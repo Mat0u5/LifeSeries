@@ -15,42 +15,31 @@ jobs:
         run: |
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+          
 
       - name: Prepare and clean commit message
         id: prepare_commit_message
         run: |
           RAW_COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
           
-          # Extract tags and join with comma
           TAGS=$(echo "$RAW_COMMIT_MESSAGE" | grep -oE '\{[^}]+\}' | tr -d '{}' | awk '{tags = tags $0", "} END {sub(", $", "", tags); print tags}')
-          
           if [ -n "$TAGS" ]; then
-            COMMIT_FOOTER="\\n\`Tags: $TAGS\`"
+          COMMIT_FOOTER="\\n\`Tags: $TAGS\`"
           else
-            COMMIT_FOOTER=""
+          COMMIT_FOOTER=""
           fi
           
-          # Build a sed-safe pattern from the tags
-          TAG_PATTERN=$(echo "$TAGS" | tr ',' '\n' | sed 's/^ *//;s/ *$//' | sed 's/.*/{&}/' | sed 's/[][\/.^$*+?(){}|]/\\&/g' | paste -sd'|' -)
+          # Clean the commit message by removing all tags and normalize whitespace
+          COMMIT_MESSAGE=$(echo "$RAW_COMMIT_MESSAGE" | sed -E 's/\{[^}]+\}//g' | sed 's/%0A/\n/g' | sed -E 's/[[:space:]]+/ /g' | sed -E 's/^[[:space:]]+|[[:space:]]+$//g')
           
-          # Remove each tag from the message
-          if [ -n "$TAG_PATTERN" ]; then
-            CLEANED_MESSAGE=$(echo "$RAW_COMMIT_MESSAGE" | sed -E "s/($TAG_PATTERN)//g")
-          else
-            CLEANED_MESSAGE="$RAW_COMMIT_MESSAGE"
+          # Only apply JSON processing if the message contains special characters that need escaping
+          if [[ "$COMMIT_MESSAGE" =~ [\"\\] ]]; then
+              COMMIT_MESSAGE=$(echo "$COMMIT_MESSAGE" | jq -s -Rr @json)
+              COMMIT_MESSAGE=${COMMIT_MESSAGE:1:-1}
           fi
-          
-          # Encode message for JSON (preserving newlines)
-          COMMIT_MESSAGE=$(echo "$CLEANED_MESSAGE" | jq -s -Rr @json)
-          COMMIT_MESSAGE=${COMMIT_MESSAGE:1:-1}
           
           echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
           echo "COMMIT_FOOTER=$COMMIT_FOOTER" >> $GITHUB_ENV
-
-
-
-
-
 
 
       - name: Get Title
