@@ -15,7 +15,7 @@ jobs:
         run: |
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
-          
+
 
       - name: Prepare and clean commit message
         id: prepare_commit_message
@@ -40,13 +40,15 @@ jobs:
         with:
           url: ${{ secrets.DISCORD_WEBHOOK }}
           method: POST
-          payload: '{ "content": "${{ env.MESSAGE_TITLE }}", "embeds": [{ "title": "[${{ github.repository }}:${{ env.BRANCH_NAME }}] - new commit", "author": {"name": "${{ github.event.head_commit.author.name}}","url": "https://github.com/${{ github.event.head_commit.author.name}}","icon_url": "https://github.com/${{ github.event.head_commit.author.name}}.png"},"description": "`` ```Commit Message:${{ env.COMMIT_MESSAGE }}```${{ env.COMMIT_FOOTER }}", "url": "https://github.com/${{ github.repository }}/commit/${{ github.sha }}", "color": 5315202 }] }'
+          payload: '{ "content": "${{ env.MESSAGE_TITLE }}", "embeds": [{ "title": "[${{ github.repository }}:${{ env.BRANCH_NAME }}] - new commit", "author": {"name": "${{ github.event.head_commit.author.name}}","url": "https://github.com/${{ github.event.head_commit.author.name}}","icon_url": "https://github.com/${{ github.event.head_commit.author.name}}.png"},"description": "**Testing branch**`Commit Message:` ```${{ env.COMMIT_MESSAGE }}```${{ env.COMMIT_FOOTER }}", "url": "https://github.com/${{ github.repository }}/commit/${{ github.sha }}", "color": 5315202 }] }'
+          args:
+          entrypoint:
 
   build:
     if: ${{ contains(github.event.head_commit.message, '{build}') }}
     strategy:
       matrix:
-        minecraft_version: [1.21, 1.21.2, 1.21.4, 1.21.5, 1.21.6]
+        minecraft_version: [ 1.21, 1.21.2, 1.21.4, 1.21.5, 1.21.6 ]
     runs-on: ubuntu-22.04
     steps:
       - name: checkout repository
