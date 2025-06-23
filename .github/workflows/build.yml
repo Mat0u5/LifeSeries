@@ -28,7 +28,7 @@ jobs:
             COMMIT_FOOTER=""
           fi
 
-          COMMIT_MESSAGE=$(echo "$RAW_COMMIT_MESSAGE" | sed -E 's/\{[^}]+\}//g' | sed 's/%0A/\\n/g' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' -e '/^$/d' | tr '\n' ' ' | sed 's/[[:space:]]*$//' | jq -s -Rr @json)
+          COMMIT_MESSAGE=$(echo "$RAW_COMMIT_MESSAGE" | sed -E 's/\{[^}]+\}//g' | sed 's/%0A/\\n/g' | sed 's/\\n*$//' | jq -s -Rr @json)
           COMMIT_MESSAGE=${COMMIT_MESSAGE:1:-1}
           
 
