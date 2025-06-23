@@ -22,21 +22,24 @@ jobs:
         run: |
           RAW_COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
           
-          # Extract tags inside {}
+          # Extract tags from commit message
           TAGS=$(echo "$RAW_COMMIT_MESSAGE" | grep -oE '\{[^}]+\}' | tr -d '{}' | awk '{tags = tags $0", "} END {sub(", $", "", tags); print tags}')
+          
           if [ -n "$TAGS" ]; then
-            COMMIT_FOOTER="\n\`Tags: $TAGS\`"
+            COMMIT_FOOTER="\\n\`Tags: $TAGS\`"
           else
             COMMIT_FOOTER=""
           fi
           
-          # Remove tag blocks like {tag} but keep everything else
-          CLEANED_COMMIT_MESSAGE=$(echo "$RAW_COMMIT_MESSAGE" | sed -E 's/\{[^}]+\}//g' | sed 's/%0A/\\n/g' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+          # Clean the commit message by removing only the actual tag patterns that were found
+          COMMIT_MESSAGE="$RAW_COMMIT_MESSAGE"
+          if [ -n "$TAGS" ]; then
+            # Only remove tags if they were actually found
+            COMMIT_MESSAGE=$(echo "$COMMIT_MESSAGE" | sed -E 's/\{[^}]+\}//g')
+          fi
           
-          # Escape for JSON safely
-          COMMIT_MESSAGE=$(printf '%s' "$CLEANED_COMMIT_MESSAGE" | jq -sRr @json)
-          
-          # Remove outer quotes from JSON string (no need if used as env var later)
+          # Handle line breaks and JSON encoding
+          COMMIT_MESSAGE=$(echo "$COMMIT_MESSAGE" | sed 's/%0A/\\n/g' | jq -s -Rr @json)
           COMMIT_MESSAGE=${COMMIT_MESSAGE:1:-1}
           
           echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
