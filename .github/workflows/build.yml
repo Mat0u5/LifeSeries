@@ -24,21 +24,24 @@ jobs:
           # Extract tags from {...}
           TAGS=$(echo "$RAW_COMMIT_MESSAGE" | grep -oE '\{[^}]+\}' | tr -d '{}' | awk '{tags = tags $0", "} END {sub(", $", "", tags); print tags}')
           
-          # Remove tags from message
-          CLEANED_MESSAGE=$(echo "$RAW_COMMIT_MESSAGE" | sed -E 's/\{[^}]+\}//g' | sed '/^\s*$/d')
-          
-          # Remove leading/trailing whitespace
-          CLEANED_MESSAGE=$(echo "$CLEANED_MESSAGE" | sed -E 's/^[[:space:]]+|[[:space:]]+$//g')
-          
-          # Only format footer if there are tags
           if [ -n "$TAGS" ]; then
-            COMMIT_FOOTER="\`Tags: $TAGS\`"
+            COMMIT_FOOTER="\\n\`Tags: $TAGS\`"
           else
             COMMIT_FOOTER=""
           fi
           
-          echo "COMMIT_MESSAGE=$CLEANED_MESSAGE" >> $GITHUB_ENV
+          # Clean message: remove tags, trim empty lines
+          CLEANED_MESSAGE=$(echo "$RAW_COMMIT_MESSAGE" | sed -E 's/\{[^}]+\}//g' | sed '/^\s*$/d')
+          
+          # Escape newlines as literal \n, encode with jq to handle quotes
+          COMMIT_MESSAGE=$(echo "$CLEANED_MESSAGE" | sed ':a;N;$!ba;s/\n/\\n/g' | jq -Rs)
+          
+          # Strip outer quotes from jq JSON string
+          COMMIT_MESSAGE=${COMMIT_MESSAGE:1:-1}
+          
+          echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
           echo "COMMIT_FOOTER=$COMMIT_FOOTER" >> $GITHUB_ENV
+
 
 
       - name: Get Title
