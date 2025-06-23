@@ -28,15 +28,12 @@ jobs:
           else
           COMMIT_FOOTER=""
           fi
-          
+    
           # Clean the commit message by removing all tags and normalize whitespace
-          COMMIT_MESSAGE=$(echo "$RAW_COMMIT_MESSAGE" | sed -E 's/\{[^}]+\}//g' | sed 's/%0A/\n/g' | sed -E 's/[[:space:]]+/ /g' | sed -E 's/^[[:space:]]+|[[:space:]]+$//g')
+          COMMIT_MESSAGE=$(echo "$RAW_COMMIT_MESSAGE" | sed -E 's/\{[^}]+\}//g' | sed 's/%0A/ /g' | sed -E 's/[[:space:]]+/ /g' | sed -E 's/^[[:space:]]+|[[:space:]]+$//g')
           
-          # Only apply JSON processing if the message contains special characters that need escaping
-          if [[ "$COMMIT_MESSAGE" =~ [\"\\] ]]; then
-              COMMIT_MESSAGE=$(echo "$COMMIT_MESSAGE" | jq -s -Rr @json)
-              COMMIT_MESSAGE=${COMMIT_MESSAGE:1:-1}
-          fi
+          # Always escape for GitHub env to handle any remaining special characters
+          COMMIT_MESSAGE=$(echo "$COMMIT_MESSAGE" | sed 's/\\/\\\\/g' | sed 's/"/\\"/g')
           
           echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
           echo "COMMIT_FOOTER=$COMMIT_FOOTER" >> $GITHUB_ENV
