@@ -20,19 +20,46 @@ jobs:
         id: prepare_commit_message
         run: |
           RAW_COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
-
+          
+          echo "DEBUG: Raw commit message:"
+          echo "$RAW_COMMIT_MESSAGE"
+          echo "---"
+          
+          # Extract tags from the original message (before any processing)
           TAGS=$(echo "$RAW_COMMIT_MESSAGE" | grep -oE '\{[^}]+\}' | tr -d '{}' | awk '{tags = tags $0", "} END {sub(", $", "", tags); print tags}')
+          echo "DEBUG: Extracted tags: '$TAGS'"
+          
           if [ -n "$TAGS" ]; then
             COMMIT_FOOTER="\\n\`Tags: $TAGS\`"
           else
             COMMIT_FOOTER=""
           fi
           
-          COMMIT_MESSAGE=$(echo "$RAW_COMMIT_MESSAGE" | sed 's/%0A/\\n/g' | sed -E 's/\{[^}]+\}//g' | sed 's/\\n*$//' | jq -s -Rr @json)
+          # Step by step processing
+          STEP1=$(echo "$RAW_COMMIT_MESSAGE" | sed 's/%0A/\\n/g')
+          echo "DEBUG: After %0A conversion:"
+          echo "$STEP1"
+          echo "---"
+          
+          STEP2=$(echo "$STEP1" | sed -E 's/\{[^}]+\}//g')
+          echo "DEBUG: After tag removal:"
+          echo "$STEP2"
+          echo "---"
+          
+          STEP3=$(echo "$STEP2" | sed 's/\\n*$//')
+          echo "DEBUG: After trailing newline removal:"
+          echo "$STEP3"
+          echo "---"
+          
+          # Final processing
+          COMMIT_MESSAGE=$(echo "$STEP3" | jq -s -Rr @json)
           COMMIT_MESSAGE=${COMMIT_MESSAGE:1:-1}
           
+          echo "DEBUG: Final commit message:"
+          echo "$COMMIT_MESSAGE"
+          
           echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
-          echo "COMMIT_FOOTER=$COMMIT_FOOTER" >> $GITHUB_ENV
+          echo "COMMIT_FOOTER=$COMMIT_FOOTER" >> $GITHUB_ENV- name: Prepare and clean commit message
 
       - name: Get Title
         id: discord_title
