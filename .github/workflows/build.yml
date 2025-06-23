@@ -22,57 +22,37 @@ jobs:
         run: |
           RAW_COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
           
-          echo "DEBUG: Raw commit message:"
-          echo "$RAW_COMMIT_MESSAGE"
-          echo "DEBUG: Raw commit message length: ${#RAW_COMMIT_MESSAGE}"
-          
           # Extract tags from commit message
           TAGS=$(echo "$RAW_COMMIT_MESSAGE" | grep -oE '\{[^}]+\}' | tr -d '{}' | awk '{tags = tags $0", "} END {sub(", $", "", tags); print tags}')
           
-          echo "DEBUG: Found tags: '$TAGS'"
-          
           if [ -n "$TAGS" ]; then
             COMMIT_FOOTER="\\n\`Tags: $TAGS\`"
-            echo "DEBUG: Will add footer: $COMMIT_FOOTER"
           else
             COMMIT_FOOTER=""
-            echo "DEBUG: No footer will be added"
           fi
           
           # Clean the commit message by removing only the specific tags that were found
           COMMIT_MESSAGE="$RAW_COMMIT_MESSAGE"
-          echo "DEBUG: Commit message before tag removal:"
-          echo "$COMMIT_MESSAGE"
           
           if [ -n "$TAGS" ]; then
             # Remove each specific tag that was found
             IFS=', ' read -ra TAG_ARRAY <<< "$TAGS"
             for tag in "${TAG_ARRAY[@]}"; do
-              echo "DEBUG: Removing tag: {$tag}"
               COMMIT_MESSAGE=$(echo "$COMMIT_MESSAGE" | sed "s/{$tag}//g")
             done
           fi
           
-          echo "DEBUG: Commit message after tag removal:"
-          echo "$COMMIT_MESSAGE"
-          
           # Handle line breaks and JSON encoding
-          echo "DEBUG: Before %0A replacement:"
-          echo "$COMMIT_MESSAGE"
-          
-          COMMIT_MESSAGE=$(echo "$COMMIT_MESSAGE" | sed 's/%0A/\\n/g')
-          echo "DEBUG: After %0A replacement:"
-          echo "$COMMIT_MESSAGE"
-          
-          COMMIT_MESSAGE=$(echo "$COMMIT_MESSAGE" | jq -s -Rr @json)
-          echo "DEBUG: After jq processing:"
-          echo "$COMMIT_MESSAGE"
-          
+          COMMIT_MESSAGE=$(echo "$COMMIT_MESSAGE" | sed 's/%0A/\\n/g' | jq -s -Rr @json)
           COMMIT_MESSAGE=${COMMIT_MESSAGE:1:-1}
-          echo "DEBUG: After removing first and last character:"
-          echo "$COMMIT_MESSAGE"
           
-          echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
+          # Convert literal \n back to actual newlines
+          COMMIT_MESSAGE=$(echo -e "$COMMIT_MESSAGE")
+          
+          echo "COMMIT_MESSAGE<<EOF" >> $GITHUB_ENV
+          echo "$COMMIT_MESSAGE" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          
           echo "COMMIT_FOOTER=$COMMIT_FOOTER" >> $GITHUB_ENV
 
 
