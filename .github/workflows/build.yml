@@ -20,10 +20,21 @@ jobs:
       - name: Prepare and clean commit message
         id: prepare_commit_message
         run: |
-          COMMIT_MESSAGE=$(echo -n "${{ github.event.head_commit.message }}" | sed 's/%0A/\\n/g' | jq -s -Rr @json)
+          RAW_COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
+        
+          TAGS=$(echo "$RAW_COMMIT_MESSAGE" | grep -oE '\{[^}]+\}' | tr -d '{}' | awk '{tags = tags $0", "} END {sub(", $", "", tags); print tags}')
+          if [ -n "$TAGS" ]; then
+          COMMIT_FOOTER="\\n\`Tags: $TAGS\`"
+          else
+          COMMIT_FOOTER=""
+          fi
+        
+          # Clean the commit message by removing all tags
+          COMMIT_MESSAGE=$(echo "$RAW_COMMIT_MESSAGE" | sed -E 's/\{[^}]+\}//g' | sed 's/%0A/\\n/g' | jq -s -Rr @json)
           COMMIT_MESSAGE=${COMMIT_MESSAGE:1:-1}
-          echo "$COMMIT_MESSAGE"
+        
           echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
+          echo "COMMIT_FOOTER=$COMMIT_FOOTER" >> $GITHUB_ENV
 
 
       - name: Get Title
@@ -40,7 +51,7 @@ jobs:
         with:
           url: ${{ secrets.DISCORD_WEBHOOK }}
           method: POST
-          payload: '{ "content": "${{ env.MESSAGE_TITLE }}", "embeds": [{ "title": "[${{ github.repository }}:${{ env.BRANCH_NAME }}] - new commit", "author": {"name": "${{ github.event.head_commit.author.name}}","url": "https://github.com/${{ github.event.head_commit.author.name}}","icon_url": "https://github.com/${{ github.event.head_commit.author.name}}.png"},"description": "```\n${{ env.COMMIT_MESSAGE }}```${{ env.COMMIT_FOOTER }}", "url": "https://github.com/${{ github.repository }}/commit/${{ github.sha }}", "color": 5315202 }] }'
+          payload: '{ "content": "${{ env.MESSAGE_TITLE }}", "embeds": [{ "title": "[${{ github.repository }}:${{ env.BRANCH_NAME }}] - new commit", "author": {"name": "${{ github.event.head_commit.author.name}}","url": "https://github.com/${{ github.event.head_commit.author.name}}","icon_url": "https://github.com/${{ github.event.head_commit.author.name}}.png"},"description": "**Testing branch**\n\n`Commit Message:` ```\n${{ env.COMMIT_MESSAGE }}```${{ env.COMMIT_FOOTER }}", "url": "https://github.com/${{ github.repository }}/commit/${{ github.sha }}", "color": 5315202 }] }'
           args:
           entrypoint:
 
