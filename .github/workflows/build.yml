@@ -42,6 +42,7 @@ jobs:
           
           # Encode message for JSON (preserving newlines)
           COMMIT_MESSAGE=$(echo "$CLEANED_MESSAGE" | jq -s -Rr @json)
+          COMMIT_MESSAGE=${COMMIT_MESSAGE:1:-1}
           
           echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
           echo "COMMIT_FOOTER=$COMMIT_FOOTER" >> $GITHUB_ENV
