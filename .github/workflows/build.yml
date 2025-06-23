@@ -21,23 +21,18 @@ jobs:
         run: |
           RAW_COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
           
-          # Extract tags from {...}
           TAGS=$(echo "$RAW_COMMIT_MESSAGE" | grep -oE '\{[^}]+\}' | tr -d '{}' | awk '{tags = tags $0", "} END {sub(", $", "", tags); print tags}')
-          
           if [ -n "$TAGS" ]; then
             COMMIT_FOOTER="\\n\`Tags: $TAGS\`"
           else
             COMMIT_FOOTER=""
           fi
           
-          # Clean message: remove tags, trim empty lines
-          CLEANED_MESSAGE=$(echo "$RAW_COMMIT_MESSAGE" | sed -E 's/\{[^}]+\}//g' | sed '/^\s*$/d')
-          
-          # Escape newlines as literal \n, encode with jq to handle quotes
-          COMMIT_MESSAGE=$(echo "$CLEANED_MESSAGE" | sed ':a;N;$!ba;s/\n/\\n/g' | jq -Rs)
+          COMMIT_MESSAGE=$(echo "$RAW_COMMIT_MESSAGE" | sed -E 's/\{[^}]+\}//g' | sed 's/%0A/\\n/g' | jq -s -Rr @json | sed 's/^"//;s/"$//')
           
           echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
           echo "COMMIT_FOOTER=$COMMIT_FOOTER" >> $GITHUB_ENV
+
 
 
 
