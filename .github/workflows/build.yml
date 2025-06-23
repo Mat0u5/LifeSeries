@@ -32,6 +32,9 @@ jobs:
           # Remove tags, then escape newlines as literal \n, then JSON encode and strip quotes
           COMMIT_MESSAGE=$(echo "$RAW_COMMIT_MESSAGE" | sed -E 's/\{[^}]+\}//g' | sed ':a;N;$!ba;s/\n/\\n/g' | jq -s -Rr @json | sed 's/^"//;s/"$//')
           
+          COMMIT_MESSAGE=$(echo -n "$COMMIT_MESSAGE" | sed 's/%0A/\\n/g' | jq -s -Rr @json)
+          COMMIT_MESSAGE=${COMMIT_MESSAGE:1:-1}
+          
           echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
           echo "COMMIT_FOOTER=$COMMIT_FOOTER" >> $GITHUB_ENV
 
