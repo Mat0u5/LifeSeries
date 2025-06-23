@@ -21,22 +21,31 @@ jobs:
         run: |
           RAW_COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
           
-          # Extract tags inside {...}
+          # Extract tags
           TAGS=$(echo "$RAW_COMMIT_MESSAGE" | grep -oE '\{[^}]+\}' | tr -d '{}' | awk '{tags = tags $0", "} END {sub(", $", "", tags); print tags}')
+          
           if [ -n "$TAGS" ]; then
             COMMIT_FOOTER="\\n\`Tags: $TAGS\`"
           else
             COMMIT_FOOTER=""
           fi
           
-          # Remove tags, then escape newlines as literal \n, then JSON encode and strip quotes
-          COMMIT_MESSAGE=$(echo "$RAW_COMMIT_MESSAGE" | sed -E 's/\{[^}]+\}//g' | sed ':a;N;$!ba;s/\n/\\n/g' | jq -s -Rr @json | sed 's/^"//;s/"$//')
+          # Build a pattern from the tags (escaped for regex)
+          TAG_PATTERN=$(echo "$TAGS" | tr ',' '\n' | sed 's/^ *//;s/ *$//' | sed 's/.*/{&}/' | paste -sd'|' -)
           
-          COMMIT_MESSAGE=$(echo -n "$COMMIT_MESSAGE" | sed 's/%0A/\\n/g' | jq -s -Rr @json)
-          COMMIT_MESSAGE=${COMMIT_MESSAGE:1:-1}
+          # Remove each tag from the message (if any)
+          if [ -n "$TAG_PATTERN" ]; then
+            CLEANED_MESSAGE=$(echo "$RAW_COMMIT_MESSAGE" | sed -E "s/($TAG_PATTERN)//g")
+          else
+            CLEANED_MESSAGE="$RAW_COMMIT_MESSAGE"
+          fi
+          
+          # Encode for JSON (Discord-compatible newlines etc.)
+          COMMIT_MESSAGE=$(echo "$CLEANED_MESSAGE" | jq -s -Rr @json)
           
           echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
           echo "COMMIT_FOOTER=$COMMIT_FOOTER" >> $GITHUB_ENV
+
 
 
 
