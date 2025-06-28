@@ -15,7 +15,6 @@ jobs:
         run: |
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
-
       - name: Prepare and clean commit message
         id: prepare_commit_message
         run: |
@@ -35,13 +34,21 @@ jobs:
           echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
           echo "COMMIT_FOOTER=$COMMIT_FOOTER" >> $GITHUB_ENV
 
-      - name: Get Title
+      #- name: Get Title
+      #  id: discord_title
+      #  run: |
+      #    if echo "${{ github.event.head_commit.message }}" | grep -q "{skip_ping}"; then
+      #      echo "MESSAGE_TITLE=*Ping Skipped.*" >> $GITHUB_ENV
+      #    else
+      #      echo "MESSAGE_TITLE=<@&1346436504427171961>" >> $GITHUB_ENV
+      #    fi
+      - name: Get Title (NON-TESTING)
         id: discord_title
         run: |
           if echo "${{ github.event.head_commit.message }}" | grep -q "{skip_ping}"; then
             echo "MESSAGE_TITLE=*Ping Skipped.*" >> $GITHUB_ENV
           else
-            echo "MESSAGE_TITLE=<@&1312808018483613726>" >> $GITHUB_ENV
+            echo "MESSAGE_TITLE=<@&1346436504427171961>" >> $GITHUB_ENV
           fi
 
       - name: Discord Message
@@ -49,7 +56,8 @@ jobs:
         with:
           url: ${{ secrets.DISCORD_WEBHOOK }}
           method: POST
-          payload: '{ "content": "${{ env.MESSAGE_TITLE }}", "embeds": [{ "title": "[${{ github.repository }}:${{ env.BRANCH_NAME }}] - new commit", "author": {"name": "${{ github.event.head_commit.author.name}}","url": "https://github.com/${{ github.event.head_commit.author.name}}","icon_url": "https://github.com/${{ github.event.head_commit.author.name}}.png"},"description": "**Testing branch**\n\n`Commit Message:` ```\n${{ env.COMMIT_MESSAGE }}```${{ env.COMMIT_FOOTER }}", "url": "https://github.com/${{ github.repository }}/commit/${{ github.sha }}", "color": 5315202 }] }'
+          #payload: '{ "content": "${{ env.MESSAGE_TITLE }}", "embeds": [{ "title": "[${{ github.repository }}:${{ env.BRANCH_NAME }}] - new commit", "author": {"name": "${{ github.event.head_commit.author.name}}","url": "https://github.com/${{ github.event.head_commit.author.name}}","icon_url": "https://github.com/${{ github.event.head_commit.author.name}}.png"},"description": "**Testing branch**\n\n`Commit Message:` ```\n${{ env.COMMIT_MESSAGE }}```${{ env.COMMIT_FOOTER }}", "url": "https://github.com/${{ github.repository }}/commit/${{ github.sha }}", "color": 5315202 }] }'
+          payload: '{ "content": "${{ env.MESSAGE_TITLE }}", "embeds": [{ "title": "[${{ github.repository }}:${{ env.BRANCH_NAME }}] - new commit", "author": {"name": "${{ github.event.head_commit.author.name}}","url": "https://github.com/${{ github.event.head_commit.author.name}}","icon_url": "https://github.com/${{ github.event.head_commit.author.name}}.png"},"description": "`Commit Message:` ```\n${{ env.COMMIT_MESSAGE }}```${{ env.COMMIT_FOOTER }}", "url": "https://github.com/Mat0u5/LifeSeries/commit/fda78f4368cb8b7c74a4cbe0726989158d465b3b", "color": 5315202 }] }'
           args:
           entrypoint:
 
