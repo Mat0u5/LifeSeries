@@ -16,7 +16,6 @@ jobs:
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
 
-
       - name: Prepare and clean commit message
         id: prepare_commit_message
         run: |
