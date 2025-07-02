@@ -194,7 +194,7 @@ public class QuizScreen extends DefaultScreen {
         //? if <= 1.21.5 {
         drawEntity(context, startX, startY, mouseX, mouseY, centerX, centerY - 50, 40);
         //?} else {
-        /*RenderUtils.drawTextLeftWrapLines(context, client.textRenderer, TextColors.DEFAULT_LIGHTER, Text.of("Bot display temporarily disabled\nin 1.21.6 because mojang broke it :<"), centerX-28, centerY-46, 60, 5);
+        /*RenderUtils.drawTextLeftWrapLines(context, client.textRenderer, TextColors.DEFAULT_LIGHTER, Text.of("Bot display temporarily disabled\nin 1.21.6+ because mojang broke it :<"), centerX-28, centerY-46, 60, 5);
         *///?}
     }
 
