@@ -110,8 +110,6 @@ public abstract class Season {
         OtherUtils.executeCommand("worldborder set " + seasonConfig.WORLDBORDER_SIZE.get(seasonConfig));
         server.getGameRules().get(GameRules.KEEP_INVENTORY).set(seasonConfig.KEEP_INVENTORY.get(seasonConfig), server);
         server.getGameRules().get(GameRules.NATURAL_REGENERATION).set(!NO_HEALING, server);
-        server.getGameRules().get(GameRules.ANNOUNCE_ADVANCEMENTS).set(seasonConfig.SHOW_ADVANCEMENTS.get(seasonConfig), server);
-
         //? if >= 1.21.6 {
         /*boolean locatorBarEnabled = seasonConfig.LOCATOR_BAR.get(seasonConfig);
         if (!locatorBarEnabled && this instanceof DoubleLife) {

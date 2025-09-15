@@ -25,18 +25,13 @@ import net.mat0u5.lifeseries.utils.ClientTaskScheduler;
 import net.mat0u5.lifeseries.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.GameMenuScreen;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.network.DisconnectionInfo;
 import net.minecraft.registry.Registries;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
@@ -328,45 +323,6 @@ public class NetworkHandlerClient {
         }
     }
     public static void handleHandshake(HandshakePayload payload) {
-        String serverVersionStr = payload.modVersionStr();
-        String serverCompatibilityStr = payload.compatibilityStr();
-        String clientVersionStr = Main.MOD_VERSION;
-        String clientCompatibilityStr = VersionControl.clientCompatibilityMin();
-
-        if (!Main.ISOLATED_ENVIRONMENT) {
-            int serverVersion = payload.modVersion();
-            int serverCompatibility = payload.compatibility();
-            int clientVersion = VersionControl.getModVersionInt(clientVersionStr);
-            int clientCompatibility = VersionControl.getModVersionInt(clientCompatibilityStr);
-
-            //Check if client version is compatible with the server version
-            if (clientVersion < serverCompatibility) {
-                Text disconnectText = Text.literal("[1Life Series Mod] Client-Server version mismatch!\n" +
-                        "Update the client version to at least version "+serverCompatibilityStr);
-                ClientUtils.disconnect(disconnectText);
-                return;
-            }
-
-            //Check if server version is compatible with the client version
-            if (serverVersion < clientCompatibility) {
-                Text disconnectText = Text.literal("[1Life Series Mod] Server-Client version mismatch!\n" +
-                        "The client version is too new for the server.\n" +
-                        "Either update the server, or downgrade the client version to " + serverVersionStr);
-                ClientUtils.disconnect(disconnectText);
-                return;
-            }
-        }
-        else {
-            //Isolated enviroment -> mod versions must be IDENTICAL between client and server
-            //Check if client version is the same as the server version
-            if (!clientVersionStr.equalsIgnoreCase(serverVersionStr)) {
-                Text disconnectText = Text.literal("[1Life Series Mod] Client-Server version mismatch!\n" +
-                        "You must join with version "+serverCompatibilityStr);
-                ClientUtils.disconnect(disconnectText);
-                return;
-            }
-        }
-
         Main.LOGGER.info(TextUtils.formatString("[PACKET_CLIENT] Received handshake (from server): {{}, {}}", payload.modVersionStr(), payload.modVersion()));
         sendHandshake();
     }

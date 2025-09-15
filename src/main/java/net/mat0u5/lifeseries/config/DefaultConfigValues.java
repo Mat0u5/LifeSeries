@@ -247,11 +247,6 @@ public class DefaultConfigValues {
             "hide_unjustified_kills", false, "global[new]",
             "Hide Unjustified Kill Messages", "Controls whether unjustified kill messages show up in admin chat."
     );
-    public final ConfigFileEntry<Boolean> SHOW_ADVANCEMENTS = new ConfigFileEntry<>(
-            "show_advancements", true, "global[new]",
-            "Show Advancemenets In Chat", "Controls advancements show up in the chat."
-    );
-
 
 
     /*

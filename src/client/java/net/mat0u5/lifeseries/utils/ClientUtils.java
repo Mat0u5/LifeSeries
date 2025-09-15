@@ -4,18 +4,10 @@ import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.DisconnectedScreen;
-import net.minecraft.client.gui.screen.MessageScreen;
-import net.minecraft.client.gui.screen.TitleScreen;
-import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.network.ServerInfo;
-import net.minecraft.client.realms.gui.screen.RealmsMainScreen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.DisconnectionInfo;
 import net.minecraft.scoreboard.Team;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,14 +48,5 @@ public class ClientUtils {
             command = command.substring(1);
         }
         handler.sendChatCommand(command);
-    }
-
-    public static void disconnect(Text reason) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client.world == null) return;
-        ClientPlayNetworkHandler handler = client.getNetworkHandler();
-        if (handler == null) return;
-        client.world.disconnect();
-        handler.onDisconnected(new DisconnectionInfo(reason));
     }
 }

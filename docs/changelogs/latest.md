@@ -16,10 +16,3 @@ Code refactoring.
 Fully reworked how Last Life lives rolling works.<br>
 Last Life rolling lives now resets all previously assigned lives.<br>
 Improved outside world border teleporting.
-
-----------
-
-Client-side version checking.<br>
-Added the 'show_advancements' global config. Default value is true.<br>
-You can now only hear some trivia sounds from the closest trivia bot.<br>
-Trivia bot punishments are now weighted based on life count and question difficulty.

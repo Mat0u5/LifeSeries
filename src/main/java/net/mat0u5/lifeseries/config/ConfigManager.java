@@ -48,7 +48,6 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,SEE_FRIENDLY_INVISIBLE_PLAYERS
                 ,SHOW_LOGIN_COMMAND_INFO
                 ,HIDE_UNJUSTIFIED_KILL_MESSAGES
-                ,SHOW_ADVANCEMENTS
 
 
                 ,GROUP_BLACKLIST // Group

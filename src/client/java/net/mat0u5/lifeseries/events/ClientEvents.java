@@ -13,7 +13,6 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.utils.ClientResourcePacks;
-import net.mat0u5.lifeseries.utils.ClientSounds;
 import net.mat0u5.lifeseries.utils.ClientTaskScheduler;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
@@ -90,7 +89,6 @@ public class ClientEvents {
             }
             ClientKeybinds.tick();
             ClientTaskScheduler.onClientTick();
-            ClientSounds.updateSingleSoundVolumes();
         }catch(Exception ignored) {}
     }
 

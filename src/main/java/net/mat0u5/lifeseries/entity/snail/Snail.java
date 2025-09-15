@@ -283,7 +283,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 10000)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, MOVEMENT_SPEED)
                 .add(EntityAttributes.GENERIC_FLYING_SPEED, FLYING_SPEED)
-                .add(EntityAttributes.GENERIC_STEP_HEIGHT, 1.2)
+                .add(EntityAttributes.GENERIC_STEP_HEIGHT, 1)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 150)
                 .add(EntityAttributes.GENERIC_WATER_MOVEMENT_EFFICIENCY, 1)
                 .add(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE, 100)

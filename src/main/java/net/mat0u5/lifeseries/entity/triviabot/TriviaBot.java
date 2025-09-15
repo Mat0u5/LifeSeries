@@ -25,10 +25,8 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShif
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.mat0u5.lifeseries.utils.other.WeightedRandomizer;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
@@ -85,8 +83,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import static net.mat0u5.lifeseries.Main.livesManager;
 import static net.mat0u5.lifeseries.Main.server;
 //? if >= 1.21.4
 /*import net.minecraft.util.Uuids;*/
@@ -632,51 +628,38 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
         );
         int numOfCurses = 9;
         if (DependencyManager.voicechatLoaded() && VoicechatMain.isConnectedToSVC(player.getUuid())) numOfCurses = 10;
-
-        Integer punishmentWeight = livesManager.getPlayerLives(player);
-        if (punishmentWeight == null) punishmentWeight = 1;
-        if (difficulty == 1) punishmentWeight++;
-        if (difficulty == 3) punishmentWeight--;
-        punishmentWeight = Math.clamp(punishmentWeight, 1, 4);
-
-        WeightedRandomizer randomizer = new WeightedRandomizer();
-        int curse = randomizer.getWeightedRandom(0, numOfCurses, punishmentWeight, 4, 1.5);
-
-        if (numOfCurses == 9 && curse >= 6) {
-            curse++;
-        }
-
+        int curse = world.random.nextInt(numOfCurses);
         switch (curse) {
             default:
             case 0:
-                curseInfestation(player);
-                break;
-            case 1:
-                curseSlipperyGround(player);
-                break;
-            case 2:
                 curseHunger(player);
                 break;
-            case 3:
-                curseBeeswarm(player);
-                break;
-            case 4:
-                curseGigantification(player);
-                break;
-            case 5:
-                curseMoonjump(player);
-                break;
-            case 6:
-                curseRoboticVoice(player);
-                break;
-            case 7:
-                curseBindingArmor(player);
-                break;
-            case 8:
+            case 1:
                 curseRavager(player);
                 break;
-            case 9:
+            case 2:
+                curseInfestation(player);
+                break;
+            case 3:
+                curseGigantification(player);
+                break;
+            case 4:
+                curseSlipperyGround(player);
+                break;
+            case 5:
+                curseBindingArmor(player);
+                break;
+            case 6:
                 curseHearts(player);
+                break;
+            case 7:
+                curseMoonjump(player);
+                break;
+            case 8:
+                curseBeeswarm(player);
+                break;
+            case 9:
+                curseRoboticVoice(player);
                 break;
         }
     }

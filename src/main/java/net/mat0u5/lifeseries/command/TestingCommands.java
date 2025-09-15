@@ -5,7 +5,6 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.mat0u5.lifeseries.utils.other.WeightedRandomizer;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
@@ -104,19 +103,6 @@ public class TestingCommands {
         if (player == null) return -1;
 
         OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Test Command 3"));
-
-        System.out.println("=== Original Example: Range 0-9, Lives 1-3 ===");
-        WeightedRandomizer randomizer = new WeightedRandomizer();
-
-        randomizer.testDistribution(0, 9, 1, 4, 1.5);
-
-        // Test different example: Range 1-100 with 1-5 difficulty levels
-        System.out.println("\n=== Different Example: Range 1-100, Difficulty 1-5 ===");
-        randomizer.testDistribution(1, 100, 1, 5, 1);
-
-        // Test edge case: Range 0-1 with 1-2 states
-        System.out.println("\n=== Edge Case: Range 0-1, States 1-2 ===");
-        randomizer.testDistribution(0, 1, 1, 2, 1);
 
         return 1;
     }
