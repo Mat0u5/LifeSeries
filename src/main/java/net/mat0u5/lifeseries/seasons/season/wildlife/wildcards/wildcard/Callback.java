@@ -197,7 +197,7 @@ public class Callback extends Wildcard {
         for (Wildcard wildcard : WildcardManager.activeWildcards.values()) {
             if (wildcard.getType() == Wildcards.CALLBACK) continue;
             wildcard.deactivate();
-            PlayerUtils.broadcastMessage(Text.of("§7A Curse has faded..."));
+            PlayerUtils.broadcastMessage(Text.of("§7A curse has faded..."));
         }
         WildcardManager.activeWildcards.clear();
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BLOCK_BEACON_DEACTIVATE);
