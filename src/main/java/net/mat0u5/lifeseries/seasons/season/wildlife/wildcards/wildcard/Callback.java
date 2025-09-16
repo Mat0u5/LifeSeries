@@ -187,7 +187,7 @@ public class Callback extends Wildcard {
                 if (wildcard.active) continue;
                 wildcard.activate();
             }
-            WildcardManager.showRainbowCryptTitle("All wildcards are active!");
+            WildcardManager.showRainbowCryptTitle("All curses are active!");
         });
         TaskScheduler.scheduleTask(92, NetworkHandlerServer::sendUpdatePackets);
 
@@ -197,7 +197,7 @@ public class Callback extends Wildcard {
         for (Wildcard wildcard : WildcardManager.activeWildcards.values()) {
             if (wildcard.getType() == Wildcards.CALLBACK) continue;
             wildcard.deactivate();
-            PlayerUtils.broadcastMessage(Text.of("§7A Wildcard has faded..."));
+            PlayerUtils.broadcastMessage(Text.of("§7A Curse has faded..."));
         }
         WildcardManager.activeWildcards.clear();
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BLOCK_BEACON_DEACTIVATE);

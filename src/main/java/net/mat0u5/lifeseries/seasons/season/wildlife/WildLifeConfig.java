@@ -176,7 +176,7 @@ public class WildLifeConfig extends ConfigManager {
     );
     public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME = new ConfigFileEntry<>(
             "wildcard_superpowers_disable_intro_theme", false, "season.superpowers",
-            "Disable Intro Theme", "Disables the theme music that plays when this wildcard is activated."
+            "Disable Intro Theme", "Disables the theme music that plays when this curse is activated."
     );
     public static final ConfigFileEntry<String> WILDCARD_SUPERPOWERS_POWER_BLACKLIST = new ConfigFileEntry<>(
             "wildcard_superpowers_power_blacklist", "[]", ConfigTypes.STRING_LIST, "season.superpowers[new]",
@@ -186,11 +186,11 @@ public class WildLifeConfig extends ConfigManager {
 
     public static final ConfigFileEntry<String> WILDCARD_CALLBACK_WILDCARDS_BLACKLIST = new ConfigFileEntry<>(
             "wildcard_callback_wildcards_blacklist", "[hunger]", ConfigTypes.STRING_LIST, "season.callback[new]",
-            "Blacklisted Wildcards", "List of wildcards that cannot be activated in Callback.", Wildcards.getWildcardsStr()
+            "Blacklisted Curses", "List of curses that cannot be activated in Callback.", Wildcards.getWildcardsStr()
     );
     public static final ConfigFileEntry<Double> WILDCARD_CALLBACK_TURN_OFF = new ConfigFileEntry<>(
             "wildcard_callback_turn_off", 0.75, ConfigTypes.PERCENTAGE, "season.callback[new]",
-            "Turn Off In Session", "Controls when in the session the callback wildcard turns off (percentage)."
+            "Turn Off In Session", "Controls when in the session the callback curse turns off (percentage)."
     );
 
     //Groups
@@ -233,7 +233,7 @@ public class WildLifeConfig extends ConfigManager {
 
     public static final ConfigFileEntry<Double> ACTIVATE_WILDCARD_MINUTE = new ConfigFileEntry<>(
             "activate_wildcard_minute", 2.5, ConfigTypes.MINUTES, "season.general",
-            "Activate Wildcard Time", "The number of minutes (in the session) after which the wildcard is activated."
+            "Activate Curse Time", "The number of minutes (in the session) after which a curse is activated."
     );
     public static final ConfigFileEntry<Boolean> KILLING_DARK_GREENS_GAINS_LIVES = new ConfigFileEntry<>(
             "killing_dark_greens_gains_lives", true, "{season.general.darkgreen}",

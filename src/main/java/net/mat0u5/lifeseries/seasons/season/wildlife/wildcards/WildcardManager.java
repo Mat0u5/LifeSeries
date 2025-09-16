@@ -64,7 +64,7 @@ public class WildcardManager {
     }
 
     public static void chosenWildcard(Wildcards wildcard) {
-        PlayerUtils.broadcastMessageToAdmins(TextUtils.format("The {} wildcard has been selected for this session.", wildcard));
+        PlayerUtils.broadcastMessageToAdmins(TextUtils.format("The {} curse has been selected for this session.", wildcard));
         PlayerUtils.broadcastMessageToAdmins(Text.of("§7Use the §f'/wildcard choose' §7 command if you want to change it."));
         WildcardManager.chosenWildcard = wildcard;
     }
@@ -116,13 +116,13 @@ public class WildcardManager {
                 if (wildcard.active) continue;
                 wildcard.activate();
             }
-            showCryptTitle("A wildcard is active!");
+            showCryptTitle("A Curse is active!");
         });
         TaskScheduler.scheduleTask(92, NetworkHandlerServer::sendUpdatePackets);
     }
 
     public static void fadedWildcard() {
-        PlayerUtils.broadcastMessage(Text.of("§7A Wildcard has faded..."));
+        PlayerUtils.broadcastMessage(Text.of("§7A Curse has faded..."));
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BLOCK_BEACON_DEACTIVATE);
     }
 
