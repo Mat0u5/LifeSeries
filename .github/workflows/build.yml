@@ -1,5 +1,3 @@
-#Available Tags: {skip_ping}, {skip_build}, {skip_discord}
-
 name: build
 
 on:
@@ -8,73 +6,28 @@ on:
       - main
 
 jobs:
-  notify:
-    if: ${{ !contains(github.event.head_commit.message, '{skip_discord}') }}
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Get branch name
-        id: get_branch_name
-        run: |
-          BRANCH_NAME=${GITHUB_REF#refs/heads/}
-          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
-
-      - name: Prepare and clean commit message
-        id: prepare_commit_message
-        run: |
-          RAW_COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
-
-          TAGS=$(echo "$RAW_COMMIT_MESSAGE" | grep -oE '\{[^}]+\}' | tr -d '{}' | awk '{tags = tags $0", "} END {sub(", $", "", tags); print tags}')
-          if [ -n "$TAGS" ]; then
-            COMMIT_FOOTER="\\n\`Tags: $TAGS\`"
-          else
-            COMMIT_FOOTER=""
-          fi
-
-          # Clean the commit message by removing all tags
-          COMMIT_MESSAGE=$(echo "$RAW_COMMIT_MESSAGE" | sed -E 's/\{[^}]+\}//g' | sed 's/%0A/\\n/g' | jq -s -Rr @json)
-          COMMIT_MESSAGE=${COMMIT_MESSAGE:1:-1}
-
-          echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
-          echo "COMMIT_FOOTER=$COMMIT_FOOTER" >> $GITHUB_ENV
-
-      - name: Get Title
-        id: discord_title
-        run: |
-          if echo "${{ github.event.head_commit.message }}" | grep -q "{skip_ping}"; then
-            echo "MESSAGE_TITLE=*Ping Skipped.*" >> $GITHUB_ENV
-          else
-            echo "MESSAGE_TITLE=<@&1346436504427171961>" >> $GITHUB_ENV
-          fi
-
-      - name: Discord Message
-        uses: satak/webrequest-action@master
-        with:
-          url: ${{ secrets.DISCORD_WEBHOOK }}
-          method: POST
-          payload: '{ "content": "${{ env.MESSAGE_TITLE }}", "embeds": [{ "title": "[${{ github.repository }}:${{ env.BRANCH_NAME }}] - new commit", "author": {"name": "${{ github.event.head_commit.author.name}}","url": "https://github.com/${{ github.event.head_commit.author.name}}","icon_url": "https://github.com/${{ github.event.head_commit.author.name}}.png"},"description": "`Commit Message:` ```\n${{ env.COMMIT_MESSAGE }}```${{ env.COMMIT_FOOTER }}", "url": "https://github.com/${{ github.repository }}/commit/${{ github.sha }}", "color": 5315202 }] }'
-
   build:
-    if: ${{ !contains(github.event.head_commit.message, '{skip_build}') }}
     runs-on: ubuntu-22.04
     steps:
-      - name: checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: validate gradle wrapper
+      - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@v2
 
-      - name: setup jdk 21
+      - name: Setup JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: 21
           distribution: 'microsoft'
 
-      - name: make gradle wrapper executable
+      - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
-      - name: build
+
+      - name: Build
         run: ./gradlew build
 
-      - name: capture build artifacts
+      - name: Capture build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: Built JARs

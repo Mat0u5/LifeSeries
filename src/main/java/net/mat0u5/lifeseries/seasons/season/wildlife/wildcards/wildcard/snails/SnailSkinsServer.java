@@ -51,7 +51,7 @@ public class SnailSkinsServer {
 
     public static void sendStoredImages(List<ServerPlayerEntity> players) {
         if (currentSeason.getSeason() != Seasons.WILD_LIFE) return;
-        File folder = new File("./config/lifeseries/wildlife/snailskins/");
+        File folder = new File("./config/lifeseries/wildlife/vhsnailskins/");
         if (!folder.exists()) {
             if (!folder.mkdirs()) {
                 Main.LOGGER.error("Failed to create folder {}", folder);
@@ -89,7 +89,7 @@ public class SnailSkinsServer {
 
     public static List<String> getAllSkins() {
         List<String> result = new ArrayList<>();
-        File folder = new File("./config/lifeseries/wildlife/snailskins/");
+        File folder = new File("./config/lifeseries/wildlife/vhsnailskins/");
         File[] files = folder.listFiles();
         if (files == null) return result;
         for (File file : files) {
@@ -108,7 +108,7 @@ public class SnailSkinsServer {
     }
 
     public static void createConfig() {
-        File folder = new File("./config/lifeseries/wildlife/snailskins/");
+        File folder = new File("./config/lifeseries/wildlife/vhsnailskins/");
         if (!folder.exists()) {
             if (!folder.mkdirs()) {
                 Main.LOGGER.error("Failed to create folder {}", folder);
@@ -117,10 +117,10 @@ public class SnailSkinsServer {
         }
         ResourceHandler handler = new ResourceHandler();
 
-        Path modelResult = new File("./config/lifeseries/wildlife/snailskins/snail.bbmodel").toPath();
+        Path modelResult = new File("./config/lifeseries/wildlife/vhsnailskins/snail.bbmodel").toPath();
         handler.copyBundledSingleFile("/model/" + Main.MOD_ID + "/snail.bbmodel", modelResult);
 
-        Path textureResult = new File("./config/lifeseries/wildlife/snailskins/example.png").toPath();
+        Path textureResult = new File("./config/lifeseries/wildlife/vhsnailskins/example.png").toPath();
         handler.copyBundledSingleFile("/model/" + Main.MOD_ID + "/texture/example.png", textureResult);
     }
 }
