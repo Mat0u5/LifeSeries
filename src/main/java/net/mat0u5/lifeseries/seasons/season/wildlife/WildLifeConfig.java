@@ -14,10 +14,6 @@ import java.util.List;
 
 public class WildLifeConfig extends ConfigManager {
     public static final List<String> BLACKLISTED_ITEMS = List.of(
-            "lectern",
-            "bookshelf",
-            "mace",
-            "end_crystal",
             "leather_helmet",
             "chainmail_helmet",
             "golden_helmet",
@@ -29,8 +25,6 @@ public class WildLifeConfig extends ConfigManager {
     );
 
     public static final List<String> BLACKLISTED_BLOCKS = List.of(
-            "lectern",
-            "bookshelf"
     );
     public static final List<String> CLAMPED_ENCHANTMENTS = List.of(
             "sharpness",
@@ -77,7 +71,7 @@ public class WildLifeConfig extends ConfigManager {
             "Randomize Interval", "The duration between food changes, in seconds."
     );
     public static final ConfigFileEntry<Integer> WILDCARD_HUNGER_EFFECT_LEVEL = new ConfigFileEntry<>(
-            "wildcard_hunger_effect_level", 3, "season.hunger",
+            "wildcard_hunger_effect_level", 2, "season.hunger",
             "Hunger Effect Level", "Controls the hunger effect level."
     );
     public static final ConfigFileEntry<Double> WILDCARD_HUNGER_NUTRITION_CHANCE = new ConfigFileEntry<>(
@@ -185,8 +179,8 @@ public class WildLifeConfig extends ConfigManager {
 
 
     public static final ConfigFileEntry<String> WILDCARD_CALLBACK_WILDCARDS_BLACKLIST = new ConfigFileEntry<>(
-            "wildcard_callback_wildcards_blacklist", "[hunger]", ConfigTypes.STRING_LIST, "season.callback[new]",
-            "Blacklisted curses", "List of curses that cannot be activated in Callback.", Wildcards.getWildcardsStr()
+            "wildcard_callback_wildcards_blacklist", "[trivia,time_dilation,superpowers]", ConfigTypes.STRING_LIST, "season.callback[new]",
+            "Blacklisted Curses", "List of curses that cannot be activated in Callback.", Wildcards.getWildcardsStr()
     );
     public static final ConfigFileEntry<Double> WILDCARD_CALLBACK_TURN_OFF = new ConfigFileEntry<>(
             "wildcard_callback_turn_off", 0.75, ConfigTypes.PERCENTAGE, "season.callback[new]",
@@ -232,15 +226,15 @@ public class WildLifeConfig extends ConfigManager {
     );
 
     public static final ConfigFileEntry<Double> ACTIVATE_WILDCARD_MINUTE = new ConfigFileEntry<>(
-            "activate_wildcard_minute", 2.5, ConfigTypes.MINUTES, "season.general",
-            "Activate curse Time", "The number of minutes (in the session) after which a curse is activated."
+            "activate_wildcard_minute", 1, ConfigTypes.MINUTES, "season.general",
+            "Activate Curse Time", "The number of minutes (in the session) after which a curse is activated."
     );
     public static final ConfigFileEntry<Boolean> KILLING_DARK_GREENS_GAINS_LIVES = new ConfigFileEntry<>(
             "killing_dark_greens_gains_lives", true, "{season.general.darkgreen}",
             "Killing Dark Greens Gains Lives", "Controls whether killing dark green players (4+ lives) gives the killer a life."
     );
     public static final ConfigFileEntry<Boolean> BROADCAST_LIFE_GAIN = new ConfigFileEntry<>(
-            "broadcast_life_gain", false, "season.general.darkgreen",
+            "broadcast_life_gain", true, "season.general.darkgreen",
             "Broadcast Life Gain", "Shows a message in chat when a player gains a life by killing a dark green player."
     );
 

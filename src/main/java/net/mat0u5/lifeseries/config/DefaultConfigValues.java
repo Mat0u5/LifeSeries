@@ -159,7 +159,7 @@ public class DefaultConfigValues {
             "Quizmaster Force List", "A list of players that are forced to become the Quizmaster."
     );
      public final ConfigFileEntry<String> BOOGEYMAN_MESSAGE = new ConfigFileEntry<>(
-            "boogeyman_message", "§7You have been chosen by the Trivia Bots. You must by any means necessary kill a §2dark green§7, §agreen§7 or §eyellow§7 name by direct action to be cured of the curse. If you fail, you will become a §cred name§7. All loyalties and friendships are removed while you are the Quizmaster.", "global.boogeyman", "Boogeyman Message", "The message that shows up when you become a QuizMaster."
+            "boogeyman_message", "§7You have been chosen by the Trivia Bots. You must by any means necessary kill a §2dark green§7, §agreen§7 or §eyellow§7 name by direct action to be cured of the curse. If you fail, you will become a §cred name§7. All loyalties and friendships are removed while you are the Quizmaster.", "global.boogeyman", "Quizmaster Message", "The message that shows up when you become a Quizmaster."
     );
     public final ConfigFileEntry<Double> BOOGEYMAN_CHANCE_MULTIPLIER = new ConfigFileEntry<>(
             "boogeyman_chance_multiplier", 0.5, ConfigTypes.PERCENTAGE, "global.boogeyman",

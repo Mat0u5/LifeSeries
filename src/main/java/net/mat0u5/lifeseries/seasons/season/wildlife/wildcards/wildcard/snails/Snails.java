@@ -136,7 +136,7 @@ public class Snails extends Wildcard {
         if (snailNames.containsKey(player.getUuid())) {
             return snailNames.get(player.getUuid());
         }
-        return TextUtils.formatString("{}'s Snail", player);
+        return TextUtils.formatString("VHSnail");
     }
 
     public static void saveSnailNames() {
