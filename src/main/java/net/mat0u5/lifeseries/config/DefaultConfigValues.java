@@ -135,16 +135,16 @@ public class DefaultConfigValues {
             "Locator Bar", "Enables the player Locator Bar."
     );
     public final ConfigFileEntry<Boolean> BOOGEYMAN = new ConfigFileEntry<>(
-            "boogeyman", false, ConfigTypes.BOOGEYMAN, "{global.boogeyman}",
-            "Boogeyman Enabled", "Enables the boogeyman."
+            "quizmaster", false, ConfigTypes.BOOGEYMAN, "{global.boogeyman}",
+            "Quizmaster Enabled", "Enables the quizmaster."
     );
     public final ConfigFileEntry<Integer> BOOGEYMAN_MIN_AMOUNT = new ConfigFileEntry<>(
             "boogeyman_min_amount", 1, "global.boogeyman",
-            "Minimum Boogeyman Amount", "The minimum amount of Boogeymen a session can have."
+            "Minimum Quizmaster Amount", "The minimum amount of Quizmasters a session can have."
     );
     public final ConfigFileEntry<Integer> BOOGEYMAN_MAX_AMOUNT = new ConfigFileEntry<>(
             "boogeyman_max_amount", 99, "global.boogeyman",
-            "Maximum Boogeyman Amount", "The maximum amount of Boogeymen a session can have."
+            "Maximum Quizmaster Amount", "The maximum amount of Quizmasters a session can have."
     );
     public final ConfigFileEntry<Boolean> BOOGEYMAN_ADVANCED_DEATHS = new ConfigFileEntry<>(
             "boogeyman_advanced_deaths", false, "global.boogeyman[new]",
@@ -152,38 +152,38 @@ public class DefaultConfigValues {
     );
     public final ConfigFileEntry<String> BOOGEYMAN_IGNORE = new ConfigFileEntry<>(
             "boogeyman_ignore", "[]", "global.boogeyman",
-            "Boogeyman Ignore List", "A list of players that cannot become the boogeyman."
+            "Quizmaster Ignore List", "A list of players that cannot become the quizmaster."
     );
     public final ConfigFileEntry<String> BOOGEYMAN_FORCE = new ConfigFileEntry<>(
             "boogeyman_force", "[]", "global.boogeyman",
-            "Boogeyman Force List", "A list of players that are forced to become the boogeyman."
+            "Quizmaster Force List", "A list of players that are forced to become the Quizmaster."
     );
     public final ConfigFileEntry<String> BOOGEYMAN_MESSAGE = new ConfigFileEntry<>(
-            "boogeyman_message", "§7You are the Boogeyman. You must by any means necessary kill a §2dark green§7, §agreen§7 or §eyellow§7 name by direct action to be cured of the curse. If you fail, you will become a §cred name§7. All loyalties and friendships are removed while you are the Boogeyman.", "global.boogeyman", "Boogeyman Message", "The message that shows up when you become a Boogeyman."
+            "boogeyman_message", "§7You have been chosen by the Trivia Bots. You must by any means necessary kill a §2dark green§7, §agreen§7 or §eyellow§7 name by direct action to be cured of the curse. If you fail, you will become a §cred name§7. All loyalties and friendships are removed while you are the Quizmaster.boogey"
     );
     public final ConfigFileEntry<Double> BOOGEYMAN_CHANCE_MULTIPLIER = new ConfigFileEntry<>(
             "boogeyman_chance_multiplier", 0.5, ConfigTypes.PERCENTAGE, "global.boogeyman",
-            "Boogeyman Chance Multiplier", "Controls how likely it is to get one extra boogeyman."
+            "Quizmaster Chance Multiplier", "Controls how likely it is to get one extra quizmaster."
     );
     public final ConfigFileEntry<Double> BOOGEYMAN_CHOOSE_MINUTE = new ConfigFileEntry<>(
             "boogeyman_choose_minute", 10.0, ConfigTypes.MINUTES, "global.boogeyman",
-            "Boogeyman Choose Time", "The number of minutes (in the session) after which the boogeyman gets picked."
+            "Quizmaster Choose Time", "The number of minutes (in the session) after which the quizmaster gets picked."
     );
     public final ConfigFileEntry<Boolean> BOOGEYMAN_ANNOUNCE_OUTCOME = new ConfigFileEntry<>(
             "boogeyman_announce_outcome", true, "global.boogeyman",
-            "Boogeyman Announce Outcome", "Shows a message in chat when the boogeyman succeeds or fails."
+            "Quizmaster Announce Outcome", "Shows a message in chat when the quizmaster succeeds or fails."
     );
     public final ConfigFileEntry<Boolean> BOOGEYMAN_INFINITE = new ConfigFileEntry<>(
             "boogeyman_infinite", false, "{global.boogeyman.infinite}[new]",
-            "Boogeyman Infinite Rolling", "When any boogeyman is cured, a new one will replace them immediatelly."
+            "Quizmaster Infinite Rolling", "When any quizmaster is cured, a new one will replace them immediatelly."
     );
     public final ConfigFileEntry<Integer> BOOGEYMAN_INFINITE_LAST_PICK = new ConfigFileEntry<>(
             "boogeyman_infinite_last_pick", 1800, ConfigTypes.SECONDS, "global.boogeyman.infinite[new]",
-            "Last Roll Before End Of Session", "Controls how long before the end of session the infinite boogey picking will stop, in seconds."
+            "Last Roll Before End Of Session", "Controls how long before the end of session the infinite quizmaster picking will stop, in seconds."
     );
     public final ConfigFileEntry<Integer> BOOGEYMAN_INFINITE_AUTO_FAIL = new ConfigFileEntry<>(
             "boogeyman_infinite_auto_fail", 360000, ConfigTypes.SECONDS, "global.boogeyman.infinite[new]",
-            "Automatic Fail", "Controls how long a Boogeyman has to kill someone before they automatically fail, in seconds."
+            "Automatic Fail", "Controls how long a Quizmaster has to kill someone before they automatically fail, in seconds."
     );
 
     public final ConfigFileEntry<Boolean> SECRET_SOCIETY = new ConfigFileEntry<>(

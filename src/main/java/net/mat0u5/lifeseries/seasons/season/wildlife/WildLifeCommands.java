@@ -175,7 +175,7 @@ public class WildLifeCommands {
         if (checkBanned(source)) return -1;
 
         if (!WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
-            source.sendError(Text.of("The Hunger wildcard is not active right now."));
+            source.sendError(Text.of("The Hunger curse is not active right now."));
             return -1;
         }
 
@@ -230,11 +230,11 @@ public class WildLifeCommands {
         if (checkBanned(source)) return -1;
         if (source.getPlayer() == null) return -1;
         if (!NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer())) {
-            source.sendError(Text.of("You must have the Life Series mod installed §nclient-side§r to open the wildcard GUI"));
+            source.sendError(Text.of("You must have the Life Series mod installed §nclient-side§r to open the curse GUI"));
             return -1;
         }
 
-        OtherUtils.sendCommandFeedback(source, Text.of("§7Opening the Wildcard selection GUI..."));
+        OtherUtils.sendCommandFeedback(source, Text.of("§7Opening the curse selection GUI..."));
         NetworkHandlerServer.sendStringPacket(source.getPlayer(), PacketNames.SELECT_WILDCARDS, "true");
         return 1;
     }
@@ -397,16 +397,16 @@ public class WildLifeCommands {
         if (checkBanned(source)) return -1;
         if (wildcardName.equalsIgnoreCase("*")) {
             WildcardManager.onSessionEnd();
-            OtherUtils.sendCommandFeedback(source, Text.of("Deactivated all wildcards"));
+            OtherUtils.sendCommandFeedback(source, Text.of("Deactivated all curses"));
             return 1;
         }
         Wildcards wildcard = Wildcards.getFromString(wildcardName);
         if (wildcard == Wildcards.NULL) {
-            source.sendError(Text.of("That Wildcard doesn't exist"));
+            source.sendError(Text.of("That curse doesn't exist"));
             return -1;
         }
         if (!WildcardManager.isActiveWildcard(wildcard)) {
-            source.sendError(Text.of("That Wildcard is not active"));
+            source.sendError(Text.of("That curse is not active"));
             return -1;
         }
         WildcardManager.fadedWildcard();
@@ -436,25 +436,25 @@ public class WildLifeCommands {
                     if (wildcard.active) continue;
                     wildcard.activate();
                 }
-                WildcardManager.showRainbowCryptTitle("All wildcards are active!");
+                WildcardManager.showRainbowCryptTitle("All curses are active!");
             });
             NetworkHandlerServer.sendUpdatePackets();
 
-            OtherUtils.sendCommandFeedback(source, Text.of("Activated all wildcards (Except Callback)"));
+            OtherUtils.sendCommandFeedback(source, Text.of("Activated all curses (Except Callback)"));
             return 1;
         }
         Wildcards wildcard = Wildcards.getFromString(wildcardName);
         if (wildcard == Wildcards.NULL) {
-            source.sendError(Text.of("That Wildcard doesn't exist"));
+            source.sendError(Text.of("That curse doesn't exist"));
             return -1;
         }
         if (WildcardManager.isActiveWildcard(wildcard)) {
-            source.sendError(Text.of("That Wildcard is already active"));
+            source.sendError(Text.of("That curse is already active"));
             return -1;
         }
         Wildcard actualWildcard = wildcard.getInstance();
         if (actualWildcard == null) {
-            source.sendError(Text.of("That Wildcard has not been implemented yet"));
+            source.sendError(Text.of("That curse has not been implemented yet"));
             return -1;
         }
         TaskScheduler.scheduleTask(89, () -> WildcardManager.activeWildcards.put(wildcard, actualWildcard));
@@ -466,17 +466,17 @@ public class WildLifeCommands {
 
     public static int listWildcards(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Available Wildcards: {}", Wildcards.getWildcardsStr()));
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Available curses: {}", Wildcards.getWildcardsStr()));
         return 1;
     }
 
     public static int listActiveWildcards(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
         if (Wildcards.getActiveWildcardsStr().isEmpty()) {
-            OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7There are no active Wildcards right now. \nYou will be able to select a Wildcard when you start a session, or you can use '§f/wildcard activate <wildcard>§7' to activate a specific Wildcard right now."));
+            OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7There are no active curses right now. \nYou will be able to select a curse when you start a session, or you can use '§f/wildcard activate <wildcard>§7' to activate a specific curse right now."));
             return 1;
         }
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Activated Wildcards: {}", Wildcards.getActiveWildcardsStr()));
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Activated curses: {}", Wildcards.getActiveWildcardsStr()));
         return 1;
     }
 }

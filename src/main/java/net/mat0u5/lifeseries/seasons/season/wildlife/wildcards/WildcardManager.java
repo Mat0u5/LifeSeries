@@ -116,13 +116,13 @@ public class WildcardManager {
                 if (wildcard.active) continue;
                 wildcard.activate();
             }
-            showCryptTitle("A Curse is active!");
+            showCryptTitle("A curse is active!");
         });
         TaskScheduler.scheduleTask(92, NetworkHandlerServer::sendUpdatePackets);
     }
 
     public static void fadedWildcard() {
-        PlayerUtils.broadcastMessage(Text.of("§7A Curse has faded..."));
+        PlayerUtils.broadcastMessage(Text.of("§7A curse has faded..."));
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BLOCK_BEACON_DEACTIVATE);
     }
 

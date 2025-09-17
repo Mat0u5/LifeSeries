@@ -186,7 +186,7 @@ public class WildLifeConfig extends ConfigManager {
 
     public static final ConfigFileEntry<String> WILDCARD_CALLBACK_WILDCARDS_BLACKLIST = new ConfigFileEntry<>(
             "wildcard_callback_wildcards_blacklist", "[hunger]", ConfigTypes.STRING_LIST, "season.callback[new]",
-            "Blacklisted Curses", "List of curses that cannot be activated in Callback.", Wildcards.getWildcardsStr()
+            "Blacklisted curses", "List of curses that cannot be activated in Callback.", Wildcards.getWildcardsStr()
     );
     public static final ConfigFileEntry<Double> WILDCARD_CALLBACK_TURN_OFF = new ConfigFileEntry<>(
             "wildcard_callback_turn_off", 0.75, ConfigTypes.PERCENTAGE, "season.callback[new]",
@@ -233,7 +233,7 @@ public class WildLifeConfig extends ConfigManager {
 
     public static final ConfigFileEntry<Double> ACTIVATE_WILDCARD_MINUTE = new ConfigFileEntry<>(
             "activate_wildcard_minute", 2.5, ConfigTypes.MINUTES, "season.general",
-            "Activate Curse Time", "The number of minutes (in the session) after which a curse is activated."
+            "Activate curse Time", "The number of minutes (in the session) after which a curse is activated."
     );
     public static final ConfigFileEntry<Boolean> KILLING_DARK_GREENS_GAINS_LIVES = new ConfigFileEntry<>(
             "killing_dark_greens_gains_lives", true, "{season.general.darkgreen}",

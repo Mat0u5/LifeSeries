@@ -35,7 +35,7 @@ public class BoogeymanManager {
     public boolean BOOGEYMAN_ANNOUNCE_OUTCOME = false;
     public List<String> BOOGEYMAN_IGNORE = new ArrayList<>();
     public List<String> BOOGEYMAN_FORCE = new ArrayList<>();
-    public String BOOGEYMAN_MESSAGE = "§7You are the Boogeyman. You must by any means necessary kill a §2dark green§7, §agreen§7 or §eyellow§7 name by direct action to be cured of the curse. If you fail, you will become a §cred name§7. All loyalties and friendships are removed while you are the Boogeyman.";
+    public String BOOGEYMAN_MESSAGE = "§7You have been chosen by the Trivia Bots. You must by any means necessary kill a §2dark green§7, §agreen§7 or §eyellow§7 name by direct action to be cured of the curse. If you fail, you will become a §cred name§7. All loyalties and friendships are removed while you are the Quizmaster.";
     public boolean BOOGEYMAN_INFINITE = false;
     public int BOOGEYMAN_INFINITE_LAST_PICK = 1800;
     public int BOOGEYMAN_INFINITE_AUTO_FAIL = 360000;
@@ -52,7 +52,7 @@ public class BoogeymanManager {
                 public void trigger() {
                     if (!BOOGEYMAN_ENABLED) return;
                     if (boogeymanChosen) return;
-                    PlayerUtils.broadcastMessage(Text.literal("The Boogeyman is being chosen in 5 minutes.").formatted(Formatting.RED));
+                    PlayerUtils.broadcastMessage(Text.literal("The Quizmaster is being chosen in 5 minutes.").formatted(Formatting.RED));
                     PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER);
                 }
             }
@@ -63,14 +63,14 @@ public class BoogeymanManager {
                 public void trigger() {
                     if (!BOOGEYMAN_ENABLED) return;
                     if (boogeymanChosen) return;
-                    PlayerUtils.broadcastMessage(Text.literal("The Boogeyman is being chosen in 1 minute.").formatted(Formatting.RED));
+                    PlayerUtils.broadcastMessage(Text.literal("The Quizmaster is being chosen in 1 minute.").formatted(Formatting.RED));
                     PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER);
                 }
             }
         );
         currentSession.addSessionAction(
                 new SessionAction(
-                        OtherUtils.minutesToTicks(BOOGEYMAN_CHOOSE_MINUTE),TextUtils.formatString("§7Choose Boogeymen §f[{}]", OtherUtils.formatTime(OtherUtils.minutesToTicks(BOOGEYMAN_CHOOSE_MINUTE))), "Choose Boogeymen"
+                        OtherUtils.minutesToTicks(BOOGEYMAN_CHOOSE_MINUTE),TextUtils.formatString("§7Choose Quizmaster §f[{}]", OtherUtils.formatTime(OtherUtils.minutesToTicks(BOOGEYMAN_CHOOSE_MINUTE))), "Choose Quizmaster"
                 ) {
                     @Override
                     public void trigger() {
@@ -125,7 +125,7 @@ public class BoogeymanManager {
     public void addBoogeymanManually(ServerPlayerEntity player) {
         if (!BOOGEYMAN_ENABLED) return;
         addBoogeyman(player);
-        player.sendMessage(Text.of("§c [NOTICE] You are now a Boogeyman!"));
+        player.sendMessage(Text.of("§c [NOTICE] You are now a Quizmaster!"));
     }
 
     public void removeBoogeymanManually(ServerPlayerEntity player) {
@@ -134,7 +134,7 @@ public class BoogeymanManager {
         if (boogeyman == null) return;
         boogeymen.remove(boogeyman);
         if (boogeymen.isEmpty()) boogeymanChosen = false;
-        player.sendMessage(Text.of("§c [NOTICE] You are no longer a Boogeyman!"));
+        player.sendMessage(Text.of("§c [NOTICE] You are no longer a Quizmaster!"));
     }
 
     public void resetBoogeymen() {
@@ -142,7 +142,7 @@ public class BoogeymanManager {
         for (Boogeyman boogeyman : boogeymen) {
             ServerPlayerEntity player = PlayerUtils.getPlayer(boogeyman.uuid);
             if (player == null) continue;
-            player.sendMessage(Text.of("§c [NOTICE] You are no longer a Boogeyman!"));
+            player.sendMessage(Text.of("§c [NOTICE] You are no longer a Quizmaster!"));
         }
         boogeymen = new ArrayList<>();
         boogeymanChosen = false;
@@ -158,7 +158,7 @@ public class BoogeymanManager {
         PlayerUtils.sendTitle(player,Text.of("§aYou are cured!"), 20, 30, 20);
         PlayerUtils.playSoundToPlayer(player, SoundEvent.of(Identifier.of("minecraft","lastlife_boogeyman_cure")));
         if (BOOGEYMAN_ANNOUNCE_OUTCOME) {
-            PlayerUtils.broadcastMessage(TextUtils.format("{}§7 is cured of the Boogeyman curse!", player));
+            PlayerUtils.broadcastMessage(TextUtils.format("{}§7 is cured of the Quizmaster curse!", player));
         }
     }
 
@@ -180,7 +180,7 @@ public class BoogeymanManager {
 
     public void prepareToChooseBoogeymen() {
         if (!BOOGEYMAN_ENABLED) return;
-        PlayerUtils.broadcastMessage(Text.literal("The Boogeyman is about to be chosen.").formatted(Formatting.RED));
+        PlayerUtils.broadcastMessage(Text.literal("The Quizmaster is about to be chosen.").formatted(Formatting.RED));
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER);
         TaskScheduler.scheduleTask(100, () -> {
             resetBoogeymen();
@@ -310,8 +310,8 @@ public class BoogeymanManager {
     public void handleBoogeymanLists(List<ServerPlayerEntity> normalPlayers, List<ServerPlayerEntity> boogeyPlayers) {
         PlayerUtils.playSoundToPlayers(normalPlayers, SoundEvent.of(Identifier.of("minecraft","lastlife_boogeyman_no")));
         PlayerUtils.playSoundToPlayers(boogeyPlayers, SoundEvent.of(Identifier.of("minecraft","lastlife_boogeyman_yes")));
-        PlayerUtils.sendTitleToPlayers(normalPlayers, Text.literal("NOT the Boogeyman.").formatted(Formatting.GREEN),10,50,20);
-        PlayerUtils.sendTitleToPlayers(boogeyPlayers, Text.literal("The Boogeyman.").formatted(Formatting.RED),10,50,20);
+        PlayerUtils.sendTitleToPlayers(normalPlayers, Text.literal("NOT the Quizmaster.").formatted(Formatting.GREEN),10,50,20);
+        PlayerUtils.sendTitleToPlayers(boogeyPlayers, Text.literal("The Quizmaster.").formatted(Formatting.GOLD),10,50,20);
         for (ServerPlayerEntity boogey : boogeyPlayers) {
             addBoogeyman(boogey);
             messageBoogeymen(boogey);
@@ -333,7 +333,7 @@ public class BoogeymanManager {
                 ServerPlayerEntity player = PlayerUtils.getPlayer(boogeyman.uuid);
                 if (player == null) {
                     if (BOOGEYMAN_ANNOUNCE_OUTCOME) {
-                        PlayerUtils.broadcastMessage(TextUtils.format("{}§7 failed to kill a player while being the §cBoogeyman§7. They have been dropped to their §cLast Life§7.", boogeyman.name));
+                        PlayerUtils.broadcastMessage(TextUtils.format("{}§7 failed to kill a player while being the §6Quizmaster§7. They have been dropped to their §cLast Life§7.", boogeyman.name));
                     }
                     ScoreboardUtils.setScore(ScoreHolder.fromName(boogeyman.name), LivesManager.SCOREBOARD_NAME, 1);
                     continue;
@@ -357,7 +357,7 @@ public class BoogeymanManager {
         if (BOOGEYMAN_ADVANCED_DEATHS) {
             PlayerUtils.sendTitle(player,Text.of("§cThe curse consumes you.."), 20, 30, 20);
             if (BOOGEYMAN_ANNOUNCE_OUTCOME) {
-                PlayerUtils.broadcastMessage(TextUtils.format("{}§7 failed to kill a player while being the §cBoogeyman§7. They have been consumed by the curse.", player));
+                PlayerUtils.broadcastMessage(TextUtils.format("{}§7 failed to kill a player while being the §6Quizmaster§7. They have been consumed by the curse.", player));
             }
             AdvancedDeathsManager.setPlayerLives(player, 1);
         }
@@ -365,7 +365,7 @@ public class BoogeymanManager {
             PlayerUtils.sendTitle(player,Text.of("§cYou have failed."), 20, 30, 20);
             PlayerUtils.playSoundToPlayer(player, SoundEvent.of(Identifier.of("minecraft","lastlife_boogeyman_fail")));
             if (BOOGEYMAN_ANNOUNCE_OUTCOME) {
-                PlayerUtils.broadcastMessage(TextUtils.format("{}§7 failed to kill a player while being the §cBoogeyman§7. They have been dropped to their §cLast Life§7.", player));
+                PlayerUtils.broadcastMessage(TextUtils.format("{}§7 failed to kill a player while being the §6Quizmaster§7. They have been dropped to their §cLast Life§7.", player));
             }
             livesManager.setPlayerLives(player, 1);
         }
@@ -390,7 +390,7 @@ public class BoogeymanManager {
         if (boogeymen.size() >= BOOGEYMAN_AMOUNT_MAX) return;
         if (currentSession.statusNotStarted() || currentSession.statusFinished()) return;
         TaskScheduler.scheduleTask(40, () -> {
-            player.sendMessage(Text.of("§cSince you were not present when the Boogeyman was being chosen, your chance to become the Boogeyman is now. Good luck!"));
+            player.sendMessage(Text.of("§cSince you were not present when the Quizmaster was being chosen, your chance to become the Quizmaster is now. Good luck!"));
             chooseBoogeymen(new ArrayList<>(List.of(player)), BoogeymanRollType.LATE_JOIN);
         });
     }
@@ -458,7 +458,7 @@ public class BoogeymanManager {
                 ServerPlayerEntity player = boogeyman.getPlayer();
                 if (player != null) {
                     warningAutoFail.add(boogeyman.uuid);
-                    player.sendMessage(Text.of("§cYou only have 5 minutes left to kill someone as the Boogeyman before you fail!"));
+                    player.sendMessage(Text.of("§cYou only have 5 minutes left to kill someone as the Quizmaster before you fail!"));
                 }
             }
         }

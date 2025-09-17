@@ -26,7 +26,7 @@ public class BoogeymanCommand {
 
     public static boolean checkBanned(ServerCommandSource source) {
         if (isAllowed()) return false;
-        source.sendError(Text.of("This command is only available when the boogeyman has been enabled in the Life Series config."));
+        source.sendError(Text.of("This command is only available when the quizmaster has been enabled in the Life Series config."));
         return true;
     }
 
@@ -92,11 +92,11 @@ public class BoogeymanCommand {
         if (bm == null) return -1;
 
         if (!bm.isBoogeyman(target)) {
-            source.sendError(Text.of("That player is not a Boogeyman"));
+            source.sendError(Text.of("That player is not a Quizmaster"));
             return -1;
         }
         if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Failing Boogeyman for {}§7...", target));
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Failing Quizmaster for {}§7...", target));
         }
         bm.playerFailBoogeymanManually(target);
 
@@ -111,7 +111,7 @@ public class BoogeymanCommand {
         if (bm == null) return -1;
 
         if (!bm.isBoogeyman(target)) {
-            source.sendError(Text.of("That player is not a Boogeyman"));
+            source.sendError(Text.of("That player is not a Quizmaster"));
             return -1;
         }
         bm.cure(target);
@@ -132,12 +132,12 @@ public class BoogeymanCommand {
         if (bm == null) return -1;
 
         if (bm.isBoogeyman(target)) {
-            source.sendError(Text.of("That player is already a Boogeyman"));
+            source.sendError(Text.of("That player is already a Quizmaster"));
             return -1;
         }
         bm.addBoogeymanManually(target);
 
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("{} is now a Boogeyman", target));
+        OtherUtils.sendCommandFeedback(source, TextUtils.format("{} is now a Quizmaster", target));
         return 1;
     }
 
@@ -150,12 +150,12 @@ public class BoogeymanCommand {
         if (bm == null) return -1;
 
         if (!bm.isBoogeyman(target)) {
-            source.sendError(Text.of("That player is not a Boogeyman"));
+            source.sendError(Text.of("That player is not a Quizmaster"));
             return -1;
         }
         bm.removeBoogeymanManually(target);
 
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("{} is no longer a Boogeyman", target));
+        OtherUtils.sendCommandFeedback(source, TextUtils.format("{} is no longer a Quizmaster", target));
         return 1;
     }
 
@@ -183,9 +183,9 @@ public class BoogeymanCommand {
         if (curedBoogeymen.isEmpty()) curedBoogeymen.add("§7None");
         if (failedBoogeymen.isEmpty()) failedBoogeymen.add("§7None");
 
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Remaining Boogeymen: {}", allBoogeymen));
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Cured Boogeymen: {}", curedBoogeymen));
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Failed Boogeymen: {}", failedBoogeymen));
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Remaining Quizmasters: {}", allBoogeymen));
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Cured Quizmasters: {}", curedBoogeymen));
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Failed Quizmasters: {}", failedBoogeymen));
         return 1;
     }
 
@@ -209,9 +209,9 @@ public class BoogeymanCommand {
             }
         }
 
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Remaining Boogeymen: {}", allBoogeymen));
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Cured Boogeymen: {}", curedBoogeymen));
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Failed Boogeymen: {}", failedBoogeymen));
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Remaining Quizmasters: {}", allBoogeymen));
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Cured Quizmasters: {}", curedBoogeymen));
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Failed Quizmasters: {}", failedBoogeymen));
         return 1;
     }
 
@@ -221,7 +221,7 @@ public class BoogeymanCommand {
         if (bm == null) return -1;
 
         bm.resetBoogeymen();
-        OtherUtils.sendCommandFeedback(source, Text.of("All Boogeymen have been cleared"));
+        OtherUtils.sendCommandFeedback(source, Text.of("All Quizmasters have been cleared"));
         return 1;
     }
 
@@ -230,7 +230,7 @@ public class BoogeymanCommand {
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
 
-        OtherUtils.sendCommandFeedback(source, Text.of("§7Choosing random Boogeymen..."));
+        OtherUtils.sendCommandFeedback(source, Text.of("§7Choosing random Quizmaster..."));
 
         bm.resetBoogeymen();
         bm.prepareToChooseBoogeymen();
