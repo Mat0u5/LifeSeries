@@ -226,7 +226,7 @@ public class WildLifeConfig extends ConfigManager {
     );
 
     public static final ConfigFileEntry<Double> ACTIVATE_WILDCARD_MINUTE = new ConfigFileEntry<>(
-            "activate_wildcard_minute", 1, ConfigTypes.MINUTES, "season.general",
+            "activate_wildcard_minute", 1.0, ConfigTypes.MINUTES, "season.general",
             "Activate Curse Time", "The number of minutes (in the session) after which a curse is activated."
     );
     public static final ConfigFileEntry<Boolean> KILLING_DARK_GREENS_GAINS_LIVES = new ConfigFileEntry<>(
