@@ -42,10 +42,10 @@ public class BoogeymanConfigEntry extends BooleanConfigEntry {
         }
 
         List<String> boogeymanDescription = new ArrayList<>();
-        boogeymanDescription.add("§nCurrent Boogeyman Settings:§r");
+        boogeymanDescription.add("§nCurrent Quizmaster Settings:§r");
         if (boogeymanIgnore.length > 0) {
             String line = TextUtils.formatString(
-                    "{} §f{}§r cannot become the boogeyman.",
+                    "{} §f{}§r cannot become the quizmaster.",
                     TextUtils.pluralize("Player", boogeymanIgnore.length),
                     String.join("§r, §f", boogeymanIgnore)
             );
@@ -54,7 +54,7 @@ public class BoogeymanConfigEntry extends BooleanConfigEntry {
         }
         if (boogeymanForce.length > 0) {
             String line = TextUtils.formatString(
-                    "{} §f{}§r will be forced to become the Boogeyman.",
+                    "{} §f{}§r will be forced to become the Quizmaster.",
                     TextUtils.pluralize("Player", boogeymanForce.length),
                     String.join("§r, §f", boogeymanForce)
             );
@@ -74,7 +74,7 @@ public class BoogeymanConfigEntry extends BooleanConfigEntry {
             boogeymanDescription.add(TextUtils.formatString(
                     "Chance for at least {} {}: {}",
                     boogeyNum,
-                    TextUtils.pluralize("Boogeyman","Boogeymen",boogeyNum),
+                    TextUtils.pluralize("Quizmaster","Quizmasters",boogeyNum),
                     String.format("%.1f%%", currentChance * 100)
             ));
         }
