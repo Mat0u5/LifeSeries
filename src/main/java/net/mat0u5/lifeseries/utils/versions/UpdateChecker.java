@@ -6,10 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -62,7 +59,7 @@ public class UpdateChecker {
 
                     // Compare the current version with the latest version
                     if (currentVersionNumber < updateVersionNumber || TEST_UPDATE_LAST) {
-                        Main.LOGGER.info("New major version found: "+name);
+                        Main.LOGGER.info("New major version found: " + name);
                         updateAvailable = true;
                         majorUpdateAvailable = true;
                         versionName = name;
@@ -70,7 +67,6 @@ public class UpdateChecker {
                         version = updateVersionNumber;
                         versionDescription = formatDescription(json.get("body").getAsString());
                     }
-
 
                 } else {
                     Main.LOGGER.error("Failed to fetch update info: " + connection.getResponseCode());
@@ -117,16 +113,17 @@ public class UpdateChecker {
                             int updateVersionNumber = VersionControl.getModVersionInt(name);
 
                             if (version < updateVersionNumber && currentVersionNumber < updateVersionNumber) {
-                                Main.LOGGER.info("New minor version found: "+name);
+                                Main.LOGGER.info("New minor version found: " + name);
                                 updateAvailable = true;
                                 versionName = name;
                                 version = updateVersionNumber;
                                 if (!majorUpdateAvailable) majorVersionName = versionName;
                                 if (!majorUpdateAvailable) versionDescription = formatDescription(json.get("body").getAsString());
                             }
-                        }catch(Exception e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
-                            Main.LOGGER.error(TextUtils.formatString("Error while parsing version number for update: {} - {}", name, e.getMessage()));
+                            Main.LOGGER.error(TextUtils.formatString(
+                                    "Error while parsing version number for update: {} - {}", name, e.getMessage()));
                         }
                     }
 
@@ -147,9 +144,9 @@ public class UpdateChecker {
     public static String getChangelogLink() {
         if (changelogLink != null) return changelogLink;
         if (majorVersionName != null) {
-            return "https://github.com/Mat0u5/LifeSeries/blob/main/docs/changelogs/"+majorVersionName+".md";
+            return "https://github.com/Mat0u5/LifeSeries/blob/main/docs/changelogs/" + majorVersionName + ".md";
         }
-        return "https://github.com/Mat0u5/LifeSeries/blob/main/docs/changelogs/"+versionName+".md";
+        return "https://github.com/Mat0u5/LifeSeries/blob/main/docs/changelogs/" + versionName + ".md";
     }
 
     public static String formatDescription(String rawDesctiption) {
@@ -164,21 +161,22 @@ public class UpdateChecker {
                     try {
                         String line = split[i].trim();
                         if (line.startsWith("changelogLink=")) {
-                            changelogLink = line.replace("changelogLink=","");
+                            changelogLink = line.replace("changelogLink=", "");
                         }
                         if (line.startsWith("versionName=")) {
-                            versionName = line.replace("versionName=","");
+                            versionName = line.replace("versionName=", "");
                         }
                         if (line.startsWith("majorVersionName=")) {
-                            majorVersionName = line.replace("majorVersionName=","");
+                            majorVersionName = line.replace("majorVersionName=", "");
                         }
                         if (line.startsWith("versionDescription=")) {
-                            rawDesctiption = line.replace("versionDescription=","");
+                            rawDesctiption = line.replace("versionDescription=", "");
                         }
                         if (line.startsWith("version=")) {
-                            version = Integer.parseInt(line.replace("version=",""));
+                            version = Integer.parseInt(line.replace("version=", ""));
                         }
-                    }catch(Exception ignored) {}
+                    } catch (Exception ignored) {
+                    }
                 }
             }
         }
@@ -186,54 +184,9 @@ public class UpdateChecker {
     }
 
     public static void onPlayerJoin(ServerPlayerEntity player) {
-        if (!updateAvailable || versionName == null) {
-            return;
-        }
-        if (!VersionControl.isDevVersion()) {
-            Text discordText = Text.literal("§7Click ").append(
-                    Text.literal("here")
-                        .styled(style -> style
-                            .withColor(Formatting.BLUE)
-                            .withClickEvent(TextUtils.openURLClickEvent("https://discord.gg/QWJxfb4zQZ"))
-                            .withUnderline(true)
-                        )).append(Text.of("§7 to join the mod development discord if you have any questions, issues, requests, or if you just want to hang out :)\n"));
-            Text updateText =
-                    TextUtils.formatLoosely("A new version of the Life Series Mod is available ({}) §nserver-side§f. \n",versionName)
-                        .styled(style -> style
-                            .withHoverEvent(
-                                TextUtils.showTextHoverEvent(TextUtils.formatLoosely(
-                                    "§7§nUpdate Description:§r\n\n{}", versionDescription
-                                ))
-                            )
-                        )
-                        .append(
-                            Text.literal("Click to download on Modrinth")
-                                .styled(style -> style
-                                    .withColor(Formatting.BLUE)
-                                        .withClickEvent(TextUtils.openURLClickEvent("https://modrinth.com/mod/life-series"))
-                                    .withUnderline(true)
-                                )
-                        );
-            if (PermissionManager.isAdmin(player)) {
-                player.sendMessage(updateText);
-                player.sendMessage(discordText);
-            }
-        }
-        else {
-            Text updateText =
-                Text.literal("§c[Life Series] You are playing on a developer version, there are probably some bugs, and it's possible that some features don't work.\n")
-                    .append(
-                        Text.literal("Download full releases on Modrinth")
-                            .styled(style -> style
-                                .withColor(Formatting.BLUE)
-                                .withClickEvent(TextUtils.openURLClickEvent("https://modrinth.com/mod/life-series"))
-                                .withUnderline(true)
-                            )
-                    );
-
-            player.sendMessage(updateText);
-        }
+        // Intentionally disabled update messages (no popup or chat)
     }
+
     public static void shutdownExecutor() {
         executor.shutdown();
         try {
