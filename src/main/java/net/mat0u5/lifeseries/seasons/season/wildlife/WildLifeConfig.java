@@ -183,7 +183,7 @@ public class WildLifeConfig extends ConfigManager {
             "Blacklisted Curses", "List of curses that cannot be activated in Callback.", Wildcards.getWildcardsStr()
     );
     public static final ConfigFileEntry<Double> WILDCARD_CALLBACK_TURN_OFF = new ConfigFileEntry<>(
-            "wildcard_callback_turn_off", 0.75, ConfigTypes.PERCENTAGE, "season.callback[new]",
+            "wildcard_callback_turn_off", 1.0, ConfigTypes.PERCENTAGE, "season.callback[new]",
             "Turn Off In Session", "Controls when in the session the callback curse turns off (percentage)."
     );
 
@@ -311,6 +311,11 @@ public class WildLifeConfig extends ConfigManager {
         SPAWN_EGG_ALLOW_ON_SPAWNER.defaultValue = true;
         SPAWNER_RECIPE.defaultValue = true;
         TAB_LIST_SHOW_LIVES.defaultValue = true;
+        ONLY_TAKE_LIVES_IN_SESSION.defaultValue = true;
+        BOOGEYMAN.defaultValue = true;
+        BOOGEYMAN_CHOOSE_MINUTE.defaultValue = 5.0;
+        BOOGEYMAN_ADVANCED_DEATHS.defaultValue = true;
+        WATCHERS_IN_TAB.defaultValue = false;
 
         new TriviaQuestionManager("./config/lifeseries/wildlife","easy-trivia.json");
         new TriviaQuestionManager("./config/lifeseries/wildlife","normal-trivia.json");
