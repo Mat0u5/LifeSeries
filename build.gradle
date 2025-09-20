@@ -1,150 +1,145 @@
 plugins {
- id 'fabric-loom' version "${loom_version}"
- id 'maven-publish'
- id "me.modmuss50.mod-publish-plugin" version "0.8.4"
+    id 'fabric-loom' version "${loom_version}"
+    id 'maven-publish'
+    id "me.modmuss50.mod-publish-plugin" version "0.8.4"
 }
-version = "${project.mod_version}+${stonecutter.current.project}"
+
+version = "${project.mod_version}+${project.base_mod_version}+${stonecutter.current.project}"
 group = project.maven_group
 
 base {
- archivesName = project.archives_base_name
+    archivesName = project.archives_base_name
 }
-loom {
- splitEnvironmentSourceSets()
 
- mods {
-  "lifeseries" {
-   sourceSet sourceSets.main
-   sourceSet sourceSets.client
-  }
- }
+loom {
+    splitEnvironmentSourceSets()
+
+    mods {
+        "lifeseries" {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.client
+        }
+    }
 }
+
 repositories {
- maven { url "https://api.modrinth.com/maven" }
- maven { url 'https://maven.nucleoid.xyz' }
- maven { url "https://maven.tomalbrc.de" }
- maven {
-  name = 'Ladysnake Mods'
-  url = 'https://maven.ladysnake.org/releases'
- }
- maven { url "https://maven.shedaniel.me/" }
- maven { url = 'https://maven.maxhenkel.de/repository/public' }
+    maven { url "https://api.modrinth.com/maven" }
+    maven { url 'https://maven.nucleoid.xyz' }
+    maven { url "https://maven.tomalbrc.de" }
+    maven {
+        name = 'Ladysnake Mods'
+        url = 'https://maven.ladysnake.org/releases'
+    }
+    maven { url "https://maven.shedaniel.me/" }
+    maven { url = 'https://maven.maxhenkel.de/repository/public' }
 }
 
 fabricApi {
- configureDataGeneration()
+    configureDataGeneration()
 }
+
 dependencies {
- minecraft("com.mojang:minecraft:${stonecutter.current.project}")
- mappings("net.fabricmc:yarn:${property("yarn_mappings")}:v2")
+    minecraft("com.mojang:minecraft:${stonecutter.current.project}")
+    mappings("net.fabricmc:yarn:${property("yarn_mappings")}:v2")
 
- modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
- modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
+    modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
 
- if (project.polymer_version != "null") modImplementation include("eu.pb4:polymer-bundled:${project.polymer_version}")
- if (project.blockbench_import_library_version != "null") modImplementation include("de.tomalbrc:blockbench-import-library:${project.blockbench_import_library_version}")
+    if (project.polymer_version != "null") modImplementation include("eu.pb4:polymer-bundled:${project.polymer_version}")
+    if (project.blockbench_import_library_version != "null") modImplementation include("de.tomalbrc:blockbench-import-library:${project.blockbench_import_library_version}")
 
- implementation "de.maxhenkel.voicechat:voicechat-api:${project.voicechat_api_version}"
- if (project.voicechat_mod_version != "null") modRuntimeOnly "maven.modrinth:simple-voice-chat:fabric-${project.voicechat_mod_version}"
- if (project.carpet_mod_version != "null") modRuntimeOnly "maven.modrinth:carpet:${project.carpet_mod_version}"
+    implementation "de.maxhenkel.voicechat:voicechat-api:${project.voicechat_api_version}"
+    if (project.voicechat_mod_version != "null") modRuntimeOnly "maven.modrinth:simple-voice-chat:fabric-${project.voicechat_mod_version}"
+    if (project.carpet_mod_version != "null") modRuntimeOnly "maven.modrinth:carpet:${project.carpet_mod_version}"
 }
+
 loom {
- runConfigs.all {
-  //ideConfigGenerated true // Run configurations are not created for subprojects by default
-  runDir "../../run" // Use a shared run folder and create separate worlds
- }
+    runConfigs.all {
+        runDir "../../run" // Use a shared run folder and create separate worlds
+    }
 }
 
 processResources {
- filesMatching("fabric.mod.json") {
-  expand "version": project.property('mod_version'),
-          "targetVersion": project.property('target_version'),
-          "minecraftVersion": stonecutter.current.version
- }
+    filesMatching("fabric.mod.json") {
+        expand "version": project.property('mod_version'),
+               "baseVersion": project.property('base_mod_version'),
+               "targetVersion": project.property('target_version'),
+               "minecraftVersion": stonecutter.current.version
+    }
 }
 
 tasks.withType(JavaCompile).configureEach {
- it.options.release = 21
+    it.options.release = 21
 }
 
 java {
- // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
- // if it is present.
- // If you remove this line, sources will not be generated.
- withSourcesJar()
-
- sourceCompatibility = JavaVersion.VERSION_21
- targetCompatibility = JavaVersion.VERSION_21
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {
- from("LICENSE") {
-  rename { "${it}_${project.base.archivesName.get()}"}
- }
+    from("LICENSE") {
+        rename { "${it}_${project.base.archivesName.get()}"}
+    }
 }
 
 publishMods {
- file = remapJar.archiveFile
- changelog = providers.environmentVariable("CHANGELOG")
- type = providers.environmentVariable("VERSION_TYPE")
- displayName = "Life Series ${project.property('mod_version')} for Fabric ${project.property('min_version')}${project.property('min_version') == project.property('max_version') ? '' : '-' + project.property('max_version')}"
+    file = remapJar.archiveFile
+    changelog = providers.environmentVariable("CHANGELOG")
+    type = providers.environmentVariable("VERSION_TYPE")
+    displayName = "Life Series ${project.property('mod_version')} for Fabric ${project.property('min_version')}${project.property('min_version') == project.property('max_version') ? '' : '-' + project.property('max_version')}"
 
- modLoaders.add("fabric")
+    modLoaders.add("fabric")
 
- def isDevBuild = providers.environmentVariable("DEV_BUILD").getOrElse("true") == "true"
+    def isDevBuild = providers.environmentVariable("DEV_BUILD").getOrElse("true") == "true"
 
- modrinth {
-  projectId = isDevBuild ? "RLDqKhd4" : "aLasQi8P"
-  accessToken = providers.environmentVariable("MODRINTH_TOKEN")
-  minecraftVersionRange {
-   start = project.property('min_version')
-   end = project.property('max_version')
-  }
+    modrinth {
+        projectId = isDevBuild ? "RLDqKhd4" : "aLasQi8P"
+        accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+        minecraftVersionRange {
+            start = project.property('min_version')
+            end = project.property('max_version')
+        }
 
-  requires("fabric-api")
-  optional("simple-voice-chat")
- }
+        requires("fabric-api")
+        optional("simple-voice-chat")
+    }
 
- if (!isDevBuild) {
-  curseforge {
-   projectId = "1151647"
-   accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
-   minecraftVersionRange {
-    start = project.property('min_version')
-    end = project.property('max_version')
-   }
+    if (!isDevBuild) {
+        curseforge {
+            projectId = "1151647"
+            accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+            minecraftVersionRange {
+                start = project.property('min_version')
+                end = project.property('max_version')
+            }
 
-   clientRequired = true
-   serverRequired = true
+            clientRequired = true
+            serverRequired = true
 
-   requires("fabric-api")
-   optional("simple-voice-chat")
-  }
- }
+            requires("fabric-api")
+            optional("simple-voice-chat")
+        }
+    }
 }
 
-
-// configure the maven publication
+// Configure the maven publication
 publishing {
- publications {
-  create("mavenJava", MavenPublication) {
-   artifactId = project.archives_base_name
-   from components.java
-  }
- }
-
- // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
- repositories {
-  // Add repositories to publish to here.
-  // Notice: This block does NOT have the same function as the block in the top level.
-  // The repositories here will be used for publishing your artifact, not for
-  // retrieving dependencies.
- }
+    publications {
+        create("mavenJava", MavenPublication) {
+            artifactId = project.archives_base_name
+            from components.java
+        }
+    }
+    repositories {
+        // Add repositories to publish to here if needed
+    }
 }
 
 task runClientNamed {
- doFirst {
-  runClient.args('--username', 'Player')
- }
- finalizedBy 'runClient'
+    doFirst {
+        runClient.args('--username', 'Player')
+    }
+    finalizedBy 'runClient'
 }

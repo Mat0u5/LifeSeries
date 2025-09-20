@@ -39,13 +39,13 @@ public class WildcardManager {
                     @Override
                     public void trigger() {
                         if (activeWildcards.isEmpty()) {
-                            PlayerUtils.broadcastMessage(Text.literal("A Wildcard will be activated in 2 minutes!").formatted(Formatting.GRAY));
+                            PlayerUtils.broadcastMessage(Text.literal("A curse will be activated in 2 minutes!").formatted(Formatting.GRAY));
                         }
                     }
                 }
         );
         currentSession.addSessionAction(
-            new SessionAction(OtherUtils.minutesToTicks(ACTIVATE_WILDCARD_MINUTE),TextUtils.formatString("§7Activate curse §f[{}]", OtherUtils.formatTime(OtherUtils.minutesToTicks(ACTIVATE_WILDCARD_MINUTE))), "Activate curse") {
+            new SessionAction(OtherUtils.minutesToTicks(ACTIVATE_WILDCARD_MINUTE),TextUtils.formatString("§7Activate curse §f[{}]", OtherUtils.formatTime(OtherUtils.minutesToTicks(ACTIVATE_WILDCARD_MINUTE))), "Activate Curse") {
                 @Override
                 public void trigger() {
                     if (activeWildcards.isEmpty()) {
