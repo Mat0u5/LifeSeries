@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "lifeseries",
-  "version": "${version}+${baseVersion}+${minecraftVersion}",
+  "version": "v-${modVer}+${baseModVer}+${minecraftVer}",
   "name": "Life Series Trivia Takeover",
   "description": "A mod of Mat0u5's Life Series mod changing stuff like the model of the Trivia bots or changing snails to be VHsnails",
   "authors": [
@@ -35,7 +35,7 @@
   ],
   "depends": {
     "fabricloader": ">=0.14.21",
-    "minecraft": "${targetVersion}",
+    "minecraft": "${minecraftVer}",
     "java": ">=21",
     "fabric-api": "*"
   },
