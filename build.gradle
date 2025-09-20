@@ -4,23 +4,17 @@ plugins {
     id "me.modmuss50.mod-publish-plugin" version "0.8.4"
 }
 
-// ----------------------------
-// Version Configuration
-// ----------------------------
+// Use findProperty() so it doesn't fail if the property is missing in a subproject
 def modVer = project.findProperty('mod_version') ?: '1.0.0'
-def baseModVer = project.findProperty('base_mod_version') ?: '1.4.0.0'
-def mcVer = stonecutter.current.version
+def baseModVer = project.findProperty('base_mod_version') ?: '1.4.2.0'
 
-version = "${modVer}+${baseModVer}+${mcVer}" // Full archive version
+version = "${modVer}+${baseModVer}+${stonecutter.current.project}"
 group = project.maven_group
 
 base {
     archivesName = project.archives_base_name
 }
 
-// ----------------------------
-// Loom & Mod Setup
-// ----------------------------
 loom {
     splitEnvironmentSourceSets()
 
@@ -30,31 +24,24 @@ loom {
             sourceSet sourceSets.client
         }
     }
-
-    runConfigs.all {
-        runDir "../../run"
-    }
 }
 
-// ----------------------------
-// Repositories
-// ----------------------------
 repositories {
     maven { url "https://api.modrinth.com/maven" }
     maven { url 'https://maven.nucleoid.xyz' }
     maven { url "https://maven.tomalbrc.de" }
-    maven { url 'https://maven.ladysnake.org/releases' }
+    maven {
+        name = 'Ladysnake Mods'
+        url = 'https://maven.ladysnake.org/releases'
+    }
     maven { url "https://maven.shedaniel.me/" }
-    maven { url 'https://maven.maxhenkel.de/repository/public' }
+    maven { url = 'https://maven.maxhenkel.de/repository/public' }
 }
 
 fabricApi {
     configureDataGeneration()
 }
 
-// ----------------------------
-// Dependencies
-// ----------------------------
 dependencies {
     minecraft("com.mojang:minecraft:${stonecutter.current.project}")
     mappings("net.fabricmc:yarn:${property("yarn_mappings")}:v2")
@@ -70,9 +57,21 @@ dependencies {
     if (project.carpet_mod_version != "null") modRuntimeOnly "maven.modrinth:carpet:${project.carpet_mod_version}"
 }
 
-// ----------------------------
-// Java Configuration
-// ----------------------------
+loom {
+    runConfigs.all {
+        runDir "../../run"
+    }
+}
+
+processResources {
+    filesMatching("fabric.mod.json") {
+        expand "version": modVer,
+               "baseVersion": baseModVer,
+               "targetVersion": project.property('target_version'),
+               "minecraftVersion": stonecutter.current.version
+    }
+}
+
 tasks.withType(JavaCompile).configureEach {
     it.options.release = 21
 }
@@ -83,36 +82,17 @@ java {
     targetCompatibility = JavaVersion.VERSION_21
 }
 
-// ----------------------------
-// Process Resources (fabric.mod.json)
-// ----------------------------
-processResources {
-    filesMatching("fabric.mod.json") {
-        expand "modVer": modVer,
-               "baseModVer": baseModVer,
-               "minecraftVer": mcVer
-    }
-}
-
-// ----------------------------
-// JAR Naming
-// ----------------------------
 jar {
-    archiveBaseName.set("trivia-takeover")
-    archiveVersion.set("${modVer}+${baseModVer}+${mcVer}")
     from("LICENSE") {
-        rename { "${it}_${project.base.archivesName.get()}" }
+        rename { "${it}_${project.base.archivesName.get()}"}
     }
 }
 
-// ----------------------------
-// Publishing
-// ----------------------------
 publishMods {
     file = remapJar.archiveFile
     changelog = providers.environmentVariable("CHANGELOG")
     type = providers.environmentVariable("VERSION_TYPE")
-    displayName = "Trivia Takeover ${modVer}+${baseModVer}+${mcVer} for Fabric ${project.property('min_version')}"
+    displayName = "Life Series ${modVer} for Fabric ${project.property('min_version')}${project.property('min_version') == project.property('max_version') ? '' : '-' + project.property('max_version')}"
 
     modLoaders.add("fabric")
 
@@ -148,7 +128,6 @@ publishMods {
     }
 }
 
-// Maven Publishing
 publishing {
     publications {
         create("mavenJava", MavenPublication) {
@@ -156,11 +135,11 @@ publishing {
             from components.java
         }
     }
+    repositories {
+        // Add repositories to publish to here if needed
+    }
 }
 
-// ----------------------------
-// Optional: Run Client Task
-// ----------------------------
 task runClientNamed {
     doFirst {
         runClient.args('--username', 'Player')
