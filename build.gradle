@@ -4,7 +4,11 @@ plugins {
     id "me.modmuss50.mod-publish-plugin" version "0.8.4"
 }
 
-version = "${project.mod_version}+${project.base_mod_version}+${stonecutter.current.project}"
+// Use findProperty() so it doesn't fail if the property is missing in a subproject
+def modVer = project.findProperty('mod_version') ?: '1.0.0'
+def baseModVer = project.findProperty('base_mod_version') ?: '1.4.2.0'
+
+version = "${modVer}+${baseModVer}+${stonecutter.current.project}"
 group = project.maven_group
 
 base {
@@ -55,14 +59,14 @@ dependencies {
 
 loom {
     runConfigs.all {
-        runDir "../../run" // Use a shared run folder and create separate worlds
+        runDir "../../run"
     }
 }
 
 processResources {
     filesMatching("fabric.mod.json") {
-        expand "version": project.property('mod_version'),
-               "baseVersion": project.property('base_mod_version'),
+        expand "version": modVer,
+               "baseVersion": baseModVer,
                "targetVersion": project.property('target_version'),
                "minecraftVersion": stonecutter.current.version
     }
@@ -88,7 +92,7 @@ publishMods {
     file = remapJar.archiveFile
     changelog = providers.environmentVariable("CHANGELOG")
     type = providers.environmentVariable("VERSION_TYPE")
-    displayName = "Life Series ${project.property('mod_version')} for Fabric ${project.property('min_version')}${project.property('min_version') == project.property('max_version') ? '' : '-' + project.property('max_version')}"
+    displayName = "Life Series ${modVer} for Fabric ${project.property('min_version')}${project.property('min_version') == project.property('max_version') ? '' : '-' + project.property('max_version')}"
 
     modLoaders.add("fabric")
 
@@ -124,7 +128,6 @@ publishMods {
     }
 }
 
-// Configure the maven publication
 publishing {
     publications {
         create("mavenJava", MavenPublication) {
