@@ -24,9 +24,14 @@ public class VersionControl {
         return MOD_VERSION.contains("dev") || MOD_VERSION.contains("pre") || Main.DEBUG;
     }
 
-    // 🔹 Convert version string into comparable integer (only your mod version)
+    // 🔹 Convert default mod version string into comparable integer
     public static int getModVersionInt() {
         return parseVersionToInt(MOD_VERSION);
+    }
+
+    // 🔹 Convert a custom version string into comparable integer
+    public static int getModVersionInt(String versionString) {
+        return parseVersionToInt(versionString);
     }
 
     private static int parseVersionToInt(String string) {
