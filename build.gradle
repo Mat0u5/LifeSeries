@@ -6,7 +6,7 @@ plugins {
 
 // Use findProperty() so it doesn't fail if the property is missing in a subproject
 def modVer = project.findProperty('mod_version') ?: '1.0.0'
-def baseModVer = project.findProperty('base_mod_version') ?: '1.4.2.0'
+def baseModVer = project.findProperty('base_mod_version') ?: '1.4.0.0'
 
 version = "${modVer}+${baseModVer}+${stonecutter.current.project}"
 group = project.maven_group
