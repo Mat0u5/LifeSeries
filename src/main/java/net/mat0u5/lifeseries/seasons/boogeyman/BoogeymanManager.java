@@ -154,6 +154,7 @@ public class BoogeymanManager {
         Boogeyman boogeyman = getBoogeyman(player);
         if (boogeymen == null) return;
         boogeyman.failed = false;
+        if (boogeyman.cured) return;
         boogeyman.cured = true;
         PlayerUtils.sendTitle(player,Text.of("§aYou are cured!"), 20, 30, 20);
         PlayerUtils.playSoundToPlayer(player, SoundEvent.of(Identifier.of("minecraft","lastlife_boogeyman_cure")));
@@ -351,6 +352,11 @@ public class BoogeymanManager {
         if (!BOOGEYMAN_ENABLED) return false;
         Boogeyman boogeyman = getBoogeyman(player);
         if (boogeymen == null) return false;
+
+        boogeyman.cured = false;
+        if (boogeyman.failed) return false;
+        boogeyman.failed = true;
+
         boolean canChangeLives = livesManager.isAlive(player) && !livesManager.isOnLastLife(player, true);
 
         if (BOOGEYMAN_ADVANCED_DEATHS) {
@@ -372,9 +378,6 @@ public class BoogeymanManager {
                 livesManager.setPlayerLives(player, 1);
             }
         }
-
-        boogeyman.failed = true;
-        boogeyman.cured = false;
         return true;
     }
 

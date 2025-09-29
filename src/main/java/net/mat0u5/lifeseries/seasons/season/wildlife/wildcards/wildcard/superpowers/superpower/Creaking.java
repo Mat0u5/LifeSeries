@@ -66,7 +66,7 @@ public class Creaking extends ToggleableSuperpower {
         if (playerTeam == null) return;
         String newTeamName = "creaking_"+player.getNameForScoreboard();
         TeamUtils.deleteTeam(newTeamName);
-        TeamUtils.createTeam(newTeamName, playerTeam.getColor());
+        TeamUtils.createTeam(newTeamName, playerTeam.getDisplayName().getString(), playerTeam.getColor());
         createdTeams.add(newTeamName);
 
         //? if >= 1.21.2 {

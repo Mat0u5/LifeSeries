@@ -61,6 +61,11 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
         Boogeyman boogeyman = getBoogeyman(player);
         if (boogeymen == null) return false;
         if (livesManager.isDead(player)) return false;
+
+        boogeyman.cured = false;
+        if (boogeyman.failed) return false;
+        boogeyman.failed = true;
+
         boolean canChangeLives = livesManager.isAlive(player) && !livesManager.isOnLastLife(player, true);
 
         Integer currentLives = livesManager.getPlayerLives(player);
@@ -89,9 +94,6 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
                 PlayerUtils.broadcastMessage(TextUtils.format("{}§7 failed to kill a player while being the §cBoogeyman§7. Their time has been dropped to {}", player, setTo));
             }
         }
-
-        boogeyman.failed = true;
-        boogeyman.cured = false;
         return true;
     }
 
