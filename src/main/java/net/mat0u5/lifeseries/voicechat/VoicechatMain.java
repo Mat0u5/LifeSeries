@@ -17,6 +17,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Listening;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.mat0u5.lifeseries.voicechat.soundeffects.RadioEffect;
 import net.mat0u5.lifeseries.voicechat.soundeffects.RoboticVoice;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -139,7 +140,7 @@ public class VoicechatMain implements VoicechatPlugin {
                 continue;
             }
             double scaled = api.getBroadcastRange()/Listening.MAX_RANGE;
-            if ((distanceFromSound*scaled) > player.getPos().distanceTo(senderPos)) {
+            if ((distanceFromSound*scaled) > WorldUtils.getEntityPos(player).distanceTo(senderPos)) {
                 continue;
             }
 

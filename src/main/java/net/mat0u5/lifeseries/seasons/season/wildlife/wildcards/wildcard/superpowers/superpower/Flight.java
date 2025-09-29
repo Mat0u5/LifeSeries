@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
+import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantments;
@@ -148,7 +149,7 @@ public class Flight extends Superpower {
             ItemStackUtils.setCustomComponentBoolean(helmet, "FromSuperpower", true);
             ItemStackUtils.setCustomComponentBoolean(helmet, "FlightSuperpower", true);
 
-            ItemStackUtils.spawnItemForPlayer(PlayerUtils.getServerWorld(player), player.getPos(), PlayerUtils.getEquipmentSlot(player, 3).copy(), player);
+            ItemStackUtils.spawnItemForPlayer(PlayerUtils.getServerWorld(player), WorldUtils.getEntityPos(player), PlayerUtils.getEquipmentSlot(player, 3).copy(), player);
             player.equipStack(EquipmentSlot.HEAD, helmet);
         }
     }

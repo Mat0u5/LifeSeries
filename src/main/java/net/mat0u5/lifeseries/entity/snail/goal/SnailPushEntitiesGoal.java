@@ -68,9 +68,9 @@ public final class SnailPushEntitiesGoal extends Goal {
     }
 
     private void pushAway(Entity entity) {
-        Vec3d direction = entity.getPos()
+        Vec3d direction = WorldUtils.getEntityPos(entity)
                 .add(0.0, 0.5, 0.0)
-                .subtract(mob.getPos())
+                .subtract(WorldUtils.getEntityPos(mob))
                 .normalize()
                 .multiply(0.4);
 

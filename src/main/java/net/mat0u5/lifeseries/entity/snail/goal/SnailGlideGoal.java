@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.entity.snail.goal;
 
 import net.mat0u5.lifeseries.entity.snail.Snail;
+import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
@@ -80,7 +81,7 @@ public final class SnailGlideGoal extends Goal {
             return;
         }
 
-        Vec3d directionToTarget = boundPlayer.getPos().subtract(mob.getPos()).normalize();
+        Vec3d directionToTarget = WorldUtils.getEntityPos(boundPlayer).subtract(WorldUtils.getEntityPos(mob)).normalize();
         float speedMultiplier = mob.getMovementSpeed() / 2;
         mob.setVelocity(directionToTarget.x * speedMultiplier, -0.1, directionToTarget.z * speedMultiplier);
     }

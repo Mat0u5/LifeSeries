@@ -20,6 +20,7 @@ import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
+import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -308,7 +309,7 @@ public class Events {
         NetworkHandlerServer.sendUpdatePacketTo(player);
         SnailSkinsServer.sendStoredImages(List.of(player));
         joiningPlayers.add(player.getUuid());
-        joiningPlayersPos.put(player.getUuid(), player.getPos());
+        joiningPlayersPos.put(player.getUuid(), WorldUtils.getEntityPos(player));
         joiningPlayersYaw.put(player.getUuid(), player.getYaw());
         joiningPlayersPitch.put(player.getUuid(), player.getPitch());
     }
@@ -317,7 +318,7 @@ public class Events {
             UUID uuid = entry.getKey();
             ServerPlayerEntity player = PlayerUtils.getPlayer(uuid);
             if (player == null) continue;
-            if (player.getPos().equals(entry.getValue())) continue;
+            if (WorldUtils.getEntityPos(player).equals(entry.getValue())) continue;
             onPlayerFinishJoining(player);
             finishedJoining(player.getUuid());
             return;

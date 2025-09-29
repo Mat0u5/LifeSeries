@@ -71,3 +71,8 @@ Code refactoring.
 
 '/boogeyman add/remove/cure/fail' now accepts multiple targets.<br>
 The creaking superpower no longer deactivates right after being activated.
+
+----------
+
+You can no longer fail or cure the same boogeyman multiple times, even with commands.<br>
+The creaking superpower team name now gets copied from the previous player team name

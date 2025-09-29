@@ -92,7 +92,7 @@ public class UpdateChecker {
             HttpURLConnection connection = null;
             try {
                 // Connect to the GitHub API
-                connection = (HttpURLConnection) new URL(Main.ALL_UPDATES_URL).openConnection();
+                connection = (HttpURLConnection) new URI(Main.ALL_UPDATES_URL).toURL().openConnection();
                 connection.setRequestMethod("GET");
                 connection.setRequestProperty("User-Agent", "Mozilla/5.0");
                 connection.setConnectTimeout(5000);

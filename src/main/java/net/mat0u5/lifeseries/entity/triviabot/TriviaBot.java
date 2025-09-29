@@ -379,9 +379,10 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
                 triviaSnail.setFromTrivia();
                 triviaSnail.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE.value(), 0.5f, 2);
                 ServerWorld world = (ServerWorld) triviaSnail.getWorldEntity();
+                Vec3d pos = WorldUtils.getEntityPos(this);
                 world.spawnParticles(
                         ParticleTypes.EXPLOSION,
-                        this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(),
+                        pos.getX(), pos.getY(), pos.getZ(),
                         10, 0.5, 0.5, 0.5, 0.5
                 );
                 TriviaWildcard.snails.put(getBoundPlayer().getUuid(), triviaSnail);
@@ -471,7 +472,7 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
             BlockPos tpTo = getBlockPosNearTarget(player, player.getBlockPos(),5);
             world.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, this.getSoundCategory(), this.getSoundVolume(), this.getSoundPitch());
             playerWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, this.getSoundCategory(), this.getSoundVolume(), this.getSoundPitch());
-            AnimationUtils.spawnTeleportParticles(world, getPos());
+            AnimationUtils.spawnTeleportParticles(world, WorldUtils.getEntityPos(this));
             AnimationUtils.spawnTeleportParticles(playerWorld, tpTo.toCenterPos());
             despawn();
             TriviaWildcard.spawnBotFor(player, tpTo);
@@ -510,7 +511,7 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
 
     @Nullable
     public BlockPos getGroundBlock() {
-        Vec3d startPos = getPos();
+        Vec3d startPos = WorldUtils.getEntityPos(this);
         Vec3d endPos = startPos.add(0, getWorldEntity().getBottomY(), 0);
 
         BlockHitResult result = getWorldEntity().raycast(
@@ -636,7 +637,7 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
         if (player == null) return;
         player.playSoundToPlayer(SoundEvents.ENTITY_ELDER_GUARDIAN_CURSE, SoundCategory.MASTER, 0.2f, 1f);
         ServerWorld world = (ServerWorld) getWorldEntity();
-        Vec3d pos = getPos();
+        Vec3d pos = WorldUtils.getEntityPos(this);
 
         //? if <= 1.21.6 {
         world.spawnParticles(
@@ -746,8 +747,8 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
     public void spawnItemForPlayer() {
         if (itemSpawner == null) return;
         if (getBoundPlayer() == null) return;
-        Vec3d playerPos = getBoundPlayer().getPos();
-        Vec3d pos = getPos().add(0,1,0);
+        Vec3d playerPos = WorldUtils.getEntityPos(getBoundPlayer());
+        Vec3d pos = WorldUtils.getEntityPos(this).add(0,1,0);
         Vec3d relativeTargetPos = new Vec3d(
                 playerPos.getX() - pos.getX(),
                 0,
@@ -842,7 +843,7 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
 
     public void curseBindingArmor(ServerPlayerEntity player) {
         for (ItemStack item : PlayerUtils.getArmorItems(player)) {
-            ItemStackUtils.spawnItemForPlayer(PlayerUtils.getServerWorld(player), player.getPos(), item.copy(), player);
+            ItemStackUtils.spawnItemForPlayer(PlayerUtils.getServerWorld(player), WorldUtils.getEntityPos(player), item.copy(), player);
         }
         ItemStack head = Items.LEATHER_HELMET.getDefaultStack();
         ItemStack chest = Items.LEATHER_CHESTPLATE.getDefaultStack();

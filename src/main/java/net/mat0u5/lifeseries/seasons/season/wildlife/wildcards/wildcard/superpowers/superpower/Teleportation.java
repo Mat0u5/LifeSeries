@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -59,27 +60,29 @@ public class Teleportation extends Superpower {
         ServerPlayerEntity player = getPlayer();
         if (player == null) return;
         ServerWorld playerWorld = PlayerUtils.getServerWorld(player);
+        Vec3d playerPos = WorldUtils.getEntityPos(player);
         boolean teleported = false;
         Entity lookingAt = PlayerUtils.getEntityLookingAt(player, 100);
         if (lookingAt != null)  {
             if (lookingAt instanceof ServerPlayerEntity lookingAtPlayer) {
                 if (!PlayerUtils.isFakePlayer(lookingAtPlayer)) {
                     ServerWorld lookingAtPlayerWorld = PlayerUtils.getServerWorld(lookingAtPlayer);
+                    Vec3d lookingAtPlayerPos = WorldUtils.getEntityPos(lookingAtPlayer);
 
-                    spawnTeleportParticles(playerWorld, player.getPos());
-                    spawnTeleportParticles(lookingAtPlayerWorld, lookingAtPlayer.getPos());
+                    spawnTeleportParticles(playerWorld, playerPos);
+                    spawnTeleportParticles(lookingAtPlayerWorld, lookingAtPlayerPos);
 
                     Set<PositionFlag> flags = EnumSet.noneOf(PositionFlag.class);
                     ServerWorld storedWorld = playerWorld;
-                    Vec3d storedPos = player.getPos();
+                    Vec3d storedPos = playerPos;
                     float storedYaw = player.getYaw();
                     float storedPitch = player.getPitch();
 
-                    PlayerUtils.teleport(player, lookingAtPlayerWorld, lookingAtPlayer.getPos(), lookingAtPlayer.getYaw(), lookingAtPlayer.getPitch());
+                    PlayerUtils.teleport(player, lookingAtPlayerWorld, lookingAtPlayerPos, lookingAtPlayer.getYaw(), lookingAtPlayer.getPitch());
                     PlayerUtils.teleport(lookingAtPlayer, storedWorld, storedPos, storedYaw, storedPitch);
 
-                    playTeleportSound(playerWorld, player.getPos());
-                    playTeleportSound(lookingAtPlayerWorld, lookingAtPlayer.getPos());
+                    playTeleportSound(playerWorld, playerPos);
+                    playTeleportSound(lookingAtPlayerWorld, lookingAtPlayerPos);
 
                     StatusEffectInstance resistance = new StatusEffectInstance(StatusEffects.RESISTANCE, 100, 3);
                     lookingAtPlayer.addStatusEffect(resistance);
@@ -92,13 +95,13 @@ public class Teleportation extends Superpower {
         if (!teleported) {
             Vec3d lookingAtPos = PlayerUtils.getPosLookingAt(player, 100);
             if (lookingAtPos != null) {
-                playTeleportSound(playerWorld, player.getPos());
-                spawnTeleportParticles(playerWorld, player.getPos());
+                playTeleportSound(playerWorld, playerPos);
+                spawnTeleportParticles(playerWorld, playerPos);
 
                 PlayerUtils.teleport(player, lookingAtPos);
 
-                playTeleportSound(playerWorld, player.getPos());
-                spawnTeleportParticles(playerWorld, player.getPos());
+                playTeleportSound(playerWorld, playerPos);
+                spawnTeleportParticles(playerWorld, playerPos);
 
                 teleported = true;
             }

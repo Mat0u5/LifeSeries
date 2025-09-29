@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.deaths;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeath;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeaths;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.FallingBlockEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -39,7 +40,7 @@ public class DeathAnvil extends AdvancedDeath {
     protected void tick(ServerPlayerEntity player) {
         if (ticks > 80) {
             if (playerPos == null) {
-                playerPos = player.getPos();
+                playerPos = WorldUtils.getEntityPos(player);
             }
             player.setPosition(playerPos);
         }

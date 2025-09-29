@@ -12,6 +12,7 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
+import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.WrittenBookContentComponent;
 import net.minecraft.item.ItemStack;
@@ -196,7 +197,7 @@ public class TaskManager {
         }
         ItemStack book = getTaskBook(player, task);
         if (!player.giveItemStack(book)) {
-            ItemStackUtils.spawnItemForPlayer(PlayerUtils.getServerWorld(player), player.getPos(), book, player);
+            ItemStackUtils.spawnItemForPlayer(PlayerUtils.getServerWorld(player), WorldUtils.getEntityPos(player), book, player);
         }
         assignedTasks.put(player.getUuid(), task);
     }

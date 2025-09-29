@@ -22,6 +22,7 @@ import net.mat0u5.lifeseries.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
+import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
@@ -189,12 +190,12 @@ public class ClientEvents {
 
                 if (MainClient.FIX_SIZECHANGING_BUGS) {
                     EntityDimensions oldEntityDimensions = player.getBaseDimensions(player.getPose()).scaled(player.getScale());
-                    Box oldBoundingBox = oldEntityDimensions.getBoxAt(player.getPos());
+                    Box oldBoundingBox = oldEntityDimensions.getBoxAt(WorldUtils.getEntityPos(player));
                     Vec3d velocity = player.getVelocity();
 
                     float newScale = player.getScale() + MainClient.SIZESHIFTING_CHANGE * 10;
                     EntityDimensions newEntityDimensions = player.getBaseDimensions(player.getPose()).scaled(newScale);
-                    Box newBoundingBox = newEntityDimensions.getBoxAt(player.getPos());
+                    Box newBoundingBox = newEntityDimensions.getBoxAt(WorldUtils.getEntityPos(player));
 
                     boolean oldSpaceEmpty = ClientUtils.isSpaceEmpty(player, oldBoundingBox, 0, 1.0E-5, 0);
                     boolean newSpaceEmpty = ClientUtils.isSpaceEmpty(player, newBoundingBox, 0, 1.0E-5, 0);

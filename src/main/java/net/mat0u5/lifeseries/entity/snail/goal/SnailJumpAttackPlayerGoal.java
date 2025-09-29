@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.entity.snail.goal;
 
 import net.mat0u5.lifeseries.entity.snail.Snail;
+import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
@@ -74,7 +75,7 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
     public void start() {
         ServerPlayerEntity boundPlayer = mob.getBoundPlayer();
         if (boundPlayer != null) {
-            this.previousTargetPosition = boundPlayer.getPos();
+            this.previousTargetPosition = WorldUtils.getEntityPos(boundPlayer);
         }
         this.attackCooldown = Snail.JUMP_COOLDOWN_SHORT;
         mob.attacking = true;
@@ -106,7 +107,7 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
         }
 
         if (boundPlayer != null) {
-            this.previousTargetPosition = boundPlayer.getPos();
+            this.previousTargetPosition = WorldUtils.getEntityPos(boundPlayer);
             mob.lookAtEntity(boundPlayer, 15, 15);
         }
     }
@@ -137,7 +138,7 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
 
         if (boundPlayer.getRandom().nextInt(6) == 0) {
             //EVEN harder attack variant
-            Vec3d targetVelocity = boundPlayer.getPos().subtract(previousTargetPosition);
+            Vec3d targetVelocity = WorldUtils.getEntityPos(boundPlayer).subtract(previousTargetPosition);
             relativeTargetPos = relativeTargetPos.add(targetVelocity.multiply(3));
         }
 

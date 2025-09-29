@@ -616,7 +616,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
 
     @Nullable
     public BlockPos getGroundBlock() {
-        Vec3d startPos = getPos();
+        Vec3d startPos = WorldUtils.getEntityPos(this);
         Vec3d endPos = new Vec3d(startPos.getX(), getWorldEntity().getBottomY(), startPos.getZ());
 
         BlockHitResult result = getWorldEntity().raycast(
@@ -646,7 +646,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
             BlockPos tpTo = getBlockPosNearTarget(player, minDistanceFromPlayer);
             world.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, this.getSoundCategory(), this.getSoundVolume(), this.getSoundPitch());
             playerWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, this.getSoundCategory(), this.getSoundVolume(), this.getSoundPitch());
-            AnimationUtils.spawnTeleportParticles(world, getPos());
+            AnimationUtils.spawnTeleportParticles(world, WorldUtils.getEntityPos(this));
             AnimationUtils.spawnTeleportParticles(playerWorld, tpTo.toCenterPos());
             despawn();
             Snails.spawnSnailFor(player, tpTo);

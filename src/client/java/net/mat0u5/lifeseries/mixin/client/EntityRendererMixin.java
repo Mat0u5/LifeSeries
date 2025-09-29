@@ -35,8 +35,8 @@ public class EntityRendererMixin<T extends Entity> {
     *///?} else {
     /*@ModifyArg(
             method = "renderLabelIfPresent",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/command/OrderedRenderCommandQueue;submitLabel(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/text/Text;ZIDLnet/minecraft/class_12075;)V"),
-            index = 2
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/command/OrderedRenderCommandQueue;submitLabel(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Vec3d;ILnet/minecraft/text/Text;ZIDLnet/minecraft/client/render/state/CameraRenderState;)V"),
+            index = 3
     )
     public Text render(Text text) {
     *///?}

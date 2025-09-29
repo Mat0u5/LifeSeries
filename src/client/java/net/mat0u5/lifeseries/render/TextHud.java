@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.MutableText;
@@ -38,7 +39,7 @@ public class TextHud {
             if (System.currentTimeMillis() - MainClient.snailPosTime > 2000) return 0;
             if (client.player == null) return 0;
 
-            float distance = (float) client.player.getPos().distanceTo(MainClient.snailPos.toCenterPos());
+            float distance = (float) WorldUtils.getEntityPos(client.player).distanceTo(MainClient.snailPos.toCenterPos());
 
             Text timerText = Text.literal(String.valueOf(Math.round(distance)));
             if (distance < 20) timerText = Text.literal("§c"+Math.round(distance));

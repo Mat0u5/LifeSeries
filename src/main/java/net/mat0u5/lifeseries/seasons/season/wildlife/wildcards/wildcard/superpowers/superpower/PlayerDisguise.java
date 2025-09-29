@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
@@ -16,6 +17,7 @@ import net.minecraft.text.Text;
 
 //? if >= 1.21.9
 /*import net.minecraft.entity.decoration.MannequinEntity;*/
+import net.minecraft.util.math.Vec3d;
 
 public class PlayerDisguise extends ToggleableSuperpower {
 
@@ -66,9 +68,10 @@ public class PlayerDisguise extends ToggleableSuperpower {
 
         ServerWorld playerWorld = PlayerUtils.getServerWorld(player);
         playerWorld.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PUFFER_FISH_BLOW_UP, SoundCategory.MASTER, 1, 1);
+        Vec3d playerPos = WorldUtils.getEntityPos(player);
         playerWorld.spawnParticles(
                 ParticleTypes.EXPLOSION,
-                player.getPos().getX(), player.getPos().getY(), player.getPos().getZ(),
+                playerPos.getX(), playerPos.getY(), playerPos.getZ(),
                 2, 0, 0, 0, 0
         );
         NetworkHandlerServer.sendPlayerDisguise(player.getUuid().toString(), player.getName().getString(), copiedPlayerUUID, copiedPlayerName);
@@ -83,9 +86,10 @@ public class PlayerDisguise extends ToggleableSuperpower {
         if (player == null) return;
         ServerWorld playerWorld = PlayerUtils.getServerWorld(player);
         playerWorld.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PUFFER_FISH_BLOW_OUT, SoundCategory.MASTER, 1, 1);
+        Vec3d playerPos = WorldUtils.getEntityPos(player);
         playerWorld.spawnParticles(
                 ParticleTypes.EXPLOSION,
-                player.getPos().getX(), player.getPos().getY(), player.getPos().getZ(),
+                playerPos.getX(), playerPos.getY(), playerPos.getZ(),
                 2, 0, 0, 0, 0
         );
         NetworkHandlerServer.sendPlayerDisguise(player.getUuid().toString(), player.getName().getString(), "", "");

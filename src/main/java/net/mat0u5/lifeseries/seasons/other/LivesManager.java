@@ -309,7 +309,7 @@ public class LivesManager {
         if (livesBefore != null) {
             player.changeGameMode(GameMode.SPECTATOR);
         }
-        Vec3d pos = player.getPos();
+        Vec3d pos = WorldUtils.getEntityPos(player);
         HashMap<Vec3d, List<Float>> info = new HashMap<>();
         info.put(pos, List.of(player.getYaw(),player.getPitch()));
         currentSeason.respawnPositions.put(player.getUuid(), info);

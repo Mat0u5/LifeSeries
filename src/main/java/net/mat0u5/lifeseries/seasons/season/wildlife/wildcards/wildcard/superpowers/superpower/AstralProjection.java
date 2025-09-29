@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -90,7 +91,7 @@ public class AstralProjection extends ToggleableSuperpower {
 
         String fakePlayerName = "`"+player.getNameForScoreboard();
 
-        startedPos = player.getPos();
+        startedPos = WorldUtils.getEntityPos(player);
         startedLooking[0] = player.getYaw();
         startedLooking[1] = player.getPitch();
         startedWorld = PlayerUtils.getServerWorld(player);
@@ -125,7 +126,7 @@ public class AstralProjection extends ToggleableSuperpower {
 
         Vec3d toBackPos = startedPos;
         if (clone != null) {
-            toBackPos = clone.getPos();
+            toBackPos = WorldUtils.getEntityPos(clone);
             //? if <= 1.21.6 {
             clone.networkHandler.onDisconnected(new DisconnectionInfo(Text.empty()));
             NetworkHandlerServer.sendPlayerDisguise(clone.getUuid().toString(), clone.getName().getString(), "", "");

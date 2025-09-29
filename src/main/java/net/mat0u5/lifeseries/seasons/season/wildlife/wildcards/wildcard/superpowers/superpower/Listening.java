@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
@@ -66,7 +67,7 @@ public class Listening extends ToggleableSuperpower {
         if (player == null) return;
         Entity lookingAtEntity = PlayerUtils.getEntityLookingAt(player, 100);
         if (lookingAtEntity != null) {
-            lookingAt = lookingAtEntity.getPos();
+            lookingAt = WorldUtils.getEntityPos(lookingAtEntity);
         } else {
             lookingAt = PlayerUtils.getPosLookingAt(player, 300);
         }

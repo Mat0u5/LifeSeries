@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.mixin.client.AbstractSoundInstanceAccessor;
 import net.mat0u5.lifeseries.mixin.client.EntityTrackingSoundInstanceAccessor;
 import net.mat0u5.lifeseries.mixin.client.SoundManagerAccessor;
 import net.mat0u5.lifeseries.mixin.client.SoundSystemAccessor;
+import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.sound.EntityTrackingSoundInstance;
@@ -67,7 +68,7 @@ public class ClientSounds {
                 String name = sound.getId().getPath();
                 if (!onlyOneOf.contains(name)) continue;
                 Vec3d soundPosition = new Vec3d(sound.getX(), sound.getY(), sound.getZ());
-                double distance = player.getPos().distanceTo(soundPosition);
+                double distance = WorldUtils.getEntityPos(player).distanceTo(soundPosition);
                 if (soundMap.containsKey(name)) {
                     soundMap.get(name).put(distance, sound);
                 }

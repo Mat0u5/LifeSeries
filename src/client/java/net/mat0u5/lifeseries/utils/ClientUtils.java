@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.utils.enums.Direction;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
+import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -98,11 +99,11 @@ public class ClientUtils {
         if (oldBaseValue == baseValue) return false;
 
         EntityDimensions oldEntityDimensions = player.getBaseDimensions(player.getPose()).scaled((float) oldBaseValue);
-        Box oldBoundingBox = oldEntityDimensions.getBoxAt(player.getPos());
+        Box oldBoundingBox = oldEntityDimensions.getBoxAt(WorldUtils.getEntityPos(player));
         double oldHitboxSize = oldEntityDimensions.width();
 
         EntityDimensions newEntityDimensions = player.getBaseDimensions(player.getPose()).scaled((float) baseValue);
-        Box newBoundingBox = newEntityDimensions.getBoxAt(player.getPos());
+        Box newBoundingBox = newEntityDimensions.getBoxAt(WorldUtils.getEntityPos(player));
         double newHitboxSize = newEntityDimensions.width();
 
         double changedBy = newHitboxSize - oldHitboxSize;

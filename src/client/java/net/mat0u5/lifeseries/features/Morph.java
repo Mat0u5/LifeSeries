@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.features;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.interfaces.IMorph;
+import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -107,7 +108,7 @@ public class Morph {
             dummy.lastRenderY = player.lastRenderY;
             dummy.lastRenderZ = player.lastRenderZ;
 
-            dummy.setPosition(player.getPos());
+            dummy.setPosition(WorldUtils.getEntityPos(player));
             dummy.setBodyYaw(player.bodyYaw);
             if (!fixedHead) {
                 dummy.setHeadYaw(player.headYaw);

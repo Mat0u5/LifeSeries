@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentLevelBasedValue;
 import net.minecraft.enchantment.effect.entity.ReplaceDiskEnchantmentEffect;
@@ -83,6 +84,8 @@ public abstract class PlayerEntityMixin {
     }
 
 
+    //TODO
+    //? if <= 1.21.6 {
     @Inject(method = "getBaseDimensions", at = @At("HEAD"), cancellable = true)
     public void getBaseDimensions(EntityPose pose, CallbackInfoReturnable<EntityDimensions> cir) {
         if (Main.modFullyDisabled()) return;
@@ -96,6 +99,7 @@ public abstract class PlayerEntityMixin {
             cir.setReturnValue(dummy.getDimensions(pose).scaled(scaleRatio, scaleRatio));
         }
     }
+    //?}
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void updateHitbox(CallbackInfo ci) {
@@ -114,6 +118,6 @@ public abstract class PlayerEntityMixin {
         if (!player.isOnGround()) return;
         if (!SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPERSPEED)) return;
 
-        ls$frostWalker.apply(PlayerUtils.getServerWorld(player), 5, null, player, player.getPos());
+        ls$frostWalker.apply(PlayerUtils.getServerWorld(player), 5, null, player, WorldUtils.getEntityPos(player));
     }
 }

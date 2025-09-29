@@ -6,17 +6,24 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.client.util.SkinTextures;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.UUID;
+//? if <= 1.21.6
+import net.minecraft.client.util.SkinTextures;
+//? if >= 1.21.9
+/*import net.minecraft.entity.player.SkinTextures;*/
 
 @Mixin(value = AbstractClientPlayerEntity.class, priority = 1)
 public class AbstractClientPlayerEntityMixin {
+    //? if <= 1.21.6 {
     @Inject(method = "getSkinTextures", at = @At("HEAD"), cancellable = true)
+    //?} else {
+    /*@Inject(method = "getSkin", at = @At("HEAD"), cancellable = true)
+    *///?}
     public void getSkinTextures(CallbackInfoReturnable<SkinTextures> cir) {
         if (Main.modFullyDisabled()) return;
         AbstractClientPlayerEntity abstrPlayer = (AbstractClientPlayerEntity) (Object) this;
