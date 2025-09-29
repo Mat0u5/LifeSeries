@@ -12,6 +12,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
@@ -52,26 +53,26 @@ public class BoogeymanCommand extends Command {
                 )
                 .then(literal("add")
                     .requires(PermissionManager::isAdmin)
-                    .then(argument("player", EntityArgumentType.player())
-                        .executes(context -> addBoogey(context.getSource(), EntityArgumentType.getPlayer(context, "player")))
+                    .then(argument("player", EntityArgumentType.players())
+                        .executes(context -> addBoogey(context.getSource(), EntityArgumentType.getPlayers(context, "player")))
                     )
                 )
                 .then(literal("remove")
                     .requires(PermissionManager::isAdmin)
-                    .then(argument("player", EntityArgumentType.player())
-                        .executes(context -> removeBoogey(context.getSource(), EntityArgumentType.getPlayer(context, "player")))
+                    .then(argument("player", EntityArgumentType.players())
+                        .executes(context -> removeBoogey(context.getSource(), EntityArgumentType.getPlayers(context, "player")))
                     )
                 )
                 .then(literal("cure")
                     .requires(PermissionManager::isAdmin)
-                    .then(argument("player", EntityArgumentType.player())
-                        .executes(context -> cureBoogey(context.getSource(), EntityArgumentType.getPlayer(context, "player")))
+                    .then(argument("player", EntityArgumentType.players())
+                        .executes(context -> cureBoogey(context.getSource(), EntityArgumentType.getPlayers(context, "player")))
                     )
                 )
                 .then(literal("fail")
                         .requires(PermissionManager::isAdmin)
-                        .then(argument("player", EntityArgumentType.player())
-                                .executes(context -> failBoogey(context.getSource(), EntityArgumentType.getPlayer(context, "player")))
+                        .then(argument("player", EntityArgumentType.players())
+                                .executes(context -> failBoogey(context.getSource(), EntityArgumentType.getPlayers(context, "player")))
                         )
                 )
                 .then(literal("selfFail")
@@ -122,78 +123,114 @@ public class BoogeymanCommand extends Command {
         return 1;
     }
 
-    public int failBoogey(ServerCommandSource source, ServerPlayerEntity target) {
+    public int failBoogey(ServerCommandSource source, Collection<ServerPlayerEntity> targets) {
         if (checkBanned(source)) return -1;
-        if (target == null) return -1;
-
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
 
-        if (!bm.isBoogeyman(target)) {
-            source.sendError(Text.of("That player is not a Boogeyman"));
-            return -1;
+        if (targets.size() == 1) {
+            ServerPlayerEntity target = targets.iterator().next();
+            if (!bm.isBoogeyman(target)) {
+                source.sendError(Text.of("That player is not a Boogeyman"));
+                return -1;
+            }
         }
-        if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Failing Boogeyman for {}§7...", target));
+
+        for (ServerPlayerEntity player : targets) {
+            bm.playerFailBoogeymanManually(player, true);
         }
-        bm.playerFailBoogeymanManually(target, true);
-
-        return 1;
-    }
-
-    public int cureBoogey(ServerCommandSource source, ServerPlayerEntity target) {
-        if (checkBanned(source)) return -1;
-        if (target == null) return -1;
-
-        BoogeymanManager bm = getBM();
-        if (bm == null) return -1;
-
-        if (!bm.isBoogeyman(target)) {
-            source.sendError(Text.of("That player is not a Boogeyman"));
-            return -1;
-        }
-        bm.cure(target);
 
         if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Curing {}§7...", target));
+            if (targets.size() == 1) {
+                OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Failing Boogeyman for {}§7...", targets.iterator().next()));
+            }
+            else {
+                OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Failing Boogeyman for {} targets§7...", targets.size()));
+            }
         }
 
         return 1;
     }
 
-    public int addBoogey(ServerCommandSource source, ServerPlayerEntity target) {
+    public int cureBoogey(ServerCommandSource source, Collection<ServerPlayerEntity> targets) {
         if (checkBanned(source)) return -1;
-
-        if (target == null) return -1;
-
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
 
-        if (bm.isBoogeyman(target)) {
-            source.sendError(Text.of("That player is already a Boogeyman"));
-            return -1;
+        if (targets.size() == 1) {
+            ServerPlayerEntity target = targets.iterator().next();
+            if (!bm.isBoogeyman(target)) {
+                source.sendError(Text.of("That player is not a Boogeyman"));
+                return -1;
+            }
         }
-        bm.addBoogeymanManually(target);
 
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("{} is now a Boogeyman", target));
+        for (ServerPlayerEntity player : targets) {
+            bm.cure(player);
+        }
+
+        if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME) {
+            if (targets.size() == 1) {
+                OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Curing {}§7...", targets.iterator().next()));
+            }
+            else {
+                OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Curing {} targets§7...", targets.size()));
+            }
+        }
+
         return 1;
     }
 
-    public int removeBoogey(ServerCommandSource source, ServerPlayerEntity target) {
+    public int addBoogey(ServerCommandSource source, Collection<ServerPlayerEntity> targets) {
         if (checkBanned(source)) return -1;
-
-        if (target == null) return -1;
-
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
 
-        if (!bm.isBoogeyman(target)) {
-            source.sendError(Text.of("That player is not a Boogeyman"));
-            return -1;
+        if (targets.size() == 1) {
+            ServerPlayerEntity target = targets.iterator().next();
+            if (bm.isBoogeyman(target)) {
+                source.sendError(Text.of("That player is already a Boogeyman"));
+                return -1;
+            }
         }
-        bm.removeBoogeymanManually(target);
 
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("{} is no longer a Boogeyman", target));
+        for (ServerPlayerEntity player : targets) {
+            bm.addBoogeymanManually(player);
+        }
+        if (targets.size() == 1) {
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("{} is now a Boogeyman", targets.iterator().next()));
+        }
+        else {
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("{} targets are now Boogeymen", targets.size()));
+        }
+
+        return 1;
+    }
+
+    public int removeBoogey(ServerCommandSource source, Collection<ServerPlayerEntity> targets) {
+        if (checkBanned(source)) return -1;
+        BoogeymanManager bm = getBM();
+        if (bm == null) return -1;
+
+        if (targets.size() == 1) {
+            ServerPlayerEntity target = targets.iterator().next();
+            if (!bm.isBoogeyman(target)) {
+                source.sendError(Text.of("That player is not a Boogeyman"));
+                return -1;
+            }
+        }
+
+        for (ServerPlayerEntity player : targets) {
+            bm.removeBoogeymanManually(player);
+        }
+        if (targets.size() == 1) {
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("{} is no longer a Boogeyman", targets.iterator().next()));
+
+        }
+        else {
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("{} targets are no longer Boogeymen", targets.size()));
+        }
+
         return 1;
     }
 

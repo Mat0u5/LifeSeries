@@ -66,3 +66,8 @@ Added the 'broadcast_tasks_when_submitted' Secret Life config. Default value is 
 
 You can now manually fail boogeymen even if they are already on their last life or dead.<br>
 Code refactoring.
+
+----------
+
+'/boogeyman add/remove/cure/fail' now accepts multiple targets.<br>
+The creaking superpower no longer deactivates right after being activated.

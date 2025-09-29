@@ -16,7 +16,7 @@ import net.minecraft.text.Text;
 
 import java.util.Optional;
 import java.util.UUID;
-//?if >= 1.21.9 {
+//? if >= 1.21.9 {
 /*import net.minecraft.util.Uuids;
 import net.minecraft.server.PlayerConfigEntry;
 *///?}

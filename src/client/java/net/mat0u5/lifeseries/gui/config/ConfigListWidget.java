@@ -182,7 +182,7 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
             if (mouseY >= currentY && mouseY < currentY + entryHeight) {
                 setFocused(entry);
                 entry.getConfigEntry().setFocused(true);
-                //?if <= 1.21.6 {
+                //? if <= 1.21.6 {
                 return entry.mouseClicked(mouseX, mouseY, button);
                 //?} else {
                 /*return entry.mouseClicked(click, doubled);

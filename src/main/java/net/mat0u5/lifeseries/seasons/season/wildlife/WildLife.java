@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
+import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
@@ -40,6 +41,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.mat0u5.lifeseries.Main.currentSession;
 import static net.mat0u5.lifeseries.Main.seasonConfig;
+import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
 //? if >= 1.21.2
 /*import net.minecraft.server.world.ServerWorld;*/
 
@@ -244,6 +246,13 @@ public class WildLife extends Season {
 
     @Override
     public void onPlayerDeath(ServerPlayerEntity player, DamageSource source) {
+        if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.CREAKING)) {
+            if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof Creaking creakingPower) {
+                creakingPower.deactivate();
+                reloadPlayerTeam(player);
+            }
+        }
+
         super.onPlayerDeath(player, source);
 
         TriviaBot.cursedGigantificationPlayers.remove(player.getUuid());
@@ -269,12 +278,15 @@ public class WildLife extends Season {
         }
     }
 
-    public static void changedPlayerTeam(ServerPlayerEntity player) {
-        if (SuperpowersWildcard.hasActivePower(player, Superpowers.CREAKING)) {
-            if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof Creaking creakingPower) {
-                creakingPower.deactivate();
-            }
+    @Override
+    public String getTeamForPlayer(ServerPlayerEntity player) {
+        String team = super.getTeamForPlayer(player);
+
+        if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.CREAKING)) {
+            return "creaking_"+player.getNameForScoreboard();
         }
+
+        return team;
     }
 
     @Override

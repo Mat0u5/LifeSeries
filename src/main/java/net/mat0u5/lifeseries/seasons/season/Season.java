@@ -195,20 +195,27 @@ public abstract class Season {
     }
 
     public void reloadPlayerTeam(ServerPlayerEntity player) {
+        reloadPlayerTeam(player, false);
+    }
+
+    private void reloadPlayerTeam(ServerPlayerEntity player, boolean waited) {
         if (player == null) return;
-        if (player.isAlive()) {
-            reloadPlayerTeamActual(player);
+
+        if (!player.isAlive() && !waited) {
+            TaskScheduler.scheduleTask(1, () -> reloadPlayerTeam(player, true));
+            return;
         }
-        else {
-            TaskScheduler.scheduleTask(2, () -> reloadPlayerTeamActual(player));
+
+        String team = getTeamForPlayer(player);
+        Team currentTeam = player.getScoreboardTeam();
+
+        if (currentTeam == null || !currentTeam.getName().equals(team)) {
+            TeamUtils.addEntityToTeam(team, player);
+            playerChangedTeam(player);
         }
     }
 
-    public void reloadPlayerTeamActual(ServerPlayerEntity player) {
-        String team = getTeamForPlayer(player);
-        TeamUtils.addEntityToTeam(team, player);
-
-        if (currentSeason.getSeason() == Seasons.WILD_LIFE) WildLife.changedPlayerTeam(player);
+    public void playerChangedTeam(ServerPlayerEntity player) {
         Events.updatePlayerListsNextTick = true;
     }
 
