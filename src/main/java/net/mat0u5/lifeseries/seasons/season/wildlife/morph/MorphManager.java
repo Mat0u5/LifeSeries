@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class MorphManager {
-    private static final Map<UUID, MorphComponent> morphComponents = new HashMap<>();
+    public static final Map<UUID, MorphComponent> morphComponents = new HashMap<>();
 
     public static MorphComponent getOrCreateComponent(PlayerEntity player) {
         return getOrCreateComponent(player.getUuid());

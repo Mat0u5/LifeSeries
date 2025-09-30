@@ -79,4 +79,5 @@ The creaking superpower team name now gets copied from the previous player team 
 
 ----------
 
-Astral Projection now uses Mannequins.
+Astral Projection now uses Mannequins.<br>
+Fully rewrote how animal disguise rendering works.
