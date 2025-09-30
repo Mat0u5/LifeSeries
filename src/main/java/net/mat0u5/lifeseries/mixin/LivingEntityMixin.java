@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -34,6 +35,12 @@ import java.util.function.Predicate;
 *///?}
 //? if >= 1.21.2
 /*import net.minecraft.entity.mob.CreakingEntity;*/
+
+//? if >= 1.21.9 {
+/*import net.minecraft.entity.decoration.MannequinEntity;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.AstralProjection;
+*///?}
 
 @Mixin(value = LivingEntity.class, priority = 1)
 public abstract class LivingEntityMixin {
@@ -167,4 +174,43 @@ public abstract class LivingEntityMixin {
             entity.setStackInHand(Hand.OFF_HAND, ItemStack.EMPTY);
         }
     }
+
+
+    //? if >= 1.21.9 {
+    /*@Inject(method = "tick", at = @At("HEAD"))
+    public void tickMannequin(CallbackInfo ci) {
+        LivingEntity entity = (LivingEntity) (Object) this;
+        if (entity instanceof MannequinEntity mannequin && mannequin instanceof MannequinEntityAccessor mannequinAccessor && mannequin.age < 0) {
+            if (entity.age % 20 == 0) {
+                boolean triggered = false;
+                ServerPlayerEntity player = PlayerUtils.getPlayer(mannequinAccessor.ls$getMannequinProfile().getGameProfile().id());
+                if (player != null) {
+                    if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.ASTRAL_PROJECTION)) {
+                        if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof AstralProjection projection) {
+                            projection.clone = mannequin;
+                            triggered = true;
+                        }
+                    }
+                }
+                if (!triggered) {
+                    entity.discard();
+                }
+            }
+        }
+    }
+    @Inject(method = "damage", at = @At("HEAD"))
+    public void damageMannequin(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity entity = (LivingEntity) (Object) this;
+        if (entity instanceof MannequinEntity mannequin && mannequin instanceof MannequinEntityAccessor mannequinAccessor && mannequin.age < 0) {
+            ServerPlayerEntity player = PlayerUtils.getPlayer(mannequinAccessor.ls$getMannequinProfile().getGameProfile().id());
+            if (player != null) {
+                if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.ASTRAL_PROJECTION)) {
+                    if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof AstralProjection projection) {
+                        projection.onDamageClone(world, source, amount);
+                    }
+                }
+            }
+        }
+    }
+    *///?}
 }

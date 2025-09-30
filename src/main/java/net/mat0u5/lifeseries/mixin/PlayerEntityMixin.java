@@ -83,8 +83,6 @@ public abstract class PlayerEntityMixin {
         }
     }
 
-
-    //TODO
     //? if <= 1.21.6 {
     @Inject(method = "getBaseDimensions", at = @At("HEAD"), cancellable = true)
     public void getBaseDimensions(EntityPose pose, CallbackInfoReturnable<EntityDimensions> cir) {

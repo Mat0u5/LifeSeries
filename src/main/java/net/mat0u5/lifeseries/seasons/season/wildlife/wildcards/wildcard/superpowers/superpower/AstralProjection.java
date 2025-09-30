@@ -10,6 +10,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 import org.jetbrains.annotations.Nullable;
@@ -31,6 +32,8 @@ import static net.mat0u5.lifeseries.Main.server;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.SpawnReason;
+import net.mat0u5.lifeseries.mixin.MannequinEntityAccessor;
+import net.minecraft.component.type.ProfileComponent;
 *///?}
 
 public class AstralProjection extends ToggleableSuperpower {
@@ -95,6 +98,7 @@ public class AstralProjection extends ToggleableSuperpower {
         startedLooking[0] = player.getYaw();
         startedLooking[1] = player.getPitch();
         startedWorld = PlayerUtils.getServerWorld(player);
+        if (startedWorld == null) return;
         startedGameMode = player.interactionManager.getGameMode();
         player.changeGameMode(GameMode.SPECTATOR);
         PlayerInventory inv = player.getInventory();
@@ -108,11 +112,20 @@ public class AstralProjection extends ToggleableSuperpower {
         });
         //?} else {
         /*clone = EntityType.MANNEQUIN.create(startedWorld, SpawnReason.COMMAND);
+        if (clone == null) return;
         clone.setBodyYaw(player.getBodyYaw());
         clone.setHeadYaw(player.getHeadYaw());
         clone.setPitch(player.getPitch());
         clone.setPos(player.getX(), player.getY(), player.getZ());
+        clone.setVelocity(player.getVelocity());
         clone.setCustomName(player.getStyledDisplayName());
+        clone.setCustomNameVisible(true);
+        if (clone instanceof MannequinEntityAccessor mannequinAccessor) {
+            mannequinAccessor.ls$setMannequinProfile(ProfileComponent.ofStatic(player.getGameProfile()));
+            mannequinAccessor.ls$setDescription(Text.of("Astral Projection"));
+            mannequinAccessor.ls$setHideDescription(true);
+        }
+        clone.age = -2_000_000;
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             clone.equipStack(slot, player.getEquippedStack(slot));
         }

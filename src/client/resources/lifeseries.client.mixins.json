@@ -14,6 +14,7 @@
     "ClientPlayerEntityMixin",
     "ClientWorldMixin",
     "EntityRendererMixin",
+    "EntityRenderStateMixin",
     "EntityTrackingSoundInstanceAccessor",
     "EntityTrackingSoundInstanceMixin",
     "InGameHudMixin",
@@ -24,7 +25,8 @@
     "SoundManagerAccessor",
     "SoundManagerMixin",
     "SoundSystemAccessor",
-    "SoundSystemMixin"
+    "SoundSystemMixin",
+    "WorldRendererMixin"
   ],
   "mixins": [
     "ClientPlayNetworkHandlerMixin",

@@ -14,10 +14,12 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-
-//? if >= 1.21.9
-/*import net.minecraft.entity.decoration.MannequinEntity;*/
 import net.minecraft.util.math.Vec3d;
+
+//? if >= 1.21.9 {
+/*import net.minecraft.entity.decoration.MannequinEntity;
+import net.mat0u5.lifeseries.mixin.MannequinEntityAccessor;
+*///?}
 
 public class PlayerDisguise extends ToggleableSuperpower {
 
@@ -45,8 +47,11 @@ public class PlayerDisguise extends ToggleableSuperpower {
         Entity lookingAt = PlayerUtils.getEntityLookingAt(player, 50);
         if (lookingAt != null)  {
             //? if >= 1.21.9 {
-            /*if (lookingAt instanceof MannequinEntity mannequin) {
-                //TODO
+            /*if (lookingAt instanceof MannequinEntity mannequin && mannequin instanceof MannequinEntityAccessor mannequinAccessor && mannequin.age < 0) {
+                ServerPlayerEntity lookingAtPlayer = PlayerUtils.getPlayer(mannequinAccessor.ls$getMannequinProfile().getGameProfile().id());
+                if (lookingAtPlayer != null) {
+                    lookingAt = lookingAtPlayer;
+                }
             }
             *///?}
             if (lookingAt instanceof ServerPlayerEntity lookingAtPlayer) {
