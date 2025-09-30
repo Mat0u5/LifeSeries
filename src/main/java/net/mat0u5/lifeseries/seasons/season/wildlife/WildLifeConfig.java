@@ -186,6 +186,14 @@ public class WildLifeConfig extends ConfigManager {
             "wildcard_superpowers_power_blacklist", "[]", ConfigTypes.STRING_LIST, "season.superpowers",
             "Blacklisted Powers", "List of superpowers that cannot be rolled randomly.", Superpowers.getAllStr()
     );
+    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ANIMALDISGUISE_ARMOR = new ConfigFileEntry<>(
+            "wildcard_superpowers_animaldisguise_armor", false, "season.superpowers",
+            "Animal Disguise: Show Armor", "Controls whether armor is seen on players disguised as mobs."
+    );
+    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ANIMALDISGUISE_HANDS = new ConfigFileEntry<>(
+            "wildcard_superpowers_animaldisguise_hands", true, "season.superpowers",
+            "Animal Disguise: Show Hand Items", "Controls whether hand items are seen on players disguised as mobs."
+    );
 
 
     public static final ConfigFileEntry<String> WILDCARD_CALLBACK_WILDCARDS_BLACKLIST = new ConfigFileEntry<>(
@@ -306,6 +314,8 @@ public class WildLifeConfig extends ConfigManager {
                 ,WILDCARD_SUPERPOWERS_ZOMBIES_LOSE_ITEMS
                 ,WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN
                 ,WILDCARD_SUPERPOWERS_SUPERSPEED_STEP
+                ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_ARMOR
+                ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_HANDS
 
                 ,WILDCARD_CALLBACK_WILDCARDS_BLACKLIST
                 ,WILDCARD_CALLBACK_TURN_OFF

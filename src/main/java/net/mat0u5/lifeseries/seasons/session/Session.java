@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.session;
 
+import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -127,16 +128,17 @@ public class Session {
 
     public void setSessionLength(int lengthTicks) {
         sessionLength = lengthTicks;
+        Main.getMainConfig().setProperty("session_length", String.valueOf(sessionLength));
     }
 
     public void addSessionLength(int lengthTicks) {
         if (sessionLength == null) sessionLength = 0;
-        sessionLength += lengthTicks;
+        setSessionLength(sessionLength + lengthTicks);
     }
 
     public void removeSessionLength(int lengthTicks) {
         if (sessionLength == null) sessionLength = 0;
-        sessionLength -= lengthTicks;
+        setSessionLength(sessionLength - lengthTicks);
     }
 
     public String getSessionLength() {

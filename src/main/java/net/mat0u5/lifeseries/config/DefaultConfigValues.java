@@ -18,10 +18,29 @@ public class DefaultConfigValues {
             "creative_ignore_blacklist", true, "global.blacklist",
             "Creative Ignore Blacklist", "Controls whether players in creative mode are able to bypass the blacklists."
     );
+    //? if < 1.21.9 {
     public final ConfigFileEntry<Integer> WORLDBORDER_SIZE = new ConfigFileEntry<>(
             "worldborder_size", 500, "global",
             "Worldborder Size", "Sets the worldborder size."
     );
+    //?} else {
+    /*public final ConfigFileEntry<Object> WORLDBORDER_GROUP = new ConfigFileEntry<>(
+            "worldborder_sizes", null, ConfigTypes.TEXT, "{global.worldborder}",
+            "Worldborder Sizes", ""
+    );
+    public final ConfigFileEntry<Integer> WORLDBORDER_SIZE = new ConfigFileEntry<>(
+            "worldborder_size", 500, "global.worldborder",
+            "Worldborder Size", "Sets the worldborder size in the overworld."
+    );
+    public final ConfigFileEntry<Integer> WORLDBORDER_NETHER_SIZE = new ConfigFileEntry<>(
+            "worldborder_nether_size", 500, "global.worldborder",
+            "Worldborder Nether Size", "Sets the worldborder size in the nether."
+    );
+    public final ConfigFileEntry<Integer> WORLDBORDER_END_SIZE = new ConfigFileEntry<>(
+            "worldborder_end_size", 500, "global.worldborder",
+            "Worldborder End Size", "Sets the worldborder size in the end."
+    );
+    *///?}
     public final ConfigFileEntry<Boolean> KEEP_INVENTORY = new ConfigFileEntry<>(
             "keep_inventory", true, "global",
             "Keep Inventory", "Decides whether players drop their items when they die."
@@ -258,11 +277,11 @@ public class DefaultConfigValues {
      * Group Entries
      */
     public final ConfigFileEntry<Object> GROUP_GLOBAL = new ConfigFileEntry<>(
-            "group_global", null, ConfigTypes.TEXT, "{global}[no_sidebar, closed]",
+            "group_global", null, ConfigTypes.TEXT, "{global}[no_sidebar]",
             "General Settings", ""
     );
     public final ConfigFileEntry<Object> GROUP_SEASON = new ConfigFileEntry<>(
-            "group_season", null, ConfigTypes.TEXT, "{season}[no_sidebar, closed]",
+            "group_season", null, ConfigTypes.TEXT, "{season}[no_sidebar]",
             "Season Specific Settings", ""
     );
     public final ConfigFileEntry<Object> GROUP_LIVES = new ConfigFileEntry<>(

@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.utils.interfaces.IMorph;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 
 import java.util.UUID;
@@ -14,6 +15,9 @@ import java.util.UUID;
 
 
 public class Morph {
+
+    public static boolean showArmor = false;
+    public static boolean showHandItems = true;
 
     public static void clientTick(MorphComponent morphComponent) {
         EntityType<?> morph = morphComponent.morph;
@@ -130,11 +134,11 @@ public class Morph {
             dummy.setOnGround(player.isOnGround());
 
             for (EquipmentSlot slot : EquipmentSlot.values()) {
-                dummy.equipStack(slot, player.getEquippedStack(slot));
+                dummy.equipStack(slot, showArmor ? player.getEquippedStack(slot) : Items.AIR.getDefaultStack());
             }
 
             for (Hand hand : Hand.values()) {
-                dummy.setStackInHand(hand, player.getStackInHand(hand));
+                dummy.setStackInHand(hand, showHandItems ? player.getStackInHand(hand) : Items.AIR.getDefaultStack());
             }
 
             dummy.setPose(player.getPose());

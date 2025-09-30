@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.4.0.28";
+	public static final String MOD_VERSION = "dev-1.4.0.29";
 	public static final String MOD_ID = "lifeseries";
 	public static final String LATEST_UPDATE_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases/latest";
 	public static final String ALL_UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
@@ -139,9 +139,8 @@ public class Main implements ModInitializer {
 	public static void parseSeason(String seasonStr) {
 		currentSeason = Seasons.getSeasonFromStringName(seasonStr).getSeasonInstance();
 
-		Integer currentSessionLength = (currentSession == null) ? null : currentSession.sessionLength;
 		currentSession = new Session();
-		currentSession.sessionLength = currentSessionLength;
+		currentSession.sessionLength = config.getOrCreateInt("session_length", 144000); //2 hours
 
 		livesManager = currentSeason.livesManager;
 		seasonConfig = currentSeason.createConfig();
@@ -196,5 +195,9 @@ public class Main implements ModInitializer {
 		}
 		SessionTranscript.resetStats();
 		return true;
+	}
+
+	public static ConfigManager getMainConfig() {
+		return config;
 	}
 }

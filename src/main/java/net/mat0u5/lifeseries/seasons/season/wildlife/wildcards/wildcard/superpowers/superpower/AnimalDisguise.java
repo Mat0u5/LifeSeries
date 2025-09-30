@@ -18,6 +18,9 @@ import java.util.List;
 
 public class AnimalDisguise extends ToggleableSuperpower {
 
+    public static boolean SHOW_ARMOR = false;
+    public static boolean SHOW_HANDS = true;
+
     public AnimalDisguise(ServerPlayerEntity player) {
         super(player);
     }

@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.config.ClientConfig;
 import net.mat0u5.lifeseries.config.ClientConfigNetwork;
+import net.mat0u5.lifeseries.features.Morph;
 import net.mat0u5.lifeseries.features.SnailSkinsClient;
 import net.mat0u5.lifeseries.features.Trivia;
 import net.mat0u5.lifeseries.config.ClientConfigGuiManager;
@@ -230,6 +231,12 @@ public class NetworkHandlerClient {
         }
         if (name == PacketNames.FIX_SIZECHANGING_BUGS) {
             MainClient.FIX_SIZECHANGING_BUGS = value.equalsIgnoreCase("true");
+        }
+        if (name == PacketNames.ANIMAL_DISGUISE_ARMOR) {
+            Morph.showArmor = value.equalsIgnoreCase("true");
+        }
+        if (name == PacketNames.ANIMAL_DISGUISE_HANDS) {
+            Morph.showHandItems = value.equalsIgnoreCase("true");
         }
     }
 

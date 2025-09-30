@@ -82,3 +82,10 @@ The creaking superpower team name now gets copied from the previous player team 
 Astral Projection now uses Mannequins.<br>
 Fully rewrote how animal disguise rendering works.<br>
 Animal disguise now shows when you're wearing armor or holding items.
+
+----------
+
+Group config entries are now closed by default.<br>
+Added dimension-specific world border size configs in 1.21.9<br>
+The session timer is now stored in a config, meaning it keeps the newest value even if the server closes.<br>
+Added two configs for animal disguise whether it should show armor and hand items.

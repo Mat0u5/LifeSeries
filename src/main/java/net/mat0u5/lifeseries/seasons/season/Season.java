@@ -32,6 +32,7 @@ import net.minecraft.item.SpawnEggItem;
 import net.minecraft.scoreboard.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.EntityHitResult;
@@ -39,6 +40,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionTypes;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -105,7 +107,15 @@ public abstract class Season {
     public void updateStuff() {
         if (server == null) return;
 
-        OtherUtils.executeCommand("worldborder set " + seasonConfig.WORLDBORDER_SIZE.get(seasonConfig));
+        ServerWorld overworld = server.getWorld(World.OVERWORLD);
+        if (overworld != null) overworld.getWorldBorder().setSize(seasonConfig.WORLDBORDER_SIZE.get(seasonConfig));
+        //? if >= 1.21.9 {
+        /*ServerWorld nether = server.getWorld(World.NETHER);
+        ServerWorld end = server.getWorld(World.END);
+        if (nether != null) nether.getWorldBorder().setSize(seasonConfig.WORLDBORDER_NETHER_SIZE.get(seasonConfig));
+        if (end != null) end.getWorldBorder().setSize(seasonConfig.WORLDBORDER_END_SIZE.get(seasonConfig));
+        *///?}
+
         server.getGameRules().get(GameRules.KEEP_INVENTORY).set(seasonConfig.KEEP_INVENTORY.get(seasonConfig), server);
         server.getGameRules().get(GameRules.NATURAL_REGENERATION).set(getSeason() != Seasons.SECRET_LIFE, server);
         server.getGameRules().get(GameRules.ANNOUNCE_ADVANCEMENTS).set(seasonConfig.SHOW_ADVANCEMENTS.get(seasonConfig), server);

@@ -18,6 +18,7 @@
     "EntityRenderStateMixin",
     "EntityTrackingSoundInstanceAccessor",
     "EntityTrackingSoundInstanceMixin",
+    "EntryListWidgetMixin",
     "InGameHudMixin",
     "LivingEntityRendererMixin",
     "MinecraftClientMixin",

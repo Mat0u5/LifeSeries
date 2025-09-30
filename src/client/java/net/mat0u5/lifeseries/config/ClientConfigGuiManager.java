@@ -113,7 +113,7 @@ public class ClientConfigGuiManager {
         }
 
         boolean showSidebar = true;
-        boolean openByDefault = true;
+        boolean openByDefault = false;
 
         if (modifier != null) {
             if (modifier.contains("no_sidebar")) {
@@ -121,6 +121,9 @@ public class ClientConfigGuiManager {
             }
             if (modifier.contains("closed")) {
                 openByDefault = false;
+            }
+            if (modifier.contains("open")) {
+                openByDefault = true;
             }
         }
 
