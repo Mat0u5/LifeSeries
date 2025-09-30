@@ -4,14 +4,14 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.interfaces.IMorph;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Hand;
 
 import java.util.UUID;
 //? if >= 1.21.2
 /*import net.minecraft.entity.SpawnReason;*/
+
 
 public class Morph {
 
@@ -128,6 +128,16 @@ public class Morph {
             dummy.setSneaking(player.isSneaking());
             dummy.age = player.age;
             dummy.setOnGround(player.isOnGround());
+
+            for (EquipmentSlot slot : EquipmentSlot.values()) {
+                dummy.equipStack(slot, player.getEquippedStack(slot));
+            }
+
+            for (Hand hand : Hand.values()) {
+                dummy.setStackInHand(hand, player.getStackInHand(hand));
+            }
+
+            dummy.setPose(player.getPose());
 
             morphComponent.morph = morph;
             morphComponent.dummy = dummy;

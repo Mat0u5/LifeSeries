@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.4.0.26";
+	public static final String MOD_VERSION = "dev-1.4.0.27";
 	public static final String MOD_ID = "lifeseries";
 	public static final String LATEST_UPDATE_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases/latest";
 	public static final String ALL_UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";

@@ -2,6 +2,8 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.entity.damage.DamageSource;
@@ -11,6 +13,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 import org.jetbrains.annotations.Nullable;
@@ -100,6 +103,7 @@ public class AstralProjection extends ToggleableSuperpower {
         startedWorld = PlayerUtils.getServerWorld(player);
         if (startedWorld == null) return;
         startedGameMode = player.interactionManager.getGameMode();
+        Vec3d velocity = player.getVelocity();
         player.changeGameMode(GameMode.SPECTATOR);
         PlayerInventory inv = player.getInventory();
 
@@ -113,11 +117,14 @@ public class AstralProjection extends ToggleableSuperpower {
         //?} else {
         /*clone = EntityType.MANNEQUIN.create(startedWorld, SpawnReason.COMMAND);
         if (clone == null) return;
-        clone.setBodyYaw(player.getBodyYaw());
-        clone.setHeadYaw(player.getHeadYaw());
-        clone.setPitch(player.getPitch());
+
         clone.setPos(player.getX(), player.getY(), player.getZ());
-        clone.setVelocity(player.getVelocity());
+        clone.headYaw = player.headYaw;
+        clone.lastHeadYaw = player.lastHeadYaw;
+        clone.bodyYaw = player.bodyYaw;
+        clone.lastBodyYaw = player.lastBodyYaw;
+        clone.lastYaw = player.lastYaw;
+        clone.setPitch(player.getPitch());
         clone.setCustomName(player.getStyledDisplayName());
         clone.setCustomNameVisible(true);
         if (clone instanceof MannequinEntityAccessor mannequinAccessor) {
@@ -129,7 +136,17 @@ public class AstralProjection extends ToggleableSuperpower {
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             clone.equipStack(slot, player.getEquippedStack(slot));
         }
+        for (Hand hand : Hand.values()) {
+            clone.setStackInHand(hand, player.getStackInHand(hand));
+        }
+
         startedWorld.spawnEntity(clone);
+
+        TaskScheduler.scheduleTask(1, () -> {
+            clone.setVelocity(velocity);
+            clone.velocityModified = true;
+            clone.velocityDirty = true;
+        });
         *///?}
     }
 
