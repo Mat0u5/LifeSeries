@@ -13,6 +13,7 @@
     "ClientCommonNetworkHandlerMixin",
     "ClientPlayerEntityMixin",
     "ClientWorldMixin",
+    "EntityRenderDispatcherMixin",
     "EntityRendererMixin",
     "EntityRenderStateMixin",
     "EntityTrackingSoundInstanceAccessor",

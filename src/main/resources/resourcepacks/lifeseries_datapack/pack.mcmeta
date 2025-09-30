@@ -1,20 +1,28 @@
 {
 	"pack":{
 		"pack_format":48,
+		"min_format": 48,
+		"max_format": 1000,
 		"supported_formats": {"min_inclusive": 48, "max_inclusive": 1000},
 		"description":"Life Series main datapack"
 	},
 	"overlays": {
 		"entries": [
 			{
+				"min_format": 48,
+				"max_format": 56,
 				"formats": {"min_inclusive": 48, "max_inclusive": 56},
 				"directory": "data_1.21-1.21.1"
 			},
 			{
+				"min_format": 57,
+				"max_format": 79,
 				"formats": {"min_inclusive": 57, "max_inclusive": 79},
 				"directory": "data_1.21.2-1.21.5"
 			},
 			{
+				"min_format": 57,
+				"max_format": 1000,
 				"formats": {"min_inclusive": 57, "max_inclusive": 1000},
 				"directory": "data_1.21.2-latest"
 			}

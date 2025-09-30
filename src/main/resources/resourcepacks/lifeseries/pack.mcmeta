@@ -2,15 +2,21 @@
    "pack":{
       "pack_format":34,
       "supported_formats": {"min_inclusive": 34, "max_inclusive": 1000},
+      "min_format": 34,
+      "max_format": 1000,
       "description":"Life Series Main Resourcepack - Created by Mat0u5"
    },
    "overlays": {
       "entries": [
          {
+            "min_format": 34,
+            "max_format": 41,
             "formats": {"min_inclusive": 34, "max_inclusive": 41},
             "directory": "1.21-1.21.1"
          },
          {
+            "min_format": 42,
+            "max_format": 1000,
             "formats": {"min_inclusive": 42, "max_inclusive": 1000},
             "directory": "1.21.2-latest"
          }

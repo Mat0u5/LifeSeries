@@ -119,12 +119,6 @@ public class AstralProjection extends ToggleableSuperpower {
         if (clone == null) return;
 
         clone.setPos(player.getX(), player.getY(), player.getZ());
-        clone.headYaw = player.headYaw;
-        clone.lastHeadYaw = player.lastHeadYaw;
-        clone.bodyYaw = player.bodyYaw;
-        clone.lastBodyYaw = player.lastBodyYaw;
-        clone.lastYaw = player.lastYaw;
-        clone.setPitch(player.getPitch());
         clone.setCustomName(player.getStyledDisplayName());
         clone.setCustomNameVisible(true);
         if (clone instanceof MannequinEntityAccessor mannequinAccessor) {
@@ -143,6 +137,12 @@ public class AstralProjection extends ToggleableSuperpower {
         startedWorld.spawnEntity(clone);
 
         TaskScheduler.scheduleTask(1, () -> {
+            clone.headYaw = player.headYaw;
+            clone.lastHeadYaw = player.lastHeadYaw;
+            clone.bodyYaw = player.bodyYaw;
+            clone.lastBodyYaw = player.lastBodyYaw;
+            clone.lastYaw = player.lastYaw;
+            clone.setPitch(player.getPitch());
             clone.setVelocity(velocity);
             clone.velocityModified = true;
             clone.velocityDirty = true;

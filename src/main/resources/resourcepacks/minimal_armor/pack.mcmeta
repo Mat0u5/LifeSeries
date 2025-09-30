@@ -1,7 +1,9 @@
 {
    "pack":{
       "pack_format":34,
-      "supported_formats": {"min_inclusive": 34, "max_inclusive": 100000},
+      "supported_formats": {"min_inclusive": 34, "max_inclusive": 1000},
+      "min_format": 34,
+      "max_format": 1000,
       "description":"Life Series Minimal Armor Resourcepack"
    }
 }

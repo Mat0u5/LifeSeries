@@ -1,15 +1,19 @@
 package net.mat0u5.lifeseries.utils;
 
+import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.utils.enums.Direction;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
@@ -185,5 +189,36 @@ public class ClientUtils {
             }
         }
         return null;
+    }
+
+    public static Text getPlayerName(Text text) {
+        if (text == null || Main.modFullyDisabled()) return text;
+        if (MinecraftClient.getInstance().getNetworkHandler() == null) return text;
+
+        if (MainClient.playerDisguiseNames.containsKey(text.getString())) {
+            String name = MainClient.playerDisguiseNames.get(text.getString());
+            for (PlayerListEntry entry : MinecraftClient.getInstance().getNetworkHandler().getPlayerList()) {
+                if (OtherUtils.profileName(entry.getProfile()).equalsIgnoreCase(TextUtils.removeFormattingCodes(name))) {
+                    if (entry.getDisplayName() != null) {
+                        return applyColorblindToName(entry.getDisplayName(), entry.getScoreboardTeam());
+                    }
+                    return applyColorblindToName(Text.literal(name), entry.getScoreboardTeam());
+                }
+            }
+        }
+        else {
+            for (PlayerListEntry entry : MinecraftClient.getInstance().getNetworkHandler().getPlayerList()) {
+                if (OtherUtils.profileName(entry.getProfile()).equalsIgnoreCase(TextUtils.removeFormattingCodes(text.getString()))) {
+                    return applyColorblindToName(text, entry.getScoreboardTeam());
+                }
+            }
+        }
+        return text;
+    }
+    public static Text applyColorblindToName(Text original, Team team) {
+        if (!MainClient.COLORBLIND_SUPPORT) return original;
+        if (original == null) return original;
+        if (team == null) return original;
+        return TextUtils.format("[{}] ",team.getDisplayName().getString()).formatted(team.getColor()).append(original);
     }
 }
