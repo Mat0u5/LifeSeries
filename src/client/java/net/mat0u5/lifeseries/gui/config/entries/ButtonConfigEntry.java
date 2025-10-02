@@ -12,6 +12,7 @@ import net.minecraft.client.input.KeyInput;
 
 public abstract class ButtonConfigEntry extends ConfigEntry {
     protected final ButtonWidget button;
+    protected boolean clicked = false;
 
     public ButtonConfigEntry(String fieldName, String displayName, String description, int buttonWidth, int buttonHeight) {
         super(fieldName, displayName, description);
@@ -51,7 +52,9 @@ public abstract class ButtonConfigEntry extends ConfigEntry {
     //? if <= 1.21.6 {
     @Override
     protected boolean mouseClickedEntry(double mouseX, double mouseY, int button) {
-        this.button.mouseClicked(mouseX, mouseY, button);
+        if (!this.button.mouseClicked(mouseX, mouseY, button)) {
+            clicked = !clicked;
+        }
         return true;
     }
 
@@ -67,7 +70,9 @@ public abstract class ButtonConfigEntry extends ConfigEntry {
     //?} else {
     /*@Override
     protected boolean mouseClickedEntry(Click click, boolean doubled) {
-        this.button.mouseClicked(click, doubled);
+        if (!this.button.mouseClicked(click, doubled)) {
+            clicked = !clicked;
+        }
         return true;
     }
 

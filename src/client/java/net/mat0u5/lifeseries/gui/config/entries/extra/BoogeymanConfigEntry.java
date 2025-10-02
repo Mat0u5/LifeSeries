@@ -31,7 +31,7 @@ public class BoogeymanConfigEntry extends BooleanConfigEntry {
     @Override
     protected void renderEntry(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         super.renderEntry(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
-        if (!value || parentGroup == null) {
+        if (parentGroup == null || !showBoogeymanInfoText()) {
             return;
         }
 
@@ -134,7 +134,7 @@ public class BoogeymanConfigEntry extends BooleanConfigEntry {
     @Override
     public int getPreferredHeight() {
         int initial = super.getPreferredHeight();
-        if (value) {
+        if (showBoogeymanInfoText()) {
             int lines = 9;
             return initial + textRenderer.fontHeight * lines + 6;
         }
@@ -144,5 +144,9 @@ public class BoogeymanConfigEntry extends BooleanConfigEntry {
     @Override
     public ConfigTypes getValueType() {
         return ConfigTypes.BOOGEYMAN;
+    }
+
+    public boolean showBoogeymanInfoText() {
+        return clicked;
     }
 }

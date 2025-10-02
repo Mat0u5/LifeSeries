@@ -14,6 +14,8 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 //? if >= 1.21.9 {
@@ -51,6 +53,7 @@ public abstract class ConfigEntry {
     protected boolean isHovered = false;
     private boolean isFocused = false;
     protected GroupConfigEntry<?> parentGroup;
+    protected List<GroupConfigEntry<?>> groupTopology = new ArrayList<>();
     private boolean isNew = false;
 
     public ConfigEntry(String fieldName, String displayName, String description) {
@@ -201,12 +204,19 @@ public abstract class ConfigEntry {
         return isFocused;
     }
 
+    public boolean isTopologyFocused() {
+        if (groupTopology.size() >= 2) {
+            return groupTopology.get(1).isFocused();
+        }
+        return isFocused();
+    }
+
     public int getPreferredHeight() {
         return PREFFERED_HEIGHT;
     }
 
     protected abstract void renderEntry(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta);
-    protected abstract void resetToDefault();
+    public abstract void resetToDefault();
 
     public abstract Object getValue();
     public abstract String getValueAsString();
@@ -255,13 +265,13 @@ public abstract class ConfigEntry {
         this.errorMessage = "";
     }
 
-    protected void markChanged() {
+    public void markChanged() {
         if (screen != null) {
             screen.onEntryValueChanged();
         }
     }
 
-    protected boolean hasResetButton() {
+    public boolean hasResetButton() {
         return true;
     }
 }

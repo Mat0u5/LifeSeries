@@ -49,7 +49,7 @@ public abstract class EmptyConfigEntry extends ConfigEntry {
     *///?}
 
     @Override
-    protected void resetToDefault() {
+    public void resetToDefault() {
 
     }
 
@@ -64,7 +64,7 @@ public abstract class EmptyConfigEntry extends ConfigEntry {
     }
 
     @Override
-    protected boolean hasResetButton() {
+    public boolean hasResetButton() {
         return false;
     }
 

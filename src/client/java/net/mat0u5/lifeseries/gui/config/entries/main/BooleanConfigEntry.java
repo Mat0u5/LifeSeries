@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.gui.config.entries.main;
 
 import net.mat0u5.lifeseries.gui.config.entries.ButtonConfigEntry;
+import net.mat0u5.lifeseries.gui.config.entries.GroupConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -37,7 +38,7 @@ public class BooleanConfigEntry extends ButtonConfigEntry implements IEntryGroup
     }
 
     @Override
-    protected void resetToDefault() {
+    public void resetToDefault() {
         value = defaultValue;
         updateButtonText();
     }
@@ -48,6 +49,12 @@ public class BooleanConfigEntry extends ButtonConfigEntry implements IEntryGroup
             this.value = booleanValue;
             updateButtonText();
         }
+    }
+
+    @Override
+    public void updateButtonText() {
+        super.updateButtonText();
+        clicked = this.value;
     }
 
     @Override
@@ -91,6 +98,11 @@ public class BooleanConfigEntry extends ButtonConfigEntry implements IEntryGroup
 
     @Override
     public boolean shouldExpand() {
-        return getValue();
+        return clicked;
+    }
+
+    @Override
+    public int expandTextX(int x, int width) {
+        return button.getX() - 10;
     }
 }

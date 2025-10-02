@@ -19,6 +19,7 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
     private static final int TEXT_FIELD_OFFSET_X = -5;
     private static final int TEXT_FIELD_OFFSET_Y = 1;
     private int maxTextFieldLength = 8192;
+    protected boolean clicked = false;
 
     public TextFieldConfigEntry(String fieldName, String displayName, String description) {
         this(fieldName, displayName, description, DEFAULT_TEXT_FIELD_WIDTH, DEFAULT_TEXT_FIELD_HEIGHT);
@@ -93,7 +94,9 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
     //? if <= 1.21.6 {
     @Override
     protected boolean mouseClickedEntry(double mouseX, double mouseY, int button) {
-        textField.mouseClicked(mouseX, mouseY, button);
+        if (!textField.mouseClicked(mouseX, mouseY, button)) {
+            clicked = !clicked;
+        }
         return true;
     }
 
@@ -109,7 +112,9 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
     //?} else {
     /*@Override
     protected boolean mouseClickedEntry(Click click, boolean doubled) {
-        textField.mouseClicked(click, doubled);
+        if (!textField.mouseClicked(click, doubled)) {
+            clicked = !clicked;
+        }
         return true;
     }
 
@@ -125,7 +130,7 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
     *///?}
 
     @Override
-    protected void resetToDefault() {
+    public void resetToDefault() {
         setText(getDefaultValueAsString());
         if (!hasCustomErrors()) {
             clearError();

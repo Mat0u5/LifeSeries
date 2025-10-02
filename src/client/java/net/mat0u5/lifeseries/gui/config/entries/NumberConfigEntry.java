@@ -128,6 +128,11 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
 
     @Override
     public boolean shouldExpand() {
-        return true;
+        return clicked;
+    }
+
+    @Override
+    public int expandTextX(int x, int width) {
+        return textField.getX() - 10;
     }
 }

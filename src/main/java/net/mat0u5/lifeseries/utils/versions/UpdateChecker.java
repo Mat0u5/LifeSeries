@@ -9,12 +9,10 @@ import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URL;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -44,7 +42,7 @@ public class UpdateChecker {
             HttpURLConnection connection = null;
             try {
                 // Connect to the GitHub API
-                connection = (HttpURLConnection) new URI(Main.LATEST_UPDATE_URL).toURL().openConnection();
+                connection = (HttpURLConnection) new URI(Main.UPDATES_URL + "/latest").toURL().openConnection();
                 connection.setRequestMethod("GET");
                 connection.setRequestProperty("User-Agent", "Mozilla/5.0");
                 connection.setConnectTimeout(5000);
@@ -92,7 +90,7 @@ public class UpdateChecker {
             HttpURLConnection connection = null;
             try {
                 // Connect to the GitHub API
-                connection = (HttpURLConnection) new URI(Main.ALL_UPDATES_URL).toURL().openConnection();
+                connection = (HttpURLConnection) new URI(Main.UPDATES_URL).toURL().openConnection();
                 connection.setRequestMethod("GET");
                 connection.setRequestProperty("User-Agent", "Mozilla/5.0");
                 connection.setConnectTimeout(5000);

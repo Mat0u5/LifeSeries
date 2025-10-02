@@ -47,6 +47,9 @@ public class ConfigScreen extends Screen {
     private static final int FOOTER_BUTTON_WIDTH = 150;
     private static final int FOOTER_BUTTON_HEIGHT = 20;
 
+    private static final int RESETALL_BUTTON_WIDTH = 90;
+    private static final int RESETALL_BUTTON_HEIGHT = 20;
+
     private final Screen parent;
     private final Map<String, List<ConfigEntry>> categories;
     private final List<String> categoryNames;
@@ -55,6 +58,7 @@ public class ConfigScreen extends Screen {
     public ConfigListWidget listWidget;
     private ButtonWidget saveButton;
     private ButtonWidget cancelButton;
+    private ButtonWidget resetAllButton;
     private TextFieldWidget searchField;
     private int selectedCategory = 0;
     private boolean hasChanges = false;
@@ -113,7 +117,28 @@ public class ConfigScreen extends Screen {
                 .build();
         this.addDrawableChild(this.cancelButton);
 
+        this.resetAllButton = ButtonWidget.builder(Text.of("Reset All"), button -> this.resetAll())
+                .dimensions(this.width - RESETALL_BUTTON_WIDTH - 10, this.height - RESETALL_BUTTON_HEIGHT - FOOTER_BUTTON_GAP, RESETALL_BUTTON_WIDTH, RESETALL_BUTTON_HEIGHT)
+                .build();
+        this.addDrawableChild(this.resetAllButton);
+
         this.updateButtonStates();
+    }
+
+    private void resetAll() {
+        for (ConfigEntry entry : getAllEntries(this.categories.get(this.categoryNames.get(selectedCategory)))) {
+            entry.resetToDefault();
+            entry.markChanged();
+        }
+    }
+
+    private boolean canResetAll() {
+        for (ConfigEntry entry : getAllEntries(this.categories.get(this.categoryNames.get(selectedCategory)))) {
+            if (entry.canReset() && entry.hasResetButton()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void onSearchChanged(String query) {
@@ -181,6 +206,7 @@ public class ConfigScreen extends Screen {
                 }
             }
         }
+        this.updateButtonStates();
     }
 
     public void onEntryValueChanged() {
@@ -217,7 +243,8 @@ public class ConfigScreen extends Screen {
                 break;
             }
         }
-        this.saveButton.active = this.hasChanges && !this.hasErrors();
+        if (this.saveButton != null) this.saveButton.active = this.hasChanges && !this.hasErrors();
+        if (this.resetAllButton != null) this.resetAllButton.active = canResetAll();
     }
 
     private boolean hasErrors() {

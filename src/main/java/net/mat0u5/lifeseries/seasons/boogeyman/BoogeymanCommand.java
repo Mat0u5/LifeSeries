@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.boogeyman;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.seasons.season.pastlife.PastLifeBoogeymanManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
@@ -87,12 +88,33 @@ public class BoogeymanCommand extends Command {
                         context.getSource()
                     ))
                 )
-
+                .executes(context -> boogeyCheck(
+                    context.getSource()
+                ))
         );
     }
 
     public BoogeymanManager getBM() {
         return currentSeason.boogeymanManager;
+    }
+
+    public int boogeyCheck(ServerCommandSource source) {
+        if (checkBanned(source)) return -1;
+        ServerPlayerEntity self = source.getPlayer();
+        if (self == null) return -1;
+        BoogeymanManager bm = getBM();
+        if (bm == null) return -1;
+
+        if (!bm.isBoogeyman(self)) {
+            source.sendError(Text.of("You are not a Boogeyman"));
+            return -1;
+        }
+        if (bm instanceof PastLifeBoogeymanManager) {
+            OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§cYou are the Boogeyman."));
+        }
+        bm.messageBoogeyman(self);
+
+        return 1;
     }
 
     public int selfFailBoogey(ServerCommandSource source, boolean confirm) {

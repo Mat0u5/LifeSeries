@@ -89,3 +89,9 @@ Group config entries are now closed by default.<br>
 Added dimension-specific world border size configs in 1.21.9<br>
 The session timer is now stored in a config, meaning it keeps the newest value even if the server closes.<br>
 Added two configs for animal disguise whether it should show armor and hand items.
+
+----------
+
+Running '/boogeyman' will tell you if you are the boogeyman or not, and the rules if you are a boogeyman.<br>
+Boolean and Number group config entries are now collapsable by clicking on them like normal text group entries.<br>
+Added a 'Reset All' button to the config screen.

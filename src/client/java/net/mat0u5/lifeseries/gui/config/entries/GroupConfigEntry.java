@@ -47,7 +47,11 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
         }
 
         this.mainEntry.parentGroup = this;
-        this.childEntries.forEach(entry -> entry.parentGroup = this);
+        this.mainEntry.groupTopology.add(this);
+        this.childEntries.forEach(entry -> {
+            entry.parentGroup = this;
+            entry.groupTopology.add(this);
+        });
     }
 
     @Override
@@ -92,6 +96,9 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
 
             mainEntry.render(context, x, y, width, entryHeight, mouseX, mouseY, entryHovered, tickDelta);
             currentY += entryHeight + ConfigListWidget.ENTRY_GAP;
+
+            String expandText = !mainEntry.shouldExpand() ? "Click to expand" : "Click to collapse";
+            RenderUtils.drawTextRight(context, textRenderer, TextColors.LIGHT_GRAY_A128, Text.of(expandText), mainEntry.expandTextX(x, width), y + LABEL_OFFSET_Y);
         }
 
 
@@ -291,7 +298,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
     }
 
     @Override
-    protected void markChanged() {
+    public void markChanged() {
         super.markChanged();
         if (mainEntry != null) {
             mainEntry.markChanged();
@@ -299,12 +306,16 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
     }
 
     public void addChildEntry(ConfigEntry entry) {
+        entry.parentGroup = this;
+        entry.groupTopology.add(this);
         entry.setScreen(this.screen);
         childEntries.add(entry);
     }
 
     public void removeChildEntry(ConfigEntry entry) {
         childEntries.remove(entry);
+        entry.parentGroup = null;
+        entry.groupTopology.remove(this);
     }
 
     public List<ConfigEntry> getChildEntries() {

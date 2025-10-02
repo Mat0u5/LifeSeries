@@ -14,6 +14,12 @@ public class ClientKeybinds {
 
     public static KeyBinding runCommand;
 
+    //? if <= 1.21.6 {
+    public static final String KEYBIND_ID = "key.category.lifeseries.general";
+     //?} else {
+    /*public static final KeyBinding.Category KEYBIND_ID = new KeyBinding.Category(Identifier.of("lifeseries","general"));
+    *///?}
+
     public static void tick() {
         while (superpower != null && superpower.wasPressed()) {
             NetworkHandlerClient.pressSuperpowerKey();
@@ -35,34 +41,20 @@ public class ClientKeybinds {
                 /*GLFW.GLFW_KEY_R,
                  *///?}
 
-                //? if <= 1.21.6 {
-                "key.categories.lifeseries"
-                //?} else {
-                /*new KeyBinding.Category(Identifier.of("lifeseries","key.categories.lifeseries"))
-                *///?}
+                KEYBIND_ID
         ));
         openConfig = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.lifeseries.openconfig",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_UNKNOWN,
-
-                //? if <= 1.21.6 {
-                "key.categories.lifeseries"
-                 //?} else {
-                /*new KeyBinding.Category(Identifier.of("lifeseries","key.categories.lifeseries"))
-                *///?}
+                KEYBIND_ID
         ));
         if (VersionControl.isDevVersion()) {
             runCommand = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                     "key.lifeseries.runcommand",
                     InputUtil.Type.KEYSYM,
                     GLFW.GLFW_KEY_RIGHT_ALT,
-
-                    //? if <= 1.21.6 {
-                    "key.categories.lifeseries"
-                     //?} else {
-                    /*new KeyBinding.Category(Identifier.of("lifeseries","key.categories.lifeseries"))
-                    *///?}
+                    KEYBIND_ID
             ));
         }
     }

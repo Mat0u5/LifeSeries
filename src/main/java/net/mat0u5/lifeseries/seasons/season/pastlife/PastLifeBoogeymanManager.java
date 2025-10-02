@@ -7,7 +7,7 @@ import net.minecraft.text.Text;
 
 public class PastLifeBoogeymanManager extends BoogeymanManager {
     @Override
-    public void messageBoogeymen(ServerPlayerEntity boogey) {
+    public void messageBoogeyman(ServerPlayerEntity boogey) {
         TaskScheduler.scheduleTask(100, () -> {
             boogey.sendMessage(Text.of("§7You are the boogeyman."));
         });

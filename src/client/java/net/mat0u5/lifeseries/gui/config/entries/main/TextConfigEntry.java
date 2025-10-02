@@ -11,9 +11,6 @@ import net.minecraft.text.Text;
 /*import net.minecraft.client.gui.Click;*/
 
 public class TextConfigEntry extends EmptyConfigEntry implements IEntryGroupHeader {
-    protected static final int TEXT_OFFSET_X = -5;
-    protected static final int TEXT_OFFSET_Y = LABEL_OFFSET_Y;
-
     private final boolean clickable;
     public boolean clicked;
 
@@ -24,13 +21,6 @@ public class TextConfigEntry extends EmptyConfigEntry implements IEntryGroupHead
     public TextConfigEntry(String fieldName, String displayName, String description, boolean clickable) {
         super(fieldName, displayName, description);
         this.clickable = clickable;
-    }
-
-    @Override
-    protected void renderEntry(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-        if (!clickable) return;
-        String text = !clicked ? "Click to expand" : "Click to collapse";
-        RenderUtils.drawTextRight(context, textRenderer, TextColors.LIGHT_GRAY_A128, Text.of(text), x + width + TEXT_OFFSET_X, y + TEXT_OFFSET_Y);
     }
 
     @Override
@@ -59,5 +49,10 @@ public class TextConfigEntry extends EmptyConfigEntry implements IEntryGroupHead
     @Override
     public boolean shouldExpand() {
         return clicked;
+    }
+
+    @Override
+    public int expandTextX(int x, int width) {
+        return x + width - 5;
     }
 }

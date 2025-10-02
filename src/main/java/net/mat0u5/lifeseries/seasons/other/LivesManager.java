@@ -52,15 +52,16 @@ public class LivesManager {
     public void updateTeams() {
         MAX_TAB_NUMBER = 4;
         Collection<Team> allTeams = TeamUtils.getAllTeams();
-        if (allTeams == null) return;
-        for (Team team : allTeams) {
-            String name = team.getName();
-            if (name.startsWith("lives_")) {
-                try {
-                    int number = Integer.parseInt(name.replace("lives_",""));
-                    MAX_TAB_NUMBER = Math.max(MAX_TAB_NUMBER, number);
-                }catch(Exception e) {}
-                team.setShowFriendlyInvisibles(SEE_FRIENDLY_INVISIBLE_PLAYERS);
+        if (allTeams != null) {
+            for (Team team : allTeams) {
+                String name = team.getName();
+                if (name.startsWith("lives_")) {
+                    try {
+                        int number = Integer.parseInt(name.replace("lives_",""));
+                        MAX_TAB_NUMBER = Math.max(MAX_TAB_NUMBER, number);
+                    }catch(Exception e) {}
+                    team.setShowFriendlyInvisibles(SEE_FRIENDLY_INVISIBLE_PLAYERS);
+                }
             }
         }
         NetworkHandlerServer.sendNumberPackets(PacketNames.TAB_LIVES_CUTOFF, MAX_TAB_NUMBER);
