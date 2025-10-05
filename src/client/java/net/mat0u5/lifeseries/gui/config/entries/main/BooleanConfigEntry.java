@@ -23,6 +23,7 @@ public class BooleanConfigEntry extends ButtonConfigEntry implements IEntryGroup
         this.value = value;
         this.startingValue = value;
         updateButtonText();
+        clicked = false;
     }
 
     @Override

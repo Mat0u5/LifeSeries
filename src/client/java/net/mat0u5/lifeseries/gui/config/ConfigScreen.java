@@ -44,10 +44,10 @@ public class ConfigScreen extends Screen {
 
     private static final int FOOTER_HEIGHT = 30;
     private static final int FOOTER_BUTTON_GAP = 4;
-    private static final int FOOTER_BUTTON_WIDTH = 150;
+    private static final int FOOTER_BUTTON_WIDTH = 145;
     private static final int FOOTER_BUTTON_HEIGHT = 20;
 
-    private static final int RESETALL_BUTTON_WIDTH = 90;
+    private static final int RESETALL_BUTTON_WIDTH = 75;
     private static final int RESETALL_BUTTON_HEIGHT = 20;
 
     private final Screen parent;

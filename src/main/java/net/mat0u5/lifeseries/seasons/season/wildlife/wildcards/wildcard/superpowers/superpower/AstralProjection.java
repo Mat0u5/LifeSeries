@@ -146,6 +146,7 @@ public class AstralProjection extends ToggleableSuperpower {
             clone.setVelocity(velocity);
             clone.velocityModified = true;
             clone.velocityDirty = true;
+            clone.refreshPositionAndAngles(WorldUtils.getEntityPos(player), player.getYaw(), player.getPitch());
         });
         *///?}
     }

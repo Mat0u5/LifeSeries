@@ -358,11 +358,11 @@ public class SecretSociety {
 
     public void punishPlayer(ServerPlayerEntity member) {
         PlayerUtils.damage(member, member.getDamageSources().playerAttack(member), 0.001f);
-        int punishmentLives = PUNISHMENT_LIVES;
+        int punishmentLives = Math.abs(PUNISHMENT_LIVES);
         Integer currentLives = livesManager.getPlayerLives(member);
         if (currentLives != null) {
-            punishmentLives = Math.min(currentLives-1, PUNISHMENT_LIVES);
+            punishmentLives = Math.min(Math.abs(currentLives-1), punishmentLives);
         }
-        livesManager.addToPlayerLives(member, punishmentLives);
+        livesManager.addToPlayerLives(member, -punishmentLives);
     }
 }
