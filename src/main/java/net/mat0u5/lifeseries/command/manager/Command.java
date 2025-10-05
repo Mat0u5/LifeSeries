@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import net.mat0u5.lifeseries.Main;
+import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
@@ -13,6 +14,10 @@ public abstract class Command {
     public abstract boolean isAllowed();
     public abstract Text getBannedText();
     public abstract void register(CommandDispatcher<ServerCommandSource> dispatcher);
+
+    public void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess) {
+        register(dispatcher);
+    }
 
     public boolean checkBanned(ServerCommandSource source) {
         if (Main.modDisabled()) {

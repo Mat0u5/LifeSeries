@@ -50,6 +50,7 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     public static String limitedLifeTimerColor = "";
     public static long limitedLifeTimeLastUpdated = 0;
     public static long limitedLifeLives = 0;
+    public static Text sideTitle = null;
 
 
     public static ClientConfig clientConfig;
@@ -65,6 +66,7 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     public static int TAB_LIST_LIVES_CUTOFF = 4;
     public static boolean FIX_SIZECHANGING_BUGS = false;
     public static float SIZESHIFTING_CHANGE = 0;
+    public static double TEXT_HUD_SCALE = 1.0;
 
 
     public static boolean isReplay = false;
@@ -130,6 +132,8 @@ public class MainClient implements ClientModInitializer, IClientHelper {
         COLORED_HEARTS = ClientConfig.COLORED_HEARTS.get(clientConfig);
         COLORED_HEARTS_HARDCORE_LAST_LIFE = ClientConfig.COLORED_HEARTS_HARDCORE_LAST_LIFE.get(clientConfig);
         COLORED_HEARTS_HARDCORE_ALL_LIVES = ClientConfig.COLORED_HEARTS_HARDCORE_ALL_LIVES.get(clientConfig);
+
+        TEXT_HUD_SCALE = ClientConfig.TEXT_HUD_SCALE.get(clientConfig);
     }
 
     public static void resetClientData() {

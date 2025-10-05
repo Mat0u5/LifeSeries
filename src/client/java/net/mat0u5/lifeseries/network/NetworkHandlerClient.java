@@ -14,6 +14,7 @@ import net.mat0u5.lifeseries.gui.other.PastLifeChooseTwistScreen;
 import net.mat0u5.lifeseries.gui.other.SnailTextureInfoScreen;
 import net.mat0u5.lifeseries.gui.seasons.ChooseSeasonScreen;
 import net.mat0u5.lifeseries.gui.seasons.SeasonInfoScreen;
+import net.mat0u5.lifeseries.mixin.client.InGameHudAccessor;
 import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.render.VignetteRenderer;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -80,7 +81,20 @@ public class NetworkHandlerClient {
             MinecraftClient client = context.client();
             client.execute(() -> handleStringListPacket(payload));
         });
+        ClientPlayNetworking.registerGlobalReceiver(SidetitlePacket.ID, (payload, context) -> {
+            MinecraftClient client = context.client();
+            client.execute(() -> handleSidetitle(payload));
+        });
     }
+
+    public static void handleSidetitle(SidetitlePacket payload) {
+        MainClient.sideTitle = payload.text();
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client.inGameHud instanceof InGameHudAccessor hudAccessor) {
+            hudAccessor.ls$setTitleRemainTicks(hudAccessor.ls$titleFadeInTicks() + hudAccessor.ls$titleStayTicks() + hudAccessor.ls$titleFadeOutTicks());
+        }
+    }
+
     public static void handleStringListPacket(StringListPayload payload) {
         String nameStr = payload.name();
         PacketNames name = PacketNames.fromName(nameStr);

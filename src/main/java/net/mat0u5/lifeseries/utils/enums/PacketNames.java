@@ -52,6 +52,7 @@ public enum PacketNames {
     ,SIZESHIFTING_CHANGE
     ,ANIMAL_DISGUISE_ARMOR
     ,ANIMAL_DISGUISE_HANDS
+    ,SIDETITLE
     ;
 
     public static PacketNames fromName(String name) {

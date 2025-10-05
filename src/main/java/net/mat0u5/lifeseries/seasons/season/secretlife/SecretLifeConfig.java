@@ -95,7 +95,7 @@ public class SecretLifeConfig extends ConfigManager {
             "Broadcast Tasks When Submitted", "Gives an option for all players to view a task when it gets failed, rerolled or succeeded."
     );
     public static final ConfigFileEntry<Boolean> CONSTANT_TASKS = new ConfigFileEntry<>(
-            "constant_tasks", false, "season",
+            "constant_tasks", false, "season[new]",
             "Constant Tasks", "Automatically gives players a new task when they have completed one."
     );
 

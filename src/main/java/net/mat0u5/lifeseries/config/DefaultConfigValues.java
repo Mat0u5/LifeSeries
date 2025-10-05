@@ -268,7 +268,7 @@ public class DefaultConfigValues {
     );
     public final ConfigFileEntry<Boolean> SHOW_ADVANCEMENTS = new ConfigFileEntry<>(
             "show_advancements", true, "global",
-            "Show Advancemenets In Chat", "Controls advancements show up in the chat."
+            "Show Advancements In Chat", "Controls advancements show up in the chat."
     );
 
 

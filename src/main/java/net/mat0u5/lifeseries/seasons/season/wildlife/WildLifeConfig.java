@@ -187,11 +187,11 @@ public class WildLifeConfig extends ConfigManager {
             "Blacklisted Powers", "List of superpowers that cannot be rolled randomly.", Superpowers.getAllStr()
     );
     public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ANIMALDISGUISE_ARMOR = new ConfigFileEntry<>(
-            "wildcard_superpowers_animaldisguise_armor", false, "season.superpowers",
+            "wildcard_superpowers_animaldisguise_armor", false, "season.superpowers[new]",
             "Animal Disguise: Show Armor", "Controls whether armor is seen on players disguised as mobs."
     );
     public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ANIMALDISGUISE_HANDS = new ConfigFileEntry<>(
-            "wildcard_superpowers_animaldisguise_hands", true, "season.superpowers",
+            "wildcard_superpowers_animaldisguise_hands", true, "season.superpowers[new]",
             "Animal Disguise: Show Hand Items", "Controls whether hand items are seen on players disguised as mobs."
     );
 

@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.events.ClientKeybinds;
 import net.mat0u5.lifeseries.features.Trivia;
+import net.mat0u5.lifeseries.mixin.client.InGameHudAccessor;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
@@ -19,7 +20,7 @@ public class TextHud {
     public static void renderText(DrawContext context) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.options.hudHidden) return;
-        int yPos = client.getWindow().getScaledHeight() - 5 - client.textRenderer.fontHeight;
+        int yPos = client.getWindow().getScaledHeight() - (5 + (int) Math.ceil((client.textRenderer.fontHeight) * MainClient.TEXT_HUD_SCALE));
 
         if (Main.DEBUG) {
             yPos += _renderSnailDistance(client, context, yPos);
@@ -31,6 +32,19 @@ public class TextHud {
         yPos += renderMimicryTimer(client, context, yPos);
         yPos += renderSuperpowerCooldown(client, context, yPos);
         yPos += renderTriviaTimer(client, context, yPos);
+
+        yPos += renderSidetitle(client, context, yPos);
+    }
+
+    public static int renderSidetitle(MinecraftClient client, DrawContext context, int y) {
+        if (MainClient.sideTitle == null) return 0;
+        if (MainClient.sideTitle.getString().isEmpty()) return 0;
+
+        if (client.inGameHud instanceof InGameHudAccessor hudAccessor) {
+            if (hudAccessor.ls$titleRemainTicks() <= 0) return 0;
+        }
+
+        return drawHudText(client, context, MainClient.sideTitle, y);
     }
 
     public static int _renderSnailDistance(MinecraftClient client, DrawContext context, int y) {
@@ -44,12 +58,7 @@ public class TextHud {
             Text timerText = Text.literal(String.valueOf(Math.round(distance)));
             if (distance < 20) timerText = Text.literal("§c"+Math.round(distance));
 
-            int screenWidth = client.getWindow().getScaledWidth();
-            int x = screenWidth - 5;
-
-            RenderUtils.drawTextRight(context, client.textRenderer, timerText, x, y);
-
-            return -client.textRenderer.fontHeight-5;
+            return drawHudText(client, context, timerText, y);
         }catch(Exception e) {}
         return 0;
     }
@@ -70,12 +79,7 @@ public class TextHud {
 
             Text text = Text.literal(textString);
 
-
-            int screenWidth = client.getWindow().getScaledWidth();
-            int x = screenWidth - 5;
-            RenderUtils.drawTextRight(context, client.textRenderer, text, x, y);
-
-            return -client.textRenderer.fontHeight-10;
+            return drawHudText(client, context, text, y) - 5;
         }
         else {
             String textString0 = "Don't worry,";
@@ -99,10 +103,11 @@ public class TextHud {
 
             int screenWidth = client.getWindow().getScaledWidth();
             int x = screenWidth - 5;
-            RenderUtils.drawTextRight(context, client.textRenderer, text1, x, y);
-            RenderUtils.drawTextRight(context, client.textRenderer, text0, x - ((client.textRenderer.getWidth(text1)-client.textRenderer.getWidth(text0))/2),  y - (client.textRenderer.fontHeight+1));
 
-            return -client.textRenderer.fontHeight*2-15;
+            int draw1 = drawHudText(client, context, text1, y);
+            int draw2 = drawHudText(client, context, text0, x - ((client.textRenderer.getWidth(text1)-client.textRenderer.getWidth(text0))/2), y - (client.textRenderer.fontHeight+1));
+
+            return draw1 + draw2 - 5;
         }
     }
 
@@ -134,12 +139,7 @@ public class TextHud {
             else timerText = timerText.append(TextUtils.formatLoosely("§7Session {}", OtherUtils.formatTimeMillis(remainingTime)));
         }
 
-        int screenWidth = client.getWindow().getScaledWidth();
-        int x = screenWidth - 5;
-
-        RenderUtils.drawTextRight(context, client.textRenderer, timerText, x, y);
-
-        return -client.textRenderer.fontHeight-5;
+        return drawHudText(client, context, timerText, y);
     }
 
     private static long limitedLifeTime = -1;
@@ -166,12 +166,7 @@ public class TextHud {
             else timerText = timerText.append(Text.of(MainClient.limitedLifeTimerColor+ OtherUtils.formatTimeMillis(remainingTime)));
         }
 
-        int screenWidth = client.getWindow().getScaledWidth();
-        int x = screenWidth - 5;
-
-        RenderUtils.drawTextRight(context, client.textRenderer, timerText, x, y);
-
-        return -client.textRenderer.fontHeight-5;
+        return drawHudText(client, context, timerText, y);
     }
 
     public static int renderTriviaTimer(MinecraftClient client, DrawContext context, int y) {
@@ -186,13 +181,11 @@ public class TextHud {
         int screenWidth = client.getWindow().getScaledWidth();
         int x = screenWidth - 5;
 
-        if (millisLeft <= 5_000) RenderUtils.drawTextRight(context, client.textRenderer, TextColors.RED, actualTimer, x, y);
-        else if (millisLeft <= 30_000) RenderUtils.drawTextRight(context, client.textRenderer, TextColors.ORANGE, actualTimer, x, y);
-        else RenderUtils.drawTextRight(context, client.textRenderer, TextColors.WHITE, actualTimer, x, y);
+        if (millisLeft <= 5_000) drawHudText(client, context, TextColors.RED, actualTimer, x, y);
+        else if (millisLeft <= 30_000) drawHudText(client, context, TextColors.ORANGE, actualTimer, x, y);
+        else drawHudText(client, context, TextColors.WHITE, actualTimer, x, y);
 
-        RenderUtils.drawTextRight(context, client.textRenderer, timerText, x - client.textRenderer.getWidth(actualTimer), y);
-
-        return -client.textRenderer.fontHeight-5;
+        return drawHudText(client, context, timerText, x - client.textRenderer.getWidth(actualTimer), y);
     }
 
     private static long lastPressed = 0;
@@ -211,11 +204,7 @@ public class TextHud {
 
         Text timerText = TextUtils.formatLoosely("{}Superpower cooldown:§f {}", (keyPressed?"§c§n":"§7") , OtherUtils.formatTimeMillis(millisLeft));
 
-        int screenWidth = client.getWindow().getScaledWidth();
-        int x = screenWidth - 5;
-        RenderUtils.drawTextRight(context, client.textRenderer, timerText, x, y);
-
-        return -client.textRenderer.fontHeight-5;
+        return drawHudText(client, context, timerText, y);
     }
 
     public static int renderMimicryTimer(MinecraftClient client, DrawContext context, int y) {
@@ -227,11 +216,26 @@ public class TextHud {
 
         Text timerText = TextUtils.formatLoosely("§7Mimic power cooldown: §f{}", OtherUtils.formatTimeMillis(millisLeft));
 
+        return drawHudText(client, context, timerText, y);
+    }
+
+    public static int drawHudText(MinecraftClient client, DrawContext context, Text text, int y) {
         int screenWidth = client.getWindow().getScaledWidth();
         int x = screenWidth - 5;
-        RenderUtils.drawTextRight(context, client.textRenderer, timerText, x, y);
+        return drawHudText(client, context, text, x, y);
+    }
 
-        return -client.textRenderer.fontHeight-5;
+    public static int drawHudText(MinecraftClient client, DrawContext context, Text text, int x, int y) {
+        return drawHudText(client, context, TextColors.DEFAULT, text, x, y);
+    }
+
+    public static int drawHudText(MinecraftClient client, DrawContext context, int color, Text text, int x, int y) {
+        if (MainClient.TEXT_HUD_SCALE != 1) {
+            RenderUtils.drawTextRightScaled(context, client.textRenderer, color, text, x, y, (float) MainClient.TEXT_HUD_SCALE, (float) MainClient.TEXT_HUD_SCALE);
+            return -((int) Math.ceil((client.textRenderer.fontHeight) * MainClient.TEXT_HUD_SCALE) + 5);
+        }
+        RenderUtils.drawTextRight(context, client.textRenderer, color, text, x, y);
+        return -client.textRenderer.fontHeight -5;
     }
 
     public static long roundTime(long time) {

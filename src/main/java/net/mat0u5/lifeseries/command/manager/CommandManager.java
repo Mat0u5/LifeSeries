@@ -35,12 +35,13 @@ public class CommandManager {
         commands.add(new SocietyCommands());
         commands.add(new TestingCommands());
         commands.add(new SubInCommands());
+        commands.add(new SideTitleCommand());
     }
 
     public static void registerAllCommands(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, net.minecraft.server.command.CommandManager.RegistrationEnvironment registrationEnvironment) {
         loadCommands();
         for (Command command : commands) {
-            command.register(dispatcher);
+            command.register(dispatcher, commandRegistryAccess);
         }
     }
 }

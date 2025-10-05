@@ -44,6 +44,11 @@ public class ClientConfig extends ConfigManager {
             "Show All Lives as Hardcore", "Hearts will always appear as though you are in hardcore."
     );
 
+    public static final ConfigFileEntry<Double> TEXT_HUD_SCALE = new ConfigFileEntry<>(
+            "text_hud_scale", 1.0, "[new]",
+            "Side Text Hud Scale", "The scale at which the side texts, like the session timer render at."
+    );
+
     @Override
     protected List<ConfigFileEntry<?>> getDefaultConfigEntries() {
         List<ConfigFileEntry<?>> result = new ArrayList<>(List.of(
@@ -54,6 +59,8 @@ public class ClientConfig extends ConfigManager {
 
                 ,COLORED_HEARTS_HARDCORE_LAST_LIFE
                 ,COLORED_HEARTS_HARDCORE_ALL_LIVES
+
+                ,TEXT_HUD_SCALE
         ));
 
         if (VersionControl.isDevVersion()) {

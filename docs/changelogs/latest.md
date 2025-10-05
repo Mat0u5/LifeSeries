@@ -11,7 +11,7 @@ Added the '/lifeseries enable' and '/lifeseries disable' commands, which fully e
 
 ----------
 
-Full compatibility with the Flashback mod .
+Full compatibility with the Flashback mod.
 
 ----------
 
@@ -81,7 +81,7 @@ The creaking superpower team name now gets copied from the previous player team 
 
 Astral Projection now uses Mannequins.<br>
 Fully rewrote how animal disguise rendering works.<br>
-Animal disguise now shows when you're wearing armor or holding items.
+Animal disguise now shows when you're wearing armor or holding items, if enabled in the config.
 
 ----------
 
@@ -95,3 +95,8 @@ Added two configs for animal disguise whether it should show armor and hand item
 Running '/boogeyman' will tell you if you are the boogeyman or not, and the rules if you are a boogeyman.<br>
 Boolean and Number group config entries are now collapsable by clicking on them like normal text group entries.<br>
 Added a 'Reset All' button to the config screen.
+
+----------
+
+You can now use the '/title <player> **side** <title>' to use the side text gui of the mod.<br>
+Added the ability to scale the side text gui to the client config.

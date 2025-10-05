@@ -32,6 +32,7 @@ import net.minecraft.network.DisconnectionInfo;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.text.Texts;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,7 @@ public class NetworkHandlerServer {
         PayloadTypeRegistry.playS2C().register(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC);
         PayloadTypeRegistry.playS2C().register(ImagePayload.ID, ImagePayload.CODEC);
         PayloadTypeRegistry.playS2C().register(ConfigPayload.ID, ConfigPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(SidetitlePacket.ID, SidetitlePacket.CODEC);
 
         PayloadTypeRegistry.playC2S().register(NumberPayload.ID, NumberPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(StringPayload.ID, StringPayload.CODEC);
@@ -62,6 +64,7 @@ public class NetworkHandlerServer {
         PayloadTypeRegistry.playC2S().register(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC);
         PayloadTypeRegistry.playC2S().register(ImagePayload.ID, ImagePayload.CODEC);
         PayloadTypeRegistry.playC2S().register(ConfigPayload.ID, ConfigPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(SidetitlePacket.ID, SidetitlePacket.CODEC);
     }
     public static void registerServerReceiver() {
         ServerPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (payload, context) -> {
@@ -384,5 +387,9 @@ public class NetworkHandlerServer {
     public static boolean wasHandshakeSuccessful(UUID uuid) {
         if (uuid == null) return false;
         return NetworkHandlerServer.handshakeSuccessful.contains(uuid);
+    }
+
+    public static void sideTitle(ServerPlayerEntity player, Text text) {
+        ServerPlayNetworking.send(player, new SidetitlePacket(text));
     }
 }
