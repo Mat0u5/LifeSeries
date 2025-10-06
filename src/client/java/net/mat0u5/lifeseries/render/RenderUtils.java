@@ -141,15 +141,23 @@ public class RenderUtils {
     }
 
     public static void drawTextRight(DrawContext context, TextRenderer textRenderer, int textColor, Text text, int x, int y) {
-        context.drawText(textRenderer, text, x - textRenderer.getWidth(text), y, textColor, false);
+        drawTextRight(context, textRenderer, textColor, text, x, y, false);
+    }
+
+    public static void drawTextRight(DrawContext context, TextRenderer textRenderer, int textColor, Text text, int x, int y, boolean shadow) {
+        context.drawText(textRenderer, text, x - textRenderer.getWidth(text), y, textColor, shadow);
     }
 
     public static void drawTextRightScaled(DrawContext context, TextRenderer textRenderer, int textColor, Text text, double x, double y, float scaleX, float scaleY) {
+        drawTextRightScaled(context, textRenderer, textColor, text, x, y, scaleX, scaleY, false);
+    }
+
+    public static void drawTextRightScaled(DrawContext context, TextRenderer textRenderer, int textColor, Text text, double x, double y, float scaleX, float scaleY, boolean shadow) {
         int width = textRenderer.getWidth(text);
         //? if <= 1.21.5 {
         context.getMatrices().push();
         context.getMatrices().scale(scaleX, scaleY, 1.0f);
-        context.drawText(textRenderer, text, (int)(x / scaleX - width), (int)(y / scaleY), textColor, false);
+        context.drawText(textRenderer, text, (int)(x / scaleX - width), (int)(y / scaleY), textColor, shadow);
         context.getMatrices().pop();
         //?} else {
         /*context.getMatrices().pushMatrix();
@@ -166,4 +174,6 @@ public class RenderUtils {
         context.fill(x, y + 1, x + 1, y + height - 1, color);
         context.fill(x + width - 1, y + 1, x + width, y + height - 1, color);
     }
+
+    //TODO i hate all of this
 }

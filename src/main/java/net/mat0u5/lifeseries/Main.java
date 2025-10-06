@@ -26,6 +26,7 @@ import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.interfaces.IClientHelper;
+import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.minecraft.server.MinecraftServer;
@@ -40,7 +41,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "1.4.1-pre1";
+	public static final String MOD_VERSION = "1.4.1";
 	public static final String MOD_ID = "lifeseries";
 	public static final String UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
 	public static final boolean DEBUG = false;
@@ -182,6 +183,7 @@ public class Main implements ModInitializer {
 			if (!DependencyManager.checkWildLifeDependencies()) return false;
 		}
 
+		TaskScheduler.clearTasks();
 		config.setProperty("currentSeries", changeTo);
 		livesManager.resetAllPlayerLivesInner();
 		currentSession.sessionEnd();

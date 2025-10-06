@@ -79,16 +79,17 @@ public class LifeSeriesCommand extends Command {
                 )
                 .then(literal("enable")
                     .requires(PermissionManager::isAdmin)
-                    .executes(context -> enableOrDisable(false))
+                    .executes(context -> enableOrDisable(context.getSource(), false))
                 )
                 .then(literal("disable")
                     .requires(PermissionManager::isAdmin)
-                    .executes(context -> enableOrDisable(true))
+                    .executes(context -> enableOrDisable(context.getSource(), true))
                 )
         );
     }
 
-    public int enableOrDisable(boolean disabled) {
+    private int enableOrDisable(ServerCommandSource source, boolean disabled) {
+        OtherUtils.sendCommandFeedback(source, TextUtils.format("The Life Series has been {}", disabled ? "disabled" : "enabled"));
         Main.setDisabled(disabled);
         return 1;
     }
@@ -136,7 +137,7 @@ public class LifeSeriesCommand extends Command {
     }
 
     public int config(ServerCommandSource source) {
-        if (checkBanned(source)) return -1;
+        //if (checkBanned(source)) return -1;
         if (source.getPlayer() == null) {
             return -1;
         }

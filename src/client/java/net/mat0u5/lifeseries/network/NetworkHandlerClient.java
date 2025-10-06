@@ -16,6 +16,7 @@ import net.mat0u5.lifeseries.gui.seasons.ChooseSeasonScreen;
 import net.mat0u5.lifeseries.gui.seasons.SeasonInfoScreen;
 import net.mat0u5.lifeseries.mixin.client.InGameHudAccessor;
 import net.mat0u5.lifeseries.network.packets.*;
+import net.mat0u5.lifeseries.render.TextHud;
 import net.mat0u5.lifeseries.render.VignetteRenderer;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
@@ -91,7 +92,7 @@ public class NetworkHandlerClient {
         MainClient.sideTitle = payload.text();
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.inGameHud instanceof InGameHudAccessor hudAccessor) {
-            hudAccessor.ls$setTitleRemainTicks(hudAccessor.ls$titleFadeInTicks() + hudAccessor.ls$titleStayTicks() + hudAccessor.ls$titleFadeOutTicks());
+            TextHud.sideTitleRemainTicks = hudAccessor.ls$titleFadeInTicks() + hudAccessor.ls$titleStayTicks() + hudAccessor.ls$titleFadeOutTicks();
         }
     }
 
@@ -166,7 +167,7 @@ public class NetworkHandlerClient {
 
         if (name == PacketNames.OPEN_CONFIG) {
             ClientConfigNetwork.load();
-            ClientTaskScheduler.scheduleTask(10, ClientConfigGuiManager::openConfig);
+            ClientTaskScheduler.schedulePriorityTask(10, ClientConfigGuiManager::openConfig);
         }
 
 

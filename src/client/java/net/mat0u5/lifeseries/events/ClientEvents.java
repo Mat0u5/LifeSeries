@@ -12,6 +12,7 @@ import net.mat0u5.lifeseries.dependencies.FlashbackCompatibility;
 import net.mat0u5.lifeseries.features.SnailSkinsClient;
 import net.mat0u5.lifeseries.gui.other.UpdateInfoScreen;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.render.TextHud;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
@@ -143,6 +144,7 @@ public class ClientEvents {
             }
             ClientKeybinds.tick();
             ClientSounds.updateSingleSoundVolumes();
+            TextHud.tick();
         }catch(Exception ignored) {}
     }
 

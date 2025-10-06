@@ -11,6 +11,7 @@ public class TaskScheduler {
 
     private static final List<Task> tasks = new ArrayList<>();
     private static final List<Task> newTasks = new ArrayList<>();
+    private static boolean clearTasks = false;
 
     public static void scheduleTask(int tickNumber, Runnable goal) {
         if (Main.modDisabled()) return;
@@ -24,9 +25,21 @@ public class TaskScheduler {
         newTasks.add(task);
     }
 
+    public static void clearTasks() {
+        clearTasks = true;
+        newTasks.clear();
+    }
+
     public static void registerTickHandler() {
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             try {
+
+                if (clearTasks) {
+                    clearTasks = false;
+                    tasks.clear();
+                    return;
+                }
+
                 Iterator<Task> iterator = tasks.iterator();
 
                 while (iterator.hasNext()) {

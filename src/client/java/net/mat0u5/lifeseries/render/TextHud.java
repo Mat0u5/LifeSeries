@@ -36,13 +36,17 @@ public class TextHud {
         yPos += renderSidetitle(client, context, yPos);
     }
 
+    public static void tick() {
+        if (sideTitleRemainTicks > 0) {
+            sideTitleRemainTicks--;
+        }
+    }
+
+    public static int sideTitleRemainTicks = 0;
     public static int renderSidetitle(MinecraftClient client, DrawContext context, int y) {
         if (MainClient.sideTitle == null) return 0;
         if (MainClient.sideTitle.getString().isEmpty()) return 0;
-
-        if (client.inGameHud instanceof InGameHudAccessor hudAccessor) {
-            if (hudAccessor.ls$titleRemainTicks() <= 0) return 0;
-        }
+        if (sideTitleRemainTicks <= 0) return 0;
 
         return drawHudText(client, context, MainClient.sideTitle, y);
     }
@@ -231,10 +235,10 @@ public class TextHud {
 
     public static int drawHudText(MinecraftClient client, DrawContext context, int color, Text text, int x, int y) {
         if (MainClient.TEXT_HUD_SCALE != 1) {
-            RenderUtils.drawTextRightScaled(context, client.textRenderer, color, text, x, y, (float) MainClient.TEXT_HUD_SCALE, (float) MainClient.TEXT_HUD_SCALE);
+            RenderUtils.drawTextRightScaled(context, client.textRenderer, color, text, x, y, (float) MainClient.TEXT_HUD_SCALE, (float) MainClient.TEXT_HUD_SCALE, true);
             return -((int) Math.ceil((client.textRenderer.fontHeight) * MainClient.TEXT_HUD_SCALE) + 5);
         }
-        RenderUtils.drawTextRight(context, client.textRenderer, color, text, x, y);
+        RenderUtils.drawTextRight(context, client.textRenderer, color, text, x, y, true);
         return -client.textRenderer.fontHeight -5;
     }
 
