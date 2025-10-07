@@ -17,6 +17,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
@@ -221,11 +222,8 @@ public class Events {
         if (player instanceof ServerPlayerEntity serverPlayer &&
                 world instanceof ServerWorld serverWorld && Main.isLogicalSide()) {
             try {
-                if (currentSeason instanceof SecretLife) {
-                    TaskManager.onBlockUse(
-                            serverPlayer,
-                            serverWorld,
-                            hitResult);
+                if (currentSeason instanceof SecretLife && PermissionManager.isAdmin(serverPlayer)) {
+                    TaskManager.onBlockUse(serverPlayer, serverWorld, hitResult);
                 }
                 if (blacklist == null) return ActionResult.PASS;
                 return blacklist.onBlockUse(serverPlayer,serverWorld,hand,hitResult);

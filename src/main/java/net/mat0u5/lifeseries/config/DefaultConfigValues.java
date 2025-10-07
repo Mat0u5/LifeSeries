@@ -123,7 +123,7 @@ public class DefaultConfigValues {
     );
     public final ConfigFileEntry<Boolean> GIVELIFE_COMMAND_ENABLED = new ConfigFileEntry<>(
             "givelife_command_enabled", false, "{global.givelife}",
-            "Enable Givelife Command", "Controls whether the '/givelife' command is available."
+            "Givelife Command Enabled", "Controls whether the '/givelife' command is available."
     );
     public final ConfigFileEntry<Integer> GIVELIFE_LIVES_MAX = new ConfigFileEntry<>(
             "givelife_lives_max", 99, "global.givelife",

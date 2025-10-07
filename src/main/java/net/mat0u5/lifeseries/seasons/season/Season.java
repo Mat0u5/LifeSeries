@@ -56,8 +56,8 @@ public abstract class Season {
     public static final String RESOURCEPACK_MAIN_SHA ="56d78f9818d17c461d00bee1cc505a0b2da96353";
     public static final String RESOURCEPACK_SECRETLIFE_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-secretlife-fc0fa2a3efe2aefdba5a3c0deda61039fc43a008/secretlife.zip";
     public static final String RESOURCEPACK_SECRETLIFE_SHA ="1befd668fa775f2b8715b348172e1ba776e57294";
-    public static final String RESOURCEPACK_MINIMAL_ARMOR_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-minimal_armor-fc0fa2a3efe2aefdba5a3c0deda61039fc43a008/minimal_armor.zip";
-    public static final String RESOURCEPACK_MINIMAL_ARMOR_SHA ="5419ec4170d2726dc04aa0597087c46e51ff8bfa";
+    public static final String RESOURCEPACK_MINIMAL_ARMOR_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-minimal_armor-47b0d2488897145e7fd8b0b7da48033a097148e8/minimal_armor.zip";
+    public static final String RESOURCEPACK_MINIMAL_ARMOR_SHA ="3696f47350d675bae8b09b73163dca7051ac9bd6";
 
     public int GIVELIFE_MAX_LIVES = 99;
     public boolean TAB_LIST_SHOW_DEAD_PLAYERS = true;

@@ -162,7 +162,7 @@ public class RenderUtils {
         //?} else {
         /*context.getMatrices().pushMatrix();
         context.getMatrices().scale(scaleX, scaleY);
-        context.drawText(textRenderer, text, (int)(x / scaleX - width), (int)(y / scaleY), textColor, false);
+        context.drawText(textRenderer, text, (int)(x / scaleX - width), (int)(y / scaleY), textColor, shadow);
         context.getMatrices().popMatrix();
         *///?}
     }

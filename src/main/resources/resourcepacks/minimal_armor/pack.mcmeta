@@ -4,6 +4,28 @@
       "supported_formats": {"min_inclusive": 34, "max_inclusive": 1000},
       "min_format": 34,
       "max_format": 1000,
-      "description":"Life Series Minimal Armor Resourcepack"
+      "description":"Minimal Armor Resourcepack"
+   },
+   "overlays": {
+      "entries": [
+         {
+            "min_format": 34,
+            "max_format": 41,
+            "formats": {"min_inclusive": 34, "max_inclusive": 41},
+            "directory": "1.21-1.21.1"
+         },
+         {
+            "min_format": 42,
+            "max_format": 1000,
+            "formats": {"min_inclusive": 42, "max_inclusive": 1000},
+            "directory": "1.21.2-latest"
+         },
+         {
+            "min_format": 69,
+            "max_format": 1000,
+            "formats": {"min_inclusive": 69, "max_inclusive": 1000},
+            "directory": "1.21.9-latest"
+         }
+      ]
    }
 }

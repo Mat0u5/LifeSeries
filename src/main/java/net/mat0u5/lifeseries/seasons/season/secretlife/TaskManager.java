@@ -611,22 +611,22 @@ public class TaskManager {
     public static boolean searchingForLocations = false;
     public static boolean checkSecretLifePositions() {
         if (successButtonPos == null) {
-            PlayerUtils.broadcastMessage(Text.literal("§c[SecretLife setup 1/4] Location for the secret keeper task §6§lSUCCESS BUTTON§r§c was not found. §nThe next button you click will be set as the location."));
+            PlayerUtils.broadcastMessageToAdmins(Text.literal("§c[SecretLife setup 1/4] Location for the secret keeper task §6§lSUCCESS BUTTON§r§c was not found. §nThe next button you click will be set as the location."));
             searchingForLocations = true;
             return false;
         }
         if (rerollButtonPos == null) {
-            PlayerUtils.broadcastMessage(Text.literal("§c[SecretLife setup 2/4] Location for the secret keeper task §6§lRE-ROLL BUTTON§r§c was not found. §nThe next button you click will be set as the location."));
+            PlayerUtils.broadcastMessageToAdmins(Text.literal("§c[SecretLife setup 2/4] Location for the secret keeper task §6§lRE-ROLL BUTTON§r§c was not found. §nThe next button you click will be set as the location."));
             searchingForLocations = true;
             return false;
         }
         if (failButtonPos == null) {
-            PlayerUtils.broadcastMessage(Text.literal("§c[SecretLife setup 3/4] Location for the secret keeper task §6§lFAIL BUTTON§r§c was not found. §nThe next button you click will be set as the location."));
+            PlayerUtils.broadcastMessageToAdmins(Text.literal("§c[SecretLife setup 3/4] Location for the secret keeper task §6§lFAIL BUTTON§r§c was not found. §nThe next button you click will be set as the location."));
             searchingForLocations = true;
             return false;
         }
         if (itemSpawnerPos == null) {
-            PlayerUtils.broadcastMessage(Text.literal("§c[SecretLife setup 4/4] Location for the secret keeper task §6§lITEM SPAWN BLOCK§r§c was not found. §nPlease place a bedrock block at the desired spot to mark it."));
+            PlayerUtils.broadcastMessageToAdmins(Text.literal("§c[SecretLife setup 4/4] Location for the secret keeper task §6§lITEM SPAWN BLOCK§r§c was not found. §nPlease place a bedrock block at the desired spot to mark it."));
             searchingForLocations = true;
             return false;
         }
