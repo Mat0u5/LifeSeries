@@ -12,5 +12,7 @@
   "key.category.lifeseries.general": "Life Series",
   "key.lifeseries.superpower": "Activate Superpower",
   "key.lifeseries.runcommand": "Keybind Command",
-  "key.lifeseries.openconfig": "Open Config"
+  "key.lifeseries.openconfig": "Open Config",
+
+  "entity.lifeseries.newsnail": "Snail"
 }

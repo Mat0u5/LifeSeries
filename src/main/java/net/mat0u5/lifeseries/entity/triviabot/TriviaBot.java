@@ -1,18 +1,7 @@
 package net.mat0u5.lifeseries.entity.triviabot;
 
-import de.tomalbrc.bil.api.AnimatedEntity;
-import de.tomalbrc.bil.api.AnimatedEntityHolder;
-import de.tomalbrc.bil.api.Animator;
-import de.tomalbrc.bil.core.holder.entity.EntityHolder;
-import de.tomalbrc.bil.core.holder.entity.living.LivingEntityHolder;
-import de.tomalbrc.bil.core.model.Model;
-import de.tomalbrc.bil.file.loader.BbModelLoader;
-import eu.pb4.polymer.virtualentity.api.attachment.EntityAttachment;
-import eu.pb4.polymer.virtualentity.api.elements.ItemDisplayElement;
-import eu.pb4.polymer.virtualentity.api.elements.VirtualElement;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.compatibilities.DependencyManager;
-import net.mat0u5.lifeseries.entity.AnimationHandler;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.goal.TriviaBotGlideGoal;
 import net.mat0u5.lifeseries.entity.triviabot.goal.TriviaBotLookAtPlayerGoal;
@@ -101,9 +90,8 @@ import net.minecraft.particle.EntityEffectParticleEffect;
 //? if >= 1.21.9
 /*import net.minecraft.particle.TintedParticleEffect;*/
 
-public class TriviaBot extends AmbientEntity implements AnimatedEntity {
+public class TriviaBot extends AmbientEntity {
     public static final Identifier ID = Identifier.of(Main.MOD_ID, "triviabot");
-    public static final Model MODEL = BbModelLoader.load(ID);
 
     public static final int STATIONARY_TP_COOLDOWN = 400; // No movement for 20 seconds teleports the bot
     public static final float MOVEMENT_SPEED = 0.45f;
@@ -128,21 +116,13 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
 
     public int nullPlayerChecks = 0;
 
-    private final EntityHolder<TriviaBot> holder;
     public UUID boundPlayerUUID;
 
     public TriviaBot(EntityType<? extends AmbientEntity> entityType, World world) {
         super(entityType, world);
-        this.holder = new LivingEntityHolder<>(this, MODEL);
-        EntityAttachment.ofTicking(holder, this);
         setInvulnerable(true);
         setPersistent();
         updateNavigation();
-    }
-
-    @Override
-    public AnimatedEntityHolder getHolder() {
-        return holder;
     }
 
     //? if <= 1.21.5 {
@@ -249,12 +229,15 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
     }
 
     public void sendDisplayEntityPackets(ServerPlayerEntity player) {
+        //TODO
+        /*
         List<VirtualElement> elements = holder.getElements();
         for (VirtualElement element : elements) {
             if (element instanceof ItemDisplayElement itemDisplayElement) {
                 NetworkHandlerServer.sendStringPacket(player, PacketNames.TRIVIA_BOT_PART, itemDisplayElement.getUuid().toString());
             }
         }
+        */
     }
 
     @Override
@@ -400,6 +383,8 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
 
     private int analyzing = -1;
     public void updateAnimations() {
+        //TODO
+        /*
         AnimationHandler.updateHurtVariant(this, holder);
         Animator animator = holder.getAnimator();
         if (ranOutOfTime) {
@@ -442,16 +427,21 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
             pauseAllAnimations("idle");
             animator.playAnimation("idle", 0, true);
         }
+        */
     }
-
     public void playAnalyzingAnimation() {
+        //TODO
+        /*
         Animator animator = holder.getAnimator();
         pauseAllAnimations("analyzing");
         animator.playAnimation("analyzing", 5);
         analyzing = 42;
+        */
     }
 
     public void pauseAllAnimations(String except) {
+        //TODO
+        /*
         Animator animator = holder.getAnimator();
         if (!except.equalsIgnoreCase("glide")) animator.pauseAnimation("glide");
         if (!except.equalsIgnoreCase("walk")) animator.pauseAnimation("walk");
@@ -461,6 +451,7 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
         if (!except.equalsIgnoreCase("answer_incorrect")) animator.pauseAnimation("answer_incorrect");
         if (!except.equalsIgnoreCase("answer_correct")) animator.pauseAnimation("answer_correct");
         if (!except.equalsIgnoreCase("snail_transform")) animator.pauseAnimation("snail_transform");
+         */
     }
 
     public void fakeTeleportToPlayer() {

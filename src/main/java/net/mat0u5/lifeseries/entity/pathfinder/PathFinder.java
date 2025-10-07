@@ -1,7 +1,5 @@
 package net.mat0u5.lifeseries.entity.pathfinder;
 
-import de.tomalbrc.bil.api.AnimatedEntity;
-import de.tomalbrc.bil.api.AnimatedEntityHolder;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.entity.Entity;
@@ -16,7 +14,7 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
-public class PathFinder extends AmbientEntity implements AnimatedEntity {
+public class PathFinder extends AmbientEntity {
     public static final Identifier ID = Identifier.of(Main.MOD_ID, "pathfinder");
     public static final float MOVEMENT_SPEED = 0.35f;
     public static final float FLYING_SPEED = 0.3f;
@@ -29,11 +27,6 @@ public class PathFinder extends AmbientEntity implements AnimatedEntity {
         setPersistent();
         setInvisible(true);
         noClip = true;
-    }
-
-    @Override
-    public AnimatedEntityHolder getHolder() {
-        return null;
     }
     public static DefaultAttributeContainer.Builder createAttributes() {
         //? if <= 1.21 {

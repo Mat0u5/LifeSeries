@@ -1,14 +1,5 @@
 package net.mat0u5.lifeseries.entity.snail;
 
-import de.tomalbrc.bil.api.AnimatedEntity;
-import de.tomalbrc.bil.api.Animator;
-import de.tomalbrc.bil.core.holder.entity.EntityHolder;
-import de.tomalbrc.bil.core.holder.entity.living.LivingEntityHolder;
-import de.tomalbrc.bil.core.model.Model;
-import de.tomalbrc.bil.file.loader.BbModelLoader;
-import eu.pb4.polymer.virtualentity.api.attachment.EntityAttachment;
-import eu.pb4.polymer.virtualentity.api.elements.ItemDisplayElement;
-import eu.pb4.polymer.virtualentity.api.elements.VirtualElement;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.pathfinder.PathFinder;
 import net.mat0u5.lifeseries.entity.snail.goal.*;
@@ -83,17 +74,13 @@ import java.util.UUID;
 
 import static net.mat0u5.lifeseries.Main.*;
 
-public class Snail extends HostileEntity implements AnimatedEntity {
+public class Snail extends HostileEntity {
     public static final RegistryKey<DamageType> SNAIL_DAMAGE = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, Identifier.of(Main.MOD_ID, "snail"));
     public static final Identifier ID = Identifier.of(Main.MOD_ID, "snail");
-    public static final Model MODEL = BbModelLoader.load(ID);
     public static final Identifier TRIVIA_ID = Identifier.of(Main.MOD_ID, "trivia_snail");
-    public static final Model TRIVIA_MODEL = BbModelLoader.load(TRIVIA_ID);
     public static double GLOBAL_SPEED_MULTIPLIER = 1;
     public static boolean SHOULD_DROWN_PLAYER = true;
 
-    public EntityHolder<Snail> holder = null;
-    public EntityAttachment attachment = null;
     public UUID boundPlayerUUID;
     public boolean attacking;
     public boolean flying;
@@ -133,6 +120,8 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     }
 
     public void updateHolderSkin() {
+        //TODO
+        /*
         if (snailSkin >= 0) {
             // The snail is made out of 9 ItemDisplayElements, 1 InteractionElement and 1 CollisionElement
             List<VirtualElement> elements = holder.getElements();
@@ -150,6 +139,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
                     CustomModelDataComponent newModelDataComponent = new CustomModelDataComponent(newValue);
                     currentItem.set(DataComponentTypes.CUSTOM_MODEL_DATA, newModelDataComponent);
                     //?} else {
+        */
                     /*Identifier customModelComponent = currentItem.get(DataComponentTypes.ITEM_MODEL);
                     if (customModelComponent == null) continue;
                     int modelIndex = 0;
@@ -194,13 +184,14 @@ public class Snail extends HostileEntity implements AnimatedEntity {
                     /*Identifier finalIdentifier = Identifier.of("snailtextures", "body"+modelIndex+"_"+newCMD);
                     currentItem.set(DataComponentTypes.ITEM_MODEL, finalIdentifier);
                     *///?}
-
+        /*
                     ItemStack newItem = Items.GOLDEN_HORSE_ARMOR.getDefaultStack();
                     newItem.applyComponentsFrom(currentItem.getComponents());
                     itemDisplayElement.setItem(newItem);
                 }
             }
         }
+        */
     }
 
     public void updateSkin(ServerPlayerEntity player) {
@@ -213,6 +204,8 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     }
 
     public void updateModel(boolean force) {
+        /*
+        //TODO
         if (updateModelCooldown > 0 && !force) {
             return;
         }
@@ -233,6 +226,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         if (getActualBoundPlayer() != null) {
             sendDisplayEntityPackets(getActualBoundPlayer());
         }
+         */
     }
 
     public int getJumpRangeSquared() {
@@ -245,9 +239,12 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         sendAirPacket();
         boundPlayerUUID = player.getUuid();
         updateSnailName();
-        sendDisplayEntityPackets(player);
+        //TODO
+        //sendDisplayEntityPackets(player);
     }
 
+    /*
+    //TODO
     public void sendDisplayEntityPackets(ServerPlayerEntity player) {
         if (holder == null) return;
         List<VirtualElement> elements = holder.getElements();
@@ -258,6 +255,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
             }
         }
     }
+     */
 
     public void updateSnailName() {
         if (getBoundPlayer() == null) return;
@@ -270,11 +268,6 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         if (snailName == null) return this.getType().getName();
         if (snailName.getString().isEmpty()) return this.getType().getName();
         return snailName;
-    }
-
-    @Override
-    public EntityHolder<Snail> getHolder() {
-        return holder;
     }
 
     public static DefaultAttributeContainer.Builder createAttributes() {
@@ -335,14 +328,19 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         }
         if (age % 400 == 0 && getActualBoundPlayer() != null) {
             if (getActualBoundPlayer() != null) {
-                sendDisplayEntityPackets(getActualBoundPlayer());
+                //TODO
+                //sendDisplayEntityPackets(getActualBoundPlayer());
             }
         }
 
         if (updateModelCooldown > 0) updateModelCooldown--;
+
+        //TODO
+        /*
         if ((this.holder == null || this.attachment == null) && age > 2) {
             updateModel(false);
         }
+         */
 
         if (dontAttackFor > 0) {
             dontAttackFor--;
@@ -529,6 +527,8 @@ public class Snail extends HostileEntity implements AnimatedEntity {
 
     private int flyAnimation = 0;
     public void updateAnimations() {
+        //TODO
+        /*
         if (holder == null) return;
         Animator animator = holder.getAnimator();
         if (flyAnimation < 0) {
@@ -555,26 +555,35 @@ public class Snail extends HostileEntity implements AnimatedEntity {
             pauseAllAnimations("idle");
             animator.playAnimation("idle", 0, true);
         }
+         */
     }
-
     public void pauseAllAnimations(String except) {
+        /*
+        //TODO
         Animator animator = holder.getAnimator();
         if (!except.equalsIgnoreCase("glide")) animator.pauseAnimation("glide");
         if (!except.equalsIgnoreCase("fly")) animator.pauseAnimation("fly");
         if (!except.equalsIgnoreCase("walk")) animator.pauseAnimation("walk");
         if (!except.equalsIgnoreCase("idle")) animator.pauseAnimation("idle");
+         */
     }
 
     public void playStartFlyAnimation() {
+        /*
+        //TODO
         flyAnimation = 7;
         Animator animator = holder.getAnimator();
         animator.playAnimation("startFly", 4);
+        */
     }
 
     public void playStopFlyAnimation() {
+        /*
+        //TODO
         flyAnimation = -7;
         Animator animator = holder.getAnimator();
         animator.playAnimation("stopFly", 5);
+         */
     }
 
     public void updatePathFinders() {

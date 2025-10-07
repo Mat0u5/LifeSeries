@@ -1,12 +1,18 @@
 package net.mat0u5.lifeseries;
 
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.mat0u5.lifeseries.config.ClientConfig;
+import net.mat0u5.lifeseries.entity.newsnail.NewSnail;
+import net.mat0u5.lifeseries.entity.newsnail.NewSnailModel;
+import net.mat0u5.lifeseries.entity.newsnail.NewSnailRenderer;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.registries.ClientRegistries;
+import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.render.ClientRenderer;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
@@ -81,6 +87,9 @@ public class MainClient implements ClientModInitializer, IClientHelper {
 
         clientConfig = new ClientConfig();
         reloadConfig();
+
+        EntityModelLayerRegistry.registerModelLayer(NewSnailModel.NEWSNAIL, NewSnailModel::getTexturedModelData);
+        EntityRendererRegistry.register(MobRegistry.NEW_SNAIL, NewSnailRenderer::new);
     }
 
     public static boolean isClientPlayer(UUID uuid) {

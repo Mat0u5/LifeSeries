@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.registries;
 
-import eu.pb4.polymer.core.api.entity.PolymerEntityUtils;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import net.mat0u5.lifeseries.entity.newsnail.NewSnail;
 import net.mat0u5.lifeseries.entity.pathfinder.PathFinder;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
@@ -53,7 +54,6 @@ public class MobRegistry {
 
     private static <T extends Entity> EntityType<T> register(Identifier id, FabricEntityTypeBuilder<T> builder) {
         EntityType<T> type = builder.build();
-        PolymerEntityUtils.registerType(type);
         return Registry.register(Registries.ENTITY_TYPE, id, type);
     }
      //?} else {
@@ -82,12 +82,22 @@ public class MobRegistry {
 
     private static <T extends Entity> EntityType<T> register(Identifier id, EntityType.Builder<T> builder) {
         EntityType<T> type = builder.build(RegistryKey.of(Registries.ENTITY_TYPE.getKey(), id));
-        PolymerEntityUtils.registerType(type);
 
         return Registry.register(Registries.ENTITY_TYPE, id, type);
     }
     *///?}
 
-    public static void registerMobs() {}
+    public static final EntityType<NewSnail> NEW_SNAIL = Registry.register(
+            Registries.ENTITY_TYPE
+            , NewSnail.ID
+            , EntityType.Builder.create(NewSnail::new, SpawnGroup.MONSTER)
+                    .dimensions(0.65f, 1.8f)
+                    .maxTrackingRange(10*16)
+                    .build()
+    );
+
+    public static void registerMobs() {
+        FabricDefaultAttributeRegistry.register(NEW_SNAIL, NewSnail.createAttributes());
+    }
 }
 
