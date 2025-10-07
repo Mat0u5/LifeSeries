@@ -8,7 +8,7 @@ static boolean isValidVersion(String string) {
  return string != null && !string.isEmpty() && !string.equalsIgnoreCase("null") && !string.equalsIgnoreCase("[VERSIONED]")
 }
 
-version = "${project.mod_version}+${stonecutter.current.project}"
+version = "${project.mod_version}+${project.minecraft_version}"
 group = project.maven_group
 
 base {
@@ -73,7 +73,7 @@ processResources {
  filesMatching("fabric.mod.json") {
   expand "version": project.property('mod_version'),
           "targetVersion": project.property('target_version'),
-          "minecraftVersion": stonecutter.current.version
+          "minecraftVersion": project.property('minecraft_version')
  }
 }
 
