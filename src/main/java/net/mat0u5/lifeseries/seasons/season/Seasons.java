@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.seasons.season;
 
-import net.mat0u5.lifeseries.dependencies.DependencyManager;
 import net.mat0u5.lifeseries.seasons.season.aprilfools.reallife.RealLife;
 import net.mat0u5.lifeseries.seasons.season.aprilfools.simplelife.SimpleLife;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
@@ -52,7 +51,7 @@ public enum Seasons {
         if (this == DOUBLE_LIFE) return new DoubleLife();
         if (this == LIMITED_LIFE) return new LimitedLife();
         if (this == SECRET_LIFE) return new SecretLife();
-        if (this == WILD_LIFE && DependencyManager.wildLifeModsLoaded()) return new WildLife();
+        if (this == WILD_LIFE) return new WildLife();
         if (this == PAST_LIFE) return new PastLife();
 
         if (this == REAL_LIFE) return new RealLife();

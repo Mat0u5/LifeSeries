@@ -1,4 +1,4 @@
-package net.mat0u5.lifeseries.voicechat.soundeffects;
+package net.mat0u5.lifeseries.compatibilities.voicechat.soundeffects;
 
 import java.util.*;
 

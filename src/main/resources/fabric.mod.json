@@ -22,7 +22,7 @@
 			"net.mat0u5.lifeseries.MainClient"
 		],
 		"voicechat": [
-			"net.mat0u5.lifeseries.voicechat.VoicechatMain"
+          "net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain"
 		]
 	},
 	"mixins": [

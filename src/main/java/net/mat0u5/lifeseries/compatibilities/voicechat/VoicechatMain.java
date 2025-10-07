@@ -1,4 +1,4 @@
-package net.mat0u5.lifeseries.voicechat;
+package net.mat0u5.lifeseries.compatibilities.voicechat;
 
 import de.maxhenkel.voicechat.api.*;
 import de.maxhenkel.voicechat.api.events.EventRegistration;
@@ -18,8 +18,8 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Listening;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.mat0u5.lifeseries.voicechat.soundeffects.RadioEffect;
-import net.mat0u5.lifeseries.voicechat.soundeffects.RoboticVoice;
+import net.mat0u5.lifeseries.compatibilities.voicechat.soundeffects.RadioEffect;
+import net.mat0u5.lifeseries.compatibilities.voicechat.soundeffects.RoboticVoice;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 

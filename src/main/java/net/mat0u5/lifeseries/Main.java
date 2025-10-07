@@ -7,8 +7,6 @@ import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.MainConfig;
-import net.mat0u5.lifeseries.dependencies.DependencyManager;
-import net.mat0u5.lifeseries.dependencies.PolymerDependency;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.registries.ModRegistries;
@@ -74,10 +72,6 @@ public class Main implements ModInitializer {
 
 		ConfigManager.moveOldMainFileIfExists();
 		SnailSkinsServer.createConfig();
-
-		if (DependencyManager.polymerLoaded()) {
-			PolymerDependency.onInitialize();
-		}
 
 		config = new MainConfig();
 		MOD_DISABLED = config.getOrCreateProperty("modDisabled", "false").equalsIgnoreCase("true");
@@ -179,10 +173,6 @@ public class Main implements ModInitializer {
 	}
 
 	public static boolean changeSeasonTo(String changeTo) {
-		if (Seasons.getSeasonFromStringName(changeTo) == Seasons.WILD_LIFE) {
-			if (!DependencyManager.checkWildLifeDependencies()) return false;
-		}
-
 		TaskScheduler.clearTasks();
 		config.setProperty("currentSeries", changeTo);
 		livesManager.resetAllPlayerLivesInner();
