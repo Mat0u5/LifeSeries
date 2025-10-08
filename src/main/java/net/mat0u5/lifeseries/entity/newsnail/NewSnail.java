@@ -52,7 +52,7 @@ public class NewSnail extends MobEntity {
         *///?}
     }
 
-    private void setupAnimationStates() {
+    private void updateAnimations() {
         if (this.idleAnimationTimeout <= 0) {
             this.idleAnimationTimeout = 80;
             this.idleAnimationState.start(this.age);
@@ -66,7 +66,7 @@ public class NewSnail extends MobEntity {
     public void tick() {
         super.tick();
         if (WorldUtils.getEntityWorld(this).isClient()) {
-            this.setupAnimationStates();
+            this.updateAnimations();
         }
     }
 }
