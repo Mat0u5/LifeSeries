@@ -9,7 +9,7 @@ import net.minecraft.util.Identifier;
 
 public class NewSnailRenderer extends MobEntityRenderer<NewSnail, NewSnailModel<NewSnail>> {
     public NewSnailRenderer(EntityRendererFactory.Context context) {
-        super(context, new NewSnailModel<>(context.getPart(NewSnailModel.NEWSNAIL)), 0.75f);
+        super(context, new NewSnailModel<>(context.getPart(NewSnailModel.NEWSNAIL)), 0f);
     }
 
     @Override

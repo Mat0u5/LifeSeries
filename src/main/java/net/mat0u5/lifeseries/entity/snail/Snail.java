@@ -121,77 +121,6 @@ public class Snail extends HostileEntity {
 
     public void updateHolderSkin() {
         //TODO
-        /*
-        if (snailSkin >= 0) {
-            // The snail is made out of 9 ItemDisplayElements, 1 InteractionElement and 1 CollisionElement
-            List<VirtualElement> elements = holder.getElements();
-            for (VirtualElement element : elements) {
-                if (element instanceof ItemDisplayElement itemDisplayElement) {
-                    ItemStack currentItem = itemDisplayElement.getItem();
-                    //? if <= 1.21 {
-                    CustomModelDataComponent modelDataComponent = currentItem.get(DataComponentTypes.CUSTOM_MODEL_DATA);
-                    if (modelDataComponent == null) continue;
-                    int oldValue = modelDataComponent.value();
-                    if (oldValue > 10000) {
-                        oldValue = (oldValue - 9999) % 10;
-                    }
-                    int newValue = 9999 + oldValue + snailSkin * 10;
-                    CustomModelDataComponent newModelDataComponent = new CustomModelDataComponent(newValue);
-                    currentItem.set(DataComponentTypes.CUSTOM_MODEL_DATA, newModelDataComponent);
-                    //?} else {
-        */
-                    /*Identifier customModelComponent = currentItem.get(DataComponentTypes.ITEM_MODEL);
-                    if (customModelComponent == null) continue;
-                    int modelIndex = 0;
-                    int oldCMD = 0;
-
-                    String path = customModelComponent.getPath().replaceAll("snail/","").replaceAll("snail_snail_","");
-
-                    if (customModelComponent.getNamespace().equalsIgnoreCase("bil")) {
-                        if (path.startsWith("e4d04078")) modelIndex = 1;
-                        else if (path.startsWith("bfab22f7")) modelIndex = 2;
-                        else if (path.startsWith("795d5ecc")) modelIndex = 3;
-                        else if (path.startsWith("f10b7849")) modelIndex = 4;
-                        else if (path.startsWith("b19373c3")) modelIndex = 5;
-                        else if (path.startsWith("6106e834")) modelIndex = 6;
-                        else if (path.startsWith("21270a34")) modelIndex = 7;
-                        else if (path.startsWith("579f1e4f")) modelIndex = 8;
-                        else if (path.startsWith("b2a5becb")) modelIndex = 9;
-                        oldCMD = modelIndex+1;
-                    }
-                    else if (path.startsWith("body") && path.contains("_")) {
-                        try {
-                            String[] split = path.split("_");
-                            modelIndex = Integer.parseInt(split[0].replaceAll("body",""));
-                            oldCMD = Integer.parseInt(split[1]);
-                        }catch(Exception e) {
-                            continue;
-                        }
-                    }
-
-                    if (modelIndex <= 0 || oldCMD <= 0) continue;
-
-                    if (oldCMD > 10000) {
-                        oldCMD = (oldCMD - 9999) % 10;
-                    }
-                    int newCMD = 9999 + oldCMD + snailSkin * 10;
-                    *///?}
-
-                    //? if = 1.21.2 {
-                    /*Identifier finalIdentifier = Identifier.of("snailtextures", "snail/body"+modelIndex+"_"+newCMD);
-                    currentItem.set(DataComponentTypes.ITEM_MODEL, finalIdentifier);
-                    *///?} else if >= 1.21.4 {
-                    /*Identifier finalIdentifier = Identifier.of("snailtextures", "body"+modelIndex+"_"+newCMD);
-                    currentItem.set(DataComponentTypes.ITEM_MODEL, finalIdentifier);
-                    *///?}
-        /*
-                    ItemStack newItem = Items.GOLDEN_HORSE_ARMOR.getDefaultStack();
-                    newItem.applyComponentsFrom(currentItem.getComponents());
-                    itemDisplayElement.setItem(newItem);
-                }
-            }
-        }
-        */
     }
 
     public void updateSkin(ServerPlayerEntity player) {
@@ -592,7 +521,8 @@ public class Snail extends HostileEntity {
             pathFinder = null;
         }
         else if (pathFinder == null || pathFinder.isRemoved()) {
-            pathFinder = MobRegistry.PATH_FINDER.spawn((ServerWorld) this.getWorldEntity(), this.getBlockPos(), SpawnReason.COMMAND);
+            //TODO
+            //pathFinder = MobRegistry.PATH_FINDER.spawn((ServerWorld) this.getWorldEntity(), this.getBlockPos(), SpawnReason.COMMAND);
         }
         else {
             pathFinder.resetDespawnTimer();
@@ -603,7 +533,8 @@ public class Snail extends HostileEntity {
             groundPathFinder = null;
         }
         else if (groundPathFinder == null || groundPathFinder.isRemoved()) {
-            groundPathFinder = MobRegistry.PATH_FINDER.spawn((ServerWorld) this.getWorldEntity(), this.getBlockPos(), SpawnReason.COMMAND);
+            //TODO
+            //groundPathFinder = MobRegistry.PATH_FINDER.spawn((ServerWorld) this.getWorldEntity(), this.getBlockPos(), SpawnReason.COMMAND);
         }
         else {
             groundPathFinder.resetDespawnTimer();

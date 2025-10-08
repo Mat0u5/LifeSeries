@@ -81,7 +81,9 @@ public class Snails extends Wildcard {
 
     public static void spawnSnailFor(ServerPlayerEntity player, BlockPos pos) {
         if (player == null || pos == null) return;
-        Snail snail = MobRegistry.SNAIL.spawn(PlayerUtils.getServerWorld(player), pos, SpawnReason.COMMAND);
+        //TODO
+        Snail snail = null;
+        //Snail snail = MobRegistry.SNAIL.spawn(PlayerUtils.getServerWorld(player), pos, SpawnReason.COMMAND);
         if (snail != null) {
             snail.setBoundPlayer(player);
             snail.updateSkin(player);

@@ -355,7 +355,9 @@ public class TriviaBot extends AmbientEntity {
 
     public void transformIntoSnail() {
         if (getBoundPlayer() != null) {
-            Snail triviaSnail = MobRegistry.SNAIL.spawn((ServerWorld) getWorldEntity(), this.getBlockPos(), SpawnReason.COMMAND);
+            //TODO
+            Snail triviaSnail = null;
+            //Snail triviaSnail = MobRegistry.SNAIL.spawn((ServerWorld) getWorldEntity(), this.getBlockPos(), SpawnReason.COMMAND);
             if (triviaSnail != null) {
                 triviaSnail.setBoundPlayer(getBoundPlayer());
                 triviaSnail.setFromTrivia();

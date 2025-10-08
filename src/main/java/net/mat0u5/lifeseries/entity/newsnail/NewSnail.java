@@ -42,8 +42,8 @@ public class NewSnail extends MobEntity {
         //?} else {
         /*return MobEntity.createMobAttributes()
                 .add(EntityAttributes.MAX_HEALTH, 10000)
-                .add(EntityAttributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
-                .add(EntityAttributes.FLYING_SPEED, FLYING_SPEED)
+                .add(EntityAttributes.MOVEMENT_SPEED, 0.35f)
+                .add(EntityAttributes.FLYING_SPEED, 0.35f)
                 .add(EntityAttributes.STEP_HEIGHT, 1)
                 .add(EntityAttributes.FOLLOW_RANGE, 150)
                 .add(EntityAttributes.WATER_MOVEMENT_EFFICIENCY, 1)

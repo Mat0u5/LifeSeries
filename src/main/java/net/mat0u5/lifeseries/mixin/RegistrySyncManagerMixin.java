@@ -1,5 +1,5 @@
 package net.mat0u5.lifeseries.mixin;
-
+//?if < 1.21.4 {
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.fabricmc.fabric.impl.registry.sync.RegistrySyncManager;
@@ -28,3 +28,13 @@ public class RegistrySyncManagerMixin {
         return original;
     }
 }
+
+//?} else {
+/*import net.minecraft.server.MinecraftServer;
+import org.spongepowered.asm.mixin.Mixin;
+
+@Mixin(value = MinecraftServer.class)
+public interface RegistrySyncManagerMixin {
+    //Empty class to avoid mixin errors
+}
+*///?}

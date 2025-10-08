@@ -87,9 +87,6 @@ public class MainClient implements ClientModInitializer, IClientHelper {
 
         clientConfig = new ClientConfig();
         reloadConfig();
-
-        EntityModelLayerRegistry.registerModelLayer(NewSnailModel.NEWSNAIL, NewSnailModel::getTexturedModelData);
-        EntityRendererRegistry.register(MobRegistry.NEW_SNAIL, NewSnailRenderer::new);
     }
 
     public static boolean isClientPlayer(UUID uuid) {
