@@ -1,8 +1,8 @@
-package net.mat0u5.lifeseries.entity.newsnail;
+package net.mat0u5.lifeseries.entity.snail;
 
 import net.minecraft.client.render.entity.animation.*;
 
-public class NewSnailAnimations {
+public class SnailAnimations {
         //? if <= 1.21.4 {
         public static final Animation walk  = Animation.Builder.create(5.4167F).looping()
                 .addBoneAnimation("head", new Transformation(Transformation.Targets.ROTATE,

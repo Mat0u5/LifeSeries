@@ -24,6 +24,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.CustomModelDataComponent;
+import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -42,6 +43,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
@@ -109,6 +111,13 @@ public class Snail extends HostileEntity {
     public static final int JUMP_COOLDOWN_LONG = 30;
     public static final int JUMP_RANGE_SQUARED = 14;
 
+    public final AnimationState walkAnimationState = new AnimationState();
+    public final AnimationState glideAnimationState = new AnimationState();
+    public final AnimationState flyAnimationState = new AnimationState();
+    public final AnimationState stopFlyAnimationState = new AnimationState();
+    public final AnimationState startFlyAnimationState = new AnimationState();
+    public final AnimationState idleAnimationState = new AnimationState();
+
     public Snail(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
         setInvulnerable(true);
@@ -123,7 +132,7 @@ public class Snail extends HostileEntity {
         //TODO
     }
 
-    public void updateSkin(ServerPlayerEntity player) {
+    public void updateSkin(PlayerEntity player) {
         if (player == null) return;
         String playerNameLower = player.getNameForScoreboard().toLowerCase();
         if (SnailSkinsServer.indexedSkins.containsKey(playerNameLower)) {
@@ -163,7 +172,7 @@ public class Snail extends HostileEntity {
         return JUMP_RANGE_SQUARED;
     }
 
-    public void setBoundPlayer(ServerPlayerEntity player) {
+    public void setBoundPlayer(PlayerEntity player) {
         if (player == null) return;
         sendAirPacket();
         boundPlayerUUID = player.getUuid();
@@ -174,7 +183,7 @@ public class Snail extends HostileEntity {
 
     /*
     //TODO
-    public void sendDisplayEntityPackets(ServerPlayerEntity player) {
+    public void sendDisplayEntityPackets(PlayerEntity player) {
         if (holder == null) return;
         List<VirtualElement> elements = holder.getElements();
         for (VirtualElement element : elements) {
@@ -283,9 +292,7 @@ public class Snail extends HostileEntity {
             updateSnailName();
         }
 
-        if (age % 2 == 0) {
-            updateAnimations();
-        }
+        updateAnimations();
 
         if (age % 50 == 0) {
             if (!fromTrivia) {
@@ -455,11 +462,16 @@ public class Snail extends HostileEntity {
     }
 
     private int flyAnimation = 0;
+    private int glideAnimationTimeout = 0;
+    private int flyAnimationTimeout = 0;
+    private int walkAnimationTimeout = 0;
+    private int idleAnimationTimeout = 0;
     public void updateAnimations() {
-        //TODO
-        /*
-        if (holder == null) return;
-        Animator animator = holder.getAnimator();
+        if (glideAnimationTimeout > 0) glideAnimationTimeout--;
+        if (flyAnimationTimeout > 0) flyAnimationTimeout--;
+        if (walkAnimationTimeout > 0) walkAnimationTimeout--;
+        if (idleAnimationTimeout > 0) idleAnimationTimeout--;
+
         if (flyAnimation < 0) {
             flyAnimation++;
             pauseAllAnimations("stopFly");
@@ -470,49 +482,69 @@ public class Snail extends HostileEntity {
         }
         else if (this.flying) {
             pauseAllAnimations("fly");
-            animator.playAnimation("fly", 3);
+            flyAnimationState.startIfNotRunning(age);
+            //if (flyAnimationTimeout <= 0) {
+            //    flyAnimationState.start(age);
+            //    flyAnimationTimeout = 80;//TODO
+            //}
         }
         else if (this.gliding || this.landing) {
             pauseAllAnimations("glide");
-            animator.playAnimation("glide", 2);
+            glideAnimationState.startIfNotRunning(age);
+            //if (glideAnimationTimeout <= 0) {
+            //    glideAnimationState.start(age);
+            //    glideAnimationTimeout = 80;//TODO
+            //}
         }
         else if (this.limbAnimator.isLimbMoving() && this.limbAnimator.getSpeed() > 0.02) {
             pauseAllAnimations("walk");
-            animator.playAnimation("walk", 1);
+            walkAnimationState.startIfNotRunning(age);
+            //if (walkAnimationTimeout <= 0) {
+            //    walkAnimationState.start(age);
+            //    walkAnimationTimeout = 80;//TODO
+            //}
         }
         else {
             pauseAllAnimations("idle");
-            animator.playAnimation("idle", 0, true);
+            idleAnimationState.startIfNotRunning(age);
+            //if (idleAnimationTimeout <= 0) {
+            //    idleAnimationState.start(age);
+            //    idleAnimationTimeout = 80;
+            //}
         }
-         */
+
     }
     public void pauseAllAnimations(String except) {
-        /*
-        //TODO
-        Animator animator = holder.getAnimator();
-        if (!except.equalsIgnoreCase("glide")) animator.pauseAnimation("glide");
-        if (!except.equalsIgnoreCase("fly")) animator.pauseAnimation("fly");
-        if (!except.equalsIgnoreCase("walk")) animator.pauseAnimation("walk");
-        if (!except.equalsIgnoreCase("idle")) animator.pauseAnimation("idle");
-         */
+        if (!except.equalsIgnoreCase("glide")) {
+            glideAnimationState.stop();
+            glideAnimationTimeout = 0;
+        }
+        if (!except.equalsIgnoreCase("fly")) {
+            flyAnimationState.stop();
+            flyAnimationTimeout = 0;
+        }
+        if (!except.equalsIgnoreCase("walk")) {
+            walkAnimationState.stop();
+            walkAnimationTimeout = 0;
+        }
+        if (!except.equalsIgnoreCase("idle")) {
+            idleAnimationState.stop();
+            idleAnimationTimeout = 0;
+        }
+        if (!except.equalsIgnoreCase("startFly")) startFlyAnimationState.stop();
+        if (!except.equalsIgnoreCase("stopFly")) stopFlyAnimationState.stop();
     }
 
     public void playStartFlyAnimation() {
-        /*
-        //TODO
         flyAnimation = 7;
-        Animator animator = holder.getAnimator();
-        animator.playAnimation("startFly", 4);
-        */
+        pauseAllAnimations("startFly");
+        startFlyAnimationState.start(age);
     }
 
     public void playStopFlyAnimation() {
-        /*
-        //TODO
         flyAnimation = -7;
-        Animator animator = holder.getAnimator();
-        animator.playAnimation("stopFly", 5);
-         */
+        pauseAllAnimations("stopFly");
+        stopFlyAnimationState.start(age);
     }
 
     public void updatePathFinders() {
@@ -754,7 +786,8 @@ public class Snail extends HostileEntity {
     }
 
     @Nullable
-    public ServerPlayerEntity getActualBoundPlayer() {
+    public PlayerEntity getActualBoundPlayer() {
+        if (!Main.isLogicalSide()) return null;
         if (server == null) return null;
         return PlayerUtils.getPlayer(boundPlayerUUID);
     }

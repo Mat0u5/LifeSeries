@@ -4,8 +4,8 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallba
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.mat0u5.lifeseries.command.ClientCommands;
-import net.mat0u5.lifeseries.entity.newsnail.NewSnailModel;
-import net.mat0u5.lifeseries.entity.newsnail.NewSnailRenderer;
+import net.mat0u5.lifeseries.entity.snail.SnailModel;
+import net.mat0u5.lifeseries.entity.snail.SnailRenderer;
 import net.mat0u5.lifeseries.events.ClientEvents;
 import net.mat0u5.lifeseries.events.ClientKeybinds;
 
@@ -21,7 +21,7 @@ public class ClientRegistries {
     }
 
     private static void registerEntities() {
-        EntityModelLayerRegistry.registerModelLayer(NewSnailModel.NEWSNAIL, NewSnailModel::getTexturedModelData);
-        EntityRendererRegistry.register(MobRegistry.NEW_SNAIL, NewSnailRenderer::new);
+        EntityModelLayerRegistry.registerModelLayer(SnailModel.SNAIL, SnailModel::getTexturedModelData);
+        EntityRendererRegistry.register(MobRegistry.SNAIL, SnailRenderer::new);
     }
 }
