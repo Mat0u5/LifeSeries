@@ -4,7 +4,6 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.DefaultConfigValues;
-import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
@@ -14,7 +13,6 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShifting;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDilation;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
@@ -32,7 +30,6 @@ import net.minecraft.network.DisconnectionInfo;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.text.Texts;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +48,6 @@ public class NetworkHandlerServer {
         PayloadTypeRegistry.playS2C().register(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(LongPayload.ID, LongPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(ImagePayload.ID, ImagePayload.CODEC);
         PayloadTypeRegistry.playS2C().register(ConfigPayload.ID, ConfigPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(SidetitlePacket.ID, SidetitlePacket.CODEC);
 
@@ -62,7 +58,6 @@ public class NetworkHandlerServer {
         PayloadTypeRegistry.playC2S().register(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(LongPayload.ID, LongPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(ImagePayload.ID, ImagePayload.CODEC);
         PayloadTypeRegistry.playC2S().register(ConfigPayload.ID, ConfigPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(SidetitlePacket.ID, SidetitlePacket.CODEC);
     }
@@ -134,7 +129,7 @@ public class NetworkHandlerServer {
         }
         updatedConfigThisTick = false;
         configNeedsReload = false;
-        Main.softestReloadStart();
+        Main.softReloadStart();
     }
 
     public static void handleNumberPacket(ServerPlayerEntity player, NumberPayload payload) {
@@ -298,17 +293,6 @@ public class NetworkHandlerServer {
         if (player == null) return;
         LongPayload payload = new LongPayload(name.getName(), number);
         ServerPlayNetworking.send(player, payload);
-    }
-
-    public static void sendImagePacket(ServerPlayerEntity player, ImagePayload payload) {
-        if (player == null) return;
-        ServerPlayNetworking.send(player, payload);
-    }
-
-    public static void sendImagePackets(ImagePayload payload) {
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            ServerPlayNetworking.send(player, payload);
-        }
     }
 
     public static void sendLongPackets(PacketNames name, long number) {

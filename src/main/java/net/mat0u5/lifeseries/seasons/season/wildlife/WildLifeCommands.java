@@ -9,8 +9,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Hunger;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Snails;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
@@ -25,8 +24,8 @@ import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -206,7 +205,9 @@ public class WildLifeCommands extends Command {
 
     public int getSnailTextures(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
-        List<String> textures = SnailSkinsServer.getAllSkins();
+        //TODO
+        List<String> textures = new ArrayList<>();
+        //List<String> textures = SnailSkinsServer.getAllSkins();
         if (textures.isEmpty()) {
             OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7No snail skins have been added yet. Run '§f/snail textures info§7' to learn how to add them."));
             return -1;

@@ -17,7 +17,6 @@ import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.secretlife.TaskManager;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
@@ -71,7 +70,6 @@ public class Main implements ModInitializer {
 		});
 
 		ConfigManager.moveOldMainFileIfExists();
-		SnailSkinsServer.createConfig();
 
 		config = new MainConfig();
 		MOD_DISABLED = config.getOrCreateProperty("modDisabled", "false").equalsIgnoreCase("true");
@@ -151,11 +149,6 @@ public class Main implements ModInitializer {
 	}
 
 	public static void softReloadStart() {
-		softestReloadStart();
-		SnailSkinsServer.sendStoredImages();
-	}
-
-	public static void softestReloadStart() {
 		if (currentSeason.getSeason() == Seasons.SECRET_LIFE) {
 			TaskManager.initialize();
 		}

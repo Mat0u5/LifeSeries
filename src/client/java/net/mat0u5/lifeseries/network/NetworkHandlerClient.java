@@ -6,7 +6,6 @@ import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.config.ClientConfig;
 import net.mat0u5.lifeseries.config.ClientConfigNetwork;
 import net.mat0u5.lifeseries.features.Morph;
-import net.mat0u5.lifeseries.features.SnailSkinsClient;
 import net.mat0u5.lifeseries.features.Trivia;
 import net.mat0u5.lifeseries.config.ClientConfigGuiManager;
 import net.mat0u5.lifeseries.gui.other.ChooseWildcardScreen;
@@ -70,10 +69,6 @@ public class NetworkHandlerClient {
             MinecraftClient client = context.client();
             client.execute(() -> handlePlayerDisguise(payload));
         });
-        ClientPlayNetworking.registerGlobalReceiver(ImagePayload.ID, (payload, context) -> {
-            MinecraftClient client = context.client();
-            client.execute(() -> handleImagePacket(payload));
-        });
         ClientPlayNetworking.registerGlobalReceiver(ConfigPayload.ID, (payload, context) -> {
             MinecraftClient client = context.client();
             client.execute(() -> handleConfigPacket(payload));
@@ -118,14 +113,6 @@ public class NetworkHandlerClient {
 
     public static void handleConfigPacket(ConfigPayload payload) {
         ClientConfigNetwork.handleConfigPacket(payload, false);
-    }
-
-    public static void handleImagePacket(ImagePayload payload) {
-        String nameStr = payload.name();
-        PacketNames name = PacketNames.fromName(nameStr);
-        if (name == PacketNames.SNAIL_SKIN) {
-            SnailSkinsClient.handleSnailSkin(payload);
-        }
     }
     
     public static void handleStringPacket(StringPayload payload) {

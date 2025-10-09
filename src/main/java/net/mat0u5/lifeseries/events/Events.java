@@ -14,7 +14,6 @@ import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.secretlife.TaskManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
@@ -305,7 +304,6 @@ public class Events {
     public static void playerStartJoining(ServerPlayerEntity player) {
         NetworkHandlerServer.sendHandshake(player);
         NetworkHandlerServer.sendUpdatePacketTo(player);
-        SnailSkinsServer.sendStoredImages(List.of(player));
         joiningPlayers.add(player.getUuid());
         joiningPlayersPos.put(player.getUuid(), WorldUtils.getEntityPos(player));
         joiningPlayersYaw.put(player.getUuid(), player.getYaw());

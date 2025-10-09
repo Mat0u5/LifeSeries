@@ -9,7 +9,6 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.compatibilities.DependencyManager;
 import net.mat0u5.lifeseries.compatibilities.FlashbackCompatibility;
-import net.mat0u5.lifeseries.features.SnailSkinsClient;
 import net.mat0u5.lifeseries.gui.other.UpdateInfoScreen;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.render.TextHud;
@@ -128,7 +127,6 @@ public class ClientEvents {
             MinecraftClient client = MinecraftClient.getInstance();
             ClientPlayerEntity player = client.player;
 
-            checkResourcepackReload();
             spawnInvisibilityParticles(client);
 
             if (Main.modDisabled()) return;
@@ -264,13 +262,5 @@ public class ClientEvents {
             return true;
         }
         return false;
-    }
-
-    public static void checkResourcepackReload() {
-        if (SnailSkinsClient.skinReloadTicks <= 0) return;
-        SnailSkinsClient.skinReloadTicks--;
-        if (SnailSkinsClient.skinReloadTicks == 0) {
-            ClientResourcePacks.enableClientResourcePack(ClientResourcePacks.SNAILS_RESOURCEPACK, true);
-        }
     }
 }
