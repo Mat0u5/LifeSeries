@@ -355,12 +355,10 @@ public class TriviaBot extends AmbientEntity {
 
     public void transformIntoSnail() {
         if (getBoundPlayer() != null) {
-            //TODO
-            Snail triviaSnail = null;
-            //Snail triviaSnail = MobRegistry.SNAIL.spawn((ServerWorld) getWorldEntity(), this.getBlockPos(), SpawnReason.COMMAND);
+            Snail triviaSnail = MobRegistry.SNAIL.spawn((ServerWorld) getWorldEntity(), this.getBlockPos(), SpawnReason.COMMAND);
             if (triviaSnail != null) {
-                triviaSnail.setBoundPlayer(getBoundPlayer());
-                triviaSnail.setFromTrivia();
+                triviaSnail.serverData.setBoundPlayer(getBoundPlayer());
+                triviaSnail.serverData.setFromTrivia();
                 triviaSnail.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE.value(), 0.5f, 2);
                 ServerWorld world = (ServerWorld) triviaSnail.getWorldEntity();
                 Vec3d pos = WorldUtils.getEntityPos(this);

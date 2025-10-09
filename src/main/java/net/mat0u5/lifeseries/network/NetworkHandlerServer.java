@@ -182,16 +182,6 @@ public class NetworkHandlerServer {
                 }
             }
         }
-        if (name == PacketNames.REQUEST_SNAIL_MODEL) {
-            if (Snails.snails.containsKey(player.getUuid())) {
-                Snail snail = Snails.snails.get(player.getUuid());
-                snail.updateModel(true);
-            }
-            if (TriviaWildcard.snails.containsKey(player.getUuid())) {
-                Snail snail = TriviaWildcard.snails.get(player.getUuid());
-                snail.updateModel(true);
-            }
-        }
         if (name == PacketNames.TRIPLE_JUMP) {
             if (currentSeason.getSeason() == Seasons.WILD_LIFE && SuperpowersWildcard.hasActivatedPower(player, Superpowers.TRIPLE_JUMP)) {
                 Superpower power = SuperpowersWildcard.getSuperpowerInstance(player);

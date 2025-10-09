@@ -47,12 +47,12 @@ public class SnailRenderer extends AgeableMobEntityRenderer<Snail, SnailRenderSt
 
     public void updateRenderState(Snail snail, SnailRenderState state, float f) {
         super.updateRenderState(snail, state, f);
-        state.walkAnimationState.copyFrom(snail.walkAnimationState);
-        state.glideAnimationState.copyFrom(snail.glideAnimationState);
-        state.flyAnimationState.copyFrom(snail.flyAnimationState);
-        state.stopFlyAnimationState.copyFrom(snail.stopFlyAnimationState);
-        state.startFlyAnimationState.copyFrom(snail.startFlyAnimationState);
-        state.idleAnimationState.copyFrom(snail.idleAnimationState);
+        state.walkAnimationState.copyFrom(snail.clientData.walkAnimationState);
+        state.glideAnimationState.copyFrom(snail.clientData.glideAnimationState);
+        state.flyAnimationState.copyFrom(snail.clientData.flyAnimationState);
+        state.stopFlyAnimationState.copyFrom(snail.clientData.stopFlyAnimationState);
+        state.startFlyAnimationState.copyFrom(snail.clientData.startFlyAnimationState);
+        state.idleAnimationState.copyFrom(snail.clientData.idleAnimationState);
         state.attacking = snail.isAttacking();
         state.flying = snail.isFlying();
         state.gliding = snail.isGliding();

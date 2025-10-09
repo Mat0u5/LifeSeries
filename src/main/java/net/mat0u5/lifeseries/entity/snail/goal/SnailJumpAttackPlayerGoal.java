@@ -23,7 +23,7 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
     @Override
     public boolean canStart() {
         if (mob.isPaused()) return false;
-        if (mob.dontAttackFor > 0) {
+        if (mob.serverData.dontAttackFor > 0) {
             return false;
         }
 
@@ -31,7 +31,7 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
             return false;
         }
 
-        PlayerEntity boundPlayer = mob.getBoundPlayer();
+        PlayerEntity boundPlayer = mob.serverData.getBoundPlayer();
         if (boundPlayer == null) {
             return false;
         }
@@ -41,7 +41,7 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
         }
 
         double distanceToTarget = mob.squaredDistanceTo(boundPlayer);
-        if (distanceToTarget > mob.getJumpRangeSquared()) {
+        if (distanceToTarget > mob.serverData.getJumpRangeSquared()) {
             return false;
         }
 
@@ -59,12 +59,12 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
             return true;
         }
 
-        PlayerEntity boundPlayer = mob.getBoundPlayer();
+        PlayerEntity boundPlayer = mob.serverData.getBoundPlayer();
         if (boundPlayer == null) {
             return false;
         }
 
-        if (mob.squaredDistanceTo(boundPlayer) > mob.getJumpRangeSquared()) {
+        if (mob.squaredDistanceTo(boundPlayer) > mob.serverData.getJumpRangeSquared()) {
             return false;
         }
 
@@ -73,7 +73,7 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
 
     @Override
     public void start() {
-        PlayerEntity boundPlayer = mob.getBoundPlayer();
+        PlayerEntity boundPlayer = mob.serverData.getBoundPlayer();
         if (boundPlayer != null) {
             this.previousTargetPosition = WorldUtils.getEntityPos(boundPlayer);
         }
@@ -95,12 +95,12 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
             return;
         }
 
-        PlayerEntity boundPlayer = mob.getBoundPlayer();
+        PlayerEntity boundPlayer = mob.serverData.getBoundPlayer();
         if (attackCooldown > 0) {
             attackCooldown--;
         }
         if (attackCooldown == 4) {
-            mob.playAttackSound();
+            mob.sounds.playAttackSound();
         }
         if (attackCooldown <= 0) {
             jumpAttackPlayer();
@@ -113,7 +113,7 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
     }
 
     private void jumpAttackPlayer() {
-        PlayerEntity boundPlayer = mob.getBoundPlayer();
+        PlayerEntity boundPlayer = mob.serverData.getBoundPlayer();
         if (boundPlayer == null) {
             return;
         }
@@ -144,10 +144,10 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
 
         Vec3d attackVector = mobVelocity;
         if (relativeTargetPos.lengthSquared() > 0.0001) {
-            attackVector = relativeTargetPos.normalize().multiply(mob.isNerfed() ? 0.8 : 1);
+            attackVector = relativeTargetPos.normalize().multiply(mob.serverData.isNerfed() ? 0.8 : 1);
         }
         if (mob.isFlying()) attackVector = attackVector.multiply(0.5);
-        double addY = 0.5 + mob.squaredDistanceTo(boundPlayer) / mob.getJumpRangeSquared();
+        double addY = 0.5 + mob.squaredDistanceTo(boundPlayer) / mob.serverData.getJumpRangeSquared();
         mob.setVelocity(attackVector.x, attackVector.y + addY, attackVector.z);
     }
 }

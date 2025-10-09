@@ -14,7 +14,7 @@ public final class SnailMineTowardsPlayerGoal extends SnailFlyGoal {
     public boolean canStart() {
         if (getMob().isPaused()) return false;
 
-        if (getMob().getBoundPlayer() == null) {
+        if (getMob().serverData.getBoundPlayer() == null) {
             return false;
         }
 
@@ -26,20 +26,20 @@ public final class SnailMineTowardsPlayerGoal extends SnailFlyGoal {
             return false;
         }
 
-        boolean canWalk = getMob().canPathToPlayer(false);
-        boolean canFly = getMob().canPathToPlayer(true);
+        boolean canWalk = getMob().pathfinding.canPathToPlayer(false);
+        boolean canFly = getMob().pathfinding.canPathToPlayer(true);
 
         return !canWalk && !canFly;
     }
 
     @Override
     public boolean shouldContinue() {
-        if (getMob().getBoundPlayer() == null) {
+        if (getMob().serverData.getBoundPlayer() == null) {
             return false;
         }
 
-        boolean canWalk = getMob().canPathToPlayer(false);
-        boolean canFly = getMob().canPathToPlayer(true);
+        boolean canWalk = getMob().pathfinding.canPathToPlayer(false);
+        boolean canFly = getMob().pathfinding.canPathToPlayer(true);
 
         return !canWalk && !canFly;
     }
@@ -47,13 +47,13 @@ public final class SnailMineTowardsPlayerGoal extends SnailFlyGoal {
     @Override
     public void start() {
         getMob().setMining(true);
-        getMob().updateNavigation();
+        getMob().pathfinding.updateNavigation();
     }
 
     @Override
     public void stop() {
         getMob().setMining(false);
         getMob().setFlying(true);
-        getMob().updateNavigation();
+        getMob().pathfinding.updateNavigation();
     }
 }

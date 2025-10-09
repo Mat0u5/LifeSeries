@@ -32,7 +32,7 @@ public final class SnailTeleportGoal extends Goal {
             teleportCooldown--;
             return false;
         }
-        if (mob.getBoundPlayer() == null) {
+        if (mob.serverData.getBoundPlayer() == null) {
             return false;
         }
         if (!mob.getBlockPos().equals(this.lastPosition)) {
@@ -43,7 +43,7 @@ public final class SnailTeleportGoal extends Goal {
         this.ticksSinceLastPositionChange++;
 
 
-        PlayerEntity boundPlayer = mob.getBoundPlayer();
+        PlayerEntity boundPlayer = mob.serverData.getBoundPlayer();
         float distFromPlayer = mob.distanceTo(boundPlayer);
         boolean dimensionsAreSame = WorldUtils.getEntityWorld(mob).getRegistryKey().equals(WorldUtils.getEntityWorld(boundPlayer).getRegistryKey());
         return !dimensionsAreSame || distFromPlayer > Snail.MAX_DISTANCE || this.ticksSinceLastPositionChange > this.maxTicksSinceLastPositionChange;
@@ -52,7 +52,7 @@ public final class SnailTeleportGoal extends Goal {
     @Override
     public void start() {
         teleportCooldown = 20;
-        mob.fakeTeleportNearPlayer(Snail.TP_MIN_RANGE);
+        mob.pathfinding.fakeTeleportNearPlayer(Snail.TP_MIN_RANGE);
     }
 
     @Override

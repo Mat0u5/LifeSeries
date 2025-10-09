@@ -27,18 +27,18 @@ public class SnailFlyGoal extends Goal {
             return false;
         }
 
-        LivingEntity boundPlayer = mob.getBoundPlayer();
+        LivingEntity boundPlayer = mob.serverData.getBoundPlayer();
         if (boundPlayer == null) {
             return false;
         }
 
-        return getMob().canPathToPlayer(true);
+        return getMob().pathfinding.canPathToPlayer(true);
     }
 
     @Override
     public boolean shouldContinue() {
         if (!mob.isFlying()) return false;
-        return mob.getBoundPlayer() != null;
+        return mob.serverData.getBoundPlayer() != null;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class SnailFlyGoal extends Goal {
     @Override
     public void stop() {
         mob.setFlying(false);
-        mob.updateNavigation();
-        mob.updateMoveControl();
+        mob.pathfinding.updateNavigation();
+        mob.pathfinding.updateMoveControl();
     }
 }

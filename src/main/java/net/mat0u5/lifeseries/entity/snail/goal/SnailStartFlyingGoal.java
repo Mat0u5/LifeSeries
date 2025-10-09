@@ -20,7 +20,7 @@ public final class SnailStartFlyingGoal extends Goal {
     @Override
     public boolean canStart() {
         if (mob.isPaused()) return false;
-        if (mob.getBoundPlayer() == null) {
+        if (mob.serverData.getBoundPlayer() == null) {
             return false;
         }
 
@@ -37,8 +37,8 @@ public final class SnailStartFlyingGoal extends Goal {
             return false;
         }
 
-        canWalk = mob.canPathToPlayer(false);
-        canFly = mob.canPathToPlayer(true);
+        canWalk = mob.pathfinding.canPathToPlayer(false);
+        canFly = mob.pathfinding.canPathToPlayer(true);
 
         if (canWalk) {
             startFlyingCounter = 0;
@@ -53,8 +53,8 @@ public final class SnailStartFlyingGoal extends Goal {
     @Override
     public void start() {
         mob.setFlying(true);
-        mob.updateNavigation();
-        mob.updateMoveControl();
+        mob.pathfinding.updateNavigation();
+        mob.pathfinding.updateMoveControl();
     }
 
     @Override

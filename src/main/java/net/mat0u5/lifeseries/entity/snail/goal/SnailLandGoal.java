@@ -21,7 +21,7 @@ public final class SnailLandGoal extends Goal {
             return false;
         }
 
-        PlayerEntity boundPlayer = mob.getBoundPlayer();
+        PlayerEntity boundPlayer = mob.serverData.getBoundPlayer();
         if (boundPlayer == null) {
             noTargetTicks++;
         } else {
@@ -42,19 +42,19 @@ public final class SnailLandGoal extends Goal {
             return false;
         }
 
-        if (!mob.isValidBlockOnGround()) {
+        if (!mob.pathfinding.isValidBlockOnGround()) {
             return false;
         }
 
-        return mob.canPathToPlayerFromGround(false);
+        return mob.pathfinding.canPathToPlayerFromGround(false);
     }
 
     @Override
     public boolean shouldContinue() {
-        if (!mob.isValidBlockOnGround()) {
+        if (!mob.pathfinding.isValidBlockOnGround()) {
             return false;
         }
-        return mob.getDistanceToGroundBlock() > 1.5D;
+        return mob.pathfinding.getDistanceToGroundBlock() > 1.5D;
     }
 
     @Override
@@ -74,8 +74,8 @@ public final class SnailLandGoal extends Goal {
         mob.setLanding(false);
         mob.setFlying(false);
         mob.setGliding(false);
-        mob.updateNavigation();
-        mob.updateMoveControl();
+        mob.pathfinding.updateNavigation();
+        mob.pathfinding.updateMoveControl();
     }
 
     private void land() {

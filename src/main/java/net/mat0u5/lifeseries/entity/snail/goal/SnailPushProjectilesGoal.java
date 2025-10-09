@@ -96,7 +96,7 @@ public final class SnailPushProjectilesGoal extends Goal {
             }
         }
         if (playSound) {
-            mob.playThrowSound();
+            mob.sounds.playThrowSound();
         }
     }
 

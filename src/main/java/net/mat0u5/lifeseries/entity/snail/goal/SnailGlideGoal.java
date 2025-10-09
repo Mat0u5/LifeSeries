@@ -33,7 +33,7 @@ public final class SnailGlideGoal extends Goal {
             return false;
         }
 
-        if (mob.getDistanceToGroundBlock() <= 1.5) {
+        if (mob.pathfinding.getDistanceToGroundBlock() <= 1.5) {
             return false;
         }
 
@@ -53,13 +53,13 @@ public final class SnailGlideGoal extends Goal {
 
     @Override
     public boolean shouldContinue() {
-        boolean canWalk = mob.canPathToPlayer(false);
+        boolean canWalk = mob.pathfinding.canPathToPlayer(false);
         if (!canWalk) {
             mob.setFlying(true);
             return false;
         }
 
-        return mob.getBoundPlayer() != null && mob.getDistanceToGroundBlock() >= 1;
+        return mob.serverData.getBoundPlayer() != null && mob.pathfinding.getDistanceToGroundBlock() >= 1;
     }
 
     @Override
@@ -70,12 +70,12 @@ public final class SnailGlideGoal extends Goal {
     @Override
     public void stop() {
         mob.setGliding(false);
-        mob.updateNavigation();
-        mob.updateMoveControl();
+        mob.pathfinding.updateNavigation();
+        mob.pathfinding.updateMoveControl();
     }
 
     private void glideToPlayer() {
-        PlayerEntity boundPlayer = mob.getBoundPlayer();
+        PlayerEntity boundPlayer = mob.serverData.getBoundPlayer();
         if (boundPlayer == null) {
             return;
         }

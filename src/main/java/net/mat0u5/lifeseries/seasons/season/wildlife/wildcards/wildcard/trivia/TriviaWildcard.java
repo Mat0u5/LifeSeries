@@ -271,7 +271,7 @@ public class TriviaWildcard extends Wildcard {
         for (ServerWorld world : server.getWorlds()) {
             for (Entity entity : world.iterateEntities()) {
                 if (entity instanceof Snail snail) {
-                    if (snail.fromTrivia) {
+                    if (snail.isFromTrivia()) {
                         toKill.add(entity);
                     }
                 }
@@ -286,8 +286,8 @@ public class TriviaWildcard extends Wildcard {
         for (ServerWorld world : server.getWorlds()) {
             for (Entity entity : world.iterateEntities()) {
                 if (entity instanceof Snail snail) {
-                    if (snail.fromTrivia) {
-                        UUID boundPlayer = snail.boundPlayerUUID;
+                    if (snail.isFromTrivia()) {
+                        UUID boundPlayer = snail.serverData.boundPlayerUUID;
                         if (boundPlayer == null || boundPlayer.equals(player.getUuid())) {
                             toKill.add(entity);
                         }
