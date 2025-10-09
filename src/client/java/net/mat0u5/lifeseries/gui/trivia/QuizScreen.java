@@ -228,12 +228,15 @@ public class QuizScreen extends DefaultScreen {
         if (client.player == null) return;
         List<Entity> allEntities = new ArrayList<>();
         List<Entity> matchingBotEntities = new ArrayList<>();
+        //TODO
+        /*
         for (DisplayEntity.ItemDisplayEntity entity : client.world.getEntitiesByClass(DisplayEntity.ItemDisplayEntity.class, client.player.getBoundingBox().expand(10), entity->true)) {
             if (MainClient.triviaBotPartUUIDs.contains(entity.getUuid())) {
                 matchingBotEntities.add(entity);
             }
             allEntities.add(entity);
         }
+        */
         if (matchingBotEntities.isEmpty()) matchingBotEntities = allEntities;
         for (Entity entity : matchingBotEntities) {
             drawEntity(context, x-30, y-55, x+30, y+85, size, 0.0625F, mouseX, mouseY, entity);

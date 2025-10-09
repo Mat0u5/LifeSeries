@@ -179,45 +179,6 @@ public class NetworkHandlerClient {
             if (season != Seasons.UNASSIGNED) MinecraftClient.getInstance().setScreen(new SeasonInfoScreen(season));
         }
 
-        if (name == PacketNames.TRIVIA_BOT_PART) {
-            try {
-                UUID uuid = UUID.fromString(value);
-                MainClient.triviaBotPartUUIDs.add(uuid);
-            }catch(Exception e) {}
-        }
-
-        if (name == PacketNames.SNAIL_PART) {
-            try {
-                UUID uuid = UUID.fromString(value);
-                MainClient.snailPartUUIDs.add(uuid);
-            }catch(Exception e) {}
-        }
-
-        if (name == PacketNames.SNAIL_POS) {
-            try {
-                String[] split = value.split("_");
-                BlockPos pos = new BlockPos(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]));
-                MainClient.snailPos = pos;
-                MainClient.snailPosTime = System.currentTimeMillis();
-            }catch(Exception e) {}
-        }
-
-        if (name == PacketNames.TRIVIA_SNAIL_PART) {
-            try {
-                UUID uuid = UUID.fromString(value);
-                MainClient.triviaSnailPartUUIDs.add(uuid);
-            }catch(Exception e) {}
-        }
-
-        if (name == PacketNames.TRIVIA_SNAIL_POS) {
-            try {
-                String[] split = value.split("_");
-                BlockPos pos = new BlockPos(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]));
-                MainClient.triviaSnailPos = pos;
-                MainClient.triviaSnailPosTime = System.currentTimeMillis();
-            }catch(Exception e) {}
-        }
-
         if (name == PacketNames.SNAIL_TEXTURES_INFO) {
             MinecraftClient.getInstance().setScreen(new SnailTextureInfoScreen());
         }

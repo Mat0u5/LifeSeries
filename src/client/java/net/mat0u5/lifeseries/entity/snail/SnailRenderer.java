@@ -12,7 +12,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.client.render.entity.MobEntityRenderer;
 public class SnailRenderer extends MobEntityRenderer<Snail, SnailModel<Snail>> {
     public SnailRenderer(EntityRendererFactory.Context context) {
-        super(context, new SnailModel<>(context.getPart(SnailModel.SNAIL)), 1f);
+        super(context, new SnailModel<>(context.getPart(SnailModel.SNAIL)), 0.35f);
     }
 
     @Override
@@ -32,7 +32,7 @@ import net.minecraft.util.Identifier;
 
 public class SnailRenderer extends AgeableMobEntityRenderer<Snail, SnailRenderState, SnailModel> {
     public SnailRenderer(EntityRendererFactory.Context context) {
-        super(context, new SnailModel(context.getPart(SnailModel.SNAIL)), new SnailModel(context.getPart(SnailModel.SNAIL)), 1f);
+        super(context, new SnailModel(context.getPart(SnailModel.SNAIL)), new SnailModel(context.getPart(SnailModel.SNAIL)), 0.35f);
     }
 
     @Override
@@ -53,11 +53,11 @@ public class SnailRenderer extends AgeableMobEntityRenderer<Snail, SnailRenderSt
         state.stopFlyAnimationState.copyFrom(snail.stopFlyAnimationState);
         state.startFlyAnimationState.copyFrom(snail.startFlyAnimationState);
         state.idleAnimationState.copyFrom(snail.idleAnimationState);
-        state.attacking = snail.attacking;
-        state.flying = snail.flying;
-        state.gliding = snail.gliding;
-        state.landing = snail.landing;
-        state.mining = snail.mining;
+        state.attacking = snail.isAttacking();
+        state.flying = snail.isFlying();
+        state.gliding = snail.isGliding();
+        state.landing = snail.isLanding();
+        state.mining = snail.isMining();
     }
 }
 *///?}

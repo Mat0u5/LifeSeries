@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.registries;
 
+import net.mat0u5.lifeseries.entity.pathfinder.PathFinder;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.minecraft.entity.Entity;
@@ -29,6 +30,15 @@ public class MobRegistry {
                     .trackRangeBlocks(512)
                     .defaultAttributes(Snail::createAttributes)
     );
+    public static final EntityType<PathFinder> PATH_FINDER = register(
+            PathFinder.ID,
+            FabricEntityTypeBuilder.createMob()
+                    .entityFactory(PathFinder::new)
+                    .spawnGroup(SpawnGroup.AMBIENT)
+                    .dimensions(EntityDimensions.changing(0.5f, 0.6f))
+                    .trackRangeBlocks(0)
+                    .defaultAttributes(PathFinder::createAttributes)
+    );
 
     private static <T extends Entity> EntityType<T> register(Identifier id, FabricEntityTypeBuilder<T> builder) {
         EntityType<T> type = builder.build();
@@ -41,6 +51,13 @@ public class MobRegistry {
                             .defaultAttributes(Snail::createAttributes))
                     .dimensions(0.5f, 0.6f)
                     .maxTrackingRange(512)
+    );
+    public static final EntityType<PathFinder> PATH_FINDER = register(
+            PathFinder.ID,
+            FabricEntityType.Builder.createMob(PathFinder::new, SpawnGroup.AMBIENT, x -> x
+                            .defaultAttributes(PathFinder::createAttributes))
+                    .dimensions(0.5f, 0.6f)
+                    .maxTrackingRange(0)
     );
 
     private static <T extends Entity> EntityType<T> register(Identifier id, EntityType.Builder<T> builder) {

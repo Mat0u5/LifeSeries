@@ -157,12 +157,12 @@ public class SnailModel extends EntityModel<SnailRenderState> {
     @Override
     public void setAngles(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.getPart().traverse().forEach(ModelPart::resetTransform);
-        this.updateAnimation(entity.flyAnimationState, SnailAnimations.idle, ageInTicks);
-        this.updateAnimation(entity.glideAnimationState, SnailAnimations.idle, ageInTicks);
-        this.updateAnimation(entity.walkAnimationState, SnailAnimations.idle, ageInTicks);
+        this.updateAnimation(entity.flyAnimationState, SnailAnimations.fly, ageInTicks);
+        this.updateAnimation(entity.glideAnimationState, SnailAnimations.glide, ageInTicks);
+        this.updateAnimation(entity.walkAnimationState, SnailAnimations.walk, ageInTicks);
         this.updateAnimation(entity.idleAnimationState, SnailAnimations.idle, ageInTicks);
-        this.updateAnimation(entity.startFlyAnimationState, SnailAnimations.idle, ageInTicks);
-        this.updateAnimation(entity.stopFlyAnimationState, SnailAnimations.idle, ageInTicks);
+        this.updateAnimation(entity.startFlyAnimationState, SnailAnimations.startFly, ageInTicks);
+        this.updateAnimation(entity.stopFlyAnimationState, SnailAnimations.stopFly, ageInTicks);
     }
 
     @Override

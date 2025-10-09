@@ -22,10 +22,6 @@ public class TextHud {
         if (client.options.hudHidden) return;
         int yPos = client.getWindow().getScaledHeight() - (5 + (int) Math.ceil((client.textRenderer.fontHeight) * MainClient.TEXT_HUD_SCALE));
 
-        if (Main.DEBUG) {
-            yPos += _renderSnailDistance(client, context, yPos);
-        }
-
         yPos += renderGameNotBroken(client, context, yPos);
         yPos += renderSessionTimer(client, context, yPos);
         yPos += renderLimitedLifeTimer(client, context, yPos);
@@ -49,22 +45,6 @@ public class TextHud {
         if (sideTitleRemainTicks <= 0) return 0;
 
         return drawHudText(client, context, MainClient.sideTitle, y);
-    }
-
-    public static int _renderSnailDistance(MinecraftClient client, DrawContext context, int y) {
-        try {
-            if (MainClient.snailPos == null) return 0;
-            if (System.currentTimeMillis() - MainClient.snailPosTime > 2000) return 0;
-            if (client.player == null) return 0;
-
-            float distance = (float) WorldUtils.getEntityPos(client.player).distanceTo(MainClient.snailPos.toCenterPos());
-
-            Text timerText = Text.literal(String.valueOf(Math.round(distance)));
-            if (distance < 20) timerText = Text.literal("§c"+Math.round(distance));
-
-            return drawHudText(client, context, timerText, y);
-        }catch(Exception e) {}
-        return 0;
     }
 
     public static int renderGameNotBroken(MinecraftClient client, DrawContext context, int y) {

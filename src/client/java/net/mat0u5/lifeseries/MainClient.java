@@ -30,13 +30,6 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     public static Map<String, String> playerDisguiseNames = new HashMap<>();
     public static Map<UUID, UUID> playerDisguiseUUIDs = new HashMap<>();
     public static Map<UUID, Long> invisiblePlayers = new HashMap<>();
-    public static List<UUID> triviaBotPartUUIDs = new ArrayList<>();
-    public static List<UUID> snailPartUUIDs = new ArrayList<>();
-    public static BlockPos snailPos = null;
-    public static long snailPosTime = 0;
-    public static List<UUID> triviaSnailPartUUIDs = new ArrayList<>();
-    public static BlockPos triviaSnailPos = null;
-    public static long triviaSnailPosTime = 0;
     public static int snailAir = 300;
     public static long snailAirTimestamp = 0;
     public static boolean preventGliding = false;
@@ -145,14 +138,6 @@ public class MainClient implements ClientModInitializer, IClientHelper {
         playerDisguiseNames = new HashMap<>();
         playerDisguiseUUIDs = new HashMap<>();
         invisiblePlayers = new HashMap<>();
-        triviaBotPartUUIDs = new ArrayList<>();
-
-        snailPartUUIDs = new ArrayList<>();
-        snailPos = null;
-        snailPosTime = 0;
-        triviaSnailPartUUIDs = new ArrayList<>();
-        triviaSnailPos = null;
-        triviaSnailPosTime = 0;
         snailAir = 300;
         snailAirTimestamp = 0;
         preventGliding = false;

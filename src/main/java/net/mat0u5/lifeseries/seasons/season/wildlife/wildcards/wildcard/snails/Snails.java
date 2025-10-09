@@ -10,6 +10,7 @@ import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
@@ -81,9 +82,7 @@ public class Snails extends Wildcard {
 
     public static void spawnSnailFor(ServerPlayerEntity player, BlockPos pos) {
         if (player == null || pos == null) return;
-        //TODO
-        Snail snail = null;
-        //Snail snail = MobRegistry.SNAIL.spawn(PlayerUtils.getServerWorld(player), pos, SpawnReason.COMMAND);
+        Snail snail = MobRegistry.SNAIL.spawn(PlayerUtils.getServerWorld(player), pos, SpawnReason.COMMAND);
         if (snail != null) {
             snail.setBoundPlayer(player);
             snail.updateSkin(player);
@@ -134,7 +133,7 @@ public class Snails extends Wildcard {
         saveSnailNames();
     }
 
-    public static String getSnailName(ServerPlayerEntity player) {
+    public static String getSnailName(PlayerEntity player) {
         if (snailNames.containsKey(player.getUuid())) {
             return snailNames.get(player.getUuid());
         }

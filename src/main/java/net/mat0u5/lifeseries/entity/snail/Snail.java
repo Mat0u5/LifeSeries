@@ -39,6 +39,9 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
 import net.minecraft.entity.damage.DamageTypes;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
@@ -84,11 +87,12 @@ public class Snail extends HostileEntity {
     public static boolean SHOULD_DROWN_PLAYER = true;
 
     public UUID boundPlayerUUID;
-    public boolean attacking;
-    public boolean flying;
-    public boolean gliding;
-    public boolean landing;
-    public boolean mining;
+    private static final TrackedData<Boolean> attacking = DataTracker.registerData(Snail.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final TrackedData<Boolean> flying = DataTracker.registerData(Snail.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final TrackedData<Boolean> gliding = DataTracker.registerData(Snail.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final TrackedData<Boolean> landing = DataTracker.registerData(Snail.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final TrackedData<Boolean> mining = DataTracker.registerData(Snail.class, TrackedDataHandlerRegistry.BOOLEAN);
+
     public boolean setNavigation = false;
     public boolean fromTrivia = false;
     public int dontAttackFor = 0;
@@ -161,9 +165,6 @@ public class Snail extends HostileEntity {
         this.attachment = EntityAttachment.ofTicking(this.holder, this);
         this.attachment.tick();
         if (snailSkin >= 0) updateHolderSkin();
-        if (getActualBoundPlayer() != null) {
-            sendDisplayEntityPackets(getActualBoundPlayer());
-        }
          */
     }
 
@@ -177,23 +178,7 @@ public class Snail extends HostileEntity {
         sendAirPacket();
         boundPlayerUUID = player.getUuid();
         updateSnailName();
-        //TODO
-        //sendDisplayEntityPackets(player);
     }
-
-    /*
-    //TODO
-    public void sendDisplayEntityPackets(PlayerEntity player) {
-        if (holder == null) return;
-        List<VirtualElement> elements = holder.getElements();
-        for (VirtualElement element : elements) {
-            if (element instanceof ItemDisplayElement itemDisplayElement) {
-                if (!fromTrivia) NetworkHandlerServer.sendStringPacket(player, PacketNames.SNAIL_PART, itemDisplayElement.getUuid().toString());
-                else NetworkHandlerServer.sendStringPacket(player, PacketNames.TRIVIA_SNAIL_PART, itemDisplayElement.getUuid().toString());
-            }
-        }
-    }
-     */
 
     public void updateSnailName() {
         if (getBoundPlayer() == null) return;
@@ -256,21 +241,6 @@ public class Snail extends HostileEntity {
         }
         super.tick();
 
-        if (age % 10 == 0 && getActualBoundPlayer() != null) {
-            BlockPos pos = getBlockPos();
-            boolean sameDimensions = getWorldEntity().getRegistryKey().equals(WorldUtils.getEntityWorld(getActualBoundPlayer()).getRegistryKey());
-            if (sameDimensions) {
-                if (!fromTrivia) NetworkHandlerServer.sendStringPacket(getActualBoundPlayer(), PacketNames.SNAIL_POS, TextUtils.formatString("{}_{}_{}", pos.getX(), pos.getY(), pos.getZ()));
-                else NetworkHandlerServer.sendStringPacket(getActualBoundPlayer(), PacketNames.TRIVIA_SNAIL_POS, TextUtils.formatString("{}_{}_{}", pos.getX(), pos.getY(), pos.getZ()));
-            }
-        }
-        if (age % 400 == 0 && getActualBoundPlayer() != null) {
-            if (getActualBoundPlayer() != null) {
-                //TODO
-                //sendDisplayEntityPackets(getActualBoundPlayer());
-            }
-        }
-
         if (updateModelCooldown > 0) updateModelCooldown--;
 
         //TODO
@@ -292,8 +262,6 @@ public class Snail extends HostileEntity {
             updateSnailName();
         }
 
-        updateAnimations();
-
         if (age % 50 == 0) {
             if (!fromTrivia) {
                 if (!Snails.snails.containsValue(this) || !WildcardManager.isActiveWildcard(Wildcards.SNAILS)) {
@@ -306,7 +274,7 @@ public class Snail extends HostileEntity {
                 }
             }
         }
-        ServerPlayerEntity boundPlayer = getBoundPlayer();
+        PlayerEntity boundPlayer = getBoundPlayer();
         if (boundPlayer != null) {
             if (this.getBoundingBox().expand(0.05).intersects(boundPlayer.getBoundingBox())) {
                 killBoundPlayer();
@@ -341,6 +309,12 @@ public class Snail extends HostileEntity {
         chunkLoading();
         playSounds();
         clearStatusEffects();
+
+        if (getWorldEntity().isClient()) {
+            updateAnimations();
+        }
+        lastFlying = isFlying();
+        lastGlidingOrLanding = isGliding() || isLanding();
     }
 
     public boolean isPaused() {
@@ -378,11 +352,13 @@ public class Snail extends HostileEntity {
             TriviaWildcard.bots.remove(boundPlayerUUID);
         }
         killPathFinders();
-        //? if <= 1.21 {
-        this.kill();
-        //?} else {
-        /*this.kill((ServerWorld) getWorldEntity());
-        *///?}
+        if (getWorldEntity() instanceof ServerWorld world) {
+            //? if <= 1.21 {
+            this.kill();
+            //?} else {
+            /*this.kill(world);
+             *///?}
+        }
         this.discard();
     }
 
@@ -391,19 +367,21 @@ public class Snail extends HostileEntity {
     }
 
     public void sendAirPacket(int amount) {
-        NetworkHandlerServer.sendNumberPacket(getBoundPlayer(), PacketNames.SNAIL_AIR, amount);
+        NetworkHandlerServer.sendNumberPacket(getServerBoundPlayer(), PacketNames.SNAIL_AIR, amount);
     }
 
     public void killPathFinders() {
-        //? if <= 1.21 {
-        if (groundPathFinder != null) groundPathFinder.kill();
-        if (pathFinder != null) pathFinder.kill();
-        //?} else {
-        /*if (groundPathFinder != null) groundPathFinder.kill((ServerWorld) WorldUtils.getEntityWorld(groundPathFinder));
-        if (pathFinder != null) pathFinder.kill((ServerWorld) WorldUtils.getEntityWorld(pathFinder));
-        *///?}
-        if (groundPathFinder != null) groundPathFinder.discard();
-        if (pathFinder != null) pathFinder.discard();
+        if (!this.getWorldEntity().isClient()) {
+            //? if <= 1.21 {
+            if (groundPathFinder != null) groundPathFinder.kill();
+            if (pathFinder != null) pathFinder.kill();
+            //?} else {
+            /*if (groundPathFinder != null) groundPathFinder.kill((ServerWorld) WorldUtils.getEntityWorld(groundPathFinder));
+            if (pathFinder != null) pathFinder.kill((ServerWorld) WorldUtils.getEntityWorld(pathFinder));
+            *///?}
+            if (groundPathFinder != null) groundPathFinder.discard();
+            if (pathFinder != null) pathFinder.discard();
+        }
     }
 
     public void handleHighVelocity() {
@@ -417,7 +395,8 @@ public class Snail extends HostileEntity {
     }
 
     public void killBoundPlayer() {
-        ServerPlayerEntity player = getBoundPlayer();
+        if (this.getWorldEntity().isClient()) return;
+        ServerPlayerEntity player = getServerBoundPlayer();
         if (player == null) return;
 
         ServerWorld world = PlayerUtils.getServerWorld(player);
@@ -436,7 +415,8 @@ public class Snail extends HostileEntity {
     }
 
     public void damageFromDrowning() {
-        ServerPlayerEntity player = getBoundPlayer();
+        if (this.getWorldEntity().isClient()) return;
+        ServerPlayerEntity player = getServerBoundPlayer();
         if (player == null) return;
         if (!player.isAlive()) return;
         ServerWorld world = PlayerUtils.getServerWorld(player);
@@ -472,6 +452,13 @@ public class Snail extends HostileEntity {
         if (walkAnimationTimeout > 0) walkAnimationTimeout--;
         if (idleAnimationTimeout > 0) idleAnimationTimeout--;
 
+        if (!lastFlying && isFlying()) {
+            playStartFlyAnimation();
+        }
+        if (lastFlying && !isFlying()) {
+            playStopFlyAnimation();
+        }
+
         if (flyAnimation < 0) {
             flyAnimation++;
             pauseAllAnimations("stopFly");
@@ -480,7 +467,7 @@ public class Snail extends HostileEntity {
             flyAnimation--;
             pauseAllAnimations("startFly");
         }
-        else if (this.flying) {
+        else if (this.isFlying()) {
             pauseAllAnimations("fly");
             flyAnimationState.startIfNotRunning(age);
             //if (flyAnimationTimeout <= 0) {
@@ -488,7 +475,7 @@ public class Snail extends HostileEntity {
             //    flyAnimationTimeout = 80;//TODO
             //}
         }
-        else if (this.gliding || this.landing) {
+        else if (this.isGliding() || this.isLanding()) {
             pauseAllAnimations("glide");
             glideAnimationState.startIfNotRunning(age);
             //if (glideAnimationTimeout <= 0) {
@@ -548,13 +535,13 @@ public class Snail extends HostileEntity {
     }
 
     public void updatePathFinders() {
+        if (this.getWorldEntity().isClient()) return;
         if (pathFinder != null && pathFinder.isRegionUnloaded()) {
             pathFinder.discard();
             pathFinder = null;
         }
         else if (pathFinder == null || pathFinder.isRemoved()) {
-            //TODO
-            //pathFinder = MobRegistry.PATH_FINDER.spawn((ServerWorld) this.getWorldEntity(), this.getBlockPos(), SpawnReason.COMMAND);
+            pathFinder = MobRegistry.PATH_FINDER.spawn((ServerWorld) this.getWorldEntity(), this.getBlockPos(), SpawnReason.COMMAND);
         }
         else {
             pathFinder.resetDespawnTimer();
@@ -565,8 +552,7 @@ public class Snail extends HostileEntity {
             groundPathFinder = null;
         }
         else if (groundPathFinder == null || groundPathFinder.isRemoved()) {
-            //TODO
-            //groundPathFinder = MobRegistry.PATH_FINDER.spawn((ServerWorld) this.getWorldEntity(), this.getBlockPos(), SpawnReason.COMMAND);
+            groundPathFinder = MobRegistry.PATH_FINDER.spawn((ServerWorld) this.getWorldEntity(), this.getBlockPos(), SpawnReason.COMMAND);
         }
         else {
             groundPathFinder.resetDespawnTimer();
@@ -611,10 +597,10 @@ public class Snail extends HostileEntity {
     }
 
     public void fakeTeleportNearPlayer(double minDistanceFromPlayer) {
-        ServerPlayerEntity player = getBoundPlayer();
-        if (player == null) return;
-        ServerWorld playerWorld = PlayerUtils.getServerWorld(player);
         if (getWorldEntity() instanceof ServerWorld world) {
+            ServerPlayerEntity player = getServerBoundPlayer();
+            if (player == null) return;
+            ServerWorld playerWorld = PlayerUtils.getServerWorld(player);
             BlockPos tpTo = getBlockPosNearTarget(player, minDistanceFromPlayer);
             world.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, this.getSoundCategory(), this.getSoundVolume(), this.getSoundPitch());
             playerWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, this.getSoundCategory(), this.getSoundVolume(), this.getSoundPitch());
@@ -625,10 +611,10 @@ public class Snail extends HostileEntity {
         }
     }
 
-    public static BlockPos getBlockPosNearTarget(ServerPlayerEntity target, double distanceFromTarget) {
+    public static BlockPos getBlockPosNearTarget(PlayerEntity target, double distanceFromTarget) {
         if (target == null) return null;
         BlockPos targetPos = target.getBlockPos();
-        return WorldUtils.getCloseBlockPos(PlayerUtils.getServerWorld(target), targetPos, distanceFromTarget, 1, false);
+        return WorldUtils.getCloseBlockPos(PlayerUtils.getWorld(target), targetPos, distanceFromTarget, 1, false);
     }
 
 
@@ -652,10 +638,10 @@ public class Snail extends HostileEntity {
     }
 
     public void updateNavigation() {
-        if (mining) {
+        if (isMining()) {
             setNavigationMining();
         }
-        else if (flying) {
+        else if (isFlying()) {
             setNavigationFlying();
         }
         else {
@@ -664,7 +650,7 @@ public class Snail extends HostileEntity {
     }
 
     public void updateMoveControl() {
-        if (flying || mining) {
+        if (isFlying() || isMining()) {
             setMoveControlFlight();
         }
         else {
@@ -759,7 +745,13 @@ public class Snail extends HostileEntity {
     }
 
     @Nullable
-    public ServerPlayerEntity getBoundPlayer() {
+    public PlayerEntity getBoundPlayer() {
+        return getServerBoundPlayer();
+    }
+
+    @Nullable
+    public ServerPlayerEntity getServerBoundPlayer() {
+        if (this.getWorldEntity().isClient()) return null;
         if (server == null) return null;
         ServerPlayerEntity player = PlayerUtils.getPlayer(boundPlayerUUID);
         if (player == null || (player.isSpectator() && livesManager.isDead(player))) {
@@ -787,7 +779,7 @@ public class Snail extends HostileEntity {
 
     @Nullable
     public PlayerEntity getActualBoundPlayer() {
-        if (!Main.isLogicalSide()) return null;
+        if (this.getWorldEntity().isClient()) return null;
         if (server == null) return null;
         return PlayerUtils.getPlayer(boundPlayerUUID);
     }
@@ -924,13 +916,13 @@ public class Snail extends HostileEntity {
             playDrownSound();
         }
 
-        if (gliding || landing) {
+        if (isGliding() || isLanding()) {
             if (!lastGlidingOrLanding) {
                 playFallSound();
             }
         }
 
-         if (flying) {
+         if (isFlying()) {
             if (!lastFlying) {
                 playFlySound();
             }
@@ -942,7 +934,7 @@ public class Snail extends HostileEntity {
                 playPropellerSound();
             }
         }
-        if (!flying && !gliding && !landing && forwardSpeed > 0.001) {
+        if (!isFlying() && !isGliding() && !isLanding() && forwardSpeed > 0.001) {
             if (walkSoundCooldown > 0) {
                 walkSoundCooldown--;
             }
@@ -951,8 +943,6 @@ public class Snail extends HostileEntity {
                 playWalkSound();
             }
         }
-        lastFlying = flying;
-        lastGlidingOrLanding = gliding || landing;
     }
 
     public void playAttackSound() {
@@ -1003,5 +993,51 @@ public class Snail extends HostileEntity {
         soundCooldown = 20;
         SoundEvent sound = OtherUtils.getRandomSound("wildlife_snail_"+name, from, to);
         this.playSound(sound, volume, 1);
+    }
+
+
+    /*
+    TRACKED STUFF
+     */
+
+    @Override
+    protected void initDataTracker(DataTracker.Builder builder) {
+        super.initDataTracker(builder);
+        builder.add(attacking, false);
+        builder.add(flying, false);
+        builder.add(gliding, false);
+        builder.add(landing, false);
+        builder.add(mining, false);
+    }
+    public void setAttacking(boolean value) {
+        this.dataTracker.set(attacking, value);
+    }
+    public void setFlying(boolean value) {
+        this.dataTracker.set(flying, value);
+    }
+    public void setGliding(boolean value) {
+        this.dataTracker.set(gliding, value);
+    }
+    public void setLanding(boolean value) {
+        this.dataTracker.set(landing, value);
+    }
+    public void setMining(boolean value) {
+        this.dataTracker.set(mining, value);
+    }
+
+    public boolean isAttacking() {
+        return this.dataTracker.get(attacking);
+    }
+    public boolean isFlying() {
+        return this.dataTracker.get(flying);
+    }
+    public boolean isGliding() {
+        return this.dataTracker.get(gliding);
+    }
+    public boolean isLanding() {
+        return this.dataTracker.get(landing);
+    }
+    public boolean isMining() {
+        return this.dataTracker.get(mining);
     }
 }

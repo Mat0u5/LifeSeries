@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.entity.snail.goal;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,15 +21,15 @@ public final class SnailGlideGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        if (mob.gliding) {
+        if (mob.isGliding()) {
             return true;
         }
 
-        if (mob.landing) {
+        if (mob.isLanding()) {
             return false;
         }
 
-        if (mob.getVelocity().y >= 0 || mob.isOnGround() || mob.flying) {
+        if (mob.getVelocity().y >= 0 || mob.isOnGround() || mob.isFlying()) {
             return false;
         }
 
@@ -48,14 +48,14 @@ public final class SnailGlideGoal extends Goal {
     @Override
     public void start() {
         ticksWaited = 0;
-        mob.gliding = true;
+        mob.setGliding(true);
     }
 
     @Override
     public boolean shouldContinue() {
         boolean canWalk = mob.canPathToPlayer(false);
         if (!canWalk) {
-            mob.flying = true;
+            mob.setFlying(true);
             return false;
         }
 
@@ -69,14 +69,13 @@ public final class SnailGlideGoal extends Goal {
 
     @Override
     public void stop() {
-        mob.gliding = false;
+        mob.setGliding(false);
         mob.updateNavigation();
         mob.updateMoveControl();
-        mob.playStopFlyAnimation();
     }
 
     private void glideToPlayer() {
-        ServerPlayerEntity boundPlayer = mob.getBoundPlayer();
+        PlayerEntity boundPlayer = mob.getBoundPlayer();
         if (boundPlayer == null) {
             return;
         }
