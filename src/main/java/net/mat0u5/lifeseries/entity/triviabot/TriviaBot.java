@@ -27,10 +27,7 @@ import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.control.MoveControl;
 import net.minecraft.entity.ai.pathing.MobNavigation;
 import net.minecraft.entity.ai.pathing.Path;
@@ -101,6 +98,15 @@ public class TriviaBot extends AmbientEntity {
     public static int EASY_TIME = 180;
     public static int NORMAL_TIME = 240;
     public static int HARD_TIME = 300;
+
+    public final AnimationState glideAnimationState = new AnimationState();
+    public final AnimationState idleAnimationState = new AnimationState();
+    public final AnimationState walkAnimationState = new AnimationState();
+    public final AnimationState countdownAnimationState = new AnimationState();
+    public final AnimationState analyzingAnimationState = new AnimationState();
+    public final AnimationState answerCorrectAnimationState = new AnimationState();
+    public final AnimationState answerIncorrectAnimationState = new AnimationState();
+    public final AnimationState snailTransformAnimationState = new AnimationState();
 
     public boolean gliding = false;
 

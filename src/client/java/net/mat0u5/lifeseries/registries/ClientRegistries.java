@@ -6,6 +6,8 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.mat0u5.lifeseries.command.ClientCommands;
 import net.mat0u5.lifeseries.entity.snail.SnailModel;
 import net.mat0u5.lifeseries.entity.snail.SnailRenderer;
+import net.mat0u5.lifeseries.entity.triviabot.TriviaBotModel;
+import net.mat0u5.lifeseries.entity.triviabot.TriviaBotRenderer;
 import net.mat0u5.lifeseries.events.ClientEvents;
 import net.mat0u5.lifeseries.events.ClientKeybinds;
 
@@ -23,5 +25,8 @@ public class ClientRegistries {
     private static void registerEntities() {
         EntityModelLayerRegistry.registerModelLayer(SnailModel.SNAIL, SnailModel::getTexturedModelData);
         EntityRendererRegistry.register(MobRegistry.SNAIL, SnailRenderer::new);
+
+        EntityModelLayerRegistry.registerModelLayer(TriviaBotModel.TRIVIA_BOT, TriviaBotModel::getTexturedModelData);
+        EntityRendererRegistry.register(MobRegistry.TRIVIA_BOT, TriviaBotRenderer::new);
     }
 }

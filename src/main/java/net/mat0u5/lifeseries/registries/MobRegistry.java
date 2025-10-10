@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.registries;
 import net.mat0u5.lifeseries.entity.pathfinder.PathFinder;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.snail.Snail;
+import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
@@ -39,6 +40,15 @@ public class MobRegistry {
                     .trackRangeBlocks(0)
                     .defaultAttributes(PathFinder::createAttributes)
     );
+    public static final EntityType<TriviaBot> TRIVIA_BOT = register(
+            TriviaBot.ID,
+            FabricEntityTypeBuilder.createMob()
+                    .entityFactory(TriviaBot::new)
+                    .spawnGroup(SpawnGroup.AMBIENT)
+                    .dimensions(EntityDimensions.changing(0.65f, 1.8f))
+                    .trackRangeBlocks(512)
+                    .defaultAttributes(TriviaBot::createAttributes)
+    );
 
     private static <T extends Entity> EntityType<T> register(Identifier id, FabricEntityTypeBuilder<T> builder) {
         EntityType<T> type = builder.build();
@@ -58,6 +68,13 @@ public class MobRegistry {
                             .defaultAttributes(PathFinder::createAttributes))
                     .dimensions(0.5f, 0.6f)
                     .maxTrackingRange(0)
+    );
+    public static final EntityType<TriviaBot> TRIVIA_BOT = register(
+            TriviaBot.ID,
+            FabricEntityType.Builder.createMob(TriviaBot::new, SpawnGroup.AMBIENT, x -> x
+                            .defaultAttributes(TriviaBot::createAttributes))
+                    .dimensions(0.65f, 1.8f)
+                    .maxTrackingRange(512)
     );
 
     private static <T extends Entity> EntityType<T> register(Identifier id, EntityType.Builder<T> builder) {
