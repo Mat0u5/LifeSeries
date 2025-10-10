@@ -58,6 +58,7 @@ public class SnailRenderer extends AgeableMobEntityRenderer<Snail, SnailRenderSt
         state.gliding = snail.isGliding();
         state.landing = snail.isLanding();
         state.mining = snail.isMining();
+        state.fromTrivia = snail.isFromTrivia();
     }
 }
 *///?}

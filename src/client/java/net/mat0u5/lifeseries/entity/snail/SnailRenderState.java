@@ -20,5 +20,6 @@ public class SnailRenderState extends LivingEntityRenderState {
     public boolean gliding;
     public boolean landing;
     public boolean mining;
+    public boolean fromTrivia;
 }
 *///?}

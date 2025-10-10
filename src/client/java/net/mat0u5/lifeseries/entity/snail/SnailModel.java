@@ -28,6 +28,7 @@ public class SnailModel extends EntityModel<SnailRenderState> {
 
     private final ModelPart main;
     private final ModelPart head;
+    private final ModelPart trivia;
     private final ModelPart body;
     private final ModelPart shell;
     private final ModelPart back;
@@ -44,6 +45,7 @@ public class SnailModel extends EntityModel<SnailRenderState> {
         *///?}
         this.main = root.getChild("main");
         this.head = this.main.getChild("head");
+        this.trivia = this.head.getChild("trivia");
         this.body = this.main.getChild("body");
         this.shell = this.body.getChild("shell");
         this.back = this.body.getChild("back");
@@ -70,25 +72,31 @@ public class SnailModel extends EntityModel<SnailRenderState> {
         ModelPartData modelPartData = modelData.getRoot();
         ModelPartData main = modelPartData.addChild("main", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 24.0F, 0.0F));
 
-        ModelPartData head = main.addChild("head", ModelPartBuilder.create().uv(28, 56).cuboid(-2.0F, -8.0F, 4.0F, 1.0F, 3.0F, 1.0F, new Dilation(0.0F))
-                .uv(32, 53).cuboid(-2.0F, -5.0F, 3.0F, 4.0F, 5.0F, 2.0F, new Dilation(0.0F))
-                .uv(44, 53).cuboid(-2.0F, -2.0F, 1.0F, 4.0F, 2.0F, 2.0F, new Dilation(0.0F))
-                .uv(56, 53).cuboid(1.0F, -8.0F, 4.0F, 1.0F, 3.0F, 1.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 0.0F, -3.0F, 0.0F, 3.1416F, 0.0F));
+        ModelPartData head = main.addChild("head", ModelPartBuilder.create().uv(12, 58).cuboid(-2.0F, -8.0F, 4.0F, 1.0F, 3.0F, 1.0F, new Dilation(0.0F))
+                .uv(48, 53).cuboid(-2.0F, -5.0F, 3.0F, 4.0F, 5.0F, 2.0F, new Dilation(0.0F))
+                .uv(16, 57).cuboid(-2.0F, -2.0F, 1.0F, 4.0F, 2.0F, 2.0F, new Dilation(0.0F))
+                .uv(32, 58).cuboid(1.0F, -8.0F, 4.0F, 1.0F, 3.0F, 1.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 0.0F, -3.0F, 0.0F, 3.1416F, 0.0F));
+
+        ModelPartData trivia = head.addChild("trivia", ModelPartBuilder.create().uv(0, 51).cuboid(-3.0F, -8.0F, 3.0F, 6.0F, 5.0F, 2.0F, new Dilation(0.01F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+
+        ModelPartData cube_r1 = trivia.addChild("cube_r1", ModelPartBuilder.create().uv(30, 57).cuboid(-1.0F, -6.0F, -0.025F, 1.0F, 6.0F, 0.05F, new Dilation(0.0F)), ModelTransform.of(0.0F, -8.0F, 4.025F, 0.0F, 0.0F, -0.3927F));
+
+        ModelPartData cube_r2 = trivia.addChild("cube_r2", ModelPartBuilder.create().uv(28, 57).cuboid(0.0F, -6.0F, -0.025F, 1.0F, 6.0F, 0.05F, new Dilation(0.0F)), ModelTransform.of(0.0F, -8.0F, 4.025F, 0.0F, 0.0F, 0.3927F));
 
         ModelPartData body = main.addChild("body", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         ModelPartData shell = body.addChild("shell", ModelPartBuilder.create().uv(34, 17).cuboid(-4.0F, -9.0F, -4.0F, 8.0F, 8.0F, 8.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
-        ModelPartData back = body.addChild("back", ModelPartBuilder.create().uv(16, 56).cuboid(-2.0F, -2.0F, 4.0F, 4.0F, 2.0F, 2.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData back = body.addChild("back", ModelPartBuilder.create().uv(0, 58).cuboid(-2.0F, -2.0F, 4.0F, 4.0F, 2.0F, 2.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         ModelPartData mid = body.addChild("mid", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         ModelPartData midfront = mid.addChild("midfront", ModelPartBuilder.create().uv(34, 37).cuboid(-1.99F, -1.99F, -4.5F, 3.98F, 1.98F, 8.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
-        ModelPartData midback = mid.addChild("midback", ModelPartBuilder.create().uv(0, 51).cuboid(-2.0F, -2.0F, 0.0F, 4.0F, 2.0F, 4.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData midback = mid.addChild("midback", ModelPartBuilder.create().uv(16, 51).cuboid(-2.0F, -2.0F, 0.0F, 4.0F, 2.0F, 4.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
-        ModelPartData propeller = body.addChild("propeller", ModelPartBuilder.create().uv(16, 51).cuboid(-2.0F, -10.0F, -2.0F, 4.0F, 1.0F, 4.0F, new Dilation(0.0F))
-                .uv(8, 57).cuboid(-0.5F, -12.0F, -0.5F, 1.0F, 2.0F, 1.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData propeller = body.addChild("propeller", ModelPartBuilder.create().uv(32, 53).cuboid(-2.0F, -10.0F, -2.0F, 4.0F, 1.0F, 4.0F, new Dilation(0.0F))
+                .uv(42, 58).cuboid(-0.5F, -12.0F, -0.5F, 1.0F, 2.0F, 1.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         ModelPartData top = propeller.addChild("top", ModelPartBuilder.create().uv(34, 47).cuboid(-3.0F, -12.01F, -3.0F, 6.0F, 0.0F, 6.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
@@ -98,39 +106,45 @@ public class SnailModel extends EntityModel<SnailRenderState> {
                 .uv(0, 17).cuboid(7.5F, -13.0F, -4.0F, 0.5F, 0.5F, 16.0F, new Dilation(0.0F))
                 .uv(0, 34).cuboid(-8.0F, -13.0F, -4.0F, 0.5F, 0.5F, 16.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, -4.0F));
 
-        ModelPartData strings = parachute.addChild("strings", ModelPartBuilder.create().uv(12, 57).cuboid(1.0F, -13.0F, 7.0F, 1.0F, 4.0F, 0.1F, new Dilation(0.0F))
-                .uv(0, 57).cuboid(2.9F, -13.0F, 5.0F, 0.1F, 4.0F, 1.0F, new Dilation(0.0F))
-                .uv(2, 57).cuboid(2.9F, -13.0F, 2.0F, 0.1F, 4.0F, 1.0F, new Dilation(0.0F))
-                .uv(6, 57).cuboid(-3.1F, -13.0F, 5.0F, 0.1F, 4.0F, 1.0F, new Dilation(0.0F))
-                .uv(4, 57).cuboid(-3.1F, -13.0F, 2.0F, 0.1F, 4.0F, 1.0F, new Dilation(0.0F))
-                .uv(14, 57).cuboid(-2.0F, -13.0F, 7.0F, 1.0F, 4.0F, 0.1F, new Dilation(0.0F))
-                .uv(46, 57).cuboid(1.0F, -13.0F, 1.0F, 1.0F, 4.0F, 0.1F, new Dilation(0.0F))
-                .uv(44, 57).cuboid(-2.0F, -13.0F, 1.0F, 1.0F, 4.0F, 0.1F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData strings = parachute.addChild("strings", ModelPartBuilder.create().uv(58, 42).cuboid(1.0F, -13.0F, 7.0F, 1.0F, 4.0F, 0.1F, new Dilation(0.0F))
+                .uv(36, 58).cuboid(2.9F, -13.0F, 5.0F, 0.1F, 4.0F, 1.0F, new Dilation(0.0F))
+                .uv(58, 37).cuboid(2.9F, -13.0F, 2.0F, 0.1F, 4.0F, 1.0F, new Dilation(0.0F))
+                .uv(40, 58).cuboid(-3.1F, -13.0F, 5.0F, 0.1F, 4.0F, 1.0F, new Dilation(0.0F))
+                .uv(38, 58).cuboid(-3.1F, -13.0F, 2.0F, 0.1F, 4.0F, 1.0F, new Dilation(0.0F))
+                .uv(46, 58).cuboid(-2.0F, -13.0F, 7.0F, 1.0F, 4.0F, 0.1F, new Dilation(0.0F))
+                .uv(60, 37).cuboid(1.0F, -13.0F, 1.0F, 1.0F, 4.0F, 0.1F, new Dilation(0.0F))
+                .uv(58, 46).cuboid(-2.0F, -13.0F, 1.0F, 1.0F, 4.0F, 0.1F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
         return TexturedModelData.of(modelData, 128, 128);
         //?} else {
         /*ModelData modelData = new ModelData();
         ModelPartData modelPartData = modelData.getRoot();
         ModelPartData main = modelPartData.addChild("main", ModelPartBuilder.create(), ModelTransform.origin(0.0F, 24.0F, 0.0F));
 
-        ModelPartData head = main.addChild("head", ModelPartBuilder.create().uv(28, 56).cuboid(-2.0F, -8.0F, 4.0F, 1.0F, 3.0F, 1.0F, new Dilation(0.0F))
-                .uv(32, 53).cuboid(-2.0F, -5.0F, 3.0F, 4.0F, 5.0F, 2.0F, new Dilation(0.0F))
-                .uv(44, 53).cuboid(-2.0F, -2.0F, 1.0F, 4.0F, 2.0F, 2.0F, new Dilation(0.0F))
-                .uv(56, 53).cuboid(1.0F, -8.0F, 4.0F, 1.0F, 3.0F, 1.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 0.0F, -3.0F, 0.0F, 3.1416F, 0.0F));
+        ModelPartData head = main.addChild("head", ModelPartBuilder.create().uv(12, 58).cuboid(-2.0F, -8.0F, 4.0F, 1.0F, 3.0F, 1.0F, new Dilation(0.0F))
+                .uv(48, 53).cuboid(-2.0F, -5.0F, 3.0F, 4.0F, 5.0F, 2.0F, new Dilation(0.0F))
+                .uv(16, 57).cuboid(-2.0F, -2.0F, 1.0F, 4.0F, 2.0F, 2.0F, new Dilation(0.0F))
+                .uv(32, 58).cuboid(1.0F, -8.0F, 4.0F, 1.0F, 3.0F, 1.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 0.0F, -3.0F, 0.0F, 3.1416F, 0.0F));
+
+        ModelPartData trivia = head.addChild("trivia", ModelPartBuilder.create().uv(0, 51).cuboid(-3.0F, -8.0F, 3.0F, 6.0F, 5.0F, 2.0F, new Dilation(0.01F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
+
+        ModelPartData cube_r1 = trivia.addChild("cube_r1", ModelPartBuilder.create().uv(30, 57).cuboid(-1.0F, -6.0F, -0.025F, 1.0F, 6.0F, 0.05F, new Dilation(0.0F)), ModelTransform.of(0.0F, -8.0F, 4.025F, 0.0F, 0.0F, -0.3927F));
+
+        ModelPartData cube_r2 = trivia.addChild("cube_r2", ModelPartBuilder.create().uv(28, 57).cuboid(0.0F, -6.0F, -0.025F, 1.0F, 6.0F, 0.05F, new Dilation(0.0F)), ModelTransform.of(0.0F, -8.0F, 4.025F, 0.0F, 0.0F, 0.3927F));
 
         ModelPartData body = main.addChild("body", ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
 
         ModelPartData shell = body.addChild("shell", ModelPartBuilder.create().uv(34, 17).cuboid(-4.0F, -9.0F, -4.0F, 8.0F, 8.0F, 8.0F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
 
-        ModelPartData back = body.addChild("back", ModelPartBuilder.create().uv(16, 56).cuboid(-2.0F, -2.0F, 4.0F, 4.0F, 2.0F, 2.0F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
+        ModelPartData back = body.addChild("back", ModelPartBuilder.create().uv(0, 58).cuboid(-2.0F, -2.0F, 4.0F, 4.0F, 2.0F, 2.0F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
 
         ModelPartData mid = body.addChild("mid", ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
 
         ModelPartData midfront = mid.addChild("midfront", ModelPartBuilder.create().uv(34, 37).cuboid(-1.99F, -1.99F, -4.5F, 3.98F, 1.98F, 8.0F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
 
-        ModelPartData midback = mid.addChild("midback", ModelPartBuilder.create().uv(0, 51).cuboid(-2.0F, -2.0F, 0.0F, 4.0F, 2.0F, 4.0F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
+        ModelPartData midback = mid.addChild("midback", ModelPartBuilder.create().uv(16, 51).cuboid(-2.0F, -2.0F, 0.0F, 4.0F, 2.0F, 4.0F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
 
-        ModelPartData propeller = body.addChild("propeller", ModelPartBuilder.create().uv(16, 51).cuboid(-2.0F, -10.0F, -2.0F, 4.0F, 1.0F, 4.0F, new Dilation(0.0F))
-                .uv(8, 57).cuboid(-0.5F, -12.0F, -0.5F, 1.0F, 2.0F, 1.0F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
+        ModelPartData propeller = body.addChild("propeller", ModelPartBuilder.create().uv(32, 53).cuboid(-2.0F, -10.0F, -2.0F, 4.0F, 1.0F, 4.0F, new Dilation(0.0F))
+                .uv(42, 58).cuboid(-0.5F, -12.0F, -0.5F, 1.0F, 2.0F, 1.0F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
 
         ModelPartData top = propeller.addChild("top", ModelPartBuilder.create().uv(34, 47).cuboid(-3.0F, -12.01F, -3.0F, 6.0F, 0.0F, 6.0F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
 
@@ -140,15 +154,14 @@ public class SnailModel extends EntityModel<SnailRenderState> {
                 .uv(0, 17).cuboid(7.5F, -13.0F, -4.0F, 0.5F, 0.5F, 16.0F, new Dilation(0.0F))
                 .uv(0, 34).cuboid(-8.0F, -13.0F, -4.0F, 0.5F, 0.5F, 16.0F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 0.0F, -4.0F));
 
-        ModelPartData strings = parachute.addChild("strings", ModelPartBuilder.create().uv(12, 57).cuboid(1.0F, -13.0F, 7.0F, 1.0F, 4.0F, 0.1F, new Dilation(0.0F))
-                .uv(0, 57).cuboid(2.9F, -13.0F, 5.0F, 0.1F, 4.0F, 1.0F, new Dilation(0.0F))
-                .uv(2, 57).cuboid(2.9F, -13.0F, 2.0F, 0.1F, 4.0F, 1.0F, new Dilation(0.0F))
-                .uv(6, 57).cuboid(-3.1F, -13.0F, 5.0F, 0.1F, 4.0F, 1.0F, new Dilation(0.0F))
-                .uv(4, 57).cuboid(-3.1F, -13.0F, 2.0F, 0.1F, 4.0F, 1.0F, new Dilation(0.0F))
-                .uv(14, 57).cuboid(-2.0F, -13.0F, 7.0F, 1.0F, 4.0F, 0.1F, new Dilation(0.0F))
-                .uv(46, 57).cuboid(1.0F, -13.0F, 1.0F, 1.0F, 4.0F, 0.1F, new Dilation(0.0F))
-                .uv(44, 57).cuboid(-2.0F, -13.0F, 1.0F, 1.0F, 4.0F, 0.1F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
-
+        ModelPartData strings = parachute.addChild("strings", ModelPartBuilder.create().uv(58, 42).cuboid(1.0F, -13.0F, 7.0F, 1.0F, 4.0F, 0.1F, new Dilation(0.0F))
+                .uv(36, 58).cuboid(2.9F, -13.0F, 5.0F, 0.1F, 4.0F, 1.0F, new Dilation(0.0F))
+                .uv(58, 37).cuboid(2.9F, -13.0F, 2.0F, 0.1F, 4.0F, 1.0F, new Dilation(0.0F))
+                .uv(40, 58).cuboid(-3.1F, -13.0F, 5.0F, 0.1F, 4.0F, 1.0F, new Dilation(0.0F))
+                .uv(38, 58).cuboid(-3.1F, -13.0F, 2.0F, 0.1F, 4.0F, 1.0F, new Dilation(0.0F))
+                .uv(46, 58).cuboid(-2.0F, -13.0F, 7.0F, 1.0F, 4.0F, 0.1F, new Dilation(0.0F))
+                .uv(60, 37).cuboid(1.0F, -13.0F, 1.0F, 1.0F, 4.0F, 0.1F, new Dilation(0.0F))
+                .uv(58, 46).cuboid(-2.0F, -13.0F, 1.0F, 1.0F, 4.0F, 0.1F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
         return TexturedModelData.of(modelData, 128, 128);
         *///?}
     }
@@ -163,6 +176,14 @@ public class SnailModel extends EntityModel<SnailRenderState> {
         this.updateAnimation(entity.clientData.idleAnimationState, SnailAnimations.idle, ageInTicks);
         this.updateAnimation(entity.clientData.startFlyAnimationState, SnailAnimations.startFly, ageInTicks);
         this.updateAnimation(entity.clientData.stopFlyAnimationState, SnailAnimations.stopFly, ageInTicks);
+
+        boolean parachuteHidden = !entity.clientData.glideAnimationState.isRunning();
+        boolean propellerHidden = !entity.clientData.flyAnimationState.isRunning();
+        boolean triviaHidden = !entity.isFromTrivia();
+
+        this.parachute.traverse().forEach(part -> part.hidden = parachuteHidden);
+        this.propeller.traverse().forEach(part -> part.hidden = propellerHidden);
+        this.trivia.traverse().forEach(part -> part.hidden = triviaHidden);
     }
 
     @Override
@@ -195,6 +216,13 @@ public class SnailModel extends EntityModel<SnailRenderState> {
         this.stopFlyAnimation.apply(state.stopFlyAnimationState, state.age);
         ^///?}
 
+        boolean parachuteHidden = !state.glideAnimationState.isRunning();
+        boolean propellerHidden = !state.flyAnimationState.isRunning();
+        boolean triviaHidden = !state.fromTrivia;
+
+        this.parachute.traverse().forEach(part -> part.hidden = parachuteHidden);
+        this.propeller.traverse().forEach(part -> part.hidden = propellerHidden);
+        this.trivia.traverse().forEach(part -> part.hidden = triviaHidden);
     }
     *///?}
 }
