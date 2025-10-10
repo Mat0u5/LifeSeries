@@ -154,7 +154,7 @@ public class SnailServerData {
         //? if <= 1.21.4 {
         world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(snail.getBlockPos()), 2, snail.getBlockPos());
         //?} else {
-        /*world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(getBlockPos()), 2);
+        /*world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(snail.getBlockPos()), 2);
          *///?}
     }
 

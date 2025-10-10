@@ -3,7 +3,11 @@ package net.mat0u5.lifeseries.entity.triviabot;
 import net.minecraft.client.render.entity.animation.*;
 
 public class TriviaBotAnimations {
+    //? if <= 1.21.5 {
     public static final Animation glide = Animation.Builder.create(2.0F).looping()
+    //?} else {
+    /*public static final AnimationDefinition glide = AnimationDefinition.Builder.create(2.0F).looping()
+    *///?}
             .addBoneAnimation("righthand", new Transformation(Transformation.Targets.ROTATE,
                     new Keyframe(0.0F, AnimationHelper.createRotationalVector(-105.709F, 68.92F, -23.971F), Transformation.Interpolations.CUBIC),
                     new Keyframe(1.0F, AnimationHelper.createRotationalVector(-109.282F, 69.462F, -17.097F), Transformation.Interpolations.CUBIC),
@@ -16,7 +20,11 @@ public class TriviaBotAnimations {
                     new Keyframe(1.4583F, AnimationHelper.createRotationalVector(8.0F, 0.0F, 7.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(1.9583F, AnimationHelper.createRotationalVector(9.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("main", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("main", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(0.5F, AnimationHelper.createTranslationalVector(1.8F, 1.2F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(1.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
@@ -26,7 +34,11 @@ public class TriviaBotAnimations {
             .addBoneAnimation("microphone", new Transformation(Transformation.Targets.SCALE,
                     new Keyframe(0.0F, AnimationHelper.createScalingVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("body", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("body", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(0.5F, AnimationHelper.createTranslationalVector(1.8F, 1.2F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(1.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
@@ -72,7 +84,11 @@ public class TriviaBotAnimations {
                     new Keyframe(1.875F, AnimationHelper.createRotationalVector(-3.0F, 0.0F, -5.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.0F, AnimationHelper.createRotationalVector(-3.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("torso", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("torso", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.2F), Transformation.Interpolations.LINEAR)
             ))
             .addBoneAnimation("legs", new Transformation(Transformation.Targets.ROTATE,
@@ -94,7 +110,11 @@ public class TriviaBotAnimations {
                     new Keyframe(1.875F, AnimationHelper.createRotationalVector(-13.0F, 0.0F, -5.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.0F, AnimationHelper.createRotationalVector(-13.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("legs", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("legs", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.3F, 1.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(1.0F, AnimationHelper.createTranslationalVector(0.0F, -0.9F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.0F, AnimationHelper.createTranslationalVector(0.0F, 0.3F, 1.0F), Transformation.Interpolations.CUBIC)
@@ -104,12 +124,20 @@ public class TriviaBotAnimations {
                     new Keyframe(1.0F, AnimationHelper.createRotationalVector(-5.0F, -8.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("dots", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("dots", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -1.4F), Transformation.Interpolations.LINEAR)
             ))
             .build();
 
+    //? if <= 1.21.5 {
     public static final Animation idle = Animation.Builder.create(4.5F).looping()
+    //?} else {
+    /*public static final AnimationDefinition idle = AnimationDefinition.Builder.create(4.5F).looping()
+    *///?}
             .addBoneAnimation("main", new Transformation(Transformation.Targets.ROTATE,
                     new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(0.3333F, AnimationHelper.createRotationalVector(2.497F, 0.109F, -2.497F), Transformation.Interpolations.CUBIC),
@@ -124,13 +152,21 @@ public class TriviaBotAnimations {
                     new Keyframe(4.2083F, AnimationHelper.createRotationalVector(2.497F, -0.109F, 2.497F), Transformation.Interpolations.CUBIC),
                     new Keyframe(4.625F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("main", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("main", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(1.875F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(2.0F, AnimationHelper.createTranslationalVector(0.0F, 2.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(2.125F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("body", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("body", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(1.875F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(2.0F, AnimationHelper.createTranslationalVector(0.0F, 2.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -189,33 +225,53 @@ public class TriviaBotAnimations {
                     new Keyframe(4.125F, AnimationHelper.createRotationalVector(-1.0F, 0.0F, -6.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(4.5F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("green", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("green", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(1.6657F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(1.6667F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.4F), Transformation.Interpolations.LINEAR),
                     new Keyframe(1.999F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.4F), Transformation.Interpolations.LINEAR),
                     new Keyframe(2.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("yellow", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("yellow", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(1.3323F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(1.3333F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.4F), Transformation.Interpolations.LINEAR),
                     new Keyframe(2.3323F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.4F), Transformation.Interpolations.LINEAR),
                     new Keyframe(2.3333F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("red", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("red", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(0.999F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(1.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.4F), Transformation.Interpolations.LINEAR),
                     new Keyframe(2.6657F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.4F), Transformation.Interpolations.LINEAR),
                     new Keyframe(2.6667F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("dots", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("dots", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -1.4F), Transformation.Interpolations.LINEAR)
             ))
             .build();
 
+    //? if <= 1.21.5 {
     public static final Animation walk = Animation.Builder.create(3.6667F).looping()
+    //?} else {
+    /*public static final AnimationDefinition walk = AnimationDefinition.Builder.create(3.6667F).looping()
+    *///?}
             .addBoneAnimation("main", new Transformation(Transformation.Targets.ROTATE,
                     new Keyframe(0.0417F, AnimationHelper.createRotationalVector(2.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(0.6667F, AnimationHelper.createRotationalVector(2.49F, 0.217F, -4.995F), Transformation.Interpolations.CUBIC),
@@ -224,7 +280,11 @@ public class TriviaBotAnimations {
                     new Keyframe(3.125F, AnimationHelper.createRotationalVector(2.478F, -0.326F, 7.492F), Transformation.Interpolations.CUBIC),
                     new Keyframe(3.7083F, AnimationHelper.createRotationalVector(2.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("body", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("body", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
             ))
             .addBoneAnimation("righthand", new Transformation(Transformation.Targets.ROTATE,
@@ -262,7 +322,11 @@ public class TriviaBotAnimations {
                     new Keyframe(3.125F, AnimationHelper.createRotationalVector(6.962F, 0.867F, -4.924F), Transformation.Interpolations.CUBIC),
                     new Keyframe(3.6667F, AnimationHelper.createRotationalVector(7.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("legs", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("legs", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.5F), Transformation.Interpolations.CUBIC),
                     new Keyframe(0.5417F, AnimationHelper.createTranslationalVector(0.0F, 0.3F, 0.5F), Transformation.Interpolations.CUBIC),
                     new Keyframe(1.3333F, AnimationHelper.createTranslationalVector(0.0F, -0.9F, 0.5F), Transformation.Interpolations.CUBIC),
@@ -270,33 +334,53 @@ public class TriviaBotAnimations {
                     new Keyframe(3.0417F, AnimationHelper.createTranslationalVector(0.0F, -0.9F, 0.5F), Transformation.Interpolations.CUBIC),
                     new Keyframe(3.6667F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.5F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("yellow", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("yellow", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(1.3323F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(1.3333F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.4F), Transformation.Interpolations.LINEAR),
                     new Keyframe(2.3323F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.4F), Transformation.Interpolations.LINEAR),
                     new Keyframe(2.3333F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("green", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("green", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(1.6657F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(1.6667F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.4F), Transformation.Interpolations.LINEAR),
                     new Keyframe(1.999F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.4F), Transformation.Interpolations.LINEAR),
                     new Keyframe(2.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("red", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("red", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(0.999F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(1.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.4F), Transformation.Interpolations.LINEAR),
                     new Keyframe(2.6657F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.4F), Transformation.Interpolations.LINEAR),
                     new Keyframe(2.6667F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("dots", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("dots", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -1.4F), Transformation.Interpolations.LINEAR)
             ))
             .build();
 
+    //? if <= 1.21.5 {
     public static final Animation countdown = Animation.Builder.create(4.0F).looping()
+    //?} else {
+    /*public static final AnimationDefinition countdown = AnimationDefinition.Builder.create(4.0F).looping()
+    *///?}
             .addBoneAnimation("main", new Transformation(Transformation.Targets.ROTATE,
                     new Keyframe(0.0F, AnimationHelper.createRotationalVector(2.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(0.8333F, AnimationHelper.createRotationalVector(2.498F, 0.087F, -1.998F), Transformation.Interpolations.CUBIC),
@@ -322,7 +406,11 @@ public class TriviaBotAnimations {
                     new Keyframe(3.499F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 270.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(3.5F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 315.0F), Transformation.Interpolations.LINEAR)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("body", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("body", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
             ))
             .addBoneAnimation("righthand", new Transformation(Transformation.Targets.ROTATE,
@@ -352,7 +440,11 @@ public class TriviaBotAnimations {
                     new Keyframe(2.875F, AnimationHelper.createRotationalVector(3.993F, 0.226F, -3.242F), Transformation.Interpolations.CUBIC),
                     new Keyframe(3.9167F, AnimationHelper.createRotationalVector(4.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("legs", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("legs", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.5F), Transformation.Interpolations.CUBIC),
                     new Keyframe(0.5417F, AnimationHelper.createTranslationalVector(0.0F, 0.3F, 0.5F), Transformation.Interpolations.CUBIC),
                     new Keyframe(1.375F, AnimationHelper.createTranslationalVector(0.0F, -0.9F, 0.5F), Transformation.Interpolations.CUBIC),
@@ -360,27 +452,47 @@ public class TriviaBotAnimations {
                     new Keyframe(3.25F, AnimationHelper.createTranslationalVector(0.0F, -0.9F, 0.5F), Transformation.Interpolations.CUBIC),
                     new Keyframe(3.9167F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.5F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("clock", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("clock", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -1.4F), Transformation.Interpolations.LINEAR)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("mouth", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("mouth", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.4F), Transformation.Interpolations.LINEAR)
             ))
             .build();
 
+    //? if <= 1.21.5 {
     public static final Animation analyzing = Animation.Builder.create(4.0F)
+    //?} else {
+    /*public static final AnimationDefinition analyzing = AnimationDefinition.Builder.create(4.0F)
+    *///?}
             .addBoneAnimation("main", new Transformation(Transformation.Targets.ROTATE,
                     new Keyframe(0.0F, AnimationHelper.createRotationalVector(2.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.0F, AnimationHelper.createRotationalVector(7.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(4.0F, AnimationHelper.createRotationalVector(2.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("main", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("main", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(1.0F, AnimationHelper.createTranslationalVector(0.0F, 0.5F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(3.0F, AnimationHelper.createTranslationalVector(0.0F, -0.5F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(4.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("body", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("body", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(1.0F, AnimationHelper.createTranslationalVector(0.0F, 0.5F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(3.0F, AnimationHelper.createTranslationalVector(0.0F, -0.5F, 0.0F), Transformation.Interpolations.CUBIC),
@@ -401,7 +513,11 @@ public class TriviaBotAnimations {
                     new Keyframe(2.9167F, AnimationHelper.createRotationalVector(-3.657F, 0.731F, 3.956F), Transformation.Interpolations.CUBIC),
                     new Keyframe(4.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("legs", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("legs", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.5F), Transformation.Interpolations.CUBIC),
                     new Keyframe(0.5417F, AnimationHelper.createTranslationalVector(0.0F, 0.3F, 0.5F), Transformation.Interpolations.CUBIC),
                     new Keyframe(1.375F, AnimationHelper.createTranslationalVector(0.0F, -0.6F, 0.5F), Transformation.Interpolations.CUBIC),
@@ -427,7 +543,11 @@ public class TriviaBotAnimations {
                     new Keyframe(3.8333F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -14.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(3.875F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("three", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("three", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.4F), Transformation.Interpolations.LINEAR),
                     new Keyframe(0.874F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.4F), Transformation.Interpolations.LINEAR),
                     new Keyframe(0.875F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -442,7 +562,11 @@ public class TriviaBotAnimations {
                     new Keyframe(3.5F, AnimationHelper.createTranslationalVector(0.0F, 1.25F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(3.5833F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("one", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("one", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.4F), Transformation.Interpolations.LINEAR),
                     new Keyframe(0.0823F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.4F), Transformation.Interpolations.LINEAR),
                     new Keyframe(0.0833F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -459,7 +583,11 @@ public class TriviaBotAnimations {
                     new Keyframe(2.75F, AnimationHelper.createTranslationalVector(0.0F, 1.25F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(2.8333F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("two", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("two", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.4F), Transformation.Interpolations.LINEAR),
                     new Keyframe(0.4573F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.4F), Transformation.Interpolations.LINEAR),
                     new Keyframe(0.4583F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -476,12 +604,20 @@ public class TriviaBotAnimations {
                     new Keyframe(3.1667F, AnimationHelper.createTranslationalVector(0.0F, 1.25F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(3.25F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("processing", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("processing", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -1.4F), Transformation.Interpolations.LINEAR)
             ))
             .build();
 
+    //? if <= 1.21.5 {
     public static final Animation answer_incorrect = Animation.Builder.create(11.1667F)
+    //?} else {
+    /*public static final AnimationDefinition answer_incorrect = AnimationDefinition.Builder.create(11.1667F)
+    *///?}
             .addBoneAnimation("main", new Transformation(Transformation.Targets.ROTATE,
                     new Keyframe(0.8333F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(0.9583F, AnimationHelper.createRotationalVector(0.0F, -25.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -504,13 +640,21 @@ public class TriviaBotAnimations {
                     new Keyframe(3.5833F, AnimationHelper.createRotationalVector(0.0F, 10.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(3.6667F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("main", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("main", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(9.7083F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(9.874F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(9.875F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(10.625F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.5F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("angry", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("angry", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0417F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(4.4573F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(4.4583F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -1.4F), Transformation.Interpolations.LINEAR)
@@ -540,7 +684,11 @@ public class TriviaBotAnimations {
                     new Keyframe(9.7083F, AnimationHelper.createRotationalVector(-23.1F, -1.44F, 1.73F), Transformation.Interpolations.CUBIC),
                     new Keyframe(10.625F, AnimationHelper.createRotationalVector(-25.171F, 25.039F, 6.148F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("righthand", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("righthand", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(4.8333F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(5.0417F, AnimationHelper.createTranslationalVector(0.0F, 1.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(5.7083F, AnimationHelper.createTranslationalVector(0.0F, 1.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -554,7 +702,11 @@ public class TriviaBotAnimations {
                     new Keyframe(0.25F, AnimationHelper.createRotationalVector(10.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(0.4167F, AnimationHelper.createRotationalVector(2.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("microphone", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("microphone", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(0.1667F, AnimationHelper.createTranslationalVector(0.0F, -8.5F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(0.25F, AnimationHelper.createTranslationalVector(0.0F, -7.5F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -611,12 +763,20 @@ public class TriviaBotAnimations {
                     new Keyframe(9.7083F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(10.625F, AnimationHelper.createRotationalVector(-25.0F, -27.5F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("lefthand", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("lefthand", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(7.3333F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(8.0F, AnimationHelper.createTranslationalVector(0.0F, 1.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(8.5F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("legs", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("legs", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(0.5417F, AnimationHelper.createTranslationalVector(0.0F, 0.3F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(1.375F, AnimationHelper.createTranslationalVector(0.0F, -0.6F, 0.0F), Transformation.Interpolations.CUBIC),
@@ -633,12 +793,20 @@ public class TriviaBotAnimations {
                     new Keyframe(0.0F, AnimationHelper.createRotationalVector(-25.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(0.2083F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("mouth", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("mouth", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.1F), Transformation.Interpolations.LINEAR),
                     new Keyframe(4.7073F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.1F), Transformation.Interpolations.LINEAR),
                     new Keyframe(4.7083F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.4F), Transformation.Interpolations.LINEAR)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("triviabot", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("triviabot", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.0833F, AnimationHelper.createTranslationalVector(0.0F, 0.5F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(4.5833F, AnimationHelper.createTranslationalVector(0.0F, -0.44F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -668,7 +836,11 @@ public class TriviaBotAnimations {
             ))
             .build();
 
+    //? if <= 1.21.5 {
     public static final Animation answer_correct = Animation.Builder.create(9.0F)
+    //?} else {
+    /*public static final AnimationDefinition answer_correct = AnimationDefinition.Builder.create(9.0F)
+    *///?}
             .addBoneAnimation("main", new Transformation(Transformation.Targets.ROTATE,
                     new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(0.2083F, AnimationHelper.createRotationalVector(5.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
@@ -697,7 +869,11 @@ public class TriviaBotAnimations {
                     new Keyframe(7.9583F, AnimationHelper.createRotationalVector(5.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(8.7083F, AnimationHelper.createRotationalVector(-22.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("main", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("main", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(0.6667F, AnimationHelper.createTranslationalVector(0.0F, 3.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(0.8333F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -727,7 +903,11 @@ public class TriviaBotAnimations {
                     new Keyframe(8.125F, AnimationHelper.createTranslationalVector(0.0F, -2.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(8.7083F, AnimationHelper.createTranslationalVector(0.0F, -2.5F, 1.5F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("happy", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("happy", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(0.124F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(0.125F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -1.4F), Transformation.Interpolations.LINEAR)
@@ -739,7 +919,11 @@ public class TriviaBotAnimations {
                     new Keyframe(1.7917F, AnimationHelper.createRotationalVector(-0.134F, -0.884F, -3.418F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("body", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("body", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(0.6667F, AnimationHelper.createTranslationalVector(0.0F, 3.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(0.8333F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -813,7 +997,11 @@ public class TriviaBotAnimations {
                     new Keyframe(8.125F, AnimationHelper.createRotationalVector(-55.851F, 31.765F, -14.549F), Transformation.Interpolations.CUBIC),
                     new Keyframe(9.0F, AnimationHelper.createRotationalVector(-57.071F, 44.222F, -15.459F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("righthand", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("righthand", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.4583F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(0.625F, AnimationHelper.createTranslationalVector(-0.5F, 1.5F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(2.2073F, AnimationHelper.createTranslationalVector(-0.5F, 1.5F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -928,7 +1116,11 @@ public class TriviaBotAnimations {
                     new Keyframe(5.25F, AnimationHelper.createRotationalVector(-7.5F, 0.0F, 1.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(5.4167F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("legs", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("legs", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, -0.6F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(0.9167F, AnimationHelper.createTranslationalVector(0.0F, 0.3F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(1.8333F, AnimationHelper.createTranslationalVector(0.0F, -0.6F, 0.0F), Transformation.Interpolations.CUBIC),
@@ -941,20 +1133,32 @@ public class TriviaBotAnimations {
                     new Keyframe(6.4583F, AnimationHelper.createTranslationalVector(0.0F, 0.3F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(6.9167F, AnimationHelper.createTranslationalVector(0.0F, -0.4F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("mouth", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("mouth", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.1F), Transformation.Interpolations.LINEAR),
                     new Keyframe(0.374F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.1F), Transformation.Interpolations.LINEAR),
                     new Keyframe(0.375F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.4F), Transformation.Interpolations.LINEAR)
             ))
             .build();
 
+    //? if <= 1.21.5 {
     public static final Animation snail_transform = Animation.Builder.create(3.0F)
+    //?} else {
+    /*public static final AnimationDefinition snail_transform = AnimationDefinition.Builder.create(3.0F)
+    *///?}
             .addBoneAnimation("main", new Transformation(Transformation.Targets.ROTATE,
                     new Keyframe(2.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.5F, AnimationHelper.createRotationalVector(0.0F, -90.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.9167F, AnimationHelper.createRotationalVector(0.0F, -90.0F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("main", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("main", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.0F, AnimationHelper.createTranslationalVector(0.0F, -12.375F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(2.5F, AnimationHelper.createTranslationalVector(0.0F, -14.5F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -964,7 +1168,11 @@ public class TriviaBotAnimations {
                     new Keyframe(2.4167F, AnimationHelper.createRotationalVector(0.0F, -90.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.9167F, AnimationHelper.createRotationalVector(0.0F, -90.0F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("body", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("body", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.0F, AnimationHelper.createTranslationalVector(0.0F, -12.375F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(2.5F, AnimationHelper.createTranslationalVector(0.0F, -14.5F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -974,7 +1182,11 @@ public class TriviaBotAnimations {
                     new Keyframe(0.5F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.0F, AnimationHelper.createRotationalVector(-180.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("righthand", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("righthand", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.0F, AnimationHelper.createTranslationalVector(0.0F, 1.0F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
@@ -982,7 +1194,11 @@ public class TriviaBotAnimations {
                     new Keyframe(2.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.5F, AnimationHelper.createRotationalVector(-88.999F, -89.0F, 102.249F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("actualhand", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("actualhand", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(2.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.5F, AnimationHelper.createTranslationalVector(-1.675F, -1.125F, -2.175F), Transformation.Interpolations.CUBIC)
             ))
@@ -994,7 +1210,11 @@ public class TriviaBotAnimations {
                     new Keyframe(0.5F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(1.2917F, AnimationHelper.createRotationalVector(-72.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("microphone", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("microphone", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(1.2917F, AnimationHelper.createTranslationalVector(0.0F, 2.75F, 5.25F), Transformation.Interpolations.CUBIC)
             ))
@@ -1010,7 +1230,11 @@ public class TriviaBotAnimations {
                     new Keyframe(1.9583F, AnimationHelper.createRotationalVector(-180.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.5F, AnimationHelper.createRotationalVector(-95.0F, 87.0F, 80.5F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("lefthand", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("lefthand", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(2.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -1.25F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.25F, AnimationHelper.createTranslationalVector(-9.0F, 0.0F, -6.87F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.5F, AnimationHelper.createTranslationalVector(-17.4F, 0.925F, -1.0F), Transformation.Interpolations.CUBIC)
@@ -1024,7 +1248,11 @@ public class TriviaBotAnimations {
                     new Keyframe(2.5F, AnimationHelper.createRotationalVector(0.0F, 90.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.9167F, AnimationHelper.createRotationalVector(0.0F, 90.0F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("torso", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("torso", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(2.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.5F, AnimationHelper.createTranslationalVector(-2.8F, 2.275F, 0.7F), Transformation.Interpolations.CUBIC)
             ))
@@ -1032,7 +1260,11 @@ public class TriviaBotAnimations {
                     new Keyframe(2.0F, AnimationHelper.createScalingVector(1.0F, 1.0F, 1.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(2.5F, AnimationHelper.createScalingVector(0.6F, 0.6F, 2.0F), Transformation.Interpolations.LINEAR)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("legs", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("legs", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(2.0F, AnimationHelper.createTranslationalVector(0.0F, 8.5F, 0.0F), Transformation.Interpolations.LINEAR)
             ))
@@ -1040,7 +1272,11 @@ public class TriviaBotAnimations {
                     new Keyframe(1.9583F, AnimationHelper.createScalingVector(1.0F, 1.0F, 1.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(2.0F, AnimationHelper.createScalingVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("bottom", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("bottom", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.0F, AnimationHelper.createTranslationalVector(0.0F, 2.25F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
@@ -1048,10 +1284,18 @@ public class TriviaBotAnimations {
                     new Keyframe(1.9583F, AnimationHelper.createScalingVector(1.0F, 1.0F, 1.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(2.0F, AnimationHelper.createScalingVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("snail", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("snail", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -1.4F), Transformation.Interpolations.LINEAR)
             ))
+            //? if <= 1.21.4 {
             .addBoneAnimation("mouth", new Transformation(Transformation.Targets.TRANSLATE,
+            //?} else {
+            /*.addBoneAnimation("mouth", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            *///?}
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.4F), Transformation.Interpolations.LINEAR)
             ))
             .build();

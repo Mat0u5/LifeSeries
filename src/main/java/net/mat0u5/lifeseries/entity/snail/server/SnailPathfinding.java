@@ -74,10 +74,10 @@ public class SnailPathfinding {
         if (pos == null) return;
         if (groundPathFinder != null) groundPathFinder.teleport(world, snail.getX(), pos.getY() + 1.0, snail.getZ(), EnumSet.noneOf(PositionFlag.class), snail.getYaw(), snail.getPitch());
         //?} else {
-        /*if (pathFinder != null) snail.pathFinder.teleport(world, snail.getX(), snail.getY(), snail.getZ(), EnumSet.noneOf(PositionFlag.class), getYaw(), getPitch(), false);
+        /*if (pathFinder != null) pathFinder.teleport(world, snail.getX(), snail.getY(), snail.getZ(), EnumSet.noneOf(PositionFlag.class), snail.getYaw(), snail.getPitch(), false);
         BlockPos pos = getGroundBlock();
         if (pos == null) return;
-        if (groundPathFinder != null) snail.groundPathFinder.teleport(world, snail.getX(), pos.getY()+1, snail.getZ(), EnumSet.noneOf(PositionFlag.class), getYaw(), getPitch(), false);
+        if (groundPathFinder != null) groundPathFinder.teleport(world, snail.getX(), pos.getY()+1, snail.getZ(), EnumSet.noneOf(PositionFlag.class), snail.getYaw(), snail.getPitch(), false);
         *///?}
     }
 
