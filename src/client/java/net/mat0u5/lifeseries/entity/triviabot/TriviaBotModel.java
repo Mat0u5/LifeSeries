@@ -316,14 +316,14 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
     @Override
     public void setAngles(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.getPart().traverse().forEach(ModelPart::resetTransform);
-        this.updateAnimation(entity.glideAnimationState, TriviaBotAnimations.glide, ageInTicks);
-        this.updateAnimation(entity.idleAnimationState, TriviaBotAnimations.idle, ageInTicks);
-        this.updateAnimation(entity.walkAnimationState, TriviaBotAnimations.walk, ageInTicks);
-        this.updateAnimation(entity.countdownAnimationState, TriviaBotAnimations.countdown, ageInTicks);
-        this.updateAnimation(entity.analyzingAnimationState, TriviaBotAnimations.analyzing, ageInTicks);
-        this.updateAnimation(entity.answerCorrectAnimationState, TriviaBotAnimations.answer_correct, ageInTicks);
-        this.updateAnimation(entity.answerIncorrectAnimationState, TriviaBotAnimations.answer_incorrect, ageInTicks);
-        this.updateAnimation(entity.snailTransformAnimationState, TriviaBotAnimations.snail_transform, ageInTicks);
+        this.updateAnimation(entity.clientData.glideAnimationState, TriviaBotAnimations.glide, ageInTicks);
+        this.updateAnimation(entity.clientData.idleAnimationState, TriviaBotAnimations.idle, ageInTicks);
+        this.updateAnimation(entity.clientData.walkAnimationState, TriviaBotAnimations.walk, ageInTicks);
+        this.updateAnimation(entity.clientData.countdownAnimationState, TriviaBotAnimations.countdown, ageInTicks);
+        this.updateAnimation(entity.clientData.analyzingAnimationState, TriviaBotAnimations.analyzing, ageInTicks);
+        this.updateAnimation(entity.clientData.answerCorrectAnimationState, TriviaBotAnimations.answer_correct, ageInTicks);
+        this.updateAnimation(entity.clientData.answerIncorrectAnimationState, TriviaBotAnimations.answer_incorrect, ageInTicks);
+        this.updateAnimation(entity.clientData.snailTransformAnimationState, TriviaBotAnimations.snail_transform, ageInTicks);
     }
 
     @Override

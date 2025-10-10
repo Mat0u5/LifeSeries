@@ -10,6 +10,7 @@ import de.maxhenkel.voicechat.api.packets.LocationalSoundPacket;
 import de.maxhenkel.voicechat.api.packets.MicrophonePacket;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
+import net.mat0u5.lifeseries.entity.triviabot.server.TriviaHandler;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
@@ -81,7 +82,7 @@ public class VoicechatMain implements VoicechatPlugin {
             VoicechatConnection connection = event.getSenderConnection();
             if (connection == null) return;
             UUID senderUUID = connection.getPlayer().getUuid();
-            if (!TriviaBot.cursedRoboticVoicePlayers.contains(senderUUID)) {
+            if (!TriviaHandler.cursedRoboticVoicePlayers.contains(senderUUID)) {
                 return;
             }
 

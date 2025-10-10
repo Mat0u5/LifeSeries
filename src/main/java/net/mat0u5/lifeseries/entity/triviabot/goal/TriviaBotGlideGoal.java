@@ -18,7 +18,7 @@ public final class TriviaBotGlideGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        if (mob.gliding) {
+        if (mob.isGliding()) {
             return true;
         }
 
@@ -26,7 +26,7 @@ public final class TriviaBotGlideGoal extends Goal {
             return false;
         }
 
-        if (mob.getDistanceToGroundBlock() <= 1.5) {
+        if (mob.pathfinding.getDistanceToGroundBlock() <= 1.5) {
             return false;
         }
 
@@ -41,12 +41,12 @@ public final class TriviaBotGlideGoal extends Goal {
     @Override
     public void start() {
         ticksWaited = 0;
-        mob.gliding = true;
+        mob.setGliding(true);
     }
 
     @Override
     public boolean shouldContinue() {
-        return mob.getDistanceToGroundBlock() >= 1;
+        return mob.pathfinding.getDistanceToGroundBlock() >= 1;
     }
 
     @Override
@@ -56,7 +56,7 @@ public final class TriviaBotGlideGoal extends Goal {
 
     @Override
     public void stop() {
-        mob.gliding = false;
-        mob.updateNavigation();
+        mob.setGliding(false);
+        mob.pathfinding.updateNavigation();
     }
 }

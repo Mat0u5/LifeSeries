@@ -24,7 +24,7 @@ public final class TriviaBotTeleportGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        if (mob.interactedWith) {
+        if (mob.interactedWith()) {
             return false;
         }
         if (teleportCooldown > 0) {
@@ -34,10 +34,10 @@ public final class TriviaBotTeleportGoal extends Goal {
 
 
 
-        if (mob.getBoundPlayer() == null) {
+        if (mob.serverData.getBoundPlayer() == null) {
             return false;
         }
-        ServerPlayerEntity boundPlayer = mob.getBoundPlayer();
+        ServerPlayerEntity boundPlayer = mob.serverData.getBoundPlayer();
 
         float distFromPlayer = mob.distanceTo(boundPlayer);
         if (distFromPlayer > TriviaBot.MAX_DISTANCE) return true;
@@ -59,7 +59,7 @@ public final class TriviaBotTeleportGoal extends Goal {
     @Override
     public void start() {
         teleportCooldown = 20;
-        mob.fakeTeleportToPlayer();
+        mob.pathfinding.fakeTeleportToPlayer();
     }
 
     @Override

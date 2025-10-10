@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
+import net.mat0u5.lifeseries.entity.triviabot.server.TriviaHandler;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -73,7 +74,7 @@ public class WildLife extends Season {
         super.initialize();
         Snails.loadConfig();
         Snails.loadSnailNames();
-        TriviaBot.initializeItemSpawner();
+        TriviaHandler.initializeItemSpawner();
     }
 
     @Override
@@ -254,11 +255,11 @@ public class WildLife extends Season {
 
         super.onPlayerDeath(player, source);
 
-        TriviaBot.cursedGigantificationPlayers.remove(player.getUuid());
-        TriviaBot.cursedHeartPlayers.remove(player.getUuid());
+        TriviaHandler.cursedGigantificationPlayers.remove(player.getUuid());
+        TriviaHandler.cursedHeartPlayers.remove(player.getUuid());
         AttributeUtils.resetMaxPlayerHealthIfNecessary(player);
 
-        TriviaBot.cursedMoonJumpPlayers.remove(player.getUuid());
+        TriviaHandler.cursedMoonJumpPlayers.remove(player.getUuid());
         AttributeUtils.resetPlayerJumpHeight(player);
 
         Superpower power = SuperpowersWildcard.getSuperpowerInstance(player);

@@ -20,9 +20,9 @@ public class TriviaBotLookAtPlayerGoal extends Goal {
     }
 
     public boolean canStart() {
-        if (!mob.interactedWith) return false;
+        if (!mob.interactedWith()) return false;
 
-        target = mob.getBoundPlayer();
+        target = mob.serverData.getBoundPlayer();
         if (target == null) return false;
 
         return this.mob.squaredDistanceTo(this.target) <= RANGE_SQUARED;

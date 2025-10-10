@@ -135,7 +135,7 @@ public class ServerPlayNetworkHandlerMixin {
         }
         if (TriviaWildcard.bots.containsKey(player.getUuid())) {
             TriviaBot bot = TriviaWildcard.bots.get(player.getUuid());
-            if (bot.interactedWith && !bot.submittedAnswer) {
+            if (bot.interactedWith() && !bot.submittedAnswer()) {
                 player.sendMessage(Text.of("<Trivia Bot> No phoning a friend allowed!"));
                 ci.cancel();
                 return true;

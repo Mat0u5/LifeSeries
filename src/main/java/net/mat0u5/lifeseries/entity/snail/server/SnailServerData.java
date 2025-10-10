@@ -66,6 +66,7 @@ public class SnailServerData {
     }
 
     public boolean tick() {
+        if (snail.getWorldEntity().isClient()) return true;
         if (snail.isPaused()) {
             snail.getNavigation().stop();
             return false;

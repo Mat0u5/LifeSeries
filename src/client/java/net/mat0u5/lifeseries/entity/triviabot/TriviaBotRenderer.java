@@ -48,14 +48,14 @@ public class TriviaBotRenderer extends AgeableMobEntityRenderer<TriviaBot, Trivi
     public void updateRenderState(TriviaBot triviaBot, TriviaBotRenderState state, float f) {
         super.updateRenderState(triviaBot, state, f);
 
-        state.glideAnimationState.copyFrom(triviaBot.glideAnimationState);
-        state.idleAnimationState.copyFrom(triviaBot.idleAnimationState);
-        state.walkAnimationState.copyFrom(triviaBot.walkAnimationState);
-        state.countdownAnimationState.copyFrom(triviaBot.countdownAnimationState);
-        state.analyzingAnimationState.copyFrom(triviaBot.analyzingAnimationState);
-        state.answerCorrectAnimationState.copyFrom(triviaBot.answerCorrectAnimationState);
-        state.answerIncorrectAnimationState.copyFrom(triviaBot.answerIncorrectAnimationState);
-        state.snailTransformAnimationState.copyFrom(triviaBot.snailTransformAnimationState);
+        state.glideAnimationState.copyFrom(triviaBot.clientData.glideAnimationState);
+        state.idleAnimationState.copyFrom(triviaBot.clientData.idleAnimationState);
+        state.walkAnimationState.copyFrom(triviaBot.clientData.walkAnimationState);
+        state.countdownAnimationState.copyFrom(triviaBot.clientData.countdownAnimationState);
+        state.analyzingAnimationState.copyFrom(triviaBot.clientData.analyzingAnimationState);
+        state.answerCorrectAnimationState.copyFrom(triviaBot.clientData.answerCorrectAnimationState);
+        state.answerIncorrectAnimationState.copyFrom(triviaBot.clientData.answerIncorrectAnimationState);
+        state.snailTransformAnimationState.copyFrom(triviaBot.clientData.snailTransformAnimationState);
     }
 }
 *///?}
