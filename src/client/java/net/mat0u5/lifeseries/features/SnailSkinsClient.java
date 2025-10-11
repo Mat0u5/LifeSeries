@@ -231,7 +231,7 @@ public class SnailSkinsClient {
     }
 
     private static int getColor(NativeImage image, int x, int y) {
-        //? if < 1.21.9 {
+        //? if <= 1.21 {
         return image.getColor(x, y);
          //?} else {
         /*return image.getColorArgb(x, y);
@@ -239,7 +239,7 @@ public class SnailSkinsClient {
     }
 
     private static void setColor(NativeImage image, int x, int y, int color) {
-        //? if < 1.21.9 {
+        //? if <= 1.21 {
         image.setColor(x, y, color);
          //?} else {
         /*image.setColorArgb(x, y, color);
