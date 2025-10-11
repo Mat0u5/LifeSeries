@@ -86,8 +86,6 @@ public class Snails extends Wildcard {
         Snail snail = MobRegistry.SNAIL.spawn(PlayerUtils.getServerWorld(player), pos, SpawnReason.COMMAND);
         if (snail != null) {
             snail.serverData.setBoundPlayer(player);
-            //TODO
-            //snail.updateSkin(player);
             snails.put(player.getUuid(), snail);
         }
     }
@@ -119,8 +117,7 @@ public class Snails extends Wildcard {
     public static void reloadSnailSkins() {
         for (Snail snail : snails.values()) {
             if (snail == null) return;
-            //TODO
-            //snail.updateSkin(snail.getActualBoundPlayer());
+            snail.serverData.updateSkin(snail.serverData.getBoundPlayer());
         }
     }
 

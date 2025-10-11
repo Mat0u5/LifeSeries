@@ -58,6 +58,7 @@ public class SnailServerData {
         sendAirPacket();
         boundPlayerUUID = player.getUuid();
         updateSnailName();
+        updateSkin(player);
     }
 
     public void updateSnailName() {
@@ -280,5 +281,9 @@ public class SnailServerData {
         if (snail.getWorldEntity().isClient()) return null;
         if (server == null) return null;
         return PlayerUtils.getPlayer(boundPlayerUUID);
+    }
+
+    public void updateSkin(PlayerEntity player) {
+        //TODO
     }
 }
