@@ -21,15 +21,15 @@ public final class SnailGlideGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        if (mob.isGliding()) {
+        if (mob.isSnailGliding()) {
             return true;
         }
 
-        if (mob.isLanding()) {
+        if (mob.isSnailLanding()) {
             return false;
         }
 
-        if (mob.getVelocity().y >= 0 || mob.isOnGround() || mob.isFlying()) {
+        if (mob.getVelocity().y >= 0 || mob.isOnGround() || mob.isSnailFlying()) {
             return false;
         }
 
@@ -48,14 +48,14 @@ public final class SnailGlideGoal extends Goal {
     @Override
     public void start() {
         ticksWaited = 0;
-        mob.setGliding(true);
+        mob.setSnailGliding(true);
     }
 
     @Override
     public boolean shouldContinue() {
         boolean canWalk = mob.pathfinding.canPathToPlayer(false);
         if (!canWalk) {
-            mob.setFlying(true);
+            mob.setSnailFlying(true);
             return false;
         }
 
@@ -69,7 +69,7 @@ public final class SnailGlideGoal extends Goal {
 
     @Override
     public void stop() {
-        mob.setGliding(false);
+        mob.setSnailGliding(false);
         mob.pathfinding.updateNavigation();
         mob.pathfinding.updateMoveControl();
     }

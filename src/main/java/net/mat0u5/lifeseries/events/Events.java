@@ -222,7 +222,7 @@ public class Events {
         if (player instanceof ServerPlayerEntity serverPlayer &&
                 world instanceof ServerWorld serverWorld && Main.isLogicalSide()) {
             try {
-                if (currentSeason instanceof SecretLife && PermissionManager.isAdmin(serverPlayer)) {
+                if (currentSeason instanceof SecretLife) {
                     TaskManager.onBlockUse(serverPlayer, serverWorld, hitResult);
                 }
                 if (blacklist == null) return ActionResult.PASS;

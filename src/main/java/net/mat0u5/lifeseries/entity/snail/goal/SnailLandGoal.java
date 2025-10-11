@@ -17,7 +17,7 @@ public final class SnailLandGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        if (!mob.isFlying() || mob.isGliding()) {
+        if (!mob.isSnailFlying() || mob.isSnailGliding()) {
             return false;
         }
 
@@ -64,16 +64,16 @@ public final class SnailLandGoal extends Goal {
 
     @Override
     public void start() {
-        mob.setLanding(true);
-        mob.setFlying(false);
-        mob.setGliding(false);
+        mob.setSnailLanding(true);
+        mob.setSnailFlying(false);
+        mob.setSnailGliding(false);
     }
 
     @Override
     public void stop() {
-        mob.setLanding(false);
-        mob.setFlying(false);
-        mob.setGliding(false);
+        mob.setSnailLanding(false);
+        mob.setSnailFlying(false);
+        mob.setSnailGliding(false);
         mob.pathfinding.updateNavigation();
         mob.pathfinding.updateMoveControl();
     }

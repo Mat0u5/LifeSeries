@@ -24,7 +24,7 @@ public final class SnailStartFlyingGoal extends Goal {
             return false;
         }
 
-        if (mob.isFlying()) {
+        if (mob.isSnailFlying()) {
             return false;
         }
 
@@ -52,7 +52,7 @@ public final class SnailStartFlyingGoal extends Goal {
 
     @Override
     public void start() {
-        mob.setFlying(true);
+        mob.setSnailFlying(true);
         mob.pathfinding.updateNavigation();
         mob.pathfinding.updateMoveControl();
     }

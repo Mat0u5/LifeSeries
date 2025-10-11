@@ -15,3 +15,10 @@ Removed all dependencies from the mod (Polymer and BIL, which were used for rend
 Custom rendering for the snail and trivia bot - this should fix ALL bugs with snails / bots being invisible sometimes.<br>
 The trivia bot quiz screen now shows the trivia entity in 1.21.6+.<br>
 Adding snail skins no longer requires a full reload (no more reloading screen on the client yipiiee).
+
+----------
+
+Sub-ins now have the snail skin of the player they are subbing in.<br>
+When a player stops subbing in for another player, their lives now return to what they were before.<br>
+You can no longer sit on snails and trivia bots with the superpunch power.<br>
+Bug fixes.

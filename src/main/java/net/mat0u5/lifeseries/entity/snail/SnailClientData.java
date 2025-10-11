@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.entity.snail;
 
+import net.mat0u5.lifeseries.utils.interfaces.IMorph;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.entity.AnimationState;
 
@@ -27,21 +28,21 @@ public class SnailClientData {
     private int stopAllAnimations = 0;
     public void updateAnimations() {
         if (stopAllAnimations <= 0) {
-            if ((!lastFlying && snail.isFlying())) {
+            if ((!lastFlying && snail.isSnailFlying())) {
                 pauseAllAnimations("startFly");
                 startFlyAnimationState.startIfNotRunning(snail.age);
                 stopAllAnimations = 15;
             }
-            else if ((!snail.isGliding() && lastGliding) || (!snail.isLanding() && lastLanding)) {
+            else if ((!snail.isSnailGliding() && lastGliding) || (!snail.isSnailLanding() && lastLanding)) {
                 pauseAllAnimations("stopFly");
                 stopFlyAnimationState.startIfNotRunning(snail.age);
                 stopAllAnimations = 15;
             }
-            else if (snail.isFlying()) {
+            else if (snail.isSnailFlying()) {
                 pauseAllAnimations("fly");
                 flyAnimationState.startIfNotRunning(snail.age);
             }
-            else if (snail.isGliding() || snail.isLanding()) {
+            else if (snail.isSnailGliding() || snail.isSnailLanding()) {
                 pauseAllAnimations("glide");
                 glideAnimationState.startIfNotRunning(snail.age);
             }
@@ -57,9 +58,9 @@ public class SnailClientData {
         else {
             stopAllAnimations--;
         }
-        lastFlying = snail.isFlying();
-        lastGliding = snail.isGliding();
-        lastLanding = snail.isLanding();
+        lastFlying = snail.isSnailFlying();
+        lastGliding = snail.isSnailGliding();
+        lastLanding = snail.isSnailLanding();
     }
     public void pauseAllAnimations(String except) {
         if (!except.equalsIgnoreCase("glide")) glideAnimationState.stop();

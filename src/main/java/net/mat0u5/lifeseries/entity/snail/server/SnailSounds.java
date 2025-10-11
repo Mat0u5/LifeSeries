@@ -34,13 +34,13 @@ public class SnailSounds {
             playDrownSound();
         }
 
-        if (snail.isGliding() || snail.isLanding()) {
+        if (snail.isSnailGliding() || snail.isSnailLanding()) {
             if (!lastGlidingOrLanding) {
                 playFallSound();
             }
         }
 
-        if (snail.isFlying()) {
+        if (snail.isSnailFlying()) {
             if (!lastFlying) {
                 playFlySound();
             }
@@ -52,7 +52,7 @@ public class SnailSounds {
                 playPropellerSound();
             }
         }
-        if (!snail.isFlying() && !snail.isGliding() && !snail.isLanding() && snail.forwardSpeed > 0.001) {
+        if (!snail.isSnailFlying() && !snail.isSnailGliding() && !snail.isSnailLanding() && snail.forwardSpeed > 0.001) {
             if (walkSoundCooldown > 0) {
                 walkSoundCooldown--;
             }
@@ -62,8 +62,8 @@ public class SnailSounds {
             }
         }
 
-        lastFlying = snail.isFlying();
-        lastGlidingOrLanding = snail.isGliding() || snail.isLanding();
+        lastFlying = snail.isSnailFlying();
+        lastGlidingOrLanding = snail.isSnailGliding() || snail.isSnailLanding();
     }
 
     public void playAttackSound() {

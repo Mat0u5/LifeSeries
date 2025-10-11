@@ -46,14 +46,14 @@ public final class SnailMineTowardsPlayerGoal extends SnailFlyGoal {
 
     @Override
     public void start() {
-        getMob().setMining(true);
+        getMob().setSnailMining(true);
         getMob().pathfinding.updateNavigation();
     }
 
     @Override
     public void stop() {
-        getMob().setMining(false);
-        getMob().setFlying(true);
+        getMob().setSnailMining(false);
+        getMob().setSnailFlying(true);
         getMob().pathfinding.updateNavigation();
     }
 }

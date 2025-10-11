@@ -2,17 +2,23 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.network.packet.s2c.play.EntityPassengersSetS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 
+import java.util.List;
+
 public class SuperPunch extends ToggleableSuperpower {
     private long ticks = 0;
     private Entity riding = null;
+    private static final List<EntityType<?>> bannedSittingEntities = List.of(MobRegistry.SNAIL, MobRegistry.TRIVIA_BOT);
+
     public SuperPunch(ServerPlayerEntity player) {
         super(player);
     }
@@ -55,6 +61,8 @@ public class SuperPunch extends ToggleableSuperpower {
     }
 
     public void tryRideEntity(Entity entity) {
+        if (entity == null) return;
+        if (bannedSittingEntities.contains(entity.getType())) return;
         ServerPlayerEntity rider = getPlayer();
         if (rider == null) return;
 

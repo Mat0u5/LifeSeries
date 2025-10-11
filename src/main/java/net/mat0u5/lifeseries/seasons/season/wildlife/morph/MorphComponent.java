@@ -1,6 +1,8 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.morph;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.entity.snail.Snail;
+import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShifting;
 import net.mat0u5.lifeseries.utils.interfaces.IMorph;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;

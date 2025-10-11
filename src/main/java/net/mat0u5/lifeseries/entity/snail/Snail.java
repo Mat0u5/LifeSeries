@@ -267,16 +267,16 @@ public class Snail extends HostileEntity {
     public void setSnailAttacking(boolean value) {
         this.dataTracker.set(attacking, value);
     }
-    public void setFlying(boolean value) {
+    public void setSnailFlying(boolean value) {
         this.dataTracker.set(flying, value);
     }
-    public void setGliding(boolean value) {
+    public void setSnailGliding(boolean value) {
         this.dataTracker.set(gliding, value);
     }
-    public void setLanding(boolean value) {
+    public void setSnailLanding(boolean value) {
         this.dataTracker.set(landing, value);
     }
-    public void setMining(boolean value) {
+    public void setSnailMining(boolean value) {
         this.dataTracker.set(mining, value);
     }
     public void setFromTrivia(boolean value) {
@@ -289,16 +289,16 @@ public class Snail extends HostileEntity {
     public boolean isSnailAttacking() {
         return this.dataTracker.get(attacking);
     }
-    public boolean isFlying() {
+    public boolean isSnailFlying() {
         return this.dataTracker.get(flying);
     }
-    public boolean isGliding() {
+    public boolean isSnailGliding() {
         return this.dataTracker.get(gliding);
     }
-    public boolean isLanding() {
+    public boolean isSnailLanding() {
         return this.dataTracker.get(landing);
     }
-    public boolean isMining() {
+    public boolean isSnailMining() {
         return this.dataTracker.get(mining);
     }
     public boolean isFromTrivia() {

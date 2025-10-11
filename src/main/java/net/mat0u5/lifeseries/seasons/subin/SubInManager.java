@@ -35,6 +35,7 @@ public class SubInManager {
     }
 
     public static void addSubIn(ServerPlayerEntity player, GameProfile targetProfile) {
+        Integer startingLives = livesManager.getPlayerLives(player);
         UUID playerUUID = player.getUuid();
         GameProfile playerProfile = player.getGameProfile();
 
@@ -51,7 +52,7 @@ public class SubInManager {
         }
 
         savePlayer(player);
-        subIns.add(new SubIn(playerProfile, targetProfile));
+        subIns.add(new SubIn(playerProfile, targetProfile, startingLives));
         loadPlayer(player);
 
         PlayerUtils.updatePlayerInventory(player);
@@ -89,6 +90,10 @@ public class SubInManager {
         subIns.remove(subIn);
         loadPlayer(player1);
         loadPlayer(player2);
+        if (player1 != null) {
+            Integer startingLives = subIn.startingLives();
+            livesManager.setPlayerLives(player1, startingLives);
+        }
     }
 
     public static void savePlayer(ServerPlayerEntity player) {
@@ -170,6 +175,6 @@ public class SubInManager {
         return getId(profile);
     }
 
-    public record SubIn(GameProfile substituter, GameProfile target) {
+    public record SubIn(GameProfile substituter, GameProfile target, Integer startingLives) {
     }
 }

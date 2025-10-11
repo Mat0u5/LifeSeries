@@ -161,10 +161,10 @@ public class SnailPathfinding {
     }
 
     public void updateNavigation() {
-        if (snail.isMining()) {
+        if (snail.isSnailMining()) {
             setNavigationMining();
         }
-        else if (snail.isFlying()) {
+        else if (snail.isSnailFlying()) {
             setNavigationFlying();
         }
         else {
@@ -173,7 +173,7 @@ public class SnailPathfinding {
     }
 
     public void updateMoveControl() {
-        if (snail.isFlying() || snail.isMining()) {
+        if (snail.isSnailFlying() || snail.isSnailMining()) {
             setMoveControlFlight();
         }
         else {

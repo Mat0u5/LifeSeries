@@ -11,7 +11,9 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.AstralProjection;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
+import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
@@ -284,6 +286,10 @@ public class SnailServerData {
     }
 
     public void updateSkin(PlayerEntity player) {
-        snail.setSkinName(player.getNameForScoreboard().toLowerCase());
+        String skinName = player.getNameForScoreboard().toLowerCase();
+        if (SubInManager.isSubbingIn(player.getUuid())) {
+            skinName = OtherUtils.profileName(SubInManager.getSubstitutedPlayer(player.getUuid())).toLowerCase();
+        }
+        snail.setSkinName(skinName);
     }
 }

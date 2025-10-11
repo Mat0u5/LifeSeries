@@ -27,7 +27,7 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
             return false;
         }
 
-        if (mob.isGliding() || mob.isMining()) {
+        if (mob.isSnailGliding() || mob.isSnailMining()) {
             return false;
         }
 
@@ -146,7 +146,7 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
         if (relativeTargetPos.lengthSquared() > 0.0001) {
             attackVector = relativeTargetPos.normalize().multiply(mob.serverData.isNerfed() ? 0.8 : 1);
         }
-        if (mob.isFlying()) attackVector = attackVector.multiply(0.5);
+        if (mob.isSnailFlying()) attackVector = attackVector.multiply(0.5);
         double addY = 0.5 + mob.squaredDistanceTo(boundPlayer) / mob.serverData.getJumpRangeSquared();
         mob.setVelocity(attackVector.x, attackVector.y + addY, attackVector.z);
     }

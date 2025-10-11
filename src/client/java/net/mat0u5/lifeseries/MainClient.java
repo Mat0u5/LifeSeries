@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.config.ClientConfig;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.registries.ClientRegistries;
 import net.mat0u5.lifeseries.render.ClientRenderer;
+import net.mat0u5.lifeseries.render.TextHud;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
@@ -148,6 +149,8 @@ public class MainClient implements ClientModInitializer, IClientHelper {
         limitedLifeTimeLastUpdated = 0;
         limitedLifeLives = 0;
         serverHandshake = HandshakeStatus.WAITING;
+        sideTitle = null;
+        TextHud.sideTitleRemainTicks = 0;
 
         MorphManager.resetMorphs();
     }
