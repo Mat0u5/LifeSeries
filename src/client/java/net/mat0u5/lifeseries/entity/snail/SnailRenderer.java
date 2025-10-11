@@ -19,6 +19,7 @@ public class SnailRenderer extends MobEntityRenderer<Snail, SnailModel<Snail>> {
     @Override
     public Identifier getTexture(Snail entity) {
         if (entity.isFromTrivia()) return Snail.TRIVIA_TEXTURE;
+        if (entity.isBoundPlayerDead()) return Snail.ZOMBIE_TEXTURE;
 
         Identifier dynamicTexture = SnailSkinsClient.getSnailTexture(entity.getSkinName());
         if (dynamicTexture != null) return dynamicTexture;
@@ -48,6 +49,7 @@ public class SnailRenderer extends AgeableMobEntityRenderer<Snail, SnailRenderSt
     @Override
     public Identifier getTexture(SnailRenderState state) {
         if (state.fromTrivia) return Snail.TRIVIA_TEXTURE;
+        if (state.boundPlayerDead) return Snail.ZOMBIE_TEXTURE;
 
         Identifier dynamicTexture = SnailSkinsClient.getSnailTexture(state.skinName);
         if (dynamicTexture != null) return dynamicTexture;
@@ -70,6 +72,7 @@ public class SnailRenderer extends AgeableMobEntityRenderer<Snail, SnailRenderSt
         state.mining = snail.isSnailMining();
         state.fromTrivia = snail.isFromTrivia();
         state.skinName = snail.getSkinName();
+        state.boundPlayerDead = snail.isBoundPlayerDead();
     }
 }
 *///?}

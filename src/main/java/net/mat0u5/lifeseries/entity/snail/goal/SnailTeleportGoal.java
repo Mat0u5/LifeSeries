@@ -3,8 +3,8 @@ package net.mat0u5.lifeseries.entity.snail.goal;
 
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,12 +27,13 @@ public final class SnailTeleportGoal extends Goal {
 
     @Override
     public boolean canStart() {
+        if (mob.getSnailWorld().isClient()) return false;
         if (mob.isPaused()) return false;
         if (teleportCooldown > 0) {
             teleportCooldown--;
             return false;
         }
-        if (mob.serverData.getBoundPlayer() == null) {
+        if (!mob.serverData.shouldPathfind()) {
             return false;
         }
         if (!mob.getBlockPos().equals(this.lastPosition)) {
@@ -43,9 +44,10 @@ public final class SnailTeleportGoal extends Goal {
         this.ticksSinceLastPositionChange++;
 
 
-        PlayerEntity boundPlayer = mob.serverData.getBoundPlayer();
-        float distFromPlayer = mob.distanceTo(boundPlayer);
-        boolean dimensionsAreSame = WorldUtils.getEntityWorld(mob).getRegistryKey().equals(WorldUtils.getEntityWorld(boundPlayer).getRegistryKey());
+        Entity boundEntity = mob.serverData.getBoundEntity();
+        if (boundEntity == null) return false;
+        float distFromPlayer = mob.distanceTo(boundEntity);
+        boolean dimensionsAreSame = WorldUtils.getEntityWorld(mob).getRegistryKey().equals(WorldUtils.getEntityWorld(boundEntity).getRegistryKey());
         return !dimensionsAreSame || distFromPlayer > Snail.MAX_DISTANCE || this.ticksSinceLastPositionChange > this.maxTicksSinceLastPositionChange;
     }
 

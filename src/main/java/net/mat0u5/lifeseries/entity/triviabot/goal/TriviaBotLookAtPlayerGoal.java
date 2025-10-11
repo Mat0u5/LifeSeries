@@ -2,15 +2,12 @@ package net.mat0u5.lifeseries.entity.triviabot.goal;
 
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.util.math.Vec3d;
 
 import java.util.EnumSet;
 
 public class TriviaBotLookAtPlayerGoal extends Goal {
     protected final TriviaBot mob;
-    @Nullable
-    protected PlayerEntity target;
     protected static final double RANGE_SQUARED = 400;
     private int lookTime;
 
@@ -20,19 +17,21 @@ public class TriviaBotLookAtPlayerGoal extends Goal {
     }
 
     public boolean canStart() {
+        if (mob.getBotWorld().isClient()) return false;
         if (!mob.interactedWith()) return false;
 
-        target = mob.serverData.getBoundPlayer();
-        if (target == null) return false;
+        Vec3d targetPos = mob.serverData.getPlayerPos();
+        if (targetPos == null) return false;
 
-        return this.mob.squaredDistanceTo(this.target) <= RANGE_SQUARED;
+        return this.mob.squaredDistanceTo(targetPos) <= RANGE_SQUARED;
     }
 
     @Override
     public boolean shouldContinue() {
-        if (this.target == null) return false;
-        if (!this.target.isAlive()) return false;
-        if (this.mob.squaredDistanceTo(this.target) > RANGE_SQUARED) return false;
+        Vec3d targetPos = mob.serverData.getPlayerPos();
+        if (targetPos == null) return false;
+
+        if (this.mob.squaredDistanceTo(targetPos) > RANGE_SQUARED) return false;
         return this.lookTime > 0;
     }
 
@@ -42,15 +41,11 @@ public class TriviaBotLookAtPlayerGoal extends Goal {
     }
 
     @Override
-    public void stop() {
-        this.target = null;
-    }
-
-    @Override
     public void tick() {
-        if (this.target != null && this.target.isAlive()) {
+        Vec3d targetPos = mob.serverData.getPlayerPos();
+        if (targetPos != null) {
             double d = this.mob.getEyeY();
-            this.mob.getLookControl().lookAt(this.target.getX(), d, this.target.getZ());
+            this.mob.getLookControl().lookAt(targetPos.getX(), d, targetPos.getZ());
             --this.lookTime;
         }
     }

@@ -19,7 +19,7 @@ public class MiningNavigation extends BirdNavigation {
             cooldown--;
         }
         if (cooldown == 0 && this.currentPath != null && !this.currentPath.isFinished()) {
-            cooldown = 40;
+            cooldown = 20;
             BlockPos entityPos = this.entity.getBlockPos();
             BlockPos targetPos = this.currentPath.getCurrentNode().getBlockPos();
 

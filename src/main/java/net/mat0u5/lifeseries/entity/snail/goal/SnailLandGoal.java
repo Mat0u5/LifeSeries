@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.entity.snail.goal;
 
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.NotNull;
 
 public final class SnailLandGoal extends Goal {
@@ -17,12 +17,13 @@ public final class SnailLandGoal extends Goal {
 
     @Override
     public boolean canStart() {
+        if (mob.getSnailWorld().isClient()) return false;
         if (!mob.isSnailFlying() || mob.isSnailGliding()) {
             return false;
         }
 
-        PlayerEntity boundPlayer = mob.serverData.getBoundPlayer();
-        if (boundPlayer == null) {
+        Vec3d targetPos = mob.serverData.getPlayerPos();
+        if (targetPos == null) {
             noTargetTicks++;
         } else {
             noTargetTicks = 0;
@@ -32,11 +33,11 @@ public final class SnailLandGoal extends Goal {
             return true;
         }
 
-        if (boundPlayer == null) {
+        if (targetPos == null) {
             return false;
         }
 
-        boolean isMobAboveTarget = mob.getY() - boundPlayer.getY() > 0.0D;
+        boolean isMobAboveTarget = mob.getY() - targetPos.getY() > 0.0D;
 
         if (!isMobAboveTarget) {
             return false;

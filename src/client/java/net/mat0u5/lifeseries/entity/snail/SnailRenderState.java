@@ -22,5 +22,6 @@ public class SnailRenderState extends LivingEntityRenderState {
     public boolean mining;
     public boolean fromTrivia;
     public String skinName;
+    public boolean boundPlayerDead;
 }
 *///?}

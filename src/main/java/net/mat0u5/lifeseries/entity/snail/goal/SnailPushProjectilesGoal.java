@@ -32,6 +32,7 @@ public final class SnailPushProjectilesGoal extends Goal {
 
     @Override
     public boolean canStart() {
+        if (mob.getSnailWorld().isClient()) return false;
         if (WorldUtils.getEntityWorld(mob) == null) {
             return false;
         }

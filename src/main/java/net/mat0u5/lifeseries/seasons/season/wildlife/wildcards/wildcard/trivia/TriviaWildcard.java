@@ -206,7 +206,7 @@ public class TriviaWildcard extends Wildcard {
     }
 
     public static void spawnBotFor(ServerPlayerEntity player) {
-        spawnBotFor(player, TriviaBotPathfinding.getBlockPosNearTarget(player, player.getBlockPos().add(0,50,0), 10));
+        spawnBotFor(player, TriviaBotPathfinding.getBlockPosNearPlayer(player, player.getBlockPos().add(0,50,0), 10));
     }
     public static void spawnBotFor(ServerPlayerEntity player, BlockPos pos) {
         resetPlayerOnBotSpawn(player);
@@ -287,7 +287,7 @@ public class TriviaWildcard extends Wildcard {
             for (Entity entity : world.iterateEntities()) {
                 if (entity instanceof Snail snail) {
                     if (snail.isFromTrivia()) {
-                        UUID boundPlayer = snail.serverData.boundPlayerUUID;
+                        UUID boundPlayer = snail.serverData.getBoundPlayerUUID();
                         if (boundPlayer == null || boundPlayer.equals(player.getUuid())) {
                             toKill.add(entity);
                         }

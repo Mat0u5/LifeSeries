@@ -22,6 +22,7 @@ public final class SnailBlockInteractGoal extends Goal {
 
     @Override
     public boolean canStart() {
+        if (mob.getSnailWorld().isClient()) return false;
         if (mob.isPaused()) return false;
         if (WorldUtils.getEntityWorld(mob) == null) {
             return false;

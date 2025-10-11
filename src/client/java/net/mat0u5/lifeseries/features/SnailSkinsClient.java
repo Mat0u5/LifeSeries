@@ -30,9 +30,9 @@ public class SnailSkinsClient {
             NativeImage image = NativeImage.read(new ByteArrayInputStream(textureData));
             if (image.getWidth() == 32 && image.getHeight() == 32) {
                 Main.LOGGER.info("Converting old 32x32 snail texture to the new format.");
-                //saveImageDebug(image, "before");
+                if (Main.DEBUG) saveImageDebug(image, "before");
                 image = convertOldSnailTexture(image);
-                //saveImageDebug(image, "after");
+                if (Main.DEBUG) saveImageDebug(image, "after");
             }
 
             if (!(image.getWidth() == 128 && image.getHeight() == 128)) {

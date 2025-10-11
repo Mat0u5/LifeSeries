@@ -19,8 +19,9 @@ public final class SnailStartFlyingGoal extends Goal {
 
     @Override
     public boolean canStart() {
+        if (mob.getSnailWorld().isClient()) return false;
         if (mob.isPaused()) return false;
-        if (mob.serverData.getBoundPlayer() == null) {
+        if (!mob.serverData.shouldPathfind()) {
             return false;
         }
 

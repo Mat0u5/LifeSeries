@@ -17,7 +17,7 @@ public class TriviaBotClientData {
     public final AnimationState answerIncorrectAnimationState = new AnimationState();
     public final AnimationState snailTransformAnimationState = new AnimationState();
     public void tick() {
-        if (!bot.getWorldEntity().isClient()) return;
+        if (!bot.getBotWorld().isClient()) return;
         updateAnimations();
     }
 

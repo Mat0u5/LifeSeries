@@ -3,7 +3,6 @@ package net.mat0u5.lifeseries.entity.snail.goal;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,6 +20,7 @@ public final class SnailGlideGoal extends Goal {
 
     @Override
     public boolean canStart() {
+        if (mob.getSnailWorld().isClient()) return false;
         if (mob.isSnailGliding()) {
             return true;
         }
@@ -59,7 +59,7 @@ public final class SnailGlideGoal extends Goal {
             return false;
         }
 
-        return mob.serverData.getBoundPlayer() != null && mob.pathfinding.getDistanceToGroundBlock() >= 1;
+        return mob.serverData.shouldPathfind() && mob.pathfinding.getDistanceToGroundBlock() >= 1;
     }
 
     @Override
@@ -75,12 +75,12 @@ public final class SnailGlideGoal extends Goal {
     }
 
     private void glideToPlayer() {
-        PlayerEntity boundPlayer = mob.serverData.getBoundPlayer();
-        if (boundPlayer == null) {
+        Vec3d targetPos = mob.serverData.getPlayerPos();
+        if (targetPos == null) {
             return;
         }
 
-        Vec3d directionToTarget = WorldUtils.getEntityPos(boundPlayer).subtract(WorldUtils.getEntityPos(mob)).normalize();
+        Vec3d directionToTarget = targetPos.subtract(WorldUtils.getEntityPos(mob)).normalize();
         float speedMultiplier = mob.getMovementSpeed() / 2;
         mob.setVelocity(directionToTarget.x * speedMultiplier, -0.1, directionToTarget.z * speedMultiplier);
     }

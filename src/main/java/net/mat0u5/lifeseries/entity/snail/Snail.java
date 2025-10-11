@@ -36,6 +36,7 @@ import static net.mat0u5.lifeseries.Main.*;
 public class Snail extends HostileEntity {
     public static final Identifier DEFAULT_TEXTURE = Identifier.of(Main.MOD_ID, "textures/entity/snail/default.png");
     public static final Identifier TRIVIA_TEXTURE = Identifier.of(Main.MOD_ID, "textures/entity/snail/trivia.png");
+    public static final Identifier ZOMBIE_TEXTURE = Identifier.of(Main.MOD_ID, "textures/entity/snail/zombie.png");
     public static final Identifier ID = Identifier.of(Main.MOD_ID, "snail");
     public static double GLOBAL_SPEED_MULTIPLIER = 1;
     public static boolean SHOULD_DROWN_PLAYER = true;
@@ -47,6 +48,7 @@ public class Snail extends HostileEntity {
     private static final TrackedData<Boolean> mining = DataTracker.registerData(Snail.class, TrackedDataHandlerRegistry.BOOLEAN);
     private static final TrackedData<Boolean> fromTrivia = DataTracker.registerData(Snail.class, TrackedDataHandlerRegistry.BOOLEAN);
     private static final TrackedData<String> skinName = DataTracker.registerData(Snail.class, TrackedDataHandlerRegistry.STRING);
+    private static final TrackedData<Boolean> playerDead = DataTracker.registerData(Snail.class, TrackedDataHandlerRegistry.BOOLEAN);
 
     public static final float MOVEMENT_SPEED = 0.35f;
     public static final float FLYING_SPEED = 0.3f;
@@ -115,10 +117,8 @@ public class Snail extends HostileEntity {
 
     @Override
     public void tick() {
+        serverData.tick();
         clientData.tick();
-        if (!serverData.tick()) {
-            return;
-        }
         super.tick();
     }
 
@@ -185,9 +185,9 @@ public class Snail extends HostileEntity {
             for(int q = k; q < l; ++q) {
                 for(int r = m; r < n; ++r) {
                     mutable.set(p, q, r);
-                    FluidState fluidState = getWorldEntity().getFluidState(mutable);
+                    FluidState fluidState = getSnailWorld().getFluidState(mutable);
                     if (fluidState.isIn(tag)) {
-                        double e = q + fluidState.getHeight(this.getWorldEntity(), mutable);
+                        double e = q + fluidState.getHeight(this.getSnailWorld(), mutable);
                         if (e >= box.minY) {
                             d = Math.max(e - box.minY, d);
                         }
@@ -200,7 +200,7 @@ public class Snail extends HostileEntity {
         return false;
     }
 
-    public World getWorldEntity() {
+    public World getSnailWorld() {
         //? if = 1.21.6 {
         /*return getWorld();
         *///?} else {
@@ -263,6 +263,7 @@ public class Snail extends HostileEntity {
         builder.add(mining, false);
         builder.add(fromTrivia, false);
         builder.add(skinName, "");
+        builder.add(playerDead, false);
     }
     public void setSnailAttacking(boolean value) {
         this.dataTracker.set(attacking, value);
@@ -285,6 +286,9 @@ public class Snail extends HostileEntity {
     public void setSkinName(String value) {
         this.dataTracker.set(skinName, value);
     }
+    public void setBoundPlayerDead(boolean value) {
+        this.dataTracker.set(playerDead, value);
+    }
 
     public boolean isSnailAttacking() {
         return this.dataTracker.get(attacking);
@@ -306,5 +310,8 @@ public class Snail extends HostileEntity {
     }
     public String getSkinName() {
         return this.dataTracker.get(skinName);
+    }
+    public boolean isBoundPlayerDead() {
+        return this.dataTracker.get(playerDead);
     }
 }

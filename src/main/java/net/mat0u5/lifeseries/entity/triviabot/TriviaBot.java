@@ -101,7 +101,7 @@ public class TriviaBot extends AmbientEntity {
     }
 
     
-    public World getWorldEntity() {
+    public World getBotWorld() {
         //? if = 1.21.6 {
         /*return getWorld();
         *///?} else {

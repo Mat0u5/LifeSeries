@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.entity.snail.goal;
 
-
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,9 +11,10 @@ public final class SnailMineTowardsPlayerGoal extends SnailFlyGoal {
 
     @Override
     public boolean canStart() {
+        if (getMob().getSnailWorld().isClient()) return false;
         if (getMob().isPaused()) return false;
 
-        if (getMob().serverData.getBoundPlayer() == null) {
+        if (!getMob().serverData.shouldPathfind()) {
             return false;
         }
 
@@ -34,7 +34,7 @@ public final class SnailMineTowardsPlayerGoal extends SnailFlyGoal {
 
     @Override
     public boolean shouldContinue() {
-        if (getMob().serverData.getBoundPlayer() == null) {
+        if (!getMob().serverData.shouldPathfind()) {
             return false;
         }
 

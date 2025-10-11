@@ -68,8 +68,8 @@ public class TriviaHandler {
 
 
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
-        if (bot.getWorldEntity().isClient()) return ActionResult.PASS;
-        ServerPlayerEntity boundPlayer = bot.serverData.getBoundServerPlayer();
+        if (bot.getBotWorld().isClient()) return ActionResult.PASS;
+        ServerPlayerEntity boundPlayer = bot.serverData.getBoundPlayer();
         if (boundPlayer == null) return ActionResult.PASS;
         if (boundPlayer.getUuid() != player.getUuid()) return ActionResult.PASS;
         if (bot.submittedAnswer()) return ActionResult.PASS;
@@ -92,12 +92,12 @@ public class TriviaHandler {
 
     public void transformIntoSnail() {
         if (bot.serverData.getBoundPlayer() != null) {
-            Snail triviaSnail = MobRegistry.SNAIL.spawn((ServerWorld) bot.getWorldEntity(), bot.getBlockPos(), SpawnReason.COMMAND);
+            Snail triviaSnail = MobRegistry.SNAIL.spawn((ServerWorld) bot.getBotWorld(), bot.getBlockPos(), SpawnReason.COMMAND);
             if (triviaSnail != null) {
                 triviaSnail.serverData.setBoundPlayer(bot.serverData.getBoundPlayer());
                 triviaSnail.serverData.setFromTrivia();
                 triviaSnail.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE.value(), 0.5f, 2);
-                ServerWorld world = (ServerWorld) triviaSnail.getWorldEntity();
+                ServerWorld world = (ServerWorld) triviaSnail.getSnailWorld();
                 Vec3d pos = WorldUtils.getEntityPos(bot);
                 world.spawnParticles(
                         ParticleTypes.EXPLOSION,
@@ -121,7 +121,7 @@ public class TriviaHandler {
     }
 
     public void handleAnswer(int answer) {
-        if (bot.getWorldEntity().isClient()) return;
+        if (bot.getBotWorld().isClient()) return;
         if (bot.submittedAnswer()) return;
         bot.setSubmittedAnswer(true);
         bot.setAnalyzingTime(42);
@@ -163,10 +163,10 @@ public class TriviaHandler {
     }
 
     public void cursePlayer() {
-        ServerPlayerEntity player = bot.serverData.getBoundServerPlayer();
+        ServerPlayerEntity player = bot.serverData.getBoundPlayer();
         if (player == null) return;
         player.playSoundToPlayer(SoundEvents.ENTITY_ELDER_GUARDIAN_CURSE, SoundCategory.MASTER, 0.2f, 1f);
-        ServerWorld world = (ServerWorld) bot.getWorldEntity();
+        ServerWorld world = (ServerWorld) bot.getBotWorld();
         Vec3d pos = WorldUtils.getEntityPos(bot);
 
         //? if <= 1.21.6 {
@@ -247,7 +247,7 @@ public class TriviaHandler {
             StatusEffects.ABSORPTION
     );
     public void blessPlayer() {
-        ServerPlayerEntity player = bot.serverData.getBoundServerPlayer();
+        ServerPlayerEntity player = bot.serverData.getBoundPlayer();
         if (player == null) return;
         player.sendMessage(Text.empty());
         for (int i = 0; i < 3; i++) {
@@ -275,7 +275,7 @@ public class TriviaHandler {
     }
 
     public void spawnItemForPlayer() {
-        if (bot.getWorldEntity().isClient()) return;
+        if (bot.getBotWorld().isClient()) return;
         if (itemSpawner == null) return;
         if (bot.serverData.getBoundPlayer() == null) return;
         Vec3d playerPos = WorldUtils.getEntityPos(bot.serverData.getBoundPlayer());
@@ -290,15 +290,15 @@ public class TriviaHandler {
             vector = relativeTargetPos.normalize().multiply(0.3).add(0,0.1,0);
         }
 
-        List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, (ServerWorld) bot.getWorldEntity(), bot.serverData.getBoundServerPlayer(), Identifier.of("lifeseriesdynamic", "trivia_reward_loottable"));
+        List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, (ServerWorld) bot.getBotWorld(), bot.serverData.getBoundPlayer(), Identifier.of("lifeseriesdynamic", "trivia_reward_loottable"));
         if (!lootTableItems.isEmpty()) {
             for (ItemStack item : lootTableItems) {
-                ItemStackUtils.spawnItemForPlayerWithVelocity((ServerWorld) bot.getWorldEntity(), pos, item, bot.serverData.getBoundPlayer(), vector);
+                ItemStackUtils.spawnItemForPlayerWithVelocity((ServerWorld) bot.getBotWorld(), pos, item, bot.serverData.getBoundPlayer(), vector);
             }
         }
         else {
             ItemStack randomItem = itemSpawner.getRandomItem();
-            ItemStackUtils.spawnItemForPlayerWithVelocity((ServerWorld) bot.getWorldEntity(), pos, randomItem, bot.serverData.getBoundPlayer(), vector);
+            ItemStackUtils.spawnItemForPlayerWithVelocity((ServerWorld) bot.getBotWorld(), pos, randomItem, bot.serverData.getBoundPlayer(), vector);
         }
     }
 
@@ -352,7 +352,7 @@ public class TriviaHandler {
     }
 
     public void curseRavager(ServerPlayerEntity player) {
-        BlockPos spawnPos = TriviaBotPathfinding.getBlockPosNearTarget(player, bot.getBlockPos(), 5);
+        BlockPos spawnPos = TriviaBotPathfinding.getBlockPosNearPlayer(player, bot.getBlockPos(), 5);
         EntityType.RAVAGER.spawn(PlayerUtils.getServerWorld(player), spawnPos, SpawnReason.COMMAND);
     }
 
@@ -409,12 +409,12 @@ public class TriviaHandler {
     }
 
     public void curseBeeswarm(ServerPlayerEntity player) {
-        BlockPos spawnPos = TriviaBotPathfinding.getBlockPosNearTarget(player, bot.getBlockPos(), 1);
-        BeeEntity bee1 = EntityType.BEE.spawn((ServerWorld) bot.getWorldEntity(), spawnPos, SpawnReason.COMMAND);
-        BeeEntity bee2 = EntityType.BEE.spawn((ServerWorld) bot.getWorldEntity(), spawnPos, SpawnReason.COMMAND);
-        BeeEntity bee3 = EntityType.BEE.spawn((ServerWorld) bot.getWorldEntity(), spawnPos, SpawnReason.COMMAND);
-        BeeEntity bee4 = EntityType.BEE.spawn((ServerWorld) bot.getWorldEntity(), spawnPos, SpawnReason.COMMAND);
-        BeeEntity bee5 = EntityType.BEE.spawn((ServerWorld) bot.getWorldEntity(), spawnPos, SpawnReason.COMMAND);
+        BlockPos spawnPos = TriviaBotPathfinding.getBlockPosNearPlayer(player, bot.getBlockPos(), 1);
+        BeeEntity bee1 = EntityType.BEE.spawn((ServerWorld) bot.getBotWorld(), spawnPos, SpawnReason.COMMAND);
+        BeeEntity bee2 = EntityType.BEE.spawn((ServerWorld) bot.getBotWorld(), spawnPos, SpawnReason.COMMAND);
+        BeeEntity bee3 = EntityType.BEE.spawn((ServerWorld) bot.getBotWorld(), spawnPos, SpawnReason.COMMAND);
+        BeeEntity bee4 = EntityType.BEE.spawn((ServerWorld) bot.getBotWorld(), spawnPos, SpawnReason.COMMAND);
+        BeeEntity bee5 = EntityType.BEE.spawn((ServerWorld) bot.getBotWorld(), spawnPos, SpawnReason.COMMAND);
         if (bee1 != null) bee1.setAngryAt(player.getUuid());
         if (bee2 != null) bee2.setAngryAt(player.getUuid());
         if (bee3 != null) bee3.setAngryAt(player.getUuid());

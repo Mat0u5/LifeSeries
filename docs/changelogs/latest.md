@@ -22,3 +22,9 @@ Sub-ins now have the snail skin of the player they are subbing in.<br>
 When a player stops subbing in for another player, their lives now return to what they were before.<br>
 You can no longer sit on snails and trivia bots with the superpunch power.<br>
 Bug fixes.
+
+----------
+
+Reviewed most snail and trivia bot code - snails should hopefully no longer sometimes freeze.<br>
+Added the zombie snail skin for dead players (for necromancy).<br>
+Bug fixes.

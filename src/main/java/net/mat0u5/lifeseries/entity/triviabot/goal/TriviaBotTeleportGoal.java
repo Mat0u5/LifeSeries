@@ -2,8 +2,8 @@ package net.mat0u5.lifeseries.entity.triviabot.goal;
 
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,6 +24,7 @@ public final class TriviaBotTeleportGoal extends Goal {
 
     @Override
     public boolean canStart() {
+        if (mob.getBotWorld().isClient()) return false;
         if (mob.interactedWith()) {
             return false;
         }
@@ -32,14 +33,14 @@ public final class TriviaBotTeleportGoal extends Goal {
             return false;
         }
 
-
-
-        if (mob.serverData.getBoundPlayer() == null) {
+        if (!mob.serverData.shouldPathfind()) {
             return false;
         }
-        PlayerEntity boundPlayer = mob.serverData.getBoundPlayer();
 
-        float distFromPlayer = mob.distanceTo(boundPlayer);
+        LivingEntity boundEntity = mob.serverData.getBoundEntity();
+        if (boundEntity == null) return false;
+
+        float distFromPlayer = mob.distanceTo(boundEntity);
         if (distFromPlayer > TriviaBot.MAX_DISTANCE) return true;
 
 
@@ -52,7 +53,7 @@ public final class TriviaBotTeleportGoal extends Goal {
         if (this.ticksSinceLastPositionChange > this.maxTicksSinceLastPositionChange) return true;
 
 
-        boolean dimensionsAreSame = WorldUtils.getEntityWorld(mob).getRegistryKey().equals(WorldUtils.getEntityWorld(boundPlayer).getRegistryKey());
+        boolean dimensionsAreSame = WorldUtils.getEntityWorld(mob).getRegistryKey().equals(WorldUtils.getEntityWorld(boundEntity).getRegistryKey());
         return !dimensionsAreSame;
     }
 

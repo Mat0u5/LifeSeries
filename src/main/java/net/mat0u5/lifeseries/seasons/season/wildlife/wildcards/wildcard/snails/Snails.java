@@ -4,9 +4,12 @@ import net.mat0u5.lifeseries.config.StringListConfig;
 import net.mat0u5.lifeseries.entity.pathfinder.PathFinder;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.snail.server.SnailPathfinding;
+import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.entity.Entity;
@@ -36,8 +39,8 @@ public class Snails extends Wildcard {
     @Override
     public void activate() {
         snails.clear();
-        for (ServerPlayerEntity player : livesManager.getAlivePlayers()) {
-            if (!player.isAlive()) continue;
+        for (ServerPlayerEntity player : PlayerUtils.getAllFunctioningPlayers()) {
+            if (!canHaveSnail(player)) continue;
             spawnSnailFor(player);
         }
         loadSnailNames();
@@ -58,8 +61,8 @@ public class Snails extends Wildcard {
     public void tick() {
         ticks++;
         if (ticks % 100 == 0) {
-            for (ServerPlayerEntity player : livesManager.getAlivePlayers()) {
-                if (!player.isAlive()) continue;
+            for (ServerPlayerEntity player : PlayerUtils.getAllFunctioningPlayers()) {
+                if (!canHaveSnail(player)) continue;
                 UUID playerUUID = player.getUuid();
                 if (snails.containsKey(playerUUID)) {
                     Snail snail = snails.get(playerUUID);
@@ -74,9 +77,16 @@ public class Snails extends Wildcard {
             }
         }
     }
+    public static boolean canHaveSnail(ServerPlayerEntity player) {
+        if (player.isCreative()) return false;
+        if (!player.isAlive()) return false;
+        if (Events.joiningPlayers.contains(player.getUuid())) return false;
+        if (player.isSpectator() && !SuperpowersWildcard.hasActivatedPower(player, Superpowers.ASTRAL_PROJECTION)) return false;
+        return true;
+    }
 
     public static void spawnSnailFor(ServerPlayerEntity player) {
-        BlockPos pos = SnailPathfinding.getBlockPosNearTarget(player, 30);
+        BlockPos pos = SnailPathfinding.getBlockPosNearPlayer(player, 30);
         if (pos == null) pos = player.getBlockPos().add(0,30,0);
         spawnSnailFor(player, pos);
     }
@@ -134,6 +144,7 @@ public class Snails extends Wildcard {
     }
 
     public static String getSnailName(PlayerEntity player) {
+        if (player == null) return "Snail";
         if (snailNames.containsKey(player.getUuid())) {
             return snailNames.get(player.getUuid());
         }
