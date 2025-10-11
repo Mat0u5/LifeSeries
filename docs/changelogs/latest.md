@@ -11,6 +11,7 @@ Bug Fixes
 
 ----------
 
-Removed all dependencies from the mod (Polymer and BIL, which were used for rendering custom entities - snail and trivia bot), which will allow me to control their rendering more, and it will speed up development time, allow me to update to newer versions (and snapshots!) faster.
-Custom rendering for the snail and trivia bot - this should fix ALL bugs with snails / bots being invisible sometimes.
-The trivia bot quiz screen now shows the trivia entity in 1.21.6+.
+Removed all dependencies from the mod (Polymer and BIL, which were used for rendering custom entities - snail and trivia bot), which will allow me to control their rendering more, and it will speed up development time, allow me to update to newer versions (and snapshots!) faster.<br>
+Custom rendering for the snail and trivia bot - this should fix ALL bugs with snails / bots being invisible sometimes.<br>
+The trivia bot quiz screen now shows the trivia entity in 1.21.6+.<br>
+Adding snail skins no longer requires a full reload (no more reloading screen on the client yipiiee).

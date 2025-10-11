@@ -15,6 +15,8 @@ public class SnailSounds {
 
     private int propellerSoundCooldown = 0;
     private int walkSoundCooldown = 0;
+    private boolean lastGlidingOrLanding = false;
+    public boolean lastFlying = false;
     public void playSounds() {
         if (soundCooldown > 0) {
             soundCooldown--;
@@ -33,13 +35,13 @@ public class SnailSounds {
         }
 
         if (snail.isGliding() || snail.isLanding()) {
-            if (!snail.lastGlidingOrLanding) {
+            if (!lastGlidingOrLanding) {
                 playFallSound();
             }
         }
 
         if (snail.isFlying()) {
-            if (!snail.lastFlying) {
+            if (!lastFlying) {
                 playFlySound();
             }
             if (propellerSoundCooldown > 0) {
@@ -59,6 +61,9 @@ public class SnailSounds {
                 playWalkSound();
             }
         }
+
+        lastFlying = snail.isFlying();
+        lastGlidingOrLanding = snail.isGliding() || snail.isLanding();
     }
 
     public void playAttackSound() {
@@ -106,13 +111,10 @@ public class SnailSounds {
     }
     public void playRandomSound(String name, float volume, int from, int to) {
         if (soundCooldown > 0) {
-            //OtherUtils.log("Skipping sound: " + name);
             return;
         }
         soundCooldown = 20;
         SoundEvent sound = OtherUtils.getRandomSound("wildlife_snail_"+name, from, to);
-        //OtherUtils.log("Playing sound: " + sound.getId().getPath());
-        //TODO sometimes just doesn't play??? Start flying and falling
         snail.playSound(sound, volume, 1);
     }
 }

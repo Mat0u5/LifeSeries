@@ -61,8 +61,6 @@ public class Snail extends HostileEntity {
     public SnailSounds sounds = new SnailSounds(this);
     public SnailPathfinding pathfinding = new SnailPathfinding(this);
     public SnailClientData clientData = new SnailClientData(this);
-    public boolean lastFlying = false;
-    public boolean lastGlidingOrLanding = false;
 
     public Snail(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
@@ -122,9 +120,6 @@ public class Snail extends HostileEntity {
             return;
         }
         super.tick();
-
-        lastFlying = isFlying();
-        lastGlidingOrLanding = isGliding() || isLanding();
     }
 
     public boolean isPaused() {

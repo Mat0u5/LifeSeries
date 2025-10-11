@@ -83,9 +83,9 @@ public class SnailSkins {
         ResourceHandler handler = new ResourceHandler();
 
         Path modelResult = new File("./config/lifeseries/wildlife/snailskins/snail.bbmodel").toPath();
-        handler.copyBundledSingleFile("/files/snails/snail.bbmodel", modelResult);
+        handler.copyBundledSingleFile("/files/snails/snail-old.bbmodel", modelResult);
 
         Path textureResult = new File("./config/lifeseries/wildlife/snailskins/example.png").toPath();
-        handler.copyBundledSingleFile("/files/snails/texture/example.png", textureResult);
+        handler.copyBundledSingleFile("/files/snails/example.png", textureResult);
     }
 }

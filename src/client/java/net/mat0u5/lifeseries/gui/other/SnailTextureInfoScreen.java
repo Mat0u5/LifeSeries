@@ -12,7 +12,6 @@ public class SnailTextureInfoScreen extends DefaultScreen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY) {
-        //TODO
         RenderUtils.drawTextCenter(context, textRenderer, Text.of("§0§nSnail Textures Info"), centerX, startY + 6);
         int currentY = startY + 26;
         currentY += 5 + RenderUtils.drawTextLeftWrapLines(context, textRenderer, DEFAULT_TEXT_COLOR, Text.of("To create your custom snail textures, you must first open the snail model (§8./config/lifeseries/wildlife/snailskins/snail.bbmodel§r) in Blockbench."), startX + 11, currentY, backgroundWidth-22, 5);
