@@ -9,7 +9,7 @@ import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.*;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Snails;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
@@ -19,7 +19,6 @@ import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.WitherEntity;
@@ -39,8 +38,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.mat0u5.lifeseries.Main.seasonConfig;
 import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
-//? if >= 1.21.2
-/*import net.minecraft.server.world.ServerWorld;*/
+//? if >= 1.21.2 {
+/*import net.mat0u5.lifeseries.utils.world.WorldUtils;
+import net.minecraft.server.world.ServerWorld;
+*///?}
 
 public class WildLife extends Season {
     public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /wildcard, /superpower, /snail";

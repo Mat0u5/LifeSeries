@@ -13,6 +13,7 @@
   "key.lifeseries.superpower": "Activate Superpower",
   "key.lifeseries.runcommand": "Keybind Command",
   "key.lifeseries.openconfig": "Open Config",
-
-  "entity.lifeseries.newsnail": "Snail"
+  "entity.lifeseries.snail": "Snail",
+  "entity.lifeseries.triviabot": "Trivia Bot",
+  "entity.lifeseries.pathfinder": "Pathfinder"
 }

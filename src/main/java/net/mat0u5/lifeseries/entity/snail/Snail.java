@@ -34,6 +34,8 @@ import org.jetbrains.annotations.Nullable;
 import static net.mat0u5.lifeseries.Main.*;
 
 public class Snail extends HostileEntity {
+    public static final Identifier DEFAULT_TEXTURE = Identifier.of(Main.MOD_ID, "textures/entity/snail/default.png");
+    public static final Identifier TRIVIA_TEXTURE = Identifier.of(Main.MOD_ID, "textures/entity/snail/trivia.png");
     public static final Identifier ID = Identifier.of(Main.MOD_ID, "snail");
     public static double GLOBAL_SPEED_MULTIPLIER = 1;
     public static boolean SHOULD_DROWN_PLAYER = true;
@@ -44,6 +46,7 @@ public class Snail extends HostileEntity {
     private static final TrackedData<Boolean> landing = DataTracker.registerData(Snail.class, TrackedDataHandlerRegistry.BOOLEAN);
     private static final TrackedData<Boolean> mining = DataTracker.registerData(Snail.class, TrackedDataHandlerRegistry.BOOLEAN);
     private static final TrackedData<Boolean> fromTrivia = DataTracker.registerData(Snail.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final TrackedData<String> skinName = DataTracker.registerData(Snail.class, TrackedDataHandlerRegistry.STRING);
 
     public static final float MOVEMENT_SPEED = 0.35f;
     public static final float FLYING_SPEED = 0.3f;
@@ -264,6 +267,7 @@ public class Snail extends HostileEntity {
         builder.add(landing, false);
         builder.add(mining, false);
         builder.add(fromTrivia, false);
+        builder.add(skinName, "");
     }
     public void setSnailAttacking(boolean value) {
         this.dataTracker.set(attacking, value);
@@ -283,6 +287,9 @@ public class Snail extends HostileEntity {
     public void setFromTrivia(boolean value) {
         this.dataTracker.set(fromTrivia, value);
     }
+    public void setSkinName(String value) {
+        this.dataTracker.set(skinName, value);
+    }
 
     public boolean isSnailAttacking() {
         return this.dataTracker.get(attacking);
@@ -301,5 +308,8 @@ public class Snail extends HostileEntity {
     }
     public boolean isFromTrivia() {
         return this.dataTracker.get(fromTrivia);
+    }
+    public String getSkinName() {
+        return this.dataTracker.get(skinName);
     }
 }

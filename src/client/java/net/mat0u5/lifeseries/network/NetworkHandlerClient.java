@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.config.ClientConfig;
 import net.mat0u5.lifeseries.config.ClientConfigNetwork;
 import net.mat0u5.lifeseries.features.Morph;
+import net.mat0u5.lifeseries.features.SnailSkinsClient;
 import net.mat0u5.lifeseries.features.Trivia;
 import net.mat0u5.lifeseries.config.ClientConfigGuiManager;
 import net.mat0u5.lifeseries.gui.other.ChooseWildcardScreen;
@@ -37,7 +38,6 @@ import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +80,11 @@ public class NetworkHandlerClient {
         ClientPlayNetworking.registerGlobalReceiver(SidetitlePacket.ID, (payload, context) -> {
             MinecraftClient client = context.client();
             client.execute(() -> handleSidetitle(payload));
+        });
+        ClientPlayNetworking.registerGlobalReceiver(SnailTexturePacket.ID, (payload, context) -> {
+            context.client().execute(() -> {
+                SnailSkinsClient.handleSnailTexture(payload.skinName(), payload.textureData());
+            });
         });
     }
 

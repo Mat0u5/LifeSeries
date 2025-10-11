@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards;
 
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.*;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Snails;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 

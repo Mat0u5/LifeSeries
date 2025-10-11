@@ -50,6 +50,7 @@ public class NetworkHandlerServer {
         PayloadTypeRegistry.playS2C().register(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC);
         PayloadTypeRegistry.playS2C().register(ConfigPayload.ID, ConfigPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(SidetitlePacket.ID, SidetitlePacket.CODEC);
+        PayloadTypeRegistry.playS2C().register(SnailTexturePacket.ID, SnailTexturePacket.CODEC);
 
         PayloadTypeRegistry.playC2S().register(NumberPayload.ID, NumberPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(StringPayload.ID, StringPayload.CODEC);
@@ -60,6 +61,7 @@ public class NetworkHandlerServer {
         PayloadTypeRegistry.playC2S().register(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC);
         PayloadTypeRegistry.playC2S().register(ConfigPayload.ID, ConfigPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(SidetitlePacket.ID, SidetitlePacket.CODEC);
+        PayloadTypeRegistry.playC2S().register(SnailTexturePacket.ID, SnailTexturePacket.CODEC);
     }
     public static void registerServerReceiver() {
         ServerPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (payload, context) -> {

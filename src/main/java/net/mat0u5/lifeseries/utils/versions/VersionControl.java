@@ -76,7 +76,8 @@ public class VersionControl {
         *   1.4.0.4     -   1.4.0.5
         *   1.4.0.6     -   1.4.0.13
         *   1.4.0.14    -   1.4.1-pre1
-        *   1.4.1       -   *
+        *   1.4.1       -   1.4.1.1
+        *   1.4.1.9     -   *
      */
 
     public static String clientCompatibilityMin() {

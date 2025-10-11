@@ -6,7 +6,7 @@ import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Snails;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.AstralProjection;
@@ -284,6 +284,6 @@ public class SnailServerData {
     }
 
     public void updateSkin(PlayerEntity player) {
-        //TODO
+        snail.setSkinName(player.getNameForScoreboard().toLowerCase());
     }
 }

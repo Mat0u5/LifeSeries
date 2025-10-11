@@ -17,6 +17,7 @@ import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.secretlife.TaskManager;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkins;
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
@@ -38,7 +39,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.4.1.8";
+	public static final String MOD_VERSION = "dev-1.4.1.9";
 	public static final String MOD_ID = "lifeseries";
 	public static final String UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
 	public static final boolean DEBUG = false;
@@ -70,6 +71,7 @@ public class Main implements ModInitializer {
 		});
 
 		ConfigManager.moveOldMainFileIfExists();
+		SnailSkins.createConfig();
 
 		config = new MainConfig();
 		MOD_DISABLED = config.getOrCreateProperty("modDisabled", "false").equalsIgnoreCase("true");
@@ -160,6 +162,7 @@ public class Main implements ModInitializer {
 		currentSeason.reload();
 		NetworkHandlerServer.sendUpdatePackets();
 		PlayerUtils.resendCommandTrees();
+		SnailSkins.sendTextures();
 	}
 	public static void reloadEnd() {
 		DatapackManager.onReloadEnd();
