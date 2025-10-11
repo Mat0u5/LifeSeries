@@ -49,7 +49,7 @@ public class WorldUtils {
         world.spawnEntity(lightning);
     }
 
-    public static BlockPos getCloseBlockPos(ServerWorld world, BlockPos targetPos, double distanceFromTarget, int height, boolean bottomSupport) {
+    public static BlockPos getCloseBlockPos(World world, BlockPos targetPos, double distanceFromTarget, int height, boolean bottomSupport) {
         for (int attempts = 0; attempts < 20; attempts++) {
             Vec3d offset = new Vec3d(
                     world.random.nextDouble() * 2 - 1,

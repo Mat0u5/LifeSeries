@@ -1,4 +1,4 @@
-package net.mat0u5.lifeseries.dependencies;
+package net.mat0u5.lifeseries.compatibilities;
 
 import com.moulberry.flashback.playback.ReplayServer;
 import net.minecraft.server.MinecraftServer;

@@ -38,7 +38,6 @@ import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,10 +69,6 @@ public class NetworkHandlerClient {
             MinecraftClient client = context.client();
             client.execute(() -> handlePlayerDisguise(payload));
         });
-        ClientPlayNetworking.registerGlobalReceiver(ImagePayload.ID, (payload, context) -> {
-            MinecraftClient client = context.client();
-            client.execute(() -> handleImagePacket(payload));
-        });
         ClientPlayNetworking.registerGlobalReceiver(ConfigPayload.ID, (payload, context) -> {
             MinecraftClient client = context.client();
             client.execute(() -> handleConfigPacket(payload));
@@ -85,6 +80,11 @@ public class NetworkHandlerClient {
         ClientPlayNetworking.registerGlobalReceiver(SidetitlePacket.ID, (payload, context) -> {
             MinecraftClient client = context.client();
             client.execute(() -> handleSidetitle(payload));
+        });
+        ClientPlayNetworking.registerGlobalReceiver(SnailTexturePacket.ID, (payload, context) -> {
+            context.client().execute(() -> {
+                SnailSkinsClient.handleSnailTexture(payload.skinName(), payload.textureData());
+            });
         });
     }
 
@@ -118,14 +118,6 @@ public class NetworkHandlerClient {
 
     public static void handleConfigPacket(ConfigPayload payload) {
         ClientConfigNetwork.handleConfigPacket(payload, false);
-    }
-
-    public static void handleImagePacket(ImagePayload payload) {
-        String nameStr = payload.name();
-        PacketNames name = PacketNames.fromName(nameStr);
-        if (name == PacketNames.SNAIL_SKIN) {
-            SnailSkinsClient.handleSnailSkin(payload);
-        }
     }
     
     public static void handleStringPacket(StringPayload payload) {
@@ -177,45 +169,6 @@ public class NetworkHandlerClient {
         if (name == PacketNames.SEASON_INFO) {
             Seasons season = Seasons.getSeasonFromStringName(value);
             if (season != Seasons.UNASSIGNED) MinecraftClient.getInstance().setScreen(new SeasonInfoScreen(season));
-        }
-
-        if (name == PacketNames.TRIVIA_BOT_PART) {
-            try {
-                UUID uuid = UUID.fromString(value);
-                MainClient.triviaBotPartUUIDs.add(uuid);
-            }catch(Exception e) {}
-        }
-
-        if (name == PacketNames.SNAIL_PART) {
-            try {
-                UUID uuid = UUID.fromString(value);
-                MainClient.snailPartUUIDs.add(uuid);
-            }catch(Exception e) {}
-        }
-
-        if (name == PacketNames.SNAIL_POS) {
-            try {
-                String[] split = value.split("_");
-                BlockPos pos = new BlockPos(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]));
-                MainClient.snailPos = pos;
-                MainClient.snailPosTime = System.currentTimeMillis();
-            }catch(Exception e) {}
-        }
-
-        if (name == PacketNames.TRIVIA_SNAIL_PART) {
-            try {
-                UUID uuid = UUID.fromString(value);
-                MainClient.triviaSnailPartUUIDs.add(uuid);
-            }catch(Exception e) {}
-        }
-
-        if (name == PacketNames.TRIVIA_SNAIL_POS) {
-            try {
-                String[] split = value.split("_");
-                BlockPos pos = new BlockPos(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]));
-                MainClient.triviaSnailPos = pos;
-                MainClient.triviaSnailPosTime = System.currentTimeMillis();
-            }catch(Exception e) {}
         }
 
         if (name == PacketNames.SNAIL_TEXTURES_INFO) {

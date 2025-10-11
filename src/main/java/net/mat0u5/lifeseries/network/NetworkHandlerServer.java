@@ -4,7 +4,6 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.DefaultConfigValues;
-import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
@@ -14,7 +13,6 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShifting;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDilation;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
@@ -32,7 +30,6 @@ import net.minecraft.network.DisconnectionInfo;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.text.Texts;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,9 +48,9 @@ public class NetworkHandlerServer {
         PayloadTypeRegistry.playS2C().register(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(LongPayload.ID, LongPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(ImagePayload.ID, ImagePayload.CODEC);
         PayloadTypeRegistry.playS2C().register(ConfigPayload.ID, ConfigPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(SidetitlePacket.ID, SidetitlePacket.CODEC);
+        PayloadTypeRegistry.playS2C().register(SnailTexturePacket.ID, SnailTexturePacket.CODEC);
 
         PayloadTypeRegistry.playC2S().register(NumberPayload.ID, NumberPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(StringPayload.ID, StringPayload.CODEC);
@@ -62,9 +59,9 @@ public class NetworkHandlerServer {
         PayloadTypeRegistry.playC2S().register(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(LongPayload.ID, LongPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(ImagePayload.ID, ImagePayload.CODEC);
         PayloadTypeRegistry.playC2S().register(ConfigPayload.ID, ConfigPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(SidetitlePacket.ID, SidetitlePacket.CODEC);
+        PayloadTypeRegistry.playC2S().register(SnailTexturePacket.ID, SnailTexturePacket.CODEC);
     }
     public static void registerServerReceiver() {
         ServerPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (payload, context) -> {
@@ -134,7 +131,7 @@ public class NetworkHandlerServer {
         }
         updatedConfigThisTick = false;
         configNeedsReload = false;
-        Main.softestReloadStart();
+        Main.softReloadStart();
     }
 
     public static void handleNumberPacket(ServerPlayerEntity player, NumberPayload payload) {
@@ -180,16 +177,6 @@ public class NetworkHandlerServer {
                 if (Main.changeSeasonTo(newSeason.getId())) {
                     PlayerUtils.broadcastMessage(TextUtils.formatLoosely("§aSuccessfully changed the season to {}.", value));
                 }
-            }
-        }
-        if (name == PacketNames.REQUEST_SNAIL_MODEL) {
-            if (Snails.snails.containsKey(player.getUuid())) {
-                Snail snail = Snails.snails.get(player.getUuid());
-                snail.updateModel(true);
-            }
-            if (TriviaWildcard.snails.containsKey(player.getUuid())) {
-                Snail snail = TriviaWildcard.snails.get(player.getUuid());
-                snail.updateModel(true);
             }
         }
         if (name == PacketNames.TRIPLE_JUMP) {
@@ -308,17 +295,6 @@ public class NetworkHandlerServer {
         if (player == null) return;
         LongPayload payload = new LongPayload(name.getName(), number);
         ServerPlayNetworking.send(player, payload);
-    }
-
-    public static void sendImagePacket(ServerPlayerEntity player, ImagePayload payload) {
-        if (player == null) return;
-        ServerPlayNetworking.send(player, payload);
-    }
-
-    public static void sendImagePackets(ImagePayload payload) {
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            ServerPlayNetworking.send(player, payload);
-        }
     }
 
     public static void sendLongPackets(PacketNames name, long number) {

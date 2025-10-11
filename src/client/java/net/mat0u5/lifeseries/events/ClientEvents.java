@@ -7,15 +7,13 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
-import net.mat0u5.lifeseries.dependencies.DependencyManager;
-import net.mat0u5.lifeseries.dependencies.FlashbackCompatibility;
-import net.mat0u5.lifeseries.features.SnailSkinsClient;
+import net.mat0u5.lifeseries.compatibilities.DependencyManager;
+import net.mat0u5.lifeseries.compatibilities.FlashbackCompatibility;
 import net.mat0u5.lifeseries.gui.other.UpdateInfoScreen;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.render.TextHud;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
-import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.utils.ClientResourcePacks;
 import net.mat0u5.lifeseries.utils.ClientSounds;
 import net.mat0u5.lifeseries.utils.ClientTaskScheduler;
@@ -43,8 +41,6 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 
 import java.util.*;
@@ -131,15 +127,12 @@ public class ClientEvents {
             MinecraftClient client = MinecraftClient.getInstance();
             ClientPlayerEntity player = client.player;
 
-            checkResourcepackReload();
             spawnInvisibilityParticles(client);
 
             if (Main.modDisabled()) return;
 
             if (player != null) {
                 tryTripleJump(player);
-                checkSnailInvisible(client, player);
-                checkTriviaSnailInvisible(client, player);
                 checkOnGroundFor(player);
             }
             ClientKeybinds.tick();
@@ -269,69 +262,5 @@ public class ClientEvents {
             return true;
         }
         return false;
-    }
-
-    private static int invisibleSnailFor = 0;
-    public static void checkSnailInvisible(MinecraftClient client, ClientPlayerEntity player) {
-        if (client.world == null) return;
-        if (MainClient.snailPos == null) return;
-        if (MainClient.snailPosTime == 0) return;
-        if (player.squaredDistanceTo(MainClient.snailPos.toCenterPos()) > 2500) return;
-        if (System.currentTimeMillis() - MainClient.snailPosTime > 2000) return;
-        if (invisibleSnailFor > 60) {
-            invisibleSnailFor = 0;
-            NetworkHandlerClient.sendStringPacket(PacketNames.REQUEST_SNAIL_MODEL, "");
-        }
-
-        List<Entity> snailEntities = new ArrayList<>();
-        for (DisplayEntity.ItemDisplayEntity entity : client.world.getEntitiesByClass(DisplayEntity.ItemDisplayEntity.class,
-                new Box(MainClient.snailPos).expand(10), entity->true)) {
-            if (MainClient.snailPartUUIDs.contains(entity.getUuid())) {
-                snailEntities.add(entity);
-            }
-        }
-
-        if (snailEntities.isEmpty()) {
-            invisibleSnailFor++;
-        }
-        else {
-            invisibleSnailFor = 0;
-        }
-    }
-
-    private static int invisibleTriviaSnailFor = 0;
-    public static void checkTriviaSnailInvisible(MinecraftClient client, ClientPlayerEntity player) {
-        if (client.world == null) return;
-        if (MainClient.triviaSnailPos == null) return;
-        if (MainClient.triviaSnailPosTime == 0) return;
-        if (player.squaredDistanceTo(MainClient.triviaSnailPos.toCenterPos()) > 2500) return;
-        if (System.currentTimeMillis() - MainClient.triviaSnailPosTime > 2000) return;
-        if (invisibleTriviaSnailFor > 60) {
-            invisibleTriviaSnailFor = 0;
-            NetworkHandlerClient.sendStringPacket(PacketNames.REQUEST_SNAIL_MODEL, "");
-        }
-
-        List<Entity> snailEntities = new ArrayList<>();
-        for (DisplayEntity.ItemDisplayEntity entity : client.world.getEntitiesByClass(DisplayEntity.ItemDisplayEntity.class,
-                new Box(MainClient.triviaSnailPos).expand(10), entity->true)) {
-            if (MainClient.triviaSnailPartUUIDs.contains(entity.getUuid())) {
-                snailEntities.add(entity);
-            }
-        }
-
-        if (snailEntities.isEmpty()) {
-            invisibleTriviaSnailFor++;
-        }
-        else {
-            invisibleTriviaSnailFor = 0;
-        }
-    }
-
-    public static void checkResourcepackReload() {
-        if (SnailSkinsClient.skinReloadTicks <= 0) return;
-        SnailSkinsClient.skinReloadTicks--;
-        if (SnailSkinsClient.skinReloadTicks == 0) {
-            ClientResourcePacks.enableClientResourcePack(ClientResourcePacks.SNAILS_RESOURCEPACK, true);
-        }
     }
 }

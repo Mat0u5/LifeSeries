@@ -1,4 +1,4 @@
-package net.mat0u5.lifeseries.voicechat;
+package net.mat0u5.lifeseries.compatibilities.voicechat;
 
 import de.maxhenkel.voicechat.api.*;
 import de.maxhenkel.voicechat.api.events.EventRegistration;
@@ -10,6 +10,7 @@ import de.maxhenkel.voicechat.api.packets.LocationalSoundPacket;
 import de.maxhenkel.voicechat.api.packets.MicrophonePacket;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
+import net.mat0u5.lifeseries.entity.triviabot.server.TriviaHandler;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
@@ -18,8 +19,8 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Listening;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.mat0u5.lifeseries.voicechat.soundeffects.RadioEffect;
-import net.mat0u5.lifeseries.voicechat.soundeffects.RoboticVoice;
+import net.mat0u5.lifeseries.compatibilities.voicechat.soundeffects.RadioEffect;
+import net.mat0u5.lifeseries.compatibilities.voicechat.soundeffects.RoboticVoice;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 
@@ -81,7 +82,7 @@ public class VoicechatMain implements VoicechatPlugin {
             VoicechatConnection connection = event.getSenderConnection();
             if (connection == null) return;
             UUID senderUUID = connection.getPlayer().getUuid();
-            if (!TriviaBot.cursedRoboticVoicePlayers.contains(senderUUID)) {
+            if (!TriviaHandler.cursedRoboticVoicePlayers.contains(senderUUID)) {
                 return;
             }
 

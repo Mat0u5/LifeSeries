@@ -7,8 +7,6 @@ import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.MainConfig;
-import net.mat0u5.lifeseries.dependencies.DependencyManager;
-import net.mat0u5.lifeseries.dependencies.PolymerDependency;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.registries.ModRegistries;
@@ -19,7 +17,7 @@ import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.secretlife.TaskManager;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkins;
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
@@ -41,7 +39,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.4.1.1";
+	public static final String MOD_VERSION = "dev-1.4.1.10";
 	public static final String MOD_ID = "lifeseries";
 	public static final String UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
 	public static final boolean DEBUG = false;
@@ -73,11 +71,7 @@ public class Main implements ModInitializer {
 		});
 
 		ConfigManager.moveOldMainFileIfExists();
-		SnailSkinsServer.createConfig();
-
-		if (DependencyManager.polymerLoaded()) {
-			PolymerDependency.onInitialize();
-		}
+		SnailSkins.createConfig();
 
 		config = new MainConfig();
 		MOD_DISABLED = config.getOrCreateProperty("modDisabled", "false").equalsIgnoreCase("true");
@@ -157,11 +151,6 @@ public class Main implements ModInitializer {
 	}
 
 	public static void softReloadStart() {
-		softestReloadStart();
-		SnailSkinsServer.sendStoredImages();
-	}
-
-	public static void softestReloadStart() {
 		if (currentSeason.getSeason() == Seasons.SECRET_LIFE) {
 			TaskManager.initialize();
 		}
@@ -173,16 +162,13 @@ public class Main implements ModInitializer {
 		currentSeason.reload();
 		NetworkHandlerServer.sendUpdatePackets();
 		PlayerUtils.resendCommandTrees();
+		SnailSkins.sendTextures();
 	}
 	public static void reloadEnd() {
 		DatapackManager.onReloadEnd();
 	}
 
 	public static boolean changeSeasonTo(String changeTo) {
-		if (Seasons.getSeasonFromStringName(changeTo) == Seasons.WILD_LIFE) {
-			if (!DependencyManager.checkWildLifeDependencies()) return false;
-		}
-
 		TaskScheduler.clearTasks();
 		config.setProperty("currentSeries", changeTo);
 		livesManager.resetAllPlayerLivesInner();

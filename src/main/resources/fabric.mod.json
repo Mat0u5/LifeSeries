@@ -22,7 +22,7 @@
 			"net.mat0u5.lifeseries.MainClient"
 		],
 		"voicechat": [
-			"net.mat0u5.lifeseries.voicechat.VoicechatMain"
+          "net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain"
 		]
 	},
 	"mixins": [
@@ -36,11 +36,7 @@
 		"fabricloader": ">=0.14.21",
 		"minecraft": "${targetVersion}",
 		"java": ">=21",
-		"fabric-api": "*"
-	},
-	"suggests": {
-		"bil": ">=1.1.10",
-		"polymer-bundled": ">=0.10.0"
+		"fabric-api": "${fabricApiVersion}"
 	},
 	"breaks": {
 		"pastlife": "*"

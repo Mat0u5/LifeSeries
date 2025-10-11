@@ -2,6 +2,8 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia;
 
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
+import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotPathfinding;
+import net.mat0u5.lifeseries.entity.triviabot.server.TriviaHandler;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
@@ -78,9 +80,9 @@ public class TriviaWildcard extends Wildcard {
         spawnedBotsFor.clear();
         activatedAt = (int) currentSession.passedTime;
         bots.clear();
-        TriviaBot.cursedGigantificationPlayers.clear();
-        TriviaBot.cursedHeartPlayers.clear();
-        TriviaBot.cursedMoonJumpPlayers.clear();
+        TriviaHandler.cursedGigantificationPlayers.clear();
+        TriviaHandler.cursedHeartPlayers.clear();
+        TriviaHandler.cursedMoonJumpPlayers.clear();
         if (!currentSession.statusStarted()) {
             PlayerUtils.broadcastMessageToAdmins(Text.of("§7You must start a session for trivia bots to spawn!"));
         }
@@ -101,9 +103,9 @@ public class TriviaWildcard extends Wildcard {
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
             TriviaWildcard.resetPlayerOnBotSpawn(player);
         }
-        TriviaBot.cursedGigantificationPlayers.clear();
-        TriviaBot.cursedHeartPlayers.clear();
-        TriviaBot.cursedMoonJumpPlayers.clear();
+        TriviaHandler.cursedGigantificationPlayers.clear();
+        TriviaHandler.cursedHeartPlayers.clear();
+        TriviaHandler.cursedMoonJumpPlayers.clear();
         super.deactivate();
     }
 
@@ -198,20 +200,20 @@ public class TriviaWildcard extends Wildcard {
         if (bots.containsKey(player.getUuid())) {
             TriviaBot bot = bots.get(player.getUuid());
             if (bot.isAlive()) {
-                bot.handleAnswer(answer);
+                bot.triviaHandler.handleAnswer(answer);
             }
         }
     }
 
     public static void spawnBotFor(ServerPlayerEntity player) {
-        spawnBotFor(player, TriviaBot.getBlockPosNearTarget(player, player.getBlockPos().add(0,50,0), 10));
+        spawnBotFor(player, TriviaBotPathfinding.getBlockPosNearTarget(player, player.getBlockPos().add(0,50,0), 10));
     }
     public static void spawnBotFor(ServerPlayerEntity player, BlockPos pos) {
         resetPlayerOnBotSpawn(player);
         TriviaBot bot = MobRegistry.TRIVIA_BOT.spawn(PlayerUtils.getServerWorld(player), pos, SpawnReason.COMMAND);
         if (bot != null) {
             SessionTranscript.newTriviaBot(player);
-            bot.setBoundPlayer(player);
+            bot.serverData.setBoundPlayer(player);
             bots.put(player.getUuid(), bot);
             player.playSoundToPlayer(SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.MASTER, 0.5f, 1);
             NetworkHandlerServer.sendNumberPacket(player, PacketNames.FAKE_THUNDER, 7);
@@ -222,26 +224,26 @@ public class TriviaWildcard extends Wildcard {
         if (bots.containsKey(player.getUuid())) {
             TriviaBot bot = bots.get(player.getUuid());
             if (bot.isAlive()) {
-                bot.despawn();
+                bot.serverData.despawn();
             }
         }
         killTriviaSnailFor(player);
 
-        if (TriviaBot.cursedGigantificationPlayers.contains(player.getUuid())) {
-            TriviaBot.cursedGigantificationPlayers.remove(player.getUuid());
+        if (TriviaHandler.cursedGigantificationPlayers.contains(player.getUuid())) {
+            TriviaHandler.cursedGigantificationPlayers.remove(player.getUuid());
             SizeShifting.setPlayerSize(player, 1);
         }
-        if (TriviaBot.cursedHeartPlayers.contains(player.getUuid())) {
-            TriviaBot.cursedHeartPlayers.remove(player.getUuid());
+        if (TriviaHandler.cursedHeartPlayers.contains(player.getUuid())) {
+            TriviaHandler.cursedHeartPlayers.remove(player.getUuid());
             AttributeUtils.resetMaxPlayerHealthIfNecessary(player);
         }
-        if (TriviaBot.cursedMoonJumpPlayers.contains(player.getUuid())) {
-            TriviaBot.cursedMoonJumpPlayers.remove(player.getUuid());
+        if (TriviaHandler.cursedMoonJumpPlayers.contains(player.getUuid())) {
+            TriviaHandler.cursedMoonJumpPlayers.remove(player.getUuid());
             AttributeUtils.resetPlayerJumpHeight(player);
         }
 
-        TriviaBot.cursedSliding.remove(player.getUuid());
-        TriviaBot.cursedRoboticVoicePlayers.remove(player.getUuid());
+        TriviaHandler.cursedSliding.remove(player.getUuid());
+        TriviaHandler.cursedRoboticVoicePlayers.remove(player.getUuid());
         NetworkHandlerServer.sendLongPacket(player, PacketNames.CURSE_SLIDING, 0);
 
         NetworkHandlerServer.sendStringPacket(player, PacketNames.RESET_TRIVIA, "true");
@@ -269,7 +271,7 @@ public class TriviaWildcard extends Wildcard {
         for (ServerWorld world : server.getWorlds()) {
             for (Entity entity : world.iterateEntities()) {
                 if (entity instanceof Snail snail) {
-                    if (snail.fromTrivia) {
+                    if (snail.isFromTrivia()) {
                         toKill.add(entity);
                     }
                 }
@@ -284,8 +286,8 @@ public class TriviaWildcard extends Wildcard {
         for (ServerWorld world : server.getWorlds()) {
             for (Entity entity : world.iterateEntities()) {
                 if (entity instanceof Snail snail) {
-                    if (snail.fromTrivia) {
-                        UUID boundPlayer = snail.boundPlayerUUID;
+                    if (snail.isFromTrivia()) {
+                        UUID boundPlayer = snail.serverData.boundPlayerUUID;
                         if (boundPlayer == null || boundPlayer.equals(player.getUuid())) {
                             toKill.add(entity);
                         }

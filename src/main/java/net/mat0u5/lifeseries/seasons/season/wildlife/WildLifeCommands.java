@@ -9,7 +9,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Hunger;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkins;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -25,8 +25,8 @@ import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -119,6 +119,9 @@ public class WildLifeCommands extends Command {
                     .then(literal("info")
                         .executes(context -> getSnailTexturesInfo(context.getSource()))
                     )
+                    .then(literal("reload")
+                            .executes(context -> snailTexturesReload(context.getSource()))
+                    )
                 )
         );
         dispatcher.register(
@@ -194,6 +197,17 @@ public class WildLifeCommands extends Command {
         return 1;
     }
 
+    public int snailTexturesReload(ServerCommandSource source) {
+        if (checkBanned(source)) return -1;
+        ServerPlayerEntity player = source.getPlayer();
+        if (player == null) return -1;
+
+        OtherUtils.sendCommandFeedback(source, Text.of("§7Reloading snail textures..."));
+        SnailSkins.sendTextures();
+
+        return 1;
+    }
+
     public int getSnailTexturesInfo(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
         ServerPlayerEntity player = source.getPlayer();
@@ -206,7 +220,7 @@ public class WildLifeCommands extends Command {
 
     public int getSnailTextures(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
-        List<String> textures = SnailSkinsServer.getAllSkins();
+        List<String> textures = SnailSkins.getAllSkins();
         if (textures.isEmpty()) {
             OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7No snail skins have been added yet. Run '§f/snail textures info§7' to learn how to add them."));
             return -1;

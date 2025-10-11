@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards;
 
-import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
+import net.mat0u5.lifeseries.entity.triviabot.server.TriviaHandler;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
@@ -14,7 +14,6 @@ import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -86,7 +85,7 @@ public class WildcardManager {
 
     public static void onPlayerJoin(ServerPlayerEntity player) {
         if (!isActiveWildcard(Wildcards.SIZE_SHIFTING)) {
-            if (SizeShifting.getPlayerSize(player) != 1 && !TriviaBot.cursedGigantificationPlayers.contains(player.getUuid())) {
+            if (SizeShifting.getPlayerSize(player) != 1 && !TriviaHandler.cursedGigantificationPlayers.contains(player.getUuid())) {
                 SizeShifting.setPlayerSize(player, 1);
             }
         }
@@ -217,7 +216,7 @@ public class WildcardManager {
         }
 
         if (isActiveWildcard(Wildcards.TRIVIA)) {
-            for (UUID uuid : TriviaBot.cursedSliding) {
+            for (UUID uuid : TriviaHandler.cursedSliding) {
                 ServerPlayerEntity player = PlayerUtils.getPlayer(uuid);
                 NetworkHandlerServer.sendLongPacket(player, PacketNames.CURSE_SLIDING, System.currentTimeMillis());
             }

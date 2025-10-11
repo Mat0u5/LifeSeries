@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails;
 import net.mat0u5.lifeseries.config.StringListConfig;
 import net.mat0u5.lifeseries.entity.pathfinder.PathFinder;
 import net.mat0u5.lifeseries.entity.snail.Snail;
+import net.mat0u5.lifeseries.entity.snail.server.SnailPathfinding;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
@@ -10,6 +11,7 @@ import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
@@ -74,7 +76,7 @@ public class Snails extends Wildcard {
     }
 
     public static void spawnSnailFor(ServerPlayerEntity player) {
-        BlockPos pos = Snail.getBlockPosNearTarget(player, 30);
+        BlockPos pos = SnailPathfinding.getBlockPosNearTarget(player, 30);
         if (pos == null) pos = player.getBlockPos().add(0,30,0);
         spawnSnailFor(player, pos);
     }
@@ -83,8 +85,7 @@ public class Snails extends Wildcard {
         if (player == null || pos == null) return;
         Snail snail = MobRegistry.SNAIL.spawn(PlayerUtils.getServerWorld(player), pos, SpawnReason.COMMAND);
         if (snail != null) {
-            snail.setBoundPlayer(player);
-            snail.updateSkin(player);
+            snail.serverData.setBoundPlayer(player);
             snails.put(player.getUuid(), snail);
         }
     }
@@ -94,7 +95,7 @@ public class Snails extends Wildcard {
         List<Entity> toKill = new ArrayList<>();
         for (ServerWorld world : server.getWorlds()) {
             for (Entity entity : world.iterateEntities()) {
-                if (entity instanceof Snail snail && !snail.fromTrivia) {
+                if (entity instanceof Snail snail && !snail.isFromTrivia()) {
                         toKill.add(entity);
                     }
 
@@ -109,14 +110,14 @@ public class Snails extends Wildcard {
     public static void reloadSnailNames() {
         for (Snail snail : snails.values()) {
             if (snail == null) return;
-            snail.updateSnailName();
+            snail.serverData.updateSnailName();
         }
     }
 
     public static void reloadSnailSkins() {
         for (Snail snail : snails.values()) {
             if (snail == null) return;
-            snail.updateSkin(snail.getActualBoundPlayer());
+            snail.serverData.updateSkin(snail.serverData.getBoundPlayer());
         }
     }
 
@@ -132,7 +133,7 @@ public class Snails extends Wildcard {
         saveSnailNames();
     }
 
-    public static String getSnailName(ServerPlayerEntity player) {
+    public static String getSnailName(PlayerEntity player) {
         if (snailNames.containsKey(player.getUuid())) {
             return snailNames.get(player.getUuid());
         }

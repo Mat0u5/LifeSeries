@@ -3,12 +3,11 @@ package net.mat0u5.lifeseries.seasons.season.wildlife;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
+import net.mat0u5.lifeseries.entity.triviabot.server.TriviaHandler;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
-import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.*;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
@@ -20,7 +19,6 @@ import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.WitherEntity;
@@ -28,7 +26,6 @@ import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Items;
 import net.minecraft.scoreboard.ScoreHolder;
 import net.minecraft.server.MinecraftServer;
@@ -39,11 +36,12 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static net.mat0u5.lifeseries.Main.currentSession;
 import static net.mat0u5.lifeseries.Main.seasonConfig;
 import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
-//? if >= 1.21.2
-/*import net.minecraft.server.world.ServerWorld;*/
+//? if >= 1.21.2 {
+/*import net.mat0u5.lifeseries.utils.world.WorldUtils;
+import net.minecraft.server.world.ServerWorld;
+*///?}
 
 public class WildLife extends Season {
     public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /wildcard, /superpower, /snail";
@@ -77,7 +75,7 @@ public class WildLife extends Season {
         super.initialize();
         Snails.loadConfig();
         Snails.loadSnailNames();
-        TriviaBot.initializeItemSpawner();
+        TriviaHandler.initializeItemSpawner();
     }
 
     @Override
@@ -258,11 +256,11 @@ public class WildLife extends Season {
 
         super.onPlayerDeath(player, source);
 
-        TriviaBot.cursedGigantificationPlayers.remove(player.getUuid());
-        TriviaBot.cursedHeartPlayers.remove(player.getUuid());
+        TriviaHandler.cursedGigantificationPlayers.remove(player.getUuid());
+        TriviaHandler.cursedHeartPlayers.remove(player.getUuid());
         AttributeUtils.resetMaxPlayerHealthIfNecessary(player);
 
-        TriviaBot.cursedMoonJumpPlayers.remove(player.getUuid());
+        TriviaHandler.cursedMoonJumpPlayers.remove(player.getUuid());
         AttributeUtils.resetPlayerJumpHeight(player);
 
         Superpower power = SuperpowersWildcard.getSuperpowerInstance(player);

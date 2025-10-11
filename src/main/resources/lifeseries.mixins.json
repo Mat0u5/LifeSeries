@@ -24,6 +24,7 @@
     "PlayerManagerMixin",
     "PlayerSaveHandlerMixin",
     "RecipeManagerMixin",
+    "RegistrySyncManagerMixin",
     "SavePropertiesMixin",
     "ServerCommandSourceMixin",
     "ServerCommonNetworkHandlerMixin",

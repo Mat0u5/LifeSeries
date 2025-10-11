@@ -243,4 +243,5 @@ This command **always** available
   - `/snail names request <name>` - Used when non-admin players want to request their snail name to be set to `<name>`. *No permissions required.*
   - `/snail textures list` - Shows a list of uploaded snail textures.
   - `/snail textures info` - Shows you how to create and upload snail textures.
+  - `/snail textures reload` - Reloads the snail textures from the files.
 </details>

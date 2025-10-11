@@ -23,22 +23,22 @@ public class SnailFlyGoal extends Goal {
     @Override
     public boolean canStart() {
         if (mob.isPaused()) return false;
-        if (!mob.flying || mob.gliding) {
+        if (!mob.isFlying() || mob.isGliding()) {
             return false;
         }
 
-        LivingEntity boundPlayer = mob.getBoundPlayer();
+        LivingEntity boundPlayer = mob.serverData.getBoundPlayer();
         if (boundPlayer == null) {
             return false;
         }
 
-        return getMob().canPathToPlayer(true);
+        return getMob().pathfinding.canPathToPlayer(true);
     }
 
     @Override
     public boolean shouldContinue() {
-        if (!mob.flying) return false;
-        return mob.getBoundPlayer() != null;
+        if (!mob.isFlying()) return false;
+        return mob.serverData.getBoundPlayer() != null;
     }
 
     @Override
@@ -47,8 +47,8 @@ public class SnailFlyGoal extends Goal {
 
     @Override
     public void stop() {
-        mob.flying = false;
-        mob.updateNavigation();
-        mob.updateMoveControl();
+        mob.setFlying(false);
+        mob.pathfinding.updateNavigation();
+        mob.pathfinding.updateMoveControl();
     }
 }

@@ -3,7 +3,6 @@ package net.mat0u5.lifeseries.utils;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.config.ClientConfig;
-import net.mat0u5.lifeseries.features.SnailSkinsClient;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.ResourcePackProfile;
@@ -12,7 +11,6 @@ import static net.mat0u5.lifeseries.MainClient.clientConfig;
 
 public class ClientResourcePacks {
     private static final String MINIMAL_ARMOR_RESOURCEPACK = "lifeseries:minimal_armor";
-    public static final String SNAILS_RESOURCEPACK = "file/" + SnailSkinsClient.PACK_NAME;
 
     public static void checkClientPacks() {
         handleClientResourcepack(MINIMAL_ARMOR_RESOURCEPACK, ClientConfig.MINIMAL_ARMOR.get(clientConfig));

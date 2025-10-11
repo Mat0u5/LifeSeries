@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.entity.snail.goal;
 
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import org.jetbrains.annotations.NotNull;
 
 public final class SnailLandGoal extends Goal {
@@ -17,11 +17,11 @@ public final class SnailLandGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        if (!mob.flying || mob.gliding) {
+        if (!mob.isFlying() || mob.isGliding()) {
             return false;
         }
 
-        ServerPlayerEntity boundPlayer = mob.getBoundPlayer();
+        PlayerEntity boundPlayer = mob.serverData.getBoundPlayer();
         if (boundPlayer == null) {
             noTargetTicks++;
         } else {
@@ -42,19 +42,19 @@ public final class SnailLandGoal extends Goal {
             return false;
         }
 
-        if (!mob.isValidBlockOnGround()) {
+        if (!mob.pathfinding.isValidBlockOnGround()) {
             return false;
         }
 
-        return mob.canPathToPlayerFromGround(false);
+        return mob.pathfinding.canPathToPlayerFromGround(false);
     }
 
     @Override
     public boolean shouldContinue() {
-        if (!mob.isValidBlockOnGround()) {
+        if (!mob.pathfinding.isValidBlockOnGround()) {
             return false;
         }
-        return mob.getDistanceToGroundBlock() > 1.5D;
+        return mob.pathfinding.getDistanceToGroundBlock() > 1.5D;
     }
 
     @Override
@@ -64,20 +64,18 @@ public final class SnailLandGoal extends Goal {
 
     @Override
     public void start() {
-        mob.landing = true;
-        mob.flying = false;
-        mob.gliding = false;
+        mob.setLanding(true);
+        mob.setFlying(false);
+        mob.setGliding(false);
     }
 
     @Override
     public void stop() {
-        mob.landing = false;
-        mob.gliding = false;
-        mob.flying = false;
-        mob.updateNavigation();
-        mob.updateMoveControl();
-
-        mob.playStopFlyAnimation();
+        mob.setLanding(false);
+        mob.setFlying(false);
+        mob.setGliding(false);
+        mob.pathfinding.updateNavigation();
+        mob.pathfinding.updateMoveControl();
     }
 
     private void land() {

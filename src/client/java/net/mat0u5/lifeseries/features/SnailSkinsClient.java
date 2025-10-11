@@ -1,159 +1,260 @@
 package net.mat0u5.lifeseries.features;
 
-import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.network.packets.ImagePayload;
-import net.minecraft.client.MinecraftClient;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
+import java.nio.file.Paths;
+import java.util.HashMap;
+
+import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.texture.NativeImage;
+import net.minecraft.client.texture.NativeImageBackedTexture;
+import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.Map;
 
 public class SnailSkinsClient {
-    private static final String CMD = "{\n  \"parent\": \"minecraft:item/generated\",\n  \"textures\": {\n    \"layer0\": \"minecraft:item/golden_horse_armor\"\n  },\n  \"overrides\": [\n__REPLACE__\n  ]\n}";
-    private static final String ITEMS_ENTRY = "{\"model\":{\"model\":\"snailtextures:item/snail/__REPLACE__\",\"tints\":[{\"default\":16777215,\"type\":\"minecraft:dye\"}],\"type\":\"minecraft:model\"}}";
-    private static final String BODY_1 = "{\"textures\":{\"0\":\"snailtextures:item/snail/texture__REPLACE__\",\"particle\":\"snailtextures:item/snail/texture__REPLACE__\"},\"elements\":[{\"from\":[9.0,13.0,12.0],\"to\":[10.0,16.0,13.0],\"faces\":{\"up\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[4.0,12.5,3.5,12.0]},\"west\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[3.0,12.0,3.5,13.5]},\"east\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[2.5,12.0,3.0,13.5]},\"south\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[12.0,2.5,12.5,4.0]},\"down\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[4.5,12.0,4.0,12.5]},\"north\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[2.0,12.0,2.5,13.5]}},\"rotation\":{\"axis\":\"y\",\"angle\":0.0,\"origin\":[10.0,13.0,13.0]}},{\"from\":[6.0,8.0,11.0],\"to\":[10.0,13.0,13.0],\"faces\":{\"up\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[12.0,10.0,10.0,9.0]},\"west\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[10.0,6.5,11.0,9.0]},\"east\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[10.0,4.0,11.0,6.5]},\"south\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[8.0,8.0,10.0,10.5]},\"down\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[12.0,10.0,10.0,11.0]},\"north\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[6.0,8.0,8.0,10.5]}},\"rotation\":{\"axis\":\"y\",\"angle\":0.0,\"origin\":[7.0,8.0,12.0]}},{\"from\":[6.0,8.0,9.0],\"to\":[10.0,10.0,11.0],\"faces\":{\"up\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,5.0,11.0,4.0]},\"west\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[9.0,11.5,10.0,12.5]},\"east\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[8.0,11.5,9.0,12.5]},\"south\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[8.0,10.5,10.0,11.5]},\"down\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,5.0,11.0,6.0]},\"north\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[6.0,10.5,8.0,11.5]}},\"rotation\":{\"axis\":\"y\",\"angle\":0.0,\"origin\":[7.0,8.0,10.0]}},{\"from\":[6.0,13.0,12.0],\"to\":[7.0,16.0,13.0],\"faces\":{\"up\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[4.0,12.5,3.5,12.0]},\"west\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[3.0,12.0,3.5,13.5]},\"east\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[2.5,12.0,3.0,13.5]},\"south\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[12.0,2.5,12.5,4.0]},\"down\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[4.5,12.0,4.0,12.5]},\"north\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[2.0,12.0,2.5,13.5]}},\"rotation\":{\"axis\":\"y\",\"angle\":0.0,\"origin\":[7.0,13.0,13.0]}}],\"display\":{\"head\":{\"rotation\":[0.0,180.0,0.0]}}}";
-    private static final String BODY_2 = "{\"textures\":{\"0\":\"snailtextures:item/snail/texture__REPLACE__\",\"particle\":\"snailtextures:item/snail/texture__REPLACE__\"},\"elements\":[{\"from\":[4.0,9.0,4.0],\"to\":[12.0,17.0,12.0],\"faces\":{\"up\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[4.0,12.0,0.0,8.0]},\"west\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[4.0,4.0,8.0,8.0]},\"east\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[0.0,4.0,4.0,8.0]},\"south\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[4.0,0.0,8.0,4.0]},\"down\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[12.0,0.0,8.0,4.0]},\"north\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[0.0,0.0,4.0,4.0]}},\"rotation\":{\"axis\":\"y\",\"angle\":0.0,\"origin\":[6.0,9.5,5.0]}}],\"display\":{\"head\":{\"rotation\":[0.0,180.0,0.0]}}}";
-    private static final String BODY_3 = "{\"textures\":{\"0\":\"snailtextures:item/snail/texture__REPLACE__\",\"particle\":\"snailtextures:item/snail/texture__REPLACE__\"},\"elements\":[{\"from\":[6.0,8.0,12.0],\"to\":[10.0,10.0,14.0],\"faces\":{\"up\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[12.0,12.0,10.0,11.0]},\"west\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[12.0,1.5,13.0,2.5]},\"east\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[12.0,0.5,13.0,1.5]},\"south\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[11.0,8.0,13.0,9.0]},\"down\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[8.0,11.5,6.0,12.5]},\"north\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[11.0,7.0,13.0,8.0]}},\"rotation\":{\"axis\":\"y\",\"angle\":0.0,\"origin\":[7.0,8.0,13.0]}}],\"display\":{\"head\":{\"rotation\":[0.0,180.0,0.0]}}}";
-    private static final String BODY_4 = "{\"textures\":{\"0\":\"snailtextures:item/snail/texture__REPLACE__\",\"particle\":\"snailtextures:item/snail/texture__REPLACE__\"},\"elements\":[{\"from\":[6.01,8.01,3.5],\"to\":[9.99,9.99,11.5],\"faces\":{\"up\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[6.0,12.0,4.0,8.0]},\"west\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[11.0,6.0,15.0,7.0]},\"east\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[11.0,6.0,15.0,7.0]},\"south\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[12.0,0.0,14.0,0.5]},\"down\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[10.0,4.0,8.0,8.0]},\"north\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[0.0,12.0,2.0,12.5]}},\"rotation\":{\"axis\":\"y\",\"angle\":0.0,\"origin\":[8.0,8.5,5.0]}}],\"display\":{\"head\":{\"rotation\":[0.0,180.0,0.0]}}}";
-    private static final String BODY_5 = "{\"textures\":{\"0\":\"snailtextures:item/snail/texture__REPLACE__\",\"particle\":\"snailtextures:item/snail/texture__REPLACE__\"},\"elements\":[{\"from\":[6.0,8.0,8.0],\"to\":[10.0,10.0,12.0],\"faces\":{\"up\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[6.0,10.0,4.0,8.0]},\"west\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,6.0,15.0,7.0]},\"east\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,6.0,15.0,7.0]},\"south\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[12.0,0.0,14.0,0.5]},\"down\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[10.0,4.0,8.0,6.0]},\"north\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[0.0,12.0,2.0,12.5]}},\"rotation\":{\"axis\":\"y\",\"angle\":0.0,\"origin\":[8.0,8.5,9.0]}}],\"display\":{\"head\":{\"rotation\":[0.0,180.0,0.0]}}}";
-    private static final String BODY_6 = "{\"textures\":{\"0\":\"snailtextures:item/snail/texture__REPLACE__\",\"particle\":\"snailtextures:item/snail/texture__REPLACE__\"},\"elements\":[{\"from\":[7.5,18.0,7.5],\"to\":[8.5,20.0,8.5],\"faces\":{\"up\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[12.5,2.5,13.0,3.0]},\"west\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[12.5,2.5,13.0,3.0]},\"east\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[12.5,2.5,13.0,3.0]},\"south\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[12.5,2.5,13.0,3.0]},\"down\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[12.5,2.5,13.0,3.0]},\"north\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[12.5,2.5,13.0,3.0]}},\"rotation\":{\"axis\":\"y\",\"angle\":0.0,\"origin\":[8.5,18.0,8.5]}},{\"from\":[6.0,17.0,6.0],\"to\":[10.0,18.0,10.0],\"faces\":{\"up\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.0,11.0,12.0,9.0]},\"west\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.0,10.5,16.0,11.0]},\"east\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.0,9.5,16.0,10.0]},\"south\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.0,10.0,16.0,10.5]},\"down\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.0,9.0,12.0,11.0]},\"north\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.0,9.0,16.0,9.5]}},\"rotation\":{\"axis\":\"y\",\"angle\":0.0,\"origin\":[7.0,17.0,7.0]}}],\"display\":{\"head\":{\"rotation\":[0.0,180.0,0.0]}}}";
-    private static final String BODY_7 = "{\"textures\":{\"0\":\"snailtextures:item/snail/texture__REPLACE__\",\"particle\":\"snailtextures:item/snail/texture__REPLACE__\"},\"elements\":[{\"from\":[5.0,20.01,5.0],\"to\":[11.0,20.01,11.0],\"faces\":{\"up\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[16.0,6.0,13.0,3.0]},\"west\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[0.0,0.0,3.0,0.0]},\"east\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[0.0,0.0,3.0,0.0]},\"south\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[0.0,0.0,3.0,0.0]},\"down\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[16.0,3.0,13.0,6.0]},\"north\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[0.0,0.0,3.0,0.0]}},\"rotation\":{\"axis\":\"y\",\"angle\":0.0,\"origin\":[5.0,20.01,5.0]}}],\"display\":{\"head\":{\"rotation\":[0.0,180.0,0.0]}}}";
-    private static final String BODY_8 = "{\"textures\":{\"0\":\"snailtextures:item/snail/texture__REPLACE__\",\"particle\":\"snailtextures:item/snail/texture__REPLACE__\"},\"elements\":[{\"from\":[0.0,21.0,4.0],\"to\":[16.0,21.6,20.0],\"faces\":{\"up\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.0,11.0,12.0,9.0]},\"west\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.0,10.5,16.0,11.0]},\"east\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.0,9.5,16.0,10.0]},\"south\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.0,10.0,16.0,10.5]},\"down\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.0,9.0,12.0,11.0]},\"north\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.0,9.0,16.0,9.5]}},\"rotation\":{\"axis\":\"y\",\"angle\":0.0,\"origin\":[1.0,21.0,5.0]}},{\"from\":[0.010000229,20.5,4.01],\"to\":[15.99,21.0,4.51],\"faces\":{\"up\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.5,0.0,15.5,0.25]},\"west\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.5,0.0,14.75,0.25]},\"east\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.5,0.0,14.75,0.25]},\"south\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.5,0.0,15.5,0.25]},\"down\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.5,0.0,15.5,0.25]},\"north\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.5,0.0,15.5,0.25]}},\"rotation\":{\"axis\":\"y\",\"angle\":0.0,\"origin\":[1.0,20.5,5.0]}},{\"from\":[0.010000229,20.5,19.49],\"to\":[15.99,21.0,19.99],\"faces\":{\"up\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.5,0.0,15.5,0.25]},\"west\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.5,0.0,14.75,0.25]},\"east\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.5,0.0,14.75,0.25]},\"south\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.5,0.0,15.5,0.25]},\"down\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.5,0.0,15.5,0.25]},\"north\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.5,0.0,15.5,0.25]}},\"rotation\":{\"axis\":\"y\",\"angle\":0.0,\"origin\":[1.0,20.5,20.5]}},{\"from\":[0.0,20.5,4.0],\"to\":[0.5,21.0,20.0],\"faces\":{\"up\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.5,0.0,15.5,0.25]},\"west\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.5,0.0,14.75,0.25]},\"east\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.5,0.0,14.75,0.25]},\"south\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.5,0.0,15.5,0.25]},\"down\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.5,0.0,15.5,0.25]},\"north\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.5,0.0,15.5,0.25]}},\"rotation\":{\"axis\":\"y\",\"angle\":0.0,\"origin\":[1.0,20.5,5.0]}},{\"from\":[15.5,20.5,4.0],\"to\":[16.0,21.0,20.0],\"faces\":{\"up\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.5,0.0,15.5,0.25]},\"west\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.5,0.0,14.75,0.25]},\"east\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.5,0.0,14.75,0.25]},\"south\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.5,0.0,15.5,0.25]},\"down\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.5,0.0,15.5,0.25]},\"north\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[14.5,0.0,15.5,0.25]}},\"rotation\":{\"axis\":\"y\",\"angle\":0.0,\"origin\":[16.5,20.5,5.0]}}],\"display\":{\"head\":{\"rotation\":[0.0,180.0,0.0]}}}";
-    private static final String BODY_9 = "{\"textures\":{\"0\":\"snailtextures:item/snail/texture__REPLACE__\",\"particle\":\"snailtextures:item/snail/texture__REPLACE__\"},\"elements\":[{\"from\":[6.0,17.0,15.0],\"to\":[7.0,21.0,15.1],\"faces\":{\"up\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[0.0,0.0,0.5,0.0]},\"west\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.0,2.5]},\"east\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.0,2.5]},\"south\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.5,2.5]},\"down\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[0.0,0.0,0.5,0.0]},\"north\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.5,2.5]}},\"rotation\":{\"axis\":\"y\",\"angle\":0.0,\"origin\":[6.0,17.0,15.0]}},{\"from\":[9.0,17.0,15.0],\"to\":[10.0,21.0,15.1],\"faces\":{\"up\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[0.0,0.0,0.5,0.0]},\"west\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.0,2.5]},\"east\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.0,2.5]},\"south\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.5,2.5]},\"down\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[0.0,0.0,0.5,0.0]},\"north\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.5,2.5]}},\"rotation\":{\"axis\":\"y\",\"angle\":0.0,\"origin\":[9.0,17.0,15.0]}},{\"from\":[9.0,17.0,9.0],\"to\":[10.0,21.0,9.1],\"faces\":{\"up\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[0.0,0.0,0.5,0.0]},\"west\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.0,2.5]},\"east\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.0,2.5]},\"south\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.5,2.5]},\"down\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[0.0,0.0,0.5,0.0]},\"north\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.5,2.5]}},\"rotation\":{\"axis\":\"y\",\"angle\":0.0,\"origin\":[9.0,17.0,9.0]}},{\"from\":[6.0,17.0,9.0],\"to\":[7.0,21.0,9.1],\"faces\":{\"up\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[0.0,0.0,0.5,0.0]},\"west\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.0,2.5]},\"east\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.0,2.5]},\"south\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.5,2.5]},\"down\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[0.0,0.0,0.5,0.0]},\"north\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.5,2.5]}},\"rotation\":{\"axis\":\"y\",\"angle\":0.0,\"origin\":[6.0,17.0,9.0]}},{\"from\":[5.0,17.0,13.0],\"to\":[5.1,21.0,14.0],\"faces\":{\"up\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[0.0,0.0,0.5,0.0]},\"west\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.0,2.5]},\"east\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.0,2.5]},\"south\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.5,2.5]},\"down\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[0.0,0.0,0.5,0.0]},\"north\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.5,2.5]}},\"rotation\":{\"axis\":\"y\",\"angle\":0.0,\"origin\":[5.0,17.0,13.0]}},{\"from\":[5.0,17.0,10.0],\"to\":[5.1,21.0,11.0],\"faces\":{\"up\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[0.0,0.0,0.5,0.0]},\"west\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.0,2.5]},\"east\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.0,2.5]},\"south\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.5,2.5]},\"down\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[0.0,0.0,0.5,0.0]},\"north\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.5,2.5]}},\"rotation\":{\"axis\":\"y\",\"angle\":0.0,\"origin\":[5.0,17.0,10.0]}},{\"from\":[11.0,17.0,10.0],\"to\":[11.1,21.0,11.0],\"faces\":{\"up\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[0.0,0.0,0.5,0.0]},\"west\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.0,2.5]},\"east\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.0,2.5]},\"south\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.5,2.5]},\"down\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[0.0,0.0,0.5,0.0]},\"north\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.5,2.5]}},\"rotation\":{\"axis\":\"y\",\"angle\":0.0,\"origin\":[11.0,17.0,10.0]}},{\"from\":[11.0,17.0,13.0],\"to\":[11.1,21.0,14.0],\"faces\":{\"up\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[0.0,0.0,0.5,0.0]},\"west\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.0,2.5]},\"east\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.0,2.5]},\"south\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.5,2.5]},\"down\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[0.0,0.0,0.5,0.0]},\"north\":{\"texture\":\"#0\",\"tintindex\":0,\"uv\":[13.0,0.5,13.5,2.5]}},\"rotation\":{\"axis\":\"y\",\"angle\":0.0,\"origin\":[11.0,17.0,13.0]}}],\"display\":{\"head\":{\"rotation\":[0.0,180.0,0.0]}}}";
+    private static final Map<String, Identifier> snailTextures = new HashMap<>();
 
-    public static int skinReloadTicks = 0;
-    public static void handleSnailSkin(ImagePayload payload) {
-        int index = payload.index();
-        int maxIndex = payload.maxIndex();
-
-        String imageName = "texture"+index;
-        byte[] imageBytes = payload.bytes();
-
-        Main.LOGGER.info("Added dynamic image: " + imageName);
-        MinecraftClient client = MinecraftClient.getInstance();
-        skinReloadTicks = 30;
-        client.execute(() -> addImage(imageName, imageBytes, index, maxIndex));
-    }
-
-    public static final String PACK_NAME = "[Life Series Mod] Snail Textures";
-    private static Path resourcePackPath;
-    private static boolean packInitialized = false;
-
-    public static void initialize() {
-        if (packInitialized) return;
-
+    public static void handleSnailTexture(String skinName, byte[] textureData) {
         try {
-            File resourcePacksFolder = new File(MinecraftClient.getInstance().runDirectory, "resourcepacks");
-            resourcePackPath = resourcePacksFolder.toPath().resolve(PACK_NAME);
+            Main.LOGGER.info(TextUtils.formatString("Received snail texture '{}'", skinName));
+            MinecraftClient client = MinecraftClient.getInstance();
 
-            Path assetsDir = resourcePackPath.resolve("assets").resolve("snailtextures");
-            Path itemsDir = assetsDir.resolve("items");
-            Path modelsDir = assetsDir.resolve("models").resolve("item").resolve("snail");
-            Path texturesDir = assetsDir.resolve("textures").resolve("item").resolve("snail");
-            Path cmdDir = resourcePackPath.resolve("assets").resolve("minecraft").resolve("models").resolve("item");
+            Identifier textureId = Identifier.of(Main.MOD_ID, "dynamic/snailskin/" + skinName);
 
-            Files.createDirectories(assetsDir);
-            Files.createDirectories(itemsDir);
-            Files.createDirectories(modelsDir);
-            Files.createDirectories(texturesDir);
-            Files.createDirectories(cmdDir);
+            NativeImage image = NativeImage.read(new ByteArrayInputStream(textureData));
+            if (image.getWidth() == 32 && image.getHeight() == 32) {
+                Main.LOGGER.info("Converting old 32x32 snail texture to the new format.");
+                //saveImageDebug(image, "before");
+                image = convertOldSnailTexture(image);
+                //saveImageDebug(image, "after");
+            }
 
-            Files.writeString(cmdDir.resolve("golden_horse_armor.json"), CMD);
+            if (!(image.getWidth() == 128 && image.getHeight() == 128)) {
+                Main.LOGGER.info("Snail texture has wrong dimensions, ignoring.");
+                return;
+            }
 
-            Path packMcmetaPath = resourcePackPath.resolve("pack.mcmeta");
-            String packMcmetaContent = "{\"pack\":{\"description\":\"Life Series Snails\",\"pack_format\":34}}";
-            Files.writeString(packMcmetaPath, packMcmetaContent);
+            //? if <= 1.21.4 {
+            NativeImageBackedTexture texture = new NativeImageBackedTexture(image);
+            //?} else {
+            /*NativeImageBackedTexture texture = new NativeImageBackedTexture(() -> skinName, image);
+            *///?}
+            removeSnailTexture(skinName);
+            client.getTextureManager().registerTexture(textureId, texture);
+            Main.LOGGER.info(TextUtils.formatString("Added snail texture '{}'", textureId));
 
-            packInitialized = true;
+            snailTextures.put(skinName, textureId);
 
-            Main.LOGGER.info("Initialized dynamic resource pack at: " + resourcePackPath);
         } catch (IOException e) {
             e.printStackTrace();
-            Main.LOGGER.info("Failed to initialize dynamic resource pack: " + e.getMessage());
         }
     }
 
-    public static CompletableFuture<Void> addImage(String imageName, byte[] imageData, int index, int maxIndex) {
-        if (!packInitialized) {
-            initialize();
+    public static Identifier getSnailTexture(String skinName) {
+        if (skinName == null) return null;
+        return snailTextures.get(skinName);
+    }
+
+    public static void removeSnailTexture(String skinName) {
+        Identifier textureId = snailTextures.remove(skinName);
+        if (textureId != null) {
+            MinecraftClient.getInstance().getTextureManager().destroyTexture(textureId);
+            Main.LOGGER.info(TextUtils.formatString("Removed old snail texture '{}'", textureId));
+        }
+    }
+
+    public static NativeImage convertOldSnailTexture(NativeImage original) {
+        NativeImage remapped = new NativeImage(128, 128, true);
+
+
+        // Parachute
+        scaleRegion(original, remapped, 24, 18, 4, 4, 16, 0, 4);
+        scaleRegion(original, remapped, 24, 18, 4, 4, 32, 0, 4);
+
+        scaleRegionXY(original, remapped, 28, 18, 4, 1, 16, 16, 4, 1);
+        scaleRegionXY(original, remapped, 28, 19, 4, 1, 0, 16, 4, 1);
+        scaleRegionXY(original, remapped, 28, 20, 4, 1, 48, 16, 4, 1);
+        scaleRegionXY(original, remapped, 28, 21, 4, 1, 32, 16, 4, 1);
+
+        copyRegion(original, remapped, 26, 1, 1, 4, 60, 37);
+        copyRegion(original, remapped, 26, 1, 1, 4, 58, 38);
+        copyRegion(original, remapped, 26, 1, 1, 4, 58, 42);
+        copyRegion(original, remapped, 26, 1, 1, 4, 58, 47);
+        copyRegion(original, remapped, 26, 1, 1, 4, 46, 58);
+        copyRegion(original, remapped, 26, 1, 1, 4, 44, 58);
+        copyRegion(original, remapped, 26, 1, 1, 4, 40, 59);
+        copyRegion(original, remapped, 26, 1, 1, 4, 42, 59);
+
+        scaleRegionXY(original, remapped, 29, 0, 1, 1, 34, 33, 34, 4);
+        scaleRegionXY(original, remapped, 29, 0, 1, 1, 0, 50, 34, 1);
+        scaleRegionXY(original, remapped, 29, 0, 1, 1, 0, 33, 34, 1);
+        scaleRegionXY(original, remapped, 29, 0, 1, 1, 16, 17, 2, 34);
+
+        // Propeller
+        copyRegion(original, remapped, 24, 18, 4, 4, 36, 53);
+        copyRegion(original, remapped, 24, 18, 4, 4, 40, 53);
+        copyRegion(original, remapped, 28, 18, 4, 1, 36, 57);
+        copyRegion(original, remapped, 28, 19, 4, 1, 32, 57);
+        copyRegion(original, remapped, 28, 20, 4, 1, 44, 57);
+        copyRegion(original, remapped, 28, 21, 4, 1, 40, 57);
+
+        scaleRegionXY(original, remapped, 25, 5, 1, 1, 37, 58, 2, 1);
+        scaleRegionXY(original, remapped, 25, 5, 1, 1, 36, 59, 4, 2);
+
+        copyRegion(original, remapped, 26, 6, 6, 6, 40, 47);
+
+        // Main Body
+        copyRegion(original, remapped, 0, 0, 8, 8, 42, 25);
+        copyRegion(original, remapped, 8, 0, 8, 8, 58, 25);
+        copyRegion(original, remapped, 16, 0, 8, 8, 50, 17);
+        copyRegion(original, remapped, 0, 8, 8, 8, 34, 25);
+        flipRegionHorizontal(remapped, 34, 25, 8, 8);
+        copyRegion(original, remapped, 8, 8, 8, 8, 50, 25);
+        copyRegion(original, remapped, 0, 16, 8, 8, 42, 17);
+
+        copyRegion(original, remapped, 24, 24, -4, -2, 2, 58);
+        copyRegion(original, remapped, 16, 23, -4, 2, 6, 58);
+        copyRegion(original, remapped, 22, 14, 4, 2, 2, 60);
+        copyRegion(original, remapped, 24, 3, 2, 2, 6, 60);
+        copyRegion(original, remapped, 22, 16, 4, 2, 8, 60);
+        copyRegion(original, remapped, 24, 1, 2, 2, 0, 60);
+
+        copyRegion(original, remapped, 12, 20, -4, -4, 20, 51);
+        copyRegion(original, remapped, 20, 8, -4, 4, 24, 51);
+        copyRegion(original, remapped, 26, 12, 4, 2, 16, 55);
+        scaleRegionXY(original, remapped, 0, 24, 4, 1, 20, 55, 1, 2);
+        copyRegion(original, remapped, 26, 12, 4, 2, 24, 55);
+        scaleRegionXY(original, remapped, 24, 0, 4, 1, 28, 55, 1, 2);
+
+        copyRegion(original, remapped, 12, 24, -4, -8, 42, 37);
+        copyRegion(original, remapped, 20, 8, -4, 8, 46, 37);
+        copyRegion(original, remapped, 22, 12, 8, 2, 34, 45);
+        scaleRegionXY(original, remapped, 0, 24, 4, 1, 42, 45, 1, 2);
+        copyRegion(original, remapped, 22, 12, 8, 2, 46, 45);
+        scaleRegionXY(original, remapped, 24, 0, 4, 1, 54, 45, 1, 2);
+
+        copyRegion(original, remapped, 26, 10, -4, -2, 18, 57);
+        copyRegion(original, remapped, 26, 10, -4, 2, 22, 57);
+        copyRegion(original, remapped, 16, 23, 2, 2, 16, 59);
+        copyRegion(original, remapped, 12, 21, 4, 2, 18, 59);
+        copyRegion(original, remapped, 18, 23, 2, 2, 22, 59);
+        copyRegion(original, remapped, 16, 21, 4, 2, 24, 59);
+
+        copyRegion(original, remapped, 24, 20, -4, -2, 50, 53);
+        copyRegion(original, remapped, 24, 20, -4, 2, 54, 53);
+        copyRegion(original, remapped, 20, 8, 2, 5, 48, 55);
+        copyRegion(original, remapped, 12, 16, 4, 5, 50, 55);
+        copyRegion(original, remapped, 20, 13, 2, 5, 54, 55);
+        copyRegion(original, remapped, 16, 16, 4, 5, 56, 55);
+
+
+        copyRegion(original, remapped, 8, 25, -1, -1, 13, 58);
+        copyRegion(original, remapped, 9, 24, -1, 1, 14, 58);
+        copyRegion(original, remapped, 5, 24, 1, 3, 12, 59);
+        copyRegion(original, remapped, 4, 24, 1, 3, 13, 59);
+        copyRegion(original, remapped, 6, 24, 1, 3, 14, 59);
+        copyRegion(original, remapped, 24, 5, 1, 3, 15, 59);
+
+        copyRegion(original, remapped, 8, 25, -1, -1, 29, 57);
+        copyRegion(original, remapped, 9, 24, -1, 1, 30, 57);
+        copyRegion(original, remapped, 5, 24, 1, 3, 28, 58);
+        copyRegion(original, remapped, 4, 24, 1, 3, 29, 58);
+        copyRegion(original, remapped, 6, 24, 1, 3, 30, 58);
+        copyRegion(original, remapped, 24, 5, 1, 3, 31, 58);
+
+        return remapped;
+    }
+
+    private static void copyRegion(NativeImage source, NativeImage dest,
+                                   int srcX, int srcY, int width, int height,
+                                   int destX, int destY) {
+        if (width < 0) {
+            srcX += width;
+            width *= -1;
+        }
+        if (height < 0) {
+            srcY += height;
+            height *= -1;
         }
 
-        return CompletableFuture.runAsync(() -> {
-            try {
-                // Convert byte array to image
-                BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageData));
-                if (image == null) {
-                    throw new IOException("Failed to decode image data");
-                }
-
-                File resourcePacksFolder = new File(MinecraftClient.getInstance().runDirectory, "resourcepacks");
-                resourcePackPath = resourcePacksFolder.toPath().resolve(PACK_NAME);
-                Path texturesDir = resourcePackPath.resolve("assets").resolve("snailtextures").resolve("textures").resolve("item").resolve("snail");
-                String textureName = imageName + ".png";
-                Path targetPath = texturesDir.resolve(textureName);
-
-                // Create parent directories
-                Files.createDirectories(targetPath.getParent());
-
-                // Write the image
-                ImageIO.write(image, "PNG", targetPath.toFile());
-
-                Main.LOGGER.info("Added image to resource pack: " + targetPath);
-
-                int modelDataStart = 10000 + index*10;
-
-                //Add the items files
-                Path assetsDir = resourcePackPath.resolve("assets").resolve("snailtextures");
-                Path itemsDir = assetsDir.resolve("items");
-                Files.createDirectories(itemsDir);
-                Files.writeString(itemsDir.resolve("body1_"+(modelDataStart+1)+".json"), ITEMS_ENTRY.replaceAll("__REPLACE__", "body1_"+(modelDataStart+1)));
-                Files.writeString(itemsDir.resolve("body2_"+(modelDataStart+2)+".json"), ITEMS_ENTRY.replaceAll("__REPLACE__", "body2_"+(modelDataStart+2)));
-                Files.writeString(itemsDir.resolve("body3_"+(modelDataStart+3)+".json"), ITEMS_ENTRY.replaceAll("__REPLACE__", "body3_"+(modelDataStart+3)));
-                Files.writeString(itemsDir.resolve("body4_"+(modelDataStart+4)+".json"), ITEMS_ENTRY.replaceAll("__REPLACE__", "body4_"+(modelDataStart+4)));
-                Files.writeString(itemsDir.resolve("body5_"+(modelDataStart+5)+".json"), ITEMS_ENTRY.replaceAll("__REPLACE__", "body5_"+(modelDataStart+5)));
-                Files.writeString(itemsDir.resolve("body6_"+(modelDataStart+6)+".json"), ITEMS_ENTRY.replaceAll("__REPLACE__", "body6_"+(modelDataStart+6)));
-                Files.writeString(itemsDir.resolve("body7_"+(modelDataStart+7)+".json"), ITEMS_ENTRY.replaceAll("__REPLACE__", "body7_"+(modelDataStart+7)));
-                Files.writeString(itemsDir.resolve("body8_"+(modelDataStart+8)+".json"), ITEMS_ENTRY.replaceAll("__REPLACE__", "body8_"+(modelDataStart+8)));
-                Files.writeString(itemsDir.resolve("body9_"+(modelDataStart+9)+".json"), ITEMS_ENTRY.replaceAll("__REPLACE__", "body9_"+(modelDataStart+9)));
-
-                //Add the model file
-                Path modelsDir = assetsDir.resolve("models").resolve("item").resolve("snail");
-                Files.createDirectories(modelsDir);
-                Files.writeString(modelsDir.resolve("body1_"+(modelDataStart+1)+".json"), BODY_1.replaceAll("__REPLACE__", String.valueOf(index)));
-                Files.writeString(modelsDir.resolve("body2_"+(modelDataStart+2)+".json"), BODY_2.replaceAll("__REPLACE__", String.valueOf(index)));
-                Files.writeString(modelsDir.resolve("body3_"+(modelDataStart+3)+".json"), BODY_3.replaceAll("__REPLACE__", String.valueOf(index)));
-                Files.writeString(modelsDir.resolve("body4_"+(modelDataStart+4)+".json"), BODY_4.replaceAll("__REPLACE__", String.valueOf(index)));
-                Files.writeString(modelsDir.resolve("body5_"+(modelDataStart+5)+".json"), BODY_5.replaceAll("__REPLACE__", String.valueOf(index)));
-                Files.writeString(modelsDir.resolve("body6_"+(modelDataStart+6)+".json"), BODY_6.replaceAll("__REPLACE__", String.valueOf(index)));
-                Files.writeString(modelsDir.resolve("body7_"+(modelDataStart+7)+".json"), BODY_7.replaceAll("__REPLACE__", String.valueOf(index)));
-                Files.writeString(modelsDir.resolve("body8_"+(modelDataStart+8)+".json"), BODY_8.replaceAll("__REPLACE__", String.valueOf(index)));
-                Files.writeString(modelsDir.resolve("body9_"+(modelDataStart+9)+".json"), BODY_9.replaceAll("__REPLACE__", String.valueOf(index)));
-
-                //Add the custom model data file
-                Path cmdDir = resourcePackPath.resolve("assets").resolve("minecraft").resolve("models").resolve("item");
-                Files.createDirectories(cmdDir);
-                List<String> replaceCMD = new ArrayList<>();
-                for (int i = 0; i <= maxIndex; i++) {
-                    for (int y = 1; y < 10; y++) {
-                        int newModelData = 10000 + i*10 + y;
-                        replaceCMD.add("\t{\"model\": \"snailtextures:item/snail/body"+y+"_"+newModelData+"\",\"predicate\": {\"custom_model_data\": "+newModelData + "}}");
+        for (int y = 0; y < Math.abs(height); y++) {
+            for (int x = 0; x < Math.abs(width); x++) {
+                int color = getColor(source, srcX + x, srcY + y);
+                setColor(dest, destX + x, destY + y, color);
+            }
+        }
+    }
+    private static void scaleRegion(NativeImage source, NativeImage dest,
+                                    int srcX, int srcY, int srcWidth, int srcHeight,
+                                    int destX, int destY, int scale) {
+        for (int y = 0; y < srcHeight; y++) {
+            for (int x = 0; x < srcWidth; x++) {
+                int color = getColor(source, srcX + x, srcY + y);
+                for (int sy = 0; sy < scale; sy++) {
+                    for (int sx = 0; sx < scale; sx++) {
+                        setColor(dest, destX + x * scale + sx, destY + y * scale + sy, color);
                     }
                 }
-                Files.writeString(cmdDir.resolve("golden_horse_armor.json"), CMD.replaceAll("__REPLACE__", String.join(",\n",replaceCMD)));
-
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                Main.LOGGER.info("Failed to add image to resource pack: " + e.getMessage());
             }
-        });
+        }
+    }
+    private static void scaleRegionXY(NativeImage source, NativeImage dest,
+                                      int srcX, int srcY, int srcWidth, int srcHeight,
+                                      int destX, int destY, int scaleX, int scaleY) {
+        for (int y = 0; y < srcHeight; y++) {
+            for (int x = 0; x < srcWidth; x++) {
+                int color = getColor(source, srcX + x, srcY + y);
+                for (int sy = 0; sy < scaleY; sy++) {
+                    for (int sx = 0; sx < scaleX; sx++) {
+                        setColor(dest, destX + x * scaleX + sx, destY + y * scaleY + sy, color);
+                    }
+                }
+            }
+        }
+    }
+
+    private static void flipRegionHorizontal(NativeImage image, int x, int y, int width, int height) {
+        for (int row = 0; row < height; row++) {
+            for (int col = 0; col < width / 2; col++) {
+                int leftColor = getColor(image, x + col, y + row);
+                int rightColor = getColor(image, x + width - 1 - col, y + row);
+                setColor(image, x + col, y + row, rightColor);
+                setColor(image, x + width - 1 - col, y + row, leftColor);
+            }
+        }
+    }
+
+    private static int getColor(NativeImage image, int x, int y) {
+        //? if <= 1.21 {
+        return image.getColor(x, y);
+         //?} else {
+        /*return image.getColorArgb(x, y);
+        *///?}
+    }
+
+    private static void setColor(NativeImage image, int x, int y, int color) {
+        //? if <= 1.21 {
+        image.setColor(x, y, color);
+         //?} else {
+        /*image.setColorArgb(x, y, color);
+        *///?}
+    }
+
+    private static void saveImageDebug(NativeImage image, String filename) {
+        try {
+            Path debugPath = Paths.get("debug_textures");
+            Files.createDirectories(debugPath);
+            Path outputPath = debugPath.resolve(filename + ".png");
+            image.writeTo(outputPath);
+            System.out.println("Saved debug texture to: " + outputPath.toAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

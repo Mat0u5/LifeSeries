@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard;
 
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
+import net.mat0u5.lifeseries.entity.triviabot.server.TriviaHandler;
 import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
@@ -38,7 +39,7 @@ public class SizeShifting extends Wildcard {
     @Override
     public void tick() {
         for (ServerPlayerEntity player : PlayerUtils.getAllFunctioningPlayers()) {
-            if (TriviaBot.cursedGigantificationPlayers.contains(player.getUuid())) continue;
+            if (TriviaHandler.cursedGigantificationPlayers.contains(player.getUuid())) continue;
             if (player.isSpectator()) continue;
             if (player.isSneaking()) {
                 addPlayerSize(player, -SIZE_CHANGE_STEP * SIZE_CHANGE_MULTIPLIER);
@@ -47,7 +48,7 @@ public class SizeShifting extends Wildcard {
     }
 
     public static void onHoldingJump(ServerPlayerEntity player) {
-        if (TriviaBot.cursedGigantificationPlayers.contains(player.getUuid())) return;
+        if (TriviaHandler.cursedGigantificationPlayers.contains(player.getUuid())) return;
         if (player.isSpectator()) return;
         if (WatcherManager.isWatcher(player)) return;
         addPlayerSize(player, SIZE_CHANGE_STEP * SIZE_CHANGE_MULTIPLIER);
@@ -92,7 +93,7 @@ public class SizeShifting extends Wildcard {
             boolean isDeadSpectator = player.isSpectator() && livesManager.isDead(player);
             if (!isActive || isDeadSpectator || isWatcher) {
                 double size = getPlayerSize(player);
-                if (TriviaBot.cursedGigantificationPlayers.contains(player.getUuid()) && !isWatcher && !isDeadSpectator) continue;
+                if (TriviaHandler.cursedGigantificationPlayers.contains(player.getUuid()) && !isWatcher && !isDeadSpectator) continue;
                 if (size == 1) continue;
                 if (size < 0.98) {
                     addPlayerSize(player, 0.01);

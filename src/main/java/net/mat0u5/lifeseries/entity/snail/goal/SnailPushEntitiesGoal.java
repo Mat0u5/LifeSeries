@@ -50,7 +50,7 @@ public final class SnailPushEntitiesGoal extends Goal {
     @Override
     public void start() {
         if (pushAway != null) {
-            mob.playThrowSound();
+            mob.sounds.playThrowSound();
             for (Entity entity : pushAway) {
                 pushAway(entity);
             }
