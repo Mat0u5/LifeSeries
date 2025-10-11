@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.entity.triviabot.goal;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,7 +37,7 @@ public final class TriviaBotTeleportGoal extends Goal {
         if (mob.serverData.getBoundPlayer() == null) {
             return false;
         }
-        ServerPlayerEntity boundPlayer = mob.serverData.getBoundPlayer();
+        PlayerEntity boundPlayer = mob.serverData.getBoundPlayer();
 
         float distFromPlayer = mob.distanceTo(boundPlayer);
         if (distFromPlayer > TriviaBot.MAX_DISTANCE) return true;

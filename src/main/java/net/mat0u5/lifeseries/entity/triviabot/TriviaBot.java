@@ -8,7 +8,6 @@ import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotPathfinding;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotServerData;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotSounds;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaHandler;
-import net.mat0u5.lifeseries.utils.world.ItemSpawner;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.control.MoveControl;
@@ -61,7 +60,6 @@ public class TriviaBot extends AmbientEntity {
         super(entityType, world);
         setInvulnerable(true);
         setPersistent();
-        pathfinding.updateNavigation();
     }
 
     public static DefaultAttributeContainer.Builder createAttributes() {
@@ -194,6 +192,7 @@ public class TriviaBot extends AmbientEntity {
         builder.add(answeredRight, false);
         builder.add(interactedWith, false);
         builder.add(gliding, false);
+        builder.add(analyzing, -1);
     }
     public void setRanOutOfTime(boolean value) {
         this.dataTracker.set(ranOutOfTime, value);
@@ -225,7 +224,7 @@ public class TriviaBot extends AmbientEntity {
     public boolean interactedWith() {
         return this.dataTracker.get(interactedWith);
     }
-    public boolean isGliding() {
+    public boolean isBotGliding() {
         return this.dataTracker.get(gliding);
     }
     public int getAnalyzingTime() {

@@ -17,7 +17,7 @@ import java.util.Map;
 
 @Mixin(value = RegistrySyncManager.class, priority = 1, remap = false)
 public class RegistrySyncManagerMixin {
-    //? if <= 1.21 {
+    //? if <= 1.21.2 {
     @ModifyReturnValue(method = "createAndPopulateRegistryMap", at = @At(value = "RETURN"))
     private static @Nullable Map<Identifier, Object2IntMap<Identifier>> checkRemoteRemap(@Nullable Map<Identifier, Object2IntMap<Identifier>> original) {
         if (original != null) {

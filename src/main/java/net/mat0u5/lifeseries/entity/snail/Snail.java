@@ -265,7 +265,7 @@ public class Snail extends HostileEntity {
         builder.add(mining, false);
         builder.add(fromTrivia, false);
     }
-    public void setAttacking(boolean value) {
+    public void setSnailAttacking(boolean value) {
         this.dataTracker.set(attacking, value);
     }
     public void setFlying(boolean value) {
@@ -284,7 +284,7 @@ public class Snail extends HostileEntity {
         this.dataTracker.set(fromTrivia, value);
     }
 
-    public boolean isAttacking() {
+    public boolean isSnailAttacking() {
         return this.dataTracker.get(attacking);
     }
     public boolean isFlying() {

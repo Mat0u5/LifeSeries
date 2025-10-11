@@ -1,47 +1,25 @@
 package net.mat0u5.lifeseries.gui.trivia;
 
-import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.features.Trivia;
 import net.mat0u5.lifeseries.gui.DefaultScreen;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.decoration.DisplayEntity;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import org.jetbrains.annotations.Nullable;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-//? if <= 1.21
-import com.mojang.blaze3d.systems.RenderSystem;
-//? if <= 1.21.5
-import net.minecraft.client.render.DiffuseLighting;
-//? if >= 1.21.6 {
-/*import net.minecraft.client.render.entity.EntityRenderer;
-import net.minecraft.client.render.entity.state.EntityRenderState;
-import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.util.Identifier;
-*///?}
-//? if <= 1.21.6
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
-//? if >= 1.21.9
-/*import net.minecraft.client.render.entity.EntityRenderManager;*/
-
 //? if >= 1.21.9
 /*import net.minecraft.client.gui.Click;*/
+
 public class QuizScreen extends DefaultScreen {
-    //? if >= 1.21.6 {
-    /*private static final Identifier TEXTURE_TRIVIABOT = Identifier.of("lifeseries","textures/gui/triviabot.png");
-    *///?}
 
     private static final int[] ANSWER_COLORS = {
             TextColors.PASTEL_BLUE, TextColors.PASTEL_ORANGE, TextColors.PASTEL_LIME, TextColors.PASTEL_YELLOW, TextColors.PASTEL_RED
@@ -215,99 +193,23 @@ public class QuizScreen extends DefaultScreen {
 
         // Entity in the middle
         context.fill(centerX-33, centerY-55, centerX+33, centerY+55, TextColors.BLACK);
-        //? if <= 1.21.5 {
-        drawEntity(context, startX, startY, mouseX, mouseY, centerX, centerY - 50, 40);
-        //?} else {
-        /*RenderUtils.drawTextureScaled(context, TEXTURE_TRIVIABOT, centerX-32, centerY-40, 0, 0, 510, 638, 0.125f, 0.125f);
-        *///?}
+        drawBot(context, startX, startY, mouseX, mouseY, centerX, centerY, 40);
     }
 
-    private void drawEntity(DrawContext context, int i, int j, int mouseX, int mouseY, int x, int y, int size) {
+    private void drawBot(DrawContext context, int i, int j, int mouseX, int mouseY, int x, int y, int size) {
         if (client == null) return;
         if (client.world == null) return;
         if (client.player == null) return;
-        List<Entity> allEntities = new ArrayList<>();
-        List<Entity> matchingBotEntities = new ArrayList<>();
-        //TODO
-        /*
-        for (DisplayEntity.ItemDisplayEntity entity : client.world.getEntitiesByClass(DisplayEntity.ItemDisplayEntity.class, client.player.getBoundingBox().expand(10), entity->true)) {
-            if (MainClient.triviaBotPartUUIDs.contains(entity.getUuid())) {
-                matchingBotEntities.add(entity);
+        TriviaBot bot = null;
+        for (TriviaBot entity : client.world.getEntitiesByClass(TriviaBot.class, client.player.getBoundingBox().expand(10), entity->true)) {
+            if (bot == null || client.player.distanceTo(entity) < client.player.distanceTo(bot)) {
+                bot = entity;
             }
-            allEntities.add(entity);
         }
-        */
-        if (matchingBotEntities.isEmpty()) matchingBotEntities = allEntities;
-        for (Entity entity : matchingBotEntities) {
-            drawEntity(context, x-30, y-55, x+30, y+85, size, 0.0625F, mouseX, mouseY, entity);
+        if (bot != null) {
+            InventoryScreen.drawEntity(context, x-30, y-70, x+30, y+70, size, 0.0625F, centerX, centerY+10, bot);
         }
     }
-
-    public static void drawEntity(DrawContext context, int x1, int y1, int x2, int y2, int size, float f, float mouseX, float mouseY, Entity entity) {
-        context.enableScissor(x1, y1, x2, y2);
-        Quaternionf quaternionf = (new Quaternionf()).rotateZ(3.1415927F);
-        Quaternionf quaternionf2 = (new Quaternionf()).rotateX(0);
-        quaternionf.mul(quaternionf2);
-        float originalYaw = entity.getYaw();
-        float originalPitch = entity.getPitch();
-        entity.setYaw(180);
-        entity.setPitch(0);
-        Vector3f vector3f = new Vector3f(0.0F, entity.getHeight() / 2.0F + f, 0.0F);
-        //? if <= 1.21.5 {
-        drawEntity(context, (x1 + x2) / 2.0F, (y1 + y2) / 2.0F, size, vector3f, quaternionf, quaternionf2, entity);
-        //?} else {
-        /*drawEntity(context, x1, y1, x2, y2, size, vector3f, quaternionf, quaternionf2, entity);
-        *///?}
-        entity.setYaw(originalYaw);
-        entity.setPitch(originalPitch);
-        context.disableScissor();
-    }
-
-    //? if <= 1.21.5 {
-    public static void drawEntity(DrawContext context, float x, float y, float size, Vector3f vector3f, Quaternionf quaternionf, @Nullable Quaternionf quaternionf2, Entity entity) {
-        context.getMatrices().push();
-        context.getMatrices().translate(x, y, 50.0);
-        context.getMatrices().scale(size, size, -size);
-        context.getMatrices().translate(vector3f.x, vector3f.y, vector3f.z);
-        context.getMatrices().multiply(quaternionf);
-        //? if <= 1.21.4 {
-        DiffuseLighting.method_34742();
-         //?} else {
-        /*DiffuseLighting.enableGuiShaderLighting();
-        *///?}
-        EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
-        if (quaternionf2 != null) {
-            entityRenderDispatcher.setRotation(quaternionf2.conjugate(new Quaternionf()).rotateY(3.1415927F));
-        }
-
-        entityRenderDispatcher.setRenderShadows(false);
-        //? if <= 1.21 {
-        RenderSystem.runAsFancy(() -> {
-            entityRenderDispatcher.render(entity, 0.0, 0.0, 0.0, 0.0F, 1.0F, context.getMatrices(), context.getVertexConsumers(), 15728880);
-        });
-         //?} else {
-        /*context.draw((vertexConsumers) -> {
-            entityRenderDispatcher.render(entity, 0.0, 0.0, 0.0, 1.0F, context.getMatrices(), vertexConsumers, 15728880);
-        });
-        *///?}
-        context.draw();
-        entityRenderDispatcher.setRenderShadows(true);
-        context.getMatrices().pop();
-        DiffuseLighting.enableGuiDepthLighting();
-    }
-    //?} else {
-    /*public static void drawEntity(DrawContext drawer, int x1, int y1, int x2, int y2, float scale, Vector3f translation, Quaternionf rotation, @Nullable Quaternionf overrideCameraAngle, Entity entity) {
-        //? if <= 1.21.6 {
-        EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
-        //?} else {
-        /^EntityRenderManager entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
-        ^///?}
-        EntityRenderer<? super Entity, ?> entityRenderer = entityRenderDispatcher.getRenderer(entity);
-        EntityRenderState entityRenderState = entityRenderer.getAndUpdateRenderState(entity, 1.0F);
-        entityRenderState.hitbox = null;
-        drawer.addEntity(entityRenderState, scale, translation, rotation, overrideCameraAngle, x1, y1, x2, y2);
-    }
-    *///?}
 
     @Override
     public boolean shouldPause() {

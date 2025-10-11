@@ -68,7 +68,8 @@ public class TriviaHandler {
 
 
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
-        ServerPlayerEntity boundPlayer = bot.serverData.getBoundPlayer();
+        if (bot.getWorldEntity().isClient()) return ActionResult.PASS;
+        ServerPlayerEntity boundPlayer = bot.serverData.getBoundServerPlayer();
         if (boundPlayer == null) return ActionResult.PASS;
         if (boundPlayer.getUuid() != player.getUuid()) return ActionResult.PASS;
         if (bot.submittedAnswer()) return ActionResult.PASS;
@@ -120,6 +121,7 @@ public class TriviaHandler {
     }
 
     public void handleAnswer(int answer) {
+        if (bot.getWorldEntity().isClient()) return;
         if (bot.submittedAnswer()) return;
         bot.setSubmittedAnswer(true);
         bot.setAnalyzingTime(42);
@@ -161,7 +163,7 @@ public class TriviaHandler {
     }
 
     public void cursePlayer() {
-        ServerPlayerEntity player = bot.serverData.getBoundPlayer();
+        ServerPlayerEntity player = bot.serverData.getBoundServerPlayer();
         if (player == null) return;
         player.playSoundToPlayer(SoundEvents.ENTITY_ELDER_GUARDIAN_CURSE, SoundCategory.MASTER, 0.2f, 1f);
         ServerWorld world = (ServerWorld) bot.getWorldEntity();
@@ -245,7 +247,7 @@ public class TriviaHandler {
             StatusEffects.ABSORPTION
     );
     public void blessPlayer() {
-        ServerPlayerEntity player = bot.serverData.getBoundPlayer();
+        ServerPlayerEntity player = bot.serverData.getBoundServerPlayer();
         if (player == null) return;
         player.sendMessage(Text.empty());
         for (int i = 0; i < 3; i++) {
@@ -273,6 +275,7 @@ public class TriviaHandler {
     }
 
     public void spawnItemForPlayer() {
+        if (bot.getWorldEntity().isClient()) return;
         if (itemSpawner == null) return;
         if (bot.serverData.getBoundPlayer() == null) return;
         Vec3d playerPos = WorldUtils.getEntityPos(bot.serverData.getBoundPlayer());
@@ -287,7 +290,7 @@ public class TriviaHandler {
             vector = relativeTargetPos.normalize().multiply(0.3).add(0,0.1,0);
         }
 
-        List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, (ServerWorld) bot.getWorldEntity(), bot.serverData.getBoundPlayer(), Identifier.of("lifeseriesdynamic", "trivia_reward_loottable"));
+        List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, (ServerWorld) bot.getWorldEntity(), bot.serverData.getBoundServerPlayer(), Identifier.of("lifeseriesdynamic", "trivia_reward_loottable"));
         if (!lootTableItems.isEmpty()) {
             for (ItemStack item : lootTableItems) {
                 ItemStackUtils.spawnItemForPlayerWithVelocity((ServerWorld) bot.getWorldEntity(), pos, item, bot.serverData.getBoundPlayer(), vector);

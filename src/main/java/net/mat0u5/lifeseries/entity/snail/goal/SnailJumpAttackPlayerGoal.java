@@ -36,7 +36,7 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
             return false;
         }
 
-        if (mob.isAttacking()) {
+        if (mob.isSnailAttacking()) {
             return true;
         }
 
@@ -78,14 +78,14 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
             this.previousTargetPosition = WorldUtils.getEntityPos(boundPlayer);
         }
         this.attackCooldown = Snail.JUMP_COOLDOWN_SHORT;
-        mob.setAttacking(true);
+        mob.setSnailAttacking(true);
     }
 
     @Override
     public void stop() {
         this.attackCooldown = Snail.JUMP_COOLDOWN_SHORT;
         this.previousTargetPosition = Vec3d.ZERO;
-        mob.setAttacking(false);
+        mob.setSnailAttacking(false);
     }
 
     @Override

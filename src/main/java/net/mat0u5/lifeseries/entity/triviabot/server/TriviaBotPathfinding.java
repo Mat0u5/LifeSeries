@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.entity.ai.control.MoveControl;
 import net.minecraft.entity.ai.pathing.MobNavigation;
 import net.minecraft.entity.ai.pathing.Path;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
@@ -16,6 +17,7 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class TriviaBotPathfinding {
@@ -23,9 +25,11 @@ public class TriviaBotPathfinding {
     public TriviaBotPathfinding(TriviaBot bot) {
         this.bot = bot;
     }
+    public boolean navigationInit = false;
 
     public void fakeTeleportToPlayer() {
-        ServerPlayerEntity player = bot.serverData.getBoundPlayer();
+        if (bot.getWorldEntity().isClient()) return;
+        ServerPlayerEntity player = bot.serverData.getBoundServerPlayer();
         if (player == null) return;
         ServerWorld playerWorld = PlayerUtils.getServerWorld(player);
         if (bot.getWorldEntity() instanceof ServerWorld world) {
@@ -33,15 +37,15 @@ public class TriviaBotPathfinding {
             world.playSound(null, bot.getX(), bot.getY(), bot.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, bot.getSoundCategory(), bot.soundVolume(), bot.getSoundPitch());
             playerWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, bot.getSoundCategory(), bot.soundVolume(), bot.getSoundPitch());
             AnimationUtils.spawnTeleportParticles(world, WorldUtils.getEntityPos(bot));
-            AnimationUtils.spawnTeleportParticles(playerWorld, tpTo.toCenterPos());
+            AnimationUtils.spawnTeleportParticles(world, tpTo.toCenterPos());
             bot.serverData.despawn();
             TriviaWildcard.spawnBotFor(player, tpTo);
         }
     }
 
-    public static BlockPos getBlockPosNearTarget(ServerPlayerEntity target, BlockPos targetPos, double distanceFromTarget) {
+    public static BlockPos getBlockPosNearTarget(PlayerEntity target, BlockPos targetPos, double distanceFromTarget) {
         if (target == null) return targetPos;
-        return WorldUtils.getCloseBlockPos(PlayerUtils.getServerWorld(target), targetPos, distanceFromTarget, 2, false);
+        return WorldUtils.getCloseBlockPos(PlayerUtils.getWorld(target), targetPos, distanceFromTarget, 2, false);
     }
 
 
@@ -52,6 +56,11 @@ public class TriviaBotPathfinding {
     }
 
     public void updateNavigationTarget() {
+        if (bot.interactedWith()) {
+            bot.getNavigation().stop();
+            return;
+        }
+
         if (bot.serverData.getBoundPlayer() == null) return;
         if (bot.distanceTo(bot.serverData.getBoundPlayer()) > TriviaBot.MAX_DISTANCE) return;
         bot.getNavigation().setSpeed(TriviaBot.MOVEMENT_SPEED);

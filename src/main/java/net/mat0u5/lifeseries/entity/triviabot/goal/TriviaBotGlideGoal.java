@@ -18,7 +18,7 @@ public final class TriviaBotGlideGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        if (mob.isGliding()) {
+        if (mob.isBotGliding()) {
             return true;
         }
 

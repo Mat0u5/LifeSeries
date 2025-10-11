@@ -1,22 +1,16 @@
 package net.mat0u5.lifeseries.entity.triviabot.server;
 
-import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
-import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.particle.ParticleTypes;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
@@ -73,24 +67,21 @@ public class TriviaBotServerData {
         }
         else {
             handleHighVelocity();
-            if (!bot.interactedWith()) {
-                ServerPlayerEntity boundPlayer = getBoundPlayer();
-                if (boundPlayer != null) {
-                    if (bot.age % 5 == 0) {
-                        bot.pathfinding.updateNavigationTarget();
-                    }
+            ServerPlayerEntity boundPlayer = getBoundServerPlayer();
+            if (boundPlayer != null) {
+                if (bot.age % 5 == 0) {
+                    bot.pathfinding.updateNavigationTarget();
                 }
             }
             if (bot.interactedWith() && bot.triviaHandler.getRemainingTime() <= 0) {
                 if (!bot.ranOutOfTime()) {
-                    ServerPlayerEntity boundPlayer = getBoundPlayer();
                     if (boundPlayer != null) {
                         NetworkHandlerServer.sendStringPacket(boundPlayer, PacketNames.RESET_TRIVIA, "true");
                     }
                 }
                 bot.setRanOutOfTime(true);
             }
-            if (snailTransformation > 33) {
+            if (snailTransformation > 66) {
                 bot.triviaHandler.transformIntoSnail();
             }
         }
@@ -99,13 +90,19 @@ public class TriviaBotServerData {
             despawn();
         }
 
+        if (bot.age % 100 == 0 || !bot.pathfinding.navigationInit) {
+            bot.pathfinding.navigationInit = true;
+            bot.pathfinding.updateNavigation();
+        }
+
         chunkLoading();
         bot.clearStatusEffects();
         bot.sounds.playSounds();
     }
 
     @Nullable
-    public ServerPlayerEntity getBoundPlayer() {
+    public ServerPlayerEntity getBoundServerPlayer() {
+        if (bot.getWorldEntity().isClient()) return null;
         if (server == null) return null;
         ServerPlayerEntity player = PlayerUtils.getPlayer(boundPlayerUUID);
         if (player == null || (player.isSpectator() && !player.isAlive())) {
@@ -117,6 +114,10 @@ public class TriviaBotServerData {
         if (!player.isAlive()) return null;
         return player;
     }
+    @Nullable
+    public PlayerEntity getBoundPlayer() {
+        return getBoundServerPlayer();
+    }
 
     @Nullable
     public ServerPlayerEntity getActualBoundPlayer() {
@@ -124,7 +125,7 @@ public class TriviaBotServerData {
         return PlayerUtils.getPlayer(boundPlayerUUID);
     }
 
-    public void setBoundPlayer(ServerPlayerEntity player) {
+    public void setBoundPlayer(PlayerEntity player) {
         if (player == null) return;
         boundPlayerUUID = player.getUuid();
     }
@@ -142,27 +143,25 @@ public class TriviaBotServerData {
 
     public void chunkLoading() {
         if (bot.getWorldEntity() instanceof ServerWorld world) {
-            addTicket(world);
+            //? if <= 1.21.4 {
+            world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(bot.getBlockPos()), 2, bot.getBlockPos());
+            //?} else {
+            /*world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(bot.getBlockPos()), 2);
+             *///?}
         }
-    }
-
-    public void addTicket(ServerWorld world) {
-        //? if <= 1.21.4 {
-        world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(bot.getBlockPos()), 2, bot.getBlockPos());
-         //?} else {
-        /*world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(bot.getBlockPos()), 2);
-        *///?}
     }
 
     public void despawn() {
         if (boundPlayerUUID != null) {
             TriviaWildcard.bots.remove(boundPlayerUUID);
         }
-        //? if <= 1.21 {
-        bot.kill();
-        //?} else {
-        /*bot.kill((ServerWorld) bot.getWorldEntity());
-         *///?}
+        if (bot.getWorldEntity().isClient()) {
+            //? if <= 1.21 {
+            bot.kill();
+            //?} else {
+            /*bot.kill((ServerWorld) bot.getWorldEntity());
+             *///?}
+        }
         bot.discard();
     }
 }

@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.entity.triviabot.goal;
 
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
@@ -10,7 +10,7 @@ import java.util.EnumSet;
 public class TriviaBotLookAtPlayerGoal extends Goal {
     protected final TriviaBot mob;
     @Nullable
-    protected ServerPlayerEntity target;
+    protected PlayerEntity target;
     protected static final double RANGE_SQUARED = 400;
     private int lookTime;
 

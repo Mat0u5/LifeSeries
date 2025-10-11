@@ -12,7 +12,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.client.render.entity.MobEntityRenderer;
 public class TriviaBotRenderer extends MobEntityRenderer<TriviaBot, TriviaBotModel<TriviaBot>> {
     public TriviaBotRenderer(EntityRendererFactory.Context context) {
-        super(context, new TriviaBotModel<>(context.getPart(TriviaBotModel.TRIVIA_BOT)), 0.5f);
+        super(context, new TriviaBotModel<>(context.getPart(TriviaBotModel.TRIVIA_BOT)), 0.45f);
     }
 
     @Override
@@ -32,7 +32,7 @@ import net.minecraft.util.Identifier;
 
 public class TriviaBotRenderer extends AgeableMobEntityRenderer<TriviaBot, TriviaBotRenderState, TriviaBotModel> {
     public TriviaBotRenderer(EntityRendererFactory.Context context) {
-        super(context, new TriviaBotModel(context.getPart(TriviaBotModel.TRIVIA_BOT)), new TriviaBotModel(context.getPart(TriviaBotModel.TRIVIA_BOT)), 0.5f);
+        super(context, new TriviaBotModel(context.getPart(TriviaBotModel.TRIVIA_BOT)), new TriviaBotModel(context.getPart(TriviaBotModel.TRIVIA_BOT)), 0.45f);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class TriviaBotRenderer extends AgeableMobEntityRenderer<TriviaBot, Trivi
 
     @Override
     public Identifier getTexture(TriviaBotRenderState state) {
-        return Identifier.of(Main.MOD_ID, "textures/entity/triviaBot/triviabot.png");
+        return Identifier.of(Main.MOD_ID, "textures/entity/triviabot/triviabot.png");
     }
 
     public void updateRenderState(TriviaBot triviaBot, TriviaBotRenderState state, float f) {

@@ -30,9 +30,11 @@ public class TriviaBotClientData {
             analyzingAnimationState.startIfNotRunning(bot.age);
         }
 
-        if (bot.ranOutOfTime() && !lastRanOutOfTime) {
+        if (bot.ranOutOfTime()) {
             pauseAllAnimations("snail_transform");
-            snailTransformAnimationState.startIfNotRunning(bot.age);
+            if (!lastRanOutOfTime) {
+                snailTransformAnimationState.startIfNotRunning(bot.age);
+            }
         }
         else if (bot.getAnalyzingTime() > 0) {
             pauseAllAnimations("analyzing");
@@ -53,7 +55,7 @@ public class TriviaBotClientData {
             pauseAllAnimations("countdown");
             countdownAnimationState.startIfNotRunning(bot.age);
         }
-        else if (bot.isGliding()) {
+        else if (bot.isBotGliding()) {
             pauseAllAnimations("glide");
             glideAnimationState.startIfNotRunning(bot.age);
         }

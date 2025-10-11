@@ -328,12 +328,12 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
 
     @Override
     public void render(MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay, int color) {
-        main.render(matrices, vertexConsumer, light, overlay, color);
+        triviabot.render(matrices, vertexConsumer, light, overlay, color);
     }
 
     @Override
     public ModelPart getPart() {
-        return main;
+        return triviabot;
     }
     //?} else {
     /*@Override
