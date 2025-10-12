@@ -22,12 +22,11 @@ public enum PacketNames {
     ,RESET_TRIVIA
     ,JUMP
     ,SESSION_STATUS
-    ,SNAIL_SKIN
-    ,MORPH
+    ,MORPH //TODO should work
     ,TIME_DILATION
-    ,PLAYER_DISGUISE // Also a packet ID
+    ,PLAYER_DISGUISE // Also a packet ID //TODO should work
     ,SHOW_VIGNETTE
-    ,PLAYER_INVISIBLE("player_invisible__")
+    ,PLAYER_INVISIBLE("player_invisible__") //TODO should work
     ,TABLIST_SHOW_EXACT
     ,CURRENT_SEASON
     ,ACTIVE_WILDCARDS

@@ -18,6 +18,8 @@ public class ThirdLifeConfig extends ConfigManager {
         "diamond_helmet",
         "netherite_helmet",
         "turtle_helmet",
+        //? if >= 1.21.9
+        /*"copper_helmet",*/
         "elytra"
     );
 

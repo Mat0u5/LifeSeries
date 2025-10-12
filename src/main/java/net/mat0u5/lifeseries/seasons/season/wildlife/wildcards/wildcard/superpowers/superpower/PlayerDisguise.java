@@ -7,7 +7,6 @@ import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -79,9 +78,16 @@ public class PlayerDisguise extends ToggleableSuperpower {
                 playerPos.getX(), playerPos.getY(), playerPos.getZ(),
                 2, 0, 0, 0, 0
         );
-        NetworkHandlerServer.sendPlayerDisguise(player.getUuid().toString(), player.getName().getString(), copiedPlayerUUID, copiedPlayerName);
-
         super.activate();
+        sendDisguisePacket();
+    }
+
+    public void sendDisguisePacket() {
+        if (!this.active) return;
+        if (copiedPlayerName.isEmpty() || copiedPlayerUUID.isEmpty()) return;
+        ServerPlayerEntity player = getPlayer();
+        if (player == null) return;
+        NetworkHandlerServer.sendPlayerDisguise(player.getUuid().toString(), player.getName().getString(), copiedPlayerUUID, copiedPlayerName);
     }
 
     @Override

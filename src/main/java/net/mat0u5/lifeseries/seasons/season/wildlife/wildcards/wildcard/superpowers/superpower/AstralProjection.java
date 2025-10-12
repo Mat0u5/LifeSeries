@@ -25,9 +25,7 @@ import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.network.DisconnectionInfo;
-import net.minecraft.network.packet.s2c.play.PositionFlag;
-import net.minecraft.text.Text;
-import java.util.EnumSet;
+
 import static net.mat0u5.lifeseries.Main.server;
 //?}
 //? if >= 1.21.9 {
@@ -111,8 +109,7 @@ public class AstralProjection extends ToggleableSuperpower {
         FakePlayer.createFake(fakePlayerName, server, startedPos, startedLooking[0], startedLooking[1], server.getOverworld().getRegistryKey(),
                 startedGameMode, false, inv, player.getUuid()).thenAccept((fakePlayer) -> {
             clone = fakePlayer;
-            String name = TextUtils.textToLegacyString(player.getStyledDisplayName());
-            NetworkHandlerServer.sendPlayerDisguise(clone.getUuid().toString(), clone.getName().getString(), player.getUuid().toString(), name);
+            sendDisguisePacket();
         });
         //?} else {
         /*clone = EntityType.MANNEQUIN.create(startedWorld, SpawnReason.COMMAND);
@@ -149,6 +146,17 @@ public class AstralProjection extends ToggleableSuperpower {
             clone.refreshPositionAndAngles(WorldUtils.getEntityPos(player), player.getYaw(), player.getPitch());
         });
         *///?}
+    }
+
+    public void sendDisguisePacket() {
+        //? if <= 1.21.6 {
+        if (!this.active) return;
+        if (clone == null) return;
+        ServerPlayerEntity player = getPlayer();
+        if (player == null) return;
+        String name = TextUtils.textToLegacyString(player.getStyledDisplayName());
+        NetworkHandlerServer.sendPlayerDisguise(clone.getUuid().toString(), clone.getName().getString(), player.getUuid().toString(), name);
+        //?}
     }
 
     public void cancelProjection() {

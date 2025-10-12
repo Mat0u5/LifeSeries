@@ -284,7 +284,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
 
     @Override
     public boolean hasError() {
-        if (mainEntry != null && mainEntry.hasError()) {
+        if (mainEntry != null && mainEntry.hasError) {
             return true;
         }
 

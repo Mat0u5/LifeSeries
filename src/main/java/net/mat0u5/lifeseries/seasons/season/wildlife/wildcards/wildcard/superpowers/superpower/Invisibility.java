@@ -50,7 +50,7 @@ public class Invisibility extends ToggleableSuperpower {
         );
 
         playerWorld.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_SHULKER_SHOOT, SoundCategory.MASTER, 1, 1);
-        NetworkHandlerServer.sendPlayerInvisible(player.getUuid(), -1);
+        sendInvisibilityPacket();
     }
 
     @Override
@@ -61,6 +61,15 @@ public class Invisibility extends ToggleableSuperpower {
         PlayerUtils.getServerWorld(player).playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.MASTER, 1, 1);
         NetworkHandlerServer.sendPlayerInvisible(player.getUuid(), 0);
         player.removeStatusEffect(StatusEffects.INVISIBILITY);
+    }
+
+    public void sendInvisibilityPacket() {
+        //? if <= 1.21.6 {
+        if (!this.active) return;
+        ServerPlayerEntity player = getPlayer();
+        if (player == null) return;
+        NetworkHandlerServer.sendPlayerInvisible(player.getUuid(), -1);
+        //?}
     }
 
     public void onTakeDamage() {

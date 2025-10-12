@@ -39,3 +39,5 @@ Bug fixes.
 ----------
 
 Added copper helmets to the default item blacklist in 1.21.9+<br>
+Group config entries now show when child entries have errors.<br>
+Players joining late now receive some packets they did not before.

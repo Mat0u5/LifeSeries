@@ -59,11 +59,6 @@ public abstract class EmptyConfigEntry extends ConfigEntry {
     }
 
     @Override
-    public boolean hasError() {
-        return false;
-    }
-
-    @Override
     public boolean hasResetButton() {
         return false;
     }

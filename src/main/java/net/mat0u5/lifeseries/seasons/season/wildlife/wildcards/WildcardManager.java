@@ -6,7 +6,11 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.*;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.AstralProjection;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Invisibility;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.PlayerDisguise;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.TimeControl;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
@@ -95,6 +99,16 @@ public class WildcardManager {
         if (!isActiveWildcard(Wildcards.TRIVIA)) {
             TriviaWildcard.resetPlayerOnBotSpawn(player);
         }
+        TaskScheduler.scheduleTask(1, () -> {
+            for (ServerPlayerEntity onlinePlayer : PlayerUtils.getAllPlayers()) {
+                Superpower power = SuperpowersWildcard.getSuperpowerInstance(onlinePlayer);
+                if (power != null) {
+                    if (power instanceof PlayerDisguise playerDisguise) playerDisguise.sendDisguisePacket();
+                    if (power instanceof AstralProjection astralProjection) astralProjection.sendDisguisePacket();
+                    if (power instanceof Invisibility invisibility) invisibility.sendInvisibilityPacket();
+                }
+            }
+        });
 
         MorphManager.resetMorph(player);
     }

@@ -248,10 +248,15 @@ public abstract class ConfigEntry {
     }
 
     public boolean hasError() {
-        return hasError;
+        if (hasError) return true;
+        if (parentGroup != null && parentGroup.getMainEntry() == this && parentGroup.hasError()) return true;
+        return false;
     }
 
     public String getErrorMessage() {
+        if (!hasError && parentGroup != null && parentGroup.getMainEntry() == this && parentGroup.hasError()) {
+            return "A child entry has an error.";
+        }
         return errorMessage;
     }
 
