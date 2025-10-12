@@ -41,3 +41,8 @@ Bug fixes.
 Added copper helmets to the default item blacklist in 1.21.9+<br>
 Group config entries now show when child entries have errors.<br>
 Players joining late now receive some packets they did not before.
+
+----------
+
+The astral projection power now works in other dimensions than the overworld.<br>
+You can no longer keep riding players with the super punch power if they go into spectator mode.

@@ -53,6 +53,9 @@ public class SuperPunch extends ToggleableSuperpower {
         ServerPlayerEntity player = getPlayer();
         if (player == null) return;
         if (ticks % 5 == 0) {
+            if (player.hasVehicle() && player.getVehicle() != null && player.getVehicle().isSpectator()) {
+                player.dismountVehicle();
+            }
             if (riding != null && !player.hasVehicle()) {
                 syncEntityPassengers(riding, PlayerUtils.getServerWorld(player));
                 riding = null;
