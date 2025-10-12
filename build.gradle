@@ -97,6 +97,7 @@ publishMods {
  modLoaders.add("fabric")
 
  def isDevBuild = providers.environmentVariable("DEV_BUILD").getOrElse("true") == "true"
+ def shouldIncludeSnapshots = project.property('mod_version').toString().contains("w")
 
  modrinth {
   projectId = isDevBuild ? "RLDqKhd4" : "aLasQi8P"
@@ -104,6 +105,7 @@ publishMods {
   minecraftVersionRange {
    start = project.property('min_version')
    end = project.property('max_version')
+   includeSnapshots = shouldIncludeSnapshots
   }
 
   requires("fabric-api")
