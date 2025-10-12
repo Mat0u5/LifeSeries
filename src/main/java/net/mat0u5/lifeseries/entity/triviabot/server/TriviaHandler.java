@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShifting;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.WeightedRandomizer;
@@ -62,7 +63,7 @@ public class TriviaHandler {
 
     public static ItemSpawner itemSpawner;
     public int difficulty = 0;
-    public long interactedAt = 0;
+    public int interactedAtAge = 0;
     public int timeToComplete = 0;
     public TriviaQuestion question;
 
@@ -73,10 +74,10 @@ public class TriviaHandler {
         if (boundPlayer == null) return ActionResult.PASS;
         if (boundPlayer.getUuid() != player.getUuid()) return ActionResult.PASS;
         if (bot.submittedAnswer()) return ActionResult.PASS;
-        if (bot.interactedWith() && getRemainingTime() <= 0) return ActionResult.PASS;
+        if (bot.interactedWith() && getRemainingTicks() <= 0) return ActionResult.PASS;
 
         if (!bot.interactedWith() || question == null) {
-            interactedAt = System.currentTimeMillis();
+            interactedAtAge = bot.age;
             difficulty = 1+bot.getRandom().nextInt(3);
             timeToComplete = difficulty * 60 + 120;
             if (difficulty == 1) timeToComplete = TriviaBot.EASY_TIME;
@@ -84,7 +85,8 @@ public class TriviaHandler {
             if (difficulty == 3) timeToComplete = TriviaBot.HARD_TIME;
             question = TriviaWildcard.getTriviaQuestion(difficulty);
         }
-        NetworkHandlerServer.sendTriviaPacket(boundPlayer, question.getQuestion(), difficulty, interactedAt, timeToComplete, question.getAnswers());
+        sendTimeUpdatePacket();
+        NetworkHandlerServer.sendTriviaPacket(boundPlayer, question.getQuestion(), difficulty, System.currentTimeMillis(), timeToComplete, question.getAnswers());
         bot.setInteractedWith(true);
 
         return ActionResult.PASS;
@@ -109,15 +111,18 @@ public class TriviaHandler {
         }
         bot.serverData.despawn();
     }
-
-    public int getRemainingTime() {
-        int timeSinceStart = (int) Math.ceil((System.currentTimeMillis() - interactedAt) / 1000.0);
-        return timeToComplete - timeSinceStart;
+    
+    public void sendTimeUpdatePacket() {
+        ServerPlayerEntity player = bot.serverData.getBoundPlayer();
+        if (player != null) {
+            int ticksSinceStart = bot.age - interactedAtAge;
+            NetworkHandlerServer.sendNumberPacket(player, PacketNames.TRIVIA_TIMER, ticksSinceStart);
+        }
     }
 
-    public long getRemainingTimeMs() {
-        long timeSinceStart = System.currentTimeMillis() - interactedAt;
-        return (timeToComplete * 1000L) - timeSinceStart;
+    public int getRemainingTicks() {
+        int ticksSinceStart = bot.age - interactedAtAge;
+        return (timeToComplete*20) - ticksSinceStart;
     }
 
     public void handleAnswer(int answer) {

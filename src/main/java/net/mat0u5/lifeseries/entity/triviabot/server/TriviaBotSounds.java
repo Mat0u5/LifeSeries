@@ -24,7 +24,7 @@ public class TriviaBotSounds {
             introSoundCooldown = 830;
         }
 
-        if (!playedCountdownEndingSound && bot.interactedWith() && !bot.submittedAnswer() && !bot.ranOutOfTime() && bot.triviaHandler.getRemainingTimeMs() <= 33800) {
+        if (!playedCountdownEndingSound && bot.interactedWith() && !bot.submittedAnswer() && !bot.ranOutOfTime() && bot.triviaHandler.getRemainingTicks() <= 676) {
             PlayerUtils.playSoundWithSourceToPlayers(
                     PlayerUtils.getAllPlayers(), bot,
                     SoundEvent.of(Identifier.ofVanilla("wildlife_trivia_suspense_end")),

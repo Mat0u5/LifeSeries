@@ -16,6 +16,7 @@ public enum PacketNames {
     ,SNAIL_TEXTURES_INFO
     ,SEASON_INFO
     ,SELECT_SEASON
+    ,CLEAR_CONFIG
     ,OPEN_CONFIG
     ,SELECT_WILDCARDS
     ,RESET_TRIVIA
@@ -33,7 +34,6 @@ public enum PacketNames {
     ,PLAYER_MIN_MSPT
     ,TRIPLE_JUMP
     ,SET_SEASON
-    ,REQUEST_CONFIG
     ,SELECTED_WILDCARD
     ,TRANSCRIPT
     ,SUPERPOWER_KEY
@@ -47,6 +47,7 @@ public enum PacketNames {
     ,ANIMAL_DISGUISE_ARMOR
     ,ANIMAL_DISGUISE_HANDS
     ,SIDETITLE
+    ,TRIVIA_TIMER
     ;
 
     public static PacketNames fromName(String name) {

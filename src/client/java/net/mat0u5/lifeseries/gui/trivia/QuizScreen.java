@@ -27,7 +27,7 @@ public class QuizScreen extends DefaultScreen {
 
     private final List<List<OrderedText>> answers = new ArrayList<>();
     private String difficulty = "Difficulty: null";
-    private long timerSeconds = 120;
+    private int timerSeconds = 120;
     private final List<Rectangle> answerRects = new ArrayList<>();
 
     public QuizScreen() {
@@ -37,7 +37,7 @@ public class QuizScreen extends DefaultScreen {
     @Override
     protected void init() {
         super.init();
-        timerSeconds = Trivia.getRemainingTime();
+        timerSeconds = Trivia.getRemainingSeconds();
 
         int fifth3 = startX + (BG_WIDTH / 5) * 3;
         int answersStartX = fifth3 + 15;
@@ -87,7 +87,7 @@ public class QuizScreen extends DefaultScreen {
     @Override
     public void tick() {
         super.tick();
-        timerSeconds = Trivia.getRemainingTime();
+        timerSeconds = Trivia.getRemainingSeconds();
         if (timerSeconds <= 0) {
             this.close();
         }

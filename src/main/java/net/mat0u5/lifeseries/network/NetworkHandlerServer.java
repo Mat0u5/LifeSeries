@@ -166,9 +166,6 @@ public class NetworkHandlerServer {
                     WildcardManager.chosenWildcard(wildcard);
                 }
             }
-            if (name == PacketNames.REQUEST_CONFIG) {
-                seasonConfig.sendConfigTo(player);
-            }
         }
         if (name == PacketNames.SET_SEASON) {
             if (PermissionManager.isAdmin(player) || currentSeason.getSeason() == Seasons.UNASSIGNED) {

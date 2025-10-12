@@ -157,9 +157,11 @@ public class NetworkHandlerClient {
             MinecraftClient.getInstance().setScreen(new ChooseWildcardScreen());
         }
 
-        if (name == PacketNames.OPEN_CONFIG) {
+        if (name == PacketNames.CLEAR_CONFIG) {
             ClientConfigNetwork.load();
-            ClientTaskScheduler.schedulePriorityTask(10, ClientConfigGuiManager::openConfig);
+        }
+        if (name == PacketNames.OPEN_CONFIG) {
+            ClientConfigGuiManager.openConfig();
         }
 
 
@@ -230,6 +232,9 @@ public class NetworkHandlerClient {
         }
         if (name == PacketNames.SIZESHIFTING_CHANGE) {
             MainClient.SIZESHIFTING_CHANGE = (float) number;
+        }
+        if (name == PacketNames.TRIVIA_TIMER) {
+            Trivia.updateTicksPassed(intNumber);
         }
     }
 

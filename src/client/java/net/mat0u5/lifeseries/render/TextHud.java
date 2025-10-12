@@ -153,20 +153,24 @@ public class TextHud {
         return drawHudText(client, context, timerText, y);
     }
 
+    private static int triviaTimer = -1;
     public static int renderTriviaTimer(MinecraftClient client, DrawContext context, int y) {
         if (!Trivia.isDoingTrivia()) return 0;
-        if (client.currentScreen != null) return 0;
 
-        long millisLeft = roundTime(Trivia.getEndTimestamp()) - System.currentTimeMillis();
+        if (sessionSecondChanged || MainClient.sessionTime <= 0 || Math.abs(triviaTimer - Trivia.getRemainingSeconds()) >= 2) {
+            triviaTimer = Trivia.getRemainingSeconds();
+        }
 
-        Text actualTimer = Text.of(OtherUtils.formatTimeMillis(millisLeft));
+        int secondsLeft = triviaTimer;
+
+        Text actualTimer = Text.of(OtherUtils.formatTimeMillis(secondsLeft * 1000));
         Text timerText = Text.of("§7Trivia timer: ");
 
         int screenWidth = client.getWindow().getScaledWidth();
         int x = screenWidth - 5;
 
-        if (millisLeft <= 5_000) drawHudText(client, context, TextColors.RED, actualTimer, x, y);
-        else if (millisLeft <= 30_000) drawHudText(client, context, TextColors.ORANGE, actualTimer, x, y);
+        if (secondsLeft <= 5) drawHudText(client, context, TextColors.RED, actualTimer, x, y);
+        else if (secondsLeft <= 30) drawHudText(client, context, TextColors.ORANGE, actualTimer, x, y);
         else drawHudText(client, context, TextColors.WHITE, actualTimer, x, y);
 
         return drawHudText(client, context, timerText, x - client.textRenderer.getWidth(actualTimer), y);

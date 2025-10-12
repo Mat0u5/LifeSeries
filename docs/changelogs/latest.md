@@ -28,3 +28,14 @@ Bug fixes.
 Reviewed most snail and trivia bot code - snails should hopefully no longer sometimes freeze.<br>
 Added the zombie snail skin for dead players (for necromancy).<br>
 Bug fixes.
+
+----------
+
+You no longer sometimes fail to receive server-side config.<br>
+Opening the config screen no longer has a delay.<br>
+The trivia bot time now works properly when the game is running at a different tick rate, or when it is paused.<br>
+Bug fixes.
+
+----------
+
+Added copper helmets to the default item blacklist in 1.21.9+<br>

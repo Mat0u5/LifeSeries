@@ -22,7 +22,6 @@ public class ClientConfigNetwork {
     public static void load() {
         configObjects.clear();
         clientConfigObjects.clear();
-        NetworkHandlerClient.sendStringPacket(PacketNames.REQUEST_CONFIG, "");
 
         int index = 0;
         for (ConfigFileEntry<?> entry : clientConfig.getAllConfigEntries()) {

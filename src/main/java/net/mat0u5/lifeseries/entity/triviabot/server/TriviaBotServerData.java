@@ -66,6 +66,9 @@ public class TriviaBotServerData implements PlayerBoundEntity {
             bot.setAnalyzingTime(bot.getAnalyzingTime()-1);
         }
 
+        if (bot.interactedWith()) {
+            bot.triviaHandler.sendTimeUpdatePacket();
+        }
 
         if (bot.submittedAnswer()) {
             if (bot.answeredRight()) {
@@ -89,7 +92,7 @@ public class TriviaBotServerData implements PlayerBoundEntity {
         }
         else {
             handleHighVelocity();
-            if (bot.interactedWith() && bot.triviaHandler.getRemainingTime() <= 0) {
+            if (bot.interactedWith() && bot.triviaHandler.getRemainingTicks() <= 0) {
                 if (!bot.ranOutOfTime()) {
                     ServerPlayerEntity boundPlayer = getBoundPlayer();
                     if (boundPlayer != null) {

@@ -20,9 +20,7 @@ public class SoundSystemMixin {
     private static final List<String> ls$nonAdjustedSounds = List.of(
             "block.beacon.deactivate",
             "wildlife_time_slow_down",
-            "wildlife_time_speed_up",
-            "wildlife_trivia_suspense",
-            "wildlife_trivia_suspense_end"
+            "wildlife_time_speed_up"
     );
     @Inject(method = "getAdjustedPitch", at = @At("HEAD"), cancellable = true)
     private void getAdjustedPitch(SoundInstance sound, CallbackInfoReturnable<Float> cir) {

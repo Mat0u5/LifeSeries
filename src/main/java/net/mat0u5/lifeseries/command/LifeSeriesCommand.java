@@ -13,6 +13,7 @@ import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.command.CommandSource;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
@@ -138,17 +139,22 @@ public class LifeSeriesCommand extends Command {
 
     public int config(ServerCommandSource source) {
         //if (checkBanned(source)) return -1;
-        if (source.getPlayer() == null) {
+        ServerPlayerEntity self = source.getPlayer();
+        if (self == null) {
             return -1;
         }
-        if (!NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer())) {
+        if (!NetworkHandlerServer.wasHandshakeSuccessful(self)) {
             source.sendError(Text.of("You must have the Life Series mod installed §nclient-side§r to open the config GUI."));
             source.sendError(Text.of("Either install the mod on the client on modify the config folder."));
             return -1;
         }
 
         OtherUtils.sendCommandFeedback(source, Text.of("§7Opening the config GUI..."));
-        NetworkHandlerServer.sendStringPacket(source.getPlayer(), PacketNames.OPEN_CONFIG,"");
+        NetworkHandlerServer.sendStringPacket(self, PacketNames.CLEAR_CONFIG,"");
+        if (PermissionManager.isAdmin(self)) {
+            Main.seasonConfig.sendConfigTo(self);
+        }
+        NetworkHandlerServer.sendStringPacket(self, PacketNames.OPEN_CONFIG,"");
         return 1;
     }
 

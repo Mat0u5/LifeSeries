@@ -18,6 +18,7 @@ public class Trivia {
     public static int difficulty = 0;
     public static int secondsToComplete = 0;
     public static long timestamp = 0;
+    public static int ticksPassed = 0;
     public static void receiveTrivia(TriviaQuestionPayload payload) {
         question = payload.question();
         answers = payload.answers();
@@ -28,18 +29,21 @@ public class Trivia {
         openGui();
     }
 
-    public static long getRemainingTime() {
-        long timeSinceStart = (int) Math.ceil((System.currentTimeMillis() - timestamp) / 1000.0);
-        return secondsToComplete - timeSinceStart;
+    public static void updateTicksPassed(int ticksPassed) {
+        Trivia.ticksPassed = ticksPassed;
     }
 
-    public static long getEndTimestamp() {
-        return (timestamp + secondsToComplete * 1000L);
+    public static int getRemainingTicks() {
+        return (secondsToComplete*20) - ticksPassed;
+    }
+
+    public static int getRemainingSeconds() {
+        return getRemainingTicks() / 20;
     }
 
     public static boolean isDoingTrivia() {
         if (Trivia.secondsToComplete == 0) return false;
-        long remaining = Trivia.getRemainingTime();
+        int remaining = Trivia.getRemainingSeconds();
         if (remaining <= 0) return false;
         if (remaining > 1000000) return false;
         return true;
@@ -63,6 +67,7 @@ public class Trivia {
         difficulty = 0;
         secondsToComplete = 0;
         timestamp = 0;
+        ticksPassed = 0;
         closeGui();
     }
 
