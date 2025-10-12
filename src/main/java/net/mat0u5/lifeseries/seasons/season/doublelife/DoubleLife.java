@@ -439,7 +439,7 @@ public class DoubleLife extends Season {
 
         if (soulmate == null) return;
         if (!soulmate.isAlive()) return;
-        if (SOULBOUND_INVENTORIES && server != null && !server.getGameRules().getBoolean(GameRules.KEEP_INVENTORY)) {
+        if (SOULBOUND_INVENTORIES && server != null && !PlayerUtils.getServerWorld(player).getGameRules().getBoolean(GameRules.KEEP_INVENTORY)) {
             soulmate.getInventory().clear();
         }
 

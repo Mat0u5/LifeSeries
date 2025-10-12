@@ -158,7 +158,11 @@ public class OtherUtils {
             if (server == null) return;
             CommandManager manager = server.getCommandManager();
             ServerCommandSource commandSource = server.getCommandSource().withSilent();
+            //? if <= 1.21.9 {
             manager.executeWithPrefix(commandSource, command);
+            //?} else {
+            /*manager.parseAndExecute(commandSource, command);
+            *///?}
         } catch (Exception e) {
             Main.LOGGER.error("Error executing command: " + command, e);
         }
@@ -235,4 +239,6 @@ public class OtherUtils {
         /*return profile.name();
         *///?}
     }
+
+
 }

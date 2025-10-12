@@ -116,17 +116,18 @@ public abstract class Season {
         if (end != null) end.getWorldBorder().setSize(seasonConfig.WORLDBORDER_END_SIZE.get(seasonConfig));
         *///?}
 
-        server.getGameRules().get(GameRules.KEEP_INVENTORY).set(seasonConfig.KEEP_INVENTORY.get(seasonConfig), server);
-        server.getGameRules().get(GameRules.NATURAL_REGENERATION).set(getSeason() != Seasons.SECRET_LIFE, server);
-        server.getGameRules().get(GameRules.ANNOUNCE_ADVANCEMENTS).set(seasonConfig.SHOW_ADVANCEMENTS.get(seasonConfig), server);
-
-        //? if >= 1.21.6 {
-        /*boolean locatorBarEnabled = seasonConfig.LOCATOR_BAR.get(seasonConfig);
-        if (!locatorBarEnabled && this instanceof DoubleLife) {
-            locatorBarEnabled = DoubleLife.SOULMATE_LOCATOR_BAR;
+        if (overworld != null) {
+            overworld.getGameRules().get(GameRules.KEEP_INVENTORY).set(seasonConfig.KEEP_INVENTORY.get(seasonConfig), server);
+            overworld.getGameRules().get(GameRules.NATURAL_REGENERATION).set(getSeason() != Seasons.SECRET_LIFE, server);
+            overworld.getGameRules().get(GameRules.ANNOUNCE_ADVANCEMENTS).set(seasonConfig.SHOW_ADVANCEMENTS.get(seasonConfig), server);
+            //? if >= 1.21.6 {
+            /*boolean locatorBarEnabled = seasonConfig.LOCATOR_BAR.get(seasonConfig);
+            if (!locatorBarEnabled && this instanceof DoubleLife) {
+                locatorBarEnabled = DoubleLife.SOULMATE_LOCATOR_BAR;
+            }
+            overworld.getGameRules().get(GameRules.LOCATOR_BAR).set(locatorBarEnabled, server);
+            *///?}
         }
-        server.getGameRules().get(GameRules.LOCATOR_BAR).set(locatorBarEnabled, server);
-        *///?}
 
         ScoreboardObjective currentListObjective = ScoreboardUtils.getObjectiveInSlot(ScoreboardDisplaySlot.LIST);
         if (TAB_LIST_SHOW_LIVES) {
@@ -240,7 +241,7 @@ public abstract class Season {
 
     public void dropItemsOnLastDeath(ServerPlayerEntity player) {
         boolean doDrop = seasonConfig.PLAYERS_DROP_ITEMS_ON_FINAL_DEATH.get(seasonConfig);
-        boolean keepInventory = server.getGameRules().getBoolean(GameRules.KEEP_INVENTORY);
+        boolean keepInventory = PlayerUtils.getServerWorld(player).getGameRules().getBoolean(GameRules.KEEP_INVENTORY);
         if (doDrop && keepInventory) {
             for (ItemStack item : PlayerUtils.getPlayerInventory(player)) {
                 //? if <= 1.21 {

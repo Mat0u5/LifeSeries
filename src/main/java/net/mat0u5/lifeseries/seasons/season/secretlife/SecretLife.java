@@ -356,7 +356,7 @@ public class SecretLife extends Season {
         if (entity instanceof ServerPlayerEntity player) {
             boolean dropBook = SecretLifeConfig.PLAYERS_DROP_TASK_ON_DEATH.get(seasonConfig);
             if (dropBook || server == null) return;
-            boolean keepInventory = server.getGameRules().getBoolean(GameRules.KEEP_INVENTORY);
+            boolean keepInventory = PlayerUtils.getServerWorld(player).getGameRules().getBoolean(GameRules.KEEP_INVENTORY);
             if (keepInventory) return;
             giveBookOnRespawn.put(player.getUuid(), TaskManager.getPlayersTaskBook(player));
             TaskManager.removePlayersTaskBook(player);
@@ -435,6 +435,7 @@ public class SecretLife extends Season {
                 naturalRegeneration = true;
             }
         }
-        server.getGameRules().get(GameRules.NATURAL_REGENERATION).set(naturalRegeneration, server);
+        if (server.getOverworld() == null) return;
+        server.getOverworld().getGameRules().get(GameRules.NATURAL_REGENERATION).set(naturalRegeneration, server);
     }
 }

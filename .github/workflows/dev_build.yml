@@ -8,6 +8,16 @@ on:
         required: true
         default: true
         type: boolean
+      versions_to_publish:
+        description: 'Versions to publish (comma-separated, e.g. "1.21,1.21.4" or "all")'
+        required: true
+        default: 'all'
+        type: string
+      create_github_release:
+        description: 'Create GitHub Release'
+        required: true
+        default: true
+        type: boolean
       version_name:
         description: 'Version Name'
         required: true
@@ -81,11 +91,29 @@ jobs:
           COMMIT_MESSAGE_BR=$(echo "$COMMIT_MESSAGE_RAW" | sed 's/\\n/<br>/g')
           echo "COMMIT_MESSAGE_BR=$COMMIT_MESSAGE_BR" >> $GITHUB_ENV
 
+      - name: Parse versions to publish
+        id: parse_versions
+        run: |
+          INPUT="${{ github.event.inputs.versions_to_publish }}"
+          if [ "$INPUT" = "all" ]; then
+            VERSIONS=("1.21" "1.21.2" "1.21.4" "1.21.5" "1.21.6" "1.21.9" "1.21.11")
+          else
+            IFS=',' read -ra VERSIONS <<< "$INPUT"
+            # Trim whitespace from each version
+            for i in "${!VERSIONS[@]}"; do
+              VERSIONS[$i]=$(echo "${VERSIONS[$i]}" | xargs)
+            done
+          fi
+          
+          echo "versions_array<<EOF" >> $GITHUB_OUTPUT
+          printf '%s\n' "${VERSIONS[@]}" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
       - name: Publish to Modrinth and Curseforge (Sequential)
         if: ${{ inputs.publish }}
         run: |
-          # Define version order explicitly to match your delay preferences
-          VERSIONS=("1.21" "1.21.2" "1.21.4" "1.21.5" "1.21.6" "1.21.9")
+          # Read versions from the parsed output
+          readarray -t VERSIONS <<< "${{ steps.parse_versions.outputs.versions_array }}"
 
           for version in "${VERSIONS[@]}"; do
             if [ -d "./versions/$version" ]; then
@@ -112,6 +140,7 @@ jobs:
             ./versions/**/build/libs/*.jar
 
       - name: Filter non-source JAR files
+        if: ${{ inputs.create_github_release }}
         id: filtered_jars
         run: |
           jars=$(find ./versions/**/build/libs/ -type f -name "*.jar" ! -name "*-sources.jar")
@@ -120,6 +149,7 @@ jobs:
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Generate Version Tag
+        if: ${{ inputs.create_github_release }}
         id: version
         run: |
           # Generate a version based on current date and commit hash
@@ -130,6 +160,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN }}
 
       - name: Create GitHub Release with JARs
+        if: ${{ inputs.create_github_release }}
         uses: softprops/action-gh-release@v2
         with:
           token: ${{ secrets.RELEASE_GITHUB_TOKEN }}

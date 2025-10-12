@@ -54,6 +54,8 @@ import static net.mat0u5.lifeseries.Main.server;
 import net.minecraft.particle.EntityEffectParticleEffect;
 //? if >= 1.21.9
 /*import net.minecraft.particle.TintedParticleEffect;*/
+//? if >= 1.21.11
+/*import net.minecraft.entity.LazyEntityReference;*/
 
 public class TriviaHandler {
     private TriviaBot bot;
@@ -420,6 +422,7 @@ public class TriviaHandler {
         BeeEntity bee3 = EntityType.BEE.spawn((ServerWorld) bot.getBotWorld(), spawnPos, SpawnReason.COMMAND);
         BeeEntity bee4 = EntityType.BEE.spawn((ServerWorld) bot.getBotWorld(), spawnPos, SpawnReason.COMMAND);
         BeeEntity bee5 = EntityType.BEE.spawn((ServerWorld) bot.getBotWorld(), spawnPos, SpawnReason.COMMAND);
+        //? if <= 1.21.9 {
         if (bee1 != null) bee1.setAngryAt(player.getUuid());
         if (bee2 != null) bee2.setAngryAt(player.getUuid());
         if (bee3 != null) bee3.setAngryAt(player.getUuid());
@@ -430,6 +433,19 @@ public class TriviaHandler {
         if (bee3 != null) bee3.setAngerTime(1000000);
         if (bee4 != null) bee4.setAngerTime(1000000);
         if (bee5 != null) bee5.setAngerTime(1000000);
+        //?} else {
+        /*if (bee1 != null) bee1.setAngryAt(LazyEntityReference.ofUUID(player.getUuid()));
+        if (bee2 != null) bee2.setAngryAt(LazyEntityReference.ofUUID(player.getUuid()));
+        if (bee3 != null) bee3.setAngryAt(LazyEntityReference.ofUUID(player.getUuid()));
+        if (bee4 != null) bee4.setAngryAt(LazyEntityReference.ofUUID(player.getUuid()));
+        if (bee5 != null) bee5.setAngryAt(LazyEntityReference.ofUUID(player.getUuid()));
+        //TODO unstable mapping
+        if (bee1 != null) bee1.method_75132(1000000);
+        if (bee2 != null) bee2.method_75132(1000000);
+        if (bee3 != null) bee3.method_75132(1000000);
+        if (bee4 != null) bee4.method_75132(1000000);
+        if (bee5 != null) bee5.method_75132(1000000);
+        *///?}
     }
 
     public static final List<UUID> cursedRoboticVoicePlayers = new ArrayList<>();
