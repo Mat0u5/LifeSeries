@@ -17,11 +17,14 @@ import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.DisconnectionInfo;
 import net.minecraft.network.packet.s2c.play.EntityAttributesS2CPacket;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -40,6 +43,13 @@ public class ClientUtils {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client == null) return false;
         if (client.player == null) return false;
+        //? if >= 1.21.2 {
+         /*if (LivingEntity.canGlideWith(client.player.getEquippedStack(EquipmentSlot.CHEST), EquipmentSlot.CHEST) ||
+            LivingEntity.canGlideWith(client.player.getEquippedStack(EquipmentSlot.LEGS), EquipmentSlot.LEGS) ||
+            LivingEntity.canGlideWith(client.player.getEquippedStack(EquipmentSlot.FEET), EquipmentSlot.FEET)) {
+            return false;
+        }
+        *///?}
         ItemStack helmet = PlayerUtils.getEquipmentSlot(client.player, 3);
         return ItemStackUtils.hasCustomComponentEntry(helmet, "FlightSuperpower");
     }

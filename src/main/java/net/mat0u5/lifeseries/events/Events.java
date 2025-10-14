@@ -23,6 +23,7 @@ import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
@@ -242,10 +243,17 @@ public class Events {
                 world instanceof ServerWorld serverWorld && Main.isLogicalSide()) {
             try {
                 ItemStack itemStack = player.getStackInHand(hand);
-                if (ItemStackUtils.hasCustomComponentEntry(PlayerUtils.getEquipmentSlot(serverPlayer, 3), "FlightSuperpower") &&
-                        itemStack.isOf(Items.FIREWORK_ROCKET)) {
-                    return ActionResult.FAIL;
+                //? if >= 1.21.2 {
+                /*if (itemStack.isOf(Items.FIREWORK_ROCKET)) {
+                    if (ItemStackUtils.hasCustomComponentEntry(PlayerUtils.getEquipmentSlot(serverPlayer, 3), "FlightSuperpower")) {
+                        if (!(LivingEntity.canGlideWith(serverPlayer.getEquippedStack(EquipmentSlot.CHEST), EquipmentSlot.CHEST) ||
+                                LivingEntity.canGlideWith(serverPlayer.getEquippedStack(EquipmentSlot.LEGS), EquipmentSlot.LEGS) ||
+                                LivingEntity.canGlideWith(serverPlayer.getEquippedStack(EquipmentSlot.FEET), EquipmentSlot.FEET))) {
+                            return ActionResult.FAIL;
+                        }
+                    }
                 }
+                *///?}
             } catch(Exception e) {
                 e.printStackTrace();
                 return ActionResult.PASS;

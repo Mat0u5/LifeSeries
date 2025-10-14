@@ -46,3 +46,9 @@ Players joining late now receive some packets they did not before.
 
 The astral projection power now works in other dimensions than the overworld.<br>
 You can no longer keep riding players with the super punch power if they go into spectator mode.
+
+----------
+
+You can no longer die from failing the Secret Society as a red name in Limited Life.<br>
+Fixed a UV mapping overlap in the trivia bot texture, which caused one pixel of the bot's head to appear to have a green pixel.<br>
+Using a normal elytra now works properly when you have the flight superpower enabled.

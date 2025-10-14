@@ -140,7 +140,7 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
 
         ModelPartData clock = expressions.addChild("clock", ModelPartBuilder.create().uv(48, 79).cuboid(-1.2228F, -1.4755F, 1.7083F, 2.0F, 2.0F, 0.0F, new Dilation(0.0F)), ModelTransform.pivot(0.2228F, -0.0245F, -0.0033F));
 
-        ModelPartData green_r1 = clock.addChild("green_r1", ModelPartBuilder.create().uv(38, 59).cuboid(0.0F, -3.5F, 0.69F, 1.0F, 3.5F, 0.0F, new Dilation(0.0F)), ModelTransform.of(-0.6228F, -0.5755F, 1.0083F, 0.0F, 0.0F, 0.3927F));
+        ModelPartData green_r1 = clock.addChild("green_r1", ModelPartBuilder.create().uv(38, 60).cuboid(0.0F, -3.5F, 0.69F, 1.0F, 3.5F, 0.0F, new Dilation(0.0F)), ModelTransform.of(-0.6228F, -0.5755F, 1.0083F, 0.0F, 0.0F, 0.3927F));
 
         ModelPartData clockhand = clock.addChild("clockhand", ModelPartBuilder.create().uv(78, 77).cuboid(0.0F, -0.4F, 1.98F, 3.0F, 1.0F, 0.0F, new Dilation(0.0F)), ModelTransform.pivot(-0.2228F, -0.4755F, -0.2917F));
 
@@ -243,7 +243,7 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
 
         ModelPartData clock = expressions.addChild("clock", ModelPartBuilder.create().uv(48, 79).cuboid(-1.2228F, -1.4755F, 1.7083F, 2.0F, 2.0F, 0.0F, new Dilation(0.0F)), ModelTransform.origin(0.2228F, -0.0245F, -0.0033F));
 
-        ModelPartData green_r1 = clock.addChild("green_r1", ModelPartBuilder.create().uv(38, 59).cuboid(0.0F, -3.5F, 0.69F, 1.0F, 3.5F, 0.0F, new Dilation(0.0F)), ModelTransform.of(-0.6228F, -0.5755F, 1.0083F, 0.0F, 0.0F, 0.3927F));
+        ModelPartData green_r1 = clock.addChild("green_r1", ModelPartBuilder.create().uv(38, 60).cuboid(0.0F, -3.5F, 0.69F, 1.0F, 3.5F, 0.0F, new Dilation(0.0F)), ModelTransform.of(-0.6228F, -0.5755F, 1.0083F, 0.0F, 0.0F, 0.3927F));
 
         ModelPartData clockhand = clock.addChild("clockhand", ModelPartBuilder.create().uv(78, 77).cuboid(0.0F, -0.4F, 1.98F, 3.0F, 1.0F, 0.0F, new Dilation(0.0F)), ModelTransform.origin(-0.2228F, -0.4755F, -0.2917F));
 

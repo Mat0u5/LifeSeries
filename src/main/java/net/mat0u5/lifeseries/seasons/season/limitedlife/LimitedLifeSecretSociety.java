@@ -17,6 +17,9 @@ public class LimitedLifeSecretSociety extends SecretSociety {
     @Override
     public void punishPlayer(ServerPlayerEntity member) {
         PlayerUtils.damage(member, member.getDamageSources().playerAttack(member), 0.001f);
-        livesManager.setPlayerLives(member, LimitedLife.getNextLivesColorLives(livesManager.getPlayerLives(member)));
+        boolean canChangeLives = livesManager.isAlive(member) && !livesManager.isOnLastLife(member, true);
+        if (canChangeLives) {
+            livesManager.setPlayerLives(member, LimitedLife.getNextLivesColorLives(livesManager.getPlayerLives(member)));
+        }
     }
 }
