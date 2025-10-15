@@ -42,7 +42,19 @@ public class VersionControl {
             }catch(Exception ignored) {}
         }
 
-        return (major * 100000) + (minor * 10000) + (patch * 1000) + build;
+        /*
+            Supports up to:
+             213 major versions
+             99 minor versions
+             99 patch versions
+             999 build versions
+
+             So 213.99.99.999 is a valid version for example.
+
+             Pre-releases act as if 900 build versions are already added, so 100 pre-releases are supported
+         */
+
+        return (major * 10_000_000) + (minor * 100_000) + (patch * 1_000) + build;
     }
 
     /*
@@ -77,18 +89,19 @@ public class VersionControl {
         *   1.4.0.6     -   1.4.0.13
         *   1.4.0.14    -   1.4.1-pre1
         *   1.4.1       -   1.4.1.1
-        *   1.4.1.9     -   *
+        *   1.4.1.9     -   1.4.1.16
+        *   1.4.1.17    -   *
      */
 
     public static String clientCompatibilityMin() {
         // This is the version that the SERVER needs to have for the current client.
         if (Main.ISOLATED_ENVIRONMENT) return MOD_VERSION;
-        return "1.4.1";
+        return "1.4.1.17";
     }
 
     public static String serverCompatibilityMin() {
         // This is the version that the CLIENT needs to have for the current server.
         if (Main.ISOLATED_ENVIRONMENT) return MOD_VERSION;
-        return "1.4.1";
+        return "1.4.1.17";
     }
 }

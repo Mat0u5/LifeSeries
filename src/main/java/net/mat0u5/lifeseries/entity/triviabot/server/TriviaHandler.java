@@ -439,12 +439,11 @@ public class TriviaHandler {
         if (bee3 != null) bee3.setAngryAt(LazyEntityReference.ofUUID(player.getUuid()));
         if (bee4 != null) bee4.setAngryAt(LazyEntityReference.ofUUID(player.getUuid()));
         if (bee5 != null) bee5.setAngryAt(LazyEntityReference.ofUUID(player.getUuid()));
-        //TODO unstable mapping
-        if (bee1 != null) bee1.method_75132(1000000);
-        if (bee2 != null) bee2.method_75132(1000000);
-        if (bee3 != null) bee3.method_75132(1000000);
-        if (bee4 != null) bee4.method_75132(1000000);
-        if (bee5 != null) bee5.method_75132(1000000);
+        if (bee1 != null) bee1.setAngerDuration(1000000);
+        if (bee2 != null) bee2.setAngerDuration(1000000);
+        if (bee3 != null) bee3.setAngerDuration(1000000);
+        if (bee4 != null) bee4.setAngerDuration(1000000);
+        if (bee5 != null) bee5.setAngerDuration(1000000);
         *///?}
     }
 
