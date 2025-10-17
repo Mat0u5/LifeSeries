@@ -12,49 +12,53 @@ public class VersionControl {
 
 
     public static int getModVersionInt(String string) {
-        String originalVersion = string;
-        if (string.contains("-pre")) {
-            string = string.split("-pre")[0];
-        }
-        string = string.replaceAll("[^\\d.]", ""); //Remove all non-digit and non-dot characters.
-        string = string.replaceAll("^\\.+|\\.+$", ""); //Remove all leading or trailing dots.
-        while (string.contains("..")) string = string.replace("..",".");
-
-        String[] parts = string.split("\\.");
-
-        int major = 0;
-        int minor = 0;
-        int patch = 0;
-        int build = 0;
         try {
-            major = parts.length > 0 ? Integer.parseInt(parts[0]) : 0;
-            minor = parts.length > 1 ? Integer.parseInt(parts[1]) : 0;
-            patch = parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
-            build = parts.length > 3 ? Integer.parseInt(parts[3]) : 0;
-        }catch(Exception e) {
-            Main.LOGGER.error(TextUtils.formatString("Failed to parse mod version to int: {} (formatted to {})", originalVersion, string));
-        }
 
-        if (originalVersion.contains("-pre")) {
-            build = -100;
+            String originalVersion = string;
+            if (string.contains("-pre")) {
+                string = string.split("-pre")[0];
+            }
+            string = string.replaceAll("[^\\d.]", ""); //Remove all non-digit and non-dot characters.
+            string = string.replaceAll("^\\.+|\\.+$", ""); //Remove all leading or trailing dots.
+            while (string.contains("..")) string = string.replace("..",".");
+
+            String[] parts = string.split("\\.");
+
+            int major = 0;
+            int minor = 0;
+            int patch = 0;
+            int build = 0;
             try {
-                build += Integer.parseInt(originalVersion.split("-pre")[1]);
-            }catch(Exception ignored) {}
-        }
+                major = parts.length > 0 ? Integer.parseInt(parts[0]) : 0;
+                minor = parts.length > 1 ? Integer.parseInt(parts[1]) : 0;
+                patch = parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
+                build = parts.length > 3 ? Integer.parseInt(parts[3]) : 0;
+            }catch(Exception e) {
+                Main.LOGGER.error(TextUtils.formatString("Failed to parse mod version to int: {} (formatted to {})", originalVersion, string));
+            }
 
-        /*
-            Supports up to:
-             213 major versions
-             99 minor versions
-             99 patch versions
-             999 build versions
+            if (originalVersion.contains("-pre")) {
+                build = -100;
+                try {
+                    build += Integer.parseInt(originalVersion.split("-pre")[1]);
+                }catch(Exception ignored) {}
+            }
 
-             So 213.99.99.999 is a valid version for example.
+            /*
+                Supports up to:
+                 213 major versions
+                 99 minor versions
+                 99 patch versions
+                 999 build versions
 
-             Pre-releases act as if 900 build versions are already added, so 100 pre-releases are supported
-         */
+                 So 213.99.99.999 is a valid version for example.
 
-        return (major * 10_000_000) + (minor * 100_000) + (patch * 1_000) + build;
+                 Pre-releases act as if 900 build versions are already added, so 100 pre-releases are supported
+             */
+
+            return (major * 10_000_000) + (minor * 100_000) + (patch * 1_000) + build;
+        }catch(Exception ignored) {}
+        return 0;
     }
 
     /*
@@ -90,18 +94,19 @@ public class VersionControl {
         *   1.4.0.14    -   1.4.1-pre1
         *   1.4.1       -   1.4.1.1
         *   1.4.1.9     -   1.4.1.16
-        *   1.4.1.17    -   *
+        *   1.4.1.17
+        *   1.4.2       -   *
      */
 
     public static String clientCompatibilityMin() {
         // This is the version that the SERVER needs to have for the current client.
         if (Main.ISOLATED_ENVIRONMENT) return MOD_VERSION;
-        return "1.4.1.17";
+        return "1.4.2";
     }
 
     public static String serverCompatibilityMin() {
         // This is the version that the CLIENT needs to have for the current server.
         if (Main.ISOLATED_ENVIRONMENT) return MOD_VERSION;
-        return "1.4.1.17";
+        return "1.4.2";
     }
 }

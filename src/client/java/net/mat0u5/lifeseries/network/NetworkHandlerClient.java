@@ -329,7 +329,7 @@ public class NetworkHandlerClient {
 
             //Check if client version is compatible with the server version
             if (clientVersion < serverCompatibility) {
-                Text disconnectText = Text.literal("[1Life Series Mod] Client-Server version mismatch!\n" +
+                Text disconnectText = Text.literal("[Life Series Mod] Client-Server version mismatch!\n" +
                         "Update the client version to at least version "+serverCompatibilityStr);
                 ClientUtils.disconnect(disconnectText);
                 return;
@@ -337,7 +337,7 @@ public class NetworkHandlerClient {
 
             //Check if server version is compatible with the client version
             if (serverVersion < clientCompatibility) {
-                Text disconnectText = Text.literal("[1Life Series Mod] Server-Client version mismatch!\n" +
+                Text disconnectText = Text.literal("[Life Series Mod] Server-Client version mismatch!\n" +
                         "The client version is too new for the server.\n" +
                         "Either update the server, or downgrade the client version to " + serverVersionStr);
                 ClientUtils.disconnect(disconnectText);
@@ -348,7 +348,7 @@ public class NetworkHandlerClient {
             //Isolated enviroment -> mod versions must be IDENTICAL between client and server
             //Check if client version is the same as the server version
             if (!clientVersionStr.equalsIgnoreCase(serverVersionStr)) {
-                Text disconnectText = Text.literal("[1Life Series Mod] Client-Server version mismatch!\n" +
+                Text disconnectText = Text.literal("[Life Series Mod] Client-Server version mismatch!\n" +
                         "You must join with version "+serverCompatibilityStr);
                 ClientUtils.disconnect(disconnectText);
                 return;
