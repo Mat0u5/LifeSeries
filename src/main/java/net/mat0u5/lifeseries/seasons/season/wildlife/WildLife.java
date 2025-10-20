@@ -24,6 +24,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
@@ -311,13 +312,11 @@ public class WildLife extends Season {
 
     @Override
     public void onPrePlayerDamage(ServerPlayerEntity player, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        if (source.getType() == player.getDamageSources().fall().getType() ||
-            source.getType() == player.getDamageSources().stalagmite().getType() ||
-            source.getType() == player.getDamageSources().flyIntoWall().getType()) {
+        if (source.isOf(DamageTypes.FALL) ||source.isOf(DamageTypes.STALAGMITE) || source.isOf(DamageTypes.FLY_INTO_WALL)) {
             if (SuperpowersWildcard.hasActivePower(player, Superpowers.FLIGHT)) {
                 if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof Flight power) {
                     if (power.isLaunchedUp) {
-                        if (source.getType() != player.getDamageSources().flyIntoWall().getType()) power.isLaunchedUp = false;
+                        if (!source.isOf(DamageTypes.FLY_INTO_WALL)) power.isLaunchedUp = false;
                         cir.setReturnValue(false);
                         return;
                     }

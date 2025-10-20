@@ -437,7 +437,7 @@ public class SecretLifeCommands extends Command {
             SecretLife secretLife = (SecretLife) currentSeason;
             if (livesManager.isDead(player)) {
                 OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("{} is dead", player));
-                return -1;
+                continue;
             }
 
             double playerHealth = secretLife.getRoundedHealth(player);

@@ -61,7 +61,7 @@ public class LastLifeConfig extends ConfigManager {
 
     public static final ConfigFileEntry<Integer> RANDOM_LIVES_MIN = new ConfigFileEntry<>(
             "random_lives_min", 2, "season",
-            "Random Lives Min", "The minumum lives you can get from the random roll."
+            "Random Lives Min", "The minimum lives you can get from the random roll."
     );
     public static final ConfigFileEntry<Integer> RANDOM_LIVES_MAX = new ConfigFileEntry<>(
             "random_lives_max", 6, "season",

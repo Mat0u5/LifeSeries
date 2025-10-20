@@ -128,6 +128,18 @@ public class BoogeymanCommand extends Command {
             source.sendError(Text.of("You are not a Boogeyman"));
             return -1;
         }
+        Boogeyman boogeyman = bm.getBoogeyman(self);
+        if (boogeyman != null) {
+            if (boogeyman.cured) {
+                source.sendError(Text.of("You have already been cured"));
+                return -1;
+            }
+            if (boogeyman.failed) {
+                source.sendError(Text.of("You have already failed"));
+                return -1;
+            }
+        }
+
         if (!confirm) {
             source.sendError(Text.of("Warning: This will cause you to fail as the Boogeyman"));
             source.sendError(Text.of("Run \"/boogeyman selfFail §lconfirm§r\" to confirm this action."));

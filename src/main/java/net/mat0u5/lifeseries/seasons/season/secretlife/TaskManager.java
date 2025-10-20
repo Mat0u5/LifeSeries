@@ -535,6 +535,7 @@ public class TaskManager {
     }
 
     public static void chooseNewTaskForPlayerIfNecessary(ServerPlayerEntity player) {
+        if (currentSession.statusFinished()) return;
         if (livesManager.isOnLastLife(player, false) || CONSTANT_TASKS) {
             TaskScheduler.scheduleTask(120, () -> {
                 TaskTypes newType = livesManager.isOnLastLife(player, false) ? TaskTypes.RED : TaskTypes.EASY;
