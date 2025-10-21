@@ -377,6 +377,7 @@ public abstract class Season {
         if (boogeymanManager.isBoogeymanThatCanBeCured(killer, victim)) {
             boogeymanManager.onBoogeymanKill(killer);
         }
+        SessionTranscript.onPlayerKilledByPlayer(victim, killer);
     }
 
     public void onMobDeath(LivingEntity entity, DamageSource damageSource) {

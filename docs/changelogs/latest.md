@@ -17,3 +17,9 @@ Added the 'lives_system_disabled' global config, which fully disables the lives 
 Snails now have the trivia layer always displayed.<br>
 Animal disguise now spawns two of the random animals in the finale when activating it.<br>
 Added the '/wildcard finale' command, which makes the wildcards act like they do in the finale (or during Callback). This resets once the session ends.
+
+----------
+
+The end of the transcript now contains a summary of how many kills and deaths each player had.<br>
+Added the 'wildcard_callback_nerfed_wildcards' Wild Life config. Default value is true.<br>
+Added the ${red} identifier to Secret Life tasks. Works similarly to ${green} and ${yellow}

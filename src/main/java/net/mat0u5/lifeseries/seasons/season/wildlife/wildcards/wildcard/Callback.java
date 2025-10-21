@@ -25,6 +25,7 @@ public class Callback extends Wildcard {
     public static double TURN_OFF = 0.75; // When all wildcards stop
     private static final double INITIAL_ACTIVATION_INTERVAL = 20 * 60 * 5;
     private static final double INITIAL_DEACTIVATION_INTERVAL = 20 * 30;
+    public static boolean NERFED_WILDCARDS = true;
 
     private int nextActivationTick = -1;
     private int nextDeactivationTick = -1;

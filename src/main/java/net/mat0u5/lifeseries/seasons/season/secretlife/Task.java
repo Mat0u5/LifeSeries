@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.seasons.season.secretlife;
 
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.RawFilteredPair;
 import net.minecraft.text.Text;
@@ -17,16 +16,34 @@ public class Task {
     public boolean anyPlayers = true;
     public boolean anyGreenPlayers = true;
     public boolean anyYellowPlayers = true;
+    public boolean anyRedPlayers = true;
     public String formattedTask = "";
     public Task(String task, TaskTypes type) {
         this.rawTask = task;
         this.type = type;
     }
 
+    public static boolean anyPlayersOnLives(ServerPlayerEntity exception, int lives) {
+        for (ServerPlayerEntity player : livesManager.getAlivePlayers()) {
+            if (player == exception) continue;
+            if (livesManager.isOnSpecificLives(player, lives, false)) return true;
+        }
+        return false;
+    }
+
+    public static boolean anyAlivePlayers(ServerPlayerEntity exception) {
+        for (ServerPlayerEntity player : livesManager.getAlivePlayers()) {
+            if (player == exception) continue;
+            return true;
+        }
+        return false;
+    }
+
     public void checkPlayerColors(ServerPlayerEntity owner) {
-        anyGreenPlayers = livesManager.anyGreenPlayers(owner);
-        anyYellowPlayers = livesManager.anyYellowPlayers(owner);
-        anyPlayers = livesManager.anyAlivePlayers(owner);
+        anyGreenPlayers = anyPlayersOnLives(owner, 3);
+        anyYellowPlayers = anyPlayersOnLives(owner, 2);
+        anyRedPlayers = anyPlayersOnLives(owner, 1);
+        anyPlayers = anyAlivePlayers(owner);
     }
 
     public boolean isValid(ServerPlayerEntity owner) {
@@ -37,6 +54,7 @@ public class Task {
         if (rawTask.contains("${green/yellow}") && !anyGreenPlayers && !anyYellowPlayers) return false;
         if (rawTask.contains("${green}") && !anyGreenPlayers) return false;
         if (rawTask.contains("${yellow}") && !anyYellowPlayers) return false;
+        if (rawTask.contains("${red}") && !anyRedPlayers) return false;
         return true;
     }
     /*
@@ -46,7 +64,7 @@ public class Task {
     ${green/yellow} - Replaced with "green" if there are any alive, or "yellow", if greens are dead. If both are dead, tasks are unavailable.
     ${green} - Replaced with "green". Tasks are only available when a green player is alive.
     ${yellow} - Replaced with "yellow". Tasks are only available when a yellow player is alive.
-    ${kill_not_permitted} - For red tasks. If its present, and the task owner kills a person, they will NOT get the 10 hearts for killing someone.
+    ${red} - Replaced with "red". Tasks are only available when a red player is alive.
      */
     public List<RawFilteredPair<Text>> getBookLines(ServerPlayerEntity owner) {
         formattedTask = "";
@@ -86,6 +104,9 @@ public class Task {
         if (page.contains("${yellow}")) {
             if (anyYellowPlayers) page = page.replaceAll("\\$\\{yellow}","yellow");
         }
+        if (page.contains("${red}")) {
+            if (anyRedPlayers) page = page.replaceAll("\\$\\{red}","red");
+        }
         if (page.contains("${kill_not_permitted}")) {
             if (anyYellowPlayers) page = page.replaceAll("\\$\\{kill_not_permitted}","");
         }
@@ -97,11 +118,5 @@ public class Task {
         if (type == TaskTypes.HARD) return 2;
         if (type == TaskTypes.RED) return 3;
         return 0;
-    }
-
-    public boolean killPermitted() {
-        if (type != TaskTypes.RED) return false;
-        if (rawTask.contains("${kill_not_permitted}")) return false;
-        return true;
     }
 }

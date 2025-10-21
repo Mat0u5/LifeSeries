@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.registries.MobRegistry;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShifting;
@@ -267,7 +268,7 @@ public class TriviaHandler {
             else {
                 amplifier = player.getRandom().nextInt(4);
             }
-            if (WildcardManager.isActiveWildcard(Wildcards.CALLBACK)) {
+            if (Wildcard.isFinale()) {
                 player.addStatusEffect(new StatusEffectInstance(effect, 12000, amplifier));
             }
             else {

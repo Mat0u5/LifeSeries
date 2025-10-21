@@ -176,7 +176,6 @@ public class TaskManager {
 
         ItemStackUtils.setCustomComponentBoolean(book, "SecretTask", true);
         ItemStackUtils.setCustomComponentInt(book, "TaskDifficulty", task.getDifficulty());
-        ItemStackUtils.setCustomComponentBoolean(book, "KillPermitted", task.killPermitted());
         return book;
     }
 

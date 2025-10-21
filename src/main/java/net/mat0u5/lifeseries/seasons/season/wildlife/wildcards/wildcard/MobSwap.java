@@ -187,7 +187,7 @@ public class MobSwap extends Wildcard {
         SessionTranscript.mobSwap();
 
         int spawnMobs;
-        if (WildcardManager.isActiveWildcard(Wildcards.CALLBACK)) {
+        if (Wildcard.isFinale()) {
             spawnMobs = (int) (SPAWN_MOBS / 1.5);
         }
         else {

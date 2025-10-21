@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.entity.PlayerBoundEntity;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
@@ -164,7 +165,7 @@ public class SnailServerData implements PlayerBoundEntity {
     public boolean isNerfed() {
         if (snail.isFromTrivia()) return true;
         if (WildcardManager.FINALE) return true;
-        return WildcardManager.isActiveWildcard(Wildcards.CALLBACK);
+        return Wildcard.isFinale();
     }
 
     public void setFromTrivia() {

@@ -68,7 +68,7 @@ public class SizeShifting extends Wildcard {
         if (size < MIN_SIZE) size = MIN_SIZE;
         if (size > MAX_SIZE) size = MAX_SIZE;
 
-        if (WildcardManager.isActiveWildcard(Wildcards.CALLBACK)) {
+        if (Wildcard.isFinale()) {
             if (size < MIN_SIZE_NERFED) size = MIN_SIZE_NERFED;
             if (size > MAX_SIZE_NERFED) size = MAX_SIZE_NERFED;
         }

@@ -206,6 +206,10 @@ public class WildLifeConfig extends ConfigManager {
             "wildcard_callback_turn_off", 0.75, ConfigTypes.PERCENTAGE, "season.callback",
             "Turn Off In Session", "Controls when in the session the callback wildcard turns off (percentage)."
     );
+    public static final ConfigFileEntry<Boolean> WILDCARD_CALLBACK_NERFED_WILDCARDS = new ConfigFileEntry<>(
+            "wildcard_callback_nerfed_wildcards", true, "season.callback",
+            "Nerfed Wildcards", "Controls whether wildcards are nerfed in callback (recommended)."
+    );
 
     //Groups
     public static final ConfigFileEntry<Object> GROUP_GENERAL = new ConfigFileEntry<>(
@@ -321,6 +325,7 @@ public class WildLifeConfig extends ConfigManager {
 
                 ,WILDCARD_CALLBACK_WILDCARDS_BLACKLIST
                 ,WILDCARD_CALLBACK_TURN_OFF
+                ,WILDCARD_CALLBACK_NERFED_WILDCARDS
         ));
     }
 

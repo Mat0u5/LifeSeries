@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.session;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.secretlife.Task;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
@@ -11,18 +12,15 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
-import static net.mat0u5.lifeseries.Main.currentSession;
+import static net.mat0u5.lifeseries.Main.*;
 
 public class SessionTranscript {
     public static final List<String> messages = new ArrayList<>();
@@ -121,10 +119,12 @@ public class SessionTranscript {
 
     public static void playerLeave(ServerPlayerEntity player) {
         addMessageWithTime("<@","> ",TextUtils.formatString("{} left the game.", player));
+        addRecordIfMissing(player);
     }
 
     public static void playerJoin(ServerPlayerEntity player) {
         addMessageWithTime("<@","> ",TextUtils.formatString("{} joined the game.", player));
+        addRecordIfMissing(player);
     }
 
     public static void triggerSessionAction(String message) {
@@ -134,6 +134,25 @@ public class SessionTranscript {
 
     public static void onPlayerDeath(ServerPlayerEntity player, DamageSource source) {
         addMessageWithTime("<@","> ",source.getDeathMessage(player).getString());
+        playerRecords.computeIfPresent(player.getNameForScoreboard(), (key, value) -> {
+            value.set(1, value.get(1)+1);
+            return value;
+        });
+    }
+
+    public static void onPlayerKilledByPlayer(ServerPlayerEntity victim, ServerPlayerEntity killer) {
+        addRecordIfMissing(killer);
+        playerRecords.computeIfPresent(killer.getNameForScoreboard(), (key, value) -> {
+            value.set(0, value.get(0)+1);
+            return value;
+        });
+    }
+
+    public static void addRecordIfMissing(ServerPlayerEntity player) {
+        if (livesManager.isDead(player) || WatcherManager.isWatcher(player)) return;
+        if (!playerRecords.containsKey(player.getNameForScoreboard())) {
+            playerRecords.put(player.getNameForScoreboard(), new ArrayList<>(List.of(0,0)));
+        }
     }
 
     public static void onPlayerLostAllLives(ServerPlayerEntity player) {
@@ -145,11 +164,27 @@ public class SessionTranscript {
     }
 
     public static void sessionStart() {
+        playerRecords.clear();
+        PlayerUtils.getAllFunctioningPlayers().forEach(SessionTranscript::addRecordIfMissing);
+        messages.add("\n");
         addMessageWithTime("-----  Session started!  -----");
     }
 
+    public static Map<String, List<Integer>> playerRecords = new HashMap<>();
     public static void sessionEnd() {
-        addMessageWithTime("-----  The session has ended!  -----");
+        addMessageWithTime("-----  The session has ended!  -----\n");
+        for (Map.Entry<String, List<Integer>> playerRecord : playerRecords.entrySet()) {
+            if (playerRecord.getValue().size() < 2) continue;
+            int kills = playerRecord.getValue().get(0);
+            int deaths = playerRecord.getValue().get(1);
+            messages.add(TextUtils.formatString("\t{}: {} {} and {} {}",
+                    playerRecord.getKey(),
+                    kills, TextUtils.pluralize("kill", kills),
+                    deaths, TextUtils.pluralize("death", deaths)));
+        }
+        if (!playerRecords.isEmpty()) {
+            messages.add("\n");
+        }
     }
     public static void addMessageWithTime(String message) {
         addMessageWithTime("[@","] ", message);
@@ -177,7 +212,7 @@ public class SessionTranscript {
     public static void addDefaultMessages() {
         messages.add(TextUtils.formatString("-----  Life Series Mod by Mat0u5  |  Mod version: {}  -----", Main.MOD_VERSION));
         messages.add(TextUtils.formatString("-----  {}  |  Time and date: {}  -----", currentSeason.getSeason().name(), OtherUtils.getTimeAndDate()));
-        messages.add("-----  Session Transcript  -----");
+        messages.add("-----  Session Transcript  -----\n");
     }
 
     public static String getStats() {
@@ -214,4 +249,6 @@ public class SessionTranscript {
     public static Text getTranscriptMessage() {
         return TextUtils.format("§7Click {}§7 to copy the session transcript.", TextUtils.copyClipboardText(SessionTranscript.getStats()));
     }
+
+    public record TranscriptPlayerRecord(UUID uuid, String name, int kills, int deaths) {}
 }

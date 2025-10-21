@@ -379,6 +379,6 @@ public class TriviaWildcard extends Wildcard {
     }
 
     public static boolean isBuffed() {
-        return WildcardManager.isActiveWildcard(Wildcards.CALLBACK);
+        return Wildcard.isFinale();
     }
 }

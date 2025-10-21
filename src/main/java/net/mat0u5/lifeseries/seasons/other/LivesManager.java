@@ -376,30 +376,6 @@ public class LivesManager {
         return players;
     }
 
-    public boolean anyGreenPlayers(ServerPlayerEntity exception) {
-        for (ServerPlayerEntity player : getAlivePlayers()) {
-            if (player == exception) continue;
-            if (isOnSpecificLives(player, 3, false)) return true;
-        }
-        return false;
-    }
-
-    public boolean anyYellowPlayers(ServerPlayerEntity exception) {
-        for (ServerPlayerEntity player : getAlivePlayers()) {
-            if (player == exception) continue;
-            if (isOnSpecificLives(player, 2, false)) return true;
-        }
-        return false;
-    }
-
-    public boolean anyAlivePlayers(ServerPlayerEntity exception) {
-        for (ServerPlayerEntity player : getAlivePlayers()) {
-            if (player == exception) continue;
-            return true;
-        }
-        return false;
-    }
-
     public boolean canChangeLivesNaturally(ServerPlayerEntity player) {
         if (ONLY_TAKE_LIVES_IN_SESSION && currentSession != null && !AdvancedDeathsManager.hasQueuedDeath(player)) {
             return currentSession.statusStarted();
