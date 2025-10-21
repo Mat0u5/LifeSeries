@@ -34,6 +34,9 @@ public class BoogeymanCommand extends Command {
     public void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(
             literal("boogeyman")
+                .executes(context -> boogeyCheck(
+                        context.getSource()
+                ))
                 .then(literal("clear")
                     .requires(PermissionManager::isAdmin)
                     .executes(context -> boogeyClear(
@@ -88,9 +91,6 @@ public class BoogeymanCommand extends Command {
                         context.getSource()
                     ))
                 )
-                .executes(context -> boogeyCheck(
-                    context.getSource()
-                ))
         );
     }
 
@@ -109,10 +109,23 @@ public class BoogeymanCommand extends Command {
             source.sendError(Text.of("You are not a Boogeyman"));
             return -1;
         }
+        Boogeyman boogeyman = bm.getBoogeyman(self);
+        if (boogeyman != null) {
+            if (boogeyman.failed) {
+                OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7You were the Boogeyman, but you have already §cfailed§7."));
+                return 1;
+
+            }
+            else if (boogeyman.cured) {
+                OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7You were the Boogeyman, and you have already been §acured§7."));
+                return 1;
+            }
+        }
         if (bm instanceof PastLifeBoogeymanManager) {
             OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§cYou are the Boogeyman."));
         }
-        bm.messageBoogeyman(self);
+
+        bm.messageBoogeyman(boogeyman, self);
 
         return 1;
     }

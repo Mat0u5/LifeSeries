@@ -93,16 +93,16 @@ public class SecretLifeConfig extends ConfigManager {
             "Secret Keeper Broadcast", "Makes the secret keeper broadcast a message in chat when someone succeeds, fails or rerolls a task."
     );
     public static final ConfigFileEntry<Boolean> BROADCAST_TASKS_WHEN_SUBMITTED = new ConfigFileEntry<>(
-            "broadcast_tasks_when_submitted", false, "season[new]",
+            "broadcast_tasks_when_submitted", false, "season",
             "Broadcast Tasks When Submitted", "Gives an option for all players to view a task when it gets failed, rerolled or succeeded."
     );
     public static final ConfigFileEntry<Boolean> CONSTANT_TASKS = new ConfigFileEntry<>(
-            "constant_tasks", false, "season[new]",
+            "constant_tasks", false, "season",
             "Constant Tasks", "Automatically gives players a new task when they have completed one."
     );
 
     public static final ConfigFileEntry<Boolean> ONLY_LOSE_HEARTS_IN_SESSION = new ConfigFileEntry<>(
-            "only_lose_hearts_in_session", false, "season.health[new]",
+            "only_lose_hearts_in_session", false, "season.health",
             "Only Lose Hearts In Session", "Makes players only lose hearts while a session is active."
     );
 

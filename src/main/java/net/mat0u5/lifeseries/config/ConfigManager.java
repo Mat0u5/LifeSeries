@@ -36,6 +36,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,DEFAULT_LIVES
                 ,ONLY_TAKE_LIVES_IN_SESSION
                 ,TAB_LIST_SHOW_LIVES // Group
+                , LIVES_SYSTEM_DISABLED
 
                 ,MAX_PLAYER_HEALTH // Group
                 ,KEEP_INVENTORY
@@ -89,8 +90,10 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,BOOGEYMAN_CHOOSE_MINUTE
                 ,BOOGEYMAN_ANNOUNCE_OUTCOME
                     ,BOOGEYMAN_INFINITE // Group
-                ,BOOGEYMAN_INFINITE_LAST_PICK
-                ,BOOGEYMAN_INFINITE_AUTO_FAIL
+                    ,BOOGEYMAN_INFINITE_LAST_PICK
+                    ,BOOGEYMAN_INFINITE_AUTO_FAIL
+                ,BOOGEYMAN_TEAM_NOTICE
+                ,BOOGEYMAN_KILLS_NEEDED
 
                 ,SECRET_SOCIETY_MEMBER_AMOUNT
                 ,SECRET_SOCIETY_START_TIME

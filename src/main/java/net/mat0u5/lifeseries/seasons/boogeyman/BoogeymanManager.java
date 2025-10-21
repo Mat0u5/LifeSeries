@@ -14,6 +14,7 @@ import net.minecraft.scoreboard.ScoreHolder;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -39,10 +40,13 @@ public class BoogeymanManager {
     public boolean BOOGEYMAN_INFINITE = false;
     public int BOOGEYMAN_INFINITE_LAST_PICK = 1800;
     public int BOOGEYMAN_INFINITE_AUTO_FAIL = 360000;
+    public boolean BOOGEYMAN_TEAM_NOTICE = false;
+    public int BOOGEYMAN_KILLS_NEEDED = 1;
 
     public List<Boogeyman> boogeymen = new ArrayList<>();
     public List<UUID> rolledPlayers = new ArrayList<>();
     public boolean boogeymanChosen = false;
+    public boolean boogeymanListChanged = false;
 
     public void addSessionActions() {
         if (!BOOGEYMAN_ENABLED) return;
@@ -112,20 +116,23 @@ public class BoogeymanManager {
         return null;
     }
 
-    public void addBoogeyman(ServerPlayerEntity player) {
-        if (!BOOGEYMAN_ENABLED) return;
+    public Boogeyman addBoogeyman(ServerPlayerEntity player) {
+        if (!BOOGEYMAN_ENABLED) return null;
         if (!rolledPlayers.contains(player.getUuid())) {
             rolledPlayers.add(player.getUuid());
         }
         Boogeyman newBoogeyman = new Boogeyman(player);
         boogeymen.add(newBoogeyman);
         boogeymanChosen = true;
+        boogeymanListChanged = true;
+        return newBoogeyman;
     }
 
     public void addBoogeymanManually(ServerPlayerEntity player) {
         if (!BOOGEYMAN_ENABLED) return;
-        addBoogeyman(player);
+        Boogeyman newBoogeyman = addBoogeyman(player);
         player.sendMessage(Text.of("§c [NOTICE] You are now a Boogeyman!"));
+        messageBoogeyman(newBoogeyman, player);
     }
 
     public void removeBoogeymanManually(ServerPlayerEntity player) {
@@ -160,6 +167,20 @@ public class BoogeymanManager {
         PlayerUtils.playSoundToPlayer(player, SoundEvent.of(Identifier.of("minecraft","lastlife_boogeyman_cure")));
         if (BOOGEYMAN_ANNOUNCE_OUTCOME) {
             PlayerUtils.broadcastMessage(TextUtils.format("{}§7 is cured of the Boogeyman curse!", player));
+        }
+    }
+
+    public void onBoogeymanKill(ServerPlayerEntity player) {
+        if (!BOOGEYMAN_ENABLED) return;
+        Boogeyman boogeyman = getBoogeyman(player);
+        if (boogeymen == null) return;
+        if (boogeyman.cured || boogeyman.failed) return;
+        boogeyman.onKill();
+        if (boogeyman.shouldCure()) {
+            cure(player);
+        }
+        else {
+            player.sendMessage(TextUtils.formatLoosely("§7You still need {} {} to be cured of the curse.", boogeyman.killsNeeded, TextUtils.pluralize("kill", boogeyman.killsNeeded)));
         }
     }
 
@@ -314,14 +335,17 @@ public class BoogeymanManager {
         PlayerUtils.sendTitleToPlayers(normalPlayers, Text.literal("NOT the Boogeyman.").formatted(Formatting.GREEN),10,50,20);
         PlayerUtils.sendTitleToPlayers(boogeyPlayers, Text.literal("The Boogeyman.").formatted(Formatting.RED),10,50,20);
         for (ServerPlayerEntity boogey : boogeyPlayers) {
-            addBoogeyman(boogey);
-            messageBoogeyman(boogey);
+            Boogeyman boogeyman = addBoogeyman(boogey);
+            messageBoogeyman(boogeyman, boogey);
         }
         SessionTranscript.boogeymenChosen(boogeyPlayers);
     }
 
-    public void messageBoogeyman(ServerPlayerEntity boogey) {
+    public void messageBoogeyman(Boogeyman boogeyman, ServerPlayerEntity boogey) {
         boogey.sendMessage(Text.of(BOOGEYMAN_MESSAGE));
+        if (boogeyman != null && boogeyman.killsNeeded != 1) {
+            boogey.sendMessage(TextUtils.formatLoosely("§7You need {} {} to be cured of the curse.", boogeyman.killsNeeded, TextUtils.pluralize("kill", boogeyman.killsNeeded)));
+        }
     }
 
     public void sessionEnd() {
@@ -424,6 +448,8 @@ public class BoogeymanManager {
         BOOGEYMAN_INFINITE = seasonConfig.BOOGEYMAN_INFINITE.get(seasonConfig);
         BOOGEYMAN_INFINITE_LAST_PICK = seasonConfig.BOOGEYMAN_INFINITE_LAST_PICK.get(seasonConfig);
         BOOGEYMAN_INFINITE_AUTO_FAIL = seasonConfig.BOOGEYMAN_INFINITE_AUTO_FAIL.get(seasonConfig);
+        BOOGEYMAN_TEAM_NOTICE = seasonConfig.BOOGEYMAN_TEAM_NOTICE.get(seasonConfig);
+        BOOGEYMAN_KILLS_NEEDED = seasonConfig.BOOGEYMAN_KILLS_NEEDED.get(seasonConfig);
     }
 
     public void onDisabledBoogeyman() {
@@ -439,6 +465,36 @@ public class BoogeymanManager {
             infiniteBoogeymenTick(boogeyman);
             autoFailTick(boogeyman);
             failedMessagesTick(boogeyman);
+        }
+        if (boogeymanListChanged) {
+            boogeymanListChanged = false;
+            if (BOOGEYMAN_TEAM_NOTICE) {
+                sendBoogeymanTeamNotice();
+            }
+        }
+    }
+
+    public void sendBoogeymanTeamNotice() {
+        for (Boogeyman boogeyman : boogeymen) {
+            ServerPlayerEntity player = boogeyman.getPlayer();
+            if (player == null) continue;
+
+            List<Text> boogeymenList = new ArrayList<>();
+            for (Boogeyman otherBoogeyman : boogeymen) {
+                ServerPlayerEntity otherPlayer = otherBoogeyman.getPlayer();
+                if (otherPlayer == player) continue;
+                if (otherPlayer != null) {
+                    boogeymenList.add(otherPlayer.getDisplayName());
+                }
+                else {
+                    boogeymenList.add(Text.of(otherBoogeyman.name));
+                }
+            }
+
+            if (!boogeymenList.isEmpty()) {
+                player.sendMessage(TextUtils.format("Current Boogeymen: {}", boogeymenList));
+
+            }
         }
     }
 

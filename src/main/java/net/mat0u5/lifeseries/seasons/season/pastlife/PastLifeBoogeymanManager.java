@@ -1,13 +1,15 @@
 package net.mat0u5.lifeseries.seasons.season.pastlife;
 
+import net.mat0u5.lifeseries.seasons.boogeyman.Boogeyman;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
 public class PastLifeBoogeymanManager extends BoogeymanManager {
     @Override
-    public void messageBoogeyman(ServerPlayerEntity boogey) {
+    public void messageBoogeyman(Boogeyman boogeyman, ServerPlayerEntity boogey) {
         TaskScheduler.scheduleTask(100, () -> {
             boogey.sendMessage(Text.of("§7You are the boogeyman."));
         });
@@ -24,5 +26,11 @@ public class PastLifeBoogeymanManager extends BoogeymanManager {
         TaskScheduler.scheduleTask(340, () -> {
             boogey.sendMessage(Text.of("§7Voluntary sacrifices will not cure the curse."));
         });
+
+        if (boogeyman != null && boogeyman.killsNeeded != 1) {
+            TaskScheduler.scheduleTask(400, () -> {
+                boogey.sendMessage(TextUtils.formatLoosely("§7You need {} {} to be cured of the curse.", boogeyman.killsNeeded, TextUtils.pluralize("kill", boogeyman.killsNeeded)));
+            });
+        }
     }
 }

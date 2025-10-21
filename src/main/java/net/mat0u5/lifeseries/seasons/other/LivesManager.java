@@ -39,6 +39,7 @@ public class LivesManager {
     public boolean ONLY_TAKE_LIVES_IN_SESSION = false;
     public boolean SEE_FRIENDLY_INVISIBLE_PLAYERS = false;
     public static int MAX_TAB_NUMBER = 4;
+    public boolean LIVES_SYSTEM_DISABLED = false;
 
     public void reload() {
         SHOW_DEATH_TITLE = seasonConfig.FINAL_DEATH_TITLE_SHOW.get(seasonConfig);
@@ -46,6 +47,7 @@ public class LivesManager {
         FINAL_DEATH_SOUND = SoundEvent.of(Identifier.of(seasonConfig.FINAL_DEATH_SOUND.get(seasonConfig)));
         ONLY_TAKE_LIVES_IN_SESSION = seasonConfig.ONLY_TAKE_LIVES_IN_SESSION.get(seasonConfig);
         SEE_FRIENDLY_INVISIBLE_PLAYERS = seasonConfig.SEE_FRIENDLY_INVISIBLE_PLAYERS.get(seasonConfig);
+        LIVES_SYSTEM_DISABLED = seasonConfig.LIVES_SYSTEM_DISABLED.get(seasonConfig);
         updateTeams();
     }
 

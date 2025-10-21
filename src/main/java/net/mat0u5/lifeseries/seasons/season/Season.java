@@ -356,7 +356,7 @@ public abstract class Season {
     public void onClaimKill(ServerPlayerEntity killer, ServerPlayerEntity victim) {
         SessionTranscript.claimKill(killer, victim);
         if (boogeymanManager.isBoogeymanThatCanBeCured(killer, victim)) {
-            boogeymanManager.cure(killer);
+            boogeymanManager.onBoogeymanKill(killer);
         }
     }
 
@@ -375,7 +375,7 @@ public abstract class Season {
         }
 
         if (boogeymanManager.isBoogeymanThatCanBeCured(killer, victim)) {
-            boogeymanManager.cure(killer);
+            boogeymanManager.onBoogeymanKill(killer);
         }
     }
 

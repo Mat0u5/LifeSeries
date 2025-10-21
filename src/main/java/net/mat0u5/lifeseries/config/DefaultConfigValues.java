@@ -89,6 +89,10 @@ public class DefaultConfigValues {
             "only_take_lives_in_session", false, "global.lives",
             "Only Lose Lives In Session", "Makes players only lose lives when they die while a session is active."
     );
+    public final ConfigFileEntry<Boolean> LIVES_SYSTEM_DISABLED = new ConfigFileEntry<>(
+            "lives_system_disabled", false, "global.lives[new]",
+            "Fully Disable Lives System", "Fully disables the lives system, if you want to implement a custom on for example :)"
+    );
     public final ConfigFileEntry<Boolean> CUSTOM_ENCHANTER_ALGORITHM = new ConfigFileEntry<>(
             "custom_enchanter_algorithm", false, "global",
             "Custom Enchanter Algorithm", "Modifies the enchanting table algorithm to allow players to get all enchants even without bookshelves."
@@ -203,6 +207,14 @@ public class DefaultConfigValues {
     public final ConfigFileEntry<Integer> BOOGEYMAN_INFINITE_AUTO_FAIL = new ConfigFileEntry<>(
             "boogeyman_infinite_auto_fail", 360000, ConfigTypes.SECONDS, "global.boogeyman.infinite",
             "Automatic Fail", "Controls how long a Boogeyman has to kill someone before they automatically fail, in seconds."
+    );
+    public final ConfigFileEntry<Boolean> BOOGEYMAN_TEAM_NOTICE = new ConfigFileEntry<>(
+            "boogeyman_team_notice", false, "global.boogeyman[new]",
+            "Boogeyman Team Notice", "Shows every Boogeyman a list of the other players that are also Boogeymen in chat."
+    );
+    public final ConfigFileEntry<Integer> BOOGEYMAN_KILLS_NEEDED = new ConfigFileEntry<>(
+            "boogeyman_kills_needed", 1, "global.boogeyman[new]",
+            "Boogyeman Kills Needed", "Controls how many kills you need as the Boogeyman to be cured."
     );
 
     public final ConfigFileEntry<Boolean> SECRET_SOCIETY = new ConfigFileEntry<>(

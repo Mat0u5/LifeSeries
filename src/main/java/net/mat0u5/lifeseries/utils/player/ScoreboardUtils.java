@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.utils.player;
 
+import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.minecraft.scoreboard.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -7,6 +8,7 @@ import net.minecraft.text.Text;
 import java.util.Collection;
 import java.util.Collections;
 
+import static net.mat0u5.lifeseries.Main.livesManager;
 import static net.mat0u5.lifeseries.Main.server;
 
 public class ScoreboardUtils {
@@ -59,6 +61,9 @@ public class ScoreboardUtils {
     }
 
     public static void setScore(ScoreHolder holder, String objectiveName, int score) {
+        if (livesManager != null && livesManager.LIVES_SYSTEM_DISABLED && objectiveName.equals(LivesManager.SCOREBOARD_NAME)) {
+            return;
+        }
         if (server == null) return;
         Scoreboard scoreboard = server.getScoreboard();
         ScoreboardObjective objective = scoreboard.getNullableObjective(objectiveName);

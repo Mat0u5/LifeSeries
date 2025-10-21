@@ -74,7 +74,7 @@ public class WildLifeConfig extends ConfigManager {
             "Change Multiplier", "The speed with which you change your size during Size Shifting."
     );
     public static final ConfigFileEntry<Boolean> WILDCARD_SIZESHIFTING_FIX_BUGS = new ConfigFileEntry<>(
-            "wildcard_sizeshifting_fix_bugs", true, "season.sizeshifting[new]",
+            "wildcard_sizeshifting_fix_bugs", true, "season.sizeshifting",
             "Fix Bugs", "Fixes the bug where you fall from blocks when shifting and when you get stuck on blocks when jumping."
     );
 
@@ -189,11 +189,11 @@ public class WildLifeConfig extends ConfigManager {
             "Blacklisted Powers", "List of superpowers that cannot be rolled randomly.", Superpowers.getAllStr()
     );
     public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ANIMALDISGUISE_ARMOR = new ConfigFileEntry<>(
-            "wildcard_superpowers_animaldisguise_armor", false, "season.superpowers[new]",
+            "wildcard_superpowers_animaldisguise_armor", false, "season.superpowers",
             "Animal Disguise: Show Armor", "Controls whether armor is seen on players disguised as mobs."
     );
     public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ANIMALDISGUISE_HANDS = new ConfigFileEntry<>(
-            "wildcard_superpowers_animaldisguise_hands", true, "season.superpowers[new]",
+            "wildcard_superpowers_animaldisguise_hands", true, "season.superpowers",
             "Animal Disguise: Show Hand Items", "Controls whether hand items are seen on players disguised as mobs."
     );
 

@@ -45,7 +45,7 @@ public class ClientConfig extends ConfigManager {
     );
 
     public static final ConfigFileEntry<Double> TEXT_HUD_SCALE = new ConfigFileEntry<>(
-            "text_hud_scale", 1.0, "[new]",
+            "text_hud_scale", 1.0, "",
             "Side Text Hud Scale", "The scale at which the side texts, like the session timer render at."
     );
 
