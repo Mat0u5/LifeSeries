@@ -81,6 +81,11 @@ public class WildLifeCommands extends Command {
                         context.getSource())
                     )
                 )
+                .then(literal("finale")
+                        .executes(context -> activateFinale(
+                                context.getSource())
+                        )
+                )
         );
         dispatcher.register(
             literal("snail")
@@ -167,6 +172,15 @@ public class WildLifeCommands extends Command {
                         .executes(context -> randomizeFood(context.getSource()))
                 )
         );
+    }
+
+    public int activateFinale(ServerCommandSource source) {
+        if (checkBanned(source)) return -1;
+
+        WildcardManager.FINALE = true;
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("All wildcards will act as if the finale (so the Callback wildcard) was activated."));
+
+        return 1;
     }
 
     public int randomizeFood(ServerCommandSource source) {

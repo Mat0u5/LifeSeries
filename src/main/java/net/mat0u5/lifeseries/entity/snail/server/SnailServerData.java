@@ -163,6 +163,7 @@ public class SnailServerData implements PlayerBoundEntity {
 
     public boolean isNerfed() {
         if (snail.isFromTrivia()) return true;
+        if (WildcardManager.FINALE) return true;
         return WildcardManager.isActiveWildcard(Wildcards.CALLBACK);
     }
 

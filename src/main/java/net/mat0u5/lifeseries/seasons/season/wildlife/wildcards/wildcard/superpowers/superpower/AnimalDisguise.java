@@ -3,15 +3,19 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
@@ -54,6 +58,9 @@ public class AnimalDisguise extends ToggleableSuperpower {
         }
         if (morph == null) {
             morph = defaultRandom.get(player.getRandom().nextInt(defaultRandom.size()));
+            if (SuperpowersWildcard.isFinale()) {
+                spawnMobs(player, morph);
+            }
         }
         PlayerUtils.getServerWorld(player).playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PUFFER_FISH_BLOW_UP, SoundCategory.MASTER, 1, 1);
 
@@ -74,5 +81,13 @@ public class AnimalDisguise extends ToggleableSuperpower {
 
     public void onTakeDamage() {
         deactivate();
+    }
+
+    public void spawnMobs(ServerPlayerEntity player, EntityType<?> morph) {
+        if (morph == null) return;
+        for (int i = 0; i < 2; i++) {
+            BlockPos spawnPos =  WorldUtils.getCloseBlockPos(PlayerUtils.getServerWorld(player), player.getBlockPos(), 6, 3, true);
+            Entity spawnedEntity = morph.spawn(PlayerUtils.getServerWorld(player), spawnPos, SpawnReason.COMMAND);
+        }
     }
 }

@@ -35,6 +35,7 @@ public class WildcardManager {
     public static final Map<Wildcards, Wildcard> activeWildcards = new HashMap<>();
     public static final Random rnd = new Random();
     public static double ACTIVATE_WILDCARD_MINUTE = 2.5;
+    public static boolean FINALE = false;
 
     public static void addSessionActions() {
         currentSession.addSessionActionIfTime(
@@ -253,6 +254,7 @@ public class WildcardManager {
     }
 
     public static void onSessionEnd() {
+        FINALE = false;
         if (!activeWildcards.isEmpty()) {
             fadedWildcard();
         }

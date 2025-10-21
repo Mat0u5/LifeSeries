@@ -183,7 +183,7 @@ public class SnailModel extends EntityModel<SnailRenderState> {
 
         this.parachute.traverse().forEach(part -> part.hidden = parachuteHidden);
         this.propeller.traverse().forEach(part -> part.hidden = propellerHidden);
-        this.trivia.traverse().forEach(part -> part.hidden = triviaHidden);
+        //this.trivia.traverse().forEach(part -> part.hidden = triviaHidden);
     }
 
     @Override
@@ -222,7 +222,7 @@ public class SnailModel extends EntityModel<SnailRenderState> {
 
         this.parachute.traverse().forEach(part -> part.hidden = parachuteHidden);
         this.propeller.traverse().forEach(part -> part.hidden = propellerHidden);
-        this.trivia.traverse().forEach(part -> part.hidden = triviaHidden);
+        //this.trivia.traverse().forEach(part -> part.hidden = triviaHidden);
     }
     *///?}
 }

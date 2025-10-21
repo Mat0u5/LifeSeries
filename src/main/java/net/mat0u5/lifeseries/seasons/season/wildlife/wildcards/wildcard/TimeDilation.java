@@ -68,13 +68,13 @@ public class TimeDilation extends Wildcard {
         if (!active) return;
         float sessionPassedTime = ((float) currentSession.passedTime - activatedAt);
         if (sessionPassedTime < 0) return;
-        if (sessionPassedTime > 3600 && sessionPassedTime < 3700 && !isNerfed()) OtherUtils.executeCommand("weather clear");
+        if (sessionPassedTime > 3600 && sessionPassedTime < 3700 && !isFinale()) OtherUtils.executeCommand("weather clear");
         int currentDiv = (int) ((currentSession.passedTime) / updateRate);
         if (lastDiv != currentDiv) {
             lastDiv = currentDiv;
 
             float progress = ((float) currentSession.passedTime - activatedAt) / (currentSession.sessionLength - activatedAt);
-            if (isNerfed()) {
+            if (isFinale()) {
                 progress = ((float) currentSession.passedTime - activatedAt) / (20*60*5);
                 if (progress >= 1 && !Callback.allWildcardsPhaseReached) {
                     deactivate();
@@ -114,13 +114,13 @@ public class TimeDilation extends Wildcard {
 
     @Override
     public void activate() {
-        if (!isNerfed()) TaskScheduler.scheduleTask(50, () -> OtherUtils.executeCommand("weather rain"));
+        if (!isFinale()) TaskScheduler.scheduleTask(50, () -> OtherUtils.executeCommand("weather rain"));
         TaskScheduler.scheduleTask(115, () -> {
             activatedAt = (int) currentSession.passedTime + 400;
             lastDiv = -1;
             PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvent.of(Identifier.ofVanilla("wildlife_time_slow_down")));
             slowlySetWorldSpeed(getMinTickRate(), 18);
-            if (!isNerfed() && getMinTickRate() <= 4) TaskScheduler.scheduleTask(18, () -> NetworkHandlerServer.sendLongPackets(PacketNames.TIME_DILATION, System.currentTimeMillis()));
+            if (!isFinale() && getMinTickRate() <= 4) TaskScheduler.scheduleTask(18, () -> NetworkHandlerServer.sendLongPackets(PacketNames.TIME_DILATION, System.currentTimeMillis()));
             TaskScheduler.scheduleTask(19, super::activate);
         });
     }
@@ -158,16 +158,12 @@ public class TimeDilation extends Wildcard {
     }
 
     public static float getMaxTickRate() {
-        if (isNerfed()) return MAX_TICK_RATE_NERFED;
+        if (isFinale()) return MAX_TICK_RATE_NERFED;
         return MAX_TICK_RATE;
     }
 
     public static float getMinTickRate() {
-        if (isNerfed()) return MIN_TICK_RATE_NERFED;
+        if (isFinale()) return MIN_TICK_RATE_NERFED;
         return Math.max(MIN_TICK_RATE, 1);
-    }
-
-    public static boolean isNerfed() {
-        return WildcardManager.isActiveWildcard(Wildcards.CALLBACK);
     }
 }

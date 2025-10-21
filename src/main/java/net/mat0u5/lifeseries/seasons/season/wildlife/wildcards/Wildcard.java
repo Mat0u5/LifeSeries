@@ -32,4 +32,8 @@ public abstract class Wildcard {
     public void tick() {}
     public void softTick() {}
 
+
+    public static boolean isFinale() {
+        return WildcardManager.FINALE || WildcardManager.isActiveWildcard(Wildcards.CALLBACK);
+    }
 }

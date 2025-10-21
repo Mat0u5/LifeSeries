@@ -43,6 +43,7 @@ public class SuperPunch extends ToggleableSuperpower {
             NetworkHandlerServer.sendVignette(player, 0);
             if (player.hasVehicle()) {
                 player.dismountVehicle();
+                syncEntityPassengers(riding, PlayerUtils.getServerWorld(player));
             }
         }
     }
