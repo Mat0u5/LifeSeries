@@ -13,6 +13,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShif
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.WeightedRandomizer;
@@ -49,10 +50,10 @@ import net.minecraft.util.math.Vec3d;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import static net.mat0u5.lifeseries.Main.livesManager;
-import static net.mat0u5.lifeseries.Main.server;
 //? if <= 1.21.6
 import net.minecraft.particle.EntityEffectParticleEffect;
+
+import static net.mat0u5.lifeseries.Main.*;
 //? if >= 1.21.9
 /*import net.minecraft.particle.TintedParticleEffect;*/
 //? if >= 1.21.11
@@ -72,7 +73,7 @@ public class TriviaHandler {
 
 
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
-        if (bot.getBotWorld().isClient()) return ActionResult.PASS;
+        if (bot.getBotWorld().isClient()) return ActionResult.SUCCESS;
         ServerPlayerEntity boundPlayer = bot.serverData.getBoundPlayer();
         if (boundPlayer == null) return ActionResult.PASS;
         if (boundPlayer.getUuid() != player.getUuid()) return ActionResult.PASS;
@@ -92,7 +93,7 @@ public class TriviaHandler {
         NetworkHandlerServer.sendTriviaPacket(boundPlayer, question.getQuestion(), difficulty, System.currentTimeMillis(), timeToComplete, question.getAnswers());
         bot.setInteractedWith(true);
 
-        return ActionResult.PASS;
+        return ActionResult.SUCCESS;
     }
 
     public void transformIntoSnail() {
@@ -259,7 +260,17 @@ public class TriviaHandler {
         if (player == null) return;
         player.sendMessage(Text.empty());
         for (int i = 0; i < 3; i++) {
-            RegistryEntry<StatusEffect> effect = blessEffects.get(player.getRandom().nextInt(blessEffects.size()));
+            int attempts = 0;
+            RegistryEntry<StatusEffect> effect = null;
+            while (effect == null && attempts < 50) {
+                attempts++;
+                RegistryEntry<StatusEffect> pickedEffect = blessEffects.get(player.getRandom().nextInt(blessEffects.size()));
+                if (blacklist != null && blacklist.getBannedEffects().contains(pickedEffect)) {
+                    continue;
+                }
+                effect = pickedEffect;
+            }
+            if (effect == null) continue;
             int amplifier;
             if (effect == StatusEffects.FIRE_RESISTANCE || effect == StatusEffects.WATER_BREATHING || effect == StatusEffects.NIGHT_VISION ||
                     effect == StatusEffects.REGENERATION || effect == StatusEffects.STRENGTH || effect == StatusEffects.HEALTH_BOOST || effect == StatusEffects.RESISTANCE) {

@@ -40,7 +40,7 @@ import static net.mat0u5.lifeseries.Main.*;
 /*import net.minecraft.entity.TypedEntityData;*/
 
 public class SecretLife extends Season {
-    public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /gift, /task, /health, /secretlife";
+    public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /gift, /task, /health";
     public static final String COMMANDS_TEXT = "/claimkill, /lives, /gift";
     public static double MAX_HEALTH = 60.0d;
     public static double MAX_KILL_HEALTH = 1000.0d;

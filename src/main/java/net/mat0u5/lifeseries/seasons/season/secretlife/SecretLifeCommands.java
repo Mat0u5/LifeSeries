@@ -165,21 +165,17 @@ public class SecretLifeCommands extends Command {
                                     )
                             )
                     )
+                    .then(literal("changeLocations")
+                            .executes(context -> changeLocations(
+                                    context.getSource())
+                            )
+                    )
         );
         dispatcher.register(
             literal("gift")
                 .then(argument("player", EntityArgumentType.player())
                     .executes(context -> gift(
                         context.getSource(), EntityArgumentType.getPlayer(context, "player"))
-                    )
-                )
-        );
-        dispatcher.register(
-            literal("secretlife")
-                .requires(PermissionManager::isAdmin)
-                .then(literal("changeLocations")
-                    .executes(context -> changeLocations(
-                        context.getSource())
                     )
                 )
         );

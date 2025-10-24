@@ -23,3 +23,9 @@ Added the '/wildcard finale' command, which makes the wildcards act like they do
 The end of the transcript now contains a summary of how many kills and deaths each player had.<br>
 Added the 'wildcard_callback_nerfed_wildcards' Wild Life config. Default value is true.<br>
 Added the ${red} identifier to Secret Life tasks. Works similarly to ${green} and ${yellow}
+
+----------
+
+Moved '/secretlife changeLocations' to '/task changeLocations'<br>
+Right-clicking on Trivia Bots now properly consumes right clicks.<br>
+Trivia bots can no longer give blacklisted effects.
