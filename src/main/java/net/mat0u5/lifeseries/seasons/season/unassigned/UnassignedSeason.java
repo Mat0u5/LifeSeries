@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.unassigned;
 
+import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
@@ -42,7 +43,9 @@ public class UnassignedSeason extends Season {
     @Override
     public void onPlayerFinishJoining(ServerPlayerEntity player) {
         super.onPlayerFinishJoining(player);
-        NetworkHandlerServer.sendStringPacket(player, PacketNames.SELECT_SEASON, "");
+        if (!Main.modDisabled()) {
+            NetworkHandlerServer.sendStringPacket(player, PacketNames.SELECT_SEASON, "");
+        }
     }
 
     @Override
@@ -67,6 +70,7 @@ public class UnassignedSeason extends Season {
     }
 
     public void broadcastNotice() {
+        if (Main.modDisabled()) return;
         if (currentSeason.getSeason() != Seasons.UNASSIGNED) return;
         PlayerUtils.broadcastMessage(Text.literal("[LifeSeries] You must select a season with ").formatted(Formatting.RED)
                 .append(Text.literal("'/lifeseries setSeries <series>'").formatted(Formatting.GRAY)), 120);

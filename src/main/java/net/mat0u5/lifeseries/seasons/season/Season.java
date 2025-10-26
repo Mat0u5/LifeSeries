@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season;
 
+import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
@@ -147,6 +148,10 @@ public abstract class Season {
             if (currentBelowNameObjective.getName().equals("HP")) {
                 ScoreboardUtils.setObjectiveInSlot(ScoreboardDisplaySlot.BELOW_NAME, null);
             }
+        }
+
+        if (getSeason() != Seasons.SIMPLE_LIFE) {
+            OtherUtils.executeCommand("/kill @e[type=wandering_trader,tag=SimpleLifeTrader]");
         }
     }
 
@@ -462,7 +467,7 @@ public abstract class Season {
     }
 
     public void onPlayerFinishJoining(ServerPlayerEntity player) {
-        if (getSeason() != Seasons.UNASSIGNED && SHOW_LOGIN_COMMAND_INFO) {
+        if (getSeason() != Seasons.UNASSIGNED && SHOW_LOGIN_COMMAND_INFO && !Main.modDisabled()) {
             if (PermissionManager.isAdmin(player)) {
                 player.sendMessage(TextUtils.formatLoosely("§7{} commands: §r{}", getSeason().getName(), getAdminCommands()));
             }
@@ -472,7 +477,7 @@ public abstract class Season {
         }
 
         learnRecipes();
-        if (currentSession.statusNotStarted() && PermissionManager.isAdmin(player)) {
+        if (currentSession.statusNotStarted() && PermissionManager.isAdmin(player) && !Main.modDisabled()) {
             player.sendMessage(Text.of("\nUse §b'/session timer set <time>'§f to set the desired session time."));
             player.sendMessage(Text.of("After that, use §b'/session start'§f to start the session."));
         }

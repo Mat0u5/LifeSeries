@@ -38,8 +38,8 @@ public class SimpleLife extends ThirdLife {
     }
 
     @Override
-    public void tick(MinecraftServer server) {
-        super.tick(server);
+    public void tickSessionOn(MinecraftServer server) {
+        super.tickSessionOn(server);
         checkCooldown--;
         if (checkCooldown <= 0) {
             checkCooldown = 1200; //1 Minute
@@ -101,6 +101,7 @@ public class SimpleLife extends ThirdLife {
                     if (rand == 1) offers.add(new TradeOffer(new TradedItem(Items.DIRT, 32), Optional.empty(), Items.SPRUCE_SAPLING.getDefaultStack(), 0, 999999, 0, 0, 0));
 
                     wanderingTraderEntity.setOffersFromServer(offers);
+                    wanderingTraderEntity.addCommandTag("SimpleLifeTrader");
                     return true;
                 }
             }

@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.4.2.5";
+	public static final String MOD_VERSION = "dev-1.4.2.6";
 	public static final String MOD_ID = "lifeseries";
 	public static final String UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
 	public static final boolean DEBUG = false;
@@ -103,8 +103,13 @@ public class Main implements ModInitializer {
 	}
 
 	public static void setDisabled(boolean disabled) {
+		boolean previouslyDisabled = MOD_DISABLED;
 		MOD_DISABLED = disabled;
 		config.setProperty("modDisabled", String.valueOf(MOD_DISABLED));
+
+		if (!previouslyDisabled && disabled) {
+			changeSeasonTo(Seasons.UNASSIGNED.getId());
+		}
 		if (!modDisabled()) {
 			fullReload();
 		}
@@ -180,8 +185,10 @@ public class Main implements ModInitializer {
 			currentSeason.onPlayerJoin(player);
 			currentSeason.onPlayerFinishJoining(player);
 			NetworkHandlerServer.tryKickFailedHandshake(player);
-			NetworkHandlerServer.sendStringPacket(player, PacketNames.SEASON_INFO, currentSeason.getSeason().getId());
-			NetworkHandlerServer.sendLongPacket(player, PacketNames.SESSION_TIMER, SessionTimerStates.NOT_STARTED.getValue());
+			if (!modDisabled()) {
+				NetworkHandlerServer.sendStringPacket(player, PacketNames.SEASON_INFO, currentSeason.getSeason().getId());
+				NetworkHandlerServer.sendLongPacket(player, PacketNames.SESSION_TIMER, SessionTimerStates.NOT_STARTED.getValue());
+			}
 		}
 		SessionTranscript.resetStats();
 		return true;

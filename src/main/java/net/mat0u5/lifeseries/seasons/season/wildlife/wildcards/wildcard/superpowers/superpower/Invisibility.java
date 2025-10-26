@@ -64,12 +64,10 @@ public class Invisibility extends ToggleableSuperpower {
     }
 
     public void sendInvisibilityPacket() {
-        //? if <= 1.21.6 {
         if (!this.active) return;
         ServerPlayerEntity player = getPlayer();
         if (player == null) return;
         NetworkHandlerServer.sendPlayerInvisible(player.getUuid(), -1);
-        //?}
     }
 
     public void onTakeDamage() {

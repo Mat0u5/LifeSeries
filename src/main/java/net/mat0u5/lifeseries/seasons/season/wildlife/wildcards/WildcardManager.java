@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards;
 
+import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaHandler;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;

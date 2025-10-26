@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.utils.player;
 
+import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaHandler;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -34,6 +35,10 @@ public class AttributeUtils {
     }
 
     public static void resetMaxPlayerHealthIfNecessary(ServerPlayerEntity player) {
+        if (Main.modDisabled()) {
+            resetMaxPlayerHealth(player);
+            return;
+        }
         if (currentSeason.getSeason() == Seasons.SECRET_LIFE) return;
         double currentMaxHealth = getMaxPlayerHealth(player);
         if (currentMaxHealth == 13 && TriviaHandler.cursedHeartPlayers.contains(player.getUuid())) return;

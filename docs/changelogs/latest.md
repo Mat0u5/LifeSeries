@@ -29,3 +29,10 @@ Added the ${red} identifier to Secret Life tasks. Works similarly to ${green} an
 Moved '/secretlife changeLocations' to '/task changeLocations'<br>
 Right-clicking on Trivia Bots now properly consumes right clicks.<br>
 Trivia bots can no longer give blacklisted effects.
+
+----------
+
+The Invisibility superpower now works properly again in 1.21.9+<br>
+Simple Life wandering traders now disappear when changing the season.<br>
+Simple Life wandering traders now only spawn if the session is on.<br>
+Running '/lifeseries disable' now additionally sets the season to unassigned.
