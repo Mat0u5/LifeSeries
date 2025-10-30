@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
@@ -21,13 +22,17 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Unit;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.GameRules;
 import net.minecraft.world.chunk.Chunk;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.*;
+
+//? if <= 1.21.9
+import net.minecraft.world.GameRules;
+//? if > 1.21.9
+/*import net.minecraft.world.rule.GameRules;*/
 
 public class MobSwap extends Wildcard {
     public static int activatedAt = -1;
@@ -258,8 +263,8 @@ public class MobSwap extends Wildcard {
                 toKill.add(entity);
             });
 
-            boolean mobLoot = world.getGameRules().getBoolean(GameRules.DO_MOB_LOOT);
-            if (mobLoot) world.getGameRules().get(GameRules.DO_MOB_LOOT).set(false, world.getServer());
+            boolean mobLoot = OtherUtils.getBooleanGameRule(world, GameRules.DO_MOB_LOOT);
+            if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.DO_MOB_LOOT, false);
             for (Entity entity : toKill) {
                 //? if <=1.21 {
                 entity.kill();
@@ -267,7 +272,7 @@ public class MobSwap extends Wildcard {
                 /*entity.kill((ServerWorld) WorldUtils.getEntityWorld(entity));
                 *///?}
             }
-            if (mobLoot) world.getGameRules().get(GameRules.DO_MOB_LOOT).set(true, world.getServer());
+            if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.DO_MOB_LOOT, true);
         }
     }
 
@@ -350,8 +355,8 @@ public class MobSwap extends Wildcard {
                 toKill.add(entity);
             });
 
-            boolean mobLoot = world.getGameRules().getBoolean(GameRules.DO_MOB_LOOT);
-            if (mobLoot) world.getGameRules().get(GameRules.DO_MOB_LOOT).set(false, world.getServer());
+            boolean mobLoot = OtherUtils.getBooleanGameRule(world, GameRules.DO_MOB_LOOT);
+            if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.DO_MOB_LOOT, false);
             for (Entity entity : toKill) {
                 //? if <=1.21 {
                 entity.kill();
@@ -359,7 +364,7 @@ public class MobSwap extends Wildcard {
                 /*entity.kill((ServerWorld) WorldUtils.getEntityWorld(entity));
                 *///?}
             }
-            if (mobLoot) world.getGameRules().get(GameRules.DO_MOB_LOOT).set(true, world.getServer());
+            if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.DO_MOB_LOOT, true);
         }
     }
 

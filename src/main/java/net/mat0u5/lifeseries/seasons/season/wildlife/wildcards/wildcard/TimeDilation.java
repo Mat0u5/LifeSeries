@@ -14,10 +14,14 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.GameRules;
 
 import static net.mat0u5.lifeseries.Main.currentSession;
 import static net.mat0u5.lifeseries.Main.server;
+
+//? if <= 1.21.9
+import net.minecraft.world.GameRules;
+//? if > 1.21.9
+/*import net.minecraft.world.rule.GameRules;*/
 
 public class TimeDilation extends Wildcard {
     public static float MIN_TICK_RATE = 1;
@@ -56,7 +60,12 @@ public class TimeDilation extends Wildcard {
                     long newTicks = serverWorld.getTimeOfDay() + weatherTicks;
                     serverWorld.setTimeOfDay(newTicks);
                     for (ServerPlayerEntity player : serverWorld.getPlayers()) {
-                        player.networkHandler.sendPacket(new WorldTimeUpdateS2CPacket(serverWorld.getTime(), serverWorld.getTimeOfDay(), serverWorld.getGameRules().getBoolean(GameRules.DO_DAYLIGHT_CYCLE)));
+                        //? if <= 1.21.9 {
+                        boolean daylightCycle = OtherUtils.getBooleanGameRule(serverWorld, GameRules.DO_DAYLIGHT_CYCLE);
+                        //?} else {
+                        /*boolean daylightCycle = OtherUtils.getBooleanGameRule(serverWorld, GameRules.ADVANCE_TIME);
+                        *///?}
+                        player.networkHandler.sendPacket(new WorldTimeUpdateS2CPacket(serverWorld.getTime(), serverWorld.getTimeOfDay(), daylightCycle));
                     }
                 }
             }

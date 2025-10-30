@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -18,6 +19,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static net.mat0u5.lifeseries.Main.server;
+
+//? if <= 1.21.9
+import net.minecraft.world.GameRules;
+//? if > 1.21.9
+/*import net.minecraft.world.rule.GameRule;*/
 
 public class OtherUtils {
     private static final Random rnd = new Random();
@@ -240,5 +246,22 @@ public class OtherUtils {
         *///?}
     }
 
-
+    //? if <= 1.21.9 {
+    public static boolean getBooleanGameRule(ServerWorld world, GameRules.Key<GameRules.BooleanRule> gamerule) {
+        return world.getGameRules().getBoolean(gamerule);
+    }
+    public static <T extends GameRules.Rule<T>> void setBooleanGameRule(ServerWorld world, GameRules.Key<GameRules.BooleanRule> gamerule, boolean value) {
+        world.getGameRules().get(gamerule).set(value, server);
+    }
+    //?} else {
+    /*public static boolean getBooleanGameRule(ServerWorld world, GameRule<?> gamerule) {
+        if (world.getGameRules().getValue(gamerule) instanceof Boolean bool) {
+            return bool;
+        }
+        return false;
+    }
+    public static void setBooleanGameRule(ServerWorld world, GameRule<Boolean> gamerule, Boolean value) {
+        world.getGameRules().setValue(gamerule, value, server);
+    }
+    *///?}
 }

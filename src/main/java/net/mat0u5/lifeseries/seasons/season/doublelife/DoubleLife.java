@@ -28,7 +28,6 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.GameRules;
 import net.minecraft.world.border.WorldBorder;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -37,6 +36,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.*;
+
+//? if <= 1.21.9
+import net.minecraft.world.GameRules;
+//? if > 1.21.9
+/*import net.minecraft.world.rule.GameRules;*/
 
 public class DoubleLife extends Season {
     public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /soulmate";
@@ -439,7 +443,8 @@ public class DoubleLife extends Season {
 
         if (soulmate == null) return;
         if (!soulmate.isAlive()) return;
-        if (SOULBOUND_INVENTORIES && server != null && !PlayerUtils.getServerWorld(player).getGameRules().getBoolean(GameRules.KEEP_INVENTORY)) {
+        boolean keepInventory = OtherUtils.getBooleanGameRule(PlayerUtils.getServerWorld(player), GameRules.KEEP_INVENTORY);
+        if (SOULBOUND_INVENTORIES && server != null && !keepInventory) {
             soulmate.getInventory().clear();
         }
 

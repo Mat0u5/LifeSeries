@@ -29,7 +29,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.world.GameRules;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -38,6 +37,10 @@ import java.util.*;
 import static net.mat0u5.lifeseries.Main.*;
 //? if >= 1.21.9
 /*import net.minecraft.entity.TypedEntityData;*/
+//? if <= 1.21.9
+import net.minecraft.world.GameRules;
+//? if > 1.21.9
+/*import net.minecraft.world.rule.GameRules;*/
 
 public class SecretLife extends Season {
     public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /gift, /task, /health";
@@ -356,7 +359,7 @@ public class SecretLife extends Season {
         if (entity instanceof ServerPlayerEntity player) {
             boolean dropBook = SecretLifeConfig.PLAYERS_DROP_TASK_ON_DEATH.get(seasonConfig);
             if (dropBook || server == null) return;
-            boolean keepInventory = PlayerUtils.getServerWorld(player).getGameRules().getBoolean(GameRules.KEEP_INVENTORY);
+            boolean keepInventory = OtherUtils.getBooleanGameRule(PlayerUtils.getServerWorld(player), GameRules.KEEP_INVENTORY);
             if (keepInventory) return;
             giveBookOnRespawn.put(player.getUuid(), TaskManager.getPlayersTaskBook(player));
             TaskManager.removePlayersTaskBook(player);
@@ -436,6 +439,10 @@ public class SecretLife extends Season {
             }
         }
         if (server.getOverworld() == null) return;
+        //? if <= 1.21.9 {
         server.getOverworld().getGameRules().get(GameRules.NATURAL_REGENERATION).set(naturalRegeneration, server);
+         //?} else {
+        /*server.getOverworld().getGameRules().setValue(GameRules.NATURAL_HEALTH_REGENERATION, naturalRegeneration, server);
+        *///?}
     }
 }

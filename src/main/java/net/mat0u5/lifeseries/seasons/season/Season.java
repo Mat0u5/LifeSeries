@@ -39,7 +39,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
-import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionTypes;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -51,6 +50,11 @@ import static net.mat0u5.lifeseries.Main.*;
 import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
 //? if >= 1.21.2
 /*import net.minecraft.server.world.ServerWorld;*/
+
+//? if <= 1.21.9
+import net.minecraft.world.GameRules;
+//? if > 1.21.9
+/*import net.minecraft.world.rule.GameRules;*/
 
 public abstract class Season {
     public static final String RESOURCEPACK_MAIN_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-main-fc0fa2a3efe2aefdba5a3c0deda61039fc43a008/main.zip";
@@ -118,15 +122,20 @@ public abstract class Season {
         *///?}
 
         if (overworld != null) {
-            overworld.getGameRules().get(GameRules.KEEP_INVENTORY).set(seasonConfig.KEEP_INVENTORY.get(seasonConfig), server);
-            overworld.getGameRules().get(GameRules.NATURAL_REGENERATION).set(getSeason() != Seasons.SECRET_LIFE, server);
-            overworld.getGameRules().get(GameRules.ANNOUNCE_ADVANCEMENTS).set(seasonConfig.SHOW_ADVANCEMENTS.get(seasonConfig), server);
+            OtherUtils.setBooleanGameRule(overworld, GameRules.KEEP_INVENTORY, seasonConfig.KEEP_INVENTORY.get(seasonConfig));
+            OtherUtils.setBooleanGameRule(overworld, GameRules.ANNOUNCE_ADVANCEMENTS, seasonConfig.SHOW_ADVANCEMENTS.get(seasonConfig));
+            //? if <= 1.21.9 {
+            OtherUtils.setBooleanGameRule(overworld, GameRules.NATURAL_REGENERATION, getSeason() != Seasons.SECRET_LIFE);
+            //?} else {
+            /*OtherUtils.setBooleanGameRule(overworld, GameRules.NATURAL_HEALTH_REGENERATION, getSeason() != Seasons.SECRET_LIFE);
+            *///?}
+
             //? if >= 1.21.6 {
             /*boolean locatorBarEnabled = seasonConfig.LOCATOR_BAR.get(seasonConfig);
             if (!locatorBarEnabled && this instanceof DoubleLife) {
                 locatorBarEnabled = DoubleLife.SOULMATE_LOCATOR_BAR;
             }
-            overworld.getGameRules().get(GameRules.LOCATOR_BAR).set(locatorBarEnabled, server);
+            OtherUtils.setBooleanGameRule(overworld, GameRules.LOCATOR_BAR, locatorBarEnabled);
             *///?}
         }
 
@@ -246,7 +255,8 @@ public abstract class Season {
 
     public void dropItemsOnLastDeath(ServerPlayerEntity player) {
         boolean doDrop = seasonConfig.PLAYERS_DROP_ITEMS_ON_FINAL_DEATH.get(seasonConfig);
-        boolean keepInventory = PlayerUtils.getServerWorld(player).getGameRules().getBoolean(GameRules.KEEP_INVENTORY);
+        boolean keepInventory = OtherUtils.getBooleanGameRule(PlayerUtils.getServerWorld(player), GameRules.KEEP_INVENTORY);
+
         if (doDrop && keepInventory) {
             for (ItemStack item : PlayerUtils.getPlayerInventory(player)) {
                 //? if <= 1.21 {
