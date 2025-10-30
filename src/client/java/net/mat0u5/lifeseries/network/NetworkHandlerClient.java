@@ -11,7 +11,6 @@ import net.mat0u5.lifeseries.features.Trivia;
 import net.mat0u5.lifeseries.config.ClientConfigGuiManager;
 import net.mat0u5.lifeseries.gui.other.ChooseWildcardScreen;
 import net.mat0u5.lifeseries.gui.other.PastLifeChooseTwistScreen;
-import net.mat0u5.lifeseries.gui.other.SnailTextureInfoScreen;
 import net.mat0u5.lifeseries.gui.seasons.ChooseSeasonScreen;
 import net.mat0u5.lifeseries.gui.seasons.SeasonInfoScreen;
 import net.mat0u5.lifeseries.mixin.client.InGameHudAccessor;
@@ -171,10 +170,6 @@ public class NetworkHandlerClient {
         if (name == PacketNames.SEASON_INFO) {
             Seasons season = Seasons.getSeasonFromStringName(value);
             if (season != Seasons.UNASSIGNED) MinecraftClient.getInstance().setScreen(new SeasonInfoScreen(season));
-        }
-
-        if (name == PacketNames.SNAIL_TEXTURES_INFO) {
-            MinecraftClient.getInstance().setScreen(new SnailTextureInfoScreen());
         }
 
         if (name == PacketNames.PREVENT_GLIDING) {

@@ -36,3 +36,8 @@ The Invisibility superpower now works properly again in 1.21.9+<br>
 Simple Life wandering traders now disappear when changing the season.<br>
 Simple Life wandering traders now only spawn if the session is on.<br>
 Running '/lifeseries disable' now additionally sets the season to unassigned.
+
+----------
+
+Editing config values that require a server reload now automatically reloads instead of just telling you to do so.<br>
+Removed the snail texture info screen, replaced with a wiki link.

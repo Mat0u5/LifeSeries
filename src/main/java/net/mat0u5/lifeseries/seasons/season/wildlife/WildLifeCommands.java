@@ -227,7 +227,9 @@ public class WildLifeCommands extends Command {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
-        NetworkHandlerServer.sendStringPacket(player, PacketNames.SNAIL_TEXTURES_INFO ,"");
+        OtherUtils.sendCommandFeedbackQuiet(source,
+                TextUtils.formatLoosely("§fClick {}§f to open the Snail Textures info page in the Wiki.", TextUtils.openURLText("mat0u5.github.io/LifeSeries-docs/config/wild-life-snails"))
+        );
 
         return 1;
     }

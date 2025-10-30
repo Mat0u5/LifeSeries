@@ -318,6 +318,6 @@ public class DefaultConfigValues {
     );
 
     public static final List<String> RELOAD_NEEDED = List.of(
-            "spawner_recipe"
+            "spawner_recipe", "blacklist_items"
     );
 }

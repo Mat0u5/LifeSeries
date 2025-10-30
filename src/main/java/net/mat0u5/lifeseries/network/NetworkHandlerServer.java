@@ -22,6 +22,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -127,11 +128,14 @@ public class NetworkHandlerServer {
     public static void onUpdatedConfig() {
         PlayerUtils.broadcastMessageToAdmins(Text.of("§7Config has been successfully updated."));
         if (configNeedsReload) {
-            PlayerUtils.broadcastMessageToAdmins(Text.of("Run §7'/lifeseries reload'§r to apply all the changes."));
+            OtherUtils.reloadServer();
+            //PlayerUtils.broadcastMessageToAdmins(Text.of("Run §7'/lifeseries reload'§r to apply all the changes."));
+        }
+        else {
+            Main.softReloadStart();
         }
         updatedConfigThisTick = false;
         configNeedsReload = false;
-        Main.softReloadStart();
     }
 
     public static void handleNumberPacket(ServerPlayerEntity player, NumberPayload payload) {
