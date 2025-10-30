@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.utils.interfaces.IServerPlayerEntity;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.entity.Entity;
@@ -19,8 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Collection;
 import java.util.OptionalInt;
 
-import static net.mat0u5.lifeseries.Main.blacklist;
-import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.Main.*;
 
 //? if <= 1.21.6 {
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
@@ -28,7 +28,7 @@ import net.minecraft.text.Text;
 //?}
 
 @Mixin(value = ServerPlayerEntity.class, priority = 1)
-public class ServerPlayerEntityMixin {
+public class ServerPlayerEntityMixin implements IServerPlayerEntity {
 
     @Inject(method = "openHandledScreen", at = @At("HEAD"))
     private void onInventoryOpen(@Nullable NamedScreenHandlerFactory factory, CallbackInfoReturnable<OptionalInt> cir) {
@@ -125,5 +125,62 @@ public class ServerPlayerEntityMixin {
     @Unique
     private ServerPlayerEntity ls$get() {
         return (ServerPlayerEntity) (Object) this;
+    }
+
+
+    /*
+        Injected Interface
+     */
+    @Unique @Override @Nullable
+    public Integer ls$getLives() {
+        return livesManager.getPlayerLives(ls$get());
+    }
+
+    @Unique @Override
+    public boolean ls$hasAssignedLives() {
+        return livesManager.hasAssignedLives(ls$get());
+    }
+
+    @Unique @Override
+    public boolean ls$isAlive() {
+        return livesManager.isAlive(ls$get());
+    }
+
+    @Unique @Override
+    public boolean ls$isDead() {
+        return livesManager.isDead(ls$get());
+    }
+
+    @Unique @Override
+    public void ls$addLives(int amount) {
+        livesManager.addToPlayerLives(ls$get(), amount);
+    }
+    @Unique @Override
+    public void ls$addLife() {
+        livesManager.addPlayerLife(ls$get());
+    }
+    @Unique @Override
+    public void ls$removeLife() {
+        livesManager.removePlayerLife(ls$get());
+    }
+
+    @Unique @Override
+    public void ls$setLives(int lives) {
+        livesManager.setPlayerLives(ls$get(), lives);
+    }
+
+    @Unique @Override
+    public boolean ls$isOnLastLife(boolean fallback) {
+        return livesManager.isOnLastLife(ls$get(), fallback);
+    }
+
+    @Unique @Override
+    public boolean ls$isOnSpecificLives(int check, boolean fallback) {
+        return livesManager.isOnSpecificLives(ls$get(), check, fallback);
+    }
+
+    @Unique @Override
+    public boolean ls$isOnAtLeastLives(int check, boolean fallback) {
+        return livesManager.isOnAtLeastLives(ls$get(), check, fallback);
     }
 }

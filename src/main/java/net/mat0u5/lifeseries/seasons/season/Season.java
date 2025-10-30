@@ -273,7 +273,7 @@ public abstract class Season {
     }
 
     public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim, boolean allowSelfDefense) {
-        if (livesManager.isOnLastLife(attacker, false)) {
+        if (attacker.ls$isOnLastLife(false)) {
             return true;
         }
         if (boogeymanManager.isBoogeymanThatCanBeCured(attacker, victim)) {
@@ -342,8 +342,8 @@ public abstract class Season {
         if (!killedByPlayer) {
             onPlayerDiedNaturally(player);
         }
-        if (livesManager.canChangeLivesNaturally(player) && livesManager.hasAssignedLives(player)) {
-            livesManager.removePlayerLife(player);
+        if (livesManager.canChangeLivesNaturally(player) && player.ls$hasAssignedLives()) {
+            player.ls$removeLife();
         }
     }
 
@@ -358,7 +358,7 @@ public abstract class Season {
         if (!respawnPositions.containsKey(player.getUuid())) return;
         HashMap<Vec3d, List<Float>> info = respawnPositions.get(player.getUuid());
         respawnPositions.remove(player.getUuid());
-        if (livesManager.isAlive(player)) return;
+        if (player.ls$isAlive()) return;
         for (Map.Entry<Vec3d, List<Float>> entry : info.entrySet()) {
             Vec3d pos = entry.getKey();
             if (pos.y <= PlayerUtils.getServerWorld(player).getBottomY()) continue;
@@ -449,10 +449,10 @@ public abstract class Season {
         AttributeUtils.resetAttributesOnPlayerJoin(player);
         reloadPlayerTeam(player);
         TaskScheduler.scheduleTask(2, () -> PlayerUtils.applyResourcepack(player.getUuid()));
-        if (!livesManager.hasAssignedLives(player)) {
+        if (!player.ls$hasAssignedLives()) {
             assignDefaultLives(player);
         }
-        if (livesManager.hasAssignedLives(player) && livesManager.isDead(player) && !PermissionManager.isAdmin(player)) {
+        if (player.ls$hasAssignedLives() && player.ls$isDead() && !PermissionManager.isAdmin(player)) {
             player.changeGameMode(GameMode.SPECTATOR);
         }
 
@@ -472,7 +472,7 @@ public abstract class Season {
     public void assignDefaultLives(ServerPlayerEntity player) {
         Integer lives = getDefaultLives();
         if (lives != null) {
-            livesManager.setPlayerLives(player, lives);
+            player.ls$setLives(lives);
         }
     }
 

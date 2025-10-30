@@ -335,7 +335,7 @@ public class DoubleLife extends Season {
     public List<ServerPlayerEntity> getNonAssignedPlayers() {
         List<ServerPlayerEntity> playersToRoll = new ArrayList<>();
         for (ServerPlayerEntity player : PlayerUtils.getAllFunctioningPlayers()) {
-            if (livesManager.isDead(player)) continue;
+            if (player.ls$isDead()) continue;
             if (hasSoulmate(player)) continue;
             playersToRoll.add(player);
         }
@@ -492,13 +492,13 @@ public class DoubleLife extends Season {
             }
         }
         
-        Integer soulmateLives = livesManager.getPlayerLives(soulmate);
-        Integer playerLives = livesManager.getPlayerLives(player);
+        Integer soulmateLives = soulmate.ls$getLives();
+        Integer playerLives = player.ls$getLives();
         if (soulmateLives != null && playerLives != null)  {
             if (!Objects.equals(soulmateLives, playerLives)) {
                 int minLives = Math.min(soulmateLives,playerLives);
-                livesManager.setPlayerLives(player, minLives);
-                livesManager.setPlayerLives(soulmate, minLives);
+                player.ls$setLives(minLives);
+                soulmate.ls$setLives(minLives);
             }
         }
 
@@ -508,12 +508,12 @@ public class DoubleLife extends Season {
 
     public void syncSoulboundLives(ServerPlayerEntity player) {
         if (player == null) return;
-        Integer lives = livesManager.getPlayerLives(player);
+        Integer lives = player.ls$getLives();
         ServerPlayerEntity soulmate = getSoulmate(player);
         if (lives == null) return;
         if (soulmate == null) return;
         if (!player.isAlive() || !soulmate.isAlive()) return;
-        livesManager.setPlayerLives(soulmate, lives);
+        soulmate.ls$setLives(lives);
     }
 
     public void canFoodHeal(ServerPlayerEntity player, CallbackInfoReturnable<Boolean> cir) {

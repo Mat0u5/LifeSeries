@@ -16,7 +16,6 @@ import net.minecraft.util.Formatting;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
-import static net.mat0u5.lifeseries.Main.livesManager;
 
 public class LastLifeLivesManager extends LivesManager {
 
@@ -36,7 +35,7 @@ public class LastLifeLivesManager extends LivesManager {
         assignedLives = true;
         List<ServerPlayerEntity> assignTo = new ArrayList<>();
         for (ServerPlayerEntity player : PlayerUtils.getAllFunctioningPlayers()) {
-            if (livesManager.hasAssignedLives(player)) continue;
+            if (player.ls$hasAssignedLives()) continue;
             assignTo.add(player);
         }
         if (assignTo.isEmpty()) return;
@@ -74,7 +73,7 @@ public class LastLifeLivesManager extends LivesManager {
             for (Map.Entry<ServerPlayerEntity, Integer> playerEntry : lives.entrySet()) {
                 Integer livesNum = playerEntry.getValue();
                 ServerPlayerEntity player = playerEntry.getKey();
-                Text textLives = livesManager.getFormattedLives(livesNum);
+                Text textLives = getFormattedLives(livesNum);
                 PlayerUtils.sendTitle(player, textLives, 0, 25, 0);
             }
             PlayerUtils.playSoundToPlayers(players, SoundEvents.UI_BUTTON_CLICK.value());
@@ -87,10 +86,10 @@ public class LastLifeLivesManager extends LivesManager {
             for (Map.Entry<ServerPlayerEntity, Integer> playerEntry : lives.entrySet()) {
                 Integer livesNum = playerEntry.getValue();
                 ServerPlayerEntity player = playerEntry.getKey();
-                Text textLives = TextUtils.format("{}§a lives.", livesManager.getFormattedLives(livesNum));
+                Text textLives = TextUtils.format("{}§a lives.", getFormattedLives(livesNum));
                 PlayerUtils.sendTitle(player, textLives, 0, 60, 20);
                 SessionTranscript.assignRandomLives(player, livesNum);
-                livesManager.setPlayerLives(player, livesNum);
+                setPlayerLives(player, livesNum);
             }
             PlayerUtils.playSoundToPlayers(lives.keySet(), SoundEvents.BLOCK_END_PORTAL_SPAWN);
             currentSeason. reloadAllPlayerTeams();
@@ -111,7 +110,7 @@ public class LastLifeLivesManager extends LivesManager {
             lastLives = lives;
 
             TaskScheduler.scheduleTask(currentDelay, () -> {
-                PlayerUtils.sendTitleToPlayers(players, livesManager.getFormattedLives(lives), 0, 25, 0);
+                PlayerUtils.sendTitleToPlayers(players, getFormattedLives(lives), 0, 25, 0);
                 PlayerUtils.playSoundToPlayers(players, SoundEvents.UI_BUTTON_CLICK.value());
             });
         }
@@ -149,7 +148,7 @@ public class LastLifeLivesManager extends LivesManager {
 
     public void onPlayerFinishJoining(ServerPlayerEntity player) {
         if (!assignedLives) return;
-        if (livesManager.hasAssignedLives(player)) return;
+        if (hasAssignedLives(player)) return;
         if (WatcherManager.isWatcher(player)) return;
         PlayerUtils.broadcastMessageToAdmins(TextUtils.format("§7Assigning random lives to {}§7...", player));
         assignRandomLives(new ArrayList<>(List.of(player)));

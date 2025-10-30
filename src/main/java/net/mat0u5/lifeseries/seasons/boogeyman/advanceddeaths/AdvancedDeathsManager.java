@@ -23,7 +23,7 @@ public class AdvancedDeathsManager {
             PlayerAdvancedDeath playerAdvancedDeath = entry.getValue();
 
             ServerPlayerEntity player = PlayerUtils.getPlayer(uuid);
-            Integer playerLives = livesManager.getPlayerLives(player);
+            Integer playerLives = player == null ? null : player.ls$getLives();
             if (player == null || playerAdvancedDeath.queuedDeaths().isEmpty() || playerLives == null
                     || playerLives <= playerAdvancedDeath.lives()) {
                 toRemove.add(uuid);
@@ -48,9 +48,9 @@ public class AdvancedDeathsManager {
     }
 
     public static void setPlayerLives(ServerPlayerEntity player, int lives) {
-        Integer currentLives = livesManager.getPlayerLives(player);
+        Integer currentLives = player.ls$getLives();
         if (currentLives == null || currentLives <= lives) {
-            livesManager.setPlayerLives(player, lives);
+            player.ls$setLives(lives);
             return;
         }
         int amountOfDeaths = currentLives - lives;
@@ -61,7 +61,7 @@ public class AdvancedDeathsManager {
         List<AdvancedDeath> queuedPlayerDeaths = getRandomDeaths(player, amountOfDeaths);
 
         if (queuedPlayerDeaths.isEmpty()) {
-            livesManager.setPlayerLives(player, lives);
+            player.ls$setLives(lives);
             return;
         }
 

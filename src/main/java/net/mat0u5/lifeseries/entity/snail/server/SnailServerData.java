@@ -53,7 +53,7 @@ public class SnailServerData implements PlayerBoundEntity {
         resetAirPacket();
         updateSnailName();
         updateSkin(player);
-        snail.setBoundPlayerDead(livesManager.isDead(player));
+        snail.setBoundPlayerDead(player.ls$isDead());
     }
 
     @Override
@@ -105,7 +105,7 @@ public class SnailServerData implements PlayerBoundEntity {
 
         if (snail.age % 20 == 0) {
             updateSnailName();
-            snail.setBoundPlayerDead(livesManager.isDead(boundPlayer));
+            snail.setBoundPlayerDead(boundPlayer.ls$isDead());
         }
 
         if (boundEntity != null && shouldPathfind() && snail.getBoundingBox().expand(0.05).intersects(boundEntity.getBoundingBox())) {
@@ -134,7 +134,7 @@ public class SnailServerData implements PlayerBoundEntity {
 
     public boolean despawnChecks() {
         ServerPlayerEntity player = getBoundPlayer();
-        if (player == null || (player.isSpectator() && livesManager.isDead(player))) {
+        if (player == null || (player.isSpectator() && player.ls$isDead())) {
             despawnPlayerChecks++;
         }
         else {

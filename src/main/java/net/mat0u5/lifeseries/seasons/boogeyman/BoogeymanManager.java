@@ -102,7 +102,7 @@ public class BoogeymanManager {
         if (boogeyman == null) return false;
         if (boogeyman.cured) return false;
         if (boogeyman.failed) return false;
-        if (livesManager.isOnLastLife(victim, true)) return false;
+        if (victim.ls$isOnLastLife(true)) return false;
         return true;
     }
 
@@ -381,7 +381,7 @@ public class BoogeymanManager {
         if (boogeyman.failed) return false;
         boogeyman.failed = true;
 
-        boolean canChangeLives = livesManager.isAlive(player) && !livesManager.isOnLastLife(player, true);
+        boolean canChangeLives = player.ls$isAlive() && !player.ls$isOnLastLife(true);
 
         if (BOOGEYMAN_ADVANCED_DEATHS) {
             PlayerUtils.sendTitle(player,Text.of("§cThe curse consumes you.."), 20, 30, 20);
@@ -399,7 +399,7 @@ public class BoogeymanManager {
                 PlayerUtils.broadcastMessage(TextUtils.format("{}§7 failed to kill a player while being the §cBoogeyman§7. They have been dropped to their §cLast Life§7.", player));
             }
             if (canChangeLives) {
-                livesManager.setPlayerLives(player, 1);
+                player.ls$setLives(1);
             }
         }
         return true;
@@ -416,7 +416,7 @@ public class BoogeymanManager {
         if (!BOOGEYMAN_ENABLED) return;
         if (!boogeymanChosen) return;
         if (rolledPlayers.contains(player.getUuid())) return;
-        if (livesManager.isDead(player)) return;
+        if (player.ls$isDead()) return;
         if (boogeymen.size() >= BOOGEYMAN_AMOUNT_MAX) return;
         if (currentSession.statusNotStarted() || currentSession.statusFinished()) return;
         TaskScheduler.scheduleTask(40, () -> {

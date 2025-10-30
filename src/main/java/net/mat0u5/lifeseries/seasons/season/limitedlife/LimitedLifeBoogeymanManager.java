@@ -27,7 +27,7 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
         if (boogeyman == null) return false;
         if (boogeyman.cured) return false;
         if (boogeyman.failed) return false;
-        if (livesManager.isOnLastLife(victim, true) && !livesManager.isOnLastLife(player, true)) return false;
+        if (victim.ls$isOnLastLife(true) && !player.ls$isOnLastLife(true)) return false;
         return true;
     }
 
@@ -60,15 +60,15 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
         if (!BOOGEYMAN_ENABLED) return false;
         Boogeyman boogeyman = getBoogeyman(player);
         if (boogeymen == null) return false;
-        if (livesManager.isDead(player)) return false;
+        if (player.ls$isDead()) return false;
 
         boogeyman.cured = false;
         if (boogeyman.failed) return false;
         boogeyman.failed = true;
 
-        boolean canChangeLives = livesManager.isAlive(player) && !livesManager.isOnLastLife(player, true);
+        boolean canChangeLives = player.ls$isAlive() && !player.ls$isOnLastLife(true);
 
-        Integer currentLives = livesManager.getPlayerLives(player);
+        Integer currentLives = player.ls$getLives();
         if (currentLives == null) return false;
         Integer setToLives = LimitedLife.getNextLivesColorLives(currentLives);
         if (setToLives == null) return false;
@@ -84,7 +84,7 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
         }
         else {
             if (canChangeLives) {
-                livesManager.setPlayerLives(player, setToLives);
+                player.ls$setLives(setToLives);
             }
             Text setTo = livesManager.getFormattedLives(player);
 

@@ -35,7 +35,7 @@ public class SubInManager {
     }
 
     public static void addSubIn(ServerPlayerEntity player, GameProfile targetProfile) {
-        Integer startingLives = livesManager.getPlayerLives(player);
+        Integer startingLives = player.ls$getLives();
         UUID playerUUID = player.getUuid();
         GameProfile playerProfile = player.getGameProfile();
 
@@ -63,7 +63,7 @@ public class SubInManager {
             livesManager.resetPlayerLife(player);
         }
         else {
-            livesManager.setPlayerLives(player, subInLives);
+            player.ls$setLives(subInLives);
         }
     }
 
@@ -92,7 +92,7 @@ public class SubInManager {
         loadPlayer(player2);
         if (player1 != null) {
             Integer startingLives = subIn.startingLives();
-            livesManager.setPlayerLives(player1, startingLives);
+            player1.ls$setLives(startingLives);
         }
     }
 

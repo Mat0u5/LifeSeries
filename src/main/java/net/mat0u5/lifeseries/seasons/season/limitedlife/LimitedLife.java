@@ -103,10 +103,10 @@ public class LimitedLife extends Season {
                     NetworkHandlerServer.sendLongPacket(player, PacketNames.SESSION_TIMER, timestamp);
                 }
 
-                if (livesManager.hasAssignedLives(player) && livesManager.getPlayerLives(player) != null) {
+                if (player.ls$hasAssignedLives() && player.ls$getLives() != null) {
                     long playerLives;
-                    if (livesManager.isAlive(player)) {
-                        Integer playerLivesInt = livesManager.getPlayerLives(player);
+                    if (player.ls$isAlive()) {
+                        Integer playerLivesInt = player.ls$getLives();
                         playerLives = playerLivesInt == null ? -1 : playerLivesInt;
                     }
                     else {
@@ -121,7 +121,7 @@ public class LimitedLife extends Season {
                 if (currentSession.displayTimer.contains(player.getUuid())) {
                     fullMessage.append(Text.literal(message).formatted(Formatting.GRAY));
                 }
-                if (livesManager.hasAssignedLives(player)) {
+                if (player.ls$hasAssignedLives()) {
                     if (!fullMessage.getString().isEmpty()) fullMessage.append(Text.of("  |  "));
                     fullMessage.append(livesManager.getFormattedLives(player));
                 }
@@ -139,7 +139,7 @@ public class LimitedLife extends Season {
         secondCounter--;
         if (secondCounter <= 0) {
             secondCounter = 20;
-            livesManager.getAlivePlayers().forEach(livesManager::removePlayerLife);
+            livesManager.getAlivePlayers().forEach(ServerPlayerEntity::ls$removeLife);
 
             if (TICK_OFFLINE_PLAYERS) {
                 Collection<ScoreboardEntry> entries = ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME);
@@ -173,8 +173,8 @@ public class LimitedLife extends Season {
         }
         onPlayerDiedNaturally(player);
         if (livesManager.canChangeLivesNaturally(player)) {
-            livesManager.addToPlayerLives(player, DEATH_NORMAL);
-            if (livesManager.isAlive(player)) {
+            player.ls$addLives(DEATH_NORMAL);
+            if (player.ls$isAlive()) {
                 PlayerUtils.sendTitle(player, Text.literal(OtherUtils.formatSecondsToReadable(DEATH_NORMAL)).formatted(Formatting.RED), 20, 80, 20);
             }
         }
@@ -188,7 +188,7 @@ public class LimitedLife extends Season {
 
         if (!wasBoogeyCure) {
             if (wasAllowedToAttack && livesManager.canChangeLivesNaturally()) {
-                livesManager.addToPlayerLives(killer, KILL_NORMAL);
+                killer.ls$addLives(KILL_NORMAL);
                 PlayerUtils.sendTitle(killer, Text.literal(OtherUtils.formatSecondsToReadable(KILL_NORMAL)).formatted(Formatting.GREEN), 20, 80, 20);
             }
         }
@@ -200,12 +200,12 @@ public class LimitedLife extends Season {
             String msgVictim = OtherUtils.formatSecondsToReadable(DEATH_BOOGEYMAN-DEATH_NORMAL);
             String msgKiller = OtherUtils.formatSecondsToReadable(KILL_BOOGEYMAN);
 
-            if (livesManager.isAlive(victim)) {
-                livesManager.addToPlayerLives(victim, DEATH_BOOGEYMAN-DEATH_NORMAL);
+            if (victim.ls$isAlive()) {
+                victim.ls$addLives(DEATH_BOOGEYMAN-DEATH_NORMAL);
                 wasAlive = true;
             }
-            livesManager.addToPlayerLives(killer, KILL_BOOGEYMAN);
-            if (livesManager.isAlive(victim)) {
+            killer.ls$addLives(KILL_BOOGEYMAN);
+            if (victim.ls$isAlive()) {
                 PlayerUtils.sendTitle(killer, Text.literal(msgKiller).formatted(Formatting.GREEN), 20, 80, 20);
                 PlayerUtils.sendTitle(victim, Text.literal(msgVictim).formatted(Formatting.RED), 20, 80, 20);
             }
@@ -228,10 +228,10 @@ public class LimitedLife extends Season {
         super.onPlayerKilledByPlayer(victim, killer);
 
         if (!wasBoogeyCure && livesManager.canChangeLivesNaturally()) {
-            boolean wasFinalKill = livesManager.isAlive(victim) || !SHOW_DEATH_TITLE;
+            boolean wasFinalKill = victim.ls$isAlive() || !SHOW_DEATH_TITLE;
             if (wasAllowedToAttack) {
                 String msgKiller = OtherUtils.formatSecondsToReadable(KILL_NORMAL);
-                livesManager.addToPlayerLives(killer, KILL_NORMAL);
+                killer.ls$addLives(KILL_NORMAL);
                 if (wasFinalKill) {
                     PlayerUtils.sendTitle(killer, Text.literal(msgKiller).formatted(Formatting.GREEN), 20, 80, 20);
                 }
@@ -243,7 +243,7 @@ public class LimitedLife extends Season {
                 }
             }
             String msgVictim = OtherUtils.formatSecondsToReadable(DEATH_NORMAL);
-            livesManager.addToPlayerLives(victim, DEATH_NORMAL);
+            victim.ls$addLives(DEATH_NORMAL);
             if (wasFinalKill) {
                 PlayerUtils.sendTitle(victim, Text.literal(msgVictim).formatted(Formatting.RED), 20, 80, 20);
             }
@@ -253,10 +253,11 @@ public class LimitedLife extends Season {
             //Victim was killed by boogeyman - remove 2 hours from victim and add 1 hour to boogey
             String msgVictim = OtherUtils.formatSecondsToReadable(DEATH_BOOGEYMAN);
             String msgKiller = OtherUtils.formatSecondsToReadable(KILL_BOOGEYMAN);
-            livesManager.addToPlayerLives(victim, DEATH_BOOGEYMAN);
-            livesManager.addToPlayerLives(killer, KILL_BOOGEYMAN);
 
-            if (livesManager.isAlive(victim) || !SHOW_DEATH_TITLE) {
+            victim.ls$addLives(DEATH_BOOGEYMAN);
+            killer.ls$addLives(KILL_BOOGEYMAN);
+
+            if (victim.ls$isAlive() || !SHOW_DEATH_TITLE) {
                 PlayerUtils.sendTitle(victim, Text.literal(msgVictim).formatted(Formatting.RED), 20, 80, 20);
                 PlayerUtils.sendTitleWithSubtitle(killer,Text.of("§aYou are cured!"), Text.literal(msgKiller).formatted(Formatting.GREEN), 20, 80, 20);
             }
@@ -270,7 +271,7 @@ public class LimitedLife extends Season {
 
     @Override
     public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim, boolean allowSelfDefense) {
-        if (livesManager.isOnSpecificLives(attacker, 2, false) && livesManager.isOnAtLeastLives(victim, 3, false)) return true;
+        if (attacker.ls$isOnSpecificLives(2, false) && victim.ls$isOnAtLeastLives(3, false)) return true;
         return super.isAllowedToAttack(attacker, victim, allowSelfDefense);
     }
 

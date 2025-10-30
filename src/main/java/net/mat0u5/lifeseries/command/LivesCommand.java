@@ -179,13 +179,13 @@ public class LivesCommand extends Command {
         ServerPlayerEntity self = source.getPlayer();
 
         if (self == null) return -1;
-        if (!livesManager.hasAssignedLives(self)) {
+        if (!self.ls$hasAssignedLives()) {
             String timeOrLives = normalLife ? "lives" : "time";
             OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("You have not been assigned any {} yet", timeOrLives));
             return 1;
         }
 
-        Integer playerLives = livesManager.getPlayerLives(self);
+        Integer playerLives = self.ls$getLives();
         
         if (normalLife) {
             OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("You have {} {}", livesManager.getFormattedLives(playerLives), TextUtils.pluralize("life", "lives", playerLives)));
@@ -242,11 +242,11 @@ public class LivesCommand extends Command {
         boolean normalLife = isNormalLife();
         String timeOrLives = normalLife ? "lives" : "time";
 
-        if (!livesManager.hasAssignedLives(target)) {
+        if (!target.ls$hasAssignedLives()) {
             source.sendError(TextUtils.formatPlain("{} has not been assigned any {}", target, timeOrLives));
             return -1;
         }
-        Integer lives = livesManager.getPlayerLives(target);
+        Integer lives = target.ls$getLives();
         if (normalLife) {
             OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("{} has {} {}", target, livesManager.getFormattedLives(lives), TextUtils.pluralize("life", "lives", lives)));
         }
@@ -294,7 +294,7 @@ public class LivesCommand extends Command {
             }
 
             for (ServerPlayerEntity player : targets) {
-                livesManager.setPlayerLives(player, amount);
+                player.ls$setLives(amount);
             }
         }
         else {
@@ -324,7 +324,7 @@ public class LivesCommand extends Command {
             }
 
             for (ServerPlayerEntity player : targets) {
-                livesManager.addToPlayerLives(player,amount);
+                player.ls$addLives(amount);
             }
         }
         if (currentSeason instanceof DoubleLife doubleLife) {

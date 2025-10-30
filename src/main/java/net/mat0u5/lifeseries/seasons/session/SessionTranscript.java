@@ -149,7 +149,7 @@ public class SessionTranscript {
     }
 
     public static void addRecordIfMissing(ServerPlayerEntity player) {
-        if (livesManager.isDead(player) || WatcherManager.isWatcher(player)) return;
+        if (player.ls$isDead() || WatcherManager.isWatcher(player)) return;
         if (!playerRecords.containsKey(player.getNameForScoreboard())) {
             playerRecords.put(player.getNameForScoreboard(), new ArrayList<>(List.of(0,0)));
         }

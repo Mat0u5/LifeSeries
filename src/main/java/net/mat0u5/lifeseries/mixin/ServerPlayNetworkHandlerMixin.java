@@ -147,7 +147,7 @@ public class ServerPlayNetworkHandlerMixin {
             ci.cancel();
             return true;
         }
-        if (currentSeason.MUTE_DEAD_PLAYERS && livesManager.isDead(player) && !WatcherManager.isWatcher(player)) {
+        if (currentSeason.MUTE_DEAD_PLAYERS && player.ls$isDead() && !WatcherManager.isWatcher(player)) {
             player.sendMessage(Text.of("Dead players aren't allowed to talk in chat! Admins can change this behavior in the config."));
             ci.cancel();
             return true;

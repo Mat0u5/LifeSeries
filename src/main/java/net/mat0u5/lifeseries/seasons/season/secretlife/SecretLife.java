@@ -122,7 +122,7 @@ public class SecretLife extends Season {
             }
         }
         TaskTypes type = TaskManager.getPlayersTaskType(player);
-        if (livesManager.isOnLastLife(player, false) && TaskManager.submittedOrFailed.contains(player.getUuid()) && type == null) {
+        if (player.ls$isOnLastLife(false) && TaskManager.submittedOrFailed.contains(player.getUuid()) && type == null) {
             TaskManager.chooseTasks(List.of(player), TaskTypes.RED);
         }
     }
@@ -309,7 +309,7 @@ public class SecretLife extends Season {
         super.sessionEnd();
         List<String> playersWithTaskBooks = new ArrayList<>();
         for (ServerPlayerEntity player : livesManager.getNonRedPlayers()) {
-            if (livesManager.isDead(player)) continue;
+            if (player.ls$isDead()) continue;
             if (TaskManager.submittedOrFailed.contains(player.getUuid())) continue;
             if (TaskManager.CONSTANT_TASKS) continue;
             playersWithTaskBooks.add(player.getNameForScoreboard());
@@ -330,7 +330,7 @@ public class SecretLife extends Season {
     @Override
     public void onPlayerKilledByPlayer(ServerPlayerEntity victim, ServerPlayerEntity killer) {
         super.onPlayerKilledByPlayer(victim, killer);
-        if (livesManager.isOnLastLife(killer, false)) {
+        if (killer.ls$isOnLastLife(false)) {
             double amountGained = Math.min(Math.max(MAX_KILL_HEALTH, MAX_HEALTH) - getPlayerHealth(killer), 20);
             if (amountGained > 0) {
                 addPlayerHealth(killer, amountGained);

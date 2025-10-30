@@ -26,7 +26,7 @@ public class Task {
     public static boolean anyPlayersOnLives(ServerPlayerEntity exception, int lives) {
         for (ServerPlayerEntity player : livesManager.getAlivePlayers()) {
             if (player == exception) continue;
-            if (livesManager.isOnSpecificLives(player, lives, false)) return true;
+            if (player.ls$isOnSpecificLives(lives, false)) return true;
         }
         return false;
     }

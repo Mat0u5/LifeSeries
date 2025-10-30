@@ -113,7 +113,7 @@ public class TriviaBotServerData implements PlayerBoundEntity {
 
     public boolean despawnChecks() {
         ServerPlayerEntity player = getBoundPlayer();
-        if (player == null || (player.isSpectator() && livesManager.isDead(player))) {
+        if (player == null || (player.isSpectator() && player.ls$isDead())) {
             despawnPlayerChecks++;
         }
         if (despawnPlayerChecks > 200) {

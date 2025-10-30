@@ -40,5 +40,10 @@
 	},
 	"breaks": {
 		"pastlife": "*"
+	},
+	"custom": {
+		"loom:injected_interfaces": {
+			"net/minecraft/class_3222": ["net/mat0u5/lifeseries/utils/interfaces/IServerPlayerEntity"]
+		}
 	}
 }

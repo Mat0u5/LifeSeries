@@ -194,7 +194,7 @@ public class TriviaHandler {
         int numOfCurses = 9;
         if (DependencyManager.voicechatLoaded() && VoicechatMain.isConnectedToSVC(player.getUuid())) numOfCurses = 10;
 
-        Integer punishmentWeight = livesManager.getPlayerLives(player);
+        Integer punishmentWeight = player.ls$getLives();
         if (punishmentWeight == null) punishmentWeight = 1;
         if (difficulty == 1) punishmentWeight++;
         if (difficulty == 3) punishmentWeight--;
