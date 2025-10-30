@@ -54,7 +54,13 @@ public class LifeSeriesCommand extends Command {
                     .executes(context -> getVersion(context.getSource()))
                 )
                 .then(literal("config")
-                    .executes(context -> config(context.getSource()))
+                        .executes(context -> config(context.getSource()))
+                )
+                .then(literal("wiki")
+                        .executes(context -> wiki(context.getSource()))
+                )
+                .then(literal("help")
+                        .executes(context -> wiki(context.getSource()))
                 )
                 .then(literal("reload")
                     .requires(PermissionManager::isAdmin)
@@ -168,6 +174,13 @@ public class LifeSeriesCommand extends Command {
     public int defaultCommand(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
         getDiscord(source);
+        return 1;
+    }
+
+    public int wiki(ServerCommandSource source) {
+        if (checkBanned(source)) return -1;
+        Text text = TextUtils.format("§7Click {}§7 to open the Life Series Mod wiki", TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs"));
+        OtherUtils.sendCommandFeedbackQuiet(source, text);
         return 1;
     }
 

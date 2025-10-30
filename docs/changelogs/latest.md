@@ -41,3 +41,7 @@ Running '/lifeseries disable' now additionally sets the season to unassigned.
 
 Editing config values that require a server reload now automatically reloads instead of just telling you to do so.<br>
 Removed the snail texture info screen, replaced with a wiki link.
+
+----------
+
+Added the '/lifeseries wiki' and '/lifeseries help' commands, which both link you to the Life Series mod wiki.
