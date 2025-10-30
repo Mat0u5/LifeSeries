@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.utils.interfaces.IServerPlayerEntity;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
@@ -182,5 +183,11 @@ public class ServerPlayerEntityMixin implements IServerPlayerEntity {
     @Unique @Override
     public boolean ls$isOnAtLeastLives(int check, boolean fallback) {
         return livesManager.isOnAtLeastLives(ls$get(), check, fallback);
+    }
+
+
+    @Unique @Override
+    public boolean ls$isWatcher() {
+        return WatcherManager.isWatcher(ls$get());
     }
 }

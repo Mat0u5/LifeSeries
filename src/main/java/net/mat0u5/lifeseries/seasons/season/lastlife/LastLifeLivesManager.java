@@ -149,7 +149,7 @@ public class LastLifeLivesManager extends LivesManager {
     public void onPlayerFinishJoining(ServerPlayerEntity player) {
         if (!assignedLives) return;
         if (hasAssignedLives(player)) return;
-        if (WatcherManager.isWatcher(player)) return;
+        if (player.ls$isWatcher()) return;
         PlayerUtils.broadcastMessageToAdmins(TextUtils.format("§7Assigning random lives to {}§7...", player));
         assignRandomLives(new ArrayList<>(List.of(player)));
     }

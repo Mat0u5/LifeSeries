@@ -16,4 +16,6 @@ public interface IServerPlayerEntity {
     default boolean ls$isOnLastLife(boolean fallback)                   { throw new UnsupportedOperationException(error); }
     default boolean ls$isOnSpecificLives(int check, boolean fallback)   { throw new UnsupportedOperationException(error); }
     default boolean ls$isOnAtLeastLives(int check, boolean fallback)    { throw new UnsupportedOperationException(error); }
+
+    default boolean ls$isWatcher()                                      { throw new UnsupportedOperationException(error); }
 }

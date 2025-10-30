@@ -361,7 +361,7 @@ public class Events {
 
     public static boolean isExcludedPlayer(Entity entity) {
         if (entity instanceof ServerPlayerEntity player) {
-            if (WatcherManager.isWatcher(player)) {
+            if (player.ls$isWatcher()) {
                 return true;
             }
         }

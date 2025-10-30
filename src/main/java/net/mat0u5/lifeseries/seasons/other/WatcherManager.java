@@ -71,17 +71,13 @@ public class WatcherManager {
         return watchers.contains(playerName);
     }
 
-    private static boolean isNotWatcher(PlayerEntity player) {
-        return !isWatcher(player);
-    }
-
     public static List<String> getWatchers() {
         return watchers;
     }
 
     public static List<ServerPlayerEntity> getWatcherPlayers() {
         List<ServerPlayerEntity> watcherPlayers = PlayerUtils.getAllPlayers();
-        watcherPlayers.removeIf(WatcherManager::isNotWatcher);
+        watcherPlayers.removeIf(player -> !isWatcher(player));
         return watcherPlayers;
     }
 }

@@ -61,7 +61,7 @@ public abstract class LivingEntityMixin {
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity instanceof ServerPlayerEntity player) {
-            if (WatcherManager.isWatcher(player)) return;
+            if (player.ls$isWatcher()) return;
             currentSeason.onPlayerHeal(player, amount);
         }
     }

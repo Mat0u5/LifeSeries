@@ -341,7 +341,7 @@ public class PlayerUtils {
         if (currentSeason.TAB_LIST_SHOW_DEAD_PLAYERS) return false;
         if (receivingPlayer.ls$isDead()) return false;
         if (player.ls$isAlive()) return false;
-        if (WatcherManager.isWatcher(player)) return false;
+        if (player.ls$isWatcher()) return false;
         if (Necromancy.preIsRessurectedPlayer(player)) return false;
         return true;
     }
@@ -351,8 +351,8 @@ public class PlayerUtils {
         if (!player.isSpectator()) return false;
 
         if (currentSeason.WATCHERS_IN_TAB) return false;
-        if (WatcherManager.isWatcher(receivingPlayer)) return false;
-        if (!WatcherManager.isWatcher(player)) return false;
+        if (receivingPlayer.ls$isWatcher()) return false;
+        if (!player.ls$isWatcher()) return false;
         return true;
     }
 

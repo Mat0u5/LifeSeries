@@ -456,7 +456,7 @@ public abstract class Season {
             player.changeGameMode(GameMode.SPECTATOR);
         }
 
-        if (WatcherManager.isWatcher(player)) {
+        if (player.ls$isWatcher()) {
             if (this instanceof DoubleLife doubleLife) {
                 doubleLife.resetSoulmate(player);
             }

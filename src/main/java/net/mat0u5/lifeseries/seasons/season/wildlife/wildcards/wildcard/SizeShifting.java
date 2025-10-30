@@ -50,7 +50,7 @@ public class SizeShifting extends Wildcard {
     public static void onHoldingJump(ServerPlayerEntity player) {
         if (TriviaHandler.cursedGigantificationPlayers.contains(player.getUuid())) return;
         if (player.isSpectator()) return;
-        if (WatcherManager.isWatcher(player)) return;
+        if (player.ls$isWatcher()) return;
         addPlayerSize(player, SIZE_CHANGE_STEP * SIZE_CHANGE_MULTIPLIER);
     }
 
@@ -89,7 +89,7 @@ public class SizeShifting extends Wildcard {
 
     public static void resetSizesTick(boolean isActive) {
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            boolean isWatcher = WatcherManager.isWatcher(player);
+            boolean isWatcher = player.ls$isWatcher();
             boolean isDeadSpectator = player.isSpectator() && player.ls$isDead();
             if (!isActive || isDeadSpectator || isWatcher) {
                 double size = getPlayerSize(player);
