@@ -201,11 +201,7 @@ public class Snail extends HostileEntity {
     }
 
     public World getSnailWorld() {
-        //? if = 1.21.6 {
-        /*return getWorld();
-        *///?} else {
-        return getEntityWorld();
-        //?}
+        return ls$getEntityWorld();
     }
 
     @Override

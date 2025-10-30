@@ -403,7 +403,7 @@ public abstract class Season {
     }
 
     public void modifyEntityDrops(LivingEntity entity, DamageSource damageSource) {
-        if (!WorldUtils.getEntityWorld(entity).isClient() && (damageSource.getAttacker() instanceof ServerPlayerEntity)) {
+        if (!entity.ls$getEntityWorld().isClient() && (damageSource.getAttacker() instanceof ServerPlayerEntity)) {
             spawnEggChance(entity);
         }
     }
@@ -433,7 +433,7 @@ public abstract class Season {
             //? if <=1.21 {
             entity.dropStack(spawnEggItem);
             //?} else
-            /*entity.dropStack((ServerWorld) WorldUtils.getEntityWorld(entity), spawnEggItem);*/
+            /*entity.dropStack((ServerWorld) entity.ls$getEntityWorld(), spawnEggItem);*/
         }
     }
 

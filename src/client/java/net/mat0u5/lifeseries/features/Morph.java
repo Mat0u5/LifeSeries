@@ -112,7 +112,7 @@ public class Morph {
             dummy.lastRenderY = player.lastRenderY;
             dummy.lastRenderZ = player.lastRenderZ;
 
-            dummy.setPosition(WorldUtils.getEntityPos(player));
+            dummy.setPosition(player.ls$getEntityPos());
             dummy.setBodyYaw(player.bodyYaw);
             if (!fixedHead) {
                 dummy.setHeadYaw(player.headYaw);

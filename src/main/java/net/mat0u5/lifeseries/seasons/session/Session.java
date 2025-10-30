@@ -284,7 +284,7 @@ public class Session {
             PlayerUtils.teleport(player, clampedX, player.getY(), clampedZ);
         }
         else {
-            lastNonBorderPositions.put(uuid, WorldUtils.getEntityPos(player));
+            lastNonBorderPositions.put(uuid, player.ls$getEntityPos());
         }
     }
 

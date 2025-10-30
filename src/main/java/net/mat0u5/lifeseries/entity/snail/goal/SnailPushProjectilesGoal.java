@@ -19,6 +19,7 @@ import java.util.List;
 import net.minecraft.util.ErrorReporter;
 *///?}
 
+@SuppressWarnings("resource")
 public final class SnailPushProjectilesGoal extends Goal {
 
     @NotNull
@@ -33,11 +34,11 @@ public final class SnailPushProjectilesGoal extends Goal {
     @Override
     public boolean canStart() {
         if (mob.getSnailWorld().isClient()) return false;
-        if (WorldUtils.getEntityWorld(mob) == null) {
+        if (mob.ls$getEntityWorld() == null) {
             return false;
         }
 
-        World world = WorldUtils.getEntityWorld(mob);
+        World world = mob.ls$getEntityWorld();
         this.projectiles = world.getEntitiesByClass(
                 ProjectileEntity.class,
                 mob.getBoundingBox().expand(5.0, 5.0, 5.0),

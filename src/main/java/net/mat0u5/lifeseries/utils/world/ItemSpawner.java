@@ -50,12 +50,12 @@ public class ItemSpawner {
         try {
             //? if <= 1.21 {
             LootContextParameterSet parameters = new LootContextParameterSet.Builder(world)
-                    .add(LootContextParameters.ORIGIN, WorldUtils.getEntityPos(player))
+                    .add(LootContextParameters.ORIGIN, player.ls$getEntityPos())
                     .add(LootContextParameters.THIS_ENTITY, player)
                     .build(LootContextTypes.COMMAND);
             //?} else {
             /*LootWorldContext parameters = new LootWorldContext.Builder(world)
-                    .add(LootContextParameters.ORIGIN, WorldUtils.getEntityPos(player))
+                    .add(LootContextParameters.ORIGIN, player.ls$getEntityPos())
                     .add(LootContextParameters.THIS_ENTITY, player)
                     .build(LootContextTypes.COMMAND);
             *///?}

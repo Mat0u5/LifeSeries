@@ -185,12 +185,12 @@ public class ClientEvents {
 
                 if (MainClient.FIX_SIZECHANGING_BUGS) {
                     EntityDimensions oldEntityDimensions = player.getBaseDimensions(player.getPose()).scaled(player.getScale());
-                    Box oldBoundingBox = oldEntityDimensions.getBoxAt(WorldUtils.getEntityPos(player));
+                    Box oldBoundingBox = oldEntityDimensions.getBoxAt(player.ls$getEntityPos());
                     Vec3d velocity = player.getVelocity();
 
                     float newScale = player.getScale() + MainClient.SIZESHIFTING_CHANGE * 10;
                     EntityDimensions newEntityDimensions = player.getBaseDimensions(player.getPose()).scaled(newScale);
-                    Box newBoundingBox = newEntityDimensions.getBoxAt(WorldUtils.getEntityPos(player));
+                    Box newBoundingBox = newEntityDimensions.getBoxAt(player.ls$getEntityPos());
 
                     boolean oldSpaceEmpty = ClientUtils.isSpaceEmpty(player, oldBoundingBox, 0, 1.0E-5, 0);
                     boolean newSpaceEmpty = ClientUtils.isSpaceEmpty(player, newBoundingBox, 0, 1.0E-5, 0);

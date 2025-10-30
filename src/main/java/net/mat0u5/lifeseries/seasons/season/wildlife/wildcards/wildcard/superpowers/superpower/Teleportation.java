@@ -60,14 +60,14 @@ public class Teleportation extends Superpower {
         ServerPlayerEntity player = getPlayer();
         if (player == null) return;
         ServerWorld playerWorld = PlayerUtils.getServerWorld(player);
-        Vec3d playerPos = WorldUtils.getEntityPos(player);
+        Vec3d playerPos = player.ls$getEntityPos();
         boolean teleported = false;
         Entity lookingAt = PlayerUtils.getEntityLookingAt(player, 100);
         if (lookingAt != null)  {
             if (lookingAt instanceof ServerPlayerEntity lookingAtPlayer) {
                 if (!PlayerUtils.isFakePlayer(lookingAtPlayer)) {
                     ServerWorld lookingAtPlayerWorld = PlayerUtils.getServerWorld(lookingAtPlayer);
-                    Vec3d lookingAtPlayerPos = WorldUtils.getEntityPos(lookingAtPlayer);
+                    Vec3d lookingAtPlayerPos = lookingAtPlayer.ls$getEntityPos();
 
                     spawnTeleportParticles(playerWorld, playerPos);
                     spawnTeleportParticles(lookingAtPlayerWorld, lookingAtPlayerPos);

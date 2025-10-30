@@ -44,11 +44,11 @@ public class TriviaBotPathfinding {
         Entity boundEntity = bot.serverData.getBoundEntity();
         if (boundEntity == null) return;
         if (bot.getBotWorld() instanceof ServerWorld world) {
-            if (WorldUtils.getEntityWorld(boundEntity) instanceof ServerWorld entityWorld) {
+            if (boundEntity.ls$getEntityWorld() instanceof ServerWorld entityWorld) {
                 BlockPos tpTo = getBlockPosNearTarget(boundEntity,5);
                 world.playSound(null, bot.getX(), bot.getY(), bot.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, bot.getSoundCategory(), bot.soundVolume(), bot.getSoundPitch());
                 entityWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, bot.getSoundCategory(), bot.soundVolume(), bot.getSoundPitch());
-                AnimationUtils.spawnTeleportParticles(world, WorldUtils.getEntityPos(bot));
+                AnimationUtils.spawnTeleportParticles(world, bot.ls$getEntityPos());
                 AnimationUtils.spawnTeleportParticles(world, tpTo.toCenterPos());
                 bot.serverData.despawn();
                 TriviaWildcard.spawnBotFor(boundPlayer, tpTo);
@@ -58,7 +58,7 @@ public class TriviaBotPathfinding {
 
     public static BlockPos getBlockPosNearPlayer(Entity target, BlockPos targetPos, double distanceFromTarget) {
         if (target == null) return targetPos;
-        return WorldUtils.getCloseBlockPos(WorldUtils.getEntityWorld(target), targetPos, distanceFromTarget, 2, false);
+        return WorldUtils.getCloseBlockPos(target.ls$getEntityWorld(), targetPos, distanceFromTarget, 2, false);
     }
 
     public BlockPos getBlockPosNearTarget(Entity target, double distanceFromTarget) {
@@ -66,7 +66,7 @@ public class TriviaBotPathfinding {
         Vec3d targetPos = bot.serverData.getPlayerPos();
         if (targetPos == null) return null;
         BlockPos targetBlockPos = BlockPos.ofFloored(targetPos.x, targetPos.y, targetPos.z);
-        return WorldUtils.getCloseBlockPos(WorldUtils.getEntityWorld(target), targetBlockPos, distanceFromTarget, 2, false);
+        return WorldUtils.getCloseBlockPos(target.ls$getEntityWorld(), targetBlockPos, distanceFromTarget, 2, false);
     }
 
 
@@ -91,7 +91,7 @@ public class TriviaBotPathfinding {
 
     @Nullable
     public BlockPos getGroundBlock() {
-        Vec3d startPos = WorldUtils.getEntityPos(bot);
+        Vec3d startPos = bot.ls$getEntityPos();
         Vec3d endPos = startPos.add(0, bot.getBotWorld().getBottomY(), 0);
 
         BlockHitResult result = bot.getBotWorld().raycast(

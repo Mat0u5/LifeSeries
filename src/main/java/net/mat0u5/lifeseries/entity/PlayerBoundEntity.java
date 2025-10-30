@@ -59,7 +59,7 @@ public interface PlayerBoundEntity {
         if (!Main.isLogicalSide()) return null;
         Entity entity = getBoundEntity();
         if (entity != null) {
-            return WorldUtils.getEntityPos(entity);
+            return entity.ls$getEntityPos();
         }
         return null;
     }

@@ -196,7 +196,7 @@ public class TaskManager {
         }
         ItemStack book = getTaskBook(player, task);
         if (!player.giveItemStack(book)) {
-            ItemStackUtils.spawnItemForPlayer(PlayerUtils.getServerWorld(player), WorldUtils.getEntityPos(player), book, player);
+            ItemStackUtils.spawnItemForPlayer(PlayerUtils.getServerWorld(player), player.ls$getEntityPos(), book, player);
         }
         assignedTasks.put(player.getUuid(), task);
     }

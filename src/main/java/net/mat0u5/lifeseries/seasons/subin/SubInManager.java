@@ -112,20 +112,20 @@ public class SubInManager {
             Optional<NbtCompound> data = iPlayerManager.ls$getSaveHandler().loadPlayerData(player);
             data.ifPresent(nbt -> {
                 player.readNbt(nbt);
-                PlayerUtils.teleport(player, WorldUtils.getEntityPos(player));
+                PlayerUtils.teleport(player, player.ls$getEntityPos());
             });
             //?} else if <= 1.21.6 {
             /*Optional<ReadView> data = iPlayerManager.ls$getSaveHandler().loadPlayerData(player, ErrorReporter.EMPTY);
             data.ifPresent(nbt -> {
                 player.readData(nbt);
-                PlayerUtils.teleport(player, WorldUtils.getEntityPos(player));
+                PlayerUtils.teleport(player, player.ls$getEntityPos());
             });
             *///?} else {
             /*Optional<NbtCompound> data = iPlayerManager.ls$getSaveHandler().loadPlayerData(player.getPlayerConfigEntry());
             Optional<ReadView> optional = data.map(playerData -> NbtReadView.create(ErrorReporter.EMPTY, server.getRegistryManager(), playerData));
             optional.ifPresent(readView -> {
                 player.readData(readView);
-                PlayerUtils.teleport(player, WorldUtils.getEntityPos(player));
+                PlayerUtils.teleport(player, player.ls$getEntityPos());
             });
             *///?}
         }

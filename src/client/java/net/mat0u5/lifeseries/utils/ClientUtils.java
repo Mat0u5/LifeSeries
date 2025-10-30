@@ -112,11 +112,11 @@ public class ClientUtils {
         if (oldBaseValue == baseValue) return false;
 
         EntityDimensions oldEntityDimensions = player.getBaseDimensions(player.getPose()).scaled((float) oldBaseValue);
-        Box oldBoundingBox = oldEntityDimensions.getBoxAt(WorldUtils.getEntityPos(player));
+        Box oldBoundingBox = oldEntityDimensions.getBoxAt(player.ls$getEntityPos());
         double oldHitboxSize = oldEntityDimensions.width();
 
         EntityDimensions newEntityDimensions = player.getBaseDimensions(player.getPose()).scaled((float) baseValue);
-        Box newBoundingBox = newEntityDimensions.getBoxAt(WorldUtils.getEntityPos(player));
+        Box newBoundingBox = newEntityDimensions.getBoxAt(player.ls$getEntityPos());
         double newHitboxSize = newEntityDimensions.width();
 
         double changedBy = newHitboxSize - oldHitboxSize;

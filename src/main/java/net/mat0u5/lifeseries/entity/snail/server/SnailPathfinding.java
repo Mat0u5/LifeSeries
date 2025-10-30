@@ -34,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EnumSet;
 import java.util.Objects;
 
+@SuppressWarnings("resource")
 public class SnailPathfinding {
     private final Snail snail;
     public SnailPathfinding(Snail snail) {
@@ -108,8 +109,8 @@ public class SnailPathfinding {
             if (groundPathFinder != null) groundPathFinder.kill();
             if (pathFinder != null) pathFinder.kill();
             //?} else {
-            /*if (groundPathFinder != null) groundPathFinder.kill((ServerWorld) WorldUtils.getEntityWorld(groundPathFinder));
-            if (pathFinder != null) pathFinder.kill((ServerWorld) WorldUtils.getEntityWorld(pathFinder));
+            /*if (groundPathFinder != null) groundPathFinder.kill((ServerWorld) groundPathFinder.ls$getEntityWorld());
+            if (pathFinder != null) pathFinder.kill((ServerWorld) pathFinder.ls$getEntityWorld());
             *///?}
             if (groundPathFinder != null) groundPathFinder.discard();
             if (pathFinder != null) pathFinder.discard();
@@ -118,7 +119,7 @@ public class SnailPathfinding {
 
     @Nullable
     public BlockPos getGroundBlock() {
-        Vec3d startPos = WorldUtils.getEntityPos(snail);
+        Vec3d startPos = snail.ls$getEntityPos();
         Vec3d endPos = new Vec3d(startPos.getX(), snail.getSnailWorld().getBottomY(), startPos.getZ());
 
         BlockHitResult result = snail.getSnailWorld().raycast(
@@ -145,12 +146,12 @@ public class SnailPathfinding {
             Entity boundEntity = snail.serverData.getBoundEntity();
             ServerPlayerEntity boundPlayer = snail.serverData.getBoundPlayer();
             if (boundEntity == null || boundPlayer == null) return;
-            if (WorldUtils.getEntityWorld(boundEntity) instanceof ServerWorld entityWorld) {
+            if (boundEntity.ls$getEntityWorld() instanceof ServerWorld entityWorld) {
                 if (!snail.serverData.shouldPathfind()) return;
                 BlockPos tpTo = getBlockPosNearTarget(boundEntity, minDistanceFromPlayer);
                 world.playSound(null, snail.getX(), snail.getY(), snail.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, snail.getSoundCategory(), snail.soundVolume(), snail.getSoundPitch());
                 entityWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, snail.getSoundCategory(), snail.soundVolume(), snail.getSoundPitch());
-                AnimationUtils.spawnTeleportParticles(world, WorldUtils.getEntityPos(snail));
+                AnimationUtils.spawnTeleportParticles(world, snail.ls$getEntityPos());
                 AnimationUtils.spawnTeleportParticles(entityWorld, tpTo.toCenterPos());
                 snail.serverData.despawn();
                 Snails.spawnSnailFor(boundPlayer, tpTo);
@@ -161,7 +162,7 @@ public class SnailPathfinding {
     public static BlockPos getBlockPosNearPlayer(Entity target, double distanceFromTarget) {
         if (target == null) return null;
         BlockPos targetPos = target.getBlockPos();
-        return WorldUtils.getCloseBlockPos(WorldUtils.getEntityWorld(target), targetPos, distanceFromTarget, 1, false);
+        return WorldUtils.getCloseBlockPos(target.ls$getEntityWorld(), targetPos, distanceFromTarget, 1, false);
     }
 
     public BlockPos getBlockPosNearTarget(Entity target, double distanceFromTarget) {
@@ -169,7 +170,7 @@ public class SnailPathfinding {
         Vec3d targetPos = snail.serverData.getPlayerPos();
         if (targetPos == null) return null;
         BlockPos targetBlockPos = BlockPos.ofFloored(targetPos.x, targetPos.y, targetPos.z);
-        return WorldUtils.getCloseBlockPos(WorldUtils.getEntityWorld(target), targetBlockPos, distanceFromTarget, 1, false);
+        return WorldUtils.getCloseBlockPos(target.ls$getEntityWorld(), targetBlockPos, distanceFromTarget, 1, false);
     }
 
     public boolean canPathToPlayer(boolean flying) {
@@ -186,7 +187,7 @@ public class SnailPathfinding {
 
     public boolean isValidBlockOnGround() {
         if (groundPathFinder == null) return false;
-        BlockState block = WorldUtils.getEntityWorld(groundPathFinder).getBlockState(groundPathFinder.getBlockPos());
+        BlockState block = groundPathFinder.ls$getEntityWorld().getBlockState(groundPathFinder.getBlockPos());
         if (block.isOf(Blocks.LAVA)) return false;
         if (block.isOf(Blocks.WATER)) return false;
         if (block.isOf(Blocks.POWDER_SNOW)) return false;

@@ -72,7 +72,7 @@ public class PlayerDisguise extends ToggleableSuperpower {
 
         ServerWorld playerWorld = PlayerUtils.getServerWorld(player);
         playerWorld.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PUFFER_FISH_BLOW_UP, SoundCategory.MASTER, 1, 1);
-        Vec3d playerPos = WorldUtils.getEntityPos(player);
+        Vec3d playerPos = player.ls$getEntityPos();
         playerWorld.spawnParticles(
                 ParticleTypes.EXPLOSION,
                 playerPos.getX(), playerPos.getY(), playerPos.getZ(),
@@ -97,7 +97,7 @@ public class PlayerDisguise extends ToggleableSuperpower {
         if (player == null) return;
         ServerWorld playerWorld = PlayerUtils.getServerWorld(player);
         playerWorld.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PUFFER_FISH_BLOW_OUT, SoundCategory.MASTER, 1, 1);
-        Vec3d playerPos = WorldUtils.getEntityPos(player);
+        Vec3d playerPos = player.ls$getEntityPos();
         playerWorld.spawnParticles(
                 ParticleTypes.EXPLOSION,
                 playerPos.getX(), playerPos.getY(), playerPos.getZ(),

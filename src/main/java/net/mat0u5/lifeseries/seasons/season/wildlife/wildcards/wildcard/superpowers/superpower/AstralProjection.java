@@ -95,7 +95,7 @@ public class AstralProjection extends ToggleableSuperpower {
 
         String fakePlayerName = "`"+player.getNameForScoreboard();
 
-        startedPos = WorldUtils.getEntityPos(player);
+        startedPos = player.ls$getEntityPos();
         startedLooking[0] = player.getYaw();
         startedLooking[1] = player.getPitch();
         startedWorld = PlayerUtils.getServerWorld(player);
@@ -143,7 +143,7 @@ public class AstralProjection extends ToggleableSuperpower {
             clone.setVelocity(velocity);
             clone.velocityModified = true;
             clone.velocityDirty = true;
-            clone.refreshPositionAndAngles(WorldUtils.getEntityPos(player), player.getYaw(), player.getPitch());
+            clone.refreshPositionAndAngles(player.ls$getEntityPos(), player.getYaw(), player.getPitch());
         });
         *///?}
     }
@@ -165,7 +165,7 @@ public class AstralProjection extends ToggleableSuperpower {
 
         Vec3d toBackPos = startedPos;
         if (clone != null) {
-            toBackPos = WorldUtils.getEntityPos(clone);
+            toBackPos = clone.ls$getEntityPos();
             //? if <= 1.21.6 {
             clone.networkHandler.onDisconnected(new DisconnectionInfo(Text.empty()));
             NetworkHandlerServer.sendPlayerDisguise(clone.getUuid().toString(), clone.getName().getString(), "", "");

@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.mixin.client;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
-import net.mat0u5.lifeseries.utils.interfaces.IEntity;
+import net.mat0u5.lifeseries.utils.interfaces.IClientEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.effect.StatusEffects;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = Entity.class, priority = 2)
-public class EntityMixin implements IEntity {
+public class EntityMixin implements IClientEntity {
     @Shadow
     private EntityDimensions dimensions;
 

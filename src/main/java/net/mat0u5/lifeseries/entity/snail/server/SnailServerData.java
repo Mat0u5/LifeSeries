@@ -38,6 +38,7 @@ import net.minecraft.world.World;
 import java.util.UUID;
 import static net.mat0u5.lifeseries.Main.livesManager;
 
+@SuppressWarnings("resource")
 public class SnailServerData implements PlayerBoundEntity {
     public static final RegistryKey<DamageType> SNAIL_DAMAGE = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, Identifier.of(Main.MOD_ID, "snail"));
     public final Snail snail;
@@ -222,7 +223,7 @@ public class SnailServerData implements PlayerBoundEntity {
     }
 
     public void killBoundEntity(Entity entity) {
-        World world = WorldUtils.getEntityWorld(entity);
+        World world = entity.ls$getEntityWorld();
         if (world instanceof ServerWorld serverWorld) {
             if (entity instanceof ServerPlayerEntity player) {
                 player.setAttacker(snail);
@@ -241,7 +242,7 @@ public class SnailServerData implements PlayerBoundEntity {
 
     public void damageFromDrowning(Entity entity) {
         if (!entity.isAlive()) return;
-        World world = WorldUtils.getEntityWorld(entity);
+        World world = entity.ls$getEntityWorld();
         if (world instanceof ServerWorld serverWorld) {
             if (entity instanceof ServerPlayerEntity player) {
                 player.setAttacker(snail);

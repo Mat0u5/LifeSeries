@@ -269,7 +269,7 @@ public class MobSwap extends Wildcard {
                 //? if <=1.21 {
                 entity.kill();
                  //?} else {
-                /*entity.kill((ServerWorld) WorldUtils.getEntityWorld(entity));
+                /*entity.kill((ServerWorld) entity.ls$getEntityWorld());
                 *///?}
             }
             if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.DO_MOB_LOOT, true);
@@ -361,7 +361,7 @@ public class MobSwap extends Wildcard {
                 //? if <=1.21 {
                 entity.kill();
                  //?} else {
-                /*entity.kill((ServerWorld) WorldUtils.getEntityWorld(entity));
+                /*entity.kill((ServerWorld) entity.ls$getEntityWorld());
                 *///?}
             }
             if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.DO_MOB_LOOT, true);

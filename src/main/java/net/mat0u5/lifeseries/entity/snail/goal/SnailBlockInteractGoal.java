@@ -11,6 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("resource")
 public final class SnailBlockInteractGoal extends Goal {
 
     @NotNull
@@ -24,7 +25,7 @@ public final class SnailBlockInteractGoal extends Goal {
     public boolean canStart() {
         if (mob.getSnailWorld().isClient()) return false;
         if (mob.isPaused()) return false;
-        if (WorldUtils.getEntityWorld(mob) == null) {
+        if (mob.ls$getEntityWorld() == null) {
             return false;
         }
 
@@ -54,19 +55,19 @@ public final class SnailBlockInteractGoal extends Goal {
     }
 
     private boolean isTrapdoorOpen(BlockPos blockPos) {
-        return WorldUtils.getEntityWorld(mob).getBlockState(blockPos).get(TrapdoorBlock.OPEN);
+        return mob.ls$getEntityWorld().getBlockState(blockPos).get(TrapdoorBlock.OPEN);
     }
 
     private void openTrapdoor(BlockPos blockPos) {
         if (!isTrapdoor(blockPos)) return;
-        World world = WorldUtils.getEntityWorld(mob);
+        World world = mob.ls$getEntityWorld();
         if (world == null) return;
         if (!isTrapdoorOpen(blockPos)) return;
-        WorldUtils.getEntityWorld(mob).setBlockState(blockPos, WorldUtils.getEntityWorld(mob).getBlockState(blockPos).with(TrapdoorBlock.OPEN, false));
+        mob.ls$getEntityWorld().setBlockState(blockPos, mob.ls$getEntityWorld().getBlockState(blockPos).with(TrapdoorBlock.OPEN, false));
     }
 
     private BlockState getBlockState(BlockPos blockPos) {
-        World world = WorldUtils.getEntityWorld(mob);
+        World world = mob.ls$getEntityWorld();
         if (world != null) {
             return world.getBlockState(blockPos);
         }

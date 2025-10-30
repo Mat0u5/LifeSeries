@@ -8,6 +8,7 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("resource")
 public final class SnailTeleportGoal extends Goal {
 
 
@@ -47,7 +48,7 @@ public final class SnailTeleportGoal extends Goal {
         Entity boundEntity = mob.serverData.getBoundEntity();
         if (boundEntity == null) return false;
         float distFromPlayer = mob.distanceTo(boundEntity);
-        boolean dimensionsAreSame = WorldUtils.getEntityWorld(mob).getRegistryKey().equals(WorldUtils.getEntityWorld(boundEntity).getRegistryKey());
+        boolean dimensionsAreSame = mob.ls$getEntityWorld().getRegistryKey().equals(boundEntity.ls$getEntityWorld().getRegistryKey());
         return !dimensionsAreSame || distFromPlayer > Snail.MAX_DISTANCE || this.ticksSinceLastPositionChange > this.maxTicksSinceLastPositionChange;
     }
 

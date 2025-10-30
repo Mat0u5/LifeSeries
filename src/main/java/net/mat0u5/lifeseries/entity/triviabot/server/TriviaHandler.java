@@ -104,7 +104,7 @@ public class TriviaHandler {
                 triviaSnail.serverData.setFromTrivia();
                 triviaSnail.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE.value(), 0.5f, 2);
                 ServerWorld world = (ServerWorld) triviaSnail.getSnailWorld();
-                Vec3d pos = WorldUtils.getEntityPos(bot);
+                Vec3d pos = bot.ls$getEntityPos();
                 world.spawnParticles(
                         ParticleTypes.EXPLOSION,
                         pos.getX(), pos.getY(), pos.getZ(),
@@ -176,7 +176,7 @@ public class TriviaHandler {
         if (player == null) return;
         player.playSoundToPlayer(SoundEvents.ENTITY_ELDER_GUARDIAN_CURSE, SoundCategory.MASTER, 0.2f, 1f);
         ServerWorld world = (ServerWorld) bot.getBotWorld();
-        Vec3d pos = WorldUtils.getEntityPos(bot);
+        Vec3d pos = bot.ls$getEntityPos();
 
         //? if <= 1.21.6 {
         world.spawnParticles(
@@ -297,8 +297,8 @@ public class TriviaHandler {
         if (bot.getBotWorld().isClient()) return;
         if (itemSpawner == null) return;
         if (bot.serverData.getBoundPlayer() == null) return;
-        Vec3d playerPos = WorldUtils.getEntityPos(bot.serverData.getBoundPlayer());
-        Vec3d pos = WorldUtils.getEntityPos(bot).add(0,1,0);
+        Vec3d playerPos = bot.serverData.getBoundPlayer().ls$getEntityPos();
+        Vec3d pos = bot.ls$getEntityPos().add(0,1,0);
         Vec3d relativeTargetPos = new Vec3d(
                 playerPos.getX() - pos.getX(),
                 0,
@@ -393,7 +393,7 @@ public class TriviaHandler {
 
     public void curseBindingArmor(ServerPlayerEntity player) {
         for (ItemStack item : PlayerUtils.getArmorItems(player)) {
-            ItemStackUtils.spawnItemForPlayer(PlayerUtils.getServerWorld(player), WorldUtils.getEntityPos(player), item.copy(), player);
+            ItemStackUtils.spawnItemForPlayer(PlayerUtils.getServerWorld(player), player.ls$getEntityPos(), item.copy(), player);
         }
         ItemStack head = Items.LEATHER_HELMET.getDefaultStack();
         ItemStack chest = Items.LEATHER_CHESTPLATE.getDefaultStack();

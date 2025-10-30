@@ -315,7 +315,7 @@ public class Events {
         NetworkHandlerServer.sendUpdatePacketTo(player);
         SnailSkins.sendTexturesTo(player);
         joiningPlayers.add(player.getUuid());
-        joiningPlayersPos.put(player.getUuid(), WorldUtils.getEntityPos(player));
+        joiningPlayersPos.put(player.getUuid(), player.ls$getEntityPos());
         joiningPlayersYaw.put(player.getUuid(), player.getYaw());
         joiningPlayersPitch.put(player.getUuid(), player.getPitch());
     }
@@ -324,7 +324,7 @@ public class Events {
             UUID uuid = entry.getKey();
             ServerPlayerEntity player = PlayerUtils.getPlayer(uuid);
             if (player == null) continue;
-            if (WorldUtils.getEntityPos(player).equals(entry.getValue())) continue;
+            if (player.ls$getEntityPos().equals(entry.getValue())) continue;
             onPlayerFinishJoining(player);
             finishedJoining(player.getUuid());
             return;

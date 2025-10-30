@@ -39,7 +39,7 @@ public class WorldUtils {
     }
 
     public static void summonHarmlessLightning(ServerPlayerEntity player) {
-        summonHarmlessLightning(PlayerUtils.getServerWorld(player), WorldUtils.getEntityPos(player));
+        summonHarmlessLightning(PlayerUtils.getServerWorld(player), player.ls$getEntityPos());
     }
 
     public static void summonHarmlessLightning(ServerWorld world, Vec3d pos) {
@@ -90,20 +90,5 @@ public class WorldUtils {
 
         }
         return null;
-    }
-
-    public static World getEntityWorld(Entity entity) {
-        //? if = 1.21.6 {
-        /*return entity.getWorld();
-         *///?} else {
-        return entity.getEntityWorld();
-        //?}
-    }
-    public static Vec3d getEntityPos(Entity entity) {
-        //? if <= 1.21.6 {
-        return entity.getPos();
-         //?} else {
-        /*return entity.getEntityPos();
-        *///?}
     }
 }

@@ -116,6 +116,6 @@ public abstract class PlayerEntityMixin {
         if (!player.isOnGround()) return;
         if (!SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPERSPEED)) return;
 
-        ls$frostWalker.apply(PlayerUtils.getServerWorld(player), 5, null, player, WorldUtils.getEntityPos(player));
+        ls$frostWalker.apply(PlayerUtils.getServerWorld(player), 5, null, player, player.ls$getEntityPos());
     }
 }

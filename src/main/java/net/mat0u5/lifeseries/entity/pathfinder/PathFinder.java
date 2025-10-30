@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.entity.pathfinder;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.control.FlightMoveControl;
@@ -66,12 +65,12 @@ public class PathFinder extends AmbientEntity {
         setPathfindingPenalty(PathNodeType.UNPASSABLE_RAIL, 0);
         if (flying) {
             moveControl = new FlightMoveControl(this, 20, true);
-            navigation = new BirdNavigation(this, WorldUtils.getEntityWorld(this));
+            navigation = new BirdNavigation(this, ls$getEntityWorld());
             navigation.setCanSwim(true);
         }
         else {
             moveControl = new MoveControl(this);
-            navigation = new MobNavigation(this, WorldUtils.getEntityWorld(this));
+            navigation = new MobNavigation(this, ls$getEntityWorld());
             navigation.setCanSwim(true);
         }
     }

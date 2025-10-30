@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("resource")
 public final class SnailPushEntitiesGoal extends Goal {
 
     @NotNull
@@ -28,7 +29,7 @@ public final class SnailPushEntitiesGoal extends Goal {
     @Override
     public boolean canStart() {
         if (mob.getSnailWorld().isClient()) return false;
-        World world = WorldUtils.getEntityWorld(mob);
+        World world = mob.ls$getEntityWorld();
         if (world == null) {
             return false;
         }
@@ -69,9 +70,9 @@ public final class SnailPushEntitiesGoal extends Goal {
     }
 
     private void pushAway(Entity entity) {
-        Vec3d direction = WorldUtils.getEntityPos(entity)
+        Vec3d direction = entity.ls$getEntityPos()
                 .add(0.0, 0.5, 0.0)
-                .subtract(WorldUtils.getEntityPos(mob))
+                .subtract(mob.ls$getEntityPos())
                 .normalize()
                 .multiply(0.4);
 

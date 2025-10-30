@@ -7,6 +7,7 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("resource")
 public final class TriviaBotTeleportGoal extends Goal {
     @NotNull
     private final TriviaBot mob;
@@ -53,7 +54,7 @@ public final class TriviaBotTeleportGoal extends Goal {
         if (this.ticksSinceLastPositionChange > this.maxTicksSinceLastPositionChange) return true;
 
 
-        boolean dimensionsAreSame = WorldUtils.getEntityWorld(mob).getRegistryKey().equals(WorldUtils.getEntityWorld(boundEntity).getRegistryKey());
+        boolean dimensionsAreSame = mob.ls$getEntityWorld().getRegistryKey().equals(boundEntity.ls$getEntityWorld().getRegistryKey());
         return !dimensionsAreSame;
     }
 
