@@ -23,6 +23,8 @@ loom {
    sourceSet sourceSets.client
   }
  }
+
+ fabricModJsonPath = rootProject.file("src/main/resources/fabric.mod.json")
 }
 repositories {
  maven { url "https://api.modrinth.com/maven" }
