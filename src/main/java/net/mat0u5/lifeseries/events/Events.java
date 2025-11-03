@@ -41,10 +41,13 @@ import net.minecraft.world.phys.Vec3;
 import java.util.*;
 import static net.mat0u5.lifeseries.Main.*;
 import static net.mat0u5.lifeseries.utils.player.PlayerUtils.isFakePlayer;
-//? if <= 1.21.2
 import net.fabricmc.fabric.api.event.player.*;
-//? if >= 1.21.2
-/*import net.fabricmc.fabric.api.event.player.*;*/
+
+//? if >= 1.21.2 {
+/*import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Items;
+*///?}
 
 public class Events {
     public static boolean skipNextTickReload = false;
@@ -240,12 +243,12 @@ public class Events {
             try {
                 ItemStack itemStack = player.getItemInHand(hand);
                 //? if >= 1.21.2 {
-                /*if (itemStack.isOf(Items.FIREWORK_ROCKET)) {
+                /*if (itemStack.is(Items.FIREWORK_ROCKET)) {
                     if (ItemStackUtils.hasCustomComponentEntry(PlayerUtils.getEquipmentSlot(serverPlayer, 3), "FlightSuperpower")) {
-                        if (!(LivingEntity.canGlideWith(serverPlayer.getEquippedStack(EquipmentSlot.CHEST), EquipmentSlot.CHEST) ||
-                                LivingEntity.canGlideWith(serverPlayer.getEquippedStack(EquipmentSlot.LEGS), EquipmentSlot.LEGS) ||
-                                LivingEntity.canGlideWith(serverPlayer.getEquippedStack(EquipmentSlot.FEET), EquipmentSlot.FEET))) {
-                            return ActionResult.FAIL;
+                        if (!(LivingEntity.canGlideUsing(serverPlayer.getItemBySlot(EquipmentSlot.CHEST), EquipmentSlot.CHEST) ||
+                                LivingEntity.canGlideUsing(serverPlayer.getItemBySlot(EquipmentSlot.LEGS), EquipmentSlot.LEGS) ||
+                                LivingEntity.canGlideUsing(serverPlayer.getItemBySlot(EquipmentSlot.FEET), EquipmentSlot.FEET))) {
+                            return InteractionResult.FAIL;
                         }
                     }
                 }

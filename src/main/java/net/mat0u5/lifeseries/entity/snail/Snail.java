@@ -19,8 +19,8 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
@@ -90,15 +90,15 @@ public class Snail extends Monster {
                 .add(Attributes.SAFE_FALL_DISTANCE, 100)
                 .add(Attributes.ATTACK_DAMAGE, 20);
         //?} else {
-        /*return MobEntity.createMobAttributes()
-                .add(EntityAttributes.MAX_HEALTH, 10000)
-                .add(EntityAttributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
-                .add(EntityAttributes.FLYING_SPEED, FLYING_SPEED)
-                .add(EntityAttributes.STEP_HEIGHT, 1)
-                .add(EntityAttributes.FOLLOW_RANGE, 150)
-                .add(EntityAttributes.WATER_MOVEMENT_EFFICIENCY, 1)
-                .add(EntityAttributes.SAFE_FALL_DISTANCE, 100)
-                .add(EntityAttributes.ATTACK_DAMAGE, 20);
+        /*return Mob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 10000)
+                .add(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
+                .add(Attributes.FLYING_SPEED, FLYING_SPEED)
+                .add(Attributes.STEP_HEIGHT, 1)
+                .add(Attributes.FOLLOW_RANGE, 150)
+                .add(Attributes.WATER_MOVEMENT_EFFICIENCY, 1)
+                .add(Attributes.SAFE_FALL_DISTANCE, 100)
+                .add(Attributes.ATTACK_DAMAGE, 20);
         *///?}
     }
 

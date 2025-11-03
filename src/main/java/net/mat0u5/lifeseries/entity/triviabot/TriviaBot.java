@@ -75,15 +75,15 @@ public class TriviaBot extends AmbientCreature {
                 .add(Attributes.SAFE_FALL_DISTANCE, 100)
                 .add(Attributes.ATTACK_DAMAGE, 0);
         //?} else {
-        /*return MobEntity.createMobAttributes()
-                .add(EntityAttributes.MAX_HEALTH, 10000)
-                .add(EntityAttributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
-                .add(EntityAttributes.FLYING_SPEED, MOVEMENT_SPEED)
-                .add(EntityAttributes.STEP_HEIGHT, 1)
-                .add(EntityAttributes.FOLLOW_RANGE, 100)
-                .add(EntityAttributes.WATER_MOVEMENT_EFFICIENCY, 1)
-                .add(EntityAttributes.SAFE_FALL_DISTANCE, 100)
-                .add(EntityAttributes.ATTACK_DAMAGE, 0);
+        /*return Mob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 10000)
+                .add(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
+                .add(Attributes.FLYING_SPEED, MOVEMENT_SPEED)
+                .add(Attributes.STEP_HEIGHT, 1)
+                .add(Attributes.FOLLOW_RANGE, 100)
+                .add(Attributes.WATER_MOVEMENT_EFFICIENCY, 1)
+                .add(Attributes.SAFE_FALL_DISTANCE, 100)
+                .add(Attributes.ATTACK_DAMAGE, 0);
         *///?}
     }
 

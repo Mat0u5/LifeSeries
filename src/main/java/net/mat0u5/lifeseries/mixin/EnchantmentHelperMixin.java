@@ -124,7 +124,7 @@ public class EnchantmentHelperMixin {
         //? if <= 1.21 {
         damageSource.getEntity().hurt(victim.damageSources().thorns(victim), 1F);
         //?} else {
-        /*damageSource.getAttacker().damage(PlayerUtils.getServerWorld(victim), victim.getDamageSources().thorns(victim), 1F);
+        /*damageSource.getEntity().hurtServer(PlayerUtils.getServerWorld(victim), victim.damageSources().thorns(victim), 1F);
          *///?}
     }
 }

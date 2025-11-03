@@ -5,18 +5,29 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
+//? if <= 1.21
+import net.minecraft.world.entity.MobSpawnType;
+//? if >= 1.21.2
+/*import net.minecraft.world.entity.EntitySpawnReason;*/
+
 public class WorldUtils {
 
     public static int findTopSafeY(Level world, Vec3 pos) {
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos(pos.x(), world.getHeight(), pos.z());
         // Check upwards or downwards for the first safe position
-        while (mutablePos.getY() >= world.getMinBuildHeight()) {
+        //? if <= 1.21 {
+        int minBuildHeight = world.getMinBuildHeight();
+        //?} else {
+        /*int minBuildHeight = world.getMinY();
+        *///?}
+        while (mutablePos.getY() >= minBuildHeight) {
             if (isSafeSpot(world, mutablePos)) {
                 return mutablePos.getY(); // Found a safe spot
             }
@@ -89,5 +100,13 @@ public class WorldUtils {
 
         }
         return null;
+    }
+
+    public static <T extends Entity> T spawnEntity(EntityType<T> entityType, ServerLevel level, BlockPos pos) {
+        //? if <= 1.21 {
+        return entityType.spawn(level, pos, MobSpawnType.COMMAND);
+        //?} else {
+        /*return entityType.spawn(level, pos, EntitySpawnReason.COMMAND);
+        *///?}
     }
 }

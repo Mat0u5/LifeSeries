@@ -13,19 +13,29 @@ import net.minecraft.world.scores.PlayerTeam;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
 //? if >= 1.21.2 {
-//?}
+/*import net.mat0u5.lifeseries.utils.world.WorldUtils;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.TargetColorParticleOption;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.creaking.Creaking;
+import net.minecraft.world.phys.AABB;
+import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.Main.server;
+*///?}
 
-
-public class Creaking extends ToggleableSuperpower {
+public class CreakingPower extends ToggleableSuperpower {
     public static final List<UUID> allCreatedEntities = new ArrayList<>();
 
     private final List<String> createdTeams = new ArrayList<>();
     //? if >= 1.21.2 {
-    /*private final List<CreakingEntity> createdEntities = new ArrayList<>();
+    /*private final List<Creaking> createdEntities = new ArrayList<>();
     *///?}
 
-    public Creaking(ServerPlayer player) {
+    public CreakingPower(ServerPlayer player) {
         super(player);
     }
 
@@ -58,13 +68,13 @@ public class Creaking extends ToggleableSuperpower {
 
         //? if >= 1.21.2 {
         /*for (int i = 0; i < 3; i++) {
-            BlockPos spawnPos =  WorldUtils.getCloseBlockPos(playerWorld, player.getBlockPos(), 6, 3, true);
-            CreakingEntity creaking = EntityType.CREAKING.spawn(playerWorld, spawnPos, SpawnReason.COMMAND);
+            BlockPos spawnPos =  WorldUtils.getCloseBlockPos(playerWorld, player.blockPosition(), 6, 3, true);
+            Creaking creaking = EntityType.CREAKING.spawn(playerWorld, spawnPos, EntitySpawnReason.COMMAND);
             if (creaking != null) {
                 creaking.setInvulnerable(true);
-                creaking.addCommandTag("creakingFromSuperpower");
+                creaking.addTag("creakingFromSuperpower");
                 createdEntities.add(creaking);
-                allCreatedEntities.add(creaking.getUuid());
+                allCreatedEntities.add(creaking.getUUID());
                 makeFriendly(newTeamName, creaking, player);
             }
         }
@@ -109,11 +119,11 @@ public class Creaking extends ToggleableSuperpower {
     }
     //? if >= 1.21.2 {
     /*public void spawnTrailParticles() {
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
         if (player == null) return;
-        ServerWorld world = PlayerUtils.getServerWorld(player);
+        ServerLevel world = PlayerUtils.getServerWorld(player);
         if (world == null) return;
-        for (CreakingEntity creakingEntity : createdEntities) {
+        for (Creaking creakingEntity : createdEntities) {
             if (creakingEntity.getRandom().nextInt(50)==0) {
                 spawnTrailParticles(creakingEntity, 1, false);
             }
@@ -123,29 +133,29 @@ public class Creaking extends ToggleableSuperpower {
         }
     }
 
-    public void spawnTrailParticles(CreakingEntity creaking, int count, boolean towardsPlayer) {
-        ServerPlayerEntity player = getPlayer();
+    public void spawnTrailParticles(Creaking creaking, int count, boolean towardsPlayer) {
+        ServerPlayer player = getPlayer();
         if (player == null) return;
-        ServerWorld world = PlayerUtils.getServerWorld(player);
+        ServerLevel world = PlayerUtils.getServerWorld(player);
         if (world == null) return;
 
         int i = towardsPlayer ? 16545810 : 6250335;
-        Random random = world.random;
+        RandomSource random = world.random;
 
         for(double d = 0.0; d < count; d++) {
-            Box box = creaking.getBoundingBox();
-            Vec3d vec3d = box.getMinPos().add(random.nextDouble() * box.getLengthX(), random.nextDouble() * box.getLengthY(), random.nextDouble() * box.getLengthZ());
-            Vec3d vec3d2 = player.ls$getEntityPos().add(random.nextDouble() - 0.5, random.nextDouble(), random.nextDouble() - 0.5);
+            AABB box = creaking.getBoundingBox();
+            Vec3 vec3d = box.getMinPosition().add(random.nextDouble() * box.getXsize(), random.nextDouble() * box.getYsize(), random.nextDouble() * box.getZsize());
+            Vec3 vec3d2 = player.ls$getEntityPos().add(random.nextDouble() - 0.5, random.nextDouble(), random.nextDouble() - 0.5);
 
             if (!towardsPlayer) {
-                Vec3d vec3d3 = vec3d;
+                Vec3 vec3d3 = vec3d;
                 vec3d = vec3d2;
                 vec3d2 = vec3d3;
             }
 
             //? if = 1.21.2 {
-            /^TrailParticleEffect trailParticleEffect2 = new TrailParticleEffect(vec3d2, i);
-            world.spawnParticles(trailParticleEffect2, vec3d.x, vec3d.y, vec3d.z, 1, 0.0, 0.0, 0.0, 0.0);
+            /^TargetColorParticleOption trailParticleEffect2 = new TargetColorParticleOption(vec3d2, i);
+            world.sendParticles(trailParticleEffect2, vec3d.x, vec3d.y, vec3d.z, 1, 0.0, 0.0, 0.0, 0.0);
             ^///?} else if >= 1.21.4 {
             /^TrailParticleEffect trailParticleEffect2 = new TrailParticleEffect(vec3d2, i, random.nextInt(40) + 10);
             world.spawnParticles(trailParticleEffect2, true, true, vec3d.x, vec3d.y, vec3d.z, 1, 0.0, 0.0, 0.0, 0.0);
@@ -155,12 +165,12 @@ public class Creaking extends ToggleableSuperpower {
 
     public static void killUnassignedMobs() {
         if (server == null) return;
-        for (ServerWorld world : server.getWorlds()) {
+        for (ServerLevel world : server.getAllLevels()) {
             List<Entity> toKill = new ArrayList<>();
-            world.iterateEntities().forEach(entity -> {
-                if (!(entity instanceof CreakingEntity)) return;
-                if (allCreatedEntities.contains(entity.getUuid())) return;
-                if (!entity.getCommandTags().contains("creakingFromSuperpower")) return;
+            world.getAllEntities().forEach(entity -> {
+                if (!(entity instanceof Creaking)) return;
+                if (allCreatedEntities.contains(entity.getUUID())) return;
+                if (!entity.getTags().contains("creakingFromSuperpower")) return;
                 toKill.add(entity);
             });
             toKill.forEach(Entity::discard);

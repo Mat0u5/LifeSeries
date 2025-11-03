@@ -156,7 +156,7 @@ public class TriviaBotServerData implements PlayerBoundEntity {
             //? if <= 1.21 {
             bot.kill();
             //?} else {
-            /*bot.kill((ServerWorld) bot.getBotWorld());
+            /*bot.kill((ServerLevel) bot.getBotWorld());
              *///?}
         }
         bot.discard();

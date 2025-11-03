@@ -230,9 +230,9 @@ public class SnailServerData implements PlayerBoundEntity {
                     .registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(SNAIL_DAMAGE));
             entity.hurt(damageSource, 1000);
             //?} else {
-            /*DamageSource damageSource = new DamageSource(serverWorld.getRegistryManager()
-                    .getOrThrow(RegistryKeys.DAMAGE_TYPE).getOrThrow(SNAIL_DAMAGE));
-            entity.damage(serverWorld, damageSource, 1000);
+            /*DamageSource damageSource = new DamageSource(serverWorld.registryAccess()
+                    .lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(SNAIL_DAMAGE));
+            entity.hurtServer(serverWorld, damageSource, 1000);
             *///?}
         }
     }
@@ -249,9 +249,9 @@ public class SnailServerData implements PlayerBoundEntity {
                     .registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.DROWN));
             entity.hurt(damageSource, 2);
             //?} else {
-            /*DamageSource damageSource = new DamageSource(serverWorld.getRegistryManager()
-                    .getOrThrow(RegistryKeys.DAMAGE_TYPE).getOrThrow(DamageTypes.DROWN));
-            entity.damage(serverWorld, damageSource, 2);
+            /*DamageSource damageSource = new DamageSource(serverWorld.registryAccess()
+                    .lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.DROWN));
+            entity.hurtServer(serverWorld, damageSource, 2);
             *///?}
             if (!entity.isAlive() && entity instanceof ServerPlayer) {
                 despawn();

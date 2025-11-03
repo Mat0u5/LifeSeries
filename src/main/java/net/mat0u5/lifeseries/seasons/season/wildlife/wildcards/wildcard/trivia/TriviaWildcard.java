@@ -13,6 +13,7 @@ import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -20,7 +21,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.MobSpawnType;
 
 import java.io.IOException;
 import java.util.*;
@@ -209,7 +209,7 @@ public class TriviaWildcard extends Wildcard {
     }
     public static void spawnBotFor(ServerPlayer player, BlockPos pos) {
         resetPlayerOnBotSpawn(player);
-        TriviaBot bot = MobRegistry.TRIVIA_BOT.spawn(PlayerUtils.getServerWorld(player), pos, MobSpawnType.COMMAND);
+        TriviaBot bot = WorldUtils.spawnEntity(MobRegistry.TRIVIA_BOT, PlayerUtils.getServerWorld(player), pos);
         if (bot != null) {
             SessionTranscript.newTriviaBot(player);
             bot.serverData.setBoundPlayer(player);

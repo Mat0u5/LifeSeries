@@ -12,12 +12,12 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.*;
@@ -94,7 +94,7 @@ public class Snails extends Wildcard {
 
     public static void spawnSnailFor(ServerPlayer player, BlockPos pos) {
         if (player == null || pos == null) return;
-        Snail snail = MobRegistry.SNAIL.spawn(PlayerUtils.getServerWorld(player), pos, MobSpawnType.COMMAND);
+        Snail snail = WorldUtils.spawnEntity(MobRegistry.SNAIL, PlayerUtils.getServerWorld(player), pos);
         if (snail != null) {
             snail.serverData.setBoundPlayer(player);
             snails.put(player.getUUID(), snail);

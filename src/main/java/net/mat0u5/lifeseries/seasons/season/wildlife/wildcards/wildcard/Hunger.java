@@ -29,10 +29,16 @@ import net.minecraft.world.item.Items;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 import static net.mat0u5.lifeseries.Main.currentSession;
+
+//? if <= 1.21
+import java.util.Optional;
+//? if >= 1.21.2 {
+/*import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.component.Consumable;
+*///?}
 
 public class Hunger extends Wildcard {
     private static final Random rnd = new Random();
@@ -197,7 +203,7 @@ public class Hunger extends Wildcard {
 
             stack.set(DataComponents.FOOD, stack.getPrototype().get(DataComponents.FOOD));
             //? if >= 1.21.2 {
-            /*stack.set(DataComponentTypes.CONSUMABLE, stack.getDefaultComponents().get(DataComponentTypes.CONSUMABLE));
+            /*stack.set(DataComponents.CONSUMABLE, stack.getPrototype().get(DataComponents.CONSUMABLE));
             *///?}
 
             DataComponentPatch changes = stack.getComponentsPatch();
@@ -237,13 +243,13 @@ public class Hunger extends Wildcard {
         components.set(DataComponents.FOOD, new FoodProperties(0, 0, false, 1.6f, Optional.empty(), List.of()));
     }
     //?} else {
-    /*public static void defaultFoodComponents(Item item, MergedComponentMap components) {
+    /*public static void defaultFoodComponents(Item item, PatchedDataComponentMap components) {
         if (item == null) return;
         if (bannedFoodItems.contains(item)) return;
-        components.set(DataComponentTypes.CONSUMABLE,
-                new ConsumableComponent(ConsumableComponent.DEFAULT_CONSUME_SECONDS, UseAction.EAT, SoundEvents.ENTITY_GENERIC_EAT, true, List.of())
+        components.set(DataComponents.CONSUMABLE,
+                new Consumable(Consumable.DEFAULT_CONSUME_SECONDS, ItemUseAnimation.EAT, SoundEvents.GENERIC_EAT, true, List.of())
         );
-        components.set(DataComponentTypes.FOOD, new FoodComponent(0, 0, false));
+        components.set(DataComponents.FOOD, new FoodProperties(0, 0, false));
     }
     *///?}
 

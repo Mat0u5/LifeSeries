@@ -18,6 +18,7 @@ import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
+import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -37,7 +38,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -49,9 +49,6 @@ import java.util.List;
 import java.util.UUID;
 import static net.mat0u5.lifeseries.Main.blacklist;
 import static net.mat0u5.lifeseries.Main.server;
-//? if >= 1.21.9
-//? if >= 1.21.11
-/*import net.minecraft.entity.LazyEntityReference;*/
 
 public class TriviaHandler {
     private TriviaBot bot;
@@ -64,7 +61,6 @@ public class TriviaHandler {
     public int interactedAtAge = 0;
     public int timeToComplete = 0;
     public TriviaQuestion question;
-
 
     public InteractionResult interactMob(Player player, InteractionHand hand) {
         if (bot.getBotWorld().isClientSide()) return InteractionResult.SUCCESS;
@@ -92,7 +88,7 @@ public class TriviaHandler {
 
     public void transformIntoSnail() {
         if (bot.serverData.getBoundPlayer() != null) {
-            Snail triviaSnail = MobRegistry.SNAIL.spawn((ServerLevel) bot.getBotWorld(), bot.blockPosition(), MobSpawnType.COMMAND);
+            Snail triviaSnail = WorldUtils.spawnEntity(MobRegistry.SNAIL, (ServerLevel) bot.getBotWorld(), bot.blockPosition());
             if (triviaSnail != null) {
                 triviaSnail.serverData.setBoundPlayer(bot.serverData.getBoundPlayer());
                 triviaSnail.serverData.setFromTrivia();
@@ -366,7 +362,7 @@ public class TriviaHandler {
 
     public void curseRavager(ServerPlayer player) {
         BlockPos spawnPos = TriviaBotPathfinding.getBlockPosNearPlayer(player, bot.blockPosition(), 5);
-        EntityType.RAVAGER.spawn(PlayerUtils.getServerWorld(player), spawnPos, MobSpawnType.COMMAND);
+        WorldUtils.spawnEntity(EntityType.RAVAGER, PlayerUtils.getServerWorld(player), spawnPos);
     }
 
     public void curseInfestation(ServerPlayer player) {
@@ -423,11 +419,11 @@ public class TriviaHandler {
 
     public void curseBeeswarm(ServerPlayer player) {
         BlockPos spawnPos = TriviaBotPathfinding.getBlockPosNearPlayer(player, bot.blockPosition(), 1);
-        Bee bee1 = EntityType.BEE.spawn((ServerLevel) bot.getBotWorld(), spawnPos, MobSpawnType.COMMAND);
-        Bee bee2 = EntityType.BEE.spawn((ServerLevel) bot.getBotWorld(), spawnPos, MobSpawnType.COMMAND);
-        Bee bee3 = EntityType.BEE.spawn((ServerLevel) bot.getBotWorld(), spawnPos, MobSpawnType.COMMAND);
-        Bee bee4 = EntityType.BEE.spawn((ServerLevel) bot.getBotWorld(), spawnPos, MobSpawnType.COMMAND);
-        Bee bee5 = EntityType.BEE.spawn((ServerLevel) bot.getBotWorld(), spawnPos, MobSpawnType.COMMAND);
+        Bee bee1 = WorldUtils.spawnEntity(EntityType.BEE, (ServerLevel) bot.getBotWorld(), spawnPos);
+        Bee bee2 = WorldUtils.spawnEntity(EntityType.BEE, (ServerLevel) bot.getBotWorld(), spawnPos);
+        Bee bee3 = WorldUtils.spawnEntity(EntityType.BEE, (ServerLevel) bot.getBotWorld(), spawnPos);
+        Bee bee4 = WorldUtils.spawnEntity(EntityType.BEE, (ServerLevel) bot.getBotWorld(), spawnPos);
+        Bee bee5 = WorldUtils.spawnEntity(EntityType.BEE, (ServerLevel) bot.getBotWorld(), spawnPos);
         //? if <= 1.21.9 {
         if (bee1 != null) bee1.setPersistentAngerTarget(player.getUUID());
         if (bee2 != null) bee2.setPersistentAngerTarget(player.getUUID());

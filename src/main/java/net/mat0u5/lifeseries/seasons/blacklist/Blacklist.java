@@ -110,7 +110,11 @@ public class Blacklist {
                 ResourceKey<Item> key = ResourceKey.create(BuiltInRegistries.ITEM.key(), id);
 
                 // Check if the block exists in the registry
+                //? if <= 1.21 {
                 Item item = BuiltInRegistries.ITEM.get(key);
+                //?} else {
+                /*Item item = BuiltInRegistries.ITEM.getValue(key);
+                *///?}
                 if (item != null) {
                     newListIdentifier.add(id);
                     newList.add(item);
@@ -139,7 +143,11 @@ public class Blacklist {
                 ResourceKey<Block> key = ResourceKey.create(BuiltInRegistries.BLOCK.key(), id);
 
                 // Check if the block exists in the registry
+                //? if <= 1.21 {
                 Block block = BuiltInRegistries.BLOCK.get(key);
+                //?} else {
+                /*Block block = BuiltInRegistries.BLOCK.getValue(key);
+                *///?}
                 if (block != null) {
                     newList.add(block);
                 } else {
@@ -165,7 +173,7 @@ public class Blacklist {
                 //? if <=1.21 {
                 .registryOrThrow(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath("minecraft", "enchantment")));
                  //?} else
-                /*.getOrThrow(RegistryKey.ofRegistry(Identifier.of("minecraft", "enchantment")));*/
+                /*.lookupOrThrow(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath("minecraft", "enchantment")));*/
 
 
         for (String enchantmentId : loadClampedEnchants()) {
@@ -173,7 +181,11 @@ public class Blacklist {
 
             try {
                 ResourceLocation id = ResourceLocation.parse(enchantmentId);
+                //? if <= 1.21 {
                 Enchantment enchantment = enchantmentRegistry.get(id);
+                //?} else {
+                /*Enchantment enchantment = enchantmentRegistry.getValue(id);
+                *///?}
 
                 if (enchantment != null) {
                     newList.add(enchantmentRegistry.getResourceKey(enchantment).orElseThrow());
@@ -200,7 +212,7 @@ public class Blacklist {
                 //? if <=1.21 {
                 .registryOrThrow(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath("minecraft", "enchantment")));
         //?} else
-        /*.getOrThrow(RegistryKey.ofRegistry(Identifier.of("minecraft", "enchantment")));*/
+        /*.lookupOrThrow(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath("minecraft", "enchantment")));*/
 
 
         for (String enchantmentId : loadBlacklistedEnchants()) {
@@ -208,7 +220,11 @@ public class Blacklist {
 
             try {
                 ResourceLocation id = ResourceLocation.parse(enchantmentId);
+                //? if <= 1.21 {
                 Enchantment enchantment = enchantmentRegistry.get(id);
+                //?} else {
+                /*Enchantment enchantment = enchantmentRegistry.getValue(id);
+                *///?}
 
                 if (enchantment != null) {
                     newList.add(enchantmentRegistry.getResourceKey(enchantment).orElseThrow());
@@ -234,14 +250,18 @@ public class Blacklist {
         //? if <=1.21 {
         .registryOrThrow(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath("minecraft", "mob_effect")));
         //?} else
-        /*.getOrThrow(RegistryKey.ofRegistry(Identifier.of("minecraft", "mob_effect")));*/
+        /*.lookupOrThrow(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath("minecraft", "mob_effect")));*/
 
         for (String potionId : loadBannedPotions()) {
             if (!potionId.contains(":")) potionId = "minecraft:" + potionId;
 
             try {
                 ResourceLocation id = ResourceLocation.parse(potionId);
+                //? if <= 1.21 {
                 MobEffect enchantment = effectsRegistry.get(id);
+                //?} else {
+                /*MobEffect enchantment = effectsRegistry.getValue(id);
+                *///?}
 
                 if (enchantment != null) {
                     newList.add(effectsRegistry.wrapAsHolder(enchantment));

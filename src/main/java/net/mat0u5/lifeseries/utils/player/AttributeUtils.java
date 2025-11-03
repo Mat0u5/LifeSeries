@@ -71,78 +71,47 @@ public class AttributeUtils {
      */
 
     public static void setMaxPlayerHealth(ServerPlayer player, double value) {
-        //? if <=1.21 {
         Objects.requireNonNull(player.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(value);
-        //?} else
-        /*Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.MAX_HEALTH)).setBaseValue(value);*/
     }
 
     public static void setPlayerJumpHeight(ServerPlayer player, double value) {
-        //? if <=1.21 {
         Objects.requireNonNull(player.getAttribute(Attributes.JUMP_STRENGTH)).setBaseValue(value);
-        //?} else
-        /*Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.JUMP_STRENGTH)).setBaseValue(value);*/
     }
 
     public static void setSafeFallHeight(ServerPlayer player, double value) {
-        //? if <=1.21 {
         Objects.requireNonNull(player.getAttribute(Attributes.SAFE_FALL_DISTANCE)).setBaseValue(value);
-        //?} else
-        /*Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.SAFE_FALL_DISTANCE)).setBaseValue(value);*/
     }
 
     public static void setScale(ServerPlayer player, double value) {
-        //? if <=1.21 {
         Objects.requireNonNull(player.getAttribute(Attributes.SCALE)).setBaseValue(value);
-        //?} else {
-        /*Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.SCALE)).setBaseValue(value);
-         *///?}
     }
 
     public static void setJumpStrength(ServerPlayer player, double value) {
-        //? if <=1.21 {
         Objects.requireNonNull(player.getAttribute(Attributes.JUMP_STRENGTH)).setBaseValue(value);
-        //?} else
-        /*Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.JUMP_STRENGTH)).setBaseValue(value);*/
     }
 
     public static void setMovementSpeed(ServerPlayer player, double value) {
         if (player == null) return;
-        //? if <=1.21 {
         Objects.requireNonNull(player.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(value);
-        //?} else
-        /*Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED)).setBaseValue(value);*/
     }
 
     public static void setStepHeight(ServerPlayer player, double value) {
         if (player == null) return;
-        //? if <=1.21 {
         Objects.requireNonNull(player.getAttribute(Attributes.STEP_HEIGHT)).setBaseValue(value);
-        //?} else
-        /*Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.STEP_HEIGHT)).setBaseValue(value);*/
     }
 
     /*
         Getters
      */
     public static double getMaxPlayerHealth(ServerPlayer player) {
-        //? if <=1.21 {
         return player.getAttributeBaseValue(Attributes.MAX_HEALTH);
-        //?} else
-        /*return player.getAttributeBaseValue(EntityAttributes.MAX_HEALTH);*/
     }
 
     public static double getMovementSpeed(ServerPlayer player) {
-        //? if <=1.21 {
         return player.getAttributeBaseValue(Attributes.MOVEMENT_SPEED);
-        //?} else
-        /*return player.getAttributeBaseValue(EntityAttributes.MOVEMENT_SPEED);*/
     }
 
     public static double getPlayerSize(ServerPlayer player) {
-        //? if <=1.21 {
         return player.getAttributeBaseValue(Attributes.SCALE);
-        //?} else
-        /*return player.getAttributeBaseValue(EntityAttributes.SCALE);*/
     }
 }

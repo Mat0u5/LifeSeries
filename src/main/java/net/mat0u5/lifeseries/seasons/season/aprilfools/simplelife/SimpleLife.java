@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.aprilfools.simplelife;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.thirdlife.ThirdLife;
+import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -78,7 +79,7 @@ public class SimpleLife extends ThirdLife {
             BlockPos blockPos2 = (BlockPos)optional.orElse(blockPos);
             BlockPos blockPos3 = this.getNearbySpawnPos(world, blockPos2, 64);
             if (blockPos3 != null && this.doesNotSuffocateAt(world, blockPos3)) {
-                WanderingTrader wanderingTraderEntity = (WanderingTrader) EntityType.WANDERING_TRADER.spawn(world, blockPos3, MobSpawnType.EVENT);
+                WanderingTrader wanderingTraderEntity = WorldUtils.spawnEntity(EntityType.WANDERING_TRADER, world, blockPos3);
                 if (wanderingTraderEntity != null) {
                     for(int j = 0; j < 2; ++j) {
                         this.spawnLlama(world, wanderingTraderEntity, 4);
@@ -113,7 +114,7 @@ public class SimpleLife extends ThirdLife {
     private void spawnLlama(ServerLevel world, WanderingTrader wanderingTrader, int range) {
         BlockPos blockPos = this.getNearbySpawnPos(world, wanderingTrader.blockPosition(), range);
         if (blockPos != null) {
-            TraderLlama traderLlamaEntity = (TraderLlama)EntityType.TRADER_LLAMA.spawn(world, blockPos, MobSpawnType.EVENT);
+            TraderLlama traderLlamaEntity = WorldUtils.spawnEntity(EntityType.TRADER_LLAMA, world, blockPos);
             if (traderLlamaEntity != null) {
                 traderLlamaEntity.setLeashedTo(wanderingTrader, true);
             }

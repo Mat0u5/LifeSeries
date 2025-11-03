@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.Vec3i;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.damagesource.DamageSource;
@@ -32,8 +33,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 import static net.mat0u5.lifeseries.Main.currentSeason;
-//? if >= 1.21.2
-/*import net.minecraft.server.world.ServerWorld;*/
 
 @Mixin(value = Player.class, priority = 1)
 public abstract class PlayerEntityMixin {
@@ -42,7 +41,7 @@ public abstract class PlayerEntityMixin {
     //? if <=1.21 {
     private void onApplyDamage(DamageSource source, float amount, CallbackInfo ci) {
      //?} else
-    /*private void onApplyDamage(ServerWorld world, DamageSource source, float amount, CallbackInfo ci) {*/
+    /*private void onApplyDamage(ServerLevel world, DamageSource source, float amount, CallbackInfo ci) {*/
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         Player player = (Player) (Object) this;
         if (WatcherManager.isWatcher(player)) return;
@@ -52,11 +51,12 @@ public abstract class PlayerEntityMixin {
         }
     }
 
-    @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     //? if <= 1.21 {
+    @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     private void onPreDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
     //?} else {
-    /*private void onPreDamage(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    /*@Inject(method = "hurtServer", at = @At("HEAD"), cancellable = true)
+    private void onPreDamage(ServerLevel world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
     *///?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         Player player = (Player) (Object) this;

@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.gui.config.entries.extra;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.mat0u5.lifeseries.gui.config.entries.StringListPopupConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -15,10 +14,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import java.util.ArrayList;
 import java.util.List;
-//? if >= 1.21.2 && <= 1.21.5
-//? if >= 1.21.2
-//? if >= 1.21.6
-/*import net.minecraft.client.gl.RenderPipelines;*/
+//? if <= 1.21
+import com.mojang.blaze3d.systems.RenderSystem;
+
+//? if >= 1.21.2 {
+/*import net.minecraft.client.renderer.RenderType;
+import net.minecraft.util.ARGB;
+*///?}
 
 public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<MobEffect>> {
     private static final ResourceLocation EFFECT_BACKGROUND_TEXTURE = ResourceLocation.withDefaultNamespace("hud/effect_background");
@@ -42,7 +44,7 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<Mob
         //? if <=1.21 {
         .registryOrThrow(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath("minecraft", "mob_effect")));
         //?} else
-        /*.getOrThrow(RegistryKey.ofRegistry(Identifier.of("minecraft", "mob_effect")));*/
+        /*.lookupOrThrow(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath("minecraft", "mob_effect")));*/
 
         for (String potionId : items) {
             if (potionId.isEmpty()) continue;
@@ -50,7 +52,11 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<Mob
 
             try {
                 ResourceLocation id = ResourceLocation.parse(potionId);
+                //? if <= 1.21 {
                 MobEffect enchantment = effectsRegistry.get(id);
+                //?} else {
+                /*MobEffect enchantment = effectsRegistry.getValue(id);
+                *///?}
 
                 if (enchantment != null) {
                     newList.add(effectsRegistry.wrapAsHolder(enchantment));
@@ -84,10 +90,10 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<Mob
 
         RenderSystem.disableBlend();
         //?} else if <= 1.21.5 {
-        /*StatusEffectSpriteManager statusEffectSpriteManager = MinecraftClient.getInstance().getStatusEffectSpriteManager();
-        context.drawGuiTexture(RenderLayer::getGuiTextured, EFFECT_BACKGROUND_TEXTURE, x, y, 24, 24);
-        Sprite sprite = statusEffectSpriteManager.getSprite(effectType);
-        context.drawSpriteStretched(RenderLayer::getGuiTextured, sprite, x + 3, y + 3, 18, 18, ColorHelper.getWhite(1.0f));
+        /*MobEffectTextureManager statusEffectSpriteManager = Minecraft.getInstance().getMobEffectTextures();
+        context.blitSprite(RenderType::guiTextured, EFFECT_BACKGROUND_TEXTURE, x, y, 24, 24);
+        TextureAtlasSprite sprite = statusEffectSpriteManager.get(effectType);
+        context.blitSprite(RenderType::guiTextured, sprite, x + 3, y + 3, 18, 18, ARGB.white(1.0f));
         *///?} else {
         /*context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, EFFECT_BACKGROUND_TEXTURE, x, y, 24, 24);
         context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, InGameHud.getEffectTexture(effectType), x + 3, y + 3, 18, 18, ColorHelper.getWhite(1.0f));

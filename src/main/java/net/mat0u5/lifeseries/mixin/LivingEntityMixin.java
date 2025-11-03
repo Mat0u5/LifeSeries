@@ -23,18 +23,18 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+
 import static net.mat0u5.lifeseries.Main.blacklist;
 import static net.mat0u5.lifeseries.Main.currentSeason;
-//? if = 1.21.2 {
-//?}
-//? if >= 1.21.2
-/*import net.minecraft.entity.mob.CreakingEntity;*/
 
-//? if >= 1.21.9 {
-/*import net.minecraft.entity.decoration.MannequinEntity;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.AstralProjection;
-*///?}
+//? if >= 1.21.2 {
+/*import net.minecraft.world.entity.monster.creaking.Creaking;
+
+//? if = 1.21.2 {
+/^import java.util.function.DoubleSupplier;
+import java.util.function.Predicate;
+^///?}
 
 @Mixin(value = LivingEntity.class, priority = 1)
 public abstract class LivingEntityMixin {
@@ -60,19 +60,20 @@ public abstract class LivingEntityMixin {
         }
     }
 
-    @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     //? if <= 1.21 {
-    public void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
+    public void hurt(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
      //?} else
-    /*public void damage(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {*/
+    /^@Inject(method = "hurtServer", at = @At("HEAD"), cancellable = true)^/
+    public void hurtServer(ServerLevel world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
 
         LivingEntity entity = (LivingEntity) (Object) this;
         //? if >= 1.21.2 {
-        /*if (entity instanceof CreakingEntity creaking) {
+        /^if (entity instanceof Creaking creaking) {
             creaking.hurtTime = 20;
         }
-        *///?}
+        ^///?}
 
         ItemStack weapon = source.getWeaponItem();
         if (amount <= WindCharge.MAX_MACE_DAMAGE) return;
@@ -83,19 +84,19 @@ public abstract class LivingEntityMixin {
         //? if <= 1.21 {
         cir.setReturnValue(entity.hurt(source, WindCharge.MAX_MACE_DAMAGE));
          //?} else
-        /*cir.setReturnValue(entity.damage(world, source, WindCharge.MAX_MACE_DAMAGE));*/
+        /^cir.setReturnValue(entity.hurtServer(world, source, WindCharge.MAX_MACE_DAMAGE));^/
     }
 
     //? if = 1.21.2 {
-    /*@Inject(method = "isEntityLookingAtMe", at = @At("HEAD"), cancellable = true)
+    /^@Inject(method = "isLookingAtMe", at = @At("HEAD"), cancellable = true)
     public void isEntityLookingAtMe(LivingEntity entity, double d, boolean bl, boolean visualShape
             , Predicate<LivingEntity> predicate, DoubleSupplier[] entityYChecks, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity me = (LivingEntity) (Object) this;
-        if (me instanceof CreakingEntity creaking) {
-            if (creaking.isTeammate(entity)) cir.setReturnValue(false);
+        if (me instanceof Creaking creaking) {
+            if (creaking.isAlliedTo(entity)) cir.setReturnValue(false);
         }
     }
-    *///?}
+    ^///?}
 
     @Inject(method = "addEffect(Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/world/entity/Entity;)Z", at = @At("HEAD"), cancellable = true)
     public void addStatusEffect(MobEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir) {
@@ -109,9 +110,9 @@ public abstract class LivingEntityMixin {
         }
     }
 
-    /*
+    /^
         Superpowers
-     */
+     ^/
 
     @Unique
     private DamageSource ls$lastDamageSource;
@@ -123,14 +124,18 @@ public abstract class LivingEntityMixin {
         this.ls$lastDamageSource = source;
     }
     //?} else {
-    /*@Inject(method = "damage", at = @At("HEAD"))
-    private void captureDamageSource(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    /^@Inject(method = "hurtServer", at = @At("HEAD"))
+    private void captureDamageSource(ServerLevel world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         this.ls$lastDamageSource = source;
     }
-    *///?}
+    ^///?}
 
     @ModifyArg(
+            //? if <= 1.21 {
             method = "hurt",
+            //?} else {
+            /^method = "hurtServer",
+            ^///?}
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"),
             index = 0
     )
@@ -156,8 +161,8 @@ public abstract class LivingEntityMixin {
     //? if <= 1.21 {
     @Inject(method = "checkTotemDeathProtection", at = @At("HEAD"))
     //?} else {
-    /*@Inject(method = "tryUseDeathProtector", at = @At("HEAD"))
-    *///?}
+    /^@Inject(method = "checkTotemDeathProtection", at = @At("HEAD"))
+    ^///?}
     private void stopFakeTotem(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
         if (Main.modDisabled()) return;
         LivingEntity entity = (LivingEntity) (Object) this;
@@ -171,7 +176,7 @@ public abstract class LivingEntityMixin {
 
 
     //? if >= 1.21.9 {
-    /*@Inject(method = "tick", at = @At("HEAD"))
+    /^@Inject(method = "tick", at = @At("HEAD"))
     public void tickMannequin(CallbackInfo ci) {
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity instanceof MannequinEntity mannequin && mannequin instanceof MannequinEntityAccessor mannequinAccessor && mannequin.age < 0) {
@@ -206,5 +211,6 @@ public abstract class LivingEntityMixin {
             }
         }
     }
-    *///?}
+    ^///?}
 }
+*/

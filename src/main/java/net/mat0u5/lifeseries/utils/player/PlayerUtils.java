@@ -26,7 +26,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.RelativeMovement;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
@@ -42,6 +41,11 @@ import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.Main.server;
+
+//? if <= 1.21
+import net.minecraft.world.entity.RelativeMovement;
+//? if >= 1.21.2
+/*import net.minecraft.world.entity.Relative;*/
 
 public class PlayerUtils {
     private static HashMap<Component, Integer> broadcastCooldown = new HashMap<>();
@@ -317,7 +321,7 @@ public class PlayerUtils {
         //? if <= 1.21 {
         return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), (RemoteChatSession.Data) Optionull.map(player.getChatSession(), RemoteChatSession::asData));
         //?} else if <= 1.21.2 {
-        /*return new PlayerListS2CPacket.Entry(player.getUuid(), player.getGameProfile(), listed, player.networkHandler.getLatency(), player.interactionManager.getGameMode(), player.getPlayerListName(), player.getPlayerListOrder(), (PublicPlayerSession.Serialized)Nullables.map(player.getSession(), PublicPlayerSession::toSerialized));
+        /*return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), player.getTabListOrder(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
         *///?} else if <= 1.21.6 {
         /*return new PlayerListS2CPacket.Entry(player.getUuid(), player.getGameProfile(), listed, player.networkHandler.getLatency(), player.interactionManager.getGameMode(), player.getPlayerListName(), player.isPartVisible(PlayerModelPart.HAT), player.getPlayerListOrder(), (PublicPlayerSession.Serialized)Nullables.map(player.getSession(), PublicPlayerSession::toSerialized));
         *///?} else {
@@ -469,7 +473,7 @@ public class PlayerUtils {
         //? if <= 1.21 {
         player.teleportTo(world, destX, destY, destZ, EnumSet.noneOf(RelativeMovement.class), yaw, pitch);
         //?} else {
-        /*player.teleport(world, destX, destY, destZ, EnumSet.noneOf(PositionFlag.class), yaw, pitch, false);
+        /*player.teleportTo(world, destX, destY, destZ, EnumSet.noneOf(Relative.class), yaw, pitch, false);
          *///?}
     }
 
@@ -501,7 +505,7 @@ public class PlayerUtils {
         //? if <= 1.21 {
         player.hurt(source, amount);
         //?} else {
-        /*player.damage(world, source, amount);
+        /*player.hurtServer(world, source, amount);
         *///?}
     }
 

@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.registries;
 
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.mat0u5.lifeseries.entity.pathfinder.PathFinder;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
@@ -8,9 +7,15 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+//? if <= 1.21 {
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.minecraft.world.entity.EntityDimensions;
+//?} else {
+/*import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityType;
+import net.minecraft.resources.ResourceKey;
+*///?}
 
 public class MobRegistry {
     //? if <= 1.21 {
@@ -49,29 +54,29 @@ public class MobRegistry {
     //?} else {
     /*public static final EntityType<Snail> SNAIL = register(
             Snail.ID,
-            FabricEntityType.Builder.createMob(Snail::new, SpawnGroup.MONSTER, x -> x
+            FabricEntityType.Builder.createMob(Snail::new, MobCategory.MONSTER, x -> x
                             .defaultAttributes(Snail::createAttributes))
-                    .dimensions(0.5f, 0.6f)
-                    .maxTrackingRange(512)
+                    .sized(0.5f, 0.6f)
+                    .clientTrackingRange(512)
     );
     public static final EntityType<PathFinder> PATH_FINDER = register(
             PathFinder.ID,
-            FabricEntityType.Builder.createMob(PathFinder::new, SpawnGroup.AMBIENT, x -> x
+            FabricEntityType.Builder.createMob(PathFinder::new, MobCategory.AMBIENT, x -> x
                             .defaultAttributes(PathFinder::createAttributes))
-                    .dimensions(0.5f, 0.6f)
-                    .maxTrackingRange(0)
+                    .sized(0.5f, 0.6f)
+                    .clientTrackingRange(0)
     );
     public static final EntityType<TriviaBot> TRIVIA_BOT = register(
             TriviaBot.ID,
-            FabricEntityType.Builder.createMob(TriviaBot::new, SpawnGroup.AMBIENT, x -> x
+            FabricEntityType.Builder.createMob(TriviaBot::new, MobCategory.AMBIENT, x -> x
                             .defaultAttributes(TriviaBot::createAttributes))
-                    .dimensions(0.65f, 1.8f)
-                    .maxTrackingRange(512)
+                    .sized(0.65f, 1.8f)
+                    .clientTrackingRange(512)
     );
 
-    private static <T extends Entity> EntityType<T> register(Identifier id, EntityType.Builder<T> builder) {
-        EntityType<T> type = builder.build(RegistryKey.of(Registries.ENTITY_TYPE.getKey(), id));
-        return Registry.register(Registries.ENTITY_TYPE, id, type);
+    private static <T extends Entity> EntityType<T> register(ResourceLocation id, EntityType.Builder<T> builder) {
+        EntityType<T> type = builder.build(ResourceKey.create(BuiltInRegistries.ENTITY_TYPE.key(), id));
+        return Registry.register(BuiltInRegistries.ENTITY_TYPE, id, type);
     }
     *///?}
 

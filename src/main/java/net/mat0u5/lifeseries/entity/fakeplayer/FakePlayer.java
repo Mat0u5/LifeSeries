@@ -29,7 +29,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-//?}
 /*
  * This file includes code from the Fabric Carpet project: https://github.com/gnembon/fabric-carpet
  *
@@ -163,7 +162,7 @@ public class FakePlayer extends ServerPlayer {
             //? if <= 1.21 {
     public boolean hurt(DamageSource source, float amount) {
      //?} else {
-    /*public boolean damage(ServerWorld world, DamageSource source, float amount) {
+    /*public boolean hurtServer(ServerLevel world, DamageSource source, float amount) {
         *///?}
         if (shadow != null) {
             ServerPlayer player = PlayerUtils.getPlayer(shadow);
@@ -182,7 +181,7 @@ public class FakePlayer extends ServerPlayer {
         //? if <= 1.21 {
         return super.hurt(source, amount);
          //?} else {
-        /*return super.damage(world, source, amount);
+        /*return super.hurtServer(world, source, amount);
         *///?}
 
     }

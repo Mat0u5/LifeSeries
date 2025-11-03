@@ -41,7 +41,7 @@ public class EnchantListConfigEntry extends StringConfigEntry {
         //? if <=1.21 {
         .registryOrThrow(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath("minecraft", "enchantment")));
         //?} else
-        /*.getOrThrow(RegistryKey.ofRegistry(Identifier.of("minecraft", "enchantment")));*/
+        /*.lookupOrThrow(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath("minecraft", "enchantment")));*/
 
 
         for (String enchantmentId : items) {
@@ -50,7 +50,11 @@ public class EnchantListConfigEntry extends StringConfigEntry {
 
             try {
                 ResourceLocation id = ResourceLocation.parse(enchantmentId);
+                //? if <= 1.21 {
                 Enchantment enchantment = enchantmentRegistry.get(id);
+                //?} else {
+                /*Enchantment enchantment = enchantmentRegistry.getValue(id);
+                *///?}
 
                 if (enchantment != null) {
                     newList.add(enchantmentRegistry.getResourceKey(enchantment).orElseThrow());

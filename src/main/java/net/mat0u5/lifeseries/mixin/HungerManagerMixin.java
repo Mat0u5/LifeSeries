@@ -58,7 +58,7 @@ public class HungerManagerMixin implements IHungerManager {
     //? if <= 1.21 {
     private void updateHead(Player player, CallbackInfo ci) {
     //?} else {
-    /*private void updateHead(ServerPlayerEntity player, CallbackInfo ci) {
+    /*private void updateHead(ServerPlayer player, CallbackInfo ci) {
     *///?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (player instanceof ServerPlayer serverPlayer) {
@@ -72,7 +72,7 @@ public class HungerManagerMixin implements IHungerManager {
     //? if <= 1.21 {
     private void updateTail(Player player, CallbackInfo ci) {
     //?} else {
-    /*private void updateTail(ServerPlayerEntity player, CallbackInfo ci) {
+    /*private void updateTail(ServerPlayer player, CallbackInfo ci) {
     *///?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (ls$prevFoodLevel != foodLevel || ls$prevSaturationLevel != saturationLevel) {

@@ -12,7 +12,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.RelativeMovement;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
@@ -71,7 +70,6 @@ public class Teleportation extends Superpower {
                     spawnTeleportParticles(playerWorld, playerPos);
                     spawnTeleportParticles(lookingAtPlayerWorld, lookingAtPlayerPos);
 
-                    Set<RelativeMovement> flags = EnumSet.noneOf(RelativeMovement.class);
                     ServerLevel storedWorld = playerWorld;
                     Vec3 storedPos = playerPos;
                     float storedYaw = player.getYRot();

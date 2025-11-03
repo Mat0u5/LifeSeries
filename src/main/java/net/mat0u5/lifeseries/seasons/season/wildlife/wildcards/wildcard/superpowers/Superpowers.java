@@ -44,7 +44,7 @@ public enum Superpowers {
         if (this == SUPERSPEED) return new Superspeed(player);
         if (this == NECROMANCY) return new Necromancy(player);
         //? if >= 1.21.2 {
-        /*if (this == CREAKING) return new Creaking(player);
+        /*if (this == CREAKING) return new CreakingPower(player);
         if (this == FLIGHT) return new Flight(player);
         *///?}
         if (DependencyManager.voicechatLoaded()) {

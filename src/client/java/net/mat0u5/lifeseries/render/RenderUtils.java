@@ -7,9 +7,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import java.util.List;
-//? if >= 1.21.2 && <= 1.21.5
-//? if >= 1.21.6
-/*import net.minecraft.client.gl.RenderPipelines;*/
 
 public class RenderUtils {
 

@@ -49,7 +49,7 @@ public class Superspeed extends ToggleableSuperpower {
             //? if <= 1.21 {
             player.playNotifySound(SoundEvents.GENERIC_EAT, SoundSource.MASTER, 1, 1);
             //?} else {
-            /*player.playSoundToPlayer(SoundEvents.ENTITY_GENERIC_EAT.value(), SoundCategory.MASTER, 1, 1);
+            /*player.playNotifySound(SoundEvents.GENERIC_EAT.value(), SoundSource.MASTER, 1, 1);
             *///?}
             return;
         }

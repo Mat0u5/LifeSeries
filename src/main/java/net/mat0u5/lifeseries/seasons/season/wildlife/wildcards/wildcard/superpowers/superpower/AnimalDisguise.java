@@ -14,11 +14,9 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
-
 
 public class AnimalDisguise extends ToggleableSuperpower {
 
@@ -87,7 +85,7 @@ public class AnimalDisguise extends ToggleableSuperpower {
         if (morph == null) return;
         for (int i = 0; i < 2; i++) {
             BlockPos spawnPos =  WorldUtils.getCloseBlockPos(PlayerUtils.getServerWorld(player), player.blockPosition(), 6, 3, true);
-            Entity spawnedEntity = morph.spawn(PlayerUtils.getServerWorld(player), spawnPos, MobSpawnType.COMMAND);
+            Entity spawnedEntity = WorldUtils.spawnEntity(morph, PlayerUtils.getServerWorld(player), spawnPos);
         }
     }
 }

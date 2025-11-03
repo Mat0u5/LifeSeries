@@ -12,8 +12,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.RelativeMovement;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
@@ -31,6 +29,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.Objects;
+
+//? if <= 1.21
+import net.minecraft.world.entity.RelativeMovement;
+//? if >= 1.21.2
+/*import net.minecraft.world.entity.Relative;*/
 
 @SuppressWarnings("resource")
 public class SnailPathfinding {
@@ -70,7 +73,7 @@ public class SnailPathfinding {
             pathFinder = null;
         }
         else if (pathFinder == null || pathFinder.isRemoved()) {
-            pathFinder = MobRegistry.PATH_FINDER.spawn((ServerLevel) snail.getSnailWorld(), snail.blockPosition(), MobSpawnType.COMMAND);
+            pathFinder = WorldUtils.spawnEntity(MobRegistry.PATH_FINDER, (ServerLevel) snail.getSnailWorld(), snail.blockPosition());
         }
         else {
             pathFinder.resetDespawnTimer();
@@ -81,7 +84,7 @@ public class SnailPathfinding {
             groundPathFinder = null;
         }
         else if (groundPathFinder == null || groundPathFinder.isRemoved()) {
-            groundPathFinder = MobRegistry.PATH_FINDER.spawn((ServerLevel) snail.getSnailWorld(), snail.blockPosition(), MobSpawnType.COMMAND);
+            groundPathFinder = WorldUtils.spawnEntity(MobRegistry.PATH_FINDER, (ServerLevel) snail.getSnailWorld(), snail.blockPosition());
         }
         else {
             groundPathFinder.resetDespawnTimer();
@@ -94,10 +97,10 @@ public class SnailPathfinding {
         if (pos == null) return;
         if (groundPathFinder != null) groundPathFinder.teleportTo(world, snail.getX(), pos.getY() + 1.0, snail.getZ(), EnumSet.noneOf(RelativeMovement.class), snail.getYRot(), snail.getXRot());
         //?} else {
-        /*if (pathFinder != null) pathFinder.teleport(world, snail.getX(), snail.getY(), snail.getZ(), EnumSet.noneOf(PositionFlag.class), snail.getYaw(), snail.getPitch(), false);
+        /*if (pathFinder != null) pathFinder.teleportTo(world, snail.getX(), snail.getY(), snail.getZ(), EnumSet.noneOf(Relative.class), snail.getYRot(), snail.getXRot(), false);
         BlockPos pos = getGroundBlock();
         if (pos == null) return;
-        if (groundPathFinder != null) groundPathFinder.teleport(world, snail.getX(), pos.getY()+1, snail.getZ(), EnumSet.noneOf(PositionFlag.class), snail.getYaw(), snail.getPitch(), false);
+        if (groundPathFinder != null) groundPathFinder.teleportTo(world, snail.getX(), pos.getY()+1, snail.getZ(), EnumSet.noneOf(Relative.class), snail.getYRot(), snail.getXRot(), false);
         *///?}
     }
 
@@ -107,8 +110,8 @@ public class SnailPathfinding {
             if (groundPathFinder != null) groundPathFinder.kill();
             if (pathFinder != null) pathFinder.kill();
             //?} else {
-            /*if (groundPathFinder != null) groundPathFinder.kill((ServerWorld) groundPathFinder.ls$getEntityWorld());
-            if (pathFinder != null) pathFinder.kill((ServerWorld) pathFinder.ls$getEntityWorld());
+            /*if (groundPathFinder != null) groundPathFinder.kill((ServerLevel) groundPathFinder.ls$getEntityWorld());
+            if (pathFinder != null) pathFinder.kill((ServerLevel) pathFinder.ls$getEntityWorld());
             *///?}
             if (groundPathFinder != null) groundPathFinder.discard();
             if (pathFinder != null) pathFinder.discard();
@@ -118,7 +121,12 @@ public class SnailPathfinding {
     @Nullable
     public BlockPos getGroundBlock() {
         Vec3 startPos = snail.ls$getEntityPos();
-        Vec3 endPos = new Vec3(startPos.x(), snail.getSnailWorld().getMinBuildHeight(), startPos.z());
+        //? if <= 1.21 {
+        int minY = snail.getSnailWorld().getMinBuildHeight();
+        //?} else {
+        /*int minY = snail.getSnailWorld().getMinY();
+        *///?}
+        Vec3 endPos = new Vec3(startPos.x(), minY, startPos.z());
 
         BlockHitResult result = snail.getSnailWorld().clip(
                 new ClipContext(
@@ -290,8 +298,8 @@ public class SnailPathfinding {
                 Objects.requireNonNull(snail.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(movementSpeed);
                 Objects.requireNonNull(snail.getAttribute(Attributes.FLYING_SPEED)).setBaseValue(flyingSpeed);
                 //?} else {
-                /*Objects.requireNonNull(snail.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED)).setBaseValue(movementSpeed);
-                Objects.requireNonNull(snail.getAttributeInstance(EntityAttributes.FLYING_SPEED)).setBaseValue(flyingSpeed);
+                /*Objects.requireNonNull(snail.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(movementSpeed);
+                Objects.requireNonNull(snail.getAttribute(Attributes.FLYING_SPEED)).setBaseValue(flyingSpeed);
                 *///?}
             }
         }

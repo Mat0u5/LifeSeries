@@ -28,19 +28,14 @@ public class ItemStackMixin {
             cir.setReturnValue(true);
             return;
         }
-        //? if <= 1.21 {
         PatchedDataComponentMap comp1 = new PatchedDataComponentMap(stack.getComponents());
         PatchedDataComponentMap comp2 = new PatchedDataComponentMap(otherStack.getComponents());
-        //?} else {
-            /*MergedComponentMap comp1 = new MergedComponentMap(stack.getComponents());
-            MergedComponentMap comp2 = new MergedComponentMap(otherStack.getComponents());
-            *///?}
 
         comp1.set(DataComponents.FOOD, stack.getPrototype().get(DataComponents.FOOD));
         comp2.set(DataComponents.FOOD, stack.getPrototype().get(DataComponents.FOOD));
         //? if >= 1.21.2 {
-            /*comp1.set(DataComponentTypes.CONSUMABLE, stack.getDefaultComponents().get(DataComponentTypes.CONSUMABLE));
-            comp2.set(DataComponentTypes.CONSUMABLE, stack.getDefaultComponents().get(DataComponentTypes.CONSUMABLE));
+            /*comp1.set(DataComponents.CONSUMABLE, stack.getPrototype().get(DataComponents.CONSUMABLE));
+            comp2.set(DataComponents.CONSUMABLE, stack.getPrototype().get(DataComponents.CONSUMABLE));
              *///?}
         if (Objects.equals(comp1, comp2)) {
             cir.setReturnValue(true);
@@ -56,7 +51,7 @@ public class ItemStackMixin {
         for (DataComponentType<?> type : allTypes) {
             if (type.equals(DataComponents.FOOD)) continue;
             //? if >= 1.21.2
-            /*if (type.equals(DataComponentTypes.CONSUMABLE)) continue;*/
+            /*if (type.equals(DataComponents.CONSUMABLE)) continue;*/
 
             Object value1 = comp1.get(type);
             Object value2 = comp2.get(type);

@@ -1,19 +1,17 @@
 package net.mat0u5.lifeseries.render;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+
 //? if <= 1.21 {
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-//?}
-//? if >= 1.21.2 {
-//?}
-//? if >= 1.21.2 && <= 1.21.5
-//? if >= 1.21.6
+//?} else {
+/*import net.minecraft.client.renderer.RenderType;
+import net.minecraft.util.ARGB;
+*///?}
 
 public class VignetteRenderer {
     private static final ResourceLocation VIGNETTE_TEXTURE = ResourceLocation.withDefaultNamespace("textures/misc/vignette.png");
@@ -50,9 +48,9 @@ public class VignetteRenderer {
         RenderSystem.defaultBlendFunc();
         RenderSystem.disableBlend();
         //?} else if <= 1.21.5 {
-        /*int color = ColorHelper.fromFloats(1.0F, darkness, darkness, darkness);
-        context.drawTexture(RenderLayer::getVignette, VIGNETTE_TEXTURE, 0, 0, 0.0F, 0.0F,
-                context.getScaledWindowWidth(), context.getScaledWindowHeight(), context.getScaledWindowWidth(), context.getScaledWindowHeight(), color);
+        /*int color = ARGB.colorFromFloat(1.0F, darkness, darkness, darkness);
+        context.blit(RenderType::vignette, VIGNETTE_TEXTURE, 0, 0, 0.0F, 0.0F,
+                context.guiWidth(), context.guiHeight(), context.guiWidth(), context.guiHeight(), color);
         *///?} else {
         /*int color = ColorHelper.fromFloats(1.0F, darkness, darkness, darkness);
         context.drawTexture(RenderPipelines.VIGNETTE, VIGNETTE_TEXTURE, 0, 0, 0.0F, 0.0F,

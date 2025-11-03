@@ -37,7 +37,7 @@ public class MorphComponent {
                     //? if <= 1.21 {
                     Entity entity = morph.create(serverPlayer.level());
                     //?} else {
-                    /*Entity entity = morph.create(PlayerUtils.getServerWorld(serverPlayer), SpawnReason.COMMAND);
+                    /*Entity entity = morph.create(PlayerUtils.getServerWorld(serverPlayer), EntitySpawnReason.COMMAND);
                      *///?}
                     if (entity != null) {
                         ((IMorph) entity).setFromMorph(true);

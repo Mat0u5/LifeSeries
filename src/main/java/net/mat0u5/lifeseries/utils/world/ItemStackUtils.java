@@ -9,7 +9,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.ItemLore;
@@ -22,6 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.server;
+//? if <= 1.21
+import net.minecraft.world.item.EnchantedBookItem;
+//? if >= 1.21.2
+/*import net.minecraft.world.item.enchantment.EnchantmentHelper;*/
 
 public class ItemStackUtils {
     public static void clearItemLore(ItemStack itemStack) {
@@ -210,10 +213,9 @@ public class ItemStackUtils {
         );
         return enchantedBook;
         //?} else {
-
-        /*RegistryEntry<Enchantment> entry = getEnchantmentEntry(enchantment);
-        ItemStack enchantedBook = EnchantmentHelper.getEnchantedBookWith(
-                new EnchantmentLevelEntry(entry, level)
+        /*Holder<Enchantment> entry = getEnchantmentEntry(enchantment);
+        ItemStack enchantedBook = EnchantmentHelper.createBook(
+                new EnchantmentInstance(entry, level)
         );
         return enchantedBook;
         *///?}
@@ -227,8 +229,8 @@ public class ItemStackUtils {
                 .lookupOrThrow(Registries.ENCHANTMENT)
                 .getOrThrow(enchantment);
         //?} else {
-        /*return server.getRegistryManager()
-                .getOrThrow(RegistryKeys.ENCHANTMENT)
+        /*return server.registryAccess()
+                .lookupOrThrow(Registries.ENCHANTMENT)
                 .getOrThrow(enchantment);
         *///?}
     }

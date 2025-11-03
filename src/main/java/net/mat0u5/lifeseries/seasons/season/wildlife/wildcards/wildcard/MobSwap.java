@@ -10,6 +10,7 @@ import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -264,7 +265,7 @@ public class MobSwap extends Wildcard {
                 //? if <=1.21 {
                 entity.kill();
                  //?} else {
-                /*entity.kill((ServerWorld) entity.ls$getEntityWorld());
+                /*entity.kill((ServerLevel) entity.ls$getEntityWorld());
                 *///?}
             }
             if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.RULE_DOMOBLOOT, true);
@@ -288,7 +289,7 @@ public class MobSwap extends Wildcard {
 
                 EntityType<?> randomMob = getRandomMob(progress, dangerThresholdMin, dangerThresholdMax);
                 if (randomMob != null) {
-                    Entity newMob = randomMob.spawn(world, entity.blockPosition(), MobSpawnType.COMMAND);
+                    Entity newMob = WorldUtils.spawnEntity(randomMob, world, entity.blockPosition());
                     if (newMob != null) {
                         newMob.moveTo(entity.getX(), entity.getY(), entity.getZ(), entity.getYRot(), entity.getXRot());
                         newMob.addTag("mobswap");
@@ -356,7 +357,7 @@ public class MobSwap extends Wildcard {
                 //? if <=1.21 {
                 entity.kill();
                  //?} else {
-                /*entity.kill((ServerWorld) entity.ls$getEntityWorld());
+                /*entity.kill((ServerLevel) entity.ls$getEntityWorld());
                 *///?}
             }
             if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.RULE_DOMOBLOOT, true);

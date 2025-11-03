@@ -24,6 +24,9 @@ import java.util.OptionalInt;
 
 import static net.mat0u5.lifeseries.Main.*;
 
+//? if >= 1.21.2
+/*import java.util.Collection;*/
+
 @Mixin(value = ServerPlayer.class, priority = 1)
 public class ServerPlayerEntityMixin implements IServerPlayerEntity {
 
@@ -86,9 +89,9 @@ public class ServerPlayerEntityMixin implements IServerPlayerEntity {
         ls$onUpdatedEffects(effect, false);
     }
     //?} else {
-    /*@Inject(method = "onStatusEffectsRemoved", at = @At("TAIL"))
-    private void onStatusEffectRemoved(Collection<StatusEffectInstance> effects, CallbackInfo ci) {
-        for (StatusEffectInstance effect : effects) {
+    /*@Inject(method = "onEffectsRemoved", at = @At("TAIL"))
+    private void onStatusEffectRemoved(Collection<MobEffectInstance> effects, CallbackInfo ci) {
+        for (MobEffectInstance effect : effects) {
             ls$onUpdatedEffects(effect, false);
         }
     }

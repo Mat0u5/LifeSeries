@@ -183,7 +183,7 @@ public class AstralProjection extends ToggleableSuperpower {
     //? if <= 1.21 {
     public void onDamageClone(DamageSource source, float amount) {
      //?} else {
-    /*public void onDamageClone(ServerWorld world, DamageSource source, float amount) {
+    /*public void onDamageClone(ServerLevel world, DamageSource source, float amount) {
     *///?}
         deactivate();
         ServerPlayer player = getPlayer();

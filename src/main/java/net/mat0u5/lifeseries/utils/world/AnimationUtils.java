@@ -16,10 +16,11 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.component.CustomModelData;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
+//? if <= 1.21
+import net.minecraft.world.item.component.CustomModelData;
 //? if >= 1.21.2 {
 /*import java.awt.Color;
 *///?}
@@ -61,7 +62,7 @@ public class AnimationUtils {
         //? if <= 1.21 {
         totemItem.set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(red ? 2 : 1));
          //?} else {
-        /*totemItem.set(DataComponentTypes.ITEM_MODEL, Identifier.of("lifeseries",red ? "task_red_totem" : "task_totem"));
+        /*totemItem.set(DataComponents.ITEM_MODEL, ResourceLocation.fromNamespaceAndPath("lifeseries",red ? "task_red_totem" : "task_totem"));
         //PlaySoundConsumeEffect playSoundEvent = new PlaySoundConsumeEffect(RegistryEntry.of(SoundEvent.of(Identifier.of("secretlife_task_totem"))));
         //totemItem.set(DataComponentTypes.DEATH_PROTECTION, new DeathProtectionComponent(List.of(playSoundEvent)));
         *///?}
@@ -183,7 +184,7 @@ public class AnimationUtils {
                     //? if <= 1.21 {
                     DustParticleOptions particleEffect = new DustParticleOptions(color, 1.0f);
                     //?} else
-                    /*DustParticleEffect particleEffect = new DustParticleEffect(new Color(color.x, color.y, color.z).getRGB(), 1.0f);*/
+                    /*DustParticleOptions particleEffect = new DustParticleOptions(new Color(color.x, color.y, color.z).getRGB(), 1.0f);*/
 
                     // Spawn particle with random offset
                     world.sendParticles(

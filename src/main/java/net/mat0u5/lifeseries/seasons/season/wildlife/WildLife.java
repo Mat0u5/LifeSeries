@@ -20,6 +20,7 @@ import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
@@ -237,7 +238,7 @@ public class WildLife extends Season {
                 //? if <= 1.21 {
                 entity.spawnAtLocation(Items.TOTEM_OF_UNDYING.getDefaultInstance());
                  //?} else {
-                /*entity.dropStack((ServerWorld) entity.ls$getEntityWorld(), Items.TOTEM_OF_UNDYING.getDefaultStack());
+                /*entity.spawnAtLocation((ServerLevel) entity.ls$getEntityWorld(), Items.TOTEM_OF_UNDYING.getDefaultInstance());
                 *///?}
             }
         }
@@ -246,7 +247,7 @@ public class WildLife extends Season {
     @Override
     public void onPlayerDeath(ServerPlayer player, DamageSource source) {
         if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.CREAKING)) {
-            if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof Creaking creakingPower) {
+            if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof CreakingPower creakingPower) {
                 creakingPower.deactivate();
                 reloadPlayerTeam(player);
             }

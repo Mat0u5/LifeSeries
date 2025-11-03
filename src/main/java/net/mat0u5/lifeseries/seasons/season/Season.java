@@ -47,8 +47,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.*;
 import static net.mat0u5.lifeseries.Main.*;
 import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
-//? if >= 1.21.2
-/*import net.minecraft.server.world.ServerWorld;*/
 
 public abstract class Season {
     public static final String RESOURCEPACK_MAIN_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-main-fc0fa2a3efe2aefdba5a3c0deda61039fc43a008/main.zip";
@@ -256,7 +254,7 @@ public abstract class Season {
                 //? if <= 1.21 {
                 player.spawnAtLocation(item);
                 //?} else
-                /*player.dropStack(PlayerUtils.getServerWorld(player), item);*/
+                /*player.spawnAtLocation(PlayerUtils.getServerWorld(player), item);*/
             }
             player.getInventory().clearContent();
         }
@@ -355,7 +353,12 @@ public abstract class Season {
         if (player.ls$isAlive()) return;
         for (Map.Entry<Vec3, List<Float>> entry : info.entrySet()) {
             Vec3 pos = entry.getKey();
-            if (pos.y <= PlayerUtils.getServerWorld(player).getMinBuildHeight()) continue;
+            //? if <= 1.21 {
+            int minY = PlayerUtils.getServerWorld(player).getMinBuildHeight();
+            //?} else {
+            /*int minY = PlayerUtils.getServerWorld(player).getMinY();
+            *///?}
+            if (pos.y <= minY) continue;
 
             PlayerUtils.teleport(player, PlayerUtils.getServerWorld(player), pos, entry.getValue().get(0), entry.getValue().get(1));
             break;
@@ -427,7 +430,7 @@ public abstract class Season {
             //? if <=1.21 {
             entity.spawnAtLocation(spawnEggItem);
             //?} else
-            /*entity.dropStack((ServerWorld) entity.ls$getEntityWorld(), spawnEggItem);*/
+            /*entity.spawnAtLocation((ServerLevel) entity.ls$getEntityWorld(), spawnEggItem);*/
         }
     }
 

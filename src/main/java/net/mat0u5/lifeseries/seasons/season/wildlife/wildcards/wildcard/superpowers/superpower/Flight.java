@@ -22,6 +22,12 @@ import net.minecraft.world.item.component.Unbreakable;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 
+//? if >= 1.21.2 {
+/*import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.equipment.Equippable;
+import java.util.Optional;
+*///?}
+
 public class Flight extends Superpower {
     public boolean isLaunchedUp = false;
     private int onGroundTicks = 0;
@@ -123,10 +129,10 @@ public class Flight extends Superpower {
             helmet.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, false);
             helmet.set(DataComponents.ITEM_NAME, Component.nullToEmpty("Winged Helmet"));
             //? if >= 1.21.2 {
-            /*helmet.set(DataComponentTypes.ITEM_MODEL, Identifier.of("lifeseries","winged_helmet"));
-            helmet.set(DataComponentTypes.GLIDER, Unit.INSTANCE);
+            /*helmet.set(DataComponents.ITEM_MODEL, ResourceLocation.fromNamespaceAndPath("lifeseries","winged_helmet"));
+            helmet.set(DataComponents.GLIDER, Unit.INSTANCE);
                 //? if <= 1.21.4 {
-                helmet.set(DataComponentTypes.EQUIPPABLE, new EquippableComponent(EquipmentSlot.HEAD, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false));
+            helmet.set(DataComponents.EQUIPPABLE, new Equippable(EquipmentSlot.HEAD, SoundEvents.ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false));
                 //?} else if <= 1.21.5 {
                 /^helmet.set(DataComponentTypes.EQUIPPABLE, new EquippableComponent(EquipmentSlot.HEAD, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false, false));
                 ^///?} else {

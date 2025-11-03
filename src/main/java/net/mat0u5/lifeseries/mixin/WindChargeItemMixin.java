@@ -8,9 +8,7 @@ import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.WindChargeItem;
 import net.minecraft.world.level.Level;
@@ -21,13 +19,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
+//? if <= 1.21 {
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.item.ItemStack;
+//?}
+//? if >= 1.21.2
+/*import net.minecraft.world.InteractionResult;*/
+
 @Mixin(value = WindChargeItem.class, priority = 1)
 public class WindChargeItemMixin {
     @Inject(method = "use", at = @At("RETURN"))
     //? if <= 1.21 {
     public void use(Level world, Player user, InteractionHand hand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
     //?} else
-    /*public void use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<ActionResult> cir) {*/
+    /*public void use(Level world, Player user, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {*/
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (user instanceof ServerPlayer player) {
             if (currentSeason.getSeason() != Seasons.WILD_LIFE) return;

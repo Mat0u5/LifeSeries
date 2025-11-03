@@ -51,10 +51,10 @@ public class ItemSpawner {
                     .withParameter(LootContextParams.THIS_ENTITY, player)
                     .create(LootContextParamSets.COMMAND);
             //?} else {
-            /*LootWorldContext parameters = new LootWorldContext.Builder(world)
-                    .add(LootContextParameters.ORIGIN, player.ls$getEntityPos())
-                    .add(LootContextParameters.THIS_ENTITY, player)
-                    .build(LootContextTypes.COMMAND);
+            /*LootParams parameters = new LootParams.Builder(world)
+                    .withParameter(LootContextParams.ORIGIN, player.ls$getEntityPos())
+                    .withParameter(LootContextParams.THIS_ENTITY, player)
+                    .create(LootContextParamSets.COMMAND);
             *///?}
 
             LootTable lootTable = world.getServer()

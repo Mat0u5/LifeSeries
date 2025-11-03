@@ -10,11 +10,15 @@ import net.minecraft.world.inventory.ResultContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+//? if <= 1.21 {
+import net.minecraft.world.level.Level;
+//?} else {
+/*import net.minecraft.server.level.ServerLevel;
+*///?}
 
 @Mixin(value = CraftingMenu.class, priority = 1)
 public class CraftingScreenHandlerMixin {
@@ -23,9 +27,9 @@ public class CraftingScreenHandlerMixin {
     private static void blockPreviewIfNoCraftingItemPresent(AbstractContainerMenu handler, Level world, Player player,
             CraftingContainer craftingInventory, ResultContainer resultInventory, RecipeHolder<CraftingRecipe> recipe, CallbackInfo ci) {
     //?} else {
-    /*private static void blockPreviewIfNoCraftingItemPresent(ScreenHandler handler, ServerWorld world, PlayerEntity player,
-            RecipeInputInventory craftingInventory, CraftingResultInventory resultInventory, RecipeEntry<CraftingRecipe> recipe, CallbackInfo ci) {
-    *///?}
+    /*private static void blockPreviewIfNoCraftingItemPresent(AbstractContainerMenu handler, ServerLevel world, Player player,
+                                                            CraftingContainer craftingInventory, ResultContainer resultInventory, RecipeHolder<CraftingRecipe> recipe, CallbackInfo ci) {
+        *///?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
 
         for (int i = 0; i < craftingInventory.getContainerSize(); i++) {
