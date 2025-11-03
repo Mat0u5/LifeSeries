@@ -6,9 +6,8 @@ import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.text.Text;
-
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,13 +65,13 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
     }
 
     @Override
-    public void render(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    public void render(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         this.y = y;
         renderEntry(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
     }
 
     @Override
-    protected void renderEntry(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    protected void renderEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         int maxHeight = getMaxHeight();
         if (hasExpandingChild()) {
             currentHeight = maxHeight;
@@ -98,7 +97,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
             currentY += entryHeight + ConfigListWidget.ENTRY_GAP;
 
             String expandText = !mainEntry.shouldExpand() ? "Click to expand" : "Click to collapse";
-            RenderUtils.drawTextRight(context, textRenderer, TextColors.LIGHT_GRAY_A128, Text.of(expandText), mainEntry.expandTextX(x, width), y + LABEL_OFFSET_Y);
+            RenderUtils.drawTextRight(context, textRenderer, TextColors.LIGHT_GRAY_A128, Component.nullToEmpty(expandText), mainEntry.expandTextX(x, width), y + LABEL_OFFSET_Y);
         }
 
 
@@ -122,9 +121,9 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
         renderExpandIcon(context, x, y, isExpanded, y+currentHeight+1, width);
     }
 
-    private void renderExpandIcon(DrawContext context, int x, int y, boolean expanded, int endY, int width) {
+    private void renderExpandIcon(GuiGraphics context, int x, int y, boolean expanded, int endY, int width) {
         String text = expanded ? "- " : "+ ";
-        RenderUtils.drawTextRight(context, textRenderer, TextColors.WHITE, Text.of(text), x + EXPAND_TEXT_OFFSET_X, y + EXPAND_TEXT_OFFSET_Y);
+        RenderUtils.drawTextRight(context, textRenderer, TextColors.WHITE, Component.nullToEmpty(text), x + EXPAND_TEXT_OFFSET_X, y + EXPAND_TEXT_OFFSET_Y);
         if (showSidebar) {
             context.fill(x+EXPAND_SIDEBAR_OFFSET_X, y, x+EXPAND_SIDEBAR_OFFSET_X+EXPAND_SIDEBAR_THICKNESS, endY - ConfigListWidget.ENTRY_GAP, TextColors.WHITE_A128);
         }

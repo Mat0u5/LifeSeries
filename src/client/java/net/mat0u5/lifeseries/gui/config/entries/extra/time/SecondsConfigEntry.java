@@ -6,11 +6,11 @@ import net.mat0u5.lifeseries.gui.config.entries.interfaces.ITextFieldAddonPopup;
 import net.mat0u5.lifeseries.gui.config.entries.main.IntegerConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.network.chat.Component;
 
 public class SecondsConfigEntry extends IntegerConfigEntry implements ITextFieldAddonPopup {
     public SecondsConfigEntry(String fieldName, String displayName, String description, int value, int defaultValue) {
@@ -18,24 +18,24 @@ public class SecondsConfigEntry extends IntegerConfigEntry implements ITextField
     }
 
     @Override
-    protected void renderEntry(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    protected void renderEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         super.renderEntry(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
         renderPopup(context, mouseX, mouseY, tickDelta);
     }
 
     @Override
-    public TextFieldWidget getTextField() {
+    public EditBox getTextField() {
         return textField;
     }
 
     @Override
-    public TextRenderer getTextRenderer() {
+    public Font getTextRenderer() {
         return textRenderer;
     }
 
     @Override
-    public Text getPopupText() {
-        return Text.literal(OtherUtils.formatSecondsToReadable(value)).formatted(Formatting.GRAY);
+    public Component getPopupText() {
+        return Component.literal(OtherUtils.formatSecondsToReadable(value)).formatted(ChatFormatting.GRAY);
     }
 
     @Override

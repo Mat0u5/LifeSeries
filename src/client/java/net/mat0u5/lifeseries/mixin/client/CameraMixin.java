@@ -3,11 +3,11 @@ package net.mat0u5.lifeseries.mixin.client;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
-import net.minecraft.client.render.Camera;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityPose;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.client.Camera;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,24 +18,24 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 @Mixin(Camera.class)
 public class CameraMixin {
     @Shadow
-    private Entity focusedEntity;
+    private Entity entity;
 
     @ModifyArg(
-            method = "update",
+            method = "setup",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/render/Camera;clipToSpace(F)F"
+                    target = "Lnet/minecraft/client/Camera;getMaxZoom(F)F"
             ),
             index = 0
     )
     private float modifyEntityScale(float originalDistance) {
-        if (!(focusedEntity instanceof PlayerEntity player) || Main.modFullyDisabled()) return originalDistance;
+        if (!(entity instanceof Player player) || Main.modFullyDisabled()) return originalDistance;
         MorphComponent morphComponent = MorphManager.getOrCreateComponent(player);
         if (morphComponent.isMorphed()) {
             LivingEntity dummy = morphComponent.getDummy();
             if (dummy != null) {
-                float playerHeight = player.getDimensions(EntityPose.STANDING).height();
-                float morphedHeight = dummy.getDimensions(EntityPose.STANDING).height();
+                float playerHeight = player.getDimensions(Pose.STANDING).height();
+                float morphedHeight = dummy.getDimensions(Pose.STANDING).height();
                 float heightScale = morphedHeight / playerHeight;
                 float cameraDistance = 4.0F;
                 //? if >= 1.21.6 {

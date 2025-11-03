@@ -2,11 +2,10 @@ package net.mat0u5.lifeseries.gui.config;
 
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.utils.TextColors;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
-import net.minecraft.text.Text;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.ObjectSelectionList;
+import net.minecraft.network.chat.Component;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -16,13 +15,13 @@ import net.minecraft.client.input.CharInput;
 import net.minecraft.client.input.KeyInput;
 *///?}
 
-public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWidget.ConfigEntryWidget> {
+public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.ConfigEntryWidget> {
     public static final int ENTRY_GAP = 2;
     private static final int MAX_HIGHLIGHTED_ENTRIES = 3;
     private static final int SCROLLBAR_OFFSET_X = 6;
     protected ConfigScreen screen;
 
-    public ConfigListWidget(MinecraftClient client, int width, int height, int y, int itemHeight) {
+    public ConfigListWidget(Minecraft client, int width, int height, int y, int itemHeight) {
         super(client, width, height, y, itemHeight);
     }
 
@@ -44,7 +43,7 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
     }
 
     @Override
-    protected void renderList(DrawContext context, int mouseX, int mouseY, float delta) {
+    protected void renderListItems(GuiGraphics context, int mouseX, int mouseY, float delta) {
 
         //? if <= 1.21.2 {
         int maxScroll = getMaxScroll();
@@ -71,7 +70,7 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
 
         Map<Float, ConfigEntry> highlightedEntries = new TreeMap<>();
 
-        for (int i = 0; i < getEntryCount(); i++) {
+        for (int i = 0; i < getItemCount(); i++) {
             ConfigEntryWidget entry = getEntry(i);
             ConfigEntry configEntry = entry.getConfigEntry();
             int entryHeight = configEntry.getPreferredHeight();
@@ -147,7 +146,7 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
     /*public int getMaxScrollY() {
     *///?}
         int totalHeight = 0;
-        for (int i = 0; i < getEntryCount(); i++) {
+        for (int i = 0; i < getItemCount(); i++) {
             totalHeight += getEntry(i).getConfigEntry().getPreferredHeight();
         }
         return Math.max(0, totalHeight - height + 8);
@@ -155,7 +154,7 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
 
     //? if <= 1.21.2 {
     @Override
-    protected boolean isScrollbarVisible() {
+    protected boolean scrollbarVisible() {
         return false;
     }
     //?}
@@ -175,7 +174,7 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
         int listTop = getY();
         int currentY = getCurrentY();
 
-        for (int i = 0; i < getEntryCount(); i++) {
+        for (int i = 0; i < getItemCount(); i++) {
             ConfigEntryWidget entry = getEntry(i);
             int entryHeight = entry.getConfigEntry().getPreferredHeight() + ENTRY_GAP;
 
@@ -244,11 +243,11 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
     }
 
     @Override
-    public int getEntryCount() {
+    public int getItemCount() {
         return this.children().size();
     }
 
-    public static class ConfigEntryWidget extends AlwaysSelectedEntryListWidget.Entry<ConfigEntryWidget> {
+    public static class ConfigEntryWidget extends ObjectSelectionList.Entry<ConfigEntryWidget> {
         private final ConfigEntry configEntry;
 
         public ConfigEntryWidget(ConfigEntry configEntry) {
@@ -257,7 +256,7 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
 
         //? if <= 1.21.6 {
         @Override
-        public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        public void render(GuiGraphics context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             configEntry.render(context, x, y, entryWidth, entryHeight, mouseX, mouseY, hovered, tickDelta);
         }
 
@@ -304,7 +303,7 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
         *///?}
 
         @Override
-        public Text getNarration() {
+        public Component getNarration() {
             return configEntry.getDisplayName();
         }
 

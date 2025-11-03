@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.utils.interfaces;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
 public interface IEntityRenderState {
     Entity ls$getEntity();

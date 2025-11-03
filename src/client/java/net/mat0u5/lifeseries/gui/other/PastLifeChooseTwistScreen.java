@@ -3,14 +3,14 @@ package net.mat0u5.lifeseries.gui.other;
 import net.mat0u5.lifeseries.gui.DefaultScreen;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.ClientUtils;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.Component;
 
 public class PastLifeChooseTwistScreen extends DefaultScreen {
 
     public PastLifeChooseTwistScreen() {
-        super(Text.of("Choose Twist"), 240, 80);
+        super(Component.nullToEmpty("Choose Twist"), 240, 80);
     }
 
     @Override
@@ -20,48 +20,48 @@ public class PastLifeChooseTwistScreen extends DefaultScreen {
         int firstX = startX + BG_WIDTH / 3-17;
         int secondsX = startX + (BG_WIDTH*2) / 3+17;
 
-        this.addDrawableChild(
-                ButtonWidget.builder(Text.literal("The Boogeyman"), btn -> {
-                            this.close();
+        this.addRenderableWidget(
+                Button.builder(Component.literal("The Boogeyman"), btn -> {
+                            this.onClose();
                             ClientUtils.runCommand("/pastlife boogeyman");
                         })
-                        .position(firstX - 50, startY + 27)
+                        .pos(firstX - 50, startY + 27)
                         .size(100, 20)
                         .build()
         );
 
-        this.addDrawableChild(
-                ButtonWidget.builder(Text.literal("Secret Society"), btn -> {
-                            this.close();
+        this.addRenderableWidget(
+                Button.builder(Component.literal("Secret Society"), btn -> {
+                            this.onClose();
                             ClientUtils.runCommand("/pastlife society");
                         })
-                        .position(secondsX - 50, startY + 27)
+                        .pos(secondsX - 50, startY + 27)
                         .size(100, 20)
                         .build()
         );
 
-        this.addDrawableChild(
-                ButtonWidget.builder(Text.literal("Pick Randomly"), btn -> {
-                            this.close();
+        this.addRenderableWidget(
+                Button.builder(Component.literal("Pick Randomly"), btn -> {
+                            this.onClose();
                             ClientUtils.runCommand("/pastlife pickRandom");
                         })
-                        .position(firstX - 50, startY + 52)
+                        .pos(firstX - 50, startY + 52)
                         .size(100, 20)
                         .build()
         );
 
-        this.addDrawableChild(
-                ButtonWidget.builder(Text.literal("No Twist"), btn -> {
-                            this.close();
+        this.addRenderableWidget(
+                Button.builder(Component.literal("No Twist"), btn -> {
+                            this.onClose();
                         })
-                        .position(secondsX - 50, startY + 52)
+                        .pos(secondsX - 50, startY + 52)
                         .size(100, 20)
                         .build()
         );
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY) {
-        RenderUtils.drawTextCenter(context, textRenderer, Text.of("Choose Past Life session twist:"), centerX, startY + 10);
+    public void render(GuiGraphics context, int mouseX, int mouseY) {
+        RenderUtils.drawTextCenter(context, font, Component.nullToEmpty("Choose Past Life session twist:"), centerX, startY + 10);
     }
 }

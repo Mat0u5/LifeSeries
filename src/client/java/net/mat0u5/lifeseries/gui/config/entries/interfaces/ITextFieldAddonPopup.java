@@ -2,15 +2,15 @@ package net.mat0u5.lifeseries.gui.config.entries.interfaces;
 
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.EditBox;
 
 public interface ITextFieldAddonPopup extends ITextPopup {
-    TextFieldWidget getTextField();
+    EditBox getTextField();
 
     @Override
-    default void renderBackground(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, float tickDelta) {
-        TextFieldWidget textField = getTextField();
+    default void renderBackground(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, float tickDelta) {
+        EditBox textField = getTextField();
         context.fill(x, y, x + width, y + height, TextColors.LIGHT_BLACK);
 
         RenderUtils.drawBorder(context, x, y, width, height, TextColors.DARK_GRAY);
@@ -26,9 +26,9 @@ public interface ITextFieldAddonPopup extends ITextPopup {
         }
     }
 
-    default void renderPopup(DrawContext context, int mouseX, int mouseY, float tickDelta) {
+    default void renderPopup(GuiGraphics context, int mouseX, int mouseY, float tickDelta) {
         if (!shouldShowPopup()) return;
-        TextFieldWidget textField = getTextField();
+        EditBox textField = getTextField();
         int popupWidth = getActualPopupWidth();
         int popupX = textField.getX()+textField.getWidth()/2-popupWidth/2;
         int popupY = Math.max(0, textField.getY() - getActualPopupHeight()) + 1;

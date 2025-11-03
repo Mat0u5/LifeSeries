@@ -4,8 +4,8 @@ import net.mat0u5.lifeseries.gui.config.entries.ButtonConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.GroupConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.Component;
 
 public class BooleanConfigEntry extends ButtonConfigEntry implements IEntryGroupHeader {
     private static final int BUTTON_WIDTH = 60;
@@ -27,15 +27,15 @@ public class BooleanConfigEntry extends ButtonConfigEntry implements IEntryGroup
     }
 
     @Override
-    protected void onButtonClick(ButtonWidget button) {
+    protected void onButtonClick(Button button) {
         value = !value;
         updateButtonText();
         markChanged();
     }
 
     @Override
-    public Text getButtonText() {
-        return value ? Text.of(TEXT_TRUE) : Text.of(TEXT_FALSE);
+    public Component getButtonText() {
+        return value ? Component.nullToEmpty(TEXT_TRUE) : Component.nullToEmpty(TEXT_FALSE);
     }
 
     @Override

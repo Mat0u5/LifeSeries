@@ -1,10 +1,10 @@
 package net.mat0u5.lifeseries.mixin.client;
 
 import net.mat0u5.lifeseries.Main;
-import net.minecraft.client.network.ClientCommonNetworkHandler;
-import net.minecraft.network.ClientConnection;
-import net.minecraft.network.packet.c2s.common.ResourcePackStatusC2SPacket;
-import net.minecraft.network.packet.s2c.common.ResourcePackSendS2CPacket;
+import net.minecraft.client.multiplayer.ClientCommonPacketListenerImpl;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
+import net.minecraft.network.protocol.common.ServerboundResourcePackPacket;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 import java.util.UUID;
 
-@Mixin(ClientCommonNetworkHandler.class)
+@Mixin(ClientCommonPacketListenerImpl.class)
 public class ClientCommonNetworkHandlerMixin {
     @Unique
     private static final List<String> ls$bannedURLs = List.of(
@@ -25,18 +25,18 @@ public class ClientCommonNetworkHandlerMixin {
 
     @Shadow
     @Final
-    protected ClientConnection connection;
+    protected Connection connection;
 
     @Inject(
-            method = "onResourcePackSend",
+            method = "handleResourcePackPush",
             at = @At(
-                    target = "Lnet/minecraft/client/network/ClientCommonNetworkHandler;getParsedResourcePackUrl(Ljava/lang/String;)Ljava/net/URL;",
+                    target = "Lnet/minecraft/client/multiplayer/ClientCommonPacketListenerImpl;parseResourcePackUrl(Ljava/lang/String;)Ljava/net/URL;",
                     shift = At.Shift.AFTER,
                     value = "INVOKE"
             ),
             cancellable = true
     )
-    public void onResourcePackSend(ResourcePackSendS2CPacket packet, CallbackInfo ci) {
+    public void onResourcePackSend(ClientboundResourcePackPushPacket packet, CallbackInfo ci) {
         if (Main.modFullyDisabled()) return;
         String url = packet.url();
         UUID uuid = packet.id();
@@ -49,9 +49,9 @@ public class ClientCommonNetworkHandlerMixin {
         }
         if (!banned) return;
         Main.LOGGER.info("Skipping resourcepack download ({})", url);
-        this.connection.send(new ResourcePackStatusC2SPacket(uuid, ResourcePackStatusC2SPacket.Status.ACCEPTED));
-        this.connection.send(new ResourcePackStatusC2SPacket(uuid, ResourcePackStatusC2SPacket.Status.DOWNLOADED));
-        this.connection.send(new ResourcePackStatusC2SPacket(uuid, ResourcePackStatusC2SPacket.Status.SUCCESSFULLY_LOADED));
+        this.connection.send(new ServerboundResourcePackPacket(uuid, ServerboundResourcePackPacket.Action.ACCEPTED));
+        this.connection.send(new ServerboundResourcePackPacket(uuid, ServerboundResourcePackPacket.Action.DOWNLOADED));
+        this.connection.send(new ServerboundResourcePackPacket(uuid, ServerboundResourcePackPacket.Action.SUCCESSFULLY_LOADED));
         ci.cancel();
     }
 }

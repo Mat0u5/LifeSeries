@@ -1,18 +1,17 @@
 package net.mat0u5.lifeseries.events;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.KeyMapping;
 import org.lwjgl.glfw.GLFW;
 
 public class ClientKeybinds {
-    public static KeyBinding superpower;
-    public static KeyBinding openConfig;
+    public static KeyMapping superpower;
+    public static KeyMapping openConfig;
 
-    public static KeyBinding runCommand;
+    public static KeyMapping runCommand;
 
     //? if <= 1.21.6 {
     public static final String KEYBIND_ID = "key.category.lifeseries.general";
@@ -21,20 +20,20 @@ public class ClientKeybinds {
     *///?}
 
     public static void tick() {
-        while (superpower != null && superpower.wasPressed()) {
+        while (superpower != null && superpower.consumeClick()) {
             NetworkHandlerClient.pressSuperpowerKey();
         }
-        while (runCommand != null && runCommand.wasPressed() && VersionControl.isDevVersion()) {
+        while (runCommand != null && runCommand.consumeClick() && VersionControl.isDevVersion()) {
             NetworkHandlerClient.pressRunCommandKey();
         }
-        while (openConfig != null && openConfig.wasPressed()) {
+        while (openConfig != null && openConfig.consumeClick()) {
             NetworkHandlerClient.pressOpenConfigKey();
         }
     }
     public static void registerKeybinds() {
-        superpower = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        superpower = KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 "key.lifeseries.superpower",
-                InputUtil.Type.KEYSYM,
+                InputConstants.Type.KEYSYM,
                 //? if <= 1.21.5 {
                 GLFW.GLFW_KEY_G,
                 //?} else {
@@ -43,16 +42,16 @@ public class ClientKeybinds {
 
                 KEYBIND_ID
         ));
-        openConfig = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        openConfig = KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 "key.lifeseries.openconfig",
-                InputUtil.Type.KEYSYM,
+                InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_UNKNOWN,
                 KEYBIND_ID
         ));
         if (VersionControl.isDevVersion()) {
-            runCommand = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+            runCommand = KeyBindingHelper.registerKeyBinding(new KeyMapping(
                     "key.lifeseries.runcommand",
-                    InputUtil.Type.KEYSYM,
+                    InputConstants.Type.KEYSYM,
                     GLFW.GLFW_KEY_RIGHT_ALT,
                     KEYBIND_ID
             ));

@@ -10,28 +10,25 @@ import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityDimensions;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.network.DisconnectionInfo;
-import net.minecraft.network.packet.s2c.play.EntityAttributesS2CPacket;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.scoreboard.Team;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.Holder;
+import net.minecraft.network.DisconnectionDetails;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.scores.PlayerTeam;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -40,7 +37,7 @@ public class ClientUtils {
 
     public static boolean shouldPreventGliding() {
         if (!MainClient.preventGliding) return false;
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft client = Minecraft.getInstance();
         if (client == null) return false;
         if (client.player == null) return false;
         //? if >= 1.21.2 {
@@ -55,51 +52,51 @@ public class ClientUtils {
     }
 
     @Nullable
-    public static PlayerEntity getPlayer(UUID uuid) {
-        MinecraftClient client = MinecraftClient.getInstance();
+    public static Player getPlayer(UUID uuid) {
+        Minecraft client = Minecraft.getInstance();
         if (client == null) return null;
-        if (client.world == null) return null;
-        return client.world.getPlayerByUuid(uuid);
+        if (client.level == null) return null;
+        return client.level.getPlayerByUUID(uuid);
     }
 
     @Nullable
-    public static Team getPlayerTeam() {
-        MinecraftClient client = MinecraftClient.getInstance();
+    public static PlayerTeam getPlayerTeam() {
+        Minecraft client = Minecraft.getInstance();
         if (client == null) return null;
         if (client.player == null) return null;
-        return client.player.getScoreboardTeam();
+        return client.player.getTeam();
     }
 
     public static void runCommand(String command) {
-        ClientPlayNetworkHandler handler = MinecraftClient.getInstance().getNetworkHandler();
+        ClientPacketListener handler = Minecraft.getInstance().getConnection();
         if (handler == null) return;
 
         if (command.startsWith("/")) {
             command = command.substring(1);
         }
-        handler.sendChatCommand(command);
+        handler.sendCommand(command);
     }
 
-    public static void disconnect(Text reason) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client.world == null) return;
-        ClientPlayNetworkHandler handler = client.getNetworkHandler();
+    public static void disconnect(Component reason) {
+        Minecraft client = Minecraft.getInstance();
+        if (client.level == null) return;
+        ClientPacketListener handler = client.getConnection();
         if (handler == null) return;
         //? if < 1.21.6 {
-        client.world.disconnect();
+        client.level.disconnect();
         //?} else {
         /*client.world.disconnect(reason);
         *///?}
-        handler.onDisconnected(new DisconnectionInfo(reason));
+        handler.onDisconnect(new DisconnectionDetails(reason));
     }
 
-    public static boolean handleUpdatedAttribute(ClientWorld world, EntityAttributeInstance instance, double baseValue, EntityAttributesS2CPacket packet) {
-        Entity entity = world.getEntityById(packet.getEntityId());
+    public static boolean handleUpdatedAttribute(ClientLevel world, AttributeInstance instance, double baseValue, ClientboundUpdateAttributesPacket packet) {
+        Entity entity = world.getEntity(packet.getEntityId());
         if (entity == null) return false;
-        if (!(entity instanceof ClientPlayerEntity player)) return false;
-        if (!MainClient.isClientPlayer(player.getUuid())) return false;
+        if (!(entity instanceof LocalPlayer player)) return false;
+        if (!MainClient.isClientPlayer(player.getUUID())) return false;
         //? if <= 1.21 {
-        RegistryEntry<EntityAttribute> scaleAttribute = EntityAttributes.GENERIC_SCALE;
+        Holder<Attribute> scaleAttribute = Attributes.SCALE;
         //?} else {
         /*RegistryEntry<EntityAttribute> scaleAttribute = EntityAttributes.SCALE;
          *///?}
@@ -111,17 +108,17 @@ public class ClientUtils {
         double oldBaseValue = player.getAttributeBaseValue(scaleAttribute);
         if (oldBaseValue == baseValue) return false;
 
-        EntityDimensions oldEntityDimensions = player.getBaseDimensions(player.getPose()).scaled((float) oldBaseValue);
-        Box oldBoundingBox = oldEntityDimensions.getBoxAt(player.ls$getEntityPos());
+        EntityDimensions oldEntityDimensions = player.getDefaultDimensions(player.getPose()).scale((float) oldBaseValue);
+        AABB oldBoundingBox = oldEntityDimensions.makeBoundingBox(player.ls$getEntityPos());
         double oldHitboxSize = oldEntityDimensions.width();
 
-        EntityDimensions newEntityDimensions = player.getBaseDimensions(player.getPose()).scaled((float) baseValue);
-        Box newBoundingBox = newEntityDimensions.getBoxAt(player.ls$getEntityPos());
+        EntityDimensions newEntityDimensions = player.getDefaultDimensions(player.getPose()).scale((float) baseValue);
+        AABB newBoundingBox = newEntityDimensions.makeBoundingBox(player.ls$getEntityPos());
         double newHitboxSize = newEntityDimensions.width();
 
         double changedBy = newHitboxSize - oldHitboxSize;
 
-        Vec3d move = null;
+        Vec3 move = null;
         if (changedBy < 0) {
             boolean oldSpaceBelowEmpty = isSpaceEmpty(player, oldBoundingBox, 0, -1.0E-5, 0);
             boolean newSpaceBelowEmpty = isSpaceEmpty(player, newBoundingBox, 0, -1.0E-5, 0);
@@ -138,7 +135,7 @@ public class ClientUtils {
                 // Growing causes the player to clip into blocks
                 move = findDesiredCollission(player, newBoundingBox, changedBy, 1.0E-5, true, false);
                 if (move != null) {
-                    move = move.multiply(5);
+                    move = move.scale(5);
                 }
             }
             if (!oldSpaceEmpty && !newSpaceEmpty) {
@@ -149,45 +146,45 @@ public class ClientUtils {
 
         if (move != null) {
             if (changedBy > 0) {
-                Vec3d playerVelocity = player.getVelocity();
+                Vec3 playerVelocity = player.getDeltaMovement();
                 double speedX = playerVelocity.x;
                 double speedZ = playerVelocity.z;
 
                 if (move.x != 0) speedX = 0;
                 if (move.z != 0) speedZ = 0;
 
-                player.setVelocity(speedX, playerVelocity.y, speedZ);
+                player.setDeltaMovement(speedX, playerVelocity.y, speedZ);
             }
 
-            player.setPos(player.getX() + move.x, player.getY(), player.getZ() + move.z);
+            player.setPosRaw(player.getX() + move.x, player.getY(), player.getZ() + move.z);
             instance.setBaseValue(baseValue);
-            player.calculateDimensions();
+            player.refreshDimensions();
             return true;
         }
         if (changedBy > 0) {
             instance.setBaseValue(baseValue);
-            player.calculateDimensions();
+            player.refreshDimensions();
             return true;
         }
         return false;
     }
 
     
-    public static boolean isSpaceEmpty(ClientPlayerEntity player, Box box, double offsetX, double offsetY, double offsetZ) {
-        if (player.noClip || player.isSpectator()) return true;
-        Box newBox = new Box(box.minX + offsetX, box.minY +offsetY, box.minZ + offsetZ, box.maxX + offsetX, box.minY, box.maxZ + offsetZ);
+    public static boolean isSpaceEmpty(LocalPlayer player, AABB box, double offsetX, double offsetY, double offsetZ) {
+        if (player.noPhysics || player.isSpectator()) return true;
+        AABB newBox = new AABB(box.minX + offsetX, box.minY +offsetY, box.minZ + offsetZ, box.maxX + offsetX, box.minY, box.maxZ + offsetZ);
         return PlayerUtils.getWorld(player).isSpaceEmpty(player, newBox);
     }
 
-    public static Vec3d recursivelyFindDesiredCollission(ClientPlayerEntity player, Box newBoundingBox, double offsetY, boolean desiredSpaceEmpty) {
+    public static Vec3 recursivelyFindDesiredCollission(LocalPlayer player, AABB newBoundingBox, double offsetY, boolean desiredSpaceEmpty) {
         for (double changedBy = 0.05; changedBy <= 0.4; changedBy += 0.05) {
-            Vec3d found = findDesiredCollission(player, newBoundingBox, changedBy, offsetY, desiredSpaceEmpty, true);
+            Vec3 found = findDesiredCollission(player, newBoundingBox, changedBy, offsetY, desiredSpaceEmpty, true);
             if (found != null) return found;
         }
         return null;
     }
 
-    public static Vec3d findDesiredCollission(ClientPlayerEntity player, Box newBoundingBox, double changedBy, double offsetY, boolean desiredSpaceEmpty, boolean onlyCardinal) {
+    public static Vec3 findDesiredCollission(LocalPlayer player, AABB newBoundingBox, double changedBy, double offsetY, boolean desiredSpaceEmpty, boolean onlyCardinal) {
         Direction[] directions = onlyCardinal ? Direction.getCardinalDirections() : Direction.values();
         for (Direction direction : directions) {
             double offsetX = changedBy * direction.x;
@@ -195,37 +192,37 @@ public class ClientUtils {
 
             boolean movedSpaceEmpty = isSpaceEmpty(player, newBoundingBox, offsetX, offsetY, offsetZ);
             if (movedSpaceEmpty == desiredSpaceEmpty) {
-                return new Vec3d(offsetX, 0, offsetZ);
+                return new Vec3(offsetX, 0, offsetZ);
             }
         }
         return null;
     }
 
-    public static Text getPlayerName(Text text) {
+    public static Component getPlayerName(Component text) {
         if (text == null || Main.modFullyDisabled()) return text;
-        if (MinecraftClient.getInstance().getNetworkHandler() == null) return text;
+        if (Minecraft.getInstance().getConnection() == null) return text;
 
         if (MainClient.playerDisguiseNames.containsKey(text.getString())) {
             String name = MainClient.playerDisguiseNames.get(text.getString());
-            for (PlayerListEntry entry : MinecraftClient.getInstance().getNetworkHandler().getPlayerList()) {
+            for (PlayerInfo entry : Minecraft.getInstance().getConnection().getOnlinePlayers()) {
                 if (OtherUtils.profileName(entry.getProfile()).equalsIgnoreCase(TextUtils.removeFormattingCodes(name))) {
-                    if (entry.getDisplayName() != null) {
-                        return applyColorblindToName(entry.getDisplayName(), entry.getScoreboardTeam());
+                    if (entry.getTabListDisplayName() != null) {
+                        return applyColorblindToName(entry.getTabListDisplayName(), entry.getTeam());
                     }
-                    return applyColorblindToName(Text.literal(name), entry.getScoreboardTeam());
+                    return applyColorblindToName(Component.literal(name), entry.getTeam());
                 }
             }
         }
         else {
-            for (PlayerListEntry entry : MinecraftClient.getInstance().getNetworkHandler().getPlayerList()) {
+            for (PlayerInfo entry : Minecraft.getInstance().getConnection().getOnlinePlayers()) {
                 if (OtherUtils.profileName(entry.getProfile()).equalsIgnoreCase(TextUtils.removeFormattingCodes(text.getString()))) {
-                    return applyColorblindToName(text, entry.getScoreboardTeam());
+                    return applyColorblindToName(text, entry.getTeam());
                 }
             }
         }
         return text;
     }
-    public static Text applyColorblindToName(Text original, Team team) {
+    public static Component applyColorblindToName(Component original, PlayerTeam team) {
         if (!MainClient.COLORBLIND_SUPPORT) return original;
         if (original == null) return original;
         if (team == null) return original;

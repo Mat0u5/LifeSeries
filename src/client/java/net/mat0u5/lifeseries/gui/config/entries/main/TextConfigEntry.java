@@ -5,10 +5,6 @@ import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.text.Text;
-//? if >= 1.21.9
-/*import net.minecraft.client.gui.Click;*/
 
 public class TextConfigEntry extends EmptyConfigEntry implements IEntryGroupHeader {
     private final boolean clickable;

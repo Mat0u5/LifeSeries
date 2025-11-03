@@ -6,17 +6,17 @@ import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 
 public class ConfirmSeasonAnswerScreen extends DefaultScreen {
     private final Screen parent;
     private final Seasons season;
 
     public ConfirmSeasonAnswerScreen(Screen parent, Seasons season) {
-        super(Text.literal("Confirm Answer"), 325, 110);
+        super(Component.literal("Confirm Answer"), 325, 110);
         this.parent = parent;
         this.season = season;
     }
@@ -34,33 +34,33 @@ public class ConfirmSeasonAnswerScreen extends DefaultScreen {
         int fifth2 = startX + (BG_WIDTH / 5)*2;
         int fifth3 = startX + (BG_WIDTH / 5)*3;
 
-        this.addDrawableChild(
-                ButtonWidget.builder(Text.literal("Confirm"), btn -> {
-                            this.close();
+        this.addRenderableWidget(
+                Button.builder(Component.literal("Confirm"), btn -> {
+                            this.onClose();
                             NetworkHandlerClient.sendStringPacket(PacketNames.SET_SEASON, season.getName());
                         })
-                        .position(fifth2 - 40, startY + BG_HEIGHT - 35)
+                        .pos(fifth2 - 40, startY + BG_HEIGHT - 35)
                         .size(60, 20)
                         .build()
         );
 
-        this.addDrawableChild(
-                ButtonWidget.builder(Text.literal("Cancel"), btn -> {
-                            if (this.client != null) this.client.setScreen(parent);
+        this.addRenderableWidget(
+                Button.builder(Component.literal("Cancel"), btn -> {
+                            if (this.minecraft != null) this.minecraft.setScreen(parent);
                         })
-                        .position(fifth3 - 20, startY + BG_HEIGHT - 35)
+                        .pos(fifth3 - 20, startY + BG_HEIGHT - 35)
                         .size(60, 20)
                         .build()
         );
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY) {
-        Text prompt1 = Text.of("WARNING: you have already selected a season.");
-        Text prompt2 = Text.of("Changing it might cause some saved data to be lost (lives, ...).");
-        Text prompt3 = TextUtils.formatPlain("Change the season to {}?", season.getName());
-        RenderUtils.drawTextCenter(context, textRenderer, prompt1, centerX, startY + 15);
-        RenderUtils.drawTextCenter(context, textRenderer, prompt2, centerX, startY + 20 + textRenderer.fontHeight);
-        RenderUtils.drawTextCenter(context, textRenderer, prompt3, centerX, startY + 35 + textRenderer.fontHeight*2);
+    public void render(GuiGraphics context, int mouseX, int mouseY) {
+        Component prompt1 = Component.nullToEmpty("WARNING: you have already selected a season.");
+        Component prompt2 = Component.nullToEmpty("Changing it might cause some saved data to be lost (lives, ...).");
+        Component prompt3 = TextUtils.formatPlain("Change the season to {}?", season.getName());
+        RenderUtils.drawTextCenter(context, font, prompt1, centerX, startY + 15);
+        RenderUtils.drawTextCenter(context, font, prompt2, centerX, startY + 20 + font.lineHeight);
+        RenderUtils.drawTextCenter(context, font, prompt3, centerX, startY + 35 + font.lineHeight*2);
     }
 }

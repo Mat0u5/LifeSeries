@@ -4,21 +4,17 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.mat0u5.lifeseries.gui.config.entries.StringListPopupConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.texture.Sprite;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.MobEffectTextureManager;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import java.util.ArrayList;
 import java.util.List;
-
-//? if <= 1.21.5
-import net.minecraft.client.texture.StatusEffectSpriteManager;
 
 //? if >= 1.21.2 && <= 1.21.5
 /*import net.minecraft.client.render.RenderLayer;*/
@@ -29,8 +25,8 @@ import net.minecraft.client.texture.StatusEffectSpriteManager;
 //? if >= 1.21.6
 /*import net.minecraft.client.gl.RenderPipelines;*/
 
-public class EffectListConfigEntry extends StringListPopupConfigEntry<RegistryEntry<StatusEffect>> {
-    private static final Identifier EFFECT_BACKGROUND_TEXTURE = Identifier.ofVanilla("hud/effect_background");
+public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<MobEffect>> {
+    private static final ResourceLocation EFFECT_BACKGROUND_TEXTURE = ResourceLocation.withDefaultNamespace("hud/effect_background");
 
     public EffectListConfigEntry(String fieldName, String displayName, String description, String value, String defaultValue) {
         super(fieldName, displayName, description, value, defaultValue, 5, 24, 2);
@@ -39,17 +35,17 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<RegistryEn
 
     @Override
     protected void reloadEntries(List<String> items) {
-        if (MinecraftClient.getInstance().world == null) return;
+        if (Minecraft.getInstance().level == null) return;
         if (entries != null) {
             entries.clear();
         }
 
-        List<RegistryEntry<StatusEffect>> newList = new ArrayList<>();
+        List<Holder<MobEffect>> newList = new ArrayList<>();
         boolean errors = false;
 
-        Registry<StatusEffect> effectsRegistry = MinecraftClient.getInstance().world.getRegistryManager()
+        Registry<MobEffect> effectsRegistry = Minecraft.getInstance().level.registryAccess()
         //? if <=1.21 {
-        .get(RegistryKey.ofRegistry(Identifier.of("minecraft", "mob_effect")));
+        .registryOrThrow(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath("minecraft", "mob_effect")));
         //?} else
         /*.getOrThrow(RegistryKey.ofRegistry(Identifier.of("minecraft", "mob_effect")));*/
 
@@ -58,11 +54,11 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<RegistryEn
             if (!potionId.contains(":")) potionId = "minecraft:" + potionId;
 
             try {
-                Identifier id = Identifier.of(potionId);
-                StatusEffect enchantment = effectsRegistry.get(id);
+                ResourceLocation id = ResourceLocation.parse(potionId);
+                MobEffect enchantment = effectsRegistry.get(id);
 
                 if (enchantment != null) {
-                    newList.add(effectsRegistry.getEntry(enchantment));
+                    newList.add(effectsRegistry.wrapAsHolder(enchantment));
                 } else {
                     setError(TextUtils.formatString("Invalid effect: '{}'", potionId));
                     errors = true;
@@ -80,16 +76,16 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<RegistryEn
     }
 
     @Override
-    protected void renderListEntry(DrawContext context, RegistryEntry<StatusEffect> effectType, int x, int y, int mouseX, int mouseY, float tickDelta) {
+    protected void renderListEntry(GuiGraphics context, Holder<MobEffect> effectType, int x, int y, int mouseX, int mouseY, float tickDelta) {
         //? if <= 1.21 {
-        StatusEffectSpriteManager statusEffectSpriteManager = MinecraftClient.getInstance().getStatusEffectSpriteManager();
+        MobEffectTextureManager statusEffectSpriteManager = Minecraft.getInstance().getMobEffectTextures();
         RenderSystem.enableBlend();
 
-        context.drawGuiTexture(EFFECT_BACKGROUND_TEXTURE, x, y, 24, 24);
-        Sprite sprite = statusEffectSpriteManager.getSprite(effectType);
-        context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        context.drawSprite(x + 3, y + 3, 0, 18, 18, sprite);
-        context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        context.blitSprite(EFFECT_BACKGROUND_TEXTURE, x, y, 24, 24);
+        TextureAtlasSprite sprite = statusEffectSpriteManager.get(effectType);
+        context.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        context.blit(x + 3, y + 3, 0, 18, 18, sprite);
+        context.setColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         RenderSystem.disableBlend();
         //?} else if <= 1.21.5 {

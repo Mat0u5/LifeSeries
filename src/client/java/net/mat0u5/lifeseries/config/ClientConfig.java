@@ -5,7 +5,7 @@ import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
-
+import ConfigFileEntry;
 import java.util.ArrayList;
 import java.util.List;
 

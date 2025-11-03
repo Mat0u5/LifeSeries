@@ -4,10 +4,10 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.events.ClientEvents;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = LivingEntity.class, priority = 2)
 public class LivingEntityMixin {
 
-    @Inject(method = "jump", at = @At("TAIL"))
+    @Inject(method = "jumpFromGround", at = @At("TAIL"))
     private void onJump(CallbackInfo ci) {
         if (Main.modDisabled()) return;
         LivingEntity entity = (LivingEntity) (Object) this;
@@ -30,30 +30,30 @@ public class LivingEntityMixin {
             //?} else {
             /*method = "travelMidAir",
             *///?}
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyMovementInput(Lnet/minecraft/util/math/Vec3d;F)Lnet/minecraft/util/math/Vec3d;"),
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;handleRelativeFrictionAndCalculateMovement(Lnet/minecraft/world/phys/Vec3;F)Lnet/minecraft/world/phys/Vec3;"),
             index = 1
     )
     private float applyMovementInput(float slipperiness) {
         if ((System.currentTimeMillis() - MainClient.CURSE_SLIDING) > 5000 || Main.modFullyDisabled()) return slipperiness;
         LivingEntity entity = (LivingEntity) (Object) this;
-        if (entity instanceof PlayerEntity playerr && MainClient.isClientPlayer(playerr.getUuid()) && playerr.isOnGround() && ClientEvents.onGroundFor >= 5) {
+        if (entity instanceof Player playerr && MainClient.isClientPlayer(playerr.getUUID()) && playerr.onGround() && ClientEvents.onGroundFor >= 5) {
             return 1.198f;
         }
         return slipperiness;
     }
 
     @ModifyArg(
-            method = "applyMovementInput",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setVelocity(Lnet/minecraft/util/math/Vec3d;)V"),
+            method = "handleRelativeFrictionAndCalculateMovement",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;setDeltaMovement(Lnet/minecraft/world/phys/Vec3;)V"),
             index = 0
     )
-    private Vec3d applyMovementInput(Vec3d velocity) {
+    private Vec3 applyMovementInput(Vec3 velocity) {
         if ((System.currentTimeMillis() - MainClient.CURSE_SLIDING) > 5000 || Main.modFullyDisabled()) return velocity;
         LivingEntity entity = (LivingEntity) (Object) this;
-        if (entity instanceof PlayerEntity playerr && MainClient.isClientPlayer(playerr.getUuid()) && playerr.isOnGround() && ClientEvents.onGroundFor >= 5) {
-            BlockPos blockPos = playerr.getVelocityAffectingPos();
+        if (entity instanceof Player playerr && MainClient.isClientPlayer(playerr.getUUID()) && playerr.onGround() && ClientEvents.onGroundFor >= 5) {
+            BlockPos blockPos = playerr.getBlockPosBelowThatAffectsMyMovement();
             float originalSlipperiness = PlayerUtils.getWorld(playerr).getBlockState(blockPos).getBlock().getSlipperiness();
-            return new Vec3d((velocity.x/originalSlipperiness)*0.995f, velocity.y, (velocity.z/originalSlipperiness)*0.995f);
+            return new Vec3((velocity.x/originalSlipperiness)*0.995f, velocity.y, (velocity.z/originalSlipperiness)*0.995f);
         }
         return velocity;
     }

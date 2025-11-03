@@ -7,11 +7,10 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,9 +18,9 @@ import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.arg
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
 public class ClientCommands {
-    public static MinecraftClient client = MinecraftClient.getInstance();
+    public static Minecraft client = Minecraft.getInstance();
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher,
-                                CommandRegistryAccess commandRegistryAccess) {
+                                CommandBuildContext commandRegistryAccess) {
         if (Main.DEBUG) {
             dispatcher.register(
                     literal("lsc")
@@ -78,33 +77,33 @@ public class ClientCommands {
         }
     }
     public static int execute(FabricClientCommandSource source)  {
-        source.sendFeedback(Text.of("Life Series client command text."));
+        source.sendFeedback(Component.nullToEmpty("Life Series client command text."));
         return 1;
     }
 
     public static int sendStringPacket(FabricClientCommandSource source, String name, String value)  {
-        final PlayerEntity self = source.getPlayer();
+        final Player self = source.getPlayer();
         NetworkHandlerClient.sendStringPacket(PacketNames.fromName(name), value);
-        self.sendMessage(Text.of("String packet sent."), false);
+        self.displayClientMessage(Component.nullToEmpty("String packet sent."), false);
         return 1;
     }
 
     public static int sendNumberPacket(FabricClientCommandSource source, String name, double value)  {
-        final PlayerEntity self = source.getPlayer();
+        final Player self = source.getPlayer();
         NetworkHandlerClient.sendNumberPacket(PacketNames.fromName(name), value);
-        self.sendMessage(Text.of("Number packet sent."), false);
+        self.displayClientMessage(Component.nullToEmpty("Number packet sent."), false);
         return 1;
     }
 
     public static int sendHandshakePacket(FabricClientCommandSource source)  {
-        final PlayerEntity self = source.getPlayer();
+        final Player self = source.getPlayer();
         NetworkHandlerClient.sendHandshake();
-        self.sendMessage(Text.of("Handshake packet sent."), false);
+        self.displayClientMessage(Component.nullToEmpty("Handshake packet sent."), false);
         return 1;
     }
 
     public static int sendConfigPacket(FabricClientCommandSource source, String configType, String id, String argsStr)  {
-        final PlayerEntity self = source.getPlayer();
+        final Player self = source.getPlayer();
         List<String> args = new ArrayList<>();
         if (argsStr.contains(";")) {
             for (String arg : argsStr.split(";")) {
@@ -118,7 +117,7 @@ public class ClientCommands {
         }
 
         NetworkHandlerClient.sendConfigUpdate(configType, id, args);
-        self.sendMessage(Text.of("Config packet sent."), false);
+        self.displayClientMessage(Component.nullToEmpty("Config packet sent."), false);
         return 1;
     }
 

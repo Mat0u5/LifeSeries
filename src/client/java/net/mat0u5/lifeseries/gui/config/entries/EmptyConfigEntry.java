@@ -1,11 +1,6 @@
 package net.mat0u5.lifeseries.gui.config.entries;
 
-import net.minecraft.client.gui.DrawContext;
-//? if >= 1.21.9 {
-/*import net.minecraft.client.gui.Click;
-import net.minecraft.client.input.CharInput;
-import net.minecraft.client.input.KeyInput;
-*///?}
+import net.minecraft.client.gui.GuiGraphics;
 
 public abstract class EmptyConfigEntry extends ConfigEntry {
     public EmptyConfigEntry(String fieldName, String displayName, String description) {
@@ -13,7 +8,7 @@ public abstract class EmptyConfigEntry extends ConfigEntry {
     }
 
     @Override
-    protected void renderEntry(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    protected void renderEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
     }
 
     //? if <= 1.21.6 {

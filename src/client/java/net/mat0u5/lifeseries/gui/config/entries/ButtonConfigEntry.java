@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.gui.config.entries;
 
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.Component;
 
 //? if >= 1.21.9 {
 /*import net.minecraft.client.gui.Click;
@@ -11,7 +11,7 @@ import net.minecraft.client.input.KeyInput;
 *///?}
 
 public abstract class ButtonConfigEntry extends ConfigEntry {
-    protected final ButtonWidget button;
+    protected final Button button;
     protected boolean clicked = false;
 
     public ButtonConfigEntry(String fieldName, String displayName, String description, int buttonWidth, int buttonHeight) {
@@ -19,21 +19,21 @@ public abstract class ButtonConfigEntry extends ConfigEntry {
         button = createButton(buttonWidth, buttonHeight);
     }
 
-    protected ButtonWidget createButton(int width, int height) {
-        return ButtonWidget.builder(getButtonText(), this::onButtonClick)
-                .dimensions(0, 0, width, height)
+    protected Button createButton(int width, int height) {
+        return Button.builder(getButtonText(), this::onButtonClick)
+                .bounds(0, 0, width, height)
                 .build();
     }
 
-    protected abstract Text getButtonText();
-    protected abstract void onButtonClick(ButtonWidget button);
+    protected abstract Component getButtonText();
+    protected abstract void onButtonClick(Button button);
 
     protected void updateButtonText() {
         button.setMessage(getButtonText());
     }
 
     @Override
-    protected void renderEntry(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    protected void renderEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         int entryWidth = getEntryContentWidth(width);
         button.setX(getButtonPosX(x, entryWidth));
         button.setY(getButtonPosY(y, height));

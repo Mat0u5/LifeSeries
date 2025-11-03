@@ -3,12 +3,11 @@ package net.mat0u5.lifeseries.gui.config.entries.extra;
 import net.mat0u5.lifeseries.gui.config.entries.StringListPopupConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.minecraft.block.Block;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,10 +31,10 @@ public class BlockListConfigEntry extends StringListPopupConfigEntry<Block> {
             if (!blockId.contains(":")) blockId = "minecraft:" + blockId;
 
             try {
-                Identifier id = Identifier.of(blockId);
-                RegistryKey<Block> key = RegistryKey.of(Registries.BLOCK.getKey(), id);
+                ResourceLocation id = ResourceLocation.parse(blockId);
+                ResourceKey<Block> key = ResourceKey.create(BuiltInRegistries.BLOCK.key(), id);
 
-                Block block = Registries.BLOCK.get(key);
+                Block block = BuiltInRegistries.BLOCK.get(key);
                 if (block != null) {
                     newList.add(block);
                 } else {
@@ -55,8 +54,8 @@ public class BlockListConfigEntry extends StringListPopupConfigEntry<Block> {
     }
 
     @Override
-    protected void renderListEntry(DrawContext context, Block block, int x, int y, int mouseX, int mouseY, float tickDelta) {
-        context.drawItem(block.asItem().getDefaultStack(), x, y);
+    protected void renderListEntry(GuiGraphics context, Block block, int x, int y, int mouseX, int mouseY, float tickDelta) {
+        context.renderItem(block.asItem().getDefaultInstance(), x, y);
     }
 
     @Override

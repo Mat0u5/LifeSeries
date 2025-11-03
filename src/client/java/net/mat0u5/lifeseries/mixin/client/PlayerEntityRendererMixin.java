@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.mixin.client;
 
-import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -8,15 +7,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.render.entity.*;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.injection.Inject;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.mat0u5.lifeseries.Main;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.util.math.MatrixStack;
-//?}
 
 //? if > 1.21.6 {
 /*import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -24,23 +23,23 @@ import net.minecraft.text.Text;
 import net.mat0u5.lifeseries.utils.ClientUtils;
 *///?}
 
-@Mixin(value = PlayerEntityRenderer.class, priority = 1)
+@Mixin(value = PlayerRenderer.class, priority = 1)
 public abstract class PlayerEntityRendererMixin {
 
     //? if <= 1.21 {
-    @Inject(method = "render(Lnet/minecraft/client/network/AbstractClientPlayerEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
+    @Inject(method = "render(Lnet/minecraft/client/player/AbstractClientPlayer;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At("HEAD"), cancellable = true)
-    public void replaceRendering(AbstractClientPlayerEntity abstractClientPlayerEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci){
+    public void replaceRendering(AbstractClientPlayer abstractClientPlayerEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i, CallbackInfo ci){
         if (Main.modFullyDisabled()) return;
-        if (MainClient.invisiblePlayers.containsKey(abstractClientPlayerEntity.getUuid())) {
-            long time = MainClient.invisiblePlayers.get(abstractClientPlayerEntity.getUuid());
+        if (MainClient.invisiblePlayers.containsKey(abstractClientPlayerEntity.getUUID())) {
+            long time = MainClient.invisiblePlayers.get(abstractClientPlayerEntity.getUUID());
             if (time > System.currentTimeMillis() || time == -1) {
                 ci.cancel();
                 return;
             }
         }
 
-        MorphComponent morphComponent = MorphManager.getOrCreateComponent(abstractClientPlayerEntity.getUuid());
+        MorphComponent morphComponent = MorphManager.getOrCreateComponent(abstractClientPlayerEntity.getUUID());
         LivingEntity dummy = morphComponent.getDummy();
         if(morphComponent.isMorphed() && dummy != null) {
             ci.cancel();

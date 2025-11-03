@@ -1,247 +1,251 @@
 package net.mat0u5.lifeseries.entity.snail;
 
+import net.minecraft.client.animation.AnimationChannel;
+import net.minecraft.client.animation.AnimationDefinition;
+import net.minecraft.client.animation.Keyframe;
+import net.minecraft.client.animation.KeyframeAnimations;
 import net.minecraft.client.render.entity.animation.*;
 
 public class SnailAnimations {
         //? if <= 1.21.5 {
-        public static final Animation walk = Animation.Builder.create(5.4167F).looping()
+        public static final AnimationDefinition walk = AnimationDefinition.Builder.withLength(5.4167F).looping()
         //?} else {
         /*public static final AnimationDefinition walk = AnimationDefinition.Builder.create(5.4167F).looping()
         *///?}
-                .addBoneAnimation("head", new Transformation(Transformation.Targets.ROTATE,
-                        new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(0.4167F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -4.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(0.7917F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 4.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(1.2083F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -4.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(1.625F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 4.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(2.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(2.4167F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -4.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(2.8333F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -4.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(3.25F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(4.1667F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -4.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(5.4167F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
+                .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                        new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(0.4167F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(0.7917F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(1.2083F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(1.625F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(2.4167F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(2.8333F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(3.25F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(4.1667F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(5.4167F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
                 //? if <= 1.21.4 {
-                .addBoneAnimation("head", new Transformation(Transformation.Targets.TRANSLATE,
+                .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.POSITION,
                 //?} else {
                 /*.addBoneAnimation("head", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                 *///?}
-                        new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(2.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -2.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(3.25F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
+                        new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, 0.0F, -2.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(3.25F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                .addBoneAnimation("shell", new Transformation(Transformation.Targets.ROTATE,
-                        new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(1.5417F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 4.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(3.25F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(3.7083F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -3.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(4.1667F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 3.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(4.5833F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -3.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(5.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 3.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(5.4167F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
+                .addAnimation("shell", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                        new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(1.5417F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(3.25F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(3.7083F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -3.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(4.1667F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 3.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(4.5833F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -3.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(5.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 3.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(5.4167F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                .addBoneAnimation("back", new Transformation(Transformation.Targets.ROTATE,
-                        new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(1.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -4.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(3.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 4.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(4.3333F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -2.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(5.4167F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
+                .addAnimation("back", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                        new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(3.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(4.3333F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -2.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(5.4167F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                .addBoneAnimation("midfront", new Transformation(Transformation.Targets.ROTATE,
-                        new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(0.4167F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -4.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(0.7917F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 4.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(1.2083F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -4.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(1.625F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 4.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(2.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(2.4167F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -4.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(2.8333F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -4.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(3.25F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(4.1667F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -4.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(5.4167F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
+                .addAnimation("midfront", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                        new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(0.4167F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(0.7917F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(1.2083F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(1.625F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(2.4167F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(2.8333F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(3.25F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(4.1667F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(5.4167F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
                 //? if <= 1.21.4 {
-                .addBoneAnimation("midfront", new Transformation(Transformation.Targets.TRANSLATE,
+                .addAnimation("midfront", new AnimationChannel(AnimationChannel.Targets.POSITION,
                 //?} else {
                 /*.addBoneAnimation("midfront", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                 *///?}
-                        new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(2.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -2.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(3.25F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
+                        new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, 0.0F, -2.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(3.25F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
                 .build();
 
         //? if <= 1.21.5 {
-        public static final Animation glide = Animation.Builder.create(2.0F).looping()
+        public static final AnimationDefinition glide = AnimationDefinition.Builder.withLength(2.0F).looping()
         //?} else {
         /*public static final AnimationDefinition glide = AnimationDefinition.Builder.create(2.0F).looping()
         *///?}
-                .addBoneAnimation("head", new Transformation(Transformation.Targets.ROTATE,
-                        new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(0.5F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 2.5F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(1.5F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -2.5F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(2.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
+                .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                        new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(0.5F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 2.5F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(1.5F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -2.5F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
                 //? if <= 1.21.4 {
-                .addBoneAnimation("head", new Transformation(Transformation.Targets.TRANSLATE,
+                .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.POSITION,
                 //?} else {
                 /*.addBoneAnimation("head", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                 *///?}
-                        new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, -2.34F, 0.0F), Transformation.Interpolations.CUBIC)
+                        new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, -2.34F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                .addBoneAnimation("back", new Transformation(Transformation.Targets.ROTATE,
-                        new Keyframe(0.0F, AnimationHelper.createRotationalVector(-50.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(0.5F, AnimationHelper.createRotationalVector(-50.0F, 0.0F, 9.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(1.5F, AnimationHelper.createRotationalVector(-50.0F, 0.0F, -9.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(2.0F, AnimationHelper.createRotationalVector(-50.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
+                .addAnimation("back", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                        new Keyframe(0.0F, KeyframeAnimations.degreeVec(-50.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(0.5F, KeyframeAnimations.degreeVec(-50.0F, 0.0F, 9.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(1.5F, KeyframeAnimations.degreeVec(-50.0F, 0.0F, -9.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(2.0F, KeyframeAnimations.degreeVec(-50.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                .addBoneAnimation("midfront", new Transformation(Transformation.Targets.ROTATE,
-                        new Keyframe(0.0F, AnimationHelper.createRotationalVector(30.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
+                .addAnimation("midfront", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                        new Keyframe(0.0F, KeyframeAnimations.degreeVec(30.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
                 //? if <= 1.21.4 {
-                .addBoneAnimation("midfront", new Transformation(Transformation.Targets.TRANSLATE,
+                .addAnimation("midfront", new AnimationChannel(AnimationChannel.Targets.POSITION,
                 //?} else {
                 /*.addBoneAnimation("midfront", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                 *///?}
-                        new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, -0.15F, -0.2F), Transformation.Interpolations.CUBIC)
+                        new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, -0.15F, -0.2F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                .addBoneAnimation("midback", new Transformation(Transformation.Targets.ROTATE,
-                        new Keyframe(0.0F, AnimationHelper.createRotationalVector(-50.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(0.5F, AnimationHelper.createRotationalVector(-50.0F, 0.0F, 9.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(1.5F, AnimationHelper.createRotationalVector(-50.0F, 0.0F, -9.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(2.0F, AnimationHelper.createRotationalVector(-50.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
+                .addAnimation("midback", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                        new Keyframe(0.0F, KeyframeAnimations.degreeVec(-50.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(0.5F, KeyframeAnimations.degreeVec(-50.0F, 0.0F, 9.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(1.5F, KeyframeAnimations.degreeVec(-50.0F, 0.0F, -9.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(2.0F, KeyframeAnimations.degreeVec(-50.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
                 .build();
 
         //? if <= 1.21.5 {
-        public static final Animation fly = Animation.Builder.create(2.0F).looping()
+        public static final AnimationDefinition fly = AnimationDefinition.Builder.withLength(2.0F).looping()
         //?} else {
         /*public static final AnimationDefinition fly = AnimationDefinition.Builder.create(2.0F).looping()
         *///?}
-                .addBoneAnimation("top", new Transformation(Transformation.Targets.ROTATE,
-                        new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
-                        new Keyframe(0.5F, AnimationHelper.createRotationalVector(0.0F, 360.0F, 0.0F), Transformation.Interpolations.LINEAR),
-                        new Keyframe(1.0F, AnimationHelper.createRotationalVector(0.0F, 720.0F, 0.0F), Transformation.Interpolations.LINEAR),
-                        new Keyframe(1.5F, AnimationHelper.createRotationalVector(0.0F, 1080.0F, 0.0F), Transformation.Interpolations.LINEAR),
-                        new Keyframe(2.0F, AnimationHelper.createRotationalVector(0.0F, 1440.0F, 0.0F), Transformation.Interpolations.LINEAR)
+                .addAnimation("top", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                        new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                        new Keyframe(0.5F, KeyframeAnimations.degreeVec(0.0F, 360.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                        new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, 720.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                        new Keyframe(1.5F, KeyframeAnimations.degreeVec(0.0F, 1080.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                        new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, 1440.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("head", new Transformation(Transformation.Targets.ROTATE,
-                        new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(0.5F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 2.5F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(1.5F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -2.5F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(2.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
+                .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                        new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(0.5F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 2.5F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(1.5F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -2.5F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
                 //? if <= 1.21.4 {
-                .addBoneAnimation("head", new Transformation(Transformation.Targets.TRANSLATE,
+                .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.POSITION,
                 //?} else {
                 /*.addBoneAnimation("head", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                 *///?}
-                        new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, -2.34F, 0.0F), Transformation.Interpolations.CUBIC)
+                        new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, -2.34F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                .addBoneAnimation("back", new Transformation(Transformation.Targets.ROTATE,
-                        new Keyframe(0.0F, AnimationHelper.createRotationalVector(-50.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(0.5F, AnimationHelper.createRotationalVector(-50.0F, 0.0F, 9.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(1.5F, AnimationHelper.createRotationalVector(-50.0F, 0.0F, -9.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(2.0F, AnimationHelper.createRotationalVector(-50.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
+                .addAnimation("back", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                        new Keyframe(0.0F, KeyframeAnimations.degreeVec(-50.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(0.5F, KeyframeAnimations.degreeVec(-50.0F, 0.0F, 9.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(1.5F, KeyframeAnimations.degreeVec(-50.0F, 0.0F, -9.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(2.0F, KeyframeAnimations.degreeVec(-50.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                .addBoneAnimation("midfront", new Transformation(Transformation.Targets.ROTATE,
-                        new Keyframe(0.0F, AnimationHelper.createRotationalVector(30.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
+                .addAnimation("midfront", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                        new Keyframe(0.0F, KeyframeAnimations.degreeVec(30.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
                 //? if <= 1.21.4 {
-                .addBoneAnimation("midfront", new Transformation(Transformation.Targets.TRANSLATE,
+                .addAnimation("midfront", new AnimationChannel(AnimationChannel.Targets.POSITION,
                 //?} else {
                 /*.addBoneAnimation("midfront", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                 *///?}
-                        new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, -0.15F, -0.2F), Transformation.Interpolations.CUBIC)
+                        new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, -0.15F, -0.2F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                .addBoneAnimation("midback", new Transformation(Transformation.Targets.ROTATE,
-                        new Keyframe(0.0F, AnimationHelper.createRotationalVector(-50.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(0.5F, AnimationHelper.createRotationalVector(-50.0F, 0.0F, 9.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(1.5F, AnimationHelper.createRotationalVector(-50.0F, 0.0F, -9.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(2.0F, AnimationHelper.createRotationalVector(-50.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
+                .addAnimation("midback", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                        new Keyframe(0.0F, KeyframeAnimations.degreeVec(-50.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(0.5F, KeyframeAnimations.degreeVec(-50.0F, 0.0F, 9.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(1.5F, KeyframeAnimations.degreeVec(-50.0F, 0.0F, -9.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(2.0F, KeyframeAnimations.degreeVec(-50.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
                 .build();
 
         //? if <= 1.21.5 {
-        public static final Animation stopFly = Animation.Builder.create(0.75F)
+        public static final AnimationDefinition stopFly = AnimationDefinition.Builder.withLength(0.75F)
         //?} else {
         /*public static final AnimationDefinition stopFly = AnimationDefinition.Builder.create(0.75F)
         *///?}
                 //? if <= 1.21.4 {
-                .addBoneAnimation("head", new Transformation(Transformation.Targets.TRANSLATE,
+                .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.POSITION,
                 //?} else {
                 /*.addBoneAnimation("head", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                 *///?}
-                        new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, -2.34F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(0.75F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
+                        new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, -2.34F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(0.75F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                .addBoneAnimation("back", new Transformation(Transformation.Targets.ROTATE,
-                        new Keyframe(0.0F, AnimationHelper.createRotationalVector(-50.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(0.75F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
+                .addAnimation("back", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                        new Keyframe(0.0F, KeyframeAnimations.degreeVec(-50.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(0.75F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                .addBoneAnimation("midfront", new Transformation(Transformation.Targets.ROTATE,
-                        new Keyframe(0.0F, AnimationHelper.createRotationalVector(30.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(0.75F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
+                .addAnimation("midfront", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                        new Keyframe(0.0F, KeyframeAnimations.degreeVec(30.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(0.75F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
                 //? if <= 1.21.4 {
-                .addBoneAnimation("midfront", new Transformation(Transformation.Targets.TRANSLATE,
+                .addAnimation("midfront", new AnimationChannel(AnimationChannel.Targets.POSITION,
                 //?} else {
                 /*.addBoneAnimation("midfront", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                 *///?}
-                        new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, -0.15F, -0.2F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(0.75F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
+                        new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, -0.15F, -0.2F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(0.75F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                .addBoneAnimation("midback", new Transformation(Transformation.Targets.ROTATE,
-                        new Keyframe(0.0F, AnimationHelper.createRotationalVector(-50.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(0.75F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
+                .addAnimation("midback", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                        new Keyframe(0.0F, KeyframeAnimations.degreeVec(-50.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(0.75F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
                 .build();
 
         //? if <= 1.21.5 {
-        public static final Animation startFly = Animation.Builder.create(0.75F)
+        public static final AnimationDefinition startFly = AnimationDefinition.Builder.withLength(0.75F)
         //?} else {
         /*public static final AnimationDefinition startFly = AnimationDefinition.Builder.create(0.75F)
         *///?}
                 //? if <= 1.21.4 {
-                .addBoneAnimation("head", new Transformation(Transformation.Targets.TRANSLATE,
+                .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.POSITION,
                 //?} else {
                 /*.addBoneAnimation("head", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                 *///?}
-                        new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(0.75F, AnimationHelper.createTranslationalVector(0.0F, -2.34F, 0.0F), Transformation.Interpolations.CUBIC)
+                        new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(0.75F, KeyframeAnimations.posVec(0.0F, -2.34F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                .addBoneAnimation("back", new Transformation(Transformation.Targets.ROTATE,
-                        new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(0.75F, AnimationHelper.createRotationalVector(-50.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
+                .addAnimation("back", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                        new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(0.75F, KeyframeAnimations.degreeVec(-50.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                .addBoneAnimation("midfront", new Transformation(Transformation.Targets.ROTATE,
-                        new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(0.75F, AnimationHelper.createRotationalVector(30.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
+                .addAnimation("midfront", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                        new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(0.75F, KeyframeAnimations.degreeVec(30.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
                 //? if <= 1.21.4 {
-                .addBoneAnimation("midfront", new Transformation(Transformation.Targets.TRANSLATE,
+                .addAnimation("midfront", new AnimationChannel(AnimationChannel.Targets.POSITION,
                 //?} else {
                 /*.addBoneAnimation("midfront", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                 *///?}
-                        new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(0.75F, AnimationHelper.createTranslationalVector(0.0F, -0.15F, -0.2F), Transformation.Interpolations.CUBIC)
+                        new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(0.75F, KeyframeAnimations.posVec(0.0F, -0.15F, -0.2F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                .addBoneAnimation("midback", new Transformation(Transformation.Targets.ROTATE,
-                        new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(0.75F, AnimationHelper.createRotationalVector(-50.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
+                .addAnimation("midback", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                        new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(0.75F, KeyframeAnimations.degreeVec(-50.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
                 .build();
 
         //? if <= 1.21.5 {
-        public static final Animation idle = Animation.Builder.create(4.0F).looping()
+        public static final AnimationDefinition idle = AnimationDefinition.Builder.withLength(4.0F).looping()
         //?} else {
         /*public static final AnimationDefinition idle = AnimationDefinition.Builder.create(4.0F).looping()
         *///?}
-                .addBoneAnimation("head", new Transformation(Transformation.Targets.ROTATE,
-                        new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(1.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -4.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(3.25F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 4.0F), Transformation.Interpolations.CUBIC),
-                        new Keyframe(4.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
+                .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                        new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(3.25F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                        new Keyframe(4.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
                 .build();
 }

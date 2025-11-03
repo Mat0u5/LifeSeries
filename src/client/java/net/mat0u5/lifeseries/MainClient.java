@@ -12,10 +12,8 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.interfaces.IClientHelper;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import java.util.*;
 
 public class MainClient implements ClientModInitializer, IClientHelper {
@@ -40,7 +38,7 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     public static String limitedLifeTimerColor = "";
     public static long limitedLifeTimeLastUpdated = 0;
     public static long limitedLifeLives = 0;
-    public static Text sideTitle = null;
+    public static Component sideTitle = null;
 
 
     public static ClientConfig clientConfig;
@@ -74,17 +72,17 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     }
 
     public static boolean isClientPlayer(UUID uuid) {
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft client = Minecraft.getInstance();
         if (client == null) return false;
         if (client.player == null) return false;
-        return client.player.getUuid().equals(uuid);
+        return client.player.getUUID().equals(uuid);
     }
 
     @Override
     public boolean isRunningIntegratedServer() {
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft client = Minecraft.getInstance();
         if (client == null) return false;
-        return client.isIntegratedServerRunning();
+        return client.hasSingleplayerServer();
     }
 
     @Override

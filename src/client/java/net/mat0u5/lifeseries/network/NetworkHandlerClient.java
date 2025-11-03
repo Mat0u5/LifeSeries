@@ -30,14 +30,13 @@ import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -89,8 +88,8 @@ public class NetworkHandlerClient {
 
     public static void handleSidetitle(SidetitlePacket payload) {
         MainClient.sideTitle = payload.text();
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client.inGameHud instanceof InGameHudAccessor hudAccessor) {
+        Minecraft client = Minecraft.getInstance();
+        if (client.gui instanceof InGameHudAccessor hudAccessor) {
             TextHud.sideTitleRemainTicks = hudAccessor.ls$titleFadeInTicks() + hudAccessor.ls$titleStayTicks() + hudAccessor.ls$titleFadeOutTicks();
         }
     }
@@ -107,7 +106,7 @@ public class NetworkHandlerClient {
                 String morphTypeStr = value.get(1);
                 EntityType<?> morphType = null;
                 if (!morphTypeStr.equalsIgnoreCase("null") && !morphUUIDStr.isEmpty()) {
-                    morphType = Registries.ENTITY_TYPE.get(Identifier.of(morphTypeStr));
+                    morphType = BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.parse(morphTypeStr));
                 }
                 if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Received morph packet: {} ({})", morphType, morphUUID);
                 MorphManager.setFromPacket(morphUUID, morphType);
@@ -144,8 +143,8 @@ public class NetworkHandlerClient {
             MainClient.clientActiveWildcards = newList;
         }
 
-        if (name == PacketNames.JUMP && MinecraftClient.getInstance().player != null) {
-            MinecraftClient.getInstance().player.jump();
+        if (name == PacketNames.JUMP && Minecraft.getInstance().player != null) {
+            Minecraft.getInstance().player.jumpFromGround();
         }
 
         if (name == PacketNames.RESET_TRIVIA) {
@@ -153,7 +152,7 @@ public class NetworkHandlerClient {
         }
 
         if (name == PacketNames.SELECT_WILDCARDS) {
-            MinecraftClient.getInstance().setScreen(new ChooseWildcardScreen());
+            Minecraft.getInstance().setScreen(new ChooseWildcardScreen());
         }
 
         if (name == PacketNames.CLEAR_CONFIG) {
@@ -165,11 +164,11 @@ public class NetworkHandlerClient {
 
 
         if (name == PacketNames.SELECT_SEASON) {
-            MinecraftClient.getInstance().setScreen(new ChooseSeasonScreen(!value.isEmpty()));
+            Minecraft.getInstance().setScreen(new ChooseSeasonScreen(!value.isEmpty()));
         }
         if (name == PacketNames.SEASON_INFO) {
             Seasons season = Seasons.getSeasonFromStringName(value);
-            if (season != Seasons.UNASSIGNED) MinecraftClient.getInstance().setScreen(new SeasonInfoScreen(season));
+            if (season != Seasons.UNASSIGNED) Minecraft.getInstance().setScreen(new SeasonInfoScreen(season));
         }
 
         if (name == PacketNames.PREVENT_GLIDING) {
@@ -185,14 +184,14 @@ public class NetworkHandlerClient {
             MainClient.TAB_LIST_SHOW_EXACT_LIVES = value.equalsIgnoreCase("true");
         }
         if (name == PacketNames.SHOW_TOTEM) {
-            ItemStack totemItem = Items.TOTEM_OF_UNDYING.getDefaultStack();
+            ItemStack totemItem = Items.TOTEM_OF_UNDYING.getDefaultInstance();
             if (value.equalsIgnoreCase("task") || value.equalsIgnoreCase("task_red")) {
                 totemItem = AnimationUtils.getSecretLifeTotemItem(value.equalsIgnoreCase("task_red"));
             }
-            MinecraftClient.getInstance().gameRenderer.showFloatingItem(totemItem);
+            Minecraft.getInstance().gameRenderer.displayItemActivation(totemItem);
         }
         if (name == PacketNames.PAST_LIFE_CHOOSE_TWIST) {
-            MinecraftClient.getInstance().setScreen(new PastLifeChooseTwistScreen());
+            Minecraft.getInstance().setScreen(new PastLifeChooseTwistScreen());
         }
         if (name == PacketNames.FIX_SIZECHANGING_BUGS) {
             MainClient.FIX_SIZECHANGING_BUGS = value.equalsIgnoreCase("true");
@@ -219,8 +218,8 @@ public class NetworkHandlerClient {
             MainClient.snailAir = intNumber;
             MainClient.snailAirTimestamp = System.currentTimeMillis();
         }
-        if (name == PacketNames.FAKE_THUNDER && MinecraftClient.getInstance().world != null) {
-            MinecraftClient.getInstance().world.setLightningTicksLeft(intNumber);
+        if (name == PacketNames.FAKE_THUNDER && Minecraft.getInstance().level != null) {
+            Minecraft.getInstance().level.setSkyFlashTime(intNumber);
         }
         if (name == PacketNames.TAB_LIVES_CUTOFF) {
             MainClient.TAB_LIST_LIVES_CUTOFF = intNumber;
@@ -324,7 +323,7 @@ public class NetworkHandlerClient {
 
             //Check if client version is compatible with the server version
             if (clientVersion < serverCompatibility) {
-                Text disconnectText = Text.literal("[Life Series Mod] Client-Server version mismatch!\n" +
+                Component disconnectText = Component.literal("[Life Series Mod] Client-Server version mismatch!\n" +
                         "Update the client version to at least version "+serverCompatibilityStr);
                 ClientUtils.disconnect(disconnectText);
                 return;
@@ -332,7 +331,7 @@ public class NetworkHandlerClient {
 
             //Check if server version is compatible with the client version
             if (serverVersion < clientCompatibility) {
-                Text disconnectText = Text.literal("[Life Series Mod] Server-Client version mismatch!\n" +
+                Component disconnectText = Component.literal("[Life Series Mod] Server-Client version mismatch!\n" +
                         "The client version is too new for the server.\n" +
                         "Either update the server, or downgrade the client version to " + serverVersionStr);
                 ClientUtils.disconnect(disconnectText);
@@ -343,7 +342,7 @@ public class NetworkHandlerClient {
             //Isolated enviroment -> mod versions must be IDENTICAL between client and server
             //Check if client version is the same as the server version
             if (!clientVersionStr.equalsIgnoreCase(serverVersionStr)) {
-                Text disconnectText = Text.literal("[Life Series Mod] Client-Server version mismatch!\n" +
+                Component disconnectText = Component.literal("[Life Series Mod] Client-Server version mismatch!\n" +
                         "You must join with version "+serverCompatibilityStr);
                 ClientUtils.disconnect(disconnectText);
                 return;

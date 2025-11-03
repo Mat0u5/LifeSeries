@@ -1,23 +1,23 @@
 package net.mat0u5.lifeseries.mixin.client;
 
-import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.gui.Gui;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(value = InGameHud.class, priority = 2)
+@Mixin(value = Gui.class, priority = 2)
 public interface InGameHudAccessor {
-    @Accessor("titleFadeInTicks")
+    @Accessor("titleFadeInTime")
     int ls$titleFadeInTicks();
 
-    @Accessor("titleStayTicks")
+    @Accessor("titleStayTime")
     int ls$titleStayTicks();
 
-    @Accessor("titleFadeOutTicks")
+    @Accessor("titleFadeOutTime")
     int ls$titleFadeOutTicks();
 
-    @Accessor("titleRemainTicks")
+    @Accessor("titleTime")
     int ls$titleRemainTicks();
 
-    @Accessor("titleRemainTicks")
+    @Accessor("titleTime")
     void ls$setTitleRemainTicks(int ticks);
 }

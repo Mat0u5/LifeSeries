@@ -1,27 +1,23 @@
 package net.mat0u5.lifeseries.entity.triviabot;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.mat0u5.lifeseries.Main;
-
-
-//? if <= 1.21 {
-
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.client.render.entity.MobEntityRenderer;
-public class TriviaBotRenderer extends MobEntityRenderer<TriviaBot, TriviaBotModel<TriviaBot>> {
-    public TriviaBotRenderer(EntityRendererFactory.Context context) {
-        super(context, new TriviaBotModel<>(context.getPart(TriviaBotModel.TRIVIA_BOT)), 0.45f);
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.resources.ResourceLocation;
+public class TriviaBotRenderer extends MobRenderer<TriviaBot, TriviaBotModel<TriviaBot>> {
+    public TriviaBotRenderer(EntityRendererProvider.Context context) {
+        super(context, new TriviaBotModel<>(context.bakeLayer(TriviaBotModel.TRIVIA_BOT)), 0.45f);
     }
 
     @Override
-    public Identifier getTexture(TriviaBot entity) {
-        return Identifier.of(Main.MOD_ID, "textures/entity/triviabot/triviabot.png");
+    public ResourceLocation getTexture(TriviaBot entity) {
+        return ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "textures/entity/triviabot/triviabot.png");
     }
 
     @Override
-    public void render(TriviaBot entity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
+    public void render(TriviaBot entity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         super.render(entity, f, g, matrixStack, vertexConsumerProvider, i);
     }
 }

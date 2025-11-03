@@ -1,13 +1,13 @@
 package net.mat0u5.lifeseries.mixin.client;
 
 import net.mat0u5.lifeseries.gui.config.ConfigListWidget;
-import net.minecraft.client.gui.widget.EntryListWidget;
+import net.minecraft.client.gui.components.AbstractSelectionList;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = EntryListWidget.class, priority = 1)
+@Mixin(value = AbstractSelectionList.class, priority = 1)
 public class EntryListWidgetMixin  {
 
     //? if >= 1.21.9 {

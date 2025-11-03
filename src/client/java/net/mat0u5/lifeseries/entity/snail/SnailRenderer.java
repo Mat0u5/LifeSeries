@@ -1,34 +1,31 @@
 package net.mat0u5.lifeseries.entity.snail;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.features.SnailSkinsClient;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.resources.ResourceLocation;
+public class SnailRenderer extends MobRenderer<Snail, SnailModel<Snail>> {
 
-//? if <= 1.21 {
-
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.render.entity.MobEntityRenderer;
-public class SnailRenderer extends MobEntityRenderer<Snail, SnailModel<Snail>> {
-
-    public SnailRenderer(EntityRendererFactory.Context context) {
-        super(context, new SnailModel<>(context.getPart(SnailModel.SNAIL)), 0.35f);
+    public SnailRenderer(EntityRendererProvider.Context context) {
+        super(context, new SnailModel<>(context.bakeLayer(SnailModel.SNAIL)), 0.35f);
     }
 
     @Override
-    public Identifier getTexture(Snail entity) {
+    public ResourceLocation getTexture(Snail entity) {
         if (entity.isFromTrivia()) return Snail.TRIVIA_TEXTURE;
         if (entity.isBoundPlayerDead()) return Snail.ZOMBIE_TEXTURE;
 
-        Identifier dynamicTexture = SnailSkinsClient.getSnailTexture(entity.getSkinName());
+        ResourceLocation dynamicTexture = SnailSkinsClient.getSnailTexture(entity.getSkinName());
         if (dynamicTexture != null) return dynamicTexture;
 
         return Snail.DEFAULT_TEXTURE;
     }
 
     @Override
-    public void render(Snail entity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
+    public void render(Snail entity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         super.render(entity, f, g, matrixStack, vertexConsumerProvider, i);
     }
 }

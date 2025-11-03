@@ -4,10 +4,10 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.ClientUtils;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.scoreboard.Team;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.scores.PlayerTeam;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,7 +23,7 @@ import net.minecraft.client.render.RenderLayer;
 //? if >= 1.21.6
 /*import com.mojang.blaze3d.pipeline.RenderPipeline;*/
 
-@Mixin(value = InGameHud.class, priority = 1)
+@Mixin(value = Gui.class, priority = 1)
 public class InGameHudMixin {
     @Unique
     private static final List<String> ls$allowedColors = List.of(
@@ -37,8 +37,8 @@ public class InGameHudMixin {
     );
 
     //? if <= 1.21 {
-    @Redirect(method = "drawHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V"))
-    private void customHearts(DrawContext instance, Identifier identifier, int x, int y, int u, int v) {
+    @Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lnet/minecraft/resources/ResourceLocation;IIII)V"))
+    private void customHearts(GuiGraphics instance, ResourceLocation identifier, int x, int y, int u, int v) {
     //?} else if <= 1.21.5 {
     /*@Redirect(method = "drawHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Ljava/util/function/Function;Lnet/minecraft/util/Identifier;IIII)V"))
     private void customHearts(DrawContext instance, Function<Identifier, RenderLayer> renderLayers, Identifier identifier, int x, int y, int u, int v) {
@@ -48,7 +48,7 @@ public class InGameHudMixin {
     *///?}
 
         String texturePath = identifier.getPath();
-        Team playerTeam = ClientUtils.getPlayerTeam();
+        PlayerTeam playerTeam = ClientUtils.getPlayerTeam();
         if (!MainClient.COLORED_HEARTS || playerTeam == null || playerTeam.getColor() == null ||
                 !ls$allowedColors.contains(playerTeam.getColor().getName().toLowerCase()) ||
                 !ls$allowedHearts.contains(texturePath) || Main.modFullyDisabled()) {
@@ -56,7 +56,7 @@ public class InGameHudMixin {
                 return;
             }
             //? if <= 1.21 {
-            instance.drawGuiTexture(identifier, x, y, u, v);
+            instance.blitSprite(identifier, x, y, u, v);
             ls$afterHeartDraw(instance, identifier, x, y, u, v);
              //?} else if <= 1.21.5 {
             /*instance.drawGuiTexture(renderLayers, identifier, x, y, u, v);
@@ -77,9 +77,9 @@ public class InGameHudMixin {
                 heartType = "hardcore_"+heartType;
             }
         }
-        Identifier customHeart = Identifier.of("lifeseries", "textures/gui/hearts/"+color+"_"+heartType+".png");
+        ResourceLocation customHeart = ResourceLocation.fromNamespaceAndPath("lifeseries", "textures/gui/hearts/"+color+"_"+heartType+".png");
         //? if <= 1.21 {
-        instance.drawTexture(customHeart, x, y, 100, u, v, u, v, u, v);
+        instance.blit(customHeart, x, y, 100, u, v, u, v, u, v);
         ls$afterHeartDraw(instance, identifier, x, y, u, v);
         //?} else if <= 1.21.5 {
         /*instance.drawTexture(renderLayers, customHeart, x, y, u, v, u, v, u, v);
@@ -92,7 +92,7 @@ public class InGameHudMixin {
 
     @Unique
     //? if <= 1.21 {
-    private void ls$afterHeartDraw(DrawContext instance, Identifier identifier, int x, int y, int u, int v) {
+    private void ls$afterHeartDraw(GuiGraphics instance, ResourceLocation identifier, int x, int y, int u, int v) {
     //?} else if <= 1.21.5 {
     /*private void ls$afterHeartDraw(DrawContext instance, Function<Identifier, RenderLayer> renderLayers, Identifier identifier, int x, int y, int u, int v) {
     *///?} else {
@@ -108,9 +108,9 @@ public class InGameHudMixin {
         if (blinking) heartName += "_blinking";
         if (half) heartName += "_half";
 
-        Identifier customHeart = Identifier.of("lifeseries", "textures/gui/hearts/secretlife/"+heartName+".png");
+        ResourceLocation customHeart = ResourceLocation.fromNamespaceAndPath("lifeseries", "textures/gui/hearts/secretlife/"+heartName+".png");
         //? if <= 1.21 {
-        instance.drawTexture(customHeart, x, y, 100, u, v, u, v, u, v);
+        instance.blit(customHeart, x, y, 100, u, v, u, v, u, v);
         //?} else if <= 1.21.5 {
         /*instance.drawTexture(renderLayers, customHeart, x, y, u, v, u, v, u, v);
         *///?} else {

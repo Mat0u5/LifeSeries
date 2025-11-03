@@ -5,16 +5,14 @@ import net.mat0u5.lifeseries.mixin.client.EntityTrackingSoundInstanceAccessor;
 import net.mat0u5.lifeseries.mixin.client.SoundManagerAccessor;
 import net.mat0u5.lifeseries.mixin.client.SoundSystemAccessor;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.sound.EntityTrackingSoundInstance;
-import net.minecraft.client.sound.SoundInstance;
-import net.minecraft.client.sound.SoundManager;
-import net.minecraft.client.sound.SoundSystem;
-import net.minecraft.entity.Entity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.math.Vec3d;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
+import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.client.sounds.SoundEngine;
+import net.minecraft.client.sounds.SoundManager;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 import java.util.*;
 
 public class ClientSounds {
@@ -27,20 +25,20 @@ public class ClientSounds {
     );
 
     public static void onSoundPlay(SoundInstance sound) {
-        if (!(sound instanceof EntityTrackingSoundInstance entityTrackingSound)) return;
+        if (!(sound instanceof EntityBoundSoundInstance entityTrackingSound)) return;
 
-        if (!trackedSounds.contains(entityTrackingSound.getId().getPath())) return;
+        if (!trackedSounds.contains(entityTrackingSound.getLocation().getPath())) return;
 
         if (!(entityTrackingSound instanceof EntityTrackingSoundInstanceAccessor entityTrackingSoundAccessor)) return;
         Entity entity = entityTrackingSoundAccessor.getEntity();
         if (entity == null) return;
-        UUID uuid = entity.getUuid();
+        UUID uuid = entity.getUUID();
         if (uuid == null) return;
 
         if (trackedEntitySounds.containsKey(uuid)) {
             SoundInstance stopSound = trackedEntitySounds.get(uuid);
             if (stopSound != null) {
-                MinecraftClient.getInstance().getSoundManager().stop(stopSound);
+                Minecraft.getInstance().getSoundManager().stop(stopSound);
             }
         }
         trackedEntitySounds.put(uuid, sound);
@@ -53,21 +51,21 @@ public class ClientSounds {
     );
     private static long ticks = 0;
     public static void updateSingleSoundVolumes() {
-        MinecraftClient client = MinecraftClient.getInstance();
-        ClientPlayerEntity player = client.player;
+        Minecraft client = Minecraft.getInstance();
+        LocalPlayer player = client.player;
         if (player == null) return;
         ticks++;
         if (ticks % 15 != 0) return;
-        SoundManager soundManager = MinecraftClient.getInstance().getSoundManager();
+        SoundManager soundManager = Minecraft.getInstance().getSoundManager();
         if (!(soundManager instanceof SoundManagerAccessor managerAccessor)) return;
-        SoundSystem soundSystem = managerAccessor.getSoundSystem();
+        SoundEngine soundSystem = managerAccessor.getSoundSystem();
         if (!(soundSystem instanceof SoundSystemAccessor accessor)) return;
         Map<String, Map<Double, SoundInstance>> soundMap = new HashMap<>();
         for (Collection<SoundInstance> soundCategory : accessor.getSounds().asMap().values()) {
             for (SoundInstance sound : soundCategory) {
-                String name = sound.getId().getPath();
+                String name = sound.getLocation().getPath();
                 if (!onlyOneOf.contains(name)) continue;
-                Vec3d soundPosition = new Vec3d(sound.getX(), sound.getY(), sound.getZ());
+                Vec3 soundPosition = new Vec3(sound.getX(), sound.getY(), sound.getZ());
                 double distance = player.ls$getEntityPos().distanceTo(soundPosition);
                 if (soundMap.containsKey(name)) {
                     soundMap.get(name).put(distance, sound);
