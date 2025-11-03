@@ -1,16 +1,10 @@
 package net.mat0u5.lifeseries.seasons.season.lastlife;
 
 import net.mat0u5.lifeseries.config.ConfigManager;
-import net.mat0u5.lifeseries.seasons.boogeyman.Boogeyman;
-import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeLivesManager;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.minecraft.server.level.ServerPlayer;
-import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.currentSession;
 import static net.mat0u5.lifeseries.Main.seasonConfig;

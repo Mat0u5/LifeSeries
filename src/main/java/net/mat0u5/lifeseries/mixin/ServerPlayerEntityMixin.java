@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.utils.interfaces.IServerPlayerEntity;
@@ -19,13 +20,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Collection;
 import java.util.OptionalInt;
 
 import static net.mat0u5.lifeseries.Main.*;
-
-//? if <= 1.21.6 {
-import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 
 @Mixin(value = ServerPlayer.class, priority = 1)
 public class ServerPlayerEntityMixin implements IServerPlayerEntity {

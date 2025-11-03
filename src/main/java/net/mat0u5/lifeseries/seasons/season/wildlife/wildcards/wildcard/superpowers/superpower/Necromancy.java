@@ -16,11 +16,13 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.GameType;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static net.mat0u5.lifeseries.Main.*;
+import static net.mat0u5.lifeseries.Main.livesManager;
+import static net.mat0u5.lifeseries.Main.seasonConfig;
 
 public class Necromancy extends Superpower {
     private static final List<UUID> ressurectedPlayers = new ArrayList<>();

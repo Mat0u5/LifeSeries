@@ -1,11 +1,12 @@
 package net.mat0u5.lifeseries.seasons.season.secretlife;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.Filterable;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.livesManager;
 

@@ -36,7 +36,7 @@ public class MinutesConfigEntry extends DoubleConfigEntry implements ITextFieldA
 
     @Override
     public Component getPopupText() {
-        return Component.literal(OtherUtils.formatSecondsToReadable((int)(value*60))).formatted(ChatFormatting.GRAY);
+        return Component.literal(OtherUtils.formatSecondsToReadable((int)(value*60))).withStyle(ChatFormatting.GRAY);
     }
 
     @Override

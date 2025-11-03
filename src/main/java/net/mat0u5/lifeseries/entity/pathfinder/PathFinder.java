@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.entity.pathfinder;
 
 import net.mat0u5.lifeseries.Main;
-import net.minecraft.entity.ai.pathing.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;

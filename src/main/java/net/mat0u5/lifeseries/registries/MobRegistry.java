@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.registries;
 
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.mat0u5.lifeseries.entity.pathfinder.PathFinder;
-import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.minecraft.core.Registry;
@@ -11,8 +11,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-//? if <= 1.21 {
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 
 public class MobRegistry {
     //? if <= 1.21 {

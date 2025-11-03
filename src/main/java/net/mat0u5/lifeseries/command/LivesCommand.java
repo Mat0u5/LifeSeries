@@ -21,6 +21,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.scores.PlayerScoreEntry;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

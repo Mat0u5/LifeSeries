@@ -36,13 +36,9 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.scores.ScoreHolder;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
 import static net.mat0u5.lifeseries.Main.seasonConfig;
-import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
 //? if >= 1.21.2 {
-/*import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.server.world.ServerWorld;
-*///?}
+//?}
 
 public class WildLife extends Season {
     public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /wildcard, /superpower, /snail";

@@ -1,8 +1,5 @@
 package net.mat0u5.lifeseries.utils.world;
 
-import org.jetbrains.annotations.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -19,6 +16,10 @@ import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.server;
 

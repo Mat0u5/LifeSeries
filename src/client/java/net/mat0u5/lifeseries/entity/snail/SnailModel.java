@@ -1,17 +1,13 @@
 package net.mat0u5.lifeseries.entity.snail;
 
-import Snail;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.*;
+import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.builders.*;
+//? if <= 1.21 {
 public class SnailModel<T extends Snail> extends HierarchicalModel<T> {
 //?} else {
 /*import net.minecraft.client.render.entity.model.EntityModel;
@@ -172,7 +168,7 @@ public class SnailModel extends EntityModel<SnailRenderState> {
 
     //? if <= 1.21 {
     @Override
-    public void setAngles(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.root().getAllParts().forEach(ModelPart::resetPose);
         this.animate(entity.clientData.flyAnimationState, SnailAnimations.fly, ageInTicks);
         this.animate(entity.clientData.glideAnimationState, SnailAnimations.glide, ageInTicks);
@@ -181,8 +177,8 @@ public class SnailModel extends EntityModel<SnailRenderState> {
         this.animate(entity.clientData.startFlyAnimationState, SnailAnimations.startFly, ageInTicks);
         this.animate(entity.clientData.stopFlyAnimationState, SnailAnimations.stopFly, ageInTicks);
 
-        boolean parachuteHidden = !entity.clientData.glideAnimationState.isRunning();
-        boolean propellerHidden = !entity.clientData.flyAnimationState.isRunning() && !entity.clientData.startFlyAnimationState.isRunning();
+        boolean parachuteHidden = !entity.clientData.glideAnimationState.isStarted();
+        boolean propellerHidden = !entity.clientData.flyAnimationState.isStarted() && !entity.clientData.startFlyAnimationState.isStarted();
         boolean triviaHidden = !entity.isFromTrivia();
 
         this.parachute.getAllParts().forEach(part -> part.skipDraw = parachuteHidden);

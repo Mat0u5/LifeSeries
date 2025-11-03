@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URI;

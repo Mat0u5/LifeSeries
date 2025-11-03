@@ -4,11 +4,11 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.config.ClientConfig;
+import net.mat0u5.lifeseries.config.ClientConfigGuiManager;
 import net.mat0u5.lifeseries.config.ClientConfigNetwork;
 import net.mat0u5.lifeseries.features.Morph;
 import net.mat0u5.lifeseries.features.SnailSkinsClient;
 import net.mat0u5.lifeseries.features.Trivia;
-import net.mat0u5.lifeseries.config.ClientConfigGuiManager;
 import net.mat0u5.lifeseries.gui.other.ChooseWildcardScreen;
 import net.mat0u5.lifeseries.gui.other.PastLifeChooseTwistScreen;
 import net.mat0u5.lifeseries.gui.seasons.ChooseSeasonScreen;
@@ -23,7 +23,6 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDilation;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.utils.ClientResourcePacks;
-import net.mat0u5.lifeseries.utils.ClientTaskScheduler;
 import net.mat0u5.lifeseries.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
@@ -37,6 +36,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -44,39 +44,39 @@ import java.util.UUID;
 public class NetworkHandlerClient {
     public static void registerClientReceiver() {
         ClientPlayNetworking.registerGlobalReceiver(NumberPayload.ID, (payload, context) -> {
-            MinecraftClient client = context.client();
+            Minecraft client = context.client();
             client.execute(() -> handleNumberPacket(payload));
         });
         ClientPlayNetworking.registerGlobalReceiver(StringPayload.ID, (payload, context) -> {
-            MinecraftClient client = context.client();
+            Minecraft client = context.client();
             client.execute(() -> handleStringPacket(payload));
         });
         ClientPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (payload, context) -> {
-            MinecraftClient client = context.client();
+            Minecraft client = context.client();
             client.execute(() -> handleHandshake(payload));
         });
         ClientPlayNetworking.registerGlobalReceiver(TriviaQuestionPayload.ID, (payload, context) -> {
-            MinecraftClient client = context.client();
+            Minecraft client = context.client();
             client.execute(() -> Trivia.receiveTrivia(payload));
         });
         ClientPlayNetworking.registerGlobalReceiver(LongPayload.ID, (payload, context) -> {
-            MinecraftClient client = context.client();
+            Minecraft client = context.client();
             client.execute(() -> handleLongPacket(payload));
         });
         ClientPlayNetworking.registerGlobalReceiver(PlayerDisguisePayload.ID, (payload, context) -> {
-            MinecraftClient client = context.client();
+            Minecraft client = context.client();
             client.execute(() -> handlePlayerDisguise(payload));
         });
         ClientPlayNetworking.registerGlobalReceiver(ConfigPayload.ID, (payload, context) -> {
-            MinecraftClient client = context.client();
+            Minecraft client = context.client();
             client.execute(() -> handleConfigPacket(payload));
         });
         ClientPlayNetworking.registerGlobalReceiver(StringListPayload.ID, (payload, context) -> {
-            MinecraftClient client = context.client();
+            Minecraft client = context.client();
             client.execute(() -> handleStringListPacket(payload));
         });
         ClientPlayNetworking.registerGlobalReceiver(SidetitlePacket.ID, (payload, context) -> {
-            MinecraftClient client = context.client();
+            Minecraft client = context.client();
             client.execute(() -> handleSidetitle(payload));
         });
         ClientPlayNetworking.registerGlobalReceiver(SnailTexturePacket.ID, (payload, context) -> {

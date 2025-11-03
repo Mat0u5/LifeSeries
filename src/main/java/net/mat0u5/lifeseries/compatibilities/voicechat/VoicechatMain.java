@@ -9,7 +9,8 @@ import de.maxhenkel.voicechat.api.opus.OpusEncoder;
 import de.maxhenkel.voicechat.api.packets.LocationalSoundPacket;
 import de.maxhenkel.voicechat.api.packets.MicrophonePacket;
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
+import net.mat0u5.lifeseries.compatibilities.voicechat.soundeffects.RadioEffect;
+import net.mat0u5.lifeseries.compatibilities.voicechat.soundeffects.RoboticVoice;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaHandler;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
@@ -18,11 +19,9 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Listening;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
-import net.mat0u5.lifeseries.compatibilities.voicechat.soundeffects.RadioEffect;
-import net.mat0u5.lifeseries.compatibilities.voicechat.soundeffects.RoboticVoice;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;

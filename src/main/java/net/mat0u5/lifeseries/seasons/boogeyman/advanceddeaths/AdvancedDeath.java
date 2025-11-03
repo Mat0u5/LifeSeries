@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
+
 import java.util.UUID;
 
 public abstract class AdvancedDeath {

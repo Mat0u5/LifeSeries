@@ -15,7 +15,6 @@ import net.minecraft.util.FormattedCharSequence;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-
 //? if >= 1.21.9
 /*import net.minecraft.client.gui.Click;*/
 
@@ -51,7 +50,7 @@ public class QuizScreen extends DefaultScreen {
         answerRects.clear();
         for (int i = 0; i < Trivia.answers.size(); i++) {
             char answerIndex = (char) (i+65);
-            MutableComponent label = TextUtils.format("{}: ", answerIndex).formatted(ChatFormatting.BOLD);
+            MutableComponent label = TextUtils.format("{}: ", answerIndex).withStyle(ChatFormatting.BOLD);
             MutableComponent answerText = Component.literal(Trivia.answers.get(i));
             answerText.setStyle(answerText.getStyle().withBold(false));
             Component text = label.append(answerText);

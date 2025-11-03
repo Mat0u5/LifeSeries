@@ -6,13 +6,14 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+//? if <= 1.21 {
 public class TriviaBotRenderer extends MobRenderer<TriviaBot, TriviaBotModel<TriviaBot>> {
     public TriviaBotRenderer(EntityRendererProvider.Context context) {
         super(context, new TriviaBotModel<>(context.bakeLayer(TriviaBotModel.TRIVIA_BOT)), 0.45f);
     }
 
     @Override
-    public ResourceLocation getTexture(TriviaBot entity) {
+    public ResourceLocation getTextureLocation(TriviaBot entity) {
         return ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "textures/entity/triviabot/triviabot.png");
     }
 

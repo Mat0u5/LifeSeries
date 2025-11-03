@@ -1,12 +1,12 @@
 package net.mat0u5.lifeseries.entity.snail;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.features.SnailSkinsClient;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+//? if <= 1.21 {
 public class SnailRenderer extends MobRenderer<Snail, SnailModel<Snail>> {
 
     public SnailRenderer(EntityRendererProvider.Context context) {
@@ -14,7 +14,7 @@ public class SnailRenderer extends MobRenderer<Snail, SnailModel<Snail>> {
     }
 
     @Override
-    public ResourceLocation getTexture(Snail entity) {
+    public ResourceLocation getTextureLocation(Snail entity) {
         if (entity.isFromTrivia()) return Snail.TRIVIA_TEXTURE;
         if (entity.isBoundPlayerDead()) return Snail.ZOMBIE_TEXTURE;
 

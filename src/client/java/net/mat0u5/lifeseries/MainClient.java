@@ -14,6 +14,7 @@ import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.interfaces.IClientHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+
 import java.util.*;
 
 public class MainClient implements ClientModInitializer, IClientHelper {

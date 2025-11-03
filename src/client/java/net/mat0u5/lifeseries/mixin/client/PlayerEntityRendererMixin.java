@@ -1,27 +1,18 @@
 package net.mat0u5.lifeseries.mixin.client;
 
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-
-//? if <= 1.21 {
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.render.entity.*;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.world.entity.LivingEntity;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.mat0u5.lifeseries.Main;
-
-//? if > 1.21.6 {
-/*import org.spongepowered.asm.mixin.injection.ModifyArg;
-import net.minecraft.text.Text;
-import net.mat0u5.lifeseries.utils.ClientUtils;
-*///?}
 
 @Mixin(value = PlayerRenderer.class, priority = 1)
 public abstract class PlayerEntityRendererMixin {

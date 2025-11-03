@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.entity.triviabot.goal;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
+
 import java.util.EnumSet;
 
 public class TriviaBotLookAtPlayerGoal extends Goal {

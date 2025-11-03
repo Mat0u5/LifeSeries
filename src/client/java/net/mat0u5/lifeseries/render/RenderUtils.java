@@ -8,7 +8,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import java.util.List;
 //? if >= 1.21.2 && <= 1.21.5
-/*import net.minecraft.client.render.RenderLayer;*/
 //? if >= 1.21.6
 /*import net.minecraft.client.gl.RenderPipelines;*/
 

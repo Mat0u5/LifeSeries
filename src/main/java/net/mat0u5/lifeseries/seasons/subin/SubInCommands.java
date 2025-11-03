@@ -14,13 +14,9 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import java.util.Optional;
-import java.util.UUID;
-//? if >= 1.21.9 {
-/*import net.minecraft.util.Uuids;
-import net.minecraft.server.PlayerConfigEntry;
-*///?}
-
 import static net.mat0u5.lifeseries.Main.currentSeason;
+//? if >= 1.21.9 {
+//?}
 
 public class SubInCommands extends Command {
     @Override

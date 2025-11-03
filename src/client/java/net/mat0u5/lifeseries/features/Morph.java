@@ -3,8 +3,6 @@ package net.mat0u5.lifeseries.features;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.interfaces.IMorph;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.entity.*;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -12,7 +10,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
-import java.util.UUID;
 //? if >= 1.21.2
 /*import net.minecraft.entity.SpawnReason;*/
 

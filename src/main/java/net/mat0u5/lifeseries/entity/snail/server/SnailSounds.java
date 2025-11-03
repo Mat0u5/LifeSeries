@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.entity.snail.server;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.sounds.SoundEvent;
+
 import java.util.Random;
 
 public class SnailSounds {

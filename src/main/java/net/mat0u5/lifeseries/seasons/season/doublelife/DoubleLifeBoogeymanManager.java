@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.doublelife;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.minecraft.server.level.ServerPlayer;
+
 import java.util.ArrayList;
 import java.util.List;
 

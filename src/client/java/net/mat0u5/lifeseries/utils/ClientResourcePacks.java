@@ -1,9 +1,7 @@
 package net.mat0u5.lifeseries.utils;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.config.ClientConfig;
-import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.repository.Pack;
 

@@ -1,18 +1,18 @@
 package net.mat0u5.lifeseries.features;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashMap;
-
+import com.mojang.blaze3d.platform.NativeImage;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.ResourceLocation;
-import com.mojang.blaze3d.platform.NativeImage;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Map;
 
 public class SnailSkinsClient {

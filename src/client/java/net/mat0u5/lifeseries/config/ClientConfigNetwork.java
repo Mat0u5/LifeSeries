@@ -2,11 +2,9 @@ package net.mat0u5.lifeseries.config;
 
 import net.mat0u5.lifeseries.config.entries.*;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
-import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
 import net.mat0u5.lifeseries.utils.ClientResourcePacks;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 
 import java.util.List;
 import java.util.Map;

@@ -10,10 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 //? if >= 1.21.9 {
-/*import net.minecraft.client.gui.Click;
-import net.minecraft.client.input.CharInput;
-import net.minecraft.client.input.KeyInput;
-*///?}
+//?}
 
 public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.ConfigEntryWidget> {
     public static final int ENTRY_GAP = 2;

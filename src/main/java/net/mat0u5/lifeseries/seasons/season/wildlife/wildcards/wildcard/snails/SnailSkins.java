@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.server.level.ServerPlayer;
+
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;

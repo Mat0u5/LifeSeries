@@ -13,11 +13,11 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
-import static net.mat0u5.lifeseries.Main.seasonConfig;
 
 public class UnassignedSeason extends Season {
     @Override

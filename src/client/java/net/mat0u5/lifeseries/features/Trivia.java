@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.network.packets.TriviaQuestionPayload;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.client.Minecraft;
+
 import java.util.ArrayList;
 import java.util.List;
 

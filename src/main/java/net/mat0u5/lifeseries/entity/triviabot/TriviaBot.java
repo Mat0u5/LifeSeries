@@ -8,7 +8,6 @@ import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotPathfinding;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotServerData;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotSounds;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaHandler;
-import net.minecraft.entity.*;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;

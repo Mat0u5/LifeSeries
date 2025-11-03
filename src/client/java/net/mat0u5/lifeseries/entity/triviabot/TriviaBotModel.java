@@ -1,18 +1,12 @@
 package net.mat0u5.lifeseries.entity.triviabot;
 
-import TriviaBot;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.*;
+import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.render.entity.model.*;
+import net.minecraft.client.model.geom.builders.*;
 
 //? if <= 1.21 {
 public class TriviaBotModel<T extends TriviaBot> extends HierarchicalModel<T> {
@@ -322,7 +316,7 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
 
     //? if <= 1.21 {
     @Override
-    public void setAngles(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.root().getAllParts().forEach(ModelPart::resetPose);
         this.animate(entity.clientData.glideAnimationState, TriviaBotAnimations.glide, ageInTicks);
         this.animate(entity.clientData.idleAnimationState, TriviaBotAnimations.idle, ageInTicks);

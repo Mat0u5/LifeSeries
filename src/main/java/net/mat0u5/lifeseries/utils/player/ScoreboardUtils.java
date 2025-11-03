@@ -2,15 +2,10 @@ package net.mat0u5.lifeseries.utils.player;
 
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.minecraft.network.chat.Component;
-import net.minecraft.scoreboard.*;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.scores.DisplaySlot;
-import net.minecraft.world.scores.Objective;
-import net.minecraft.world.scores.PlayerScoreEntry;
-import net.minecraft.world.scores.ReadOnlyScoreInfo;
-import net.minecraft.world.scores.ScoreHolder;
-import net.minecraft.world.scores.Scoreboard;
+import net.minecraft.world.scores.*;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
+
 import java.util.Collection;
 import java.util.Collections;
 

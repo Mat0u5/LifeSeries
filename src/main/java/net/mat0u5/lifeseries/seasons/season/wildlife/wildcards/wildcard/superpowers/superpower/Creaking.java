@@ -4,7 +4,6 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.TeamUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -15,16 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 //? if >= 1.21.2 {
-/*import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.mob.CreakingEntity;
-import net.minecraft.particle.TrailParticleEffect;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.random.Random;
-
-import static net.mat0u5.lifeseries.Main.currentSeason;
-import static net.mat0u5.lifeseries.Main.server;
-*///?}
+//?}
 
 
 public class Creaking extends ToggleableSuperpower {

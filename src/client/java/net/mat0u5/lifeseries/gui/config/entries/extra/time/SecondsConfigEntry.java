@@ -35,7 +35,7 @@ public class SecondsConfigEntry extends IntegerConfigEntry implements ITextField
 
     @Override
     public Component getPopupText() {
-        return Component.literal(OtherUtils.formatSecondsToReadable(value)).formatted(ChatFormatting.GRAY);
+        return Component.literal(OtherUtils.formatSecondsToReadable(value)).withStyle(ChatFormatting.GRAY);
     }
 
     @Override

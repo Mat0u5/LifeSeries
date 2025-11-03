@@ -17,6 +17,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.scores.ScoreHolder;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

@@ -4,7 +4,6 @@ import net.mat0u5.lifeseries.mixin.client.AbstractSoundInstanceAccessor;
 import net.mat0u5.lifeseries.mixin.client.EntityTrackingSoundInstanceAccessor;
 import net.mat0u5.lifeseries.mixin.client.SoundManagerAccessor;
 import net.mat0u5.lifeseries.mixin.client.SoundSystemAccessor;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
@@ -13,6 +12,7 @@ import net.minecraft.client.sounds.SoundEngine;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
+
 import java.util.*;
 
 public class ClientSounds {

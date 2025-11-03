@@ -26,19 +26,13 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
-import static net.mat0u5.lifeseries.Main.currentSession;
-
 import java.util.Optional;
-//?}
+import java.util.Random;
 
-//? if >= 1.21.2 {
-/*import net.minecraft.component.MergedComponentMap;
-import net.minecraft.component.type.ConsumableComponent;
-import net.minecraft.item.consume.UseAction;
-*///?}
+import static net.mat0u5.lifeseries.Main.currentSession;
 
 public class Hunger extends Wildcard {
     private static final Random rnd = new Random();

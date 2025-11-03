@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.command.manager;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.mat0u5.lifeseries.command.*;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanCommand;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLifeCommands;
@@ -12,6 +11,7 @@ import net.mat0u5.lifeseries.seasons.secretsociety.SocietyCommands;
 import net.mat0u5.lifeseries.seasons.subin.SubInCommands;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
+
 import java.util.ArrayList;
 import java.util.List;
 

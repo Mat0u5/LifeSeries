@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.entity.snail.goal;
 
 import net.mat0u5.lifeseries.entity.snail.Snail;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,11 +12,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 //? if >= 1.21.4
-/*import java.util.Optional;*/
 //? if >= 1.21.6 {
-/*import net.minecraft.storage.NbtWriteView;
-import net.minecraft.util.ErrorReporter;
-*///?}
+//?}
 
 @SuppressWarnings("resource")
 public final class SnailPushProjectilesGoal extends Goal {

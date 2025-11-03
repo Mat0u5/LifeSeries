@@ -14,9 +14,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.TicketType;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.phys.Vec3;
-import java.util.UUID;
 
-import static net.mat0u5.lifeseries.Main.livesManager;
+import java.util.UUID;
 
 public class TriviaBotServerData implements PlayerBoundEntity {
     private TriviaBot bot;

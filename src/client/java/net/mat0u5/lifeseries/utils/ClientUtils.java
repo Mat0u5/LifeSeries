@@ -9,7 +9,6 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -173,7 +172,7 @@ public class ClientUtils {
     public static boolean isSpaceEmpty(LocalPlayer player, AABB box, double offsetX, double offsetY, double offsetZ) {
         if (player.noPhysics || player.isSpectator()) return true;
         AABB newBox = new AABB(box.minX + offsetX, box.minY +offsetY, box.minZ + offsetZ, box.maxX + offsetX, box.minY, box.maxZ + offsetZ);
-        return PlayerUtils.getWorld(player).isSpaceEmpty(player, newBox);
+        return PlayerUtils.getWorld(player).noCollision(player, newBox);
     }
 
     public static Vec3 recursivelyFindDesiredCollission(LocalPlayer player, AABB newBoundingBox, double offsetY, boolean desiredSpaceEmpty) {
@@ -226,6 +225,6 @@ public class ClientUtils {
         if (!MainClient.COLORBLIND_SUPPORT) return original;
         if (original == null) return original;
         if (team == null) return original;
-        return TextUtils.format("[{}] ",team.getDisplayName().getString()).formatted(team.getColor()).append(original);
+        return TextUtils.format("[{}] ",team.getDisplayName().getString()).withStyle(team.getColor()).append(original);
     }
 }

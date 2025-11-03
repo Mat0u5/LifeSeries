@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.core.BlockPos;
+
 import java.util.List;
 
 public class SecretLifeLocationConfig extends ConfigManager {

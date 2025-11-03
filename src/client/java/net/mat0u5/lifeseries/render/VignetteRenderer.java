@@ -1,20 +1,19 @@
 package net.mat0u5.lifeseries.render;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 //? if <= 1.21 {
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 //?}
 //? if >= 1.21.2 {
-/*import net.minecraft.util.math.ColorHelper;
-*///?}
+//?}
 //? if >= 1.21.2 && <= 1.21.5
-/*import net.minecraft.client.render.RenderLayer;*/
 //? if >= 1.21.6
-/*import net.minecraft.client.gl.RenderPipelines;*/
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 
 public class VignetteRenderer {
     private static final ResourceLocation VIGNETTE_TEXTURE = ResourceLocation.withDefaultNamespace("textures/misc/vignette.png");
@@ -36,8 +35,8 @@ public class VignetteRenderer {
         RenderSystem.depthMask(false);
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(
-                GlStateManager.SrcFactor.ZERO, GlStateManager.DstFactor.ONE_MINUS_SRC_COLOR,
-                GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO
+                GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR,
+                GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO
         );
         context.setColor(darkness, darkness, darkness, 1.0F);
         context.blit(VIGNETTE_TEXTURE, 0, 0, -90, 0.0F, 0.0F,

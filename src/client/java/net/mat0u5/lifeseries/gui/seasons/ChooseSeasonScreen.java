@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;

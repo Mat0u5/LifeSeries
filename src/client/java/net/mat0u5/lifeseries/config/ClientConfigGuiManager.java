@@ -3,7 +3,9 @@ package net.mat0u5.lifeseries.config;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.entries.*;
 import net.mat0u5.lifeseries.gui.config.ConfigScreen;
-import net.mat0u5.lifeseries.gui.config.entries.*;
+import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
+import net.mat0u5.lifeseries.gui.config.entries.GroupConfigEntry;
+import net.mat0u5.lifeseries.gui.config.entries.NumberConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.extra.*;
 import net.mat0u5.lifeseries.gui.config.entries.extra.time.MinutesConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.extra.time.SecondsConfigEntry;
@@ -12,7 +14,11 @@ import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ClientConfigGuiManager {
     public static void openConfig() {

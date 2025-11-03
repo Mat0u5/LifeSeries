@@ -5,8 +5,6 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
-import static net.mat0u5.lifeseries.Main.livesManager;
-
 public class LimitedLifeSecretSociety extends SecretSociety {
 
     @Override

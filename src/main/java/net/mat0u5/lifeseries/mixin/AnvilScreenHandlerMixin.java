@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.core.Holder;
@@ -16,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Optional;
-import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
 
 import static net.mat0u5.lifeseries.Main.blacklist;
 

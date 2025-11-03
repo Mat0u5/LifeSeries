@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.boogeyman;
 
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
+
 import java.util.UUID;
 
 import static net.mat0u5.lifeseries.Main.seasonConfig;

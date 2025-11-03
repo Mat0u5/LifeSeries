@@ -11,15 +11,10 @@ import net.minecraft.world.scores.PlayerTeam;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
 import java.util.List;
 //? if > 1.21 && <= 1.21.5 {
-/*import java.util.function.Function;
-import net.minecraft.client.render.RenderLayer;
-*///?}
+//?}
 //? if >= 1.21.6
 /*import com.mojang.blaze3d.pipeline.RenderPipeline;*/
 
