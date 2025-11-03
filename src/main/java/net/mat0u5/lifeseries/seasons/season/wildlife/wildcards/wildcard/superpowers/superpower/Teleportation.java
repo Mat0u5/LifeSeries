@@ -4,27 +4,26 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.network.packet.s2c.play.PositionFlag;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.Vec3d;
-
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.RelativeMovement;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.phys.Vec3;
 import java.util.EnumSet;
 import java.util.Set;
 
 public class Teleportation extends Superpower {
     private long ticks = 0;
 
-    public Teleportation(ServerPlayerEntity player) {
+    public Teleportation(ServerPlayer player) {
         super(player);
     }
 
@@ -42,14 +41,14 @@ public class Teleportation extends Superpower {
     public void tick() {
         ticks++;
         if (ticks % 2400 == 0) {
-            ServerPlayerEntity player = getPlayer();
+            ServerPlayer player = getPlayer();
             if (player != null) {
-                int pearls = player.getInventory().count(Items.ENDER_PEARL);
+                int pearls = player.getInventory().countItem(Items.ENDER_PEARL);
                 int givePearls = 2;
                 if (pearls == 15) givePearls = 1;
                 if (pearls >= 16) givePearls = 0;
                 if (givePearls > 0) {
-                    player.getInventory().insertStack(new ItemStack(Items.ENDER_PEARL, givePearls));
+                    player.getInventory().add(new ItemStack(Items.ENDER_PEARL, givePearls));
                 }
             }
         }
@@ -57,35 +56,35 @@ public class Teleportation extends Superpower {
 
     @Override
     public void activate() {
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
         if (player == null) return;
-        ServerWorld playerWorld = PlayerUtils.getServerWorld(player);
-        Vec3d playerPos = player.ls$getEntityPos();
+        ServerLevel playerWorld = PlayerUtils.getServerWorld(player);
+        Vec3 playerPos = player.ls$getEntityPos();
         boolean teleported = false;
         Entity lookingAt = PlayerUtils.getEntityLookingAt(player, 100);
         if (lookingAt != null)  {
-            if (lookingAt instanceof ServerPlayerEntity lookingAtPlayer) {
+            if (lookingAt instanceof ServerPlayer lookingAtPlayer) {
                 if (!PlayerUtils.isFakePlayer(lookingAtPlayer)) {
-                    ServerWorld lookingAtPlayerWorld = PlayerUtils.getServerWorld(lookingAtPlayer);
-                    Vec3d lookingAtPlayerPos = lookingAtPlayer.ls$getEntityPos();
+                    ServerLevel lookingAtPlayerWorld = PlayerUtils.getServerWorld(lookingAtPlayer);
+                    Vec3 lookingAtPlayerPos = lookingAtPlayer.ls$getEntityPos();
 
                     spawnTeleportParticles(playerWorld, playerPos);
                     spawnTeleportParticles(lookingAtPlayerWorld, lookingAtPlayerPos);
 
-                    Set<PositionFlag> flags = EnumSet.noneOf(PositionFlag.class);
-                    ServerWorld storedWorld = playerWorld;
-                    Vec3d storedPos = playerPos;
-                    float storedYaw = player.getYaw();
-                    float storedPitch = player.getPitch();
+                    Set<RelativeMovement> flags = EnumSet.noneOf(RelativeMovement.class);
+                    ServerLevel storedWorld = playerWorld;
+                    Vec3 storedPos = playerPos;
+                    float storedYaw = player.getYRot();
+                    float storedPitch = player.getXRot();
 
-                    PlayerUtils.teleport(player, lookingAtPlayerWorld, lookingAtPlayerPos, lookingAtPlayer.getYaw(), lookingAtPlayer.getPitch());
+                    PlayerUtils.teleport(player, lookingAtPlayerWorld, lookingAtPlayerPos, lookingAtPlayer.getYRot(), lookingAtPlayer.getXRot());
                     PlayerUtils.teleport(lookingAtPlayer, storedWorld, storedPos, storedYaw, storedPitch);
 
                     playTeleportSound(playerWorld, playerPos);
                     playTeleportSound(lookingAtPlayerWorld, lookingAtPlayerPos);
 
-                    StatusEffectInstance resistance = new StatusEffectInstance(StatusEffects.RESISTANCE, 100, 3);
-                    lookingAtPlayer.addStatusEffect(resistance);
+                    MobEffectInstance resistance = new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 100, 3);
+                    lookingAtPlayer.addEffect(resistance);
 
                     teleported = true;
                 }
@@ -93,7 +92,7 @@ public class Teleportation extends Superpower {
         }
 
         if (!teleported) {
-            Vec3d lookingAtPos = PlayerUtils.getPosLookingAt(player, 100);
+            Vec3 lookingAtPos = PlayerUtils.getPosLookingAt(player, 100);
             if (lookingAtPos != null) {
                 playTeleportSound(playerWorld, playerPos);
                 spawnTeleportParticles(playerWorld, playerPos);
@@ -108,20 +107,20 @@ public class Teleportation extends Superpower {
         }
 
         if (!teleported) {
-            PlayerUtils.displayMessageToPlayer(player, Text.literal("There is nothing to teleport to."), 65);
+            PlayerUtils.displayMessageToPlayer(player, Component.literal("There is nothing to teleport to."), 65);
             return;
         }
         super.activate();
     }
 
-    public void spawnTeleportParticles(ServerWorld world, Vec3d pos) {
-        world.spawnParticles(
+    public void spawnTeleportParticles(ServerLevel world, Vec3 pos) {
+        world.sendParticles(
                 ParticleTypes.PORTAL,
-                pos.getX(), pos.getY()+0.9, pos.getZ(),
+                pos.x(), pos.y()+0.9, pos.z(),
                 40, 0.3, 0.5, 0.3, 0
         );
     }
-    public void playTeleportSound(ServerWorld world, Vec3d pos) {
-        world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, SoundCategory.MASTER, 1, 1);
+    public void playTeleportSound(ServerLevel world, Vec3 pos) {
+        world.playSound(null, pos.x(), pos.y(), pos.z(), SoundEvents.PLAYER_TELEPORT, SoundSource.MASTER, 1, 1);
     }
 }

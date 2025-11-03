@@ -15,20 +15,21 @@ import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageType;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.border.WorldBorder;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.border.WorldBorder;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -37,15 +38,10 @@ import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.*;
 
-//? if <= 1.21.9
-import net.minecraft.world.GameRules;
-//? if > 1.21.9
-/*import net.minecraft.world.rule.GameRules;*/
-
 public class DoubleLife extends Season {
     public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /soulmate";
     public static final String COMMANDS_TEXT = "/claimkill, /lives";
-    public static final RegistryKey<DamageType> SOULMATE_DAMAGE = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, Identifier.of(Main.MOD_ID, "soulmate"));
+    public static final ResourceKey<DamageType> SOULMATE_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "soulmate"));
     StringListConfig soulmateConfig;
     public boolean ANNOUNCE_SOULMATES = false;
     public boolean SOULBOUND_FOOD = false;
@@ -111,7 +107,7 @@ public class DoubleLife extends Season {
     }
 
     @Override
-    public void onPlayerJoin(ServerPlayerEntity player) {
+    public void onPlayerJoin(ServerPlayer player) {
         super.onPlayerJoin(player);
 
         if (player == null) return;
@@ -131,14 +127,14 @@ public class DoubleLife extends Season {
     }
 
     @Override
-    public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim, boolean allowSelfDefense) {
-        ServerPlayerEntity soulmate = getSoulmate(victim);
+    public boolean isAllowedToAttack(ServerPlayer attacker, ServerPlayer victim, boolean allowSelfDefense) {
+        ServerPlayer soulmate = getSoulmate(victim);
         if (soulmate != null && soulmate == attacker) return true;
         return super.isAllowedToAttack(attacker, victim, allowSelfDefense);
     }
 
     @Override
-    public void onPlayerRespawn(ServerPlayerEntity player) {
+    public void onPlayerRespawn(ServerPlayer player) {
         super.onPlayerRespawn(player);
         syncPlayer(player);
     }
@@ -174,24 +170,24 @@ public class DoubleLife extends Season {
 
         int index = 1;
         for (Map.Entry<UUID, UUID> entry : soulmatesOrdered.entrySet()) {
-            ServerPlayerEntity key = PlayerUtils.getPlayer(entry.getKey());
-            ServerPlayerEntity value = PlayerUtils.getPlayer(entry.getValue());
+            ServerPlayer key = PlayerUtils.getPlayer(entry.getKey());
+            ServerPlayer value = PlayerUtils.getPlayer(entry.getValue());
             if (key != null) {
-                key.addCommandTag("soulmate_" + index);
+                key.addTag("soulmate_" + index);
             }
             if (value != null) {
-                value.addCommandTag("soulmate_" + index);
+                value.addTag("soulmate_" + index);
             }
             index++;
         }
     }
 
     public void removeSoulmateTags() {
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            List<String> tagsCopy = new ArrayList<>(player.getCommandTags());
+        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
+            List<String> tagsCopy = new ArrayList<>(player.getTags());
             for (String tag : tagsCopy) {
                 if (tag.startsWith("soulmate_")) {
-                    player.removeCommandTag(tag);
+                    player.removeTag(tag);
                 }
             }
         }
@@ -202,8 +198,8 @@ public class DoubleLife extends Season {
         setAllSoulmates(soulmatesOrdered);
     }
 
-    public boolean isMainSoulmate(ServerPlayerEntity player) {
-        UUID playerUUID = player.getUuid();
+    public boolean isMainSoulmate(ServerPlayer player) {
+        UUID playerUUID = player.getUUID();
         if (SubInManager.isSubbingIn(playerUUID)) {
             playerUUID = SubInManager.getSubstitutedPlayerUUID(playerUUID);
         }
@@ -211,9 +207,9 @@ public class DoubleLife extends Season {
         return soulmatesOrdered.containsKey(playerUUID);
     }
 
-    public boolean hasSoulmate(ServerPlayerEntity player) {
+    public boolean hasSoulmate(ServerPlayer player) {
         if (player == null) return false;
-        return hasSoulmate(player.getUuid());
+        return hasSoulmate(player.getUUID());
     }
     public boolean hasSoulmate(UUID playerUUID) {
         if (SubInManager.isSubbingIn(playerUUID)) {
@@ -223,8 +219,8 @@ public class DoubleLife extends Season {
         return soulmates.containsKey(playerUUID);
     }
 
-    public boolean isSoulmateOnline(ServerPlayerEntity player) {
-        return isSoulmateOnline(player.getUuid());
+    public boolean isSoulmateOnline(ServerPlayer player) {
+        return isSoulmateOnline(player.getUUID());
     }
 
     public boolean isSoulmateOnline(UUID playerUUID) {
@@ -241,12 +237,12 @@ public class DoubleLife extends Season {
     }
 
     @Nullable
-    public ServerPlayerEntity getSoulmate(ServerPlayerEntity player) {
-        return getSoulmate(player.getUuid());
+    public ServerPlayer getSoulmate(ServerPlayer player) {
+        return getSoulmate(player.getUUID());
     }
 
     @Nullable
-    public ServerPlayerEntity getSoulmate(UUID playerUUID) {
+    public ServerPlayer getSoulmate(UUID playerUUID) {
         if (!isSoulmateOnline(playerUUID)) return null;
         if (SubInManager.isSubbingIn(playerUUID)) {
             playerUUID = SubInManager.getSubstitutedPlayerUUID(playerUUID);
@@ -274,16 +270,16 @@ public class DoubleLife extends Season {
         return soulmateUUID;
     }
 
-    public void setSoulmate(ServerPlayerEntity player1, ServerPlayerEntity player2) {
-        soulmates.put(player1.getUuid(), player2.getUuid());
-        soulmates.put(player2.getUuid(), player1.getUuid());
+    public void setSoulmate(ServerPlayer player1, ServerPlayer player2) {
+        soulmates.put(player1.getUUID(), player2.getUUID());
+        soulmates.put(player2.getUUID(), player1.getUUID());
         SessionTranscript.soulmate(player1, player2);
         syncPlayers(player1, player2);
         updateOrderedSoulmates();
     }
 
-    public void resetSoulmate(ServerPlayerEntity player) {
-        UUID playerUUID = player.getUuid();
+    public void resetSoulmate(ServerPlayer player) {
+        UUID playerUUID = player.getUUID();
         Map<UUID, UUID> newSoulmates = new HashMap<>();
         for (Map.Entry<UUID, UUID> entry : soulmates.entrySet()) {
             if (entry.getKey().equals(playerUUID)) continue;
@@ -301,40 +297,40 @@ public class DoubleLife extends Season {
     }
 
     public void rollSoulmates() {
-        List<ServerPlayerEntity> playersToRoll = getNonAssignedPlayers();
+        List<ServerPlayer> playersToRoll = getNonAssignedPlayers();
         PlayerUtils.playSoundToPlayers(playersToRoll, SoundEvents.UI_BUTTON_CLICK.value());
-        PlayerUtils.sendTitleToPlayers(playersToRoll, Text.literal("3").formatted(Formatting.GREEN),5,20,5);
+        PlayerUtils.sendTitleToPlayers(playersToRoll, Component.literal("3").withStyle(ChatFormatting.GREEN),5,20,5);
         TaskScheduler.scheduleTask(25, () -> {
             PlayerUtils.playSoundToPlayers(playersToRoll, SoundEvents.UI_BUTTON_CLICK.value());
-            PlayerUtils.sendTitleToPlayers(playersToRoll, Text.literal("2").formatted(Formatting.GREEN),5,20,5);
+            PlayerUtils.sendTitleToPlayers(playersToRoll, Component.literal("2").withStyle(ChatFormatting.GREEN),5,20,5);
         });
         TaskScheduler.scheduleTask(50, () -> {
             PlayerUtils.playSoundToPlayers(playersToRoll, SoundEvents.UI_BUTTON_CLICK.value());
-            PlayerUtils.sendTitleToPlayers(playersToRoll, Text.literal("1").formatted(Formatting.GREEN),5,20,5);
+            PlayerUtils.sendTitleToPlayers(playersToRoll, Component.literal("1").withStyle(ChatFormatting.GREEN),5,20,5);
         });
         TaskScheduler.scheduleTask(75, () -> {
-            PlayerUtils.sendTitleToPlayers(playersToRoll, Text.literal("Your soulmate is...").formatted(Formatting.GREEN),10,50,20);
-            PlayerUtils.playSoundToPlayers(playersToRoll, SoundEvent.of(Identifier.of("minecraft","doublelife_soulmate_wait")));
+            PlayerUtils.sendTitleToPlayers(playersToRoll, Component.literal("Your soulmate is...").withStyle(ChatFormatting.GREEN),10,50,20);
+            PlayerUtils.playSoundToPlayers(playersToRoll, SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("minecraft","doublelife_soulmate_wait")));
         });
         TaskScheduler.scheduleTask(165, () -> {
             chooseRandomSoulmates();
-            for (ServerPlayerEntity player : playersToRoll) {
-                Text text = Text.literal("????").formatted(Formatting.GREEN);
+            for (ServerPlayer player : playersToRoll) {
+                Component text = Component.literal("????").withStyle(ChatFormatting.GREEN);
                 if (hasSoulmate(player) && ANNOUNCE_SOULMATES) {
-                    ServerPlayerEntity soulmate = getSoulmate(player);
+                    ServerPlayer soulmate = getSoulmate(player);
                     if (soulmate != null) {
                         text = TextUtils.format("{}", soulmate);
                     }
                 }
                 PlayerUtils.sendTitle(player, text,20,60,20);
-                PlayerUtils.playSoundToPlayer(player, SoundEvent.of(Identifier.of("minecraft","doublelife_soulmate_chosen")));
+                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("minecraft","doublelife_soulmate_chosen")));
             }
         });
     }
 
-    public List<ServerPlayerEntity> getNonAssignedPlayers() {
-        List<ServerPlayerEntity> playersToRoll = new ArrayList<>();
-        for (ServerPlayerEntity player : PlayerUtils.getAllFunctioningPlayers()) {
+    public List<ServerPlayer> getNonAssignedPlayers() {
+        List<ServerPlayer> playersToRoll = new ArrayList<>();
+        for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
             if (player.ls$isDead()) continue;
             if (hasSoulmate(player)) continue;
             playersToRoll.add(player);
@@ -345,39 +341,39 @@ public class DoubleLife extends Season {
     public void distributePlayers() {
         if (DISABLE_START_TELEPORT) return;
         if (server == null) return;
-        List<ServerPlayerEntity> players = getNonAssignedPlayers();
+        List<ServerPlayer> players = getNonAssignedPlayers();
         if (players.isEmpty()) return;
         if (players.size() == 1) return;
-        PlayerUtils.playSoundToPlayers(players, SoundEvents.ENTITY_ENDERMAN_TELEPORT);
+        PlayerUtils.playSoundToPlayers(players, SoundEvents.ENDERMAN_TELEPORT);
 
-        for (ServerPlayerEntity player : PlayerUtils.getAllFunctioningPlayers()) {
-            player.removeCommandTag("randomTeleport");
+        for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
+            player.removeTag("randomTeleport");
         }
 
-        for (ServerPlayerEntity player : players) {
-            player.addCommandTag("randomTeleport");
-            player.sendMessage(Text.of("§6Woosh!"));
+        for (ServerPlayer player : players) {
+            player.addTag("randomTeleport");
+            player.sendSystemMessage(Component.nullToEmpty("§6Woosh!"));
         }
-        WorldBorder border = server.getOverworld().getWorldBorder();
+        WorldBorder border = server.overworld().getWorldBorder();
         OtherUtils.executeCommand(TextUtils.formatString("spreadplayers {} {} 0 {} false @a[tag=randomTeleport]", border.getCenterX(), border.getCenterZ(), (border.getSize()/2)));
-        PlayerUtils.broadcastMessageToAdmins(Text.of("Randomly distributed players."));
+        PlayerUtils.broadcastMessageToAdmins(Component.nullToEmpty("Randomly distributed players."));
 
-        for (ServerPlayerEntity player : PlayerUtils.getAllFunctioningPlayers()) {
-            player.removeCommandTag("randomTeleport");
+        for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
+            player.removeTag("randomTeleport");
         }
     }
 
     public void chooseRandomSoulmates() {
-        List<ServerPlayerEntity> playersToRoll = getNonAssignedPlayers();
+        List<ServerPlayer> playersToRoll = getNonAssignedPlayers();
         Collections.shuffle(playersToRoll);
         if (playersToRoll.size()%2 != 0) {
-            ServerPlayerEntity remove = playersToRoll.getFirst();
+            ServerPlayer remove = playersToRoll.getFirst();
             playersToRoll.remove(remove);
-            PlayerUtils.broadcastMessageToAdmins(Text.literal(" [DoubleLife] ").append(remove.getStyledDisplayName()).append(" was not paired with anyone, as there is an odd number of non-assigned players online."));
+            PlayerUtils.broadcastMessageToAdmins(Component.literal(" [DoubleLife] ").append(remove.getFeedbackDisplayName()).append(" was not paired with anyone, as there is an odd number of non-assigned players online."));
         }
         while(!playersToRoll.isEmpty()) {
-            ServerPlayerEntity player1 = playersToRoll.get(0);
-            ServerPlayerEntity player2 = playersToRoll.get(1);
+            ServerPlayer player1 = playersToRoll.get(0);
+            ServerPlayer player2 = playersToRoll.get(1);
             setSoulmate(player1,player2);
             playersToRoll.removeFirst();
             playersToRoll.removeFirst();
@@ -386,12 +382,12 @@ public class DoubleLife extends Season {
     }
 
     @Override
-    public void onPlayerHeal(ServerPlayerEntity player, float amount) {
+    public void onPlayerHeal(ServerPlayer player, float amount) {
         if (player == null) return;
         if (!hasSoulmate(player)) return;
         if (!isSoulmateOnline(player)) return;
 
-        ServerPlayerEntity soulmate = getSoulmate(player);
+        ServerPlayer soulmate = getSoulmate(player);
         if (soulmate == null) return;
         if (!soulmate.isAlive()) return;
 
@@ -401,22 +397,22 @@ public class DoubleLife extends Season {
     }
 
     @Override
-    public void onPlayerDamage(ServerPlayerEntity player, DamageSource source, float amount, CallbackInfo ci) {
-        if (source.getType().msgId().equalsIgnoreCase("soulmate")) return;
+    public void onPlayerDamage(ServerPlayer player, DamageSource source, float amount, CallbackInfo ci) {
+        if (source.type().msgId().equalsIgnoreCase("soulmate")) return;
         if (amount == 0) return;
         if (player == null) return;
         if (!hasSoulmate(player)) return;
         if (!isSoulmateOnline(player)) return;
 
-        ServerPlayerEntity soulmate = getSoulmate(player);
+        ServerPlayer soulmate = getSoulmate(player);
         if (soulmate == null) return;
         if (!soulmate.isAlive()) return;
 
         if (soulmate.hurtTime == 0) {
             //? if <=1.21 {
-            DamageSource damageSource = new DamageSource( soulmate.getWorld().getRegistryManager()
-                    .get(RegistryKeys.DAMAGE_TYPE).entryOf(SOULMATE_DAMAGE));
-            soulmate.damage(damageSource, 0.0000001F);
+            DamageSource damageSource = new DamageSource( soulmate.level().registryAccess()
+                    .registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(SOULMATE_DAMAGE));
+            soulmate.hurt(damageSource, 0.0000001F);
             //?} else {
             /*DamageSource damageSource = new DamageSource( PlayerUtils.getServerWorld(soulmate).getRegistryManager()
                     .getOrThrow(RegistryKeys.DAMAGE_TYPE).getOrThrow(SOULMATE_DAMAGE));
@@ -432,28 +428,28 @@ public class DoubleLife extends Season {
     }
 
     @Override
-    public void onPlayerDeath(ServerPlayerEntity player, DamageSource source) {
+    public void onPlayerDeath(ServerPlayer player, DamageSource source) {
         super.onPlayerDeath(player, source);
 
         if (player == null) return;
         if (!hasSoulmate(player)) return;
         if (!isSoulmateOnline(player)) return;
 
-        ServerPlayerEntity soulmate = getSoulmate(player);
+        ServerPlayer soulmate = getSoulmate(player);
 
         if (soulmate == null) return;
         if (!soulmate.isAlive()) return;
-        boolean keepInventory = OtherUtils.getBooleanGameRule(PlayerUtils.getServerWorld(player), GameRules.KEEP_INVENTORY);
+        boolean keepInventory = OtherUtils.getBooleanGameRule(PlayerUtils.getServerWorld(player), GameRules.RULE_KEEPINVENTORY);
         if (SOULBOUND_INVENTORIES && server != null && !keepInventory) {
-            soulmate.getInventory().clear();
+            soulmate.getInventory().clearContent();
         }
 
         //? if <=1.21 {
-        DamageSource damageSource = new DamageSource( soulmate.getWorld().getRegistryManager()
-                .get(RegistryKeys.DAMAGE_TYPE).entryOf(SOULMATE_DAMAGE));
-        soulmate.setAttacker(player);
-        soulmate.setAttacking(player);
-        soulmate.damage(damageSource, 1000);
+        DamageSource damageSource = new DamageSource( soulmate.level().registryAccess()
+                .registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(SOULMATE_DAMAGE));
+        soulmate.setLastHurtByMob(player);
+        soulmate.setLastHurtByPlayer(player);
+        soulmate.hurt(damageSource, 1000);
          //?} else {
         /*DamageSource damageSource = new DamageSource( PlayerUtils.getServerWorld(soulmate).getRegistryManager()
                 .getOrThrow(RegistryKeys.DAMAGE_TYPE).getOrThrow(SOULMATE_DAMAGE));
@@ -471,17 +467,17 @@ public class DoubleLife extends Season {
     }
 
     public void syncAllPlayers() {
-        for (ServerPlayerEntity player : PlayerUtils.getAllFunctioningPlayers()) {
+        for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
             syncPlayer(player);
         }
     }
 
-    public void syncPlayer(ServerPlayerEntity player) {
-        ServerPlayerEntity soulmate = getSoulmate(player);
+    public void syncPlayer(ServerPlayer player) {
+        ServerPlayer soulmate = getSoulmate(player);
         syncPlayers(soulmate, player);
     }
 
-    public void syncPlayers(ServerPlayerEntity player, ServerPlayerEntity soulmate) {
+    public void syncPlayers(ServerPlayer player, ServerPlayer soulmate) {
         if (player == null || soulmate == null) return;
         if (!player.isAlive() || !soulmate.isAlive()) return;
         if (player.getHealth() != soulmate.getHealth()) {
@@ -506,17 +502,17 @@ public class DoubleLife extends Season {
         syncPlayerInventory(player, soulmate);
     }
 
-    public void syncSoulboundLives(ServerPlayerEntity player) {
+    public void syncSoulboundLives(ServerPlayer player) {
         if (player == null) return;
         Integer lives = player.ls$getLives();
-        ServerPlayerEntity soulmate = getSoulmate(player);
+        ServerPlayer soulmate = getSoulmate(player);
         if (lives == null) return;
         if (soulmate == null) return;
         if (!player.isAlive() || !soulmate.isAlive()) return;
         soulmate.ls$setLives(lives);
     }
 
-    public void canFoodHeal(ServerPlayerEntity player, CallbackInfoReturnable<Boolean> cir) {
+    public void canFoodHeal(ServerPlayer player, CallbackInfoReturnable<Boolean> cir) {
         boolean orig =  player.getHealth() > 0.0F && player.getHealth() < player.getMaxHealth();
         if (!orig) {
             cir.setReturnValue(false);
@@ -526,11 +522,11 @@ public class DoubleLife extends Season {
         if (!hasSoulmate(player)) return;
         if (!isSoulmateOnline(player)) return;
         if (isMainSoulmate(player)) return;
-        ServerPlayerEntity soulmate = getSoulmate(player);
+        ServerPlayer soulmate = getSoulmate(player);
         if (soulmate == null) return;
         if (!soulmate.isAlive()) return;
 
-        boolean canHealWithSaturationOther = soulmate.getHungerManager().getSaturationLevel() > 2.0F && soulmate.getHungerManager().getFoodLevel() >= 20;
+        boolean canHealWithSaturationOther = soulmate.getFoodData().getSaturationLevel() > 2.0F && soulmate.getFoodData().getFoodLevel() >= 20;
 
         if (canHealWithSaturationOther) {
             cir.setReturnValue(false);
@@ -565,10 +561,10 @@ public class DoubleLife extends Season {
         return loadedSoulmates;
     }
 
-    public void updateFood(ServerPlayerEntity player, ServerPlayerEntity soulmate) {
+    public void updateFood(ServerPlayer player, ServerPlayer soulmate) {
         if (!SOULBOUND_FOOD) return;
-        IHungerManager hungerManager1 = (IHungerManager) player.getHungerManager();
-        IHungerManager hungerManager2 = (IHungerManager) soulmate.getHungerManager();
+        IHungerManager hungerManager1 = (IHungerManager) player.getFoodData();
+        IHungerManager hungerManager2 = (IHungerManager) soulmate.getFoodData();
         if (hungerManager1 == null || hungerManager2 == null) return;
 
         int foodLevel = Math.min(hungerManager1.ls$getFoodLevel(), hungerManager2.ls$getFoodLevel());
@@ -576,13 +572,13 @@ public class DoubleLife extends Season {
         setHungerManager(hungerManager1, hungerManager2, foodLevel, saturation);
     }
 
-    public void updateFoodFrom(ServerPlayerEntity player) {
+    public void updateFoodFrom(ServerPlayer player) {
         if (!SOULBOUND_FOOD) return;
         if (player == null) return;
-        ServerPlayerEntity soulmate = getSoulmate(player);
+        ServerPlayer soulmate = getSoulmate(player);
         if (soulmate == null) return;
-        IHungerManager hungerManager1 = (IHungerManager) player.getHungerManager();
-        IHungerManager hungerManager2 = (IHungerManager) soulmate.getHungerManager();
+        IHungerManager hungerManager1 = (IHungerManager) player.getFoodData();
+        IHungerManager hungerManager2 = (IHungerManager) soulmate.getFoodData();
         if (hungerManager1 == null || hungerManager2 == null) return;
 
         hungerManager2.ls$setFoodLevel(hungerManager1.ls$getFoodLevel());
@@ -598,14 +594,14 @@ public class DoubleLife extends Season {
     }
 
     @Override
-    public void onUpdatedInventory(ServerPlayerEntity player) {
+    public void onUpdatedInventory(ServerPlayer player) {
         super.onUpdatedInventory(player);
-        ServerPlayerEntity soulmate = getSoulmate(player);
+        ServerPlayer soulmate = getSoulmate(player);
         if (soulmate == null) return;
         syncPlayerInventory(player, soulmate);
     }
 
-    public void syncPlayerInventory(ServerPlayerEntity player, ServerPlayerEntity soulmate) {
+    public void syncPlayerInventory(ServerPlayer player, ServerPlayer soulmate) {
         if (!SOULBOUND_INVENTORIES) return;
         if (isRecentlyDead(player) && isRecentlyDead(soulmate)) return;
         boolean swapDirection = false;
@@ -619,26 +615,26 @@ public class DoubleLife extends Season {
         }
     }
 
-    public boolean isRecentlyDead(ServerPlayerEntity player) {
-        return !player.isAlive() || player.age <= 1;
+    public boolean isRecentlyDead(ServerPlayer player) {
+        return !player.isAlive() || player.tickCount <= 1;
     }
 
-    public void setPlayerInventory(ServerPlayerEntity player, PlayerInventory inventory) {
+    public void setPlayerInventory(ServerPlayer player, Inventory inventory) {
         List<ItemStack> newInventory = getPlayerInventory(inventory);
-        PlayerInventory playerInventory = player.getInventory();
-        for (int i = 0; i < Math.min(newInventory.size(), playerInventory.size()); i++) {
+        Inventory playerInventory = player.getInventory();
+        for (int i = 0; i < Math.min(newInventory.size(), playerInventory.getContainerSize()); i++) {
             ItemStack newStack = newInventory.get(i).copy();
-            if (ItemStack.areEqual(playerInventory.getStack(i), newStack)) continue;
-            playerInventory.setStack(i, newStack);
+            if (ItemStack.matches(playerInventory.getItem(i), newStack)) continue;
+            playerInventory.setItem(i, newStack);
         }
-        player.sendAbilitiesUpdate();
+        player.onUpdateAbilities();
     }
 
-    public List<ItemStack> getPlayerInventory(PlayerInventory inventory) {
+    public List<ItemStack> getPlayerInventory(Inventory inventory) {
         //? if <= 1.21.4 {
-        List<ItemStack> result = new ArrayList<>(inventory.main);
+        List<ItemStack> result = new ArrayList<>(inventory.items);
         result.addAll(inventory.armor);
-        result.addAll(inventory.offHand);
+        result.addAll(inventory.offhand);
         //?} else {
         /*List<ItemStack> result = new ArrayList<>(inventory.getMainStacks());
         for (int i = result.size(); i < inventory.size(); i++) {
@@ -648,50 +644,50 @@ public class DoubleLife extends Season {
         return result;
     }
 
-    public void syncStatusEffectsFrom(ServerPlayerEntity player, StatusEffectInstance effect, boolean add) {
+    public void syncStatusEffectsFrom(ServerPlayer player, MobEffectInstance effect, boolean add) {
         TaskScheduler.scheduleTask(0, () -> delayedSyncStatusEffectsFrom(player, effect, add));
     }
 
-    public void delayedSyncStatusEffectsFrom(ServerPlayerEntity player, StatusEffectInstance effect, boolean add) {
+    public void delayedSyncStatusEffectsFrom(ServerPlayer player, MobEffectInstance effect, boolean add) {
         if (!SOULBOUND_EFFECTS) return;
-        ServerPlayerEntity soulmate = getSoulmate(player);
+        ServerPlayer soulmate = getSoulmate(player);
         if (soulmate == null) return;
 
         if (add) {
-            if (!soulmate.getStatusEffects().contains(effect)) {
-                soulmate.addStatusEffect(effect);
+            if (!soulmate.getActiveEffects().contains(effect)) {
+                soulmate.addEffect(effect);
             }
         }
         else {
-            if (soulmate.hasStatusEffect(effect.getEffectType())) {
-                soulmate.removeStatusEffect(effect.getEffectType());
+            if (soulmate.hasEffect(effect.getEffect())) {
+                soulmate.removeEffect(effect.getEffect());
             }
-            if (player.hasStatusEffect(effect.getEffectType())) {
-                soulmate.addStatusEffect(player.getStatusEffect(effect.getEffectType()));
+            if (player.hasEffect(effect.getEffect())) {
+                soulmate.addEffect(player.getEffect(effect.getEffect()));
             }
         }
     }
 
     public void checkForEnding() {
-        List<ServerPlayerEntity> remainingPlayers = livesManager.getAlivePlayers();
+        List<ServerPlayer> remainingPlayers = livesManager.getAlivePlayers();
         if (remainingPlayers.size() == 2 && BREAKUP_LAST_PAIR_STANDING) {
-            ServerPlayerEntity player1 = remainingPlayers.get(0);
-            ServerPlayerEntity player2 = remainingPlayers.get(1);
+            ServerPlayer player1 = remainingPlayers.get(0);
+            ServerPlayer player2 = remainingPlayers.get(1);
             if (hasSoulmate(player1) && hasSoulmate(player2)) {
                 if (getSoulmate(player1) == player2) {
                     resetSoulmate(player1);
-                    List<ServerPlayerEntity> allPlayers = PlayerUtils.getAllPlayers();
+                    List<ServerPlayer> allPlayers = PlayerUtils.getAllPlayers();
                     TaskScheduler.scheduleTask(200, () -> {
-                        PlayerUtils.sendTitleWithSubtitleToPlayers(allPlayers, Text.empty(), Text.of("§aYour fate is your own..."), 20, 40, 20);
+                        PlayerUtils.sendTitleWithSubtitleToPlayers(allPlayers, Component.empty(), Component.nullToEmpty("§aYour fate is your own..."), 20, 40, 20);
                     });
                     TaskScheduler.scheduleTask(300, () -> {
-                        PlayerUtils.sendTitleWithSubtitleToPlayers(allPlayers, Text.empty(), Text.of("§cThere can only be one winner."), 20, 40, 20);
+                        PlayerUtils.sendTitleWithSubtitleToPlayers(allPlayers, Component.empty(), Component.nullToEmpty("§cThere can only be one winner."), 20, 40, 20);
                     });
                     TaskScheduler.scheduleTask(380, () -> {
                         WorldUtils.summonHarmlessLightning(player1);
                         WorldUtils.summonHarmlessLightning(player2);
-                        PlayerUtils.damage(player1, player1.getDamageSources().lightningBolt(), 0.0000001F);
-                        PlayerUtils.damage(player2, player2.getDamageSources().lightningBolt(), 0.0000001F);
+                        PlayerUtils.damage(player1, player1.damageSources().lightningBolt(), 0.0000001F);
+                        PlayerUtils.damage(player2, player2.damageSources().lightningBolt(), 0.0000001F);
                     });
                 }
             }

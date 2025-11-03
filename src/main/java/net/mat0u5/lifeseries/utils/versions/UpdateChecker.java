@@ -7,9 +7,8 @@ import com.google.gson.JsonParser;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
@@ -183,16 +182,16 @@ public class UpdateChecker {
         return rawDesctiption;
     }
 
-    public static void onPlayerJoin(ServerPlayerEntity player) {
+    public static void onPlayerJoin(ServerPlayer player) {
         if (!updateAvailable || versionName == null) {
             return;
         }
         if (!VersionControl.isDevVersion()) {
-            Text discordText = TextUtils.format("§7Click {}§7 to join the mod development discord if you have any questions, issues, requests, or if you just want to hang out :)\"", TextUtils.openURLText("https://discord.gg/QWJxfb4zQZ"));
+            Component discordText = TextUtils.format("§7Click {}§7 to join the mod development discord if you have any questions, issues, requests, or if you just want to hang out :)\"", TextUtils.openURLText("https://discord.gg/QWJxfb4zQZ"));
 
-            Text updateText =
+            Component updateText =
                     TextUtils.formatLoosely("A new version of the Life Series Mod is available ({}) §nserver-side§f. \n",versionName)
-                        .styled(style -> style
+                        .withStyle(style -> style
                             .withHoverEvent(
                                 TextUtils.showTextHoverEvent(TextUtils.formatLoosely(
                                     "§7§nUpdate Description:§r\n\n{}", versionDescription
@@ -203,18 +202,18 @@ public class UpdateChecker {
                                 TextUtils.clickableText("Click to download on Modrinth", TextUtils.openURLClickEvent("https://modrinth.com/mod/life-series"))
                         );
             if (PermissionManager.isAdmin(player)) {
-                player.sendMessage(updateText);
-                player.sendMessage(discordText);
+                player.sendSystemMessage(updateText);
+                player.sendSystemMessage(discordText);
             }
         }
         else {
-            Text updateText =
-                Text.literal("§c[Life Series] You are playing on a developer version, there are probably some bugs, and it's possible that some features don't work.\n")
+            Component updateText =
+                Component.literal("§c[Life Series] You are playing on a developer version, there are probably some bugs, and it's possible that some features don't work.\n")
                     .append(
                         TextUtils.clickableText("Download full releases on Modrinth", TextUtils.openURLClickEvent("https://modrinth.com/mod/life-series"))
                     );
 
-            player.sendMessage(updateText);
+            player.sendSystemMessage(updateText);
         }
     }
     public static void shutdownExecutor() {

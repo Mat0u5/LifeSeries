@@ -8,8 +8,8 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 
 public class PastLife extends Season {
     public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /boogeyman, /society, /pastlife";
@@ -49,15 +49,15 @@ public class PastLife extends Season {
     }
 
     public void requestSessionAction() {
-        for (ServerPlayerEntity player : PlayerUtils.getAdminPlayers()) {
+        for (ServerPlayer player : PlayerUtils.getAdminPlayers()) {
             if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {
                 NetworkHandlerServer.sendStringPacket(player, PacketNames.PAST_LIFE_CHOOSE_TWIST, "");
             }
             else {
-                player.sendMessage(Text.of("§7Past Life session started:"));
-                player.sendMessage(Text.of("§7 Type §f\"/pastlife boogeyman\"§7 to have the Boogeyman in this session."));
-                player.sendMessage(Text.of("§7 Type §f\"/pastlife society\"§7 to have the Secret Society in this session."));
-                player.sendMessage(Text.of("§7 Or type §f\"/pastlife pickRandom\"§7 if you want the game to pick randomly."));
+                player.sendSystemMessage(Component.nullToEmpty("§7Past Life session started:"));
+                player.sendSystemMessage(Component.nullToEmpty("§7 Type §f\"/pastlife boogeyman\"§7 to have the Boogeyman in this session."));
+                player.sendSystemMessage(Component.nullToEmpty("§7 Type §f\"/pastlife society\"§7 to have the Secret Society in this session."));
+                player.sendSystemMessage(Component.nullToEmpty("§7 Or type §f\"/pastlife pickRandom\"§7 if you want the game to pick randomly."));
             }
         }
     }

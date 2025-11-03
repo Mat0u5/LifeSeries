@@ -5,50 +5,54 @@ import net.mat0u5.lifeseries.entity.snail.goal.*;
 import net.mat0u5.lifeseries.entity.snail.server.SnailPathfinding;
 import net.mat0u5.lifeseries.entity.snail.server.SnailServerData;
 import net.mat0u5.lifeseries.entity.snail.server.SnailSounds;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.control.MoveControl;
-import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.registry.tag.FluidTags;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
 import net.minecraft.util.math.*;
-import net.minecraft.world.World;
-import net.minecraft.world.explosion.Explosion;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import static net.mat0u5.lifeseries.Main.*;
 
-public class Snail extends HostileEntity {
-    public static final Identifier DEFAULT_TEXTURE = Identifier.of(Main.MOD_ID, "textures/entity/snail/default.png");
-    public static final Identifier TRIVIA_TEXTURE = Identifier.of(Main.MOD_ID, "textures/entity/snail/trivia.png");
-    public static final Identifier ZOMBIE_TEXTURE = Identifier.of(Main.MOD_ID, "textures/entity/snail/zombie.png");
-    public static final Identifier ID = Identifier.of(Main.MOD_ID, "snail");
+public class Snail extends Monster {
+    public static final ResourceLocation DEFAULT_TEXTURE = ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "textures/entity/snail/default.png");
+    public static final ResourceLocation TRIVIA_TEXTURE = ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "textures/entity/snail/trivia.png");
+    public static final ResourceLocation ZOMBIE_TEXTURE = ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "textures/entity/snail/zombie.png");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "snail");
     public static double GLOBAL_SPEED_MULTIPLIER = 1;
     public static boolean SHOULD_DROWN_PLAYER = true;
 
-    private static final TrackedData<Boolean> attacking = DataTracker.registerData(Snail.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Boolean> flying = DataTracker.registerData(Snail.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Boolean> gliding = DataTracker.registerData(Snail.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Boolean> landing = DataTracker.registerData(Snail.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Boolean> mining = DataTracker.registerData(Snail.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Boolean> fromTrivia = DataTracker.registerData(Snail.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<String> skinName = DataTracker.registerData(Snail.class, TrackedDataHandlerRegistry.STRING);
-    private static final TrackedData<Boolean> playerDead = DataTracker.registerData(Snail.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> attacking = SynchedEntityData.defineId(Snail.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> flying = SynchedEntityData.defineId(Snail.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> gliding = SynchedEntityData.defineId(Snail.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> landing = SynchedEntityData.defineId(Snail.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> mining = SynchedEntityData.defineId(Snail.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> fromTrivia = SynchedEntityData.defineId(Snail.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<String> skinName = SynchedEntityData.defineId(Snail.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<Boolean> playerDead = SynchedEntityData.defineId(Snail.class, EntityDataSerializers.BOOLEAN);
 
     public static final float MOVEMENT_SPEED = 0.35f;
     public static final float FLYING_SPEED = 0.3f;
@@ -64,28 +68,28 @@ public class Snail extends HostileEntity {
     public SnailPathfinding pathfinding = new SnailPathfinding(this);
     public SnailClientData clientData = new SnailClientData(this);
 
-    public Snail(EntityType<? extends HostileEntity> entityType, World world) {
+    public Snail(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
         setInvulnerable(true);
-        setPersistent();
+        setPersistenceRequired();
     }
 
     @Override
-    protected Text getDefaultName() {
+    protected Component getTypeName() {
         return serverData.getDefaultName();
     }
 
-    public static DefaultAttributeContainer.Builder createAttributes() {
+    public static AttributeSupplier.Builder createAttributes() {
         //? if <= 1.21 {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 10000)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, MOVEMENT_SPEED)
-                .add(EntityAttributes.GENERIC_FLYING_SPEED, FLYING_SPEED)
-                .add(EntityAttributes.GENERIC_STEP_HEIGHT, 1.2)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 150)
-                .add(EntityAttributes.GENERIC_WATER_MOVEMENT_EFFICIENCY, 1)
-                .add(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE, 100)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 20);
+        return Mob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 10000)
+                .add(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
+                .add(Attributes.FLYING_SPEED, FLYING_SPEED)
+                .add(Attributes.STEP_HEIGHT, 1.2)
+                .add(Attributes.FOLLOW_RANGE, 150)
+                .add(Attributes.WATER_MOVEMENT_EFFICIENCY, 1)
+                .add(Attributes.SAFE_FALL_DISTANCE, 100)
+                .add(Attributes.ATTACK_DAMAGE, 20);
         //?} else {
         /*return MobEntity.createMobAttributes()
                 .add(EntityAttributes.MAX_HEALTH, 10000)
@@ -100,19 +104,19 @@ public class Snail extends HostileEntity {
     }
 
     @Override
-    protected void initGoals() {
-        goalSelector.add(0, new SnailTeleportGoal(this));
+    protected void registerGoals() {
+        goalSelector.addGoal(0, new SnailTeleportGoal(this));
 
-        goalSelector.add(1, new SnailLandGoal(this));
-        goalSelector.add(2, new SnailMineTowardsPlayerGoal(this));
-        goalSelector.add(3, new SnailFlyGoal(this));
-        goalSelector.add(4, new SnailGlideGoal(this));
-        goalSelector.add(5, new SnailJumpAttackPlayerGoal(this));
-        goalSelector.add(6, new SnailStartFlyingGoal(this));
+        goalSelector.addGoal(1, new SnailLandGoal(this));
+        goalSelector.addGoal(2, new SnailMineTowardsPlayerGoal(this));
+        goalSelector.addGoal(3, new SnailFlyGoal(this));
+        goalSelector.addGoal(4, new SnailGlideGoal(this));
+        goalSelector.addGoal(5, new SnailJumpAttackPlayerGoal(this));
+        goalSelector.addGoal(6, new SnailStartFlyingGoal(this));
 
-        goalSelector.add(7, new SnailBlockInteractGoal(this));
-        goalSelector.add(8, new SnailPushEntitiesGoal(this));
-        goalSelector.add(9, new SnailPushProjectilesGoal(this));
+        goalSelector.addGoal(7, new SnailBlockInteractGoal(this));
+        goalSelector.addGoal(8, new SnailPushEntitiesGoal(this));
+        goalSelector.addGoal(9, new SnailPushProjectilesGoal(this));
     }
 
     @Override
@@ -127,8 +131,8 @@ public class Snail extends HostileEntity {
     }
 
     @Override
-    public SoundCategory getSoundCategory() {
-        return SoundCategory.HOSTILE;
+    public SoundSource getSoundSource() {
+        return SoundSource.HOSTILE;
     }
 
     /*
@@ -136,13 +140,13 @@ public class Snail extends HostileEntity {
      */
 
     @Override
-    public Vec3d applyFluidMovingSpeed(double gravity, boolean falling, Vec3d motion) {
+    public Vec3 getFluidFallingAdjustedMovement(double gravity, boolean falling, Vec3 motion) {
         return motion;
     }
 
     @Override
     //? if <= 1.21.4 {
-    protected boolean shouldSwimInFluids() {
+    protected boolean isAffectedByFluids() {
         return false;
     }
     //?} else {
@@ -152,41 +156,41 @@ public class Snail extends HostileEntity {
     *///?}
 
     @Override
-    public boolean isTouchingWater() {
+    public boolean isInWater() {
         return false;
     }
 
     @Override
     public void setSwimming(boolean swimming) {
-        this.setFlag(4, false);
+        this.setSharedFlag(4, false);
     }
 
     public boolean isInLavaLocal = false;
     @Override
-    public boolean updateMovementInFluid(TagKey<Fluid> tag, double speed) {
+    public boolean updateFluidHeightAndDoFluidPushing(TagKey<Fluid> tag, double speed) {
         if (FluidTags.LAVA != tag) {
             return false;
         }
 
-        if (this.isRegionUnloaded()) {
+        if (this.touchingUnloadedChunk()) {
             return false;
         }
-        Box box = this.getBoundingBox().contract(0.001);
-        int i = MathHelper.floor(box.minX);
-        int j = MathHelper.ceil(box.maxX);
-        int k = MathHelper.floor(box.minY);
-        int l = MathHelper.ceil(box.maxY);
-        int m = MathHelper.floor(box.minZ);
-        int n = MathHelper.ceil(box.maxZ);
+        AABB box = this.getBoundingBox().deflate(0.001);
+        int i = Mth.floor(box.minX);
+        int j = Mth.ceil(box.maxX);
+        int k = Mth.floor(box.minY);
+        int l = Mth.ceil(box.maxY);
+        int m = Mth.floor(box.minZ);
+        int n = Mth.ceil(box.maxZ);
         double d = 0.0;
-        BlockPos.Mutable mutable = new BlockPos.Mutable();
+        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
         for(int p = i; p < j; ++p) {
             for(int q = k; q < l; ++q) {
                 for(int r = m; r < n; ++r) {
                     mutable.set(p, q, r);
                     FluidState fluidState = getSnailWorld().getFluidState(mutable);
-                    if (fluidState.isIn(tag)) {
+                    if (fluidState.is(tag)) {
                         double e = q + fluidState.getHeight(this.getSnailWorld(), mutable);
                         if (e >= box.minY) {
                             d = Math.max(e - box.minY, d);
@@ -200,38 +204,38 @@ public class Snail extends HostileEntity {
         return false;
     }
 
-    public World getSnailWorld() {
+    public Level getSnailWorld() {
         return ls$getEntityWorld();
     }
 
     @Override
-    public void onDeath(DamageSource damageSource) {
-        super.onDeath(damageSource);
+    public void die(DamageSource damageSource) {
+        super.die(damageSource);
         pathfinding.killPathFinders();
     }
 
     @Override
-    protected boolean canStartRiding(Entity entity) {
+    protected boolean canRide(Entity entity) {
         return false;
     }
 
     @Override
-    public void slowMovement(BlockState state, Vec3d multiplier) {
+    public void makeStuckInBlock(BlockState state, Vec3 multiplier) {
     }
 
     @Override
-    public boolean isImmuneToExplosion(Explosion explosion) {
+    public boolean ignoreExplosion(Explosion explosion) {
         return true;
     }
 
 
     @Override
-    public boolean canUsePortals(boolean allowVehicles) {
+    public boolean canUsePortal(boolean allowVehicles) {
         return false;
     }
 
     @Override
-    public boolean addStatusEffect(StatusEffectInstance effect, @Nullable Entity source) {
+    public boolean addEffect(MobEffectInstance effect, @Nullable Entity source) {
         return false;
     }
 
@@ -239,7 +243,7 @@ public class Snail extends HostileEntity {
         return getSoundVolume();
     }
 
-    public void setNavigation(EntityNavigation newNavigation) {
+    public void setNavigation(PathNavigation newNavigation) {
         this.navigation = newNavigation;
     }
     public void setMoveControl(MoveControl newMoveControl) {
@@ -250,64 +254,64 @@ public class Snail extends HostileEntity {
      */
 
     @Override
-    protected void initDataTracker(DataTracker.Builder builder) {
-        super.initDataTracker(builder);
-        builder.add(attacking, false);
-        builder.add(flying, false);
-        builder.add(gliding, false);
-        builder.add(landing, false);
-        builder.add(mining, false);
-        builder.add(fromTrivia, false);
-        builder.add(skinName, "");
-        builder.add(playerDead, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(attacking, false);
+        builder.define(flying, false);
+        builder.define(gliding, false);
+        builder.define(landing, false);
+        builder.define(mining, false);
+        builder.define(fromTrivia, false);
+        builder.define(skinName, "");
+        builder.define(playerDead, false);
     }
     public void setSnailAttacking(boolean value) {
-        this.dataTracker.set(attacking, value);
+        this.entityData.set(attacking, value);
     }
     public void setSnailFlying(boolean value) {
-        this.dataTracker.set(flying, value);
+        this.entityData.set(flying, value);
     }
     public void setSnailGliding(boolean value) {
-        this.dataTracker.set(gliding, value);
+        this.entityData.set(gliding, value);
     }
     public void setSnailLanding(boolean value) {
-        this.dataTracker.set(landing, value);
+        this.entityData.set(landing, value);
     }
     public void setSnailMining(boolean value) {
-        this.dataTracker.set(mining, value);
+        this.entityData.set(mining, value);
     }
     public void setFromTrivia(boolean value) {
-        this.dataTracker.set(fromTrivia, value);
+        this.entityData.set(fromTrivia, value);
     }
     public void setSkinName(String value) {
-        this.dataTracker.set(skinName, value);
+        this.entityData.set(skinName, value);
     }
     public void setBoundPlayerDead(boolean value) {
-        this.dataTracker.set(playerDead, value);
+        this.entityData.set(playerDead, value);
     }
 
     public boolean isSnailAttacking() {
-        return this.dataTracker.get(attacking);
+        return this.entityData.get(attacking);
     }
     public boolean isSnailFlying() {
-        return this.dataTracker.get(flying);
+        return this.entityData.get(flying);
     }
     public boolean isSnailGliding() {
-        return this.dataTracker.get(gliding);
+        return this.entityData.get(gliding);
     }
     public boolean isSnailLanding() {
-        return this.dataTracker.get(landing);
+        return this.entityData.get(landing);
     }
     public boolean isSnailMining() {
-        return this.dataTracker.get(mining);
+        return this.entityData.get(mining);
     }
     public boolean isFromTrivia() {
-        return this.dataTracker.get(fromTrivia);
+        return this.entityData.get(fromTrivia);
     }
     public String getSkinName() {
-        return this.dataTracker.get(skinName);
+        return this.entityData.get(skinName);
     }
     public boolean isBoundPlayerDead() {
-        return this.dataTracker.get(playerDead);
+        return this.entityData.get(playerDead);
     }
 }

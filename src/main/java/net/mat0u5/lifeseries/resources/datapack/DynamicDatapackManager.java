@@ -4,8 +4,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.resources.ResourceHandler;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.WorldSavePath;
-
+import net.minecraft.world.level.storage.LevelResource;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,7 +30,7 @@ public class DynamicDatapackManager {
     }
 
     private static void createDatapack(MinecraftServer server) {
-        Path datapackFolder = server.getSavePath(WorldSavePath.DATAPACKS);
+        Path datapackFolder = server.getWorldPath(LevelResource.DATAPACK_DIR);
         ResourceHandler handler = new ResourceHandler();
 
         datapackFolder.resolve(DATAPACK_MAIN).toFile().mkdirs();
@@ -41,7 +40,7 @@ public class DynamicDatapackManager {
 
     public static void copyLootTables(MinecraftServer server) {
         if (server == null) return;
-        Path datapackFolder = server.getSavePath(WorldSavePath.DATAPACKS);
+        Path datapackFolder = server.getWorldPath(LevelResource.DATAPACK_DIR);
         ResourceHandler handler = new ResourceHandler();
 
         File configTrivia = new File(CONFIG_TABLE_TRIVIA);

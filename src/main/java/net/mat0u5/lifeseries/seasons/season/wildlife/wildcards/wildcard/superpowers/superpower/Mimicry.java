@@ -7,11 +7,11 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
 
 //? if >= 1.21.9 {
 /*import net.minecraft.entity.decoration.MannequinEntity;
@@ -22,7 +22,7 @@ public class Mimicry extends Superpower {
 
     private Superpower mimic = null;
 
-    public Mimicry(ServerPlayerEntity player) {
+    public Mimicry(ServerPlayer player) {
         super(player);
     }
 
@@ -38,7 +38,7 @@ public class Mimicry extends Superpower {
 
     @Override
     public void activate() {
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
         if (player == null) return;
         Entity lookingAt = PlayerUtils.getEntityLookingAt(player, 50);
         boolean isLookingAtPlayer = false;
@@ -52,7 +52,7 @@ public class Mimicry extends Superpower {
                 }
             }
             *///?}
-            if (lookingAt instanceof ServerPlayerEntity lookingAtPlayer) {
+            if (lookingAt instanceof ServerPlayer lookingAtPlayer) {
                 lookingAtPlayer = PlayerUtils.getPlayerOrProjection(lookingAtPlayer);
                 isLookingAtPlayer = true;
                 Superpowers mimicPower = SuperpowersWildcard.getSuperpower(lookingAtPlayer);
@@ -61,10 +61,10 @@ public class Mimicry extends Superpower {
                         mimic = mimicPower.getInstance(player);
                         successfullyMimicked = true;
                         PlayerUtils.displayMessageToPlayer(player, TextUtils.format("Mimicked superpower of {}", lookingAtPlayer), 65);
-                        player.playSoundToPlayer(SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.MASTER, 0.3f, 1);
+                        player.playNotifySound(SoundEvents.CHICKEN_EGG, SoundSource.MASTER, 0.3f, 1);
                     }
                     if (mimicPower == Superpowers.MIMICRY) {
-                        PlayerUtils.displayMessageToPlayer(player, Text.literal("You cannot mimic that power."), 65);
+                        PlayerUtils.displayMessageToPlayer(player, Component.literal("You cannot mimic that power."), 65);
                         return;
                     }
                 }
@@ -72,11 +72,11 @@ public class Mimicry extends Superpower {
         }
 
         if (!isLookingAtPlayer) {
-            PlayerUtils.displayMessageToPlayer(player, Text.of("You are not looking at a player."), 65);
+            PlayerUtils.displayMessageToPlayer(player, Component.nullToEmpty("You are not looking at a player."), 65);
             return;
         }
         if (!successfullyMimicked) {
-            PlayerUtils.displayMessageToPlayer(player, Text.of("That player does not have a superpower."), 65);
+            PlayerUtils.displayMessageToPlayer(player, Component.nullToEmpty("That player does not have a superpower."), 65);
             return;
         }
         super.activate();

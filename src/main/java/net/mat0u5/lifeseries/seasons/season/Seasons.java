@@ -10,8 +10,7 @@ import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.thirdlife.ThirdLife;
 import net.mat0u5.lifeseries.seasons.season.unassigned.UnassignedSeason;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.resources.ResourceLocation;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,8 +58,8 @@ public enum Seasons {
         return new UnassignedSeason();
     }
 
-    public Identifier getLogo() {
-        return Identifier.of("lifeseries","textures/gui/"+this.getId()+".png");
+    public ResourceLocation getLogo() {
+        return ResourceLocation.fromNamespaceAndPath("lifeseries","textures/gui/"+this.getId()+".png");
     }
 
     public static Seasons getSeasonFromStringName(String name) {

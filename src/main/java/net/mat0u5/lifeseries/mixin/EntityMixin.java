@@ -9,15 +9,15 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.S
 import net.mat0u5.lifeseries.utils.interfaces.IEntity;
 import net.mat0u5.lifeseries.utils.interfaces.IEntityDataSaver;
 import net.mat0u5.lifeseries.utils.interfaces.IMorph;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.EvokerEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Evoker;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -75,18 +75,18 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
         return ls$fromMorph;
     }
 
-    @Inject(method = "getAir", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "getAirSupply", at = @At("RETURN"), cancellable = true)
     public void getAir(CallbackInfoReturnable<Integer> cir) {
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (currentSeason instanceof WildLife) {
             if (!Snail.SHOULD_DROWN_PLAYER) return;
             if (!WildcardManager.isActiveWildcard(Wildcards.SNAILS)) return;
             Entity entity = (Entity) (Object) this;
-            if (entity instanceof PlayerEntity player && !player.hasStatusEffect(StatusEffects.WATER_BREATHING)) {
-                if (!Snails.snails.containsKey(player.getUuid())) return;
-                Snail snail = Snails.snails.get(player.getUuid());
+            if (entity instanceof Player player && !player.hasEffect(MobEffects.WATER_BREATHING)) {
+                if (!Snails.snails.containsKey(player.getUUID())) return;
+                Snail snail = Snails.snails.get(player.getUUID());
                 if (snail == null) return;
-                int snailAir = snail.getAir();
+                int snailAir = snail.getAirSupply();
                 int initialAir = cir.getReturnValue();
                 if (snailAir < initialAir) {
                     cir.setReturnValue(snailAir);
@@ -96,7 +96,7 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
     }
 
     //? if <= 1.21 {
-    @Inject(method = "dropStack(Lnet/minecraft/item/ItemStack;F)Lnet/minecraft/entity/ItemEntity;",
+    @Inject(method = "spawnAtLocation(Lnet/minecraft/world/item/ItemStack;F)Lnet/minecraft/world/entity/item/ItemEntity;",
             at = @At("HEAD"), cancellable = true)
     public void dropStack(ItemStack stack, float yOffset, CallbackInfoReturnable<ItemEntity> cir) {
     //?} else {
@@ -107,7 +107,7 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (currentSeason instanceof WildLife) {
             Entity entity = (Entity) (Object) this;
-            if (entity instanceof EvokerEntity && stack.isOf(Items.TOTEM_OF_UNDYING)) {
+            if (entity instanceof Evoker && stack.is(Items.TOTEM_OF_UNDYING)) {
                 cir.setReturnValue(null);
             }
         }
@@ -140,20 +140,20 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
         Injected Interface
      */
     @Unique @Override
-    public World ls$getEntityWorld() {
+    public Level ls$getEntityWorld() {
         Entity entity = (Entity) (Object) this;
         //? if = 1.21.6 {
         /*return entity.getWorld();
          *///?} else {
-        return entity.getEntityWorld();
+        return entity.getCommandSenderWorld();
         //?}
     }
 
     @Unique @Override
-    public Vec3d ls$getEntityPos() {
+    public Vec3 ls$getEntityPos() {
         Entity entity = (Entity) (Object) this;
         //? if <= 1.21.6 {
-        return entity.getPos();
+        return entity.position();
         //?} else {
         /*return entity.getEntityPos();
          *///?}

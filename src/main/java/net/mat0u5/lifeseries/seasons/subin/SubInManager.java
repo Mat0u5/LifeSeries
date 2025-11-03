@@ -6,19 +6,12 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.network.packet.s2c.play.ExperienceBarUpdateS2CPacket;
-import net.minecraft.server.network.ServerPlayerEntity;
-
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.game.ClientboundSetExperiencePacket;
+import net.minecraft.server.level.ServerPlayer;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.*;
-
-//? if != 1.21.6
-import net.minecraft.nbt.NbtCompound;
-//? if >= 1.21.6 {
-/*import net.minecraft.storage.ReadView;
-import net.minecraft.util.ErrorReporter;
-*///?}
 
 //? if >= 1.21.9 {
 /*import net.minecraft.storage.NbtReadView;
@@ -34,9 +27,9 @@ public class SubInManager {
         return OtherUtils.profileName(profile);
     }
 
-    public static void addSubIn(ServerPlayerEntity player, GameProfile targetProfile) {
+    public static void addSubIn(ServerPlayer player, GameProfile targetProfile) {
         Integer startingLives = player.ls$getLives();
-        UUID playerUUID = player.getUuid();
+        UUID playerUUID = player.getUUID();
         GameProfile playerProfile = player.getGameProfile();
 
         UUID targetProfileId = getId(targetProfile);
@@ -56,7 +49,7 @@ public class SubInManager {
         loadPlayer(player);
 
         PlayerUtils.updatePlayerInventory(player);
-        player.networkHandler.sendPacket(new ExperienceBarUpdateS2CPacket(player.experienceProgress, player.totalExperience, player.experienceLevel));
+        player.connection.send(new ClientboundSetExperiencePacket(player.experienceProgress, player.totalExperience, player.experienceLevel));
 
         Integer subInLives = livesManager.getScoreLives(getName(targetProfile));
         if (subInLives == null) {
@@ -67,8 +60,8 @@ public class SubInManager {
         }
     }
 
-    public static void removeSubIn(ServerPlayerEntity player) {
-        UUID playerUUID = player.getUuid();
+    public static void removeSubIn(ServerPlayer player) {
+        UUID playerUUID = player.getUUID();
         for (SubIn subIn : new ArrayList<>(subIns)) {
             if (getId(subIn.substituter()).equals(playerUUID) || getId(subIn.target()).equals(playerUUID)) {
                 removeSubIn(subIn);
@@ -77,13 +70,13 @@ public class SubInManager {
     }
 
     private static void removeSubIn(SubIn subIn) {
-        ServerPlayerEntity player1 = PlayerUtils.getPlayer(getId(subIn.substituter()));
-        ServerPlayerEntity player2 = PlayerUtils.getPlayer(getId(subIn.target()));
+        ServerPlayer player1 = PlayerUtils.getPlayer(getId(subIn.substituter()));
+        ServerPlayer player2 = PlayerUtils.getPlayer(getId(subIn.target()));
         if (player1 != null) {
-            player1.sendMessage(TextUtils.formatLoosely("§6You are no longer subbing in for {}", getName(subIn.target())));
+            player1.sendSystemMessage(TextUtils.formatLoosely("§6You are no longer subbing in for {}", getName(subIn.target())));
         }
         if (player2 != null) {
-            player2.sendMessage(TextUtils.formatLoosely("§6{} is no longer subbing in for you", getName(subIn.substituter())));
+            player2.sendSystemMessage(TextUtils.formatLoosely("§6{} is no longer subbing in for you", getName(subIn.substituter())));
         }
 
         savePlayer(player1);
@@ -96,22 +89,22 @@ public class SubInManager {
         }
     }
 
-    public static void savePlayer(ServerPlayerEntity player) {
+    public static void savePlayer(ServerPlayer player) {
         if (player == null || server == null) return;
 
-        if (server.getPlayerManager() instanceof IPlayerManager iPlayerManager) {
+        if (server.getPlayerList() instanceof IPlayerManager iPlayerManager) {
             iPlayerManager.ls$savePlayerData(player);
         }
     }
 
-    public static void loadPlayer(ServerPlayerEntity player) {
+    public static void loadPlayer(ServerPlayer player) {
         if (player == null || server == null) return;
 
-        if (server.getPlayerManager() instanceof IPlayerManager iPlayerManager) {
+        if (server.getPlayerList() instanceof IPlayerManager iPlayerManager) {
             //? if < 1.21.6 {
-            Optional<NbtCompound> data = iPlayerManager.ls$getSaveHandler().loadPlayerData(player);
+            Optional<CompoundTag> data = iPlayerManager.ls$getSaveHandler().load(player);
             data.ifPresent(nbt -> {
-                player.readNbt(nbt);
+                player.load(nbt);
                 PlayerUtils.teleport(player, player.ls$getEntityPos());
             });
             //?} else if <= 1.21.6 {

@@ -6,11 +6,12 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Hunger;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.PatchedDataComponentMap;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,18 +20,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
-//? if <= 1.21
-import net.minecraft.component.ComponentMapImpl;
-//? if >= 1.21.2
-/*import net.minecraft.component.MergedComponentMap;*/
-
 @Mixin(value = Item.class, priority = 1)
 public abstract class ItemMixin {
     @Accessor("components")
-    public abstract ComponentMap normalComponents();
+    public abstract DataComponentMap normalComponents();
 
-    @Inject(method = "getComponents", at = @At("HEAD"), cancellable = true)
-    public void getComponents(CallbackInfoReturnable<ComponentMap> cir) {
+    @Inject(method = "components", at = @At("HEAD"), cancellable = true)
+    public void getComponents(CallbackInfoReturnable<DataComponentMap> cir) {
         if (Main.modDisabled()) return;
         boolean isLogicalSide = Main.isLogicalSide();
         boolean hungerActive = false;
@@ -49,7 +45,7 @@ public abstract class ItemMixin {
         if (hungerActive) {
             Item item = (Item) (Object) this;
             //? if <= 1.21 {
-            ComponentMapImpl components = new ComponentMapImpl(normalComponents());
+            PatchedDataComponentMap components = new PatchedDataComponentMap(normalComponents());
              //?} else {
             /*MergedComponentMap components = new MergedComponentMap(normalComponents());
             *///?}
@@ -58,8 +54,8 @@ public abstract class ItemMixin {
         }
     }
 
-    @Inject(method = "finishUsing", at = @At("HEAD"))
-    public void finishUsing(ItemStack stack, World world, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {
+    @Inject(method = "finishUsingItem", at = @At("HEAD"))
+    public void finishUsing(ItemStack stack, Level world, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (currentSeason instanceof WildLife && WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
             Item item = (Item) (Object) this;

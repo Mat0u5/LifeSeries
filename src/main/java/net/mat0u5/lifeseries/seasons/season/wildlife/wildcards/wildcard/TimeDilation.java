@@ -8,20 +8,16 @@ import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
-import net.minecraft.server.ServerTickManager;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.protocol.game.ClientboundSetTimePacket;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.ServerTickRateManager;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.GameRules;
 
 import static net.mat0u5.lifeseries.Main.currentSession;
 import static net.mat0u5.lifeseries.Main.server;
-
-//? if <= 1.21.9
-import net.minecraft.world.GameRules;
-//? if > 1.21.9
-/*import net.minecraft.world.rule.GameRules;*/
 
 public class TimeDilation extends Wildcard {
     public static float MIN_TICK_RATE = 1;
@@ -46,8 +42,8 @@ public class TimeDilation extends Wildcard {
     @Override
     public void tick() {
         if (server == null) return;
-        ServerTickManager serverTickManager = server.getTickManager();
-        float rate = serverTickManager.getTickRate();
+        ServerTickRateManager serverTickManager = server.tickRateManager();
+        float rate = serverTickManager.tickrate();
         if (rate > 20) {
             if (rate > 30) {
                 adjustCreeperFuseTimes();
@@ -56,16 +52,16 @@ public class TimeDilation extends Wildcard {
             int weatherTicks = (int) weatherTicksBacklog;
             if (weatherTicks >= 1) {
                 weatherTicksBacklog -= weatherTicks;
-                for (ServerWorld serverWorld : server.getWorlds()) {
-                    long newTicks = serverWorld.getTimeOfDay() + weatherTicks;
-                    serverWorld.setTimeOfDay(newTicks);
-                    for (ServerPlayerEntity player : serverWorld.getPlayers()) {
+                for (ServerLevel serverWorld : server.getAllLevels()) {
+                    long newTicks = serverWorld.getDayTime() + weatherTicks;
+                    serverWorld.setDayTime(newTicks);
+                    for (ServerPlayer player : serverWorld.players()) {
                         //? if <= 1.21.9 {
-                        boolean daylightCycle = OtherUtils.getBooleanGameRule(serverWorld, GameRules.DO_DAYLIGHT_CYCLE);
+                        boolean daylightCycle = OtherUtils.getBooleanGameRule(serverWorld, GameRules.RULE_DAYLIGHT);
                         //?} else {
                         /*boolean daylightCycle = OtherUtils.getBooleanGameRule(serverWorld, GameRules.ADVANCE_TIME);
                         *///?}
-                        player.networkHandler.sendPacket(new WorldTimeUpdateS2CPacket(serverWorld.getTime(), serverWorld.getTimeOfDay(), daylightCycle));
+                        player.connection.send(new ClientboundSetTimePacket(serverWorld.getGameTime(), serverWorld.getDayTime(), daylightCycle));
                     }
                 }
             }
@@ -127,7 +123,7 @@ public class TimeDilation extends Wildcard {
         TaskScheduler.scheduleTask(115, () -> {
             activatedAt = (int) currentSession.passedTime + 400;
             lastDiv = -1;
-            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvent.of(Identifier.ofVanilla("wildlife_time_slow_down")));
+            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvent.createVariableRangeEvent(ResourceLocation.withDefaultNamespace("wildlife_time_slow_down")));
             slowlySetWorldSpeed(getMinTickRate(), 18);
             if (!isFinale() && getMinTickRate() <= 4) TaskScheduler.scheduleTask(18, () -> NetworkHandlerServer.sendLongPackets(PacketNames.TIME_DILATION, System.currentTimeMillis()));
             TaskScheduler.scheduleTask(19, super::activate);
@@ -136,8 +132,8 @@ public class TimeDilation extends Wildcard {
 
     public static void slowlySetWorldSpeed(float rate, int ticks) {
         if (server == null) return;
-        ServerTickManager serverTickManager = server.getTickManager();
-        float currentRate = serverTickManager.getTickRate();
+        ServerTickRateManager serverTickManager = server.tickRateManager();
+        float currentRate = serverTickManager.tickrate();
         float step = (rate - currentRate) / (ticks);
         for (int i = 0; i < ticks; i++) {
             int finalI = i;
@@ -148,20 +144,20 @@ public class TimeDilation extends Wildcard {
 
     public static void setWorldSpeed(float rate) {
         if (server == null) return;
-        ServerTickManager serverTickManager = server.getTickManager();
+        ServerTickRateManager serverTickManager = server.tickRateManager();
         serverTickManager.setTickRate(rate);
     }
 
     public static float getWorldSpeed() {
         if (server == null) return 20;
-        ServerTickManager serverTickManager = server.getTickManager();
-        return serverTickManager.getTickRate();
+        ServerTickRateManager serverTickManager = server.tickRateManager();
+        return serverTickManager.tickrate();
     }
 
     private static void adjustCreeperFuseTimes() {
         if (server == null) return;
-        ServerTickManager serverTickManager = server.getTickManager();
-        float tickRate = serverTickManager.getTickRate();
+        ServerTickRateManager serverTickManager = server.tickRateManager();
+        float tickRate = serverTickManager.tickrate();
         short fuseTime = (short) (20 * (tickRate / 20.0f));
         OtherUtils.executeCommand("/execute as @e[type=minecraft:creeper] run data modify entity @s Fuse set value "+fuseTime+"s");
     }

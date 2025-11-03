@@ -5,15 +5,12 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.TeamUtils;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.scoreboard.Team;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.scores.PlayerTeam;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -38,7 +35,7 @@ public class Creaking extends ToggleableSuperpower {
     /*private final List<CreakingEntity> createdEntities = new ArrayList<>();
     *///?}
 
-    public Creaking(ServerPlayerEntity player) {
+    public Creaking(ServerPlayer player) {
         super(player);
     }
 
@@ -58,13 +55,13 @@ public class Creaking extends ToggleableSuperpower {
     @Override
     public void activate() {
         super.activate();
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
         if (player == null) return;
-        ServerWorld playerWorld = PlayerUtils.getServerWorld(player);
+        ServerLevel playerWorld = PlayerUtils.getServerWorld(player);
 
-        Team playerTeam = TeamUtils.getPlayerTeam(player);
+        PlayerTeam playerTeam = TeamUtils.getPlayerTeam(player);
         if (playerTeam == null) return;
-        String newTeamName = "creaking_"+player.getNameForScoreboard();
+        String newTeamName = "creaking_"+player.getScoreboardName();
         TeamUtils.deleteTeam(newTeamName);
         TeamUtils.createTeam(newTeamName, playerTeam.getDisplayName().getString(), playerTeam.getColor());
         createdTeams.add(newTeamName);
@@ -110,13 +107,13 @@ public class Creaking extends ToggleableSuperpower {
         return 10000;
     }
 
-    private static void makeFriendly(String teamName, Entity entity, ServerPlayerEntity player) {
+    private static void makeFriendly(String teamName, Entity entity, ServerPlayer player) {
         TeamUtils.addEntityToTeam(teamName, player);
         TeamUtils.addEntityToTeam(teamName, entity);
-        Vec3d entityPos = entity.ls$getEntityPos();
-        PlayerUtils.getServerWorld(player).spawnParticles(
+        Vec3 entityPos = entity.ls$getEntityPos();
+        PlayerUtils.getServerWorld(player).sendParticles(
                 ParticleTypes.EXPLOSION,
-                entityPos.getX(), entityPos.getY(), entityPos.getZ(),
+                entityPos.x(), entityPos.y(), entityPos.z(),
                 1, 0, 0, 0, 0
         );
     }

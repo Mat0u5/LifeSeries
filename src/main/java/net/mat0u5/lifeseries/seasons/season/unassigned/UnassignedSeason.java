@@ -10,10 +10,9 @@ import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,11 +36,11 @@ public class UnassignedSeason extends Season {
     }
 
     @Override
-    public void onPlayerJoin(ServerPlayerEntity player) {
+    public void onPlayerJoin(ServerPlayer player) {
         TaskScheduler.scheduleTask(100, this::broadcastNotice);
     }
     @Override
-    public void onPlayerFinishJoining(ServerPlayerEntity player) {
+    public void onPlayerFinishJoining(ServerPlayer player) {
         super.onPlayerFinishJoining(player);
         if (!Main.modDisabled()) {
             NetworkHandlerServer.sendStringPacket(player, PacketNames.SELECT_SEASON, "");
@@ -72,10 +71,10 @@ public class UnassignedSeason extends Season {
     public void broadcastNotice() {
         if (Main.modDisabled()) return;
         if (currentSeason.getSeason() != Seasons.UNASSIGNED) return;
-        PlayerUtils.broadcastMessage(Text.literal("[LifeSeries] You must select a season with ").formatted(Formatting.RED)
-                .append(Text.literal("'/lifeseries setSeries <series>'").formatted(Formatting.GRAY)), 120);
-        PlayerUtils.broadcastMessage(Text.literal("You must have §noperator permissions§r to use most commands in this mod.").formatted(Formatting.RED), 120);
-        Text text = TextUtils.format("§7Click {}§7 to join the mod development discord if you have any questions, issues, requests, or if you just want to hang out :)\"", TextUtils.openURLText("https://discord.gg/QWJxfb4zQZ"));
+        PlayerUtils.broadcastMessage(Component.literal("[LifeSeries] You must select a season with ").withStyle(ChatFormatting.RED)
+                .append(Component.literal("'/lifeseries setSeries <series>'").withStyle(ChatFormatting.GRAY)), 120);
+        PlayerUtils.broadcastMessage(Component.literal("You must have §noperator permissions§r to use most commands in this mod.").withStyle(ChatFormatting.RED), 120);
+        Component text = TextUtils.format("§7Click {}§7 to join the mod development discord if you have any questions, issues, requests, or if you just want to hang out :)\"", TextUtils.openURLText("https://discord.gg/QWJxfb4zQZ"));
         PlayerUtils.broadcastMessage(text, 120);
     }
 }

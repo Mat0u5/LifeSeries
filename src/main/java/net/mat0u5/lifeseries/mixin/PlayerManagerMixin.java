@@ -3,15 +3,16 @@ package net.mat0u5.lifeseries.mixin;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayerManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.network.ClientConnection;
-import net.minecraft.network.message.MessageType;
-import net.minecraft.network.message.SignedMessage;
-import net.minecraft.server.PlayerManager;
-import net.minecraft.server.network.ConnectedClientData;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.world.PlayerSaveHandler;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.chat.ChatType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.PlayerChatMessage;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.CommonListenerCookie;
+import net.minecraft.server.players.PlayerList;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.storage.PlayerDataStorage;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -26,8 +27,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static net.mat0u5.lifeseries.Main.currentSeason;
-//? if <= 1.21.5
-import net.minecraft.nbt.NbtCompound;
+
 //? if >= 1.21.6 {
 /*import net.minecraft.util.ErrorReporter;
 import net.minecraft.storage.ReadView;
@@ -37,43 +37,43 @@ import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import java.util.Optional;
 //?}
 
-@Mixin(value = PlayerManager.class, priority = 1)
+@Mixin(value = PlayerList.class, priority = 1)
 public abstract class PlayerManagerMixin implements IPlayerManager {
 
     @Final
     @Shadow
-    private PlayerSaveHandler saveHandler;
+    private PlayerDataStorage playerIo;
 
     @Override
-    public PlayerSaveHandler ls$getSaveHandler() {
-        return saveHandler;
+    public PlayerDataStorage ls$getSaveHandler() {
+        return playerIo;
     }
 
 
-    @Invoker("savePlayerData")
-    abstract void invokeSavePlayerData(ServerPlayerEntity player);
+    @Invoker("save")
+    abstract void invokeSavePlayerData(ServerPlayer player);
 
     @Override
-    public void ls$savePlayerData(ServerPlayerEntity player) {
+    public void ls$savePlayerData(ServerPlayer player) {
         invokeSavePlayerData(player);
     }
 
-    @Inject(method = "broadcast(Lnet/minecraft/text/Text;Ljava/util/function/Function;Z)V", at = @At("HEAD"), cancellable = true)
-    public void broadcast(Text message, Function<ServerPlayerEntity, Text> playerMessageFactory, boolean overlay, CallbackInfo ci) {
+    @Inject(method = "broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Ljava/util/function/Function;Z)V", at = @At("HEAD"), cancellable = true)
+    public void broadcast(Component message, Function<ServerPlayer, Component> playerMessageFactory, boolean overlay, CallbackInfo ci) {
         if (Main.modFullyDisabled()) return;
         if (message.getString().contains("`")) ci.cancel();
     }
 
-    @Inject(method = "broadcast(Lnet/minecraft/network/message/SignedMessage;Ljava/util/function/Predicate;Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/network/message/MessageType$Parameters;)V", at = @At("HEAD"), cancellable = true)
-    public void broadcast(SignedMessage message, Predicate<ServerPlayerEntity> shouldSendFiltered, ServerPlayerEntity sender, MessageType.Parameters params, CallbackInfo ci) {
+    @Inject(method = "broadcastChatMessage(Lnet/minecraft/network/chat/PlayerChatMessage;Ljava/util/function/Predicate;Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/network/chat/ChatType$Bound;)V", at = @At("HEAD"), cancellable = true)
+    public void broadcast(PlayerChatMessage message, Predicate<ServerPlayer> shouldSendFiltered, ServerPlayer sender, ChatType.Bound params, CallbackInfo ci) {
         if (Main.modFullyDisabled()) return;
-        if (message.getContent().getString().contains("`")) ci.cancel();
+        if (message.decoratedContent().getString().contains("`")) ci.cancel();
     }
 
     //? if <= 1.21.6 {
-    @Inject(method = "loadPlayerData", at = @At(value = "RETURN", shift = At.Shift.BEFORE))
+    @Inject(method = "load", at = @At(value = "RETURN", shift = At.Shift.BEFORE))
             //? if <= 1.21.5 {
-    public void loadPlayerData(ServerPlayerEntity player, CallbackInfoReturnable<Optional<NbtCompound>> cir) {
+    public void loadPlayerData(ServerPlayer player, CallbackInfoReturnable<Optional<CompoundTag>> cir) {
      //?} else {
     /*public void loadPlayerData(ServerPlayerEntity player, ErrorReporter errorReporter, CallbackInfoReturnable<Optional<ReadView>> cir) {
         *///?}
@@ -84,17 +84,17 @@ public abstract class PlayerManagerMixin implements IPlayerManager {
     }
     //?}
 
-    @Inject(method = "respawnPlayer", at = @At("RETURN"))
-    public void respawnPlayer(ServerPlayerEntity player, boolean alive, Entity.RemovalReason removalReason, CallbackInfoReturnable<ServerPlayerEntity> cir) {
+    @Inject(method = "respawn", at = @At("RETURN"))
+    public void respawnPlayer(ServerPlayer player, boolean alive, Entity.RemovalReason removalReason, CallbackInfoReturnable<ServerPlayer> cir) {
         if (alive || removalReason != Entity.RemovalReason.KILLED) return;
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         currentSeason.onPlayerRespawn(cir.getReturnValue());
     }
 
-    @Redirect(method = "onPlayerConnect", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/PlayerManager;broadcast(Lnet/minecraft/text/Text;Z)V"))
-    public void skipLoginMessage(PlayerManager instance, Text message, boolean overlay, ClientConnection connection, ServerPlayerEntity player, ConnectedClientData clientData) {
+    @Redirect(method = "placeNewPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Z)V"))
+    public void skipLoginMessage(PlayerList instance, Component message, boolean overlay, Connection connection, ServerPlayer player, CommonListenerCookie clientData) {
         if (!Main.isLogicalSide() || Main.modDisabled() || player == null) {
-            instance.broadcast(message, overlay);
+            instance.broadcastSystemMessage(message, overlay);
         }
         PlayerUtils.broadcastToVisiblePlayers(player, message);
     }

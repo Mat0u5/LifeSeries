@@ -1,8 +1,10 @@
 package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.util.profiler.Profiler;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.item.crafting.RecipeManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -12,17 +14,14 @@ import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.blacklist;
 
-//? if <=1.21 {
-import net.minecraft.recipe.RecipeManager;
 import com.google.gson.JsonElement;
-import net.minecraft.util.Identifier;
 import java.util.ArrayList;
 import java.util.Map;
 @Mixin(value = RecipeManager.class, priority = 1)
 public class RecipeManagerMixin {
 
-    @Inject(method = "apply(Ljava/util/Map;Lnet/minecraft/resource/ResourceManager;Lnet/minecraft/util/profiler/Profiler;)V", at = @At("HEAD"))
-    private void applyMixin(Map<Identifier, JsonElement> map, ResourceManager resourceManager, Profiler profiler, CallbackInfo info) {
+    @Inject(method = "apply(Ljava/util/Map;Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)V", at = @At("HEAD"))
+    private void applyMixin(Map<ResourceLocation, JsonElement> map, ResourceManager resourceManager, ProfilerFiller profiler, CallbackInfo info) {
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (blacklist == null) return;
         if (blacklist.loadedListItemIdentifier == null)  {
@@ -30,9 +29,9 @@ public class RecipeManagerMixin {
         }
         if (blacklist.loadedListItemIdentifier.isEmpty()) return;
 
-        List<Identifier> toRemove = new ArrayList<>();
+        List<ResourceLocation> toRemove = new ArrayList<>();
 
-        for (Identifier identifier : map.keySet()) {
+        for (ResourceLocation identifier : map.keySet()) {
             if (blacklist.loadedListItemIdentifier.contains(identifier)) {
                 toRemove.add(identifier);
             }

@@ -27,10 +27,10 @@ import net.mat0u5.lifeseries.utils.interfaces.IClientHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,9 +65,9 @@ public class Main implements ModInitializer {
 		LOGGER.info("Initializing Life Series...");
 
 		FabricLoader.getInstance().getModContainer(Main.MOD_ID).ifPresent(container -> {
-			ResourceManagerHelper.registerBuiltinResourcePack(Identifier.of(Main.MOD_ID, "lifeseries"), container, Text.of("Main Life Series Resourcepack"), ResourcePackActivationType.ALWAYS_ENABLED);
-			ResourceManagerHelper.registerBuiltinResourcePack(Identifier.of(Main.MOD_ID, "minimal_armor"), container, Text.of("Minimal Armor Resourcepack"), ResourcePackActivationType.NORMAL);
-			ResourceManagerHelper.registerBuiltinResourcePack(Identifier.of(Main.MOD_ID, "lifeseries_datapack"), container, ResourcePackActivationType.ALWAYS_ENABLED);
+			ResourceManagerHelper.registerBuiltinResourcePack(ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "lifeseries"), container, Component.nullToEmpty("Main Life Series Resourcepack"), ResourcePackActivationType.ALWAYS_ENABLED);
+			ResourceManagerHelper.registerBuiltinResourcePack(ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "minimal_armor"), container, Component.nullToEmpty("Minimal Armor Resourcepack"), ResourcePackActivationType.NORMAL);
+			ResourceManagerHelper.registerBuiltinResourcePack(ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "lifeseries_datapack"), container, ResourcePackActivationType.ALWAYS_ENABLED);
 		});
 
 		ConfigManager.moveOldMainFileIfExists();
@@ -181,7 +181,7 @@ public class Main implements ModInitializer {
 		Main.parseSeason(changeTo);
 		currentSeason.initialize();
 		reloadStart();
-		for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+		for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
 			currentSeason.onPlayerJoin(player);
 			currentSeason.onPlayerFinishJoining(player);
 			NetworkHandlerServer.tryKickFailedHandshake(player);

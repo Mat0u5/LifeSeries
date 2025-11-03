@@ -4,7 +4,7 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.fabricmc.fabric.impl.registry.sync.RegistrySyncManager;
 import net.mat0u5.lifeseries.Main;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,11 +19,11 @@ import java.util.Map;
 public class RegistrySyncManagerMixin {
     //? if <= 1.21.2 {
     @ModifyReturnValue(method = "createAndPopulateRegistryMap", at = @At(value = "RETURN"))
-    private static @Nullable Map<Identifier, Object2IntMap<Identifier>> checkRemoteRemap(@Nullable Map<Identifier, Object2IntMap<Identifier>> original) {
+    private static @Nullable Map<ResourceLocation, Object2IntMap<ResourceLocation>> checkRemoteRemap(@Nullable Map<ResourceLocation, Object2IntMap<ResourceLocation>> original) {
         if (original != null) {
-            Identifier entityType = Identifier.ofVanilla("entity_type");
+            ResourceLocation entityType = ResourceLocation.withDefaultNamespace("entity_type");
             if (original.containsKey(entityType)) {
-                Object2IntMap<Identifier> entityTypes = original.get(entityType);
+                Object2IntMap<ResourceLocation> entityTypes = original.get(entityType);
                 entityTypes.keySet().removeIf(value ->
                         value.getNamespace().equalsIgnoreCase(Main.MOD_ID)
                 );

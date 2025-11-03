@@ -9,11 +9,10 @@ import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
-import net.minecraft.command.CommandSource;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
@@ -28,12 +27,12 @@ public class SessionCommand extends Command {
     }
 
     @Override
-    public Text getBannedText() {
-        return Text.of("This command is only available when you have selected a Season.");
+    public Component getBannedText() {
+        return Component.nullToEmpty("This command is only available when you have selected a Season.");
     }
 
     @Override
-    public void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+    public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
             literal("session")
                 .then(literal("start")
@@ -58,7 +57,7 @@ public class SessionCommand extends Command {
                     .then(literal("set")
                         .requires(PermissionManager::isAdmin)
                         .then(argument("time", StringArgumentType.greedyString())
-                            .suggests((context, builder) -> CommandSource.suggestMatching(List.of("1h","1h30m","2h"), builder))
+                            .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("1h","1h30m","2h"), builder))
                             .executes(context -> setTime(
                                 context.getSource(), StringArgumentType.getString(context, "time")
                             ))
@@ -67,7 +66,7 @@ public class SessionCommand extends Command {
                     .then(literal("add")
                         .requires(PermissionManager::isAdmin)
                         .then(argument("time", StringArgumentType.greedyString())
-                            .suggests((context, builder) -> CommandSource.suggestMatching(List.of("30m", "1h"), builder))
+                            .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("30m", "1h"), builder))
                             .executes(context -> addTime(
                                 context.getSource(), StringArgumentType.getString(context, "time")
                             ))
@@ -76,7 +75,7 @@ public class SessionCommand extends Command {
                     .then(literal("fastforward")
                         .requires(PermissionManager::isAdmin)
                         .then(argument("time", StringArgumentType.greedyString())
-                            .suggests((context, builder) -> CommandSource.suggestMatching(List.of("5m"), builder))
+                            .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("5m"), builder))
                             .executes(context -> skipTime(
                                 context.getSource(), StringArgumentType.getString(context, "time")
                             ))
@@ -85,7 +84,7 @@ public class SessionCommand extends Command {
                     .then(literal("remove")
                         .requires(PermissionManager::isAdmin)
                             .then(argument("time", StringArgumentType.greedyString())
-                                    .suggests((context, builder) -> CommandSource.suggestMatching(List.of("5m"), builder))
+                                    .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("5m"), builder))
                                     .executes(context -> removeTime(
                                             context.getSource(), StringArgumentType.getString(context, "time")
                                     ))
@@ -106,20 +105,20 @@ public class SessionCommand extends Command {
         );
     }
 
-    public int getTime(ServerCommandSource source) {
+    public int getTime(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
 
         if (!currentSession.validTime()) {
-            source.sendError(Text.of("The session time has not been set yet"));
+            source.sendFailure(Component.nullToEmpty("The session time has not been set yet"));
             return -1;
         }
         OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("The session ends in {}",currentSession.getRemainingTimeStr()));
         return 1;
     }
 
-    public int displayTimer(ServerCommandSource source) {
+    public int displayTimer(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        final ServerPlayerEntity self = source.getPlayer();
+        final ServerPlayer self = source.getPlayer();
 
         if (self == null) return -1;
         if (NetworkHandlerServer.wasHandshakeSuccessful(self)) {
@@ -132,70 +131,70 @@ public class SessionCommand extends Command {
         return 1;
     }
 
-    public int startSession(ServerCommandSource source) {
+    public int startSession(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
 
         if (!currentSession.validTime()) {
-            source.sendError(Text.of("The session time is not set! Use '/session timer set <time>' to set the session time."));
+            source.sendFailure(Component.nullToEmpty("The session time is not set! Use '/session timer set <time>' to set the session time."));
             return -1;
         }
         if (currentSession.statusStarted()) {
-            source.sendError(Text.of("The session has already started"));
+            source.sendFailure(Component.nullToEmpty("The session has already started"));
             return -1;
         }
         if (currentSession.statusPaused()) {
-            OtherUtils.sendCommandFeedback(source, Text.of("§7Unpausing session..."));
+            OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Unpausing session..."));
             currentSession.sessionPause();
             return 1;
         }
 
-        OtherUtils.sendCommandFeedback(source, Text.of("Starting session..."));
+        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("Starting session..."));
         if (!currentSession.sessionStart()) {
-            source.sendError(Text.of("Could not start session"));
+            source.sendFailure(Component.nullToEmpty("Could not start session"));
             return -1;
         }
 
         return 1;
     }
 
-    public int stopSession(ServerCommandSource source) {
+    public int stopSession(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
 
         if (currentSession.statusNotStarted() || currentSession.statusFinished()) {
-            source.sendError(Text.of("The session has not yet started"));
+            source.sendFailure(Component.nullToEmpty("The session has not yet started"));
             return -1;
         }
 
-        OtherUtils.sendCommandFeedback(source, Text.of("§7Stopping session..."));
+        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Stopping session..."));
         currentSession.sessionEnd();
         return 1;
     }
 
-    public int pauseSession(ServerCommandSource source) {
+    public int pauseSession(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
 
         if (currentSession.statusNotStarted() || currentSession.statusFinished()) {
-            source.sendError(Text.of("The session has not yet started"));
+            source.sendFailure(Component.nullToEmpty("The session has not yet started"));
             return -1;
         }
 
         if (currentSession.statusPaused()) {
-            OtherUtils.sendCommandFeedback(source, Text.of("§7Unpausing session..."));
+            OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Unpausing session..."));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, Text.of("§7Pausing session..."));
+            OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Pausing session..."));
         }
         currentSession.sessionPause();
 
         return 1;
     }
 
-    public int skipTime(ServerCommandSource source, String timeArgument) {
+    public int skipTime(CommandSourceStack source, String timeArgument) {
         if (checkBanned(source)) return -1;
 
         Integer totalTicks = OtherUtils.parseTimeFromArgument(timeArgument);
         if (totalTicks == null) {
-            source.sendError(Text.literal(INVALID_TIME_FORMAT_ERROR));
+            source.sendFailure(Component.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
         OtherUtils.sendCommandFeedback(source, TextUtils.format("Skipped {} in the session length", OtherUtils.formatTime(totalTicks)));
@@ -203,12 +202,12 @@ public class SessionCommand extends Command {
         return 1;
     }
 
-    public int setTime(ServerCommandSource source, String timeArgument) {
+    public int setTime(CommandSourceStack source, String timeArgument) {
         if (checkBanned(source)) return -1;
 
         Integer totalTicks = OtherUtils.parseTimeFromArgument(timeArgument);
         if (totalTicks == null) {
-            source.sendError(Text.literal(INVALID_TIME_FORMAT_ERROR));
+            source.sendFailure(Component.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
         currentSession.setSessionLength(totalTicks);
@@ -217,12 +216,12 @@ public class SessionCommand extends Command {
         return 1;
     }
 
-    public int addTime(ServerCommandSource source, String timeArgument) {
+    public int addTime(CommandSourceStack source, String timeArgument) {
         if (checkBanned(source)) return -1;
 
         Integer totalTicks = OtherUtils.parseTimeFromArgument(timeArgument);
         if (totalTicks == null) {
-            source.sendError(Text.literal(INVALID_TIME_FORMAT_ERROR));
+            source.sendFailure(Component.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
         currentSession.addSessionLength(totalTicks);
@@ -231,12 +230,12 @@ public class SessionCommand extends Command {
         return 1;
     }
 
-    public int removeTime(ServerCommandSource source, String timeArgument) {
+    public int removeTime(CommandSourceStack source, String timeArgument) {
         if (checkBanned(source)) return -1;
 
         Integer totalTicks = OtherUtils.parseTimeFromArgument(timeArgument);
         if (totalTicks == null) {
-            source.sendError(Text.literal(INVALID_TIME_FORMAT_ERROR));
+            source.sendFailure(Component.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
         currentSession.removeSessionLength(totalTicks);

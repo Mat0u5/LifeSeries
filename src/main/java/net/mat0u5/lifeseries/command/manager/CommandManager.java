@@ -10,9 +10,8 @@ import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLifeCommands;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeCommands;
 import net.mat0u5.lifeseries.seasons.secretsociety.SocietyCommands;
 import net.mat0u5.lifeseries.seasons.subin.SubInCommands;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.server.command.ServerCommandSource;
-
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.CommandSourceStack;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +37,7 @@ public class CommandManager {
         commands.add(new SideTitleCommand());
     }
 
-    public static void registerAllCommands(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, net.minecraft.server.command.CommandManager.RegistrationEnvironment registrationEnvironment) {
+    public static void registerAllCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandRegistryAccess, net.minecraft.commands.Commands.CommandSelection registrationEnvironment) {
         loadCommands();
         for (Command command : commands) {
             command.register(dispatcher, commandRegistryAccess);

@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.entity.snail.goal;
 
 import net.mat0u5.lifeseries.entity.snail.Snail;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.Goal;
 import org.jetbrains.annotations.NotNull;
 
 public final class SnailStartFlyingGoal extends Goal {
@@ -18,8 +18,8 @@ public final class SnailStartFlyingGoal extends Goal {
     }
 
     @Override
-    public boolean canStart() {
-        if (mob.getSnailWorld().isClient()) return false;
+    public boolean canUse() {
+        if (mob.getSnailWorld().isClientSide()) return false;
         if (mob.isPaused()) return false;
         if (!mob.serverData.shouldPathfind()) {
             return false;
@@ -34,7 +34,7 @@ public final class SnailStartFlyingGoal extends Goal {
             return false;
         }*/
 
-        if (mob.getNavigation().getCurrentPath() == null) {
+        if (mob.getNavigation().getPath() == null) {
             return false;
         }
 

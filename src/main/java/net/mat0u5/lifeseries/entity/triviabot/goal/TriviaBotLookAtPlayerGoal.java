@@ -1,9 +1,8 @@
 package net.mat0u5.lifeseries.entity.triviabot.goal;
 
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.Vec3d;
-
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.phys.Vec3;
 import java.util.EnumSet;
 
 public class TriviaBotLookAtPlayerGoal extends Goal {
@@ -13,39 +12,39 @@ public class TriviaBotLookAtPlayerGoal extends Goal {
 
     public TriviaBotLookAtPlayerGoal(TriviaBot mob) {
         this.mob = mob;
-        this.setControls(EnumSet.of(Goal.Control.LOOK));
+        this.setFlags(EnumSet.of(Goal.Flag.LOOK));
     }
 
-    public boolean canStart() {
-        if (mob.getBotWorld().isClient()) return false;
+    public boolean canUse() {
+        if (mob.getBotWorld().isClientSide()) return false;
         if (!mob.interactedWith()) return false;
 
-        Vec3d targetPos = mob.serverData.getPlayerPos();
+        Vec3 targetPos = mob.serverData.getPlayerPos();
         if (targetPos == null) return false;
 
-        return this.mob.squaredDistanceTo(targetPos) <= RANGE_SQUARED;
+        return this.mob.distanceToSqr(targetPos) <= RANGE_SQUARED;
     }
 
     @Override
-    public boolean shouldContinue() {
-        Vec3d targetPos = mob.serverData.getPlayerPos();
+    public boolean canContinueToUse() {
+        Vec3 targetPos = mob.serverData.getPlayerPos();
         if (targetPos == null) return false;
 
-        if (this.mob.squaredDistanceTo(targetPos) > RANGE_SQUARED) return false;
+        if (this.mob.distanceToSqr(targetPos) > RANGE_SQUARED) return false;
         return this.lookTime > 0;
     }
 
     @Override
     public void start() {
-        this.lookTime = this.getTickCount(40 + this.mob.getRandom().nextInt(40));
+        this.lookTime = this.adjustedTickDelay(40 + this.mob.getRandom().nextInt(40));
     }
 
     @Override
     public void tick() {
-        Vec3d targetPos = mob.serverData.getPlayerPos();
+        Vec3 targetPos = mob.serverData.getPlayerPos();
         if (targetPos != null) {
             double d = this.mob.getEyeY();
-            this.mob.getLookControl().lookAt(targetPos.getX(), d, targetPos.getZ());
+            this.mob.getLookControl().setLookAt(targetPos.x(), d, targetPos.z());
             --this.lookTime;
         }
     }

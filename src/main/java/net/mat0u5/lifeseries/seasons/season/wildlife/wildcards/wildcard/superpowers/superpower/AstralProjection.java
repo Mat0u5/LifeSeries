@@ -6,16 +6,16 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.GameMode;
+import net.minecraft.network.DisconnectionDetails;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 
@@ -24,7 +24,6 @@ import static net.mat0u5.lifeseries.Main.livesManager;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.minecraft.network.DisconnectionInfo;
 
 import static net.mat0u5.lifeseries.Main.server;
 //?}
@@ -46,13 +45,13 @@ public class AstralProjection extends ToggleableSuperpower {
     public MannequinEntity clone;
     *///?}
     @Nullable
-    private Vec3d startedPos;
+    private Vec3 startedPos;
     @Nullable
-    private ServerWorld startedWorld;
+    private ServerLevel startedWorld;
     private float[] startedLooking = new float[2];
-    private GameMode startedGameMode = GameMode.SURVIVAL;
+    private GameType startedGameMode = GameType.SURVIVAL;
 
-    public AstralProjection(ServerPlayerEntity player) {
+    public AstralProjection(ServerPlayer player) {
         super(player);
     }
 
@@ -88,26 +87,26 @@ public class AstralProjection extends ToggleableSuperpower {
     }
 
     public void startProjection() {
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
         if (player == null) return;
         if (player.isSpectator()) return;
-        player.playSoundToPlayer(SoundEvents.BLOCK_TRIAL_SPAWNER_OMINOUS_ACTIVATE, SoundCategory.MASTER, 0.3f, 1);
+        player.playNotifySound(SoundEvents.TRIAL_SPAWNER_OMINOUS_ACTIVATE, SoundSource.MASTER, 0.3f, 1);
 
-        String fakePlayerName = "`"+player.getNameForScoreboard();
+        String fakePlayerName = "`"+player.getScoreboardName();
 
         startedPos = player.ls$getEntityPos();
-        startedLooking[0] = player.getYaw();
-        startedLooking[1] = player.getPitch();
+        startedLooking[0] = player.getYRot();
+        startedLooking[1] = player.getXRot();
         startedWorld = PlayerUtils.getServerWorld(player);
         if (startedWorld == null) return;
-        startedGameMode = player.interactionManager.getGameMode();
-        Vec3d velocity = player.getVelocity();
-        player.changeGameMode(GameMode.SPECTATOR);
-        PlayerInventory inv = player.getInventory();
+        startedGameMode = player.gameMode.getGameModeForPlayer();
+        Vec3 velocity = player.getDeltaMovement();
+        player.setGameMode(GameType.SPECTATOR);
+        Inventory inv = player.getInventory();
 
         //? if <= 1.21.6 {
-        FakePlayer.createFake(fakePlayerName, server, startedPos, startedLooking[0], startedLooking[1], PlayerUtils.getServerWorld(player).getRegistryKey(),
-                startedGameMode, false, inv, player.getUuid()).thenAccept((fakePlayer) -> {
+        FakePlayer.createFake(fakePlayerName, server, startedPos, startedLooking[0], startedLooking[1], PlayerUtils.getServerWorld(player).dimension(),
+                startedGameMode, false, inv, player.getUUID()).thenAccept((fakePlayer) -> {
             clone = fakePlayer;
             sendDisguisePacket();
         });
@@ -152,23 +151,23 @@ public class AstralProjection extends ToggleableSuperpower {
         //? if <= 1.21.6 {
         if (!this.active) return;
         if (clone == null) return;
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
         if (player == null) return;
-        String name = TextUtils.textToLegacyString(player.getStyledDisplayName());
-        NetworkHandlerServer.sendPlayerDisguise(clone.getUuid().toString(), clone.getName().getString(), player.getUuid().toString(), name);
+        String name = TextUtils.textToLegacyString(player.getFeedbackDisplayName());
+        NetworkHandlerServer.sendPlayerDisguise(clone.getUUID().toString(), clone.getName().getString(), player.getUUID().toString(), name);
         //?}
     }
 
     public void cancelProjection() {
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
         if (player == null) return;
 
-        Vec3d toBackPos = startedPos;
+        Vec3 toBackPos = startedPos;
         if (clone != null) {
             toBackPos = clone.ls$getEntityPos();
             //? if <= 1.21.6 {
-            clone.networkHandler.onDisconnected(new DisconnectionInfo(Text.empty()));
-            NetworkHandlerServer.sendPlayerDisguise(clone.getUuid().toString(), clone.getName().getString(), "", "");
+            clone.connection.onDisconnect(new DisconnectionDetails(Component.empty()));
+            NetworkHandlerServer.sendPlayerDisguise(clone.getUUID().toString(), clone.getName().getString(), "", "");
             //?} else {
             /*clone.discard();
             *///?}
@@ -179,8 +178,8 @@ public class AstralProjection extends ToggleableSuperpower {
         if (startedWorld != null && toBackPos != null) {
             PlayerUtils.teleport(player, startedWorld, toBackPos, startedLooking[0], startedLooking[1]);
         }
-        player.changeGameMode(startedGameMode);
-        player.playSoundToPlayer(SoundEvents.ENTITY_EVOKER_DEATH, SoundCategory.MASTER, 0.3f, 1);
+        player.setGameMode(startedGameMode);
+        player.playNotifySound(SoundEvents.EVOKER_DEATH, SoundSource.MASTER, 0.3f, 1);
     }
 
 
@@ -190,7 +189,7 @@ public class AstralProjection extends ToggleableSuperpower {
     /*public void onDamageClone(ServerWorld world, DamageSource source, float amount) {
     *///?}
         deactivate();
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
         if (player == null) return;
         //? if <= 1.21 {
         PlayerUtils.damage(player, source, amount);

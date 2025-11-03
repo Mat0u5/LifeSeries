@@ -1,11 +1,11 @@
 package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.registry.Registries;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -17,32 +17,32 @@ import static net.mat0u5.lifeseries.Main.blacklist;
 //? if >= 1.21.2
 /*import net.minecraft.server.world.ServerWorld;*/
 
-@Mixin(value = StatusEffect.class, priority = 1)
+@Mixin(value = MobEffect.class, priority = 1)
 public class StatusEffectMixin {
-    @Inject(method = "applyInstantEffect", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "applyInstantenousEffect", at = @At("HEAD"), cancellable = true)
     //? if <= 1.21 {
     public void applyInstantEffect(Entity source, Entity attacker, LivingEntity target, int amplifier, double proximity, CallbackInfo ci) {
     //?} else {
     /*public void applyInstantEffect(ServerWorld world, Entity effectEntity, Entity attacker, LivingEntity target, int amplifier, double proximity, CallbackInfo ci) {
     *///?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
-        StatusEffect effect = (StatusEffect) (Object) this;
-        if (target instanceof ServerPlayerEntity) {
-            if (blacklist.getBannedEffects().contains(Registries.STATUS_EFFECT.getEntry(effect))) {
+        MobEffect effect = (MobEffect) (Object) this;
+        if (target instanceof ServerPlayer) {
+            if (blacklist.getBannedEffects().contains(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect))) {
                 ci.cancel();
             }
         }
     }
-    @Inject(method = "applyUpdateEffect", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "applyEffectTick", at = @At("HEAD"), cancellable = true)
     //? if <= 1.21 {
     public void applyInstantEffect(LivingEntity entity, int amplifier, CallbackInfoReturnable<Boolean> cir) {
     //?} else {
     /*public void applyInstantEffect(ServerWorld world, LivingEntity entity, int amplifier, CallbackInfoReturnable<Boolean> cir) {
     *///?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
-        StatusEffect effect = (StatusEffect) (Object) this;
-        if (entity instanceof ServerPlayerEntity) {
-            if (blacklist.getBannedEffects().contains(Registries.STATUS_EFFECT.getEntry(effect))) {
+        MobEffect effect = (MobEffect) (Object) this;
+        if (entity instanceof ServerPlayer) {
+            if (blacklist.getBannedEffects().contains(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect))) {
                 cir.setReturnValue(false);
             }
         }

@@ -12,145 +12,148 @@ import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerModelPart;
-import net.minecraft.entity.projectile.ProjectileUtil;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.encryption.PublicPlayerSession;
-import net.minecraft.network.packet.s2c.common.ResourcePackRemoveS2CPacket;
-import net.minecraft.network.packet.s2c.common.ResourcePackSendS2CPacket;
+import net.minecraft.Optionull;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.RemoteChatSession;
 import net.minecraft.network.packet.s2c.play.*;
-import net.minecraft.registry.Registries;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.text.Text;
-import net.minecraft.util.Nullables;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.GameMode;
-import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
-
+import net.minecraft.network.protocol.common.ClientboundResourcePackPopPacket;
+import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
+import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
+import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
+import net.minecraft.network.protocol.game.ClientboundSoundEntityPacket;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Container;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.RelativeMovement;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.*;
 
 public class PlayerUtils {
-    private static HashMap<Text, Integer> broadcastCooldown = new HashMap<>();
+    private static HashMap<Component, Integer> broadcastCooldown = new HashMap<>();
 
-    public static void sendTitleWithSubtitle(ServerPlayerEntity player, Text title, Text subtitle, int fadeIn, int stay, int fadeOut) {
+    public static void sendTitleWithSubtitle(ServerPlayer player, Component title, Component subtitle, int fadeIn, int stay, int fadeOut) {
         if (server == null) return;
         if (player == null) return;
         if (!player.isAlive()) {
-            TaskScheduler.scheduleTask(5, () -> sendTitleWithSubtitle(getPlayer(player.getUuid()), title, subtitle, fadeIn, stay, fadeOut));
+            TaskScheduler.scheduleTask(5, () -> sendTitleWithSubtitle(getPlayer(player.getUUID()), title, subtitle, fadeIn, stay, fadeOut));
             return;
         }
-        TitleFadeS2CPacket fadePacket = new TitleFadeS2CPacket(fadeIn, stay, fadeOut);
-        player.networkHandler.sendPacket(fadePacket);
-        TitleS2CPacket titlePacket = new TitleS2CPacket(title);
-        player.networkHandler.sendPacket(titlePacket);
-        SubtitleS2CPacket subtitlePacket = new SubtitleS2CPacket(subtitle);
-        player.networkHandler.sendPacket(subtitlePacket);
+        ClientboundSetTitlesAnimationPacket fadePacket = new ClientboundSetTitlesAnimationPacket(fadeIn, stay, fadeOut);
+        player.connection.send(fadePacket);
+        ClientboundSetTitleTextPacket titlePacket = new ClientboundSetTitleTextPacket(title);
+        player.connection.send(titlePacket);
+        ClientboundSetSubtitleTextPacket subtitlePacket = new ClientboundSetSubtitleTextPacket(subtitle);
+        player.connection.send(subtitlePacket);
     }
 
-    public static void sendTitle(ServerPlayerEntity player, Text title, int fadeIn, int stay, int fadeOut) {
+    public static void sendTitle(ServerPlayer player, Component title, int fadeIn, int stay, int fadeOut) {
         if (server == null) return;
         if (player == null) return;
         if (!player.isAlive()) {
-            TaskScheduler.scheduleTask(5, () -> sendTitle(getPlayer(player.getUuid()), title, fadeIn, stay, fadeOut));
+            TaskScheduler.scheduleTask(5, () -> sendTitle(getPlayer(player.getUUID()), title, fadeIn, stay, fadeOut));
             return;
         }
-        TitleFadeS2CPacket fadePacket = new TitleFadeS2CPacket(fadeIn, stay, fadeOut);
-        player.networkHandler.sendPacket(fadePacket);
-        TitleS2CPacket titlePacket = new TitleS2CPacket(title);
-        player.networkHandler.sendPacket(titlePacket);
+        ClientboundSetTitlesAnimationPacket fadePacket = new ClientboundSetTitlesAnimationPacket(fadeIn, stay, fadeOut);
+        player.connection.send(fadePacket);
+        ClientboundSetTitleTextPacket titlePacket = new ClientboundSetTitleTextPacket(title);
+        player.connection.send(titlePacket);
     }
 
-    public static void sendTitleToPlayers(Collection<ServerPlayerEntity> players, Text title, int fadeIn, int stay, int fadeOut) {
-        for (ServerPlayerEntity player : players) {
+    public static void sendTitleToPlayers(Collection<ServerPlayer> players, Component title, int fadeIn, int stay, int fadeOut) {
+        for (ServerPlayer player : players) {
             sendTitle(player, title, fadeIn, stay, fadeOut);
         }
     }
 
-    public static void sendTitleWithSubtitleToPlayers(Collection<ServerPlayerEntity> players, Text title, Text subtitle, int fadeIn, int stay, int fadeOut) {
-        for (ServerPlayerEntity player : players) {
+    public static void sendTitleWithSubtitleToPlayers(Collection<ServerPlayer> players, Component title, Component subtitle, int fadeIn, int stay, int fadeOut) {
+        for (ServerPlayer player : players) {
             sendTitleWithSubtitle(player, title, subtitle, fadeIn, stay, fadeOut);
         }
     }
 
-    public static void playSoundToPlayers(Collection<ServerPlayerEntity> players, SoundEvent sound) {
-        playSoundToPlayers(players,sound,SoundCategory.MASTER,1,1);
+    public static void playSoundToPlayers(Collection<ServerPlayer> players, SoundEvent sound) {
+        playSoundToPlayers(players,sound,SoundSource.MASTER,1,1);
     }
-    public static void playSoundToPlayers(Collection<ServerPlayerEntity> players, SoundEvent sound, float volume, float pitch) {
-        playSoundToPlayers(players,sound, SoundCategory.MASTER, volume, pitch);
+    public static void playSoundToPlayers(Collection<ServerPlayer> players, SoundEvent sound, float volume, float pitch) {
+        playSoundToPlayers(players,sound, SoundSource.MASTER, volume, pitch);
     }
 
-    public static void playSoundToPlayers(Collection<ServerPlayerEntity> players, SoundEvent sound, SoundCategory soundCategory, float volume, float pitch) {
-        for (ServerPlayerEntity player : players) {
+    public static void playSoundToPlayers(Collection<ServerPlayer> players, SoundEvent sound, SoundSource soundCategory, float volume, float pitch) {
+        for (ServerPlayer player : players) {
             if (player == null) continue;
-            player.playSoundToPlayer(sound, soundCategory, volume, pitch);
+            player.playNotifySound(sound, soundCategory, volume, pitch);
         }
     }
 
-    public static void playSoundToPlayer(ServerPlayerEntity player, SoundEvent sound) {
+    public static void playSoundToPlayer(ServerPlayer player, SoundEvent sound) {
         playSoundToPlayer(player, sound, 1, 1);
     }
 
-    public static void playSoundToPlayer(ServerPlayerEntity player, SoundEvent sound, float volume, float pitch) {
-        player.playSoundToPlayer(sound, SoundCategory.MASTER, volume, pitch);
+    public static void playSoundToPlayer(ServerPlayer player, SoundEvent sound, float volume, float pitch) {
+        player.playNotifySound(sound, SoundSource.MASTER, volume, pitch);
     }
 
     private static final Random rnd = new Random();
-    public static void playSoundWithSourceToPlayers(Entity source, SoundEvent sound, SoundCategory soundCategory, float volume, float pitch) {
+    public static void playSoundWithSourceToPlayers(Entity source, SoundEvent sound, SoundSource soundCategory, float volume, float pitch) {
         playSoundWithSourceToPlayers(getAllPlayers(), source, sound, soundCategory, volume, pitch);
     }
-    public static void playSoundWithSourceToPlayers(Collection<ServerPlayerEntity> players, Entity source, SoundEvent sound, SoundCategory soundCategory, float volume, float pitch) {
-        PlaySoundFromEntityS2CPacket packet = new PlaySoundFromEntityS2CPacket(Registries.SOUND_EVENT.getEntry(sound), soundCategory, source, volume, pitch, rnd.nextLong());
-        for (ServerPlayerEntity player : players) {
-            player.networkHandler.sendPacket(packet);
+    public static void playSoundWithSourceToPlayers(Collection<ServerPlayer> players, Entity source, SoundEvent sound, SoundSource soundCategory, float volume, float pitch) {
+        ClientboundSoundEntityPacket packet = new ClientboundSoundEntityPacket(BuiltInRegistries.SOUND_EVENT.wrapAsHolder(sound), soundCategory, source, volume, pitch, rnd.nextLong());
+        for (ServerPlayer player : players) {
+            player.connection.send(packet);
         }
     }
 
-    public static List<ServerPlayerEntity> getAllPlayers() {
-        List<ServerPlayerEntity> result = new ArrayList<>();
+    public static List<ServerPlayer> getAllPlayers() {
+        List<ServerPlayer> result = new ArrayList<>();
         if (server == null) return result;
 
-        for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+        for (ServerPlayer player : server.getPlayerList().getPlayers()) {
             if (isFakePlayer(player)) continue;
             result.add(player);
         }
         return result;
     }
 
-    public static List<ServerPlayerEntity> getAllFunctioningPlayers() {
-        List<ServerPlayerEntity> result = getAllPlayers();
+    public static List<ServerPlayer> getAllFunctioningPlayers() {
+        List<ServerPlayer> result = getAllPlayers();
         result.removeIf(WatcherManager::isWatcher);
         return result;
     }
 
-    public static List<ServerPlayerEntity> getAdminPlayers() {
-        List<ServerPlayerEntity> result = getAllPlayers();
+    public static List<ServerPlayer> getAdminPlayers() {
+        List<ServerPlayer> result = getAllPlayers();
         result.removeIf(player -> !PermissionManager.isAdmin(player));
         return result;
     }
 
-    public static ServerPlayerEntity getPlayer(String name) {
+    public static ServerPlayer getPlayer(String name) {
         if (server == null || name == null) return null;
-        return server.getPlayerManager().getPlayer(name);
+        return server.getPlayerList().getPlayerByName(name);
     }
 
-    public static ServerPlayerEntity getPlayer(UUID uuid) {
+    public static ServerPlayer getPlayer(UUID uuid) {
         if (server == null || uuid == null) return null;
-        return server.getPlayerManager().getPlayer(uuid);
+        return server.getPlayerList().getPlayer(uuid);
     }
 
     public static void applyResourcepack(UUID uuid) {
@@ -160,7 +163,7 @@ public class PlayerUtils {
 
     public static void applyServerResourcepack(UUID uuid) {
         if (server == null) return;
-        ServerPlayerEntity player = getPlayer(uuid);
+        ServerPlayer player = getPlayer(uuid);
         if (player == null) return;
         applySingleResourcepack(player, Season.RESOURCEPACK_MAIN_URL, Season.RESOURCEPACK_MAIN_SHA, "Life Series Resourcepack.");
         applySingleResourcepack(player, Season.RESOURCEPACK_MINIMAL_ARMOR_URL, Season.RESOURCEPACK_MINIMAL_ARMOR_SHA, "Life Series Resourcepack.");
@@ -172,29 +175,29 @@ public class PlayerUtils {
         }
     }
 
-    private static void applySingleResourcepack(ServerPlayerEntity player, String link, String sha1, String message) {
+    private static void applySingleResourcepack(ServerPlayer player, String link, String sha1, String message) {
         UUID id = UUID.nameUUIDFromBytes(link.getBytes(StandardCharsets.UTF_8));
-        ResourcePackSendS2CPacket resourcepackPacket = new ResourcePackSendS2CPacket(
+        ClientboundResourcePackPushPacket resourcepackPacket = new ClientboundResourcePackPushPacket(
                 id,
                 link,
                 sha1,
                 false,
-                Optional.of(Text.translatable(message))
+                Optional.of(Component.translatable(message))
         );
-        player.networkHandler.sendPacket(resourcepackPacket);
+        player.connection.send(resourcepackPacket);
     }
 
-    private static void removeSingleResourcepack(ServerPlayerEntity player, String link) {
+    private static void removeSingleResourcepack(ServerPlayer player, String link) {
         UUID id = UUID.nameUUIDFromBytes(link.getBytes(StandardCharsets.UTF_8));
-        ResourcePackRemoveS2CPacket removePackPacket = new ResourcePackRemoveS2CPacket(Optional.of(id));
-        player.networkHandler.sendPacket(removePackPacket);
+        ClientboundResourcePackPopPacket removePackPacket = new ClientboundResourcePackPopPacket(Optional.of(id));
+        player.connection.send(removePackPacket);
     }
 
-    public static List<ItemStack> getPlayerInventory(ServerPlayerEntity player) {
+    public static List<ItemStack> getPlayerInventory(ServerPlayer player) {
         List<ItemStack> list = new ArrayList<>();
-        Inventory inventory = player.getInventory();
-        for (int i = 0; i < inventory.size(); i++) {
-            ItemStack itemStack = inventory.getStack(i);
+        Container inventory = player.getInventory();
+        for (int i = 0; i < inventory.getContainerSize(); i++) {
+            ItemStack itemStack = inventory.getItem(i);
             if (!itemStack.isEmpty()) {
                 list.add(itemStack);
             }
@@ -202,24 +205,24 @@ public class PlayerUtils {
         return list;
     }
 
-    public static void clearItemStack(ServerPlayerEntity player, ItemStack itemStack) {
+    public static void clearItemStack(ServerPlayer player, ItemStack itemStack) {
         if (itemStack == null || itemStack.isEmpty()) return;
-        Inventory inventory = player.getInventory();
-        for (int i = 0; i < inventory.size(); i++) {
-            ItemStack stack = inventory.getStack(i);
+        Container inventory = player.getInventory();
+        for (int i = 0; i < inventory.getContainerSize(); i++) {
+            ItemStack stack = inventory.getItem(i);
             if (stack.equals(itemStack)) {
-                inventory.removeStack(i);
+                inventory.removeItemNoUpdate(i);
             }
         }
     }
 
-    public static Entity getEntityLookingAt(ServerPlayerEntity player, double maxDistance) {
-        Vec3d start = player.getCameraPosVec(1.0F);
-        Vec3d direction = player.getRotationVec(1.0F).normalize().multiply(maxDistance);
-        Vec3d end = start.add(direction);
+    public static Entity getEntityLookingAt(ServerPlayer player, double maxDistance) {
+        Vec3 start = player.getEyePosition(1.0F);
+        Vec3 direction = player.getViewVector(1.0F).normalize().scale(maxDistance);
+        Vec3 end = start.add(direction);
 
-        HitResult entityHit = ProjectileUtil.raycast(player, start, end,
-                player.getBoundingBox().stretch(direction).expand(1.0),
+        HitResult entityHit = ProjectileUtil.getEntityHitResult(player, start, end,
+                player.getBoundingBox().expandTowards(direction).inflate(1.0),
                 entity -> !entity.isSpectator() && entity.isAlive(), maxDistance*maxDistance);
 
         if (entityHit instanceof EntityHitResult entityHitResult) {
@@ -228,13 +231,13 @@ public class PlayerUtils {
 
         return null;
     }
-    public static Vec3d getPosLookingAt(ServerPlayerEntity player, double maxDistance) {
-        HitResult blockHit = player.raycast(maxDistance, 1, false);
-        if (Math.sqrt(blockHit.squaredDistanceTo(player)) >= (maxDistance*0.99)) {
+    public static Vec3 getPosLookingAt(ServerPlayer player, double maxDistance) {
+        HitResult blockHit = player.pick(maxDistance, 1, false);
+        if (Math.sqrt(blockHit.distanceTo(player)) >= (maxDistance*0.99)) {
             return null;
         }
         if (blockHit instanceof BlockHitResult blockHitResult) {
-            return blockHitResult.getPos();
+            return blockHitResult.getLocation();
         }
         return null;
     }
@@ -242,40 +245,40 @@ public class PlayerUtils {
     public static boolean isFakePlayer(Entity player) {
         return player instanceof FakePlayer;
     }
-    public static void displayMessageToPlayer(ServerPlayerEntity player, Text text, int timeFor) {
-        Session.skipTimer.put(player.getUuid(), timeFor/5);
-        player.sendMessage(text, true);
+    public static void displayMessageToPlayer(ServerPlayer player, Component text, int timeFor) {
+        Session.skipTimer.put(player.getUUID(), timeFor/5);
+        player.displayClientMessage(text, true);
     }
 
     public static List<UUID> updateInventoryQueue = new ArrayList<>();
-    public static void updatePlayerInventory(ServerPlayerEntity player) {
-        if (updateInventoryQueue.contains(player.getUuid())) return;
-        updateInventoryQueue.add(player.getUuid());
+    public static void updatePlayerInventory(ServerPlayer player) {
+        if (updateInventoryQueue.contains(player.getUUID())) return;
+        updateInventoryQueue.add(player.getUUID());
     }
 
-    public static void resendCommandTree(ServerPlayerEntity player) {
+    public static void resendCommandTree(ServerPlayer player) {
         if (player == null) return;
         if (server == null) return;
-        server.getCommandManager().sendCommandTree(player);
+        server.getCommands().sendCommands(player);
     }
 
     public static void resendCommandTrees() {
-        for (ServerPlayerEntity player : getAllPlayers()) {
+        for (ServerPlayer player : getAllPlayers()) {
             resendCommandTree(player);
         }
     }
 
-    public static ItemStack getEquipmentSlot(PlayerEntity player, int slot) {
+    public static ItemStack getEquipmentSlot(Player player, int slot) {
         //? if <= 1.21.4 {
-        return player.getInventory().getArmorStack(slot);
+        return player.getInventory().getArmor(slot);
         //?} else {
         /*return player.getInventory().getStack(slot + 36);
         *///?}
     }
 
     //? if <= 1.21.4 {
-    public static Iterable<ItemStack> getArmorItems(ServerPlayerEntity player) {
-        return player.getArmorItems();
+    public static Iterable<ItemStack> getArmorItems(ServerPlayer player) {
+        return player.getArmorSlots();
     }
     //?} else {
     /*public static List<ItemStack> getArmorItems(ServerPlayerEntity player) {
@@ -292,31 +295,31 @@ public class PlayerUtils {
         if (server == null) return;
         if (currentSeason == null) return;
 
-        List<ServerPlayerEntity> allPlayers = server.getPlayerManager().getPlayerList();
+        List<ServerPlayer> allPlayers = server.getPlayerList().getPlayers();
 
-        for (ServerPlayerEntity receivingPlayer : allPlayers) {
+        for (ServerPlayer receivingPlayer : allPlayers) {
 
-            PlayerListS2CPacket packet = PlayerListS2CPacket.entryFromPlayer(List.of(receivingPlayer));
-            List<PlayerListS2CPacket.Entry> newEntries = new ArrayList<>();
-            for (ServerPlayerEntity player : allPlayers) {
+            ClientboundPlayerInfoUpdatePacket packet = ClientboundPlayerInfoUpdatePacket.createPlayerInitializing(List.of(receivingPlayer));
+            List<ClientboundPlayerInfoUpdatePacket.Entry> newEntries = new ArrayList<>();
+            for (ServerPlayer player : allPlayers) {
                 if (player == receivingPlayer) continue;
 
                 boolean hidePlayer = hidePlayerFrom(receivingPlayer, player);
 
-                PlayerListS2CPacket.Entry entry = getPlayerListEntry(player, !hidePlayer);
+                ClientboundPlayerInfoUpdatePacket.Entry entry = getPlayerListEntry(player, !hidePlayer);
                 newEntries.add(entry);
             }
 
             if (packet instanceof PlayerListS2CPacketAccessor accessor) {
                 accessor.setEntries(newEntries);
             }
-            receivingPlayer.networkHandler.sendPacket(packet);
+            receivingPlayer.connection.send(packet);
         }
     }
 
-    public static PlayerListS2CPacket.Entry getPlayerListEntry(ServerPlayerEntity player, boolean listed) {
+    public static ClientboundPlayerInfoUpdatePacket.Entry getPlayerListEntry(ServerPlayer player, boolean listed) {
         //? if <= 1.21 {
-        return new PlayerListS2CPacket.Entry(player.getUuid(), player.getGameProfile(), listed, player.networkHandler.getLatency(), player.interactionManager.getGameMode(), player.getPlayerListName(), (PublicPlayerSession.Serialized) Nullables.map(player.getSession(), PublicPlayerSession::toSerialized));
+        return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), (RemoteChatSession.Data) Optionull.map(player.getChatSession(), RemoteChatSession::asData));
         //?} else if <= 1.21.2 {
         /*return new PlayerListS2CPacket.Entry(player.getUuid(), player.getGameProfile(), listed, player.networkHandler.getLatency(), player.interactionManager.getGameMode(), player.getPlayerListName(), player.getPlayerListOrder(), (PublicPlayerSession.Serialized)Nullables.map(player.getSession(), PublicPlayerSession::toSerialized));
         *///?} else if <= 1.21.6 {
@@ -326,7 +329,7 @@ public class PlayerUtils {
         *///?}
     }
 
-    public static boolean hidePlayerFrom(ServerPlayerEntity receivingPlayer, ServerPlayerEntity player) {
+    public static boolean hidePlayerFrom(ServerPlayer receivingPlayer, ServerPlayer player) {
         if (receivingPlayer == null || player == null) return false;
         if (PlayerUtils.isFakePlayer(player)) return true;
         if (hideDeadPlayerFrom(receivingPlayer, player)) return true;
@@ -334,7 +337,7 @@ public class PlayerUtils {
         return false;
     }
 
-    private static boolean hideDeadPlayerFrom(ServerPlayerEntity receivingPlayer, ServerPlayerEntity player) {
+    private static boolean hideDeadPlayerFrom(ServerPlayer receivingPlayer, ServerPlayer player) {
         if (receivingPlayer.isSpectator()) return false;
         if (!player.isSpectator()) return false;
 
@@ -346,7 +349,7 @@ public class PlayerUtils {
         return true;
     }
 
-    private static boolean hideWatcherPlayerFrom(ServerPlayerEntity receivingPlayer, ServerPlayerEntity player) {
+    private static boolean hideWatcherPlayerFrom(ServerPlayer receivingPlayer, ServerPlayer player) {
         if (receivingPlayer.isSpectator()) return false;
         if (!player.isSpectator()) return false;
 
@@ -356,9 +359,9 @@ public class PlayerUtils {
         return true;
     }
 
-    public static ServerWorld getServerWorld(ServerPlayerEntity player) {
+    public static ServerLevel getServerWorld(ServerPlayer player) {
         //? if <= 1.21.5 {
-        return player.getServerWorld();
+        return player.serverLevel();
          //?} else if <= 1.21.6 {
         /*return player.getWorld();
          *///?} else {
@@ -366,9 +369,9 @@ public class PlayerUtils {
         *///?}
     }
 
-    public static World getWorld(PlayerEntity player) {
+    public static Level getWorld(Player player) {
         //? if <= 1.21.6 {
-        return player.getWorld();
+        return player.level();
          //?} else {
         /*return player.getEntityWorld();
         *///?}
@@ -376,9 +379,9 @@ public class PlayerUtils {
 
     public static void onTick() {
         if (!broadcastCooldown.isEmpty()) {
-            HashMap<Text, Integer> newCooldowns = new HashMap<>();
-            for (Map.Entry<Text, Integer> entry : broadcastCooldown.entrySet()) {
-                Text key = entry.getKey();
+            HashMap<Component, Integer> newCooldowns = new HashMap<>();
+            for (Map.Entry<Component, Integer> entry : broadcastCooldown.entrySet()) {
+                Component key = entry.getKey();
                 Integer value = entry.getValue();
                 value--;
                 if (value > 0) {
@@ -390,103 +393,103 @@ public class PlayerUtils {
 
         if (!updateInventoryQueue.isEmpty()) {
             for (UUID uuid : updateInventoryQueue) {
-                ServerPlayerEntity player = PlayerUtils.getPlayer(uuid);
+                ServerPlayer player = PlayerUtils.getPlayer(uuid);
                 if (player == null) continue;
 
-                player.getInventory().updateItems();
-                player.currentScreenHandler.sendContentUpdates();
+                player.getInventory().tick();
+                player.containerMenu.broadcastChanges();
                 if (!player.isCreative()) {
-                    player.currentScreenHandler.syncState();
-                    player.playerScreenHandler.syncState();
+                    player.containerMenu.sendAllDataToRemote();
+                    player.inventoryMenu.sendAllDataToRemote();
                 }
             }
             updateInventoryQueue.clear();
         }
     }
 
-    public static void broadcastMessage(Text message) {
+    public static void broadcastMessage(Component message) {
         broadcastMessage(message, 1);
     }
 
-    public static void broadcastMessageToAdmins(Text message) {
+    public static void broadcastMessageToAdmins(Component message) {
         broadcastMessageToAdmins(message, 1);
     }
 
-    public static void broadcastMessageExcept(Text message, ServerPlayerEntity exceptPlayer) {
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+    public static void broadcastMessageExcept(Component message, ServerPlayer exceptPlayer) {
+        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
             if (player == exceptPlayer) continue;
-            player.sendMessage(message, false);
+            player.displayClientMessage(message, false);
         }
     }
 
-    public static void broadcastMessage(Text message, int cooldownTicks) {
+    public static void broadcastMessage(Component message, int cooldownTicks) {
         if (broadcastCooldown.containsKey(message)) return;
         broadcastCooldown.put(message, cooldownTicks);
 
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            player.sendMessage(message, false);
+        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
+            player.displayClientMessage(message, false);
         }
     }
 
-    public static void broadcastMessageToAdmins(Text message, int cooldownTicks) {
+    public static void broadcastMessageToAdmins(Component message, int cooldownTicks) {
         if (broadcastCooldown.containsKey(message)) return;
         broadcastCooldown.put(message, cooldownTicks);
 
-        for (ServerPlayerEntity player : PlayerUtils.getAdminPlayers()) {
-            player.sendMessage(message, false);
+        for (ServerPlayer player : PlayerUtils.getAdminPlayers()) {
+            player.displayClientMessage(message, false);
         }
         Main.LOGGER.info(message.getString());
     }
 
-    public static void teleport(ServerPlayerEntity player, BlockPos pos) {
-        teleport(player, getServerWorld(player), pos.toBottomCenterPos());
+    public static void teleport(ServerPlayer player, BlockPos pos) {
+        teleport(player, getServerWorld(player), pos.getBottomCenter());
     }
 
-    public static void teleport(ServerPlayerEntity player, Vec3d pos) {
+    public static void teleport(ServerPlayer player, Vec3 pos) {
         teleport(player, getServerWorld(player), pos);
     }
 
-    public static void teleport(ServerPlayerEntity player, double destX, double destY, double destZ) {
+    public static void teleport(ServerPlayer player, double destX, double destY, double destZ) {
         teleport(player, getServerWorld(player), destX, destY, destZ);
     }
 
-    public static void teleport(ServerPlayerEntity player, ServerWorld world, double destX, double destY, double destZ) {
-        teleport(player, world, destX, destY, destZ, player.getYaw(), player.getPitch());
+    public static void teleport(ServerPlayer player, ServerLevel world, double destX, double destY, double destZ) {
+        teleport(player, world, destX, destY, destZ, player.getYRot(), player.getXRot());
     }
 
-    public static void teleport(ServerPlayerEntity player, ServerWorld world, BlockPos pos) {
-        teleport(player, world, pos.toBottomCenterPos());
+    public static void teleport(ServerPlayer player, ServerLevel world, BlockPos pos) {
+        teleport(player, world, pos.getBottomCenter());
     }
 
-    public static void teleport(ServerPlayerEntity player, ServerWorld world, Vec3d pos) {
-        teleport(player, world, pos.getX(), pos.getY(), pos.getZ(), player.getYaw(), player.getPitch());
+    public static void teleport(ServerPlayer player, ServerLevel world, Vec3 pos) {
+        teleport(player, world, pos.x(), pos.y(), pos.z(), player.getYRot(), player.getXRot());
     }
 
-    public static void teleport(ServerPlayerEntity player, ServerWorld world, Vec3d pos, float yaw, float pitch) {
-        teleport(player, world, pos.getX(), pos.getY(), pos.getZ(), yaw, pitch);
+    public static void teleport(ServerPlayer player, ServerLevel world, Vec3 pos, float yaw, float pitch) {
+        teleport(player, world, pos.x(), pos.y(), pos.z(), yaw, pitch);
     }
 
-    public static void teleport(ServerPlayerEntity player, ServerWorld world, double destX, double destY, double destZ, float yaw, float pitch) {
+    public static void teleport(ServerPlayer player, ServerLevel world, double destX, double destY, double destZ, float yaw, float pitch) {
         //? if <= 1.21 {
-        player.teleport(world, destX, destY, destZ, EnumSet.noneOf(PositionFlag.class), yaw, pitch);
+        player.teleportTo(world, destX, destY, destZ, EnumSet.noneOf(RelativeMovement.class), yaw, pitch);
         //?} else {
         /*player.teleport(world, destX, destY, destZ, EnumSet.noneOf(PositionFlag.class), yaw, pitch, false);
          *///?}
     }
 
-    public static void safelyPutIntoSurvival(ServerPlayerEntity player) {
-        if (player.interactionManager.getGameMode() == GameMode.SURVIVAL) return;
+    public static void safelyPutIntoSurvival(ServerPlayer player) {
+        if (player.gameMode.getGameModeForPlayer() == GameType.SURVIVAL) return;
 
         //Teleport to the highest block in the terrain
-        BlockPos.Mutable playerBlockPos = player.getBlockPos().mutableCopy();
-        int safeY = WorldUtils.findTopSafeY(getServerWorld(player), playerBlockPos.toCenterPos());
+        BlockPos.MutableBlockPos playerBlockPos = player.blockPosition().mutable();
+        int safeY = WorldUtils.findTopSafeY(getServerWorld(player), playerBlockPos.getCenter());
         playerBlockPos.setY(safeY);
         teleport(player, playerBlockPos);
 
-        player.changeGameMode(GameMode.SURVIVAL);
+        player.setGameMode(GameType.SURVIVAL);
     }
 
-    public static ServerPlayerEntity getPlayerOrProjection(ServerPlayerEntity player) {
+    public static ServerPlayer getPlayerOrProjection(ServerPlayer player) {
         if (player == null) return null;
         if (!PlayerUtils.isFakePlayer(player)) return player;
 
@@ -498,19 +501,19 @@ public class PlayerUtils {
         return player;
     }
 
-    public static void damage(ServerPlayerEntity player, ServerWorld world, DamageSource source, float amount) {
+    public static void damage(ServerPlayer player, ServerLevel world, DamageSource source, float amount) {
         //? if <= 1.21 {
-        player.damage(source, amount);
+        player.hurt(source, amount);
         //?} else {
         /*player.damage(world, source, amount);
         *///?}
     }
 
-    public static void damage(ServerPlayerEntity player, DamageSource source, float amount) {
+    public static void damage(ServerPlayer player, DamageSource source, float amount) {
         damage(player, getServerWorld(player), source, amount);
     }
 
-    public static void killFromSource(ServerPlayerEntity player, DamageSource source) {
+    public static void killFromSource(ServerPlayer player, DamageSource source) {
         player.setHealth(0.0001f);
         damage(player, source, 10);
         if (player.isAlive()) {
@@ -522,10 +525,10 @@ public class PlayerUtils {
         }
     }
 
-    public static void broadcastToVisiblePlayers(ServerPlayerEntity broadcaster, Text message) {
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+    public static void broadcastToVisiblePlayers(ServerPlayer broadcaster, Component message) {
+        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
             if (hidePlayerFrom(player, broadcaster)) continue;
-            player.sendMessage(message);
+            player.sendSystemMessage(message);
         }
     }
 }

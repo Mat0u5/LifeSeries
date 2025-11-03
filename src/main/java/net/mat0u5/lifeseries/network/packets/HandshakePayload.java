@@ -1,25 +1,25 @@
 package net.mat0u5.lifeseries.network.packets;
 
 import net.mat0u5.lifeseries.Main;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 
-public record HandshakePayload(String modVersionStr, int modVersion, String compatibilityStr, int compatibility) implements CustomPayload {
+public record HandshakePayload(String modVersionStr, int modVersion, String compatibilityStr, int compatibility) implements CustomPacketPayload {
 
-    public static final CustomPayload.Id<HandshakePayload> ID = new CustomPayload.Id<>(Identifier.of(Main.MOD_ID, "handshake"));
-    public static final PacketCodec<RegistryByteBuf, HandshakePayload> CODEC = PacketCodec.tuple(
-            PacketCodecs.STRING, HandshakePayload::modVersionStr,
-            PacketCodecs.INTEGER, HandshakePayload::modVersion,
-            PacketCodecs.STRING, HandshakePayload::compatibilityStr,
-            PacketCodecs.INTEGER, HandshakePayload::compatibility,
+    public static final CustomPacketPayload.Type<HandshakePayload> ID = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "handshake"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, HandshakePayload> CODEC = StreamCodec.composite(
+            ByteBufCodecs.STRING_UTF8, HandshakePayload::modVersionStr,
+            ByteBufCodecs.INT, HandshakePayload::modVersion,
+            ByteBufCodecs.STRING_UTF8, HandshakePayload::compatibilityStr,
+            ByteBufCodecs.INT, HandshakePayload::compatibility,
             HandshakePayload::new
     );
 
     @Override
-    public CustomPayload.Id<? extends CustomPayload> getId() {
+    public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 }

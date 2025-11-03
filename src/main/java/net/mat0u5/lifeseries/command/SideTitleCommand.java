@@ -7,14 +7,13 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.command.argument.TextArgumentType;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.text.Texts;
-
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.ComponentArgument;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentUtils;
+import net.minecraft.server.level.ServerPlayer;
 import java.util.Collection;
 
 public class SideTitleCommand extends Command {
@@ -24,25 +23,25 @@ public class SideTitleCommand extends Command {
     }
 
     @Override
-    public Text getBannedText() {
-        return Text.empty();
+    public Component getBannedText() {
+        return Component.empty();
     }
 
     @Override
-    public void register(CommandDispatcher<ServerCommandSource> dispatcher) {}
+    public void register(CommandDispatcher<CommandSourceStack> dispatcher) {}
 
     @Override
-    public void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess) {
+    public void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registryAccess) {
         dispatcher.register(
             literal("title")
                 .requires(PermissionManager::isAdmin)
-                .then(argument("targets", EntityArgumentType.players())
+                .then(argument("targets", EntityArgument.players())
                         .then(literal("side")
-                                .then(argument("title", TextArgumentType.text(registryAccess))
+                                .then(argument("title", ComponentArgument.textComponent(registryAccess))
                                         .executes(context -> executeTitle(
                                                 context.getSource(),
-                                                EntityArgumentType.getPlayers(context, "targets"),
-                                                TextArgumentType.getTextArgument(context, "title")
+                                                EntityArgument.getPlayers(context, "targets"),
+                                                ComponentArgument.getComponent(context, "title")
                                         ))
                                 )
                         )
@@ -50,9 +49,9 @@ public class SideTitleCommand extends Command {
         );
     }
 
-    private int executeTitle(ServerCommandSource source, Collection<ServerPlayerEntity> targets, Text title) throws CommandSyntaxException {
-        for(ServerPlayerEntity player : targets) {
-            NetworkHandlerServer.sideTitle(player, Texts.parse(source, title, player, 0));
+    private int executeTitle(CommandSourceStack source, Collection<ServerPlayer> targets, Component title) throws CommandSyntaxException {
+        for(ServerPlayer player : targets) {
+            NetworkHandlerServer.sideTitle(player, ComponentUtils.updateForEntity(source, title, player, 0));
         }
 
         if (targets.size() == 1) {

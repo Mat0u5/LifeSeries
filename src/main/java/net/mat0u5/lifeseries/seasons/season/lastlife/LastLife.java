@@ -9,9 +9,7 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeLivesManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-
+import net.minecraft.server.level.ServerPlayer;
 import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.currentSession;
@@ -88,7 +86,7 @@ public class LastLife extends Season {
     }
 
     @Override
-    public void onPlayerFinishJoining(ServerPlayerEntity player) {
+    public void onPlayerFinishJoining(ServerPlayer player) {
         super.onPlayerFinishJoining(player);
         if (livesManager instanceof LastLifeLivesManager lastLifeLivesManager) {
             lastLifeLivesManager.onPlayerFinishJoining(player);

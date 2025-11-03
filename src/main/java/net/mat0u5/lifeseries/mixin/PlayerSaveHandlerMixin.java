@@ -2,8 +2,8 @@ package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.PlayerSaveHandler;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.PlayerDataStorage;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,17 +14,17 @@ import java.util.UUID;
 //? if >= 1.21.9
 /*import net.minecraft.server.PlayerConfigEntry;*/
 
-@Mixin(value = PlayerSaveHandler.class, priority = 1)
+@Mixin(value = PlayerDataStorage.class, priority = 1)
 public class PlayerSaveHandlerMixin {
 
-    @Redirect(method = "savePlayerData", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getUuidAsString()Ljava/lang/String;"))
-    public String subInSave(PlayerEntity instance) {
+    @Redirect(method = "save", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getStringUUID()Ljava/lang/String;"))
+    public String subInSave(Player instance) {
         return ls$getStringUUIDForPlayer(instance);
     }
 
     //? if <= 1.21.6 {
-    @Redirect(method = "loadPlayerData(Lnet/minecraft/entity/player/PlayerEntity;Ljava/lang/String;)Ljava/util/Optional;", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getUuidAsString()Ljava/lang/String;"))
-    public String subInLoad(PlayerEntity instance) {
+    @Redirect(method = "load(Lnet/minecraft/world/entity/player/Player;Ljava/lang/String;)Ljava/util/Optional;", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getStringUUID()Ljava/lang/String;"))
+    public String subInLoad(Player instance) {
         return ls$getStringUUIDForPlayer(instance);
     }
     //?} else {
@@ -46,13 +46,13 @@ public class PlayerSaveHandlerMixin {
     *///?}
 
     @Unique
-    private String ls$getStringUUIDForPlayer(PlayerEntity instance) {
-        if (Main.isLogicalSide() && !Main.modDisabled() && SubInManager.isSubbingIn(instance.getUuid())) {
-            UUID resultUUID = SubInManager.getSubstitutedPlayerUUID(instance.getUuid());
+    private String ls$getStringUUIDForPlayer(Player instance) {
+        if (Main.isLogicalSide() && !Main.modDisabled() && SubInManager.isSubbingIn(instance.getUUID())) {
+            UUID resultUUID = SubInManager.getSubstitutedPlayerUUID(instance.getUUID());
             if (resultUUID != null) {
                 return resultUUID.toString();
             }
         }
-        return instance.getUuidAsString();
+        return instance.getStringUUID();
     }
 }

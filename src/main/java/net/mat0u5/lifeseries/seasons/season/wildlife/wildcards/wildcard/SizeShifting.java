@@ -9,7 +9,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 
 import static net.mat0u5.lifeseries.Main.livesManager;
 
@@ -38,31 +38,31 @@ public class SizeShifting extends Wildcard {
 
     @Override
     public void tick() {
-        for (ServerPlayerEntity player : PlayerUtils.getAllFunctioningPlayers()) {
-            if (TriviaHandler.cursedGigantificationPlayers.contains(player.getUuid())) continue;
+        for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
+            if (TriviaHandler.cursedGigantificationPlayers.contains(player.getUUID())) continue;
             if (player.isSpectator()) continue;
-            if (player.isSneaking()) {
+            if (player.isShiftKeyDown()) {
                 addPlayerSize(player, -SIZE_CHANGE_STEP * SIZE_CHANGE_MULTIPLIER);
             }
         }
     }
 
-    public static void onHoldingJump(ServerPlayerEntity player) {
-        if (TriviaHandler.cursedGigantificationPlayers.contains(player.getUuid())) return;
+    public static void onHoldingJump(ServerPlayer player) {
+        if (TriviaHandler.cursedGigantificationPlayers.contains(player.getUUID())) return;
         if (player.isSpectator()) return;
         if (player.ls$isWatcher()) return;
         addPlayerSize(player, SIZE_CHANGE_STEP * SIZE_CHANGE_MULTIPLIER);
     }
 
-    public static double getPlayerSize(ServerPlayerEntity player) {
+    public static double getPlayerSize(ServerPlayer player) {
         return AttributeUtils.getPlayerSize(player);
     }
 
-    public static void addPlayerSize(ServerPlayerEntity player, double amount) {
+    public static void addPlayerSize(ServerPlayer player, double amount) {
         setPlayerSize(player, getPlayerSize(player)+amount);
     }
 
-    public static void setPlayerSize(ServerPlayerEntity player, double size) {
+    public static void setPlayerSize(ServerPlayer player, double size) {
         if (size < MIN_SIZE_HARD) size = MIN_SIZE_HARD;
         if (size > MAX_SIZE_HARD) size = MAX_SIZE_HARD;
         if (size < MIN_SIZE) size = MIN_SIZE;
@@ -83,17 +83,17 @@ public class SizeShifting extends Wildcard {
 
         AttributeUtils.setScale(player, size);
     }
-    public static void setPlayerSizeUnchecked(ServerPlayerEntity player, double size) {
+    public static void setPlayerSizeUnchecked(ServerPlayer player, double size) {
         AttributeUtils.setScale(player, size);
     }
 
     public static void resetSizesTick(boolean isActive) {
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
             boolean isWatcher = player.ls$isWatcher();
             boolean isDeadSpectator = player.isSpectator() && player.ls$isDead();
             if (!isActive || isDeadSpectator || isWatcher) {
                 double size = getPlayerSize(player);
-                if (TriviaHandler.cursedGigantificationPlayers.contains(player.getUuid()) && !isWatcher && !isDeadSpectator) continue;
+                if (TriviaHandler.cursedGigantificationPlayers.contains(player.getUUID()) && !isWatcher && !isDeadSpectator) continue;
                 if (size == 1) continue;
                 if (size < 0.98) {
                     addPlayerSize(player, 0.01);

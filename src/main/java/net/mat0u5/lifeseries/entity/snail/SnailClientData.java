@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.entity.snail;
 
 import net.mat0u5.lifeseries.utils.interfaces.IMorph;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.minecraft.entity.AnimationState;
+import net.minecraft.world.entity.AnimationState;
 
 public class SnailClientData {
     public final AnimationState walkAnimationState = new AnimationState();
@@ -30,29 +30,29 @@ public class SnailClientData {
         if (stopAllAnimations <= 0) {
             if ((!lastFlying && snail.isSnailFlying())) {
                 pauseAllAnimations("startFly");
-                startFlyAnimationState.startIfNotRunning(snail.age);
+                startFlyAnimationState.startIfStopped(snail.tickCount);
                 stopAllAnimations = 15;
             }
             else if ((!snail.isSnailGliding() && lastGliding) || (!snail.isSnailLanding() && lastLanding)) {
                 pauseAllAnimations("stopFly");
-                stopFlyAnimationState.startIfNotRunning(snail.age);
+                stopFlyAnimationState.startIfStopped(snail.tickCount);
                 stopAllAnimations = 15;
             }
             else if (snail.isSnailFlying()) {
                 pauseAllAnimations("fly");
-                flyAnimationState.startIfNotRunning(snail.age);
+                flyAnimationState.startIfStopped(snail.tickCount);
             }
             else if (snail.isSnailGliding() || snail.isSnailLanding()) {
                 pauseAllAnimations("glide");
-                glideAnimationState.startIfNotRunning(snail.age);
+                glideAnimationState.startIfStopped(snail.tickCount);
             }
-            else if (snail.limbAnimator.isLimbMoving() && snail.limbAnimator.getSpeed() > 0.02) {
+            else if (snail.walkAnimation.isMoving() && snail.walkAnimation.speed() > 0.02) {
                 pauseAllAnimations("walk");
-                walkAnimationState.startIfNotRunning(snail.age);
+                walkAnimationState.startIfStopped(snail.tickCount);
             }
             else {
                 pauseAllAnimations("idle");
-                idleAnimationState.startIfNotRunning(snail.age);
+                idleAnimationState.startIfStopped(snail.tickCount);
             }
         }
         else {

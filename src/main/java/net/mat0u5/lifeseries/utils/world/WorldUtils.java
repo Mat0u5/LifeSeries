@@ -1,63 +1,62 @@
 package net.mat0u5.lifeseries.utils.world;
 
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LightningEntity;
-import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class WorldUtils {
 
-    public static int findTopSafeY(World world, Vec3d pos) {
-        BlockPos.Mutable mutablePos = new BlockPos.Mutable(pos.getX(), world.getHeight(), pos.getZ());
+    public static int findTopSafeY(Level world, Vec3 pos) {
+        BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos(pos.x(), world.getHeight(), pos.z());
         // Check upwards or downwards for the first safe position
-        while (mutablePos.getY() >= world.getBottomY()) {
+        while (mutablePos.getY() >= world.getMinBuildHeight()) {
             if (isSafeSpot(world, mutablePos)) {
                 return mutablePos.getY(); // Found a safe spot
             }
             mutablePos.move(0, -1, 0);
         }
         // Fallback to original position if no safe spot found
-        return (int) pos.getY();
+        return (int) pos.y();
     }
 
-    public static boolean isSafeSpot(World world, BlockPos.Mutable pos) {
+    public static boolean isSafeSpot(Level world, BlockPos.MutableBlockPos pos) {
         // Check if the block below is solid
-        boolean isSolidBlockBelow = world.getBlockState(pos.down()).hasSolidTopSurface(world, pos.down(), new ZombieEntity(world));
+        boolean isSolidBlockBelow = world.getBlockState(pos.below()).entityCanStandOn(world, pos.below(), new Zombie(world));
 
         // Check if the current position and one above are non-collision blocks (air, water, etc.)
         boolean isNonCollisionAbove = world.getBlockState(pos).getCollisionShape(world, pos).isEmpty()
-                && world.getBlockState(pos.up()).getCollisionShape(world, pos.up()).isEmpty();
+                && world.getBlockState(pos.above()).getCollisionShape(world, pos.above()).isEmpty();
 
         return isSolidBlockBelow && isNonCollisionAbove;
     }
 
-    public static void summonHarmlessLightning(ServerPlayerEntity player) {
+    public static void summonHarmlessLightning(ServerPlayer player) {
         summonHarmlessLightning(PlayerUtils.getServerWorld(player), player.ls$getEntityPos());
     }
 
-    public static void summonHarmlessLightning(ServerWorld world, Vec3d pos) {
-        LightningEntity lightning = new LightningEntity(EntityType.LIGHTNING_BOLT, world);
-        lightning.setPos(pos.x, pos.y, pos.z);
-        lightning.setCosmetic(true);
-        world.spawnEntity(lightning);
+    public static void summonHarmlessLightning(ServerLevel world, Vec3 pos) {
+        LightningBolt lightning = new LightningBolt(EntityType.LIGHTNING_BOLT, world);
+        lightning.setPosRaw(pos.x, pos.y, pos.z);
+        lightning.setVisualOnly(true);
+        world.addFreshEntity(lightning);
     }
 
-    public static BlockPos getCloseBlockPos(World world, BlockPos targetPos, double distanceFromTarget, int height, boolean bottomSupport) {
+    public static BlockPos getCloseBlockPos(Level world, BlockPos targetPos, double distanceFromTarget, int height, boolean bottomSupport) {
         for (int attempts = 0; attempts < 20; attempts++) {
-            Vec3d offset = new Vec3d(
+            Vec3 offset = new Vec3(
                     world.random.nextDouble() * 2 - 1,
                     0,
                     world.random.nextDouble() * 2 - 1
-            ).normalize().multiply(distanceFromTarget);
+            ).normalize().scale(distanceFromTarget);
 
-            BlockPos pos = targetPos.add((int) offset.getX(), 0, (int) offset.getZ());
+            BlockPos pos = targetPos.offset((int) offset.x(), 0, (int) offset.z());
 
             BlockPos validPos = findNearestAirBlock(pos, world, height, bottomSupport);
             if (validPos != null) {
@@ -68,18 +67,18 @@ public class WorldUtils {
         return targetPos;
     }
 
-    private static BlockPos findNearestAirBlock(BlockPos pos, World world, int height, boolean bottomSupport) {
+    private static BlockPos findNearestAirBlock(BlockPos pos, Level world, int height, boolean bottomSupport) {
         for (int yOffset = 5; yOffset >= -5; yOffset--) {
-            BlockPos newPos = pos.up(yOffset);
+            BlockPos newPos = pos.above(yOffset);
             if (bottomSupport) {
-                BlockPos bottomPos = newPos.down();
-                if (!world.getBlockState(bottomPos).isSideSolidFullSquare(world, bottomPos, Direction.UP)) {
+                BlockPos bottomPos = newPos.below();
+                if (!world.getBlockState(bottomPos).isFaceSturdy(world, bottomPos, Direction.UP)) {
                     continue;
                 }
             }
             boolean allAir = true;
             for (int i = 0; i < height; i++) {
-                BlockPos airTest = newPos.up(i);
+                BlockPos airTest = newPos.above(i);
                 if (!world.getBlockState(airTest).isAir()) {
                     allAir = false;
                 }

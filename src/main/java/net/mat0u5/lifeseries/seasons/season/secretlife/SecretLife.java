@@ -13,34 +13,28 @@ import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.NbtComponent;
-import net.minecraft.component.type.PotionContentsComponent;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.potion.Potions;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.GameRules;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.*;
-//? if >= 1.21.9
-/*import net.minecraft.entity.TypedEntityData;*/
-//? if <= 1.21.9
-import net.minecraft.world.GameRules;
-//? if > 1.21.9
-/*import net.minecraft.world.rule.GameRules;*/
 
 public class SecretLife extends Season {
     public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /gift, /task, /health";
@@ -53,13 +47,13 @@ public class SecretLife extends Season {
     SessionAction taskWarningAction = new SessionAction(OtherUtils.minutesToTicks(-5)+1) {
         @Override
         public void trigger() {
-            PlayerUtils.broadcastMessage(Text.literal("Go submit / fail your secret tasks if you haven't!").formatted(Formatting.GRAY));
+            PlayerUtils.broadcastMessage(Component.literal("Go submit / fail your secret tasks if you haven't!").withStyle(ChatFormatting.GRAY));
         }
     };
     SessionAction taskWarningAction2 = new SessionAction(OtherUtils.minutesToTicks(-30)+1) {
         @Override
         public void trigger() {
-            PlayerUtils.broadcastMessage(Text.literal("You better start finishing your secret tasks if you haven't already!").formatted(Formatting.GRAY));
+            PlayerUtils.broadcastMessage(Component.literal("You better start finishing your secret tasks if you haven't already!").withStyle(ChatFormatting.GRAY));
         }
     };
 
@@ -112,17 +106,17 @@ public class SecretLife extends Season {
     }
 
     @Override
-    public void onPlayerRespawn(ServerPlayerEntity player) {
+    public void onPlayerRespawn(ServerPlayer player) {
         super.onPlayerRespawn(player);
-        if (giveBookOnRespawn.containsKey(player.getUuid())) {
-            ItemStack book = giveBookOnRespawn.get(player.getUuid());
-            giveBookOnRespawn.remove(player.getUuid());
+        if (giveBookOnRespawn.containsKey(player.getUUID())) {
+            ItemStack book = giveBookOnRespawn.get(player.getUUID());
+            giveBookOnRespawn.remove(player.getUUID());
             if (book != null) {
-                player.getInventory().insertStack(book);
+                player.getInventory().add(book);
             }
         }
         TaskTypes type = TaskManager.getPlayersTaskType(player);
-        if (player.ls$isOnLastLife(false) && TaskManager.submittedOrFailed.contains(player.getUuid()) && type == null) {
+        if (player.ls$isOnLastLife(false) && TaskManager.submittedOrFailed.contains(player.getUUID()) && type == null) {
             TaskManager.chooseTasks(List.of(player), TaskTypes.RED);
         }
     }
@@ -154,9 +148,9 @@ public class SecretLife extends Season {
         ItemStack pot = new ItemStack(Items.POTION);
         ItemStack pot2 = new ItemStack(Items.POTION);
         ItemStack pot3 = new ItemStack(Items.POTION);
-        pot.set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(Potions.INVISIBILITY));
-        pot2.set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(Potions.SLOW_FALLING));
-        pot3.set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(Potions.FIRE_RESISTANCE));
+        pot.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.INVISIBILITY));
+        pot2.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.SLOW_FALLING));
+        pot3.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.FIRE_RESISTANCE));
         itemSpawner.addItem(pot, 10);
         itemSpawner.addItem(pot2, 10);
         itemSpawner.addItem(pot3, 10);
@@ -179,20 +173,20 @@ public class SecretLife extends Season {
         ItemStack camel = new ItemStack(Items.CAMEL_SPAWN_EGG);
         ItemStack zombieHorse = new ItemStack(Items.ZOMBIE_HORSE_SPAWN_EGG);
         ItemStack skeletonHorse = new ItemStack(Items.SKELETON_HORSE_SPAWN_EGG);
-        NbtCompound nbtCompSkeleton = new NbtCompound();
+        CompoundTag nbtCompSkeleton = new CompoundTag();
         nbtCompSkeleton.putInt("Tame", 1);
         nbtCompSkeleton.putString("id", "skeleton_horse");
 
-        NbtCompound nbtCompZombie= new NbtCompound();
+        CompoundTag nbtCompZombie= new CompoundTag();
         nbtCompZombie.putInt("Tame", 1);
         nbtCompZombie.putString("id", "zombie_horse");
 
-        NbtCompound nbtCompCamel = new NbtCompound();
+        CompoundTag nbtCompCamel = new CompoundTag();
         nbtCompCamel.putInt("Tame", 1);
         nbtCompCamel.putString("id", "camel");
 
         //? if <= 1.21.4 {
-        NbtCompound saddleItemComp = new NbtCompound();
+        CompoundTag saddleItemComp = new CompoundTag();
         saddleItemComp.putInt("Count", 1);
         saddleItemComp.putString("id", "saddle");
         nbtCompSkeleton.put("SaddleItem", saddleItemComp);
@@ -209,14 +203,14 @@ public class SecretLife extends Season {
         *///?}
 
 
-        NbtComponent nbtSkeleton = NbtComponent.of(nbtCompSkeleton);
-        NbtComponent nbtZombie = NbtComponent.of(nbtCompZombie);
-        NbtComponent nbtCamel= NbtComponent.of(nbtCompCamel);
+        CustomData nbtSkeleton = CustomData.of(nbtCompSkeleton);
+        CustomData nbtZombie = CustomData.of(nbtCompZombie);
+        CustomData nbtCamel= CustomData.of(nbtCompCamel);
 
         //? if <= 1.21.6 {
-        zombieHorse.set(DataComponentTypes.ENTITY_DATA, nbtZombie);
-        skeletonHorse.set(DataComponentTypes.ENTITY_DATA, nbtSkeleton);
-        camel.set(DataComponentTypes.ENTITY_DATA, nbtCamel);
+        zombieHorse.set(DataComponents.ENTITY_DATA, nbtZombie);
+        skeletonHorse.set(DataComponents.ENTITY_DATA, nbtSkeleton);
+        camel.set(DataComponents.ENTITY_DATA, nbtCamel);
         //?} else {
         /*zombieHorse.set(DataComponentTypes.ENTITY_DATA, TypedEntityData.create(EntityType.ZOMBIE, nbtZombie.copyNbt()));
         skeletonHorse.set(DataComponentTypes.ENTITY_DATA, TypedEntityData.create(EntityType.SKELETON, nbtSkeleton.copyNbt()));
@@ -234,49 +228,49 @@ public class SecretLife extends Season {
         ItemStack mace = new ItemStack(Items.MACE);
         ItemStackUtils.setCustomComponentBoolean(mace, "IgnoreBlacklist", true);
         ItemStackUtils.setCustomComponentBoolean(mace, "NoModifications", true);
-        mace.setDamage(mace.getMaxDamage()-1);
+        mace.setDamageValue(mace.getMaxDamage()-1);
         itemSpawner.addItem(mace, 3);
 
         ItemStack patat = new ItemStack(Items.POISONOUS_POTATO);
-        patat.set(DataComponentTypes.CUSTOM_NAME,Text.of("§6§l§nThe Sacred Patat"));
+        patat.set(DataComponents.CUSTOM_NAME,Component.nullToEmpty("§6§l§nThe Sacred Patat"));
         ItemStackUtils.addLoreToItemStack(patat,
-                List.of(Text.of("§5§oEating this might help you. Or maybe not..."))
+                List.of(Component.nullToEmpty("§5§oEating this might help you. Or maybe not..."))
         );
         itemSpawner.addItem(patat, 1);
     }
 
     @Override
-    public void onPlayerDamage(ServerPlayerEntity player, DamageSource source, float amount, CallbackInfo ci) {
-        if (player.hasStatusEffect(StatusEffects.HEALTH_BOOST)) {
-            player.removeStatusEffect(StatusEffects.HEALTH_BOOST);
+    public void onPlayerDamage(ServerPlayer player, DamageSource source, float amount, CallbackInfo ci) {
+        if (player.hasEffect(MobEffects.HEALTH_BOOST)) {
+            player.removeEffect(MobEffects.HEALTH_BOOST);
         }
         TaskScheduler.scheduleTask(1, () -> syncPlayerHealth(player));
     }
 
     @Override
-    public void onPlayerDeath(ServerPlayerEntity player, DamageSource source) {
+    public void onPlayerDeath(ServerPlayer player, DamageSource source) {
         super.onPlayerDeath(player, source);
         setPlayerHealth(player, MAX_HEALTH);
     }
 
     @Override
-    public void onPlayerJoin(ServerPlayerEntity player) {
+    public void onPlayerJoin(ServerPlayer player) {
         super.onPlayerJoin(player);
 
-        if (TaskManager.tasksChosen && !TaskManager.tasksChosenFor.contains(player.getUuid())) {
+        if (TaskManager.tasksChosen && !TaskManager.tasksChosenFor.contains(player.getUUID())) {
             TaskScheduler.scheduleTask(100, () -> TaskManager.chooseTasks(List.of(player), null));
         }
     }
 
     @Override
-    public void assignDefaultLives(ServerPlayerEntity player) {
+    public void assignDefaultLives(ServerPlayer player) {
         setPlayerHealth(player, MAX_HEALTH);
         player.setHealth((float) MAX_HEALTH);
         super.assignDefaultLives(player);
     }
 
     @Override
-    public void onPlayerFinishJoining(ServerPlayerEntity player) {
+    public void onPlayerFinishJoining(ServerPlayer player) {
         TaskManager.checkSecretLifePositions();
         super.onPlayerFinishJoining(player);
     }
@@ -308,11 +302,11 @@ public class SecretLife extends Season {
     public void sessionEnd() {
         super.sessionEnd();
         List<String> playersWithTaskBooks = new ArrayList<>();
-        for (ServerPlayerEntity player : livesManager.getNonRedPlayers()) {
+        for (ServerPlayer player : livesManager.getNonRedPlayers()) {
             if (player.ls$isDead()) continue;
-            if (TaskManager.submittedOrFailed.contains(player.getUuid())) continue;
+            if (TaskManager.submittedOrFailed.contains(player.getUUID())) continue;
             if (TaskManager.CONSTANT_TASKS) continue;
-            playersWithTaskBooks.add(player.getNameForScoreboard());
+            playersWithTaskBooks.add(player.getScoreboardName());
         }
         if (!playersWithTaskBooks.isEmpty()) {
             boolean isOne = playersWithTaskBooks.size() == 1;
@@ -322,13 +316,13 @@ public class SecretLife extends Season {
     }
 
     public void heartsTranscript() {
-        for (ServerPlayerEntity player : livesManager.getAlivePlayers()) {
+        for (ServerPlayer player : livesManager.getAlivePlayers()) {
             SessionTranscript.logHealth(player, getRoundedHealth(player));
         }
     }
 
     @Override
-    public void onPlayerKilledByPlayer(ServerPlayerEntity victim, ServerPlayerEntity killer) {
+    public void onPlayerKilledByPlayer(ServerPlayer victim, ServerPlayer killer) {
         super.onPlayerKilledByPlayer(victim, killer);
         if (killer.ls$isOnLastLife(false)) {
             double amountGained = Math.min(Math.max(MAX_KILL_HEALTH, MAX_HEALTH) - getPlayerHealth(killer), 20);
@@ -336,7 +330,7 @@ public class SecretLife extends Season {
                 addPlayerHealth(killer, amountGained);
                 double roundedHearts = Math.ceil(amountGained) / 2.0;
                 String text = TextUtils.pluralize(TextUtils.formatString("+{} Heart", roundedHearts), roundedHearts);
-                PlayerUtils.sendTitle(killer, Text.literal(text).formatted(Formatting.RED), 0, 40, 20);
+                PlayerUtils.sendTitle(killer, Component.literal(text).withStyle(ChatFormatting.RED), 0, 40, 20);
             }
         }
     }
@@ -356,26 +350,26 @@ public class SecretLife extends Season {
     @Override
     public void modifyEntityDrops(LivingEntity entity, DamageSource damageSource) {
         super.modifyEntityDrops(entity, damageSource);
-        if (entity instanceof ServerPlayerEntity player) {
+        if (entity instanceof ServerPlayer player) {
             boolean dropBook = SecretLifeConfig.PLAYERS_DROP_TASK_ON_DEATH.get(seasonConfig);
             if (dropBook || server == null) return;
-            boolean keepInventory = OtherUtils.getBooleanGameRule(PlayerUtils.getServerWorld(player), GameRules.KEEP_INVENTORY);
+            boolean keepInventory = OtherUtils.getBooleanGameRule(PlayerUtils.getServerWorld(player), GameRules.RULE_KEEPINVENTORY);
             if (keepInventory) return;
-            giveBookOnRespawn.put(player.getUuid(), TaskManager.getPlayersTaskBook(player));
+            giveBookOnRespawn.put(player.getUUID(), TaskManager.getPlayersTaskBook(player));
             TaskManager.removePlayersTaskBook(player);
         }
     }
 
-    public void removePlayerHealth(ServerPlayerEntity player, double health) {
+    public void removePlayerHealth(ServerPlayer player, double health) {
         addPlayerHealth(player,-health);
     }
 
-    public void addPlayerHealth(ServerPlayerEntity player, double health) {
+    public void addPlayerHealth(ServerPlayer player, double health) {
         double currentHealth = AttributeUtils.getMaxPlayerHealth(player);
         setPlayerHealth(player, currentHealth + health);
     }
 
-    public void setPlayerHealth(ServerPlayerEntity player, double health) {
+    public void setPlayerHealth(ServerPlayer player, double health) {
         if (player == null) return;
         if (health < 0.1) health = 0.1;
         if (canChangeHealth() || (health > getPlayerHealth(player))) {
@@ -386,32 +380,32 @@ public class SecretLife extends Season {
         }
     }
 
-    public double getPlayerHealth(ServerPlayerEntity player) {
+    public double getPlayerHealth(ServerPlayer player) {
         return AttributeUtils.getMaxPlayerHealth(player);
     }
 
-    public double getRoundedHealth(ServerPlayerEntity player) {
+    public double getRoundedHealth(ServerPlayer player) {
         return Math.floor(getPlayerHealth(player)*100)/100.0;
     }
 
-    public void syncPlayerHealth(ServerPlayerEntity player) {
+    public void syncPlayerHealth(ServerPlayer player) {
         if (player == null) return;
         if (!player.isAlive()) return;
         setPlayerHealth(player, player.getHealth());
     }
 
     public void syncAllPlayerHealth() {
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
             setPlayerHealth(player, player.getHealth());
         }
     }
 
-    public void resetPlayerHealth(ServerPlayerEntity player) {
+    public void resetPlayerHealth(ServerPlayer player) {
         setPlayerHealth(player, MAX_HEALTH);
     }
 
     public void resetAllPlayerHealth() {
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
             resetPlayerHealth(player);
         }
     }
@@ -425,7 +419,7 @@ public class SecretLife extends Season {
     public void sessionChangeStatus(SessionStatus newStatus) {
         super.sessionChangeStatus(newStatus);
         checkNaturalRegeneration();
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
             player.setHealth((float) getPlayerHealth(player));
         }
     }
@@ -438,9 +432,9 @@ public class SecretLife extends Season {
                 naturalRegeneration = true;
             }
         }
-        if (server.getOverworld() == null) return;
+        if (server.overworld() == null) return;
         //? if <= 1.21.9 {
-        server.getOverworld().getGameRules().get(GameRules.NATURAL_REGENERATION).set(naturalRegeneration, server);
+        server.overworld().getGameRules().getRule(GameRules.RULE_NATURAL_REGENERATION).set(naturalRegeneration, server);
          //?} else {
         /*server.getOverworld().getGameRules().setValue(GameRules.NATURAL_HEALTH_REGENERATION, naturalRegeneration, server);
         *///?}

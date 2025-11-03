@@ -7,16 +7,15 @@ import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.GameMode;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.level.GameType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -29,7 +28,7 @@ public class Necromancy extends Superpower {
     public static final List<UUID> clearedPlayers = new ArrayList<>();
     private List<UUID> perPlayerRessurections = new ArrayList<>();
 
-    public Necromancy(ServerPlayerEntity player) {
+    public Necromancy(ServerPlayer player) {
         super(player);
     }
 
@@ -45,48 +44,48 @@ public class Necromancy extends Superpower {
 
     @Override
     public void activate() {
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
         if (player == null) return;
 
         if (getDeadSpectatorPlayers().isEmpty()) {
-            PlayerUtils.displayMessageToPlayer(player, Text.of("There are no dead players."), 80);
+            PlayerUtils.displayMessageToPlayer(player, Component.nullToEmpty("There are no dead players."), 80);
             return;
         }
 
-        ServerWorld playerWorld = PlayerUtils.getServerWorld(player);
-        playerWorld.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_WARDEN_EMERGE, SoundCategory.MASTER, 1, 1);
+        ServerLevel playerWorld = PlayerUtils.getServerWorld(player);
+        playerWorld.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.WARDEN_EMERGE, SoundSource.MASTER, 1, 1);
 
-        List<ServerPlayerEntity> affectedPlayers = playerWorld.getEntitiesByClass(ServerPlayerEntity.class, player.getBoundingBox().expand(10), playerEntity -> playerEntity.distanceTo(player) <= 10);
-        StatusEffectInstance blindness = new StatusEffectInstance(StatusEffects.BLINDNESS, 115, 0);
-        for (ServerPlayerEntity affectedPlayer : affectedPlayers) {
-            affectedPlayer.addStatusEffect(blindness);
+        List<ServerPlayer> affectedPlayers = playerWorld.getEntitiesOfClass(ServerPlayer.class, player.getBoundingBox().inflate(10), playerEntity -> playerEntity.distanceTo(player) <= 10);
+        MobEffectInstance blindness = new MobEffectInstance(MobEffects.BLINDNESS, 115, 0);
+        for (ServerPlayer affectedPlayer : affectedPlayers) {
+            affectedPlayer.addEffect(blindness);
         }
 
-        for (ServerPlayerEntity deadPlayer : getDeadSpectatorPlayers()) {
-            queuedRessurectedPlayers.add(deadPlayer.getUuid());
+        for (ServerPlayer deadPlayer : getDeadSpectatorPlayers()) {
+            queuedRessurectedPlayers.add(deadPlayer.getUUID());
         }
 
         TaskScheduler.scheduleTask(100, () -> {
-            ServerPlayerEntity updatedPlayer = getPlayer();
+            ServerPlayer updatedPlayer = getPlayer();
             if (updatedPlayer != null) {
-                ServerWorld updatedPlayerWorld = PlayerUtils.getServerWorld(updatedPlayer);
-                List<ServerPlayerEntity> deadPlayers = getDeadSpectatorPlayers();
-                for (ServerPlayerEntity deadPlayer : deadPlayers) {
-                    BlockPos tpTo = WorldUtils.getCloseBlockPos(updatedPlayerWorld, updatedPlayer.getBlockPos(), 3, 2, true);
+                ServerLevel updatedPlayerWorld = PlayerUtils.getServerWorld(updatedPlayer);
+                List<ServerPlayer> deadPlayers = getDeadSpectatorPlayers();
+                for (ServerPlayer deadPlayer : deadPlayers) {
+                    BlockPos tpTo = WorldUtils.getCloseBlockPos(updatedPlayerWorld, updatedPlayer.blockPosition(), 3, 2, true);
                     PlayerUtils.teleport(deadPlayer, updatedPlayerWorld, tpTo);
-                    deadPlayer.changeGameMode(GameMode.SURVIVAL);
+                    deadPlayer.setGameMode(GameType.SURVIVAL);
                     if (seasonConfig instanceof WildLifeConfig config) {
-                        if (WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_LOSE_ITEMS.get(config) && !clearedPlayers.contains(deadPlayer.getUuid())) {
-                            clearedPlayers.add(deadPlayer.getUuid());
-                            deadPlayer.getInventory().clear();
+                        if (WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_LOSE_ITEMS.get(config) && !clearedPlayers.contains(deadPlayer.getUUID())) {
+                            clearedPlayers.add(deadPlayer.getUUID());
+                            deadPlayer.getInventory().clearContent();
                         }
                     }
                     AttributeUtils.setMaxPlayerHealth(deadPlayer, 8);
                     deadPlayer.setHealth(8);
                     WorldUtils.summonHarmlessLightning(deadPlayer);
-                    ressurectedPlayers.add(deadPlayer.getUuid());
-                    perPlayerRessurections.add(deadPlayer.getUuid());
-                    queuedRessurectedPlayers.remove(deadPlayer.getUuid());
+                    ressurectedPlayers.add(deadPlayer.getUUID());
+                    perPlayerRessurections.add(deadPlayer.getUUID());
+                    queuedRessurectedPlayers.remove(deadPlayer.getUUID());
                 }
             }
         });
@@ -97,12 +96,12 @@ public class Necromancy extends Superpower {
     public void deactivate() {
         super.deactivate();
         List<UUID> deadAgain = new ArrayList<>();
-        for (ServerPlayerEntity player : livesManager.getDeadPlayers()) {
+        for (ServerPlayer player : livesManager.getDeadPlayers()) {
             if (player.isSpectator()) continue;
-            UUID uuid = player.getUuid();
+            UUID uuid = player.getUUID();
             if (perPlayerRessurections.contains(uuid) && ressurectedPlayers.contains(uuid)) {
                 WorldUtils.summonHarmlessLightning(player);
-                player.changeGameMode(GameMode.SPECTATOR);
+                player.setGameMode(GameType.SPECTATOR);
                 deadAgain.add(uuid);
             }
         }
@@ -114,7 +113,7 @@ public class Necromancy extends Superpower {
     @Override
     public void tick() {
         for (UUID uuid : new ArrayList<>(perPlayerRessurections)) {
-            ServerPlayerEntity player = PlayerUtils.getPlayer(uuid);
+            ServerPlayer player = PlayerUtils.getPlayer(uuid);
             if (player != null && player.ls$isAlive()) {
                 perPlayerRessurections.remove(uuid);
                 ressurectedPlayers.remove(uuid);
@@ -124,9 +123,9 @@ public class Necromancy extends Superpower {
         }
     }
 
-    public static List<ServerPlayerEntity> getDeadSpectatorPlayers() {
-        List<ServerPlayerEntity> deadPlayers = new ArrayList<>();
-        for (ServerPlayerEntity player : livesManager.getDeadPlayers()) {
+    public static List<ServerPlayer> getDeadSpectatorPlayers() {
+        List<ServerPlayer> deadPlayers = new ArrayList<>();
+        for (ServerPlayer player : livesManager.getDeadPlayers()) {
             if (!player.isSpectator()) continue;
             deadPlayers.add(player);
         }
@@ -137,11 +136,11 @@ public class Necromancy extends Superpower {
         return !livesManager.getDeadPlayers().isEmpty();
     }
 
-    public static boolean isRessurectedPlayer(ServerPlayerEntity player) {
-        return ressurectedPlayers.contains(player.getUuid());
+    public static boolean isRessurectedPlayer(ServerPlayer player) {
+        return ressurectedPlayers.contains(player.getUUID());
     }
 
-    public static boolean preIsRessurectedPlayer(ServerPlayerEntity player) {
-        return queuedRessurectedPlayers.contains(player.getUuid()) || ressurectedPlayers.contains(player.getUuid());
+    public static boolean preIsRessurectedPlayer(ServerPlayer player) {
+        return queuedRessurectedPlayers.contains(player.getUUID()) || ressurectedPlayers.contains(player.getUUID());
     }
 }

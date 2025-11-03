@@ -5,12 +5,11 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.Vec3d;
-
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -18,10 +17,10 @@ import java.util.UUID;
 public class Listening extends ToggleableSuperpower {
     public static final double MAX_RANGE = 20;
     public static List<UUID> listeningPlayers = new ArrayList<>();
-    public Vec3d lookingAt = null;
+    public Vec3 lookingAt = null;
     private long ticks = 0;
 
-    public Listening(ServerPlayerEntity player) {
+    public Listening(ServerPlayer player) {
         super(player);
     }
 
@@ -34,7 +33,7 @@ public class Listening extends ToggleableSuperpower {
     public void tick() {
         ticks++;
         if (!active) return;
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
         if (player == null) return;
         if (ticks % 5 == 0) {
             updateLooking();
@@ -44,26 +43,26 @@ public class Listening extends ToggleableSuperpower {
     @Override
     public void activate() {
         super.activate();
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
         if (player == null) return;
-        player.playSoundToPlayer(SoundEvents.ENTITY_PUFFER_FISH_BLOW_UP, SoundCategory.MASTER, 1, 1);
+        player.playNotifySound(SoundEvents.PUFFER_FISH_BLOW_UP, SoundSource.MASTER, 1, 1);
         NetworkHandlerServer.sendVignette(player, -1);
-        listeningPlayers.add(player.getUuid());
+        listeningPlayers.add(player.getUUID());
         updateLooking();
     }
 
     @Override
     public void deactivate() {
         super.deactivate();
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
         if (player == null) return;
         NetworkHandlerServer.sendVignette(player, 0);
-        listeningPlayers.remove(player.getUuid());
-        player.playSoundToPlayer(SoundEvents.ENTITY_PUFFER_FISH_BLOW_OUT, SoundCategory.MASTER, 1, 1);
+        listeningPlayers.remove(player.getUUID());
+        player.playNotifySound(SoundEvents.PUFFER_FISH_BLOW_OUT, SoundSource.MASTER, 1, 1);
     }
 
     public void updateLooking() {
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
         if (player == null) return;
         Entity lookingAtEntity = PlayerUtils.getEntityLookingAt(player, 100);
         if (lookingAtEntity != null) {

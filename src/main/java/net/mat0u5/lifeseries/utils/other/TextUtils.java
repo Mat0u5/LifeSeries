@@ -1,10 +1,15 @@
 package net.mat0u5.lifeseries.utils.other;
 
 import net.mat0u5.lifeseries.Main;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.text.*;
-import net.minecraft.util.Formatting;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +61,7 @@ public class TextUtils {
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
-    public static String textToLegacyString(Text text) {
+    public static String textToLegacyString(Component text) {
         StringBuilder formattedString = new StringBuilder();
         Style style = text.getStyle();
 
@@ -79,9 +84,9 @@ public class TextUtils {
     }
 
     public static String getColorCode(TextColor color) {
-        for (Formatting formatting : Formatting.values()) {
-            if (formatting.getColorValue() == color.getRgb()) {
-                return "§" + formatting.getCode();
+        for (ChatFormatting formatting : ChatFormatting.values()) {
+            if (formatting.getColor() == color.getValue()) {
+                return "§" + formatting.getChar();
             }
         }
         return "";
@@ -114,7 +119,7 @@ public class TextUtils {
         *///?}
     }
 
-    public static HoverEvent showTextHoverEvent(Text text) {
+    public static HoverEvent showTextHoverEvent(Component text) {
         //? if <= 1.21.4 {
         return new HoverEvent(HoverEvent.Action.SHOW_TEXT, text);
         //?} else {
@@ -122,54 +127,54 @@ public class TextUtils {
         *///?}
     }
 
-    public static Text selfMessageText(String message) {
+    public static Component selfMessageText(String message) {
         return runCommandText("/selfmsg " + message);
     }
 
-    public static Text runCommandText(String command) {
+    public static Component runCommandText(String command) {
         return hereText(runCommandClickEvent(command));
     }
 
-    public static Text openURLText(String url) {
+    public static Component openURLText(String url) {
         return hereText(openURLClickEvent(url));
     }
 
-    public static Text copyClipboardText(String copy) {
+    public static Component copyClipboardText(String copy) {
         return hereText(copyClipboardClickEvent(copy));
     }
 
-    public static Text hereText(ClickEvent event) {
+    public static Component hereText(ClickEvent event) {
         return clickableText("here", event);
     }
 
-    public static Text clickableText(String label, ClickEvent event) {
-        return Text.literal(label)
-                .styled(style -> style
-                        .withColor(Formatting.BLUE)
+    public static Component clickableText(String label, ClickEvent event) {
+        return Component.literal(label)
+                .withStyle(style -> style
+                        .withColor(ChatFormatting.BLUE)
                         .withClickEvent(event)
-                        .withUnderline(true)
+                        .withUnderlined(true)
                 );
     }
 
 
-    public static MutableText formatPlain(String template, Object... args) {
-        return Text.literal(formatString(template, args));
+    public static MutableComponent formatPlain(String template, Object... args) {
+        return Component.literal(formatString(template, args));
     }
 
     public static String formatString(String template, Object... args) {
         return format(template, args).getString();
     }
 
-    public static MutableText format(String template, Object... args) {
+    public static MutableComponent format(String template, Object... args) {
         return formatStyled(false, template, args);
     }
 
-    public static MutableText formatLoosely(String template, Object... args) {
+    public static MutableComponent formatLoosely(String template, Object... args) {
         return formatStyled(true, template, args);
     }
 
-    private static MutableText formatStyled(boolean looselyStyled, String template, Object... args) {
-        MutableText result = Text.empty();
+    private static MutableComponent formatStyled(boolean looselyStyled, String template, Object... args) {
+        MutableComponent result = Component.empty();
         StringBuilder resultLooselyStyled = new StringBuilder();
 
         int argIndex = 0;
@@ -189,12 +194,12 @@ public class TextUtils {
         while (placeholderIndex != -1 && argIndex < args.length) {
             if (placeholderIndex > lastIndex) {
                 String textBefore = template.substring(lastIndex, placeholderIndex);
-                result.append(Text.literal(textBefore));
+                result.append(Component.literal(textBefore));
                 resultLooselyStyled.append(textBefore);
             }
 
             Object arg = args[argIndex];
-            Text argText = getTextForArgument(arg);
+            Component argText = getTextForArgument(arg);
             result.append(argText);
             resultLooselyStyled.append(argText.getString());
 
@@ -205,42 +210,42 @@ public class TextUtils {
 
         if (lastIndex < template.length()) {
             String remainingText = template.substring(lastIndex);
-            result.append(Text.literal(remainingText));
+            result.append(Component.literal(remainingText));
             resultLooselyStyled.append(remainingText);
         }
 
         if (looselyStyled) {
-            return Text.literal(resultLooselyStyled.toString());
+            return Component.literal(resultLooselyStyled.toString());
         }
 
         return result;
     }
 
-    private static Text getTextForArgument(Object arg) {
+    private static Component getTextForArgument(Object arg) {
         if (arg == null) {
-            return Text.empty();
+            return Component.empty();
         }
-        if (arg instanceof Text text) {
+        if (arg instanceof Component text) {
             return text;
         }
-        if (arg instanceof ServerPlayerEntity player) {
-            Text name = player.getDisplayName();
-            if (name == null) return Text.empty();
+        if (arg instanceof ServerPlayer player) {
+            Component name = player.getDisplayName();
+            if (name == null) return Component.empty();
             return name;
         }
         if (arg instanceof List<?> list) {
-            MutableText text = Text.empty();
+            MutableComponent text = Component.empty();
             int index = 0;
             for (Object obj : list) {
                 if (index != 0) {
-                    text.append(Text.of(", "));
+                    text.append(Component.nullToEmpty(", "));
                 }
                 text.append(getTextForArgument(obj));
                 index++;
             }
             return text;
         }
-        return Text.of(arg.toString());
+        return Component.nullToEmpty(arg.toString());
     }
 
     public static String pluralize(String text, Integer amount) {

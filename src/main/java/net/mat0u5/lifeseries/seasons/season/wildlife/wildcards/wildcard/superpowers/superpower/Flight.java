@@ -8,38 +8,27 @@ import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ItemEnchantmentsComponent;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Unit;
-
-//? if >= 1.21.2 {
-/*import net.minecraft.component.type.EquippableComponent;
-import net.minecraft.util.Identifier;
-import java.util.Optional;
-*///?}
-//? if <= 1.21.4
-import net.minecraft.component.type.UnbreakableComponent;
-//? if >= 1.21.5
-/*import net.minecraft.component.type.TooltipDisplayComponent;*/
-//? if >= 1.21.6
-/*import net.minecraft.registry.Registries;*/
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.Unbreakable;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 
 public class Flight extends Superpower {
     public boolean isLaunchedUp = false;
     private int onGroundTicks = 0;
     private long ticks = 0;
 
-    public Flight(ServerPlayerEntity player) {
+    public Flight(ServerPlayer player) {
         super(player);
     }
 
@@ -56,7 +45,7 @@ public class Flight extends Superpower {
     @Override
     public void tick() {
         ticks++;
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
         if (player == null) {
             onGroundTicks = 0;
             return;
@@ -67,7 +56,7 @@ public class Flight extends Superpower {
             return;
         }
 
-        if (player.isOnGround()) {
+        if (player.onGround()) {
             onGroundTicks++;
             if (ticks % 5 == 0) NetworkHandlerServer.sendStringPacket(player, PacketNames.PREVENT_GLIDING, "true");
         }
@@ -85,15 +74,15 @@ public class Flight extends Superpower {
     @Override
     public void activate() {
         super.activate();
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
         if (player == null) return;
         giveHelmet();
 
-        PlayerUtils.getServerWorld(player).playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.MASTER, 1, 1);
-        player.playSoundToPlayer(SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.MASTER, 1, 1);
+        PlayerUtils.getServerWorld(player).playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.MASTER, 1, 1);
+        player.playNotifySound(SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.MASTER, 1, 1);
 
-        StatusEffectInstance effect = new StatusEffectInstance(StatusEffects.JUMP_BOOST, 20, 54, false, false, false);
-        player.addStatusEffect(effect);
+        MobEffectInstance effect = new MobEffectInstance(MobEffects.JUMP, 20, 54, false, false, false);
+        player.addEffect(effect);
         NetworkHandlerServer.sendStringPacket(player, PacketNames.JUMP, "");
 
         isLaunchedUp = true;
@@ -103,27 +92,27 @@ public class Flight extends Superpower {
     @Override
     public void deactivate() {
         super.deactivate();
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
         if (player == null) return;
-        TaskScheduler.scheduleTask(1, () -> player.getInventory().markDirty());
+        TaskScheduler.scheduleTask(1, () -> player.getInventory().setChanged());
         NetworkHandlerServer.sendStringPacket(player, PacketNames.PREVENT_GLIDING, "false");
     }
 
     private void giveHelmet() {
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
         if (player != null) {
             if (ItemStackUtils.hasCustomComponentEntry(PlayerUtils.getEquipmentSlot(player, 3), "FlightSuperpower")) return;
 
             ItemStack helmet = new ItemStack(Items.IRON_NUGGET);
-            helmet.addEnchantment(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
-            helmet.addEnchantment(ItemStackUtils.getEnchantmentEntry(Enchantments.VANISHING_CURSE), 1);
-            ItemEnchantmentsComponent enchantmentsComponent = helmet.get(DataComponentTypes.ENCHANTMENTS);
+            helmet.enchant(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
+            helmet.enchant(ItemStackUtils.getEnchantmentEntry(Enchantments.VANISHING_CURSE), 1);
+            ItemEnchantments enchantmentsComponent = helmet.get(DataComponents.ENCHANTMENTS);
             //? if <= 1.21.4 {
             if (enchantmentsComponent != null) {
-                helmet.set(DataComponentTypes.ENCHANTMENTS, enchantmentsComponent.withShowInTooltip(false));
+                helmet.set(DataComponents.ENCHANTMENTS, enchantmentsComponent.withTooltip(false));
             }
-            helmet.set(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(false));
-            helmet.set(DataComponentTypes.HIDE_ADDITIONAL_TOOLTIP, Unit.INSTANCE);
+            helmet.set(DataComponents.UNBREAKABLE, new Unbreakable(false));
+            helmet.set(DataComponents.HIDE_ADDITIONAL_TOOLTIP, Unit.INSTANCE);
              //?} else {
             /*helmet.set(DataComponentTypes.UNBREAKABLE, Unit.INSTANCE);
             helmet.set(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplayComponent.DEFAULT
@@ -132,8 +121,8 @@ public class Flight extends Superpower {
             );
             *///?}
 
-            helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, false);
-            helmet.set(DataComponentTypes.ITEM_NAME, Text.of("Winged Helmet"));
+            helmet.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, false);
+            helmet.set(DataComponents.ITEM_NAME, Component.nullToEmpty("Winged Helmet"));
             //? if >= 1.21.2 {
             /*helmet.set(DataComponentTypes.ITEM_MODEL, Identifier.of("lifeseries","winged_helmet"));
             helmet.set(DataComponentTypes.GLIDER, Unit.INSTANCE);
@@ -150,7 +139,7 @@ public class Flight extends Superpower {
             ItemStackUtils.setCustomComponentBoolean(helmet, "FlightSuperpower", true);
 
             ItemStackUtils.spawnItemForPlayer(PlayerUtils.getServerWorld(player), player.ls$getEntityPos(), PlayerUtils.getEquipmentSlot(player, 3).copy(), player);
-            player.equipStack(EquipmentSlot.HEAD, helmet);
+            player.setItemSlot(EquipmentSlot.HEAD, helmet);
         }
     }
 }

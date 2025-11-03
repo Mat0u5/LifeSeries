@@ -12,16 +12,15 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.border.WorldBorder;
-
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.level.border.WorldBorder;
+import net.minecraft.world.phys.Vec3;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.blacklist;
@@ -45,13 +44,13 @@ public class Session {
     SessionAction endWarning1 = new SessionAction(OtherUtils.minutesToTicks(-5)) {
         @Override
         public void trigger() {
-            PlayerUtils.broadcastMessage(Text.literal("Session ends in 5 minutes!").formatted(Formatting.GOLD));
+            PlayerUtils.broadcastMessage(Component.literal("Session ends in 5 minutes!").withStyle(ChatFormatting.GOLD));
         }
     };
     SessionAction endWarning2 = new SessionAction(OtherUtils.minutesToTicks(-30)) {
         @Override
         public void trigger() {
-            PlayerUtils.broadcastMessage(Text.literal("Session ends in 30 minutes!").formatted(Formatting.GOLD));
+            PlayerUtils.broadcastMessage(Component.literal("Session ends in 30 minutes!").withStyle(ChatFormatting.GOLD));
         }
     };
     SessionAction actionInfoAction = new SessionAction(OtherUtils.secondsToTicks(7)) {
@@ -67,8 +66,8 @@ public class Session {
         if (!currentSeason.sessionStart()) return false;
         changeStatus(SessionStatus.STARTED);
         passedTime = 0;
-        Text line1 = TextUtils.formatLoosely("§6Session started! §7[{}]", OtherUtils.formatTime(sessionLength));
-        Text line2 = Text.literal("§f/session timer showDisplay§7 - toggles a session timer on your screen.");
+        Component line1 = TextUtils.formatLoosely("§6Session started! §7[{}]", OtherUtils.formatTime(sessionLength));
+        Component line2 = Component.literal("§f/session timer showDisplay§7 - toggles a session timer on your screen.");
         PlayerUtils.broadcastMessage(line1);
         PlayerUtils.broadcastMessage(line2);
 
@@ -102,7 +101,7 @@ public class Session {
         SessionTranscript.sessionEnd();
         if (status != SessionStatus.FINISHED && status != SessionStatus.NOT_STARTED) {
             SessionTranscript.onSessionEnd();
-            PlayerUtils.broadcastMessage(Text.literal("The session has ended!").formatted(Formatting.GOLD));
+            PlayerUtils.broadcastMessage(Component.literal("The session has ended!").withStyle(ChatFormatting.GOLD));
         }
         changeStatus(SessionStatus.FINISHED);
         passedTime = 0;
@@ -111,11 +110,11 @@ public class Session {
 
     public void sessionPause() {
         if (statusPaused()) {
-            PlayerUtils.broadcastMessage(Text.literal("Session unpaused!").formatted(Formatting.GOLD));
+            PlayerUtils.broadcastMessage(Component.literal("Session unpaused!").withStyle(ChatFormatting.GOLD));
             changeStatus(SessionStatus.STARTED);
         }
         else {
-            PlayerUtils.broadcastMessage(Text.literal("Session paused!").formatted(Formatting.GOLD));
+            PlayerUtils.broadcastMessage(Component.literal("Session paused!").withStyle(ChatFormatting.GOLD));
             changeStatus(SessionStatus.PAUSED);
         }
     }
@@ -167,34 +166,34 @@ public class Session {
         return sessionLength != null;
     }
 
-    public boolean isInDisplayTimer(ServerPlayerEntity player) {
-        return displayTimer.contains(player.getUuid());
+    public boolean isInDisplayTimer(ServerPlayer player) {
+        return displayTimer.contains(player.getUUID());
     }
 
-    public void addToDisplayTimer(ServerPlayerEntity player) {
-        displayTimer.add(player.getUuid());
+    public void addToDisplayTimer(ServerPlayer player) {
+        displayTimer.add(player.getUUID());
     }
 
-    public void removeFromDisplayTimer(ServerPlayerEntity player) {
-        if (!displayTimer.contains(player.getUuid())) return;
-        displayTimer.remove(player.getUuid());
+    public void removeFromDisplayTimer(ServerPlayer player) {
+        if (!displayTimer.contains(player.getUUID())) return;
+        displayTimer.remove(player.getUUID());
     }
 
     public void tick(MinecraftServer server) {
         currentTimer++;
         if (currentTimer % DISPLAY_TIMER_INTERVAL == 0) {
             displayTimers(server);
-            for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+            for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
                 NetworkHandlerServer.sendStringPacket(player, PacketNames.SESSION_STATUS, status.getName());
             }
-            for (RegistryEntry<StatusEffect> effect : blacklist.getBannedEffects()) {
-                for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-                    if (player.hasStatusEffect(effect)) {
-                        StatusEffectInstance actualEffect = player.getStatusEffect(effect);
+            for (Holder<MobEffect> effect : blacklist.getBannedEffects()) {
+                for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
+                    if (player.hasEffect(effect)) {
+                        MobEffectInstance actualEffect = player.getEffect(effect);
                         if (actualEffect != null) {
-                            if (!actualEffect.isAmbient() && !actualEffect.shouldShowIcon() && !actualEffect.shouldShowParticles()) continue;
+                            if (!actualEffect.isAmbient() && !actualEffect.showIcon() && !actualEffect.isVisible()) continue;
                         }
-                        player.removeStatusEffect(effect);
+                        player.removeEffect(effect);
                     }
                 }
             }
@@ -204,7 +203,7 @@ public class Session {
         }
 
         if (playerNaturalDeathLog != null && !playerNaturalDeathLog.isEmpty()) {
-            int currentTime = server.getTicks();
+            int currentTime = server.getTickCount();
             List<UUID> removeQueue = new ArrayList<>();
             for (Map.Entry<UUID, Integer> entry : playerNaturalDeathLog.entrySet()) {
                 int tickDiff = currentTime - entry.getValue();
@@ -216,7 +215,7 @@ public class Session {
                 removeQueue.forEach(playerNaturalDeathLog::remove);
             }
         }
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
             if (player.isSpectator()) continue;
             checkPlayerPosition(player);
         }
@@ -228,7 +227,7 @@ public class Session {
     }
 
     public void tickSessionOn(MinecraftServer server) {
-        float tickRate = server.getTickManager().getTickRate();
+        float tickRate = server.tickRateManager().tickrate();
         if (tickRate == 20) {
             passedTime++;
         }
@@ -253,23 +252,23 @@ public class Session {
         activeActions = remaining;
     }
 
-    private Map<UUID, Vec3d> lastNonBorderPositions = new HashMap<>();
-    public void checkPlayerPosition(ServerPlayerEntity player) {
+    private Map<UUID, Vec3> lastNonBorderPositions = new HashMap<>();
+    public void checkPlayerPosition(ServerPlayer player) {
         WorldBorder border = PlayerUtils.getServerWorld(player).getWorldBorder();
-        double playerSize = player.getBoundingBox().getLengthX()/2;
-        double minX = Math.floor(border.getBoundWest()) + playerSize;
-        double maxX = Math.ceil(border.getBoundEast()) - playerSize;
-        double minZ = Math.floor(border.getBoundNorth()) + playerSize;
-        double maxZ = Math.ceil(border.getBoundSouth()) - playerSize;
+        double playerSize = player.getBoundingBox().getXsize()/2;
+        double minX = Math.floor(border.getMinX()) + playerSize;
+        double maxX = Math.ceil(border.getMaxX()) - playerSize;
+        double minZ = Math.floor(border.getMinZ()) + playerSize;
+        double maxZ = Math.ceil(border.getMaxZ()) - playerSize;
 
         double playerX = player.getX();
         double playerZ = player.getZ();
 
-        UUID uuid = player.getUuid();
+        UUID uuid = player.getUUID();
 
         if (playerX < minX || playerX > maxX || playerZ < minZ || playerZ > maxZ) {
             if (lastNonBorderPositions.containsKey(uuid)) {
-                Vec3d pos = lastNonBorderPositions.get(uuid);
+                Vec3 pos = lastNonBorderPositions.get(uuid);
                 if (!(pos.x < minX || pos.x > maxX || pos.z < minZ || pos.z > maxZ)) {
                     PlayerUtils.teleport(player, pos);
                     return;
@@ -309,9 +308,9 @@ public class Session {
             message = "Session has ended";
         }
 
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            UUID uuid = player.getUuid();
-            if (displayTimer.contains(player.getUuid())) {
+        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
+            UUID uuid = player.getUUID();
+            if (displayTimer.contains(player.getUUID())) {
                 if (skipTimer.containsKey(uuid)) {
                     int value = skipTimer.get(uuid);
                     value--;
@@ -321,7 +320,7 @@ public class Session {
                 }
 
                 if (!NetworkHandlerServer.wasHandshakeSuccessful(player)) {
-                    player.sendMessage(Text.literal(message).formatted(Formatting.GRAY), true);
+                    player.displayClientMessage(Component.literal(message).withStyle(ChatFormatting.GRAY), true);
                 }
             }
             if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {
@@ -344,15 +343,15 @@ public class Session {
         if (getSessionActions().isEmpty()) return;
         List<SessionAction> actions = new ArrayList<>(getSessionActions());
         actions.sort(Comparator.comparingInt(SessionAction::getTriggerTime));
-        List<Text> messages = new ArrayList<>();
+        List<Component> messages = new ArrayList<>();
         for (SessionAction action : actions) {
             String actionMessage = action.sessionMessage;
             if (actionMessage == null) continue;
             if (actionMessage.isEmpty()) continue;
             if (messages.isEmpty()) {
-                messages.add(Text.of("§7Queued session actions:"));
+                messages.add(Component.nullToEmpty("§7Queued session actions:"));
             }
-            messages.add(Text.of("§7- "+actionMessage));
+            messages.add(Component.nullToEmpty("§7- "+actionMessage));
         }
 
         messages.forEach(PlayerUtils::broadcastMessageToAdmins);

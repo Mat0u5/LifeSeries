@@ -2,9 +2,9 @@ package net.mat0u5.lifeseries.entity.triviabot.goal;
 
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("resource")
@@ -20,12 +20,12 @@ public final class TriviaBotTeleportGoal extends Goal {
     public TriviaBotTeleportGoal(@NotNull TriviaBot mob) {
         this.mob = mob;
         this.maxTicksSinceLastPositionChange = TriviaBot.STATIONARY_TP_COOLDOWN;
-        this.lastPosition = BlockPos.ORIGIN;
+        this.lastPosition = BlockPos.ZERO;
     }
 
     @Override
-    public boolean canStart() {
-        if (mob.getBotWorld().isClient()) return false;
+    public boolean canUse() {
+        if (mob.getBotWorld().isClientSide()) return false;
         if (mob.interactedWith()) {
             return false;
         }
@@ -45,16 +45,16 @@ public final class TriviaBotTeleportGoal extends Goal {
         if (distFromPlayer > TriviaBot.MAX_DISTANCE) return true;
 
 
-        if (!mob.getBlockPos().equals(this.lastPosition) || distFromPlayer < 4) {
+        if (!mob.blockPosition().equals(this.lastPosition) || distFromPlayer < 4) {
             this.ticksSinceLastPositionChange = 0;
-            this.lastPosition = mob.getBlockPos();
+            this.lastPosition = mob.blockPosition();
         }
 
         this.ticksSinceLastPositionChange++;
         if (this.ticksSinceLastPositionChange > this.maxTicksSinceLastPositionChange) return true;
 
 
-        boolean dimensionsAreSame = mob.ls$getEntityWorld().getRegistryKey().equals(boundEntity.ls$getEntityWorld().getRegistryKey());
+        boolean dimensionsAreSame = mob.ls$getEntityWorld().dimension().equals(boundEntity.ls$getEntityWorld().dimension());
         return !dimensionsAreSame;
     }
 
@@ -65,7 +65,7 @@ public final class TriviaBotTeleportGoal extends Goal {
     }
 
     @Override
-    public boolean shouldContinue() {
+    public boolean canContinueToUse() {
         return false;
     }
 }

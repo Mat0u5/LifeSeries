@@ -3,8 +3,7 @@ package net.mat0u5.lifeseries.config;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
-import net.minecraft.server.network.ServerPlayerEntity;
-
+import net.minecraft.server.level.ServerPlayer;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -152,7 +151,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
         }
     }
 
-    public void sendConfigTo(ServerPlayerEntity player) {
+    public void sendConfigTo(ServerPlayer player) {
         int index = 0;
         for (ConfigFileEntry<?> entry : getAllConfigEntries()) {
             sendConfigEntry(player, entry, index);
@@ -160,7 +159,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
         }
     }
 
-    public void sendConfigEntry(ServerPlayerEntity player, ConfigFileEntry<?> entry, int index) {
+    public void sendConfigEntry(ServerPlayer player, ConfigFileEntry<?> entry, int index) {
         NetworkHandlerServer.sendConfig(player, getConfigPayload(entry, index));
     }
 

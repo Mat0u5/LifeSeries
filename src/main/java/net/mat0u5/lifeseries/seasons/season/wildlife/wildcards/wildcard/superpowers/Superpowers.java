@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 
 import net.mat0u5.lifeseries.compatibilities.DependencyManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.*;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public enum Superpowers {
     NECROMANCY;
 
     @Nullable
-    public Superpower getInstance(ServerPlayerEntity player) {
+    public Superpower getInstance(ServerPlayer player) {
         if (this == TIME_CONTROL) return new TimeControl(player);
         if (this == WIND_CHARGE) return new WindCharge(player);
         if (this == ASTRAL_PROJECTION) return new AstralProjection(player);

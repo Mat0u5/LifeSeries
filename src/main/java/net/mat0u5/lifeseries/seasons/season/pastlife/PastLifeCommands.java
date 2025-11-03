@@ -6,9 +6,8 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Text;
-
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.Component;
 import java.util.Random;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
@@ -23,12 +22,12 @@ public class PastLifeCommands extends Command {
     }
 
     @Override
-    public Text getBannedText() {
-        return Text.of("This command is only available when playing Past Life.");
+    public Component getBannedText() {
+        return Component.nullToEmpty("This command is only available when playing Past Life.");
     }
 
     @Override
-    public void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+    public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
             literal("pastlife")
                     .requires(PermissionManager::isAdmin)
@@ -44,11 +43,11 @@ public class PastLifeCommands extends Command {
         );
     }
 
-    public int pickRandom(ServerCommandSource source) {
+    public int pickRandom(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
 
         if (!currentSession.statusStarted()) {
-            source.sendError(Text.of("The session has not started yet"));
+            source.sendFailure(Component.nullToEmpty("The session has not started yet"));
             return -1;
         }
 
@@ -64,11 +63,11 @@ public class PastLifeCommands extends Command {
         }
 
         if (bannedBoogeyman && bannedSociety) {
-            source.sendError(Text.of("Picking failed"));
+            source.sendFailure(Component.nullToEmpty("Picking failed"));
             return -1;
         }
 
-        OtherUtils.sendCommandFeedback(source, Text.of("§7Randomly picking the Boogeyman or the Secret Society..."));
+        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Randomly picking the Boogeyman or the Secret Society..."));
         if (!bannedBoogeyman && bannedSociety) {
             currentSeason.boogeymanManager.addSessionActions();
             return 1;
@@ -92,68 +91,68 @@ public class PastLifeCommands extends Command {
         return 1;
     }
 
-    public int pickSociety(ServerCommandSource source) {
+    public int pickSociety(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
 
         if (!currentSession.statusStarted()) {
-            source.sendError(Text.of("The session has not started yet"));
+            source.sendFailure(Component.nullToEmpty("The session has not started yet"));
             return -1;
         }
 
         if (!currentSeason.secretSociety.SOCIETY_ENABLED) {
-            source.sendError(Text.of("The Secret Society is disabled in the config"));
+            source.sendFailure(Component.nullToEmpty("The Secret Society is disabled in the config"));
             return -1;
         }
 
         if (currentSeason.secretSociety.societyEnded) {
-            source.sendError(Text.of("The Secret Society has already ended"));
+            source.sendFailure(Component.nullToEmpty("The Secret Society has already ended"));
             return -1;
         }
 
         if (currentSeason.secretSociety.societyStarted) {
-            source.sendError(Text.of("The Secret Society has already started"));
+            source.sendFailure(Component.nullToEmpty("The Secret Society has already started"));
             return -1;
         }
 
         for (SessionAction action : currentSession.getSessionActions()) {
             if (action.sessionId != null && action.sessionId.equalsIgnoreCase("Begin Secret Society")) {
-                source.sendError(Text.of("The Secret Society is already queued"));
+                source.sendFailure(Component.nullToEmpty("The Secret Society is already queued"));
                 return -1;
             }
         }
 
         currentSeason.secretSociety.addSessionActions();
-        OtherUtils.sendCommandFeedback(source, Text.of("Added the Secret Society to queued session actions"));
+        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("Added the Secret Society to queued session actions"));
         return 1;
     }
 
-    public int pickBoogeyman(ServerCommandSource source) {
+    public int pickBoogeyman(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
 
         if (!currentSession.statusStarted()) {
-            source.sendError(Text.of("The session has not started yet"));
+            source.sendFailure(Component.nullToEmpty("The session has not started yet"));
             return -1;
         }
 
         if (!currentSeason.boogeymanManager.BOOGEYMAN_ENABLED) {
-            source.sendError(Text.of("The Boogeyman is disabled in the config"));
+            source.sendFailure(Component.nullToEmpty("The Boogeyman is disabled in the config"));
             return -1;
         }
 
         if (currentSeason.boogeymanManager.boogeymanChosen) {
-            source.sendError(Text.of("The Boogeyman has already been chosen"));
+            source.sendFailure(Component.nullToEmpty("The Boogeyman has already been chosen"));
             return -1;
         }
 
         for (SessionAction action : currentSession.getSessionActions()) {
             if (action.sessionId != null && action.sessionId.equalsIgnoreCase("Choose Boogeymen")) {
-                source.sendError(Text.of("The Boogeyman is already queued"));
+                source.sendFailure(Component.nullToEmpty("The Boogeyman is already queued"));
                 return -1;
             }
         }
 
         currentSeason.boogeymanManager.addSessionActions();
-        OtherUtils.sendCommandFeedback(source, Text.of("Added the Boogeyman to queued session actions"));
+        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("Added the Boogeyman to queued session actions"));
         return 1;
     }
 }

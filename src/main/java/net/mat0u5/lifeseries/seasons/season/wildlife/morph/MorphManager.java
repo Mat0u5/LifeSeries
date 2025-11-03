@@ -3,9 +3,9 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.morph;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -16,16 +16,16 @@ import java.util.UUID;
 public class MorphManager {
     public static final Map<UUID, MorphComponent> morphComponents = new HashMap<>();
 
-    public static MorphComponent getOrCreateComponent(PlayerEntity player) {
-        return getOrCreateComponent(player.getUuid());
+    public static MorphComponent getOrCreateComponent(Player player) {
+        return getOrCreateComponent(player.getUUID());
     }
 
     public static MorphComponent getOrCreateComponent(UUID playerUUID) {
         return morphComponents.computeIfAbsent(playerUUID, k -> new MorphComponent(playerUUID));
     }
 
-    public static void removeComponent(ServerPlayerEntity player) {
-        morphComponents.remove(player.getUuid());
+    public static void removeComponent(ServerPlayer player) {
+        morphComponents.remove(player.getUUID());
         syncFromPlayer(player);
     }
 
@@ -34,46 +34,46 @@ public class MorphManager {
     }
 
     @Nullable
-    public static MorphComponent getComponent(PlayerEntity player) {
-        return morphComponents.get(player.getUuid());
+    public static MorphComponent getComponent(Player player) {
+        return morphComponents.get(player.getUUID());
     }
 
-    public static boolean hasComponent(PlayerEntity player) {
-        return morphComponents.containsKey(player.getUuid());
+    public static boolean hasComponent(Player player) {
+        return morphComponents.containsKey(player.getUUID());
     }
 
-    public static void setMorph(PlayerEntity player, EntityType<?> morph) {
+    public static void setMorph(Player player, EntityType<?> morph) {
         MorphComponent component = getOrCreateComponent(player);
         component.setMorph(morph);
         syncFromPlayer(player);
     }
 
-    public static void resetMorph(PlayerEntity player) {
+    public static void resetMorph(Player player) {
         setMorph(player, null);
     }
 
-    public static void onPlayerJoin(ServerPlayerEntity player) {
+    public static void onPlayerJoin(ServerPlayer player) {
         getOrCreateComponent(player);
     }
 
-    public static void onPlayerDisconnect(ServerPlayerEntity player) {
+    public static void onPlayerDisconnect(ServerPlayer player) {
         removeComponent(player);
     }
 
-    public static void syncFromPlayer(PlayerEntity player) {
-        if (!(player instanceof ServerPlayerEntity serverPlayer)) return;
+    public static void syncFromPlayer(Player player) {
+        if (!(player instanceof ServerPlayer serverPlayer)) return;
         MorphComponent component = getComponent(serverPlayer);
         String typeStr = "null";
         if (component != null) typeStr = component.getTypeAsString();
-        NetworkHandlerServer.sendStringListPackets(PacketNames.MORPH, List.of(serverPlayer.getUuidAsString(), typeStr));
+        NetworkHandlerServer.sendStringListPackets(PacketNames.MORPH, List.of(serverPlayer.getStringUUID(), typeStr));
     }
 
-    public static void syncToPlayer(PlayerEntity player) {
-        if (!(player instanceof ServerPlayerEntity serverPlayer)) return;
-        for (ServerPlayerEntity otherPlayer : PlayerUtils.getAllPlayers()) {
+    public static void syncToPlayer(Player player) {
+        if (!(player instanceof ServerPlayer serverPlayer)) return;
+        for (ServerPlayer otherPlayer : PlayerUtils.getAllPlayers()) {
             MorphComponent component = getOrCreateComponent(otherPlayer);
             String typeStr = component.getTypeAsString();
-            NetworkHandlerServer.sendStringListPacket(serverPlayer, PacketNames.MORPH, List.of(otherPlayer.getUuidAsString(), typeStr));
+            NetworkHandlerServer.sendStringListPacket(serverPlayer, PacketNames.MORPH, List.of(otherPlayer.getStringUUID(), typeStr));
         }
     }
 

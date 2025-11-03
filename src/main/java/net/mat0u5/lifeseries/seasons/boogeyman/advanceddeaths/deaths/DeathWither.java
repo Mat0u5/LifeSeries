@@ -2,15 +2,15 @@ package net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.deaths;
 
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeath;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeaths;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 
 public class DeathWither extends AdvancedDeath {
-    public DeathWither(ServerPlayerEntity player) {
+    public DeathWither(ServerPlayer player) {
         super(player);
     }
 
@@ -25,27 +25,27 @@ public class DeathWither extends AdvancedDeath {
     }
 
     @Override
-    protected DamageSource damageSource(ServerPlayerEntity player) {
-        return player.getDamageSources().wither();
+    protected DamageSource damageSource(ServerPlayer player) {
+        return player.damageSources().wither();
     }
 
     @Override
-    protected void tick(ServerPlayerEntity player) {
-        StatusEffectInstance witherEffect = new StatusEffectInstance(StatusEffects.WITHER, -1, 2, false, false, false);
-        player.addStatusEffect(witherEffect);
+    protected void tick(ServerPlayer player) {
+        MobEffectInstance witherEffect = new MobEffectInstance(MobEffects.WITHER, -1, 2, false, false, false);
+        player.addEffect(witherEffect);
         if (player.hurtTime == 10 && ticks < 80) {
-            player.playSoundToPlayer(SoundEvents.ENTITY_WITHER_SHOOT, SoundCategory.PLAYERS, 1, 1);
+            player.playNotifySound(SoundEvents.WITHER_SHOOT, SoundSource.PLAYERS, 1, 1);
         }
     }
 
     @Override
-    protected void begin(ServerPlayerEntity player) {
+    protected void begin(ServerPlayer player) {
     }
 
     @Override
     protected void end() {
         if (playerNotFound()) return;
-        ServerPlayerEntity player = getPlayer();
-        player.removeStatusEffect(StatusEffects.WITHER);
+        ServerPlayer player = getPlayer();
+        player.removeEffect(MobEffects.WITHER);
     }
 }

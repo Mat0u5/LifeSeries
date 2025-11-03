@@ -8,10 +8,9 @@ import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -154,20 +153,20 @@ public class Callback extends Wildcard {
     }
 
     public void showEndingTitles() {
-        List<ServerPlayerEntity> players = PlayerUtils.getAllPlayers();
-        PlayerUtils.sendTitleToPlayers(players, Text.of("§7The ending is §cyours§7..."), 0, 90, 0);
+        List<ServerPlayer> players = PlayerUtils.getAllPlayers();
+        PlayerUtils.sendTitleToPlayers(players, Component.nullToEmpty("§7The ending is §cyours§7..."), 0, 90, 0);
         TaskScheduler.scheduleTask(80, () -> {
 
-            PlayerUtils.playSoundToPlayers(players, SoundEvents.BLOCK_NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
-            PlayerUtils.sendTitleToPlayers(players, Text.of("§cMake"), 0, 40, 0);
+            PlayerUtils.playSoundToPlayers(players, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
+            PlayerUtils.sendTitleToPlayers(players, Component.nullToEmpty("§cMake"), 0, 40, 0);
         });
         TaskScheduler.scheduleTask(110, () -> {
-            PlayerUtils.playSoundToPlayers(players, SoundEvents.BLOCK_NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
-            PlayerUtils.sendTitleToPlayers(players, Text.of("§cMake §eit"), 0, 40, 0);
+            PlayerUtils.playSoundToPlayers(players, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
+            PlayerUtils.sendTitleToPlayers(players, Component.nullToEmpty("§cMake §eit"), 0, 40, 0);
         });
         TaskScheduler.scheduleTask(140, () -> {
-            PlayerUtils.playSoundToPlayers(players, SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, 0.2f, 1);
-            PlayerUtils.sendTitleToPlayers(players, Text.of("§cMake §eit §a§lWILD"), 0, 90, 20);
+            PlayerUtils.playSoundToPlayers(players, SoundEvents.ZOMBIE_VILLAGER_CURE, 0.2f, 1);
+            PlayerUtils.sendTitleToPlayers(players, Component.nullToEmpty("§cMake §eit §a§lWILD"), 0, 90, 20);
 
         });
     }
@@ -198,10 +197,10 @@ public class Callback extends Wildcard {
         for (Wildcard wildcard : WildcardManager.activeWildcards.values()) {
             if (wildcard.getType() == Wildcards.CALLBACK) continue;
             wildcard.deactivate();
-            PlayerUtils.broadcastMessage(Text.of("§7A Wildcard has faded..."));
+            PlayerUtils.broadcastMessage(Component.nullToEmpty("§7A Wildcard has faded..."));
         }
         WildcardManager.activeWildcards.clear();
-        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BLOCK_BEACON_DEACTIVATE);
+        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BEACON_DEACTIVATE);
         NetworkHandlerServer.sendUpdatePackets();
     }
     private Wildcards lastActivatedWildcard;

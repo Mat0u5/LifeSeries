@@ -13,15 +13,14 @@ import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.scoreboard.ScoreHolder;
-import net.minecraft.scoreboard.ScoreboardEntry;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.scores.PlayerScoreEntry;
+import net.minecraft.world.scores.ScoreHolder;
 import java.util.Collection;
 
 import static net.mat0u5.lifeseries.Main.*;
@@ -88,7 +87,7 @@ public class LimitedLife extends Season {
             message = "Session has ended";
         }
 
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
 
             if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {
                 long timestamp = SessionTimerStates.OFF.getValue();
@@ -117,15 +116,15 @@ public class LimitedLife extends Season {
                 }
             }
             else {
-                MutableText fullMessage = Text.empty();
-                if (currentSession.displayTimer.contains(player.getUuid())) {
-                    fullMessage.append(Text.literal(message).formatted(Formatting.GRAY));
+                MutableComponent fullMessage = Component.empty();
+                if (currentSession.displayTimer.contains(player.getUUID())) {
+                    fullMessage.append(Component.literal(message).withStyle(ChatFormatting.GRAY));
                 }
                 if (player.ls$hasAssignedLives()) {
-                    if (!fullMessage.getString().isEmpty()) fullMessage.append(Text.of("  |  "));
+                    if (!fullMessage.getString().isEmpty()) fullMessage.append(Component.nullToEmpty("  |  "));
                     fullMessage.append(livesManager.getFormattedLives(player));
                 }
-                player.sendMessage(fullMessage, true);
+                player.displayClientMessage(fullMessage, true);
             }
         }
     }
@@ -139,33 +138,33 @@ public class LimitedLife extends Season {
         secondCounter--;
         if (secondCounter <= 0) {
             secondCounter = 20;
-            livesManager.getAlivePlayers().forEach(ServerPlayerEntity::ls$removeLife);
+            livesManager.getAlivePlayers().forEach(ServerPlayer::ls$removeLife);
 
             if (TICK_OFFLINE_PLAYERS) {
-                Collection<ScoreboardEntry> entries = ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME);
-                for (ScoreboardEntry entry : entries) {
+                Collection<PlayerScoreEntry> entries = ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME);
+                for (PlayerScoreEntry entry : entries) {
                     if (entry.value() <= 0) continue;
                     if (PlayerUtils.getPlayer(entry.owner()) != null) continue;
-                    ScoreboardUtils.setScore(ScoreHolder.fromName(entry.owner()), LivesManager.SCOREBOARD_NAME, entry.value() - 1);
+                    ScoreboardUtils.setScore(ScoreHolder.forNameOnly(entry.owner()), LivesManager.SCOREBOARD_NAME, entry.value() - 1);
                 }
             }
         }
     }
 
     @Override
-    public void onPlayerDeath(ServerPlayerEntity player, DamageSource source) {
+    public void onPlayerDeath(ServerPlayer player, DamageSource source) {
         SessionTranscript.onPlayerDeath(player, source);
         if (source != null) {
-            if (source.getAttacker() instanceof ServerPlayerEntity serverAttacker) {
-                if (player != source.getAttacker()) {
+            if (source.getEntity() instanceof ServerPlayer serverAttacker) {
+                if (player != source.getEntity()) {
                     onPlayerKilledByPlayer(player, serverAttacker);
                     return;
                 }
             }
         }
-        if (player.getPrimeAdversary() != null) {
-            if (player.getPrimeAdversary() instanceof ServerPlayerEntity serverAdversary) {
-                if (player != player.getPrimeAdversary()) {
+        if (player.getKillCredit() != null) {
+            if (player.getKillCredit() instanceof ServerPlayer serverAdversary) {
+                if (player != player.getKillCredit()) {
                     onPlayerKilledByPlayer(player, serverAdversary);
                     return;
                 }
@@ -175,13 +174,13 @@ public class LimitedLife extends Season {
         if (livesManager.canChangeLivesNaturally(player)) {
             player.ls$addLives(DEATH_NORMAL);
             if (player.ls$isAlive()) {
-                PlayerUtils.sendTitle(player, Text.literal(OtherUtils.formatSecondsToReadable(DEATH_NORMAL)).formatted(Formatting.RED), 20, 80, 20);
+                PlayerUtils.sendTitle(player, Component.literal(OtherUtils.formatSecondsToReadable(DEATH_NORMAL)).withStyle(ChatFormatting.RED), 20, 80, 20);
             }
         }
     }
 
     @Override
-    public void onClaimKill(ServerPlayerEntity killer, ServerPlayerEntity victim) {
+    public void onClaimKill(ServerPlayer killer, ServerPlayer victim) {
         boolean wasAllowedToAttack = isAllowedToAttack(killer, victim, false);
         boolean wasBoogeyCure = boogeymanManager.isBoogeymanThatCanBeCured(killer, victim);
         super.onClaimKill(killer, victim);
@@ -189,7 +188,7 @@ public class LimitedLife extends Season {
         if (!wasBoogeyCure) {
             if (wasAllowedToAttack && livesManager.canChangeLivesNaturally()) {
                 killer.ls$addLives(KILL_NORMAL);
-                PlayerUtils.sendTitle(killer, Text.literal(OtherUtils.formatSecondsToReadable(KILL_NORMAL)).formatted(Formatting.GREEN), 20, 80, 20);
+                PlayerUtils.sendTitle(killer, Component.literal(OtherUtils.formatSecondsToReadable(KILL_NORMAL)).withStyle(ChatFormatting.GREEN), 20, 80, 20);
             }
         }
         else if (livesManager.canChangeLivesNaturally()) {
@@ -206,23 +205,23 @@ public class LimitedLife extends Season {
             }
             killer.ls$addLives(KILL_BOOGEYMAN);
             if (victim.ls$isAlive()) {
-                PlayerUtils.sendTitle(killer, Text.literal(msgKiller).formatted(Formatting.GREEN), 20, 80, 20);
-                PlayerUtils.sendTitle(victim, Text.literal(msgVictim).formatted(Formatting.RED), 20, 80, 20);
+                PlayerUtils.sendTitle(killer, Component.literal(msgKiller).withStyle(ChatFormatting.GREEN), 20, 80, 20);
+                PlayerUtils.sendTitle(victim, Component.literal(msgVictim).withStyle(ChatFormatting.RED), 20, 80, 20);
             }
             else if (wasAlive && SHOW_DEATH_TITLE) {
                 PlayerUtils.sendTitleWithSubtitle(killer,
-                        Text.literal(msgKiller).formatted(Formatting.GREEN),
+                        Component.literal(msgKiller).withStyle(ChatFormatting.GREEN),
                         livesManager.getDeathMessage(victim),
                         20, 80, 20);
             }
             else {
-                PlayerUtils.sendTitle(killer, Text.literal(msgKiller).formatted(Formatting.GREEN), 20, 80, 20);
+                PlayerUtils.sendTitle(killer, Component.literal(msgKiller).withStyle(ChatFormatting.GREEN), 20, 80, 20);
             }
         }
     }
 
     @Override
-    public void onPlayerKilledByPlayer(ServerPlayerEntity victim, ServerPlayerEntity killer) {
+    public void onPlayerKilledByPlayer(ServerPlayer victim, ServerPlayer killer) {
         boolean wasAllowedToAttack = isAllowedToAttack(killer, victim, false);
         boolean wasBoogeyCure = boogeymanManager.isBoogeymanThatCanBeCured(killer, victim);
         super.onPlayerKilledByPlayer(victim, killer);
@@ -233,11 +232,11 @@ public class LimitedLife extends Season {
                 String msgKiller = OtherUtils.formatSecondsToReadable(KILL_NORMAL);
                 killer.ls$addLives(KILL_NORMAL);
                 if (wasFinalKill) {
-                    PlayerUtils.sendTitle(killer, Text.literal(msgKiller).formatted(Formatting.GREEN), 20, 80, 20);
+                    PlayerUtils.sendTitle(killer, Component.literal(msgKiller).withStyle(ChatFormatting.GREEN), 20, 80, 20);
                 }
                 else {
                     PlayerUtils.sendTitleWithSubtitle(killer,
-                            Text.literal(msgKiller).formatted(Formatting.GREEN),
+                            Component.literal(msgKiller).withStyle(ChatFormatting.GREEN),
                             livesManager.getDeathMessage(victim),
                             20, 80, 20);
                 }
@@ -245,7 +244,7 @@ public class LimitedLife extends Season {
             String msgVictim = OtherUtils.formatSecondsToReadable(DEATH_NORMAL);
             victim.ls$addLives(DEATH_NORMAL);
             if (wasFinalKill) {
-                PlayerUtils.sendTitle(victim, Text.literal(msgVictim).formatted(Formatting.RED), 20, 80, 20);
+                PlayerUtils.sendTitle(victim, Component.literal(msgVictim).withStyle(ChatFormatting.RED), 20, 80, 20);
             }
         }
         else if (livesManager.canChangeLivesNaturally()) {
@@ -258,11 +257,11 @@ public class LimitedLife extends Season {
             killer.ls$addLives(KILL_BOOGEYMAN);
 
             if (victim.ls$isAlive() || !SHOW_DEATH_TITLE) {
-                PlayerUtils.sendTitle(victim, Text.literal(msgVictim).formatted(Formatting.RED), 20, 80, 20);
-                PlayerUtils.sendTitleWithSubtitle(killer,Text.of("§aYou are cured!"), Text.literal(msgKiller).formatted(Formatting.GREEN), 20, 80, 20);
+                PlayerUtils.sendTitle(victim, Component.literal(msgVictim).withStyle(ChatFormatting.RED), 20, 80, 20);
+                PlayerUtils.sendTitleWithSubtitle(killer,Component.nullToEmpty("§aYou are cured!"), Component.literal(msgKiller).withStyle(ChatFormatting.GREEN), 20, 80, 20);
             }
             else {
-                PlayerUtils.sendTitleWithSubtitle(killer,Text.of("§aYou are cured, "+msgKiller),
+                PlayerUtils.sendTitleWithSubtitle(killer,Component.nullToEmpty("§aYou are cured, "+msgKiller),
                         livesManager.getDeathMessage(victim)
                         , 20, 80, 20);
             }
@@ -270,7 +269,7 @@ public class LimitedLife extends Season {
     }
 
     @Override
-    public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim, boolean allowSelfDefense) {
+    public boolean isAllowedToAttack(ServerPlayer attacker, ServerPlayer victim, boolean allowSelfDefense) {
         if (attacker.ls$isOnSpecificLives(2, false) && victim.ls$isOnAtLeastLives(3, false)) return true;
         return super.isAllowedToAttack(attacker, victim, allowSelfDefense);
     }

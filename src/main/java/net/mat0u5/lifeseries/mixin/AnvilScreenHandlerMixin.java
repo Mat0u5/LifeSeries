@@ -2,14 +2,14 @@ package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.screen.AnvilScreenHandler;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AnvilMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,31 +20,31 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
 
 import static net.mat0u5.lifeseries.Main.blacklist;
 
-@Mixin(value = AnvilScreenHandler.class, priority = 1)
+@Mixin(value = AnvilMenu.class, priority = 1)
 public abstract class AnvilScreenHandlerMixin {
 
-    @Inject(method = "updateResult", at = @At("TAIL"))
+    @Inject(method = "createResult", at = @At("TAIL"))
     private void modifyAnvilResultName(CallbackInfo ci) {
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (blacklist == null) return;
         ForgingScreenHandlerAccessor accessor = (ForgingScreenHandlerAccessor) (Object) this;
-        Inventory outputInventory = accessor.getOutput();
+        Container outputInventory = accessor.getOutput();
 
-        ItemStack resultStack = outputInventory.getStack(0);
+        ItemStack resultStack = outputInventory.getItem(0);
         if (ItemStackUtils.hasCustomComponentEntry(resultStack, "NoAnvil") ||
             ItemStackUtils.hasCustomComponentEntry(resultStack, "NoModifications")) {
-            outputInventory.setStack(0, ItemStack.EMPTY);
+            outputInventory.setItem(0, ItemStack.EMPTY);
         }
 
-        if (!resultStack.hasEnchantments()) return;
+        if (!resultStack.isEnchanted()) return;
 
-        resultStack.set(DataComponentTypes.ENCHANTMENTS, blacklist.clampAndBlacklistEnchantments(resultStack.getEnchantments()));
+        resultStack.set(DataComponents.ENCHANTMENTS, blacklist.clampAndBlacklistEnchantments(resultStack.getEnchantments()));
         if (ItemStackUtils.hasCustomComponentEntry(resultStack, "NoMending")) {
-            for (Entry<RegistryEntry<Enchantment>> enchant : resultStack.getEnchantments().getEnchantmentEntries()) {
-                Optional<RegistryKey<Enchantment>> enchantRegistry = enchant.getKey().getKey();
+            for (Entry<Holder<Enchantment>> enchant : resultStack.getEnchantments().entrySet()) {
+                Optional<ResourceKey<Enchantment>> enchantRegistry = enchant.getKey().unwrapKey();
                 if (enchantRegistry.isEmpty()) continue;
                 if (enchantRegistry.get() == Enchantments.MENDING) {
-                    outputInventory.setStack(0, ItemStack.EMPTY);
+                    outputInventory.setItem(0, ItemStack.EMPTY);
                 }
             }
         }

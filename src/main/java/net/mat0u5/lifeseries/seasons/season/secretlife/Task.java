@@ -1,12 +1,11 @@
 package net.mat0u5.lifeseries.seasons.season.secretlife;
 
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.RawFilteredPair;
-import net.minecraft.text.Text;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.Filterable;
 
 import static net.mat0u5.lifeseries.Main.livesManager;
 
@@ -23,30 +22,30 @@ public class Task {
         this.type = type;
     }
 
-    public static boolean anyPlayersOnLives(ServerPlayerEntity exception, int lives) {
-        for (ServerPlayerEntity player : livesManager.getAlivePlayers()) {
+    public static boolean anyPlayersOnLives(ServerPlayer exception, int lives) {
+        for (ServerPlayer player : livesManager.getAlivePlayers()) {
             if (player == exception) continue;
             if (player.ls$isOnSpecificLives(lives, false)) return true;
         }
         return false;
     }
 
-    public static boolean anyAlivePlayers(ServerPlayerEntity exception) {
-        for (ServerPlayerEntity player : livesManager.getAlivePlayers()) {
+    public static boolean anyAlivePlayers(ServerPlayer exception) {
+        for (ServerPlayer player : livesManager.getAlivePlayers()) {
             if (player == exception) continue;
             return true;
         }
         return false;
     }
 
-    public void checkPlayerColors(ServerPlayerEntity owner) {
+    public void checkPlayerColors(ServerPlayer owner) {
         anyGreenPlayers = anyPlayersOnLives(owner, 3);
         anyYellowPlayers = anyPlayersOnLives(owner, 2);
         anyRedPlayers = anyPlayersOnLives(owner, 1);
         anyPlayers = anyAlivePlayers(owner);
     }
 
-    public boolean isValid(ServerPlayerEntity owner) {
+    public boolean isValid(ServerPlayer owner) {
         if (rawTask == null) return false;
         if (rawTask.isEmpty()) return false;
         checkPlayerColors(owner);
@@ -66,13 +65,13 @@ public class Task {
     ${yellow} - Replaced with "yellow". Tasks are only available when a yellow player is alive.
     ${red} - Replaced with "red". Tasks are only available when a red player is alive.
      */
-    public List<RawFilteredPair<Text>> getBookLines(ServerPlayerEntity owner) {
+    public List<Filterable<Component>> getBookLines(ServerPlayer owner) {
         formattedTask = "";
-        List<RawFilteredPair<Text>> lines = new ArrayList<>();
+        List<Filterable<Component>> lines = new ArrayList<>();
         int pageNum = 0;
         for (String page : rawTask.split("\\\\p")) {
             page = formatString(owner, page);
-            lines.add(RawFilteredPair.of(Text.of(page)));
+            lines.add(Filterable.passThrough(Component.nullToEmpty(page)));
 
             if (pageNum != 0) {
                 formattedTask += "\n";
@@ -84,14 +83,14 @@ public class Task {
         return lines;
     }
 
-    public String formatString(ServerPlayerEntity owner, String page) {
+    public String formatString(ServerPlayer owner, String page) {
         checkPlayerColors(owner);
         if (page.contains("${random_player}")) {
-            List<ServerPlayerEntity> players = livesManager.getAlivePlayers();
+            List<ServerPlayer> players = livesManager.getAlivePlayers();
             players.remove(owner);
             if (!players.isEmpty()) {
                 Collections.shuffle(players);
-                page = page.replaceAll("\\$\\{random_player}",players.getFirst().getNameForScoreboard());
+                page = page.replaceAll("\\$\\{random_player}",players.getFirst().getScoreboardName());
             }
         }
         if (page.contains("${green/yellow}")) {
