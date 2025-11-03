@@ -4,9 +4,6 @@ name: build
 
 on:
   push:
-    branches:
-      - main
-      - nopolymer
 
 jobs:
   notify:
@@ -41,10 +38,10 @@ jobs:
       - name: Get Title
         id: discord_title
         run: |
-          if echo "${{ github.event.head_commit.message }}" | grep -q "{skip_ping}"; then
-            echo "MESSAGE_TITLE=*Ping Skipped.*" >> $GITHUB_ENV
-          else
+          if echo "${{ github.event.head_commit.message }}" | grep -q "{ping}"; then
             echo "MESSAGE_TITLE=<@&1346436504427171961>" >> $GITHUB_ENV
+          else
+            echo "MESSAGE_TITLE=*Ping Skipped.*" >> $GITHUB_ENV
           fi
 
       - name: Discord Message
@@ -55,7 +52,7 @@ jobs:
           payload: '{ "content": "${{ env.MESSAGE_TITLE }}", "embeds": [{ "title": "[${{ github.repository }}:${{ env.BRANCH_NAME }}] - new commit", "author": {"name": "${{ github.event.head_commit.author.name}}","url": "https://github.com/${{ github.event.head_commit.author.name}}","icon_url": "https://github.com/${{ github.event.head_commit.author.name}}.png"},"description": "`Commit Message:` ```\n${{ env.COMMIT_MESSAGE }}```${{ env.COMMIT_FOOTER }}", "url": "https://github.com/${{ github.repository }}/commit/${{ github.sha }}", "color": 5315202 }] }'
 
   build:
-    if: ${{ !contains(github.event.head_commit.message, '{skip_build}') }}
+    if: ${{ contains(github.event.head_commit.message, '{build}') }}
     runs-on: ubuntu-22.04
     steps:
       - name: checkout repository
