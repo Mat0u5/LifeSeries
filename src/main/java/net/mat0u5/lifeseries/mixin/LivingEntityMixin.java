@@ -186,7 +186,7 @@ public abstract class LivingEntityMixin {
     /*@Inject(method = "tick", at = @At("HEAD"))
     public void tickMannequin(CallbackInfo ci) {
         LivingEntity entity = (LivingEntity) (Object) this;
-        if (entity instanceof Mannequin mannequin && mannequin instanceof MannequinEntityAccessor mannequinAccessor && mannequin.tickCount < 0) {
+        if (entity instanceof Mannequin mannequin && mannequin instanceof MannequinAccessor mannequinAccessor && mannequin.tickCount < 0) {
             if (entity.tickCount % 20 == 0) {
                 boolean triggered = false;
                 ServerPlayer player = PlayerUtils.getPlayer(mannequinAccessor.ls$getMannequinProfile().partialProfile().id());
@@ -207,7 +207,7 @@ public abstract class LivingEntityMixin {
     @Inject(method = "hurtServer", at = @At("HEAD"))
     public void damageMannequin(ServerLevel world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity entity = (LivingEntity) (Object) this;
-        if (entity instanceof Mannequin mannequin && mannequin instanceof MannequinEntityAccessor mannequinAccessor && mannequin.tickCount < 0) {
+        if (entity instanceof Mannequin mannequin && mannequin instanceof MannequinAccessor mannequinAccessor && mannequin.tickCount < 0) {
             ServerPlayer player = PlayerUtils.getPlayer(mannequinAccessor.ls$getMannequinProfile().partialProfile().id());
             if (player != null) {
                 if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.ASTRAL_PROJECTION)) {

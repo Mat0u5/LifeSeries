@@ -14,7 +14,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 //? if >= 1.21.9 {
-/*import net.mat0u5.lifeseries.mixin.MannequinEntityAccessor;
+/*import net.mat0u5.lifeseries.mixin.MannequinAccessor;
 import net.minecraft.world.entity.decoration.Mannequin;
 *///?}
 
@@ -44,7 +44,7 @@ public class PlayerDisguise extends ToggleableSuperpower {
         Entity lookingAt = PlayerUtils.getEntityLookingAt(player, 50);
         if (lookingAt != null)  {
             //? if >= 1.21.9 {
-            /*if (lookingAt instanceof Mannequin mannequin && mannequin instanceof MannequinEntityAccessor mannequinAccessor && mannequin.tickCount < 0) {
+            /*if (lookingAt instanceof Mannequin mannequin && mannequin instanceof MannequinAccessor mannequinAccessor && mannequin.tickCount < 0) {
                 ServerPlayer lookingAtPlayer = PlayerUtils.getPlayer(mannequinAccessor.ls$getMannequinProfile().partialProfile().id());
                 if (lookingAtPlayer != null) {
                     lookingAt = lookingAtPlayer;

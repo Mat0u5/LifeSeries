@@ -28,7 +28,7 @@ import static net.mat0u5.lifeseries.Main.server;
 //? if >= 1.21.9 {
 /*import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.minecraft.world.entity.decoration.Mannequin;
-import net.mat0u5.lifeseries.mixin.MannequinEntityAccessor;
+import net.mat0u5.lifeseries.mixin.MannequinAccessor;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
@@ -117,7 +117,7 @@ public class AstralProjection extends ToggleableSuperpower {
         clone.setPosRaw(player.getX(), player.getY(), player.getZ());
         clone.setCustomName(player.getFeedbackDisplayName());
         clone.setCustomNameVisible(true);
-        if (clone instanceof MannequinEntityAccessor mannequinAccessor) {
+        if (clone instanceof MannequinAccessor mannequinAccessor) {
             mannequinAccessor.ls$setMannequinProfile(ResolvableProfile.createResolved(player.getGameProfile()));
             mannequinAccessor.ls$setDescription(Component.nullToEmpty("Astral Projection"));
             mannequinAccessor.ls$setHideDescription(true);
