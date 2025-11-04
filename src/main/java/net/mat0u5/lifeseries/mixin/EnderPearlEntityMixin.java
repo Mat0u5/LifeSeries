@@ -19,11 +19,11 @@ public class EnderPearlEntityMixin {
             index = 1
     )
     //?} else {
-        /*@ModifyArg(
-                method = "onCollision",
-                at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;damage(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/damage/DamageSource;F)Z"),
-                index = 2
-        )
+    /*@ModifyArg(
+            method = "onHit",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayer;hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z"),
+            index = 2
+    )
     *///?}
         private float onTargetDamaged(float amount) {
         if (!Main.isLogicalSide() || Main.modDisabled()) return amount;

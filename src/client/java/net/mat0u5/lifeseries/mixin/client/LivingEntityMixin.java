@@ -28,7 +28,7 @@ public class LivingEntityMixin {
             //? if <= 1.21 {
             method = "travel",
             //?} else {
-            /*method = "travelMidAir",
+            /*method = "travelInAir",
             *///?}
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;handleRelativeFrictionAndCalculateMovement(Lnet/minecraft/world/phys/Vec3;F)Lnet/minecraft/world/phys/Vec3;"),
             index = 1
