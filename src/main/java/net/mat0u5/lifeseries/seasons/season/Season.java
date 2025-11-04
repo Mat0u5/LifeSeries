@@ -413,7 +413,7 @@ public abstract class Season {
     }
 
     public void modifyEntityDrops(LivingEntity entity, DamageSource damageSource) {
-        if (!entity.ls$getEntityWorld().isClientSide() && (damageSource.getEntity() instanceof ServerPlayer)) {
+        if (!entity.level().isClientSide() && (damageSource.getEntity() instanceof ServerPlayer)) {
             spawnEggChance(entity);
         }
     }
@@ -443,7 +443,7 @@ public abstract class Season {
             //? if <=1.21 {
             entity.spawnAtLocation(spawnEggItem);
             //?} else
-            /*entity.spawnAtLocation((ServerLevel) entity.ls$getEntityWorld(), spawnEggItem);*/
+            /*entity.spawnAtLocation((ServerLevel) entity.level(), spawnEggItem);*/
         }
     }
 

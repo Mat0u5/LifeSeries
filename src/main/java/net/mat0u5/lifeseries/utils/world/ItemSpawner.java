@@ -47,12 +47,12 @@ public class ItemSpawner {
         try {
             //? if <= 1.21 {
             LootParams parameters = new LootParams.Builder(world)
-                    .withParameter(LootContextParams.ORIGIN, player.ls$getEntityPos())
+                    .withParameter(LootContextParams.ORIGIN, player.position())
                     .withParameter(LootContextParams.THIS_ENTITY, player)
                     .create(LootContextParamSets.COMMAND);
             //?} else {
             /*LootParams parameters = new LootParams.Builder(world)
-                    .withParameter(LootContextParams.ORIGIN, player.ls$getEntityPos())
+                    .withParameter(LootContextParams.ORIGIN, player.position())
                     .withParameter(LootContextParams.THIS_ENTITY, player)
                     .create(LootContextParamSets.COMMAND);
             *///?}

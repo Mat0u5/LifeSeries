@@ -24,9 +24,6 @@ public final class SnailBlockInteractGoal extends Goal {
     public boolean canUse() {
         if (mob.getSnailWorld().isClientSide()) return false;
         if (mob.isPaused()) return false;
-        if (mob.ls$getEntityWorld() == null) {
-            return false;
-        }
 
         BlockPos blockPos = mob.blockPosition();
 
@@ -54,22 +51,17 @@ public final class SnailBlockInteractGoal extends Goal {
     }
 
     private boolean isTrapdoorOpen(BlockPos blockPos) {
-        return mob.ls$getEntityWorld().getBlockState(blockPos).getValue(TrapDoorBlock.OPEN);
+        return mob.level().getBlockState(blockPos).getValue(TrapDoorBlock.OPEN);
     }
 
     private void openTrapdoor(BlockPos blockPos) {
         if (!isTrapdoor(blockPos)) return;
-        Level world = mob.ls$getEntityWorld();
-        if (world == null) return;
         if (!isTrapdoorOpen(blockPos)) return;
-        mob.ls$getEntityWorld().setBlockAndUpdate(blockPos, mob.ls$getEntityWorld().getBlockState(blockPos).setValue(TrapDoorBlock.OPEN, false));
+        mob.level().setBlockAndUpdate(blockPos, mob.level().getBlockState(blockPos).setValue(TrapDoorBlock.OPEN, false));
     }
 
     private BlockState getBlockState(BlockPos blockPos) {
-        Level world = mob.ls$getEntityWorld();
-        if (world != null) {
-            return world.getBlockState(blockPos);
-        }
-        return Blocks.AIR.defaultBlockState();
+        Level world = mob.level();
+        return world.getBlockState(blockPos);
     }
 }

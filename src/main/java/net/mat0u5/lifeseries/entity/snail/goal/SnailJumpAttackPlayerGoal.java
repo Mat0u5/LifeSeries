@@ -78,7 +78,7 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
     public void start() {
         Entity boundEntity = mob.serverData.getBoundEntity();
         if (boundEntity != null) {
-            this.previousTargetPosition = boundEntity.ls$getEntityPos();
+            this.previousTargetPosition = boundEntity.position();
         }
         this.attackCooldown = Snail.JUMP_COOLDOWN_SHORT;
         mob.setSnailAttacking(true);
@@ -110,7 +110,7 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
         }
 
         if (boundEntity != null) {
-            this.previousTargetPosition = boundEntity.ls$getEntityPos();
+            this.previousTargetPosition = boundEntity.position();
             mob.lookAt(boundEntity, 15, 15);
         }
     }
@@ -141,7 +141,7 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
 
         if (boundEntity.getRandom().nextInt(6) == 0) {
             //EVEN harder attack variant
-            Vec3 targetVelocity = boundEntity.ls$getEntityPos().subtract(previousTargetPosition);
+            Vec3 targetVelocity = boundEntity.position().subtract(previousTargetPosition);
             relativeTargetPos = relativeTargetPos.add(targetVelocity.scale(3));
         }
 

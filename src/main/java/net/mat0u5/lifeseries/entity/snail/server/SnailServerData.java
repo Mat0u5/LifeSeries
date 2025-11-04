@@ -220,7 +220,7 @@ public class SnailServerData implements PlayerBoundEntity {
     }
 
     public void killBoundEntity(Entity entity) {
-        Level world = entity.ls$getEntityWorld();
+        Level world = entity.level();
         if (world instanceof ServerLevel serverWorld) {
             if (entity instanceof ServerPlayer player) {
                 player.setLastHurtByMob(snail);
@@ -239,7 +239,7 @@ public class SnailServerData implements PlayerBoundEntity {
 
     public void damageFromDrowning(Entity entity) {
         if (!entity.isAlive()) return;
-        Level world = entity.ls$getEntityWorld();
+        Level world = entity.level();
         if (world instanceof ServerLevel serverWorld) {
             if (entity instanceof ServerPlayer player) {
                 player.setLastHurtByMob(snail);

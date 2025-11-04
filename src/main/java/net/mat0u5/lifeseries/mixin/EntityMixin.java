@@ -6,7 +6,6 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
-import net.mat0u5.lifeseries.utils.interfaces.IEntity;
 import net.mat0u5.lifeseries.utils.interfaces.IEntityDataSaver;
 import net.mat0u5.lifeseries.utils.interfaces.IMorph;
 import net.minecraft.world.effect.MobEffects;
@@ -16,8 +15,6 @@ import net.minecraft.world.entity.monster.Evoker;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -34,7 +31,7 @@ import net.minecraft.world.entity.EntityType;
 *///?}
 
 @Mixin(value = Entity.class, priority = 1)
-public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
+public abstract class EntityMixin implements IEntityDataSaver, IMorph {
     /*
     private NbtCompound persistentData;
     @Override
@@ -134,22 +131,4 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
         }
     }
     *///?}
-
-
-    /*
-        Injected Interface
-     */
-    @Unique @Override
-    public Level ls$getEntityWorld() {
-        Entity entity = (Entity) (Object) this;
-        //TODO remove
-        return entity.level();
-    }
-
-    @Unique @Override
-    public Vec3 ls$getEntityPos() {
-        Entity entity = (Entity) (Object) this;
-        //TODO remove
-        return entity.position();
-    }
 }

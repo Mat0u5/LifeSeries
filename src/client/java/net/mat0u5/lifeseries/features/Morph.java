@@ -78,7 +78,7 @@ public class Morph {
             dummy.yOld = player.yOld;
             dummy.zOld = player.zOld;
 
-            dummy.setPos(player.ls$getEntityPos());
+            dummy.setPos(player.position());
             dummy.setYBodyRot(player.yBodyRot);
             if (!fixedHead) {
                 dummy.setYHeadRot(player.yHeadRot);

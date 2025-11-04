@@ -66,7 +66,7 @@ public class Listening extends ToggleableSuperpower {
         if (player == null) return;
         Entity lookingAtEntity = PlayerUtils.getEntityLookingAt(player, 100);
         if (lookingAtEntity != null) {
-            lookingAt = lookingAtEntity.ls$getEntityPos();
+            lookingAt = lookingAtEntity.position();
         } else {
             lookingAt = PlayerUtils.getPosLookingAt(player, 300);
         }

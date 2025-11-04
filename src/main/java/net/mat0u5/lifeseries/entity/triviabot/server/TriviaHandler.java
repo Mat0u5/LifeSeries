@@ -97,7 +97,7 @@ public class TriviaHandler {
                 triviaSnail.serverData.setFromTrivia();
                 triviaSnail.playSound(SoundEvents.GENERIC_EXPLODE.value(), 0.5f, 2);
                 ServerLevel world = (ServerLevel) triviaSnail.getSnailWorld();
-                Vec3 pos = bot.ls$getEntityPos();
+                Vec3 pos = bot.position();
                 world.sendParticles(
                         ParticleTypes.EXPLOSION,
                         pos.x(), pos.y(), pos.z(),
@@ -169,7 +169,7 @@ public class TriviaHandler {
         if (player == null) return;
         player.playNotifySound(SoundEvents.ELDER_GUARDIAN_CURSE, SoundSource.MASTER, 0.2f, 1f);
         ServerLevel world = (ServerLevel) bot.getBotWorld();
-        Vec3 pos = bot.ls$getEntityPos();
+        Vec3 pos = bot.position();
 
         world.sendParticles(
                 ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 0xFFa61111),
@@ -298,8 +298,8 @@ public class TriviaHandler {
         if (bot.getBotWorld().isClientSide()) return;
         if (itemSpawner == null) return;
         if (bot.serverData.getBoundPlayer() == null) return;
-        Vec3 playerPos = bot.serverData.getBoundPlayer().ls$getEntityPos();
-        Vec3 pos = bot.ls$getEntityPos().add(0,1,0);
+        Vec3 playerPos = bot.serverData.getBoundPlayer().position();
+        Vec3 pos = bot.position().add(0,1,0);
         Vec3 relativeTargetPos = new Vec3(
                 playerPos.x() - pos.x(),
                 0,
@@ -394,7 +394,7 @@ public class TriviaHandler {
 
     public void curseBindingArmor(ServerPlayer player) {
         for (ItemStack item : PlayerUtils.getArmorItems(player)) {
-            ItemStackUtils.spawnItemForPlayer(PlayerUtils.getServerWorld(player), player.ls$getEntityPos(), item.copy(), player);
+            ItemStackUtils.spawnItemForPlayer(PlayerUtils.getServerWorld(player), player.position(), item.copy(), player);
         }
         ItemStack head = Items.LEATHER_HELMET.getDefaultInstance();
         ItemStack chest = Items.LEATHER_CHESTPLATE.getDefaultInstance();

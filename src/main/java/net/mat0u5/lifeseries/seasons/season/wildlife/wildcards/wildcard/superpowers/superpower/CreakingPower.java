@@ -114,7 +114,7 @@ public class CreakingPower extends ToggleableSuperpower {
     private static void makeFriendly(String teamName, Entity entity, ServerPlayer player) {
         TeamUtils.addEntityToTeam(teamName, player);
         TeamUtils.addEntityToTeam(teamName, entity);
-        Vec3 entityPos = entity.ls$getEntityPos();
+        Vec3 entityPos = entity.position();
         PlayerUtils.getServerWorld(player).sendParticles(
                 ParticleTypes.EXPLOSION,
                 entityPos.x(), entityPos.y(), entityPos.z(),
@@ -149,7 +149,7 @@ public class CreakingPower extends ToggleableSuperpower {
         for(double d = 0.0; d < count; d++) {
             AABB box = creaking.getBoundingBox();
             Vec3 vec3d = box.getMinPosition().add(random.nextDouble() * box.getXsize(), random.nextDouble() * box.getYsize(), random.nextDouble() * box.getZsize());
-            Vec3 vec3d2 = player.ls$getEntityPos().add(random.nextDouble() - 0.5, random.nextDouble(), random.nextDouble() - 0.5);
+            Vec3 vec3d2 = player.position().add(random.nextDouble() - 0.5, random.nextDouble(), random.nextDouble() - 0.5);
 
             if (!towardsPlayer) {
                 Vec3 vec3d3 = vec3d;

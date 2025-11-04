@@ -139,7 +139,7 @@ public class VoicechatMain implements VoicechatPlugin {
                 continue;
             }
             double scaled = api.getBroadcastRange()/Listening.MAX_RANGE;
-            if ((distanceFromSound*scaled) > player.ls$getEntityPos().distanceTo(senderPos)) {
+            if ((distanceFromSound*scaled) > player.position().distanceTo(senderPos)) {
                 continue;
             }
 

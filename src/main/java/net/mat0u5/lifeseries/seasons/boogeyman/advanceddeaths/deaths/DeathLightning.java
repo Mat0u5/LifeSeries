@@ -48,7 +48,7 @@ public class DeathLightning extends AdvancedDeath {
                     world.random.nextDouble() * 2 - 1
             ).normalize().scale(distanceFromTarget);
 
-            Vec3 pos = player.ls$getEntityPos().add(offset.x(), 0, offset.z());
+            Vec3 pos = player.position().add(offset.x(), 0, offset.z());
             Vec3 lightningPos = new Vec3(pos.x, WorldUtils.findTopSafeY(world, pos), pos.z);
             WorldUtils.summonHarmlessLightning(world, lightningPos);
         }

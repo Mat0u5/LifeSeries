@@ -66,7 +66,7 @@ public class ClientSounds {
                 String name = sound.getLocation().getPath();
                 if (!onlyOneOf.contains(name)) continue;
                 Vec3 soundPosition = new Vec3(sound.getX(), sound.getY(), sound.getZ());
-                double distance = player.ls$getEntityPos().distanceTo(soundPosition);
+                double distance = player.position().distanceTo(soundPosition);
                 if (soundMap.containsKey(name)) {
                     soundMap.get(name).put(distance, sound);
                 }

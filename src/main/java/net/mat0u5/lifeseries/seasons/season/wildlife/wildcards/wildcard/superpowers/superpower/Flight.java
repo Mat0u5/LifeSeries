@@ -152,7 +152,7 @@ public class Flight extends Superpower {
             ItemStackUtils.setCustomComponentBoolean(helmet, "FromSuperpower", true);
             ItemStackUtils.setCustomComponentBoolean(helmet, "FlightSuperpower", true);
 
-            ItemStackUtils.spawnItemForPlayer(PlayerUtils.getServerWorld(player), player.ls$getEntityPos(), PlayerUtils.getEquipmentSlot(player, 3).copy(), player);
+            ItemStackUtils.spawnItemForPlayer(PlayerUtils.getServerWorld(player), player.position(), PlayerUtils.getEquipmentSlot(player, 3).copy(), player);
             player.setItemSlot(EquipmentSlot.HEAD, helmet);
         }
     }

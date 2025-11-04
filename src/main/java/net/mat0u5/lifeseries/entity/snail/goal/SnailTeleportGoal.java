@@ -47,7 +47,7 @@ public final class SnailTeleportGoal extends Goal {
         Entity boundEntity = mob.serverData.getBoundEntity();
         if (boundEntity == null) return false;
         float distFromPlayer = mob.distanceTo(boundEntity);
-        boolean dimensionsAreSame = mob.ls$getEntityWorld().dimension().equals(boundEntity.ls$getEntityWorld().dimension());
+        boolean dimensionsAreSame = mob.level().dimension().equals(boundEntity.level().dimension());
         return !dimensionsAreSame || distFromPlayer > Snail.MAX_DISTANCE || this.ticksSinceLastPositionChange > this.maxTicksSinceLastPositionChange;
     }
 

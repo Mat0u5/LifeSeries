@@ -49,7 +49,7 @@ public class WorldUtils {
     }
 
     public static void summonHarmlessLightning(ServerPlayer player) {
-        summonHarmlessLightning(PlayerUtils.getServerWorld(player), player.ls$getEntityPos());
+        summonHarmlessLightning(PlayerUtils.getServerWorld(player), player.position());
     }
 
     public static void summonHarmlessLightning(ServerLevel world, Vec3 pos) {

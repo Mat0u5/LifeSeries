@@ -22,7 +22,7 @@ public abstract class ItemEntityMixin {
             if (blacklist == null) return;
             ItemEntity itemEntity = (ItemEntity) (Object) this;
             if (itemEntity.hasPickUpDelay()) return;
-            if (itemEntity.ls$getEntityWorld().isClientSide()) return;
+            if (itemEntity.level().isClientSide()) return;
             ItemStack stack = itemEntity.getItem();
             blacklist.onCollision(serverPlayer,stack,ci);
         }

@@ -79,7 +79,7 @@ public final class SnailGlideGoal extends Goal {
             return;
         }
 
-        Vec3 directionToTarget = targetPos.subtract(mob.ls$getEntityPos()).normalize();
+        Vec3 directionToTarget = targetPos.subtract(mob.position()).normalize();
         float speedMultiplier = mob.getSpeed() / 2;
         mob.setDeltaMovement(directionToTarget.x * speedMultiplier, -0.1, directionToTarget.z * speedMultiplier);
     }

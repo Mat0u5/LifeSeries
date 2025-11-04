@@ -39,7 +39,7 @@ public class DeathAnvil extends AdvancedDeath {
     protected void tick(ServerPlayer player) {
         if (ticks > 80) {
             if (playerPos == null) {
-                playerPos = player.ls$getEntityPos();
+                playerPos = player.position();
             }
             player.setPos(playerPos);
         }

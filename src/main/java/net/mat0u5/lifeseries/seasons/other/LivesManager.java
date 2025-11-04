@@ -314,7 +314,7 @@ public class LivesManager {
         if (livesBefore != null) {
             player.setGameMode(GameType.SPECTATOR);
         }
-        Vec3 pos = player.ls$getEntityPos();
+        Vec3 pos = player.position();
         HashMap<Vec3, List<Float>> info = new HashMap<>();
         info.put(pos, List.of(player.getYRot(),player.getXRot()));
         currentSeason.respawnPositions.put(player.getUUID(), info);

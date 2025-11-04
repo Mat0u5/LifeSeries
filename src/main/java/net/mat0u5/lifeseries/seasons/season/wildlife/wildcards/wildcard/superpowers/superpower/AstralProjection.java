@@ -94,7 +94,7 @@ public class AstralProjection extends ToggleableSuperpower {
 
         String fakePlayerName = "`"+player.getScoreboardName();
 
-        startedPos = player.ls$getEntityPos();
+        startedPos = player.position();
         startedLooking[0] = player.getYRot();
         startedLooking[1] = player.getXRot();
         startedWorld = PlayerUtils.getServerWorld(player);
@@ -142,7 +142,7 @@ public class AstralProjection extends ToggleableSuperpower {
             clone.setDeltaMovement(velocity);
             clone.hurtMarked = true;
             clone.hasImpulse = true;
-            clone.snapTo(player.ls$getEntityPos(), player.getYRot(), player.getXRot());
+            clone.snapTo(player.position(), player.getYRot(), player.getXRot());
         });
         *///?}
     }
@@ -164,7 +164,7 @@ public class AstralProjection extends ToggleableSuperpower {
 
         Vec3 toBackPos = startedPos;
         if (clone != null) {
-            toBackPos = clone.ls$getEntityPos();
+            toBackPos = clone.position();
             //? if <= 1.21.6 {
             clone.connection.onDisconnect(new DisconnectionDetails(Component.empty()));
             NetworkHandlerServer.sendPlayerDisguise(clone.getUUID().toString(), clone.getName().getString(), "", "");

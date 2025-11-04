@@ -34,11 +34,8 @@ public final class SnailPushProjectilesGoal extends Goal {
     @Override
     public boolean canUse() {
         if (mob.getSnailWorld().isClientSide()) return false;
-        if (mob.ls$getEntityWorld() == null) {
-            return false;
-        }
 
-        Level world = mob.ls$getEntityWorld();
+        Level world = mob.level();
         this.projectiles = world.getEntitiesOfClass(
                 Projectile.class,
                 mob.getBoundingBox().inflate(5.0, 5.0, 5.0),

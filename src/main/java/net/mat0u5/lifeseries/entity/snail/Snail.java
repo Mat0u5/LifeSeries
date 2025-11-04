@@ -192,7 +192,8 @@ public class Snail extends Monster {
     }
 
     public Level getSnailWorld() {
-        return ls$getEntityWorld();
+        //TODO remove
+        return level();
     }
 
     @Override

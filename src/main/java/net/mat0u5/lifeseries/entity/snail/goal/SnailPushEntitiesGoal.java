@@ -33,10 +33,7 @@ public final class SnailPushEntitiesGoal extends Goal {
     @Override
     public boolean canUse() {
         if (mob.getSnailWorld().isClientSide()) return false;
-        Level world = mob.ls$getEntityWorld();
-        if (world == null) {
-            return false;
-        }
+        Level world = mob.level();
 
         lastPushTime++;
         int pushDelay = 20;
@@ -79,9 +76,9 @@ public final class SnailPushEntitiesGoal extends Goal {
     }
 
     private void pushAway(Entity entity) {
-        Vec3 direction = entity.ls$getEntityPos()
+        Vec3 direction = entity.position()
                 .add(0.0, 0.5, 0.0)
-                .subtract(mob.ls$getEntityPos())
+                .subtract(mob.position())
                 .normalize()
                 .scale(0.4);
 

@@ -91,7 +91,8 @@ public class TriviaBot extends AmbientCreature {
 
     
     public Level getBotWorld() {
-        return ls$getEntityWorld();
+        //TODO remove
+        return level();
     }
 
     /*

@@ -274,7 +274,7 @@ public class MobSwap extends Wildcard {
                 //? if <=1.21 {
                 entity.kill();
                  //?} else {
-                /*entity.kill((ServerLevel) entity.ls$getEntityWorld());
+                /*entity.kill((ServerLevel) entity.level());
                 *///?}
             }
             //? if <= 1.21.9 {
@@ -379,7 +379,7 @@ public class MobSwap extends Wildcard {
                 //? if <=1.21 {
                 entity.kill();
                  //?} else {
-                /*entity.kill((ServerLevel) entity.ls$getEntityWorld());
+                /*entity.kill((ServerLevel) entity.level());
                 *///?}
             }
             //? if <= 1.21.9 {

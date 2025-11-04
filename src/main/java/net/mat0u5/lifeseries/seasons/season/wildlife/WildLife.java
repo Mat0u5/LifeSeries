@@ -238,7 +238,7 @@ public class WildLife extends Season {
                 //? if <= 1.21 {
                 entity.spawnAtLocation(Items.TOTEM_OF_UNDYING.getDefaultInstance());
                  //?} else {
-                /*entity.spawnAtLocation((ServerLevel) entity.ls$getEntityWorld(), Items.TOTEM_OF_UNDYING.getDefaultInstance());
+                /*entity.spawnAtLocation((ServerLevel) entity.level(), Items.TOTEM_OF_UNDYING.getDefaultInstance());
                 *///?}
             }
         }

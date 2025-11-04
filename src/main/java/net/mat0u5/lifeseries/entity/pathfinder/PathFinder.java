@@ -59,12 +59,12 @@ public class PathFinder extends AmbientCreature {
         setPathfindingMalus(PathType.UNPASSABLE_RAIL, 0);
         if (flying) {
             moveControl = new FlyingMoveControl(this, 20, true);
-            navigation = new FlyingPathNavigation(this, ls$getEntityWorld());
+            navigation = new FlyingPathNavigation(this, level());
             navigation.setCanFloat(true);
         }
         else {
             moveControl = new MoveControl(this);
-            navigation = new GroundPathNavigation(this, ls$getEntityWorld());
+            navigation = new GroundPathNavigation(this, level());
             navigation.setCanFloat(true);
         }
     }

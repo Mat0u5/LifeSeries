@@ -112,20 +112,20 @@ public class SubInManager {
             Optional<CompoundTag> data = iPlayerManager.ls$getSaveHandler().load(player);
             data.ifPresent(nbt -> {
                 player.load(nbt);
-                PlayerUtils.teleport(player, player.ls$getEntityPos());
+                PlayerUtils.teleport(player, player.position());
             });
             //?} else if <= 1.21.6 {
             /*Optional<ValueInput> data = iPlayerManager.ls$getSaveHandler().load(player, ProblemReporter.DISCARDING);
             data.ifPresent(nbt -> {
                 player.load(nbt);
-                PlayerUtils.teleport(player, player.ls$getEntityPos());
+                PlayerUtils.teleport(player, player.position());
             });
             *///?} else {
             /*Optional<CompoundTag> data = iPlayerManager.ls$getSaveHandler().load(player.nameAndId());
             Optional<ValueInput> optional = data.map(playerData -> TagValueInput.create(ProblemReporter.DISCARDING, server.registryAccess(), playerData));
             optional.ifPresent(readView -> {
                 player.load(readView);
-                PlayerUtils.teleport(player, player.ls$getEntityPos());
+                PlayerUtils.teleport(player, player.position());
             });
             *///?}
         }
