@@ -1,12 +1,8 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
-import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.network.DisconnectionDetails;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,17 +16,24 @@ import org.jetbrains.annotations.Nullable;
 import static net.mat0u5.lifeseries.Main.server;
 //? if <= 1.21.6 {
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
+import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
+import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.minecraft.network.DisconnectionDetails;
+import net.minecraft.network.chat.Component;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import static net.mat0u5.lifeseries.Main.server;
 //?}
 //? if >= 1.21.9 {
-/*import net.minecraft.entity.decoration.MannequinEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.SpawnReason;
+/*import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.minecraft.world.entity.decoration.Mannequin;
 import net.mat0u5.lifeseries.mixin.MannequinEntityAccessor;
-import net.minecraft.component.type.ProfileComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.component.ResolvableProfile;
 *///?}
 
 public class AstralProjection extends ToggleableSuperpower {
@@ -39,7 +42,7 @@ public class AstralProjection extends ToggleableSuperpower {
     public FakePlayer clone;
     //?} else {
     /*@Nullable
-    public MannequinEntity clone;
+    public Mannequin clone;
     *///?}
     @Nullable
     private Vec3 startedPos;
@@ -108,38 +111,38 @@ public class AstralProjection extends ToggleableSuperpower {
             sendDisguisePacket();
         });
         //?} else {
-        /*clone = EntityType.MANNEQUIN.create(startedWorld, SpawnReason.COMMAND);
+        /*clone = EntityType.MANNEQUIN.create(startedWorld, EntitySpawnReason.COMMAND);
         if (clone == null) return;
 
-        clone.setPos(player.getX(), player.getY(), player.getZ());
-        clone.setCustomName(player.getStyledDisplayName());
+        clone.setPosRaw(player.getX(), player.getY(), player.getZ());
+        clone.setCustomName(player.getFeedbackDisplayName());
         clone.setCustomNameVisible(true);
         if (clone instanceof MannequinEntityAccessor mannequinAccessor) {
-            mannequinAccessor.ls$setMannequinProfile(ProfileComponent.ofStatic(player.getGameProfile()));
-            mannequinAccessor.ls$setDescription(Text.of("Astral Projection"));
+            mannequinAccessor.ls$setMannequinProfile(ResolvableProfile.createResolved(player.getGameProfile()));
+            mannequinAccessor.ls$setDescription(Component.nullToEmpty("Astral Projection"));
             mannequinAccessor.ls$setHideDescription(true);
         }
-        clone.age = -2_000_000;
+        clone.tickCount = -2_000_000;
         for (EquipmentSlot slot : EquipmentSlot.values()) {
-            clone.equipStack(slot, player.getEquippedStack(slot));
+            clone.setItemSlot(slot, player.getItemBySlot(slot));
         }
-        for (Hand hand : Hand.values()) {
-            clone.setStackInHand(hand, player.getStackInHand(hand));
+        for (InteractionHand hand : InteractionHand.values()) {
+            clone.setItemInHand(hand, player.getItemInHand(hand));
         }
 
-        startedWorld.spawnEntity(clone);
+        startedWorld.addFreshEntity(clone);
 
         TaskScheduler.scheduleTask(1, () -> {
-            clone.headYaw = player.headYaw;
-            clone.lastHeadYaw = player.lastHeadYaw;
-            clone.bodyYaw = player.bodyYaw;
-            clone.lastBodyYaw = player.lastBodyYaw;
-            clone.lastYaw = player.lastYaw;
-            clone.setPitch(player.getPitch());
-            clone.setVelocity(velocity);
-            clone.velocityModified = true;
-            clone.velocityDirty = true;
-            clone.refreshPositionAndAngles(player.ls$getEntityPos(), player.getYaw(), player.getPitch());
+            clone.yHeadRot = player.yHeadRot;
+            clone.yHeadRotO = player.yHeadRotO;
+            clone.yBodyRot = player.yBodyRot;
+            clone.yBodyRotO = player.yBodyRotO;
+            clone.yRotO = player.yRotO;
+            clone.setXRot(player.getXRot());
+            clone.setDeltaMovement(velocity);
+            clone.hurtMarked = true;
+            clone.hasImpulse = true;
+            clone.snapTo(player.ls$getEntityPos(), player.getYRot(), player.getXRot());
         });
         *///?}
     }

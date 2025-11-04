@@ -19,6 +19,10 @@ import net.minecraft.nbt.CompoundTag;
 /*import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.level.storage.ValueInput;
 *///?}
+//? if >= 1.21.9 {
+/*import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.nbt.CompoundTag;
+*///?}
 
 public class SubInManager {
     public static List<SubIn> subIns = new ArrayList<>();
@@ -117,10 +121,10 @@ public class SubInManager {
                 PlayerUtils.teleport(player, player.ls$getEntityPos());
             });
             *///?} else {
-            /*Optional<NbtCompound> data = iPlayerManager.ls$getSaveHandler().loadPlayerData(player.getPlayerConfigEntry());
-            Optional<ReadView> optional = data.map(playerData -> NbtReadView.create(ErrorReporter.EMPTY, server.getRegistryManager(), playerData));
+            /*Optional<CompoundTag> data = iPlayerManager.ls$getSaveHandler().load(player.nameAndId());
+            Optional<ValueInput> optional = data.map(playerData -> TagValueInput.create(ProblemReporter.DISCARDING, server.registryAccess(), playerData));
             optional.ifPresent(readView -> {
-                player.readData(readView);
+                player.load(readView);
                 PlayerUtils.teleport(player, player.ls$getEntityPos());
             });
             *///?}

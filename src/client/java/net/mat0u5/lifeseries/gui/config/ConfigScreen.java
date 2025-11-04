@@ -21,7 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 //? if >= 1.21.9 {
-//?}
+/*import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+*///?}
 
 public class ConfigScreen extends Screen {
     private static int HEADER_HEIGHT_SMALL = 55;
@@ -350,7 +353,7 @@ public class ConfigScreen extends Screen {
         if (this.searchField.mouseClicked(mouseX, mouseY, button)) {
     //?} else {
     /*@Override
-    public boolean mouseClicked(Click click, boolean doubled) {
+    public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         int mouseX = (int) click.x();
         int mouseY = (int) click.y();
         boolean leftClick = click.button() == 0;
@@ -393,8 +396,8 @@ public class ConfigScreen extends Screen {
         if (this.searchField.isFocused() && this.searchField.keyPressed(keyCode, scanCode, modifiers)) {
     //?} else {
     /*@Override
-    public boolean keyPressed(KeyInput keyInput) {
-        int keyCode = keyInput.getKeycode();
+    public boolean keyPressed(KeyEvent keyInput) {
+        int keyCode = keyInput.input();
         int modifiers = keyInput.modifiers();
         if (this.searchField.isFocused() && this.searchField.keyPressed(keyInput)) {
     *///?}
@@ -424,7 +427,7 @@ public class ConfigScreen extends Screen {
     }
     //?} else {
     /*@Override
-    public boolean charTyped(CharInput charInput) {
+    public boolean charTyped(CharacterEvent charInput) {
         if (this.searchField.isFocused() && this.searchField.charTyped(charInput)) {
             return true;
         }

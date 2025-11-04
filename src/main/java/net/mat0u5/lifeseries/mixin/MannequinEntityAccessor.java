@@ -9,26 +9,26 @@ public interface MannequinEntityAccessor {
 }
 //?} else {
 
-/*import net.minecraft.component.type.ProfileComponent;
-import net.minecraft.entity.decoration.MannequinEntity;
-import net.minecraft.text.Text;
+/*import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.decoration.Mannequin;
+import net.minecraft.world.item.component.ResolvableProfile;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-@Mixin(value = MannequinEntity.class, priority = 1)
+@Mixin(value = Mannequin.class, priority = 1)
 public interface MannequinEntityAccessor {
 
-    @Invoker("setMannequinProfile")
-    void ls$setMannequinProfile(ProfileComponent profile);
+    @Invoker("setProfile")
+    void ls$setMannequinProfile(ResolvableProfile profile);
 
-    @Invoker("getMannequinProfile")
-    ProfileComponent ls$getMannequinProfile();
+    @Invoker("getProfile")
+    ResolvableProfile ls$getMannequinProfile();
 
     @Invoker("setDescription")
-    void ls$setDescription(Text description);
+    void ls$setDescription(Component description);
 
     @Invoker("getDescription")
-    Text ls$getDescription();
+    Component ls$getDescription();
 
     @Invoker("setHideDescription")
     void ls$setHideDescription(boolean hideDescription);

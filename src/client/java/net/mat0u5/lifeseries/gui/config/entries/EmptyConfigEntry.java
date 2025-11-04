@@ -2,6 +2,12 @@ package net.mat0u5.lifeseries.gui.config.entries;
 
 import net.minecraft.client.gui.GuiGraphics;
 
+//? if >= 1.21.9 {
+/*import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+*///?}
+
 public abstract class EmptyConfigEntry extends ConfigEntry {
     public EmptyConfigEntry(String fieldName, String displayName, String description) {
         super(fieldName, displayName, description);
@@ -28,17 +34,17 @@ public abstract class EmptyConfigEntry extends ConfigEntry {
     }
     //?} else {
     /*@Override
-    protected boolean mouseClickedEntry(Click click, boolean doubled) {
+    protected boolean mouseClickedEntry(MouseButtonEvent click, boolean doubled) {
         return false;
     }
 
     @Override
-    protected boolean keyPressedEntry(KeyInput input) {
+    protected boolean keyPressedEntry(KeyEvent input) {
         return false;
     }
 
     @Override
-    protected boolean charTypedEntry(CharInput input) {
+    protected boolean charTypedEntry(CharacterEvent input) {
         return false;
     }
     *///?}

@@ -35,6 +35,11 @@ import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.*;
 
+//? if >= 1.21.9 {
+/*import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.component.TypedEntityData;
+*///?}
+
 public class SecretLife extends Season {
     public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /gift, /task, /health";
     public static final String COMMANDS_TEXT = "/claimkill, /lives, /gift";
@@ -211,9 +216,9 @@ public class SecretLife extends Season {
         skeletonHorse.set(DataComponents.ENTITY_DATA, nbtSkeleton);
         camel.set(DataComponents.ENTITY_DATA, nbtCamel);
         //?} else {
-        /*zombieHorse.set(DataComponentTypes.ENTITY_DATA, TypedEntityData.create(EntityType.ZOMBIE, nbtZombie.copyNbt()));
-        skeletonHorse.set(DataComponentTypes.ENTITY_DATA, TypedEntityData.create(EntityType.SKELETON, nbtSkeleton.copyNbt()));
-        camel.set(DataComponentTypes.ENTITY_DATA, TypedEntityData.create(EntityType.CAMEL, nbtCamel.copyNbt()));
+        /*zombieHorse.set(DataComponents.ENTITY_DATA, TypedEntityData.of(EntityType.ZOMBIE, nbtZombie.copyTag()));
+        skeletonHorse.set(DataComponents.ENTITY_DATA, TypedEntityData.of(EntityType.SKELETON, nbtSkeleton.copyTag()));
+        camel.set(DataComponents.ENTITY_DATA, TypedEntityData.of(EntityType.CAMEL, nbtCamel.copyTag()));
         *///?}
         itemSpawner.addItem(zombieHorse, 10);
         itemSpawner.addItem(skeletonHorse, 10);

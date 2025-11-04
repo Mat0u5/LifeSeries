@@ -157,7 +157,7 @@ public class ItemStackUtils {
         //? if <= 1.21.6 {
         return nbt.contains(componentEntry);
         //?} else {
-        /*return nbt.copyNbt().contains(componentEntry);
+        /*return nbt.copyTag().contains(componentEntry);
         *///?}
     }
 
@@ -167,7 +167,7 @@ public class ItemStackUtils {
         //? if <= 1.21.6 {
         if (!nbt.contains(componentEntry)) return;
         //?} else {
-        /*if (!nbt.copyNbt().contains(componentEntry)) return;
+        /*if (!nbt.copyTag().contains(componentEntry)) return;
         *///?}
         CompoundTag nbtComp = nbt.copyTag();
         nbtComp.remove(componentEntry);

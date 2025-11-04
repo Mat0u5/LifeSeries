@@ -7,6 +7,9 @@ import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.client.KeyMapping;
 import org.lwjgl.glfw.GLFW;
 
+//? if >= 1.21.9
+/*import net.minecraft.resources.ResourceLocation;*/
+
 public class ClientKeybinds {
     public static KeyMapping superpower;
     public static KeyMapping openConfig;
@@ -16,7 +19,7 @@ public class ClientKeybinds {
     //? if <= 1.21.6 {
     public static final String KEYBIND_ID = "key.category.lifeseries.general";
      //?} else {
-    /*public static final KeyBinding.Category KEYBIND_ID = new KeyBinding.Category(Identifier.of("lifeseries","general"));
+    /*public static final KeyMapping.Category KEYBIND_ID = new KeyMapping.Category(ResourceLocation.fromNamespaceAndPath("lifeseries","general"));
     *///?}
 
     public static void tick() {

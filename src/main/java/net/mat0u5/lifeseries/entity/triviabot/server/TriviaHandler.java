@@ -168,19 +168,11 @@ public class TriviaHandler {
         ServerLevel world = (ServerLevel) bot.getBotWorld();
         Vec3 pos = bot.ls$getEntityPos();
 
-        //? if <= 1.21.6 {
         world.sendParticles(
                 ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 0xFFa61111),
                 pos.x(), pos.y()+1, pos.z(),
                 40, 0.1, 0.25, 0.1, 0.035
         );
-        //?} else {
-        /*world.spawnParticles(
-                TintedParticleEffect.create(ParticleTypes.ENTITY_EFFECT, 0xFFa61111),
-                pos.getX(), pos.getY()+1, pos.getZ(),
-                40, 0.1, 0.25, 0.1, 0.035
-        );
-        *///?}
         int numOfCurses = 9;
         if (DependencyManager.voicechatLoaded() && VoicechatMain.isConnectedToSVC(player.getUUID())) numOfCurses = 10;
 

@@ -10,7 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 //? if >= 1.21.9 {
-//?}
+/*import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+*///?}
 
 public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.ConfigEntryWidget> {
     public static final int ENTRY_GAP = 2;
@@ -82,7 +85,7 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
                 entry.setY(currentY);
                 entry.setWidth(entryWidth);
                 entry.setHeight(entryHeight);
-                entry.render(context, mouseX, mouseY, hovered, delta);
+                entry.renderContent(context, mouseX, mouseY, hovered, delta);
                 *///?}
 
 
@@ -156,7 +159,7 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
     //? if <= 1.21.6 {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
     //?} else {
-    /*public boolean mouseClicked(Click click, boolean doubled) {
+    /*public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         int mouseX = (int) click.x();
         int mouseY = (int) click.y();
     *///?}
@@ -217,14 +220,14 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
     }
     //?} else {
     /*@Override
-    public boolean keyPressed(KeyInput input) {
+    public boolean keyPressed(KeyEvent input) {
         ConfigEntryWidget entry = getFocused();
         if (entry == null) return false;
         return entry.keyPressed(input);
     }
 
     @Override
-    public boolean charTyped(CharInput input) {
+    public boolean charTyped(CharacterEvent input) {
         ConfigEntryWidget entry = getFocused();
         if (entry == null) return false;
         return entry.charTyped(input);
@@ -272,24 +275,24 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
         }
         //?} else {
         /*@Override
-        public void render(DrawContext context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        public void renderContent(GuiGraphics context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             configEntry.render(context, this.getX(), this.getY(), this.getWidth(), this.getHeight(), mouseX, mouseY, hovered, tickDelta);
         }
 
         @Override
-        public boolean mouseClicked(Click click, boolean doubled) {
+        public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
             configEntry.setFocused(true);
             return configEntry.mouseClicked(click, doubled);
         }
 
         @Override
-        public boolean keyPressed(KeyInput input) {
+        public boolean keyPressed(KeyEvent input) {
             configEntry.setFocused(true);
             return configEntry.keyPressed(input);
         }
 
         @Override
-        public boolean charTyped(CharInput input) {
+        public boolean charTyped(CharacterEvent input) {
             configEntry.setFocused(true);
             return configEntry.charTyped(input);
         }

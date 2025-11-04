@@ -28,13 +28,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static net.mat0u5.lifeseries.Main.blacklist;
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
-//? if >= 1.21.2 {
-/*import net.minecraft.world.entity.monster.creaking.Creaking;
+//? if >= 1.21.2
+/*import net.minecraft.world.entity.monster.creaking.Creaking;*/
 
 //? if = 1.21.2 {
-/^import java.util.function.DoubleSupplier;
+/*import java.util.function.DoubleSupplier;
 import java.util.function.Predicate;
-^///?}
+*///?}
+
+//? if >= 1.21.9 {
+/*import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.AstralProjection;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.minecraft.world.entity.decoration.Mannequin;
+*///?}
 
 @Mixin(value = LivingEntity.class, priority = 1)
 public abstract class LivingEntityMixin {
@@ -63,17 +69,18 @@ public abstract class LivingEntityMixin {
     //? if <= 1.21 {
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     public void hurt(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-     //?} else
-    /^@Inject(method = "hurtServer", at = @At("HEAD"), cancellable = true)^/
+     //?} else {
+    /*@Inject(method = "hurtServer", at = @At("HEAD"), cancellable = true)
     public void hurtServer(ServerLevel world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    *///?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
 
         LivingEntity entity = (LivingEntity) (Object) this;
         //? if >= 1.21.2 {
-        /^if (entity instanceof Creaking creaking) {
+        /*if (entity instanceof Creaking creaking) {
             creaking.hurtTime = 20;
         }
-        ^///?}
+        *///?}
 
         ItemStack weapon = source.getWeaponItem();
         if (amount <= WindCharge.MAX_MACE_DAMAGE) return;
@@ -84,11 +91,11 @@ public abstract class LivingEntityMixin {
         //? if <= 1.21 {
         cir.setReturnValue(entity.hurt(source, WindCharge.MAX_MACE_DAMAGE));
          //?} else
-        /^cir.setReturnValue(entity.hurtServer(world, source, WindCharge.MAX_MACE_DAMAGE));^/
+        /*cir.setReturnValue(entity.hurtServer(world, source, WindCharge.MAX_MACE_DAMAGE));*/
     }
 
     //? if = 1.21.2 {
-    /^@Inject(method = "isLookingAtMe", at = @At("HEAD"), cancellable = true)
+    /*@Inject(method = "isLookingAtMe", at = @At("HEAD"), cancellable = true)
     public void isEntityLookingAtMe(LivingEntity entity, double d, boolean bl, boolean visualShape
             , Predicate<LivingEntity> predicate, DoubleSupplier[] entityYChecks, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity me = (LivingEntity) (Object) this;
@@ -96,7 +103,7 @@ public abstract class LivingEntityMixin {
             if (creaking.isAlliedTo(entity)) cir.setReturnValue(false);
         }
     }
-    ^///?}
+    *///?}
 
     @Inject(method = "addEffect(Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/world/entity/Entity;)Z", at = @At("HEAD"), cancellable = true)
     public void addStatusEffect(MobEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir) {
@@ -110,9 +117,9 @@ public abstract class LivingEntityMixin {
         }
     }
 
-    /^
+    /*
         Superpowers
-     ^/
+     */
 
     @Unique
     private DamageSource ls$lastDamageSource;
@@ -124,18 +131,18 @@ public abstract class LivingEntityMixin {
         this.ls$lastDamageSource = source;
     }
     //?} else {
-    /^@Inject(method = "hurtServer", at = @At("HEAD"))
+    /*@Inject(method = "hurtServer", at = @At("HEAD"))
     private void captureDamageSource(ServerLevel world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         this.ls$lastDamageSource = source;
     }
-    ^///?}
+    *///?}
 
     @ModifyArg(
             //? if <= 1.21 {
             method = "hurt",
             //?} else {
-            /^method = "hurtServer",
-            ^///?}
+            /*method = "hurtServer",
+            *///?}
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"),
             index = 0
     )
@@ -161,8 +168,8 @@ public abstract class LivingEntityMixin {
     //? if <= 1.21 {
     @Inject(method = "checkTotemDeathProtection", at = @At("HEAD"))
     //?} else {
-    /^@Inject(method = "checkTotemDeathProtection", at = @At("HEAD"))
-    ^///?}
+    /*@Inject(method = "checkTotemDeathProtection", at = @At("HEAD"))
+    *///?}
     private void stopFakeTotem(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
         if (Main.modDisabled()) return;
         LivingEntity entity = (LivingEntity) (Object) this;
@@ -176,13 +183,13 @@ public abstract class LivingEntityMixin {
 
 
     //? if >= 1.21.9 {
-    /^@Inject(method = "tick", at = @At("HEAD"))
+    /*@Inject(method = "tick", at = @At("HEAD"))
     public void tickMannequin(CallbackInfo ci) {
         LivingEntity entity = (LivingEntity) (Object) this;
-        if (entity instanceof MannequinEntity mannequin && mannequin instanceof MannequinEntityAccessor mannequinAccessor && mannequin.age < 0) {
-            if (entity.age % 20 == 0) {
+        if (entity instanceof Mannequin mannequin && mannequin instanceof MannequinEntityAccessor mannequinAccessor && mannequin.tickCount < 0) {
+            if (entity.tickCount % 20 == 0) {
                 boolean triggered = false;
-                ServerPlayerEntity player = PlayerUtils.getPlayer(mannequinAccessor.ls$getMannequinProfile().getGameProfile().id());
+                ServerPlayer player = PlayerUtils.getPlayer(mannequinAccessor.ls$getMannequinProfile().partialProfile().id());
                 if (player != null) {
                     if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.ASTRAL_PROJECTION)) {
                         if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof AstralProjection projection) {
@@ -197,11 +204,11 @@ public abstract class LivingEntityMixin {
             }
         }
     }
-    @Inject(method = "damage", at = @At("HEAD"))
-    public void damageMannequin(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    @Inject(method = "hurtServer", at = @At("HEAD"))
+    public void damageMannequin(ServerLevel world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity entity = (LivingEntity) (Object) this;
-        if (entity instanceof MannequinEntity mannequin && mannequin instanceof MannequinEntityAccessor mannequinAccessor && mannequin.age < 0) {
-            ServerPlayerEntity player = PlayerUtils.getPlayer(mannequinAccessor.ls$getMannequinProfile().getGameProfile().id());
+        if (entity instanceof Mannequin mannequin && mannequin instanceof MannequinEntityAccessor mannequinAccessor && mannequin.tickCount < 0) {
+            ServerPlayer player = PlayerUtils.getPlayer(mannequinAccessor.ls$getMannequinProfile().partialProfile().id());
             if (player != null) {
                 if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.ASTRAL_PROJECTION)) {
                     if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof AstralProjection projection) {
@@ -211,6 +218,5 @@ public abstract class LivingEntityMixin {
             }
         }
     }
-    ^///?}
+    *///?}
 }
-*/

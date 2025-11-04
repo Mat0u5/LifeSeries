@@ -6,13 +6,16 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.resources.PlayerSkin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.UUID;
+//? if <= 1.21.6
+import net.minecraft.client.resources.PlayerSkin;
+//? if >= 1.21.9
+/*import net.minecraft.world.entity.player.PlayerSkin;*/
 
 @Mixin(value = AbstractClientPlayer.class, priority = 1)
 public class AbstractClientPlayerEntityMixin {

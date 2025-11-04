@@ -173,7 +173,7 @@ public class ClientUtils {
     public static boolean isSpaceEmpty(LocalPlayer player, AABB box, double offsetX, double offsetY, double offsetZ) {
         if (player.noPhysics || player.isSpectator()) return true;
         AABB newBox = new AABB(box.minX + offsetX, box.minY +offsetY, box.minZ + offsetZ, box.maxX + offsetX, box.minY, box.maxZ + offsetZ);
-        return PlayerUtils.getWorld(player).noCollision(player, newBox);
+        return player.level().noCollision(player, newBox);
     }
 
     public static Vec3 recursivelyFindDesiredCollission(LocalPlayer player, AABB newBoundingBox, double offsetY, boolean desiredSpaceEmpty) {

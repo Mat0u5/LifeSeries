@@ -6,8 +6,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
-//? if >= 1.21.9
-/*import net.minecraft.client.gui.Click;*/
+//? if >= 1.21.9 {
+/*import net.minecraft.client.input.MouseButtonEvent;
+*///?}
 
 public abstract class DefaultScreen extends Screen {
 
@@ -79,7 +80,7 @@ public abstract class DefaultScreen extends Screen {
     }
     //?} else {
     /*@Override
-    public boolean mouseClicked(Click click, boolean doubled) {
+    public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         if (click.button() == 0 && allowCloseButton()) { // Left-click
             if (isInCloseRegion((int)click.x(), (int)click.y())) {
                 closeButtonClicked();

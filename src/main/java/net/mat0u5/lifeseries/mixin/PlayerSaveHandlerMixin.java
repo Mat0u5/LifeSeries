@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import java.util.UUID;
 
 //? if >= 1.21.9
-/*import net.minecraft.server.PlayerConfigEntry;*/
+/*import net.minecraft.server.players.NameAndId;*/
 
 @Mixin(value = PlayerDataStorage.class, priority = 1)
 public class PlayerSaveHandlerMixin {
@@ -28,13 +28,13 @@ public class PlayerSaveHandlerMixin {
         return ls$getStringUUIDForPlayer(instance);
     }
     //?} else {
-    /*@Redirect(method = "loadPlayerData(Lnet/minecraft/server/PlayerConfigEntry;Ljava/lang/String;)Ljava/util/Optional;", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/PlayerConfigEntry;id()Ljava/util/UUID;"))
-    public UUID subInLoad(PlayerConfigEntry instance) {
+    /*@Redirect(method = "load(Lnet/minecraft/server/players/NameAndId;Ljava/lang/String;)Ljava/util/Optional;", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/NameAndId;id()Ljava/util/UUID;"))
+    public UUID subInLoad(NameAndId instance) {
         return ls$getStringUUIDForPlayer(instance);
     }
 
     @Unique
-    private UUID ls$getStringUUIDForPlayer(PlayerConfigEntry instance) {
+    private UUID ls$getStringUUIDForPlayer(NameAndId instance) {
         if (Main.isLogicalSide() && !Main.modDisabled() && SubInManager.isSubbingIn(instance.id())) {
             UUID resultUUID = SubInManager.getSubstitutedPlayerUUID(instance.id());
             if (resultUUID != null) {

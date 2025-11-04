@@ -1,5 +1,9 @@
 package net.mat0u5.lifeseries.mixin.client;
 
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+
+//? if <= 1.21.6 {
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
@@ -7,14 +11,18 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.world.entity.LivingEntity;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 @Mixin(value = PlayerRenderer.class, priority = 1)
+//?} else {
+/*import net.mat0u5.lifeseries.utils.ClientUtils;
+import net.minecraft.client.renderer.entity.player.AvatarRenderer;
+import net.minecraft.network.chat.Component;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+@Mixin(value = AvatarRenderer.class, priority = 1)
+*///?}
 public abstract class PlayerEntityRendererMixin {
 
     //? if <= 1.21 {
@@ -40,11 +48,12 @@ public abstract class PlayerEntityRendererMixin {
 
     //? if > 1.21.6 {
     /*@ModifyArg(
-            method = "renderLabelIfPresent(Lnet/minecraft/client/render/entity/state/PlayerEntityRenderState;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/command/OrderedRenderCommandQueue;Lnet/minecraft/client/render/state/CameraRenderState;)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/command/OrderedRenderCommandQueue;submitLabel(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Vec3d;ILnet/minecraft/text/Text;ZIDLnet/minecraft/client/render/state/CameraRenderState;)V"),
+            method = "submitNameTag(Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitNameTag(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/phys/Vec3;ILnet/minecraft/network/chat/Component;ZIDLnet/minecraft/client/renderer/state/CameraRenderState;)V"),
             index = 3
     )
-    public Text render(Text text) {
+    //TODO test
+    public Component render(Component text) {
         return ClientUtils.getPlayerName(text);
     }
     *///?}

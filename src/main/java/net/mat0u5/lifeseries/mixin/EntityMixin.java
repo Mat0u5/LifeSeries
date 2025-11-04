@@ -122,8 +122,8 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
     )
     //?} else {
     /^@WrapOperation(
-            method = "startRiding(Lnet/minecraft/entity/Entity;ZZ)Z",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityType;isSaveable()Z")
+            method = "startRiding(Lnet/minecraft/world/entity/Entity;ZZ)Z",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/EntityType;canSerialize()Z")
     )
     ^///?}
     private boolean allowRidingPlayers(EntityType instance, Operation<Boolean> original) {
@@ -149,10 +149,7 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
     @Unique @Override
     public Vec3 ls$getEntityPos() {
         Entity entity = (Entity) (Object) this;
-        //? if <= 1.21.6 {
+        //TODO remove
         return entity.position();
-        //?} else {
-        /*return entity.getEntityPos();
-         *///?}
     }
 }

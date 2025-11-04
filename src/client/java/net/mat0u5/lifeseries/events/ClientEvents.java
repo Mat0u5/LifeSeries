@@ -156,11 +156,7 @@ public class ClientEvents {
                     double y = player.getY() + Math.random() * 1.8;
                     double z = player.getZ() + (Math.random() - 0.5) * 0.6;
 
-                    //? if <= 1.21.6 {
                     ParticleOptions invisibilityParticle = ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 0x208891b5);
-                    //?} else {
-                    /*ParticleEffect invisibilityParticle = TintedParticleEffect.create(ParticleTypes.ENTITY_EFFECT, 0x208891b5);
-                    *///?}
                     particleManager.createParticle(invisibilityParticle, x, y, z, 0, 0, 0);
                 }
             }

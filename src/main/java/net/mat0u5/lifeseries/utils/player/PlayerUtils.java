@@ -326,7 +326,7 @@ public class PlayerUtils {
         *///?} else if <= 1.21.6 {
         /*return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), player.isModelPartShown(PlayerModelPart.HAT), player.getTabListOrder(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
         *///?} else {
-        /*return new PlayerListS2CPacket.Entry(player.getUuid(), player.getGameProfile(), listed, player.networkHandler.getLatency(), player.getGameMode(), player.getPlayerListName(), player.isModelPartVisible(PlayerModelPart.HAT), player.getPlayerListOrder(), (PublicPlayerSession.Serialized)Nullables.map(player.getSession(), PublicPlayerSession::toSerialized));
+        /*return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode(), player.getTabListDisplayName(), player.isModelPartShown(PlayerModelPart.HAT), player.getTabListOrder(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
         *///?}
     }
 
@@ -363,19 +363,9 @@ public class PlayerUtils {
     public static ServerLevel getServerWorld(ServerPlayer player) {
         //? if <= 1.21.5 {
         return player.serverLevel();
-         //?} else if <= 1.21.6 {
-        /*return player.level();
-         *///?} else {
-        /*return player.getEntityWorld();
-        *///?}
-    }
-
-    public static Level getWorld(Player player) {
-        //? if <= 1.21.6 {
-        return player.level();
          //?} else {
-        /*return player.getEntityWorld();
-        *///?}
+        /*return player.level();
+         *///?}
     }
 
     public static void onTick() {

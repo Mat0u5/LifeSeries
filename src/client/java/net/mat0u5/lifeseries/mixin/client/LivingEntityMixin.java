@@ -52,7 +52,7 @@ public class LivingEntityMixin {
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity instanceof Player playerr && MainClient.isClientPlayer(playerr.getUUID()) && playerr.onGround() && ClientEvents.onGroundFor >= 5) {
             BlockPos blockPos = playerr.getBlockPosBelowThatAffectsMyMovement();
-            float originalSlipperiness = PlayerUtils.getWorld(playerr).getBlockState(blockPos).getBlock().getFriction();
+            float originalSlipperiness = playerr.level().getBlockState(blockPos).getBlock().getFriction();
             return new Vec3((velocity.x/originalSlipperiness)*0.995f, velocity.y, (velocity.z/originalSlipperiness)*0.995f);
         }
         return velocity;

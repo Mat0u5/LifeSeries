@@ -11,7 +11,10 @@ import net.minecraft.network.chat.Component;
 import java.util.ArrayList;
 import java.util.List;
 //? if >= 1.21.9 {
-//?}
+/*import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+*///?}
 
 public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends EmptyConfigEntry {
     private static final int CHILD_INDENT = 20;
@@ -151,7 +154,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
     //? if <= 1.21.6 {
     protected boolean mouseClickedEntry(double mouseX, double mouseY, int button) {
     //?} else {
-    /*protected boolean mouseClickedEntry(Click click, boolean doubled) {
+    /*protected boolean mouseClickedEntry(MouseButtonEvent click, boolean doubled) {
         int mouseX = (int) click.x();
         int mouseY = (int) click.y();
     *///?}
@@ -193,7 +196,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
     //? if <= 1.21.6 {
     protected boolean keyPressedEntry(int keyCode, int scanCode, int modifiers) {
     //?} else {
-    /*protected boolean keyPressedEntry(KeyInput input) {
+    /*protected boolean keyPressedEntry(KeyEvent input) {
     *///?}
         if (mainEntry != null && mainEntry.isFocused()) {
             //? if <= 1.21.6 {
@@ -225,7 +228,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
     //? if <= 1.21.6 {
     protected boolean charTypedEntry(char chr, int modifiers) {
     //?} else {
-    /*protected boolean charTypedEntry(CharInput input) {
+    /*protected boolean charTypedEntry(CharacterEvent input) {
     *///?}
         if (mainEntry != null && mainEntry.isFocused()) {
             //? if <= 1.21.6 {

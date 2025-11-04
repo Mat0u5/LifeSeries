@@ -14,7 +14,7 @@ public class PermissionManager {
         //? if < 1.21.9 {
         return server.getPlayerList().isOp(player.getGameProfile());
         //?} else {
-        /*return server.getPlayerManager().isOperator(player.getPlayerConfigEntry());
+        /*return server.getPlayerList().isOp(player.nameAndId());
         *///?}
     }
 

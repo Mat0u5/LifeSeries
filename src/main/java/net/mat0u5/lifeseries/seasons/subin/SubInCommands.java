@@ -13,10 +13,12 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+
 import java.util.Optional;
 import static net.mat0u5.lifeseries.Main.currentSeason;
-//? if >= 1.21.9 {
-//?}
+
+//? if >= 1.21.9
+/*import net.minecraft.server.players.NameAndId;*/
 
 public class SubInCommands extends Command {
     @Override
@@ -70,10 +72,10 @@ public class SubInCommands extends Command {
                 targetProfile = opt.get();
             }
         //?} else {
-        /*if (source.getServer().getApiServices().nameToIdCache() != null) {
-            Optional<PlayerConfigEntry> opt = source.getServer().getApiServices().nameToIdCache().findByName(target);
+        /*if (source.getServer().services().nameToIdCache() != null) {
+            Optional<NameAndId> opt = source.getServer().services().nameToIdCache().get(target);
             if (opt.isPresent()) {
-                PlayerConfigEntry playerConfigEntry = opt.get();
+                NameAndId playerConfigEntry = opt.get();
                 targetProfile = new GameProfile(playerConfigEntry.id(), playerConfigEntry.name());
             }
         *///?}

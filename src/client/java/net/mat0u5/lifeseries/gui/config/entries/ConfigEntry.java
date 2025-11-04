@@ -17,7 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 //? if >= 1.21.9 {
-//?}
+/*import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+*///?}
 
 public abstract class ConfigEntry {
     public static final int PREFFERED_HEIGHT = 20;
@@ -165,21 +168,21 @@ public abstract class ConfigEntry {
         return charTypedEntry(chr, modifiers);
     }
     //?} else {
-    /*protected abstract boolean mouseClickedEntry(Click click, boolean doubled);
-    protected abstract boolean keyPressedEntry(KeyInput keyInput);
-    protected abstract boolean charTypedEntry(CharInput charInput);
-    public boolean mouseClicked(Click click, boolean doubled) {
+    /*protected abstract boolean mouseClickedEntry(MouseButtonEvent click, boolean doubled);
+    protected abstract boolean keyPressedEntry(KeyEvent keyInput);
+    protected abstract boolean charTypedEntry(CharacterEvent charInput);
+    public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         if (hasResetButton() && resetButton.mouseClicked(click, doubled)) {
             return true;
         }
         return mouseClickedEntry(click, doubled);
     }
 
-    public boolean keyPressed(KeyInput keyInput) {
+    public boolean keyPressed(KeyEvent keyInput) {
         return keyPressedEntry(keyInput);
     }
 
-    public boolean charTyped(CharInput charInput) {
+    public boolean charTyped(CharacterEvent charInput) {
         return charTypedEntry(charInput);
     }
     *///?}

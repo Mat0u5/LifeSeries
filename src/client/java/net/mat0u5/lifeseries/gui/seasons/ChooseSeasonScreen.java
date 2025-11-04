@@ -13,8 +13,10 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-//? if >= 1.21.9
-/*import net.minecraft.client.gui.Click;*/
+//? if >= 1.21.9 {
+/*import net.minecraft.client.input.MouseButtonEvent;
+*///?}
+
 public class ChooseSeasonScreen extends DefaultScreen {
 
     private static final int ROWS = 2;
@@ -111,7 +113,7 @@ public class ChooseSeasonScreen extends DefaultScreen {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0) { // Left-click
     //?} else {
-    /*public boolean mouseClicked(Click click, boolean doubled) {
+    /*public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         double mouseX = click.x();
         double mouseY = click.y();
         if (click.button() == 0) { // Left-click

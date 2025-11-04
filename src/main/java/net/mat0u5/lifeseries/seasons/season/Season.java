@@ -107,8 +107,8 @@ public abstract class Season {
         ServerLevel overworld = server.getLevel(Level.OVERWORLD);
         if (overworld != null) overworld.getWorldBorder().setSize(seasonConfig.WORLDBORDER_SIZE.get(seasonConfig));
         //? if >= 1.21.9 {
-        /*ServerWorld nether = server.getWorld(World.NETHER);
-        ServerWorld end = server.getWorld(World.END);
+        /*ServerLevel nether = server.getLevel(Level.NETHER);
+        ServerLevel end = server.getLevel(Level.END);
         if (nether != null) nether.getWorldBorder().setSize(seasonConfig.WORLDBORDER_NETHER_SIZE.get(seasonConfig));
         if (end != null) end.getWorldBorder().setSize(seasonConfig.WORLDBORDER_END_SIZE.get(seasonConfig));
         *///?}

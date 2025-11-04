@@ -1,6 +1,17 @@
 package net.mat0u5.lifeseries.entity.fakeplayer;
 
+/*
+ * This file includes code from the Fabric Carpet project: https://github.com/gnembon/fabric-carpet
+ *
+ * Used and modified under the MIT License.
+ */
+
 import com.mojang.authlib.GameProfile;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ClientInformation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+//? if <= 1.21.6 {
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.AstralProjection;
@@ -11,10 +22,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.game.ClientboundRotateHeadPacket;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ClientInformation;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.players.GameProfileCache;
 import net.minecraft.world.damagesource.DamageSource;
@@ -29,11 +36,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-/*
- * This file includes code from the Fabric Carpet project: https://github.com/gnembon/fabric-carpet
- *
- * Used and modified under the MIT License.
- */
+//?}
+
 @SuppressWarnings("EntityConstructor")
 public class FakePlayer extends ServerPlayer {
     private FakePlayer(MinecraftServer server, ServerLevel worldIn, GameProfile profile, ClientInformation cli) {

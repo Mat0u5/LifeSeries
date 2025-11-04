@@ -5,9 +5,9 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 
 //? if >= 1.21.9 {
-/*import net.minecraft.client.gui.Click;
-import net.minecraft.client.input.CharInput;
-import net.minecraft.client.input.KeyInput;
+/*import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
 *///?}
 
 public abstract class ButtonConfigEntry extends ConfigEntry {
@@ -69,7 +69,7 @@ public abstract class ButtonConfigEntry extends ConfigEntry {
     }
     //?} else {
     /*@Override
-    protected boolean mouseClickedEntry(Click click, boolean doubled) {
+    protected boolean mouseClickedEntry(MouseButtonEvent click, boolean doubled) {
         if (!this.button.mouseClicked(click, doubled)) {
             clicked = !clicked;
         }
@@ -77,12 +77,12 @@ public abstract class ButtonConfigEntry extends ConfigEntry {
     }
 
     @Override
-    protected boolean keyPressedEntry(KeyInput input) {
+    protected boolean keyPressedEntry(KeyEvent input) {
         return false;
     }
 
     @Override
-    protected boolean charTypedEntry(CharInput input) {
+    protected boolean charTypedEntry(CharacterEvent input) {
         return false;
     }
     *///?}

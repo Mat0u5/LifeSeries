@@ -14,8 +14,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 
 //? if >= 1.21.9 {
-/*import net.minecraft.entity.decoration.MannequinEntity;
-import net.mat0u5.lifeseries.mixin.MannequinEntityAccessor;
+/*import net.mat0u5.lifeseries.mixin.MannequinEntityAccessor;
+import net.minecraft.world.entity.decoration.Mannequin;
 *///?}
 
 public class Mimicry extends Superpower {
@@ -45,8 +45,8 @@ public class Mimicry extends Superpower {
         boolean successfullyMimicked = false;
         if (lookingAt != null)  {
             //? if >= 1.21.9 {
-            /*if (lookingAt instanceof MannequinEntity mannequin && mannequin instanceof MannequinEntityAccessor mannequinAccessor && mannequin.age < 0) {
-                ServerPlayerEntity lookingAtPlayer = PlayerUtils.getPlayer(mannequinAccessor.ls$getMannequinProfile().getGameProfile().id());
+            /*if (lookingAt instanceof Mannequin mannequin && mannequin instanceof MannequinEntityAccessor mannequinAccessor && mannequin.tickCount < 0) {
+                ServerPlayer lookingAtPlayer = PlayerUtils.getPlayer(mannequinAccessor.ls$getMannequinProfile().partialProfile().id());
                 if (lookingAtPlayer != null) {
                     lookingAt = lookingAtPlayer;
                 }

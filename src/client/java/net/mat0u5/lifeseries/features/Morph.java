@@ -30,10 +30,8 @@ public class Morph {
             if (dummy == null || dummy.getType() != morph) {
                 //? if <= 1.21 {
                 Entity entity = morph.create(player.level());
-                //?} else if <= 1.21.6 {
+                //?} else {
                 /*Entity entity = morph.create(player.level(), EntitySpawnReason.COMMAND);
-                *///?} else {
-                /*Entity entity = morph.create(player.getEntityWorld(), SpawnReason.COMMAND);
                 *///?}
                 if (entity != null) ((IMorph) entity).setFromMorph(true);
                 if(!(entity instanceof LivingEntity)){
