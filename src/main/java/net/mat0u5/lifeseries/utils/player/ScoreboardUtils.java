@@ -1,9 +1,10 @@
 package net.mat0u5.lifeseries.utils.player;
 
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
-import net.minecraft.scoreboard.*;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.scores.*;
+import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -14,50 +15,50 @@ import static net.mat0u5.lifeseries.Main.server;
 public class ScoreboardUtils {
 
     public static void createObjective(String name) {
-        createObjective(name, name, ScoreboardCriterion.DUMMY);
+        createObjective(name, name, ObjectiveCriteria.DUMMY);
     }
 
-    public static void createObjective(String name, String displayName, ScoreboardCriterion criterion) {
+    public static void createObjective(String name, String displayName, ObjectiveCriteria criterion) {
         if (server == null) return;
         Scoreboard scoreboard = server.getScoreboard();
-        if (scoreboard.getNullableObjective(name) != null) return;
-        scoreboard.addObjective(name, criterion, Text.literal(displayName), criterion.getDefaultRenderType(), false, null);
+        if (scoreboard.getObjective(name) != null) return;
+        scoreboard.addObjective(name, criterion, Component.literal(displayName), criterion.getDefaultRenderType(), false, null);
     }
 
     public static boolean existsObjective(String name) {
         if (server == null) return false;
         Scoreboard scoreboard = server.getScoreboard();
-        return scoreboard.getNullableObjective(name) != null;
+        return scoreboard.getObjective(name) != null;
     }
 
-    public static ScoreboardObjective getObjective(String name) {
+    public static Objective getObjective(String name) {
         if (server == null) return null;
         Scoreboard scoreboard = server.getScoreboard();
-        return scoreboard.getNullableObjective(name);
+        return scoreboard.getObjective(name);
     }
 
-    public static ScoreboardObjective getObjectiveInSlot(ScoreboardDisplaySlot slot) {
+    public static Objective getObjectiveInSlot(DisplaySlot slot) {
         if (server == null) return null;
         Scoreboard scoreboard = server.getScoreboard();
-        return scoreboard.getObjectiveForSlot(slot);
+        return scoreboard.getDisplayObjective(slot);
     }
 
-    public static void setObjectiveInSlot(ScoreboardDisplaySlot slot, String name) {
+    public static void setObjectiveInSlot(DisplaySlot slot, String name) {
         if (server == null) return;
         Scoreboard scoreboard = server.getScoreboard();
-        scoreboard.setObjectiveSlot(slot, scoreboard.getNullableObjective(name));
+        scoreboard.setDisplayObjective(slot, scoreboard.getObjective(name));
     }
 
     public static void removeObjective(String name) {
         if (server == null) return;
         Scoreboard scoreboard = server.getScoreboard();
-        ScoreboardObjective objective = scoreboard.getNullableObjective(name);
+        Objective objective = scoreboard.getObjective(name);
         if (objective == null) return;
         scoreboard.removeObjective(objective);
     }
 
-    public static void setScore(ServerPlayerEntity player, String objectiveName, int score) {
-        setScore(ScoreHolder.fromName(player.getNameForScoreboard()), objectiveName, score);
+    public static void setScore(ServerPlayer player, String objectiveName, int score) {
+        setScore(ScoreHolder.forNameOnly(player.getScoreboardName()), objectiveName, score);
     }
 
     public static void setScore(ScoreHolder holder, String objectiveName, int score) {
@@ -66,38 +67,38 @@ public class ScoreboardUtils {
         }
         if (server == null) return;
         Scoreboard scoreboard = server.getScoreboard();
-        ScoreboardObjective objective = scoreboard.getNullableObjective(objectiveName);
+        Objective objective = scoreboard.getObjective(objectiveName);
         if (objective == null) return;
-        scoreboard.getOrCreateScore(holder, objective).setScore(score);
+        scoreboard.getOrCreatePlayerScore(holder, objective).set(score);
     }
 
-    public static Collection<ScoreboardEntry> getScores(String objectiveName) {
+    public static Collection<PlayerScoreEntry> getScores(String objectiveName) {
         if (server == null) return Collections.emptyList();
         Scoreboard scoreboard = server.getScoreboard();
-        ScoreboardObjective objective = scoreboard.getNullableObjective(objectiveName);
+        Objective objective = scoreboard.getObjective(objectiveName);
         if (objective == null) return Collections.emptyList();
-        return scoreboard.getScoreboardEntries(objective);
+        return scoreboard.listPlayerScores(objective);
     }
 
     public static Integer getScore(ScoreHolder holder, String objectiveName) {
         if (server == null) return null;
         Scoreboard scoreboard = server.getScoreboard();
-        ScoreboardObjective objective = scoreboard.getNullableObjective(objectiveName);
+        Objective objective = scoreboard.getObjective(objectiveName);
         if (objective == null) return -1;
-        ReadableScoreboardScore score = scoreboard.getScore(holder, objective);
+        ReadOnlyScoreInfo score = scoreboard.getPlayerScoreInfo(holder, objective);
         if (score == null) return null;
-        return score.getScore();
+        return score.value();
     }
 
-    public static void setScore(ServerPlayerEntity player, String objectiveName) {
-        resetScore(ScoreHolder.fromName(player.getNameForScoreboard()), objectiveName);
+    public static void setScore(ServerPlayer player, String objectiveName) {
+        resetScore(ScoreHolder.forNameOnly(player.getScoreboardName()), objectiveName);
     }
 
     public static void resetScore(ScoreHolder holder, String objectiveName) {
         if (server == null) return;
         Scoreboard scoreboard = server.getScoreboard();
-        ScoreboardObjective objective = scoreboard.getNullableObjective(objectiveName);
+        Objective objective = scoreboard.getObjective(objectiveName);
         if (objective == null) return;
-        scoreboard.removeScore(holder, objective);
+        scoreboard.resetSinglePlayerScore(holder, objective);
     }
 }

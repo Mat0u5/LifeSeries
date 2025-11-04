@@ -1,8 +1,9 @@
 package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.util.profiler.Profiler;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.item.crafting.RecipeManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -12,17 +13,16 @@ import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.blacklist;
 
-//? if <=1.21 {
-import net.minecraft.recipe.RecipeManager;
+//? if <= 1.21 {
+import net.minecraft.resources.ResourceLocation;
 import com.google.gson.JsonElement;
-import net.minecraft.util.Identifier;
 import java.util.ArrayList;
 import java.util.Map;
 @Mixin(value = RecipeManager.class, priority = 1)
 public class RecipeManagerMixin {
 
-    @Inject(method = "apply(Ljava/util/Map;Lnet/minecraft/resource/ResourceManager;Lnet/minecraft/util/profiler/Profiler;)V", at = @At("HEAD"))
-    private void applyMixin(Map<Identifier, JsonElement> map, ResourceManager resourceManager, Profiler profiler, CallbackInfo info) {
+    @Inject(method = "apply(Ljava/util/Map;Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)V", at = @At("HEAD"))
+    private void applyMixin(Map<ResourceLocation, JsonElement> map, ResourceManager resourceManager, ProfilerFiller profiler, CallbackInfo info) {
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (blacklist == null) return;
         if (blacklist.loadedListItemIdentifier == null)  {
@@ -30,9 +30,9 @@ public class RecipeManagerMixin {
         }
         if (blacklist.loadedListItemIdentifier.isEmpty()) return;
 
-        List<Identifier> toRemove = new ArrayList<>();
+        List<ResourceLocation> toRemove = new ArrayList<>();
 
-        for (Identifier identifier : map.keySet()) {
+        for (ResourceLocation identifier : map.keySet()) {
             if (blacklist.loadedListItemIdentifier.contains(identifier)) {
                 toRemove.add(identifier);
             }
@@ -41,20 +41,18 @@ public class RecipeManagerMixin {
     }
 
 }
- //?} else {
-/*import net.minecraft.recipe.ServerRecipeManager;
-import net.minecraft.recipe.PreparedRecipes;
-import net.mat0u5.lifeseries.Main;
-import net.minecraft.recipe.RecipeEntry;
+//?} else {
+/*import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeMap;
 import org.spongepowered.asm.mixin.Shadow;
-@Mixin(ServerRecipeManager.class)
+@Mixin(RecipeManager.class)
 public abstract class RecipeManagerMixin {
 
     @Shadow
-    private PreparedRecipes preparedRecipes;
+    private RecipeMap recipes;
 
-    @Inject(method = "apply", at = @At("HEAD"), cancellable = true)
-    private void applyMixin(PreparedRecipes preparedRecipes, ResourceManager resourceManager, Profiler profiler, CallbackInfo ci) {
+    @Inject(method = "apply(Lnet/minecraft/world/item/crafting/RecipeMap;Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)V", at = @At("HEAD"), cancellable = true)
+    private void applyMixin(RecipeMap preparedRecipes, ResourceManager resourceManager, ProfilerFiller profiler, CallbackInfo ci) {
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (blacklist == null) return;
         if (blacklist.loadedListItemIdentifier == null)  {
@@ -62,11 +60,11 @@ public abstract class RecipeManagerMixin {
         }
         if (blacklist.loadedListItemIdentifier.isEmpty()) return;
 
-        List<RecipeEntry<?>> filteredRecipes = preparedRecipes.recipes().stream()
-            .filter(recipe -> !blacklist.loadedListItemIdentifier.contains(recipe.id().getValue()))
-            .toList();
+        List<RecipeHolder<?>> filteredRecipes = preparedRecipes.values().stream()
+                .filter(recipe -> !blacklist.loadedListItemIdentifier.contains(recipe.id().location()))
+                .toList();
 
-        this.preparedRecipes = PreparedRecipes.of(filteredRecipes);
+        this.recipes = RecipeMap.create(filteredRecipes);
 
         // Log the updated recipe count
         Main.LOGGER.info("Loaded {} recipes after filtering", filteredRecipes.size());

@@ -3,9 +3,9 @@ package net.mat0u5.lifeseries.mixin;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.utils.interfaces.IHungerManager;
-import net.minecraft.entity.player.HungerManager;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
-@Mixin(value = HungerManager.class, priority = 1)
+@Mixin(value = FoodData.class, priority = 1)
 public class HungerManagerMixin implements IHungerManager {
     @Shadow
     private int foodLevel;
@@ -23,7 +23,7 @@ public class HungerManagerMixin implements IHungerManager {
     private float saturationLevel;
 
     @Unique
-    private ServerPlayerEntity ls$player;
+    private ServerPlayer ls$player;
 
     @Unique
     @Override
@@ -54,25 +54,25 @@ public class HungerManagerMixin implements IHungerManager {
     @Unique
     private float ls$prevSaturationLevel;
 
-    @Inject(method = "update", at = @At("HEAD"))
+    @Inject(method = "tick", at = @At("HEAD"))
     //? if <= 1.21 {
-    private void updateHead(PlayerEntity player, CallbackInfo ci) {
+    private void updateHead(Player player, CallbackInfo ci) {
     //?} else {
-    /*private void updateHead(ServerPlayerEntity player, CallbackInfo ci) {
+    /*private void updateHead(ServerPlayer player, CallbackInfo ci) {
     *///?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
-        if (player instanceof ServerPlayerEntity serverPlayer) {
+        if (player instanceof ServerPlayer serverPlayer) {
             this.ls$player = serverPlayer;
         }
         ls$prevFoodLevel = this.foodLevel;
         ls$prevSaturationLevel = this.saturationLevel;
     }
 
-    @Inject(method = "update", at = @At("TAIL"))
+    @Inject(method = "tick", at = @At("TAIL"))
     //? if <= 1.21 {
-    private void updateTail(PlayerEntity player, CallbackInfo ci) {
+    private void updateTail(Player player, CallbackInfo ci) {
     //?} else {
-    /*private void updateTail(ServerPlayerEntity player, CallbackInfo ci) {
+    /*private void updateTail(ServerPlayer player, CallbackInfo ci) {
     *///?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (ls$prevFoodLevel != foodLevel || ls$prevSaturationLevel != saturationLevel) {
@@ -85,12 +85,12 @@ public class HungerManagerMixin implements IHungerManager {
         ls$emitUpdate();
     }
 
-    @Inject(method = "setSaturationLevel", at = @At("TAIL"))
+    @Inject(method = "setSaturation", at = @At("TAIL"))
     private void setSaturationLevel(CallbackInfo ci) {
         ls$emitUpdate();
     }
 
-    @Inject(method = "addInternal", at = @At("TAIL"))
+    @Inject(method = "add", at = @At("TAIL"))
     private void addInternal(CallbackInfo ci) {
         ls$emitUpdate();
     }

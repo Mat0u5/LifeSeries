@@ -3,9 +3,8 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -14,13 +13,13 @@ public abstract class Superpower {
     public boolean active = false;
     public long cooldown = 0;
     private final UUID playerUUID;
-    public Superpower(ServerPlayerEntity player) {
-        playerUUID = player.getUuid();
+    public Superpower(ServerPlayer player) {
+        playerUUID = player.getUUID();
         SessionTranscript.newSuperpower(player, getSuperpower());
     }
 
     @Nullable
-    public ServerPlayerEntity getPlayer() {
+    public ServerPlayer getPlayer() {
         return PlayerUtils.getPlayer(playerUUID);
     }
 

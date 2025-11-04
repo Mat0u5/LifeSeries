@@ -6,16 +6,14 @@ import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.text.Text;
-
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
 import java.util.ArrayList;
 import java.util.List;
-
 //? if >= 1.21.9 {
-/*import net.minecraft.client.gui.Click;
-import net.minecraft.client.input.CharInput;
-import net.minecraft.client.input.KeyInput;
+/*import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
 *///?}
 
 public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends EmptyConfigEntry {
@@ -66,13 +64,13 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
     }
 
     @Override
-    public void render(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    public void render(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         this.y = y;
         renderEntry(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
     }
 
     @Override
-    protected void renderEntry(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    protected void renderEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         int maxHeight = getMaxHeight();
         if (hasExpandingChild()) {
             currentHeight = maxHeight;
@@ -98,7 +96,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
             currentY += entryHeight + ConfigListWidget.ENTRY_GAP;
 
             String expandText = !mainEntry.shouldExpand() ? "Click to expand" : "Click to collapse";
-            RenderUtils.drawTextRight(context, textRenderer, TextColors.LIGHT_GRAY_A128, Text.of(expandText), mainEntry.expandTextX(x, width), y + LABEL_OFFSET_Y);
+            RenderUtils.drawTextRight(context, textRenderer, TextColors.LIGHT_GRAY_A128, Component.nullToEmpty(expandText), mainEntry.expandTextX(x, width), y + LABEL_OFFSET_Y);
         }
 
 
@@ -122,9 +120,9 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
         renderExpandIcon(context, x, y, isExpanded, y+currentHeight+1, width);
     }
 
-    private void renderExpandIcon(DrawContext context, int x, int y, boolean expanded, int endY, int width) {
+    private void renderExpandIcon(GuiGraphics context, int x, int y, boolean expanded, int endY, int width) {
         String text = expanded ? "- " : "+ ";
-        RenderUtils.drawTextRight(context, textRenderer, TextColors.WHITE, Text.of(text), x + EXPAND_TEXT_OFFSET_X, y + EXPAND_TEXT_OFFSET_Y);
+        RenderUtils.drawTextRight(context, textRenderer, TextColors.WHITE, Component.nullToEmpty(text), x + EXPAND_TEXT_OFFSET_X, y + EXPAND_TEXT_OFFSET_Y);
         if (showSidebar) {
             context.fill(x+EXPAND_SIDEBAR_OFFSET_X, y, x+EXPAND_SIDEBAR_OFFSET_X+EXPAND_SIDEBAR_THICKNESS, endY - ConfigListWidget.ENTRY_GAP, TextColors.WHITE_A128);
         }
@@ -156,7 +154,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
     //? if <= 1.21.6 {
     protected boolean mouseClickedEntry(double mouseX, double mouseY, int button) {
     //?} else {
-    /*protected boolean mouseClickedEntry(Click click, boolean doubled) {
+    /*protected boolean mouseClickedEntry(MouseButtonEvent click, boolean doubled) {
         int mouseX = (int) click.x();
         int mouseY = (int) click.y();
     *///?}
@@ -198,7 +196,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
     //? if <= 1.21.6 {
     protected boolean keyPressedEntry(int keyCode, int scanCode, int modifiers) {
     //?} else {
-    /*protected boolean keyPressedEntry(KeyInput input) {
+    /*protected boolean keyPressedEntry(KeyEvent input) {
     *///?}
         if (mainEntry != null && mainEntry.isFocused()) {
             //? if <= 1.21.6 {
@@ -230,7 +228,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
     //? if <= 1.21.6 {
     protected boolean charTypedEntry(char chr, int modifiers) {
     //?} else {
-    /*protected boolean charTypedEntry(CharInput input) {
+    /*protected boolean charTypedEntry(CharacterEvent input) {
     *///?}
         if (mainEntry != null && mainEntry.isFocused()) {
             //? if <= 1.21.6 {

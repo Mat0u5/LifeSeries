@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.entity.snail.goal;
 
 import net.mat0u5.lifeseries.entity.snail.Snail;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 public final class SnailLandGoal extends Goal {
@@ -16,13 +16,13 @@ public final class SnailLandGoal extends Goal {
     }
 
     @Override
-    public boolean canStart() {
-        if (mob.getSnailWorld().isClient()) return false;
+    public boolean canUse() {
+        if (mob.level().isClientSide()) return false;
         if (!mob.isSnailFlying() || mob.isSnailGliding()) {
             return false;
         }
 
-        Vec3d targetPos = mob.serverData.getPlayerPos();
+        Vec3 targetPos = mob.serverData.getPlayerPos();
         if (targetPos == null) {
             noTargetTicks++;
         } else {
@@ -37,7 +37,7 @@ public final class SnailLandGoal extends Goal {
             return false;
         }
 
-        boolean isMobAboveTarget = mob.getY() - targetPos.getY() > 0.0D;
+        boolean isMobAboveTarget = mob.getY() - targetPos.y() > 0.0D;
 
         if (!isMobAboveTarget) {
             return false;
@@ -51,7 +51,7 @@ public final class SnailLandGoal extends Goal {
     }
 
     @Override
-    public boolean shouldContinue() {
+    public boolean canContinueToUse() {
         if (!mob.pathfinding.isValidBlockOnGround()) {
             return false;
         }
@@ -80,6 +80,6 @@ public final class SnailLandGoal extends Goal {
     }
 
     private void land() {
-        mob.setVelocity(0.0D, -0.15D, 0.0D);
+        mob.setDeltaMovement(0.0D, -0.15D, 0.0D);
     }
 }

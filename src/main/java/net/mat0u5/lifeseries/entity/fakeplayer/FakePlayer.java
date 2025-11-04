@@ -1,44 +1,47 @@
 package net.mat0u5.lifeseries.entity.fakeplayer;
 
-import com.mojang.authlib.GameProfile;
-import net.minecraft.network.packet.c2s.common.SyncedClientOptions;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-//? if <= 1.21.6 {
-import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.AstralProjection;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.block.entity.SkullBlockEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.DisconnectionInfo;
-import net.minecraft.network.NetworkSide;
-import net.minecraft.network.packet.s2c.play.EntitySetHeadYawS2CPacket;
-import net.minecraft.network.packet.s2c.play.PositionFlag;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.server.network.ConnectedClientData;
-import net.minecraft.text.Text;
-import net.minecraft.util.UserCache;
-import net.minecraft.util.Uuids;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.GameMode;
-import net.minecraft.world.World;
-
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-//?}
 /*
  * This file includes code from the Fabric Carpet project: https://github.com/gnembon/fabric-carpet
  *
  * Used and modified under the MIT License.
  */
+
+import com.mojang.authlib.GameProfile;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ClientInformation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+//? if <= 1.21.6 {
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.AstralProjection;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.minecraft.core.UUIDUtil;
+import net.minecraft.network.DisconnectionDetails;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.PacketFlow;
+import net.minecraft.network.protocol.game.ClientboundRotateHeadPacket;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.network.CommonListenerCookie;
+import net.minecraft.server.players.GameProfileCache;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.SkullBlockEntity;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+//?}
+
 @SuppressWarnings("EntityConstructor")
-public class FakePlayer extends ServerPlayerEntity {
-    private FakePlayer(MinecraftServer server, ServerWorld worldIn, GameProfile profile, SyncedClientOptions cli) {
-        super(server, worldIn, profile, cli);
+public class FakePlayer extends ServerPlayer {
+    private FakePlayer(MinecraftServer server, ServerLevel levelIn, GameProfile profile, ClientInformation cli) {
+        super(server, levelIn, profile, cli);
     }
     //? if <= 1.21.6 {
     private static final Set<String> spawning = new HashSet<>();
@@ -46,26 +49,26 @@ public class FakePlayer extends ServerPlayerEntity {
     public UUID shadow;
 
     public static CompletableFuture<FakePlayer> createFake(
-            String username, MinecraftServer server, Vec3d pos, double yaw, double pitch,
-            RegistryKey<World> dimensionId, GameMode gamemode, boolean flying, PlayerInventory inv,
+            String username, MinecraftServer server, Vec3 pos, double yaw, double pitch,
+            ResourceKey<Level> dimensionId, GameType gamemode, boolean flying, Inventory inv,
             UUID shadow) {
-        ServerWorld worldIn = server.getWorld(dimensionId);
-        UserCache.setUseRemote(false);
+        ServerLevel levelIn = server.getLevel(dimensionId);
+        GameProfileCache.setUsesAuthentication(false);
         GameProfile gameprofile = null;
         try {
-            if (server.getUserCache() != null) {
-                Optional<GameProfile> opt = server.getUserCache().findByName(username);
+            if (server.getProfileCache() != null) {
+                Optional<GameProfile> opt = server.getProfileCache().get(username);
                 if (opt.isPresent()) {
                     gameprofile = opt.get();
                 }
             }
         } catch(Exception ignored) {}
         finally {
-            UserCache.setUseRemote(server.isDedicated() && server.isRemote());
+            GameProfileCache.setUsesAuthentication(server.isDedicatedServer() && server.isPublished());
         }
         if (gameprofile == null)
         {
-            gameprofile = new GameProfile(Uuids.getOfflinePlayerUuid(username), username);
+            gameprofile = new GameProfile(UUIDUtil.createOfflinePlayerUUID(username), username);
         }
         GameProfile finalGP = gameprofile;
 
@@ -83,28 +86,32 @@ public class FakePlayer extends ServerPlayerEntity {
             GameProfile current = finalGP;
             if (profile.isPresent()) current = profile.get();
 
-            FakePlayer instance = new FakePlayer(server, worldIn, current, SyncedClientOptions.createDefault());
-            instance.fixStartingPosition = () -> instance.refreshPositionAndAngles(pos.x, pos.y, pos.z, (float) yaw, (float) pitch);
-            FakeClientConnection connection = new FakeClientConnection(NetworkSide.SERVERBOUND);
-            ConnectedClientData data =  new ConnectedClientData(current, 0, instance.getClientOptions(), true);
-            server.getPlayerManager().onPlayerConnect(connection, instance, data);
-            PlayerUtils.teleport(instance, worldIn, pos, (float) yaw, (float) pitch);
+            FakePlayer instance = new FakePlayer(server, levelIn, current, ClientInformation.createDefault());
+            //? if <= 1.21.4 {
+            instance.fixStartingPosition = () -> instance.moveTo(pos.x, pos.y, pos.z, (float) yaw, (float) pitch);
+            //?} else {
+            /*instance.fixStartingPosition = () -> instance.snapTo(pos.x, pos.y, pos.z, (float) yaw, (float) pitch);
+            *///?}
+            FakeClientConnection connection = new FakeClientConnection(PacketFlow.SERVERBOUND);
+            CommonListenerCookie data =  new CommonListenerCookie(current, 0, instance.clientInformation(), true);
+            server.getPlayerList().placeNewPlayer(connection, instance, data);
+            PlayerUtils.teleport(instance, levelIn, pos, (float) yaw, (float) pitch);
             instance.setHealth(20.0F);
             instance.unsetRemoved();
-            instance.changeGameMode(gamemode);
-            server.getPlayerManager().sendToAll(new EntitySetHeadYawS2CPacket(instance, (byte) (instance.getYaw() * 256 / 360)));
-            instance.dataTracker.set(PLAYER_MODEL_PARTS, (byte) 0x7f);
+            instance.setGameMode(gamemode);
+            server.getPlayerList().broadcastAll(new ClientboundRotateHeadPacket(instance, (byte) (instance.getYRot() * 256 / 360)));
+            instance.entityData.set(DATA_PLAYER_MODE_CUSTOMISATION, (byte) 0x7f);
             instance.getAbilities().flying = flying;
 
-            instance.getInventory().clone(inv);
-            instance.getInventory().markDirty();
-            instance.getInventory().updateItems();
-            instance.currentScreenHandler.sendContentUpdates();
+            instance.getInventory().replaceWith(inv);
+            instance.getInventory().setChanged();
+            instance.getInventory().tick();
+            instance.containerMenu.broadcastChanges();
 
             instance.shadow = shadow;
-            instance.clearStatusEffects();
-            instance.setOnFire(false);
-            instance.setFireTicks(0);
+            instance.removeAllEffects();
+            instance.setSharedFlagOnFire(false);
+            instance.setRemainingFireTicks(0);
             //instance.setCustomName(displayName);
             future.complete(instance);
         }, server);
@@ -113,24 +120,24 @@ public class FakePlayer extends ServerPlayerEntity {
     }
 
     private static CompletableFuture<Optional<GameProfile>> fetchGameProfile(final String name) {
-        return SkullBlockEntity.fetchProfileByName(name);
+        return SkullBlockEntity.fetchGameProfile(name);
     }
 
     @Override
-    public String getIp() {
+    public String getIpAddress() {
         return "127.0.0.1";
     }
 
     @Override
-    public boolean allowsServerListing() {
+    public boolean allowsListing() {
         return false;
     }
     @Override
     public void tick() {
-        if (age % 20 == 0) {
+        if (tickCount % 20 == 0) {
             boolean triggered = false;
             if (shadow != null) {
-                ServerPlayerEntity player = PlayerUtils.getPlayer(shadow);
+                ServerPlayer player = PlayerUtils.getPlayer(shadow);
                 if (player != null) {
                     if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.ASTRAL_PROJECTION)) {
                         if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof AstralProjection projection) {
@@ -141,18 +148,18 @@ public class FakePlayer extends ServerPlayerEntity {
                 }
             }
             if (!triggered) {
-                networkHandler.onDisconnected(new DisconnectionInfo(Text.empty()));
+                connection.onDisconnect(new DisconnectionDetails(Component.empty()));
             }
         }
         //
-        if (age % 10 == 0)
+        if (tickCount % 10 == 0)
         {
-            this.networkHandler.syncWithPlayerPosition();
+            this.connection.resetPosition();
         }
         try
         {
             super.tick();
-            playerTick();
+            doTick();
         }
         catch (NullPointerException e) {
             e.printStackTrace();
@@ -161,28 +168,28 @@ public class FakePlayer extends ServerPlayerEntity {
 
     @Override
             //? if <= 1.21 {
-    public boolean damage(DamageSource source, float amount) {
+    public boolean hurt(DamageSource source, float amount) {
      //?} else {
-    /*public boolean damage(ServerWorld world, DamageSource source, float amount) {
+    /*public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
         *///?}
         if (shadow != null) {
-            ServerPlayerEntity player = PlayerUtils.getPlayer(shadow);
+            ServerPlayer player = PlayerUtils.getPlayer(shadow);
             if (player != null) {
                 if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.ASTRAL_PROJECTION)) {
                     if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof AstralProjection projection) {
                         //? if <= 1.21 {
                         projection.onDamageClone(source, amount);
                          //?} else {
-                        /*projection.onDamageClone(world, source, amount);
+                        /*projection.onDamageClone(level, source, amount);
                         *///?}
                     }
                 }
             }
         }
         //? if <= 1.21 {
-        return super.damage(source, amount);
+        return super.hurt(source, amount);
          //?} else {
-        /*return super.damage(world, source, amount);
+        /*return super.hurtServer(level, source, amount);
         *///?}
 
     }

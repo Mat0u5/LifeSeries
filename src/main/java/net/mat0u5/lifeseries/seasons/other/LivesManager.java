@@ -13,17 +13,19 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.player.TeamUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.scoreboard.*;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.GameMode;
+import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.scores.PlayerScoreEntry;
+import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.ScoreHolder;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -34,7 +36,7 @@ import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
 public class LivesManager {
     public static final String SCOREBOARD_NAME = "Lives";
     public boolean FINAL_DEATH_LIGHTNING = true;
-    public SoundEvent FINAL_DEATH_SOUND = SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER;
+    public SoundEvent FINAL_DEATH_SOUND = SoundEvents.LIGHTNING_BOLT_THUNDER;
     public boolean SHOW_DEATH_TITLE = false;
     public boolean ONLY_TAKE_LIVES_IN_SESSION = false;
     public boolean SEE_FRIENDLY_INVISIBLE_PLAYERS = false;
@@ -44,7 +46,7 @@ public class LivesManager {
     public void reload() {
         SHOW_DEATH_TITLE = seasonConfig.FINAL_DEATH_TITLE_SHOW.get(seasonConfig);
         FINAL_DEATH_LIGHTNING = seasonConfig.FINAL_DEATH_LIGHTNING.get(seasonConfig);
-        FINAL_DEATH_SOUND = SoundEvent.of(Identifier.of(seasonConfig.FINAL_DEATH_SOUND.get(seasonConfig)));
+        FINAL_DEATH_SOUND = SoundEvent.createVariableRangeEvent(ResourceLocation.parse(seasonConfig.FINAL_DEATH_SOUND.get(seasonConfig)));
         ONLY_TAKE_LIVES_IN_SESSION = seasonConfig.ONLY_TAKE_LIVES_IN_SESSION.get(seasonConfig);
         SEE_FRIENDLY_INVISIBLE_PLAYERS = seasonConfig.SEE_FRIENDLY_INVISIBLE_PLAYERS.get(seasonConfig);
         LIVES_SYSTEM_DISABLED = seasonConfig.LIVES_SYSTEM_DISABLED.get(seasonConfig);
@@ -53,16 +55,16 @@ public class LivesManager {
 
     public void updateTeams() {
         MAX_TAB_NUMBER = 4;
-        Collection<Team> allTeams = TeamUtils.getAllTeams();
+        Collection<PlayerTeam> allTeams = TeamUtils.getAllTeams();
         if (allTeams != null) {
-            for (Team team : allTeams) {
+            for (PlayerTeam team : allTeams) {
                 String name = team.getName();
                 if (name.startsWith("lives_")) {
                     try {
                         int number = Integer.parseInt(name.replace("lives_",""));
                         MAX_TAB_NUMBER = Math.max(MAX_TAB_NUMBER, number);
                     }catch(Exception e) {}
-                    team.setShowFriendlyInvisibles(SEE_FRIENDLY_INVISIBLE_PLAYERS);
+                    team.setSeeFriendlyInvisibles(SEE_FRIENDLY_INVISIBLE_PLAYERS);
                 }
             }
         }
@@ -70,45 +72,45 @@ public class LivesManager {
     }
 
     public void createTeams() {
-        TeamUtils.createTeam("lives_null", "Unassigned", Formatting.GRAY);
-        TeamUtils.createTeam("lives_0", "Dead", Formatting.DARK_GRAY);
-        TeamUtils.createTeam("lives_1", "Red", Formatting.RED);
-        TeamUtils.createTeam("lives_2", "Yellow", Formatting.YELLOW);
-        TeamUtils.createTeam("lives_3", "Green", Formatting.GREEN);
-        TeamUtils.createTeam("lives_4", "Dark Green", Formatting.DARK_GREEN);
+        TeamUtils.createTeam("lives_null", "Unassigned", ChatFormatting.GRAY);
+        TeamUtils.createTeam("lives_0", "Dead", ChatFormatting.DARK_GRAY);
+        TeamUtils.createTeam("lives_1", "Red", ChatFormatting.RED);
+        TeamUtils.createTeam("lives_2", "Yellow", ChatFormatting.YELLOW);
+        TeamUtils.createTeam("lives_3", "Green", ChatFormatting.GREEN);
+        TeamUtils.createTeam("lives_4", "Dark Green", ChatFormatting.DARK_GREEN);
     }
 
     public void createScoreboards() {
         ScoreboardUtils.createObjective(SCOREBOARD_NAME);
     }
 
-    public Formatting getColorForLives(ServerPlayerEntity player) {
+    public ChatFormatting getColorForLives(ServerPlayer player) {
         return getColorForLives(getPlayerLives(player));
     }
 
-    public Formatting getColorForLives(Integer lives) {
-        Team team = TeamUtils.getTeam(getTeamForLives(lives));
+    public ChatFormatting getColorForLives(Integer lives) {
+        PlayerTeam team = TeamUtils.getTeam(getTeamForLives(lives));
         if (team != null) {
-            Formatting color = team.getColor();
+            ChatFormatting color = team.getColor();
             if (color != null) {
                 return color;
             }
         }
-        return Formatting.DARK_GRAY;
+        return ChatFormatting.DARK_GRAY;
     }
 
-    public Text getFormattedLives(ServerPlayerEntity player) {
+    public Component getFormattedLives(ServerPlayer player) {
         return getFormattedLives(getPlayerLives(player));
     }
 
-    public Text getFormattedLives(@Nullable Integer lives) {
+    public Component getFormattedLives(@Nullable Integer lives) {
         if (lives == null) {
             lives = 0;
         }
-        Formatting color = getColorForLives(lives);
-        return Text.literal(String.valueOf(lives)).formatted(color);
+        ChatFormatting color = getColorForLives(lives);
+        return Component.literal(String.valueOf(lives)).withStyle(color);
     }
-    public String getTeamForPlayer(ServerPlayerEntity player) {
+    public String getTeamForPlayer(ServerPlayer player) {
         Integer lives = getPlayerLives(player);
         return getTeamForLives(lives);
     }
@@ -119,9 +121,9 @@ public class LivesManager {
             return nullTeam;
         }
         List<Integer> livesTeams = new ArrayList<>();
-        Collection<Team> allTeams = TeamUtils.getAllTeams();
+        Collection<PlayerTeam> allTeams = TeamUtils.getAllTeams();
         if (allTeams != null) {
-            for (Team team : allTeams) {
+            for (PlayerTeam team : allTeams) {
                 String name = team.getName();
                 if (name.startsWith(prefix)) {
                     try {
@@ -151,33 +153,33 @@ public class LivesManager {
     }
 
     @Nullable
-    public Integer getPlayerLives(ServerPlayerEntity player) {
+    public Integer getPlayerLives(ServerPlayer player) {
         if (player == null) return null;
         if (isWatcher(player)) return null;
         return ScoreboardUtils.getScore(player, SCOREBOARD_NAME);
     }
 
-    public boolean hasAssignedLives(ServerPlayerEntity player) {
+    public boolean hasAssignedLives(ServerPlayer player) {
         Integer lives = getPlayerLives(player);
         return lives != null;
     }
 
-    public boolean isAlive(ServerPlayerEntity player) {
+    public boolean isAlive(ServerPlayer player) {
         Integer lives = getPlayerLives(player);
         if (lives == null) return false;
         if (!hasAssignedLives(player)) return false;
         return lives > 0;
     }
 
-    public boolean isDead(ServerPlayerEntity player) {
+    public boolean isDead(ServerPlayer player) {
         return !isAlive(player);
     }
 
-    public void removePlayerLife(ServerPlayerEntity player) {
+    public void removePlayerLife(ServerPlayer player) {
         addToPlayerLives(player,-1);
     }
 
-    public void resetPlayerLife(ServerPlayerEntity player) {
+    public void resetPlayerLife(ServerPlayer player) {
         ScoreboardUtils.resetScore(player, SCOREBOARD_NAME);
         currentSeason.reloadPlayerTeam(player);
         currentSeason.assignDefaultLives(player);
@@ -188,8 +190,8 @@ public class LivesManager {
 
     public void resetAllPlayerLivesInner() {
         createScoreboards();
-        for (ScoreboardEntry entry : ScoreboardUtils.getScores(SCOREBOARD_NAME)) {
-            ScoreboardUtils.resetScore(ScoreHolder.fromName(entry.owner()), SCOREBOARD_NAME);
+        for (PlayerScoreEntry entry : ScoreboardUtils.getScores(SCOREBOARD_NAME)) {
+            ScoreboardUtils.resetScore(ScoreHolder.forNameOnly(entry.owner()), SCOREBOARD_NAME);
         }
 
         currentSeason.reloadAllPlayerTeams();
@@ -200,11 +202,11 @@ public class LivesManager {
         PlayerUtils.getAllPlayers().forEach(currentSeason::assignDefaultLives);
     }
 
-    public void addPlayerLife(ServerPlayerEntity player) {
+    public void addPlayerLife(ServerPlayer player) {
         addToPlayerLives(player,1);
     }
 
-    public void addToPlayerLives(ServerPlayerEntity player, int amount) {
+    public void addToPlayerLives(ServerPlayer player, int amount) {
         if (amount == 0) return;
         Integer currentLives = getPlayerLives(player);
         if (currentLives == null) currentLives = 0;
@@ -213,7 +215,7 @@ public class LivesManager {
         setPlayerLives(player, lives);
     }
 
-    public void addToLifeNoUpdate(ServerPlayerEntity player) {
+    public void addToLifeNoUpdate(ServerPlayer player) {
         if (isWatcher(player)) return;
         Integer currentLives = getPlayerLives(player);
         if (currentLives == null) currentLives = 0;
@@ -222,13 +224,13 @@ public class LivesManager {
         ScoreboardUtils.setScore(player, SCOREBOARD_NAME, lives);
     }
 
-    public void receiveLifeFromOtherPlayer(Text playerName, ServerPlayerEntity target, boolean isRevive) {
-        target.playSoundToPlayer(SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, SoundCategory.MASTER, 10, 1);
+    public void receiveLifeFromOtherPlayer(Component playerName, ServerPlayer target, boolean isRevive) {
+        target.playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.MASTER, 10, 1);
         if (seasonConfig.GIVELIFE_BROADCAST.get(seasonConfig)) {
             PlayerUtils.broadcastMessageExcept(TextUtils.format("{} received a life from {}", target, playerName), target);
         }
-        target.sendMessage(TextUtils.format("You received a life from {}", playerName));
-        PlayerUtils.sendTitleWithSubtitle(target, Text.of("You received a life"), TextUtils.format("from {}", playerName), 10, 60, 10);
+        target.sendSystemMessage(TextUtils.format("You received a life from {}", playerName));
+        PlayerUtils.sendTitleWithSubtitle(target, Component.nullToEmpty("You received a life"), TextUtils.format("from {}", playerName), 10, 60, 10);
         AnimationUtils.createSpiral(target, 175);
         currentSeason.reloadPlayerTeam(target);
         SessionTranscript.givelife(playerName, target);
@@ -240,7 +242,7 @@ public class LivesManager {
         }
     }
 
-    public void setPlayerLives(ServerPlayerEntity player, int lives) {
+    public void setPlayerLives(ServerPlayer player, int lives) {
         if (player == null || isWatcher(player)) return;
         Integer livesBefore = getPlayerLives(player);
         ScoreboardUtils.setScore(player, SCOREBOARD_NAME, lives);
@@ -252,77 +254,77 @@ public class LivesManager {
         }
         currentSeason.reloadPlayerTeam(player);
 
-        if (SubInManager.isSubbingIn(player.getUuid())) {
-            String substitutedPlayerName =OtherUtils.profileName(SubInManager.getSubstitutedPlayer(player.getUuid()));
+        if (SubInManager.isSubbingIn(player.getUUID())) {
+            String substitutedPlayerName =OtherUtils.profileName(SubInManager.getSubstitutedPlayer(player.getUUID()));
             setScore(substitutedPlayerName, lives);
         }
     }
 
     public void setScore(String playerName, int lives) {
-        ScoreboardUtils.setScore(ScoreHolder.fromName(playerName), SCOREBOARD_NAME, lives);
+        ScoreboardUtils.setScore(ScoreHolder.forNameOnly(playerName), SCOREBOARD_NAME, lives);
         currentSeason.reloadAllPlayerTeams();
     }
 
     @Nullable
     public Integer getScoreLives(String playerName) {
-        return ScoreboardUtils.getScore(ScoreHolder.fromName(playerName), SCOREBOARD_NAME);
+        return ScoreboardUtils.getScore(ScoreHolder.forNameOnly(playerName), SCOREBOARD_NAME);
     }
 
     @Nullable
-    public Boolean isOnLastLife(ServerPlayerEntity player) {
+    public Boolean isOnLastLife(ServerPlayer player) {
         return isOnSpecificLives(player, 1);
     }
 
-    public boolean isOnLastLife(ServerPlayerEntity player, boolean fallback) {
+    public boolean isOnLastLife(ServerPlayer player, boolean fallback) {
         Boolean isOnLastLife = isOnLastLife(player);
         if (isOnLastLife == null) return fallback;
         return isOnLastLife;
     }
 
     @Nullable
-    public Boolean isOnSpecificLives(ServerPlayerEntity player, int check) {
+    public Boolean isOnSpecificLives(ServerPlayer player, int check) {
         if (isDead(player)) return null;
         Integer lives = getPlayerLives(player);
         if (lives == null) return null;
         return lives == check;
     }
 
-    public boolean isOnSpecificLives(ServerPlayerEntity player, int check, boolean fallback) {
+    public boolean isOnSpecificLives(ServerPlayer player, int check, boolean fallback) {
         Boolean isOnLife = isOnSpecificLives(player, check);
         if (isOnLife == null) return fallback;
         return isOnLife;
     }
 
     @Nullable
-    public Boolean isOnAtLeastLives(ServerPlayerEntity player, int check) {
+    public Boolean isOnAtLeastLives(ServerPlayer player, int check) {
         if (isDead(player)) return null;
         Integer lives = getPlayerLives(player);
         if (lives == null) return null;
         return lives >= check;
     }
 
-    public boolean isOnAtLeastLives(ServerPlayerEntity player, int check, boolean fallback) {
+    public boolean isOnAtLeastLives(ServerPlayer player, int check, boolean fallback) {
         Boolean isOnAtLeast = isOnAtLeastLives(player, check);
         if (isOnAtLeast == null) return fallback;
         return isOnAtLeast;
     }
 
 
-    public void playerLostAllLives(ServerPlayerEntity player, Integer livesBefore) {
+    public void playerLostAllLives(ServerPlayer player, Integer livesBefore) {
         if (livesBefore != null) {
-            player.changeGameMode(GameMode.SPECTATOR);
+            player.setGameMode(GameType.SPECTATOR);
         }
-        Vec3d pos = player.ls$getEntityPos();
-        HashMap<Vec3d, List<Float>> info = new HashMap<>();
-        info.put(pos, List.of(player.getYaw(),player.getPitch()));
-        currentSeason.respawnPositions.put(player.getUuid(), info);
+        Vec3 pos = player.position();
+        HashMap<Vec3, List<Float>> info = new HashMap<>();
+        info.put(pos, List.of(player.getYRot(),player.getXRot()));
+        currentSeason.respawnPositions.put(player.getUUID(), info);
         currentSeason.dropItemsOnLastDeath(player);
         if (livesBefore != null) {
             if (FINAL_DEATH_LIGHTNING) {
-                WorldUtils.summonHarmlessLightning(player);
+                LevelUtils.summonHarmlessLightning(player);
             }
             if (livesBefore > 0) {
-                Necromancy.clearedPlayers.remove(player.getUuid());
+                Necromancy.clearedPlayers.remove(player.getUUID());
                 if (FINAL_DEATH_SOUND != null) {
                     PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), FINAL_DEATH_SOUND);
                 }
@@ -333,50 +335,50 @@ public class LivesManager {
         currentSeason.boogeymanManager.playerLostAllLives(player);
     }
 
-    public void showDeathTitle(ServerPlayerEntity player) {
+    public void showDeathTitle(ServerPlayer player) {
         if (SHOW_DEATH_TITLE) {
             String subtitle = seasonConfig.FINAL_DEATH_TITLE_SUBTITLE.get(seasonConfig);
-            PlayerUtils.sendTitleWithSubtitleToPlayers(PlayerUtils.getAllPlayers(), player.getStyledDisplayName(), Text.literal(subtitle), 20, 80, 20);
+            PlayerUtils.sendTitleWithSubtitleToPlayers(PlayerUtils.getAllPlayers(), player.getFeedbackDisplayName(), Component.literal(subtitle), 20, 80, 20);
         }
-        Text deathMessage = getDeathMessage(player);
+        Component deathMessage = getDeathMessage(player);
         if (!deathMessage.getString().isEmpty()) {
             PlayerUtils.broadcastMessage(deathMessage);
         }
     }
 
-    public Text getDeathMessage(ServerPlayerEntity player) {
+    public Component getDeathMessage(ServerPlayer player) {
         String message = seasonConfig.FINAL_DEATH_MESSAGE.get(seasonConfig);
         if (message.contains("${player}")) {
             return TextUtils.format(message.replace("${player}", "{}"), player);
         }
-        return Text.literal(message);
+        return Component.literal(message);
     }
 
-    public List<ServerPlayerEntity> getNonRedPlayers() {
-        List<ServerPlayerEntity> players = PlayerUtils.getAllFunctioningPlayers();
+    public List<ServerPlayer> getNonRedPlayers() {
+        List<ServerPlayer> players = PlayerUtils.getAllFunctioningPlayers();
         players.removeIf(player -> isOnLastLife(player, true));
         return players;
     }
 
-    public List<ServerPlayerEntity> getRedPlayers() {
-        List<ServerPlayerEntity> players = PlayerUtils.getAllFunctioningPlayers();
+    public List<ServerPlayer> getRedPlayers() {
+        List<ServerPlayer> players = PlayerUtils.getAllFunctioningPlayers();
         players.removeIf(player -> !isOnLastLife(player, false));
         return players;
     }
 
-    public List<ServerPlayerEntity> getAlivePlayers() {
-        List<ServerPlayerEntity> players = PlayerUtils.getAllFunctioningPlayers();
+    public List<ServerPlayer> getAlivePlayers() {
+        List<ServerPlayer> players = PlayerUtils.getAllFunctioningPlayers();
         players.removeIf(this::isDead);
         return players;
     }
 
-    public List<ServerPlayerEntity> getDeadPlayers() {
-        List<ServerPlayerEntity> players = PlayerUtils.getAllFunctioningPlayers();
+    public List<ServerPlayer> getDeadPlayers() {
+        List<ServerPlayer> players = PlayerUtils.getAllFunctioningPlayers();
         players.removeIf(this::isAlive);
         return players;
     }
 
-    public boolean canChangeLivesNaturally(ServerPlayerEntity player) {
+    public boolean canChangeLivesNaturally(ServerPlayer player) {
         if (ONLY_TAKE_LIVES_IN_SESSION && currentSession != null && !AdvancedDeathsManager.hasQueuedDeath(player)) {
             return currentSession.statusStarted();
         }

@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths;
 
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
 
 import java.util.UUID;
 
@@ -11,24 +11,24 @@ public abstract class AdvancedDeath {
     protected boolean started = false;
     protected boolean finished = false;
     protected long ticks = -100;
-    public AdvancedDeath(ServerPlayerEntity player) {
-        this.playerUUID = player.getUuid();
+    public AdvancedDeath(ServerPlayer player) {
+        this.playerUUID = player.getUUID();
     }
 
     protected abstract AdvancedDeaths getDeathType();
-    protected abstract void tick(ServerPlayerEntity player);
-    protected abstract void begin(ServerPlayerEntity player);
+    protected abstract void tick(ServerPlayer player);
+    protected abstract void begin(ServerPlayer player);
     protected abstract void end();
     protected abstract int maxTime();
-    protected abstract DamageSource damageSource(ServerPlayerEntity player);
+    protected abstract DamageSource damageSource(ServerPlayer player);
 
-    public ServerPlayerEntity getPlayer() {
+    public ServerPlayer getPlayer() {
         return PlayerUtils.getPlayer(playerUUID);
     }
 
     public void onTick() {
         if (playerNotFound()) return;
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
 
         ticks++;
 
@@ -48,7 +48,7 @@ public abstract class AdvancedDeath {
     }
 
     public boolean playerNotFound() {
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
         return player == null || !player.isAlive();
     }
 
@@ -57,7 +57,7 @@ public abstract class AdvancedDeath {
         end();
     }
 
-    public void ranOutOfTime(ServerPlayerEntity player) {
+    public void ranOutOfTime(ServerPlayer player) {
         PlayerUtils.killFromSource(player, damageSource(player));
     }
 

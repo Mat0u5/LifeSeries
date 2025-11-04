@@ -6,36 +6,36 @@
     "defaultRequire": 1
   },
   "client": [
-    "AbstractClientPlayerEntityMixin",
+    "AbstractClientPlayerMixin",
     "AbstractSoundInstanceAccessor",
     "AbstractSoundInstanceMixin",
     "CameraMixin",
-    "ClientCommonNetworkHandlerMixin",
-    "ClientPlayerEntityMixin",
-    "ClientWorldMixin",
+    "ClientCommonPacketListenerImplMixin",
+    "LocalPlayerMixin",
+    "ClientLevelMixin",
     "EntityRenderDispatcherMixin",
     "EntityRendererMixin",
     "EntityRenderStateMixin",
-    "EntityTrackingSoundInstanceAccessor",
-    "EntityTrackingSoundInstanceMixin",
-    "EntryListWidgetMixin",
-    "InGameHudAccessor",
-    "InGameHudMixin",
+    "EntityBoundSoundInstanceAccessor",
+    "EntityBoundSoundInstanceMixin",
+    "AbstractSelectionListMixin",
+    "GuiAccessor",
+    "GuiMixin",
     "LivingEntityRendererMixin",
-    "MinecraftClientMixin",
+    "MinecraftMixin",
     "PlayerEntityRendererMixin",
     "PlayerListHudMixin",
     "SoundManagerAccessor",
     "SoundManagerMixin",
-    "SoundSystemAccessor",
-    "SoundSystemMixin",
-    "WorldRendererMixin"
+    "SoundEngineAccessor",
+    "SoundEngineMixin",
+    "LevelRendererMixin"
   ],
   "mixins": [
-    "ClientPlayNetworkHandlerMixin",
+    "ClientPacketListenerMixin",
     "EntityMixin",
     "GameRendererMixin",
     "LivingEntityMixin",
-    "PlayerEntityMixin"
+    "PlayerMixin"
   ]
 }

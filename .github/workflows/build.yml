@@ -3,10 +3,7 @@
 name: build
 
 on:
-  push:
-    branches:
-      - main
-      - nopolymer
+  push:6
 
 jobs:
   notify:

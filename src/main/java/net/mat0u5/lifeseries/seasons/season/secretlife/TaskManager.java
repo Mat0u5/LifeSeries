@@ -12,24 +12,23 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.WrittenBookContentComponent;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.RawFilteredPair;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.Filterable;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.WrittenBookContent;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
 import java.util.*;
@@ -100,7 +99,7 @@ public class TaskManager {
         locationsConfig.deleteLocations();
     }
 
-    public static Task getRandomTask(ServerPlayerEntity owner, TaskTypes type) {
+    public static Task getRandomTask(ServerPlayer owner, TaskTypes type) {
         String selectedTask = "";
 
         if (easyTasks.isEmpty()) {
@@ -132,7 +131,7 @@ public class TaskManager {
         return new Task(selectedTask, type);
     }
 
-    public static String getRandomTask(ServerPlayerEntity owner, TaskTypes type, List<String> tasks) {
+    public static String getRandomTask(ServerPlayer owner, TaskTypes type, List<String> tasks) {
         List<String> tasksCopy = new ArrayList<>(tasks);
         Collections.shuffle(tasksCopy);
         for (String taskCandidate : tasksCopy) {
@@ -156,11 +155,11 @@ public class TaskManager {
         return result;
     }
 
-    public static ItemStack getTaskBook(ServerPlayerEntity player, Task task) {
+    public static ItemStack getTaskBook(ServerPlayer player, Task task) {
         ItemStack book = new ItemStack(Items.WRITTEN_BOOK);
-        List<RawFilteredPair<Text>> lines = task.getBookLines(player);
-        WrittenBookContentComponent bookContent = new WrittenBookContentComponent(
-            RawFilteredPair.of(TextUtils.formatString("§c{}'s Secret Task", player)),
+        List<Filterable<Component>> lines = task.getBookLines(player);
+        WrittenBookContent bookContent = new WrittenBookContent(
+            Filterable.passThrough(TextUtils.formatString("§c{}'s Secret Task", player)),
                 "Secret Keeper",
                 0,
                 lines,
@@ -168,10 +167,10 @@ public class TaskManager {
         );
 
         List<String> linesStr = new ArrayList<>();
-        for (RawFilteredPair<Text> line : lines) {
+        for (Filterable<Component> line : lines) {
             linesStr.add(line.get(true).getString());
         }
-        book.set(DataComponentTypes.WRITTEN_BOOK_CONTENT, bookContent);
+        book.set(DataComponents.WRITTEN_BOOK_CONTENT, bookContent);
         SessionTranscript.assignTask(player, task, linesStr);
 
         ItemStackUtils.setCustomComponentBoolean(book, "SecretTask", true);
@@ -179,30 +178,30 @@ public class TaskManager {
         return book;
     }
 
-    public static void assignRandomTaskToPlayer(ServerPlayerEntity player, TaskTypes type) {
+    public static void assignRandomTaskToPlayer(ServerPlayer player, TaskTypes type) {
         if (type != TaskTypes.RED || CONSTANT_TASKS) {
-            submittedOrFailed.remove(player.getUuid());
+            submittedOrFailed.remove(player.getUUID());
         }
 
         removePlayersTaskBook(player);
         if (player.ls$isDead()) return;
         Task task;
-        if (preAssignedTasks.containsKey(player.getUuid())) {
-            task = preAssignedTasks.get(player.getUuid());
-            preAssignedTasks.remove(player.getUuid());
+        if (preAssignedTasks.containsKey(player.getUUID())) {
+            task = preAssignedTasks.get(player.getUUID());
+            preAssignedTasks.remove(player.getUUID());
         }
         else {
             task = getRandomTask(player, type);
         }
         ItemStack book = getTaskBook(player, task);
-        if (!player.giveItemStack(book)) {
-            ItemStackUtils.spawnItemForPlayer(PlayerUtils.getServerWorld(player), player.ls$getEntityPos(), book, player);
+        if (!player.addItem(book)) {
+            ItemStackUtils.spawnItemForPlayer(player.ls$getServerLevel(), player.position(), book, player);
         }
-        assignedTasks.put(player.getUuid(), task);
+        assignedTasks.put(player.getUUID(), task);
     }
 
-    public static void assignRandomTasks(List<ServerPlayerEntity> allowedPlayers, TaskTypes type) {
-        for (ServerPlayerEntity player : allowedPlayers) {
+    public static void assignRandomTasks(List<ServerPlayer> allowedPlayers, TaskTypes type) {
+        for (ServerPlayer player : allowedPlayers) {
             if (player.ls$isDead()) continue;
             TaskTypes thisType = type;
             if (thisType == null) {
@@ -213,28 +212,28 @@ public class TaskManager {
         }
     }
 
-    public static void chooseTasks(List<ServerPlayerEntity> allowedPlayers, TaskTypes type) {
+    public static void chooseTasks(List<ServerPlayer> allowedPlayers, TaskTypes type) {
         secretKeeperBeingUsed = true;
-        for (ServerPlayerEntity player : allowedPlayers) {
-            if (!tasksChosenFor.contains(player.getUuid())) {
-                tasksChosenFor.add(player.getUuid());
+        for (ServerPlayer player : allowedPlayers) {
+            if (!tasksChosenFor.contains(player.getUUID())) {
+                tasksChosenFor.add(player.getUUID());
             }
         }
-        PlayerUtils.sendTitleToPlayers(allowedPlayers, Text.literal("Your secret is...").formatted(Formatting.RED),20,35,0);
+        PlayerUtils.sendTitleToPlayers(allowedPlayers, Component.literal("Your secret is...").withStyle(ChatFormatting.RED),20,35,0);
 
         TaskScheduler.scheduleTask(40, () -> {
             PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvents.UI_BUTTON_CLICK.value());
-            PlayerUtils.sendTitleToPlayers(allowedPlayers, Text.literal("3").formatted(Formatting.RED),0,35,0);
+            PlayerUtils.sendTitleToPlayers(allowedPlayers, Component.literal("3").withStyle(ChatFormatting.RED),0,35,0);
         });
         TaskScheduler.scheduleTask(70, () -> {
-            PlayerUtils.sendTitleToPlayers(allowedPlayers, Text.literal("2").formatted(Formatting.RED),0,35,0);
-            PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvent.of(Identifier.ofVanilla("secretlife_task")));
+            PlayerUtils.sendTitleToPlayers(allowedPlayers, Component.literal("2").withStyle(ChatFormatting.RED),0,35,0);
+            PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvent.createVariableRangeEvent(ResourceLocation.withDefaultNamespace("secretlife_task")));
         });
         TaskScheduler.scheduleTask(105, () -> {
-            PlayerUtils.sendTitleToPlayers(allowedPlayers, Text.literal("1").formatted(Formatting.RED),0,35,0);
+            PlayerUtils.sendTitleToPlayers(allowedPlayers, Component.literal("1").withStyle(ChatFormatting.RED),0,35,0);
         });
         TaskScheduler.scheduleTask(130, () -> {
-            for (ServerPlayerEntity player : allowedPlayers) {
+            for (ServerPlayer player : allowedPlayers) {
                 boolean redTask = type == TaskTypes.RED || (type == null && player.ls$isOnLastLife(false));
                 AnimationUtils.playSecretLifeTotemAnimation(player, redTask);
             }
@@ -245,14 +244,14 @@ public class TaskManager {
         });
     }
 
-    public static ItemStack getPlayersTaskBook(ServerPlayerEntity player) {
+    public static ItemStack getPlayersTaskBook(ServerPlayer player) {
         for (ItemStack item : PlayerUtils.getPlayerInventory(player)) {
             if (ItemStackUtils.hasCustomComponentEntry(item,"SecretTask")) return item;
         }
         return null;
     }
 
-    public static boolean hasNonRedTaskBook(ServerPlayerEntity player) {
+    public static boolean hasNonRedTaskBook(ServerPlayer player) {
         for (ItemStack item : PlayerUtils.getPlayerInventory(player)) {
             if (!ItemStackUtils.hasCustomComponentEntry(item,"SecretTask")) continue;
             if (!ItemStackUtils.hasCustomComponentEntry(item,"TaskDifficulty")) continue;
@@ -262,7 +261,7 @@ public class TaskManager {
         return false;
     }
 
-    public static boolean removePlayersTaskBook(ServerPlayerEntity player) {
+    public static boolean removePlayersTaskBook(ServerPlayer player) {
         boolean success = false;
         for (ItemStack item : PlayerUtils.getPlayerInventory(player)) {
             if (ItemStackUtils.hasCustomComponentEntry(item,"SecretTask")) {
@@ -273,7 +272,7 @@ public class TaskManager {
         return success;
     }
 
-    public static boolean getPlayerKillPermitted(ServerPlayerEntity player) {
+    public static boolean getPlayerKillPermitted(ServerPlayer player) {
         ItemStack item = getPlayersTaskBook(player);
         if (item == null) return false;
         if (!ItemStackUtils.hasCustomComponentEntry(item,"SecretTask")) return false;
@@ -282,7 +281,7 @@ public class TaskManager {
         return ItemStackUtils.getCustomComponentBoolean(item, "KillPermitted");
     }
 
-    public static TaskTypes getPlayersTaskType(ServerPlayerEntity player) {
+    public static TaskTypes getPlayersTaskType(ServerPlayer player) {
         ItemStack item = getPlayersTaskBook(player);
         if (item == null) return null;
         if (!ItemStackUtils.hasCustomComponentEntry(item,"SecretTask")) return null;
@@ -294,7 +293,7 @@ public class TaskManager {
         return null;
     }
 
-    public static void addHealthThenItems(ServerPlayerEntity player, int addHealth) {
+    public static void addHealthThenItems(ServerPlayer player, int addHealth) {
         if (server == null) return;
         if (addHealth == 0) {
             secretKeeperBeingUsed = false;
@@ -318,21 +317,21 @@ public class TaskManager {
                 secretKeeperBeingUsed = false;
                 return;
             }
-            Vec3d spawnPos = itemSpawnerPos.toCenterPos();
+            Vec3 spawnPos = itemSpawnerPos.getCenter();
             for (int i = 0; i <= itemsNum; i++) {
                 if (i == 0) continue;
                 TaskScheduler.scheduleTask(3*i, () -> {
-                    server.getOverworld().playSound(null, spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                    server.overworld().playSound(null, spawnPos.x(), spawnPos.y(), spawnPos.z(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
 
-                    List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, server.getOverworld(), player, Identifier.of("lifeseriesdynamic", "task_reward_loottable"));
+                    List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, server.overworld(), player, ResourceLocation.fromNamespaceAndPath("lifeseriesdynamic", "task_reward_loottable"));
                     if (!lootTableItems.isEmpty()) {
                         for (ItemStack item : lootTableItems) {
-                            ItemStackUtils.spawnItemForPlayer(server.getOverworld(), spawnPos, item, player);
+                            ItemStackUtils.spawnItemForPlayer(server.overworld(), spawnPos, item, player);
                         }
                     }
                     else {
                         ItemStack randomItem = season.itemSpawner.getRandomItem();
-                        ItemStackUtils.spawnItemForPlayer(server.getOverworld(), spawnPos, randomItem, player);
+                        ItemStackUtils.spawnItemForPlayer(server.overworld(), spawnPos, randomItem, player);
                     }
 
                 });
@@ -341,39 +340,39 @@ public class TaskManager {
         }
     }
 
-    public static boolean hasSessionStarted(ServerPlayerEntity player) {
+    public static boolean hasSessionStarted(ServerPlayer player) {
         if (currentSession.statusNotStarted()) {
-            player.sendMessage(Text.of("§cThe session has not started yet."));
+            player.sendSystemMessage(Component.nullToEmpty("§cThe session has not started yet."));
             return false;
         }
         return true;
     }
 
-    public static boolean isBeingUsed(ServerPlayerEntity player) {
+    public static boolean isBeingUsed(ServerPlayer player) {
         if (!secretKeeperBeingUsed) return false;
-        player.sendMessage(Text.of("§cSomeone else is using the Secret Keeper right now."));
+        player.sendSystemMessage(Component.nullToEmpty("§cSomeone else is using the Secret Keeper right now."));
         return true;
     }
 
-    public static boolean hasTaskBookCheck(ServerPlayerEntity player, boolean sendMessage) {
+    public static boolean hasTaskBookCheck(ServerPlayer player, boolean sendMessage) {
         TaskTypes type = getPlayersTaskType(player);
         if (type != null) return true;
         if (sendMessage) {
-            player.sendMessage(Text.of("§cYou do not have a secret task book in your inventory."));
+            player.sendSystemMessage(Component.nullToEmpty("§cYou do not have a secret task book in your inventory."));
         }
         return false;
     }
 
-    public static void sendPublicTaskMessage(ServerPlayerEntity player) {
+    public static void sendPublicTaskMessage(ServerPlayer player) {
         String rawTask = "";
 
         Task task = null;
 
-        if (hasTaskBookCheck(player, false) && assignedTasks.containsKey(player.getUuid())) {
-            task = assignedTasks.get(player.getUuid());
+        if (hasTaskBookCheck(player, false) && assignedTasks.containsKey(player.getUUID())) {
+            task = assignedTasks.get(player.getUUID());
         }
-        else if (preAssignedTasks.containsKey(player.getUuid())) {
-            task = preAssignedTasks.get(player.getUuid());
+        else if (preAssignedTasks.containsKey(player.getUUID())) {
+            task = preAssignedTasks.get(player.getUUID());
         }
 
         if (task == null) return;
@@ -388,7 +387,7 @@ public class TaskManager {
         PlayerUtils.broadcastMessage(TextUtils.format("§7Click {}§7 to see what {}§7's task was.", TextUtils.selfMessageText(rawTask), player));
     }
 
-    public static void succeedTask(ServerPlayerEntity player, boolean fromCommand) {
+    public static void succeedTask(ServerPlayer player, boolean fromCommand) {
         if (server == null) return;
         if (!fromCommand) {
             if (!hasSessionStarted(player)) return;
@@ -404,15 +403,15 @@ public class TaskManager {
         }
         SessionTranscript.successTask(player);
         removePlayersTaskBook(player);
-        submittedOrFailed.add(player.getUuid());
+        submittedOrFailed.add(player.getUUID());
         secretKeeperBeingUsed = true;
 
-        Vec3d centerPos = itemSpawnerPos.toCenterPos();
-        AnimationUtils.createGlyphAnimation(server.getOverworld(), centerPos, 40);
-        server.getOverworld().playSound(null, centerPos.getX(), centerPos.getY(), centerPos.getZ(), SoundEvent.of(Identifier.of("minecraft","secretlife_task")), SoundCategory.PLAYERS, 1.0F, 1.0F);
+        Vec3 centerPos = itemSpawnerPos.getCenter();
+        AnimationUtils.createGlyphAnimation(server.overworld(), centerPos, 40);
+        server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("minecraft","secretlife_task")), SoundSource.PLAYERS, 1.0F, 1.0F);
         TaskScheduler.scheduleTask(60, () -> {
-            server.getOverworld().playSound(null, centerPos.getX(), centerPos.getY(), centerPos.getZ(), SoundEvents.BLOCK_TRIAL_SPAWNER_EJECT_ITEM, SoundCategory.PLAYERS, 1.0F, 1.0F);
-            AnimationUtils.spawnFireworkBall(server.getOverworld(), centerPos, 40, 0.3, new Vector3f(0, 1, 0));
+            server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvents.TRIAL_SPAWNER_EJECT_ITEM, SoundSource.PLAYERS, 1.0F, 1.0F);
+            AnimationUtils.spawnFireworkBall(server.overworld(), centerPos, 40, 0.3, new Vector3f(0, 1, 0));
             if (type == TaskTypes.EASY) {
                 showHeartTitle(player, EASY_SUCCESS);
                 addHealthThenItems(player, EASY_SUCCESS);
@@ -429,7 +428,7 @@ public class TaskManager {
         chooseNewTaskForPlayerIfNecessary(player);
     }
 
-    public static void rerollTask(ServerPlayerEntity player, boolean fromCommand) {
+    public static void rerollTask(ServerPlayer player, boolean fromCommand) {
         if (!fromCommand) {
             if (!hasSessionStarted(player)) return;
             if (isBeingUsed(player)) return;
@@ -457,19 +456,19 @@ public class TaskManager {
             }
 
             PlayerUtils.playSoundToPlayer(player, SoundEvents.UI_BUTTON_CLICK.value());
-            PlayerUtils.sendTitle(player, Text.literal("The reward is more").formatted(Formatting.DARK_GREEN).formatted(Formatting.BOLD),20,35,0);
+            PlayerUtils.sendTitle(player, Component.literal("The reward is more").withStyle(ChatFormatting.DARK_GREEN).withStyle(ChatFormatting.BOLD),20,35,0);
 
             TaskScheduler.scheduleTask(50, () -> {
                 PlayerUtils.playSoundToPlayer(player, SoundEvents.UI_BUTTON_CLICK.value());
-                PlayerUtils.sendTitle(player, Text.literal("The risk is great").formatted(Formatting.GREEN).formatted(Formatting.BOLD),20,35,0);
+                PlayerUtils.sendTitle(player, Component.literal("The risk is great").withStyle(ChatFormatting.GREEN).withStyle(ChatFormatting.BOLD),20,35,0);
             });
             TaskScheduler.scheduleTask(100, () -> {
                 PlayerUtils.playSoundToPlayer(player, SoundEvents.UI_BUTTON_CLICK.value());
-                PlayerUtils.sendTitle(player, Text.literal("Let me open the door").formatted(Formatting.YELLOW).formatted(Formatting.BOLD),20,35,0);
+                PlayerUtils.sendTitle(player, Component.literal("Let me open the door").withStyle(ChatFormatting.YELLOW).withStyle(ChatFormatting.BOLD),20,35,0);
             });
             TaskScheduler.scheduleTask(150, () -> {
                 PlayerUtils.playSoundToPlayer(player, SoundEvents.UI_BUTTON_CLICK.value());
-                PlayerUtils.sendTitle(player, Text.literal("Accept your fate").formatted(Formatting.RED).formatted(Formatting.BOLD),20,30,0);
+                PlayerUtils.sendTitle(player, Component.literal("Accept your fate").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD),20,30,0);
             });
             TaskScheduler.scheduleTask(200, () -> AnimationUtils.playSecretLifeTotemAnimation(player, false));
             TaskScheduler.scheduleTask(240, () -> {
@@ -480,15 +479,15 @@ public class TaskManager {
         }
         if (type == TaskTypes.HARD) {
             if (!player.ls$isOnLastLife(true)) {
-                player.sendMessage(Text.of("§cYou cannot re-roll a Hard task."));
+                player.sendSystemMessage(Component.nullToEmpty("§cYou cannot re-roll a Hard task."));
             }
             else {
-                player.sendMessage(Text.of("§cYou cannot re-roll a Hard task. If you want your red task instead, click the Fail button."));
+                player.sendSystemMessage(Component.nullToEmpty("§cYou cannot re-roll a Hard task. If you want your red task instead, click the Fail button."));
             }
         }
     }
 
-    public static void failTask(ServerPlayerEntity player, boolean fromCommand) {
+    public static void failTask(ServerPlayer player, boolean fromCommand) {
         if (server == null) return;
         if (!fromCommand) {
             if (!hasSessionStarted(player)) return;
@@ -505,15 +504,15 @@ public class TaskManager {
         }
         SessionTranscript.failTask(player);
         removePlayersTaskBook(player);
-        submittedOrFailed.add(player.getUuid());
+        submittedOrFailed.add(player.getUUID());
         secretKeeperBeingUsed = true;
 
-        Vec3d centerPos = itemSpawnerPos.toCenterPos();
-        AnimationUtils.createGlyphAnimation(server.getOverworld(), centerPos, 40);
-        server.getOverworld().playSound(null, centerPos.getX(), centerPos.getY(), centerPos.getZ(), SoundEvent.of(Identifier.of("minecraft","secretlife_task")), SoundCategory.PLAYERS, 1.0F, 1.0F);
+        Vec3 centerPos = itemSpawnerPos.getCenter();
+        AnimationUtils.createGlyphAnimation(server.overworld(), centerPos, 40);
+        server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("minecraft","secretlife_task")), SoundSource.PLAYERS, 1.0F, 1.0F);
         TaskScheduler.scheduleTask(60, () -> {
-            server.getOverworld().playSound(null, centerPos.getX(), centerPos.getY(), centerPos.getZ(), SoundEvents.BLOCK_TRIAL_SPAWNER_SPAWN_MOB, SoundCategory.PLAYERS, 1.0F, 1.0F);
-            AnimationUtils.spawnFireworkBall(server.getOverworld(), centerPos, 40, 0.3, new Vector3f(1, 0, 0));
+            server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvents.TRIAL_SPAWNER_SPAWN_MOB, SoundSource.PLAYERS, 1.0F, 1.0F);
+            AnimationUtils.spawnFireworkBall(server.overworld(), centerPos, 40, 0.3, new Vector3f(1, 0, 0));
             if (type == TaskTypes.EASY) {
                 showHeartTitle(player, EASY_FAIL);
                 season.removePlayerHealth(player, -EASY_FAIL);
@@ -533,7 +532,7 @@ public class TaskManager {
         chooseNewTaskForPlayerIfNecessary(player);
     }
 
-    public static void chooseNewTaskForPlayerIfNecessary(ServerPlayerEntity player) {
+    public static void chooseNewTaskForPlayerIfNecessary(ServerPlayer player) {
         if (currentSession.statusFinished()) return;
         if (player.ls$isOnLastLife(false) || CONSTANT_TASKS) {
             TaskScheduler.scheduleTask(120, () -> {
@@ -543,11 +542,11 @@ public class TaskManager {
         }
     }
 
-    public static void showHeartTitle(ServerPlayerEntity player, int amount) {
+    public static void showHeartTitle(ServerPlayer player, int amount) {
         if (amount == 0) return;
         SecretLife season = (SecretLife) currentSeason;
         if (amount > 0 && season.getPlayerHealth(player) >= SecretLife.MAX_HEALTH) return;
-        int healthBefore = MathHelper.ceil(season.getPlayerHealth(player));
+        int healthBefore = Mth.ceil(season.getPlayerHealth(player));
         int finalAmount = amount;
         if (healthBefore + amount <= 0) {
             finalAmount = -healthBefore+1;
@@ -564,10 +563,10 @@ public class TaskManager {
         if (finalAmount%2==0) finalStr = String.valueOf((int)finalHearts);
 
 
-        Formatting formatting = Formatting.GREEN;
-        if (finalAmount < 0) formatting = Formatting.RED;
+        ChatFormatting formatting = ChatFormatting.GREEN;
+        if (finalAmount < 0) formatting = ChatFormatting.RED;
         else finalStr = "+"+finalStr;
-        PlayerUtils.sendTitle(player, TextUtils.format("{} Hearts", finalStr).formatted(formatting), 20, 40, 20);
+        PlayerUtils.sendTitle(player, TextUtils.format("{} Hearts", finalStr).withStyle(formatting), 20, 40, 20);
     }
 
     public static boolean alreadyHasPos(BlockPos pos) {
@@ -580,28 +579,28 @@ public class TaskManager {
     public static void positionFound(BlockPos pos, boolean fromButton) {
         if (pos == null) return;
         if (alreadyHasPos(pos)) {
-            PlayerUtils.broadcastMessage(Text.literal("§c[SecretLife setup] This location is already being used."), 20);
+            PlayerUtils.broadcastMessage(Component.literal("§c[SecretLife setup] This location is already being used."), 20);
             return;
         }
         if (successButtonPos == null && fromButton) {
             successButtonPos = pos;
-            PlayerUtils.broadcastMessage(Text.literal("§a[SecretLife setup 1/4] Location set.\n"));
+            PlayerUtils.broadcastMessage(Component.literal("§a[SecretLife setup 1/4] Location set.\n"));
         }
         else if (rerollButtonPos == null && fromButton) {
             rerollButtonPos = pos;
-            PlayerUtils.broadcastMessage(Text.literal("§a[SecretLife setup 2/4] Location set.\n"));
+            PlayerUtils.broadcastMessage(Component.literal("§a[SecretLife setup 2/4] Location set.\n"));
         }
         else if (failButtonPos == null && fromButton) {
             failButtonPos = pos;
-            PlayerUtils.broadcastMessage(Text.literal("§a[SecretLife setup 3/4] Location set.\n"));
+            PlayerUtils.broadcastMessage(Component.literal("§a[SecretLife setup 3/4] Location set.\n"));
         }
         if (itemSpawnerPos == null && !fromButton) {
             if (successButtonPos != null && rerollButtonPos != null && failButtonPos != null) {
                 itemSpawnerPos = pos;
-                PlayerUtils.broadcastMessage(Text.literal("§a[SecretLife] All locations have been set. If you wish to change them in the future, use §2'/secretlife changeLocations'\n"));
+                PlayerUtils.broadcastMessage(Component.literal("§a[SecretLife] All locations have been set. If you wish to change them in the future, use §2'/secretlife changeLocations'\n"));
 
-                PlayerUtils.broadcastMessage(Text.of("\nUse §b'/session timer set <time>'§f to set the desired session time."));
-                PlayerUtils.broadcastMessage(Text.of("After that, use §b'/session start'§f to start the session."));
+                PlayerUtils.broadcastMessage(Component.nullToEmpty("\nUse §b'/session timer set <time>'§f to set the desired session time."));
+                PlayerUtils.broadcastMessage(Component.nullToEmpty("After that, use §b'/session start'§f to start the session."));
             }
         }
         locationsConfig.saveLocations();
@@ -611,22 +610,22 @@ public class TaskManager {
     public static boolean searchingForLocations = false;
     public static boolean checkSecretLifePositions() {
         if (successButtonPos == null) {
-            PlayerUtils.broadcastMessageToAdmins(Text.literal("§c[SecretLife setup 1/4] Location for the secret keeper task §6§lSUCCESS BUTTON§r§c was not found. §nThe next button you click will be set as the location."));
+            PlayerUtils.broadcastMessageToAdmins(Component.literal("§c[SecretLife setup 1/4] Location for the secret keeper task §6§lSUCCESS BUTTON§r§c was not found. §nThe next button you click will be set as the location."));
             searchingForLocations = true;
             return false;
         }
         if (rerollButtonPos == null) {
-            PlayerUtils.broadcastMessageToAdmins(Text.literal("§c[SecretLife setup 2/4] Location for the secret keeper task §6§lRE-ROLL BUTTON§r§c was not found. §nThe next button you click will be set as the location."));
+            PlayerUtils.broadcastMessageToAdmins(Component.literal("§c[SecretLife setup 2/4] Location for the secret keeper task §6§lRE-ROLL BUTTON§r§c was not found. §nThe next button you click will be set as the location."));
             searchingForLocations = true;
             return false;
         }
         if (failButtonPos == null) {
-            PlayerUtils.broadcastMessageToAdmins(Text.literal("§c[SecretLife setup 3/4] Location for the secret keeper task §6§lFAIL BUTTON§r§c was not found. §nThe next button you click will be set as the location."));
+            PlayerUtils.broadcastMessageToAdmins(Component.literal("§c[SecretLife setup 3/4] Location for the secret keeper task §6§lFAIL BUTTON§r§c was not found. §nThe next button you click will be set as the location."));
             searchingForLocations = true;
             return false;
         }
         if (itemSpawnerPos == null) {
-            PlayerUtils.broadcastMessageToAdmins(Text.literal("§c[SecretLife setup 4/4] Location for the secret keeper task §6§lITEM SPAWN BLOCK§r§c was not found. §nPlease place a bedrock block at the desired spot to mark it."));
+            PlayerUtils.broadcastMessageToAdmins(Component.literal("§c[SecretLife setup 4/4] Location for the secret keeper task §6§lITEM SPAWN BLOCK§r§c was not found. §nPlease place a bedrock block at the desired spot to mark it."));
             searchingForLocations = true;
             return false;
         }
@@ -634,9 +633,9 @@ public class TaskManager {
         return true;
     }
 
-    public static void onBlockUse(ServerPlayerEntity player, ServerWorld world, BlockHitResult hitResult) {
+    public static void onBlockUse(ServerPlayer player, ServerLevel level, BlockHitResult hitResult) {
         BlockPos pos = hitResult.getBlockPos();
-        String name = world.getBlockState(pos).getBlock().getName().getString().toLowerCase();
+        String name = level.getBlockState(pos).getBlock().getName().getString().toLowerCase();
         if (name.contains("button")) {
             if (searchingForLocations) {
                 positionFound(pos, true);
@@ -655,12 +654,12 @@ public class TaskManager {
         }
         if (!searchingForLocations) return;
         if (successButtonPos == null || rerollButtonPos == null || failButtonPos == null) return;
-        BlockPos placePos = pos.offset(hitResult.getSide());
+        BlockPos placePos = pos.relative(hitResult.getDirection());
         TaskScheduler.scheduleTask(1, () -> {
-            String name2 = world.getBlockState(placePos).getBlock().getName().getString().toLowerCase();
+            String name2 = level.getBlockState(placePos).getBlock().getName().getString().toLowerCase();
             if (name2.contains("bedrock")) {
                 positionFound(placePos, false);
-                world.breakBlock(placePos, false);
+                level.destroyBlock(placePos, false);
             }
         });
     }

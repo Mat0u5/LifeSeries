@@ -6,13 +6,12 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,28 +28,28 @@ public class ClaimKillCommand extends Command {
     }
 
     @Override
-    public Text getBannedText() {
-        return Text.of("This command is only available when you have selected a Season.");
+    public Component getBannedText() {
+        return Component.nullToEmpty("This command is only available when you have selected a Season.");
     }
 
     @Override
-    public void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+    public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
             literal("claimkill")
-                .then(argument("player", EntityArgumentType.player())
-                    .suggests((context, builder) -> CommandSource.suggestMatching(getSuggestions(), builder))
+                .then(argument("player", EntityArgument.player())
+                    .suggests((context, builder) -> SharedSuggestionProvider.suggest(getSuggestions(), builder))
                     .executes(context -> claimCredit(
-                        context.getSource(), EntityArgumentType.getPlayer(context, "player")
+                        context.getSource(), EntityArgument.getPlayer(context, "player")
                     ))
                 )
                 .then(literal("validate")
                     .requires(PermissionManager::isAdmin)
-                    .then(argument("killer", EntityArgumentType.player())
-                        .then(argument("victim", EntityArgumentType.player())
+                    .then(argument("killer", EntityArgument.player())
+                        .then(argument("victim", EntityArgument.player())
                             .executes(context -> claimCreditAccept(
                                 context.getSource(),
-                                EntityArgumentType.getPlayer(context, "killer"),
-                                EntityArgumentType.getPlayer(context, "victim")
+                                EntityArgument.getPlayer(context, "killer"),
+                                EntityArgument.getPlayer(context, "victim")
                             ))
                         )
                     )
@@ -63,47 +62,47 @@ public class ClaimKillCommand extends Command {
         List<String> suggestions = new ArrayList<>();
         Set<UUID> recentDeaths = currentSession.playerNaturalDeathLog.keySet();
         for (UUID uuid : recentDeaths) {
-            ServerPlayerEntity player = PlayerUtils.getPlayer(uuid);
+            ServerPlayer player = PlayerUtils.getPlayer(uuid);
             if (player == null) continue;
-            suggestions.add(player.getNameForScoreboard());
+            suggestions.add(player.getScoreboardName());
         }
         return suggestions;
     }
 
-    public int claimCredit(ServerCommandSource source, ServerPlayerEntity victim) {
+    public int claimCredit(CommandSourceStack source, ServerPlayer victim) {
         if (checkBanned(source)) return -1;
         if (victim == null) return -1;
-        PlayerEntity player = source.getPlayer();
+        Player player = source.getPlayer();
         if (player == null) return -1;
 
         Set<UUID> recentDeaths = currentSession.playerNaturalDeathLog.keySet();
-        UUID victimUUID = victim.getUuid();
+        UUID victimUUID = victim.getUUID();
         if (!recentDeaths.contains(victimUUID)) {
-            source.sendError(TextUtils.formatPlain("{} did not die in the last 2 minutes. Or they might have been killed by a player directly.", victim));
+            source.sendFailure(TextUtils.formatPlain("{} did not die in the last 2 minutes. Or they might have been killed by a player directly.", victim));
             return -1;
         }
         if (player == victim) {
-            source.sendError(Text.of("You cannot claim credit for your own death :P"));
+            source.sendFailure(Component.nullToEmpty("You cannot claim credit for your own death :P"));
             return -1;
         }
-        Text textAll = TextUtils.format("{}§7 claims credit for {}§7's death.", player, victim);
+        Component textAll = TextUtils.format("{}§7 claims credit for {}§7's death.", player, victim);
         PlayerUtils.broadcastMessageToAdmins(textAll, 200);
         String validateCommand = TextUtils.formatString("/claimkill validate {} {}", player, victim);
-        Text adminText = TextUtils.format("§7Click {}§7 to accept the claim if you think it's valid.", TextUtils.runCommandText(validateCommand));
+        Component adminText = TextUtils.format("§7Click {}§7 to accept the claim if you think it's valid.", TextUtils.runCommandText(validateCommand));
         PlayerUtils.broadcastMessageToAdmins(adminText, 200);
 
         return 1;
     }
 
-    public int claimCreditAccept(ServerCommandSource source, ServerPlayerEntity killer, ServerPlayerEntity victim) {
+    public int claimCreditAccept(CommandSourceStack source, ServerPlayer killer, ServerPlayer victim) {
         if (checkBanned(source)) return -1;
         if (killer == null) return -1;
         if (victim == null) return -1;
 
-        Text message = TextUtils.format("{}§7's kill claim on {}§7 was accepted.", killer, victim);
+        Component message = TextUtils.format("{}§7's kill claim on {}§7 was accepted.", killer, victim);
         PlayerUtils.broadcastMessage(message);
         currentSeason.onClaimKill(killer, victim);
-        currentSession.playerNaturalDeathLog.remove(victim.getUuid());
+        currentSession.playerNaturalDeathLog.remove(victim.getUUID());
 
         return 1;
     }

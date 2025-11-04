@@ -6,15 +6,14 @@ import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.text.Text;
-
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-
-//? if >= 1.21.9
-/*import net.minecraft.client.gui.Click;*/
+//? if >= 1.21.9 {
+/*import net.minecraft.client.input.MouseButtonEvent;
+*///?}
 
 public class ChooseExtraSeasonScreen extends DefaultScreen {
 
@@ -26,7 +25,7 @@ public class ChooseExtraSeasonScreen extends DefaultScreen {
     private static final int LOGO_SIZE = (int) (LOGO_TEXTURE_SIZE * LOGO_SCALE);
 
     public ChooseExtraSeasonScreen(boolean hasSelectedBefore) {
-        super(Text.literal("Choose April Season Screen"), 190, 100);
+        super(Component.literal("Choose April Season Screen"), 190, 100);
         this.hasSelectedBefore = hasSelectedBefore;
     }
 
@@ -66,9 +65,9 @@ public class ChooseExtraSeasonScreen extends DefaultScreen {
             }
         }
 
-        Text goBack = Text.of("Go Back");
-        int textWidth = textRenderer.getWidth(goBack);
-        int textHeight = textRenderer.fontHeight;
+        Component goBack = Component.nullToEmpty("Go Back");
+        int textWidth = font.width(goBack);
+        int textHeight = font.lineHeight;
 
         Rectangle rect = new Rectangle(startX+6, endY-8-textHeight, textWidth+1, textHeight+1);
         if (x >= rect.x && x <= rect.x + rect.width && y >= rect.y && y <= rect.y + rect.height) {
@@ -83,14 +82,14 @@ public class ChooseExtraSeasonScreen extends DefaultScreen {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0) { // Left-click
     //?} else {
-    /*public boolean mouseClicked(Click click, boolean doubled) {
+    /*public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         double mouseX = click.x();
         double mouseY = click.y();
         if (click.button() == 0) { // Left-click
     *///?}
             int region = getRegion((int) mouseX, (int) mouseY);
-            if (region == -1 && this.client != null) {
-                this.client.setScreen(new ChooseSeasonScreen(hasSelectedBefore));
+            if (region == -1 && this.minecraft != null) {
+                this.minecraft.setScreen(new ChooseSeasonScreen(hasSelectedBefore));
                 return true;
             }
             else if (region != 0) {
@@ -108,19 +107,19 @@ public class ChooseExtraSeasonScreen extends DefaultScreen {
     public void handleSeasonRegionClick(int region) {
         for (ChooseSeasonScreen.SeasonRegion seasonRegion : seasonRegions) {
             if (seasonRegion.id() == region) {
-                if (hasSelectedBefore && this.client != null) {
-                    this.client.setScreen(new ConfirmSeasonAnswerScreen(this, seasonRegion.season()));
+                if (hasSelectedBefore && this.minecraft != null) {
+                    this.minecraft.setScreen(new ConfirmSeasonAnswerScreen(this, seasonRegion.season()));
                 }
                 else {
                     NetworkHandlerClient.sendStringPacket(PacketNames.SET_SEASON, seasonRegion.season().getName());
-                    this.close();
+                    this.onClose();
                 }
             }
         }
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY) {
+    public void render(GuiGraphics context, int mouseX, int mouseY) {
         int currentRegion = getRegion(mouseX, mouseY);
 
         // Background + images
@@ -129,11 +128,11 @@ public class ChooseExtraSeasonScreen extends DefaultScreen {
         }
 
         String prompt = "Select the season you want to play.";
-        RenderUtils.drawTextCenter(context, this.textRenderer, Text.of(prompt), centerX, startY + 15);
+        RenderUtils.drawTextCenter(context, this.font, Component.nullToEmpty(prompt), centerX, startY + 15);
 
-        Text goBack = Text.of("Go Back");
-        int textWidth = textRenderer.getWidth(goBack);
-        int textHeight = textRenderer.fontHeight;
+        Component goBack = Component.nullToEmpty("Go Back");
+        int textWidth = font.width(goBack);
+        int textHeight = font.lineHeight;
 
         Rectangle rect = new Rectangle(startX+6, endY-8-textHeight, textWidth+1, textHeight+1);
 
@@ -143,10 +142,10 @@ public class ChooseExtraSeasonScreen extends DefaultScreen {
         context.fill(rect.x + rect.width, rect.y-1, rect.x + rect.width + 2, rect.y + rect.height, DEFAULT_TEXT_COLOR); // right
 
         if (currentRegion == -1) {
-            RenderUtils.drawTextLeft(context, this.textRenderer, TextColors.PURE_WHITE, goBack, rect.x+1, rect.y+1);
+            RenderUtils.drawTextLeft(context, this.font, TextColors.PURE_WHITE, goBack, rect.x+1, rect.y+1);
         }
         else {
-            RenderUtils.drawTextLeft(context, this.textRenderer, DEFAULT_TEXT_COLOR, goBack, rect.x+1, rect.y+1);
+            RenderUtils.drawTextLeft(context, this.font, DEFAULT_TEXT_COLOR, goBack, rect.x+1, rect.y+1);
         }
 
     }

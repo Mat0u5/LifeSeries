@@ -6,18 +6,15 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
-import net.mat0u5.lifeseries.utils.interfaces.IEntity;
 import net.mat0u5.lifeseries.utils.interfaces.IEntityDataSaver;
 import net.mat0u5.lifeseries.utils.interfaces.IMorph;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.EvokerEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Evoker;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,12 +26,12 @@ import static net.mat0u5.lifeseries.Main.currentSeason;
 //? if >= 1.21.2 {
 /*import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.minecraft.entity.EntityType;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntityType;
 *///?}
 
 @Mixin(value = Entity.class, priority = 1)
-public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
+public abstract class EntityMixin implements IEntityDataSaver, IMorph {
     /*
     private NbtCompound persistentData;
     @Override
@@ -75,18 +72,18 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
         return ls$fromMorph;
     }
 
-    @Inject(method = "getAir", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "getAirSupply", at = @At("RETURN"), cancellable = true)
     public void getAir(CallbackInfoReturnable<Integer> cir) {
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (currentSeason instanceof WildLife) {
             if (!Snail.SHOULD_DROWN_PLAYER) return;
             if (!WildcardManager.isActiveWildcard(Wildcards.SNAILS)) return;
             Entity entity = (Entity) (Object) this;
-            if (entity instanceof PlayerEntity player && !player.hasStatusEffect(StatusEffects.WATER_BREATHING)) {
-                if (!Snails.snails.containsKey(player.getUuid())) return;
-                Snail snail = Snails.snails.get(player.getUuid());
+            if (entity instanceof Player player && !player.hasEffect(MobEffects.WATER_BREATHING)) {
+                if (!Snails.snails.containsKey(player.getUUID())) return;
+                Snail snail = Snails.snails.get(player.getUUID());
                 if (snail == null) return;
-                int snailAir = snail.getAir();
+                int snailAir = snail.getAirSupply();
                 int initialAir = cir.getReturnValue();
                 if (snailAir < initialAir) {
                     cir.setReturnValue(snailAir);
@@ -96,18 +93,18 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
     }
 
     //? if <= 1.21 {
-    @Inject(method = "dropStack(Lnet/minecraft/item/ItemStack;F)Lnet/minecraft/entity/ItemEntity;",
+    @Inject(method = "spawnAtLocation(Lnet/minecraft/world/item/ItemStack;F)Lnet/minecraft/world/entity/item/ItemEntity;",
             at = @At("HEAD"), cancellable = true)
     public void dropStack(ItemStack stack, float yOffset, CallbackInfoReturnable<ItemEntity> cir) {
     //?} else {
-        /*@Inject(method = "dropStack(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemStack;F)Lnet/minecraft/entity/ItemEntity;",
-                at = @At("HEAD"), cancellable = true)
-        public void dropStack(ServerWorld world, ItemStack stack, float yOffset, CallbackInfoReturnable<ItemEntity> cir) {
-    *///?}
+    /*@Inject(method = "spawnAtLocation(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/ItemStack;F)Lnet/minecraft/world/entity/item/ItemEntity;",
+            at = @At("HEAD"), cancellable = true)
+    public void dropStack(ServerLevel level, ItemStack stack, float yOffset, CallbackInfoReturnable<ItemEntity> cir) {
+        *///?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (currentSeason instanceof WildLife) {
             Entity entity = (Entity) (Object) this;
-            if (entity instanceof EvokerEntity && stack.isOf(Items.TOTEM_OF_UNDYING)) {
+            if (entity instanceof Evoker && stack.is(Items.TOTEM_OF_UNDYING)) {
                 cir.setReturnValue(null);
             }
         }
@@ -117,13 +114,13 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
     //? if >= 1.21.2 {
     /*//? if <= 1.21.6 {
     @WrapOperation(
-            method = "startRiding(Lnet/minecraft/entity/Entity;Z)Z",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityType;isSaveable()Z")
+            method = "startRiding(Lnet/minecraft/world/entity/Entity;Z)Z",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/EntityType;canSerialize()Z")
     )
     //?} else {
     /^@WrapOperation(
-            method = "startRiding(Lnet/minecraft/entity/Entity;ZZ)Z",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityType;isSaveable()Z")
+            method = "startRiding(Lnet/minecraft/world/entity/Entity;ZZ)Z",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/EntityType;canSerialize()Z")
     )
     ^///?}
     private boolean allowRidingPlayers(EntityType instance, Operation<Boolean> original) {
@@ -134,28 +131,4 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
         }
     }
     *///?}
-
-
-    /*
-        Injected Interface
-     */
-    @Unique @Override
-    public World ls$getEntityWorld() {
-        Entity entity = (Entity) (Object) this;
-        //? if = 1.21.6 {
-        /*return entity.getWorld();
-         *///?} else {
-        return entity.getEntityWorld();
-        //?}
-    }
-
-    @Unique @Override
-    public Vec3d ls$getEntityPos() {
-        Entity entity = (Entity) (Object) this;
-        //? if <= 1.21.6 {
-        return entity.getPos();
-        //?} else {
-        /*return entity.getEntityPos();
-         *///?}
-    }
 }

@@ -10,29 +10,29 @@ import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.WardenEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvents;
+import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Unit;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.monster.warden.Warden;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.*;
+import static net.mat0u5.lifeseries.Main.currentSession;
+import static net.mat0u5.lifeseries.Main.server;
 
 //? if <= 1.21.9
-import net.minecraft.world.GameRules;
+import net.minecraft.world.level.GameRules;
 //? if > 1.21.9
-/*import net.minecraft.world.rule.GameRules;*/
+/*import net.minecraft.world.level.gamerules.GameRules;*/
 
 public class MobSwap extends Wildcard {
     public static int activatedAt = -1;
@@ -185,7 +185,7 @@ public class MobSwap extends Wildcard {
 
     public void mobSwap() {
         //TODO refactor
-        List<ServerPlayerEntity> players = PlayerUtils.getAllPlayers();
+        List<ServerPlayer> players = PlayerUtils.getAllPlayers();
         swaps++;
         if (swaps < 1) return;
 
@@ -211,7 +211,7 @@ public class MobSwap extends Wildcard {
         }
 
         if (swaps > 1) {
-            PlayerUtils.playSoundToPlayers(players, SoundEvents.BLOCK_BEACON_DEACTIVATE);
+            PlayerUtils.playSoundToPlayers(players, SoundEvents.BEACON_DEACTIVATE);
         }
 
         killNonNamedMobs();
@@ -226,13 +226,13 @@ public class MobSwap extends Wildcard {
 
         for (int i = timeForSpawning; i > 120; i -= 20) {
             TaskScheduler.scheduleTask(i, () -> {
-                PlayerUtils.playSoundToPlayers(players, SoundEvents.ENTITY_CHICKEN_EGG);
+                PlayerUtils.playSoundToPlayers(players, SoundEvents.CHICKEN_EGG);
             });
         }
 
         for (int delay : eggSounds) {
             TaskScheduler.scheduleTask(timeForSpawning + delay, () -> {
-                PlayerUtils.playSoundToPlayers(players, SoundEvents.ENTITY_CHICKEN_EGG);
+                PlayerUtils.playSoundToPlayers(players, SoundEvents.CHICKEN_EGG);
             });
         }
 
@@ -243,19 +243,19 @@ public class MobSwap extends Wildcard {
         });
 
         TaskScheduler.scheduleTask(timeForSpawning + 240, () -> {
-            PlayerUtils.playSoundToPlayers(players, SoundEvents.ENTITY_ELDER_GUARDIAN_CURSE, 0.2f, 1);
-            PlayerUtils.playSoundToPlayers(players, SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, 0.2f, 1);
+            PlayerUtils.playSoundToPlayers(players, SoundEvents.ELDER_GUARDIAN_CURSE, 0.2f, 1);
+            PlayerUtils.playSoundToPlayers(players, SoundEvents.ZOMBIE_VILLAGER_CURE, 0.2f, 1);
             transformNonNamedMobs(progress);
         });
     }
 
     private static void killNonNamedMobs() {
         if (server == null) return;
-        for (ServerWorld world : server.getWorlds()) {
+        for (ServerLevel level : server.getAllLevels()) {
             List<Entity> toKill = new ArrayList<>();
-            world.iterateEntities().forEach(entity -> {
+            level.getAllEntities().forEach(entity -> {
                 if (!(entity instanceof LivingEntity)) return;
-                if (entity instanceof PlayerEntity) return;
+                if (entity instanceof Player) return;
                 if (entity instanceof Snail) return;
                 if (entity instanceof TriviaBot) return;
                 if (entity instanceof PathFinder) return;
@@ -263,16 +263,25 @@ public class MobSwap extends Wildcard {
                 toKill.add(entity);
             });
 
-            boolean mobLoot = OtherUtils.getBooleanGameRule(world, GameRules.DO_MOB_LOOT);
-            if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.DO_MOB_LOOT, false);
+            //? if <= 1.21.9 {
+            boolean mobLoot = OtherUtils.getBooleanGameRule(level, GameRules.RULE_DOMOBLOOT);
+            if (mobLoot) OtherUtils.setBooleanGameRule(level, GameRules.RULE_DOMOBLOOT, false);
+            //?} else {
+            /*boolean mobLoot = OtherUtils.getBooleanGameRule(level, GameRules.MOB_DROPS);
+            if (mobLoot) OtherUtils.setBooleanGameRule(level, GameRules.MOB_DROPS, false);
+            *///?}
             for (Entity entity : toKill) {
                 //? if <=1.21 {
                 entity.kill();
                  //?} else {
-                /*entity.kill((ServerWorld) entity.ls$getEntityWorld());
+                /*entity.kill((ServerLevel) entity.level());
                 *///?}
             }
-            if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.DO_MOB_LOOT, true);
+            //? if <= 1.21.9 {
+            if (mobLoot) OtherUtils.setBooleanGameRule(level, GameRules.RULE_DOMOBLOOT, true);
+            //?} else {
+            /*if (mobLoot) OtherUtils.setBooleanGameRule(level, GameRules.MOB_DROPS, true);
+            *///?}
         }
     }
 
@@ -281,11 +290,11 @@ public class MobSwap extends Wildcard {
         int dangerThresholdMax = Math.max(80, Math.min(115, (int) (progress * 50) + 80));
 
         if (server == null) return;
-        for (ServerWorld world : server.getWorlds()) {
+        for (ServerLevel level : server.getAllLevels()) {
             List<Entity> toKill = new ArrayList<>();
-            world.iterateEntities().forEach(entity -> {
+            level.getAllEntities().forEach(entity -> {
                 if (!(entity instanceof LivingEntity)) return;
-                if (entity instanceof PlayerEntity) return;
+                if (entity instanceof Player) return;
                 if (entity instanceof Snail) return;
                 if (entity instanceof TriviaBot) return;
                 if (entity instanceof PathFinder) return;
@@ -293,15 +302,19 @@ public class MobSwap extends Wildcard {
 
                 EntityType<?> randomMob = getRandomMob(progress, dangerThresholdMin, dangerThresholdMax);
                 if (randomMob != null) {
-                    Entity newMob = randomMob.spawn(world, entity.getBlockPos(), SpawnReason.COMMAND);
+                    Entity newMob = LevelUtils.spawnEntity(randomMob, level, entity.blockPosition());
                     if (newMob != null) {
-                        newMob.refreshPositionAndAngles(entity.getX(), entity.getY(), entity.getZ(), entity.getYaw(), entity.getPitch());
-                        newMob.addCommandTag("mobswap");
-                        if (newMob instanceof MobEntity mobEntity) {
-                            mobEntity.setPersistent();
+                        //? if <= 1.21.4 {
+                        newMob.moveTo(entity.getX(), entity.getY(), entity.getZ(), entity.getYRot(), entity.getXRot());
+                        //?} else {
+                        /*newMob.snapTo(entity.getX(), entity.getY(), entity.getZ(), entity.getYRot(), entity.getXRot());
+                        *///?}
+                        newMob.addTag("mobswap");
+                        if (newMob instanceof Mob mobEntity) {
+                            mobEntity.setPersistenceRequired();
                         }
-                        if (newMob instanceof WardenEntity wardenEntity) {
-                            wardenEntity.getBrain().remember(MemoryModuleType.DIG_COOLDOWN, Unit.INSTANCE, 12000000L);
+                        if (newMob instanceof Warden wardenEntity) {
+                            wardenEntity.getBrain().setMemoryWithExpiry(MemoryModuleType.DIG_COOLDOWN, Unit.INSTANCE, 12000000L);
                         }
                     }
                 }
@@ -342,33 +355,42 @@ public class MobSwap extends Wildcard {
 
     public static void killMobSwapMobs() {
         if (server == null) return;
-        for (ServerWorld world : server.getWorlds()) {
+        for (ServerLevel level : server.getAllLevels()) {
             List<Entity> toKill = new ArrayList<>();
-            world.iterateEntities().forEach(entity -> {
+            level.getAllEntities().forEach(entity -> {
                 if (!(entity instanceof LivingEntity)) return;
-                if (entity instanceof PlayerEntity) return;
+                if (entity instanceof Player) return;
                 if (entity instanceof Snail) return;
                 if (entity instanceof TriviaBot) return;
                 if (entity instanceof PathFinder) return;
                 if (entity.hasCustomName()) return;
-                if (!entity.getCommandTags().contains("mobswap")) return;
+                if (!entity.getTags().contains("mobswap")) return;
                 toKill.add(entity);
             });
 
-            boolean mobLoot = OtherUtils.getBooleanGameRule(world, GameRules.DO_MOB_LOOT);
-            if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.DO_MOB_LOOT, false);
+            //? if <= 1.21.9 {
+            boolean mobLoot = OtherUtils.getBooleanGameRule(level, GameRules.RULE_DOMOBLOOT);
+            if (mobLoot) OtherUtils.setBooleanGameRule(level, GameRules.RULE_DOMOBLOOT, false);
+            //?} else {
+            /*boolean mobLoot = OtherUtils.getBooleanGameRule(level, GameRules.MOB_DROPS);
+            if (mobLoot) OtherUtils.setBooleanGameRule(level, GameRules.MOB_DROPS, false);
+            *///?}
             for (Entity entity : toKill) {
                 //? if <=1.21 {
                 entity.kill();
                  //?} else {
-                /*entity.kill((ServerWorld) entity.ls$getEntityWorld());
+                /*entity.kill((ServerLevel) entity.level());
                 *///?}
             }
-            if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.DO_MOB_LOOT, true);
+            //? if <= 1.21.9 {
+            if (mobLoot) OtherUtils.setBooleanGameRule(level, GameRules.RULE_DOMOBLOOT, true);
+            //?} else {
+            /*if (mobLoot) OtherUtils.setBooleanGameRule(level, GameRules.MOB_DROPS, true);
+            *///?}
         }
     }
 
-    public static void getSpawnCapacity(SpawnGroup group, CallbackInfoReturnable<Integer> cir) {
+    public static void getSpawnCapacity(MobCategory group, CallbackInfoReturnable<Integer> cir) {
         if (group.getName().equalsIgnoreCase("monster") && mobcapMonster >= 0) {
             cir.setReturnValue(mobcapMonster);
         }
@@ -377,22 +399,22 @@ public class MobSwap extends Wildcard {
         }
     }
 
-    public static void isRare(SpawnGroup group, CallbackInfoReturnable<Boolean> cir) {
+    public static void isRare(MobCategory group, CallbackInfoReturnable<Boolean> cir) {
         if (group.getName().equalsIgnoreCase("creature") && fastAnimalSpawn) {
             cir.setReturnValue(false);
         }
     }
 
-    public static void isAcceptableSpawnPosition(ServerWorld world, Chunk chunk, BlockPos.Mutable pos, double squaredDistance, CallbackInfoReturnable<Boolean> cir) {
+    public static void isAcceptableSpawnPosition(ServerLevel level, ChunkAccess chunk, BlockPos.MutableBlockPos pos, double squaredDistance, CallbackInfoReturnable<Boolean> cir) {
         if (!fastAnimalSpawn) return;
         if (squaredDistance < 4) {
             cir.setReturnValue(false);
         }
         //? if <= 1.21.4 {
-        cir.setReturnValue(Objects.equals(new ChunkPos(pos), chunk.getPos()) || world.shouldTick(pos));
+        cir.setReturnValue(Objects.equals(new ChunkPos(pos), chunk.getPos()) || level.isNaturalSpawningAllowed(pos));
         //?} else {
         /*ChunkPos chunkPos = new ChunkPos(pos);
-        cir.setReturnValue(Objects.equals(chunkPos, chunk.getPos()) || world.canSpawnEntitiesAt(chunkPos));
+        cir.setReturnValue(Objects.equals(chunkPos, chunk.getPos()) || level.canSpawnEntitiesInChunk(chunkPos));
         *///?}
     }
 }

@@ -10,19 +10,19 @@ public final class SnailMineTowardsPlayerGoal extends SnailFlyGoal {
     }
 
     @Override
-    public boolean canStart() {
-        if (getMob().getSnailWorld().isClient()) return false;
+    public boolean canUse() {
+        if (getMob().level().isClientSide()) return false;
         if (getMob().isPaused()) return false;
 
         if (!getMob().serverData.shouldPathfind()) {
             return false;
         }
 
-        if (getMob().getNavigation().getCurrentPath() == null) {
+        if (getMob().getNavigation().getPath() == null) {
             return false;
         }
 
-        if (!getMob().getNavigation().getCurrentPath().isFinished()) {
+        if (!getMob().getNavigation().getPath().isDone()) {
             return false;
         }
 
@@ -33,7 +33,7 @@ public final class SnailMineTowardsPlayerGoal extends SnailFlyGoal {
     }
 
     @Override
-    public boolean shouldContinue() {
+    public boolean canContinueToUse() {
         if (!getMob().serverData.shouldPathfind()) {
             return false;
         }

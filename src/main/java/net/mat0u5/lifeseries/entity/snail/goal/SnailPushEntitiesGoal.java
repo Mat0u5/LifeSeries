@@ -1,18 +1,22 @@
 package net.mat0u5.lifeseries.entity.snail.goal;
 
 import net.mat0u5.lifeseries.entity.snail.Snail;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.TntEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.projectile.thrown.PotionEntity;
-import net.minecraft.entity.vehicle.TntMinecartEntity;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.entity.vehicle.MinecartTNT;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+//? if <= 1.21.4 {
+import net.minecraft.world.entity.projectile.ThrownPotion;
+//?} else {
+/*import net.minecraft.world.entity.projectile.AbstractThrownPotion;
+*///?}
 
 @SuppressWarnings("resource")
 public final class SnailPushEntitiesGoal extends Goal {
@@ -27,12 +31,9 @@ public final class SnailPushEntitiesGoal extends Goal {
     }
 
     @Override
-    public boolean canStart() {
-        if (mob.getSnailWorld().isClient()) return false;
-        World world = mob.ls$getEntityWorld();
-        if (world == null) {
-            return false;
-        }
+    public boolean canUse() {
+        if (mob.level().isClientSide()) return false;
+        Level level = mob.level();
 
         lastPushTime++;
         int pushDelay = 20;
@@ -42,9 +43,14 @@ public final class SnailPushEntitiesGoal extends Goal {
         lastPushTime = 0;
 
         pushAway = new ArrayList<>();
-        pushAway.addAll(world.getEntitiesByClass(TntEntity.class, mob.getBoundingBox().expand(8.0), entity -> mob.squaredDistanceTo(entity) < 64.0));
-        pushAway.addAll(world.getEntitiesByClass(TntMinecartEntity.class, mob.getBoundingBox().expand(8.0), entity -> mob.squaredDistanceTo(entity) < 64.0));
-        pushAway.addAll(world.getEntitiesByClass(PotionEntity.class, mob.getBoundingBox().expand(8.0), entity -> mob.squaredDistanceTo(entity) < 64.0));
+        pushAway.addAll(level.getEntitiesOfClass(PrimedTnt.class, mob.getBoundingBox().inflate(8.0), entity -> mob.distanceToSqr(entity) < 64.0));
+        pushAway.addAll(level.getEntitiesOfClass(MinecartTNT.class, mob.getBoundingBox().inflate(8.0), entity -> mob.distanceToSqr(entity) < 64.0));
+        //? if <= 1.21.4 {
+        pushAway.addAll(level.getEntitiesOfClass(ThrownPotion.class, mob.getBoundingBox().inflate(8.0), entity -> mob.distanceToSqr(entity) < 64.0));
+        //?} else {
+        /*pushAway.addAll(level.getEntitiesOfClass(AbstractThrownPotion.class, mob.getBoundingBox().inflate(8.0), entity -> mob.distanceToSqr(entity) < 64.0));
+
+        *///?}
 
         return !pushAway.isEmpty();
     }
@@ -65,17 +71,17 @@ public final class SnailPushEntitiesGoal extends Goal {
     }
 
     @Override
-    public boolean shouldContinue() {
+    public boolean canContinueToUse() {
         return false;
     }
 
     private void pushAway(Entity entity) {
-        Vec3d direction = entity.ls$getEntityPos()
+        Vec3 direction = entity.position()
                 .add(0.0, 0.5, 0.0)
-                .subtract(mob.ls$getEntityPos())
+                .subtract(mob.position())
                 .normalize()
-                .multiply(0.4);
+                .scale(0.4);
 
-        entity.setVelocity(entity.getVelocity().add(direction));
+        entity.setDeltaMovement(entity.getDeltaMovement().add(direction));
     }
 }

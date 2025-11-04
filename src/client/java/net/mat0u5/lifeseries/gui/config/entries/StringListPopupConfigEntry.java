@@ -3,11 +3,11 @@ package net.mat0u5.lifeseries.gui.config.entries;
 import net.mat0u5.lifeseries.gui.config.entries.interfaces.IPopup;
 import net.mat0u5.lifeseries.gui.config.entries.interfaces.ITextFieldAddonPopup;
 import net.mat0u5.lifeseries.gui.config.entries.main.StringConfigEntry;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +33,7 @@ public abstract class StringListPopupConfigEntry<T> extends StringConfigEntry im
     }
 
     @Override
-    protected void renderEntry(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    protected void renderEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         super.renderEntry(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
         renderPopup(context, mouseX, mouseY, tickDelta);
     }
@@ -56,21 +56,21 @@ public abstract class StringListPopupConfigEntry<T> extends StringConfigEntry im
     }
 
     @Override
-    public TextFieldWidget getTextField() {
+    public EditBox getTextField() {
         return textField;
     }
 
     @Override
-    public TextRenderer getTextRenderer() {
+    public Font getTextRenderer() {
         return textRenderer;
     }
 
     @Override
-    public Text getPopupText() {
+    public Component getPopupText() {
         if (entries == null || entries.isEmpty()) {
-            return Text.literal("Empty").formatted(Formatting.GRAY);
+            return Component.literal("Empty").withStyle(ChatFormatting.GRAY);
         }
-        return Text.empty();
+        return Component.empty();
     }
 
     @Override
@@ -107,7 +107,7 @@ public abstract class StringListPopupConfigEntry<T> extends StringConfigEntry im
     }
 
     @Override
-    public void renderContent(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, float tickDelta) {
+    public void renderContent(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, float tickDelta) {
         if (entries == null || entries.isEmpty()) {
             ITextFieldAddonPopup.super.renderContent(context, x, y, width, height, mouseX, mouseY, tickDelta);
             return;
@@ -130,5 +130,5 @@ public abstract class StringListPopupConfigEntry<T> extends StringConfigEntry im
     }
 
     protected abstract void reloadEntries(List<String> items);
-    protected abstract void renderListEntry(DrawContext context, T entry, int x, int y, int mouseX, int mouseY, float tickDelta);
+    protected abstract void renderListEntry(GuiGraphics context, T entry, int x, int y, int mouseX, int mouseY, float tickDelta);
 }

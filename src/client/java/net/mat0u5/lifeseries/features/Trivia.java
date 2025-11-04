@@ -7,7 +7,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.network.packets.TriviaQuestionPayload;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,13 +51,13 @@ public class Trivia {
 
     public static void openGui() {
         if (question.isEmpty() || answers.isEmpty()) return;
-        MinecraftClient.getInstance().setScreen(new QuizScreen());
+        Minecraft.getInstance().setScreen(new QuizScreen());
     }
 
     public static void closeGui() {
-        if (MinecraftClient.getInstance().currentScreen == null) return;
-        if (MinecraftClient.getInstance().currentScreen instanceof QuizScreen || MinecraftClient.getInstance().currentScreen instanceof ConfirmQuizAnswerScreen) {
-            MinecraftClient.getInstance().currentScreen.close();
+        if (Minecraft.getInstance().screen == null) return;
+        if (Minecraft.getInstance().screen instanceof QuizScreen || Minecraft.getInstance().screen instanceof ConfirmQuizAnswerScreen) {
+            Minecraft.getInstance().screen.onClose();
         }
     }
 

@@ -3,11 +3,11 @@ package net.mat0u5.lifeseries.gui.config.entries.extra;
 import net.mat0u5.lifeseries.gui.config.entries.StringListPopupConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +33,14 @@ public class ItemListConfigEntry extends StringListPopupConfigEntry<Item> {
             if (!itemId.contains(":")) itemId = "minecraft:" + itemId;
 
             try {
-                Identifier id = Identifier.of(itemId);
-                RegistryKey<Item> key = RegistryKey.of(Registries.ITEM.getKey(), id);
+                ResourceLocation id = ResourceLocation.parse(itemId);
+                ResourceKey<Item> key = ResourceKey.create(BuiltInRegistries.ITEM.key(), id);
 
-                Item item = Registries.ITEM.get(key);
+                //? if <= 1.21 {
+                Item item = BuiltInRegistries.ITEM.get(key);
+                //?} else {
+                /*Item item = BuiltInRegistries.ITEM.getValue(key);
+                *///?}
                 if (item != null) {
                     newList.add(item);
                 } else {
@@ -55,8 +59,8 @@ public class ItemListConfigEntry extends StringListPopupConfigEntry<Item> {
     }
 
     @Override
-    protected void renderListEntry(DrawContext context, Item item, int x, int y, int mouseX, int mouseY, float tickDelta) {
-        context.drawItem(item.getDefaultStack(), x, y);
+    protected void renderListEntry(GuiGraphics context, Item item, int x, int y, int mouseX, int mouseY, float tickDelta) {
+        context.renderItem(item.getDefaultInstance(), x, y);
     }
 
     @Override

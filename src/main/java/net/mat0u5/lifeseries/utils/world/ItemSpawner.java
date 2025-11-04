@@ -1,22 +1,19 @@
 package net.mat0u5.lifeseries.utils.world;
 
 import net.mat0u5.lifeseries.Main;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.loot.context.LootContextTypes;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 import java.util.*;
-//? if <= 1.21
-import net.minecraft.loot.context.LootContextParameterSet;
-//? if >= 1.21.2
-/*import net.minecraft.loot.context.LootWorldContext;*/
 
 public class ItemSpawner {
     HashMap<ItemStack, Integer> lootTable = new HashMap<>();
@@ -45,31 +42,31 @@ public class ItemSpawner {
         return null;
     }
 
-    public static List<ItemStack> getRandomItemsFromLootTable(MinecraftServer server, ServerWorld world, ServerPlayerEntity player, Identifier lootTableId) {
-        if (server == null || world == null || player == null) return new ArrayList<>();
+    public static List<ItemStack> getRandomItemsFromLootTable(MinecraftServer server, ServerLevel level, ServerPlayer player, ResourceLocation lootTableId) {
+        if (server == null || level == null || player == null) return new ArrayList<>();
         try {
             //? if <= 1.21 {
-            LootContextParameterSet parameters = new LootContextParameterSet.Builder(world)
-                    .add(LootContextParameters.ORIGIN, player.ls$getEntityPos())
-                    .add(LootContextParameters.THIS_ENTITY, player)
-                    .build(LootContextTypes.COMMAND);
+            LootParams parameters = new LootParams.Builder(level)
+                    .withParameter(LootContextParams.ORIGIN, player.position())
+                    .withParameter(LootContextParams.THIS_ENTITY, player)
+                    .create(LootContextParamSets.COMMAND);
             //?} else {
-            /*LootWorldContext parameters = new LootWorldContext.Builder(world)
-                    .add(LootContextParameters.ORIGIN, player.ls$getEntityPos())
-                    .add(LootContextParameters.THIS_ENTITY, player)
-                    .build(LootContextTypes.COMMAND);
+            /*LootParams parameters = new LootParams.Builder(level)
+                    .withParameter(LootContextParams.ORIGIN, player.position())
+                    .withParameter(LootContextParams.THIS_ENTITY, player)
+                    .create(LootContextParamSets.COMMAND);
             *///?}
 
-            LootTable lootTable = world.getServer()
-                    .getReloadableRegistries()
-                    .getLootTable(RegistryKey.of(RegistryKeys.LOOT_TABLE, lootTableId));
+            LootTable lootTable = level.getServer()
+                    .reloadableRegistries()
+                    .getLootTable(ResourceKey.create(Registries.LOOT_TABLE, lootTableId));
 
             if (lootTable == null) {
                 Main.LOGGER.error("Loot table not found: " + lootTableId);
                 return new ArrayList<>();
             }
 
-            List<ItemStack> generatedLoot = lootTable.generateLoot(parameters);
+            List<ItemStack> generatedLoot = lootTable.getRandomItems(parameters);
 
             if (generatedLoot == null || generatedLoot.isEmpty()) {
                 Main.LOGGER.error("No loot generated from table: " + lootTableId);

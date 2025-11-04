@@ -7,13 +7,10 @@ import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShifting;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.WeightedRandomizer;
@@ -21,43 +18,40 @@ import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ColorParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.phys.Vec3;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-//? if <= 1.21.6
-import net.minecraft.particle.EntityEffectParticleEffect;
+import static net.mat0u5.lifeseries.Main.blacklist;
+import static net.mat0u5.lifeseries.Main.server;
 
-import static net.mat0u5.lifeseries.Main.*;
-//? if >= 1.21.9
-/*import net.minecraft.particle.TintedParticleEffect;*/
-//? if >= 1.21.11
-/*import net.minecraft.entity.LazyEntityReference;*/
+//? if > 1.21.9
+/*import net.minecraft.world.entity.EntityReference;*/
 
 public class TriviaHandler {
     private TriviaBot bot;
@@ -71,17 +65,16 @@ public class TriviaHandler {
     public int timeToComplete = 0;
     public TriviaQuestion question;
 
-
-    public ActionResult interactMob(PlayerEntity player, Hand hand) {
-        if (bot.getBotWorld().isClient()) return ActionResult.SUCCESS;
-        ServerPlayerEntity boundPlayer = bot.serverData.getBoundPlayer();
-        if (boundPlayer == null) return ActionResult.PASS;
-        if (boundPlayer.getUuid() != player.getUuid()) return ActionResult.PASS;
-        if (bot.submittedAnswer()) return ActionResult.PASS;
-        if (bot.interactedWith() && getRemainingTicks() <= 0) return ActionResult.PASS;
+    public InteractionResult interactMob(Player player, InteractionHand hand) {
+        if (bot.level().isClientSide()) return InteractionResult.SUCCESS;
+        ServerPlayer boundPlayer = bot.serverData.getBoundPlayer();
+        if (boundPlayer == null) return InteractionResult.PASS;
+        if (boundPlayer.getUUID() != player.getUUID()) return InteractionResult.PASS;
+        if (bot.submittedAnswer()) return InteractionResult.PASS;
+        if (bot.interactedWith() && getRemainingTicks() <= 0) return InteractionResult.PASS;
 
         if (!bot.interactedWith() || question == null) {
-            interactedAtAge = bot.age;
+            interactedAtAge = bot.tickCount;
             difficulty = 1+bot.getRandom().nextInt(3);
             timeToComplete = difficulty * 60 + 120;
             if (difficulty == 1) timeToComplete = TriviaBot.EASY_TIME;
@@ -93,58 +86,58 @@ public class TriviaHandler {
         NetworkHandlerServer.sendTriviaPacket(boundPlayer, question.getQuestion(), difficulty, System.currentTimeMillis(), timeToComplete, question.getAnswers());
         bot.setInteractedWith(true);
 
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     public void transformIntoSnail() {
         if (bot.serverData.getBoundPlayer() != null) {
-            Snail triviaSnail = MobRegistry.SNAIL.spawn((ServerWorld) bot.getBotWorld(), bot.getBlockPos(), SpawnReason.COMMAND);
+            Snail triviaSnail = LevelUtils.spawnEntity(MobRegistry.SNAIL, (ServerLevel) bot.level(), bot.blockPosition());
             if (triviaSnail != null) {
                 triviaSnail.serverData.setBoundPlayer(bot.serverData.getBoundPlayer());
                 triviaSnail.serverData.setFromTrivia();
-                triviaSnail.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE.value(), 0.5f, 2);
-                ServerWorld world = (ServerWorld) triviaSnail.getSnailWorld();
-                Vec3d pos = bot.ls$getEntityPos();
-                world.spawnParticles(
+                triviaSnail.playSound(SoundEvents.GENERIC_EXPLODE.value(), 0.5f, 2);
+                ServerLevel level = (ServerLevel) triviaSnail.level();
+                Vec3 pos = bot.position();
+                level.sendParticles(
                         ParticleTypes.EXPLOSION,
-                        pos.getX(), pos.getY(), pos.getZ(),
+                        pos.x(), pos.y(), pos.z(),
                         10, 0.5, 0.5, 0.5, 0.5
                 );
-                TriviaWildcard.snails.put(bot.serverData.getBoundPlayer().getUuid(), triviaSnail);
+                TriviaWildcard.snails.put(bot.serverData.getBoundPlayer().getUUID(), triviaSnail);
             }
         }
         bot.serverData.despawn();
     }
     
     public void sendTimeUpdatePacket() {
-        ServerPlayerEntity player = bot.serverData.getBoundPlayer();
+        ServerPlayer player = bot.serverData.getBoundPlayer();
         if (player != null) {
-            int ticksSinceStart = bot.age - interactedAtAge;
+            int ticksSinceStart = bot.tickCount - interactedAtAge;
             NetworkHandlerServer.sendNumberPacket(player, PacketNames.TRIVIA_TIMER, ticksSinceStart);
         }
     }
 
     public int getRemainingTicks() {
-        int ticksSinceStart = bot.age - interactedAtAge;
+        int ticksSinceStart = bot.tickCount - interactedAtAge;
         return (timeToComplete*20) - ticksSinceStart;
     }
 
     public void handleAnswer(int answer) {
-        if (bot.getBotWorld().isClient()) return;
+        if (bot.level().isClientSide()) return;
         if (bot.submittedAnswer()) return;
         bot.setSubmittedAnswer(true);
         bot.setAnalyzingTime(42);
         PlayerUtils.playSoundWithSourceToPlayers(
                 PlayerUtils.getAllPlayers(), bot,
-                SoundEvent.of(Identifier.ofVanilla("wildlife_trivia_analyzing")),
-                SoundCategory.NEUTRAL, 1f, 1);
+                SoundEvent.createVariableRangeEvent(ResourceLocation.withDefaultNamespace("wildlife_trivia_analyzing")),
+                SoundSource.NEUTRAL, 1f, 1);
         if (answer == question.getCorrectAnswerIndex()) {
             answeredCorrect();
             TaskScheduler.scheduleTask(72, () -> {
                 PlayerUtils.playSoundWithSourceToPlayers(
                         PlayerUtils.getAllPlayers(), bot,
-                        SoundEvent.of(Identifier.ofVanilla("wildlife_trivia_correct")),
-                        SoundCategory.NEUTRAL, 1f, 1);
+                        SoundEvent.createVariableRangeEvent(ResourceLocation.withDefaultNamespace("wildlife_trivia_correct")),
+                        SoundSource.NEUTRAL, 1f, 1);
             });
         }
         else {
@@ -152,8 +145,8 @@ public class TriviaHandler {
             TaskScheduler.scheduleTask(72, () -> {
                 PlayerUtils.playSoundWithSourceToPlayers(
                         PlayerUtils.getAllPlayers(), bot,
-                        SoundEvent.of(Identifier.ofVanilla("wildlife_trivia_incorrect")),
-                        SoundCategory.NEUTRAL, 1f, 1);
+                        SoundEvent.createVariableRangeEvent(ResourceLocation.withDefaultNamespace("wildlife_trivia_incorrect")),
+                        SoundSource.NEUTRAL, 1f, 1);
             });
         }
     }
@@ -172,27 +165,19 @@ public class TriviaHandler {
     }
 
     public void cursePlayer() {
-        ServerPlayerEntity player = bot.serverData.getBoundPlayer();
+        ServerPlayer player = bot.serverData.getBoundPlayer();
         if (player == null) return;
-        player.playSoundToPlayer(SoundEvents.ENTITY_ELDER_GUARDIAN_CURSE, SoundCategory.MASTER, 0.2f, 1f);
-        ServerWorld world = (ServerWorld) bot.getBotWorld();
-        Vec3d pos = bot.ls$getEntityPos();
+        player.playNotifySound(SoundEvents.ELDER_GUARDIAN_CURSE, SoundSource.MASTER, 0.2f, 1f);
+        ServerLevel level = (ServerLevel) bot.level();
+        Vec3 pos = bot.position();
 
-        //? if <= 1.21.6 {
-        world.spawnParticles(
-                EntityEffectParticleEffect.create(ParticleTypes.ENTITY_EFFECT, 0xFFa61111),
-                pos.getX(), pos.getY()+1, pos.getZ(),
+        level.sendParticles(
+                ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 0xFFa61111),
+                pos.x(), pos.y()+1, pos.z(),
                 40, 0.1, 0.25, 0.1, 0.035
         );
-        //?} else {
-        /*world.spawnParticles(
-                TintedParticleEffect.create(ParticleTypes.ENTITY_EFFECT, 0xFFa61111),
-                pos.getX(), pos.getY()+1, pos.getZ(),
-                40, 0.1, 0.25, 0.1, 0.035
-        );
-        *///?}
         int numOfCurses = 9;
-        if (DependencyManager.voicechatLoaded() && VoicechatMain.isConnectedToSVC(player.getUuid())) numOfCurses = 10;
+        if (DependencyManager.voicechatLoaded() && VoicechatMain.isConnectedToSVC(player.getUUID())) numOfCurses = 10;
 
         Integer punishmentWeight = player.ls$getLives();
         if (punishmentWeight == null) punishmentWeight = 1;
@@ -242,29 +227,38 @@ public class TriviaHandler {
         }
     }
 
-    private static final List<RegistryEntry<StatusEffect>> blessEffects = List.of(
-            StatusEffects.SPEED,
-            StatusEffects.HASTE,
-            StatusEffects.STRENGTH,
-            StatusEffects.JUMP_BOOST,
-            StatusEffects.REGENERATION,
-            StatusEffects.RESISTANCE,
-            StatusEffects.FIRE_RESISTANCE,
-            StatusEffects.WATER_BREATHING,
-            StatusEffects.NIGHT_VISION,
-            StatusEffects.HEALTH_BOOST,
-            StatusEffects.ABSORPTION
+    private static final List<Holder<MobEffect>> blessEffects = List.of(
+            //? if <= 1.21.4 {
+            MobEffects.MOVEMENT_SPEED,
+            MobEffects.DIG_SPEED,
+            MobEffects.DAMAGE_BOOST,
+            MobEffects.JUMP,
+            MobEffects.DAMAGE_RESISTANCE,
+            //?} else {
+            /*MobEffects.SPEED,
+            MobEffects.HASTE,
+            MobEffects.STRENGTH,
+            MobEffects.JUMP_BOOST,
+            MobEffects.RESISTANCE,
+            *///?}
+
+            MobEffects.REGENERATION,
+            MobEffects.FIRE_RESISTANCE,
+            MobEffects.WATER_BREATHING,
+            MobEffects.NIGHT_VISION,
+            MobEffects.HEALTH_BOOST,
+            MobEffects.ABSORPTION
     );
     public void blessPlayer() {
-        ServerPlayerEntity player = bot.serverData.getBoundPlayer();
+        ServerPlayer player = bot.serverData.getBoundPlayer();
         if (player == null) return;
-        player.sendMessage(Text.empty());
+        player.sendSystemMessage(Component.empty());
         for (int i = 0; i < 3; i++) {
             int attempts = 0;
-            RegistryEntry<StatusEffect> effect = null;
+            Holder<MobEffect> effect = null;
             while (effect == null && attempts < 50) {
                 attempts++;
-                RegistryEntry<StatusEffect> pickedEffect = blessEffects.get(player.getRandom().nextInt(blessEffects.size()));
+                Holder<MobEffect> pickedEffect = blessEffects.get(player.getRandom().nextInt(blessEffects.size()));
                 if (blacklist != null && blacklist.getBannedEffects().contains(pickedEffect)) {
                     continue;
                 }
@@ -272,52 +266,59 @@ public class TriviaHandler {
             }
             if (effect == null) continue;
             int amplifier;
-            if (effect == StatusEffects.FIRE_RESISTANCE || effect == StatusEffects.WATER_BREATHING || effect == StatusEffects.NIGHT_VISION ||
-                    effect == StatusEffects.REGENERATION || effect == StatusEffects.STRENGTH || effect == StatusEffects.HEALTH_BOOST || effect == StatusEffects.RESISTANCE) {
+            //? if <= 1.21.4 {
+            if (effect == MobEffects.FIRE_RESISTANCE || effect == MobEffects.WATER_BREATHING || effect == MobEffects.NIGHT_VISION ||
+                    effect == MobEffects.REGENERATION || effect == MobEffects.DAMAGE_BOOST || effect == MobEffects.HEALTH_BOOST || effect == MobEffects.DAMAGE_RESISTANCE) {
                 amplifier = 0;
             }
+            //?} else {
+            /*if (effect == MobEffects.FIRE_RESISTANCE || effect == MobEffects.WATER_BREATHING || effect == MobEffects.NIGHT_VISION ||
+                    effect == MobEffects.REGENERATION || effect == MobEffects.STRENGTH || effect == MobEffects.HEALTH_BOOST || effect == MobEffects.RESISTANCE) {
+                amplifier = 0;
+            }
+            *///?}
             else {
                 amplifier = player.getRandom().nextInt(4);
             }
             if (Wildcard.isFinale()) {
-                player.addStatusEffect(new StatusEffectInstance(effect, 12000, amplifier));
+                player.addEffect(new MobEffectInstance(effect, 12000, amplifier));
             }
             else {
-                player.addStatusEffect(new StatusEffectInstance(effect, 24000, amplifier));
+                player.addEffect(new MobEffectInstance(effect, 24000, amplifier));
             }
 
             String romanNumeral = TextUtils.toRomanNumeral(amplifier + 1);
-            Text effectName = Text.translatable(effect.value().getTranslationKey());
-            player.sendMessage(TextUtils.formatLoosely(" §a§l+ §7{}§6 {}", effectName, romanNumeral));
+            Component effectName = Component.translatable(effect.value().getDescriptionId());
+            player.sendSystemMessage(TextUtils.formatLoosely(" §a§l+ §7{}§6 {}", effectName, romanNumeral));
         }
-        player.sendMessage(Text.empty());
+        player.sendSystemMessage(Component.empty());
     }
 
     public void spawnItemForPlayer() {
-        if (bot.getBotWorld().isClient()) return;
+        if (bot.level().isClientSide()) return;
         if (itemSpawner == null) return;
         if (bot.serverData.getBoundPlayer() == null) return;
-        Vec3d playerPos = bot.serverData.getBoundPlayer().ls$getEntityPos();
-        Vec3d pos = bot.ls$getEntityPos().add(0,1,0);
-        Vec3d relativeTargetPos = new Vec3d(
-                playerPos.getX() - pos.getX(),
+        Vec3 playerPos = bot.serverData.getBoundPlayer().position();
+        Vec3 pos = bot.position().add(0,1,0);
+        Vec3 relativeTargetPos = new Vec3(
+                playerPos.x() - pos.x(),
                 0,
-                playerPos.getZ() - pos.getZ()
+                playerPos.z() - pos.z()
         );
-        Vec3d vector = Vec3d.ZERO;
-        if (relativeTargetPos.lengthSquared() > 0.0001) {
-            vector = relativeTargetPos.normalize().multiply(0.3).add(0,0.1,0);
+        Vec3 vector = Vec3.ZERO;
+        if (relativeTargetPos.lengthSqr() > 0.0001) {
+            vector = relativeTargetPos.normalize().scale(0.3).add(0,0.1,0);
         }
 
-        List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, (ServerWorld) bot.getBotWorld(), bot.serverData.getBoundPlayer(), Identifier.of("lifeseriesdynamic", "trivia_reward_loottable"));
+        List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, (ServerLevel) bot.level(), bot.serverData.getBoundPlayer(), ResourceLocation.fromNamespaceAndPath("lifeseriesdynamic", "trivia_reward_loottable"));
         if (!lootTableItems.isEmpty()) {
             for (ItemStack item : lootTableItems) {
-                ItemStackUtils.spawnItemForPlayerWithVelocity((ServerWorld) bot.getBotWorld(), pos, item, bot.serverData.getBoundPlayer(), vector);
+                ItemStackUtils.spawnItemForPlayerWithVelocity((ServerLevel) bot.level(), pos, item, bot.serverData.getBoundPlayer(), vector);
             }
         }
         else {
             ItemStack randomItem = itemSpawner.getRandomItem();
-            ItemStackUtils.spawnItemForPlayerWithVelocity((ServerWorld) bot.getBotWorld(), pos, randomItem, bot.serverData.getBoundPlayer(), vector);
+            ItemStackUtils.spawnItemForPlayerWithVelocity((ServerLevel) bot.level(), pos, randomItem, bot.serverData.getBoundPlayer(), vector);
         }
     }
 
@@ -346,7 +347,7 @@ public class TriviaHandler {
         ItemStack mace = new ItemStack(Items.MACE);
         ItemStackUtils.setCustomComponentBoolean(mace, "IgnoreBlacklist", true);
         ItemStackUtils.setCustomComponentBoolean(mace, "NoModifications", true);
-        mace.setDamage(mace.getMaxDamage()-1);
+        mace.setDamageValue(mace.getMaxDamage()-1);
         itemSpawner.addItem(mace, 5);
 
         ItemStack endCrystal = new ItemStack(Items.END_CRYSTAL);
@@ -354,9 +355,9 @@ public class TriviaHandler {
         itemSpawner.addItem(endCrystal, 10);
 
         ItemStack patat = new ItemStack(Items.POISONOUS_POTATO);
-        patat.set(DataComponentTypes.CUSTOM_NAME, Text.of("§6§l§nThe Sacred Patat"));
+        patat.set(DataComponents.CUSTOM_NAME, Component.nullToEmpty("§6§l§nThe Sacred Patat"));
         ItemStackUtils.addLoreToItemStack(patat,
-                List.of(Text.of("§5§oEating bot might help you. Or maybe not..."))
+                List.of(Component.nullToEmpty("§5§oEating bot might help you. Or maybe not..."))
         );
         itemSpawner.addItem(patat, 1);
     }
@@ -365,102 +366,102 @@ public class TriviaHandler {
         Curses
      */
 
-    public void curseHunger(ServerPlayerEntity player) {
-        StatusEffectInstance statusEffectInstance = new StatusEffectInstance(StatusEffects.HUNGER, 18000, 2);
-        player.addStatusEffect(statusEffectInstance);
+    public void curseHunger(ServerPlayer player) {
+        MobEffectInstance statusEffectInstance = new MobEffectInstance(MobEffects.HUNGER, 18000, 2);
+        player.addEffect(statusEffectInstance);
     }
 
-    public void curseRavager(ServerPlayerEntity player) {
-        BlockPos spawnPos = TriviaBotPathfinding.getBlockPosNearPlayer(player, bot.getBlockPos(), 5);
-        EntityType.RAVAGER.spawn(PlayerUtils.getServerWorld(player), spawnPos, SpawnReason.COMMAND);
+    public void curseRavager(ServerPlayer player) {
+        BlockPos spawnPos = TriviaBotPathfinding.getBlockPosNearPlayer(player, bot.blockPosition(), 5);
+        LevelUtils.spawnEntity(EntityType.RAVAGER, player.ls$getServerLevel(), spawnPos);
     }
 
-    public void curseInfestation(ServerPlayerEntity player) {
-        StatusEffectInstance statusEffectInstance = new StatusEffectInstance(StatusEffects.INFESTED, 18000, 0);
-        player.addStatusEffect(statusEffectInstance);
+    public void curseInfestation(ServerPlayer player) {
+        MobEffectInstance statusEffectInstance = new MobEffectInstance(MobEffects.INFESTED, 18000, 0);
+        player.addEffect(statusEffectInstance);
     }
 
     public static final List<UUID> cursedGigantificationPlayers = new ArrayList<>();
-    public void curseGigantification(ServerPlayerEntity player) {
-        cursedGigantificationPlayers.add(player.getUuid());
+    public void curseGigantification(ServerPlayer player) {
+        cursedGigantificationPlayers.add(player.getUUID());
         SizeShifting.setPlayerSizeUnchecked(player, 4);
     }
 
     public static final List<UUID> cursedSliding = new ArrayList<>();
-    public void curseSlipperyGround(ServerPlayerEntity player) {
-        cursedSliding.add(player.getUuid());
+    public void curseSlipperyGround(ServerPlayer player) {
+        cursedSliding.add(player.getUUID());
     }
 
-    public void curseBindingArmor(ServerPlayerEntity player) {
+    public void curseBindingArmor(ServerPlayer player) {
         for (ItemStack item : PlayerUtils.getArmorItems(player)) {
-            ItemStackUtils.spawnItemForPlayer(PlayerUtils.getServerWorld(player), player.ls$getEntityPos(), item.copy(), player);
+            ItemStackUtils.spawnItemForPlayer(player.ls$getServerLevel(), player.position(), item.copy(), player);
         }
-        ItemStack head = Items.LEATHER_HELMET.getDefaultStack();
-        ItemStack chest = Items.LEATHER_CHESTPLATE.getDefaultStack();
-        ItemStack legs = Items.LEATHER_LEGGINGS.getDefaultStack();
-        ItemStack boots = Items.LEATHER_BOOTS.getDefaultStack();
-        head.addEnchantment(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
-        chest.addEnchantment(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
-        legs.addEnchantment(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
-        boots.addEnchantment(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
+        ItemStack head = Items.LEATHER_HELMET.getDefaultInstance();
+        ItemStack chest = Items.LEATHER_CHESTPLATE.getDefaultInstance();
+        ItemStack legs = Items.LEATHER_LEGGINGS.getDefaultInstance();
+        ItemStack boots = Items.LEATHER_BOOTS.getDefaultInstance();
+        head.enchant(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
+        chest.enchant(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
+        legs.enchant(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
+        boots.enchant(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
         ItemStackUtils.setCustomComponentBoolean(head, "IgnoreBlacklist", true);
         ItemStackUtils.setCustomComponentBoolean(chest, "IgnoreBlacklist", true);
         ItemStackUtils.setCustomComponentBoolean(legs, "IgnoreBlacklist", true);
         ItemStackUtils.setCustomComponentBoolean(boots, "IgnoreBlacklist", true);
-        player.equipStack(EquipmentSlot.HEAD, head);
-        player.equipStack(EquipmentSlot.CHEST, chest);
-        player.equipStack(EquipmentSlot.LEGS, legs);
-        player.equipStack(EquipmentSlot.FEET, boots);
-        player.getInventory().markDirty();
+        player.setItemSlot(EquipmentSlot.HEAD, head);
+        player.setItemSlot(EquipmentSlot.CHEST, chest);
+        player.setItemSlot(EquipmentSlot.LEGS, legs);
+        player.setItemSlot(EquipmentSlot.FEET, boots);
+        player.getInventory().setChanged();
     }
 
     public static final List<UUID> cursedHeartPlayers = new ArrayList<>();
-    public void curseHearts(ServerPlayerEntity player) {
-        cursedHeartPlayers.add(player.getUuid());
+    public void curseHearts(ServerPlayer player) {
+        cursedHeartPlayers.add(player.getUUID());
         double newHealth = Math.max(player.getMaxHealth()-7, 1);
         AttributeUtils.setMaxPlayerHealth(player, newHealth);
     }
 
     public static final List<UUID> cursedMoonJumpPlayers = new ArrayList<>();
-    public void curseMoonjump(ServerPlayerEntity player) {
-        cursedMoonJumpPlayers.add(player.getUuid());
+    public void curseMoonjump(ServerPlayer player) {
+        cursedMoonJumpPlayers.add(player.getUUID());
         AttributeUtils.setJumpStrength(player, 0.76);
     }
 
-    public void curseBeeswarm(ServerPlayerEntity player) {
-        BlockPos spawnPos = TriviaBotPathfinding.getBlockPosNearPlayer(player, bot.getBlockPos(), 1);
-        BeeEntity bee1 = EntityType.BEE.spawn((ServerWorld) bot.getBotWorld(), spawnPos, SpawnReason.COMMAND);
-        BeeEntity bee2 = EntityType.BEE.spawn((ServerWorld) bot.getBotWorld(), spawnPos, SpawnReason.COMMAND);
-        BeeEntity bee3 = EntityType.BEE.spawn((ServerWorld) bot.getBotWorld(), spawnPos, SpawnReason.COMMAND);
-        BeeEntity bee4 = EntityType.BEE.spawn((ServerWorld) bot.getBotWorld(), spawnPos, SpawnReason.COMMAND);
-        BeeEntity bee5 = EntityType.BEE.spawn((ServerWorld) bot.getBotWorld(), spawnPos, SpawnReason.COMMAND);
+    public void curseBeeswarm(ServerPlayer player) {
+        BlockPos spawnPos = TriviaBotPathfinding.getBlockPosNearPlayer(player, bot.blockPosition(), 1);
+        Bee bee1 = LevelUtils.spawnEntity(EntityType.BEE, (ServerLevel) bot.level(), spawnPos);
+        Bee bee2 = LevelUtils.spawnEntity(EntityType.BEE, (ServerLevel) bot.level(), spawnPos);
+        Bee bee3 = LevelUtils.spawnEntity(EntityType.BEE, (ServerLevel) bot.level(), spawnPos);
+        Bee bee4 = LevelUtils.spawnEntity(EntityType.BEE, (ServerLevel) bot.level(), spawnPos);
+        Bee bee5 = LevelUtils.spawnEntity(EntityType.BEE, (ServerLevel) bot.level(), spawnPos);
         //? if <= 1.21.9 {
-        if (bee1 != null) bee1.setAngryAt(player.getUuid());
-        if (bee2 != null) bee2.setAngryAt(player.getUuid());
-        if (bee3 != null) bee3.setAngryAt(player.getUuid());
-        if (bee4 != null) bee4.setAngryAt(player.getUuid());
-        if (bee5 != null) bee5.setAngryAt(player.getUuid());
-        if (bee1 != null) bee1.setAngerTime(1000000);
-        if (bee2 != null) bee2.setAngerTime(1000000);
-        if (bee3 != null) bee3.setAngerTime(1000000);
-        if (bee4 != null) bee4.setAngerTime(1000000);
-        if (bee5 != null) bee5.setAngerTime(1000000);
+        if (bee1 != null) bee1.setPersistentAngerTarget(player.getUUID());
+        if (bee2 != null) bee2.setPersistentAngerTarget(player.getUUID());
+        if (bee3 != null) bee3.setPersistentAngerTarget(player.getUUID());
+        if (bee4 != null) bee4.setPersistentAngerTarget(player.getUUID());
+        if (bee5 != null) bee5.setPersistentAngerTarget(player.getUUID());
+        if (bee1 != null) bee1.setRemainingPersistentAngerTime(1000000);
+        if (bee2 != null) bee2.setRemainingPersistentAngerTime(1000000);
+        if (bee3 != null) bee3.setRemainingPersistentAngerTime(1000000);
+        if (bee4 != null) bee4.setRemainingPersistentAngerTime(1000000);
+        if (bee5 != null) bee5.setRemainingPersistentAngerTime(1000000);
         //?} else {
-        /*if (bee1 != null) bee1.setAngryAt(LazyEntityReference.ofUUID(player.getUuid()));
-        if (bee2 != null) bee2.setAngryAt(LazyEntityReference.ofUUID(player.getUuid()));
-        if (bee3 != null) bee3.setAngryAt(LazyEntityReference.ofUUID(player.getUuid()));
-        if (bee4 != null) bee4.setAngryAt(LazyEntityReference.ofUUID(player.getUuid()));
-        if (bee5 != null) bee5.setAngryAt(LazyEntityReference.ofUUID(player.getUuid()));
-        if (bee1 != null) bee1.setAngerDuration(1000000);
-        if (bee2 != null) bee2.setAngerDuration(1000000);
-        if (bee3 != null) bee3.setAngerDuration(1000000);
-        if (bee4 != null) bee4.setAngerDuration(1000000);
-        if (bee5 != null) bee5.setAngerDuration(1000000);
+        /*if (bee1 != null) bee1.setPersistentAngerTarget(EntityReference.of(player.getUUID()));
+        if (bee2 != null) bee2.setPersistentAngerTarget(EntityReference.of(player.getUUID()));
+        if (bee3 != null) bee3.setPersistentAngerTarget(EntityReference.of(player.getUUID()));
+        if (bee4 != null) bee4.setPersistentAngerTarget(EntityReference.of(player.getUUID()));
+        if (bee5 != null) bee5.setPersistentAngerTarget(EntityReference.of(player.getUUID()));
+        if (bee1 != null) bee1.setPersistentAngerEndTime(bee1.getAge() + 1000000);
+        if (bee2 != null) bee2.setPersistentAngerEndTime(bee2.getAge() + 1000000);
+        if (bee3 != null) bee3.setPersistentAngerEndTime(bee3.getAge() + 1000000);
+        if (bee4 != null) bee4.setPersistentAngerEndTime(bee4.getAge() + 1000000);
+        if (bee5 != null) bee5.setPersistentAngerEndTime(bee5.getAge() + 1000000);
         *///?}
     }
 
     public static final List<UUID> cursedRoboticVoicePlayers = new ArrayList<>();
-    public void curseRoboticVoice(ServerPlayerEntity player) {
-        cursedRoboticVoicePlayers.add(player.getUuid());
+    public void curseRoboticVoice(ServerPlayer player) {
+        cursedRoboticVoicePlayers.add(player.getUUID());
     }
 }

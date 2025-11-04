@@ -1,50 +1,44 @@
 package net.mat0u5.lifeseries.entity.pathfinder;
 
 import net.mat0u5.lifeseries.Main;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.control.FlightMoveControl;
-import net.minecraft.entity.ai.control.MoveControl;
-import net.minecraft.entity.ai.pathing.*;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.mob.AmbientEntity;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.FlyingMoveControl;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.ambient.AmbientCreature;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.Node;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.level.pathfinder.PathType;
 
-public class PathFinder extends AmbientEntity {
-    public static final Identifier ID = Identifier.of(Main.MOD_ID, "pathfinder");
+public class PathFinder extends AmbientCreature {
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "pathfinder");
     public static final float MOVEMENT_SPEED = 0.35f;
     public static final float FLYING_SPEED = 0.3f;
     private int despawnTimer = 0;
 
-    public PathFinder(EntityType<? extends AmbientEntity> entityType, World world) {
-        super(entityType, world);
+    public PathFinder(EntityType<? extends AmbientCreature> entityType, Level level) {
+        super(entityType, level);
         setInvulnerable(true);
         setNoGravity(true);
-        setPersistent();
+        setPersistenceRequired();
         setInvisible(true);
-        noClip = true;
+        noPhysics = true;
     }
-    public static DefaultAttributeContainer.Builder createAttributes() {
-        //? if <= 1.21 {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 10000)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, MOVEMENT_SPEED)
-                .add(EntityAttributes.GENERIC_FLYING_SPEED, FLYING_SPEED)
-                .add(EntityAttributes.GENERIC_STEP_HEIGHT, 1)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 150)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 20);
-        //?} else {
-        /*return MobEntity.createMobAttributes()
-                .add(EntityAttributes.MAX_HEALTH, 10000)
-                .add(EntityAttributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
-                .add(EntityAttributes.FLYING_SPEED, FLYING_SPEED)
-                .add(EntityAttributes.STEP_HEIGHT, 1)
-                .add(EntityAttributes.FOLLOW_RANGE, 150)
-                .add(EntityAttributes.ATTACK_DAMAGE, 20);
-        *///?}
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 10000)
+                .add(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
+                .add(Attributes.FLYING_SPEED, FLYING_SPEED)
+                .add(Attributes.STEP_HEIGHT, 1)
+                .add(Attributes.FOLLOW_RANGE, 150)
+                .add(Attributes.ATTACK_DAMAGE, 20);
     }
     @Override
     public void tick() {
@@ -57,21 +51,21 @@ public class PathFinder extends AmbientEntity {
 
     public void setNavigation(boolean flying) {
         despawnTimer = 0;
-        setPathfindingPenalty(PathNodeType.BLOCKED, -1);
-        setPathfindingPenalty(PathNodeType.TRAPDOOR, -1);
-        setPathfindingPenalty(PathNodeType.DANGER_TRAPDOOR, -1);
-        setPathfindingPenalty(PathNodeType.WALKABLE_DOOR, -1);
-        setPathfindingPenalty(PathNodeType.DOOR_OPEN, -1);
-        setPathfindingPenalty(PathNodeType.UNPASSABLE_RAIL, 0);
+        setPathfindingMalus(PathType.BLOCKED, -1);
+        setPathfindingMalus(PathType.TRAPDOOR, -1);
+        setPathfindingMalus(PathType.DANGER_TRAPDOOR, -1);
+        setPathfindingMalus(PathType.WALKABLE_DOOR, -1);
+        setPathfindingMalus(PathType.DOOR_OPEN, -1);
+        setPathfindingMalus(PathType.UNPASSABLE_RAIL, 0);
         if (flying) {
-            moveControl = new FlightMoveControl(this, 20, true);
-            navigation = new BirdNavigation(this, ls$getEntityWorld());
-            navigation.setCanSwim(true);
+            moveControl = new FlyingMoveControl(this, 20, true);
+            navigation = new FlyingPathNavigation(this, level());
+            navigation.setCanFloat(true);
         }
         else {
             moveControl = new MoveControl(this);
-            navigation = new MobNavigation(this, ls$getEntityWorld());
-            navigation.setCanSwim(true);
+            navigation = new GroundPathNavigation(this, level());
+            navigation.setCanFloat(true);
         }
     }
 
@@ -79,11 +73,11 @@ public class PathFinder extends AmbientEntity {
         despawnTimer = 0;
         if (pathfindTo == null) return false;
         setNavigation(flying);
-        Path path = navigation.findPathTo(pathfindTo, 0);
+        Path path = navigation.createPath(pathfindTo, 0);
         if (path == null) return false;
-        PathNode end = path.getEnd();
+        Node end = path.getEndNode();
         if (end == null) return false;
-        return end.getBlockPos().equals(pathfindTo.getBlockPos());
+        return end.asBlockPos().equals(pathfindTo.blockPosition());
     }
 
     public void resetDespawnTimer() {

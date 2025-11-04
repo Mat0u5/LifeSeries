@@ -6,26 +6,24 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
+import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
-
 
 public class AnimalDisguise extends ToggleableSuperpower {
 
     public static boolean SHOW_ARMOR = false;
     public static boolean SHOW_HANDS = true;
 
-    public AnimalDisguise(ServerPlayerEntity player) {
+    public AnimalDisguise(ServerPlayer player) {
         super(player);
     }
 
@@ -44,13 +42,13 @@ public class AnimalDisguise extends ToggleableSuperpower {
     public void activate() {
         super.activate();
 
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
         if (player == null) return;
         Entity lookingAt = PlayerUtils.getEntityLookingAt(player, 50);
         EntityType<?> morph = null;
         if (lookingAt != null)  {
             if (lookingAt instanceof LivingEntity livingEntity &&
-                    !(lookingAt instanceof PlayerEntity)) {
+                    !(lookingAt instanceof Player)) {
                 if (!bannedEntities.contains(lookingAt.getType())) {
                     morph = lookingAt.getType();
                 }
@@ -62,7 +60,7 @@ public class AnimalDisguise extends ToggleableSuperpower {
                 spawnMobs(player, morph);
             }
         }
-        PlayerUtils.getServerWorld(player).playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PUFFER_FISH_BLOW_UP, SoundCategory.MASTER, 1, 1);
+        player.ls$getServerLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PUFFER_FISH_BLOW_UP, SoundSource.MASTER, 1, 1);
 
         EntityType<?> finalMorph = morph;
 
@@ -72,9 +70,9 @@ public class AnimalDisguise extends ToggleableSuperpower {
     @Override
     public void deactivate() {
         super.deactivate();
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
         if (player == null) return;
-        PlayerUtils.getServerWorld(player).playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PUFFER_FISH_BLOW_OUT, SoundCategory.MASTER, 1, 1);
+        player.ls$getServerLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PUFFER_FISH_BLOW_OUT, SoundSource.MASTER, 1, 1);
 
         MorphManager.resetMorph(player);
     }
@@ -83,11 +81,11 @@ public class AnimalDisguise extends ToggleableSuperpower {
         deactivate();
     }
 
-    public void spawnMobs(ServerPlayerEntity player, EntityType<?> morph) {
+    public void spawnMobs(ServerPlayer player, EntityType<?> morph) {
         if (morph == null) return;
         for (int i = 0; i < 2; i++) {
-            BlockPos spawnPos =  WorldUtils.getCloseBlockPos(PlayerUtils.getServerWorld(player), player.getBlockPos(), 6, 3, true);
-            Entity spawnedEntity = morph.spawn(PlayerUtils.getServerWorld(player), spawnPos, SpawnReason.COMMAND);
+            BlockPos spawnPos =  LevelUtils.getCloseBlockPos(player.ls$getServerLevel(), player.blockPosition(), 6, 3, true);
+            Entity spawnedEntity = LevelUtils.spawnEntity(morph, player.ls$getServerLevel(), spawnPos);
         }
     }
 }

@@ -11,21 +11,21 @@ import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import static net.mat0u5.lifeseries.Main.*;
+import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.Main.currentSession;
 
 public class SecretLifeCommands extends Command {
 
@@ -35,12 +35,12 @@ public class SecretLifeCommands extends Command {
     }
 
     @Override
-    public Text getBannedText() {
-        return Text.of("This command is only available when playing Secret Life.");
+    public Component getBannedText() {
+        return Component.nullToEmpty("This command is only available when playing Secret Life.");
     }
 
     @Override
-    public void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+    public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 
         dispatcher.register(
             literal("health")
@@ -53,53 +53,53 @@ public class SecretLifeCommands extends Command {
                 )
                 .then(literal("add")
                     .requires(PermissionManager::isAdmin)
-                    .then(argument("player", EntityArgumentType.players())
+                    .then(argument("player", EntityArgument.players())
                         .executes(context -> healthManager(
-                            context.getSource(), EntityArgumentType.getPlayers(context, "player"), 1, false)
+                            context.getSource(), EntityArgument.getPlayers(context, "player"), 1, false)
                         )
                         .then(argument("amount", DoubleArgumentType.doubleArg(0))
                             .executes(context -> healthManager(
-                                context.getSource(), EntityArgumentType.getPlayers(context, "player"), DoubleArgumentType.getDouble(context, "amount"), false)
+                                context.getSource(), EntityArgument.getPlayers(context, "player"), DoubleArgumentType.getDouble(context, "amount"), false)
                             )
                         )
                     )
                 )
                 .then(literal("remove")
                     .requires(PermissionManager::isAdmin)
-                    .then(argument("player", EntityArgumentType.players())
+                    .then(argument("player", EntityArgument.players())
                         .executes(context -> healthManager(
-                            context.getSource(), EntityArgumentType.getPlayers(context, "player"), -1, false)
+                            context.getSource(), EntityArgument.getPlayers(context, "player"), -1, false)
                         )
                         .then(argument("amount", DoubleArgumentType.doubleArg(0))
                             .executes(context -> healthManager(
-                                context.getSource(), EntityArgumentType.getPlayers(context, "player"), -DoubleArgumentType.getDouble(context, "amount"), false)
+                                context.getSource(), EntityArgument.getPlayers(context, "player"), -DoubleArgumentType.getDouble(context, "amount"), false)
                             )
                         )
                     )
                 )
                 .then(literal("set")
                     .requires(PermissionManager::isAdmin)
-                    .then(argument("player", EntityArgumentType.players())
+                    .then(argument("player", EntityArgument.players())
                         .then(argument("amount", DoubleArgumentType.doubleArg(0))
                             .executes(context -> healthManager(
-                                context.getSource(), EntityArgumentType.getPlayers(context, "player"), DoubleArgumentType.getDouble(context, "amount"), true)
+                                context.getSource(), EntityArgument.getPlayers(context, "player"), DoubleArgumentType.getDouble(context, "amount"), true)
                             )
                         )
                     )
                 )
                 .then(literal("get")
                     .requires(PermissionManager::isAdmin)
-                    .then(argument("player", EntityArgumentType.players())
+                    .then(argument("player", EntityArgument.players())
                         .executes(context -> getHealthFor(
-                            context.getSource(), EntityArgumentType.getPlayers(context, "player"))
+                            context.getSource(), EntityArgument.getPlayers(context, "player"))
                         )
                     )
                 )
                 .then(literal("reset")
                     .requires(PermissionManager::isAdmin)
-                    .then(argument("player", EntityArgumentType.players())
+                    .then(argument("player", EntityArgument.players())
                         .executes(context -> resetHealth(
-                            context.getSource(), EntityArgumentType.getPlayers(context, "player"))
+                            context.getSource(), EntityArgument.getPlayers(context, "player"))
                         )
                     )
                 )
@@ -108,48 +108,48 @@ public class SecretLifeCommands extends Command {
             literal("task")
                     .requires(PermissionManager::isAdmin)
                     .then(literal("succeed")
-                            .then(argument("player", EntityArgumentType.players())
+                            .then(argument("player", EntityArgument.players())
                                     .executes(context -> succeedTask(
-                                            context.getSource(), EntityArgumentType.getPlayers(context, "player"))
+                                            context.getSource(), EntityArgument.getPlayers(context, "player"))
                                     )
                             )
                     )
                     .then(literal("fail")
-                            .then(argument("player", EntityArgumentType.players())
+                            .then(argument("player", EntityArgument.players())
                                     .executes(context -> failTask(
-                                            context.getSource(), EntityArgumentType.getPlayers(context, "player"))
+                                            context.getSource(), EntityArgument.getPlayers(context, "player"))
                                     )
                             )
                     )
                     .then(literal("reroll")
-                            .then(argument("player", EntityArgumentType.players())
+                            .then(argument("player", EntityArgument.players())
                                     .executes(context -> rerollTask(
-                                            context.getSource(), EntityArgumentType.getPlayers(context, "player"))
+                                            context.getSource(), EntityArgument.getPlayers(context, "player"))
                                     )
                             )
                     )
                     .then(literal("assignRandom")
-                            .then(argument("player", EntityArgumentType.players())
+                            .then(argument("player", EntityArgument.players())
                                     .executes(context -> assignTask(
-                                            context.getSource(), EntityArgumentType.getPlayers(context, "player"))
+                                            context.getSource(), EntityArgument.getPlayers(context, "player"))
                                     )
                             )
                     )
                     .then(literal("clearTask")
-                            .then(argument("player", EntityArgumentType.players())
+                            .then(argument("player", EntityArgument.players())
                                     .executes(context -> clearTask(
-                                            context.getSource(), EntityArgumentType.getPlayers(context, "player"))
+                                            context.getSource(), EntityArgument.getPlayers(context, "player"))
                                     )
                             )
                     )
                     .then(literal("set")
-                            .then(argument("player", EntityArgumentType.players())
+                            .then(argument("player", EntityArgument.players())
                                     .then(argument("type", StringArgumentType.string())
-                                            .suggests((context, builder) -> CommandSource.suggestMatching(List.of("easy","hard","red"), builder))
+                                            .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("easy","hard","red"), builder))
                                             .then(argument("task", StringArgumentType.greedyString())
                                                     .executes(context -> setTask(
                                                             context.getSource(),
-                                                            EntityArgumentType.getPlayers(context, "player"),
+                                                            EntityArgument.getPlayers(context, "player"),
                                                             StringArgumentType.getString(context, "type"),
                                                             StringArgumentType.getString(context, "task")
                                                             )
@@ -159,9 +159,9 @@ public class SecretLifeCommands extends Command {
                             )
                     )
                     .then(literal("get")
-                            .then(argument("player", EntityArgumentType.player())
+                            .then(argument("player", EntityArgument.player())
                                     .executes(context -> getTask(
-                                            context.getSource(), EntityArgumentType.getPlayer(context, "player"))
+                                            context.getSource(), EntityArgument.getPlayer(context, "player"))
                                     )
                             )
                     )
@@ -173,23 +173,23 @@ public class SecretLifeCommands extends Command {
         );
         dispatcher.register(
             literal("gift")
-                .then(argument("player", EntityArgumentType.player())
+                .then(argument("player", EntityArgument.player())
                     .executes(context -> gift(
-                        context.getSource(), EntityArgumentType.getPlayer(context, "player"))
+                        context.getSource(), EntityArgument.getPlayer(context, "player"))
                     )
                 )
         );
     }
 
-    public int getTask(ServerCommandSource source, ServerPlayerEntity player) {
+    public int getTask(CommandSourceStack source, ServerPlayer player) {
         if (checkBanned(source)) return -1;
         if (player == null) return -1;
 
-        boolean hasPreassignedTask = TaskManager.preAssignedTasks.containsKey(player.getUuid());
+        boolean hasPreassignedTask = TaskManager.preAssignedTasks.containsKey(player.getUUID());
         boolean hasTaskBook = TaskManager.hasTaskBookCheck(player, false);
 
         if (!hasTaskBook && !hasPreassignedTask) {
-            source.sendMessage(TextUtils.formatPlain("{} does not have a task book in their inventory nor a pre-assigned task", player));
+            source.sendSystemMessage(TextUtils.formatPlain("{} does not have a task book in their inventory nor a pre-assigned task", player));
             return -1;
         }
 
@@ -198,18 +198,18 @@ public class SecretLifeCommands extends Command {
 
         if (hasTaskBook) {
             OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("{} has a task book in their inventory", player));
-            if (TaskManager.assignedTasks.containsKey(player.getUuid())) {
-                task = TaskManager.assignedTasks.get(player.getUuid());
+            if (TaskManager.assignedTasks.containsKey(player.getUUID())) {
+                task = TaskManager.assignedTasks.get(player.getUUID());
             }
         }
         else {
             //Pre-assigned task
             OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("{} has a pre-assigned task", player));
-            task = TaskManager.preAssignedTasks.get(player.getUuid());
+            task = TaskManager.preAssignedTasks.get(player.getUUID());
         }
 
         if (task == null) {
-            source.sendError(Text.of("Failed to read task contents"));
+            source.sendFailure(Component.nullToEmpty("Failed to read task contents"));
             return -1;
         }
 
@@ -227,7 +227,7 @@ public class SecretLifeCommands extends Command {
         return 1;
     }
 
-    public int setTask(ServerCommandSource source, Collection<ServerPlayerEntity> targets, String type, String task) {
+    public int setTask(CommandSourceStack source, Collection<ServerPlayer> targets, String type, String task) {
         if (checkBanned(source)) return -1;
         if (targets == null || targets.isEmpty()) return -1;
 
@@ -238,8 +238,8 @@ public class SecretLifeCommands extends Command {
 
         task = task.replaceAll("\\\\n","\n");
 
-        for (ServerPlayerEntity player : targets) {
-            TaskManager.preAssignedTasks.put(player.getUuid(), new Task(task, taskType));
+        for (ServerPlayer player : targets) {
+            TaskManager.preAssignedTasks.put(player.getUUID(), new Task(task, taskType));
 
             boolean inSession = TaskManager.tasksChosen && !currentSession.statusFinished();
             if (TaskManager.removePlayersTaskBook(player) || inSession) {
@@ -251,7 +251,7 @@ public class SecretLifeCommands extends Command {
             }
             else if (targets.size() == 1) {
                 OtherUtils.sendCommandFeedback(source, TextUtils.format("Pre-assigned {}'s task for randomization", player));
-                OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7They will be given the task book once you / the game rolls the tasks"));
+                OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7They will be given the task book once you / the game rolls the tasks"));
             }
         }
 
@@ -262,25 +262,25 @@ public class SecretLifeCommands extends Command {
         return 1;
     }
 
-    public int changeLocations(ServerCommandSource source) {
+    public int changeLocations(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        OtherUtils.sendCommandFeedback(source, Text.of("Changing Secret Life locations..."));
+        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("Changing Secret Life locations..."));
         TaskManager.deleteLocations();
         TaskManager.checkSecretLifePositions();
         return 1;
     }
 
-    public int clearTask(ServerCommandSource source, Collection<ServerPlayerEntity> targets) {
+    public int clearTask(CommandSourceStack source, Collection<ServerPlayer> targets) {
         if (checkBanned(source)) return -1;
-        List<ServerPlayerEntity> affected = new ArrayList<>();
-        for (ServerPlayerEntity player : targets) {
+        List<ServerPlayer> affected = new ArrayList<>();
+        for (ServerPlayer player : targets) {
             if (TaskManager.removePlayersTaskBook(player)) {
                 affected.add(player);
             }
         }
 
         if (affected.isEmpty()) {
-            source.sendError(Text.of("No task books were found"));
+            source.sendFailure(Component.nullToEmpty("No task books were found"));
             return -1;
         }
         if (affected.size() == 1) {
@@ -292,7 +292,7 @@ public class SecretLifeCommands extends Command {
         return 1;
     }
 
-    public int assignTask(ServerCommandSource source, Collection<ServerPlayerEntity> targets) {
+    public int assignTask(CommandSourceStack source, Collection<ServerPlayer> targets) {
         if (checkBanned(source)) return -1;
 
         if (targets.size() == 1) {
@@ -307,7 +307,7 @@ public class SecretLifeCommands extends Command {
         return 1;
     }
 
-    public int succeedTask(ServerCommandSource source, Collection<ServerPlayerEntity> targets) {
+    public int succeedTask(CommandSourceStack source, Collection<ServerPlayer> targets) {
         if (checkBanned(source)) return -1;
         if (targets == null || targets.isEmpty()) return -1;
 
@@ -318,14 +318,14 @@ public class SecretLifeCommands extends Command {
             OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Succeeding task for {}§7 targets...", targets.size()));
         }
 
-        for (ServerPlayerEntity player : targets) {
+        for (ServerPlayer player : targets) {
             TaskManager.succeedTask(player, true);
         }
 
         return 1;
     }
 
-    public int failTask(ServerCommandSource source, Collection<ServerPlayerEntity> targets) {
+    public int failTask(CommandSourceStack source, Collection<ServerPlayer> targets) {
         if (checkBanned(source)) return -1;
         if (targets == null || targets.isEmpty()) return -1;
 
@@ -336,14 +336,14 @@ public class SecretLifeCommands extends Command {
             OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Failing task for {}§7 targets...", targets.size()));
         }
 
-        for (ServerPlayerEntity player : targets) {
+        for (ServerPlayer player : targets) {
             TaskManager.failTask(player, true);
         }
 
         return 1;
     }
 
-    public int rerollTask(ServerCommandSource source, Collection<ServerPlayerEntity> targets) {
+    public int rerollTask(CommandSourceStack source, Collection<ServerPlayer> targets) {
         if (checkBanned(source)) return -1;
         if (targets == null || targets.isEmpty()) return -1;
 
@@ -354,7 +354,7 @@ public class SecretLifeCommands extends Command {
             OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Rerolling task for {}§7 targets...", targets.size()));
         }
 
-        for (ServerPlayerEntity player : targets) {
+        for (ServerPlayer player : targets) {
             TaskManager.rerollTask(player, true);
         }
 
@@ -362,56 +362,56 @@ public class SecretLifeCommands extends Command {
     }
 
     public static final List<UUID> playersGiven = new ArrayList<>();
-    public int gift(ServerCommandSource source, ServerPlayerEntity target) {
+    public int gift(CommandSourceStack source, ServerPlayer target) {
         if (checkBanned(source)) return -1;
-        final ServerPlayerEntity self = source.getPlayer();
+        final ServerPlayer self = source.getPlayer();
         if (self == null) return -1;
         if (target == null) return -1;
         SecretLife secretLife = (SecretLife) currentSeason;
 
         if (target == self) {
-            source.sendError(Text.of("Nice Try."));
+            source.sendFailure(Component.nullToEmpty("Nice Try."));
             return -1;
         }
-        if (playersGiven.contains(self.getUuid())) {
-            source.sendError(Text.of("You have already gifted a heart this session"));
+        if (playersGiven.contains(self.getUUID())) {
+            source.sendFailure(Component.nullToEmpty("You have already gifted a heart this session"));
             return -1;
         }
         if (target.ls$isDead()) {
-            source.sendError(Text.of("That player is not alive"));
+            source.sendFailure(Component.nullToEmpty("That player is not alive"));
             return -1;
         }
         if (!currentSession.statusStarted()) {
-            source.sendError(Text.of("The session has not started"));
+            source.sendFailure(Component.nullToEmpty("The session has not started"));
             return -1;
         }
-        playersGiven.add(self.getUuid());
+        playersGiven.add(self.getUUID());
         secretLife.addPlayerHealth(target, 2);
-        Text senderMessage = TextUtils.format("You have gifted a heart to {}", target);
-        Text recipientMessage = TextUtils.format("{} gave you a heart", self);
+        Component senderMessage = TextUtils.format("You have gifted a heart to {}", target);
+        Component recipientMessage = TextUtils.format("{} gave you a heart", self);
         SessionTranscript.giftHeart(self, target);
 
-        self.sendMessage(senderMessage);
+        self.sendSystemMessage(senderMessage);
         PlayerUtils.sendTitle(target, recipientMessage, 20, 20, 20);
-        target.sendMessage(recipientMessage);
+        target.sendSystemMessage(recipientMessage);
         AnimationUtils.createSpiral(target, 40);
 
-        PlayerUtils.playSoundToPlayers(List.of(self,target), SoundEvent.of(Identifier.of("minecraft","secretlife_life")));
+        PlayerUtils.playSoundToPlayers(List.of(self,target), SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("minecraft","secretlife_life")));
 
         return 1;
     }
 
-    public int showHealth(ServerCommandSource source) {
+    public int showHealth(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
 
-        final ServerPlayerEntity self = source.getPlayer();
+        final ServerPlayer self = source.getPlayer();
 
         if (self == null) return -1;
 
         SecretLife secretLife = (SecretLife) currentSeason;
 
         if (self.ls$isDead()) {
-            OtherUtils.sendCommandFeedbackQuiet(source, Text.of("You're dead..."));
+            OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("You're dead..."));
             return -1;
         }
 
@@ -421,15 +421,15 @@ public class SecretLifeCommands extends Command {
         return 1;
     }
 
-    public int getHealthFor(ServerCommandSource source, Collection<ServerPlayerEntity> targets) {
+    public int getHealthFor(CommandSourceStack source, Collection<ServerPlayer> targets) {
         if (checkBanned(source)) return -1;
         if (targets == null) return -1;
 
         if (targets.size() > 1) {
-            OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Health of targets:"));
+            OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("Health of targets:"));
         }
 
-        for (ServerPlayerEntity player : targets) {
+        for (ServerPlayer player : targets) {
             SecretLife secretLife = (SecretLife) currentSeason;
             if (player.ls$isDead()) {
                 OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("{} is dead", player));
@@ -443,20 +443,20 @@ public class SecretLifeCommands extends Command {
         return 1;
     }
 
-    public int syncHealth(ServerCommandSource source) {
+    public int syncHealth(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
         SecretLife secretLife = (SecretLife) currentSeason;
         secretLife.syncAllPlayerHealth();
         return 1;
     }
 
-    public int healthManager(ServerCommandSource source, Collection<ServerPlayerEntity> targets, double amount, boolean setNotGive) {
+    public int healthManager(CommandSourceStack source, Collection<ServerPlayer> targets, double amount, boolean setNotGive) {
         if (checkBanned(source)) return -1;
         if (targets == null || targets.isEmpty()) return -1;
 
         SecretLife secretLife = (SecretLife) currentSeason;
         if (setNotGive) {
-            for (ServerPlayerEntity player : targets) {
+            for (ServerPlayer player : targets) {
                 secretLife.setPlayerHealth(player, amount);
             }
             if (targets.size() == 1) {
@@ -467,7 +467,7 @@ public class SecretLifeCommands extends Command {
             }
         }
         else {
-            for (ServerPlayerEntity player : targets) {
+            for (ServerPlayer player : targets) {
                 secretLife.addPlayerHealth(player, amount);
             }
             String addOrRemove = amount >= 0 ? "Added" : "Removed";
@@ -483,11 +483,11 @@ public class SecretLifeCommands extends Command {
         return 1;
     }
 
-    public int resetHealth(ServerCommandSource source, Collection<ServerPlayerEntity> targets) {
+    public int resetHealth(CommandSourceStack source, Collection<ServerPlayer> targets) {
         if (checkBanned(source)) return -1;
         if (targets == null || targets.isEmpty()) return -1;
 
-        for (ServerPlayerEntity player : targets) {
+        for (ServerPlayer player : targets) {
             SecretLife secretLife = (SecretLife) currentSeason;
             secretLife.resetPlayerHealth(player);
         }

@@ -5,28 +5,28 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import net.mat0u5.lifeseries.Main;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Text;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.Component;
 
 public abstract class Command {
     public abstract boolean isAllowed();
-    public abstract Text getBannedText();
-    public abstract void register(CommandDispatcher<ServerCommandSource> dispatcher);
+    public abstract Component getBannedText();
+    public abstract void register(CommandDispatcher<CommandSourceStack> dispatcher);
 
-    public void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess) {
+    public void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registryAccess) {
         register(dispatcher);
     }
 
-    public boolean checkBanned(ServerCommandSource source) {
+    public boolean checkBanned(CommandSourceStack source) {
         if (Main.modDisabled()) {
-            source.sendError(Text.of("The Life Series mod is disabled!"));
-            source.sendError(Text.of("Enable with \"/lifeseries enable\""));
+            source.sendFailure(Component.nullToEmpty("The Life Series mod is disabled!"));
+            source.sendFailure(Component.nullToEmpty("Enable with \"/lifeseries enable\""));
             return true;
         }
         if (isAllowed()) return false;
-        source.sendError(getBannedText());
+        source.sendFailure(getBannedText());
         return true;
     }
 
@@ -40,11 +40,11 @@ public abstract class Command {
     }
     */
 
-    public static LiteralArgumentBuilder<ServerCommandSource> literal(String string) {
-        return CommandManager.literal(string);
+    public static LiteralArgumentBuilder<CommandSourceStack> literal(String string) {
+        return Commands.literal(string);
     }
 
-    public static <T> RequiredArgumentBuilder<ServerCommandSource, T> argument(String name, ArgumentType<T> type) {
-        return CommandManager.argument(name, type);
+    public static <T> RequiredArgumentBuilder<CommandSourceStack, T> argument(String name, ArgumentType<T> type) {
+        return Commands.argument(name, type);
     }
 }

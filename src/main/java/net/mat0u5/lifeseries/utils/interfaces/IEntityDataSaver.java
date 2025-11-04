@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.utils.interfaces;
 
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 
 public interface IEntityDataSaver {
-    NbtCompound getPersistentData();
+    CompoundTag getPersistentData();
 }

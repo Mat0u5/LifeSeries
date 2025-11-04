@@ -3,11 +3,11 @@ package net.mat0u5.lifeseries.gui.config.entries.extra;
 import net.mat0u5.lifeseries.gui.config.entries.main.StringConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.enchantment.Enchantment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,17 +31,17 @@ public class EnchantListConfigEntry extends StringConfigEntry {
         reloadEntries(items);
     }
     protected void reloadEntries(List<String> items) {
-        if (MinecraftClient.getInstance().world == null) return;
+        if (Minecraft.getInstance().level == null) return;
 
-        List<RegistryKey<Enchantment>> newList = new ArrayList<>();
+        List<ResourceKey<Enchantment>> newList = new ArrayList<>();
         boolean errors = false;
 
-        Registry<Enchantment> enchantmentRegistry = MinecraftClient.getInstance().world.getRegistryManager()
+        Registry<Enchantment> enchantmentRegistry = Minecraft.getInstance().level.registryAccess()
 
         //? if <=1.21 {
-        .get(RegistryKey.ofRegistry(Identifier.of("minecraft", "enchantment")));
+        .registryOrThrow(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath("minecraft", "enchantment")));
         //?} else
-        /*.getOrThrow(RegistryKey.ofRegistry(Identifier.of("minecraft", "enchantment")));*/
+        /*.lookupOrThrow(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath("minecraft", "enchantment")));*/
 
 
         for (String enchantmentId : items) {
@@ -49,11 +49,15 @@ public class EnchantListConfigEntry extends StringConfigEntry {
             if (!enchantmentId.contains(":")) enchantmentId = "minecraft:" + enchantmentId;
 
             try {
-                Identifier id = Identifier.of(enchantmentId);
+                ResourceLocation id = ResourceLocation.parse(enchantmentId);
+                //? if <= 1.21 {
                 Enchantment enchantment = enchantmentRegistry.get(id);
+                //?} else {
+                /*Enchantment enchantment = enchantmentRegistry.getValue(id);
+                *///?}
 
                 if (enchantment != null) {
-                    newList.add(enchantmentRegistry.getKey(enchantment).orElseThrow());
+                    newList.add(enchantmentRegistry.getResourceKey(enchantment).orElseThrow());
                 } else {
                     setError(TextUtils.formatString("Invalid enchantment: '{}'", enchantmentId));
                     errors = true;

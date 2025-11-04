@@ -19,30 +19,27 @@ import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.boss.WitherEntity;
-import net.minecraft.entity.boss.dragon.EnderDragonEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageTypes;
-import net.minecraft.entity.mob.WardenEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Items;
-import net.minecraft.scoreboard.ScoreHolder;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.monster.warden.Warden;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.scores.ScoreHolder;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
 import static net.mat0u5.lifeseries.Main.seasonConfig;
-import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
 //? if >= 1.21.2 {
-/*import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.server.world.ServerWorld;
-*///?}
+//?}
 
 public class WildLife extends Season {
     public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /wildcard, /superpower, /snail";
@@ -80,19 +77,19 @@ public class WildLife extends Season {
     }
 
     @Override
-    public void onPlayerJoin(ServerPlayerEntity player) {
+    public void onPlayerJoin(ServerPlayer player) {
         super.onPlayerJoin(player);
         WildcardManager.onPlayerJoin(player);
     }
 
     @Override
-    public void onPlayerFinishJoining(ServerPlayerEntity player) {
+    public void onPlayerFinishJoining(ServerPlayer player) {
         super.onPlayerFinishJoining(player);
         WildcardManager.onPlayerFinishJoining(player);
     }
 
     @Override
-    public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim, boolean allowSelfDefense) {
+    public boolean isAllowedToAttack(ServerPlayer attacker, ServerPlayer victim, boolean allowSelfDefense) {
         if (Necromancy.isRessurectedPlayer(victim) || Necromancy.isRessurectedPlayer(attacker)) {
             return true;
         }
@@ -103,7 +100,7 @@ public class WildLife extends Season {
     }
 
     @Override
-    public void onPlayerKilledByPlayer(ServerPlayerEntity victim, ServerPlayerEntity killer) {
+    public void onPlayerKilledByPlayer(ServerPlayer victim, ServerPlayer killer) {
         boolean wasAllowedToAttack = isAllowedToAttack(killer, victim, false);
         boolean wasBoogeyCure = boogeymanManager.isBoogeymanThatCanBeCured(killer, victim);
         super.onPlayerKilledByPlayer(victim, killer);
@@ -114,7 +111,7 @@ public class WildLife extends Season {
                     if (currentLives == null) currentLives = 0;
                     int lives = currentLives + 1;
                     if (lives <= 0) {
-                        ScoreboardUtils.setScore(ScoreHolder.fromName(killer.getNameForScoreboard()), LivesManager.SCOREBOARD_NAME, lives);
+                        ScoreboardUtils.setScore(ScoreHolder.forNameOnly(killer.getScoreboardName()), LivesManager.SCOREBOARD_NAME, lives);
                     }
                     else {
                         broadcastLifeGain(killer);
@@ -133,7 +130,7 @@ public class WildLife extends Season {
 
 
     @Override
-    public void onClaimKill(ServerPlayerEntity killer, ServerPlayerEntity victim) {
+    public void onClaimKill(ServerPlayer killer, ServerPlayer victim) {
         super.onClaimKill(killer, victim);
         if (victim.ls$isOnAtLeastLives(4, false) && KILLING_DARK_GREENS_GAINS_LIVES) {
             broadcastLifeGain(killer);
@@ -141,7 +138,7 @@ public class WildLife extends Season {
         }
     }
 
-    public void broadcastLifeGain(ServerPlayerEntity player) {
+    public void broadcastLifeGain(ServerPlayer player) {
         if (BROADCAST_LIFE_GAIN) {
             PlayerUtils.broadcastMessage(TextUtils.format("{}§7 gained a life for killing a §2dark green§7 player.", player));
         }
@@ -236,21 +233,21 @@ public class WildLife extends Season {
     @Override
     public void modifyEntityDrops(LivingEntity entity, DamageSource damageSource) {
         super.modifyEntityDrops(entity, damageSource);
-        if (damageSource.getSource() instanceof PlayerEntity) {
-            if (entity instanceof WardenEntity || entity instanceof WitherEntity || entity instanceof EnderDragonEntity) {
+        if (damageSource.getDirectEntity() instanceof Player) {
+            if (entity instanceof Warden || entity instanceof WitherBoss || entity instanceof EnderDragon) {
                 //? if <= 1.21 {
-                entity.dropStack(Items.TOTEM_OF_UNDYING.getDefaultStack());
+                entity.spawnAtLocation(Items.TOTEM_OF_UNDYING.getDefaultInstance());
                  //?} else {
-                /*entity.dropStack((ServerWorld) entity.ls$getEntityWorld(), Items.TOTEM_OF_UNDYING.getDefaultStack());
+                /*entity.spawnAtLocation((ServerLevel) entity.level(), Items.TOTEM_OF_UNDYING.getDefaultInstance());
                 *///?}
             }
         }
     }
 
     @Override
-    public void onPlayerDeath(ServerPlayerEntity player, DamageSource source) {
+    public void onPlayerDeath(ServerPlayer player, DamageSource source) {
         if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.CREAKING)) {
-            if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof Creaking creakingPower) {
+            if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof CreakingPower creakingPower) {
                 creakingPower.deactivate();
                 reloadPlayerTeam(player);
             }
@@ -258,11 +255,11 @@ public class WildLife extends Season {
 
         super.onPlayerDeath(player, source);
 
-        TriviaHandler.cursedGigantificationPlayers.remove(player.getUuid());
-        TriviaHandler.cursedHeartPlayers.remove(player.getUuid());
+        TriviaHandler.cursedGigantificationPlayers.remove(player.getUUID());
+        TriviaHandler.cursedHeartPlayers.remove(player.getUUID());
         AttributeUtils.resetMaxPlayerHealthIfNecessary(player);
 
-        TriviaHandler.cursedMoonJumpPlayers.remove(player.getUuid());
+        TriviaHandler.cursedMoonJumpPlayers.remove(player.getUUID());
         AttributeUtils.resetPlayerJumpHeight(player);
 
         Superpower power = SuperpowersWildcard.getSuperpowerInstance(player);
@@ -272,7 +269,7 @@ public class WildLife extends Season {
     }
 
     @Override
-    public void onPlayerDisconnect(ServerPlayerEntity player) {
+    public void onPlayerDisconnect(ServerPlayer player) {
         super.onPlayerDisconnect(player);
 
         Superpower power = SuperpowersWildcard.getSuperpowerInstance(player);
@@ -282,18 +279,18 @@ public class WildLife extends Season {
     }
 
     @Override
-    public String getTeamForPlayer(ServerPlayerEntity player) {
+    public String getTeamForPlayer(ServerPlayer player) {
         String team = super.getTeamForPlayer(player);
 
         if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.CREAKING)) {
-            return "creaking_"+player.getNameForScoreboard();
+            return "creaking_"+player.getScoreboardName();
         }
 
         return team;
     }
 
     @Override
-    public void onPlayerDamage(ServerPlayerEntity player, DamageSource source, float amount, CallbackInfo ci) {
+    public void onPlayerDamage(ServerPlayer player, DamageSource source, float amount, CallbackInfo ci) {
         if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.PLAYER_DISGUISE)) {
             if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof PlayerDisguise power) {
                 power.onTakeDamage();
@@ -312,12 +309,12 @@ public class WildLife extends Season {
     }
 
     @Override
-    public void onPrePlayerDamage(ServerPlayerEntity player, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        if (source.isOf(DamageTypes.FALL) ||source.isOf(DamageTypes.STALAGMITE) || source.isOf(DamageTypes.FLY_INTO_WALL)) {
+    public void onPrePlayerDamage(ServerPlayer player, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        if (source.is(DamageTypes.FALL) ||source.is(DamageTypes.STALAGMITE) || source.is(DamageTypes.FLY_INTO_WALL)) {
             if (SuperpowersWildcard.hasActivePower(player, Superpowers.FLIGHT)) {
                 if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof Flight power) {
                     if (power.isLaunchedUp) {
-                        if (!source.isOf(DamageTypes.FLY_INTO_WALL)) power.isLaunchedUp = false;
+                        if (!source.is(DamageTypes.FLY_INTO_WALL)) power.isLaunchedUp = false;
                         cir.setReturnValue(false);
                         return;
                     }
@@ -332,8 +329,8 @@ public class WildLife extends Season {
                     }
                 }
             }
-            if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPER_PUNCH) && player.hasVehicle()) {
-                if (player.getVehicle() instanceof ServerPlayerEntity) {
+            if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPER_PUNCH) && player.isPassenger()) {
+                if (player.getVehicle() instanceof ServerPlayer) {
                     cir.setReturnValue(false);
                     return;
                 }
@@ -342,7 +339,7 @@ public class WildLife extends Season {
     }
 
     @Override
-    public void onRightClickEntity(ServerPlayerEntity player, World world, Hand hand, Entity entity, EntityHitResult hitResult) {
+    public void onRightClickEntity(ServerPlayer player, Level level, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
         if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPER_PUNCH)) {
             if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof SuperPunch power) {
                 power.tryRideEntity(entity);
@@ -351,7 +348,7 @@ public class WildLife extends Season {
     }
 
     @Override
-    public void onAttackEntity(ServerPlayerEntity player, World world, Hand hand, Entity entity, EntityHitResult hitResult) {
+    public void onAttackEntity(ServerPlayer player, Level level, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
         if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.INVISIBILITY)) {
             if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof Invisibility power) {
                 power.onAttack();
@@ -360,7 +357,7 @@ public class WildLife extends Season {
     }
 
     @Override
-    public void onUpdatedInventory(ServerPlayerEntity player) {
+    public void onUpdatedInventory(ServerPlayer player) {
         super.onUpdatedInventory(player);
         Hunger.updateInventory(player);
     }

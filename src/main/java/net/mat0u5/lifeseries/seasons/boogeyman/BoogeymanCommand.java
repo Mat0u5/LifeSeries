@@ -7,10 +7,10 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,12 +26,12 @@ public class BoogeymanCommand extends Command {
     }
 
     @Override
-    public Text getBannedText() {
-        return Text.of("This command is only available when the boogeyman has been enabled in the Life Series config.");
+    public Component getBannedText() {
+        return Component.nullToEmpty("This command is only available when the boogeyman has been enabled in the Life Series config.");
     }
 
     @Override
-    public void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+    public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
             literal("boogeyman")
                 .executes(context -> boogeyCheck(
@@ -57,26 +57,26 @@ public class BoogeymanCommand extends Command {
                 )
                 .then(literal("add")
                     .requires(PermissionManager::isAdmin)
-                    .then(argument("player", EntityArgumentType.players())
-                        .executes(context -> addBoogey(context.getSource(), EntityArgumentType.getPlayers(context, "player")))
+                    .then(argument("player", EntityArgument.players())
+                        .executes(context -> addBoogey(context.getSource(), EntityArgument.getPlayers(context, "player")))
                     )
                 )
                 .then(literal("remove")
                     .requires(PermissionManager::isAdmin)
-                    .then(argument("player", EntityArgumentType.players())
-                        .executes(context -> removeBoogey(context.getSource(), EntityArgumentType.getPlayers(context, "player")))
+                    .then(argument("player", EntityArgument.players())
+                        .executes(context -> removeBoogey(context.getSource(), EntityArgument.getPlayers(context, "player")))
                     )
                 )
                 .then(literal("cure")
                     .requires(PermissionManager::isAdmin)
-                    .then(argument("player", EntityArgumentType.players())
-                        .executes(context -> cureBoogey(context.getSource(), EntityArgumentType.getPlayers(context, "player")))
+                    .then(argument("player", EntityArgument.players())
+                        .executes(context -> cureBoogey(context.getSource(), EntityArgument.getPlayers(context, "player")))
                     )
                 )
                 .then(literal("fail")
                         .requires(PermissionManager::isAdmin)
-                        .then(argument("player", EntityArgumentType.players())
-                                .executes(context -> failBoogey(context.getSource(), EntityArgumentType.getPlayers(context, "player")))
+                        .then(argument("player", EntityArgument.players())
+                                .executes(context -> failBoogey(context.getSource(), EntityArgument.getPlayers(context, "player")))
                         )
                 )
                 .then(literal("selfFail")
@@ -98,31 +98,31 @@ public class BoogeymanCommand extends Command {
         return currentSeason.boogeymanManager;
     }
 
-    public int boogeyCheck(ServerCommandSource source) {
+    public int boogeyCheck(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        ServerPlayerEntity self = source.getPlayer();
+        ServerPlayer self = source.getPlayer();
         if (self == null) return -1;
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
 
         if (!bm.isBoogeyman(self)) {
-            source.sendError(Text.of("You are not a Boogeyman"));
+            source.sendFailure(Component.nullToEmpty("You are not a Boogeyman"));
             return -1;
         }
         Boogeyman boogeyman = bm.getBoogeyman(self);
         if (boogeyman != null) {
             if (boogeyman.failed) {
-                OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7You were the Boogeyman, but you have already §cfailed§7."));
+                OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7You were the Boogeyman, but you have already §cfailed§7."));
                 return 1;
 
             }
             else if (boogeyman.cured) {
-                OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7You were the Boogeyman, and you have already been §acured§7."));
+                OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7You were the Boogeyman, and you have already been §acured§7."));
                 return 1;
             }
         }
         if (bm instanceof PastLifeBoogeymanManager) {
-            OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§cYou are the Boogeyman."));
+            OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§cYou are the Boogeyman."));
         }
 
         bm.messageBoogeyman(boogeyman, self);
@@ -130,37 +130,37 @@ public class BoogeymanCommand extends Command {
         return 1;
     }
 
-    public int selfFailBoogey(ServerCommandSource source, boolean confirm) {
+    public int selfFailBoogey(CommandSourceStack source, boolean confirm) {
         if (checkBanned(source)) return -1;
-        ServerPlayerEntity self = source.getPlayer();
+        ServerPlayer self = source.getPlayer();
         if (self == null) return -1;
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
 
         if (!bm.isBoogeyman(self)) {
-            source.sendError(Text.of("You are not a Boogeyman"));
+            source.sendFailure(Component.nullToEmpty("You are not a Boogeyman"));
             return -1;
         }
         Boogeyman boogeyman = bm.getBoogeyman(self);
         if (boogeyman != null) {
             if (boogeyman.cured) {
-                source.sendError(Text.of("You have already been cured"));
+                source.sendFailure(Component.nullToEmpty("You have already been cured"));
                 return -1;
             }
             if (boogeyman.failed) {
-                source.sendError(Text.of("You have already failed"));
+                source.sendFailure(Component.nullToEmpty("You have already failed"));
                 return -1;
             }
         }
 
         if (!confirm) {
-            source.sendError(Text.of("Warning: This will cause you to fail as the Boogeyman"));
-            source.sendError(Text.of("Run \"/boogeyman selfFail §lconfirm§r\" to confirm this action."));
+            source.sendFailure(Component.nullToEmpty("Warning: This will cause you to fail as the Boogeyman"));
+            source.sendFailure(Component.nullToEmpty("Run \"/boogeyman selfFail §lconfirm§r\" to confirm this action."));
             return -1;
         }
 
         if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME) {
-            OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7Failing as the Boogeyman..."));
+            OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7Failing as the Boogeyman..."));
         }
         else {
             PlayerUtils.broadcastMessage(TextUtils.format("{}§7 voulentarily failed themselves as the Boogeyman. They have been consumed by the curse.", self));
@@ -170,20 +170,20 @@ public class BoogeymanCommand extends Command {
         return 1;
     }
 
-    public int failBoogey(ServerCommandSource source, Collection<ServerPlayerEntity> targets) {
+    public int failBoogey(CommandSourceStack source, Collection<ServerPlayer> targets) {
         if (checkBanned(source)) return -1;
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
 
         if (targets.size() == 1) {
-            ServerPlayerEntity target = targets.iterator().next();
+            ServerPlayer target = targets.iterator().next();
             if (!bm.isBoogeyman(target)) {
-                source.sendError(Text.of("That player is not a Boogeyman"));
+                source.sendFailure(Component.nullToEmpty("That player is not a Boogeyman"));
                 return -1;
             }
         }
 
-        for (ServerPlayerEntity player : targets) {
+        for (ServerPlayer player : targets) {
             bm.playerFailBoogeymanManually(player, true);
         }
 
@@ -199,20 +199,20 @@ public class BoogeymanCommand extends Command {
         return 1;
     }
 
-    public int cureBoogey(ServerCommandSource source, Collection<ServerPlayerEntity> targets) {
+    public int cureBoogey(CommandSourceStack source, Collection<ServerPlayer> targets) {
         if (checkBanned(source)) return -1;
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
 
         if (targets.size() == 1) {
-            ServerPlayerEntity target = targets.iterator().next();
+            ServerPlayer target = targets.iterator().next();
             if (!bm.isBoogeyman(target)) {
-                source.sendError(Text.of("That player is not a Boogeyman"));
+                source.sendFailure(Component.nullToEmpty("That player is not a Boogeyman"));
                 return -1;
             }
         }
 
-        for (ServerPlayerEntity player : targets) {
+        for (ServerPlayer player : targets) {
             bm.cure(player);
         }
 
@@ -228,20 +228,20 @@ public class BoogeymanCommand extends Command {
         return 1;
     }
 
-    public int addBoogey(ServerCommandSource source, Collection<ServerPlayerEntity> targets) {
+    public int addBoogey(CommandSourceStack source, Collection<ServerPlayer> targets) {
         if (checkBanned(source)) return -1;
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
 
         if (targets.size() == 1) {
-            ServerPlayerEntity target = targets.iterator().next();
+            ServerPlayer target = targets.iterator().next();
             if (bm.isBoogeyman(target)) {
-                source.sendError(Text.of("That player is already a Boogeyman"));
+                source.sendFailure(Component.nullToEmpty("That player is already a Boogeyman"));
                 return -1;
             }
         }
 
-        for (ServerPlayerEntity player : targets) {
+        for (ServerPlayer player : targets) {
             bm.addBoogeymanManually(player);
         }
         if (targets.size() == 1) {
@@ -254,20 +254,20 @@ public class BoogeymanCommand extends Command {
         return 1;
     }
 
-    public int removeBoogey(ServerCommandSource source, Collection<ServerPlayerEntity> targets) {
+    public int removeBoogey(CommandSourceStack source, Collection<ServerPlayer> targets) {
         if (checkBanned(source)) return -1;
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
 
         if (targets.size() == 1) {
-            ServerPlayerEntity target = targets.iterator().next();
+            ServerPlayer target = targets.iterator().next();
             if (!bm.isBoogeyman(target)) {
-                source.sendError(Text.of("That player is not a Boogeyman"));
+                source.sendFailure(Component.nullToEmpty("That player is not a Boogeyman"));
                 return -1;
             }
         }
 
-        for (ServerPlayerEntity player : targets) {
+        for (ServerPlayer player : targets) {
             bm.removeBoogeymanManually(player);
         }
         if (targets.size() == 1) {
@@ -281,7 +281,7 @@ public class BoogeymanCommand extends Command {
         return 1;
     }
 
-    public int boogeyList(ServerCommandSource source) {
+    public int boogeyList(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
@@ -311,7 +311,7 @@ public class BoogeymanCommand extends Command {
         return 1;
     }
 
-    public int boogeyCount(ServerCommandSource source) {
+    public int boogeyCount(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
@@ -337,22 +337,22 @@ public class BoogeymanCommand extends Command {
         return 1;
     }
 
-    public int boogeyClear(ServerCommandSource source) {
+    public int boogeyClear(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
 
         bm.resetBoogeymen();
-        OtherUtils.sendCommandFeedback(source, Text.of("All Boogeymen have been cleared"));
+        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("All Boogeymen have been cleared"));
         return 1;
     }
 
-    public int boogeyChooseRandom(ServerCommandSource source) {
+    public int boogeyChooseRandom(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
 
-        OtherUtils.sendCommandFeedback(source, Text.of("§7Choosing random Boogeymen..."));
+        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Choosing random Boogeymen..."));
 
         bm.resetBoogeymen();
         bm.prepareToChooseBoogeymen();

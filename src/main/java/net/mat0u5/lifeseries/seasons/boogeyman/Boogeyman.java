@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.seasons.boogeyman;
 
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.UUID;
 
@@ -16,13 +16,13 @@ public class Boogeyman {
     public int ticks = 0;
     public int killsNeeded;
 
-    public Boogeyman(ServerPlayerEntity player) {
-        uuid = player.getUuid();
-        name = player.getNameForScoreboard();
+    public Boogeyman(ServerPlayer player) {
+        uuid = player.getUUID();
+        name = player.getScoreboardName();
         resetKills();
     }
 
-    public ServerPlayerEntity getPlayer() {
+    public ServerPlayer getPlayer() {
         return PlayerUtils.getPlayer(uuid);
     }
 

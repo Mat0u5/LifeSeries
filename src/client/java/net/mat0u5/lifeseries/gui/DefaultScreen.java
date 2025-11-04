@@ -2,12 +2,13 @@ package net.mat0u5.lifeseries.gui;
 
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 
-//? if >= 1.21.9
-/*import net.minecraft.client.gui.Click;*/
+//? if >= 1.21.9 {
+/*import net.minecraft.client.input.MouseButtonEvent;
+*///?}
 
 public abstract class DefaultScreen extends Screen {
 
@@ -17,7 +18,7 @@ public abstract class DefaultScreen extends Screen {
     protected int offsetY = 0;
     protected static final int DEFAULT_TEXT_COLOR = TextColors.DEFAULT;
 
-    protected DefaultScreen(Text name, int widthX, int widthY, int offsetX, int offsetY) {
+    protected DefaultScreen(Component name, int widthX, int widthY, int offsetX, int offsetY) {
         super(name);
         this.BG_WIDTH = widthX;
         this.BG_HEIGHT = widthY;
@@ -25,14 +26,14 @@ public abstract class DefaultScreen extends Screen {
         this.offsetY = offsetY;
         calculateCoordinates();
     }
-    protected DefaultScreen(Text name, int widthX, int widthY) {
+    protected DefaultScreen(Component name, int widthX, int widthY) {
         super(name);
         this.BG_WIDTH = widthX;
         this.BG_HEIGHT = widthY;
         calculateCoordinates();
     }
 
-    public DefaultScreen(Text name) {
+    public DefaultScreen(Component name) {
         super(name);
         this.BG_WIDTH = 320;
         this.BG_HEIGHT = 180;
@@ -79,7 +80,7 @@ public abstract class DefaultScreen extends Screen {
     }
     //?} else {
     /*@Override
-    public boolean mouseClicked(Click click, boolean doubled) {
+    public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         if (click.button() == 0 && allowCloseButton()) { // Left-click
             if (isInCloseRegion((int)click.x(), (int)click.y())) {
                 closeButtonClicked();
@@ -91,13 +92,13 @@ public abstract class DefaultScreen extends Screen {
     *///?}
 
     public void closeButtonClicked() {
-        this.close();
+        this.onClose();
     }
 
     public boolean isInCloseRegion(int x, int y) {
-        double width = textRenderer.getWidth(Text.of("✖"));
+        double width = font.width(Component.nullToEmpty("✖"));
         double middleX = endX - 4 - (width/2);
-        double height = textRenderer.fontHeight;
+        double height = font.lineHeight;
         double middleY = startY + 4 + (height/2);
         return Math.abs(x-middleX) <= (width/2) && Math.abs(y-middleY) <= (height/2);
     }
@@ -109,9 +110,9 @@ public abstract class DefaultScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {}
+    public void renderBackground(GuiGraphics context, int mouseX, int mouseY, float delta) {}
 
-    public void renderBackground(DrawContext context, int mouseX, int mouseY) {
+    public void renderBackground(GuiGraphics context, int mouseX, int mouseY) {
         // Thick borders
         context.fill(startX-2, startY-2, endX, endY, TextColors.PURE_WHITE);
         context.fill(startX, startY, endX+2, endY+2, TextColors.GUI_GRAY);
@@ -143,18 +144,18 @@ public abstract class DefaultScreen extends Screen {
         context.fill(endX-1, endY-1, endX, endY, TextColors.GUI_GRAY);
     }
 
-    public void renderClose(DrawContext context, int mouseX, int mouseY) {
-        if (isInCloseRegion(mouseX, mouseY)) RenderUtils.drawTextRight(context, textRenderer, Text.of("§l✖"), endX - 1, startY + 1);
-        else RenderUtils.drawTextRight(context, textRenderer, Text.of("✖"), endX - 1, startY + 1);
+    public void renderClose(GuiGraphics context, int mouseX, int mouseY) {
+        if (isInCloseRegion(mouseX, mouseY)) RenderUtils.drawTextRight(context, font, Component.nullToEmpty("§l✖"), endX - 1, startY + 1);
+        else RenderUtils.drawTextRight(context, font, Component.nullToEmpty("✖"), endX - 1, startY + 1);
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
         this.renderBackground(context, mouseX, mouseY);
         this.render(context, mouseX, mouseY);
         if (allowCloseButton()) renderClose(context, mouseX, mouseY);
         super.render(context, mouseX, mouseY, delta);
     }
 
-    public abstract void render(DrawContext context, int mouseX, int mouseY);
+    public abstract void render(GuiGraphics context, int mouseX, int mouseY);
 }

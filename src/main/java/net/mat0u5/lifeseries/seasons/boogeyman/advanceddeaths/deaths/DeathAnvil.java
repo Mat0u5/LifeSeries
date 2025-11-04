@@ -3,21 +3,20 @@ package net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.deaths;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeath;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeaths;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.FallingBlockEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.item.FallingBlockEntity;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 
 public class DeathAnvil extends AdvancedDeath {
     private int anvilAmount = 20;
-    private Vec3d playerPos = null;
-    public DeathAnvil(ServerPlayerEntity player) {
+    private Vec3 playerPos = null;
+    public DeathAnvil(ServerPlayer player) {
         super(player);
     }
 
@@ -32,30 +31,30 @@ public class DeathAnvil extends AdvancedDeath {
     }
 
     @Override
-    protected DamageSource damageSource(ServerPlayerEntity player) {
-        return player.getDamageSources().fallingAnvil(player);
+    protected DamageSource damageSource(ServerPlayer player) {
+        return player.damageSources().anvil(player);
     }
 
     @Override
-    protected void tick(ServerPlayerEntity player) {
+    protected void tick(ServerPlayer player) {
         if (ticks > 80) {
             if (playerPos == null) {
-                playerPos = player.ls$getEntityPos();
+                playerPos = player.position();
             }
-            player.setPosition(playerPos);
+            player.setPos(playerPos);
         }
         if (ticks % 5 == 0 && anvilAmount > 0) {
-            BlockPos spawnPos = player.getBlockPos().add(anvilAmount, 15, 0);
-            ServerWorld world = PlayerUtils.getServerWorld(player);
-            FallingBlockEntity entity = FallingBlockEntity.spawnFromBlock(world, spawnPos, Blocks.ANVIL.getDefaultState());
-            PlayerUtils.playSoundWithSourceToPlayers(entity, SoundEvents.BLOCK_ANVIL_PLACE, SoundCategory.BLOCKS, 1, 1);
-            entity.setDestroyedOnLanding();
+            BlockPos spawnPos = player.blockPosition().offset(anvilAmount, 15, 0);
+            ServerLevel level = player.ls$getServerLevel();
+            FallingBlockEntity entity = FallingBlockEntity.fall(level, spawnPos, Blocks.ANVIL.defaultBlockState());
+            PlayerUtils.playSoundWithSourceToPlayers(entity, SoundEvents.ANVIL_PLACE, SoundSource.BLOCKS, 1, 1);
+            entity.disableDrop();
             anvilAmount--;
         }
     }
 
     @Override
-    protected void begin(ServerPlayerEntity player) {
+    protected void begin(ServerPlayer player) {
     }
 
     @Override

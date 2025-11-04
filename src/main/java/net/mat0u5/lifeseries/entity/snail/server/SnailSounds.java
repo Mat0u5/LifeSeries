@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.entity.snail.server;
 
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.minecraft.sound.SoundEvent;
+import net.minecraft.sounds.SoundEvent;
 
 import java.util.Random;
 
@@ -30,7 +30,7 @@ public class SnailSounds {
             playBurnSound();
         }
 
-        if (snail.getAir() == 0 && random.nextInt(100) == 0) {
+        if (snail.getAirSupply() == 0 && random.nextInt(100) == 0) {
             playDrownSound();
         }
 
@@ -52,7 +52,7 @@ public class SnailSounds {
                 playPropellerSound();
             }
         }
-        if (!snail.isSnailFlying() && !snail.isSnailGliding() && !snail.isSnailLanding() && snail.forwardSpeed > 0.001) {
+        if (!snail.isSnailFlying() && !snail.isSnailGliding() && !snail.isSnailLanding() && snail.zza > 0.001) {
             if (walkSoundCooldown > 0) {
                 walkSoundCooldown--;
             }

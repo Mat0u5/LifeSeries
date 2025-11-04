@@ -12,17 +12,18 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
+import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.*;
+import static net.mat0u5.lifeseries.Main.currentSession;
+import static net.mat0u5.lifeseries.Main.server;
 
 public class Snails extends Wildcard {
     public static StringListConfig snailNameConfig;
@@ -39,13 +40,13 @@ public class Snails extends Wildcard {
     @Override
     public void activate() {
         snails.clear();
-        for (ServerPlayerEntity player : PlayerUtils.getAllFunctioningPlayers()) {
+        for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
             if (!canHaveSnail(player)) continue;
             spawnSnailFor(player);
         }
         loadSnailNames();
         if (!currentSession.statusStarted()) {
-            PlayerUtils.broadcastMessageToAdmins(Text.of("§7Use the §f'/snail ...'§7 command to modify snail names and to get info on how to change snail textures."));
+            PlayerUtils.broadcastMessageToAdmins(Component.nullToEmpty("§7Use the §f'/snail ...'§7 command to modify snail names and to get info on how to change snail textures."));
         }
         super.activate();
     }
@@ -61,9 +62,9 @@ public class Snails extends Wildcard {
     public void tick() {
         ticks++;
         if (ticks % 100 == 0) {
-            for (ServerPlayerEntity player : PlayerUtils.getAllFunctioningPlayers()) {
+            for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
                 if (!canHaveSnail(player)) continue;
-                UUID playerUUID = player.getUuid();
+                UUID playerUUID = player.getUUID();
                 if (snails.containsKey(playerUUID)) {
                     Snail snail = snails.get(playerUUID);
                     if (snail == null || !snail.isAlive()) {
@@ -77,34 +78,34 @@ public class Snails extends Wildcard {
             }
         }
     }
-    public static boolean canHaveSnail(ServerPlayerEntity player) {
+    public static boolean canHaveSnail(ServerPlayer player) {
         if (player.isCreative()) return false;
         if (!player.isAlive()) return false;
-        if (Events.joiningPlayers.contains(player.getUuid())) return false;
+        if (Events.joiningPlayers.contains(player.getUUID())) return false;
         if (player.isSpectator() && !SuperpowersWildcard.hasActivatedPower(player, Superpowers.ASTRAL_PROJECTION)) return false;
         return true;
     }
 
-    public static void spawnSnailFor(ServerPlayerEntity player) {
+    public static void spawnSnailFor(ServerPlayer player) {
         BlockPos pos = SnailPathfinding.getBlockPosNearPlayer(player, 30);
-        if (pos == null) pos = player.getBlockPos().add(0,30,0);
+        if (pos == null) pos = player.blockPosition().offset(0,30,0);
         spawnSnailFor(player, pos);
     }
 
-    public static void spawnSnailFor(ServerPlayerEntity player, BlockPos pos) {
+    public static void spawnSnailFor(ServerPlayer player, BlockPos pos) {
         if (player == null || pos == null) return;
-        Snail snail = MobRegistry.SNAIL.spawn(PlayerUtils.getServerWorld(player), pos, SpawnReason.COMMAND);
+        Snail snail = LevelUtils.spawnEntity(MobRegistry.SNAIL, player.ls$getServerLevel(), pos);
         if (snail != null) {
             snail.serverData.setBoundPlayer(player);
-            snails.put(player.getUuid(), snail);
+            snails.put(player.getUUID(), snail);
         }
     }
 
     public static void killAllSnails() {
         if (server == null) return;
         List<Entity> toKill = new ArrayList<>();
-        for (ServerWorld world : server.getWorlds()) {
-            for (Entity entity : world.iterateEntities()) {
+        for (ServerLevel level : server.getAllLevels()) {
+            for (Entity entity : level.getAllEntities()) {
                 if (entity instanceof Snail snail && !snail.isFromTrivia()) {
                         toKill.add(entity);
                     }
@@ -131,22 +132,22 @@ public class Snails extends Wildcard {
         }
     }
 
-    public static void setSnailName(ServerPlayerEntity player, String name) {
-        snailNames.put(player.getUuid(), name);
+    public static void setSnailName(ServerPlayer player, String name) {
+        snailNames.put(player.getUUID(), name);
         reloadSnailNames();
         saveSnailNames();
     }
 
-    public static void resetSnailName(ServerPlayerEntity player) {
-        snailNames.remove(player.getUuid());
+    public static void resetSnailName(ServerPlayer player) {
+        snailNames.remove(player.getUUID());
         reloadSnailNames();
         saveSnailNames();
     }
 
-    public static String getSnailName(PlayerEntity player) {
+    public static String getSnailName(Player player) {
         if (player == null) return "Snail";
-        if (snailNames.containsKey(player.getUuid())) {
-            return snailNames.get(player.getUuid());
+        if (snailNames.containsKey(player.getUUID())) {
+            return snailNames.get(player.getUUID());
         }
         return TextUtils.formatString("{}'s Snail", player);
     }

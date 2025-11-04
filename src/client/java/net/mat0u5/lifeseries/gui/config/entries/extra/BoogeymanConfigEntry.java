@@ -9,8 +9,8 @@ import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class BoogeymanConfigEntry extends BooleanConfigEntry {
     }
 
     @Override
-    protected void renderEntry(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    protected void renderEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         super.renderEntry(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
         if (parentGroup == null || !showBoogeymanInfoText()) {
             return;
@@ -81,8 +81,8 @@ public class BoogeymanConfigEntry extends BooleanConfigEntry {
 
         int currentY = y + DESCRIPTION_OFFSET_Y;
         for (String line : boogeymanDescription) {
-            RenderUtils.drawTextLeft(context, textRenderer, TextColors.LIGHT_GRAY,  Text.literal(line), x+DESCRIPTION_OFFSET_X, currentY);
-            currentY += textRenderer.fontHeight;
+            RenderUtils.drawTextLeft(context, textRenderer, TextColors.LIGHT_GRAY,  Component.literal(line), x+DESCRIPTION_OFFSET_X, currentY);
+            currentY += textRenderer.lineHeight;
         }
     }
 
@@ -136,7 +136,7 @@ public class BoogeymanConfigEntry extends BooleanConfigEntry {
         int initial = super.getPreferredHeight();
         if (showBoogeymanInfoText()) {
             int lines = 9;
-            return initial + textRenderer.fontHeight * lines + 6;
+            return initial + textRenderer.lineHeight * lines + 6;
         }
         return initial;
     }

@@ -3,17 +3,16 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 
 public class Invisibility extends ToggleableSuperpower {
-    public Invisibility(ServerPlayerEntity player) {
+    public Invisibility(ServerPlayer player) {
         super(player);
     }
 
@@ -30,44 +29,44 @@ public class Invisibility extends ToggleableSuperpower {
     @Override
     public void tick() {
         if (!active) return;
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
         if (player == null) return;
-        StatusEffectInstance invis = new StatusEffectInstance(StatusEffects.INVISIBILITY, 219, 0, false, false, false);
-        player.addStatusEffect(invis);
+        MobEffectInstance invis = new MobEffectInstance(MobEffects.INVISIBILITY, 219, 0, false, false, false);
+        player.addEffect(invis);
     }
 
     @Override
     public void activate() {
         super.activate();
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
         if (player == null) return;
-        ServerWorld playerWorld = PlayerUtils.getServerWorld(player);
+        ServerLevel playerLevel = player.ls$getServerLevel();
 
-        playerWorld.spawnParticles(
+        playerLevel.sendParticles(
                 ParticleTypes.SMOKE,
                 player.getX(), player.getY()+0.9, player.getZ(),
                 40, 0.3, 0.5, 0.3, 0
         );
 
-        playerWorld.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_SHULKER_SHOOT, SoundCategory.MASTER, 1, 1);
+        playerLevel.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.SHULKER_SHOOT, SoundSource.MASTER, 1, 1);
         sendInvisibilityPacket();
     }
 
     @Override
     public void deactivate() {
         super.deactivate();
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
         if (player == null) return;
-        PlayerUtils.getServerWorld(player).playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.MASTER, 1, 1);
-        NetworkHandlerServer.sendPlayerInvisible(player.getUuid(), 0);
-        player.removeStatusEffect(StatusEffects.INVISIBILITY);
+        player.ls$getServerLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.CHICKEN_EGG, SoundSource.MASTER, 1, 1);
+        NetworkHandlerServer.sendPlayerInvisible(player.getUUID(), 0);
+        player.removeEffect(MobEffects.INVISIBILITY);
     }
 
     public void sendInvisibilityPacket() {
         if (!this.active) return;
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
         if (player == null) return;
-        NetworkHandlerServer.sendPlayerInvisible(player.getUuid(), -1);
+        NetworkHandlerServer.sendPlayerInvisible(player.getUUID(), -1);
     }
 
     public void onTakeDamage() {

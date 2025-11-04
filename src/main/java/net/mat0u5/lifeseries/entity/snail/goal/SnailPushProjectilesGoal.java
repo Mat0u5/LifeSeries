@@ -1,22 +1,22 @@
 package net.mat0u5.lifeseries.entity.snail.goal;
 
 import net.mat0u5.lifeseries.entity.snail.Snail;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.entity.projectile.TridentEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ThrownTrident;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-//? if >= 1.21.4
+
+//? if >= 1.21.5
 /*import java.util.Optional;*/
 //? if >= 1.21.6 {
-/*import net.minecraft.storage.NbtWriteView;
-import net.minecraft.util.ErrorReporter;
+/*import net.minecraft.util.ProblemReporter;
+import net.minecraft.world.level.storage.TagValueOutput;
 *///?}
 
 @SuppressWarnings("resource")
@@ -25,24 +25,21 @@ public final class SnailPushProjectilesGoal extends Goal {
     @NotNull
     private final Snail mob;
     @NotNull
-    private List<ProjectileEntity> projectiles  = new ArrayList<>();
+    private List<Projectile> projectiles  = new ArrayList<>();
 
     public SnailPushProjectilesGoal(@NotNull Snail mob) {
         this.mob = mob;
     }
 
     @Override
-    public boolean canStart() {
-        if (mob.getSnailWorld().isClient()) return false;
-        if (mob.ls$getEntityWorld() == null) {
-            return false;
-        }
+    public boolean canUse() {
+        if (mob.level().isClientSide()) return false;
 
-        World world = mob.ls$getEntityWorld();
-        this.projectiles = world.getEntitiesByClass(
-                ProjectileEntity.class,
-                mob.getBoundingBox().expand(5.0, 5.0, 5.0),
-                projectile -> projectile.squaredDistanceTo(mob) < 16
+        Level level = mob.level();
+        this.projectiles = level.getEntitiesOfClass(
+                Projectile.class,
+                mob.getBoundingBox().inflate(5.0, 5.0, 5.0),
+                projectile -> projectile.distanceToSqr(mob) < 16
         );
 
         return !this.projectiles.isEmpty();
@@ -51,14 +48,14 @@ public final class SnailPushProjectilesGoal extends Goal {
     @Override
     public void start() {
         boolean playSound = false;
-        for (ProjectileEntity projectile : projectiles) {
+        for (Projectile projectile : projectiles) {
             //? if <= 1.21.5 {
-            NbtCompound empty = new NbtCompound();
-            NbtCompound nbt = projectile.writeNbt(empty);
+            CompoundTag empty = new CompoundTag();
+            CompoundTag nbt = projectile.saveWithoutId(empty);
             //?} else {
-            /*NbtWriteView writeView = NbtWriteView.create(ErrorReporter.EMPTY);
-            projectile.writeData(writeView);
-            NbtCompound nbt = writeView.getNbt();
+            /*TagValueOutput writeView = TagValueOutput.createWithoutContext(ProblemReporter.DISCARDING);
+            projectile.saveWithoutId(writeView);
+            CompoundTag nbt = writeView.buildResult();
             *///?}
             //? if <= 1.21.4 {
             if (nbt.contains("inGround") && nbt.getBoolean("inGround")) {
@@ -91,8 +88,8 @@ public final class SnailPushProjectilesGoal extends Goal {
                 double velocityX = (dx / horizontalDistance) * speed;
                 double velocityZ = (dz / horizontalDistance) * speed;
 
-                projectile.setVelocity(velocityX, velocityY, velocityZ, 1.6F, 0.0F);
-                if (!(projectile instanceof TridentEntity)) projectile.setOwner(mob);
+                projectile.shoot(velocityX, velocityY, velocityZ, 1.6F, 0.0F);
+                if (!(projectile instanceof ThrownTrident)) projectile.setOwner(mob);
 
                 playSound = true;
             }
@@ -103,7 +100,7 @@ public final class SnailPushProjectilesGoal extends Goal {
     }
 
     @Override
-    public boolean shouldContinue() {
+    public boolean canContinueToUse() {
         return false;
     }
 

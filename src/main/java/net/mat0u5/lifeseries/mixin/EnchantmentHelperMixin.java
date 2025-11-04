@@ -5,17 +5,17 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.EnchantmentLevelEntry;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -35,13 +35,13 @@ import static net.mat0u5.lifeseries.Main.seasonConfig;
 
 @Mixin(value = EnchantmentHelper.class, priority = 1)
 public class EnchantmentHelperMixin {
-    @Inject(method = "getPossibleEntries", at = @At("HEAD"), cancellable = true)
-    private static void getPossibleEntries(int level, ItemStack stack, Stream<RegistryEntry<Enchantment>> possibleEnchantments, CallbackInfoReturnable<List<EnchantmentLevelEntry>> cir) {
+    @Inject(method = "getAvailableEnchantmentResults", at = @At("HEAD"), cancellable = true)
+    private static void getPossibleEntries(int level, ItemStack stack, Stream<Holder<Enchantment>> possibleEnchantments, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (Main.server == null) return;
 
         if (ItemStackUtils.hasCustomComponentEntry(stack, "NoEnchants") || ItemStackUtils.hasCustomComponentEntry(stack, "NoModifications")) {
-            cir.setReturnValue(Lists.<EnchantmentLevelEntry>newArrayList());
+            cir.setReturnValue(Lists.<EnchantmentInstance>newArrayList());
             return;
         }
 
@@ -54,21 +54,21 @@ public class EnchantmentHelperMixin {
     }
 
     @Unique
-    private static void ls$blacklistEnchantments(int level, ItemStack stack, Stream<RegistryEntry<Enchantment>> possibleEnchantments, CallbackInfoReturnable<List<EnchantmentLevelEntry>> cir) {
-        List<EnchantmentLevelEntry> list = Lists.<EnchantmentLevelEntry>newArrayList();
-        boolean bl = stack.isOf(Items.BOOK);
+    private static void ls$blacklistEnchantments(int level, ItemStack stack, Stream<Holder<Enchantment>> possibleEnchantments, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
+        List<EnchantmentInstance> list = Lists.<EnchantmentInstance>newArrayList();
+        boolean bl = stack.is(Items.BOOK);
         possibleEnchantments.filter(enchantment -> ((Enchantment)enchantment.value()).isPrimaryItem(stack) || bl).forEach(enchantmentx -> {
             Enchantment enchantment = (Enchantment)enchantmentx.value();
-            Optional<RegistryKey<Enchantment>> enchantRegistryKey = enchantmentx.getKey();
+            Optional<ResourceKey<Enchantment>> enchantRegistryKey = enchantmentx.unwrapKey();
             boolean isRegistryPresent = enchantRegistryKey.isPresent();
             if (isRegistryPresent && !blacklist.getBannedEnchants().contains(enchantRegistryKey.get())) {
                 for (int j = enchantment.getMaxLevel(); j >= enchantment.getMinLevel(); j--) {
-                    if (level >= enchantment.getMinPower(j) && level <= enchantment.getMaxPower(j)) {
+                    if (level >= enchantment.getMinCost(j) && level <= enchantment.getMaxCost(j)) {
                         if (isRegistryPresent && blacklist.getClampedEnchants().contains(enchantRegistryKey.get())) {
-                            list.add(new EnchantmentLevelEntry(enchantmentx, 1));
+                            list.add(new EnchantmentInstance(enchantmentx, 1));
                         }
                         else {
-                            list.add(new EnchantmentLevelEntry(enchantmentx, j));
+                            list.add(new EnchantmentInstance(enchantmentx, j));
                         }
                         break;
                     }
@@ -79,31 +79,31 @@ public class EnchantmentHelperMixin {
     }
 
     @Unique
-    private static void ls$customEnchantmentTableAlgorithm(int level, ItemStack stack, Stream<RegistryEntry<Enchantment>> possibleEnchantments, CallbackInfoReturnable<List<EnchantmentLevelEntry>> cir) {
-        List<EnchantmentLevelEntry> list = new ArrayList<>();
-        boolean bl = stack.isOf(Items.BOOK);
+    private static void ls$customEnchantmentTableAlgorithm(int level, ItemStack stack, Stream<Holder<Enchantment>> possibleEnchantments, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
+        List<EnchantmentInstance> list = new ArrayList<>();
+        boolean bl = stack.is(Items.BOOK);
         possibleEnchantments.filter(enchantment -> ((Enchantment)enchantment.value()).isPrimaryItem(stack) || bl).forEach(enchantmentx -> {
             Enchantment enchantment = (Enchantment)enchantmentx.value();
-            Optional<RegistryKey<Enchantment>> enchantRegistryKey = enchantmentx.getKey();
+            Optional<ResourceKey<Enchantment>> enchantRegistryKey = enchantmentx.unwrapKey();
             if (enchantRegistryKey.isPresent() && !blacklist.getBannedEnchants().contains(enchantRegistryKey.get())) {
                 if (blacklist.getClampedEnchants().contains(enchantRegistryKey.get())) {
-                    list.add(new EnchantmentLevelEntry(enchantmentx, 1));
+                    list.add(new EnchantmentInstance(enchantmentx, 1));
                 }
                 else {
                     for (int j = enchantment.getMaxLevel(); j >= enchantment.getMinLevel(); j--) {
                         if (j == 1) {
                             if (enchantment.getMaxLevel() <= 3 || level < 4) {
-                                list.add(new EnchantmentLevelEntry(enchantmentx, j));
+                                list.add(new EnchantmentInstance(enchantmentx, j));
                             }
                         }
                         else if (j == 2 && level > 4 && enchantment.getMaxLevel() > 3) {
-                            list.add(new EnchantmentLevelEntry(enchantmentx, j));
+                            list.add(new EnchantmentInstance(enchantmentx, j));
                         }
                         else if (j == 2 && level > 6 && enchantment.getMaxLevel() >= 3) {
-                            list.add(new EnchantmentLevelEntry(enchantmentx, j));
+                            list.add(new EnchantmentInstance(enchantmentx, j));
                         }
                         else if (j == 3 && level > 6 && enchantment.getMaxLevel() > 3) {
-                            list.add(new EnchantmentLevelEntry(enchantmentx, j));
+                            list.add(new EnchantmentInstance(enchantmentx, j));
                         }
                     }
                 }
@@ -113,18 +113,18 @@ public class EnchantmentHelperMixin {
     }
 
     @Inject(
-            method = "onTargetDamaged(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/Entity;Lnet/minecraft/entity/damage/DamageSource;)V", at = @At("HEAD")
+            method = "doPostAttackEffects(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/damagesource/DamageSource;)V", at = @At("HEAD")
     )
-    private static void onTargetDamaged(ServerWorld world, Entity victimEntity, DamageSource damageSource, CallbackInfo ci) {
+    private static void onTargetDamaged(ServerLevel level, Entity victimEntity, DamageSource damageSource, CallbackInfo ci) {
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
-        if (!(victimEntity instanceof ServerPlayerEntity victim)) return;
+        if (!(victimEntity instanceof ServerPlayer victim)) return;
         if (damageSource == null) return;
-        if (damageSource.getAttacker() == null) return;
+        if (damageSource.getEntity() == null) return;
         if (!SuperpowersWildcard.hasActivatedPower(victim, Superpowers.SUPER_PUNCH)) return;
         //? if <= 1.21 {
-        damageSource.getAttacker().damage(victim.getDamageSources().thorns(victim), 1F);
+        damageSource.getEntity().hurt(victim.damageSources().thorns(victim), 1F);
         //?} else {
-        /*damageSource.getAttacker().damage(PlayerUtils.getServerWorld(victim), victim.getDamageSources().thorns(victim), 1F);
+        /*damageSource.getEntity().hurtServer(victim.ls$getServerLevel(), victim.damageSources().thorns(victim), 1F);
          *///?}
     }
 }

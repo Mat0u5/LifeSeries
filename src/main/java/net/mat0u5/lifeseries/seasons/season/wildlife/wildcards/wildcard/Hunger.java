@@ -8,37 +8,36 @@ import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.component.ComponentChanges;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.FoodComponent;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.component.PatchedDataComponentMap;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
 import static net.mat0u5.lifeseries.Main.currentSession;
 
-//? if <= 1.21 {
-import net.minecraft.component.ComponentMapImpl;
+//? if <= 1.21
 import java.util.Optional;
-//?}
-
 //? if >= 1.21.2 {
-/*import net.minecraft.component.MergedComponentMap;
-import net.minecraft.component.type.ConsumableComponent;
-import net.minecraft.item.consume.UseAction;
+/*import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.component.Consumable;
 *///?}
 
 public class Hunger extends Wildcard {
@@ -56,59 +55,84 @@ public class Hunger extends Wildcard {
     public static double NUTRITION_CHANCE = 0.4;
     public static double SATURATION_CHANCE = 0.5;
 
-    private static final List<RegistryEntry<StatusEffect>> effects = List.of(
-            StatusEffects.SPEED,
-            StatusEffects.SLOWNESS,
-            StatusEffects.HASTE,
-            StatusEffects.MINING_FATIGUE,
-            StatusEffects.STRENGTH,
-            StatusEffects.INSTANT_HEALTH,
-            StatusEffects.INSTANT_DAMAGE,
-            StatusEffects.JUMP_BOOST,
-            StatusEffects.NAUSEA,
-            StatusEffects.REGENERATION,
-            StatusEffects.RESISTANCE,
-            StatusEffects.FIRE_RESISTANCE,
-            StatusEffects.WATER_BREATHING,
-            StatusEffects.INVISIBILITY,
-            StatusEffects.BLINDNESS,
-            StatusEffects.NIGHT_VISION,
-            StatusEffects.WEAKNESS,
-            StatusEffects.POISON,
-            StatusEffects.WITHER,
-            StatusEffects.HEALTH_BOOST,
-            StatusEffects.ABSORPTION,
-            StatusEffects.SATURATION,
-            StatusEffects.GLOWING,
-            StatusEffects.LEVITATION,
-            StatusEffects.LUCK,
-            StatusEffects.UNLUCK,
-            StatusEffects.SLOW_FALLING,
-            StatusEffects.CONDUIT_POWER,
-            StatusEffects.DOLPHINS_GRACE,
-            StatusEffects.HERO_OF_THE_VILLAGE,
-            StatusEffects.DARKNESS,
-            StatusEffects.WIND_CHARGED,
-            StatusEffects.WEAVING,
-            StatusEffects.OOZING,
-            StatusEffects.INFESTED
+    private static final List<Holder<MobEffect>> effects = List.of(
+            //? if <= 1.21.4 {
+            MobEffects.MOVEMENT_SPEED,
+            MobEffects.MOVEMENT_SLOWDOWN,
+            MobEffects.DIG_SPEED,
+            MobEffects.DIG_SLOWDOWN,
+            MobEffects.DAMAGE_BOOST,
+            MobEffects.HEAL,
+            MobEffects.HARM,
+            MobEffects.JUMP,
+            MobEffects.CONFUSION,
+            MobEffects.DAMAGE_RESISTANCE,
+            //?} else {
+            /*MobEffects.SPEED,
+            MobEffects.SLOWNESS,
+            MobEffects.HASTE,
+            MobEffects.MINING_FATIGUE,
+            MobEffects.STRENGTH,
+            MobEffects.INSTANT_HEALTH,
+            MobEffects.INSTANT_DAMAGE,
+            MobEffects.JUMP_BOOST,
+            MobEffects.NAUSEA,
+            MobEffects.RESISTANCE,
+            *///?}
+            MobEffects.REGENERATION,
+            MobEffects.FIRE_RESISTANCE,
+            MobEffects.WATER_BREATHING,
+            MobEffects.INVISIBILITY,
+            MobEffects.BLINDNESS,
+            MobEffects.NIGHT_VISION,
+            MobEffects.WEAKNESS,
+            MobEffects.POISON,
+            MobEffects.WITHER,
+            MobEffects.HEALTH_BOOST,
+            MobEffects.ABSORPTION,
+            MobEffects.SATURATION,
+            MobEffects.GLOWING,
+            MobEffects.LEVITATION,
+            MobEffects.LUCK,
+            MobEffects.UNLUCK,
+            MobEffects.SLOW_FALLING,
+            MobEffects.CONDUIT_POWER,
+            MobEffects.DOLPHINS_GRACE,
+            MobEffects.HERO_OF_THE_VILLAGE,
+            MobEffects.DARKNESS,
+            MobEffects.WIND_CHARGED,
+            MobEffects.WEAVING,
+            MobEffects.OOZING,
+            MobEffects.INFESTED
     );
 
-    private static final List<RegistryEntry<StatusEffect>> levelLimit = List.of(
-            StatusEffects.STRENGTH,
-            StatusEffects.INSTANT_HEALTH,
-            StatusEffects.INSTANT_DAMAGE,
-            StatusEffects.REGENERATION,
-            StatusEffects.RESISTANCE,
-            StatusEffects.WITHER,
-            StatusEffects.ABSORPTION,
-            StatusEffects.SATURATION
+    private static final List<Holder<MobEffect>> levelLimit = List.of(
+            //? if <= 1.21.4 {
+            MobEffects.DAMAGE_BOOST,
+            MobEffects.HEAL,
+            MobEffects.HARM,
+            MobEffects.DAMAGE_RESISTANCE,
+            //?} else {
+            /*MobEffects.STRENGTH,
+            MobEffects.INSTANT_HEALTH,
+            MobEffects.INSTANT_DAMAGE,
+            MobEffects.RESISTANCE,
+            *///?}
+            MobEffects.REGENERATION,
+            MobEffects.WITHER,
+            MobEffects.ABSORPTION,
+            MobEffects.SATURATION
     );
 
-    private static final List<RegistryEntry<StatusEffect>> durationLimit = List.of(
-            StatusEffects.INSTANT_HEALTH,
-            StatusEffects.INSTANT_DAMAGE,
-            StatusEffects.SATURATION
+    private static final List<Holder<MobEffect>> durationLimit = List.of(
+            //? if <= 1.21.4 {
+            MobEffects.HEAL,
+            MobEffects.HARM,
+            //?} else {
+            /*MobEffects.INSTANT_HEALTH,
+            MobEffects.INSTANT_DAMAGE,
+            *///?}
+            MobEffects.SATURATION
     );
 
     public static final List<Item> commonItems = Arrays.asList(
@@ -140,8 +164,8 @@ public class Hunger extends Wildcard {
         }
         ticks++;
         if (ticks % 20 == 0) {
-            for (ServerPlayerEntity player : PlayerUtils.getAllFunctioningPlayers()) {
-                if (!player.hasStatusEffect(StatusEffects.HUNGER)) {
+            for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
+                if (!player.hasEffect(MobEffects.HUNGER)) {
                     addHunger(player);
                 }
             }
@@ -153,8 +177,8 @@ public class Hunger extends Wildcard {
         shuffledBefore = false;
         TaskScheduler.scheduleTask(1, OtherUtils::reloadServerNoUpdate);
         TaskScheduler.scheduleTask(10, Hunger::updateInventories);
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            player.removeStatusEffect(StatusEffects.HUNGER);
+        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
+            player.removeEffect(MobEffects.HUNGER);
         }
         super.deactivate();
     }
@@ -169,16 +193,16 @@ public class Hunger extends Wildcard {
     }
 
     public void newFoodRules() {
-        List<ServerPlayerEntity> players = PlayerUtils.getAllFunctioningPlayers();
+        List<ServerPlayer> players = PlayerUtils.getAllFunctioningPlayers();
         SessionTranscript.newHungerRule();
         if (shuffledBefore) {
-            PlayerUtils.playSoundToPlayers(players, SoundEvents.BLOCK_NOTE_BLOCK_PLING.value());
-            PlayerUtils.sendTitleWithSubtitleToPlayers(players, Text.empty(), Text.of("§7Food is about to be randomised..."), 0, 140, 0);
+            PlayerUtils.playSoundToPlayers(players, SoundEvents.NOTE_BLOCK_PLING.value());
+            PlayerUtils.sendTitleWithSubtitleToPlayers(players, Component.empty(), Component.nullToEmpty("§7Food is about to be randomised..."), 0, 140, 0);
             TaskScheduler.scheduleTask(40, WildcardManager::showDots);
             TaskScheduler.scheduleTask(140, () -> {
                 addHunger();
                 updateInventories();
-                PlayerUtils.playSoundToPlayers(players, SoundEvents.ENTITY_ELDER_GUARDIAN_CURSE, 0.2f, 1);
+                PlayerUtils.playSoundToPlayers(players, SoundEvents.ELDER_GUARDIAN_CURSE, 0.2f, 1);
                 shuffleVersion++;
             });
         }
@@ -196,21 +220,21 @@ public class Hunger extends Wildcard {
         PlayerUtils.getAllFunctioningPlayers().forEach(Hunger::updateInventory);
     }
 
-    public static void updateInventory(ServerPlayerEntity player) {
-        PlayerInventory inventory = player.getInventory();
-        for (int i = 0; i < inventory.size(); i++) {
-            ItemStack stack = inventory.getStack(i);
+    public static void updateInventory(ServerPlayer player) {
+        Inventory inventory = player.getInventory();
+        for (int i = 0; i < inventory.getContainerSize(); i++) {
+            ItemStack stack = inventory.getItem(i);
             if (stack.isEmpty()) continue;
 
-            stack.set(DataComponentTypes.FOOD, stack.getDefaultComponents().get(DataComponentTypes.FOOD));
+            stack.set(DataComponents.FOOD, stack.getPrototype().get(DataComponents.FOOD));
             //? if >= 1.21.2 {
-            /*stack.set(DataComponentTypes.CONSUMABLE, stack.getDefaultComponents().get(DataComponentTypes.CONSUMABLE));
+            /*stack.set(DataComponents.CONSUMABLE, stack.getPrototype().get(DataComponents.CONSUMABLE));
             *///?}
 
-            ComponentChanges changes = stack.getComponentChanges();
+            DataComponentPatch changes = stack.getComponentsPatch();
             ItemStack newItem = new ItemStack(stack.getItem(), stack.getCount());
-            newItem.applyChanges(changes);
-            inventory.setStack(i, newItem);
+            newItem.applyComponentsAndValidate(changes);
+            inventory.setItem(i, newItem);
         }
 
         PlayerUtils.updatePlayerInventory(player);
@@ -219,16 +243,16 @@ public class Hunger extends Wildcard {
     public static void addHunger() {
         PlayerUtils.getAllFunctioningPlayers().forEach(Hunger::addHunger);
     }
-    public static void addHunger(ServerPlayerEntity player) {
+    public static void addHunger(ServerPlayer player) {
         if (player == null) return;
         if (player.isSpectator()) return;
         if (HUNGER_EFFECT_LEVEL <= 0) return;
-        StatusEffectInstance statusEffectInstance = new StatusEffectInstance(StatusEffects.HUNGER, -1, HUNGER_EFFECT_LEVEL-1, false, false, false);
-        player.addStatusEffect(statusEffectInstance);
+        MobEffectInstance statusEffectInstance = new MobEffectInstance(MobEffects.HUNGER, -1, HUNGER_EFFECT_LEVEL-1, false, false, false);
+        player.addEffect(statusEffectInstance);
     }
 
-    public static void onUseItem(ServerPlayerEntity player) {
-        if (!player.hasStatusEffect(StatusEffects.HUNGER) && WildcardManager.isActiveWildcard(Wildcards.HUNGER)){
+    public static void onUseItem(ServerPlayer player) {
+        if (!player.hasEffect(MobEffects.HUNGER) && WildcardManager.isActiveWildcard(Wildcards.HUNGER)){
             addHunger(player);
         }
     }
@@ -238,33 +262,33 @@ public class Hunger extends Wildcard {
     );
 
     //? if <= 1.21 {
-    public static void defaultFoodComponents(Item item, ComponentMapImpl components) {
+    public static void defaultFoodComponents(Item item, PatchedDataComponentMap components) {
         if (item == null) return;
         if (bannedFoodItems.contains(item)) return;
-        components.set(DataComponentTypes.FOOD, new FoodComponent(0, 0, false, 1.6f, Optional.empty(), List.of()));
+        components.set(DataComponents.FOOD, new FoodProperties(0, 0, false, 1.6f, Optional.empty(), List.of()));
     }
     //?} else {
-    /*public static void defaultFoodComponents(Item item, MergedComponentMap components) {
+    /*public static void defaultFoodComponents(Item item, PatchedDataComponentMap components) {
         if (item == null) return;
         if (bannedFoodItems.contains(item)) return;
-        components.set(DataComponentTypes.CONSUMABLE,
-                new ConsumableComponent(ConsumableComponent.DEFAULT_CONSUME_SECONDS, UseAction.EAT, SoundEvents.ENTITY_GENERIC_EAT, true, List.of())
+        components.set(DataComponents.CONSUMABLE,
+                new Consumable(Consumable.DEFAULT_CONSUME_SECONDS, ItemUseAnimation.EAT, SoundEvents.GENERIC_EAT, true, List.of())
         );
-        components.set(DataComponentTypes.FOOD, new FoodComponent(0, 0, false));
+        components.set(DataComponents.FOOD, new FoodProperties(0, 0, false));
     }
     *///?}
 
-    public static void finishUsing(Item item, ComponentMap normalComponents, LivingEntity entity) {
-        if (!(entity instanceof ServerPlayerEntity player)) return;
+    public static void finishUsing(Item item, DataComponentMap normalComponents, LivingEntity entity) {
+        if (!(entity instanceof ServerPlayer player)) return;
         if (item == null) return;
         if (bannedFoodItems.contains(item)) return;
 
         int nutrition = 0;
         int saturation = 0;
-        StatusEffectInstance effect = null;
+        MobEffectInstance effect = null;
 
-        if (normalComponents.contains(DataComponentTypes.FOOD)) {
-            effect = new StatusEffectInstance(StatusEffects.HUNGER, 3600, 7, false, false, false);
+        if (normalComponents.has(DataComponents.FOOD)) {
+            effect = new MobEffectInstance(MobEffects.HUNGER, 3600, 7, false, false, false);
         }
         else {
             //Random effect
@@ -274,14 +298,14 @@ public class Hunger extends Wildcard {
             if (random.nextDouble() < EFFECT_CHANCE) {
                 int amplifier = random.nextInt(5); // 0 -> 4
                 int duration = (int) Math.ceil(((random.nextInt(20) + 1) * AVG_EFFECT_DURATION) / 10.0);
-                RegistryEntry<StatusEffect> registryEntryEffect = effects.get(random.nextInt(effects.size()));
+                Holder<MobEffect> registryEntryEffect = effects.get(random.nextInt(effects.size()));
                 if (levelLimit.contains(registryEntryEffect) || commonItems.contains(item)) {
                     amplifier = 0;
                 }
                 if (durationLimit.contains(registryEntryEffect)) {
                     duration = 1;
                 }
-                effect = new StatusEffectInstance(registryEntryEffect, duration*20, amplifier);
+                effect = new MobEffectInstance(registryEntryEffect, duration*20, amplifier);
             }
 
             // Random nutrition and saturation
@@ -296,14 +320,14 @@ public class Hunger extends Wildcard {
             }
         }
 
-        player.getHungerManager().add(nutrition, saturation);
+        player.getFoodData().eat(nutrition, saturation);
         if (effect != null) {
-            player.addStatusEffect(effect);
+            player.addEffect(effect);
         }
     }
 
     private static int getHash(Item item) {
-        String itemId = Registries.ITEM.getId(item).toString();
+        String itemId = BuiltInRegistries.ITEM.getKey(item).toString();
         return Math.abs((itemId.hashCode() + shuffleVersion) * 31);
     }
 }

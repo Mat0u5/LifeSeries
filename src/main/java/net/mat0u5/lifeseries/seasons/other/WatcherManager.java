@@ -1,16 +1,15 @@
 package net.mat0u5.lifeseries.seasons.other;
 
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.player.TeamUtils;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.scoreboard.ScoreboardEntry;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.world.GameMode;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.scores.PlayerScoreEntry;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,7 +25,7 @@ public class WatcherManager {
     private static List<String> watchers = new ArrayList<>();
 
     public static void createTeams() {
-        TeamUtils.createTeam(WatcherManager.TEAM_NAME, WatcherManager.TEAM_DISPLAY_NAME, Formatting.DARK_GRAY);
+        TeamUtils.createTeam(WatcherManager.TEAM_NAME, WatcherManager.TEAM_DISPLAY_NAME, ChatFormatting.DARK_GRAY);
     }
 
     public static void createScoreboards() {
@@ -35,36 +34,36 @@ public class WatcherManager {
 
     public static void reloadWatchers() {
         watchers.clear();
-        Collection<ScoreboardEntry> entries = ScoreboardUtils.getScores(SCOREBOARD_NAME);
+        Collection<PlayerScoreEntry> entries = ScoreboardUtils.getScores(SCOREBOARD_NAME);
         if (entries == null || entries.isEmpty()) return;
-        for (ScoreboardEntry entry : entries) {
+        for (PlayerScoreEntry entry : entries) {
             if (entry.value() <= 0) continue;
             watchers.add(entry.owner());
         }
     }
 
-    public static void addWatcher(ServerPlayerEntity player) {
-        watchers.add(player.getNameForScoreboard());
+    public static void addWatcher(ServerPlayer player) {
+        watchers.add(player.getScoreboardName());
         ScoreboardUtils.setScore(player, SCOREBOARD_NAME, 1);
         livesManager.resetPlayerLife(player);
-        player.changeGameMode(GameMode.SPECTATOR);
+        player.setGameMode(GameType.SPECTATOR);
         if (currentSeason instanceof DoubleLife doubleLife) {
             doubleLife.resetSoulmate(player);
         }
-        player.sendMessage(Text.of("§7§nYou are now a Watcher.\n"));
-        player.sendMessage(Text.of("§7Watchers are players that are online, but are not affected by most season mechanics. They can only observe - this is very useful for spectators and for admins."));
+        player.sendSystemMessage(Component.nullToEmpty("§7§nYou are now a Watcher.\n"));
+        player.sendSystemMessage(Component.nullToEmpty("§7Watchers are players that are online, but are not affected by most season mechanics. They can only observe - this is very useful for spectators and for admins."));
         //player.sendMessage(Text.of("§8§oNOTE: This is an experimental feature, report any bugs you find!"));
     }
 
-    public static void removeWatcher(ServerPlayerEntity player) {
-        watchers.remove(player.getNameForScoreboard());
+    public static void removeWatcher(ServerPlayer player) {
+        watchers.remove(player.getScoreboardName());
         ScoreboardUtils.resetScore(player, SCOREBOARD_NAME);
         livesManager.resetPlayerLife(player);
-        player.sendMessage(Text.of("§7You are no longer a Watcher."));
+        player.sendSystemMessage(Component.nullToEmpty("§7You are no longer a Watcher."));
     }
 
-    public static boolean isWatcher(PlayerEntity player) {
-        return watchers.contains(player.getNameForScoreboard());
+    public static boolean isWatcher(Player player) {
+        return watchers.contains(player.getScoreboardName());
     }
 
     public static boolean isWatcher(String playerName) {
@@ -75,8 +74,8 @@ public class WatcherManager {
         return watchers;
     }
 
-    public static List<ServerPlayerEntity> getWatcherPlayers() {
-        List<ServerPlayerEntity> watcherPlayers = PlayerUtils.getAllPlayers();
+    public static List<ServerPlayer> getWatcherPlayers() {
+        List<ServerPlayer> watcherPlayers = PlayerUtils.getAllPlayers();
         watcherPlayers.removeIf(player -> !isWatcher(player));
         return watcherPlayers;
     }

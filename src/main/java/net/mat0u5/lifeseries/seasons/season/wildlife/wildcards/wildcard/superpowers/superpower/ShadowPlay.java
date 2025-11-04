@@ -3,19 +3,18 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 
 import java.util.List;
 
 public class ShadowPlay extends Superpower {
-    public ShadowPlay(ServerPlayerEntity player) {
+    public ShadowPlay(ServerPlayer player) {
         super(player);
     }
 
@@ -32,23 +31,23 @@ public class ShadowPlay extends Superpower {
     @Override
     public void activate() {
         super.activate();
-        ServerPlayerEntity player = getPlayer();
+        ServerPlayer player = getPlayer();
         if (player == null) return;
-        ServerWorld playerWorld = PlayerUtils.getServerWorld(player);
-        List<ServerPlayerEntity> affectedPlayers = playerWorld.getEntitiesByClass(ServerPlayerEntity.class, player.getBoundingBox().expand(10), playerEntity -> playerEntity.distanceTo(player) <= 10);
-        StatusEffectInstance blindness = new StatusEffectInstance(StatusEffects.BLINDNESS, 100, 0);
-        StatusEffectInstance invis = new StatusEffectInstance(StatusEffects.INVISIBILITY, 60, 0, false, false, false);
+        ServerLevel playerLevel = player.ls$getServerLevel();
+        List<ServerPlayer> affectedPlayers = playerLevel.getEntitiesOfClass(ServerPlayer.class, player.getBoundingBox().inflate(10), playerEntity -> playerEntity.distanceTo(player) <= 10);
+        MobEffectInstance blindness = new MobEffectInstance(MobEffects.BLINDNESS, 100, 0);
+        MobEffectInstance invis = new MobEffectInstance(MobEffects.INVISIBILITY, 60, 0, false, false, false);
         affectedPlayers.remove(player);
-        for (ServerPlayerEntity affectedPlayer : affectedPlayers) {
-            affectedPlayer.addStatusEffect(blindness);
-            PlayerUtils.getServerWorld(affectedPlayer).spawnParticles(
+        for (ServerPlayer affectedPlayer : affectedPlayers) {
+            affectedPlayer.addEffect(blindness);
+            affectedPlayer.ls$getServerLevel().sendParticles(
                     ParticleTypes.SMOKE,
                     affectedPlayer.getX(), affectedPlayer.getY()+0.9, affectedPlayer.getZ(),
                     40, 0.3, 0.5, 0.3, 0
             );
         }
-        player.addStatusEffect(invis);
-        playerWorld.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_SHULKER_SHOOT, SoundCategory.MASTER, 1, 1);
-        NetworkHandlerServer.sendPlayerInvisible(player.getUuid(), System.currentTimeMillis()+3000);
+        player.addEffect(invis);
+        playerLevel.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.SHULKER_SHOOT, SoundSource.MASTER, 1, 1);
+        NetworkHandlerServer.sendPlayerInvisible(player.getUUID(), System.currentTimeMillis()+3000);
     }
 }

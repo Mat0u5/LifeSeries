@@ -7,21 +7,20 @@ import net.mat0u5.lifeseries.entity.triviabot.server.TriviaHandler;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShifting;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
+import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
 
 import java.io.IOException;
 import java.util.*;
@@ -59,8 +58,8 @@ public class TriviaWildcard extends Wildcard {
     public void tick() {
         ticks++;
         if (ticks % 200 == 0) {
-            for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-                UUID playerUUID = player.getUuid();
+            for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
+                UUID playerUUID = player.getUUID();
                 if (snails.containsKey(playerUUID)) {
                     Snail snail = snails.get(playerUUID);
                     if (snail == null || !snail.isAlive()) {
@@ -84,9 +83,9 @@ public class TriviaWildcard extends Wildcard {
         TriviaHandler.cursedHeartPlayers.clear();
         TriviaHandler.cursedMoonJumpPlayers.clear();
         if (!currentSession.statusStarted()) {
-            PlayerUtils.broadcastMessageToAdmins(Text.of("§7You must start a session for trivia bots to spawn!"));
+            PlayerUtils.broadcastMessageToAdmins(Component.nullToEmpty("§7You must start a session for trivia bots to spawn!"));
         }
-        PlayerUtils.broadcastMessageToAdmins(Text.of("§7You can modify the trivia questions in the config files (./config/lifeseries/wildlife/*-trivia)"));
+        PlayerUtils.broadcastMessageToAdmins(Component.nullToEmpty("§7You can modify the trivia questions in the config files (./config/lifeseries/wildlife/*-trivia)"));
         super.activate();
     }
 
@@ -100,7 +99,7 @@ public class TriviaWildcard extends Wildcard {
         bots.clear();
         killAllBots();
         killAllTriviaSnails();
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
             TriviaWildcard.resetPlayerOnBotSpawn(player);
         }
         TriviaHandler.cursedGigantificationPlayers.clear();
@@ -115,7 +114,7 @@ public class TriviaWildcard extends Wildcard {
         int sessionEnd = currentSession.sessionLength - 6000; // Don't spawn bots 5 minutes before the end
         int availableTime = sessionEnd - sessionStart;
 
-        List<ServerPlayerEntity> players = livesManager.getAlivePlayers();
+        List<ServerPlayer> players = livesManager.getAlivePlayers();
         if (players.isEmpty()) return;
         if (isBuffed()) Collections.shuffle(players);
 
@@ -131,8 +130,8 @@ public class TriviaWildcard extends Wildcard {
 
         int maxSpawns = Math.min(desiredTotalSpawns, availableTime / interval);
 
-        for (ServerPlayerEntity player : players) {
-            UUID uuid = player.getUuid();
+        for (ServerPlayer player : players) {
+            UUID uuid = player.getUUID();
             if (!playerSpawnQueue.containsKey(uuid)) {
                 playerSpawnQueue.put(uuid, new LinkedList<>());
                 globalScheduleInitialized = false;
@@ -143,8 +142,8 @@ public class TriviaWildcard extends Wildcard {
             playerSpawnQueue.values().forEach(Collection::clear);
             for (int i = 0; i < maxSpawns; i++) {
                 int spawnTime = sessionStart + 100 + i * interval;
-                ServerPlayerEntity assignedPlayer = players.get(i % numPlayers);
-                UUID uuid = assignedPlayer.getUuid();
+                ServerPlayer assignedPlayer = players.get(i % numPlayers);
+                UUID uuid = assignedPlayer.getUUID();
                 if (spawnTime > currentTick) {
                     playerSpawnQueue.get(uuid).offer(spawnTime);
                 }
@@ -152,19 +151,19 @@ public class TriviaWildcard extends Wildcard {
             globalScheduleInitialized = true;
         }
 
-        for (ServerPlayerEntity player : players) {
-            UUID uuid = player.getUuid();
+        for (ServerPlayer player : players) {
+            UUID uuid = player.getUUID();
             Queue<Integer> queue = playerSpawnQueue.get(uuid);
             if (queue != null && !queue.isEmpty()) {
                 if (currentTick >= queue.peek()) {
                     queue.poll();
-                    if (spawnedBotsFor.containsKey(player.getUuid())) {
-                        spawnedBotsFor.put(player.getUuid(), 1+spawnedBotsFor.get(player.getUuid()));
+                    if (spawnedBotsFor.containsKey(player.getUUID())) {
+                        spawnedBotsFor.put(player.getUUID(), 1+spawnedBotsFor.get(player.getUUID()));
                     }
                     else {
-                        spawnedBotsFor.put(player.getUuid(), 1);
+                        spawnedBotsFor.put(player.getUUID(), 1);
                     }
-                    if (spawnedBotsFor.get(player.getUuid()) <= getBotsPerPlayer()) {
+                    if (spawnedBotsFor.get(player.getUUID()) <= getBotsPerPlayer()) {
                         spawnBotFor(player);
                     }
                 }
@@ -173,8 +172,8 @@ public class TriviaWildcard extends Wildcard {
     }
 
     public void updateDeadBots() {
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            UUID playerUUID = player.getUuid();
+        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
+            UUID playerUUID = player.getUUID();
             if (bots.containsKey(playerUUID)) {
                 TriviaBot bot = bots.get(playerUUID);
                 if (bot == null || !bot.isAlive()) {
@@ -196,54 +195,54 @@ public class TriviaWildcard extends Wildcard {
         playerSpawnQueue.clear();
     }
 
-    public static void handleAnswer(ServerPlayerEntity player, int answer) {
-        if (bots.containsKey(player.getUuid())) {
-            TriviaBot bot = bots.get(player.getUuid());
+    public static void handleAnswer(ServerPlayer player, int answer) {
+        if (bots.containsKey(player.getUUID())) {
+            TriviaBot bot = bots.get(player.getUUID());
             if (bot.isAlive()) {
                 bot.triviaHandler.handleAnswer(answer);
             }
         }
     }
 
-    public static void spawnBotFor(ServerPlayerEntity player) {
-        spawnBotFor(player, TriviaBotPathfinding.getBlockPosNearPlayer(player, player.getBlockPos().add(0,50,0), 10));
+    public static void spawnBotFor(ServerPlayer player) {
+        spawnBotFor(player, TriviaBotPathfinding.getBlockPosNearPlayer(player, player.blockPosition().offset(0,50,0), 10));
     }
-    public static void spawnBotFor(ServerPlayerEntity player, BlockPos pos) {
+    public static void spawnBotFor(ServerPlayer player, BlockPos pos) {
         resetPlayerOnBotSpawn(player);
-        TriviaBot bot = MobRegistry.TRIVIA_BOT.spawn(PlayerUtils.getServerWorld(player), pos, SpawnReason.COMMAND);
+        TriviaBot bot = LevelUtils.spawnEntity(MobRegistry.TRIVIA_BOT, player.ls$getServerLevel(), pos);
         if (bot != null) {
             SessionTranscript.newTriviaBot(player);
             bot.serverData.setBoundPlayer(player);
-            bots.put(player.getUuid(), bot);
-            player.playSoundToPlayer(SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.MASTER, 0.5f, 1);
+            bots.put(player.getUUID(), bot);
+            player.playNotifySound(SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.MASTER, 0.5f, 1);
             NetworkHandlerServer.sendNumberPacket(player, PacketNames.FAKE_THUNDER, 7);
         }
     }
 
-    public static void resetPlayerOnBotSpawn(ServerPlayerEntity player) {
-        if (bots.containsKey(player.getUuid())) {
-            TriviaBot bot = bots.get(player.getUuid());
+    public static void resetPlayerOnBotSpawn(ServerPlayer player) {
+        if (bots.containsKey(player.getUUID())) {
+            TriviaBot bot = bots.get(player.getUUID());
             if (bot.isAlive()) {
                 bot.serverData.despawn();
             }
         }
         killTriviaSnailFor(player);
 
-        if (TriviaHandler.cursedGigantificationPlayers.contains(player.getUuid())) {
-            TriviaHandler.cursedGigantificationPlayers.remove(player.getUuid());
+        if (TriviaHandler.cursedGigantificationPlayers.contains(player.getUUID())) {
+            TriviaHandler.cursedGigantificationPlayers.remove(player.getUUID());
             SizeShifting.setPlayerSize(player, 1);
         }
-        if (TriviaHandler.cursedHeartPlayers.contains(player.getUuid())) {
-            TriviaHandler.cursedHeartPlayers.remove(player.getUuid());
+        if (TriviaHandler.cursedHeartPlayers.contains(player.getUUID())) {
+            TriviaHandler.cursedHeartPlayers.remove(player.getUUID());
             AttributeUtils.resetMaxPlayerHealthIfNecessary(player);
         }
-        if (TriviaHandler.cursedMoonJumpPlayers.contains(player.getUuid())) {
-            TriviaHandler.cursedMoonJumpPlayers.remove(player.getUuid());
+        if (TriviaHandler.cursedMoonJumpPlayers.contains(player.getUUID())) {
+            TriviaHandler.cursedMoonJumpPlayers.remove(player.getUUID());
             AttributeUtils.resetPlayerJumpHeight(player);
         }
 
-        TriviaHandler.cursedSliding.remove(player.getUuid());
-        TriviaHandler.cursedRoboticVoicePlayers.remove(player.getUuid());
+        TriviaHandler.cursedSliding.remove(player.getUUID());
+        TriviaHandler.cursedRoboticVoicePlayers.remove(player.getUUID());
         NetworkHandlerServer.sendLongPacket(player, PacketNames.CURSE_SLIDING, 0);
 
         NetworkHandlerServer.sendStringPacket(player, PacketNames.RESET_TRIVIA, "true");
@@ -252,15 +251,15 @@ public class TriviaWildcard extends Wildcard {
     public static void killAllBots() {
         if (server == null) return;
         List<Entity> toKill = new ArrayList<>();
-        for (ServerWorld world : server.getWorlds()) {
-            for (Entity entity : world.iterateEntities()) {
+        for (ServerLevel level : server.getAllLevels()) {
+            for (Entity entity : level.getAllEntities()) {
                 if (entity instanceof TriviaBot) {
                     toKill.add(entity);
                 }
             }
         }
         toKill.forEach(Entity::discard);
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
             NetworkHandlerServer.sendStringPacket(player, PacketNames.RESET_TRIVIA, "true");
         }
     }
@@ -268,8 +267,8 @@ public class TriviaWildcard extends Wildcard {
     public static void killAllTriviaSnails() {
         if (server == null) return;
         List<Entity> toKill = new ArrayList<>();
-        for (ServerWorld world : server.getWorlds()) {
-            for (Entity entity : world.iterateEntities()) {
+        for (ServerLevel level : server.getAllLevels()) {
+            for (Entity entity : level.getAllEntities()) {
                 if (entity instanceof Snail snail) {
                     if (snail.isFromTrivia()) {
                         toKill.add(entity);
@@ -280,15 +279,15 @@ public class TriviaWildcard extends Wildcard {
         toKill.forEach(Entity::discard);
     }
 
-    public static void killTriviaSnailFor(ServerPlayerEntity player) {
+    public static void killTriviaSnailFor(ServerPlayer player) {
         if (server == null) return;
         List<Entity> toKill = new ArrayList<>();
-        for (ServerWorld world : server.getWorlds()) {
-            for (Entity entity : world.iterateEntities()) {
+        for (ServerLevel level : server.getAllLevels()) {
+            for (Entity entity : level.getAllEntities()) {
                 if (entity instanceof Snail snail) {
                     if (snail.isFromTrivia()) {
                         UUID boundPlayer = snail.serverData.getBoundPlayerUUID();
-                        if (boundPlayer == null || boundPlayer.equals(player.getUuid())) {
+                        if (boundPlayer == null || boundPlayer.equals(player.getUUID())) {
                             toKill.add(entity);
                         }
                     }

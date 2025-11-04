@@ -1,33 +1,33 @@
 package net.mat0u5.lifeseries.render;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+
 //? if <= 1.21 {
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-//?}
-//? if >= 1.21.2 {
-/*import net.minecraft.util.math.ColorHelper;
+//?} else {
+/*import net.minecraft.util.ARGB;
 *///?}
 //? if >= 1.21.2 && <= 1.21.5
-/*import net.minecraft.client.render.RenderLayer;*/
+/*import net.minecraft.client.renderer.RenderType;*/
 //? if >= 1.21.6
-/*import net.minecraft.client.gl.RenderPipelines;*/
+/*import net.minecraft.client.renderer.RenderPipelines;*/
 
 public class VignetteRenderer {
-    private static final Identifier VIGNETTE_TEXTURE = Identifier.ofVanilla("textures/misc/vignette.png");
+    private static final ResourceLocation VIGNETTE_TEXTURE = ResourceLocation.withDefaultNamespace("textures/misc/vignette.png");
     private static float vignetteDarkness = 0.0F;
     private static long vignetteEnd = 0;
 
-    public static void renderVignette(DrawContext context) {
+    public static void renderVignette(GuiGraphics context) {
         if (System.currentTimeMillis() >= vignetteEnd && vignetteEnd != -1) return;
 
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft client = Minecraft.getInstance();
         if (client.player == null) return;
 
-        float darkness = MathHelper.clamp(vignetteDarkness, 0.0F, 1.0F);
+        float darkness = Mth.clamp(vignetteDarkness, 0.0F, 1.0F);
         if (darkness == 0) return;
 
 
@@ -36,34 +36,34 @@ public class VignetteRenderer {
         RenderSystem.depthMask(false);
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(
-                GlStateManager.SrcFactor.ZERO, GlStateManager.DstFactor.ONE_MINUS_SRC_COLOR,
-                GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO
+                GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR,
+                GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO
         );
-        context.setShaderColor(darkness, darkness, darkness, 1.0F);
-        context.drawTexture(VIGNETTE_TEXTURE, 0, 0, -90, 0.0F, 0.0F,
-                context.getScaledWindowWidth(), context.getScaledWindowHeight(),
-                context.getScaledWindowWidth(), context.getScaledWindowHeight()
+        context.setColor(darkness, darkness, darkness, 1.0F);
+        context.blit(VIGNETTE_TEXTURE, 0, 0, -90, 0.0F, 0.0F,
+                context.guiWidth(), context.guiHeight(),
+                context.guiWidth(), context.guiHeight()
         );
 
         RenderSystem.depthMask(true);
         RenderSystem.enableDepthTest();
-        context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        context.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.defaultBlendFunc();
         RenderSystem.disableBlend();
         //?} else if <= 1.21.5 {
-        /*int color = ColorHelper.fromFloats(1.0F, darkness, darkness, darkness);
-        context.drawTexture(RenderLayer::getVignette, VIGNETTE_TEXTURE, 0, 0, 0.0F, 0.0F,
-                context.getScaledWindowWidth(), context.getScaledWindowHeight(), context.getScaledWindowWidth(), context.getScaledWindowHeight(), color);
+        /*int color = ARGB.colorFromFloat(1.0F, darkness, darkness, darkness);
+        context.blit(RenderType::vignette, VIGNETTE_TEXTURE, 0, 0, 0.0F, 0.0F,
+                context.guiWidth(), context.guiHeight(), context.guiWidth(), context.guiHeight(), color);
         *///?} else {
-        /*int color = ColorHelper.fromFloats(1.0F, darkness, darkness, darkness);
-        context.drawTexture(RenderPipelines.VIGNETTE, VIGNETTE_TEXTURE, 0, 0, 0.0F, 0.0F,
-                context.getScaledWindowWidth(), context.getScaledWindowHeight(), context.getScaledWindowWidth(), context.getScaledWindowHeight(), color);
+        /*int color = ARGB.colorFromFloat(1.0F, darkness, darkness, darkness);
+        context.blit(RenderPipelines.VIGNETTE, VIGNETTE_TEXTURE, 0, 0, 0.0F, 0.0F,
+                context.guiWidth(), context.guiHeight(), context.guiWidth(), context.guiHeight(), color);
         *///?}
     }
 
     // Call this method to show the vignette for a certain duration
     public static void showVignetteFor(float darkness, long durationMillis) {
-        vignetteDarkness = MathHelper.clamp(darkness, 0.0F, 1.0F);
+        vignetteDarkness = Mth.clamp(darkness, 0.0F, 1.0F);
         if (durationMillis == -1) {
             vignetteEnd = -1;
         }

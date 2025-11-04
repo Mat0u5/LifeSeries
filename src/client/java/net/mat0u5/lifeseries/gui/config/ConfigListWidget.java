@@ -2,27 +2,26 @@ package net.mat0u5.lifeseries.gui.config;
 
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.utils.TextColors;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
-import net.minecraft.text.Text;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.ObjectSelectionList;
+import net.minecraft.network.chat.Component;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 //? if >= 1.21.9 {
-/*import net.minecraft.client.gui.Click;
-import net.minecraft.client.input.CharInput;
-import net.minecraft.client.input.KeyInput;
+/*import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
 *///?}
 
-public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWidget.ConfigEntryWidget> {
+public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.ConfigEntryWidget> {
     public static final int ENTRY_GAP = 2;
     private static final int MAX_HIGHLIGHTED_ENTRIES = 3;
     private static final int SCROLLBAR_OFFSET_X = 6;
     protected ConfigScreen screen;
 
-    public ConfigListWidget(MinecraftClient client, int width, int height, int y, int itemHeight) {
+    public ConfigListWidget(Minecraft client, int width, int height, int y, int itemHeight) {
         super(client, width, height, y, itemHeight);
     }
 
@@ -44,20 +43,16 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
     }
 
     @Override
-    protected void renderList(DrawContext context, int mouseX, int mouseY, float delta) {
+    protected void renderListItems(GuiGraphics context, int mouseX, int mouseY, float delta) {
 
         //? if <= 1.21.2 {
         int maxScroll = getMaxScroll();
         //?} else {
-        /*int maxScroll = getMaxScrollY();
+        /*int maxScroll = maxScrollAmount();
          *///?}
 
         if (getScrolledAmount() > maxScroll) {
-            //? if <= 1.21.2 {
             setScrollAmount(maxScroll);
-            //?} else {
-            /*setScrollY(maxScroll);
-            *///?}
         }
 
         int listLeft = getX();
@@ -71,7 +66,7 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
 
         Map<Float, ConfigEntry> highlightedEntries = new TreeMap<>();
 
-        for (int i = 0; i < getEntryCount(); i++) {
+        for (int i = 0; i < getItemCount(); i++) {
             ConfigEntryWidget entry = getEntry(i);
             ConfigEntry configEntry = entry.getConfigEntry();
             int entryHeight = configEntry.getPreferredHeight();
@@ -90,7 +85,7 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
                 entry.setY(currentY);
                 entry.setWidth(entryWidth);
                 entry.setHeight(entryHeight);
-                entry.render(context, mouseX, mouseY, hovered, delta);
+                entry.renderContent(context, mouseX, mouseY, hovered, delta);
                 *///?}
 
 
@@ -144,10 +139,10 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
     //? if <= 1.21.2 {
     public int getMaxScroll() {
     //?} else {
-    /*public int getMaxScrollY() {
+    /*public int maxScrollAmount() {
     *///?}
         int totalHeight = 0;
-        for (int i = 0; i < getEntryCount(); i++) {
+        for (int i = 0; i < getItemCount(); i++) {
             totalHeight += getEntry(i).getConfigEntry().getPreferredHeight();
         }
         return Math.max(0, totalHeight - height + 8);
@@ -155,7 +150,7 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
 
     //? if <= 1.21.2 {
     @Override
-    protected boolean isScrollbarVisible() {
+    protected boolean scrollbarVisible() {
         return false;
     }
     //?}
@@ -164,7 +159,7 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
     //? if <= 1.21.6 {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
     //?} else {
-    /*public boolean mouseClicked(Click click, boolean doubled) {
+    /*public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         int mouseX = (int) click.x();
         int mouseY = (int) click.y();
     *///?}
@@ -175,7 +170,7 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
         int listTop = getY();
         int currentY = getCurrentY();
 
-        for (int i = 0; i < getEntryCount(); i++) {
+        for (int i = 0; i < getItemCount(); i++) {
             ConfigEntryWidget entry = getEntry(i);
             int entryHeight = entry.getConfigEntry().getPreferredHeight() + ENTRY_GAP;
 
@@ -199,7 +194,7 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
         //? if <= 1.21.2 {
         return getScrollAmount();
         //?} else {
-        /*return getScrollY();
+        /*return scrollAmount();
         *///?}
     }
 
@@ -225,14 +220,14 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
     }
     //?} else {
     /*@Override
-    public boolean keyPressed(KeyInput input) {
+    public boolean keyPressed(KeyEvent input) {
         ConfigEntryWidget entry = getFocused();
         if (entry == null) return false;
         return entry.keyPressed(input);
     }
 
     @Override
-    public boolean charTyped(CharInput input) {
+    public boolean charTyped(CharacterEvent input) {
         ConfigEntryWidget entry = getFocused();
         if (entry == null) return false;
         return entry.charTyped(input);
@@ -244,11 +239,11 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
     }
 
     @Override
-    public int getEntryCount() {
+    public int getItemCount() {
         return this.children().size();
     }
 
-    public static class ConfigEntryWidget extends AlwaysSelectedEntryListWidget.Entry<ConfigEntryWidget> {
+    public static class ConfigEntryWidget extends ObjectSelectionList.Entry<ConfigEntryWidget> {
         private final ConfigEntry configEntry;
 
         public ConfigEntryWidget(ConfigEntry configEntry) {
@@ -257,7 +252,7 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
 
         //? if <= 1.21.6 {
         @Override
-        public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        public void render(GuiGraphics context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             configEntry.render(context, x, y, entryWidth, entryHeight, mouseX, mouseY, hovered, tickDelta);
         }
 
@@ -280,31 +275,31 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
         }
         //?} else {
         /*@Override
-        public void render(DrawContext context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        public void renderContent(GuiGraphics context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             configEntry.render(context, this.getX(), this.getY(), this.getWidth(), this.getHeight(), mouseX, mouseY, hovered, tickDelta);
         }
 
         @Override
-        public boolean mouseClicked(Click click, boolean doubled) {
+        public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
             configEntry.setFocused(true);
             return configEntry.mouseClicked(click, doubled);
         }
 
         @Override
-        public boolean keyPressed(KeyInput input) {
+        public boolean keyPressed(KeyEvent input) {
             configEntry.setFocused(true);
             return configEntry.keyPressed(input);
         }
 
         @Override
-        public boolean charTyped(CharInput input) {
+        public boolean charTyped(CharacterEvent input) {
             configEntry.setFocused(true);
             return configEntry.charTyped(input);
         }
         *///?}
 
         @Override
-        public Text getNarration() {
+        public Component getNarration() {
             return configEntry.getDisplayName();
         }
 

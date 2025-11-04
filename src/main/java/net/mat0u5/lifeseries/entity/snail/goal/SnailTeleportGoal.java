@@ -2,10 +2,9 @@ package net.mat0u5.lifeseries.entity.snail.goal;
 
 
 import net.mat0u5.lifeseries.entity.snail.Snail;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.goal.Goal;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("resource")
@@ -23,12 +22,12 @@ public final class SnailTeleportGoal extends Goal {
     public SnailTeleportGoal(@NotNull Snail mob) {
         this.mob = mob;
         this.maxTicksSinceLastPositionChange = Snail.STATIONARY_TP_COOLDOWN;
-        this.lastPosition = BlockPos.ORIGIN;
+        this.lastPosition = BlockPos.ZERO;
     }
 
     @Override
-    public boolean canStart() {
-        if (mob.getSnailWorld().isClient()) return false;
+    public boolean canUse() {
+        if (mob.level().isClientSide()) return false;
         if (mob.isPaused()) return false;
         if (teleportCooldown > 0) {
             teleportCooldown--;
@@ -37,9 +36,9 @@ public final class SnailTeleportGoal extends Goal {
         if (!mob.serverData.shouldPathfind()) {
             return false;
         }
-        if (!mob.getBlockPos().equals(this.lastPosition)) {
+        if (!mob.blockPosition().equals(this.lastPosition)) {
             this.ticksSinceLastPositionChange = 0;
-            this.lastPosition = mob.getBlockPos();
+            this.lastPosition = mob.blockPosition();
         }
 
         this.ticksSinceLastPositionChange++;
@@ -48,7 +47,7 @@ public final class SnailTeleportGoal extends Goal {
         Entity boundEntity = mob.serverData.getBoundEntity();
         if (boundEntity == null) return false;
         float distFromPlayer = mob.distanceTo(boundEntity);
-        boolean dimensionsAreSame = mob.ls$getEntityWorld().getRegistryKey().equals(boundEntity.ls$getEntityWorld().getRegistryKey());
+        boolean dimensionsAreSame = mob.level().dimension().equals(boundEntity.level().dimension());
         return !dimensionsAreSame || distFromPlayer > Snail.MAX_DISTANCE || this.ticksSinceLastPositionChange > this.maxTicksSinceLastPositionChange;
     }
 
@@ -59,7 +58,7 @@ public final class SnailTeleportGoal extends Goal {
     }
 
     @Override
-    public boolean shouldContinue() {
+    public boolean canContinueToUse() {
         return false;
     }
 }

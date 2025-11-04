@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.deaths.DeathAnvil;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.deaths.DeathLightning;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.deaths.DeathWither;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public enum AdvancedDeaths {
     ANVIL;
 
     @Nullable
-    public AdvancedDeath getInstance(ServerPlayerEntity player) {
+    public AdvancedDeath getInstance(ServerPlayer player) {
         if (this == WITHER) return new DeathWither(player);
         if (this == ANVIL) return new DeathAnvil(player);
         if (this == LIGHTNING) return new DeathLightning(player);

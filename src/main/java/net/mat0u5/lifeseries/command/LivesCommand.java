@@ -13,14 +13,14 @@ import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.scoreboard.ScoreboardEntry;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.scores.PlayerScoreEntry;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -53,12 +53,12 @@ public class LivesCommand extends Command {
     }
 
     @Override
-    public Text getBannedText() {
-        return Text.of("This command is only available when you have selected a Season.");
+    public Component getBannedText() {
+        return Component.nullToEmpty("This command is only available when you have selected a Season.");
     }
 
     @Override
-    public void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+    public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
             literal("lives")
             .executes(context -> showLives(context.getSource()))
@@ -70,21 +70,21 @@ public class LivesCommand extends Command {
             )
             .then(literal("add")
                 .requires(PermissionManager::isAdmin)
-                .then(argument("player", EntityArgumentType.players())
+                .then(argument("player", EntityArgument.players())
                     .executes(context -> lifeManager(
-                        context.getSource(), EntityArgumentType.getPlayers(context, "player"), 1, false)
+                        context.getSource(), EntityArgument.getPlayers(context, "player"), 1, false)
                     )
                     .then(argument("amount", IntegerArgumentType.integer(1))
                         .requires(source -> isAllowedNormal())
                         .executes(context -> lifeManager(
-                            context.getSource(), EntityArgumentType.getPlayers(context, "player"), IntegerArgumentType.getInteger(context, "amount"), false)
+                            context.getSource(), EntityArgument.getPlayers(context, "player"), IntegerArgumentType.getInteger(context, "amount"), false)
                         )
                     )
                     .then(argument("time", StringArgumentType.greedyString())
                         .requires(source -> isAllowedLimited())
-                        .suggests((context, builder) -> CommandSource.suggestMatching(List.of("30m", "1h"), builder))
+                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("30m", "1h"), builder))
                         .executes(context -> lifeManager(
-                            context.getSource(), EntityArgumentType.getPlayers(context, "player"),
+                            context.getSource(), EntityArgument.getPlayers(context, "player"),
                             StringArgumentType.getString(context, "time"), false, false)
                         )
                     )
@@ -92,21 +92,21 @@ public class LivesCommand extends Command {
             )
             .then(literal("remove")
                 .requires(PermissionManager::isAdmin)
-                .then(argument("player", EntityArgumentType.players())
+                .then(argument("player", EntityArgument.players())
                     .executes(context -> lifeManager(
-                        context.getSource(), EntityArgumentType.getPlayers(context, "player"), -1, false)
+                        context.getSource(), EntityArgument.getPlayers(context, "player"), -1, false)
                     )
                     .then(argument("amount", IntegerArgumentType.integer(1))
                         .requires(source -> isAllowedNormal())
                         .executes(context -> lifeManager(
-                            context.getSource(), EntityArgumentType.getPlayers(context, "player"), -IntegerArgumentType.getInteger(context, "amount"), false)
+                            context.getSource(), EntityArgument.getPlayers(context, "player"), -IntegerArgumentType.getInteger(context, "amount"), false)
                         )
                     )
                     .then(argument("time", StringArgumentType.greedyString())
                         .requires(source -> isAllowedLimited())
-                        .suggests((context, builder) -> CommandSource.suggestMatching(List.of("30m", "1h"), builder))
+                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("30m", "1h"), builder))
                         .executes(context -> lifeManager(
-                            context.getSource(), EntityArgumentType.getPlayers(context, "player"),
+                            context.getSource(), EntityArgument.getPlayers(context, "player"),
                             StringArgumentType.getString(context, "time"), false, true)
                         )
                     )
@@ -114,18 +114,18 @@ public class LivesCommand extends Command {
             )
             .then(literal("set")
                 .requires(PermissionManager::isAdmin)
-                .then(argument("player", EntityArgumentType.players())
+                .then(argument("player", EntityArgument.players())
                     .then(argument("amount", IntegerArgumentType.integer(0))
                         .requires(source -> isAllowedNormal())
                         .executes(context -> lifeManager(
-                            context.getSource(), EntityArgumentType.getPlayers(context, "player"), IntegerArgumentType.getInteger(context, "amount"), true)
+                            context.getSource(), EntityArgument.getPlayers(context, "player"), IntegerArgumentType.getInteger(context, "amount"), true)
                         )
                     )
                     .then(argument("time", StringArgumentType.greedyString())
                         .requires(source -> isAllowedLimited())
-                        .suggests((context, builder) -> CommandSource.suggestMatching(List.of("8h", "16h", "24h"), builder))
+                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("8h", "16h", "24h"), builder))
                         .executes(context -> lifeManager(
-                            context.getSource(), EntityArgumentType.getPlayers(context, "player"),
+                            context.getSource(), EntityArgument.getPlayers(context, "player"),
                             StringArgumentType.getString(context, "time"), true, false)
                         )
                     )
@@ -133,9 +133,9 @@ public class LivesCommand extends Command {
             )
             .then(literal("get")
                 .requires(PermissionManager::isAdmin)
-                .then(argument("player", EntityArgumentType.player())
+                .then(argument("player", EntityArgument.player())
                     .executes(context -> getLivesFor(
-                        context.getSource(), EntityArgumentType.getPlayer(context, "player"))
+                        context.getSource(), EntityArgument.getPlayer(context, "player"))
                     )
                 )
                 .then(literal("*")
@@ -146,9 +146,9 @@ public class LivesCommand extends Command {
             )
             .then(literal("reset")
                     .requires(PermissionManager::isAdmin)
-                    .then(argument("player", EntityArgumentType.players())
+                    .then(argument("player", EntityArgument.players())
                             .executes(context -> resetLives(
-                                    context.getSource(), EntityArgumentType.getPlayers(context, "player"))
+                                    context.getSource(), EntityArgument.getPlayers(context, "player"))
                             )
                     )
             )
@@ -163,20 +163,20 @@ public class LivesCommand extends Command {
                     .executes(context -> assignRandomLives(
                             context.getSource(), PlayerUtils.getAllPlayers()
                     ))
-                    .then(argument("players", EntityArgumentType.players())
+                    .then(argument("players", EntityArgument.players())
                             .executes(context -> assignRandomLives(
-                                    context.getSource(), EntityArgumentType.getPlayers(context, "players")
+                                    context.getSource(), EntityArgument.getPlayers(context, "players")
                             ))
                     )
             )
         );
     }
 
-    public int showLives(ServerCommandSource source) {
+    public int showLives(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
         boolean normalLife = isNormalLife();
 
-        ServerPlayerEntity self = source.getPlayer();
+        ServerPlayer self = source.getPlayer();
 
         if (self == null) return -1;
         if (!self.ls$hasAssignedLives()) {
@@ -195,40 +195,40 @@ public class LivesCommand extends Command {
         }
 
         if (playerLives == null || playerLives <= 0) {
-            OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Womp womp."));
+            OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("Womp womp."));
         }
 
         return 1;
     }
 
-    public int getAllLives(ServerCommandSource source) {
+    public int getAllLives(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
         boolean normalLife = isNormalLife();
         String timeOrLives = normalLife ? "lives" : "time";
 
         if (!ScoreboardUtils.existsObjective(LivesManager.SCOREBOARD_NAME)) {
-            source.sendError(TextUtils.format("Nobody has been assigned {} yet", timeOrLives));
+            source.sendFailure(TextUtils.format("Nobody has been assigned {} yet", timeOrLives));
             return -1;
         }
 
-        Collection<ScoreboardEntry> entries = ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME);
+        Collection<PlayerScoreEntry> entries = ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME);
         if (entries.isEmpty()) {
-            source.sendError(TextUtils.format("Nobody has been assigned {} yet", timeOrLives));
+            source.sendFailure(TextUtils.format("Nobody has been assigned {} yet", timeOrLives));
             return -1;
         }
         String timeOrLives2 = normalLife ? "Lives" : "Times";
 
-        MutableText text = TextUtils.format("Assigned {}: \n", timeOrLives2);
-        for (ScoreboardEntry entry : entries) {
+        MutableComponent text = TextUtils.format("Assigned {}: \n", timeOrLives2);
+        for (PlayerScoreEntry entry : entries) {
             String name = entry.owner();
             if (name.startsWith("`")) continue;
             int lives = entry.value();
-            Formatting color = livesManager.getColorForLives(lives);
+            ChatFormatting color = livesManager.getColorForLives(lives);
             if (normalLife) {
-                text.append(TextUtils.format("{} has {} {}\n", Text.literal(name).formatted(color), livesManager.getFormattedLives(lives), TextUtils.pluralize("life", "lives", lives)));
+                text.append(TextUtils.format("{} has {} {}\n", Component.literal(name).withStyle(color), livesManager.getFormattedLives(lives), TextUtils.pluralize("life", "lives", lives)));
             }
             else {
-                text.append(TextUtils.format("{} has {} left\n", Text.literal(name).formatted(color), livesManager.getFormattedLives(lives)));
+                text.append(TextUtils.format("{} has {} left\n", Component.literal(name).withStyle(color), livesManager.getFormattedLives(lives)));
             }
         }
 
@@ -236,14 +236,14 @@ public class LivesCommand extends Command {
         return 1;
     }
 
-    public int getLivesFor(ServerCommandSource source, ServerPlayerEntity target) {
+    public int getLivesFor(CommandSourceStack source, ServerPlayer target) {
         if (checkBanned(source)) return -1;
         if (target == null) return -1;
         boolean normalLife = isNormalLife();
         String timeOrLives = normalLife ? "lives" : "time";
 
         if (!target.ls$hasAssignedLives()) {
-            source.sendError(TextUtils.formatPlain("{} has not been assigned any {}", target, timeOrLives));
+            source.sendFailure(TextUtils.formatPlain("{} has not been assigned any {}", target, timeOrLives));
             return -1;
         }
         Integer lives = target.ls$getLives();
@@ -256,7 +256,7 @@ public class LivesCommand extends Command {
         return 1;
     }
 
-    public int reloadLives(ServerCommandSource source) {
+    public int reloadLives(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
         boolean normalLife = isNormalLife();
         String timeOrLives = normalLife ? "lives" : "times";
@@ -266,11 +266,11 @@ public class LivesCommand extends Command {
         return 1;
     }
 
-    public int lifeManager(ServerCommandSource source, Collection<ServerPlayerEntity> targets, String timeArgument, boolean setNotGive, boolean reverse) {
+    public int lifeManager(CommandSourceStack source, Collection<ServerPlayer> targets, String timeArgument, boolean setNotGive, boolean reverse) {
 
         Integer amount = OtherUtils.parseTimeSecondsFromArgument(timeArgument);
         if (amount == null) {
-            source.sendError(Text.literal(SessionCommand.INVALID_TIME_FORMAT_ERROR));
+            source.sendFailure(Component.literal(SessionCommand.INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
         if (reverse) amount *= -1;
@@ -278,7 +278,7 @@ public class LivesCommand extends Command {
         return lifeManager(source, targets, amount, setNotGive);
     }
 
-    public int lifeManager(ServerCommandSource source, Collection<ServerPlayerEntity> targets, int amount, boolean setNotGive) {
+    public int lifeManager(CommandSourceStack source, Collection<ServerPlayer> targets, int amount, boolean setNotGive) {
         if (checkBanned(source)) return -1;
         if (targets == null || targets.isEmpty()) return -1;
         boolean normalLife = isNormalLife();
@@ -293,7 +293,7 @@ public class LivesCommand extends Command {
                 OtherUtils.sendCommandFeedback(source, TextUtils.format("Set {} to {} for {} targets", timeOrLives, livesManager.getFormattedLives(amount), targets.size()));
             }
 
-            for (ServerPlayerEntity player : targets) {
+            for (ServerPlayer player : targets) {
                 player.ls$setLives(amount);
             }
         }
@@ -323,7 +323,7 @@ public class LivesCommand extends Command {
                 }
             }
 
-            for (ServerPlayerEntity player : targets) {
+            for (ServerPlayer player : targets) {
                 player.ls$addLives(amount);
             }
         }
@@ -333,7 +333,7 @@ public class LivesCommand extends Command {
         return 1;
     }
 
-    public int resetLives(ServerCommandSource source, Collection<ServerPlayerEntity> targets) {
+    public int resetLives(CommandSourceStack source, Collection<ServerPlayer> targets) {
         if (checkBanned(source)) return -1;
         if (targets == null || targets.isEmpty()) return -1;
         boolean normalLife = isNormalLife();
@@ -351,7 +351,7 @@ public class LivesCommand extends Command {
         return 1;
     }
 
-    public int resetAllLives(ServerCommandSource source) {
+    public int resetAllLives(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
         boolean normalLife = isNormalLife();
         String timeOrLives = normalLife ? "lives" : "times";
@@ -361,7 +361,7 @@ public class LivesCommand extends Command {
         return 1;
     }
 
-    public int assignRandomLives(ServerCommandSource source, Collection<ServerPlayerEntity> players) {
+    public int assignRandomLives(CommandSourceStack source, Collection<ServerPlayer> players) {
         if (checkBanned(source)) return -1;
         if (players == null || players.isEmpty()) return -1;
 

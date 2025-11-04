@@ -1,31 +1,29 @@
 package net.mat0u5.lifeseries.features;
 
+import com.mojang.blaze3d.platform.NativeImage;
+import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.resources.ResourceLocation;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
-
-import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.texture.NativeImage;
-import net.minecraft.client.texture.NativeImageBackedTexture;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.Map;
 
 public class SnailSkinsClient {
-    private static final Map<String, Identifier> snailTextures = new HashMap<>();
+    private static final Map<String, ResourceLocation> snailTextures = new HashMap<>();
 
     public static void handleSnailTexture(String skinName, byte[] textureData) {
         try {
             Main.LOGGER.info(TextUtils.formatString("Received snail texture '{}'", skinName));
-            MinecraftClient client = MinecraftClient.getInstance();
+            Minecraft client = Minecraft.getInstance();
 
-            Identifier textureId = Identifier.of(Main.MOD_ID, "dynamic/snailskin/" + skinName);
+            ResourceLocation textureId = ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "dynamic/snailskin/" + skinName);
 
             NativeImage image = NativeImage.read(new ByteArrayInputStream(textureData));
             if (image.getWidth() == 32 && image.getHeight() == 32) {
@@ -41,12 +39,12 @@ public class SnailSkinsClient {
             }
 
             //? if <= 1.21.4 {
-            NativeImageBackedTexture texture = new NativeImageBackedTexture(image);
+            DynamicTexture texture = new DynamicTexture(image);
             //?} else {
-            /*NativeImageBackedTexture texture = new NativeImageBackedTexture(() -> skinName, image);
+            /*DynamicTexture texture = new DynamicTexture(() -> skinName, image);
             *///?}
             removeSnailTexture(skinName);
-            client.getTextureManager().registerTexture(textureId, texture);
+            client.getTextureManager().register(textureId, texture);
             Main.LOGGER.info(TextUtils.formatString("Added snail texture '{}'", textureId));
 
             snailTextures.put(skinName, textureId);
@@ -56,15 +54,15 @@ public class SnailSkinsClient {
         }
     }
 
-    public static Identifier getSnailTexture(String skinName) {
+    public static ResourceLocation getSnailTexture(String skinName) {
         if (skinName == null) return null;
         return snailTextures.get(skinName);
     }
 
     public static void removeSnailTexture(String skinName) {
-        Identifier textureId = snailTextures.remove(skinName);
+        ResourceLocation textureId = snailTextures.remove(skinName);
         if (textureId != null) {
-            MinecraftClient.getInstance().getTextureManager().destroyTexture(textureId);
+            Minecraft.getInstance().getTextureManager().release(textureId);
             Main.LOGGER.info(TextUtils.formatString("Removed old snail texture '{}'", textureId));
         }
     }
@@ -232,17 +230,17 @@ public class SnailSkinsClient {
 
     private static int getColor(NativeImage image, int x, int y) {
         //? if <= 1.21 {
-        return image.getColor(x, y);
+        return image.getPixelRGBA(x, y);
          //?} else {
-        /*return image.getColorArgb(x, y);
+        /*return image.getPixel(x, y);
         *///?}
     }
 
     private static void setColor(NativeImage image, int x, int y, int color) {
         //? if <= 1.21 {
-        image.setColor(x, y, color);
+        image.setPixelRGBA(x, y, color);
          //?} else {
-        /*image.setColorArgb(x, y, color);
+        /*image.setPixel(x, y, color);
         *///?}
     }
 
@@ -251,7 +249,7 @@ public class SnailSkinsClient {
             Path debugPath = Paths.get("debug_textures");
             Files.createDirectories(debugPath);
             Path outputPath = debugPath.resolve(filename + ".png");
-            image.writeTo(outputPath);
+            image.writeToFile(outputPath);
             System.out.println("Saved debug texture to: " + outputPath.toAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();

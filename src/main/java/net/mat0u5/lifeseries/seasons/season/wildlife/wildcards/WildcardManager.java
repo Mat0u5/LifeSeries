@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards;
 
-import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaHandler;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
@@ -20,17 +19,15 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.effect.MobEffects;
 import java.util.*;
-
 import static net.mat0u5.lifeseries.Main.*;
 //? if >= 1.21.2
-/*import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Creaking;*/
+/*import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.CreakingPower;*/
 
 public class WildcardManager {
     public static final Map<Wildcards, Wildcard> activeWildcards = new HashMap<>();
@@ -44,7 +41,7 @@ public class WildcardManager {
                     @Override
                     public void trigger() {
                         if (activeWildcards.isEmpty()) {
-                            PlayerUtils.broadcastMessage(Text.literal("A Wildcard will be activated in 2 minutes!").formatted(Formatting.GRAY));
+                            PlayerUtils.broadcastMessage(Component.literal("A Wildcard will be activated in 2 minutes!").withStyle(ChatFormatting.GRAY));
                         }
                     }
                 }
@@ -70,7 +67,7 @@ public class WildcardManager {
 
     public static void chosenWildcard(Wildcards wildcard) {
         PlayerUtils.broadcastMessageToAdmins(TextUtils.format("The {} wildcard has been selected for this session.", wildcard));
-        PlayerUtils.broadcastMessageToAdmins(Text.of("§7Use the §f'/wildcard choose' §7 command if you want to change it."));
+        PlayerUtils.broadcastMessageToAdmins(Component.nullToEmpty("§7Use the §f'/wildcard choose' §7 command if you want to change it."));
         WildcardManager.chosenWildcard = wildcard;
     }
 
@@ -89,20 +86,20 @@ public class WildcardManager {
         if (index == 6) activeWildcards.put(Wildcards.SUPERPOWERS, new SuperpowersWildcard());
     }
 
-    public static void onPlayerJoin(ServerPlayerEntity player) {
+    public static void onPlayerJoin(ServerPlayer player) {
         if (!isActiveWildcard(Wildcards.SIZE_SHIFTING)) {
-            if (SizeShifting.getPlayerSize(player) != 1 && !TriviaHandler.cursedGigantificationPlayers.contains(player.getUuid())) {
+            if (SizeShifting.getPlayerSize(player) != 1 && !TriviaHandler.cursedGigantificationPlayers.contains(player.getUUID())) {
                 SizeShifting.setPlayerSize(player, 1);
             }
         }
         if (!isActiveWildcard(Wildcards.HUNGER)) {
-            player.removeStatusEffect(StatusEffects.HUNGER);
+            player.removeEffect(MobEffects.HUNGER);
         }
         if (!isActiveWildcard(Wildcards.TRIVIA)) {
             TriviaWildcard.resetPlayerOnBotSpawn(player);
         }
         TaskScheduler.scheduleTask(1, () -> {
-            for (ServerPlayerEntity onlinePlayer : PlayerUtils.getAllPlayers()) {
+            for (ServerPlayer onlinePlayer : PlayerUtils.getAllPlayers()) {
                 Superpower power = SuperpowersWildcard.getSuperpowerInstance(onlinePlayer);
                 if (power != null) {
                     if (power instanceof PlayerDisguise playerDisguise) playerDisguise.sendDisguisePacket();
@@ -115,7 +112,7 @@ public class WildcardManager {
         MorphManager.resetMorph(player);
     }
 
-    public static void onPlayerFinishJoining(ServerPlayerEntity player) {
+    public static void onPlayerFinishJoining(ServerPlayer player) {
         if (isActiveWildcard(Wildcards.SUPERPOWERS) && !SuperpowersWildcard.hasPower(player) && player.ls$isAlive()) {
             SuperpowersWildcard.rollRandomSuperpowerForPlayer(player);
         }
@@ -137,26 +134,26 @@ public class WildcardManager {
     }
 
     public static void fadedWildcard() {
-        PlayerUtils.broadcastMessage(Text.of("§7A Wildcard has faded..."));
-        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BLOCK_BEACON_DEACTIVATE);
+        PlayerUtils.broadcastMessage(Component.nullToEmpty("§7A Wildcard has faded..."));
+        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BEACON_DEACTIVATE);
     }
 
     public static void showDots() {
-        List<ServerPlayerEntity> players = PlayerUtils.getAllPlayers();
-        PlayerUtils.playSoundToPlayers(players, SoundEvents.BLOCK_NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
-        PlayerUtils.sendTitleToPlayers(players, Text.literal("§a§l,"),0,40,0);
+        List<ServerPlayer> players = PlayerUtils.getAllPlayers();
+        PlayerUtils.playSoundToPlayers(players, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
+        PlayerUtils.sendTitleToPlayers(players, Component.literal("§a§l,"),0,40,0);
         TaskScheduler.scheduleTask(30, () -> {
-            PlayerUtils.playSoundToPlayers(players, SoundEvents.BLOCK_NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
-            PlayerUtils.sendTitleToPlayers(players, Text.literal("§a§l, §e§l,"),0,40,0);
+            PlayerUtils.playSoundToPlayers(players, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
+            PlayerUtils.sendTitleToPlayers(players, Component.literal("§a§l, §e§l,"),0,40,0);
         });
         TaskScheduler.scheduleTask(60, () -> {
-            PlayerUtils.playSoundToPlayers(players, SoundEvents.BLOCK_NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
-            PlayerUtils.sendTitleToPlayers(players, Text.literal("§a§l, §e§l, §c§l,"),0,40,0);
+            PlayerUtils.playSoundToPlayers(players, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
+            PlayerUtils.sendTitleToPlayers(players, Component.literal("§a§l, §e§l, §c§l,"),0,40,0);
         });
     }
 
     public static void showCryptTitle(String text) {
-        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, 0.2f, 1);
+        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ZOMBIE_VILLAGER_CURE, 0.2f, 1);
         String colorCrypt = "§r§6§l§k";
         String colorNormal = "§r§6§l";
 
@@ -176,13 +173,13 @@ public class WildcardManager {
                 result.append(text.charAt(j));
             }
 
-            TaskScheduler.scheduleTask((i + 1) * 4, () -> PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Text.literal(String.valueOf(result)), 0, 30, 20));
+            TaskScheduler.scheduleTask((i + 1) * 4, () -> PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal(String.valueOf(result)), 0, 30, 20));
         }
     }
 
     private static final List<String> allColorCodes = List.of("6","9","a","b","c","d","e");
     public static void showRainbowCryptTitle(String text) {
-        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, 0.2f, 1);
+        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ZOMBIE_VILLAGER_CURE, 0.2f, 1);
         String colorCrypt = "§r§_§l§k";
         String colorNormal = "§r§_§l";
 
@@ -203,7 +200,7 @@ public class WildcardManager {
                 result.append(text.charAt(j));
             }
 
-            TaskScheduler.scheduleTask((i + 1) * 2, () -> PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Text.literal(String.valueOf(result)), 0, 4, 4));
+            TaskScheduler.scheduleTask((i + 1) * 2, () -> PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal(String.valueOf(result)), 0, 4, 4));
         }
     }
 
@@ -215,12 +212,12 @@ public class WildcardManager {
             wildcard.tick();
         }
         SizeShifting.resetSizesTick(isActiveWildcard(Wildcards.SIZE_SHIFTING));
-        if (server != null && server.getTicks() % 200 == 0) {
+        if (server != null && server.getTickCount() % 200 == 0) {
             if (!isActiveWildcard(Wildcards.MOB_SWAP)) {
                 MobSwap.killMobSwapMobs();
             }
             //? if >= 1.21.2 {
-            /*Creaking.killUnassignedMobs();
+            /*CreakingPower.killUnassignedMobs();
             *///?}
         }
 
@@ -233,7 +230,7 @@ public class WildcardManager {
 
         if (isActiveWildcard(Wildcards.TRIVIA)) {
             for (UUID uuid : TriviaHandler.cursedSliding) {
-                ServerPlayerEntity player = PlayerUtils.getPlayer(uuid);
+                ServerPlayer player = PlayerUtils.getPlayer(uuid);
                 NetworkHandlerServer.sendLongPacket(player, PacketNames.CURSE_SLIDING, System.currentTimeMillis());
             }
         }
@@ -248,7 +245,7 @@ public class WildcardManager {
 
     public static void onSessionStart() {
         if (chosenWildcard == null && activeWildcards.isEmpty()) {
-            for (ServerPlayerEntity player : PlayerUtils.getAdminPlayers()) {
+            for (ServerPlayer player : PlayerUtils.getAdminPlayers()) {
                 NetworkHandlerServer.sendStringPacket(player, PacketNames.SELECT_WILDCARDS, "true");
             }
         }
@@ -278,7 +275,7 @@ public class WildcardManager {
         return activeWildcards.containsKey(wildcard);
     }
 
-    public static void onUseItem(ServerPlayerEntity player) {
+    public static void onUseItem(ServerPlayer player) {
         Hunger.onUseItem(player);
     }
 }

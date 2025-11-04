@@ -3,8 +3,8 @@ package net.mat0u5.lifeseries.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.command.manager.Command;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Text;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.Component;
 
 public class SelfMessageCommand extends Command {
 
@@ -14,12 +14,12 @@ public class SelfMessageCommand extends Command {
     }
 
     @Override
-    public Text getBannedText() {
-        return Text.of("");
+    public Component getBannedText() {
+        return Component.nullToEmpty("");
     }
 
     @Override
-    public void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+    public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
             literal("selfmsg")
                 .then(argument("message", StringArgumentType.greedyString())
@@ -32,9 +32,9 @@ public class SelfMessageCommand extends Command {
 
     }
 
-    public int execute(ServerCommandSource source, String string) {
+    public int execute(CommandSourceStack source, String string) {
         if (checkBanned(source)) return -1;
-        source.sendMessage(Text.of(string));
+        source.sendSystemMessage(Component.nullToEmpty(string));
         return 1;
     }
 }

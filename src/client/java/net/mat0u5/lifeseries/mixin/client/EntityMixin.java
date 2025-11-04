@@ -3,10 +3,10 @@ package net.mat0u5.lifeseries.mixin.client;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.utils.interfaces.IClientEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityDimensions;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,14 +18,14 @@ public class EntityMixin implements IClientEntity {
     @Shadow
     private EntityDimensions dimensions;
 
-    @Inject(method = "getAir", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "getAirSupply", at = @At("RETURN"), cancellable = true)
     public void getAir(CallbackInfoReturnable<Integer> cir) {
         if (Main.isLogicalSide() || Main.modDisabled()) return;
         if (System.currentTimeMillis() - MainClient.snailAirTimestamp > 5000) return;
         if (MainClient.snailAir >= 300) return;
 
         Entity entity = (Entity) (Object) this;
-        if (entity instanceof PlayerEntity player && !player.hasStatusEffect(StatusEffects.WATER_BREATHING)) {
+        if (entity instanceof Player player && !player.hasEffect(MobEffects.WATER_BREATHING)) {
             int initialAir = cir.getReturnValue();
             if (MainClient.snailAir < initialAir) {
                 cir.setReturnValue(MainClient.snailAir);

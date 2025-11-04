@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.mixin.client;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.mat0u5.lifeseries.Main;
-import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.renderer.GameRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 

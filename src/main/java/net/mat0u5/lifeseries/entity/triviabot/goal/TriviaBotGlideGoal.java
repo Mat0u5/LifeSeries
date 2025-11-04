@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.entity.triviabot.goal;
 
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.Goal;
 import org.jetbrains.annotations.NotNull;
 
 public final class TriviaBotGlideGoal extends Goal {
@@ -17,13 +17,13 @@ public final class TriviaBotGlideGoal extends Goal {
     }
 
     @Override
-    public boolean canStart() {
-        if (mob.getBotWorld().isClient()) return false;
+    public boolean canUse() {
+        if (mob.level().isClientSide()) return false;
         if (mob.isBotGliding()) {
             return true;
         }
 
-        if (mob.getVelocity().y >= 0 || mob.isOnGround()) {
+        if (mob.getDeltaMovement().y >= 0 || mob.onGround()) {
             return false;
         }
 
@@ -46,13 +46,13 @@ public final class TriviaBotGlideGoal extends Goal {
     }
 
     @Override
-    public boolean shouldContinue() {
+    public boolean canContinueToUse() {
         return mob.pathfinding.getDistanceToGroundBlock() >= 1;
     }
 
     @Override
     public void tick() {
-        mob.setVelocity(0, -0.1, 0);
+        mob.setDeltaMovement(0, -0.1, 0);
     }
 
     @Override

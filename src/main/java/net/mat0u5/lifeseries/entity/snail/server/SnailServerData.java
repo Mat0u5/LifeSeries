@@ -15,32 +15,29 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageType;
-import net.minecraft.entity.damage.DamageTypes;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ChunkTicketType;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.TicketType;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
-import static net.mat0u5.lifeseries.Main.livesManager;
 
 @SuppressWarnings("resource")
 public class SnailServerData implements PlayerBoundEntity {
-    public static final RegistryKey<DamageType> SNAIL_DAMAGE = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, Identifier.of(Main.MOD_ID, "snail"));
+    public static final ResourceKey<DamageType> SNAIL_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "snail"));
     public final Snail snail;
 
     public SnailServerData(Snail snail) {
@@ -50,7 +47,7 @@ public class SnailServerData implements PlayerBoundEntity {
     private UUID boundPlayerUUID;
 
     @Override
-    public void onSetPlayer(ServerPlayerEntity player) {
+    public void onSetPlayer(ServerPlayer player) {
         resetAirPacket();
         updateSnailName();
         updateSkin(player);
@@ -69,20 +66,20 @@ public class SnailServerData implements PlayerBoundEntity {
 
     @Override
     public boolean shouldPathfind() {
-        if (snail.getSnailWorld().isClient()) return false;
-        ServerPlayerEntity player = getBoundPlayer();
+        if (snail.level().isClientSide()) return false;
+        ServerPlayer player = getBoundPlayer();
         if (player == null) return false;
         if (player.isCreative()) return false;
         if (!player.isAlive()) return false;
         if (getPlayerPos() == null) return false;
-        if (Events.joiningPlayers.contains(player.getUuid())) return false;
+        if (Events.joiningPlayers.contains(player.getUUID())) return false;
         if (player.isSpectator() && !SuperpowersWildcard.hasActivatedPower(player, Superpowers.ASTRAL_PROJECTION)) return false;
         return true;
     }
 
     public int dontAttackFor = 0;
     public int despawnPlayerChecks = 0;
-    public Text snailName;
+    public Component snailName;
     private int lastAir = 0;
 
     public int getJumpRangeSquared() {
@@ -92,32 +89,32 @@ public class SnailServerData implements PlayerBoundEntity {
 
     public void updateSnailName() {
         if (!hasBoundPlayer()) return;
-        snailName = Text.of(Snails.getSnailName(getBoundPlayer()));
+        snailName = Component.nullToEmpty(Snails.getSnailName(getBoundPlayer()));
     }
 
     public void tick() {
-        if (snail.getSnailWorld().isClient()) return;
+        if (snail.level().isClientSide()) return;
         snail.pathfinding.tick();
         if (despawnChecks()) return;
-        ServerPlayerEntity boundPlayer = getBoundPlayer();
+        ServerPlayer boundPlayer = getBoundPlayer();
         LivingEntity boundEntity = getBoundEntity();
 
         if (dontAttackFor > 0) dontAttackFor--;
 
-        if (snail.age % 20 == 0) {
+        if (snail.tickCount % 20 == 0) {
             updateSnailName();
             snail.setBoundPlayerDead(boundPlayer.ls$isDead());
         }
 
-        if (boundEntity != null && shouldPathfind() && snail.getBoundingBox().expand(0.05).intersects(boundEntity.getBoundingBox())) {
+        if (boundEntity != null && shouldPathfind() && snail.getBoundingBox().inflate(0.05).intersects(boundEntity.getBoundingBox())) {
             killBoundEntity(boundEntity);
         }
 
         if (boundPlayer != null && boundEntity != null) {
             if (Snail.SHOULD_DROWN_PLAYER && !snail.isFromTrivia()) {
-                int currentAir = snail.getAir();
-                if (boundEntity.hasStatusEffect(StatusEffects.WATER_BREATHING)) {
-                    currentAir = snail.getMaxAir();
+                int currentAir = snail.getAirSupply();
+                if (boundEntity.hasEffect(MobEffects.WATER_BREATHING)) {
+                    currentAir = snail.getMaxAirSupply();
                 }
                 if (lastAir != currentAir) {
                     lastAir = currentAir;
@@ -130,11 +127,11 @@ public class SnailServerData implements PlayerBoundEntity {
         handleHighVelocity();
         chunkLoading();
         snail.sounds.playSounds();
-        snail.clearStatusEffects();
+        snail.removeAllEffects();
     }
 
     public boolean despawnChecks() {
-        ServerPlayerEntity player = getBoundPlayer();
+        ServerPlayer player = getBoundPlayer();
         if (player == null || (player.isSpectator() && player.ls$isDead())) {
             despawnPlayerChecks++;
         }
@@ -146,7 +143,7 @@ public class SnailServerData implements PlayerBoundEntity {
             despawn();
             return true;
         }
-        if (snail.age % 10 == 0) {
+        if (snail.tickCount % 10 == 0) {
             if (!snail.isFromTrivia()) {
                 if (!Snails.snails.containsValue(snail) || !WildcardManager.isActiveWildcard(Wildcards.SNAILS)) {
                     despawn();
@@ -154,7 +151,7 @@ public class SnailServerData implements PlayerBoundEntity {
                 }
             }
             else {
-                if (!WildcardManager.isActiveWildcard(Wildcards.TRIVIA) || snail.age >= 36000) {
+                if (!WildcardManager.isActiveWildcard(Wildcards.TRIVIA) || snail.tickCount >= 36000) {
                     despawn();
                     return true;
                 }
@@ -176,11 +173,11 @@ public class SnailServerData implements PlayerBoundEntity {
     }
 
     public void chunkLoading() {
-        if (snail.getSnailWorld() instanceof ServerWorld world) {
+        if (snail.level() instanceof ServerLevel level) {
             //? if <= 1.21.4 {
-            world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(snail.getBlockPos()), 2, snail.getBlockPos());
+            level.getChunkSource().addRegionTicket(TicketType.PORTAL, new ChunkPos(snail.blockPosition()), 2, snail.blockPosition());
             //?} else {
-            /*world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(snail.getBlockPos()), 2);
+            /*level.getChunkSource().addTicketWithRadius(TicketType.PORTAL, new ChunkPos(snail.blockPosition()), 2);
              *///?}
         }
     }
@@ -191,90 +188,90 @@ public class SnailServerData implements PlayerBoundEntity {
             TriviaWildcard.bots.remove(boundPlayerUUID);
         }
         snail.pathfinding.killPathFinders();
-        if (snail.getSnailWorld() instanceof ServerWorld world) {
+        if (snail.level() instanceof ServerLevel level) {
             //? if <= 1.21 {
             snail.kill();
             //?} else {
-            /*snail.kill(world);
+            /*snail.kill(level);
              *///?}
         }
         snail.discard();
     }
 
     public void resetAirPacket() {
-        ServerPlayerEntity player = getBoundPlayer();
+        ServerPlayer player = getBoundPlayer();
         if (player != null) {
             sendAirPacket(player, 300);
         }
     }
 
-    public void sendAirPacket(ServerPlayerEntity player, int amount) {
+    public void sendAirPacket(ServerPlayer player, int amount) {
         NetworkHandlerServer.sendNumberPacket(player, PacketNames.SNAIL_AIR, amount);
     }
 
     public void handleHighVelocity() {
-        Vec3d velocity = snail.getVelocity();
+        Vec3 velocity = snail.getDeltaMovement();
         if (velocity.y > 0.15) {
-            snail.setVelocity(velocity.x,0.15,velocity.z);
+            snail.setDeltaMovement(velocity.x,0.15,velocity.z);
         }
         else if (velocity.y < -0.15) {
-            snail.setVelocity(velocity.x,-0.15,velocity.z);
+            snail.setDeltaMovement(velocity.x,-0.15,velocity.z);
         }
     }
 
     public void killBoundEntity(Entity entity) {
-        World world = entity.ls$getEntityWorld();
-        if (world instanceof ServerWorld serverWorld) {
-            if (entity instanceof ServerPlayerEntity player) {
-                player.setAttacker(snail);
+        Level level = entity.level();
+        if (level instanceof ServerLevel serverLevel) {
+            if (entity instanceof ServerPlayer player) {
+                player.setLastHurtByMob(snail);
             }
             //? if <=1.21 {
-            DamageSource damageSource = new DamageSource(serverWorld.getRegistryManager()
-                    .get(RegistryKeys.DAMAGE_TYPE).entryOf(SNAIL_DAMAGE));
-            entity.damage(damageSource, 1000);
+            DamageSource damageSource = new DamageSource(serverLevel.registryAccess()
+                    .registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(SNAIL_DAMAGE));
+            entity.hurt(damageSource, 1000);
             //?} else {
-            /*DamageSource damageSource = new DamageSource(serverWorld.getRegistryManager()
-                    .getOrThrow(RegistryKeys.DAMAGE_TYPE).getOrThrow(SNAIL_DAMAGE));
-            entity.damage(serverWorld, damageSource, 1000);
+            /*DamageSource damageSource = new DamageSource(serverLevel.registryAccess()
+                    .lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(SNAIL_DAMAGE));
+            entity.hurtServer(serverLevel, damageSource, 1000);
             *///?}
         }
     }
 
     public void damageFromDrowning(Entity entity) {
         if (!entity.isAlive()) return;
-        World world = entity.ls$getEntityWorld();
-        if (world instanceof ServerWorld serverWorld) {
-            if (entity instanceof ServerPlayerEntity player) {
-                player.setAttacker(snail);
+        Level level = entity.level();
+        if (level instanceof ServerLevel serverLevel) {
+            if (entity instanceof ServerPlayer player) {
+                player.setLastHurtByMob(snail);
             }
             //? if <=1.21 {
-            DamageSource damageSource = new DamageSource(serverWorld.getRegistryManager()
-                    .get(RegistryKeys.DAMAGE_TYPE).entryOf(DamageTypes.DROWN));
-            entity.damage(damageSource, 2);
+            DamageSource damageSource = new DamageSource(serverLevel.registryAccess()
+                    .registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.DROWN));
+            entity.hurt(damageSource, 2);
             //?} else {
-            /*DamageSource damageSource = new DamageSource(serverWorld.getRegistryManager()
-                    .getOrThrow(RegistryKeys.DAMAGE_TYPE).getOrThrow(DamageTypes.DROWN));
-            entity.damage(serverWorld, damageSource, 2);
+            /*DamageSource damageSource = new DamageSource(serverLevel.registryAccess()
+                    .lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.DROWN));
+            entity.hurtServer(serverLevel, damageSource, 2);
             *///?}
-            if (!entity.isAlive() && entity instanceof ServerPlayerEntity) {
+            if (!entity.isAlive() && entity instanceof ServerPlayer) {
                 despawn();
             }
         }
     }
 
-    public Text getDefaultName() {
-        if (snail.isFromTrivia()) return Text.of("VHSnail");
-        if (snailName == null) return snail.getType().getName();
-        if (snailName.getString().isEmpty()) return snail.getType().getName();
+    public Component getDefaultName() {
+        if (snail.isFromTrivia()) return Component.nullToEmpty("VHSnail");
+        if (snailName == null) return snail.getType().getDescription();
+        if (snailName.getString().isEmpty()) return snail.getType().getDescription();
         return snailName;
     }
 
 
-    public void updateSkin(PlayerEntity player) {
+    public void updateSkin(Player player) {
         if (player == null) return;
-        String skinName = player.getNameForScoreboard().toLowerCase();
-        if (SubInManager.isSubbingIn(player.getUuid())) {
-            skinName = OtherUtils.profileName(SubInManager.getSubstitutedPlayer(player.getUuid())).toLowerCase();
+        String skinName = player.getScoreboardName().toLowerCase();
+        if (SubInManager.isSubbingIn(player.getUUID())) {
+            skinName = OtherUtils.profileName(SubInManager.getSubstitutedPlayer(player.getUUID())).toLowerCase();
         }
         snail.setSkinName(skinName);
     }

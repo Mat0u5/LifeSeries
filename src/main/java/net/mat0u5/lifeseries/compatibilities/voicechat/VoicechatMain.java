@@ -9,7 +9,8 @@ import de.maxhenkel.voicechat.api.opus.OpusEncoder;
 import de.maxhenkel.voicechat.api.packets.LocationalSoundPacket;
 import de.maxhenkel.voicechat.api.packets.MicrophonePacket;
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
+import net.mat0u5.lifeseries.compatibilities.voicechat.soundeffects.RadioEffect;
+import net.mat0u5.lifeseries.compatibilities.voicechat.soundeffects.RoboticVoice;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaHandler;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
@@ -18,11 +19,8 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Listening;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.mat0u5.lifeseries.compatibilities.voicechat.soundeffects.RadioEffect;
-import net.mat0u5.lifeseries.compatibilities.voicechat.soundeffects.RoboticVoice;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,12 +116,12 @@ public class VoicechatMain implements VoicechatPlugin {
                 continue;
             }
             VoicechatConnection playerConnection = api.getConnectionOf(uuid);
-            ServerPlayerEntity player = PlayerUtils.getPlayer(uuid);
+            ServerPlayer player = PlayerUtils.getPlayer(uuid);
 
             if (playerConnection == null || player == null) {
                 continue;
             }
-            Vec3d lookingAt = null;
+            Vec3 lookingAt = null;
             if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.LISTENING)) {
                 if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof Listening listeningPower) {
                     lookingAt = listeningPower.lookingAt;
@@ -134,14 +132,14 @@ public class VoicechatMain implements VoicechatPlugin {
                 continue;
             }
 
-            Vec3d senderPos = new Vec3d(senderPosition.getX(), senderPosition.getY(), senderPosition.getZ());
+            Vec3 senderPos = new Vec3(senderPosition.getX(), senderPosition.getY(), senderPosition.getZ());
             double distanceFromSound = senderPos.distanceTo(lookingAt);
             double maxDistance = Math.min(api.getBroadcastRange(), Listening.MAX_RANGE);
             if (distanceFromSound > maxDistance) {
                 continue;
             }
             double scaled = api.getBroadcastRange()/Listening.MAX_RANGE;
-            if ((distanceFromSound*scaled) > player.ls$getEntityPos().distanceTo(senderPos)) {
+            if ((distanceFromSound*scaled) > player.position().distanceTo(senderPos)) {
                 continue;
             }
 

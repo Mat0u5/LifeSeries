@@ -1,10 +1,10 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers;
 
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 
 public abstract class ToggleableSuperpower extends Superpower {
 
-    public ToggleableSuperpower(ServerPlayerEntity player) {
+    public ToggleableSuperpower(ServerPlayer player) {
         super(player);
     }
 

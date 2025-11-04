@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.gui.config.entries.main;
 
 import net.mat0u5.lifeseries.gui.config.entries.TextFieldConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.GuiGraphics;
 
 public class StringConfigEntry extends TextFieldConfigEntry {
     private static final int FIELD_WIDTH = 150;
@@ -30,8 +30,8 @@ public class StringConfigEntry extends TextFieldConfigEntry {
     @Override
     protected void initializeTextField() {
         setText(value);
-        if (textField.getWidth()-6 < textRenderer.getWidth(value)) {
-            textField.setCursorToStart(false);
+        if (textField.getWidth()-6 < textRenderer.width(value)) {
+            textField.moveCursorToStart(false);
         }
     }
 
@@ -60,16 +60,16 @@ public class StringConfigEntry extends TextFieldConfigEntry {
         if (textField == null) return;
         if (x < 0) return;
 
-        String text = textField.getText();
+        String text = textField.getValue();
         if (text == null) return;
         if (text.isEmpty()) {
             targetWidth = FIELD_WIDTH;
             return;
         }
 
-        int textWidth = textRenderer.getWidth(text) + 20;
+        int textWidth = textRenderer.width(text) + 20;
 
-        int labelEndX = x + LABEL_OFFSET_X + textRenderer.getWidth(getDisplayName());
+        int labelEndX = x + LABEL_OFFSET_X + textRenderer.width(getDisplayName());
         int fieldEndX = textField.getX() + textField.getWidth();
         int maxFieldWidth = fieldEndX - labelEndX - 15;
         if (maxFieldWidth <= FIELD_WIDTH) maxFieldWidth = FIELD_WIDTH;
@@ -85,7 +85,7 @@ public class StringConfigEntry extends TextFieldConfigEntry {
     }
 
     @Override
-    protected void renderEntry(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    protected void renderEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         this.x = x;
         updateAnimations(tickDelta);
 

@@ -2,8 +2,7 @@ package net.mat0u5.lifeseries.entity.snail.goal;
 
 
 import net.mat0u5.lifeseries.entity.snail.Snail;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.Goal;
 import org.jetbrains.annotations.NotNull;
 
 public class SnailFlyGoal extends Goal {
@@ -21,8 +20,8 @@ public class SnailFlyGoal extends Goal {
     }
 
     @Override
-    public boolean canStart() {
-        if (mob.getSnailWorld().isClient()) return false;
+    public boolean canUse() {
+        if (mob.level().isClientSide()) return false;
         if (mob.isPaused()) return false;
         if (!mob.isSnailFlying() || mob.isSnailGliding()) {
             return false;
@@ -32,7 +31,7 @@ public class SnailFlyGoal extends Goal {
     }
 
     @Override
-    public boolean shouldContinue() {
+    public boolean canContinueToUse() {
         if (!mob.isSnailFlying()) return false;
         return mob.serverData.shouldPathfind();
     }

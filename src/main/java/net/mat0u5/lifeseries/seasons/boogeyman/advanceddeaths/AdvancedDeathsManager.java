@@ -3,8 +3,7 @@ package net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.server.network.ServerPlayerEntity;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.*;
 
@@ -22,7 +21,7 @@ public class AdvancedDeathsManager {
             UUID uuid = entry.getKey();
             PlayerAdvancedDeath playerAdvancedDeath = entry.getValue();
 
-            ServerPlayerEntity player = PlayerUtils.getPlayer(uuid);
+            ServerPlayer player = PlayerUtils.getPlayer(uuid);
             Integer playerLives = player == null ? null : player.ls$getLives();
             if (player == null || playerAdvancedDeath.queuedDeaths().isEmpty() || playerLives == null
                     || playerLives <= playerAdvancedDeath.lives()) {
@@ -47,7 +46,7 @@ public class AdvancedDeathsManager {
         }
     }
 
-    public static void setPlayerLives(ServerPlayerEntity player, int lives) {
+    public static void setPlayerLives(ServerPlayer player, int lives) {
         Integer currentLives = player.ls$getLives();
         if (currentLives == null || currentLives <= lives) {
             player.ls$setLives(lives);
@@ -65,25 +64,25 @@ public class AdvancedDeathsManager {
             return;
         }
 
-        queuedDeaths.put(player.getUuid(), new PlayerAdvancedDeath(player.getNameForScoreboard(), lives, queuedPlayerDeaths));
+        queuedDeaths.put(player.getUUID(), new PlayerAdvancedDeath(player.getScoreboardName(), lives, queuedPlayerDeaths));
     }
 
-    public static void onPlayerDeath(ServerPlayerEntity player) {
+    public static void onPlayerDeath(ServerPlayer player) {
         if (queuedDeaths.isEmpty()) return;
         for (Map.Entry<UUID, PlayerAdvancedDeath> entry : queuedDeaths.entrySet()) {
             UUID uuid = entry.getKey();
-            if (uuid != player.getUuid()) continue;
+            if (uuid != player.getUUID()) continue;
             PlayerAdvancedDeath playerAdvancedDeath = entry.getValue();
             playerAdvancedDeath.queuedDeaths().getFirst().onEnd();
             playerAdvancedDeath.queuedDeaths().removeFirst();
         }
     }
 
-    public static boolean hasQueuedDeath(ServerPlayerEntity player) {
-        return queuedDeaths.containsKey(player.getUuid());
+    public static boolean hasQueuedDeath(ServerPlayer player) {
+        return queuedDeaths.containsKey(player.getUUID());
     }
 
-    public static List<AdvancedDeath> getRandomDeaths(ServerPlayerEntity player, int deathCount) {
+    public static List<AdvancedDeath> getRandomDeaths(ServerPlayer player, int deathCount) {
         List<AdvancedDeaths> allDeaths = AdvancedDeaths.getAllDeaths();
         List<AdvancedDeath> result = new ArrayList<>();
         Collections.shuffle(allDeaths);

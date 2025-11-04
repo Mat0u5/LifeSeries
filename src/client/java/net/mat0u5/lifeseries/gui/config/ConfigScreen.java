@@ -4,28 +4,26 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.config.ClientConfigNetwork;
-import net.mat0u5.lifeseries.gui.config.entries.GroupConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
+import net.mat0u5.lifeseries.gui.config.entries.GroupConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.main.TextConfigEntry;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.utils.TextColors;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ConfirmScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.ConfirmScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 //? if >= 1.21.9 {
-/*import net.minecraft.client.gui.Click;
-import net.minecraft.client.input.CharInput;
-import net.minecraft.client.input.KeyInput;
+/*import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
 *///?}
 
 public class ConfigScreen extends Screen {
@@ -56,15 +54,15 @@ public class ConfigScreen extends Screen {
 
     private ConfigEntry focusedEntry;
     public ConfigListWidget listWidget;
-    private ButtonWidget saveButton;
-    private ButtonWidget cancelButton;
-    private ButtonWidget resetAllButton;
-    private TextFieldWidget searchField;
+    private Button saveButton;
+    private Button cancelButton;
+    private Button resetAllButton;
+    private EditBox searchField;
     private int selectedCategory = 0;
     private boolean hasChanges = false;
     private String currentSearchQuery = "";
 
-    public ConfigScreen(Screen parent, Text title, Map<String, List<ConfigEntry>> categories) {
+    public ConfigScreen(Screen parent, Component title, Map<String, List<ConfigEntry>> categories) {
         super(title);
         this.parent = parent;
         this.categories = categories;
@@ -90,37 +88,37 @@ public class ConfigScreen extends Screen {
         int listTop = headerHeight;
 
         int searchBarWidth = Math.min(SEARCH_BAR_WIDTH, this.width - 40);
-        this.searchField = new TextFieldWidget(this.textRenderer,
+        this.searchField = new EditBox(this.font,
                 (this.width-searchBarWidth)/2, searchBarY,
                 searchBarWidth, SEARCH_BAR_HEIGHT,
-                Text.of("§7Search config..."));
-        this.searchField.setPlaceholder(Text.of("§7Search config..."));
-        this.searchField.setText(this.currentSearchQuery);
-        this.searchField.setChangedListener(this::onSearchChanged);
-        this.addSelectableChild(this.searchField);
+                Component.nullToEmpty("§7Search config..."));
+        this.searchField.setHint(Component.nullToEmpty("§7Search config..."));
+        this.searchField.setValue(this.currentSearchQuery);
+        this.searchField.setResponder(this::onSearchChanged);
+        this.addWidget(this.searchField);
 
-        this.listWidget = new ConfigListWidget(this.client, this.width, this.height - listTop - FOOTER_HEIGHT, listTop, ConfigEntry.PREFFERED_HEIGHT);
+        this.listWidget = new ConfigListWidget(this.minecraft, this.width, this.height - listTop - FOOTER_HEIGHT, listTop, ConfigEntry.PREFFERED_HEIGHT);
         listWidget.setScreen(this);
 
-        this.addSelectableChild(this.listWidget);
-        this.addDrawableChild(this.listWidget);
+        this.addWidget(this.listWidget);
+        this.addRenderableWidget(this.listWidget);
 
         this.refreshList();
 
-        this.saveButton = ButtonWidget.builder(Text.of("Save & Quit"), button -> this.save())
-                .dimensions(this.width / 2 + FOOTER_BUTTON_GAP, this.height - FOOTER_BUTTON_HEIGHT - FOOTER_BUTTON_GAP, FOOTER_BUTTON_WIDTH, FOOTER_BUTTON_HEIGHT)
+        this.saveButton = Button.builder(Component.nullToEmpty("Save & Quit"), button -> this.save())
+                .bounds(this.width / 2 + FOOTER_BUTTON_GAP, this.height - FOOTER_BUTTON_HEIGHT - FOOTER_BUTTON_GAP, FOOTER_BUTTON_WIDTH, FOOTER_BUTTON_HEIGHT)
                 .build();
-        this.addDrawableChild(this.saveButton);
+        this.addRenderableWidget(this.saveButton);
 
-        this.cancelButton = ButtonWidget.builder(Text.of("Discard Changes"), button -> this.close())
-                .dimensions(this.width / 2 - FOOTER_BUTTON_WIDTH - FOOTER_BUTTON_GAP, this.height - FOOTER_BUTTON_HEIGHT - FOOTER_BUTTON_GAP, FOOTER_BUTTON_WIDTH, FOOTER_BUTTON_HEIGHT)
+        this.cancelButton = Button.builder(Component.nullToEmpty("Discard Changes"), button -> this.onClose())
+                .bounds(this.width / 2 - FOOTER_BUTTON_WIDTH - FOOTER_BUTTON_GAP, this.height - FOOTER_BUTTON_HEIGHT - FOOTER_BUTTON_GAP, FOOTER_BUTTON_WIDTH, FOOTER_BUTTON_HEIGHT)
                 .build();
-        this.addDrawableChild(this.cancelButton);
+        this.addRenderableWidget(this.cancelButton);
 
-        this.resetAllButton = ButtonWidget.builder(Text.of("Reset All"), button -> this.resetAll())
-                .dimensions(this.width - RESETALL_BUTTON_WIDTH - 10, this.height - RESETALL_BUTTON_HEIGHT - FOOTER_BUTTON_GAP, RESETALL_BUTTON_WIDTH, RESETALL_BUTTON_HEIGHT)
+        this.resetAllButton = Button.builder(Component.nullToEmpty("Reset All"), button -> this.resetAll())
+                .bounds(this.width - RESETALL_BUTTON_WIDTH - 10, this.height - RESETALL_BUTTON_HEIGHT - FOOTER_BUTTON_GAP, RESETALL_BUTTON_WIDTH, RESETALL_BUTTON_HEIGHT)
                 .build();
-        this.addDrawableChild(this.resetAllButton);
+        this.addRenderableWidget(this.resetAllButton);
 
         this.updateButtonStates();
     }
@@ -286,35 +284,35 @@ public class ConfigScreen extends Screen {
         }
         MainClient.reloadConfig();
 
-        this.client.setScreen(this.parent);
+        this.minecraft.setScreen(this.parent);
     }
 
     @Override
-    public void close() {
+    public void onClose() {
         if (this.hasChanges) {
-            this.client.setScreen(new ConfirmScreen(
+            this.minecraft.setScreen(new ConfirmScreen(
                     confirmed -> {
                         if (confirmed) {
-                            this.client.setScreen(this.parent);
+                            this.minecraft.setScreen(this.parent);
                         } else {
-                            this.client.setScreen(this);
+                            this.minecraft.setScreen(this);
                         }
                     },
-                    Text.of("Changes Not Saved"),
-                    Text.of("Are you sure you want to quit editing the config? Changes will not be saved!"),
-                    Text.of("Quit & Discard Changes"),
-                    Text.of("Cancel")
+                    Component.nullToEmpty("Changes Not Saved"),
+                    Component.nullToEmpty("Are you sure you want to quit editing the config? Changes will not be saved!"),
+                    Component.nullToEmpty("Quit & Discard Changes"),
+                    Component.nullToEmpty("Cancel")
             ));
         } else {
-            this.client.setScreen(this.parent);
+            this.minecraft.setScreen(this.parent);
         }
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
 
-        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, HEADER_TITLE_Y, TextColors.WHITE);
+        context.drawCenteredString(this.font, this.title, this.width / 2, HEADER_TITLE_Y, TextColors.WHITE);
 
         if (this.categoryNames.size() > 1) {
             this.renderCategoryTabs(context, mouseX, mouseY);
@@ -323,11 +321,11 @@ public class ConfigScreen extends Screen {
         this.searchField.render(context, mouseX, mouseY, delta);
 
         if (this.hasErrors()) {
-            context.drawTextWithShadow(this.textRenderer, Text.of("Errors"), 10, HEADER_TITLE_Y, TextColors.LIGHT_RED);
+            context.drawString(this.font, Component.nullToEmpty("Errors"), 10, HEADER_TITLE_Y, TextColors.LIGHT_RED);
         }
     }
 
-    private void renderCategoryTabs(DrawContext context, int mouseX, int mouseY) {
+    private void renderCategoryTabs(GuiGraphics context, int mouseX, int mouseY) {
         int tabWidth = Math.min(HEADER_CATEGORY_MIN_WIDTH, this.width / this.categoryNames.size());
         int startX = (this.width - ((tabWidth+HEADER_CATEGORY_GAP) * this.categoryNames.size())) / 2;
 
@@ -344,7 +342,7 @@ public class ConfigScreen extends Screen {
 
             String categoryName = this.categoryNames.get(i);
             int textColor = isSelected ? TextColors.WHITE : TextColors.PASTEL_WHITE;
-            context.drawCenteredTextWithShadow(this.textRenderer, categoryName, tabX + tabWidth / 2, tabY + HEADER_CATEGORY_NAME_OFFSET_Y, textColor);
+            context.drawCenteredString(this.font, categoryName, tabX + tabWidth / 2, tabY + HEADER_CATEGORY_NAME_OFFSET_Y, textColor);
         }
     }
 
@@ -355,7 +353,7 @@ public class ConfigScreen extends Screen {
         if (this.searchField.mouseClicked(mouseX, mouseY, button)) {
     //?} else {
     /*@Override
-    public boolean mouseClicked(Click click, boolean doubled) {
+    public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         int mouseX = (int) click.x();
         int mouseY = (int) click.y();
         boolean leftClick = click.button() == 0;
@@ -398,8 +396,8 @@ public class ConfigScreen extends Screen {
         if (this.searchField.isFocused() && this.searchField.keyPressed(keyCode, scanCode, modifiers)) {
     //?} else {
     /*@Override
-    public boolean keyPressed(KeyInput keyInput) {
-        int keyCode = keyInput.getKeycode();
+    public boolean keyPressed(KeyEvent keyInput) {
+        int keyCode = keyInput.input();
         int modifiers = keyInput.modifiers();
         if (this.searchField.isFocused() && this.searchField.keyPressed(keyInput)) {
     *///?}
@@ -429,7 +427,7 @@ public class ConfigScreen extends Screen {
     }
     //?} else {
     /*@Override
-    public boolean charTyped(CharInput charInput) {
+    public boolean charTyped(CharacterEvent charInput) {
         if (this.searchField.isFocused() && this.searchField.charTyped(charInput)) {
             return true;
         }
@@ -445,8 +443,8 @@ public class ConfigScreen extends Screen {
         searchField.setFocused(true);
     }
 
-    public TextRenderer getTextRenderer() {
-        return this.textRenderer;
+    public Font getTextRenderer() {
+        return this.font;
     }
 
     public ConfigEntry getFocusedEntry() {
@@ -466,10 +464,10 @@ public class ConfigScreen extends Screen {
 
     public static class Builder {
         private final Screen parent;
-        private final Text title;
+        private final Component title;
         private final Map<String, List<ConfigEntry>> categories = Maps.newLinkedHashMap();
 
-        public Builder(Screen parent, Text title) {
+        public Builder(Screen parent, Component title) {
             this.parent = parent;
             this.title = title;
         }

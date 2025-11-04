@@ -6,18 +6,18 @@ import net.mat0u5.lifeseries.gui.DefaultScreen;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.OrderedText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.util.FormattedCharSequence;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-
-//? if >= 1.21.9
-/*import net.minecraft.client.gui.Click;*/
+//? if >= 1.21.9 {
+/*import net.minecraft.client.input.MouseButtonEvent;
+*///?}
 
 public class QuizScreen extends DefaultScreen {
 
@@ -25,13 +25,13 @@ public class QuizScreen extends DefaultScreen {
             TextColors.PASTEL_BLUE, TextColors.PASTEL_ORANGE, TextColors.PASTEL_LIME, TextColors.PASTEL_YELLOW, TextColors.PASTEL_RED
     };
 
-    private final List<List<OrderedText>> answers = new ArrayList<>();
+    private final List<List<FormattedCharSequence>> answers = new ArrayList<>();
     private String difficulty = "Difficulty: null";
     private int timerSeconds = 120;
     private final List<Rectangle> answerRects = new ArrayList<>();
 
     public QuizScreen() {
-        super(Text.literal("Quiz Screen"));
+        super(Component.literal("Quiz Screen"));
     }
 
     @Override
@@ -51,16 +51,16 @@ public class QuizScreen extends DefaultScreen {
         answerRects.clear();
         for (int i = 0; i < Trivia.answers.size(); i++) {
             char answerIndex = (char) (i+65);
-            MutableText label = TextUtils.format("{}: ", answerIndex).formatted(Formatting.BOLD);
-            MutableText answerText = Text.literal(Trivia.answers.get(i));
+            MutableComponent label = TextUtils.format("{}: ", answerIndex).withStyle(ChatFormatting.BOLD);
+            MutableComponent answerText = Component.literal(Trivia.answers.get(i));
             answerText.setStyle(answerText.getStyle().withBold(false));
-            Text text = label.append(answerText);
-            List<OrderedText> answer = this.textRenderer.wrapLines(text, maxWidth);
+            Component text = label.append(answerText);
+            List<FormattedCharSequence> answer = this.font.split(text, maxWidth);
             answers.add(answer);
-            int answerBoxHeight = this.textRenderer.fontHeight * answer.size()+2;
+            int answerBoxHeight = this.font.lineHeight * answer.size()+2;
             int answerBoxWidth = 0;
-            for (OrderedText line : answer) {
-                int lineWidth = this.textRenderer.getWidth(line);
+            for (FormattedCharSequence line : answer) {
+                int lineWidth = this.font.width(line);
                 if (lineWidth > answerBoxWidth) answerBoxWidth = lineWidth;
             }
             answerBoxWidth += 2;
@@ -89,7 +89,7 @@ public class QuizScreen extends DefaultScreen {
         super.tick();
         timerSeconds = Trivia.getRemainingSeconds();
         if (timerSeconds <= 0) {
-            this.close();
+            this.onClose();
         }
     }
 
@@ -98,14 +98,14 @@ public class QuizScreen extends DefaultScreen {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0) { // Left-click
     //?} else {
-    /*public boolean mouseClicked(Click click, boolean doubled) {
+    /*public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         double mouseX = click.x();
         double mouseY = click.y();
         if (click.button() == 0) { // Left-click
     *///?}
             for (int i = 0; i < answerRects.size(); i++) {
                 if (answerRects.get(i).contains(mouseX, mouseY)) {
-                    if (this.client != null) this.client.setScreen(new ConfirmQuizAnswerScreen(this, i));
+                    if (this.minecraft != null) this.minecraft.setScreen(new ConfirmQuizAnswerScreen(this, i));
                     return true;
                 }
             }
@@ -118,7 +118,7 @@ public class QuizScreen extends DefaultScreen {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY) {
+    public void render(GuiGraphics context, int mouseX, int mouseY) {
         // X
         int fifth1 = startX + (BG_WIDTH / 5);
         int fifth2 = startX + (BG_WIDTH / 5) * 2;
@@ -154,23 +154,23 @@ public class QuizScreen extends DefaultScreen {
         while (secondsStr.length() < 2) secondsStr = "0" + secondsStr;
         while (minutesStr.length() < 2) minutesStr = "0" + minutesStr;
 
-        Text timerText = TextUtils.format("{}:{}", minutesStr, secondsStr);
-        if (timerSeconds <= 5) RenderUtils.drawTextCenter(context, this.textRenderer, TextColors.RED, timerText, centerX, minY);
-        else if (timerSeconds <= 30) RenderUtils.drawTextCenter(context, this.textRenderer, TextColors.ORANGE, timerText, centerX, minY);
-        else RenderUtils.drawTextCenter(context, this.textRenderer, timerText, centerX, minY);
+        Component timerText = TextUtils.format("{}:{}", minutesStr, secondsStr);
+        if (timerSeconds <= 5) RenderUtils.drawTextCenter(context, this.font, TextColors.RED, timerText, centerX, minY);
+        else if (timerSeconds <= 30) RenderUtils.drawTextCenter(context, this.font, TextColors.ORANGE, timerText, centerX, minY);
+        else RenderUtils.drawTextCenter(context, this.font, timerText, centerX, minY);
 
         // Difficulty
-        RenderUtils.drawTextCenter(context, this.textRenderer, Text.of(difficulty), centerX, maxY);
+        RenderUtils.drawTextCenter(context, this.font, Component.nullToEmpty(difficulty), centerX, maxY);
 
         // Questions
-        RenderUtils.drawTextCenter(context, this.textRenderer, Text.literal("Question").formatted(Formatting.UNDERLINE), fifth1, minY);
-        List<OrderedText> wrappedQuestion = this.textRenderer.wrapLines(Text.literal(Trivia.question), questionWidth);
+        RenderUtils.drawTextCenter(context, this.font, Component.literal("Question").withStyle(ChatFormatting.UNDERLINE), fifth1, minY);
+        List<FormattedCharSequence> wrappedQuestion = this.font.split(Component.literal(Trivia.question), questionWidth);
         for (int i = 0; i < wrappedQuestion.size(); i++) {
-            RenderUtils.drawOrderedTextLeft(context, this.textRenderer, DEFAULT_TEXT_COLOR, wrappedQuestion.get(i), questionX, questionY + i * this.textRenderer.fontHeight);
+            RenderUtils.drawOrderedTextLeft(context, this.font, DEFAULT_TEXT_COLOR, wrappedQuestion.get(i), questionX, questionY + i * this.font.lineHeight);
         }
 
         // Answers
-        RenderUtils.drawTextCenter(context, this.textRenderer, Text.literal("Answers").formatted(Formatting.UNDERLINE), fifth4, minY);
+        RenderUtils.drawTextCenter(context, this.font, Component.literal("Answers").withStyle(ChatFormatting.UNDERLINE), fifth4, minY);
         for (int i = 0; i < Trivia.answers.size(); i++) {
             Rectangle rect = answerRects.get(i);
             int borderColor = ANSWER_COLORS[i % ANSWER_COLORS.length];
@@ -185,9 +185,9 @@ public class QuizScreen extends DefaultScreen {
 
             // Draw each line
             int lineY = rect.y + 2;
-            for (OrderedText line : answers.get(i)) {
-                RenderUtils.drawOrderedTextLeft(context, this.textRenderer, textColor, line, rect.x+1, lineY);
-                lineY += this.textRenderer.fontHeight;
+            for (FormattedCharSequence line : answers.get(i)) {
+                RenderUtils.drawOrderedTextLeft(context, this.font, textColor, line, rect.x+1, lineY);
+                lineY += this.font.lineHeight;
             }
         }
 
@@ -196,23 +196,23 @@ public class QuizScreen extends DefaultScreen {
         drawBot(context, startX, startY, mouseX, mouseY, centerX, centerY, 40);
     }
 
-    private void drawBot(DrawContext context, int i, int j, int mouseX, int mouseY, int x, int y, int size) {
-        if (client == null) return;
-        if (client.world == null) return;
-        if (client.player == null) return;
+    private void drawBot(GuiGraphics context, int i, int j, int mouseX, int mouseY, int x, int y, int size) {
+        if (minecraft == null) return;
+        if (minecraft.level == null) return;
+        if (minecraft.player == null) return;
         TriviaBot bot = null;
-        for (TriviaBot entity : client.world.getEntitiesByClass(TriviaBot.class, client.player.getBoundingBox().expand(10), entity->true)) {
-            if (bot == null || client.player.distanceTo(entity) < client.player.distanceTo(bot)) {
+        for (TriviaBot entity : minecraft.level.getEntitiesOfClass(TriviaBot.class, minecraft.player.getBoundingBox().inflate(10), entity->true)) {
+            if (bot == null || minecraft.player.distanceTo(entity) < minecraft.player.distanceTo(bot)) {
                 bot = entity;
             }
         }
         if (bot != null) {
-            InventoryScreen.drawEntity(context, x-30, y-70, x+30, y+70, size, 0.0625F, centerX, centerY+10, bot);
+            InventoryScreen.renderEntityInInventoryFollowsMouse(context, x-30, y-70, x+30, y+70, size, 0.0625F, centerX, centerY+10, bot);
         }
     }
 
     @Override
-    public boolean shouldPause() {
+    public boolean isPauseScreen() {
         return false;
     }
 }

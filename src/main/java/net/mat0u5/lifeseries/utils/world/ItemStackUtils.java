@@ -1,98 +1,99 @@
 package net.mat0u5.lifeseries.utils.world;
 
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.LoreComponent;
-import net.minecraft.component.type.NbtComponent;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentLevelEntry;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.ItemLore;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentInstance;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.server;
 //? if <= 1.21
-import net.minecraft.item.EnchantedBookItem;
+import net.minecraft.world.item.EnchantedBookItem;
 //? if >= 1.21.2
-/*import net.minecraft.enchantment.EnchantmentHelper;*/
-//? if >= 1.21.4
+/*import net.minecraft.world.item.enchantment.EnchantmentHelper;*/
+//? if >= 1.21.5
 /*import java.util.Optional;*/
 
 public class ItemStackUtils {
     public static void clearItemLore(ItemStack itemStack) {
-        itemStack.remove(DataComponentTypes.LORE);
+        itemStack.remove(DataComponents.LORE);
     }
 
-    public static void addLoreToItemStack(ItemStack itemStack, List<Text> lines) {
-        List<Text> loreLines = getLore(itemStack);
+    public static void addLoreToItemStack(ItemStack itemStack, List<Component> lines) {
+        List<Component> loreLines = getLore(itemStack);
         if (lines != null && !lines.isEmpty()) loreLines.addAll(lines);
-        LoreComponent lore = new LoreComponent(loreLines);
-        itemStack.set(DataComponentTypes.LORE, lore);
+        ItemLore lore = new ItemLore(loreLines);
+        itemStack.set(DataComponents.LORE, lore);
     }
 
-    public static List<Text> getLore(ItemStack itemStack) {
-        LoreComponent lore = itemStack.get(DataComponentTypes.LORE);
+    public static List<Component> getLore(ItemStack itemStack) {
+        ItemLore lore = itemStack.get(DataComponents.LORE);
         if (lore == null) return new ArrayList<>();
-        List<Text> lines = lore.lines();
+        List<Component> lines = lore.lines();
         if (lines == null) return new ArrayList<>();
         if (lines.isEmpty()) return new ArrayList<>();
         return lines;
     }
 
-    public static ItemStack getHoldingItem(PlayerEntity player) {
-        ItemStack mainHandItem = player.getMainHandStack();
+    public static ItemStack getHoldingItem(Player player) {
+        ItemStack mainHandItem = player.getMainHandItem();
         if (mainHandItem != null) {
             if (!mainHandItem.isEmpty()) return mainHandItem;
         }
-        return player.getOffHandStack();
+        return player.getOffhandItem();
     }
 
     public static void setCustomComponentInt(ItemStack itemStack, String componentKey, int value) {
         if (itemStack == null) return;
-        NbtComponent currentNbt = itemStack.get(DataComponentTypes.CUSTOM_DATA);
-        NbtCompound nbtComp = currentNbt == null ? new NbtCompound() : currentNbt.copyNbt();
+        CustomData currentNbt = itemStack.get(DataComponents.CUSTOM_DATA);
+        CompoundTag nbtComp = currentNbt == null ? new CompoundTag() : currentNbt.copyTag();
         nbtComp.putInt(componentKey,value);
-        itemStack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbtComp));
+        itemStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbtComp));
     }
 
     public static void setCustomComponentByte(ItemStack itemStack, String componentKey, byte value) {
         if (itemStack == null) return;
-        NbtComponent currentNbt = itemStack.get(DataComponentTypes.CUSTOM_DATA);
-        NbtCompound nbtComp = currentNbt == null ? new NbtCompound() : currentNbt.copyNbt();
+        CustomData currentNbt = itemStack.get(DataComponents.CUSTOM_DATA);
+        CompoundTag nbtComp = currentNbt == null ? new CompoundTag() : currentNbt.copyTag();
         nbtComp.putByte(componentKey,value);
-        itemStack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbtComp));
+        itemStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbtComp));
     }
 
     public static void setCustomComponentBoolean(ItemStack itemStack, String componentKey, boolean value) {
         if (itemStack == null) return;
-        NbtComponent currentNbt = itemStack.get(DataComponentTypes.CUSTOM_DATA);
-        NbtCompound nbtComp = currentNbt == null ? new NbtCompound() : currentNbt.copyNbt();
+        CustomData currentNbt = itemStack.get(DataComponents.CUSTOM_DATA);
+        CompoundTag nbtComp = currentNbt == null ? new CompoundTag() : currentNbt.copyTag();
         nbtComp.putBoolean(componentKey, value);
-        itemStack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbtComp));
+        itemStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbtComp));
     }
 
     public static void setCustomComponentString(ItemStack itemStack, String componentKey, String value) {
         if (itemStack == null) return;
-        NbtComponent currentNbt = itemStack.get(DataComponentTypes.CUSTOM_DATA);
-        NbtCompound nbtComp = currentNbt == null ? new NbtCompound() : currentNbt.copyNbt();
+        CustomData currentNbt = itemStack.get(DataComponents.CUSTOM_DATA);
+        CompoundTag nbtComp = currentNbt == null ? new CompoundTag() : currentNbt.copyTag();
         nbtComp.putString(componentKey,value);
-        itemStack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbtComp));
+        itemStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbtComp));
     }
 
     public static String getCustomComponentString(ItemStack itemStack, String componentKey) {
         if (itemStack == null) return null;
-        NbtComponent nbtComponent = itemStack.get(DataComponentTypes.CUSTOM_DATA);
+        CustomData nbtComponent = itemStack.get(DataComponents.CUSTOM_DATA);
         if (nbtComponent == null) return null;
-        NbtCompound nbtComp = nbtComponent.copyNbt();
+        CompoundTag nbtComp = nbtComponent.copyTag();
         if (!nbtComp.contains(componentKey)) return null;
         //? if <= 1.21.4 {
         return nbtComp.getString(componentKey);
@@ -106,9 +107,9 @@ public class ItemStackUtils {
 
     public static Integer getCustomComponentInt(ItemStack itemStack, String componentKey) {
         if (itemStack == null) return null;
-        NbtComponent nbtComponent = itemStack.get(DataComponentTypes.CUSTOM_DATA);
+        CustomData nbtComponent = itemStack.get(DataComponents.CUSTOM_DATA);
         if (nbtComponent == null) return null;
-        NbtCompound nbtComp = nbtComponent.copyNbt();
+        CompoundTag nbtComp = nbtComponent.copyTag();
         if (!nbtComp.contains(componentKey)) return null;
         //? if <= 1.21.4 {
         return nbtComp.getInt(componentKey);
@@ -121,9 +122,9 @@ public class ItemStackUtils {
 
     public static Byte getCustomComponentByte(ItemStack itemStack, String componentKey) {
         if (itemStack == null) return null;
-        NbtComponent nbtComponent = itemStack.get(DataComponentTypes.CUSTOM_DATA);
+        CustomData nbtComponent = itemStack.get(DataComponents.CUSTOM_DATA);
         if (nbtComponent == null) return null;
-        NbtCompound nbtComp = nbtComponent.copyNbt();
+        CompoundTag nbtComp = nbtComponent.copyTag();
         if (!nbtComp.contains(componentKey)) return null;
         //? if <= 1.21.4 {
         return nbtComp.getByte(componentKey);
@@ -136,9 +137,9 @@ public class ItemStackUtils {
 
     public static Boolean getCustomComponentBoolean(ItemStack itemStack, String componentKey) {
         if (itemStack == null) return null;
-        NbtComponent nbtComponent = itemStack.get(DataComponentTypes.CUSTOM_DATA);
+        CustomData nbtComponent = itemStack.get(DataComponents.CUSTOM_DATA);
         if (nbtComponent == null) return null;
-        NbtCompound nbtComp = nbtComponent.copyNbt();
+        CompoundTag nbtComp = nbtComponent.copyTag();
         if (!nbtComp.contains(componentKey)) return null;
         //? if <= 1.21.4 {
         return nbtComp.getBoolean(componentKey);
@@ -151,88 +152,87 @@ public class ItemStackUtils {
 
     public static boolean hasCustomComponentEntry(ItemStack itemStack, String componentEntry) {
         if (itemStack == null) return false;
-        NbtComponent nbt = itemStack.getComponents().get(DataComponentTypes.CUSTOM_DATA);
+        CustomData nbt = itemStack.getComponents().get(DataComponents.CUSTOM_DATA);
         if (nbt == null) return false;
         //? if <= 1.21.6 {
         return nbt.contains(componentEntry);
         //?} else {
-        /*return nbt.copyNbt().contains(componentEntry);
+        /*return nbt.copyTag().contains(componentEntry);
         *///?}
     }
 
     public static void removeCustomComponentEntry(ItemStack itemStack, String componentEntry) {
-        NbtComponent nbt = itemStack.getComponents().get(DataComponentTypes.CUSTOM_DATA);
+        CustomData nbt = itemStack.getComponents().get(DataComponents.CUSTOM_DATA);
         if (nbt == null) return;
         //? if <= 1.21.6 {
         if (!nbt.contains(componentEntry)) return;
         //?} else {
-        /*if (!nbt.copyNbt().contains(componentEntry)) return;
+        /*if (!nbt.copyTag().contains(componentEntry)) return;
         *///?}
-        NbtCompound nbtComp = nbt.copyNbt();
+        CompoundTag nbtComp = nbt.copyTag();
         nbtComp.remove(componentEntry);
         if (nbtComp.isEmpty()) {
-            itemStack.set(DataComponentTypes.CUSTOM_DATA, itemStack.getDefaultComponents().get(DataComponentTypes.CUSTOM_DATA));
+            itemStack.set(DataComponents.CUSTOM_DATA, itemStack.getPrototype().get(DataComponents.CUSTOM_DATA));
         }
         else {
-            itemStack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbtComp));
+            itemStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbtComp));
         }
     }
 
-    public static void spawnItem(ServerWorld world, Vec3d position, ItemStack stack) {
-        spawnItemForPlayer(world, position, stack, null);
+    public static void spawnItem(ServerLevel level, Vec3 position, ItemStack stack) {
+        spawnItemForPlayer(level, position, stack, null);
     }
 
-    public static void spawnItemForPlayer(ServerWorld world, Vec3d position, ItemStack stack, PlayerEntity player) {
-        if (world == null || stack.isEmpty()) {
+    public static void spawnItemForPlayer(ServerLevel level, Vec3 position, ItemStack stack, Player player) {
+        if (level == null || stack.isEmpty()) {
             return;
         }
-        ItemEntity itemEntity = new ItemEntity(world, position.x, position.y, position.z, stack);
-        itemEntity.setPickupDelay(20);
-        itemEntity.setVelocity(itemEntity.getVelocity().getX()/4, 0.2, itemEntity.getVelocity().getZ()/4);
-        if (player != null) itemEntity.setOwner(player.getUuid());
+        ItemEntity itemEntity = new ItemEntity(level, position.x, position.y, position.z, stack);
+        itemEntity.setPickUpDelay(20);
+        itemEntity.setDeltaMovement(itemEntity.getDeltaMovement().x()/4, 0.2, itemEntity.getDeltaMovement().z()/4);
+        if (player != null) itemEntity.setTarget(player.getUUID());
 
-        world.spawnEntity(itemEntity);
+        level.addFreshEntity(itemEntity);
     }
-    public static void spawnItemForPlayerWithVelocity(ServerWorld world, Vec3d position, ItemStack stack, PlayerEntity player, Vec3d velocity) {
-        if (world == null || stack.isEmpty()) {
+    public static void spawnItemForPlayerWithVelocity(ServerLevel level, Vec3 position, ItemStack stack, Player player, Vec3 velocity) {
+        if (level == null || stack.isEmpty()) {
             return;
         }
-        ItemEntity itemEntity = new ItemEntity(world, position.x, position.y, position.z, stack);
-        itemEntity.setPickupDelay(20);
-        itemEntity.setVelocity(velocity);
-        if (player != null) itemEntity.setOwner(player.getUuid());
+        ItemEntity itemEntity = new ItemEntity(level, position.x, position.y, position.z, stack);
+        itemEntity.setPickUpDelay(20);
+        itemEntity.setDeltaMovement(velocity);
+        if (player != null) itemEntity.setTarget(player.getUUID());
 
-        world.spawnEntity(itemEntity);
+        level.addFreshEntity(itemEntity);
     }
 
-    public static ItemStack createEnchantedBook(RegistryKey<Enchantment> enchantment, int level) {
+    public static ItemStack createEnchantedBook(ResourceKey<Enchantment> enchantment, int level) {
         if (server == null) return null;
         //? if <=1.21 {
-        RegistryEntry<Enchantment> entry = getEnchantmentEntry(enchantment);
-        ItemStack enchantedBook = EnchantedBookItem.forEnchantment(
-                new EnchantmentLevelEntry(entry, level)
+        Holder<Enchantment> entry = getEnchantmentEntry(enchantment);
+        ItemStack enchantedBook = EnchantedBookItem.createForEnchantment(
+                new EnchantmentInstance(entry, level)
         );
         return enchantedBook;
         //?} else {
-
-        /*RegistryEntry<Enchantment> entry = getEnchantmentEntry(enchantment);
-        ItemStack enchantedBook = EnchantmentHelper.getEnchantedBookWith(
-                new EnchantmentLevelEntry(entry, level)
+        /*Holder<Enchantment> entry = getEnchantmentEntry(enchantment);
+        ItemStack enchantedBook = EnchantmentHelper.createBook(
+                new EnchantmentInstance(entry, level)
         );
         return enchantedBook;
         *///?}
     }
 
     @Nullable
-    public static RegistryEntry<Enchantment> getEnchantmentEntry(RegistryKey<Enchantment> enchantment) {
+    public static Holder<Enchantment> getEnchantmentEntry(ResourceKey<Enchantment> enchantment) {
         if (server == null) return null;
         //? if <=1.21 {
-        return server.getRegistryManager()
-                .getWrapperOrThrow(RegistryKeys.ENCHANTMENT)
+        return server.registryAccess()
+                .lookupOrThrow(Registries.ENCHANTMENT)
                 .getOrThrow(enchantment);
         //?} else {
-        /*return server.getRegistryManager()
-                .getOrThrow(RegistryKeys.ENCHANTMENT)
+        /*return server.registryAccess()
+                .lookupOrThrow(Registries.ENCHANTMENT)
                 .getOrThrow(enchantment);
         *///?}
     }

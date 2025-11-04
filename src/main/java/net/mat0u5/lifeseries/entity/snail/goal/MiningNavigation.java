@@ -1,32 +1,32 @@
 package net.mat0u5.lifeseries.entity.snail.goal;
 
-import net.minecraft.entity.ai.pathing.BirdNavigation;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.level.Level;
 
-public class MiningNavigation extends BirdNavigation {
+public class MiningNavigation extends FlyingPathNavigation {
 
     public int cooldown = 40;
 
-    public MiningNavigation(MobEntity mob, World world) {
-        super(mob, world);
+    public MiningNavigation(Mob mob, Level level) {
+        super(mob, level);
     }
 
     @Override
-    protected boolean isAtValidPosition() {
+    protected boolean canUpdatePath() {
         if (cooldown > 0) {
             cooldown--;
         }
-        if (cooldown == 0 && this.currentPath != null && !this.currentPath.isFinished()) {
+        if (cooldown == 0 && this.path != null && !this.path.isDone()) {
             cooldown = 20;
-            BlockPos entityPos = this.entity.getBlockPos();
-            BlockPos targetPos = this.currentPath.getCurrentNode().getBlockPos();
+            BlockPos entityPos = this.mob.blockPosition();
+            BlockPos targetPos = this.path.getNextNode().asBlockPos();
 
             breakBlocksForPath(entityPos, targetPos);
         }
 
-        return super.isAtValidPosition();
+        return super.canUpdatePath();
     }
 
     private void breakBlocksForPath(BlockPos start, BlockPos end) {
@@ -34,25 +34,25 @@ public class MiningNavigation extends BirdNavigation {
         int dy = Integer.signum(end.getY() - start.getY());
         int dz = Integer.signum(end.getZ() - start.getZ());
 
-        breakBlockIfNecessary(start.add(dx, dy, dz));
+        breakBlockIfNecessary(start.offset(dx, dy, dz));
 
         if (dx != 0 && dz != 0) {
-            breakBlockIfNecessary(start.add(dx, 0, 0));
-            breakBlockIfNecessary(start.add(0, 0, dz));
+            breakBlockIfNecessary(start.offset(dx, 0, 0));
+            breakBlockIfNecessary(start.offset(0, 0, dz));
         }
 
         if (dy != 0) {
-            breakBlockIfNecessary(start.add(0, dy, 0));
+            breakBlockIfNecessary(start.offset(0, dy, 0));
 
             if (dx != 0 || dz != 0) {
-                breakBlockIfNecessary(start.add(dx, dy, dz));
+                breakBlockIfNecessary(start.offset(dx, dy, dz));
             }
         }
     }
 
     private void breakBlockIfNecessary(BlockPos pos) {
-        if (!this.world.getBlockState(pos).isAir()) {
-            this.world.breakBlock(pos, true, this.entity);
+        if (!this.level.getBlockState(pos).isAir()) {
+            this.level.destroyBlock(pos, true, this.mob);
         }
     }
 }

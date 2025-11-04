@@ -1,19 +1,18 @@
 package net.mat0u5.lifeseries.gui.config.entries;
 
 import net.mat0u5.lifeseries.utils.TextColors;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.text.Text;
-
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.network.chat.Component;
 import java.util.Objects;
 //? if >= 1.21.9 {
-/*import net.minecraft.client.gui.Click;
-import net.minecraft.client.input.CharInput;
-import net.minecraft.client.input.KeyInput;
+/*import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
 *///?}
 
 public abstract class TextFieldConfigEntry extends ConfigEntry {
-    protected final TextFieldWidget textField;
+    protected final EditBox textField;
     private static final int DEFAULT_TEXT_FIELD_WIDTH = 100;
     protected static final int DEFAULT_TEXT_FIELD_HEIGHT = 18;
     private static final int TEXT_FIELD_OFFSET_X = -5;
@@ -31,8 +30,8 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
 
     public TextFieldConfigEntry(String fieldName, String displayName, String description, int textFieldWidth, int textFieldHeight) {
         super(fieldName, displayName, description);
-        textField = new TextFieldWidget(textRenderer, 0, 0, textFieldWidth, textFieldHeight, Text.empty());
-        textField.setChangedListener(this::onChanged);
+        textField = new EditBox(textRenderer, 0, 0, textFieldWidth, textFieldHeight, Component.empty());
+        textField.setResponder(this::onChanged);
         textField.setMaxLength(maxTextFieldLength);
     }
 
@@ -55,11 +54,11 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
     protected void postTextChanged() {
     }
 
-    protected void renderAdditionalContent(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    protected void renderAdditionalContent(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
     }
 
     @Override
-    protected void renderEntry(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    protected void renderEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         int entryWidth = getEntryContentWidth(width);
 
         renderAdditionalContent(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
@@ -69,10 +68,10 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
         textField.render(context, mouseX, mouseY, tickDelta);
 
         if (hasError()) {
-            textField.setEditableColor(TextColors.PASTEL_RED);
+            textField.setTextColor(TextColors.PASTEL_RED);
         }
         else {
-            textField.setEditableColor(TextColors.WHITE);
+            textField.setTextColor(TextColors.WHITE);
         }
     }
 
@@ -111,7 +110,7 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
     }
     //?} else {
     /*@Override
-    protected boolean mouseClickedEntry(Click click, boolean doubled) {
+    protected boolean mouseClickedEntry(MouseButtonEvent click, boolean doubled) {
         if (!textField.mouseClicked(click, doubled)) {
             clicked = !clicked;
         }
@@ -119,12 +118,12 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
     }
 
     @Override
-    protected boolean keyPressedEntry(KeyInput input) {
+    protected boolean keyPressedEntry(KeyEvent input) {
         return textField.keyPressed(input);
     }
 
     @Override
-    protected boolean charTypedEntry(CharInput input) {
+    protected boolean charTypedEntry(CharacterEvent input) {
         return textField.charTyped(input);
     }
     *///?}
@@ -140,7 +139,7 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
     public void setText(String text) {
         onTextChanged(text);
         postTextChanged();
-        textField.setText(text);
+        textField.setValue(text);
     }
 
     public boolean hasCustomErrors() {
@@ -149,11 +148,11 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
 
     @Override
     public boolean modified() {
-        return !Objects.equals(textField.getText(), getStartingValueAsString());
+        return !Objects.equals(textField.getValue(), getStartingValueAsString());
     }
 
     @Override
     public boolean canReset() {
-        return !Objects.equals(textField.getText(), getDefaultValueAsString());
+        return !Objects.equals(textField.getValue(), getDefaultValueAsString());
     }
 }

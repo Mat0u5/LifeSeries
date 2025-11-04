@@ -1,10 +1,11 @@
 package net.mat0u5.lifeseries.gui.config.entries;
 
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.GuiGraphics;
+
 //? if >= 1.21.9 {
-/*import net.minecraft.client.gui.Click;
-import net.minecraft.client.input.CharInput;
-import net.minecraft.client.input.KeyInput;
+/*import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
 *///?}
 
 public abstract class EmptyConfigEntry extends ConfigEntry {
@@ -13,7 +14,7 @@ public abstract class EmptyConfigEntry extends ConfigEntry {
     }
 
     @Override
-    protected void renderEntry(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    protected void renderEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
     }
 
     //? if <= 1.21.6 {
@@ -33,17 +34,17 @@ public abstract class EmptyConfigEntry extends ConfigEntry {
     }
     //?} else {
     /*@Override
-    protected boolean mouseClickedEntry(Click click, boolean doubled) {
+    protected boolean mouseClickedEntry(MouseButtonEvent click, boolean doubled) {
         return false;
     }
 
     @Override
-    protected boolean keyPressedEntry(KeyInput input) {
+    protected boolean keyPressedEntry(KeyEvent input) {
         return false;
     }
 
     @Override
-    protected boolean charTypedEntry(CharInput input) {
+    protected boolean charTypedEntry(CharacterEvent input) {
         return false;
     }
     *///?}

@@ -8,30 +8,31 @@ import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotPathfinding;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotServerData;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotSounds;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.control.MoveControl;
-import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.AmbientEntity;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraft.world.explosion.Explosion;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ambient.AmbientCreature;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.phys.Vec3;
 
-public class TriviaBot extends AmbientEntity {
-    public static final Identifier ID = Identifier.of(Main.MOD_ID, "triviabot");
+public class TriviaBot extends AmbientCreature {
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "triviabot");
 
     public static final int STATIONARY_TP_COOLDOWN = 400; // No movement for 20 seconds teleports the bot
     public static final float MOVEMENT_SPEED = 0.45f;
@@ -48,49 +49,37 @@ public class TriviaBot extends AmbientEntity {
     public TriviaHandler triviaHandler = new TriviaHandler(this);
 
 
-    private static final TrackedData<Boolean> submittedAnswer = DataTracker.registerData(TriviaBot.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Boolean> ranOutOfTime = DataTracker.registerData(TriviaBot.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Boolean> answeredRight = DataTracker.registerData(TriviaBot.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Boolean> interactedWith = DataTracker.registerData(TriviaBot.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Boolean> gliding = DataTracker.registerData(TriviaBot.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Integer> analyzing = DataTracker.registerData(TriviaBot.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final EntityDataAccessor<Boolean> submittedAnswer = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> ranOutOfTime = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> answeredRight = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> interactedWith = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> gliding = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> analyzing = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.INT);
 
 
-    public TriviaBot(EntityType<? extends AmbientEntity> entityType, World world) {
-        super(entityType, world);
+    public TriviaBot(EntityType<? extends AmbientCreature> entityType, Level level) {
+        super(entityType, level);
         setInvulnerable(true);
-        setPersistent();
+        setPersistenceRequired();
     }
 
-    public static DefaultAttributeContainer.Builder createAttributes() {
-        //? if <= 1.21 {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 10000)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, MOVEMENT_SPEED)
-                .add(EntityAttributes.GENERIC_FLYING_SPEED, MOVEMENT_SPEED)
-                .add(EntityAttributes.GENERIC_STEP_HEIGHT, 1)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 100)
-                .add(EntityAttributes.GENERIC_WATER_MOVEMENT_EFFICIENCY, 1)
-                .add(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE, 100)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 0);
-        //?} else {
-        /*return MobEntity.createMobAttributes()
-                .add(EntityAttributes.MAX_HEALTH, 10000)
-                .add(EntityAttributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
-                .add(EntityAttributes.FLYING_SPEED, MOVEMENT_SPEED)
-                .add(EntityAttributes.STEP_HEIGHT, 1)
-                .add(EntityAttributes.FOLLOW_RANGE, 100)
-                .add(EntityAttributes.WATER_MOVEMENT_EFFICIENCY, 1)
-                .add(EntityAttributes.SAFE_FALL_DISTANCE, 100)
-                .add(EntityAttributes.ATTACK_DAMAGE, 0);
-        *///?}
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 10000)
+                .add(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
+                .add(Attributes.FLYING_SPEED, MOVEMENT_SPEED)
+                .add(Attributes.STEP_HEIGHT, 1)
+                .add(Attributes.FOLLOW_RANGE, 100)
+                .add(Attributes.WATER_MOVEMENT_EFFICIENCY, 1)
+                .add(Attributes.SAFE_FALL_DISTANCE, 100)
+                .add(Attributes.ATTACK_DAMAGE, 0);
     }
 
     @Override
-    protected void initGoals() {
-        goalSelector.add(0, new TriviaBotTeleportGoal(this));
-        goalSelector.add(1, new TriviaBotGlideGoal(this));
-        goalSelector.add(2, new TriviaBotLookAtPlayerGoal(this));
+    protected void registerGoals() {
+        goalSelector.addGoal(0, new TriviaBotTeleportGoal(this));
+        goalSelector.addGoal(1, new TriviaBotGlideGoal(this));
+        goalSelector.addGoal(2, new TriviaBotLookAtPlayerGoal(this));
     }
 
     @Override
@@ -100,77 +89,72 @@ public class TriviaBot extends AmbientEntity {
         clientData.tick();
     }
 
-    
-    public World getBotWorld() {
-        return ls$getEntityWorld();
-    }
-
     /*
         Override vanilla things
      */
     @Override
-    public ActionResult interactMob(PlayerEntity player, Hand hand) {
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
         return triviaHandler.interactMob(player, hand);
     }
 
     @Override
-    public SoundCategory getSoundCategory() {
-        return SoundCategory.PLAYERS;
+    public SoundSource getSoundSource() {
+        return SoundSource.PLAYERS;
     }
     
     @Override
-    public Vec3d applyFluidMovingSpeed(double gravity, boolean falling, Vec3d motion) {
+    public Vec3 getFluidFallingAdjustedMovement(double gravity, boolean falling, Vec3 motion) {
         return motion;
     }
 
     @Override
     //? if <= 1.21.4 {
-    protected boolean shouldSwimInFluids() {
+    protected boolean isAffectedByFluids() {
         return false;
     }
     //?} else {
-    /*public boolean shouldSwimInFluids() {
+    /*public boolean isAffectedByFluids() {
         return false;
     }
     *///?}
 
     @Override
-    public boolean isTouchingWater() {
+    public boolean isInWater() {
         return false;
     }
 
     @Override
     public void setSwimming(boolean swimming) {
-        this.setFlag(4, false);
+        this.setSharedFlag(4, false);
     }
 
     @Override
-    public boolean updateMovementInFluid(TagKey<Fluid> tag, double speed) {
+    public boolean updateFluidHeightAndDoFluidPushing(TagKey<Fluid> tag, double speed) {
         return false;
     }
 
     @Override
-    protected boolean canStartRiding(Entity entity) {
+    protected boolean canRide(Entity entity) {
         return CAN_START_RIDING;
     }
 
     @Override
-    public void slowMovement(BlockState state, Vec3d multiplier) {
+    public void makeStuckInBlock(BlockState state, Vec3 multiplier) {
     }
 
     @Override
-    public boolean isImmuneToExplosion(Explosion explosion) {
+    public boolean ignoreExplosion(Explosion explosion) {
         return true;
     }
 
     @Override
-    public boolean canUsePortals(boolean allowVehicles) {
+    public boolean canUsePortal(boolean allowVehicles) {
         return false;
     }
     public float soundVolume() {
         return getSoundVolume();
     }
-    public void setNavigation(EntityNavigation newNavigation) {
+    public void setNavigation(PathNavigation newNavigation) {
         this.navigation = newNavigation;
     }
     public void setMoveControl(MoveControl newMoveControl) {
@@ -181,49 +165,49 @@ public class TriviaBot extends AmbientEntity {
     Data Tracker Stuff
      */
     @Override
-    protected void initDataTracker(DataTracker.Builder builder) {
-        super.initDataTracker(builder);
-        builder.add(ranOutOfTime, false);
-        builder.add(submittedAnswer, false);
-        builder.add(answeredRight, false);
-        builder.add(interactedWith, false);
-        builder.add(gliding, false);
-        builder.add(analyzing, -1);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(ranOutOfTime, false);
+        builder.define(submittedAnswer, false);
+        builder.define(answeredRight, false);
+        builder.define(interactedWith, false);
+        builder.define(gliding, false);
+        builder.define(analyzing, -1);
     }
     public void setRanOutOfTime(boolean value) {
-        this.dataTracker.set(ranOutOfTime, value);
+        this.entityData.set(ranOutOfTime, value);
     }
     public void setSubmittedAnswer(boolean value) {
-        this.dataTracker.set(submittedAnswer, value);
+        this.entityData.set(submittedAnswer, value);
     }
     public void setAnsweredRight(boolean value) {
-        this.dataTracker.set(answeredRight, value);
+        this.entityData.set(answeredRight, value);
     }
     public void setInteractedWith(boolean value) {
-        this.dataTracker.set(interactedWith, value);
+        this.entityData.set(interactedWith, value);
     }
     public void setGliding(boolean value) {
-        this.dataTracker.set(gliding, value);
+        this.entityData.set(gliding, value);
     }
     public void setAnalyzingTime(int value) {
-        this.dataTracker.set(analyzing, value);
+        this.entityData.set(analyzing, value);
     }
     public boolean ranOutOfTime() {
-        return this.dataTracker.get(ranOutOfTime);
+        return this.entityData.get(ranOutOfTime);
     }
     public boolean submittedAnswer() {
-        return this.dataTracker.get(submittedAnswer);
+        return this.entityData.get(submittedAnswer);
     }
     public boolean answeredRight() {
-        return this.dataTracker.get(answeredRight);
+        return this.entityData.get(answeredRight);
     }
     public boolean interactedWith() {
-        return this.dataTracker.get(interactedWith);
+        return this.entityData.get(interactedWith);
     }
     public boolean isBotGliding() {
-        return this.dataTracker.get(gliding);
+        return this.entityData.get(gliding);
     }
     public int getAnalyzingTime() {
-        return this.dataTracker.get(analyzing);
+        return this.entityData.get(analyzing);
     }
 }

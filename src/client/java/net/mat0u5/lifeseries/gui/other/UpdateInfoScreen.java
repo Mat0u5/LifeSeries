@@ -6,20 +6,20 @@ import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.text.Text;
-import net.minecraft.util.Util;
+import net.minecraft.Util;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.Component;
 
 public class UpdateInfoScreen extends DefaultScreen {
     private String versionName;
     private String description;
-    private Text dismissText = Text.of("Dismiss for this update");
+    private Component dismissText = Component.nullToEmpty("Dismiss for this update");
     private int textWidth = 0;
-    private ButtonWidget dismissButton;
+    private Button dismissButton;
 
     public UpdateInfoScreen(String versionName, String description) {
-        super(Text.of("New Life Series Update"), 400, 225, 0, +10);
+        super(Component.nullToEmpty("New Life Series Update"), 400, 225, 0, +10);
         this.versionName = versionName;
         this.description = description.replace("\r","");
     }
@@ -32,46 +32,46 @@ public class UpdateInfoScreen extends DefaultScreen {
     @Override
     protected void init() {
         super.init();
-        textWidth = textRenderer.getWidth(dismissText) + 5;
+        textWidth = font.width(dismissText) + 5;
 
-        this.addDrawableChild(
-                ButtonWidget.builder(Text.literal("Join Discord").withColor(TextColors.PASTEL_WHITE),btn -> {
-                            Util.getOperatingSystem().open("https://discord.gg/QWJxfb4zQZ");
+        this.addRenderableWidget(
+                Button.builder(Component.literal("Join Discord").withColor(TextColors.PASTEL_WHITE),btn -> {
+                            Util.getPlatform().openUri("https://discord.gg/QWJxfb4zQZ");
                         })
-                        .position(startX + 5, endY - 25)
+                        .pos(startX + 5, endY - 25)
                         .size(80, 20)
                         .build()
         );
-        this.addDrawableChild(
-                ButtonWidget.builder(Text.literal("Full Changelog").withColor(TextColors.PASTEL_WHITE), btn -> {
-                            Util.getOperatingSystem().open(UpdateChecker.getChangelogLink());
+        this.addRenderableWidget(
+                Button.builder(Component.literal("Full Changelog").withColor(TextColors.PASTEL_WHITE), btn -> {
+                            Util.getPlatform().openUri(UpdateChecker.getChangelogLink());
                         })
-                        .position(endX - 80 - 5, endY - 25)
+                        .pos(endX - 80 - 5, endY - 25)
                         .size(80, 20)
                         .build()
         );
-        this.addDrawableChild(
-                ButtonWidget.builder(Text.literal("Download on Modrinth"), btn -> {
-                            this.close();
-                            Util.getOperatingSystem().open("https://modrinth.com/mod/life-series"); //Same as having a text with a click event, but that doesnt work in GUIs
+        this.addRenderableWidget(
+                Button.builder(Component.literal("Download on Modrinth"), btn -> {
+                            this.onClose();
+                            Util.getPlatform().openUri("https://modrinth.com/mod/life-series"); //Same as having a text with a click event, but that doesnt work in GUIs
                         })
-                        .position(centerX - 85, endY - 25)
+                        .pos(centerX - 85, endY - 25)
                         .size(170, 20)
                         .build()
         );
-        dismissButton = this.addDrawableChild(
-                ButtonWidget.builder(dismissText, btn -> {
+        dismissButton = this.addRenderableWidget(
+                Button.builder(dismissText, btn -> {
                             MainClient.clientConfig.setProperty("ignore_update", String.valueOf(UpdateChecker.version));
-                            this.close();
+                            this.onClose();
                         })
-                        .position(endX - textWidth/2-40, startY - 20)
+                        .pos(endX - textWidth/2-40, startY - 20)
                         .size(textWidth, 16)
                         .build()
         );
     }
 
     @Override
-    public void renderBackground(DrawContext context, int mouseX, int mouseY) {
+    public void renderBackground(GuiGraphics context, int mouseX, int mouseY) {
         if (isInCheckboxRegion(mouseX, mouseY)) {
             context.fill(endX - textWidth/2-3-40, startY - 23, endX + textWidth/2+3-40, startY, TextColors.BLACK);
             context.fill(endX - textWidth/2-2-40, startY - 22, endX + textWidth/2+2-40, startY - 1, TextColors.GUI_BACKGROUND);
@@ -83,9 +83,9 @@ public class UpdateInfoScreen extends DefaultScreen {
         super.renderBackground(context, mouseX, mouseY);
     }
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY) {
-        RenderUtils.drawTextCenter(context, this.textRenderer, Text.of("§0§nA new Life Series mod update is available!"), centerX, startY + 7);
-        RenderUtils.drawTextLeft(context, this.textRenderer, TextUtils.formatLoosely("§0§nChangelog in version §l{}§0:",versionName), startX + 7, startY + 25 + textRenderer.fontHeight);
-        RenderUtils.drawTextLeftWrapLines(context, this.textRenderer, DEFAULT_TEXT_COLOR, Text.of(description), startX + 7, startY + 30 + textRenderer.fontHeight*2, backgroundWidth-14, 5);
+    public void render(GuiGraphics context, int mouseX, int mouseY) {
+        RenderUtils.drawTextCenter(context, this.font, Component.nullToEmpty("§0§nA new Life Series mod update is available!"), centerX, startY + 7);
+        RenderUtils.drawTextLeft(context, this.font, TextUtils.formatLoosely("§0§nChangelog in version §l{}§0:",versionName), startX + 7, startY + 25 + font.lineHeight);
+        RenderUtils.drawTextLeftWrapLines(context, this.font, DEFAULT_TEXT_COLOR, Component.nullToEmpty(description), startX + 7, startY + 30 + font.lineHeight*2, backgroundWidth-14, 5);
     }
 }

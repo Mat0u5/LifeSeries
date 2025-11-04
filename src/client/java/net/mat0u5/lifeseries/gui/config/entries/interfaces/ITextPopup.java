@@ -1,25 +1,25 @@
 package net.mat0u5.lifeseries.gui.config.entries.interfaces;
 
 import net.mat0u5.lifeseries.utils.TextColors;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
 
 public interface ITextPopup extends IPopup {
-    TextRenderer getTextRenderer();
-    Text getPopupText();
+    Font getTextRenderer();
+    Component getPopupText();
     default int getPopupWidth() {
-        return getTextRenderer().getWidth(getPopupText())+1;
+        return getTextRenderer().width(getPopupText())+1;
     }
 
     default int getPopupHeight() {
-        return getTextRenderer().fontHeight;
+        return getTextRenderer().lineHeight;
     }
 
-    default void renderContent(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, float tickDelta) {
-        TextRenderer textRenderer = getTextRenderer();
-        Text popupText = getPopupText();
+    default void renderContent(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, float tickDelta) {
+        Font textRenderer = getTextRenderer();
+        Component popupText = getPopupText();
         if (popupText == null) return;
-        context.drawText(textRenderer, popupText, x+1, y+1, TextColors.LIGHT_GRAY, false);
+        context.drawString(textRenderer, popupText, x+1, y+1, TextColors.LIGHT_GRAY, false);
     }
 }

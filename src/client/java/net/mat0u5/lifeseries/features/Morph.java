@@ -3,15 +3,10 @@ package net.mat0u5.lifeseries.features;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.interfaces.IMorph;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.entity.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Items;
-import net.minecraft.util.Hand;
-
-import java.util.UUID;
-//? if >= 1.21.2
-/*import net.minecraft.entity.SpawnReason;*/
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
 
 
 public class Morph {
@@ -24,7 +19,7 @@ public class Morph {
         LivingEntity dummy = morphComponent.dummy;
 
         if(morphComponent.isMorphed() && morph != null){
-            PlayerEntity player = ClientUtils.getPlayer(morphComponent.playerUUID);
+            Player player = ClientUtils.getPlayer(morphComponent.playerUUID);
             if (player == null) return;
 
             boolean isHorse = morph == EntityType.HORSE || morph == EntityType.SKELETON_HORSE || morph == EntityType.ZOMBIE_HORSE;
@@ -34,11 +29,9 @@ public class Morph {
 
             if (dummy == null || dummy.getType() != morph) {
                 //? if <= 1.21 {
-                Entity entity = morph.create(player.getWorld());
-                //?} else if <= 1.21.6 {
-                /*Entity entity = morph.create(player.getWorld(), SpawnReason.COMMAND);
-                *///?} else {
-                /*Entity entity = morph.create(player.getEntityWorld(), SpawnReason.COMMAND);
+                Entity entity = morph.create(player.level());
+                //?} else {
+                /*Entity entity = morph.create(player.level(), EntitySpawnReason.COMMAND);
                 *///?}
                 if (entity != null) ((IMorph) entity).setFromMorph(true);
                 if(!(entity instanceof LivingEntity)){
@@ -47,98 +40,71 @@ public class Morph {
                 }
                 dummy = (LivingEntity) entity;
             }
-            //? if <= 1.21.4 {
-            dummy.prevX = player.prevX;
-            dummy.prevY = player.prevY;
-            dummy.prevZ = player.prevZ;
-            dummy.prevBodyYaw = player.prevBodyYaw;
+            dummy.xo = player.xo;
+            dummy.yo = player.yo;
+            dummy.zo = player.zo;
+            dummy.yBodyRotO = player.yBodyRotO;
             if (!fixedHead) {
-                dummy.prevHeadYaw = player.prevHeadYaw;
+                dummy.yHeadRotO = player.yHeadRotO;
             }
             else {
-                dummy.prevHeadYaw = player.prevBodyYaw;
+                dummy.yHeadRotO = player.yBodyRotO;
             }
 
             if (!clampedPitch) {
-                dummy.prevPitch = player.prevPitch;
+                dummy.xRotO = player.xRotO;
             }
             else {
-                dummy.prevPitch = Math.clamp(player.prevPitch, -28, 28);
+                dummy.xRotO = Math.clamp(player.xRotO, -28, 28);
             }
-            if (reversePitch) dummy.prevPitch *= -1;
-            //?} else {
-            /*dummy.lastX = player.lastX;
-            dummy.lastY = player.lastY;
-            dummy.lastZ = player.lastZ;
-            dummy.lastBodyYaw = player.lastBodyYaw;
-            if (!fixedHead) {
-                dummy.lastHeadYaw = player.lastHeadYaw;
-            }
-            else {
-                dummy.lastHeadYaw = player.lastBodyYaw;
-            }
-
-            if (!clampedPitch) {
-                dummy.lastPitch = player.lastPitch;
-            }
-            else {
-                dummy.lastPitch = Math.clamp(player.lastPitch, -28, 28);
-            }
-            if (reversePitch) dummy.lastPitch *= -1;
-            *///?}
+            if (reversePitch) dummy.xRotO *= -1;
 
             //Some math to synchronize the morph limbs with the player limbs
-            //? if <= 1.21.4 {
-            float prevPlayerSpeed = (player.limbAnimator.getSpeed(-1)+player.limbAnimator.getSpeed())/2;
-            //?} else {
-            /*float prevPlayerSpeed = (player.limbAnimator.getAmplitude(-1)+player.limbAnimator.getSpeed())/2;
-             *///?}
-            dummy.limbAnimator.setSpeed(prevPlayerSpeed);
+            float prevPlayerSpeed = (player.walkAnimation.speed(-1)+player.walkAnimation.speed())/2;
+            dummy.walkAnimation.setSpeed(prevPlayerSpeed);
             //? if <= 1.21 {
-            dummy.limbAnimator.updateLimbs(player.limbAnimator.getPos() - dummy.limbAnimator.getPos(), 1);
-            //?} else if <= 1.21.4 {
-            /*dummy.limbAnimator.updateLimbs(player.limbAnimator.getPos() - dummy.limbAnimator.getPos(), 1, 1);
-             *///?} else {
-            /*dummy.limbAnimator.updateLimbs(player.limbAnimator.getAnimationProgress() - dummy.limbAnimator.getAnimationProgress(), 1, 1);
+            dummy.walkAnimation.update(player.walkAnimation.position() - dummy.walkAnimation.position(), 1);
+            //?} else {
+            /*dummy.walkAnimation.update(player.walkAnimation.position() - dummy.walkAnimation.position(), 1, 1);
              *///?}
-            dummy.limbAnimator.setSpeed(player.limbAnimator.getSpeed());
+            dummy.walkAnimation.setSpeed(player.walkAnimation.speed());
 
-            dummy.lastHandSwingProgress = player.lastHandSwingProgress;
-            dummy.handSwingProgress = player.handSwingProgress;
-            dummy.handSwinging = player.handSwinging;
-            dummy.handSwingTicks = player.handSwingTicks;
+            dummy.oAttackAnim = player.oAttackAnim;
+            dummy.attackAnim = player.attackAnim;
+            dummy.swinging = player.swinging;
+            dummy.swingTime = player.swingTime;
 
-            dummy.lastRenderX = player.lastRenderX;
-            dummy.lastRenderY = player.lastRenderY;
-            dummy.lastRenderZ = player.lastRenderZ;
+            dummy.xOld = player.xOld;
+            dummy.yOld = player.yOld;
+            dummy.zOld = player.zOld;
 
-            dummy.setPosition(player.ls$getEntityPos());
-            dummy.setBodyYaw(player.bodyYaw);
+            dummy.setPos(player.position());
+            dummy.setYBodyRot(player.yBodyRot);
             if (!fixedHead) {
-                dummy.setHeadYaw(player.headYaw);
+                dummy.setYHeadRot(player.yHeadRot);
             }
             else {
-                dummy.setHeadYaw(player.bodyYaw);
+                dummy.setYHeadRot(player.yBodyRot);
             }
 
             if (!clampedPitch) {
-                dummy.setPitch(player.getPitch());
+                dummy.setXRot(player.getXRot());
             }
             else {
-                dummy.setPitch(Math.clamp(player.getPitch(), -28, 28));
+                dummy.setXRot(Math.clamp(player.getXRot(), -28, 28));
             }
-            if (reversePitch) dummy.setPitch(dummy.getPitch() * -1);
+            if (reversePitch) dummy.setXRot(dummy.getXRot() * -1);
 
-            dummy.setSneaking(player.isSneaking());
-            dummy.age = player.age;
-            dummy.setOnGround(player.isOnGround());
+            dummy.setShiftKeyDown(player.isShiftKeyDown());
+            dummy.tickCount = player.tickCount;
+            dummy.setOnGround(player.onGround());
 
             for (EquipmentSlot slot : EquipmentSlot.values()) {
-                dummy.equipStack(slot, showArmor ? player.getEquippedStack(slot) : Items.AIR.getDefaultStack());
+                dummy.setItemSlot(slot, showArmor ? player.getItemBySlot(slot) : Items.AIR.getDefaultInstance());
             }
 
-            for (Hand hand : Hand.values()) {
-                dummy.setStackInHand(hand, showHandItems ? player.getStackInHand(hand) : Items.AIR.getDefaultStack());
+            for (InteractionHand hand : InteractionHand.values()) {
+                dummy.setItemInHand(hand, showHandItems ? player.getItemInHand(hand) : Items.AIR.getDefaultInstance());
             }
 
             dummy.setPose(player.getPose());

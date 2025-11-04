@@ -2,23 +2,20 @@ package net.mat0u5.lifeseries.entity.triviabot.server;
 
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.control.MoveControl;
-import net.minecraft.entity.ai.pathing.MobNavigation;
-import net.minecraft.entity.ai.pathing.Path;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RaycastContext;
+import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 public class TriviaBotPathfinding {
@@ -29,27 +26,27 @@ public class TriviaBotPathfinding {
     public boolean navigationInit = false;
 
     public void tick() {
-        if (bot.age % 5 == 0) {
+        if (bot.tickCount % 5 == 0) {
             bot.pathfinding.updateNavigationTarget();
         }
-        if (bot.age % 100 == 0 || !navigationInit) {
+        if (bot.tickCount % 100 == 0 || !navigationInit) {
             navigationInit = true;
             updateNavigation();
         }
     }
 
     public void fakeTeleportToPlayer() {
-        if (bot.getBotWorld().isClient()) return;
-        ServerPlayerEntity boundPlayer = bot.serverData.getBoundPlayer();
+        if (bot.level().isClientSide()) return;
+        ServerPlayer boundPlayer = bot.serverData.getBoundPlayer();
         Entity boundEntity = bot.serverData.getBoundEntity();
         if (boundEntity == null) return;
-        if (bot.getBotWorld() instanceof ServerWorld world) {
-            if (boundEntity.ls$getEntityWorld() instanceof ServerWorld entityWorld) {
+        if (bot.level() instanceof ServerLevel level) {
+            if (boundEntity.level() instanceof ServerLevel entityWorld) {
                 BlockPos tpTo = getBlockPosNearTarget(boundEntity,5);
-                world.playSound(null, bot.getX(), bot.getY(), bot.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, bot.getSoundCategory(), bot.soundVolume(), bot.getSoundPitch());
-                entityWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, bot.getSoundCategory(), bot.soundVolume(), bot.getSoundPitch());
-                AnimationUtils.spawnTeleportParticles(world, bot.ls$getEntityPos());
-                AnimationUtils.spawnTeleportParticles(world, tpTo.toCenterPos());
+                level.playSound(null, bot.getX(), bot.getY(), bot.getZ(), SoundEvents.PLAYER_TELEPORT, bot.getSoundSource(), bot.soundVolume(), bot.getVoicePitch());
+                entityWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.PLAYER_TELEPORT, bot.getSoundSource(), bot.soundVolume(), bot.getVoicePitch());
+                AnimationUtils.spawnTeleportParticles(level, bot.position());
+                AnimationUtils.spawnTeleportParticles(level, tpTo.getCenter());
                 bot.serverData.despawn();
                 TriviaWildcard.spawnBotFor(boundPlayer, tpTo);
             }
@@ -58,48 +55,53 @@ public class TriviaBotPathfinding {
 
     public static BlockPos getBlockPosNearPlayer(Entity target, BlockPos targetPos, double distanceFromTarget) {
         if (target == null) return targetPos;
-        return WorldUtils.getCloseBlockPos(target.ls$getEntityWorld(), targetPos, distanceFromTarget, 2, false);
+        return LevelUtils.getCloseBlockPos(target.level(), targetPos, distanceFromTarget, 2, false);
     }
 
     public BlockPos getBlockPosNearTarget(Entity target, double distanceFromTarget) {
         if (target == null) return null;
-        Vec3d targetPos = bot.serverData.getPlayerPos();
+        Vec3 targetPos = bot.serverData.getPlayerPos();
         if (targetPos == null) return null;
-        BlockPos targetBlockPos = BlockPos.ofFloored(targetPos.x, targetPos.y, targetPos.z);
-        return WorldUtils.getCloseBlockPos(target.ls$getEntityWorld(), targetBlockPos, distanceFromTarget, 2, false);
+        BlockPos targetBlockPos = BlockPos.containing(targetPos.x, targetPos.y, targetPos.z);
+        return LevelUtils.getCloseBlockPos(target.level(), targetBlockPos, distanceFromTarget, 2, false);
     }
 
 
     public void updateNavigation() {
         bot.setMoveControl(new MoveControl(bot));
-        bot.setNavigation(new MobNavigation(bot, bot.getBotWorld()));
+        bot.setNavigation(new GroundPathNavigation(bot, bot.level()));
         updateNavigationTarget();
     }
 
     public void updateNavigationTarget() {
-        Vec3d targetPos = bot.serverData.getPlayerPos();
+        Vec3 targetPos = bot.serverData.getPlayerPos();
         if (bot.interactedWith() ||!bot.serverData.shouldPathfind() || targetPos == null ||
-                bot.squaredDistanceTo(targetPos) > (TriviaBot.MAX_DISTANCE*TriviaBot.MAX_DISTANCE)) {
+                bot.distanceToSqr(targetPos) > (TriviaBot.MAX_DISTANCE*TriviaBot.MAX_DISTANCE)) {
             bot.getNavigation().stop();
             return;
         }
 
-        bot.getNavigation().setSpeed(TriviaBot.MOVEMENT_SPEED);
-        Path path = bot.getNavigation().findPathTo(targetPos.x, targetPos.y, targetPos.z, 3);
-        if (path != null) bot.getNavigation().startMovingAlong(path, TriviaBot.MOVEMENT_SPEED);
+        bot.getNavigation().setSpeedModifier(TriviaBot.MOVEMENT_SPEED);
+        Path path = bot.getNavigation().createPath(targetPos.x, targetPos.y, targetPos.z, 3);
+        if (path != null) bot.getNavigation().moveTo(path, TriviaBot.MOVEMENT_SPEED);
     }
 
     @Nullable
     public BlockPos getGroundBlock() {
-        Vec3d startPos = bot.ls$getEntityPos();
-        Vec3d endPos = startPos.add(0, bot.getBotWorld().getBottomY(), 0);
+        Vec3 startPos = bot.position();
+        //? if <= 1.21 {
+        int minY = bot.level().getMinBuildHeight();
+        //?} else {
+        /*int minY = bot.level().getMinY();
+        *///?}
+        Vec3 endPos = startPos.add(0, minY, 0);
 
-        BlockHitResult result = bot.getBotWorld().raycast(
-                new RaycastContext(
+        BlockHitResult result = bot.level().clip(
+                new ClipContext(
                         startPos,
                         endPos,
-                        RaycastContext.ShapeType.COLLIDER,
-                        RaycastContext.FluidHandling.NONE,
+                        ClipContext.Block.COLLIDER,
+                        ClipContext.Fluid.NONE,
                         bot
                 )
         );

@@ -5,16 +5,15 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.AstralProjection;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
 
 public interface PlayerBoundEntity {
-    void onSetPlayer(ServerPlayerEntity player);
+    void onSetPlayer(ServerPlayer player);
     UUID getBoundPlayerUUID();
     void setBoundPlayerUUID(UUID uuid);
     boolean shouldPathfind();
@@ -25,13 +24,13 @@ public interface PlayerBoundEntity {
         return true;
     }
 
-    default void setBoundPlayer(ServerPlayerEntity player) {
+    default void setBoundPlayer(ServerPlayer player) {
         if (player == null) return;
-        setBoundPlayerUUID(player.getUuid());
+        setBoundPlayerUUID(player.getUUID());
         onSetPlayer(player);
     }
 
-    default ServerPlayerEntity getBoundPlayer() {
+    default ServerPlayer getBoundPlayer() {
         if (Main.isLogicalSide()) {
             return PlayerUtils.getPlayer(getBoundPlayerUUID());
         }
@@ -40,7 +39,7 @@ public interface PlayerBoundEntity {
 
     default LivingEntity getBoundEntity() {
         if (Main.isLogicalSide()) {
-            ServerPlayerEntity player = PlayerUtils.getPlayer(getBoundPlayerUUID());
+            ServerPlayer player = PlayerUtils.getPlayer(getBoundPlayerUUID());
             if (player != null) {
                 if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.ASTRAL_PROJECTION)) {
                     if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof AstralProjection astralProjection) {
@@ -55,11 +54,11 @@ public interface PlayerBoundEntity {
         return null;
     }
 
-    default Vec3d getPlayerPos() {
+    default Vec3 getPlayerPos() {
         if (!Main.isLogicalSide()) return null;
         Entity entity = getBoundEntity();
         if (entity != null) {
-            return entity.ls$getEntityPos();
+            return entity.position();
         }
         return null;
     }

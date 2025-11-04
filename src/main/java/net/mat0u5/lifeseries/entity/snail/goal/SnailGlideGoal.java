@@ -1,9 +1,8 @@
 package net.mat0u5.lifeseries.entity.snail.goal;
 
 import net.mat0u5.lifeseries.entity.snail.Snail;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 public final class SnailGlideGoal extends Goal {
@@ -19,8 +18,8 @@ public final class SnailGlideGoal extends Goal {
     }
 
     @Override
-    public boolean canStart() {
-        if (mob.getSnailWorld().isClient()) return false;
+    public boolean canUse() {
+        if (mob.level().isClientSide()) return false;
         if (mob.isSnailGliding()) {
             return true;
         }
@@ -29,7 +28,7 @@ public final class SnailGlideGoal extends Goal {
             return false;
         }
 
-        if (mob.getVelocity().y >= 0 || mob.isOnGround() || mob.isSnailFlying()) {
+        if (mob.getDeltaMovement().y >= 0 || mob.onGround() || mob.isSnailFlying()) {
             return false;
         }
 
@@ -52,7 +51,7 @@ public final class SnailGlideGoal extends Goal {
     }
 
     @Override
-    public boolean shouldContinue() {
+    public boolean canContinueToUse() {
         boolean canWalk = mob.pathfinding.canPathToPlayer(false);
         if (!canWalk) {
             mob.setSnailFlying(true);
@@ -75,13 +74,13 @@ public final class SnailGlideGoal extends Goal {
     }
 
     private void glideToPlayer() {
-        Vec3d targetPos = mob.serverData.getPlayerPos();
+        Vec3 targetPos = mob.serverData.getPlayerPos();
         if (targetPos == null) {
             return;
         }
 
-        Vec3d directionToTarget = targetPos.subtract(mob.ls$getEntityPos()).normalize();
-        float speedMultiplier = mob.getMovementSpeed() / 2;
-        mob.setVelocity(directionToTarget.x * speedMultiplier, -0.1, directionToTarget.z * speedMultiplier);
+        Vec3 directionToTarget = targetPos.subtract(mob.position()).normalize();
+        float speedMultiplier = mob.getSpeed() / 2;
+        mob.setDeltaMovement(directionToTarget.x * speedMultiplier, -0.1, directionToTarget.z * speedMultiplier);
     }
 }

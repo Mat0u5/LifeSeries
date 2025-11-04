@@ -11,9 +11,9 @@ import net.mat0u5.lifeseries.utils.other.WeightedRandomizer;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;
 
@@ -25,12 +25,12 @@ public class TestingCommands extends Command {
     }
 
     @Override
-    public Text getBannedText() {
-        return Text.of("This command is only available when playing a dev version.");
+    public Component getBannedText() {
+        return Component.nullToEmpty("This command is only available when playing a dev version.");
     }
 
     @Override
-    public void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+    public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         if (VersionControl.isDevVersion()) {
             dispatcher.register(
                 literal("ls")
@@ -57,25 +57,25 @@ public class TestingCommands extends Command {
 
     }
 
-    public int test(ServerCommandSource source) {
+    public int test(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        ServerPlayerEntity player = source.getPlayer();
+        ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
         TaskScheduler.scheduleTask(1, () -> {
-            List<ServerPlayerEntity> test = List.of(player);
+            List<ServerPlayer> test = List.of(player);
             test.removeFirst();//Will cause an error
         });
 
         return 1;
     }
 
-    public int test1(ServerCommandSource source) {
+    public int test1(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        ServerPlayerEntity player = source.getPlayer();
+        ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Test Command 1"));
+        OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("Test Command 1"));
 
         OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Test0: {}", AdvancedDeathsManager.getRandomDeaths(player, 0)));
         OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Test1: {}", AdvancedDeathsManager.getRandomDeaths(player, 1)));
@@ -89,23 +89,23 @@ public class TestingCommands extends Command {
         return 1;
     }
 
-    public int test2(ServerCommandSource source) {
+    public int test2(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        ServerPlayerEntity player = source.getPlayer();
+        ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Test Command 2"));
+        OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("Test Command 2"));
         OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Test: {}", PlayerUtils.getAllPlayers()));
 
         return 1;
     }
 
-    public int test3(ServerCommandSource source) {
+    public int test3(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        ServerPlayerEntity player = source.getPlayer();
+        ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Test Command 3"));
+        OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("Test Command 3"));
 
         System.out.println("=== Original Example: Range 0-9, Lives 1-3 ===");
         WeightedRandomizer randomizer = new WeightedRandomizer();
@@ -123,7 +123,7 @@ public class TestingCommands extends Command {
         return 1;
     }
 
-    public int spawnPlayers(ServerCommandSource source, int amount) {
+    public int spawnPlayers(CommandSourceStack source, int amount) {
         if (checkBanned(source)) return -1;
         for (int i = 1; i <= amount; i++) {
             OtherUtils.executeCommand(TextUtils.formatString("player Test{} spawn in survival", i));
