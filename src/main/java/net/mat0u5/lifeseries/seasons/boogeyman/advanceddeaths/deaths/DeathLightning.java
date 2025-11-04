@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.deaths;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeath;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeaths;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
+import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class DeathLightning extends AdvancedDeath {
     private Random rnd = new Random();
-    private ServerLevel world;
+    private ServerLevel level;
     public DeathLightning(ServerPlayer player) {
         super(player);
     }
@@ -35,34 +35,34 @@ public class DeathLightning extends AdvancedDeath {
 
     @Override
     protected void tick(ServerPlayer player) {
-        ServerLevel world = PlayerUtils.getServerWorld(player);
+        ServerLevel level = player.ls$getServerLevel();
         if (ticks > 160) {
-            WorldUtils.summonHarmlessLightning(player);
+            LevelUtils.summonHarmlessLightning(player);
             PlayerUtils.killFromSource(player, player.damageSources().lightningBolt());
         }
         else if (ticks > 80) {
             int distanceFromTarget = rnd.nextInt(15, 100);
             Vec3 offset = new Vec3(
-                    world.random.nextDouble() * 2 - 1,
+                    level.random.nextDouble() * 2 - 1,
                     0,
-                    world.random.nextDouble() * 2 - 1
+                    level.random.nextDouble() * 2 - 1
             ).normalize().scale(distanceFromTarget);
 
             Vec3 pos = player.position().add(offset.x(), 0, offset.z());
-            Vec3 lightningPos = new Vec3(pos.x, WorldUtils.findTopSafeY(world, pos), pos.z);
-            WorldUtils.summonHarmlessLightning(world, lightningPos);
+            Vec3 lightningPos = new Vec3(pos.x, LevelUtils.findTopSafeY(level, pos), pos.z);
+            LevelUtils.summonHarmlessLightning(level, lightningPos);
         }
     }
 
     @Override
     protected void begin(ServerPlayer player) {
-        world = PlayerUtils.getServerWorld(player);
-        world.setWeatherParameters(0, 200, true, true);
+        level = player.ls$getServerLevel();
+        level.setWeatherParameters(0, 200, true, true);
     }
 
     @Override
     protected void end() {
-        if (world == null) return;
-        world.setWeatherParameters(12000, 0, false, false);
+        if (level == null) return;
+        level.setWeatherParameters(12000, 0, false, false);
     }
 }

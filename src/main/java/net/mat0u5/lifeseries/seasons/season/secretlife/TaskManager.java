@@ -195,7 +195,7 @@ public class TaskManager {
         }
         ItemStack book = getTaskBook(player, task);
         if (!player.addItem(book)) {
-            ItemStackUtils.spawnItemForPlayer(PlayerUtils.getServerWorld(player), player.position(), book, player);
+            ItemStackUtils.spawnItemForPlayer(player.ls$getServerLevel(), player.position(), book, player);
         }
         assignedTasks.put(player.getUUID(), task);
     }
@@ -633,9 +633,9 @@ public class TaskManager {
         return true;
     }
 
-    public static void onBlockUse(ServerPlayer player, ServerLevel world, BlockHitResult hitResult) {
+    public static void onBlockUse(ServerPlayer player, ServerLevel level, BlockHitResult hitResult) {
         BlockPos pos = hitResult.getBlockPos();
-        String name = world.getBlockState(pos).getBlock().getName().getString().toLowerCase();
+        String name = level.getBlockState(pos).getBlock().getName().getString().toLowerCase();
         if (name.contains("button")) {
             if (searchingForLocations) {
                 positionFound(pos, true);
@@ -656,10 +656,10 @@ public class TaskManager {
         if (successButtonPos == null || rerollButtonPos == null || failButtonPos == null) return;
         BlockPos placePos = pos.relative(hitResult.getDirection());
         TaskScheduler.scheduleTask(1, () -> {
-            String name2 = world.getBlockState(placePos).getBlock().getName().getString().toLowerCase();
+            String name2 = level.getBlockState(placePos).getBlock().getName().getString().toLowerCase();
             if (name2.contains("bedrock")) {
                 positionFound(placePos, false);
-                world.destroyBlock(placePos, false);
+                level.destroyBlock(placePos, false);
             }
         });
     }

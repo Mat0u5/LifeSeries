@@ -22,7 +22,7 @@ public final class SnailBlockInteractGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (mob.getSnailWorld().isClientSide()) return false;
+        if (mob.level().isClientSide()) return false;
         if (mob.isPaused()) return false;
 
         BlockPos blockPos = mob.blockPosition();
@@ -61,7 +61,7 @@ public final class SnailBlockInteractGoal extends Goal {
     }
 
     private BlockState getBlockState(BlockPos blockPos) {
-        Level world = mob.level();
-        return world.getBlockState(blockPos);
+        Level level = mob.level();
+        return level.getBlockState(blockPos);
     }
 }

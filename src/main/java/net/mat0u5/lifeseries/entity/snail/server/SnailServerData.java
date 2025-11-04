@@ -66,7 +66,7 @@ public class SnailServerData implements PlayerBoundEntity {
 
     @Override
     public boolean shouldPathfind() {
-        if (snail.getSnailWorld().isClientSide()) return false;
+        if (snail.level().isClientSide()) return false;
         ServerPlayer player = getBoundPlayer();
         if (player == null) return false;
         if (player.isCreative()) return false;
@@ -93,7 +93,7 @@ public class SnailServerData implements PlayerBoundEntity {
     }
 
     public void tick() {
-        if (snail.getSnailWorld().isClientSide()) return;
+        if (snail.level().isClientSide()) return;
         snail.pathfinding.tick();
         if (despawnChecks()) return;
         ServerPlayer boundPlayer = getBoundPlayer();
@@ -173,11 +173,11 @@ public class SnailServerData implements PlayerBoundEntity {
     }
 
     public void chunkLoading() {
-        if (snail.getSnailWorld() instanceof ServerLevel world) {
+        if (snail.level() instanceof ServerLevel level) {
             //? if <= 1.21.4 {
-            world.getChunkSource().addRegionTicket(TicketType.PORTAL, new ChunkPos(snail.blockPosition()), 2, snail.blockPosition());
+            level.getChunkSource().addRegionTicket(TicketType.PORTAL, new ChunkPos(snail.blockPosition()), 2, snail.blockPosition());
             //?} else {
-            /*world.getChunkSource().addTicketWithRadius(TicketType.PORTAL, new ChunkPos(snail.blockPosition()), 2);
+            /*level.getChunkSource().addTicketWithRadius(TicketType.PORTAL, new ChunkPos(snail.blockPosition()), 2);
              *///?}
         }
     }
@@ -188,11 +188,11 @@ public class SnailServerData implements PlayerBoundEntity {
             TriviaWildcard.bots.remove(boundPlayerUUID);
         }
         snail.pathfinding.killPathFinders();
-        if (snail.getSnailWorld() instanceof ServerLevel world) {
+        if (snail.level() instanceof ServerLevel level) {
             //? if <= 1.21 {
             snail.kill();
             //?} else {
-            /*snail.kill(world);
+            /*snail.kill(level);
              *///?}
         }
         snail.discard();
@@ -220,38 +220,38 @@ public class SnailServerData implements PlayerBoundEntity {
     }
 
     public void killBoundEntity(Entity entity) {
-        Level world = entity.level();
-        if (world instanceof ServerLevel serverWorld) {
+        Level level = entity.level();
+        if (level instanceof ServerLevel serverLevel) {
             if (entity instanceof ServerPlayer player) {
                 player.setLastHurtByMob(snail);
             }
             //? if <=1.21 {
-            DamageSource damageSource = new DamageSource(serverWorld.registryAccess()
+            DamageSource damageSource = new DamageSource(serverLevel.registryAccess()
                     .registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(SNAIL_DAMAGE));
             entity.hurt(damageSource, 1000);
             //?} else {
-            /*DamageSource damageSource = new DamageSource(serverWorld.registryAccess()
+            /*DamageSource damageSource = new DamageSource(serverLevel.registryAccess()
                     .lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(SNAIL_DAMAGE));
-            entity.hurtServer(serverWorld, damageSource, 1000);
+            entity.hurtServer(serverLevel, damageSource, 1000);
             *///?}
         }
     }
 
     public void damageFromDrowning(Entity entity) {
         if (!entity.isAlive()) return;
-        Level world = entity.level();
-        if (world instanceof ServerLevel serverWorld) {
+        Level level = entity.level();
+        if (level instanceof ServerLevel serverLevel) {
             if (entity instanceof ServerPlayer player) {
                 player.setLastHurtByMob(snail);
             }
             //? if <=1.21 {
-            DamageSource damageSource = new DamageSource(serverWorld.registryAccess()
+            DamageSource damageSource = new DamageSource(serverLevel.registryAccess()
                     .registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.DROWN));
             entity.hurt(damageSource, 2);
             //?} else {
-            /*DamageSource damageSource = new DamageSource(serverWorld.registryAccess()
+            /*DamageSource damageSource = new DamageSource(serverLevel.registryAccess()
                     .lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.DROWN));
-            entity.hurtServer(serverWorld, damageSource, 2);
+            entity.hurtServer(serverLevel, damageSource, 2);
             *///?}
             if (!entity.isAlive() && entity instanceof ServerPlayer) {
                 despawn();

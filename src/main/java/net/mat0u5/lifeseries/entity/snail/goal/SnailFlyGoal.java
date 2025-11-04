@@ -21,7 +21,7 @@ public class SnailFlyGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (mob.getSnailWorld().isClientSide()) return false;
+        if (mob.level().isClientSide()) return false;
         if (mob.isPaused()) return false;
         if (!mob.isSnailFlying() || mob.isSnailGliding()) {
             return false;

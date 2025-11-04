@@ -6,7 +6,7 @@ import net.mat0u5.lifeseries.entity.snail.goal.MiningNavigation;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
+import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -67,13 +67,13 @@ public class SnailPathfinding {
     }
 
     public void updatePathFinders() {
-        if (snail.getSnailWorld().isClientSide()) return;
+        if (snail.level().isClientSide()) return;
         if (pathFinder != null && pathFinder.touchingUnloadedChunk()) {
             pathFinder.discard();
             pathFinder = null;
         }
         else if (pathFinder == null || pathFinder.isRemoved()) {
-            pathFinder = WorldUtils.spawnEntity(MobRegistry.PATH_FINDER, (ServerLevel) snail.getSnailWorld(), snail.blockPosition());
+            pathFinder = LevelUtils.spawnEntity(MobRegistry.PATH_FINDER, (ServerLevel) snail.level(), snail.blockPosition());
         }
         else {
             pathFinder.resetDespawnTimer();
@@ -84,28 +84,28 @@ public class SnailPathfinding {
             groundPathFinder = null;
         }
         else if (groundPathFinder == null || groundPathFinder.isRemoved()) {
-            groundPathFinder = WorldUtils.spawnEntity(MobRegistry.PATH_FINDER, (ServerLevel) snail.getSnailWorld(), snail.blockPosition());
+            groundPathFinder = LevelUtils.spawnEntity(MobRegistry.PATH_FINDER, (ServerLevel) snail.level(), snail.blockPosition());
         }
         else {
             groundPathFinder.resetDespawnTimer();
         }
 
-        ServerLevel world = (ServerLevel) snail.getSnailWorld();
+        ServerLevel level = (ServerLevel) snail.level();
         //? if <= 1.21 {
-        if (pathFinder != null) pathFinder.teleportTo(world, snail.getX(), snail.getY(), snail.getZ(), EnumSet.noneOf(RelativeMovement.class), snail.getYRot(), snail.getXRot());
+        if (pathFinder != null) pathFinder.teleportTo(level, snail.getX(), snail.getY(), snail.getZ(), EnumSet.noneOf(RelativeMovement.class), snail.getYRot(), snail.getXRot());
         BlockPos pos = getGroundBlock();
         if (pos == null) return;
-        if (groundPathFinder != null) groundPathFinder.teleportTo(world, snail.getX(), pos.getY() + 1.0, snail.getZ(), EnumSet.noneOf(RelativeMovement.class), snail.getYRot(), snail.getXRot());
+        if (groundPathFinder != null) groundPathFinder.teleportTo(level, snail.getX(), pos.getY() + 1.0, snail.getZ(), EnumSet.noneOf(RelativeMovement.class), snail.getYRot(), snail.getXRot());
         //?} else {
-        /*if (pathFinder != null) pathFinder.teleportTo(world, snail.getX(), snail.getY(), snail.getZ(), EnumSet.noneOf(Relative.class), snail.getYRot(), snail.getXRot(), false);
+        /*if (pathFinder != null) pathFinder.teleportTo(level, snail.getX(), snail.getY(), snail.getZ(), EnumSet.noneOf(Relative.class), snail.getYRot(), snail.getXRot(), false);
         BlockPos pos = getGroundBlock();
         if (pos == null) return;
-        if (groundPathFinder != null) groundPathFinder.teleportTo(world, snail.getX(), pos.getY()+1, snail.getZ(), EnumSet.noneOf(Relative.class), snail.getYRot(), snail.getXRot(), false);
+        if (groundPathFinder != null) groundPathFinder.teleportTo(level, snail.getX(), pos.getY()+1, snail.getZ(), EnumSet.noneOf(Relative.class), snail.getYRot(), snail.getXRot(), false);
         *///?}
     }
 
     public void killPathFinders() {
-        if (!snail.getSnailWorld().isClientSide()) {
+        if (!snail.level().isClientSide()) {
             //? if <= 1.21 {
             if (groundPathFinder != null) groundPathFinder.kill();
             if (pathFinder != null) pathFinder.kill();
@@ -122,13 +122,13 @@ public class SnailPathfinding {
     public BlockPos getGroundBlock() {
         Vec3 startPos = snail.position();
         //? if <= 1.21 {
-        int minY = snail.getSnailWorld().getMinBuildHeight();
+        int minY = snail.level().getMinBuildHeight();
         //?} else {
-        /*int minY = snail.getSnailWorld().getMinY();
+        /*int minY = snail.level().getMinY();
         *///?}
         Vec3 endPos = new Vec3(startPos.x(), minY, startPos.z());
 
-        BlockHitResult result = snail.getSnailWorld().clip(
+        BlockHitResult result = snail.level().clip(
                 new ClipContext(
                         startPos,
                         endPos,
@@ -148,16 +148,16 @@ public class SnailPathfinding {
     }
 
     public void fakeTeleportNearPlayer(double minDistanceFromPlayer) {
-        if (snail.getSnailWorld() instanceof ServerLevel world) {
+        if (snail.level() instanceof ServerLevel level) {
             Entity boundEntity = snail.serverData.getBoundEntity();
             ServerPlayer boundPlayer = snail.serverData.getBoundPlayer();
             if (boundEntity == null || boundPlayer == null) return;
             if (boundEntity.level() instanceof ServerLevel entityWorld) {
                 if (!snail.serverData.shouldPathfind()) return;
                 BlockPos tpTo = getBlockPosNearTarget(boundEntity, minDistanceFromPlayer);
-                world.playSound(null, snail.getX(), snail.getY(), snail.getZ(), SoundEvents.PLAYER_TELEPORT, snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
+                level.playSound(null, snail.getX(), snail.getY(), snail.getZ(), SoundEvents.PLAYER_TELEPORT, snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
                 entityWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.PLAYER_TELEPORT, snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
-                AnimationUtils.spawnTeleportParticles(world, snail.position());
+                AnimationUtils.spawnTeleportParticles(level, snail.position());
                 AnimationUtils.spawnTeleportParticles(entityWorld, tpTo.getCenter());
                 snail.serverData.despawn();
                 Snails.spawnSnailFor(boundPlayer, tpTo);
@@ -168,7 +168,7 @@ public class SnailPathfinding {
     public static BlockPos getBlockPosNearPlayer(Entity target, double distanceFromTarget) {
         if (target == null) return null;
         BlockPos targetPos = target.blockPosition();
-        return WorldUtils.getCloseBlockPos(target.level(), targetPos, distanceFromTarget, 1, false);
+        return LevelUtils.getCloseBlockPos(target.level(), targetPos, distanceFromTarget, 1, false);
     }
 
     public BlockPos getBlockPosNearTarget(Entity target, double distanceFromTarget) {
@@ -176,7 +176,7 @@ public class SnailPathfinding {
         Vec3 targetPos = snail.serverData.getPlayerPos();
         if (targetPos == null) return null;
         BlockPos targetBlockPos = BlockPos.containing(targetPos.x, targetPos.y, targetPos.z);
-        return WorldUtils.getCloseBlockPos(target.level(), targetBlockPos, distanceFromTarget, 1, false);
+        return LevelUtils.getCloseBlockPos(target.level(), targetBlockPos, distanceFromTarget, 1, false);
     }
 
     public boolean canPathToPlayer(boolean flying) {
@@ -228,7 +228,7 @@ public class SnailPathfinding {
         snail.setPathfindingMalus(PathType.WALKABLE_DOOR, -1);
         snail.setPathfindingMalus(PathType.DOOR_OPEN, -1);
         snail.setPathfindingMalus(PathType.UNPASSABLE_RAIL, 0);
-        snail.setNavigation(new FlyingPathNavigation(snail, snail.getSnailWorld()));
+        snail.setNavigation(new FlyingPathNavigation(snail, snail.level()));
         updateNavigationTarget();
     }
 
@@ -239,7 +239,7 @@ public class SnailPathfinding {
         snail.setPathfindingMalus(PathType.WALKABLE_DOOR, -1);
         snail.setPathfindingMalus(PathType.DOOR_OPEN, -1);
         snail.setPathfindingMalus(PathType.UNPASSABLE_RAIL, 0);
-        snail.setNavigation(new GroundPathNavigation(snail, snail.getSnailWorld()));
+        snail.setNavigation(new GroundPathNavigation(snail, snail.level()));
         updateNavigationTarget();
     }
 
@@ -250,7 +250,7 @@ public class SnailPathfinding {
         snail.setPathfindingMalus(PathType.WALKABLE_DOOR, 0);
         snail.setPathfindingMalus(PathType.DOOR_OPEN, 0);
         snail.setPathfindingMalus(PathType.UNPASSABLE_RAIL, 0);
-        snail.setNavigation(new MiningNavigation(snail, snail.getSnailWorld()));
+        snail.setNavigation(new MiningNavigation(snail, snail.level()));
         updateNavigationTarget();
     }
 

@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.entity.triviabot.server;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
+import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -36,17 +36,17 @@ public class TriviaBotPathfinding {
     }
 
     public void fakeTeleportToPlayer() {
-        if (bot.getBotWorld().isClientSide()) return;
+        if (bot.level().isClientSide()) return;
         ServerPlayer boundPlayer = bot.serverData.getBoundPlayer();
         Entity boundEntity = bot.serverData.getBoundEntity();
         if (boundEntity == null) return;
-        if (bot.getBotWorld() instanceof ServerLevel world) {
+        if (bot.level() instanceof ServerLevel level) {
             if (boundEntity.level() instanceof ServerLevel entityWorld) {
                 BlockPos tpTo = getBlockPosNearTarget(boundEntity,5);
-                world.playSound(null, bot.getX(), bot.getY(), bot.getZ(), SoundEvents.PLAYER_TELEPORT, bot.getSoundSource(), bot.soundVolume(), bot.getVoicePitch());
+                level.playSound(null, bot.getX(), bot.getY(), bot.getZ(), SoundEvents.PLAYER_TELEPORT, bot.getSoundSource(), bot.soundVolume(), bot.getVoicePitch());
                 entityWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.PLAYER_TELEPORT, bot.getSoundSource(), bot.soundVolume(), bot.getVoicePitch());
-                AnimationUtils.spawnTeleportParticles(world, bot.position());
-                AnimationUtils.spawnTeleportParticles(world, tpTo.getCenter());
+                AnimationUtils.spawnTeleportParticles(level, bot.position());
+                AnimationUtils.spawnTeleportParticles(level, tpTo.getCenter());
                 bot.serverData.despawn();
                 TriviaWildcard.spawnBotFor(boundPlayer, tpTo);
             }
@@ -55,7 +55,7 @@ public class TriviaBotPathfinding {
 
     public static BlockPos getBlockPosNearPlayer(Entity target, BlockPos targetPos, double distanceFromTarget) {
         if (target == null) return targetPos;
-        return WorldUtils.getCloseBlockPos(target.level(), targetPos, distanceFromTarget, 2, false);
+        return LevelUtils.getCloseBlockPos(target.level(), targetPos, distanceFromTarget, 2, false);
     }
 
     public BlockPos getBlockPosNearTarget(Entity target, double distanceFromTarget) {
@@ -63,13 +63,13 @@ public class TriviaBotPathfinding {
         Vec3 targetPos = bot.serverData.getPlayerPos();
         if (targetPos == null) return null;
         BlockPos targetBlockPos = BlockPos.containing(targetPos.x, targetPos.y, targetPos.z);
-        return WorldUtils.getCloseBlockPos(target.level(), targetBlockPos, distanceFromTarget, 2, false);
+        return LevelUtils.getCloseBlockPos(target.level(), targetBlockPos, distanceFromTarget, 2, false);
     }
 
 
     public void updateNavigation() {
         bot.setMoveControl(new MoveControl(bot));
-        bot.setNavigation(new GroundPathNavigation(bot, bot.getBotWorld()));
+        bot.setNavigation(new GroundPathNavigation(bot, bot.level()));
         updateNavigationTarget();
     }
 
@@ -90,13 +90,13 @@ public class TriviaBotPathfinding {
     public BlockPos getGroundBlock() {
         Vec3 startPos = bot.position();
         //? if <= 1.21 {
-        int minY = bot.getBotWorld().getMinBuildHeight();
+        int minY = bot.level().getMinBuildHeight();
         //?} else {
-        /*int minY = bot.getBotWorld().getMinY();
+        /*int minY = bot.level().getMinY();
         *///?}
         Vec3 endPos = startPos.add(0, minY, 0);
 
-        BlockHitResult result = bot.getBotWorld().clip(
+        BlockHitResult result = bot.level().clip(
                 new ClipContext(
                         startPos,
                         endPos,

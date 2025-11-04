@@ -3,7 +3,6 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -41,15 +40,15 @@ public class Invisibility extends ToggleableSuperpower {
         super.activate();
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        ServerLevel playerWorld = PlayerUtils.getServerWorld(player);
+        ServerLevel playerLevel = player.ls$getServerLevel();
 
-        playerWorld.sendParticles(
+        playerLevel.sendParticles(
                 ParticleTypes.SMOKE,
                 player.getX(), player.getY()+0.9, player.getZ(),
                 40, 0.3, 0.5, 0.3, 0
         );
 
-        playerWorld.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.SHULKER_SHOOT, SoundSource.MASTER, 1, 1);
+        playerLevel.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.SHULKER_SHOOT, SoundSource.MASTER, 1, 1);
         sendInvisibilityPacket();
     }
 
@@ -58,7 +57,7 @@ public class Invisibility extends ToggleableSuperpower {
         super.deactivate();
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        PlayerUtils.getServerWorld(player).playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.CHICKEN_EGG, SoundSource.MASTER, 1, 1);
+        player.ls$getServerLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.CHICKEN_EGG, SoundSource.MASTER, 1, 1);
         NetworkHandlerServer.sendPlayerInvisible(player.getUUID(), 0);
         player.removeEffect(MobEffects.INVISIBILITY);
     }

@@ -179,31 +179,31 @@ public class ItemStackUtils {
         }
     }
 
-    public static void spawnItem(ServerLevel world, Vec3 position, ItemStack stack) {
-        spawnItemForPlayer(world, position, stack, null);
+    public static void spawnItem(ServerLevel level, Vec3 position, ItemStack stack) {
+        spawnItemForPlayer(level, position, stack, null);
     }
 
-    public static void spawnItemForPlayer(ServerLevel world, Vec3 position, ItemStack stack, Player player) {
-        if (world == null || stack.isEmpty()) {
+    public static void spawnItemForPlayer(ServerLevel level, Vec3 position, ItemStack stack, Player player) {
+        if (level == null || stack.isEmpty()) {
             return;
         }
-        ItemEntity itemEntity = new ItemEntity(world, position.x, position.y, position.z, stack);
+        ItemEntity itemEntity = new ItemEntity(level, position.x, position.y, position.z, stack);
         itemEntity.setPickUpDelay(20);
         itemEntity.setDeltaMovement(itemEntity.getDeltaMovement().x()/4, 0.2, itemEntity.getDeltaMovement().z()/4);
         if (player != null) itemEntity.setTarget(player.getUUID());
 
-        world.addFreshEntity(itemEntity);
+        level.addFreshEntity(itemEntity);
     }
-    public static void spawnItemForPlayerWithVelocity(ServerLevel world, Vec3 position, ItemStack stack, Player player, Vec3 velocity) {
-        if (world == null || stack.isEmpty()) {
+    public static void spawnItemForPlayerWithVelocity(ServerLevel level, Vec3 position, ItemStack stack, Player player, Vec3 velocity) {
+        if (level == null || stack.isEmpty()) {
             return;
         }
-        ItemEntity itemEntity = new ItemEntity(world, position.x, position.y, position.z, stack);
+        ItemEntity itemEntity = new ItemEntity(level, position.x, position.y, position.z, stack);
         itemEntity.setPickUpDelay(20);
         itemEntity.setDeltaMovement(velocity);
         if (player != null) itemEntity.setTarget(player.getUUID());
 
-        world.addFreshEntity(itemEntity);
+        level.addFreshEntity(itemEntity);
     }
 
     public static ItemStack createEnchantedBook(ResourceKey<Enchantment> enchantment, int level) {

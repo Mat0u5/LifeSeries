@@ -19,11 +19,11 @@ import static net.mat0u5.lifeseries.Main.currentSeason;
 @Mixin(value = NaturalSpawner.class, priority = 1)
 public class NaturalSpawnerMixin {
     @Inject(method = "isRightDistanceToPlayerAndSpawnPoint", at = @At("HEAD"), cancellable = true)
-    private static void isAcceptableSpawnPosition(ServerLevel world, ChunkAccess chunk, BlockPos.MutableBlockPos pos, double squaredDistance, CallbackInfoReturnable<Boolean> cir) {
+    private static void isAcceptableSpawnPosition(ServerLevel level, ChunkAccess chunk, BlockPos.MutableBlockPos pos, double squaredDistance, CallbackInfoReturnable<Boolean> cir) {
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (currentSeason instanceof WildLife) {
             if (WildcardManager.isActiveWildcard(Wildcards.MOB_SWAP)) {
-                MobSwap.isAcceptableSpawnPosition(world, chunk, pos, squaredDistance, cir);
+                MobSwap.isAcceptableSpawnPosition(level, chunk, pos, squaredDistance, cir);
             }
         }
     }

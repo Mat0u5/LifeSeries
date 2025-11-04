@@ -99,7 +99,7 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph {
     //?} else {
     /*@Inject(method = "spawnAtLocation(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/ItemStack;F)Lnet/minecraft/world/entity/item/ItemEntity;",
             at = @At("HEAD"), cancellable = true)
-    public void dropStack(ServerLevel world, ItemStack stack, float yOffset, CallbackInfoReturnable<ItemEntity> cir) {
+    public void dropStack(ServerLevel level, ItemStack stack, float yOffset, CallbackInfoReturnable<ItemEntity> cir) {
         *///?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (currentSeason instanceof WildLife) {

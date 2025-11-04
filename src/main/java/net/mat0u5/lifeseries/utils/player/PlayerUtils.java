@@ -10,7 +10,7 @@ import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
+import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.Optionull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -27,11 +27,9 @@ import net.minecraft.world.Container;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.PlayerModelPart;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -47,6 +45,8 @@ import static net.mat0u5.lifeseries.Main.server;
 import net.minecraft.world.entity.RelativeMovement;
 //? if >= 1.21.2
 /*import net.minecraft.world.entity.Relative;*/
+//? if >= 1.21.4
+/*import net.minecraft.world.entity.player.PlayerModelPart;*/
 
 public class PlayerUtils {
     private static HashMap<Component, Integer> broadcastCooldown = new HashMap<>();
@@ -360,14 +360,6 @@ public class PlayerUtils {
         return true;
     }
 
-    public static ServerLevel getServerWorld(ServerPlayer player) {
-        //? if <= 1.21.5 {
-        return player.serverLevel();
-         //?} else {
-        /*return player.level();
-         *///?}
-    }
-
     public static void onTick() {
         if (!broadcastCooldown.isEmpty()) {
             HashMap<Component, Integer> newCooldowns = new HashMap<>();
@@ -433,38 +425,38 @@ public class PlayerUtils {
     }
 
     public static void teleport(ServerPlayer player, BlockPos pos) {
-        teleport(player, getServerWorld(player), pos.getBottomCenter());
+        teleport(player, player.ls$getServerLevel(), pos.getBottomCenter());
     }
 
     public static void teleport(ServerPlayer player, Vec3 pos) {
-        teleport(player, getServerWorld(player), pos);
+        teleport(player, player.ls$getServerLevel(), pos);
     }
 
     public static void teleport(ServerPlayer player, double destX, double destY, double destZ) {
-        teleport(player, getServerWorld(player), destX, destY, destZ);
+        teleport(player, player.ls$getServerLevel(), destX, destY, destZ);
     }
 
-    public static void teleport(ServerPlayer player, ServerLevel world, double destX, double destY, double destZ) {
-        teleport(player, world, destX, destY, destZ, player.getYRot(), player.getXRot());
+    public static void teleport(ServerPlayer player, ServerLevel level, double destX, double destY, double destZ) {
+        teleport(player, level, destX, destY, destZ, player.getYRot(), player.getXRot());
     }
 
-    public static void teleport(ServerPlayer player, ServerLevel world, BlockPos pos) {
-        teleport(player, world, pos.getBottomCenter());
+    public static void teleport(ServerPlayer player, ServerLevel level, BlockPos pos) {
+        teleport(player, level, pos.getBottomCenter());
     }
 
-    public static void teleport(ServerPlayer player, ServerLevel world, Vec3 pos) {
-        teleport(player, world, pos.x(), pos.y(), pos.z(), player.getYRot(), player.getXRot());
+    public static void teleport(ServerPlayer player, ServerLevel level, Vec3 pos) {
+        teleport(player, level, pos.x(), pos.y(), pos.z(), player.getYRot(), player.getXRot());
     }
 
-    public static void teleport(ServerPlayer player, ServerLevel world, Vec3 pos, float yaw, float pitch) {
-        teleport(player, world, pos.x(), pos.y(), pos.z(), yaw, pitch);
+    public static void teleport(ServerPlayer player, ServerLevel level, Vec3 pos, float yaw, float pitch) {
+        teleport(player, level, pos.x(), pos.y(), pos.z(), yaw, pitch);
     }
 
-    public static void teleport(ServerPlayer player, ServerLevel world, double destX, double destY, double destZ, float yaw, float pitch) {
+    public static void teleport(ServerPlayer player, ServerLevel level, double destX, double destY, double destZ, float yaw, float pitch) {
         //? if <= 1.21 {
-        player.teleportTo(world, destX, destY, destZ, EnumSet.noneOf(RelativeMovement.class), yaw, pitch);
+        player.teleportTo(level, destX, destY, destZ, EnumSet.noneOf(RelativeMovement.class), yaw, pitch);
         //?} else {
-        /*player.teleportTo(world, destX, destY, destZ, EnumSet.noneOf(Relative.class), yaw, pitch, false);
+        /*player.teleportTo(level, destX, destY, destZ, EnumSet.noneOf(Relative.class), yaw, pitch, false);
          *///?}
     }
 
@@ -473,7 +465,7 @@ public class PlayerUtils {
 
         //Teleport to the highest block in the terrain
         BlockPos.MutableBlockPos playerBlockPos = player.blockPosition().mutable();
-        int safeY = WorldUtils.findTopSafeY(getServerWorld(player), playerBlockPos.getCenter());
+        int safeY = LevelUtils.findTopSafeY(player.ls$getServerLevel(), playerBlockPos.getCenter());
         playerBlockPos.setY(safeY);
         teleport(player, playerBlockPos);
 
@@ -492,26 +484,14 @@ public class PlayerUtils {
         return player;
     }
 
-    public static void damage(ServerPlayer player, ServerLevel world, DamageSource source, float amount) {
-        //? if <= 1.21 {
-        player.hurt(source, amount);
-        //?} else {
-        /*player.hurtServer(world, source, amount);
-        *///?}
-    }
-
-    public static void damage(ServerPlayer player, DamageSource source, float amount) {
-        damage(player, getServerWorld(player), source, amount);
-    }
-
     public static void killFromSource(ServerPlayer player, DamageSource source) {
         player.setHealth(0.0001f);
-        damage(player, source, 10);
+        player.ls$hurt(source, 10);
         if (player.isAlive()) {
             //? if <= 1.21 {
             player.kill();
             //?} else {
-            /*player.kill(getServerWorld(player));
+            /*player.kill(player.ls$getServerLevel());
             *///?}
         }
     }

@@ -362,9 +362,9 @@ public class SecretLife extends Season {
             boolean dropBook = SecretLifeConfig.PLAYERS_DROP_TASK_ON_DEATH.get(seasonConfig);
             if (dropBook || server == null) return;
             //? if <= 1.21.9 {
-            boolean keepInventory = OtherUtils.getBooleanGameRule(PlayerUtils.getServerWorld(player), GameRules.RULE_KEEPINVENTORY);
+            boolean keepInventory = OtherUtils.getBooleanGameRule(player.ls$getServerLevel(), GameRules.RULE_KEEPINVENTORY);
             //?} else {
-            /*boolean keepInventory = OtherUtils.getBooleanGameRule(PlayerUtils.getServerWorld(player), GameRules.KEEP_INVENTORY);
+            /*boolean keepInventory = OtherUtils.getBooleanGameRule(player.ls$getServerLevel(), GameRules.KEEP_INVENTORY);
             *///?}
             if (keepInventory) return;
             giveBookOnRespawn.put(player.getUUID(), TaskManager.getPlayersTaskBook(player));

@@ -94,8 +94,8 @@ public class ClientUtils {
         handler.onDisconnect(new DisconnectionDetails(reason));
     }
 
-    public static boolean handleUpdatedAttribute(ClientLevel world, AttributeInstance instance, double baseValue, ClientboundUpdateAttributesPacket packet) {
-        Entity entity = world.getEntity(packet.getEntityId());
+    public static boolean handleUpdatedAttribute(ClientLevel level, AttributeInstance instance, double baseValue, ClientboundUpdateAttributesPacket packet) {
+        Entity entity = level.getEntity(packet.getEntityId());
         if (entity == null) return false;
         if (!(entity instanceof LocalPlayer player)) return false;
         if (!MainClient.isClientPlayer(player.getUUID())) return false;

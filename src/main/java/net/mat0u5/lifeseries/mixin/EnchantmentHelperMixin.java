@@ -115,7 +115,7 @@ public class EnchantmentHelperMixin {
     @Inject(
             method = "doPostAttackEffects(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/damagesource/DamageSource;)V", at = @At("HEAD")
     )
-    private static void onTargetDamaged(ServerLevel world, Entity victimEntity, DamageSource damageSource, CallbackInfo ci) {
+    private static void onTargetDamaged(ServerLevel level, Entity victimEntity, DamageSource damageSource, CallbackInfo ci) {
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (!(victimEntity instanceof ServerPlayer victim)) return;
         if (damageSource == null) return;
@@ -124,7 +124,7 @@ public class EnchantmentHelperMixin {
         //? if <= 1.21 {
         damageSource.getEntity().hurt(victim.damageSources().thorns(victim), 1F);
         //?} else {
-        /*damageSource.getEntity().hurtServer(PlayerUtils.getServerWorld(victim), victim.damageSources().thorns(victim), 1F);
+        /*damageSource.getEntity().hurtServer(victim.ls$getServerLevel(), victim.damageSources().thorns(victim), 1F);
          *///?}
     }
 }

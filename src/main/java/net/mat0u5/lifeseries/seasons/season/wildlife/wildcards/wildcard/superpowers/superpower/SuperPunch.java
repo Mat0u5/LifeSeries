@@ -5,7 +5,6 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -43,7 +42,7 @@ public class SuperPunch extends ToggleableSuperpower {
             NetworkHandlerServer.sendVignette(player, 0);
             if (player.isPassenger()) {
                 player.removeVehicle();
-                syncEntityPassengers(riding, PlayerUtils.getServerWorld(player));
+                syncEntityPassengers(riding, player.ls$getServerLevel());
             }
         }
     }
@@ -58,7 +57,7 @@ public class SuperPunch extends ToggleableSuperpower {
                 player.removeVehicle();
             }
             if (riding != null && !player.isPassenger()) {
-                syncEntityPassengers(riding, PlayerUtils.getServerWorld(player));
+                syncEntityPassengers(riding, player.ls$getServerLevel());
                 riding = null;
             }
         }
@@ -72,13 +71,13 @@ public class SuperPunch extends ToggleableSuperpower {
 
         if (entity.isVehicle()) return;
 
-        ServerLevel riderWorld = PlayerUtils.getServerWorld(rider);
+        ServerLevel riderLevel = rider.ls$getServerLevel();
 
         if (rider.isPassenger()) {
             Entity vehicle = rider.getVehicle();
             rider.removeVehicle();
 
-            syncEntityPassengers(vehicle, riderWorld);
+            syncEntityPassengers(vehicle, riderLevel);
         }
 
         //? if <= 1.21.6 {
@@ -89,14 +88,14 @@ public class SuperPunch extends ToggleableSuperpower {
 
         if (rideResult) {
             riding = entity;
-            syncEntityPassengers(entity, riderWorld);
+            syncEntityPassengers(entity, riderLevel);
         }
     }
 
-    private void syncEntityPassengers(Entity entity, ServerLevel world) {
+    private void syncEntityPassengers(Entity entity, ServerLevel level) {
         ClientboundSetPassengersPacket passengersPacket = new ClientboundSetPassengersPacket(entity);
 
-        for (ServerPlayer trackingPlayer : PlayerLookup.tracking(world, entity.blockPosition())) {
+        for (ServerPlayer trackingPlayer : PlayerLookup.tracking(level, entity.blockPosition())) {
             trackingPlayer.connection.send(passengersPacket);
         }
 

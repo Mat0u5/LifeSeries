@@ -6,7 +6,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
+import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -54,10 +54,10 @@ public class Necromancy extends Superpower {
             return;
         }
 
-        ServerLevel playerWorld = PlayerUtils.getServerWorld(player);
-        playerWorld.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.WARDEN_EMERGE, SoundSource.MASTER, 1, 1);
+        ServerLevel playerLevel = player.ls$getServerLevel();
+        playerLevel.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.WARDEN_EMERGE, SoundSource.MASTER, 1, 1);
 
-        List<ServerPlayer> affectedPlayers = playerWorld.getEntitiesOfClass(ServerPlayer.class, player.getBoundingBox().inflate(10), playerEntity -> playerEntity.distanceTo(player) <= 10);
+        List<ServerPlayer> affectedPlayers = playerLevel.getEntitiesOfClass(ServerPlayer.class, player.getBoundingBox().inflate(10), playerEntity -> playerEntity.distanceTo(player) <= 10);
         MobEffectInstance blindness = new MobEffectInstance(MobEffects.BLINDNESS, 115, 0);
         for (ServerPlayer affectedPlayer : affectedPlayers) {
             affectedPlayer.addEffect(blindness);
@@ -70,11 +70,11 @@ public class Necromancy extends Superpower {
         TaskScheduler.scheduleTask(100, () -> {
             ServerPlayer updatedPlayer = getPlayer();
             if (updatedPlayer != null) {
-                ServerLevel updatedPlayerWorld = PlayerUtils.getServerWorld(updatedPlayer);
+                ServerLevel updatedPlayerLevel = updatedPlayer.ls$getServerLevel();
                 List<ServerPlayer> deadPlayers = getDeadSpectatorPlayers();
                 for (ServerPlayer deadPlayer : deadPlayers) {
-                    BlockPos tpTo = WorldUtils.getCloseBlockPos(updatedPlayerWorld, updatedPlayer.blockPosition(), 3, 2, true);
-                    PlayerUtils.teleport(deadPlayer, updatedPlayerWorld, tpTo);
+                    BlockPos tpTo = LevelUtils.getCloseBlockPos(updatedPlayerLevel, updatedPlayer.blockPosition(), 3, 2, true);
+                    PlayerUtils.teleport(deadPlayer, updatedPlayerLevel, tpTo);
                     deadPlayer.setGameMode(GameType.SURVIVAL);
                     if (seasonConfig instanceof WildLifeConfig config) {
                         if (WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_LOSE_ITEMS.get(config) && !clearedPlayers.contains(deadPlayer.getUUID())) {
@@ -84,7 +84,7 @@ public class Necromancy extends Superpower {
                     }
                     AttributeUtils.setMaxPlayerHealth(deadPlayer, 8);
                     deadPlayer.setHealth(8);
-                    WorldUtils.summonHarmlessLightning(deadPlayer);
+                    LevelUtils.summonHarmlessLightning(deadPlayer);
                     ressurectedPlayers.add(deadPlayer.getUUID());
                     perPlayerRessurections.add(deadPlayer.getUUID());
                     queuedRessurectedPlayers.remove(deadPlayer.getUUID());
@@ -102,7 +102,7 @@ public class Necromancy extends Superpower {
             if (player.isSpectator()) continue;
             UUID uuid = player.getUUID();
             if (perPlayerRessurections.contains(uuid) && ressurectedPlayers.contains(uuid)) {
-                WorldUtils.summonHarmlessLightning(player);
+                LevelUtils.summonHarmlessLightning(player);
                 player.setGameMode(GameType.SPECTATOR);
                 deadAgain.add(uuid);
             }

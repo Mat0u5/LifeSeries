@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
 @Mixin(value = ServerLevel.class, priority = 1)
-public class ServerWorldMixin {
+public class ServerLevelMixin {
 
     @Inject(method = "broadcastEntityEvent", at = @At("HEAD"))
     public void broadcast(Entity entity, byte status, CallbackInfo ci) {

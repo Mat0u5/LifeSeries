@@ -248,7 +248,7 @@ public class Session {
 
     private Map<UUID, Vec3> lastNonBorderPositions = new HashMap<>();
     public void checkPlayerPosition(ServerPlayer player) {
-        WorldBorder border = PlayerUtils.getServerWorld(player).getWorldBorder();
+        WorldBorder border = player.ls$getServerLevel().getWorldBorder();
         double playerSize = player.getBoundingBox().getXsize()/2;
         double minX = Math.floor(border.getMinX()) + playerSize;
         double maxX = Math.ceil(border.getMaxX()) - playerSize;

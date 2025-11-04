@@ -257,9 +257,9 @@ public abstract class Season {
     public void dropItemsOnLastDeath(ServerPlayer player) {
         boolean doDrop = seasonConfig.PLAYERS_DROP_ITEMS_ON_FINAL_DEATH.get(seasonConfig);
         //? if <= 1.21.9 {
-        boolean keepInventory = OtherUtils.getBooleanGameRule(PlayerUtils.getServerWorld(player), GameRules.RULE_KEEPINVENTORY);
+        boolean keepInventory = OtherUtils.getBooleanGameRule(player.ls$getServerLevel(), GameRules.RULE_KEEPINVENTORY);
         //?} else {
-        /*boolean keepInventory = OtherUtils.getBooleanGameRule(PlayerUtils.getServerWorld(player), GameRules.KEEP_INVENTORY);
+        /*boolean keepInventory = OtherUtils.getBooleanGameRule(player.ls$getServerLevel(), GameRules.KEEP_INVENTORY);
         *///?}
 
         if (doDrop && keepInventory) {
@@ -267,7 +267,7 @@ public abstract class Season {
                 //? if <= 1.21 {
                 player.spawnAtLocation(item);
                 //?} else
-                /*player.spawnAtLocation(PlayerUtils.getServerWorld(player), item);*/
+                /*player.spawnAtLocation(player.ls$getServerLevel(), item);*/
             }
             player.getInventory().clearContent();
         }
@@ -367,13 +367,13 @@ public abstract class Season {
         for (Map.Entry<Vec3, List<Float>> entry : info.entrySet()) {
             Vec3 pos = entry.getKey();
             //? if <= 1.21 {
-            int minY = PlayerUtils.getServerWorld(player).getMinBuildHeight();
+            int minY = player.ls$getServerLevel().getMinBuildHeight();
             //?} else {
-            /*int minY = PlayerUtils.getServerWorld(player).getMinY();
+            /*int minY = player.ls$getServerLevel().getMinY();
             *///?}
             if (pos.y <= minY) continue;
 
-            PlayerUtils.teleport(player, PlayerUtils.getServerWorld(player), pos, entry.getValue().get(0), entry.getValue().get(1));
+            PlayerUtils.teleport(player, player.ls$getServerLevel(), pos, entry.getValue().get(0), entry.getValue().get(1));
             break;
         }
     }
@@ -507,10 +507,10 @@ public abstract class Season {
     public void onPlayerDisconnect(ServerPlayer player) {
     }
 
-    public void onRightClickEntity(ServerPlayer player, Level world, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
+    public void onRightClickEntity(ServerPlayer player, Level level, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
     }
 
-    public void onAttackEntity(ServerPlayer player, Level world, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
+    public void onAttackEntity(ServerPlayer player, Level level, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
     }
 
     public void onUpdatedInventory(ServerPlayer player) {

@@ -18,7 +18,7 @@ public final class TriviaBotGlideGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (mob.getBotWorld().isClientSide()) return false;
+        if (mob.level().isClientSide()) return false;
         if (mob.isBotGliding()) {
             return true;
         }

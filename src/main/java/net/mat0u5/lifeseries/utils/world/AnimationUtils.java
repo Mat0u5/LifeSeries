@@ -34,7 +34,7 @@ public class AnimationUtils {
 
     public static void playRealTotemAnimation(ServerPlayer player) {
         // Visible by other players too
-        PlayerUtils.getServerWorld(player).broadcastEntityEvent(player, (byte) 35);
+        player.ls$getServerLevel().broadcastEntityEvent(player, (byte) 35);
     }
 
     public static void playSecretLifeTotemAnimation(ServerPlayer player, boolean red) {
@@ -92,7 +92,7 @@ public class AnimationUtils {
     }
 
     private static void processSpiral(ServerPlayer player, int step) {
-        ServerLevel world = PlayerUtils.getServerWorld(player);
+        ServerLevel level = player.ls$getServerLevel();
         double x = player.getX();
         double z = player.getZ();
         double yStart = player.getY();
@@ -106,26 +106,26 @@ public class AnimationUtils {
         double offsetX = radius * Math.cos((float) angle);
         double offsetZ = radius * Math.sin((float) angle);
 
-        world.sendParticles(
+        level.sendParticles(
                 ParticleTypes.HAPPY_VILLAGER,
                 x + offsetX, y, z + offsetZ,
                 1, 0, 0, 0, 0
         );
     }
 
-    public static void createGlyphAnimation(ServerLevel world, Vec3 target, int duration) {
-        if (world == null || target == null || duration <= 0) return;
+    public static void createGlyphAnimation(ServerLevel level, Vec3 target, int duration) {
+        if (level == null || target == null || duration <= 0) return;
 
         double radius = 7.5; // Radius of the glyph starting positions
 
         for (int step = 0; step < duration; step++) {
-            TaskScheduler.scheduleTask(step, () -> spawnGlyphParticles(world, target, radius));
+            TaskScheduler.scheduleTask(step, () -> spawnGlyphParticles(level, target, radius));
         }
     }
 
-    private static void spawnGlyphParticles(ServerLevel world, Vec3 target, double radius) {
+    private static void spawnGlyphParticles(ServerLevel level, Vec3 target, double radius) {
         int particlesPerTick = 50; // Number of glyphs spawned per tick
-        RandomSource random = world.getRandom();
+        RandomSource random = level.getRandom();
 
         for (int i = 0; i < particlesPerTick; i++) {
             // Randomize starting position around the target block
@@ -152,7 +152,7 @@ public class AnimationUtils {
             double vz = dz * velocityScale;
 
             // Spawn the particle with velocity
-            world.sendParticles(
+            level.sendParticles(
                     ParticleTypes.ENCHANT, // Glyph particle
                     startX, startY, startZ, // Starting position
                     0, // Number of particles to display as a burst (keep 0 for velocity to work)
@@ -162,10 +162,10 @@ public class AnimationUtils {
         }
     }
 
-    public static void spawnFireworkBall(ServerLevel world, Vec3 position, int duration, double radius, Vector3f color) {
-        if (world == null || position == null || duration <= 0 || radius <= 0) return;
+    public static void spawnFireworkBall(ServerLevel level, Vec3 position, int duration, double radius, Vector3f color) {
+        if (level == null || position == null || duration <= 0 || radius <= 0) return;
 
-        RandomSource random = world.getRandom();
+        RandomSource random = level.getRandom();
 
         for (int step = 0; step < duration; step++) {
             TaskScheduler.scheduleTask(step, () -> {
@@ -187,7 +187,7 @@ public class AnimationUtils {
                     /*DustParticleOptions particleEffect = new DustParticleOptions(new Color(color.x, color.y, color.z).getRGB(), 1.0f);*/
 
                     // Spawn particle with random offset
-                    world.sendParticles(
+                    level.sendParticles(
                             particleEffect, // Colored particle effect
                             position.x() + x,
                             position.y() + y,
@@ -201,8 +201,8 @@ public class AnimationUtils {
         }
     }
 
-    public static void spawnTeleportParticles(ServerLevel world, Vec3 pos) {
-        world.sendParticles(
+    public static void spawnTeleportParticles(ServerLevel level, Vec3 pos) {
+        level.sendParticles(
                 ParticleTypes.PORTAL,
                 pos.x, pos.y, pos.z,
                 30,

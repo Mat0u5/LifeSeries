@@ -245,21 +245,21 @@ public class OtherUtils {
     }
 
     //? if <= 1.21.9 {
-    public static boolean getBooleanGameRule(ServerLevel world, GameRules.Key<GameRules.BooleanValue> gamerule) {
-        return world.getGameRules().getBoolean(gamerule);
+    public static boolean getBooleanGameRule(ServerLevel level, GameRules.Key<GameRules.BooleanValue> gamerule) {
+        return level.getGameRules().getBoolean(gamerule);
     }
-    public static <T extends GameRules.Value<T>> void setBooleanGameRule(ServerLevel world, GameRules.Key<GameRules.BooleanValue> gamerule, boolean value) {
-        world.getGameRules().getRule(gamerule).set(value, server);
+    public static <T extends GameRules.Value<T>> void setBooleanGameRule(ServerLevel level, GameRules.Key<GameRules.BooleanValue> gamerule, boolean value) {
+        level.getGameRules().getRule(gamerule).set(value, server);
     }
     //?} else {
-    /*public static boolean getBooleanGameRule(ServerLevel world, GameRule<?> gamerule) {
-        if (world.getGameRules().get(gamerule) instanceof Boolean bool) {
+    /*public static boolean getBooleanGameRule(ServerLevel level, GameRule<?> gamerule) {
+        if (level.getGameRules().get(gamerule) instanceof Boolean bool) {
             return bool;
         }
         return false;
     }
-    public static void setBooleanGameRule(ServerLevel world, GameRule<Boolean> gamerule, Boolean value) {
-        world.getGameRules().set(gamerule, value, server);
+    public static void setBooleanGameRule(ServerLevel level, GameRule<Boolean> gamerule, Boolean value) {
+        level.getGameRules().set(gamerule, value, server);
     }
     *///?}
 }

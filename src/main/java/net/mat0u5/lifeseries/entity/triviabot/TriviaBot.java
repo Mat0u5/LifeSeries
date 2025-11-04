@@ -57,8 +57,8 @@ public class TriviaBot extends AmbientCreature {
     private static final EntityDataAccessor<Integer> analyzing = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.INT);
 
 
-    public TriviaBot(EntityType<? extends AmbientCreature> entityType, Level world) {
-        super(entityType, world);
+    public TriviaBot(EntityType<? extends AmbientCreature> entityType, Level level) {
+        super(entityType, level);
         setInvulnerable(true);
         setPersistenceRequired();
     }
@@ -87,12 +87,6 @@ public class TriviaBot extends AmbientCreature {
         super.tick();
         serverData.tick();
         clientData.tick();
-    }
-
-    
-    public Level getBotWorld() {
-        //TODO remove
-        return level();
     }
 
     /*

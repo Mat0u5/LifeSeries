@@ -21,7 +21,7 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (mob.getSnailWorld().isClientSide()) return false;
+        if (mob.level().isClientSide()) return false;
         if (!mob.serverData.shouldPathfind()) return false;
         if (mob.isPaused()) return false;
         if (mob.serverData.dontAttackFor > 0) {

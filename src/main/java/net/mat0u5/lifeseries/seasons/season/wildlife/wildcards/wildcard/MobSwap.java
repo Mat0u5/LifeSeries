@@ -10,7 +10,7 @@ import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
+import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -251,9 +251,9 @@ public class MobSwap extends Wildcard {
 
     private static void killNonNamedMobs() {
         if (server == null) return;
-        for (ServerLevel world : server.getAllLevels()) {
+        for (ServerLevel level : server.getAllLevels()) {
             List<Entity> toKill = new ArrayList<>();
-            world.getAllEntities().forEach(entity -> {
+            level.getAllEntities().forEach(entity -> {
                 if (!(entity instanceof LivingEntity)) return;
                 if (entity instanceof Player) return;
                 if (entity instanceof Snail) return;
@@ -264,11 +264,11 @@ public class MobSwap extends Wildcard {
             });
 
             //? if <= 1.21.9 {
-            boolean mobLoot = OtherUtils.getBooleanGameRule(world, GameRules.RULE_DOMOBLOOT);
-            if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.RULE_DOMOBLOOT, false);
+            boolean mobLoot = OtherUtils.getBooleanGameRule(level, GameRules.RULE_DOMOBLOOT);
+            if (mobLoot) OtherUtils.setBooleanGameRule(level, GameRules.RULE_DOMOBLOOT, false);
             //?} else {
-            /*boolean mobLoot = OtherUtils.getBooleanGameRule(world, GameRules.MOB_DROPS);
-            if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.MOB_DROPS, false);
+            /*boolean mobLoot = OtherUtils.getBooleanGameRule(level, GameRules.MOB_DROPS);
+            if (mobLoot) OtherUtils.setBooleanGameRule(level, GameRules.MOB_DROPS, false);
             *///?}
             for (Entity entity : toKill) {
                 //? if <=1.21 {
@@ -278,9 +278,9 @@ public class MobSwap extends Wildcard {
                 *///?}
             }
             //? if <= 1.21.9 {
-            if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.RULE_DOMOBLOOT, true);
+            if (mobLoot) OtherUtils.setBooleanGameRule(level, GameRules.RULE_DOMOBLOOT, true);
             //?} else {
-            /*if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.MOB_DROPS, true);
+            /*if (mobLoot) OtherUtils.setBooleanGameRule(level, GameRules.MOB_DROPS, true);
             *///?}
         }
     }
@@ -290,9 +290,9 @@ public class MobSwap extends Wildcard {
         int dangerThresholdMax = Math.max(80, Math.min(115, (int) (progress * 50) + 80));
 
         if (server == null) return;
-        for (ServerLevel world : server.getAllLevels()) {
+        for (ServerLevel level : server.getAllLevels()) {
             List<Entity> toKill = new ArrayList<>();
-            world.getAllEntities().forEach(entity -> {
+            level.getAllEntities().forEach(entity -> {
                 if (!(entity instanceof LivingEntity)) return;
                 if (entity instanceof Player) return;
                 if (entity instanceof Snail) return;
@@ -302,7 +302,7 @@ public class MobSwap extends Wildcard {
 
                 EntityType<?> randomMob = getRandomMob(progress, dangerThresholdMin, dangerThresholdMax);
                 if (randomMob != null) {
-                    Entity newMob = WorldUtils.spawnEntity(randomMob, world, entity.blockPosition());
+                    Entity newMob = LevelUtils.spawnEntity(randomMob, level, entity.blockPosition());
                     if (newMob != null) {
                         //? if <= 1.21.4 {
                         newMob.moveTo(entity.getX(), entity.getY(), entity.getZ(), entity.getYRot(), entity.getXRot());
@@ -355,9 +355,9 @@ public class MobSwap extends Wildcard {
 
     public static void killMobSwapMobs() {
         if (server == null) return;
-        for (ServerLevel world : server.getAllLevels()) {
+        for (ServerLevel level : server.getAllLevels()) {
             List<Entity> toKill = new ArrayList<>();
-            world.getAllEntities().forEach(entity -> {
+            level.getAllEntities().forEach(entity -> {
                 if (!(entity instanceof LivingEntity)) return;
                 if (entity instanceof Player) return;
                 if (entity instanceof Snail) return;
@@ -369,11 +369,11 @@ public class MobSwap extends Wildcard {
             });
 
             //? if <= 1.21.9 {
-            boolean mobLoot = OtherUtils.getBooleanGameRule(world, GameRules.RULE_DOMOBLOOT);
-            if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.RULE_DOMOBLOOT, false);
+            boolean mobLoot = OtherUtils.getBooleanGameRule(level, GameRules.RULE_DOMOBLOOT);
+            if (mobLoot) OtherUtils.setBooleanGameRule(level, GameRules.RULE_DOMOBLOOT, false);
             //?} else {
-            /*boolean mobLoot = OtherUtils.getBooleanGameRule(world, GameRules.MOB_DROPS);
-            if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.MOB_DROPS, false);
+            /*boolean mobLoot = OtherUtils.getBooleanGameRule(level, GameRules.MOB_DROPS);
+            if (mobLoot) OtherUtils.setBooleanGameRule(level, GameRules.MOB_DROPS, false);
             *///?}
             for (Entity entity : toKill) {
                 //? if <=1.21 {
@@ -383,9 +383,9 @@ public class MobSwap extends Wildcard {
                 *///?}
             }
             //? if <= 1.21.9 {
-            if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.RULE_DOMOBLOOT, true);
+            if (mobLoot) OtherUtils.setBooleanGameRule(level, GameRules.RULE_DOMOBLOOT, true);
             //?} else {
-            /*if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.MOB_DROPS, true);
+            /*if (mobLoot) OtherUtils.setBooleanGameRule(level, GameRules.MOB_DROPS, true);
             *///?}
         }
     }
@@ -405,16 +405,16 @@ public class MobSwap extends Wildcard {
         }
     }
 
-    public static void isAcceptableSpawnPosition(ServerLevel world, ChunkAccess chunk, BlockPos.MutableBlockPos pos, double squaredDistance, CallbackInfoReturnable<Boolean> cir) {
+    public static void isAcceptableSpawnPosition(ServerLevel level, ChunkAccess chunk, BlockPos.MutableBlockPos pos, double squaredDistance, CallbackInfoReturnable<Boolean> cir) {
         if (!fastAnimalSpawn) return;
         if (squaredDistance < 4) {
             cir.setReturnValue(false);
         }
         //? if <= 1.21.4 {
-        cir.setReturnValue(Objects.equals(new ChunkPos(pos), chunk.getPos()) || world.isNaturalSpawningAllowed(pos));
+        cir.setReturnValue(Objects.equals(new ChunkPos(pos), chunk.getPos()) || level.isNaturalSpawningAllowed(pos));
         //?} else {
         /*ChunkPos chunkPos = new ChunkPos(pos);
-        cir.setReturnValue(Objects.equals(chunkPos, chunk.getPos()) || world.canSpawnEntitiesInChunk(chunkPos));
+        cir.setReturnValue(Objects.equals(chunkPos, chunk.getPos()) || level.canSpawnEntitiesInChunk(chunkPos));
         *///?}
     }
 }

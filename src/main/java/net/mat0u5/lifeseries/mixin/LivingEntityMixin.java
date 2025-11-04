@@ -71,7 +71,7 @@ public abstract class LivingEntityMixin {
     public void hurt(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
      //?} else {
     /*@Inject(method = "hurtServer", at = @At("HEAD"), cancellable = true)
-    public void hurtServer(ServerLevel world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    public void hurtServer(ServerLevel level, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
     *///?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
 
@@ -91,7 +91,7 @@ public abstract class LivingEntityMixin {
         //? if <= 1.21 {
         cir.setReturnValue(entity.hurt(source, WindCharge.MAX_MACE_DAMAGE));
          //?} else
-        /*cir.setReturnValue(entity.hurtServer(world, source, WindCharge.MAX_MACE_DAMAGE));*/
+        /*cir.setReturnValue(entity.hurtServer(level, source, WindCharge.MAX_MACE_DAMAGE));*/
     }
 
     //? if = 1.21.2 {
@@ -132,7 +132,7 @@ public abstract class LivingEntityMixin {
     }
     //?} else {
     /*@Inject(method = "hurtServer", at = @At("HEAD"))
-    private void captureDamageSource(ServerLevel world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    private void captureDamageSource(ServerLevel level, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         this.ls$lastDamageSource = source;
     }
     *///?}
@@ -160,7 +160,7 @@ public abstract class LivingEntityMixin {
     }
 
     @Inject(method = "dropAllDeathLoot", at = @At("HEAD"))
-    private void onDrop(ServerLevel world, DamageSource damageSource, CallbackInfo ci) {
+    private void onDrop(ServerLevel level, DamageSource damageSource, CallbackInfo ci) {
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         Events.onEntityDropItems((LivingEntity) (Object) this, damageSource);
     }
@@ -205,14 +205,14 @@ public abstract class LivingEntityMixin {
         }
     }
     @Inject(method = "hurtServer", at = @At("HEAD"))
-    public void damageMannequin(ServerLevel world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    public void damageMannequin(ServerLevel level, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity instanceof Mannequin mannequin && mannequin instanceof MannequinAccessor mannequinAccessor && mannequin.tickCount < 0) {
             ServerPlayer player = PlayerUtils.getPlayer(mannequinAccessor.ls$getMannequinProfile().partialProfile().id());
             if (player != null) {
                 if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.ASTRAL_PROJECTION)) {
                     if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof AstralProjection projection) {
-                        projection.onDamageClone(world, source, amount);
+                        projection.onDamageClone(level, source, amount);
                     }
                 }
             }

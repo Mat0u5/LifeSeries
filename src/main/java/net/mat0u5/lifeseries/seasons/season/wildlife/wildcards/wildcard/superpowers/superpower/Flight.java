@@ -88,7 +88,7 @@ public class Flight extends Superpower {
         if (player == null) return;
         giveHelmet();
 
-        PlayerUtils.getServerWorld(player).playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.MASTER, 1, 1);
+        player.ls$getServerLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.MASTER, 1, 1);
         player.playNotifySound(SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.MASTER, 1, 1);
 
         //? if <= 1.21.4 {
@@ -152,7 +152,7 @@ public class Flight extends Superpower {
             ItemStackUtils.setCustomComponentBoolean(helmet, "FromSuperpower", true);
             ItemStackUtils.setCustomComponentBoolean(helmet, "FlightSuperpower", true);
 
-            ItemStackUtils.spawnItemForPlayer(PlayerUtils.getServerWorld(player), player.position(), PlayerUtils.getEquipmentSlot(player, 3).copy(), player);
+            ItemStackUtils.spawnItemForPlayer(player.ls$getServerLevel(), player.position(), PlayerUtils.getEquipmentSlot(player, 3).copy(), player);
             player.setItemSlot(EquipmentSlot.HEAD, helmet);
         }
     }

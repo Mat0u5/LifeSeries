@@ -51,7 +51,7 @@ public abstract class ItemMixin {
     }
 
     @Inject(method = "finishUsingItem", at = @At("HEAD"))
-    public void finishUsing(ItemStack stack, Level world, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {
+    public void finishUsing(ItemStack stack, Level level, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (currentSeason instanceof WildLife && WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
             Item item = (Item) (Object) this;

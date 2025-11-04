@@ -40,8 +40,8 @@ import java.util.concurrent.CompletableFuture;
 
 @SuppressWarnings("EntityConstructor")
 public class FakePlayer extends ServerPlayer {
-    private FakePlayer(MinecraftServer server, ServerLevel worldIn, GameProfile profile, ClientInformation cli) {
-        super(server, worldIn, profile, cli);
+    private FakePlayer(MinecraftServer server, ServerLevel levelIn, GameProfile profile, ClientInformation cli) {
+        super(server, levelIn, profile, cli);
     }
     //? if <= 1.21.6 {
     private static final Set<String> spawning = new HashSet<>();
@@ -52,7 +52,7 @@ public class FakePlayer extends ServerPlayer {
             String username, MinecraftServer server, Vec3 pos, double yaw, double pitch,
             ResourceKey<Level> dimensionId, GameType gamemode, boolean flying, Inventory inv,
             UUID shadow) {
-        ServerLevel worldIn = server.getLevel(dimensionId);
+        ServerLevel levelIn = server.getLevel(dimensionId);
         GameProfileCache.setUsesAuthentication(false);
         GameProfile gameprofile = null;
         try {
@@ -86,7 +86,7 @@ public class FakePlayer extends ServerPlayer {
             GameProfile current = finalGP;
             if (profile.isPresent()) current = profile.get();
 
-            FakePlayer instance = new FakePlayer(server, worldIn, current, ClientInformation.createDefault());
+            FakePlayer instance = new FakePlayer(server, levelIn, current, ClientInformation.createDefault());
             //? if <= 1.21.4 {
             instance.fixStartingPosition = () -> instance.moveTo(pos.x, pos.y, pos.z, (float) yaw, (float) pitch);
             //?} else {
@@ -95,7 +95,7 @@ public class FakePlayer extends ServerPlayer {
             FakeClientConnection connection = new FakeClientConnection(PacketFlow.SERVERBOUND);
             CommonListenerCookie data =  new CommonListenerCookie(current, 0, instance.clientInformation(), true);
             server.getPlayerList().placeNewPlayer(connection, instance, data);
-            PlayerUtils.teleport(instance, worldIn, pos, (float) yaw, (float) pitch);
+            PlayerUtils.teleport(instance, levelIn, pos, (float) yaw, (float) pitch);
             instance.setHealth(20.0F);
             instance.unsetRemoved();
             instance.setGameMode(gamemode);
@@ -170,7 +170,7 @@ public class FakePlayer extends ServerPlayer {
             //? if <= 1.21 {
     public boolean hurt(DamageSource source, float amount) {
      //?} else {
-    /*public boolean hurtServer(ServerLevel world, DamageSource source, float amount) {
+    /*public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
         *///?}
         if (shadow != null) {
             ServerPlayer player = PlayerUtils.getPlayer(shadow);
@@ -180,7 +180,7 @@ public class FakePlayer extends ServerPlayer {
                         //? if <= 1.21 {
                         projection.onDamageClone(source, amount);
                          //?} else {
-                        /*projection.onDamageClone(world, source, amount);
+                        /*projection.onDamageClone(level, source, amount);
                         *///?}
                     }
                 }
@@ -189,7 +189,7 @@ public class FakePlayer extends ServerPlayer {
         //? if <= 1.21 {
         return super.hurt(source, amount);
          //?} else {
-        /*return super.hurtServer(world, source, amount);
+        /*return super.hurtServer(level, source, amount);
         *///?}
 
     }

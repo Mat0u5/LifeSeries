@@ -41,12 +41,12 @@ import net.minecraft.world.phys.Vec3;
 import java.util.*;
 import static net.mat0u5.lifeseries.Main.*;
 import static net.mat0u5.lifeseries.utils.player.PlayerUtils.isFakePlayer;
-import net.fabricmc.fabric.api.event.player.*;
 
 //? if >= 1.21.2 {
 /*import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Items;
+import net.fabricmc.fabric.api.event.player.*;
 *///?}
 
 public class Events {
@@ -61,12 +61,12 @@ public class Events {
         ServerLifecycleEvents.START_DATA_PACK_RELOAD.register(Events::onReloadStart);
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register(Events::onReloadEnd);
 
-        AttackBlockCallback.EVENT.register((player, world, hand, pos, direction) -> {
+        AttackBlockCallback.EVENT.register((player, level, hand, pos, direction) -> {
             if (!(player instanceof ServerPlayer) || modDisabled()) {
                 return InteractionResult.PASS; // Only handle server-side events
             }
 
-            return Events.onBlockAttack((ServerPlayer) player, world, pos);
+            return Events.onBlockAttack((ServerPlayer) player, level, pos);
         });
         UseBlockCallback.EVENT.register(Events::onBlockUse);
         //? if >= 1.21.2 {
@@ -215,18 +215,18 @@ public class Events {
         } catch(Exception e) {e.printStackTrace();}
     }
 
-    public static InteractionResult onBlockUse(Player player, Level world, InteractionHand hand, BlockHitResult hitResult) {
+    public static InteractionResult onBlockUse(Player player, Level level, InteractionHand hand, BlockHitResult hitResult) {
         if (Main.modDisabled()) return InteractionResult.PASS;
         if (isFakePlayer(player)) return InteractionResult.PASS;
 
         if (player instanceof ServerPlayer serverPlayer &&
-                world instanceof ServerLevel serverWorld && Main.isLogicalSide()) {
+                level instanceof ServerLevel serverLevel && Main.isLogicalSide()) {
             try {
                 if (currentSeason instanceof SecretLife) {
-                    TaskManager.onBlockUse(serverPlayer, serverWorld, hitResult);
+                    TaskManager.onBlockUse(serverPlayer, serverLevel, hitResult);
                 }
                 if (blacklist == null) return InteractionResult.PASS;
-                return blacklist.onBlockUse(serverPlayer,serverWorld,hand,hitResult);
+                return blacklist.onBlockUse(serverPlayer,serverLevel,hand,hitResult);
             } catch(Exception e) {
                 e.printStackTrace();
                 return InteractionResult.PASS;
@@ -235,11 +235,11 @@ public class Events {
         return InteractionResult.PASS;
     }
 
-    public static InteractionResult onItemUse(Player player, Level world, InteractionHand hand) {
+    public static InteractionResult onItemUse(Player player, Level level, InteractionHand hand) {
         if (isFakePlayer(player) || modDisabled()) return InteractionResult.PASS;
 
         if (player instanceof ServerPlayer serverPlayer &&
-                world instanceof ServerLevel serverWorld && Main.isLogicalSide()) {
+                level instanceof ServerLevel serverLevel && Main.isLogicalSide()) {
             try {
                 ItemStack itemStack = player.getItemInHand(hand);
                 //? if >= 1.21.2 {
@@ -261,40 +261,40 @@ public class Events {
         return InteractionResult.PASS;
     }
 
-    public static InteractionResult onBlockAttack(ServerPlayer player, Level world, BlockPos pos) {
+    public static InteractionResult onBlockAttack(ServerPlayer player, Level level, BlockPos pos) {
         if (isFakePlayer(player)) return InteractionResult.PASS;
 
         try {
             if (!Main.isLogicalSide()) return InteractionResult.PASS;
             if (blacklist == null) return InteractionResult.PASS;
-            if (world.isClientSide()) return InteractionResult.PASS;
-            return blacklist.onBlockAttack(player,world,pos);
+            if (level.isClientSide()) return InteractionResult.PASS;
+            return blacklist.onBlockAttack(player, level,pos);
         } catch(Exception e) {
             e.printStackTrace();
             return InteractionResult.PASS;
         }
     }
 
-    private static InteractionResult onRightClickEntity(Player player, Level world, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
+    private static InteractionResult onRightClickEntity(Player player, Level level, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
         if (isFakePlayer(player) || modDisabled()) return InteractionResult.PASS;
 
         try {
             if (!Main.isLogicalSide()) return InteractionResult.PASS;
             if (player instanceof ServerPlayer serverPlayer) {
-                currentSeason.onRightClickEntity(serverPlayer, world, hand, entity, hitResult);
+                currentSeason.onRightClickEntity(serverPlayer, level, hand, entity, hitResult);
             }
         } catch(Exception e) {
             e.printStackTrace();
         }
         return InteractionResult.PASS;
     }
-    private static InteractionResult onAttackEntity(Player player, Level world, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
+    private static InteractionResult onAttackEntity(Player player, Level level, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
         if (isFakePlayer(player) || modDisabled()) return InteractionResult.PASS;
 
         try {
             if (!Main.isLogicalSide()) return InteractionResult.PASS;
             if (player instanceof ServerPlayer serverPlayer) {
-                currentSeason.onAttackEntity(serverPlayer, world, hand, entity, hitResult);
+                currentSeason.onAttackEntity(serverPlayer, level, hand, entity, hitResult);
             }
         } catch(Exception e) {
             e.printStackTrace();

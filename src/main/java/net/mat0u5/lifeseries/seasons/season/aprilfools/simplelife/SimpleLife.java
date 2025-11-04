@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.aprilfools.simplelife;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.thirdlife.ThirdLife;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
+import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -44,10 +44,10 @@ public class SimpleLife extends ThirdLife {
         checkCooldown--;
         if (checkCooldown <= 0) {
             checkCooldown = 1200; //1 Minute
-            ServerLevel world = server.overworld();
-            if (world == null) return;
+            ServerLevel level = server.overworld();
+            if (level == null) return;
             int traderCount = 0;
-            for (Entity entity : world.getAllEntities()) {
+            for (Entity entity : level.getAllEntities()) {
                 if (entity instanceof WanderingTrader) {
                     traderCount++;
                 }
@@ -57,32 +57,32 @@ public class SimpleLife extends ThirdLife {
             if (traderCount >= 2) checkCooldown = 200;
             if (traderCount >= 3) return;
             for (int i = 0; i < 5; i++) {
-                if (trySpawnTrader(world)) {
+                if (trySpawnTrader(level)) {
                     break;
                 }
             }
         }
     }
 
-    public boolean trySpawnTrader(ServerLevel world) {
-        Player playerEntity = world.getRandomPlayer();
+    public boolean trySpawnTrader(ServerLevel level) {
+        Player playerEntity = level.getRandomPlayer();
         if (playerEntity == null) {
             return true;
         } else {
             BlockPos blockPos = playerEntity.blockPosition();
-            PoiManager pointOfInterestStorage = world.getPoiManager();
+            PoiManager pointOfInterestStorage = level.getPoiManager();
             Optional<BlockPos> optional = pointOfInterestStorage.find((poiType) -> {
                 return poiType.is(PoiTypes.MEETING);
             }, (pos) -> {
                 return true;
             }, blockPos, 64, PoiManager.Occupancy.ANY);
             BlockPos blockPos2 = (BlockPos)optional.orElse(blockPos);
-            BlockPos blockPos3 = this.getNearbySpawnPos(world, blockPos2, 64);
-            if (blockPos3 != null && this.doesNotSuffocateAt(world, blockPos3)) {
-                WanderingTrader wanderingTraderEntity = WorldUtils.spawnEntity(EntityType.WANDERING_TRADER, world, blockPos3);
+            BlockPos blockPos3 = this.getNearbySpawnPos(level, blockPos2, 64);
+            if (blockPos3 != null && this.doesNotSuffocateAt(level, blockPos3)) {
+                WanderingTrader wanderingTraderEntity = LevelUtils.spawnEntity(EntityType.WANDERING_TRADER, level, blockPos3);
                 if (wanderingTraderEntity != null) {
                     for(int j = 0; j < 2; ++j) {
-                        this.spawnLlama(world, wanderingTraderEntity, 4);
+                        this.spawnLlama(level, wanderingTraderEntity, 4);
                     }
 
                     wanderingTraderEntity.setDespawnDelay(12000);
@@ -111,10 +111,10 @@ public class SimpleLife extends ThirdLife {
         }
     }
 
-    private void spawnLlama(ServerLevel world, WanderingTrader wanderingTrader, int range) {
-        BlockPos blockPos = this.getNearbySpawnPos(world, wanderingTrader.blockPosition(), range);
+    private void spawnLlama(ServerLevel level, WanderingTrader wanderingTrader, int range) {
+        BlockPos blockPos = this.getNearbySpawnPos(level, wanderingTrader.blockPosition(), range);
         if (blockPos != null) {
-            TraderLlama traderLlamaEntity = WorldUtils.spawnEntity(EntityType.TRADER_LLAMA, world, blockPos);
+            TraderLlama traderLlamaEntity = LevelUtils.spawnEntity(EntityType.TRADER_LLAMA, level, blockPos);
             if (traderLlamaEntity != null) {
                 traderLlamaEntity.setLeashedTo(wanderingTrader, true);
             }

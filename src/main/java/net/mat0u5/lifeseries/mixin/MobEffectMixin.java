@@ -23,7 +23,7 @@ public class MobEffectMixin {
     //? if <= 1.21 {
     public void applyInstantEffect(Entity source, Entity attacker, LivingEntity target, int amplifier, double proximity, CallbackInfo ci) {
     //?} else {
-    /*public void applyInstantEffect(ServerLevel world, Entity effectEntity, Entity attacker, LivingEntity target, int amplifier, double proximity, CallbackInfo ci) {
+    /*public void applyInstantEffect(ServerLevel level, Entity effectEntity, Entity attacker, LivingEntity target, int amplifier, double proximity, CallbackInfo ci) {
     *///?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         MobEffect effect = (MobEffect) (Object) this;
@@ -37,7 +37,7 @@ public class MobEffectMixin {
     //? if <= 1.21 {
     public void applyInstantEffect(LivingEntity entity, int amplifier, CallbackInfoReturnable<Boolean> cir) {
     //?} else {
-    /*public void applyInstantEffect(ServerLevel world, LivingEntity entity, int amplifier, CallbackInfoReturnable<Boolean> cir) {
+    /*public void applyInstantEffect(ServerLevel level, LivingEntity entity, int amplifier, CallbackInfoReturnable<Boolean> cir) {
     *///?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         MobEffect effect = (MobEffect) (Object) this;

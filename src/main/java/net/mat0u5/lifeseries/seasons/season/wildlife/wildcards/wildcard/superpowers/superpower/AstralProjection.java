@@ -16,14 +16,9 @@ import org.jetbrains.annotations.Nullable;
 import static net.mat0u5.lifeseries.Main.server;
 //? if <= 1.21.6 {
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
-import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.network.DisconnectionDetails;
-import net.minecraft.network.chat.Component;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
-import static net.mat0u5.lifeseries.Main.server;
 //?}
 //? if >= 1.21.9 {
 /*import net.mat0u5.lifeseries.utils.other.TaskScheduler;
@@ -47,7 +42,7 @@ public class AstralProjection extends ToggleableSuperpower {
     @Nullable
     private Vec3 startedPos;
     @Nullable
-    private ServerLevel startedWorld;
+    private ServerLevel startedLevel;
     private float[] startedLooking = new float[2];
     private GameType startedGameMode = GameType.SURVIVAL;
 
@@ -83,7 +78,7 @@ public class AstralProjection extends ToggleableSuperpower {
         clone = null;
         startedPos = null;
         startedLooking = new float[2];
-        startedWorld = null;
+        startedLevel = null;
     }
 
     public void startProjection() {
@@ -97,21 +92,21 @@ public class AstralProjection extends ToggleableSuperpower {
         startedPos = player.position();
         startedLooking[0] = player.getYRot();
         startedLooking[1] = player.getXRot();
-        startedWorld = PlayerUtils.getServerWorld(player);
-        if (startedWorld == null) return;
+        startedLevel = player.ls$getServerLevel();
+        if (startedLevel == null) return;
         startedGameMode = player.gameMode.getGameModeForPlayer();
         Vec3 velocity = player.getDeltaMovement();
         player.setGameMode(GameType.SPECTATOR);
         Inventory inv = player.getInventory();
 
         //? if <= 1.21.6 {
-        FakePlayer.createFake(fakePlayerName, server, startedPos, startedLooking[0], startedLooking[1], PlayerUtils.getServerWorld(player).dimension(),
+        FakePlayer.createFake(fakePlayerName, server, startedPos, startedLooking[0], startedLooking[1], player.ls$getServerLevel().dimension(),
                 startedGameMode, false, inv, player.getUUID()).thenAccept((fakePlayer) -> {
             clone = fakePlayer;
             sendDisguisePacket();
         });
         //?} else {
-        /*clone = EntityType.MANNEQUIN.create(startedWorld, EntitySpawnReason.COMMAND);
+        /*clone = EntityType.MANNEQUIN.create(startedLevel, EntitySpawnReason.COMMAND);
         if (clone == null) return;
 
         clone.setPosRaw(player.getX(), player.getY(), player.getZ());
@@ -130,7 +125,7 @@ public class AstralProjection extends ToggleableSuperpower {
             clone.setItemInHand(hand, player.getItemInHand(hand));
         }
 
-        startedWorld.addFreshEntity(clone);
+        startedLevel.addFreshEntity(clone);
 
         TaskScheduler.scheduleTask(1, () -> {
             clone.yHeadRot = player.yHeadRot;
@@ -175,8 +170,8 @@ public class AstralProjection extends ToggleableSuperpower {
 
         if (player.ls$isDead()) return;
 
-        if (startedWorld != null && toBackPos != null) {
-            PlayerUtils.teleport(player, startedWorld, toBackPos, startedLooking[0], startedLooking[1]);
+        if (startedLevel != null && toBackPos != null) {
+            PlayerUtils.teleport(player, startedLevel, toBackPos, startedLooking[0], startedLooking[1]);
         }
         player.setGameMode(startedGameMode);
         player.playNotifySound(SoundEvents.EVOKER_DEATH, SoundSource.MASTER, 0.3f, 1);
@@ -186,15 +181,15 @@ public class AstralProjection extends ToggleableSuperpower {
     //? if <= 1.21 {
     public void onDamageClone(DamageSource source, float amount) {
      //?} else {
-    /*public void onDamageClone(ServerLevel world, DamageSource source, float amount) {
+    /*public void onDamageClone(ServerLevel level, DamageSource source, float amount) {
     *///?}
         deactivate();
         ServerPlayer player = getPlayer();
         if (player == null) return;
         //? if <= 1.21 {
-        PlayerUtils.damage(player, source, amount);
+        player.ls$hurt(source, amount);
          //?} else {
-        /*PlayerUtils.damage(player, world, source, amount);
+        /*player.ls$hurt(level, source, amount);
         *///?}
     }
 }

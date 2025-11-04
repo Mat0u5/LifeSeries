@@ -13,7 +13,7 @@ import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
+import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -209,7 +209,7 @@ public class TriviaWildcard extends Wildcard {
     }
     public static void spawnBotFor(ServerPlayer player, BlockPos pos) {
         resetPlayerOnBotSpawn(player);
-        TriviaBot bot = WorldUtils.spawnEntity(MobRegistry.TRIVIA_BOT, PlayerUtils.getServerWorld(player), pos);
+        TriviaBot bot = LevelUtils.spawnEntity(MobRegistry.TRIVIA_BOT, player.ls$getServerLevel(), pos);
         if (bot != null) {
             SessionTranscript.newTriviaBot(player);
             bot.serverData.setBoundPlayer(player);
@@ -251,8 +251,8 @@ public class TriviaWildcard extends Wildcard {
     public static void killAllBots() {
         if (server == null) return;
         List<Entity> toKill = new ArrayList<>();
-        for (ServerLevel world : server.getAllLevels()) {
-            for (Entity entity : world.getAllEntities()) {
+        for (ServerLevel level : server.getAllLevels()) {
+            for (Entity entity : level.getAllEntities()) {
                 if (entity instanceof TriviaBot) {
                     toKill.add(entity);
                 }
@@ -267,8 +267,8 @@ public class TriviaWildcard extends Wildcard {
     public static void killAllTriviaSnails() {
         if (server == null) return;
         List<Entity> toKill = new ArrayList<>();
-        for (ServerLevel world : server.getAllLevels()) {
-            for (Entity entity : world.getAllEntities()) {
+        for (ServerLevel level : server.getAllLevels()) {
+            for (Entity entity : level.getAllEntities()) {
                 if (entity instanceof Snail snail) {
                     if (snail.isFromTrivia()) {
                         toKill.add(entity);
@@ -282,8 +282,8 @@ public class TriviaWildcard extends Wildcard {
     public static void killTriviaSnailFor(ServerPlayer player) {
         if (server == null) return;
         List<Entity> toKill = new ArrayList<>();
-        for (ServerLevel world : server.getAllLevels()) {
-            for (Entity entity : world.getAllEntities()) {
+        for (ServerLevel level : server.getAllLevels()) {
+            for (Entity entity : level.getAllEntities()) {
                 if (entity instanceof Snail snail) {
                     if (snail.isFromTrivia()) {
                         UUID boundPlayer = snail.serverData.getBoundPlayerUUID();

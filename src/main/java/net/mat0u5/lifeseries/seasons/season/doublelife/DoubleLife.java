@@ -14,7 +14,7 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
+import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -418,9 +418,9 @@ public class DoubleLife extends Season {
                     .registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(SOULMATE_DAMAGE));
             soulmate.hurt(damageSource, 0.0000001F);
             //?} else {
-            /*DamageSource damageSource = new DamageSource( PlayerUtils.getServerWorld(soulmate).registryAccess()
+            /*DamageSource damageSource = new DamageSource( soulmate.ls$getServerLevel().registryAccess()
                     .lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(SOULMATE_DAMAGE));
-            soulmate.hurtServer(PlayerUtils.getServerWorld(soulmate), damageSource, 0.0000001F);
+            soulmate.hurtServer(soulmate.ls$getServerLevel(), damageSource, 0.0000001F);
             *///?}
         }
 
@@ -444,9 +444,9 @@ public class DoubleLife extends Season {
         if (soulmate == null) return;
         if (!soulmate.isAlive()) return;
         //? if <= 1.21.9 {
-        boolean keepInventory = OtherUtils.getBooleanGameRule(PlayerUtils.getServerWorld(player), GameRules.RULE_KEEPINVENTORY);
+        boolean keepInventory = OtherUtils.getBooleanGameRule(player.ls$getServerLevel(), GameRules.RULE_KEEPINVENTORY);
         //?} else {
-        /*boolean keepInventory = OtherUtils.getBooleanGameRule(PlayerUtils.getServerWorld(player), GameRules.KEEP_INVENTORY);
+        /*boolean keepInventory = OtherUtils.getBooleanGameRule(player.ls$getServerLevel(), GameRules.KEEP_INVENTORY);
         *///?}
         if (SOULBOUND_INVENTORIES && server != null && !keepInventory) {
             soulmate.getInventory().clearContent();
@@ -459,7 +459,7 @@ public class DoubleLife extends Season {
         soulmate.setLastHurtByPlayer(player);
         soulmate.hurt(damageSource, 1000);
          //?} else {
-        /*DamageSource damageSource = new DamageSource( PlayerUtils.getServerWorld(soulmate).registryAccess()
+        /*DamageSource damageSource = new DamageSource( soulmate.ls$getServerLevel().registryAccess()
                 .lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(SOULMATE_DAMAGE));
         soulmate.setLastHurtByMob(player);
         //? if <= 1.21.4 {
@@ -467,7 +467,7 @@ public class DoubleLife extends Season {
         //?} else {
         /^soulmate.setLastHurtByPlayer(player, 100);
         ^///?}
-        soulmate.hurtServer(PlayerUtils.getServerWorld(soulmate), damageSource, 1000);
+        soulmate.hurtServer(soulmate.ls$getServerLevel(), damageSource, 1000);
         *///?}
 
 
@@ -692,10 +692,10 @@ public class DoubleLife extends Season {
                         PlayerUtils.sendTitleWithSubtitleToPlayers(allPlayers, Component.empty(), Component.nullToEmpty("§cThere can only be one winner."), 20, 40, 20);
                     });
                     TaskScheduler.scheduleTask(380, () -> {
-                        WorldUtils.summonHarmlessLightning(player1);
-                        WorldUtils.summonHarmlessLightning(player2);
-                        PlayerUtils.damage(player1, player1.damageSources().lightningBolt(), 0.0000001F);
-                        PlayerUtils.damage(player2, player2.damageSources().lightningBolt(), 0.0000001F);
+                        LevelUtils.summonHarmlessLightning(player1);
+                        LevelUtils.summonHarmlessLightning(player2);
+                        player1.ls$hurt(player1.damageSources().lightningBolt(), 0.0000001F);
+                        player2.ls$hurt(player2.damageSources().lightningBolt(), 0.0000001F);
                     });
                 }
             }

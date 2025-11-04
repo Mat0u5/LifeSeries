@@ -45,8 +45,8 @@ public class DeathAnvil extends AdvancedDeath {
         }
         if (ticks % 5 == 0 && anvilAmount > 0) {
             BlockPos spawnPos = player.blockPosition().offset(anvilAmount, 15, 0);
-            ServerLevel world = PlayerUtils.getServerWorld(player);
-            FallingBlockEntity entity = FallingBlockEntity.fall(world, spawnPos, Blocks.ANVIL.defaultBlockState());
+            ServerLevel level = player.ls$getServerLevel();
+            FallingBlockEntity entity = FallingBlockEntity.fall(level, spawnPos, Blocks.ANVIL.defaultBlockState());
             PlayerUtils.playSoundWithSourceToPlayers(entity, SoundEvents.ANVIL_PLACE, SoundSource.BLOCKS, 1, 1);
             entity.disableDrop();
             anvilAmount--;

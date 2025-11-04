@@ -67,8 +67,8 @@ public class Snail extends Monster {
     public SnailPathfinding pathfinding = new SnailPathfinding(this);
     public SnailClientData clientData = new SnailClientData(this);
 
-    public Snail(EntityType<? extends Monster> entityType, Level world) {
-        super(entityType, world);
+    public Snail(EntityType<? extends Monster> entityType, Level level) {
+        super(entityType, level);
         setInvulnerable(true);
         setPersistenceRequired();
     }
@@ -176,9 +176,9 @@ public class Snail extends Monster {
             for(int q = k; q < l; ++q) {
                 for(int r = m; r < n; ++r) {
                     mutable.set(p, q, r);
-                    FluidState fluidState = getSnailWorld().getFluidState(mutable);
+                    FluidState fluidState = level().getFluidState(mutable);
                     if (fluidState.is(tag)) {
-                        double e = q + fluidState.getHeight(this.getSnailWorld(), mutable);
+                        double e = q + fluidState.getHeight(this.level(), mutable);
                         if (e >= box.minY) {
                             d = Math.max(e - box.minY, d);
                         }
@@ -189,11 +189,6 @@ public class Snail extends Monster {
 
         isInLavaLocal = d > 0.0;
         return false;
-    }
-
-    public Level getSnailWorld() {
-        //TODO remove
-        return level();
     }
 
     @Override

@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class WanderingTraderSpawnerMixin {
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     //? if <= 1.21.4 {
-    public void spawn(ServerLevel world, boolean spawnMonsters, boolean spawnAnimals, CallbackInfoReturnable<Integer> cir) {
+    public void spawn(ServerLevel level, boolean spawnMonsters, boolean spawnAnimals, CallbackInfoReturnable<Integer> cir) {
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (currentSeason.getSeason() == Seasons.SIMPLE_LIFE) {
             cir.setReturnValue(0);
@@ -25,9 +25,9 @@ public class WanderingTraderSpawnerMixin {
     }
     //?} else {
     /*//? if <= 1.21.6 {
-    public void spawn(ServerLevel world, boolean spawnMonsters, boolean spawnAnimals, CallbackInfo ci) {
+    public void spawn(ServerLevel level, boolean spawnMonsters, boolean spawnAnimals, CallbackInfo ci) {
     //?} else {
-    /^public void spawn(ServerLevel world, boolean spawnMonsters, CallbackInfo ci) {
+    /^public void spawn(ServerLevel level, boolean spawnMonsters, CallbackInfo ci) {
     ^///?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (currentSeason.getSeason() == Seasons.SIMPLE_LIFE) {

@@ -17,7 +17,7 @@ public class TriviaBotLookAtPlayerGoal extends Goal {
     }
 
     public boolean canUse() {
-        if (mob.getBotWorld().isClientSide()) return false;
+        if (mob.level().isClientSide()) return false;
         if (!mob.interactedWith()) return false;
 
         Vec3 targetPos = mob.serverData.getPlayerPos();

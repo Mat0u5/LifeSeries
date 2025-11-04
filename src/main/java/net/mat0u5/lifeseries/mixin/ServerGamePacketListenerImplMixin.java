@@ -86,10 +86,10 @@ public class ServerGamePacketListenerImplMixin {
         ServerGamePacketListenerImpl handler = (ServerGamePacketListenerImpl) (Object) this;
         ServerPlayer player = handler.getPlayer();
         if (player instanceof FakePlayer) {
-            ServerLevel world = PlayerUtils.getServerWorld(player);
-            if (world.getPlayerByUUID(player.getUUID()) != null) {
+            ServerLevel level = player.ls$getServerLevel();
+            if (level.getPlayerByUUID(player.getUUID()) != null) {
                 handler.resetPosition();
-                world.getChunkSource().move(player);
+                level.getChunkSource().move(player);
             }
         }
     }

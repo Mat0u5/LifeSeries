@@ -32,7 +32,7 @@
     "ServerPlayerGameModeMixin",
     "ServerGamePacketListenerImplMixin",
     "WaypointTransmitterMixin",
-    "ServerWorldMixin",
+    "ServerLevelMixin",
     "SleepStatusMixin",
     "SpawnEggItemMixin",
     "MobCategoryMixin",

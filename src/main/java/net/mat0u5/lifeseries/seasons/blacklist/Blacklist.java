@@ -294,26 +294,26 @@ public class Blacklist {
         getBannedEffects();
     }
 
-    public InteractionResult onBlockUse(ServerPlayer player, Level world, InteractionHand hand, BlockHitResult hitResult) {
+    public InteractionResult onBlockUse(ServerPlayer player, Level level, InteractionHand hand, BlockHitResult hitResult) {
         if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST) return InteractionResult.PASS;
         processItemStack(player, player.getItemInHand(hand));
         BlockPos blockPos = hitResult.getBlockPos();
-        BlockState block = world.getBlockState(blockPos);
+        BlockState block = level.getBlockState(blockPos);
         if (block.isAir()) return InteractionResult.PASS;
         if (getBlockBlacklist().contains(block.getBlock())) {
-            world.setBlockAndUpdate(blockPos, Blocks.AIR.defaultBlockState());
+            level.setBlockAndUpdate(blockPos, Blocks.AIR.defaultBlockState());
             return InteractionResult.FAIL;
         }
         return InteractionResult.PASS;
     }
 
-    public InteractionResult onBlockAttack(ServerPlayer player, Level world, BlockPos pos) {
+    public InteractionResult onBlockAttack(ServerPlayer player, Level level, BlockPos pos) {
         if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST) return InteractionResult.PASS;
-        if (world.isClientSide()) return InteractionResult.PASS;
-        BlockState block = world.getBlockState(pos);
+        if (level.isClientSide()) return InteractionResult.PASS;
+        BlockState block = level.getBlockState(pos);
         if (block.isAir()) return InteractionResult.PASS;
         if (getBlockBlacklist().contains(block.getBlock())) {
-            world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+            level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
             return InteractionResult.FAIL;
         }
         return InteractionResult.PASS;

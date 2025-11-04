@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 //? if >= 1.21.2 {
-/*import net.mat0u5.lifeseries.utils.world.WorldUtils;
+/*import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntitySpawnReason;
@@ -61,7 +61,7 @@ public class CreakingPower extends ToggleableSuperpower {
         super.activate();
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        ServerLevel playerWorld = PlayerUtils.getServerWorld(player);
+        ServerLevel playerLevel = player.ls$getServerLevel();
 
         PlayerTeam playerTeam = TeamUtils.getPlayerTeam(player);
         if (playerTeam == null) return;
@@ -72,8 +72,8 @@ public class CreakingPower extends ToggleableSuperpower {
 
         //? if >= 1.21.2 {
         /*for (int i = 0; i < 3; i++) {
-            BlockPos spawnPos =  WorldUtils.getCloseBlockPos(playerWorld, player.blockPosition(), 6, 3, true);
-            Creaking creaking = EntityType.CREAKING.spawn(playerWorld, spawnPos, EntitySpawnReason.COMMAND);
+            BlockPos spawnPos =  LevelUtils.getCloseBlockPos(playerLevel, player.blockPosition(), 6, 3, true);
+            Creaking creaking = EntityType.CREAKING.spawn(playerLevel, spawnPos, EntitySpawnReason.COMMAND);
             if (creaking != null) {
                 creaking.setInvulnerable(true);
                 creaking.addTag("creakingFromSuperpower");
@@ -115,7 +115,7 @@ public class CreakingPower extends ToggleableSuperpower {
         TeamUtils.addEntityToTeam(teamName, player);
         TeamUtils.addEntityToTeam(teamName, entity);
         Vec3 entityPos = entity.position();
-        PlayerUtils.getServerWorld(player).sendParticles(
+        player.ls$getServerLevel().sendParticles(
                 ParticleTypes.EXPLOSION,
                 entityPos.x(), entityPos.y(), entityPos.z(),
                 1, 0, 0, 0, 0
@@ -125,8 +125,8 @@ public class CreakingPower extends ToggleableSuperpower {
     /*public void spawnTrailParticles() {
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        ServerLevel world = PlayerUtils.getServerWorld(player);
-        if (world == null) return;
+        ServerLevel level = player.ls$getServerLevel();
+        if (level == null) return;
         for (Creaking creakingEntity : createdEntities) {
             if (creakingEntity.getRandom().nextInt(50)==0) {
                 spawnTrailParticles(creakingEntity, 1, false);
@@ -140,11 +140,11 @@ public class CreakingPower extends ToggleableSuperpower {
     public void spawnTrailParticles(Creaking creaking, int count, boolean towardsPlayer) {
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        ServerLevel world = PlayerUtils.getServerWorld(player);
-        if (world == null) return;
+        ServerLevel level = player.ls$getServerLevel();
+        if (level == null) return;
 
         int i = towardsPlayer ? 16545810 : 6250335;
-        RandomSource random = world.random;
+        RandomSource random = level.random;
 
         for(double d = 0.0; d < count; d++) {
             AABB box = creaking.getBoundingBox();
@@ -159,19 +159,19 @@ public class CreakingPower extends ToggleableSuperpower {
 
             //? if = 1.21.2 {
             /^TargetColorParticleOption trailParticleEffect2 = new TargetColorParticleOption(vec3d2, i);
-            world.sendParticles(trailParticleEffect2, vec3d.x, vec3d.y, vec3d.z, 1, 0.0, 0.0, 0.0, 0.0);
+            level.sendParticles(trailParticleEffect2, vec3d.x, vec3d.y, vec3d.z, 1, 0.0, 0.0, 0.0, 0.0);
             ^///?} else if >= 1.21.4 {
             /^TrailParticleOption trailParticleEffect2 = new TrailParticleOption(vec3d2, i, random.nextInt(40) + 10);
-            world.sendParticles(trailParticleEffect2, true, true, vec3d.x, vec3d.y, vec3d.z, 1, 0.0, 0.0, 0.0, 0.0);
+            level.sendParticles(trailParticleEffect2, true, true, vec3d.x, vec3d.y, vec3d.z, 1, 0.0, 0.0, 0.0, 0.0);
             ^///?}
         }
     }
 
     public static void killUnassignedMobs() {
         if (server == null) return;
-        for (ServerLevel world : server.getAllLevels()) {
+        for (ServerLevel level : server.getAllLevels()) {
             List<Entity> toKill = new ArrayList<>();
-            world.getAllEntities().forEach(entity -> {
+            level.getAllEntities().forEach(entity -> {
                 if (!(entity instanceof Creaking)) return;
                 if (allCreatedEntities.contains(entity.getUUID())) return;
                 if (!entity.getTags().contains("creakingFromSuperpower")) return;

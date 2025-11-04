@@ -34,7 +34,7 @@ import java.util.Optional;
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
 //?if >= 1.21.2
-import net.minecraft.server.level.ServerLevel;
+/*import net.minecraft.server.level.ServerLevel;*/
 
 @Mixin(value = Player.class, priority = 1)
 public abstract class PlayerMixin {
@@ -43,7 +43,7 @@ public abstract class PlayerMixin {
     //? if <=1.21 {
     private void onApplyDamage(DamageSource source, float amount, CallbackInfo ci) {
      //?} else
-    /*private void onApplyDamage(ServerLevel world, DamageSource source, float amount, CallbackInfo ci) {*/
+    /*private void onApplyDamage(ServerLevel level, DamageSource source, float amount, CallbackInfo ci) {*/
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         Player player = (Player) (Object) this;
         if (WatcherManager.isWatcher(player)) return;
@@ -58,7 +58,7 @@ public abstract class PlayerMixin {
     private void onPreDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
     //?} else {
     /*@Inject(method = "hurtServer", at = @At("HEAD"), cancellable = true)
-    private void onPreDamage(ServerLevel world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    private void onPreDamage(ServerLevel level, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
     *///?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         Player player = (Player) (Object) this;
@@ -115,6 +115,6 @@ public abstract class PlayerMixin {
         if (!player.onGround()) return;
         if (!SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPERSPEED)) return;
 
-        ls$frostWalker.apply(PlayerUtils.getServerWorld(player), 5, null, player, player.position());
+        ls$frostWalker.apply(player.ls$getServerLevel(), 5, null, player, player.position());
     }
 }

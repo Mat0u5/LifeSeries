@@ -16,9 +16,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.EnumSet;
-import java.util.Set;
-
 public class Teleportation extends Superpower {
     private long ticks = 0;
 
@@ -57,29 +54,29 @@ public class Teleportation extends Superpower {
     public void activate() {
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        ServerLevel playerWorld = PlayerUtils.getServerWorld(player);
+        ServerLevel playerLevel = player.ls$getServerLevel();
         Vec3 playerPos = player.position();
         boolean teleported = false;
         Entity lookingAt = PlayerUtils.getEntityLookingAt(player, 100);
         if (lookingAt != null)  {
             if (lookingAt instanceof ServerPlayer lookingAtPlayer) {
                 if (!PlayerUtils.isFakePlayer(lookingAtPlayer)) {
-                    ServerLevel lookingAtPlayerWorld = PlayerUtils.getServerWorld(lookingAtPlayer);
+                    ServerLevel lookingAtPlayerLevel = lookingAtPlayer.ls$getServerLevel();
                     Vec3 lookingAtPlayerPos = lookingAtPlayer.position();
 
-                    spawnTeleportParticles(playerWorld, playerPos);
-                    spawnTeleportParticles(lookingAtPlayerWorld, lookingAtPlayerPos);
+                    spawnTeleportParticles(playerLevel, playerPos);
+                    spawnTeleportParticles(lookingAtPlayerLevel, lookingAtPlayerPos);
 
-                    ServerLevel storedWorld = playerWorld;
+                    ServerLevel storedLevel = playerLevel;
                     Vec3 storedPos = playerPos;
                     float storedYaw = player.getYRot();
                     float storedPitch = player.getXRot();
 
-                    PlayerUtils.teleport(player, lookingAtPlayerWorld, lookingAtPlayerPos, lookingAtPlayer.getYRot(), lookingAtPlayer.getXRot());
-                    PlayerUtils.teleport(lookingAtPlayer, storedWorld, storedPos, storedYaw, storedPitch);
+                    PlayerUtils.teleport(player, lookingAtPlayerLevel, lookingAtPlayerPos, lookingAtPlayer.getYRot(), lookingAtPlayer.getXRot());
+                    PlayerUtils.teleport(lookingAtPlayer, storedLevel, storedPos, storedYaw, storedPitch);
 
-                    playTeleportSound(playerWorld, playerPos);
-                    playTeleportSound(lookingAtPlayerWorld, lookingAtPlayerPos);
+                    playTeleportSound(playerLevel, playerPos);
+                    playTeleportSound(lookingAtPlayerLevel, lookingAtPlayerPos);
 
                     //? if <= 1.21.4 {
                     MobEffectInstance resistance = new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 100, 3);
@@ -96,13 +93,13 @@ public class Teleportation extends Superpower {
         if (!teleported) {
             Vec3 lookingAtPos = PlayerUtils.getPosLookingAt(player, 100);
             if (lookingAtPos != null) {
-                playTeleportSound(playerWorld, playerPos);
-                spawnTeleportParticles(playerWorld, playerPos);
+                playTeleportSound(playerLevel, playerPos);
+                spawnTeleportParticles(playerLevel, playerPos);
 
                 PlayerUtils.teleport(player, lookingAtPos);
 
-                playTeleportSound(playerWorld, playerPos);
-                spawnTeleportParticles(playerWorld, playerPos);
+                playTeleportSound(playerLevel, playerPos);
+                spawnTeleportParticles(playerLevel, playerPos);
 
                 teleported = true;
             }
@@ -115,14 +112,14 @@ public class Teleportation extends Superpower {
         super.activate();
     }
 
-    public void spawnTeleportParticles(ServerLevel world, Vec3 pos) {
-        world.sendParticles(
+    public void spawnTeleportParticles(ServerLevel level, Vec3 pos) {
+        level.sendParticles(
                 ParticleTypes.PORTAL,
                 pos.x(), pos.y()+0.9, pos.z(),
                 40, 0.3, 0.5, 0.3, 0
         );
     }
-    public void playTeleportSound(ServerLevel world, Vec3 pos) {
-        world.playSound(null, pos.x(), pos.y(), pos.z(), SoundEvents.PLAYER_TELEPORT, SoundSource.MASTER, 1, 1);
+    public void playTeleportSound(ServerLevel level, Vec3 pos) {
+        level.playSound(null, pos.x(), pos.y(), pos.z(), SoundEvents.PLAYER_TELEPORT, SoundSource.MASTER, 1, 1);
     }
 }

@@ -24,7 +24,7 @@ public final class TriviaBotTeleportGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (mob.getBotWorld().isClientSide()) return false;
+        if (mob.level().isClientSide()) return false;
         if (mob.interactedWith()) {
             return false;
         }

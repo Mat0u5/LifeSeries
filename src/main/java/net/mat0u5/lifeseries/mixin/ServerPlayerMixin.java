@@ -4,12 +4,14 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
-import net.mat0u5.lifeseries.utils.interfaces.IServerPlayerEntity;
+import net.mat0u5.lifeseries.utils.interfaces.IServerPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Nullable;
@@ -28,7 +30,7 @@ import static net.mat0u5.lifeseries.Main.*;
 /*import java.util.Collection;*/
 
 @Mixin(value = ServerPlayer.class, priority = 1)
-public class ServerPlayerMixin implements IServerPlayerEntity {
+public class ServerPlayerMixin implements IServerPlayer {
 
     @Inject(method = "openMenu", at = @At("HEAD"))
     private void onInventoryOpen(@Nullable MenuProvider factory, CallbackInfoReturnable<OptionalInt> cir) {
@@ -188,5 +190,31 @@ public class ServerPlayerMixin implements IServerPlayerEntity {
     @Unique @Override
     public boolean ls$isWatcher() {
         return WatcherManager.isWatcher(ls$get());
+    }
+
+    @Unique @Override
+    public void ls$hurt(DamageSource source, float amount) {
+        //? if <= 1.21 {
+        ls$get().hurt(source, amount);
+        //?} else {
+        /*ls$get().hurtServer(ls$getServerLevel(), source, amount);
+         *///?}
+    }
+    @Unique @Override
+    public void ls$hurt(ServerLevel level, DamageSource source, float amount) {
+        //? if <= 1.21 {
+        ls$get().hurt(source, amount);
+        //?} else {
+        /*ls$get().hurtServer(level, source, amount);
+         *///?}
+    }
+
+    @Unique @Override
+    public ServerLevel ls$getServerLevel() {
+        //? if <= 1.21.5 {
+        return ls$get().serverLevel();
+        //?} else {
+        /*return ls$get().level();
+         *///?}
     }
 }

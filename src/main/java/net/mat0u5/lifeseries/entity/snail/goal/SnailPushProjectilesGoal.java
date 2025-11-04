@@ -33,10 +33,10 @@ public final class SnailPushProjectilesGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (mob.getSnailWorld().isClientSide()) return false;
+        if (mob.level().isClientSide()) return false;
 
-        Level world = mob.level();
-        this.projectiles = world.getEntitiesOfClass(
+        Level level = mob.level();
+        this.projectiles = level.getEntitiesOfClass(
                 Projectile.class,
                 mob.getBoundingBox().inflate(5.0, 5.0, 5.0),
                 projectile -> projectile.distanceToSqr(mob) < 16

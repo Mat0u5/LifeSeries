@@ -23,8 +23,8 @@ public class PathFinder extends AmbientCreature {
     public static final float FLYING_SPEED = 0.3f;
     private int despawnTimer = 0;
 
-    public PathFinder(EntityType<? extends AmbientCreature> entityType, Level world) {
-        super(entityType, world);
+    public PathFinder(EntityType<? extends AmbientCreature> entityType, Level level) {
+        super(entityType, level);
         setInvulnerable(true);
         setNoGravity(true);
         setPersistenceRequired();

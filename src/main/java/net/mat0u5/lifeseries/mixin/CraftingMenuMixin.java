@@ -24,10 +24,10 @@ import net.minecraft.world.level.Level;
 public class CraftingMenuMixin {
     @Inject(method = "slotChangedCraftingGrid", at = @At("HEAD"), cancellable = true)
     //? if <= 1.21 {
-    private static void blockPreviewIfNoCraftingItemPresent(AbstractContainerMenu handler, Level world, Player player,
-            CraftingContainer craftingInventory, ResultContainer resultInventory, RecipeHolder<CraftingRecipe> recipe, CallbackInfo ci) {
+    private static void blockPreviewIfNoCraftingItemPresent(AbstractContainerMenu handler, Level level, Player player,
+                                                            CraftingContainer craftingInventory, ResultContainer resultInventory, RecipeHolder<CraftingRecipe> recipe, CallbackInfo ci) {
     //?} else {
-    /*private static void blockPreviewIfNoCraftingItemPresent(AbstractContainerMenu handler, ServerLevel world, Player player,
+    /*private static void blockPreviewIfNoCraftingItemPresent(AbstractContainerMenu handler, ServerLevel level, Player player,
                                                             CraftingContainer craftingInventory, ResultContainer resultInventory, RecipeHolder<CraftingRecipe> recipe, CallbackInfo ci) {
         *///?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;

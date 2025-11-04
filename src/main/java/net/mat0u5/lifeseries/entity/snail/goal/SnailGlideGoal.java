@@ -19,7 +19,7 @@ public final class SnailGlideGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (mob.getSnailWorld().isClientSide()) return false;
+        if (mob.level().isClientSide()) return false;
         if (mob.isSnailGliding()) {
             return true;
         }

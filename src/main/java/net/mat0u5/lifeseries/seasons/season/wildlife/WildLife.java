@@ -339,7 +339,7 @@ public class WildLife extends Season {
     }
 
     @Override
-    public void onRightClickEntity(ServerPlayer player, Level world, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
+    public void onRightClickEntity(ServerPlayer player, Level level, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
         if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPER_PUNCH)) {
             if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof SuperPunch power) {
                 power.tryRideEntity(entity);
@@ -348,7 +348,7 @@ public class WildLife extends Season {
     }
 
     @Override
-    public void onAttackEntity(ServerPlayer player, Level world, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
+    public void onAttackEntity(ServerPlayer player, Level level, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
         if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.INVISIBILITY)) {
             if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof Invisibility power) {
                 power.onAttack();

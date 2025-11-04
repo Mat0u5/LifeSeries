@@ -56,16 +56,16 @@ public class TimeDilation extends Wildcard {
             int weatherTicks = (int) weatherTicksBacklog;
             if (weatherTicks >= 1) {
                 weatherTicksBacklog -= weatherTicks;
-                for (ServerLevel serverWorld : server.getAllLevels()) {
-                    long newTicks = serverWorld.getDayTime() + weatherTicks;
-                    serverWorld.setDayTime(newTicks);
-                    for (ServerPlayer player : serverWorld.players()) {
+                for (ServerLevel serverLevelorld : server.getAllLevels()) {
+                    long newTicks = serverLevelorld.getDayTime() + weatherTicks;
+                    serverLevelorld.setDayTime(newTicks);
+                    for (ServerPlayer player : serverLevelorld.players()) {
                         //? if <= 1.21.9 {
-                        boolean daylightCycle = OtherUtils.getBooleanGameRule(serverWorld, GameRules.RULE_DAYLIGHT);
+                        boolean daylightCycle = OtherUtils.getBooleanGameRule(serverLevelorld, GameRules.RULE_DAYLIGHT);
                         //?} else {
-                        /*boolean daylightCycle = OtherUtils.getBooleanGameRule(serverWorld, GameRules.ADVANCE_TIME);
+                        /*boolean daylightCycle = OtherUtils.getBooleanGameRule(serverLevelorld, GameRules.ADVANCE_TIME);
                         *///?}
-                        player.connection.send(new ClientboundSetTimePacket(serverWorld.getGameTime(), serverWorld.getDayTime(), daylightCycle));
+                        player.connection.send(new ClientboundSetTimePacket(serverLevelorld.getGameTime(), serverLevelorld.getDayTime(), daylightCycle));
                     }
                 }
             }

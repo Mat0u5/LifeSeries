@@ -18,13 +18,13 @@ import static net.mat0u5.lifeseries.Main.currentSeason;
 @Mixin(value = ServerPlayerGameMode.class, priority = 1)
 public class ServerPlayerGameModeMixin {
     @Inject(at = @At("RETURN"), method = "useItemOn")
-    private void onInteractBlock(ServerPlayer player, Level world, ItemStack stack, InteractionHand hand, BlockHitResult hitResult, CallbackInfoReturnable<InteractionResult> cir) {
+    private void onInteractBlock(ServerPlayer player, Level level, ItemStack stack, InteractionHand hand, BlockHitResult hitResult, CallbackInfoReturnable<InteractionResult> cir) {
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         currentSeason.onUpdatedInventory(player);
     }
 
     @Inject(at = @At("RETURN"), method = "useItem")
-    private void onInteractItem(ServerPlayer player, Level world, ItemStack stack, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
+    private void onInteractItem(ServerPlayer player, Level level, ItemStack stack, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         currentSeason.onUpdatedInventory(player);
     }

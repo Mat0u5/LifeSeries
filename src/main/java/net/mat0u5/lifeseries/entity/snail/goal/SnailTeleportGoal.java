@@ -27,7 +27,7 @@ public final class SnailTeleportGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (mob.getSnailWorld().isClientSide()) return false;
+        if (mob.level().isClientSide()) return false;
         if (mob.isPaused()) return false;
         if (teleportCooldown > 0) {
             teleportCooldown--;

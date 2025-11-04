@@ -357,7 +357,7 @@ public class SecretSociety {
     }
 
     public void punishPlayer(ServerPlayer member) {
-        PlayerUtils.damage(member, member.damageSources().playerAttack(member), 0.001f);
+        member.ls$hurt(member.damageSources().playerAttack(member), 0.001f);
         int punishmentLives = Math.abs(PUNISHMENT_LIVES);
         Integer currentLives = member.ls$getLives();
         if (currentLives != null) {

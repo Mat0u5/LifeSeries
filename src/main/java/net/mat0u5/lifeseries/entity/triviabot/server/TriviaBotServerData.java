@@ -43,7 +43,7 @@ public class TriviaBotServerData implements PlayerBoundEntity {
 
     @Override
     public boolean shouldPathfind() {
-        if (bot.getBotWorld().isClientSide()) return false;
+        if (bot.level().isClientSide()) return false;
         ServerPlayer player = getBoundPlayer();
         if (player == null) return false;
         if (!player.isAlive()) return false;
@@ -53,7 +53,7 @@ public class TriviaBotServerData implements PlayerBoundEntity {
     }
 
     public void tick() {
-        if (bot.getBotWorld().isClientSide()) return;
+        if (bot.level().isClientSide()) return;
         if (despawnChecks()) return;
         bot.pathfinding.tick();
 
@@ -139,11 +139,11 @@ public class TriviaBotServerData implements PlayerBoundEntity {
     }
 
     public void chunkLoading() {
-        if (bot.getBotWorld() instanceof ServerLevel world) {
+        if (bot.level() instanceof ServerLevel level) {
             //? if <= 1.21.4 {
-            world.getChunkSource().addRegionTicket(TicketType.PORTAL, new ChunkPos(bot.blockPosition()), 2, bot.blockPosition());
+            level.getChunkSource().addRegionTicket(TicketType.PORTAL, new ChunkPos(bot.blockPosition()), 2, bot.blockPosition());
             //?} else {
-            /*world.getChunkSource().addTicketWithRadius(TicketType.PORTAL, new ChunkPos(bot.blockPosition()), 2);
+            /*level.getChunkSource().addTicketWithRadius(TicketType.PORTAL, new ChunkPos(bot.blockPosition()), 2);
              *///?}
         }
     }
@@ -152,11 +152,11 @@ public class TriviaBotServerData implements PlayerBoundEntity {
         if (getBoundPlayerUUID() != null) {
             TriviaWildcard.bots.remove(getBoundPlayerUUID());
         }
-        if (!bot.getBotWorld().isClientSide()) {
+        if (!bot.level().isClientSide()) {
             //? if <= 1.21 {
             bot.kill();
             //?} else {
-            /*bot.kill((ServerLevel) bot.getBotWorld());
+            /*bot.kill((ServerLevel) bot.level());
              *///?}
         }
         bot.discard();

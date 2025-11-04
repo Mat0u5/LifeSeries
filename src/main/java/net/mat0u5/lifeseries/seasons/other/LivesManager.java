@@ -13,7 +13,7 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.player.TeamUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
+import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -321,7 +321,7 @@ public class LivesManager {
         currentSeason.dropItemsOnLastDeath(player);
         if (livesBefore != null) {
             if (FINAL_DEATH_LIGHTNING) {
-                WorldUtils.summonHarmlessLightning(player);
+                LevelUtils.summonHarmlessLightning(player);
             }
             if (livesBefore > 0) {
                 Necromancy.clearedPlayers.remove(player.getUUID());

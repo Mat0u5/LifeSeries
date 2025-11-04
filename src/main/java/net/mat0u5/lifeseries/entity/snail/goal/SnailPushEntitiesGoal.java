@@ -32,8 +32,8 @@ public final class SnailPushEntitiesGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (mob.getSnailWorld().isClientSide()) return false;
-        Level world = mob.level();
+        if (mob.level().isClientSide()) return false;
+        Level level = mob.level();
 
         lastPushTime++;
         int pushDelay = 20;
@@ -43,12 +43,12 @@ public final class SnailPushEntitiesGoal extends Goal {
         lastPushTime = 0;
 
         pushAway = new ArrayList<>();
-        pushAway.addAll(world.getEntitiesOfClass(PrimedTnt.class, mob.getBoundingBox().inflate(8.0), entity -> mob.distanceToSqr(entity) < 64.0));
-        pushAway.addAll(world.getEntitiesOfClass(MinecartTNT.class, mob.getBoundingBox().inflate(8.0), entity -> mob.distanceToSqr(entity) < 64.0));
+        pushAway.addAll(level.getEntitiesOfClass(PrimedTnt.class, mob.getBoundingBox().inflate(8.0), entity -> mob.distanceToSqr(entity) < 64.0));
+        pushAway.addAll(level.getEntitiesOfClass(MinecartTNT.class, mob.getBoundingBox().inflate(8.0), entity -> mob.distanceToSqr(entity) < 64.0));
         //? if <= 1.21.4 {
-        pushAway.addAll(world.getEntitiesOfClass(ThrownPotion.class, mob.getBoundingBox().inflate(8.0), entity -> mob.distanceToSqr(entity) < 64.0));
+        pushAway.addAll(level.getEntitiesOfClass(ThrownPotion.class, mob.getBoundingBox().inflate(8.0), entity -> mob.distanceToSqr(entity) < 64.0));
         //?} else {
-        /*pushAway.addAll(world.getEntitiesOfClass(AbstractThrownPotion.class, mob.getBoundingBox().inflate(8.0), entity -> mob.distanceToSqr(entity) < 64.0));
+        /*pushAway.addAll(level.getEntitiesOfClass(AbstractThrownPotion.class, mob.getBoundingBox().inflate(8.0), entity -> mob.distanceToSqr(entity) < 64.0));
 
         *///?}
 

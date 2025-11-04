@@ -30,9 +30,9 @@ import net.minecraft.world.item.ItemStack;
 public class WindChargeItemMixin {
     @Inject(method = "use", at = @At("RETURN"))
     //? if <= 1.21 {
-    public void use(Level world, Player user, InteractionHand hand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
+    public void use(Level level, Player user, InteractionHand hand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
     //?} else
-    /*public void use(Level world, Player user, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {*/
+    /*public void use(Level level, Player user, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {*/
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (user instanceof ServerPlayer player) {
             if (currentSeason.getSeason() != Seasons.WILD_LIFE) return;

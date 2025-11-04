@@ -11,7 +11,7 @@ public final class SnailMineTowardsPlayerGoal extends SnailFlyGoal {
 
     @Override
     public boolean canUse() {
-        if (getMob().getSnailWorld().isClientSide()) return false;
+        if (getMob().level().isClientSide()) return false;
         if (getMob().isPaused()) return false;
 
         if (!getMob().serverData.shouldPathfind()) {

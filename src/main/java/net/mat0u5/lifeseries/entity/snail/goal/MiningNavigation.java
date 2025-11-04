@@ -9,8 +9,8 @@ public class MiningNavigation extends FlyingPathNavigation {
 
     public int cooldown = 40;
 
-    public MiningNavigation(Mob mob, Level world) {
-        super(mob, world);
+    public MiningNavigation(Mob mob, Level level) {
+        super(mob, level);
     }
 
     @Override

@@ -12,7 +12,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUtils;
+import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -94,7 +94,7 @@ public class Snails extends Wildcard {
 
     public static void spawnSnailFor(ServerPlayer player, BlockPos pos) {
         if (player == null || pos == null) return;
-        Snail snail = WorldUtils.spawnEntity(MobRegistry.SNAIL, PlayerUtils.getServerWorld(player), pos);
+        Snail snail = LevelUtils.spawnEntity(MobRegistry.SNAIL, player.ls$getServerLevel(), pos);
         if (snail != null) {
             snail.serverData.setBoundPlayer(player);
             snails.put(player.getUUID(), snail);
@@ -104,8 +104,8 @@ public class Snails extends Wildcard {
     public static void killAllSnails() {
         if (server == null) return;
         List<Entity> toKill = new ArrayList<>();
-        for (ServerLevel world : server.getAllLevels()) {
-            for (Entity entity : world.getAllEntities()) {
+        for (ServerLevel level : server.getAllLevels()) {
+            for (Entity entity : level.getAllEntities()) {
                 if (entity instanceof Snail snail && !snail.isFromTrivia()) {
                         toKill.add(entity);
                     }

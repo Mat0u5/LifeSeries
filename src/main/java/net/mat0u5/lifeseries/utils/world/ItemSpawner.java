@@ -42,22 +42,22 @@ public class ItemSpawner {
         return null;
     }
 
-    public static List<ItemStack> getRandomItemsFromLootTable(MinecraftServer server, ServerLevel world, ServerPlayer player, ResourceLocation lootTableId) {
-        if (server == null || world == null || player == null) return new ArrayList<>();
+    public static List<ItemStack> getRandomItemsFromLootTable(MinecraftServer server, ServerLevel level, ServerPlayer player, ResourceLocation lootTableId) {
+        if (server == null || level == null || player == null) return new ArrayList<>();
         try {
             //? if <= 1.21 {
-            LootParams parameters = new LootParams.Builder(world)
+            LootParams parameters = new LootParams.Builder(level)
                     .withParameter(LootContextParams.ORIGIN, player.position())
                     .withParameter(LootContextParams.THIS_ENTITY, player)
                     .create(LootContextParamSets.COMMAND);
             //?} else {
-            /*LootParams parameters = new LootParams.Builder(world)
+            /*LootParams parameters = new LootParams.Builder(level)
                     .withParameter(LootContextParams.ORIGIN, player.position())
                     .withParameter(LootContextParams.THIS_ENTITY, player)
                     .create(LootContextParamSets.COMMAND);
             *///?}
 
-            LootTable lootTable = world.getServer()
+            LootTable lootTable = level.getServer()
                     .reloadableRegistries()
                     .getLootTable(ResourceKey.create(Registries.LOOT_TABLE, lootTableId));
 
