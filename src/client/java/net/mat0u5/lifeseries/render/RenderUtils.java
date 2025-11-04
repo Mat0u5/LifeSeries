@@ -8,6 +8,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import java.util.List;
 
+
+import net.minecraft.client.renderer.RenderType;
+
 public class RenderUtils {
 
     public static void debugX(GuiGraphics context, int x) {
@@ -36,14 +39,14 @@ public class RenderUtils {
         *///?}
     }
     //? if >= 1.21.2 && <= 1.21.5 {
-    /*public static void drawTextureScaled(DrawContext context, Identifier texture, float x, float y, int u, int v, int width, int height, int textureWidth, int textureHeight, float scaleX, float scaleY) {
-        context.getMatrices().push();
-        context.getMatrices().scale(scaleX, scaleY, 1.0f);
-        context.drawTexture(RenderLayer::getGuiTextured, texture, (int) (x / scaleX), (int) (y / scaleY), u, v, width, height, textureWidth, textureHeight);
-        context.getMatrices().pop();
+    /*public static void drawTextureScaled(GuiGraphics context, ResourceLocation texture, float x, float y, int u, int v, int width, int height, int textureWidth, int textureHeight, float scaleX, float scaleY) {
+        context.pose().pushPose();
+        context.pose().scale(scaleX, scaleY, 1.0f);
+        context.blit(RenderType::guiTextured, texture, (int) (x / scaleX), (int) (y / scaleY), u, v, width, height, textureWidth, textureHeight);
+        context.pose().popPose();
     }
-    public static void drawTexture(DrawContext context, Identifier texture, int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight) {
-        context.drawTexture(RenderLayer::getGuiTextured, texture, x, y, u, v, width, height, textureWidth, textureHeight);
+    public static void drawTexture(GuiGraphics context, ResourceLocation texture, int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight) {
+        context.blit(RenderType::guiTextured, texture, x, y, u, v, width, height, textureWidth, textureHeight);
     }
     *///?} else if >= 1.21.6 {
     /*public static void drawTextureScaled(DrawContext context, Identifier texture, float x, float y, int u, int v, int width, int height, int textureWidth, int textureHeight, float scaleX, float scaleY) {

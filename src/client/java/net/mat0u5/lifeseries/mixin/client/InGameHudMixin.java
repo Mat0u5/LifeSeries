@@ -13,10 +13,10 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import java.util.List;
-//? if > 1.21 && <= 1.21.5 {
-//?}
-//? if >= 1.21.6
-/*import com.mojang.blaze3d.pipeline.RenderPipeline;*/
+//? if >= 1.21.2 {
+/*import net.minecraft.client.renderer.RenderType;
+import java.util.function.Function;
+*///?}
 
 @Mixin(value = Gui.class, priority = 1)
 public class InGameHudMixin {
@@ -35,8 +35,8 @@ public class InGameHudMixin {
     @Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lnet/minecraft/resources/ResourceLocation;IIII)V"))
     private void customHearts(GuiGraphics instance, ResourceLocation identifier, int x, int y, int u, int v) {
     //?} else if <= 1.21.5 {
-    /*@Redirect(method = "drawHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Ljava/util/function/Function;Lnet/minecraft/util/Identifier;IIII)V"))
-    private void customHearts(DrawContext instance, Function<Identifier, RenderLayer> renderLayers, Identifier identifier, int x, int y, int u, int v) {
+    /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Ljava/util/function/Function;Lnet/minecraft/resources/ResourceLocation;IIII)V"))
+    private void customHearts(GuiGraphics instance, Function<ResourceLocation, RenderType> renderLayers, ResourceLocation identifier, int x, int y, int u, int v) {
     *///?} else {
     /*@Redirect(method = "drawHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/util/Identifier;IIII)V"))
     private void customHearts(DrawContext instance, RenderPipeline renderPipeline, Identifier identifier, int x, int y, int u, int v) {
@@ -54,7 +54,7 @@ public class InGameHudMixin {
             instance.blitSprite(identifier, x, y, u, v);
             ls$afterHeartDraw(instance, identifier, x, y, u, v);
              //?} else if <= 1.21.5 {
-            /*instance.drawGuiTexture(renderLayers, identifier, x, y, u, v);
+            /*instance.blitSprite(renderLayers, identifier, x, y, u, v);
             ls$afterHeartDraw(instance, renderLayers, identifier, x, y, u, v);
             *///?} else {
             /*instance.drawGuiTexture(renderPipeline, identifier, x, y, u, v);
@@ -77,7 +77,7 @@ public class InGameHudMixin {
         instance.blit(customHeart, x, y, 100, u, v, u, v, u, v);
         ls$afterHeartDraw(instance, identifier, x, y, u, v);
         //?} else if <= 1.21.5 {
-        /*instance.drawTexture(renderLayers, customHeart, x, y, u, v, u, v, u, v);
+        /*instance.blit(renderLayers, customHeart, x, y, u, v, u, v, u, v);
         ls$afterHeartDraw(instance, renderLayers, identifier, x, y, u, v);
         *///?} else {
         /*instance.drawTexture(renderPipeline, customHeart, x, y, u, v, u, v, u, v);
@@ -89,7 +89,7 @@ public class InGameHudMixin {
     //? if <= 1.21 {
     private void ls$afterHeartDraw(GuiGraphics instance, ResourceLocation identifier, int x, int y, int u, int v) {
     //?} else if <= 1.21.5 {
-    /*private void ls$afterHeartDraw(DrawContext instance, Function<Identifier, RenderLayer> renderLayers, Identifier identifier, int x, int y, int u, int v) {
+    /*private void ls$afterHeartDraw(GuiGraphics instance, Function<ResourceLocation, RenderType> renderLayers, ResourceLocation identifier, int x, int y, int u, int v) {
     *///?} else {
     /*private void ls$afterHeartDraw(DrawContext instance, RenderPipeline renderPipeline, Identifier identifier, int x, int y, int u, int v) {
     *///?}
@@ -107,7 +107,7 @@ public class InGameHudMixin {
         //? if <= 1.21 {
         instance.blit(customHeart, x, y, 100, u, v, u, v, u, v);
         //?} else if <= 1.21.5 {
-        /*instance.drawTexture(renderLayers, customHeart, x, y, u, v, u, v, u, v);
+        /*instance.blit(renderLayers, customHeart, x, y, u, v, u, v, u, v);
         *///?} else {
         /*instance.drawTexture(renderPipeline, customHeart, x, y, u, v, u, v, u, v);
         *///?}

@@ -32,7 +32,6 @@ public class PathFinder extends AmbientCreature {
         noPhysics = true;
     }
     public static AttributeSupplier.Builder createAttributes() {
-        //? if <= 1.21 {
         return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 10000)
                 .add(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
@@ -40,15 +39,6 @@ public class PathFinder extends AmbientCreature {
                 .add(Attributes.STEP_HEIGHT, 1)
                 .add(Attributes.FOLLOW_RANGE, 150)
                 .add(Attributes.ATTACK_DAMAGE, 20);
-        //?} else {
-        /*return Mob.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 10000)
-                .add(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
-                .add(Attributes.FLYING_SPEED, FLYING_SPEED)
-                .add(Attributes.STEP_HEIGHT, 1)
-                .add(Attributes.FOLLOW_RANGE, 150)
-                .add(Attributes.ATTACK_DAMAGE, 20);
-        *///?}
     }
     @Override
     public void tick() {

@@ -106,7 +106,11 @@ public class NetworkHandlerClient {
                 String morphTypeStr = value.get(1);
                 EntityType<?> morphType = null;
                 if (!morphTypeStr.equalsIgnoreCase("null") && !morphUUIDStr.isEmpty()) {
+                    //? if <= 1.21 {
                     morphType = BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.parse(morphTypeStr));
+                    //?} else {
+                    /*morphType = BuiltInRegistries.ENTITY_TYPE.getValue(ResourceLocation.parse(morphTypeStr));
+                    *///?}
                 }
                 if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Received morph packet: {} ({})", morphType, morphUUID);
                 MorphManager.setFromPacket(morphUUID, morphType);

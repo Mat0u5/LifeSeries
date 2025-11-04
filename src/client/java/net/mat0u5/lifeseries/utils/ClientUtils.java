@@ -32,6 +32,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
+//? if >= 1.21.2 {
+/*import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+*///?}
+
 public class ClientUtils {
 
     public static boolean shouldPreventGliding() {
@@ -40,9 +45,9 @@ public class ClientUtils {
         if (client == null) return false;
         if (client.player == null) return false;
         //? if >= 1.21.2 {
-         /*if (LivingEntity.canGlideWith(client.player.getEquippedStack(EquipmentSlot.CHEST), EquipmentSlot.CHEST) ||
-            LivingEntity.canGlideWith(client.player.getEquippedStack(EquipmentSlot.LEGS), EquipmentSlot.LEGS) ||
-            LivingEntity.canGlideWith(client.player.getEquippedStack(EquipmentSlot.FEET), EquipmentSlot.FEET)) {
+        /*if (LivingEntity.canGlideUsing(client.player.getItemBySlot(EquipmentSlot.CHEST), EquipmentSlot.CHEST) ||
+                LivingEntity.canGlideUsing(client.player.getItemBySlot(EquipmentSlot.LEGS), EquipmentSlot.LEGS) ||
+                LivingEntity.canGlideUsing(client.player.getItemBySlot(EquipmentSlot.FEET), EquipmentSlot.FEET)) {
             return false;
         }
         *///?}
@@ -94,11 +99,7 @@ public class ClientUtils {
         if (entity == null) return false;
         if (!(entity instanceof LocalPlayer player)) return false;
         if (!MainClient.isClientPlayer(player.getUUID())) return false;
-        //? if <= 1.21 {
         Holder<Attribute> scaleAttribute = Attributes.SCALE;
-        //?} else {
-        /*RegistryEntry<EntityAttribute> scaleAttribute = EntityAttributes.SCALE;
-         *///?}
         if (instance.getAttribute() != scaleAttribute) return false;
         if (MainClient.clientCurrentSeason != Seasons.WILD_LIFE) return false;
         if (!MainClient.clientActiveWildcards.contains(Wildcards.SIZE_SHIFTING)) return false;

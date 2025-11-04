@@ -12,17 +12,17 @@ public class EntityRenderDispatcherMixin {
 /*import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
-import net.minecraft.client.render.Frustum;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.client.renderer.culling.Frustum;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 //? if <= 1.21.6 {
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
 @Mixin(value = EntityRenderDispatcher.class, priority = 1)
  //?} else {
 /^import net.minecraft.client.render.entity.EntityRenderManager;
@@ -31,9 +31,9 @@ import net.minecraft.client.render.entity.EntityRenderDispatcher;
 public class EntityRenderDispatcherMixin {
     @Inject(method = "shouldRender", at = @At("HEAD"), cancellable = true)
     public <E extends Entity> void render(E entity, Frustum frustum, double x, double y, double z, CallbackInfoReturnable<Boolean> cir) {
-        if (entity instanceof PlayerEntity playerEntity) {
-            if (MainClient.invisiblePlayers.containsKey(playerEntity.getUuid())) {
-                long time = MainClient.invisiblePlayers.get(playerEntity.getUuid());
+        if (entity instanceof Player playerEntity) {
+            if (MainClient.invisiblePlayers.containsKey(playerEntity.getUUID())) {
+                long time = MainClient.invisiblePlayers.get(playerEntity.getUUID());
                 if (time > System.currentTimeMillis() || time == -1) {
                     cir.setReturnValue(false);
                 }

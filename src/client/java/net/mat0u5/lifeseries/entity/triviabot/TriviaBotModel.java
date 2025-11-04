@@ -1,17 +1,17 @@
 package net.mat0u5.lifeseries.entity.triviabot;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 
 //? if <= 1.21 {
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.HierarchicalModel;
 public class TriviaBotModel<T extends TriviaBot> extends HierarchicalModel<T> {
 //?} else {
-/*import net.minecraft.client.render.entity.model.EntityModel;
+/*import net.minecraft.client.model.EntityModel;
 public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
 *///?}
 
@@ -339,18 +339,18 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
     }
     //?} else {
     /*@Override
-    public void setAngles(TriviaBotRenderState state) {
-        super.setAngles(state);
+    public void setupAnim(TriviaBotRenderState state) {
+        super.setupAnim(state);
 
         //? if <= 1.21.5 {
-        this.animate(state.glideAnimationState, TriviaBotAnimations.glide, state.age);
-        this.animate(state.idleAnimationState, TriviaBotAnimations.idle, state.age);
-        this.animate(state.walkAnimationState, TriviaBotAnimations.walk, state.age);
-        this.animate(state.countdownAnimationState, TriviaBotAnimations.countdown, state.age);
-        this.animate(state.analyzingAnimationState, TriviaBotAnimations.analyzing, state.age);
-        this.animate(state.answerCorrectAnimationState, TriviaBotAnimations.answer_correct, state.age);
-        this.animate(state.answerIncorrectAnimationState, TriviaBotAnimations.answer_incorrect, state.age);
-        this.animate(state.snailTransformAnimationState, TriviaBotAnimations.snail_transform, state.age);
+        this.animate(state.glideAnimationState, TriviaBotAnimations.glide, state.ageInTicks);
+        this.animate(state.idleAnimationState, TriviaBotAnimations.idle, state.ageInTicks);
+        this.animate(state.walkAnimationState, TriviaBotAnimations.walk, state.ageInTicks);
+        this.animate(state.countdownAnimationState, TriviaBotAnimations.countdown, state.ageInTicks);
+        this.animate(state.analyzingAnimationState, TriviaBotAnimations.analyzing, state.ageInTicks);
+        this.animate(state.answerCorrectAnimationState, TriviaBotAnimations.answer_correct, state.ageInTicks);
+        this.animate(state.answerIncorrectAnimationState, TriviaBotAnimations.answer_incorrect, state.ageInTicks);
+        this.animate(state.snailTransformAnimationState, TriviaBotAnimations.snail_transform, state.ageInTicks);
         //?} else {
         /^this.glideAnimation.apply(state.glideAnimationState, state.age);
         this.idleAnimation.apply(state.idleAnimationState, state.age);

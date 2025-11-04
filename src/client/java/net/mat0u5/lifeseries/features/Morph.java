@@ -4,14 +4,9 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.interfaces.IMorph;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
-//? if >= 1.21.2
-/*import net.minecraft.entity.SpawnReason;*/
 
 
 public class Morph {
@@ -36,7 +31,7 @@ public class Morph {
                 //? if <= 1.21 {
                 Entity entity = morph.create(player.level());
                 //?} else if <= 1.21.6 {
-                /*Entity entity = morph.create(player.getWorld(), SpawnReason.COMMAND);
+                /*Entity entity = morph.create(player.level(), EntitySpawnReason.COMMAND);
                 *///?} else {
                 /*Entity entity = morph.create(player.getEntityWorld(), SpawnReason.COMMAND);
                 *///?}
@@ -97,7 +92,7 @@ public class Morph {
             //? if <= 1.21 {
             dummy.walkAnimation.update(player.walkAnimation.position() - dummy.walkAnimation.position(), 1);
             //?} else if <= 1.21.4 {
-            /*dummy.limbAnimator.updateLimbs(player.limbAnimator.getPos() - dummy.limbAnimator.getPos(), 1, 1);
+            /*dummy.walkAnimation.update(player.walkAnimation.position() - dummy.walkAnimation.position(), 1, 1);
              *///?} else {
             /*dummy.limbAnimator.updateLimbs(player.limbAnimator.getAnimationProgress() - dummy.limbAnimator.getAnimationProgress(), 1, 1);
              *///?}

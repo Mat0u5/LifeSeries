@@ -172,7 +172,7 @@ public class ClientEvents {
             //? if <= 1.21 {
             boolean jumping = player.input.jumping;
             //?} else {
-            /*boolean jumping = player.input.playerInput.jump();
+            /*boolean jumping = player.input.keyPresses.jump();
             *///?}
             if (jumping) {
 
@@ -229,7 +229,7 @@ public class ClientEvents {
         //? if <= 1.21 {
         boolean holdingJump = player.input.jumping;
         //?} else {
-        /*boolean holdingJump = player.input.playerInput.jump();
+        /*boolean holdingJump = player.input.keyPresses.jump();
         *///?}
 
         if (!lastJumping && holdingJump) {

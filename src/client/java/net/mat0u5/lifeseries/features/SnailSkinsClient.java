@@ -232,7 +232,7 @@ public class SnailSkinsClient {
         //? if <= 1.21 {
         return image.getPixelRGBA(x, y);
          //?} else {
-        /*return image.getColorArgb(x, y);
+        /*return image.getPixel(x, y);
         *///?}
     }
 
@@ -240,7 +240,7 @@ public class SnailSkinsClient {
         //? if <= 1.21 {
         image.setPixelRGBA(x, y, color);
          //?} else {
-        /*image.setColorArgb(x, y, color);
+        /*image.setPixel(x, y, color);
         *///?}
     }
 

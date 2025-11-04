@@ -36,7 +36,11 @@ public class ItemListConfigEntry extends StringListPopupConfigEntry<Item> {
                 ResourceLocation id = ResourceLocation.parse(itemId);
                 ResourceKey<Item> key = ResourceKey.create(BuiltInRegistries.ITEM.key(), id);
 
+                //? if <= 1.21 {
                 Item item = BuiltInRegistries.ITEM.get(key);
+                //?} else {
+                /*Item item = BuiltInRegistries.ITEM.getValue(key);
+                *///?}
                 if (item != null) {
                     newList.add(item);
                 } else {

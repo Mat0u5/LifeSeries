@@ -79,7 +79,6 @@ public class Snail extends Monster {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        //? if <= 1.21 {
         return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 10000)
                 .add(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
@@ -89,17 +88,6 @@ public class Snail extends Monster {
                 .add(Attributes.WATER_MOVEMENT_EFFICIENCY, 1)
                 .add(Attributes.SAFE_FALL_DISTANCE, 100)
                 .add(Attributes.ATTACK_DAMAGE, 20);
-        //?} else {
-        /*return Mob.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 10000)
-                .add(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
-                .add(Attributes.FLYING_SPEED, FLYING_SPEED)
-                .add(Attributes.STEP_HEIGHT, 1)
-                .add(Attributes.FOLLOW_RANGE, 150)
-                .add(Attributes.WATER_MOVEMENT_EFFICIENCY, 1)
-                .add(Attributes.SAFE_FALL_DISTANCE, 100)
-                .add(Attributes.ATTACK_DAMAGE, 20);
-        *///?}
     }
 
     @Override
