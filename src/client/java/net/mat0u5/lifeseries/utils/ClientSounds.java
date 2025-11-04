@@ -1,9 +1,9 @@
 package net.mat0u5.lifeseries.utils;
 
 import net.mat0u5.lifeseries.mixin.client.AbstractSoundInstanceAccessor;
-import net.mat0u5.lifeseries.mixin.client.EntityTrackingSoundInstanceAccessor;
+import net.mat0u5.lifeseries.mixin.client.EntityBoundSoundInstanceAccessor;
 import net.mat0u5.lifeseries.mixin.client.SoundManagerAccessor;
-import net.mat0u5.lifeseries.mixin.client.SoundSystemAccessor;
+import net.mat0u5.lifeseries.mixin.client.SoundEngineAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
@@ -29,7 +29,7 @@ public class ClientSounds {
 
         if (!trackedSounds.contains(entityTrackingSound.getLocation().getPath())) return;
 
-        if (!(entityTrackingSound instanceof EntityTrackingSoundInstanceAccessor entityTrackingSoundAccessor)) return;
+        if (!(entityTrackingSound instanceof EntityBoundSoundInstanceAccessor entityTrackingSoundAccessor)) return;
         Entity entity = entityTrackingSoundAccessor.getEntity();
         if (entity == null) return;
         UUID uuid = entity.getUUID();
@@ -59,7 +59,7 @@ public class ClientSounds {
         SoundManager soundManager = Minecraft.getInstance().getSoundManager();
         if (!(soundManager instanceof SoundManagerAccessor managerAccessor)) return;
         SoundEngine soundSystem = managerAccessor.getSoundSystem();
-        if (!(soundSystem instanceof SoundSystemAccessor accessor)) return;
+        if (!(soundSystem instanceof SoundEngineAccessor accessor)) return;
         Map<String, Map<Double, SoundInstance>> soundMap = new HashMap<>();
         for (Collection<SoundInstance> soundCategory : accessor.getSounds().asMap().values()) {
             for (SoundInstance sound : soundCategory) {

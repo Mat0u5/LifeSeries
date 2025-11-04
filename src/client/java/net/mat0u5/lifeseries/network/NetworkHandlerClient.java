@@ -13,7 +13,7 @@ import net.mat0u5.lifeseries.gui.other.ChooseWildcardScreen;
 import net.mat0u5.lifeseries.gui.other.PastLifeChooseTwistScreen;
 import net.mat0u5.lifeseries.gui.seasons.ChooseSeasonScreen;
 import net.mat0u5.lifeseries.gui.seasons.SeasonInfoScreen;
-import net.mat0u5.lifeseries.mixin.client.InGameHudAccessor;
+import net.mat0u5.lifeseries.mixin.client.GuiAccessor;
 import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.render.TextHud;
 import net.mat0u5.lifeseries.render.VignetteRenderer;
@@ -89,7 +89,7 @@ public class NetworkHandlerClient {
     public static void handleSidetitle(SidetitlePacket payload) {
         MainClient.sideTitle = payload.text();
         Minecraft client = Minecraft.getInstance();
-        if (client.gui instanceof InGameHudAccessor hudAccessor) {
+        if (client.gui instanceof GuiAccessor hudAccessor) {
             TextHud.sideTitleRemainTicks = hudAccessor.ls$titleFadeInTicks() + hudAccessor.ls$titleStayTicks() + hudAccessor.ls$titleFadeOutTicks();
         }
     }
