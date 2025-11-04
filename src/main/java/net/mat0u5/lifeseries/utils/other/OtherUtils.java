@@ -11,7 +11,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.level.GameRules;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -22,6 +21,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static net.mat0u5.lifeseries.Main.server;
+
+//? if <= 1.21.9
+import net.minecraft.world.level.GameRules;
+//? if > 1.21.9
+/*import net.minecraft.world.level.gamerules.GameRule;*/
 
 public class OtherUtils {
     private static final Random rnd = new Random();
@@ -162,11 +166,7 @@ public class OtherUtils {
             if (server == null) return;
             Commands manager = server.getCommands();
             CommandSourceStack commandSource = server.createCommandSourceStack().withSuppressedOutput();
-            //? if <= 1.21.9 {
             manager.performPrefixedCommand(commandSource, command);
-            //?} else {
-            /*manager.parseAndExecute(commandSource, command);
-            *///?}
         } catch (Exception e) {
             Main.LOGGER.error("Error executing command: " + command, e);
         }
@@ -252,14 +252,14 @@ public class OtherUtils {
         world.getGameRules().getRule(gamerule).set(value, server);
     }
     //?} else {
-    /*public static boolean getBooleanGameRule(ServerWorld world, GameRule<?> gamerule) {
-        if (world.getGameRules().getValue(gamerule) instanceof Boolean bool) {
+    /*public static boolean getBooleanGameRule(ServerLevel world, GameRule<?> gamerule) {
+        if (world.getGameRules().get(gamerule) instanceof Boolean bool) {
             return bool;
         }
         return false;
     }
-    public static void setBooleanGameRule(ServerWorld world, GameRule<Boolean> gamerule, Boolean value) {
-        world.getGameRules().setValue(gamerule, value, server);
+    public static void setBooleanGameRule(ServerLevel world, GameRule<Boolean> gamerule, Boolean value) {
+        world.getGameRules().set(gamerule, value, server);
     }
     *///?}
 }

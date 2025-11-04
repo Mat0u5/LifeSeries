@@ -28,7 +28,6 @@ import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.GameRules;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.*;
@@ -39,6 +38,11 @@ import static net.mat0u5.lifeseries.Main.*;
 /*import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.component.TypedEntityData;
 *///?}
+
+//? if <= 1.21.9
+import net.minecraft.world.level.GameRules;
+//? if > 1.21.9
+/*import net.minecraft.world.level.gamerules.GameRules;*/
 
 public class SecretLife extends Season {
     public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /gift, /task, /health";
@@ -357,7 +361,11 @@ public class SecretLife extends Season {
         if (entity instanceof ServerPlayer player) {
             boolean dropBook = SecretLifeConfig.PLAYERS_DROP_TASK_ON_DEATH.get(seasonConfig);
             if (dropBook || server == null) return;
+            //? if <= 1.21.9 {
             boolean keepInventory = OtherUtils.getBooleanGameRule(PlayerUtils.getServerWorld(player), GameRules.RULE_KEEPINVENTORY);
+            //?} else {
+            /*boolean keepInventory = OtherUtils.getBooleanGameRule(PlayerUtils.getServerWorld(player), GameRules.KEEP_INVENTORY);
+            *///?}
             if (keepInventory) return;
             giveBookOnRespawn.put(player.getUUID(), TaskManager.getPlayersTaskBook(player));
             TaskManager.removePlayersTaskBook(player);
@@ -440,7 +448,7 @@ public class SecretLife extends Season {
         //? if <= 1.21.9 {
         server.overworld().getGameRules().getRule(GameRules.RULE_NATURAL_REGENERATION).set(naturalRegeneration, server);
          //?} else {
-        /*server.getOverworld().getGameRules().setValue(GameRules.NATURAL_HEALTH_REGENERATION, naturalRegeneration, server);
+        /*server.overworld().getGameRules().set(GameRules.NATURAL_HEALTH_REGENERATION, naturalRegeneration, server);
         *///?}
     }
 }

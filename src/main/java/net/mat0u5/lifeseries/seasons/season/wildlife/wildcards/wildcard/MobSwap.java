@@ -21,7 +21,6 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -29,6 +28,11 @@ import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.currentSession;
 import static net.mat0u5.lifeseries.Main.server;
+
+//? if <= 1.21.9
+import net.minecraft.world.level.GameRules;
+//? if > 1.21.9
+/*import net.minecraft.world.level.gamerules.GameRules;*/
 
 public class MobSwap extends Wildcard {
     public static int activatedAt = -1;
@@ -259,8 +263,13 @@ public class MobSwap extends Wildcard {
                 toKill.add(entity);
             });
 
+            //? if <= 1.21.9 {
             boolean mobLoot = OtherUtils.getBooleanGameRule(world, GameRules.RULE_DOMOBLOOT);
             if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.RULE_DOMOBLOOT, false);
+            //?} else {
+            /*boolean mobLoot = OtherUtils.getBooleanGameRule(world, GameRules.MOB_DROPS);
+            if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.MOB_DROPS, false);
+            *///?}
             for (Entity entity : toKill) {
                 //? if <=1.21 {
                 entity.kill();
@@ -268,7 +277,11 @@ public class MobSwap extends Wildcard {
                 /*entity.kill((ServerLevel) entity.ls$getEntityWorld());
                 *///?}
             }
+            //? if <= 1.21.9 {
             if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.RULE_DOMOBLOOT, true);
+            //?} else {
+            /*if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.MOB_DROPS, true);
+            *///?}
         }
     }
 
@@ -355,8 +368,13 @@ public class MobSwap extends Wildcard {
                 toKill.add(entity);
             });
 
+            //? if <= 1.21.9 {
             boolean mobLoot = OtherUtils.getBooleanGameRule(world, GameRules.RULE_DOMOBLOOT);
             if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.RULE_DOMOBLOOT, false);
+            //?} else {
+            /*boolean mobLoot = OtherUtils.getBooleanGameRule(world, GameRules.MOB_DROPS);
+            if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.MOB_DROPS, false);
+            *///?}
             for (Entity entity : toKill) {
                 //? if <=1.21 {
                 entity.kill();
@@ -364,7 +382,11 @@ public class MobSwap extends Wildcard {
                 /*entity.kill((ServerLevel) entity.ls$getEntityWorld());
                 *///?}
             }
+            //? if <= 1.21.9 {
             if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.RULE_DOMOBLOOT, true);
+            //?} else {
+            /*if (mobLoot) OtherUtils.setBooleanGameRule(world, GameRules.MOB_DROPS, true);
+            *///?}
         }
     }
 

@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.Map;
 
-//? if <= 1.21 {
+//? if <= 1.21.2 {
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.mat0u5.lifeseries.Main;
 import org.jetbrains.annotations.Nullable;

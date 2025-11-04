@@ -48,6 +48,7 @@ public class WorldRendererMixin {
         if (player.isSpectator()) return false;
         if (player.isInvisible()) return false;
         Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+        //? if <= 1.21.9 {
         if (player instanceof LocalPlayer && camera.getEntity() != player) {
             return false;
         }
@@ -55,6 +56,15 @@ public class WorldRendererMixin {
                 !(camera.getEntity() instanceof LivingEntity livingEntityCamera && livingEntityCamera.isSleeping())) {
             return false;
         }
+        //?} else {
+        /*if (player instanceof LocalPlayer && camera.entity() != player) {
+            return false;
+        }
+        if (player == camera.entity() && !camera.isDetached() &&
+                !(camera.entity() instanceof LivingEntity livingEntityCamera && livingEntityCamera.isSleeping())) {
+            return false;
+        }
+        *///?}
         return true;
     }
 }

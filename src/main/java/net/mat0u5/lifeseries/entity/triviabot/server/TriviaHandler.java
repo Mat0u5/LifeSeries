@@ -50,6 +50,9 @@ import java.util.UUID;
 import static net.mat0u5.lifeseries.Main.blacklist;
 import static net.mat0u5.lifeseries.Main.server;
 
+//? if > 1.21.9
+/*import net.minecraft.world.entity.EntityReference;*/
+
 public class TriviaHandler {
     private TriviaBot bot;
     public TriviaHandler(TriviaBot bot) {
@@ -444,16 +447,16 @@ public class TriviaHandler {
         if (bee4 != null) bee4.setRemainingPersistentAngerTime(1000000);
         if (bee5 != null) bee5.setRemainingPersistentAngerTime(1000000);
         //?} else {
-        /*if (bee1 != null) bee1.setAngryAt(LazyEntityReference.ofUUID(player.getUuid()));
-        if (bee2 != null) bee2.setAngryAt(LazyEntityReference.ofUUID(player.getUuid()));
-        if (bee3 != null) bee3.setAngryAt(LazyEntityReference.ofUUID(player.getUuid()));
-        if (bee4 != null) bee4.setAngryAt(LazyEntityReference.ofUUID(player.getUuid()));
-        if (bee5 != null) bee5.setAngryAt(LazyEntityReference.ofUUID(player.getUuid()));
-        if (bee1 != null) bee1.setAngerDuration(1000000);
-        if (bee2 != null) bee2.setAngerDuration(1000000);
-        if (bee3 != null) bee3.setAngerDuration(1000000);
-        if (bee4 != null) bee4.setAngerDuration(1000000);
-        if (bee5 != null) bee5.setAngerDuration(1000000);
+        /*if (bee1 != null) bee1.setPersistentAngerTarget(EntityReference.of(player.getUUID()));
+        if (bee2 != null) bee2.setPersistentAngerTarget(EntityReference.of(player.getUUID()));
+        if (bee3 != null) bee3.setPersistentAngerTarget(EntityReference.of(player.getUUID()));
+        if (bee4 != null) bee4.setPersistentAngerTarget(EntityReference.of(player.getUUID()));
+        if (bee5 != null) bee5.setPersistentAngerTarget(EntityReference.of(player.getUUID()));
+        if (bee1 != null) bee1.setPersistentAngerEndTime(bee1.getAge() + 1000000);
+        if (bee2 != null) bee2.setPersistentAngerEndTime(bee2.getAge() + 1000000);
+        if (bee3 != null) bee3.setPersistentAngerEndTime(bee3.getAge() + 1000000);
+        if (bee4 != null) bee4.setPersistentAngerEndTime(bee4.getAge() + 1000000);
+        if (bee5 != null) bee5.setPersistentAngerEndTime(bee5.getAge() + 1000000);
         *///?}
     }
 
