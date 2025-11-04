@@ -1,15 +1,21 @@
 package net.mat0u5.lifeseries.mixin;
 
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.fabricmc.fabric.impl.registry.sync.RegistrySyncManager;
-import net.mat0u5.lifeseries.Main;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.Map;
+
+//? if <= 1.21 {
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import net.mat0u5.lifeseries.Main;
+import org.jetbrains.annotations.Nullable;
+//?} else {
+/*import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+*///?}
 
 //Don't do this at home kids
 
@@ -32,7 +38,7 @@ public class RegistrySyncManagerMixin {
     }
     //?} else {
     /*@Inject(method = "areAllRegistriesOptional", at = @At(value = "HEAD"), cancellable = true)
-    private static void checkRemoteRemap(Map<Identifier, Object2IntMap<Identifier>> map, CallbackInfoReturnable<Boolean> cir) {
+    private static void checkRemoteRemap(Map<ResourceLocation, Object2IntMap<ResourceLocation>> map, CallbackInfoReturnable<Boolean> cir) {
         cir.setReturnValue(true);
     }
     *///?}

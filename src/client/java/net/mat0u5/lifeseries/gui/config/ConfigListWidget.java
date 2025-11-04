@@ -45,15 +45,11 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
         //? if <= 1.21.2 {
         int maxScroll = getMaxScroll();
         //?} else {
-        /*int maxScroll = getMaxScrollY();
+        /*int maxScroll = maxScrollAmount();
          *///?}
 
         if (getScrolledAmount() > maxScroll) {
-            //? if <= 1.21.2 {
             setScrollAmount(maxScroll);
-            //?} else {
-            /*setScrollY(maxScroll);
-            *///?}
         }
 
         int listLeft = getX();
@@ -140,7 +136,7 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
     //? if <= 1.21.2 {
     public int getMaxScroll() {
     //?} else {
-    /*public int getMaxScrollY() {
+    /*public int maxScrollAmount() {
     *///?}
         int totalHeight = 0;
         for (int i = 0; i < getItemCount(); i++) {
@@ -195,7 +191,7 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
         //? if <= 1.21.2 {
         return getScrollAmount();
         //?} else {
-        /*return getScrollY();
+        /*return scrollAmount();
         *///?}
     }
 

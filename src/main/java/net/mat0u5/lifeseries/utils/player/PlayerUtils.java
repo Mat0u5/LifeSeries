@@ -27,6 +27,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.PlayerModelPart;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
@@ -323,7 +324,7 @@ public class PlayerUtils {
         //?} else if <= 1.21.2 {
         /*return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), player.getTabListOrder(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
         *///?} else if <= 1.21.6 {
-        /*return new PlayerListS2CPacket.Entry(player.getUuid(), player.getGameProfile(), listed, player.networkHandler.getLatency(), player.interactionManager.getGameMode(), player.getPlayerListName(), player.isPartVisible(PlayerModelPart.HAT), player.getPlayerListOrder(), (PublicPlayerSession.Serialized)Nullables.map(player.getSession(), PublicPlayerSession::toSerialized));
+        /*return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), player.isModelPartShown(PlayerModelPart.HAT), player.getTabListOrder(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
         *///?} else {
         /*return new PlayerListS2CPacket.Entry(player.getUuid(), player.getGameProfile(), listed, player.networkHandler.getLatency(), player.getGameMode(), player.getPlayerListName(), player.isModelPartVisible(PlayerModelPart.HAT), player.getPlayerListOrder(), (PublicPlayerSession.Serialized)Nullables.map(player.getSession(), PublicPlayerSession::toSerialized));
         *///?}

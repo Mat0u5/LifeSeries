@@ -17,7 +17,6 @@ import java.util.UUID;
 //? if >= 1.21.2 {
 /*import net.mat0u5.lifeseries.utils.world.WorldUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.TargetColorParticleOption;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
@@ -26,6 +25,11 @@ import net.minecraft.world.phys.AABB;
 import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.Main.server;
 *///?}
+
+//? if = 1.21.2
+/*import net.minecraft.core.particles.TargetColorParticleOption;*/
+//? if >= 1.21.4
+/*import net.minecraft.core.particles.TrailParticleOption;*/
 
 public class CreakingPower extends ToggleableSuperpower {
     public static final List<UUID> allCreatedEntities = new ArrayList<>();
@@ -157,8 +161,8 @@ public class CreakingPower extends ToggleableSuperpower {
             /^TargetColorParticleOption trailParticleEffect2 = new TargetColorParticleOption(vec3d2, i);
             world.sendParticles(trailParticleEffect2, vec3d.x, vec3d.y, vec3d.z, 1, 0.0, 0.0, 0.0, 0.0);
             ^///?} else if >= 1.21.4 {
-            /^TrailParticleEffect trailParticleEffect2 = new TrailParticleEffect(vec3d2, i, random.nextInt(40) + 10);
-            world.spawnParticles(trailParticleEffect2, true, true, vec3d.x, vec3d.y, vec3d.z, 1, 0.0, 0.0, 0.0, 0.0);
+            /^TrailParticleOption trailParticleEffect2 = new TrailParticleOption(vec3d2, i, random.nextInt(40) + 10);
+            world.sendParticles(trailParticleEffect2, true, true, vec3d.x, vec3d.y, vec3d.z, 1, 0.0, 0.0, 0.0, 0.0);
             ^///?}
         }
     }
