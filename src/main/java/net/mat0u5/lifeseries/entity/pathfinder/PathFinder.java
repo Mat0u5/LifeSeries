@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.entity.pathfinder;
 
 import net.mat0u5.lifeseries.Main;
-import net.minecraft.resources.ResourceLocation;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -17,8 +17,18 @@ import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.level.pathfinder.PathType;
 
+//? if <= 1.21.9 {
+import net.minecraft.resources.ResourceLocation;
+ //?} else {
+/*import net.minecraft.resources.Identifier;
+*///?}
+
 public class PathFinder extends AmbientCreature {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "pathfinder");
+    //? if <= 1.21.9 {
+    public static final ResourceLocation ID = IdentifierHelper.mod("pathfinder");
+    //?} else {
+    /*public static final Identifier ID = IdentifierHelper.mod("pathfinder");
+    *///?}
     public static final float MOVEMENT_SPEED = 0.35f;
     public static final float FLYING_SPEED = 0.3f;
     private int despawnTimer = 0;

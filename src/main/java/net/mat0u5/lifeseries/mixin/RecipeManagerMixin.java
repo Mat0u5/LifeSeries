@@ -61,7 +61,11 @@ public abstract class RecipeManagerMixin {
         if (blacklist.loadedListItemIdentifier.isEmpty()) return;
 
         List<RecipeHolder<?>> filteredRecipes = preparedRecipes.values().stream()
+                //? if <= 1.21.9 {
                 .filter(recipe -> !blacklist.loadedListItemIdentifier.contains(recipe.id().location()))
+                //?} else {
+                /^.filter(recipe -> !blacklist.loadedListItemIdentifier.contains(recipe.id().identifier()))
+                ^///?}
                 .toList();
 
         this.recipes = RecipeMap.create(filteredRecipes);

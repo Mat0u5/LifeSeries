@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShif
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.WeightedRandomizer;
@@ -25,7 +26,6 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -129,14 +129,14 @@ public class TriviaHandler {
         bot.setAnalyzingTime(42);
         PlayerUtils.playSoundWithSourceToPlayers(
                 PlayerUtils.getAllPlayers(), bot,
-                SoundEvent.createVariableRangeEvent(ResourceLocation.withDefaultNamespace("wildlife_trivia_analyzing")),
+                SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_trivia_analyzing")),
                 SoundSource.NEUTRAL, 1f, 1);
         if (answer == question.getCorrectAnswerIndex()) {
             answeredCorrect();
             TaskScheduler.scheduleTask(72, () -> {
                 PlayerUtils.playSoundWithSourceToPlayers(
                         PlayerUtils.getAllPlayers(), bot,
-                        SoundEvent.createVariableRangeEvent(ResourceLocation.withDefaultNamespace("wildlife_trivia_correct")),
+                        SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_trivia_correct")),
                         SoundSource.NEUTRAL, 1f, 1);
             });
         }
@@ -145,7 +145,7 @@ public class TriviaHandler {
             TaskScheduler.scheduleTask(72, () -> {
                 PlayerUtils.playSoundWithSourceToPlayers(
                         PlayerUtils.getAllPlayers(), bot,
-                        SoundEvent.createVariableRangeEvent(ResourceLocation.withDefaultNamespace("wildlife_trivia_incorrect")),
+                        SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_trivia_incorrect")),
                         SoundSource.NEUTRAL, 1f, 1);
             });
         }
@@ -310,7 +310,7 @@ public class TriviaHandler {
             vector = relativeTargetPos.normalize().scale(0.3).add(0,0.1,0);
         }
 
-        List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, (ServerLevel) bot.level(), bot.serverData.getBoundPlayer(), ResourceLocation.fromNamespaceAndPath("lifeseriesdynamic", "trivia_reward_loottable"));
+        List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, (ServerLevel) bot.level(), bot.serverData.getBoundPlayer(), IdentifierHelper.mod("trivia_reward_loottable"));
         if (!lootTableItems.isEmpty()) {
             for (ItemStack item : lootTableItems) {
                 ItemStackUtils.spawnItemForPlayerWithVelocity((ServerLevel) bot.level(), pos, item, bot.serverData.getBoundPlayer(), vector);

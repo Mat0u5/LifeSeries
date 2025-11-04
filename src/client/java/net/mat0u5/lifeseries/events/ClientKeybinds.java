@@ -3,12 +3,10 @@ package net.mat0u5.lifeseries.events;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.client.KeyMapping;
 import org.lwjgl.glfw.GLFW;
-
-//? if >= 1.21.9
-/*import net.minecraft.resources.ResourceLocation;*/
 
 public class ClientKeybinds {
     public static KeyMapping superpower;
@@ -19,7 +17,7 @@ public class ClientKeybinds {
     //? if <= 1.21.6 {
     public static final String KEYBIND_ID = "key.category.lifeseries.general";
      //?} else {
-    /*public static final KeyMapping.Category KEYBIND_ID = new KeyMapping.Category(ResourceLocation.fromNamespaceAndPath("lifeseries","general"));
+    /*public static final KeyMapping.Category KEYBIND_ID = new KeyMapping.Category(IdentifierHelper.mod("general"));
     *///?}
 
     public static void tick() {

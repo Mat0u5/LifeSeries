@@ -27,7 +27,11 @@ public class ClientSounds {
     public static void onSoundPlay(SoundInstance sound) {
         if (!(sound instanceof EntityBoundSoundInstance entityTrackingSound)) return;
 
+        //? if <= 1.21.9 {
         if (!trackedSounds.contains(entityTrackingSound.getLocation().getPath())) return;
+        //?} else {
+        /*if (!trackedSounds.contains(entityTrackingSound.getIdentifier().getPath())) return;
+        *///?}
 
         if (!(entityTrackingSound instanceof EntityBoundSoundInstanceAccessor entityTrackingSoundAccessor)) return;
         Entity entity = entityTrackingSoundAccessor.getEntity();
@@ -63,7 +67,11 @@ public class ClientSounds {
         Map<String, Map<Double, SoundInstance>> soundMap = new HashMap<>();
         for (Collection<SoundInstance> soundCategory : accessor.getSounds().asMap().values()) {
             for (SoundInstance sound : soundCategory) {
+                //? if <= 1.21.9 {
                 String name = sound.getLocation().getPath();
+                //?} else {
+                /*String name = sound.getIdentifier().getPath();
+                *///?}
                 if (!onlyOneOf.contains(name)) continue;
                 Vec3 soundPosition = new Vec3(sound.getX(), sound.getY(), sound.getZ());
                 double distance = player.position().distanceTo(soundPosition);

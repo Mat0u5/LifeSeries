@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.render;
 
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 //? if <= 1.21 {
@@ -16,8 +16,18 @@ import com.mojang.blaze3d.systems.RenderSystem;
 //? if >= 1.21.6
 /*import net.minecraft.client.renderer.RenderPipelines;*/
 
+//? if <= 1.21.9 {
+import net.minecraft.resources.ResourceLocation;
+ //?} else {
+/*import net.minecraft.resources.Identifier;
+*///?}
+
 public class VignetteRenderer {
-    private static final ResourceLocation VIGNETTE_TEXTURE = ResourceLocation.withDefaultNamespace("textures/misc/vignette.png");
+    //? if <= 1.21.9 {
+    private static final ResourceLocation VIGNETTE_TEXTURE = IdentifierHelper.vanilla("textures/misc/vignette.png");
+    //?} else {
+    /*private static final Identifier VIGNETTE_TEXTURE = IdentifierHelper.vanilla("textures/misc/vignette.png");
+    *///?}
     private static float vignetteDarkness = 0.0F;
     private static long vignetteEnd = 0;
 

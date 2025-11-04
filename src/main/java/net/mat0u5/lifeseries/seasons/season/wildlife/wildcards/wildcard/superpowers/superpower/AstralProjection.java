@@ -136,7 +136,11 @@ public class AstralProjection extends ToggleableSuperpower {
             clone.setXRot(player.getXRot());
             clone.setDeltaMovement(velocity);
             clone.hurtMarked = true;
+            //? if <= 1.21.9 {
             clone.hasImpulse = true;
+            //?} else {
+            /^clone.needsSync = true;
+            ^///?}
             clone.snapTo(player.position(), player.getYRot(), player.getXRot());
         });
         *///?}

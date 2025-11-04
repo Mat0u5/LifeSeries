@@ -7,7 +7,6 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -182,7 +181,7 @@ public class OtherUtils {
             int index = rnd.nextInt(from, to + 1);
             name += index;
         }
-        return SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("minecraft", name));
+        return SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla(name));
     }
 
     public static String getTimeAndDate() {

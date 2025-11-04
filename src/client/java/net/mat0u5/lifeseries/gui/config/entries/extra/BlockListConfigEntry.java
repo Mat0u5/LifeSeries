@@ -2,11 +2,11 @@ package net.mat0u5.lifeseries.gui.config.entries.extra;
 
 import net.mat0u5.lifeseries.gui.config.entries.StringListPopupConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class BlockListConfigEntry extends StringListPopupConfigEntry<Block> {
             if (!blockId.contains(":")) blockId = "minecraft:" + blockId;
 
             try {
-                ResourceLocation id = ResourceLocation.parse(blockId);
+                var id = IdentifierHelper.parse(blockId);
                 ResourceKey<Block> key = ResourceKey.create(BuiltInRegistries.BLOCK.key(), id);
 
                 //? if <= 1.21 {

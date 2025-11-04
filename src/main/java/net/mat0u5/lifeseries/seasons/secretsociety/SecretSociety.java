@@ -2,12 +2,12 @@ package net.mat0u5.lifeseries.seasons.secretsociety;
 
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import org.jetbrains.annotations.Nullable;
@@ -129,9 +129,9 @@ public class SecretSociety {
         SessionTranscript.societyMembersChosen(memberPlayers);
 
         if (!SOUND_ONLY_MEMBERS) {
-            PlayerUtils.playSoundToPlayers(nonMemberPlayers, SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("minecraft","secretlife_task")));
+            PlayerUtils.playSoundToPlayers(nonMemberPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("secretlife_task")));
         }
-        PlayerUtils.playSoundToPlayers(memberPlayers, SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("minecraft","secretlife_task")));
+        PlayerUtils.playSoundToPlayers(memberPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("secretlife_task")));
         PlayerUtils.sendTitleToPlayers(memberPlayers, Component.nullToEmpty("§cThe Society calls"), 0, 30, 0);
 
         TaskScheduler.scheduleTask(15, () -> {
@@ -197,7 +197,7 @@ public class SecretSociety {
     }
 
     public void afterInitiate(ServerPlayer player) {
-        PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(ResourceLocation.parse("secretlife_task")), 1, 1);
+        PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.parse("secretlife_task")), 1, 1);
 
         int currentTime = 20;
         TaskScheduler.scheduleTask(currentTime, () -> {
@@ -320,10 +320,10 @@ public class SecretSociety {
         societyEnded = true;
         SessionTranscript.societyEnded();
         if (SOUND_ONLY_MEMBERS) {
-            PlayerUtils.playSoundToPlayers(getMembers(), SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("minecraft","secretlife_task")));
+            PlayerUtils.playSoundToPlayers(getMembers(), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("secretlife_task")));
         }
         else {
-            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("minecraft","secretlife_task")));
+            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("secretlife_task")));
         }
     }
 

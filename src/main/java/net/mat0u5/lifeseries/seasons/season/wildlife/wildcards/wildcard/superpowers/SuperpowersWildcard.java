@@ -5,9 +5,9 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Mimicry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import org.jetbrains.annotations.Nullable;
@@ -116,7 +116,7 @@ public class SuperpowersWildcard extends Wildcard {
             pos++;
         }
         if (!WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME) {
-            PlayerUtils.playSoundToPlayers(allPlayers, SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("minecraft","wildlife_superpowers")), 0.2f, 1);
+            PlayerUtils.playSoundToPlayers(allPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_superpowers")), 0.2f, 1);
         }
     }
 
@@ -138,7 +138,7 @@ public class SuperpowersWildcard extends Wildcard {
         if (instance != null) playerSuperpowers.put(player.getUUID(), instance);
 
         if (!WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME) {
-            PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("minecraft","wildlife_superpowers")), 0.2f, 1);
+            PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_superpowers")), 0.2f, 1);
         }
     }
 
@@ -149,7 +149,7 @@ public class SuperpowersWildcard extends Wildcard {
         Superpower instance = superpower.getInstance(player);
         if (instance != null) playerSuperpowers.put(player.getUUID(), instance);
         if (!WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME) {
-            PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("minecraft","wildlife_superpowers")), 0.2f, 1);
+            PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_superpowers")), 0.2f, 1);
         }
     }
 

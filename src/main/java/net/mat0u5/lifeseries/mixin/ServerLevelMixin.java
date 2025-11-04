@@ -2,8 +2,8 @@ package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
@@ -23,6 +23,6 @@ public class ServerLevelMixin {
             return;
         }
         // This sound doesnt exist client-side, so it won't double
-        PlayerUtils.playSoundWithSourceToPlayers(entity, SoundEvent.createVariableRangeEvent(ResourceLocation.parse("secretlife_normal_totem")), entity.getSoundSource(), 1, 1);
+        PlayerUtils.playSoundWithSourceToPlayers(entity, SoundEvent.createVariableRangeEvent(IdentifierHelper.parse("secretlife_normal_totem")), entity.getSoundSource(), 1, 1);
     }
 }

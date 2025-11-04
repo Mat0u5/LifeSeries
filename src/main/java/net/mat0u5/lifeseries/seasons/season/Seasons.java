@@ -10,10 +10,16 @@ import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.thirdlife.ThirdLife;
 import net.mat0u5.lifeseries.seasons.season.unassigned.UnassignedSeason;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
-import net.minecraft.resources.ResourceLocation;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+
+//? if <= 1.21.9 {
+import net.minecraft.resources.ResourceLocation;
+ //?} else {
+/*import net.minecraft.resources.Identifier;
+*///?}
 
 public enum Seasons {
     UNASSIGNED("Unassigned", "unassigned"),
@@ -59,8 +65,12 @@ public enum Seasons {
         return new UnassignedSeason();
     }
 
+    //? if <= 1.21.9 {
     public ResourceLocation getLogo() {
-        return ResourceLocation.fromNamespaceAndPath("lifeseries","textures/gui/"+this.getId()+".png");
+    //?} else {
+    /*public Identifier getLogo() {
+    *///?}
+        return IdentifierHelper.mod("textures/gui/" + this.getId() + ".png");
     }
 
     public static Seasons getSeasonFromStringName(String name) {

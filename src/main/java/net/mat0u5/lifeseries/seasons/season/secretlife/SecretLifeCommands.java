@@ -6,6 +6,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
@@ -15,7 +16,6 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 
@@ -396,7 +396,7 @@ public class SecretLifeCommands extends Command {
         target.sendSystemMessage(recipientMessage);
         AnimationUtils.createSpiral(target, 40);
 
-        PlayerUtils.playSoundToPlayers(List.of(self,target), SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("minecraft","secretlife_life")));
+        PlayerUtils.playSoundToPlayers(List.of(self,target), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("secretlife_life")));
 
         return 1;
     }

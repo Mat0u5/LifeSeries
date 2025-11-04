@@ -2,11 +2,11 @@ package net.mat0u5.lifeseries.gui.config.entries.extra;
 
 import net.mat0u5.lifeseries.gui.config.entries.main.StringConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 import java.util.ArrayList;
@@ -39,9 +39,9 @@ public class EnchantListConfigEntry extends StringConfigEntry {
         Registry<Enchantment> enchantmentRegistry = Minecraft.getInstance().level.registryAccess()
 
         //? if <=1.21 {
-        .registryOrThrow(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath("minecraft", "enchantment")));
+        .registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.of("minecraft", "enchantment")));
         //?} else
-        /*.lookupOrThrow(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath("minecraft", "enchantment")));*/
+        /*.lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));*/
 
 
         for (String enchantmentId : items) {
@@ -49,7 +49,7 @@ public class EnchantListConfigEntry extends StringConfigEntry {
             if (!enchantmentId.contains(":")) enchantmentId = "minecraft:" + enchantmentId;
 
             try {
-                ResourceLocation id = ResourceLocation.parse(enchantmentId);
+                var id = IdentifierHelper.parse(enchantmentId);
                 //? if <= 1.21 {
                 Enchantment enchantment = enchantmentRegistry.get(id);
                 //?} else {

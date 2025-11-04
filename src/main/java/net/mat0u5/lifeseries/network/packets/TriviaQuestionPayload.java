@@ -1,17 +1,16 @@
 package net.mat0u5.lifeseries.network.packets;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 
 public record TriviaQuestionPayload(String question, int difficulty, long timestamp, int timeToComplete, List<String> answers) implements CustomPacketPayload {
 
-    public static final CustomPacketPayload.Type<TriviaQuestionPayload> ID = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "triviaquestion"));
+    public static final CustomPacketPayload.Type<TriviaQuestionPayload> ID = new CustomPacketPayload.Type<>(IdentifierHelper.mod("triviaquestion"));
     public static final StreamCodec<RegistryFriendlyByteBuf, TriviaQuestionPayload> CODEC = StreamCodec.composite(
             ByteBufCodecs.STRING_UTF8, TriviaQuestionPayload::question,
             ByteBufCodecs.INT, TriviaQuestionPayload::difficulty,

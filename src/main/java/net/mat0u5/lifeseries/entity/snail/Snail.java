@@ -5,12 +5,12 @@ import net.mat0u5.lifeseries.entity.snail.goal.*;
 import net.mat0u5.lifeseries.entity.snail.server.SnailPathfinding;
 import net.mat0u5.lifeseries.entity.snail.server.SnailServerData;
 import net.mat0u5.lifeseries.entity.snail.server.SnailSounds;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
@@ -36,11 +36,24 @@ import org.jetbrains.annotations.Nullable;
 
 import static net.mat0u5.lifeseries.Main.currentSession;
 
+//? if <= 1.21.9 {
+import net.minecraft.resources.ResourceLocation;
+ //?} else {
+/*import net.minecraft.resources.Identifier;
+*///?}
+
 public class Snail extends Monster {
-    public static final ResourceLocation DEFAULT_TEXTURE = ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "textures/entity/snail/default.png");
-    public static final ResourceLocation TRIVIA_TEXTURE = ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "textures/entity/snail/trivia.png");
-    public static final ResourceLocation ZOMBIE_TEXTURE = ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "textures/entity/snail/zombie.png");
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "snail");
+    //? if <= 1.21.9 {
+    public static final ResourceLocation DEFAULT_TEXTURE = IdentifierHelper.mod("textures/entity/snail/default.png");
+    public static final ResourceLocation TRIVIA_TEXTURE = IdentifierHelper.mod("textures/entity/snail/trivia.png");
+    public static final ResourceLocation ZOMBIE_TEXTURE = IdentifierHelper.mod("textures/entity/snail/zombie.png");
+    public static final ResourceLocation ID = IdentifierHelper.mod("snail");
+    //?} else {
+    /*public static final Identifier DEFAULT_TEXTURE = IdentifierHelper.mod("textures/entity/snail/default.png");
+    public static final Identifier TRIVIA_TEXTURE = IdentifierHelper.mod("textures/entity/snail/trivia.png");
+    public static final Identifier ZOMBIE_TEXTURE = IdentifierHelper.mod("textures/entity/snail/zombie.png");
+    public static final Identifier ID = IdentifierHelper.mod("snail");
+    *///?}
     public static double GLOBAL_SPEED_MULTIPLIER = 1;
     public static boolean SHOULD_DROWN_PLAYER = true;
 

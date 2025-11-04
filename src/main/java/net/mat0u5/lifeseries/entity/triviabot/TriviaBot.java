@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.entity.triviabot;
 
-import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.triviabot.goal.TriviaBotGlideGoal;
 import net.mat0u5.lifeseries.entity.triviabot.goal.TriviaBotLookAtPlayerGoal;
 import net.mat0u5.lifeseries.entity.triviabot.goal.TriviaBotTeleportGoal;
@@ -8,10 +7,10 @@ import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotPathfinding;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotServerData;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotSounds;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaHandler;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
@@ -31,8 +30,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3;
 
+//? if <= 1.21.9 {
+import net.minecraft.resources.ResourceLocation;
+ //?} else {
+/*import net.minecraft.resources.Identifier;
+*///?}
+
 public class TriviaBot extends AmbientCreature {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "triviabot");
+    //? if <= 1.21.9 {
+    public static final ResourceLocation ID = IdentifierHelper.mod("triviabot");
+    //?} else {
+    /*public static final Identifier ID = IdentifierHelper.mod("triviabot");
+    *///?}
 
     public static final int STATIONARY_TP_COOLDOWN = 400; // No movement for 20 seconds teleports the bot
     public static final float MOVEMENT_SPEED = 0.45f;

@@ -4,15 +4,19 @@ import net.mat0u5.lifeseries.utils.TextColors;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import java.util.List;
-
 
 //? if >= 1.21.2 && <= 1.21.5
 /*import net.minecraft.client.renderer.RenderType;*/
 //? if >= 1.21.6
 /*import net.minecraft.client.renderer.RenderPipelines;*/
+
+//? if <= 1.21.9 {
+import net.minecraft.resources.ResourceLocation;
+ //?} else {
+/*import net.minecraft.resources.Identifier;
+*///?}
 
 public class RenderUtils {
 
@@ -24,7 +28,11 @@ public class RenderUtils {
         context.fill(0, y, context.guiWidth(), y+1, TextColors.DEBUG);
     }
 
+    //? if <= 1.21.9 {
     public static void drawTextureScaled(GuiGraphics context, ResourceLocation texture, float x, float y, int u, int v, int width, int height, float scaleX, float scaleY) {
+    //?} else {
+    /*public static void drawTextureScaled(GuiGraphics context, Identifier texture, float x, float y, int u, int v, int width, int height, float scaleX, float scaleY) {
+    *///?}
         //? if <= 1.21 {
         context.pose().pushPose();
         context.pose().scale(scaleX, scaleY, 1.0f);
@@ -34,7 +42,11 @@ public class RenderUtils {
         /*drawTextureScaled(context, texture, x, y, u, v, width, height, width, height, scaleX, scaleY);
         *///?}
     }
+    //? if <= 1.21.9 {
     public static void drawTexture(GuiGraphics context, ResourceLocation texture, int x, int y, int u, int v, int width, int height) {
+    //?} else {
+    /*public static void drawTexture(GuiGraphics context, Identifier texture, int x, int y, int u, int v, int width, int height) {
+    *///?}
         //? if <= 1.21 {
         context.blit(texture, x, y, u, v, width, height);
         //?} else {
@@ -51,7 +63,7 @@ public class RenderUtils {
     public static void drawTexture(GuiGraphics context, ResourceLocation texture, int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight) {
         context.blit(RenderType::guiTextured, texture, x, y, u, v, width, height, textureWidth, textureHeight);
     }
-    *///?} else if >= 1.21.6 {
+    *///?} else if >= 1.21.6 && <= 1.21.9 {
     /*public static void drawTextureScaled(GuiGraphics context, ResourceLocation texture, float x, float y, int u, int v, int width, int height, int textureWidth, int textureHeight, float scaleX, float scaleY) {
         context.pose().pushMatrix();
         context.pose().scale(scaleX, scaleY);
@@ -59,6 +71,16 @@ public class RenderUtils {
         context.pose().popMatrix();
     }
     public static void drawTexture(GuiGraphics context, ResourceLocation texture, int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight) {
+        context.blit(RenderPipelines.GUI_TEXTURED, texture, x, y, u, v, width, height, textureWidth, textureHeight);
+    }
+    *///?} else {
+    /*public static void drawTextureScaled(GuiGraphics context, Identifier texture, float x, float y, int u, int v, int width, int height, int textureWidth, int textureHeight, float scaleX, float scaleY) {
+        context.pose().pushMatrix();
+        context.pose().scale(scaleX, scaleY);
+        context.blit(RenderPipelines.GUI_TEXTURED, texture, (int) (x / scaleX), (int) (y / scaleY), u, v, width, height, textureWidth, textureHeight);
+        context.pose().popMatrix();
+    }
+    public static void drawTexture(GuiGraphics context, Identifier texture, int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight) {
         context.blit(RenderPipelines.GUI_TEXTURED, texture, x, y, u, v, width, height, textureWidth, textureHeight);
     }
     *///?}

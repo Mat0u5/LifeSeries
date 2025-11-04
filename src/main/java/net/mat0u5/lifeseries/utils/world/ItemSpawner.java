@@ -3,7 +3,6 @@ package net.mat0u5.lifeseries.utils.world;
 import net.mat0u5.lifeseries.Main;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,6 +13,12 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 import java.util.*;
+
+//? if <= 1.21.9 {
+import net.minecraft.resources.ResourceLocation;
+ //?} else {
+/*import net.minecraft.resources.Identifier;
+*///?}
 
 public class ItemSpawner {
     HashMap<ItemStack, Integer> lootTable = new HashMap<>();
@@ -42,7 +47,13 @@ public class ItemSpawner {
         return null;
     }
 
-    public static List<ItemStack> getRandomItemsFromLootTable(MinecraftServer server, ServerLevel level, ServerPlayer player, ResourceLocation lootTableId) {
+
+    public static List<ItemStack> getRandomItemsFromLootTable(MinecraftServer server, ServerLevel level, ServerPlayer player
+          //? if <= 1.21.9 {
+            , ResourceLocation lootTableId) {
+          //?} else {
+            /*, Identifier lootTableId) {
+          *///?}
         if (server == null || level == null || player == null) return new ArrayList<>();
         try {
             //? if <= 1.21 {

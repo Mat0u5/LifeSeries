@@ -2,7 +2,13 @@ package net.mat0u5.lifeseries.entity.snail;
 
 import net.mat0u5.lifeseries.features.SnailSkinsClient;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+
+//? if <= 1.21.9 {
 import net.minecraft.resources.ResourceLocation;
+ //?} else {
+/*import net.minecraft.resources.Identifier;
+*///?}
+
 //? if <= 1.21 {
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -31,6 +37,7 @@ public class SnailRenderer extends MobRenderer<Snail, SnailModel<Snail>> {
 }
 //?} else {
 /*import net.minecraft.client.renderer.entity.AgeableMobRenderer;
+
 public class SnailRenderer extends AgeableMobRenderer<Snail, SnailRenderState, SnailModel> {
     public SnailRenderer(EntityRendererProvider.Context context) {
         super(context, new SnailModel(context.bakeLayer(SnailModel.SNAIL)), new SnailModel(context.bakeLayer(SnailModel.SNAIL)), 0.35f);
@@ -42,11 +49,15 @@ public class SnailRenderer extends AgeableMobRenderer<Snail, SnailRenderState, S
     }
 
     @Override
+    //? if <= 1.21.9 {
     public ResourceLocation getTextureLocation(SnailRenderState state) {
+    //?} else {
+    /^public Identifier getTextureLocation(SnailRenderState state) {
+    ^///?}
         if (state.fromTrivia) return Snail.TRIVIA_TEXTURE;
         if (state.boundPlayerDead) return Snail.ZOMBIE_TEXTURE;
 
-        ResourceLocation dynamicTexture = SnailSkinsClient.getSnailTexture(state.skinName);
+        var dynamicTexture = SnailSkinsClient.getSnailTexture(state.skinName);
         if (dynamicTexture != null) return dynamicTexture;
 
         return Snail.DEFAULT_TEXTURE;

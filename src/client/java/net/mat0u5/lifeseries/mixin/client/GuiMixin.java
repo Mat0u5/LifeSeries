@@ -4,9 +4,9 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.ClientUtils;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.scores.PlayerTeam;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -19,6 +19,12 @@ import java.util.function.Function;
 *///?}
 //? if >= 1.21.6
 /*import com.mojang.blaze3d.pipeline.RenderPipeline;*/
+
+//? if <= 1.21.9 {
+import net.minecraft.resources.ResourceLocation;
+ //?} else {
+/*import net.minecraft.resources.Identifier;
+*///?}
 
 @Mixin(value = Gui.class, priority = 1)
 public class GuiMixin {
@@ -39,10 +45,13 @@ public class GuiMixin {
     //?} else if <= 1.21.5 {
     /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Ljava/util/function/Function;Lnet/minecraft/resources/ResourceLocation;IIII)V"))
     private void customHearts(GuiGraphics instance, Function<ResourceLocation, RenderType> renderLayers, ResourceLocation identifier, int x, int y, int u, int v) {
-    *///?} else {
+    *///?} else if <= 1.21.9 {
     /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/ResourceLocation;IIII)V"))
     private void customHearts(GuiGraphics instance, RenderPipeline renderPipeline, ResourceLocation identifier, int x, int y, int u, int v) {
-        *///?}
+    *///?} else {
+    /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V"))
+    private void customHearts(GuiGraphics instance, RenderPipeline renderPipeline, Identifier identifier, int x, int y, int u, int v) {
+    *///?}
 
         String texturePath = identifier.getPath();
         PlayerTeam playerTeam = ClientUtils.getPlayerTeam();
@@ -74,7 +83,7 @@ public class GuiMixin {
                 heartType = "hardcore_"+heartType;
             }
         }
-        ResourceLocation customHeart = ResourceLocation.fromNamespaceAndPath("lifeseries", "textures/gui/hearts/"+color+"_"+heartType+".png");
+        var customHeart = IdentifierHelper.mod("textures/gui/hearts/"+color+"_"+heartType+".png");
         //? if <= 1.21 {
         instance.blit(customHeart, x, y, 100, u, v, u, v, u, v);
         ls$afterHeartDraw(instance, identifier, x, y, u, v);
@@ -92,8 +101,10 @@ public class GuiMixin {
     private void ls$afterHeartDraw(GuiGraphics instance, ResourceLocation identifier, int x, int y, int u, int v) {
     //?} else if <= 1.21.5 {
     /*private void ls$afterHeartDraw(GuiGraphics instance, Function<ResourceLocation, RenderType> renderLayers, ResourceLocation identifier, int x, int y, int u, int v) {
-    *///?} else {
+    *///?} else if <= 1.21.9 {
     /*private void ls$afterHeartDraw(GuiGraphics instance, RenderPipeline renderPipeline, ResourceLocation identifier, int x, int y, int u, int v) {
+    *///?} else {
+    /*private void ls$afterHeartDraw(GuiGraphics instance, RenderPipeline renderPipeline, Identifier identifier, int x, int y, int u, int v) {
     *///?}
         if (MainClient.clientCurrentSeason != Seasons.SECRET_LIFE || Main.modFullyDisabled()) {
             return;
@@ -105,7 +116,7 @@ public class GuiMixin {
         if (blinking) heartName += "_blinking";
         if (half) heartName += "_half";
 
-        ResourceLocation customHeart = ResourceLocation.fromNamespaceAndPath("lifeseries", "textures/gui/hearts/secretlife/"+heartName+".png");
+        var customHeart = IdentifierHelper.mod("textures/gui/hearts/secretlife/"+heartName+".png");
         //? if <= 1.21 {
         instance.blit(customHeart, x, y, 100, u, v, u, v, u, v);
         //?} else if <= 1.21.5 {

@@ -14,7 +14,6 @@ import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 public class SeasonInfoScreen extends DefaultScreen {
@@ -29,7 +28,7 @@ public class SeasonInfoScreen extends DefaultScreen {
     @Override
     public void render(GuiGraphics context, int mouseX, int mouseY) {
         // Background + images
-        ResourceLocation logo = season.getLogo();
+        var logo = season.getLogo();
         if (logo != null) {
             RenderUtils.drawTextureScaled(context, logo, startX + 5, endY - 64, 0, 0, 256, 256, 0.25f, 0.25f);
             RenderUtils.drawTextureScaled(context, logo, endX - 64 - 5, endY - 64, 0, 0, 256, 256, 0.25f, 0.25f);

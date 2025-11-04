@@ -2,13 +2,13 @@ package net.mat0u5.lifeseries.gui.config.entries.extra;
 
 import net.mat0u5.lifeseries.gui.config.entries.StringListPopupConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +31,17 @@ import net.minecraft.client.resources.MobEffectTextureManager;
 import net.minecraft.client.renderer.RenderPipelines;
 *///?}
 
+//? if <= 1.21.9 {
+import net.minecraft.resources.ResourceLocation;
+ //?} else {
+/*import net.minecraft.resources.Identifier;
+*///?}
 public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<MobEffect>> {
-    private static final ResourceLocation EFFECT_BACKGROUND_TEXTURE = ResourceLocation.withDefaultNamespace("hud/effect_background");
+    //? if <= 1.21.9 {
+    private static final ResourceLocation EFFECT_BACKGROUND_TEXTURE = IdentifierHelper.vanilla("hud/effect_background");
+    //?} else {
+    /*private static final Identifier EFFECT_BACKGROUND_TEXTURE = IdentifierHelper.vanilla("hud/effect_background");
+    *///?}
 
     public EffectListConfigEntry(String fieldName, String displayName, String description, String value, String defaultValue) {
         super(fieldName, displayName, description, value, defaultValue, 5, 24, 2);
@@ -51,16 +60,16 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<Mob
 
         Registry<MobEffect> effectsRegistry = Minecraft.getInstance().level.registryAccess()
         //? if <=1.21 {
-        .registryOrThrow(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath("minecraft", "mob_effect")));
+        .registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
         //?} else
-        /*.lookupOrThrow(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath("minecraft", "mob_effect")));*/
+        /*.lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));*/
 
         for (String potionId : items) {
             if (potionId.isEmpty()) continue;
             if (!potionId.contains(":")) potionId = "minecraft:" + potionId;
 
             try {
-                ResourceLocation id = ResourceLocation.parse(potionId);
+                var id = IdentifierHelper.parse(potionId);
                 //? if <= 1.21 {
                 MobEffect enchantment = effectsRegistry.get(id);
                 //?} else {

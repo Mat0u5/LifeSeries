@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.blacklist;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
@@ -12,7 +13,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -40,8 +40,18 @@ import java.util.Optional;
 import static net.mat0u5.lifeseries.Main.seasonConfig;
 import static net.mat0u5.lifeseries.Main.server;
 
+//? if <= 1.21.9 {
+import net.minecraft.resources.ResourceLocation;
+ //?} else {
+/*import net.minecraft.resources.Identifier;
+*///?}
+
 public class Blacklist {
+    //? if <= 1.21.9 {
     public List<ResourceLocation> loadedListItemIdentifier;
+    //?} else {
+    /*public List<Identifier> loadedListItemIdentifier;
+    *///?}
     private List<Item> loadedListItem;
     private List<Block> loadedListBlock;
     private List<ResourceKey<Enchantment>> loadedListEnchants;
@@ -94,11 +104,15 @@ public class Blacklist {
     public List<Item> getItemBlacklist() {
         if (loadedListItem != null) return loadedListItem;
         List<Item> newList = new ArrayList<>();
+        //? if <= 1.21.9 {
         List<ResourceLocation> newListIdentifier = new ArrayList<>();
+        //?} else {
+        /*List<Identifier> newListIdentifier = new ArrayList<>();
+        *///?}
 
         if (seasonConfig != null) {
             if (!seasonConfig.SPAWNER_RECIPE.get(seasonConfig)) {
-                newListIdentifier.add(ResourceLocation.fromNamespaceAndPath("lifeseries", "spawner_recipe"));
+                newListIdentifier.add(IdentifierHelper.mod("spawner_recipe"));
             }
         }
 
@@ -106,7 +120,7 @@ public class Blacklist {
             if (!itemId.contains(":")) itemId = "minecraft:" + itemId;
 
             try {
-                ResourceLocation id = ResourceLocation.parse(itemId);
+                var id = IdentifierHelper.parse(itemId);
                 ResourceKey<Item> key = ResourceKey.create(BuiltInRegistries.ITEM.key(), id);
 
                 // Check if the block exists in the registry
@@ -139,7 +153,7 @@ public class Blacklist {
             if (!blockId.contains(":")) blockId = "minecraft:" + blockId;
 
             try {
-                ResourceLocation id = ResourceLocation.parse(blockId);
+                var id = IdentifierHelper.parse(blockId);
                 ResourceKey<Block> key = ResourceKey.create(BuiltInRegistries.BLOCK.key(), id);
 
                 // Check if the block exists in the registry
@@ -171,16 +185,16 @@ public class Blacklist {
         Registry<Enchantment> enchantmentRegistry = server.registryAccess()
 
                 //? if <=1.21 {
-                .registryOrThrow(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath("minecraft", "enchantment")));
+                .registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));
                  //?} else
-                /*.lookupOrThrow(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath("minecraft", "enchantment")));*/
+                /*.lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));*/
 
 
         for (String enchantmentId : loadClampedEnchants()) {
             if (!enchantmentId.contains(":")) enchantmentId = "minecraft:" + enchantmentId;
 
             try {
-                ResourceLocation id = ResourceLocation.parse(enchantmentId);
+                var id = IdentifierHelper.parse(enchantmentId);
                 //? if <= 1.21 {
                 Enchantment enchantment = enchantmentRegistry.get(id);
                 //?} else {
@@ -210,16 +224,16 @@ public class Blacklist {
         Registry<Enchantment> enchantmentRegistry = server.registryAccess()
 
                 //? if <=1.21 {
-                .registryOrThrow(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath("minecraft", "enchantment")));
+                .registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));
         //?} else
-        /*.lookupOrThrow(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath("minecraft", "enchantment")));*/
+        /*.lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));*/
 
 
         for (String enchantmentId : loadBlacklistedEnchants()) {
             if (!enchantmentId.contains(":")) enchantmentId = "minecraft:" + enchantmentId;
 
             try {
-                ResourceLocation id = ResourceLocation.parse(enchantmentId);
+                var id = IdentifierHelper.parse(enchantmentId);
                 //? if <= 1.21 {
                 Enchantment enchantment = enchantmentRegistry.get(id);
                 //?} else {
@@ -248,15 +262,15 @@ public class Blacklist {
 
         Registry<MobEffect> effectsRegistry = server.registryAccess()
         //? if <=1.21 {
-        .registryOrThrow(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath("minecraft", "mob_effect")));
+        .registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
         //?} else
-        /*.lookupOrThrow(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath("minecraft", "mob_effect")));*/
+        /*.lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));*/
 
         for (String potionId : loadBannedPotions()) {
             if (!potionId.contains(":")) potionId = "minecraft:" + potionId;
 
             try {
-                ResourceLocation id = ResourceLocation.parse(potionId);
+                var id = IdentifierHelper.parse(potionId);
                 //? if <= 1.21 {
                 MobEffect enchantment = effectsRegistry.get(id);
                 //?} else {

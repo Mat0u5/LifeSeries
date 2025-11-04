@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.config.StringListConfig;
 import net.mat0u5.lifeseries.config.StringListManager;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -16,7 +17,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.Filterable;
@@ -227,7 +227,7 @@ public class TaskManager {
         });
         TaskScheduler.scheduleTask(70, () -> {
             PlayerUtils.sendTitleToPlayers(allowedPlayers, Component.literal("2").withStyle(ChatFormatting.RED),0,35,0);
-            PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvent.createVariableRangeEvent(ResourceLocation.withDefaultNamespace("secretlife_task")));
+            PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("secretlife_task")));
         });
         TaskScheduler.scheduleTask(105, () -> {
             PlayerUtils.sendTitleToPlayers(allowedPlayers, Component.literal("1").withStyle(ChatFormatting.RED),0,35,0);
@@ -323,7 +323,7 @@ public class TaskManager {
                 TaskScheduler.scheduleTask(3*i, () -> {
                     server.overworld().playSound(null, spawnPos.x(), spawnPos.y(), spawnPos.z(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
 
-                    List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, server.overworld(), player, ResourceLocation.fromNamespaceAndPath("lifeseriesdynamic", "task_reward_loottable"));
+                    List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, server.overworld(), player, IdentifierHelper.of("lifeseriesdynamic", "task_reward_loottable"));
                     if (!lootTableItems.isEmpty()) {
                         for (ItemStack item : lootTableItems) {
                             ItemStackUtils.spawnItemForPlayer(server.overworld(), spawnPos, item, player);
@@ -408,7 +408,7 @@ public class TaskManager {
 
         Vec3 centerPos = itemSpawnerPos.getCenter();
         AnimationUtils.createGlyphAnimation(server.overworld(), centerPos, 40);
-        server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("minecraft","secretlife_task")), SoundSource.PLAYERS, 1.0F, 1.0F);
+        server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("secretlife_task")), SoundSource.PLAYERS, 1.0F, 1.0F);
         TaskScheduler.scheduleTask(60, () -> {
             server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvents.TRIAL_SPAWNER_EJECT_ITEM, SoundSource.PLAYERS, 1.0F, 1.0F);
             AnimationUtils.spawnFireworkBall(server.overworld(), centerPos, 40, 0.3, new Vector3f(0, 1, 0));
@@ -509,7 +509,7 @@ public class TaskManager {
 
         Vec3 centerPos = itemSpawnerPos.getCenter();
         AnimationUtils.createGlyphAnimation(server.overworld(), centerPos, 40);
-        server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("minecraft","secretlife_task")), SoundSource.PLAYERS, 1.0F, 1.0F);
+        server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("secretlife_task")), SoundSource.PLAYERS, 1.0F, 1.0F);
         TaskScheduler.scheduleTask(60, () -> {
             server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvents.TRIAL_SPAWNER_SPAWN_MOB, SoundSource.PLAYERS, 1.0F, 1.0F);
             AnimationUtils.spawnFireworkBall(server.overworld(), centerPos, 40, 0.3, new Vector3f(1, 0, 0));

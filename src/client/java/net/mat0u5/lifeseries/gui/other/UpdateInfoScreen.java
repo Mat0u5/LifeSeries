@@ -6,10 +6,14 @@ import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
-import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
+//? if <= 1.21.9 {
+import net.minecraft.Util;
+//?} else {
+/*import net.minecraft.util.Util;
+*///?}
 
 public class UpdateInfoScreen extends DefaultScreen {
     private String versionName;

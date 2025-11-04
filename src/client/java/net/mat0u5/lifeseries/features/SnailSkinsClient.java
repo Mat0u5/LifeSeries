@@ -2,10 +2,10 @@ package net.mat0u5.lifeseries.features;
 
 import com.mojang.blaze3d.platform.NativeImage;
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.resources.ResourceLocation;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -15,15 +15,25 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+//? if <= 1.21.9 {
+import net.minecraft.resources.ResourceLocation;
+ //?} else {
+/*import net.minecraft.resources.Identifier;
+*///?}
+
 public class SnailSkinsClient {
+    //? if <= 1.21.9 {
     private static final Map<String, ResourceLocation> snailTextures = new HashMap<>();
+    //?} else {
+    /*private static final Map<String, Identifier> snailTextures = new HashMap<>();
+    *///?}
 
     public static void handleSnailTexture(String skinName, byte[] textureData) {
         try {
             Main.LOGGER.info(TextUtils.formatString("Received snail texture '{}'", skinName));
             Minecraft client = Minecraft.getInstance();
 
-            ResourceLocation textureId = ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "dynamic/snailskin/" + skinName);
+            var textureId = IdentifierHelper.mod("dynamic/snailskin/" + skinName);
 
             NativeImage image = NativeImage.read(new ByteArrayInputStream(textureData));
             if (image.getWidth() == 32 && image.getHeight() == 32) {
@@ -54,13 +64,17 @@ public class SnailSkinsClient {
         }
     }
 
+    //? if <= 1.21.9 {
     public static ResourceLocation getSnailTexture(String skinName) {
+    //?} else {
+    /*public static Identifier getSnailTexture(String skinName) {
+    *///?}
         if (skinName == null) return null;
         return snailTextures.get(skinName);
     }
 
     public static void removeSnailTexture(String skinName) {
-        ResourceLocation textureId = snailTextures.remove(skinName);
+        var textureId = snailTextures.remove(skinName);
         if (textureId != null) {
             Minecraft.getInstance().getTextureManager().release(textureId);
             Main.LOGGER.info(TextUtils.formatString("Removed old snail texture '{}'", textureId));

@@ -1,8 +1,15 @@
 package net.mat0u5.lifeseries.entity.triviabot;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+
+//? if <= 1.21.9 {
 import net.minecraft.resources.ResourceLocation;
+ //?} else {
+/*import net.minecraft.resources.Identifier;
+*///?}
+
 //? if <= 1.21 {
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -14,7 +21,7 @@ public class TriviaBotRenderer extends MobRenderer<TriviaBot, TriviaBotModel<Tri
 
     @Override
     public ResourceLocation getTextureLocation(TriviaBot entity) {
-        return ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "textures/entity/triviabot/triviabot.png");
+        return IdentifierHelper.mod("textures/entity/triviabot/triviabot.png");
     }
 
     @Override
@@ -24,6 +31,7 @@ public class TriviaBotRenderer extends MobRenderer<TriviaBot, TriviaBotModel<Tri
 }
 //?} else {
 /*import net.minecraft.client.renderer.entity.AgeableMobRenderer;
+
 public class TriviaBotRenderer extends AgeableMobRenderer<TriviaBot, TriviaBotRenderState, TriviaBotModel> {
     public TriviaBotRenderer(EntityRendererProvider.Context context) {
         super(context, new TriviaBotModel(context.bakeLayer(TriviaBotModel.TRIVIA_BOT)), new TriviaBotModel(context.bakeLayer(TriviaBotModel.TRIVIA_BOT)), 0.45f);
@@ -35,8 +43,12 @@ public class TriviaBotRenderer extends AgeableMobRenderer<TriviaBot, TriviaBotRe
     }
 
     @Override
+    //? if <= 1.21.9 {
     public ResourceLocation getTextureLocation(TriviaBotRenderState state) {
-        return ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "textures/entity/triviabot/triviabot.png");
+    //?} else {
+    /^public Identifier getTextureLocation(TriviaBotRenderState state) {
+    ^///?}
+        return IdentifierHelper.mod("textures/entity/triviabot/triviabot.png");
     }
 
     @Override

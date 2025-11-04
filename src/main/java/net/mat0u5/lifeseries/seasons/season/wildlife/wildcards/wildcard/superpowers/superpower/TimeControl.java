@@ -3,9 +3,9 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDilation;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 
@@ -32,9 +32,9 @@ public class TimeControl extends Superpower {
         if (previousSpeed <= 4) return;
         changedSpeedFor += 90;
         TimeDilation.slowlySetWorldSpeed(4, 20);
-        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvent.createVariableRangeEvent(ResourceLocation.withDefaultNamespace("wildlife_time_slow_down")));
+        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_time_slow_down")));
         TaskScheduler.scheduleTask(70, () -> {
-            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvent.createVariableRangeEvent(ResourceLocation.withDefaultNamespace("wildlife_time_speed_up")), 0.65f, 1);
+            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_time_speed_up")), 0.65f, 1);
             TimeDilation.slowlySetWorldSpeed(previousSpeed, 20);
         });
     }

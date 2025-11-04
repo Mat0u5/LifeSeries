@@ -5,7 +5,6 @@ import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -15,6 +14,12 @@ import net.minecraft.world.entity.EntityDimensions;
 //?} else {
 /*import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityType;
 import net.minecraft.resources.ResourceKey;
+*///?}
+
+//? if <= 1.21.9 {
+import net.minecraft.resources.ResourceLocation;
+ //?} else {
+/*import net.minecraft.resources.Identifier;
 *///?}
 
 public class MobRegistry {
@@ -74,7 +79,11 @@ public class MobRegistry {
                     .clientTrackingRange(512)
     );
 
+    //? if <= 1.21.9 {
     private static <T extends Entity> EntityType<T> register(ResourceLocation id, EntityType.Builder<T> builder) {
+    //?} else {
+    /^private static <T extends Entity> EntityType<T> register(Identifier id, EntityType.Builder<T> builder) {
+    ^///?}
         EntityType<T> type = builder.build(ResourceKey.create(BuiltInRegistries.ENTITY_TYPE.key(), id));
         return Registry.register(BuiltInRegistries.ENTITY_TYPE, id, type);
     }

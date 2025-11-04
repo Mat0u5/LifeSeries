@@ -4,11 +4,11 @@ import net.mat0u5.lifeseries.seasons.boogeyman.Boogeyman;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.scores.ScoreHolder;
@@ -89,7 +89,7 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
             Component setTo = livesManager.getFormattedLives(player);
 
             PlayerUtils.sendTitle(player,Component.nullToEmpty("§cYou have failed."), 20, 30, 20);
-            PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("minecraft","lastlife_boogeyman_fail")));
+            PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("lastlife_boogeyman_fail")));
             if (BOOGEYMAN_ANNOUNCE_OUTCOME && sendMessage) {
                 PlayerUtils.broadcastMessage(TextUtils.format("{}§7 failed to kill a player while being the §cBoogeyman§7. Their time has been dropped to {}", player, setTo));
             }

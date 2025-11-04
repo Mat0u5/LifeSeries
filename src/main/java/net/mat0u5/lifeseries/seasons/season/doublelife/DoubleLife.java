@@ -10,6 +10,7 @@ import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IHungerManager;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -19,7 +20,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -45,7 +45,7 @@ import net.minecraft.world.level.GameRules;
 public class DoubleLife extends Season {
     public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /soulmate";
     public static final String COMMANDS_TEXT = "/claimkill, /lives";
-    public static final ResourceKey<DamageType> SOULMATE_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "soulmate"));
+    public static final ResourceKey<DamageType> SOULMATE_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE,  IdentifierHelper.mod("soulmate"));
     StringListConfig soulmateConfig;
     public boolean ANNOUNCE_SOULMATES = false;
     public boolean SOULBOUND_FOOD = false;
@@ -314,7 +314,7 @@ public class DoubleLife extends Season {
         });
         TaskScheduler.scheduleTask(75, () -> {
             PlayerUtils.sendTitleToPlayers(playersToRoll, Component.literal("Your soulmate is...").withStyle(ChatFormatting.GREEN),10,50,20);
-            PlayerUtils.playSoundToPlayers(playersToRoll, SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("minecraft","doublelife_soulmate_wait")));
+            PlayerUtils.playSoundToPlayers(playersToRoll, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("doublelife_soulmate_wait")));
         });
         TaskScheduler.scheduleTask(165, () -> {
             chooseRandomSoulmates();
@@ -327,7 +327,7 @@ public class DoubleLife extends Season {
                     }
                 }
                 PlayerUtils.sendTitle(player, text,20,60,20);
-                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("minecraft","doublelife_soulmate_chosen")));
+                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("doublelife_soulmate_chosen")));
             }
         });
     }

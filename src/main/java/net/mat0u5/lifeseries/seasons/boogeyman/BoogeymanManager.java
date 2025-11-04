@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -12,7 +13,6 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -163,7 +163,7 @@ public class BoogeymanManager {
         if (boogeyman.cured) return;
         boogeyman.cured = true;
         PlayerUtils.sendTitle(player,Component.nullToEmpty("§aYou are cured!"), 20, 30, 20);
-        PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("minecraft","lastlife_boogeyman_cure")));
+        PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("lastlife_boogeyman_cure")));
         if (BOOGEYMAN_ANNOUNCE_OUTCOME) {
             PlayerUtils.broadcastMessage(TextUtils.format("{}§7 is cured of the Boogeyman curse!", player));
         }
@@ -222,7 +222,7 @@ public class BoogeymanManager {
             PlayerUtils.sendTitleToPlayers(allowedPlayers, Component.literal("1").withStyle(ChatFormatting.RED),0,35,0);
         });
         TaskScheduler.scheduleTask(90, () -> {
-            PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvent.createVariableRangeEvent(ResourceLocation.withDefaultNamespace("lastlife_boogeyman_wait")));
+            PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("lastlife_boogeyman_wait")));
             PlayerUtils.sendTitleToPlayers(allowedPlayers, Component.literal("You are...").withStyle(ChatFormatting.YELLOW),10,50,20);
         });
     }
@@ -329,8 +329,8 @@ public class BoogeymanManager {
     }
 
     public void handleBoogeymanLists(List<ServerPlayer> normalPlayers, List<ServerPlayer> boogeyPlayers) {
-        PlayerUtils.playSoundToPlayers(normalPlayers, SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("minecraft","lastlife_boogeyman_no")));
-        PlayerUtils.playSoundToPlayers(boogeyPlayers, SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("minecraft","lastlife_boogeyman_yes")));
+        PlayerUtils.playSoundToPlayers(normalPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("lastlife_boogeyman_no")));
+        PlayerUtils.playSoundToPlayers(boogeyPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("lastlife_boogeyman_yes")));
         PlayerUtils.sendTitleToPlayers(normalPlayers, Component.literal("NOT the Boogeyman.").withStyle(ChatFormatting.GREEN),10,50,20);
         PlayerUtils.sendTitleToPlayers(boogeyPlayers, Component.literal("The Boogeyman.").withStyle(ChatFormatting.RED),10,50,20);
         for (ServerPlayer boogey : boogeyPlayers) {
@@ -393,7 +393,7 @@ public class BoogeymanManager {
         }
         else {
             PlayerUtils.sendTitle(player,Component.nullToEmpty("§cYou have failed."), 20, 30, 20);
-            PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("minecraft","lastlife_boogeyman_fail")));
+            PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("lastlife_boogeyman_fail")));
             if (BOOGEYMAN_ANNOUNCE_OUTCOME && sendMessage) {
                 PlayerUtils.broadcastMessage(TextUtils.format("{}§7 failed to kill a player while being the §cBoogeyman§7. They have been dropped to their §cLast Life§7.", player));
             }
