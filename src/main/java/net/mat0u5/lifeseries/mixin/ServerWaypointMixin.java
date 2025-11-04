@@ -9,10 +9,10 @@ public class ServerWaypointMixin {
 }
 //?} else {
 /*import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.waypoints.WaypointTransmitter;
 import net.mat0u5.lifeseries.Main;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.world.waypoint.ServerWaypoint;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,16 +22,16 @@ import java.util.UUID;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
-@Mixin(value = ServerWaypoint.class, priority = 1)
+@Mixin(value = WaypointTransmitter.class, priority = 1)
 public interface ServerWaypointMixin {
 
-    @Inject(method = "cannotReceive", at = @At("HEAD"), cancellable = true)
-    private static void cannotReceive(LivingEntity source, ServerPlayerEntity receiver, CallbackInfoReturnable<Boolean> cir) {
+    @Inject(method = "doesSourceIgnoreReceiver", at = @At("HEAD"), cancellable = true)
+    private static void cannotReceive(LivingEntity source, ServerPlayer receiver, CallbackInfoReturnable<Boolean> cir) {
         if (Main.modDisabled()) return;
-        if (source instanceof ServerPlayerEntity sender) {
+        if (source instanceof ServerPlayer sender) {
             if (currentSeason instanceof DoubleLife doubleLife && DoubleLife.SOULMATE_LOCATOR_BAR) {
-                UUID receiverSoulmateUUID = doubleLife.getSoulmateUUID(receiver.getUuid());
-                if (sender.getUuid().equals(receiverSoulmateUUID)) {
+                UUID receiverSoulmateUUID = doubleLife.getSoulmateUUID(receiver.getUUID());
+                if (sender.getUUID().equals(receiverSoulmateUUID)) {
                     cir.setReturnValue(false);
                 }
                 else {

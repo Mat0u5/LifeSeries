@@ -5,7 +5,6 @@ import net.mat0u5.lifeseries.utils.interfaces.IPlayerManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundSetExperiencePacket;
 import net.minecraft.server.level.ServerPlayer;
 import java.util.ArrayList;
@@ -14,8 +13,12 @@ import java.util.Optional;
 import java.util.UUID;
 import static net.mat0u5.lifeseries.Main.livesManager;
 import static net.mat0u5.lifeseries.Main.server;
-//? if >= 1.21.9 {
-//?}
+//? if <= 1.21.5
+import net.minecraft.nbt.CompoundTag;
+//? if >= 1.21.6 {
+/*import net.minecraft.util.ProblemReporter;
+import net.minecraft.world.level.storage.ValueInput;
+*///?}
 
 public class SubInManager {
     public static List<SubIn> subIns = new ArrayList<>();
@@ -108,9 +111,9 @@ public class SubInManager {
                 PlayerUtils.teleport(player, player.ls$getEntityPos());
             });
             //?} else if <= 1.21.6 {
-            /*Optional<ReadView> data = iPlayerManager.ls$getSaveHandler().loadPlayerData(player, ErrorReporter.EMPTY);
+            /*Optional<ValueInput> data = iPlayerManager.ls$getSaveHandler().load(player, ProblemReporter.DISCARDING);
             data.ifPresent(nbt -> {
-                player.readData(nbt);
+                player.load(nbt);
                 PlayerUtils.teleport(player, player.ls$getEntityPos());
             });
             *///?} else {

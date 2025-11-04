@@ -5,7 +5,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakeClientConnection;
 import net.minecraft.network.Connection;
-import net.minecraft.network.PacketSendListener;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.network.ServerCommonPacketListenerImpl;
@@ -15,6 +14,11 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+//? if <= 1.21.5
+import net.minecraft.network.PacketSendListener;
+//? if >= 1.21.6
+/*import io.netty.channel.ChannelFutureListener;*/
 
 @Mixin(value = ServerCommonPacketListenerImpl.class, priority = 1)
 public class ServerCommonNetworkHandlerMixin {
@@ -42,10 +46,10 @@ public class ServerCommonNetworkHandlerMixin {
     }
     //?} else {
     /*@WrapOperation(
-            method = "send",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;send(Lnet/minecraft/network/packet/Packet;Lio/netty/channel/ChannelFutureListener;Z)V")
+            method = "send(Lnet/minecraft/network/protocol/Packet;Lio/netty/channel/ChannelFutureListener;)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/network/Connection;send(Lnet/minecraft/network/protocol/Packet;Lio/netty/channel/ChannelFutureListener;Z)V")
     )
-    public void send(ClientConnection instance, Packet packet, ChannelFutureListener channelFutureListener, boolean b, Operation<Void> original) {
+    public void send(Connection instance, Packet packet, ChannelFutureListener channelFutureListener, boolean b, Operation<Void> original) {
         if (connection instanceof FakeClientConnection) return;
         original.call(instance, packet, channelFutureListener, b);
     }

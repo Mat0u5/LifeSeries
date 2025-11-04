@@ -9,7 +9,10 @@ import net.minecraft.util.FormattedCharSequence;
 import java.util.List;
 
 
-import net.minecraft.client.renderer.RenderType;
+//? if >= 1.21.2 && <= 1.21.5
+/*import net.minecraft.client.renderer.RenderType;*/
+//? if >= 1.21.6
+/*import net.minecraft.client.renderer.RenderPipelines;*/
 
 public class RenderUtils {
 
@@ -49,14 +52,14 @@ public class RenderUtils {
         context.blit(RenderType::guiTextured, texture, x, y, u, v, width, height, textureWidth, textureHeight);
     }
     *///?} else if >= 1.21.6 {
-    /*public static void drawTextureScaled(DrawContext context, Identifier texture, float x, float y, int u, int v, int width, int height, int textureWidth, int textureHeight, float scaleX, float scaleY) {
-        context.getMatrices().pushMatrix();
-        context.getMatrices().scale(scaleX, scaleY);
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, texture, (int) (x / scaleX), (int) (y / scaleY), u, v, width, height, textureWidth, textureHeight);
-        context.getMatrices().popMatrix();
+    /*public static void drawTextureScaled(GuiGraphics context, ResourceLocation texture, float x, float y, int u, int v, int width, int height, int textureWidth, int textureHeight, float scaleX, float scaleY) {
+        context.pose().pushMatrix();
+        context.pose().scale(scaleX, scaleY);
+        context.blit(RenderPipelines.GUI_TEXTURED, texture, (int) (x / scaleX), (int) (y / scaleY), u, v, width, height, textureWidth, textureHeight);
+        context.pose().popMatrix();
     }
-    public static void drawTexture(DrawContext context, Identifier texture, int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight) {
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, texture, x, y, u, v, width, height, textureWidth, textureHeight);
+    public static void drawTexture(GuiGraphics context, ResourceLocation texture, int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight) {
+        context.blit(RenderPipelines.GUI_TEXTURED, texture, x, y, u, v, width, height, textureWidth, textureHeight);
     }
     *///?}
 
@@ -80,10 +83,10 @@ public class RenderUtils {
         context.drawString(textRenderer, text, (int)(x / scaleX - textRenderer.width(text)/2.0), (int)(y / scaleY), textColor, false);
         context.pose().popPose();
         //?} else {
-        /*context.getMatrices().pushMatrix();
-        context.getMatrices().scale(scaleX, scaleY);
-        context.drawText(textRenderer, text, (int)(x / scaleX - textRenderer.getWidth(text)/2.0), (int)(y / scaleY), textColor, false);
-        context.getMatrices().popMatrix();
+        /*context.pose().pushMatrix();
+        context.pose().scale(scaleX, scaleY);
+        context.drawString(textRenderer, text, (int)(x / scaleX - textRenderer.width(text)/2.0), (int)(y / scaleY), textColor, false);
+        context.pose().popMatrix();
         *///?}
     }
 
@@ -112,10 +115,10 @@ public class RenderUtils {
         context.drawString(textRenderer, text, (int)(x / scaleX), (int)(y / scaleY), textColor, false);
         context.pose().popPose();
         //?} else {
-        /*context.getMatrices().pushMatrix();
-        context.getMatrices().scale(scaleX, scaleY);
-        context.drawText(textRenderer, text, (int)(x / scaleX), (int)(y / scaleY), textColor, false);
-        context.getMatrices().popMatrix();
+        /*context.pose().pushMatrix();
+        context.pose().scale(scaleX, scaleY);
+        context.drawString(textRenderer, text, (int)(x / scaleX), (int)(y / scaleY), textColor, false);
+        context.pose().popMatrix();
         *///?}
     }
 
@@ -158,10 +161,10 @@ public class RenderUtils {
         context.drawString(textRenderer, text, (int)(x / scaleX - width), (int)(y / scaleY), textColor, shadow);
         context.pose().popPose();
         //?} else {
-        /*context.getMatrices().pushMatrix();
-        context.getMatrices().scale(scaleX, scaleY);
-        context.drawText(textRenderer, text, (int)(x / scaleX - width), (int)(y / scaleY), textColor, shadow);
-        context.getMatrices().popMatrix();
+        /*context.pose().pushMatrix();
+        context.pose().scale(scaleX, scaleY);
+        context.drawString(textRenderer, text, (int)(x / scaleX - width), (int)(y / scaleY), textColor, shadow);
+        context.pose().popMatrix();
         *///?}
     }
 

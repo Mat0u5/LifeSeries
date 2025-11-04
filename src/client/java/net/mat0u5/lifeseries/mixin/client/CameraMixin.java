@@ -12,8 +12,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+
 //? if >= 1.21.6
-/*import net.minecraft.entity.attribute.EntityAttributes;*/
+/*import net.minecraft.world.entity.ai.attributes.Attributes;*/
 
 @Mixin(Camera.class)
 public class CameraMixin {
@@ -39,7 +40,7 @@ public class CameraMixin {
                 float heightScale = morphedHeight / playerHeight;
                 float cameraDistance = 4.0F;
                 //? if >= 1.21.6 {
-                /*cameraDistance = (float)player.getAttributeValue(EntityAttributes.CAMERA_DISTANCE);
+                /*cameraDistance = (float)player.getAttributeValue(Attributes.CAMERA_DISTANCE);
                  *///?}
                 return heightScale * cameraDistance;
             }

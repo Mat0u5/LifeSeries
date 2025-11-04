@@ -89,7 +89,7 @@ public class ClientUtils {
         //? if < 1.21.6 {
         client.level.disconnect();
         //?} else {
-        /*client.world.disconnect(reason);
+        /*client.level.disconnect(reason);
         *///?}
         handler.onDisconnect(new DisconnectionDetails(reason));
     }

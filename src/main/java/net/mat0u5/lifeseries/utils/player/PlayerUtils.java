@@ -364,7 +364,7 @@ public class PlayerUtils {
         //? if <= 1.21.5 {
         return player.serverLevel();
          //?} else if <= 1.21.6 {
-        /*return player.getWorld();
+        /*return player.level();
          *///?} else {
         /*return player.getEntityWorld();
         *///?}

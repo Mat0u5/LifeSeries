@@ -142,11 +142,8 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
     @Unique @Override
     public Level ls$getEntityWorld() {
         Entity entity = (Entity) (Object) this;
-        //? if = 1.21.6 {
-        /*return entity.getWorld();
-         *///?} else {
-        return entity.getCommandSenderWorld();
-        //?}
+        //TODO remove
+        return entity.level();
     }
 
     @Unique @Override

@@ -14,6 +14,10 @@ import java.util.List;
 
 //? if >= 1.21.5
 /*import java.util.Optional;*/
+//? if >= 1.21.6 {
+/*import net.minecraft.util.ProblemReporter;
+import net.minecraft.world.level.storage.TagValueOutput;
+*///?}
 
 @SuppressWarnings("resource")
 public final class SnailPushProjectilesGoal extends Goal {
@@ -52,9 +56,9 @@ public final class SnailPushProjectilesGoal extends Goal {
             CompoundTag empty = new CompoundTag();
             CompoundTag nbt = projectile.saveWithoutId(empty);
             //?} else {
-            /*NbtWriteView writeView = NbtWriteView.create(ErrorReporter.EMPTY);
-            projectile.writeData(writeView);
-            NbtCompound nbt = writeView.getNbt();
+            /*TagValueOutput writeView = TagValueOutput.createWithoutContext(ProblemReporter.DISCARDING);
+            projectile.saveWithoutId(writeView);
+            CompoundTag nbt = writeView.buildResult();
             *///?}
             //? if <= 1.21.4 {
             if (nbt.contains("inGround") && nbt.getBoolean("inGround")) {

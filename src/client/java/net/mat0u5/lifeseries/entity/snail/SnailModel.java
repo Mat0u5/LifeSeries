@@ -4,6 +4,10 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+
+//? if >= 1.21.6
+/*import net.minecraft.client.animation.KeyframeAnimation;*/
+
 //? if <= 1.21 {
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -15,12 +19,12 @@ public class SnailModel extends EntityModel<SnailRenderState> {
 *///?}
 
     //? if >= 1.21.6 {
-    /*private final Animation flyAnimation;
-    private final Animation glideAnimation;
-    private final Animation walkAnimation;
-    private final Animation idleAnimation;
-    private final Animation startFlyAnimation;
-    private final Animation stopFlyAnimation;
+    /*private final KeyframeAnimation flyAnimation;
+    private final KeyframeAnimation glideAnimation;
+    private final KeyframeAnimation walkAnimation;
+    private final KeyframeAnimation idleAnimation;
+    private final KeyframeAnimation startFlyAnimation;
+    private final KeyframeAnimation stopFlyAnimation;
     *///?}
 
     public static final ModelLayerLocation SNAIL = new ModelLayerLocation(Snail.ID, "main");
@@ -57,12 +61,12 @@ public class SnailModel extends EntityModel<SnailRenderState> {
         this.strings = this.parachute.getChild("strings");
 
         //? if >= 1.21.6 {
-        /*flyAnimation = SnailAnimations.fly.createAnimation(root);
-        glideAnimation = SnailAnimations.glide.createAnimation(root);
-        walkAnimation = SnailAnimations.walk.createAnimation(root);
-        idleAnimation = SnailAnimations.idle.createAnimation(root);
-        startFlyAnimation = SnailAnimations.startFly.createAnimation(root);
-        stopFlyAnimation = SnailAnimations.stopFly.createAnimation(root);
+        /*flyAnimation = SnailAnimations.fly.bake(root);
+        glideAnimation = SnailAnimations.glide.bake(root);
+        walkAnimation = SnailAnimations.walk.bake(root);
+        idleAnimation = SnailAnimations.idle.bake(root);
+        startFlyAnimation = SnailAnimations.startFly.bake(root);
+        stopFlyAnimation = SnailAnimations.stopFly.bake(root);
         *///?}
     }
     public static LayerDefinition getTexturedModelData() {
@@ -157,12 +161,12 @@ public class SnailModel extends EntityModel<SnailRenderState> {
         this.animate(state.startFlyAnimationState, SnailAnimations.startFly , state.ageInTicks);
         this.animate(state.stopFlyAnimationState, SnailAnimations.stopFly , state.ageInTicks);
         //?} else {
-        /^this.flyAnimation.apply(state.flyAnimationState, state.age);
-        this.glideAnimation.apply(state.glideAnimationState, state.age);
-        this.walkAnimation.apply(state.walkAnimationState, state.age);
-        this.idleAnimation.apply(state.idleAnimationState, state.age);
-        this.startFlyAnimation.apply(state.startFlyAnimationState, state.age);
-        this.stopFlyAnimation.apply(state.stopFlyAnimationState, state.age);
+        /^this.flyAnimation.apply(state.flyAnimationState, state.ageInTicks);
+        this.glideAnimation.apply(state.glideAnimationState, state.ageInTicks);
+        this.walkAnimation.apply(state.walkAnimationState, state.ageInTicks);
+        this.idleAnimation.apply(state.idleAnimationState, state.ageInTicks);
+        this.startFlyAnimation.apply(state.startFlyAnimationState, state.ageInTicks);
+        this.stopFlyAnimation.apply(state.stopFlyAnimationState, state.ageInTicks);
         ^///?}
 
         boolean parachuteHidden = !state.glideAnimationState.isStarted();

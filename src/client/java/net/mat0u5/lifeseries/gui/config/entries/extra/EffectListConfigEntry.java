@@ -5,8 +5,6 @@ import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.MobEffectTextureManager;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -20,6 +18,15 @@ import com.mojang.blaze3d.systems.RenderSystem;
 //? if >= 1.21.2 {
 /*import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.ARGB;
+*///?}
+
+//? if <= 1.21.5 {
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.MobEffectTextureManager;
+//?}
+//? if >= 1.21.6 {
+/*import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.RenderPipelines;
 *///?}
 
 public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<MobEffect>> {
@@ -95,8 +102,8 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<Mob
         TextureAtlasSprite sprite = statusEffectSpriteManager.get(effectType);
         context.blitSprite(RenderType::guiTextured, sprite, x + 3, y + 3, 18, 18, ARGB.white(1.0f));
         *///?} else {
-        /*context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, EFFECT_BACKGROUND_TEXTURE, x, y, 24, 24);
-        context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, InGameHud.getEffectTexture(effectType), x + 3, y + 3, 18, 18, ColorHelper.getWhite(1.0f));
+        /*context.blitSprite(RenderPipelines.GUI_TEXTURED, EFFECT_BACKGROUND_TEXTURE, x, y, 24, 24);
+        context.blitSprite(RenderPipelines.GUI_TEXTURED, Gui.getMobEffectSprite(effectType), x + 3, y + 3, 18, 18, ARGB.white(1.0f));
         *///?}
     }
 

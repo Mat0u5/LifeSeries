@@ -110,7 +110,7 @@ public abstract class ConfigEntry {
                 //? if <= 1.21.5 {
                 context.renderTooltip(textRenderer, textRenderer.split(errorText, MAX_DESCRIPTION_WIDTH), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY);
                  //?} else {
-                /*context.drawTooltip(textRenderer, textRenderer.wrapLines(errorText, MAX_DESCRIPTION_WIDTH), HoveredTooltipPositioner.INSTANCE, mouseX, mouseY, false);
+                /*context.setTooltipForNextFrame(textRenderer, textRenderer.split(errorText, MAX_DESCRIPTION_WIDTH), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY, false);
                 *///?}
             }
         }
@@ -121,7 +121,7 @@ public abstract class ConfigEntry {
                 //? if <= 1.21.5 {
                 context.renderTooltip(textRenderer, textRenderer.split(descriptionText, MAX_DESCRIPTION_WIDTH), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY);
                  //?} else {
-                /*context.drawTooltip(textRenderer, textRenderer.wrapLines(descriptionText, MAX_DESCRIPTION_WIDTH), HoveredTooltipPositioner.INSTANCE, mouseX, mouseY, false);
+                /*context.setTooltipForNextFrame(textRenderer, textRenderer.split(descriptionText, MAX_DESCRIPTION_WIDTH), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY, false);
                 *///?}
             }
         }

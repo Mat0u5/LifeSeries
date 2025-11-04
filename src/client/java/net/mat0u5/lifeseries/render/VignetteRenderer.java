@@ -9,9 +9,12 @@ import net.minecraft.util.Mth;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 //?} else {
-/*import net.minecraft.client.renderer.RenderType;
-import net.minecraft.util.ARGB;
+/*import net.minecraft.util.ARGB;
 *///?}
+//? if >= 1.21.2 && <= 1.21.5
+/*import net.minecraft.client.renderer.RenderType;*/
+//? if >= 1.21.6
+/*import net.minecraft.client.renderer.RenderPipelines;*/
 
 public class VignetteRenderer {
     private static final ResourceLocation VIGNETTE_TEXTURE = ResourceLocation.withDefaultNamespace("textures/misc/vignette.png");
@@ -52,9 +55,9 @@ public class VignetteRenderer {
         context.blit(RenderType::vignette, VIGNETTE_TEXTURE, 0, 0, 0.0F, 0.0F,
                 context.guiWidth(), context.guiHeight(), context.guiWidth(), context.guiHeight(), color);
         *///?} else {
-        /*int color = ColorHelper.fromFloats(1.0F, darkness, darkness, darkness);
-        context.drawTexture(RenderPipelines.VIGNETTE, VIGNETTE_TEXTURE, 0, 0, 0.0F, 0.0F,
-                context.getScaledWindowWidth(), context.getScaledWindowHeight(), context.getScaledWindowWidth(), context.getScaledWindowHeight(), color);
+        /*int color = ARGB.colorFromFloat(1.0F, darkness, darkness, darkness);
+        context.blit(RenderPipelines.VIGNETTE, VIGNETTE_TEXTURE, 0, 0, 0.0F, 0.0F,
+                context.guiWidth(), context.guiHeight(), context.guiWidth(), context.guiHeight(), color);
         *///?}
     }
 

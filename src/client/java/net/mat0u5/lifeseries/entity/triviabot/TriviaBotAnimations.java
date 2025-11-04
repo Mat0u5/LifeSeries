@@ -6,11 +6,7 @@ import net.minecraft.client.animation.Keyframe;
 import net.minecraft.client.animation.KeyframeAnimations;
 
 public class TriviaBotAnimations {
-    //? if <= 1.21.5 {
     public static final AnimationDefinition glide = AnimationDefinition.Builder.withLength(2.0F).looping()
-    //?} else {
-    /*public static final AnimationDefinition glide = AnimationDefinition.Builder.create(2.0F).looping()
-    *///?}
             .addAnimation("righthand", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(-105.709F, 68.92F, -23.971F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.0F, KeyframeAnimations.degreeVec(-109.282F, 69.462F, -17.097F), AnimationChannel.Interpolations.CATMULLROM),
@@ -116,11 +112,7 @@ public class TriviaBotAnimations {
             ))
             .build();
 
-    //? if <= 1.21.5 {
     public static final AnimationDefinition idle = AnimationDefinition.Builder.withLength(4.5F).looping()
-    //?} else {
-    /*public static final AnimationDefinition idle = AnimationDefinition.Builder.create(4.5F).looping()
-    *///?}
             .addAnimation("main", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.3333F, KeyframeAnimations.degreeVec(2.497F, 0.109F, -2.497F), AnimationChannel.Interpolations.CATMULLROM),
@@ -226,11 +218,7 @@ public class TriviaBotAnimations {
             ))
             .build();
 
-    //? if <= 1.21.5 {
     public static final AnimationDefinition walk = AnimationDefinition.Builder.withLength(3.6667F).looping()
-    //?} else {
-    /*public static final AnimationDefinition walk = AnimationDefinition.Builder.create(3.6667F).looping()
-    *///?}
             .addAnimation("main", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0417F, KeyframeAnimations.degreeVec(2.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.6667F, KeyframeAnimations.degreeVec(2.49F, 0.217F, -4.995F), AnimationChannel.Interpolations.CATMULLROM),
@@ -311,11 +299,7 @@ public class TriviaBotAnimations {
             ))
             .build();
 
-    //? if <= 1.21.5 {
     public static final AnimationDefinition countdown = AnimationDefinition.Builder.withLength(4.0F).looping()
-    //?} else {
-    /*public static final AnimationDefinition countdown = AnimationDefinition.Builder.create(4.0F).looping()
-    *///?}
             .addAnimation("main", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(2.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.8333F, KeyframeAnimations.degreeVec(2.498F, 0.087F, -1.998F), AnimationChannel.Interpolations.CATMULLROM),
@@ -387,11 +371,7 @@ public class TriviaBotAnimations {
             ))
             .build();
 
-    //? if <= 1.21.5 {
     public static final AnimationDefinition analyzing = AnimationDefinition.Builder.withLength(4.0F)
-    //?} else {
-    /*public static final AnimationDefinition analyzing = AnimationDefinition.Builder.create(4.0F)
-    *///?}
             .addAnimation("main", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(2.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.0F, KeyframeAnimations.degreeVec(7.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -504,11 +484,7 @@ public class TriviaBotAnimations {
             ))
             .build();
 
-    //? if <= 1.21.5 {
     public static final AnimationDefinition answer_incorrect = AnimationDefinition.Builder.withLength(11.1667F)
-    //?} else {
-    /*public static final AnimationDefinition answer_incorrect = AnimationDefinition.Builder.create(11.1667F)
-    *///?}
             .addAnimation("main", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.8333F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.9583F, KeyframeAnimations.degreeVec(0.0F, -25.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
@@ -695,11 +671,7 @@ public class TriviaBotAnimations {
             ))
             .build();
 
-    //? if <= 1.21.5 {
     public static final AnimationDefinition answer_correct = AnimationDefinition.Builder.withLength(9.0F)
-    //?} else {
-    /*public static final AnimationDefinition answer_correct = AnimationDefinition.Builder.create(9.0F)
-    *///?}
             .addAnimation("main", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.2083F, KeyframeAnimations.degreeVec(5.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -979,11 +951,7 @@ public class TriviaBotAnimations {
             ))
             .build();
 
-    //? if <= 1.21.5 {
     public static final AnimationDefinition snail_transform = AnimationDefinition.Builder.withLength(3.0F)
-    //?} else {
-    /*public static final AnimationDefinition snail_transform = AnimationDefinition.Builder.create(3.0F)
-    *///?}
             .addAnimation("main", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.5F, KeyframeAnimations.degreeVec(0.0F, -90.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),

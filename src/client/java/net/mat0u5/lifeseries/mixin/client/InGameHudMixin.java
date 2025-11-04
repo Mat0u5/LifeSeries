@@ -13,10 +13,12 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import java.util.List;
-//? if >= 1.21.2 {
+//? if >= 1.21.2 && <= 1.21.5 {
 /*import net.minecraft.client.renderer.RenderType;
 import java.util.function.Function;
 *///?}
+//? if >= 1.21.6
+/*import com.mojang.blaze3d.pipeline.RenderPipeline;*/
 
 @Mixin(value = Gui.class, priority = 1)
 public class InGameHudMixin {
@@ -38,9 +40,9 @@ public class InGameHudMixin {
     /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Ljava/util/function/Function;Lnet/minecraft/resources/ResourceLocation;IIII)V"))
     private void customHearts(GuiGraphics instance, Function<ResourceLocation, RenderType> renderLayers, ResourceLocation identifier, int x, int y, int u, int v) {
     *///?} else {
-    /*@Redirect(method = "drawHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/util/Identifier;IIII)V"))
-    private void customHearts(DrawContext instance, RenderPipeline renderPipeline, Identifier identifier, int x, int y, int u, int v) {
-    *///?}
+    /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/ResourceLocation;IIII)V"))
+    private void customHearts(GuiGraphics instance, RenderPipeline renderPipeline, ResourceLocation identifier, int x, int y, int u, int v) {
+        *///?}
 
         String texturePath = identifier.getPath();
         PlayerTeam playerTeam = ClientUtils.getPlayerTeam();
@@ -57,7 +59,7 @@ public class InGameHudMixin {
             /*instance.blitSprite(renderLayers, identifier, x, y, u, v);
             ls$afterHeartDraw(instance, renderLayers, identifier, x, y, u, v);
             *///?} else {
-            /*instance.drawGuiTexture(renderPipeline, identifier, x, y, u, v);
+            /*instance.blitSprite(renderPipeline, identifier, x, y, u, v);
             ls$afterHeartDraw(instance, renderPipeline, identifier, x, y, u, v);
             *///?}
             return;
@@ -80,7 +82,7 @@ public class InGameHudMixin {
         /*instance.blit(renderLayers, customHeart, x, y, u, v, u, v, u, v);
         ls$afterHeartDraw(instance, renderLayers, identifier, x, y, u, v);
         *///?} else {
-        /*instance.drawTexture(renderPipeline, customHeart, x, y, u, v, u, v, u, v);
+        /*instance.blit(renderPipeline, customHeart, x, y, u, v, u, v, u, v);
         ls$afterHeartDraw(instance, renderPipeline, identifier, x, y, u, v);
         *///?}
     }
@@ -91,7 +93,7 @@ public class InGameHudMixin {
     //?} else if <= 1.21.5 {
     /*private void ls$afterHeartDraw(GuiGraphics instance, Function<ResourceLocation, RenderType> renderLayers, ResourceLocation identifier, int x, int y, int u, int v) {
     *///?} else {
-    /*private void ls$afterHeartDraw(DrawContext instance, RenderPipeline renderPipeline, Identifier identifier, int x, int y, int u, int v) {
+    /*private void ls$afterHeartDraw(GuiGraphics instance, RenderPipeline renderPipeline, ResourceLocation identifier, int x, int y, int u, int v) {
     *///?}
         if (MainClient.clientCurrentSeason != Seasons.SECRET_LIFE || Main.modFullyDisabled()) {
             return;
@@ -109,7 +111,7 @@ public class InGameHudMixin {
         //?} else if <= 1.21.5 {
         /*instance.blit(renderLayers, customHeart, x, y, u, v, u, v, u, v);
         *///?} else {
-        /*instance.drawTexture(renderPipeline, customHeart, x, y, u, v, u, v, u, v);
+        /*instance.blit(renderPipeline, customHeart, x, y, u, v, u, v, u, v);
         *///?}
     }
 }

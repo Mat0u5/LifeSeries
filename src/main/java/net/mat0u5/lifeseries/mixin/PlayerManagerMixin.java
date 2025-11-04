@@ -4,7 +4,6 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayerManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
@@ -27,12 +26,12 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import static net.mat0u5.lifeseries.Main.currentSeason;
+//? if <= 1.21.5
+import net.minecraft.nbt.CompoundTag;
 //? if >= 1.21.6 {
-//?}
-//? if <= 1.21.6 {
-import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
-import java.util.Optional;
-//?}
+/*import net.minecraft.util.ProblemReporter;
+import net.minecraft.world.level.storage.ValueInput;
+*///?}
 
 @Mixin(value = PlayerList.class, priority = 1)
 public abstract class PlayerManagerMixin implements IPlayerManager {
@@ -72,7 +71,7 @@ public abstract class PlayerManagerMixin implements IPlayerManager {
             //? if <= 1.21.5 {
     public void loadPlayerData(ServerPlayer player, CallbackInfoReturnable<Optional<CompoundTag>> cir) {
      //?} else {
-    /*public void loadPlayerData(ServerPlayerEntity player, ErrorReporter errorReporter, CallbackInfoReturnable<Optional<ReadView>> cir) {
+    /*public void loadPlayerData(ServerPlayer player, ProblemReporter errorReporter, CallbackInfoReturnable<Optional<ValueInput>> cir) {
         *///?}
         if (Main.modFullyDisabled()) return;
         if (player instanceof FakePlayer fakePlayer) {

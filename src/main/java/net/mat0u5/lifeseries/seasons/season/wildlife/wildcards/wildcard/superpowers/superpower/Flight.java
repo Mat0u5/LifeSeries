@@ -30,6 +30,8 @@ import java.util.Optional;
 import net.minecraft.world.item.component.Unbreakable;
 //? if >= 1.21.5
 /*import net.minecraft.world.item.component.TooltipDisplay;*/
+//? if >= 1.21.6
+/*import net.minecraft.core.registries.BuiltInRegistries;*/
 
 public class Flight extends Superpower {
     public boolean isLaunchedUp = false;
@@ -143,7 +145,7 @@ public class Flight extends Superpower {
                 //?} else if <= 1.21.5 {
                 /^helmet.set(DataComponents.EQUIPPABLE, new Equippable(EquipmentSlot.HEAD, SoundEvents.ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false, false));
                 ^///?} else {
-                /^helmet.set(DataComponentTypes.EQUIPPABLE, new EquippableComponent(EquipmentSlot.HEAD, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false, false, false, Registries.SOUND_EVENT.getEntry(SoundEvents.ITEM_SHEARS_SNIP)));
+                /^helmet.set(DataComponents.EQUIPPABLE, new Equippable(EquipmentSlot.HEAD, SoundEvents.ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false, false, false, BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.SHEARS_SNIP)));
                 ^///?}
             *///?}
             ItemStackUtils.setCustomComponentBoolean(helmet, "IgnoreBlacklist", true);
