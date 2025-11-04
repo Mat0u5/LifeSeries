@@ -248,7 +248,11 @@ public class ClientEvents {
 
     private static boolean hasTripleJumpEffect(LocalPlayer player) {
         for (Map.Entry<Holder<MobEffect>, MobEffectInstance> entry : player.getActiveEffectsMap().entrySet()) {
+            //? if <= 1.21.4 {
             if (entry.getKey() != MobEffects.JUMP) continue;
+            //?} else {
+            /*if (entry.getKey() != MobEffects.JUMP_BOOST) continue;
+            *///?}
             MobEffectInstance jumpBoost = entry.getValue();
             if (jumpBoost.getAmplifier() != 2) continue;
             if (jumpBoost.getDuration() > 220 || jumpBoost.getDuration() < 200) continue;

@@ -42,7 +42,6 @@ public class Morph {
                 }
                 dummy = (LivingEntity) entity;
             }
-            //? if <= 1.21.4 {
             dummy.xo = player.xo;
             dummy.yo = player.yo;
             dummy.zo = player.zo;
@@ -61,40 +60,14 @@ public class Morph {
                 dummy.xRotO = Math.clamp(player.xRotO, -28, 28);
             }
             if (reversePitch) dummy.xRotO *= -1;
-            //?} else {
-            /*dummy.lastX = player.lastX;
-            dummy.lastY = player.lastY;
-            dummy.lastZ = player.lastZ;
-            dummy.lastBodyYaw = player.lastBodyYaw;
-            if (!fixedHead) {
-                dummy.lastHeadYaw = player.lastHeadYaw;
-            }
-            else {
-                dummy.lastHeadYaw = player.lastBodyYaw;
-            }
-
-            if (!clampedPitch) {
-                dummy.lastPitch = player.lastPitch;
-            }
-            else {
-                dummy.lastPitch = Math.clamp(player.lastPitch, -28, 28);
-            }
-            if (reversePitch) dummy.lastPitch *= -1;
-            *///?}
 
             //Some math to synchronize the morph limbs with the player limbs
-            //? if <= 1.21.4 {
             float prevPlayerSpeed = (player.walkAnimation.speed(-1)+player.walkAnimation.speed())/2;
-            //?} else {
-            /*float prevPlayerSpeed = (player.limbAnimator.getAmplitude(-1)+player.limbAnimator.getSpeed())/2;
-             *///?}
             dummy.walkAnimation.setSpeed(prevPlayerSpeed);
             //? if <= 1.21 {
             dummy.walkAnimation.update(player.walkAnimation.position() - dummy.walkAnimation.position(), 1);
-            //?} else if <= 1.21.4 {
+            //?} else {
             /*dummy.walkAnimation.update(player.walkAnimation.position() - dummy.walkAnimation.position(), 1, 1);
-             *///?} else {
-            /*dummy.limbAnimator.updateLimbs(player.limbAnimator.getAnimationProgress() - dummy.limbAnimator.getAnimationProgress(), 1, 1);
              *///?}
             dummy.walkAnimation.setSpeed(player.walkAnimation.speed());
 

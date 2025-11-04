@@ -457,7 +457,7 @@ public class DoubleLife extends Season {
         //? if <= 1.21.4 {
         soulmate.setLastHurtByPlayer(player);
         //?} else {
-        /^soulmate.setAttacking(player, 100);
+        /^soulmate.setLastHurtByPlayer(player, 100);
         ^///?}
         soulmate.hurtServer(PlayerUtils.getServerWorld(soulmate), damageSource, 1000);
         *///?}
@@ -636,9 +636,9 @@ public class DoubleLife extends Season {
         result.addAll(inventory.armor);
         result.addAll(inventory.offhand);
         //?} else {
-        /*List<ItemStack> result = new ArrayList<>(inventory.getMainStacks());
-        for (int i = result.size(); i < inventory.size(); i++) {
-            result.add(inventory.getStack(i));
+        /*List<ItemStack> result = new ArrayList<>(inventory.getNonEquipmentItems());
+        for (int i = result.size(); i < inventory.getContainerSize(); i++) {
+            result.add(inventory.getItem(i));
         }
         *///?}
         return result;

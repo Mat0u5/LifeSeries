@@ -83,7 +83,11 @@ public class FakePlayer extends ServerPlayer {
             if (profile.isPresent()) current = profile.get();
 
             FakePlayer instance = new FakePlayer(server, worldIn, current, ClientInformation.createDefault());
+            //? if <= 1.21.4 {
             instance.fixStartingPosition = () -> instance.moveTo(pos.x, pos.y, pos.z, (float) yaw, (float) pitch);
+            //?} else {
+            /*instance.fixStartingPosition = () -> instance.snapTo(pos.x, pos.y, pos.z, (float) yaw, (float) pitch);
+            *///?}
             FakeClientConnection connection = new FakeClientConnection(PacketFlow.SERVERBOUND);
             CommonListenerCookie data =  new CommonListenerCookie(current, 0, instance.clientInformation(), true);
             server.getPlayerList().placeNewPlayer(connection, instance, data);

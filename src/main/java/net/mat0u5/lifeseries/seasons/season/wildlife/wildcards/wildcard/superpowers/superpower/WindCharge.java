@@ -12,10 +12,13 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.component.Unbreakable;
 import net.minecraft.world.item.enchantment.Enchantments;
 
 import java.util.Set;
+//? if <= 1.21.4
+import net.minecraft.world.item.component.Unbreakable;
+//? if >= 1.21.5
+/*import net.minecraft.util.Unit;*/
 
 public class WindCharge extends ToggleableSuperpower {
     public static int MAX_MACE_DAMAGE = 2;
@@ -70,7 +73,7 @@ public class WindCharge extends ToggleableSuperpower {
             //? if <= 1.21.4 {
             mace.set(DataComponents.UNBREAKABLE, new Unbreakable(true));
             //?} else {
-            /*mace.set(DataComponentTypes.UNBREAKABLE, Unit.INSTANCE);
+            /*mace.set(DataComponents.UNBREAKABLE, Unit.INSTANCE);
             *///?}
             mace.set(DataComponents.MAX_DAMAGE, 1);
             mace.set(DataComponents.DAMAGE, 1);

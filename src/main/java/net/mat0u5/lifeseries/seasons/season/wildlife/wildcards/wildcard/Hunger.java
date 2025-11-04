@@ -56,6 +56,7 @@ public class Hunger extends Wildcard {
     public static double SATURATION_CHANCE = 0.5;
 
     private static final List<Holder<MobEffect>> effects = List.of(
+            //? if <= 1.21.4 {
             MobEffects.MOVEMENT_SPEED,
             MobEffects.MOVEMENT_SLOWDOWN,
             MobEffects.DIG_SPEED,
@@ -65,8 +66,20 @@ public class Hunger extends Wildcard {
             MobEffects.HARM,
             MobEffects.JUMP,
             MobEffects.CONFUSION,
-            MobEffects.REGENERATION,
             MobEffects.DAMAGE_RESISTANCE,
+            //?} else {
+            /*MobEffects.SPEED,
+            MobEffects.SLOWNESS,
+            MobEffects.HASTE,
+            MobEffects.MINING_FATIGUE,
+            MobEffects.STRENGTH,
+            MobEffects.INSTANT_HEALTH,
+            MobEffects.INSTANT_DAMAGE,
+            MobEffects.JUMP_BOOST,
+            MobEffects.NAUSEA,
+            MobEffects.RESISTANCE,
+            *///?}
+            MobEffects.REGENERATION,
             MobEffects.FIRE_RESISTANCE,
             MobEffects.WATER_BREATHING,
             MobEffects.INVISIBILITY,
@@ -94,19 +107,31 @@ public class Hunger extends Wildcard {
     );
 
     private static final List<Holder<MobEffect>> levelLimit = List.of(
+            //? if <= 1.21.4 {
             MobEffects.DAMAGE_BOOST,
             MobEffects.HEAL,
             MobEffects.HARM,
-            MobEffects.REGENERATION,
             MobEffects.DAMAGE_RESISTANCE,
+            //?} else {
+            /*MobEffects.STRENGTH,
+            MobEffects.INSTANT_HEALTH,
+            MobEffects.INSTANT_DAMAGE,
+            MobEffects.RESISTANCE,
+            *///?}
+            MobEffects.REGENERATION,
             MobEffects.WITHER,
             MobEffects.ABSORPTION,
             MobEffects.SATURATION
     );
 
     private static final List<Holder<MobEffect>> durationLimit = List.of(
+            //? if <= 1.21.4 {
             MobEffects.HEAL,
             MobEffects.HARM,
+            //?} else {
+            /*MobEffects.INSTANT_HEALTH,
+            MobEffects.INSTANT_DAMAGE,
+            *///?}
             MobEffects.SATURATION
     );
 

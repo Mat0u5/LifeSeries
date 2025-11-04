@@ -31,12 +31,20 @@ public class TripleJump extends ToggleableSuperpower {
         }
 
         if (!player.onGround()) {
+            //? if <= 1.21.4 {
             MobEffectInstance jump = new MobEffectInstance(MobEffects.JUMP, 219, 2, false, false, false);
+            //?} else {
+            /*MobEffectInstance jump = new MobEffectInstance(MobEffects.JUMP_BOOST, 219, 2, false, false, false);
+            *///?}
             player.addEffect(jump);
             onGroundTicks = 0;
         }
         else {
+            //? if <= 1.21.4 {
             player.removeEffect(MobEffects.JUMP);
+            //?} else {
+            /*player.removeEffect(MobEffects.JUMP_BOOST);
+            *///?}
             onGroundTicks++;
         }
 
@@ -65,7 +73,11 @@ public class TripleJump extends ToggleableSuperpower {
         super.deactivate();
         ServerPlayer player = getPlayer();
         if (player == null) return;
+        //? if <= 1.21.4 {
         player.removeEffect(MobEffects.JUMP);
+        //?} else {
+        /*player.removeEffect(MobEffects.JUMP_BOOST);
+        *///?}
         player.playNotifySound(SoundEvents.SLIME_SQUISH, SoundSource.MASTER, 1, 1);
         NetworkHandlerServer.sendVignette(player, 0);
     }

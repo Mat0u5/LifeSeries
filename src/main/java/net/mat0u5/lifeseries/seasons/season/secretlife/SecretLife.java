@@ -192,8 +192,8 @@ public class SecretLife extends Season {
         nbtCompZombie.put("SaddleItem", saddleItemComp);
         nbtCompCamel.put("SaddleItem", saddleItemComp);
         //?} else {
-        /*NbtCompound equipmentItemComp = new NbtCompound();
-        NbtCompound saddleItemComp = new NbtCompound();
+        /*CompoundTag equipmentItemComp = new CompoundTag();
+        CompoundTag saddleItemComp = new CompoundTag();
         saddleItemComp.putString("id", "saddle");
         equipmentItemComp.put("saddle", saddleItemComp);
         nbtCompSkeleton.put("equipment", equipmentItemComp);

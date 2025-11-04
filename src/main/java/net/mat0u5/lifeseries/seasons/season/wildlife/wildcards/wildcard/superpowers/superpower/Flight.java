@@ -18,7 +18,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.component.Unbreakable;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 
@@ -27,6 +26,10 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.item.equipment.Equippable;
 import java.util.Optional;
 *///?}
+//? if <= 1.21.4
+import net.minecraft.world.item.component.Unbreakable;
+//? if >= 1.21.5
+/*import net.minecraft.world.item.component.TooltipDisplay;*/
 
 public class Flight extends Superpower {
     public boolean isLaunchedUp = false;
@@ -86,7 +89,11 @@ public class Flight extends Superpower {
         PlayerUtils.getServerWorld(player).playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.MASTER, 1, 1);
         player.playNotifySound(SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.MASTER, 1, 1);
 
+        //? if <= 1.21.4 {
         MobEffectInstance effect = new MobEffectInstance(MobEffects.JUMP, 20, 54, false, false, false);
+        //?} else {
+        /*MobEffectInstance effect = new MobEffectInstance(MobEffects.JUMP_BOOST, 20, 54, false, false, false);
+        *///?}
         player.addEffect(effect);
         NetworkHandlerServer.sendStringPacket(player, PacketNames.JUMP, "");
 
@@ -119,10 +126,10 @@ public class Flight extends Superpower {
             helmet.set(DataComponents.UNBREAKABLE, new Unbreakable(false));
             helmet.set(DataComponents.HIDE_ADDITIONAL_TOOLTIP, Unit.INSTANCE);
              //?} else {
-            /*helmet.set(DataComponentTypes.UNBREAKABLE, Unit.INSTANCE);
-            helmet.set(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplayComponent.DEFAULT
-                    .with(DataComponentTypes.ENCHANTMENTS, true)
-                    .with(DataComponentTypes.UNBREAKABLE, true)
+            /*helmet.set(DataComponents.UNBREAKABLE, Unit.INSTANCE);
+            helmet.set(DataComponents.TOOLTIP_DISPLAY, TooltipDisplay.DEFAULT
+                    .withHidden(DataComponents.ENCHANTMENTS, true)
+                    .withHidden(DataComponents.UNBREAKABLE, true)
             );
             *///?}
 
@@ -134,7 +141,7 @@ public class Flight extends Superpower {
                 //? if <= 1.21.4 {
             helmet.set(DataComponents.EQUIPPABLE, new Equippable(EquipmentSlot.HEAD, SoundEvents.ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false));
                 //?} else if <= 1.21.5 {
-                /^helmet.set(DataComponentTypes.EQUIPPABLE, new EquippableComponent(EquipmentSlot.HEAD, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false, false));
+                /^helmet.set(DataComponents.EQUIPPABLE, new Equippable(EquipmentSlot.HEAD, SoundEvents.ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false, false));
                 ^///?} else {
                 /^helmet.set(DataComponentTypes.EQUIPPABLE, new EquippableComponent(EquipmentSlot.HEAD, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false, false, false, Registries.SOUND_EVENT.getEntry(SoundEvents.ITEM_SHEARS_SNIP)));
                 ^///?}

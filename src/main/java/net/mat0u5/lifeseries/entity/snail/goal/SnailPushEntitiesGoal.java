@@ -4,7 +4,6 @@ import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.item.PrimedTnt;
-import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.entity.vehicle.MinecartTNT;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -12,6 +11,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+//? if <= 1.21.4 {
+import net.minecraft.world.entity.projectile.ThrownPotion;
+//?} else {
+/*import net.minecraft.world.entity.projectile.AbstractThrownPotion;
+*///?}
 
 @SuppressWarnings("resource")
 public final class SnailPushEntitiesGoal extends Goal {
@@ -43,7 +48,12 @@ public final class SnailPushEntitiesGoal extends Goal {
         pushAway = new ArrayList<>();
         pushAway.addAll(world.getEntitiesOfClass(PrimedTnt.class, mob.getBoundingBox().inflate(8.0), entity -> mob.distanceToSqr(entity) < 64.0));
         pushAway.addAll(world.getEntitiesOfClass(MinecartTNT.class, mob.getBoundingBox().inflate(8.0), entity -> mob.distanceToSqr(entity) < 64.0));
+        //? if <= 1.21.4 {
         pushAway.addAll(world.getEntitiesOfClass(ThrownPotion.class, mob.getBoundingBox().inflate(8.0), entity -> mob.distanceToSqr(entity) < 64.0));
+        //?} else {
+        /*pushAway.addAll(world.getEntitiesOfClass(AbstractThrownPotion.class, mob.getBoundingBox().inflate(8.0), entity -> mob.distanceToSqr(entity) < 64.0));
+
+        *///?}
 
         return !pushAway.isEmpty();
     }

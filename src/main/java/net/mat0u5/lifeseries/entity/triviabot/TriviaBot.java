@@ -118,7 +118,7 @@ public class TriviaBot extends AmbientCreature {
         return false;
     }
     //?} else {
-    /*public boolean shouldSwimInFluids() {
+    /*public boolean isAffectedByFluids() {
         return false;
     }
     *///?}

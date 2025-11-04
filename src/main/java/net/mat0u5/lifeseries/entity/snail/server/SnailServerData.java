@@ -177,7 +177,7 @@ public class SnailServerData implements PlayerBoundEntity {
             //? if <= 1.21.4 {
             world.getChunkSource().addRegionTicket(TicketType.PORTAL, new ChunkPos(snail.blockPosition()), 2, snail.blockPosition());
             //?} else {
-            /*world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(snail.getBlockPos()), 2);
+            /*world.getChunkSource().addTicketWithRadius(TicketType.PORTAL, new ChunkPos(snail.blockPosition()), 2);
              *///?}
         }
     }

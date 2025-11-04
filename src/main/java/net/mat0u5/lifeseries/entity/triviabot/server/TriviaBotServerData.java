@@ -143,7 +143,7 @@ public class TriviaBotServerData implements PlayerBoundEntity {
             //? if <= 1.21.4 {
             world.getChunkSource().addRegionTicket(TicketType.PORTAL, new ChunkPos(bot.blockPosition()), 2, bot.blockPosition());
             //?} else {
-            /*world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(bot.getBlockPos()), 2);
+            /*world.getChunkSource().addTicketWithRadius(TicketType.PORTAL, new ChunkPos(bot.blockPosition()), 2);
              *///?}
         }
     }

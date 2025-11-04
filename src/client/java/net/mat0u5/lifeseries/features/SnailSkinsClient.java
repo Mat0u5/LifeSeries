@@ -41,7 +41,7 @@ public class SnailSkinsClient {
             //? if <= 1.21.4 {
             DynamicTexture texture = new DynamicTexture(image);
             //?} else {
-            /*NativeImageBackedTexture texture = new NativeImageBackedTexture(() -> skinName, image);
+            /*DynamicTexture texture = new DynamicTexture(() -> skinName, image);
             *///?}
             removeSnailTexture(skinName);
             client.getTextureManager().register(textureId, texture);

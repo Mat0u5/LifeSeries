@@ -12,6 +12,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+//? if >= 1.21.5
+/*import java.util.Optional;*/
+
 @SuppressWarnings("resource")
 public final class SnailPushProjectilesGoal extends Goal {
 

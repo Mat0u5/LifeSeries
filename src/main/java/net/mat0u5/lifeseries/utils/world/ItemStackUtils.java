@@ -25,6 +25,8 @@ import static net.mat0u5.lifeseries.Main.server;
 import net.minecraft.world.item.EnchantedBookItem;
 //? if >= 1.21.2
 /*import net.minecraft.world.item.enchantment.EnchantmentHelper;*/
+//? if >= 1.21.5
+/*import java.util.Optional;*/
 
 public class ItemStackUtils {
     public static void clearItemLore(ItemStack itemStack) {

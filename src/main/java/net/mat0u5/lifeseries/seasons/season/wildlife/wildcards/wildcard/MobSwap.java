@@ -291,7 +291,11 @@ public class MobSwap extends Wildcard {
                 if (randomMob != null) {
                     Entity newMob = WorldUtils.spawnEntity(randomMob, world, entity.blockPosition());
                     if (newMob != null) {
+                        //? if <= 1.21.4 {
                         newMob.moveTo(entity.getX(), entity.getY(), entity.getZ(), entity.getYRot(), entity.getXRot());
+                        //?} else {
+                        /*newMob.snapTo(entity.getX(), entity.getY(), entity.getZ(), entity.getYRot(), entity.getXRot());
+                        *///?}
                         newMob.addTag("mobswap");
                         if (newMob instanceof Mob mobEntity) {
                             mobEntity.setPersistenceRequired();
@@ -388,7 +392,7 @@ public class MobSwap extends Wildcard {
         cir.setReturnValue(Objects.equals(new ChunkPos(pos), chunk.getPos()) || world.isNaturalSpawningAllowed(pos));
         //?} else {
         /*ChunkPos chunkPos = new ChunkPos(pos);
-        cir.setReturnValue(Objects.equals(chunkPos, chunk.getPos()) || world.canSpawnEntitiesAt(chunkPos));
+        cir.setReturnValue(Objects.equals(chunkPos, chunk.getPos()) || world.canSpawnEntitiesInChunk(chunkPos));
         *///?}
     }
 }

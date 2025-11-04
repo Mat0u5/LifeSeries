@@ -66,7 +66,6 @@ public class SnailModel extends EntityModel<SnailRenderState> {
         *///?}
     }
     public static LayerDefinition getTexturedModelData() {
-        //? if <= 1.21.4 {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
         PartDefinition main = modelPartData.addOrReplaceChild("main", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
@@ -114,55 +113,6 @@ public class SnailModel extends EntityModel<SnailRenderState> {
                 .texOffs(60, 37).addBox(1.0F, -13.0F, 1.0F, 1.0F, 4.0F, 0.0F, new CubeDeformation(0.0F))
                 .texOffs(58, 47).addBox(-2.0F, -13.0F, 1.0F, 1.0F, 4.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
         return LayerDefinition.create(modelData, 128, 128);
-        //?} else {
-        /*ModelData modelData = new ModelData();
-		ModelPartData modelPartData = modelData.getRoot();
-		ModelPartData main = modelPartData.addChild("main", ModelPartBuilder.create(), ModelTransform.origin(0.0F, 24.0F, 0.0F));
-
-		ModelPartData head = main.addChild("head", ModelPartBuilder.create().uv(28, 57).cuboid(-2.0F, -8.0F, 4.0F, 1.0F, 3.0F, 1.0F, new Dilation(0.0F))
-		.uv(48, 53).cuboid(-2.0F, -5.0F, 3.0F, 4.0F, 5.0F, 2.0F, new Dilation(0.0F))
-		.uv(16, 57).cuboid(-2.0F, -2.0F, 1.0F, 4.0F, 2.0F, 2.0F, new Dilation(0.0F))
-		.uv(12, 58).cuboid(1.0F, -8.0F, 4.0F, 1.0F, 3.0F, 1.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 0.0F, -3.0F, 0.0F, 3.1416F, 0.0F));
-
-		ModelPartData trivia = head.addChild("trivia", ModelPartBuilder.create().uv(0, 51).cuboid(-3.0F, -8.0F, 3.0F, 6.0F, 5.0F, 2.0F, new Dilation(0.01F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
-
-		ModelPartData cube_r1 = trivia.addChild("cube_r1", ModelPartBuilder.create().uv(34, 58).cuboid(-1.0F, -6.0F, -0.025F, 1.0F, 6.0F, 0.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, -8.0F, 4.025F, 0.0F, 0.0F, -0.3927F));
-
-		ModelPartData cube_r2 = trivia.addChild("cube_r2", ModelPartBuilder.create().uv(32, 58).cuboid(0.0F, -6.0F, -0.025F, 1.0F, 6.0F, 0.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, -8.0F, 4.025F, 0.0F, 0.0F, 0.3927F));
-
-		ModelPartData body = main.addChild("body", ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
-
-		ModelPartData shell = body.addChild("shell", ModelPartBuilder.create().uv(34, 17).cuboid(-4.0F, -9.0F, -4.0F, 8.0F, 8.0F, 8.0F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
-
-		ModelPartData back = body.addChild("back", ModelPartBuilder.create().uv(0, 58).cuboid(-2.0F, -2.0F, 4.0F, 4.0F, 2.0F, 2.0F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
-
-		ModelPartData mid = body.addChild("mid", ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
-
-		ModelPartData midfront = mid.addChild("midfront", ModelPartBuilder.create().uv(34, 37).cuboid(-1.99F, -1.99F, -4.5F, 3.98F, 1.98F, 8.0F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
-
-		ModelPartData midback = mid.addChild("midback", ModelPartBuilder.create().uv(16, 51).cuboid(-2.0F, -2.0F, 0.0F, 4.0F, 2.0F, 4.0F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
-
-		ModelPartData propeller = body.addChild("propeller", ModelPartBuilder.create().uv(32, 53).cuboid(-2.0F, -10.0F, -2.0F, 4.0F, 1.0F, 4.0F, new Dilation(0.0F))
-		.uv(36, 58).cuboid(-0.5F, -12.0F, -0.5F, 1.0F, 2.0F, 1.0F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
-
-		ModelPartData top = propeller.addChild("top", ModelPartBuilder.create().uv(34, 47).cuboid(-3.0F, -12.01F, -3.0F, 6.0F, 0.0F, 6.0F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
-
-		ModelPartData parachute = body.addChild("parachute", ModelPartBuilder.create().uv(0, 0).cuboid(-8.0F, -13.6F, -4.0F, 16.0F, 0.6F, 16.0F, new Dilation(0.0F))
-		.uv(34, 33).cuboid(-7.99F, -13.0F, -3.99F, 15.98F, 0.5F, 0.5F, new Dilation(0.0F))
-		.uv(34, 35).cuboid(-7.99F, -13.0F, 11.49F, 15.98F, 0.5F, 0.5F, new Dilation(0.0F))
-		.uv(0, 17).cuboid(7.5F, -13.0F, -4.0F, 0.5F, 0.5F, 16.0F, new Dilation(0.0F))
-		.uv(0, 34).cuboid(-8.0F, -13.0F, -4.0F, 0.5F, 0.5F, 16.0F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 0.0F, -4.0F));
-
-		ModelPartData strings = parachute.addChild("strings", ModelPartBuilder.create().uv(44, 58).cuboid(1.0F, -13.0F, 7.0F, 1.0F, 4.0F, 0.0F, new Dilation(0.0F))
-		.uv(58, 37).cuboid(3.0F, -13.0F, 5.0F, 0.0F, 4.0F, 1.0F, new Dilation(0.0F))
-		.uv(40, 58).cuboid(3.0F, -13.0F, 2.0F, 0.0F, 4.0F, 1.0F, new Dilation(0.0F))
-		.uv(58, 42).cuboid(-3.0F, -13.0F, 5.0F, 0.0F, 4.0F, 1.0F, new Dilation(0.0F))
-		.uv(42, 58).cuboid(-3.0F, -13.0F, 2.0F, 0.0F, 4.0F, 1.0F, new Dilation(0.0F))
-		.uv(46, 58).cuboid(-2.0F, -13.0F, 7.0F, 1.0F, 4.0F, 0.0F, new Dilation(0.0F))
-		.uv(60, 37).cuboid(1.0F, -13.0F, 1.0F, 1.0F, 4.0F, 0.0F, new Dilation(0.0F))
-		.uv(58, 47).cuboid(-2.0F, -13.0F, 1.0F, 1.0F, 4.0F, 0.0F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
-		return TexturedModelData.of(modelData, 128, 128);
-        *///?}
     }
 
     //? if <= 1.21 {

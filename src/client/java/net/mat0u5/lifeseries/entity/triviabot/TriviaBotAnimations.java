@@ -23,11 +23,7 @@ public class TriviaBotAnimations {
                     new Keyframe(1.4583F, KeyframeAnimations.degreeVec(8.0F, 0.0F, 7.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.9583F, KeyframeAnimations.degreeVec(9.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("main", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("main", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.5F, KeyframeAnimations.posVec(1.8F, 1.2F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -37,11 +33,7 @@ public class TriviaBotAnimations {
             .addAnimation("microphone", new AnimationChannel(AnimationChannel.Targets.SCALE,
                     new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("body", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.5F, KeyframeAnimations.posVec(1.8F, 1.2F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -87,11 +79,7 @@ public class TriviaBotAnimations {
                     new Keyframe(1.875F, KeyframeAnimations.degreeVec(-3.0F, 0.0F, -5.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.0F, KeyframeAnimations.degreeVec(-3.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("torso", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("torso", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 1.2F), AnimationChannel.Interpolations.LINEAR)
             ))
             .addAnimation("legs", new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -113,11 +101,7 @@ public class TriviaBotAnimations {
                     new Keyframe(1.875F, KeyframeAnimations.degreeVec(-13.0F, 0.0F, -5.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.0F, KeyframeAnimations.degreeVec(-13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("legs", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("legs", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.3F, 1.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.0F, KeyframeAnimations.posVec(0.0F, -0.9F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, 0.3F, 1.0F), AnimationChannel.Interpolations.CATMULLROM)
@@ -127,11 +111,7 @@ public class TriviaBotAnimations {
                     new Keyframe(1.0F, KeyframeAnimations.degreeVec(-5.0F, -8.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("dots", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("dots", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, -1.4F), AnimationChannel.Interpolations.LINEAR)
             ))
             .build();
@@ -155,21 +135,13 @@ public class TriviaBotAnimations {
                     new Keyframe(4.2083F, KeyframeAnimations.degreeVec(2.497F, -0.109F, 2.497F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(4.625F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("main", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("main", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(1.875F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, 2.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(2.125F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("body", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(1.875F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, 2.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
@@ -228,44 +200,28 @@ public class TriviaBotAnimations {
                     new Keyframe(4.125F, KeyframeAnimations.degreeVec(-1.0F, 0.0F, -6.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(4.5F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("green", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("green", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(1.6657F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(1.6667F, KeyframeAnimations.posVec(0.0F, 0.0F, 1.4F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(1.999F, KeyframeAnimations.posVec(0.0F, 0.0F, 1.4F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("yellow", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("yellow", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(1.3323F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(1.3333F, KeyframeAnimations.posVec(0.0F, 0.0F, 1.4F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(2.3323F, KeyframeAnimations.posVec(0.0F, 0.0F, 1.4F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(2.3333F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("red", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("red", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.999F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(1.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 1.4F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(2.6657F, KeyframeAnimations.posVec(0.0F, 0.0F, 1.4F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(2.6667F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("dots", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("dots", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, -1.4F), AnimationChannel.Interpolations.LINEAR)
             ))
             .build();
@@ -283,11 +239,7 @@ public class TriviaBotAnimations {
                     new Keyframe(3.125F, KeyframeAnimations.degreeVec(2.478F, -0.326F, 7.492F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(3.7083F, KeyframeAnimations.degreeVec(2.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("body", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
             .addAnimation("righthand", new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -325,11 +277,7 @@ public class TriviaBotAnimations {
                     new Keyframe(3.125F, KeyframeAnimations.degreeVec(6.962F, 0.867F, -4.924F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(3.6667F, KeyframeAnimations.degreeVec(7.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("legs", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("legs", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.5F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.5417F, KeyframeAnimations.posVec(0.0F, 0.3F, 0.5F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.3333F, KeyframeAnimations.posVec(0.0F, -0.9F, 0.5F), AnimationChannel.Interpolations.CATMULLROM),
@@ -337,44 +285,28 @@ public class TriviaBotAnimations {
                     new Keyframe(3.0417F, KeyframeAnimations.posVec(0.0F, -0.9F, 0.5F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(3.6667F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.5F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("yellow", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("yellow", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(1.3323F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(1.3333F, KeyframeAnimations.posVec(0.0F, 0.0F, 1.4F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(2.3323F, KeyframeAnimations.posVec(0.0F, 0.0F, 1.4F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(2.3333F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("green", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("green", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(1.6657F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(1.6667F, KeyframeAnimations.posVec(0.0F, 0.0F, 1.4F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(1.999F, KeyframeAnimations.posVec(0.0F, 0.0F, 1.4F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("red", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("red", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.999F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(1.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 1.4F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(2.6657F, KeyframeAnimations.posVec(0.0F, 0.0F, 1.4F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(2.6667F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("dots", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("dots", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, -1.4F), AnimationChannel.Interpolations.LINEAR)
             ))
             .build();
@@ -409,11 +341,7 @@ public class TriviaBotAnimations {
                     new Keyframe(3.499F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 270.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(3.5F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 315.0F), AnimationChannel.Interpolations.LINEAR)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("body", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
             .addAnimation("righthand", new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -443,11 +371,7 @@ public class TriviaBotAnimations {
                     new Keyframe(2.875F, KeyframeAnimations.degreeVec(3.993F, 0.226F, -3.242F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(3.9167F, KeyframeAnimations.degreeVec(4.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("legs", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("legs", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.5F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.5417F, KeyframeAnimations.posVec(0.0F, 0.3F, 0.5F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.375F, KeyframeAnimations.posVec(0.0F, -0.9F, 0.5F), AnimationChannel.Interpolations.CATMULLROM),
@@ -455,18 +379,10 @@ public class TriviaBotAnimations {
                     new Keyframe(3.25F, KeyframeAnimations.posVec(0.0F, -0.9F, 0.5F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(3.9167F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.5F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("clock", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("clock", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, -1.4F), AnimationChannel.Interpolations.LINEAR)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("mouth", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("mouth", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 1.4F), AnimationChannel.Interpolations.LINEAR)
             ))
             .build();
@@ -481,21 +397,13 @@ public class TriviaBotAnimations {
                     new Keyframe(2.0F, KeyframeAnimations.degreeVec(7.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(4.0F, KeyframeAnimations.degreeVec(2.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("main", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("main", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.0F, KeyframeAnimations.posVec(0.0F, 0.5F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(3.0F, KeyframeAnimations.posVec(0.0F, -0.5F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(4.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("body", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.0F, KeyframeAnimations.posVec(0.0F, 0.5F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(3.0F, KeyframeAnimations.posVec(0.0F, -0.5F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -516,11 +424,7 @@ public class TriviaBotAnimations {
                     new Keyframe(2.9167F, KeyframeAnimations.degreeVec(-3.657F, 0.731F, 3.956F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(4.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("legs", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("legs", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.5F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.5417F, KeyframeAnimations.posVec(0.0F, 0.3F, 0.5F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.375F, KeyframeAnimations.posVec(0.0F, -0.6F, 0.5F), AnimationChannel.Interpolations.CATMULLROM),
@@ -546,11 +450,7 @@ public class TriviaBotAnimations {
                     new Keyframe(3.8333F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -14.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(3.875F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("three", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("three", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 1.4F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.874F, KeyframeAnimations.posVec(0.0F, 0.0F, 1.4F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.875F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
@@ -565,11 +465,7 @@ public class TriviaBotAnimations {
                     new Keyframe(3.5F, KeyframeAnimations.posVec(0.0F, 1.25F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(3.5833F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("one", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("one", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 1.4F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.0823F, KeyframeAnimations.posVec(0.0F, 0.0F, 1.4F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.0833F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
@@ -586,11 +482,7 @@ public class TriviaBotAnimations {
                     new Keyframe(2.75F, KeyframeAnimations.posVec(0.0F, 1.25F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(2.8333F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("two", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("two", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 1.4F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.4573F, KeyframeAnimations.posVec(0.0F, 0.0F, 1.4F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.4583F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
@@ -607,11 +499,7 @@ public class TriviaBotAnimations {
                     new Keyframe(3.1667F, KeyframeAnimations.posVec(0.0F, 1.25F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(3.25F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("processing", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("processing", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, -1.4F), AnimationChannel.Interpolations.LINEAR)
             ))
             .build();
@@ -643,21 +531,13 @@ public class TriviaBotAnimations {
                     new Keyframe(3.5833F, KeyframeAnimations.degreeVec(0.0F, 10.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(3.6667F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("main", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("main", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(9.7083F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(9.874F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(9.875F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(10.625F, KeyframeAnimations.posVec(0.0F, 0.0F, 1.5F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("angry", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("angry", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0417F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(4.4573F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(4.4583F, KeyframeAnimations.posVec(0.0F, 0.0F, -1.4F), AnimationChannel.Interpolations.LINEAR)
@@ -687,11 +567,7 @@ public class TriviaBotAnimations {
                     new Keyframe(9.7083F, KeyframeAnimations.degreeVec(-23.1F, -1.44F, 1.73F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(10.625F, KeyframeAnimations.degreeVec(-25.171F, 25.039F, 6.148F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("righthand", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("righthand", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(4.8333F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(5.0417F, KeyframeAnimations.posVec(0.0F, 1.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(5.7083F, KeyframeAnimations.posVec(0.0F, 1.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
@@ -705,11 +581,7 @@ public class TriviaBotAnimations {
                     new Keyframe(0.25F, KeyframeAnimations.degreeVec(10.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.4167F, KeyframeAnimations.degreeVec(2.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("microphone", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("microphone", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.1667F, KeyframeAnimations.posVec(0.0F, -8.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.25F, KeyframeAnimations.posVec(0.0F, -7.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
@@ -766,20 +638,12 @@ public class TriviaBotAnimations {
                     new Keyframe(9.7083F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(10.625F, KeyframeAnimations.degreeVec(-25.0F, -27.5F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("lefthand", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("lefthand", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(7.3333F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(8.0F, KeyframeAnimations.posVec(0.0F, 1.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(8.5F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("legs", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("legs", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.5417F, KeyframeAnimations.posVec(0.0F, 0.3F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.375F, KeyframeAnimations.posVec(0.0F, -0.6F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -796,20 +660,12 @@ public class TriviaBotAnimations {
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(-25.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.2083F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("mouth", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("mouth", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.1F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(4.7073F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.1F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(4.7083F, KeyframeAnimations.posVec(0.0F, 0.0F, 1.4F), AnimationChannel.Interpolations.LINEAR)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("triviabot", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("triviabot", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.0833F, KeyframeAnimations.posVec(0.0F, 0.5F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(4.5833F, KeyframeAnimations.posVec(0.0F, -0.44F, 0.0F), AnimationChannel.Interpolations.LINEAR),
@@ -872,11 +728,7 @@ public class TriviaBotAnimations {
                     new Keyframe(7.9583F, KeyframeAnimations.degreeVec(5.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(8.7083F, KeyframeAnimations.degreeVec(-22.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("main", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("main", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.5F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.6667F, KeyframeAnimations.posVec(0.0F, 3.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.8333F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
@@ -906,11 +758,7 @@ public class TriviaBotAnimations {
                     new Keyframe(8.125F, KeyframeAnimations.posVec(0.0F, -2.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(8.7083F, KeyframeAnimations.posVec(0.0F, -2.5F, 1.5F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("happy", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("happy", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.124F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.125F, KeyframeAnimations.posVec(0.0F, 0.0F, -1.4F), AnimationChannel.Interpolations.LINEAR)
@@ -922,11 +770,7 @@ public class TriviaBotAnimations {
                     new Keyframe(1.7917F, KeyframeAnimations.degreeVec(-0.134F, -0.884F, -3.418F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("body", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.5F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.6667F, KeyframeAnimations.posVec(0.0F, 3.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.8333F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
@@ -1000,11 +844,7 @@ public class TriviaBotAnimations {
                     new Keyframe(8.125F, KeyframeAnimations.degreeVec(-55.851F, 31.765F, -14.549F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(9.0F, KeyframeAnimations.degreeVec(-57.071F, 44.222F, -15.459F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("righthand", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("righthand", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.4583F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.625F, KeyframeAnimations.posVec(-0.5F, 1.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(2.2073F, KeyframeAnimations.posVec(-0.5F, 1.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
@@ -1119,11 +959,7 @@ public class TriviaBotAnimations {
                     new Keyframe(5.25F, KeyframeAnimations.degreeVec(-7.5F, 0.0F, 1.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(5.4167F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("legs", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("legs", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, -0.6F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.9167F, KeyframeAnimations.posVec(0.0F, 0.3F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.8333F, KeyframeAnimations.posVec(0.0F, -0.6F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -1136,11 +972,7 @@ public class TriviaBotAnimations {
                     new Keyframe(6.4583F, KeyframeAnimations.posVec(0.0F, 0.3F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(6.9167F, KeyframeAnimations.posVec(0.0F, -0.4F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("mouth", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("mouth", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.1F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.374F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.1F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.375F, KeyframeAnimations.posVec(0.0F, 0.0F, 1.4F), AnimationChannel.Interpolations.LINEAR)
@@ -1157,11 +989,7 @@ public class TriviaBotAnimations {
                     new Keyframe(2.5F, KeyframeAnimations.degreeVec(0.0F, -90.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.9167F, KeyframeAnimations.degreeVec(0.0F, -90.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("main", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("main", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.5F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, -12.375F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(2.5F, KeyframeAnimations.posVec(0.0F, -14.5F, 0.0F), AnimationChannel.Interpolations.LINEAR)
@@ -1171,11 +999,7 @@ public class TriviaBotAnimations {
                     new Keyframe(2.4167F, KeyframeAnimations.degreeVec(0.0F, -90.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.9167F, KeyframeAnimations.degreeVec(0.0F, -90.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("body", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.5F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, -12.375F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(2.5F, KeyframeAnimations.posVec(0.0F, -14.5F, 0.0F), AnimationChannel.Interpolations.LINEAR)
@@ -1185,11 +1009,7 @@ public class TriviaBotAnimations {
                     new Keyframe(0.5F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.0F, KeyframeAnimations.degreeVec(-180.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("righthand", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("righthand", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.5F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, 1.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
@@ -1197,11 +1017,7 @@ public class TriviaBotAnimations {
                     new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.5F, KeyframeAnimations.degreeVec(-88.999F, -89.0F, 102.249F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("actualhand", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("actualhand", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.5F, KeyframeAnimations.posVec(-1.675F, -1.125F, -2.175F), AnimationChannel.Interpolations.CATMULLROM)
             ))
@@ -1213,11 +1029,7 @@ public class TriviaBotAnimations {
                     new Keyframe(0.5F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.2917F, KeyframeAnimations.degreeVec(-72.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("microphone", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("microphone", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.5F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.2917F, KeyframeAnimations.posVec(0.0F, 2.75F, 5.25F), AnimationChannel.Interpolations.CATMULLROM)
             ))
@@ -1233,11 +1045,7 @@ public class TriviaBotAnimations {
                     new Keyframe(1.9583F, KeyframeAnimations.degreeVec(-180.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.5F, KeyframeAnimations.degreeVec(-95.0F, 87.0F, 80.5F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("lefthand", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("lefthand", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, 0.0F, -1.25F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.25F, KeyframeAnimations.posVec(-9.0F, 0.0F, -6.87F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.5F, KeyframeAnimations.posVec(-17.4F, 0.925F, -1.0F), AnimationChannel.Interpolations.CATMULLROM)
@@ -1251,11 +1059,7 @@ public class TriviaBotAnimations {
                     new Keyframe(2.5F, KeyframeAnimations.degreeVec(0.0F, 90.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.9167F, KeyframeAnimations.degreeVec(0.0F, 90.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("torso", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("torso", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.5F, KeyframeAnimations.posVec(-2.8F, 2.275F, 0.7F), AnimationChannel.Interpolations.CATMULLROM)
             ))
@@ -1263,11 +1067,7 @@ public class TriviaBotAnimations {
                     new Keyframe(2.0F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(2.5F, KeyframeAnimations.scaleVec(0.6F, 0.6F, 2.0F), AnimationChannel.Interpolations.LINEAR)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("legs", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("legs", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.5F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, 8.5F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
@@ -1275,11 +1075,7 @@ public class TriviaBotAnimations {
                     new Keyframe(1.9583F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(2.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("bottom", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("bottom", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.5F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, 2.25F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
@@ -1287,18 +1083,10 @@ public class TriviaBotAnimations {
                     new Keyframe(1.9583F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(2.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("snail", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("snail", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, -1.4F), AnimationChannel.Interpolations.LINEAR)
             ))
-            //? if <= 1.21.4 {
             .addAnimation("mouth", new AnimationChannel(AnimationChannel.Targets.POSITION,
-            //?} else {
-            /*.addBoneAnimation("mouth", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-            *///?}
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 1.4F), AnimationChannel.Interpolations.LINEAR)
             ))
             .build();

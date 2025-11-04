@@ -137,7 +137,7 @@ public class Snail extends Monster {
         return false;
     }
     //?} else {
-    /*public boolean shouldSwimInFluids() {
+    /*public boolean isAffectedByFluids() {
         return false;
     }
     *///?}

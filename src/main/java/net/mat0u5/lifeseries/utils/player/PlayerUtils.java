@@ -273,7 +273,7 @@ public class PlayerUtils {
         //? if <= 1.21.4 {
         return player.getInventory().getArmor(slot);
         //?} else {
-        /*return player.getInventory().getStack(slot + 36);
+        /*return player.getInventory().getItem(slot + 36);
         *///?}
     }
 
@@ -282,7 +282,7 @@ public class PlayerUtils {
         return player.getArmorSlots();
     }
     //?} else {
-    /*public static List<ItemStack> getArmorItems(ServerPlayerEntity player) {
+    /*public static List<ItemStack> getArmorItems(ServerPlayer player) {
         List<ItemStack> result = new ArrayList<>();
         result.add(getEquipmentSlot(player, 0));
         result.add(getEquipmentSlot(player, 1));

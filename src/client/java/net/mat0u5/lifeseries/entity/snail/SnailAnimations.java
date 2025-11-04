@@ -24,11 +24,7 @@ public class SnailAnimations {
                         new Keyframe(4.1667F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -4.0F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(5.4167F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                //? if <= 1.21.4 {
                 .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.POSITION,
-                //?} else {
-                /*.addBoneAnimation("head", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-                *///?}
                         new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, 0.0F, -2.0F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(3.25F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
@@ -63,11 +59,7 @@ public class SnailAnimations {
                         new Keyframe(4.1667F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -4.0F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(5.4167F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                //? if <= 1.21.4 {
                 .addAnimation("midfront", new AnimationChannel(AnimationChannel.Targets.POSITION,
-                //?} else {
-                /*.addBoneAnimation("midfront", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-                *///?}
                         new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, 0.0F, -2.0F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(3.25F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
@@ -85,11 +77,7 @@ public class SnailAnimations {
                         new Keyframe(1.5F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -2.5F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                //? if <= 1.21.4 {
                 .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.POSITION,
-                //?} else {
-                /*.addBoneAnimation("head", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-                *///?}
                         new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, -2.34F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
                 .addAnimation("back", new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -101,11 +89,7 @@ public class SnailAnimations {
                 .addAnimation("midfront", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                         new Keyframe(0.0F, KeyframeAnimations.degreeVec(30.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                //? if <= 1.21.4 {
                 .addAnimation("midfront", new AnimationChannel(AnimationChannel.Targets.POSITION,
-                //?} else {
-                /*.addBoneAnimation("midfront", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-                *///?}
                         new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, -0.15F, -0.2F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
                 .addAnimation("midback", new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -134,11 +118,7 @@ public class SnailAnimations {
                         new Keyframe(1.5F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -2.5F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                //? if <= 1.21.4 {
                 .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.POSITION,
-                //?} else {
-                /*.addBoneAnimation("head", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-                *///?}
                         new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, -2.34F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
                 .addAnimation("back", new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -150,11 +130,7 @@ public class SnailAnimations {
                 .addAnimation("midfront", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                         new Keyframe(0.0F, KeyframeAnimations.degreeVec(30.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                //? if <= 1.21.4 {
                 .addAnimation("midfront", new AnimationChannel(AnimationChannel.Targets.POSITION,
-                //?} else {
-                /*.addBoneAnimation("midfront", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-                *///?}
                         new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, -0.15F, -0.2F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
                 .addAnimation("midback", new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -170,11 +146,7 @@ public class SnailAnimations {
         //?} else {
         /*public static final AnimationDefinition stopFly = AnimationDefinition.Builder.create(0.75F)
         *///?}
-                //? if <= 1.21.4 {
                 .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.POSITION,
-                //?} else {
-                /*.addBoneAnimation("head", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-                *///?}
                         new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, -2.34F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.75F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
@@ -186,11 +158,7 @@ public class SnailAnimations {
                         new Keyframe(0.0F, KeyframeAnimations.degreeVec(30.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.75F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                //? if <= 1.21.4 {
                 .addAnimation("midfront", new AnimationChannel(AnimationChannel.Targets.POSITION,
-                //?} else {
-                /*.addBoneAnimation("midfront", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-                *///?}
                         new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, -0.15F, -0.2F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.75F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
@@ -205,11 +173,7 @@ public class SnailAnimations {
         //?} else {
         /*public static final AnimationDefinition startFly = AnimationDefinition.Builder.create(0.75F)
         *///?}
-                //? if <= 1.21.4 {
                 .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.POSITION,
-                //?} else {
-                /*.addBoneAnimation("head", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-                *///?}
                         new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.75F, KeyframeAnimations.posVec(0.0F, -2.34F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
@@ -221,11 +185,7 @@ public class SnailAnimations {
                         new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.75F, KeyframeAnimations.degreeVec(30.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                //? if <= 1.21.4 {
                 .addAnimation("midfront", new AnimationChannel(AnimationChannel.Targets.POSITION,
-                //?} else {
-                /*.addBoneAnimation("midfront", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-                *///?}
                         new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.75F, KeyframeAnimations.posVec(0.0F, -0.15F, -0.2F), AnimationChannel.Interpolations.CATMULLROM)
                 ))

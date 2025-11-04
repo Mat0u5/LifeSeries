@@ -7,7 +7,6 @@ import net.minecraft.world.entity.npc.WanderingTraderSpawner;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static net.mat0u5.lifeseries.Main.currentSeason;
 //? if <= 1.21.4
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -26,9 +25,9 @@ public class WanderingTraderManagerMixin {
     }
     //?} else {
     /*//? if <= 1.21.6 {
-    public void spawn(ServerWorld world, boolean spawnMonsters, boolean spawnAnimals, CallbackInfo ci) {
+    public void spawn(ServerLevel world, boolean spawnMonsters, boolean spawnAnimals, CallbackInfo ci) {
     //?} else {
-    /^public void spawn(ServerWorld world, boolean spawnMonsters, CallbackInfo ci) {
+    /^public void spawn(ServerLevel world, boolean spawnMonsters, CallbackInfo ci) {
     ^///?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (currentSeason.getSeason() == Seasons.SIMPLE_LIFE) {
