@@ -3,7 +3,7 @@
 name: build
 
 on:
-  push:6
+  push:
 
 jobs:
   notify:
