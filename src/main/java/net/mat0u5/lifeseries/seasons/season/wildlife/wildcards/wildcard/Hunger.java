@@ -16,6 +16,7 @@ import net.minecraft.core.component.PatchedDataComponentMap;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -27,9 +28,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.currentSession;
 
@@ -54,6 +53,7 @@ public class Hunger extends Wildcard {
     public static int AVG_EFFECT_DURATION = 10;
     public static double NUTRITION_CHANCE = 0.4;
     public static double SATURATION_CHANCE = 0.5;
+    public static double SOUND_CHANCE = 0.01;
 
     private static final List<Holder<MobEffect>> effects = List.of(
             //? if <= 1.21.4 {
@@ -316,6 +316,28 @@ public class Hunger extends Wildcard {
                 if (random.nextDouble() < SATURATION_CHANCE) {
                     saturation = random.nextInt(4) + 1; // 1 -> 4
                     if (saturation > nutrition) saturation = nutrition;
+                }
+            }
+
+            // Random Sound
+            if (!commonItems.contains(item)) {
+                if (random.nextDouble() < SOUND_CHANCE) {
+                    List<SoundEvent> allSounds = new ArrayList<>();
+                    for (SoundEvent sound : BuiltInRegistries.SOUND_EVENT.stream().toList()) {
+                        //? if <= 1.21 {
+                        if (sound.getLocation().getPath().startsWith("entity.")) {
+                            allSounds.add(sound);
+                        }
+                        //?} else {
+                        /*if (sound.location().getPath().startsWith("entity.")) {
+                            allSounds.add(sound);
+                        }
+                        *///?}
+                    }
+                    if (!allSounds.isEmpty()) {
+                        SoundEvent sound = allSounds.get(random.nextInt(allSounds.size()));
+                        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 0.5f, 1f);
+                    }
                 }
             }
         }

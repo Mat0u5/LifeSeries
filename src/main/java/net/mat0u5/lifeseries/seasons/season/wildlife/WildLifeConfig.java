@@ -102,6 +102,10 @@ public class WildLifeConfig extends ConfigManager {
             "wildcard_hunger_avg_effect_duration", 10, ConfigTypes.SECONDS, "season.hunger",
             "Average Random Effect Duration", "Average random effect duration, in seconds."
     );
+    public static final ConfigFileEntry<Double> WILDCARD_HUNGER_SOUND_CHANCE = new ConfigFileEntry<>(
+            "wildcard_hunger_sound_chance", 0.01, ConfigTypes.PERCENTAGE, "season.hunger[new]",
+            "Play Sound Chance", "Chance for food to play a random sound to everyone on the server."
+    );
 
     public static final ConfigFileEntry<Double> WILDCARD_SNAILS_SPEED_MULTIPLIER = new ConfigFileEntry<>(
             "wildcard_snails_speed_multiplier", 1.0, "season.snails",
@@ -111,7 +115,10 @@ public class WildLifeConfig extends ConfigManager {
             "wildcard_snails_drown_players", true, "season.snails",
             "Drown Players", "Controls whether snails can drown players when the snails are underwater."
     );
-
+    public static final ConfigFileEntry<Boolean> WILDCARD_SNAILS_EFFECTS = new ConfigFileEntry<>(
+            "wildcard_snails_effects", false, "season.snails[new]",
+            "Can Have Potion Effects", "Controls whether snails can have potion effects, like invisibility."
+    );
 
     public static final ConfigFileEntry<Double> WILDCARD_TIMEDILATION_MIN_SPEED = new ConfigFileEntry<>(
             "wildcard_timedilation_min_speed", 0.05, "season.timedilation",
@@ -295,9 +302,11 @@ public class WildLifeConfig extends ConfigManager {
                 ,WILDCARD_HUNGER_SATURATION_CHANCE
                 ,WILDCARD_HUNGER_EFFECT_CHANCE
                 ,WILDCARD_HUNGER_AVG_EFFECT_DURATION
+                ,WILDCARD_HUNGER_SOUND_CHANCE
 
                 ,WILDCARD_SNAILS_SPEED_MULTIPLIER
                 ,WILDCARD_SNAILS_DROWN_PLAYERS
+                ,WILDCARD_SNAILS_EFFECTS
 
                 ,WILDCARD_TIMEDILATION_MIN_SPEED
                 ,WILDCARD_TIMEDILATION_MAX_SPEED

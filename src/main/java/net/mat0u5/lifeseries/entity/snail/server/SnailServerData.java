@@ -126,7 +126,9 @@ public class SnailServerData implements PlayerBoundEntity {
         handleHighVelocity();
         chunkLoading();
         snail.sounds.playSounds();
-        snail.removeAllEffects();
+        if (!Snail.ALLOW_POTION_EFFECTS) {
+            snail.removeAllEffects();
+        }
     }
 
     public boolean despawnChecks() {

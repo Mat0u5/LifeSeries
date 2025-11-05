@@ -73,7 +73,7 @@ public class RenderUtils {
     public static void drawTexture(GuiGraphics context, ResourceLocation texture, int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight) {
         context.blit(RenderPipelines.GUI_TEXTURED, texture, x, y, u, v, width, height, textureWidth, textureHeight);
     }
-    *///?} else {
+    *///?} else if > 1.21.9 {
     /*public static void drawTextureScaled(GuiGraphics context, Identifier texture, float x, float y, int u, int v, int width, int height, int textureWidth, int textureHeight, float scaleX, float scaleY) {
         context.pose().pushMatrix();
         context.pose().scale(scaleX, scaleY);

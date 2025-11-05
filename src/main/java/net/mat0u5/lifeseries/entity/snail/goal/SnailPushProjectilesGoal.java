@@ -19,6 +19,11 @@ import java.util.List;
 import net.minecraft.world.level.storage.TagValueOutput;
 *///?}
 
+//? if <= 1.21.4
+import net.minecraft.world.entity.projectile.ThrownPotion;
+//? if >= 1.21.5
+/*import net.minecraft.world.entity.projectile.AbstractThrownPotion;*/
+
 @SuppressWarnings("resource")
 public final class SnailPushProjectilesGoal extends Goal {
 
@@ -65,6 +70,16 @@ public final class SnailPushProjectilesGoal extends Goal {
             /*Optional<Boolean> bool = nbt.getBoolean("inGround");
             if (nbt.contains("inGround") && bool.isPresent()) {
                 if (bool.get()) continue;
+            }
+            *///?}
+
+            //? if <= 1.21.4 {
+            if (projectile instanceof ThrownPotion && Snail.ALLOW_POTION_EFFECTS) {
+                continue;
+            }
+            //?} else {
+            /*if (projectile instanceof AbstractThrownPotion && Snail.ALLOW_POTION_EFFECTS) {
+                continue;
             }
             *///?}
 

@@ -175,9 +175,16 @@ public class LimitedLife extends Season {
         if (livesManager.canChangeLivesNaturally(player)) {
             player.ls$addLives(DEATH_NORMAL);
             if (player.ls$isAlive()) {
-                PlayerUtils.sendTitle(player, Component.literal(OtherUtils.formatSecondsToReadable(DEATH_NORMAL)).withStyle(ChatFormatting.RED), 20, 80, 20);
+                sendTimeTitle(player, DEATH_NORMAL, ChatFormatting.RED);
             }
         }
+    }
+
+    public void sendTimeTitle(ServerPlayer player, int timeSeconds, ChatFormatting style) {
+        sendTimeTitle(player, Component.literal(OtherUtils.formatSecondsToReadable(timeSeconds)).withStyle(style));
+    }
+    public void sendTimeTitle(ServerPlayer player, Component text) {
+        PlayerUtils.sendTitle(player, text, 20, 80, 20);
     }
 
     @Override
@@ -189,34 +196,35 @@ public class LimitedLife extends Season {
         if (!wasBoogeyCure) {
             if (wasAllowedToAttack && livesManager.canChangeLivesNaturally()) {
                 killer.ls$addLives(KILL_NORMAL);
-                PlayerUtils.sendTitle(killer, Component.literal(OtherUtils.formatSecondsToReadable(KILL_NORMAL)).withStyle(ChatFormatting.GREEN), 20, 80, 20);
+                sendTimeTitle(killer, KILL_NORMAL, ChatFormatting.GREEN);
             }
         }
         else if (livesManager.canChangeLivesNaturally()) {
             //Victim was killed by boogeyman - remove 2 hours from victim and add 1 hour to boogey
 
-            boolean wasAlive = false;
-
-            String msgVictim = OtherUtils.formatSecondsToReadable(DEATH_BOOGEYMAN-DEATH_NORMAL);
-            String msgKiller = OtherUtils.formatSecondsToReadable(KILL_BOOGEYMAN);
-
-            if (victim.ls$isAlive()) {
+            boolean wasAlive = victim.ls$isAlive();
+            if (wasAlive) {
                 victim.ls$addLives(DEATH_BOOGEYMAN-DEATH_NORMAL);
-                wasAlive = true;
             }
             killer.ls$addLives(KILL_BOOGEYMAN);
-            if (victim.ls$isAlive()) {
-                PlayerUtils.sendTitle(killer, Component.literal(msgKiller).withStyle(ChatFormatting.GREEN), 20, 80, 20);
-                PlayerUtils.sendTitle(victim, Component.literal(msgVictim).withStyle(ChatFormatting.RED), 20, 80, 20);
-            }
-            else if (wasAlive && SHOW_DEATH_TITLE) {
-                PlayerUtils.sendTitleWithSubtitle(killer,
-                        Component.literal(msgKiller).withStyle(ChatFormatting.GREEN),
-                        livesManager.getDeathMessage(victim),
-                        20, 80, 20);
+            boolean isAlive = victim.ls$isAlive();
+
+            if (isAlive) {
+                sendTimeTitle(killer, KILL_BOOGEYMAN, ChatFormatting.GREEN);
+                sendTimeTitle(victim, (DEATH_BOOGEYMAN-DEATH_NORMAL), ChatFormatting.RED);
             }
             else {
-                PlayerUtils.sendTitle(killer, Component.literal(msgKiller).withStyle(ChatFormatting.GREEN), 20, 80, 20);
+                //Is dead right now
+                if (wasAlive && SHOW_DEATH_TITLE) {
+                    String msgKiller = OtherUtils.formatSecondsToReadable(KILL_BOOGEYMAN);
+                    PlayerUtils.sendTitleWithSubtitle(killer,
+                            Component.literal(msgKiller).withStyle(ChatFormatting.GREEN),
+                            livesManager.getDeathMessage(victim),
+                            20, 80, 20);
+                }
+                else {
+                    sendTimeTitle(killer, KILL_BOOGEYMAN, ChatFormatting.GREEN);
+                }
             }
         }
     }
@@ -228,37 +236,38 @@ public class LimitedLife extends Season {
         super.onPlayerKilledByPlayer(victim, killer);
 
         if (!wasBoogeyCure && livesManager.canChangeLivesNaturally()) {
-            boolean wasFinalKill = victim.ls$isAlive() || !SHOW_DEATH_TITLE;
+            Component victimDeathMessage = livesManager.getDeathMessage(victim);
+
+            boolean wasAlive = victim.ls$isAlive();
+            victim.ls$addLives(DEATH_NORMAL);
+            boolean isAlive = victim.ls$isAlive();
+
             if (wasAllowedToAttack) {
-                String msgKiller = OtherUtils.formatSecondsToReadable(KILL_NORMAL);
                 killer.ls$addLives(KILL_NORMAL);
-                if (wasFinalKill) {
-                    PlayerUtils.sendTitle(killer, Component.literal(msgKiller).withStyle(ChatFormatting.GREEN), 20, 80, 20);
-                }
-                else {
+                if ((wasAlive && !isAlive) && SHOW_DEATH_TITLE) {
                     PlayerUtils.sendTitleWithSubtitle(killer,
-                            Component.literal(msgKiller).withStyle(ChatFormatting.GREEN),
-                            livesManager.getDeathMessage(victim),
+                            Component.literal(OtherUtils.formatSecondsToReadable(KILL_NORMAL)).withStyle(ChatFormatting.GREEN),
+                            victimDeathMessage,
                             20, 80, 20);
                 }
+                else {
+                    sendTimeTitle(killer, KILL_NORMAL, ChatFormatting.GREEN);
+                }
             }
-            String msgVictim = OtherUtils.formatSecondsToReadable(DEATH_NORMAL);
-            victim.ls$addLives(DEATH_NORMAL);
-            if (wasFinalKill) {
-                PlayerUtils.sendTitle(victim, Component.literal(msgVictim).withStyle(ChatFormatting.RED), 20, 80, 20);
+            if (isAlive) {
+                sendTimeTitle(victim, DEATH_NORMAL, ChatFormatting.RED);
             }
         }
         else if (livesManager.canChangeLivesNaturally()) {
 
             //Victim was killed by boogeyman - remove 2 hours from victim and add 1 hour to boogey
-            String msgVictim = OtherUtils.formatSecondsToReadable(DEATH_BOOGEYMAN);
             String msgKiller = OtherUtils.formatSecondsToReadable(KILL_BOOGEYMAN);
 
             victim.ls$addLives(DEATH_BOOGEYMAN);
             killer.ls$addLives(KILL_BOOGEYMAN);
 
             if (victim.ls$isAlive() || !SHOW_DEATH_TITLE) {
-                PlayerUtils.sendTitle(victim, Component.literal(msgVictim).withStyle(ChatFormatting.RED), 20, 80, 20);
+                sendTimeTitle(victim, DEATH_BOOGEYMAN, ChatFormatting.RED);
                 PlayerUtils.sendTitleWithSubtitle(killer,Component.nullToEmpty("§aYou are cured!"), Component.literal(msgKiller).withStyle(ChatFormatting.GREEN), 20, 80, 20);
             }
             else {

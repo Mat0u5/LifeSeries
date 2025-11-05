@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.entity.snail;
 
-import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.snail.goal.*;
 import net.mat0u5.lifeseries.entity.snail.server.SnailPathfinding;
 import net.mat0u5.lifeseries.entity.snail.server.SnailServerData;
@@ -56,6 +55,7 @@ public class Snail extends Monster {
     *///?}
     public static double GLOBAL_SPEED_MULTIPLIER = 1;
     public static boolean SHOULD_DROWN_PLAYER = true;
+    public static boolean ALLOW_POTION_EFFECTS = false;
 
     private static final EntityDataAccessor<Boolean> attacking = SynchedEntityData.defineId(Snail.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> flying = SynchedEntityData.defineId(Snail.class, EntityDataSerializers.BOOLEAN);
@@ -232,6 +232,9 @@ public class Snail extends Monster {
 
     @Override
     public boolean addEffect(MobEffectInstance effect, @Nullable Entity source) {
+        if (ALLOW_POTION_EFFECTS) {
+            return super.addEffect(effect, source);
+        }
         return false;
     }
 

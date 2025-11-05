@@ -45,3 +45,10 @@ Removed the snail texture info screen, replaced with a wiki link.
 ----------
 
 Added the '/lifeseries wiki' and '/lifeseries help' commands, which both link you to the Life Series mod wiki.
+
+----------
+
+Fixed some death titles in Limited Life not showing correctly.<br>
+The Hunger wildcard now has a chance to play a sound effect when food is eaten.<br>
+Added the 'wildcard_hunger_sound_chance' Wild Life config, default value is 0.01 (1%).<br>
+Added the 'wildcard_snails_effects' Wild Life config, which controls whether snails can have potion effects. Default value is false.
