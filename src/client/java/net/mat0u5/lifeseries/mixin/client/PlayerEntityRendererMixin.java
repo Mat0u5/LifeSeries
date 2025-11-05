@@ -1,20 +1,45 @@
 package net.mat0u5.lifeseries.mixin.client;
 
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-//? if <= 1.21.6 {
+import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.seasons.other.LivesManager;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.minecraft.world.scores.DisplaySlot;
+import net.minecraft.world.scores.Objective;
+import net.minecraft.world.scores.ReadOnlyScoreInfo;
+import net.minecraft.world.scores.Scoreboard;
+import net.minecraft.network.chat.Component;
+import org.spongepowered.asm.mixin.injection.Redirect;
+
+//? if <= 1.21 {
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.numbers.NumberFormat;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+//?} else {
+/*import net.mat0u5.lifeseries.utils.interfaces.IEntityRenderState;
+import net.minecraft.world.entity.player.Player;
+*///?}
+//? if >= 1.21.2 && <= 1.21.6
+/*import net.minecraft.client.renderer.entity.state.PlayerRenderState;*/
+//? if >= 1.21.9
+/*import net.minecraft.client.renderer.entity.state.AvatarRenderState;*/
+
+//? if <= 1.21.6 {
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+
 @Mixin(value = PlayerRenderer.class, priority = 1)
 //?} else {
 /*import net.mat0u5.lifeseries.utils.ClientUtils;
@@ -52,9 +77,61 @@ public abstract class PlayerEntityRendererMixin {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitNameTag(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/phys/Vec3;ILnet/minecraft/network/chat/Component;ZIDLnet/minecraft/client/renderer/state/CameraRenderState;)V"),
             index = 3
     )
-    //TODO test
     public Component render(Component text) {
         return ClientUtils.getPlayerName(text);
+    }
+    *///?}
+
+    //? if <= 1.21 {
+    @Redirect(method = "renderNameTag(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/scores/ReadOnlyScoreInfo;safeFormatValue(Lnet/minecraft/world/scores/ReadOnlyScoreInfo;Lnet/minecraft/network/chat/numbers/NumberFormat;)Lnet/minecraft/network/chat/MutableComponent;"))
+    public MutableComponent customBelowName(ReadOnlyScoreInfo readOnlyScoreInfo, NumberFormat numberFormat, AbstractClientPlayer abstractClientPlayer) {
+        MutableComponent original = ReadOnlyScoreInfo.safeFormatValue(readOnlyScoreInfo, numberFormat);
+        Scoreboard scoreboard = abstractClientPlayer.getScoreboard();
+        Objective objective = scoreboard.getDisplayObjective(DisplaySlot.BELOW_NAME);
+        if (objective != null) {
+            if (objective.getName().equalsIgnoreCase(LivesManager.SCOREBOARD_NAME)) {
+                if (MainClient.clientCurrentSeason == Seasons.LIMITED_LIFE) {
+                    int ticksLeft = Math.max(0, readOnlyScoreInfo.value()*20);
+                    return Component.literal(OtherUtils.formatTime(ticksLeft) + ";").setStyle(abstractClientPlayer.getDisplayName().getStyle());
+                }
+            }
+        }
+        return original;
+    }
+    @ModifyArg(method = "renderNameTag(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/LivingEntityRenderer;renderNameTag(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IF)V", ordinal = 0), index = 1)
+    public Component removeLives(Component par2) {
+        String belowName = par2.getString();
+        if (belowName.contains(";") && !par2.getSiblings().isEmpty()) {
+            return Component.literal(belowName.split(";")[0]).withStyle(par2.getSiblings().getFirst().getStyle());
+        }
+        return par2;
+    }
+    //?} else {
+    /*//? if <= 1.21.6 {
+    @Redirect(method = "renderNameTag(Lnet/minecraft/client/renderer/entity/state/PlayerRenderState;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/PlayerRenderState;scoreText:Lnet/minecraft/network/chat/Component;"))
+    public Component customBelowName(PlayerRenderState instance) {
+    //?} else {
+    /^@Redirect(method = "submitNameTag(Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;scoreText:Lnet/minecraft/network/chat/Component;"))
+    public Component customBelowName(AvatarRenderState instance) {
+    ^///?}
+        Component original = instance.scoreText;
+        if (instance instanceof IEntityRenderState accessor && accessor.ls$getEntity() instanceof Player player) {
+            //? if <= 1.21.6 {
+            Scoreboard scoreboard = player.getScoreboard();
+            //?} else {
+            /^Scoreboard scoreboard = player.level().getScoreboard();
+            ^///?}
+            Objective objective = scoreboard.getDisplayObjective(DisplaySlot.BELOW_NAME);
+            if (objective != null) {
+                ReadOnlyScoreInfo scoreInfo = scoreboard.getPlayerScoreInfo(player, objective);
+                if (scoreInfo != null && objective.getName().equalsIgnoreCase(LivesManager.SCOREBOARD_NAME)) {
+                    if (MainClient.clientCurrentSeason == Seasons.LIMITED_LIFE) {
+                        return Component.literal(OtherUtils.formatTime(scoreInfo.value()*20)).setStyle(player.getDisplayName().getStyle());
+                    }
+                }
+            }
+        }
+        return original;
     }
     *///?}
 }

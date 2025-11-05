@@ -1,5 +1,5 @@
 package net.mat0u5.lifeseries.mixin.client;
-//? if < 1.21.9 {
+//? if <= 1.21 {
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
 
@@ -8,7 +8,6 @@ public class EntityRenderStateMixin {
     //Empty class to avoid mixin errors
 }
 //?} else {
-
 /*import net.mat0u5.lifeseries.utils.interfaces.IEntityRenderState;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.world.entity.Entity;

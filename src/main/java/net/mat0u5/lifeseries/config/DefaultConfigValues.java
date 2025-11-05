@@ -216,6 +216,10 @@ public class DefaultConfigValues {
             "boogeyman_kills_needed", 1, "global.boogeyman[new]",
             "Boogyeman Kills Needed", "Controls how many kills you need as the Boogeyman to be cured."
     );
+    public final ConfigFileEntry<Boolean> BOOGEYMAN_STEAL_LIFE = new ConfigFileEntry<>(
+            "boogeyman_steal_life", false, "global.boogeyman[new]",
+            "Boogeyman Steal Life", "When a boogeyman gets cured, they gain a life for completing their task."
+    );
 
     public final ConfigFileEntry<Boolean> SECRET_SOCIETY = new ConfigFileEntry<>(
             "secret_society", false, "{global.society}",

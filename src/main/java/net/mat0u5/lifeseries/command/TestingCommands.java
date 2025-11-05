@@ -14,6 +14,9 @@ import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.scores.ScoreAccess;
+import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 
 import java.util.List;
 
@@ -62,10 +65,6 @@ public class TestingCommands extends Command {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        TaskScheduler.scheduleTask(1, () -> {
-            List<ServerPlayer> test = List.of(player);
-            test.removeFirst();//Will cause an error
-        });
 
         return 1;
     }

@@ -41,6 +41,7 @@ public class BoogeymanManager {
     public int BOOGEYMAN_INFINITE_AUTO_FAIL = 360000;
     public boolean BOOGEYMAN_TEAM_NOTICE = false;
     public int BOOGEYMAN_KILLS_NEEDED = 1;
+    public boolean BOOGEYMAN_STEAL_LIFE = false;
 
     public List<Boogeyman> boogeymen = new ArrayList<>();
     public List<UUID> rolledPlayers = new ArrayList<>();
@@ -165,7 +166,13 @@ public class BoogeymanManager {
         PlayerUtils.sendTitle(player,Component.nullToEmpty("§aYou are cured!"), 20, 30, 20);
         PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("lastlife_boogeyman_cure")));
         if (BOOGEYMAN_ANNOUNCE_OUTCOME) {
-            PlayerUtils.broadcastMessage(TextUtils.format("{}§7 is cured of the Boogeyman curse!", player));
+            if (BOOGEYMAN_STEAL_LIFE) {
+                PlayerUtils.broadcastMessage(TextUtils.format("{}§7 is cured of the Boogeyman curse and gained a life for succeeding!", player));
+                player.ls$addLife();
+            }
+            else {
+                PlayerUtils.broadcastMessage(TextUtils.format("{}§7 is cured of the Boogeyman curse!", player));
+            }
         }
     }
 
@@ -449,6 +456,7 @@ public class BoogeymanManager {
         BOOGEYMAN_INFINITE_AUTO_FAIL = seasonConfig.BOOGEYMAN_INFINITE_AUTO_FAIL.get(seasonConfig);
         BOOGEYMAN_TEAM_NOTICE = seasonConfig.BOOGEYMAN_TEAM_NOTICE.get(seasonConfig);
         BOOGEYMAN_KILLS_NEEDED = seasonConfig.BOOGEYMAN_KILLS_NEEDED.get(seasonConfig);
+        BOOGEYMAN_STEAL_LIFE = seasonConfig.BOOGEYMAN_STEAL_LIFE.get(seasonConfig);
     }
 
     public void onDisabledBoogeyman() {

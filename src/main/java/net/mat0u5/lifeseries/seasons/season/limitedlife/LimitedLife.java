@@ -19,6 +19,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.scores.DisplaySlot;
 import net.minecraft.world.scores.PlayerScoreEntry;
 import net.minecraft.world.scores.ScoreHolder;
 
@@ -37,6 +38,7 @@ public class LimitedLife extends Season {
     private int KILL_NORMAL = 1800;
     private int KILL_BOOGEYMAN = 3600;
     public static boolean TICK_OFFLINE_PLAYERS = false;
+    public static boolean SHOW_TIME_BELOW_NAME = false;
 
     @Override
     public Seasons getSeason() {
@@ -297,6 +299,7 @@ public class LimitedLife extends Season {
         KILL_BOOGEYMAN = LimitedLifeConfig.TIME_KILL_BOOGEYMAN.get(config);
         TICK_OFFLINE_PLAYERS = LimitedLifeConfig.TICK_OFFLINE_PLAYERS.get(config);
         LimitedLifeLivesManager.BROADCAST_COLOR_CHANGES = LimitedLifeConfig.BROADCAST_COLOR_CHANGES.get(config);
+        SHOW_TIME_BELOW_NAME = LimitedLifeConfig.SHOW_TIME_BELOW_NAME.get(config);
     }
 
     @Override

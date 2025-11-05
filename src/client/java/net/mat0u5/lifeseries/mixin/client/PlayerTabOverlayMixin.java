@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = PlayerTabOverlay.class, priority = 1)
-public class PlayerListHudMixin {
+public class PlayerTabOverlayMixin {
 
     @Redirect(method = "render",
             at = @At(value = "INVOKE",

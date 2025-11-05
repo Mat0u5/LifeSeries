@@ -94,6 +94,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                     ,BOOGEYMAN_INFINITE_AUTO_FAIL
                 ,BOOGEYMAN_TEAM_NOTICE
                 ,BOOGEYMAN_KILLS_NEEDED
+                ,BOOGEYMAN_STEAL_LIFE
 
                 ,SECRET_SOCIETY_MEMBER_AMOUNT
                 ,SECRET_SOCIETY_START_TIME

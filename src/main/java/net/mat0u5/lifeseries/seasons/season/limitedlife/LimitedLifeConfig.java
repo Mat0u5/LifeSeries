@@ -93,6 +93,10 @@ public class LimitedLifeConfig extends ConfigManager {
             "broadcast_color_changes", false, "season",
             "Broadcast Color Changes", "Sends a message in chat to all players when someone changes color."
     );
+    public static final ConfigFileEntry<Boolean> SHOW_TIME_BELOW_NAME = new ConfigFileEntry<>(
+            "show_time_below_name", false, "season[new]",
+            "Show Time Below Name", "Show the time a player has left below their username."
+    );
 
     public static final ConfigFileEntry<Object> GROUP_TIME = new ConfigFileEntry<>(
             "group_time", null, ConfigTypes.TEXT, "{season.time}",
@@ -121,6 +125,7 @@ public class LimitedLifeConfig extends ConfigManager {
         return new ArrayList<>(List.of(
                 TICK_OFFLINE_PLAYERS
                 ,BROADCAST_COLOR_CHANGES
+                ,SHOW_TIME_BELOW_NAME
 
                 ,GROUP_TIME //Group
 

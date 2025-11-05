@@ -10,6 +10,7 @@ import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.seasons.secretsociety.SecretSociety;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
@@ -22,6 +23,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -40,6 +42,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.DisplaySlot;
 import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.ScoreAccess;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -151,11 +154,17 @@ public abstract class Season {
         }
 
         Objective currentBelowNameObjective = ScoreboardUtils.getObjectiveInSlot(DisplaySlot.BELOW_NAME);
-        if (SHOW_HEALTH_BELOW_NAME) {
+        if (getSeason() == Seasons.LIMITED_LIFE && LimitedLife.SHOW_TIME_BELOW_NAME) {
+            ScoreboardUtils.setObjectiveInSlot(DisplaySlot.BELOW_NAME, LivesManager.SCOREBOARD_NAME);
+        }
+        else if (SHOW_HEALTH_BELOW_NAME) {
             ScoreboardUtils.setObjectiveInSlot(DisplaySlot.BELOW_NAME, "HP");
         }
         else if (currentBelowNameObjective != null) {
             if (currentBelowNameObjective.getName().equals("HP")) {
+                ScoreboardUtils.setObjectiveInSlot(DisplaySlot.BELOW_NAME, null);
+            }
+            if (currentBelowNameObjective.getName().equals(LivesManager.SCOREBOARD_NAME)) {
                 ScoreboardUtils.setObjectiveInSlot(DisplaySlot.BELOW_NAME, null);
             }
         }
@@ -383,6 +392,13 @@ public abstract class Season {
         if (boogeymanManager.isBoogeymanThatCanBeCured(killer, victim)) {
             boogeymanManager.onBoogeymanKill(killer);
         }
+
+        killer.awardStat(Stats.PLAYER_KILLS);
+        //? if <= 1.21 {
+        killer.getScoreboard().forAllObjectives(ObjectiveCriteria.KILL_COUNT_PLAYERS, killer, ScoreAccess::increment);
+        //?} else {
+        /*killer.level().getScoreboard().forAllObjectives(ObjectiveCriteria.KILL_COUNT_PLAYERS, killer, ScoreAccess::increment);
+        *///?}
     }
 
     public void onPlayerDamage(ServerPlayer player, DamageSource source, float amount, CallbackInfo ci) {

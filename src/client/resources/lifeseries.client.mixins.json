@@ -24,7 +24,7 @@
     "LivingEntityRendererMixin",
     "MinecraftMixin",
     "PlayerEntityRendererMixin",
-    "PlayerListHudMixin",
+    "PlayerTabOverlayMixin",
     "SoundManagerAccessor",
     "SoundManagerMixin",
     "SoundEngineAccessor",

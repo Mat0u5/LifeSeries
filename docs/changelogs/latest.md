@@ -52,3 +52,9 @@ Fixed some death titles in Limited Life not showing correctly.<br>
 The Hunger wildcard now has a chance to play a sound effect when food is eaten.<br>
 Added the 'wildcard_hunger_sound_chance' Wild Life config, default value is 0.01 (1%).<br>
 Added the 'wildcard_snails_effects' Wild Life config, which controls whether snails can have potion effects. Default value is false.
+
+----------
+
+Claimkills now count towards player kill scoreboards.<br>
+Added the 'boogeyman_steal_life' global config, which makes boogeymen gain a life when they are cured. Default value is false.<br>
+Added the 'show_time_below_name' Limited Life config. Default value is false.
