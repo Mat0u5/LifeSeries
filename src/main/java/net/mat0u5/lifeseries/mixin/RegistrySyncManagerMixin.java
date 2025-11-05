@@ -5,6 +5,9 @@ import net.fabricmc.fabric.impl.registry.sync.RegistrySyncManager;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import net.mat0u5.lifeseries.Main;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
@@ -14,11 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 /*import net.minecraft.resources.Identifier;
 *///?}
 
-//? if <= 1.21.2 {
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.mat0u5.lifeseries.Main;
-import org.jetbrains.annotations.Nullable;
-//?} else {
+//? if > 1.21.2 {
 /*import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 *///?}
@@ -27,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = RegistrySyncManager.class, priority = 1, remap = false)
 public class RegistrySyncManagerMixin {
-    //? if <= 1.21.2 {
+    //?if <= 1.21.9 {
     @ModifyReturnValue(method = "createAndPopulateRegistryMap", at = @At(value = "RETURN"))
     private static @Nullable Map<ResourceLocation, Object2IntMap<ResourceLocation>> checkRemoteRemap(@Nullable Map<ResourceLocation, Object2IntMap<ResourceLocation>> original) {
         if (original != null) {
@@ -43,6 +42,22 @@ public class RegistrySyncManagerMixin {
         return original;
     }
     //?} else {
+    /*@ModifyReturnValue(method = "createAndPopulateRegistryMap", at = @At(value = "RETURN"))
+    private static @Nullable Map<Identifier, Object2IntMap<Identifier>> checkRemoteRemap(@Nullable Map<Identifier, Object2IntMap<Identifier>> original) {
+        if (original != null) {
+            Identifier entityType = IdentifierHelper.vanilla("entity_type");
+            if (original.containsKey(entityType)) {
+                Object2IntMap<Identifier> entityTypes = original.get(entityType);
+                entityTypes.keySet().removeIf(value ->
+                        value.getNamespace().equalsIgnoreCase(Main.MOD_ID)
+                );
+                original.put(entityType, entityTypes);
+            }
+        }
+        return original;
+    }
+    *///?}
+    //?if > 1.21.2 {
     /*@Inject(method = "areAllRegistriesOptional", at = @At(value = "HEAD"), cancellable = true)
     //? if <= 1.21.9 {
     private static void checkRemoteRemap(Map<ResourceLocation, Object2IntMap<ResourceLocation>> map, CallbackInfoReturnable<Boolean> cir) {

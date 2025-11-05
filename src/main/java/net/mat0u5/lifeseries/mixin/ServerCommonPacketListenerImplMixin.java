@@ -57,6 +57,10 @@ public class ServerCommonPacketListenerImplMixin {
 
     @Inject(method = "disconnect(Lnet/minecraft/network/chat/Component;)V", at = @At("HEAD"), cancellable = true)
     public void disconnect(Component reason, CallbackInfo ci) {
+        if (reason.getString().contains("lifeseries") && reason.getString().contains("registr")) {
+            ci.cancel();
+            return;
+        }
         if (Main.modFullyDisabled()) return;
         if (connection instanceof FakeClientConnection) {
             ci.cancel();
