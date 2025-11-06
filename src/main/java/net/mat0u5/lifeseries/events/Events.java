@@ -132,6 +132,7 @@ public class Events {
         try {
             currentSeason.onPlayerDisconnect(player);
             SessionTranscript.playerLeave(player);
+            NetworkHandlerServer.preLoginHandshake.remove(player.getUUID());
         } catch(Exception e) {e.printStackTrace();}
     }
 

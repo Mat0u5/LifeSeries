@@ -1,9 +1,10 @@
 package net.mat0u5.lifeseries.network;
 
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import com.mojang.authlib.GameProfile;
+import net.fabricmc.fabric.api.networking.v1.*;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.DefaultConfigValues;
+import net.mat0u5.lifeseries.mixin.ServerLoginPacketListenerImplAccessor;
 import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
@@ -22,6 +23,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
@@ -40,6 +42,7 @@ import static net.mat0u5.lifeseries.Main.*;
 
 public class NetworkHandlerServer {
     public static final List<UUID> handshakeSuccessful = new ArrayList<>();
+    public static final List<UUID> preLoginHandshake = new ArrayList<>();
 
     public static void registerPackets() {
         PayloadTypeRegistry.playS2C().register(NumberPayload.ID, NumberPayload.CODEC);
@@ -65,6 +68,21 @@ public class NetworkHandlerServer {
         PayloadTypeRegistry.playC2S().register(SnailTexturePacket.ID, SnailTexturePacket.CODEC);
     }
     public static void registerServerReceiver() {
+        ServerLoginConnectionEvents.QUERY_START.register((handler, server, sender, synchronizer) -> {
+            sender.sendPacket(IdentifierHelper.mod("preloginpacket"), PacketByteBufs.create());
+        });
+
+        // Handle the response
+        ServerLoginNetworking.registerGlobalReceiver(IdentifierHelper.mod("preloginpacket"),
+                (server, handler, understood, buf, synchronizer, responseSender) -> {
+                    if (understood) {
+                        GameProfile profile = ((ServerLoginPacketListenerImplAccessor) handler).getGameProfile();
+                        preLoginHandshake.add(OtherUtils.profileId(profile));
+                        LOGGER.info("Received pre-login packet from " + OtherUtils.profileName(profile));
+                    }
+                }
+        );
+
         ServerPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (payload, context) -> {
             ServerPlayer player = context.player();
             MinecraftServer server = context.server();

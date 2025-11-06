@@ -1,11 +1,15 @@
 package net.mat0u5.lifeseries.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.fabricmc.fabric.impl.registry.sync.RegistrySyncManager;
+import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.minecraft.server.network.ServerConfigurationPacketListenerImpl;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.mat0u5.lifeseries.Main;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +17,7 @@ import java.util.Map;
 
 //? if <= 1.21.9 {
 import net.minecraft.resources.ResourceLocation;
- //?} else {
+//?} else {
 /*import net.minecraft.resources.Identifier;
 *///?}
 
@@ -26,38 +30,52 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = RegistrySyncManager.class, priority = 1, remap = false)
 public class RegistrySyncManagerMixin {
+
     //?if <= 1.21.9 {
-    @ModifyReturnValue(method = "createAndPopulateRegistryMap", at = @At(value = "RETURN"))
-    private static @Nullable Map<ResourceLocation, Object2IntMap<ResourceLocation>> checkRemoteRemap(@Nullable Map<ResourceLocation, Object2IntMap<ResourceLocation>> original) {
-        if (original != null) {
+    @WrapOperation(method = "configureClient", at = @At(value = "INVOKE", target = "Lnet/fabricmc/fabric/impl/registry/sync/RegistrySyncManager;createAndPopulateRegistryMap()Ljava/util/Map;"))
+    private static @Nullable Map<ResourceLocation, Object2IntMap<ResourceLocation>> checkRemoteRemap(Operation<Map<ResourceLocation, Object2IntMap<ResourceLocation>>> original, ServerConfigurationPacketListenerImpl handler) {
+        Map<ResourceLocation, Object2IntMap<ResourceLocation>> originalValue = original.call();
+        if (NetworkHandlerServer.preLoginHandshake.contains(OtherUtils.profileId(handler.getOwner()))) {
+            Main.LOGGER.info("Sending unmodified registry entries to client");
+            return originalValue;
+        }
+        if (originalValue != null) {
             ResourceLocation entityType = IdentifierHelper.vanilla("entity_type");
-            if (original.containsKey(entityType)) {
-                Object2IntMap<ResourceLocation> entityTypes = original.get(entityType);
+            if (originalValue.containsKey(entityType)) {
+                Object2IntMap<ResourceLocation> entityTypes = originalValue.get(entityType);
                 entityTypes.keySet().removeIf(value ->
                         value.getNamespace().equalsIgnoreCase(Main.MOD_ID)
                 );
-                original.put(entityType, entityTypes);
+                originalValue.put(entityType, entityTypes);
             }
         }
-        return original;
+        Main.LOGGER.info("Sending modified registry entries to client");
+        return originalValue;
     }
     //?} else {
-    /*@ModifyReturnValue(method = "createAndPopulateRegistryMap", at = @At(value = "RETURN"))
-    private static @Nullable Map<Identifier, Object2IntMap<Identifier>> checkRemoteRemap(@Nullable Map<Identifier, Object2IntMap<Identifier>> original) {
-        if (original != null) {
+    /*@WrapOperation(method = "configureClient", at = @At(value = "INVOKE", target = "Lnet/fabricmc/fabric/impl/registry/sync/RegistrySyncManager;createAndPopulateRegistryMap()Ljava/util/Map;"))
+    private static @Nullable Map<Identifier, Object2IntMap<Identifier>> checkRemoteRemap(Operation<Map<Identifier, Object2IntMap<Identifier>>> original, ServerConfigurationPacketListenerImpl handler) {
+        Map<Identifier, Object2IntMap<Identifier>> originalValue = original.call();
+        if (NetworkHandlerServer.preLoginHandshake.contains(OtherUtils.profileId(handler.getOwner()))) {
+            Main.LOGGER.info("Sending unmodified registry entries to client");
+            return originalValue;
+        }
+        if (originalValue != null) {
             Identifier entityType = IdentifierHelper.vanilla("entity_type");
-            if (original.containsKey(entityType)) {
-                Object2IntMap<Identifier> entityTypes = original.get(entityType);
+            if (originalValue.containsKey(entityType)) {
+                Object2IntMap<Identifier> entityTypes = originalValue.get(entityType);
                 entityTypes.keySet().removeIf(value ->
                         value.getNamespace().equalsIgnoreCase(Main.MOD_ID)
                 );
-                original.put(entityType, entityTypes);
+                originalValue.put(entityType, entityTypes);
             }
         }
-        return original;
+        Main.LOGGER.info("Sending modified registry entries to client");
+        return originalValue;
     }
     *///?}
-    //?if > 1.21.2 {
+
+    //? if > 1.21.2 {
     /*@Inject(method = "areAllRegistriesOptional", at = @At(value = "HEAD"), cancellable = true)
     //? if <= 1.21.9 {
     private static void checkRemoteRemap(Map<ResourceLocation, Object2IntMap<ResourceLocation>> map, CallbackInfoReturnable<Boolean> cir) {

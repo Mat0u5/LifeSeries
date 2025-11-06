@@ -63,9 +63,9 @@ public class MainClient implements ClientModInitializer, IClientHelper {
 
     @Override
     public void onInitializeClient() {
+        ClientRegistries.registerModStuff();
         NetworkHandlerClient.registerClientReceiver();
         ClientRenderer.onInitialize();
-        ClientRegistries.registerModStuff();
         Main.setClientHelper(this);
 
         clientConfig = new ClientConfig();

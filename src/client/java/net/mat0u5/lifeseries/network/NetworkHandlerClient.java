@@ -1,6 +1,8 @@
 package net.mat0u5.lifeseries.network;
 
+import net.fabricmc.fabric.api.client.networking.v1.ClientLoginNetworking;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.config.ClientConfig;
@@ -40,9 +42,18 @@ import net.minecraft.world.item.Items;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class NetworkHandlerClient {
     public static void registerClientReceiver() {
+        ClientLoginNetworking.registerGlobalReceiver(IdentifierHelper.mod("preloginpacket"),
+                (client, handler, buf, listenerAdder) -> {
+                    return CompletableFuture.completedFuture(
+                            PacketByteBufs.create().writeBoolean(true)
+                    );
+                }
+        );
+
         ClientPlayNetworking.registerGlobalReceiver(NumberPayload.ID, (payload, context) -> {
             Minecraft client = context.client();
             client.execute(() -> handleNumberPacket(payload));

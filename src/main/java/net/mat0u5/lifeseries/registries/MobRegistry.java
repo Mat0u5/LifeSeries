@@ -1,95 +1,74 @@
 package net.mat0u5.lifeseries.registries;
 
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.mat0u5.lifeseries.entity.pathfinder.PathFinder;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-//? if <= 1.21 {
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.minecraft.world.entity.EntityDimensions;
-//?} else {
-/*import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityType;
+//?if >= 1.21.2 {
+/*import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 *///?}
 
-//? if <= 1.21.9 {
-import net.minecraft.resources.ResourceLocation;
- //?} else {
-/*import net.minecraft.resources.Identifier;
-*///?}
-
 public class MobRegistry {
-    //? if <= 1.21 {
-    public static final EntityType<Snail> SNAIL = register(
+    //? if >= 1.21.2 {
+    /*public static final ResourceKey<EntityType<?>> SNAIL_KEY = ResourceKey.create(
+            Registries.ENTITY_TYPE,
+            Snail.ID
+    );
+    public static final ResourceKey<EntityType<?>> TRIVIA_KEY = ResourceKey.create(
+            Registries.ENTITY_TYPE,
+            TriviaBot.ID
+    );
+    public static final ResourceKey<EntityType<?>> PATHFINDER_KEY = ResourceKey.create(
+            Registries.ENTITY_TYPE,
+            PathFinder.ID
+    );
+    *///?}
+    public static final EntityType<Snail> SNAIL = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE,
             Snail.ID,
-            FabricEntityTypeBuilder.createMob()
-                    .entityFactory(Snail::new)
-                    .spawnGroup(MobCategory.MONSTER)
-                    .dimensions(EntityDimensions.scalable(0.5f, 0.6f))
-                    .trackRangeBlocks(512)
-                    .defaultAttributes(Snail::createAttributes)
-    );
-    public static final EntityType<PathFinder> PATH_FINDER = register(
-            PathFinder.ID,
-            FabricEntityTypeBuilder.createMob()
-                    .entityFactory(PathFinder::new)
-                    .spawnGroup(MobCategory.AMBIENT)
-                    .dimensions(EntityDimensions.scalable(0.5f, 0.6f))
-                    .trackRangeBlocks(0)
-                    .defaultAttributes(PathFinder::createAttributes)
-    );
-    public static final EntityType<TriviaBot> TRIVIA_BOT = register(
-            TriviaBot.ID,
-            FabricEntityTypeBuilder.createMob()
-                    .entityFactory(TriviaBot::new)
-                    .spawnGroup(MobCategory.AMBIENT)
-                    .dimensions(EntityDimensions.scalable(0.65f, 1.8f))
-                    .trackRangeBlocks(512)
-                    .defaultAttributes(TriviaBot::createAttributes)
-    );
-
-    private static <T extends Entity> EntityType<T> register(ResourceLocation id, FabricEntityTypeBuilder<T> builder) {
-        EntityType<T> type = builder.build();
-        return Registry.register(BuiltInRegistries.ENTITY_TYPE, id, type);
-    }
-    //?} else {
-    /*public static final EntityType<Snail> SNAIL = register(
-            Snail.ID,
-            FabricEntityType.Builder.createMob(Snail::new, MobCategory.MONSTER, x -> x
-                            .defaultAttributes(Snail::createAttributes))
+            EntityType.Builder.of(Snail::new, MobCategory.MONSTER)
                     .sized(0.5f, 0.6f)
                     .clientTrackingRange(512)
+                    //? if <= 1.21 {
+                    .build()
+                    //?} else {
+                    /*.build(SNAIL_KEY)
+                    *///?}
     );
-    public static final EntityType<PathFinder> PATH_FINDER = register(
+    public static final EntityType<PathFinder> PATH_FINDER = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE,
             PathFinder.ID,
-            FabricEntityType.Builder.createMob(PathFinder::new, MobCategory.AMBIENT, x -> x
-                            .defaultAttributes(PathFinder::createAttributes))
+            EntityType.Builder.of(PathFinder::new, MobCategory.AMBIENT)
                     .sized(0.5f, 0.6f)
                     .clientTrackingRange(0)
+                    //? if <= 1.21 {
+                    .build()
+                    //?} else {
+                    /*.build(PATHFINDER_KEY)
+            *///?}
     );
-    public static final EntityType<TriviaBot> TRIVIA_BOT = register(
+    public static final EntityType<TriviaBot> TRIVIA_BOT = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE,
             TriviaBot.ID,
-            FabricEntityType.Builder.createMob(TriviaBot::new, MobCategory.AMBIENT, x -> x
-                            .defaultAttributes(TriviaBot::createAttributes))
+            EntityType.Builder.of(TriviaBot::new, MobCategory.AMBIENT)
                     .sized(0.65f, 1.8f)
                     .clientTrackingRange(512)
+                    //? if <= 1.21 {
+                    .build()
+                    //?} else {
+                    /*.build(TRIVIA_KEY)
+            *///?}
     );
 
-    //? if <= 1.21.9 {
-    private static <T extends Entity> EntityType<T> register(ResourceLocation id, EntityType.Builder<T> builder) {
-    //?} else {
-    /^private static <T extends Entity> EntityType<T> register(Identifier id, EntityType.Builder<T> builder) {
-    ^///?}
-        EntityType<T> type = builder.build(ResourceKey.create(BuiltInRegistries.ENTITY_TYPE.key(), id));
-        return Registry.register(BuiltInRegistries.ENTITY_TYPE, id, type);
-    }
-    *///?}
-
     public static void registerMobs() {
+        FabricDefaultAttributeRegistry.register(SNAIL, Snail.createAttributes());
+        FabricDefaultAttributeRegistry.register(PATH_FINDER, PathFinder.createAttributes());
+        FabricDefaultAttributeRegistry.register(TRIVIA_BOT, TriviaBot.createAttributes());
     }
 }
 
