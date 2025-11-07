@@ -85,7 +85,7 @@ public class LastLifeLivesManager extends LivesManager {
             for (Map.Entry<ServerPlayer, Integer> playerEntry : lives.entrySet()) {
                 Integer livesNum = playerEntry.getValue();
                 ServerPlayer player = playerEntry.getKey();
-                Component textLives = TextUtils.format("{}§a lives.", getFormattedLives(livesNum));
+                Component textLives = TextUtils.format("{}§a {}.", getFormattedLives(livesNum), TextUtils.pluralize("life","lives", livesNum));
                 PlayerUtils.sendTitle(player, textLives, 0, 60, 20);
                 SessionTranscript.assignRandomLives(player, livesNum);
                 setPlayerLives(player, livesNum);

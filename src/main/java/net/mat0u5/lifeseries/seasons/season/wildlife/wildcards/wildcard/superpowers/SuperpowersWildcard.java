@@ -60,11 +60,13 @@ public class SuperpowersWildcard extends Wildcard {
         }
         playerSuperpowers.get(uuid).turnOff();
         playerSuperpowers.remove(uuid);
+        Necromancy.checkRessurectedPlayersReset();
     }
 
     public static void resetAllSuperpowers() {
         playerSuperpowers.values().forEach(Superpower::turnOff);
         playerSuperpowers.clear();
+        Necromancy.checkRessurectedPlayersReset();
     }
 
     public static void rollRandomSuperpowers() {
@@ -151,6 +153,7 @@ public class SuperpowersWildcard extends Wildcard {
         if (!WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME) {
             PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_superpowers")), 0.2f, 1);
         }
+        Necromancy.checkRessurectedPlayersReset();
     }
 
     public static void pressedSuperpowerKey(ServerPlayer player) {

@@ -22,6 +22,7 @@ public class AttributeUtils {
 
 
     public static void resetAttributesOnPlayerJoin(ServerPlayer player) {
+        if (player == null) return;
         resetMaxPlayerHealthIfNecessary(player);
         if (!TriviaHandler.cursedMoonJumpPlayers.contains(player.getUUID())) {
             resetPlayerJumpHeight(player);

@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -99,17 +100,20 @@ public class Necromancy extends Superpower {
         super.deactivate();
         List<UUID> deadAgain = new ArrayList<>();
         for (ServerPlayer player : livesManager.getDeadPlayers()) {
-            if (player.isSpectator()) continue;
             UUID uuid = player.getUUID();
             if (perPlayerRessurections.contains(uuid) && ressurectedPlayers.contains(uuid)) {
+                deadAgain.add(uuid);
+                if (player.isSpectator()) continue;
                 LevelUtils.summonHarmlessLightning(player);
                 player.setGameMode(GameType.SPECTATOR);
-                deadAgain.add(uuid);
             }
         }
         ressurectedPlayers.removeAll(deadAgain);
         perPlayerRessurections.removeAll(deadAgain);
         queuedRessurectedPlayers.removeAll(deadAgain);
+        for (UUID uuid : deadAgain) {
+            AttributeUtils.resetAttributesOnPlayerJoin(PlayerUtils.getPlayer(uuid));
+        }
     }
 
     @Override
@@ -140,6 +144,20 @@ public class Necromancy extends Superpower {
 
     public static boolean isRessurectedPlayer(ServerPlayer player) {
         return ressurectedPlayers.contains(player.getUUID());
+    }
+
+    public static void checkRessurectedPlayersReset() {
+        if (ressurectedPlayers.isEmpty()) return;
+        for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
+            if (SuperpowersWildcard.getSuperpower(player) == Superpowers.NECROMANCY) {
+                return;
+            }
+        }
+        List<UUID> copyPlayers = new ArrayList<>(ressurectedPlayers);
+        ressurectedPlayers.clear();
+        for (UUID uuid : copyPlayers) {
+            AttributeUtils.resetAttributesOnPlayerJoin(PlayerUtils.getPlayer(uuid));
+        }
     }
 
     public static boolean preIsRessurectedPlayer(ServerPlayer player) {
