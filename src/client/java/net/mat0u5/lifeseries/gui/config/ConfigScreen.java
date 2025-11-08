@@ -19,6 +19,7 @@ import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 //? if >= 1.21.9 {
 /*import net.minecraft.client.input.MouseButtonEvent;
@@ -153,18 +154,18 @@ public class ConfigScreen extends Screen {
             return true;
         }
 
-        String lowerQuery = query.toLowerCase();
+        String lowerQuery = query.toLowerCase(Locale.ROOT);
 
-        if (entry.getDisplayName().getString().toLowerCase().contains(lowerQuery)) {
+        if (entry.getDisplayName().getString().toLowerCase(Locale.ROOT).contains(lowerQuery)) {
             return true;
         }
 
-        if (entry.getFieldName().toLowerCase().contains(lowerQuery)) {
+        if (entry.getFieldName().toLowerCase(Locale.ROOT).contains(lowerQuery)) {
             return true;
         }
 
         String description = entry.getDescription();
-        if (description != null && !description.isEmpty() && description.toLowerCase().contains(lowerQuery)) {
+        if (description != null && !description.isEmpty() && description.toLowerCase(Locale.ROOT).contains(lowerQuery)) {
             return true;
         }
 

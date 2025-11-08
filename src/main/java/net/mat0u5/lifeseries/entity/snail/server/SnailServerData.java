@@ -32,6 +32,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.Locale;
 import java.util.UUID;
 
 @SuppressWarnings("resource")
@@ -270,9 +271,9 @@ public class SnailServerData implements PlayerBoundEntity {
 
     public void updateSkin(Player player) {
         if (player == null) return;
-        String skinName = player.getScoreboardName().toLowerCase();
+        String skinName = player.getScoreboardName().toLowerCase(Locale.ROOT);
         if (SubInManager.isSubbingIn(player.getUUID())) {
-            skinName = OtherUtils.profileName(SubInManager.getSubstitutedPlayer(player.getUUID())).toLowerCase();
+            skinName = OtherUtils.profileName(SubInManager.getSubstitutedPlayer(player.getUUID())).toLowerCase(Locale.ROOT);
         }
         snail.setSkinName(skinName);
     }

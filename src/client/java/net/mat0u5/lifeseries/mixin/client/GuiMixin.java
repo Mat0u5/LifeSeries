@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import java.util.List;
+import java.util.Locale;
 //? if >= 1.21.2 && <= 1.21.5 {
 /*import net.minecraft.client.renderer.RenderType;
 import java.util.function.Function;
@@ -56,7 +57,7 @@ public class GuiMixin {
         String texturePath = identifier.getPath();
         PlayerTeam playerTeam = ClientUtils.getPlayerTeam();
         if (!MainClient.COLORED_HEARTS || playerTeam == null || playerTeam.getColor() == null ||
-                !ls$allowedColors.contains(playerTeam.getColor().getName().toLowerCase()) ||
+                !ls$allowedColors.contains(playerTeam.getColor().getName().toLowerCase(Locale.ROOT)) ||
                 !ls$allowedHearts.contains(texturePath) || Main.modFullyDisabled()) {
             if (MainClient.clientCurrentSeason == Seasons.SECRET_LIFE && texturePath.startsWith("hud/heart/container")) {
                 return;
@@ -74,7 +75,7 @@ public class GuiMixin {
             return;
         }
 
-        String color = playerTeam.getColor().getName().toLowerCase();
+        String color = playerTeam.getColor().getName().toLowerCase(Locale.ROOT);
 
         String heartType = texturePath.replaceFirst("hud/heart/", "");
 

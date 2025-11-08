@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class SnailSkins {
 
@@ -24,7 +25,7 @@ public class SnailSkins {
     public static void sendTexturesTo(List<ServerPlayer> players) {
         for (File file : getAllSkinFiles()) {
             try {
-                String name = file.getName().toLowerCase().replaceAll(".png","");
+                String name = file.getName().toLowerCase(Locale.ROOT).replaceAll(".png","");
                 byte[] textureData = Files.readAllBytes(file.toPath());
 
                 SnailTexturePacket packet = new SnailTexturePacket(name, textureData);
@@ -52,7 +53,7 @@ public class SnailSkins {
             if (files == null) return result;
             for (File file : files) {
                 if (!file.isFile()) continue;
-                String name = file.getName().toLowerCase();
+                String name = file.getName().toLowerCase(Locale.ROOT);
                 if (name.equalsIgnoreCase("example.png")) continue;
                 if (!name.endsWith(".png")) continue;
                 result.add(file);
@@ -66,7 +67,7 @@ public class SnailSkins {
     public static List<String> getAllSkins() {
         List<String> result = new ArrayList<>();
         for (File file : getAllSkinFiles()) {
-            String name = file.getName().toLowerCase().replaceAll(".png","");
+            String name = file.getName().toLowerCase(Locale.ROOT).replaceAll(".png","");
             result.add(name);
         }
         return result;

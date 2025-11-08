@@ -171,9 +171,11 @@ public class Events {
                 updatePlayerListsNextTick = false;
                 PlayerUtils.updatePlayerLists();
             }
-            if (server.tickRateManager().isFrozen()) return;
             if (Main.currentSession != null) {
                 Main.currentSession.tick(server);
+            }
+            if (server.tickRateManager().isFrozen()) return;
+            if (Main.currentSession != null) {
                 currentSeason.tick(server);
             }
             PlayerUtils.onTick();

@@ -635,7 +635,7 @@ public class TaskManager {
 
     public static void onBlockUse(ServerPlayer player, ServerLevel level, BlockHitResult hitResult) {
         BlockPos pos = hitResult.getBlockPos();
-        String name = level.getBlockState(pos).getBlock().getName().getString().toLowerCase();
+        String name = level.getBlockState(pos).getBlock().getName().getString().toLowerCase(Locale.ROOT);
         if (name.contains("button")) {
             if (searchingForLocations) {
                 positionFound(pos, true);
@@ -656,7 +656,7 @@ public class TaskManager {
         if (successButtonPos == null || rerollButtonPos == null || failButtonPos == null) return;
         BlockPos placePos = pos.relative(hitResult.getDirection());
         TaskScheduler.scheduleTask(1, () -> {
-            String name2 = level.getBlockState(placePos).getBlock().getName().getString().toLowerCase();
+            String name2 = level.getBlockState(placePos).getBlock().getName().getString().toLowerCase(Locale.ROOT);
             if (name2.contains("bedrock")) {
                 positionFound(placePos, false);
                 level.destroyBlock(placePos, false);

@@ -12,10 +12,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.*;
 
@@ -54,10 +51,10 @@ public class SecretSociety {
         IGNORE_MEMBERS.clear();
         POSSIBLE_WORDS.clear();
         for (String name : seasonConfig.SECRET_SOCIETY_FORCE.get(seasonConfig).replaceAll("\\[","").replaceAll("]","").replaceAll(" ","").trim().split(",")) {
-            if (!name.isEmpty()) FORCE_MEMBERS.add(name.toLowerCase());
+            if (!name.isEmpty()) FORCE_MEMBERS.add(name.toLowerCase(Locale.ROOT));
         }
         for (String name : seasonConfig.SECRET_SOCIETY_IGNORE.get(seasonConfig).replaceAll("\\[","").replaceAll("]","").replaceAll(" ","").trim().split(",")) {
-            if (!name.isEmpty()) IGNORE_MEMBERS.add(name.toLowerCase());
+            if (!name.isEmpty()) IGNORE_MEMBERS.add(name.toLowerCase(Locale.ROOT));
         }
         for (String name : seasonConfig.SECRET_SOCIETY_WORDS.get(seasonConfig).replaceAll("\\[","").replaceAll("]","").replaceAll(" ","").trim().split(",")) {
             if (!name.isEmpty()) POSSIBLE_WORDS.add(name);
@@ -152,8 +149,8 @@ public class SecretSociety {
         List<ServerPlayer> memberPlayers = new ArrayList<>();
         int remainingMembers = MEMBER_COUNT;
         for (ServerPlayer player : allowedPlayers) {
-            if (IGNORE_MEMBERS.contains(player.getScoreboardName().toLowerCase())) continue;
-            if (FORCE_MEMBERS.contains(player.getScoreboardName().toLowerCase())) {
+            if (IGNORE_MEMBERS.contains(player.getScoreboardName().toLowerCase(Locale.ROOT))) continue;
+            if (FORCE_MEMBERS.contains(player.getScoreboardName().toLowerCase(Locale.ROOT))) {
                 memberPlayers.add(player);
                 remainingMembers--;
             }
@@ -161,8 +158,8 @@ public class SecretSociety {
 
         for (ServerPlayer player : allowedPlayers) {
             if (remainingMembers <= 0) break;
-            if (IGNORE_MEMBERS.contains(player.getScoreboardName().toLowerCase())) continue;
-            if (FORCE_MEMBERS.contains(player.getScoreboardName().toLowerCase())) continue;
+            if (IGNORE_MEMBERS.contains(player.getScoreboardName().toLowerCase(Locale.ROOT))) continue;
+            if (FORCE_MEMBERS.contains(player.getScoreboardName().toLowerCase(Locale.ROOT))) continue;
             if (memberPlayers.contains(player)) continue;
             memberPlayers.add(player);
             remainingMembers--;

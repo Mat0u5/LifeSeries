@@ -7,6 +7,7 @@ import net.minecraft.client.gui.GuiGraphics;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class StringListConfigEntry extends StringListPopupConfigEntry<String> {
 
@@ -28,12 +29,12 @@ public class StringListConfigEntry extends StringListPopupConfigEntry<String> {
 
         for (String entry : items) {
             if (entry.isEmpty()) continue;
-            if (allowedValues != null && !allowedValues.contains(entry.toLowerCase())) {
+            if (allowedValues != null && !allowedValues.contains(entry.toLowerCase(Locale.ROOT))) {
                 setError(TextUtils.formatString("Invalid entry: '{}'", entry));
                 errors = true;
                 continue;
             }
-            newList.add(entry.toLowerCase());
+            newList.add(entry.toLowerCase(Locale.ROOT));
         }
 
         entries = newList;

@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public enum Superpowers {
     NULL,
@@ -54,7 +55,7 @@ public enum Superpowers {
     }
 
     public String getString() {
-        return this.toString().toLowerCase();
+        return this.toString().toLowerCase(Locale.ROOT);
     }
 
     public static List<Superpowers> getImplemented() {
@@ -94,7 +95,7 @@ public enum Superpowers {
 
     public static Superpowers fromString(String superpower) {
         try {
-            return Enum.valueOf(Superpowers.class, superpower.toUpperCase());
+            return Enum.valueOf(Superpowers.class, superpower.toUpperCase(Locale.ROOT));
         } catch(Exception e) {}
         return Superpowers.NULL;
     }

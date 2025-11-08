@@ -12,6 +12,7 @@ import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.seasons.secretsociety.SecretSociety;
+import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
@@ -187,6 +188,7 @@ public abstract class Season {
         GIVELIFE_CAN_REVIVE = seasonConfig.GIVELIFE_CAN_REVIVE.get(seasonConfig);
         SHOW_LOGIN_COMMAND_INFO = seasonConfig.SHOW_LOGIN_COMMAND_INFO.get(seasonConfig);
         HIDE_UNJUSTIFIED_KILL_MESSAGES = seasonConfig.HIDE_UNJUSTIFIED_KILL_MESSAGES.get(seasonConfig);
+        Session.TICK_FREEZE_NOT_IN_SESSION = seasonConfig.TICK_FREEZE_NOT_IN_SESSION.get(seasonConfig);
 
         boogeymanManager.onReload();
         secretSociety.onReload();
@@ -198,6 +200,7 @@ public abstract class Season {
         Events.updatePlayerListsNextTick = true;
         WatcherManager.reloadWatchers();
         livesManager.reload();
+        currentSession.freezeIfNecessary();
     }
 
     public void reloadPlayers() {

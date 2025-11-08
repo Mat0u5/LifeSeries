@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.network;
 import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.networking.v1.*;
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.DefaultConfigValues;
 import net.mat0u5.lifeseries.mixin.ServerLoginPacketListenerImplAccessor;
 import net.mat0u5.lifeseries.network.packets.*;
@@ -25,6 +26,7 @@ import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -119,8 +121,12 @@ public class NetworkHandlerServer {
                 updatedConfigThisTick = true;
             }
             else if (configType.parentBoolean() && !args.isEmpty()) {
-                seasonConfig.setProperty(id, String.valueOf(args.getFirst().equalsIgnoreCase("true")));
+                boolean boolValue = args.getFirst().equalsIgnoreCase("true");
+                seasonConfig.setProperty(id,String.valueOf(boolValue));
                 updatedConfigThisTick = true;
+                TaskScheduler.schedulePriorityTask(1, () -> {
+                    ConfigManager.onUpdatedBoolean(id, boolValue);
+                });
             }
             else if (configType.parentDouble() && !args.isEmpty()) {
                 try {

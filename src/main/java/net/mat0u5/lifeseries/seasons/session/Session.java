@@ -29,6 +29,7 @@ public class Session {
     public static final int NATURAL_DEATH_LOG_MAX = 2400;
     public static final int DISPLAY_TIMER_INTERVAL = 5;
     public static final int TAB_LIST_INTERVAL = 20;
+    public static boolean TICK_FREEZE_NOT_IN_SESSION = false;
     public long currentTimer = 0;
 
     public Integer sessionLength = null;
@@ -214,6 +215,7 @@ public class Session {
             checkPlayerPosition(player);
         }
 
+        if (server.tickRateManager().isFrozen()) return;
         if (!validTime()) return;
         if (!statusStarted()) return;
         tickSessionOn(server);
@@ -370,5 +372,12 @@ public class Session {
     public void changeStatus(SessionStatus newStatus) {
         status = newStatus;
         currentSeason.sessionChangeStatus(status);
+        freezeIfNecessary();
+    }
+
+    public void freezeIfNecessary() {
+        if (!TICK_FREEZE_NOT_IN_SESSION) return;
+        boolean frozen = status != SessionStatus.STARTED;
+        OtherUtils.setFreezeGame(frozen);
     }
 }

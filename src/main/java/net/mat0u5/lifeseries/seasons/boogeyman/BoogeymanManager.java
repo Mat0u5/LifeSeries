@@ -18,10 +18,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.scores.ScoreHolder;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.*;
 
@@ -307,8 +304,8 @@ public class BoogeymanManager {
             if (isBoogeyman(player)) continue;
             if (!allowedPlayers.contains(player)) continue;
             if (rolledPlayers.contains(player.getUUID())) continue;
-            if (BOOGEYMAN_IGNORE.contains(player.getScoreboardName().toLowerCase())) continue;
-            if (BOOGEYMAN_FORCE.contains(player.getScoreboardName().toLowerCase())) {
+            if (BOOGEYMAN_IGNORE.contains(player.getScoreboardName().toLowerCase(Locale.ROOT))) continue;
+            if (BOOGEYMAN_FORCE.contains(player.getScoreboardName().toLowerCase(Locale.ROOT))) {
                 boogeyPlayers.add(player);
                 chooseBoogeymen--;
             }
@@ -319,8 +316,8 @@ public class BoogeymanManager {
             if (isBoogeyman(player)) continue;
             if (!allowedPlayers.contains(player)) continue;
             if (rolledPlayers.contains(player.getUUID())) continue;
-            if (BOOGEYMAN_IGNORE.contains(player.getScoreboardName().toLowerCase())) continue;
-            if (BOOGEYMAN_FORCE.contains(player.getScoreboardName().toLowerCase())) continue;
+            if (BOOGEYMAN_IGNORE.contains(player.getScoreboardName().toLowerCase(Locale.ROOT))) continue;
+            if (BOOGEYMAN_FORCE.contains(player.getScoreboardName().toLowerCase(Locale.ROOT))) continue;
             if (boogeyPlayers.contains(player)) continue;
 
             boogeyPlayers.add(player);
@@ -444,10 +441,10 @@ public class BoogeymanManager {
         BOOGEYMAN_IGNORE.clear();
         BOOGEYMAN_FORCE.clear();
         for (String name : seasonConfig.BOOGEYMAN_IGNORE.get(seasonConfig).replaceAll("\\[","").replaceAll("]","").replaceAll(" ","").trim().split(",")) {
-            if (!name.isEmpty()) BOOGEYMAN_IGNORE.add(name.toLowerCase());
+            if (!name.isEmpty()) BOOGEYMAN_IGNORE.add(name.toLowerCase(Locale.ROOT));
         }
         for (String name : seasonConfig.BOOGEYMAN_FORCE.get(seasonConfig).replaceAll("\\[","").replaceAll("]","").replaceAll(" ","").trim().split(",")) {
-            if (!name.isEmpty()) BOOGEYMAN_FORCE.add(name.toLowerCase());
+            if (!name.isEmpty()) BOOGEYMAN_FORCE.add(name.toLowerCase(Locale.ROOT));
         }
         BOOGEYMAN_CHOOSE_MINUTE = seasonConfig.BOOGEYMAN_CHOOSE_MINUTE.get(seasonConfig);
         BOOGEYMAN_ANNOUNCE_OUTCOME = seasonConfig.BOOGEYMAN_ANNOUNCE_OUTCOME.get(seasonConfig);

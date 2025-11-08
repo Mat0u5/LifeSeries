@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.ServerTickRateManager;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -261,4 +262,30 @@ public class OtherUtils {
         level.getGameRules().set(gamerule, value, server);
     }
     *///?}
+
+    public static void setFreezeGame(boolean frozen) {
+        if (server == null) return;
+        ServerTickRateManager serverTickRateManager = server.tickRateManager();
+
+        if (serverTickRateManager.isFrozen() == frozen)  return;
+
+        if (frozen) {
+            if (serverTickRateManager.isSprinting()) {
+                serverTickRateManager.stopSprinting();
+            }
+
+            if (serverTickRateManager.isSteppingForward()) {
+                serverTickRateManager.stopStepping();
+            }
+        }
+
+        serverTickRateManager.setFrozen(frozen);
+
+        if (frozen) {
+            PlayerUtils.broadcastMessageToAdmins(Component.nullToEmpty("§7The game is frozen"));
+        }
+        else {
+            PlayerUtils.broadcastMessageToAdmins(Component.nullToEmpty("§7The game is no longer frozen."));
+        }
+    }
 }

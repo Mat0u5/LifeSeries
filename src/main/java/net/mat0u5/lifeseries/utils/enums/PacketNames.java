@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.utils.enums;
 
+import java.util.Locale;
+
 public enum PacketNames {
     PACKET("")
 
@@ -56,7 +58,7 @@ public enum PacketNames {
             }
         }
         PacketNames returnPacket = PACKET;
-        returnPacket.setName(name); // This changes the name of the PACKET forever, which isn't really a problem. In fact, it kinda acts as a sort of cache.
+        returnPacket.setName(name.toLowerCase(Locale.ROOT));
         return returnPacket;
     }
 
@@ -67,7 +69,7 @@ public enum PacketNames {
     }
 
     PacketNames() {
-        this.name = this.toString().toLowerCase();
+        this.name = this.toString().toLowerCase(Locale.ROOT);
     }
 
     public String getName() {

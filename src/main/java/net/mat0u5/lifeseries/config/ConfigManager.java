@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.config;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.io.*;
@@ -11,6 +12,9 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+
+import static net.mat0u5.lifeseries.Main.currentSession;
+import static net.mat0u5.lifeseries.Main.seasonConfig;
 
 public abstract class ConfigManager extends DefaultConfigValues {
 
@@ -57,6 +61,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,SHOW_LOGIN_COMMAND_INFO
                 ,HIDE_UNJUSTIFIED_KILL_MESSAGES
                 ,SHOW_ADVANCEMENTS
+                ,TICK_FREEZE_NOT_IN_SESSION
 
 
                 ,GROUP_BLACKLIST // Group
@@ -215,6 +220,14 @@ public abstract class ConfigManager extends DefaultConfigValues {
         }
     }
 
+    public static void onUpdatedBoolean(String id, boolean value) {
+        if (id.equals(seasonConfig.TICK_FREEZE_NOT_IN_SESSION.key)) {
+            currentSession.freezeIfNecessary();
+            if (!value) {
+                OtherUtils.setFreezeGame(false);
+            }
+        }
+    }
 
     public static void moveOldMainFileIfExists() {
         File newFolder = new File("./config/lifeseries/main/");

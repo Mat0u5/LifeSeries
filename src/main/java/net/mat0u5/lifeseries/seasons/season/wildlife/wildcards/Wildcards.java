@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public enum Wildcards {
     NULL,
@@ -33,12 +34,12 @@ public enum Wildcards {
     }
 
     public String getStringName() {
-        return this.toString().toLowerCase();
+        return this.toString().toLowerCase(Locale.ROOT);
     }
 
     public static Wildcards getFromString(String wildcard) {
         try {
-            return Enum.valueOf(Wildcards.class, wildcard.toUpperCase());
+            return Enum.valueOf(Wildcards.class, wildcard.toUpperCase(Locale.ROOT));
         } catch(Exception e) {}
         return Wildcards.NULL;
     }

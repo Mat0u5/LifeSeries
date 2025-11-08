@@ -16,6 +16,7 @@ import net.minecraft.world.scores.ScoreHolder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import static net.mat0u5.lifeseries.Main.livesManager;
 import static net.mat0u5.lifeseries.Main.server;
@@ -110,8 +111,8 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
                 if (isBoogeyman(player)) continue;
                 if (!allowedPlayers.contains(player)) continue;
                 if (rolledPlayers.contains(player.getUUID())) continue;
-                if (BOOGEYMAN_IGNORE.contains(player.getScoreboardName().toLowerCase())) continue;
-                if (BOOGEYMAN_FORCE.contains(player.getScoreboardName().toLowerCase())) continue;
+                if (BOOGEYMAN_IGNORE.contains(player.getScoreboardName().toLowerCase(Locale.ROOT))) continue;
+                if (BOOGEYMAN_FORCE.contains(player.getScoreboardName().toLowerCase(Locale.ROOT))) continue;
                 if (boogeyPlayers.contains(player)) continue;
 
                 boogeyPlayers.add(player);
