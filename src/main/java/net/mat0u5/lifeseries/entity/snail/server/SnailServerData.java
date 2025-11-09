@@ -103,7 +103,9 @@ public class SnailServerData implements PlayerBoundEntity {
 
         if (snail.tickCount % 20 == 0) {
             updateSnailName();
-            snail.setBoundPlayerDead(boundPlayer.ls$isDead());
+            if (boundPlayer != null) {
+                snail.setBoundPlayerDead(boundPlayer.ls$isDead());
+            }
         }
 
         if (boundEntity != null && shouldPathfind() && snail.getBoundingBox().inflate(0.05).intersects(boundEntity.getBoundingBox())) {

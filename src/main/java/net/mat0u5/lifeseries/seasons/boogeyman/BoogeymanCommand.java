@@ -242,7 +242,9 @@ public class BoogeymanCommand extends Command {
         }
 
         for (ServerPlayer player : targets) {
-            bm.addBoogeymanManually(player);
+            if (!bm.isBoogeyman(player)) {
+                bm.addBoogeymanManually(player);
+            }
         }
         if (targets.size() == 1) {
             OtherUtils.sendCommandFeedback(source, TextUtils.format("{} is now a Boogeyman", targets.iterator().next()));

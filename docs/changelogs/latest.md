@@ -11,3 +11,10 @@ Players no longer sometimes keep zombie hearts.
 All toLowerCase and toUpperCase calls now have a Locale, to prevent issues in different languages.<br>
 Added the 'tick_freeze_not_in_session' global config, which automatically freezes the game when the session is paused or ended or not started. Default value is false.<br>
 Session timers now display even when the game is tick frozen.
+
+----------
+
+You can no longer make one person the boogeyman twice by using the add command.<br>
+Snails no longer crash the game when the player they are tracking logs off.<br>
+Snails no longer sometimes fail to spawn for new players.<br>
+Items from trivia bots can no longer be picked up by hoppers.

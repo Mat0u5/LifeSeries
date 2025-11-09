@@ -316,7 +316,7 @@ public class Events {
         NetworkHandlerServer.sendHandshake(player);
         NetworkHandlerServer.sendUpdatePacketTo(player);
         SnailSkins.sendTexturesTo(player);
-        joiningPlayers.add(player.getUUID());
+        if (!joiningPlayers.contains(player.getUUID())) joiningPlayers.add(player.getUUID());
         joiningPlayersPos.put(player.getUUID(), player.position());
         joiningPlayersYaw.put(player.getUUID(), player.getYRot());
         joiningPlayersPitch.put(player.getUUID(), player.getXRot());

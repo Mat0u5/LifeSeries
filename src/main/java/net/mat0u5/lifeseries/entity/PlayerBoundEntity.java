@@ -9,6 +9,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -30,6 +31,7 @@ public interface PlayerBoundEntity {
         onSetPlayer(player);
     }
 
+    @Nullable
     default ServerPlayer getBoundPlayer() {
         if (Main.isLogicalSide()) {
             return PlayerUtils.getPlayer(getBoundPlayerUUID());
@@ -37,6 +39,7 @@ public interface PlayerBoundEntity {
         return null;
     }
 
+    @Nullable
     default LivingEntity getBoundEntity() {
         if (Main.isLogicalSide()) {
             ServerPlayer player = PlayerUtils.getPlayer(getBoundPlayerUUID());
