@@ -22,6 +22,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Explosion;
@@ -79,7 +80,6 @@ public class Snail extends Monster {
     public SnailSounds sounds = new SnailSounds(this);
     public SnailPathfinding pathfinding = new SnailPathfinding(this);
     public SnailClientData clientData = new SnailClientData(this);
-    public boolean stuckSnail = false;//TODO remove
 
     public Snail(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -108,16 +108,18 @@ public class Snail extends Monster {
     protected void registerGoals() {
         goalSelector.addGoal(0, new SnailTeleportGoal(this));
 
-        goalSelector.addGoal(1, new SnailLandGoal(this));
-        goalSelector.addGoal(2, new SnailMineTowardsPlayerGoal(this));
-        goalSelector.addGoal(3, new SnailFlyGoal(this));
-        goalSelector.addGoal(4, new SnailGlideGoal(this));
-        goalSelector.addGoal(5, new SnailJumpAttackPlayerGoal(this));
-        goalSelector.addGoal(6, new SnailStartFlyingGoal(this));
+        goalSelector.addGoal(1, new MeleeAttackGoal(this, MOVEMENT_SPEED, true));
 
-        goalSelector.addGoal(7, new SnailBlockInteractGoal(this));
-        goalSelector.addGoal(8, new SnailPushEntitiesGoal(this));
-        goalSelector.addGoal(9, new SnailPushProjectilesGoal(this));
+        goalSelector.addGoal(2, new SnailLandGoal(this));
+        goalSelector.addGoal(3, new SnailMineTowardsPlayerGoal(this));
+        goalSelector.addGoal(4, new SnailFlyGoal(this));
+        goalSelector.addGoal(5, new SnailGlideGoal(this));
+        goalSelector.addGoal(6, new SnailJumpAttackPlayerGoal(this));
+        goalSelector.addGoal(7, new SnailStartFlyingGoal(this));
+
+        goalSelector.addGoal(8, new SnailBlockInteractGoal(this));
+        goalSelector.addGoal(9, new SnailPushEntitiesGoal(this));
+        goalSelector.addGoal(10, new SnailPushProjectilesGoal(this));
     }
 
     @Override
@@ -237,6 +239,10 @@ public class Snail extends Monster {
             return super.addEffect(effect, source);
         }
         return false;
+    }
+    @Override
+    protected AABB getAttackBoundingBox() {
+        return this.getBoundingBox();
     }
 
     public float soundVolume() {

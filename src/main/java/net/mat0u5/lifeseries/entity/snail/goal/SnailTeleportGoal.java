@@ -87,16 +87,6 @@ public final class SnailTeleportGoal extends Goal {
     public void start() {
         teleportCooldown = 20;
 
-        boolean wasStuck = (this.ticksSinceLastPositionChange > this.maxTicksSinceLastPositionChange) ||
-                (this.lowSpeedTicks > (this.maxTicksSinceLastPositionChange / 2));
-
-        if (wasStuck) {
-            OtherUtils.log("Snail Stuck: " + mob.getUUID() + " at " + mob.blockPosition() +
-                    " (pos: " + ticksSinceLastPositionChange + ", speed: " + lowSpeedTicks + ")");
-            mob.stuckSnail = true;
-            return;
-        }
-
         mob.pathfinding.fakeTeleportNearPlayer(Snail.TP_MIN_RANGE);
 
         this.ticksSinceLastPositionChange = 0;

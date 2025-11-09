@@ -18,3 +18,10 @@ You can no longer make one person the boogeyman twice by using the add command.<
 Snails no longer crash the game when the player they are tracking logs off.<br>
 Snails no longer sometimes fail to spawn for new players.<br>
 Items from trivia bots can no longer be picked up by hoppers.
+
+----------
+
+Completely rewrote snail pathfinding, leading to massive improvements.<br>
+Snails should no longer randomly stop moving on the edges of blocks.<br>
+Snail mining and flying navigation no longer sometimes stops working.<br>
+Reduced lag caused by snails by around 10x
