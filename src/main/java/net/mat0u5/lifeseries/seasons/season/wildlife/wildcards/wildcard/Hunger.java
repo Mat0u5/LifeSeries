@@ -146,7 +146,7 @@ public class Hunger extends Wildcard {
             Items.ANDESITE, Items.DIORITE, Items.GRANITE, Items.BASALT, Items.BLACKSTONE, Items.END_STONE,
             Items.SOUL_SAND, Items.SOUL_SOIL, Items.CRIMSON_NYLIUM, Items.WARPED_NYLIUM, Items.CACTUS, Items.SEA_PICKLE,
             Items.KELP, Items.DRIED_KELP_BLOCK, Items.WHEAT_SEEDS
-            //?if >= 1.21.5 {
+            //? if >= 1.21.5 {
             /*,Items.LEAF_LITTER
             *///?}
     );

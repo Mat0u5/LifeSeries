@@ -1,9 +1,7 @@
 package net.mat0u5.lifeseries.entity.snail.server;
 
-import net.mat0u5.lifeseries.entity.pathfinder.PathFinder;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.snail.goal.MiningNavigation;
-import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
@@ -17,6 +15,7 @@ import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -27,32 +26,54 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.EnumSet;
 import java.util.Objects;
-
-//? if <= 1.21
-import net.minecraft.world.entity.RelativeMovement;
-//? if >= 1.21.2
-/*import net.minecraft.world.entity.Relative;*/
 
 @SuppressWarnings("resource")
 public class SnailPathfinding {
     private final Snail snail;
+
+    private GroundPathNavigation groundNavigation;
+    private FlyingPathNavigation flyingNavigation;
+    private MiningNavigation miningNavigation;
+
+    private NavigationMode currentMode = NavigationMode.WALKING;
+    private NavigationMode lastMode = NavigationMode.WALKING;
+
+    private int pathfindingCacheTicks = 0;
+    private static final int PATHFINDING_CACHE_DURATION = 20;
+    private boolean cachedCanPathOnGround = true;
+    private boolean cachedCanPathFlying = true;
+
+    public boolean navigationInit = false;
+    private double lastSpeedMultiplier = 0.99;
+
     public SnailPathfinding(Snail snail) {
         this.snail = snail;
+        initializeNavigations();
     }
-    @Nullable
-    public PathFinder groundPathFinder;
-    @Nullable
-    public PathFinder pathFinder;
-    public boolean navigationInit = false;
+
+    private enum NavigationMode {
+        WALKING,
+        FLYING,
+        MINING
+    }
+
+    private void initializeNavigations() {
+        groundNavigation = new GroundPathNavigation(snail, snail.level());
+        flyingNavigation = new FlyingPathNavigation(snail, snail.level());
+        miningNavigation = new MiningNavigation(snail, snail.level());
+
+        setupGroundPathfinding(groundNavigation);
+        setupFlyingPathfinding(flyingNavigation);
+        setupMiningPathfinding(miningNavigation);
+    }
 
     public void tick() {
-        updatePathFinders();
         if (snail.isPaused()) {
             snail.getNavigation().stop();
             return;
         }
+
         if (snail.tickCount % 100 == 0 || !navigationInit) {
             navigationInit = true;
             updateMoveControl();
@@ -64,58 +85,67 @@ public class SnailPathfinding {
         else if (snail.tickCount % 5 == 0) {
             updateNavigationTarget();
         }
-    }
 
-    public void updatePathFinders() {
-        if (snail.level().isClientSide()) return;
-        if (pathFinder != null && pathFinder.touchingUnloadedChunk()) {
-            pathFinder.discard();
-            pathFinder = null;
-        }
-        else if (pathFinder == null || pathFinder.isRemoved()) {
-            pathFinder = LevelUtils.spawnEntity(MobRegistry.PATH_FINDER, (ServerLevel) snail.level(), snail.blockPosition());
+        if (pathfindingCacheTicks <= 0) {
+            updatePathfindingCache();
+            pathfindingCacheTicks = PATHFINDING_CACHE_DURATION;
         }
         else {
-            pathFinder.resetDespawnTimer();
+            pathfindingCacheTicks--;
         }
-
-        if (groundPathFinder != null && groundPathFinder.touchingUnloadedChunk()) {
-            groundPathFinder.discard();
-            groundPathFinder = null;
-        }
-        else if (groundPathFinder == null || groundPathFinder.isRemoved()) {
-            groundPathFinder = LevelUtils.spawnEntity(MobRegistry.PATH_FINDER, (ServerLevel) snail.level(), snail.blockPosition());
-        }
-        else {
-            groundPathFinder.resetDespawnTimer();
-        }
-
-        ServerLevel level = (ServerLevel) snail.level();
-        //? if <= 1.21 {
-        if (pathFinder != null) pathFinder.teleportTo(level, snail.getX(), snail.getY(), snail.getZ(), EnumSet.noneOf(RelativeMovement.class), snail.getYRot(), snail.getXRot());
-        BlockPos pos = getGroundBlock();
-        if (pos == null) return;
-        if (groundPathFinder != null) groundPathFinder.teleportTo(level, snail.getX(), pos.getY() + 1.0, snail.getZ(), EnumSet.noneOf(RelativeMovement.class), snail.getYRot(), snail.getXRot());
-        //?} else {
-        /*if (pathFinder != null) pathFinder.teleportTo(level, snail.getX(), snail.getY(), snail.getZ(), EnumSet.noneOf(Relative.class), snail.getYRot(), snail.getXRot(), false);
-        BlockPos pos = getGroundBlock();
-        if (pos == null) return;
-        if (groundPathFinder != null) groundPathFinder.teleportTo(level, snail.getX(), pos.getY()+1, snail.getZ(), EnumSet.noneOf(Relative.class), snail.getYRot(), snail.getXRot(), false);
-        *///?}
     }
 
-    public void killPathFinders() {
-        if (!snail.level().isClientSide()) {
-            //? if <= 1.21 {
-            if (groundPathFinder != null) groundPathFinder.kill();
-            if (pathFinder != null) pathFinder.kill();
-            //?} else {
-            /*if (groundPathFinder != null) groundPathFinder.kill((ServerLevel) groundPathFinder.level());
-            if (pathFinder != null) pathFinder.kill((ServerLevel) pathFinder.level());
-            *///?}
-            if (groundPathFinder != null) groundPathFinder.discard();
-            if (pathFinder != null) pathFinder.discard();
+    private void updatePathfindingCache() {
+        if (!snail.serverData.shouldPathfind() || snail.level().isClientSide()) {
+            return;
         }
+
+        Entity target = snail.serverData.getBoundEntity();
+        if (target == null) {
+            cachedCanPathOnGround = false;
+            cachedCanPathFlying = false;
+            return;
+        }
+
+        Vec3 targetPos = target.position();
+
+        Path groundPath = groundNavigation.createPath(targetPos.x, targetPos.y, targetPos.z, 0);
+        cachedCanPathOnGround = groundPath != null && !groundPath.isDone();
+
+        if (!cachedCanPathOnGround) {
+            Path flyingPath = flyingNavigation.createPath(targetPos.x, targetPos.y, targetPos.z, 0);
+            cachedCanPathFlying = flyingPath != null && !flyingPath.isDone();
+        }
+        else {
+            cachedCanPathFlying = true;
+        }
+    }
+
+    public boolean canPathToPlayer(boolean requireFlying) {
+        if (!snail.serverData.shouldPathfind()) return false;
+
+        if (requireFlying) {
+            return cachedCanPathFlying;
+        }
+        return cachedCanPathOnGround;
+    }
+
+    public boolean canPathToPlayerFromGround(boolean flying) {
+        if (!isValidBlockOnGround()) {
+            return false;
+        }
+        return canPathToPlayer(flying);
+    }
+
+    public boolean isValidBlockOnGround() {
+        BlockPos groundPos = getGroundBlock();
+        if (groundPos == null) return false;
+
+        BlockState block = snail.level().getBlockState(groundPos);
+        if (block.is(Blocks.LAVA)) return false;
+        if (block.is(Blocks.WATER)) return false;
+        if (block.is(Blocks.POWDER_SNOW)) return false;
+        return true;
     }
 
     @Nullable
@@ -155,6 +185,7 @@ public class SnailPathfinding {
             if (boundEntity.level() instanceof ServerLevel entityWorld) {
                 if (!snail.serverData.shouldPathfind()) return;
                 BlockPos tpTo = getBlockPosNearTarget(boundEntity, minDistanceFromPlayer);
+                if (tpTo == null) return;
                 level.playSound(null, snail.getX(), snail.getY(), snail.getZ(), SoundEvents.PLAYER_TELEPORT, snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
                 entityWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.PLAYER_TELEPORT, snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
                 AnimationUtils.spawnTeleportParticles(level, snail.position());
@@ -179,37 +210,39 @@ public class SnailPathfinding {
         return LevelUtils.getCloseBlockPos(target.level(), targetBlockPos, distanceFromTarget, 1, false);
     }
 
-    public boolean canPathToPlayer(boolean flying) {
-        if (!snail.serverData.shouldPathfind()) return false;
-        if (pathFinder == null) return false;
-        return pathFinder.canPathfind(snail.serverData.getBoundEntity(), flying);
-    }
-
-    public boolean canPathToPlayerFromGround(boolean flying) {
-        if (!snail.serverData.shouldPathfind()) return false;
-        if (groundPathFinder == null) return false;
-        return groundPathFinder.canPathfind(snail.serverData.getBoundEntity(), flying);
-    }
-
-    public boolean isValidBlockOnGround() {
-        if (groundPathFinder == null) return false;
-        BlockState block = groundPathFinder.level().getBlockState(groundPathFinder.blockPosition());
-        if (block.is(Blocks.LAVA)) return false;
-        if (block.is(Blocks.WATER)) return false;
-        if (block.is(Blocks.POWDER_SNOW)) return false;
-        return true;
-    }
-
     public void updateNavigation() {
+        NavigationMode desiredMode;
+
         if (snail.isSnailMining()) {
-            setNavigationMining();
+            desiredMode = NavigationMode.MINING;
         }
         else if (snail.isSnailFlying()) {
-            setNavigationFlying();
+            desiredMode = NavigationMode.FLYING;
         }
         else {
+            desiredMode = NavigationMode.WALKING;
+        }
+
+        if (desiredMode != currentMode) {
+            switchNavigationMode(desiredMode);
+            currentMode = desiredMode;
+        }
+    }
+
+    private void switchNavigationMode(NavigationMode mode) {
+        snail.getNavigation().stop();
+
+        if (mode == NavigationMode.MINING) {
+            setNavigationMining();
+        }
+        else if (mode == NavigationMode.FLYING) {
+            setNavigationFlying();
+        }
+        else if (mode == NavigationMode.WALKING) {
             setNavigationWalking();
         }
+
+        lastMode = mode;
     }
 
     public void updateMoveControl() {
@@ -221,6 +254,18 @@ public class SnailPathfinding {
         }
     }
 
+    private void setupGroundPathfinding(PathNavigation nav) {
+        nav.setCanFloat(false);
+    }
+
+    private void setupFlyingPathfinding(PathNavigation nav) {
+        nav.setCanFloat(true);
+    }
+
+    private void setupMiningPathfinding(PathNavigation nav) {
+        nav.setCanFloat(true);
+    }
+
     public void setNavigationFlying() {
         snail.setPathfindingMalus(PathType.BLOCKED, -1);
         snail.setPathfindingMalus(PathType.TRAPDOOR, -1);
@@ -228,7 +273,7 @@ public class SnailPathfinding {
         snail.setPathfindingMalus(PathType.WALKABLE_DOOR, -1);
         snail.setPathfindingMalus(PathType.DOOR_OPEN, -1);
         snail.setPathfindingMalus(PathType.UNPASSABLE_RAIL, 0);
-        snail.setNavigation(new FlyingPathNavigation(snail, snail.level()));
+        snail.setNavigation(flyingNavigation);
         updateNavigationTarget();
     }
 
@@ -239,7 +284,7 @@ public class SnailPathfinding {
         snail.setPathfindingMalus(PathType.WALKABLE_DOOR, -1);
         snail.setPathfindingMalus(PathType.DOOR_OPEN, -1);
         snail.setPathfindingMalus(PathType.UNPASSABLE_RAIL, 0);
-        snail.setNavigation(new GroundPathNavigation(snail, snail.level()));
+        snail.setNavigation(groundNavigation);
         updateNavigationTarget();
     }
 
@@ -250,7 +295,7 @@ public class SnailPathfinding {
         snail.setPathfindingMalus(PathType.WALKABLE_DOOR, 0);
         snail.setPathfindingMalus(PathType.DOOR_OPEN, 0);
         snail.setPathfindingMalus(PathType.UNPASSABLE_RAIL, 0);
-        snail.setNavigation(new MiningNavigation(snail, snail.level()));
+        snail.setNavigation(miningNavigation);
         updateNavigationTarget();
     }
 
@@ -262,19 +307,23 @@ public class SnailPathfinding {
             return;
         }
 
-        if (snail.getNavigation() instanceof FlyingPathNavigation) {
-            snail.getNavigation().setSpeedModifier(1);
-            Path path = snail.getNavigation().createPath(targetPos.x, targetPos.y, targetPos.z, 0);
-            if (path != null) snail.getNavigation().moveTo(path, 1);
+        PathNavigation nav = snail.getNavigation();
+
+        if (nav instanceof FlyingPathNavigation) {
+            nav.stop();
+            nav.setSpeedModifier(1);
+            Path path = nav.createPath(targetPos.x, targetPos.y, targetPos.z, 0);
+            if (path != null) nav.moveTo(path, 1);
         }
         else {
-            snail.getNavigation().setSpeedModifier(Snail.MOVEMENT_SPEED);
-            Path path = snail.getNavigation().createPath(targetPos.x, targetPos.y, targetPos.z, 0);
-            if (path != null) snail.getNavigation().moveTo(path, Snail.MOVEMENT_SPEED);
+            snail.setOnGround(true);
+            nav.stop();
+            nav.setSpeedModifier(Snail.MOVEMENT_SPEED);
+            Path path = nav.createPath(targetPos.x, targetPos.y, targetPos.z, 0);
+            if (path != null) nav.moveTo(path, Snail.MOVEMENT_SPEED);
         }
     }
 
-    private double lastSpeedMultiplier = 0.99;
     public void updateMovementSpeed() {
         Path path = snail.getNavigation().getPath();
         if (path != null) {
@@ -313,5 +362,11 @@ public class SnailPathfinding {
     public void setMoveControlWalking() {
         snail.setNoGravity(false);
         snail.setMoveControl(new MoveControl(snail));
+    }
+
+    public void cleanup() {
+        if (groundNavigation != null) groundNavigation.stop();
+        if (flyingNavigation != null) flyingNavigation.stop();
+        if (miningNavigation != null) miningNavigation.stop();
     }
 }

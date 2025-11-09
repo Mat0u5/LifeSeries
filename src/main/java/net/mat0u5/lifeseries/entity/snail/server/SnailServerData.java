@@ -191,7 +191,8 @@ public class SnailServerData implements PlayerBoundEntity {
         if (boundPlayerUUID != null) {
             TriviaWildcard.bots.remove(boundPlayerUUID);
         }
-        snail.pathfinding.killPathFinders();
+        snail.pathfinding.cleanup();
+
         if (snail.level() instanceof ServerLevel level) {
             //? if <= 1.21 {
             snail.kill();

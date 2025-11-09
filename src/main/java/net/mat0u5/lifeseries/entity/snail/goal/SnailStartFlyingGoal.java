@@ -10,8 +10,6 @@ public final class SnailStartFlyingGoal extends Goal {
     private final Snail mob;
     private int startFlyingCounter;
     private final int startFlyingDelay = 70;
-    private boolean canWalk = true;
-    private boolean canFly = true;
 
     public SnailStartFlyingGoal(@NotNull Snail mob) {
         this.mob = mob;
@@ -29,23 +27,25 @@ public final class SnailStartFlyingGoal extends Goal {
             return false;
         }
 
-        /*
-        if (!mob.isTargetOnGround()) {
-            return false;
-        }*/
-
         if (mob.getNavigation().getPath() == null) {
+            startFlyingCounter = 0;
             return false;
         }
 
-        canWalk = mob.pathfinding.canPathToPlayer(false);
-        canFly = mob.pathfinding.canPathToPlayer(true);
+        // Use cached pathfinding results
+        boolean canWalk = mob.pathfinding.canPathToPlayer(false);
+        boolean canFly = mob.pathfinding.canPathToPlayer(true);
 
         if (canWalk) {
             startFlyingCounter = 0;
+            return false;
         }
         else if (canFly) {
             startFlyingCounter++;
+        }
+        else {
+            startFlyingCounter = 0;
+            return false;
         }
 
         return startFlyingCounter >= startFlyingDelay;
@@ -61,6 +61,10 @@ public final class SnailStartFlyingGoal extends Goal {
     @Override
     public void stop() {
         startFlyingCounter = 0;
-        canWalk = true;
+    }
+
+    @Override
+    public boolean canContinueToUse() {
+        return false;
     }
 }

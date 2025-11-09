@@ -79,6 +79,7 @@ public class Snail extends Monster {
     public SnailSounds sounds = new SnailSounds(this);
     public SnailPathfinding pathfinding = new SnailPathfinding(this);
     public SnailClientData clientData = new SnailClientData(this);
+    public boolean stuckSnail = false;//TODO remove
 
     public Snail(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -207,7 +208,7 @@ public class Snail extends Monster {
     @Override
     public void die(DamageSource damageSource) {
         super.die(damageSource);
-        pathfinding.killPathFinders();
+        pathfinding.cleanup();
     }
 
     @Override

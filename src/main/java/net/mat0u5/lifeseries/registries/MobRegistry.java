@@ -8,7 +8,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-//?if >= 1.21.2 {
+//? if >= 1.21.2 {
 /*import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 *///?}

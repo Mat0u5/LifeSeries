@@ -31,7 +31,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = RegistrySyncManager.class, priority = 1, remap = false)
 public class RegistrySyncManagerMixin {
 
-    //?if <= 1.21.9 {
+    //? if <= 1.21.9 {
     @WrapOperation(method = "configureClient", at = @At(value = "INVOKE", target = "Lnet/fabricmc/fabric/impl/registry/sync/RegistrySyncManager;createAndPopulateRegistryMap()Ljava/util/Map;"))
     private static @Nullable Map<ResourceLocation, Object2IntMap<ResourceLocation>> checkRemoteRemap(Operation<Map<ResourceLocation, Object2IntMap<ResourceLocation>>> original, ServerConfigurationPacketListenerImpl handler) {
         Map<ResourceLocation, Object2IntMap<ResourceLocation>> originalValue = original.call();
