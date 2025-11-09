@@ -43,7 +43,7 @@ public final class SnailLandGoal extends Goal {
             return false;
         }
 
-        if (!mob.pathfinding.isValidBlockOnGround()) {
+        if (!mob.pathfinding.isValidGroundPosition(mob.pathfinding.getGroundBlock())) {
             return false;
         }
 
@@ -52,7 +52,7 @@ public final class SnailLandGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        if (!mob.pathfinding.isValidBlockOnGround()) {
+        if (!mob.pathfinding.isValidGroundPosition(mob.pathfinding.getGroundBlock())) {
             return false;
         }
         return mob.pathfinding.getDistanceToGroundBlock() > 1.5D;

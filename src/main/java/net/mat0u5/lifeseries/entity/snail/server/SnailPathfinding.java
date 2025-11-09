@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.entity.snail.server;
 
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.snail.goal.MiningNavigation;
+import net.mat0u5.lifeseries.mixin.PathNavigationAccessor;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
@@ -19,6 +20,7 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.BlockHitResult;
@@ -63,9 +65,13 @@ public class SnailPathfinding {
         flyingNavigation = new FlyingPathNavigation(snail, snail.level());
         miningNavigation = new MiningNavigation(snail, snail.level());
 
-        setupGroundPathfinding(groundNavigation);
-        setupFlyingPathfinding(flyingNavigation);
-        setupMiningPathfinding(miningNavigation);
+        groundNavigation.setCanFloat(false);
+        groundNavigation.setCanOpenDoors(false);
+        groundNavigation.setCanPassDoors(false);
+        groundNavigation.setCanWalkOverFences(false);
+
+        flyingNavigation.setCanFloat(false);
+        miningNavigation.setCanFloat(false);
     }
 
     public void tick() {
@@ -93,6 +99,19 @@ public class SnailPathfinding {
         else {
             pathfindingCacheTicks--;
         }
+
+        if (snail.tickCount % 10 == 0) {
+            checkPathStaleness();
+        }
+    }
+
+    private void checkPathStaleness() {
+        if (!snail.serverData.shouldPathfind()) return;
+
+        Path currentPath = snail.getNavigation().getPath();
+        if (currentPath != null && (currentPath.isDone() || currentPath.getNodeCount() <= 1)) {
+            updateNavigationTarget();
+        }
     }
 
     private void updatePathfindingCache() {
@@ -108,17 +127,43 @@ public class SnailPathfinding {
         }
 
         Vec3 targetPos = target.position();
+        BlockPos targetBlockPos = target.blockPosition();
 
-        Path groundPath = groundNavigation.createPath(targetPos.x, targetPos.y, targetPos.z, 0);
-        cachedCanPathOnGround = groundPath != null && !groundPath.isDone();
+        BlockPos groundPos = getGroundBlock();
+
+        if (groundPos != null && isValidGroundPosition(groundPos)) {
+            Vec3 originalPos = snail.position();
+            double groundY = groundPos.getY() + 1.0;
+
+            boolean wasOnGround = snail.onGround();
+            snail.setOnGround(true);
+            snail.setPos(snail.getX(), groundY, snail.getZ());
+            Path groundPath = groundNavigation.createPath(targetPos.x, targetPos.y, targetPos.z, 0);
+            snail.setPos(originalPos.x, originalPos.y, originalPos.z);
+            snail.setOnGround(wasOnGround);
+
+            cachedCanPathOnGround =  groundPath != null && groundPath.getEndNode() != null && groundPath.getEndNode().asBlockPos().equals(targetBlockPos);
+        }
+        else {
+            cachedCanPathOnGround = false;
+        }
 
         if (!cachedCanPathOnGround) {
             Path flyingPath = flyingNavigation.createPath(targetPos.x, targetPos.y, targetPos.z, 0);
-            cachedCanPathFlying = flyingPath != null && !flyingPath.isDone();
+            cachedCanPathFlying =  flyingPath != null && flyingPath.getEndNode() != null && flyingPath.getEndNode().asBlockPos().equals(targetBlockPos);
         }
         else {
             cachedCanPathFlying = true;
         }
+    }
+
+    public boolean isValidGroundPosition(BlockPos groundPos) {
+        if (groundPos == null) return false;
+        BlockState block = snail.level().getBlockState(groundPos);
+        if (block.is(Blocks.LAVA)) return false;
+        if (block.is(Blocks.WATER)) return false;
+        if (block.is(Blocks.POWDER_SNOW)) return false;
+        return true;
     }
 
     public boolean canPathToPlayer(boolean requireFlying) {
@@ -131,21 +176,11 @@ public class SnailPathfinding {
     }
 
     public boolean canPathToPlayerFromGround(boolean flying) {
-        if (!isValidBlockOnGround()) {
+        BlockPos groundPos = getGroundBlock();
+        if (!isValidGroundPosition(groundPos)) {
             return false;
         }
         return canPathToPlayer(flying);
-    }
-
-    public boolean isValidBlockOnGround() {
-        BlockPos groundPos = getGroundBlock();
-        if (groundPos == null) return false;
-
-        BlockState block = snail.level().getBlockState(groundPos);
-        if (block.is(Blocks.LAVA)) return false;
-        if (block.is(Blocks.WATER)) return false;
-        if (block.is(Blocks.POWDER_SNOW)) return false;
-        return true;
     }
 
     @Nullable
@@ -254,18 +289,6 @@ public class SnailPathfinding {
         }
     }
 
-    private void setupGroundPathfinding(PathNavigation nav) {
-        nav.setCanFloat(false);
-    }
-
-    private void setupFlyingPathfinding(PathNavigation nav) {
-        nav.setCanFloat(true);
-    }
-
-    private void setupMiningPathfinding(PathNavigation nav) {
-        nav.setCanFloat(true);
-    }
-
     public void setNavigationFlying() {
         snail.setPathfindingMalus(PathType.BLOCKED, -1);
         snail.setPathfindingMalus(PathType.TRAPDOOR, -1);
@@ -273,6 +296,11 @@ public class SnailPathfinding {
         snail.setPathfindingMalus(PathType.WALKABLE_DOOR, -1);
         snail.setPathfindingMalus(PathType.DOOR_OPEN, -1);
         snail.setPathfindingMalus(PathType.UNPASSABLE_RAIL, 0);
+        snail.setPathfindingMalus(PathType.FENCE, -1);
+        snail.setPathfindingMalus(PathType.DAMAGE_OTHER, 0);
+        snail.setPathfindingMalus(PathType.DANGER_OTHER, 0);
+        snail.setPathfindingMalus(PathType.WALKABLE, 0);
+        snail.setPathfindingMalus(PathType.OPEN, 0);
         snail.setNavigation(flyingNavigation);
         updateNavigationTarget();
     }
@@ -284,6 +312,13 @@ public class SnailPathfinding {
         snail.setPathfindingMalus(PathType.WALKABLE_DOOR, -1);
         snail.setPathfindingMalus(PathType.DOOR_OPEN, -1);
         snail.setPathfindingMalus(PathType.UNPASSABLE_RAIL, 0);
+
+        snail.setPathfindingMalus(PathType.FENCE, -1);
+        snail.setPathfindingMalus(PathType.DAMAGE_OTHER, 0);
+        snail.setPathfindingMalus(PathType.DANGER_OTHER, 0);
+        snail.setPathfindingMalus(PathType.WALKABLE, 0);
+        snail.setPathfindingMalus(PathType.OPEN, 0);
+
         snail.setNavigation(groundNavigation);
         updateNavigationTarget();
     }
@@ -295,6 +330,11 @@ public class SnailPathfinding {
         snail.setPathfindingMalus(PathType.WALKABLE_DOOR, 0);
         snail.setPathfindingMalus(PathType.DOOR_OPEN, 0);
         snail.setPathfindingMalus(PathType.UNPASSABLE_RAIL, 0);
+        snail.setPathfindingMalus(PathType.FENCE, 0);
+        snail.setPathfindingMalus(PathType.DAMAGE_OTHER, 0);
+        snail.setPathfindingMalus(PathType.DANGER_OTHER, 0);
+        snail.setPathfindingMalus(PathType.WALKABLE, 0);
+        snail.setPathfindingMalus(PathType.OPEN, 0);
         snail.setNavigation(miningNavigation);
         updateNavigationTarget();
     }
@@ -310,17 +350,15 @@ public class SnailPathfinding {
         PathNavigation nav = snail.getNavigation();
 
         if (nav instanceof FlyingPathNavigation) {
-            nav.stop();
             nav.setSpeedModifier(1);
-            Path path = nav.createPath(targetPos.x, targetPos.y, targetPos.z, 0);
-            if (path != null) nav.moveTo(path, 1);
         }
         else {
-            snail.setOnGround(true);
-            nav.stop();
             nav.setSpeedModifier(Snail.MOVEMENT_SPEED);
-            Path path = nav.createPath(targetPos.x, targetPos.y, targetPos.z, 0);
-            if (path != null) nav.moveTo(path, Snail.MOVEMENT_SPEED);
+        }
+
+        if (nav instanceof PathNavigationAccessor accessor) {
+            accessor.setPath(null);
+            accessor.setPath(nav.createPath(targetPos.x, targetPos.y, targetPos.z, 0));
         }
     }
 
