@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails;
 
 import net.mat0u5.lifeseries.config.StringListConfig;
-import net.mat0u5.lifeseries.entity.pathfinder.PathFinder;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.snail.server.SnailPathfinding;
 import net.mat0u5.lifeseries.events.Events;
@@ -108,10 +107,6 @@ public class Snails extends Wildcard {
         for (ServerLevel level : server.getAllLevels()) {
             for (Entity entity : level.getAllEntities()) {
                 if (entity instanceof Snail snail && !snail.isFromTrivia()) {
-                        toKill.add(entity);
-                    }
-
-                if (entity instanceof PathFinder) {
                     toKill.add(entity);
                 }
             }

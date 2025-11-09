@@ -21,7 +21,6 @@
     "MobEffectMixin",
     "MobMixin",
     "NaturalSpawnerMixin",
-    "PathNavigationAccessor",
     "PlayerDataStorageMixin",
     "PlayerInventoryMixin",
     "PlayerLikeEntityMixin",

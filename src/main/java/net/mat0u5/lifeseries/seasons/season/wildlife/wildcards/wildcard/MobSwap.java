@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard;
 
-import net.mat0u5.lifeseries.entity.pathfinder.PathFinder;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
@@ -258,7 +257,6 @@ public class MobSwap extends Wildcard {
                 if (entity instanceof Player) return;
                 if (entity instanceof Snail) return;
                 if (entity instanceof TriviaBot) return;
-                if (entity instanceof PathFinder) return;
                 if (entity.hasCustomName()) return;
                 toKill.add(entity);
             });
@@ -297,7 +295,6 @@ public class MobSwap extends Wildcard {
                 if (entity instanceof Player) return;
                 if (entity instanceof Snail) return;
                 if (entity instanceof TriviaBot) return;
-                if (entity instanceof PathFinder) return;
                 if (entity.hasCustomName()) return;
 
                 EntityType<?> randomMob = getRandomMob(progress, dangerThresholdMin, dangerThresholdMax);
@@ -362,7 +359,6 @@ public class MobSwap extends Wildcard {
                 if (entity instanceof Player) return;
                 if (entity instanceof Snail) return;
                 if (entity instanceof TriviaBot) return;
-                if (entity instanceof PathFinder) return;
                 if (entity.hasCustomName()) return;
                 if (!entity.getTags().contains("mobswap")) return;
                 toKill.add(entity);

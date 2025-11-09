@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.registries;
 
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
-import net.mat0u5.lifeseries.entity.pathfinder.PathFinder;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.minecraft.core.Registry;
@@ -23,10 +22,6 @@ public class MobRegistry {
             Registries.ENTITY_TYPE,
             TriviaBot.ID
     );
-    public static final ResourceKey<EntityType<?>> PATHFINDER_KEY = ResourceKey.create(
-            Registries.ENTITY_TYPE,
-            PathFinder.ID
-    );
     *///?}
     public static final EntityType<Snail> SNAIL = Registry.register(
             BuiltInRegistries.ENTITY_TYPE,
@@ -39,18 +34,6 @@ public class MobRegistry {
                     //?} else {
                     /*.build(SNAIL_KEY)
                     *///?}
-    );
-    public static final EntityType<PathFinder> PATH_FINDER = Registry.register(
-            BuiltInRegistries.ENTITY_TYPE,
-            PathFinder.ID,
-            EntityType.Builder.of(PathFinder::new, MobCategory.AMBIENT)
-                    .sized(0.5f, 0.6f)
-                    .clientTrackingRange(0)
-                    //? if <= 1.21 {
-                    .build()
-                    //?} else {
-                    /*.build(PATHFINDER_KEY)
-            *///?}
     );
     public static final EntityType<TriviaBot> TRIVIA_BOT = Registry.register(
             BuiltInRegistries.ENTITY_TYPE,
@@ -67,7 +50,6 @@ public class MobRegistry {
 
     public static void registerMobs() {
         FabricDefaultAttributeRegistry.register(SNAIL, Snail.createAttributes());
-        FabricDefaultAttributeRegistry.register(PATH_FINDER, PathFinder.createAttributes());
         FabricDefaultAttributeRegistry.register(TRIVIA_BOT, TriviaBot.createAttributes());
     }
 }
