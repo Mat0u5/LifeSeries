@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.entity.triviabot.server;
 
-import net.mat0u5.lifeseries.compatibilities.DependencyManager;
+import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
@@ -177,7 +177,7 @@ public class TriviaHandler {
                 40, 0.1, 0.25, 0.1, 0.035
         );
         int numOfCurses = 9;
-        if (DependencyManager.voicechatLoaded() && VoicechatMain.isConnectedToSVC(player.getUUID())) numOfCurses = 10;
+        if (CompatibilityManager.voicechatLoaded() && VoicechatMain.isConnectedToSVC(player.getUUID())) numOfCurses = 10;
 
         Integer punishmentWeight = player.ls$getLives();
         if (punishmentWeight == null) punishmentWeight = 1;

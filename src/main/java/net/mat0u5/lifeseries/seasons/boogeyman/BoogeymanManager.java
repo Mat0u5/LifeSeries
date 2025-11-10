@@ -162,14 +162,19 @@ public class BoogeymanManager {
         boogeyman.cured = true;
         PlayerUtils.sendTitle(player,Component.nullToEmpty("§aYou are cured!"), 20, 30, 20);
         PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("lastlife_boogeyman_cure")));
+
+        boolean stealLife = BOOGEYMAN_STEAL_LIFE && livesManager.canChangeLivesNaturally();
+
         if (BOOGEYMAN_ANNOUNCE_OUTCOME) {
-            if (BOOGEYMAN_STEAL_LIFE) {
+            if (stealLife) {
                 PlayerUtils.broadcastMessage(TextUtils.format("{}§7 is cured of the Boogeyman curse and gained a life for succeeding!", player));
-                player.ls$addLife();
             }
             else {
                 PlayerUtils.broadcastMessage(TextUtils.format("{}§7 is cured of the Boogeyman curse!", player));
             }
+        }
+        if (stealLife) {
+            player.ls$addLife();
         }
     }
 

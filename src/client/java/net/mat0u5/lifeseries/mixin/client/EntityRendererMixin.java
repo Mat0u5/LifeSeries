@@ -9,9 +9,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 //? if >= 1.21.2 {
 /*import net.mat0u5.lifeseries.utils.interfaces.IEntityRenderState;
+import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
+import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.mat0u5.lifeseries.utils.interfaces.IMorph;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 *///?}
 
 @Mixin(value = EntityRenderer.class, priority = 1)
@@ -47,6 +53,21 @@ public class EntityRendererMixin<T extends Entity> {
     public void injectEntity(T entity, S state, float tickProgress, CallbackInfo ci) {
         if (state instanceof IEntityRenderState accessor) {
             accessor.ls$update(entity, tickProgress);
+        }
+    }
+    @Inject(method = "affectedByCulling", at = @At("HEAD"), cancellable = true)
+    public void stopCulling(T entity, CallbackInfoReturnable<Boolean> cir) {
+        if (entity instanceof IMorph morph && morph.isFromMorph()) {
+            cir.setReturnValue(false);
+            return;
+        }
+        if (entity instanceof Player player) {
+            MorphComponent morphComponent = MorphManager.getOrCreateComponent(player.getUUID());
+            LivingEntity dummy = morphComponent.getDummy();
+            if(morphComponent.isMorphed() && dummy != null) {
+                cir.setReturnValue(false);
+                return;
+            }
         }
     }
     *///?}

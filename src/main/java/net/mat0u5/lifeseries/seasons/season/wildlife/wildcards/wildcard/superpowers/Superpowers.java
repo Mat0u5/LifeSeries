@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers;
 
-import net.mat0u5.lifeseries.compatibilities.DependencyManager;
+import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.*;
 import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.Nullable;
@@ -48,7 +48,7 @@ public enum Superpowers {
         /*if (this == CREAKING) return new CreakingPower(player);
         if (this == FLIGHT) return new Flight(player);
         *///?}
-        if (DependencyManager.voicechatLoaded()) {
+        if (CompatibilityManager.voicechatLoaded()) {
             if (this == LISTENING) return new Listening(player);
         }
         return null;
@@ -65,7 +65,7 @@ public enum Superpowers {
         result.remove(CREAKING);
         result.remove(FLIGHT);
         //?}
-        if (!DependencyManager.voicechatLoaded()) {
+        if (!CompatibilityManager.voicechatLoaded()) {
             result.remove(LISTENING);
         }
         return result;

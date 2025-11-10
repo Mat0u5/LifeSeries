@@ -73,13 +73,6 @@ public final class SnailTeleportGoal extends Goal {
         boolean stuckByPosition = this.ticksSinceLastPositionChange > this.maxTicksSinceLastPositionChange;
         boolean stuckBySpeed = this.lowSpeedTicks > (this.maxTicksSinceLastPositionChange / 2);
 
-        if (stuckByPosition) {
-            OtherUtils.log("StuckByPosition");
-        }
-        if (stuckBySpeed) {
-            OtherUtils.log("StuckBySpeed");
-        }
-
         return stuckByPosition || stuckBySpeed;
     }
 

@@ -7,7 +7,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
-import net.mat0u5.lifeseries.compatibilities.DependencyManager;
+import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.FlashbackCompatibility;
 import net.mat0u5.lifeseries.gui.other.UpdateInfoScreen;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
@@ -59,7 +59,7 @@ public class ClientEvents {
 
     private static void onServerStart(MinecraftServer server) {
         boolean isReplay = false;
-        if (DependencyManager.flashbackLoaded()) {
+        if (CompatibilityManager.flashbackLoaded()) {
             if (FlashbackCompatibility.isReplayServer(server)) {
                 Main.LOGGER.info("Detected Flashback Replay");
                 isReplay = true;
