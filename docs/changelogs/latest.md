@@ -30,3 +30,8 @@ Reduced lag caused by snails by around 10x
 
 The Entity Culling mod is now compatible with the animal disguise superpower in 1.21.2+<br>
 Fixed bugs regarding the boogeyman steal life config.
+
+----------
+
+Added the '/boogeyman reset <players>' command, which resets the Boogeyman fail/cure status. It does not automatically revert any punishments / rewards.<br>
+Vanilla commands can now change the config. (For example changing the keep inv/show advancements / locator bar gamerule, or changing the worldborder size will change the config value)

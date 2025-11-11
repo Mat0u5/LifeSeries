@@ -67,6 +67,12 @@ public class BoogeymanCommand extends Command {
                         .executes(context -> removeBoogey(context.getSource(), EntityArgument.getPlayers(context, "player")))
                     )
                 )
+                .then(literal("reset")
+                        .requires(PermissionManager::isAdmin)
+                        .then(argument("player", EntityArgument.players())
+                                .executes(context -> resetBoogey(context.getSource(), EntityArgument.getPlayers(context, "player")))
+                        )
+                )
                 .then(literal("cure")
                     .requires(PermissionManager::isAdmin)
                     .then(argument("player", EntityArgument.players())
@@ -194,6 +200,32 @@ public class BoogeymanCommand extends Command {
             else {
                 OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Failing Boogeyman for {} targets§7...", targets.size()));
             }
+        }
+
+        return 1;
+    }
+    public int resetBoogey(CommandSourceStack source, Collection<ServerPlayer> targets) {
+        if (checkBanned(source)) return -1;
+        BoogeymanManager bm = getBM();
+        if (bm == null) return -1;
+
+        if (targets.size() == 1) {
+            ServerPlayer target = targets.iterator().next();
+            if (!bm.isBoogeyman(target)) {
+                source.sendFailure(Component.nullToEmpty("That player is not a Boogeyman"));
+                return -1;
+            }
+        }
+
+        for (ServerPlayer player : targets) {
+            bm.reset(player);
+        }
+
+        if (targets.size() == 1) {
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("§Resetting Boogeyman cure/failure for {}§7...", targets.iterator().next()));
+        }
+        else {
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Resetting Boogeyman cure/failure for {} targets§7...", targets.size()));
         }
 
         return 1;

@@ -8,6 +8,7 @@
     "CraftingMenuMixin",
     "EnchantmentHelperMixin",
     "EntityMixin",
+    "GameRuleCommandMixin",
     "HopperBlockEntityMixin",
     "HungerManagerMixin",
     "ItemCombinerMenuAccessor",
@@ -42,6 +43,7 @@
     "WanderingTraderSpawnerMixin",
     "WaypointTransmitterMixin",
     "WindChargeItemMixin",
+    "WorldBorderCommandMixin",
     "WorldDataMixin"
   ],
   "injectors": {

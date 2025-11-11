@@ -153,6 +153,19 @@ public class BoogeymanManager {
         rolledPlayers = new ArrayList<>();
     }
 
+    public void reset(ServerPlayer player) {
+        if (!BOOGEYMAN_ENABLED) return;
+        Boogeyman boogeyman = getBoogeyman(player);
+        if (boogeymen == null) return;
+        if (boogeyman.failed || boogeyman.cured) {
+            player.sendSystemMessage(Component.nullToEmpty("§c [NOTICE] Your Boogeyman  fail/cure status has been reset"));
+        }
+        boogeyman.failed = false;
+        boogeyman.cured = false;
+        boogeyman.died = false;
+        boogeyman.resetKills();
+    }
+
     public void cure(ServerPlayer player) {
         if (!BOOGEYMAN_ENABLED) return;
         Boogeyman boogeyman = getBoogeyman(player);
