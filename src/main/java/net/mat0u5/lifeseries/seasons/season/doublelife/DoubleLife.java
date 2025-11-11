@@ -73,6 +73,8 @@ public class DoubleLife extends Season {
 
     public Map<UUID, UUID> soulmates = new TreeMap<>();
     public Map<UUID, UUID> soulmatesOrdered = new TreeMap<>();
+    public static Map<UUID, UUID> soulmatesForce = new HashMap<>();
+    public static Map<UUID, UUID> soulmatesPrevent = new HashMap<>();
 
     @Override
     public void initialize() {
@@ -274,6 +276,11 @@ public class DoubleLife extends Season {
         return soulmateUUID;
     }
 
+    public void setOfflineSoulmate(UUID player1UUID, UUID player2UUID) {
+        soulmates.put(player1UUID, player2UUID);
+        soulmates.put(player2UUID, player1UUID);
+        updateOrderedSoulmates();
+    }
     public void setSoulmate(ServerPlayer player1, ServerPlayer player2) {
         soulmates.put(player1.getUUID(), player2.getUUID());
         soulmates.put(player2.getUUID(), player1.getUUID());
@@ -369,20 +376,44 @@ public class DoubleLife extends Season {
 
     public void chooseRandomSoulmates() {
         List<ServerPlayer> playersToRoll = getNonAssignedPlayers();
-        Collections.shuffle(playersToRoll);
-        if (playersToRoll.size()%2 != 0) {
-            ServerPlayer remove = playersToRoll.getFirst();
-            playersToRoll.remove(remove);
-            PlayerUtils.broadcastMessageToAdmins(Component.literal(" [DoubleLife] ").append(remove.getFeedbackDisplayName()).append(" was not paired with anyone, as there is an odd number of non-assigned players online."));
+
+        for (Map.Entry<UUID, UUID> entry : soulmatesForce.entrySet()) {
+            ServerPlayer player1 = PlayerUtils.getPlayer(entry.getKey());
+            ServerPlayer player2 = PlayerUtils.getPlayer(entry.getValue());
+            if (player1 != null && player2 != null && playersToRoll.contains(player1) &&  playersToRoll.contains(player2)) {
+                setSoulmate(player1,player2);
+            }
+            else {
+                setOfflineSoulmate(entry.getKey(),entry.getValue());
+            }
+            if (player1 != null) playersToRoll.remove(player1);
+            if (player2 != null) playersToRoll.remove(player2);
         }
+
         while(!playersToRoll.isEmpty()) {
-            ServerPlayer player1 = playersToRoll.get(0);
-            ServerPlayer player2 = playersToRoll.get(1);
-            setSoulmate(player1,player2);
+            Collections.shuffle(playersToRoll);
+            ServerPlayer player1 = playersToRoll.getFirst();
+            ServerPlayer player2 = null;
             playersToRoll.removeFirst();
-            playersToRoll.removeFirst();
+            for (ServerPlayer player : playersToRoll) {
+                if (Objects.equals(soulmatesPrevent.get(player1.getUUID()), player.getUUID())) continue;
+                if (Objects.equals(soulmatesPrevent.get(player.getUUID()), player1.getUUID())) continue;
+                player2 = player;
+                break;
+            }
+            if (player2 != null) {
+                playersToRoll.remove(player2);
+                setSoulmate(player1,player2);
+            }
         }
+
         saveSoulmates();
+
+        for (ServerPlayer remaining : getNonAssignedPlayers()) {
+            PlayerUtils.broadcastMessageToAdmins(Component.literal("[Double Life] ").append(remaining.getFeedbackDisplayName()).append(" was not paired with anyone."));
+        }
+        soulmatesForce.clear();
+        soulmatesPrevent.clear();
     }
 
     @Override
@@ -700,5 +731,13 @@ public class DoubleLife extends Season {
                 }
             }
         }
+    }
+
+    public void forceSoulmates(ServerPlayer player, ServerPlayer soulmate) {
+        soulmatesForce.put(player.getUUID(), soulmate.getUUID());
+    }
+
+    public void preventSoulmates(ServerPlayer player, ServerPlayer soulmate) {
+        soulmatesPrevent.put(player.getUUID(), soulmate.getUUID());
     }
 }

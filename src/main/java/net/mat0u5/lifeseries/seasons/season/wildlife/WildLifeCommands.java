@@ -155,11 +155,14 @@ public class WildLifeCommands extends Command {
                 .then(literal("skipCooldown")
                     .executes(context -> skipSuperpowerCooldown(context.getSource()))
                 )
-                .then(literal("assignForRandomization")
+                .then(literal("force")
                     .then(argument("player", EntityArgument.players())
                         .then(argument("superpower", StringArgumentType.string())
                             .suggests((context, builder) -> SharedSuggestionProvider.suggest(Superpowers.getImplementedStr(), builder))
                             .executes(context -> assignSuperpower(context.getSource(), EntityArgument.getPlayers(context, "player"), StringArgumentType.getString(context, "superpower")))
+                        )
+                        .then(literal("reset")
+                                .executes(context -> assignSuperpower(context.getSource(), EntityArgument.getPlayers(context, "player"), null))
                         )
                     )
                 )
@@ -272,6 +275,20 @@ public class WildLifeCommands extends Command {
     public int assignSuperpower(CommandSourceStack source, Collection<ServerPlayer> targets, String name) {
         if (checkBanned(source)) return -1;
         if (targets == null || targets.isEmpty()) return -1;
+
+        if (name == null) {
+            for (ServerPlayer player : targets) {
+                SuperpowersWildcard.assignedSuperpowers.remove(player.getUUID());
+            }
+            if (targets.size() == 1) {
+                OtherUtils.sendCommandFeedback(source, TextUtils.format("Reset {}'s superpower assignment", targets.iterator().next()));
+            }
+            else {
+                OtherUtils.sendCommandFeedback(source, TextUtils.format("Reset the superpower assignment of {} targets", targets.size()));
+            }
+            return 1;
+        }
+
         if (!Superpowers.getImplementedStr().contains(name)) {
             source.sendFailure(Component.nullToEmpty("That superpower doesn't exist"));
             return -1;

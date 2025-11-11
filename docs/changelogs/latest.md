@@ -40,3 +40,10 @@ Vanilla commands can now change the config. (For example changing the keep inv/s
 
 Added the 'wildcard_superpowers_zombies_health' Wild Life config. Default value is 8.<br>
 Added the 'wildcard_hunger_non_edible_items' Wild Life config - It's an item list, so the same format as the item blacklist for example.
+
+----------
+
+Renamed '/superpower assignForRandomization' to '/superpower force'<br>
+Added the '/soulmate force <player> <soulmate>' command, which forces two players to be rolled together when the soulmate randomization happens.<br>
+Added the '/soulmate prevent <player> <soulmate>' command, which prevents two players from being rolled together when the soulmate randomization happens.<br>
+Both of the commands don't keep that info once you close the server.
