@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers;
 
+import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
@@ -97,7 +98,7 @@ public class SuperpowersWildcard extends Wildcard {
         Collections.shuffle(allPlayers);
         for (ServerPlayer player : allPlayers) {
             Superpowers power = implemented.get(pos%implemented.size());
-            if (power == Superpowers.LISTENING && !VoicechatMain.isConnectedToSVC(player.getUUID())) {
+            if (power == Superpowers.LISTENING && CompatibilityManager.voicechatLoaded() && !VoicechatMain.isConnectedToSVC(player.getUUID())) {
                 pos++;
                 power = implemented.get(pos%implemented.size());
             }

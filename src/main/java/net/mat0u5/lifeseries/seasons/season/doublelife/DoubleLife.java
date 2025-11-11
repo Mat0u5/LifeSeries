@@ -55,6 +55,7 @@ public class DoubleLife extends Season {
     public boolean BREAKUP_LAST_PAIR_STANDING = false;
     public boolean DISABLE_START_TELEPORT = false;
     public static boolean SOULMATE_LOCATOR_BAR = false;
+    public boolean SOULMATES_PVP_ALLOWED = true;
 
     public SessionAction actionChooseSoulmates = new SessionAction(
             OtherUtils.minutesToTicks(1), "§7Assign soulmates if necessary §f[00:01:00]", "Assign Soulmates if necessary"
@@ -156,6 +157,7 @@ public class DoubleLife extends Season {
         BREAKUP_LAST_PAIR_STANDING = DoubleLifeConfig.BREAKUP_LAST_PAIR_STANDING.get(seasonConfig);
         DISABLE_START_TELEPORT = DoubleLifeConfig.DISABLE_START_TELEPORT.get(seasonConfig);
         SOULBOUND_BOOGEYMAN = DoubleLifeConfig.SOULBOUND_BOOGEYMAN.get(seasonConfig);
+        SOULMATES_PVP_ALLOWED = DoubleLifeConfig.SOULMATES_PVP_ALLOWED.get(seasonConfig);
         syncAllPlayers();
     }
 
@@ -429,6 +431,20 @@ public class DoubleLife extends Season {
         float newHealth = Math.min(soulmate.getHealth() + amount, soulmate.getMaxHealth());
         soulmate.setHealth(newHealth);
         TaskScheduler.scheduleTask(1,()-> syncPlayers(player, soulmate));
+    }
+
+    @Override
+    public void onPrePlayerDamage(ServerPlayer player, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        if (SOULMATES_PVP_ALLOWED) return;
+
+        ServerPlayer soulmate = getSoulmate(player);
+        if (soulmate == null) return;
+
+        if (source.getEntity() instanceof ServerPlayer attacker) {
+            if (soulmate == attacker) {
+                cir.setReturnValue(false);
+            }
+        }
     }
 
     @Override

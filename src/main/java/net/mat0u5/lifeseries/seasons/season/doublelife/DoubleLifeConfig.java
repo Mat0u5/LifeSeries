@@ -92,6 +92,10 @@ public class DoubleLifeConfig extends ConfigManager {
             "soulbound_boogeyman", false, "season.soulbind",
             "Soulbound Boogeyman (If enabled)", "Makes you become the Bogeyman if your soulmate is one - curing one will cure the other as well."
     );
+    public static final ConfigFileEntry<Boolean> SOULMATES_PVP_ALLOWED = new ConfigFileEntry<>(
+            "soulmates_pvp_allowed", true, "season[new]",
+            "Soulmates PvP Allowed", "Controls whether soulmates can hit each other."
+    );
 
 
     public static final ConfigFileEntry<Object> GROUP_SOULBIND = new ConfigFileEntry<>(
@@ -116,6 +120,7 @@ public class DoubleLifeConfig extends ConfigManager {
                 ,SOULBOUND_EFFECTS
                 ,SOULBOUND_INVENTORIES
                 , SOULBOUND_BOOGEYMAN
+                ,SOULMATES_PVP_ALLOWED
         ));
         //? if >= 1.21.6 {
         /*result.add(SOULMATE_LOCATOR_BAR);

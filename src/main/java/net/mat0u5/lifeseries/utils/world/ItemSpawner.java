@@ -50,7 +50,7 @@ public class ItemSpawner {
 
     public static List<ItemStack> getRandomItemsFromLootTable(MinecraftServer server, ServerLevel level, ServerPlayer player
           //? if <= 1.21.9 {
-            , ResourceLocation lootTableId) {
+            , ResourceLocation lootTableId, boolean silent) {
           //?} else {
             /*, Identifier lootTableId) {
           *///?}
@@ -73,7 +73,7 @@ public class ItemSpawner {
                     .getLootTable(ResourceKey.create(Registries.LOOT_TABLE, lootTableId));
 
             if (lootTable == null) {
-                Main.LOGGER.error("Loot table not found: " + lootTableId);
+                if (!silent) Main.LOGGER.error("Loot table not found: " + lootTableId);
                 return new ArrayList<>();
             }
 

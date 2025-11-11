@@ -47,3 +47,8 @@ Renamed '/superpower assignForRandomization' to '/superpower force'<br>
 Added the '/soulmate force <player> <soulmate>' command, which forces two players to be rolled together when the soulmate randomization happens.<br>
 Added the '/soulmate prevent <player> <soulmate>' command, which prevents two players from being rolled together when the soulmate randomization happens.<br>
 Both of the commands don't keep that info once you close the server.
+
+----------
+
+You can now add loot tables for different task types in Secret Life.<br>
+Added the 'soulmates_pvp_allowed' Double Life config. Default value is true.

@@ -293,7 +293,7 @@ public class TaskManager {
         return null;
     }
 
-    public static void addHealthThenItems(ServerPlayer player, int addHealth) {
+    public static void addHealthThenItems(ServerPlayer player, int addHealth, TaskTypes taskType) {
         if (server == null) return;
         if (addHealth == 0) {
             secretKeeperBeingUsed = false;
@@ -323,7 +323,19 @@ public class TaskManager {
                 TaskScheduler.scheduleTask(3*i, () -> {
                     server.overworld().playSound(null, spawnPos.x(), spawnPos.y(), spawnPos.z(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
 
-                    List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, server.overworld(), player, IdentifierHelper.of("lifeseriesdynamic", "task_reward_loottable"));
+                    List<ItemStack> lootTableItems = new ArrayList<>();
+
+                    if (taskType == TaskTypes.HARD) {
+                        lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, server.overworld(), player, IdentifierHelper.of("lifeseriesdynamic", "task_reward_loottable_hard"), true);
+                    }
+                    else if (taskType == TaskTypes.RED) {
+                        lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, server.overworld(), player, IdentifierHelper.of("lifeseriesdynamic", "task_reward_loottable_red"), true);
+                    }
+
+                    if (taskType == TaskTypes.EASY || lootTableItems.isEmpty()) {
+                        lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, server.overworld(), player, IdentifierHelper.of("lifeseriesdynamic", "task_reward_loottable"), false);
+                    }
+
                     if (!lootTableItems.isEmpty()) {
                         for (ItemStack item : lootTableItems) {
                             ItemStackUtils.spawnItemForPlayer(server.overworld(), spawnPos, item, player);
@@ -414,15 +426,15 @@ public class TaskManager {
             AnimationUtils.spawnFireworkBall(server.overworld(), centerPos, 40, 0.3, new Vector3f(0, 1, 0));
             if (type == TaskTypes.EASY) {
                 showHeartTitle(player, EASY_SUCCESS);
-                addHealthThenItems(player, EASY_SUCCESS);
+                addHealthThenItems(player, EASY_SUCCESS, type);
             }
             if (type == TaskTypes.HARD) {
                 showHeartTitle(player, HARD_SUCCESS);
-                addHealthThenItems(player, HARD_SUCCESS);
+                addHealthThenItems(player, HARD_SUCCESS, type);
             }
             if (type == TaskTypes.RED) {
                 showHeartTitle(player, RED_SUCCESS);
-                addHealthThenItems(player, RED_SUCCESS);
+                addHealthThenItems(player, RED_SUCCESS, type);
             }
         });
         chooseNewTaskForPlayerIfNecessary(player);
@@ -597,7 +609,7 @@ public class TaskManager {
         if (itemSpawnerPos == null && !fromButton) {
             if (successButtonPos != null && rerollButtonPos != null && failButtonPos != null) {
                 itemSpawnerPos = pos;
-                PlayerUtils.broadcastMessage(Component.literal("§a[SecretLife] All locations have been set. If you wish to change them in the future, use §2'/secretlife changeLocations'\n"));
+                PlayerUtils.broadcastMessage(Component.literal("§a[SecretLife] All locations have been set. If you wish to change them in the future, use §2'/task changeLocations'\n"));
 
                 PlayerUtils.broadcastMessage(Component.nullToEmpty("\nUse §b'/session timer set <time>'§f to set the desired session time."));
                 PlayerUtils.broadcastMessage(Component.nullToEmpty("After that, use §b'/session start'§f to start the session."));
