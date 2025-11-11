@@ -94,7 +94,7 @@ public class DefaultConfigValues {
             "Tick Freeze When Not In Session", "Automatically freezes the game when the session is paused or ended or not started."
     );
     public final ConfigFileEntry<Boolean> LIVES_SYSTEM_DISABLED = new ConfigFileEntry<>(
-            "lives_system_disabled", false, "global.lives[new]",
+            "lives_system_disabled", false, "global.lives",
             "Fully Disable Lives System", "Fully disables the lives system, if you want to implement a custom on for example :)"
     );
     public final ConfigFileEntry<Boolean> CUSTOM_ENCHANTER_ALGORITHM = new ConfigFileEntry<>(
@@ -213,15 +213,15 @@ public class DefaultConfigValues {
             "Automatic Fail", "Controls how long a Boogeyman has to kill someone before they automatically fail, in seconds."
     );
     public final ConfigFileEntry<Boolean> BOOGEYMAN_TEAM_NOTICE = new ConfigFileEntry<>(
-            "boogeyman_team_notice", false, "global.boogeyman[new]",
+            "boogeyman_team_notice", false, "global.boogeyman",
             "Boogeyman Team Notice", "Shows every Boogeyman a list of the other players that are also Boogeymen in chat."
     );
     public final ConfigFileEntry<Integer> BOOGEYMAN_KILLS_NEEDED = new ConfigFileEntry<>(
-            "boogeyman_kills_needed", 1, "global.boogeyman[new]",
+            "boogeyman_kills_needed", 1, "global.boogeyman",
             "Boogyeman Kills Needed", "Controls how many kills you need as the Boogeyman to be cured."
     );
     public final ConfigFileEntry<Boolean> BOOGEYMAN_STEAL_LIFE = new ConfigFileEntry<>(
-            "boogeyman_steal_life", false, "global.boogeyman[new]",
+            "boogeyman_steal_life", false, "global.boogeyman",
             "Boogeyman Steal Life", "When a boogeyman gets cured, they gain a life for completing their task."
     );
 

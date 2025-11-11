@@ -22,6 +22,7 @@ import net.mat0u5.lifeseries.render.VignetteRenderer;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Hunger;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDilation;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.utils.ClientResourcePacks;
@@ -29,13 +30,16 @@ import net.mat0u5.lifeseries.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
@@ -126,6 +130,31 @@ public class NetworkHandlerClient {
                 if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Received morph packet: {} ({})", morphType, morphUUID);
                 MorphManager.setFromPacket(morphUUID, morphType);
             } catch (Exception e) {}
+        }
+
+        if (name == PacketNames.HUNGER_NON_EDIBLE) {
+            Hunger.nonEdible.clear();
+            for (String itemId : value) {
+                if (!itemId.contains(":")) itemId = "minecraft:" + itemId;
+
+                try {
+                    var id = IdentifierHelper.parse(itemId);
+                    ResourceKey<Item> key = ResourceKey.create(BuiltInRegistries.ITEM.key(), id);
+
+                    //? if <= 1.21 {
+                    Item item = BuiltInRegistries.ITEM.get(key);
+                    //?} else {
+                    /*Item item = BuiltInRegistries.ITEM.getValue(key);
+                     *///?}
+                    if (item != null) {
+                        Hunger.nonEdible.add(item);
+                    } else {
+                        OtherUtils.throwError("[CONFIG] Invalid item: " + itemId);
+                    }
+                } catch (Exception e) {
+                    OtherUtils.throwError("[CONFIG] Error parsing item ID: " + itemId);
+                }
+            }
         }
     }
 

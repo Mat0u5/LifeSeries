@@ -44,9 +44,11 @@ public abstract class ItemMixin {
         }
         if (hungerActive) {
             Item item = (Item) (Object) this;
-            PatchedDataComponentMap components = new PatchedDataComponentMap(normalComponents());
-            Hunger.defaultFoodComponents(item, components);
-            cir.setReturnValue(components);
+            if (!Hunger.nonEdible.contains(item)) {
+                PatchedDataComponentMap components = new PatchedDataComponentMap(normalComponents());
+                Hunger.defaultFoodComponents(item, components);
+                cir.setReturnValue(components);
+            }
         }
     }
 

@@ -21,6 +21,7 @@ public class SuperpowersWildcard extends Wildcard {
     public static List<Superpowers> blacklistedPowers = List.of();
     private static final Map<UUID, Superpower> playerSuperpowers = new HashMap<>();
     public static final Map<UUID, Superpowers> assignedSuperpowers = new HashMap<>();
+    public static int ZOMBIES_HEALTH = 8;
 
     public static void setBlacklist(String blacklist) {
         blacklistedPowers = new ArrayList<>();

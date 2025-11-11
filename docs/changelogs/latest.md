@@ -35,3 +35,8 @@ Fixed bugs regarding the boogeyman steal life config.
 
 Added the '/boogeyman reset <players>' command, which resets the Boogeyman fail/cure status. It does not automatically revert any punishments / rewards.<br>
 Vanilla commands can now change the config. (For example changing the keep inv/show advancements / locator bar gamerule, or changing the worldborder size will change the config value)
+
+----------
+
+Added the 'wildcard_superpowers_zombies_health' Wild Life config. Default value is 8.<br>
+Added the 'wildcard_hunger_non_edible_items' Wild Life config - It's an item list, so the same format as the item blacklist for example.

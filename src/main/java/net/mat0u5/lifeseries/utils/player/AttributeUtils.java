@@ -42,7 +42,7 @@ public class AttributeUtils {
         if (currentSeason.getSeason() == Seasons.SECRET_LIFE) return;
         double currentMaxHealth = getMaxPlayerHealth(player);
         if (currentMaxHealth == 13 && TriviaHandler.cursedHeartPlayers.contains(player.getUUID())) return;
-        if (currentMaxHealth == 8 && Necromancy.isRessurectedPlayer(player)) return;
+        if (currentMaxHealth == SuperpowersWildcard.ZOMBIES_HEALTH && Necromancy.isRessurectedPlayer(player)) return;
         resetMaxPlayerHealth(player);
     }
 

@@ -13,6 +13,7 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Hunger;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShifting;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDilation;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
@@ -346,6 +347,7 @@ public class NetworkHandlerServer {
 
         sendStringPacket(player, PacketNames.ANIMAL_DISGUISE_ARMOR, String.valueOf(AnimalDisguise.SHOW_ARMOR));
         sendStringPacket(player, PacketNames.ANIMAL_DISGUISE_HANDS, String.valueOf(AnimalDisguise.SHOW_HANDS));
+        sendStringListPacket(player, PacketNames.HUNGER_NON_EDIBLE, Hunger.nonEdibleStr);
     }
 
     public static void sendUpdatePackets() {

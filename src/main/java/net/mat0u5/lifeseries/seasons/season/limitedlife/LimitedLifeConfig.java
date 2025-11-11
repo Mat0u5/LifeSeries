@@ -94,7 +94,7 @@ public class LimitedLifeConfig extends ConfigManager {
             "Broadcast Color Changes", "Sends a message in chat to all players when someone changes color."
     );
     public static final ConfigFileEntry<Boolean> SHOW_TIME_BELOW_NAME = new ConfigFileEntry<>(
-            "show_time_below_name", false, "season[new]",
+            "show_time_below_name", false, "season",
             "Show Time Below Name", "Show the time a player has left below their username."
     );
 

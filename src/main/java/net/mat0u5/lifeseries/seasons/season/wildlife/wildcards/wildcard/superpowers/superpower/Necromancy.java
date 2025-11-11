@@ -83,8 +83,8 @@ public class Necromancy extends Superpower {
                             deadPlayer.getInventory().clearContent();
                         }
                     }
-                    AttributeUtils.setMaxPlayerHealth(deadPlayer, 8);
-                    deadPlayer.setHealth(8);
+                    AttributeUtils.setMaxPlayerHealth(deadPlayer, SuperpowersWildcard.ZOMBIES_HEALTH);
+                    deadPlayer.setHealth(SuperpowersWildcard.ZOMBIES_HEALTH);
                     LevelUtils.summonHarmlessLightning(deadPlayer);
                     ressurectedPlayers.add(deadPlayer.getUUID());
                     perPlayerRessurections.add(deadPlayer.getUUID());

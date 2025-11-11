@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -15,6 +16,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.PatchedDataComponentMap;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -31,6 +33,7 @@ import net.minecraft.world.item.Items;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.currentSession;
+import static net.mat0u5.lifeseries.Main.seasonConfig;
 
 //? if <= 1.21
 import java.util.Optional;
@@ -151,6 +154,9 @@ public class Hunger extends Wildcard {
             *///?}
     );
 
+    public static List<String> nonEdibleStr = new ArrayList<>();
+    public static List<Item> nonEdible = new ArrayList<>();
+
     @Override
     public Wildcards getType() {
         return Wildcards.HUNGER;
@@ -193,6 +199,40 @@ public class Hunger extends Wildcard {
             lastVersion = -1;
             super.activate();
         });
+    }
+
+    public static void newNonEdibleItems(String raw) {
+        raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
+        nonEdible = new ArrayList<>();
+        nonEdibleStr = new ArrayList<>();
+        if (!raw.isEmpty()) {
+            nonEdibleStr = new ArrayList<>(Arrays.asList(raw.split(",")));
+        }
+        for (String itemId : nonEdibleStr) {
+            if (!itemId.contains(":")) itemId = "minecraft:" + itemId;
+
+            try {
+                var id = IdentifierHelper.parse(itemId);
+                ResourceKey<Item> key = ResourceKey.create(BuiltInRegistries.ITEM.key(), id);
+
+                // Check if the block exists in the registry
+                //? if <= 1.21 {
+                Item item = BuiltInRegistries.ITEM.get(key);
+                //?} else {
+                /*Item item = BuiltInRegistries.ITEM.getValue(key);
+                 *///?}
+                if (item != null) {
+                    nonEdible.add(item);
+                } else {
+                    OtherUtils.throwError("[CONFIG] Invalid item: " + itemId);
+                }
+            } catch (Exception e) {
+                OtherUtils.throwError("[CONFIG] Error parsing item ID: " + itemId);
+            }
+        }
+        NetworkHandlerServer.sendUpdatePackets();
+        TaskScheduler.scheduleTask(1, OtherUtils::reloadServerNoUpdate);
+        TaskScheduler.scheduleTask(5, Hunger::updateInventories);
     }
 
     public void newFoodRules() {
@@ -285,6 +325,7 @@ public class Hunger extends Wildcard {
         if (!(entity instanceof ServerPlayer player)) return;
         if (item == null) return;
         if (bannedFoodItems.contains(item)) return;
+        if (nonEdible.contains(item)) return;
 
         int nutrition = 0;
         int saturation = 0;

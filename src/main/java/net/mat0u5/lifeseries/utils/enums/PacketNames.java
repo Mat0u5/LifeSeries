@@ -49,6 +49,7 @@ public enum PacketNames {
     ,ANIMAL_DISGUISE_HANDS
     ,SIDETITLE
     ,TRIVIA_TIMER
+    ,HUNGER_NON_EDIBLE
     ;
 
     public static PacketNames fromName(String name) {

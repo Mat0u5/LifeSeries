@@ -103,8 +103,12 @@ public class WildLifeConfig extends ConfigManager {
             "Average Random Effect Duration", "Average random effect duration, in seconds."
     );
     public static final ConfigFileEntry<Double> WILDCARD_HUNGER_SOUND_CHANCE = new ConfigFileEntry<>(
-            "wildcard_hunger_sound_chance", 0.01, ConfigTypes.PERCENTAGE, "season.hunger[new]",
+            "wildcard_hunger_sound_chance", 0.01, ConfigTypes.PERCENTAGE, "season.hunger",
             "Play Sound Chance", "Chance for food to play a random sound to everyone on the server."
+    );
+    public static final ConfigFileEntry<String> WILDCARD_HUNGER_NON_EDIBLE_ITEMS = new ConfigFileEntry<>(
+            "wildcard_hunger_non_edible_items", "[]", ConfigTypes.ITEM_LIST, "season.hunger[new]",
+            "Non Edible Itmes", "A list of items that you can't eat."
     );
 
     public static final ConfigFileEntry<Double> WILDCARD_SNAILS_SPEED_MULTIPLIER = new ConfigFileEntry<>(
@@ -116,7 +120,7 @@ public class WildLifeConfig extends ConfigManager {
             "Drown Players", "Controls whether snails can drown players when the snails are underwater."
     );
     public static final ConfigFileEntry<Boolean> WILDCARD_SNAILS_EFFECTS = new ConfigFileEntry<>(
-            "wildcard_snails_effects", false, "season.snails[new]",
+            "wildcard_snails_effects", false, "season.snails",
             "Can Have Potion Effects", "Controls whether snails can have potion effects, like invisibility."
     );
 
@@ -183,6 +187,10 @@ public class WildLifeConfig extends ConfigManager {
             "wildcard_superpowers_zombies_revive_by_killing_dark_green", false, "season.superpowers",
             "Necromancy: Zombies Can Revive", "Controls whether zombies can be revived (gain a life) by killing a dark green player."
     );
+    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_ZOMBIES_HEALTH = new ConfigFileEntry<>(
+            "wildcard_superpowers_zombies_health", 8, "season.superpowers[new]",
+            "Necromancy: Zombie Health Amount", "Controls how much health zombies will have."
+    );
     public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_SUPERSPEED_STEP = new ConfigFileEntry<>(
             "wildcard_superpowers_superspeed_step", false, "season.superpowers",
             "Superspeed: Step Up Blocks", "Controls whether players with the superspeed power active can step up blocks without jumping (like when riding a horse)."
@@ -214,7 +222,7 @@ public class WildLifeConfig extends ConfigManager {
             "Turn Off In Session", "Controls when in the session the callback wildcard turns off (percentage)."
     );
     public static final ConfigFileEntry<Boolean> WILDCARD_CALLBACK_NERFED_WILDCARDS = new ConfigFileEntry<>(
-            "wildcard_callback_nerfed_wildcards", true, "season.callback[new]",
+            "wildcard_callback_nerfed_wildcards", true, "season.callback",
             "Nerfed Wildcards", "Controls whether wildcards are nerfed in callback (recommended)."
     );
 
@@ -303,6 +311,7 @@ public class WildLifeConfig extends ConfigManager {
                 ,WILDCARD_HUNGER_EFFECT_CHANCE
                 ,WILDCARD_HUNGER_AVG_EFFECT_DURATION
                 ,WILDCARD_HUNGER_SOUND_CHANCE
+                ,WILDCARD_HUNGER_NON_EDIBLE_ITEMS
 
                 ,WILDCARD_SNAILS_SPEED_MULTIPLIER
                 ,WILDCARD_SNAILS_DROWN_PLAYERS
@@ -328,6 +337,7 @@ public class WildLifeConfig extends ConfigManager {
                 ,WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE
                 ,WILDCARD_SUPERPOWERS_ZOMBIES_LOSE_ITEMS
                 ,WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN
+                ,WILDCARD_SUPERPOWERS_ZOMBIES_HEALTH
                 ,WILDCARD_SUPERPOWERS_SUPERSPEED_STEP
                 ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_ARMOR
                 ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_HANDS
