@@ -52,7 +52,7 @@ public class ItemSpawner {
           //? if <= 1.21.9 {
             , ResourceLocation lootTableId, boolean silent) {
           //?} else {
-            /*, Identifier lootTableId) {
+            /*, Identifier lootTableId, boolean silent) {
           *///?}
         if (server == null || level == null || player == null) return new ArrayList<>();
         try {

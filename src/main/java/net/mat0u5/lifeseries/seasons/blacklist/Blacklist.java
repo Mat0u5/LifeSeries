@@ -49,8 +49,10 @@ import net.minecraft.resources.ResourceLocation;
 public class Blacklist {
     //? if <= 1.21.9 {
     public List<ResourceLocation> loadedListItemIdentifier;
+    public List<ResourceLocation> loadedRecipeBlacklist;
     //?} else {
     /*public List<Identifier> loadedListItemIdentifier;
+    public List<Identifier> loadedRecipeBlacklist;
     *///?}
     private List<Item> loadedListItem;
     private List<Block> loadedListBlock;
@@ -64,6 +66,14 @@ public class Blacklist {
     public List<String> loadItemBlacklist() {
         if (seasonConfig == null) return new ArrayList<>();
         String raw = seasonConfig.BLACKLIST_ITEMS.get(seasonConfig);
+        raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
+        if (raw.isEmpty()) return new ArrayList<>();
+        return new ArrayList<>(Arrays.asList(raw.split(",")));
+    }
+
+    public List<String> loadRecipeBlacklist() {
+        if (seasonConfig == null) return new ArrayList<>();
+        String raw = seasonConfig.BLACKLIST_RECIPES.get(seasonConfig);
         raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
         if (raw.isEmpty()) return new ArrayList<>();
         return new ArrayList<>(Arrays.asList(raw.split(",")));
@@ -110,12 +120,6 @@ public class Blacklist {
         /*List<Identifier> newListIdentifier = new ArrayList<>();
         *///?}
 
-        if (seasonConfig != null) {
-            if (!seasonConfig.SPAWNER_RECIPE.get(seasonConfig)) {
-                newListIdentifier.add(IdentifierHelper.mod("spawner_recipe"));
-            }
-        }
-
         for (String itemId : loadItemBlacklist()) {
             if (!itemId.contains(":")) itemId = "minecraft:" + itemId;
 
@@ -142,6 +146,50 @@ public class Blacklist {
 
         loadedListItem = newList;
         loadedListItemIdentifier = newListIdentifier;
+        return newList;
+    }
+
+    //? if <= 1.21.9 {
+    public List<ResourceLocation> getRecipeBlacklist() {
+    //?} else {
+    /*public List<Identifier> getRecipeBlacklist() {
+    *///?}
+        if (loadedRecipeBlacklist != null) return loadedRecipeBlacklist;
+        //? if <= 1.21.9 {
+        List<ResourceLocation> newList = new ArrayList<>();
+        //?} else {
+        /*List<Identifier> newList = new ArrayList<>();
+         *///?}
+
+        if (seasonConfig != null) {
+            if (!seasonConfig.SPAWNER_RECIPE.get(seasonConfig)) {
+                newList.add(IdentifierHelper.mod("spawner_recipe"));
+            }
+        }
+
+        for (String itemId : loadRecipeBlacklist()) {
+            if (!itemId.contains(":")) itemId = "minecraft:" + itemId;
+
+            try {
+                var id = IdentifierHelper.parse(itemId);
+                ResourceKey<Item> key = ResourceKey.create(BuiltInRegistries.ITEM.key(), id);
+
+                //? if <= 1.21 {
+                Item item = BuiltInRegistries.ITEM.get(key);
+                //?} else {
+                /*Item item = BuiltInRegistries.ITEM.getValue(key);
+                 *///?}
+                if (item != null) {
+                    newList.add(id);
+                } else {
+                    OtherUtils.throwError("[CONFIG] Invalid item: " + itemId);
+                }
+            } catch (Exception e) {
+                OtherUtils.throwError("[CONFIG] Error parsing item ID: " + itemId);
+            }
+        }
+
+        loadedRecipeBlacklist = newList;
         return newList;
     }
 
@@ -295,17 +343,19 @@ public class Blacklist {
         if (Main.server == null) return;
 
         CREATIVE_IGNORE_BLACKLIST = seasonConfig.CREATIVE_IGNORE_BLACKLIST.get(seasonConfig);
-        
+
         loadedListItem = null;
         loadedListBlock = null;
         loadedListEnchants = null;
         loadedBannedEnchants = null;
         loadedBannedEffects = null;
+        loadedRecipeBlacklist = null;
         getItemBlacklist();
         getBlockBlacklist();
         getClampedEnchants();
         getBannedEnchants();
         getBannedEffects();
+        getRecipeBlacklist();
     }
 
     public InteractionResult onBlockUse(ServerPlayer player, Level level, InteractionHand hand, BlockHitResult hitResult) {

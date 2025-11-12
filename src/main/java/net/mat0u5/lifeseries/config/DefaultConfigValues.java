@@ -113,6 +113,10 @@ public class DefaultConfigValues {
             "blacklist_clamped_enchants", "[]", ConfigTypes.ENCHANT_LIST, "global.blacklist",
             "Clamped Enchants", "List of enchantments clamped to level 1 (any higher levels will be set to lvl1)."
     );
+    public final ConfigFileEntry<String> BLACKLIST_RECIPES = new ConfigFileEntry<>(
+            "blacklist_recipes", "[]", ConfigTypes.ITEM_LIST, "global.blacklist[new]",
+            "Blacklisted Recipes", "List of banned recipes - items you can't craft."
+    );
     public final ConfigFileEntry<String> FINAL_DEATH_TITLE_SUBTITLE = new ConfigFileEntry<>(
             "final_death_title_subtitle", "ran out of lives!", "global.finaldeath",
             "Death Subtitle", "The subtitle that shows when a player dies (requires Show Death Title on Final Death to be set to true)."
@@ -326,6 +330,6 @@ public class DefaultConfigValues {
     );
 
     public static final List<String> RELOAD_NEEDED = List.of(
-            "spawner_recipe", "blacklist_items"
+            "spawner_recipe", "blacklist_items", "blacklist_recipes"
     );
 }

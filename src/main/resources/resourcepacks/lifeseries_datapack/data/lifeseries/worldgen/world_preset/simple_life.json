@@ -1,0 +1,73 @@
+{
+  "dimensions": {
+    "minecraft:overworld": {
+      "type": "minecraft:overworld",
+      "generator": {
+        "type": "minecraft:flat",
+        "settings": {
+          "biome": "minecraft:plains",
+          "features": false,
+          "lakes": false,
+          "layers": [
+            {
+              "height": 160,
+              "block": "minecraft:air"
+            },
+            {
+              "height": 3,
+              "block": "minecraft:dirt"
+            },
+            {
+              "height": 1,
+              "block": "minecraft:grass_block"
+            }
+          ],
+          "structure_overrides": [
+            "minecraft:strongholds",
+            "minecraft:villages"
+          ]
+        }
+      }
+    },
+    "minecraft:the_end": {
+      "type": "minecraft:the_end",
+      "generator": {
+        "type": "minecraft:flat",
+        "settings": {
+          "biome": "minecraft:the_end",
+          "layers": [
+            {
+              "height": 46,
+              "block": "minecraft:air"
+            },
+            {
+              "height": 4,
+              "block": "minecraft:end_stone"
+            }
+          ],
+          "structure_overrides": []
+        }
+      }
+    },
+    "minecraft:the_nether": {
+      "type": "minecraft:the_nether",
+      "generator": {
+        "type": "minecraft:flat",
+        "settings": {
+          "biome": "minecraft:nether_wastes",
+          "layers": [
+            {
+              "height": 46,
+              "block": "minecraft:air"
+            },
+            {
+              "height": 4,
+              "block": "minecraft:netherrack"
+            }
+          ],
+          "structure_overrides": []
+        }
+      }
+    }
+  }
+}

@@ -79,6 +79,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 //Group stuff
                 ,SHOW_HEALTH_BELOW_NAME
                 ,BLACKLIST_ITEMS
+                ,BLACKLIST_RECIPES
                 ,BLACKLIST_BLOCKS
                 ,BLACKLIST_CLAMPED_ENCHANTS
                 ,BLACKLIST_BANNED_ENCHANTS

@@ -28,12 +28,15 @@ public class RecipeManagerMixin {
         if (blacklist.loadedListItemIdentifier == null)  {
             blacklist.getItemBlacklist();
         }
-        if (blacklist.loadedListItemIdentifier.isEmpty()) return;
+        if (blacklist.loadedRecipeBlacklist == null)  {
+            blacklist.getRecipeBlacklist();
+        }
+        if (blacklist.loadedListItemIdentifier.isEmpty() && blacklist.loadedRecipeBlacklist.isEmpty()) return;
 
         List<ResourceLocation> toRemove = new ArrayList<>();
 
         for (ResourceLocation identifier : map.keySet()) {
-            if (blacklist.loadedListItemIdentifier.contains(identifier)) {
+            if (blacklist.loadedListItemIdentifier.contains(identifier) || blacklist.loadedRecipeBlacklist.contains(identifier)) {
                 toRemove.add(identifier);
             }
         }
@@ -58,13 +61,16 @@ public abstract class RecipeManagerMixin {
         if (blacklist.loadedListItemIdentifier == null)  {
             blacklist.getItemBlacklist();
         }
-        if (blacklist.loadedListItemIdentifier.isEmpty()) return;
+        if (blacklist.loadedRecipeBlacklist == null)  {
+            blacklist.getRecipeBlacklist();
+        }
+        if (blacklist.loadedListItemIdentifier.isEmpty() && blacklist.loadedRecipeBlacklist.isEmpty()) return;
 
         List<RecipeHolder<?>> filteredRecipes = preparedRecipes.values().stream()
                 //? if <= 1.21.9 {
-                .filter(recipe -> !blacklist.loadedListItemIdentifier.contains(recipe.id().location()))
+                .filter(recipe -> !blacklist.loadedListItemIdentifier.contains(recipe.id().location()) && !blacklist.loadedRecipeBlacklist.contains(recipe.id().location()))
                 //?} else {
-                /^.filter(recipe -> !blacklist.loadedListItemIdentifier.contains(recipe.id().identifier()))
+                /^.filter(recipe -> !blacklist.loadedListItemIdentifier.contains(recipe.id().identifier()) && !blacklist.loadedRecipeBlacklist.contains(recipe.id().identifier()))
                 ^///?}
                 .toList();
 
