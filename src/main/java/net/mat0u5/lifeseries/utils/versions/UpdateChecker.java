@@ -144,10 +144,7 @@ public class UpdateChecker {
 
     public static String getChangelogLink() {
         if (changelogLink != null) return changelogLink;
-        if (majorVersionName != null) {
-            return "https://github.com/Mat0u5/LifeSeries/blob/main/docs/changelogs/"+majorVersionName+".md";
-        }
-        return "https://github.com/Mat0u5/LifeSeries/blob/main/docs/changelogs/"+versionName+".md";
+        return "https://mat0u5.github.io/LifeSeries-docs/changelog?v="+VersionControl.strippedVersionName()+"-"+versionName;
     }
 
     public static String formatDescription(String rawDesctiption) {
