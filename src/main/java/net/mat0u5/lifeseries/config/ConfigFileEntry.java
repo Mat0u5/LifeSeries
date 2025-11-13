@@ -14,16 +14,26 @@ public class ConfigFileEntry<T> {
     public final String description;
     public final String groupInfo;
     public final List<String> args;
+    public final boolean dynamic;
 
     public ConfigFileEntry(String key, T defaultValue, String groupInfo, String displayName, String description) {
         this(key, defaultValue, getTypeFromValue(defaultValue), groupInfo, displayName, description);
+    }
+    public ConfigFileEntry(String key, T defaultValue, String groupInfo, String displayName, String description, boolean dynamic) {
+        this(key, defaultValue, getTypeFromValue(defaultValue), groupInfo, displayName, description, dynamic);
     }
 
     public ConfigFileEntry(String key, T defaultValue, ConfigTypes type, String groupInfo, String displayName, String description) {
         this(key, defaultValue, type, groupInfo, displayName, description, null);
     }
-
+    public ConfigFileEntry(String key, T defaultValue, ConfigTypes type, String groupInfo, String displayName, String description, boolean dynamic) {
+        this(key, defaultValue, type, groupInfo, displayName, description, null, dynamic);
+    }
     public ConfigFileEntry(String key, T defaultValue, ConfigTypes type, String groupInfo, String displayName, String description, List<String> args) {
+        this(key, defaultValue, type, groupInfo, displayName, description, args, false);
+    }
+
+    public ConfigFileEntry(String key, T defaultValue, ConfigTypes type, String groupInfo, String displayName, String description, List<String> args, boolean dynamic) {
         this.key = key;
         this.defaultValue = defaultValue;
         this.type = type;
@@ -31,6 +41,7 @@ public class ConfigFileEntry<T> {
         this.description = description;
         this.groupInfo = groupInfo;
         this.args = args;
+        this.dynamic = dynamic;
     }
 
     public static ConfigTypes getTypeFromValue(Object defaultValue) {

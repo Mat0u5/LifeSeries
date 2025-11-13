@@ -308,8 +308,8 @@ public class DefaultConfigValues {
             "group_season", null, ConfigTypes.TEXT, "{season}[no_sidebar]",
             "Season Specific Settings", ""
     );
-    public final ConfigFileEntry<Object> GROUP_LIVES = new ConfigFileEntry<>(
-            "group_lives", null, ConfigTypes.TEXT, "{global.lives}",
+    public final ConfigFileEntry<Object> GROUP_GLOBAL_LIVES = new ConfigFileEntry<>(
+            "group_global_lives", null, ConfigTypes.TEXT, "{global.lives}",
             "Lives Stuff", ""
     );
     public final ConfigFileEntry<Object> GROUP_BLACKLIST = new ConfigFileEntry<>(
@@ -327,6 +327,25 @@ public class DefaultConfigValues {
     public final ConfigFileEntry<Object> GROUP_WATCHERS = new ConfigFileEntry<>(
             "group_watchers", null, ConfigTypes.TEXT, "{global.watchers}",
             "Watchers §7('/watcher' command)", ""
+    );
+
+    public final ConfigFileEntry<Object> GROUP_LIVES = new ConfigFileEntry<>(
+            "group_lives", null, ConfigTypes.TEXT, "{lives}",
+            "Lives Manager", ""
+    );
+    public final ConfigFileEntry<Object> GROUP_TEAMS = new ConfigFileEntry<>(
+            "group_teams", null, ConfigTypes.TEXT, "{teams}",
+            "Teams Manager", ""
+    );
+    public final ConfigFileEntry<Object> GROUP_DATAPACK = new ConfigFileEntry<>(
+            "group_datapack", null, ConfigTypes.TEXT, "{datapack}",
+            "Datapack Integration", ""
+    );
+
+
+    public final ConfigFileEntry<Object> NO_SEASON_SPECIFIC = new ConfigFileEntry<>(
+            "no_season_specific", null, ConfigTypes.TEXT, "season",
+            "There are no season specific entries", ""
     );
 
     public static final List<String> RELOAD_NEEDED = List.of(

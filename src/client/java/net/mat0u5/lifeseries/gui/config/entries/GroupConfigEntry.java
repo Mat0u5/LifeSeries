@@ -345,4 +345,9 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
         }
         return false;
     }
+
+    @Override
+    public boolean sendToServer() {
+        return false;
+    }
 }

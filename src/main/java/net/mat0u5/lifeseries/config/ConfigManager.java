@@ -3,8 +3,12 @@ package net.mat0u5.lifeseries.config;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
+import net.mat0u5.lifeseries.seasons.other.LivesManager;
+import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.scores.PlayerScoreEntry;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -13,8 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import static net.mat0u5.lifeseries.Main.currentSession;
-import static net.mat0u5.lifeseries.Main.seasonConfig;
+import static net.mat0u5.lifeseries.Main.*;
 
 public abstract class ConfigManager extends DefaultConfigValues {
 
@@ -35,8 +38,11 @@ public abstract class ConfigManager extends DefaultConfigValues {
         return new ArrayList<>(List.of(
                 GROUP_GLOBAL // Group
                 ,GROUP_SEASON // Group
+                ,GROUP_LIVES
+                //,GROUP_TEAMS
+                //,GROUP_DATAPACK
 
-                ,GROUP_LIVES // Group
+                , GROUP_GLOBAL_LIVES // Group
                 ,DEFAULT_LIVES
                 ,ONLY_TAKE_LIVES_IN_SESSION
                 ,TAB_LIST_SHOW_LIVES // Group
@@ -135,7 +141,9 @@ public abstract class ConfigManager extends DefaultConfigValues {
     }
 
     protected List<ConfigFileEntry<?>> getSeasonSpecificConfigEntries() {
-        return new ArrayList<>(List.of());
+        return new ArrayList<>(List.of(
+                NO_SEASON_SPECIFIC
+        ));
     }
 
     protected List<ConfigFileEntry<?>> getAllConfigEntries() {
@@ -165,6 +173,22 @@ public abstract class ConfigManager extends DefaultConfigValues {
             sendConfigEntry(player, entry, index);
             index++;
         }
+        for (PlayerScoreEntry entry : ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME)) {
+            ConfigFileEntry<Integer> lifeEntry = new ConfigFileEntry<>(
+                    "dynamic_lives_"+entry.owner(), entry.value(), ConfigTypes.LIVES_ENTRY, "lives",
+                    entry.owner(), "", true
+            );
+            sendConfigEntry(player, lifeEntry, index);
+            index++;
+        }
+        for (ServerPlayer nonAssignedPlayer : livesManager.getNonAssignedPlayers()) {
+            ConfigFileEntry<Integer> lifeEntry = new ConfigFileEntry<>(
+                    "dynamic_lives_"+nonAssignedPlayer.getScoreboardName(), null, ConfigTypes.LIVES_ENTRY, "lives",
+                    nonAssignedPlayer.getScoreboardName(), "", true
+            );
+            sendConfigEntry(player, lifeEntry, index);
+            index++;
+        }
     }
 
     public void sendConfigEntry(ServerPlayer player, ConfigFileEntry<?> entry, int index) {
@@ -174,11 +198,16 @@ public abstract class ConfigManager extends DefaultConfigValues {
     public ConfigPayload getConfigPayload(ConfigFileEntry<?> entry, int index) {
         String value = "";
         if (!entry.type.parentText()) {
-            value = getPropertyAsString(entry.key, entry.defaultValue);
+            if (!entry.dynamic) {
+                value = getPropertyAsString(entry.key, entry.defaultValue);
+            }
         }
         String defaultValue = "";
         if (entry.defaultValue != null) {
             defaultValue = entry.defaultValue.toString();
+            if (entry.dynamic) {
+                value = entry.defaultValue.toString();
+            }
         }
         List<String> args = new ArrayList<>(List.of(value, defaultValue, entry.groupInfo));
         if (entry.args != null) {
@@ -197,6 +226,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
         } else if (defaultValue instanceof String stringValue) {
             return getOrCreateProperty(key, stringValue);
         }
+        if (defaultValue == null) return "";
         return defaultValue.toString();
     }
 

@@ -184,6 +184,12 @@ public class ClientConfigGuiManager {
             }
             return new IntegerConfigEntry(intObject.id, intObject.name, intObject.description, intObject.integerValue, intObject.defaultValue);
         }
+        else if (object instanceof NullableIntegerObject intObject) {
+            if (intObject.configType == ConfigTypes.LIVES_ENTRY) {
+                return new LivesConfigEntry(intObject.id, intObject.name, intObject.description, intObject.integerValue, intObject.defaultValue);
+            }
+            return new NullableIntegerConfigEntry(intObject.id, intObject.name, intObject.description, intObject.integerValue, intObject.defaultValue);
+        }
         else if (object instanceof DoubleObject doubleObject) {
             if (doubleObject.configType == ConfigTypes.PERCENTAGE) {
                 return new PercentageConfigEntry(doubleObject.id, doubleObject.name, doubleObject.description, doubleObject.doubleValue, doubleObject.defaultValue);

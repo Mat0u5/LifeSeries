@@ -32,8 +32,8 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
 
     @Override
     protected void initializeTextField() {
-        setText(value.toString());
-        if (textField.getWidth()-6 < textRenderer.width(value.toString())) {
+        setText(getValueAsString());
+        if (textField.getWidth()-6 < textRenderer.width(getValueAsString())) {
             textField.moveCursorToStart(false);
         }
     }
@@ -72,7 +72,7 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
     public void setValue(Object value) {
         if (isValidType(value)) {
             this.value = castValue(value);
-            setText(value.toString());
+            setText(getValueAsString());
         }
     }
 
@@ -91,6 +91,7 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
 
     @Override
     public String getValueAsString() {
+        if (value == null) return "";
         return value.toString();
     }
 
@@ -101,6 +102,7 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
 
     @Override
     public String getDefaultValueAsString() {
+        if (defaultValue == null) return "";
         return defaultValue.toString();
     }
 

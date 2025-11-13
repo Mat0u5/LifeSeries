@@ -31,11 +31,13 @@ import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.network.DisconnectionDetails;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.scores.ScoreHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,6 +103,11 @@ public class NetworkHandlerServer {
             MinecraftServer server = context.server();
             server.execute(() -> handleStringPacket(player, payload));
         });
+        ServerPlayNetworking.registerGlobalReceiver(StringListPayload.ID, (payload, context) -> {
+            ServerPlayer player = context.player();
+            MinecraftServer server = context.server();
+            server.execute(() -> handleStringListPacket(player, payload));
+        });
         ServerPlayNetworking.registerGlobalReceiver(ConfigPayload.ID, (payload, context) -> {
             ServerPlayer player = context.player();
             MinecraftServer server = context.server();
@@ -136,11 +143,16 @@ public class NetworkHandlerServer {
                     updatedConfigThisTick = true;
                 }catch(Exception e){}
             }
-            else if (configType.parentInteger() && !args.isEmpty()) {
+            else if ((configType.parentInteger() && !args.isEmpty()) || (configType.parentNullableInteger() && !args.isEmpty())) {
                 try {
                     int value = Integer.parseInt(args.getFirst());
                     seasonConfig.setProperty(id, String.valueOf(value));
                     updatedConfigThisTick = true;
+                }catch(Exception e){}
+            }
+            else if (configType.parentNullableInteger() && args.isEmpty()) {
+                try {
+                    seasonConfig.removeProperty(id);
                 }catch(Exception e){}
             }
 
@@ -211,6 +223,25 @@ public class NetworkHandlerServer {
                 if (power instanceof TripleJump tripleJump) {
                     tripleJump.isInAir = true;
                 }
+            }
+        }
+    }
+
+    public static void handleStringListPacket(ServerPlayer player, StringListPayload payload) {
+        String nameStr = payload.name();
+        PacketNames name = PacketNames.fromName(nameStr);
+        List<String> value = payload.value();
+
+        if (PermissionManager.isAdmin(player)) {
+            if (name == PacketNames.SET_LIVES && value.size() >= 2) {
+                try {
+                    int lives = Integer.parseInt(value.get(1));
+                    livesManager.setScore(value.getFirst(), lives);
+                }catch(Exception e) {
+                    ScoreboardUtils.resetScore(ScoreHolder.forNameOnly(value.getFirst()), LivesManager.SCOREBOARD_NAME);
+
+                }
+                Season.reloadPlayerTeams = true;
             }
         }
     }

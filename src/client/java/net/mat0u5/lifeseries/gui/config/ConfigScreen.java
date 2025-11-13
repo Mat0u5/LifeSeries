@@ -195,11 +195,13 @@ public class ConfigScreen extends Screen {
                 String searchQuery = this.currentSearchQuery.trim();
                 if (searchQuery.isEmpty()) {
                     for (ConfigEntry entry : entries) {
+                        if (!entry.isSearchable()) continue;
                         this.listWidget.addEntry(entry);
                     }
                 }
                 else {
                     for (ConfigEntry entry : getFilteredEntries(getAllEntries(entries), searchQuery)) {
+                        if (!entry.isSearchable()) continue;
                         this.listWidget.addEntry(entry);
                     }
                 }
@@ -270,12 +272,8 @@ public class ConfigScreen extends Screen {
         for (ConfigEntry entry : getAllEntries(allSurfaceEntriesServer)) {
             // Server
             if (!entry.modified()) continue;
-            if (entry instanceof GroupConfigEntry) continue;
-            NetworkHandlerClient.sendConfigUpdate(
-                    entry.getValueType().toString(),
-                    entry.getFieldName(),
-                    List.of(entry.getValueAsString())
-            );
+            if (!entry.sendToServer()) continue;
+            entry.onSave();
         }
         for (ConfigEntry entry : getAllEntries(allSurfaceEntriesClient)) {
             // Client

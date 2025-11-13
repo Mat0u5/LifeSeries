@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.gui.config.entries;
 
 import net.mat0u5.lifeseries.gui.config.ConfigScreen;
+import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
@@ -276,5 +277,21 @@ public abstract class ConfigEntry {
 
     public boolean hasResetButton() {
         return true;
+    }
+
+    public boolean sendToServer() {
+        return true;
+    }
+
+    public boolean isSearchable() {
+        return true;
+    }
+
+    public void onSave() {
+        NetworkHandlerClient.sendConfigUpdate(
+                getValueType().toString(),
+                getFieldName(),
+                List.of(getValueAsString())
+        );
     }
 }

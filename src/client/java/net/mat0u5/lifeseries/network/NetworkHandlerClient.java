@@ -441,6 +441,10 @@ public class NetworkHandlerClient {
         ClientPlayNetworking.send(new StringPayload(name.getName(), value));
     }
 
+    public static void sendStringListPacket(PacketNames name, List<String> value) {
+        ClientPlayNetworking.send(new StringListPayload(name.getName(), value));
+    }
+
     public static void sendNumberPacket(PacketNames name, double value) {
         ClientPlayNetworking.send(new NumberPayload(name.getName(), value));
     }

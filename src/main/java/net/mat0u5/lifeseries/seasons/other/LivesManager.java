@@ -354,6 +354,12 @@ public class LivesManager {
         return Component.literal(message);
     }
 
+    public List<ServerPlayer> getNonAssignedPlayers() {
+        List<ServerPlayer> players = PlayerUtils.getAllFunctioningPlayers();
+        players.removeIf(player -> getPlayerLives(player) != null);
+        return players;
+    }
+
     public List<ServerPlayer> getNonRedPlayers() {
         List<ServerPlayer> players = PlayerUtils.getAllFunctioningPlayers();
         players.removeIf(player -> isOnLastLife(player, true));

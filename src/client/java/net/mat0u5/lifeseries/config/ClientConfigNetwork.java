@@ -77,6 +77,19 @@ public class ClientConfigNetwork {
                 return new IntegerObject(payload, value, defaultValue);
             }catch(Exception e){}
         }
+        if (configType.parentNullableInteger()) {
+            Integer value = null;
+            Integer defaultValue = null;
+            try {
+                value = Integer.parseInt(argValue);
+            }catch(Exception e){}
+            try {
+                defaultValue = Integer.parseInt(argDefaultValue);
+            }catch(Exception e){}
+            try {
+                return new NullableIntegerObject(payload, value, defaultValue);
+            }catch(Exception e){}
+        }
 
         return null;
     }

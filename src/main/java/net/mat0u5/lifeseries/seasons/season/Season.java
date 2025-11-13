@@ -76,6 +76,7 @@ public abstract class Season {
     public static boolean GIVELIFE_CAN_REVIVE = false;
     public boolean SHOW_LOGIN_COMMAND_INFO = true;
     public boolean HIDE_UNJUSTIFIED_KILL_MESSAGES = false;
+    public static boolean reloadPlayerTeams = false;
 
     public BoogeymanManager boogeymanManager = createBoogeymanManager();
     public SecretSociety secretSociety = createSecretSociety();
@@ -325,7 +326,8 @@ public abstract class Season {
         ticks++;
         boogeymanManager.tick();
         secretSociety.tick();
-        if (ticks % 100 == 0) {
+        if (ticks % 100 == 0 || reloadPlayerTeams) {
+            reloadPlayerTeams = false;
             reloadAllPlayerTeams();
         }
     }

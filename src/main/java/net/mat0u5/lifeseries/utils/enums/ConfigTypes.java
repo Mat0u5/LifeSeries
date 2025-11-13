@@ -6,6 +6,7 @@ public enum ConfigTypes {
     STRING("string"),
     BOOLEAN("boolean"),
     INTEGER("integer"),
+    NULLABLE_INTEGER("nullable_integer"),
     DOUBLE("double"),
     TEXT("text"),
 
@@ -19,6 +20,8 @@ public enum ConfigTypes {
     SECONDS("seconds"),
     MINUTES("minutes"),
     STRING_LIST("list"),
+
+    LIVES_ENTRY("lives"),
 
     GROUP("group");
 
@@ -43,6 +46,9 @@ public enum ConfigTypes {
     }
     public boolean parentInteger() {
         return this == INTEGER || this == HEARTS || this == SECONDS;
+    }
+    public boolean parentNullableInteger() {
+        return this == NULLABLE_INTEGER || this == LIVES_ENTRY;
     }
     public boolean parentDouble() {
         return this == DOUBLE || this == PERCENTAGE || this == MINUTES;
