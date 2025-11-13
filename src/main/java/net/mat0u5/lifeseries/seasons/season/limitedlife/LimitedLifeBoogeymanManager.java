@@ -22,15 +22,6 @@ import static net.mat0u5.lifeseries.Main.livesManager;
 import static net.mat0u5.lifeseries.Main.server;
 
 public class LimitedLifeBoogeymanManager extends BoogeymanManager {
-    @Override
-    public boolean isBoogeymanThatCanBeCured(ServerPlayer player, ServerPlayer victim) {
-        Boogeyman boogeyman = getBoogeyman(player);
-        if (boogeyman == null) return false;
-        if (boogeyman.cured) return false;
-        if (boogeyman.failed) return false;
-        if (victim.ls$isOnLastLife(true) && !player.ls$isOnLastLife(true)) return false;
-        return true;
-    }
 
     @Override
     public void sessionEnd() {

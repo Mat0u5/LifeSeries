@@ -92,6 +92,8 @@ public abstract class PlayerManagerMixin implements IPlayerManager {
         if (!Main.isLogicalSide() || Main.modDisabled() || player == null) {
             instance.broadcastSystemMessage(message, overlay);
         }
-        PlayerUtils.broadcastToVisiblePlayers(player, message);
+        else {
+            PlayerUtils.broadcastToVisiblePlayers(player, message);
+        }
     }
 }

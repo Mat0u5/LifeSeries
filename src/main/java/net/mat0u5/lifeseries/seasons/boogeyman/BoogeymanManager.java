@@ -99,7 +99,9 @@ public class BoogeymanManager {
         if (boogeyman == null) return false;
         if (boogeyman.cured) return false;
         if (boogeyman.failed) return false;
-        if (victim.ls$isOnLastLife(true)) return false;
+        List<ServerPlayer> nonReds = livesManager.getNonRedPlayers();
+        nonReds.remove(player);
+        if (victim.ls$isOnLastLife(true) && !nonReds.isEmpty()) return false;
         return true;
     }
 

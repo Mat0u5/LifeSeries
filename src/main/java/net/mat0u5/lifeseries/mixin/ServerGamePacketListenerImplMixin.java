@@ -164,6 +164,8 @@ public class ServerGamePacketListenerImplMixin {
         if (!Main.isLogicalSide() || Main.modDisabled()) {
             instance.broadcastSystemMessage(message, overlay);
         }
-        PlayerUtils.broadcastToVisiblePlayers(handler.player, message);
+        else {
+            PlayerUtils.broadcastToVisiblePlayers(handler.player, message);
+        }
     }
 }

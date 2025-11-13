@@ -57,3 +57,9 @@ Added the 'soulmates_pvp_allowed' Double Life config. Default value is true.
 
 Added the 'blacklist_recipes' global config - It's an item list, so the same format as the item blacklist for example. All blacklisted items still have disabled recipes, this is only if you want non-blacklisted items but without recipes.<br>
 Added the Simple Life world preset, which is a flat world in all dimensions without slime spawning in the overworld.
+
+----------
+
+Join and leave messages are no longer doubled when the mod is disabled.<br>
+If a player is the Boogeyman and there are no more non-reds in the game, they can now be cured by killing a red.<br>
+Being outside the border no longer gives you one tick of damage before teleporting you.

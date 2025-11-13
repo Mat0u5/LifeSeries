@@ -435,6 +435,7 @@ public class DoubleLife extends Season {
 
     @Override
     public void onPrePlayerDamage(ServerPlayer player, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        super.onPrePlayerDamage(player, source, amount, cir);
         if (SOULMATES_PVP_ALLOWED) return;
 
         ServerPlayer soulmate = getSoulmate(player);
