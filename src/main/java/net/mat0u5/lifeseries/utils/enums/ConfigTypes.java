@@ -22,6 +22,7 @@ public enum ConfigTypes {
     STRING_LIST("list"),
 
     LIVES_ENTRY("lives"),
+    TEAM_ENTRY("teams"),
 
     GROUP("group");
 
@@ -39,7 +40,7 @@ public enum ConfigTypes {
         return this == STRING || this == ITEM_LIST || this == BLOCK_LIST || this == EFFECT_LIST || this == ENCHANT_LIST || this == STRING_LIST;
     }
     public boolean parentText() {
-        return this == TEXT;
+        return this == TEXT || this == TEAM_ENTRY;
     }
     public boolean parentBoolean() {
         return this == BOOLEAN || this == BOOGEYMAN;

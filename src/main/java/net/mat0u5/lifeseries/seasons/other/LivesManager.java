@@ -53,8 +53,8 @@ public class LivesManager {
         updateTeams();
     }
 
-    public void updateTeams() {
-        MAX_TAB_NUMBER = 4;
+    public Map<Integer, PlayerTeam> getLivesTeams() {
+        Map<Integer, PlayerTeam> result = new TreeMap<>();
         Collection<PlayerTeam> allTeams = TeamUtils.getAllTeams();
         if (allTeams != null) {
             for (PlayerTeam team : allTeams) {
@@ -62,11 +62,19 @@ public class LivesManager {
                 if (name.startsWith("lives_")) {
                     try {
                         int number = Integer.parseInt(name.replace("lives_",""));
-                        MAX_TAB_NUMBER = Math.max(MAX_TAB_NUMBER, number);
+                        result.put(number, team);
                     }catch(Exception e) {}
-                    team.setSeeFriendlyInvisibles(SEE_FRIENDLY_INVISIBLE_PLAYERS);
                 }
             }
+        }
+        return result;
+    }
+
+    public void updateTeams() {
+        MAX_TAB_NUMBER = 4;
+        for (Map.Entry<Integer, PlayerTeam> entry : getLivesTeams().entrySet()) {
+            MAX_TAB_NUMBER = Math.max(MAX_TAB_NUMBER, entry.getKey());
+            entry.getValue().setSeeFriendlyInvisibles(SEE_FRIENDLY_INVISIBLE_PLAYERS);
         }
         NetworkHandlerServer.sendNumberPackets(PacketNames.TAB_LIVES_CUTOFF, MAX_TAB_NUMBER);
     }

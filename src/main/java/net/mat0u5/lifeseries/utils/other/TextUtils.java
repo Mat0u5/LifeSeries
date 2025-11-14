@@ -115,6 +115,13 @@ public class TextUtils {
         *///?}
     }
 
+    public static Component withHover(Component text, Component hover) {
+        return text.copy().withStyle(style -> style.withHoverEvent(showTextHoverEvent(hover)));
+    }
+    public static Component withHover(String text, String hover) {
+        return Component.literal(text).withStyle(style -> style.withHoverEvent(showTextHoverEvent(Component.literal(hover))));
+    }
+
     public static Component selfMessageText(String message) {
         return runCommandText("/selfmsg " + message);
     }

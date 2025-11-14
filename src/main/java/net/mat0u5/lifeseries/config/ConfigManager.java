@@ -9,13 +9,12 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.scores.PlayerScoreEntry;
+import net.minecraft.world.scores.PlayerTeam;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.*;
 
@@ -39,7 +38,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 GROUP_GLOBAL // Group
                 ,GROUP_SEASON // Group
                 ,GROUP_LIVES
-                //,GROUP_TEAMS
+                ,GROUP_TEAMS
                 //,GROUP_DATAPACK
 
                 , GROUP_GLOBAL_LIVES // Group
@@ -187,6 +186,18 @@ public abstract class ConfigManager extends DefaultConfigValues {
                     nonAssignedPlayer.getScoreboardName(), "", true
             );
             sendConfigEntry(player, lifeEntry, index);
+            index++;
+        }
+        for (Map.Entry<Integer, PlayerTeam> entry : livesManager.getLivesTeams().entrySet()) {
+            PlayerTeam team = entry.getValue();
+            int teamNum = entry.getKey();
+            String validKill = "";//TODO
+            String gainLife = "";//TODO
+            ConfigFileEntry<Object> teamEntry = new ConfigFileEntry<>(
+                    "dynamic_teams_"+ UUID.randomUUID(), null, ConfigTypes.TEAM_ENTRY, "teams",
+                    "", "", List.of(String.valueOf(teamNum), team.getDisplayName().getString(), team.getColor().getName(), validKill, gainLife), true
+            );
+            sendConfigEntry(player, teamEntry, index);
             index++;
         }
     }

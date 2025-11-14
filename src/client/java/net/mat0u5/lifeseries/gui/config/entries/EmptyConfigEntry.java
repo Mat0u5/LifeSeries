@@ -99,7 +99,7 @@ public abstract class EmptyConfigEntry extends ConfigEntry {
     }
 
     @Override
-    public boolean modified() {
+    public boolean isModified() {
         return false;
     }
 }

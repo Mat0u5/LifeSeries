@@ -226,7 +226,7 @@ public abstract class ConfigEntry {
     public abstract ConfigTypes getValueType();
     public abstract void setValue(Object value);
 
-    public boolean modified() {
+    public boolean isModified() {
         return !Objects.equals(getValue(), getStartingValue());
     }
 

@@ -200,6 +200,9 @@ public class ClientConfigGuiManager {
             return new DoubleConfigEntry(doubleObject.id, doubleObject.name, doubleObject.description, doubleObject.doubleValue, doubleObject.defaultValue);
         }
         else if (object instanceof TextObject textObject) {
+            if (textObject.configType == ConfigTypes.TEAM_ENTRY) {
+                return new TeamConfigEntry(textObject.id, textObject.args);
+            }
             return new TextConfigEntry(textObject.id, textObject.name, textObject.description, textObject.clickable);
         }
         return null;

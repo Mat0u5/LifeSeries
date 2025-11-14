@@ -7,7 +7,6 @@ import net.mat0u5.lifeseries.config.ClientConfigNetwork;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.GroupConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.main.TextConfigEntry;
-import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -239,7 +238,7 @@ public class ConfigScreen extends Screen {
     private void updateButtonStates() {
         this.hasChanges = false;
         for (ConfigEntry entry : getAllEntries()) {
-            if (entry.modified()) {
+            if (entry.isModified()) {
                 this.hasChanges = true;
                 break;
             }
@@ -271,13 +270,13 @@ public class ConfigScreen extends Screen {
 
         for (ConfigEntry entry : getAllEntries(allSurfaceEntriesServer)) {
             // Server
-            if (!entry.modified()) continue;
+            if (!entry.isModified()) continue;
             if (!entry.sendToServer()) continue;
             entry.onSave();
         }
         for (ConfigEntry entry : getAllEntries(allSurfaceEntriesClient)) {
             // Client
-            if (!entry.modified()) continue;
+            if (!entry.isModified()) continue;
             if (entry instanceof GroupConfigEntry) continue;
             ClientConfigNetwork.onConfigSave(entry);
         }
@@ -319,6 +318,7 @@ public class ConfigScreen extends Screen {
 
         this.searchField.render(context, mouseX, mouseY, delta);
 
+        updateButtonStates();
         if (this.hasErrors()) {
             context.drawString(this.font, Component.nullToEmpty("Errors"), 10, HEADER_TITLE_Y, TextColors.LIGHT_RED);
         }
