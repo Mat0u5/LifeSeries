@@ -44,8 +44,6 @@ import static net.mat0u5.lifeseries.Main.seasonConfig;
 public class WildLife extends Season {
     public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /wildcard, /superpower, /snail";
     public static final String COMMANDS_TEXT = "/claimkill, /lives, /snail";
-    public static boolean KILLING_DARK_GREENS_GAINS_LIVES = true;
-    public static boolean BROADCAST_LIFE_GAIN = true;
 
     @Override
     public Seasons getSeason() {
@@ -93,9 +91,6 @@ public class WildLife extends Season {
         if (Necromancy.isRessurectedPlayer(victim) || Necromancy.isRessurectedPlayer(attacker)) {
             return true;
         }
-        if (attacker.ls$isOnSpecificLives(2, false) && victim.ls$isOnAtLeastLives(3, false)) {
-            return true;
-        }
         return super.isAllowedToAttack(attacker, victim, allowSelfDefense);
     }
 
@@ -114,35 +109,14 @@ public class WildLife extends Season {
                         ScoreboardUtils.setScore(ScoreHolder.forNameOnly(killer.getScoreboardName()), LivesManager.SCOREBOARD_NAME, lives);
                     }
                     else {
-                        broadcastLifeGain(killer);
+                        broadcastLifeGain(killer, victim);
                         killer.ls$addLife();
                     }
                 }
             }
-            else {
-                if (KILLING_DARK_GREENS_GAINS_LIVES) {
-                    broadcastLifeGain(killer);
-                    killer.ls$addLife();
-                }
-            }
         }
     }
 
-
-    @Override
-    public void onClaimKill(ServerPlayer killer, ServerPlayer victim) {
-        super.onClaimKill(killer, victim);
-        if (victim.ls$isOnAtLeastLives(4, false) && KILLING_DARK_GREENS_GAINS_LIVES) {
-            broadcastLifeGain(killer);
-            killer.ls$addLife();
-        }
-    }
-
-    public void broadcastLifeGain(ServerPlayer player) {
-        if (BROADCAST_LIFE_GAIN) {
-            PlayerUtils.broadcastMessage(TextUtils.format("{}§7 gained a life for killing a §2dark green§7 player.", player));
-        }
-    }
 
     @Override
     public void tickSessionOn(MinecraftServer server) {
@@ -215,8 +189,6 @@ public class WildLife extends Season {
         WindCharge.MAX_MACE_DAMAGE = WildLifeConfig.WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE.get(config);
         Superspeed.STEP_UP = WildLifeConfig.WILDCARD_SUPERPOWERS_SUPERSPEED_STEP.get(config);
         WildcardManager.ACTIVATE_WILDCARD_MINUTE = WildLifeConfig.ACTIVATE_WILDCARD_MINUTE.get(config);
-        KILLING_DARK_GREENS_GAINS_LIVES = WildLifeConfig.KILLING_DARK_GREENS_GAINS_LIVES.get(config);
-        BROADCAST_LIFE_GAIN = WildLifeConfig.BROADCAST_LIFE_GAIN.get(config);
         SuperpowersWildcard.WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME = WildLifeConfig.WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME.get(config);
         SuperpowersWildcard.setBlacklist(WildLifeConfig.WILDCARD_SUPERPOWERS_POWER_BLACKLIST.get(config));
         SuperpowersWildcard.ZOMBIES_HEALTH = WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_HEALTH.get(config);

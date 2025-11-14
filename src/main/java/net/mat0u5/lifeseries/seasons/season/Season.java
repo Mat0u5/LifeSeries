@@ -77,6 +77,7 @@ public abstract class Season {
     public boolean SHOW_LOGIN_COMMAND_INFO = true;
     public boolean HIDE_UNJUSTIFIED_KILL_MESSAGES = false;
     public static boolean reloadPlayerTeams = false;
+    private static boolean BROADCAST_LIFE_GAIN = false;
 
     public BoogeymanManager boogeymanManager = createBoogeymanManager();
     public SecretSociety secretSociety = createSecretSociety();
@@ -191,6 +192,7 @@ public abstract class Season {
         SHOW_LOGIN_COMMAND_INFO = seasonConfig.SHOW_LOGIN_COMMAND_INFO.get(seasonConfig);
         HIDE_UNJUSTIFIED_KILL_MESSAGES = seasonConfig.HIDE_UNJUSTIFIED_KILL_MESSAGES.get(seasonConfig);
         Session.TICK_FREEZE_NOT_IN_SESSION = seasonConfig.TICK_FREEZE_NOT_IN_SESSION.get(seasonConfig);
+        BROADCAST_LIFE_GAIN = seasonConfig.BROADCAST_LIFE_GAIN.get(seasonConfig);
 
         boogeymanManager.onReload();
         secretSociety.onReload();
@@ -303,6 +305,15 @@ public abstract class Season {
                  return true;
              }
         }
+
+        PlayerTeam team = attacker.getTeam();
+        if (team != null) {
+            Integer canKillLives = livesManager.getTeamCanKill(team.getName());
+            if (canKillLives != null && victim.ls$isOnAtLeastLives(canKillLives, false)) {
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -398,6 +409,16 @@ public abstract class Season {
         if (boogeymanManager.isBoogeymanThatCanBeCured(killer, victim)) {
             boogeymanManager.onBoogeymanKill(killer);
         }
+        else {
+            PlayerTeam team = killer.getTeam();
+            if (team != null) {
+                Integer canGainLife = livesManager.getTeamGainLives(team.getName());
+                if (canGainLife != null && victim.ls$isOnAtLeastLives(canGainLife, false)) {
+                    broadcastLifeGain(killer, victim);
+                    killer.ls$addLife();
+                }
+            }
+        }
 
         killer.awardStat(Stats.PLAYER_KILLS);
         //? if <= 1.21 {
@@ -405,6 +426,12 @@ public abstract class Season {
         //?} else {
         /*killer.level().getScoreboard().forAllObjectives(ObjectiveCriteria.KILL_COUNT_PLAYERS, killer, ScoreAccess::increment);
         *///?}
+    }
+
+    public void broadcastLifeGain(ServerPlayer player, ServerPlayer victim) {
+        if (BROADCAST_LIFE_GAIN) {
+            PlayerUtils.broadcastMessage(TextUtils.format("{}§7 gained a life for killing {}.", player, victim));
+        }
     }
 
     public void onPlayerDamage(ServerPlayer player, DamageSource source, float amount, CallbackInfo ci) {
@@ -420,14 +447,28 @@ public abstract class Season {
     }
 
     public void onPlayerKilledByPlayer(ServerPlayer victim, ServerPlayer killer) {
+        boolean isAllowedToAttack = isAllowedToAttack(killer, victim, false);
+        boolean isBoogeyCure = boogeymanManager.isBoogeymanThatCanBeCured(killer, victim);
+
         if (!isAllowedToAttack(killer, victim) && !HIDE_UNJUSTIFIED_KILL_MESSAGES) {
             PlayerUtils.broadcastMessageToAdmins(TextUtils.format("§c [Unjustified Kill?] {}§7 was killed by {}", victim, killer));
         }
 
-        if (boogeymanManager.isBoogeymanThatCanBeCured(killer, victim)) {
+        if (isBoogeyCure) {
             boogeymanManager.onBoogeymanKill(killer);
         }
         SessionTranscript.onPlayerKilledByPlayer(victim, killer);
+
+        if (!isBoogeyCure && isAllowedToAttack) {
+            PlayerTeam team = killer.getTeam();
+            if (team != null) {
+                Integer canGainLife = livesManager.getTeamGainLives(team.getName());
+                if (canGainLife != null && victim.ls$isOnAtLeastLives(canGainLife, false)) {
+                    broadcastLifeGain(killer, victim);
+                    killer.ls$addLife();
+                }
+            }
+        }
     }
 
     public void onMobDeath(LivingEntity entity, DamageSource damageSource) {

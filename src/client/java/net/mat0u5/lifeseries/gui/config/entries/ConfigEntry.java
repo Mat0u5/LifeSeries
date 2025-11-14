@@ -54,6 +54,7 @@ public abstract class ConfigEntry {
     protected GroupConfigEntry<?> parentGroup;
     protected List<GroupConfigEntry<?>> groupTopology = new ArrayList<>();
     private boolean isNew = false;
+    public boolean changedForever = false;
 
     public ConfigEntry(String fieldName, String displayName, String description) {
         this.fieldName = fieldName;
@@ -273,6 +274,10 @@ public abstract class ConfigEntry {
         if (screen != null) {
             screen.onEntryValueChanged();
         }
+    }
+
+    public void markChangedForever() {
+        changedForever = true;
     }
 
     public boolean hasResetButton() {

@@ -268,14 +268,6 @@ public class WildLifeConfig extends ConfigManager {
             "activate_wildcard_minute", 2.5, ConfigTypes.MINUTES, "season.general",
             "Activate Wildcard Time", "The number of minutes (in the session) after which the wildcard is activated."
     );
-    public static final ConfigFileEntry<Boolean> KILLING_DARK_GREENS_GAINS_LIVES = new ConfigFileEntry<>(
-            "killing_dark_greens_gains_lives", true, "{season.general.darkgreen}",
-            "Killing Dark Greens Gains Lives", "Controls whether killing dark green players (4+ lives) gives the killer a life."
-    );
-    public static final ConfigFileEntry<Boolean> BROADCAST_LIFE_GAIN = new ConfigFileEntry<>(
-            "broadcast_life_gain", false, "season.general.darkgreen",
-            "Broadcast Life Gain", "Shows a message in chat when a player gains a life by killing a dark green player."
-    );
 
     public WildLifeConfig() {
         super("./config/"+ Main.MOD_ID,"wildlife.properties");
@@ -285,7 +277,6 @@ public class WildLifeConfig extends ConfigManager {
     protected List<ConfigFileEntry<?>> getSeasonSpecificConfigEntries() {
         return new ArrayList<>(List.of(
                 GROUP_GENERAL //Group
-                    ,KILLING_DARK_GREENS_GAINS_LIVES//Group
                 ,GROUP_SIZESHIFTING //Group
                 ,GROUP_HUNGER //Group
                 ,GROUP_SNAILS //Group
@@ -296,7 +287,6 @@ public class WildLifeConfig extends ConfigManager {
                 ,GROUP_CALLBACK //Group
 
                 //Group stuff
-                ,BROADCAST_LIFE_GAIN
                 ,ACTIVATE_WILDCARD_MINUTE
 
                 ,WILDCARD_SIZESHIFTING_MIN_SIZE

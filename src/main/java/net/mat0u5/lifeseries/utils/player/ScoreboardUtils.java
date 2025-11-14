@@ -61,8 +61,12 @@ public class ScoreboardUtils {
         setScore(ScoreHolder.forNameOnly(player.getScoreboardName()), objectiveName, score);
     }
 
-    public static void setScore(ScoreHolder holder, String objectiveName, int score) {
+    public static void setScore(ScoreHolder holder, String objectiveName, Integer score) {
         if (livesManager != null && livesManager.LIVES_SYSTEM_DISABLED && objectiveName.equals(LivesManager.SCOREBOARD_NAME)) {
+            return;
+        }
+        if (score == null) {
+            resetScore(holder, objectiveName);
             return;
         }
         if (server == null) return;

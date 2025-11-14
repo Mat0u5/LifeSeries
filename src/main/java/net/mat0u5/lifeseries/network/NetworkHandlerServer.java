@@ -32,14 +32,18 @@ import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
+import net.mat0u5.lifeseries.utils.player.TeamUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.DisconnectionDetails;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.ScoreHolder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -240,6 +244,47 @@ public class NetworkHandlerServer {
                 }catch(Exception e) {
                     ScoreboardUtils.resetScore(ScoreHolder.forNameOnly(value.getFirst()), LivesManager.SCOREBOARD_NAME);
 
+                }
+                Season.reloadPlayerTeams = true;
+            }
+            if (name == PacketNames.SET_TEAM && value.size() >= 6) {
+                List<String> teamNames = Arrays.asList(value.getFirst().split(";"));
+                String packetTeamName = "lives_" + value.get(1);
+                String packetTeamDisplayName = value.get(2);
+                String packetTeamColor = value.get(3);
+                String packetAllowedKill = value.get(4);
+                String packetGainLifeKill = value.get(5);
+
+                ChatFormatting newTeamColor = ChatFormatting.getByName(packetTeamColor);
+                if (newTeamColor == null) newTeamColor = ChatFormatting.WHITE;
+
+                Integer allowedKill = null;
+                Integer gainLife = null;
+                try {
+                    allowedKill = Integer.parseInt(packetAllowedKill);
+                } catch(Exception e) {}
+                try {
+                    gainLife = Integer.parseInt(packetGainLifeKill);
+                } catch(Exception e) {}
+
+                boolean teamModified = false;
+                for (PlayerTeam livesTeam : new ArrayList<>(livesManager.getLivesTeams().values())) {
+                    String teamName = livesTeam.getName();
+                    if (!teamNames.contains(teamName)) {
+                        livesManager.updateTeamConfig(teamName, null, null);
+                        TeamUtils.deleteTeam(teamName);
+                        continue;
+                    }
+                    if (!teamName.equals(packetTeamName)) continue;
+
+                    livesTeam.setColor(newTeamColor);
+                    livesTeam.setDisplayName(Component.literal(packetTeamDisplayName).withStyle(newTeamColor));
+                    livesManager.updateTeamConfig(teamName, allowedKill, gainLife);
+                    teamModified = true;
+                }
+                if (!teamModified) {
+                    TeamUtils.createTeam(packetTeamName, packetTeamDisplayName, newTeamColor);
+                    livesManager.updateTeamConfig(packetTeamName, allowedKill, gainLife);
                 }
                 Season.reloadPlayerTeams = true;
             }

@@ -67,6 +67,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,HIDE_UNJUSTIFIED_KILL_MESSAGES
                 ,SHOW_ADVANCEMENTS
                 ,TICK_FREEZE_NOT_IN_SESSION
+                ,BROADCAST_LIFE_GAIN
 
 
                 ,GROUP_BLACKLIST // Group
@@ -190,12 +191,15 @@ public abstract class ConfigManager extends DefaultConfigValues {
         }
         for (Map.Entry<Integer, PlayerTeam> entry : livesManager.getLivesTeams().entrySet()) {
             PlayerTeam team = entry.getValue();
+            String teamName = team.getName();
             int teamNum = entry.getKey();
-            String validKill = "";//TODO
-            String gainLife = "";//TODO
+            Integer validKill = livesManager.getTeamCanKill(teamName);
+            Integer gainLife = livesManager.getTeamGainLives(teamName);
+            String validKillStr = validKill != null ? String.valueOf(validKill) : "";
+            String gainLifeStr = gainLife != null ? String.valueOf(gainLife) : "";
             ConfigFileEntry<Object> teamEntry = new ConfigFileEntry<>(
                     "dynamic_teams_"+ UUID.randomUUID(), null, ConfigTypes.TEAM_ENTRY, "teams",
-                    "", "", List.of(String.valueOf(teamNum), team.getDisplayName().getString(), team.getColor().getName(), validKill, gainLife), true
+                    "", "", List.of(String.valueOf(teamNum), team.getDisplayName().getString(), team.getColor().getName(), validKillStr, gainLifeStr), true
             );
             sendConfigEntry(player, teamEntry, index);
             index++;

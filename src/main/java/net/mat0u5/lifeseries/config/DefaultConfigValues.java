@@ -294,6 +294,10 @@ public class DefaultConfigValues {
             "show_advancements", true, "global",
             "Show Advancements In Chat", "Controls advancements show up in the chat."
     );
+    public final ConfigFileEntry<Boolean> BROADCAST_LIFE_GAIN = new ConfigFileEntry<>(
+            "broadcast_life_gain", false, "global[new]",
+            "Broadcast Kill Life Gain", "Shows a message in chat when a player gains a life by killing a player."
+    );
 
 
 

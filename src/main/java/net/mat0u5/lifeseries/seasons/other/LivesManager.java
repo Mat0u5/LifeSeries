@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.other;
 
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
@@ -77,6 +78,46 @@ public class LivesManager {
             entry.getValue().setSeeFriendlyInvisibles(SEE_FRIENDLY_INVISIBLE_PLAYERS);
         }
         NetworkHandlerServer.sendNumberPackets(PacketNames.TAB_LIVES_CUTOFF, MAX_TAB_NUMBER);
+    }
+
+    public Integer getTeamCanKill(String teamName) {
+        Integer teamConfig = seasonConfig.getOrCreateInt("team_cankill-"+teamName, defaultTeamCanKill(teamName));
+        if (teamConfig <= -1) teamConfig = null;
+        return teamConfig;
+    }
+
+    public Integer getTeamGainLives(String teamName) {
+        Integer teamConfig = seasonConfig.getOrCreateInt("team_gainlvies-"+teamName, defaultTeamGainLife(teamName));
+        if (teamConfig <= -1) teamConfig = null;
+        return teamConfig;
+    }
+
+    public int defaultTeamCanKill(String teamName) {
+        if (currentSeason.getSeason() == Seasons.WILD_LIFE || currentSeason.getSeason() == Seasons.LIMITED_LIFE) {
+            if (teamName.equals("lives_2")) {
+                return 3;
+            }
+        }
+        if (teamName.equals("lives_1")) {
+            return 1;
+        }
+        return -1;
+    }
+
+    public int defaultTeamGainLife(String teamName) {
+        if (currentSeason.getSeason() == Seasons.WILD_LIFE) {
+            if (teamName.equals("lives_2")) {
+                return 4;
+            }
+        }
+        return -1;
+    }
+
+    public void updateTeamConfig(String teamName, Integer canKill, Integer gainLife) {
+        if (canKill == null) canKill = -1;
+        if (gainLife == null) gainLife = -1;
+        seasonConfig.setProperty("team_cankill-"+teamName, String.valueOf(canKill));
+        seasonConfig.setProperty("team_gainlvies-"+teamName, String.valueOf(gainLife));
     }
 
     public void createTeams() {

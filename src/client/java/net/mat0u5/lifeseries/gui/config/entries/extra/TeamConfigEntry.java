@@ -2,10 +2,11 @@ package net.mat0u5.lifeseries.gui.config.entries.extra;
 
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.EmptyConfigEntry;
+import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -171,13 +172,14 @@ public class TeamConfigEntry extends EmptyConfigEntry {
 
         if (getTeamNum() == null) textFieldLives.setTextColor(TextColors.PASTEL_RED);
         else textFieldLives.setTextColor(TextColors.WHITE);
-        if (getTeamColor() == null) {
+        ChatFormatting teamColor = getTeamColor();
+        if (teamColor == null || teamColor.getColor() == null) {
             textFieldColor.setTextColor(TextColors.PASTEL_RED);
             textFieldName.setTextColor(TextColors.WHITE);
         }
         else {
             textFieldColor.setTextColor(TextColors.WHITE);
-            textFieldName.setTextColor(getTeamColor().getColor());
+            textFieldName.setTextColor(TextColors.toArgb(255, teamColor.getColor()));
         }
         Integer currentTeamAllowed = getTeamAllowedKill();
         Integer currentTeamGain = getTeamGainLifeKill();
@@ -202,6 +204,10 @@ public class TeamConfigEntry extends EmptyConfigEntry {
     public void deleteEntry(Button button) {
         if (isDefaultTeam()) return;
         if (parentGroup == null) return;
+        try {
+            parentGroup.getMainEntry().markChangedForever();
+            parentGroup.getChildEntries().getFirst().markChangedForever();
+        }catch(Exception e) {}
         parentGroup.removeChildEntry(this);
     }
 
@@ -211,7 +217,9 @@ public class TeamConfigEntry extends EmptyConfigEntry {
         for (int i : getSisterTeamNums()) {
             if (i > max) max = i;
         }
-        parentGroup.addChildEntry(new TeamConfigEntry("dynamic_teams_"+ UUID.randomUUID(), List.of("", "" ,"", String.valueOf(max+1), "New Team", "white", "", "")));
+        TeamConfigEntry newEntry = new TeamConfigEntry("dynamic_teams_"+ UUID.randomUUID(), List.of("", "" ,"", String.valueOf(max+1), "New Team", "white", "", ""));
+        parentGroup.addChildEntry(newEntry);
+        newEntry.defaultTeamNum = "";
     }
 
     public boolean isFirst() {
@@ -238,7 +246,6 @@ public class TeamConfigEntry extends EmptyConfigEntry {
         this.teamColor = textFieldColor.getValue();
         this.allowedKill = textFieldAllowedKill.getValue();
         this.gainLifeKill = textFieldGainLife.getValue();
-        System.out.println("New Value: " + teamNum);
         markChanged();
         checkErrors();
     }
@@ -318,7 +325,6 @@ public class TeamConfigEntry extends EmptyConfigEntry {
             setError("Team boundary cannot be the same as another team.");
             return;
         }
-        System.out.println("ClearError");
         clearError();
         markChanged();
     }
@@ -459,7 +465,14 @@ public class TeamConfigEntry extends EmptyConfigEntry {
 
     @Override
     public void onSave() {
-        //TODO
+        List<String> allTeams = new ArrayList<>();
+        allTeams.add("lives_"+this.teamNum);
+        for (TeamConfigEntry entry : sisterEntries()) {
+            allTeams.add("lives_"+entry.teamNum);
+        }
+        NetworkHandlerClient.sendStringListPacket(PacketNames.SET_TEAM, List.of(
+            String.join(";",allTeams), teamNum, teamName, teamColor, allowedKill, gainLifeKill
+        ));
     }
 
     @Override

@@ -281,12 +281,6 @@ public class LimitedLife extends Season {
     }
 
     @Override
-    public boolean isAllowedToAttack(ServerPlayer attacker, ServerPlayer victim, boolean allowSelfDefense) {
-        if (attacker.ls$isOnSpecificLives(2, false) && victim.ls$isOnAtLeastLives(3, false)) return true;
-        return super.isAllowedToAttack(attacker, victim, allowSelfDefense);
-    }
-
-    @Override
     public void reload() {
         super.reload();
         if (!(seasonConfig instanceof LimitedLifeConfig config)) return;

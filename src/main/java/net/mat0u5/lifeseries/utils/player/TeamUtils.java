@@ -19,16 +19,17 @@ public class TeamUtils {
         createTeam(teamName, teamName, color);
     }
 
-    public static void createTeam(String teamName, String displayName, ChatFormatting color) {
-        if (server == null) return;
+    public static boolean createTeam(String teamName, String displayName, ChatFormatting color) {
+        if (server == null) return false;
         Scoreboard scoreboard = server.getScoreboard();
         if (scoreboard.getPlayerTeam(teamName) != null) {
             // A team with this name already exists
-            return;
+            return false;
         }
         PlayerTeam team = scoreboard.addPlayerTeam(teamName);
         team.setDisplayName(Component.literal(displayName).withStyle(color));
         team.setColor(color);
+        return true;
     }
 
     public static void addEntityToTeam(String teamName, Entity entity) {

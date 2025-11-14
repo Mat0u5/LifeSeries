@@ -238,7 +238,7 @@ public class ConfigScreen extends Screen {
     private void updateButtonStates() {
         this.hasChanges = false;
         for (ConfigEntry entry : getAllEntries()) {
-            if (entry.isModified()) {
+            if (entry.isModified() || entry.changedForever) {
                 this.hasChanges = true;
                 break;
             }
@@ -270,13 +270,13 @@ public class ConfigScreen extends Screen {
 
         for (ConfigEntry entry : getAllEntries(allSurfaceEntriesServer)) {
             // Server
-            if (!entry.isModified()) continue;
+            if (!entry.isModified() && !entry.changedForever) continue;
             if (!entry.sendToServer()) continue;
             entry.onSave();
         }
         for (ConfigEntry entry : getAllEntries(allSurfaceEntriesClient)) {
             // Client
-            if (!entry.isModified()) continue;
+            if (!entry.isModified() && !entry.changedForever) continue;
             if (entry instanceof GroupConfigEntry) continue;
             ClientConfigNetwork.onConfigSave(entry);
         }
