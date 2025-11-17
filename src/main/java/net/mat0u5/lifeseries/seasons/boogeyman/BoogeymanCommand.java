@@ -91,7 +91,7 @@ public class BoogeymanCommand extends Command {
                         )
                         .executes(context -> selfFailBoogey(context.getSource(), false))
                 )
-                .then(literal("chooseRandom")
+                .then(literal("randomize")
                     .requires(PermissionManager::isAdmin)
                     .executes(context -> boogeyChooseRandom(
                         context.getSource()

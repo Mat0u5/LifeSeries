@@ -128,14 +128,14 @@ public class SecretLifeCommands extends Command {
                                     )
                             )
                     )
-                    .then(literal("assignRandom")
+                    .then(literal("randomize")
                             .then(argument("player", EntityArgument.players())
                                     .executes(context -> assignTask(
                                             context.getSource(), EntityArgument.getPlayers(context, "player"))
                                     )
                             )
                     )
-                    .then(literal("clearTask")
+                    .then(literal("clear")
                             .then(argument("player", EntityArgument.players())
                                     .executes(context -> clearTask(
                                             context.getSource(), EntityArgument.getPlayers(context, "player"))

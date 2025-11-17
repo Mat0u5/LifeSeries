@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.mat0u5.lifeseries.Main.blacklist;
 
@@ -25,6 +26,14 @@ public abstract class ItemEntityMixin {
             if (itemEntity.level().isClientSide()) return;
             ItemStack stack = itemEntity.getItem();
             blacklist.onCollision(serverPlayer,stack,ci);
+        }
+    }
+    @Inject(method = "fireImmune", at = @At("HEAD"), cancellable = true)
+    private void preventBurning(CallbackInfoReturnable<Boolean> cir) {
+        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        ItemEntity itemEntity = (ItemEntity) (Object) this;
+        if (itemEntity instanceof ItemEntityAccessor accessor && accessor.getTarget() != null) {
+            cir.setReturnValue(true);
         }
     }
 }

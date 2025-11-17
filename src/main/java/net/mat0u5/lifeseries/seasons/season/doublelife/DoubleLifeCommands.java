@@ -92,7 +92,7 @@ public class DoubleLifeCommands extends Command {
                 .then(literal("resetAll")
                     .executes(context -> resetAllSoulmates(context.getSource()))
                 )
-                .then(literal("rollRandom")
+                .then(literal("randomize")
                     .executes(context -> rollSoulmates(context.getSource()))
                 )
         );
