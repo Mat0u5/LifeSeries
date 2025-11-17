@@ -173,7 +173,7 @@ public class LimitedLife extends Season {
                 }
             }
         }
-        onPlayerDiedNaturally(player);
+        onPlayerDiedNaturally(player, source);
         if (livesManager.canChangeLivesNaturally(player)) {
             player.ls$addLives(DEATH_NORMAL);
             if (player.ls$isAlive()) {

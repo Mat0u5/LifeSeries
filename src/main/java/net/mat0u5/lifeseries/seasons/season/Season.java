@@ -31,6 +31,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.ElderGuardian;
@@ -371,14 +372,29 @@ public abstract class Season {
             }
         }
         if (!killedByPlayer) {
-            onPlayerDiedNaturally(player);
+            onPlayerDiedNaturally(player, source);
         }
         if (livesManager.canChangeLivesNaturally(player) && player.ls$hasAssignedLives()) {
             player.ls$removeLife();
         }
     }
 
-    public void onPlayerDiedNaturally(ServerPlayer player) {
+    public void onPlayerDiedNaturally(ServerPlayer player, DamageSource source) {
+        if (source.getEntity() instanceof TamableAnimal tamableAnimal) {
+            //? if <= 1.21.4 {
+            ServerPlayer owner = PlayerUtils.getPlayer(tamableAnimal.getOwnerUUID());
+            //?} else {
+            /*ServerPlayer owner = null;
+            if (tamableAnimal.getOwnerReference() != null) owner = PlayerUtils.getPlayer(tamableAnimal.getOwnerReference().getUUID());
+            *///?}
+            if (owner != null) {
+                //? if <= 1.21.2 {
+                owner.awardKillScore(player, 1, source);
+                //?} else {
+                /*owner.awardKillScore(player, source);
+                *///?}
+            }
+        }
         if (server == null) return;
         currentSession.playerNaturalDeathLog.remove(player.getUUID());
         currentSession.playerNaturalDeathLog.put(player.getUUID(), server.getTickCount());
@@ -420,11 +436,10 @@ public abstract class Season {
             }
         }
 
-        killer.awardStat(Stats.PLAYER_KILLS);
-        //? if <= 1.21 {
-        killer.getScoreboard().forAllObjectives(ObjectiveCriteria.KILL_COUNT_PLAYERS, killer, ScoreAccess::increment);
+        //? if <= 1.21.2 {
+        killer.awardKillScore(victim, 1, killer.damageSources().playerAttack(killer));
         //?} else {
-        /*killer.level().getScoreboard().forAllObjectives(ObjectiveCriteria.KILL_COUNT_PLAYERS, killer, ScoreAccess::increment);
+        /*killer.awardKillScore(victim, killer.damageSources().playerAttack(killer));
         *///?}
     }
 

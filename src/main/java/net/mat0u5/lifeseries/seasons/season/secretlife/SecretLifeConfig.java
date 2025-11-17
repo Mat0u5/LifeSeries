@@ -100,6 +100,10 @@ public class SecretLifeConfig extends ConfigManager {
             "constant_tasks", false, "season",
             "Constant Tasks", "Automatically gives players a new task when they have completed one."
     );
+    public static final ConfigFileEntry<Boolean> TASKS_NEED_CONFIRMATION = new ConfigFileEntry<>(
+            "tasks_need_confirmation", false, "season[new]",
+            "Tasks Need Confirmation", "Requires an admin to confirm when someone is succeeding a task."
+    );
 
     public static final ConfigFileEntry<Boolean> ONLY_LOSE_HEARTS_IN_SESSION = new ConfigFileEntry<>(
             "only_lose_hearts_in_session", false, "season.health",
@@ -125,6 +129,7 @@ public class SecretLifeConfig extends ConfigManager {
                 ,BROADCAST_SECRET_KEEPER
                 ,BROADCAST_TASKS_WHEN_SUBMITTED
                 ,CONSTANT_TASKS
+                ,TASKS_NEED_CONFIRMATION
 
                 ,GROUP_HEALTH //Group
 

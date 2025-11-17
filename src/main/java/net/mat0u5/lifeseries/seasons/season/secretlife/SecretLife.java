@@ -96,21 +96,20 @@ public class SecretLife extends Season {
     @Override
     public void reload() {
         super.reload();
-        if (!(seasonConfig instanceof SecretLifeConfig config)) return;
-
-        MAX_HEALTH = config.MAX_PLAYER_HEALTH.get(config);
-        MAX_KILL_HEALTH = SecretLifeConfig.MAX_PLAYER_KILL_HEALTH.get(config);
-        TaskManager.EASY_SUCCESS = SecretLifeConfig.TASK_HEALTH_EASY_PASS.get(config);
-        TaskManager.EASY_FAIL = SecretLifeConfig.TASK_HEALTH_EASY_FAIL.get(config);
-        TaskManager.HARD_SUCCESS = SecretLifeConfig.TASK_HEALTH_HARD_PASS.get(config);
-        TaskManager.HARD_FAIL = SecretLifeConfig.TASK_HEALTH_HARD_FAIL.get(config);
-        TaskManager.RED_SUCCESS = SecretLifeConfig.TASK_HEALTH_RED_PASS.get(config);
-        TaskManager.RED_FAIL = SecretLifeConfig.TASK_HEALTH_RED_FAIL.get(config);
-        TaskManager.ASSIGN_TASKS_MINUTE = SecretLifeConfig.ASSIGN_TASKS_MINUTE.get(config);
-        TaskManager.BROADCAST_SECRET_KEEPER = SecretLifeConfig.BROADCAST_SECRET_KEEPER.get(config);
-        TaskManager.CONSTANT_TASKS = SecretLifeConfig.CONSTANT_TASKS.get(config);
-        TaskManager.PUBLIC_TASKS_ON_SUBMIT = SecretLifeConfig.BROADCAST_TASKS_WHEN_SUBMITTED.get(config);
-        ONLY_LOSE_HEARTS_IN_SESSION = SecretLifeConfig.ONLY_LOSE_HEARTS_IN_SESSION.get(config);
+        MAX_HEALTH = seasonConfig.MAX_PLAYER_HEALTH.get(seasonConfig);
+        MAX_KILL_HEALTH = SecretLifeConfig.MAX_PLAYER_KILL_HEALTH.get(seasonConfig);
+        TaskManager.EASY_SUCCESS = SecretLifeConfig.TASK_HEALTH_EASY_PASS.get(seasonConfig);
+        TaskManager.EASY_FAIL = SecretLifeConfig.TASK_HEALTH_EASY_FAIL.get(seasonConfig);
+        TaskManager.HARD_SUCCESS = SecretLifeConfig.TASK_HEALTH_HARD_PASS.get(seasonConfig);
+        TaskManager.HARD_FAIL = SecretLifeConfig.TASK_HEALTH_HARD_FAIL.get(seasonConfig);
+        TaskManager.RED_SUCCESS = SecretLifeConfig.TASK_HEALTH_RED_PASS.get(seasonConfig);
+        TaskManager.RED_FAIL = SecretLifeConfig.TASK_HEALTH_RED_FAIL.get(seasonConfig);
+        TaskManager.ASSIGN_TASKS_MINUTE = SecretLifeConfig.ASSIGN_TASKS_MINUTE.get(seasonConfig);
+        TaskManager.BROADCAST_SECRET_KEEPER = SecretLifeConfig.BROADCAST_SECRET_KEEPER.get(seasonConfig);
+        TaskManager.CONSTANT_TASKS = SecretLifeConfig.CONSTANT_TASKS.get(seasonConfig);
+        TaskManager.PUBLIC_TASKS_ON_SUBMIT = SecretLifeConfig.BROADCAST_TASKS_WHEN_SUBMITTED.get(seasonConfig);
+        ONLY_LOSE_HEARTS_IN_SESSION = SecretLifeConfig.ONLY_LOSE_HEARTS_IN_SESSION.get(seasonConfig);
+        TaskManager.TASKS_NEED_CONFIRMATION = SecretLifeConfig.TASKS_NEED_CONFIRMATION.get(seasonConfig);
     }
 
     @Override
