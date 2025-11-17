@@ -114,7 +114,7 @@ public class WildcardManager {
 
     public static void onPlayerFinishJoining(ServerPlayer player) {
         if (isActiveWildcard(Wildcards.SUPERPOWERS) && !SuperpowersWildcard.hasPower(player) && player.ls$isAlive()) {
-            SuperpowersWildcard.rollRandomSuperpowerForPlayer(player);
+            SuperpowersWildcard.rollRandomSuperpowers(new ArrayList<>(List.of(player)));
         }
     }
 
