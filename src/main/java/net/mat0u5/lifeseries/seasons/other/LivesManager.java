@@ -264,11 +264,11 @@ public class LivesManager {
         setPlayerLives(player, lives);
     }
 
-    public void addToLifeNoUpdate(ServerPlayer player) {
+    public void addToLivesNoUpdate(ServerPlayer player, int amount) {
         if (isWatcher(player)) return;
         Integer currentLives = getPlayerLives(player);
         if (currentLives == null) currentLives = 0;
-        int lives = currentLives + 1;
+        int lives = currentLives + amount;
         if (lives < 0) lives = 0;
         ScoreboardUtils.setScore(player, SCOREBOARD_NAME, lives);
     }

@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
@@ -189,20 +190,22 @@ public abstract class ConfigManager extends DefaultConfigValues {
             sendConfigEntry(player, lifeEntry, index);
             index++;
         }
-        for (Map.Entry<Integer, PlayerTeam> entry : livesManager.getLivesTeams().entrySet()) {
-            PlayerTeam team = entry.getValue();
-            String teamName = team.getName();
-            int teamNum = entry.getKey();
-            Integer validKill = livesManager.getTeamCanKill(teamName);
-            Integer gainLife = livesManager.getTeamGainLives(teamName);
-            String validKillStr = validKill != null ? String.valueOf(validKill) : "";
-            String gainLifeStr = gainLife != null ? String.valueOf(gainLife) : "";
-            ConfigFileEntry<Object> teamEntry = new ConfigFileEntry<>(
-                    "dynamic_teams_"+ UUID.randomUUID(), null, ConfigTypes.TEAM_ENTRY, "teams",
-                    "", "", List.of(String.valueOf(teamNum), team.getDisplayName().getString(), team.getColor().getName(), validKillStr, gainLifeStr), true
-            );
-            sendConfigEntry(player, teamEntry, index);
-            index++;
+        if (currentSeason.getSeason() != Seasons.LIMITED_LIFE) {
+            for (Map.Entry<Integer, PlayerTeam> entry : livesManager.getLivesTeams().entrySet()) {
+                PlayerTeam team = entry.getValue();
+                String teamName = team.getName();
+                int teamNum = entry.getKey();
+                Integer validKill = livesManager.getTeamCanKill(teamName);
+                Integer gainLife = livesManager.getTeamGainLives(teamName);
+                String validKillStr = validKill != null ? String.valueOf(validKill) : "";
+                String gainLifeStr = gainLife != null ? String.valueOf(gainLife) : "";
+                ConfigFileEntry<Object> teamEntry = new ConfigFileEntry<>(
+                        "dynamic_teams_"+ UUID.randomUUID(), null, ConfigTypes.TEAM_ENTRY, "teams",
+                        "", "", List.of(String.valueOf(teamNum), team.getDisplayName().getString(), team.getColor().getName(), validKillStr, gainLifeStr), true
+                );
+                sendConfigEntry(player, teamEntry, index);
+                index++;
+            }
         }
     }
 

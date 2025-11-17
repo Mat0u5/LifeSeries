@@ -88,7 +88,7 @@ public abstract class PlayerEntityRendererMixin {
         MutableComponent original = ReadOnlyScoreInfo.safeFormatValue(readOnlyScoreInfo, numberFormat);
         Scoreboard scoreboard = abstractClientPlayer.getScoreboard();
         Objective objective = scoreboard.getDisplayObjective(DisplaySlot.BELOW_NAME);
-        if (objective != null) {
+        if (objective != null && readOnlyScoreInfo != null) {
             if (objective.getName().equalsIgnoreCase(LivesManager.SCOREBOARD_NAME)) {
                 if (MainClient.clientCurrentSeason == Seasons.LIMITED_LIFE) {
                     int ticksLeft = Math.max(0, readOnlyScoreInfo.value()*20);

@@ -450,7 +450,7 @@ public class DoubleLife extends Season {
 
     @Override
     public void onPlayerDamage(ServerPlayer player, DamageSource source, float amount, CallbackInfo ci) {
-        if (source.type().msgId().equalsIgnoreCase("soulmate")) return;
+        if (source.is(DoubleLife.SOULMATE_DAMAGE)) return;
         if (amount == 0) return;
         if (player == null) return;
         if (!hasSoulmate(player)) return;

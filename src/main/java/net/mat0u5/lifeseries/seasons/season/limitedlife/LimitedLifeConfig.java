@@ -111,12 +111,9 @@ public class LimitedLifeConfig extends ConfigManager {
     protected List<ConfigFileEntry<?>> getDefaultConfigEntries() {
         List<ConfigFileEntry<?>> defaultEntries = super.getDefaultConfigEntries();
         defaultEntries.remove(DEFAULT_LIVES);
-        defaultEntries.remove(GIVELIFE_COMMAND_ENABLED);
-        defaultEntries.remove(GIVELIFE_LIVES_MAX);
-        defaultEntries.remove(GIVELIFE_BROADCAST);
-        defaultEntries.remove(GIVELIFE_CAN_REVIVE);
         defaultEntries.remove(TAB_LIST_SHOW_EXACT_LIVES);
         defaultEntries.remove(SECRET_SOCIETY_PUNISHMENT_LIVES);
+        defaultEntries.remove(GROUP_TEAMS);
         return defaultEntries;
     }
 
@@ -151,6 +148,10 @@ public class LimitedLifeConfig extends ConfigManager {
         BOOGEYMAN.defaultValue = true;
         BOOGEYMAN_MAX_AMOUNT.defaultValue = 1;
         BOOGEYMAN_MESSAGE.defaultValue = "§7You are the Boogeyman. You must by any means necessary kill a §2dark green§7, §agreen§7 or §eyellow§7 name by direct action to be cured of the curse. If you fail, your time will be dropped to the next color. All loyalties and friendships are removed while you are the Boogeyman.";
+        GIVELIFE_LIVES_MAX.displayName = "Max Givelife Time";
+        GIVELIFE_LIVES_MAX.description = "The maximum amount of time a player can have from other players giving them time using /givelife.";
+        GIVELIFE_LIVES_MAX.defaultValue = 3600000;
+        GIVELIFE_BROADCAST.description = "Broadcasts the message when a player gives time to another player using /givelife.";
         super.instantiateProperties();
     }
 }

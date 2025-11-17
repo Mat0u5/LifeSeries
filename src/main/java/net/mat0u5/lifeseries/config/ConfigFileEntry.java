@@ -10,8 +10,8 @@ public class ConfigFileEntry<T> {
     public final String key;
     public T defaultValue;
     public final ConfigTypes type;
-    public final String displayName;
-    public final String description;
+    public String displayName;
+    public String description;
     public final String groupInfo;
     public final List<String> args;
     public final boolean dynamic;

@@ -1,18 +1,24 @@
 package net.mat0u5.lifeseries.seasons.season.limitedlife;
 
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
+import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
+import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.scores.ScoreHolder;
 
 import java.util.Locale;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.Main.seasonConfig;
 import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
 
 public class LimitedLifeLivesManager extends LivesManager {
@@ -90,5 +96,23 @@ public class LimitedLifeLivesManager extends LivesManager {
         if (limitedLifeLives <= YELLOW_TIME) return 2;
         if (limitedLifeLives <= DEFAULT_TIME) return 3;
         return 4;
+    }
+
+    @Override
+    public void receiveLifeFromOtherPlayer(Component playerName, ServerPlayer target, boolean isRevive) {
+        target.playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.MASTER, 10, 1);
+        Component amount = Component.literal(OtherUtils.formatTime(-LimitedLife.DEATH_NORMAL*20));
+
+        if (seasonConfig.GIVELIFE_BROADCAST.get(seasonConfig)) {
+            PlayerUtils.broadcastMessageExcept(TextUtils.format("{} received {} from {}", target, amount, playerName), target);
+        }
+        target.sendSystemMessage(TextUtils.format("You received {} from {}", amount, playerName));
+        PlayerUtils.sendTitleWithSubtitle(target, TextUtils.format("You received {}", amount), TextUtils.format("from {}", playerName), 10, 60, 10);
+        AnimationUtils.createSpiral(target, 175);
+        currentSeason.reloadPlayerTeam(target);
+        SessionTranscript.givelife(playerName, target);
+        if (isRevive && isAlive(target)) {
+            PlayerUtils.safelyPutIntoSurvival(target);
+        }
     }
 }

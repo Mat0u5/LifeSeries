@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -26,7 +27,6 @@ public class GivelifeCommand extends Command {
 
     @Override
     public boolean isAllowed() {
-        if (currentSeason.getSeason() == Seasons.LIMITED_LIFE) return false;
         return seasonConfig.GIVELIFE_COMMAND_ENABLED.get(seasonConfig);
     }
 
@@ -51,8 +51,11 @@ public class GivelifeCommand extends Command {
         final ServerPlayer self = source.getPlayer();
         if (self == null) return -1;
         if (target == null) return -1;
+
+        String livesOrTime = currentSeason.getSeason() != Seasons.LIMITED_LIFE ? "lives" : "time";
+
         if (self.ls$isDead()) {
-            source.sendFailure(Component.nullToEmpty("You do not have any lives to give"));
+            source.sendFailure(TextUtils.format("You do not have any {} to give", livesOrTime));
             return -1;
         }
         boolean isRevive = target.ls$isDead();
@@ -61,24 +64,24 @@ public class GivelifeCommand extends Command {
             return -1;
         }
         if (target == self) {
-            source.sendFailure(Component.nullToEmpty("You cannot give a life to yourself"));
+            source.sendFailure(TextUtils.format("You cannot give {} to yourself", livesOrTime));
             return -1;
         }
         Integer currentLives = self.ls$getLives();
         if (currentLives == null || currentLives <= 1) {
-            source.sendFailure(Component.nullToEmpty("You cannot give away your last life"));
+            source.sendFailure(TextUtils.format("You cannot give away any more {}", livesOrTime));
             return -1;
         }
         Integer targetLives = target.ls$getLives();
         if (targetLives == null || targetLives >= currentSeason.GIVELIFE_MAX_LIVES) {
-            source.sendFailure(Component.nullToEmpty("That player cannot receive any more lives"));
+            source.sendFailure(TextUtils.format("That player cannot receive any more {}", livesOrTime));
             return -1;
         }
         if (currentSeason instanceof DoubleLife doubleLife) {
             ServerPlayer soulmate = doubleLife.getSoulmate(self);
             if (soulmate != null) {
                 if (soulmate.equals(target)) {
-                    source.sendFailure(Component.nullToEmpty("You cannot give a life to your soulmate"));
+                    source.sendFailure(TextUtils.format("You cannot give {} to your soulmate", livesOrTime));
                     return -1;
                 }
                 boolean success = doubleLifeGiveLife(source, self, soulmate, target);
@@ -89,8 +92,12 @@ public class GivelifeCommand extends Command {
         }
 
         Component currentPlayerName = self.getFeedbackDisplayName();
-        self.ls$removeLife();
-        livesManager.addToLifeNoUpdate(target);
+        int amount = 1;
+        if (currentSeason.getSeason() == Seasons.LIMITED_LIFE) {
+            amount = -LimitedLife.DEATH_NORMAL;
+        }
+        self.ls$addLives(-amount);
+        livesManager.addToLivesNoUpdate(target, amount);
         AnimationUtils.playTotemAnimation(self);
         TaskScheduler.scheduleTask(40, () -> livesManager.receiveLifeFromOtherPlayer(currentPlayerName, target, isRevive));
 

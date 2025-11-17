@@ -106,6 +106,7 @@ public class ClientConfigGuiManager {
             targetGroup.addChildEntry(configEntry);
         }
         else {
+            Main.LOGGER.error("Could not find parent group {} for entry {}", groupInfo, configEntry.getFieldName());
             category.addEntry(configEntry);
         }
     }
