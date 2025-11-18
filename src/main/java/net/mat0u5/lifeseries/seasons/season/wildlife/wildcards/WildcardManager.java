@@ -19,6 +19,7 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -266,6 +267,7 @@ public class WildcardManager {
             wildcard.deactivate();
         }
         activeWildcards.clear();
+        DatapackIntegration.initWildcards();
         SuperpowersWildcard.resetAllSuperpowers();
         NetworkHandlerServer.sendUpdatePackets();
         chosenWildcard = null;

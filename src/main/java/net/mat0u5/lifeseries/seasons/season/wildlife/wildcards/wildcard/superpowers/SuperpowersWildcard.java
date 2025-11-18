@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -63,12 +64,14 @@ public class SuperpowersWildcard extends Wildcard {
         playerSuperpowers.get(uuid).turnOff();
         playerSuperpowers.remove(uuid);
         Necromancy.checkRessurectedPlayersReset();
+        DatapackIntegration.deactivateSuperpower(player);
     }
 
     public static void resetAllSuperpowers() {
         playerSuperpowers.values().forEach(Superpower::turnOff);
         playerSuperpowers.clear();
         Necromancy.checkRessurectedPlayersReset();
+        DatapackIntegration.initSuperpowers();
     }
 
     public static void rollRandomSuperpowers() {
@@ -93,7 +96,10 @@ public class SuperpowersWildcard extends Wildcard {
             if (hasPower(player)) continue;
             Superpowers power = getRandomPower(player);
             Superpower instance = power.getInstance(player);
-            if (instance != null) playerSuperpowers.put(player.getUUID(), instance);
+            if (instance != null) {
+                playerSuperpowers.put(player.getUUID(), instance);
+                DatapackIntegration.activateSuperpower(player, power);
+            }
         }
         if (!WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME) {
             PlayerUtils.playSoundToPlayers(allPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_superpowers")), 0.2f, 1);
@@ -155,7 +161,10 @@ public class SuperpowersWildcard extends Wildcard {
             playerSuperpowers.get(player.getUUID()).turnOff();
         }
         Superpower instance = superpower.getInstance(player);
-        if (instance != null) playerSuperpowers.put(player.getUUID(), instance);
+        if (instance != null) {
+            playerSuperpowers.put(player.getUUID(), instance);
+            DatapackIntegration.activateSuperpower(player, superpower);
+        }
         if (!WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME) {
             PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_superpowers")), 0.2f, 1);
         }

@@ -122,6 +122,7 @@ public class BoogeymanManager {
         }
         Boogeyman newBoogeyman = new Boogeyman(player);
         boogeymen.add(newBoogeyman);
+        player.addTag("boogeyman");
         boogeymanChosen = true;
         boogeymanListChanged = true;
         return newBoogeyman;
@@ -139,6 +140,7 @@ public class BoogeymanManager {
         Boogeyman boogeyman = getBoogeyman(player);
         if (boogeyman == null) return;
         boogeymen.remove(boogeyman);
+        player.removeTag("boogeyman");
         if (boogeymen.isEmpty()) boogeymanChosen = false;
         player.sendSystemMessage(Component.nullToEmpty("§c [NOTICE] You are no longer a Boogeyman!"));
     }
@@ -527,6 +529,10 @@ public class BoogeymanManager {
         if (!currentSession.statusStarted()) return;
         if (!boogeyman.failed && !boogeyman.cured && !boogeyman.died) return;
         boogeymen.remove(boogeyman);
+        ServerPlayer player = boogeyman.getPlayer();
+        if (player != null) {
+            player.removeTag("boogeyman");
+        }
         TaskScheduler.scheduleTask(100, this::chooseNewBoogeyman);
     }
 

@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
+import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.ChatFormatting;
@@ -200,6 +201,7 @@ public class TaskManager {
             ItemStackUtils.spawnItemForPlayer(player.ls$getServerLevel(), player.position(), book, player);
         }
         assignedTasks.put(player.getUUID(), task);
+        DatapackIntegration.setPlayerTask(player, type);
     }
 
     public static void assignRandomTasks(List<ServerPlayer> allowedPlayers, TaskTypes type) {
@@ -271,6 +273,7 @@ public class TaskManager {
                 success = true;
             }
         }
+        DatapackIntegration.setPlayerTask(player, null);
         return success;
     }
 

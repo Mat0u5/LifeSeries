@@ -20,6 +20,7 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.*;
+import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -231,6 +232,7 @@ public abstract class Season {
         ScoreboardUtils.createObjective("HP", "§c❤", ObjectiveCriteria.HEALTH);
         WatcherManager.createScoreboards();
         livesManager.createScoreboards();
+        DatapackIntegration.createScoreboards();
     }
 
     public void reloadAllPlayerTeams() {

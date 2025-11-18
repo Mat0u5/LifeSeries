@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -61,6 +62,7 @@ public class Session {
         if (!currentSeason.sessionStart()) return false;
         changeStatus(SessionStatus.STARTED);
         passedTime = 0;
+        DatapackIntegration.setSessionTimePassed(getPassedTime());
         Component line1 = TextUtils.formatLoosely("§6Session started! §7[{}]", OtherUtils.formatTime(sessionLength));
         Component line2 = Component.literal("§f/session timer showDisplay§7 - toggles a session timer on your screen.");
         PlayerUtils.broadcastMessage(line1);
@@ -100,6 +102,7 @@ public class Session {
         }
         changeStatus(SessionStatus.FINISHED);
         passedTime = 0;
+        DatapackIntegration.setSessionTimePassed(getPassedTime());
         currentSeason.sessionEnd();
     }
 
@@ -123,6 +126,7 @@ public class Session {
     public void setSessionLength(int lengthTicks) {
         sessionLength = lengthTicks;
         Main.getMainConfig().setProperty("session_length", String.valueOf(sessionLength));
+        DatapackIntegration.setSessionLength(lengthTicks);
     }
 
     public void addSessionLength(int lengthTicks) {
@@ -230,6 +234,7 @@ public class Session {
         else {
             passedTime += (20/tickRate);
         }
+        DatapackIntegration.setSessionTimePassed(getPassedTime());
 
         if (passedTime >= sessionLength) {
             sessionEnd();
@@ -373,6 +378,7 @@ public class Session {
         status = newStatus;
         currentSeason.sessionChangeStatus(status);
         freezeIfNecessary();
+        DatapackIntegration.changeSessionStatus(newStatus);
     }
 
     public void freezeIfNecessary() {

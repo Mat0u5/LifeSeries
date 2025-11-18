@@ -28,6 +28,7 @@ import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
+import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -39,7 +40,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.4.3.21";
+	public static final String MOD_VERSION = "dev-1.4.3.22";
 	public static final String MOD_ID = "lifeseries";
 	public static final String UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
 	public static final boolean DEBUG = false;
@@ -143,6 +144,7 @@ public class Main implements ModInitializer {
 
 		currentSession = new Session();
 		currentSession.sessionLength = config.getOrCreateInt("session_length", 144000); //2 hours
+		DatapackIntegration.setSessionLength(currentSession.sessionLength);
 
 		livesManager = currentSeason.livesManager;
 		seasonConfig = currentSeason.createConfig();

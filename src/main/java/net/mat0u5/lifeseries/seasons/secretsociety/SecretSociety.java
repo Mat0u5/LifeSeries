@@ -254,11 +254,13 @@ public class SecretSociety {
 
     public void removeMember(ServerPlayer player) {
         members.removeIf(member -> member.uuid == player.getUUID());
+        player.removeTag("society_member");
     }
 
     public void addMember(ServerPlayer player) {
         if (!SOCIETY_ENABLED) return;
         members.add(new SocietyMember(player));
+        player.addTag("society_member");
     }
 
     public void addMemberManually(ServerPlayer player) {
@@ -284,6 +286,7 @@ public class SecretSociety {
     public void resetMembers() {
         for (ServerPlayer player : getMembers()) {
             player.sendSystemMessage(Component.nullToEmpty("§c [NOTICE] You are no longer a Secret Society member!"));
+            player.removeTag("society_member");
         }
         members.clear();
     }

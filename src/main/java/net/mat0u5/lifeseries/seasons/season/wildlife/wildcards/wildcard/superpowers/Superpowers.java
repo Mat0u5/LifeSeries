@@ -58,6 +58,17 @@ public enum Superpowers {
         return this.toString().toLowerCase(Locale.ROOT);
     }
 
+    public int getIndex() {
+        return this.ordinal();
+    }
+
+    public static Superpowers getFromIndex(int index) {
+        for (Superpowers power : Superpowers.values()) {
+            if (power.getIndex() == index) return power;
+        }
+        return Superpowers.NULL;
+    }
+
     public static List<Superpowers> getImplemented() {
         List<Superpowers> result = new ArrayList<>(List.of(Superpowers.values()));
         result.remove(NULL);

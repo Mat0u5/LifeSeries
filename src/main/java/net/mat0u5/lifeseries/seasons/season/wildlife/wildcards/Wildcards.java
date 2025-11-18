@@ -37,6 +37,17 @@ public enum Wildcards {
         return this.toString().toLowerCase(Locale.ROOT);
     }
 
+    public int getIndex() {
+        return this.ordinal();
+    }
+
+    public static Wildcards getFromIndex(int index) {
+        for (Wildcards wildcard : Wildcards.values()) {
+            if (wildcard.getIndex() == index) return wildcard;
+        }
+        return Wildcards.NULL;
+    }
+
     public static Wildcards getFromString(String wildcard) {
         try {
             return Enum.valueOf(Wildcards.class, wildcard.toUpperCase(Locale.ROOT));
