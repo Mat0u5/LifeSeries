@@ -11,7 +11,6 @@ import net.mat0u5.lifeseries.utils.interfaces.IMorph;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.monster.Evoker;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -28,6 +27,11 @@ import static net.mat0u5.lifeseries.Main.currentSeason;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
+*///?}
+//? if <= 1.21.9 {
+import net.minecraft.world.entity.monster.Evoker;
+//?} else {
+/*import net.minecraft.world.entity.monster.illager.Evoker;
 *///?}
 
 @Mixin(value = Entity.class, priority = 1)

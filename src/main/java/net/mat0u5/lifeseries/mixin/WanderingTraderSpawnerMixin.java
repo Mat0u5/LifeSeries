@@ -3,7 +3,6 @@ package net.mat0u5.lifeseries.mixin;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.npc.WanderingTraderSpawner;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -12,6 +11,11 @@ import static net.mat0u5.lifeseries.Main.currentSeason;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 //? if >= 1.21.5
 /*import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;*/
+//? if <= 1.21.9 {
+import net.minecraft.world.entity.npc.WanderingTraderSpawner;
+//?} else {
+/*import net.minecraft.world.entity.npc.wanderingtrader.WanderingTraderSpawner;
+*///?}
 
 @Mixin(value = WanderingTraderSpawner.class, priority = 1)
 public class WanderingTraderSpawnerMixin {

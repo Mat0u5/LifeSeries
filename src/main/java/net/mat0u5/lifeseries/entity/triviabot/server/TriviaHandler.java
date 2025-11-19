@@ -38,7 +38,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -52,6 +51,12 @@ import static net.mat0u5.lifeseries.Main.server;
 
 //? if > 1.21.9
 /*import net.minecraft.world.entity.EntityReference;*/
+
+//? if <= 1.21.9 {
+import net.minecraft.world.entity.animal.Bee;
+//?} else {
+/*import net.minecraft.world.entity.animal.bee.Bee;
+*///?}
 
 public class TriviaHandler {
     private TriviaBot bot;

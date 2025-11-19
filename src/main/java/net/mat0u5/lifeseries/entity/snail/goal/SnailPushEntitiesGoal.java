@@ -4,7 +4,6 @@ import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.item.PrimedTnt;
-import net.minecraft.world.entity.vehicle.MinecartTNT;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -14,8 +13,16 @@ import java.util.List;
 
 //? if <= 1.21.4 {
 import net.minecraft.world.entity.projectile.ThrownPotion;
-//?} else {
+//?} else if <= 1.21.9 {
 /*import net.minecraft.world.entity.projectile.AbstractThrownPotion;
+*///?} {
+/*import net.minecraft.world.entity.projectile.throwableitemprojectile.AbstractThrownPotion;
+*///?}
+
+//? if <= 1.21.9 {
+import net.minecraft.world.entity.vehicle.MinecartTNT;
+//?} else {
+/*import net.minecraft.world.entity.vehicle.minecart.MinecartTNT;
 *///?}
 
 @SuppressWarnings("resource")

@@ -241,9 +241,15 @@ public class Snail extends Monster {
         return false;
     }
     @Override
+    //? if <= 1.21.9 {
     protected AABB getAttackBoundingBox() {
         return this.getBoundingBox();
     }
+    //?} else {
+    /*protected AABB getAttackBoundingBox(final double horizontalExpansion) {
+        return this.getBoundingBox();
+    }
+    *///?}
 
     public float soundVolume() {
         return getSoundVolume();

@@ -10,8 +10,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiTypes;
-import net.minecraft.world.entity.animal.horse.TraderLlama;
-import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.ItemCost;
@@ -24,6 +22,14 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Random;
+
+//? if <= 1.21.9 {
+import net.minecraft.world.entity.animal.horse.TraderLlama;
+import net.minecraft.world.entity.npc.WanderingTrader;
+//?} else {
+/*import net.minecraft.world.entity.animal.equine.TraderLlama;
+import net.minecraft.world.entity.npc.wanderingtrader.WanderingTrader;
+*///?}
 
 public class SimpleLife extends ThirdLife {
     private Random rnd = new Random();
