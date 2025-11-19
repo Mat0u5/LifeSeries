@@ -86,7 +86,7 @@ jobs:
         if: ${{ inputs.publish }}
         run: |
           # Define version order explicitly to match your delay preferences
-          VERSIONS=("1.21" "1.21.2" "1.21.4" "1.21.5" "1.21.6" "1.21.9")
+          VERSIONS=("1.21" "1.21.2" "1.21.4" "1.21.5" "1.21.6" "1.21.9" "1.21.11")
 
           for version in "${VERSIONS[@]}"; do
             if [ -d "./versions/$version" ]; then
