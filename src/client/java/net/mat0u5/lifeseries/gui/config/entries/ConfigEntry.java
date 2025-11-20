@@ -86,6 +86,13 @@ public abstract class ConfigEntry {
         this.screen = screen;
     }
 
+    public int additionalLabelOffsetY() {
+        return 0;
+    }
+    public int additionalResetButtonOffsetY() {
+        return 0;
+    }
+
     public void render(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         isHovered = hovered;
         updateHighlightAnimation(tickDelta);
@@ -97,13 +104,13 @@ public abstract class ConfigEntry {
 
         int textColor = hasError() ? TextColors.PASTEL_RED : TextColors.WHITE;
         int labelX = x + LABEL_OFFSET_X;
-        int labelY = y + LABEL_OFFSET_Y;
+        int labelY = y + LABEL_OFFSET_Y + additionalLabelOffsetY();
         context.drawString(textRenderer, getDisplayName(), labelX, labelY, textColor);
 
         int resetButtonX = x + width - RESET_BUTTON_WIDTH + RESET_BUTTON_OFFSET_X;
         if (hasResetButton()) {
             resetButton.setX(resetButtonX);
-            resetButton.setY(y + RESET_BUTTON_OFFSET_Y);
+            resetButton.setY(y + RESET_BUTTON_OFFSET_Y + additionalResetButtonOffsetY());
             resetButton.active = canReset();
             resetButton.render(context, mouseX, mouseY, tickDelta);
         }

@@ -455,6 +455,7 @@ public class TaskManager {
                 addHealthThenItems(player, RED_SUCCESS, type);
             }
         });
+        DatapackIntegration.EVENT_TASK_SUCCEED.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
         chooseNewTaskForPlayerIfNecessary(player);
     }
 
@@ -505,6 +506,7 @@ public class TaskManager {
                 assignRandomTaskToPlayer(player, newType);
                 secretKeeperBeingUsed = false;
             });
+            DatapackIntegration.EVENT_TASK_REROLL.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
             return;
         }
         if (type == TaskTypes.HARD) {
@@ -559,6 +561,7 @@ public class TaskManager {
                 secretKeeperBeingUsed = false;
             }
         });
+        DatapackIntegration.EVENT_TASK_FAIL.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
         chooseNewTaskForPlayerIfNecessary(player);
     }
 

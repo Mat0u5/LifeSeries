@@ -240,6 +240,11 @@ public class TeamConfigEntry extends EmptyConfigEntry {
         return PREFFERED_HEIGHT * heightMultiplier;
     }
 
+    @Override
+    public int additionalResetButtonOffsetY() {
+        return isFirst() ? PREFFERED_HEIGHT : 0;
+    }
+
     public void onChanged(String text) {
         this.teamNum = textFieldLives.getValue();
         this.teamName = textFieldName.getValue();

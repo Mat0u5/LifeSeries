@@ -162,7 +162,6 @@ public class OtherUtils {
     }
 
     public static void executeCommand(String command) {
-        OtherUtils.log("Executing: " + command);
         try {
             if (server == null) return;
             Commands manager = server.getCommands();

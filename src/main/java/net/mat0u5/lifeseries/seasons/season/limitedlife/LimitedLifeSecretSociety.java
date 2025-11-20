@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.limitedlife;
 
 import net.mat0u5.lifeseries.seasons.secretsociety.SecretSociety;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -15,6 +16,8 @@ public class LimitedLifeSecretSociety extends SecretSociety {
     @Override
     public void punishPlayer(ServerPlayer member) {
         member.ls$hurt(member.damageSources().playerAttack(member), 0.001f);
+        DatapackIntegration.EVENT_SOCIETY_FAIL_REWARD.trigger(new DatapackIntegration.Events.MacroEntry("Player", member.getScoreboardName()));
+        if (DatapackIntegration.EVENT_SOCIETY_FAIL_REWARD.isCanceled()) return;
         boolean canChangeLives = member.ls$isAlive() && !member.ls$isOnLastLife(true);
         if (canChangeLives) {
             member.ls$setLives(LimitedLife.getNextLivesColorLives(member.ls$getLives()));

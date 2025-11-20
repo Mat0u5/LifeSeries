@@ -102,11 +102,13 @@ public class DatapackIntegration {
     public static void activateWildcard(Wildcards wildcard) {
         int index = wildcard.getIndex();
         ScoreboardUtils.setScore(ScoreHolder.forNameOnly(wildcard.getStringName()), SCOREBOARD_WILDCARDS, 1);
+        DatapackIntegration.EVENT_WILDCARD_ACTIVATE.trigger(new DatapackIntegration.Events.MacroEntry("Index", String.valueOf(index)));
     }
 
     public static void deactivateWildcard(Wildcards wildcard) {
         int index = wildcard.getIndex();
         ScoreboardUtils.setScore(ScoreHolder.forNameOnly(wildcard.getStringName()), SCOREBOARD_WILDCARDS, 0);
+        DatapackIntegration.EVENT_WILDCARD_DEACTIVATE.trigger(new DatapackIntegration.Events.MacroEntry("Index", String.valueOf(index)));
     }
 
     public static void initSuperpowers() {
@@ -138,6 +140,9 @@ public class DatapackIntegration {
         if (status == SessionStatus.PAUSED) index = 3;
         if (status == SessionStatus.FINISHED) index = 4;
         ScoreboardUtils.setScore(ScoreHolder.forNameOnly("Status"), SCOREBOARD_SESSION_INFO, index);
+        DatapackIntegration.EVENT_SESSION_CHANGE_STATUS.trigger(
+                new DatapackIntegration.Events.MacroEntry("Status", String.valueOf(index))
+        );
     }
     public static void setSessionLength(int ticks) {
         ScoreboardUtils.setScore(ScoreHolder.forNameOnly("Length"), SCOREBOARD_SESSION_INFO, ticks);
@@ -147,24 +152,24 @@ public class DatapackIntegration {
     }
 
     public enum Events {
-        PLAYER_JOIN("player_join", "Player Join", "Triggers when a player joins the game.", false),
-        PLAYER_LEAVE("player_leave", "Player Leave", "Triggers when a player leaves the game.", false),
-        PLAYER_DEATH("player_death_punishment", "Player Death §7Punishment", "Triggers when a player dies.", true),
-        PLAYER_PVP_KILLED("player_pvp_killed_reward", "Player PvP Killed §7Reward", "Triggers when a killer kills a victim.", true),
-        CLAIM_KILL("claim_kill", "Claim Kill §7Reward", "Triggers when a killer uses '/claimkill' for killing a victim", true),
-        SESSION_CHANGE_STATUS("session_status_change", "Session Change Status", "Triggers when the session changes status.", false),
-        BOOGEYMAN_ADDED("boogeyman_added", "Boogeyman Added", "Triggers when a boogeyman is added.", false),
-        BOOGEYMAN_CURE_REWARD("boogeyman_cure_reward", "Boogeyman Cure §7Reward", "Triggers when a boogeyman cures", true),
-        BOOGEYMAN_FAIL_REWARD("boogeyman_fail_reward", "Boogeyman Fail §7Punishment", "Triggers when a boogeyman fails.", true),
-        SOCIETY_MEMBER_ADDED("society_member_added", "Society Member Added", "Triggers when a secret society member is added.", false),
-        SOCIETY_SUCCESS_REWARD("society_success_reward", "Secret Society Success §7Reward", "Triggers when a society member succeeds.", true),
-        SOCIETY_FAIL_REWARD("society_fail_reward", "Secret Society Fail §7Punishment", "Triggers when a society member fails.", true),
-        TASK_SUCCEED("task_succeed", "Task Succeed", "Triggers when a player succeeds their task in Secret Life.", false),
-        TASK_FAIL("task_fail", "Task Fail", "Triggers when a player fails their task in Secret Life.", false),
-        TASK_REROLL("task_reroll", "Task Reroll", "Triggers when a player rerolls their task in Secret Life.", false),
-        WILDCARD_ACTIVATE("wildcard_activate", "Wildcard Activate", "Triggers when a wildcard activates.", false),
-        WILDCARD_DEACTIVATE("wildcard_deactivate", "Wildcard Deactivate", "Triggers when a wildcard activates.", false),
-        TRIVIA_BOT_SPAWN("trivia_bot_spawn", "Trivia Bot Spawn", "Triggers when a trivia bot spawns for a player.", false);
+        PLAYER_JOIN("player_join", "Player Join", "Triggers when a player joins the game.\nAvailable macros: $(Player)", false),
+        PLAYER_LEAVE("player_leave", "Player Leave", "Triggers when a player leaves the game.\nAvailable macros: $(Player)", false),
+        PLAYER_DEATH("player_death_punishment", "Player Death §7Punishment", "Triggers when a player dies.\nAvailable macros: $(Player)", true),
+        PLAYER_PVP_KILLED("player_pvp_killed_reward", "Player PvP Killed §7Reward", "Triggers when a killer kills a victim.\nAvailable macros: $(Killer), $(Victim)", true),
+        CLAIM_KILL("claim_kill", "Claim Kill §7Reward", "Triggers when a killer uses '/claimkill' for killing a victim.\nAvailable macros: $(Killer), $(Victim)", true),
+        SESSION_CHANGE_STATUS("session_status_change", "Session Change Status", "Triggers when the session changes status.\nAvailable macros: $(Status)", false),
+        BOOGEYMAN_ADDED("boogeyman_added", "Boogeyman Added", "Triggers when a boogeyman is added.\nAvailable macros: $(Player)", false),
+        BOOGEYMAN_CURE_REWARD("boogeyman_cure_reward", "Boogeyman Cure §7Reward", "Triggers when a boogeyman cures.\nAvailable macros: $(Player)", true),
+        BOOGEYMAN_FAIL_REWARD("boogeyman_fail_reward", "Boogeyman Fail §7Punishment", "Triggers when a boogeyman fails.\nAvailable macros: $(Player)", true),
+        SOCIETY_MEMBER_ADDED("society_member_added", "Society Member Added", "Triggers when a secret society member is added.\nAvailable macros: $(Player)", false),
+        SOCIETY_SUCCESS_REWARD("society_success_reward", "Secret Society Success §7Reward", "Triggers when a society member succeeds.\nAvailable macros: $(Player)", true),
+        SOCIETY_FAIL_REWARD("society_fail_reward", "Secret Society Fail §7Punishment", "Triggers when a society member fails.\nAvailable macros: $(Player)", true),
+        TASK_SUCCEED("task_succeed", "Task Succeed", "Triggers when a player succeeds their task in Secret Life.\nAvailable macros: $(Player)", false),
+        TASK_FAIL("task_fail", "Task Fail", "Triggers when a player fails their task in Secret Life.\nAvailable macros: $(Player)", false),
+        TASK_REROLL("task_reroll", "Task Reroll", "Triggers when a player rerolls their task in Secret Life.\nAvailable macros: $(Player)", false),
+        WILDCARD_ACTIVATE("wildcard_activate", "Wildcard Activate", "Triggers when a wildcard activates.\nAvailable macros: $(Index)", false),
+        WILDCARD_DEACTIVATE("wildcard_deactivate", "Wildcard Deactivate", "Triggers when a wildcard activates.\nAvailable macros: $(Index)", false),
+        TRIVIA_BOT_SPAWN("trivia_bot_spawn", "Trivia Bot Spawn", "Triggers when a trivia bot spawns for a player.\nAvailable macros: $(Player)", false);
 
         @Nullable
         String command;

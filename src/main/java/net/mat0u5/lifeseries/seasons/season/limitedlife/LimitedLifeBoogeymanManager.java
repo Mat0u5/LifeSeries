@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
+import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -54,6 +55,8 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
         if (boogeymen == null) return false;
         if (player.ls$isDead()) return false;
 
+        player.removeTag("boogeyman_cured");
+        player.addTag("boogeyman_failed");
         boogeyman.cured = false;
         if (boogeyman.failed) return false;
         boogeyman.failed = true;
@@ -65,25 +68,28 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
         Integer setToLives = LimitedLife.getNextLivesColorLives(currentLives);
         if (setToLives == null) return false;
 
-        if (BOOGEYMAN_ADVANCED_DEATHS) {
-            PlayerUtils.sendTitle(player,Component.nullToEmpty("§cThe curse consumes you.."), 20, 30, 20);
-            if (BOOGEYMAN_ANNOUNCE_OUTCOME && sendMessage) {
-                PlayerUtils.broadcastMessage(TextUtils.format("{}§7 failed to kill a player while being the §cBoogeyman§7. They have been consumed by the curse.", player));
+        DatapackIntegration.EVENT_BOOGEYMAN_FAIL_REWARD.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
+        if (!DatapackIntegration.EVENT_BOOGEYMAN_FAIL_REWARD.isCanceled()) {
+            if (BOOGEYMAN_ADVANCED_DEATHS) {
+                PlayerUtils.sendTitle(player,Component.nullToEmpty("§cThe curse consumes you.."), 20, 30, 20);
+                if (BOOGEYMAN_ANNOUNCE_OUTCOME && sendMessage) {
+                    PlayerUtils.broadcastMessage(TextUtils.format("{}§7 failed to kill a player while being the §cBoogeyman§7. They have been consumed by the curse.", player));
+                }
+                if (canChangeLives) {
+                    AdvancedDeathsManager.setPlayerLives(player, setToLives);
+                }
             }
-            if (canChangeLives) {
-                AdvancedDeathsManager.setPlayerLives(player, setToLives);
-            }
-        }
-        else {
-            if (canChangeLives) {
-                player.ls$setLives(setToLives);
-            }
-            Component setTo = livesManager.getFormattedLives(player);
+            else {
+                if (canChangeLives) {
+                    player.ls$setLives(setToLives);
+                }
+                Component setTo = livesManager.getFormattedLives(player);
 
-            PlayerUtils.sendTitle(player,Component.nullToEmpty("§cYou have failed."), 20, 30, 20);
-            PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("lastlife_boogeyman_fail")));
-            if (BOOGEYMAN_ANNOUNCE_OUTCOME && sendMessage) {
-                PlayerUtils.broadcastMessage(TextUtils.format("{}§7 failed to kill a player while being the §cBoogeyman§7. Their time has been dropped to {}", player, setTo));
+                PlayerUtils.sendTitle(player,Component.nullToEmpty("§cYou have failed."), 20, 30, 20);
+                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("lastlife_boogeyman_fail")));
+                if (BOOGEYMAN_ANNOUNCE_OUTCOME && sendMessage) {
+                    PlayerUtils.broadcastMessage(TextUtils.format("{}§7 failed to kill a player while being the §cBoogeyman§7. Their time has been dropped to {}", player, setTo));
+                }
             }
         }
         return true;

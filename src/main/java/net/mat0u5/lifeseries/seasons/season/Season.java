@@ -377,7 +377,8 @@ public abstract class Season {
         if (!killedByPlayer) {
             onPlayerDiedNaturally(player, source);
         }
-        if (livesManager.canChangeLivesNaturally(player) && player.ls$hasAssignedLives()) {
+        DatapackIntegration.EVENT_PLAYER_DEATH.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
+        if (!DatapackIntegration.EVENT_PLAYER_DEATH.isCanceled() && livesManager.canChangeLivesNaturally(player) && player.ls$hasAssignedLives()) {
             player.ls$removeLife();
         }
     }
@@ -425,10 +426,16 @@ public abstract class Season {
 
     public void onClaimKill(ServerPlayer killer, ServerPlayer victim) {
         SessionTranscript.claimKill(killer, victim);
-        if (boogeymanManager.isBoogeymanThatCanBeCured(killer, victim)) {
+        boolean isBoogeyCure = boogeymanManager.isBoogeymanThatCanBeCured(killer, victim);
+        if (isBoogeyCure) {
             boogeymanManager.onBoogeymanKill(killer);
         }
-        else {
+
+        DatapackIntegration.EVENT_CLAIM_KILL.trigger(List.of(
+                new DatapackIntegration.Events.MacroEntry("Killer", killer.getScoreboardName()),
+                new DatapackIntegration.Events.MacroEntry("Victim", victim.getScoreboardName())
+        ));
+        if (!DatapackIntegration.EVENT_CLAIM_KILL.isCanceled() && !isBoogeyCure) {
             PlayerTeam team = killer.getTeam();
             if (team != null) {
                 Integer canGainLife = livesManager.getTeamGainLives(team.getName());
@@ -477,7 +484,11 @@ public abstract class Season {
         }
         SessionTranscript.onPlayerKilledByPlayer(victim, killer);
 
-        if (!isBoogeyCure && isAllowedToAttack) {
+        DatapackIntegration.EVENT_PLAYER_PVP_KILLED.trigger(List.of(
+                new DatapackIntegration.Events.MacroEntry("Killer", killer.getScoreboardName()),
+                new DatapackIntegration.Events.MacroEntry("Victim", victim.getScoreboardName())
+        ));
+        if (!DatapackIntegration.EVENT_PLAYER_PVP_KILLED.isCanceled() && !isBoogeyCure && isAllowedToAttack) {
             PlayerTeam team = killer.getTeam();
             if (team != null) {
                 Integer canGainLife = livesManager.getTeamGainLives(team.getName());

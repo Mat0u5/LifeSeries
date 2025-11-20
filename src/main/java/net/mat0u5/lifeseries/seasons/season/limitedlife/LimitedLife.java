@@ -13,6 +13,7 @@ import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
+import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -174,7 +175,8 @@ public class LimitedLife extends Season {
             }
         }
         onPlayerDiedNaturally(player, source);
-        if (livesManager.canChangeLivesNaturally(player)) {
+        DatapackIntegration.EVENT_PLAYER_DEATH.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
+        if (!DatapackIntegration.EVENT_PLAYER_DEATH.isCanceled() && livesManager.canChangeLivesNaturally(player)) {
             player.ls$addLives(DEATH_NORMAL);
             if (player.ls$isAlive()) {
                 sendTimeTitle(player, DEATH_NORMAL, ChatFormatting.RED);
@@ -194,6 +196,7 @@ public class LimitedLife extends Season {
         boolean wasAllowedToAttack = isAllowedToAttack(killer, victim, false);
         boolean wasBoogeyCure = boogeymanManager.isBoogeymanThatCanBeCured(killer, victim);
         super.onClaimKill(killer, victim);
+        if (DatapackIntegration.EVENT_CLAIM_KILL.isCanceled()) return;
 
         if (!wasBoogeyCure) {
             if (wasAllowedToAttack && livesManager.canChangeLivesNaturally()) {
@@ -236,6 +239,7 @@ public class LimitedLife extends Season {
         boolean wasAllowedToAttack = isAllowedToAttack(killer, victim, false);
         boolean wasBoogeyCure = boogeymanManager.isBoogeymanThatCanBeCured(killer, victim);
         super.onPlayerKilledByPlayer(victim, killer);
+        if (DatapackIntegration.EVENT_PLAYER_PVP_KILLED.isCanceled()) return;
 
         if (!wasBoogeyCure && livesManager.canChangeLivesNaturally()) {
             Component victimDeathMessage = livesManager.getDeathMessage(victim);

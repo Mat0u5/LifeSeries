@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -261,6 +262,7 @@ public class SecretSociety {
         if (!SOCIETY_ENABLED) return;
         members.add(new SocietyMember(player));
         player.addTag("society_member");
+        DatapackIntegration.EVENT_SOCIETY_MEMBER_ADDED.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
     }
 
     public void addMemberManually(ServerPlayer player) {
@@ -333,6 +335,9 @@ public class SecretSociety {
         PlayerUtils.sendTitleWithSubtitleToPlayers(memberPlayers, Component.empty(), Component.nullToEmpty("§aThe Society is pleased"), 20, 30, 20);
         TaskScheduler.scheduleTask(75, () -> {
             PlayerUtils.sendTitleWithSubtitleToPlayers(memberPlayers, Component.empty(), Component.nullToEmpty("§aYou will not be punished"), 20, 30, 20);
+            for (ServerPlayer member : memberPlayers) {
+                DatapackIntegration.EVENT_SOCIETY_SUCCESS_REWARD.trigger(new DatapackIntegration.Events.MacroEntry("Player", member.getScoreboardName()));
+            }
         });
         TaskScheduler.scheduleTask(150, () -> {
             PlayerUtils.sendTitleWithSubtitleToPlayers(memberPlayers, Component.empty(), Component.nullToEmpty("§cYou are still sworn to secrecy"), 20, 30, 20);
@@ -358,6 +363,8 @@ public class SecretSociety {
 
     public void punishPlayer(ServerPlayer member) {
         member.ls$hurt(member.damageSources().playerAttack(member), 0.001f);
+        DatapackIntegration.EVENT_SOCIETY_FAIL_REWARD.trigger(new DatapackIntegration.Events.MacroEntry("Player", member.getScoreboardName()));
+        if (DatapackIntegration.EVENT_SOCIETY_FAIL_REWARD.isCanceled()) return;
         int punishmentLives = Math.abs(PUNISHMENT_LIVES);
         Integer currentLives = member.ls$getLives();
         if (currentLives != null) {
