@@ -20,18 +20,66 @@ public class DatapackIntegration {
     private static final String SCOREBOARD_SESSION_INFO = "Session";
     private static final String SCOREBOARD_TASK_DIFFICULTY = "TaskDifficulty";
 
-    public static final Events EVENT_TEST = Events.TEST;
-    public static final Events EVENT_TEST2 = Events.TEST2;
+    public static final Events EVENT_PLAYER_JOIN = Events.PLAYER_JOIN;
+    public static final Events EVENT_PLAYER_LEAVE = Events.PLAYER_LEAVE;
+    public static final Events EVENT_PLAYER_DEATH = Events.PLAYER_DEATH;
+    public static final Events EVENT_PLAYER_PVP_KILLED = Events.PLAYER_PVP_KILLED;
+    public static final Events EVENT_CLAIM_KILL = Events.CLAIM_KILL;
+    public static final Events EVENT_SESSION_CHANGE_STATUS = Events.SESSION_CHANGE_STATUS;
+    public static final Events EVENT_BOOGEYMAN_ADDED = Events.BOOGEYMAN_ADDED;
+    public static final Events EVENT_BOOGEYMAN_CURE_REWARD = Events.BOOGEYMAN_CURE_REWARD;
+    public static final Events EVENT_BOOGEYMAN_FAIL_REWARD = Events.BOOGEYMAN_FAIL_REWARD;
+    public static final Events EVENT_SOCIETY_MEMBER_ADDED = Events.SOCIETY_MEMBER_ADDED;
+    public static final Events EVENT_SOCIETY_SUCCESS_REWARD = Events.SOCIETY_SUCCESS_REWARD;
+    public static final Events EVENT_SOCIETY_FAIL_REWARD = Events.SOCIETY_FAIL_REWARD;
+    public static final Events EVENT_TASK_SUCCEED = Events.TASK_SUCCEED;
+    public static final Events EVENT_TASK_FAIL = Events.TASK_FAIL;
+    public static final Events EVENT_TASK_REROLL = Events.TASK_REROLL;
+    public static final Events EVENT_WILDCARD_ACTIVATE = Events.WILDCARD_ACTIVATE;
+    public static final Events EVENT_WILDCARD_DEACTIVATE = Events.WILDCARD_DEACTIVATE;
+    public static final Events EVENT_TRIVIA_BOT_SPAWN = Events.TRIVIA_BOT_SPAWN;
 
     public static void reload() {
-        EVENT_TEST.reload();
-        EVENT_TEST2.reload();
+        EVENT_PLAYER_JOIN.reload();
+        EVENT_PLAYER_LEAVE.reload();
+        EVENT_PLAYER_DEATH.reload();
+        EVENT_PLAYER_PVP_KILLED.reload();
+        EVENT_CLAIM_KILL.reload();
+        EVENT_SESSION_CHANGE_STATUS.reload();
+        EVENT_BOOGEYMAN_ADDED.reload();
+        EVENT_BOOGEYMAN_CURE_REWARD.reload();
+        EVENT_BOOGEYMAN_FAIL_REWARD.reload();
+        EVENT_SOCIETY_MEMBER_ADDED.reload();
+        EVENT_SOCIETY_SUCCESS_REWARD.reload();
+        EVENT_SOCIETY_FAIL_REWARD.reload();
+        EVENT_TASK_SUCCEED.reload();
+        EVENT_TASK_FAIL.reload();
+        EVENT_TASK_REROLL.reload();
+        EVENT_WILDCARD_ACTIVATE.reload();
+        EVENT_WILDCARD_DEACTIVATE.reload();
+        EVENT_TRIVIA_BOT_SPAWN.reload();
     }
 
     public static List<Events> getAllEvents() {
         return List.of(
-                EVENT_TEST
-                ,EVENT_TEST2
+                EVENT_PLAYER_JOIN
+                ,EVENT_PLAYER_LEAVE
+                ,EVENT_PLAYER_DEATH
+                ,EVENT_PLAYER_PVP_KILLED
+                ,EVENT_CLAIM_KILL
+                ,EVENT_SESSION_CHANGE_STATUS
+                ,EVENT_BOOGEYMAN_ADDED
+                ,EVENT_BOOGEYMAN_CURE_REWARD
+                ,EVENT_BOOGEYMAN_FAIL_REWARD
+                ,EVENT_SOCIETY_MEMBER_ADDED
+                ,EVENT_SOCIETY_SUCCESS_REWARD
+                ,EVENT_SOCIETY_FAIL_REWARD
+                ,EVENT_TASK_SUCCEED
+                ,EVENT_TASK_FAIL
+                ,EVENT_TASK_REROLL
+                ,EVENT_WILDCARD_ACTIVATE
+                ,EVENT_WILDCARD_DEACTIVATE
+                ,EVENT_TRIVIA_BOT_SPAWN
         );
     }
 
@@ -96,8 +144,24 @@ public class DatapackIntegration {
     }
 
     public enum Events {
-        TEST("event_test", "Test Event", "Test Description", true),
-        TEST2("event_test2", "Test Event2", "Test Description2", false);
+        PLAYER_JOIN("player_join", "Player Join", "Triggers when a player joins the game.", false),
+        PLAYER_LEAVE("player_leave", "Player Leave", "Triggers when a player leaves the game.", false),
+        PLAYER_DEATH("player_death_punishment", "Player Death §7Punishment", "Triggers when a player dies.", true),
+        PLAYER_PVP_KILLED("player_pvp_killed_reward", "Player PvP Killed §7Reward", "Triggers when a killer kills a victim.", true),
+        CLAIM_KILL("claim_kill", "Claim Kill §7Reward", "Triggers when a killer uses '/claimkill' for killing a victim", true),
+        SESSION_CHANGE_STATUS("session_status_change", "Session Change Status", "Triggers when the session changes status.", false),
+        BOOGEYMAN_ADDED("boogeyman_added", "Boogeyman Added", "Triggers when a boogeyman is added.", false),
+        BOOGEYMAN_CURE_REWARD("boogeyman_cure_reward", "Boogeyman Cure §7Reward", "Triggers when a boogeyman cures", true),
+        BOOGEYMAN_FAIL_REWARD("boogeyman_fail_reward", "Boogeyman Fail §7Punishment", "Triggers when a boogeyman fails.", true),
+        SOCIETY_MEMBER_ADDED("society_member_added", "Society Member Added", "Triggers when a secret society member is added.", false),
+        SOCIETY_SUCCESS_REWARD("society_success_reward", "Secret Society Success §7Reward", "Triggers when a society member succeeds.", true),
+        SOCIETY_FAIL_REWARD("society_fail_reward", "Secret Society Fail §7Punishment", "Triggers when a society member fails.", true),
+        TASK_SUCCEED("task_succeed", "Task Succeed", "Triggers when a player succeeds their task in Secret Life.", false),
+        TASK_FAIL("task_fail", "Task Fail", "Triggers when a player fails their task in Secret Life.", false),
+        TASK_REROLL("task_reroll", "Task Reroll", "Triggers when a player rerolls their task in Secret Life.", false),
+        WILDCARD_ACTIVATE("wildcard_activate", "Wildcard Activate", "Triggers when a wildcard activates.", false),
+        WILDCARD_DEACTIVATE("wildcard_deactivate", "Wildcard Deactivate", "Triggers when a wildcard activates.", false),
+        TRIVIA_BOT_SPAWN("trivia_bot_spawn", "Trivia Bot Spawn", "Triggers when a trivia bot spawns for a player.", false);
 
         @Nullable
         String command;
@@ -109,10 +173,16 @@ public class DatapackIntegration {
         final boolean cancellable;
 
         Events(String eventName, String displayName, String description, boolean cancellable) {
-            this.eventName = eventName;
+            this.eventName = "event_"+eventName;
             this.displayName = displayName;
-            this.description = description;
             this.cancellable = cancellable;
+
+            if (!cancellable) {
+                this.description = description+"\nNot cancellable.";
+            }
+            else {
+                this.description = description;
+            }
         }
 
         public void reload() {
