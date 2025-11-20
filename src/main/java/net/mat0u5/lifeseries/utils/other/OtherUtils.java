@@ -162,6 +162,7 @@ public class OtherUtils {
     }
 
     public static void executeCommand(String command) {
+        OtherUtils.log("Executing: " + command);
         try {
             if (server == null) return;
             Commands manager = server.getCommands();
@@ -287,5 +288,13 @@ public class OtherUtils {
         else {
             PlayerUtils.broadcastMessageToAdmins(Component.nullToEmpty("§7The game is no longer frozen."));
         }
+    }
+
+    public static boolean isNumber(String text) {
+        try {
+            int num = Integer.parseInt(text);
+            return true;
+        } catch (Exception e) {}
+        return false;
     }
 }

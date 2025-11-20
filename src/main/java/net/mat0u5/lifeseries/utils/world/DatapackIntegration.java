@@ -4,12 +4,15 @@ import net.mat0u5.lifeseries.seasons.season.secretlife.TaskTypes;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.scores.ScoreHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.seasonConfig;
@@ -224,5 +227,43 @@ public class DatapackIntegration {
         public String getDescription() {
             return description;
         }
+
+        public void trigger() {
+            trigger(List.of());
+        }
+        public void trigger(MacroEntry entry) {
+            trigger(List.of(entry));
+        }
+        public void trigger(List<MacroEntry> macroEntries) {
+            if (!hasCommand()) return;
+            if (command == null) return;
+            if (command.startsWith("/function ") || command.startsWith("function ")) {
+                List<String> macroStrings = new ArrayList<>();
+                for (MacroEntry entry : macroEntries) {
+                    boolean isNumber = OtherUtils.isNumber(entry.value());
+                    if (isNumber) {
+                        macroStrings.add(TextUtils.formatString("{}:{}", entry.key(), entry.value()));
+                    }
+                    else {
+                        macroStrings.add(TextUtils.formatString("{}:\"{}\"", entry.key(), entry.value()));
+                    }
+                }
+                if (macroStrings.isEmpty()) {
+                    OtherUtils.executeCommand(command);
+                }
+                else {
+                    OtherUtils.executeCommand(command + " {"+String.join(", ", macroStrings)+"}");
+                }
+            }
+            else {
+                String runCommand = command;
+                for (MacroEntry entry : macroEntries) {
+                    runCommand = runCommand.replace("$("+entry.key()+")", entry.value);
+                }
+                OtherUtils.executeCommand(runCommand);
+            }
+        }
+
+        public record MacroEntry(String key, String value) {}
     }
 }

@@ -75,8 +75,12 @@ public class TestingCommands extends Command {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Event cmd: '{}'", DatapackIntegration.EVENT_TEST.getCommand()));
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Event canceled: '{}'", DatapackIntegration.EVENT_TEST.getCanceled()));
+        DatapackIntegration.EVENT_PLAYER_LEAVE.trigger(List.of(
+                new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()),
+                new DatapackIntegration.Events.MacroEntry("PosX", String.valueOf(player.blockPosition().getX())),
+                new DatapackIntegration.Events.MacroEntry("PosY", String.valueOf(player.blockPosition().getY())),
+                new DatapackIntegration.Events.MacroEntry("PosZ", String.valueOf(player.blockPosition().getZ()))
+        ));
 
         return 1;
     }
