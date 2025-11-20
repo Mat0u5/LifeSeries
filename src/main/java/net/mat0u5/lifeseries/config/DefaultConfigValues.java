@@ -341,9 +341,9 @@ public class DefaultConfigValues {
             "group_teams", null, ConfigTypes.TEXT, "{teams}",
             "Teams Manager", ""
     );
-    public final ConfigFileEntry<Object> GROUP_DATAPACK = new ConfigFileEntry<>(
-            "group_datapack", null, ConfigTypes.TEXT, "{datapack}",
-            "Datapack Integration", ""
+    public final ConfigFileEntry<Object> GROUP_EVENTS = new ConfigFileEntry<>(
+            "group_events", null, ConfigTypes.TEXT, "{events}",
+            "Events", ""
     );
 
 

@@ -128,7 +128,14 @@ public class NetworkHandlerServer {
             List<String> args = payload.args();
             if (VersionControl.isDevVersion()) Main.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received config update from {}: {{}, {}, {}}", player, configType, id, args));
 
-            if (configType.parentString() && !args.isEmpty()) {
+            if (configType == ConfigTypes.EVENT_ENTRY && args.size() >= 2) {
+                String command = args.getFirst().strip();
+                String canceled = args.get(1);
+                seasonConfig.setOrRemoveProperty(id, command);
+                seasonConfig.setOrRemoveProperty(id+"_canceled", canceled);
+                updatedConfigThisTick = true;
+            }
+            else if (configType.parentString() && !args.isEmpty()) {
                 seasonConfig.setProperty(id, args.getFirst());
                 updatedConfigThisTick = true;
             }

@@ -69,7 +69,7 @@ public class StringConfigEntry extends TextFieldConfigEntry {
 
         int textWidth = textRenderer.width(text) + 20;
 
-        int labelEndX = x + LABEL_OFFSET_X + textRenderer.width(getDisplayName());
+        int labelEndX = labelEndX();
         int fieldEndX = textField.getX() + textField.getWidth();
         int maxFieldWidth = fieldEndX - labelEndX - 15;
         if (maxFieldWidth <= FIELD_WIDTH) maxFieldWidth = FIELD_WIDTH;
@@ -83,6 +83,11 @@ public class StringConfigEntry extends TextFieldConfigEntry {
             targetWidth = Math.min(FIELD_WIDTH, requiredWidth);
         }
     }
+
+    public int labelEndX() {
+        return x + LABEL_OFFSET_X + textRenderer.width(getDisplayName());
+    }
+
 
     @Override
     protected void renderEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {

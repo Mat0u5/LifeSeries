@@ -207,6 +207,7 @@ public abstract class Season {
         WatcherManager.reloadWatchers();
         livesManager.reload();
         currentSession.freezeIfNecessary();
+        DatapackIntegration.reload();
     }
 
     public void reloadPlayers() {

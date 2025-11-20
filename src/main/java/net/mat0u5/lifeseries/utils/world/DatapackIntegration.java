@@ -7,12 +7,33 @@ import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.scores.ScoreHolder;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+
+import static net.mat0u5.lifeseries.Main.seasonConfig;
 
 public class DatapackIntegration {
-    public static final String SCOREBOARD_WILDCARDS = "Wildcards";
-    public static final String SCOREBOARD_SUPERPOWERS = "PlayerSuperpowers";
-    public static final String SCOREBOARD_SESSION_INFO = "Session";
-    public static final String SCOREBOARD_TASK_DIFFICULTY = "TaskDifficulty";
+    private static final String SCOREBOARD_WILDCARDS = "Wildcards";
+    private static final String SCOREBOARD_SUPERPOWERS = "PlayerSuperpowers";
+    private static final String SCOREBOARD_SESSION_INFO = "Session";
+    private static final String SCOREBOARD_TASK_DIFFICULTY = "TaskDifficulty";
+
+    public static final Events EVENT_TEST = Events.TEST;
+    public static final Events EVENT_TEST2 = Events.TEST2;
+
+    public static void reload() {
+        EVENT_TEST.reload();
+        EVENT_TEST2.reload();
+    }
+
+    public static List<Events> getAllEvents() {
+        return List.of(
+                EVENT_TEST
+                ,EVENT_TEST2
+        );
+    }
 
     public static void createScoreboards() {
         ScoreboardUtils.createObjective(SCOREBOARD_WILDCARDS);
@@ -72,5 +93,66 @@ public class DatapackIntegration {
     }
     public static void setSessionTimePassed(int ticks) {
         ScoreboardUtils.setScore(ScoreHolder.forNameOnly("PassedTime"), SCOREBOARD_SESSION_INFO, ticks);
+    }
+
+    public enum Events {
+        TEST("event_test", "Test Event", "Test Description", true),
+        TEST2("event_test2", "Test Event2", "Test Description2", false);
+
+        @Nullable
+        String command;
+        @Nullable
+        String canceled;
+        final String eventName;
+        final String displayName;
+        final String description;
+        final boolean cancellable;
+
+        Events(String eventName, String displayName, String description, boolean cancellable) {
+            this.eventName = eventName;
+            this.displayName = displayName;
+            this.description = description;
+            this.cancellable = cancellable;
+        }
+
+        public void reload() {
+            command = seasonConfig.getProperty(eventName);
+            if (cancellable) {
+                canceled = seasonConfig.getOrCreateProperty(eventName+"_canceled", "false");
+            }
+        }
+
+        public boolean isCanceled() {
+            if (!cancellable) return false;
+            return canceled != null && canceled.equalsIgnoreCase("true");
+        }
+
+        public boolean hasCommand() {
+            return command != null && !command.isEmpty();
+        }
+
+        @NotNull
+        public String getCanceled() {
+            if (!cancellable || canceled == null) return "";
+            return canceled;
+        }
+
+        public String getEventName() {
+            return eventName;
+        }
+
+        @NotNull
+        public String getCommand() {
+            if (command == null) return "";
+            return command;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
+
+        public String getDescription() {
+            return description;
+        }
     }
 }

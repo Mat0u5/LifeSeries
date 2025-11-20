@@ -174,6 +174,12 @@ public class ClientConfigGuiManager {
                     return new StringListConfigEntry(stringObject.id, stringObject.name, stringObject.description, stringObject.stringValue, stringObject.defaultValue, args);
                 }
             }
+            else if (stringObject.configType == ConfigTypes.EVENT_ENTRY) {
+                List<String> args = new ArrayList<>(stringObject.args);
+                if (args.size() >= 4) {
+                    return new EventConfigEntry(stringObject.id, stringObject.name, stringObject.description, stringObject.stringValue, stringObject.defaultValue, args.get(3));
+                }
+            }
             return new StringConfigEntry(stringObject.id, stringObject.name, stringObject.description, stringObject.stringValue, stringObject.defaultValue);
         }
         else if (object instanceof IntegerObject intObject) {

@@ -339,11 +339,6 @@ public class TeamConfigEntry extends EmptyConfigEntry {
     }
 
     @Override
-    public boolean canReset() {
-        return isModified();
-    }
-
-    @Override
     public boolean isModified() {
         if (!Objects.equals(textFieldLives.getValue(), defaultTeamNum)) return true;
         if (!Objects.equals(textFieldName.getValue(), defaultTeamName)) return true;
