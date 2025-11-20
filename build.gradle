@@ -99,7 +99,10 @@ publishMods {
  modLoaders.add("fabric")
 
  def isDevBuild = providers.environmentVariable("DEV_BUILD").getOrElse("true") == "true"
- def shouldIncludeSnapshots = project.property('min_version').toString().contains("w") || project.property('max_version').toString().contains("w")
+ def shouldIncludeSnapshots =
+         project.property('min_version').toString().contains("w") || project.property('max_version').toString().contains("w") ||
+         project.property('min_version').toString().contains("pre") || project.property('max_version').toString().contains("pre") ||
+         project.property('min_version').toString().contains("rc") || project.property('max_version').toString().contains("rc")
 
  modrinth {
   projectId = isDevBuild ? "RLDqKhd4" : "aLasQi8P"
