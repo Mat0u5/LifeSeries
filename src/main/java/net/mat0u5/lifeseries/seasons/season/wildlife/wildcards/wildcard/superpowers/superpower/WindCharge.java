@@ -37,7 +37,7 @@ public class WindCharge extends ToggleableSuperpower {
         super.activate();
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        player.playNotifySound(SoundEvents.ARROW_SHOOT, SoundSource.MASTER, 0.3f, 1);
+        player.ls$playNotifySound(SoundEvents.ARROW_SHOOT, SoundSource.MASTER, 0.3f, 1);
         AttributeUtils.setSafeFallHeight(player, 100000);
         giveMace();
         giveWindCharge();
@@ -49,7 +49,7 @@ public class WindCharge extends ToggleableSuperpower {
         super.deactivate();
         ServerPlayer player = getPlayer();
         if (player != null) {
-            player.playNotifySound(SoundEvents.WIND_CHARGE_BURST.value(), SoundSource.MASTER, 0.3f, 1);
+            player.ls$playNotifySound(SoundEvents.WIND_CHARGE_BURST.value(), SoundSource.MASTER, 0.3f, 1);
             TaskScheduler.scheduleTask(1, () -> player.getInventory().setChanged());
             AttributeUtils.resetSafeFallHeight(player);
         }

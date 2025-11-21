@@ -61,7 +61,7 @@ public class Mimicry extends Superpower {
                         mimic = mimicPower.getInstance(player);
                         successfullyMimicked = true;
                         PlayerUtils.displayMessageToPlayer(player, TextUtils.format("Mimicked superpower of {}", lookingAtPlayer), 65);
-                        player.playNotifySound(SoundEvents.CHICKEN_EGG, SoundSource.MASTER, 0.3f, 1);
+                        player.ls$playNotifySound(SoundEvents.CHICKEN_EGG, SoundSource.MASTER, 0.3f, 1);
                     }
                     if (mimicPower == Superpowers.MIMICRY) {
                         PlayerUtils.displayMessageToPlayer(player, Component.literal("You cannot mimic that power."), 65);

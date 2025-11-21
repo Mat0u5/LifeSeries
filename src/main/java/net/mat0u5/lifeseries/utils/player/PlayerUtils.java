@@ -101,7 +101,7 @@ public class PlayerUtils {
     public static void playSoundToPlayers(Collection<ServerPlayer> players, SoundEvent sound, SoundSource soundCategory, float volume, float pitch) {
         for (ServerPlayer player : players) {
             if (player == null) continue;
-            player.playNotifySound(sound, soundCategory, volume, pitch);
+            player.ls$playNotifySound(sound, soundCategory, volume, pitch);
         }
     }
 
@@ -110,7 +110,7 @@ public class PlayerUtils {
     }
 
     public static void playSoundToPlayer(ServerPlayer player, SoundEvent sound, float volume, float pitch) {
-        player.playNotifySound(sound, SoundSource.MASTER, volume, pitch);
+        player.ls$playNotifySound(sound, SoundSource.MASTER, volume, pitch);
     }
 
     private static final Random rnd = new Random();

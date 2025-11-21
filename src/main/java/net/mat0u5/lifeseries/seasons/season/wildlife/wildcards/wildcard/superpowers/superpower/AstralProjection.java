@@ -85,7 +85,7 @@ public class AstralProjection extends ToggleableSuperpower {
         ServerPlayer player = getPlayer();
         if (player == null) return;
         if (player.isSpectator()) return;
-        player.playNotifySound(SoundEvents.TRIAL_SPAWNER_OMINOUS_ACTIVATE, SoundSource.MASTER, 0.3f, 1);
+        player.ls$playNotifySound(SoundEvents.TRIAL_SPAWNER_OMINOUS_ACTIVATE, SoundSource.MASTER, 0.3f, 1);
 
         String fakePlayerName = "`"+player.getScoreboardName();
 
@@ -178,7 +178,7 @@ public class AstralProjection extends ToggleableSuperpower {
             PlayerUtils.teleport(player, startedLevel, toBackPos, startedLooking[0], startedLooking[1]);
         }
         player.setGameMode(startedGameMode);
-        player.playNotifySound(SoundEvents.EVOKER_DEATH, SoundSource.MASTER, 0.3f, 1);
+        player.ls$playNotifySound(SoundEvents.EVOKER_DEATH, SoundSource.MASTER, 0.3f, 1);
     }
 
 

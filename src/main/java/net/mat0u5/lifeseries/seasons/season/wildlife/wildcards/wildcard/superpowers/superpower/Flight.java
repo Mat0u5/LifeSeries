@@ -89,7 +89,7 @@ public class Flight extends Superpower {
         giveHelmet();
 
         player.ls$getServerLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.MASTER, 1, 1);
-        player.playNotifySound(SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.MASTER, 1, 1);
+        player.ls$playNotifySound(SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.MASTER, 1, 1);
 
         //? if <= 1.21.4 {
         MobEffectInstance effect = new MobEffectInstance(MobEffects.JUMP, 20, 54, false, false, false);

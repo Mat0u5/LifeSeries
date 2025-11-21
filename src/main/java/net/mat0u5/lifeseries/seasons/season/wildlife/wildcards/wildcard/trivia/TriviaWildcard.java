@@ -215,7 +215,7 @@ public class TriviaWildcard extends Wildcard {
             SessionTranscript.newTriviaBot(player);
             bot.serverData.setBoundPlayer(player);
             bots.put(player.getUUID(), bot);
-            player.playNotifySound(SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.MASTER, 0.5f, 1);
+            player.ls$playNotifySound(SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.MASTER, 0.5f, 1);
             NetworkHandlerServer.sendNumberPacket(player, PacketNames.FAKE_THUNDER, 7);
             DatapackIntegration.EVENT_TRIVIA_BOT_SPAWN.trigger(List.of(
                     new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()),

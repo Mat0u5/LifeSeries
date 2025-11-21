@@ -8,6 +8,8 @@ import net.mat0u5.lifeseries.utils.interfaces.IServerPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
@@ -26,6 +28,10 @@ import java.util.OptionalInt;
 
 import static net.mat0u5.lifeseries.Main.*;
 
+//? if >= 1.21.11 {
+/*import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
+*///?}
 //? if >= 1.21.2
 /*import java.util.Collection;*/
 
@@ -216,5 +222,20 @@ public class ServerPlayerMixin implements IServerPlayer {
         //?} else {
         /*return ls$get().level();
          *///?}
+    }
+
+    @Unique @Override
+    public void ls$playNotifySound(SoundEvent sound, SoundSource soundSource, float volume, float pitch) {
+        ServerPlayer self = ls$get();
+        //? if <= 1.21.9 {
+        self.ls$playNotifySound(sound, soundSource, volume, pitch);
+        //?} else {
+        /*self.connection
+                .send(
+                        new ClientboundSoundPacket(
+                                BuiltInRegistries.SOUND_EVENT.wrapAsHolder(sound), soundSource, self.getX(), self.getY(), self.getZ(), volume, pitch, self.getRandom().nextLong()
+                        )
+                );
+        *///?}
     }
 }

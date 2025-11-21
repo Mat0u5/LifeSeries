@@ -45,7 +45,7 @@ public class Listening extends ToggleableSuperpower {
         super.activate();
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        player.playNotifySound(SoundEvents.PUFFER_FISH_BLOW_UP, SoundSource.MASTER, 1, 1);
+        player.ls$playNotifySound(SoundEvents.PUFFER_FISH_BLOW_UP, SoundSource.MASTER, 1, 1);
         NetworkHandlerServer.sendVignette(player, -1);
         listeningPlayers.add(player.getUUID());
         updateLooking();
@@ -58,7 +58,7 @@ public class Listening extends ToggleableSuperpower {
         if (player == null) return;
         NetworkHandlerServer.sendVignette(player, 0);
         listeningPlayers.remove(player.getUUID());
-        player.playNotifySound(SoundEvents.PUFFER_FISH_BLOW_OUT, SoundSource.MASTER, 1, 1);
+        player.ls$playNotifySound(SoundEvents.PUFFER_FISH_BLOW_OUT, SoundSource.MASTER, 1, 1);
     }
 
     public void updateLooking() {

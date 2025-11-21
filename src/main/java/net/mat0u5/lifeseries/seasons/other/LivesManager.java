@@ -275,7 +275,7 @@ public class LivesManager {
     }
 
     public void receiveLifeFromOtherPlayer(Component playerName, ServerPlayer target, boolean isRevive) {
-        target.playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.MASTER, 10, 1);
+        target.ls$playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.MASTER, 10, 1);
         if (seasonConfig.GIVELIFE_BROADCAST.get(seasonConfig)) {
             PlayerUtils.broadcastMessageExcept(TextUtils.format("{} received a life from {}", target, playerName), target);
         }

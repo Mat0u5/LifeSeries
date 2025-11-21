@@ -192,7 +192,7 @@ public class TriviaHandler {
     public void cursePlayer() {
         ServerPlayer player = bot.serverData.getBoundPlayer();
         if (player == null) return;
-        player.playNotifySound(SoundEvents.ELDER_GUARDIAN_CURSE, SoundSource.MASTER, 0.2f, 1f);
+        player.ls$playNotifySound(SoundEvents.ELDER_GUARDIAN_CURSE, SoundSource.MASTER, 0.2f, 1f);
         ServerLevel level = (ServerLevel) bot.level();
         Vec3 pos = bot.position();
 

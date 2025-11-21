@@ -238,7 +238,7 @@ public class ClientEvents {
         if (!hasTripleJumpEffect(player)) return;
         jumpedInAir++;
         player.jumpFromGround();
-        player.playNotifySound(SoundEvents.WIND_CHARGE_BURST.value(), SoundSource.MASTER, 0.25f, 1f);
+        player.level().playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.WIND_CHARGE_BURST.value(), SoundSource.MASTER, 0.25f, 1f, false);
         NetworkHandlerClient.sendStringPacket(PacketNames.TRIPLE_JUMP,"");
     }
 

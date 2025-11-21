@@ -34,7 +34,7 @@ public class DeathWither extends AdvancedDeath {
         MobEffectInstance witherEffect = new MobEffectInstance(MobEffects.WITHER, -1, 2, false, false, false);
         player.addEffect(witherEffect);
         if (player.hurtTime == 10 && ticks < 80) {
-            player.playNotifySound(SoundEvents.WITHER_SHOOT, SoundSource.PLAYERS, 1, 1);
+            player.ls$playNotifySound(SoundEvents.WITHER_SHOOT, SoundSource.PLAYERS, 1, 1);
         }
     }
 

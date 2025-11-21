@@ -47,13 +47,13 @@ public class Superspeed extends ToggleableSuperpower {
         if (player == null) return;
         if (player.getFoodData().getFoodLevel() <= 6) {
             //? if <= 1.21 {
-            player.playNotifySound(SoundEvents.GENERIC_EAT, SoundSource.MASTER, 1, 1);
+            player.ls$playNotifySound(SoundEvents.GENERIC_EAT, SoundSource.MASTER, 1, 1);
             //?} else {
-            /*player.playNotifySound(SoundEvents.GENERIC_EAT.value(), SoundSource.MASTER, 1, 1);
+            /*player.ls$playNotifySound(SoundEvents.GENERIC_EAT.value(), SoundSource.MASTER, 1, 1);
             *///?}
             return;
         }
-        player.playNotifySound(SoundEvents.BEACON_ACTIVATE, SoundSource.MASTER, 1, 1);
+        player.ls$playNotifySound(SoundEvents.BEACON_ACTIVATE, SoundSource.MASTER, 1, 1);
         slowlySetSpeed(player, 0.35, 60);
         NetworkHandlerServer.sendVignette(player, -1);
         if (STEP_UP) {
@@ -71,7 +71,7 @@ public class Superspeed extends ToggleableSuperpower {
     public void deactivate() {
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        player.playNotifySound(SoundEvents.BEACON_DEACTIVATE, SoundSource.MASTER, 1, 1);
+        player.ls$playNotifySound(SoundEvents.BEACON_DEACTIVATE, SoundSource.MASTER, 1, 1);
         slowlySetSpeed(player, AttributeUtils.DEFAULT_PLAYER_MOVEMENT_SPEED, 30);
         if (!WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
             player.removeEffect(MobEffects.HUNGER);

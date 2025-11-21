@@ -56,7 +56,7 @@ public class PlayerDisguise extends ToggleableSuperpower {
                 if (!PlayerUtils.isFakePlayer(lookingAtPlayer)) {
                     copiedPlayerUUID = lookingAtPlayer.getStringUUID();
                     copiedPlayerName = TextUtils.textToLegacyString(lookingAtPlayer.getFeedbackDisplayName());
-                    player.playNotifySound(SoundEvents.RESPAWN_ANCHOR_CHARGE, SoundSource.MASTER, 0.3f, 1);
+                    player.ls$playNotifySound(SoundEvents.RESPAWN_ANCHOR_CHARGE, SoundSource.MASTER, 0.3f, 1);
                     PlayerUtils.displayMessageToPlayer(player, TextUtils.format("Copied DNA of {}", lookingAtPlayer).append(Component.nullToEmpty(" — Press again to disguise")), 65);
                     return;
                 }
