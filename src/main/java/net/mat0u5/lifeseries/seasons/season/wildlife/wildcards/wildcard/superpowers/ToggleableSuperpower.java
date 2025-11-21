@@ -34,6 +34,7 @@ public abstract class ToggleableSuperpower extends Superpower {
     public void activate() {
         active = true;
         cooldown(activateCooldownMillis());
+        triggerActivated();
     }
 
     @Override

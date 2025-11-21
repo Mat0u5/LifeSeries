@@ -375,10 +375,11 @@ public class Session {
     }
 
     public void changeStatus(SessionStatus newStatus) {
+        SessionStatus prevStatus = status;
         status = newStatus;
         currentSeason.sessionChangeStatus(status);
         freezeIfNecessary();
-        DatapackIntegration.changeSessionStatus(newStatus);
+        DatapackIntegration.changeSessionStatus(prevStatus, newStatus);
     }
 
     public void freezeIfNecessary() {

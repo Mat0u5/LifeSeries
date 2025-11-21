@@ -248,6 +248,7 @@ public class SecretLife extends Season {
 
     @Override
     public void onPlayerDamage(ServerPlayer player, DamageSource source, float amount, CallbackInfo ci) {
+        super.onPlayerDamage(player, source, amount, ci);
         if (player.hasEffect(MobEffects.HEALTH_BOOST)) {
             player.removeEffect(MobEffects.HEALTH_BOOST);
         }

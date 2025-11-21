@@ -4,9 +4,11 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.UUID;
 
 public abstract class Superpower {
@@ -42,6 +44,7 @@ public abstract class Superpower {
     public void activate() {
         active = true;
         cooldown(getCooldownMillis());
+        triggerActivated();
     }
 
     public void deactivate() {
@@ -59,5 +62,15 @@ public abstract class Superpower {
 
     public void sendCooldownPacket() {
         NetworkHandlerServer.sendLongPacket(getPlayer(), PacketNames.SUPERPOWER_COOLDOWN, cooldown);
+    }
+
+    public void triggerActivated() {
+        ServerPlayer player = getPlayer();
+        if (player != null) {
+            DatapackIntegration.EVENT_SUPERPOWER_TRIGGER.trigger(List.of(
+                    new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()),
+                    new DatapackIntegration.Events.MacroEntry("SuperpowerIndex", String.valueOf(getSuperpower().getIndex()))
+            ));
+        }
     }
 }

@@ -96,8 +96,8 @@ public class EventConfigEntry extends StringConfigEntry {
 
     public void updateButton() {
         canceledButton.active = canceled != null;
-        String text = "CANCEL";
-        if (canceled == null || !canceled) text = "PASS";
+        String text = "OVERRIDE";
+        if (canceled == null || !canceled) text = "ALLOW";
         canceledButton.setMessage(Component.nullToEmpty(text));
         canceledButton.setX(textField.getX() - 10 - canceledButton.getWidth());
         canceledButton.setY(textField.getY());

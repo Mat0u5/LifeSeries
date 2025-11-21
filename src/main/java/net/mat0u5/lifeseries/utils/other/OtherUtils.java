@@ -294,6 +294,10 @@ public class OtherUtils {
             int num = Integer.parseInt(text);
             return true;
         } catch (Exception e) {}
+        try {
+            double num = Double.parseDouble(text);
+            return true;
+        } catch (Exception e) {}
         return false;
     }
 }

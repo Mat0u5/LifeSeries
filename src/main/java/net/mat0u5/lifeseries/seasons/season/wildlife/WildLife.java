@@ -267,6 +267,7 @@ public class WildLife extends Season {
 
     @Override
     public void onPlayerDamage(ServerPlayer player, DamageSource source, float amount, CallbackInfo ci) {
+        super.onPlayerDamage(player, source, amount, ci);
         if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.PLAYER_DISGUISE)) {
             if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof PlayerDisguise power) {
                 power.onTakeDamage();

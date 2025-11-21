@@ -428,7 +428,7 @@ public abstract class Season {
         SessionTranscript.claimKill(killer, victim);
         boolean isBoogeyCure = boogeymanManager.isBoogeymanThatCanBeCured(killer, victim);
         if (isBoogeyCure) {
-            boogeymanManager.onBoogeymanKill(killer);
+            boogeymanManager.onBoogeymanKill(killer, victim);
         }
 
         DatapackIntegration.EVENT_CLAIM_KILL.trigger(List.of(
@@ -460,6 +460,10 @@ public abstract class Season {
     }
 
     public void onPlayerDamage(ServerPlayer player, DamageSource source, float amount, CallbackInfo ci) {
+        DatapackIntegration.EVENT_PLAYER_TAKE_DAMAGE.trigger(List.of(
+                new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()),
+                new DatapackIntegration.Events.MacroEntry("Amount", String.valueOf(amount))
+        ));
     }
 
     public void onPrePlayerDamage(ServerPlayer player, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
@@ -480,7 +484,7 @@ public abstract class Season {
         }
 
         if (isBoogeyCure) {
-            boogeymanManager.onBoogeymanKill(killer);
+            boogeymanManager.onBoogeymanKill(killer, victim);
         }
         SessionTranscript.onPlayerKilledByPlayer(victim, killer);
 

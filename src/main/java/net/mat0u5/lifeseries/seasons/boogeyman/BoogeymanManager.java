@@ -204,17 +204,21 @@ public class BoogeymanManager {
         }
     }
 
-    public void onBoogeymanKill(ServerPlayer player) {
+    public void onBoogeymanKill(ServerPlayer boogeyPlayer, ServerPlayer victim) {
         if (!BOOGEYMAN_ENABLED) return;
-        Boogeyman boogeyman = getBoogeyman(player);
+        Boogeyman boogeyman = getBoogeyman(boogeyPlayer);
         if (boogeymen == null) return;
         if (boogeyman.cured || boogeyman.failed) return;
+        DatapackIntegration.EVENT_BOOGEYMAN_KILL.trigger(List.of(
+                new DatapackIntegration.Events.MacroEntry("Boogeyman", boogeyPlayer.getScoreboardName()),
+                new DatapackIntegration.Events.MacroEntry("Victim", victim.getScoreboardName())
+        ));
         boogeyman.onKill();
         if (boogeyman.shouldCure()) {
-            cure(player);
+            cure(boogeyPlayer);
         }
         else {
-            player.sendSystemMessage(TextUtils.formatLoosely("§7You still need {} {} to be cured of the curse.", boogeyman.killsNeeded, TextUtils.pluralize("kill", boogeyman.killsNeeded)));
+            boogeyPlayer.sendSystemMessage(TextUtils.formatLoosely("§7You still need {} {} to be cured of the curse.", boogeyman.killsNeeded, TextUtils.pluralize("kill", boogeyman.killsNeeded)));
         }
     }
 
