@@ -286,18 +286,17 @@ public class LimitedLife extends Season {
 
     @Override
     public void reload() {
+        SHOW_TIME_BELOW_NAME = LimitedLifeConfig.SHOW_TIME_BELOW_NAME.get(seasonConfig);
         super.reload();
-        if (!(seasonConfig instanceof LimitedLifeConfig config)) return;
-        LimitedLifeLivesManager.DEFAULT_TIME = LimitedLifeConfig.TIME_DEFAULT.get(config);
-        LimitedLifeLivesManager.YELLOW_TIME = LimitedLifeConfig.TIME_YELLOW.get(config);
-        LimitedLifeLivesManager.RED_TIME = LimitedLifeConfig.TIME_RED.get(config);
-        DEATH_NORMAL = LimitedLifeConfig.TIME_DEATH.get(config);
-        DEATH_BOOGEYMAN = LimitedLifeConfig.TIME_DEATH_BOOGEYMAN.get(config);
-        KILL_NORMAL = LimitedLifeConfig.TIME_KILL.get(config);
-        KILL_BOOGEYMAN = LimitedLifeConfig.TIME_KILL_BOOGEYMAN.get(config);
-        TICK_OFFLINE_PLAYERS = LimitedLifeConfig.TICK_OFFLINE_PLAYERS.get(config);
-        LimitedLifeLivesManager.BROADCAST_COLOR_CHANGES = LimitedLifeConfig.BROADCAST_COLOR_CHANGES.get(config);
-        SHOW_TIME_BELOW_NAME = LimitedLifeConfig.SHOW_TIME_BELOW_NAME.get(config);
+        LimitedLifeLivesManager.DEFAULT_TIME = LimitedLifeConfig.TIME_DEFAULT.get(seasonConfig);
+        LimitedLifeLivesManager.YELLOW_TIME = LimitedLifeConfig.TIME_YELLOW.get(seasonConfig);
+        LimitedLifeLivesManager.RED_TIME = LimitedLifeConfig.TIME_RED.get(seasonConfig);
+        DEATH_NORMAL = LimitedLifeConfig.TIME_DEATH.get(seasonConfig);
+        DEATH_BOOGEYMAN = LimitedLifeConfig.TIME_DEATH_BOOGEYMAN.get(seasonConfig);
+        KILL_NORMAL = LimitedLifeConfig.TIME_KILL.get(seasonConfig);
+        KILL_BOOGEYMAN = LimitedLifeConfig.TIME_KILL_BOOGEYMAN.get(seasonConfig);
+        TICK_OFFLINE_PLAYERS = LimitedLifeConfig.TICK_OFFLINE_PLAYERS.get(seasonConfig);
+        LimitedLifeLivesManager.BROADCAST_COLOR_CHANGES = LimitedLifeConfig.BROADCAST_COLOR_CHANGES.get(seasonConfig);
     }
 
     @Override

@@ -155,6 +155,9 @@ public class BoogeymanManager {
             ServerPlayer player = PlayerUtils.getPlayer(boogeyman.uuid);
             if (player == null) continue;
             player.sendSystemMessage(Component.nullToEmpty("§c [NOTICE] You are no longer a Boogeyman!"));
+            player.removeTag("boogeyman");
+            player.removeTag("boogeyman_cured");
+            player.removeTag("boogeyman_failed");
         }
         boogeymen = new ArrayList<>();
         boogeymanChosen = false;

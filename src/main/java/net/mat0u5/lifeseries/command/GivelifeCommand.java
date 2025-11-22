@@ -67,8 +67,14 @@ public class GivelifeCommand extends Command {
             source.sendFailure(TextUtils.format("You cannot give {} to yourself", livesOrTime));
             return -1;
         }
+
+        int giveAmount = 1;
+        if (currentSeason.getSeason() == Seasons.LIMITED_LIFE) {
+            giveAmount = -LimitedLife.DEATH_NORMAL;
+        }
+
         Integer currentLives = self.ls$getLives();
-        if (currentLives == null || currentLives <= 1) {
+        if (currentLives == null || currentLives <= giveAmount) {
             source.sendFailure(TextUtils.format("You cannot give away any more {}", livesOrTime));
             return -1;
         }
@@ -92,12 +98,8 @@ public class GivelifeCommand extends Command {
         }
 
         Component currentPlayerName = self.getFeedbackDisplayName();
-        int amount = 1;
-        if (currentSeason.getSeason() == Seasons.LIMITED_LIFE) {
-            amount = -LimitedLife.DEATH_NORMAL;
-        }
-        self.ls$addLives(-amount);
-        livesManager.addToLivesNoUpdate(target, amount);
+        self.ls$addLives(-giveAmount);
+        livesManager.addToLivesNoUpdate(target, giveAmount);
         AnimationUtils.playTotemAnimation(self);
         TaskScheduler.scheduleTask(40, () -> livesManager.receiveLifeFromOtherPlayer(currentPlayerName, target, isRevive));
 

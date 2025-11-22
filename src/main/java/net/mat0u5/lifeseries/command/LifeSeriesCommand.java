@@ -154,6 +154,10 @@ public class LifeSeriesCommand extends Command {
             source.sendFailure(Component.nullToEmpty("Either install the mod on the client on modify the config folder."));
             return -1;
         }
+        if (currentSeason.getSeason() == Seasons.UNASSIGNED) {
+            source.sendFailure(Component.nullToEmpty("You need to select a season first to use the config."));
+            return -1;
+        }
 
         OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Opening the config GUI..."));
         NetworkHandlerServer.sendStringPacket(self, PacketNames.CLEAR_CONFIG,"");

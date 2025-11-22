@@ -228,7 +228,7 @@ public class ServerPlayerMixin implements IServerPlayer {
     public void ls$playNotifySound(SoundEvent sound, SoundSource soundSource, float volume, float pitch) {
         ServerPlayer self = ls$get();
         //? if <= 1.21.9 {
-        self.ls$playNotifySound(sound, soundSource, volume, pitch);
+        self.playNotifySound(sound, soundSource, volume, pitch);
         //?} else {
         /*self.connection
                 .send(
