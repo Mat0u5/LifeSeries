@@ -26,7 +26,7 @@ import net.minecraft.core.component.PatchedDataComponentMap;
 
 @Mixin(value = Item.class, priority = 1)
 public abstract class ItemMixin {
-    //?if < 1.20.5 {
+    //? if < 1.20.5 {
     @Accessor("foodProperties")
     public abstract FoodProperties foodProperties();
     //?}

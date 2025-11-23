@@ -373,7 +373,7 @@ public class Hunger extends Wildcard {
             if (random.nextDouble() < EFFECT_CHANCE) {
                 int amplifier = random.nextInt(5); // 0 -> 4
                 int duration = (int) Math.ceil(((random.nextInt(20) + 1) * AVG_EFFECT_DURATION) / 10.0);
-                //?if <= 1.20.1 {
+                //? if <= 1.20.1 {
                 MobEffect registryEntryEffect = effects.get(random.nextInt(effects.size()));
                 if (levelLimit.contains(registryEntryEffect) || commonItems.contains(item)) {
                     amplifier = 0;

@@ -5,7 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-//?if <= 1.20.1 {
+//? if <= 1.20.1 {
 import net.minecraft.server.network.FilteredText;
 //?} else {
 /*import net.minecraft.network.chat.Component;
@@ -70,7 +70,7 @@ public class Task {
     ${yellow} - Replaced with "yellow". Tasks are only available when a yellow player is alive.
     ${red} - Replaced with "red". Tasks are only available when a red player is alive.
      */
-    //?if <= 1.20.1 {
+    //? if <= 1.20.1 {
     public List<FilteredText> getBookLines(ServerPlayer owner) {
         formattedTask = "";
         List<FilteredText> lines = new ArrayList<>();
