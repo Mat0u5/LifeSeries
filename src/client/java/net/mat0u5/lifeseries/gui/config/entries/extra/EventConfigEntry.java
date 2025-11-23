@@ -24,8 +24,7 @@ public class EventConfigEntry extends StringConfigEntry {
     Boolean canceled;
     Boolean defaultCanceled;
     Button canceledButton;
-    //TODO update link to non-dev
-    public static final String tutorialLink = "https://mat0u5.github.io/LifeSeries-docs/dev/integration/datapacks.html#events";
+    public static final String tutorialLink = "https://mat0u5.github.io/LifeSeries-docs/integration/datapacks.html#events";
     final Button openTutorialButton;
 
     public EventConfigEntry(String fieldName, String displayName, String description, String value, String defaultValue, String canceledStr) {
@@ -117,6 +116,11 @@ public class EventConfigEntry extends StringConfigEntry {
     @Override
     public boolean isModified() {
         return !Objects.equals(canceled, defaultCanceled) || super.isModified();
+    }
+
+    @Override
+    public boolean canReset() {
+        return isModified();
     }
 
     @Override

@@ -97,4 +97,8 @@ public abstract class EmptyConfigEntry extends ConfigEntry {
     public boolean isModified() {
         return false;
     }
+    @Override
+    public boolean canReset() {
+        return false;
+    }
 }

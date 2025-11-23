@@ -354,6 +354,11 @@ public class TeamConfigEntry extends EmptyConfigEntry {
     }
 
     @Override
+    public boolean canReset() {
+        return isModified();
+    }
+
+    @Override
     public void setFocused(boolean focused) {
         super.setFocused(focused);
         if (!focused) {

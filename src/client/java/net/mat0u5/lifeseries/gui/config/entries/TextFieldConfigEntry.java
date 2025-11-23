@@ -150,4 +150,9 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
     public boolean isModified() {
         return !Objects.equals(textField.getValue(), getStartingValueAsString());
     }
+
+    @Override
+    public boolean canReset() {
+        return !Objects.equals(textField.getValue(), getDefaultValueAsString());
+    }
 }

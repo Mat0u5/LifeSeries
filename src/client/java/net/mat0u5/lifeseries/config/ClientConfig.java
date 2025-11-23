@@ -47,6 +47,11 @@ public class ClientConfig extends ConfigManager {
     );
 
     @Override
+    protected List<ConfigFileEntry<?>> getSeasonSpecificConfigEntries() {
+        return new ArrayList<>();
+    }
+
+    @Override
     protected List<ConfigFileEntry<?>> getDefaultConfigEntries() {
         List<ConfigFileEntry<?>> result = new ArrayList<>(List.of(
                 MINIMAL_ARMOR

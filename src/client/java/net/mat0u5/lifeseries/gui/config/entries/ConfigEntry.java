@@ -239,7 +239,7 @@ public abstract class ConfigEntry {
     }
 
     public boolean canReset() {
-        return isModified();
+        return !Objects.equals(getValue(), getDefaultValue());
     }
 
     public String getFieldName() {
