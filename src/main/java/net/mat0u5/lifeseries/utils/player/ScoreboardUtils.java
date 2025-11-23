@@ -69,7 +69,7 @@ public class ScoreboardUtils {
         scoreboard.removeObjective(objective);
     }
 
-    //? if >= 1.21 {
+    //? if > 1.20.1 {
     /*public static void setScore(String holder, String objectiveName, int score) {
         setScore(ScoreHolder.forNameOnly(holder), objectiveName, score);
     }

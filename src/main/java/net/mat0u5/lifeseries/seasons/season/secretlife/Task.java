@@ -1,12 +1,16 @@
 package net.mat0u5.lifeseries.seasons.season.secretlife;
 
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.network.Filterable;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+//?if <= 1.20.1 {
+import net.minecraft.server.network.FilteredText;
+//?} else {
+/*import net.minecraft.network.chat.Component;
+import net.minecraft.server.network.Filterable;
+*///?}
 
 import static net.mat0u5.lifeseries.Main.livesManager;
 
@@ -66,13 +70,23 @@ public class Task {
     ${yellow} - Replaced with "yellow". Tasks are only available when a yellow player is alive.
     ${red} - Replaced with "red". Tasks are only available when a red player is alive.
      */
-    public List<Filterable<Component>> getBookLines(ServerPlayer owner) {
+    //?if <= 1.20.1 {
+    public List<FilteredText> getBookLines(ServerPlayer owner) {
+        formattedTask = "";
+        List<FilteredText> lines = new ArrayList<>();
+        int pageNum = 0;
+        for (String page : rawTask.split("\\\\p")) {
+            page = formatString(owner, page);
+            lines.add(FilteredText.passThrough(page));
+    //?} else {
+    /*public List<Filterable<Component>> getBookLines(ServerPlayer owner) {
         formattedTask = "";
         List<Filterable<Component>> lines = new ArrayList<>();
         int pageNum = 0;
         for (String page : rawTask.split("\\\\p")) {
             page = formatString(owner, page);
             lines.add(Filterable.passThrough(Component.nullToEmpty(page)));
+    *///?}
 
             if (pageNum != 0) {
                 formattedTask += "\n";

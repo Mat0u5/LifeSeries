@@ -33,7 +33,7 @@ import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.seasonConfig;
 import static net.mat0u5.lifeseries.Main.server;
-//?if <= 1.20.1 {
+//? if <= 1.20.1 {
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -410,7 +410,7 @@ public class Blacklist {
         if (getItemBlacklist().contains(item)) return true;
         if (item != Items.POTION && item != Items.LINGERING_POTION && item != Items.SPLASH_POTION) return false;
 
-        //?if <= 1.20.1 {
+        //? if <= 1.20.1 {
         Potion potion = PotionUtils.getPotion(itemStack);
         for (MobEffectInstance effect : potion.getEffects()) {
             if (getBannedEffects().contains(effect.getEffect())) return true;
@@ -456,7 +456,7 @@ public class Blacklist {
             }
             return;
         }
-        //?if <= 1.20.1 {
+        //? if <= 1.20.1 {
         Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(itemStack);
         if (enchantments != null) {
             EnchantmentHelper.setEnchantments(clampAndBlacklistEnchantments(enchantments), itemStack);
@@ -474,7 +474,7 @@ public class Blacklist {
 
     }
 
-    //?if <= 1.20.1 {
+    //? if <= 1.20.1 {
     public Map<Enchantment, Integer> clampAndBlacklistEnchantments(Map<Enchantment, Integer> enchants) {
         Map<Enchantment, Integer> afterBlacklist = blacklistEnchantments(enchants);
         clampEnchantments(afterBlacklist);
