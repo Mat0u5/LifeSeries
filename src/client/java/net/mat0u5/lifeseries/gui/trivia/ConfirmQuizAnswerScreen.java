@@ -48,7 +48,7 @@ public class ConfirmQuizAnswerScreen extends DefaultScreen {
 
     @Override
     public void render(GuiGraphics context, int mouseX, int mouseY) {
-        RenderUtils.drawTextCenter(context, font, Component.nullToEmpty("Submit answer?"), centerX, startY + 10);
+        RenderUtils.text("Submit answer?", centerX, startY + 10).anchorCenter().render(context, this.font);
     }
 
     @Override

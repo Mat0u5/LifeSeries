@@ -183,7 +183,6 @@ public class MobSwap extends Wildcard {
     }
 
     public void mobSwap() {
-        //TODO refactor
         List<ServerPlayer> players = PlayerUtils.getAllPlayers();
         swaps++;
         if (swaps < 1) return;

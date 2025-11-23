@@ -105,6 +105,6 @@ public class ChooseWildcardScreen extends DefaultScreen {
     @Override
     public void render(GuiGraphics context, int mouseX, int mouseY) {
         String prompt = "Select the Wildcard for this session.";
-        RenderUtils.drawTextCenter(context, this.font, Component.nullToEmpty(prompt), centerX, startY + 20);
+        RenderUtils.text(prompt, centerX, startY + 20).anchorCenter().render(context, this.font);
     }
 }

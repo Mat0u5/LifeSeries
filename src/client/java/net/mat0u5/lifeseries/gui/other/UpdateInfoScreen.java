@@ -88,8 +88,8 @@ public class UpdateInfoScreen extends DefaultScreen {
     }
     @Override
     public void render(GuiGraphics context, int mouseX, int mouseY) {
-        RenderUtils.drawTextCenter(context, this.font, Component.nullToEmpty("§0§nA new Life Series mod update is available!"), centerX, startY + 7);
-        RenderUtils.drawTextLeft(context, this.font, TextUtils.formatLoosely("§0§nChangelog in version §l{}§0:",versionName), startX + 7, startY + 25 + font.lineHeight);
-        RenderUtils.drawTextLeftWrapLines(context, this.font, DEFAULT_TEXT_COLOR, Component.nullToEmpty(description), startX + 7, startY + 30 + font.lineHeight*2, backgroundWidth-14, 5);
+        RenderUtils.text("§0§nA new Life Series mod update is available!", centerX, startY + 7).anchorCenter().render(context, this.font);
+        RenderUtils.text(TextUtils.formatLoosely("§0§nChangelog in version §l{}§0:",versionName), startX + 7, startY + 25 + font.lineHeight).render(context, this.font);
+        RenderUtils.text(description, startX + 7, startY + 30 + font.lineHeight*2).wrapLines(backgroundWidth-14, 5).render(context, this.font);
     }
 }

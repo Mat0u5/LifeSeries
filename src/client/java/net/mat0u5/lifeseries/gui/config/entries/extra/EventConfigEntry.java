@@ -54,10 +54,10 @@ public class EventConfigEntry extends StringConfigEntry {
             openTutorialButton.setY(y+1);
             Component part1 = Component.nullToEmpty("§cLearn how to use Events");
             Component part2 = Component.nullToEmpty("§cin the Life Series Wiki.");
-            RenderUtils.drawTextLeft(context, textRenderer, part1, x+10, y+6);
+            RenderUtils.text(part1, x+10, y+6).render(context, textRenderer);
             int widthText = textRenderer.width(part1);
             openTutorialButton.setX(x+widthText+15);
-            RenderUtils.drawTextLeft(context, textRenderer, part2, x+widthText+openTutorialButton.getWidth()+20, y+6);
+            RenderUtils.text(part2, x+widthText+openTutorialButton.getWidth()+20, y+6).render(context, textRenderer);
         }
         super.renderEntry(context, x, y + (isFirst?PREFFERED_HEIGHT:0), width, height, mouseX, mouseY, hovered, tickDelta);
     }

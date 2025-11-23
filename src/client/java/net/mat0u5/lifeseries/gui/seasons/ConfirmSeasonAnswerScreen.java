@@ -59,8 +59,8 @@ public class ConfirmSeasonAnswerScreen extends DefaultScreen {
         Component prompt1 = Component.nullToEmpty("WARNING: you have already selected a season.");
         Component prompt2 = Component.nullToEmpty("Changing it might cause some saved data to be lost (lives, ...).");
         Component prompt3 = TextUtils.formatPlain("Change the season to {}?", season.getName());
-        RenderUtils.drawTextCenter(context, font, prompt1, centerX, startY + 15);
-        RenderUtils.drawTextCenter(context, font, prompt2, centerX, startY + 20 + font.lineHeight);
-        RenderUtils.drawTextCenter(context, font, prompt3, centerX, startY + 35 + font.lineHeight*2);
+        RenderUtils.text(prompt1, centerX, startY + 15).anchorCenter().render(context, this.font);
+        RenderUtils.text(prompt2, centerX, startY + 20 + font.lineHeight).anchorCenter().render(context, this.font);
+        RenderUtils.text(prompt3, centerX, startY + 35 + font.lineHeight*2).anchorCenter().render(context, this.font);
     }
 }

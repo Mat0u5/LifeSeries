@@ -81,7 +81,7 @@ public class BoogeymanConfigEntry extends BooleanConfigEntry {
 
         int currentY = y + DESCRIPTION_OFFSET_Y;
         for (String line : boogeymanDescription) {
-            RenderUtils.drawTextLeft(context, textRenderer, TextColors.LIGHT_GRAY,  Component.literal(line), x+DESCRIPTION_OFFSET_X, currentY);
+            RenderUtils.text(line, x+DESCRIPTION_OFFSET_X, currentY).colored(TextColors.LIGHT_GRAY).render(context, textRenderer);
             currentY += textRenderer.lineHeight;
         }
     }

@@ -155,22 +155,28 @@ public class QuizScreen extends DefaultScreen {
         while (minutesStr.length() < 2) minutesStr = "0" + minutesStr;
 
         Component timerText = TextUtils.format("{}:{}", minutesStr, secondsStr);
-        if (timerSeconds <= 5) RenderUtils.drawTextCenter(context, this.font, TextColors.RED, timerText, centerX, minY);
-        else if (timerSeconds <= 30) RenderUtils.drawTextCenter(context, this.font, TextColors.ORANGE, timerText, centerX, minY);
-        else RenderUtils.drawTextCenter(context, this.font, timerText, centerX, minY);
+        if (timerSeconds <= 5) {
+            RenderUtils.text(timerText, centerX, minY).anchorCenter().colored(TextColors.RED).render(context, this.font);
+        }
+        else if (timerSeconds <= 30) {
+            RenderUtils.text(timerText, centerX, minY).anchorCenter().colored(TextColors.ORANGE).render(context, this.font);
+        }
+        else {
+            RenderUtils.text(timerText, centerX, minY).anchorCenter().render(context, this.font);
+        }
 
         // Difficulty
-        RenderUtils.drawTextCenter(context, this.font, Component.nullToEmpty(difficulty), centerX, maxY);
+        RenderUtils.text(difficulty, centerX, maxY).anchorCenter().render(context, this.font);
 
         // Questions
-        RenderUtils.drawTextCenter(context, this.font, Component.literal("Question").withStyle(ChatFormatting.UNDERLINE), fifth1, minY);
+        RenderUtils.text(Component.literal("Question").withStyle(ChatFormatting.UNDERLINE), fifth1, minY).anchorCenter().render(context, this.font);
         List<FormattedCharSequence> wrappedQuestion = this.font.split(Component.literal(Trivia.question), questionWidth);
         for (int i = 0; i < wrappedQuestion.size(); i++) {
-            RenderUtils.drawOrderedTextLeft(context, this.font, DEFAULT_TEXT_COLOR, wrappedQuestion.get(i), questionX, questionY + i * this.font.lineHeight);
+            RenderUtils.text(wrappedQuestion.get(i), questionX, questionY + i * this.font.lineHeight).render(context, this.font);
         }
 
         // Answers
-        RenderUtils.drawTextCenter(context, this.font, Component.literal("Answers").withStyle(ChatFormatting.UNDERLINE), fifth4, minY);
+        RenderUtils.text(Component.literal("Answers").withStyle(ChatFormatting.UNDERLINE), fifth4, minY).anchorCenter().render(context, this.font);
         for (int i = 0; i < Trivia.answers.size(); i++) {
             Rectangle rect = answerRects.get(i);
             int borderColor = ANSWER_COLORS[i % ANSWER_COLORS.length];
@@ -186,7 +192,7 @@ public class QuizScreen extends DefaultScreen {
             // Draw each line
             int lineY = rect.y + 2;
             for (FormattedCharSequence line : answers.get(i)) {
-                RenderUtils.drawOrderedTextLeft(context, this.font, textColor, line, rect.x+1, lineY);
+                RenderUtils.text(line, rect.x+1, lineY).colored(textColor).render(context, this.font);
                 lineY += this.font.lineHeight;
             }
         }

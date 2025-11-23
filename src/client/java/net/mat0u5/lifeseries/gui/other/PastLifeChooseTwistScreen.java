@@ -62,6 +62,6 @@ public class PastLifeChooseTwistScreen extends DefaultScreen {
 
     @Override
     public void render(GuiGraphics context, int mouseX, int mouseY) {
-        RenderUtils.drawTextCenter(context, font, Component.nullToEmpty("Choose Past Life session twist:"), centerX, startY + 10);
+        RenderUtils.text("Choose Past Life session twist:", centerX, startY + 10).anchorCenter().render(context, font);
     }
 }

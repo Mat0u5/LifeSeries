@@ -110,11 +110,12 @@ public class TeamConfigEntry extends EmptyConfigEntry {
             Component header3Text = Component.nullToEmpty("§fColor");
             Component header4Text = Component.nullToEmpty("§f\uD83D\uDEC8 Can Kill");
             Component header5Text = Component.nullToEmpty("§f\uD83D\uDEC8 Gain Life");
-            RenderUtils.drawTextCenter(context, textRenderer, header1Text, field1CenterX, y+5);
-            RenderUtils.drawTextCenter(context, textRenderer, header2Text, field2CenterX, y+5);
-            RenderUtils.drawTextCenter(context, textRenderer, header3Text, field3CenterX, y+5);
-            RenderUtils.drawTextCenter(context, textRenderer, header4Text, field4CenterX, y+5);
-            RenderUtils.drawTextCenter(context, textRenderer, header5Text, field5CenterX, y+5);
+
+            RenderUtils.text(header1Text, field1CenterX, y+5).anchorCenter().render(context, textRenderer);
+            RenderUtils.text(header2Text, field2CenterX, y+5).anchorCenter().render(context, textRenderer);
+            RenderUtils.text(header3Text, field3CenterX, y+5).anchorCenter().render(context, textRenderer);
+            RenderUtils.text(header4Text, field4CenterX, y+5).anchorCenter().render(context, textRenderer);
+            RenderUtils.text(header5Text, field5CenterX, y+5).anchorCenter().render(context, textRenderer);
 
             if (hovered && mouseY >= y + 5 && mouseY <= y + 5 + textRenderer.lineHeight) {
                 Component hoverText = null;

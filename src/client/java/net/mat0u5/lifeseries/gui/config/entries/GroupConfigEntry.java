@@ -96,7 +96,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
             currentY += entryHeight + ConfigListWidget.ENTRY_GAP;
 
             String expandText = !mainEntry.shouldExpand() ? "Click to expand" : "Click to collapse";
-            RenderUtils.drawTextRight(context, textRenderer, TextColors.LIGHT_GRAY_A128, Component.nullToEmpty(expandText), mainEntry.expandTextX(x, width), y + LABEL_OFFSET_Y);
+            RenderUtils.text(expandText, mainEntry.expandTextX(x, width), y + LABEL_OFFSET_Y).anchorRight().colored(TextColors.LIGHT_GRAY_A128).render(context, textRenderer);
         }
 
 
@@ -122,7 +122,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
 
     private void renderExpandIcon(GuiGraphics context, int x, int y, boolean expanded, int endY, int width) {
         String text = expanded ? "- " : "+ ";
-        RenderUtils.drawTextRight(context, textRenderer, TextColors.WHITE, Component.nullToEmpty(text), x + EXPAND_TEXT_OFFSET_X, y + EXPAND_TEXT_OFFSET_Y);
+        RenderUtils.text(text, x + EXPAND_TEXT_OFFSET_X, y + EXPAND_TEXT_OFFSET_Y).anchorRight().colored(TextColors.WHITE).render(context, textRenderer);
         if (showSidebar) {
             context.fill(x+EXPAND_SIDEBAR_OFFSET_X, y, x+EXPAND_SIDEBAR_OFFSET_X+EXPAND_SIDEBAR_THICKNESS, endY - ConfigListWidget.ENTRY_GAP, TextColors.WHITE_A128);
         }

@@ -53,7 +53,7 @@ public class PastLifeInfoScreen extends DefaultScreen {
 
     @Override
     public void render(GuiGraphics context, int mouseX, int mouseY) {
-        RenderUtils.drawTextCenterScaled(context, this.font, Component.nullToEmpty("§0Past Life"), centerX, startY + 7, 2f, 2f);
-        RenderUtils.drawTextLeftWrapLines(context, this.font, TextColors.PASTEL_RED, Component.nullToEmpty(pastLifeInfoText), startX + 12, startY + 30, BG_WIDTH-30, 6);
+        RenderUtils.text("§0Past Life", centerX, startY + 7).anchorCenter().scaled(2f, 2f).render(context, this.font);
+        RenderUtils.text(pastLifeInfoText, startX + 12, startY + 30).colored(TextColors.PASTEL_RED).wrapLines(BG_WIDTH-30, 6).render(context, this.font);
     }
 }

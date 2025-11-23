@@ -116,7 +116,7 @@ public abstract class ConfigEntry {
         }
 
         if (hasError()) {
-            RenderUtils.drawTextRight(context, textRenderer, TextColors.PASTEL_RED, Component.nullToEmpty("⚠"), x + width + ERROR_LABEL_OFFSET_X, y + ERROR_LABEL_OFFSET_Y);
+            RenderUtils.text("⚠", x + width + ERROR_LABEL_OFFSET_X, y + ERROR_LABEL_OFFSET_Y).anchorRight().colored(TextColors.PASTEL_RED).render(context, textRenderer);
             if (isHovered) {
                 Component errorText = TextUtils.format("§cERROR:\n{}",getErrorMessage());
                 //? if <= 1.21.5 {

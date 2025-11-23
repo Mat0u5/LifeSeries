@@ -216,10 +216,12 @@ public class TextHud {
 
     public static int drawHudText(Minecraft client, GuiGraphics context, int color, Component text, int x, int y) {
         if (MainClient.TEXT_HUD_SCALE != 1) {
-            RenderUtils.drawTextRightScaled(context, client.font, color, text, x, y, (float) MainClient.TEXT_HUD_SCALE, (float) MainClient.TEXT_HUD_SCALE, true);
+            float scaleX = (float) MainClient.TEXT_HUD_SCALE;
+            float scaleY = (float) MainClient.TEXT_HUD_SCALE;
+            RenderUtils.text(text, x, y).anchorRight().colored(color).scaled(scaleX, scaleY).withShadow().render(context, client.font);
             return -((int) Math.ceil((client.font.lineHeight) * MainClient.TEXT_HUD_SCALE) + 5);
         }
-        RenderUtils.drawTextRight(context, client.font, color, text, x, y, true);
+        RenderUtils.text(text, x, y).anchorRight().colored(color).withShadow().render(context, client.font);
         return -client.font.lineHeight -5;
     }
 
