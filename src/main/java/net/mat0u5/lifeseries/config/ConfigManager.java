@@ -10,8 +10,8 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.scores.PlayerScoreEntry;
 import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.Score;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -19,6 +19,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.*;
+//? if >= 1.21
+/*import net.minecraft.world.scores.PlayerScoreEntry;*/
 
 public abstract class ConfigManager extends DefaultConfigValues {
 
@@ -175,7 +177,17 @@ public abstract class ConfigManager extends DefaultConfigValues {
             sendConfigEntry(player, entry, index);
             index++;
         }
-        for (PlayerScoreEntry entry : ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME)) {
+        //? if <= 1.20.1 {
+        for (Score entry : ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME)) {
+            ConfigFileEntry<Integer> lifeEntry = new ConfigFileEntry<>(
+                    "dynamic_lives_"+entry.getOwner(), entry.getScore(), ConfigTypes.LIVES_ENTRY, "lives",
+                    entry.getOwner(), "", true
+            );
+            sendConfigEntry(player, lifeEntry, index);
+            index++;
+        }
+        //?} else {
+        /*for (PlayerScoreEntry entry : ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME)) {
             ConfigFileEntry<Integer> lifeEntry = new ConfigFileEntry<>(
                     "dynamic_lives_"+entry.owner(), entry.value(), ConfigTypes.LIVES_ENTRY, "lives",
                     entry.owner(), "", true
@@ -183,6 +195,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
             sendConfigEntry(player, lifeEntry, index);
             index++;
         }
+        *///?}
         for (ServerPlayer nonAssignedPlayer : livesManager.getNonAssignedPlayers()) {
             ConfigFileEntry<Integer> lifeEntry = new ConfigFileEntry<>(
                     "dynamic_lives_"+nonAssignedPlayer.getScoreboardName(), null, ConfigTypes.LIVES_ENTRY, "lives",

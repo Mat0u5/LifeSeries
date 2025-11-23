@@ -106,7 +106,7 @@ public class WildLife extends Season {
                     if (currentLives == null) currentLives = 0;
                     int lives = currentLives + 1;
                     if (lives <= 0) {
-                        ScoreboardUtils.setScore(ScoreHolder.forNameOnly(killer.getScoreboardName()), LivesManager.SCOREBOARD_NAME, lives);
+                        ScoreboardUtils.setScore(killer.getScoreboardName(), LivesManager.SCOREBOARD_NAME, lives);
                     }
                     else {
                         broadcastLifeGain(killer, victim);

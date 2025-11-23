@@ -259,7 +259,7 @@ public class NetworkHandlerServer {
                         int lives = Integer.parseInt(value.get(1));
                         livesManager.setScore(value.getFirst(), lives);
                     }catch(Exception e) {
-                        ScoreboardUtils.resetScore(ScoreHolder.forNameOnly(value.getFirst()), LivesManager.SCOREBOARD_NAME);
+                        ScoreboardUtils.resetScore(value.getFirst(), LivesManager.SCOREBOARD_NAME);
                     }
                 }
 

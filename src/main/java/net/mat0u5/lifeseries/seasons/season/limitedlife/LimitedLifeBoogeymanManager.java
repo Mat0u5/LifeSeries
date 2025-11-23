@@ -34,14 +34,14 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
             if (!boogeyman.cured && !boogeyman.failed) {
                 ServerPlayer player = PlayerUtils.getPlayer(boogeyman.uuid);
                 if (player == null) {
-                    Integer currentLives = ScoreboardUtils.getScore(ScoreHolder.forNameOnly(boogeyman.name), LivesManager.SCOREBOARD_NAME);
+                    Integer currentLives = ScoreboardUtils.getScore(boogeyman.name, LivesManager.SCOREBOARD_NAME);
                     if (currentLives == null) continue;
                     if (currentLives <= LimitedLifeLivesManager.RED_TIME) continue;
 
                     if (BOOGEYMAN_ANNOUNCE_OUTCOME) {
                         PlayerUtils.broadcastMessage(TextUtils.format("{}§7 failed to kill a player while being the §cBoogeyman§7. Their time has been dropped to the next color.", boogeyman.name));
                     }
-                    ScoreboardUtils.setScore(ScoreHolder.forNameOnly(boogeyman.name), LivesManager.SCOREBOARD_NAME, LimitedLife.getNextLivesColorLives(currentLives));
+                    ScoreboardUtils.setScore(boogeyman.name, LivesManager.SCOREBOARD_NAME, LimitedLife.getNextLivesColorLives(currentLives));
                     continue;
                 }
                 playerFailBoogeyman(player, true);

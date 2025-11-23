@@ -43,10 +43,10 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.scores.DisplaySlot;
 import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.PlayerTeam;
-import net.minecraft.world.scores.ScoreAccess;
+import net.minecraft.world.scores.Scoreboard;
+import net.minecraft.world.scores.Team;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -57,6 +57,8 @@ import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
 import net.minecraft.world.level.GameRules;
 //? if > 1.21.9
 /*import net.minecraft.world.level.gamerules.GameRules;*/
+//? if >= 1.21
+/*import net.minecraft.world.scores.DisplaySlot;*/
 
 public abstract class Season {
     public static final String RESOURCEPACK_MAIN_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-main-fc0fa2a3efe2aefdba5a3c0deda61039fc43a008/main.zip";
@@ -149,29 +151,37 @@ public abstract class Season {
             *///?}
         }
 
-        Objective currentListObjective = ScoreboardUtils.getObjectiveInSlot(DisplaySlot.LIST);
+        //? if <= 1.20.1 {
+        int listSlot = Scoreboard.DISPLAY_SLOT_LIST;
+        int belowNameSlot = Scoreboard.DISPLAY_SLOT_BELOW_NAME;
+        //?} else {
+        /*DisplaySlot listSlot = DisplaySlot.LIST;
+        DisplaySlot belowNameSlot = DisplaySlot.BELOW_NAME;
+        *///?}
+
+        Objective currentListObjective = ScoreboardUtils.getObjectiveInSlot(listSlot);
         if (TAB_LIST_SHOW_LIVES) {
-            ScoreboardUtils.setObjectiveInSlot(DisplaySlot.LIST, LivesManager.SCOREBOARD_NAME);
+            ScoreboardUtils.setObjectiveInSlot(listSlot, LivesManager.SCOREBOARD_NAME);
         }
         else if (currentListObjective != null) {
             if (currentListObjective.getName().equals(LivesManager.SCOREBOARD_NAME)) {
-                ScoreboardUtils.setObjectiveInSlot(DisplaySlot.LIST, null);
+                ScoreboardUtils.setObjectiveInSlot(listSlot, null);
             }
         }
 
-        Objective currentBelowNameObjective = ScoreboardUtils.getObjectiveInSlot(DisplaySlot.BELOW_NAME);
+        Objective currentBelowNameObjective = ScoreboardUtils.getObjectiveInSlot(belowNameSlot);
         if (getSeason() == Seasons.LIMITED_LIFE && LimitedLife.SHOW_TIME_BELOW_NAME) {
-            ScoreboardUtils.setObjectiveInSlot(DisplaySlot.BELOW_NAME, LivesManager.SCOREBOARD_NAME);
+            ScoreboardUtils.setObjectiveInSlot(belowNameSlot, LivesManager.SCOREBOARD_NAME);
         }
         else if (SHOW_HEALTH_BELOW_NAME) {
-            ScoreboardUtils.setObjectiveInSlot(DisplaySlot.BELOW_NAME, "HP");
+            ScoreboardUtils.setObjectiveInSlot(belowNameSlot, "HP");
         }
         else if (currentBelowNameObjective != null) {
             if (currentBelowNameObjective.getName().equals("HP")) {
-                ScoreboardUtils.setObjectiveInSlot(DisplaySlot.BELOW_NAME, null);
+                ScoreboardUtils.setObjectiveInSlot(belowNameSlot, null);
             }
             if (currentBelowNameObjective.getName().equals(LivesManager.SCOREBOARD_NAME)) {
-                ScoreboardUtils.setObjectiveInSlot(DisplaySlot.BELOW_NAME, null);
+                ScoreboardUtils.setObjectiveInSlot(belowNameSlot, null);
             }
         }
 
@@ -253,7 +263,7 @@ public abstract class Season {
         }
 
         String team = getTeamForPlayer(player);
-        PlayerTeam currentTeam = player.getTeam();
+        Team currentTeam = player.getTeam();
 
         if (currentTeam == null || !currentTeam.getName().equals(team)) {
             TeamUtils.addEntityToTeam(team, player);
@@ -310,7 +320,7 @@ public abstract class Season {
              }
         }
 
-        PlayerTeam team = attacker.getTeam();
+        Team team = attacker.getTeam();
         if (team != null) {
             Integer canKillLives = livesManager.getTeamCanKill(team.getName());
             if (canKillLives != null && victim.ls$isOnAtLeastLives(canKillLives, false)) {
@@ -436,7 +446,7 @@ public abstract class Season {
                 new DatapackIntegration.Events.MacroEntry("Victim", victim.getScoreboardName())
         ));
         if (!DatapackIntegration.EVENT_CLAIM_KILL.isCanceled() && !isBoogeyCure) {
-            PlayerTeam team = killer.getTeam();
+            Team team = killer.getTeam();
             if (team != null) {
                 Integer canGainLife = livesManager.getTeamGainLives(team.getName());
                 if (canGainLife != null && victim.ls$isOnAtLeastLives(canGainLife, false)) {
@@ -493,7 +503,7 @@ public abstract class Season {
                 new DatapackIntegration.Events.MacroEntry("Victim", victim.getScoreboardName())
         ));
         if (!DatapackIntegration.EVENT_PLAYER_PVP_KILLED.isCanceled() && !isBoogeyCure && isAllowedToAttack) {
-            PlayerTeam team = killer.getTeam();
+            Team team = killer.getTeam();
             if (team != null) {
                 Integer canGainLife = livesManager.getTeamGainLives(team.getName());
                 if (canGainLife != null && victim.ls$isOnAtLeastLives(canGainLife, false)) {
