@@ -33,15 +33,15 @@ import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.seasonConfig;
 import static net.mat0u5.lifeseries.Main.server;
-//? if <= 1.20.1 {
-import net.minecraft.world.item.alchemy.Potion;
+//? if <= 1.20 {
+/*import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-//?} else {
-/*import net.minecraft.core.component.DataComponents;
+*///?} else {
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
-*///?}
+//?}
 
 //? if <= 1.21.9 {
 import net.minecraft.resources.ResourceLocation;
@@ -410,18 +410,18 @@ public class Blacklist {
         if (getItemBlacklist().contains(item)) return true;
         if (item != Items.POTION && item != Items.LINGERING_POTION && item != Items.SPLASH_POTION) return false;
 
-        //? if <= 1.20.1 {
-        Potion potion = PotionUtils.getPotion(itemStack);
+        //? if <= 1.20 {
+        /*Potion potion = PotionUtils.getPotion(itemStack);
         for (MobEffectInstance effect : potion.getEffects()) {
             if (getBannedEffects().contains(effect.getEffect())) return true;
         }
-        //?} else {
-        /*PotionContents potions = itemStack.getComponents().get(DataComponents.POTION_CONTENTS);
+        *///?} else {
+        PotionContents potions = itemStack.getComponents().get(DataComponents.POTION_CONTENTS);
         if (potions == null) return false;
         for (MobEffectInstance effect : potions.getAllEffects()) {
             if (getBannedEffects().contains(effect.getEffect())) return true;
         }
-        *///?}
+        //?}
         return false;
     }
 
@@ -456,13 +456,13 @@ public class Blacklist {
             }
             return;
         }
-        //? if <= 1.20.1 {
-        Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(itemStack);
+        //? if <= 1.20 {
+        /*Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(itemStack);
         if (enchantments != null) {
             EnchantmentHelper.setEnchantments(clampAndBlacklistEnchantments(enchantments), itemStack);
         }
-        //?} else {
-        /*ItemEnchantments enchants = itemStack.getComponents().get(DataComponents.ENCHANTMENTS);
+        *///?} else {
+        ItemEnchantments enchants = itemStack.getComponents().get(DataComponents.ENCHANTMENTS);
         ItemEnchantments enchantsStored = itemStack.getComponents().get(DataComponents.STORED_ENCHANTMENTS);
         if (enchants != null) {
             itemStack.set(DataComponents.ENCHANTMENTS, clampAndBlacklistEnchantments(enchants));
@@ -470,12 +470,12 @@ public class Blacklist {
         if (enchantsStored != null) {
             itemStack.set(DataComponents.STORED_ENCHANTMENTS, clampAndBlacklistEnchantments(enchantsStored));
         }
-        *///?}
+        //?}
 
     }
 
-    //? if <= 1.20.1 {
-    public Map<Enchantment, Integer> clampAndBlacklistEnchantments(Map<Enchantment, Integer> enchants) {
+    //? if <= 1.20 {
+    /*public Map<Enchantment, Integer> clampAndBlacklistEnchantments(Map<Enchantment, Integer> enchants) {
         Map<Enchantment, Integer> afterBlacklist = blacklistEnchantments(enchants);
         clampEnchantments(afterBlacklist);
         return afterBlacklist;
@@ -512,8 +512,8 @@ public class Blacklist {
             }
         }
     }
-    //?} else {
-    /*public ItemEnchantments clampAndBlacklistEnchantments(ItemEnchantments enchants) {
+    *///?} else {
+    public ItemEnchantments clampAndBlacklistEnchantments(ItemEnchantments enchants) {
         ItemEnchantments afterBlacklist = blacklistEnchantments(enchants);
         clampEnchantments(afterBlacklist);
         return afterBlacklist;
@@ -552,5 +552,5 @@ public class Blacklist {
             }
         }
     }
-    *///?}
+    //?}
 }

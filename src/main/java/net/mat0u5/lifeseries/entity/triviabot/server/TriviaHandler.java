@@ -110,11 +110,11 @@ public class TriviaHandler {
             if (triviaSnail != null) {
                 triviaSnail.serverData.setBoundPlayer(bot.serverData.getBoundPlayer());
                 triviaSnail.serverData.setFromTrivia();
-                //? if <= 1.20.1 {
-                triviaSnail.playSound(SoundEvents.GENERIC_EXPLODE, 0.5f, 2);
-                //?} else {
-                /*triviaSnail.playSound(SoundEvents.GENERIC_EXPLODE.value(), 0.5f, 2);
-                *///?}
+                //? if <= 1.20 {
+                /*triviaSnail.playSound(SoundEvents.GENERIC_EXPLODE, 0.5f, 2);
+                *///?} else {
+                triviaSnail.playSound(SoundEvents.GENERIC_EXPLODE.value(), 0.5f, 2);
+                //?}
                 ServerLevel level = (ServerLevel) triviaSnail.level();
                 Vec3 pos = bot.position();
                 level.sendParticles(
@@ -204,23 +204,23 @@ public class TriviaHandler {
         ServerLevel level = (ServerLevel) bot.level();
         Vec3 pos = bot.position();
 
-        //? if <= 1.20.1 {
-        level.sendParticles(
+        //? if <= 1.20 {
+        /*level.sendParticles(
                 new DustParticleOptions(new Vector3f(166, 17, 17), 1.0F),
                 pos.x(), pos.y()+1, pos.z(),
                 40, 0.1, 0.25, 0.1, 0.035
         );
-        //?} else {
-        /*level.sendParticles(
+        *///?} else {
+        level.sendParticles(
                 ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 0xFFa61111),
                 pos.x(), pos.y()+1, pos.z(),
                 40, 0.1, 0.25, 0.1, 0.035
         );
-        *///?}
+        //?}
         int minCurseNum = 0;
         //? if < 1.21 {
-        minCurseNum = 1;
-        //?}
+        /*minCurseNum = 1;
+        *///?}
         int numOfCurses = 9;
         if (CompatibilityManager.voicechatLoaded() && VoicechatMain.isConnectedToSVC(player.getUUID())) numOfCurses = 10;
 
@@ -240,10 +240,10 @@ public class TriviaHandler {
         switch (curse) {
             default:
             //? if >= 1.21 {
-            /*case 0:
+            case 0:
                 curseInfestation(player);
                 break;
-            *///?}
+            //?}
             case 1:
                 curseSlipperyGround(player);
                 break;
@@ -274,11 +274,11 @@ public class TriviaHandler {
         }
     }
 
-    //? if <= 1.20.1 {
-    private static final List<MobEffect> blessEffects = List.of(
-    //?} else {
-    /*private static final List<Holder<MobEffect>> blessEffects = List.of(
-    *///?}
+    //? if <= 1.20 {
+    /*private static final List<MobEffect> blessEffects = List.of(
+    *///?} else {
+    private static final List<Holder<MobEffect>> blessEffects = List.of(
+    //?}
             //? if <= 1.21.4 {
             MobEffects.MOVEMENT_SPEED,
             MobEffects.DIG_SPEED,
@@ -383,8 +383,8 @@ public class TriviaHandler {
         itemSpawner.addItem(new ItemStack(Items.CREEPER_SPAWN_EGG), 10);
         itemSpawner.addItem(new ItemStack(Items.GOLDEN_CARROT, 8), 10);
         //? if >= 1.21 {
-        /*itemSpawner.addItem(new ItemStack(Items.WIND_CHARGE, 16), 10);
-        *///?}
+        itemSpawner.addItem(new ItemStack(Items.WIND_CHARGE, 16), 10);
+        //?}
         itemSpawner.addItem(new ItemStack(Items.SCULK_SHRIEKER, 2), 10);
         itemSpawner.addItem(new ItemStack(Items.SCULK_SENSOR, 8), 10);
         itemSpawner.addItem(new ItemStack(Items.TNT, 8), 20);
@@ -398,25 +398,25 @@ public class TriviaHandler {
         itemSpawner.addItem(new ItemStack(Items.IRON_BLOCK, 2), 10);
 
         //? if >= 1.21 {
-        /*ItemStack mace = new ItemStack(Items.MACE);
+        ItemStack mace = new ItemStack(Items.MACE);
         ItemStackUtils.setCustomComponentBoolean(mace, "IgnoreBlacklist", true);
         ItemStackUtils.setCustomComponentBoolean(mace, "NoModifications", true);
         mace.setDamageValue(mace.getMaxDamage()-1);
         itemSpawner.addItem(mace, 5);
-        *///?}
+        //?}
 
         ItemStack endCrystal = new ItemStack(Items.END_CRYSTAL);
         ItemStackUtils.setCustomComponentBoolean(endCrystal, "IgnoreBlacklist", true);
         itemSpawner.addItem(endCrystal, 10);
 
         //? if >= 1.20.5 {
-        /*ItemStack patat = new ItemStack(Items.POISONOUS_POTATO);
+        ItemStack patat = new ItemStack(Items.POISONOUS_POTATO);
         patat.set(DataComponents.CUSTOM_NAME, Component.nullToEmpty("§6§l§nThe Sacred Patat"));
         ItemStackUtils.addLoreToItemStack(patat,
                 List.of(Component.nullToEmpty("§5§oEating bot might help you. Or maybe not..."))
         );
         itemSpawner.addItem(patat, 1);
-        *///?}
+        //?}
     }
 
     /*
@@ -434,11 +434,11 @@ public class TriviaHandler {
     }
 
     //? if >= 1.21 {
-    /*public void curseInfestation(ServerPlayer player) {
+    public void curseInfestation(ServerPlayer player) {
         MobEffectInstance statusEffectInstance = new MobEffectInstance(MobEffects.INFESTED, 18000, 0);
         player.addEffect(statusEffectInstance);
     }
-    *///?}
+    //?}
 
     public static final List<UUID> cursedGigantificationPlayers = new ArrayList<>();
     public void curseGigantification(ServerPlayer player) {
@@ -459,17 +459,17 @@ public class TriviaHandler {
         ItemStack chest = Items.LEATHER_CHESTPLATE.getDefaultInstance();
         ItemStack legs = Items.LEATHER_LEGGINGS.getDefaultInstance();
         ItemStack boots = Items.LEATHER_BOOTS.getDefaultInstance();
-        //? if <= 1.20.1 {
-        head.enchant(Enchantments.BINDING_CURSE, 1);
+        //? if <= 1.20 {
+        /*head.enchant(Enchantments.BINDING_CURSE, 1);
         chest.enchant(Enchantments.BINDING_CURSE, 1);
         legs.enchant (Enchantments.BINDING_CURSE, 1);
         boots.enchant(Enchantments.BINDING_CURSE, 1);
-        //?} else {
-        /*head.enchant(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
+        *///?} else {
+        head.enchant(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
         chest.enchant(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
         legs.enchant(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
         boots.enchant(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
-        *///?}
+        //?}
         ItemStackUtils.setCustomComponentBoolean(head, "IgnoreBlacklist", true);
         ItemStackUtils.setCustomComponentBoolean(chest, "IgnoreBlacklist", true);
         ItemStackUtils.setCustomComponentBoolean(legs, "IgnoreBlacklist", true);

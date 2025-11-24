@@ -18,7 +18,7 @@ import java.util.List;
 import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.Main.livesManager;
 //? if >= 1.21
-/*import net.minecraft.world.scores.PlayerScoreEntry;*/
+import net.minecraft.world.scores.PlayerScoreEntry;
 
 public class WatcherManager {
     public static final String SCOREBOARD_NAME = "Watchers";
@@ -36,21 +36,21 @@ public class WatcherManager {
 
     public static void reloadWatchers() {
         watchers.clear();
-        //? if <= 1.20.1 {
-        Collection<Score> entries = ScoreboardUtils.getScores(SCOREBOARD_NAME);
+        //? if <= 1.20 {
+        /*Collection<Score> entries = ScoreboardUtils.getScores(SCOREBOARD_NAME);
         if (entries == null || entries.isEmpty()) return;
         for (Score entry : entries) {
             if (entry.getScore() <= 0) continue;
             watchers.add(entry.getOwner());
         }
-        //?} else {
-        /*Collection<PlayerScoreEntry> entries = ScoreboardUtils.getScores(SCOREBOARD_NAME);
+        *///?} else {
+        Collection<PlayerScoreEntry> entries = ScoreboardUtils.getScores(SCOREBOARD_NAME);
         if (entries == null || entries.isEmpty()) return;
         for (PlayerScoreEntry entry : entries) {
             if (entry.value() <= 0) continue;
             watchers.add(entry.owner());
         }
-        *///?}
+        //?}
     }
 
     public static void addWatcher(ServerPlayer player) {

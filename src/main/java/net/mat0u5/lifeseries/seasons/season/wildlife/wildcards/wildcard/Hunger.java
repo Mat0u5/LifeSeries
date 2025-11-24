@@ -32,11 +32,11 @@ import static net.mat0u5.lifeseries.Main.currentSession;
 import static net.mat0u5.lifeseries.Main.seasonConfig;
 
 //? if > 1.20.5 {
-/*import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.PatchedDataComponentMap;
-*///?}
+//?}
 //? if <= 1.21
 import java.util.Optional;
 //? if >= 1.21.2 {
@@ -60,68 +60,68 @@ public class Hunger extends Wildcard {
     public static double SATURATION_CHANCE = 0.5;
     public static double SOUND_CHANCE = 0.01;
 
-    //? if <= 1.20.1 {
-    private static final List<MobEffect> effects = List.of(
-    //?} else {
-    /*private static final List<Holder<MobEffect>> effects = List.of(
-    *///?}
+    //? if <= 1.20 {
+    /*private static final List<MobEffect> effects = List.of(
+    *///?} else {
+    private static final List<Holder<MobEffect>> effects = List.of(
+    //?}
             //? if <= 1.21.4 {
-            MobEffects.MOVEMENT_SPEED,
-            MobEffects.MOVEMENT_SLOWDOWN,
-            MobEffects.DIG_SPEED,
-            MobEffects.DIG_SLOWDOWN,
-            MobEffects.DAMAGE_BOOST,
-            MobEffects.HEAL,
-            MobEffects.HARM,
-            MobEffects.JUMP,
-            MobEffects.CONFUSION,
-            MobEffects.DAMAGE_RESISTANCE,
+            MobEffects.MOVEMENT_SPEED
+            ,MobEffects.MOVEMENT_SLOWDOWN
+            ,MobEffects.DIG_SPEED
+            ,MobEffects.DIG_SLOWDOWN
+            ,MobEffects.DAMAGE_BOOST
+            ,MobEffects.HEAL
+            ,MobEffects.HARM
+            ,MobEffects.JUMP
+            ,MobEffects.CONFUSION
+            ,MobEffects.DAMAGE_RESISTANCE
             //?} else {
-            /*MobEffects.SPEED,
-            MobEffects.SLOWNESS,
-            MobEffects.HASTE,
-            MobEffects.MINING_FATIGUE,
-            MobEffects.STRENGTH,
-            MobEffects.INSTANT_HEALTH,
-            MobEffects.INSTANT_DAMAGE,
-            MobEffects.JUMP_BOOST,
-            MobEffects.NAUSEA,
-            MobEffects.RESISTANCE,
+            /*MobEffects.SPEED
+            ,MobEffects.SLOWNESS
+            ,MobEffects.HASTE
+            ,MobEffects.MINING_FATIGUE
+            ,MobEffects.STRENGTH
+            ,MobEffects.INSTANT_HEALTH
+            ,MobEffects.INSTANT_DAMAGE
+            ,MobEffects.JUMP_BOOST
+            ,MobEffects.NAUSEA
+            ,MobEffects.RESISTANCE
             *///?}
-            MobEffects.REGENERATION,
-            MobEffects.FIRE_RESISTANCE,
-            MobEffects.WATER_BREATHING,
-            MobEffects.INVISIBILITY,
-            MobEffects.BLINDNESS,
-            MobEffects.NIGHT_VISION,
-            MobEffects.WEAKNESS,
-            MobEffects.POISON,
-            MobEffects.WITHER,
-            MobEffects.HEALTH_BOOST,
-            MobEffects.ABSORPTION,
-            MobEffects.SATURATION,
-            MobEffects.GLOWING,
-            MobEffects.LEVITATION,
-            MobEffects.LUCK,
-            MobEffects.UNLUCK,
-            MobEffects.SLOW_FALLING,
-            MobEffects.CONDUIT_POWER,
-            MobEffects.DOLPHINS_GRACE,
-            MobEffects.HERO_OF_THE_VILLAGE,
-            MobEffects.DARKNESS
+            ,MobEffects.REGENERATION
+            ,MobEffects.FIRE_RESISTANCE
+            ,MobEffects.WATER_BREATHING
+            ,MobEffects.INVISIBILITY
+            ,MobEffects.BLINDNESS
+            ,MobEffects.NIGHT_VISION
+            ,MobEffects.WEAKNESS
+            ,MobEffects.POISON
+            ,MobEffects.WITHER
+            ,MobEffects.HEALTH_BOOST
+            ,MobEffects.ABSORPTION
+            ,MobEffects.SATURATION
+            ,MobEffects.GLOWING
+            ,MobEffects.LEVITATION
+            ,MobEffects.LUCK
+            ,MobEffects.UNLUCK
+            ,MobEffects.SLOW_FALLING
+            ,MobEffects.CONDUIT_POWER
+            ,MobEffects.DOLPHINS_GRACE
+            ,MobEffects.HERO_OF_THE_VILLAGE
+            ,MobEffects.DARKNESS
             //? if >= 1.21 {
-            /*,MobEffects.WIND_CHARGED
-            MobEffects.WEAVING,
-            MobEffects.OOZING,
-            MobEffects.INFESTED
-            *///?}
+            ,MobEffects.WIND_CHARGED
+            ,MobEffects.WEAVING
+            ,MobEffects.OOZING
+            ,MobEffects.INFESTED
+            //?}
     );
 
-    //? if <= 1.20.1 {
-    private static final List<MobEffect> levelLimit = List.of(
-    //?} else {
-    /*private static final List<Holder<MobEffect>> levelLimit = List.of(
-    *///?}
+    //? if <= 1.20 {
+    /*private static final List<MobEffect> levelLimit = List.of(
+    *///?} else {
+    private static final List<Holder<MobEffect>> levelLimit = List.of(
+    //?}
             //? if <= 1.21.4 {
             MobEffects.DAMAGE_BOOST,
             MobEffects.HEAL,
@@ -139,11 +139,11 @@ public class Hunger extends Wildcard {
             MobEffects.SATURATION
     );
 
-    //? if <= 1.20.1 {
-    private static final List<MobEffect> durationLimit = List.of(
-    //?} else {
-    /*private static final List<Holder<MobEffect>> durationLimit = List.of(
-    *///?}
+    //? if <= 1.20 {
+    /*private static final List<MobEffect> durationLimit = List.of(
+    *///?} else {
+    private static final List<Holder<MobEffect>> durationLimit = List.of(
+    //?}
             //? if <= 1.21.4 {
             MobEffects.HEAL,
             MobEffects.HARM,
@@ -286,17 +286,17 @@ public class Hunger extends Wildcard {
             if (stack.isEmpty()) continue;
 
             //? if < 1.20.5 {
-            ItemStack newItem = new ItemStack(stack.getItem(), stack.getCount());
-            //?} else {
-            /*stack.set(DataComponents.FOOD, stack.getPrototype().get(DataComponents.FOOD));
+            /*ItemStack newItem = new ItemStack(stack.getItem(), stack.getCount());
+            *///?} else {
+            stack.set(DataComponents.FOOD, stack.getPrototype().get(DataComponents.FOOD));
             //? if >= 1.21.2 {
-            /^stack.set(DataComponents.CONSUMABLE, stack.getPrototype().get(DataComponents.CONSUMABLE));
-             ^///?}
+            /*stack.set(DataComponents.CONSUMABLE, stack.getPrototype().get(DataComponents.CONSUMABLE));
+             *///?}
 
             DataComponentPatch changes = stack.getComponentsPatch();
             ItemStack newItem = new ItemStack(stack.getItem(), stack.getCount());
             newItem.applyComponentsAndValidate(changes);
-            *///?}
+            //?}
             inventory.setItem(i, newItem);
         }
 
@@ -323,17 +323,17 @@ public class Hunger extends Wildcard {
     public static final List<Item> bannedFoodItems = List.of(
             Items.AIR, Items.ENDER_PEARL, Items.GOLDEN_APPLE, Items.ENCHANTED_GOLDEN_APPLE
             //? if >= 1.21 {
-            /*,Items.WIND_CHARGE
-            *///?}
+            ,Items.WIND_CHARGE
+            //?}
     );
 
     //? if >= 1.20.5 && <= 1.21 {
-    /*public static void defaultFoodComponents(Item item, PatchedDataComponentMap components) {
+    public static void defaultFoodComponents(Item item, PatchedDataComponentMap components) {
         if (item == null) return;
         if (bannedFoodItems.contains(item)) return;
         components.set(DataComponents.FOOD, new FoodProperties(0, 0, false, 1.6f, Optional.empty(), List.of()));
     }
-    *///?} else if > 1.21 {
+    //?} else if > 1.21 {
     /*public static void defaultFoodComponents(Item item, PatchedDataComponentMap components) {
         if (item == null) return;
         if (bannedFoodItems.contains(item)) return;
@@ -345,18 +345,18 @@ public class Hunger extends Wildcard {
     *///?}
 
     //? if < 1.20.5 {
-    public static void finishUsing(Item item, boolean isNormallyEdible, LivingEntity entity) {
-    //?} else {
-    /*public static void finishUsing(Item item, DataComponentMap normalComponents, LivingEntity entity) {
-    *///?}
+    /*public static void finishUsing(Item item, boolean isNormallyEdible, LivingEntity entity) {
+    *///?} else {
+    public static void finishUsing(Item item, DataComponentMap normalComponents, LivingEntity entity) {
+    //?}
         if (!(entity instanceof ServerPlayer player)) return;
         if (item == null) return;
         if (bannedFoodItems.contains(item)) return;
         if (nonEdible.contains(item)) return;
 
         //? if >= 1.20.5 {
-        /*boolean isNormallyEdible = normalComponents.has(DataComponents.FOOD);
-        *///?}
+        boolean isNormallyEdible = normalComponents.has(DataComponents.FOOD);
+        //?}
 
         int nutrition = 0;
         int saturation = 0;
@@ -373,8 +373,8 @@ public class Hunger extends Wildcard {
             if (random.nextDouble() < EFFECT_CHANCE) {
                 int amplifier = random.nextInt(5); // 0 -> 4
                 int duration = (int) Math.ceil(((random.nextInt(20) + 1) * AVG_EFFECT_DURATION) / 10.0);
-                //? if <= 1.20.1 {
-                MobEffect registryEntryEffect = effects.get(random.nextInt(effects.size()));
+                //? if <= 1.20 {
+                /*MobEffect registryEntryEffect = effects.get(random.nextInt(effects.size()));
                 if (levelLimit.contains(registryEntryEffect) || commonItems.contains(item)) {
                     amplifier = 0;
                 }
@@ -382,8 +382,8 @@ public class Hunger extends Wildcard {
                     duration = 1;
                 }
                 effect = new MobEffectInstance(registryEntryEffect, duration*20, amplifier);
-                //?} else {
-                /*Holder<MobEffect> registryEntryEffect = effects.get(random.nextInt(effects.size()));
+                *///?} else {
+                Holder<MobEffect> registryEntryEffect = effects.get(random.nextInt(effects.size()));
                 if (levelLimit.contains(registryEntryEffect) || commonItems.contains(item)) {
                     amplifier = 0;
                 }
@@ -391,7 +391,7 @@ public class Hunger extends Wildcard {
                     duration = 1;
                 }
                 effect = new MobEffectInstance(registryEntryEffect, duration*20, amplifier);
-                *///?}
+                //?}
             }
 
             // Random nutrition and saturation

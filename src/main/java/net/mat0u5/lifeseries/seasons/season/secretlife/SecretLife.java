@@ -31,15 +31,15 @@ import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.*;
 
-//? if <= 1.20.1 {
-import net.minecraft.world.item.EnchantedBookItem;
+//? if <= 1.20 {
+/*import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
-//?} else {
-/*import net.minecraft.core.component.DataComponents;
+*///?} else {
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.component.CustomData;
-*///?}
+//?}
 
 //? if >= 1.21.9 {
 /*import net.minecraft.world.entity.EntityType;
@@ -153,8 +153,8 @@ public class SecretLife extends Season {
         itemSpawner.addItem(new ItemStack(Items.OBSIDIAN, 8), 10);
         itemSpawner.addItem(new ItemStack(Items.ARROW, 32), 10);
         //? if >= 1.20.5 {
-        /*itemSpawner.addItem(new ItemStack(Items.WOLF_ARMOR), 10);
-        *///?}
+        itemSpawner.addItem(new ItemStack(Items.WOLF_ARMOR), 10);
+        //?}
         itemSpawner.addItem(new ItemStack(Items.BUNDLE), 10);
         itemSpawner.addItem(new ItemStack(Items.ENDER_PEARL, 2), 10);
         itemSpawner.addItem(new ItemStack(Items.BOOKSHELF, 4), 10);
@@ -164,35 +164,35 @@ public class SecretLife extends Season {
         ItemStack pot = new ItemStack(Items.POTION);
         ItemStack pot2 = new ItemStack(Items.POTION);
         ItemStack pot3 = new ItemStack(Items.POTION);
-        //? if <= 1.20.1 {
-        PotionUtils.setCustomEffects(pot, Potions.INVISIBILITY.getEffects());
+        //? if <= 1.20 {
+        /*PotionUtils.setCustomEffects(pot, Potions.INVISIBILITY.getEffects());
         PotionUtils.setCustomEffects(pot2, Potions.SLOW_FALLING.getEffects());
         PotionUtils.setCustomEffects(pot3, Potions.FIRE_RESISTANCE.getEffects());
-        //?} else {
-        /*pot.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.INVISIBILITY));
+        *///?} else {
+        pot.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.INVISIBILITY));
         pot2.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.SLOW_FALLING));
         pot3.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.FIRE_RESISTANCE));
-        *///?}
+        //?}
         itemSpawner.addItem(pot, 10);
         itemSpawner.addItem(pot2, 10);
         itemSpawner.addItem(pot3, 10);
 
         //Enchanted Books
-        //? if <= 1.20.1 {
-        itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.ALL_DAMAGE_PROTECTION, 3))), 10);
+        //? if <= 1.20 {
+        /*itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.ALL_DAMAGE_PROTECTION, 3))), 10);
         itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.FALL_PROTECTION, 3))), 10);
         itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.SILK_TOUCH, 1))), 10);
         itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.BLOCK_FORTUNE, 3))), 10);
         itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.MOB_LOOTING, 3))), 10);
         itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.BLOCK_EFFICIENCY, 4))), 10);
-        //?} else {
-        /*itemSpawner.addItem(Objects.requireNonNull(ItemStackUtils.createEnchantedBook(Enchantments.PROTECTION, 3)), 10);
+        *///?} else {
+        itemSpawner.addItem(Objects.requireNonNull(ItemStackUtils.createEnchantedBook(Enchantments.PROTECTION, 3)), 10);
         itemSpawner.addItem(Objects.requireNonNull(ItemStackUtils.createEnchantedBook(Enchantments.FEATHER_FALLING, 3)), 10);
         itemSpawner.addItem(Objects.requireNonNull(ItemStackUtils.createEnchantedBook(Enchantments.SILK_TOUCH, 1)), 10);
         itemSpawner.addItem(Objects.requireNonNull(ItemStackUtils.createEnchantedBook(Enchantments.FORTUNE, 3)), 10);
         itemSpawner.addItem(Objects.requireNonNull(ItemStackUtils.createEnchantedBook(Enchantments.LOOTING, 3)), 10);
         itemSpawner.addItem(Objects.requireNonNull(ItemStackUtils.createEnchantedBook(Enchantments.EFFICIENCY, 4)), 10);
-        *///?}
+        //?}
 
 
         //Spawn Eggs
@@ -235,20 +235,20 @@ public class SecretLife extends Season {
 
 
         //? if < 1.20.5 {
-        zombieHorse.setTag(nbtCompZombie);
+        /*zombieHorse.setTag(nbtCompZombie);
         skeletonHorse.setTag(nbtCompSkeleton);
         camel.setTag(nbtCompCamel);
-        //?} else {
-        /*CustomData nbtSkeleton = CustomData.of(nbtCompSkeleton);
+        *///?} else {
+        CustomData nbtSkeleton = CustomData.of(nbtCompSkeleton);
         CustomData nbtZombie = CustomData.of(nbtCompZombie);
         CustomData nbtCamel= CustomData.of(nbtCompCamel);
-        *///?}
+        //?}
 
         //? if >=1.20.5 && <= 1.21.6 {
-        /*zombieHorse.set(DataComponents.ENTITY_DATA, nbtZombie);
+        zombieHorse.set(DataComponents.ENTITY_DATA, nbtZombie);
         skeletonHorse.set(DataComponents.ENTITY_DATA, nbtSkeleton);
         camel.set(DataComponents.ENTITY_DATA, nbtCamel);
-        *///?} else if > 1.21.6 {
+        //?} else if > 1.21.6 {
         /*zombieHorse.set(DataComponents.ENTITY_DATA, TypedEntityData.of(EntityType.ZOMBIE, nbtZombie.copyTag()));
         skeletonHorse.set(DataComponents.ENTITY_DATA, TypedEntityData.of(EntityType.SKELETON, nbtSkeleton.copyTag()));
         camel.set(DataComponents.ENTITY_DATA, TypedEntityData.of(EntityType.CAMEL, nbtCamel.copyTag()));
@@ -263,21 +263,21 @@ public class SecretLife extends Season {
         itemSpawner.addItem(endCrystal, 10);
 
         //? if >= 1.21 {
-        /*ItemStack mace = new ItemStack(Items.MACE);
+        ItemStack mace = new ItemStack(Items.MACE);
         ItemStackUtils.setCustomComponentBoolean(mace, "IgnoreBlacklist", true);
         ItemStackUtils.setCustomComponentBoolean(mace, "NoModifications", true);
         mace.setDamageValue(mace.getMaxDamage()-1);
         itemSpawner.addItem(mace, 3);
-        *///?}
+        //?}
 
         //? if >= 1.20.5 {
-        /*ItemStack patat = new ItemStack(Items.POISONOUS_POTATO);
+        ItemStack patat = new ItemStack(Items.POISONOUS_POTATO);
         patat.set(DataComponents.CUSTOM_NAME,Component.nullToEmpty("§6§l§nThe Sacred Patat"));
         ItemStackUtils.addLoreToItemStack(patat,
                 List.of(Component.nullToEmpty("§5§oEating this might help you. Or maybe not..."))
         );
         itemSpawner.addItem(patat, 1);
-        *///?}
+        //?}
     }
 
     @Override

@@ -28,7 +28,7 @@ import static net.mat0u5.lifeseries.Main.currentSession;
 import static net.mat0u5.lifeseries.Main.seasonConfig;
 
 //? if >= 1.21
-/*import net.minecraft.world.scores.PlayerScoreEntry;*/
+import net.minecraft.world.scores.PlayerScoreEntry;
 
 public class LimitedLife extends Season {
     public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /boogeyman";
@@ -146,21 +146,21 @@ public class LimitedLife extends Season {
             livesManager.getAlivePlayers().forEach(ServerPlayer::ls$removeLife);
 
             if (TICK_OFFLINE_PLAYERS) {
-                //? if <= 1.20.1 {
-                Collection<Score> entries = ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME);
+                //? if <= 1.20 {
+                /*Collection<Score> entries = ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME);
                 for (Score entry : entries) {
                     if (entry.getScore() <= 0) continue;
                     if (PlayerUtils.getPlayer(entry.getOwner()) != null) continue;
                     ScoreboardUtils.setScore(entry.getOwner(), LivesManager.SCOREBOARD_NAME, entry.getScore() - 1);
                 }
-                //?} else {
-                /*Collection<PlayerScoreEntry> entries = ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME);
+                *///?} else {
+                Collection<PlayerScoreEntry> entries = ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME);
                 for (PlayerScoreEntry entry : entries) {
                     if (entry.value() <= 0) continue;
                     if (PlayerUtils.getPlayer(entry.owner()) != null) continue;
                     ScoreboardUtils.setScore(entry.owner(), LivesManager.SCOREBOARD_NAME, entry.value() - 1);
                 }
-                *///?}
+                //?}
             }
         }
     }

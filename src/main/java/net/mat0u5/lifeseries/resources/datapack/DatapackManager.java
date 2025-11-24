@@ -22,7 +22,7 @@ public class DatapackManager {
 
     public static String getMinecraftVersion() {
         //? if = 1.21
-        /*return "1.21-1.21.1";*/
+        return "1.21-1.21.1";
         //? if = 1.21.2
         /*return "1.21.2-1.21.3";*/
         //? if = 1.21.4
