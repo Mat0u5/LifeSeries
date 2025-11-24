@@ -9,9 +9,7 @@ import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.players.PlayerList;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.PlayerDataStorage;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -31,6 +29,10 @@ import net.minecraft.nbt.CompoundTag;
 //? if >= 1.21.6 {
 /*import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.level.storage.ValueInput;
+*///?}
+//? if > 1.20 {
+/*import net.minecraft.server.network.CommonListenerCookie;
+import net.minecraft.world.entity.Entity;
 *///?}
 
 @Mixin(value = PlayerList.class, priority = 1)
@@ -81,14 +83,26 @@ public abstract class PlayerManagerMixin implements IPlayerManager {
     //?}
 
     @Inject(method = "respawn", at = @At("RETURN"))
-    public void respawnPlayer(ServerPlayer player, boolean alive, Entity.RemovalReason removalReason, CallbackInfoReturnable<ServerPlayer> cir) {
-        if (alive || removalReason != Entity.RemovalReason.KILLED) return;
+    //?if <= 1.20 {
+    public void respawnPlayer(ServerPlayer serverPlayer, boolean alive, CallbackInfoReturnable<ServerPlayer> cir) {
+    //?} else {
+    /*public void respawnPlayer(ServerPlayer player, boolean alive, Entity.RemovalReason removalReason, CallbackInfoReturnable<ServerPlayer> cir) {
+    *///?}
+        //?if <= 1.20 {
+        if (alive) return;//TODO test
+        //?} else {
+        /*if (alive || removalReason != Entity.RemovalReason.KILLED) return;
+        *///?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         currentSeason.onPlayerRespawn(cir.getReturnValue());
     }
 
     @Redirect(method = "placeNewPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Z)V"))
-    public void skipLoginMessage(PlayerList instance, Component message, boolean overlay, Connection connection, ServerPlayer player, CommonListenerCookie clientData) {
+    //?if <= 1.20 {
+    public void skipLoginMessage(PlayerList instance, Component message, boolean overlay, Connection connection, ServerPlayer player) {
+    //?} else {
+    /*public void skipLoginMessage(PlayerList instance, Component message, boolean overlay, Connection connection, ServerPlayer player, CommonListenerCookie clientData) {
+    *///?}
         if (!Main.isLogicalSide() || Main.modDisabled() || player == null) {
             instance.broadcastSystemMessage(message, overlay);
         }

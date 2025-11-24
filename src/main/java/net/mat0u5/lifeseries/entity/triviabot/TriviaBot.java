@@ -70,6 +70,9 @@ public class TriviaBot extends AmbientCreature {
         super(entityType, level);
         setInvulnerable(true);
         setPersistenceRequired();
+        //?if <= 1.20 {
+        this.setMaxUpStep(1.0F);
+        //?}
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -77,10 +80,12 @@ public class TriviaBot extends AmbientCreature {
                 .add(Attributes.MAX_HEALTH, 10000)
                 .add(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
                 .add(Attributes.FLYING_SPEED, MOVEMENT_SPEED)
-                .add(Attributes.STEP_HEIGHT, 1)
-                .add(Attributes.FOLLOW_RANGE, 100)
+                //?if > 1.20 {
+                /*.add(Attributes.STEP_HEIGHT, 1)
                 .add(Attributes.WATER_MOVEMENT_EFFICIENCY, 1)
                 .add(Attributes.SAFE_FALL_DISTANCE, 100)
+                *///?}
+                .add(Attributes.FOLLOW_RANGE, 100)
                 .add(Attributes.ATTACK_DAMAGE, 0);
     }
 
@@ -151,7 +156,22 @@ public class TriviaBot extends AmbientCreature {
     public void makeStuckInBlock(BlockState state, Vec3 multiplier) {
     }
 
+    //?if <= 1.21 {
     @Override
+    protected int calculateFallDamage(float f, float g) {
+        return 0;
+    }
+    @Override
+    public boolean ignoreExplosion() {
+        return true;
+    }
+
+    @Override
+    public boolean canChangeDimensions() {
+        return false;
+    }
+    //?} else {
+    /*@Override
     public boolean ignoreExplosion(Explosion explosion) {
         return true;
     }
@@ -160,6 +180,7 @@ public class TriviaBot extends AmbientCreature {
     public boolean canUsePortal(boolean allowVehicles) {
         return false;
     }
+    *///?}
     public float soundVolume() {
         return getSoundVolume();
     }
@@ -173,7 +194,19 @@ public class TriviaBot extends AmbientCreature {
     /*
     Data Tracker Stuff
      */
+    //?if <= 1.20 {
     @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(ranOutOfTime, false);
+        this.entityData.define(submittedAnswer, false);
+        this.entityData.define(answeredRight, false);
+        this.entityData.define(interactedWith, false);
+        this.entityData.define(gliding, false);
+        this.entityData.define(analyzing, -1);
+    }
+    //?} else {
+    /*@Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(ranOutOfTime, false);
@@ -183,6 +216,7 @@ public class TriviaBot extends AmbientCreature {
         builder.define(gliding, false);
         builder.define(analyzing, -1);
     }
+    *///?}
     public void setRanOutOfTime(boolean value) {
         this.entityData.set(ranOutOfTime, value);
     }

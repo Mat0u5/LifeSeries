@@ -50,8 +50,12 @@ import java.util.UUID;
 import static net.mat0u5.lifeseries.Main.blacklist;
 import static net.mat0u5.lifeseries.Main.server;
 
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.particles.ColorParticleOption;
+//?if > 1.20 {
+/*import net.minecraft.core.particles.ColorParticleOption;
+*///?}
+//?if >= 1.20.5 {
+/*import net.minecraft.core.component.DataComponents;
+*///?}
 
 //? if > 1.21.9
 /*import net.minecraft.world.entity.EntityReference;*/
@@ -306,10 +310,18 @@ public class TriviaHandler {
         player.sendSystemMessage(Component.empty());
         for (int i = 0; i < 3; i++) {
             int attempts = 0;
-            Holder<MobEffect> effect = null;
+            //?if <= 1.20 {
+            MobEffect effect = null;
+            //?} else {
+            /*Holder<MobEffect> effect = null;
+             *///?}
             while (effect == null && attempts < 50) {
                 attempts++;
-                Holder<MobEffect> pickedEffect = blessEffects.get(player.getRandom().nextInt(blessEffects.size()));
+                //?if <= 1.20 {
+                MobEffect pickedEffect = blessEffects.get(player.getRandom().nextInt(blessEffects.size()));
+                //?} else {
+                /*Holder<MobEffect> pickedEffect = blessEffects.get(player.getRandom().nextInt(blessEffects.size()));
+                *///?}
                 if (blacklist != null && blacklist.getBannedEffects().contains(pickedEffect)) {
                     continue;
                 }
@@ -339,7 +351,11 @@ public class TriviaHandler {
             }
 
             String romanNumeral = TextUtils.toRomanNumeral(amplifier + 1);
-            Component effectName = Component.translatable(effect.value().getDescriptionId());
+            //?if <= 1.20 {
+            Component effectName = effect.getDisplayName();
+            //?} else {
+            /*Component effectName = Component.translatable(effect.value().getDescriptionId());
+            *///?}
             player.sendSystemMessage(TextUtils.formatLoosely(" §a§l+ §7{}§6 {}", effectName, romanNumeral));
         }
         player.sendSystemMessage(Component.empty());
