@@ -11,13 +11,13 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 
-//?if > 1.20 {
+//? if > 1.20 {
 /*import net.minecraft.server.level.ClientInformation;
 *///?}
 
 //? if <= 1.21.6 {
 
-//?if <= 1.20 {
+//? if <= 1.20 {
 import java.util.concurrent.atomic.AtomicReference;
 //?} else {
 /*import net.minecraft.network.DisconnectionDetails;
@@ -49,7 +49,7 @@ import java.util.concurrent.CompletableFuture;
 
 @SuppressWarnings("EntityConstructor")
 public class FakePlayer extends ServerPlayer {
-    //?if <= 1.20 {
+    //? if <= 1.20 {
     private FakePlayer(MinecraftServer server, ServerLevel levelIn, GameProfile profile) {
         super(server, levelIn, profile);
     }
@@ -101,7 +101,7 @@ public class FakePlayer extends ServerPlayer {
             GameProfile current = finalGP;
             if (profile.isPresent()) current = profile.get();
 
-            //?if <= 1.20 {
+            //? if <= 1.20 {
             FakePlayer instance = new FakePlayer(server, levelIn, current);
             //?} else {
             /*FakePlayer instance = new FakePlayer(server, levelIn, current, ClientInformation.createDefault());
@@ -112,7 +112,7 @@ public class FakePlayer extends ServerPlayer {
             /*instance.fixStartingPosition = () -> instance.snapTo(pos.x, pos.y, pos.z, (float) yaw, (float) pitch);
             *///?}
             FakeClientConnection connection = new FakeClientConnection(PacketFlow.SERVERBOUND);
-            //?if <= 1.20 {
+            //? if <= 1.20 {
             server.getPlayerList().placeNewPlayer(connection, instance);
             //?} else {
             /*CommonListenerCookie data =  new CommonListenerCookie(current, 0, instance.clientInformation(), true);
@@ -143,7 +143,7 @@ public class FakePlayer extends ServerPlayer {
     }
 
     private static CompletableFuture<Optional<GameProfile>> fetchGameProfile(MinecraftServer server, final String name) {
-        //?if <= 1.20 {
+        //? if <= 1.20 {
         GameProfile gameprofile;
         try {
             gameprofile = server.getProfileCache().get(name).orElse(null);
@@ -192,7 +192,7 @@ public class FakePlayer extends ServerPlayer {
                 }
             }
             if (!triggered) {
-                //?if <= 1.20 {
+                //? if <= 1.20 {
                 connection.onDisconnect(Component.empty());
                 //?} else {
                 /*connection.onDisconnect(new DisconnectionDetails(Component.empty()));

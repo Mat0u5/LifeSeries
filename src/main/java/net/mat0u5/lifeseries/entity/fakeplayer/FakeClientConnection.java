@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.entity.fakeplayer;
 import net.minecraft.network.Connection;
 import net.minecraft.network.PacketListener;
 import net.minecraft.network.protocol.PacketFlow;
-//?if > 1.20
+//? if > 1.20
 /*import net.minecraft.network.ProtocolInfo;*/
 
 /*
@@ -19,7 +19,7 @@ public class FakeClientConnection extends Connection {
     public void setReadOnly() {}
     @Override
     public void handleDisconnection() {}
-    //?if <= 1.20 {
+    //? if <= 1.20 {
     @Override
     public void setListener(PacketListener packetListener)
     {

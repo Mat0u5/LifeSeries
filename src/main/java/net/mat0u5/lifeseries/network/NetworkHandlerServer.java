@@ -35,12 +35,13 @@ import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.player.TeamUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.DisconnectionDetails;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.scores.PlayerTeam;
-import net.minecraft.world.scores.ScoreHolder;
+//? if > 1.20 {
+/*import net.minecraft.network.DisconnectionDetails;
+*///?}
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,7 +55,8 @@ public class NetworkHandlerServer {
     public static final List<UUID> preLoginHandshake = new ArrayList<>();
 
     public static void registerPackets() {
-        PayloadTypeRegistry.playS2C().register(NumberPayload.ID, NumberPayload.CODEC);
+        //? if > 1.20 {
+        /*PayloadTypeRegistry.playS2C().register(NumberPayload.ID, NumberPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(StringPayload.ID, StringPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(StringListPayload.ID, StringListPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(HandshakePayload.ID, HandshakePayload.CODEC);
@@ -75,8 +77,52 @@ public class NetworkHandlerServer {
         PayloadTypeRegistry.playC2S().register(ConfigPayload.ID, ConfigPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(SidetitlePacket.ID, SidetitlePacket.CODEC);
         PayloadTypeRegistry.playC2S().register(SnailTexturePacket.ID, SnailTexturePacket.CODEC);
+        *///?}
     }
+    //? if <= 1.20 {
     public static void registerServerReceiver() {
+        ServerLoginConnectionEvents.QUERY_START.register((handler, server, sender, synchronizer) -> {
+            sender.sendPacket(IdentifierHelper.mod("preloginpacket"), PacketByteBufs.create());
+        });
+
+        // Handle the response
+        ServerLoginNetworking.registerGlobalReceiver(IdentifierHelper.mod("preloginpacket"),
+                (server, handler, understood, buf, synchronizer, responseSender) -> {
+                    if (understood) {
+                        GameProfile profile = ((ServerLoginPacketListenerImplAccessor) handler).getGameProfile();
+                        preLoginHandshake.add(OtherUtils.profileId(profile));
+                        LOGGER.info("Received pre-login packet from " + OtherUtils.profileName(profile));
+                    }
+                }
+        );
+
+        ServerPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (server, player, handler, buf, responseSender) -> {
+            HandshakePayload payload = HandshakePayload.read(buf);
+            server.execute(() -> handleHandshakeResponse(player, payload));
+        });
+
+        ServerPlayNetworking.registerGlobalReceiver(NumberPayload.ID, (server, player, handler, buf, responseSender) -> {
+            NumberPayload payload = NumberPayload.read(buf);
+            server.execute(() -> handleNumberPacket(player, payload));
+        });
+
+        ServerPlayNetworking.registerGlobalReceiver(StringPayload.ID, (server, player, handler, buf, responseSender) -> {
+            StringPayload payload = StringPayload.read(buf);
+            server.execute(() -> handleStringPacket(player, payload));
+        });
+
+        ServerPlayNetworking.registerGlobalReceiver(StringListPayload.ID, (server, player, handler, buf, responseSender) -> {
+            StringListPayload payload = StringListPayload.read(buf);
+            server.execute(() -> handleStringListPacket(player, payload));
+        });
+
+        ServerPlayNetworking.registerGlobalReceiver(ConfigPayload.ID, (server, player, handler, buf, responseSender) -> {
+            ConfigPayload payload = ConfigPayload.read(buf);
+            server.execute(() -> handleConfigPacket(player, payload));
+        });
+    }
+    //?} else {
+    /*public static void registerServerReceiver() {
         ServerLoginConnectionEvents.QUERY_START.register((handler, server, sender, synchronizer) -> {
             sender.sendPacket(IdentifierHelper.mod("preloginpacket"), PacketByteBufs.create());
         });
@@ -118,6 +164,7 @@ public class NetworkHandlerServer {
             server.execute(() -> handleConfigPacket(player, payload));
         });
     }
+    *///?}
 
     public static boolean updatedConfigThisTick = false;
     public static boolean configNeedsReload = false;
@@ -325,7 +372,11 @@ public class NetworkHandlerServer {
             if (clientVersion < serverCompatibility) {
                 Component disconnectText = Component.literal("[Life Series Mod] Client-Server version mismatch!\n" +
                         "Update the client version to at least version "+serverCompatibilityStr);
-                player.connection.disconnect(new DisconnectionDetails(disconnectText));
+                //? if <= 1.20 {
+                player.connection.disconnect(disconnectText);
+                //?} else {
+                /*player.connection.disconnect(new DisconnectionDetails(disconnectText));
+                *///?}
                 return;
             }
 
@@ -334,7 +385,11 @@ public class NetworkHandlerServer {
                 Component disconnectText = Component.literal("[Life Series Mod] Server-Client version mismatch!\n" +
                         "The client version is too new for the server.\n" +
                         "Either update the server, or downgrade the client version to " + serverVersionStr);
-                player.connection.disconnect(new DisconnectionDetails(disconnectText));
+                //? if <= 1.20 {
+                player.connection.disconnect(disconnectText);
+                //?} else {
+                /*player.connection.disconnect(new DisconnectionDetails(disconnectText));
+                 *///?}
                 return;
             }
         }
@@ -344,7 +399,11 @@ public class NetworkHandlerServer {
             if (!clientVersionStr.equalsIgnoreCase(serverVersionStr)) {
                 Component disconnectText = Component.literal("[Life Series Mod] Client-Server version mismatch!\n" +
                         "You must join with version "+serverCompatibilityStr);
-                player.connection.disconnect(new DisconnectionDetails(disconnectText));
+                //? if <= 1.20 {
+                player.connection.disconnect(disconnectText);
+                //?} else {
+                /*player.connection.disconnect(new DisconnectionDetails(disconnectText));
+                 *///?}
                 return;
             }
         }
@@ -473,7 +532,11 @@ public class NetworkHandlerServer {
         if (wasHandshakeSuccessful(player)) return;
         Component disconnectText = Component.literal("You must have the §2Life Series mod\n§l installed on the client§r§r§f to play Wild Life!\n").append(
                 Component.literal("§9§nThe Life Series mod is available on Modrinth."));
-        player.connection.disconnect(new DisconnectionDetails(disconnectText));
+        //? if <= 1.20 {
+        player.connection.disconnect(disconnectText);
+        //?} else {
+        /*player.connection.disconnect(new DisconnectionDetails(disconnectText));
+         *///?}
     }
 
     public static boolean wasHandshakeSuccessful(ServerPlayer player) {
