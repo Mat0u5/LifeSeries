@@ -58,7 +58,7 @@ import net.minecraft.world.level.GameRules;
 //? if > 1.21.9
 /*import net.minecraft.world.level.gamerules.GameRules;*/
 //? if >= 1.21
-import net.minecraft.world.scores.DisplaySlot;
+/*import net.minecraft.world.scores.DisplaySlot;*/
 
 public abstract class Season {
     public static final String RESOURCEPACK_MAIN_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-main-fc0fa2a3efe2aefdba5a3c0deda61039fc43a008/main.zip";
@@ -152,12 +152,12 @@ public abstract class Season {
         }
 
         //? if <= 1.20 {
-        /*int listSlot = Scoreboard.DISPLAY_SLOT_LIST;
+        int listSlot = Scoreboard.DISPLAY_SLOT_LIST;
         int belowNameSlot = Scoreboard.DISPLAY_SLOT_BELOW_NAME;
-        *///?} else {
-        DisplaySlot listSlot = DisplaySlot.LIST;
+        //?} else {
+        /*DisplaySlot listSlot = DisplaySlot.LIST;
         DisplaySlot belowNameSlot = DisplaySlot.BELOW_NAME;
-        //?}
+        *///?}
 
         Objective currentListObjective = ScoreboardUtils.getObjectiveInSlot(listSlot);
         if (TAB_LIST_SHOW_LIVES) {

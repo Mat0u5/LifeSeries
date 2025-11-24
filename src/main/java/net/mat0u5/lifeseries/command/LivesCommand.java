@@ -30,7 +30,7 @@ import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.Main.livesManager;
 
 //? if >= 1.21
-import net.minecraft.world.scores.PlayerScoreEntry;
+/*import net.minecraft.world.scores.PlayerScoreEntry;*/
 
 public class LivesCommand extends Command {
 
@@ -215,10 +215,10 @@ public class LivesCommand extends Command {
         }
 
         //? if <= 1.20 {
-        /*Collection<Score> entries = ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME);
-        *///?} else {
-        Collection<PlayerScoreEntry> entries = ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME);
-        //?}
+        Collection<Score> entries = ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME);
+        //?} else {
+        /*Collection<PlayerScoreEntry> entries = ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME);
+        *///?}
         if (entries.isEmpty()) {
             source.sendFailure(TextUtils.format("Nobody has been assigned {} yet", timeOrLives));
             return -1;
@@ -227,14 +227,14 @@ public class LivesCommand extends Command {
 
         MutableComponent text = TextUtils.format("Assigned {}: \n", timeOrLives2);
         //? if <= 1.20 {
-        /*for (Score entry : entries) {
+        for (Score entry : entries) {
             String name = entry.getOwner();
             int lives = entry.getScore();
-        *///?} else {
-        for (PlayerScoreEntry entry : entries) {
+        //?} else {
+        /*for (PlayerScoreEntry entry : entries) {
             String name = entry.owner();
             int lives = entry.value();
-        //?}
+        *///?}
             if (name.startsWith("`")) continue;
             ChatFormatting color = livesManager.getColorForLives(lives);
             if (normalLife) {

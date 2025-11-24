@@ -16,16 +16,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import static net.mat0u5.lifeseries.Main.blacklist;
 
 //? if < 1.20.5 {
-/*import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import java.util.Map;
-*///?} else {
-import net.minecraft.core.component.DataComponents;
+//?} else {
+/*import net.minecraft.core.component.DataComponents;
 import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import java.util.Optional;
-//?}
+*///?}
 
 @Mixin(value = AnvilMenu.class, priority = 1)
 public abstract class AnvilMenuMixin {
@@ -46,7 +46,7 @@ public abstract class AnvilMenuMixin {
         if (!resultStack.isEnchanted()) return;
 
         //? if < 1.20.5 {
-        /*EnchantmentHelper.setEnchantments(blacklist.clampAndBlacklistEnchantments(EnchantmentHelper.getEnchantments(resultStack)), resultStack);
+        EnchantmentHelper.setEnchantments(blacklist.clampAndBlacklistEnchantments(EnchantmentHelper.getEnchantments(resultStack)), resultStack);
         if (ItemStackUtils.hasCustomComponentEntry(resultStack, "NoMending")) {
             for (Map.Entry<Enchantment, Integer> enchant : EnchantmentHelper.getEnchantments(resultStack).entrySet()) {
                 Enchantment actualEnchant = enchant.getKey();
@@ -55,8 +55,8 @@ public abstract class AnvilMenuMixin {
                 }
             }
         }
-        *///?} else {
-        resultStack.set(DataComponents.ENCHANTMENTS, blacklist.clampAndBlacklistEnchantments(resultStack.getEnchantments()));
+        //?} else {
+        /*resultStack.set(DataComponents.ENCHANTMENTS, blacklist.clampAndBlacklistEnchantments(resultStack.getEnchantments()));
         if (ItemStackUtils.hasCustomComponentEntry(resultStack, "NoMending")) {
             for (Entry<Holder<Enchantment>> enchant : resultStack.getEnchantments().entrySet()) {
                 Optional<ResourceKey<Enchantment>> enchantRegistry = enchant.getKey().unwrapKey();
@@ -66,7 +66,7 @@ public abstract class AnvilMenuMixin {
                 }
             }
         }
-        //?}
+        *///?}
 
     }
 }

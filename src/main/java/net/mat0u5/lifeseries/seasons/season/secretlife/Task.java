@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 //? if <= 1.20 {
-/*import net.minecraft.server.network.FilteredText;
-*///?} else {
-import net.minecraft.network.chat.Component;
+import net.minecraft.server.network.FilteredText;
+//?} else {
+/*import net.minecraft.network.chat.Component;
 import net.minecraft.server.network.Filterable;
-//?}
+*///?}
 
 import static net.mat0u5.lifeseries.Main.livesManager;
 
@@ -71,22 +71,22 @@ public class Task {
     ${red} - Replaced with "red". Tasks are only available when a red player is alive.
      */
     //? if <= 1.20 {
-    /*public List<FilteredText> getBookLines(ServerPlayer owner) {
+    public List<FilteredText> getBookLines(ServerPlayer owner) {
         formattedTask = "";
         List<FilteredText> lines = new ArrayList<>();
         int pageNum = 0;
         for (String page : rawTask.split("\\\\p")) {
             page = formatString(owner, page);
             lines.add(FilteredText.passThrough(page));
-    *///?} else {
-    public List<Filterable<Component>> getBookLines(ServerPlayer owner) {
+    //?} else {
+    /*public List<Filterable<Component>> getBookLines(ServerPlayer owner) {
         formattedTask = "";
         List<Filterable<Component>> lines = new ArrayList<>();
         int pageNum = 0;
         for (String page : rawTask.split("\\\\p")) {
             page = formatString(owner, page);
             lines.add(Filterable.passThrough(Component.nullToEmpty(page)));
-    //?}
+    *///?}
 
             if (pageNum != 0) {
                 formattedTask += "\n";

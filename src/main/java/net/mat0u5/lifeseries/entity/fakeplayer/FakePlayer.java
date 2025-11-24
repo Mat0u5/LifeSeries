@@ -8,21 +8,30 @@ package net.mat0u5.lifeseries.entity.fakeplayer;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+
+//?if > 1.20 {
+/*import net.minecraft.server.level.ClientInformation;
+*///?}
+
 //? if <= 1.21.6 {
+
+//?if <= 1.20 {
+import java.util.concurrent.atomic.AtomicReference;
+//?} else {
+/*import net.minecraft.network.DisconnectionDetails;
+import net.minecraft.server.network.CommonListenerCookie;
+*///?}
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.AstralProjection;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.UUIDUtil;
-import net.minecraft.network.DisconnectionDetails;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.game.ClientboundRotateHeadPacket;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.players.GameProfileCache;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Inventory;
@@ -40,9 +49,15 @@ import java.util.concurrent.CompletableFuture;
 
 @SuppressWarnings("EntityConstructor")
 public class FakePlayer extends ServerPlayer {
-    private FakePlayer(MinecraftServer server, ServerLevel levelIn, GameProfile profile, ClientInformation cli) {
+    //?if <= 1.20 {
+    private FakePlayer(MinecraftServer server, ServerLevel levelIn, GameProfile profile) {
+        super(server, levelIn, profile);
+    }
+    //?} else {
+    /*private FakePlayer(MinecraftServer server, ServerLevel levelIn, GameProfile profile, ClientInformation cli) {
         super(server, levelIn, profile, cli);
     }
+    *///?}
     //? if <= 1.21.6 {
     private static final Set<String> spawning = new HashSet<>();
     public Runnable fixStartingPosition = () -> {};
@@ -77,7 +92,7 @@ public class FakePlayer extends ServerPlayer {
 
         CompletableFuture<FakePlayer> future = new CompletableFuture<>();
 
-        fetchGameProfile(name).whenCompleteAsync((profile, throwable) -> {
+        fetchGameProfile(server, name).whenCompleteAsync((profile, throwable) -> {
             spawning.remove(name);
             if (throwable != null) {
                 future.completeExceptionally(throwable);
@@ -86,15 +101,23 @@ public class FakePlayer extends ServerPlayer {
             GameProfile current = finalGP;
             if (profile.isPresent()) current = profile.get();
 
-            FakePlayer instance = new FakePlayer(server, levelIn, current, ClientInformation.createDefault());
+            //?if <= 1.20 {
+            FakePlayer instance = new FakePlayer(server, levelIn, current);
+            //?} else {
+            /*FakePlayer instance = new FakePlayer(server, levelIn, current, ClientInformation.createDefault());
+            *///?}
             //? if <= 1.21.4 {
             instance.fixStartingPosition = () -> instance.moveTo(pos.x, pos.y, pos.z, (float) yaw, (float) pitch);
             //?} else {
             /*instance.fixStartingPosition = () -> instance.snapTo(pos.x, pos.y, pos.z, (float) yaw, (float) pitch);
             *///?}
             FakeClientConnection connection = new FakeClientConnection(PacketFlow.SERVERBOUND);
-            CommonListenerCookie data =  new CommonListenerCookie(current, 0, instance.clientInformation(), true);
+            //?if <= 1.20 {
+            server.getPlayerList().placeNewPlayer(connection, instance);
+            //?} else {
+            /*CommonListenerCookie data =  new CommonListenerCookie(current, 0, instance.clientInformation(), true);
             server.getPlayerList().placeNewPlayer(connection, instance, data);
+            *///?}
             PlayerUtils.teleport(instance, levelIn, pos, (float) yaw, (float) pitch);
             instance.setHealth(20.0F);
             instance.unsetRemoved();
@@ -119,8 +142,29 @@ public class FakePlayer extends ServerPlayer {
         return future;
     }
 
-    private static CompletableFuture<Optional<GameProfile>> fetchGameProfile(final String name) {
-        return SkullBlockEntity.fetchGameProfile(name);
+    private static CompletableFuture<Optional<GameProfile>> fetchGameProfile(MinecraftServer server, final String name) {
+        //?if <= 1.20 {
+        GameProfile gameprofile;
+        try {
+            gameprofile = server.getProfileCache().get(name).orElse(null);
+        }
+        finally {
+            GameProfileCache.setUsesAuthentication(server.isDedicatedServer() && server.usesAuthentication());
+        }
+        if (gameprofile == null)
+        {
+            gameprofile = new GameProfile(UUIDUtil.createOfflinePlayerUUID(name), name);
+        }
+        if (gameprofile.getProperties().containsKey("textures"))
+        {
+            AtomicReference<GameProfile> result = new AtomicReference<>();
+            SkullBlockEntity.updateGameprofile(gameprofile, result::set);
+            gameprofile = result.get();
+        }
+        return CompletableFuture.completedFuture(Optional.ofNullable(gameprofile));
+        //?} else {
+        /*return SkullBlockEntity.fetchGameProfile(name);
+        *///?}
     }
 
     @Override
@@ -148,7 +192,11 @@ public class FakePlayer extends ServerPlayer {
                 }
             }
             if (!triggered) {
-                connection.onDisconnect(new DisconnectionDetails(Component.empty()));
+                //?if <= 1.20 {
+                connection.onDisconnect(Component.empty());
+                //?} else {
+                /*connection.onDisconnect(new DisconnectionDetails(Component.empty()));
+                *///?}
             }
         }
         //

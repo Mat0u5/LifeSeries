@@ -35,7 +35,7 @@ import static net.mat0u5.lifeseries.Main.*;
 import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
 
 //? if >= 1.21
-import net.minecraft.world.scores.PlayerScoreEntry;
+/*import net.minecraft.world.scores.PlayerScoreEntry;*/
 
 public class LivesManager {
     public static final String SCOREBOARD_NAME = "Lives";
@@ -243,14 +243,14 @@ public class LivesManager {
     public void resetAllPlayerLivesInner() {
         createScoreboards();
         //? if <= 1.20 {
-        /*for (Score entry : ScoreboardUtils.getScores(SCOREBOARD_NAME)) {
+        for (Score entry : ScoreboardUtils.getScores(SCOREBOARD_NAME)) {
             ScoreboardUtils.resetScore(entry.getOwner(), SCOREBOARD_NAME);
         }
-        *///?} else {
-        for (PlayerScoreEntry entry : ScoreboardUtils.getScores(SCOREBOARD_NAME)) {
+        //?} else {
+        /*for (PlayerScoreEntry entry : ScoreboardUtils.getScores(SCOREBOARD_NAME)) {
             ScoreboardUtils.resetScore(entry.owner(), SCOREBOARD_NAME);
         }
-        //?}
+        *///?}
 
         currentSeason.reloadAllPlayerTeams();
     }

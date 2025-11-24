@@ -23,10 +23,10 @@ public class ScoreboardUtils {
         Scoreboard scoreboard = server.getScoreboard();
         if (scoreboard.getObjective(name) != null) return;
         //? if <= 1.20 {
-        /*scoreboard.addObjective(name, criterion, Component.literal(displayName), criterion.getDefaultRenderType());
-        *///?} else {
-        scoreboard.addObjective(name, criterion, Component.literal(displayName), criterion.getDefaultRenderType(), false, null);
-        //?}
+        scoreboard.addObjective(name, criterion, Component.literal(displayName), criterion.getDefaultRenderType());
+        //?} else {
+        /*scoreboard.addObjective(name, criterion, Component.literal(displayName), criterion.getDefaultRenderType(), false, null);
+        *///?}
     }
 
     public static boolean existsObjective(String name) {
@@ -42,20 +42,20 @@ public class ScoreboardUtils {
     }
 
     //? if <= 1.20 {
-    /*public static Objective getObjectiveInSlot(int slot) {
-    *///?} else {
-    public static Objective getObjectiveInSlot(DisplaySlot slot) {
-    //?}
+    public static Objective getObjectiveInSlot(int slot) {
+    //?} else {
+    /*public static Objective getObjectiveInSlot(DisplaySlot slot) {
+    *///?}
         if (server == null) return null;
         Scoreboard scoreboard = server.getScoreboard();
         return scoreboard.getDisplayObjective(slot);
     }
 
     //? if <= 1.20 {
-    /*public static void setObjectiveInSlot(int slot, String name) {
-    *///?} else {
-    public static void setObjectiveInSlot(DisplaySlot slot, String name) {
-    //?}
+    public static void setObjectiveInSlot(int slot, String name) {
+    //?} else {
+    /*public static void setObjectiveInSlot(DisplaySlot slot, String name) {
+    *///?}
         if (server == null) return;
         Scoreboard scoreboard = server.getScoreboard();
         scoreboard.setDisplayObjective(slot, scoreboard.getObjective(name));
@@ -70,16 +70,16 @@ public class ScoreboardUtils {
     }
 
     //? if > 1.20 {
-    public static void setScore(String holder, String objectiveName, int score) {
+    /*public static void setScore(String holder, String objectiveName, int score) {
         setScore(ScoreHolder.forNameOnly(holder), objectiveName, score);
     }
-    //?}
+    *///?}
 
     //? if <= 1.20 {
-    /*public static void setScore(String holder, String objectiveName, Integer score) {
-    *///?} else {
-    public static void setScore(ScoreHolder holder, String objectiveName, Integer score) {
-    //?}
+    public static void setScore(String holder, String objectiveName, Integer score) {
+    //?} else {
+    /*public static void setScore(ScoreHolder holder, String objectiveName, Integer score) {
+    *///?}
         if (livesManager != null && livesManager.LIVES_SYSTEM_DISABLED && objectiveName.equals(LivesManager.SCOREBOARD_NAME)) {
             return;
         }
@@ -92,14 +92,14 @@ public class ScoreboardUtils {
         Objective objective = scoreboard.getObjective(objectiveName);
         if (objective == null) return;
         //? if <= 1.20 {
-        /*scoreboard.getOrCreatePlayerScore(holder, objective).setScore(score);
-        *///?} else {
-        scoreboard.getOrCreatePlayerScore(holder, objective).set(score);
-        //?}
+        scoreboard.getOrCreatePlayerScore(holder, objective).setScore(score);
+        //?} else {
+        /*scoreboard.getOrCreatePlayerScore(holder, objective).set(score);
+        *///?}
     }
 
     //? if <= 1.20 {
-    /*public static void setScore(ServerPlayer holder, String objectiveName, int score) {
+    public static void setScore(ServerPlayer holder, String objectiveName, int score) {
         setScore(holder.getScoreboardName(), objectiveName, score);
     }
     public static Collection<Score> getScores(String objectiveName) {
@@ -135,8 +135,8 @@ public class ScoreboardUtils {
         if (objective == null) return;
         scoreboard.resetPlayerScore(holder, objective);
     }
-    *///?} else {
-    public static Collection<PlayerScoreEntry> getScores(String objectiveName) {
+    //?} else {
+    /*public static Collection<PlayerScoreEntry> getScores(String objectiveName) {
         if (server == null) return Collections.emptyList();
         Scoreboard scoreboard = server.getScoreboard();
         Objective objective = scoreboard.getObjective(objectiveName);
@@ -168,5 +168,5 @@ public class ScoreboardUtils {
         if (objective == null) return;
         scoreboard.resetSinglePlayerScore(holder, objective);
     }
-    //?}
+    *///?}
 }
