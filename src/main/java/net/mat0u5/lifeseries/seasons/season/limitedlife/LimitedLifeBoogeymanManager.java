@@ -12,7 +12,6 @@ import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.scores.ScoreHolder;
 
 import java.util.ArrayList;
 import java.util.Collections;

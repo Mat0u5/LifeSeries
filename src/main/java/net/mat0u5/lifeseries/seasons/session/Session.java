@@ -185,7 +185,11 @@ public class Session {
             for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
                 NetworkHandlerServer.sendStringPacket(player, PacketNames.SESSION_STATUS, status.getName());
             }
-            for (Holder<MobEffect> effect : blacklist.getBannedEffects()) {
+            //? if <= 1.20 {
+            for (MobEffect effect : blacklist.getBannedEffects()) {
+            //?} else {
+            /*for (Holder<MobEffect> effect : blacklist.getBannedEffects()) {
+            *///?}
                 for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
                     if (player.hasEffect(effect)) {
                         MobEffectInstance actualEffect = player.getEffect(effect);
@@ -219,7 +223,9 @@ public class Session {
             checkPlayerPosition(player);
         }
 
-        if (server.tickRateManager().isFrozen()) return;
+        //? if >= 1.20.3 {
+        /*if (server.tickRateManager().isFrozen()) return;
+        *///?}
         if (!validTime()) return;
         if (!statusStarted()) return;
         tickSessionOn(server);
@@ -227,7 +233,11 @@ public class Session {
     }
 
     public void tickSessionOn(MinecraftServer server) {
-        float tickRate = server.tickRateManager().tickrate();
+        //? if < 1.20.3 {
+        float tickRate = 20;
+        //?} else {
+        /*float tickRate = server.tickRateManager().tickrate();
+        *///?}
         if (tickRate == 20) {
             passedTime++;
         }

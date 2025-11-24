@@ -46,7 +46,7 @@ import net.minecraft.world.entity.RelativeMovement;
 //? if >= 1.21.4
 /*import net.minecraft.world.entity.player.PlayerModelPart;*/
 
-//?if > 1.20 {
+//? if > 1.20 {
 /*import net.minecraft.network.protocol.common.ClientboundResourcePackPopPacket;
 import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
 *///?}

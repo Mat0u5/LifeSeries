@@ -62,8 +62,12 @@ public class Blacklist {
     private List<ResourceKey<Enchantment>> loadedListEnchants;
     private List<ResourceKey<Enchantment>> loadedBannedEnchants;
 
-    private List<Holder<MobEffect>> loadedBannedEffects;
-    
+    //? if <= 1.20 {
+    private List<MobEffect> loadedBannedEffects;
+    //?} else {
+    /*private List<Holder<MobEffect>> loadedBannedEffects;
+    *///?}
+
     public boolean CREATIVE_IGNORE_BLACKLIST = true;
 
     public List<String> loadItemBlacklist() {
@@ -305,11 +309,19 @@ public class Blacklist {
         return newList;
     }
 
-    public List<Holder<MobEffect>> getBannedEffects() {
+    //? if <= 1.20 {
+    public List<MobEffect> getBannedEffects() {
+    //?} else {
+    /*public List<Holder<MobEffect>> getBannedEffects() {
+    *///?}
         if (server == null) return new ArrayList<>();
 
         if (loadedBannedEffects != null) return loadedBannedEffects;
-        List<Holder<MobEffect>> newList = new ArrayList<>();
+        //? if <= 1.20 {
+        List<MobEffect> newList = new ArrayList<>();
+        //?} else {
+        /*List<Holder<MobEffect>> newList = new ArrayList<>();
+         *///?}
 
         Registry<MobEffect> effectsRegistry = server.registryAccess()
         //? if <=1.21 {
@@ -329,7 +341,11 @@ public class Blacklist {
                 *///?}
 
                 if (enchantment != null) {
-                    newList.add(effectsRegistry.wrapAsHolder(enchantment));
+                    //? if <= 1.20 {
+                    newList.add(enchantment);
+                    //?} else {
+                    /*newList.add(effectsRegistry.wrapAsHolder(enchantment));
+                    *///?}
                 } else {
                     OtherUtils.throwError("[CONFIG] Invalid effect: " + potionId);
                 }

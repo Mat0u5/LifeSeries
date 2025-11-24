@@ -83,12 +83,12 @@ public abstract class PlayerManagerMixin implements IPlayerManager {
     //?}
 
     @Inject(method = "respawn", at = @At("RETURN"))
-    //?if <= 1.20 {
+    //? if <= 1.20 {
     public void respawnPlayer(ServerPlayer serverPlayer, boolean alive, CallbackInfoReturnable<ServerPlayer> cir) {
     //?} else {
     /*public void respawnPlayer(ServerPlayer player, boolean alive, Entity.RemovalReason removalReason, CallbackInfoReturnable<ServerPlayer> cir) {
     *///?}
-        //?if <= 1.20 {
+        //? if <= 1.20 {
         if (alive) return;//TODO test
         //?} else {
         /*if (alive || removalReason != Entity.RemovalReason.KILLED) return;
@@ -98,7 +98,7 @@ public abstract class PlayerManagerMixin implements IPlayerManager {
     }
 
     @Redirect(method = "placeNewPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Z)V"))
-    //?if <= 1.20 {
+    //? if <= 1.20 {
     public void skipLoginMessage(PlayerList instance, Component message, boolean overlay, Connection connection, ServerPlayer player) {
     //?} else {
     /*public void skipLoginMessage(PlayerList instance, Component message, boolean overlay, Connection connection, ServerPlayer player, CommonListenerCookie clientData) {

@@ -1,6 +1,15 @@
 package net.mat0u5.lifeseries.mixin;
 
-import net.mat0u5.lifeseries.Main;
+//? if < 1.21 {
+import net.minecraft.server.MinecraftServer;
+import org.spongepowered.asm.mixin.Mixin;
+
+@Mixin(value = MinecraftServer.class)
+public interface SimpleExplosionDamageCalculatorMixin {
+    //Empty class to avoid mixin errors
+}
+//?} else {
+/*import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
@@ -13,7 +22,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
-
 @Mixin(value = SimpleExplosionDamageCalculator.class, priority = 1)
 public class SimpleExplosionDamageCalculatorMixin {
     @Inject(method = "getKnockbackMultiplier", at = @At("RETURN"), cancellable = true)
@@ -28,3 +36,4 @@ public class SimpleExplosionDamageCalculatorMixin {
         }
     }
 }
+*///?}

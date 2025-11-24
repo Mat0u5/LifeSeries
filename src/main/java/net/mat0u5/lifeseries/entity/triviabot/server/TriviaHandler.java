@@ -50,10 +50,10 @@ import java.util.UUID;
 import static net.mat0u5.lifeseries.Main.blacklist;
 import static net.mat0u5.lifeseries.Main.server;
 
-//?if > 1.20 {
+//? if > 1.20 {
 /*import net.minecraft.core.particles.ColorParticleOption;
 *///?}
-//?if >= 1.20.5 {
+//? if >= 1.20.5 {
 /*import net.minecraft.core.component.DataComponents;
 *///?}
 
@@ -310,14 +310,14 @@ public class TriviaHandler {
         player.sendSystemMessage(Component.empty());
         for (int i = 0; i < 3; i++) {
             int attempts = 0;
-            //?if <= 1.20 {
+            //? if <= 1.20 {
             MobEffect effect = null;
             //?} else {
             /*Holder<MobEffect> effect = null;
              *///?}
             while (effect == null && attempts < 50) {
                 attempts++;
-                //?if <= 1.20 {
+                //? if <= 1.20 {
                 MobEffect pickedEffect = blessEffects.get(player.getRandom().nextInt(blessEffects.size()));
                 //?} else {
                 /*Holder<MobEffect> pickedEffect = blessEffects.get(player.getRandom().nextInt(blessEffects.size()));
@@ -351,7 +351,7 @@ public class TriviaHandler {
             }
 
             String romanNumeral = TextUtils.toRomanNumeral(amplifier + 1);
-            //?if <= 1.20 {
+            //? if <= 1.20 {
             Component effectName = effect.getDisplayName();
             //?} else {
             /*Component effectName = Component.translatable(effect.value().getDescriptionId());

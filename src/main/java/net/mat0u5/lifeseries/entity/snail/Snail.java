@@ -86,7 +86,7 @@ public class Snail extends Monster {
         super(entityType, level);
         setInvulnerable(true);
         setPersistenceRequired();
-        //?if <= 1.20 {
+        //? if <= 1.20 {
         this.setMaxUpStep(1.2F);
         //?}
     }
@@ -101,7 +101,7 @@ public class Snail extends Monster {
                 .add(Attributes.MAX_HEALTH, 10000)
                 .add(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
                 .add(Attributes.FLYING_SPEED, FLYING_SPEED)
-                //?if > 1.20 {
+                //? if > 1.20 {
                 /*.add(Attributes.STEP_HEIGHT, 1.2)
                 .add(Attributes.WATER_MOVEMENT_EFFICIENCY, 1)
                 .add(Attributes.SAFE_FALL_DISTANCE, 100)
@@ -228,7 +228,7 @@ public class Snail extends Monster {
     public void makeStuckInBlock(BlockState state, Vec3 multiplier) {
     }
 
-    //?if <= 1.21 {
+    //? if <= 1.21 {
     @Override
     protected int calculateFallDamage(float f, float g) {
         return 0;
@@ -293,7 +293,7 @@ public class Snail extends Monster {
     Data Tracker Stuff
      */
 
-    //?if <= 1.20 {
+    //? if <= 1.20 {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();

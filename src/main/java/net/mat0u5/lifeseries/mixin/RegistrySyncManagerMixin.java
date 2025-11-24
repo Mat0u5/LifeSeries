@@ -12,7 +12,7 @@ import net.mat0u5.lifeseries.Main;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
-//?if <= 1.20 {
+//? if <= 1.20 {
 import net.minecraft.server.level.ServerPlayer;
 //?} else {
 /*import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -37,7 +37,7 @@ public class RegistrySyncManagerMixin {
 
     //? if <= 1.21.9 {
 
-    //?if <= 1.20 {
+    //? if <= 1.20 {
     @WrapOperation(method = "sendPacket(Lnet/minecraft/server/level/ServerPlayer;Lnet/fabricmc/fabric/impl/registry/sync/packet/RegistryPacketHandler;)V", at = @At(value = "INVOKE", target = "Lnet/fabricmc/fabric/impl/registry/sync/RegistrySyncManager;createAndPopulateRegistryMap(ZLjava/util/Map;)Ljava/util/Map;"))
     private static @Nullable Map<ResourceLocation, Object2IntMap<ResourceLocation>> checkRemoteRemap(boolean b, Map map, Operation<Map<ResourceLocation, Object2IntMap<ResourceLocation>>> original, ServerPlayer player) {
     Map<ResourceLocation, Object2IntMap<ResourceLocation>> originalValue = original.call(b, map);

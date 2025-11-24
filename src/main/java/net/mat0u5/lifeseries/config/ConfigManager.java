@@ -70,7 +70,9 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,SHOW_LOGIN_COMMAND_INFO
                 ,HIDE_UNJUSTIFIED_KILL_MESSAGES
                 ,SHOW_ADVANCEMENTS
-                ,TICK_FREEZE_NOT_IN_SESSION
+                //? if >= 1.20.3 {
+                /*,TICK_FREEZE_NOT_IN_SESSION
+                *///?}
                 ,BROADCAST_LIFE_GAIN
 
 
