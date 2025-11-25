@@ -9,7 +9,11 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(ServerLoginPacketListenerImpl.class)
 public interface ServerLoginPacketListenerImplAccessor {
-    @Accessor("authenticatedProfile")
+    //? if <= 1.20 {
+    @Accessor("gameProfile")
+    //?} else {
+    /*@Accessor("authenticatedProfile")
+    *///?}
     GameProfile getGameProfile();
 
     @Accessor
