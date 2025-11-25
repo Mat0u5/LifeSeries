@@ -77,14 +77,21 @@ public class WildcardManager {
             activeWildcards.put(chosenWildcard, chosenWildcard.getInstance());
             return;
         }
-        int index = rnd.nextInt(7);
-        if (index == 0) activeWildcards.put(Wildcards.SIZE_SHIFTING, new SizeShifting());
-        if (index == 1) activeWildcards.put(Wildcards.HUNGER, new Hunger());
-        if (index == 2) activeWildcards.put(Wildcards.TIME_DILATION, new TimeDilation());
-        if (index == 3) activeWildcards.put(Wildcards.SNAILS, new Snails());
-        if (index == 4) activeWildcards.put(Wildcards.MOB_SWAP, new MobSwap());
-        if (index == 5) activeWildcards.put(Wildcards.TRIVIA, new TriviaWildcard());
-        if (index == 6) activeWildcards.put(Wildcards.SUPERPOWERS, new SuperpowersWildcard());
+        //? if < 1.20.3 {
+        int index = rnd.nextInt(6);
+        if (index >= 2) index++;
+        //?} else {
+        /*int index = rnd.nextInt(7);
+        *///?}
+        if (index == 0) activeWildcards.put(Wildcards.SIZE_SHIFTING, Wildcards.SIZE_SHIFTING.getInstance());
+        if (index == 1) activeWildcards.put(Wildcards.HUNGER, Wildcards.HUNGER.getInstance());
+        //? if >= 1.20.3 {
+        /*if (index == 2) activeWildcards.put(Wildcards.TIME_DILATION, Wildcards.TIME_DILATION.getInstance());
+        *///?}
+        if (index == 3) activeWildcards.put(Wildcards.SNAILS, Wildcards.SNAILS.getInstance());
+        if (index == 4) activeWildcards.put(Wildcards.MOB_SWAP, Wildcards.MOB_SWAP.getInstance());
+        if (index == 5) activeWildcards.put(Wildcards.TRIVIA, Wildcards.TRIVIA.getInstance());
+        if (index == 6) activeWildcards.put(Wildcards.SUPERPOWERS, Wildcards.SUPERPOWERS.getInstance());
     }
 
     public static void onPlayerJoin(ServerPlayer player) {

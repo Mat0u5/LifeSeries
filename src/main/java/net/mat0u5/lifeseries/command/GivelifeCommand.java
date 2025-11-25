@@ -97,7 +97,7 @@ public class GivelifeCommand extends Command {
             }
         }
 
-        Component currentPlayerName = self.getFeedbackDisplayName();
+        Component currentPlayerName = self.getDisplayName();
         self.ls$addLives(-giveAmount);
         livesManager.addToLivesNoUpdate(target, giveAmount);
         AnimationUtils.playTotemAnimation(self);

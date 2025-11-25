@@ -68,9 +68,13 @@ public class ItemSpawner {
                     .create(LootContextParamSets.COMMAND);
             *///?}
 
-            LootTable lootTable = level.getServer()
+            //? if <= 1.20 {
+            LootTable lootTable = level.getServer().getLootData().getLootTable(lootTableId);
+            //?} else {
+            /*LootTable lootTable = level.getServer()
                     .reloadableRegistries()
                     .getLootTable(ResourceKey.create(Registries.LOOT_TABLE, lootTableId));
+            *///?}
 
             if (lootTable == null) {
                 if (!silent) Main.LOGGER.error("Loot table not found: " + lootTableId);

@@ -9,8 +9,21 @@ import net.minecraft.resources.ResourceLocation;
 *///?}
 
 public class IdentifierHelper {
-    //? if <= 1.21.9 {
+    //? if <= 1.20 {
     public static ResourceLocation of(String namespace, String path) {
+        return new ResourceLocation(namespace, path);
+    }
+    public static ResourceLocation mod(String path) {
+        return new ResourceLocation(Main.MOD_ID, path);
+    }
+    public static ResourceLocation vanilla(String path) {
+        return new ResourceLocation("minecraft", path);
+    }
+    public static ResourceLocation parse(String string) {
+        return new ResourceLocation(string);//TODO test
+    }
+    //?} else if <= 1.21.9 {
+    /*public static ResourceLocation of(String namespace, String path) {
         return ResourceLocation.fromNamespaceAndPath(namespace, path);
     }
     public static ResourceLocation mod(String path) {
@@ -22,7 +35,7 @@ public class IdentifierHelper {
     public static ResourceLocation parse(String string) {
         return ResourceLocation.parse(string);
     }
-    //?} else {
+    *///?} else {
     /*public static Identifier of(String namespace, String path) {
         return Identifier.fromNamespaceAndPath(namespace, path);
     }
