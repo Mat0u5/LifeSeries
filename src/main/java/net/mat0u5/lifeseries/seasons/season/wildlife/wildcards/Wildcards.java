@@ -22,7 +22,9 @@ public enum Wildcards {
 
 
     public Wildcard getInstance() {
-        if (this == SIZE_SHIFTING) return new SizeShifting();
+        //? if > 1.20 {
+        /*if (this == SIZE_SHIFTING) return new SizeShifting();
+        *///?}
         if (this == HUNGER) return new Hunger();
         if (this == SNAILS) return new Snails();
         //? if >= 1.20.3 {
@@ -64,6 +66,9 @@ public enum Wildcards {
         wildcards.remove(Wildcards.NULL);
         //? if < 1.20.3 {
         wildcards.remove(Wildcards.TIME_DILATION);
+        //?}
+        //? if <= 1.20 {
+        wildcards.remove(Wildcards.SIZE_SHIFTING);
         //?}
         return wildcards;
     }

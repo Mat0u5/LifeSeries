@@ -180,7 +180,8 @@ public class PlayerUtils {
     }
 
     private static void applySingleResourcepack(ServerPlayer player, String link, String sha1, String message) {
-        UUID id = UUID.nameUUIDFromBytes(link.getBytes(StandardCharsets.UTF_8));
+        //? if > 1.20 {
+        /*UUID id = UUID.nameUUIDFromBytes(link.getBytes(StandardCharsets.UTF_8));
         ClientboundResourcePackPushPacket resourcepackPacket = new ClientboundResourcePackPushPacket(
                 id,
                 link,
@@ -189,12 +190,15 @@ public class PlayerUtils {
                 Optional.of(Component.translatable(message))
         );
         player.connection.send(resourcepackPacket);
+        *///?}
     }
 
     private static void removeSingleResourcepack(ServerPlayer player, String link) {
-        UUID id = UUID.nameUUIDFromBytes(link.getBytes(StandardCharsets.UTF_8));
+        //? if > 1.20 {
+        /*UUID id = UUID.nameUUIDFromBytes(link.getBytes(StandardCharsets.UTF_8));
         ClientboundResourcePackPopPacket removePackPacket = new ClientboundResourcePackPopPacket(Optional.of(id));
         player.connection.send(removePackPacket);
+        *///?}
     }
 
     public static List<ItemStack> getPlayerInventory(ServerPlayer player) {
@@ -322,9 +326,11 @@ public class PlayerUtils {
     }
 
     public static ClientboundPlayerInfoUpdatePacket.Entry getPlayerListEntry(ServerPlayer player, boolean listed) {
-        //? if <= 1.21 {
-        return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), (RemoteChatSession.Data) Optionull.map(player.getChatSession(), RemoteChatSession::asData));
-        //?} else if <= 1.21.2 {
+        //? if <= 1.20 {
+        return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.latency, player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
+        //?} else if <= 1.21 {
+        /*return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), (RemoteChatSession.Data) Optionull.map(player.getChatSession(), RemoteChatSession::asData));
+        *///?} else if <= 1.21.2 {
         /*return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), player.getTabListOrder(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
         *///?} else if <= 1.21.6 {
         /*return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), player.isModelPartShown(PlayerModelPart.HAT), player.getTabListOrder(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
@@ -428,7 +434,11 @@ public class PlayerUtils {
     }
 
     public static void teleport(ServerPlayer player, BlockPos pos) {
-        teleport(player, player.ls$getServerLevel(), pos.getBottomCenter());
+        //? if <= 1.20 {
+        teleport(player, player.ls$getServerLevel(), pos.getCenter());
+        //?} else {
+        /*teleport(player, player.ls$getServerLevel(), pos.getBottomCenter());
+        *///?}
     }
 
     public static void teleport(ServerPlayer player, Vec3 pos) {
@@ -444,7 +454,11 @@ public class PlayerUtils {
     }
 
     public static void teleport(ServerPlayer player, ServerLevel level, BlockPos pos) {
-        teleport(player, level, pos.getBottomCenter());
+        //? if <= 1.20 {
+        teleport(player, level, pos.getCenter());
+        //?} else {
+        /*teleport(player, level, pos.getBottomCenter());
+        *///?}
     }
 
     public static void teleport(ServerPlayer player, ServerLevel level, Vec3 pos) {

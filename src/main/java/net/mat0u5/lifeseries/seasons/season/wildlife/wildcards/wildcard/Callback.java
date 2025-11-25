@@ -131,12 +131,16 @@ public class Callback extends Wildcard {
         nextDeactivationTick = -1;
         allWildcardsPhaseReached = false;
         preAllWildcardsPhaseReached = false;
-        if (!blacklistedWildcards.contains(Wildcards.SIZE_SHIFTING)) {
+        //? if <= 1.20 {
+        softActivateWildcard(getRandomInactiveWildcard());
+        //?} else {
+        /*if (!blacklistedWildcards.contains(Wildcards.SIZE_SHIFTING)) {
             softActivateWildcard(Wildcards.SIZE_SHIFTING);
         }
         else {
             softActivateWildcard(getRandomInactiveWildcard());
         }
+        *///?}
         super.activate();
     }
 

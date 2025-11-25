@@ -31,7 +31,9 @@ public class MorphComponent {
             ServerPlayer serverPlayer = PlayerUtils.getPlayer(playerUUID);
             if (serverPlayer != null) {
                 if (morph == null) {
-                    SizeShifting.setPlayerSizeUnchecked(serverPlayer, 1);
+                    //? if > 1.20 {
+                    /*SizeShifting.setPlayerSizeUnchecked(serverPlayer, 1);
+                    *///?}
                 }
                 else {
                     //? if <= 1.21 {
@@ -50,7 +52,9 @@ public class MorphComponent {
                         double scaleX = dimensions.width() / serverPlayer.getDimensions(Pose.STANDING).width();
                         *///?}
                         double scale = Math.clamp(Math.min(scaleX, scaleY), 0.1, 1.0);
-                        if (scale != serverPlayer.getScale()) SizeShifting.setPlayerSizeUnchecked(serverPlayer, 0.1);
+                        //? if > 1.20 {
+                        /*if (scale != serverPlayer.getScale()) SizeShifting.setPlayerSizeUnchecked(serverPlayer, 0.1);//TODO fix in 1.20
+                        *///?}
                     }
                 }
             }

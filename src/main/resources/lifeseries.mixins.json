@@ -6,6 +6,7 @@
     "AnvilMenuMixin",
     "CommandSourceStackMixin",
     "CraftingMenuMixin",
+    "DedicatedServerMixin",
     "EnchantmentHelperMixin",
     "EntityMixin",
     "GameRuleCommandMixin",

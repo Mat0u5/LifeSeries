@@ -2,36 +2,39 @@ package net.mat0u5.lifeseries.utils;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
-import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.utils.enums.Direction;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.Team;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.UUID;
+
+//? if > 1.20 {
+/*import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.Holder;
 import net.minecraft.network.DisconnectionDetails;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.scores.PlayerTeam;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.UUID;
-
+*///?}
 //? if >= 1.21.2 {
 /*import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -64,7 +67,7 @@ public class ClientUtils {
     }
 
     @Nullable
-    public static PlayerTeam getPlayerTeam() {
+    public static Team getPlayerTeam() {
         Minecraft client = Minecraft.getInstance();
         if (client == null) return null;
         if (client.player == null) return null;
@@ -91,10 +94,15 @@ public class ClientUtils {
         //?} else {
         /*client.level.disconnect(reason);
         *///?}
-        handler.onDisconnect(new DisconnectionDetails(reason));
+        //? if <= 1.20 {
+        handler.onDisconnect(reason);
+        //?} else {
+        /*handler.onDisconnect(new DisconnectionDetails(reason));
+        *///?}
     }
 
-    public static boolean handleUpdatedAttribute(ClientLevel level, AttributeInstance instance, double baseValue, ClientboundUpdateAttributesPacket packet) {
+    //? if > 1.20 {
+    /*public static boolean handleUpdatedAttribute(ClientLevel level, AttributeInstance instance, double baseValue, ClientboundUpdateAttributesPacket packet) {
         Entity entity = level.getEntity(packet.getEntityId());
         if (entity == null) return false;
         if (!(entity instanceof LocalPlayer player)) return false;
@@ -168,6 +176,7 @@ public class ClientUtils {
         }
         return false;
     }
+    *///?}
 
     
     public static boolean isSpaceEmpty(LocalPlayer player, AABB box, double offsetX, double offsetY, double offsetZ) {

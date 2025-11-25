@@ -7,7 +7,7 @@ import net.mat0u5.lifeseries.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.Team;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -55,7 +55,7 @@ public class GuiMixin {
     *///?}
 
         String texturePath = identifier.getPath();
-        PlayerTeam playerTeam = ClientUtils.getPlayerTeam();
+        Team playerTeam = ClientUtils.getPlayerTeam();
         if (!MainClient.COLORED_HEARTS || playerTeam == null || playerTeam.getColor() == null ||
                 !ls$allowedColors.contains(playerTeam.getColor().getName().toLowerCase(Locale.ROOT)) ||
                 !ls$allowedHearts.contains(texturePath) || Main.modFullyDisabled()) {

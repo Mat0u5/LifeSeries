@@ -235,7 +235,9 @@ public class TriviaWildcard extends Wildcard {
 
         if (TriviaHandler.cursedGigantificationPlayers.contains(player.getUUID())) {
             TriviaHandler.cursedGigantificationPlayers.remove(player.getUUID());
-            SizeShifting.setPlayerSize(player, 1);
+            //? if > 1.20 {
+            /*SizeShifting.setPlayerSize(player, 1);
+            *///?}
         }
         if (TriviaHandler.cursedHeartPlayers.contains(player.getUUID())) {
             TriviaHandler.cursedHeartPlayers.remove(player.getUUID());

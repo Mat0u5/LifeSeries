@@ -77,28 +77,17 @@ public class WildcardManager {
             activeWildcards.put(chosenWildcard, chosenWildcard.getInstance());
             return;
         }
-        //? if < 1.20.3 {
-        int index = rnd.nextInt(6);
-        if (index >= 2) index++;
-        //?} else {
-        /*int index = rnd.nextInt(7);
-        *///?}
-        if (index == 0) activeWildcards.put(Wildcards.SIZE_SHIFTING, Wildcards.SIZE_SHIFTING.getInstance());
-        if (index == 1) activeWildcards.put(Wildcards.HUNGER, Wildcards.HUNGER.getInstance());
-        //? if >= 1.20.3 {
-        /*if (index == 2) activeWildcards.put(Wildcards.TIME_DILATION, Wildcards.TIME_DILATION.getInstance());
-        *///?}
-        if (index == 3) activeWildcards.put(Wildcards.SNAILS, Wildcards.SNAILS.getInstance());
-        if (index == 4) activeWildcards.put(Wildcards.MOB_SWAP, Wildcards.MOB_SWAP.getInstance());
-        if (index == 5) activeWildcards.put(Wildcards.TRIVIA, Wildcards.TRIVIA.getInstance());
-        if (index == 6) activeWildcards.put(Wildcards.SUPERPOWERS, Wildcards.SUPERPOWERS.getInstance());
+        Wildcards wildcard = Wildcards.getWildcards().get(rnd.nextInt(Wildcards.getWildcards().size()));
+        activeWildcards.put(wildcard, wildcard.getInstance());
     }
 
     public static void onPlayerJoin(ServerPlayer player) {
         if (!isActiveWildcard(Wildcards.SIZE_SHIFTING)) {
-            if (SizeShifting.getPlayerSize(player) != 1 && !TriviaHandler.cursedGigantificationPlayers.contains(player.getUUID())) {
+            //? if > 1.20 {
+            /*if (SizeShifting.getPlayerSize(player) != 1 && !TriviaHandler.cursedGigantificationPlayers.contains(player.getUUID())) {
                 SizeShifting.setPlayerSize(player, 1);
             }
+            *///?}
         }
         if (!isActiveWildcard(Wildcards.HUNGER)) {
             player.removeEffect(MobEffects.HUNGER);
@@ -219,7 +208,9 @@ public class WildcardManager {
             if (!wildcard.active) continue;
             wildcard.tick();
         }
-        SizeShifting.resetSizesTick(isActiveWildcard(Wildcards.SIZE_SHIFTING));
+        //? if > 1.20 {
+        /*SizeShifting.resetSizesTick(isActiveWildcard(Wildcards.SIZE_SHIFTING));
+        *///?}
         if (server != null && server.getTickCount() % 200 == 0) {
             if (!isActiveWildcard(Wildcards.MOB_SWAP)) {
                 MobSwap.killMobSwapMobs();

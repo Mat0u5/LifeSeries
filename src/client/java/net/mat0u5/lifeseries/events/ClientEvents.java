@@ -164,12 +164,13 @@ public class ClientEvents {
     }
 
     public static void sendPackets(LocalPlayer player) {
-        if (MainClient.clientCurrentSeason == Seasons.WILD_LIFE && MainClient.clientActiveWildcards.contains(Wildcards.SIZE_SHIFTING)) {
+        //? if > 1.20 {
+        /*if (MainClient.clientCurrentSeason == Seasons.WILD_LIFE && MainClient.clientActiveWildcards.contains(Wildcards.SIZE_SHIFTING)) {
             //? if <= 1.21 {
             boolean jumping = player.input.jumping;
             //?} else {
-            /*boolean jumping = player.input.keyPresses.jump();
-            *///?}
+            /^boolean jumping = player.input.keyPresses.jump();
+             ^///?}
             if (jumping) {
 
                 if (MainClient.FIX_SIZECHANGING_BUGS) {
@@ -196,6 +197,7 @@ public class ClientEvents {
                 NetworkHandlerClient.sendHoldingJumpPacket();
             }
         }
+        *///?}
     }
 
     public static void onClientJump(Entity entity) {

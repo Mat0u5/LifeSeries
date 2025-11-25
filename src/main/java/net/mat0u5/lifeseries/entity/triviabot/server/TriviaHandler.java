@@ -226,6 +226,9 @@ public class TriviaHandler {
         minCurseNum = 1;
         //?}
         int numOfCurses = 9;
+        //? if <= 1.20 {
+        numOfCurses--;
+        //?}
         if (CompatibilityManager.voicechatLoaded() && VoicechatMain.isConnectedToSVC(player.getUUID())) numOfCurses = 10;
 
         Integer punishmentWeight = player.ls$getLives();
@@ -236,6 +239,12 @@ public class TriviaHandler {
 
         WeightedRandomizer randomizer = new WeightedRandomizer();
         int curse = randomizer.getWeightedRandom(minCurseNum, numOfCurses, punishmentWeight, 4, 1.5);
+
+        //? if <= 1.20 {
+        if (curse >= 4) {
+            curse++;
+        }
+        //?}
 
         if (numOfCurses == 9 && curse >= 6) {
             curse++;
@@ -257,9 +266,11 @@ public class TriviaHandler {
             case 3:
                 curseBeeswarm(player);
                 break;
-            case 4:
+            //? if > 1.20 {
+            /*case 4:
                 curseGigantification(player);
                 break;
+            *///?}
             case 5:
                 curseMoonjump(player);
                 break;
@@ -457,10 +468,12 @@ public class TriviaHandler {
     *///?}
 
     public static final List<UUID> cursedGigantificationPlayers = new ArrayList<>();
-    public void curseGigantification(ServerPlayer player) {
+    //? if > 1.20 {
+    /*public void curseGigantification(ServerPlayer player) {
         cursedGigantificationPlayers.add(player.getUUID());
         SizeShifting.setPlayerSizeUnchecked(player, 4);
     }
+    *///?}
 
     public static final List<UUID> cursedSliding = new ArrayList<>();
     public void curseSlipperyGround(ServerPlayer player) {
