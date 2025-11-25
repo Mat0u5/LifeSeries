@@ -40,10 +40,13 @@ public class GuiMixin {
             "hud/heart/hardcore_full", "hud/heart/hardcore_full_blinking", "hud/heart/hardcore_half", "hud/heart/hardcore_half_blinking"
     );
 
-    //? if <= 1.21 {
-    @Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lnet/minecraft/resources/ResourceLocation;IIII)V"))
+    //? if <= 1.20 {
+    @Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blit(Lnet/minecraft/resources/ResourceLocation;IIIIII)V"))
+    private void customHearts(GuiGraphics instance, ResourceLocation identifier, int x, int y, int u, int v, int m, int n) {
+    //?} else if <= 1.21 {
+    /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lnet/minecraft/resources/ResourceLocation;IIII)V"))
     private void customHearts(GuiGraphics instance, ResourceLocation identifier, int x, int y, int u, int v) {
-    //?} else if <= 1.21.5 {
+    *///?} else if <= 1.21.5 {
     /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Ljava/util/function/Function;Lnet/minecraft/resources/ResourceLocation;IIII)V"))
     private void customHearts(GuiGraphics instance, Function<ResourceLocation, RenderType> renderLayers, ResourceLocation identifier, int x, int y, int u, int v) {
     *///?} else if <= 1.21.9 {
@@ -62,10 +65,13 @@ public class GuiMixin {
             if (MainClient.clientCurrentSeason == Seasons.SECRET_LIFE && texturePath.startsWith("hud/heart/container")) {
                 return;
             }
-            //? if <= 1.21 {
-            instance.blitSprite(identifier, x, y, u, v);
+            //? if <= 1.20 {
+            instance.blit(identifier, x, y, u, v, m, n);
             ls$afterHeartDraw(instance, identifier, x, y, u, v);
-             //?} else if <= 1.21.5 {
+            //?} else if <= 1.21 {
+            /*instance.blitSprite(identifier, x, y, u, v);
+            ls$afterHeartDraw(instance, identifier, x, y, u, v);
+            *///?} else if <= 1.21.5 {
             /*instance.blitSprite(renderLayers, identifier, x, y, u, v);
             ls$afterHeartDraw(instance, renderLayers, identifier, x, y, u, v);
             *///?} else {

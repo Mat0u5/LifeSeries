@@ -8,13 +8,19 @@ import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.minecraft.world.scores.DisplaySlot;
 import net.minecraft.world.scores.Objective;
-import net.minecraft.world.scores.ReadOnlyScoreInfo;
 import net.minecraft.world.scores.Scoreboard;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+//? if <= 1.20 {
+import net.minecraft.world.scores.Score;
+//?} else {
+/*import net.minecraft.world.scores.ReadOnlyScoreInfo;
+import net.minecraft.world.scores.DisplaySlot;
+*///?}
+//? if > 1.20 && <= 1.21
+/*import net.minecraft.network.chat.numbers.NumberFormat;*/
 //? if <= 1.21 {
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.mat0u5.lifeseries.Main;
@@ -23,7 +29,6 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.numbers.NumberFormat;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -82,8 +87,33 @@ public abstract class PlayerEntityRendererMixin {
     }
     *///?}
 
-    //? if <= 1.21 {
-    @Redirect(method = "renderNameTag(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/scores/ReadOnlyScoreInfo;safeFormatValue(Lnet/minecraft/world/scores/ReadOnlyScoreInfo;Lnet/minecraft/network/chat/numbers/NumberFormat;)Lnet/minecraft/network/chat/MutableComponent;"))
+    //? if <= 1.20 {
+    @Redirect(method = "renderNameTag(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/Component;literal(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;"))
+    public MutableComponent customBelowName(String string, AbstractClientPlayer abstractClientPlayer) {
+        MutableComponent original = Component.literal(string);
+        Scoreboard scoreboard = abstractClientPlayer.getScoreboard();
+        Objective objective = scoreboard.getDisplayObjective(Scoreboard.DISPLAY_SLOT_BELOW_NAME);
+        if (objective != null) {
+            Score score = scoreboard.getOrCreatePlayerScore(abstractClientPlayer.getScoreboardName(), objective);
+            if (objective.getName().equalsIgnoreCase(LivesManager.SCOREBOARD_NAME)) {
+                if (MainClient.clientCurrentSeason == Seasons.LIMITED_LIFE) {
+                    int ticksLeft = Math.max(0, score.getScore()*20);
+                    return Component.literal(OtherUtils.formatTime(ticksLeft) + ";").setStyle(abstractClientPlayer.getDisplayName().getStyle());
+                }
+            }
+        }
+        return original;
+    }
+    @ModifyArg(method = "renderNameTag(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/LivingEntityRenderer;renderNameTag(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", ordinal = 0), index = 1)
+    public Component removeLives(Component par2) {
+        String belowName = par2.getString();
+        if (belowName.contains(";") && !par2.getSiblings().isEmpty()) {
+            return Component.literal(belowName.split(";")[0]).withStyle(par2.getSiblings().getFirst().getStyle());
+        }
+        return par2;
+    }
+    //?} else if <= 1.21 {
+    /*@Redirect(method = "renderNameTag(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/scores/ReadOnlyScoreInfo;safeFormatValue(Lnet/minecraft/world/scores/ReadOnlyScoreInfo;Lnet/minecraft/network/chat/numbers/NumberFormat;)Lnet/minecraft/network/chat/MutableComponent;"))
     public MutableComponent customBelowName(ReadOnlyScoreInfo readOnlyScoreInfo, NumberFormat numberFormat, AbstractClientPlayer abstractClientPlayer) {
         MutableComponent original = ReadOnlyScoreInfo.safeFormatValue(readOnlyScoreInfo, numberFormat);
         Scoreboard scoreboard = abstractClientPlayer.getScoreboard();
@@ -106,7 +136,7 @@ public abstract class PlayerEntityRendererMixin {
         }
         return par2;
     }
-    //?} else {
+    *///?} else {
     /*//? if <= 1.21.6 {
     @Redirect(method = "renderNameTag(Lnet/minecraft/client/renderer/entity/state/PlayerRenderState;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/PlayerRenderState;scoreText:Lnet/minecraft/network/chat/Component;"))
     public Component customBelowName(PlayerRenderState instance) {

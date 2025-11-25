@@ -6,8 +6,10 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
+import net.mat0u5.lifeseries.utils.interfaces.IEntity;
 import net.mat0u5.lifeseries.utils.interfaces.IEntityDataSaver;
 import net.mat0u5.lifeseries.utils.interfaces.IMorph;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -15,6 +17,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -35,7 +38,7 @@ import net.minecraft.world.entity.monster.Evoker;
 *///?}
 
 @Mixin(value = Entity.class, priority = 1)
-public abstract class EntityMixin implements IEntityDataSaver, IMorph {
+public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
     /*
     private NbtCompound persistentData;
     @Override
@@ -60,6 +63,20 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph {
         }
     }
     */
+    //? if <= 1.20 {
+    @Shadow
+    public abstract BlockPos getBlockPosBelowThatAffectsMyMovement();
+    public BlockPos ls$getBlockPosBelowThatAffectsMyMovement() {
+        return getBlockPosBelowThatAffectsMyMovement();
+    }
+    //?} else {
+    /*public BlockPos ls$getBlockPosBelowThatAffectsMyMovement() {
+        Entity entity = (Entity) (Object) this;
+        return entity.getBlockPosBelowThatAffectsMyMovement();
+    }
+    *///?}
+
+
 
     @Unique
     private boolean ls$fromMorph = false;

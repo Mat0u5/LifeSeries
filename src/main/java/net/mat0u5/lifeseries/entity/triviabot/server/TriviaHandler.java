@@ -23,7 +23,6 @@ import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -50,9 +49,12 @@ import java.util.UUID;
 import static net.mat0u5.lifeseries.Main.blacklist;
 import static net.mat0u5.lifeseries.Main.server;
 
-//? if > 1.20 {
+//? if <= 1.20 {
+import net.minecraft.core.particles.DustParticleOptions;
+//?} else {
 /*import net.minecraft.core.particles.ColorParticleOption;
 *///?}
+
 //? if >= 1.20.5 {
 /*import net.minecraft.core.component.DataComponents;
 *///?}
