@@ -36,7 +36,11 @@ import net.minecraft.resources.ResourceLocation;
  //?} else {
 /*import net.minecraft.resources.Identifier;
 *///?}
-public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<MobEffect>> {
+//? if <= 1.20 {
+public class EffectListConfigEntry extends StringListPopupConfigEntry<MobEffect> {
+//?} else {
+/*public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<MobEffect>> {
+*///?}
     //? if <= 1.21.9 {
     private static final ResourceLocation EFFECT_BACKGROUND_TEXTURE = IdentifierHelper.vanilla("hud/effect_background");
     //?} else {
@@ -55,7 +59,11 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<Mob
             entries.clear();
         }
 
-        List<Holder<MobEffect>> newList = new ArrayList<>();
+        //? if <= 1.20 {
+        List<MobEffect> newList = new ArrayList<>();
+        //?} else {
+        /*List<Holder<MobEffect>> newList = new ArrayList<>();
+        *///?}
         boolean errors = false;
 
         Registry<MobEffect> effectsRegistry = Minecraft.getInstance().level.registryAccess()
@@ -77,7 +85,11 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<Mob
                 *///?}
 
                 if (enchantment != null) {
-                    newList.add(effectsRegistry.wrapAsHolder(enchantment));
+                    //? if <= 1.20 {
+                    newList.add(enchantment);
+                    //?} else {
+                    /*newList.add(effectsRegistry.wrapAsHolder(enchantment));
+                    *///?}
                 } else {
                     setError(TextUtils.formatString("Invalid effect: '{}'", potionId));
                     errors = true;
@@ -95,12 +107,20 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<Mob
     }
 
     @Override
-    protected void renderListEntry(GuiGraphics context, Holder<MobEffect> effectType, int x, int y, int mouseX, int mouseY, float tickDelta) {
+    //? if <= 1.20 {
+    protected void renderListEntry(GuiGraphics context, MobEffect effectType, int x, int y, int mouseX, int mouseY, float tickDelta) {
+    //?} else {
+    /*protected void renderListEntry(GuiGraphics context, Holder<MobEffect> effectType, int x, int y, int mouseX, int mouseY, float tickDelta) {
+    *///?}
         //? if <= 1.21 {
         MobEffectTextureManager statusEffectSpriteManager = Minecraft.getInstance().getMobEffectTextures();
         RenderSystem.enableBlend();
 
-        context.blitSprite(EFFECT_BACKGROUND_TEXTURE, x, y, 24, 24);
+        //? if <= 1.21 {
+        context.blit(EFFECT_BACKGROUND_TEXTURE, x, y, 24, 24, 24, 24);//TODO idk what the last two parts are
+        //?} else {
+        /*context.blitSprite(EFFECT_BACKGROUND_TEXTURE, x, y, 24, 24);
+        *///?}
         TextureAtlasSprite sprite = statusEffectSpriteManager.get(effectType);
         context.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         context.blit(x + 3, y + 3, 0, 18, 18, sprite);

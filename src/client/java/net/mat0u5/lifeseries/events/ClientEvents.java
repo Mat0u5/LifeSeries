@@ -27,7 +27,6 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Holder;
-import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.MinecraftServer;
@@ -43,6 +42,13 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Map;
+
+//? if <= 1.20 {
+import net.minecraft.core.particles.DustParticleOptions;
+import org.joml.Vector3f;
+//?} else {
+/*import net.minecraft.core.particles.ColorParticleOption;
+ *///?}
 
 public class ClientEvents {
     public static long onGroundFor = 0;
@@ -156,7 +162,11 @@ public class ClientEvents {
                     double y = player.getY() + Math.random() * 1.8;
                     double z = player.getZ() + (Math.random() - 0.5) * 0.6;
 
-                    ParticleOptions invisibilityParticle = ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 0x208891b5);
+                    //? if <= 1.20 {
+                    ParticleOptions invisibilityParticle = new DustParticleOptions(new Vector3f(136, 145, 181), 0.13F);//TODO check if alpha works
+                    //?} else {
+                    /*ParticleOptions invisibilityParticle = ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 0x208891b5);
+                    *///?}
                     particleManager.createParticle(invisibilityParticle, x, y, z, 0, 0, 0);
                 }
             }
@@ -240,12 +250,20 @@ public class ClientEvents {
         if (!hasTripleJumpEffect(player)) return;
         jumpedInAir++;
         player.jumpFromGround();
-        player.level().playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.WIND_CHARGE_BURST.value(), SoundSource.MASTER, 0.25f, 1f, false);
+        //? if < 1.21 {
+        player.level().playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.PHANTOM_SWOOP, SoundSource.MASTER, 0.25f, 1f, false);//TODO sound
+        //?} else {
+        /*player.level().playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.WIND_CHARGE_BURST.value(), SoundSource.MASTER, 0.25f, 1f, false);
+        *///?}
         NetworkHandlerClient.sendStringPacket(PacketNames.TRIPLE_JUMP,"");
     }
 
     private static boolean hasTripleJumpEffect(LocalPlayer player) {
-        for (Map.Entry<Holder<MobEffect>, MobEffectInstance> entry : player.getActiveEffectsMap().entrySet()) {
+        //? if <= 1.20 {
+        for (Map.Entry<MobEffect, MobEffectInstance> entry : player.getActiveEffectsMap().entrySet()) {
+        //?} else {
+        /*for (Map.Entry<Holder<MobEffect>, MobEffectInstance> entry : player.getActiveEffectsMap().entrySet()) {
+        *///?}
             //? if <= 1.21.4 {
             if (entry.getKey() != MobEffects.JUMP) continue;
             //?} else {

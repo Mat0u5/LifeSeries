@@ -31,7 +31,11 @@ public class StringConfigEntry extends TextFieldConfigEntry {
     protected void initializeTextField() {
         setText(value);
         if (textField.getWidth()-6 < textRenderer.width(value)) {
-            textField.moveCursorToStart(false);
+            //? if <= 1.20 {
+            textField.moveCursorToStart();
+            //?} else {
+            /*textField.moveCursorToStart(false);
+            *///?}
         }
     }
 

@@ -97,7 +97,11 @@ public class ConfigScreen extends Screen {
         this.searchField.setResponder(this::onSearchChanged);
         this.addWidget(this.searchField);
 
-        this.listWidget = new ConfigListWidget(this.minecraft, this.width, this.height - listTop - FOOTER_HEIGHT, listTop, ConfigEntry.PREFFERED_HEIGHT);
+        //? if <= 1.20 {
+        this.listWidget = new ConfigListWidget(this.minecraft, this.width, this.height - listTop - FOOTER_HEIGHT, listTop, ConfigEntry.PREFFERED_HEIGHT, headerHeight);
+        //?} else {
+        /*this.listWidget = new ConfigListWidget(this.minecraft, this.width, this.height - listTop - FOOTER_HEIGHT, listTop, ConfigEntry.PREFFERED_HEIGHT);
+        *///?}
         listWidget.setScreen(this);
 
         this.addWidget(this.listWidget);

@@ -21,9 +21,15 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
     private static final int SCROLLBAR_OFFSET_X = 6;
     protected ConfigScreen screen;
 
-    public ConfigListWidget(Minecraft client, int width, int height, int y, int itemHeight) {
+    //? if <= 1.20 {
+    public ConfigListWidget(Minecraft client, int width, int height, int y, int itemHeight, int headerHeight) {
+        super(client, width, height, y, itemHeight, headerHeight);
+    }
+    //?} else {
+    /*public ConfigListWidget(Minecraft client, int width, int height, int y, int itemHeight) {
         super(client, width, height, y, itemHeight);
     }
+    *///?}
 
     public void setScreen(ConfigScreen screen) {
         this.screen = screen;
@@ -43,8 +49,11 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
     }
 
     @Override
-    protected void renderListItems(GuiGraphics context, int mouseX, int mouseY, float delta) {
-
+    //? if <= 1.21 {
+    protected void renderList(GuiGraphics context, int mouseX, int mouseY, float delta) {
+    //?} else {
+    /*protected void renderListItems(GuiGraphics context, int mouseX, int mouseY, float delta) {
+    *///?}
         //? if <= 1.21.2 {
         int maxScroll = getMaxScroll();
         //?} else {
@@ -147,13 +156,22 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
         }
         return Math.max(0, totalHeight - height + 8);
     }
+    //? if <= 1.20 {
+    protected int getX() {
+        return this.x0;
+    }
+    protected int getY() {
+        return this.y0;
+    }
+    //?}
 
-    //? if <= 1.21.2 {
-    @Override
+    //TODO in 1.20
+    //? if > 1.20 && <= 1.21.2 {
+    /*@Override
     protected boolean scrollbarVisible() {
         return false;
     }
-    //?}
+    *///?}
 
     @Override
     //? if <= 1.21.6 {
