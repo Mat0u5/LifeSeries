@@ -21,7 +21,7 @@ public abstract class MobMixin {
     @Inject(method = "finalizeSpawn", at = @At("HEAD"))
     //? if <= 1.21 {
 
-    //? if <= 1.20 {
+    //? if <= 1.20.3 {
     private void initialize(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType spawnReason, SpawnGroupData spawnGroupData, CompoundTag compoundTag, CallbackInfoReturnable<SpawnGroupData> cir) {
     //?} else {
     /*private void initialize(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData, CallbackInfoReturnable<SpawnGroupData> cir) {

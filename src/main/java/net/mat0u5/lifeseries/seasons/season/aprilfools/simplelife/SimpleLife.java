@@ -22,7 +22,7 @@ import java.util.Iterator;
 import java.util.Optional;
 import java.util.Random;
 
-//? if <= 1.20 {
+//? if <= 1.20.3 {
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.NaturalSpawner;
 //?} else {
@@ -101,7 +101,7 @@ public class SimpleLife extends ThirdLife {
 
                     MerchantOffers offers = wanderingTraderEntity.getOffers();
                     offers.clear();
-                    //? if <= 1.20 {
+                    //? if <= 1.20.3 {
                     offers.add(new MerchantOffer(new ItemStack(Items.DIRT, 5), ItemStack.EMPTY, Items.IRON_INGOT.getDefaultInstance(), 0, 999999, 0, 0, 0));
                     offers.add(new MerchantOffer(new ItemStack(Items.DIRT, 40), ItemStack.EMPTY, Items.WATER_BUCKET.getDefaultInstance(), 0, 999999, 0, 0, 0));
                     offers.add(new MerchantOffer(new ItemStack(Items.DIRT, 40), ItemStack.EMPTY, Items.LAVA_BUCKET.getDefaultInstance(), 0, 999999, 0, 0, 0));
@@ -149,7 +149,7 @@ public class SimpleLife extends ThirdLife {
 
     private BlockPos getNearbySpawnPos(LevelReader world, BlockPos pos, int range) {
         BlockPos blockPos = null;
-        //? if > 1.20 {
+        //? if > 1.20.3 {
         /*SpawnPlacementType spawnLocation = SpawnPlacements.getPlacementType(EntityType.WANDERING_TRADER);
         *///?}
 
@@ -158,7 +158,7 @@ public class SimpleLife extends ThirdLife {
             int k = pos.getZ() + rnd.nextInt(range * 2) - range;
             int l = world.getHeight(Heightmap.Types.WORLD_SURFACE, j, k);
             BlockPos blockPos2 = new BlockPos(j, l, k);
-            //? if <= 1.20 {
+            //? if <= 1.20.3 {
             if (NaturalSpawner.isSpawnPositionOk(SpawnPlacements.Type.ON_GROUND, world, blockPos2, EntityType.WANDERING_TRADER)) {
             //?} else {
             /*if (spawnLocation.isSpawnPositionOk(world, blockPos2, EntityType.WANDERING_TRADER)) {

@@ -43,7 +43,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.Map;
 
-//? if <= 1.20 {
+//? if <= 1.20.3 {
 import net.minecraft.core.particles.DustParticleOptions;
 import org.joml.Vector3f;
 //?} else {
@@ -162,7 +162,7 @@ public class ClientEvents {
                     double y = player.getY() + Math.random() * 1.8;
                     double z = player.getZ() + (Math.random() - 0.5) * 0.6;
 
-                    //? if <= 1.20 {
+                    //? if <= 1.20.3 {
                     ParticleOptions invisibilityParticle = new DustParticleOptions(new Vector3f(136, 145, 181), 0.13F);//TODO check if alpha works
                     //?} else {
                     /*ParticleOptions invisibilityParticle = ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 0x208891b5);
@@ -174,7 +174,7 @@ public class ClientEvents {
     }
 
     public static void sendPackets(LocalPlayer player) {
-        //? if > 1.20 {
+        //? if > 1.20.3 {
         /*if (MainClient.clientCurrentSeason == Seasons.WILD_LIFE && MainClient.clientActiveWildcards.contains(Wildcards.SIZE_SHIFTING)) {
             //? if <= 1.21 {
             boolean jumping = player.input.jumping;
@@ -259,7 +259,7 @@ public class ClientEvents {
     }
 
     private static boolean hasTripleJumpEffect(LocalPlayer player) {
-        //? if <= 1.20 {
+        //? if <= 1.20.3 {
         for (Map.Entry<MobEffect, MobEffectInstance> entry : player.getActiveEffectsMap().entrySet()) {
         //?} else {
         /*for (Map.Entry<Holder<MobEffect>, MobEffectInstance> entry : player.getActiveEffectsMap().entrySet()) {

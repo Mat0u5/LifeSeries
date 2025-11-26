@@ -1,5 +1,5 @@
 package net.mat0u5.lifeseries.network.packets;
-//? if <= 1.20 {
+//? if <= 1.20.3 {
 import net.fabricmc.fabric.api.networking.v1.FabricPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketType;

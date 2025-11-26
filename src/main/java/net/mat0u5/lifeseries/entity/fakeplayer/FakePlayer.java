@@ -7,6 +7,7 @@ package net.mat0u5.lifeseries.entity.fakeplayer;
  */
 
 import com.mojang.authlib.GameProfile;
+import net.mat0u5.lifeseries.mixin.SkullBlockEntityAccessor;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,10 +21,10 @@ import net.minecraft.server.level.ServerPlayer;
 //? if <= 1.20 {
 import java.util.concurrent.atomic.AtomicReference;
 //?}
-//? if < 1.20.5 {
-import net.minecraft.network.DisconnectionDetails;
-//?}
-//? if >= 1.20.5 {
+//? if > 1.20.5 {
+/*import net.minecraft.network.DisconnectionDetails;
+*///?}
+//? if >= 1.20.3 {
 /*import net.minecraft.server.network.CommonListenerCookie;
 *///?}
 
@@ -118,7 +119,10 @@ public class FakePlayer extends ServerPlayer {
             FakeClientConnection connection = new FakeClientConnection(PacketFlow.SERVERBOUND);
             //? if <= 1.20 {
             server.getPlayerList().placeNewPlayer(connection, instance);
-            //?} else {
+            //?} else if <= 1.20.3 {
+            /*CommonListenerCookie data =  new CommonListenerCookie(current, 0, instance.clientInformation());
+            server.getPlayerList().placeNewPlayer(connection, instance, data);
+            *///?} else {
             /*CommonListenerCookie data =  new CommonListenerCookie(current, 0, instance.clientInformation(), true);
             server.getPlayerList().placeNewPlayer(connection, instance, data);
             *///?}
@@ -166,7 +170,9 @@ public class FakePlayer extends ServerPlayer {
             gameprofile = result.get();
         }
         return CompletableFuture.completedFuture(Optional.ofNullable(gameprofile));
-        //?} else {
+        //?} else if <= 1.20.3 {
+        /*return SkullBlockEntityAccessor.ls$fetchGameProfile(name);
+        *///?} else {
         /*return SkullBlockEntity.fetchGameProfile(name);
         *///?}
     }

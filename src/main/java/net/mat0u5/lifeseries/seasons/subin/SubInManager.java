@@ -108,7 +108,7 @@ public class SubInManager {
         if (player == null || server == null) return;
 
         if (server.getPlayerList() instanceof IPlayerManager iPlayerManager) {
-            //? if <= 1.20 {
+            //? if <= 1.20.3 {
             CompoundTag nbt = iPlayerManager.ls$getSaveHandler().load(player);
             if (nbt != null) {
                 player.load(nbt);

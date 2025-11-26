@@ -27,7 +27,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
-//? if <= 1.20 {
+//? if <= 1.20.3 {
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 //?} else {
 /*import net.minecraft.world.level.pathfinder.PathType;
@@ -302,7 +302,7 @@ public class SnailPathfinding {
     }
 
     public void setNavigationFlying() {
-        //? if <= 1.20 {
+        //? if <= 1.20.3 {
         snail.setPathfindingMalus(BlockPathTypes.BLOCKED, -1);
         snail.setPathfindingMalus(BlockPathTypes.TRAPDOOR, -1);
         snail.setPathfindingMalus(BlockPathTypes.WALKABLE_DOOR, -1);
@@ -331,7 +331,7 @@ public class SnailPathfinding {
     }
 
     public void setNavigationWalking() {
-        //? if <= 1.20 {
+        //? if <= 1.20.3 {
         snail.setPathfindingMalus(BlockPathTypes.BLOCKED, -1);
         snail.setPathfindingMalus(BlockPathTypes.TRAPDOOR, -1);
         snail.setPathfindingMalus(BlockPathTypes.WALKABLE_DOOR, -1);
@@ -365,7 +365,7 @@ public class SnailPathfinding {
     }
 
     public void setNavigationMining() {
-        //? if <= 1.20 {
+        //? if <= 1.20.3 {
         snail.setPathfindingMalus(BlockPathTypes.BLOCKED, 4.0f);
         snail.setPathfindingMalus(BlockPathTypes.TRAPDOOR, 0);
         snail.setPathfindingMalus(BlockPathTypes.WALKABLE_DOOR, 0);

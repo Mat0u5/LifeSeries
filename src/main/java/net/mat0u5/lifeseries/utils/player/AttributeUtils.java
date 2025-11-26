@@ -27,7 +27,7 @@ public class AttributeUtils {
         if (!TriviaHandler.cursedMoonJumpPlayers.contains(player.getUUID())) {
             resetPlayerJumpHeight(player);
         }
-        //? if > 1.20 {
+        //? if > 1.20.3 {
         /*if (!SuperpowersWildcard.hasActivatedPower(player, Superpowers.WIND_CHARGE)) {
             resetSafeFallHeight(player);
         }
@@ -57,7 +57,7 @@ public class AttributeUtils {
         setPlayerJumpHeight(player, DEFAULT_PLAYER_JUMP_HEIGHT);
     }
 
-    //? if > 1.20 {
+    //? if > 1.20.3 {
     /*public static void resetSafeFallHeight(ServerPlayer player) {
         setSafeFallHeight(player, DEFAULT_PLAYER_SAFE_FALL_HEIGHT);
     }
@@ -83,13 +83,13 @@ public class AttributeUtils {
         Objects.requireNonNull(player.getAttribute(Attributes.JUMP_STRENGTH)).setBaseValue(value);
     }
 
-    //? if > 1.20 {
+    //? if > 1.20.3 {
     /*public static void setSafeFallHeight(ServerPlayer player, double value) {
         Objects.requireNonNull(player.getAttribute(Attributes.SAFE_FALL_DISTANCE)).setBaseValue(value);
     }
     *///?}
 
-    //? if > 1.20 {
+    //? if > 1.20.3 {
     /*public static void setScale(ServerPlayer player, double value) {
         Objects.requireNonNull(player.getAttribute(Attributes.SCALE)).setBaseValue(value);
     }
@@ -106,7 +106,7 @@ public class AttributeUtils {
 
     public static void setStepHeight(ServerPlayer player, double value) {
         if (player == null) return;
-        //? if <= 1.20 {
+        //? if <= 1.20.3 {
         player.setMaxUpStep((float) value);//TODO test
         //?} else {
         /*Objects.requireNonNull(player.getAttribute(Attributes.STEP_HEIGHT)).setBaseValue(value);
@@ -124,7 +124,7 @@ public class AttributeUtils {
         return player.getAttributeBaseValue(Attributes.MOVEMENT_SPEED);
     }
 
-    //? if > 1.20 {
+    //? if > 1.20.3 {
     /*public static double getPlayerSize(ServerPlayer player) {
         return player.getAttributeBaseValue(Attributes.SCALE);
     }

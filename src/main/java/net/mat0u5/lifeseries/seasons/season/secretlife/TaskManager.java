@@ -33,7 +33,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import static net.mat0u5.lifeseries.Main.*;
-//? if <= 1.20 {
+//? if <= 1.20.3 {
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.server.network.FilteredText;

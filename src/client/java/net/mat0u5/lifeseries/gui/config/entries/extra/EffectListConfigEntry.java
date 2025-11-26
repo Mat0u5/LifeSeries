@@ -36,7 +36,7 @@ import net.minecraft.resources.ResourceLocation;
  //?} else {
 /*import net.minecraft.resources.Identifier;
 *///?}
-//? if <= 1.20 {
+//? if <= 1.20.3 {
 public class EffectListConfigEntry extends StringListPopupConfigEntry<MobEffect> {
 //?} else {
 /*public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<MobEffect>> {
@@ -59,7 +59,7 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<MobEffect>
             entries.clear();
         }
 
-        //? if <= 1.20 {
+        //? if <= 1.20.3 {
         List<MobEffect> newList = new ArrayList<>();
         //?} else {
         /*List<Holder<MobEffect>> newList = new ArrayList<>();
@@ -85,7 +85,7 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<MobEffect>
                 *///?}
 
                 if (enchantment != null) {
-                    //? if <= 1.20 {
+                    //? if <= 1.20.3 {
                     newList.add(enchantment);
                     //?} else {
                     /*newList.add(effectsRegistry.wrapAsHolder(enchantment));
@@ -107,7 +107,7 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<MobEffect>
     }
 
     @Override
-    //? if <= 1.20 {
+    //? if <= 1.20.3 {
     protected void renderListEntry(GuiGraphics context, MobEffect effectType, int x, int y, int mouseX, int mouseY, float tickDelta) {
     //?} else {
     /*protected void renderListEntry(GuiGraphics context, Holder<MobEffect> effectType, int x, int y, int mouseX, int mouseY, float tickDelta) {

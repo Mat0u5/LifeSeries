@@ -68,7 +68,7 @@ public class ItemSpawner {
                     .create(LootContextParamSets.COMMAND);
             *///?}
 
-            //? if <= 1.20 {
+            //? if <= 1.20.3 {
             LootTable lootTable = level.getServer().getLootData().getLootTable(lootTableId);
             //?} else {
             /*LootTable lootTable = level.getServer()

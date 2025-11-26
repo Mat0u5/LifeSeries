@@ -46,7 +46,7 @@ import net.minecraft.world.flag.FeatureFlagSet;
 @Mixin(value = EnchantmentHelper.class, priority = 1)
 public class EnchantmentHelperMixin {
     @Inject(method = "getAvailableEnchantmentResults", at = @At("HEAD"), cancellable = true)
-    //? if <= 1.20 {
+    //? if <= 1.20.3 {
     private static void getPossibleEntries(int level, ItemStack stack, boolean bl, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
     //?} else if <= 1.20.5 {
     /*private static void getPossibleEntries(FeatureFlagSet featureFlagSet, int level, ItemStack stack, boolean bl, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {

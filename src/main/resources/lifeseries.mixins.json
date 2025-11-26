@@ -38,6 +38,7 @@
     "ServerPlayerGameModeMixin",
     "ServerPlayerMixin",
     "SimpleExplosionDamageCalculatorMixin",
+    "SkullBlockEntityAccessor",
     "SleepStatusMixin",
     "SpawnEggItemMixin",
     "ThrownEnderpearlMixin",

@@ -83,7 +83,7 @@ public abstract class PlayerManagerMixin implements IPlayerManager {
     //?}
 
     @Inject(method = "respawn", at = @At("RETURN"))
-    //? if <= 1.20 {
+    //? if <= 1.20.3 {
     public void respawnPlayer(ServerPlayer serverPlayer, boolean alive, CallbackInfoReturnable<ServerPlayer> cir) {
     //?} else {
     /*public void respawnPlayer(ServerPlayer player, boolean alive, Entity.RemovalReason removalReason, CallbackInfoReturnable<ServerPlayer> cir) {

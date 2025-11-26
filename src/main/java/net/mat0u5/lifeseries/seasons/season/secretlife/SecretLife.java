@@ -35,7 +35,7 @@ import static net.mat0u5.lifeseries.Main.*;
 import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 //?}
-//? if <= 1.20 {
+//? if <= 1.20.3 {
 import net.minecraft.world.item.alchemy.PotionUtils;
 //?} else {
 /*import net.minecraft.core.component.DataComponents;
@@ -166,7 +166,7 @@ public class SecretLife extends Season {
         ItemStack pot = new ItemStack(Items.POTION);
         ItemStack pot2 = new ItemStack(Items.POTION);
         ItemStack pot3 = new ItemStack(Items.POTION);
-        //? if <= 1.20 {
+        //? if <= 1.20.3 {
         PotionUtils.setCustomEffects(pot, Potions.INVISIBILITY.getEffects());
         PotionUtils.setCustomEffects(pot2, Potions.SLOW_FALLING.getEffects());
         PotionUtils.setCustomEffects(pot3, Potions.FIRE_RESISTANCE.getEffects());
@@ -180,7 +180,7 @@ public class SecretLife extends Season {
         itemSpawner.addItem(pot3, 10);
 
         //Enchanted Books
-        //? if <= 1.20 {
+        //? if <= 1.20.3 {
         itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.ALL_DAMAGE_PROTECTION, 3))), 10);
         itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.FALL_PROTECTION, 3))), 10);
         itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.SILK_TOUCH, 1))), 10);

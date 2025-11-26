@@ -38,7 +38,7 @@ public class SideTitleCommand extends Command {
                 .requires(PermissionManager::isAdmin)
                 .then(argument("targets", EntityArgument.players())
                         .then(literal("side")
-                                //? if <= 1.20 {
+                                //? if <= 1.20.3 {
                                 .then(argument("title", ComponentArgument.textComponent())
                                 //?} else {
                                 /*.then(argument("title", ComponentArgument.textComponent(registryAccess))

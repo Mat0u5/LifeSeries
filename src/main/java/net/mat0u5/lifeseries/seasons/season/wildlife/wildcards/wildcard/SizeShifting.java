@@ -35,7 +35,7 @@ public class SizeShifting extends Wildcard {
             if (TriviaHandler.cursedGigantificationPlayers.contains(player.getUUID())) continue;
             if (player.isSpectator()) continue;
             if (player.isShiftKeyDown()) {
-                //? if > 1.20 {
+                //? if > 1.20.3 {
                 /*addPlayerSize(player, -SIZE_CHANGE_STEP * SIZE_CHANGE_MULTIPLIER);
                 *///?}
             }
@@ -46,12 +46,12 @@ public class SizeShifting extends Wildcard {
         if (TriviaHandler.cursedGigantificationPlayers.contains(player.getUUID())) return;
         if (player.isSpectator()) return;
         if (player.ls$isWatcher()) return;
-        //? if > 1.20 {
+        //? if > 1.20.3 {
         /*addPlayerSize(player, SIZE_CHANGE_STEP * SIZE_CHANGE_MULTIPLIER);
         *///?}
     }
 
-    //? if > 1.20 {
+    //? if > 1.20.3 {
     /*public static double getPlayerSize(ServerPlayer player) {
         return AttributeUtils.getPlayerSize(player);
     }

@@ -88,7 +88,7 @@ public abstract class PlayerMixin {
     }
 
     //? if <= 1.21.6 {
-    //? if <= 1.20 {
+    //? if <= 1.20.3 {
     @Inject(method = "getDimensions", at = @At("HEAD"), cancellable = true)
     //?} else {
     /*@Inject(method = "getDefaultDimensions", at = @At("HEAD"), cancellable = true)

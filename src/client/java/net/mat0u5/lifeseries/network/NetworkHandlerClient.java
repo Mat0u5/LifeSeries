@@ -47,12 +47,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-//? if <= 1.20 {
+//? if <= 1.20.3 {
 import net.minecraft.network.FriendlyByteBuf;
 //?}
 
 public class NetworkHandlerClient {
-    //? if <= 1.20 {
+    //? if <= 1.20.3 {
     public static void registerClientReceiver() {
         ClientLoginNetworking.registerGlobalReceiver(IdentifierHelper.mod("preloginpacket"),
                 (client, handler, buf, listenerAdder) -> {

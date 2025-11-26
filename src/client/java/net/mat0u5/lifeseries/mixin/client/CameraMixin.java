@@ -21,7 +21,7 @@ public class CameraMixin {
     @Shadow
     private Entity entity;
 
-    //? if <= 1.20 {
+    //? if <= 1.20.3 {
     @ModifyArg(method = "setup", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;getMaxZoom(D)D"), index = 0)
     private double modifyEntityScale(double originalDistance) {
     //?} else {
@@ -33,7 +33,7 @@ public class CameraMixin {
         if (morphComponent.isMorphed()) {
             LivingEntity dummy = morphComponent.getDummy();
             if (dummy != null) {
-                //? if <= 1.20 {
+                //? if <= 1.20.3 {
                 float playerHeight = player.getDimensions(Pose.STANDING).height;
                 float morphedHeight = dummy.getDimensions(Pose.STANDING).height;
                 //?} else {

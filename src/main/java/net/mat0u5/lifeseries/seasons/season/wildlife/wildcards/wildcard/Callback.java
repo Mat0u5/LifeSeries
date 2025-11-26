@@ -131,7 +131,7 @@ public class Callback extends Wildcard {
         nextDeactivationTick = -1;
         allWildcardsPhaseReached = false;
         preAllWildcardsPhaseReached = false;
-        //? if <= 1.20 {
+        //? if <= 1.20.3 {
         softActivateWildcard(getRandomInactiveWildcard());
         //?} else {
         /*if (!blacklistedWildcards.contains(Wildcards.SIZE_SHIFTING)) {

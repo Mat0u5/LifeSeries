@@ -83,7 +83,7 @@ public class WildcardManager {
 
     public static void onPlayerJoin(ServerPlayer player) {
         if (!isActiveWildcard(Wildcards.SIZE_SHIFTING)) {
-            //? if > 1.20 {
+            //? if > 1.20.3 {
             /*if (SizeShifting.getPlayerSize(player) != 1 && !TriviaHandler.cursedGigantificationPlayers.contains(player.getUUID())) {
                 SizeShifting.setPlayerSize(player, 1);
             }
@@ -208,7 +208,7 @@ public class WildcardManager {
             if (!wildcard.active) continue;
             wildcard.tick();
         }
-        //? if > 1.20 {
+        //? if > 1.20.3 {
         /*SizeShifting.resetSizesTick(isActiveWildcard(Wildcards.SIZE_SHIFTING));
         *///?}
         if (server != null && server.getTickCount() % 200 == 0) {

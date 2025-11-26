@@ -49,7 +49,7 @@ import java.util.UUID;
 import static net.mat0u5.lifeseries.Main.blacklist;
 import static net.mat0u5.lifeseries.Main.server;
 
-//? if <= 1.20 {
+//? if <= 1.20.3 {
 import net.minecraft.core.particles.DustParticleOptions;
 //?} else {
 /*import net.minecraft.core.particles.ColorParticleOption;
@@ -116,7 +116,7 @@ public class TriviaHandler {
             if (triviaSnail != null) {
                 triviaSnail.serverData.setBoundPlayer(bot.serverData.getBoundPlayer());
                 triviaSnail.serverData.setFromTrivia();
-                //? if <= 1.20 {
+                //? if <= 1.20.3 {
                 triviaSnail.playSound(SoundEvents.GENERIC_EXPLODE, 0.5f, 2);
                 //?} else {
                 /*triviaSnail.playSound(SoundEvents.GENERIC_EXPLODE.value(), 0.5f, 2);
@@ -210,7 +210,7 @@ public class TriviaHandler {
         ServerLevel level = (ServerLevel) bot.level();
         Vec3 pos = bot.position();
 
-        //? if <= 1.20 {
+        //? if <= 1.20.3 {
         level.sendParticles(
                 new DustParticleOptions(new Vector3f(166, 17, 17), 1.0F),
                 pos.x(), pos.y()+1, pos.z(),
@@ -228,7 +228,7 @@ public class TriviaHandler {
         minCurseNum = 1;
         //?}
         int numOfCurses = 9;
-        //? if <= 1.20 {
+        //? if <= 1.20.3 {
         numOfCurses--;
         //?}
         if (CompatibilityManager.voicechatLoaded() && VoicechatMain.isConnectedToSVC(player.getUUID())) numOfCurses = 10;
@@ -242,7 +242,7 @@ public class TriviaHandler {
         WeightedRandomizer randomizer = new WeightedRandomizer();
         int curse = randomizer.getWeightedRandom(minCurseNum, numOfCurses, punishmentWeight, 4, 1.5);
 
-        //? if <= 1.20 {
+        //? if <= 1.20.3 {
         if (curse >= 4) {
             curse++;
         }
@@ -268,7 +268,7 @@ public class TriviaHandler {
             case 3:
                 curseBeeswarm(player);
                 break;
-            //? if > 1.20 {
+            //? if > 1.20.3 {
             /*case 4:
                 curseGigantification(player);
                 break;
@@ -291,7 +291,7 @@ public class TriviaHandler {
         }
     }
 
-    //? if <= 1.20 {
+    //? if <= 1.20.3 {
     private static final List<MobEffect> blessEffects = List.of(
     //?} else {
     /*private static final List<Holder<MobEffect>> blessEffects = List.of(
@@ -323,14 +323,14 @@ public class TriviaHandler {
         player.sendSystemMessage(Component.empty());
         for (int i = 0; i < 3; i++) {
             int attempts = 0;
-            //? if <= 1.20 {
+            //? if <= 1.20.3 {
             MobEffect effect = null;
             //?} else {
             /*Holder<MobEffect> effect = null;
              *///?}
             while (effect == null && attempts < 50) {
                 attempts++;
-                //? if <= 1.20 {
+                //? if <= 1.20.3 {
                 MobEffect pickedEffect = blessEffects.get(player.getRandom().nextInt(blessEffects.size()));
                 //?} else {
                 /*Holder<MobEffect> pickedEffect = blessEffects.get(player.getRandom().nextInt(blessEffects.size()));
@@ -364,7 +364,7 @@ public class TriviaHandler {
             }
 
             String romanNumeral = TextUtils.toRomanNumeral(amplifier + 1);
-            //? if <= 1.20 {
+            //? if <= 1.20.3 {
             Component effectName = effect.getDisplayName();
             //?} else {
             /*Component effectName = Component.translatable(effect.value().getDescriptionId());
@@ -470,7 +470,7 @@ public class TriviaHandler {
     *///?}
 
     public static final List<UUID> cursedGigantificationPlayers = new ArrayList<>();
-    //? if > 1.20 {
+    //? if > 1.20.3 {
     /*public void curseGigantification(ServerPlayer player) {
         cursedGigantificationPlayers.add(player.getUUID());
         SizeShifting.setPlayerSizeUnchecked(player, 4);

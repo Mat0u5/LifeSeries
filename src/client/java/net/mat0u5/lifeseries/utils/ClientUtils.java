@@ -102,7 +102,7 @@ public class ClientUtils {
         *///?}
     }
 
-    //? if > 1.20 {
+    //? if > 1.20.3 {
     /*public static boolean handleUpdatedAttribute(ClientLevel level, AttributeInstance instance, double baseValue, ClientboundUpdateAttributesPacket packet) {
         Entity entity = level.getEntity(packet.getEntityId());
         if (entity == null) return false;

@@ -22,7 +22,7 @@ import net.minecraft.world.item.EnchantedBookItem;
 //? if >= 1.21.5
 /*import java.util.Optional;*/
 
-//? if <= 1.20 {
+//? if <= 1.20.3 {
 //?} else {
 /*import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.component.CustomData;
@@ -33,7 +33,7 @@ import java.util.List;
 *///?}
 
 public class ItemStackUtils {
-    //? if <= 1.20 {
+    //? if <= 1.20.3 {
 
     public static void setCustomComponentInt(ItemStack itemStack, String componentKey, int value) {
         if (itemStack == null) return;

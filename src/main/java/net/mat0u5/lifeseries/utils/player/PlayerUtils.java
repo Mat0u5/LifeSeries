@@ -187,7 +187,11 @@ public class PlayerUtils {
                 link,
                 sha1,
                 false,
-                Optional.of(Component.translatable(message))
+                //? if <= 1.20.3 {
+                Component.translatable(message)
+                //?} else {
+                /^Optional.of(Component.translatable(message))
+                ^///?}
         );
         player.connection.send(resourcepackPacket);
         *///?}

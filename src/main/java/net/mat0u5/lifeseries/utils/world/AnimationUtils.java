@@ -20,7 +20,7 @@ import org.joml.Vector3f;
 
 //? if >= 1.20.5
 /*import net.minecraft.core.component.DataComponents;*/
-//? if <= 1.21 && > 1.20
+//? if <= 1.21 && > 1.20.3
 /*import net.minecraft.world.item.component.CustomModelData;*/
 //? if >= 1.21.2 {
 /*import java.awt.Color;
@@ -60,7 +60,7 @@ public class AnimationUtils {
     public static ItemStack getSecretLifeTotemItem(boolean red) {
         ItemStack totemItem = Items.TOTEM_OF_UNDYING.getDefaultInstance();
         ItemStackUtils.setCustomComponentBoolean(totemItem, "FakeTotem", true);
-        //? if <= 1.20 {
+        //? if <= 1.20.3 {
         ItemStackUtils.setCustomComponentInt(totemItem, "CustomModelData", red ? 2 : 1);
         //?} else if <= 1.21 {
         /*totemItem.set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(red ? 2 : 1));

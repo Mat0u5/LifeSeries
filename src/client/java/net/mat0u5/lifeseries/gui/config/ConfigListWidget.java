@@ -166,7 +166,7 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
     //?}
 
     //TODO in 1.20
-    //? if > 1.20 && <= 1.21.2 {
+    //? if > 1.20.3 && <= 1.21.2 {
     /*@Override
     protected boolean scrollbarVisible() {
         return false;

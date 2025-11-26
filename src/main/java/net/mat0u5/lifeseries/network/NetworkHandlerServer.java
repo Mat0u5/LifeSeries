@@ -55,7 +55,7 @@ public class NetworkHandlerServer {
     public static final List<UUID> preLoginHandshake = new ArrayList<>();
 
     public static void registerPackets() {
-        //? if > 1.20 {
+        //? if > 1.20.3 {
         /*PayloadTypeRegistry.playS2C().register(NumberPayload.ID, NumberPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(StringPayload.ID, StringPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(StringListPayload.ID, StringListPayload.CODEC);
@@ -79,7 +79,7 @@ public class NetworkHandlerServer {
         PayloadTypeRegistry.playC2S().register(SnailTexturePacket.ID, SnailTexturePacket.CODEC);
         *///?}
     }
-    //? if <= 1.20 {
+    //? if <= 1.20.3 {
     public static void registerServerReceiver() {
         ServerLoginConnectionEvents.QUERY_START.register((handler, server, sender, synchronizer) -> {
             sender.sendPacket(IdentifierHelper.mod("preloginpacket"), PacketByteBufs.create());

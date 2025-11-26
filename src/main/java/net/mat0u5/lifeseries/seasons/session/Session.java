@@ -185,7 +185,7 @@ public class Session {
             for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
                 NetworkHandlerServer.sendStringPacket(player, PacketNames.SESSION_STATUS, status.getName());
             }
-            //? if <= 1.20 {
+            //? if <= 1.20.3 {
             for (MobEffect effect : blacklist.getBannedEffects()) {
             //?} else {
             /*for (Holder<MobEffect> effect : blacklist.getBannedEffects()) {

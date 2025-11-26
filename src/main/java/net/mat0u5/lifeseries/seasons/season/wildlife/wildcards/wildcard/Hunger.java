@@ -60,7 +60,7 @@ public class Hunger extends Wildcard {
     public static double SATURATION_CHANCE = 0.5;
     public static double SOUND_CHANCE = 0.01;
 
-    //? if <= 1.20 {
+    //? if <= 1.20.3 {
     private static final List<MobEffect> effects = List.of(
     //?} else {
     /*private static final List<Holder<MobEffect>> effects = List.of(
@@ -117,7 +117,7 @@ public class Hunger extends Wildcard {
             *///?}
     );
 
-    //? if <= 1.20 {
+    //? if <= 1.20.3 {
     private static final List<MobEffect> levelLimit = List.of(
     //?} else {
     /*private static final List<Holder<MobEffect>> levelLimit = List.of(
@@ -139,7 +139,7 @@ public class Hunger extends Wildcard {
             MobEffects.SATURATION
     );
 
-    //? if <= 1.20 {
+    //? if <= 1.20.3 {
     private static final List<MobEffect> durationLimit = List.of(
     //?} else {
     /*private static final List<Holder<MobEffect>> durationLimit = List.of(
@@ -377,7 +377,7 @@ public class Hunger extends Wildcard {
             if (random.nextDouble() < EFFECT_CHANCE) {
                 int amplifier = random.nextInt(5); // 0 -> 4
                 int duration = (int) Math.ceil(((random.nextInt(20) + 1) * AVG_EFFECT_DURATION) / 10.0);
-                //? if <= 1.20 {
+                //? if <= 1.20.3 {
                 MobEffect registryEntryEffect = effects.get(random.nextInt(effects.size()));
                 if (levelLimit.contains(registryEntryEffect) || commonItems.contains(item)) {
                     amplifier = 0;

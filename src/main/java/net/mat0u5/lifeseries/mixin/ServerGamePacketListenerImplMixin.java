@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Set;
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
-//? if <= 1.20 {
+//? if <= 1.20.3 {
 import net.minecraft.network.protocol.game.ServerboundChatCommandPacket;
 //?} else {
 /*import net.minecraft.network.protocol.game.ServerboundChatCommandSignedPacket;
@@ -103,7 +103,7 @@ public class ServerGamePacketListenerImplMixin {
     @Unique
     private static final List<String> mutedCommands = List.of("msg", "tell", "whisper", "w", "me");
 
-    //? if > 1.20 {
+    //? if > 1.20.3 {
     /*@Inject(method = "performUnsignedChatCommand", at = @At("HEAD"), cancellable = true)
     private void executeCommand(String command, CallbackInfo ci) {
         if (Main.modDisabled()) return;
@@ -120,7 +120,10 @@ public class ServerGamePacketListenerImplMixin {
     //? if <= 1.20 {
     @Inject(method = "performChatCommand", at = @At(value = "INVOKE", target = "Lnet/minecraft/commands/Commands;performCommand(Lcom/mojang/brigadier/ParseResults;Ljava/lang/String;)I"), cancellable = true)
     private void handleCommandExecution(ServerboundChatCommandPacket packet, LastSeenMessages lastSeenMessages, CallbackInfo ci) {
-    //?} else {
+    //?} else if <= 1.20.3 {
+    /*@Inject(method = "performChatCommand", at = @At(value = "INVOKE", target = "Lnet/minecraft/commands/Commands;performCommand(Lcom/mojang/brigadier/ParseResults;Ljava/lang/String;)V"), cancellable = true)
+    private void handleCommandExecution(ServerboundChatCommandPacket packet, LastSeenMessages lastSeenMessages, CallbackInfo ci) {
+    *///?} else {
     /*@Inject(method = "performSignedChatCommand", at = @At(value = "INVOKE", target = "Lnet/minecraft/commands/Commands;performCommand(Lcom/mojang/brigadier/ParseResults;Ljava/lang/String;)V"), cancellable = true)
     private void handleCommandExecution(ServerboundChatCommandSignedPacket packet, LastSeenMessages lastSeenMessages, CallbackInfo ci) {
     *///?}

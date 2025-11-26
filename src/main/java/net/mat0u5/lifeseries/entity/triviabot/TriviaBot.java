@@ -70,7 +70,7 @@ public class TriviaBot extends AmbientCreature {
         super(entityType, level);
         setInvulnerable(true);
         setPersistenceRequired();
-        //? if <= 1.20 {
+        //? if <= 1.20.3 {
         this.setMaxUpStep(1.0F);
         //?}
     }
@@ -80,7 +80,7 @@ public class TriviaBot extends AmbientCreature {
                 .add(Attributes.MAX_HEALTH, 10000)
                 .add(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
                 .add(Attributes.FLYING_SPEED, MOVEMENT_SPEED)
-                //? if > 1.20 {
+                //? if > 1.20.3 {
                 /*.add(Attributes.STEP_HEIGHT, 1)
                 .add(Attributes.SAFE_FALL_DISTANCE, 100)
                 *///?}
@@ -175,7 +175,7 @@ public class TriviaBot extends AmbientCreature {
         return false;
     }
     *///?}
-    //? if < 1.20.5 {
+    //? if < 1.20.3 {
     @Override
     public boolean ignoreExplosion() {
         return true;
@@ -199,7 +199,7 @@ public class TriviaBot extends AmbientCreature {
     /*
     Data Tracker Stuff
      */
-    //? if <= 1.20 {
+    //? if <= 1.20.3 {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();

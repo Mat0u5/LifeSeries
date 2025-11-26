@@ -33,11 +33,12 @@ import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.seasonConfig;
 import static net.mat0u5.lifeseries.Main.server;
-//? if <= 1.20 {
+//? if <= 1.20.3 {
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-//?} else {
+//?}
+//? if >= 1.20.5 {
 /*import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
@@ -62,7 +63,7 @@ public class Blacklist {
     private List<ResourceKey<Enchantment>> loadedListEnchants;
     private List<ResourceKey<Enchantment>> loadedBannedEnchants;
 
-    //? if <= 1.20 {
+    //? if <= 1.20.3 {
     private List<MobEffect> loadedBannedEffects;
     //?} else {
     /*private List<Holder<MobEffect>> loadedBannedEffects;
@@ -309,7 +310,7 @@ public class Blacklist {
         return newList;
     }
 
-    //? if <= 1.20 {
+    //? if <= 1.20.3 {
     public List<MobEffect> getBannedEffects() {
     //?} else {
     /*public List<Holder<MobEffect>> getBannedEffects() {
@@ -317,7 +318,7 @@ public class Blacklist {
         if (server == null) return new ArrayList<>();
 
         if (loadedBannedEffects != null) return loadedBannedEffects;
-        //? if <= 1.20 {
+        //? if <= 1.20.3 {
         List<MobEffect> newList = new ArrayList<>();
         //?} else {
         /*List<Holder<MobEffect>> newList = new ArrayList<>();
@@ -341,7 +342,7 @@ public class Blacklist {
                 *///?}
 
                 if (enchantment != null) {
-                    //? if <= 1.20 {
+                    //? if <= 1.20.3 {
                     newList.add(enchantment);
                     //?} else {
                     /*newList.add(effectsRegistry.wrapAsHolder(enchantment));
@@ -426,7 +427,7 @@ public class Blacklist {
         if (getItemBlacklist().contains(item)) return true;
         if (item != Items.POTION && item != Items.LINGERING_POTION && item != Items.SPLASH_POTION) return false;
 
-        //? if <= 1.20 {
+        //? if <= 1.20.3 {
         Potion potion = PotionUtils.getPotion(itemStack);
         for (MobEffectInstance effect : potion.getEffects()) {
             if (getBannedEffects().contains(effect.getEffect())) return true;
@@ -472,7 +473,7 @@ public class Blacklist {
             }
             return;
         }
-        //? if <= 1.20 {
+        //? if <= 1.20.3 {
         Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(itemStack);
         if (enchantments != null) {
             EnchantmentHelper.setEnchantments(clampAndBlacklistEnchantments(enchantments), itemStack);
@@ -490,7 +491,7 @@ public class Blacklist {
 
     }
 
-    //? if <= 1.20 {
+    //? if <= 1.20.3 {
     public Map<Enchantment, Integer> clampAndBlacklistEnchantments(Map<Enchantment, Integer> enchants) {
         Map<Enchantment, Integer> afterBlacklist = blacklistEnchantments(enchants);
         clampEnchantments(afterBlacklist);
