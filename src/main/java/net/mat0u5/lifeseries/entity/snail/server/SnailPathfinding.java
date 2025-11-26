@@ -228,7 +228,7 @@ public class SnailPathfinding {
                 if (!snail.serverData.shouldPathfind()) return;
                 BlockPos tpTo = getBlockPosNearTarget(boundEntity, minDistanceFromPlayer);
                 if (tpTo == null) return;
-                //? if <= 1.20 {
+                //? if <= 1.20.2 {
                 level.playSound(null, snail.getX(), snail.getY(), snail.getZ(), SoundEvents.ENDERMAN_TELEPORT, snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
                 entityWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.ENDERMAN_TELEPORT, snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
                 //?} else {

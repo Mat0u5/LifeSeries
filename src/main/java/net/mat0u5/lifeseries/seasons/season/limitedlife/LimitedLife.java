@@ -27,7 +27,7 @@ import java.util.Collection;
 import static net.mat0u5.lifeseries.Main.currentSession;
 import static net.mat0u5.lifeseries.Main.seasonConfig;
 
-//? if > 1.20
+//? if > 1.20.2
 /*import net.minecraft.world.scores.PlayerScoreEntry;*/
 
 public class LimitedLife extends Season {
@@ -146,7 +146,7 @@ public class LimitedLife extends Season {
             livesManager.getAlivePlayers().forEach(ServerPlayer::ls$removeLife);
 
             if (TICK_OFFLINE_PLAYERS) {
-                //? if <= 1.20 {
+                //? if <= 1.20.2 {
                 Collection<Score> entries = ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME);
                 for (Score entry : entries) {
                     if (entry.getScore() <= 0) continue;

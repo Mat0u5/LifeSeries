@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 //? if > 1.20.5 {
 /*import net.minecraft.network.DisconnectionDetails;
 *///?}
-//? if >= 1.20.3 {
+//? if >= 1.20.2 {
 /*import net.minecraft.server.network.CommonListenerCookie;
 *///?}
 

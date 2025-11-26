@@ -21,7 +21,7 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
     private static final int SCROLLBAR_OFFSET_X = 6;
     protected ConfigScreen screen;
 
-    //? if <= 1.20 {
+    //? if <= 1.20.2 {
     public ConfigListWidget(Minecraft client, int width, int height, int y, int itemHeight, int headerHeight) {
         super(client, width, height, y, itemHeight, headerHeight);
     }
@@ -156,7 +156,7 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
         }
         return Math.max(0, totalHeight - height + 8);
     }
-    //? if <= 1.20 {
+    //? if <= 1.20.2 {
     protected int getX() {
         return this.x0;
     }

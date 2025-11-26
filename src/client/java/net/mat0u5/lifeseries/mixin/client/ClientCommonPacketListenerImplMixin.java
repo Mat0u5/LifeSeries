@@ -18,7 +18,11 @@ import net.minecraft.network.protocol.game.ServerboundResourcePackPacket;
 //?} else {
 /*import java.util.UUID;
 import net.minecraft.client.multiplayer.ClientCommonPacketListenerImpl;
-import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
+//? if <= 1.20.2 {
+import net.minecraft.network.protocol.common.ClientboundResourcePackPacket;
+//?} else {
+/^import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
+^///?}
 import net.minecraft.network.protocol.common.ServerboundResourcePackPacket;
 *///?}
 
@@ -40,12 +44,15 @@ public class ClientCommonPacketListenerImplMixin {
     //? if <= 1.20 {
     @Inject(method = "handleResourcePack",at = @At(target = "Lnet/minecraft/client/multiplayer/ClientPacketListener;parseResourcePackUrl(Ljava/lang/String;)Ljava/net/URL;", shift = At.Shift.AFTER, value = "INVOKE" ), cancellable = true)
     public void onResourcePackSend(ClientboundResourcePackPacket packet, CallbackInfo ci) {
-    //?} else {
+    //?} else if <= 1.20.2 {
+    /*@Inject(method = "handleResourcePack",at = @At(target = "Lnet/minecraft/client/multiplayer/ClientCommonPacketListenerImpl;parseResourcePackUrl(Ljava/lang/String;)Ljava/net/URL;", shift = At.Shift.AFTER, value = "INVOKE" ), cancellable = true)
+    public void onResourcePackSend(ClientboundResourcePackPacket packet, CallbackInfo ci) {
+    *///?} else {
     /*@Inject(method = "handleResourcePackPush",at = @At(target = "Lnet/minecraft/client/multiplayer/ClientCommonPacketListenerImpl;parseResourcePackUrl(Ljava/lang/String;)Ljava/net/URL;", shift = At.Shift.AFTER, value = "INVOKE" ), cancellable = true)
     public void onResourcePackSend(ClientboundResourcePackPushPacket packet, CallbackInfo ci) {
     *///?}
         if (Main.modFullyDisabled()) return;
-        //? if <= 1.20 {
+        //? if <= 1.20.2 {
         String url = packet.getUrl();
         //?} else {
         /*String url = packet.url();
@@ -62,7 +69,9 @@ public class ClientCommonPacketListenerImplMixin {
         Main.LOGGER.info("Skipping resourcepack download ({})", url);
         //? if <= 1.20 {
         this.connection.send(new ServerboundResourcePackPacket(ServerboundResourcePackPacket.Action.ACCEPTED));//TODO test
-        //?} else {
+        //?} else if <= 1.20.2 {
+        /*this.connection.send(new ServerboundResourcePackPacket(ServerboundResourcePackPacket.Action.ACCEPTED));//TODO test
+        *///?} else {
         /*this.connection.send(new ServerboundResourcePackPacket(uuid, ServerboundResourcePackPacket.Action.ACCEPTED));
         this.connection.send(new ServerboundResourcePackPacket(uuid, ServerboundResourcePackPacket.Action.DOWNLOADED));
         this.connection.send(new ServerboundResourcePackPacket(uuid, ServerboundResourcePackPacket.Action.SUCCESSFULLY_LOADED));

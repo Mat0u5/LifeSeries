@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.mixin.client;
 
 
+import net.minecraft.world.scores.DisplaySlot;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -13,13 +14,13 @@ import net.minecraft.world.scores.Scoreboard;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-//? if <= 1.20 {
+//? if <= 1.20.2 {
 import net.minecraft.world.scores.Score;
 //?} else {
 /*import net.minecraft.world.scores.ReadOnlyScoreInfo;
 import net.minecraft.world.scores.DisplaySlot;
 *///?}
-//? if > 1.20 && <= 1.21
+//? if > 1.20.2 && <= 1.21
 /*import net.minecraft.network.chat.numbers.NumberFormat;*/
 //? if <= 1.21 {
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -88,12 +89,16 @@ public abstract class PlayerEntityRendererMixin {
     *///?}
 
     //TODO check 1.20.5
-    //? if <= 1.20 {
+    //? if <= 1.20.2 {
     @Redirect(method = "renderNameTag(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/Component;literal(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;"))
     public MutableComponent customBelowName(String string, AbstractClientPlayer abstractClientPlayer) {
         MutableComponent original = Component.literal(string);
         Scoreboard scoreboard = abstractClientPlayer.getScoreboard();
+        //? if <= 1.20 {
         Objective objective = scoreboard.getDisplayObjective(Scoreboard.DISPLAY_SLOT_BELOW_NAME);
+        //?} else {
+        /*Objective objective = scoreboard.getDisplayObjective(DisplaySlot.BELOW_NAME);
+        *///?}
         if (objective != null) {
             Score score = scoreboard.getOrCreatePlayerScore(abstractClientPlayer.getScoreboardName(), objective);
             if (objective.getName().equalsIgnoreCase(LivesManager.SCOREBOARD_NAME)) {

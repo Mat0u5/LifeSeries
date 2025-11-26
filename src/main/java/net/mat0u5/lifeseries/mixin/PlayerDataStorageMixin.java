@@ -22,7 +22,7 @@ public class PlayerDataStorageMixin {
         return ls$getStringUUIDForPlayer(instance);
     }
 
-    //? if <= 1.20 {
+    //? if <= 1.20.2 {
     @Redirect(method = "load", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getStringUUID()Ljava/lang/String;"))
     public String subInLoad(Player instance) {
         return ls$getStringUUIDForPlayer(instance);

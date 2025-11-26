@@ -46,7 +46,7 @@ import net.minecraft.world.entity.RelativeMovement;
 //? if >= 1.21.4
 /*import net.minecraft.world.entity.player.PlayerModelPart;*/
 
-//? if > 1.20 {
+//? if > 1.20.2 {
 /*import net.minecraft.network.protocol.common.ClientboundResourcePackPopPacket;
 import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
 *///?}
@@ -180,7 +180,7 @@ public class PlayerUtils {
     }
 
     private static void applySingleResourcepack(ServerPlayer player, String link, String sha1, String message) {
-        //? if > 1.20 {
+        //? if > 1.20.2 {
         /*UUID id = UUID.nameUUIDFromBytes(link.getBytes(StandardCharsets.UTF_8));
         ClientboundResourcePackPushPacket resourcepackPacket = new ClientboundResourcePackPushPacket(
                 id,
@@ -198,7 +198,7 @@ public class PlayerUtils {
     }
 
     private static void removeSingleResourcepack(ServerPlayer player, String link) {
-        //? if > 1.20 {
+        //? if > 1.20.2 {
         /*UUID id = UUID.nameUUIDFromBytes(link.getBytes(StandardCharsets.UTF_8));
         ClientboundResourcePackPopPacket removePackPacket = new ClientboundResourcePackPopPacket(Optional.of(id));
         player.connection.send(removePackPacket);

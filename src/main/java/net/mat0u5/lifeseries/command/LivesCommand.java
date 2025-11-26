@@ -29,7 +29,7 @@ import java.util.List;
 import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.Main.livesManager;
 
-//? if > 1.20
+//? if > 1.20.2
 /*import net.minecraft.world.scores.PlayerScoreEntry;*/
 
 public class LivesCommand extends Command {
@@ -214,7 +214,7 @@ public class LivesCommand extends Command {
             return -1;
         }
 
-        //? if <= 1.20 {
+        //? if <= 1.20.2 {
         Collection<Score> entries = ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME);
         //?} else {
         /*Collection<PlayerScoreEntry> entries = ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME);
@@ -226,7 +226,7 @@ public class LivesCommand extends Command {
         String timeOrLives2 = normalLife ? "Lives" : "Times";
 
         MutableComponent text = TextUtils.format("Assigned {}: \n", timeOrLives2);
-        //? if <= 1.20 {
+        //? if <= 1.20.2 {
         for (Score entry : entries) {
             String name = entry.getOwner();
             int lives = entry.getScore();

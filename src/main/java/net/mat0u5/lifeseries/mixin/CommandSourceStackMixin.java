@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 @Mixin(value = CommandSourceStack.class, priority = 1)
 public abstract class CommandSourceStackMixin {
 
-    //? if <= 1.20 {
+    //? if <= 1.20.2 {
     @Accessor
     public abstract boolean isSilent();
     //?}
@@ -28,7 +28,7 @@ public abstract class CommandSourceStackMixin {
         Component text = feedbackSupplier.get();
         String sourceStr = "null";
         CommandSourceStack source = (CommandSourceStack) (Object) this;
-        //? if <= 1.20 {
+        //? if <= 1.20.2 {
         if (isSilent()) return;
         //?} else {
         /*if (source.isSilent()) return;

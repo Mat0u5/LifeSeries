@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-//? if <= 1.20 {
+//? if <= 1.20.2 {
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -30,7 +30,7 @@ import net.minecraft.network.chat.numbers.NumberFormat;
 @Mixin(value = PlayerTabOverlay.class, priority = 1)
 public class PlayerTabOverlayMixin {
 
-    //? if <= 1.20 {
+    //? if <= 1.20.2 {
     @Redirect(method = "renderTablistScore",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;III)I"))

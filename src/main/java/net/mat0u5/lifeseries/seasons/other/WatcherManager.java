@@ -17,7 +17,7 @@ import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.Main.livesManager;
-//? if > 1.20
+//? if > 1.20.2
 /*import net.minecraft.world.scores.PlayerScoreEntry;*/
 
 public class WatcherManager {
@@ -36,7 +36,7 @@ public class WatcherManager {
 
     public static void reloadWatchers() {
         watchers.clear();
-        //? if <= 1.20 {
+        //? if <= 1.20.2 {
         Collection<Score> entries = ScoreboardUtils.getScores(SCOREBOARD_NAME);
         if (entries == null || entries.isEmpty()) return;
         for (Score entry : entries) {

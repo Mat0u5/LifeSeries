@@ -117,7 +117,7 @@ public class ServerGamePacketListenerImplMixin {
     }
     *///?}
 
-    //? if <= 1.20 {
+    //? if <= 1.20.2 {
     @Inject(method = "performChatCommand", at = @At(value = "INVOKE", target = "Lnet/minecraft/commands/Commands;performCommand(Lcom/mojang/brigadier/ParseResults;Ljava/lang/String;)I"), cancellable = true)
     private void handleCommandExecution(ServerboundChatCommandPacket packet, LastSeenMessages lastSeenMessages, CallbackInfo ci) {
     //?} else if <= 1.20.3 {

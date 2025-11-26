@@ -22,7 +22,7 @@ public class ScoreboardUtils {
         if (server == null) return;
         Scoreboard scoreboard = server.getScoreboard();
         if (scoreboard.getObjective(name) != null) return;
-        //? if <= 1.20 {
+        //? if <= 1.20.2 {
         scoreboard.addObjective(name, criterion, Component.literal(displayName), criterion.getDefaultRenderType());
         //?} else {
         /*scoreboard.addObjective(name, criterion, Component.literal(displayName), criterion.getDefaultRenderType(), false, null);
@@ -69,13 +69,13 @@ public class ScoreboardUtils {
         scoreboard.removeObjective(objective);
     }
 
-    //? if > 1.20 {
+    //? if > 1.20.2 {
     /*public static void setScore(String holder, String objectiveName, int score) {
         setScore(ScoreHolder.forNameOnly(holder), objectiveName, score);
     }
     *///?}
 
-    //? if <= 1.20 {
+    //? if <= 1.20.2 {
     public static void setScore(String holder, String objectiveName, Integer score) {
     //?} else {
     /*public static void setScore(ScoreHolder holder, String objectiveName, Integer score) {
@@ -91,14 +91,14 @@ public class ScoreboardUtils {
         Scoreboard scoreboard = server.getScoreboard();
         Objective objective = scoreboard.getObjective(objectiveName);
         if (objective == null) return;
-        //? if <= 1.20 {
+        //? if <= 1.20.2 {
         scoreboard.getOrCreatePlayerScore(holder, objective).setScore(score);
         //?} else {
         /*scoreboard.getOrCreatePlayerScore(holder, objective).set(score);
         *///?}
     }
 
-    //? if <= 1.20 {
+    //? if <= 1.20.2 {
     public static void setScore(ServerPlayer holder, String objectiveName, int score) {
         setScore(holder.getScoreboardName(), objectiveName, score);
     }
