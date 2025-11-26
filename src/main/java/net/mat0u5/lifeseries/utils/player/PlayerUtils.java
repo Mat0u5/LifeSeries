@@ -434,7 +434,7 @@ public class PlayerUtils {
     }
 
     public static void teleport(ServerPlayer player, BlockPos pos) {
-        //? if <= 1.20 {
+        //? if <= 1.20.5 {
         teleport(player, player.ls$getServerLevel(), pos.getCenter());
         //?} else {
         /*teleport(player, player.ls$getServerLevel(), pos.getBottomCenter());
@@ -454,7 +454,7 @@ public class PlayerUtils {
     }
 
     public static void teleport(ServerPlayer player, ServerLevel level, BlockPos pos) {
-        //? if <= 1.20 {
+        //? if <= 1.20.5 {
         teleport(player, level, pos.getCenter());
         //?} else {
         /*teleport(player, level, pos.getBottomCenter());

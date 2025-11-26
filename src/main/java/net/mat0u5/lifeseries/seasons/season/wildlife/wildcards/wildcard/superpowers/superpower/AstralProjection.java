@@ -19,7 +19,7 @@ import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 //?}
-//? if > 1.20 && <= 1.21.6
+//? if > 1.20.5 && <= 1.21.6
 /*import net.minecraft.network.DisconnectionDetails;*/
 
 //? if >= 1.21.9 {
@@ -172,7 +172,7 @@ public class AstralProjection extends ToggleableSuperpower {
             toBackPos = clone.position();
             //? if <= 1.21.6 {
 
-            //? if <= 1.20 {
+            //? if <= 1.20.5 {
             clone.connection.onDisconnect(Component.empty());
             //?} else {
             /*clone.connection.onDisconnect(new DisconnectionDetails(Component.empty()));

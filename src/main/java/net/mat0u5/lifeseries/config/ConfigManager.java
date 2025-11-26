@@ -19,7 +19,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.*;
-//? if >= 1.21
+//? if > 1.20
 /*import net.minecraft.world.scores.PlayerScoreEntry;*/
 
 public abstract class ConfigManager extends DefaultConfigValues {

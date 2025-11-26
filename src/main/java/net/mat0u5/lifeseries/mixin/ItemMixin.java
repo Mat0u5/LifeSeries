@@ -62,6 +62,8 @@ public abstract class ItemMixin {
     }
     *///?}
 
+    //TODO test in 1.20.5
+    //? if != 1.20.5 {
     @Inject(method = "isEdible", at = @At("HEAD"))
     public void isEdible(CallbackInfoReturnable<Boolean> cir) {
         if (Main.modDisabled()) return;
@@ -86,6 +88,7 @@ public abstract class ItemMixin {
             }
         }
     }
+    //?}
 
     @Inject(method = "finishUsingItem", at = @At("HEAD"))
     public void finishUsing(ItemStack stack, Level level, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {

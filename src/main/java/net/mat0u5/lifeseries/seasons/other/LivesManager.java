@@ -34,7 +34,7 @@ import java.util.*;
 import static net.mat0u5.lifeseries.Main.*;
 import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
 
-//? if >= 1.21
+//? if > 1.20
 /*import net.minecraft.world.scores.PlayerScoreEntry;*/
 
 public class LivesManager {

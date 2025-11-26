@@ -61,9 +61,15 @@ public abstract class AnvilMenuMixin {
             for (Entry<Holder<Enchantment>> enchant : resultStack.getEnchantments().entrySet()) {
                 Optional<ResourceKey<Enchantment>> enchantRegistry = enchant.getKey().unwrapKey();
                 if (enchantRegistry.isEmpty()) continue;
-                if (enchantRegistry.get() == Enchantments.MENDING) {
+                //? if <= 1.20.5 {
+                if (enchant.getKey().value() == Enchantments.MENDING) {
                     outputInventory.setItem(0, ItemStack.EMPTY);
                 }
+                //?} else {
+                /^if (enchantRegistry.get() == Enchantments.MENDING) {
+                    outputInventory.setItem(0, ItemStack.EMPTY);
+                }
+                ^///?}
             }
         }
         *///?}

@@ -31,10 +31,12 @@ import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.*;
 
-//? if <= 1.20 {
+//? if <= 1.20.5 {
 import net.minecraft.world.item.EnchantedBookItem;
-import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
+//?}
+//? if <= 1.20 {
+import net.minecraft.world.item.alchemy.PotionUtils;
 //?} else {
 /*import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.alchemy.PotionContents;
@@ -185,7 +187,14 @@ public class SecretLife extends Season {
         itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.BLOCK_FORTUNE, 3))), 10);
         itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.MOB_LOOTING, 3))), 10);
         itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.BLOCK_EFFICIENCY, 4))), 10);
-        //?} else {
+        //?} else if <= 1.20.5 {
+        /*itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.PROTECTION, 3))), 10);
+        itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.FEATHER_FALLING, 3))), 10);
+        itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.SILK_TOUCH, 1))), 10);
+        itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.FORTUNE, 3))), 10);
+        itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.LOOTING, 3))), 10);
+        itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.EFFICIENCY, 4))), 10);
+        *///?} else {
         /*itemSpawner.addItem(Objects.requireNonNull(ItemStackUtils.createEnchantedBook(Enchantments.PROTECTION, 3)), 10);
         itemSpawner.addItem(Objects.requireNonNull(ItemStackUtils.createEnchantedBook(Enchantments.FEATHER_FALLING, 3)), 10);
         itemSpawner.addItem(Objects.requireNonNull(ItemStackUtils.createEnchantedBook(Enchantments.SILK_TOUCH, 1)), 10);

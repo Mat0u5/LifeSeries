@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 *///?}
 
 public class IdentifierHelper {
-    //? if <= 1.20 {
+    //? if <= 1.20.5 {
     public static ResourceLocation of(String namespace, String path) {
         return new ResourceLocation(namespace, path);
     }

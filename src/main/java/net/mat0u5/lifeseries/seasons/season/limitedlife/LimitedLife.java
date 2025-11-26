@@ -27,7 +27,7 @@ import java.util.Collection;
 import static net.mat0u5.lifeseries.Main.currentSession;
 import static net.mat0u5.lifeseries.Main.seasonConfig;
 
-//? if >= 1.21
+//? if > 1.20
 /*import net.minecraft.world.scores.PlayerScoreEntry;*/
 
 public class LimitedLife extends Season {

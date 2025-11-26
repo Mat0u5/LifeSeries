@@ -18,7 +18,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
-//? if >= 1.21
+//? if >= 1.20.5
 /*import net.minecraft.core.component.DataComponents;*/
 //? if <= 1.21 && > 1.20
 /*import net.minecraft.world.item.component.CustomModelData;*/

@@ -49,7 +49,7 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
     }
 
     @Override
-    //? if <= 1.21 {
+    //? if < 1.20.5 {
     protected void renderList(GuiGraphics context, int mouseX, int mouseY, float delta) {
     //?} else {
     /*protected void renderListItems(GuiGraphics context, int mouseX, int mouseY, float delta) {

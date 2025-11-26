@@ -39,7 +39,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.scores.PlayerTeam;
-//? if > 1.20 {
+//? if > 1.20.5 {
 /*import net.minecraft.network.DisconnectionDetails;
 *///?}
 
@@ -140,27 +140,22 @@ public class NetworkHandlerServer {
 
         ServerPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (payload, context) -> {
             ServerPlayer player = context.player();
-            MinecraftServer server = context.server();
             server.execute(() -> handleHandshakeResponse(player, payload));
         });
         ServerPlayNetworking.registerGlobalReceiver(NumberPayload.ID, (payload, context) -> {
             ServerPlayer player = context.player();
-            MinecraftServer server = context.server();
             server.execute(() -> handleNumberPacket(player, payload));
         });
         ServerPlayNetworking.registerGlobalReceiver(StringPayload.ID, (payload, context) -> {
             ServerPlayer player = context.player();
-            MinecraftServer server = context.server();
             server.execute(() -> handleStringPacket(player, payload));
         });
         ServerPlayNetworking.registerGlobalReceiver(StringListPayload.ID, (payload, context) -> {
             ServerPlayer player = context.player();
-            MinecraftServer server = context.server();
             server.execute(() -> handleStringListPacket(player, payload));
         });
         ServerPlayNetworking.registerGlobalReceiver(ConfigPayload.ID, (payload, context) -> {
             ServerPlayer player = context.player();
-            MinecraftServer server = context.server();
             server.execute(() -> handleConfigPacket(player, payload));
         });
     }
@@ -372,7 +367,7 @@ public class NetworkHandlerServer {
             if (clientVersion < serverCompatibility) {
                 Component disconnectText = Component.literal("[Life Series Mod] Client-Server version mismatch!\n" +
                         "Update the client version to at least version "+serverCompatibilityStr);
-                //? if <= 1.20 {
+                //? if <= 1.20.5 {
                 player.connection.disconnect(disconnectText);
                 //?} else {
                 /*player.connection.disconnect(new DisconnectionDetails(disconnectText));
@@ -385,7 +380,7 @@ public class NetworkHandlerServer {
                 Component disconnectText = Component.literal("[Life Series Mod] Server-Client version mismatch!\n" +
                         "The client version is too new for the server.\n" +
                         "Either update the server, or downgrade the client version to " + serverVersionStr);
-                //? if <= 1.20 {
+                //? if <= 1.20.5 {
                 player.connection.disconnect(disconnectText);
                 //?} else {
                 /*player.connection.disconnect(new DisconnectionDetails(disconnectText));
@@ -399,7 +394,7 @@ public class NetworkHandlerServer {
             if (!clientVersionStr.equalsIgnoreCase(serverVersionStr)) {
                 Component disconnectText = Component.literal("[Life Series Mod] Client-Server version mismatch!\n" +
                         "You must join with version "+serverCompatibilityStr);
-                //? if <= 1.20 {
+                //? if <= 1.20.5 {
                 player.connection.disconnect(disconnectText);
                 //?} else {
                 /*player.connection.disconnect(new DisconnectionDetails(disconnectText));
@@ -532,7 +527,7 @@ public class NetworkHandlerServer {
         if (wasHandshakeSuccessful(player)) return;
         Component disconnectText = Component.literal("You must have the §2Life Series mod\n§l installed on the client§r§r§f to play Wild Life!\n").append(
                 Component.literal("§9§nThe Life Series mod is available on Modrinth."));
-        //? if <= 1.20 {
+        //? if <= 1.20.5 {
         player.connection.disconnect(disconnectText);
         //?} else {
         /*player.connection.disconnect(new DisconnectionDetails(disconnectText));

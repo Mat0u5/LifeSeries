@@ -19,10 +19,14 @@ import net.minecraft.server.level.ServerPlayer;
 
 //? if <= 1.20 {
 import java.util.concurrent.atomic.AtomicReference;
-//?} else {
-/*import net.minecraft.network.DisconnectionDetails;
-import net.minecraft.server.network.CommonListenerCookie;
+//?}
+//? if < 1.20.5 {
+import net.minecraft.network.DisconnectionDetails;
+//?}
+//? if >= 1.20.5 {
+/*import net.minecraft.server.network.CommonListenerCookie;
 *///?}
+
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.AstralProjection;
@@ -192,7 +196,7 @@ public class FakePlayer extends ServerPlayer {
                 }
             }
             if (!triggered) {
-                //? if <= 1.20 {
+                //? if <= 1.20.5 {
                 connection.onDisconnect(Component.empty());
                 //?} else {
                 /*connection.onDisconnect(new DisconnectionDetails(Component.empty()));

@@ -82,8 +82,10 @@ public class TriviaBot extends AmbientCreature {
                 .add(Attributes.FLYING_SPEED, MOVEMENT_SPEED)
                 //? if > 1.20 {
                 /*.add(Attributes.STEP_HEIGHT, 1)
-                .add(Attributes.WATER_MOVEMENT_EFFICIENCY, 1)
                 .add(Attributes.SAFE_FALL_DISTANCE, 100)
+                *///?}
+                //? if > 1.20.5 {
+                /*.add(Attributes.WATER_MOVEMENT_EFFICIENCY, 1)
                 *///?}
                 .add(Attributes.FOLLOW_RANGE, 100)
                 .add(Attributes.ATTACK_DAMAGE, 0);
@@ -156,29 +158,32 @@ public class TriviaBot extends AmbientCreature {
     public void makeStuckInBlock(BlockState state, Vec3 multiplier) {
     }
 
-    //? if <= 1.21 {
+    //? if <= 1.20 {
     @Override
     protected int calculateFallDamage(float f, float g) {
         return 0;
     }
-    @Override
-    public boolean ignoreExplosion() {
-        return true;
-    }
-
+    //?}
+    //? if <= 1.20.5 {
     @Override
     public boolean canChangeDimensions() {
         return false;
     }
     //?} else {
     /*@Override
-    public boolean ignoreExplosion(Explosion explosion) {
-        return true;
-    }
-
-    @Override
     public boolean canUsePortal(boolean allowVehicles) {
         return false;
+    }
+    *///?}
+    //? if < 1.20.5 {
+    @Override
+    public boolean ignoreExplosion() {
+        return true;
+    }
+    //?} else {
+    /*@Override
+    public boolean ignoreExplosion(Explosion explosion) {
+        return true;
     }
     *///?}
     public float soundVolume() {

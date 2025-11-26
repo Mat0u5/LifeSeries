@@ -122,7 +122,7 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
         if (boundEntity == null) {
             return;
         }
-        //? if <= 1.20 {
+        //? if <= 1.20.5 {
         Random rnd = new Random();
         //?} else {
         /*Random rnd = boundEntity.getRandom();

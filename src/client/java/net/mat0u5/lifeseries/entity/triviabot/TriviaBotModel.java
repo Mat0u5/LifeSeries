@@ -226,7 +226,7 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
         this.animate(entity.clientData.snailTransformAnimationState, TriviaBotAnimations.snail_transform, ageInTicks);
     }
 
-    //? if <= 1.20 {
+    //? if <= 1.20.5 {
     @Override
     public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float i, float j, float k, float l) {
         triviabot.render(matrices, vertexConsumer, light, overlay, i, j, k, l);

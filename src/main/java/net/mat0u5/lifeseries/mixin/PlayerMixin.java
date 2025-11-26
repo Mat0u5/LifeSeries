@@ -24,7 +24,7 @@ import static net.mat0u5.lifeseries.Main.currentSeason;
 //? if >= 1.21.2
 /*import net.minecraft.server.level.ServerLevel;*/
 
-//? if <= 1.20 {
+//? if <= 1.20.5 {
 import net.minecraft.world.item.enchantment.FrostWalkerEnchantment;
 //?} else {
 /*import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -113,7 +113,7 @@ public abstract class PlayerMixin {
         ((Player) (Object) this).refreshDimensions();
     }
 
-    //? if > 1.20 {
+    //? if > 1.20.5 {
     /*@Unique
     private static final ReplaceDisk ls$frostWalker =  new ReplaceDisk(LevelBasedValue.constant(5.0F), LevelBasedValue.constant(1.0F), new Vec3i(0, -1, 0), Optional.of(BlockPredicate.allOf(BlockPredicate.matchesTag(new Vec3i(0, 1, 0), BlockTags.AIR), BlockPredicate.matchesBlocks(Blocks.WATER), BlockPredicate.matchesFluids(Fluids.WATER), BlockPredicate.unobstructed())), BlockStateProvider.simple(Blocks.FROSTED_ICE), Optional.of(GameEvent.BLOCK_PLACE));
     *///?}
@@ -126,7 +126,7 @@ public abstract class PlayerMixin {
         if (!player.onGround()) return;
         if (!SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPERSPEED)) return;
 
-        //? if <= 1.20 {
+        //? if <= 1.20.5 {
         FrostWalkerEnchantment.onEntityMoved(entity, entity.level(), entity.blockPosition(), 5);
         //?} else {
         /*ls$frostWalker.apply(player.ls$getServerLevel(), 5, null, player, player.position());

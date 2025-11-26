@@ -22,12 +22,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
+//? if > 1.20.5
+/*import net.minecraft.network.DisconnectionDetails;*/
 //? if > 1.20 {
 /*import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.Holder;
-import net.minecraft.network.DisconnectionDetails;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
@@ -94,7 +95,7 @@ public class ClientUtils {
         //?} else {
         /*client.level.disconnect(reason);
         *///?}
-        //? if <= 1.20 {
+        //? if <= 1.20.5 {
         handler.onDisconnect(reason);
         //?} else {
         /*handler.onDisconnect(new DisconnectionDetails(reason));

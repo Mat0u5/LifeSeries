@@ -264,7 +264,7 @@ public class ItemStackUtils {
 
     public static ItemStack createEnchantedBook(ResourceKey<Enchantment> enchantment, int level) {
         if (server == null) return null;
-        //? if <= 1.20 {
+        //? if <= 1.20.5 {
         Holder<Enchantment> entry = getEnchantmentEntry(enchantment);
         if (entry == null) return null;
         ItemStack enchantedBook = EnchantedBookItem.createForEnchantment(

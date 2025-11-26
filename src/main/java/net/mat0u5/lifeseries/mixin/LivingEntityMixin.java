@@ -162,7 +162,7 @@ public abstract class LivingEntityMixin {
     }
 
     @Inject(method = "dropAllDeathLoot", at = @At("HEAD"))
-    //? if <= 1.20 {
+    //? if <= 1.20.5 {
     private void onDrop(DamageSource damageSource, CallbackInfo ci) {
     //?} else {
     /*private void onDrop(ServerLevel level, DamageSource damageSource, CallbackInfo ci) {

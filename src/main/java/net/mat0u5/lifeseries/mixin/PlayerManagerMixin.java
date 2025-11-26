@@ -88,7 +88,7 @@ public abstract class PlayerManagerMixin implements IPlayerManager {
     //?} else {
     /*public void respawnPlayer(ServerPlayer player, boolean alive, Entity.RemovalReason removalReason, CallbackInfoReturnable<ServerPlayer> cir) {
     *///?}
-        //? if <= 1.20 {
+        //? if <= 1.20.5 {
         if (alive) return;//TODO test
         //?} else {
         /*if (alive || removalReason != Entity.RemovalReason.KILLED) return;

@@ -139,7 +139,7 @@ public class SnailModel extends EntityModel<SnailRenderState> {
         //this.trivia.traverse().forEach(part -> part.hidden = triviaHidden);
     }
 
-    //? if <= 1.20 {
+    //? if <= 1.20.5 {
     @Override
     public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float i, float j, float k, float l) {
         main.render(matrices, vertexConsumer, light, overlay, i, j, k, l);

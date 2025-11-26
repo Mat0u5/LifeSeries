@@ -552,7 +552,11 @@ public class Blacklist {
 
         for (it.unimi.dsi.fastutil.objects.Object2IntMap.Entry<Holder<Enchantment>> enchant : enchants.entrySet()) {
             if (toRemove.contains(enchant)) continue;
-            builder.upgrade(enchant.getKey(), enchant.getIntValue());
+            //? if <= 1.20.5 {
+            builder.upgrade(enchant.getKey().value(), enchant.getIntValue());
+            //?} else {
+            /^builder.upgrade(enchant.getKey(), enchant.getIntValue());
+            ^///?}
         }
 
         return builder.toImmutable();

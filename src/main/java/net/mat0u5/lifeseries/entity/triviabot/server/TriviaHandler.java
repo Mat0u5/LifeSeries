@@ -490,7 +490,7 @@ public class TriviaHandler {
         ItemStack chest = Items.LEATHER_CHESTPLATE.getDefaultInstance();
         ItemStack legs = Items.LEATHER_LEGGINGS.getDefaultInstance();
         ItemStack boots = Items.LEATHER_BOOTS.getDefaultInstance();
-        //? if <= 1.20 {
+        //? if <= 1.20.5 {
         head.enchant(Enchantments.BINDING_CURSE, 1);
         chest.enchant(Enchantments.BINDING_CURSE, 1);
         legs.enchant (Enchantments.BINDING_CURSE, 1);
