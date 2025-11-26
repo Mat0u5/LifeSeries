@@ -16,6 +16,7 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
     private Vec3 previousTargetPosition = Vec3.ZERO;
     private int attackCooldown = Snail.JUMP_COOLDOWN_SHORT;
     private int attackCooldown2 = 0;
+    private static final Random rnd = new Random();
 
     public SnailJumpAttackPlayerGoal(@NotNull Snail mob) {
         this.mob = mob;
@@ -122,11 +123,6 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
         if (boundEntity == null) {
             return;
         }
-        //? if <= 1.20.5 {
-        Random rnd = new Random();
-        //?} else {
-        /*Random rnd = boundEntity.getRandom();
-        *///?}
 
         this.attackCooldown = Snail.JUMP_COOLDOWN_SHORT;
         this.attackCooldown2 = Snail.JUMP_COOLDOWN_LONG;
