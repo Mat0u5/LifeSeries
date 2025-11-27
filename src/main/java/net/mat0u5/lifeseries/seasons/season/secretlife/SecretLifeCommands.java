@@ -284,7 +284,7 @@ public class SecretLifeCommands extends Command {
             return -1;
         }
         if (affected.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Removed task book from {}", affected.getFirst()));
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("Removed task book from {}", affected.get(0)));
         }
         else {
             OtherUtils.sendCommandFeedback(source, TextUtils.format("Removed task book from {} targets", affected.size()));

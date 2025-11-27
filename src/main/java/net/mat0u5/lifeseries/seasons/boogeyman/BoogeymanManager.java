@@ -315,7 +315,7 @@ public class BoogeymanManager {
         else {
             // Infinite mode, just pick one from the allowed players
             Collections.shuffle(allowedPlayers);
-            boogeyPlayers.add(allowedPlayers.getFirst());
+            boogeyPlayers.add(allowedPlayers.get(0));
         }
 
         for (ServerPlayer player : allowedPlayers) {

@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.morph;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShifting;
 import net.mat0u5.lifeseries.utils.interfaces.IMorph;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;
@@ -51,7 +52,7 @@ public class MorphComponent {
                         /*double scaleY = dimensions.height() / serverPlayer.getDimensions(Pose.STANDING).height();
                         double scaleX = dimensions.width() / serverPlayer.getDimensions(Pose.STANDING).width();
                         *///?}
-                        double scale = Math.clamp(Math.min(scaleX, scaleY), 0.1, 1.0);
+                        double scale = OtherUtils.clamp(Math.min(scaleX, scaleY), 0.1, 1.0);
                         //? if > 1.20.3 {
                         /*if (scale != serverPlayer.getScale()) SizeShifting.setPlayerSizeUnchecked(serverPlayer, 0.1);//TODO fix in 1.20
                         *///?}

@@ -94,7 +94,7 @@ public class TimeDilation extends Wildcard {
                     return;
                 }
             }
-            progress = Math.clamp(progress, 0, 1);
+            progress = OtherUtils.clamp(progress, 0, 1);
             /*
             if (progress < 0.492f) {
                 progress = 0.311774f * (float) Math.pow(progress, 0.7);

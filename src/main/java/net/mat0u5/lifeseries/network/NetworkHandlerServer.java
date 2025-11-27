@@ -171,18 +171,18 @@ public class NetworkHandlerServer {
             if (VersionControl.isDevVersion()) Main.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received config update from {}: {{}, {}, {}}", player, configType, id, args));
 
             if (configType == ConfigTypes.EVENT_ENTRY && args.size() >= 2) {
-                String command = args.getFirst().strip();
+                String command = args.get(0).strip();
                 String canceled = args.get(1);
                 seasonConfig.setOrRemoveProperty(id, command);
                 seasonConfig.setOrRemoveProperty(id+"_canceled", canceled);
                 updatedConfigThisTick = true;
             }
             else if (configType.parentString() && !args.isEmpty()) {
-                seasonConfig.setProperty(id, args.getFirst());
+                seasonConfig.setProperty(id, args.get(0));
                 updatedConfigThisTick = true;
             }
             else if (configType.parentBoolean() && !args.isEmpty()) {
-                boolean boolValue = args.getFirst().equalsIgnoreCase("true");
+                boolean boolValue = args.get(0).equalsIgnoreCase("true");
                 seasonConfig.setProperty(id,String.valueOf(boolValue));
                 updatedConfigThisTick = true;
                 TaskScheduler.schedulePriorityTask(1, () -> {
@@ -191,14 +191,14 @@ public class NetworkHandlerServer {
             }
             else if (configType.parentDouble() && !args.isEmpty()) {
                 try {
-                    double value = Double.parseDouble(args.getFirst());
+                    double value = Double.parseDouble(args.get(0));
                     seasonConfig.setProperty(id, String.valueOf(value));
                     updatedConfigThisTick = true;
                 }catch(Exception e){}
             }
             else if ((configType.parentInteger() && !args.isEmpty()) || (configType.parentNullableInteger() && !args.isEmpty())) {
                 try {
-                    int value = Integer.parseInt(args.getFirst());
+                    int value = Integer.parseInt(args.get(0));
                     seasonConfig.setProperty(id, String.valueOf(value));
                     updatedConfigThisTick = true;
                 }catch(Exception e){}
@@ -287,7 +287,7 @@ public class NetworkHandlerServer {
 
         if (PermissionManager.isAdmin(player)) {
             if (name == PacketNames.SET_LIVES && value.size() >= 2) {
-                ServerPlayer settingPlayer = PlayerUtils.getPlayer(value.getFirst());
+                ServerPlayer settingPlayer = PlayerUtils.getPlayer(value.get(0));
                 if (settingPlayer != null) {
                     try {
                         int lives = Integer.parseInt(value.get(1));
@@ -299,16 +299,16 @@ public class NetworkHandlerServer {
                 else {
                     try {
                         int lives = Integer.parseInt(value.get(1));
-                        livesManager.setScore(value.getFirst(), lives);
+                        livesManager.setScore(value.get(0), lives);
                     }catch(Exception e) {
-                        ScoreboardUtils.resetScore(value.getFirst(), LivesManager.SCOREBOARD_NAME);
+                        ScoreboardUtils.resetScore(value.get(0), LivesManager.SCOREBOARD_NAME);
                     }
                 }
 
                 Season.reloadPlayerTeams = true;
             }
             if (name == PacketNames.SET_TEAM && value.size() >= 6) {
-                List<String> teamNames = Arrays.asList(value.getFirst().split(";"));
+                List<String> teamNames = Arrays.asList(value.get(0).split(";"));
                 String packetTeamName = "lives_" + value.get(1);
                 String packetTeamDisplayName = value.get(2);
                 String packetTeamColor = value.get(3);

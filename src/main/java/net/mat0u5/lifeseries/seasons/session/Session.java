@@ -287,8 +287,8 @@ public class Session {
             }
 
             // Clamp player position inside the border
-            double clampedX = Math.clamp(playerX, minX, maxX);
-            double clampedZ = Math.clamp(playerZ, minZ, maxZ);
+            double clampedX = OtherUtils.clamp(playerX, minX, maxX);
+            double clampedZ = OtherUtils.clamp(playerZ, minZ, maxZ);
 
             // Teleport player inside the world border
             PlayerUtils.teleport(player, clampedX, player.getY(), clampedZ);

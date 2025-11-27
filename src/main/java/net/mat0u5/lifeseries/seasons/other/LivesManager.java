@@ -191,8 +191,8 @@ public class LivesManager {
         if (!livesTeams.isEmpty()) {
             Collections.sort(livesTeams);
 
-            if (lives <= livesTeams.getFirst()) {
-                return prefix + livesTeams.getFirst();
+            if (lives <= livesTeams.get(0)) {
+                return prefix + livesTeams.get(0);
             }
             Collections.reverse(livesTeams);
             for (int i : livesTeams) {

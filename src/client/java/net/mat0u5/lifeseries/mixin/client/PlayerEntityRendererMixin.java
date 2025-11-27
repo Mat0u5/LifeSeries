@@ -145,7 +145,7 @@ public abstract class PlayerEntityRendererMixin {
     public Component removeLives(Component par2) {
         String belowName = par2.getString();
         if (belowName.contains(";") && !par2.getSiblings().isEmpty()) {
-            return Component.literal(belowName.split(";")[0]).withStyle(par2.getSiblings().getFirst().getStyle());
+            return Component.literal(belowName.split(";")[0]).withStyle(par2.getSiblings().get(0).getStyle());
         }
         return par2;
     }

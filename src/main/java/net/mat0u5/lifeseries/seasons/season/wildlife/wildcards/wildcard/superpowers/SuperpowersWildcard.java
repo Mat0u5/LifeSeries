@@ -153,7 +153,7 @@ public class SuperpowersWildcard extends Wildcard {
             queue.add(power);
         }
 
-        return queue.getFirst();
+        return queue.get(0);
     }
 
     public static void setSuperpower(ServerPlayer player, Superpowers superpower) {

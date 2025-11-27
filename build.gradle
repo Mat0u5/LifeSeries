@@ -65,23 +65,34 @@ loom {
   runDir "../../run" // Use a shared run folder and create separate worlds
  }
 }
+def java21 = stonecutter.eval(stonecutter.current.version, ">=1.20.5")
 
 processResources {
  filesMatching("fabric.mod.json") {
   expand "version": project.property('mod_version'),
           "targetVersion": project.property('target_version'),
           "fabricApiVersion": project.property('fabric_api_target_version'),
-          "minecraftVersion": project.property('minecraft_version')
+          "minecraftVersion": project.property('minecraft_version'),
+          "javaVersion": project.property('java_version')
+ }
+ filesMatching("lifeseries.mixins.json") {
+  expand "javaVersion": java21 ? "JAVA_21":"JAVA_17"
+ }
+}
+processClientResources {
+ filesMatching("lifeseries.client.mixins.json") {
+  expand "javaVersion": java21 ? "JAVA_21":"JAVA_17"
  }
 }
 
 tasks.withType(JavaCompile).configureEach {
- it.options.release = 21
+ it.options.release = java21 ? 21 : 17
 }
 
 java {
- sourceCompatibility = JavaVersion.VERSION_21
- targetCompatibility = JavaVersion.VERSION_21
+ def javaVersion = java21 ? JavaVersion.VERSION_21 : JavaVersion.VERSION_17
+ targetCompatibility = javaVersion
+ sourceCompatibility = javaVersion
 }
 
 jar {

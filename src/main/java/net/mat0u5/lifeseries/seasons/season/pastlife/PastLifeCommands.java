@@ -86,7 +86,7 @@ public class PastLifeCommands extends Command {
             else {
                 currentSeason.secretSociety.addSessionActions();
             }
-            currentSession.getSessionActions().getLast().sessionMessage = "Randomly Selected Twist";
+            currentSession.getSessionActions().get(currentSession.getSessionActions().size() - 1).sessionMessage = "Randomly Selected Twist";
             return 1;
         }
         return 1;

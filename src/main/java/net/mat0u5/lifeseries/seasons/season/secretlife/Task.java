@@ -105,7 +105,7 @@ public class Task {
             players.remove(owner);
             if (!players.isEmpty()) {
                 Collections.shuffle(players);
-                page = page.replaceAll("\\$\\{random_player}",players.getFirst().getScoreboardName());
+                page = page.replaceAll("\\$\\{random_player}",players.get(0).getScoreboardName());
             }
         }
         if (page.contains("${green/yellow}")) {

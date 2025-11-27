@@ -11,10 +11,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShif
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
-import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.mat0u5.lifeseries.utils.other.WeightedRandomizer;
+import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
@@ -237,7 +234,7 @@ public class TriviaHandler {
         if (punishmentWeight == null) punishmentWeight = 1;
         if (difficulty == 1) punishmentWeight++;
         if (difficulty == 3) punishmentWeight--;
-        punishmentWeight = Math.clamp(punishmentWeight, 1, 4);
+        punishmentWeight = OtherUtils.clamp(punishmentWeight, 1, 4);
 
         WeightedRandomizer randomizer = new WeightedRandomizer();
         int curse = randomizer.getWeightedRandom(minCurseNum, numOfCurses, punishmentWeight, 4, 1.5);
