@@ -20,6 +20,7 @@ import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.render.TextHud;
 import net.mat0u5.lifeseries.render.VignetteRenderer;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Hunger;
@@ -195,7 +196,8 @@ public class NetworkHandlerClient {
                     *///?}
                 }
                 if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Received morph packet: {} ({})", morphType, morphUUID);
-                MorphManager.setFromPacket(morphUUID, morphType);
+                MorphComponent newComponent = MorphManager.setFromPacket(morphUUID, morphType);
+                Morph.clientTick(newComponent);
             } catch (Exception e) {}
         }
 

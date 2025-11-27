@@ -60,7 +60,7 @@ public class HeartsConfigEntry extends IntegerConfigEntry implements ITextFieldA
         List<MutableComponent> heartsList = new ArrayList<>();
 
         StringBuilder topRow = new StringBuilder();
-        for (int i = 0; i < hearts % 10; i++) {//TODO test
+        for (int i = 0; i < hearts % 10; i++) {
             topRow.append(HEART_SYMBOL);
         }
         if (hasHalfHeart) {

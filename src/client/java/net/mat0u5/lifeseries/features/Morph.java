@@ -19,7 +19,7 @@ public class Morph {
         EntityType<?> morph = morphComponent.morph;
         LivingEntity dummy = morphComponent.dummy;
 
-        if(morphComponent.isMorphed() && morph != null){
+        if (morphComponent.isMorphed() && morph != null) {
             Player player = ClientUtils.getPlayer(morphComponent.playerUUID);
             if (player == null) return;
 

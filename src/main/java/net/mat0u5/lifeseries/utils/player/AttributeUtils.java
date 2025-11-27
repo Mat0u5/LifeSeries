@@ -113,9 +113,7 @@ public class AttributeUtils {
 
     public static void setStepHeight(ServerPlayer player, double value) {
         if (player == null) return;
-        //? if <= 1.20.3 {
-        player.setMaxUpStep((float) value);//TODO test
-        //?} else {
+        //? if > 1.20.3 {
         /*AttributeInstance instance = player.getAttribute(Attributes.STEP_HEIGHT);
         if (instance != null) instance.setBaseValue(value);
         *///?}

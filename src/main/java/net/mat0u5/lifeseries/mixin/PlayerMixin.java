@@ -86,6 +86,21 @@ public abstract class PlayerMixin {
             }
         }
     }
+    //?if <= 1.20.3 {
+    @Inject(method = "getStandingEyeHeight", at = @At("HEAD"), cancellable = true)
+    public void getBaseDimensions(Pose pose, EntityDimensions entityDimensions, CallbackInfoReturnable<Float> cir) {
+        if (Main.modFullyDisabled()) return;
+        Player player = (Player) (Object) this;
+        MorphComponent morphComponent = MorphManager.getOrCreateComponent(player);
+        if (!morphComponent.isMorphed()) return;
+
+        float scaleRatio = 1 / player.getScale();
+        LivingEntity dummy = morphComponent.getDummy();
+        if (morphComponent.isMorphed() && dummy != null) {
+            cir.setReturnValue(dummy.getEyeHeight(pose) * scaleRatio);
+        }
+    }
+    //?}
 
     //? if <= 1.21.6 {
     //? if <= 1.20.3 {
