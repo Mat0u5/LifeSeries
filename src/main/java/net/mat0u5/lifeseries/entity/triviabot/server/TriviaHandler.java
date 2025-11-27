@@ -387,7 +387,7 @@ public class TriviaHandler {
             vector = relativeTargetPos.normalize().scale(0.3).add(0,0.1,0);
         }
 
-        List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, (ServerLevel) bot.level(), bot.serverData.getBoundPlayer(), IdentifierHelper.mod("trivia_reward_loottable"), false);
+        List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, (ServerLevel) bot.level(), bot.serverData.getBoundPlayer(), IdentifierHelper.of("lifeseriesdynamic", "trivia_reward_loottable"), false);
         if (!lootTableItems.isEmpty()) {
             for (ItemStack item : lootTableItems) {
                 ItemStackUtils.spawnItemForPlayerWithVelocity((ServerLevel) bot.level(), pos, item, bot.serverData.getBoundPlayer(), vector);
