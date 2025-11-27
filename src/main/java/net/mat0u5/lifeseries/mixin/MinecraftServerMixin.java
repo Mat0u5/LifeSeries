@@ -2,7 +2,6 @@ package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.dedicated.DedicatedServer;
 import org.spongepowered.asm.mixin.Mixin;
 //? if <= 1.20.2 {
 import net.minecraft.server.MinecraftServer;
@@ -13,8 +12,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 //?}
 
-@Mixin(value = DedicatedServer.class, priority = 1)
-public class DedicatedServerMixin {
+@Mixin(value = MinecraftServer.class, priority = 1)
+public class MinecraftServerMixin {
 
     //? if <= 1.20.2 {
     @Inject(method = "getServerResourcePack", at = @At("HEAD"), cancellable = true)

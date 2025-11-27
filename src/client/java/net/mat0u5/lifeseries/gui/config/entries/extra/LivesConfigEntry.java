@@ -82,6 +82,6 @@ public class LivesConfigEntry extends NullableIntegerConfigEntry {
 
     @Override
     public boolean isSearchable() {
-        return true;
+        return false;
     }
 }

@@ -83,18 +83,18 @@ public abstract class PlayerManagerMixin implements IPlayerManager {
     //?}
 
     @Inject(method = "respawn", at = @At("RETURN"))
-    //? if <= 1.20.3 {
+    //? if <= 1.20.5 {
     public void respawnPlayer(ServerPlayer serverPlayer, boolean alive, CallbackInfoReturnable<ServerPlayer> cir) {
     //?} else {
     /*public void respawnPlayer(ServerPlayer player, boolean alive, Entity.RemovalReason removalReason, CallbackInfoReturnable<ServerPlayer> cir) {
     *///?}
         //? if <= 1.20.5 {
-        if (alive) return;//TODO test
+        if (alive) return;
         //?} else {
         /*if (alive || removalReason != Entity.RemovalReason.KILLED) return;
         *///?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
-        currentSeason.onPlayerRespawn(cir.getReturnValue());
+              currentSeason.onPlayerRespawn(cir.getReturnValue());
     }
 
     @Redirect(method = "placeNewPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Z)V"))

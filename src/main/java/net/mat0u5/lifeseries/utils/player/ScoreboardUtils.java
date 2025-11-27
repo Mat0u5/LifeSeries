@@ -119,6 +119,7 @@ public class ScoreboardUtils {
         Scoreboard scoreboard = server.getScoreboard();
         Objective objective = scoreboard.getObjective(objectiveName);
         if (objective == null) return -1;
+        if (!scoreboard.hasPlayerScore(holder, objective)) return null;
         Score score = scoreboard.getOrCreatePlayerScore(holder, objective);
         if (score == null) return null;
         return score.getScore();

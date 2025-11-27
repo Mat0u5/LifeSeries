@@ -16,7 +16,8 @@ public class WildLifeConfig extends ConfigManager {
     public static final List<String> BLACKLISTED_ITEMS = List.of(
             "lectern",
             "bookshelf",
-            "mace",
+            //? if >= 1.21
+            /*"mace",*/
             "end_crystal",
             "leather_helmet",
             "chainmail_helmet",
@@ -40,7 +41,11 @@ public class WildLifeConfig extends ConfigManager {
             "bane_of_arthropods",
             "fire_aspect",
             "knockback",
-            "sweeping_edge",
+            //? if <= 1.20.3 {
+            "sweeping",
+            //?} else {
+            /*"sweeping_edge",
+            *///?}
 
             "power",
             "punch",
@@ -52,9 +57,11 @@ public class WildLifeConfig extends ConfigManager {
             "feather_falling",
             "thorns",
 
-            "breach",
+            //? if >= 1.21 {
+            /*"breach",
             "density",
             "wind_burst",
+            *///?}
 
             "multishot",
             "piercing",

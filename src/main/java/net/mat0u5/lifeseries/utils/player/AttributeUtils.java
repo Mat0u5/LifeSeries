@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
 import java.util.Objects;
@@ -76,32 +77,38 @@ public class AttributeUtils {
      */
 
     public static void setMaxPlayerHealth(ServerPlayer player, double value) {
-        Objects.requireNonNull(player.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(value);
+        AttributeInstance instance = player.getAttribute(Attributes.MAX_HEALTH);
+        if (instance != null) instance.setBaseValue(value);
     }
 
     public static void setPlayerJumpHeight(ServerPlayer player, double value) {
-        Objects.requireNonNull(player.getAttribute(Attributes.JUMP_STRENGTH)).setBaseValue(value);
+        AttributeInstance instance = player.getAttribute(Attributes.JUMP_STRENGTH);
+        if (instance != null) instance.setBaseValue(value);
     }
 
     //? if > 1.20.3 {
     /*public static void setSafeFallHeight(ServerPlayer player, double value) {
-        Objects.requireNonNull(player.getAttribute(Attributes.SAFE_FALL_DISTANCE)).setBaseValue(value);
+        AttributeInstance instance = player.getAttribute(Attributes.SAFE_FALL_DISTANCE);
+        if (instance != null) instance.setBaseValue(value);
     }
     *///?}
 
     //? if > 1.20.3 {
     /*public static void setScale(ServerPlayer player, double value) {
-        Objects.requireNonNull(player.getAttribute(Attributes.SCALE)).setBaseValue(value);
+        AttributeInstance instance = player.getAttribute(Attributes.SCALE);
+        if (instance != null) instance.setBaseValue(value);
     }
     *///?}
 
     public static void setJumpStrength(ServerPlayer player, double value) {
-        Objects.requireNonNull(player.getAttribute(Attributes.JUMP_STRENGTH)).setBaseValue(value);
+        AttributeInstance instance = player.getAttribute(Attributes.JUMP_STRENGTH);
+        if (instance != null) instance.setBaseValue(value);
     }
 
     public static void setMovementSpeed(ServerPlayer player, double value) {
         if (player == null) return;
-        Objects.requireNonNull(player.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(value);
+        AttributeInstance instance = player.getAttribute(Attributes.MOVEMENT_SPEED);
+        if (instance != null) instance.setBaseValue(value);
     }
 
     public static void setStepHeight(ServerPlayer player, double value) {
@@ -109,7 +116,8 @@ public class AttributeUtils {
         //? if <= 1.20.3 {
         player.setMaxUpStep((float) value);//TODO test
         //?} else {
-        /*Objects.requireNonNull(player.getAttribute(Attributes.STEP_HEIGHT)).setBaseValue(value);
+        /*AttributeInstance instance = player.getAttribute(Attributes.STEP_HEIGHT);
+        if (instance != null) instance.setBaseValue(value);
         *///?}
     }
 

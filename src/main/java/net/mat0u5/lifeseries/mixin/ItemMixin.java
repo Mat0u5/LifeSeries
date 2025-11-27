@@ -62,9 +62,8 @@ public abstract class ItemMixin {
     }
     *///?}
 
-    //TODO test in 1.20.5
-    //? if != 1.20.5 {
-    @Inject(method = "isEdible", at = @At("HEAD"))
+    //? if < 1.20.5 {
+    @Inject(method = "isEdible", at = @At("HEAD"), cancellable = true)
     public void isEdible(CallbackInfoReturnable<Boolean> cir) {
         if (Main.modDisabled()) return;
         boolean isLogicalSide = Main.isLogicalSide();

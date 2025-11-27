@@ -22,7 +22,7 @@ import net.minecraft.resources.ResourceLocation;
 @Mixin(value = AbstractClientPlayer.class, priority = 1)
 public class AbstractClientPlayerMixin {
     //? if <= 1.20 {
-    @Inject(method = "getSkinTextureLocation", at = @At("HEAD"), cancellable = true)//TODO test
+    @Inject(method = "getSkinTextureLocation", at = @At("HEAD"), cancellable = true)
     public void getSkinTextures(CallbackInfoReturnable<ResourceLocation> cir) {
     //?} else if <= 1.21.6 {
     /*@Inject(method = "getSkin", at = @At("HEAD"), cancellable = true)

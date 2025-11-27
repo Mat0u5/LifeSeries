@@ -20,7 +20,7 @@ public class IdentifierHelper {
         return new ResourceLocation("minecraft", path);
     }
     public static ResourceLocation parse(String string) {
-        return new ResourceLocation(string);//TODO test
+        return new ResourceLocation(string);
     }
     //?} else if <= 1.21.9 {
     /*public static ResourceLocation of(String namespace, String path) {

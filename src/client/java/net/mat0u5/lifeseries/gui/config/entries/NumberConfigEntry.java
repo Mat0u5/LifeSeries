@@ -117,7 +117,8 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
 
     @Override
     public String getStartingValueAsString() {
-        return String.valueOf(startingValue);
+        if (startingValue == null) return "";
+        return startingValue.toString();
     }
 
     public T getMinValue() {

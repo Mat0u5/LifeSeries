@@ -88,7 +88,6 @@ public abstract class PlayerEntityRendererMixin {
     }
     *///?}
 
-    //TODO check 1.20.5
     //? if <= 1.20.2 {
     @Redirect(method = "renderNameTag(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/Component;literal(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;"))
     public MutableComponent customBelowName(String string, AbstractClientPlayer abstractClientPlayer) {
@@ -113,8 +112,8 @@ public abstract class PlayerEntityRendererMixin {
     @ModifyArg(method = "renderNameTag(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/LivingEntityRenderer;renderNameTag(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", ordinal = 0), index = 1)
     public Component removeLives(Component par2) {
         String belowName = par2.getString();
-        if (belowName.contains(";") && !par2.getSiblings().isEmpty()) {
-            return Component.literal(belowName.split(";")[0]).withStyle(par2.getSiblings().getFirst().getStyle());
+        if (belowName.contains(";") ) {
+            return Component.literal(belowName.split(";")[0]).withStyle(par2.getStyle());
         }
         return par2;
     }

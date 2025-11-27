@@ -41,9 +41,11 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<MobEffect>
 //?} else {
 /*public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<MobEffect>> {
 *///?}
-    //? if <= 1.21.9 {
-    private static final ResourceLocation EFFECT_BACKGROUND_TEXTURE = IdentifierHelper.vanilla("hud/effect_background");
-    //?} else {
+     //? if <= 1.20 {
+    private static final ResourceLocation EFFECT_BACKGROUND_TEXTURE = IdentifierHelper.vanilla("textures/gui/container/inventory.png");
+    //?} else if <= 1.21.9 {
+    /*private static final ResourceLocation EFFECT_BACKGROUND_TEXTURE = IdentifierHelper.vanilla("hud/effect_background");
+    *///?} else {
     /*private static final Identifier EFFECT_BACKGROUND_TEXTURE = IdentifierHelper.vanilla("hud/effect_background");
     *///?}
 
@@ -116,8 +118,8 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<MobEffect>
         MobEffectTextureManager statusEffectSpriteManager = Minecraft.getInstance().getMobEffectTextures();
         RenderSystem.enableBlend();
 
-        //? if <= 1.21 {
-        context.blit(EFFECT_BACKGROUND_TEXTURE, x, y, 24, 24, 24, 24);//TODO idk what the last two parts are
+        //? if <= 1.20 {
+        context.blit(EFFECT_BACKGROUND_TEXTURE, x, y, 141, 166, 24, 24);
         //?} else {
         /*context.blitSprite(EFFECT_BACKGROUND_TEXTURE, x, y, 24, 24);
         *///?}

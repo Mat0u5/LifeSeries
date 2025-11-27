@@ -21,7 +21,7 @@ public class CameraMixin {
     @Shadow
     private Entity entity;
 
-    //? if <= 1.20.3 {
+    //? if <= 1.20.5 {
     @ModifyArg(method = "setup", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;getMaxZoom(D)D"), index = 0)
     private double modifyEntityScale(double originalDistance) {
     //?} else {

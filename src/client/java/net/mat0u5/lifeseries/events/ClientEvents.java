@@ -151,7 +151,11 @@ public class ClientEvents {
 
     public static void spawnInvisibilityParticles(Minecraft client) {
         if (client.level == null) return;
-        if (client.level.random.nextInt(15) != 0) return;
+        //? if <= 1.20.3 {
+        if (client.level.random.nextInt(30) != 0) return;
+        //?} else {
+        /*if (client.level.random.nextInt(15) != 0) return;
+        *///?}
         for (Player player : client.level.players()) {
             if (MainClient.invisiblePlayers.containsKey(player.getUUID())) {
                 long time = MainClient.invisiblePlayers.get(player.getUUID());
@@ -163,11 +167,15 @@ public class ClientEvents {
                     double z = player.getZ() + (Math.random() - 0.5) * 0.6;
 
                     //? if <= 1.20.3 {
-                    ParticleOptions invisibilityParticle = new DustParticleOptions(new Vector3f(136, 145, 181), 0.13F);//TODO check if alpha works
+                    int color = 0x208891b5;
+                    double d = (double)(color >> 16 & 255) / (double)255.0F;
+                    double e = (double)(color >> 8 & 255) / (double)255.0F;
+                    double f = (double)(color >> 0 & 255) / (double)255.0F;
+                    particleManager.createParticle(ParticleTypes.ENTITY_EFFECT, x, y, z, d, e, f);
                     //?} else {
                     /*ParticleOptions invisibilityParticle = ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 0x208891b5);
-                    *///?}
                     particleManager.createParticle(invisibilityParticle, x, y, z, 0, 0, 0);
+                    *///?}
                 }
             }
         }
@@ -251,7 +259,7 @@ public class ClientEvents {
         jumpedInAir++;
         player.jumpFromGround();
         //? if < 1.21 {
-        player.level().playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.PHANTOM_SWOOP, SoundSource.MASTER, 0.25f, 1f, false);//TODO sound
+        player.level().playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.BAT_TAKEOFF, SoundSource.MASTER, 0.25f, 1f, false);
         //?} else {
         /*player.level().playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.WIND_CHARGE_BURST.value(), SoundSource.MASTER, 0.25f, 1f, false);
         *///?}

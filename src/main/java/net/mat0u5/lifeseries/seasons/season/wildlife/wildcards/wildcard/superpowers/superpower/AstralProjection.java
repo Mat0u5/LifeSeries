@@ -88,7 +88,7 @@ public class AstralProjection extends ToggleableSuperpower {
         if (player == null) return;
         if (player.isSpectator()) return;
         //? if <= 1.21 {
-        player.ls$playNotifySound(SoundEvents.FIRECHARGE_USE, SoundSource.MASTER, 0.3f, 1);//TODO
+        player.ls$playNotifySound(SoundEvents.EVOKER_PREPARE_ATTACK, SoundSource.MASTER, 0.3f, 1);
         //?} else {
         /*player.ls$playNotifySound(SoundEvents.TRIAL_SPAWNER_OMINOUS_ACTIVATE, SoundSource.MASTER, 0.3f, 1);
         *///?}

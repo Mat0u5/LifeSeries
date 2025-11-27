@@ -214,7 +214,7 @@ public class QuizScreen extends DefaultScreen {
         }
         if (bot != null) {
             //? if <= 1.20 {
-            InventoryScreen.renderEntityInInventoryFollowsMouse(context, x, y, size, centerX, centerY+10, bot);//TODO test
+            InventoryScreen.renderEntityInInventoryFollowsMouse(context, x, y+35, size, 0, 0, bot);
             //?} else {
             /*InventoryScreen.renderEntityInInventoryFollowsMouse(context, x-30, y-70, x+30, y+70, size, 0.0625F, centerX, centerY+10, bot);
             *///?}
