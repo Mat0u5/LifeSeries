@@ -25,9 +25,9 @@ public enum Wildcards {
         if (this == HUNGER) return new Hunger();
         if (this == SNAILS) return new Snails();
         //? if >= 1.20.3 {
-        /*if (this == SIZE_SHIFTING) return new SizeShifting();
+        if (this == SIZE_SHIFTING) return new SizeShifting();
         if (this == TIME_DILATION) return new TimeDilation();
-        *///?}
+        //?}
         if (this == TRIVIA) return new TriviaWildcard();
         if (this == MOB_SWAP) return new MobSwap();
         if (this == SUPERPOWERS) return new SuperpowersWildcard();
@@ -63,9 +63,9 @@ public enum Wildcards {
         List<Wildcards> wildcards = new ArrayList<>(List.of(Wildcards.values()));
         wildcards.remove(Wildcards.NULL);
         //? if < 1.20.3 {
-        wildcards.remove(Wildcards.TIME_DILATION);
+        /*wildcards.remove(Wildcards.TIME_DILATION);
         wildcards.remove(Wildcards.SIZE_SHIFTING);
-        //?}
+        *///?}
         return wildcards;
     }
 

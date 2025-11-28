@@ -64,17 +64,17 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
     }
     */
     //? if <= 1.20.5 {
-    @Shadow
+    /*@Shadow
     public abstract BlockPos getBlockPosBelowThatAffectsMyMovement();
     public BlockPos ls$getBlockPosBelowThatAffectsMyMovement() {
         return getBlockPosBelowThatAffectsMyMovement();
     }
-    //?} else {
-    /*public BlockPos ls$getBlockPosBelowThatAffectsMyMovement() {
+    *///?} else {
+    public BlockPos ls$getBlockPosBelowThatAffectsMyMovement() {
         Entity entity = (Entity) (Object) this;
         return entity.getBlockPosBelowThatAffectsMyMovement();
     }
-    *///?}
+    //?}
 
 
 

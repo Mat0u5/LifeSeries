@@ -4,7 +4,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import net.minecraft.client.sounds.SoundEngine;
 
 //? if >= 1.20.3 {
-/*import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.Main;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.util.Mth;
@@ -15,12 +15,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
-*///?}
+//?}
 
 @Mixin(value = SoundEngine.class, priority = 1)
 public class SoundEngineMixin {
     //? if >= 1.20.3 {
-    /*@Unique
+    @Unique
     private static final List<String> ls$nonAdjustedSounds = List.of(
             "block.beacon.deactivate",
             "wildlife_time_slow_down",
@@ -31,8 +31,8 @@ public class SoundEngineMixin {
         //? if <= 1.21.9 {
         String name = sound.getLocation().getPath();
         //?} else {
-        /^String name = sound.getIdentifier().getPath();
-         ^///?}
+        /*String name = sound.getIdentifier().getPath();
+         *///?}
         if (ls$nonAdjustedSounds.contains(name) || Main.modFullyDisabled()) return;
         Minecraft client = Minecraft.getInstance();
         if (client.level != null) {
@@ -42,5 +42,5 @@ public class SoundEngineMixin {
             }
         }
     }
-    *///?}
+    //?}
 }

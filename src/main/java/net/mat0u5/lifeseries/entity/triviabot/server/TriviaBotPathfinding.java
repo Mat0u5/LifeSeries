@@ -44,12 +44,12 @@ public class TriviaBotPathfinding {
             if (boundEntity.level() instanceof ServerLevel entityWorld) {
                 BlockPos tpTo = getBlockPosNearTarget(boundEntity,5);
                 //? if <= 1.20.2 {
-                level.playSound(null, bot.getX(), bot.getY(), bot.getZ(), SoundEvents.ENDERMAN_TELEPORT, bot.getSoundSource(), bot.soundVolume(), bot.getVoicePitch());
+                /*level.playSound(null, bot.getX(), bot.getY(), bot.getZ(), SoundEvents.ENDERMAN_TELEPORT, bot.getSoundSource(), bot.soundVolume(), bot.getVoicePitch());
                 entityWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.ENDERMAN_TELEPORT, bot.getSoundSource(), bot.soundVolume(), bot.getVoicePitch());
-                //?} else {
-                /*level.playSound(null, bot.getX(), bot.getY(), bot.getZ(), SoundEvents.PLAYER_TELEPORT, bot.getSoundSource(), bot.soundVolume(), bot.getVoicePitch());
+                *///?} else {
+                level.playSound(null, bot.getX(), bot.getY(), bot.getZ(), SoundEvents.PLAYER_TELEPORT, bot.getSoundSource(), bot.soundVolume(), bot.getVoicePitch());
                 entityWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.PLAYER_TELEPORT, bot.getSoundSource(), bot.soundVolume(), bot.getVoicePitch());
-                *///?}
+                //?}
                 AnimationUtils.spawnTeleportParticles(level, bot.position());
                 AnimationUtils.spawnTeleportParticles(level, tpTo.getCenter());
                 bot.serverData.despawn();

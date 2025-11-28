@@ -109,18 +109,18 @@ public class SubInManager {
 
         if (server.getPlayerList() instanceof IPlayerManager iPlayerManager) {
             //? if <= 1.20.3 {
-            CompoundTag nbt = iPlayerManager.ls$getSaveHandler().load(player);
+            /*CompoundTag nbt = iPlayerManager.ls$getSaveHandler().load(player);
             if (nbt != null) {
                 player.load(nbt);
                 PlayerUtils.teleport(player, player.position());
             }
-            //?} else if < 1.21.6 {
-            /*Optional<CompoundTag> data = iPlayerManager.ls$getSaveHandler().load(player);
+            *///?} else if < 1.21.6 {
+            Optional<CompoundTag> data = iPlayerManager.ls$getSaveHandler().load(player);
             data.ifPresent(nbt -> {
                 player.load(nbt);
                 PlayerUtils.teleport(player, player.position());
             });
-            *///?} else if <= 1.21.6 {
+            //?} else if <= 1.21.6 {
             /*Optional<ValueInput> data = iPlayerManager.ls$getSaveHandler().load(player, ProblemReporter.DISCARDING);
             data.ifPresent(nbt -> {
                 player.load(nbt);

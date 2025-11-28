@@ -13,20 +13,20 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 
 //? if > 1.20 {
-/*import net.minecraft.server.level.ClientInformation;
-*///?}
+import net.minecraft.server.level.ClientInformation;
+//?}
 
 //? if <= 1.21.6 {
 
 //? if <= 1.20 {
-import java.util.concurrent.atomic.AtomicReference;
-//?}
+/*import java.util.concurrent.atomic.AtomicReference;
+*///?}
 //? if > 1.20.5 {
-/*import net.minecraft.network.DisconnectionDetails;
-*///?}
+import net.minecraft.network.DisconnectionDetails;
+//?}
 //? if >= 1.20.2 {
-/*import net.minecraft.server.network.CommonListenerCookie;
-*///?}
+import net.minecraft.server.network.CommonListenerCookie;
+//?}
 
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
@@ -55,14 +55,14 @@ import java.util.concurrent.CompletableFuture;
 @SuppressWarnings("EntityConstructor")
 public class FakePlayer extends ServerPlayer {
     //? if <= 1.20 {
-    private FakePlayer(MinecraftServer server, ServerLevel levelIn, GameProfile profile) {
+    /*private FakePlayer(MinecraftServer server, ServerLevel levelIn, GameProfile profile) {
         super(server, levelIn, profile);
     }
-    //?} else {
-    /*private FakePlayer(MinecraftServer server, ServerLevel levelIn, GameProfile profile, ClientInformation cli) {
+    *///?} else {
+    private FakePlayer(MinecraftServer server, ServerLevel levelIn, GameProfile profile, ClientInformation cli) {
         super(server, levelIn, profile, cli);
     }
-    *///?}
+    //?}
     //? if <= 1.21.6 {
     private static final Set<String> spawning = new HashSet<>();
     public Runnable fixStartingPosition = () -> {};
@@ -107,10 +107,10 @@ public class FakePlayer extends ServerPlayer {
             if (profile.isPresent()) current = profile.get();
 
             //? if <= 1.20 {
-            FakePlayer instance = new FakePlayer(server, levelIn, current);
-            //?} else {
-            /*FakePlayer instance = new FakePlayer(server, levelIn, current, ClientInformation.createDefault());
-            *///?}
+            /*FakePlayer instance = new FakePlayer(server, levelIn, current);
+            *///?} else {
+            FakePlayer instance = new FakePlayer(server, levelIn, current, ClientInformation.createDefault());
+            //?}
             //? if <= 1.21.4 {
             instance.fixStartingPosition = () -> instance.moveTo(pos.x, pos.y, pos.z, (float) yaw, (float) pitch);
             //?} else {
@@ -118,14 +118,14 @@ public class FakePlayer extends ServerPlayer {
             *///?}
             FakeClientConnection connection = new FakeClientConnection(PacketFlow.SERVERBOUND);
             //? if <= 1.20 {
-            server.getPlayerList().placeNewPlayer(connection, instance);
-            //?} else if <= 1.20.3 {
+            /*server.getPlayerList().placeNewPlayer(connection, instance);
+            *///?} else if <= 1.20.3 {
             /*CommonListenerCookie data =  new CommonListenerCookie(current, 0, instance.clientInformation());
             server.getPlayerList().placeNewPlayer(connection, instance, data);
             *///?} else {
-            /*CommonListenerCookie data =  new CommonListenerCookie(current, 0, instance.clientInformation(), true);
+            CommonListenerCookie data =  new CommonListenerCookie(current, 0, instance.clientInformation(), true);
             server.getPlayerList().placeNewPlayer(connection, instance, data);
-            *///?}
+            //?}
             PlayerUtils.teleport(instance, levelIn, pos, (float) yaw, (float) pitch);
             instance.setHealth(20.0F);
             instance.unsetRemoved();
@@ -152,7 +152,7 @@ public class FakePlayer extends ServerPlayer {
 
     private static CompletableFuture<Optional<GameProfile>> fetchGameProfile(MinecraftServer server, final String name) {
         //? if <= 1.20 {
-        GameProfile gameprofile;
+        /*GameProfile gameprofile;
         try {
             gameprofile = server.getProfileCache().get(name).orElse(null);
         }
@@ -170,11 +170,11 @@ public class FakePlayer extends ServerPlayer {
             gameprofile = result.get();
         }
         return CompletableFuture.completedFuture(Optional.ofNullable(gameprofile));
-        //?} else if <= 1.20.3 {
+        *///?} else if <= 1.20.3 {
         /*return SkullBlockEntityAccessor.ls$fetchGameProfile(name);
         *///?} else {
-        /*return SkullBlockEntity.fetchGameProfile(name);
-        *///?}
+        return SkullBlockEntity.fetchGameProfile(name);
+        //?}
     }
 
     @Override
@@ -203,10 +203,10 @@ public class FakePlayer extends ServerPlayer {
             }
             if (!triggered) {
                 //? if <= 1.20.5 {
-                connection.onDisconnect(Component.empty());
-                //?} else {
-                /*connection.onDisconnect(new DisconnectionDetails(Component.empty()));
-                *///?}
+                /*connection.onDisconnect(Component.empty());
+                *///?} else {
+                connection.onDisconnect(new DisconnectionDetails(Component.empty()));
+                //?}
             }
         }
         //

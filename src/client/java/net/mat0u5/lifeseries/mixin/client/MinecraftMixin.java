@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.mixin.client;
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
 //? if >= 1.20.3 {
-/*import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.render.ClientRenderer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDilation;
@@ -11,13 +11,13 @@ import net.minecraft.world.TickRateManager;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-*///?}
+//?}
 
 @Mixin(value = Minecraft.class, priority = 1)
 public abstract class MinecraftMixin {
 
     //? if >= 1.20.3 {
-    /*@Inject(method = "getTickTargetMillis", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getTickTargetMillis", at = @At("HEAD"), cancellable = true)
     private void getTargetMillisPerTick(float millis, CallbackInfoReturnable<Float> cir) {
         if (Main.modFullyDisabled()) return;
         Minecraft client = Minecraft.getInstance();
@@ -53,5 +53,5 @@ public abstract class MinecraftMixin {
         cir.setReturnValue(millis);
         ClientRenderer.isGameFullyFrozen = false;
     }
-    *///?}
+    //?}
 }

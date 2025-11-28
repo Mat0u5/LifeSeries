@@ -24,18 +24,18 @@ import net.minecraft.world.item.EnchantedBookItem;
 
 //? if <= 1.20.3 {
 //?} else {
-/*import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.network.chat.Component;
 import java.util.ArrayList;
 import java.util.List;
-*///?}
+//?}
 
 public class ItemStackUtils {
     //? if <= 1.20.3 {
 
-    public static void setCustomComponentInt(ItemStack itemStack, String componentKey, int value) {
+    /*public static void setCustomComponentInt(ItemStack itemStack, String componentKey, int value) {
         if (itemStack == null) return;
         CompoundTag currentNbt = itemStack.getOrCreateTag();
         currentNbt.putInt(componentKey,value);
@@ -103,8 +103,8 @@ public class ItemStackUtils {
         nbt.remove(componentEntry);
         itemStack.setTag(nbt);
     }
-    //?} else {
-    /*public static void addLoreToItemStack(ItemStack itemStack, List<Component> lines) {
+    *///?} else {
+    public static void addLoreToItemStack(ItemStack itemStack, List<Component> lines) {
         List<Component> loreLines = getLore(itemStack);
         if (lines != null && !lines.isEmpty()) loreLines.addAll(lines);
         ItemLore lore = new ItemLore(loreLines);
@@ -153,10 +153,10 @@ public class ItemStackUtils {
         //? if <= 1.21.4 {
         return nbtComp.getString(componentKey);
         //?} else {
-        /^Optional<String> optional = nbtComp.getString(componentKey);
+        /*Optional<String> optional = nbtComp.getString(componentKey);
         if (optional.isEmpty()) return null;
         return optional.get();
-        ^///?}
+        *///?}
 
     }
 
@@ -169,10 +169,10 @@ public class ItemStackUtils {
         //? if <= 1.21.4 {
         return nbtComp.getInt(componentKey);
         //?} else {
-        /^Optional<Integer> optional = nbtComp.getInt(componentKey);
+        /*Optional<Integer> optional = nbtComp.getInt(componentKey);
         if (optional.isEmpty()) return null;
         return optional.get();
-        ^///?}
+        *///?}
     }
 
     public static Byte getCustomComponentByte(ItemStack itemStack, String componentKey) {
@@ -184,10 +184,10 @@ public class ItemStackUtils {
         //? if <= 1.21.4 {
         return nbtComp.getByte(componentKey);
         //?} else {
-        /^Optional<Byte> optional = nbtComp.getByte(componentKey);
+        /*Optional<Byte> optional = nbtComp.getByte(componentKey);
         if (optional.isEmpty()) return null;
         return optional.get();
-        ^///?}
+        *///?}
     }
 
     public static Boolean getCustomComponentBoolean(ItemStack itemStack, String componentKey) {
@@ -199,10 +199,10 @@ public class ItemStackUtils {
         //? if <= 1.21.4 {
         return nbtComp.getBoolean(componentKey);
         //?} else {
-        /^Optional<Boolean> optional = nbtComp.getBoolean(componentKey);
+        /*Optional<Boolean> optional = nbtComp.getBoolean(componentKey);
         if (optional.isEmpty()) return null;
         return optional.get();
-        ^///?}
+        *///?}
     }
 
     public static boolean hasCustomComponentEntry(ItemStack itemStack, String componentEntry) {
@@ -212,8 +212,8 @@ public class ItemStackUtils {
         //? if <= 1.21.6 {
         return nbt.contains(componentEntry);
         //?} else {
-        /^return nbt.copyTag().contains(componentEntry);
-         ^///?}
+        /*return nbt.copyTag().contains(componentEntry);
+         *///?}
     }
 
     public static void removeCustomComponentEntry(ItemStack itemStack, String componentEntry) {
@@ -222,8 +222,8 @@ public class ItemStackUtils {
         //? if <= 1.21.6 {
         if (!nbt.contains(componentEntry)) return;
         //?} else {
-        /^if (!nbt.copyTag().contains(componentEntry)) return;
-         ^///?}
+        /*if (!nbt.copyTag().contains(componentEntry)) return;
+         *///?}
         CompoundTag nbtComp = nbt.copyTag();
         nbtComp.remove(componentEntry);
         if (nbtComp.isEmpty()) {
@@ -233,7 +233,7 @@ public class ItemStackUtils {
             itemStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbtComp));
         }
     }
-    *///?}
+    //?}
 
     public static void spawnItem(ServerLevel level, Vec3 position, ItemStack stack) {
         spawnItemForPlayer(level, position, stack, null);
@@ -265,19 +265,19 @@ public class ItemStackUtils {
     public static ItemStack createEnchantedBook(ResourceKey<Enchantment> enchantment, int level) {
         if (server == null) return null;
         //? if <= 1.20.5 {
-        Holder<Enchantment> entry = getEnchantmentEntry(enchantment);
+        /*Holder<Enchantment> entry = getEnchantmentEntry(enchantment);
         if (entry == null) return null;
         ItemStack enchantedBook = EnchantedBookItem.createForEnchantment(
                 new EnchantmentInstance(entry.value(), level)
         );
         return enchantedBook;
-        //?} else if <= 1.21 {
-        /*Holder<Enchantment> entry = getEnchantmentEntry(enchantment);
+        *///?} else if <= 1.21 {
+        Holder<Enchantment> entry = getEnchantmentEntry(enchantment);
         ItemStack enchantedBook = EnchantedBookItem.createForEnchantment(
                 new EnchantmentInstance(entry, level)
         );
         return enchantedBook;
-        *///?} else {
+        //?} else {
         /*Holder<Enchantment> entry = getEnchantmentEntry(enchantment);
         ItemStack enchantedBook = EnchantmentHelper.createBook(
                 new EnchantmentInstance(entry, level)

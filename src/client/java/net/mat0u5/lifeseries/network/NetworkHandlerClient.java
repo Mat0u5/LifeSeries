@@ -49,12 +49,12 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 //? if <= 1.20.3 {
-import net.minecraft.network.FriendlyByteBuf;
-//?}
+/*import net.minecraft.network.FriendlyByteBuf;
+*///?}
 
 public class NetworkHandlerClient {
     //? if <= 1.20.3 {
-    public static void registerClientReceiver() {
+    /*public static void registerClientReceiver() {
         ClientLoginNetworking.registerGlobalReceiver(IdentifierHelper.mod("preloginpacket"),
                 (client, handler, buf, listenerAdder) -> {
                     FriendlyByteBuf response = PacketByteBufs.create();
@@ -115,8 +115,8 @@ public class NetworkHandlerClient {
             });
         });
     }
-    //?} else {
-    /*public static void registerClientReceiver() {
+    *///?} else {
+    public static void registerClientReceiver() {
         ClientLoginNetworking.registerGlobalReceiver(IdentifierHelper.mod("preloginpacket"),
                 (client, handler, buf, listenerAdder) -> {
                     return CompletableFuture.completedFuture(
@@ -167,7 +167,7 @@ public class NetworkHandlerClient {
             });
         });
     }
-    *///?}
+    //?}
 
     public static void handleSidetitle(SidetitlePacket payload) {
         MainClient.sideTitle = payload.text();

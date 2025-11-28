@@ -28,12 +28,12 @@ public interface IPopup {
         if (!shouldShowPopup()) return;
 
         //? if <= 1.20 {
-        int offsetX = 0;
-        int offsetY = -1;
-        //?} else {
         /*int offsetX = 0;
+        int offsetY = -1;
+        *///?} else {
+        int offsetX = 0;
         int offsetY = 0;
-        *///?}
+        //?}
 
         //? if <= 1.21.5 {
         context.pose().pushPose();

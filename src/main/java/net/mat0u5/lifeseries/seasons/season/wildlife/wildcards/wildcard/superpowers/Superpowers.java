@@ -43,11 +43,11 @@ public enum Superpowers {
         if (this == SUPERSPEED) return new Superspeed(player);
         if (this == NECROMANCY) return new Necromancy(player);
         //? if >= 1.20.3 {
-        /*if (this == TIME_CONTROL) return new TimeControl(player);
-        *///?}
+        if (this == TIME_CONTROL) return new TimeControl(player);
+        //?}
         //? if >= 1.21 {
-        /*if (this == WIND_CHARGE) return new WindCharge(player);
-        *///?}
+        if (this == WIND_CHARGE) return new WindCharge(player);
+        //?}
         //? if >= 1.21.2 {
         /*if (this == CREAKING) return new CreakingPower(player);
         if (this == FLIGHT) return new Flight(player);
@@ -93,11 +93,11 @@ public enum Superpowers {
         List<Superpowers> result = new ArrayList<>(List.of(Superpowers.values()));
         result.remove(NULL);
         //? if < 1.20.3 {
-        result.remove(TIME_CONTROL);
-        //?}
+        /*result.remove(TIME_CONTROL);
+        *///?}
         //? if < 1.21 {
-        result.remove(WIND_CHARGE);
-        //?}
+        /*result.remove(WIND_CHARGE);
+        *///?}
         //? if < 1.21.2 {
         result.remove(CREAKING);
         result.remove(FLIGHT);

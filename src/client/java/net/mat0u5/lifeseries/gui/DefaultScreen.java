@@ -111,10 +111,10 @@ public abstract class DefaultScreen extends Screen {
 
     @Override
     //? if <= 1.20 {
-    public void renderBackground(GuiGraphics context) {}
-    //?} else {
-    /*public void renderBackground(GuiGraphics context, int mouseX, int mouseY, float delta) {}
-    *///?}
+    /*public void renderBackground(GuiGraphics context) {}
+    *///?} else {
+    public void renderBackground(GuiGraphics context, int mouseX, int mouseY, float delta) {}
+    //?}
 
     public void renderBackground(GuiGraphics context, int mouseX, int mouseY) {
         // Thick borders

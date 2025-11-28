@@ -29,10 +29,10 @@ import java.util.Set;
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
 //? if <= 1.20.3 {
-import net.minecraft.network.protocol.game.ServerboundChatCommandPacket;
-//?} else {
-/*import net.minecraft.network.protocol.game.ServerboundChatCommandSignedPacket;
-*///?}
+/*import net.minecraft.network.protocol.game.ServerboundChatCommandPacket;
+*///?} else {
+import net.minecraft.network.protocol.game.ServerboundChatCommandSignedPacket;
+//?}
 
 //? if <= 1.21
 import net.minecraft.world.entity.RelativeMovement;
@@ -104,7 +104,7 @@ public class ServerGamePacketListenerImplMixin {
     private static final List<String> mutedCommands = List.of("msg", "tell", "whisper", "w", "me");
 
     //? if > 1.20.3 {
-    /*@Inject(method = "performUnsignedChatCommand", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "performUnsignedChatCommand", at = @At("HEAD"), cancellable = true)
     private void executeCommand(String command, CallbackInfo ci) {
         if (Main.modDisabled()) return;
         ServerGamePacketListenerImpl handler = (ServerGamePacketListenerImpl) (Object) this;
@@ -115,18 +115,18 @@ public class ServerGamePacketListenerImplMixin {
             }
         }
     }
-    *///?}
+    //?}
 
     //? if <= 1.20.2 {
-    @Inject(method = "performChatCommand", at = @At(value = "INVOKE", target = "Lnet/minecraft/commands/Commands;performCommand(Lcom/mojang/brigadier/ParseResults;Ljava/lang/String;)I"), cancellable = true)
+    /*@Inject(method = "performChatCommand", at = @At(value = "INVOKE", target = "Lnet/minecraft/commands/Commands;performCommand(Lcom/mojang/brigadier/ParseResults;Ljava/lang/String;)I"), cancellable = true)
     private void handleCommandExecution(ServerboundChatCommandPacket packet, LastSeenMessages lastSeenMessages, CallbackInfo ci) {
-    //?} else if <= 1.20.3 {
+    *///?} else if <= 1.20.3 {
     /*@Inject(method = "performChatCommand", at = @At(value = "INVOKE", target = "Lnet/minecraft/commands/Commands;performCommand(Lcom/mojang/brigadier/ParseResults;Ljava/lang/String;)V"), cancellable = true)
     private void handleCommandExecution(ServerboundChatCommandPacket packet, LastSeenMessages lastSeenMessages, CallbackInfo ci) {
     *///?} else {
-    /*@Inject(method = "performSignedChatCommand", at = @At(value = "INVOKE", target = "Lnet/minecraft/commands/Commands;performCommand(Lcom/mojang/brigadier/ParseResults;Ljava/lang/String;)V"), cancellable = true)
+    @Inject(method = "performSignedChatCommand", at = @At(value = "INVOKE", target = "Lnet/minecraft/commands/Commands;performCommand(Lcom/mojang/brigadier/ParseResults;Ljava/lang/String;)V"), cancellable = true)
     private void handleCommandExecution(ServerboundChatCommandSignedPacket packet, LastSeenMessages lastSeenMessages, CallbackInfo ci) {
-    *///?}
+    //?}
         if (Main.modDisabled()) return;
         ServerGamePacketListenerImpl handler = (ServerGamePacketListenerImpl) (Object) this;
         for (String command : mutedCommands) {
@@ -174,10 +174,10 @@ public class ServerGamePacketListenerImplMixin {
     }
 
     //? if <= 1.20 {
-    @Redirect(method = "onDisconnect", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Z)V"))
-    //?} else {
-    /*@Redirect(method = "removePlayerFromWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Z)V"))
-    *///?}
+    /*@Redirect(method = "onDisconnect", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Z)V"))
+    *///?} else {
+    @Redirect(method = "removePlayerFromWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Z)V"))
+    //?}
     public void noLogoffMessage(PlayerList instance, Component message, boolean overlay) {
         ServerGamePacketListenerImpl handler = (ServerGamePacketListenerImpl) (Object) this;
         if (!Main.isLogicalSide() || Main.modDisabled()) {

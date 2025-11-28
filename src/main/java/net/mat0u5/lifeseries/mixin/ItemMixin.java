@@ -21,18 +21,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
 //? if >= 1.20.5 {
-/*import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.PatchedDataComponentMap;
-*///?}
+//?}
 
 @Mixin(value = Item.class, priority = 1)
 public abstract class ItemMixin {
     //? if < 1.20.5 {
-    @Accessor("foodProperties")
+    /*@Accessor("foodProperties")
     public abstract FoodProperties ls$foodProperties();
-    //?}
+    *///?}
     //? if >= 1.20.5 {
-    /*@Accessor("components")
+    @Accessor("components")
     public abstract DataComponentMap normalComponents();
 
     @Inject(method = "components", at = @At("HEAD"), cancellable = true)
@@ -61,10 +61,10 @@ public abstract class ItemMixin {
             }
         }
     }
-    *///?}
+    //?}
 
     //? if < 1.20.5 {
-    @Inject(method = "isEdible", at = @At("HEAD"), cancellable = true)
+    /*@Inject(method = "isEdible", at = @At("HEAD"), cancellable = true)
     public void isEdible(CallbackInfoReturnable<Boolean> cir) {
         Item item = (Item) (Object) this;
         cir.setReturnValue(item.getFoodProperties() != null);
@@ -94,7 +94,7 @@ public abstract class ItemMixin {
             }
         }
     }
-    //?}
+    *///?}
 
     @Inject(method = "finishUsingItem", at = @At("HEAD"))
     public void finishUsing(ItemStack stack, Level level, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {
@@ -102,10 +102,10 @@ public abstract class ItemMixin {
         if (currentSeason instanceof WildLife && WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
             Item item = (Item) (Object) this;
             //? if < 1.20.5 {
-            Hunger.finishUsing(item, ls$foodProperties() != null, user);
-            //?} else {
-            /*Hunger.finishUsing(item, normalComponents(), user);
-            *///?}
+            /*Hunger.finishUsing(item, ls$foodProperties() != null, user);
+            *///?} else {
+            Hunger.finishUsing(item, normalComponents(), user);
+            //?}
         }
     }
 }

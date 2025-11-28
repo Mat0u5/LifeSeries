@@ -36,8 +36,8 @@ public class SizeShifting extends Wildcard {
             if (player.isSpectator()) continue;
             if (player.isShiftKeyDown()) {
                 //? if > 1.20.3 {
-                /*addPlayerSize(player, -SIZE_CHANGE_STEP * SIZE_CHANGE_MULTIPLIER);
-                *///?}
+                addPlayerSize(player, -SIZE_CHANGE_STEP * SIZE_CHANGE_MULTIPLIER);
+                //?}
             }
         }
     }
@@ -47,12 +47,12 @@ public class SizeShifting extends Wildcard {
         if (player.isSpectator()) return;
         if (player.ls$isWatcher()) return;
         //? if > 1.20.3 {
-        /*addPlayerSize(player, SIZE_CHANGE_STEP * SIZE_CHANGE_MULTIPLIER);
-        *///?}
+        addPlayerSize(player, SIZE_CHANGE_STEP * SIZE_CHANGE_MULTIPLIER);
+        //?}
     }
 
     //? if > 1.20.3 {
-    /*public static double getPlayerSize(ServerPlayer player) {
+    public static double getPlayerSize(ServerPlayer player) {
         return AttributeUtils.getPlayerSize(player);
     }
 
@@ -100,5 +100,5 @@ public class SizeShifting extends Wildcard {
             }
         }
     }
-    *///?}
+    //?}
 }

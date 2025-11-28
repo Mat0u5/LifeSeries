@@ -17,7 +17,7 @@ public class WildLifeConfig extends ConfigManager {
             "lectern",
             "bookshelf",
             //? if >= 1.21
-            /*"mace",*/
+            "mace",
             "end_crystal",
             "leather_helmet",
             "chainmail_helmet",
@@ -42,10 +42,10 @@ public class WildLifeConfig extends ConfigManager {
             "fire_aspect",
             "knockback",
             //? if <= 1.20.3 {
-            "sweeping",
-            //?} else {
-            /*"sweeping_edge",
-            *///?}
+            /*"sweeping",
+            *///?} else {
+            "sweeping_edge",
+            //?}
 
             "power",
             "punch",
@@ -58,10 +58,10 @@ public class WildLifeConfig extends ConfigManager {
             "thorns",
 
             //? if >= 1.21 {
-            /*"breach",
+            "breach",
             "density",
             "wind_burst",
-            *///?}
+            //?}
 
             "multishot",
             "piercing",
@@ -336,8 +336,8 @@ public class WildLifeConfig extends ConfigManager {
                 ,WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN
                 ,WILDCARD_SUPERPOWERS_ZOMBIES_HEALTH
                 //? if > 1.20.3 {
-                /*,WILDCARD_SUPERPOWERS_SUPERSPEED_STEP
-                *///?}
+                ,WILDCARD_SUPERPOWERS_SUPERSPEED_STEP
+                //?}
                 ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_ARMOR
                 ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_HANDS
 

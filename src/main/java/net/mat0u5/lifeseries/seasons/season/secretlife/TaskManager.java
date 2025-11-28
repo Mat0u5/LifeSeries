@@ -34,15 +34,15 @@ import java.util.stream.Stream;
 
 import static net.mat0u5.lifeseries.Main.*;
 //? if <= 1.20.3 {
-import net.minecraft.nbt.ListTag;
+/*import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.server.network.FilteredText;
-//?}
+*///?}
 //? if >= 1.20.5 {
-/*import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.world.item.component.WrittenBookContent;
-*///?}
+//?}
 
 public class TaskManager {
     public static int EASY_SUCCESS = 20;
@@ -169,7 +169,7 @@ public class TaskManager {
     public static ItemStack getTaskBook(ServerPlayer player, Task task) {
         ItemStack book = new ItemStack(Items.WRITTEN_BOOK);
         //? if < 1.20.5 {
-        List<FilteredText> lines = task.getBookLines(player);
+        /*List<FilteredText> lines = task.getBookLines(player);
         book.addTagElement("author", StringTag.valueOf("Secret Keeper"));
         book.addTagElement("title", StringTag.valueOf(TextUtils.formatString("§c{}'s Secret Task", player)));
         ListTag listTag = new ListTag();
@@ -181,8 +181,8 @@ public class TaskManager {
         for (FilteredText line : lines) {
             linesStr.add(line.filteredOrEmpty());
         }
-        //?} else {
-        /*List<Filterable<Component>> lines = task.getBookLines(player);
+        *///?} else {
+        List<Filterable<Component>> lines = task.getBookLines(player);
         WrittenBookContent bookContent = new WrittenBookContent(
                 Filterable.passThrough(TextUtils.formatString("§c{}'s Secret Task", player)),
                 "Secret Keeper",
@@ -196,7 +196,7 @@ public class TaskManager {
             linesStr.add(line.get(true).getString());
         }
         book.set(DataComponents.WRITTEN_BOOK_CONTENT, bookContent);
-        *///?}
+        //?}
         SessionTranscript.assignTask(player, task, linesStr);
 
         ItemStackUtils.setCustomComponentBoolean(book, "SecretTask", true);
@@ -464,10 +464,10 @@ public class TaskManager {
         server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("secretlife_task")), SoundSource.PLAYERS, 1.0F, 1.0F);
         TaskScheduler.scheduleTask(60, () -> {
             //? if < 1.21 {
-            server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.PLAYERS, 1.0F, 1.0F);
-            //?} else {
-            /*server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvents.TRIAL_SPAWNER_EJECT_ITEM, SoundSource.PLAYERS, 1.0F, 1.0F);
-            *///?}
+            /*server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.PLAYERS, 1.0F, 1.0F);
+            *///?} else {
+            server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvents.TRIAL_SPAWNER_EJECT_ITEM, SoundSource.PLAYERS, 1.0F, 1.0F);
+            //?}
             AnimationUtils.spawnFireworkBall(server.overworld(), centerPos, 40, 0.3, new Vector3f(0, 1, 0));
             if (type == TaskTypes.EASY) {
                 showHeartTitle(player, EASY_SUCCESS);
@@ -571,10 +571,10 @@ public class TaskManager {
         server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("secretlife_task")), SoundSource.PLAYERS, 1.0F, 1.0F);
         TaskScheduler.scheduleTask(60, () -> {
             //? if < 1.21 {
-            server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvents.ELDER_GUARDIAN_CURSE, SoundSource.PLAYERS, 1.0F, 1.0F);
-            //?} else {
-            /*server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvents.TRIAL_SPAWNER_SPAWN_MOB, SoundSource.PLAYERS, 1.0F, 1.0F);
-            *///?}
+            /*server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvents.ELDER_GUARDIAN_CURSE, SoundSource.PLAYERS, 1.0F, 1.0F);
+            *///?} else {
+            server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvents.TRIAL_SPAWNER_SPAWN_MOB, SoundSource.PLAYERS, 1.0F, 1.0F);
+            //?}
             AnimationUtils.spawnFireworkBall(server.overworld(), centerPos, 40, 0.3, new Vector3f(1, 0, 0));
             if (type == TaskTypes.EASY) {
                 showHeartTitle(player, EASY_FAIL);

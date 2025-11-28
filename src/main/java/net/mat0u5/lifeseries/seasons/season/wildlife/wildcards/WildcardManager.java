@@ -84,10 +84,10 @@ public class WildcardManager {
     public static void onPlayerJoin(ServerPlayer player) {
         if (!isActiveWildcard(Wildcards.SIZE_SHIFTING)) {
             //? if > 1.20.3 {
-            /*if (SizeShifting.getPlayerSize(player) != 1 && !TriviaHandler.cursedGigantificationPlayers.contains(player.getUUID())) {
+            if (SizeShifting.getPlayerSize(player) != 1 && !TriviaHandler.cursedGigantificationPlayers.contains(player.getUUID())) {
                 SizeShifting.setPlayerSize(player, 1);
             }
-            *///?}
+            //?}
         }
         if (!isActiveWildcard(Wildcards.HUNGER)) {
             player.removeEffect(MobEffects.HUNGER);
@@ -209,8 +209,8 @@ public class WildcardManager {
             wildcard.tick();
         }
         //? if > 1.20.3 {
-        /*SizeShifting.resetSizesTick(isActiveWildcard(Wildcards.SIZE_SHIFTING));
-        *///?}
+        SizeShifting.resetSizesTick(isActiveWildcard(Wildcards.SIZE_SHIFTING));
+        //?}
         if (server != null && server.getTickCount() % 200 == 0) {
             if (!isActiveWildcard(Wildcards.MOB_SWAP)) {
                 MobSwap.killMobSwapMobs();

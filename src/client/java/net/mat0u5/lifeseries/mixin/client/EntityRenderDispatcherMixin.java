@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.mixin.client;
 
 //? if <= 1.20.3 {
-import com.mojang.blaze3d.vertex.PoseStack;
+/*import com.mojang.blaze3d.vertex.PoseStack;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
@@ -28,15 +28,15 @@ public class EntityRenderDispatcherMixin {
         }
     }
 }
-//?} else if <= 1.21 {
-/*import net.minecraft.server.MinecraftServer;
+*///?} else if <= 1.21 {
+import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(value = MinecraftServer.class)
 public class EntityRenderDispatcherMixin {
     //Empty class to avoid mixin errors
 }
-*///?} else {
+//?} else {
 /*import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;

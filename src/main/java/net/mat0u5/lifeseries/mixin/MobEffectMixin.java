@@ -29,36 +29,36 @@ public class MobEffectMixin {
         MobEffect effect = (MobEffect) (Object) this;
         if (target instanceof ServerPlayer) {
             //? if <= 1.20 {
-            if (blacklist.getBannedEffects().contains(effect)) {
+            /*if (blacklist.getBannedEffects().contains(effect)) {
                 ci.cancel();
             }
-            //?} else {
-            /*if (blacklist.getBannedEffects().contains(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect))) {
+            *///?} else {
+            if (blacklist.getBannedEffects().contains(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect))) {
                 ci.cancel();
             }
-            *///?}
+            //?}
         }
     }
     @Inject(method = "applyEffectTick", at = @At("HEAD"), cancellable = true)
     //? if <= 1.20.3 {
-    public void applyInstantEffect(LivingEntity entity, int i, CallbackInfo ci) {
-    //?} else if <= 1.21 {
-    /*public void applyInstantEffect(LivingEntity entity, int amplifier, CallbackInfoReturnable<Boolean> cir) {
-    *///?} else {
+    /*public void applyInstantEffect(LivingEntity entity, int i, CallbackInfo ci) {
+    *///?} else if <= 1.21 {
+    public void applyInstantEffect(LivingEntity entity, int amplifier, CallbackInfoReturnable<Boolean> cir) {
+    //?} else {
     /*public void applyInstantEffect(ServerLevel level, LivingEntity entity, int amplifier, CallbackInfoReturnable<Boolean> cir) {
     *///?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         MobEffect effect = (MobEffect) (Object) this;
         if (entity instanceof ServerPlayer) {
             //? if <= 1.20.3 {
-            if (blacklist.getBannedEffects().contains(effect)) {
+            /*if (blacklist.getBannedEffects().contains(effect)) {
                 ci.cancel();
             }
-            //?} else {
-            /*if (blacklist.getBannedEffects().contains(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect))) {
+            *///?} else {
+            if (blacklist.getBannedEffects().contains(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect))) {
                 cir.setReturnValue(false);
             }
-            *///?}
+            //?}
         }
     }
 }

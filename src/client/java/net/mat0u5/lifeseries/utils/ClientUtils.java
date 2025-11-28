@@ -23,9 +23,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 //? if > 1.20.5
-/*import net.minecraft.network.DisconnectionDetails;*/
+import net.minecraft.network.DisconnectionDetails;
 //? if > 1.20 {
-/*import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.Holder;
@@ -35,7 +35,7 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-*///?}
+//?}
 //? if >= 1.21.2 {
 /*import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -96,14 +96,14 @@ public class ClientUtils {
         /*client.level.disconnect(reason);
         *///?}
         //? if <= 1.20.5 {
-        handler.onDisconnect(reason);
-        //?} else {
-        /*handler.onDisconnect(new DisconnectionDetails(reason));
-        *///?}
+        /*handler.onDisconnect(reason);
+        *///?} else {
+        handler.onDisconnect(new DisconnectionDetails(reason));
+        //?}
     }
 
     //? if > 1.20.3 {
-    /*public static boolean handleUpdatedAttribute(ClientLevel level, AttributeInstance instance, double baseValue, ClientboundUpdateAttributesPacket packet) {
+    public static boolean handleUpdatedAttribute(ClientLevel level, AttributeInstance instance, double baseValue, ClientboundUpdateAttributesPacket packet) {
         Entity entity = level.getEntity(packet.getEntityId());
         if (entity == null) return false;
         if (!(entity instanceof LocalPlayer player)) return false;
@@ -177,7 +177,7 @@ public class ClientUtils {
         }
         return false;
     }
-    *///?}
+    //?}
 
     
     public static boolean isSpaceEmpty(LocalPlayer player, AABB box, double offsetX, double offsetY, double offsetZ) {

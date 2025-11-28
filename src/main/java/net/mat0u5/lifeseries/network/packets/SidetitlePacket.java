@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.network.packets;
 //? if <= 1.20.3 {
-import net.fabricmc.fabric.api.networking.v1.FabricPacket;
+/*import net.fabricmc.fabric.api.networking.v1.FabricPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
@@ -34,8 +34,8 @@ public record SidetitlePacket(Component text) implements FabricPacket {
         return TYPE;
     }
 }
-//?} else {
-/*import net.mat0u5.lifeseries.utils.enums.PacketNames;
+*///?} else {
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -53,4 +53,4 @@ public record SidetitlePacket(Component text) implements CustomPacketPayload {
         return ID;
     }
 }
-*///?}
+//?}

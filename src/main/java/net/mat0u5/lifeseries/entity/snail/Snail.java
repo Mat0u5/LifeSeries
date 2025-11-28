@@ -87,8 +87,8 @@ public class Snail extends Monster {
         setInvulnerable(true);
         setPersistenceRequired();
         //? if <= 1.20.3 {
-        this.setMaxUpStep(1.2F);
-        //?}
+        /*this.setMaxUpStep(1.2F);
+        *///?}
     }
 
     @Override
@@ -102,12 +102,12 @@ public class Snail extends Monster {
                 .add(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
                 .add(Attributes.FLYING_SPEED, FLYING_SPEED)
                 //? if > 1.20.3 {
-                /*.add(Attributes.STEP_HEIGHT, 1.2)
+                .add(Attributes.STEP_HEIGHT, 1.2)
                 .add(Attributes.SAFE_FALL_DISTANCE, 100)
-                *///?}
+                //?}
                 //? if > 1.20.5 {
-                /*.add(Attributes.WATER_MOVEMENT_EFFICIENCY, 1)
-                *///?}
+                .add(Attributes.WATER_MOVEMENT_EFFICIENCY, 1)
+                //?}
                 .add(Attributes.FOLLOW_RANGE, 150)
                 .add(Attributes.ATTACK_DAMAGE, 20);
     }
@@ -231,33 +231,33 @@ public class Snail extends Monster {
     }
 
     //? if <= 1.20.3 {
-    @Override
+    /*@Override
     protected int calculateFallDamage(float f, float g) {
         return 0;
     }
-    //?}
+    *///?}
     //? if <= 1.20.5 {
-    @Override
+    /*@Override
     public boolean canChangeDimensions() {
         return false;
     }
-    //?} else {
-    /*@Override
+    *///?} else {
+    @Override
     public boolean canUsePortal(boolean allowVehicles) {
         return false;
     }
-    *///?}
+    //?}
     //? if < 1.20.3 {
-    @Override
+    /*@Override
     public boolean ignoreExplosion() {
         return true;
     }
-    //?} else {
-    /*@Override
+    *///?} else {
+    @Override
     public boolean ignoreExplosion(Explosion explosion) {
         return true;
     }
-    *///?}
+    //?}
 
     @Override
     public boolean addEffect(MobEffectInstance effect, @Nullable Entity source) {
@@ -268,16 +268,16 @@ public class Snail extends Monster {
     }
 
     //? if <= 1.20 {
-    @Override
+    /*@Override
     public boolean isWithinMeleeAttackRange(final LivingEntity target) {
         return this.getBoundingBox().intersects(target.getBoundingBox());
     }
-    //?} else if <= 1.21.9 {
-    /*@Override
+    *///?} else if <= 1.21.9 {
+    @Override
     protected AABB getAttackBoundingBox() {
         return this.getBoundingBox();
     }
-    *///?} else {
+    //?} else {
     /*@Override
     protected AABB getAttackBoundingBox(final double horizontalExpansion) {
         return this.getBoundingBox();
@@ -299,7 +299,7 @@ public class Snail extends Monster {
      */
 
     //? if <= 1.20.3 {
-    @Override
+    /*@Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(attacking, false);
@@ -311,8 +311,8 @@ public class Snail extends Monster {
         this.entityData.define(skinName, "");
         this.entityData.define(playerDead, false);
     }
-    //?} else {
-    /*@Override
+    *///?} else {
+    @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(attacking, false);
@@ -324,7 +324,7 @@ public class Snail extends Monster {
         builder.define(skinName, "");
         builder.define(playerDead, false);
     }
-    *///?}
+    //?}
     public void setSnailAttacking(boolean value) {
         this.entityData.set(attacking, value);
     }

@@ -28,16 +28,16 @@ import static net.mat0u5.lifeseries.Main.seasonConfig;
 //? if >= 1.21.2
 /*import net.mat0u5.lifeseries.utils.player.PlayerUtils;*/
 //? if <= 1.20.5 {
-import net.minecraft.core.registries.BuiltInRegistries;
+/*import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.entity.LivingEntity;
-//?} else {
-/*import net.minecraft.core.Holder;
+*///?} else {
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import java.util.ArrayList;
 import java.util.stream.Stream;
-*///?}
+//?}
 //? if > 1.20 && <= 1.20.5 {
 /*import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.flag.FeatureFlagSet;
@@ -47,12 +47,12 @@ import net.minecraft.world.flag.FeatureFlagSet;
 public class EnchantmentHelperMixin {
     @Inject(method = "getAvailableEnchantmentResults", at = @At("HEAD"), cancellable = true)
     //? if <= 1.20.3 {
-    private static void getPossibleEntries(int level, ItemStack stack, boolean bl, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
-    //?} else if <= 1.20.5 {
+    /*private static void getPossibleEntries(int level, ItemStack stack, boolean bl, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
+    *///?} else if <= 1.20.5 {
     /*private static void getPossibleEntries(FeatureFlagSet featureFlagSet, int level, ItemStack stack, boolean bl, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
     *///?} else {
-    /*private static void getPossibleEntries(int level, ItemStack stack, Stream<Holder<Enchantment>> possibleEnchantments, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
-    *///?}
+    private static void getPossibleEntries(int level, ItemStack stack, Stream<Holder<Enchantment>> possibleEnchantments, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
+    //?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (Main.server == null) return;
 
@@ -62,25 +62,25 @@ public class EnchantmentHelperMixin {
         }
         //? if <= 1.20.5 {
 
-        if (seasonConfig.CUSTOM_ENCHANTER_ALGORITHM.get(seasonConfig)) {
+        /*if (seasonConfig.CUSTOM_ENCHANTER_ALGORITHM.get(seasonConfig)) {
             ls$customEnchantmentTableAlgorithm(level, stack, bl, cir);
         }
         else {
             ls$blacklistEnchantments(level, stack, bl, cir);
         }
-        //?} else {
-        /*if (seasonConfig.CUSTOM_ENCHANTER_ALGORITHM.get(seasonConfig)) {
+        *///?} else {
+        if (seasonConfig.CUSTOM_ENCHANTER_ALGORITHM.get(seasonConfig)) {
             ls$customEnchantmentTableAlgorithm(level, stack, possibleEnchantments, cir);
         }
         else {
             ls$blacklistEnchantments(level, stack, possibleEnchantments, cir);
         }
-        *///?}
+        //?}
 
     }
 
     //? if <= 1.20.5 {
-    @Unique
+    /*@Unique
     private static void ls$blacklistEnchantments(int level, ItemStack stack, boolean bl, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
         List<EnchantmentInstance> list = Lists.newArrayList();
         Item item = stack.getItem();
@@ -92,10 +92,10 @@ public class EnchantmentHelperMixin {
                 continue;
             }
             //? if <= 1.20 {
-            if ((!enchantment.isTreasureOnly() || bl) && enchantment.isDiscoverable() && (enchantment.category.canEnchant(item) || bl2)) {
-            //?} else {
-            /*if ((!enchantment.isTreasureOnly() || bl) && enchantment.isDiscoverable() && (enchantment.canEnchant(stack) || bl2)) {
-            *///?}
+            /^if ((!enchantment.isTreasureOnly() || bl) && enchantment.isDiscoverable() && (enchantment.category.canEnchant(item) || bl2)) {
+            ^///?} else {
+            if ((!enchantment.isTreasureOnly() || bl) && enchantment.isDiscoverable() && (enchantment.canEnchant(stack) || bl2)) {
+            //?}
                 for(int j = enchantment.getMaxLevel(); j > enchantment.getMinLevel() - 1; --j) {
                     if (level >= enchantment.getMinCost(j) && level <= enchantment.getMaxCost(j)) {
                         if (key.isPresent() && blacklist.getClampedEnchants().contains(key.get())) {
@@ -121,10 +121,10 @@ public class EnchantmentHelperMixin {
         for(Enchantment enchantment : BuiltInRegistries.ENCHANTMENT) {
             Optional<ResourceKey<Enchantment>> key = BuiltInRegistries.ENCHANTMENT.getResourceKey(enchantment);
             //? if <= 1.20 {
-            if ((!enchantment.isTreasureOnly() || bl) && enchantment.isDiscoverable() && (enchantment.category.canEnchant(item) || bl2)) {
-            //?} else {
-            /*if ((!enchantment.isTreasureOnly() || bl) && enchantment.isDiscoverable() && (enchantment.canEnchant(stack) || bl2)) {
-            *///?}
+            /^if ((!enchantment.isTreasureOnly() || bl) && enchantment.isDiscoverable() && (enchantment.category.canEnchant(item) || bl2)) {
+            ^///?} else {
+            if ((!enchantment.isTreasureOnly() || bl) && enchantment.isDiscoverable() && (enchantment.canEnchant(stack) || bl2)) {
+            //?}
                 if (key.isPresent() && blacklist.getClampedEnchants().contains(key.get())) {
                     list.add(new EnchantmentInstance(enchantment, 1));
                 }
@@ -151,21 +151,21 @@ public class EnchantmentHelperMixin {
 
         cir.setReturnValue(list);
     }
-    //?} else {
-    /*@Unique
+    *///?} else {
+    @Unique
     private static void ls$blacklistEnchantments(int level, ItemStack stack, Stream<Holder<Enchantment>> possibleEnchantments, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
         List<EnchantmentInstance> list = Lists.<EnchantmentInstance>newArrayList();
         boolean bl = stack.is(Items.BOOK);
         //? if <= 1.20.5 {
-        possibleEnchantments.filter(enchantment -> ((Enchantment)enchantment.value()).isPrimaryItem(stack) || bl).forEach(enchantmentHolder -> {
+        /*possibleEnchantments.filter(enchantment -> ((Enchantment)enchantment.value()).isPrimaryItem(stack) || bl).forEach(enchantmentHolder -> {
         Enchantment enchantmentx = enchantmentHolder.value();
         Enchantment enchantment = enchantmentx;
         Optional<ResourceKey<Enchantment>> enchantRegistryKey = enchantmentHolder.unwrapKey();
-        //?} else {
-        /^possibleEnchantments.filter(enchantment -> ((Enchantment)enchantment.value()).isPrimaryItem(stack) || bl).forEach(enchantmentx -> {
+        *///?} else {
+        possibleEnchantments.filter(enchantment -> ((Enchantment)enchantment.value()).isPrimaryItem(stack) || bl).forEach(enchantmentx -> {
         Enchantment enchantment = (Enchantment)enchantmentx.value();
         Optional<ResourceKey<Enchantment>> enchantRegistryKey = enchantmentx.unwrapKey();
-        ^///?}
+        //?}
             boolean isRegistryPresent = enchantRegistryKey.isPresent();
             if (isRegistryPresent && !blacklist.getBannedEnchants().contains(enchantRegistryKey.get())) {
                 for (int j = enchantment.getMaxLevel(); j >= enchantment.getMinLevel(); j--) {
@@ -189,15 +189,15 @@ public class EnchantmentHelperMixin {
         List<EnchantmentInstance> list = new ArrayList<>();
         boolean bl = stack.is(Items.BOOK);
         //? if <= 1.20.5 {
-        possibleEnchantments.filter(enchantment -> ((Enchantment)enchantment.value()).isPrimaryItem(stack) || bl).forEach(enchantmentHolder -> {
+        /*possibleEnchantments.filter(enchantment -> ((Enchantment)enchantment.value()).isPrimaryItem(stack) || bl).forEach(enchantmentHolder -> {
         Enchantment enchantmentx = enchantmentHolder.value();
         Enchantment enchantment = enchantmentx;
         Optional<ResourceKey<Enchantment>> enchantRegistryKey = enchantmentHolder.unwrapKey();
-        //?} else {
-        /^possibleEnchantments.filter(enchantment -> ((Enchantment)enchantment.value()).isPrimaryItem(stack) || bl).forEach(enchantmentx -> {
+        *///?} else {
+        possibleEnchantments.filter(enchantment -> ((Enchantment)enchantment.value()).isPrimaryItem(stack) || bl).forEach(enchantmentx -> {
         Enchantment enchantment = (Enchantment)enchantmentx.value();
         Optional<ResourceKey<Enchantment>> enchantRegistryKey = enchantmentx.unwrapKey();
-        ^///?}
+        //?}
             if (enchantRegistryKey.isPresent() && !blacklist.getBannedEnchants().contains(enchantRegistryKey.get())) {
                 if (blacklist.getClampedEnchants().contains(enchantRegistryKey.get())) {
                     list.add(new EnchantmentInstance(enchantmentx, 1));
@@ -224,34 +224,34 @@ public class EnchantmentHelperMixin {
         });
         cir.setReturnValue(list);
     }
-    *///?}
+    //?}
 
     //? if <= 1.20.5 {
-    @Inject(
+    /*@Inject(
             method = "doPostDamageEffects", at = @At("HEAD")
     )
     private static void onTargetDamaged(LivingEntity victimEntity, Entity sourceEntity, CallbackInfo ci) {
-    //?} else {
-    /*@Inject(
+    *///?} else {
+    @Inject(
             method = "doPostAttackEffects(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/damagesource/DamageSource;)V", at = @At("HEAD")
     )
     private static void onTargetDamaged(ServerLevel level, Entity victimEntity, DamageSource damageSource, CallbackInfo ci) {
-    *///?}
+    //?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (!(victimEntity instanceof ServerPlayer victim)) return;
         //? if <= 1.20.5 {
-        if (sourceEntity == null) return;
+        /*if (sourceEntity == null) return;
         if (!SuperpowersWildcard.hasActivatedPower(victim, Superpowers.SUPER_PUNCH)) return;
         sourceEntity.hurt(victim.damageSources().thorns(victim), 1F);
-        //?} else {
-        /*if (damageSource == null) return;
+        *///?} else {
+        if (damageSource == null) return;
         if (damageSource.getEntity() == null) return;
         if (!SuperpowersWildcard.hasActivatedPower(victim, Superpowers.SUPER_PUNCH)) return;
         //? if <= 1.21 {
         damageSource.getEntity().hurt(victim.damageSources().thorns(victim), 1F);
         //?} else {
-        /^damageSource.getEntity().hurtServer(victim.ls$getServerLevel(), victim.damageSources().thorns(victim), 1F);
-        ^///?}
+        /*damageSource.getEntity().hurtServer(victim.ls$getServerLevel(), victim.damageSources().thorns(victim), 1F);
         *///?}
+        //?}
     }
 }

@@ -23,16 +23,16 @@ public class PlayerDataStorageMixin {
     }
 
     //? if <= 1.20.2 {
-    @Redirect(method = "load", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getStringUUID()Ljava/lang/String;"))
+    /*@Redirect(method = "load", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getStringUUID()Ljava/lang/String;"))
     public String subInLoad(Player instance) {
         return ls$getStringUUIDForPlayer(instance);
     }
-    //?} else if <= 1.21.6 {
-    /*@Redirect(method = "load(Lnet/minecraft/world/entity/player/Player;Ljava/lang/String;)Ljava/util/Optional;", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getStringUUID()Ljava/lang/String;"))
+    *///?} else if <= 1.21.6 {
+    @Redirect(method = "load(Lnet/minecraft/world/entity/player/Player;Ljava/lang/String;)Ljava/util/Optional;", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getStringUUID()Ljava/lang/String;"))
     public String subInLoad(Player instance) {
         return ls$getStringUUIDForPlayer(instance);
     }
-    *///?} else {
+    //?} else {
     /*@Redirect(method = "load(Lnet/minecraft/server/players/NameAndId;Ljava/lang/String;)Ljava/util/Optional;", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/NameAndId;id()Ljava/util/UUID;"))
     public UUID subInLoad(NameAndId instance) {
         return ls$getStringUUIDForPlayer(instance);

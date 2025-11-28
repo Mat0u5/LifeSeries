@@ -1,14 +1,14 @@
 package net.mat0u5.lifeseries.mixin;
 //? if < 1.21 {
-import net.minecraft.server.MinecraftServer;
+/*import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(value = MinecraftServer.class)
 public interface WindChargeItemMixin {
     //Empty class to avoid mixin errors
 }
-//?} else {
-/*import net.mat0u5.lifeseries.Main;
+*///?} else {
+import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
@@ -32,7 +32,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.item.ItemStack;
 //?}
 //? if >= 1.21.2
-/^import net.minecraft.world.InteractionResult;^/
+/*import net.minecraft.world.InteractionResult;*/
 
 @Mixin(value = WindChargeItem.class, priority = 1)
 public class WindChargeItemMixin {
@@ -40,7 +40,7 @@ public class WindChargeItemMixin {
             //? if <= 1.21 {
     public void use(Level level, Player user, InteractionHand hand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
         //?} else
-        /^public void use(Level level, Player user, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {^/
+        /*public void use(Level level, Player user, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {*/
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (user instanceof ServerPlayer player) {
             if (currentSeason.getSeason() != Seasons.WILD_LIFE) return;
@@ -55,4 +55,4 @@ public class WindChargeItemMixin {
     }
 }
 
-*///?}
+//?}

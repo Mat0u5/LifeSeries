@@ -47,9 +47,9 @@ import net.minecraft.world.entity.RelativeMovement;
 /*import net.minecraft.world.entity.player.PlayerModelPart;*/
 
 //? if > 1.20.2 {
-/*import net.minecraft.network.protocol.common.ClientboundResourcePackPopPacket;
+import net.minecraft.network.protocol.common.ClientboundResourcePackPopPacket;
 import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
-*///?}
+//?}
 
 public class PlayerUtils {
     private static HashMap<Component, Integer> broadcastCooldown = new HashMap<>();
@@ -181,28 +181,28 @@ public class PlayerUtils {
 
     private static void applySingleResourcepack(ServerPlayer player, String link, String sha1, String message) {
         //? if > 1.20.2 {
-        /*UUID id = UUID.nameUUIDFromBytes(link.getBytes(StandardCharsets.UTF_8));
+        UUID id = UUID.nameUUIDFromBytes(link.getBytes(StandardCharsets.UTF_8));
         ClientboundResourcePackPushPacket resourcepackPacket = new ClientboundResourcePackPushPacket(
                 id,
                 link,
                 sha1,
                 false,
                 //? if <= 1.20.3 {
-                Component.translatable(message)
-                //?} else {
-                /^Optional.of(Component.translatable(message))
-                ^///?}
+                /*Component.translatable(message)
+                *///?} else {
+                Optional.of(Component.translatable(message))
+                //?}
         );
         player.connection.send(resourcepackPacket);
-        *///?}
+        //?}
     }
 
     private static void removeSingleResourcepack(ServerPlayer player, String link) {
         //? if > 1.20.2 {
-        /*UUID id = UUID.nameUUIDFromBytes(link.getBytes(StandardCharsets.UTF_8));
+        UUID id = UUID.nameUUIDFromBytes(link.getBytes(StandardCharsets.UTF_8));
         ClientboundResourcePackPopPacket removePackPacket = new ClientboundResourcePackPopPacket(Optional.of(id));
         player.connection.send(removePackPacket);
-        *///?}
+        //?}
     }
 
     public static List<ItemStack> getPlayerInventory(ServerPlayer player) {
@@ -331,10 +331,10 @@ public class PlayerUtils {
 
     public static ClientboundPlayerInfoUpdatePacket.Entry getPlayerListEntry(ServerPlayer player, boolean listed) {
         //? if <= 1.20 {
-        return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.latency, player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
-        //?} else if <= 1.21 {
-        /*return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), (RemoteChatSession.Data) Optionull.map(player.getChatSession(), RemoteChatSession::asData));
-        *///?} else if <= 1.21.2 {
+        /*return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.latency, player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
+        *///?} else if <= 1.21 {
+        return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), (RemoteChatSession.Data) Optionull.map(player.getChatSession(), RemoteChatSession::asData));
+        //?} else if <= 1.21.2 {
         /*return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), player.getTabListOrder(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
         *///?} else if <= 1.21.6 {
         /*return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), player.isModelPartShown(PlayerModelPart.HAT), player.getTabListOrder(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
@@ -439,10 +439,10 @@ public class PlayerUtils {
 
     public static void teleport(ServerPlayer player, BlockPos pos) {
         //? if <= 1.20.5 {
-        teleport(player, player.ls$getServerLevel(), pos.getCenter());
-        //?} else {
-        /*teleport(player, player.ls$getServerLevel(), pos.getBottomCenter());
-        *///?}
+        /*teleport(player, player.ls$getServerLevel(), pos.getCenter());
+        *///?} else {
+        teleport(player, player.ls$getServerLevel(), pos.getBottomCenter());
+        //?}
     }
 
     public static void teleport(ServerPlayer player, Vec3 pos) {
@@ -459,10 +459,10 @@ public class PlayerUtils {
 
     public static void teleport(ServerPlayer player, ServerLevel level, BlockPos pos) {
         //? if <= 1.20.5 {
-        teleport(player, level, pos.getCenter());
-        //?} else {
-        /*teleport(player, level, pos.getBottomCenter());
-        *///?}
+        /*teleport(player, level, pos.getCenter());
+        *///?} else {
+        teleport(player, level, pos.getBottomCenter());
+        //?}
     }
 
     public static void teleport(ServerPlayer player, ServerLevel level, Vec3 pos) {

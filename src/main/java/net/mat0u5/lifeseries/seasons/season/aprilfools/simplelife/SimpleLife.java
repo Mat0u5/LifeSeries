@@ -23,11 +23,11 @@ import java.util.Optional;
 import java.util.Random;
 
 //? if <= 1.20.3 {
-import net.minecraft.world.item.ItemStack;
+/*import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.NaturalSpawner;
-//?} else {
-/*import net.minecraft.world.item.trading.ItemCost;
-*///?}
+*///?} else {
+import net.minecraft.world.item.trading.ItemCost;
+//?}
 
 //? if <= 1.21.9 {
 import net.minecraft.world.entity.animal.horse.TraderLlama;
@@ -102,7 +102,7 @@ public class SimpleLife extends ThirdLife {
                     MerchantOffers offers = wanderingTraderEntity.getOffers();
                     offers.clear();
                     //? if <= 1.20.3 {
-                    offers.add(new MerchantOffer(new ItemStack(Items.DIRT, 5), ItemStack.EMPTY, Items.IRON_INGOT.getDefaultInstance(), 0, 999999, 0, 0, 0));
+                    /*offers.add(new MerchantOffer(new ItemStack(Items.DIRT, 5), ItemStack.EMPTY, Items.IRON_INGOT.getDefaultInstance(), 0, 999999, 0, 0, 0));
                     offers.add(new MerchantOffer(new ItemStack(Items.DIRT, 40), ItemStack.EMPTY, Items.WATER_BUCKET.getDefaultInstance(), 0, 999999, 0, 0, 0));
                     offers.add(new MerchantOffer(new ItemStack(Items.DIRT, 40), ItemStack.EMPTY, Items.LAVA_BUCKET.getDefaultInstance(), 0, 999999, 0, 0, 0));
                     offers.add(new MerchantOffer(new ItemStack(Items.DIRT, 1), ItemStack.EMPTY, Items.SAND.getDefaultInstance(), 0, 999999, 0, 0, 0));
@@ -113,8 +113,8 @@ public class SimpleLife extends ThirdLife {
                     int rand = rnd.nextInt(2);
                     if (rand == 0) offers.add(new MerchantOffer(new ItemStack(Items.DIRT, 32), ItemStack.EMPTY, Items.OAK_SAPLING.getDefaultInstance(), 0, 999999, 0, 0, 0));
                     if (rand == 1) offers.add(new MerchantOffer(new ItemStack(Items.DIRT, 32), ItemStack.EMPTY, Items.SPRUCE_SAPLING.getDefaultInstance(), 0, 999999, 0, 0, 0));
-                    //?} else {
-                    /*offers.add(new MerchantOffer(new ItemCost(Items.DIRT, 5), Optional.empty(), Items.IRON_INGOT.getDefaultInstance(), 0, 999999, 0, 0, 0));
+                    *///?} else {
+                    offers.add(new MerchantOffer(new ItemCost(Items.DIRT, 5), Optional.empty(), Items.IRON_INGOT.getDefaultInstance(), 0, 999999, 0, 0, 0));
                     offers.add(new MerchantOffer(new ItemCost(Items.DIRT, 40), Optional.empty(), Items.WATER_BUCKET.getDefaultInstance(), 0, 999999, 0, 0, 0));
                     offers.add(new MerchantOffer(new ItemCost(Items.DIRT, 40), Optional.empty(), Items.LAVA_BUCKET.getDefaultInstance(), 0, 999999, 0, 0, 0));
                     offers.add(new MerchantOffer(new ItemCost(Items.DIRT, 1), Optional.empty(), Items.SAND.getDefaultInstance(), 0, 999999, 0, 0, 0));
@@ -125,7 +125,7 @@ public class SimpleLife extends ThirdLife {
                     int rand = rnd.nextInt(2);
                     if (rand == 0) offers.add(new MerchantOffer(new ItemCost(Items.DIRT, 32), Optional.empty(), Items.OAK_SAPLING.getDefaultInstance(), 0, 999999, 0, 0, 0));
                     if (rand == 1) offers.add(new MerchantOffer(new ItemCost(Items.DIRT, 32), Optional.empty(), Items.SPRUCE_SAPLING.getDefaultInstance(), 0, 999999, 0, 0, 0));
-                    *///?}
+                    //?}
 
                     wanderingTraderEntity.overrideOffers(offers);
                     wanderingTraderEntity.addTag("SimpleLifeTrader");
@@ -150,8 +150,8 @@ public class SimpleLife extends ThirdLife {
     private BlockPos getNearbySpawnPos(LevelReader world, BlockPos pos, int range) {
         BlockPos blockPos = null;
         //? if > 1.20.3 {
-        /*SpawnPlacementType spawnLocation = SpawnPlacements.getPlacementType(EntityType.WANDERING_TRADER);
-        *///?}
+        SpawnPlacementType spawnLocation = SpawnPlacements.getPlacementType(EntityType.WANDERING_TRADER);
+        //?}
 
         for(int i = 0; i < 10; ++i) {
             int j = pos.getX() + rnd.nextInt(range * 2) - range;
@@ -159,10 +159,10 @@ public class SimpleLife extends ThirdLife {
             int l = world.getHeight(Heightmap.Types.WORLD_SURFACE, j, k);
             BlockPos blockPos2 = new BlockPos(j, l, k);
             //? if <= 1.20.3 {
-            if (NaturalSpawner.isSpawnPositionOk(SpawnPlacements.Type.ON_GROUND, world, blockPos2, EntityType.WANDERING_TRADER)) {
-            //?} else {
-            /*if (spawnLocation.isSpawnPositionOk(world, blockPos2, EntityType.WANDERING_TRADER)) {
-            *///?}
+            /*if (NaturalSpawner.isSpawnPositionOk(SpawnPlacements.Type.ON_GROUND, world, blockPos2, EntityType.WANDERING_TRADER)) {
+            *///?} else {
+            if (spawnLocation.isSpawnPositionOk(world, blockPos2, EntityType.WANDERING_TRADER)) {
+            //?}
                 blockPos = blockPos2;
                 break;
             }

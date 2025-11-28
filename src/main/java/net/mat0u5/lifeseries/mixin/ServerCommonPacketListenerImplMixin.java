@@ -20,12 +20,12 @@ import net.minecraft.network.PacketSendListener;
 /*import io.netty.channel.ChannelFutureListener;*/
 
 //? if <= 1.20 {
-import net.minecraft.server.network.ServerGamePacketListenerImpl;
+/*import net.minecraft.server.network.ServerGamePacketListenerImpl;
 @Mixin(value = ServerGamePacketListenerImpl.class, priority = 1)
-//?} else {
-/*import net.minecraft.server.network.ServerCommonPacketListenerImpl;
+*///?} else {
+import net.minecraft.server.network.ServerCommonPacketListenerImpl;
 @Mixin(value = ServerCommonPacketListenerImpl.class, priority = 1)
-*///?}
+//?}
 public class ServerCommonPacketListenerImplMixin {
 
     @Final
@@ -42,7 +42,7 @@ public class ServerCommonPacketListenerImplMixin {
 
 
     //? if <= 1.20 {
-    @WrapOperation(
+    /*@WrapOperation(
             method = "send(Lnet/minecraft/network/protocol/Packet;Lnet/minecraft/network/PacketSendListener;)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/network/Connection;send(Lnet/minecraft/network/protocol/Packet;Lnet/minecraft/network/PacketSendListener;)V")
     )
@@ -50,8 +50,8 @@ public class ServerCommonPacketListenerImplMixin {
         if (connection instanceof FakeClientConnection) return;
         original.call(instance, packet, packetSendListener);
     }
-    //?} else if <= 1.21.5 {
-    /*@WrapOperation(
+    *///?} else if <= 1.21.5 {
+    @WrapOperation(
             method = "send(Lnet/minecraft/network/protocol/Packet;Lnet/minecraft/network/PacketSendListener;)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/network/Connection;send(Lnet/minecraft/network/protocol/Packet;Lnet/minecraft/network/PacketSendListener;Z)V")
     )
@@ -59,7 +59,7 @@ public class ServerCommonPacketListenerImplMixin {
         if (connection instanceof FakeClientConnection) return;
         original.call(instance, packet, callbacks, flush);
     }
-    *///?} else {
+    //?} else {
     /*@WrapOperation(
             method = "send(Lnet/minecraft/network/protocol/Packet;Lio/netty/channel/ChannelFutureListener;)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/network/Connection;send(Lnet/minecraft/network/protocol/Packet;Lio/netty/channel/ChannelFutureListener;Z)V")

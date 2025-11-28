@@ -295,13 +295,13 @@ public class DatapackIntegration {
             if (command == null) return;
             if (command.startsWith("/function ") || command.startsWith("function ")) {
                 //? if < 1.20.2 {
-                String runCommand = command;
+                /*String runCommand = command;
                 for (MacroEntry entry : macroEntries) {
                     runCommand = runCommand.replace("$("+entry.key()+")", entry.value);
                 }
                 OtherUtils.executeCommand(runCommand);
-                //?} else {
-                /*List<String> macroStrings = new ArrayList<>();
+                *///?} else {
+                List<String> macroStrings = new ArrayList<>();
                 for (MacroEntry entry : macroEntries) {
                     boolean isNumber = OtherUtils.isNumber(entry.value());
                     if (isNumber) {
@@ -317,7 +317,7 @@ public class DatapackIntegration {
                 else {
                     OtherUtils.executeCommand(command + " {"+String.join(", ", macroStrings)+"}");
                 }
-                *///?}
+                //?}
             }
             else {
                 String runCommand = command;

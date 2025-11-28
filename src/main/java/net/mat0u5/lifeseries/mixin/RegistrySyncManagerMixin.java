@@ -13,11 +13,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 //? if <= 1.20 {
-import net.minecraft.server.level.ServerPlayer;
-//?} else {
-/*import net.mat0u5.lifeseries.utils.other.OtherUtils;
+/*import net.minecraft.server.level.ServerPlayer;
+*///?} else {
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.server.network.ServerConfigurationPacketListenerImpl;
-*///?}
+//?}
 
 //? if <= 1.21.9 {
 import net.minecraft.resources.ResourceLocation;
@@ -38,16 +38,16 @@ public class RegistrySyncManagerMixin {
     //? if <= 1.21.9 {
 
     //? if <= 1.20 {
-    @WrapOperation(method = "sendPacket(Lnet/minecraft/server/level/ServerPlayer;Lnet/fabricmc/fabric/impl/registry/sync/packet/RegistryPacketHandler;)V", at = @At(value = "INVOKE", target = "Lnet/fabricmc/fabric/impl/registry/sync/RegistrySyncManager;createAndPopulateRegistryMap(ZLjava/util/Map;)Ljava/util/Map;"))
+    /*@WrapOperation(method = "sendPacket(Lnet/minecraft/server/level/ServerPlayer;Lnet/fabricmc/fabric/impl/registry/sync/packet/RegistryPacketHandler;)V", at = @At(value = "INVOKE", target = "Lnet/fabricmc/fabric/impl/registry/sync/RegistrySyncManager;createAndPopulateRegistryMap(ZLjava/util/Map;)Ljava/util/Map;"))
     private static @Nullable Map<ResourceLocation, Object2IntMap<ResourceLocation>> checkRemoteRemap(boolean b, Map map, Operation<Map<ResourceLocation, Object2IntMap<ResourceLocation>>> original, ServerPlayer player) {
     Map<ResourceLocation, Object2IntMap<ResourceLocation>> originalValue = original.call(b, map);
     if (NetworkHandlerServer.preLoginHandshake.contains(player.getUUID())) {
-    //?} else {
-    /*@WrapOperation(method = "configureClient", at = @At(value = "INVOKE", target = "Lnet/fabricmc/fabric/impl/registry/sync/RegistrySyncManager;createAndPopulateRegistryMap()Ljava/util/Map;"))
+    *///?} else {
+    @WrapOperation(method = "configureClient", at = @At(value = "INVOKE", target = "Lnet/fabricmc/fabric/impl/registry/sync/RegistrySyncManager;createAndPopulateRegistryMap()Ljava/util/Map;"))
     private static @Nullable Map<ResourceLocation, Object2IntMap<ResourceLocation>> checkRemoteRemap(Operation<Map<ResourceLocation, Object2IntMap<ResourceLocation>>> original, ServerConfigurationPacketListenerImpl handler) {
     Map<ResourceLocation, Object2IntMap<ResourceLocation>> originalValue = original.call();
     if (NetworkHandlerServer.preLoginHandshake.contains(OtherUtils.profileId(handler.getOwner()))) {
-    *///?}
+    //?}
             Main.LOGGER.info("Sending unmodified registry entries to client");
             return originalValue;
         }

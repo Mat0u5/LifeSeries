@@ -22,7 +22,7 @@ public class DatapackManager {
 
     public static String getMinecraftVersion() {
         //? if = 1.20
-        return "1.20-1.20.1";
+        /*return "1.20-1.20.1";*/
         //? if = 1.20.2
         /*return "1.20.2";*/
         //? if = 1.20.3
@@ -30,7 +30,7 @@ public class DatapackManager {
         //? if = 1.20.5
         /*return "1.20.5-1.20.6";*/
         //? if = 1.21
-        /*return "1.21-1.21.1";*/
+        return "1.21-1.21.1";
         //? if = 1.21.2
         /*return "1.21.2-1.21.3";*/
         //? if = 1.21.4
@@ -47,24 +47,24 @@ public class DatapackManager {
 
     public static String getResourceTriviaPackVersion() {
         //? if < 1.20.5 {
-        return "_pre1.20.5";
-        //?} else if < 1.21 {
+        /*return "_pre1.20.5";
+        *///?} else if < 1.21 {
         /*return "_pre1.21";
         *///?} else if <= 1.21.4 {
-        /*return "";
-        *///?} else {
+        return "";
+        //?} else {
         /*return "_1.21.5";
         *///?}
     }
 
     public static String getResourceTaskPackVersion() {
         //? if < 1.20.5 {
-        return "_pre1.20.5";
-        //?} else if < 1.21 {
+        /*return "_pre1.20.5";
+        *///?} else if < 1.21 {
         /*return "_pre1.21";
         *///?} else if <= 1.21.4 {
-        /*return "";
-        *///?} else {
+        return "";
+        //?} else {
         /*return "_1.21.5";
         *///?}
     }

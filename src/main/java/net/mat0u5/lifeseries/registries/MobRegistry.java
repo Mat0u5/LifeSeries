@@ -30,10 +30,10 @@ public class MobRegistry {
                     .sized(0.5f, 0.6f)
                     .clientTrackingRange(512)
                     //? if <= 1.20.3 {
-                    .build(Snail.ID.toString())
-                    //?} else if <= 1.21 {
-                    /*.build()
-                    *///?} else {
+                    /*.build(Snail.ID.toString())
+                    *///?} else if <= 1.21 {
+                    .build()
+                    //?} else {
                     /*.build(SNAIL_KEY)
                     *///?}
     );
@@ -44,10 +44,10 @@ public class MobRegistry {
                     .sized(0.65f, 1.8f)
                     .clientTrackingRange(512)
                     //? if <= 1.20.3 {
-                    .build(TriviaBot.ID.toString())
-                    //?} else if <= 1.21 {
-                    /*.build()
-                     *///?} else {
+                    /*.build(TriviaBot.ID.toString())
+                    *///?} else if <= 1.21 {
+                    .build()
+                     //?} else {
                     /*.build(TRIVIA_KEY)
                      *///?}
     );

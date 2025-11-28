@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.network.packets;
 //? if <= 1.20.3 {
-import net.fabricmc.fabric.api.networking.v1.FabricPacket;
+/*import net.fabricmc.fabric.api.networking.v1.FabricPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
@@ -50,8 +50,8 @@ public record TriviaQuestionPayload(String question, int difficulty, long timest
         return TYPE;
     }
 }
-//?} else {
-/*import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+*///?} else {
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -76,4 +76,4 @@ public record TriviaQuestionPayload(String question, int difficulty, long timest
         return ID;
     }
 }
-*///?}
+//?}

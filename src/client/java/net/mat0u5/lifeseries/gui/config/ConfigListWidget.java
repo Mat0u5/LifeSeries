@@ -24,14 +24,14 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
     protected ConfigScreen screen;
 
     //? if <= 1.20.2 {
-    public ConfigListWidget(Minecraft client, int width, int height, int y, int endY, int headerHeight) {
+    /*public ConfigListWidget(Minecraft client, int width, int height, int y, int endY, int headerHeight) {
         super(client, width, height, y, endY, headerHeight);
     }
-    //?} else {
-    /*public ConfigListWidget(Minecraft client, int width, int height, int y, int itemHeight) {
+    *///?} else {
+    public ConfigListWidget(Minecraft client, int width, int height, int y, int itemHeight) {
         super(client, width, height, y, itemHeight);
     }
-    *///?}
+    //?}
 
     public void setScreen(ConfigScreen screen) {
         this.screen = screen;
@@ -51,12 +51,12 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
     }
 
     //? if < 1.20.5 {
-    @Override
-    public void renderList(GuiGraphics context, int mouseX, int mouseY, float delta) {
-    //?} else {
     /*@Override
+    public void renderList(GuiGraphics context, int mouseX, int mouseY, float delta) {
+    *///?} else {
+    @Override
     protected void renderListItems(GuiGraphics context, int mouseX, int mouseY, float delta) {
-    *///?}
+    //?}
         //? if <= 1.21.2 {
         int maxScroll = getMaxScroll();
         //?} else {
@@ -173,24 +173,24 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
         return Math.max(0, totalHeight - height + 8);
     }
     //? if <= 1.20.2 {
-    protected int getX() {
+    /*protected int getX() {
         return this.x0;
     }
     protected int getY() {
         return this.y0;
     }
-    //?}
+    *///?}
 
     //? if <= 1.20.3 {
-    protected int getScrollbarPosition() {
+    /*protected int getScrollbarPosition() {
         return this.width *2;//Make not invisible
     }
-    //?} else {
-    /*@Override
+    *///?} else {
+    @Override
     protected boolean scrollbarVisible() {
         return false;
     }
-    *///?}
+    //?}
 
     @Override
     //? if <= 1.21.6 {

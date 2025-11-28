@@ -178,8 +178,8 @@ public class Events {
                 Main.currentSession.tick(server);
             }
             //? if >= 1.20.3 {
-            /*if (server.tickRateManager().isFrozen()) return;
-            *///?}
+            if (server.tickRateManager().isFrozen()) return;
+            //?}
             if (Main.currentSession != null) {
                 currentSeason.tick(server);
             }

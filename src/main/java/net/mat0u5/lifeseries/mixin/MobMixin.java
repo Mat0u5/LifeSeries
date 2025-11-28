@@ -22,10 +22,10 @@ public abstract class MobMixin {
     //? if <= 1.21 {
 
     //? if <= 1.20.3 {
-    private void initialize(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType spawnReason, SpawnGroupData spawnGroupData, CompoundTag compoundTag, CallbackInfoReturnable<SpawnGroupData> cir) {
-    //?} else {
-    /*private void initialize(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData, CallbackInfoReturnable<SpawnGroupData> cir) {
-    *///?}
+    /*private void initialize(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType spawnReason, SpawnGroupData spawnGroupData, CompoundTag compoundTag, CallbackInfoReturnable<SpawnGroupData> cir) {
+    *///?} else {
+    private void initialize(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData, CallbackInfoReturnable<SpawnGroupData> cir) {
+    //?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (spawnReason == MobSpawnType.NATURAL) return;
         if (spawnReason == MobSpawnType.CHUNK_GENERATION) return;

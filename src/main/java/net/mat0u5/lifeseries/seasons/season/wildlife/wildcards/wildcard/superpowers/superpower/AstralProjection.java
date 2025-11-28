@@ -20,7 +20,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 //?}
 //? if > 1.20.5 && <= 1.21.6
-/*import net.minecraft.network.DisconnectionDetails;*/
+import net.minecraft.network.DisconnectionDetails;
 
 //? if >= 1.21.9 {
 /*import net.mat0u5.lifeseries.utils.other.TaskScheduler;
@@ -173,10 +173,10 @@ public class AstralProjection extends ToggleableSuperpower {
             //? if <= 1.21.6 {
 
             //? if <= 1.20.5 {
-            clone.connection.onDisconnect(Component.empty());
-            //?} else {
-            /*clone.connection.onDisconnect(new DisconnectionDetails(Component.empty()));
-            *///?}
+            /*clone.connection.onDisconnect(Component.empty());
+            *///?} else {
+            clone.connection.onDisconnect(new DisconnectionDetails(Component.empty()));
+            //?}
             NetworkHandlerServer.sendPlayerDisguise(clone.getUUID().toString(), clone.getName().getString(), "", "");
             //?} else {
             /*clone.discard();

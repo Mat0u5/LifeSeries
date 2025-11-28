@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(value = ClientPacketListener.class, priority = 1)
 public class ClientPacketListenerMixin {
     //? if > 1.20.3 {
-    /*@Shadow
+    @Shadow
 
     private ClientLevel level;
     @WrapOperation(method = "handleUpdateAttributes", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeInstance;setBaseValue(D)V"))
@@ -24,5 +24,5 @@ public class ClientPacketListenerMixin {
             original.call(instance, baseValue);
         }
     }
-    *///?}
+    //?}
 }

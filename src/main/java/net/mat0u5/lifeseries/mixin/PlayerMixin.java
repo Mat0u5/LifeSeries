@@ -25,9 +25,9 @@ import static net.mat0u5.lifeseries.Main.currentSeason;
 /*import net.minecraft.server.level.ServerLevel;*/
 
 //? if <= 1.20.5 {
-import net.minecraft.world.item.enchantment.FrostWalkerEnchantment;
-//?} else {
-/*import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+/*import net.minecraft.world.item.enchantment.FrostWalkerEnchantment;
+*///?} else {
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.Vec3i;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
@@ -39,7 +39,7 @@ import org.spongepowered.asm.mixin.Unique;
 import java.util.Optional;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.item.enchantment.effects.ReplaceDisk;
-*///?}
+//?}
 
 @Mixin(value = Player.class, priority = 1)
 public abstract class PlayerMixin {
@@ -87,7 +87,7 @@ public abstract class PlayerMixin {
         }
     }
     //? if <= 1.20.3 {
-    @Inject(method = "getStandingEyeHeight", at = @At("HEAD"), cancellable = true)
+    /*@Inject(method = "getStandingEyeHeight", at = @At("HEAD"), cancellable = true)
     public void getBaseDimensions(Pose pose, EntityDimensions entityDimensions, CallbackInfoReturnable<Float> cir) {
         if (Main.modFullyDisabled()) return;
         Player player = (Player) (Object) this;
@@ -100,14 +100,14 @@ public abstract class PlayerMixin {
             cir.setReturnValue(dummy.getEyeHeight(pose) * scaleRatio);
         }
     }
-    //?}
+    *///?}
 
     //? if <= 1.21.6 {
     //? if <= 1.20.3 {
-    @Inject(method = "getDimensions", at = @At("HEAD"), cancellable = true)
-    //?} else {
-    /*@Inject(method = "getDefaultDimensions", at = @At("HEAD"), cancellable = true)
-    *///?}
+    /*@Inject(method = "getDimensions", at = @At("HEAD"), cancellable = true)
+    *///?} else {
+    @Inject(method = "getDefaultDimensions", at = @At("HEAD"), cancellable = true)
+    //?}
     public void getBaseDimensions(Pose pose, CallbackInfoReturnable<EntityDimensions> cir) {
         if (Main.modFullyDisabled()) return;
         Player player = (Player) (Object) this;
@@ -129,9 +129,9 @@ public abstract class PlayerMixin {
     }
 
     //? if > 1.20.5 {
-    /*@Unique
+    @Unique
     private static final ReplaceDisk ls$frostWalker =  new ReplaceDisk(LevelBasedValue.constant(5.0F), LevelBasedValue.constant(1.0F), new Vec3i(0, -1, 0), Optional.of(BlockPredicate.allOf(BlockPredicate.matchesTag(new Vec3i(0, 1, 0), BlockTags.AIR), BlockPredicate.matchesBlocks(Blocks.WATER), BlockPredicate.matchesFluids(Fluids.WATER), BlockPredicate.unobstructed())), BlockStateProvider.simple(Blocks.FROSTED_ICE), Optional.of(GameEvent.BLOCK_PLACE));
-    *///?}
+    //?}
 
     @Inject(method = "travel", at = @At("HEAD"))
     private void travel(Vec3 movementInput, CallbackInfo ci) {
@@ -142,9 +142,9 @@ public abstract class PlayerMixin {
         if (!SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPERSPEED)) return;
 
         //? if <= 1.20.5 {
-        FrostWalkerEnchantment.onEntityMoved(entity, entity.level(), entity.blockPosition(), 5);
-        //?} else {
-        /*ls$frostWalker.apply(player.ls$getServerLevel(), 5, null, player, player.position());
-        *///?}
+        /*FrostWalkerEnchantment.onEntityMoved(entity, entity.level(), entity.blockPosition(), 5);
+        *///?} else {
+        ls$frostWalker.apply(player.ls$getServerLevel(), 5, null, player, player.position());
+        //?}
     }
 }

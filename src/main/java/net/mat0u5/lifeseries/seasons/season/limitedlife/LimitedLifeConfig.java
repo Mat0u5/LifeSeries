@@ -14,7 +14,7 @@ public class LimitedLifeConfig extends ConfigManager {
             "lectern",
             "bookshelf",
             //? if >= 1.21
-            /*"mace",*/
+            "mace",
             "leather_helmet",
             "chainmail_helmet",
             "golden_helmet",
@@ -38,10 +38,10 @@ public class LimitedLifeConfig extends ConfigManager {
             "fire_aspect",
             "knockback",
             //? if <= 1.20.3 {
-            "sweeping",
-            //?} else {
-            /*"sweeping_edge",
-            *///?}
+            /*"sweeping",
+            *///?} else {
+            "sweeping_edge",
+            //?}
 
             "power",
             "punch",
@@ -54,10 +54,10 @@ public class LimitedLifeConfig extends ConfigManager {
             "thorns",
 
             //? if >= 1.21 {
-            /*"breach",
+            "breach",
             "density",
             "wind_burst",
-            *///?}
+            //?}
 
             "multishot",
             "piercing",

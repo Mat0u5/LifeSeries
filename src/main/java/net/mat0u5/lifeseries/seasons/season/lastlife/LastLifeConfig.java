@@ -14,7 +14,7 @@ public class LastLifeConfig extends ConfigManager {
             "bookshelf",
             "enchanting_table",
             //? if >= 1.21
-            /*"mace",*/
+            "mace",
             "end_crystal",
             "leather_helmet",
             "chainmail_helmet",
@@ -39,10 +39,10 @@ public class LastLifeConfig extends ConfigManager {
             "fire_aspect",
             "knockback",
             //? if <= 1.20.3 {
-            "sweeping",
-            //?} else {
-            /*"sweeping_edge",
-            *///?}
+            /*"sweeping",
+            *///?} else {
+            "sweeping_edge",
+            //?}
 
             "power",
             "punch",
@@ -55,10 +55,10 @@ public class LastLifeConfig extends ConfigManager {
             "thorns",
 
             //? if >= 1.21 {
-            /*"breach",
+            "breach",
             "density",
             "wind_burst",
-            *///?}
+            //?}
 
             "multishot",
             "piercing",

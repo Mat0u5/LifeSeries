@@ -227,16 +227,16 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
     }
 
     //? if <= 1.20.5 {
-    @Override
+    /*@Override
     public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float i, float j, float k, float l) {
         triviabot.render(matrices, vertexConsumer, light, overlay, i, j, k, l);
     }
-    //?} else {
-    /*@Override
+    *///?} else {
+    @Override
     public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, int color) {
         triviabot.render(matrices, vertexConsumer, light, overlay, color);
     }
-    *///?}
+    //?}
 
     @Override
     public ModelPart root() {

@@ -91,16 +91,16 @@ public class HungerManagerMixin implements IHungerManager {
     }
 
     //? if <= 1.20.3 {
-    @Inject(method = "eat(IF)V", at = @At("TAIL"))
+    /*@Inject(method = "eat(IF)V", at = @At("TAIL"))
     private void addInternal(CallbackInfo ci) {
         ls$emitUpdate();
     }
-    //?} else {
-    /*@Inject(method = "add", at = @At("TAIL"))
+    *///?} else {
+    @Inject(method = "add", at = @At("TAIL"))
     private void addInternal(CallbackInfo ci) {
         ls$emitUpdate();
     }
-    *///?}
+    //?}
 
     @Unique
     private void ls$emitUpdate() {

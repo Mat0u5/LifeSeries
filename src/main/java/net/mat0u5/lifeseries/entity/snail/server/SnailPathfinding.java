@@ -28,10 +28,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 //? if <= 1.20.3 {
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
-//?} else {
-/*import net.minecraft.world.level.pathfinder.PathType;
-*///?}
+/*import net.minecraft.world.level.pathfinder.BlockPathTypes;
+*///?} else {
+import net.minecraft.world.level.pathfinder.PathType;
+//?}
 
 @SuppressWarnings("resource")
 public class SnailPathfinding {
@@ -229,12 +229,12 @@ public class SnailPathfinding {
                 BlockPos tpTo = getBlockPosNearTarget(boundEntity, minDistanceFromPlayer);
                 if (tpTo == null) return;
                 //? if <= 1.20.2 {
-                level.playSound(null, snail.getX(), snail.getY(), snail.getZ(), SoundEvents.ENDERMAN_TELEPORT, snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
+                /*level.playSound(null, snail.getX(), snail.getY(), snail.getZ(), SoundEvents.ENDERMAN_TELEPORT, snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
                 entityWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.ENDERMAN_TELEPORT, snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
-                //?} else {
-                /*level.playSound(null, snail.getX(), snail.getY(), snail.getZ(), SoundEvents.PLAYER_TELEPORT, snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
+                *///?} else {
+                level.playSound(null, snail.getX(), snail.getY(), snail.getZ(), SoundEvents.PLAYER_TELEPORT, snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
                 entityWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.PLAYER_TELEPORT, snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
-                *///?}
+                //?}
                 AnimationUtils.spawnTeleportParticles(level, snail.position());
                 AnimationUtils.spawnTeleportParticles(entityWorld, tpTo.getCenter());
                 snail.serverData.despawn();
@@ -303,7 +303,7 @@ public class SnailPathfinding {
 
     public void setNavigationFlying() {
         //? if <= 1.20.3 {
-        snail.setPathfindingMalus(BlockPathTypes.BLOCKED, -1);
+        /*snail.setPathfindingMalus(BlockPathTypes.BLOCKED, -1);
         snail.setPathfindingMalus(BlockPathTypes.TRAPDOOR, -1);
         snail.setPathfindingMalus(BlockPathTypes.WALKABLE_DOOR, -1);
         snail.setPathfindingMalus(BlockPathTypes.DOOR_OPEN, -1);
@@ -313,8 +313,8 @@ public class SnailPathfinding {
         snail.setPathfindingMalus(BlockPathTypes.DANGER_OTHER, 0);
         snail.setPathfindingMalus(BlockPathTypes.WALKABLE, 0);
         snail.setPathfindingMalus(BlockPathTypes.OPEN, 0);
-        //?} else {
-        /*snail.setPathfindingMalus(PathType.BLOCKED, -1);
+        *///?} else {
+        snail.setPathfindingMalus(PathType.BLOCKED, -1);
         snail.setPathfindingMalus(PathType.TRAPDOOR, -1);
         snail.setPathfindingMalus(PathType.DANGER_TRAPDOOR, -1);
         snail.setPathfindingMalus(PathType.WALKABLE_DOOR, -1);
@@ -325,14 +325,14 @@ public class SnailPathfinding {
         snail.setPathfindingMalus(PathType.DANGER_OTHER, 0);
         snail.setPathfindingMalus(PathType.WALKABLE, 0);
         snail.setPathfindingMalus(PathType.OPEN, 0);
-        *///?}
+        //?}
         snail.setNavigation(flyingNavigation);
         updateNavigationTarget();
     }
 
     public void setNavigationWalking() {
         //? if <= 1.20.3 {
-        snail.setPathfindingMalus(BlockPathTypes.BLOCKED, -1);
+        /*snail.setPathfindingMalus(BlockPathTypes.BLOCKED, -1);
         snail.setPathfindingMalus(BlockPathTypes.TRAPDOOR, -1);
         snail.setPathfindingMalus(BlockPathTypes.WALKABLE_DOOR, -1);
         snail.setPathfindingMalus(BlockPathTypes.DOOR_OPEN, -1);
@@ -344,8 +344,8 @@ public class SnailPathfinding {
         snail.setPathfindingMalus(BlockPathTypes.DANGER_OTHER, 0);
         snail.setPathfindingMalus(BlockPathTypes.WALKABLE, 0);
         snail.setPathfindingMalus(BlockPathTypes.OPEN, 0);
-        //?} else {
-        /*snail.setPathfindingMalus(PathType.BLOCKED, -1);
+        *///?} else {
+        snail.setPathfindingMalus(PathType.BLOCKED, -1);
         snail.setPathfindingMalus(PathType.TRAPDOOR, -1);
         snail.setPathfindingMalus(PathType.DANGER_TRAPDOOR, -1);
         snail.setPathfindingMalus(PathType.WALKABLE_DOOR, -1);
@@ -358,7 +358,7 @@ public class SnailPathfinding {
         snail.setPathfindingMalus(PathType.DANGER_OTHER, 0);
         snail.setPathfindingMalus(PathType.WALKABLE, 0);
         snail.setPathfindingMalus(PathType.OPEN, 0);
-        *///?}
+        //?}
 
         snail.setNavigation(groundNavigation);
         updateNavigationTarget();
@@ -366,7 +366,7 @@ public class SnailPathfinding {
 
     public void setNavigationMining() {
         //? if <= 1.20.3 {
-        snail.setPathfindingMalus(BlockPathTypes.BLOCKED, 4.0f);
+        /*snail.setPathfindingMalus(BlockPathTypes.BLOCKED, 4.0f);
         snail.setPathfindingMalus(BlockPathTypes.TRAPDOOR, 0);
         snail.setPathfindingMalus(BlockPathTypes.WALKABLE_DOOR, 0);
         snail.setPathfindingMalus(BlockPathTypes.DOOR_OPEN, 0);
@@ -376,8 +376,8 @@ public class SnailPathfinding {
         snail.setPathfindingMalus(BlockPathTypes.DANGER_OTHER, 0);
         snail.setPathfindingMalus(BlockPathTypes.WALKABLE, 0);
         snail.setPathfindingMalus(BlockPathTypes.OPEN, 0);
-        //?} else {
-        /*snail.setPathfindingMalus(PathType.BLOCKED, 4.0f);
+        *///?} else {
+        snail.setPathfindingMalus(PathType.BLOCKED, 4.0f);
         snail.setPathfindingMalus(PathType.TRAPDOOR, 0);
         snail.setPathfindingMalus(PathType.DANGER_TRAPDOOR, 0);
         snail.setPathfindingMalus(PathType.WALKABLE_DOOR, 0);
@@ -388,7 +388,7 @@ public class SnailPathfinding {
         snail.setPathfindingMalus(PathType.DANGER_OTHER, 0);
         snail.setPathfindingMalus(PathType.WALKABLE, 0);
         snail.setPathfindingMalus(PathType.OPEN, 0);
-        *///?}
+        //?}
         snail.setNavigation(miningNavigation);
         updateNavigationTarget();
     }

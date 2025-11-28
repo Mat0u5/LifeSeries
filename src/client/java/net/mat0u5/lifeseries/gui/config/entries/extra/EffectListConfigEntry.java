@@ -37,15 +37,15 @@ import net.minecraft.resources.ResourceLocation;
 /*import net.minecraft.resources.Identifier;
 *///?}
 //? if <= 1.20.3 {
-public class EffectListConfigEntry extends StringListPopupConfigEntry<MobEffect> {
-//?} else {
-/*public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<MobEffect>> {
-*///?}
+/*public class EffectListConfigEntry extends StringListPopupConfigEntry<MobEffect> {
+*///?} else {
+public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<MobEffect>> {
+//?}
      //? if <= 1.20 {
-    private static final ResourceLocation EFFECT_BACKGROUND_TEXTURE = IdentifierHelper.vanilla("textures/gui/container/inventory.png");
-    //?} else if <= 1.21.9 {
-    /*private static final ResourceLocation EFFECT_BACKGROUND_TEXTURE = IdentifierHelper.vanilla("hud/effect_background");
-    *///?} else {
+    /*private static final ResourceLocation EFFECT_BACKGROUND_TEXTURE = IdentifierHelper.vanilla("textures/gui/container/inventory.png");
+    *///?} else if <= 1.21.9 {
+    private static final ResourceLocation EFFECT_BACKGROUND_TEXTURE = IdentifierHelper.vanilla("hud/effect_background");
+    //?} else {
     /*private static final Identifier EFFECT_BACKGROUND_TEXTURE = IdentifierHelper.vanilla("hud/effect_background");
     *///?}
 
@@ -62,10 +62,10 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<MobEffect>
         }
 
         //? if <= 1.20.3 {
-        List<MobEffect> newList = new ArrayList<>();
-        //?} else {
-        /*List<Holder<MobEffect>> newList = new ArrayList<>();
-        *///?}
+        /*List<MobEffect> newList = new ArrayList<>();
+        *///?} else {
+        List<Holder<MobEffect>> newList = new ArrayList<>();
+        //?}
         boolean errors = false;
 
         Registry<MobEffect> effectsRegistry = Minecraft.getInstance().level.registryAccess()
@@ -88,10 +88,10 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<MobEffect>
 
                 if (enchantment != null) {
                     //? if <= 1.20.3 {
-                    newList.add(enchantment);
-                    //?} else {
-                    /*newList.add(effectsRegistry.wrapAsHolder(enchantment));
-                    *///?}
+                    /*newList.add(enchantment);
+                    *///?} else {
+                    newList.add(effectsRegistry.wrapAsHolder(enchantment));
+                    //?}
                 } else {
                     setError(TextUtils.formatString("Invalid effect: '{}'", potionId));
                     errors = true;
@@ -110,19 +110,19 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<MobEffect>
 
     @Override
     //? if <= 1.20.3 {
-    protected void renderListEntry(GuiGraphics context, MobEffect effectType, int x, int y, int mouseX, int mouseY, float tickDelta) {
-    //?} else {
-    /*protected void renderListEntry(GuiGraphics context, Holder<MobEffect> effectType, int x, int y, int mouseX, int mouseY, float tickDelta) {
-    *///?}
+    /*protected void renderListEntry(GuiGraphics context, MobEffect effectType, int x, int y, int mouseX, int mouseY, float tickDelta) {
+    *///?} else {
+    protected void renderListEntry(GuiGraphics context, Holder<MobEffect> effectType, int x, int y, int mouseX, int mouseY, float tickDelta) {
+    //?}
         //? if <= 1.21 {
         MobEffectTextureManager statusEffectSpriteManager = Minecraft.getInstance().getMobEffectTextures();
         RenderSystem.enableBlend();
 
         //? if <= 1.20 {
-        context.blit(EFFECT_BACKGROUND_TEXTURE, x, y, 141, 166, 24, 24);
-        //?} else {
-        /*context.blitSprite(EFFECT_BACKGROUND_TEXTURE, x, y, 24, 24);
-        *///?}
+        /*context.blit(EFFECT_BACKGROUND_TEXTURE, x, y, 141, 166, 24, 24);
+        *///?} else {
+        context.blitSprite(EFFECT_BACKGROUND_TEXTURE, x, y, 24, 24);
+        //?}
         TextureAtlasSprite sprite = statusEffectSpriteManager.get(effectType);
         context.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         context.blit(x + 3, y + 3, 0, 18, 18, sprite);

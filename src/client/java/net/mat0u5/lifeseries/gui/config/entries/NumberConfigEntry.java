@@ -35,10 +35,10 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
         setText(getValueAsString());
         if (textField.getWidth()-6 < textRenderer.width(getValueAsString())) {
             //? if <= 1.20 {
-            textField.moveCursorToStart();
-            //?} else {
-            /*textField.moveCursorToStart(false);
-            *///?}
+            /*textField.moveCursorToStart();
+            *///?} else {
+            textField.moveCursorToStart(false);
+            //?}
         }
     }
 
