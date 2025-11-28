@@ -74,12 +74,7 @@ public enum Superpowers {
     }
 
     public static List<Superpowers> getImplemented() {
-        List<Superpowers> result = new ArrayList<>(List.of(Superpowers.values()));
-        result.remove(NULL);
-        //? if <= 1.21 {
-        result.remove(CREAKING);
-        result.remove(FLIGHT);
-        //?}
+        List<Superpowers> result = getAll();
         if (!CompatibilityManager.voicechatLoaded()) {
             result.remove(LISTENING);
         }
@@ -97,6 +92,16 @@ public enum Superpowers {
     public static List<Superpowers> getAll() {
         List<Superpowers> result = new ArrayList<>(List.of(Superpowers.values()));
         result.remove(NULL);
+        //? if < 1.20.3 {
+        result.remove(TIME_CONTROL);
+        //?}
+        //? if < 1.21 {
+        result.remove(WIND_CHARGE);
+        //?}
+        //? if < 1.21.2 {
+        result.remove(CREAKING);
+        result.remove(FLIGHT);
+        //?}
         return result;
     }
 

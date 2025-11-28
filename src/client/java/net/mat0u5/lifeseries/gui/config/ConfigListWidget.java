@@ -14,8 +14,8 @@ import java.util.TreeMap;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 *///?}
-//?if > 1.20 && <= 1.20.3
-import net.minecraft.client.gui.screens.Screen;
+//? if > 1.20 && <= 1.20.3
+/*import net.minecraft.client.gui.screens.Screen;*/
 
 public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.ConfigEntryWidget> {
     public static final int ENTRY_GAP = 2;

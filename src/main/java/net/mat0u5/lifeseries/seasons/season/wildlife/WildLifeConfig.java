@@ -336,8 +336,8 @@ public class WildLifeConfig extends ConfigManager {
                 ,WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN
                 ,WILDCARD_SUPERPOWERS_ZOMBIES_HEALTH
                 //? if > 1.20.3 {
-                ,WILDCARD_SUPERPOWERS_SUPERSPEED_STEP
-                //?}
+                /*,WILDCARD_SUPERPOWERS_SUPERSPEED_STEP
+                *///?}
                 ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_ARMOR
                 ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_HANDS
 

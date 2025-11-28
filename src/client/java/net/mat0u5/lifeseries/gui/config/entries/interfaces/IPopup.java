@@ -27,7 +27,7 @@ public interface IPopup {
     default void renderPopup(GuiGraphics context, int x, int y, int mouseX, int mouseY, float tickDelta) {
         if (!shouldShowPopup()) return;
 
-        //?if <= 1.20 {
+        //? if <= 1.20 {
         int offsetX = 0;
         int offsetY = -1;
         //?} else {

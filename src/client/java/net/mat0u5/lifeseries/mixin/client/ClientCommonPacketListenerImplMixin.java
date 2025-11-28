@@ -69,8 +69,10 @@ public class ClientCommonPacketListenerImplMixin {
         Main.LOGGER.info("Skipping resourcepack download ({})", url);
         //? if <= 1.20 {
         this.connection.send(new ServerboundResourcePackPacket(ServerboundResourcePackPacket.Action.ACCEPTED));
+        this.connection.send(new ServerboundResourcePackPacket(ServerboundResourcePackPacket.Action.SUCCESSFULLY_LOADED));
         //?} else if <= 1.20.2 {
         /*this.connection.send(new ServerboundResourcePackPacket(ServerboundResourcePackPacket.Action.ACCEPTED));
+        this.connection.send(new ServerboundResourcePackPacket(ServerboundResourcePackPacket.Action.SUCCESSFULLY_LOADED));
         *///?} else {
         /*this.connection.send(new ServerboundResourcePackPacket(uuid, ServerboundResourcePackPacket.Action.ACCEPTED));
         this.connection.send(new ServerboundResourcePackPacket(uuid, ServerboundResourcePackPacket.Action.DOWNLOADED));

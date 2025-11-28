@@ -86,7 +86,7 @@ public abstract class PlayerMixin {
             }
         }
     }
-    //?if <= 1.20.3 {
+    //? if <= 1.20.3 {
     @Inject(method = "getStandingEyeHeight", at = @At("HEAD"), cancellable = true)
     public void getBaseDimensions(Pose pose, EntityDimensions entityDimensions, CallbackInfoReturnable<Float> cir) {
         if (Main.modFullyDisabled()) return;

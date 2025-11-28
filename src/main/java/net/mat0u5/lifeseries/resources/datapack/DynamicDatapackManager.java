@@ -22,7 +22,7 @@ public class DynamicDatapackManager {
     private static final String LOCAL_MCMETA = "/files/dynamicpack/pack.mcmeta";
 
     private static final String DATAPACK_MAIN = "Life Series Dynamic Datapack";
-    //?if < 1.21 {
+    //? if < 1.21 {
     private static final String DATAPACK_LOOTTABLE = DATAPACK_MAIN+"/data/lifeseriesdynamic/loot_tables";
     //?} else {
     /*private static final String DATAPACK_LOOTTABLE = DATAPACK_MAIN+"/data/lifeseriesdynamic/loot_table";

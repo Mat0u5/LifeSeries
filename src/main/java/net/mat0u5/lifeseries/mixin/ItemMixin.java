@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Hunger;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -28,7 +29,7 @@ import net.minecraft.core.component.PatchedDataComponentMap;
 public abstract class ItemMixin {
     //? if < 1.20.5 {
     @Accessor("foodProperties")
-    public abstract FoodProperties foodProperties();
+    public abstract FoodProperties ls$foodProperties();
     //?}
     //? if >= 1.20.5 {
     /*@Accessor("components")
@@ -65,6 +66,12 @@ public abstract class ItemMixin {
     //? if < 1.20.5 {
     @Inject(method = "isEdible", at = @At("HEAD"), cancellable = true)
     public void isEdible(CallbackInfoReturnable<Boolean> cir) {
+        Item item = (Item) (Object) this;
+        cir.setReturnValue(item.getFoodProperties() != null);
+    }
+
+    @Inject(method = "getFoodProperties", at = @At("HEAD"), cancellable = true)
+    public void makeEdible(CallbackInfoReturnable<FoodProperties> cir) {
         if (Main.modDisabled()) return;
         boolean isLogicalSide = Main.isLogicalSide();
         boolean hungerActive = false;
@@ -83,7 +90,7 @@ public abstract class ItemMixin {
         if (hungerActive) {
             Item item = (Item) (Object) this;
             if (!Hunger.nonEdible.contains(item)) {
-                cir.setReturnValue(true);
+                cir.setReturnValue(Foods.BREAD);
             }
         }
     }
@@ -95,7 +102,7 @@ public abstract class ItemMixin {
         if (currentSeason instanceof WildLife && WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
             Item item = (Item) (Object) this;
             //? if < 1.20.5 {
-            Hunger.finishUsing(item, foodProperties() != null, user);
+            Hunger.finishUsing(item, ls$foodProperties() != null, user);
             //?} else {
             /*Hunger.finishUsing(item, normalComponents(), user);
             *///?}

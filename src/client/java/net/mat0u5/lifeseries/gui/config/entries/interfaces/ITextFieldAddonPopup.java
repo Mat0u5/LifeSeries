@@ -19,14 +19,14 @@ public interface ITextFieldAddonPopup extends ITextPopup {
         int textFieldX = textField.getX();
         int textFieldY = textField.getY();
         if (textField.getWidth() <= width) {
-            //?if <= 1.20 {
+            //? if <= 1.20 {
             context.fill(textFieldX, textFieldY-1, textFieldX+textField.getWidth(), textFieldY, TextColors.DARK_GRAY);
             //?} else {
             /*context.fill(textFieldX+1, textFieldY, textFieldX+textField.getWidth()-1, textFieldY+1, TextColors.DARK_GRAY);
             *///?}
         }
         else {
-            //?if <= 1.20 {
+            //? if <= 1.20 {
             context.fill(x, textFieldY-1, x+width, textFieldY, TextColors.DARK_GRAY);
             //?} else {
             /*context.fill(x, textFieldY, x+width, textFieldY+1, TextColors.DARK_GRAY);
