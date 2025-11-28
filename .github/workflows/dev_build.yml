@@ -96,7 +96,7 @@ jobs:
         run: |
           INPUT="${{ github.event.inputs.versions_to_publish }}"
           if [ "$INPUT" = "all" ]; then
-            VERSIONS=("1.21" "1.21.2" "1.21.4" "1.21.5" "1.21.6" "1.21.9" "1.21.11")
+            VERSIONS=("1.20" "1.20.2" "1.20.3" "1.20.5" "1.21" "1.21.2" "1.21.4" "1.21.5" "1.21.6" "1.21.9" "1.21.11")
           else
             IFS=',' read -ra VERSIONS <<< "$INPUT"
             # Trim whitespace from each version
