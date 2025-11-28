@@ -1,24 +1,18 @@
 package net.mat0u5.lifeseries.utils.world;
 
 import net.minecraft.core.Holder;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.CustomData;
-import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.server;
 //? if <= 1.21
@@ -28,11 +22,88 @@ import net.minecraft.world.item.EnchantedBookItem;
 //? if >= 1.21.5
 /*import java.util.Optional;*/
 
+//? if <= 1.20.3 {
+//?} else {
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.ItemLore;
+import net.minecraft.network.chat.Component;
+import java.util.ArrayList;
+import java.util.List;
+//?}
+
 public class ItemStackUtils {
-    public static void clearItemLore(ItemStack itemStack) {
-        itemStack.remove(DataComponents.LORE);
+    //? if <= 1.20.3 {
+
+    /*public static void setCustomComponentInt(ItemStack itemStack, String componentKey, int value) {
+        if (itemStack == null) return;
+        CompoundTag currentNbt = itemStack.getOrCreateTag();
+        currentNbt.putInt(componentKey,value);
+        itemStack.setTag(currentNbt);
     }
 
+    public static void setCustomComponentBoolean(ItemStack itemStack, String componentKey, boolean value) {
+        if (itemStack == null) return;
+        CompoundTag currentNbt = itemStack.getOrCreateTag();
+        currentNbt.putBoolean(componentKey,value);
+        itemStack.setTag(currentNbt);
+    }
+
+    public static void setCustomComponentString(ItemStack itemStack, String componentKey, String value) {
+        if (itemStack == null) return;
+        CompoundTag currentNbt = itemStack.getTag();
+        currentNbt.putString(componentKey,value);
+        itemStack.setTag(currentNbt);
+    }
+
+    public static String getCustomComponentString(ItemStack itemStack, String componentKey) {
+        if (itemStack == null) return null;
+        CompoundTag currentNbt = itemStack.getTag();
+        if (currentNbt == null) return null;
+        if (!currentNbt.contains(componentKey)) return null;
+        return currentNbt.getString(componentKey);
+
+    }
+
+    public static Integer getCustomComponentInt(ItemStack itemStack, String componentKey) {
+        if (itemStack == null) return null;
+        CompoundTag currentNbt = itemStack.getTag();
+        if (currentNbt == null) return null;
+        if (!currentNbt.contains(componentKey)) return null;
+        return currentNbt.getInt(componentKey);
+    }
+
+    public static Byte getCustomComponentByte(ItemStack itemStack, String componentKey) {
+        if (itemStack == null) return null;
+        CompoundTag currentNbt = itemStack.getTag();
+        if (currentNbt == null) return null;
+        if (!currentNbt.contains(componentKey)) return null;
+        return currentNbt.getByte(componentKey);
+    }
+
+    public static Boolean getCustomComponentBoolean(ItemStack itemStack, String componentKey) {
+        if (itemStack == null) return null;
+        CompoundTag currentNbt = itemStack.getTag();
+        if (currentNbt == null) return null;
+        if (!currentNbt.contains(componentKey)) return null;
+        return currentNbt.getBoolean(componentKey);
+    }
+
+    public static boolean hasCustomComponentEntry(ItemStack itemStack, String componentEntry) {
+        if (itemStack == null) return false;
+        CompoundTag currentNbt = itemStack.getTag();
+        if (currentNbt == null) return false;
+        return currentNbt.contains(componentEntry);
+    }
+
+    public static void removeCustomComponentEntry(ItemStack itemStack, String componentEntry) {
+        CompoundTag nbt = itemStack.getTag();
+        if (nbt == null) return;
+        if (!nbt.contains(componentEntry)) return;
+        nbt.remove(componentEntry);
+        itemStack.setTag(nbt);
+    }
+    *///?} else {
     public static void addLoreToItemStack(ItemStack itemStack, List<Component> lines) {
         List<Component> loreLines = getLore(itemStack);
         if (lines != null && !lines.isEmpty()) loreLines.addAll(lines);
@@ -49,27 +120,11 @@ public class ItemStackUtils {
         return lines;
     }
 
-    public static ItemStack getHoldingItem(Player player) {
-        ItemStack mainHandItem = player.getMainHandItem();
-        if (mainHandItem != null) {
-            if (!mainHandItem.isEmpty()) return mainHandItem;
-        }
-        return player.getOffhandItem();
-    }
-
     public static void setCustomComponentInt(ItemStack itemStack, String componentKey, int value) {
         if (itemStack == null) return;
         CustomData currentNbt = itemStack.get(DataComponents.CUSTOM_DATA);
         CompoundTag nbtComp = currentNbt == null ? new CompoundTag() : currentNbt.copyTag();
         nbtComp.putInt(componentKey,value);
-        itemStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbtComp));
-    }
-
-    public static void setCustomComponentByte(ItemStack itemStack, String componentKey, byte value) {
-        if (itemStack == null) return;
-        CustomData currentNbt = itemStack.get(DataComponents.CUSTOM_DATA);
-        CompoundTag nbtComp = currentNbt == null ? new CompoundTag() : currentNbt.copyTag();
-        nbtComp.putByte(componentKey,value);
         itemStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbtComp));
     }
 
@@ -158,7 +213,7 @@ public class ItemStackUtils {
         return nbt.contains(componentEntry);
         //?} else {
         /*return nbt.copyTag().contains(componentEntry);
-        *///?}
+         *///?}
     }
 
     public static void removeCustomComponentEntry(ItemStack itemStack, String componentEntry) {
@@ -168,7 +223,7 @@ public class ItemStackUtils {
         if (!nbt.contains(componentEntry)) return;
         //?} else {
         /*if (!nbt.copyTag().contains(componentEntry)) return;
-        *///?}
+         *///?}
         CompoundTag nbtComp = nbt.copyTag();
         nbtComp.remove(componentEntry);
         if (nbtComp.isEmpty()) {
@@ -178,6 +233,7 @@ public class ItemStackUtils {
             itemStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbtComp));
         }
     }
+    //?}
 
     public static void spawnItem(ServerLevel level, Vec3 position, ItemStack stack) {
         spawnItemForPlayer(level, position, stack, null);
@@ -208,7 +264,14 @@ public class ItemStackUtils {
 
     public static ItemStack createEnchantedBook(ResourceKey<Enchantment> enchantment, int level) {
         if (server == null) return null;
-        //? if <=1.21 {
+        //? if <= 1.20.5 {
+        /*Holder<Enchantment> entry = getEnchantmentEntry(enchantment);
+        if (entry == null) return null;
+        ItemStack enchantedBook = EnchantedBookItem.createForEnchantment(
+                new EnchantmentInstance(entry.value(), level)
+        );
+        return enchantedBook;
+        *///?} else if <= 1.21 {
         Holder<Enchantment> entry = getEnchantmentEntry(enchantment);
         ItemStack enchantedBook = EnchantedBookItem.createForEnchantment(
                 new EnchantmentInstance(entry, level)
@@ -226,7 +289,7 @@ public class ItemStackUtils {
     @Nullable
     public static Holder<Enchantment> getEnchantmentEntry(ResourceKey<Enchantment> enchantment) {
         if (server == null) return null;
-        //? if <=1.21 {
+        //? if <= 1.21 {
         return server.registryAccess()
                 .lookupOrThrow(Registries.ENCHANTMENT)
                 .getOrThrow(enchantment);

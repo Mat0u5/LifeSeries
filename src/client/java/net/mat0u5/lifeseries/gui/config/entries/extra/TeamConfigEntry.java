@@ -207,7 +207,7 @@ public class TeamConfigEntry extends EmptyConfigEntry {
         if (parentGroup == null) return;
         try {
             parentGroup.getMainEntry().markChangedForever();
-            parentGroup.getChildEntries().getFirst().markChangedForever();
+            parentGroup.getChildEntries().get(0).markChangedForever();
         }catch(Exception e) {}
         parentGroup.removeChildEntry(this);
     }

@@ -57,7 +57,9 @@ public class Superspeed extends ToggleableSuperpower {
         slowlySetSpeed(player, 0.35, 60);
         NetworkHandlerServer.sendVignette(player, -1);
         if (STEP_UP) {
+            //? if > 1.20.3 {
             AttributeUtils.setStepHeight(player, 1);
+            //?}
         }
         super.activate();
     }

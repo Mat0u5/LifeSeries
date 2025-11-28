@@ -26,6 +26,15 @@ public interface IPopup {
 
     default void renderPopup(GuiGraphics context, int x, int y, int mouseX, int mouseY, float tickDelta) {
         if (!shouldShowPopup()) return;
+
+        //? if <= 1.20 {
+        /*int offsetX = 0;
+        int offsetY = -1;
+        *///?} else {
+        int offsetX = 0;
+        int offsetY = 0;
+        //?}
+
         //? if <= 1.21.5 {
         context.pose().pushPose();
         context.pose().translate(0, 0, 100);
@@ -34,8 +43,8 @@ public interface IPopup {
         *///?}
         int width = getActualPopupWidth();
         int height = getActualPopupHeight();
-        renderBackground(context, x, y, width, height, mouseX, mouseY, tickDelta);
-        renderContent(context, x+getPadding()/2, y+getPadding()/2, width, height, mouseX, mouseY, tickDelta);
+        renderBackground(context, x, y+offsetY, width, height, mouseX, mouseY, tickDelta);
+        renderContent(context, x+getPadding()/2, y+getPadding()/2+offsetY, width, height, mouseX, mouseY, tickDelta);
         //? if <= 1.21.5 {
         context.pose().popPose();
         //?} else {

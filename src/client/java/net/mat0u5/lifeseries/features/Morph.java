@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.features;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.interfaces.IMorph;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
@@ -18,7 +19,7 @@ public class Morph {
         EntityType<?> morph = morphComponent.morph;
         LivingEntity dummy = morphComponent.dummy;
 
-        if(morphComponent.isMorphed() && morph != null){
+        if (morphComponent.isMorphed() && morph != null) {
             Player player = ClientUtils.getPlayer(morphComponent.playerUUID);
             if (player == null) return;
 
@@ -55,7 +56,7 @@ public class Morph {
                 dummy.xRotO = player.xRotO;
             }
             else {
-                dummy.xRotO = Math.clamp(player.xRotO, -28, 28);
+                dummy.xRotO = OtherUtils.clamp(player.xRotO, -28, 28);
             }
             if (reversePitch) dummy.xRotO *= -1;
 
@@ -91,7 +92,7 @@ public class Morph {
                 dummy.setXRot(player.getXRot());
             }
             else {
-                dummy.setXRot(Math.clamp(player.getXRot(), -28, 28));
+                dummy.setXRot(OtherUtils.clamp(player.getXRot(), -28, 28));
             }
             if (reversePitch) dummy.setXRot(dummy.getXRot() * -1);
 

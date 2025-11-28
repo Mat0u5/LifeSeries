@@ -3,12 +3,14 @@ package net.mat0u5.lifeseries.mixin.client;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.events.ClientEvents;
+import net.mat0u5.lifeseries.utils.interfaces.IEntity;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -50,8 +52,8 @@ public class LivingEntityMixin {
     private Vec3 applyMovementInput(Vec3 velocity) {
         if ((System.currentTimeMillis() - MainClient.CURSE_SLIDING) > 5000 || Main.modFullyDisabled()) return velocity;
         LivingEntity entity = (LivingEntity) (Object) this;
-        if (entity instanceof Player playerr && MainClient.isClientPlayer(playerr.getUUID()) && playerr.onGround() && ClientEvents.onGroundFor >= 5) {
-            BlockPos blockPos = playerr.getBlockPosBelowThatAffectsMyMovement();
+        if (entity instanceof Player playerr && entity instanceof IEntity entityAccessor && MainClient.isClientPlayer(playerr.getUUID()) && playerr.onGround() && ClientEvents.onGroundFor >= 5) {
+            BlockPos blockPos = entityAccessor.ls$getBlockPosBelowThatAffectsMyMovement();
             float originalSlipperiness = playerr.level().getBlockState(blockPos).getBlock().getFriction();
             return new Vec3((velocity.x/originalSlipperiness)*0.995f, velocity.y, (velocity.z/originalSlipperiness)*0.995f);
         }

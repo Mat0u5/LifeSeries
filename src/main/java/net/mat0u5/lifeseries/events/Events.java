@@ -177,7 +177,9 @@ public class Events {
             if (Main.currentSession != null) {
                 Main.currentSession.tick(server);
             }
+            //? if >= 1.20.3 {
             if (server.tickRateManager().isFrozen()) return;
+            //?}
             if (Main.currentSession != null) {
                 currentSeason.tick(server);
             }

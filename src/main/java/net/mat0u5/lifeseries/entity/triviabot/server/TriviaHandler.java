@@ -11,10 +11,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShif
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
-import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.mat0u5.lifeseries.utils.other.WeightedRandomizer;
+import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
@@ -23,8 +20,7 @@ import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.particles.ColorParticleOption;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -50,11 +46,22 @@ import java.util.UUID;
 import static net.mat0u5.lifeseries.Main.blacklist;
 import static net.mat0u5.lifeseries.Main.server;
 
+//? if <= 1.20.3 {
+/*import net.minecraft.core.particles.DustParticleOptions;
+*///?} else {
+import net.minecraft.core.particles.ColorParticleOption;
+//?}
+
+//? if >= 1.20.5 {
+import net.minecraft.core.component.DataComponents;
+//?}
+
 //? if > 1.21.9
 /*import net.minecraft.world.entity.EntityReference;*/
 
 //? if <= 1.21.9 {
 import net.minecraft.world.entity.animal.Bee;
+import org.joml.Vector3f;
 //?} else {
 /*import net.minecraft.world.entity.animal.bee.Bee;
 *///?}
@@ -106,7 +113,11 @@ public class TriviaHandler {
             if (triviaSnail != null) {
                 triviaSnail.serverData.setBoundPlayer(bot.serverData.getBoundPlayer());
                 triviaSnail.serverData.setFromTrivia();
+                //? if <= 1.20.3 {
+                /*triviaSnail.playSound(SoundEvents.GENERIC_EXPLODE, 0.5f, 2);
+                *///?} else {
                 triviaSnail.playSound(SoundEvents.GENERIC_EXPLODE.value(), 0.5f, 2);
+                //?}
                 ServerLevel level = (ServerLevel) triviaSnail.level();
                 Vec3 pos = bot.position();
                 level.sendParticles(
@@ -196,22 +207,43 @@ public class TriviaHandler {
         ServerLevel level = (ServerLevel) bot.level();
         Vec3 pos = bot.position();
 
+        //? if <= 1.20.3 {
+        /*level.sendParticles(
+                new DustParticleOptions(new Vector3f(166, 17, 17), 1.0F),
+                pos.x(), pos.y()+1, pos.z(),
+                40, 0.1, 0.25, 0.1, 0.035
+        );
+        *///?} else {
         level.sendParticles(
                 ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 0xFFa61111),
                 pos.x(), pos.y()+1, pos.z(),
                 40, 0.1, 0.25, 0.1, 0.035
         );
+        //?}
+        int minCurseNum = 0;
+        //? if < 1.21 {
+        /*minCurseNum = 1;
+        *///?}
         int numOfCurses = 9;
+        //? if <= 1.20.3 {
+        /*numOfCurses--;
+        *///?}
         if (CompatibilityManager.voicechatLoaded() && VoicechatMain.isConnectedToSVC(player.getUUID())) numOfCurses = 10;
 
         Integer punishmentWeight = player.ls$getLives();
         if (punishmentWeight == null) punishmentWeight = 1;
         if (difficulty == 1) punishmentWeight++;
         if (difficulty == 3) punishmentWeight--;
-        punishmentWeight = Math.clamp(punishmentWeight, 1, 4);
+        punishmentWeight = OtherUtils.clamp(punishmentWeight, 1, 4);
 
         WeightedRandomizer randomizer = new WeightedRandomizer();
-        int curse = randomizer.getWeightedRandom(0, numOfCurses, punishmentWeight, 4, 1.5);
+        int curse = randomizer.getWeightedRandom(minCurseNum, numOfCurses, punishmentWeight, 4, 1.5);
+
+        //? if <= 1.20.3 {
+        /*if (curse >= 4) {
+            curse++;
+        }
+        *///?}
 
         if (numOfCurses == 9 && curse >= 6) {
             curse++;
@@ -219,9 +251,11 @@ public class TriviaHandler {
 
         switch (curse) {
             default:
+            //? if >= 1.21 {
             case 0:
                 curseInfestation(player);
                 break;
+            //?}
             case 1:
                 curseSlipperyGround(player);
                 break;
@@ -231,9 +265,11 @@ public class TriviaHandler {
             case 3:
                 curseBeeswarm(player);
                 break;
+            //? if > 1.20.3 {
             case 4:
                 curseGigantification(player);
                 break;
+            //?}
             case 5:
                 curseMoonjump(player);
                 break;
@@ -252,7 +288,11 @@ public class TriviaHandler {
         }
     }
 
+    //? if <= 1.20.3 {
+    /*private static final List<MobEffect> blessEffects = List.of(
+    *///?} else {
     private static final List<Holder<MobEffect>> blessEffects = List.of(
+    //?}
             //? if <= 1.21.4 {
             MobEffects.MOVEMENT_SPEED,
             MobEffects.DIG_SPEED,
@@ -280,10 +320,18 @@ public class TriviaHandler {
         player.sendSystemMessage(Component.empty());
         for (int i = 0; i < 3; i++) {
             int attempts = 0;
+            //? if <= 1.20.3 {
+            /*MobEffect effect = null;
+            *///?} else {
             Holder<MobEffect> effect = null;
+             //?}
             while (effect == null && attempts < 50) {
                 attempts++;
+                //? if <= 1.20.3 {
+                /*MobEffect pickedEffect = blessEffects.get(player.getRandom().nextInt(blessEffects.size()));
+                *///?} else {
                 Holder<MobEffect> pickedEffect = blessEffects.get(player.getRandom().nextInt(blessEffects.size()));
+                //?}
                 if (blacklist != null && blacklist.getBannedEffects().contains(pickedEffect)) {
                     continue;
                 }
@@ -313,7 +361,11 @@ public class TriviaHandler {
             }
 
             String romanNumeral = TextUtils.toRomanNumeral(amplifier + 1);
+            //? if <= 1.20.3 {
+            /*Component effectName = effect.getDisplayName();
+            *///?} else {
             Component effectName = Component.translatable(effect.value().getDescriptionId());
+            //?}
             player.sendSystemMessage(TextUtils.formatLoosely(" §a§l+ §7{}§6 {}", effectName, romanNumeral));
         }
         player.sendSystemMessage(Component.empty());
@@ -335,7 +387,7 @@ public class TriviaHandler {
             vector = relativeTargetPos.normalize().scale(0.3).add(0,0.1,0);
         }
 
-        List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, (ServerLevel) bot.level(), bot.serverData.getBoundPlayer(), IdentifierHelper.mod("trivia_reward_loottable"), false);
+        List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, (ServerLevel) bot.level(), bot.serverData.getBoundPlayer(), IdentifierHelper.of("lifeseriesdynamic", "trivia_reward_loottable"), false);
         if (!lootTableItems.isEmpty()) {
             for (ItemStack item : lootTableItems) {
                 ItemStackUtils.spawnItemForPlayerWithVelocity((ServerLevel) bot.level(), pos, item, bot.serverData.getBoundPlayer(), vector);
@@ -356,7 +408,9 @@ public class TriviaHandler {
         itemSpawner.addItem(new ItemStack(Items.DIAMOND, 4), 20);
         itemSpawner.addItem(new ItemStack(Items.CREEPER_SPAWN_EGG), 10);
         itemSpawner.addItem(new ItemStack(Items.GOLDEN_CARROT, 8), 10);
+        //? if >= 1.21 {
         itemSpawner.addItem(new ItemStack(Items.WIND_CHARGE, 16), 10);
+        //?}
         itemSpawner.addItem(new ItemStack(Items.SCULK_SHRIEKER, 2), 10);
         itemSpawner.addItem(new ItemStack(Items.SCULK_SENSOR, 8), 10);
         itemSpawner.addItem(new ItemStack(Items.TNT, 8), 20);
@@ -369,22 +423,26 @@ public class TriviaHandler {
         itemSpawner.addItem(new ItemStack(Items.ARROW, 64), 10);
         itemSpawner.addItem(new ItemStack(Items.IRON_BLOCK, 2), 10);
 
+        //? if >= 1.21 {
         ItemStack mace = new ItemStack(Items.MACE);
         ItemStackUtils.setCustomComponentBoolean(mace, "IgnoreBlacklist", true);
         ItemStackUtils.setCustomComponentBoolean(mace, "NoModifications", true);
         mace.setDamageValue(mace.getMaxDamage()-1);
         itemSpawner.addItem(mace, 5);
+        //?}
 
         ItemStack endCrystal = new ItemStack(Items.END_CRYSTAL);
         ItemStackUtils.setCustomComponentBoolean(endCrystal, "IgnoreBlacklist", true);
         itemSpawner.addItem(endCrystal, 10);
 
+        //? if >= 1.20.5 {
         ItemStack patat = new ItemStack(Items.POISONOUS_POTATO);
         patat.set(DataComponents.CUSTOM_NAME, Component.nullToEmpty("§6§l§nThe Sacred Patat"));
         ItemStackUtils.addLoreToItemStack(patat,
                 List.of(Component.nullToEmpty("§5§oEating bot might help you. Or maybe not..."))
         );
         itemSpawner.addItem(patat, 1);
+        //?}
     }
 
     /*
@@ -401,16 +459,20 @@ public class TriviaHandler {
         LevelUtils.spawnEntity(EntityType.RAVAGER, player.ls$getServerLevel(), spawnPos);
     }
 
+    //? if >= 1.21 {
     public void curseInfestation(ServerPlayer player) {
         MobEffectInstance statusEffectInstance = new MobEffectInstance(MobEffects.INFESTED, 18000, 0);
         player.addEffect(statusEffectInstance);
     }
+    //?}
 
     public static final List<UUID> cursedGigantificationPlayers = new ArrayList<>();
+    //? if > 1.20.3 {
     public void curseGigantification(ServerPlayer player) {
         cursedGigantificationPlayers.add(player.getUUID());
         SizeShifting.setPlayerSizeUnchecked(player, 4);
     }
+    //?}
 
     public static final List<UUID> cursedSliding = new ArrayList<>();
     public void curseSlipperyGround(ServerPlayer player) {
@@ -425,10 +487,17 @@ public class TriviaHandler {
         ItemStack chest = Items.LEATHER_CHESTPLATE.getDefaultInstance();
         ItemStack legs = Items.LEATHER_LEGGINGS.getDefaultInstance();
         ItemStack boots = Items.LEATHER_BOOTS.getDefaultInstance();
+        //? if <= 1.20.5 {
+        /*head.enchant(Enchantments.BINDING_CURSE, 1);
+        chest.enchant(Enchantments.BINDING_CURSE, 1);
+        legs.enchant (Enchantments.BINDING_CURSE, 1);
+        boots.enchant(Enchantments.BINDING_CURSE, 1);
+        *///?} else {
         head.enchant(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
         chest.enchant(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
         legs.enchant(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
         boots.enchant(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
+        //?}
         ItemStackUtils.setCustomComponentBoolean(head, "IgnoreBlacklist", true);
         ItemStackUtils.setCustomComponentBoolean(chest, "IgnoreBlacklist", true);
         ItemStackUtils.setCustomComponentBoolean(legs, "IgnoreBlacklist", true);

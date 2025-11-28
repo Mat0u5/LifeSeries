@@ -17,7 +17,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.scores.ScoreHolder;
 
 import java.util.*;
 
@@ -316,7 +315,7 @@ public class BoogeymanManager {
         else {
             // Infinite mode, just pick one from the allowed players
             Collections.shuffle(allowedPlayers);
-            boogeyPlayers.add(allowedPlayers.getFirst());
+            boogeyPlayers.add(allowedPlayers.get(0));
         }
 
         for (ServerPlayer player : allowedPlayers) {
@@ -401,7 +400,7 @@ public class BoogeymanManager {
                     if (BOOGEYMAN_ANNOUNCE_OUTCOME) {
                         PlayerUtils.broadcastMessage(TextUtils.format("{}§7 failed to kill a player while being the §cBoogeyman§7. They have been dropped to their §cLast Life§7.", boogeyman.name));
                     }
-                    ScoreboardUtils.setScore(ScoreHolder.forNameOnly(boogeyman.name), LivesManager.SCOREBOARD_NAME, 1);
+                    ScoreboardUtils.setScore(boogeyman.name, LivesManager.SCOREBOARD_NAME, 1);
                     continue;
                 }
                 playerFailBoogeyman(player, true);

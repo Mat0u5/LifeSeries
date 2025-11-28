@@ -238,7 +238,7 @@ public class DoubleLifeCommands extends Command {
             return -1;
         }
         if (affected.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("{}'s soulmate was reset", affected.getFirst()));
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("{}'s soulmate was reset", affected.get(0)));
             return 1;
         }
         OtherUtils.sendCommandFeedback(source, TextUtils.format("Soulmate was reset for {} targets", affected.size()));

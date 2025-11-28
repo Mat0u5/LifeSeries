@@ -77,9 +77,10 @@ public class MorphManager {
         }
     }
 
-    public static void setFromPacket(UUID uuid, EntityType<?> morph) {
+    public static MorphComponent setFromPacket(UUID uuid, EntityType<?> morph) {
         MorphComponent component = getOrCreateComponent(uuid);
         component.setMorph(morph);
+        return component;
     }
 
     /*

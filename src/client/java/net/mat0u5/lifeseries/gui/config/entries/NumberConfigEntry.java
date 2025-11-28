@@ -34,7 +34,11 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
     protected void initializeTextField() {
         setText(getValueAsString());
         if (textField.getWidth()-6 < textRenderer.width(getValueAsString())) {
+            //? if <= 1.20 {
+            /*textField.moveCursorToStart();
+            *///?} else {
             textField.moveCursorToStart(false);
+            //?}
         }
     }
 
@@ -113,7 +117,8 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
 
     @Override
     public String getStartingValueAsString() {
-        return String.valueOf(startingValue);
+        if (startingValue == null) return "";
+        return startingValue.toString();
     }
 
     public T getMinValue() {

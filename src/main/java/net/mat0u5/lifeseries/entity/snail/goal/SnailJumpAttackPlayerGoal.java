@@ -6,6 +6,8 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Random;
+
 public final class SnailJumpAttackPlayerGoal extends Goal {
 
     @NotNull
@@ -14,6 +16,7 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
     private Vec3 previousTargetPosition = Vec3.ZERO;
     private int attackCooldown = Snail.JUMP_COOLDOWN_SHORT;
     private int attackCooldown2 = 0;
+    private static final Random rnd = new Random();
 
     public SnailJumpAttackPlayerGoal(@NotNull Snail mob) {
         this.mob = mob;
@@ -120,6 +123,7 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
         if (boundEntity == null) {
             return;
         }
+
         this.attackCooldown = Snail.JUMP_COOLDOWN_SHORT;
         this.attackCooldown2 = Snail.JUMP_COOLDOWN_LONG;
 
@@ -130,7 +134,7 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
                 previousTargetPosition.z() - mob.getZ()
         );
 
-        if (boundEntity.getRandom().nextInt(3) == 0) {
+        if (rnd.nextInt(3) == 0) {
             //Harder attack variant
             relativeTargetPos = new Vec3(
                     boundEntity.getX() - mob.getX(),
@@ -139,7 +143,7 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
             );
         }
 
-        if (boundEntity.getRandom().nextInt(6) == 0) {
+        if (rnd.nextInt(6) == 0) {
             //EVEN harder attack variant
             Vec3 targetVelocity = boundEntity.position().subtract(previousTargetPosition);
             relativeTargetPos = relativeTargetPos.add(targetVelocity.scale(3));

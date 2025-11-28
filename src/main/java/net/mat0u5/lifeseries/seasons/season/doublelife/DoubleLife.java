@@ -394,9 +394,9 @@ public class DoubleLife extends Season {
 
         while(!playersToRoll.isEmpty()) {
             Collections.shuffle(playersToRoll);
-            ServerPlayer player1 = playersToRoll.getFirst();
+            ServerPlayer player1 = playersToRoll.get(0);
             ServerPlayer player2 = null;
-            playersToRoll.removeFirst();
+            playersToRoll.remove(0);
             for (ServerPlayer player : playersToRoll) {
                 if (Objects.equals(soulmatesPrevent.get(player1.getUUID()), player.getUUID())) continue;
                 if (Objects.equals(soulmatesPrevent.get(player.getUUID()), player1.getUUID())) continue;
@@ -412,7 +412,7 @@ public class DoubleLife extends Season {
         saveSoulmates();
 
         for (ServerPlayer remaining : getNonAssignedPlayers()) {
-            PlayerUtils.broadcastMessageToAdmins(Component.literal("[Double Life] ").append(remaining.getFeedbackDisplayName()).append(" was not paired with anyone."));
+            PlayerUtils.broadcastMessageToAdmins(Component.literal("[Double Life] ").append(remaining.getDisplayName()).append(" was not paired with anyone."));
         }
         soulmatesForce.clear();
         soulmatesPrevent.clear();

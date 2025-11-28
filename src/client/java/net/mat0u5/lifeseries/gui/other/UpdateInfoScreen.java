@@ -39,7 +39,7 @@ public class UpdateInfoScreen extends DefaultScreen {
         textWidth = font.width(dismissText) + 5;
 
         this.addRenderableWidget(
-                Button.builder(Component.literal("Join Discord").withColor(TextColors.PASTEL_WHITE),btn -> {
+                Button.builder(Component.literal("Join Discord").withStyle(style -> style.withColor(TextColors.PASTEL_WHITE)),btn -> {
                             Util.getPlatform().openUri("https://discord.gg/QWJxfb4zQZ");
                         })
                         .pos(startX + 5, endY - 25)
@@ -47,7 +47,7 @@ public class UpdateInfoScreen extends DefaultScreen {
                         .build()
         );
         this.addRenderableWidget(
-                Button.builder(Component.literal("Full Changelog").withColor(TextColors.PASTEL_WHITE), btn -> {
+                Button.builder(Component.literal("Full Changelog").withStyle(style -> style.withColor(TextColors.PASTEL_WHITE)), btn -> {
                             Util.getPlatform().openUri(UpdateChecker.getChangelogLink());
                         })
                         .pos(endX - 80 - 5, endY - 25)

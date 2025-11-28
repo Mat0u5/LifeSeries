@@ -185,7 +185,11 @@ public class Session {
             for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
                 NetworkHandlerServer.sendStringPacket(player, PacketNames.SESSION_STATUS, status.getName());
             }
+            //? if <= 1.20.3 {
+            /*for (MobEffect effect : blacklist.getBannedEffects()) {
+            *///?} else {
             for (Holder<MobEffect> effect : blacklist.getBannedEffects()) {
+            //?}
                 for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
                     if (player.hasEffect(effect)) {
                         MobEffectInstance actualEffect = player.getEffect(effect);
@@ -219,7 +223,9 @@ public class Session {
             checkPlayerPosition(player);
         }
 
+        //? if >= 1.20.3 {
         if (server.tickRateManager().isFrozen()) return;
+        //?}
         if (!validTime()) return;
         if (!statusStarted()) return;
         tickSessionOn(server);
@@ -227,7 +233,11 @@ public class Session {
     }
 
     public void tickSessionOn(MinecraftServer server) {
+        //? if < 1.20.3 {
+        /*float tickRate = 20;
+        *///?} else {
         float tickRate = server.tickRateManager().tickrate();
+        //?}
         if (tickRate == 20) {
             passedTime++;
         }
@@ -277,8 +287,8 @@ public class Session {
             }
 
             // Clamp player position inside the border
-            double clampedX = Math.clamp(playerX, minX, maxX);
-            double clampedZ = Math.clamp(playerZ, minZ, maxZ);
+            double clampedX = OtherUtils.clamp(playerX, minX, maxX);
+            double clampedZ = OtherUtils.clamp(playerZ, minZ, maxZ);
 
             // Teleport player inside the world border
             PlayerUtils.teleport(player, clampedX, player.getY(), clampedZ);

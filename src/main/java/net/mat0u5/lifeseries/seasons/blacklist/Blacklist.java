@@ -10,7 +10,6 @@ import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,9 +21,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -32,13 +29,20 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.seasonConfig;
 import static net.mat0u5.lifeseries.Main.server;
+//? if <= 1.20.3 {
+/*import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+*///?}
+//? if >= 1.20.5 {
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
+//?}
 
 //? if <= 1.21.9 {
 import net.minecraft.resources.ResourceLocation;
@@ -59,8 +63,12 @@ public class Blacklist {
     private List<ResourceKey<Enchantment>> loadedListEnchants;
     private List<ResourceKey<Enchantment>> loadedBannedEnchants;
 
+    //? if <= 1.20.3 {
+    /*private List<MobEffect> loadedBannedEffects;
+    *///?} else {
     private List<Holder<MobEffect>> loadedBannedEffects;
-    
+    //?}
+
     public boolean CREATIVE_IGNORE_BLACKLIST = true;
 
     public List<String> loadItemBlacklist() {
@@ -302,11 +310,19 @@ public class Blacklist {
         return newList;
     }
 
+    //? if <= 1.20.3 {
+    /*public List<MobEffect> getBannedEffects() {
+    *///?} else {
     public List<Holder<MobEffect>> getBannedEffects() {
+    //?}
         if (server == null) return new ArrayList<>();
 
         if (loadedBannedEffects != null) return loadedBannedEffects;
+        //? if <= 1.20.3 {
+        /*List<MobEffect> newList = new ArrayList<>();
+        *///?} else {
         List<Holder<MobEffect>> newList = new ArrayList<>();
+         //?}
 
         Registry<MobEffect> effectsRegistry = server.registryAccess()
         //? if <=1.21 {
@@ -326,7 +342,11 @@ public class Blacklist {
                 *///?}
 
                 if (enchantment != null) {
+                    //? if <= 1.20.3 {
+                    /*newList.add(enchantment);
+                    *///?} else {
                     newList.add(effectsRegistry.wrapAsHolder(enchantment));
+                    //?}
                 } else {
                     OtherUtils.throwError("[CONFIG] Invalid effect: " + potionId);
                 }
@@ -407,11 +427,18 @@ public class Blacklist {
         if (getItemBlacklist().contains(item)) return true;
         if (item != Items.POTION && item != Items.LINGERING_POTION && item != Items.SPLASH_POTION) return false;
 
+        //? if <= 1.20.3 {
+        /*Potion potion = PotionUtils.getPotion(itemStack);
+        for (MobEffectInstance effect : potion.getEffects()) {
+            if (getBannedEffects().contains(effect.getEffect())) return true;
+        }
+        *///?} else {
         PotionContents potions = itemStack.getComponents().get(DataComponents.POTION_CONTENTS);
         if (potions == null) return false;
         for (MobEffectInstance effect : potions.getAllEffects()) {
             if (getBannedEffects().contains(effect.getEffect())) return true;
         }
+        //?}
         return false;
     }
 
@@ -446,6 +473,12 @@ public class Blacklist {
             }
             return;
         }
+        //? if <= 1.20.3 {
+        /*Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(itemStack);
+        if (enchantments != null) {
+            EnchantmentHelper.setEnchantments(clampAndBlacklistEnchantments(enchantments), itemStack);
+        }
+        *///?} else {
         ItemEnchantments enchants = itemStack.getComponents().get(DataComponents.ENCHANTMENTS);
         ItemEnchantments enchantsStored = itemStack.getComponents().get(DataComponents.STORED_ENCHANTMENTS);
         if (enchants != null) {
@@ -454,8 +487,49 @@ public class Blacklist {
         if (enchantsStored != null) {
             itemStack.set(DataComponents.STORED_ENCHANTMENTS, clampAndBlacklistEnchantments(enchantsStored));
         }
+        //?}
+
     }
 
+    //? if <= 1.20.3 {
+    /*public Map<Enchantment, Integer> clampAndBlacklistEnchantments(Map<Enchantment, Integer> enchants) {
+        Map<Enchantment, Integer> afterBlacklist = blacklistEnchantments(enchants);
+        clampEnchantments(afterBlacklist);
+        return afterBlacklist;
+    }
+
+    public Map<Enchantment, Integer> blacklistEnchantments(Map<Enchantment, Integer> enchants) {
+        if (enchants.isEmpty()) return enchants;
+        List<ResourceKey<Enchantment>> banned = getBannedEnchants();
+        if (banned.isEmpty()) return enchants;
+
+        Map<Enchantment, Integer> result = new HashMap<>();
+
+        for (Map.Entry<Enchantment, Integer> enchant : enchants.entrySet()) {
+            Enchantment actualEnchant = enchant.getKey();
+            Optional<ResourceKey<Enchantment>> key = BuiltInRegistries.ENCHANTMENT.getResourceKey(actualEnchant);
+            if (key.isPresent() && banned.contains(key.get())) {
+                continue;
+            }
+            result.put(enchant.getKey(), enchant.getValue());
+        }
+
+        return result;
+    }
+
+    public void clampEnchantments(Map<Enchantment, Integer>  enchants) {
+        List<ResourceKey<Enchantment>> clamp = getClampedEnchants();
+
+        for (Map.Entry<Enchantment, Integer> enchant : enchants.entrySet()) {
+            Enchantment actualEnchant = enchant.getKey();
+            Optional<ResourceKey<Enchantment>> key = BuiltInRegistries.ENCHANTMENT.getResourceKey(actualEnchant);
+            if (key.isEmpty()) continue;
+            if (clamp.contains(key.get())) {
+                enchant.setValue(1);
+            }
+        }
+    }
+    *///?} else {
     public ItemEnchantments clampAndBlacklistEnchantments(ItemEnchantments enchants) {
         ItemEnchantments afterBlacklist = blacklistEnchantments(enchants);
         clampEnchantments(afterBlacklist);
@@ -479,7 +553,11 @@ public class Blacklist {
 
         for (it.unimi.dsi.fastutil.objects.Object2IntMap.Entry<Holder<Enchantment>> enchant : enchants.entrySet()) {
             if (toRemove.contains(enchant)) continue;
+            //? if <= 1.20.5 {
+            /*builder.upgrade(enchant.getKey().value(), enchant.getIntValue());
+            *///?} else {
             builder.upgrade(enchant.getKey(), enchant.getIntValue());
+            //?}
         }
 
         return builder.toImmutable();
@@ -495,4 +573,5 @@ public class Blacklist {
             }
         }
     }
+    //?}
 }

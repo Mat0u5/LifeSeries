@@ -13,7 +13,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.scores.ScoreHolder;
 
 import java.util.Locale;
 
@@ -64,7 +63,7 @@ public class LimitedLifeLivesManager extends LivesManager {
         if (player.getTeam() != null) {
             colorBefore = player.getTeam().getColor();
         }
-        ScoreboardUtils.setScore(ScoreHolder.forNameOnly(player.getScoreboardName()), LivesManager.SCOREBOARD_NAME, lives);
+        ScoreboardUtils.setScore(player.getScoreboardName(), LivesManager.SCOREBOARD_NAME, lives);
         if (lives <= 0) {
             playerLostAllLives(player, livesBefore);
         }

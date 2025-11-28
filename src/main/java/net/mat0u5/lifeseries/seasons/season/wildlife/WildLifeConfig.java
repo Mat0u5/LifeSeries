@@ -16,6 +16,7 @@ public class WildLifeConfig extends ConfigManager {
     public static final List<String> BLACKLISTED_ITEMS = List.of(
             "lectern",
             "bookshelf",
+            //? if >= 1.21
             "mace",
             "end_crystal",
             "leather_helmet",
@@ -40,7 +41,11 @@ public class WildLifeConfig extends ConfigManager {
             "bane_of_arthropods",
             "fire_aspect",
             "knockback",
+            //? if <= 1.20.3 {
+            /*"sweeping",
+            *///?} else {
             "sweeping_edge",
+            //?}
 
             "power",
             "punch",
@@ -52,9 +57,11 @@ public class WildLifeConfig extends ConfigManager {
             "feather_falling",
             "thorns",
 
+            //? if >= 1.21 {
             "breach",
             "density",
             "wind_burst",
+            //?}
 
             "multishot",
             "piercing",
@@ -328,7 +335,9 @@ public class WildLifeConfig extends ConfigManager {
                 ,WILDCARD_SUPERPOWERS_ZOMBIES_LOSE_ITEMS
                 ,WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN
                 ,WILDCARD_SUPERPOWERS_ZOMBIES_HEALTH
+                //? if > 1.20.3 {
                 ,WILDCARD_SUPERPOWERS_SUPERSPEED_STEP
+                //?}
                 ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_ARMOR
                 ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_HANDS
 

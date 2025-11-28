@@ -10,14 +10,14 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.network.protocol.game.ClientboundSetTimePacket;
-import net.minecraft.server.ServerTickRateManager;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 
 import static net.mat0u5.lifeseries.Main.currentSession;
 import static net.mat0u5.lifeseries.Main.server;
-
+//? if >= 1.20.3
+import net.minecraft.server.ServerTickRateManager;
 //? if <= 1.21.9
 import net.minecraft.world.level.GameRules;
 //? if > 1.21.9
@@ -46,6 +46,7 @@ public class TimeDilation extends Wildcard {
     @Override
     public void tick() {
         if (server == null) return;
+        //? if >= 1.20.3 {
         ServerTickRateManager serverTickManager = server.tickRateManager();
         float rate = serverTickManager.tickrate();
         if (rate > 20) {
@@ -64,12 +65,13 @@ public class TimeDilation extends Wildcard {
                         boolean daylightCycle = OtherUtils.getBooleanGameRule(serverLevelorld, GameRules.RULE_DAYLIGHT);
                         //?} else {
                         /*boolean daylightCycle = OtherUtils.getBooleanGameRule(serverLevelorld, GameRules.ADVANCE_TIME);
-                        *///?}
+                         *///?}
                         player.connection.send(new ClientboundSetTimePacket(serverLevelorld.getGameTime(), serverLevelorld.getDayTime(), daylightCycle));
                     }
                 }
             }
         }
+        //?}
     }
 
     @Override
@@ -92,7 +94,7 @@ public class TimeDilation extends Wildcard {
                     return;
                 }
             }
-            progress = Math.clamp(progress, 0, 1);
+            progress = OtherUtils.clamp(progress, 0, 1);
             /*
             if (progress < 0.492f) {
                 progress = 0.311774f * (float) Math.pow(progress, 0.7);
@@ -136,6 +138,7 @@ public class TimeDilation extends Wildcard {
 
     public static void slowlySetWorldSpeed(float rate, int ticks) {
         if (server == null) return;
+        //? if >= 1.20.3 {
         ServerTickRateManager serverTickManager = server.tickRateManager();
         float currentRate = serverTickManager.tickrate();
         float step = (rate - currentRate) / (ticks);
@@ -144,26 +147,35 @@ public class TimeDilation extends Wildcard {
             TaskScheduler.scheduleTask(i, () -> serverTickManager.setTickRate(currentRate + (step * finalI)));
         }
         TaskScheduler.scheduleTask(ticks+1, () -> serverTickManager.setTickRate(rate));
+        //?}
     }
 
     public static void setWorldSpeed(float rate) {
         if (server == null) return;
+        //? if >= 1.20.3 {
         ServerTickRateManager serverTickManager = server.tickRateManager();
         serverTickManager.setTickRate(rate);
+        //?}
     }
 
     public static float getWorldSpeed() {
         if (server == null) return 20;
+        //? if >= 1.20.3 {
         ServerTickRateManager serverTickManager = server.tickRateManager();
         return serverTickManager.tickrate();
+        //?} else {
+        /*return 20;
+        *///?}
     }
 
     private static void adjustCreeperFuseTimes() {
         if (server == null) return;
+        //? if >= 1.20.3 {
         ServerTickRateManager serverTickManager = server.tickRateManager();
         float tickRate = serverTickManager.tickrate();
         short fuseTime = (short) (20 * (tickRate / 20.0f));
         OtherUtils.executeCommand("/execute as @e[type=minecraft:creeper] run data modify entity @s Fuse set value "+fuseTime+"s");
+        //?}
     }
 
     public static float getMaxTickRate() {

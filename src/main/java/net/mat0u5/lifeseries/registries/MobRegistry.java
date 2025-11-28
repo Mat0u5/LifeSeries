@@ -29,7 +29,9 @@ public class MobRegistry {
             EntityType.Builder.of(Snail::new, MobCategory.MONSTER)
                     .sized(0.5f, 0.6f)
                     .clientTrackingRange(512)
-                    //? if <= 1.21 {
+                    //? if <= 1.20.3 {
+                    /*.build(Snail.ID.toString())
+                    *///?} else if <= 1.21 {
                     .build()
                     //?} else {
                     /*.build(SNAIL_KEY)
@@ -41,11 +43,13 @@ public class MobRegistry {
             EntityType.Builder.of(TriviaBot::new, MobCategory.AMBIENT)
                     .sized(0.65f, 1.8f)
                     .clientTrackingRange(512)
-                    //? if <= 1.21 {
+                    //? if <= 1.20.3 {
+                    /*.build(TriviaBot.ID.toString())
+                    *///?} else if <= 1.21 {
                     .build()
-                    //?} else {
+                     //?} else {
                     /*.build(TRIVIA_KEY)
-            *///?}
+                     *///?}
     );
 
     public static void registerMobs() {

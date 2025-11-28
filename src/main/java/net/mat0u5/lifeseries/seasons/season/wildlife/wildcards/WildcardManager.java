@@ -77,21 +77,17 @@ public class WildcardManager {
             activeWildcards.put(chosenWildcard, chosenWildcard.getInstance());
             return;
         }
-        int index = rnd.nextInt(7);
-        if (index == 0) activeWildcards.put(Wildcards.SIZE_SHIFTING, new SizeShifting());
-        if (index == 1) activeWildcards.put(Wildcards.HUNGER, new Hunger());
-        if (index == 2) activeWildcards.put(Wildcards.TIME_DILATION, new TimeDilation());
-        if (index == 3) activeWildcards.put(Wildcards.SNAILS, new Snails());
-        if (index == 4) activeWildcards.put(Wildcards.MOB_SWAP, new MobSwap());
-        if (index == 5) activeWildcards.put(Wildcards.TRIVIA, new TriviaWildcard());
-        if (index == 6) activeWildcards.put(Wildcards.SUPERPOWERS, new SuperpowersWildcard());
+        Wildcards wildcard = Wildcards.getWildcards().get(rnd.nextInt(Wildcards.getWildcards().size()));
+        activeWildcards.put(wildcard, wildcard.getInstance());
     }
 
     public static void onPlayerJoin(ServerPlayer player) {
         if (!isActiveWildcard(Wildcards.SIZE_SHIFTING)) {
+            //? if > 1.20.3 {
             if (SizeShifting.getPlayerSize(player) != 1 && !TriviaHandler.cursedGigantificationPlayers.contains(player.getUUID())) {
                 SizeShifting.setPlayerSize(player, 1);
             }
+            //?}
         }
         if (!isActiveWildcard(Wildcards.HUNGER)) {
             player.removeEffect(MobEffects.HUNGER);
@@ -212,7 +208,9 @@ public class WildcardManager {
             if (!wildcard.active) continue;
             wildcard.tick();
         }
+        //? if > 1.20.3 {
         SizeShifting.resetSizesTick(isActiveWildcard(Wildcards.SIZE_SHIFTING));
+        //?}
         if (server != null && server.getTickCount() % 200 == 0) {
             if (!isActiveWildcard(Wildcards.MOB_SWAP)) {
                 MobSwap.killMobSwapMobs();

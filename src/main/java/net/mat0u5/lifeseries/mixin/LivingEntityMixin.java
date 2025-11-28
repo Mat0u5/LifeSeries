@@ -82,6 +82,7 @@ public abstract class LivingEntityMixin {
         }
         *///?}
 
+        //? if >= 1.21 {
         ItemStack weapon = source.getWeaponItem();
         if (amount <= WindCharge.MAX_MACE_DAMAGE) return;
         if (weapon == null) return;
@@ -90,8 +91,9 @@ public abstract class LivingEntityMixin {
         if (!ItemStackUtils.hasCustomComponentEntry(weapon, "WindChargeSuperpower")) return;
         //? if <= 1.21 {
         cir.setReturnValue(entity.hurt(source, WindCharge.MAX_MACE_DAMAGE));
-         //?} else
+        //?} else
         /*cir.setReturnValue(entity.hurtServer(level, source, WindCharge.MAX_MACE_DAMAGE));*/
+        //?}
     }
 
     //? if = 1.21.2 {
@@ -160,7 +162,11 @@ public abstract class LivingEntityMixin {
     }
 
     @Inject(method = "dropAllDeathLoot", at = @At("HEAD"))
+    //? if <= 1.20.5 {
+    /*private void onDrop(DamageSource damageSource, CallbackInfo ci) {
+    *///?} else {
     private void onDrop(ServerLevel level, DamageSource damageSource, CallbackInfo ci) {
+    //?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         Events.onEntityDropItems((LivingEntity) (Object) this, damageSource);
     }

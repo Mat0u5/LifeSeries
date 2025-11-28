@@ -7,7 +7,6 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.ServerTickRateManager;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -21,6 +20,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static net.mat0u5.lifeseries.Main.server;
+
+//? if >= 1.20.3
+import net.minecraft.server.ServerTickRateManager;
 
 //? if <= 1.21.9
 import net.minecraft.world.level.GameRules;
@@ -265,6 +267,7 @@ public class OtherUtils {
 
     public static void setFreezeGame(boolean frozen) {
         if (server == null) return;
+        //? if >= 1.20.3 {
         ServerTickRateManager serverTickRateManager = server.tickRateManager();
 
         if (serverTickRateManager.isFrozen() == frozen)  return;
@@ -287,6 +290,7 @@ public class OtherUtils {
         else {
             PlayerUtils.broadcastMessageToAdmins(Component.nullToEmpty("§7The game is no longer frozen."));
         }
+        //?}
     }
 
     public static boolean isNumber(String text) {
@@ -299,5 +303,50 @@ public class OtherUtils {
             return true;
         } catch (Exception e) {}
         return false;
+    }
+
+    public static double clamp(double value, double min, double max) {
+        if (!(min < max)) {
+            if (Double.isNaN(min)) {
+                throw new IllegalArgumentException("min is NaN");
+            }
+            if (Double.isNaN(max)) {
+                throw new IllegalArgumentException("max is NaN");
+            }
+            if (Double.compare(min, max) > 0) {
+                throw new IllegalArgumentException(min + " > " + max);
+            }
+        }
+        return Math.min(max, Math.max(value, min));
+    }
+
+    public static float clamp(float value, float min, float max) {
+        if (!(min < max)) {
+            if (Double.isNaN(min)) {
+                throw new IllegalArgumentException("min is NaN");
+            }
+            if (Double.isNaN(max)) {
+                throw new IllegalArgumentException("max is NaN");
+            }
+            if (Double.compare(min, max) > 0) {
+                throw new IllegalArgumentException(min + " > " + max);
+            }
+        }
+        return Math.min(max, Math.max(value, min));
+    }
+
+    public static int clamp(int value, int min, int max) {
+        if (!(min < max)) {
+            if (Double.isNaN(min)) {
+                throw new IllegalArgumentException("min is NaN");
+            }
+            if (Double.isNaN(max)) {
+                throw new IllegalArgumentException("max is NaN");
+            }
+            if (Double.compare(min, max) > 0) {
+                throw new IllegalArgumentException(min + " > " + max);
+            }
+        }
+        return Math.min(max, Math.max(value, min));
     }
 }

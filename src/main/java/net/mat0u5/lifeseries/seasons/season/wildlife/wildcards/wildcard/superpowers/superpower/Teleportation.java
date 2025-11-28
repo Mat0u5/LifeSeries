@@ -120,6 +120,10 @@ public class Teleportation extends Superpower {
         );
     }
     public void playTeleportSound(ServerLevel level, Vec3 pos) {
+        //? if <= 1.20.2 {
+        /*level.playSound(null, pos.x(), pos.y(), pos.z(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.MASTER, 1, 1);
+        *///?} else {
         level.playSound(null, pos.x(), pos.y(), pos.z(), SoundEvents.PLAYER_TELEPORT, SoundSource.MASTER, 1, 1);
+        //?}
     }
 }

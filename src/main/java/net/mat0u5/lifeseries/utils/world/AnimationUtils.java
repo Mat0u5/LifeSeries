@@ -5,7 +5,6 @@ import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundEntityEventPacket;
@@ -19,7 +18,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
-//? if <= 1.21
+//? if >= 1.20.5
+import net.minecraft.core.component.DataComponents;
+//? if <= 1.21 && > 1.20.3
 import net.minecraft.world.item.component.CustomModelData;
 //? if >= 1.21.2 {
 /*import java.awt.Color;
@@ -59,9 +60,11 @@ public class AnimationUtils {
     public static ItemStack getSecretLifeTotemItem(boolean red) {
         ItemStack totemItem = Items.TOTEM_OF_UNDYING.getDefaultInstance();
         ItemStackUtils.setCustomComponentBoolean(totemItem, "FakeTotem", true);
-        //? if <= 1.21 {
+        //? if <= 1.20.3 {
+        /*ItemStackUtils.setCustomComponentInt(totemItem, "CustomModelData", red ? 2 : 1);
+        *///?} else if <= 1.21 {
         totemItem.set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(red ? 2 : 1));
-         //?} else {
+        //?} else {
         /*totemItem.set(DataComponents.ITEM_MODEL, IdentifierHelper.mod(red ? "task_red_totem" : "task_totem"));
         //PlaySoundConsumeEffect playSoundEvent = new PlaySoundConsumeEffect(RegistryEntry.of(SoundEvent.of(Identifier.of("secretlife_task_totem"))));
         //totemItem.set(DataComponentTypes.DEATH_PROTECTION, new DeathProtectionComponent(List.of(playSoundEvent)));

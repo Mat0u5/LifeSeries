@@ -60,7 +60,9 @@ public class HeartsConfigEntry extends IntegerConfigEntry implements ITextFieldA
         List<MutableComponent> heartsList = new ArrayList<>();
 
         StringBuilder topRow = new StringBuilder();
-        topRow.repeat(HEART_SYMBOL, (hearts % 10));
+        for (int i = 0; i < hearts % 10; i++) {
+            topRow.append(HEART_SYMBOL);
+        }
         if (hasHalfHeart) {
             topRow.append(HALF_HEART_SYMBOL);
         }
@@ -74,7 +76,7 @@ public class HeartsConfigEntry extends IntegerConfigEntry implements ITextFieldA
             heartsList.add(Component.literal(HEART_ROW).withStyle(ChatFormatting.RED));
         }
 
-        heartsList.set(heartsList.size()-1, heartsList.getLast().append(TextUtils.formatLoosely("§7 ({} HP)", value)));
+        heartsList.set(heartsList.size()-1, heartsList.get(heartsList.size()-1).append(TextUtils.formatLoosely("§7 ({} HP)", value)));
 
         return heartsList;
     }

@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -13,7 +14,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.function.Supplier;
 
 @Mixin(value = CommandSourceStack.class, priority = 1)
-public class CommandSourceStackMixin {
+public abstract class CommandSourceStackMixin {
+
+    //? if <= 1.20.2 {
+    /*@Accessor
+    public abstract boolean isSilent();
+    *///?}
 
     @Inject(method = "sendSuccess", at = @At("HEAD"))
     public void sendFeedback(Supplier<Component> feedbackSupplier, boolean broadcastToOps, CallbackInfo ci) {
@@ -22,7 +28,11 @@ public class CommandSourceStackMixin {
         Component text = feedbackSupplier.get();
         String sourceStr = "null";
         CommandSourceStack source = (CommandSourceStack) (Object) this;
+        //? if <= 1.20.2 {
+        /*if (isSilent()) return;
+        *///?} else {
         if (source.isSilent()) return;
+        //?}
         if (!source.isPlayer()) {
             sourceStr = "console";
         }

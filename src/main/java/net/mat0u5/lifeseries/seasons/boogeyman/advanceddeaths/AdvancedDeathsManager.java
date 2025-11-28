@@ -28,15 +28,15 @@ public class AdvancedDeathsManager {
                 toRemove.add(uuid);
                 continue;
             }
-            if (playerAdvancedDeath.queuedDeaths().getFirst().isFinished() ||
-                    (playerAdvancedDeath.queuedDeaths().getFirst().started && playerAdvancedDeath.queuedDeaths().getFirst().playerNotFound())) {
-                playerAdvancedDeath.queuedDeaths().removeFirst();
+            if (playerAdvancedDeath.queuedDeaths().get(0).isFinished() ||
+                    (playerAdvancedDeath.queuedDeaths().get(0).started && playerAdvancedDeath.queuedDeaths().get(0).playerNotFound())) {
+                playerAdvancedDeath.queuedDeaths().remove(0);
                 if (playerAdvancedDeath.queuedDeaths().isEmpty()) {
                     toRemove.add(uuid);
                     continue;
                 }
             }
-            playerAdvancedDeath.queuedDeaths().getFirst().onTick();
+            playerAdvancedDeath.queuedDeaths().get(0).onTick();
         }
         for (UUID uuid : toRemove) {
             PlayerAdvancedDeath playerAdvancedDeath = queuedDeaths.get(uuid);
@@ -73,8 +73,8 @@ public class AdvancedDeathsManager {
             UUID uuid = entry.getKey();
             if (uuid != player.getUUID()) continue;
             PlayerAdvancedDeath playerAdvancedDeath = entry.getValue();
-            playerAdvancedDeath.queuedDeaths().getFirst().onEnd();
-            playerAdvancedDeath.queuedDeaths().removeFirst();
+            playerAdvancedDeath.queuedDeaths().get(0).onEnd();
+            playerAdvancedDeath.queuedDeaths().remove(0);
         }
     }
 

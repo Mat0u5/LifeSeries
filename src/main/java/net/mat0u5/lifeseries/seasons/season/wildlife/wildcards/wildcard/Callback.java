@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.network.chat.Component;
@@ -104,7 +105,7 @@ public class Callback extends Wildcard {
             nextActivationTick = currentTick + activationIntervalTicks;
 
             double deactivationProgressFactor = 1 + (sessionProgress / TURN_OFF) * 4;
-            int deactivationIntervalTicks = (int)(INITIAL_DEACTIVATION_INTERVAL * Math.clamp(deactivationProgressFactor, 1, 5));
+            int deactivationIntervalTicks = (int)(INITIAL_DEACTIVATION_INTERVAL * OtherUtils.clamp(deactivationProgressFactor, 1, 5));
             nextDeactivationTick = currentTick + deactivationIntervalTicks;
         }
 
@@ -131,12 +132,16 @@ public class Callback extends Wildcard {
         nextDeactivationTick = -1;
         allWildcardsPhaseReached = false;
         preAllWildcardsPhaseReached = false;
+        //? if <= 1.20.3 {
+        /*softActivateWildcard(getRandomInactiveWildcard());
+        *///?} else {
         if (!blacklistedWildcards.contains(Wildcards.SIZE_SHIFTING)) {
             softActivateWildcard(Wildcards.SIZE_SHIFTING);
         }
         else {
             softActivateWildcard(getRandomInactiveWildcard());
         }
+        //?}
         super.activate();
     }
 

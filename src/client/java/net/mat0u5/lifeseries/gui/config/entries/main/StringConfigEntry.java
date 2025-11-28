@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.gui.config.entries.main;
 
 import net.mat0u5.lifeseries.gui.config.entries.TextFieldConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.client.gui.GuiGraphics;
 
 public class StringConfigEntry extends TextFieldConfigEntry {
@@ -31,7 +32,11 @@ public class StringConfigEntry extends TextFieldConfigEntry {
     protected void initializeTextField() {
         setText(value);
         if (textField.getWidth()-6 < textRenderer.width(value)) {
+            //? if <= 1.20 {
+            /*textField.moveCursorToStart();
+            *///?} else {
             textField.moveCursorToStart(false);
+            //?}
         }
     }
 
@@ -74,7 +79,7 @@ public class StringConfigEntry extends TextFieldConfigEntry {
         int maxFieldWidth = fieldEndX - labelEndX - 15;
         if (maxFieldWidth <= FIELD_WIDTH) maxFieldWidth = FIELD_WIDTH;
 
-        int requiredWidth = Math.clamp(textWidth + PADDING * 2, FIELD_WIDTH, maxFieldWidth);
+        int requiredWidth = OtherUtils.clamp(textWidth + PADDING * 2, FIELD_WIDTH, maxFieldWidth);
 
         if (isFocused()) {
             targetWidth = requiredWidth;

@@ -20,6 +20,7 @@ import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.render.TextHud;
 import net.mat0u5.lifeseries.render.VignetteRenderer;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Hunger;
@@ -47,8 +48,74 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+//? if <= 1.20.3 {
+/*import net.minecraft.network.FriendlyByteBuf;
+*///?}
 
 public class NetworkHandlerClient {
+    //? if <= 1.20.3 {
+    /*public static void registerClientReceiver() {
+        ClientLoginNetworking.registerGlobalReceiver(IdentifierHelper.mod("preloginpacket"),
+                (client, handler, buf, listenerAdder) -> {
+                    FriendlyByteBuf response = PacketByteBufs.create();
+                    response.writeBoolean(true);
+                    return CompletableFuture.completedFuture(response);
+                }
+        );
+
+        ClientPlayNetworking.registerGlobalReceiver(NumberPayload.ID, (client, handler, buf, responseSender) -> {
+            NumberPayload payload = NumberPayload.read(buf);
+            client.execute(() -> handleNumberPacket(payload));
+        });
+
+        ClientPlayNetworking.registerGlobalReceiver(StringPayload.ID, (client, handler, buf, responseSender) -> {
+            StringPayload payload = StringPayload.read(buf);
+            client.execute(() -> handleStringPacket(payload));
+        });
+
+        ClientPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (client, handler, buf, responseSender) -> {
+            HandshakePayload payload = HandshakePayload.read(buf);
+            client.execute(() -> handleHandshake(payload));
+        });
+
+        ClientPlayNetworking.registerGlobalReceiver(TriviaQuestionPayload.ID, (client, handler, buf, responseSender) -> {
+            TriviaQuestionPayload payload = TriviaQuestionPayload.read(buf);
+            client.execute(() -> Trivia.receiveTrivia(payload));
+        });
+
+        ClientPlayNetworking.registerGlobalReceiver(LongPayload.ID, (client, handler, buf, responseSender) -> {
+            LongPayload payload = LongPayload.read(buf);
+            client.execute(() -> handleLongPacket(payload));
+        });
+
+        ClientPlayNetworking.registerGlobalReceiver(PlayerDisguisePayload.ID, (client, handler, buf, responseSender) -> {
+            PlayerDisguisePayload payload = PlayerDisguisePayload.read(buf);
+            client.execute(() -> handlePlayerDisguise(payload));
+        });
+
+        ClientPlayNetworking.registerGlobalReceiver(ConfigPayload.ID, (client, handler, buf, responseSender) -> {
+            ConfigPayload payload = ConfigPayload.read(buf);
+            client.execute(() -> handleConfigPacket(payload));
+        });
+
+        ClientPlayNetworking.registerGlobalReceiver(StringListPayload.ID, (client, handler, buf, responseSender) -> {
+            StringListPayload payload = StringListPayload.read(buf);
+            client.execute(() -> handleStringListPacket(payload));
+        });
+
+        ClientPlayNetworking.registerGlobalReceiver(SidetitlePacket.ID, (client, handler, buf, responseSender) -> {
+            SidetitlePacket payload = SidetitlePacket.read(buf);
+            client.execute(() -> handleSidetitle(payload));
+        });
+
+        ClientPlayNetworking.registerGlobalReceiver(SnailTexturePacket.ID, (client, handler, buf, responseSender) -> {
+            SnailTexturePacket payload = SnailTexturePacket.read(buf);
+            client.execute(() -> {
+                SnailSkinsClient.handleSnailTexture(payload.skinName(), payload.textureData());
+            });
+        });
+    }
+    *///?} else {
     public static void registerClientReceiver() {
         ClientLoginNetworking.registerGlobalReceiver(IdentifierHelper.mod("preloginpacket"),
                 (client, handler, buf, listenerAdder) -> {
@@ -100,6 +167,7 @@ public class NetworkHandlerClient {
             });
         });
     }
+    //?}
 
     public static void handleSidetitle(SidetitlePacket payload) {
         MainClient.sideTitle = payload.text();
@@ -128,7 +196,8 @@ public class NetworkHandlerClient {
                     *///?}
                 }
                 if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Received morph packet: {} ({})", morphType, morphUUID);
-                MorphManager.setFromPacket(morphUUID, morphType);
+                MorphComponent newComponent = MorphManager.setFromPacket(morphUUID, morphType);
+                Morph.clientTick(newComponent);
             } catch (Exception e) {}
         }
 

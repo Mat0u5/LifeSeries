@@ -4,30 +4,30 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Unit;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+
+//? if >= 1.21.2 {
+/*import net.minecraft.world.item.equipment.Equippable;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.Unit;
+import java.util.Optional;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.item.enchantment.ItemEnchantments;
-
-//? if >= 1.21.2 {
-/*import net.minecraft.world.item.equipment.Equippable;
-import java.util.Optional;
 *///?}
-//? if <= 1.21.4
-import net.minecraft.world.item.component.Unbreakable;
+//? if >=1.21.2 && <= 1.21.4
+/*import net.minecraft.world.item.component.Unbreakable;*/
 //? if >= 1.21.5
 /*import net.minecraft.world.item.component.TooltipDisplay;*/
 //? if >= 1.21.6
@@ -113,7 +113,8 @@ public class Flight extends Superpower {
     }
 
     private void giveHelmet() {
-        ServerPlayer player = getPlayer();
+        //? if >= 1.21.2 {
+        /*ServerPlayer player = getPlayer();
         if (player != null) {
             if (ItemStackUtils.hasCustomComponentEntry(PlayerUtils.getEquipmentSlot(player, 3), "FlightSuperpower")) return;
 
@@ -127,27 +128,27 @@ public class Flight extends Superpower {
             }
             helmet.set(DataComponents.UNBREAKABLE, new Unbreakable(false));
             helmet.set(DataComponents.HIDE_ADDITIONAL_TOOLTIP, Unit.INSTANCE);
-             //?} else {
-            /*helmet.set(DataComponents.UNBREAKABLE, Unit.INSTANCE);
+            //?} else {
+            /^helmet.set(DataComponents.UNBREAKABLE, Unit.INSTANCE);
             helmet.set(DataComponents.TOOLTIP_DISPLAY, TooltipDisplay.DEFAULT
                     .withHidden(DataComponents.ENCHANTMENTS, true)
                     .withHidden(DataComponents.UNBREAKABLE, true)
             );
-            *///?}
+            ^///?}
 
             helmet.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, false);
             helmet.set(DataComponents.ITEM_NAME, Component.nullToEmpty("Winged Helmet"));
             //? if >= 1.21.2 {
-            /*helmet.set(DataComponents.ITEM_MODEL, IdentifierHelper.mod("winged_helmet"));
+            /^helmet.set(DataComponents.ITEM_MODEL, IdentifierHelper.mod("winged_helmet"));
             helmet.set(DataComponents.GLIDER, Unit.INSTANCE);
                 //? if <= 1.21.4 {
             helmet.set(DataComponents.EQUIPPABLE, new Equippable(EquipmentSlot.HEAD, SoundEvents.ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false));
                 //?} else if <= 1.21.5 {
-                /^helmet.set(DataComponents.EQUIPPABLE, new Equippable(EquipmentSlot.HEAD, SoundEvents.ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false, false));
-                ^///?} else {
-                /^helmet.set(DataComponents.EQUIPPABLE, new Equippable(EquipmentSlot.HEAD, SoundEvents.ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false, false, false, BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.SHEARS_SNIP)));
-                ^///?}
-            *///?}
+                /^¹helmet.set(DataComponents.EQUIPPABLE, new Equippable(EquipmentSlot.HEAD, SoundEvents.ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false, false));
+                ¹^///?} else {
+                /^¹helmet.set(DataComponents.EQUIPPABLE, new Equippable(EquipmentSlot.HEAD, SoundEvents.ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false, false, false, BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.SHEARS_SNIP)));
+                ¹^///?}
+            ^///?}
             ItemStackUtils.setCustomComponentBoolean(helmet, "IgnoreBlacklist", true);
             ItemStackUtils.setCustomComponentBoolean(helmet, "FromSuperpower", true);
             ItemStackUtils.setCustomComponentBoolean(helmet, "FlightSuperpower", true);
@@ -155,5 +156,6 @@ public class Flight extends Superpower {
             ItemStackUtils.spawnItemForPlayer(player.ls$getServerLevel(), player.position(), PlayerUtils.getEquipmentSlot(player, 3).copy(), player);
             player.setItemSlot(EquipmentSlot.HEAD, helmet);
         }
+        *///?}
     }
 }

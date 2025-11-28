@@ -18,8 +18,10 @@ import static net.mat0u5.lifeseries.Main.server;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.minecraft.network.DisconnectionDetails;
 //?}
+//? if > 1.20.5 && <= 1.21.6
+import net.minecraft.network.DisconnectionDetails;
+
 //? if >= 1.21.9 {
 /*import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.minecraft.world.entity.decoration.Mannequin;
@@ -85,7 +87,11 @@ public class AstralProjection extends ToggleableSuperpower {
         ServerPlayer player = getPlayer();
         if (player == null) return;
         if (player.isSpectator()) return;
-        player.ls$playNotifySound(SoundEvents.TRIAL_SPAWNER_OMINOUS_ACTIVATE, SoundSource.MASTER, 0.3f, 1);
+        //? if <= 1.21 {
+        player.ls$playNotifySound(SoundEvents.EVOKER_PREPARE_ATTACK, SoundSource.MASTER, 0.3f, 1);
+        //?} else {
+        /*player.ls$playNotifySound(SoundEvents.TRIAL_SPAWNER_OMINOUS_ACTIVATE, SoundSource.MASTER, 0.3f, 1);
+        *///?}
 
         String fakePlayerName = "`"+player.getScoreboardName();
 
@@ -152,7 +158,7 @@ public class AstralProjection extends ToggleableSuperpower {
         if (clone == null) return;
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        String name = TextUtils.textToLegacyString(player.getFeedbackDisplayName());
+        String name = TextUtils.textToLegacyString(player.getDisplayName());
         NetworkHandlerServer.sendPlayerDisguise(clone.getUUID().toString(), clone.getName().getString(), player.getUUID().toString(), name);
         //?}
     }
@@ -165,7 +171,12 @@ public class AstralProjection extends ToggleableSuperpower {
         if (clone != null) {
             toBackPos = clone.position();
             //? if <= 1.21.6 {
+
+            //? if <= 1.20.5 {
+            /*clone.connection.onDisconnect(Component.empty());
+            *///?} else {
             clone.connection.onDisconnect(new DisconnectionDetails(Component.empty()));
+            //?}
             NetworkHandlerServer.sendPlayerDisguise(clone.getUUID().toString(), clone.getName().getString(), "", "");
             //?} else {
             /*clone.discard();

@@ -14,6 +14,7 @@ public class DoubleLifeConfig extends ConfigManager {
             "lectern",
             "bookshelf",
             "enchanting_table",
+            //? if >= 1.21
             "mace",
             "end_crystal",
             "leather_helmet",
@@ -38,7 +39,11 @@ public class DoubleLifeConfig extends ConfigManager {
             "bane_of_arthropods",
             "fire_aspect",
             "knockback",
+            //? if <= 1.20.3 {
+            /*"sweeping",
+            *///?} else {
             "sweeping_edge",
+            //?}
 
             "power",
             "punch",
@@ -50,9 +55,11 @@ public class DoubleLifeConfig extends ConfigManager {
             "feather_falling",
             "thorns",
 
+            //? if >= 1.21 {
             "breach",
             "density",
             "wind_burst",
+            //?}
 
             "multishot",
             "piercing",

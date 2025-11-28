@@ -33,7 +33,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.scores.ScoreHolder;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static net.mat0u5.lifeseries.Main.seasonConfig;
@@ -106,7 +105,7 @@ public class WildLife extends Season {
                     if (currentLives == null) currentLives = 0;
                     int lives = currentLives + 1;
                     if (lives <= 0) {
-                        ScoreboardUtils.setScore(ScoreHolder.forNameOnly(killer.getScoreboardName()), LivesManager.SCOREBOARD_NAME, lives);
+                        ScoreboardUtils.setScore(killer.getScoreboardName(), LivesManager.SCOREBOARD_NAME, lives);
                     }
                     else {
                         broadcastLifeGain(killer, victim);

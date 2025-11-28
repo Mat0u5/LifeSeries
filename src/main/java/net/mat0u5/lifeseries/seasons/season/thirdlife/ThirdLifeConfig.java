@@ -9,6 +9,7 @@ import java.util.List;
 
 public class ThirdLifeConfig extends ConfigManager {
     public static final List<String> BLACKLISTED_ITEMS = List.of(
+        //? if >= 1.21
         "mace",
         "end_crystal",
         "leather_helmet",
@@ -30,7 +31,11 @@ public class ThirdLifeConfig extends ConfigManager {
             "bane_of_arthropods",
             "fire_aspect",
             "knockback",
+            //? if <= 1.20.3 {
+            /*"sweeping",
+            *///?} else {
             "sweeping_edge",
+            //?}
 
             "power",
             "punch",
@@ -42,9 +47,11 @@ public class ThirdLifeConfig extends ConfigManager {
             "feather_falling",
             "thorns",
 
+            //? if >= 1.21 {
             "breach",
             "density",
             "wind_burst",
+            //?}
 
             "multishot",
             "piercing",

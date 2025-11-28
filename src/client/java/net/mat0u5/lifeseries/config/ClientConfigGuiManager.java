@@ -168,9 +168,9 @@ public class ClientConfigGuiManager {
             else if (stringObject.configType == ConfigTypes.STRING_LIST) {
                 List<String> args = new ArrayList<>(stringObject.args);
                 if (args.size() >= 3) {
-                    args.removeFirst();
-                    args.removeFirst();
-                    args.removeFirst();
+                    args.remove(0);
+                    args.remove(0);
+                    args.remove(0);
                     return new StringListConfigEntry(stringObject.id, stringObject.name, stringObject.description, stringObject.stringValue, stringObject.defaultValue, args);
                 }
             }

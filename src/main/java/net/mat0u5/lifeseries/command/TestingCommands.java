@@ -3,9 +3,7 @@ package net.mat0u5.lifeseries.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.mat0u5.lifeseries.command.manager.Command;
-import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.WeightedRandomizer;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
@@ -15,9 +13,6 @@ import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.stats.Stats;
-import net.minecraft.world.scores.ScoreAccess;
-import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 
 import java.util.List;
 

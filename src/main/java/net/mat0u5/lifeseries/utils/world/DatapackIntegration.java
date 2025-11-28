@@ -8,7 +8,6 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.scores.ScoreHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -129,19 +128,19 @@ public class DatapackIntegration {
 
     public static void initWildcards() {
         for (Wildcards wildcard : Wildcards.getWildcards()) {
-            ScoreboardUtils.setScore(ScoreHolder.forNameOnly(wildcard.getStringName()), SCOREBOARD_WILDCARDS, 0);
+            ScoreboardUtils.setScore(wildcard.getStringName(), SCOREBOARD_WILDCARDS, 0);
         }
     }
 
     public static void activateWildcard(Wildcards wildcard) {
         int index = wildcard.getIndex();
-        ScoreboardUtils.setScore(ScoreHolder.forNameOnly(wildcard.getStringName()), SCOREBOARD_WILDCARDS, 1);
+        ScoreboardUtils.setScore(wildcard.getStringName(), SCOREBOARD_WILDCARDS, 1);
         DatapackIntegration.EVENT_WILDCARD_ACTIVATE.trigger(new DatapackIntegration.Events.MacroEntry("Index", String.valueOf(index)));
     }
 
     public static void deactivateWildcard(Wildcards wildcard) {
         int index = wildcard.getIndex();
-        ScoreboardUtils.setScore(ScoreHolder.forNameOnly(wildcard.getStringName()), SCOREBOARD_WILDCARDS, 0);
+        ScoreboardUtils.setScore(wildcard.getStringName(), SCOREBOARD_WILDCARDS, 0);
         DatapackIntegration.EVENT_WILDCARD_DEACTIVATE.trigger(new DatapackIntegration.Events.MacroEntry("Index", String.valueOf(index)));
     }
 
@@ -173,7 +172,7 @@ public class DatapackIntegration {
         if (status == SessionStatus.STARTED) index = 2;
         if (status == SessionStatus.PAUSED) index = 3;
         if (status == SessionStatus.FINISHED) index = 4;
-        ScoreboardUtils.setScore(ScoreHolder.forNameOnly("Status"), SCOREBOARD_SESSION_INFO, index);
+        ScoreboardUtils.setScore("Status", SCOREBOARD_SESSION_INFO, index);
         DatapackIntegration.EVENT_SESSION_CHANGE_STATUS.trigger(
                 new DatapackIntegration.Events.MacroEntry("Status", String.valueOf(index))
         );
@@ -184,10 +183,10 @@ public class DatapackIntegration {
         else if (status == SessionStatus.STARTED) DatapackIntegration.EVENT_SESSION_START.trigger();
     }
     public static void setSessionLength(int ticks) {
-        ScoreboardUtils.setScore(ScoreHolder.forNameOnly("Length"), SCOREBOARD_SESSION_INFO, ticks);
+        ScoreboardUtils.setScore("Length", SCOREBOARD_SESSION_INFO, ticks);
     }
     public static void setSessionTimePassed(int ticks) {
-        ScoreboardUtils.setScore(ScoreHolder.forNameOnly("PassedTime"), SCOREBOARD_SESSION_INFO, ticks);
+        ScoreboardUtils.setScore("PassedTime", SCOREBOARD_SESSION_INFO, ticks);
     }
 
     public enum Events {
@@ -295,6 +294,13 @@ public class DatapackIntegration {
             if (!hasCommand()) return;
             if (command == null) return;
             if (command.startsWith("/function ") || command.startsWith("function ")) {
+                //? if < 1.20.2 {
+                /*String runCommand = command;
+                for (MacroEntry entry : macroEntries) {
+                    runCommand = runCommand.replace("$("+entry.key()+")", entry.value);
+                }
+                OtherUtils.executeCommand(runCommand);
+                *///?} else {
                 List<String> macroStrings = new ArrayList<>();
                 for (MacroEntry entry : macroEntries) {
                     boolean isNumber = OtherUtils.isNumber(entry.value());
@@ -311,6 +317,7 @@ public class DatapackIntegration {
                 else {
                     OtherUtils.executeCommand(command + " {"+String.join(", ", macroStrings)+"}");
                 }
+                //?}
             }
             else {
                 String runCommand = command;

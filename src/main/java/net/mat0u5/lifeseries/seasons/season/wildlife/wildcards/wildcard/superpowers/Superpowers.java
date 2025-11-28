@@ -31,8 +31,6 @@ public enum Superpowers {
 
     @Nullable
     public Superpower getInstance(ServerPlayer player) {
-        if (this == TIME_CONTROL) return new TimeControl(player);
-        if (this == WIND_CHARGE) return new WindCharge(player);
         if (this == ASTRAL_PROJECTION) return new AstralProjection(player);
         if (this == PLAYER_DISGUISE) return new PlayerDisguise(player);
         if (this == ANIMAL_DISGUISE) return new AnimalDisguise(player);
@@ -44,6 +42,12 @@ public enum Superpowers {
         if (this == TRIPLE_JUMP) return new TripleJump(player);
         if (this == SUPERSPEED) return new Superspeed(player);
         if (this == NECROMANCY) return new Necromancy(player);
+        //? if >= 1.20.3 {
+        if (this == TIME_CONTROL) return new TimeControl(player);
+        //?}
+        //? if >= 1.21 {
+        if (this == WIND_CHARGE) return new WindCharge(player);
+        //?}
         //? if >= 1.21.2 {
         /*if (this == CREAKING) return new CreakingPower(player);
         if (this == FLIGHT) return new Flight(player);
@@ -70,12 +74,7 @@ public enum Superpowers {
     }
 
     public static List<Superpowers> getImplemented() {
-        List<Superpowers> result = new ArrayList<>(List.of(Superpowers.values()));
-        result.remove(NULL);
-        //? if <= 1.21 {
-        result.remove(CREAKING);
-        result.remove(FLIGHT);
-        //?}
+        List<Superpowers> result = getAll();
         if (!CompatibilityManager.voicechatLoaded()) {
             result.remove(LISTENING);
         }
@@ -93,6 +92,16 @@ public enum Superpowers {
     public static List<Superpowers> getAll() {
         List<Superpowers> result = new ArrayList<>(List.of(Superpowers.values()));
         result.remove(NULL);
+        //? if < 1.20.3 {
+        /*result.remove(TIME_CONTROL);
+        *///?}
+        //? if < 1.21 {
+        /*result.remove(WIND_CHARGE);
+        *///?}
+        //? if < 1.21.2 {
+        result.remove(CREAKING);
+        result.remove(FLIGHT);
+        //?}
         return result;
     }
 

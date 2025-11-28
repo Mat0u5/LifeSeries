@@ -13,6 +13,7 @@ public class LimitedLifeConfig extends ConfigManager {
     public static final List<String> BLACKLISTED_ITEMS = List.of(
             "lectern",
             "bookshelf",
+            //? if >= 1.21
             "mace",
             "leather_helmet",
             "chainmail_helmet",
@@ -36,7 +37,11 @@ public class LimitedLifeConfig extends ConfigManager {
             "bane_of_arthropods",
             "fire_aspect",
             "knockback",
+            //? if <= 1.20.3 {
+            /*"sweeping",
+            *///?} else {
             "sweeping_edge",
+            //?}
 
             "power",
             "punch",
@@ -48,9 +53,11 @@ public class LimitedLifeConfig extends ConfigManager {
             "feather_falling",
             "thorns",
 
+            //? if >= 1.21 {
             "breach",
             "density",
             "wind_burst",
+            //?}
 
             "multishot",
             "piercing",

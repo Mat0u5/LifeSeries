@@ -23,8 +23,6 @@ public class SizeShifting extends Wildcard {
     public static double SIZE_CHANGE_STEP = 0.0015;
 
     public static boolean FIX_SIZECHANGING_BUGS = false;
-
-    //public static boolean SAVE_FROM_FALLING = true;
     
     @Override
     public Wildcards getType() {
@@ -37,7 +35,9 @@ public class SizeShifting extends Wildcard {
             if (TriviaHandler.cursedGigantificationPlayers.contains(player.getUUID())) continue;
             if (player.isSpectator()) continue;
             if (player.isShiftKeyDown()) {
+                //? if > 1.20.3 {
                 addPlayerSize(player, -SIZE_CHANGE_STEP * SIZE_CHANGE_MULTIPLIER);
+                //?}
             }
         }
     }
@@ -46,9 +46,12 @@ public class SizeShifting extends Wildcard {
         if (TriviaHandler.cursedGigantificationPlayers.contains(player.getUUID())) return;
         if (player.isSpectator()) return;
         if (player.ls$isWatcher()) return;
+        //? if > 1.20.3 {
         addPlayerSize(player, SIZE_CHANGE_STEP * SIZE_CHANGE_MULTIPLIER);
+        //?}
     }
 
+    //? if > 1.20.3 {
     public static double getPlayerSize(ServerPlayer player) {
         return AttributeUtils.getPlayerSize(player);
     }
@@ -70,11 +73,6 @@ public class SizeShifting extends Wildcard {
 
 
         if (MorphManager.getOrCreateComponent(player).isMorphed()) return;
-        /*
-        if (saveFromFalling) {
-            Has to be done client-side :/
-        }
-        */
 
         AttributeUtils.setScale(player, size);
     }
@@ -102,4 +100,5 @@ public class SizeShifting extends Wildcard {
             }
         }
     }
+    //?}
 }

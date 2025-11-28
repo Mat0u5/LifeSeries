@@ -1,11 +1,12 @@
 {
   "required": true,
   "package": "net.mat0u5.lifeseries.mixin",
-  "compatibilityLevel": "JAVA_21",
+  "compatibilityLevel": "${javaVersion}",
   "mixins": [
     "AnvilMenuMixin",
     "CommandSourceStackMixin",
     "CraftingMenuMixin",
+    "MinecraftServerMixin",
     "EnchantmentHelperMixin",
     "EntityMixin",
     "GameRuleCommandMixin",
@@ -37,6 +38,7 @@
     "ServerPlayerGameModeMixin",
     "ServerPlayerMixin",
     "SimpleExplosionDamageCalculatorMixin",
+    "SkullBlockEntityAccessor",
     "SleepStatusMixin",
     "SpawnEggItemMixin",
     "ThrownEnderpearlMixin",

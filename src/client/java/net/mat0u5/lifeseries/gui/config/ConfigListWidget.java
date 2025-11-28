@@ -14,6 +14,8 @@ import java.util.TreeMap;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 *///?}
+//? if > 1.20 && <= 1.20.3
+/*import net.minecraft.client.gui.screens.Screen;*/
 
 public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.ConfigEntryWidget> {
     public static final int ENTRY_GAP = 2;
@@ -21,9 +23,15 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
     private static final int SCROLLBAR_OFFSET_X = 6;
     protected ConfigScreen screen;
 
+    //? if <= 1.20.2 {
+    /*public ConfigListWidget(Minecraft client, int width, int height, int y, int endY, int headerHeight) {
+        super(client, width, height, y, endY, headerHeight);
+    }
+    *///?} else {
     public ConfigListWidget(Minecraft client, int width, int height, int y, int itemHeight) {
         super(client, width, height, y, itemHeight);
     }
+    //?}
 
     public void setScreen(ConfigScreen screen) {
         this.screen = screen;
@@ -42,9 +50,13 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
         return width - 20;
     }
 
+    //? if < 1.20.5 {
+    /*@Override
+    public void renderList(GuiGraphics context, int mouseX, int mouseY, float delta) {
+    *///?} else {
     @Override
     protected void renderListItems(GuiGraphics context, int mouseX, int mouseY, float delta) {
-
+    //?}
         //? if <= 1.21.2 {
         int maxScroll = getMaxScroll();
         //?} else {
@@ -133,6 +145,19 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
             int handleY = scrollbarTop + (int)((scrollbarHeight - handleHeight) * getScrolledAmount() / maxScroll);
             context.fill(scrollbarX + 1, handleY, scrollbarX + SCROLLBAR_OFFSET_X - 1, handleY + handleHeight, TextColors.WHITE_A128);
         }
+        //? if > 1.20 <= 1.20.3 {
+        /*context.disableScissor();
+        context.setColor(0.25F, 0.25F, 0.25F, 1.0F);
+        //? if <= 1.20.2 {
+        context.blit(Screen.BACKGROUND_LOCATION, this.x0, 0, 0.0F, 0.0F, this.width, this.y0, 32, 32);
+        context.blit(Screen.BACKGROUND_LOCATION, this.x0, this.y1, 0.0F, (float)this.y1, this.width, this.height - this.y1, 32, 32);
+        //?} else {
+        /^context.blit(Screen.BACKGROUND_LOCATION, this.getX(), 0, 0.0F, 0.0F, this.width, this.getY(), 32, 32);
+        context.blit(Screen.BACKGROUND_LOCATION, this.getX(), this.getBottom(), 0.0F, (float)this.getBottom(), this.width, this.height, 32, 32);
+        ^///?}
+        context.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        this.enableScissor(context);
+        *///?}
     }
 
     @Override
@@ -147,8 +172,20 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
         }
         return Math.max(0, totalHeight - height + 8);
     }
+    //? if <= 1.20.2 {
+    /*protected int getX() {
+        return this.x0;
+    }
+    protected int getY() {
+        return this.y0;
+    }
+    *///?}
 
-    //? if <= 1.21.2 {
+    //? if <= 1.20.3 {
+    /*protected int getScrollbarPosition() {
+        return this.width *2;//Make not invisible
+    }
+    *///?} else {
     @Override
     protected boolean scrollbarVisible() {
         return false;
