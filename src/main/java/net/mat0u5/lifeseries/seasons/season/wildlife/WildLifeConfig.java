@@ -115,7 +115,7 @@ public class WildLifeConfig extends ConfigManager {
     );
     public static final ConfigFileEntry<String> WILDCARD_HUNGER_NON_EDIBLE_ITEMS = new ConfigFileEntry<>(
             "wildcard_hunger_non_edible_items", "[]", ConfigTypes.ITEM_LIST, "season.hunger[new]",
-            "Non Edible Itmes", "A list of items that you can't eat."
+            "Non Edible Items", "A list of items that you can't eat."
     );
 
     public static final ConfigFileEntry<Double> WILDCARD_SNAILS_SPEED_MULTIPLIER = new ConfigFileEntry<>(

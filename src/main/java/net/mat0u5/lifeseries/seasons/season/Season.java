@@ -451,9 +451,12 @@ public abstract class Season {
             Team team = killer.getTeam();
             if (team != null) {
                 Integer canGainLife = livesManager.getTeamGainLives(team.getName());
-                if (canGainLife != null && victim.ls$isOnAtLeastLives(canGainLife, false)) {
-                    broadcastLifeGain(killer, victim);
-                    killer.ls$addLife();
+                Integer victimLives = victim.ls$getLives();
+                if (canGainLife != null && victimLives != null) {
+                    if (victimLives + 1 >= canGainLife) { // +1 because the victim already lost a life
+                        broadcastLifeGain(killer, victim);
+                        killer.ls$addLife();
+                    }
                 }
             }
         }
