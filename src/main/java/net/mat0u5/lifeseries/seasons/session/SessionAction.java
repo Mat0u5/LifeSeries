@@ -1,21 +1,22 @@
 package net.mat0u5.lifeseries.seasons.session;
 
+import net.mat0u5.lifeseries.utils.other.Time;
 import static net.mat0u5.lifeseries.Main.currentSession;
 
 public abstract class SessionAction {
     public boolean hasTriggered = false;
-    public int triggerAtTicks;
+    private Time triggerTime;
     public String sessionMessage;
-    public String sessionId;
+    public boolean showTime = false;
 
-    public SessionAction(int triggerAtTicks) {
-        this.triggerAtTicks = triggerAtTicks;
+    public SessionAction(Time triggerTime) {
+        this.triggerTime = triggerTime;
     }
 
-    public SessionAction(int triggerAtTicks, String message, String sessionId) {
-        this.triggerAtTicks = triggerAtTicks;
+    public SessionAction(Time triggerTime, String message) {
+        this.triggerTime = triggerTime;
         this.sessionMessage = message;
-        this.sessionId = sessionId;
+        this.showTime = true;
     }
 
     public boolean tick() {
@@ -24,7 +25,7 @@ public abstract class SessionAction {
         if (hasTriggered) return true;
         if (shouldTrigger) {
             hasTriggered = true;
-            SessionTranscript.triggerSessionAction(sessionId);
+            SessionTranscript.triggerSessionAction(sessionMessage);
             trigger();
             return true;
         }
@@ -32,20 +33,21 @@ public abstract class SessionAction {
     }
 
     public boolean shouldTrigger() {
+        int triggerAtTicks = triggerTime.getTicks();
         if (triggerAtTicks >= 0) {
             // Trigger after start
-            int passedTime = currentSession.getPassedTime();
+            int passedTime = currentSession.getPassedTime().getTicks();
             return passedTime >= triggerAtTicks;
         }
         else {
             // Trigger before end
-            int remainingTime = currentSession.getRemainingTime();
+            int remainingTime = currentSession.getRemainingTime().getTicks();
             return remainingTime <= Math.abs(triggerAtTicks);
         }
     }
 
-    public int getTriggerTime() {
-        return triggerAtTicks;
+    public Time getTriggerTime() {
+        return triggerTime;
     }
 
     public abstract void trigger();

@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShifting;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
@@ -34,14 +35,14 @@ public class TriviaWildcard extends Wildcard {
     public static final Map<UUID, Snail> snails = new HashMap<>();
     private static boolean globalScheduleInitialized = false;
     public static Map<UUID, TriviaBot> bots = new HashMap<>();
-    public static int activatedAt = -1;
+    public static Time activatedAt = Time.nullTime();
     public static int TRIVIA_BOTS_PER_PLAYER = 5;
     public static int MIN_BOT_DELAY = 8400;
     public static TriviaQuestionManager easyTrivia;
     public static TriviaQuestionManager normalTrivia;
     public static TriviaQuestionManager hardTrivia;
     private static final Random rnd = new Random();
-    public static long ticks = 0;
+    public static Time timer = Time.zero();
 
     @Override
     public Wildcards getType() {
@@ -50,15 +51,15 @@ public class TriviaWildcard extends Wildcard {
 
     @Override
     public void tickSessionOn() {
-        int passedTime = (int) ((float) currentSession.passedTime - activatedAt);
-        if (passedTime % 20 == 0) trySpawnBots();
-        if (passedTime % 200 == 0) updateDeadBots();
+        Time passedTime = currentSession.getPassedTime().diff(activatedAt);
+        if (passedTime.isMultipleOf(Time.seconds(1))) trySpawnBots();
+        if (passedTime.isMultipleOf(Time.seconds(10))) updateDeadBots();
     }
 
     @Override
     public void tick() {
-        ticks++;
-        if (ticks % 200 == 0) {
+        timer.tick();
+        if (timer.isMultipleOf(Time.seconds(10))) {
             for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
                 UUID playerUUID = player.getUUID();
                 if (snails.containsKey(playerUUID)) {
@@ -78,7 +79,7 @@ public class TriviaWildcard extends Wildcard {
         usedHardQuestions.clear();
         resetQueue();
         spawnedBotsFor.clear();
-        activatedAt = (int) currentSession.passedTime;
+        activatedAt = currentSession.getPassedTime();
         bots.clear();
         TriviaHandler.cursedGigantificationPlayers.clear();
         TriviaHandler.cursedHeartPlayers.clear();
@@ -110,9 +111,9 @@ public class TriviaWildcard extends Wildcard {
     }
 
     public void trySpawnBots() {
-        int currentTick = (int) currentSession.passedTime;
-        int sessionStart = activatedAt;
-        int sessionEnd = currentSession.sessionLength - 6000; // Don't spawn bots 5 minutes before the end
+        int currentTick = currentSession.getPassedTime().getTicks();
+        int sessionStart = activatedAt.getTicks();
+        int sessionEnd = currentSession.getSessionLength().getTicks() - 6000; // Don't spawn bots 5 minutes before the end
         int availableTime = sessionEnd - sessionStart;
 
         List<ServerPlayer> players = livesManager.getAlivePlayers();

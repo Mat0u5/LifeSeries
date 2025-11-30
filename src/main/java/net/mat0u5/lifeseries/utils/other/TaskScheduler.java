@@ -13,14 +13,18 @@ public class TaskScheduler {
     private static final List<Task> newTasks = new ArrayList<>();
     private static boolean clearTasks = false;
 
-    public static void scheduleTask(int tickNumber, Runnable goal) {
+    public static void scheduleTask(int ticks, Runnable goal) {
         if (Main.modDisabled()) return;
-        Task task = new Task(tickNumber, goal);
+        Task task = new Task(ticks, goal);
         newTasks.add(task);
     }
 
-    public static void schedulePriorityTask(int tickNumber, Runnable goal) {
-        Task task = new Task(tickNumber, goal);
+    public static void scheduleTask(Time time, Runnable goal) {
+        scheduleTask(time.getTicks(), goal);
+    }
+
+    public static void schedulePriorityTask(Time time, Runnable goal) {
+        Task task = new Task(time.getTicks(), goal);
         task.priority = true;
         newTasks.add(task);
     }

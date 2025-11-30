@@ -191,7 +191,7 @@ public class SessionTranscript {
     }
 
     private static void addMessageWithTime(String start, String end, String message) {
-        String time = currentSession.getPassedTimeStr();
+        String time = currentSession.getPassedTime().formatLong();
         String finalMessage = start+time+end+message;
 
         if (currentSession.statusNotStarted() || currentSession.statusFinished()) {

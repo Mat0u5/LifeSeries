@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -18,7 +19,7 @@ public class Listening extends ToggleableSuperpower {
     public static final double MAX_RANGE = 20;
     public static List<UUID> listeningPlayers = new ArrayList<>();
     public Vec3 lookingAt = null;
-    private long ticks = 0;
+    private Time timer = Time.zero();
 
     public Listening(ServerPlayer player) {
         super(player);
@@ -31,11 +32,11 @@ public class Listening extends ToggleableSuperpower {
 
     @Override
     public void tick() {
-        ticks++;
+        timer.tick();
         if (!active) return;
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        if (ticks % 5 == 0) {
+        if (timer.isMultipleOf(Time.ticks(5))) {
             updateLooking();
         }
     }

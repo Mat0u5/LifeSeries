@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,8 +24,8 @@ public class Callback extends Wildcard {
     private static int activatedAt = -1;
 
     public static double TURN_OFF = 0.75; // When all wildcards stop
-    private static final double INITIAL_ACTIVATION_INTERVAL = 20 * 60 * 5;
-    private static final double INITIAL_DEACTIVATION_INTERVAL = 20 * 30;
+    private static final Time INITIAL_ACTIVATION_INTERVAL = Time.minutes(5);
+    private static final Time INITIAL_DEACTIVATION_INTERVAL = Time.seconds(30);
     public static boolean NERFED_WILDCARDS = true;
 
     private int nextActivationTick = -1;
@@ -51,12 +52,14 @@ public class Callback extends Wildcard {
 
     @Override
     public void tick() {
-        if (currentSession.sessionLength == null) return;
+        if (!currentSession.validTime()) return;
+        int passedTimeTicks = currentSession.getPassedTime().getTicks();
+        int sessionLengthTicks = currentSession.getSessionLength().getTicks();
 
-        double sessionProgress = (currentSession.passedTime-activatedAt) / (currentSession.sessionLength-activatedAt);
+        double sessionProgress = (passedTimeTicks -activatedAt) / (sessionLengthTicks -activatedAt);
 
         if (nextActivationTick == -1) {
-            nextActivationTick = (int) currentSession.passedTime + 20 * 60 * 5; // First activation after 5 minutes
+            nextActivationTick = passedTimeTicks + 20 * 60 * 5; // First activation after 5 minutes
         }
 
         if (sessionProgress >= TURN_OFF && active) {
@@ -67,7 +70,7 @@ public class Callback extends Wildcard {
 
         if (allWildcardsPhaseReached) return;
 
-        double approachingEndPhase = TURN_OFF - (6000.0/currentSession.sessionLength); // 5 minutes before the end
+        double approachingEndPhase = TURN_OFF - (6000.0/sessionLengthTicks); // 5 minutes before the end
         if (sessionProgress >= approachingEndPhase) {
             activateAllWildcards();
             allWildcardsPhaseReached = true;
@@ -75,7 +78,7 @@ public class Callback extends Wildcard {
         }
 
         if (preAllWildcardsPhaseReached) return;
-        double furtherApproachingEndPhase = TURN_OFF - (6600.0/currentSession.sessionLength); // 5.5 minutes before the end - no more actions
+        double furtherApproachingEndPhase = TURN_OFF - (6600.0/sessionLengthTicks); // 5.5 minutes before the end - no more actions
         if (sessionProgress >= furtherApproachingEndPhase) {
             if (WildcardManager.isActiveWildcard(Wildcards.TIME_DILATION)) {
                 // Disable Time Dilation if it's active...
@@ -89,35 +92,32 @@ public class Callback extends Wildcard {
             return;
         }
 
-
-        int currentTick = (int) currentSession.passedTime;
-
-        int targetActiveCount = getTargetActiveWildcardCount(sessionProgress);
+        int targetActiveCount = getTargetActiveWildcardCount(sessionProgress, sessionLengthTicks);
         int currentActiveCount = Wildcards.getActiveWildcards().size()-1;
 
-        if ((currentActiveCount < targetActiveCount && currentTick >= nextActivationTick) ||
-                (currentTick >= nextActivationTick && nextActivationTick > 0)) {
+        if ((currentActiveCount < targetActiveCount && passedTimeTicks >= nextActivationTick) ||
+                (passedTimeTicks >= nextActivationTick && nextActivationTick > 0)) {
 
             activateRandomWildcard();
 
             double progressFactor = 1.0 - sessionProgress;
-            int activationIntervalTicks = (int)(INITIAL_ACTIVATION_INTERVAL * Math.max(0.5, progressFactor));
-            nextActivationTick = currentTick + activationIntervalTicks;
+            int activationIntervalTicks = (int)(INITIAL_ACTIVATION_INTERVAL.getTicks() * Math.max(0.5, progressFactor));
+            nextActivationTick = passedTimeTicks + activationIntervalTicks;
 
             double deactivationProgressFactor = 1 + (sessionProgress / TURN_OFF) * 4;
-            int deactivationIntervalTicks = (int)(INITIAL_DEACTIVATION_INTERVAL * OtherUtils.clamp(deactivationProgressFactor, 1, 5));
-            nextDeactivationTick = currentTick + deactivationIntervalTicks;
+            int deactivationIntervalTicks = (int)(INITIAL_DEACTIVATION_INTERVAL.getTicks() * OtherUtils.clamp(deactivationProgressFactor, 1, 5));
+            nextDeactivationTick = passedTimeTicks + deactivationIntervalTicks;
         }
 
-        if (currentActiveCount > targetActiveCount && nextDeactivationTick > 0 && currentTick >= nextDeactivationTick) {
+        if (currentActiveCount > targetActiveCount && nextDeactivationTick > 0 && passedTimeTicks >= nextDeactivationTick) {
 
             deactivateRandomWildcard();
             nextDeactivationTick = -1;
         }
     }
 
-    private int getTargetActiveWildcardCount(double sessionProgress) {
-        double approachingEndPhase = TURN_OFF - (6000.0/currentSession.sessionLength);
+    private int getTargetActiveWildcardCount(double sessionProgress, int sessionLengthTicks) {
+        double approachingEndPhase = TURN_OFF - (6000.0/sessionLengthTicks);
         double newProgress = sessionProgress/approachingEndPhase;
         if (newProgress < 0.25) return 1;
         if (newProgress < 0.5) return 2;
@@ -127,7 +127,7 @@ public class Callback extends Wildcard {
 
     @Override
     public void activate() {
-        activatedAt = (int) currentSession.passedTime;
+        activatedAt = currentSession.getPassedTime().getTicks();
         nextActivationTick = -1;
         nextDeactivationTick = -1;
         allWildcardsPhaseReached = false;

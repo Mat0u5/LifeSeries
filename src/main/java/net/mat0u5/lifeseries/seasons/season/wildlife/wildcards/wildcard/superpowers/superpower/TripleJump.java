@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -11,7 +12,7 @@ import net.minecraft.world.effect.MobEffects;
 
 public class TripleJump extends ToggleableSuperpower {
     public boolean isInAir = false;
-    private int onGroundTicks = 0;
+    private Time onGround = Time.zero();
 
     public TripleJump(ServerPlayer player) {
         super(player);
@@ -26,7 +27,7 @@ public class TripleJump extends ToggleableSuperpower {
     public void tick() {
         ServerPlayer player = getPlayer();
         if (!active || player == null) {
-            onGroundTicks = 0;
+            onGround = Time.zero();
             return;
         }
 
@@ -37,7 +38,7 @@ public class TripleJump extends ToggleableSuperpower {
             /*MobEffectInstance jump = new MobEffectInstance(MobEffects.JUMP_BOOST, 219, 2, false, false, false);
             *///?}
             player.addEffect(jump);
-            onGroundTicks = 0;
+            onGround = Time.zero();
         }
         else {
             //? if <= 1.21.4 {
@@ -45,17 +46,17 @@ public class TripleJump extends ToggleableSuperpower {
             //?} else {
             /*player.removeEffect(MobEffects.JUMP_BOOST);
             *///?}
-            onGroundTicks++;
+            onGround.tick();
         }
 
         if (!isInAir) {
-            onGroundTicks = 0;
+            onGround = Time.zero();
             return;
         }
 
-        if (onGroundTicks >= 10) {
+        if (onGround.isLarger(Time.ticks(10))) {
             isInAir = false;
-            onGroundTicks = 0;
+            onGround = Time.zero();
         }
     }
 

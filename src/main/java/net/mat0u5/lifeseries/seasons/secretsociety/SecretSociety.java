@@ -2,10 +2,7 @@ package net.mat0u5.lifeseries.seasons.secretsociety;
 
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.network.chat.Component;
@@ -28,11 +25,11 @@ public class SecretSociety {
     public int PUNISHMENT_LIVES = -2;
     public boolean SOUND_ONLY_MEMBERS = false;
 
-    public static final int INITIATE_MESSAGE_DELAYS = 15*20;
+    public static final Time INITIATE_MESSAGE_DELAYS = Time.seconds(15);
     public List<SocietyMember> members = new ArrayList<>();
     public boolean societyStarted = false;
     public boolean societyEnded = false;
-    public long ticks = 0;
+    public Time timer = Time.zero();
     public String secretWord = "";
     public Random rnd = new Random();
 
@@ -64,7 +61,7 @@ public class SecretSociety {
 
     public void addSessionActions() {
         if (!SOCIETY_ENABLED) return;
-        currentSession.addSessionAction(new SessionAction(OtherUtils.minutesToTicks(START_TIME), TextUtils.formatString("§7Begin Secret Society §f[{}]", OtherUtils.formatTime(OtherUtils.minutesToTicks(START_TIME))), "Begin Secret Society") {
+        currentSession.addSessionAction(new SessionAction(Time.minutes(START_TIME), "Begin Secret Society") {
             @Override
             public void trigger() {
                 if (!SOCIETY_ENABLED) return;
@@ -86,7 +83,7 @@ public class SecretSociety {
         societyStarted = true;
         societyEnded = false;
         SessionTranscript.societyStarted();
-        ticks = 0;
+        timer = Time.zero();
         resetMembers();
         chooseMembers(PlayerUtils.getAllFunctioningPlayers());
     }
@@ -172,9 +169,9 @@ public class SecretSociety {
         if (!SOCIETY_ENABLED) return;
         if (!societyStarted) return;
         if (societyEnded) return;
-        ticks++;
-        if (ticks < 250) return;
-        if (ticks % INITIATE_MESSAGE_DELAYS == 0) {
+        timer.tick();
+        if (timer.isSmaller(Time.ticks(250))) return;
+        if (timer.isMultipleOf(INITIATE_MESSAGE_DELAYS)) {
             for (SocietyMember member : members) {
                 if (member.initiated) continue;
                 ServerPlayer player = member.getPlayer();
@@ -310,7 +307,7 @@ public class SecretSociety {
     public void sessionEnd() {
         if (!SOCIETY_ENABLED) return;
         if (societyStarted && !societyEnded) {
-            TaskScheduler.scheduleTask(40, () -> {
+            TaskScheduler.scheduleTask(Time.seconds(2), () -> {
                 PlayerUtils.broadcastMessageToAdmins(Component.nullToEmpty("§c The Secret Society has not been ended by any Member!"));
                 PlayerUtils.broadcastMessageToAdmins(Component.nullToEmpty("§c Run \"/society members list\" to see the Members."));
             });

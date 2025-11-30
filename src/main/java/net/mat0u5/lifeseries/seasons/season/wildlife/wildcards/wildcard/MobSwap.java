@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
@@ -34,7 +35,7 @@ import net.minecraft.world.level.GameRules;
 /*import net.minecraft.world.level.gamerules.GameRules;*/
 
 public class MobSwap extends Wildcard {
-    public static int activatedAt = -1;
+    public static Time activatedAt = Time.nullTime();
     public static int lastDiv0 = 0;
     public static int lastDiv = 0;
     public static int mobsLeftDiv = 0;
@@ -136,7 +137,7 @@ public class MobSwap extends Wildcard {
     public void tickSessionOn() {
         if (server == null) return;
 
-        int currentDiv0 = (int) (((float) currentSession.passedTime - activatedAt) / 40.0);
+        int currentDiv0 = (int) (((float) currentSession.getPassedTime().diff(activatedAt).getTicks()) / 40.0);
         if (lastDiv0 != currentDiv0) {
             int currentDiv = getDiv();
             if (lastDiv != currentDiv) {
@@ -149,7 +150,7 @@ public class MobSwap extends Wildcard {
 
     @Override
     public void activate() {
-        activatedAt = (int) currentSession.passedTime;
+        activatedAt = currentSession.getPassedTime();
         lastDiv = 0;
         mobsLeftDiv = 0;
         bossChance = 0;
@@ -167,15 +168,17 @@ public class MobSwap extends Wildcard {
     public int getDiv() {
         List<Integer> triggerTimes = new ArrayList<>();
         int lastTime = 0;
+        int sessionLengthTicks = currentSession.getSessionLength().getTicks();
+        int passedTicks = currentSession.getPassedTime().diff(activatedAt).getTicks();
         if (MAX_DELAY > 2400) {
             lastTime = 2400;
-            if (2400 > (currentSession.passedTime - activatedAt)) triggerTimes.add(2400);
+            if (2400 > passedTicks) triggerTimes.add(2400);
         }
-        while (lastTime < currentSession.sessionLength) {
-            float sessionProgress = ((float) lastTime) / (currentSession.sessionLength);
+        while (lastTime < sessionLengthTicks) {
+            float sessionProgress = ((float) lastTime) / sessionLengthTicks;
             sessionProgress = OtherUtils.clamp(sessionProgress, 0, 1);
             lastTime += (int) (MAX_DELAY - sessionProgress * (MAX_DELAY - MIN_DELAY));
-            if (lastTime > (currentSession.passedTime - activatedAt) && lastTime < (currentSession.sessionLength-MIN_DELAY)) {
+            if (lastTime > passedTicks && lastTime < (sessionLengthTicks - MIN_DELAY)) {
                 triggerTimes.add(lastTime);
             }
         }
@@ -197,7 +200,7 @@ public class MobSwap extends Wildcard {
             spawnMobs = SPAWN_MOBS;
         }
 
-        float progress = ((float) currentSession.passedTime - activatedAt) / (currentSession.sessionLength - activatedAt);
+        double progress = currentSession.progress(activatedAt);
         if (progress > 0.7) {
             if (mobsLeftDiv == 0) {
                 mobsLeftDiv = lastDiv;
@@ -282,7 +285,7 @@ public class MobSwap extends Wildcard {
         }
     }
 
-    private static void transformNonNamedMobs(float progress) {
+    private static void transformNonNamedMobs(double progress) {
         int dangerThresholdMin = Math.min(50, (int) (progress * 70));
         int dangerThresholdMax = Math.max(80, Math.min(115, (int) (progress * 50) + 80));
 
@@ -321,7 +324,7 @@ public class MobSwap extends Wildcard {
         }
     }
 
-    private static EntityType<?> getRandomMob(float progress, int dangerThresholdMin, int dangerThresholdMax) {
+    private static EntityType<?> getRandomMob(double progress, int dangerThresholdMin, int dangerThresholdMax) {
         List<EntityType<?>> possibleMobs = new ArrayList<>();
 
         for (Map.Entry<EntityType<?>, Integer> entry : entityEntries.entrySet()) {

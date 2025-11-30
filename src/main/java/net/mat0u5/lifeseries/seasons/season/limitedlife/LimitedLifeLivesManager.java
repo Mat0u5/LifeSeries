@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
@@ -41,7 +42,7 @@ public class LimitedLifeLivesManager extends LivesManager {
     public Component getFormattedLives(Integer lives) {
         if (lives == null) return Component.empty();
         ChatFormatting color = getColorForLives(lives);
-        return Component.literal(OtherUtils.formatTime(lives*20)).withStyle(color);
+        return Component.literal(Time.seconds(lives).formatLong()).withStyle(color);
     }
 
     @Override
@@ -100,7 +101,7 @@ public class LimitedLifeLivesManager extends LivesManager {
     @Override
     public void receiveLifeFromOtherPlayer(Component playerName, ServerPlayer target, boolean isRevive) {
         target.ls$playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.MASTER, 10, 1);
-        Component amount = Component.literal(OtherUtils.formatTime(-LimitedLife.DEATH_NORMAL*20));
+        Component amount = Component.literal(LimitedLife.NEW_DEATH_NORMAL.copy().multiply(-1).formatLong());
 
         if (seasonConfig.GIVELIFE_BROADCAST.get(seasonConfig)) {
             PlayerUtils.broadcastMessageExcept(TextUtils.format("{} received {} from {}", target, amount, playerName), target);

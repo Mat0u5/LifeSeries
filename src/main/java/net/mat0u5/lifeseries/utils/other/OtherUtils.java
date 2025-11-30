@@ -57,81 +57,8 @@ public class OtherUtils {
         }
     }
 
-    public static void debugString(String str) {
-        Main.LOGGER.info(TextUtils.formatString("String length: {}", str.length()));
-
-        // Print each character as its code point
-        for (int i = 0; i < str.length(); i++) {
-            char c = str.charAt(i);
-            Main.LOGGER.info("Character at %d: '%c' (Unicode: U+%04X)%n", i, c, (int)c);
-        }
-    }
-
-    public static String formatTime(int totalTicks) {
-        int hours = totalTicks / 72000;
-        int minutes = (totalTicks % 72000) / 1200;
-        int seconds = (totalTicks % 1200) / 20;
-        return TextUtils.formatString("{}:{}:{}", hours, formatTimeNumber(minutes), formatTimeNumber(seconds));
-    }
-
-    public static String formatTimeMillis(long millis) {
-        long totalSeconds = (long) Math.ceil(millis / 1000.0);
-        long hours = totalSeconds / 3600;
-        long minutes = (totalSeconds % 3600) / 60;
-        long seconds = (totalSeconds % 60);
-        if (hours == 0) {
-            return TextUtils.formatString("{}:{}", formatTimeNumber(minutes), formatTimeNumber(seconds));
-        }
-
-        return TextUtils.formatString("{}:{}:{}", hours, formatTimeNumber(minutes), formatTimeNumber(seconds));
-    }
-
-    public static String formatTimeNumber(int time) {
-        String value = String.valueOf(time);
-        while (value.length() < 2) value = "0" + value;
-        return value;
-    }
-
-    public static String formatTimeNumber(long time) {
-        String value = String.valueOf(time);
-        while (value.length() < 2) value = "0" + value;
-        return value;
-    }
-
-    public static String formatSecondsToReadable(int seconds) {
-        boolean isNegative = seconds < 0;
-        seconds = Math.abs(seconds);
-
-        int hours = seconds / 3600;
-        int remainingSeconds = seconds % 3600;
-        int minutes = remainingSeconds / 60;
-        int secs = remainingSeconds % 60;
-
-        if (hours > 0 && minutes == 0 && secs == 0) {
-            return (isNegative ? "-" : "+") + hours + (hours == 1 ? " hour" : " hours");
-        } else if (hours == 0 && minutes > 0 && secs == 0) {
-            return (isNegative ? "-" : "+") + minutes + (minutes == 1 ? " minute" : " minutes");
-        } else if (hours == 0 && minutes == 0 && secs > 0) {
-            return (isNegative ? "-" : "+") + secs + (secs == 1 ? " second" : " seconds");
-        } else {
-            return String.format("%s%d:%02d:%02d", isNegative ? "-" : "+", hours, minutes, secs);
-        }
-    }
-
-    public static int minutesToTicks(int mins) {
-        return mins*60*20;
-    }
-    public static int minutesToTicks(double mins) {
-        double ticks = mins*60*20;
-        return (int) ticks;
-    }
-
-    public static int secondsToTicks(int secs) {
-        return secs*20;
-    }
-
     private static final Pattern TIME_PATTERN = Pattern.compile("(?:(\\d+)h)?(?:(\\d+)m)?(?:(\\d+)s)?");
-    public static Integer parseTimeFromArgument(String time) {
+    public static Time parseTimeFromArgument(String time) {
         time = time.replaceAll(" ", "").replaceAll("\"", "");
         Matcher matcher = TIME_PATTERN.matcher(time);
         if (!matcher.matches()) {
@@ -142,21 +69,7 @@ public class OtherUtils {
         int minutes = parseInt(matcher.group(2));
         int seconds = parseInt(matcher.group(3));
 
-        return (hours * 3600 + minutes * 60 + seconds) * 20;
-    }
-
-    public static Integer parseTimeSecondsFromArgument(String time) {
-        time = time.replaceAll(" ", "").replaceAll("\"", "");
-        Matcher matcher = TIME_PATTERN.matcher(time);
-        if (!matcher.matches()) {
-            return null; // Invalid time format
-        }
-
-        int hours = parseInt(matcher.group(1));
-        int minutes = parseInt(matcher.group(2));
-        int seconds = parseInt(matcher.group(3));
-
-        return (hours * 3600 + minutes * 60 + seconds);
+        return Time.seconds(hours * 3600 + minutes * 60 + seconds);
     }
 
     private static int parseInt(String value) {

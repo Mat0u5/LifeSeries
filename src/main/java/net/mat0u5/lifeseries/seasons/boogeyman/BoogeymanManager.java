@@ -5,10 +5,7 @@ import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
@@ -34,8 +31,8 @@ public class BoogeymanManager {
     public List<String> BOOGEYMAN_FORCE = new ArrayList<>();
     public String BOOGEYMAN_MESSAGE = "§7You are the Boogeyman. You must by any means necessary kill a §2dark green§7, §agreen§7 or §eyellow§7 name by direct action to be cured of the curse. If you fail, you will become a §cred name§7. All loyalties and friendships are removed while you are the Boogeyman.";
     public boolean BOOGEYMAN_INFINITE = false;
-    public int BOOGEYMAN_INFINITE_LAST_PICK = 1800;
-    public int BOOGEYMAN_INFINITE_AUTO_FAIL = 360000;
+    public Time BOOGEYMAN_INFINITE_LAST_PICK = Time.minutes(30);
+    public Time BOOGEYMAN_INFINITE_AUTO_FAIL = Time.hours(100);
     public boolean BOOGEYMAN_TEAM_NOTICE = false;
     public int BOOGEYMAN_KILLS_NEEDED = 1;
     public boolean BOOGEYMAN_STEAL_LIFE = false;
@@ -48,7 +45,7 @@ public class BoogeymanManager {
     public void addSessionActions() {
         if (!BOOGEYMAN_ENABLED) return;
         currentSession.addSessionActionIfTime(
-            new SessionAction(OtherUtils.minutesToTicks(BOOGEYMAN_CHOOSE_MINUTE-5)) {
+            new SessionAction(Time.minutes(BOOGEYMAN_CHOOSE_MINUTE-5)) {
                 @Override
                 public void trigger() {
                     if (!BOOGEYMAN_ENABLED) return;
@@ -59,7 +56,7 @@ public class BoogeymanManager {
             }
         );
         currentSession.addSessionActionIfTime(
-            new SessionAction(OtherUtils.minutesToTicks(BOOGEYMAN_CHOOSE_MINUTE-1)) {
+            new SessionAction(Time.minutes(BOOGEYMAN_CHOOSE_MINUTE-1)) {
                 @Override
                 public void trigger() {
                     if (!BOOGEYMAN_ENABLED) return;
@@ -70,9 +67,7 @@ public class BoogeymanManager {
             }
         );
         currentSession.addSessionAction(
-                new SessionAction(
-                        OtherUtils.minutesToTicks(BOOGEYMAN_CHOOSE_MINUTE),TextUtils.formatString("§7Choose Boogeymen §f[{}]", OtherUtils.formatTime(OtherUtils.minutesToTicks(BOOGEYMAN_CHOOSE_MINUTE))), "Choose Boogeymen"
-                ) {
+                new SessionAction(Time.minutes(BOOGEYMAN_CHOOSE_MINUTE), "Choose Boogeymen") {
                     @Override
                     public void trigger() {
                         if (!BOOGEYMAN_ENABLED) return;
@@ -227,16 +222,15 @@ public class BoogeymanManager {
     public void chooseNewBoogeyman() {
         if (!BOOGEYMAN_ENABLED) return;
         if (currentSession.statusFinished() || currentSession.statusNotStarted()) return;
-        int remainingTicks = currentSession.getRemainingTime();
-        if (remainingTicks <= OtherUtils.secondsToTicks(BOOGEYMAN_INFINITE_LAST_PICK)) return;
+        if (currentSession.getRemainingTime().isSmaller(BOOGEYMAN_INFINITE_LAST_PICK)) return;
 
         PlayerUtils.broadcastMessage(Component.literal("A new boogeyman is about to be chosen.").withStyle(ChatFormatting.RED));
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.LIGHTNING_BOLT_THUNDER);
-        TaskScheduler.scheduleTask(100, () -> {
+        TaskScheduler.scheduleTask(Time.seconds(5), () -> {
             List<ServerPlayer> allowedPlayers = getAllowedBoogeyPlayers();
             if (allowedPlayers.isEmpty()) return;
             Collections.shuffle(allowedPlayers);
-            TaskScheduler.scheduleTask(180, () -> chooseBoogeymen(allowedPlayers, BoogeymanRollType.INFINITE));
+            TaskScheduler.scheduleTask(Time.seconds(9), () -> chooseBoogeymen(allowedPlayers, BoogeymanRollType.INFINITE));
         });
     }
 
@@ -244,7 +238,7 @@ public class BoogeymanManager {
         if (!BOOGEYMAN_ENABLED) return;
         PlayerUtils.broadcastMessage(Component.literal("The Boogeyman is about to be chosen.").withStyle(ChatFormatting.RED));
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.LIGHTNING_BOLT_THUNDER);
-        TaskScheduler.scheduleTask(100, () -> {
+        TaskScheduler.scheduleTask(Time.seconds(5), () -> {
             resetBoogeymen();
             chooseBoogeymen(livesManager.getAlivePlayers(), BoogeymanRollType.NORMAL);
         });
@@ -271,7 +265,7 @@ public class BoogeymanManager {
         if (!BOOGEYMAN_ENABLED) return;
         allowedPlayers.removeIf(this::isBoogeyman);
         showRolling(allowedPlayers);
-        TaskScheduler.scheduleTask(180, () -> boogeymenChooseRandom(allowedPlayers, rollType));
+        TaskScheduler.scheduleTask(Time.seconds(9), () -> boogeymenChooseRandom(allowedPlayers, rollType));
     }
 
     public int getBoogeymanAmount(BoogeymanRollType rollType) {
@@ -465,7 +459,7 @@ public class BoogeymanManager {
         if (player.ls$isDead()) return;
         if (boogeymen.size() >= BOOGEYMAN_AMOUNT_MAX) return;
         if (currentSession.statusNotStarted() || currentSession.statusFinished()) return;
-        TaskScheduler.scheduleTask(40, () -> {
+        TaskScheduler.scheduleTask(Time.seconds(2), () -> {
             player.sendSystemMessage(Component.nullToEmpty("§cSince you were not present when the Boogeyman was being chosen, your chance to become the Boogeyman is now. Good luck!"));
             chooseBoogeymen(new ArrayList<>(List.of(player)), BoogeymanRollType.LATE_JOIN);
         });
@@ -492,8 +486,8 @@ public class BoogeymanManager {
         BOOGEYMAN_CHOOSE_MINUTE = seasonConfig.BOOGEYMAN_CHOOSE_MINUTE.get(seasonConfig);
         BOOGEYMAN_ANNOUNCE_OUTCOME = seasonConfig.BOOGEYMAN_ANNOUNCE_OUTCOME.get(seasonConfig);
         BOOGEYMAN_INFINITE = seasonConfig.BOOGEYMAN_INFINITE.get(seasonConfig);
-        BOOGEYMAN_INFINITE_LAST_PICK = seasonConfig.BOOGEYMAN_INFINITE_LAST_PICK.get(seasonConfig);
-        BOOGEYMAN_INFINITE_AUTO_FAIL = seasonConfig.BOOGEYMAN_INFINITE_AUTO_FAIL.get(seasonConfig);
+        BOOGEYMAN_INFINITE_LAST_PICK = Time.seconds(seasonConfig.BOOGEYMAN_INFINITE_LAST_PICK.get(seasonConfig));
+        BOOGEYMAN_INFINITE_AUTO_FAIL = Time.seconds(seasonConfig.BOOGEYMAN_INFINITE_AUTO_FAIL.get(seasonConfig));
         BOOGEYMAN_TEAM_NOTICE = seasonConfig.BOOGEYMAN_TEAM_NOTICE.get(seasonConfig);
         BOOGEYMAN_KILLS_NEEDED = seasonConfig.BOOGEYMAN_KILLS_NEEDED.get(seasonConfig);
         BOOGEYMAN_STEAL_LIFE = seasonConfig.BOOGEYMAN_STEAL_LIFE.get(seasonConfig);
@@ -556,7 +550,7 @@ public class BoogeymanManager {
             player.removeTag("boogeyman_cured");
             player.removeTag("boogeyman_failed");
         }
-        TaskScheduler.scheduleTask(100, this::chooseNewBoogeyman);
+        TaskScheduler.scheduleTask(Time.seconds(5), this::chooseNewBoogeyman);
     }
 
     public void autoFailTick(Boogeyman boogeyman) {
@@ -566,9 +560,9 @@ public class BoogeymanManager {
         if (boogeyman.cured) return;
         if (boogeyman.died) return;
 
-        int boogeymanTime = boogeyman.ticks / 20;
-        int warningTime = (BOOGEYMAN_INFINITE_AUTO_FAIL - 5*60);
-        if (boogeymanTime >= warningTime && warningTime >= 0) {
+        Time boogeymanTime = boogeyman.timeBoogeyman;
+        Time warningTime = BOOGEYMAN_INFINITE_AUTO_FAIL.diff(Time.minutes(5));
+        if (boogeymanTime.isLarger(warningTime) && warningTime.isLarger(Time.zero())) {
             if (!warningAutoFail.contains(boogeyman.uuid)) {
                 ServerPlayer player = boogeyman.getPlayer();
                 if (player != null) {
@@ -581,7 +575,7 @@ public class BoogeymanManager {
             warningAutoFail.remove(boogeyman.uuid);
         }
 
-        if (boogeymanTime >= BOOGEYMAN_INFINITE_AUTO_FAIL) {
+        if (boogeymanTime.isLarger(BOOGEYMAN_INFINITE_AUTO_FAIL)) {
             ServerPlayer player = boogeyman.getPlayer();
             if (player != null) {
                 if (!playerFailBoogeyman(player, true)) {

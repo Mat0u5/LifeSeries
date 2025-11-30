@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.mixin.client;
 
 
+import net.mat0u5.lifeseries.utils.other.Time;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -102,8 +103,8 @@ public abstract class PlayerEntityRendererMixin {
             Score score = scoreboard.getOrCreatePlayerScore(abstractClientPlayer.getScoreboardName(), objective);
             if (objective.getName().equalsIgnoreCase(LivesManager.SCOREBOARD_NAME)) {
                 if (MainClient.clientCurrentSeason == Seasons.LIMITED_LIFE) {
-                    int ticksLeft = Math.max(0, score.getScore()*20);
-                    return Component.literal(OtherUtils.formatTime(ticksLeft) + ";").setStyle(abstractClientPlayer.getDisplayName().getStyle());
+                    Time timeLeft = Time.seconds(Math.max(0, score.getScore()));
+                    return Component.literal(timeLeft.formatLong() + ";").setStyle(abstractClientPlayer.getDisplayName().getStyle());
                 }
             }
         }
@@ -130,8 +131,8 @@ public abstract class PlayerEntityRendererMixin {
         if (objective != null && readOnlyScoreInfo != null) {
             if (objective.getName().equalsIgnoreCase(LivesManager.SCOREBOARD_NAME)) {
                 if (MainClient.clientCurrentSeason == Seasons.LIMITED_LIFE) {
-                    int ticksLeft = Math.max(0, readOnlyScoreInfo.value()*20);
-                    return Component.literal(OtherUtils.formatTime(ticksLeft) + ";").setStyle(abstractClientPlayer.getDisplayName().getStyle());
+                    Time timeLeft = Time.seconds(Math.max(0, readOnlyScoreInfo.value()));
+                    return Component.literal(timeLeft.formatLong() + ";").setStyle(abstractClientPlayer.getDisplayName().getStyle());
                 }
             }
         }
@@ -169,7 +170,7 @@ public abstract class PlayerEntityRendererMixin {
                 ReadOnlyScoreInfo scoreInfo = scoreboard.getPlayerScoreInfo(player, objective);
                 if (scoreInfo != null && objective.getName().equalsIgnoreCase(LivesManager.SCOREBOARD_NAME)) {
                     if (MainClient.clientCurrentSeason == Seasons.LIMITED_LIFE) {
-                        return Component.literal(OtherUtils.formatTime(scoreInfo.value()*20)).setStyle(player.getDisplayName().getStyle());
+                        return Component.literal(Time.seconds(scoreInfo.value()).formatLong()).setStyle(player.getDisplayName().getStyle());
                     }
                 }
             }

@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
@@ -68,7 +69,7 @@ public class Necromancy extends Superpower {
             queuedRessurectedPlayers.add(deadPlayer.getUUID());
         }
 
-        TaskScheduler.scheduleTask(100, () -> {
+        TaskScheduler.scheduleTask(Time.seconds(5), () -> {
             ServerPlayer updatedPlayer = getPlayer();
             if (updatedPlayer != null) {
                 ServerLevel updatedPlayerLevel = updatedPlayer.ls$getServerLevel();

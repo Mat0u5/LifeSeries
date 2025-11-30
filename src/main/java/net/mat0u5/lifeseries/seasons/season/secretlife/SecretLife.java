@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
@@ -61,13 +62,13 @@ public class SecretLife extends Season {
     public static boolean ONLY_LOSE_HEARTS_IN_SESSION = false;
 
     public ItemSpawner itemSpawner;
-    SessionAction taskWarningAction = new SessionAction(OtherUtils.minutesToTicks(-5)+1) {
+    SessionAction taskWarningAction = new SessionAction(Time.minutes(-5).add(Time.seconds(1))) {
         @Override
         public void trigger() {
             PlayerUtils.broadcastMessage(Component.literal("Go submit / fail your secret tasks if you haven't!").withStyle(ChatFormatting.GRAY));
         }
     };
-    SessionAction taskWarningAction2 = new SessionAction(OtherUtils.minutesToTicks(-30)+1) {
+    SessionAction taskWarningAction2 = new SessionAction(Time.minutes(-30).add(Time.seconds(1))) {
         @Override
         public void trigger() {
             PlayerUtils.broadcastMessage(Component.literal("You better start finishing your secret tasks if you haven't already!").withStyle(ChatFormatting.GRAY));
@@ -309,7 +310,7 @@ public class SecretLife extends Season {
         super.onPlayerJoin(player);
 
         if (TaskManager.tasksChosen && !TaskManager.tasksChosenFor.contains(player.getUUID())) {
-            TaskScheduler.scheduleTask(100, () -> TaskManager.chooseTasks(List.of(player), null));
+            TaskScheduler.scheduleTask(Time.seconds(5), () -> TaskManager.chooseTasks(List.of(player), null));
         }
     }
 
@@ -386,13 +387,13 @@ public class SecretLife extends Season {
         }
     }
 
-    private long ticks = 0;
+    private Time timer = Time.zero();
     @Override
     public void tick(MinecraftServer server) {
         super.tick(server);
         TaskManager.tick();
-        ticks++;
-        if (ticks % 20 == 0) {
+        timer.tick();
+        if (timer.isMultipleOf(Time.seconds(1))) {
             checkNaturalRegeneration();
         }
     }

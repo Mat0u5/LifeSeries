@@ -25,10 +25,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
@@ -185,7 +182,7 @@ public class NetworkHandlerServer {
                 boolean boolValue = args.get(0).equalsIgnoreCase("true");
                 seasonConfig.setProperty(id,String.valueOf(boolValue));
                 updatedConfigThisTick = true;
-                TaskScheduler.schedulePriorityTask(1, () -> {
+                TaskScheduler.schedulePriorityTask(Time.ticks(1), () -> {
                     ConfigManager.onUpdatedBoolean(id, boolValue);
                 });
             }

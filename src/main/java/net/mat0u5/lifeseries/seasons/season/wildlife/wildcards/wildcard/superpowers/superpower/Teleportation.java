@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -17,7 +18,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 
 public class Teleportation extends Superpower {
-    private long ticks = 0;
+    private Time timer = Time.zero();
 
     public Teleportation(ServerPlayer player) {
         super(player);
@@ -35,8 +36,8 @@ public class Teleportation extends Superpower {
 
     @Override
     public void tick() {
-        ticks++;
-        if (ticks % 2400 == 0) {
+        timer.tick();
+        if (timer.isMultipleOf(Time.minutes(2))) {
             ServerPlayer player = getPlayer();
             if (player != null) {
                 int pearls = player.getInventory().countItem(Items.ENDER_PEARL);

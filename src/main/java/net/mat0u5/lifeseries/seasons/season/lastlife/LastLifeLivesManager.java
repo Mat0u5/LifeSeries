@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -20,9 +21,7 @@ public class LastLifeLivesManager extends LivesManager {
 
     public boolean assignedLives = false;
 
-    public SessionAction actionChooseLives = new SessionAction(
-            OtherUtils.minutesToTicks(1),"§7Assign lives if necessary §f[00:01:00]", "Assign lives if necessary"
-    ) {
+    public SessionAction actionChooseLives = new SessionAction(Time.minutes(1),"Assign lives if necessary") {
         @Override
         public void trigger() {
             assignRandomLivesToUnassignedPlayers();
@@ -44,8 +43,7 @@ public class LastLifeLivesManager extends LivesManager {
     public void assignRandomLives(List<ServerPlayer> players) {
         players.forEach(this::resetPlayerLife);
         PlayerUtils.sendTitleToPlayers(players, Component.literal("You will have...").withStyle(ChatFormatting.GRAY), 10, 40, 10);
-        int delay = 60;
-        TaskScheduler.scheduleTask(delay, ()-> rollLives(players));
+        TaskScheduler.scheduleTask(Time.seconds(3), ()-> rollLives(players));
     }
 
     public void rollLives(List<ServerPlayer> players) {

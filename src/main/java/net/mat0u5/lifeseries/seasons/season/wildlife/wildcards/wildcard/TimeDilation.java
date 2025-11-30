@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.network.protocol.game.ClientboundSetTimePacket;
 import net.minecraft.server.level.ServerLevel;
@@ -35,7 +36,7 @@ public class TimeDilation extends Wildcard {
 
     public static int updateRate = 100;
     public static int lastDiv = -1;
-    public static int activatedAt = -1;
+    public static Time activatedAt = Time.nullTime();
     public static float weatherTicksBacklog = 0;
 
     @Override
@@ -77,16 +78,16 @@ public class TimeDilation extends Wildcard {
     @Override
     public void tickSessionOn() {
         if (!active) return;
-        float sessionPassedTime = ((float) currentSession.passedTime - activatedAt);
+        float sessionPassedTime = currentSession.getPassedTime().diff(activatedAt).getTicks();
         if (sessionPassedTime < 0) return;
         if (sessionPassedTime > 3600 && sessionPassedTime < 3700 && !isFinale()) OtherUtils.executeCommand("weather clear");
-        int currentDiv = (int) ((currentSession.passedTime) / updateRate);
+        int currentDiv = (int) (((double)currentSession.getPassedTime().getTicks()) / updateRate);
         if (lastDiv != currentDiv) {
             lastDiv = currentDiv;
 
-            float progress = ((float) currentSession.passedTime - activatedAt) / (currentSession.sessionLength - activatedAt);
+            float progress = (float) currentSession.progress(activatedAt);
             if (isFinale()) {
-                progress = ((float) currentSession.passedTime - activatedAt) / (20*60*5);
+                progress = sessionPassedTime / (20*60*5);
                 if (progress >= 1 && !Callback.allWildcardsPhaseReached) {
                     deactivate();
                     WildcardManager.fadedWildcard();
@@ -127,7 +128,7 @@ public class TimeDilation extends Wildcard {
     public void activate() {
         if (!isFinale()) TaskScheduler.scheduleTask(50, () -> OtherUtils.executeCommand("weather rain"));
         TaskScheduler.scheduleTask(115, () -> {
-            activatedAt = (int) currentSession.passedTime + 400;
+            activatedAt = currentSession.getPassedTime().add(Time.seconds(20));
             lastDiv = -1;
             PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_time_slow_down")));
             slowlySetWorldSpeed(getMinTickRate(), 18);

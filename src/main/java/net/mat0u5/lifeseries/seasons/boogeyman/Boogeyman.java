@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.boogeyman;
 
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -13,7 +14,7 @@ public class Boogeyman {
     public boolean cured = false;
     public boolean failed = false;
     public boolean died = false;
-    public int ticks = 0;
+    public Time timeBoogeyman = Time.zero();
     public int killsNeeded;
 
     public Boogeyman(ServerPlayer player) {
@@ -27,7 +28,7 @@ public class Boogeyman {
     }
 
     public void tick() {
-        ticks++;
+        timeBoogeyman.tick();
     }
 
     public void onKill() {

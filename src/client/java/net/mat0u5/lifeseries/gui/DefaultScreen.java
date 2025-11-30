@@ -96,11 +96,9 @@ public abstract class DefaultScreen extends Screen {
     }
 
     public boolean isInCloseRegion(int x, int y) {
-        double width = font.width(Component.nullToEmpty("✖"));
-        double middleX = endX - 4 - (width/2);
-        double height = font.lineHeight;
-        double middleY = startY + 4 + (height/2);
-        return Math.abs(x-middleX) <= (width/2) && Math.abs(y-middleY) <= (height/2);
+        int topRightX = endX - 1;
+        int topRightY = startY + 2;
+        return x >= topRightX-8 && x <= topRightX  &&  y >= topRightY-2 && y <= topRightY + 6;
     }
 
     @Override
@@ -149,11 +147,28 @@ public abstract class DefaultScreen extends Screen {
     }
 
     public void renderClose(GuiGraphics context, int mouseX, int mouseY) {
-        String text = "✖";
+        int color = TextColors.BLACK;
         if (isInCloseRegion(mouseX, mouseY)) {
-            text = "§l✖";
+            color = TextColors.GRAY;
         }
-        RenderUtils.text(text, endX - 1, startY + 1).anchorRight().render(context, font);
+
+        int topRightX = endX - 1;
+        int topRightY = startY + 2;
+
+        context.fill(topRightX-1-1, topRightY-1, topRightX, topRightY+1, color);
+        context.fill(topRightX-6-1, topRightY-1, topRightX-5, topRightY+1, color);
+
+        context.fill(topRightX-2-1, topRightY+1-1, topRightX-1, topRightY+2, color);
+        context.fill(topRightX-5-1, topRightY+1-1, topRightX-4, topRightY+2, color);
+
+        context.fill(topRightX-4-1, topRightY+2-1, topRightX-2, topRightY+4, color);
+
+        context.fill(topRightX-1-1, topRightY+5-1, topRightX, topRightY+6, color);
+        context.fill(topRightX-6-1, topRightY+5-1, topRightX-5, topRightY+6, color);
+
+        context.fill(topRightX-2-1, topRightY+4-1, topRightX-1, topRightY+5, color);
+        context.fill(topRightX-5-1, topRightY+4-1, topRightX-4, topRightY+5, color);
+
     }
 
     @Override

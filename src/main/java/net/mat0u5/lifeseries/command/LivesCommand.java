@@ -10,6 +10,7 @@ import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.lastlife.LastLifeLivesManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
@@ -281,14 +282,14 @@ public class LivesCommand extends Command {
 
     public int lifeManager(CommandSourceStack source, Collection<ServerPlayer> targets, String timeArgument, boolean setNotGive, boolean reverse) {
 
-        Integer amount = OtherUtils.parseTimeSecondsFromArgument(timeArgument);
-        if (amount == null) {
+        Time amount = OtherUtils.parseTimeFromArgument(timeArgument);
+        if (amount == null || !amount.isPresent()) {
             source.sendFailure(Component.literal(SessionCommand.INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
-        if (reverse) amount *= -1;
+        if (reverse) amount.multiply(-1);
 
-        return lifeManager(source, targets, amount, setNotGive);
+        return lifeManager(source, targets, amount.getSeconds(), setNotGive);
     }
 
     public int lifeManager(CommandSourceStack source, Collection<ServerPlayer> targets, int amount, boolean setNotGive) {
@@ -315,7 +316,7 @@ public class LivesCommand extends Command {
             String addOrRemove = amount >= 0 ? "Added" : "Removed";
             String timeOrLives2 = Math.abs(amount)==1?"life":"lives";
             if (!normalLife) {
-                timeOrLives2 = OtherUtils.formatTime(Math.abs(amount)*20);
+                timeOrLives2 = Time.seconds(Math.abs(amount)).formatLong();
             }
             String toOrFrom = amount >= 0 ? "to" : "from";
 

@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -117,7 +118,7 @@ public class TextHud {
             }
 
             if (remainingTime < 0) timerText = timerText.append(Component.nullToEmpty("§7Session has ended"));
-            else timerText = timerText.append(TextUtils.formatLoosely("§7Session {}", OtherUtils.formatTimeMillis(remainingTime)));
+            else timerText = timerText.append(TextUtils.formatLoosely("§7Session {}", Time.millis(remainingTime).formatLong()));
         }
 
         return drawHudText(client, context, timerText, y);
@@ -144,7 +145,7 @@ public class TextHud {
             long remainingTime = currentSeconds * 1000;
 
             if (remainingTime < 0) timerText = timerText.append(TextUtils.formatLoosely("{}0:00:00", MainClient.limitedLifeTimerColor));
-            else timerText = timerText.append(Component.nullToEmpty(MainClient.limitedLifeTimerColor+ OtherUtils.formatTimeMillis(remainingTime)));
+            else timerText = timerText.append(Component.nullToEmpty(MainClient.limitedLifeTimerColor+ Time.millis(remainingTime).formatLong()));
         }
 
         return drawHudText(client, context, timerText, y);
@@ -160,7 +161,7 @@ public class TextHud {
 
         int secondsLeft = triviaTimer;
 
-        Component actualTimer = Component.nullToEmpty(OtherUtils.formatTimeMillis(secondsLeft * 1000));
+        Component actualTimer = Component.nullToEmpty(Time.seconds(secondsLeft).format());
         Component timerText = Component.nullToEmpty("§7Trivia timer: ");
 
         int screenWidth = client.getWindow().getGuiScaledWidth();
@@ -187,7 +188,7 @@ public class TextHud {
         boolean keyPressed = pressedAgo < 500;
         if (pressedAgo > 6000) return 0;
 
-        Component timerText = TextUtils.formatLoosely("{}Superpower cooldown:§f {}", (keyPressed?"§c§n":"§7") , OtherUtils.formatTimeMillis(millisLeft));
+        Component timerText = TextUtils.formatLoosely("{}Superpower cooldown:§f {}", (keyPressed?"§c§n":"§7") , Time.millis(millisLeft).format());
 
         return drawHudText(client, context, timerText, y);
     }
@@ -199,7 +200,7 @@ public class TextHud {
         long millisLeft = roundTime(MainClient.MIMICRY_COOLDOWN_TIMESTAMP) - currentMillis;
         if (millisLeft > 10000000) return 0;
 
-        Component timerText = TextUtils.formatLoosely("§7Mimic power cooldown: §f{}", OtherUtils.formatTimeMillis(millisLeft));
+        Component timerText = TextUtils.formatLoosely("§7Mimic power cooldown: §f{}", Time.millis(millisLeft).format());
 
         return drawHudText(client, context, timerText, y);
     }

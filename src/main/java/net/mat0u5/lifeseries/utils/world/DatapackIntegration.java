@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.NotNull;
@@ -182,11 +183,11 @@ public class DatapackIntegration {
         else if (prevStatus == SessionStatus.PAUSED && status != SessionStatus.PAUSED) DatapackIntegration.EVENT_SESSION_UNPAUSE.trigger();
         else if (status == SessionStatus.STARTED) DatapackIntegration.EVENT_SESSION_START.trigger();
     }
-    public static void setSessionLength(int ticks) {
-        ScoreboardUtils.setScore("Length", SCOREBOARD_SESSION_INFO, ticks);
+    public static void setSessionLength(Time time) {
+        ScoreboardUtils.setScore("Length", SCOREBOARD_SESSION_INFO, time.getTicks());
     }
-    public static void setSessionTimePassed(int ticks) {
-        ScoreboardUtils.setScore("PassedTime", SCOREBOARD_SESSION_INFO, ticks);
+    public static void setSessionTimePassed(Time time) {
+        ScoreboardUtils.setScore("PassedTime", SCOREBOARD_SESSION_INFO, time.getTicks());
     }
 
     public enum Events {

@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -37,7 +38,7 @@ public class UnassignedSeason extends Season {
 
     @Override
     public void onPlayerJoin(ServerPlayer player) {
-        TaskScheduler.scheduleTask(100, this::broadcastNotice);
+        TaskScheduler.scheduleTask(Time.seconds(5), this::broadcastNotice);
     }
     @Override
     public void onPlayerFinishJoining(ServerPlayer player) {

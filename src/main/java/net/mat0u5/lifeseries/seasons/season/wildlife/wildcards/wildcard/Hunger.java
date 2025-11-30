@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -29,7 +30,6 @@ import net.minecraft.world.item.Items;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.currentSession;
-import static net.mat0u5.lifeseries.Main.seasonConfig;
 
 //? if >= 1.20.5 {
 import net.minecraft.core.component.DataComponentMap;
@@ -50,7 +50,7 @@ public class Hunger extends Wildcard {
     public static int shuffleVersion = 0;
     private static boolean shuffledBefore = false;
     private static int lastVersion = -1;
-    private static long ticks = 0;
+    private static Time timer = Time.zero();
 
     public static int HUNGER_EFFECT_LEVEL = 3;
 
@@ -180,15 +180,15 @@ public class Hunger extends Wildcard {
 
     @Override
     public void tick() {
-        if (currentSession.sessionLength == null || currentSession.sessionLength - currentSession.passedTime > 6000) {
-            int currentVersion = (int) Math.floor(currentSession.passedTime / (SWITCH_DELAY));
+        if (currentSession.validTime() || currentSession.getRemainingTime().getTicks() > 6000) {
+            int currentVersion = (int) Math.floor((double) currentSession.getPassedTime().getTicks() / (SWITCH_DELAY));
             if (lastVersion != currentVersion) {
                 lastVersion = currentVersion;
                 newFoodRules();
             }
         }
-        ticks++;
-        if (ticks % 20 == 0) {
+        timer.tick();
+        if (timer.isMultipleOf(Time.seconds(1))) {
             for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
                 if (!player.hasEffect(MobEffects.HUNGER)) {
                     addHunger(player);
@@ -209,7 +209,7 @@ public class Hunger extends Wildcard {
     }
     @Override
     public void activate() {
-        TaskScheduler.scheduleTask(100, () -> {
+        TaskScheduler.scheduleTask(Time.seconds(5), () -> {
             shuffleVersion = rnd.nextInt(0,100);
             shuffledBefore = false;
             lastVersion = -1;
@@ -257,8 +257,8 @@ public class Hunger extends Wildcard {
         if (shuffledBefore) {
             PlayerUtils.playSoundToPlayers(players, SoundEvents.NOTE_BLOCK_PLING.value());
             PlayerUtils.sendTitleWithSubtitleToPlayers(players, Component.empty(), Component.nullToEmpty("§7Food is about to be randomised..."), 0, 140, 0);
-            TaskScheduler.scheduleTask(40, WildcardManager::showDots);
-            TaskScheduler.scheduleTask(140, () -> {
+            TaskScheduler.scheduleTask(Time.seconds(2), WildcardManager::showDots);
+            TaskScheduler.scheduleTask(Time.seconds(7), () -> {
                 addHunger();
                 updateInventories();
                 PlayerUtils.playSoundToPlayers(players, SoundEvents.ELDER_GUARDIAN_CURSE, 0.2f, 1);

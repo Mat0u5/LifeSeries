@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.gui.config.entries.interfaces.ITextFieldAddonPopup;
 import net.mat0u5.lifeseries.gui.config.entries.main.DoubleConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -36,7 +37,7 @@ public class MinutesConfigEntry extends DoubleConfigEntry implements ITextFieldA
 
     @Override
     public Component getPopupText() {
-        return Component.literal(OtherUtils.formatSecondsToReadable((int)(value*60))).withStyle(ChatFormatting.GRAY);
+        return Component.literal(Time.minutes(value).formatReadable()).withStyle(ChatFormatting.GRAY);
     }
 
     @Override

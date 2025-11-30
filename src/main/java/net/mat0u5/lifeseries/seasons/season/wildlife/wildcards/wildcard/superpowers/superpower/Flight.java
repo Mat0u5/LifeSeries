@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -36,7 +37,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 public class Flight extends Superpower {
     public boolean isLaunchedUp = false;
     private int onGroundTicks = 0;
-    private long ticks = 0;
+    private Time timer = Time.zero();
 
     public Flight(ServerPlayer player) {
         super(player);
@@ -54,7 +55,7 @@ public class Flight extends Superpower {
 
     @Override
     public void tick() {
-        ticks++;
+        timer.tick();
         ServerPlayer player = getPlayer();
         if (player == null) {
             onGroundTicks = 0;
@@ -62,13 +63,13 @@ public class Flight extends Superpower {
         }
         if (!isLaunchedUp) {
             onGroundTicks = 0;
-            if (ticks % 5 == 0) NetworkHandlerServer.sendStringPacket(player, PacketNames.PREVENT_GLIDING, "true");
+            if (timer.isMultipleOf(Time.ticks(5))) NetworkHandlerServer.sendStringPacket(player, PacketNames.PREVENT_GLIDING, "true");
             return;
         }
 
         if (player.onGround()) {
             onGroundTicks++;
-            if (ticks % 5 == 0) NetworkHandlerServer.sendStringPacket(player, PacketNames.PREVENT_GLIDING, "true");
+            if (timer.isMultipleOf(Time.ticks(5))) NetworkHandlerServer.sendStringPacket(player, PacketNames.PREVENT_GLIDING, "true");
         }
 
         else {

@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -193,55 +194,55 @@ public class SessionCommand extends Command {
     public int skipTime(CommandSourceStack source, String timeArgument) {
         if (checkBanned(source)) return -1;
 
-        Integer totalTicks = OtherUtils.parseTimeFromArgument(timeArgument);
-        if (totalTicks == null) {
+        Time timeTotal = OtherUtils.parseTimeFromArgument(timeArgument);
+        if (timeTotal == null || !timeTotal.isPresent()) {
             source.sendFailure(Component.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("Skipped {} in the session length", OtherUtils.formatTime(totalTicks)));
-        currentSession.passedTime+=totalTicks;
+        OtherUtils.sendCommandFeedback(source, TextUtils.format("Skipped {} in the session length", timeTotal.formatLong()));
+        currentSession.passTime(timeTotal);
         return 1;
     }
 
     public int setTime(CommandSourceStack source, String timeArgument) {
         if (checkBanned(source)) return -1;
 
-        Integer totalTicks = OtherUtils.parseTimeFromArgument(timeArgument);
-        if (totalTicks == null) {
+        Time timeTotal = OtherUtils.parseTimeFromArgument(timeArgument);
+        if (timeTotal == null || !timeTotal.isPresent()) {
             source.sendFailure(Component.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
-        currentSession.setSessionLength(totalTicks);
+        currentSession.setSessionLength(timeTotal);
 
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("The session length has been set to {}", OtherUtils.formatTime(totalTicks)));
+        OtherUtils.sendCommandFeedback(source, TextUtils.format("The session length has been set to {}", timeTotal.formatLong()));
         return 1;
     }
 
     public int addTime(CommandSourceStack source, String timeArgument) {
         if (checkBanned(source)) return -1;
 
-        Integer totalTicks = OtherUtils.parseTimeFromArgument(timeArgument);
-        if (totalTicks == null) {
+        Time timeTotal = OtherUtils.parseTimeFromArgument(timeArgument);
+        if (timeTotal == null || !timeTotal.isPresent()) {
             source.sendFailure(Component.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
-        currentSession.addSessionLength(totalTicks);
+        currentSession.addSessionLength(timeTotal);
 
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("Added {} to the session length", OtherUtils.formatTime(totalTicks)));
+        OtherUtils.sendCommandFeedback(source, TextUtils.format("Added {} to the session length", timeTotal.formatLong()));
         return 1;
     }
 
     public int removeTime(CommandSourceStack source, String timeArgument) {
         if (checkBanned(source)) return -1;
 
-        Integer totalTicks = OtherUtils.parseTimeFromArgument(timeArgument);
-        if (totalTicks == null) {
+        Time timeTotal = OtherUtils.parseTimeFromArgument(timeArgument);
+        if (timeTotal == null || !timeTotal.isPresent()) {
             source.sendFailure(Component.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
-        currentSession.removeSessionLength(totalTicks);
+        currentSession.removeSessionLength(timeTotal);
 
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("Removed {} from the session length", OtherUtils.formatTime(totalTicks)));
+        OtherUtils.sendCommandFeedback(source, TextUtils.format("Removed {} from the session length", timeTotal.formatLong()));
         return 1;
     }
 }

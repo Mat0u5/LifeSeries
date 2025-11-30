@@ -19,13 +19,13 @@ import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.*;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -45,7 +45,6 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.PlayerTeam;
-import net.minecraft.world.scores.Scoreboard;
 import net.minecraft.world.scores.Team;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -53,6 +52,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.*;
 import static net.mat0u5.lifeseries.Main.*;
 import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
+
+//? if <= 1.20
+/*import net.minecraft.world.scores.Scoreboard;*/
 //? if <= 1.21.9
 import net.minecraft.world.level.GameRules;
 //? if > 1.21.9
@@ -348,12 +350,12 @@ public abstract class Season {
     public void sessionChangeStatus(SessionStatus newStatus) {
     }
 
-    private long ticks = 0;
+    private Time timer = Time.zero();
     public void tick(MinecraftServer server) {
-        ticks++;
+        timer.tick();
         boogeymanManager.tick();
         secretSociety.tick();
-        if (ticks % 100 == 0 || reloadPlayerTeams) {
+        if (timer.isMultipleOf(Time.seconds(5)) || reloadPlayerTeams) {
             reloadPlayerTeams = false;
             reloadAllPlayerTeams();
         }

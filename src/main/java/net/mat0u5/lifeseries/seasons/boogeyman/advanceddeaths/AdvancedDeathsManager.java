@@ -54,7 +54,7 @@ public class AdvancedDeathsManager {
         }
         int amountOfDeaths = currentLives - lives;
         if (currentSeason.getSeason() == Seasons.LIMITED_LIFE) {
-            amountOfDeaths = (int) Math.ceil(((double) amountOfDeaths) / Math.abs(LimitedLife.DEATH_NORMAL));
+            amountOfDeaths = (int) Math.ceil(((double) amountOfDeaths) / Math.abs(LimitedLife.NEW_DEATH_NORMAL.getSeconds()));
         }
 
         List<AdvancedDeath> queuedPlayerDeaths = getRandomDeaths(player, amountOfDeaths);

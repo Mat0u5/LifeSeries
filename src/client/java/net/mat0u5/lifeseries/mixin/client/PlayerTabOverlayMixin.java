@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.PlayerTabOverlay;
 import net.minecraft.client.multiplayer.PlayerInfo;
@@ -45,7 +46,7 @@ public class PlayerTabOverlayMixin {
                     }
                 }
                 else {
-                    renderOverride = Component.literal(OtherUtils.formatTime(score*20)).withStyle(ChatFormatting.YELLOW);
+                    renderOverride = Component.literal(Time.seconds(score).formatLong()).withStyle(ChatFormatting.YELLOW);
                 }
                 if (renderOverride != null) {
                     return instance.drawString(font, renderOverride, k - font.width(renderOverride), i2, i3);
@@ -72,7 +73,7 @@ public class PlayerTabOverlayMixin {
                 }
             }
             else {
-                return Component.literal(OtherUtils.formatTime(score*20)).setStyle(originalText.getStyle());
+                return Component.literal(Time.seconds(score).formatLong()).setStyle(originalText.getStyle());
             }
         }
 

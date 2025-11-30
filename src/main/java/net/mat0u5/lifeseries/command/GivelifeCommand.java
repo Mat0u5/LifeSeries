@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -70,7 +71,7 @@ public class GivelifeCommand extends Command {
 
         int giveAmount = 1;
         if (currentSeason.getSeason() == Seasons.LIMITED_LIFE) {
-            giveAmount = -LimitedLife.DEATH_NORMAL;
+            giveAmount = -LimitedLife.NEW_DEATH_NORMAL.getSeconds();
         }
 
         Integer currentLives = self.ls$getLives();
@@ -101,7 +102,7 @@ public class GivelifeCommand extends Command {
         self.ls$addLives(-giveAmount);
         livesManager.addToLivesNoUpdate(target, giveAmount);
         AnimationUtils.playTotemAnimation(self);
-        TaskScheduler.scheduleTask(40, () -> livesManager.receiveLifeFromOtherPlayer(currentPlayerName, target, isRevive));
+        TaskScheduler.scheduleTask(Time.seconds(2), () -> livesManager.receiveLifeFromOtherPlayer(currentPlayerName, target, isRevive));
 
         if (currentSeason instanceof DoubleLife doubleLife) {
             doubleLife.syncSoulboundLives(self);

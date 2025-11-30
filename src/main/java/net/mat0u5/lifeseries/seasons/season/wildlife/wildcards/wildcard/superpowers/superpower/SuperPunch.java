@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,7 +15,7 @@ import net.minecraft.world.entity.EntityType;
 import java.util.List;
 
 public class SuperPunch extends ToggleableSuperpower {
-    private long ticks = 0;
+    private Time timer = Time.zero();
     private Entity riding = null;
     private static final List<EntityType<?>> bannedSittingEntities = List.of(MobRegistry.SNAIL, MobRegistry.TRIVIA_BOT);
 
@@ -49,10 +50,10 @@ public class SuperPunch extends ToggleableSuperpower {
 
     @Override
     public void tick() {
-        ticks++;
+        timer.tick();
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        if (ticks % 5 == 0) {
+        if (timer.isMultipleOf(Time.ticks(5))) {
             if (player.isPassenger() && player.getVehicle() != null && player.getVehicle().isSpectator()) {
                 player.removeVehicle();
             }

@@ -18,6 +18,7 @@ import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.ChatFormatting;
@@ -38,7 +39,7 @@ public class WildcardManager {
 
     public static void addSessionActions() {
         currentSession.addSessionActionIfTime(
-                new SessionAction(OtherUtils.minutesToTicks(ACTIVATE_WILDCARD_MINUTE-2)) {
+                new SessionAction(Time.minutes(ACTIVATE_WILDCARD_MINUTE-2)) {
                     @Override
                     public void trigger() {
                         if (activeWildcards.isEmpty()) {
@@ -48,7 +49,7 @@ public class WildcardManager {
                 }
         );
         currentSession.addSessionAction(
-            new SessionAction(OtherUtils.minutesToTicks(ACTIVATE_WILDCARD_MINUTE),TextUtils.formatString("§7Activate Wildcard §f[{}]", OtherUtils.formatTime(OtherUtils.minutesToTicks(ACTIVATE_WILDCARD_MINUTE))), "Activate Wildcard") {
+            new SessionAction(Time.minutes(ACTIVATE_WILDCARD_MINUTE), "Activate Wildcard") {
                 @Override
                 public void trigger() {
                     if (activeWildcards.isEmpty()) {

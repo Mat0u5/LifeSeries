@@ -26,6 +26,7 @@ import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.interfaces.IClientHelper;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
@@ -40,7 +41,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.4.4.2";
+	public static final String MOD_VERSION = "dev-1.4.4.3";
 	public static final String MOD_ID = "lifeseries";
 	public static final String UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
 	public static final boolean DEBUG = false;
@@ -143,8 +144,9 @@ public class Main implements ModInitializer {
 		currentSeason = Seasons.getSeasonFromStringName(seasonStr).getSeasonInstance();
 
 		currentSession = new Session();
-		currentSession.sessionLength = config.getOrCreateInt("session_length", 144000); //2 hours
-		DatapackIntegration.setSessionLength(currentSession.sessionLength);
+		int configSessionLength = config.getOrCreateInt("session_length", Time.hours(2).getTicks());
+		currentSession.setSessionLength(Time.ticks(configSessionLength));
+		DatapackIntegration.setSessionLength(currentSession.getSessionLength());
 
 		livesManager = currentSeason.livesManager;
 		seasonConfig = currentSeason.createConfig();

@@ -5,10 +5,7 @@ import net.mat0u5.lifeseries.config.StringListConfig;
 import net.mat0u5.lifeseries.config.StringListManager;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
@@ -78,9 +75,7 @@ public class TaskManager {
     public static List<UUID> pendingConfirmationTasks = new ArrayList<>();
 
     public static SessionAction getActionChooseTasks() {
-        return new SessionAction(
-                OtherUtils.minutesToTicks(ASSIGN_TASKS_MINUTE),TextUtils.formatString("§7Assign Tasks §f[{}]", OtherUtils.formatTime(OtherUtils.minutesToTicks(ASSIGN_TASKS_MINUTE))), "Assign Tasks"
-        ) {
+        return new SessionAction(Time.minutes(ASSIGN_TASKS_MINUTE), "Assign Tasks") {
             @Override
             public void trigger() {
                 chooseTasks(livesManager.getAlivePlayers(), null);
@@ -462,7 +457,7 @@ public class TaskManager {
         Vec3 centerPos = itemSpawnerPos.getCenter();
         AnimationUtils.createGlyphAnimation(server.overworld(), centerPos, 40);
         server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("secretlife_task")), SoundSource.PLAYERS, 1.0F, 1.0F);
-        TaskScheduler.scheduleTask(60, () -> {
+        TaskScheduler.scheduleTask(Time.seconds(3), () -> {
             //? if < 1.21 {
             /*server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.PLAYERS, 1.0F, 1.0F);
             *///?} else {
@@ -569,7 +564,7 @@ public class TaskManager {
         Vec3 centerPos = itemSpawnerPos.getCenter();
         AnimationUtils.createGlyphAnimation(server.overworld(), centerPos, 40);
         server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("secretlife_task")), SoundSource.PLAYERS, 1.0F, 1.0F);
-        TaskScheduler.scheduleTask(60, () -> {
+        TaskScheduler.scheduleTask(Time.seconds(3), () -> {
             //? if < 1.21 {
             /*server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvents.ELDER_GUARDIAN_CURSE, SoundSource.PLAYERS, 1.0F, 1.0F);
             *///?} else {
@@ -599,7 +594,7 @@ public class TaskManager {
     public static void chooseNewTaskForPlayerIfNecessary(ServerPlayer player) {
         if (currentSession.statusFinished()) return;
         if (player.ls$isOnLastLife(false) || CONSTANT_TASKS) {
-            TaskScheduler.scheduleTask(120, () -> {
+            TaskScheduler.scheduleTask(Time.seconds(6), () -> {
                 TaskTypes newType = player.ls$isOnLastLife(false) ? TaskTypes.RED : TaskTypes.EASY;
                 chooseTasks(List.of(player), newType);
             });
