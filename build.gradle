@@ -36,6 +36,12 @@ repositories {
  }
  maven { url "https://maven.shedaniel.me/" }
  maven { url = 'https://maven.maxhenkel.de/repository/public' }
+ maven {
+  url = "https://www.cursemaven.com"
+  content {
+   includeGroup "curse.maven"
+  }
+ }
 }
 
 fabricApi {
@@ -54,7 +60,7 @@ dependencies {
  // Runtime only QOL mods
  if (isValidVersion(project.carpet_bot_relog_version)) modRuntimeOnly "maven.modrinth:carpet-bot-relog:${project.carpet_bot_relog_version}"
  if (isValidVersion(project.voicechat_mod_version)) modRuntimeOnly "maven.modrinth:simple-voice-chat:fabric-${project.voicechat_mod_version}"
- if (isValidVersion(project.carpet_mod_version)) modRuntimeOnly "maven.modrinth:carpet:${project.carpet_mod_version}"
+ if (isValidVersion(project.carpet_mod_version)) modRuntimeOnly "curse.maven:carpet-349239:${project.carpet_mod_version}"
 
  //Runtime and compile
  if (isValidVersion(project.voicechat_api_version)) implementation "de.maxhenkel.voicechat:voicechat-api:${project.voicechat_api_version}"
