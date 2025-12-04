@@ -9,16 +9,27 @@ on:
 
 jobs:
   notify:
-    if: ${{ !contains(github.event.head_commit.message, '{skip_discord}') && secrets.DISCORD_WEBHOOK != '' }}
+    if: ${{ !contains(github.event.head_commit.message, '{skip_discord}') }}
     runs-on: ubuntu-22.04
     steps:
+      - name: Check if webhook is configured
+        id: check_webhook
+        run: |
+          if [ -z "${{ secrets.DISCORD_WEBHOOK }}" ]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Get branch name
+        if: steps.check_webhook.outputs.skip != 'true'
         id: get_branch_name
         run: |
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
 
       - name: Prepare and clean commit message
+        if: steps.check_webhook.outputs.skip != 'true'
         id: prepare_commit_message
         run: |
           RAW_COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
@@ -38,6 +49,7 @@ jobs:
           echo "COMMIT_FOOTER=$COMMIT_FOOTER" >> $GITHUB_ENV
 
       - name: Get Title
+        if: steps.check_webhook.outputs.skip != 'true'
         id: discord_title
         run: |
           if echo "${{ github.event.head_commit.message }}" | grep -q "{skip_ping}"; then
@@ -47,6 +59,7 @@ jobs:
           fi
 
       - name: Discord Message
+        if: steps.check_webhook.outputs.skip != 'true'
         uses: satak/webrequest-action@master
         with:
           url: ${{ secrets.DISCORD_WEBHOOK }}
