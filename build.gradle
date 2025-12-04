@@ -115,26 +115,30 @@ publishMods {
 
  modLoaders.add("fabric")
 
- def isDevBuild = providers.environmentVariable("DEV_BUILD").getOrElse("true") == "true"
+ def publishModrinth = providers.environmentVariable("PUBLISH_MODRINTH").getOrElse("false") == "true"
+ def isDevBuild = providers.environmentVariable("DEV_BUILD").getOrElse("false") == "true"
+ def publishCF = providers.environmentVariable("PUBLISH_CURSEFORGE").getOrElse("false") == "true"
+
  def shouldIncludeSnapshots =
-         project.property('min_version').toString().contains("w") || project.property('max_version').toString().contains("w") ||
-         project.property('min_version').toString().contains("pre") || project.property('max_version').toString().contains("pre") ||
-         project.property('min_version').toString().contains("rc") || project.property('max_version').toString().contains("rc")
+         project.property('min_version').toString().matches(/.*(w|pre|rc|snapshot).*/) ||
+         project.property('max_version').toString().matches(/.*(w|pre|rc|snapshot).*/)
 
- modrinth {
-  projectId = isDevBuild ? "RLDqKhd4" : "aLasQi8P"
-  accessToken = providers.environmentVariable("MODRINTH_TOKEN")
-  minecraftVersionRange {
-   start = project.property('min_version')
-   end = project.property('max_version')
-   includeSnapshots = shouldIncludeSnapshots
+ if (publishModrinth) {
+  modrinth {
+   projectId = isDevBuild ? "RLDqKhd4" : "aLasQi8P"
+   accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+   minecraftVersionRange {
+    start = project.property('min_version')
+    end = project.property('max_version')
+    includeSnapshots = shouldIncludeSnapshots
+   }
+
+   requires("fabric-api")
+   optional("simple-voice-chat")
   }
-
-  requires("fabric-api")
-  optional("simple-voice-chat")
  }
 
- if (!isDevBuild) {
+ if (publishCF) {
   curseforge {
    projectId = "1151647"
    accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
