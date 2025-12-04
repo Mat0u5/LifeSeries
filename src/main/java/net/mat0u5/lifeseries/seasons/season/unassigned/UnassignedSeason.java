@@ -29,7 +29,16 @@ public class UnassignedSeason extends Season {
     public ConfigManager createConfig() {
         return new ConfigManager(null, null) {
             @Override
-            public void instantiateProperties() {}
+            public void instantiateProperties() {
+                WORLDBORDER_SIZE.defaultValue = 30_000_000;
+                //?if >= 1.21.11 {
+                /*WORLDBORDER_NETHER_SIZE.defaultValue = 30_000_000;
+                WORLDBORDER_END_SIZE.defaultValue = 30_000_000;
+                *///?}
+                KEEP_INVENTORY.defaultValue = false;
+                SHOW_ADVANCEMENTS.defaultValue = true;
+                LOCATOR_BAR.defaultValue = true;
+            }
 
             @Override
             protected List<ConfigFileEntry<?>> getDefaultConfigEntries() { return new ArrayList<>(List.of()); }

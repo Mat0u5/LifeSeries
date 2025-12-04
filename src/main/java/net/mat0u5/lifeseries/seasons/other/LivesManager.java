@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeLivesManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
@@ -85,20 +86,33 @@ public class LivesManager {
 
     public Integer getTeamCanKill(String teamName) {
         Integer teamConfig = seasonConfig.getOrCreateInt("team_cankill-"+teamName, defaultTeamCanKill(teamName));
+        if (teamConfig <= -1) {
+            teamConfig = defaultTeamCanKill(teamName);
+            seasonConfig.setProperty("team_cankill-"+teamName, String.valueOf(teamConfig));
+        }
         if (teamConfig <= -1) teamConfig = null;
         return teamConfig;
     }
 
     public Integer getTeamGainLives(String teamName) {
         Integer teamConfig = seasonConfig.getOrCreateInt("team_gainlvies-"+teamName, defaultTeamGainLife(teamName));
+        if (teamConfig <= -1) {
+            teamConfig = defaultTeamGainLife(teamName);
+            seasonConfig.setProperty("team_gainlvies-"+teamName, String.valueOf(teamConfig));
+        }
         if (teamConfig <= -1) teamConfig = null;
         return teamConfig;
     }
 
     public int defaultTeamCanKill(String teamName) {
-        if (currentSeason.getSeason() == Seasons.WILD_LIFE || currentSeason.getSeason() == Seasons.LIMITED_LIFE) {
+        if (currentSeason.getSeason() == Seasons.WILD_LIFE) {
             if (teamName.equals("lives_2")) {
                 return 3;
+            }
+        }
+        if (currentSeason.getSeason() == Seasons.LIMITED_LIFE) {
+            if (teamName.equals("lives_2")) {
+                return LimitedLifeLivesManager.YELLOW_TIME;
             }
         }
         if (teamName.equals("lives_1")) {
@@ -109,8 +123,16 @@ public class LivesManager {
 
     public int defaultTeamGainLife(String teamName) {
         if (currentSeason.getSeason() == Seasons.WILD_LIFE) {
-            if (teamName.equals("lives_2")) {
+            if (teamName.equals("lives_1") || teamName.equals("lives_2")) {
                 return 4;
+            }
+        }
+        if (currentSeason.getSeason() == Seasons.LIMITED_LIFE) {
+            if (teamName.equals("lives_1")) {
+                return 1;
+            }
+            if (teamName.equals("lives_2")) {
+                return LimitedLifeLivesManager.YELLOW_TIME;
             }
         }
         return -1;

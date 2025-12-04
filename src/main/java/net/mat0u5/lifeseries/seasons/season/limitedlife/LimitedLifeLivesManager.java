@@ -115,4 +115,20 @@ public class LimitedLifeLivesManager extends LivesManager {
             PlayerUtils.safelyPutIntoSurvival(target);
         }
     }
+
+    @Override
+    public void addToPlayerLives(ServerPlayer player, int amount) {
+        if (Math.abs(amount) >= 2) {
+            sendTimeTitle(player, Time.seconds(amount), amount < 0 ? ChatFormatting.RED : ChatFormatting.GREEN);
+        }
+        super.addToPlayerLives(player, amount);
+    }
+
+    public void sendTimeTitle(ServerPlayer player, Time time, ChatFormatting style) {
+        sendTimeTitle(player, Component.literal(time.formatReadable()).withStyle(style));
+    }
+
+    public void sendTimeTitle(ServerPlayer player, Component text) {
+        PlayerUtils.sendTitle(player, text, 20, 80, 20);
+    }
 }

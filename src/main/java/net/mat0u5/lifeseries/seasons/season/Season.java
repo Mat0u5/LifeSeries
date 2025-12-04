@@ -450,17 +450,7 @@ public abstract class Season {
                 new DatapackIntegration.Events.MacroEntry("Victim", victim.getScoreboardName())
         ));
         if (!DatapackIntegration.EVENT_CLAIM_KILL.isCanceled() && !isBoogeyCure) {
-            Team team = killer.getTeam();
-            if (team != null) {
-                Integer canGainLife = livesManager.getTeamGainLives(team.getName());
-                Integer victimLives = victim.ls$getLives();
-                if (canGainLife != null && victimLives != null) {
-                    if (victimLives + 1 >= canGainLife) { // +1 because the victim already lost a life
-                        broadcastLifeGain(killer, victim);
-                        killer.ls$addLife();
-                    }
-                }
-            }
+            tryClaimKillLifeGain(killer, victim);
         }
 
         //? if <= 1.21.2 {
@@ -469,6 +459,32 @@ public abstract class Season {
         /*killer.awardKillScore(victim, killer.damageSources().playerAttack(killer));
         *///?}
     }
+
+    public void tryClaimKillLifeGain(ServerPlayer killer, ServerPlayer victim) {
+        Team team = killer.getTeam();
+        if (team != null) {
+            Integer canGainLife = livesManager.getTeamGainLives(team.getName());
+            Integer victimLives = victim.ls$getLives();
+            if (canGainLife != null && victimLives != null && victimLives > 0) {
+                if (victimLives + 1 >= canGainLife) { // +1 because the victim already lost a life
+                    broadcastLifeGain(killer, victim);
+                    killer.ls$addLife();
+                }
+            }
+        }
+    }
+
+    public void tryKillLifeGain(ServerPlayer killer, ServerPlayer victim) {
+        Team team = killer.getTeam();
+        if (team != null) {
+            Integer canGainLife = livesManager.getTeamGainLives(team.getName());
+            if (canGainLife != null && victim.ls$isOnAtLeastLives(canGainLife, false)) {
+                broadcastLifeGain(killer, victim);
+                killer.ls$addLife();
+            }
+        }
+    }
+
 
     public void broadcastLifeGain(ServerPlayer player, ServerPlayer victim) {
         if (BROADCAST_LIFE_GAIN) {
@@ -510,14 +526,7 @@ public abstract class Season {
                 new DatapackIntegration.Events.MacroEntry("Victim", victim.getScoreboardName())
         ));
         if (!DatapackIntegration.EVENT_PLAYER_PVP_KILLED.isCanceled() && !isBoogeyCure && isAllowedToAttack) {
-            Team team = killer.getTeam();
-            if (team != null) {
-                Integer canGainLife = livesManager.getTeamGainLives(team.getName());
-                if (canGainLife != null && victim.ls$isOnAtLeastLives(canGainLife, false)) {
-                    broadcastLifeGain(killer, victim);
-                    killer.ls$addLife();
-                }
-            }
+            tryKillLifeGain(killer, victim);
         }
     }
 

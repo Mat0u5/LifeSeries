@@ -1,9 +1,11 @@
 package net.mat0u5.lifeseries.gui.config.entries.extra;
 
+import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.EmptyConfigEntry;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.render.RenderUtils;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
@@ -62,8 +64,8 @@ public class TeamConfigEntry extends EmptyConfigEntry {
         textFieldLives = new EditBox(textRenderer, 0, 0, 30, 18, Component.empty());
         textFieldName = new EditBox(textRenderer, 0, 0, 80, 18, Component.empty());
         textFieldColor = new EditBox(textRenderer, 0, 0, 80, 18, Component.empty());
-        textFieldAllowedKill = new EditBox(textRenderer, 0, 0, 30, 18, Component.empty());
-        textFieldGainLife = new EditBox(textRenderer, 0, 0, 30, 18, Component.empty());
+        textFieldAllowedKill = new EditBox(textRenderer, 0, 0, 45, 18, Component.empty());
+        textFieldGainLife = new EditBox(textRenderer, 0, 0, 45, 18, Component.empty());
 
         textFieldLives.setValue(teamNum);
         textFieldName.setValue(teamName);
@@ -167,6 +169,9 @@ public class TeamConfigEntry extends EmptyConfigEntry {
         if (isLast()) {
             addEntryButton.render(context, mouseX, mouseY, tickDelta);
         }
+        boolean shouldShow = MainClient.clientCurrentSeason != Seasons.LIMITED_LIFE;
+        addEntryButton.active = shouldShow;
+        addEntryButton.visible = shouldShow;
 
         deleteEntryButton.active = !isDefaultTeam();
         textFieldLives.setEditable(!isDefaultTeam());
@@ -230,6 +235,7 @@ public class TeamConfigEntry extends EmptyConfigEntry {
 
     public boolean isLast() {
         if (parentGroup == null) return false;
+        if (MainClient.clientCurrentSeason == Seasons.LIMITED_LIFE) return false;
         return parentGroup.getChildEntries().indexOf(this) == parentGroup.getChildEntries().size()-1;
     }
 

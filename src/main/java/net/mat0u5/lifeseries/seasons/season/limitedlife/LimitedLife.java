@@ -23,13 +23,13 @@ import net.minecraft.world.damagesource.DamageSource;
 
 import java.util.Collection;
 
-import static net.mat0u5.lifeseries.Main.currentSession;
-import static net.mat0u5.lifeseries.Main.seasonConfig;
-
 //? if <= 1.20.2
 /*import net.minecraft.world.scores.Score;*/
 //? if > 1.20.2
 import net.minecraft.world.scores.PlayerScoreEntry;
+import net.minecraft.world.scores.Team;
+
+import static net.mat0u5.lifeseries.Main.*;
 
 public class LimitedLife extends Season {
     public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /boogeyman";
@@ -190,109 +190,69 @@ public class LimitedLife extends Season {
         DatapackIntegration.EVENT_PLAYER_DEATH.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
         if (!DatapackIntegration.EVENT_PLAYER_DEATH.isCanceled() && livesManager.canChangeLivesNaturally(player)) {
             player.ls$addLives(NEW_DEATH_NORMAL.getSeconds());
-            if (player.ls$isAlive()) {
-                sendTimeTitle(player, NEW_DEATH_NORMAL, ChatFormatting.RED);
-            }
         }
-    }
-
-    public void sendTimeTitle(ServerPlayer player, Time time, ChatFormatting style) {
-        sendTimeTitle(player, Component.literal(time.formatReadable()).withStyle(style));
-    }
-    public void sendTimeTitle(ServerPlayer player, Component text) {
-        PlayerUtils.sendTitle(player, text, 20, 80, 20);
     }
 
     @Override
     public void onClaimKill(ServerPlayer killer, ServerPlayer victim) {
-        boolean wasAllowedToAttack = isAllowedToAttack(killer, victim, false);
         boolean wasBoogeyCure = boogeymanManager.isBoogeymanThatCanBeCured(killer, victim);
         super.onClaimKill(killer, victim);
-        if (DatapackIntegration.EVENT_CLAIM_KILL.isCanceled()) return;
+        boolean cancelGain = DatapackIntegration.EVENT_CLAIM_KILL.isCanceled();
+        boolean cancelPunishment = DatapackIntegration.EVENT_PLAYER_DEATH.isCanceled();
+        if (cancelGain && cancelPunishment) return;
 
-        if (!wasBoogeyCure) {
-            if (wasAllowedToAttack && livesManager.canChangeLivesNaturally()) {
-                killer.ls$addLives(NEW_KILL_NORMAL.getSeconds());
-                sendTimeTitle(killer, NEW_KILL_NORMAL, ChatFormatting.GREEN);
-            }
-        }
-        else if (livesManager.canChangeLivesNaturally()) {
+        if (wasBoogeyCure && livesManager.canChangeLivesNaturally()) {
             //Victim was killed by boogeyman - remove 2 hours from victim and add 1 hour to boogey
-
             boolean wasAlive = victim.ls$isAlive();
-            if (wasAlive) {
+            if (wasAlive && !cancelPunishment) {
                 victim.ls$addLives(NEW_DEATH_BOOGEYMAN.diff(NEW_DEATH_NORMAL).getSeconds());
             }
-            killer.ls$addLives(NEW_KILL_BOOGEYMAN.getSeconds());
-            boolean isAlive = victim.ls$isAlive();
+            if (!cancelGain) killer.ls$addLives(NEW_KILL_BOOGEYMAN.getSeconds());
+        }
+    }
 
-            if (isAlive) {
-                sendTimeTitle(killer, NEW_KILL_BOOGEYMAN, ChatFormatting.GREEN);
-                sendTimeTitle(victim, NEW_DEATH_BOOGEYMAN.diff(NEW_DEATH_NORMAL), ChatFormatting.RED);
+    @Override
+    public void tryClaimKillLifeGain(ServerPlayer killer, ServerPlayer victim) {
+        Team team = killer.getTeam();
+        if (team != null) {
+            Integer canGainLife = livesManager.getTeamGainLives(team.getName());
+            Integer victimLives = victim.ls$getLives();
+            int amount = NEW_KILL_NORMAL.getSeconds();
+            if (canGainLife != null && victimLives != null && victimLives > 0) {
+                if (victimLives + amount >= canGainLife) { // +amount because the victim already lost time
+                    broadcastLifeGain(killer, victim);
+                    killer.ls$addLives(amount);
+                }
             }
-            else {
-                //Is dead right now
-                if (wasAlive && SHOW_DEATH_TITLE) {
-                    String msgKiller = NEW_KILL_BOOGEYMAN.formatReadable();
-                    PlayerUtils.sendTitleWithSubtitle(killer,
-                            Component.literal(msgKiller).withStyle(ChatFormatting.GREEN),
-                            livesManager.getDeathMessage(victim),
-                            20, 80, 20);
-                }
-                else {
-                    sendTimeTitle(killer, NEW_KILL_BOOGEYMAN, ChatFormatting.GREEN);
-                }
+        }
+    }
+
+    @Override
+    public void tryKillLifeGain(ServerPlayer killer, ServerPlayer victim) {
+        Team team = killer.getTeam();
+        if (team != null) {
+            Integer canGainLife = livesManager.getTeamGainLives(team.getName());
+            if (canGainLife != null && victim.ls$isOnAtLeastLives(canGainLife, false)) {
+                broadcastLifeGain(killer, victim);
+                killer.ls$addLives(NEW_KILL_NORMAL.getSeconds());
             }
         }
     }
 
     @Override
     public void onPlayerKilledByPlayer(ServerPlayer victim, ServerPlayer killer) {
-        boolean wasAllowedToAttack = isAllowedToAttack(killer, victim, false);
         boolean wasBoogeyCure = boogeymanManager.isBoogeymanThatCanBeCured(killer, victim);
         super.onPlayerKilledByPlayer(victim, killer);
         if (DatapackIntegration.EVENT_PLAYER_PVP_KILLED.isCanceled()) return;
 
         if (!wasBoogeyCure && livesManager.canChangeLivesNaturally()) {
-            Component victimDeathMessage = livesManager.getDeathMessage(victim);
-
-            boolean wasAlive = victim.ls$isAlive();
             victim.ls$addLives(NEW_DEATH_NORMAL.getSeconds());
-            boolean isAlive = victim.ls$isAlive();
-
-            if (wasAllowedToAttack) {
-                killer.ls$addLives(NEW_KILL_NORMAL.getSeconds());
-                if ((wasAlive && !isAlive) && SHOW_DEATH_TITLE) {
-                    PlayerUtils.sendTitleWithSubtitle(killer,
-                            Component.literal(NEW_KILL_NORMAL.formatReadable()).withStyle(ChatFormatting.GREEN),
-                            victimDeathMessage,
-                            20, 80, 20);
-                }
-                else {
-                    sendTimeTitle(killer, NEW_KILL_NORMAL, ChatFormatting.GREEN);
-                }
-            }
-            if (isAlive) {
-                sendTimeTitle(victim, NEW_DEATH_NORMAL, ChatFormatting.RED);
-            }
         }
         else if (livesManager.canChangeLivesNaturally()) {
-
             //Victim was killed by boogeyman - remove 2 hours from victim and add 1 hour to boogey
-            String msgKiller = NEW_KILL_BOOGEYMAN.formatReadable();
-
             victim.ls$addLives(NEW_DEATH_BOOGEYMAN.getSeconds());
-            killer.ls$addLives(NEW_KILL_BOOGEYMAN.getSeconds());
-
-            if (victim.ls$isAlive() || !SHOW_DEATH_TITLE) {
-                sendTimeTitle(victim, NEW_DEATH_BOOGEYMAN, ChatFormatting.RED);
-                PlayerUtils.sendTitleWithSubtitle(killer,Component.nullToEmpty("§aYou are cured!"), Component.literal(msgKiller).withStyle(ChatFormatting.GREEN), 20, 80, 20);
-            }
-            else {
-                PlayerUtils.sendTitleWithSubtitle(killer,Component.nullToEmpty("§aYou are cured, "+msgKiller),
-                        livesManager.getDeathMessage(victim)
-                        , 20, 80, 20);
-            }
+            livesManager.addToLivesNoUpdate(killer, NEW_KILL_BOOGEYMAN.getSeconds());
+            currentSeason.reloadPlayerTeam(killer);
         }
     }
 

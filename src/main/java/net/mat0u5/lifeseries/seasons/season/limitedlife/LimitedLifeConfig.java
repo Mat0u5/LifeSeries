@@ -120,7 +120,6 @@ public class LimitedLifeConfig extends ConfigManager {
         defaultEntries.remove(DEFAULT_LIVES);
         defaultEntries.remove(TAB_LIST_SHOW_EXACT_LIVES);
         defaultEntries.remove(SECRET_SOCIETY_PUNISHMENT_LIVES);
-        defaultEntries.remove(GROUP_TEAMS);
         return defaultEntries;
     }
 
