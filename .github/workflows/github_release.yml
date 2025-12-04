@@ -89,12 +89,12 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Generated version: $VERSION"
         env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
 
       - name: Create GitHub Release with JARs
         uses: softprops/action-gh-release@v2
         with:
-          token: ${{ secrets.RELEASE_GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASE_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
           tag_name: ${{ steps.version.outputs.version }}
           name: ${{ github.event.inputs.release_name }}
           body: |
