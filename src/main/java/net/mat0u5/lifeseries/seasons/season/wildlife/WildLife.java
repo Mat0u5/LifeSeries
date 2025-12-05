@@ -206,8 +206,8 @@ public class WildLife extends Season {
     }
 
     @Override
-    public void modifyEntityDrops(LivingEntity entity, DamageSource damageSource) {
-        super.modifyEntityDrops(entity, damageSource);
+    public void modifyEntityDrops(LivingEntity entity, DamageSource damageSource, CallbackInfo ci) {
+        super.modifyEntityDrops(entity, damageSource, ci);
         if (damageSource.getDirectEntity() instanceof Player) {
             if (entity instanceof Warden || entity instanceof WitherBoss || entity instanceof EnderDragon) {
                 //? if <= 1.21 {

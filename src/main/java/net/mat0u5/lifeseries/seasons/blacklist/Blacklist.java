@@ -65,8 +65,10 @@ public class Blacklist {
 
     //? if <= 1.20.3 {
     /*private List<MobEffect> loadedBannedEffects;
+    private List<MobEffect> loadedClampedEffects;
     *///?} else {
     private List<Holder<MobEffect>> loadedBannedEffects;
+    private List<Holder<MobEffect>> loadedClampedEffects;
     //?}
 
     public boolean CREATIVE_IGNORE_BLACKLIST = true;
@@ -114,6 +116,14 @@ public class Blacklist {
     public List<String> loadBannedPotions() {
         if (seasonConfig == null) return new ArrayList<>();
         String raw = seasonConfig.BLACKLIST_BANNED_POTION_EFFECTS.get(seasonConfig);
+        raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
+        if (raw.isEmpty()) return new ArrayList<>();
+        return new ArrayList<>(Arrays.asList(raw.split(",")));
+    }
+
+    public List<String> loadClampedPotions() {
+        if (seasonConfig == null) return new ArrayList<>();
+        String raw = seasonConfig.BLACKLIST_CLAMPED_POTION_EFFECTS.get(seasonConfig);
         raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
         if (raw.isEmpty()) return new ArrayList<>();
         return new ArrayList<>(Arrays.asList(raw.split(",")));
@@ -314,7 +324,7 @@ public class Blacklist {
     /*public List<MobEffect> getBannedEffects() {
     *///?} else {
     public List<Holder<MobEffect>> getBannedEffects() {
-    //?}
+        //?}
         if (server == null) return new ArrayList<>();
 
         if (loadedBannedEffects != null) return loadedBannedEffects;
@@ -322,7 +332,7 @@ public class Blacklist {
         /*List<MobEffect> newList = new ArrayList<>();
         *///?} else {
         List<Holder<MobEffect>> newList = new ArrayList<>();
-         //?}
+        //?}
 
         Registry<MobEffect> effectsRegistry = server.registryAccess()
         //? if <=1.21 {
@@ -359,6 +369,55 @@ public class Blacklist {
         return newList;
     }
 
+    //? if <= 1.20.3 {
+    /*public List<MobEffect> getClampedEffects() {
+     *///?} else {
+    public List<Holder<MobEffect>> getClampedEffects() {
+        //?}
+        if (server == null) return new ArrayList<>();
+
+        if (loadedClampedEffects != null) return loadedClampedEffects;
+        //? if <= 1.20.3 {
+        /*List<MobEffect> newList = new ArrayList<>();
+         *///?} else {
+        List<Holder<MobEffect>> newList = new ArrayList<>();
+        //?}
+
+        Registry<MobEffect> effectsRegistry = server.registryAccess()
+        //? if <=1.21 {
+        .registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
+        //?} else
+        /*.lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));*/
+
+        for (String potionId : loadClampedPotions()) {
+            if (!potionId.contains(":")) potionId = "minecraft:" + potionId;
+
+            try {
+                var id = IdentifierHelper.parse(potionId);
+                //? if <= 1.21 {
+                MobEffect enchantment = effectsRegistry.get(id);
+                //?} else {
+                /*MobEffect enchantment = effectsRegistry.getValue(id);
+                 *///?}
+
+                if (enchantment != null) {
+                    //? if <= 1.20.3 {
+                    /*newList.add(enchantment);
+                     *///?} else {
+                    newList.add(effectsRegistry.wrapAsHolder(enchantment));
+                    //?}
+                } else {
+                    OtherUtils.throwError("[CONFIG] Invalid effect: " + potionId);
+                }
+            } catch (Exception e) {
+                OtherUtils.throwError("[CONFIG] Error parsing effect ID: " + potionId);
+            }
+        }
+
+        loadedClampedEffects = newList;
+        return newList;
+    }
+
     public void reloadBlacklist() {
         if (Main.server == null) return;
 
@@ -369,12 +428,14 @@ public class Blacklist {
         loadedListEnchants = null;
         loadedBannedEnchants = null;
         loadedBannedEffects = null;
+        loadedClampedEffects = null;
         loadedRecipeBlacklist = null;
         getItemBlacklist();
         getBlockBlacklist();
         getClampedEnchants();
         getBannedEnchants();
         getBannedEffects();
+        getClampedEffects();
         getRecipeBlacklist();
     }
 

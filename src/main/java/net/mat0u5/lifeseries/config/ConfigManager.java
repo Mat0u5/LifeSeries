@@ -74,6 +74,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,TICK_FREEZE_NOT_IN_SESSION
                 //?}
                 ,BROADCAST_LIFE_GAIN
+                ,ADDITIONAL_WITHER_SKULL_RATE
 
 
                 ,GROUP_BLACKLIST // Group
@@ -96,6 +97,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,BLACKLIST_CLAMPED_ENCHANTS
                 ,BLACKLIST_BANNED_ENCHANTS
                 ,BLACKLIST_BANNED_POTION_EFFECTS
+                ,BLACKLIST_CLAMPED_POTION_EFFECTS
                 ,CREATIVE_IGNORE_BLACKLIST
 
                 ,BOOGEYMAN_MIN_AMOUNT

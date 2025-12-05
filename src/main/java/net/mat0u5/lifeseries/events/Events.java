@@ -39,6 +39,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 import java.util.*;
 import static net.mat0u5.lifeseries.Main.*;
 import static net.mat0u5.lifeseries.utils.player.PlayerUtils.isFakePlayer;
@@ -205,11 +207,11 @@ public class Events {
             currentSeason.onMobDeath(entity, source);
         } catch(Exception e) {e.printStackTrace();}
     }
-    public static void onEntityDropItems(LivingEntity entity, DamageSource source) {
+    public static void onEntityDropItems(LivingEntity entity, DamageSource source, CallbackInfo ci) {
         if (isFakePlayer(entity)) return;
         try {
             if (!Main.isLogicalSide()) return;
-            currentSeason.onEntityDropItems(entity, source);
+            currentSeason.onEntityDropItems(entity, source, ci);
         } catch(Exception e) {e.printStackTrace();}
     }
 

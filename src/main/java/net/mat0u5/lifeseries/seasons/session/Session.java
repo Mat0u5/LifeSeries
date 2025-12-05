@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.session;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.events.Events;
+import net.mat0u5.lifeseries.mixin.MobEffectInstanceAccessor;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
@@ -274,9 +275,9 @@ public class Session {
             }
             //? if <= 1.20.3 {
             /*for (MobEffect effect : blacklist.getBannedEffects()) {
-            *///?} else {
+             *///?} else {
             for (Holder<MobEffect> effect : blacklist.getBannedEffects()) {
-            //?}
+                //?}
                 for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
                     if (player.hasEffect(effect)) {
                         MobEffectInstance actualEffect = player.getEffect(effect);
@@ -284,6 +285,22 @@ public class Session {
                             if (!actualEffect.isAmbient() && !actualEffect.showIcon() && !actualEffect.isVisible()) continue;
                         }
                         player.removeEffect(effect);
+                    }
+                }
+            }
+            //? if <= 1.20.3 {
+            /*for (MobEffect effect : blacklist.getClampedEffects()) {
+             *///?} else {
+            for (Holder<MobEffect> effect : blacklist.getClampedEffects()) {
+                //?}
+                for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
+                    if (player.hasEffect(effect)) {
+                        MobEffectInstance actualEffect = player.getEffect(effect);
+                        if (actualEffect != null && actualEffect.getAmplifier() > 0 && actualEffect instanceof MobEffectInstanceAccessor accessor) {
+                            player.removeEffect(effect);
+                            accessor.ls$setAmplifier(1);
+                            player.addEffect(actualEffect);
+                        }
                     }
                 }
             }

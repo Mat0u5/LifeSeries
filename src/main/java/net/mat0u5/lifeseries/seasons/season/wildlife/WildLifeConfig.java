@@ -114,7 +114,7 @@ public class WildLifeConfig extends ConfigManager {
             "Play Sound Chance", "Chance for food to play a random sound to everyone on the server."
     );
     public static final ConfigFileEntry<String> WILDCARD_HUNGER_NON_EDIBLE_ITEMS = new ConfigFileEntry<>(
-            "wildcard_hunger_non_edible_items", "[]", ConfigTypes.ITEM_LIST, "season.hunger[new]",
+            "wildcard_hunger_non_edible_items", "[]", ConfigTypes.ITEM_LIST, "season.hunger",
             "Non Edible Items", "A list of items that you can't eat."
     );
 
@@ -195,7 +195,7 @@ public class WildLifeConfig extends ConfigManager {
             "Necromancy: Zombies Can Revive", "Controls whether zombies can be revived (gain a life) by killing a dark green player."
     );
     public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_ZOMBIES_HEALTH = new ConfigFileEntry<>(
-            "wildcard_superpowers_zombies_health", 8, "season.superpowers[new]",
+            "wildcard_superpowers_zombies_health", 8, "season.superpowers",
             "Necromancy: Zombie Health Amount", "Controls how much health zombies will have."
     );
     public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_SUPERSPEED_STEP = new ConfigFileEntry<>(

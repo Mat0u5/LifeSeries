@@ -25,18 +25,6 @@
 				"max_format": 1000,
 				"formats": {"min_inclusive": 57, "max_inclusive": 1000},
 				"directory": "data_1.21.2-latest"
-			},
-			{
-				"min_format": 15,
-				"max_format": 47,
-				"formats": {"min_inclusive": 15, "max_inclusive": 47},
-				"directory": "data_1.20-1.21.6"
-			},
-			{
-				"min_format": 48,
-				"max_format": 1000,
-				"formats": {"min_inclusive": 48, "max_inclusive": 1000},
-				"directory": "data_1.21-latest"
 			}
 		]
 	}

@@ -400,8 +400,8 @@ public class SecretLife extends Season {
 
     private Map<UUID, ItemStack> giveBookOnRespawn = new HashMap<>();
     @Override
-    public void modifyEntityDrops(LivingEntity entity, DamageSource damageSource) {
-        super.modifyEntityDrops(entity, damageSource);
+    public void modifyEntityDrops(LivingEntity entity, DamageSource damageSource, CallbackInfo ci) {
+        super.modifyEntityDrops(entity, damageSource, ci);
         if (entity instanceof ServerPlayer player) {
             boolean dropBook = SecretLifeConfig.PLAYERS_DROP_TASK_ON_DEATH.get(seasonConfig);
             if (dropBook || server == null) return;

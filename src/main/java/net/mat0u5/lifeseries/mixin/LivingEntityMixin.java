@@ -18,9 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -107,6 +105,20 @@ public abstract class LivingEntityMixin {
     }
     *///?}
 
+    @ModifyVariable(method = "addEffect(Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/world/entity/Entity;)Z", at = @At("HEAD"), ordinal = 0, argsOnly = true)
+    public MobEffectInstance clampStatusEffect(MobEffectInstance value) {
+        if (!Main.isLogicalSide() || Main.modDisabled()) return value;
+
+        LivingEntity entity = (LivingEntity) (Object) this;
+        if (entity instanceof ServerPlayer) {
+            if (blacklist.getClampedEffects().contains(value.getEffect()) && value instanceof MobEffectInstanceAccessor accessor) {
+                accessor.ls$setAmplifier(0);
+            }
+        }
+
+        return value;
+    }
+
     @Inject(method = "addEffect(Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/world/entity/Entity;)Z", at = @At("HEAD"), cancellable = true)
     public void addStatusEffect(MobEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir) {
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
@@ -168,7 +180,7 @@ public abstract class LivingEntityMixin {
     private void onDrop(ServerLevel level, DamageSource damageSource, CallbackInfo ci) {
     //?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
-        Events.onEntityDropItems((LivingEntity) (Object) this, damageSource);
+        Events.onEntityDropItems((LivingEntity) (Object) this, damageSource, ci);
     }
 
     //? if <= 1.21 {

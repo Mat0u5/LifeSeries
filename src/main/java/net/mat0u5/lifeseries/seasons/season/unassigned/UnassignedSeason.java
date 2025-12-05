@@ -31,7 +31,7 @@ public class UnassignedSeason extends Season {
             @Override
             public void instantiateProperties() {
                 WORLDBORDER_SIZE.defaultValue = 30_000_000;
-                //?if >= 1.21.11 {
+                //? if >= 1.21.11 {
                 /*WORLDBORDER_NETHER_SIZE.defaultValue = 30_000_000;
                 WORLDBORDER_END_SIZE.defaultValue = 30_000_000;
                 *///?}

@@ -65,6 +65,10 @@ public class DefaultConfigValues {
             "blacklist_banned_potion_effects", "[strength, instant_health, instant_damage]", ConfigTypes.EFFECT_LIST, "global.blacklist",
             "Banned Potion Effects", "List of banned potion effects."
     );
+    public final ConfigFileEntry<String> BLACKLIST_CLAMPED_POTION_EFFECTS = new ConfigFileEntry<>(
+            "blacklist_clamped_potion_effects", "[]", ConfigTypes.EFFECT_LIST, "global.blacklist[new]",
+            "Clamped Potion Effects", "List of potion effects clamped to level 1 (any higher levels will be set to level 1)."
+    );
     public final ConfigFileEntry<Boolean> SPAWNER_RECIPE = new ConfigFileEntry<>(
             "spawner_recipe", false, "global.spawnegg",
             "Spawner Recipe", "Controls whether the spawner crafting recipe is enabled."
@@ -90,7 +94,7 @@ public class DefaultConfigValues {
             "Only Lose Lives In Session", "Makes players only lose lives when they die while a session is active."
     );
     public final ConfigFileEntry<Boolean> TICK_FREEZE_NOT_IN_SESSION = new ConfigFileEntry<>(
-            "tick_freeze_not_in_session", false, "global[new]",
+            "tick_freeze_not_in_session", false, "global",
             "Tick Freeze When Not In Session", "Automatically freezes the game when the session is paused or ended or not started."
     );
     public final ConfigFileEntry<Boolean> LIVES_SYSTEM_DISABLED = new ConfigFileEntry<>(
@@ -114,7 +118,7 @@ public class DefaultConfigValues {
             "Clamped Enchants", "List of enchantments clamped to level 1 (any higher levels will be set to lvl1)."
     );
     public final ConfigFileEntry<String> BLACKLIST_RECIPES = new ConfigFileEntry<>(
-            "blacklist_recipes", "[]", ConfigTypes.ITEM_LIST, "global.blacklist[new]",
+            "blacklist_recipes", "[]", ConfigTypes.ITEM_LIST, "global.blacklist",
             "Blacklisted Recipes", "List of banned recipes - items you can't craft."
     );
     public final ConfigFileEntry<String> FINAL_DEATH_TITLE_SUBTITLE = new ConfigFileEntry<>(
@@ -295,8 +299,12 @@ public class DefaultConfigValues {
             "Show Advancements In Chat", "Controls advancements show up in the chat."
     );
     public final ConfigFileEntry<Boolean> BROADCAST_LIFE_GAIN = new ConfigFileEntry<>(
-            "broadcast_life_gain", false, "global[new]",
+            "broadcast_life_gain", false, "global",
             "Broadcast Kill Life Gain", "Shows a message in chat when a player gains a life by killing a player."
+    );
+    public final ConfigFileEntry<Double> ADDITIONAL_WITHER_SKULL_RATE = new ConfigFileEntry<>(
+            "additional_wither_skull_rate", 0.05, ConfigTypes.PERCENTAGE, "global[new]",
+            "Additional Wither Skull Rate", "Controls the additional chance for wither skeletons to drop skulls."
     );
 
 

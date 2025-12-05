@@ -7,8 +7,10 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -60,5 +62,40 @@ public class MobEffectMixin {
             }
             //?}
         }
+    }
+
+
+    //? if <= 1.21 {
+    @ModifyVariable(method = "applyInstantenousEffect", at = @At("HEAD"), index = 4, argsOnly = true)
+    //?} else {
+    /*@ModifyVariable(method = "applyInstantenousEffect", at = @At("HEAD"), index = 5, argsOnly = true)
+    *///?}
+    private int clampInstantEffect(int amplifier) {
+        return ls$clampEffect(amplifier);
+    }
+
+    //? if <= 1.21 {
+    @ModifyVariable(method = "applyEffectTick", at = @At("HEAD"), index = 2, argsOnly = true)
+    //?} else {
+    /*@ModifyVariable(method = "applyEffectTick", at = @At("HEAD"), index = 3, argsOnly = true)
+    *///?}
+    private int clampApplyEffect(int amplifier) {
+        return ls$clampEffect(amplifier);
+    }
+
+    @Unique
+    public int ls$clampEffect(int amplifier) {
+        if (!Main.isLogicalSide() || Main.modDisabled()) return amplifier;
+        MobEffect effect = (MobEffect) (Object) this;
+        //? if <= 1.20.3 {
+        /*if (blacklist.getClampedEffects().contains(effect)) {
+            return 0;
+        }
+        *///?} else {
+        if (blacklist.getClampedEffects().contains(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect))) {
+            return 0;
+        }
+        //?}
+        return amplifier;
     }
 }

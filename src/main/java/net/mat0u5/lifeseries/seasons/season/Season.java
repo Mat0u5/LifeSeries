@@ -38,6 +38,7 @@ import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.ElderGuardian;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
@@ -61,6 +62,11 @@ import net.minecraft.world.level.GameRules;
 /*import net.minecraft.world.level.gamerules.GameRules;*/
 //? if > 1.20
 import net.minecraft.world.scores.DisplaySlot;
+//? if <= 1.21.9 {
+import net.minecraft.world.entity.monster.WitherSkeleton;
+//?} else {
+/*import net.minecraft.world.entity.monster.skeleton.WitherSkeleton;
+*///?}
 
 public abstract class Season {
     public static final String RESOURCEPACK_MAIN_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-main-27d9e98eb6009401319a5256f7695f1bba902412/main.zip";
@@ -86,6 +92,8 @@ public abstract class Season {
     public boolean HIDE_UNJUSTIFIED_KILL_MESSAGES = false;
     public static boolean reloadPlayerTeams = false;
     private static boolean BROADCAST_LIFE_GAIN = false;
+    private double ADDITIONAL_WITHER_SKULL_RATE = 0.05;
+    public static Random rnd = new Random();
 
     public BoogeymanManager boogeymanManager = createBoogeymanManager();
     public SecretSociety secretSociety = createSecretSociety();
@@ -209,6 +217,7 @@ public abstract class Season {
         HIDE_UNJUSTIFIED_KILL_MESSAGES = seasonConfig.HIDE_UNJUSTIFIED_KILL_MESSAGES.get(seasonConfig);
         Session.TICK_FREEZE_NOT_IN_SESSION = seasonConfig.TICK_FREEZE_NOT_IN_SESSION.get(seasonConfig);
         BROADCAST_LIFE_GAIN = seasonConfig.BROADCAST_LIFE_GAIN.get(seasonConfig);
+        ADDITIONAL_WITHER_SKULL_RATE = seasonConfig.ADDITIONAL_WITHER_SKULL_RATE.get(seasonConfig);
 
         boogeymanManager.onReload();
         secretSociety.onReload();
@@ -533,13 +542,21 @@ public abstract class Season {
     public void onMobDeath(LivingEntity entity, DamageSource damageSource) {
     }
 
-    public void onEntityDropItems(LivingEntity entity, DamageSource damageSource) {
-        modifyEntityDrops(entity, damageSource);
+    public void onEntityDropItems(LivingEntity entity, DamageSource damageSource, CallbackInfo ci) {
+        modifyEntityDrops(entity, damageSource, ci);
     }
 
-    public void modifyEntityDrops(LivingEntity entity, DamageSource damageSource) {
+    public void modifyEntityDrops(LivingEntity entity, DamageSource damageSource, CallbackInfo ci) {
         if (!entity.level().isClientSide() && (damageSource.getEntity() instanceof ServerPlayer)) {
             spawnEggChance(entity);
+            if (entity instanceof WitherSkeleton && rnd.nextDouble() <= ADDITIONAL_WITHER_SKULL_RATE) {
+                ItemStack skullItem = Items.WITHER_SKELETON_SKULL.getDefaultInstance();
+                //? if <=1.21 {
+                entity.spawnAtLocation(skullItem);
+                //?} else
+                /*entity.spawnAtLocation((ServerLevel) entity.level(), skullItem);*/
+                ci.cancel();
+            }
         }
     }
 

@@ -108,7 +108,7 @@ public class SecretLifeConfig extends ConfigManager {
             "Constant Tasks", "Automatically gives players a new task when they have completed one."
     );
     public static final ConfigFileEntry<Boolean> TASKS_NEED_CONFIRMATION = new ConfigFileEntry<>(
-            "tasks_need_confirmation", false, "season[new]",
+            "tasks_need_confirmation", false, "season",
             "Tasks Need Confirmation", "Requires an admin to confirm when someone is succeeding a task."
     );
 
