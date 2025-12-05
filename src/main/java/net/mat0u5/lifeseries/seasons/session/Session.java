@@ -36,6 +36,8 @@ public class Session {
     private Time timer = Time.zero();
     private Time sessionLength = Time.nullTime();
     private Time passedTime = Time.zero();
+    private Time fullPassedTime = Time.zero();
+    public List<Time[]> sessionPauses = new ArrayList<>();
 
     private SessionStatus status = SessionStatus.NOT_STARTED;
 
@@ -64,6 +66,7 @@ public class Session {
         if (!currentSeason.sessionStart()) return false;
         changeStatus(SessionStatus.STARTED);
         passedTime = Time.zero();
+        fullPassedTime = Time.zero();
         DatapackIntegration.setSessionTimePassed(getPassedTime());
         Component line1 = TextUtils.formatLoosely("§6Session started! §7[{}]", sessionLength.formatLong());
         Component line2 = Component.literal("§f/session timer showDisplay§7 - toggles a session timer on your screen.");
@@ -104,14 +107,19 @@ public class Session {
         }
         changeStatus(SessionStatus.FINISHED);
         passedTime = Time.zero();
+        fullPassedTime = Time.zero();
         DatapackIntegration.setSessionTimePassed(getPassedTime());
         currentSeason.sessionEnd();
+        discardQueuedPauses();
     }
 
     public void sessionPause() {
         if (statusPaused()) {
             PlayerUtils.broadcastMessage(Component.literal("Session unpaused!").withStyle(ChatFormatting.GOLD));
             changeStatus(SessionStatus.STARTED);
+            if (isInQueuedPause()) {
+                discardCurrentQueuedPause();
+            }
         }
         else {
             PlayerUtils.broadcastMessage(Component.literal("Session paused!").withStyle(ChatFormatting.GOLD));
@@ -127,6 +135,7 @@ public class Session {
 
     public void passTime(Time time) {
         passedTime.add(time);
+        fullPassedTime.add(time);
     }
 
     public void setSessionLength(Time time) {
@@ -189,7 +198,74 @@ public class Session {
         displayTimer.remove(player.getUUID());
     }
 
+    public void queuePause(Time pauseAt, Time pauseLength) {
+        Time[] pauseEntry = new Time[2];
+        pauseEntry[0] = pauseAt;
+        pauseEntry[1] = pauseLength;
+        sessionPauses.add(pauseEntry);
+    }
+
+    public boolean isInQueuedPause() {
+        for (int i = 0; i < sessionPauses.size(); i++) {
+            Time[] pauseEntry = sessionPauses.get(i);
+            Time startPause = pauseEntry[0];
+            Time pauseLength = pauseEntry[1];
+            Time endPause = startPause.copy().add(pauseLength);
+            if (fullPassedTime.isLarger(startPause) && fullPassedTime.isSmaller(endPause)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void discardCurrentQueuedPause() {
+        sessionPauses.removeIf(pauseEntry -> {
+            Time startPause = pauseEntry[0];
+            Time pauseLength = pauseEntry[1];
+            Time endPause = startPause.copy().add(pauseLength);
+            return fullPassedTime.isLarger(startPause) && fullPassedTime.isSmaller(endPause);
+        });
+    }
+
+    public void discardQueuedPauses() {
+        sessionPauses.removeIf(pauseEntry -> {
+            Time startPause = pauseEntry[0];
+            Time pauseLength = pauseEntry[1];
+            Time endPause = startPause.copy().add(pauseLength);
+            return fullPassedTime.isLarger(endPause);
+        });
+    }
+
+    public void discardAllQueuedPauses() {
+        if (isInQueuedPause()) {
+            sessionPause();
+        }
+        sessionPauses.clear();
+    }
+
     public void tick(MinecraftServer server) {
+        if (statusPaused()) {
+            if (!isInQueuedPause()) {
+                sessionPause();
+            }
+            //? if < 1.20.3 {
+            /*float tickRate = 20;
+             *///?} else {
+            float tickRate = server.tickRateManager().tickrate();
+            //?}
+            if (tickRate == 20) {
+                fullPassedTime.tick();
+            }
+            else {
+                fullPassedTime.add((long)((20.0/tickRate)*Time.CONVERT_TICKS));
+            }
+        }
+        else if (statusStarted() && isInQueuedPause()) {
+            sessionPause();
+        }
+        discardQueuedPauses();
+
+
         timer.tick();
         if (timer.isMultipleOf(DISPLAY_TIMER_INTERVAL)) {
             displayTimers(server);
@@ -255,6 +331,7 @@ public class Session {
         else {
             passedTime.add((long)((20.0/tickRate)*Time.CONVERT_TICKS));
         }
+        fullPassedTime = passedTime.copy();
         DatapackIntegration.setSessionTimePassed(getPassedTime());
 
         if (passedTime.isLarger(sessionLength)) {

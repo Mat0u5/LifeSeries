@@ -54,6 +54,22 @@ public class SessionCommand extends Command {
                     .executes(context -> pauseSession(
                         context.getSource()
                     ))
+                    .then(literal("queue")
+                        .then(literal("reset")
+                            .executes(context -> pauseQueueReset(
+                                    context.getSource()
+                            ))
+                        )
+                        .then(argument("time", StringArgumentType.string())
+                                .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("1h","1h30m","2h"), builder))
+                                .then(argument("duration", StringArgumentType.greedyString())
+                                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("5m", "10m"), builder))
+                                        .executes(context -> pauseQueue(
+                                                context.getSource(), StringArgumentType.getString(context, "time"), StringArgumentType.getString(context, "duration")
+                                        ))
+                                )
+                        )
+                    )
                 )
                 .then(literal("timer")
                     .then(literal("set")
@@ -105,6 +121,32 @@ public class SessionCommand extends Command {
                 )
 
         );
+    }
+    public int pauseQueue(CommandSourceStack source, String timeArgument1, String timeArgument2) {
+        if (checkBanned(source)) return -1;
+
+        Time pauseAt = OtherUtils.parseTimeFromArgument(timeArgument1);
+        if (pauseAt == null || !pauseAt.isPresent()) {
+            source.sendFailure(Component.literal(INVALID_TIME_FORMAT_ERROR));
+            return -1;
+        }
+        Time pauseFor = OtherUtils.parseTimeFromArgument(timeArgument2);
+        if (pauseFor == null || !pauseFor.isPresent()) {
+            source.sendFailure(Component.literal(INVALID_TIME_FORMAT_ERROR));
+            return -1;
+        }
+
+        OtherUtils.sendCommandFeedback(source, TextUtils.format("The session will pause at {} for {}", pauseAt.formatLong(), pauseFor.formatLong()));
+        currentSession.queuePause(pauseAt, pauseFor);
+        return 1;
+    }
+
+    public int pauseQueueReset(CommandSourceStack source) {
+        if (checkBanned(source)) return -1;
+        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("Reset all queued pauses"));
+
+        currentSession.discardAllQueuedPauses();
+        return 1;
     }
 
     public int getTime(CommandSourceStack source) {

@@ -519,7 +519,11 @@ public class TriviaHandler {
     public static final List<UUID> cursedMoonJumpPlayers = new ArrayList<>();
     public void curseMoonjump(ServerPlayer player) {
         cursedMoonJumpPlayers.add(player.getUUID());
-        AttributeUtils.setJumpStrength(player, 0.76);
+        //?if >= 1.21.5 {
+        AttributeUtils.setJumpStrength(player, 0.85);
+        //?} else {
+        /*AttributeUtils.setJumpStrength(player, 0.76);
+        *///?}
     }
 
     public void curseBeeswarm(ServerPlayer player) {
