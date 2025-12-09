@@ -224,11 +224,12 @@ public class SessionCommand extends Command {
 
         if (currentSession.statusPaused()) {
             OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Unpausing session..."));
+            currentSession.sessionPause();
         }
         else {
             OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Pausing session..."));
+            currentSession.queuePause(currentSession.getPassedTime(), Time.hours(10_000));
         }
-        currentSession.sessionPause();
 
         return 1;
     }

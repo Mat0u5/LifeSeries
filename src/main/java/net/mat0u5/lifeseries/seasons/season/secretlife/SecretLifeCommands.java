@@ -185,6 +185,8 @@ public class SecretLifeCommands extends Command {
         if (checkBanned(source)) return -1;
         if (player == null) return -1;
 
+        if (!TaskManager.checkSecretLifePositions()) return -1;
+
         boolean hasPreassignedTask = TaskManager.preAssignedTasks.containsKey(player.getUUID());
         boolean hasTaskBook = TaskManager.hasTaskBookCheck(player, false);
 
@@ -231,6 +233,8 @@ public class SecretLifeCommands extends Command {
         if (checkBanned(source)) return -1;
         if (targets == null || targets.isEmpty()) return -1;
 
+        if (!TaskManager.checkSecretLifePositions()) return -1;
+
         TaskTypes taskType = TaskTypes.EASY;
 
         if (type.equalsIgnoreCase("hard")) taskType = TaskTypes.HARD;
@@ -272,6 +276,8 @@ public class SecretLifeCommands extends Command {
 
     public int clearTask(CommandSourceStack source, Collection<ServerPlayer> targets) {
         if (checkBanned(source)) return -1;
+
+        if (!TaskManager.checkSecretLifePositions()) return -1;
         List<ServerPlayer> affected = new ArrayList<>();
         for (ServerPlayer player : targets) {
             if (TaskManager.removePlayersTaskBook(player)) {
@@ -295,6 +301,8 @@ public class SecretLifeCommands extends Command {
     public int assignTask(CommandSourceStack source, Collection<ServerPlayer> targets) {
         if (checkBanned(source)) return -1;
 
+        if (!TaskManager.checkSecretLifePositions()) return -1;
+
         if (targets.size() == 1) {
             OtherUtils.sendCommandFeedback(source, TextUtils.format("Assigning random task to {}", targets.iterator().next()));
         }
@@ -310,6 +318,8 @@ public class SecretLifeCommands extends Command {
     public int succeedTask(CommandSourceStack source, Collection<ServerPlayer> targets) {
         if (checkBanned(source)) return -1;
         if (targets == null || targets.isEmpty()) return -1;
+
+        if (!TaskManager.checkSecretLifePositions()) return -1;
 
         if (targets.size() == 1) {
             OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Succeeding task for {}§7...", targets.iterator().next()));
@@ -329,6 +339,8 @@ public class SecretLifeCommands extends Command {
         if (checkBanned(source)) return -1;
         if (targets == null || targets.isEmpty()) return -1;
 
+        if (!TaskManager.checkSecretLifePositions()) return -1;
+
         if (targets.size() == 1) {
             OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Failing task for {}§7...", targets.iterator().next()));
         }
@@ -346,6 +358,8 @@ public class SecretLifeCommands extends Command {
     public int rerollTask(CommandSourceStack source, Collection<ServerPlayer> targets) {
         if (checkBanned(source)) return -1;
         if (targets == null || targets.isEmpty()) return -1;
+
+        if (!TaskManager.checkSecretLifePositions()) return -1;
 
         if (targets.size() == 1) {
             OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Rerolling task for {}§7...", targets.iterator().next()));

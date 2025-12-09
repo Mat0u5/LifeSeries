@@ -246,9 +246,6 @@ public class Session {
 
     public void tick(MinecraftServer server) {
         if (statusPaused()) {
-            if (!isInQueuedPause()) {
-                sessionPause();
-            }
             //? if < 1.20.3 {
             /*float tickRate = 20;
              *///?} else {
@@ -261,10 +258,11 @@ public class Session {
                 fullPassedTime.add((long)((20.0/tickRate)*Time.CONVERT_TICKS));
             }
         }
-        else if (statusStarted() && isInQueuedPause()) {
+        discardQueuedPauses();
+        boolean inQueuedPause = isInQueuedPause();
+        if ((statusStarted() && inQueuedPause) || (statusPaused() && !inQueuedPause)) {
             sessionPause();
         }
-        discardQueuedPauses();
 
 
         timer.tick();

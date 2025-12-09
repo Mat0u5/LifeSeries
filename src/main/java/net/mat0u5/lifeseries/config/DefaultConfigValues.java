@@ -94,7 +94,7 @@ public class DefaultConfigValues {
             "Only Lose Lives In Session", "Makes players only lose lives when they die while a session is active."
     );
     public final ConfigFileEntry<Boolean> TICK_FREEZE_NOT_IN_SESSION = new ConfigFileEntry<>(
-            "tick_freeze_not_in_session", false, "global",
+            "tick_freeze_not_in_session", false, "global[new]",
             "Tick Freeze When Not In Session", "Automatically freezes the game when the session is paused or ended or not started."
     );
     public final ConfigFileEntry<Boolean> LIVES_SYSTEM_DISABLED = new ConfigFileEntry<>(

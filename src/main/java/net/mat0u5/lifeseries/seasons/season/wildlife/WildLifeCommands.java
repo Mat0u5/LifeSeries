@@ -255,7 +255,7 @@ public class WildLifeCommands extends Command {
         if (checkBanned(source)) return -1;
         if (source.getPlayer() == null) return -1;
         if (!NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer())) {
-            source.sendFailure(Component.nullToEmpty("You must have the Life Series mod installed §nclient-side§r to open the wildcard GUI"));
+            source.sendFailure(Component.nullToEmpty("You must have the Life Series mod installed §nclient-side§c to open the wildcard GUI"));
             return -1;
         }
 

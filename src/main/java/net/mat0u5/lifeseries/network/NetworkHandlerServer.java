@@ -22,6 +22,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.AnimalDisguise;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.TripleJump;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
+import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
@@ -262,8 +263,13 @@ public class NetworkHandlerServer {
             if (PermissionManager.isAdmin(player) || currentSeason.getSeason() == Seasons.UNASSIGNED) {
                 Seasons newSeason = Seasons.getSeasonFromStringName(value);
                 if (newSeason == Seasons.UNASSIGNED) return;
+                boolean prevTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
                 if (Main.changeSeasonTo(newSeason.getId())) {
+                    boolean currentTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
                     PlayerUtils.broadcastMessage(TextUtils.formatLoosely("§aSuccessfully changed the season to {}.", value));
+                    if (prevTickFreeze != currentTickFreeze) {
+                        OtherUtils.setFreezeGame(currentTickFreeze);
+                    }
                 }
             }
         }

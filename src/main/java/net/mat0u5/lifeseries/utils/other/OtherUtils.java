@@ -65,11 +65,14 @@ public class OtherUtils {
             return null; // Invalid time format
         }
 
-        int hours = parseInt(matcher.group(1));
-        int minutes = parseInt(matcher.group(2));
-        int seconds = parseInt(matcher.group(3));
-
-        return Time.seconds(hours * 3600 + minutes * 60 + seconds);
+        try {
+            int hours = parseInt(matcher.group(1));
+            int minutes = parseInt(matcher.group(2));
+            int seconds = parseInt(matcher.group(3));
+            int totalSeconds = Math.addExact(Math.addExact(Math.multiplyExact(hours, 3600), Math.multiplyExact(minutes, 60)), seconds);
+            return Time.seconds(totalSeconds);
+        }catch(Exception e) {}
+        return null;
     }
 
     private static int parseInt(String value) {
