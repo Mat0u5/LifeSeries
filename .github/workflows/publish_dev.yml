@@ -131,6 +131,8 @@ jobs:
           CHANGELOG: ${{ env.COMMIT_MESSAGE_BR }}
           VERSION_TYPE: ${{ github.event.inputs.version_type }}
           DEV_BUILD: true
+          PUBLISH_MODRINTH: true
+          PUBLISH_CURSEFORGE: false
 
       - name: capture build artifacts
         uses: actions/upload-artifact@v4
