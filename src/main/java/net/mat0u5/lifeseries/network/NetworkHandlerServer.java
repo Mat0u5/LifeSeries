@@ -526,7 +526,7 @@ public class NetworkHandlerServer {
 
     public static void tryKickFailedHandshake(ServerPlayer player) {
         if (server == null) return;
-        if (currentSeason.getSeason() != Seasons.WILD_LIFE) return;
+        if (!currentSeason.getSeason().requiresClient()) return;
         if (wasHandshakeSuccessful(player)) return;
         Component disconnectText = Component.literal("You must have the §2Life Series mod\n§l installed on the client§r§r§f to play Wild Life!\n").append(
                 Component.literal("§9§nThe Life Series mod is available on Modrinth."));

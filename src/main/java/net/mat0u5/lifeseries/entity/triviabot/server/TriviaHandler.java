@@ -61,6 +61,7 @@ import net.minecraft.core.component.DataComponents;
 
 //? if <= 1.21.9 {
 import net.minecraft.world.entity.animal.Bee;
+import org.apache.http.util.EntityUtils;
 import org.joml.Vector3f;
 //?} else {
 /*import net.minecraft.world.entity.animal.bee.Bee;
@@ -93,12 +94,13 @@ public class TriviaHandler {
 
         if (!bot.interactedWith() || question == null) {
             interactedAtAge = bot.tickCount;
-            difficulty = 1+bot.getRandom().nextInt(3);
+            Tuple<Integer, TriviaQuestion> triviaQuestion = TriviaWildcard.getTriviaQuestion(boundPlayer);
+            difficulty = triviaQuestion.x;
+            question = triviaQuestion.y;
             timeToComplete = difficulty * 60 + 120;
             if (difficulty == 1) timeToComplete = TriviaBot.EASY_TIME;
             if (difficulty == 2) timeToComplete = TriviaBot.NORMAL_TIME;
             if (difficulty == 3) timeToComplete = TriviaBot.HARD_TIME;
-            question = TriviaWildcard.getTriviaQuestion(difficulty);
         }
         sendTimeUpdatePacket();
         NetworkHandlerServer.sendTriviaPacket(boundPlayer, question.getQuestion(), difficulty, System.currentTimeMillis(), timeToComplete, question.getAnswers());
@@ -263,7 +265,7 @@ public class TriviaHandler {
                 curseHunger(player);
                 break;
             case 3:
-                curseBeeswarm(player);
+                curseBeeswarm(player, bot.blockPosition());
                 break;
             //? if > 1.20.3 {
             case 4:
@@ -280,7 +282,7 @@ public class TriviaHandler {
                 curseBindingArmor(player);
                 break;
             case 8:
-                curseRavager(player);
+                curseRavager(player, bot.blockPosition());
                 break;
             case 9:
                 curseHearts(player);
@@ -449,18 +451,18 @@ public class TriviaHandler {
         Curses
      */
 
-    public void curseHunger(ServerPlayer player) {
+    public static void curseHunger(ServerPlayer player) {
         MobEffectInstance statusEffectInstance = new MobEffectInstance(MobEffects.HUNGER, 18000, 2);
         player.addEffect(statusEffectInstance);
     }
 
-    public void curseRavager(ServerPlayer player) {
-        BlockPos spawnPos = TriviaBotPathfinding.getBlockPosNearPlayer(player, bot.blockPosition(), 5);
+    public static void curseRavager(ServerPlayer player, BlockPos pos) {
+        BlockPos spawnPos = TriviaBotPathfinding.getBlockPosNearPlayer(player, pos, 5);
         LevelUtils.spawnEntity(EntityType.RAVAGER, player.ls$getServerLevel(), spawnPos);
     }
 
     //? if >= 1.21 {
-    public void curseInfestation(ServerPlayer player) {
+    public static void curseInfestation(ServerPlayer player) {
         MobEffectInstance statusEffectInstance = new MobEffectInstance(MobEffects.INFESTED, 18000, 0);
         player.addEffect(statusEffectInstance);
     }
@@ -468,18 +470,18 @@ public class TriviaHandler {
 
     public static final List<UUID> cursedGigantificationPlayers = new ArrayList<>();
     //? if > 1.20.3 {
-    public void curseGigantification(ServerPlayer player) {
+    public static void curseGigantification(ServerPlayer player) {
         cursedGigantificationPlayers.add(player.getUUID());
         SizeShifting.setPlayerSizeUnchecked(player, 4);
     }
     //?}
 
     public static final List<UUID> cursedSliding = new ArrayList<>();
-    public void curseSlipperyGround(ServerPlayer player) {
+    public static void curseSlipperyGround(ServerPlayer player) {
         cursedSliding.add(player.getUUID());
     }
 
-    public void curseBindingArmor(ServerPlayer player) {
+    public static void curseBindingArmor(ServerPlayer player) {
         for (ItemStack item : PlayerUtils.getArmorItems(player)) {
             ItemStackUtils.spawnItemForPlayer(player.ls$getServerLevel(), player.position(), item.copy(), player);
         }
@@ -510,14 +512,14 @@ public class TriviaHandler {
     }
 
     public static final List<UUID> cursedHeartPlayers = new ArrayList<>();
-    public void curseHearts(ServerPlayer player) {
+    public static void curseHearts(ServerPlayer player) {
         cursedHeartPlayers.add(player.getUUID());
         double newHealth = Math.max(player.getMaxHealth()-7, 1);
         AttributeUtils.setMaxPlayerHealth(player, newHealth);
     }
 
     public static final List<UUID> cursedMoonJumpPlayers = new ArrayList<>();
-    public void curseMoonjump(ServerPlayer player) {
+    public static void curseMoonjump(ServerPlayer player) {
         cursedMoonJumpPlayers.add(player.getUUID());
         //? if >= 1.21.5 {
         /*AttributeUtils.setJumpStrength(player, 0.85);
@@ -526,13 +528,13 @@ public class TriviaHandler {
         //?}
     }
 
-    public void curseBeeswarm(ServerPlayer player) {
-        BlockPos spawnPos = TriviaBotPathfinding.getBlockPosNearPlayer(player, bot.blockPosition(), 1);
-        Bee bee1 = LevelUtils.spawnEntity(EntityType.BEE, (ServerLevel) bot.level(), spawnPos);
-        Bee bee2 = LevelUtils.spawnEntity(EntityType.BEE, (ServerLevel) bot.level(), spawnPos);
-        Bee bee3 = LevelUtils.spawnEntity(EntityType.BEE, (ServerLevel) bot.level(), spawnPos);
-        Bee bee4 = LevelUtils.spawnEntity(EntityType.BEE, (ServerLevel) bot.level(), spawnPos);
-        Bee bee5 = LevelUtils.spawnEntity(EntityType.BEE, (ServerLevel) bot.level(), spawnPos);
+    public static void curseBeeswarm(ServerPlayer player, BlockPos pos) {
+        BlockPos spawnPos = TriviaBotPathfinding.getBlockPosNearPlayer(player, pos, 1);
+        Bee bee1 = LevelUtils.spawnEntity(EntityType.BEE, player.ls$getServerLevel(), spawnPos);
+        Bee bee2 = LevelUtils.spawnEntity(EntityType.BEE, player.ls$getServerLevel(), spawnPos);
+        Bee bee3 = LevelUtils.spawnEntity(EntityType.BEE, player.ls$getServerLevel(), spawnPos);
+        Bee bee4 = LevelUtils.spawnEntity(EntityType.BEE, player.ls$getServerLevel(), spawnPos);
+        Bee bee5 = LevelUtils.spawnEntity(EntityType.BEE, player.ls$getServerLevel(), spawnPos);
         //? if <= 1.21.9 {
         if (bee1 != null) bee1.setPersistentAngerTarget(player.getUUID());
         if (bee2 != null) bee2.setPersistentAngerTarget(player.getUUID());
@@ -559,7 +561,7 @@ public class TriviaHandler {
     }
 
     public static final List<UUID> cursedRoboticVoicePlayers = new ArrayList<>();
-    public void curseRoboticVoice(ServerPlayer player) {
+    public static void curseRoboticVoice(ServerPlayer player) {
         cursedRoboticVoicePlayers.add(player.getUUID());
     }
 }

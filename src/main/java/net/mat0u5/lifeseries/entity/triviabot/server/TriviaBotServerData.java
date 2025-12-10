@@ -119,7 +119,7 @@ public class TriviaBotServerData implements PlayerBoundEntity {
             return true;
         }
         if (bot.tickCount % 10 == 0) {
-            if (!TriviaWildcard.bots.containsValue(bot) || !WildcardManager.isActiveWildcard(Wildcards.TRIVIA)) {
+            if (!TriviaWildcard.bots.containsValue(bot)) {
                 despawn();
                 return true;
             }

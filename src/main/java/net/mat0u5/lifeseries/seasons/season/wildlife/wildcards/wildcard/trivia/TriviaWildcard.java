@@ -12,6 +12,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShif
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.Time;
+import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
@@ -43,6 +44,7 @@ public class TriviaWildcard extends Wildcard {
     public static TriviaQuestionManager hardTrivia;
     private static final Random rnd = new Random();
     public static Time timer = Time.zero();
+    public static Map<UUID, Tuple<Integer, TriviaQuestion>> preAssignedTrivia = new HashMap<>();
 
     @Override
     public Wildcards getType() {
@@ -234,6 +236,12 @@ public class TriviaWildcard extends Wildcard {
         }
         killTriviaSnailFor(player);
 
+        resetPlayerPunishments(player);
+
+        NetworkHandlerServer.sendStringPacket(player, PacketNames.RESET_TRIVIA, "true");
+    }
+
+    public static void resetPlayerPunishments(ServerPlayer player) {
         if (TriviaHandler.cursedGigantificationPlayers.contains(player.getUUID())) {
             TriviaHandler.cursedGigantificationPlayers.remove(player.getUUID());
             //? if > 1.20.3 {
@@ -252,8 +260,6 @@ public class TriviaWildcard extends Wildcard {
         TriviaHandler.cursedSliding.remove(player.getUUID());
         TriviaHandler.cursedRoboticVoicePlayers.remove(player.getUUID());
         NetworkHandlerServer.sendLongPacket(player, PacketNames.CURSE_SLIDING, 0);
-
-        NetworkHandlerServer.sendStringPacket(player, PacketNames.RESET_TRIVIA, "true");
     }
 
     public static void killAllBots() {
@@ -305,18 +311,25 @@ public class TriviaWildcard extends Wildcard {
         toKill.forEach(Entity::discard);
     }
 
-    public static TriviaQuestion getTriviaQuestion(int difficulty) {
+    public static Tuple<Integer, TriviaQuestion> getTriviaQuestion(ServerPlayer player) {
+        if (preAssignedTrivia.containsKey(player.getUUID())) {
+            var assigned = preAssignedTrivia.get(player.getUUID());
+            preAssignedTrivia.remove(player.getUUID());
+            return assigned;
+        }
+
+        int difficulty = 1 + player.getRandom().nextInt(3);
         try {
             if (difficulty == 1) {
-                return getEasyQuestion();
+                return new Tuple<>(difficulty, getEasyQuestion());
             }
             if (difficulty == 2) {
-                return getNormalQuestion();
+                return new Tuple<>(difficulty, getNormalQuestion());
             }
-            return getHardQuestion();
+            return new Tuple<>(difficulty, getHardQuestion());
         } catch(Exception e) {
             LOGGER.error(e.toString());
-            return TriviaQuestion.getDefault();
+            return new Tuple<>(difficulty, TriviaQuestion.getDefault());
         }
     }
 

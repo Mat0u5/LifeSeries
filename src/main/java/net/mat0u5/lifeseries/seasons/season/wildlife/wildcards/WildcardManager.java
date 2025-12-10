@@ -228,11 +228,9 @@ public class WildcardManager {
             }
         }
 
-        if (isActiveWildcard(Wildcards.TRIVIA)) {
-            for (UUID uuid : TriviaHandler.cursedSliding) {
-                ServerPlayer player = PlayerUtils.getPlayer(uuid);
-                NetworkHandlerServer.sendLongPacket(player, PacketNames.CURSE_SLIDING, System.currentTimeMillis());
-            }
+        for (UUID uuid : TriviaHandler.cursedSliding) {
+            ServerPlayer player = PlayerUtils.getPlayer(uuid);
+            NetworkHandlerServer.sendLongPacket(player, PacketNames.CURSE_SLIDING, System.currentTimeMillis());
         }
     }
 

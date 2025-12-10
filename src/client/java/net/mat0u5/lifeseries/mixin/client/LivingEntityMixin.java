@@ -36,7 +36,7 @@ public class LivingEntityMixin {
             index = 1
     )
     private float applyMovementInput(float slipperiness) {
-        if ((System.currentTimeMillis() - MainClient.CURSE_SLIDING) > 5000 || Main.modFullyDisabled()) return slipperiness;
+        if ((System.currentTimeMillis() - MainClient.CURSE_SLIDING) > 2000 || Main.modFullyDisabled()) return slipperiness;
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity instanceof Player playerr && MainClient.isClientPlayer(playerr.getUUID()) && playerr.onGround() && ClientEvents.onGroundFor >= 5) {
             return 1.198f;
@@ -50,7 +50,7 @@ public class LivingEntityMixin {
             index = 0
     )
     private Vec3 applyMovementInput(Vec3 velocity) {
-        if ((System.currentTimeMillis() - MainClient.CURSE_SLIDING) > 5000 || Main.modFullyDisabled()) return velocity;
+        if ((System.currentTimeMillis() - MainClient.CURSE_SLIDING) > 2000 || Main.modFullyDisabled()) return velocity;
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity instanceof Player playerr && entity instanceof IEntity entityAccessor && MainClient.isClientPlayer(playerr.getUUID()) && playerr.onGround() && ClientEvents.onGroundFor >= 5) {
             BlockPos blockPos = entityAccessor.ls$getBlockPosBelowThatAffectsMyMovement();

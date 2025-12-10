@@ -73,6 +73,11 @@ public enum Seasons {
         return IdentifierHelper.mod("textures/gui/" + this.getId() + ".png");
     }
 
+    public boolean requiresClient() {
+        if (this == WILD_LIFE) return true;
+        return false;
+    }
+
     public static Seasons getSeasonFromStringName(String name) {
         for (Seasons season : Seasons.values()) {
             if (season.getName().equalsIgnoreCase(name) || season.getId().equalsIgnoreCase(name)) {
