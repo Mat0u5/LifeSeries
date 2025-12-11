@@ -33,6 +33,14 @@ public class SessionCommand extends Command {
         return Component.nullToEmpty("This command is only available when you have selected a Season.");
     }
 
+    public List<String> getAdminCommands() {
+        return List.of("session");
+    }
+
+    public List<String> getNonAdminCommands() {
+        return List.of("session");
+    }
+
     @Override
     public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(

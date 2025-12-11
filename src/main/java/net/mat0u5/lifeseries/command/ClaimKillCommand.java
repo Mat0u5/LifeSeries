@@ -32,6 +32,14 @@ public class ClaimKillCommand extends Command {
         return Component.nullToEmpty("This command is only available when you have selected a Season.");
     }
 
+    public List<String> getAdminCommands() {
+        return List.of("claimkill");
+    }
+
+    public List<String> getNonAdminCommands() {
+        return List.of("claimkill");
+    }
+
     @Override
     public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(

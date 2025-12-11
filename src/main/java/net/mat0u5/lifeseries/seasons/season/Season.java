@@ -1,10 +1,13 @@
 package net.mat0u5.lifeseries.seasons.season;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.command.manager.CommandManager;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.events.Events;
+import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
@@ -16,6 +19,7 @@ import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -101,8 +105,6 @@ public abstract class Season {
 
     public abstract Seasons getSeason();
     public abstract ConfigManager createConfig();
-    public abstract String getAdminCommands();
-    public abstract String getNonAdminCommands();
 
     public Blacklist createBlacklist() {
         return new Blacklist();
@@ -231,6 +233,32 @@ public abstract class Season {
         livesManager.reload();
         currentSession.freezeIfNecessary();
         DatapackIntegration.reload();
+    }
+
+    public String getAdminCommands() {
+        List<String> allCommands = new ArrayList<>();
+        for (Command command : CommandManager.commands) {
+            if (!command.isAllowed()) continue;
+            for (String commandStr : command.getAdminCommands()) {
+                allCommands.add("/"+commandStr);
+            }
+        }
+        return String.join(", ", allCommands);
+    }
+
+    public String getNonAdminCommands() {
+        List<String> allCommands = new ArrayList<>();
+        for (Command command : CommandManager.commands) {
+            if (!command.isAllowed()) continue;
+            for (String commandStr : command.getNonAdminCommands()) {
+                allCommands.add("/"+commandStr);
+            }
+        }
+        return String.join(", ", allCommands);
+    }
+
+    public void sendSetSeasonPacket(ServerPlayer player) {
+        NetworkHandlerServer.sendStringListPacket(player, PacketNames.SEASON_INFO, List.of(currentSeason.getSeason().getId(), currentSeason.getAdminCommands(), currentSeason.getNonAdminCommands()));
     }
 
     public void reloadPlayers() {

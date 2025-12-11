@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 
+import java.util.List;
 import java.util.Random;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
@@ -25,6 +26,14 @@ public class PastLifeCommands extends Command {
     @Override
     public Component getBannedText() {
         return Component.nullToEmpty("This command is only available when playing Past Life.");
+    }
+
+    public List<String> getAdminCommands() {
+        return List.of("pastlife");
+    }
+
+    public List<String> getNonAdminCommands() {
+        return List.of();
     }
 
     @Override

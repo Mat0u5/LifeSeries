@@ -10,7 +10,7 @@ import java.util.List;
 
 public class CustomTextRenderer {
     private final Component text;
-    private final FormattedCharSequence orderedText;
+    private FormattedCharSequence orderedText;
     private final double x;
     private final double y;
     private float scaleX = 1;
@@ -55,6 +55,9 @@ public class CustomTextRenderer {
         wrapLines = true;
         wrapMaxWidth = maxWidth;
         wrapGapY = gapY;
+        if (orderedText == null && text != null) {
+            orderedText = text.getVisualOrderText();
+        }
         return this;
     }
 
@@ -93,9 +96,6 @@ public class CustomTextRenderer {
         if (anchor == Anchor.CENTER) offsetX -= textWidth/2.0;
         if (anchor == Anchor.RIGHT) offsetX -= textWidth;
 
-        if (this.text != null) {
-            context.drawString(textRenderer, text, (int)(x / scaleX + offsetX), (int)(y / scaleY), textColor, shadow);
-        }
         if (this.orderedText != null) {
             if (wrapLines) {
                 List<FormattedCharSequence> wrappedText = textRenderer.split(text, wrapMaxWidth);
@@ -109,6 +109,9 @@ public class CustomTextRenderer {
             else {
                 context.drawString(textRenderer, orderedText, (int) (x / scaleX + offsetX), (int) (y / scaleY), textColor, shadow);
             }
+        }
+        else if (this.text != null) {
+            context.drawString(textRenderer, text, (int)(x / scaleX + offsetX), (int)(y / scaleY), textColor, shadow);
         }
 
         if (isScaled()) {

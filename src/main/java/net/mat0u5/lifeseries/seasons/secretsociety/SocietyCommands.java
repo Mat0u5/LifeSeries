@@ -33,6 +33,14 @@ public class SocietyCommands extends Command {
         return Component.nullToEmpty("This command is only available when the Secret Society is enabled in the config.");
     }
 
+    public List<String> getAdminCommands() {
+        return List.of("society");
+    }
+
+    public List<String> getNonAdminCommands() {
+        return List.of("society");
+    }
+
     @Override
     public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(

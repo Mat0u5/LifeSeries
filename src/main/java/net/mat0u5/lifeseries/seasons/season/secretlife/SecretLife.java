@@ -55,8 +55,6 @@ import net.minecraft.world.level.GameRules;
 /*import net.minecraft.world.level.gamerules.GameRules;*/
 
 public class SecretLife extends Season {
-    public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /gift, /task, /health";
-    public static final String COMMANDS_TEXT = "/claimkill, /lives, /gift";
     public static double MAX_HEALTH = 60.0d;
     public static double MAX_KILL_HEALTH = 1000.0d;
     public static boolean ONLY_LOSE_HEARTS_IN_SESSION = false;
@@ -84,16 +82,6 @@ public class SecretLife extends Season {
     public ConfigManager createConfig() {
         TaskManager.initialize();
         return new SecretLifeConfig();
-    }
-
-    @Override
-    public String getAdminCommands() {
-        return COMMANDS_ADMIN_TEXT;
-    }
-
-    @Override
-    public String getNonAdminCommands() {
-        return COMMANDS_TEXT;
     }
 
     @Override

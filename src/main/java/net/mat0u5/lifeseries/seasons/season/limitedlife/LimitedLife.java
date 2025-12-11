@@ -32,8 +32,6 @@ import net.minecraft.world.scores.Team;
 import static net.mat0u5.lifeseries.Main.*;
 
 public class LimitedLife extends Season {
-    public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /boogeyman";
-    public static final String COMMANDS_TEXT = "/claimkill, /lives";
 
     private boolean SHOW_DEATH_TITLE = true;
 
@@ -67,16 +65,6 @@ public class LimitedLife extends Season {
     @Override
     public LivesManager createLivesManager() {
         return new LimitedLifeLivesManager();
-    }
-
-    @Override
-    public String getAdminCommands() {
-        return COMMANDS_ADMIN_TEXT;
-    }
-
-    @Override
-    public String getNonAdminCommands() {
-        return COMMANDS_TEXT;
     }
 
     public void displayTimers(MinecraftServer server) {

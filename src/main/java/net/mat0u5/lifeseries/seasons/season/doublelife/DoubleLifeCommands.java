@@ -28,6 +28,10 @@ public class DoubleLifeCommands extends Command {
         return Component.nullToEmpty("This command is only available when playing Double Life.");
     }
 
+    public List<String> getAdminCommands() {
+        return List.of("soulmate");
+    }
+
     @Override
     public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(

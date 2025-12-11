@@ -43,6 +43,14 @@ public class TriviaCommand extends Command {
         return Component.nullToEmpty("This command is only available in Wild Life.");
     }
 
+    public List<String> getAdminCommands() {
+        return List.of("trivia");
+    }
+
+    public List<String> getNonAdminCommands() {
+        return List.of();
+    }
+
     @Override
     public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(

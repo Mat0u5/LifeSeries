@@ -14,6 +14,7 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
+import java.util.List;
 import java.util.Optional;
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
@@ -29,6 +30,10 @@ public class SubInCommands extends Command {
     @Override
     public Component getBannedText() {
         return Component.nullToEmpty("This command is only available when you have selected a Season.");
+    }
+
+    public List<String> getAdminCommands() {
+        return List.of("subin");
     }
 
     @Override

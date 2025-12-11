@@ -41,9 +41,6 @@ import static net.mat0u5.lifeseries.Main.seasonConfig;
 *///?}
 
 public class WildLife extends Season {
-    public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /wildcard, /superpower, /snail, /hunger, /trivia";
-    public static final String COMMANDS_TEXT = "/claimkill, /lives, /snail";
-
     @Override
     public Seasons getSeason() {
         return Seasons.WILD_LIFE;
@@ -53,16 +50,6 @@ public class WildLife extends Season {
     public ConfigManager createConfig() {
         Snails.loadConfig();
         return new WildLifeConfig();
-    }
-
-    @Override
-    public String getAdminCommands() {
-        return COMMANDS_ADMIN_TEXT;
-    }
-
-    @Override
-    public String getNonAdminCommands() {
-        return COMMANDS_TEXT;
     }
 
     @Override

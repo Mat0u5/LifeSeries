@@ -64,16 +64,6 @@ public class UnassignedSeason extends Season {
     }
 
     @Override
-    public String getAdminCommands() {
-        return "";
-    }
-
-    @Override
-    public String getNonAdminCommands() {
-        return "";
-    }
-
-    @Override
     public Integer getDefaultLives() {
         return null;
     }

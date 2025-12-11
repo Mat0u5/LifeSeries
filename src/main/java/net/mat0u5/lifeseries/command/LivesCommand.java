@@ -61,6 +61,14 @@ public class LivesCommand extends Command {
         return Component.nullToEmpty("This command is only available when you have selected a Season.");
     }
 
+    public List<String> getAdminCommands() {
+        return List.of("lives");
+    }
+
+    public List<String> getNonAdminCommands() {
+        return List.of("lives");
+    }
+
     @Override
     public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(

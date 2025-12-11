@@ -90,6 +90,6 @@ public class UpdateInfoScreen extends DefaultScreen {
     public void render(GuiGraphics context, int mouseX, int mouseY) {
         RenderUtils.text("§0§nA new Life Series mod update is available!", centerX, startY + 7).anchorCenter().render(context, this.font);
         RenderUtils.text(TextUtils.formatLoosely("§0§nChangelog in version §l{}§0:",versionName), startX + 7, startY + 25 + font.lineHeight).render(context, this.font);
-        RenderUtils.text(description, startX + 7, startY + 30 + font.lineHeight*2).wrapLines(backgroundWidth-14, 5).render(context, this.font);
+        RenderUtils.text(description, startX + 7, startY + 30 + font.lineHeight*2).wrapLines(BG_WIDTH-14, 5).render(context, this.font);
     }
 }

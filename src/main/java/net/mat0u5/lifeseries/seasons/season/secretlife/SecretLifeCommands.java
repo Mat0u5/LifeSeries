@@ -39,6 +39,14 @@ public class SecretLifeCommands extends Command {
         return Component.nullToEmpty("This command is only available when playing Secret Life.");
     }
 
+    public List<String> getAdminCommands() {
+        return List.of("health", "task", "gift");
+    }
+
+    public List<String> getNonAdminCommands() {
+        return List.of("health", "gift");
+    }
+
     @Override
     public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 

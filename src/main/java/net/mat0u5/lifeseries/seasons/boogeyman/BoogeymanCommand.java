@@ -30,6 +30,14 @@ public class BoogeymanCommand extends Command {
         return Component.nullToEmpty("This command is only available when the boogeyman has been enabled in the Life Series config.");
     }
 
+    public List<String> getAdminCommands() {
+        return List.of("boogeyman");
+    }
+
+    public List<String> getNonAdminCommands() {
+        return List.of("boogeyman");
+    }
+
     @Override
     public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(

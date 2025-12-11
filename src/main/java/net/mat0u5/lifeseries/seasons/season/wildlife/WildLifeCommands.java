@@ -45,6 +45,14 @@ public class WildLifeCommands extends Command {
         return Component.nullToEmpty("This command is only available when playing Wild Life.");
     }
 
+    public List<String> getAdminCommands() {
+        return List.of("wildcard", "snail", "superpower", "hunger");
+    }
+
+    public List<String> getNonAdminCommands() {
+        return List.of("snail");
+    }
+
     @Override
     public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(

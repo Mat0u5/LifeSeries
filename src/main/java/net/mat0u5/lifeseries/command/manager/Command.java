@@ -10,10 +10,18 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 
+import java.util.List;
+
 public abstract class Command {
     public abstract boolean isAllowed();
     public abstract Component getBannedText();
     public abstract void register(CommandDispatcher<CommandSourceStack> dispatcher);
+    public List<String> getAdminCommands() {
+        return List.of();
+    }
+    public List<String> getNonAdminCommands() {
+        return List.of();
+    }
 
     public void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registryAccess) {
         register(dispatcher);
