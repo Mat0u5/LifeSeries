@@ -21,6 +21,7 @@
     "GuiAccessor",
     "GuiMixin",
     "LevelRendererMixin",
+    "LevelMixin",
     "LivingEntityRendererMixin",
     "LocalPlayerMixin",
     "MinecraftMixin",

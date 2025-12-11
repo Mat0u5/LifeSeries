@@ -57,10 +57,12 @@ public class ServerLevelMixin {
     //?}
     @Inject(method = "tickChunk", at = @At(value = "HEAD"))
     public void customPrecipitation(LevelChunk levelChunk, int i, CallbackInfo ci) {
-        ChunkPos chunkPos = levelChunk.getPos();
-        ServerLevel level = (ServerLevel) (Object) this;
-        for(int l = 0; l < i; ++l) {
-            ((NiceLife)currentSeason).tickChunk(level, chunkPos);
+        if (!Main.modDisabled() && currentSeason.getSeason() == Seasons.NICE_LIFE) {
+            ChunkPos chunkPos = levelChunk.getPos();
+            ServerLevel level = (ServerLevel) (Object) this;
+            for(int l = 0; l < i; ++l) {
+                ((NiceLife)currentSeason).tickChunk(level, chunkPos);
+            }
         }
     }
 }

@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.minecraft.client.multiplayer.ClientLevel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -68,5 +69,17 @@ public class WeatherEffectRendererMixin {
         //?} else {
         /*return original.call(resourceLocation, bl);
         *///?}
+    }
+
+    //?if <= 1.21 {
+    @WrapOperation(method = "renderSnowAndRain", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;getRainLevel(F)F"))
+    //?} else if <= 1.21.9 {
+    /*@WrapOperation(method = "extractRenderState", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;getRainLevel(F)F"))
+    *///?}
+    public float renderRain(ClientLevel instance, float v, Operation<Float> original) {
+        if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE) {
+            return 1;
+        }
+        return original.call(instance, v);
     }
 }
