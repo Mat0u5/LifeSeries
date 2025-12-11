@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.lastlife.LastLife;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
+import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLife;
 import net.mat0u5.lifeseries.seasons.season.pastlife.PastLife;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.thirdlife.ThirdLife;
@@ -96,6 +97,7 @@ public class SeasonInfoScreen extends DefaultScreen {
         if (season == Seasons.SECRET_LIFE) commandsTextActual = Component.literal(SecretLife.COMMANDS_TEXT);
         if (season == Seasons.WILD_LIFE) commandsTextActual = Component.literal(WildLife.COMMANDS_TEXT);
         if (season == Seasons.PAST_LIFE) commandsTextActual = Component.literal(PastLife.COMMANDS_TEXT);
+        if (season == Seasons.NICE_LIFE) commandsTextActual = Component.literal(NiceLife.COMMANDS_TEXT);
         return commandsTextActual;
     }
 
@@ -109,6 +111,7 @@ public class SeasonInfoScreen extends DefaultScreen {
         if (season == Seasons.SECRET_LIFE) adminCommandsTextActual = Component.literal(SecretLife.COMMANDS_ADMIN_TEXT);
         if (season == Seasons.WILD_LIFE) adminCommandsTextActual = Component.literal(WildLife.COMMANDS_ADMIN_TEXT);
         if (season == Seasons.PAST_LIFE) adminCommandsTextActual = Component.literal(PastLife.COMMANDS_ADMIN_TEXT);
+        if (season == Seasons.NICE_LIFE) adminCommandsTextActual = Component.literal(NiceLife.COMMANDS_ADMIN_TEXT);
         return adminCommandsTextActual;
     }
 

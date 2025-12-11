@@ -41,7 +41,7 @@ import static net.mat0u5.lifeseries.Main.seasonConfig;
 *///?}
 
 public class WildLife extends Season {
-    public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /wildcard, /superpower, /snail";
+    public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /wildcard, /superpower, /snail, /hunger, /trivia";
     public static final String COMMANDS_TEXT = "/claimkill, /lives, /snail";
 
     @Override
