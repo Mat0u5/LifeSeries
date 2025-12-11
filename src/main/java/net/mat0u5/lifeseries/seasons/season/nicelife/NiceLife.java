@@ -17,7 +17,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
@@ -27,10 +26,10 @@ import static net.mat0u5.lifeseries.Main.seasonConfig;
 
 public class NiceLife extends Season {
 
-    public boolean LIGHT_MELTS_SNOW = false; //TODO CONFIG
-    public boolean SNOW_WHEN_NOT_IN_SESSION = false; //TODO CONFIG
-    public Time SNOW_LAYER_INCREASE_INTERVAL = Time.seconds(600); //TODO CONFIG
-    public Time snowTicks = Time.zero(); //TODO CONFIG
+    public static boolean LIGHT_MELTS_SNOW = false;
+    public boolean SNOW_WHEN_NOT_IN_SESSION = false;
+    public Time SNOW_LAYER_INCREASE_INTERVAL = Time.seconds(600);
+    public Time snowTicks = Time.zero();
     public double snowLayerTickChance = 1.0 / 48;
     public int currentMaxSnowLayers = -1;
 
@@ -45,7 +44,9 @@ public class NiceLife extends Season {
     }
     @Override
     public void reload() {
-        //SNOW_LAYER_INCREASE_INTERVAL = Time.seconds(Math.max(13, ...));
+        LIGHT_MELTS_SNOW = NiceLifeConfig.LIGHT_MELTS_SNOW.get(seasonConfig);
+        SNOW_WHEN_NOT_IN_SESSION = NiceLifeConfig.SNOW_WHEN_NOT_IN_SESSION.get(seasonConfig);
+        SNOW_LAYER_INCREASE_INTERVAL = Time.seconds(Math.max(13, NiceLifeConfig.SNOW_LAYER_INCREMENT_DELAY.get(seasonConfig)));
         snowLayerTickChance = 250.0 / Math.max(SNOW_LAYER_INCREASE_INTERVAL.getTicks(), 1);
         if (currentMaxSnowLayers == -1) {
             currentMaxSnowLayers = seasonConfig.getOrCreateInt("current_snow_layers", 1);

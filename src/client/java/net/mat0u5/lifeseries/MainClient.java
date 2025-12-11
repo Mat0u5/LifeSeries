@@ -56,7 +56,7 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     public static boolean FIX_SIZECHANGING_BUGS = false;
     public static float SIZESHIFTING_CHANGE = 0;
     public static double TEXT_HUD_SCALE = 1.0;
-    public static boolean NICE_LIFE_LESS_SNOW = true;//TODO config
+    public static boolean NICE_LIFE_LESS_SNOW = true;
 
     public static boolean isReplay = false;
     public static HandshakeStatus serverHandshake = HandshakeStatus.WAITING;
@@ -123,6 +123,8 @@ public class MainClient implements ClientModInitializer, IClientHelper {
         COLORED_HEARTS_HARDCORE_ALL_LIVES = ClientConfig.COLORED_HEARTS_HARDCORE_ALL_LIVES.get(clientConfig);
 
         TEXT_HUD_SCALE = ClientConfig.TEXT_HUD_SCALE.get(clientConfig);
+
+        NICE_LIFE_LESS_SNOW = ClientConfig.NICE_LIFE_LESS_SNOW.get(clientConfig);
     }
 
     public static void resetClientData() {

@@ -40,6 +40,10 @@ public class ClientConfig extends ConfigManager {
             "colored_hearts_hardcore_all_lives", false, "coloredhearts",
             "Show All Lives as Hardcore", "Hearts will always appear as though you are in hardcore."
     );
+    public static final ConfigFileEntry<Boolean> NICE_LIFE_LESS_SNOW = new ConfigFileEntry<>(
+            "nice_life_less_snow", true, "[new]",
+            "Less Obstructive Snow in Nice Life", "Reduces the number of snow particles when it snows."
+    );
 
     public static final ConfigFileEntry<Double> TEXT_HUD_SCALE = new ConfigFileEntry<>(
             "text_hud_scale", 1.0, "",
@@ -63,6 +67,7 @@ public class ClientConfig extends ConfigManager {
                 ,COLORED_HEARTS_HARDCORE_ALL_LIVES
 
                 ,TEXT_HUD_SCALE
+                ,NICE_LIFE_LESS_SNOW
         ));
 
         if (VersionControl.isDevVersion()) {

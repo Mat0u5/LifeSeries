@@ -66,7 +66,7 @@ public class DefaultConfigValues {
             "Banned Potion Effects", "List of banned potion effects."
     );
     public final ConfigFileEntry<String> BLACKLIST_CLAMPED_POTION_EFFECTS = new ConfigFileEntry<>(
-            "blacklist_clamped_potion_effects", "[]", ConfigTypes.EFFECT_LIST, "global.blacklist[new]",
+            "blacklist_clamped_potion_effects", "[]", ConfigTypes.EFFECT_LIST, "global.blacklist",
             "Clamped Potion Effects", "List of potion effects clamped to level 1 (any higher levels will be set to level 1)."
     );
     public final ConfigFileEntry<Boolean> SPAWNER_RECIPE = new ConfigFileEntry<>(
@@ -94,7 +94,7 @@ public class DefaultConfigValues {
             "Only Lose Lives In Session", "Makes players only lose lives when they die while a session is active."
     );
     public final ConfigFileEntry<Boolean> TICK_FREEZE_NOT_IN_SESSION = new ConfigFileEntry<>(
-            "tick_freeze_not_in_session", false, "global[new]",
+            "tick_freeze_not_in_session", false, "global",
             "Tick Freeze When Not In Session", "Automatically freezes the game when the session is paused or ended or not started."
     );
     public final ConfigFileEntry<Boolean> LIVES_SYSTEM_DISABLED = new ConfigFileEntry<>(
@@ -303,7 +303,7 @@ public class DefaultConfigValues {
             "Broadcast Kill Life Gain", "Shows a message in chat when a player gains a life by killing a player."
     );
     public final ConfigFileEntry<Double> ADDITIONAL_WITHER_SKULL_RATE = new ConfigFileEntry<>(
-            "additional_wither_skull_rate", 0.05, ConfigTypes.PERCENTAGE, "global[new]",
+            "additional_wither_skull_rate", 0.05, ConfigTypes.PERCENTAGE, "global",
             "Additional Wither Skull Rate", "Controls the additional chance for wither skeletons to drop skulls."
     );
 
