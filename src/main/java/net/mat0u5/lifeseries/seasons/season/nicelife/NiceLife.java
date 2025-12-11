@@ -43,6 +43,7 @@ public class NiceLife extends Season {
         if (currentSession.statusStarted()) {
 
         }*/
+        server.overworld().setWeatherParameters(0, 1000, true, false);
     }
     public void tickChunk(ServerLevel level, ChunkPos chunkPos) {
         if (!currentSession.statusStarted()) {//TODO config

@@ -528,7 +528,7 @@ public class NetworkHandlerServer {
         if (server == null) return;
         if (!currentSeason.getSeason().requiresClient()) return;
         if (wasHandshakeSuccessful(player)) return;
-        Component disconnectText = Component.literal("You must have the §2Life Series mod\n§l installed on the client§r§r§f to play Wild Life!\n").append(
+        Component disconnectText = Component.literal("You must have the §2Life Series mod\n§l installed on the client§r§r§f to play "+currentSeason.getSeason().getName()+"!\n").append(
                 Component.literal("§9§nThe Life Series mod is available on Modrinth."));
         //? if <= 1.20.5 {
         /*player.connection.disconnect(disconnectText);

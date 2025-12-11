@@ -4,6 +4,7 @@
   "compatibilityLevel": "${javaVersion}",
   "mixins": [
     "AnvilMenuMixin",
+    "BiomeMixin",
     "CommandSourceStackMixin",
     "CraftingMenuMixin",
     "EnchantmentHelperMixin",

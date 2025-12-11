@@ -56,7 +56,7 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     public static boolean FIX_SIZECHANGING_BUGS = false;
     public static float SIZESHIFTING_CHANGE = 0;
     public static double TEXT_HUD_SCALE = 1.0;
-
+    public static boolean NICE_LIFE_LESS_SNOW = true;//TODO config
 
     public static boolean isReplay = false;
     public static HandshakeStatus serverHandshake = HandshakeStatus.WAITING;
