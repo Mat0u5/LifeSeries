@@ -178,6 +178,11 @@ public class SecretLifeCommands extends Command {
                         context.getSource(), EntityArgument.getPlayer(context, "player"))
                     )
                 )
+                .then(literal("reset")
+                        .then(argument("player", EntityArgument.players())
+                            .executes(context -> resetGift(context.getSource(), EntityArgument.getPlayers(context, "player")))
+                        )
+                )
         );
     }
 
@@ -376,6 +381,22 @@ public class SecretLifeCommands extends Command {
     }
 
     public static final List<UUID> playersGiven = new ArrayList<>();
+    public int resetGift(CommandSourceStack source, Collection<ServerPlayer> targets) {
+        if (checkBanned(source)) return -1;
+
+        for (ServerPlayer player : targets) {
+            playersGiven.remove(player.getUUID());
+        }
+
+        if (targets.size() == 1) {
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("Reset {}'s gifted hearts", targets.iterator().next()));
+        }
+        else {
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("Reset the gifted hearts of {} targets", targets.size()));
+        }
+
+        return 1;
+    }
     public int gift(CommandSourceStack source, ServerPlayer target) {
         if (checkBanned(source)) return -1;
         final ServerPlayer self = source.getPlayer();
