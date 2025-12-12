@@ -247,7 +247,6 @@ public class TriviaCommand extends Command {
 
     public List<TriviaQuestion> getTriviaQuestions(String questionType) {
         List<TriviaQuestion> result = new ArrayList<>();
-        OtherUtils.log("Getting trivia suggestions");
         TriviaQuestionManager manager = null;
         if (questionType.equalsIgnoreCase("easy")) {
             manager = TriviaWildcard.easyTrivia;

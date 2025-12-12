@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.biome.Biome;
@@ -21,16 +22,16 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 
-import static net.mat0u5.lifeseries.Main.currentSession;
-import static net.mat0u5.lifeseries.Main.seasonConfig;
+import static net.mat0u5.lifeseries.Main.*;
 
 public class NiceLife extends Season {
 
     public static boolean LIGHT_MELTS_SNOW = false;
     public boolean SNOW_WHEN_NOT_IN_SESSION = false;
+    public static boolean ADVANCE_TIME_WHEN_NOT_IN_SESSION = false;
     public Time SNOW_LAYER_INCREASE_INTERVAL = Time.seconds(600);
     public Time snowTicks = Time.zero();
-    public double snowLayerTickChance = 1.0 / 48;
+    public double snowLayerTickChance = 1.0 / 43;
     public int currentMaxSnowLayers = -1;
 
     @Override
@@ -47,7 +48,8 @@ public class NiceLife extends Season {
         LIGHT_MELTS_SNOW = NiceLifeConfig.LIGHT_MELTS_SNOW.get(seasonConfig);
         SNOW_WHEN_NOT_IN_SESSION = NiceLifeConfig.SNOW_WHEN_NOT_IN_SESSION.get(seasonConfig);
         SNOW_LAYER_INCREASE_INTERVAL = Time.seconds(Math.max(13, NiceLifeConfig.SNOW_LAYER_INCREMENT_DELAY.get(seasonConfig)));
-        snowLayerTickChance = 250.0 / Math.max(SNOW_LAYER_INCREASE_INTERVAL.getTicks(), 1);
+        ADVANCE_TIME_WHEN_NOT_IN_SESSION = NiceLifeConfig.ADVANCE_TIME_WHEN_NOT_IN_SESSION.get(seasonConfig);
+        snowLayerTickChance = 280.0 / Math.max(SNOW_LAYER_INCREASE_INTERVAL.getTicks(), 1);
         if (currentMaxSnowLayers == -1) {
             currentMaxSnowLayers = seasonConfig.getOrCreateInt("current_snow_layers", 1);
         }
@@ -65,17 +67,25 @@ public class NiceLife extends Season {
                     currentMaxSnowLayers = 1;
                 }
                 seasonConfig.setProperty("current_snow_layers", String.valueOf(currentMaxSnowLayers));
-                OtherUtils.log("Total Layers: "+currentMaxSnowLayers);
             }
         }
-        long dayTime = server.overworld().getDayTime() % 24000L;
-        /*
-        boolean isNight =
-        if (currentSession.statusStarted()) {
 
-        }*/
         server.overworld().setWeatherParameters(0, 1000, true, false);
+
+        boolean advanceTime = !isMidnight() && (currentSession.statusStarted() || ADVANCE_TIME_WHEN_NOT_IN_SESSION);
+        //? if <= 1.21.9 {
+        OtherUtils.setBooleanGameRule(server.overworld(), GameRules.RULE_DAYLIGHT, advanceTime);
+        //?} else {
+        /*OtherUtils.setBooleanGameRule(server.overworld(), GameRules.ADVANCE_TIME, advanceTime);
+         *///?}
     }
+
+    public boolean isMidnight() {
+        if (server == null) return false;
+        long dayTime = server.overworld().getDayTime() % 24000L;
+        return dayTime >= 18000 && dayTime <= 20000;
+    }
+
     public void tickChunk(ServerLevel level, ChunkPos chunkPos) {
         if (level.dimension() != Level.OVERWORLD) {
             return;
@@ -163,11 +173,28 @@ public class NiceLife extends Season {
         *///?}
         if (blockPos.getY() >= minY && blockPos.getY() < maxY && darkEnough) {
             BlockState blockState = level.getBlockState(blockPos);
-            //? if <= 1.20.2 {
-            /*boolean canSnowOverride = (blockState.isAir() || blockState.is(Blocks.SNOW) || blockState.is(Blocks.GRASS) || blockState.is(Blocks.TALL_GRASS));
-             *///?} else {
-            boolean canSnowOverride = (blockState.isAir() || blockState.is(Blocks.SNOW) || blockState.is(Blocks.SHORT_GRASS) || blockState.is(Blocks.TALL_GRASS));
-            //?}
+            boolean canSnowOverride = blockState.isAir() ||
+                    blockState.is(Blocks.SNOW) ||
+                    //?if <= 1.20.2 {
+                    /*blockState.is(Blocks.GRASS) ||
+                    *///?} else {
+                    blockState.is(Blocks.SHORT_GRASS) ||
+                    //?}
+                    blockState.is(Blocks.TALL_GRASS) ||
+                    blockState.is(Blocks.DANDELION) ||
+                    blockState.is(Blocks.TORCHFLOWER) ||
+                    blockState.is(Blocks.POPPY) ||
+                    blockState.is(Blocks.BLUE_ORCHID) ||
+                    blockState.is(Blocks.ALLIUM) ||
+                    blockState.is(Blocks.AZURE_BLUET) ||
+                    blockState.is(Blocks.RED_TULIP) ||
+                    blockState.is(Blocks.ORANGE_TULIP) ||
+                    blockState.is(Blocks.WHITE_TULIP) ||
+                    blockState.is(Blocks.PINK_TULIP) ||
+                    blockState.is(Blocks.OXEYE_DAISY) ||
+                    blockState.is(Blocks.CORNFLOWER) ||
+                    blockState.is(Blocks.WITHER_ROSE) ||
+                    blockState.is(Blocks.LILY_OF_THE_VALLEY);
             if (canSnowOverride && Blocks.SNOW.defaultBlockState().canSurvive(level, blockPos)) {
                 return true;
             }

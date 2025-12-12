@@ -65,6 +65,10 @@ public class NiceLifeConfig extends ConfigManager {
             "snow_layer_increment_delay", 600, ConfigTypes.SECONDS, "season[new]",
             "Snow Layer Increment Delay", "Controls the interval between snow layer increments, in seconds."
     );
+    public static final ConfigFileEntry<Boolean> ADVANCE_TIME_WHEN_NOT_IN_SESSION = new ConfigFileEntry<>(
+            "advance_time_not_in_session", false, "season[new]",
+            "Advance Time When Not In Session", "Controls whether the daylight cycle is paused when not in session."
+    );
 
     public NiceLifeConfig() {
         super("./config/"+ Main.MOD_ID,"nicelife.properties");
@@ -80,6 +84,7 @@ public class NiceLifeConfig extends ConfigManager {
                 LIGHT_MELTS_SNOW
                 ,SNOW_WHEN_NOT_IN_SESSION
                 ,SNOW_LAYER_INCREMENT_DELAY
+                ,ADVANCE_TIME_WHEN_NOT_IN_SESSION
         ));
     }
 
