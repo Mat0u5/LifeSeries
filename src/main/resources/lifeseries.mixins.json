@@ -36,6 +36,7 @@
     "RegistrySyncManagerMixin",
     "ServerCommonPacketListenerImplMixin",
     "ServerGamePacketListenerImplMixin",
+    "ServerLevelAccessor",
     "ServerLevelMixin",
     "ServerLoginPacketListenerImplAccessor",
     "ServerPlayerGameModeMixin",

@@ -1,15 +1,19 @@
 package net.mat0u5.lifeseries.seasons.season.nicelife;
 
 import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.mixin.ServerLevelAccessor;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.Time;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.SleepStatus;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.biome.Biome;
@@ -24,6 +28,11 @@ import net.minecraft.world.level.material.Fluids;
 
 import static net.mat0u5.lifeseries.Main.*;
 
+//? if <= 1.21.9
+import net.minecraft.world.level.GameRules;
+//? if > 1.21.9
+/*import net.minecraft.world.level.gamerules.GameRules;*/
+
 public class NiceLife extends Season {
 
     public static boolean LIGHT_MELTS_SNOW = false;
@@ -33,7 +42,8 @@ public class NiceLife extends Season {
     public Time snowTicks = Time.zero();
     public double snowLayerTickChance = 1.0 / 43;
     public int currentMaxSnowLayers = -1;
-
+    public static boolean triviaInProgress = false;
+    //ServerLevel - wakeUpAllPlayers()
     @Override
     public Seasons getSeason() {
         return Seasons.NICE_LIFE;
@@ -55,6 +65,7 @@ public class NiceLife extends Season {
         }
     }
 
+    public static Time tempSleepTimer = Time.zero();
     @Override
     public void tick(MinecraftServer server) {
         super.tick(server);
@@ -69,15 +80,47 @@ public class NiceLife extends Season {
                 seasonConfig.setProperty("current_snow_layers", String.valueOf(currentMaxSnowLayers));
             }
         }
-
-        server.overworld().setWeatherParameters(0, 1000, true, false);
+        ServerLevel overworld = server.overworld();
+        overworld.setWeatherParameters(0, 1000, true, false);
 
         boolean advanceTime = !isMidnight() && (currentSession.statusStarted() || ADVANCE_TIME_WHEN_NOT_IN_SESSION);
         //? if <= 1.21.9 {
-        OtherUtils.setBooleanGameRule(server.overworld(), GameRules.RULE_DAYLIGHT, advanceTime);
+        OtherUtils.setBooleanGameRule(overworld, GameRules.RULE_DAYLIGHT, advanceTime);
         //?} else {
-        /*OtherUtils.setBooleanGameRule(server.overworld(), GameRules.ADVANCE_TIME, advanceTime);
+        /*OtherUtils.setBooleanGameRule(overworld, GameRules.ADVANCE_TIME, advanceTime);
          *///?}
+
+        if (!isMidnight()) {
+            for(ServerPlayer serverPlayer : PlayerUtils.getAllPlayers()) {
+                if (serverPlayer.isSleeping()) {
+                    serverPlayer.displayClientMessage(Component.nullToEmpty("You are too excited to fall asleep"), true);
+                }
+            }
+        }
+
+        if (overworld instanceof ServerLevelAccessor accessor) {
+            SleepStatus sleepStatus = accessor.ls$getSleepStatus();
+            //?if <= 1.21.9 {
+            int percentage = overworld.getGameRules().getInt(GameRules.RULE_PLAYERS_SLEEPING_PERCENTAGE);
+            //?} else {
+            /*int percentage = overworld.getGameRules().get(GameRules.PLAYERS_SLEEPING_PERCENTAGE);
+            *///?}
+            if (sleepStatus.areEnoughSleeping(percentage) && isMidnight()) {
+                //TODO spawn trivia bots, prevent players from getting out of beds.
+                triviaInProgress = true;
+                tempSleepTimer.tick();
+                if (tempSleepTimer.isLarger(Time.seconds(5))) {
+                    long newTime = overworld.getDayTime() + 24000L;
+                    overworld.setDayTime(newTime - newTime % 24000L);
+                    accessor.ls$wakeUpAllPlayers();
+                    tempSleepTimer = Time.zero();
+                    triviaInProgress = false;
+                }
+            }
+            else {
+                tempSleepTimer = Time.zero();
+            }
+        }
     }
 
     public boolean isMidnight() {

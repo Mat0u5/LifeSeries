@@ -21,12 +21,16 @@ public abstract class SleepStatusMixin {
     @Inject(method = "areEnoughDeepSleeping", at = @At("RETURN"), cancellable = true)
     public void canResetTime(int percentage, List<ServerPlayer> players, CallbackInfoReturnable<Boolean> cir) {
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
-        if (currentSeason.getSeason() != Seasons.WILD_LIFE) return;
-        for (ServerPlayer player : players) {
-            if (!player.isSleepingLongEnough()) return;
-            if (SuperpowersWildcard.hasActivePower(player, Superpowers.TIME_CONTROL)) {
-                cir.setReturnValue(true);
+        if (currentSeason.getSeason() == Seasons.WILD_LIFE) {
+            for (ServerPlayer player : players) {
+                if (!player.isSleepingLongEnough()) return;
+                if (SuperpowersWildcard.hasActivePower(player, Superpowers.TIME_CONTROL)) {
+                    cir.setReturnValue(true);
+                }
             }
+        }
+        if (currentSeason.getSeason() == Seasons.NICE_LIFE) {
+            cir.setReturnValue(false);
         }
     }
 

@@ -10,7 +10,6 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -20,6 +19,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
+
+//?if <= 1.20
+/*import net.minecraft.util.RandomSource;*/
 
 @Mixin(value = ServerLevel.class, priority = 1)
 public class ServerLevelMixin {
