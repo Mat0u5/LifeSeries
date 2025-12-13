@@ -71,7 +71,7 @@ public class WeatherEffectRendererMixin {
         *///?}
     }
 
-    //?if <= 1.21 {
+    //? if <= 1.21 {
     @WrapOperation(method = "renderSnowAndRain", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;getRainLevel(F)F"))
     //?} else if <= 1.21.9 {
     /*@WrapOperation(method = "extractRenderState", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;getRainLevel(F)F"))

@@ -5,6 +5,7 @@
   "mixins": [
     "AnvilMenuMixin",
     "BiomeMixin",
+    "ChunkStatusTasksMixin",
     "CommandSourceStackMixin",
     "CraftingMenuMixin",
     "EnchantmentHelperMixin",

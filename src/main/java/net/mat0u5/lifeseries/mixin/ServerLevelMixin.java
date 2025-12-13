@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
-//?if <= 1.20
+//? if <= 1.20
 /*import net.minecraft.util.RandomSource;*/
 
 @Mixin(value = ServerLevel.class, priority = 1)

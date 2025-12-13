@@ -35,6 +35,7 @@ import net.minecraft.world.level.GameRules;
 
 public class NiceLife extends Season {
 
+    public static boolean SNOWY_NETHER = true;
     public static boolean LIGHT_MELTS_SNOW = false;
     public boolean SNOW_WHEN_NOT_IN_SESSION = false;
     public static boolean ADVANCE_TIME_WHEN_NOT_IN_SESSION = false;
@@ -43,7 +44,7 @@ public class NiceLife extends Season {
     public double snowLayerTickChance = 1.0 / 43;
     public int currentMaxSnowLayers = -1;
     public static boolean triviaInProgress = false;
-    //ServerLevel - wakeUpAllPlayers()
+
     @Override
     public Seasons getSeason() {
         return Seasons.NICE_LIFE;
@@ -59,6 +60,7 @@ public class NiceLife extends Season {
         SNOW_WHEN_NOT_IN_SESSION = NiceLifeConfig.SNOW_WHEN_NOT_IN_SESSION.get(seasonConfig);
         SNOW_LAYER_INCREASE_INTERVAL = Time.seconds(Math.max(13, NiceLifeConfig.SNOW_LAYER_INCREMENT_DELAY.get(seasonConfig)));
         ADVANCE_TIME_WHEN_NOT_IN_SESSION = NiceLifeConfig.ADVANCE_TIME_WHEN_NOT_IN_SESSION.get(seasonConfig);
+        SNOWY_NETHER = NiceLifeConfig.SNOWY_NETHER.get(seasonConfig);
         snowLayerTickChance = 280.0 / Math.max(SNOW_LAYER_INCREASE_INTERVAL.getTicks(), 1);
         if (currentMaxSnowLayers == -1) {
             currentMaxSnowLayers = seasonConfig.getOrCreateInt("current_snow_layers", 1);
@@ -100,7 +102,7 @@ public class NiceLife extends Season {
 
         if (overworld instanceof ServerLevelAccessor accessor) {
             SleepStatus sleepStatus = accessor.ls$getSleepStatus();
-            //?if <= 1.21.9 {
+            //? if <= 1.21.9 {
             int percentage = overworld.getGameRules().getInt(GameRules.RULE_PLAYERS_SLEEPING_PERCENTAGE);
             //?} else {
             /*int percentage = overworld.getGameRules().get(GameRules.PLAYERS_SLEEPING_PERCENTAGE);
@@ -218,7 +220,7 @@ public class NiceLife extends Season {
             BlockState blockState = level.getBlockState(blockPos);
             boolean canSnowOverride = blockState.isAir() ||
                     blockState.is(Blocks.SNOW) ||
-                    //?if <= 1.20.2 {
+                    //? if <= 1.20.2 {
                     /*blockState.is(Blocks.GRASS) ||
                     *///?} else {
                     blockState.is(Blocks.SHORT_GRASS) ||
@@ -243,5 +245,36 @@ public class NiceLife extends Season {
             }
         }
         return false;
+    }
+
+    public static final BlockState packedIce = Blocks.PACKED_ICE.defaultBlockState();
+    public static final BlockState snowBlock = Blocks.SNOW_BLOCK.defaultBlockState();
+    public static final BlockState air = Blocks.AIR.defaultBlockState();
+    public static final BlockState froglight = Blocks.PEARLESCENT_FROGLIGHT.defaultBlockState();
+    public BlockState transformBlockState(BlockState oldState) {
+        if (oldState.is(Blocks.NETHERRACK) ||
+                oldState.is(Blocks.BASALT) ||
+                oldState.is(Blocks.SOUL_SAND) ||
+                oldState.is(Blocks.SOUL_SOIL) ||
+                oldState.is(Blocks.CRIMSON_NYLIUM) ||
+                oldState.is(Blocks.WARPED_NYLIUM) ||
+                oldState.is(Blocks.MAGMA_BLOCK) ||
+                oldState.is(Blocks.GRAVEL)) {
+            return snowBlock;
+        }
+        if (oldState.is(Blocks.LAVA)) {
+            return packedIce;
+        }
+        if (oldState.is(Blocks.CRIMSON_FUNGUS) ||
+                oldState.is(Blocks.CRIMSON_ROOTS) ||
+                oldState.is(Blocks.WARPED_FUNGUS) ||
+                oldState.is(Blocks.WARPED_ROOTS) ||
+                oldState.is(Blocks.NETHER_SPROUTS)) {
+            return air;
+        }
+        if (oldState.is(Blocks.GLOWSTONE) || oldState.is(Blocks.SHROOMLIGHT)) {
+            return froglight;
+        }
+        return null;
     }
 }

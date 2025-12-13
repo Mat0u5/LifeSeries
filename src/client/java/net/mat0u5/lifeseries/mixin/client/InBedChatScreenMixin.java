@@ -18,7 +18,7 @@ public abstract class InBedChatScreenMixin {
     abstract Button ls$leaveBedButton();
 
     @Inject(method = "charTyped", at = @At("HEAD"))
-    //?if <= 1.21.6 {
+    //? if <= 1.21.6 {
     private void unfocusButton(char c, int i, CallbackInfoReturnable<Boolean> cir) {
     //?} else {
     /*private void unfocusButton(CharacterEvent input, CallbackInfoReturnable<Boolean> cir) {

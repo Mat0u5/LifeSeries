@@ -70,6 +70,11 @@ public class NiceLifeConfig extends ConfigManager {
             "Advance Time When Not In Session", "Controls whether the daylight cycle is paused when not in session."
     );
 
+    public static final ConfigFileEntry<Boolean> SNOWY_NETHER = new ConfigFileEntry<>(
+            "snowy_nether", true, "season[new]",
+            "Snowy Nether", "Controls the nether is frozen."
+    );
+
     public NiceLifeConfig() {
         super("./config/"+ Main.MOD_ID,"nicelife.properties");
     }
@@ -85,6 +90,7 @@ public class NiceLifeConfig extends ConfigManager {
                 ,SNOW_WHEN_NOT_IN_SESSION
                 ,SNOW_LAYER_INCREMENT_DELAY
                 ,ADVANCE_TIME_WHEN_NOT_IN_SESSION
+                ,SNOWY_NETHER
         ));
     }
 
