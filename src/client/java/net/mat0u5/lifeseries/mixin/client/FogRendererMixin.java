@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.mixin.client;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLife;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -46,7 +46,7 @@ public class FogRendererMixin {
     *///?}
         ClientLevel nether = Minecraft.getInstance().level;
         if (camera.getFluidInCamera() == FogType.NONE && nether != null && nether.dimension() == Level.NETHER &&
-                NiceLife.SNOWY_NETHER && !Main.modDisabled() && currentSeason.getSeason() == Seasons.NICE_LIFE) {
+                MainClient.NICELIFE_SNOWY_NETHER && !Main.modDisabled() && currentSeason.getSeason() == Seasons.NICE_LIFE) {
             //? if <= 1.21 {
             ci.cancel();
             //?} else if <= 1.21.5 {

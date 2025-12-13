@@ -318,6 +318,13 @@ public class NetworkHandlerClient {
         if (name == PacketNames.ANIMAL_DISGUISE_HANDS) {
             Morph.showHandItems = value.equalsIgnoreCase("true");
         }
+        if (name == PacketNames.SNOWY_NETHER) {
+            boolean newValue = value.equalsIgnoreCase("true");
+            if (MainClient.NICELIFE_SNOWY_NETHER != newValue) {
+                MainClient.NICELIFE_SNOWY_NETHER = newValue;
+                ClientResourcePacks.checkClientPacks();
+            }
+        }
     }
 
     public static void handleNumberPacket(NumberPayload payload) {

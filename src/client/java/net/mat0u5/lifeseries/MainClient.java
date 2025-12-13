@@ -26,6 +26,7 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     public static long SUPERPOWER_COOLDOWN_TIMESTAMP = 0;
     public static long MIMICRY_COOLDOWN_TIMESTAMP = 0;
     public static long CURSE_SLIDING = 0;
+    public static boolean NICELIFE_SNOWY_NETHER = true;
 
     public static Map<String, String> playerDisguiseNames = new HashMap<>();
     public static Map<UUID, UUID> playerDisguiseUUIDs = new HashMap<>();
