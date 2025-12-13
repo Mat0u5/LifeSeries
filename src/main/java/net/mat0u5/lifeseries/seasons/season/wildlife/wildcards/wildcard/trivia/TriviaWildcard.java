@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotPathfinding;
-import net.mat0u5.lifeseries.entity.triviabot.server.TriviaHandler;
+import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
@@ -83,9 +83,9 @@ public class TriviaWildcard extends Wildcard {
         spawnedBotsFor.clear();
         activatedAt = currentSession.getPassedTime();
         bots.clear();
-        TriviaHandler.cursedGigantificationPlayers.clear();
-        TriviaHandler.cursedHeartPlayers.clear();
-        TriviaHandler.cursedMoonJumpPlayers.clear();
+        WildLifeTriviaHandler.cursedGigantificationPlayers.clear();
+        WildLifeTriviaHandler.cursedHeartPlayers.clear();
+        WildLifeTriviaHandler.cursedMoonJumpPlayers.clear();
         if (!currentSession.statusStarted()) {
             PlayerUtils.broadcastMessageToAdmins(Component.nullToEmpty("§7You must start a session for trivia bots to spawn!"));
         }
@@ -106,9 +106,9 @@ public class TriviaWildcard extends Wildcard {
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
             TriviaWildcard.resetPlayerOnBotSpawn(player);
         }
-        TriviaHandler.cursedGigantificationPlayers.clear();
-        TriviaHandler.cursedHeartPlayers.clear();
-        TriviaHandler.cursedMoonJumpPlayers.clear();
+        WildLifeTriviaHandler.cursedGigantificationPlayers.clear();
+        WildLifeTriviaHandler.cursedHeartPlayers.clear();
+        WildLifeTriviaHandler.cursedMoonJumpPlayers.clear();
         super.deactivate();
     }
 
@@ -242,23 +242,23 @@ public class TriviaWildcard extends Wildcard {
     }
 
     public static void resetPlayerPunishments(ServerPlayer player) {
-        if (TriviaHandler.cursedGigantificationPlayers.contains(player.getUUID())) {
-            TriviaHandler.cursedGigantificationPlayers.remove(player.getUUID());
+        if (WildLifeTriviaHandler.cursedGigantificationPlayers.contains(player.getUUID())) {
+            WildLifeTriviaHandler.cursedGigantificationPlayers.remove(player.getUUID());
             //? if > 1.20.3 {
             SizeShifting.setPlayerSize(player, 1);
             //?}
         }
-        if (TriviaHandler.cursedHeartPlayers.contains(player.getUUID())) {
-            TriviaHandler.cursedHeartPlayers.remove(player.getUUID());
+        if (WildLifeTriviaHandler.cursedHeartPlayers.contains(player.getUUID())) {
+            WildLifeTriviaHandler.cursedHeartPlayers.remove(player.getUUID());
             AttributeUtils.resetMaxPlayerHealthIfNecessary(player);
         }
-        if (TriviaHandler.cursedMoonJumpPlayers.contains(player.getUUID())) {
-            TriviaHandler.cursedMoonJumpPlayers.remove(player.getUUID());
+        if (WildLifeTriviaHandler.cursedMoonJumpPlayers.contains(player.getUUID())) {
+            WildLifeTriviaHandler.cursedMoonJumpPlayers.remove(player.getUUID());
             AttributeUtils.resetPlayerJumpHeight(player);
         }
 
-        TriviaHandler.cursedSliding.remove(player.getUUID());
-        TriviaHandler.cursedRoboticVoicePlayers.remove(player.getUUID());
+        WildLifeTriviaHandler.cursedSliding.remove(player.getUUID());
+        WildLifeTriviaHandler.cursedRoboticVoicePlayers.remove(player.getUUID());
         NetworkHandlerServer.sendLongPacket(player, PacketNames.CURSE_SLIDING, 0);
     }
 

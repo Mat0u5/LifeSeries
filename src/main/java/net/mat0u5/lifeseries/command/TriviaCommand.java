@@ -5,7 +5,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
-import net.mat0u5.lifeseries.entity.triviabot.server.TriviaHandler;
+import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
@@ -146,41 +146,41 @@ public class TriviaCommand extends Command {
 
                 //? if >= 1.21 {
                 case "infestation":
-                    TriviaHandler.curseInfestation(player);
+                    WildLifeTriviaHandler.curseInfestation(player);
                     break;
                 //?}
                 case "slippery_ground":
-                    TriviaHandler.curseSlipperyGround(player);
+                    WildLifeTriviaHandler.curseSlipperyGround(player);
                     break;
                 case "hunger":
-                    TriviaHandler.curseHunger(player);
+                    WildLifeTriviaHandler.curseHunger(player);
                     break;
                 case "beeswarm":
-                    TriviaHandler.curseBeeswarm(player, player.blockPosition());
+                    WildLifeTriviaHandler.curseBeeswarm(player, player.blockPosition());
                     break;
                 //? if > 1.20.3 {
                 case "gigantification":
-                    TriviaHandler.curseGigantification(player);
+                    WildLifeTriviaHandler.curseGigantification(player);
                     break;
                 //?}
                 case "moonjump":
-                    TriviaHandler.curseMoonjump(player);
+                    WildLifeTriviaHandler.curseMoonjump(player);
                     break;
                 case "robotic_voice":
                     if (VoicechatMain.isConnectedToSVC(player.getUUID())) {
-                        TriviaHandler.curseRoboticVoice(player);
+                        WildLifeTriviaHandler.curseRoboticVoice(player);
                         totalSVC++;
                     }
                     break;
                 case "binding_armor":
-                    TriviaHandler.curseBindingArmor(player);
+                    WildLifeTriviaHandler.curseBindingArmor(player);
                     break;
                 case "ravager":
-                    TriviaHandler.curseRavager(player, player.blockPosition());
+                    WildLifeTriviaHandler.curseRavager(player, player.blockPosition());
                     break;
                 default:
                 case "hearts":
-                    TriviaHandler.curseHearts(player);
+                    WildLifeTriviaHandler.curseHearts(player);
                     break;
             }
         }

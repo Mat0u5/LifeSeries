@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.utils.player;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.entity.triviabot.server.TriviaHandler;
+import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
@@ -9,8 +9,6 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-
-import java.util.Objects;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.Main.seasonConfig;
@@ -25,7 +23,7 @@ public class AttributeUtils {
     public static void resetAttributesOnPlayerJoin(ServerPlayer player) {
         if (player == null) return;
         resetMaxPlayerHealthIfNecessary(player);
-        if (!TriviaHandler.cursedMoonJumpPlayers.contains(player.getUUID())) {
+        if (!WildLifeTriviaHandler.cursedMoonJumpPlayers.contains(player.getUUID())) {
             resetPlayerJumpHeight(player);
         }
         //? if > 1.20.3 {
@@ -44,7 +42,7 @@ public class AttributeUtils {
         }
         if (currentSeason.getSeason() == Seasons.SECRET_LIFE) return;
         double currentMaxHealth = getMaxPlayerHealth(player);
-        if (currentMaxHealth == 13 && TriviaHandler.cursedHeartPlayers.contains(player.getUUID())) return;
+        if (currentMaxHealth == 13 && WildLifeTriviaHandler.cursedHeartPlayers.contains(player.getUUID())) return;
         if (currentMaxHealth == SuperpowersWildcard.ZOMBIES_HEALTH && Necromancy.isRessurectedPlayer(player)) return;
         resetMaxPlayerHealth(player);
     }

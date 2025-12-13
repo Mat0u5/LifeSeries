@@ -3,7 +3,8 @@ package net.mat0u5.lifeseries.seasons.season.wildlife;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
-import net.mat0u5.lifeseries.entity.triviabot.server.TriviaHandler;
+import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
+import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -15,9 +16,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.*;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -57,7 +56,7 @@ public class WildLife extends Season {
         super.initialize();
         Snails.loadConfig();
         Snails.loadSnailNames();
-        TriviaHandler.initializeItemSpawner();
+        WildLifeTriviaHandler.initializeItemSpawner();
     }
 
     @Override
@@ -169,9 +168,9 @@ public class WildLife extends Season {
 
         TriviaBot.CAN_START_RIDING = WildLifeConfig.WILDCARD_TRIVIA_BOTS_CAN_ENTER_BOATS.get(config);
         TriviaWildcard.TRIVIA_BOTS_PER_PLAYER = WildLifeConfig.WILDCARD_TRIVIA_BOTS_PER_PLAYER.get(config);
-        TriviaBot.EASY_TIME = WildLifeConfig.WILDCARD_TRIVIA_SECONDS_EASY.get(config);
-        TriviaBot.NORMAL_TIME = WildLifeConfig.WILDCARD_TRIVIA_SECONDS_NORMAL.get(config);
-        TriviaBot.HARD_TIME = WildLifeConfig.WILDCARD_TRIVIA_SECONDS_HARD.get(config);
+        WildLifeTriviaHandler.EASY_TIME = WildLifeConfig.WILDCARD_TRIVIA_SECONDS_EASY.get(config);
+        WildLifeTriviaHandler.NORMAL_TIME = WildLifeConfig.WILDCARD_TRIVIA_SECONDS_NORMAL.get(config);
+        WildLifeTriviaHandler.HARD_TIME = WildLifeConfig.WILDCARD_TRIVIA_SECONDS_HARD.get(config);
         WindCharge.MAX_MACE_DAMAGE = WildLifeConfig.WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE.get(config);
         Superspeed.STEP_UP = WildLifeConfig.WILDCARD_SUPERPOWERS_SUPERSPEED_STEP.get(config);
         WildcardManager.ACTIVATE_WILDCARD_MINUTE = WildLifeConfig.ACTIVATE_WILDCARD_MINUTE.get(config);
@@ -217,11 +216,11 @@ public class WildLife extends Season {
 
         super.onPlayerDeath(player, source);
 
-        TriviaHandler.cursedGigantificationPlayers.remove(player.getUUID());
-        TriviaHandler.cursedHeartPlayers.remove(player.getUUID());
+        WildLifeTriviaHandler.cursedGigantificationPlayers.remove(player.getUUID());
+        WildLifeTriviaHandler.cursedHeartPlayers.remove(player.getUUID());
         AttributeUtils.resetMaxPlayerHealthIfNecessary(player);
 
-        TriviaHandler.cursedMoonJumpPlayers.remove(player.getUUID());
+        WildLifeTriviaHandler.cursedMoonJumpPlayers.remove(player.getUUID());
         AttributeUtils.resetPlayerJumpHeight(player);
 
         Superpower power = SuperpowersWildcard.getSuperpowerInstance(player);

@@ -6,7 +6,10 @@ import net.mat0u5.lifeseries.entity.triviabot.goal.TriviaBotTeleportGoal;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotPathfinding;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotServerData;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotSounds;
-import net.mat0u5.lifeseries.entity.triviabot.server.TriviaHandler;
+import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
+import net.mat0u5.lifeseries.entity.triviabot.server.trivia.TriviaHandler;
+import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -29,6 +32,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3;
+import static net.mat0u5.lifeseries.Main.currentSeason;
 
 //? if <= 1.21.9 {
 import net.minecraft.resources.ResourceLocation;
@@ -47,16 +51,12 @@ public class TriviaBot extends AmbientCreature {
     public static final float MOVEMENT_SPEED = 0.45f;
     public static final int MAX_DISTANCE = 100;
     public static boolean CAN_START_RIDING = true;
-    public static int EASY_TIME = 180;
-    public static int NORMAL_TIME = 240;
-    public static int HARD_TIME = 300;
 
     public TriviaBotClientData clientData = new TriviaBotClientData(this);
     public TriviaBotServerData serverData = new TriviaBotServerData(this);
     public TriviaBotSounds sounds = new TriviaBotSounds(this);
     public TriviaBotPathfinding pathfinding = new TriviaBotPathfinding(this);
-    public TriviaHandler triviaHandler = new TriviaHandler(this);
-
+    public final TriviaHandler triviaHandler;
 
     private static final EntityDataAccessor<Boolean> submittedAnswer = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> ranOutOfTime = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.BOOLEAN);
@@ -73,6 +73,12 @@ public class TriviaBot extends AmbientCreature {
         //? if <= 1.20.3 {
         /*this.setMaxUpStep(1.0F);
         *///?}
+        if (currentSeason.getSeason() == Seasons.NICE_LIFE) {
+            triviaHandler = new NiceLifeTriviaHandler(this);
+        }
+        else {
+            triviaHandler = new WildLifeTriviaHandler(this);
+        }
     }
 
     public static AttributeSupplier.Builder createAttributes() {

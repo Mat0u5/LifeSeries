@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard;
 
-import net.mat0u5.lifeseries.entity.triviabot.server.TriviaHandler;
+import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
@@ -32,7 +32,7 @@ public class SizeShifting extends Wildcard {
     @Override
     public void tick() {
         for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
-            if (TriviaHandler.cursedGigantificationPlayers.contains(player.getUUID())) continue;
+            if (WildLifeTriviaHandler.cursedGigantificationPlayers.contains(player.getUUID())) continue;
             if (player.isSpectator()) continue;
             if (player.isShiftKeyDown()) {
                 //? if > 1.20.3 {
@@ -43,7 +43,7 @@ public class SizeShifting extends Wildcard {
     }
 
     public static void onHoldingJump(ServerPlayer player) {
-        if (TriviaHandler.cursedGigantificationPlayers.contains(player.getUUID())) return;
+        if (WildLifeTriviaHandler.cursedGigantificationPlayers.contains(player.getUUID())) return;
         if (player.isSpectator()) return;
         if (player.ls$isWatcher()) return;
         //? if > 1.20.3 {
@@ -86,7 +86,7 @@ public class SizeShifting extends Wildcard {
             boolean isDeadSpectator = player.isSpectator() && player.ls$isDead();
             if (!isActive || isDeadSpectator || isWatcher) {
                 double size = getPlayerSize(player);
-                if (TriviaHandler.cursedGigantificationPlayers.contains(player.getUUID()) && !isWatcher && !isDeadSpectator) continue;
+                if (WildLifeTriviaHandler.cursedGigantificationPlayers.contains(player.getUUID()) && !isWatcher && !isDeadSpectator) continue;
                 if (size == 1) continue;
                 if (size < 0.98) {
                     addPlayerSize(player, 0.01);

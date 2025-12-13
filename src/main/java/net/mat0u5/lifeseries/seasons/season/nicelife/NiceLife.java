@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.nicelife;
 
 import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
 import net.mat0u5.lifeseries.mixin.ServerLevelAccessor;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -44,6 +45,12 @@ public class NiceLife extends Season {
     public double snowLayerTickChance = 1.0 / 43;
     public int currentMaxSnowLayers = -1;
     public static boolean triviaInProgress = false;
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        NiceLifeTriviaHandler.initializeItemSpawner();
+    }
 
     @Override
     public Seasons getSeason() {

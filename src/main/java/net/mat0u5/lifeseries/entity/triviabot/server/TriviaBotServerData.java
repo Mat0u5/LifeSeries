@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.entity.triviabot.server;
 import net.mat0u5.lifeseries.entity.PlayerBoundEntity;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -17,13 +18,14 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
 
+import static net.mat0u5.lifeseries.Main.currentSeason;
+
 public class TriviaBotServerData implements PlayerBoundEntity {
     private TriviaBot bot;
     public TriviaBotServerData(TriviaBot bot) {
         this.bot = bot;
     }
 
-    public int snailTransformation = 0;
     public int despawnPlayerChecks = 0;
 
     private UUID _boundPlayerUUID;
@@ -56,53 +58,7 @@ public class TriviaBotServerData implements PlayerBoundEntity {
         if (bot.level().isClientSide()) return;
         if (despawnChecks()) return;
         bot.pathfinding.tick();
-
-        if (bot.ranOutOfTime()) {
-            snailTransformation++;
-        }
-        if (bot.tickCount % 2 == 0 && bot.submittedAnswer()) {
-            bot.setAnalyzingTime(bot.getAnalyzingTime()-1);
-        }
-
-        if (bot.interactedWith()) {
-            bot.triviaHandler.sendTimeUpdatePacket();
-        }
-
-        if (bot.submittedAnswer()) {
-            if (bot.answeredRight()) {
-                if (bot.getAnalyzingTime() < -80) {
-                    if (bot.isPassenger()) bot.removeVehicle();
-                    bot.noPhysics = true;
-                    float velocity = Math.min(0.5f, 0.25f * Math.abs((bot.getAnalyzingTime()+80) / (20.0f)));
-                    bot.setDeltaMovement(0,velocity,0);
-                    if (bot.getAnalyzingTime() < -200) despawn();
-                }
-            }
-            else {
-                if (bot.getAnalyzingTime() < -100) {
-                    if (bot.isPassenger()) bot.removeVehicle();
-                    bot.noPhysics = true;
-                    float velocity = Math.min(0.5f, 0.25f * Math.abs((bot.getAnalyzingTime()+100) / (20.0f)));
-                    bot.setDeltaMovement(0,velocity,0);
-                    if (bot.getAnalyzingTime() < -200) despawn();
-                }
-            }
-        }
-        else {
-            handleHighVelocity();
-            if (bot.interactedWith() && bot.triviaHandler.getRemainingTicks() <= 0) {
-                if (!bot.ranOutOfTime()) {
-                    ServerPlayer boundPlayer = getBoundPlayer();
-                    if (boundPlayer != null) {
-                        NetworkHandlerServer.sendStringPacket(boundPlayer, PacketNames.RESET_TRIVIA, "true");
-                    }
-                }
-                bot.setRanOutOfTime(true);
-            }
-            if (snailTransformation > 66) {
-                bot.triviaHandler.transformIntoSnail();
-            }
-        }
+        bot.triviaHandler.tick();
 
         chunkLoading();
         bot.removeAllEffects();
@@ -119,7 +75,16 @@ public class TriviaBotServerData implements PlayerBoundEntity {
             return true;
         }
         if (bot.tickCount % 10 == 0) {
-            if (!TriviaWildcard.bots.containsValue(bot)) {
+            if (currentSeason.getSeason() == Seasons.WILD_LIFE) {
+                if (!TriviaWildcard.bots.containsValue(bot)) {
+                    despawn();
+                    return true;
+                }
+            }
+            else if (currentSeason.getSeason() == Seasons.NICE_LIFE) {
+                //TODO
+            }
+            else {
                 despawn();
                 return true;
             }
