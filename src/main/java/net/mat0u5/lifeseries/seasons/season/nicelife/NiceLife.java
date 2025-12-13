@@ -253,6 +253,7 @@ public class NiceLife extends Season {
     public static final BlockState froglight = Blocks.PEARLESCENT_FROGLIGHT.defaultBlockState();
     public BlockState transformBlockState(BlockState oldState) {
         if (oldState.is(Blocks.NETHERRACK) ||
+                oldState.is(Blocks.BLACKSTONE) ||
                 oldState.is(Blocks.BASALT) ||
                 oldState.is(Blocks.SOUL_SAND) ||
                 oldState.is(Blocks.SOUL_SOIL) ||

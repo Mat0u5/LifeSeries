@@ -19,6 +19,7 @@
     "EntityRenderDispatcherMixin",
     "EntityRendererMixin",
     "EntityRenderStateMixin",
+    "FogRendererMixin",
     "GuiAccessor",
     "GuiMixin",
     "InBedChatScreenMixin",
