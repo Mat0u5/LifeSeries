@@ -4,19 +4,18 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 //? if <= 1.21
-import net.minecraft.world.entity.MobSpawnType;
 //? if >= 1.21.2
 /*import net.minecraft.world.entity.EntitySpawnReason;*/
 
 //? if <= 1.21.9 {
 import net.minecraft.world.entity.monster.Zombie;
+
+import java.util.EnumSet;
 //?} else {
 /*import net.minecraft.world.entity.monster.zombie.Zombie;
 *///?}
@@ -112,5 +111,33 @@ public class LevelUtils {
         //?} else {
         /*return entityType.spawn(level, pos, EntitySpawnReason.COMMAND);
         *///?}
+    }
+
+    public static void teleport(Entity entity, ServerLevel level, double destX, double destY, double destZ) {
+        teleport(entity, level, destX, destY, destZ, entity.getYRot(), entity.getXRot());
+    }
+
+    public static void teleport(Entity entity, ServerLevel level, BlockPos pos) {
+        //? if <= 1.20.5 {
+        /*teleport(entity, level, pos.getCenter());
+         *///?} else {
+        teleport(entity, level, pos.getBottomCenter());
+        //?}
+    }
+
+    public static void teleport(Entity entity, ServerLevel level, Vec3 pos) {
+        teleport(entity, level, pos.x(), pos.y(), pos.z(), entity.getYRot(), entity.getXRot());
+    }
+
+    public static void teleport(Entity entity, ServerLevel level, Vec3 pos, float yaw, float pitch) {
+        teleport(entity, level, pos.x(), pos.y(), pos.z(), yaw, pitch);
+    }
+
+    public static void teleport(Entity entity, ServerLevel level, double destX, double destY, double destZ, float yaw, float pitch) {
+        //? if <= 1.21 {
+        entity.teleportTo(level, destX, destY, destZ, EnumSet.noneOf(RelativeMovement.class), yaw, pitch);
+        //?} else {
+        /*entity.teleportTo(level, destX, destY, destZ, EnumSet.noneOf(Relative.class), yaw, pitch, false);
+         *///?}
     }
 }

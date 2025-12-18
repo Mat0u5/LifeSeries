@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -73,8 +74,8 @@ public class Teleportation extends Superpower {
                     float storedYaw = player.getYRot();
                     float storedPitch = player.getXRot();
 
-                    PlayerUtils.teleport(player, lookingAtPlayerLevel, lookingAtPlayerPos, lookingAtPlayer.getYRot(), lookingAtPlayer.getXRot());
-                    PlayerUtils.teleport(lookingAtPlayer, storedLevel, storedPos, storedYaw, storedPitch);
+                    LevelUtils.teleport(player, lookingAtPlayerLevel, lookingAtPlayerPos, lookingAtPlayer.getYRot(), lookingAtPlayer.getXRot());
+                    LevelUtils.teleport(lookingAtPlayer, storedLevel, storedPos, storedYaw, storedPitch);
 
                     playTeleportSound(playerLevel, playerPos);
                     playTeleportSound(lookingAtPlayerLevel, lookingAtPlayerPos);

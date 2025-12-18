@@ -26,6 +26,7 @@ import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.*;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -471,7 +472,7 @@ public abstract class Season {
             *///?}
             if (pos.y <= minY) continue;
 
-            PlayerUtils.teleport(player, player.ls$getServerLevel(), pos, entry.getValue().get(0), entry.getValue().get(1));
+            LevelUtils.teleport(player, player.ls$getServerLevel(), pos, entry.getValue().get(0), entry.getValue().get(1));
             break;
         }
     }

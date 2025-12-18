@@ -74,9 +74,9 @@ public abstract class TriviaHandler {
         return (timeToComplete*20) - ticksSinceStart;
     }
 
-    public void handleAnswer(int answer) {
-        if (bot.level().isClientSide()) return;
-        if (bot.submittedAnswer()) return;
+    public boolean handleAnswer(int answer) {
+        if (bot.level().isClientSide()) return false;
+        if (bot.submittedAnswer()) return false;
         bot.setSubmittedAnswer(true);
         if (answer == question.getCorrectAnswerIndex()) {
             answeredCorrect();
@@ -84,6 +84,7 @@ public abstract class TriviaHandler {
         else {
             answeredIncorrect();
         }
+        return true;
     }
 
     public void answeredCorrect() {

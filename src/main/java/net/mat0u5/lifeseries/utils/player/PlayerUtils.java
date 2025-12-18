@@ -113,6 +113,7 @@ public class PlayerUtils {
     }
 
     public static void playSoundToPlayer(ServerPlayer player, SoundEvent sound, float volume, float pitch) {
+        if (player == null) return;
         player.ls$playNotifySound(sound, SoundSource.MASTER, volume, pitch);
     }
 
@@ -439,46 +440,18 @@ public class PlayerUtils {
 
     public static void teleport(ServerPlayer player, BlockPos pos) {
         //? if <= 1.20.5 {
-        /*teleport(player, player.ls$getServerLevel(), pos.getCenter());
+        /*LevelUtils.teleport(player, player.ls$getServerLevel(), pos.getCenter());
         *///?} else {
-        teleport(player, player.ls$getServerLevel(), pos.getBottomCenter());
+        LevelUtils.teleport(player, player.ls$getServerLevel(), pos.getBottomCenter());
         //?}
     }
 
     public static void teleport(ServerPlayer player, Vec3 pos) {
-        teleport(player, player.ls$getServerLevel(), pos);
+        LevelUtils.teleport(player, player.ls$getServerLevel(), pos);
     }
 
     public static void teleport(ServerPlayer player, double destX, double destY, double destZ) {
-        teleport(player, player.ls$getServerLevel(), destX, destY, destZ);
-    }
-
-    public static void teleport(ServerPlayer player, ServerLevel level, double destX, double destY, double destZ) {
-        teleport(player, level, destX, destY, destZ, player.getYRot(), player.getXRot());
-    }
-
-    public static void teleport(ServerPlayer player, ServerLevel level, BlockPos pos) {
-        //? if <= 1.20.5 {
-        /*teleport(player, level, pos.getCenter());
-        *///?} else {
-        teleport(player, level, pos.getBottomCenter());
-        //?}
-    }
-
-    public static void teleport(ServerPlayer player, ServerLevel level, Vec3 pos) {
-        teleport(player, level, pos.x(), pos.y(), pos.z(), player.getYRot(), player.getXRot());
-    }
-
-    public static void teleport(ServerPlayer player, ServerLevel level, Vec3 pos, float yaw, float pitch) {
-        teleport(player, level, pos.x(), pos.y(), pos.z(), yaw, pitch);
-    }
-
-    public static void teleport(ServerPlayer player, ServerLevel level, double destX, double destY, double destZ, float yaw, float pitch) {
-        //? if <= 1.21 {
-        player.teleportTo(level, destX, destY, destZ, EnumSet.noneOf(RelativeMovement.class), yaw, pitch);
-        //?} else {
-        /*player.teleportTo(level, destX, destY, destZ, EnumSet.noneOf(Relative.class), yaw, pitch, false);
-         *///?}
+        LevelUtils.teleport(player, player.ls$getServerLevel(), destX, destY, destZ);
     }
 
     public static void safelyPutIntoSurvival(ServerPlayer player) {

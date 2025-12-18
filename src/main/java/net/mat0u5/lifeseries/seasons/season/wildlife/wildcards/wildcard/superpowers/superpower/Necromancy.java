@@ -76,7 +76,7 @@ public class Necromancy extends Superpower {
                 List<ServerPlayer> deadPlayers = getDeadSpectatorPlayers();
                 for (ServerPlayer deadPlayer : deadPlayers) {
                     BlockPos tpTo = LevelUtils.getCloseBlockPos(updatedPlayerLevel, updatedPlayer.blockPosition(), 3, 2, true);
-                    PlayerUtils.teleport(deadPlayer, updatedPlayerLevel, tpTo);
+                    LevelUtils.teleport(deadPlayer, updatedPlayerLevel, tpTo);
                     deadPlayer.setGameMode(GameType.SURVIVAL);
                     if (seasonConfig instanceof WildLifeConfig config) {
                         if (WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_LOSE_ITEMS.get(config) && !clearedPlayers.contains(deadPlayer.getUUID())) {

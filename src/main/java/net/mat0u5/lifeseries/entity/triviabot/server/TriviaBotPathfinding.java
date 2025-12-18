@@ -24,10 +24,11 @@ public class TriviaBotPathfinding {
         this.bot = bot;
     }
     public boolean navigationInit = false;
+    public boolean noPathfinding = false;
 
     public void tick() {
         if (bot.tickCount % 5 == 0) {
-            bot.pathfinding.updateNavigationTarget();
+            updateNavigationTarget();
         }
         if (bot.tickCount % 100 == 0 || !navigationInit) {
             navigationInit = true;
@@ -80,7 +81,7 @@ public class TriviaBotPathfinding {
 
     public void updateNavigationTarget() {
         Vec3 targetPos = bot.serverData.getPlayerPos();
-        if (bot.interactedWith() ||!bot.serverData.shouldPathfind() || targetPos == null ||
+        if (noPathfinding || bot.interactedWith() ||!bot.serverData.shouldPathfind() || targetPos == null ||
                 bot.distanceToSqr(targetPos) > (TriviaBot.MAX_DISTANCE*TriviaBot.MAX_DISTANCE)) {
             bot.getNavigation().stop();
             return;

@@ -31,6 +31,9 @@ import static net.mat0u5.lifeseries.Main.*;
 
 //? if <= 1.21.9
 import net.minecraft.world.level.GameRules;
+
+import java.util.ArrayList;
+import java.util.List;
 //? if > 1.21.9
 /*import net.minecraft.world.level.gamerules.GameRules;*/
 
@@ -115,9 +118,18 @@ public class NiceLife extends Season {
             /*int percentage = overworld.getGameRules().get(GameRules.PLAYERS_SLEEPING_PERCENTAGE);
             *///?}
             if (sleepStatus.areEnoughSleeping(percentage) && isMidnight()) {
-                //TODO spawn trivia bots, prevent players from getting out of beds.
-                triviaInProgress = true;
+                if (!NiceLifeTriviaManager.triviaInProgress) {
+                    //TODO play midnight sound
+                    List<ServerPlayer> triviaPlayers = new ArrayList<>();
+                    for(ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
+                        if (player.isSpectator()) continue;
+                        if (!player.isSleeping()) continue;
+                        triviaPlayers.add(player);
+                    }
+                    NiceLifeTriviaManager.startTrivia(triviaPlayers);
+                }
                 tempSleepTimer.tick();
+                //TODO remove
                 if (tempSleepTimer.isLarger(Time.seconds(5))) {
                     long newTime = overworld.getDayTime() + 24000L;
                     overworld.setDayTime(newTime - newTime % 24000L);
@@ -127,9 +139,25 @@ public class NiceLife extends Season {
                 }
             }
             else {
+                if (isMidnight()) {
+                    NiceLifeTriviaManager.triviaInProgress = false;
+                }
                 tempSleepTimer = Time.zero();
             }
         }
+    }
+
+    @Override
+    public boolean sessionStart() {
+        super.sessionStart();
+        NiceLifeTriviaManager.sessionStart();
+        return true;
+    }
+
+    @Override
+    public void sessionEnd() {
+        super.sessionEnd();
+        NiceLifeTriviaManager.sessionEnd();
     }
 
     public boolean isMidnight() {

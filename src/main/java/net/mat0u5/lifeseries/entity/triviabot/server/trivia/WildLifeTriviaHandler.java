@@ -171,20 +171,16 @@ public class WildLifeTriviaHandler extends TriviaHandler {
         bot.serverData.despawn();
     }
 
-    public void handleAnswer(int answer) {
-        if (bot.level().isClientSide()) return;
-        super.handleAnswer(answer);
-        bot.setAnalyzingTime(42);
-        PlayerUtils.playSoundWithSourceToPlayers(
-                PlayerUtils.getAllPlayers(), bot,
-                SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_trivia_analyzing")),
-                SoundSource.NEUTRAL, 1f, 1);
-        if (answer == question.getCorrectAnswerIndex()) {
-            answeredCorrect();
+    public boolean handleAnswer(int answer) {
+        if (super.handleAnswer(answer)) {
+            bot.setAnalyzingTime(42);
+            PlayerUtils.playSoundWithSourceToPlayers(
+                    PlayerUtils.getAllPlayers(), bot,
+                    SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_trivia_analyzing")),
+                    SoundSource.NEUTRAL, 1f, 1);
+            return true;
         }
-        else {
-            answeredIncorrect();
-        }
+        return false;
     }
 
     public void answeredCorrect() {

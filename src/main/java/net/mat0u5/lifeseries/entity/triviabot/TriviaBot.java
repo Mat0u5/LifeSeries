@@ -75,6 +75,7 @@ public class TriviaBot extends AmbientCreature {
         *///?}
         if (currentSeason.getSeason() == Seasons.NICE_LIFE) {
             triviaHandler = new NiceLifeTriviaHandler(this);
+            sounds.playWithoutSource = true;
         }
         else {
             triviaHandler = new WildLifeTriviaHandler(this);

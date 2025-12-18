@@ -8,6 +8,7 @@ package net.mat0u5.lifeseries.entity.fakeplayer;
 
 import com.mojang.authlib.GameProfile;
 import net.mat0u5.lifeseries.mixin.SkullBlockEntityAccessor;
+import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -126,7 +127,7 @@ public class FakePlayer extends ServerPlayer {
             CommonListenerCookie data =  new CommonListenerCookie(current, 0, instance.clientInformation(), true);
             server.getPlayerList().placeNewPlayer(connection, instance, data);
             //?}
-            PlayerUtils.teleport(instance, levelIn, pos, (float) yaw, (float) pitch);
+            LevelUtils.teleport(instance, levelIn, pos, (float) yaw, (float) pitch);
             instance.setHealth(20.0F);
             instance.unsetRemoved();
             instance.setGameMode(gamemode);

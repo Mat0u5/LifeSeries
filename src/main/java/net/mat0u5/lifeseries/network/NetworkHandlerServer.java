@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLife;
+import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
@@ -238,7 +239,12 @@ public class NetworkHandlerServer {
         int intValue = (int) value;
         if (name == PacketNames.TRIVIA_ANSWER) {
             if (VersionControl.isDevVersion()) Main.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received trivia answer (from {}): {}", player, intValue));
-            TriviaWildcard.handleAnswer(player, intValue);
+            if (currentSeason.getSeason() == Seasons.NICE_LIFE) {
+                NiceLifeTriviaManager.handleAnswer(player, intValue);
+            }
+            else {
+                TriviaWildcard.handleAnswer(player, intValue);
+            }
         }
     }
     public static void handleStringPacket(ServerPlayer player, StringPayload payload) {

@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -186,7 +187,7 @@ public class AstralProjection extends ToggleableSuperpower {
         if (player.ls$isDead()) return;
 
         if (startedLevel != null && toBackPos != null) {
-            PlayerUtils.teleport(player, startedLevel, toBackPos, startedLooking[0], startedLooking[1]);
+            LevelUtils.teleport(player, startedLevel, toBackPos, startedLooking[0], startedLooking[1]);
         }
         player.setGameMode(startedGameMode);
         player.ls$playNotifySound(SoundEvents.EVOKER_DEATH, SoundSource.MASTER, 0.3f, 1);
