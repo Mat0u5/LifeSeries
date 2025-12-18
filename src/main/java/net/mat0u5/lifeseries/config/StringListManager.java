@@ -67,7 +67,9 @@ public class StringListManager {
 
         try (FileReader reader = new FileReader(file)) {
             Type listType = new TypeToken<List<String>>() {}.getType();
-            return GSON.fromJson(reader, listType);
+            List<String> strings = new ArrayList<>(GSON.fromJson(reader, listType));
+            strings.removeIf(str -> str == null || str.isEmpty());
+            return strings;
         } catch (IOException e) {
             Main.LOGGER.error(e.getMessage());
             return new ArrayList<>();

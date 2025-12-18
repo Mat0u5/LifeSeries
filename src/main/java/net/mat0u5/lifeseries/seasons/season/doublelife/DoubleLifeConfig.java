@@ -97,7 +97,7 @@ public class DoubleLifeConfig extends ConfigManager {
     );
     public static final ConfigFileEntry<Boolean> SOULBOUND_BOOGEYMAN = new ConfigFileEntry<>(
             "soulbound_boogeyman", false, "season.soulbind",
-            "Soulbound Boogeyman (If enabled)", "Makes you become the Bogeyman if your soulmate is one - curing one will cure the other as well."
+            "Soulbound Boogeymen (If enabled)", "Makes you become the Boogeyman if your soulmate is one - curing one will cure the other as well."
     );
     public static final ConfigFileEntry<Boolean> SOULMATES_PVP_ALLOWED = new ConfigFileEntry<>(
             "soulmates_pvp_allowed", true, "season",

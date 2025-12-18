@@ -21,6 +21,7 @@ public class StringListConfig extends ConfigManager {
         if (list == null || list.isEmpty()) return;
         for (int pos = 0; pos < list.size(); pos++) {
             String str = list.get(pos);
+            if (str.isEmpty()) continue;
             setPropertyCommented("entry"+pos,str, "-- DO NOT MODIFY --");
         }
     }
@@ -30,6 +31,7 @@ public class StringListConfig extends ConfigManager {
         for (int i = 0; i < 1000; i++) {
             String property = getProperty("entry"+i);
             if (property == null) break;
+            if (property.isEmpty()) continue;
             list.add(property);
         }
         return list;

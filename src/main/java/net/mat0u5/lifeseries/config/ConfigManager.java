@@ -9,7 +9,10 @@ import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.border.BorderStatus;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Score;
 
@@ -300,6 +303,25 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 OtherUtils.setFreezeGame(false);
             }
         }
+    }
+
+    public static void onUpdatedInteger(String id, int value) {
+        if (server == null) return;
+
+        if (id.equals(seasonConfig.WORLDBORDER_SIZE.key)) {
+            ServerLevel overworld = server.getLevel(Level.OVERWORLD);
+            if (overworld != null) overworld.getWorldBorder().setSize(value);
+        }
+        //? if >= 1.21.9 {
+        /*if (id.equals(seasonConfig.WORLDBORDER_NETHER_SIZE.key)) {
+            ServerLevel nether = server.getLevel(Level.NETHER);
+            if (nether != null) nether.getWorldBorder().setSize(value);
+        }
+        if (id.equals(seasonConfig.WORLDBORDER_END_SIZE.key)) {
+            ServerLevel end = server.getLevel(Level.END);
+            if (end != null) end.getWorldBorder().setSize(value);
+        }
+        *///?}
     }
 
     public static void moveOldMainFileIfExists() {

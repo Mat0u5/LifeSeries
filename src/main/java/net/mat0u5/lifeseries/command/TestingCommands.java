@@ -63,8 +63,8 @@ public class TestingCommands extends Command {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        OtherUtils.log(String.valueOf(server.overworld().getDayTime()));
-        OtherUtils.log(String.valueOf(server.overworld().getDayTime() % 24000L));
+        OtherUtils.log(String.valueOf(server.overworld().getWorldBorder().getLerpTarget()));
+        OtherUtils.log(String.valueOf(server.overworld().getWorldBorder().getSize()));
 
         return 1;
     }

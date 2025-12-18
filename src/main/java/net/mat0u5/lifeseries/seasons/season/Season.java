@@ -46,6 +46,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.border.BorderStatus;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Objective;
@@ -133,12 +134,12 @@ public abstract class Season {
         if (server == null) return;
 
         ServerLevel overworld = server.getLevel(Level.OVERWORLD);
-        if (overworld != null) overworld.getWorldBorder().setSize(seasonConfig.WORLDBORDER_SIZE.get(seasonConfig));
+        if (overworld != null && overworld.getWorldBorder().getStatus() == BorderStatus.STATIONARY) overworld.getWorldBorder().setSize(seasonConfig.WORLDBORDER_SIZE.get(seasonConfig));
         //? if >= 1.21.9 {
         /*ServerLevel nether = server.getLevel(Level.NETHER);
         ServerLevel end = server.getLevel(Level.END);
-        if (nether != null) nether.getWorldBorder().setSize(seasonConfig.WORLDBORDER_NETHER_SIZE.get(seasonConfig));
-        if (end != null) end.getWorldBorder().setSize(seasonConfig.WORLDBORDER_END_SIZE.get(seasonConfig));
+        if (nether != null && nether.getWorldBorder().getStatus() == BorderStatus.STATIONARY) nether.getWorldBorder().setSize(seasonConfig.WORLDBORDER_NETHER_SIZE.get(seasonConfig));
+        if (end != null && end.getWorldBorder().getStatus() == BorderStatus.STATIONARY) end.getWorldBorder().setSize(seasonConfig.WORLDBORDER_END_SIZE.get(seasonConfig));
         *///?}
 
         if (overworld != null) {

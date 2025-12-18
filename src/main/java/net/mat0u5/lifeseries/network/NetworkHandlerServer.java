@@ -200,6 +200,9 @@ public class NetworkHandlerServer {
                     int value = Integer.parseInt(args.get(0));
                     seasonConfig.setProperty(id, String.valueOf(value));
                     updatedConfigThisTick = true;
+                    TaskScheduler.schedulePriorityTask(Time.ticks(1), () -> {
+                        ConfigManager.onUpdatedInteger(id, value);
+                    });
                 }catch(Exception e){}
             }
             else if (configType.parentNullableInteger() && args.isEmpty()) {
