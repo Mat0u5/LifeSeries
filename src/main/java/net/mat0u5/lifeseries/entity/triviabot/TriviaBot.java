@@ -158,6 +158,7 @@ public class TriviaBot extends AmbientCreature {
 
     @Override
     protected boolean canRide(Entity entity) {
+        if (this.noPhysics) return false;
         return CAN_START_RIDING;
     }
 

@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.nicelife;
 
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
-import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotPathfinding;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.registries.MobRegistry;
@@ -9,7 +8,6 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
-import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
@@ -63,9 +61,9 @@ public class NiceLifeTriviaManager {
                 BlockPos headPos = bedPos.relative(bedDirection);
                 BlockPos frontBedPos = headPos.relative(bedDirection);
                 BlockPos spawnBotPos = frontBedPos;
-                for (int i = 0; i <= 7; i++) {
-                    BlockPos newPos = bedPos.relative(bedDirection, 7);
-                    if (!level.getBlockState(newPos).isFaceSturdy(level, newPos, Direction.UP)) {
+                for (int i = 0; i <= 6; i++) {
+                    BlockPos newPos = frontBedPos.relative(bedDirection, i);
+                    if (!level.getBlockState(newPos.below()).isFaceSturdy(level, newPos, Direction.UP)) {
                         break;
                     }
                     spawnBotPos = newPos;
@@ -88,8 +86,8 @@ public class NiceLifeTriviaManager {
             //?} else {
             /*int maxY = level.getMaxY();
             *///?}
-            for (int dirY = spawnBotPos.getY(); dirY <= maxY; dirY++) {
-                BlockPos breakBlockPos = spawnBotPos.offset(0, dirY, 0);
+            for (int breakY = spawnBotPos.getY(); breakY <= maxY; breakY++) {
+                BlockPos breakBlockPos = spawnBotPos.atY(breakY);
                 breakBlocksAround(level, breakBlockPos);
             }
             TriviaBot bot = LevelUtils.spawnEntity(MobRegistry.TRIVIA_BOT, player.ls$getServerLevel(), spawnBotPos);

@@ -6,7 +6,6 @@ import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -16,7 +15,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
@@ -45,6 +44,10 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
     }
 
     public void tick() {
+        if (spawnInfo == null) {
+            bot.serverData.despawn();
+            return;
+        }
         bot.pathfinding.noPathfinding = true;
         bot.noPhysics = true;
         ServerPlayer boundPlayer = bot.serverData.getBoundPlayer();
@@ -91,36 +94,60 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
                         NetworkHandlerServer.sendStringPacket(boundPlayer, PacketNames.RESET_TRIVIA, "true");
                     }
                 }
-                bot.setRanOutOfTime(true);
+                bot.setRanOutOfTime(false);//Prevents the snail transformation animation
             }
         }
+        turn(bot.getDeltaMovement(), 10.0F);
+    }
+
+    public void turn(Vec3 movement, float turnSpeed) {
+        float targetYaw = (float)(Math.atan2(movement.z, movement.x) * (180F / Math.PI)) - 90F;
+        float currentYaw = bot.getYRot();
+        float newYaw = Mth.approachDegrees(currentYaw, targetYaw, turnSpeed);
+        bot.setYRot(newYaw);
+        bot.yRotO = newYaw;
     }
 
     public void landingTick(ServerLevel level) {
         sameStateForTicks++;
-        bot.setDeltaMovement(0, -0.25,0);
-        if (bot.blockPosition().getY() <= spawnInfo.spawnPos().getY()) {
+        if (bot.blockPosition().getY() < spawnInfo.spawnPos().getY()) {
+            bot.setDeltaMovement(0, 0,0);
+            bot.setPos(bot.position().x, spawnInfo.spawnPos().getY(), bot.position().z);
             currentState = BotState.APPROACHING;
             sameStateForTicks = 0;
             for (BlockPos pos : BlockPos.betweenClosed(spawnInfo.spawnPos().above(), spawnInfo.bedPos())) {
                 level.destroyBlock(pos, true);
             }
         }
-        NiceLifeTriviaManager.breakBlocksAround(level, bot.blockPosition());
+        else {
+            bot.setDeltaMovement(0, -0.25,0);
+            NiceLifeTriviaManager.breakBlocksAround(level, bot.blockPosition());
+        }
     }
 
     public void approachingTick(ServerLevel level, ServerPlayer boundPlayer) {
         sameStateForTicks++;
         Vec3 botPos = bot.position();
         //? if <= 1.20.5 {
-        /*Vec3 bedPos = spawnInfo.spawnPos().getCenter();//TODO test
+        /*Vec3 bedPos = spawnInfo.bedPos().getCenter();//TODO test
          *///?} else {
-        Vec3 bedPos = spawnInfo.spawnPos().getBottomCenter();
+        Vec3 bedPos = spawnInfo.bedPos().getBottomCenter();
         //?}
         double speedX = bedPos.x() - botPos.x();
         double speedZ = bedPos.z() - botPos.z();
-        Vec3 speed = new Vec3(speedX, 0,speedZ).normalize().scale(0.25);
+        double maxSpeed = 0.08;
+        if (speedX > maxSpeed) speedX = maxSpeed;
+        if (speedX < -maxSpeed) speedX = -maxSpeed;
+        if (speedZ > maxSpeed) speedZ = maxSpeed;
+        if (speedZ < -maxSpeed) speedZ = -maxSpeed;
+        //if (speedX > 0 && speedX < 0.01) speedX = 0.01;
+        //if (speedX < 0 && speedX > -0.01) speedX = -0.01;
+        //if (speedZ > 0 && speedZ < 0.01) speedZ = 0.01;
+        //if (speedZ < 0 && speedZ > -0.01) speedZ = -0.01;
+
+        Vec3 speed = new Vec3(speedX, 0,speedZ);
         bot.setDeltaMovement(speed);
+        if (sameStateForTicks == 1) turn(speed, 1000);
         boolean atPos = botPos.distanceTo(bedPos) <= 0.1;
         if (atPos || sameStateForTicks >= 200) {
             if (!atPos) {
