@@ -130,7 +130,7 @@ public class NiceLife extends Season {
                 }
                 tempSleepTimer.tick();
                 //TODO remove
-                if (tempSleepTimer.isLarger(Time.seconds(5))) {
+                if (tempSleepTimer.isLarger(Time.seconds(30))) {
                     long newTime = overworld.getDayTime() + 24000L;
                     overworld.setDayTime(newTime - newTime % 24000L);
                     accessor.ls$wakeUpAllPlayers();

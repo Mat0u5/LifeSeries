@@ -48,13 +48,17 @@ public class DatapackManager {
     public static String getResourceTriviaPackVersion() {
         //? if < 1.20.5 {
         /*return "_pre1.20.5";
-        *///?} else if < 1.21 {
+         *///?} else if < 1.21 {
         /*return "_pre1.21";
-        *///?} else if <= 1.21.4 {
+         *///?} else if <= 1.21.4 {
         return "";
         //?} else {
         /*return "_1.21.5";
-        *///?}
+         *///?}
+    }
+
+    public static String getResourceNiceLifeTriviaPackVersion() {
+        return "";
     }
 
     public static String getResourceTaskPackVersion() {

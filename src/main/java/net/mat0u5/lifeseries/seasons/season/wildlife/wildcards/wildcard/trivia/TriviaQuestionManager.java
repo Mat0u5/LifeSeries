@@ -25,6 +25,9 @@ public class TriviaQuestionManager {
         }
         if (!this.file.exists()) {
             ResourceHandler handler = new ResourceHandler();
+            if (folder.contains("nicelife")) {
+                handler.copyBundledSingleFile("/files/trivia/nicelife-trivia.json", this.file.toPath());
+            }
             if (file.startsWith("easy-")) {
                 handler.copyBundledSingleFile("/files/trivia/easy-trivia.json", this.file.toPath());
             }

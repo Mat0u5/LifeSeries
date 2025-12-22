@@ -10,6 +10,7 @@ import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
+import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -19,6 +20,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.List;
+
+import static net.mat0u5.lifeseries.Main.server;
 
 public class NiceLifeTriviaHandler extends TriviaHandler {
     public static ItemSpawner itemSpawner;
@@ -198,6 +203,35 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
                     bot.serverData.getBoundPlayer(),
                     SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_trivia_incorrect")), 1f, 1);//TODO sound
         });
+    }
+
+    public void spawnItemForPlayer() {
+        if (bot.level().isClientSide()) return;
+        if (itemSpawner == null) return;
+        if (bot.serverData.getBoundPlayer() == null) return;
+        Vec3 playerPos = bot.serverData.getBoundPlayer().position();
+        Vec3 pos = bot.position().add(0,1,0);
+        Vec3 relativeTargetPos = new Vec3(
+                playerPos.x() - pos.x(),
+                0,
+                playerPos.z() - pos.z()
+        );
+        Vec3 vector = Vec3.ZERO;
+        if (relativeTargetPos.lengthSqr() > 0.0001) {
+            vector = relativeTargetPos.normalize().scale(0.3).add(0,0.1,0);
+        }
+        //TODO velocity + dependent on success/fail
+
+        List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, (ServerLevel) bot.level(), bot.serverData.getBoundPlayer(), IdentifierHelper.of("lifeseriesdynamic", "nicelife_trivia_reward_loottable"), false);
+        if (!lootTableItems.isEmpty()) {
+            for (ItemStack item : lootTableItems) {
+                ItemStackUtils.spawnItemForPlayerWithVelocity((ServerLevel) bot.level(), pos, item, bot.serverData.getBoundPlayer(), vector);
+            }
+        }
+        else {
+            ItemStack randomItem = itemSpawner.getRandomItem();
+            ItemStackUtils.spawnItemForPlayerWithVelocity((ServerLevel) bot.level(), pos, randomItem, bot.serverData.getBoundPlayer(), vector);
+        }
     }
 
     public static void initializeItemSpawner() {
