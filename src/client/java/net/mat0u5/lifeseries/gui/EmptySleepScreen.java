@@ -4,9 +4,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
-public class EmptyScreen extends Screen {
+public class EmptySleepScreen extends Screen {
     public boolean closable = true;
-    public EmptyScreen(boolean closable) {
+    public EmptySleepScreen(boolean closable) {
         super(Component.empty());
         this.closable = closable;
     }

@@ -54,6 +54,7 @@ public enum PacketNames {
     ,SET_TEAM
     ,SNOWY_NETHER
     ,EMPTY_SCREEN
+    ,HIDE_SLEEP_DARKNESS
     ;
 
     public static PacketNames fromName(String name) {

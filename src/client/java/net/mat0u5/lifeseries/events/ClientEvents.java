@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.FlashbackCompatibility;
+import net.mat0u5.lifeseries.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.gui.other.UpdateInfoScreen;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.render.TextHud;
@@ -133,6 +134,9 @@ public class ClientEvents {
             if (player != null) {
                 tryTripleJump(player);
                 checkOnGroundFor(player);
+                if (!player.isSleeping() && client.screen instanceof EmptySleepScreen) {
+                    client.setScreen(null);
+                }
             }
             ClientKeybinds.tick();
             ClientSounds.updateSingleSoundVolumes();

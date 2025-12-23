@@ -41,6 +41,7 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     public static long limitedLifeTimeLastUpdated = 0;
     public static long limitedLifeLives = 0;
     public static Component sideTitle = null;
+    public static boolean hideSleepDarkness = false;
 
 
     public static ClientConfig clientConfig;

@@ -11,12 +11,13 @@ import net.mat0u5.lifeseries.config.ClientConfigNetwork;
 import net.mat0u5.lifeseries.features.Morph;
 import net.mat0u5.lifeseries.features.SnailSkinsClient;
 import net.mat0u5.lifeseries.features.Trivia;
-import net.mat0u5.lifeseries.gui.EmptyScreen;
+import net.mat0u5.lifeseries.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.gui.other.ChooseWildcardScreen;
 import net.mat0u5.lifeseries.gui.other.PastLifeChooseTwistScreen;
 import net.mat0u5.lifeseries.gui.seasons.ChooseSeasonScreen;
 import net.mat0u5.lifeseries.gui.seasons.SeasonInfoScreen;
 import net.mat0u5.lifeseries.mixin.client.GuiAccessor;
+import net.mat0u5.lifeseries.mixin.client.PlayerAccessor;
 import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.render.TextHud;
 import net.mat0u5.lifeseries.render.VignetteRenderer;
@@ -37,6 +38,7 @@ import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -329,10 +331,17 @@ public class NetworkHandlerClient {
         if (name == PacketNames.EMPTY_SCREEN) {
             boolean boolValue = value.equalsIgnoreCase("true");
             if (boolValue) {
-                Minecraft.getInstance().setScreen(new EmptyScreen(false));
+                Minecraft.getInstance().setScreen(new EmptySleepScreen(false));
             }
             else {
                 Minecraft.getInstance().setScreen(null);
+            }
+        }
+        if (name == PacketNames.HIDE_SLEEP_DARKNESS) {
+            MainClient.hideSleepDarkness = value.equalsIgnoreCase("true");
+            LocalPlayer player = Minecraft.getInstance().player;
+            if (!MainClient.hideSleepDarkness && player != null && player instanceof PlayerAccessor accessor) {
+                accessor.ls$setSleepCounter(0);
             }
         }
     }

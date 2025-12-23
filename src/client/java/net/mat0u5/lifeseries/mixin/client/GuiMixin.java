@@ -149,7 +149,7 @@ public class GuiMixin {
     //? if <= 1.20.3 {
     /*@WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getSleepTimer()I"))
     private int stopSleepDarkness(LocalPlayer instance, Operation<Integer> original) {
-        if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().screen instanceof InBedChatScreen)) {
+        if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().screen instanceof InBedChatScreen) && MainClient.hideSleepDarkness) {
             return 0;
         }
         return original.call(instance);
@@ -157,14 +157,14 @@ public class GuiMixin {
     *///?} else if <= 1.20.5 {
     /*@Inject(method = "renderSleepOverlay", at = @At("HEAD"), cancellable = true)
     private void stopSleepDarkness(GuiGraphics guiGraphics, float f, CallbackInfo ci) {
-        if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().screen instanceof InBedChatScreen)) {
+        if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().screen instanceof InBedChatScreen) && MainClient.hideSleepDarkness) {
             ci.cancel();
         }
     }
     *///?} else {
     @Inject(method = "renderSleepOverlay", at = @At("HEAD"), cancellable = true)
     private void stopSleepDarkness(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
-        if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().screen instanceof InBedChatScreen)) {
+        if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().screen instanceof InBedChatScreen) && MainClient.hideSleepDarkness) {
             ci.cancel();
         }
     }

@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.gui.trivia;
 
 import net.mat0u5.lifeseries.features.Trivia;
-import net.mat0u5.lifeseries.gui.EmptyScreen;
+import net.mat0u5.lifeseries.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -88,7 +88,7 @@ public class NewQuizScreen extends Screen {
             for (int i = 0; i < answerRects.size(); i++) {
                 if (answerRects.get(i).contains(mouseX, mouseY)) {
                     this.onClose();
-                    Minecraft.getInstance().setScreen(new EmptyScreen(false));
+                    Minecraft.getInstance().setScreen(new EmptySleepScreen(false));
                     Trivia.sendAnswer(i);
                     return true;
                 }
@@ -152,7 +152,7 @@ public class NewQuizScreen extends Screen {
 
             // Check if the mouse is hovering over this answer
             if (rect.contains(mouseX, mouseY)) {
-                context.fill(rect.x-2, rect.y-2, rect.x+rect.width+4, rect.y+rect.height+4, TextColors.BLACK_A128);
+                context.fill(rect.x-2, rect.y-2, rect.x+rect.width+4, rect.y+rect.height+4, TextColors.BLACK_A64);
             }
 
             // Draw each line

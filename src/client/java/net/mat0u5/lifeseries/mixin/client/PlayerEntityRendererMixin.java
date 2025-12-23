@@ -2,12 +2,11 @@ package net.mat0u5.lifeseries.mixin.client;
 
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.mat0u5.lifeseries.gui.EmptyScreen;
+import net.mat0u5.lifeseries.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.gui.trivia.NewQuizScreen;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -187,7 +186,7 @@ public abstract class PlayerEntityRendererMixin {
 
     @ModifyReturnValue(method = "getArmPose*", at = @At("RETURN"))
     private static HumanoidModel.ArmPose noHands(HumanoidModel.ArmPose original) {
-        if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && (Minecraft.getInstance().screen instanceof EmptyScreen || Minecraft.getInstance().screen instanceof NewQuizScreen)) {
+        if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && (Minecraft.getInstance().screen instanceof EmptySleepScreen || Minecraft.getInstance().screen instanceof NewQuizScreen)) {
             return HumanoidModel.ArmPose.EMPTY;
         }
         return original;

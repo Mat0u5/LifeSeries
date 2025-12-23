@@ -29,6 +29,7 @@
     "LivingEntityRendererMixin",
     "LocalPlayerMixin",
     "MinecraftMixin",
+    "PlayerAccessor",
     "PlayerEntityRendererMixin",
     "PlayerTabOverlayMixin",
     "SoundEngineAccessor",
