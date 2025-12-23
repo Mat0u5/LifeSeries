@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.config.ClientConfigNetwork;
 import net.mat0u5.lifeseries.features.Morph;
 import net.mat0u5.lifeseries.features.SnailSkinsClient;
 import net.mat0u5.lifeseries.features.Trivia;
+import net.mat0u5.lifeseries.gui.EmptyScreen;
 import net.mat0u5.lifeseries.gui.other.ChooseWildcardScreen;
 import net.mat0u5.lifeseries.gui.other.PastLifeChooseTwistScreen;
 import net.mat0u5.lifeseries.gui.seasons.ChooseSeasonScreen;
@@ -323,6 +324,15 @@ public class NetworkHandlerClient {
             if (MainClient.NICELIFE_SNOWY_NETHER != newValue) {
                 MainClient.NICELIFE_SNOWY_NETHER = newValue;
                 ClientResourcePacks.checkClientPacks();
+            }
+        }
+        if (name == PacketNames.EMPTY_SCREEN) {
+            boolean boolValue = value.equalsIgnoreCase("true");
+            if (boolValue) {
+                Minecraft.getInstance().setScreen(new EmptyScreen(false));
+            }
+            else {
+                Minecraft.getInstance().setScreen(null);
             }
         }
     }

@@ -27,6 +27,9 @@ public class TextColors {
     public static int WHITE_A128 = argb(128, 224, 224, 224);
     public static int BLACK_A32 = argb(32, 0, 0, 0);
     public static int BLACK_A64 = argb(64, 0, 0, 0);
+    public static int BLACK_A96 = argb(96, 0, 0, 0);
+    public static int BLACK_A128 = argb(128, 0, 0, 0);
+    public static int BLACK_A192 = argb(192, 0, 0, 0);
     public static int LIGHT_GRAY = rgb(170, 170, 170);
     public static int LIGHT_GRAY_A128 = argb(128, 170, 170, 170);
     public static int GRAY = rgb(128, 128, 128);

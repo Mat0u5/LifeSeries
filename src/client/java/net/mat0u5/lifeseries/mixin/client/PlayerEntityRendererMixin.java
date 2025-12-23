@@ -1,18 +1,24 @@
 package net.mat0u5.lifeseries.mixin.client;
 
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import net.mat0u5.lifeseries.gui.EmptyScreen;
+import net.mat0u5.lifeseries.gui.trivia.NewQuizScreen;
 import net.mat0u5.lifeseries.utils.other.Time;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.Scoreboard;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import net.mat0u5.lifeseries.Main;
 
 //? if > 1.20
 import net.minecraft.world.scores.DisplaySlot;
@@ -25,7 +31,6 @@ import net.minecraft.world.scores.ReadOnlyScoreInfo;
 import net.minecraft.network.chat.numbers.NumberFormat;
 //? if <= 1.21 {
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -178,4 +183,13 @@ public abstract class PlayerEntityRendererMixin {
         return original;
     }
     *///?}
+
+
+    @ModifyReturnValue(method = "getArmPose*", at = @At("RETURN"))
+    private static HumanoidModel.ArmPose noHands(HumanoidModel.ArmPose original) {
+        if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && (Minecraft.getInstance().screen instanceof EmptyScreen || Minecraft.getInstance().screen instanceof NewQuizScreen)) {
+            return HumanoidModel.ArmPose.EMPTY;
+        }
+        return original;
+    }
 }

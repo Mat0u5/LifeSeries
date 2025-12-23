@@ -450,6 +450,7 @@ public class NetworkHandlerServer {
     }
 
     public static void sendStringPacket(ServerPlayer player, PacketNames name, String value) {
+        if (player == null) return;
         StringPayload payload = new StringPayload(name.getName(), value);
         ServerPlayNetworking.send(player, payload);
     }

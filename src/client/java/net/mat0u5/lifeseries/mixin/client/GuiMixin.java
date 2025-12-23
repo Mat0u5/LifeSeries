@@ -5,25 +5,37 @@ import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.InBedChatScreen;
 import net.minecraft.world.scores.Team;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import java.util.List;
 import java.util.Locale;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+//? if <= 1.20.3 {
+/*import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.minecraft.client.player.LocalPlayer;
+*///?}
 //? if >= 1.21.2 && <= 1.21.5 {
 /*import net.minecraft.client.renderer.RenderType;
 import java.util.function.Function;
 *///?}
 //? if >= 1.21.6
 /*import com.mojang.blaze3d.pipeline.RenderPipeline;*/
+//? if >= 1.21
+import net.minecraft.client.DeltaTracker;
 
 //? if <= 1.21.9 {
 import net.minecraft.resources.ResourceLocation;
- //?} else {
+//?} else {
 /*import net.minecraft.resources.Identifier;
 *///?}
 
@@ -132,4 +144,29 @@ public class GuiMixin {
         /*instance.blit(renderPipeline, customHeart, x, y, u, v, u, v, u, v);
         *///?}
     }
+
+
+    //? if <= 1.20.3 {
+    /*@WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getSleepTimer()I"))
+    private int stopSleepDarkness(LocalPlayer instance, Operation<Integer> original) {
+        if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().screen instanceof InBedChatScreen)) {
+            return 0;
+        }
+        return original.call(instance);
+    }
+    *///?} else if <= 1.20.5 {
+    /*@Inject(method = "renderSleepOverlay", at = @At("HEAD"), cancellable = true)
+    private void stopSleepDarkness(GuiGraphics guiGraphics, float f, CallbackInfo ci) {
+        if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().screen instanceof InBedChatScreen)) {
+            ci.cancel();
+        }
+    }
+    *///?} else {
+    @Inject(method = "renderSleepOverlay", at = @At("HEAD"), cancellable = true)
+    private void stopSleepDarkness(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().screen instanceof InBedChatScreen)) {
+            ci.cancel();
+        }
+    }
+    //?}
 }

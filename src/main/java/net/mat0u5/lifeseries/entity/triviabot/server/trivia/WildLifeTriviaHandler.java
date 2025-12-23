@@ -79,6 +79,7 @@ public class WildLifeTriviaHandler extends TriviaHandler {
     public static int HARD_TIME = 300;
 
     public void tick() {
+        super.tick();
         if (bot.ranOutOfTime()) {
             snailTransformation++;
         }

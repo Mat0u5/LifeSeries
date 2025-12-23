@@ -154,6 +154,7 @@ public class TextHud {
     private static int triviaTimer = -1;
     public static int renderTriviaTimer(Minecraft client, GuiGraphics context, int y) {
         if (!Trivia.isDoingTrivia()) return 0;
+        if (MainClient.clientCurrentSeason == Seasons.NICE_LIFE) return 0;
 
         if (sessionSecondChanged || MainClient.sessionTime <= 0 || Math.abs(triviaTimer - Trivia.getRemainingSeconds()) >= 2) {
             triviaTimer = Trivia.getRemainingSeconds();

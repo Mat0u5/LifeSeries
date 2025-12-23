@@ -49,6 +49,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
     }
 
     public void tick() {
+        super.tick();
         if (spawnInfo == null) {
             bot.serverData.despawn();
             return;
@@ -172,6 +173,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
 
     public boolean handleAnswer(int answer) {
         if (super.handleAnswer(answer)) {
+            NetworkHandlerServer.sendStringPacket(bot.serverData.getBoundPlayer(), PacketNames.EMPTY_SCREEN, "false"); //TODO move elsewhere
             bot.setAnalyzingTime(42);//TODO time
             PlayerUtils.playSoundToPlayer(
                     bot.serverData.getBoundPlayer(),

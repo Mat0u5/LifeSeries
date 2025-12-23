@@ -47,6 +47,7 @@ public class NiceLifeTriviaManager {
         triviaQuestions = new TriviaQuestionManager("./config/lifeseries/nicelife","trivia.json");
         triviaSpawns.clear();
         for (ServerPlayer player : triviaPlayers) {
+            NetworkHandlerServer.sendStringPacket(player, PacketNames.EMPTY_SCREEN, "true");
             BlockPos bedPos = player.getSleepingPos().orElse(null);
             if (bedPos == null) {
                 continue;
