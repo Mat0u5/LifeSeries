@@ -57,6 +57,7 @@ public class TriviaBot extends AmbientCreature {
     public TriviaBotSounds sounds = new TriviaBotSounds(this);
     public TriviaBotPathfinding pathfinding = new TriviaBotPathfinding(this);
     public final TriviaHandler triviaHandler;
+    private boolean isSantaBot = false;
 
     private static final EntityDataAccessor<Boolean> submittedAnswer = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> ranOutOfTime = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.BOOLEAN);
@@ -64,6 +65,7 @@ public class TriviaBot extends AmbientCreature {
     private static final EntityDataAccessor<Boolean> interactedWith = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> gliding = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> analyzing = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> santaBot = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.BOOLEAN);
 
 
     public TriviaBot(EntityType<? extends AmbientCreature> entityType, Level level) {
@@ -76,6 +78,7 @@ public class TriviaBot extends AmbientCreature {
         if (currentSeason.getSeason() == Seasons.NICE_LIFE) {
             triviaHandler = new NiceLifeTriviaHandler(this);
             sounds.playWithoutSource = true;
+            isSantaBot = true;
         }
         else {
             triviaHandler = new WildLifeTriviaHandler(this);
@@ -217,6 +220,7 @@ public class TriviaBot extends AmbientCreature {
         this.entityData.define(interactedWith, false);
         this.entityData.define(gliding, false);
         this.entityData.define(analyzing, -1);
+        this.entityData.define(santaBot, isSantaBot);
     }
     *///?} else {
     @Override
@@ -228,6 +232,7 @@ public class TriviaBot extends AmbientCreature {
         builder.define(interactedWith, false);
         builder.define(gliding, false);
         builder.define(analyzing, -1);
+        builder.define(santaBot, isSantaBot);
     }
     //?}
     public void setRanOutOfTime(boolean value) {
@@ -248,6 +253,10 @@ public class TriviaBot extends AmbientCreature {
     public void setAnalyzingTime(int value) {
         this.entityData.set(analyzing, value);
     }
+    public void setSantaBot(boolean value) {
+        this.entityData.set(santaBot, value);
+    }
+
     public boolean ranOutOfTime() {
         return this.entityData.get(ranOutOfTime);
     }
@@ -265,5 +274,8 @@ public class TriviaBot extends AmbientCreature {
     }
     public int getAnalyzingTime() {
         return this.entityData.get(analyzing);
+    }
+    public boolean santaBot() {
+        return this.entityData.get(santaBot);
     }
 }

@@ -46,7 +46,9 @@ public class NiceLifeTriviaManager {
         usedQuestions.clear();
         triviaQuestions = new TriviaQuestionManager("./config/lifeseries/nicelife","trivia.json");
         triviaSpawns.clear();
+        currentQuestion = getQuestion();
         for (ServerPlayer player : triviaPlayers) {
+            NetworkHandlerServer.sendStringPacket(player, PacketNames.HIDE_SLEEP_DARKNESS, "true");
             NetworkHandlerServer.sendStringPacket(player, PacketNames.EMPTY_SCREEN, "true");
             BlockPos bedPos = player.getSleepingPos().orElse(null);
             if (bedPos == null) {
@@ -155,23 +157,26 @@ public class NiceLifeTriviaManager {
         return new Tuple<>(1, currentQuestion);
     }
 
-    public static TriviaQuestion getQuestion() throws IOException {
-        if (triviaQuestions == null) {
-            triviaQuestions = new TriviaQuestionManager("./config/lifeseries/nicelife","trivia.json");
-        }
-        List<TriviaQuestion> unusedQuestions = new ArrayList<>();
-        for (TriviaQuestion trivia : triviaQuestions.getTriviaQuestions()) {
-            if (usedQuestions.contains(trivia.getQuestion())) continue;
-            unusedQuestions.add(trivia);
-        }
-        if (unusedQuestions.isEmpty()) {
-            usedQuestions.clear();
-            unusedQuestions = triviaQuestions.getTriviaQuestions();
-        }
-        if (unusedQuestions.isEmpty()) return TriviaQuestion.getDefault();
-        TriviaQuestion result = unusedQuestions.get(rnd.nextInt(unusedQuestions.size()));
-        usedQuestions.add(result.getQuestion());
-        return result;
+    public static TriviaQuestion getQuestion() {
+        try {
+            if (triviaQuestions == null) {
+                triviaQuestions = new TriviaQuestionManager("./config/lifeseries/nicelife","trivia.json");
+            }
+            List<TriviaQuestion> unusedQuestions = new ArrayList<>();
+            for (TriviaQuestion trivia : triviaQuestions.getTriviaQuestions()) {
+                if (usedQuestions.contains(trivia.getQuestion())) continue;
+                unusedQuestions.add(trivia);
+            }
+            if (unusedQuestions.isEmpty()) {
+                usedQuestions.clear();
+                unusedQuestions = triviaQuestions.getTriviaQuestions();
+            }
+            if (unusedQuestions.isEmpty()) return TriviaQuestion.getDefault();
+            TriviaQuestion result = unusedQuestions.get(rnd.nextInt(unusedQuestions.size()));
+            usedQuestions.add(result.getQuestion());
+            return result;
+        }catch(Exception ignored) {}
+        return TriviaQuestion.getDefault();
     }
 
     public record TriviaSpawn(UUID uuid, BlockPos spawnPos, BlockPos bedPos) {}

@@ -34,7 +34,10 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
     private enum BotState {
         LANDING,
         APPROACHING,
-        APPROACHED
+        APPROACHED,
+        ANALYZING,
+        LEAVING,
+        FLYING_UP
     }
 
     public NiceLifeTriviaHandler(TriviaBot bot) {
@@ -67,43 +70,34 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         if (currentState == BotState.APPROACHED) {
             approachedTick(level);
         }
+        if (currentState == BotState.LEAVING) {
+            leavingTick(level, boundPlayer);
+        }
+        if (currentState == BotState.FLYING_UP) {
+            flyingUpTick(level);
+        }
 
         if (bot.tickCount % 2 == 0 && bot.submittedAnswer()) {
             bot.setAnalyzingTime(bot.getAnalyzingTime()-1);
         }
 
-        if (bot.submittedAnswer()) {
-            if (bot.answeredRight()) {
-                if (bot.getAnalyzingTime() < -80) {
-                    if (bot.isPassenger()) bot.removeVehicle();
-                    bot.noPhysics = true;
-                    float velocity = Math.min(0.5f, 0.25f * Math.abs((bot.getAnalyzingTime()+80) / (20.0f)));
-                    bot.setDeltaMovement(0,velocity,0);
-                    if (bot.getAnalyzingTime() < -200) bot.serverData.despawn();
-                }
-            }
-            else {
-                if (bot.getAnalyzingTime() < -100) {
-                    if (bot.isPassenger()) bot.removeVehicle();
-                    bot.noPhysics = true;
-                    float velocity = Math.min(0.5f, 0.25f * Math.abs((bot.getAnalyzingTime()+100) / (20.0f)));
-                    bot.setDeltaMovement(0,velocity,0);
-                    if (bot.getAnalyzingTime() < -200) bot.serverData.despawn();
-                }
-            }
-        }
-        else {
+        if (!bot.submittedAnswer()) {
             bot.serverData.handleHighVelocity();
             if (bot.interactedWith() && getRemainingTicks() <= 0) {
                 if (!bot.ranOutOfTime()) {
                     if (boundPlayer != null) {
                         NetworkHandlerServer.sendStringPacket(boundPlayer, PacketNames.RESET_TRIVIA, "true");
                     }
+
                 }
-                bot.setRanOutOfTime(false);//Prevents the snail transformation animation
+                bot.setRanOutOfTime(true);
+                bot.setSubmittedAnswer(true);
+                answeredIncorrect();
             }
         }
-        turn(bot.getDeltaMovement(), 10.0F);
+        if (currentState == BotState.APPROACHING || currentState == BotState.LEAVING) {
+            turn(bot.getDeltaMovement(), 20.0F);
+        }
     }
 
     public void turn(Vec3 movement, float turnSpeed) {
@@ -119,8 +113,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         if (bot.blockPosition().getY() < spawnInfo.spawnPos().getY()) {
             bot.setDeltaMovement(0, 0,0);
             bot.setPos(bot.position().x, spawnInfo.spawnPos().getY(), bot.position().z);
-            currentState = BotState.APPROACHING;
-            sameStateForTicks = 0;
+            changeStateTo(BotState.APPROACHING);
             for (BlockPos pos : BlockPos.betweenClosed(spawnInfo.spawnPos().above(), spawnInfo.bedPos())) {
                 level.destroyBlock(pos, true);
             }
@@ -146,10 +139,6 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         if (speedX < -maxSpeed) speedX = -maxSpeed;
         if (speedZ > maxSpeed) speedZ = maxSpeed;
         if (speedZ < -maxSpeed) speedZ = -maxSpeed;
-        //if (speedX > 0 && speedX < 0.01) speedX = 0.01;
-        //if (speedX < 0 && speedX > -0.01) speedX = -0.01;
-        //if (speedZ > 0 && speedZ < 0.01) speedZ = 0.01;
-        //if (speedZ < 0 && speedZ > -0.01) speedZ = -0.01;
 
         Vec3 speed = new Vec3(speedX, 0,speedZ);
         bot.setDeltaMovement(speed);
@@ -159,8 +148,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
             if (!atPos) {
                 LevelUtils.teleport(bot, level, spawnInfo.bedPos());
             }
-            currentState = BotState.APPROACHED;
-            sameStateForTicks = 0;
+            changeStateTo(BotState.APPROACHED);
             startTrivia(boundPlayer);
         }
     }
@@ -168,12 +156,54 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
     public void approachedTick(ServerLevel level) {
         sameStateForTicks++;
         bot.setDeltaMovement(0, 0, 0);
+    }
 
+    public void flyingUpTick(ServerLevel level) {
+        if (sameStateForTicks == 0) {
+            NetworkHandlerServer.sendStringPacket(bot.serverData.getBoundPlayer(), PacketNames.HIDE_SLEEP_DARKNESS, "false");//TODO move elsewhere
+        }
+        sameStateForTicks++;
+        if (bot.isPassenger()) bot.removeVehicle();
+        bot.noPhysics = true;
+        float velocity = Math.min(0.3f, 0.25f * Math.abs(sameStateForTicks / (20.0f)));
+        bot.setDeltaMovement(0,velocity,0);
+        if (sameStateForTicks > 200) bot.serverData.despawn();
+    }
+
+    public void leavingTick(ServerLevel level, ServerPlayer boundPlayer) {
+        sameStateForTicks++;
+        Vec3 botPos = bot.position();
+        //? if <= 1.20.5 {
+        /*Vec3 leavePos = spawnInfo.spawnPos().getCenter();//TODO test
+         *///?} else {
+        Vec3 leavePos = spawnInfo.spawnPos().getBottomCenter();
+        //?}
+        double speedX = leavePos.x() - botPos.x();
+        double speedZ = leavePos.z() - botPos.z();
+        double maxSpeed = 0.08;
+        if (speedX > maxSpeed) speedX = maxSpeed;
+        if (speedX < -maxSpeed) speedX = -maxSpeed;
+        if (speedZ > maxSpeed) speedZ = maxSpeed;
+        if (speedZ < -maxSpeed) speedZ = -maxSpeed;
+
+        Vec3 speed = new Vec3(speedX, 0,speedZ);
+        bot.setDeltaMovement(speed);
+        boolean atPos = botPos.distanceTo(leavePos) <= 0.1;
+        if (atPos || sameStateForTicks >= 200) {
+            if (!atPos) {
+                LevelUtils.teleport(bot, level, spawnInfo.spawnPos());
+            }
+            changeStateTo(BotState.FLYING_UP);
+        }
+    }
+
+    public void changeStateTo(BotState newState) {
+        currentState = newState;
+        sameStateForTicks = 0;
     }
 
     public boolean handleAnswer(int answer) {
         if (super.handleAnswer(answer)) {
-            NetworkHandlerServer.sendStringPacket(bot.serverData.getBoundPlayer(), PacketNames.EMPTY_SCREEN, "false"); //TODO move elsewhere
             bot.setAnalyzingTime(42);//TODO time
             PlayerUtils.playSoundToPlayer(
                     bot.serverData.getBoundPlayer(),
@@ -195,15 +225,22 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
                     bot.serverData.getBoundPlayer(),
                     SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_trivia_correct")), 1f, 1);//TODO sound
         });
+        TaskScheduler.scheduleTask(250, () -> { //TODO delay
+            changeStateTo(BotState.LEAVING);
+        });
     }
 
     public void answeredIncorrect() {
         super.answeredIncorrect();
+        int startingDelay = bot.ranOutOfTime() ? 0 : 72;
         //TaskScheduler.scheduleTask(210, this::cursePlayer);
-        TaskScheduler.scheduleTask(72, () -> {
+        TaskScheduler.scheduleTask(startingDelay, () -> {
             PlayerUtils.playSoundToPlayer(
                     bot.serverData.getBoundPlayer(),
                     SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_trivia_incorrect")), 1f, 1);//TODO sound
+        });
+        TaskScheduler.scheduleTask(startingDelay+200, () -> { //TODO delay
+            changeStateTo(BotState.LEAVING);
         });
     }
 

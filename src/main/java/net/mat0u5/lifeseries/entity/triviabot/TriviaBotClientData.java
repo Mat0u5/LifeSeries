@@ -30,7 +30,7 @@ public class TriviaBotClientData {
             analyzingAnimationState.startIfStopped(bot.tickCount);
         }
 
-        if (bot.ranOutOfTime()) {
+        if (bot.ranOutOfTime() && !bot.santaBot()) {
             pauseAllAnimations("snail_transform");
             if (!lastRanOutOfTime) {
                 snailTransformAnimationState.startIfStopped(bot.tickCount);
