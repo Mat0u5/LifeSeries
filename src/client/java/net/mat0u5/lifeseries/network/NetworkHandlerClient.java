@@ -16,6 +16,7 @@ import net.mat0u5.lifeseries.gui.other.ChooseWildcardScreen;
 import net.mat0u5.lifeseries.gui.other.PastLifeChooseTwistScreen;
 import net.mat0u5.lifeseries.gui.seasons.ChooseSeasonScreen;
 import net.mat0u5.lifeseries.gui.seasons.SeasonInfoScreen;
+import net.mat0u5.lifeseries.gui.trivia.VotingScreen;
 import net.mat0u5.lifeseries.mixin.client.GuiAccessor;
 import net.mat0u5.lifeseries.mixin.client.PlayerAccessor;
 import net.mat0u5.lifeseries.network.packets.*;
@@ -235,6 +236,12 @@ public class NetworkHandlerClient {
                 }
             }
         }
+
+        if (name == PacketNames.VOTING_SCREEN) {
+            String voteName = value.get(0);
+            value.remove(0);
+            Minecraft.getInstance().setScreen(new VotingScreen(voteName, value));
+        }
     }
 
     public static void handleConfigPacket(ConfigPayload payload) {
@@ -371,6 +378,11 @@ public class NetworkHandlerClient {
         }
         if (name == PacketNames.TRIVIA_TIMER) {
             Trivia.updateTicksPassed(intNumber);
+        }
+        if (name == PacketNames.VOTING_TIME) {
+            if (Minecraft.getInstance().screen instanceof VotingScreen votingScreen) {
+                votingScreen.timerSeconds = intNumber;
+            }
         }
     }
 

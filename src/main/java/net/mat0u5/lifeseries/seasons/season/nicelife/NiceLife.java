@@ -48,6 +48,7 @@ public class NiceLife extends Season {
     public double snowLayerTickChance = 1.0 / 43;
     public int currentMaxSnowLayers = -1;
     public static boolean triviaInProgress = false;
+    public static boolean TESTING = true; //TODO remove
 
     @Override
     public void initialize() {
@@ -117,6 +118,9 @@ public class NiceLife extends Season {
             //?} else {
             /*int percentage = overworld.getGameRules().get(GameRules.PLAYERS_SLEEPING_PERCENTAGE);
             *///?}
+            if (TESTING) {
+                percentage = 1;
+            }
             if (sleepStatus.areEnoughSleeping(percentage) && isMidnight() && currentSession.statusStarted()) {
                 if (!NiceLifeTriviaManager.triviaInProgress) {
                     //TODO play midnight sound
@@ -130,7 +134,7 @@ public class NiceLife extends Season {
                 }
                 tempSleepTimer.tick();
                 //TODO remove
-                if (tempSleepTimer.isLarger(Time.seconds(80))) {
+                if (tempSleepTimer.isLarger(Time.seconds(800))) {
                     long newTime = overworld.getDayTime() + 24000L;
                     overworld.setDayTime(newTime - newTime % 24000L);
                     accessor.ls$wakeUpAllPlayers();

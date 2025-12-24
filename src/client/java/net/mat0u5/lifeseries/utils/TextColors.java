@@ -29,7 +29,9 @@ public class TextColors {
     public static int BLACK_A64 = argb(64, 0, 0, 0);
     public static int BLACK_A96 = argb(96, 0, 0, 0);
     public static int BLACK_A128 = argb(128, 0, 0, 0);
+    public static int BLACK_A160 = argb(160, 0, 0, 0);
     public static int BLACK_A192 = argb(192, 0, 0, 0);
+    public static int BLACK_A224 = argb(224, 0, 0, 0);
     public static int LIGHT_GRAY = rgb(170, 170, 170);
     public static int LIGHT_GRAY_A128 = argb(128, 170, 170, 170);
     public static int GRAY = rgb(128, 128, 128);
@@ -38,6 +40,9 @@ public class TextColors {
 
     public static int GUI_BACKGROUND = rgb(198, 198, 198);
     public static int GUI_GRAY = rgb(85, 85, 85);
+    public static int GUI_GRAY_A32 = argb(32, 85, 85, 85);
+    public static int GUI_GRAY_A96 = argb(96, 85, 85, 85);
+    public static int GUI_GRAY_A128 = argb(128, 85, 85, 85);
 
     public static int rgb(int red, int green, int blue) {
         return argb(255, red, green, blue);

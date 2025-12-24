@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
@@ -20,9 +21,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.io.IOException;
 import java.util.*;
 
+import static net.mat0u5.lifeseries.Main.livesManager;
 import static net.mat0u5.lifeseries.Main.server;
 
 public class NiceLifeTriviaManager {
@@ -35,6 +36,15 @@ public class NiceLifeTriviaManager {
     public static Random rnd = new Random();
     public static final int QUESTION_TIME = 67;
     public static List<TriviaSpawn> triviaSpawns = new ArrayList<>();
+    public static TriviaVoteType voteType = TriviaVoteType.NAUGHTY_LIST;
+    public static double NICE_LIST_CHANCE = 0.5; //TODO config
+    public static Time VOTING_TIME = Time.minutes(10); //TODO config
+
+    public enum TriviaVoteType {
+        NICE_LIST,
+        NAUGHTY_LIST,
+        NONE //TODO logic for choosing this
+    }
 
     public static void initialize() {
 
@@ -47,6 +57,12 @@ public class NiceLifeTriviaManager {
         triviaQuestions = new TriviaQuestionManager("./config/lifeseries/nicelife","trivia.json");
         triviaSpawns.clear();
         currentQuestion = getQuestion();
+        voteType = TriviaVoteType.NAUGHTY_LIST;
+        if (rnd.nextDouble() <= NICE_LIST_CHANCE && !NiceLife.TESTING) {
+            if (livesManager.anyPlayersOnLives(2)) {
+                voteType = TriviaVoteType.NICE_LIST;
+            }
+        }
         for (ServerPlayer player : triviaPlayers) {
             NetworkHandlerServer.sendStringPacket(player, PacketNames.HIDE_SLEEP_DARKNESS, "true");
             NetworkHandlerServer.sendStringPacket(player, PacketNames.EMPTY_SCREEN, "true");

@@ -25,7 +25,7 @@ public final class TriviaBotTeleportGoal extends Goal {
     @Override
     public boolean canUse() {
         if (mob.level().isClientSide()) return false;
-        if (mob.interactedWith() || mob.pathfinding.noPathfinding || mob.santaBot) {
+        if (mob.interactedWith() || mob.pathfinding.noPathfinding || mob.santaBot()) {
             return false;
         }
         if (teleportCooldown > 0) {

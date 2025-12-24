@@ -23,6 +23,8 @@ public class CustomTextureRenderer {
     private final float y;
     private final int width;
     private final int height;
+    private int outWidth;
+    private int outHeight;
     private int textureWidth;
     private int textureHeight;
     private int u = 0;
@@ -39,6 +41,8 @@ public class CustomTextureRenderer {
         this.y = y;
         this.width = width;
         this.height = height;
+        this.outWidth = width;
+        this.outHeight = height;
         this.textureWidth = width;
         this.textureHeight = height;
         this.texture = texture;
@@ -53,6 +57,12 @@ public class CustomTextureRenderer {
     public CustomTextureRenderer uv(int newU, int newV) {
         u = newU;
         v = newV;
+        return this;
+    }
+
+    public CustomTextureRenderer outSize(int newOutWidth, int newOutHeight) {
+        outWidth = newOutWidth;
+        outHeight = newOutHeight;
         return this;
     }
 
@@ -78,11 +88,11 @@ public class CustomTextureRenderer {
         }
 
         //? if <= 1.21 {
-        context.blit(texture, (int) (x / scaleX), (int) (y / scaleY), u, v, width, height);
+        context.blit(texture, (int) (x / scaleX), (int) (y / scaleY), outWidth, outHeight, u, v, width, height, textureWidth, textureHeight);
         //?} else if <= 1.21.5 {
-        /*context.blit(RenderType::guiTextured, texture, (int) (x / scaleX), (int) (y / scaleY), u, v, width, height, textureWidth, textureHeight);
+        /*context.blit(RenderType::guiTextured, texture, (int) (x / scaleX), (int) (y / scaleY), u, v, outWidth, outHeight, width, height, textureWidth, textureHeight);
         *///?} else {
-        /*context.blit(RenderPipelines.GUI_TEXTURED, texture, (int) (x / scaleX), (int) (y / scaleY), u, v, width, height, textureWidth, textureHeight);
+        /*context.blit(RenderPipelines.GUI_TEXTURED, texture, (int) (x / scaleX), (int) (y / scaleY), u, v, outWidth, outHeight, width, height, textureWidth, textureHeight);
         *///?}
 
         if (isScaled()) {

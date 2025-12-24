@@ -478,4 +478,11 @@ public class LivesManager {
         }
         return true;
     }
+
+    public boolean anyPlayersOnLives(int lives) {
+        for (ServerPlayer player : getAlivePlayers()) {
+            if (isOnSpecificLives(player, lives, false)) return true;
+        }
+        return false;
+    }
 }
