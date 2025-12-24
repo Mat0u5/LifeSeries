@@ -439,11 +439,7 @@ public class PlayerUtils {
     }
 
     public static void teleport(ServerPlayer player, BlockPos pos) {
-        //? if <= 1.20.5 {
-        /*LevelUtils.teleport(player, player.ls$getServerLevel(), pos.getCenter());
-        *///?} else {
-        LevelUtils.teleport(player, player.ls$getServerLevel(), pos.getBottomCenter());
-        //?}
+        LevelUtils.teleport(player, player.ls$getServerLevel(), Vec3.atBottomCenterOf(pos));
     }
 
     public static void teleport(ServerPlayer player, Vec3 pos) {
@@ -459,7 +455,7 @@ public class PlayerUtils {
 
         //Teleport to the highest block in the terrain
         BlockPos.MutableBlockPos playerBlockPos = player.blockPosition().mutable();
-        int safeY = LevelUtils.findTopSafeY(player.ls$getServerLevel(), playerBlockPos.getCenter());
+        int safeY = LevelUtils.findTopSafeY(player.ls$getServerLevel(), Vec3.atBottomCenterOf(playerBlockPos));
         playerBlockPos.setY(safeY);
         teleport(player, playerBlockPos);
 

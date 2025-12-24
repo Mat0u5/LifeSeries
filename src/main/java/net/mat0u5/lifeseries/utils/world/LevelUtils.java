@@ -116,11 +116,7 @@ public class LevelUtils {
     }
 
     public static void teleport(Entity entity, ServerLevel level, BlockPos pos) {
-        //? if <= 1.20.5 {
-        /*teleport(entity, level, pos.getCenter());
-         *///?} else {
-        teleport(entity, level, pos.getBottomCenter());
-        //?}
+        teleport(entity, level, Vec3.atBottomCenterOf(pos));
     }
 
     public static void teleport(Entity entity, ServerLevel level, Vec3 pos) {

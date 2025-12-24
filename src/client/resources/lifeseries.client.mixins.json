@@ -23,7 +23,7 @@
     "GuiAccessor",
     "GuiMixin",
     "InBedChatScreenMixin",
-    "ItemInHandRendererMixin",
+    "ItemInHandLayerMixin",
     "LevelMixin",
     "LevelRendererMixin",
     "LivingEntityRendererMixin",

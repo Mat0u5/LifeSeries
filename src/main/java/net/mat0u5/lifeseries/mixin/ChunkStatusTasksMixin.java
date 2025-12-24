@@ -34,7 +34,7 @@ public abstract class ChunkStatusTasksMixin {
     private static void snowNether(WorldGenRegion worldGenRegion, ChunkAccess chunkAccess, CallbackInfo ci) {
         ServerLevel level = worldGenRegion.getLevel();
     *///?} else if <= 1.20.5 {
-    /*@ModifyVariable(method = "generateFull", at = @At("HEAD"), index = 3, argsOnly = true)
+    /*@ModifyVariable(method = "generateFull", at = @At("HEAD"), index = 5, argsOnly = true)
     private static ChunkAccess snowNether(ChunkAccess chunkAccess, WorldGenContext context) {
         ServerLevel level = context.level();
         if (chunkAccess instanceof ImposterProtoChunk) {
