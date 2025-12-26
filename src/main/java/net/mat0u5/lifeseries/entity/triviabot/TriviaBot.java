@@ -42,9 +42,13 @@ import net.minecraft.resources.ResourceLocation;
 
 public class TriviaBot extends AmbientCreature {
     //? if <= 1.21.9 {
+    public static final ResourceLocation DEFAULT_TEXTURE = IdentifierHelper.mod("textures/entity/triviabot/triviabot.png");
+    public static final ResourceLocation SANTABOT_TEXTURE = IdentifierHelper.mod("textures/entity/triviabot/santabot.png");
     public static final ResourceLocation ID = IdentifierHelper.mod("triviabot");
     //?} else {
-    /*public static final Identifier ID = IdentifierHelper.mod("triviabot");
+    /*public static final Identifier DEFAULT_TEXTURE = IdentifierHelper.mod("textures/entity/triviabot/triviabot.png");
+    public static final Identifier SANTABOT_TEXTURE = IdentifierHelper.mod("textures/entity/triviabot/santabot.png");
+    public static final Identifier ID = IdentifierHelper.mod("triviabot");
     *///?}
 
     public static final int STATIONARY_TP_COOLDOWN = 400; // No movement for 20 seconds teleports the bot

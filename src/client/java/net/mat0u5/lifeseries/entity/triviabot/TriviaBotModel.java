@@ -30,6 +30,14 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
     private final KeyframeAnimation answerCorrectAnimation;
     private final KeyframeAnimation answerIncorrectAnimation;
     private final KeyframeAnimation snailTransformAnimation;
+
+    private final KeyframeAnimation santaAnalyzingAnimation;
+    private final KeyframeAnimation santaAnswerCorrectAnimation;
+    private final KeyframeAnimation santaAnswerIncorrectAnimation;
+    private final KeyframeAnimation santaFlyAnimation;
+    private final KeyframeAnimation santaGlideAnimation;
+    private final KeyframeAnimation santaIdleAnimation;
+    private final KeyframeAnimation santaWaveAnimation;
      *///?}
 
     private final ModelPart triviabot;
@@ -51,6 +59,9 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
     private final ModelPart angry;
     private final ModelPart happy;
     private final ModelPart snail;
+    private final ModelPart beard;
+    private final ModelPart hat;
+    private final ModelPart ball;
     private final ModelPart body;
     private final ModelPart righthand;
     private final ModelPart actualhand;
@@ -58,8 +69,10 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
     private final ModelPart umbrella;
     private final ModelPart top;
     private final ModelPart lefthand;
+    private final ModelPart bag;
     private final ModelPart torso;
     private final ModelPart bottom;
+    private final ModelPart bottomlarge;
     private final ModelPart legs;
 
     public TriviaBotModel(ModelPart root) {
@@ -67,34 +80,39 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
         /*super(root);
         *///?}
         this.triviabot = root.getChild("triviabot");
-        this.neckpivot = this.triviabot.getChild("neckpivot");
-        this.main = this.neckpivot.getChild("main");
-        this.shell = this.main.getChild("shell");
-        this.expressions = this.main.getChild("expressions");
-        this.mouth = this.expressions.getChild("mouth");
-        this.dots = this.expressions.getChild("dots");
-        this.green = this.dots.getChild("green");
-        this.yellow = this.dots.getChild("yellow");
-        this.red = this.dots.getChild("red");
-        this.clock = this.expressions.getChild("clock");
-        this.clockhand = this.clock.getChild("clockhand");
-        this.processing = this.expressions.getChild("processing");
-        this.one = this.processing.getChild("one");
-        this.two = this.processing.getChild("two");
-        this.three = this.processing.getChild("three");
-        this.angry = this.expressions.getChild("angry");
-        this.happy = this.expressions.getChild("happy");
-        this.snail = this.expressions.getChild("snail");
-        this.body = this.triviabot.getChild("body");
-        this.righthand = this.body.getChild("righthand");
-        this.actualhand = this.righthand.getChild("actualhand");
-        this.microphone = this.righthand.getChild("microphone");
-        this.umbrella = this.righthand.getChild("umbrella");
-        this.top = this.umbrella.getChild("top");
-        this.lefthand = this.body.getChild("lefthand");
-        this.torso = this.body.getChild("torso");
-        this.bottom = this.torso.getChild("bottom");
-        this.legs = this.body.getChild("legs");
+        this.neckpivot = root.getChild("neckpivot");
+        this.main = root.getChild("main");
+        this.shell = root.getChild("shell");
+        this.expressions = root.getChild("expressions");
+        this.mouth = root.getChild("mouth");
+        this.dots = root.getChild("dots");
+        this.green = root.getChild("green");
+        this.yellow = root.getChild("yellow");
+        this.red = root.getChild("red");
+        this.clock = root.getChild("clock");
+        this.clockhand = root.getChild("clockhand");
+        this.processing = root.getChild("processing");
+        this.one = root.getChild("one");
+        this.two = root.getChild("two");
+        this.three = root.getChild("three");
+        this.angry = root.getChild("angry");
+        this.happy = root.getChild("happy");
+        this.snail = root.getChild("snail");
+        this.beard = root.getChild("beard");
+        this.hat = root.getChild("hat");
+        this.ball = root.getChild("ball");
+        this.body = root.getChild("body");
+        this.righthand = root.getChild("righthand");
+        this.actualhand = root.getChild("actualhand");
+        this.microphone = root.getChild("microphone");
+        this.umbrella = root.getChild("umbrella");
+        this.top = root.getChild("top");
+        this.lefthand = root.getChild("lefthand");
+        this.bag = root.getChild("bag");
+        this.torso = root.getChild("torso");
+        this.bottom = root.getChild("bottom");
+        this.bottomlarge = root.getChild("bottomlarge");
+        this.legs = root.getChild("legs");
 
         //? if >= 1.21.6 {
         /*glideAnimation = TriviaBotAnimations.glide.bake(root);
@@ -105,6 +123,14 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
         answerCorrectAnimation = TriviaBotAnimations.answer_correct.bake(root);
         answerIncorrectAnimation = TriviaBotAnimations.answer_incorrect.bake(root);
         snailTransformAnimation = TriviaBotAnimations.snail_transform.bake(root);
+
+        santaAnalyzingAnimation = TriviaBotAnimations.santa_analyzing.bake(root);
+        santaAnswerCorrectAnimation = TriviaBotAnimations.santa_answer_correct.bake(root);
+        santaAnswerIncorrectAnimation = TriviaBotAnimations.santa_answer_incorrect.bake(root);
+        santaFlyAnimation = TriviaBotAnimations.santa_fly.bake(root);
+        santaGlideAnimation = TriviaBotAnimations.santa_glide.bake(root);
+        santaIdleAnimation = TriviaBotAnimations.santa_idle.bake(root);
+        santaWaveAnimation = TriviaBotAnimations.santa_wave.bake(root);
         *///?}
     }
     public static LayerDefinition getTexturedModelData() {
@@ -162,6 +188,16 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
 
         PartDefinition snail = expressions.addOrReplaceChild("snail", CubeListBuilder.create().texOffs(56, 60).addBox(-5.0F, -4.5F, -1.3F, 10.0F, 9.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 3.005F));
 
+        PartDefinition beard = main.addOrReplaceChild("beard", CubeListBuilder.create().texOffs(52, 82).addBox(-3.0F, 0.5F, -4.62F, 6.0F, 8.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition hat = main.addOrReplaceChild("hat", CubeListBuilder.create().texOffs(60, 84).addBox(-4.3F, -1.5F, -3.5F, 8.0F, 3.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.3F, -6.1F, 3.3F, -0.3927F, 0.0F, 0.0F));
+
+        PartDefinition cube_r1 = hat.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(39, 93).addBox(-3.0F, -2.0F, -3.0F, 6.0F, 5.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.3F, -3.1F, 1.1F, -0.3927F, 0.0F, 0.0F));
+
+        PartDefinition ball = hat.addOrReplaceChild("ball", CubeListBuilder.create(), PartPose.offset(2.1929F, -3.5F, 4.0071F));
+
+        PartDefinition cube_r2 = ball.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(63, 95).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.8F, -0.2F, 2.8F, -0.7854F, 0.7854F, 0.0F));
+
         PartDefinition body = triviabot.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, 23.1F, 0.7F));
 
         PartDefinition righthand = body.addOrReplaceChild("righthand", CubeListBuilder.create(), PartPose.offset(-7.7F, -16.9F, 0.0F));
@@ -190,12 +226,20 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
 
         PartDefinition lefthand = body.addOrReplaceChild("lefthand", CubeListBuilder.create().texOffs(8, 69).addBox(-1.9F, -1.5F, -2.0F, 3.0F, 10.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(8.1F, -17.4F, 0.0F));
 
+        PartDefinition bag = lefthand.addOrReplaceChild("bag", CubeListBuilder.create().texOffs(12, 83).addBox(-0.3474F, -3.2093F, -7.6446F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
+                .texOffs(36, 84).addBox(1.6526F, -6.2093F, -5.6446F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.25F, 8.05F, 2.45F, 1.3809F, 0.0242F, 1.0667F));
+
         PartDefinition torso = body.addOrReplaceChild("torso", CubeListBuilder.create().texOffs(40, 25).addBox(-5.998F, -5.3F, -3.002F, 12.0F, 5.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(-0.002F, -12.1F, 0.002F));
 
         PartDefinition bottom = torso.addOrReplaceChild("bottom", CubeListBuilder.create().texOffs(36, 71).addBox(-4.998F, -0.3F, -2.502F, 10.0F, 2.0F, 0.0F, new CubeDeformation(0.0F))
                 .texOffs(72, 36).addBox(-4.998F, -0.3F, 2.498F, 10.0F, 2.0F, 0.0F, new CubeDeformation(0.0F))
                 .texOffs(28, 60).addBox(-4.998F, -0.3F, -2.502F, 0.0F, 2.0F, 5.0F, new CubeDeformation(0.0F))
                 .texOffs(72, 42).addBox(5.002F, -0.3F, -2.502F, 0.0F, 2.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition bottomlarge = torso.addOrReplaceChild("bottomlarge", CubeListBuilder.create().texOffs(0, 83).addBox(-4.998F, -0.3F, -3.002F, 10.0F, 2.0F, 0.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 85).addBox(-4.998F, -0.3F, 2.998F, 10.0F, 2.0F, 0.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 81).addBox(-4.998F, -0.3F, -3.002F, 0.0F, 2.0F, 6.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 83).addBox(5.002F, -0.3F, -3.002F, 0.0F, 2.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition legs = body.addOrReplaceChild("legs", CubeListBuilder.create().texOffs(72, 38).addBox(-3.9975F, 0.6F, -2.0025F, 8.0F, 2.0F, 0.0F, new CubeDeformation(0.0F))
                 .texOffs(72, 40).addBox(-3.9975F, 0.6F, 1.9975F, 8.0F, 2.0F, 0.0F, new CubeDeformation(0.0F))
@@ -224,6 +268,14 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
         this.animate(entity.clientData.answerCorrectAnimationState, TriviaBotAnimations.answer_correct, ageInTicks);
         this.animate(entity.clientData.answerIncorrectAnimationState, TriviaBotAnimations.answer_incorrect, ageInTicks);
         this.animate(entity.clientData.snailTransformAnimationState, TriviaBotAnimations.snail_transform, ageInTicks);
+
+        this.animate(entity.clientData.santaAnalyzingAnimation, TriviaBotAnimations.santa_analyzing, ageInTicks);
+        this.animate(entity.clientData.santaAnswerCorrectAnimation, TriviaBotAnimations.santa_answer_correct, ageInTicks);
+        this.animate(entity.clientData.santaAnswerIncorrectAnimation, TriviaBotAnimations.santa_answer_incorrect, ageInTicks);
+        this.animate(entity.clientData.santaFlyAnimation, TriviaBotAnimations.santa_fly, ageInTicks);
+        this.animate(entity.clientData.santaGlideAnimation, TriviaBotAnimations.santa_glide, ageInTicks);
+        this.animate(entity.clientData.santaIdleAnimation, TriviaBotAnimations.santa_idle, ageInTicks);
+        this.animate(entity.clientData.santaWaveAnimation, TriviaBotAnimations.santa_wave, ageInTicks);
     }
 
     //? if <= 1.20.5 {
@@ -256,6 +308,14 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
         this.animate(state.answerCorrectAnimationState, TriviaBotAnimations.answer_correct, state.ageInTicks);
         this.animate(state.answerIncorrectAnimationState, TriviaBotAnimations.answer_incorrect, state.ageInTicks);
         this.animate(state.snailTransformAnimationState, TriviaBotAnimations.snail_transform, state.ageInTicks);
+
+        this.animate(state.santaAnalyzingAnimation, TriviaBotAnimations.santa_analyzing, state.ageInTicks);
+        this.animate(state.santaAnswerCorrectAnimation, TriviaBotAnimations.santa_answer_correct, state.ageInTicks);
+        this.animate(state.santaAnswerIncorrectAnimation, TriviaBotAnimations.santa_answer_incorrect, state.ageInTicks);
+        this.animate(state.santaFlyAnimation, TriviaBotAnimations.santa_fly, state.ageInTicks);
+        this.animate(state.santaGlideAnimation, TriviaBotAnimations.santa_glide, state.ageInTicks);
+        this.animate(state.santaIdleAnimation, TriviaBotAnimations.santa_idle, state.ageInTicks);
+        this.animate(state.santaWaveAnimation, TriviaBotAnimations.santa_wave, state.ageInTicks);
         //?} else {
         /^this.glideAnimation.apply(state.glideAnimationState, state.ageInTicks);
         this.idleAnimation.apply(state.idleAnimationState, state.ageInTicks);
@@ -265,6 +325,14 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
         this.answerCorrectAnimation.apply(state.answerCorrectAnimationState, state.ageInTicks);
         this.answerIncorrectAnimation.apply(state.answerIncorrectAnimationState, state.ageInTicks);
         this.snailTransformAnimation.apply(state.snailTransformAnimationState, state.ageInTicks);
+
+        this.santaAnalyzingAnimation.apply(state.santaAnalyzingAnimation, state.ageInTicks);
+        this.santaAnswerCorrectAnimation.apply(state.santaAnswerCorrectAnimation, state.ageInTicks);
+        this.santaAnswerIncorrectAnimation.apply(state.santaAnswerIncorrectAnimation, state.ageInTicks);
+        this.santaFlyAnimation.apply(state.santaFlyAnimation, state.ageInTicks);
+        this.santaGlideAnimation.apply(state.santaGlideAnimation, state.ageInTicks);
+        this.santaIdleAnimation.apply(state.santaIdleAnimation, state.ageInTicks);
+        this.santaWaveAnimation.apply(state.santaWaveAnimation, state.ageInTicks);
         ^///?}
     }
     *///?}

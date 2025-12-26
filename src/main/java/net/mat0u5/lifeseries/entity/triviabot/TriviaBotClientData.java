@@ -16,6 +16,14 @@ public class TriviaBotClientData {
     public final AnimationState answerCorrectAnimationState = new AnimationState();
     public final AnimationState answerIncorrectAnimationState = new AnimationState();
     public final AnimationState snailTransformAnimationState = new AnimationState();
+
+    public final AnimationState santaAnalyzingAnimation = new AnimationState(); //TODO
+    public final AnimationState santaAnswerCorrectAnimation = new AnimationState(); //TODO
+    public final AnimationState santaAnswerIncorrectAnimation = new AnimationState(); //TODO
+    public final AnimationState santaFlyAnimation = new AnimationState(); //TODO
+    public final AnimationState santaGlideAnimation = new AnimationState(); //TODO
+    public final AnimationState santaIdleAnimation = new AnimationState(); //TODO
+    public final AnimationState santaWaveAnimation = new AnimationState(); //TODO
     public void tick() {
         if (!bot.level().isClientSide()) return;
         updateAnimations();

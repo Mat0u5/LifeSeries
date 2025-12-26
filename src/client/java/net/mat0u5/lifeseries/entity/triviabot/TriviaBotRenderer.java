@@ -21,7 +21,10 @@ public class TriviaBotRenderer extends MobRenderer<TriviaBot, TriviaBotModel<Tri
 
     @Override
     public ResourceLocation getTextureLocation(TriviaBot entity) {
-        return IdentifierHelper.mod("textures/entity/triviabot/triviabot.png");
+        if (entity.santaBot()) {
+            return TriviaBot.SANTABOT_TEXTURE;
+        }
+        return TriviaBot.DEFAULT_TEXTURE;
     }
 
     @Override
@@ -48,7 +51,10 @@ public class TriviaBotRenderer extends AgeableMobRenderer<TriviaBot, TriviaBotRe
     //?} else {
     /^public Identifier getTextureLocation(TriviaBotRenderState state) {
     ^///?}
-        return IdentifierHelper.mod("textures/entity/triviabot/triviabot.png");
+        if (state.santaBot) {
+            return TriviaBot.SANTABOT_TEXTURE;
+        }
+        return TriviaBot.DEFAULT_TEXTURE;
     }
 
     @Override
@@ -63,6 +69,16 @@ public class TriviaBotRenderer extends AgeableMobRenderer<TriviaBot, TriviaBotRe
         state.answerCorrectAnimationState.copyFrom(triviaBot.clientData.answerCorrectAnimationState);
         state.answerIncorrectAnimationState.copyFrom(triviaBot.clientData.answerIncorrectAnimationState);
         state.snailTransformAnimationState.copyFrom(triviaBot.clientData.snailTransformAnimationState);
+
+        state.santaAnalyzingAnimation.copyFrom(triviaBot.clientData.santaAnalyzingAnimation);
+        state.santaAnswerCorrectAnimation.copyFrom(triviaBot.clientData.santaAnswerCorrectAnimation);
+        state.santaAnswerIncorrectAnimation.copyFrom(triviaBot.clientData.santaAnswerIncorrectAnimation);
+        state.santaFlyAnimation.copyFrom(triviaBot.clientData.santaFlyAnimation);
+        state.santaGlideAnimation.copyFrom(triviaBot.clientData.santaGlideAnimation);
+        state.santaIdleAnimation.copyFrom(triviaBot.clientData.santaIdleAnimation);
+        state.santaWaveAnimation.copyFrom(triviaBot.clientData.santaWaveAnimation);
+
+        state.santaBot = triviaBot.santaBot();
     }
 }
 *///?}
