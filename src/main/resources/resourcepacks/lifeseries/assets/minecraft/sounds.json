@@ -391,5 +391,173 @@
                 "name": "wildlife/trivia/triviabot_incorrect"
             }
         ]
+    },
+
+
+
+    "nicelife_midnight_chimes": {
+        "sounds": [
+            "nicelife/midnight_chimes"
+        ]
+    },
+    "nicelife_red_winter": {
+        "sounds": [
+            "nicelife/red_winter"
+        ]
+    },
+
+    "nicelife_snowman_growl": {
+        "sounds": [
+            "nicelife/snowman_growl"
+        ]
+    },
+    "nicelife_snowman_hit": {
+        "sounds": [
+            "nicelife/snowman_hit"
+        ]
+    },
+    "nicelife_vote_result": {
+        "sounds": [
+            "nicelife/vote_result"
+        ]
+    },
+
+    "nicelife_nicelist_countdown_1": {
+        "sounds": [
+            "nicelife/nicelist_countdown_1"
+        ]
+    },
+    "nicelife_nicelist_countdown_2": {
+        "sounds": [
+            "nicelife/nicelist_countdown_2"
+        ]
+    },
+    "nicelife_nicelist_countdown_3": {
+        "sounds": [
+            "nicelife/nicelist_countdown_3"
+        ]
+    },
+    "nicelife_nicelist_end": {
+        "sounds": [
+            "nicelife/nicelist_end"
+        ]
+    },
+    "nicelife_nicelist_person": {
+        "sounds": [
+            "nicelife/nicelist_person"
+        ]
+    },
+    "nicelife_nicelist_start": {
+        "sounds": [
+            "nicelife/nicelist_start"
+        ]
+    },
+
+    "nicelife_santabot_analyzing": {
+        "sounds": [
+            "nicelife/santabot_analyzing"
+        ]
+    },
+    "nicelife_santabot_away": {
+        "sounds": [
+            "nicelife/santabot_away"
+        ]
+    },
+    "nicelife_santabot_christmas_soundbyte": {
+        "sounds": [
+            "nicelife/santabot_christmas_soundbyte"
+        ]
+    },
+
+    "nicelife_santabot_correct1": {
+        "sounds": [
+            "nicelife/santabot_correct1"
+        ]
+    },
+    "nicelife_santabot_correct2": {
+        "sounds": [
+            "nicelife/santabot_correct2"
+        ]
+    },
+    "nicelife_santabot_correct3": {
+        "sounds": [
+            "nicelife/santabot_correct3"
+        ]
+    },
+    "nicelife_santabot_correct4": {
+        "sounds": [
+            "nicelife/santabot_correct4"
+        ]
+    },
+    "nicelife_santabot_correct5": {
+        "sounds": [
+            "nicelife/santabot_correct5"
+        ]
+    },
+    "nicelife_santabot_correct6": {
+        "sounds": [
+            "nicelife/santabot_correct6"
+        ]
+    },
+    "nicelife_santabot_incorrect1": {
+        "sounds": [
+            "nicelife/santabot_incorrect1"
+        ]
+    },
+    "nicelife_santabot_incorrect2": {
+        "sounds": [
+            "nicelife/santabot_incorrect2"
+        ]
+    },
+    "nicelife_santabot_incorrect3": {
+        "sounds": [
+            "nicelife/santabot_incorrect3"
+        ]
+    },
+    "nicelife_santabot_incorrect4": {
+        "sounds": [
+            "nicelife/santabot_incorrect4"
+        ]
+    },
+    "nicelife_santabot_incorrect5": {
+        "sounds": [
+            "nicelife/santabot_incorrect5"
+        ]
+    },
+    "nicelife_santabot_incorrect6": {
+        "sounds": [
+            "nicelife/santabot_incorrect6"
+        ]
+    },
+
+    "nicelife_santabot_incorrect_all_wrong": {
+        "sounds": [
+            "nicelife/santabot_incorrect_all_wrong"
+        ]
+    },
+    "nicelife_santabot_intro": {
+        "sounds": [
+            "nicelife/santabot_intro"
+        ]
+    },
+    "nicelife_santabot_introduction_long": {
+        "sounds": [
+            "nicelife/santabot_introduction_long"
+        ]
+    },
+    "nicelife_santabot_introduction_short": {
+        "sounds": [
+            "nicelife/santabot_introduction_short"
+        ]
+    },
+    "nicelife_santabot_suspense": {
+        "sounds": [
+            "nicelife/santabot_suspense"
+        ]
+    },
+    "nicelife_santabot_suspense_end": {
+        "sounds": [
+            "nicelife/santabot_suspense_end"
+        ]
     }
 }
