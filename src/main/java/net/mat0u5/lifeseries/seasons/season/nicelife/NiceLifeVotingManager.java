@@ -13,8 +13,8 @@ import static net.mat0u5.lifeseries.Main.livesManager;
 public class NiceLifeVotingManager {
     public static Random rnd = new Random();
     public static TriviaVoteType voteType = TriviaVoteType.NAUGHTY_LIST;
-    public static double NICE_LIST_CHANCE = 0.5; //TODO config
-    public static Time VOTING_TIME = Time.seconds(60); //TODO config
+    public static double NICE_LIST_CHANCE = 0.5;
+    public static Time VOTING_TIME = Time.seconds(60);
     public static boolean REDS_ON_NAUGHTY_LIST = false;
     public static List<UUID> allowedToVote = new ArrayList<>();
     public static List<UUID> playersVoted = new ArrayList<>();

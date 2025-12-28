@@ -35,7 +35,7 @@ public class NiceLifeTriviaManager {
     public static boolean firstTriviaInSession = true;
     public static TriviaQuestion currentQuestion = TriviaQuestion.getDefault();
     public static Random rnd = new Random();
-    public static int QUESTION_TIME = 67; //TODO config
+    public static int QUESTION_TIME = 67;
     public static List<TriviaSpawn> triviaSpawns = new ArrayList<>();
     public static List<UUID> triviaPlayersUUID = new ArrayList<>();
     public static boolean preparingForSpawn = false;

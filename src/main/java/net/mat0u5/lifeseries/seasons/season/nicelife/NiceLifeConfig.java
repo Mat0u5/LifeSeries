@@ -75,6 +75,29 @@ public class NiceLifeConfig extends ConfigManager {
             "Snowy Nether", "Controls the nether is frozen."
     );
 
+    public static final ConfigFileEntry<Integer> TRIVIA_QUESTION_TIME = new ConfigFileEntry<>(
+            "trivia_question_time", 67, ConfigTypes.SECONDS, "season.trivia[new]",
+            "Trivia Question Time", "Controls how much time people have to answer the trivia, in seconds."
+    );
+    public static final ConfigFileEntry<Integer> VOTING_TIME = new ConfigFileEntry<>(
+            "voting_time", 60, ConfigTypes.SECONDS, "season.voting[new]",
+            "Voting Time", "Controls how much time people have for voting, in seconds."
+    );
+    public static final ConfigFileEntry<Double> NICE_LIST_CHANCE = new ConfigFileEntry<>(
+            "nice_list_chance", 0.5, ConfigTypes.PERCENTAGE, "season.voting[new]",
+            "Nice List Chance", "Percentage of how often the nice list will be chosen for the vote instead of the naughty list."
+    );
+
+
+    public static final ConfigFileEntry<Object> GROUP_TRIVIA = new ConfigFileEntry<>(
+            "group_trivia", null, ConfigTypes.TEXT, "{season.trivia}[new]",
+            "Trivia", ""
+    );
+    public static final ConfigFileEntry<Object> GROUP_VOTING = new ConfigFileEntry<>(
+            "group_voting", null, ConfigTypes.TEXT, "{season.voting}[new]",
+            "Trivia", ""
+    );
+
     public NiceLifeConfig() {
         super("./config/"+ Main.MOD_ID,"nicelife.properties");
     }
@@ -91,6 +114,13 @@ public class NiceLifeConfig extends ConfigManager {
                 ,SNOW_LAYER_INCREMENT_DELAY
                 ,ADVANCE_TIME_WHEN_NOT_IN_SESSION
                 ,SNOWY_NETHER
+
+                ,GROUP_TRIVIA
+                ,GROUP_VOTING
+
+                ,TRIVIA_QUESTION_TIME
+                ,VOTING_TIME
+                ,NICE_LIST_CHANCE
         ));
     }
 
