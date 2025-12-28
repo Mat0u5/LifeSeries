@@ -2,8 +2,10 @@ package net.mat0u5.lifeseries.gui.trivia;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.mat0u5.lifeseries.gui.EmptySleepScreen;
+import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.Minecraft;
@@ -308,7 +310,7 @@ public class VotingScreen extends Screen {
     private void onSubmitVote() {
         if (selectedPlayer != null) {
             Minecraft.getInstance().setScreen(new EmptySleepScreen(false));
-            //TODO send voting packet
+            NetworkHandlerClient.sendStringPacket(PacketNames.SUBMIT_VOTE, selectedPlayer);
         }
     }
 

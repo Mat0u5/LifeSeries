@@ -35,7 +35,7 @@ public class ClientSounds {
         //? if <= 1.21.9 {
         if (!onlyPlayLatestSounds.contains(sound.getLocation().getPath())) return;
         //?} else {
-        /*if (!trackedSounds.contains(sound.getIdentifier().getPath())) return;
+        /*if (!onlyPlayLatestSounds.contains(sound.getIdentifier().getPath())) return;
         *///?}
 
         if (sound instanceof EntityBoundSoundInstance entityTrackingSound) {

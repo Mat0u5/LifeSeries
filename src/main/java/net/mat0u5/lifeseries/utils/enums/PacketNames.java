@@ -57,6 +57,7 @@ public enum PacketNames {
     ,HIDE_SLEEP_DARKNESS
     ,VOTING_SCREEN
     ,VOTING_TIME
+    ,SUBMIT_VOTE
     ;
 
     public static PacketNames fromName(String name) {

@@ -224,7 +224,7 @@ public class TriviaBot extends AmbientCreature {
         this.entityData.define(interactedWith, false);
         this.entityData.define(gliding, false);
         this.entityData.define(analyzing, -1);
-        this.entityData.define(santaBot, isSantaBot);
+        this.entityData.define(santaBot, false);
         this.entityData.define(waving, 0);
         this.entityData.define(leaving, false);
     }

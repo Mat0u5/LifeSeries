@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.nicelife;
 
 import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
 import net.mat0u5.lifeseries.mixin.ServerLevelAccessor;
 import net.mat0u5.lifeseries.seasons.season.Season;
@@ -36,6 +37,7 @@ import net.minecraft.world.level.GameRules;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 //? if > 1.21.9
 /*import net.minecraft.world.level.gamerules.GameRules;*/
 
@@ -50,7 +52,6 @@ public class NiceLife extends Season {
     public double snowLayerTickChance = 1.0 / 43;
     public int currentMaxSnowLayers = -1;
     public static boolean playedMidnightChimes = false;
-    public static boolean TESTING = true; //TODO remove
 
     @Override
     public void initialize() {
@@ -80,7 +81,6 @@ public class NiceLife extends Season {
         }
     }
 
-    public static Time tempSleepTimer = Time.zero();
     @Override
     public void tick(MinecraftServer server) {
         super.tick(server);
@@ -126,9 +126,6 @@ public class NiceLife extends Season {
             //?} else {
             /*int percentage = overworld.getGameRules().get(GameRules.PLAYERS_SLEEPING_PERCENTAGE);
             *///?}
-            if (TESTING) {
-                percentage = 1;
-            }
             if (sleepStatus.areEnoughSleeping(percentage) && isMidnight() && currentSession.statusStarted()) {
                 if (!NiceLifeTriviaManager.triviaInProgress) {
                     List<ServerPlayer> triviaPlayers = new ArrayList<>();
@@ -139,20 +136,33 @@ public class NiceLife extends Season {
                     }
                     NiceLifeTriviaManager.startTrivia(triviaPlayers);
                 }
-                tempSleepTimer.tick();
-                //TODO remove
-                if (tempSleepTimer.isLarger(Time.seconds(800))) {
-                    sleepThroughNight();
-                }
             }
             else {
                 if (isMidnight()) {
                     NiceLifeTriviaManager.triviaInProgress = false;
                 }
-                tempSleepTimer = Time.zero();
+            }
+        }
+        if (isMidnight() && NiceLifeTriviaManager.triviaInProgress) {
+            List<ServerPlayer> remainingTriviaPlayers = new ArrayList<>();
+            for (UUID playerUUID : NiceLifeTriviaManager.triviaPlayersUUID) {
+                ServerPlayer player = PlayerUtils.getPlayer(playerUUID);
+                if (player == null) continue;
+                if (!player.isSleeping()) continue;
+                if (player.ls$isDead()) continue;
+                TriviaBot bot = NiceLifeTriviaManager.bots.get(playerUUID);
+                if (bot == null) continue;
+                if (!bot.isAlive()) continue;
+                if (!(bot.triviaHandler instanceof NiceLifeTriviaHandler triviaHandler)) continue;
+                if (triviaHandler.currentState == NiceLifeTriviaHandler.BotState.FINISHED) continue;
+                remainingTriviaPlayers.add(player);
+            }
+            if (remainingTriviaPlayers.isEmpty()) {
+                sleepThroughNight();
             }
         }
     }
+
     public void sleepThroughNight() {
         if (server == null) return;
         ServerLevel overworld = server.overworld();
@@ -160,8 +170,8 @@ public class NiceLife extends Season {
             long newTime = overworld.getDayTime() + 24000L;
             overworld.setDayTime(newTime - newTime % 24000L);
             accessor.ls$wakeUpAllPlayers();
-            tempSleepTimer = Time.zero();
             playedMidnightChimes = false;
+            NiceLifeTriviaManager.endTrivia();
         }
     }
 

@@ -70,13 +70,13 @@ public class TriviaBotRenderer extends AgeableMobRenderer<TriviaBot, TriviaBotRe
         state.answerIncorrectAnimationState.copyFrom(triviaBot.clientData.answerIncorrectAnimationState);
         state.snailTransformAnimationState.copyFrom(triviaBot.clientData.snailTransformAnimationState);
 
-        state.santaAnalyzingAnimation.copyFrom(triviaBot.clientData.santaAnalyzingAnimation);
-        state.santaAnswerCorrectAnimation.copyFrom(triviaBot.clientData.santaAnswerCorrectAnimation);
-        state.santaAnswerIncorrectAnimation.copyFrom(triviaBot.clientData.santaAnswerIncorrectAnimation);
-        state.santaFlyAnimation.copyFrom(triviaBot.clientData.santaFlyAnimation);
-        state.santaGlideAnimation.copyFrom(triviaBot.clientData.santaGlideAnimation);
-        state.santaIdleAnimation.copyFrom(triviaBot.clientData.santaIdleAnimation);
-        state.santaWaveAnimation.copyFrom(triviaBot.clientData.santaWaveAnimation);
+        state.santaAnalyzingAnimationState.copyFrom(triviaBot.clientData.santaAnalyzingAnimationState);
+        state.santaAnswerCorrectAnimationState.copyFrom(triviaBot.clientData.santaAnswerCorrectAnimationState);
+        state.santaAnswerIncorrectAnimationState.copyFrom(triviaBot.clientData.santaAnswerIncorrectAnimationState);
+        state.santaFlyAnimationState.copyFrom(triviaBot.clientData.santaFlyAnimationState);
+        state.santaGlideAnimationState.copyFrom(triviaBot.clientData.santaGlideAnimationState);
+        state.santaIdleAnimationState.copyFrom(triviaBot.clientData.santaIdleAnimationState);
+        state.santaWaveAnimationState.copyFrom(triviaBot.clientData.santaWaveAnimationState);
 
         state.santaBot = triviaBot.santaBot();
     }

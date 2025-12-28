@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.entity.triviabot.server.trivia;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
+import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeVotingManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.*;
@@ -31,14 +32,15 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
     public BotState currentState = BotState.LANDING;
     private Time sameStateTime = Time.zero();
 
-    private enum BotState {
+    public enum BotState {
         LANDING,
         APPROACHING,
         APPROACHED,
         QUESTION,
         VOTING,
         LEAVING,
-        FLYING_UP
+        FLYING_UP,
+        FINISHED
     }
 
     public NiceLifeTriviaHandler(TriviaBot bot) {
@@ -126,7 +128,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
 
     public void landingTick(ServerLevel level) {
         sameStateTime.tick();
-        if (bot.blockPosition().getY() < spawnInfo.spawnPos().getY()) {
+        if (bot.blockPosition().getY() < spawnInfo.spawnPos().getY() || sameStateTime.isLarger(Time.seconds(30))) {
             bot.setDeltaMovement(0, 0,0);
             bot.setPos(bot.position().x, spawnInfo.spawnPos().getY(), bot.position().z);
             changeStateTo(BotState.APPROACHING);
@@ -197,6 +199,9 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
     public void questionTick(ServerLevel level, ServerPlayer boundPlayer) {
         sameStateTime.tick();
         bot.setDeltaMovement(0, 0, 0);
+        if (sameStateTime.isLarger(NiceLifeVotingManager.VOTING_TIME.add(Time.seconds(35)))) {
+            changeStateTo(BotState.LEAVING);
+        }
     }
 
     public void flyingUpTick(ServerLevel level) {
@@ -205,13 +210,16 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         sameStateTime.tick();
         if (bot.isPassenger()) bot.removeVehicle();
         bot.noPhysics = true;
-        if (sameStateTime.getTicks() < 10) {
+        if (sameStateTime.getTicks() < 15) {
             bot.setDeltaMovement(0,0, 0);
             return;
         }
         float velocity = Math.min(0.3f, 0.25f * Math.abs((sameStateTime.getTicks()-10) / (20.0f)));
         bot.setDeltaMovement(0,velocity,0);
-        if (sameStateTime.isLarger(Time.seconds(10))) bot.serverData.despawn();
+        if (sameStateTime.isLarger(Time.seconds(10))) {
+            changeStateTo(BotState.FINISHED);
+            bot.serverData.despawn();
+        }
     }
 
     public void leavingTick(ServerLevel level, ServerPlayer boundPlayer) {
@@ -244,10 +252,11 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
     public void votingTick(ServerLevel level) {
         sameStateTime.tick();
         bot.setDeltaMovement(0, 0, 0);
-        Time remainingVotingTime = NiceLifeTriviaManager.VOTING_TIME.diff(sameStateTime);
+        Time remainingVotingTime = NiceLifeVotingManager.VOTING_TIME.diff(sameStateTime);
         NetworkHandlerServer.sendNumberPacket(bot.serverData.getBoundPlayer(), PacketNames.VOTING_TIME, remainingVotingTime.getSeconds());
-        if (sameStateTime.isLarger(NiceLifeTriviaManager.VOTING_TIME)) {
+        if (sameStateTime.isLarger(NiceLifeVotingManager.VOTING_TIME)) {
             NetworkHandlerServer.sendNumberPacket(bot.serverData.getBoundPlayer(), PacketNames.VOTING_TIME, 0);
+            changeStateTo(BotState.LEAVING);
         }
     }
 
@@ -300,12 +309,12 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
     public boolean startVoting() {
         ServerPlayer boundPlayer = bot.serverData.getBoundPlayer();
         if (boundPlayer == null) return false;
-        NiceLifeTriviaManager.TriviaVoteType voteType = NiceLifeTriviaManager.voteType;
-        if (voteType == NiceLifeTriviaManager.TriviaVoteType.NONE) return false;
+        NiceLifeVotingManager.TriviaVoteType voteType = NiceLifeVotingManager.voteType;
+        if (voteType == NiceLifeVotingManager.TriviaVoteType.NONE) return false;
         List<String> availableForVoting = new ArrayList<>();
 
         // The first element of the list is the voting name.
-        if (voteType == NiceLifeTriviaManager.TriviaVoteType.NICE_LIST) {
+        if (voteType == NiceLifeVotingManager.TriviaVoteType.NICE_LIST) {
             availableForVoting.add("Vote for who's been nice");
         }
         else {
@@ -313,7 +322,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         }
 
         for (ServerPlayer player : livesManager.getAlivePlayers()) {
-            if (voteType == NiceLifeTriviaManager.TriviaVoteType.NICE_LIST) {
+            if (voteType == NiceLifeVotingManager.TriviaVoteType.NICE_LIST) {
                 if (player != boundPlayer && player.ls$isOnAtLeastLives(2, false)) {
                     availableForVoting.add(player.getScoreboardName());
                 }
