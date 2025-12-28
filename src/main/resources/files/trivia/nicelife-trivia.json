@@ -1,7 +1,72 @@
 [
 	{
-		"question": "TODO question question question question question question question",
-		"answers": ["Answer 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1", "A2", "A3"],
+		"question": "What does the Trivia Bot want to do?",
+		"answers": ["Create interesting content", "Teach Minecraft trivia", "Get on the Nice List!"],
 		"correct_answer_index": 0
+	},
+	{
+		"question": "What enchantment do you need to walk over powdered snow?",
+		"answers": ["Depth Strider", "Frost Walker", "Feather Falling", "None of these are correct"],
+		"correct_answer_index": 3
+	},
+	{
+		"question": "What would win, 100 Strays or 1 Warden?",
+		"answers": ["1 Warden", "One of each Pokemon", "100 Strays"],
+		"correct_answer_index": 1
+	},
+	{
+		"question": "Is \"Nightmare Before Christmas\" a Halloween movie or a Christmas movie?",
+		"answers": ["Both", "A Christmas movie", "A Halloween movie"],
+		"correct_answer_index": 0
+	},
+	{
+		"question": "What came first?",
+		"answers": ["The Chicken", "The Egg", "We'll never know"],
+		"correct_answer_index": 2
+	},
+	{
+		"question": "Which Life Series season ran closest to the holidays?",
+		"answers": ["Double Life", "Secret Life", "Limited Life", "Wild Life"],
+		"correct_answer_index": 1
+	},
+	{
+		"question": "What dates are chests retextured into presents in Minecraft?",
+		"answers": ["December 25", "December 24 to 26", "December 12-31"],
+		"correct_answer_index": 1
+	},
+	{
+		"question": "Which of these items cannot be used on an already existing Snow Golem?",
+		"answers": ["Lead", "Shears", "Carved Pumpkin", "Name Tag"],
+		"correct_answer_index": 2
+	},
+	{
+		"question": "Is it possible for a carved pumpkin to naturally spawn?",
+		"answers": ["Yes, in vanilla world generation", "No, never", "Only with custom generation rules"],
+		"correct_answer_index": 0
+	},
+	{
+		"question": "Is it possible to spawn a Snow Golem by placing the blocks sideways?",
+		"answers": ["Yes", "No"],
+		"correct_answer_index": 0
+	},
+	{
+		"question": "I could be a bird, the sand, or the sun. What am I?",
+		"answers": ["A person", "A clock", "A pond", "A phoenix"],
+		"correct_answer_index": 1
+	},
+	{
+		"question": "According to the Life Series players, which player was voted naughtiest?",
+		"answers": ["Joel", "Scar", "Martyn", "Timmy"],
+		"correct_answer_index": 0
+	},
+	{
+		"question": "Is it possible to spawn a Snow Golem by placing the blocks upside down?",
+		"answers": ["Yes", "No"],
+		"correct_answer_index": 0
+	},
+	{
+		"question": "Which of these Life Series team's base exteriors was built almost entirely out of snow?",
+		"answers": ["Birthday Cake", "Heart Foundation", "Shadow Alliance", "Team B.E.S.T.", "The Villies"],
+		"correct_answer_index": 3
 	}
 ]
