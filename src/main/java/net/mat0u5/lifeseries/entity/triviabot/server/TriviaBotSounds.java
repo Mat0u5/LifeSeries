@@ -15,7 +15,12 @@ public class TriviaBotSounds {
     private int introSoundCooldown = 0;
     private boolean playedCountdownSound = false;
     private boolean playedCountdownEndingSound = false;
+    public int delay = 0;
     public void playSounds() {
+        if (delay > 0) {
+            delay--;
+            return;
+        }
         if (introSoundCooldown > 0) introSoundCooldown--;
 
         if (introSoundCooldown == 0 && !bot.interactedWith()) {
@@ -26,7 +31,7 @@ public class TriviaBotSounds {
             }
             else {
                 SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_intro"));
-                PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 1, 1);
+                PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.65f, 1);
                 introSoundCooldown = 624;
             }
         }

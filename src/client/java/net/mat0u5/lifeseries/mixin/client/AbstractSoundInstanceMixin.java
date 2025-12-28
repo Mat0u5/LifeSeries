@@ -17,16 +17,24 @@ public class AbstractSoundInstanceMixin {
         AbstractSoundInstance soundInstance = (AbstractSoundInstance) (Object) this;
         if (soundInstance instanceof EntityBoundSoundInstance entityTrackingSound) {
             //? if <= 1.21.9 {
-            if (entityTrackingSound.getLocation().getPath().equalsIgnoreCase("wildlife_trivia_suspense") ||
-                    entityTrackingSound.getLocation().getPath().equalsIgnoreCase("nicelife_santabot_suspense")) {
+            if (entityTrackingSound.getLocation().getPath().equalsIgnoreCase("wildlife_trivia_suspense")) {
                 cir.setReturnValue(true);
             }
             //?} else {
-            /*if (entityTrackingSound.getIdentifier().getPath().equalsIgnoreCase("wildlife_trivia_suspense") ||
-                    entityTrackingSound.getIdentifier().getPath().equalsIgnoreCase("nicelife_santabot_suspense")) {
+            /*if (entityTrackingSound.getIdentifier().getPath().equalsIgnoreCase("wildlife_trivia_suspense")) {
                 cir.setReturnValue(true);
             }
             *///?}
         }
+        //? if <= 1.21.9 {
+        if (soundInstance.getLocation().getPath().equalsIgnoreCase("nicelife_santabot_suspense")) {
+            cir.setReturnValue(true);
+        }
+        //?} else {
+        /*if (soundInstance.getIdentifier().getPath().equalsIgnoreCase("nicelife_santabot_suspense")) {
+            cir.setReturnValue(true);
+        }
+        *///?}
+
     }
 }

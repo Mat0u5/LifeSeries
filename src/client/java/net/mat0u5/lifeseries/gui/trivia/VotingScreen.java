@@ -159,6 +159,8 @@ public class VotingScreen extends Screen {
         RenderUtils.text(title, width / 2, 10).anchorCenter().colored(TextColors.WHITE).withShadow().render(graphics, font);
         searchBox.render(graphics, mouseX, mouseY, partialTick);
 
+        submitButton.active = selectedPlayer != null && !selectedPlayer.isEmpty();
+
         // Timer
         long minutes = timerSeconds / 60;
         long seconds = timerSeconds - minutes * 60;

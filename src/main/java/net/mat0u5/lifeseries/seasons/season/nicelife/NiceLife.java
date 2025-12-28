@@ -143,7 +143,7 @@ public class NiceLife extends Season {
                 }
             }
         }
-        if (isMidnight() && NiceLifeTriviaManager.triviaInProgress) {
+        if (isMidnight() && NiceLifeTriviaManager.triviaInProgress && !NiceLifeTriviaManager.preparingForSpawn) {
             List<ServerPlayer> remainingTriviaPlayers = new ArrayList<>();
             for (UUID playerUUID : NiceLifeTriviaManager.triviaPlayersUUID) {
                 ServerPlayer player = PlayerUtils.getPlayer(playerUUID);

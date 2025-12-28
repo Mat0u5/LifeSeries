@@ -30,6 +30,7 @@ public class TriviaBotLookAtPlayerGoal extends Goal {
     public boolean canContinueToUse() {
         Vec3 targetPos = mob.serverData.getPlayerPos();
         if (targetPos == null) return false;
+        if (mob.santaBot()) return false;
 
         if (this.mob.distanceToSqr(targetPos) > RANGE_SQUARED) return false;
         return this.lookTime > 0;
@@ -42,6 +43,7 @@ public class TriviaBotLookAtPlayerGoal extends Goal {
 
     @Override
     public void tick() {
+        if (mob.santaBot()) return;
         Vec3 targetPos = mob.serverData.getPlayerPos();
         if (targetPos != null) {
             double d = this.mob.getEyeY();

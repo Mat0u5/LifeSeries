@@ -8,6 +8,8 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
@@ -16,6 +18,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -32,9 +35,10 @@ public class NiceLifeTriviaManager {
     public static boolean firstTriviaInSession = true;
     public static TriviaQuestion currentQuestion = TriviaQuestion.getDefault();
     public static Random rnd = new Random();
-    public static final int QUESTION_TIME = 67;
+    public static int QUESTION_TIME = 67; //TODO config
     public static List<TriviaSpawn> triviaSpawns = new ArrayList<>();
     public static List<UUID> triviaPlayersUUID = new ArrayList<>();
+    public static boolean preparingForSpawn = false;
 
     public static void initialize() {
 
@@ -82,8 +86,27 @@ public class NiceLifeTriviaManager {
                 triviaSpawns.add(new TriviaSpawn(player.getUUID(), spawnBotPos, frontBedPos, bedDirection));
             }
         }
-        spawnTriviaBots();
-        firstTriviaInSession = false; //TODO use this to add the extended trivia intro
+
+        preparingForSpawn = true;
+        if (firstTriviaInSession) {
+            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_introduction_long"));
+            PlayerUtils.playSoundToPlayers(triviaPlayers, sound, 1f, 1);
+            TaskScheduler.scheduleTask(612-160, () -> {
+                spawnTriviaBots(160);
+            });
+        }
+        else {
+            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_introduction_short"));
+            PlayerUtils.playSoundToPlayers(triviaPlayers, sound, 1f, 1);
+            TaskScheduler.scheduleTask(71, () -> {
+                spawnTriviaBots(0);
+            });
+            //TaskScheduler.scheduleTask(71+90, () -> {
+            //    SoundEvent sound2 = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_christmas_soundbyte"));
+            //    PlayerUtils.playSoundToPlayers(triviaPlayers, sound2, 0.8f, 1);
+            //});
+        }
+        firstTriviaInSession = false;
     }
 
     public static void endTrivia() {
@@ -91,7 +114,7 @@ public class NiceLifeTriviaManager {
         triviaInProgress = false;
     }
 
-    public static void spawnTriviaBots() {
+    public static void spawnTriviaBots(int soundDelay) {
         for (TriviaSpawn triviaSpawnInfo : triviaSpawns) {
             ServerPlayer player = PlayerUtils.getPlayer(triviaSpawnInfo.uuid());
             if (player == null) continue;
@@ -110,6 +133,7 @@ public class NiceLifeTriviaManager {
             }
             TriviaBot bot = LevelUtils.spawnEntity(MobRegistry.TRIVIA_BOT, player.ls$getServerLevel(), spawnBotPos);
             if (bot != null) {
+                bot.sounds.delay = soundDelay;
                 SessionTranscript.newTriviaBot(player);
                 bot.serverData.setBoundPlayer(player);
                 bots.put(player.getUUID(), bot);
@@ -122,6 +146,7 @@ public class NiceLifeTriviaManager {
                 }
             }
         }
+        preparingForSpawn = false;
     }
 
     public static void breakBlocksAround(ServerLevel level, BlockPos pos, int bedYPos) {

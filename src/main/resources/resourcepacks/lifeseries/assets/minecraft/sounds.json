@@ -559,5 +559,10 @@
         "sounds": [
             "nicelife/santabot_suspense_end"
         ]
+    },
+    "nicelife_santabot_turn": {
+      "sounds": [
+        "nicelife/santabot_turn"
+      ]
     }
 }

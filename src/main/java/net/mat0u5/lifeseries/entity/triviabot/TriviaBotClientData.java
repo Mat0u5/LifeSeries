@@ -139,7 +139,6 @@ public class TriviaBotClientData {
     }
 
     public void pauseAllAnimations(String except) {
-        OtherUtils.log(except);//TODO remove
         if (!except.equalsIgnoreCase("glide")) glideAnimationState.stop();
         if (!except.equalsIgnoreCase("walk")) walkAnimationState.stop();
         if (!except.equalsIgnoreCase("idle")) idleAnimationState.stop();

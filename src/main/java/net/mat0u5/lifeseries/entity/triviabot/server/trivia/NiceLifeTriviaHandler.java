@@ -102,13 +102,13 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
                     if (boundPlayer != null) {
                         NetworkHandlerServer.sendStringPacket(boundPlayer, PacketNames.RESET_TRIVIA, "true");
                     }
-
+                    changeStateTo(BotState.LEAVING);
                 }
                 bot.setRanOutOfTime(true);
-                bot.setSubmittedAnswer(true);
-                answeredIncorrect();
             }
         }
+
+        NiceLifeTriviaManager.preparingForSpawn = false;
     }
 
     public void turnToBed(float turnSpeed) {
@@ -121,9 +121,18 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
 
     public void turn(float targetYaw, float turnSpeed) {
         float currentYaw = bot.getYRot();
-        float newYaw = Mth.approachDegrees(currentYaw, targetYaw, turnSpeed);
+
+        float delta = targetYaw - currentYaw;
+        while (delta > 180.0f) delta -= 360.0f;
+        while (delta < -180.0f) delta += 360.0f;
+        float turnAmount = Math.max(-turnSpeed, Math.min(turnSpeed, delta));
+        float newYaw = currentYaw + turnAmount;
+        while (newYaw > 180.0f) newYaw -= 360.0f;
+        while (newYaw < -180.0f) newYaw += 360.0f;
+
         bot.setYRot(newYaw);
-        bot.yRotO = newYaw;
+        bot.setYBodyRot(newYaw);
+        bot.setYHeadRot(newYaw);
     }
 
     public void landingTick(ServerLevel level) {
@@ -190,6 +199,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
     public void approachedTick(ServerLevel level, ServerPlayer boundPlayer) {
         sameStateTime.tick();
         bot.setDeltaMovement(0, 0, 0);
+        turnToBed(20);
         if (sameStateTime.getTicks() > 78) {
             changeStateTo(BotState.QUESTION);
             startTrivia(boundPlayer);
@@ -199,6 +209,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
     public void questionTick(ServerLevel level, ServerPlayer boundPlayer) {
         sameStateTime.tick();
         bot.setDeltaMovement(0, 0, 0);
+        turnToBed(20);
         if (sameStateTime.isLarger(NiceLifeVotingManager.VOTING_TIME.add(Time.seconds(35)))) {
             changeStateTo(BotState.LEAVING);
         }
@@ -206,15 +217,19 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
 
     public void flyingUpTick(ServerLevel level) {
         bot.setLeaving(true);
-        turnToBed(20);
+        turnToBed(40);
         sameStateTime.tick();
         if (bot.isPassenger()) bot.removeVehicle();
         bot.noPhysics = true;
         if (sameStateTime.getTicks() < 15) {
-            bot.setDeltaMovement(0,0, 0);
+            bot.setDeltaMovement(0, 0, 0);
             return;
         }
-        float velocity = Math.min(0.3f, 0.25f * Math.abs((sameStateTime.getTicks()-10) / (20.0f)));
+        float velocity = 0.1f * Math.abs((sameStateTime.getTicks()-15) / (20.0f));
+        if (sameStateTime.getTicks() >= 43) {
+            velocity *= 3f;
+        }
+
         bot.setDeltaMovement(0,velocity,0);
         if (sameStateTime.isLarger(Time.seconds(10))) {
             changeStateTo(BotState.FINISHED);
@@ -251,6 +266,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
 
     public void votingTick(ServerLevel level) {
         sameStateTime.tick();
+        turnToBed(20);
         bot.setDeltaMovement(0, 0, 0);
         Time remainingVotingTime = NiceLifeVotingManager.VOTING_TIME.diff(sameStateTime);
         NetworkHandlerServer.sendNumberPacket(bot.serverData.getBoundPlayer(), PacketNames.VOTING_TIME, remainingVotingTime.getSeconds());
@@ -269,8 +285,14 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         if (newState == BotState.APPROACHED) {
             bot.setWaving(78);
         }
+        if (newState == BotState.LEAVING) {
+            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_turn"));
+            PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.65f, 1);
+        }
         if (newState == BotState.FLYING_UP) {
             NetworkHandlerServer.sendStringPacket(bot.serverData.getBoundPlayer(), PacketNames.HIDE_SLEEP_DARKNESS, "false");
+            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_away"));
+            PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.65f, 1);
         }
     }
 
@@ -294,10 +316,9 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         //TaskScheduler.scheduleTask(213, this::blessPlayer);
         SoundEvent sound = OtherUtils.getRandomSound("nicelife_santabot_correct", 1, 6);
         TaskScheduler.scheduleTask(174, () -> {
-            PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 1f, 1);
+            PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.65f, 1);
         });
         TaskScheduler.scheduleTask(174+140, () -> {
-            bot.setAnalyzingTime(-1); //To stop the animation
             if (startVoting()) {
                 changeStateTo(BotState.VOTING);
             }
@@ -334,19 +355,19 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         if (availableForVoting.isEmpty()) return false;
 
         NetworkHandlerServer.sendStringListPacket(boundPlayer, PacketNames.VOTING_SCREEN, availableForVoting);
+        NiceLifeVotingManager.allowedToVote.add(boundPlayer.getUUID());
+        //TODO play voting sound
         return true;
     }
 
     public void answeredIncorrect() {
         super.answeredIncorrect();
-        int startingDelay = bot.ranOutOfTime() ? 0 : 174;
         //TaskScheduler.scheduleTask(210, this::cursePlayer);
         SoundEvent sound = OtherUtils.getRandomSound("nicelife_santabot_incorrect", 1, 6);
-        TaskScheduler.scheduleTask(startingDelay, () -> {
-            PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 1f, 1);
+        TaskScheduler.scheduleTask(174, () -> {
+            PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.65f, 1);
         });
-        TaskScheduler.scheduleTask(startingDelay+160, () -> {
-            bot.setAnalyzingTime(-1); //To stop the animation
+        TaskScheduler.scheduleTask(174+160, () -> {
             changeStateTo(BotState.LEAVING);
         });
     }

@@ -47,6 +47,9 @@ public final class TriviaBotGlideGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
+        if (mob.santaBot()) {
+            return mob.pathfinding.getDistanceToGroundBlock() >= 0.1;
+        }
         return mob.pathfinding.getDistanceToGroundBlock() >= 1;
     }
 

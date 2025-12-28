@@ -107,6 +107,7 @@ public class NewQuizScreen extends Screen {
         timerSeconds = Trivia.getRemainingSeconds();
         if (timerSeconds <= 0) {
             this.onClose();
+            Minecraft.getInstance().setScreen(new EmptySleepScreen(false));
         }
     }
 
