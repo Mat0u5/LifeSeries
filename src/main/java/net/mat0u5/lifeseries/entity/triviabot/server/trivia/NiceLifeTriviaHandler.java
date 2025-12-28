@@ -5,10 +5,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
-import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.other.Time;
-import net.mat0u5.lifeseries.utils.other.Tuple;
+import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
@@ -38,6 +35,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         LANDING,
         APPROACHING,
         APPROACHED,
+        QUESTION,
         VOTING,
         LEAVING,
         FLYING_UP
@@ -60,6 +58,11 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         bot.noPhysics = true;
         ServerPlayer boundPlayer = bot.serverData.getBoundPlayer();
         ServerLevel level = (ServerLevel) bot.level();
+
+        if (bot.waving() > 0) {
+            bot.setWaving(bot.waving()-1);
+        }
+
         if (spawnInfo == null || (boundPlayer != null && !boundPlayer.isSleeping())) {
             bot.serverData.despawn();
             return;
@@ -71,7 +74,10 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
             approachingTick(level, boundPlayer);
         }
         if (currentState == BotState.APPROACHED) {
-            approachedTick(level);
+            approachedTick(level, boundPlayer);
+        }
+        if (currentState == BotState.QUESTION) {
+            questionTick(level, boundPlayer);
         }
         if (currentState == BotState.VOTING) {
             votingTick(level);
@@ -101,13 +107,17 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
                 answeredIncorrect();
             }
         }
-        if (currentState == BotState.APPROACHING || currentState == BotState.LEAVING) {
-            turn(bot.getDeltaMovement(), 20.0F);
-        }
     }
 
-    public void turn(Vec3 movement, float turnSpeed) {
-        float targetYaw = (float)(Math.atan2(movement.z, movement.x) * (180F / Math.PI)) - 90F;
+    public void turnToBed(float turnSpeed) {
+        turn(spawnInfo.bedDirection().getOpposite().toYRot(), turnSpeed);
+    }
+
+    public void turnFromBed(float turnSpeed) {
+        turn(spawnInfo.bedDirection().toYRot(), turnSpeed);
+    }
+
+    public void turn(float targetYaw, float turnSpeed) {
         float currentYaw = bot.getYRot();
         float newYaw = Mth.approachDegrees(currentYaw, targetYaw, turnSpeed);
         bot.setYRot(newYaw);
@@ -126,13 +136,34 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         }
         else {
             bot.setDeltaMovement(0, -0.25,0);
-            NiceLifeTriviaManager.breakBlocksAround(level, bot.blockPosition());
+            NiceLifeTriviaManager.breakBlocksAround(level, bot.blockPosition(), spawnInfo.bedPos().getY());
         }
     }
 
     public void approachingTick(ServerLevel level, ServerPlayer boundPlayer) {
         sameStateTime.tick();
+
+        turnToBed(20);
+
         Vec3 botPos = bot.position();
+
+        if (bot.waving() == -1) {
+            Vec3 bedVector = Vec3.atBottomCenterOf(spawnInfo.bedPos()).subtract(Vec3.atBottomCenterOf(spawnInfo.spawnPos()));
+            if (bedVector.length() > 4) {
+                Vec3 middlePos = Vec3.atBottomCenterOf(spawnInfo.spawnPos()).add(bedVector.scale(0.4));
+                boolean atMiddlePos = botPos.distanceTo(middlePos) <= 0.1;
+                if (atMiddlePos) {
+                    bot.setDeltaMovement(0, 0, 0);
+                    bot.setWaving(78);
+                    return;
+                }
+            }
+        }
+        else if (bot.waving() > 4) {
+            bot.setDeltaMovement(0, 0, 0);
+            return;
+        }
+
         Vec3 bedPos = Vec3.atBottomCenterOf(spawnInfo.bedPos());
         double speedX = bedPos.x() - botPos.x();
         double speedZ = bedPos.z() - botPos.z();
@@ -144,36 +175,50 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
 
         Vec3 speed = new Vec3(speedX, 0,speedZ);
         bot.setDeltaMovement(speed);
-        if (sameStateTime.getTicks() == 1) turn(speed, 1000);
+
         boolean atPos = botPos.distanceTo(bedPos) <= 0.1;
         if (atPos || sameStateTime.isLarger(Time.seconds(10))) {
             if (!atPos) {
                 LevelUtils.teleport(bot, level, spawnInfo.bedPos());
             }
             changeStateTo(BotState.APPROACHED);
+        }
+    }
+
+    public void approachedTick(ServerLevel level, ServerPlayer boundPlayer) {
+        sameStateTime.tick();
+        bot.setDeltaMovement(0, 0, 0);
+        if (sameStateTime.getTicks() > 78) {
+            changeStateTo(BotState.QUESTION);
             startTrivia(boundPlayer);
         }
     }
 
-    public void approachedTick(ServerLevel level) {
+    public void questionTick(ServerLevel level, ServerPlayer boundPlayer) {
         sameStateTime.tick();
         bot.setDeltaMovement(0, 0, 0);
     }
 
     public void flyingUpTick(ServerLevel level) {
-        if (sameStateTime.getTicks() == 0) {
-            NetworkHandlerServer.sendStringPacket(bot.serverData.getBoundPlayer(), PacketNames.HIDE_SLEEP_DARKNESS, "false");//TODO move elsewhere
-        }
+        bot.setLeaving(true);
+        turnToBed(20);
         sameStateTime.tick();
         if (bot.isPassenger()) bot.removeVehicle();
         bot.noPhysics = true;
-        float velocity = Math.min(0.3f, 0.25f * Math.abs(sameStateTime.getTicks() / (20.0f)));
+        if (sameStateTime.getTicks() < 10) {
+            bot.setDeltaMovement(0,0, 0);
+            return;
+        }
+        float velocity = Math.min(0.3f, 0.25f * Math.abs((sameStateTime.getTicks()-10) / (20.0f)));
         bot.setDeltaMovement(0,velocity,0);
         if (sameStateTime.isLarger(Time.seconds(10))) bot.serverData.despawn();
     }
 
     public void leavingTick(ServerLevel level, ServerPlayer boundPlayer) {
         sameStateTime.tick();
+
+        turnFromBed(20);
+
         Vec3 botPos = bot.position();
         Vec3 leavePos = Vec3.atBottomCenterOf(spawnInfo.spawnPos());
         Vec3 bedPos = Vec3.atBottomCenterOf(spawnInfo.bedPos());
@@ -193,7 +238,6 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
                 LevelUtils.teleport(bot, level, spawnInfo.spawnPos());
             }
             changeStateTo(BotState.FLYING_UP);
-            turn(bot.position().subtract(bedPos), 1000);
         }
     }
 
@@ -210,14 +254,23 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
     public void changeStateTo(BotState newState) {
         currentState = newState;
         sameStateTime = Time.zero();
+        if (newState == BotState.APPROACHING) {
+            turnToBed(1000);
+        }
+        if (newState == BotState.APPROACHED) {
+            bot.setWaving(78);
+        }
+        if (newState == BotState.FLYING_UP) {
+            NetworkHandlerServer.sendStringPacket(bot.serverData.getBoundPlayer(), PacketNames.HIDE_SLEEP_DARKNESS, "false");
+        }
     }
 
     public boolean handleAnswer(int answer) {
         if (super.handleAnswer(answer)) {
-            bot.setAnalyzingTime(42);//TODO time
+            bot.setAnalyzingTime(87);
             PlayerUtils.playSoundToPlayer(
                     bot.serverData.getBoundPlayer(),
-                    SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_trivia_analyzing")), 1f, 1);//TODO sound
+                    SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_analyzing")), 1f, 1);
             return true;
         }
         return false;
@@ -230,12 +283,12 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         //TaskScheduler.scheduleTask(170, this::spawnItemForPlayer);
         //TaskScheduler.scheduleTask(198, this::spawnItemForPlayer);
         //TaskScheduler.scheduleTask(213, this::blessPlayer);
-        TaskScheduler.scheduleTask(72, () -> {
-            PlayerUtils.playSoundToPlayer(
-                    bot.serverData.getBoundPlayer(),
-                    SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_trivia_correct")), 1f, 1);//TODO sound
+        SoundEvent sound = OtherUtils.getRandomSound("nicelife_santabot_correct", 1, 6);
+        TaskScheduler.scheduleTask(174, () -> {
+            PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 1f, 1);
         });
-        TaskScheduler.scheduleTask(250, () -> { //TODO delay
+        TaskScheduler.scheduleTask(174+140, () -> {
+            bot.setAnalyzingTime(-1); //To stop the animation
             if (startVoting()) {
                 changeStateTo(BotState.VOTING);
             }
@@ -277,16 +330,15 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
 
     public void answeredIncorrect() {
         super.answeredIncorrect();
-        int startingDelay = bot.ranOutOfTime() ? 0 : 72;
+        int startingDelay = bot.ranOutOfTime() ? 0 : 174;
         //TaskScheduler.scheduleTask(210, this::cursePlayer);
+        SoundEvent sound = OtherUtils.getRandomSound("nicelife_santabot_incorrect", 1, 6);
         TaskScheduler.scheduleTask(startingDelay, () -> {
-            PlayerUtils.playSoundToPlayer(
-                    bot.serverData.getBoundPlayer(),
-                    SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_trivia_incorrect")), 1f, 1);//TODO sound
+            PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 1f, 1);
         });
-        TaskScheduler.scheduleTask(startingDelay+200, () -> { //TODO delay
-            changeStateTo(BotState.VOTING);
-
+        TaskScheduler.scheduleTask(startingDelay+160, () -> {
+            bot.setAnalyzingTime(-1); //To stop the animation
+            changeStateTo(BotState.LEAVING);
         });
     }
 

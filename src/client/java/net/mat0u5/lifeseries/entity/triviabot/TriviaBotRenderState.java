@@ -18,13 +18,13 @@ public class TriviaBotRenderState extends LivingEntityRenderState {
     public final AnimationState answerIncorrectAnimationState = new AnimationState();
     public final AnimationState snailTransformAnimationState = new AnimationState();
 
-    public final AnimationState santaAnalyzingAnimation = new AnimationState();
-    public final AnimationState santaAnswerCorrectAnimation = new AnimationState();
-    public final AnimationState santaAnswerIncorrectAnimation = new AnimationState();
-    public final AnimationState santaFlyAnimation = new AnimationState();
-    public final AnimationState santaGlideAnimation = new AnimationState();
-    public final AnimationState santaIdleAnimation = new AnimationState();
-    public final AnimationState santaWaveAnimation = new AnimationState();
+    public final AnimationState santaAnalyzingAnimationState = new AnimationState();
+    public final AnimationState santaAnswerCorrectAnimationState = new AnimationState();
+    public final AnimationState santaAnswerIncorrectAnimationState = new AnimationState();
+    public final AnimationState santaFlyAnimationState = new AnimationState();
+    public final AnimationState santaGlideAnimationState = new AnimationState();
+    public final AnimationState santaIdleAnimationState = new AnimationState();
+    public final AnimationState santaWaveAnimationState = new AnimationState();
 
     public boolean santaBot = false;
 }

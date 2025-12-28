@@ -11,6 +11,8 @@ import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.FlashbackCompatibility;
 import net.mat0u5.lifeseries.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.gui.other.UpdateInfoScreen;
+import net.mat0u5.lifeseries.gui.trivia.NewQuizScreen;
+import net.mat0u5.lifeseries.gui.trivia.VotingScreen;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.render.TextHud;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -134,7 +136,7 @@ public class ClientEvents {
             if (player != null) {
                 tryTripleJump(player);
                 checkOnGroundFor(player);
-                if (!player.isSleeping() && client.screen instanceof EmptySleepScreen) {
+                if (!player.isSleeping() && (client.screen instanceof EmptySleepScreen || client.screen instanceof NewQuizScreen || (client.screen instanceof VotingScreen votingScreen && votingScreen.requiresSleep))) {
                     client.setScreen(null);
                 }
             }

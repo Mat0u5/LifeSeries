@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandle
 import net.mat0u5.lifeseries.mixin.ServerLevelAccessor;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -14,6 +15,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.SleepStatus;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
@@ -47,7 +49,7 @@ public class NiceLife extends Season {
     public Time snowTicks = Time.zero();
     public double snowLayerTickChance = 1.0 / 43;
     public int currentMaxSnowLayers = -1;
-    public static boolean triviaInProgress = false;
+    public static boolean playedMidnightChimes = false;
     public static boolean TESTING = true; //TODO remove
 
     @Override
@@ -109,6 +111,12 @@ public class NiceLife extends Season {
                     serverPlayer.displayClientMessage(Component.nullToEmpty("You are too excited to fall asleep"), true);
                 }
             }
+            if (!playedMidnightChimes && isMidnight(23*20)) {
+                playedMidnightChimes = true;
+                PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(),
+                        SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_midnight_chimes")),
+                        1f, 1);
+            }
         }
 
         if (overworld instanceof ServerLevelAccessor accessor) {
@@ -123,7 +131,6 @@ public class NiceLife extends Season {
             }
             if (sleepStatus.areEnoughSleeping(percentage) && isMidnight() && currentSession.statusStarted()) {
                 if (!NiceLifeTriviaManager.triviaInProgress) {
-                    //TODO play midnight sound
                     List<ServerPlayer> triviaPlayers = new ArrayList<>();
                     for(ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
                         if (player.isSpectator()) continue;
@@ -135,11 +142,7 @@ public class NiceLife extends Season {
                 tempSleepTimer.tick();
                 //TODO remove
                 if (tempSleepTimer.isLarger(Time.seconds(800))) {
-                    long newTime = overworld.getDayTime() + 24000L;
-                    overworld.setDayTime(newTime - newTime % 24000L);
-                    accessor.ls$wakeUpAllPlayers();
-                    tempSleepTimer = Time.zero();
-                    triviaInProgress = false;
+                    sleepThroughNight();
                 }
             }
             else {
@@ -150,6 +153,18 @@ public class NiceLife extends Season {
             }
         }
     }
+    public void sleepThroughNight() {
+        if (server == null) return;
+        ServerLevel overworld = server.overworld();
+        if (overworld instanceof ServerLevelAccessor accessor) {
+            long newTime = overworld.getDayTime() + 24000L;
+            overworld.setDayTime(newTime - newTime % 24000L);
+            accessor.ls$wakeUpAllPlayers();
+            tempSleepTimer = Time.zero();
+            playedMidnightChimes = false;
+        }
+    }
+
 
     @Override
     public boolean sessionStart() {
@@ -165,8 +180,12 @@ public class NiceLife extends Season {
     }
 
     public boolean isMidnight() {
+        return isMidnight(0);
+    }
+
+    public boolean isMidnight(int offset) {
         if (server == null) return false;
-        long dayTime = server.overworld().getDayTime() % 24000L;
+        long dayTime = server.overworld().getDayTime() % 24000L + offset;
         return dayTime >= 18000 && dayTime <= 20000;
     }
 

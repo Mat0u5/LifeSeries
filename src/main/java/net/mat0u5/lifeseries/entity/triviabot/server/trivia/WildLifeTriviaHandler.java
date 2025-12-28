@@ -91,6 +91,7 @@ public class WildLifeTriviaHandler extends TriviaHandler {
         if (bot.submittedAnswer()) {
             if (bot.answeredRight()) {
                 if (bot.getAnalyzingTime() < -80) {
+                    bot.setLeaving(true);
                     if (bot.isPassenger()) bot.removeVehicle();
                     bot.noPhysics = true;
                     float velocity = Math.min(0.5f, 0.25f * Math.abs((bot.getAnalyzingTime()+80) / (20.0f)));

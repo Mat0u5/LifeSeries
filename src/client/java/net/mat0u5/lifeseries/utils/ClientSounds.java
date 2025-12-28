@@ -16,36 +16,53 @@ import net.minecraft.world.phys.Vec3;
 import java.util.*;
 
 public class ClientSounds {
-    public static final Map<UUID, SoundInstance> trackedEntitySounds = new HashMap<>();
-    private static final List<String> trackedSounds = List.of(
+    public static final Map<UUID, SoundInstance> onlyPlayLatestEntities = new HashMap<>();
+    public static final List<SoundInstance> onlyPlayLatest = new ArrayList<>();
+    private static final List<String> onlyPlayLatestSounds = List.of(
             "wildlife_trivia_intro",
             "wildlife_trivia_suspense",
             "wildlife_trivia_suspense_end",
-            "wildlife_trivia_analyzing"
+            "wildlife_trivia_analyzing",
+
+            "nicelife_santabot_intro",
+            "nicelife_santabot_suspense",
+            "nicelife_santabot_suspense_end",
+            "nicelife_santabot_analyzing"
     );
 
     public static void onSoundPlay(SoundInstance sound) {
-        if (!(sound instanceof EntityBoundSoundInstance entityTrackingSound)) return;
 
         //? if <= 1.21.9 {
-        if (!trackedSounds.contains(entityTrackingSound.getLocation().getPath())) return;
+        if (!onlyPlayLatestSounds.contains(sound.getLocation().getPath())) return;
         //?} else {
-        /*if (!trackedSounds.contains(entityTrackingSound.getIdentifier().getPath())) return;
+        /*if (!trackedSounds.contains(sound.getIdentifier().getPath())) return;
         *///?}
 
-        if (!(entityTrackingSound instanceof EntityBoundSoundInstanceAccessor entityTrackingSoundAccessor)) return;
-        Entity entity = entityTrackingSoundAccessor.getEntity();
-        if (entity == null) return;
-        UUID uuid = entity.getUUID();
-        if (uuid == null) return;
+        if (sound instanceof EntityBoundSoundInstance entityTrackingSound) {
+            if ((entityTrackingSound instanceof EntityBoundSoundInstanceAccessor entityTrackingSoundAccessor)) {
+                Entity entity = entityTrackingSoundAccessor.getEntity();
+                if (entity == null) return;
+                UUID uuid = entity.getUUID();
+                if (uuid == null) return;
 
-        if (trackedEntitySounds.containsKey(uuid)) {
-            SoundInstance stopSound = trackedEntitySounds.get(uuid);
+                if (onlyPlayLatestEntities.containsKey(uuid)) {
+                    SoundInstance stopSound = onlyPlayLatestEntities.get(uuid);
+                    if (stopSound != null) {
+                        Minecraft.getInstance().getSoundManager().stop(stopSound);
+                    }
+                }
+                onlyPlayLatestEntities.put(uuid, sound);
+                return;
+            }
+        }
+
+        for (SoundInstance stopSound : onlyPlayLatest) {
             if (stopSound != null) {
                 Minecraft.getInstance().getSoundManager().stop(stopSound);
             }
         }
-        trackedEntitySounds.put(uuid, sound);
+        onlyPlayLatest.clear();
+        onlyPlayLatest.add(sound);
     }
 
     private static final List<String> onlyOneOf = List.of(

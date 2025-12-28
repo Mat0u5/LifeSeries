@@ -87,7 +87,8 @@ public class NiceLifeTriviaManager {
                     }
                     spawnBotPos = newPos;
                 }
-                triviaSpawns.add(new TriviaSpawn(player.getUUID(), spawnBotPos, frontBedPos));
+
+                triviaSpawns.add(new TriviaSpawn(player.getUUID(), spawnBotPos, frontBedPos, bedDirection));
             }
         }
         spawnTriviaBots();
@@ -106,8 +107,10 @@ public class NiceLifeTriviaManager {
             /*int maxY = level.getMaxY();
             *///?}
             for (int breakY = spawnBotPos.getY(); breakY <= maxY; breakY++) {
+                //TODO stop at an air pos.
+                //TODO sequential block breaking
                 BlockPos breakBlockPos = spawnBotPos.atY(breakY);
-                breakBlocksAround(level, breakBlockPos);
+                breakBlocksAround(level, breakBlockPos, triviaSpawnInfo.bedPos.getY());
             }
             TriviaBot bot = LevelUtils.spawnEntity(MobRegistry.TRIVIA_BOT, player.ls$getServerLevel(), spawnBotPos);
             if (bot != null) {
@@ -125,11 +128,11 @@ public class NiceLifeTriviaManager {
         }
     }
 
-    public static void breakBlocksAround(ServerLevel level, BlockPos pos) {
+    public static void breakBlocksAround(ServerLevel level, BlockPos pos, int bedYPos) {
         for (int dirX = -1; dirX <= 1; dirX++) {
             for (int dirZ = -1; dirZ <= 1; dirZ++) {
                 BlockPos breakBlockPos = pos.offset(dirX, 0, dirZ);
-                if (level.getBlockState(breakBlockPos).getBlock() instanceof BedBlock) {
+                if (pos.getY() > bedYPos && level.getBlockState(breakBlockPos).getBlock() instanceof BedBlock) {
                     continue;
                 }
                 level.destroyBlock(breakBlockPos, true);
@@ -195,5 +198,5 @@ public class NiceLifeTriviaManager {
         return TriviaQuestion.getDefault();
     }
 
-    public record TriviaSpawn(UUID uuid, BlockPos spawnPos, BlockPos bedPos) {}
+    public record TriviaSpawn(UUID uuid, BlockPos spawnPos, BlockPos bedPos, Direction bedDirection) {}
 }

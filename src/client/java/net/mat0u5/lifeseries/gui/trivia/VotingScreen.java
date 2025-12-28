@@ -46,6 +46,7 @@ public class VotingScreen extends Screen {
     private String selectedPlayer = null;
     private final List<String> availablePlayers;
     public int timerSeconds = 60;
+    public boolean requiresSleep = false;
 
     private int listLeft;
     private int listRight;
@@ -53,6 +54,9 @@ public class VotingScreen extends Screen {
 
     public VotingScreen(String name, List<String> availablePlayers) {
         super(Component.literal(name));
+        if (name.endsWith("nice") || name.endsWith("naghty")) {
+            requiresSleep = true;
+        }
         this.availablePlayers = availablePlayers;
     }
 

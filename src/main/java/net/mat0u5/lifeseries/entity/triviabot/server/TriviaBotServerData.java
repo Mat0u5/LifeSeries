@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.entity.PlayerBoundEntity;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -82,7 +83,10 @@ public class TriviaBotServerData implements PlayerBoundEntity {
                 }
             }
             else if (currentSeason.getSeason() == Seasons.NICE_LIFE) {
-                //TODO
+                if (!NiceLifeTriviaManager.bots.containsValue(bot)) {
+                    despawn();
+                    return true;
+                }
             }
             else {
                 despawn();
