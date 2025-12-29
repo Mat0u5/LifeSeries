@@ -185,6 +185,9 @@ public class LivesManager {
         return Component.literal(String.valueOf(lives)).withStyle(color);
     }
     public String getTeamForPlayer(ServerPlayer player) {
+        if (LIVES_SYSTEM_DISABLED) {
+            return null;
+        }
         Integer lives = getPlayerLives(player);
         return getTeamForLives(lives);
     }

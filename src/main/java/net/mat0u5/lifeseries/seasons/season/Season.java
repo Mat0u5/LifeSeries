@@ -308,7 +308,7 @@ public abstract class Season {
         String team = getTeamForPlayer(player);
         Team currentTeam = player.getTeam();
 
-        if (currentTeam == null || !currentTeam.getName().equals(team)) {
+        if (team != null && (currentTeam == null || !currentTeam.getName().equals(team))) {
             TeamUtils.addEntityToTeam(team, player);
             playerChangedTeam(player);
         }
