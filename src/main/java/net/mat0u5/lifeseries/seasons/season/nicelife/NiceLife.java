@@ -318,7 +318,7 @@ public class NiceLife extends Season {
         return false;
     }
 
-    public static final BlockState packedIce = Blocks.PACKED_ICE.defaultBlockState();
+    public static final BlockState blueIce = Blocks.BLUE_ICE.defaultBlockState();
     public static final BlockState snowBlock = Blocks.SNOW_BLOCK.defaultBlockState();
     public static final BlockState air = Blocks.AIR.defaultBlockState();
     public static final BlockState froglight = Blocks.PEARLESCENT_FROGLIGHT.defaultBlockState();
@@ -335,7 +335,7 @@ public class NiceLife extends Season {
             return snowBlock;
         }
         if (oldState.is(Blocks.LAVA)) {
-            return packedIce;
+            return blueIce;
         }
         if (oldState.is(Blocks.CRIMSON_FUNGUS) ||
                 oldState.is(Blocks.CRIMSON_ROOTS) ||

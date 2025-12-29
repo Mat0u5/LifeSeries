@@ -23,17 +23,6 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:wind_charge",
-          "weight": 10,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": 6
-            }
-          ]
-        },
-        {
-          "type": "minecraft:item",
           "name": "minecraft:creeper_spawn_egg",
           "weight": 10
         },
@@ -140,23 +129,6 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:mace",
-          "weight": 5,
-          "functions": [
-            {
-              "function": "minecraft:set_components",
-              "components": {
-                "minecraft:custom_data": {
-                  "IgnoreBlacklist": true,
-                  "NoModifications": true
-                },
-                "minecraft:damage": 499
-              }
-            }
-          ]
-        },
-        {
-          "type": "minecraft:item",
           "name": "minecraft:potion",
           "weight": 10,
           "functions": [
@@ -232,6 +204,7 @@
             }
           ]
         },
+
         {
           "type": "minecraft:item",
           "name": "minecraft:cooked_beef",
@@ -242,11 +215,6 @@
               "count": 16
             }
           ]
-        },
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:breeze_rod",
-          "weight": 10
         },
         {
           "type": "minecraft:item",

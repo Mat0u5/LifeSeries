@@ -23,17 +23,6 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:wind_charge",
-          "weight": 10,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": 6
-            }
-          ]
-        },
-        {
-          "type": "minecraft:item",
           "name": "minecraft:creeper_spawn_egg",
           "weight": 10
         },
@@ -129,29 +118,9 @@
           "weight": 10,
           "functions": [
             {
-              "function": "minecraft:set_components",
-              "components": {
-                "minecraft:custom_data": {
-                  "IgnoreBlacklist": true
-                }
-              }
-            }
-          ]
-        },
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:mace",
-          "weight": 5,
-          "functions": [
-            {
-              "function": "minecraft:set_components",
-              "components": {
-                "minecraft:custom_data": {
-                  "IgnoreBlacklist": true,
-                  "NoModifications": true
-                },
-                "minecraft:damage": 499
-              }
+              "function": "minecraft:set_nbt",
+              "tag": "{IgnoreBlacklist:true}",
+              "conditions": []
             }
           ]
         },
@@ -221,13 +190,9 @@
           "weight": 10,
           "functions": [
             {
-              "function": "minecraft:set_components",
-              "components": {
-                "minecraft:stored_enchantments": {
-                  "levels": {
-                    "minecraft:feather_falling": 3
-                  }
-                }
+              "function": "minecraft:set_enchantments",
+              "enchantments": {
+                "minecraft:feather_falling": 3
               }
             }
           ]
@@ -242,11 +207,6 @@
               "count": 16
             }
           ]
-        },
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:breeze_rod",
-          "weight": 10
         },
         {
           "type": "minecraft:item",
@@ -291,16 +251,8 @@
           "weight": 10,
           "functions": [
             {
-              "function": "minecraft:set_components",
-              "components": {
-                "minecraft:entity_data": {
-                  "id": "minecraft:camel",
-                  "Tame": true,
-                  "SaddleItem": {
-                    "id": "minecraft:saddle"
-                  }
-                }
-              }
+              "function": "minecraft:set_nbt",
+              "tag": "{SaddleItem:{id:\"saddle\",Count:1b}, Tame:1b}"
             }
           ]
         },
@@ -320,13 +272,14 @@
           "weight": 1,
           "functions": [
             {
-              "function": "minecraft:set_components",
-              "components": {
-                "minecraft:custom_name": "\"§6§l§nThe Sacred Patat\"",
-                "minecraft:lore": [
-                  "\"§5§oEating this might help you. Or maybe not...\""
-                ]
-              }
+              "function": "minecraft:set_lore",
+              "lore": [
+                "§5§oEating this might help you. Or maybe not..."
+              ]
+            },
+            {
+              "function": "minecraft:set_name",
+              "name": "§6§l§nThe Sacred Patat"
             }
           ]
         }

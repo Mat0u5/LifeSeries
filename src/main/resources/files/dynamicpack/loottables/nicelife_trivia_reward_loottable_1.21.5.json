@@ -224,9 +224,7 @@
               "function": "minecraft:set_components",
               "components": {
                 "minecraft:stored_enchantments": {
-                  "levels": {
-                    "minecraft:feather_falling": 3
-                  }
+                  "minecraft:feather_falling": 3
                 }
               }
             }
@@ -322,9 +320,9 @@
             {
               "function": "minecraft:set_components",
               "components": {
-                "minecraft:custom_name": "\"§6§l§nThe Sacred Patat\"",
+                "minecraft:custom_name": "§6§l§nThe Sacred Patat",
                 "minecraft:lore": [
-                  "\"§5§oEating this might help you. Or maybe not...\""
+                  "§5§oEating this might help you. Or maybe not..."
                 ]
               }
             }

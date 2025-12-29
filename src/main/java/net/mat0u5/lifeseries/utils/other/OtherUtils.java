@@ -13,9 +13,7 @@ import net.minecraft.sounds.SoundEvent;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -114,22 +112,22 @@ public class OtherUtils {
         reloadServer();
     }
 
-    private static long[] reloads = {System.currentTimeMillis(),System.currentTimeMillis(),System.currentTimeMillis()};
+    private static List<Long> reloads = new ArrayList<>();
     public static void reloadServer() {
         try {
-            Arrays.sort(reloads);
             int inInterval = 0;
-            for (int i = 0; i < 3; i++) {
-                if (System.currentTimeMillis() - OtherUtils.reloads[i] < 5000) {
-                    inInterval++;
-                }
+            if (reloads.size() >= 3) {
+                int size = reloads.size();
+                if (System.currentTimeMillis() - reloads.get(size-1) < 5000) inInterval++;
+                if (System.currentTimeMillis() - reloads.get(size-2) < 5000) inInterval++;
+                if (System.currentTimeMillis() - reloads.get(size-3) < 5000) inInterval++;
             }
 
             if (inInterval >= 3) {
                 Main.LOGGER.error("Detected and prevented possible reload loop!");
                 return;
             }
-            reloads[0] = System.currentTimeMillis();
+            reloads.add(System.currentTimeMillis());
             OtherUtils.executeCommand("reload");
         } catch (Exception e) {
             Main.LOGGER.error("Error reloading server", e);

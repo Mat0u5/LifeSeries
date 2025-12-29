@@ -12,21 +12,42 @@ import net.mat0u5.lifeseries.utils.world.ItemSpawner;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static net.mat0u5.lifeseries.Main.livesManager;
 import static net.mat0u5.lifeseries.Main.server;
+
+//? if <= 1.20.5 {
+/*import net.minecraft.world.item.EnchantedBookItem;
+import net.minecraft.world.item.enchantment.EnchantmentInstance;
+*///?}
+//? if <= 1.20.3 {
+/*import net.minecraft.world.item.alchemy.PotionUtils;
+ *///?} else {
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.component.CustomData;
+//?}
+
+//? if >= 1.21.9 {
+/*import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.component.TypedEntityData;
+*///?}
 
 public class NiceLifeTriviaHandler extends TriviaHandler {
     public static ItemSpawner itemSpawner;
@@ -236,7 +257,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
             return;
         }
         float velocity = 0.12f * Math.abs((sameStateTime.getTicks()-12) / (20.0f));
-        if (sameStateTime.getTicks() >= 46) {
+        if (sameStateTime.getTicks() >= 42) {
             velocity *= 2f;
         }
 
@@ -444,9 +465,119 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
     }
 
     public static void initializeItemSpawner() {
-        //TODO loot table
-        //TODO finish items
         itemSpawner = new ItemSpawner();
-        itemSpawner.addItem(new ItemStack(Items.GOLDEN_APPLE, 2), 20);
+        itemSpawner.addItem(new ItemStack(Items.DIAMOND_BLOCK, 1), 10);
+        itemSpawner.addItem(new ItemStack(Items.GOLDEN_CARROT, 32), 10);
+        itemSpawner.addItem(new ItemStack(Items.CREEPER_SPAWN_EGG, 1), 10);
+        itemSpawner.addItem(new ItemStack(Items.PUFFERFISH_BUCKET, 1), 10);
+        itemSpawner.addItem(new ItemStack(Items.DIAMOND, 3), 20);
+        itemSpawner.addItem(new ItemStack(Items.IRON_BLOCK, 2), 10);
+        itemSpawner.addItem(new ItemStack(Items.GOLDEN_APPLE, 1), 20);
+        itemSpawner.addItem(new ItemStack(Items.SCULK_SENSOR, 1), 10);
+        itemSpawner.addItem(new ItemStack(Items.SCULK_SHRIEKER, 1), 10);
+        itemSpawner.addItem(new ItemStack(Items.TNT, 2), 20);
+        itemSpawner.addItem(new ItemStack(Items.OBSIDIAN, 20), 10);
+        itemSpawner.addItem(new ItemStack(Items.ARROW, 32), 10);
+
+        itemSpawner.addItem(new ItemStack(Items.ENDER_PEARL, 2), 20);
+        itemSpawner.addItem(new ItemStack(Items.SHULKER_BOX, 1), 10);
+
+        itemSpawner.addItem(new ItemStack(Items.BIRCH_LOG, 64), 10);
+        itemSpawner.addItem(new ItemStack(Items.OAK_LOG, 64), 10);
+        itemSpawner.addItem(new ItemStack(Items.MANGROVE_LOG, 64), 10);
+
+        itemSpawner.addItem(new ItemStack(Items.COOKED_BEEF, 16), 10);
+        itemSpawner.addItem(new ItemStack(Items.BLAZE_ROD, 8), 10);
+        itemSpawner.addItem(new ItemStack(Items.REDSTONE, 32), 10);
+        itemSpawner.addItem(new ItemStack(Items.VINDICATOR_SPAWN_EGG, 1), 10);
+        itemSpawner.addItem(new ItemStack(Items.EVOKER_SPAWN_EGG, 1), 10);
+
+        itemSpawner.addItem(new ItemStack(Items.BREWING_STAND, 1), 10);
+        itemSpawner.addItem(new ItemStack(Items.ENCHANTING_TABLE, 1), 10);
+
+        //Enchanted Books
+        //? if <= 1.20.3 {
+        /*itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.FALL_PROTECTION, 3))), 10);
+        *///?} else if <= 1.20.5 {
+        /*itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.FEATHER_FALLING, 3))), 10);
+        *///?} else {
+        itemSpawner.addItem(Objects.requireNonNull(ItemStackUtils.createEnchantedBook(Enchantments.FEATHER_FALLING, 3)), 10);
+        //?}
+
+        //Potions
+        ItemStack pot = new ItemStack(Items.POTION);
+        ItemStack pot2 = new ItemStack(Items.POTION);
+        //? if <= 1.20.3 {
+        /*PotionUtils.setCustomEffects(pot, Potions.INVISIBILITY.getEffects());
+        PotionUtils.setCustomEffects(pot2, Potions.SLOW_FALLING.getEffects());
+        *///?} else {
+        pot.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.INVISIBILITY));
+        pot2.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.SLOW_FALLING));
+        //?}
+        itemSpawner.addItem(pot, 10);
+        itemSpawner.addItem(pot2, 10);
+
+        //?if >= 1.21 {
+        itemSpawner.addItem(new ItemStack(Items.WIND_CHARGE, 6), 10);
+        itemSpawner.addItem(new ItemStack(Items.BREEZE_ROD, 1), 10);
+
+        ItemStack mace = new ItemStack(Items.MACE);
+        ItemStackUtils.setCustomComponentBoolean(mace, "IgnoreBlacklist", true);
+        ItemStackUtils.setCustomComponentBoolean(mace, "NoModifications", true);
+        mace.setDamageValue(mace.getMaxDamage()-1);
+        itemSpawner.addItem(mace, 5);
+        //?}
+        //?if >= 1.21.6 {
+        /*itemSpawner.addItem(new ItemStack(Items.DRIED_GHAST, 1), 10);
+        *///?}
+
+        ItemStack endCrystal = new ItemStack(Items.END_CRYSTAL);
+        ItemStackUtils.setCustomComponentBoolean(endCrystal, "IgnoreBlacklist", true);
+        itemSpawner.addItem(endCrystal, 10);
+
+        //? if >= 1.20.5 {
+        ItemStack patat = new ItemStack(Items.POISONOUS_POTATO);
+        patat.set(DataComponents.CUSTOM_NAME, Component.nullToEmpty("§6§l§nThe Sacred Patat"));
+        ItemStackUtils.addLoreToItemStack(patat,
+                List.of(Component.nullToEmpty("§5§oEating bot might help you. Or maybe not..."))
+        );
+        itemSpawner.addItem(patat, 1);
+        //?}
+
+
+
+        //Camel spawn egg
+        ItemStack camel = new ItemStack(Items.CAMEL_SPAWN_EGG);
+
+        CompoundTag nbtCompCamel = new CompoundTag();
+        nbtCompCamel.putInt("Tame", 1);
+        nbtCompCamel.putString("id", "camel");
+
+        //? if <= 1.21.4 {
+        CompoundTag saddleItemComp = new CompoundTag();
+        saddleItemComp.putInt("Count", 1);
+        saddleItemComp.putString("id", "saddle");
+        nbtCompCamel.put("SaddleItem", saddleItemComp);
+        //?} else {
+        /*CompoundTag equipmentItemComp = new CompoundTag();
+        CompoundTag saddleItemComp = new CompoundTag();
+        saddleItemComp.putString("id", "saddle");
+        equipmentItemComp.put("saddle", saddleItemComp);
+        nbtCompCamel.put("equipment", equipmentItemComp);
+        *///?}
+
+
+        //? if < 1.20.5 {
+        /*camel.setTag(nbtCompCamel);
+        *///?} else {
+        CustomData nbtCamel= CustomData.of(nbtCompCamel);
+        //?}
+
+        //? if >=1.20.5 && <= 1.21.6 {
+        camel.set(DataComponents.ENTITY_DATA, nbtCamel);
+        //?} else if > 1.21.6 {
+        /*camel.set(DataComponents.ENTITY_DATA, TypedEntityData.of(EntityType.CAMEL, nbtCamel.copyTag()));
+        *///?}
+        itemSpawner.addItem(camel, 10);
     }
 }
