@@ -27,11 +27,13 @@ public class AbstractSoundInstanceMixin {
             *///?}
         }
         //? if <= 1.21.9 {
-        if (soundInstance.getLocation().getPath().equalsIgnoreCase("nicelife_santabot_suspense")) {
+        if (soundInstance.getLocation().getPath().equalsIgnoreCase("nicelife_santabot_suspense") ||
+                soundInstance.getLocation().getPath().equalsIgnoreCase("nicelife_santabot_vote")) {
             cir.setReturnValue(true);
         }
         //?} else {
-        /*if (soundInstance.getIdentifier().getPath().equalsIgnoreCase("nicelife_santabot_suspense")) {
+        /*if (soundInstance.getIdentifier().getPath().equalsIgnoreCase("nicelife_santabot_suspense") ||
+                soundInstance.getIdentifier().getPath().equalsIgnoreCase("nicelife_santabot_vote")) {
             cir.setReturnValue(true);
         }
         *///?}

@@ -23,6 +23,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -82,7 +83,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         super.tick();
         bot.pathfinding.noPathfinding = true;
         bot.noPhysics = true;
-        bot.setNoGravity(true);//TODO just doesnt work???
+        bot.setNoGravity(true);
 
         ServerPlayer boundPlayer = bot.serverData.getBoundPlayer();
         ServerLevel level = (ServerLevel) bot.level();
@@ -91,13 +92,22 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
             bot.setWaving(bot.waving()-1);
         }
 
-        if (spawnInfo == null || (boundPlayer != null && !boundPlayer.isSleeping())) {
+        if (spawnInfo == null || boundPlayer == null) {
             bot.serverData.despawn();
             return;
         }
+        if (boundPlayer != null && !boundPlayer.isSleeping()) {
+            changeStateTo(BotState.LEAVING);
+        }
+
         if (currentState == BotState.LANDING) {
             landingTick(level);
+            bot.setGliding(true);
         }
+        else {
+            bot.setGliding(false);
+        }
+
         if (currentState == BotState.APPROACHING) {
             approachingTick(level, boundPlayer);
         }
@@ -172,8 +182,16 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
             bot.setPos(bot.position().x, spawnInfo.spawnPos().getY()+botPosOffset.y, bot.position().z);
             changeStateTo(BotState.APPROACHING);
             for (BlockPos pos : BlockPos.betweenClosed(spawnInfo.spawnPos().above(), spawnInfo.bedPos())) {
-                if (level.getBlockState(pos).getBlock() instanceof BedBlock) continue;
-                level.destroyBlock(pos, true);
+                BlockState state = level.getBlockState(pos);
+                if (state.getBlock() instanceof BedBlock) continue;
+                if (state.getBlock().defaultDestroyTime() == -1) {
+                    //Unbreakable blocks
+                    continue;
+                }
+                if (state.getCollisionShape(level, pos).isEmpty()) {
+                    continue;
+                }
+                level.destroyBlock(pos, NiceLifeTriviaManager.BREAKING_DROPS_RESOURCES);
             }
         }
         else {
@@ -393,7 +411,9 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
 
         NetworkHandlerServer.sendStringListPacket(boundPlayer, PacketNames.VOTING_SCREEN, availableForVoting);
         NiceLifeVotingManager.allowedToVote.add(boundPlayer.getUUID());
-        //TODO play voting sound
+        //TODO add the voting sound - "nicelife_santabot_vote"
+        SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_suspense"));
+        PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.65f, 1);
         return true;
     }
 

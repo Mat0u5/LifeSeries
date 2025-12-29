@@ -51,6 +51,10 @@ public class MiningNavigation extends FlyingPathNavigation {
     }
 
     private void breakBlockIfNecessary(BlockPos pos) {
+        if (level.getBlockState(pos).getBlock().defaultDestroyTime() == -1) {
+            //Unbreakable blocks
+            return;
+        }
         if (!this.level.getBlockState(pos).isAir()) {
             this.level.destroyBlock(pos, true, this.mob);
         }

@@ -20,7 +20,7 @@ public final class TriviaBotGlideGoal extends Goal {
     @Override
     public boolean canUse() {
         if (mob.level().isClientSide()) return false;
-        if (mob.triviaHandler instanceof NiceLifeTriviaHandler triviaHandler && triviaHandler.currentState != NiceLifeTriviaHandler.BotState.LANDING) return false;
+        if (mob.santaBot()) return false;
 
         if (mob.isBotGliding()) {
             return true;
@@ -45,15 +45,10 @@ public final class TriviaBotGlideGoal extends Goal {
     @Override
     public void start() {
         ticksWaited = 0;
-        mob.setGliding(true);
     }
 
     @Override
     public boolean canContinueToUse() {
-        if (mob.santaBot()) {
-            if (mob.triviaHandler instanceof NiceLifeTriviaHandler triviaHandler && triviaHandler.currentState != NiceLifeTriviaHandler.BotState.LANDING) return false;
-            return mob.pathfinding.getDistanceToGroundBlock() >= 0.1;
-        }
         return mob.pathfinding.getDistanceToGroundBlock() >= 1;
     }
 

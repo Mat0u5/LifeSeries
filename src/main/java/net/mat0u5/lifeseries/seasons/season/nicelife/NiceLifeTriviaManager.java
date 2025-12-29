@@ -36,6 +36,8 @@ public class NiceLifeTriviaManager {
     public static TriviaQuestion currentQuestion = TriviaQuestion.getDefault();
     public static Random rnd = new Random();
     public static int QUESTION_TIME = 68;
+    public static boolean CAN_BREAK_BEDS = true;
+    public static boolean BREAKING_DROPS_RESOURCES = true;
     public static List<TriviaSpawn> triviaSpawns = new ArrayList<>();
     public static List<UUID> triviaPlayersUUID = new ArrayList<>();
     public static boolean preparingForSpawn = false;
@@ -91,6 +93,7 @@ public class NiceLifeTriviaManager {
         if (firstTriviaInSession) {
             SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_introduction_long"));
             PlayerUtils.playSoundToPlayers(triviaPlayers, sound, 1f, 1);
+            breakBotSpawnBlocks(616-160);
             TaskScheduler.scheduleTask(616-160, () -> {
                 spawnTriviaBots(160);
             });
@@ -98,6 +101,7 @@ public class NiceLifeTriviaManager {
         else {
             SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_introduction_short"));
             PlayerUtils.playSoundToPlayers(triviaPlayers, sound, 1f, 1);
+            breakBotSpawnBlocks(71);
             TaskScheduler.scheduleTask(71, () -> {
                 spawnTriviaBots(0);
             });
@@ -114,7 +118,7 @@ public class NiceLifeTriviaManager {
         triviaInProgress = false;
     }
 
-    public static void spawnTriviaBots(int soundDelay) {
+    public static void breakBotSpawnBlocks(int overTicks) {
         for (TriviaSpawn triviaSpawnInfo : triviaSpawns) {
             ServerPlayer player = PlayerUtils.getPlayer(triviaSpawnInfo.uuid());
             if (player == null) continue;
@@ -124,13 +128,35 @@ public class NiceLifeTriviaManager {
             int maxY = level.getMaxBuildHeight();
             //?} else {
             /*int maxY = level.getMaxY();
-            *///?}
-            for (int breakY = spawnBotPos.getY(); breakY <= maxY; breakY++) {
-                //TODO stop at an air pos.
-                //TODO sequential block breaking
+             *///?}
+            List<Integer> breakYPositions = new ArrayList<>();
+            for (int breakY = spawnBotPos.getY(); breakY < maxY; breakY++) {
                 BlockPos breakBlockPos = spawnBotPos.atY(breakY);
-                breakBlocksAround(level, breakBlockPos, triviaSpawnInfo.bedPos.getY());
+                BlockPos aboveBreakBlockPos = breakBlockPos.above();
+                breakYPositions.add(breakY);
+                if (level.getBlockState(breakBlockPos).isAir() && level.getBlockState(aboveBreakBlockPos).isAir()) {
+                    breakYPositions.add(breakY+1);
+                    break;
+                }
             }
+            Collections.reverse(breakYPositions);
+            double delay = 0;
+            double step = (double) overTicks / breakYPositions.size();
+            for (int yPos : breakYPositions) {
+                BlockPos breakBlockPos = spawnBotPos.atY(yPos);
+                TaskScheduler.scheduleTask((int) delay, () -> {
+                    breakBlocksAround(level, breakBlockPos, triviaSpawnInfo.bedPos.getY());
+                });
+                delay += step;
+            }
+        }
+    }
+
+    public static void spawnTriviaBots(int soundDelay) {
+        for (TriviaSpawn triviaSpawnInfo : triviaSpawns) {
+            ServerPlayer player = PlayerUtils.getPlayer(triviaSpawnInfo.uuid());
+            if (player == null) continue;
+            BlockPos spawnBotPos = triviaSpawnInfo.spawnPos().offset(0, 20, 0);
             TriviaBot bot = LevelUtils.spawnEntity(MobRegistry.TRIVIA_BOT, player.ls$getServerLevel(), spawnBotPos);
             if (bot != null) {
                 bot.sounds.delay = soundDelay;
@@ -153,10 +179,14 @@ public class NiceLifeTriviaManager {
         for (int dirX = -1; dirX <= 1; dirX++) {
             for (int dirZ = -1; dirZ <= 1; dirZ++) {
                 BlockPos breakBlockPos = pos.offset(dirX, 0, dirZ);
-                if (breakBlockPos.getY() <= bedYPos && level.getBlockState(breakBlockPos).getBlock() instanceof BedBlock) {
+                if ((breakBlockPos.getY() <= bedYPos || !CAN_BREAK_BEDS) && level.getBlockState(breakBlockPos).getBlock() instanceof BedBlock) {
                     continue;
                 }
-                level.destroyBlock(breakBlockPos, true);
+                if (level.getBlockState(breakBlockPos).getBlock().defaultDestroyTime() == -1) {
+                    //Unbreakable blocks
+                    continue;
+                }
+                level.destroyBlock(breakBlockPos, BREAKING_DROPS_RESOURCES);
             }
         }
     }

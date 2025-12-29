@@ -79,6 +79,14 @@ public class NiceLifeConfig extends ConfigManager {
             "trivia_question_time", 68, ConfigTypes.SECONDS, "season.trivia[new]",
             "Trivia Question Time", "Controls how much time people have to answer the trivia, in seconds."
     );
+    public static final ConfigFileEntry<Boolean> BOT_CAN_BREAK_BEDS = new ConfigFileEntry<>(
+            "bot_can_break_beds", true, "season.trivia[new]",
+            "Bots Can Break Beds", "Controls whether descending santa bots can break the beds of other players in the way."
+    );
+    public static final ConfigFileEntry<Boolean> BOT_BREAKING_BLOCKS_DROP_RESOURCES = new ConfigFileEntry<>(
+            "bot_breaking_blocks_drop_resources", true, "season.trivia[new]",
+            "Bots Breaking Blocks Drop Resources", "Controls whether block broken by descending santa bots drop items."
+    );
     public static final ConfigFileEntry<Integer> VOTING_TIME = new ConfigFileEntry<>(
             "voting_time", 60, ConfigTypes.SECONDS, "season.voting[new]",
             "Voting Time", "Controls how much time people have for voting, in seconds."
@@ -119,6 +127,8 @@ public class NiceLifeConfig extends ConfigManager {
                 ,GROUP_VOTING
 
                 ,TRIVIA_QUESTION_TIME
+                ,BOT_CAN_BREAK_BEDS
+                , BOT_BREAKING_BLOCKS_DROP_RESOURCES
                 ,VOTING_TIME
                 ,NICE_LIST_CHANCE
         ));

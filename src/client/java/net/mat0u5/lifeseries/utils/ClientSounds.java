@@ -34,7 +34,9 @@ public class ClientSounds {
             "nicelife_santabot_incorrect3",
             "nicelife_santabot_incorrect4",
             "nicelife_santabot_incorrect5",
-            "nicelife_santabot_incorrect6"
+            "nicelife_santabot_incorrect6",
+            "nicelife_santabot_vote",
+            "nicelife_santabot_turn"
     );
 
     public static void onSoundPlay(SoundInstance sound) {
