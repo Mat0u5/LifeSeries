@@ -23,7 +23,7 @@ public class NiceLifeVotingManager {
     public enum TriviaVoteType {
         NICE_LIST,
         NAUGHTY_LIST,
-        NONE //TODO logic for choosing this
+        NONE
     }
 
     public static void reset() {

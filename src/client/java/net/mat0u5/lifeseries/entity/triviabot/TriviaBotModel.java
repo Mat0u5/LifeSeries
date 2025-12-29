@@ -38,6 +38,8 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
     private final KeyframeAnimation santaGlideAnimation;
     private final KeyframeAnimation santaIdleAnimation;
     private final KeyframeAnimation santaWaveAnimation;
+    private final KeyframeAnimation faceAngryAnimation;
+    private final KeyframeAnimation faceHappyAnimation;
      *///?}
 
     private final ModelPart full;
@@ -134,6 +136,9 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
         santaGlideAnimation = TriviaBotAnimations.santa_glide.bake(root);
         santaIdleAnimation = TriviaBotAnimations.santa_idle.bake(root);
         santaWaveAnimation = TriviaBotAnimations.santa_wave.bake(root);
+
+        faceAngryAnimation = TriviaBotAnimations.face_angry.bake(root);
+        faceHappyAnimation = TriviaBotAnimations.face_happy.bake(root);
         *///?}
     }
     public static LayerDefinition getTexturedModelData() {
@@ -281,6 +286,9 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
         this.animate(entity.clientData.santaGlideAnimationState, TriviaBotAnimations.santa_glide, ageInTicks);
         this.animate(entity.clientData.santaIdleAnimationState, TriviaBotAnimations.santa_idle, ageInTicks);
         this.animate(entity.clientData.santaWaveAnimationState, TriviaBotAnimations.santa_wave, ageInTicks);
+
+        this.animate(entity.clientData.faceAngryAnimationState, TriviaBotAnimations.face_angry, ageInTicks);
+        this.animate(entity.clientData.faceHappyAnimationState, TriviaBotAnimations.face_happy, ageInTicks);
     }
 
     //? if <= 1.20.5 {
@@ -321,6 +329,9 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
         this.animate(state.santaGlideAnimationState, TriviaBotAnimations.santa_glide, state.ageInTicks);
         this.animate(state.santaIdleAnimationState, TriviaBotAnimations.santa_idle, state.ageInTicks);
         this.animate(state.santaWaveAnimationState, TriviaBotAnimations.santa_wave, state.ageInTicks);
+
+        this.animate(state.faceAngryAnimationState, TriviaBotAnimations.face_angry, state.ageInTicks);
+        this.animate(state.faceHappyAnimationState, TriviaBotAnimations.face_happy, state.ageInTicks);
         //?} else {
         /^this.glideAnimation.apply(state.glideAnimationState, state.ageInTicks);
         this.idleAnimation.apply(state.idleAnimationState, state.ageInTicks);
@@ -338,6 +349,9 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
         this.santaGlideAnimation.apply(state.santaGlideAnimationState, state.ageInTicks);
         this.santaIdleAnimation.apply(state.santaIdleAnimationState, state.ageInTicks);
         this.santaWaveAnimation.apply(state.santaWaveAnimationState, state.ageInTicks);
+
+        this.faceAngryAnimation.apply(state.faceAngryAnimationState, state.ageInTicks);
+        this.faceHappyAnimation.apply(state.faceHappyAnimationState, state.ageInTicks);
         ^///?}
     }
     *///?}

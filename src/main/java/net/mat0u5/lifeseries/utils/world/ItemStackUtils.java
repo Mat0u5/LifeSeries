@@ -235,13 +235,13 @@ public class ItemStackUtils {
     }
     //?}
 
-    public static void spawnItem(ServerLevel level, Vec3 position, ItemStack stack) {
-        spawnItemForPlayer(level, position, stack, null);
+    public static ItemEntity spawnItem(ServerLevel level, Vec3 position, ItemStack stack) {
+        return spawnItemForPlayer(level, position, stack, null);
     }
 
-    public static void spawnItemForPlayer(ServerLevel level, Vec3 position, ItemStack stack, Player player) {
+    public static ItemEntity spawnItemForPlayer(ServerLevel level, Vec3 position, ItemStack stack, Player player) {
         if (level == null || stack.isEmpty()) {
-            return;
+            return null;
         }
         ItemEntity itemEntity = new ItemEntity(level, position.x, position.y, position.z, stack);
         itemEntity.setPickUpDelay(20);
@@ -249,10 +249,11 @@ public class ItemStackUtils {
         if (player != null) itemEntity.setTarget(player.getUUID());
 
         level.addFreshEntity(itemEntity);
+        return itemEntity;
     }
-    public static void spawnItemForPlayerWithVelocity(ServerLevel level, Vec3 position, ItemStack stack, Player player, Vec3 velocity) {
+    public static ItemEntity spawnItemForPlayerWithVelocity(ServerLevel level, Vec3 position, ItemStack stack, Player player, Vec3 velocity) {
         if (level == null || stack.isEmpty()) {
-            return;
+            return null;
         }
         ItemEntity itemEntity = new ItemEntity(level, position.x, position.y, position.z, stack);
         itemEntity.setPickUpDelay(20);
@@ -260,6 +261,7 @@ public class ItemStackUtils {
         if (player != null) itemEntity.setTarget(player.getUUID());
 
         level.addFreshEntity(itemEntity);
+        return itemEntity;
     }
 
     public static ItemStack createEnchantedBook(ResourceKey<Enchantment> enchantment, int level) {

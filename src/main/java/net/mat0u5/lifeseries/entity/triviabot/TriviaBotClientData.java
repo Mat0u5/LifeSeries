@@ -25,6 +25,8 @@ public class TriviaBotClientData {
     public final AnimationState santaGlideAnimationState = new AnimationState();
     public final AnimationState santaIdleAnimationState = new AnimationState();
     public final AnimationState santaWaveAnimationState = new AnimationState();
+    public final AnimationState faceAngryAnimationState = new AnimationState();
+    public final AnimationState faceHappyAnimationState = new AnimationState();
     public void tick() {
         if (!bot.level().isClientSide()) return;
         updateAnimations();
@@ -89,7 +91,7 @@ public class TriviaBotClientData {
     }
 
     public void santaAnimations() {
-        if (bot.submittedAnswer() && !lastSubmittedAnswer) {
+        if (bot.submittedAnswer() && !lastSubmittedAnswer && bot.getAnalyzingTime() > 0) {
             pauseAllAnimations("santa_analyzing");
             santaAnalyzingAnimationState.startIfStopped(bot.tickCount);
         }
@@ -149,11 +151,25 @@ public class TriviaBotClientData {
         if (!except.equalsIgnoreCase("snail_transform")) snailTransformAnimationState.stop();
 
         if (!except.equalsIgnoreCase("santa_analyzing")) santaAnalyzingAnimationState.stop();
-        if (!except.equalsIgnoreCase("santa_answer_correct")) santaAnswerCorrectAnimationState.stop();
-        if (!except.equalsIgnoreCase("santa_answer_incorrect")) santaAnswerIncorrectAnimationState.stop();
+        if (!except.equalsIgnoreCase("santa_answer_correct")) {
+            santaAnswerCorrectAnimationState.stop();
+            if (bot.submittedAnswer() && bot.getAnalyzingTime() < 0 && bot.answeredRight()) {
+                faceHappyAnimationState.startIfStopped(bot.tickCount);
+            }
+        }
+        if (!except.equalsIgnoreCase("santa_answer_incorrect")) {
+            santaAnswerIncorrectAnimationState.stop();
+            if (bot.submittedAnswer() && bot.getAnalyzingTime() < 0 && !bot.answeredRight()) {
+                faceAngryAnimationState.startIfStopped(bot.tickCount);
+            }
+        }
         if (!except.equalsIgnoreCase("santa_fly")) santaFlyAnimationState.stop();
         if (!except.equalsIgnoreCase("santa_glide")) santaGlideAnimationState.stop();
         if (!except.equalsIgnoreCase("santa_idle")) santaIdleAnimationState.stop();
         if (!except.equalsIgnoreCase("santa_wave")) santaWaveAnimationState.stop();
+
+        // These are permanent
+        //if (!except.equalsIgnoreCase("face_angry")) faceAngryAnimationState.stop();
+        //if (!except.equalsIgnoreCase("face_happy")) faceHappyAnimationState.stop();
     }
 }

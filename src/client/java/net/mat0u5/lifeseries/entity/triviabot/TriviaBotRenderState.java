@@ -26,6 +26,9 @@ public class TriviaBotRenderState extends LivingEntityRenderState {
     public final AnimationState santaIdleAnimationState = new AnimationState();
     public final AnimationState santaWaveAnimationState = new AnimationState();
 
+    public final AnimationState faceAngryAnimationState = new AnimationState();
+    public final AnimationState faceHappyAnimationState = new AnimationState();
+
     public boolean santaBot = false;
 }
 *///?}

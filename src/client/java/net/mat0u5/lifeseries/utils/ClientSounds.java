@@ -28,7 +28,13 @@ public class ClientSounds {
             "nicelife_santabot_intro",
             "nicelife_santabot_suspense",
             "nicelife_santabot_suspense_end",
-            "nicelife_santabot_analyzing"
+            "nicelife_santabot_analyzing",
+            "nicelife_santabot_incorrect1",
+            "nicelife_santabot_incorrect2",
+            "nicelife_santabot_incorrect3",
+            "nicelife_santabot_incorrect4",
+            "nicelife_santabot_incorrect5",
+            "nicelife_santabot_incorrect6"
     );
 
     public static void onSoundPlay(SoundInstance sound) {

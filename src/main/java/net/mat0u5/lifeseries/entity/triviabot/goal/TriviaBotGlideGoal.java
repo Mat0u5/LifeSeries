@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.entity.triviabot.goal;
 
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
+import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
 import net.minecraft.world.entity.ai.goal.Goal;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,6 +20,8 @@ public final class TriviaBotGlideGoal extends Goal {
     @Override
     public boolean canUse() {
         if (mob.level().isClientSide()) return false;
+        if (mob.triviaHandler instanceof NiceLifeTriviaHandler triviaHandler && triviaHandler.currentState != NiceLifeTriviaHandler.BotState.LANDING) return false;
+
         if (mob.isBotGliding()) {
             return true;
         }
@@ -48,6 +51,7 @@ public final class TriviaBotGlideGoal extends Goal {
     @Override
     public boolean canContinueToUse() {
         if (mob.santaBot()) {
+            if (mob.triviaHandler instanceof NiceLifeTriviaHandler triviaHandler && triviaHandler.currentState != NiceLifeTriviaHandler.BotState.LANDING) return false;
             return mob.pathfinding.getDistanceToGroundBlock() >= 0.1;
         }
         return mob.pathfinding.getDistanceToGroundBlock() >= 1;

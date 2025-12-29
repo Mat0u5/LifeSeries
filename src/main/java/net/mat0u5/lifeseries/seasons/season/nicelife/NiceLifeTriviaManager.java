@@ -35,7 +35,7 @@ public class NiceLifeTriviaManager {
     public static boolean firstTriviaInSession = true;
     public static TriviaQuestion currentQuestion = TriviaQuestion.getDefault();
     public static Random rnd = new Random();
-    public static int QUESTION_TIME = 67;
+    public static int QUESTION_TIME = 68;
     public static List<TriviaSpawn> triviaSpawns = new ArrayList<>();
     public static List<UUID> triviaPlayersUUID = new ArrayList<>();
     public static boolean preparingForSpawn = false;
@@ -91,7 +91,7 @@ public class NiceLifeTriviaManager {
         if (firstTriviaInSession) {
             SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_introduction_long"));
             PlayerUtils.playSoundToPlayers(triviaPlayers, sound, 1f, 1);
-            TaskScheduler.scheduleTask(612-160, () -> {
+            TaskScheduler.scheduleTask(616-160, () -> {
                 spawnTriviaBots(160);
             });
         }
@@ -153,7 +153,7 @@ public class NiceLifeTriviaManager {
         for (int dirX = -1; dirX <= 1; dirX++) {
             for (int dirZ = -1; dirZ <= 1; dirZ++) {
                 BlockPos breakBlockPos = pos.offset(dirX, 0, dirZ);
-                if (pos.getY() > bedYPos && level.getBlockState(breakBlockPos).getBlock() instanceof BedBlock) {
+                if (breakBlockPos.getY() <= bedYPos && level.getBlockState(breakBlockPos).getBlock() instanceof BedBlock) {
                     continue;
                 }
                 level.destroyBlock(breakBlockPos, true);

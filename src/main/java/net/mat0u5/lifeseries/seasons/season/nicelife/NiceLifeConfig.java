@@ -76,7 +76,7 @@ public class NiceLifeConfig extends ConfigManager {
     );
 
     public static final ConfigFileEntry<Integer> TRIVIA_QUESTION_TIME = new ConfigFileEntry<>(
-            "trivia_question_time", 67, ConfigTypes.SECONDS, "season.trivia[new]",
+            "trivia_question_time", 68, ConfigTypes.SECONDS, "season.trivia[new]",
             "Trivia Question Time", "Controls how much time people have to answer the trivia, in seconds."
     );
     public static final ConfigFileEntry<Integer> VOTING_TIME = new ConfigFileEntry<>(
@@ -95,7 +95,7 @@ public class NiceLifeConfig extends ConfigManager {
     );
     public static final ConfigFileEntry<Object> GROUP_VOTING = new ConfigFileEntry<>(
             "group_voting", null, ConfigTypes.TEXT, "{season.voting}[new]",
-            "Trivia", ""
+            "Voting", ""
     );
 
     public NiceLifeConfig() {

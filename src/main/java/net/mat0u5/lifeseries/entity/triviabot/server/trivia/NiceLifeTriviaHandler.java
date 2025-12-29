@@ -16,8 +16,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
     public NiceLifeTriviaManager.TriviaSpawn spawnInfo;
     public BotState currentState = BotState.LANDING;
     private Time sameStateTime = Time.zero();
+    private static Vec3 botPosOffset = new Vec3(0, 0, 0);
 
     public enum BotState {
         LANDING,
@@ -58,6 +61,8 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         super.tick();
         bot.pathfinding.noPathfinding = true;
         bot.noPhysics = true;
+        bot.setNoGravity(true);//TODO just doesnt work???
+
         ServerPlayer boundPlayer = bot.serverData.getBoundPlayer();
         ServerLevel level = (ServerLevel) bot.level();
 
@@ -102,7 +107,11 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
                     if (boundPlayer != null) {
                         NetworkHandlerServer.sendStringPacket(boundPlayer, PacketNames.RESET_TRIVIA, "true");
                     }
-                    changeStateTo(BotState.LEAVING);
+                    TaskScheduler.scheduleTask(40, () -> {
+                        bot.setSubmittedAnswer(true);
+                        bot.setAnalyzingTime(0);
+                        answeredIncorrect();
+                    });
                 }
                 bot.setRanOutOfTime(true);
             }
@@ -137,11 +146,12 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
 
     public void landingTick(ServerLevel level) {
         sameStateTime.tick();
-        if (bot.blockPosition().getY() < spawnInfo.spawnPos().getY() || sameStateTime.isLarger(Time.seconds(30))) {
+        if (bot.position().y() < (spawnInfo.spawnPos().getY()+botPosOffset.y) || sameStateTime.isLarger(Time.seconds(30))) {
             bot.setDeltaMovement(0, 0,0);
-            bot.setPos(bot.position().x, spawnInfo.spawnPos().getY(), bot.position().z);
+            bot.setPos(bot.position().x, spawnInfo.spawnPos().getY()+botPosOffset.y, bot.position().z);
             changeStateTo(BotState.APPROACHING);
             for (BlockPos pos : BlockPos.betweenClosed(spawnInfo.spawnPos().above(), spawnInfo.bedPos())) {
+                if (level.getBlockState(pos).getBlock() instanceof BedBlock) continue;
                 level.destroyBlock(pos, true);
             }
         }
@@ -161,7 +171,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         if (bot.waving() == -1) {
             Vec3 bedVector = Vec3.atBottomCenterOf(spawnInfo.bedPos()).subtract(Vec3.atBottomCenterOf(spawnInfo.spawnPos()));
             if (bedVector.length() > 4) {
-                Vec3 middlePos = Vec3.atBottomCenterOf(spawnInfo.spawnPos()).add(bedVector.scale(0.4));
+                Vec3 middlePos = Vec3.atBottomCenterOf(spawnInfo.spawnPos()).add(botPosOffset).add(bedVector.scale(0.4));
                 boolean atMiddlePos = botPos.distanceTo(middlePos) <= 0.1;
                 if (atMiddlePos) {
                     bot.setDeltaMovement(0, 0, 0);
@@ -175,7 +185,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
             return;
         }
 
-        Vec3 bedPos = Vec3.atBottomCenterOf(spawnInfo.bedPos());
+        Vec3 bedPos = Vec3.atBottomCenterOf(spawnInfo.bedPos()).add(botPosOffset);
         double speedX = bedPos.x() - botPos.x();
         double speedZ = bedPos.z() - botPos.z();
         double maxSpeed = 0.08;
@@ -190,7 +200,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         boolean atPos = botPos.distanceTo(bedPos) <= 0.1;
         if (atPos || sameStateTime.isLarger(Time.seconds(10))) {
             if (!atPos) {
-                LevelUtils.teleport(bot, level, spawnInfo.bedPos());
+                LevelUtils.teleport(bot, level, Vec3.atBottomCenterOf(spawnInfo.bedPos()).add(botPosOffset));
             }
             changeStateTo(BotState.APPROACHED);
         }
@@ -210,7 +220,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         sameStateTime.tick();
         bot.setDeltaMovement(0, 0, 0);
         turnToBed(20);
-        if (sameStateTime.isLarger(NiceLifeVotingManager.VOTING_TIME.add(Time.seconds(35)))) {
+        if (sameStateTime.isLarger(NiceLifeVotingManager.VOTING_TIME.copy().add(Time.seconds(35)))) {
             changeStateTo(BotState.LEAVING);
         }
     }
@@ -221,13 +231,13 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         sameStateTime.tick();
         if (bot.isPassenger()) bot.removeVehicle();
         bot.noPhysics = true;
-        if (sameStateTime.getTicks() < 15) {
+        if (sameStateTime.getTicks() < 12) {
             bot.setDeltaMovement(0, 0, 0);
             return;
         }
-        float velocity = 0.1f * Math.abs((sameStateTime.getTicks()-15) / (20.0f));
-        if (sameStateTime.getTicks() >= 43) {
-            velocity *= 3f;
+        float velocity = 0.12f * Math.abs((sameStateTime.getTicks()-12) / (20.0f));
+        if (sameStateTime.getTicks() >= 46) {
+            velocity *= 2f;
         }
 
         bot.setDeltaMovement(0,velocity,0);
@@ -243,8 +253,8 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         turnFromBed(20);
 
         Vec3 botPos = bot.position();
-        Vec3 leavePos = Vec3.atBottomCenterOf(spawnInfo.spawnPos());
-        Vec3 bedPos = Vec3.atBottomCenterOf(spawnInfo.bedPos());
+        Vec3 leavePos = Vec3.atBottomCenterOf(spawnInfo.spawnPos()).add(botPosOffset);
+        Vec3 bedPos = Vec3.atBottomCenterOf(spawnInfo.bedPos()).add(botPosOffset);
         double speedX = leavePos.x() - botPos.x();
         double speedZ = leavePos.z() - botPos.z();
         double maxSpeed = 0.08;
@@ -258,7 +268,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         boolean atPos = botPos.distanceTo(leavePos) <= 0.1;
         if (atPos || sameStateTime.isLarger(Time.seconds(10))) {
             if (!atPos) {
-                LevelUtils.teleport(bot, level, spawnInfo.spawnPos());
+                LevelUtils.teleport(bot, level, Vec3.atBottomCenterOf(spawnInfo.spawnPos()).add(botPosOffset));
             }
             changeStateTo(BotState.FLYING_UP);
         }
@@ -288,6 +298,12 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         if (newState == BotState.LEAVING) {
             SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_turn"));
             PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.65f, 1);
+            TaskScheduler.scheduleTask(40, () -> {
+                for (ItemEntity item : droppedItems) {
+                    if (item == null) continue;
+                    item.setPickUpDelay(0);
+                }
+            });
         }
         if (newState == BotState.FLYING_UP) {
             NetworkHandlerServer.sendStringPacket(bot.serverData.getBoundPlayer(), PacketNames.HIDE_SLEEP_DARKNESS, "false");
@@ -309,11 +325,11 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
 
     public void answeredCorrect() {
         super.answeredCorrect();
-        //TODO items
-        //TaskScheduler.scheduleTask(145, this::spawnItemForPlayer);
-        //TaskScheduler.scheduleTask(170, this::spawnItemForPlayer);
-        //TaskScheduler.scheduleTask(198, this::spawnItemForPlayer);
-        //TaskScheduler.scheduleTask(213, this::blessPlayer);
+
+        TaskScheduler.scheduleTask(174+87, () -> spawnItemForPlayer(true));
+        TaskScheduler.scheduleTask(174+107, () -> spawnItemForPlayer(true));
+        TaskScheduler.scheduleTask(174+126, () -> spawnItemForPlayer(true));
+
         SoundEvent sound = OtherUtils.getRandomSound("nicelife_santabot_correct", 1, 6);
         TaskScheduler.scheduleTask(174, () -> {
             PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.65f, 1);
@@ -362,22 +378,32 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
 
     public void answeredIncorrect() {
         super.answeredIncorrect();
-        //TaskScheduler.scheduleTask(210, this::cursePlayer);
+        int delay = bot.ranOutOfTime() ? 0 : 174;
+        TaskScheduler.scheduleTask(delay+115, () -> spawnItemForPlayer(false));
+        TaskScheduler.scheduleTask(delay+135, () -> spawnItemForPlayer(false));
         SoundEvent sound = OtherUtils.getRandomSound("nicelife_santabot_incorrect", 1, 6);
-        TaskScheduler.scheduleTask(174, () -> {
+        TaskScheduler.scheduleTask(delay, () -> {
             PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.65f, 1);
         });
-        TaskScheduler.scheduleTask(174+160, () -> {
+        TaskScheduler.scheduleTask(delay+160, () -> {
             changeStateTo(BotState.LEAVING);
         });
     }
 
-    public void spawnItemForPlayer() {
+    public List<ItemEntity> droppedItems = new ArrayList<>();
+    public void spawnItemForPlayer(boolean success) {
         if (bot.level().isClientSide()) return;
         if (itemSpawner == null) return;
         if (bot.serverData.getBoundPlayer() == null) return;
-        Vec3 playerPos = bot.serverData.getBoundPlayer().position();
         Vec3 pos = bot.position().add(0,1,0);
+        //?if <= 1.21 {
+        Vec3 towardsArm = Vec3.atLowerCornerOf(spawnInfo.bedDirection().getCounterClockWise().getNormal());
+        //?} else {
+        /*Vec3 towardsArm = spawnInfo.bedDirection().getCounterClockWise().getUnitVec3();
+        *///?}
+        pos = pos.add(towardsArm.scale(0.6));
+        Vec3 playerPos = bot.serverData.getBoundPlayer().position().add(towardsArm.scale(0.3));
+
         Vec3 relativeTargetPos = new Vec3(
                 playerPos.x() - pos.x(),
                 0,
@@ -385,19 +411,35 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         );
         Vec3 vector = Vec3.ZERO;
         if (relativeTargetPos.lengthSqr() > 0.0001) {
-            vector = relativeTargetPos.normalize().scale(0.3).add(0,0.1,0);
+            if (success) {
+                vector = relativeTargetPos.normalize().scale(0.05).add(0,0.43,0);
+            }
+            else {
+                vector = relativeTargetPos.normalize().scale(0.25).add(0,0.1,0);
+            }
         }
-        //TODO velocity + dependent on success/fail
 
-        List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, (ServerLevel) bot.level(), bot.serverData.getBoundPlayer(), IdentifierHelper.of("lifeseriesdynamic", "nicelife_trivia_reward_loottable"), false);
-        if (!lootTableItems.isEmpty()) {
-            for (ItemStack item : lootTableItems) {
-                ItemStackUtils.spawnItemForPlayerWithVelocity((ServerLevel) bot.level(), pos, item, bot.serverData.getBoundPlayer(), vector);
+        if (success) {
+            List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, (ServerLevel) bot.level(), bot.serverData.getBoundPlayer(), IdentifierHelper.of("lifeseriesdynamic", "nicelife_trivia_reward_loottable"), false);
+            if (!lootTableItems.isEmpty()) {
+                for (ItemStack item : lootTableItems) {
+                    ItemEntity itemEntity = ItemStackUtils.spawnItemForPlayerWithVelocity((ServerLevel) bot.level(), pos, item, bot.serverData.getBoundPlayer(), vector);
+                    itemEntity.setNeverPickUp();
+                    droppedItems.add(itemEntity);
+                }
+            }
+            else {
+                ItemStack randomItem = itemSpawner.getRandomItem();
+                ItemEntity itemEntity = ItemStackUtils.spawnItemForPlayerWithVelocity((ServerLevel) bot.level(), pos, randomItem, bot.serverData.getBoundPlayer(), vector);
+                itemEntity.setNeverPickUp();
+                droppedItems.add(itemEntity);
             }
         }
         else {
-            ItemStack randomItem = itemSpawner.getRandomItem();
-            ItemStackUtils.spawnItemForPlayerWithVelocity((ServerLevel) bot.level(), pos, randomItem, bot.serverData.getBoundPlayer(), vector);
+            ItemStack coal = Items.COAL.getDefaultInstance();
+            ItemEntity itemEntity = ItemStackUtils.spawnItemForPlayerWithVelocity((ServerLevel) bot.level(), pos, coal, bot.serverData.getBoundPlayer(), vector);
+            itemEntity.setNeverPickUp();
+            droppedItems.add(itemEntity);
         }
     }
 
