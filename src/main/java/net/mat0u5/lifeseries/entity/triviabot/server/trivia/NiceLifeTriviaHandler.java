@@ -96,7 +96,8 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
             bot.serverData.despawn();
             return;
         }
-        if (boundPlayer != null && !boundPlayer.isSleeping()) {
+        if (boundPlayer != null && !boundPlayer.isSleeping() && currentState != BotState.LEAVING && currentState != BotState.FLYING_UP && currentState != BotState.FINISHED) {
+            NiceLifeTriviaManager.incorrectAnswers.add(bot.serverData.getBoundPlayerUUID());
             changeStateTo(BotState.LEAVING);
         }
 
@@ -365,6 +366,8 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
     public void answeredCorrect() {
         super.answeredCorrect();
 
+        NiceLifeTriviaManager.correctAnswers.add(bot.serverData.getBoundPlayerUUID());
+
         TaskScheduler.scheduleTask(174+87, () -> spawnItemForPlayer(true));
         TaskScheduler.scheduleTask(174+107, () -> spawnItemForPlayer(true));
         TaskScheduler.scheduleTask(174+126, () -> spawnItemForPlayer(true));
@@ -385,12 +388,12 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
     public boolean startVoting() {
         ServerPlayer boundPlayer = bot.serverData.getBoundPlayer();
         if (boundPlayer == null) return false;
-        NiceLifeVotingManager.TriviaVoteType voteType = NiceLifeVotingManager.voteType;
-        if (voteType == NiceLifeVotingManager.TriviaVoteType.NONE) return false;
+        NiceLifeVotingManager.VoteType voteType = NiceLifeVotingManager.voteType;
+        if (voteType == NiceLifeVotingManager.VoteType.NONE) return false;
         List<String> availableForVoting = new ArrayList<>();
 
         // The first element of the list is the voting name.
-        if (voteType == NiceLifeVotingManager.TriviaVoteType.NICE_LIST) {
+        if (voteType == NiceLifeVotingManager.VoteType.NICE_LIST) {
             availableForVoting.add("Vote for who's been nice");
         }
         else {
@@ -398,7 +401,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         }
 
         for (ServerPlayer player : livesManager.getAlivePlayers()) {
-            if (voteType == NiceLifeVotingManager.TriviaVoteType.NICE_LIST) {
+            if (voteType == NiceLifeVotingManager.VoteType.NICE_LIST) {
                 if (player != boundPlayer && player.ls$isOnAtLeastLives(2, false)) {
                     availableForVoting.add(player.getScoreboardName());
                 }
@@ -419,6 +422,9 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
 
     public void answeredIncorrect() {
         super.answeredIncorrect();
+
+        NiceLifeTriviaManager.incorrectAnswers.add(bot.serverData.getBoundPlayerUUID());
+
         int delay = bot.ranOutOfTime() ? 0 : 174;
         TaskScheduler.scheduleTask(delay+115, () -> spawnItemForPlayer(false));
         TaskScheduler.scheduleTask(delay+135, () -> spawnItemForPlayer(false));

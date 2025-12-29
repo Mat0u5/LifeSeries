@@ -17,6 +17,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.SleepStatus;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
@@ -34,12 +35,12 @@ import static net.mat0u5.lifeseries.Main.*;
 
 //? if <= 1.21.9
 import net.minecraft.world.level.GameRules;
+//? if > 1.21.9
+/*import net.minecraft.world.level.gamerules.GameRules;*/
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-//? if > 1.21.9
-/*import net.minecraft.world.level.gamerules.GameRules;*/
 
 public class NiceLife extends Season {
 
@@ -52,6 +53,7 @@ public class NiceLife extends Season {
     public double snowLayerTickChance = 1.0 / 43;
     public int currentMaxSnowLayers = -1;
     public static boolean playedMidnightChimes = false;
+    public static boolean reachedSunset = false;
 
     @Override
     public void initialize() {
@@ -70,6 +72,8 @@ public class NiceLife extends Season {
     }
     @Override
     public void reload() {
+        super.reload();
+        NiceLifeVotingManager.createTeams();
         LIGHT_MELTS_SNOW = NiceLifeConfig.LIGHT_MELTS_SNOW.get(seasonConfig);
         SNOW_WHEN_NOT_IN_SESSION = NiceLifeConfig.SNOW_WHEN_NOT_IN_SESSION.get(seasonConfig);
         SNOW_LAYER_INCREASE_INTERVAL = Time.seconds(Math.max(13, NiceLifeConfig.SNOW_LAYER_INCREMENT_DELAY.get(seasonConfig)));
@@ -116,7 +120,7 @@ public class NiceLife extends Season {
                     serverPlayer.displayClientMessage(Component.nullToEmpty("You are too excited to fall asleep"), true);
                 }
             }
-            if (!playedMidnightChimes && isMidnight(23*20)) {
+            if (!playedMidnightChimes && isTimeBetween(18000-23*20, 20000)) {
                 playedMidnightChimes = true;
                 PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(),
                         SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_midnight_chimes")),
@@ -139,12 +143,9 @@ public class NiceLife extends Season {
                         if (!player.isSleeping()) continue;
                         triviaPlayers.add(player);
                     }
-                    NiceLifeTriviaManager.startTrivia(triviaPlayers);
-                }
-            }
-            else {
-                if (isMidnight()) {
-                    NiceLifeTriviaManager.triviaInProgress = false;
+                    if (!triviaPlayers.isEmpty()) {
+                        NiceLifeTriviaManager.startTrivia(triviaPlayers);
+                    }
                 }
             }
         }
@@ -166,6 +167,10 @@ public class NiceLife extends Season {
                 sleepThroughNight();
             }
         }
+        if (!reachedSunset && isSunset() && !NiceLifeVotingManager.naughtyListMembers.isEmpty()) {
+            NiceLifeVotingManager.endNaughtyList();
+        }
+        reachedSunset = isSunset();
     }
 
     public void sleepThroughNight() {
@@ -195,13 +200,17 @@ public class NiceLife extends Season {
     }
 
     public boolean isMidnight() {
-        return isMidnight(0);
+        return isTimeBetween(18000, 20000);
     }
 
-    public boolean isMidnight(int offset) {
+    public boolean isSunset() {
+        return isTimeBetween(13000, 15000);
+    }
+
+    public boolean isTimeBetween(int minTime, int maxTime) {
         if (server == null) return false;
-        long dayTime = server.overworld().getDayTime() % 24000L + offset;
-        return dayTime >= 18000 && dayTime <= 20000;
+        long dayTime = server.overworld().getDayTime() % 24000L;
+        return dayTime >= minTime && dayTime <= maxTime;
     }
 
     public void tickChunk(ServerLevel level, ChunkPos chunkPos) {
@@ -211,7 +220,11 @@ public class NiceLife extends Season {
         if (currentSession.statusStarted()  || SNOW_WHEN_NOT_IN_SESSION) {
             int minX = chunkPos.getMinBlockX();
             int maxX = chunkPos.getMinBlockZ();
-            if (level.random.nextDouble() <= snowLayerTickChance) {
+            double chance = snowLayerTickChance;
+            if (currentMaxSnowLayers >= 8) {
+                chance *= 3;
+            }
+            if (level.random.nextDouble() <= chance) {
                 customPrecipitation(level, level.getBlockRandomPos(minX, 0, maxX, 15));
             }
         }
@@ -232,7 +245,9 @@ public class NiceLife extends Season {
                     int currentLayers = state.getValue(SnowLayerBlock.LAYERS);
                     if (currentLayers < Math.min(currentMaxSnowLayers, 8)) {
                         if (currentLayers == 7) {
-                            level.setBlockAndUpdate(topPos, Blocks.SNOW_BLOCK.defaultBlockState());
+                            BlockState newState = Blocks.SNOW_BLOCK.defaultBlockState();
+                            level.setBlockAndUpdate(topPos, newState);
+                            Block.pushEntitiesUp(state, newState, level, topPos);
                         }
                         else {
                             BlockState newState = state.setValue(SnowLayerBlock.LAYERS, currentLayers + 1);
@@ -350,5 +365,38 @@ public class NiceLife extends Season {
             return froglight;
         }
         return null;
+    }
+
+    @Override
+    public String getTeamForPlayer(ServerPlayer player) {
+        if (NiceLifeVotingManager.naughtyListMembers.contains(player.getUUID())) {
+            return NiceLifeVotingManager.NAUGHTY_LIST_TEAM;
+        }
+        if (NiceLifeVotingManager.niceListMembers.contains(player.getUUID())) {
+            return NiceLifeVotingManager.NICE_LIST_TEAM;
+        }
+
+        return super.getTeamForPlayer(player);
+    }
+
+    @Override
+    public boolean isAllowedToAttack(ServerPlayer attacker, ServerPlayer victim, boolean allowSelfDefense) {
+        if (NiceLifeVotingManager.niceListMembers.contains(victim.getUUID())) {
+            return false;
+        }
+        if (NiceLifeVotingManager.naughtyListMembers.contains(victim.getUUID())) {
+            return true;
+        }
+        return super.isAllowedToAttack(attacker, victim, allowSelfDefense);
+    }
+
+    @Override
+    public void onPlayerDeath(ServerPlayer player, DamageSource source) {
+        super.onPlayerDeath(player, source);
+        NiceLifeVotingManager.naughtyListMembers.remove(player.getUUID());
+        if (player.ls$isDead()) {
+            NiceLifeVotingManager.niceListMembers.remove(player.getUUID());
+        }
+        reloadPlayerTeam(player);
     }
 }

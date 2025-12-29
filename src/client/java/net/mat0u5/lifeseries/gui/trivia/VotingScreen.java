@@ -56,7 +56,7 @@ public class VotingScreen extends Screen {
 
     public VotingScreen(String name, List<String> availablePlayers) {
         super(Component.literal(name));
-        if (name.endsWith("nice") || name.endsWith("naghty")) {
+        if (name.endsWith("nice") || name.endsWith("naughty")) {
             requiresSleep = true;
         }
         this.availablePlayers = availablePlayers;
@@ -144,7 +144,7 @@ public class VotingScreen extends Screen {
 
     @Override
     public boolean shouldCloseOnEsc() {
-        return false;
+        return !requiresSleep;
     }
 
     @Override
@@ -311,7 +311,12 @@ public class VotingScreen extends Screen {
 
     private void onSubmitVote() {
         if (selectedPlayer != null) {
-            Minecraft.getInstance().setScreen(new EmptySleepScreen(false));
+            if (requiresSleep) {
+                Minecraft.getInstance().setScreen(new EmptySleepScreen(false));
+            }
+            else {
+                Minecraft.getInstance().setScreen(null);
+            }
             NetworkHandlerClient.sendStringPacket(PacketNames.SUBMIT_VOTE, selectedPlayer);
         }
     }

@@ -41,6 +41,8 @@ public class NiceLifeTriviaManager {
     public static List<TriviaSpawn> triviaSpawns = new ArrayList<>();
     public static List<UUID> triviaPlayersUUID = new ArrayList<>();
     public static boolean preparingForSpawn = false;
+    public static List<UUID> correctAnswers = new ArrayList<>();
+    public static List<UUID> incorrectAnswers = new ArrayList<>();
 
     public static void initialize() {
 
@@ -51,11 +53,13 @@ public class NiceLifeTriviaManager {
         for (ServerPlayer player : triviaPlayers) {
             triviaPlayersUUID.add(player.getUUID());
         }
+        correctAnswers.clear();
+        incorrectAnswers.clear();
 
         triviaInProgress = true;
         killAllBots();
         usedQuestions.clear();
-        NiceLifeVotingManager.reset();
+        NiceLifeVotingManager.resetTrivia();
         triviaQuestions = new TriviaQuestionManager("./config/lifeseries/nicelife","trivia.json");
         triviaSpawns.clear();
         currentQuestion = getQuestion();
@@ -116,6 +120,13 @@ public class NiceLifeTriviaManager {
     public static void endTrivia() {
         killAllBots();
         triviaInProgress = false;
+        if (correctAnswers.isEmpty() && incorrectAnswers.isEmpty()) return;
+        if (correctAnswers.isEmpty()) {
+            //TODO all wrong stuff
+        }
+        else {
+            NiceLifeVotingManager.endTriviaVoting();
+        }
     }
 
     public static void breakBotSpawnBlocks(int overTicks) {

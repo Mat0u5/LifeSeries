@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.players.SleepStatus;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
@@ -19,9 +20,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.Main.currentSession;
 
 //? if <= 1.20
 /*import net.minecraft.util.RandomSource;*/
+
+//? if <= 1.21.9
+import net.minecraft.world.level.GameRules;
+//? if > 1.21.9
+/*import net.minecraft.world.level.gamerules.GameRules;*/
 
 @Mixin(value = ServerLevel.class, priority = 1)
 public class ServerLevelMixin {
@@ -64,6 +71,23 @@ public class ServerLevelMixin {
             ServerLevel level = (ServerLevel) (Object) this;
             for(int l = 0; l < i; ++l) {
                 ((NiceLife)currentSeason).tickChunk(level, chunkPos);
+            }
+        }
+    }
+    @Inject(method = "announceSleepStatus", at = @At(value = "HEAD"), cancellable = true)
+    public void dontAnnounce(CallbackInfo ci) {
+        if (!Main.modDisabled() && currentSeason instanceof NiceLife niceLife) {
+            ServerLevel level = (ServerLevel) (Object) this;
+            if (level instanceof ServerLevelAccessor accessor) {
+                SleepStatus sleepStatus = accessor.ls$getSleepStatus();
+                //? if <= 1.21.9 {
+                int percentage = level.getGameRules().getInt(GameRules.RULE_PLAYERS_SLEEPING_PERCENTAGE);
+                //?} else {
+                /*int percentage = level.getGameRules().get(GameRules.PLAYERS_SLEEPING_PERCENTAGE);
+                 *///?}
+                if (sleepStatus.areEnoughSleeping(percentage) && niceLife.isMidnight() && currentSession.statusStarted()) {
+                    ci.cancel();
+                }
             }
         }
     }
