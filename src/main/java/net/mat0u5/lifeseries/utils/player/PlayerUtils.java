@@ -412,6 +412,12 @@ public class PlayerUtils {
         broadcastMessageToAdmins(message, 1);
     }
 
+    public static void broadcastMessage(List<ServerPlayer> players, Component message) {
+        for (ServerPlayer player : players) {
+            player.displayClientMessage(message, false);
+        }
+    }
+
     public static void broadcastMessageExcept(Component message, ServerPlayer exceptPlayer) {
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
             if (player == exceptPlayer) continue;

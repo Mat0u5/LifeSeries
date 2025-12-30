@@ -59,7 +59,7 @@ public class NiceLifeTriviaManager {
         triviaInProgress = true;
         killAllBots();
         usedQuestions.clear();
-        NiceLifeVotingManager.resetTrivia();
+        NiceLifeVotingManager.reset();
         triviaQuestions = new TriviaQuestionManager("./config/lifeseries/nicelife","trivia.json");
         triviaSpawns.clear();
         currentQuestion = getQuestion();

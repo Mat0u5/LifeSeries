@@ -162,15 +162,17 @@ public class VotingScreen extends Screen {
         submitButton.active = selectedPlayer != null && !selectedPlayer.isEmpty();
 
         // Timer
-        long minutes = timerSeconds / 60;
-        long seconds = timerSeconds - minutes * 60;
-        String secondsStr = String.valueOf(seconds);
-        String minutesStr = String.valueOf(minutes);
-        while (secondsStr.length() < 2) secondsStr = "0" + secondsStr;
-        while (minutesStr.length() < 2) minutesStr = "0" + minutesStr;
-        Component timerText = TextUtils.format("{}:{}", minutesStr, secondsStr);
+        if (requiresSleep) {
+            long minutes = timerSeconds / 60;
+            long seconds = timerSeconds - minutes * 60;
+            String secondsStr = String.valueOf(seconds);
+            String minutesStr = String.valueOf(minutes);
+            while (secondsStr.length() < 2) secondsStr = "0" + secondsStr;
+            while (minutesStr.length() < 2) minutesStr = "0" + minutesStr;
+            Component timerText = TextUtils.format("{}:{}", minutesStr, secondsStr);
 
-        RenderUtils.text(timerText, listRight, 25).anchorCenter().colored(TextColors.WHITE).withShadow().render(graphics, font);
+            RenderUtils.text(timerText, listRight, 25).anchorCenter().colored(TextColors.WHITE).withShadow().render(graphics, font);
+        }
 
         int listTop = LIST_TOP;
         int listBottom = height - LIST_BOTTOM_OFFSET;

@@ -389,7 +389,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         ServerPlayer boundPlayer = bot.serverData.getBoundPlayer();
         if (boundPlayer == null) return false;
         NiceLifeVotingManager.VoteType voteType = NiceLifeVotingManager.voteType;
-        if (voteType == NiceLifeVotingManager.VoteType.NONE) return false;
+        if (voteType != NiceLifeVotingManager.VoteType.NICE_LIST && voteType != NiceLifeVotingManager.VoteType.NAUGHTY_LIST) return false;
         List<String> availableForVoting = new ArrayList<>();
 
         // The first element of the list is the voting name.
@@ -402,15 +402,17 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
 
         for (ServerPlayer player : livesManager.getAlivePlayers()) {
             if (voteType == NiceLifeVotingManager.VoteType.NICE_LIST) {
-                if (player != boundPlayer && player.ls$isOnAtLeastLives(2, false)) {
+                if (player != boundPlayer) {
                     availableForVoting.add(player.getScoreboardName());
                 }
             }
             else {
-                availableForVoting.add(player.getScoreboardName());
+                if (player.ls$isOnAtLeastLives(2, false) || NiceLifeVotingManager.REDS_ON_NAUGHTY_LIST) {
+                    availableForVoting.add(player.getScoreboardName());
+                }
             }
         }
-        if (availableForVoting.isEmpty()) return false;
+        if (availableForVoting.size() <= 1) return false;
 
         NetworkHandlerServer.sendStringListPacket(boundPlayer, PacketNames.VOTING_SCREEN, availableForVoting);
         NiceLifeVotingManager.allowedToVote.add(boundPlayer.getUUID());

@@ -488,4 +488,10 @@ public class LivesManager {
         }
         return false;
     }
+    public boolean anyPlayersAtLeastLives(int lives) {
+        for (ServerPlayer player : getAlivePlayers()) {
+            if (isOnAtLeastLives(player, lives, false)) return true;
+        }
+        return false;
+    }
 }

@@ -2,6 +2,8 @@ package net.mat0u5.lifeseries.seasons.season.nicelife;
 
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
+import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -24,10 +26,11 @@ public class NiceLifeVotingManager {
     public static VoteType voteType = VoteType.NAUGHTY_LIST;
     public static double NICE_LIST_CHANCE = 0.5;
     public static Time VOTING_TIME = Time.seconds(60);
-    public static boolean REDS_ON_NAUGHTY_LIST = false;
+    public static boolean REDS_ON_NAUGHTY_LIST = false; //TODO config
     public static List<UUID> allowedToVote = new ArrayList<>();
     public static List<UUID> playersVoted = new ArrayList<>();
-    public static Map<UUID, Integer> votes = new HashMap<>();
+    public static Map<UUID, Integer> votesByCount = new HashMap<>();
+    public static Map<UUID, UUID> votesByPerson = new HashMap<>();
     public static int NICE_LIST_COUNT = 3; //TODO config
     public static int NAUGHTY_LIST_COUNT = 3; //TODO config
     public static List<UUID> niceListMembers = new ArrayList<>();
@@ -49,21 +52,20 @@ public class NiceLifeVotingManager {
         TeamUtils.createTeam(NICE_LIST_TEAM, NICE_LIST_TEAM_NAME, ChatFormatting.LIGHT_PURPLE);
     }
 
-    public static void resetTrivia() {
+    public static void reset() {
         allowedToVote.clear();
         playersVoted.clear();
-        votes.clear();
-    }
-
-    public static void resetNiceListLife() {
-        //TODO
+        votesByCount.clear();
+        votesByPerson.clear();
+        voteType = VoteType.NONE;
     }
 
     public static void chooseVote() {
-        voteType = VoteType.NAUGHTY_LIST;
-        if (rnd.nextDouble() <= NICE_LIST_CHANCE) {
-            if (livesManager.anyPlayersOnLives(2) || REDS_ON_NAUGHTY_LIST) {
-                voteType = VoteType.NICE_LIST;
+        voteType = VoteType.NICE_LIST;
+        if (rnd.nextDouble() > NICE_LIST_CHANCE) {
+            voteType = VoteType.NONE;
+            if (livesManager.anyPlayersAtLeastLives(2) || REDS_ON_NAUGHTY_LIST) {
+                voteType = VoteType.NAUGHTY_LIST;
             }
         }
     }
@@ -101,20 +103,21 @@ public class NiceLifeVotingManager {
         ServerPlayer votedFor = PlayerUtils.getPlayer(vote);
         if (votedFor == null) return;
         if (votedFor.ls$isDead()) return;
-        if (voteType == VoteType.NICE_LIST && votedFor.ls$isOnSpecificLives(1, true) && !REDS_ON_NAUGHTY_LIST) return;
+        if (voteType == VoteType.NAUGHTY_LIST && votedFor.ls$isOnSpecificLives(1, true) && !REDS_ON_NAUGHTY_LIST) return;
         if (voteType == VoteType.NICE_LIST && player == votedFor) return;
 
 
         playersVoted.add(player.getUUID());
-        if (!votes.containsKey(votedFor.getUUID())) {
-            votes.put(votedFor.getUUID(), 0);
+        if (!votesByCount.containsKey(votedFor.getUUID())) {
+            votesByCount.put(votedFor.getUUID(), 0);
         }
-        votes.put(votedFor.getUUID(), votes.get(votedFor.getUUID())+1);
+        votesByCount.put(votedFor.getUUID(), votesByCount.get(votedFor.getUUID())+1);
+        votesByPerson.put(player.getUUID(), votedFor.getUUID());
     }
 
     public static List<UUID> getMostVotedForPlayers(int count) {
         Map<Integer, List<UUID>> voteGroups = new HashMap<>();
-        for (Map.Entry<UUID, Integer> entry : votes.entrySet()) {
+        for (Map.Entry<UUID, Integer> entry : votesByCount.entrySet()) {
             voteGroups.computeIfAbsent(entry.getValue(), k -> new ArrayList<>()).add(entry.getKey());
         }
 
@@ -150,8 +153,7 @@ public class NiceLifeVotingManager {
             announceNiceList();
         }
         currentSeason.reloadAllPlayerTeams();
-
-        resetTrivia();
+        reset();
     }
 
     public static void announceNaughtyList() {
@@ -181,7 +183,7 @@ public class NiceLifeVotingManager {
                     PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
                     naughtyListMembers.add(uuid);
                     currentSeason.reloadPlayerTeam(player);
-                    //TODO skin icon in later versions.
+                    //TODO skin icon in 1.21.9+
                     PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), TextUtils.format("{}", player), 15, 80, 20);
                 }
             });
@@ -208,10 +210,75 @@ public class NiceLifeVotingManager {
         List<UUID> players = getMostVotedForPlayers(NICE_LIST_COUNT);
         niceListMembers.clear();
         if (players.isEmpty()) return;
-        //TODO
+        int delay = 80;
+        TaskScheduler.scheduleTask(delay, () -> {
+            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_vote_result"));
+            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
+            PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§aThese players are on..."), 15, 80, 20);
+        });
+        delay += 90;
+        TaskScheduler.scheduleTask(delay, () -> {
+            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_nicelist_start"));
+            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
+            PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§aTHE NICE LIST"), 15, 80, 20);
+        });
+        delay += 80;
+        for (UUID uuid : players) {
+            ServerPlayer player = PlayerUtils.getPlayer(uuid);
+            if (player == null) continue;
+            if (player.ls$isDead()) continue;
+            TaskScheduler.scheduleTask(delay, () -> {
+                if (player != null) {
+                    SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_nicelist_person"));
+                    PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
+                    niceListMembers.add(uuid);
+                    currentSeason.reloadPlayerTeam(player);
+                    //TODO skin icon in 1.21.9+
+                    PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), TextUtils.format("{}", player), 15, 80, 20);
+                }
+            });
+            delay += 55;
+        }
+        delay += 55;
+
+        TaskScheduler.scheduleTask(delay, () -> {
+            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
+            PlayerUtils.broadcastMessage(TextUtils.formatLoosely("\n §6[§e!§6]§7 At sunset, players on the nice list will vote to give a §2non-pink§7 name a life.\n", players.size(), TextUtils.pluralize("person", "people", players.size())));
+        });
+        delay += 110;
+        TaskScheduler.scheduleTask(delay, () -> {
+            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
+            PlayerUtils.broadcastMessage(Component.literal(" §6[§e!§6]§7 The majority of the §dpinks§7 must vote for the same player for the life to be given.\n"));
+        });
+        delay += 110;
+        TaskScheduler.scheduleTask(delay, () -> {
+            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
+            PlayerUtils.broadcastMessage(Component.literal(" §6[§e!§6]§7 Pink names are not allowed to be targeted by any other players, including §creds§7.\n"));
+        });
+        List<ServerPlayer> niceListPlayers = new ArrayList<>();
+        for (UUID uuid : players) {
+            allowedToVote.add(uuid);
+            ServerPlayer player = PlayerUtils.getPlayer(uuid);
+            if (player != null) {
+                niceListPlayers.add(player);
+            }
+        }
+        delay += 150;
+        TaskScheduler.scheduleTask(delay, () -> {
+            voteType = VoteType.NICE_LIST_LIFE;
+            PlayerUtils.playSoundToPlayers(niceListPlayers, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
+            PlayerUtils.broadcastMessage(niceListPlayers, TextUtils.format(" §6[§e!§6]§7 You are on the nice list. Type {}§7 to choose who you would like to give a life to.\n", TextUtils.clickableText("§f§l/vote", TextUtils.runCommandClickEvent("/vote"))));
+        });
+        delay += 110;
+        TaskScheduler.scheduleTask(delay, () -> {
+            voteType = VoteType.NICE_LIST_LIFE;
+            PlayerUtils.playSoundToPlayers(niceListPlayers, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
+            PlayerUtils.broadcastMessage(niceListPlayers, Component.literal(" §6[§e!§6]§7 You can change your vote at anytime, but the results will be locked in at sunset.\n"));
+        });
     }
 
     public static void endNaughtyList() {
+
         SoundEvent voteSound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_vote_result"));
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), voteSound, 1f, 1);
         PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§cPlayers return to normal in..."), 15, 80, 20);
@@ -242,12 +309,159 @@ public class NiceLifeVotingManager {
         });
     }
 
-    public static void endNiceListLifeVoting() {
-        //TODO
-        resetNiceListLife();
+    public static void endNiceList() {
+        SoundEvent voteSound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_nicelist_end"));
+        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), voteSound, 1f, 1);
+        PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§cThe nice vote will end in..."), 15, 80, 20);
+
+        int delay = 95;
+        TaskScheduler.scheduleTask(delay, () -> {
+            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_nicelist_countdown_3"));
+            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
+            PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§23.."), 15, 25, 15);
+        });
+        delay += 40;
+        TaskScheduler.scheduleTask(delay, () -> {
+            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_nicelist_countdown_2"));
+            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
+            PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§e2.."), 15, 25, 15);
+        });
+        delay += 40;
+        TaskScheduler.scheduleTask(delay, () -> {
+            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_nicelist_countdown_1"));
+            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
+            PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§c1.."), 15, 25, 15);
+        });
+        delay += 55;
+        TaskScheduler.scheduleTask(delay, () -> {
+            actuallyEndNiceList();
+        });
+    }
+
+    public static void actuallyEndNiceList() {
+        Map<UUID, Integer> reloadedVotesByCount = new HashMap<>();
+        int availableVotes = 0;
+        int validVotes = 0;
+        for (UUID uuid : niceListMembers) {
+            ServerPlayer player = PlayerUtils.getPlayer(uuid);
+            if (player == null) continue;
+            if (player.ls$isDead()) continue;
+            availableVotes++;
+        }
+        for (Map.Entry<UUID, UUID> entry : votesByPerson.entrySet()) {
+            UUID votedForUUID = entry.getValue();
+            ServerPlayer votingPlayer = PlayerUtils.getPlayer(entry.getKey());
+            ServerPlayer votedFor = PlayerUtils.getPlayer(votedForUUID);
+            if (votingPlayer == null || votedFor == null) continue;
+            if (votingPlayer.ls$isDead() || votedFor.ls$isDead()) continue;
+            if (!niceListMembers.contains(votingPlayer.getUUID()) || niceListMembers.contains(votedFor.getUUID())) continue;
+            validVotes++;
+            if (!reloadedVotesByCount.containsKey(votedForUUID)) {
+                reloadedVotesByCount.put(votedForUUID, 0);
+            }
+            reloadedVotesByCount.put(votedForUUID, reloadedVotesByCount.get(votedForUUID)+1);
+        }
+
+
+
+
+        if (reloadedVotesByCount.isEmpty() || availableVotes == 0 || validVotes == 0) {
+            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_naughtylist"));
+            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
+            PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§cInsufficient votes"), 15, 80, 20);
+        }
+        else {
+            UUID mostVotedFor = reloadedVotesByCount.keySet().stream().iterator().next();
+            int mostVotes = 0;
+            for (Map.Entry<UUID, Integer> entry : reloadedVotesByCount.entrySet()) {
+                UUID vote = entry.getKey();
+                int votes = entry.getValue();
+                if (votes > mostVotes) {
+                    mostVotedFor = vote;
+                    mostVotes = votes;
+                }
+            }
+            double requiredVotes = (double)availableVotes/2.0;
+            ServerPlayer winner = PlayerUtils.getPlayer(mostVotedFor);
+
+            if (mostVotes > requiredVotes && winner != null) {
+                SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_vote_result"));
+                PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
+                PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§2The winner is..."), 15, 80, 20);
+
+                TaskScheduler.scheduleTask(85, ()-> {
+                    winner.ls$addLife();
+                    currentSeason.reloadPlayerTeam(winner);
+                    PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.FIREWORK_ROCKET_LAUNCH, 1f, 1);
+                    //TODO skin icon in 1.21.9+
+                    PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), TextUtils.format("{}", winner), 15, 80, 20);
+                });
+            }
+            else {
+                SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_naughtylist"));
+                PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
+                if (validVotes > requiredVotes) {
+                    PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§cNo agreement reached"), 15, 80, 20);
+                }
+                else {
+                    PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§cInsufficient votes"), 15, 80, 20);
+                }
+            }
+        }
+        niceListMembers.clear();
+        currentSeason.reloadAllPlayerTeams();
+
+
+        reset();
+    }
+
+    public static boolean openNiceListLifeVote(ServerPlayer player) {
+        List<String> availableForVoting = new ArrayList<>();
+        availableForVoting.add("Vote for who should get a life");
+        for (ServerPlayer availableVotePlayer : livesManager.getAlivePlayers()) {
+            if (niceListMembers.contains(availableVotePlayer.getUUID())) continue;
+            availableForVoting.add(availableVotePlayer.getScoreboardName());
+        }
+        if (availableForVoting.size() <= 1) {
+            return false;
+        }
+
+        NetworkHandlerServer.sendStringListPacket(player, PacketNames.VOTING_SCREEN, availableForVoting);
+        return true;
     }
 
     public static void handleNiceListLifeVote(ServerPlayer player, String vote) {
-        //TODO
+        if (voteType != VoteType.NICE_LIST_LIFE) return;
+
+        if (player.ls$isDead()) return;
+        if (!niceListMembers.contains(player.getUUID())) return;
+        if (vote.isEmpty()) return;
+        ServerPlayer votedFor = PlayerUtils.getPlayer(vote);
+        if (votedFor == null) return;
+        if (votedFor.ls$isDead()) return;
+        if (niceListMembers.contains(votedFor.getUUID())) return;
+
+        //TODO skin icon in 1.21.9+
+        player.sendSystemMessage(TextUtils.format("\n §6[§e!§6]§7 You voted for {}§7.\n", votedFor), false);
+        votesByPerson.put(player.getUUID(), votedFor.getUUID());
+    }
+
+    public static void warnNiceListMembers() {
+        List<ServerPlayer> niceListPlayers = new ArrayList<>();
+        for (UUID uuid : NiceLifeVotingManager.niceListMembers) {
+            ServerPlayer player = PlayerUtils.getPlayer(uuid);
+            if (player != null) {
+                niceListPlayers.add(player);
+            }
+        }
+        if (!niceListPlayers.isEmpty()) {
+            Component message = TextUtils.format("\n§7Don't forget to {}§7!\n", TextUtils.clickableText("§f§l/vote", TextUtils.runCommandClickEvent("/vote")));
+            PlayerUtils.playSoundToPlayers(niceListPlayers, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
+            PlayerUtils.broadcastMessage(niceListPlayers, message);
+            TaskScheduler.scheduleTask(Time.seconds(30), () -> {
+                PlayerUtils.playSoundToPlayers(niceListPlayers, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
+                PlayerUtils.broadcastMessage(niceListPlayers, message);
+            });
+        }
     }
 }

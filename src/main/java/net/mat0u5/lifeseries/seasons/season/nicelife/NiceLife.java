@@ -6,9 +6,7 @@ import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandle
 import net.mat0u5.lifeseries.mixin.ServerLevelAccessor;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.other.Time;
+import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -54,6 +52,7 @@ public class NiceLife extends Season {
     public int currentMaxSnowLayers = -1;
     public static boolean playedMidnightChimes = false;
     public static boolean reachedSunset = false;
+    public static boolean reachedPreSunset = false;
 
     @Override
     public void initialize() {
@@ -167,10 +166,21 @@ public class NiceLife extends Season {
                 sleepThroughNight();
             }
         }
-        if (!reachedSunset && isSunset() && !NiceLifeVotingManager.naughtyListMembers.isEmpty()) {
-            NiceLifeVotingManager.endNaughtyList();
+        if (!reachedPreSunset && isTimeBetween(11800, 13000)) {
+            if (!NiceLifeVotingManager.niceListMembers.isEmpty()) {
+                NiceLifeVotingManager.warnNiceListMembers();
+            }
+        }
+        if (!reachedSunset && isSunset()) {
+            if (!NiceLifeVotingManager.naughtyListMembers.isEmpty()) {
+                NiceLifeVotingManager.endNaughtyList();
+            }
+            if (!NiceLifeVotingManager.niceListMembers.isEmpty()) {
+                NiceLifeVotingManager.endNiceList();
+            }
         }
         reachedSunset = isSunset();
+        reachedPreSunset = isTimeBetween(11800, 13000);
     }
 
     public void sleepThroughNight() {
@@ -251,13 +261,15 @@ public class NiceLife extends Season {
                         }
                         else {
                             BlockState newState = state.setValue(SnowLayerBlock.LAYERS, currentLayers + 1);
-                            Block.pushEntitiesUp(state, newState, level, topPos);
                             level.setBlockAndUpdate(topPos, newState);
+                            Block.pushEntitiesUp(state, newState, level, topPos);
                         }
                     }
                 }
                 else if (!(level.getBlockState(belowPos).is(Blocks.SNOW_BLOCK) && currentMaxSnowLayers == 8)) {
-                    level.setBlockAndUpdate(topPos, Blocks.SNOW.defaultBlockState());
+                    BlockState newState = Blocks.SNOW.defaultBlockState();
+                    level.setBlockAndUpdate(topPos, newState);
+                    Block.pushEntitiesUp(state, newState, level, topPos);
                 }
             }
         }

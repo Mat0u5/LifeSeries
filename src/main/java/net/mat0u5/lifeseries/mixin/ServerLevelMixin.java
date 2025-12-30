@@ -76,19 +76,8 @@ public class ServerLevelMixin {
     }
     @Inject(method = "announceSleepStatus", at = @At(value = "HEAD"), cancellable = true)
     public void dontAnnounce(CallbackInfo ci) {
-        if (!Main.modDisabled() && currentSeason instanceof NiceLife niceLife) {
-            ServerLevel level = (ServerLevel) (Object) this;
-            if (level instanceof ServerLevelAccessor accessor) {
-                SleepStatus sleepStatus = accessor.ls$getSleepStatus();
-                //? if <= 1.21.9 {
-                int percentage = level.getGameRules().getInt(GameRules.RULE_PLAYERS_SLEEPING_PERCENTAGE);
-                //?} else {
-                /*int percentage = level.getGameRules().get(GameRules.PLAYERS_SLEEPING_PERCENTAGE);
-                 *///?}
-                if (sleepStatus.areEnoughSleeping(percentage) && niceLife.isMidnight() && currentSession.statusStarted()) {
-                    ci.cancel();
-                }
-            }
+        if (!Main.modDisabled() && currentSeason.getSeason() == Seasons.NICE_LIFE) {
+            ci.cancel();
         }
     }
 }
