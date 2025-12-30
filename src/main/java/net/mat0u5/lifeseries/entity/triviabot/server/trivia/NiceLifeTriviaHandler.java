@@ -445,7 +445,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         if (itemSpawner == null) return;
         if (bot.serverData.getBoundPlayer() == null) return;
         Vec3 pos = bot.position().add(0,1,0);
-        //?if <= 1.21 {
+        //? if <= 1.21 {
         Vec3 towardsArm = Vec3.atLowerCornerOf(spawnInfo.bedDirection().getCounterClockWise().getNormal());
         //?} else {
         /*Vec3 towardsArm = spawnInfo.bedDirection().getCounterClockWise().getUnitVec3();
@@ -545,7 +545,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         itemSpawner.addItem(pot, 10);
         itemSpawner.addItem(pot2, 10);
 
-        //?if >= 1.21 {
+        //? if >= 1.21 {
         itemSpawner.addItem(new ItemStack(Items.WIND_CHARGE, 6), 10);
         itemSpawner.addItem(new ItemStack(Items.BREEZE_ROD, 1), 10);
 
@@ -555,7 +555,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         mace.setDamageValue(mace.getMaxDamage()-1);
         itemSpawner.addItem(mace, 5);
         //?}
-        //?if >= 1.21.6 {
+        //? if >= 1.21.6 {
         /*itemSpawner.addItem(new ItemStack(Items.DRIED_GHAST, 1), 10);
         *///?}
 

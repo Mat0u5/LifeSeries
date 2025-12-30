@@ -183,8 +183,7 @@ public class NiceLifeVotingManager {
                     PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
                     naughtyListMembers.add(uuid);
                     currentSeason.reloadPlayerTeam(player);
-                    //TODO skin icon in 1.21.9+
-                    PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), TextUtils.format("{}", player), 15, 80, 20);
+                    PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), PlayerUtils.getPlayerNameWithIcon(player), 15, 80, 20);
                 }
             });
             delay += 55;
@@ -233,8 +232,7 @@ public class NiceLifeVotingManager {
                     PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
                     niceListMembers.add(uuid);
                     currentSeason.reloadPlayerTeam(player);
-                    //TODO skin icon in 1.21.9+
-                    PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), TextUtils.format("{}", player), 15, 80, 20);
+                    PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), PlayerUtils.getPlayerNameWithIcon(player), 15, 80, 20);
                 }
             });
             delay += 55;
@@ -243,7 +241,7 @@ public class NiceLifeVotingManager {
 
         TaskScheduler.scheduleTask(delay, () -> {
             PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
-            PlayerUtils.broadcastMessage(TextUtils.formatLoosely("\n §6[§e!§6]§7 At sunset, players on the nice list will vote to give a §2non-pink§7 name a life.\n", players.size(), TextUtils.pluralize("person", "people", players.size())));
+            PlayerUtils.broadcastMessage(Component.literal("\n §6[§e!§6]§7 At sunset, players on the nice list will vote to give a §2non-pink§7 name a life.\n"));
         });
         delay += 110;
         TaskScheduler.scheduleTask(delay, () -> {
@@ -393,8 +391,7 @@ public class NiceLifeVotingManager {
                     winner.ls$addLife();
                     currentSeason.reloadPlayerTeam(winner);
                     PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.FIREWORK_ROCKET_LAUNCH, 1f, 1);
-                    //TODO skin icon in 1.21.9+
-                    PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), TextUtils.format("{}", winner), 15, 80, 20);
+                    PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), PlayerUtils.getPlayerNameWithIcon(winner), 15, 80, 20);
                 });
             }
             else {
@@ -441,8 +438,7 @@ public class NiceLifeVotingManager {
         if (votedFor.ls$isDead()) return;
         if (niceListMembers.contains(votedFor.getUUID())) return;
 
-        //TODO skin icon in 1.21.9+
-        player.sendSystemMessage(TextUtils.format("\n §6[§e!§6]§7 You voted for {}§7.\n", votedFor), false);
+        player.sendSystemMessage(TextUtils.format("\n §6[§e!§6]§7 You voted for {}§7.\n", PlayerUtils.getPlayerNameWithIcon(player)), false);
         votesByPerson.put(player.getUUID(), votedFor.getUUID());
     }
 

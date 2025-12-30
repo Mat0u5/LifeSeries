@@ -49,6 +49,9 @@ public class NiceLife extends Season {
     public Time SNOW_LAYER_INCREASE_INTERVAL = Time.seconds(600);
     public Time snowTicks = Time.zero();
     public double snowLayerTickChance = 1.0 / 43;
+    public int precipitationTicks = 1;
+    public double chancePerTick = snowLayerTickChance;
+
     public int currentMaxSnowLayers = -1;
     public static boolean playedMidnightChimes = false;
     public static boolean reachedSunset = false;
@@ -75,18 +78,29 @@ public class NiceLife extends Season {
         NiceLifeVotingManager.createTeams();
         LIGHT_MELTS_SNOW = NiceLifeConfig.LIGHT_MELTS_SNOW.get(seasonConfig);
         SNOW_WHEN_NOT_IN_SESSION = NiceLifeConfig.SNOW_WHEN_NOT_IN_SESSION.get(seasonConfig);
-        SNOW_LAYER_INCREASE_INTERVAL = Time.seconds(Math.max(13, NiceLifeConfig.SNOW_LAYER_INCREMENT_DELAY.get(seasonConfig)));
+        SNOW_LAYER_INCREASE_INTERVAL = Time.seconds(NiceLifeConfig.SNOW_LAYER_INCREMENT_DELAY.get(seasonConfig));
         ADVANCE_TIME_WHEN_NOT_IN_SESSION = NiceLifeConfig.ADVANCE_TIME_WHEN_NOT_IN_SESSION.get(seasonConfig);
         SNOWY_NETHER = NiceLifeConfig.SNOWY_NETHER.get(seasonConfig);
         snowLayerTickChance = 280.0 / Math.max(SNOW_LAYER_INCREASE_INTERVAL.getTicks(), 1);
         if (currentMaxSnowLayers == -1) {
             currentMaxSnowLayers = seasonConfig.getOrCreateInt("current_snow_layers", 1);
         }
+        updateSnowTick();
+
         NiceLifeTriviaManager.QUESTION_TIME = NiceLifeConfig.TRIVIA_QUESTION_TIME.get(seasonConfig);
         NiceLifeTriviaManager.CAN_BREAK_BEDS = NiceLifeConfig.BOT_CAN_BREAK_BEDS.get(seasonConfig);
         NiceLifeTriviaManager.BREAKING_DROPS_RESOURCES = NiceLifeConfig.BOT_BREAKING_BLOCKS_DROP_RESOURCES.get(seasonConfig);
         NiceLifeVotingManager.NICE_LIST_CHANCE = NiceLifeConfig.NICE_LIST_CHANCE.get(seasonConfig);
         NiceLifeVotingManager.VOTING_TIME = Time.seconds(NiceLifeConfig.VOTING_TIME.get(seasonConfig));
+    }
+
+    public void updateSnowTick() {
+        double chance = snowLayerTickChance;
+        if (currentMaxSnowLayers >= 8) {
+            chance *= 3;
+        }
+        precipitationTicks = Math.max(1, (int) Math.ceil(chance));
+        chancePerTick = chance / precipitationTicks;
     }
 
     @Override
@@ -100,6 +114,7 @@ public class NiceLife extends Season {
                 if (currentMaxSnowLayers > 8) {
                     currentMaxSnowLayers = 1;
                 }
+                updateSnowTick();
                 seasonConfig.setProperty("current_snow_layers", String.valueOf(currentMaxSnowLayers));
             }
         }
@@ -230,12 +245,11 @@ public class NiceLife extends Season {
         if (currentSession.statusStarted()  || SNOW_WHEN_NOT_IN_SESSION) {
             int minX = chunkPos.getMinBlockX();
             int maxX = chunkPos.getMinBlockZ();
-            double chance = snowLayerTickChance;
-            if (currentMaxSnowLayers >= 8) {
-                chance *= 3;
-            }
-            if (level.random.nextDouble() <= chance) {
-                customPrecipitation(level, level.getBlockRandomPos(minX, 0, maxX, 15));
+
+            for (int i = 0; i < precipitationTicks; i++) {
+                if (level.random.nextDouble() <= chancePerTick) {
+                    customPrecipitation(level, level.getBlockRandomPos(minX, 0, maxX, 15));
+                }
             }
         }
     }
@@ -260,6 +274,15 @@ public class NiceLife extends Season {
                             Block.pushEntitiesUp(state, newState, level, topPos);
                         }
                         else {
+
+                            /*
+                                While this would make the overall area more consistent in snow height,
+                                brand-new blocks would have a 3 layer difference in accumulation.
+                             */
+                            //int addLayers = Math.min(3, currentMaxSnowLayers - currentLayers);
+                            //int newLayers = Math.min(7, currentLayers + addLayers);
+                            //BlockState newState = state.setValue(SnowLayerBlock.LAYERS, newLayers);
+
                             BlockState newState = state.setValue(SnowLayerBlock.LAYERS, currentLayers + 1);
                             level.setBlockAndUpdate(topPos, newState);
                             Block.pushEntitiesUp(state, newState, level, topPos);

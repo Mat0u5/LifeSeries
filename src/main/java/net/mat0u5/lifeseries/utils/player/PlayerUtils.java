@@ -10,6 +10,7 @@ import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.Optionull;
 import net.minecraft.core.BlockPos;
@@ -50,6 +51,11 @@ import net.minecraft.world.entity.RelativeMovement;
 import net.minecraft.network.protocol.common.ClientboundResourcePackPopPacket;
 import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
 //?}
+
+//? if >= 1.21.9 {
+/*import net.minecraft.world.item.component.ResolvableProfile;
+import net.minecraft.network.chat.contents.objects.PlayerSprite;
+*///?}
 
 public class PlayerUtils {
     private static HashMap<Component, Integer> broadcastCooldown = new HashMap<>();
@@ -497,5 +503,14 @@ public class PlayerUtils {
             if (hidePlayerFrom(player, broadcaster)) continue;
             player.sendSystemMessage(message);
         }
+    }
+
+    public static Component getPlayerNameWithIcon(ServerPlayer player) {
+        //? if < 1.21.9 {
+        return player.getDisplayName();
+        //?} else {
+        /*Component image = Component.object(new PlayerSprite(ResolvableProfile.createResolved(player.getGameProfile()), true));
+        return TextUtils.format("{} {}", image, player);
+        *///?}
     }
 }
