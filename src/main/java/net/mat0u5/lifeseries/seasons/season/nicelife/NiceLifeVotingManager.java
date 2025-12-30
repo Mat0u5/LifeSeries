@@ -26,13 +26,13 @@ public class NiceLifeVotingManager {
     public static VoteType voteType = VoteType.NAUGHTY_LIST;
     public static double NICE_LIST_CHANCE = 0.5;
     public static Time VOTING_TIME = Time.seconds(60);
-    public static boolean REDS_ON_NAUGHTY_LIST = false; //TODO config
+    public static boolean REDS_ON_NAUGHTY_LIST = false;
     public static List<UUID> allowedToVote = new ArrayList<>();
     public static List<UUID> playersVoted = new ArrayList<>();
     public static Map<UUID, Integer> votesByCount = new HashMap<>();
     public static Map<UUID, UUID> votesByPerson = new HashMap<>();
-    public static int NICE_LIST_COUNT = 3; //TODO config
-    public static int NAUGHTY_LIST_COUNT = 3; //TODO config
+    public static int NICE_LIST_COUNT = 3;
+    public static int NAUGHTY_LIST_COUNT = 3;
     public static List<UUID> niceListMembers = new ArrayList<>();
     public static List<UUID> naughtyListMembers = new ArrayList<>();
     public static String NAUGHTY_LIST_TEAM = "naughty_list";
