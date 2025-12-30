@@ -4,8 +4,10 @@ import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
 import net.mat0u5.lifeseries.mixin.ServerLevelAccessor;
+import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.BlockPos;
@@ -33,6 +35,7 @@ import static net.mat0u5.lifeseries.Main.*;
 
 //? if <= 1.21.9
 import net.minecraft.world.level.GameRules;
+import net.minecraft.world.phys.Vec3;
 //? if > 1.21.9
 /*import net.minecraft.world.level.gamerules.GameRules;*/
 
@@ -56,6 +59,7 @@ public class NiceLife extends Season {
     public static boolean playedMidnightChimes = false;
     public static boolean reachedSunset = false;
     public static boolean reachedPreSunset = false;
+    public static boolean redWinter = false;
 
     @Override
     public void initialize() {
@@ -96,9 +100,14 @@ public class NiceLife extends Season {
 
     public void updateSnowTick() {
         double chance = snowLayerTickChance;
+
+        if (redWinter) {
+            chance *= 5;
+        }
         if (currentMaxSnowLayers >= 8) {
             chance *= 3;
         }
+
         precipitationTicks = Math.max(1, (int) Math.ceil(chance));
         chancePerTick = chance / precipitationTicks;
     }
@@ -196,6 +205,48 @@ public class NiceLife extends Season {
         }
         reachedSunset = isSunset();
         reachedPreSunset = isTimeBetween(11800, 13000);
+
+        boolean shouldRedWinter = shouldRedWinter();
+        if (redWinter != shouldRedWinter) {
+            redWinter = shouldRedWinter;
+            if (redWinter) {
+                triggerRedWinter();
+            }
+            else {
+                Season.setSkyColor(null, false);
+                Season.setFogColor(null, false);
+                Season.setCloudColor(null, false);
+            }
+        }
+    }
+
+    public void triggerRedWinter() {
+        TaskScheduler.scheduleTask(20, () -> {
+            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(),
+                    SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_red_winter")),
+                    1f, 1);
+        });
+        TaskScheduler.scheduleTask(20 + 12, () -> {
+            PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§eThe last yellow falls.."), 15, 65, 15);
+        });
+        TaskScheduler.scheduleTask(20 + 108, () -> {
+            PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§cRed winter is here.."), 15, 40, 15);
+        });
+        TaskScheduler.scheduleTask(20 + 215, () -> {
+            NetworkHandlerServer.sendNumberPackets(PacketNames.FAKE_THUNDER, 7);
+        });
+        TaskScheduler.scheduleTask(20 + 224, () -> {
+            Season.setSkyColor(new Vec3(15, -140, -255), false);
+            Season.setFogColor(new Vec3(40, -104, -143), false);
+            Season.setCloudColor(new Vec3(-255, -255, -255), true);
+        });
+    }
+
+    public boolean shouldRedWinter() {
+        if (currentSession.statusNotStarted()) return false;
+        List<ServerPlayer> redPlayers = livesManager.getAlivePlayers();
+        List<ServerPlayer> nonRedPlayers = livesManager.getNonRedPlayers();
+        return !redPlayers.isEmpty() && nonRedPlayers.isEmpty();
     }
 
     public void sleepThroughNight() {
