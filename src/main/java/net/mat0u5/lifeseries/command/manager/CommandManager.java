@@ -40,6 +40,7 @@ public class CommandManager {
         commands.add(new SelfMessageCommand());
         commands.add(new SideTitleCommand());
         commands.add(new TestingCommands());
+        commands.add(new OtherCommands());
     }
 
     public static void registerAllCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandRegistryAccess, net.minecraft.commands.Commands.CommandSelection registrationEnvironment) {

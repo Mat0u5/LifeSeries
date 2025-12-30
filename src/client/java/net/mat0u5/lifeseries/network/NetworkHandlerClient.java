@@ -47,6 +47,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -241,6 +242,43 @@ public class NetworkHandlerClient {
             String voteName = value.get(0);
             value.remove(0);
             Minecraft.getInstance().setScreen(new VotingScreen(voteName, value));
+        }
+
+        if (name == PacketNames.SKYCOLOR) {
+            MainClient.skyColorSetMode = value.get(0).equalsIgnoreCase("true");
+            MainClient.skyColor = null;
+            if (value.size() >= 4) {
+                try {
+                    double red = Double.parseDouble(value.get(1)) / 255.0;
+                    double green = Double.parseDouble(value.get(2)) / 255.0;
+                    double blue = Double.parseDouble(value.get(3)) / 255.0;
+                    MainClient.skyColor = new Vec3(red, green, blue);
+                }catch (Exception ignored) {}
+            }
+        }
+        if (name == PacketNames.FOGCOLOR) {
+            MainClient.fogColorSetMode = value.get(0).equalsIgnoreCase("true");
+            MainClient.fogColor = null;
+            if (value.size() >= 4) {
+                try {
+                    double red = Double.parseDouble(value.get(1)) / 255.0;
+                    double green = Double.parseDouble(value.get(2)) / 255.0;
+                    double blue = Double.parseDouble(value.get(3)) / 255.0;
+                    MainClient.fogColor = new Vec3(red, green, blue);
+                }catch (Exception ignored) {}
+            }
+        }
+        if (name == PacketNames.CLOUDCOLOR) {
+            MainClient.cloudColorSetMode = value.get(0).equalsIgnoreCase("true");
+            MainClient.cloudColor = null;
+            if (value.size() >= 4) {
+                try {
+                    double red = Double.parseDouble(value.get(1)) / 255.0;
+                    double green = Double.parseDouble(value.get(2)) / 255.0;
+                    double blue = Double.parseDouble(value.get(3)) / 255.0;
+                    MainClient.cloudColor = new Vec3(red, green, blue);
+                }catch (Exception ignored) {}
+            }
         }
     }
 

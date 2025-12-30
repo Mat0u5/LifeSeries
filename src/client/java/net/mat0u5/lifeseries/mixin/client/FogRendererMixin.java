@@ -1,16 +1,22 @@
 package net.mat0u5.lifeseries.mixin.client;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.render.ClientRenderer;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.FogType;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import net.mat0u5.lifeseries.render.RenderUtils;
 import org.joml.Vector4f;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
@@ -45,7 +51,7 @@ public class FogRendererMixin {
     /*private static void stopFog(Camera camera, int i, DeltaTracker deltaTracker, float f, ClientLevel clientLevel, CallbackInfoReturnable<Vector4f> cir) {
     *///?}
         ClientLevel nether = Minecraft.getInstance().level;
-        if (camera.getFluidInCamera() == FogType.NONE && nether != null && nether.dimension() == Level.NETHER &&
+        if (MainClient.fogColor == null && camera.getFluidInCamera() == FogType.NONE && nether != null && nether.dimension() == Level.NETHER &&
                 MainClient.NICELIFE_SNOWY_NETHER && !Main.modDisabled() && currentSeason.getSeason() == Seasons.NICE_LIFE) {
             //? if <= 1.21 {
             ci.cancel();
@@ -56,4 +62,27 @@ public class FogRendererMixin {
             *///?}
         }
     }
+
+    //? if <= 1.21 {
+    @Redirect(method = "setupColor", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;clearColor(FFFF)V"))
+    private static void customFogColor(float r, float g, float b, float a) {
+        Vec3 result = ClientRenderer.modifyColor(r, g, b, MainClient.fogColor, MainClient.fogColorSetMode, null);
+        MainClient.cachedFogRenderColor = result;
+        RenderSystem.clearColor((float) result.x, (float) result.y, (float) result.z, a);
+    }
+
+    @Redirect(method = "levelFogColor", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderFogColor(FFF)V"))
+    private static void customFogColor(float r, float g, float b) {
+        Vec3 result = ClientRenderer.modifyColor(r, g, b, MainClient.fogColor, MainClient.fogColorSetMode, null);
+        RenderSystem.setShaderFogColor((float) result.x, (float) result.y, (float) result.z);
+    }
+    //?} else {
+    /*@ModifyReturnValue(method = "computeFogColor", at = @At("RETURN"))
+    private static Vector4f customFogColor(Vector4f original) {
+        Vector4f result = ClientRenderer.modifyColor(original, MainClient.fogColor, MainClient.fogColorSetMode, null);
+        MainClient.cachedFogRenderColor = new Vec3(result.x, result.y, result.z);
+        return result;
+    }
+    *///?}
+
 }

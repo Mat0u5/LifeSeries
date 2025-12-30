@@ -438,7 +438,8 @@ public class NiceLifeVotingManager {
         if (votedFor.ls$isDead()) return;
         if (niceListMembers.contains(votedFor.getUUID())) return;
 
-        player.sendSystemMessage(TextUtils.format("\n §6[§e!§6]§7 You voted for {}§7.\n", PlayerUtils.getPlayerNameWithIcon(player)), false);
+        PlayerUtils.playSoundToPlayer(player, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
+        player.sendSystemMessage(TextUtils.format("\n §6[§e!§6]§7 You voted for {}§7.\n", PlayerUtils.getPlayerNameWithIcon(votedFor)), false);
         votesByPerson.put(player.getUUID(), votedFor.getUUID());
     }
 

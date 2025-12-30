@@ -14,6 +14,7 @@ import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.interfaces.IClientHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.*;
 
@@ -42,7 +43,13 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     public static long limitedLifeLives = 0;
     public static Component sideTitle = null;
     public static boolean hideSleepDarkness = false;
-
+    public static Vec3 skyColor = null;
+    public static boolean skyColorSetMode = false;
+    public static Vec3 fogColor = null;
+    public static boolean fogColorSetMode = false;
+    public static Vec3 cloudColor = null;
+    public static boolean cloudColorSetMode = false;
+    public static Vec3 cachedFogRenderColor = null;
 
     public static ClientConfig clientConfig;
 
@@ -154,6 +161,13 @@ public class MainClient implements ClientModInitializer, IClientHelper {
         serverHandshake = HandshakeStatus.WAITING;
         sideTitle = null;
         TextHud.sideTitleRemainTicks = 0;
+
+        skyColor = null;
+        skyColorSetMode = false;
+        fogColor = null;
+        fogColorSetMode = false;
+        cloudColor = null;
+        cloudColorSetMode = false;
 
         MorphManager.resetMorphs();
     }

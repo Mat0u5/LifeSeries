@@ -100,6 +100,12 @@ public abstract class Season {
     private static boolean BROADCAST_LIFE_GAIN = false;
     private double ADDITIONAL_WITHER_SKULL_RATE = 0.05;
     public static Random rnd = new Random();
+    public static Vec3 skyColor = null;
+    public static boolean skyColorSetMode = false;
+    public static Vec3 fogColor = null;
+    public static boolean fogColorSetMode = false;
+    public static Vec3 cloudColor = null;
+    public static boolean cloudColorSetMode = false;
 
     public BoogeymanManager boogeymanManager = createBoogeymanManager();
     public SecretSociety secretSociety = createSecretSociety();
@@ -235,6 +241,24 @@ public abstract class Season {
         livesManager.reload();
         currentSession.freezeIfNecessary();
         DatapackIntegration.reload();
+    }
+
+    public static void setSkyColor(Vec3 color, boolean setMode) {
+        skyColor = color;
+        skyColorSetMode = setMode;
+        NetworkHandlerServer.sendUpdatePackets();
+    }
+
+    public static void setFogColor(Vec3 color, boolean setMode) {
+        fogColor = color;
+        fogColorSetMode = setMode;
+        NetworkHandlerServer.sendUpdatePackets();
+    }
+
+    public static void setCloudColor(Vec3 color, boolean setMode) {
+        cloudColor = color;
+        cloudColorSetMode = setMode;
+        NetworkHandlerServer.sendUpdatePackets();
     }
 
     public String getAdminCommands() {
