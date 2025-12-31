@@ -45,6 +45,7 @@ public final class TriviaBotGlideGoal extends Goal {
     @Override
     public void start() {
         ticksWaited = 0;
+        mob.setGliding(true);
     }
 
     @Override

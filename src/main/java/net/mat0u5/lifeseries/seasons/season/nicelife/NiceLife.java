@@ -23,6 +23,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
@@ -68,6 +69,7 @@ public class NiceLife extends Season {
     public static Time naughtyListGlowTimeInterval = Time.seconds(60);
     public static Time naughtyListGlowTime = Time.seconds(5);
     public static Time timePassed = Time.zero();
+    public static Time triviaCannotStartFor = Time.zero();
 
     @Override
     public void initialize() {
@@ -160,30 +162,37 @@ public class NiceLife extends Season {
                 PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(),
                         SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_midnight_chimes")),
                         1f, 1);
+                postponeTriviaStart(Time.ticks(779));
             }
         }
 
-        if (overworld instanceof ServerLevelAccessor accessor) {
-            SleepStatus sleepStatus = accessor.ls$getSleepStatus();
-            //? if <= 1.21.9 {
-            int percentage = overworld.getGameRules().getInt(GameRules.RULE_PLAYERS_SLEEPING_PERCENTAGE);
-            //?} else {
-            /*int percentage = overworld.getGameRules().get(GameRules.PLAYERS_SLEEPING_PERCENTAGE);
-            *///?}
-            if (sleepStatus.areEnoughSleeping(percentage) && isMidnight() && currentSession.statusStarted()) {
-                if (!NiceLifeTriviaManager.triviaInProgress) {
-                    List<ServerPlayer> triviaPlayers = new ArrayList<>();
-                    for(ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
-                        if (player.isSpectator()) continue;
-                        if (!player.isSleeping()) continue;
-                        triviaPlayers.add(player);
-                    }
-                    if (!triviaPlayers.isEmpty()) {
-                        NiceLifeTriviaManager.startTrivia(triviaPlayers);
+        if (triviaCannotStartFor.isSmaller(Time.zero())) {
+            if (overworld instanceof ServerLevelAccessor accessor) {
+                SleepStatus sleepStatus = accessor.ls$getSleepStatus();
+                //? if <= 1.21.9 {
+                int percentage = overworld.getGameRules().getInt(GameRules.RULE_PLAYERS_SLEEPING_PERCENTAGE);
+                 //?} else {
+                /*int percentage = overworld.getGameRules().get(GameRules.PLAYERS_SLEEPING_PERCENTAGE);
+                *///?}
+                if (sleepStatus.areEnoughSleeping(percentage) && isMidnight() && currentSession.statusStarted()) {
+                    if (!NiceLifeTriviaManager.triviaInProgress) {
+                        List<ServerPlayer> triviaPlayers = new ArrayList<>();
+                        for(ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
+                            if (player.isSpectator()) continue;
+                            if (!player.isSleeping()) continue;
+                            triviaPlayers.add(player);
+                        }
+                        if (!triviaPlayers.isEmpty()) {
+                            NiceLifeTriviaManager.startTrivia(triviaPlayers);
+                        }
                     }
                 }
             }
         }
+        else {
+            triviaCannotStartFor.add(Time.ticks(-1));
+        }
+
         if (isMidnight() && NiceLifeTriviaManager.triviaInProgress && !NiceLifeTriviaManager.preparingForSpawn) {
             List<ServerPlayer> remainingTriviaPlayers = new ArrayList<>();
             for (UUID playerUUID : NiceLifeTriviaManager.triviaPlayersUUID) {
@@ -208,12 +217,7 @@ public class NiceLife extends Season {
             }
         }
         if (!reachedSunset && isSunset()) {
-            if (!NiceLifeVotingManager.naughtyListMembers.isEmpty()) {
-                NiceLifeVotingManager.endNaughtyList();
-            }
-            if (!NiceLifeVotingManager.niceListMembers.isEmpty()) {
-                NiceLifeVotingManager.endNiceList();
-            }
+            NiceLifeVotingManager.endListsIfNecessary();
         }
         reachedSunset = isSunset();
         reachedPreSunset = isTimeBetween(11800, 13000);
@@ -234,6 +238,13 @@ public class NiceLife extends Season {
             VoicechatMain.niceLifeTick();
         }
     }
+
+    public static void postponeTriviaStart(Time time) {
+        if (!triviaCannotStartFor.isLarger(time)) {
+            triviaCannotStartFor = time;
+        }
+    }
+
     @Override
     public void tickSessionOn(MinecraftServer server) {
         super.tickSessionOn(server);
@@ -289,11 +300,22 @@ public class NiceLife extends Season {
         }
     }
 
+    public void wakeUpAllPlayers() {
+        if (server == null) return;
+        ServerLevel overworld = server.overworld();
+        if (overworld instanceof ServerLevelAccessor accessor) {
+            accessor.ls$wakeUpAllPlayers();
+        }
+    }
+
 
     @Override
     public boolean sessionStart() {
         super.sessionStart();
         NiceLifeTriviaManager.sessionStart();
+        NiceLifeVotingManager.endListsIfNecessary();
+        wakeUpAllPlayers();
+        playedMidnightChimes = false;
         return true;
     }
 
@@ -301,6 +323,8 @@ public class NiceLife extends Season {
     public void sessionEnd() {
         super.sessionEnd();
         NiceLifeTriviaManager.sessionEnd();
+        NiceLifeVotingManager.endListsIfNecessary();
+        wakeUpAllPlayers();
     }
 
     public boolean isMidnight() {
@@ -308,7 +332,7 @@ public class NiceLife extends Season {
     }
 
     public boolean isSunset() {
-        return isTimeBetween(13000, 15000);
+        return isTimeBetween(13000, 20000);
     }
 
     public boolean isTimeBetween(int minTime, int maxTime) {
@@ -427,6 +451,9 @@ public class NiceLife extends Season {
                     *///?} else {
                     blockState.is(Blocks.SHORT_GRASS) ||
                     //?}
+                    //? if >= 1.21.5 {
+                    /*blockState.is(Blocks.LEAF_LITTER) ||
+                    *///?}
                     blockState.is(Blocks.TALL_GRASS) ||
                     blockState.is(Blocks.DANDELION) ||
                     blockState.is(Blocks.TORCHFLOWER) ||

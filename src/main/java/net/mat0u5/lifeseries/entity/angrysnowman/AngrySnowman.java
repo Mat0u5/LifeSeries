@@ -64,6 +64,9 @@ public class AngrySnowman extends SnowGolem {
             ServerPlayer closestPlayer = null;
             double closestDistance = 100000;
             for (ServerPlayer player : livesManager.getAlivePlayers()) {
+                if (player.isSpectator()) continue;
+                if (player.isCreative()) continue;
+
                 double distance = this.distanceTo(player);
                 if (distance < closestDistance && distance < 30) {
                     closestPlayer = player;

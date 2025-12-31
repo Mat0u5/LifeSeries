@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
-//? if < 1.21.9 {
+//? if <= 1.21.9 {
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
 

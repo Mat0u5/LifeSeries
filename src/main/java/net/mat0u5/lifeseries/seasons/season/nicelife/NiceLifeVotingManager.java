@@ -156,6 +156,15 @@ public class NiceLifeVotingManager {
         reset();
     }
 
+    public static void endListsIfNecessary() {
+        if (!naughtyListMembers.isEmpty()) {
+            endNaughtyList();
+        }
+        if (!niceListMembers.isEmpty()) {
+            endNiceList();
+        }
+    }
+
     public static void announceNaughtyList() {
         List<UUID> players = getMostVotedForPlayers(NAUGHTY_LIST_COUNT);
         naughtyListMembers.clear();
@@ -305,6 +314,7 @@ public class NiceLifeVotingManager {
             naughtyListMembers.clear();
             currentSeason.reloadAllPlayerTeams();
         });
+        NiceLife.postponeTriviaStart(Time.ticks(delay+20));
     }
 
     public static void endNiceList() {
@@ -334,6 +344,7 @@ public class NiceLifeVotingManager {
         TaskScheduler.scheduleTask(delay, () -> {
             actuallyEndNiceList();
         });
+        NiceLife.postponeTriviaStart(Time.ticks(delay+85));
     }
 
     public static void actuallyEndNiceList() {

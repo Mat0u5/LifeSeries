@@ -3,12 +3,15 @@ package net.mat0u5.lifeseries.features;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.config.ClientConfig;
+import net.mat0u5.lifeseries.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.gui.trivia.ConfirmQuizAnswerScreen;
 import net.mat0u5.lifeseries.gui.trivia.NewQuizScreen;
 import net.mat0u5.lifeseries.gui.trivia.QuizScreen;
+import net.mat0u5.lifeseries.gui.trivia.VotingScreen;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.network.packets.TriviaQuestionPayload;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.utils.ClientSounds;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.client.Minecraft;
@@ -78,6 +81,7 @@ public class Trivia {
         timestamp = 0;
         ticksPassed = 0;
         closeGui();
+        ClientSounds.stopTriviaSounds();
     }
 
     public static void sendAnswer(int answer) {

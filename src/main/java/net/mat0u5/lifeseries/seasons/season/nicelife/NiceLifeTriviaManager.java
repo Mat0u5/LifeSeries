@@ -149,7 +149,7 @@ public class NiceLifeTriviaManager {
         TaskScheduler.scheduleTask(120, () -> {
             PlayerUtils.broadcastMessage(Component.literal("§f<§2§mTrivia§m§2 Santa Bot§f>§4 SNOW MUST GO ON!"));
             for (ServerPlayer player : livesManager.getAlivePlayers()) {
-                for (int i = 0; i < 2; i++) {
+                for (int i = 0; i < 3; i++) {
                     BlockPos pos = LevelUtils.getCloseBlockPos(player.ls$getServerLevel(), player.blockPosition(), 8, 2, true);
                     AngrySnowman snowman = LevelUtils.spawnEntity(MobRegistry.ANGRY_SNOWMAN, player.ls$getServerLevel(), pos);
                     if (snowman != null) {
