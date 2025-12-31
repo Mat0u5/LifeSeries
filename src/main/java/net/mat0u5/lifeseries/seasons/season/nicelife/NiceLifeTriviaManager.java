@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.nicelife;
 
+import net.mat0u5.lifeseries.entity.angrysnowman.AngrySnowman;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
@@ -16,6 +17,7 @@ import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -25,6 +27,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.*;
 
+import static net.mat0u5.lifeseries.Main.livesManager;
 import static net.mat0u5.lifeseries.Main.server;
 
 public class NiceLifeTriviaManager {
@@ -122,11 +125,31 @@ public class NiceLifeTriviaManager {
         triviaInProgress = false;
         if (correctAnswers.isEmpty() && incorrectAnswers.isEmpty()) return;
         if (correctAnswers.isEmpty()) {
-            //TODO all wrong stuff
+            TaskScheduler.scheduleTask(100, NiceLifeTriviaManager::allWrong);
         }
         else {
             NiceLifeVotingManager.endTriviaVoting();
         }
+    }
+
+    public static void allWrong() {
+        SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_incorrect_all_wrong"));
+        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
+        PlayerUtils.broadcastMessage(Component.literal("§f<§2§mTrivia§m§2 Santa Bot§f>§4 WRONG! WRONG! WRONG! ALL WRONG!"));
+        NetworkHandlerServer.sendStringPackets(PacketNames.TRIVIA_ALL_WRONG, "");
+        //TODO guardian trivia face
+        TaskScheduler.scheduleTask(120, () -> {
+            PlayerUtils.broadcastMessage(Component.literal("§f<§2§mTrivia§m§2 Santa Bot§f>§4 SNOW MUST GO ON!"));
+            for (ServerPlayer player : livesManager.getAlivePlayers()) {
+                for (int i = 0; i < 2; i++) {
+                    BlockPos pos = LevelUtils.getCloseBlockPos(player.ls$getServerLevel(), player.blockPosition(), 8, 2, true);
+                    AngrySnowman snowman = LevelUtils.spawnEntity(MobRegistry.ANGRY_SNOWMAN, player.ls$getServerLevel(), pos);
+                    if (snowman != null) {
+                        snowman.setPumpkin(false);
+                    }
+                }
+            }
+        });
     }
 
     public static void breakBotSpawnBlocks(int overTicks) {

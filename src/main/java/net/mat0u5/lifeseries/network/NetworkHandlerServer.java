@@ -452,6 +452,12 @@ public class NetworkHandlerServer {
 
     }
 
+    public static void sendStringPackets(PacketNames name, String value) {
+        StringPayload payload = new StringPayload(name.getName(), value);
+        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
+            ServerPlayNetworking.send(player, payload);
+        }
+    }
     public static void sendStringPacket(ServerPlayer player, PacketNames name, String value) {
         if (player == null) return;
         StringPayload payload = new StringPayload(name.getName(), value);
@@ -464,8 +470,8 @@ public class NetworkHandlerServer {
     }
 
     public static void sendStringListPackets(PacketNames name, List<String> value) {
+        StringListPayload payload = new StringListPayload(name.getName(), value);
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-            StringListPayload payload = new StringListPayload(name.getName(), value);
             ServerPlayNetworking.send(player, payload);
         }
     }

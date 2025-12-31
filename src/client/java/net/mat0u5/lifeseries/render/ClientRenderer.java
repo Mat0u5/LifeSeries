@@ -45,7 +45,7 @@ public class ClientRenderer {
         return original;
     }
 
-    //?if >= 1.21.2 {
+    //? if >= 1.21.2 {
     /*public static int modifyColor(int originalInt, Vec3 targetColor, boolean setMode, Vec3 cache) {
         Vector3f original = ARGB.vector3fFromRGB24(originalInt);
         if (targetColor != null) {

@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.entity.angrysnowman.AngrySnowman;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -11,6 +12,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -165,6 +167,11 @@ public abstract class LivingEntityMixin {
         if (ls$lastDamageSource == null) return strength;
 
         DamageSource source = ls$lastDamageSource;
+
+        if (source.getEntity() instanceof AngrySnowman) {
+            return 3;
+        }
+
         if (source.getEntity() instanceof ServerPlayer attacker &&
                 source.type() == attacker.damageSources().playerAttack(attacker).type() &&
                 SuperpowersWildcard.hasActivatedPower(attacker, Superpowers.SUPER_PUNCH)) {

@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallba
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.mat0u5.lifeseries.command.ClientCommands;
+import net.mat0u5.lifeseries.entity.angrysnowman.AngrySnowmanRenderer;
 import net.mat0u5.lifeseries.entity.snail.SnailModel;
 import net.mat0u5.lifeseries.entity.snail.SnailRenderer;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBotModel;
@@ -28,5 +29,7 @@ public class ClientRegistries {
 
         EntityModelLayerRegistry.registerModelLayer(TriviaBotModel.TRIVIA_BOT, TriviaBotModel::getTexturedModelData);
         EntityRendererRegistry.register(MobRegistry.TRIVIA_BOT, TriviaBotRenderer::new);
+
+        EntityRendererRegistry.register(MobRegistry.ANGRY_SNOWMAN, AngrySnowmanRenderer::new);
     }
 }
