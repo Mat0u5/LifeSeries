@@ -38,7 +38,9 @@ public class AngrySnowmanRenderer extends SnowGolemRenderer {
     /*public Identifier getTextureLocation(SnowGolemRenderState state) {
     *///?}
             UUID uuid = null;
-            //? if >= 1.21.2 {
+            //? if <= 1.21 {
+            uuid  = entity.getUUID();
+            //?} else {
             /*if (state instanceof IEntityRenderState stateAccessor) {
                 uuid = stateAccessor.ls$getEntity().getUUID();
             }

@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.nicelife;
 
+import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
+import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
 import net.mat0u5.lifeseries.entity.angrysnowman.AngrySnowman;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
@@ -58,6 +60,9 @@ public class NiceLifeTriviaManager {
         }
         correctAnswers.clear();
         incorrectAnswers.clear();
+        if (CompatibilityManager.voicechatLoaded()) {
+            VoicechatMain.niceLifeTriviaStart(triviaPlayers);
+        }
 
         triviaInProgress = true;
         killAllBots();
@@ -129,6 +134,9 @@ public class NiceLifeTriviaManager {
         }
         else {
             NiceLifeVotingManager.endTriviaVoting();
+        }
+        if (CompatibilityManager.voicechatLoaded()) {
+            VoicechatMain.niceLifeTick();
         }
     }
 

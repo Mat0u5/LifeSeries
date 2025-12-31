@@ -5,6 +5,8 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
+import net.mat0u5.lifeseries.compatibilities.VoicechatClient;
 import net.mat0u5.lifeseries.config.ClientConfig;
 import net.mat0u5.lifeseries.config.ClientConfigGuiManager;
 import net.mat0u5.lifeseries.config.ClientConfigNetwork;
@@ -285,7 +287,8 @@ public class NetworkHandlerClient {
     public static void handleConfigPacket(ConfigPayload payload) {
         ClientConfigNetwork.handleConfigPacket(payload, false);
     }
-    
+
+    private static boolean lastMuteState = false;
     public static void handleStringPacket(StringPayload payload) {
         String nameStr = payload.name();
         PacketNames name = PacketNames.fromName(nameStr);
@@ -387,6 +390,12 @@ public class NetworkHandlerClient {
             LocalPlayer player = Minecraft.getInstance().player;
             if (!MainClient.hideSleepDarkness && player != null && player instanceof PlayerAccessor accessor) {
                 accessor.ls$setSleepCounter(0);
+            }
+        }
+        if (name == PacketNames.MIC_MUTED) {
+            boolean boolValue = value.equalsIgnoreCase("true");
+            if (CompatibilityManager.voicechatLoaded()) {
+                VoicechatClient.setMuted(boolValue);
             }
         }
     }

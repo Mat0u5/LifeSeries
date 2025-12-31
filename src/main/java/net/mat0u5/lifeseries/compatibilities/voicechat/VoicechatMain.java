@@ -4,6 +4,7 @@ import de.maxhenkel.voicechat.api.*;
 import de.maxhenkel.voicechat.api.events.EventRegistration;
 import de.maxhenkel.voicechat.api.events.MicrophonePacketEvent;
 import de.maxhenkel.voicechat.api.events.PlayerConnectedEvent;
+import de.maxhenkel.voicechat.api.events.VoicechatServerStartedEvent;
 import de.maxhenkel.voicechat.api.opus.OpusDecoder;
 import de.maxhenkel.voicechat.api.opus.OpusEncoder;
 import de.maxhenkel.voicechat.api.packets.LocationalSoundPacket;
@@ -12,28 +13,30 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.compatibilities.voicechat.soundeffects.RadioEffect;
 import net.mat0u5.lifeseries.compatibilities.voicechat.soundeffects.RoboticVoice;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
+import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Listening;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
 public class VoicechatMain implements VoicechatPlugin {
 
-    private static List<UUID> connectedPlayers = new ArrayList<>();
+    private static Map<UUID, VoicechatConnection> connectedPlayers = new HashMap();
+    private static List<UUID> tempMutedPlayers = new ArrayList<>();
 
     private OpusEncoder encoder;
     private OpusDecoder decoder;
+    private static VoicechatServerApi serverApi;
 
     @Override
     public String getPluginId() {
@@ -49,19 +52,53 @@ public class VoicechatMain implements VoicechatPlugin {
 
     @Override
     public void registerEvents(EventRegistration registration) {
+        registration.registerEvent(VoicechatServerStartedEvent.class, this::onServerStarted, 100);
         registration.registerEvent(MicrophonePacketEvent.class, this::onAudioPacket);
         registration.registerEvent(PlayerConnectedEvent.class, this::onPlayerConnected);
+    }
+
+    public void onServerStarted(VoicechatServerStartedEvent event) {
+        serverApi = event.getVoicechat();
     }
     
     private void onPlayerConnected(PlayerConnectedEvent event) {
         UUID uuid = event.getConnection().getPlayer().getUuid();
-        if (!connectedPlayers.contains(uuid)) {
-            connectedPlayers.add(uuid);
-        }
+        connectedPlayers.put(uuid, event.getConnection());
     }
 
     public static boolean isConnectedToSVC(UUID uuid) {
-        return connectedPlayers.contains(uuid);
+        return connectedPlayers.containsKey(uuid);
+    }
+
+
+    public static void niceLifeTriviaStart(List<ServerPlayer> triviaPlayers) {
+        if (serverApi == null) return;
+        tempMutedPlayers.clear();
+
+        for (ServerPlayer player : triviaPlayers) {
+            if (connectedPlayers.containsKey(player.getUUID())) {
+                if (!tempMutedPlayers.contains(player.getUUID())) {
+                    tempMutedPlayers.add(player.getUUID());
+                }
+                NetworkHandlerServer.sendStringPacket(player, PacketNames.MIC_MUTED, "true");
+            }
+        }
+    }
+
+    public static void niceLifeTick() {
+        if (serverApi == null) return;
+        for (Map.Entry<UUID, VoicechatConnection> entry : connectedPlayers.entrySet()) {
+            UUID playerUUID = entry.getKey();
+            if (tempMutedPlayers.contains(playerUUID)) {
+                ServerPlayer player = PlayerUtils.getPlayer(playerUUID);
+                if (player != null) {
+                    if (!player.isSleeping()) {
+                        tempMutedPlayers.remove(playerUUID);
+                        NetworkHandlerServer.sendStringPacket(player, PacketNames.MIC_MUTED, "false");
+                    }
+                }
+            }
+        }
     }
 
     private void onAudioPacket(MicrophonePacketEvent event) {

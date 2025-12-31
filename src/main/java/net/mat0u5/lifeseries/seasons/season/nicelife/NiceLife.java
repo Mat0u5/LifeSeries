@@ -1,5 +1,8 @@
 package net.mat0u5.lifeseries.seasons.season.nicelife;
 
+import de.maxhenkel.voicechat.api.audiolistener.PlayerAudioListener;
+import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
+import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
@@ -18,6 +21,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.SleepStatus;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
@@ -60,6 +65,9 @@ public class NiceLife extends Season {
     public static boolean reachedSunset = false;
     public static boolean reachedPreSunset = false;
     public static boolean redWinter = false;
+    public static Time naughtyListGlowTimeInterval = Time.seconds(60);
+    public static Time naughtyListGlowTime = Time.seconds(5);
+    public static Time timePassed = Time.zero();
 
     @Override
     public void initialize() {
@@ -95,7 +103,7 @@ public class NiceLife extends Season {
         NiceLifeTriviaManager.CAN_BREAK_BEDS = NiceLifeConfig.BOT_CAN_BREAK_BEDS.get(seasonConfig);
         NiceLifeTriviaManager.BREAKING_DROPS_RESOURCES = NiceLifeConfig.BOT_BREAKING_BLOCKS_DROP_RESOURCES.get(seasonConfig);
         NiceLifeVotingManager.NICE_LIST_CHANCE = NiceLifeConfig.NICE_LIST_CHANCE.get(seasonConfig);
-        NiceLifeVotingManager.VOTING_TIME = Time.seconds(NiceLifeConfig.NAUGHTY_LIST_PLAYERS.get(seasonConfig));
+        NiceLifeVotingManager.VOTING_TIME = Time.seconds(NiceLifeConfig.VOTING_TIME.get(seasonConfig));
         NiceLifeVotingManager.REDS_ON_NAUGHTY_LIST = NiceLifeConfig.ALLOW_REDS_ON_NAUGHTY_LIST.get(seasonConfig);
         NiceLifeVotingManager.NAUGHTY_LIST_COUNT = NiceLifeConfig.NAUGHTY_LIST_PLAYERS.get(seasonConfig);
         NiceLifeVotingManager.NICE_LIST_COUNT = NiceLifeConfig.NICE_LIST_PLAYERS.get(seasonConfig);
@@ -118,6 +126,7 @@ public class NiceLife extends Season {
     @Override
     public void tick(MinecraftServer server) {
         super.tick(server);
+        timePassed.tick();
         if (currentSession.statusStarted() || SNOW_WHEN_NOT_IN_SESSION) {
             snowTicks.tick();
             if (snowTicks.isLarger(SNOW_LAYER_INCREASE_INTERVAL)) {
@@ -219,6 +228,22 @@ public class NiceLife extends Season {
                 Season.setSkyColor(null, false);
                 Season.setFogColor(null, false);
                 Season.setCloudColor(null, false);
+            }
+        }
+        if (timePassed.getTicks() % 20 == 0 && CompatibilityManager.voicechatLoaded()) {
+            VoicechatMain.niceLifeTick();
+        }
+    }
+    @Override
+    public void tickSessionOn(MinecraftServer server) {
+        super.tickSessionOn(server);
+        if (timePassed.isMultipleOf(naughtyListGlowTimeInterval)) {
+            MobEffectInstance glowing = new MobEffectInstance(MobEffects.GLOWING, naughtyListGlowTime.getTicks(), 0);
+            for (UUID uuid : NiceLifeVotingManager.naughtyListMembers) {
+                ServerPlayer player = PlayerUtils.getPlayer(uuid);
+                if (player != null) {
+                    player.addEffect(glowing);
+                }
             }
         }
     }

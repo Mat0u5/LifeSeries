@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.FlashbackCompatibility;
+import net.mat0u5.lifeseries.compatibilities.VoicechatClient;
 import net.mat0u5.lifeseries.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.gui.other.UpdateInfoScreen;
 import net.mat0u5.lifeseries.gui.trivia.NewQuizScreen;
@@ -143,6 +144,9 @@ public class ClientEvents {
             ClientKeybinds.tick();
             ClientSounds.updateSingleSoundVolumes();
             TextHud.tick();
+            if (CompatibilityManager.voicechatLoaded()) {
+                VoicechatClient.checkMute();
+            }
         }catch(Exception ignored) {}
     }
 
