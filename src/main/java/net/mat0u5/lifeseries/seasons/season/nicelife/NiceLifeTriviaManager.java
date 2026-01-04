@@ -64,6 +64,7 @@ public class NiceLifeTriviaManager {
             VoicechatMain.niceLifeTriviaStart(triviaPlayers);
         }
 
+        NetworkHandlerServer.sendUpdatePackets();
         triviaInProgress = true;
         killAllBots();
         usedQuestions.clear();
@@ -145,7 +146,6 @@ public class NiceLifeTriviaManager {
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
         PlayerUtils.broadcastMessage(Component.literal("§f<§2§mTrivia§m§2 Santa Bot§f>§4 WRONG! WRONG! WRONG! ALL WRONG!"));
         NetworkHandlerServer.sendStringPackets(PacketNames.TRIVIA_ALL_WRONG, "");
-        //TODO guardian trivia face
         TaskScheduler.scheduleTask(120, () -> {
             PlayerUtils.broadcastMessage(Component.literal("§f<§2§mTrivia§m§2 Santa Bot§f>§4 SNOW MUST GO ON!"));
             for (ServerPlayer player : livesManager.getAlivePlayers()) {

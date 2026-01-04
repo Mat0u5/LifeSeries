@@ -39,6 +39,7 @@ public class NiceLifeVotingManager {
     public static String NAUGHTY_LIST_TEAM_NAME = "Naughty List";
     public static String NICE_LIST_TEAM = "nice_list";
     public static String NICE_LIST_TEAM_NAME = "Nice List";
+    public static Optional<VoteType> forcedTriviaVote = Optional.empty();
 
     public enum VoteType {
         NICE_LIST,
@@ -61,6 +62,12 @@ public class NiceLifeVotingManager {
     }
 
     public static void chooseVote() {
+        if (forcedTriviaVote.isPresent()) {
+            voteType = forcedTriviaVote.get();
+            forcedTriviaVote = Optional.empty();
+            return;
+        }
+
         voteType = VoteType.NICE_LIST;
         if (rnd.nextDouble() > NICE_LIST_CHANCE) {
             voteType = VoteType.NONE;

@@ -2,6 +2,8 @@ package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.angrysnowman.AngrySnowman;
+import net.mat0u5.lifeseries.entity.snail.Snail;
+import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -12,7 +14,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -244,4 +245,15 @@ public abstract class LivingEntityMixin {
         }
     }
     *///?}
+
+/*
+    @ModifyVariable(method = "handleRelativeFrictionAndCalculateMovement", at = @At("HEAD"), index = 2, argsOnly = true)
+    private float noSpecialFriction(float original) {
+        LivingEntity entity = (LivingEntity) (Object) this;
+        if (entity instanceof Snail || entity instanceof TriviaBot) {
+            return 0.6F;
+        }
+        return original;
+    }
+*/
 }
