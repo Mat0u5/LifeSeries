@@ -21,6 +21,7 @@ public class ModRegistries {
         registerEvents();
         TextUtils.setEmotes();
         MobRegistry.registerMobs();
+        ParticleRegistry.registerParticles();
     }
 
     private static void registerCommands() {

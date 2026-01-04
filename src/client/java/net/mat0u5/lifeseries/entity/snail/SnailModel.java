@@ -111,7 +111,7 @@ public class SnailModel extends EntityModel<SnailRenderState> {
         PartDefinition strings = parachute.addOrReplaceChild("strings", CubeListBuilder.create().texOffs(44, 58).addBox(1.0F, -13.0F, 7.0F, 1.0F, 4.0F, 0.0F, new CubeDeformation(0.0F))
                 .texOffs(58, 37).addBox(3.0F, -13.0F, 5.0F, 0.0F, 4.0F, 1.0F, new CubeDeformation(0.0F))
                 .texOffs(40, 58).addBox(3.0F, -13.0F, 2.0F, 0.0F, 4.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(58, 42).addBox(-3.0F, -13.0F, 5.0F, 0.0F, 4.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(58, 41).addBox(-3.0F, -13.0F, 5.0F, 0.0F, 4.0F, 1.0F, new CubeDeformation(0.0F))
                 .texOffs(42, 58).addBox(-3.0F, -13.0F, 2.0F, 0.0F, 4.0F, 1.0F, new CubeDeformation(0.0F))
                 .texOffs(46, 58).addBox(-2.0F, -13.0F, 7.0F, 1.0F, 4.0F, 0.0F, new CubeDeformation(0.0F))
                 .texOffs(60, 37).addBox(1.0F, -13.0F, 1.0F, 1.0F, 4.0F, 0.0F, new CubeDeformation(0.0F))

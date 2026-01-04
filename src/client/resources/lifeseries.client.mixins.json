@@ -29,6 +29,8 @@
     "LivingEntityRendererMixin",
     "LocalPlayerMixin",
     "MinecraftMixin",
+    "ParticleAccessor",
+    "ParticleEngineMixin",
     "PlayerAccessor",
     "PlayerEntityRendererMixin",
     "PlayerTabOverlayMixin",

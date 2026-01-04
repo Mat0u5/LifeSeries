@@ -35,57 +35,41 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = RegistrySyncManager.class, priority = 1, remap = false)
 public class RegistrySyncManagerMixin {
 
-    //? if <= 1.21.9 {
-
     //? if <= 1.20 {
     /*@WrapOperation(method = "sendPacket(Lnet/minecraft/server/level/ServerPlayer;Lnet/fabricmc/fabric/impl/registry/sync/packet/RegistryPacketHandler;)V", at = @At(value = "INVOKE", target = "Lnet/fabricmc/fabric/impl/registry/sync/RegistrySyncManager;createAndPopulateRegistryMap(ZLjava/util/Map;)Ljava/util/Map;"))
     private static @Nullable Map<ResourceLocation, Object2IntMap<ResourceLocation>> checkRemoteRemap(boolean b, Map map, Operation<Map<ResourceLocation, Object2IntMap<ResourceLocation>>> original, ServerPlayer player) {
     Map<ResourceLocation, Object2IntMap<ResourceLocation>> originalValue = original.call(b, map);
-    if (NetworkHandlerServer.preLoginHandshake.contains(player.getUUID())) {
-    *///?} else {
+        if (NetworkHandlerServer.preLoginHandshake.contains(player.getUUID())) {
+    *///?} else if <= 1.21.9 {
     @WrapOperation(method = "configureClient", at = @At(value = "INVOKE", target = "Lnet/fabricmc/fabric/impl/registry/sync/RegistrySyncManager;createAndPopulateRegistryMap()Ljava/util/Map;"))
     private static @Nullable Map<ResourceLocation, Object2IntMap<ResourceLocation>> checkRemoteRemap(Operation<Map<ResourceLocation, Object2IntMap<ResourceLocation>>> original, ServerConfigurationPacketListenerImpl handler) {
     Map<ResourceLocation, Object2IntMap<ResourceLocation>> originalValue = original.call();
-    if (NetworkHandlerServer.preLoginHandshake.contains(OtherUtils.profileId(handler.getOwner()))) {
-    //?}
-            Main.LOGGER.info("Sending unmodified registry entries to client");
-            return originalValue;
-        }
-        if (originalValue != null) {
-            ResourceLocation entityType = IdentifierHelper.vanilla("entity_type");
-            if (originalValue.containsKey(entityType)) {
-                Object2IntMap<ResourceLocation> entityTypes = originalValue.get(entityType);
-                entityTypes.keySet().removeIf(value ->
-                        value.getNamespace().equalsIgnoreCase(Main.MOD_ID)
-                );
-                originalValue.put(entityType, entityTypes);
-            }
-        }
-        Main.LOGGER.info("Sending modified registry entries to client");
-        return originalValue;
-    }
+        if (NetworkHandlerServer.preLoginHandshake.contains(OtherUtils.profileId(handler.getOwner()))) {
     //?} else {
     /*@WrapOperation(method = "configureClient", at = @At(value = "INVOKE", target = "Lnet/fabricmc/fabric/impl/registry/sync/RegistrySyncManager;createAndPopulateRegistryMap()Ljava/util/Map;"))
     private static @Nullable Map<Identifier, Object2IntMap<Identifier>> checkRemoteRemap(Operation<Map<Identifier, Object2IntMap<Identifier>>> original, ServerConfigurationPacketListenerImpl handler) {
         Map<Identifier, Object2IntMap<Identifier>> originalValue = original.call();
         if (NetworkHandlerServer.preLoginHandshake.contains(OtherUtils.profileId(handler.getOwner()))) {
+    *///?}
             Main.LOGGER.info("Sending unmodified registry entries to client");
             return originalValue;
         }
         if (originalValue != null) {
-            Identifier entityType = IdentifierHelper.vanilla("entity_type");
-            if (originalValue.containsKey(entityType)) {
-                Object2IntMap<Identifier> entityTypes = originalValue.get(entityType);
+            for (var location : originalValue.keySet()) {
+                //? if <= 1.21.9 {
+                Object2IntMap<ResourceLocation> entityTypes = originalValue.get(location);
+                //?} else {
+                /*Object2IntMap<Identifier> entityTypes = originalValue.get(location);
+                *///?}
                 entityTypes.keySet().removeIf(value ->
                         value.getNamespace().equalsIgnoreCase(Main.MOD_ID)
                 );
-                originalValue.put(entityType, entityTypes);
+                originalValue.put(location, entityTypes);
             }
         }
         Main.LOGGER.info("Sending modified registry entries to client");
         return originalValue;
     }
-    *///?}
 
     //? if > 1.21.2 {
     /*@Inject(method = "areAllRegistriesOptional", at = @At(value = "HEAD"), cancellable = true)

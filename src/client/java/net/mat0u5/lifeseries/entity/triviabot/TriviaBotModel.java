@@ -192,7 +192,7 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
 
         PartDefinition three = processing.addOrReplaceChild("three", CubeListBuilder.create().texOffs(66, 79).addBox(-1.0F, -1.0F, 1.705F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(3.0F, 0.0F, 0.0F));
 
-        PartDefinition angry = expressions.addOrReplaceChild("angry", CubeListBuilder.create().texOffs(56, 51).addBox(-5.0F, -9.6F, -1.5F, 10.0F, 9.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 5.1F, 3.205F));
+        PartDefinition angry = expressions.addOrReplaceChild("angry", CubeListBuilder.create().texOffs(56, 51).addBox(-5.0F, -9.6F, -1.55F, 10.0F, 9.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 5.1F, 3.205F));
 
         PartDefinition happy = expressions.addOrReplaceChild("happy", CubeListBuilder.create().texOffs(8, 60).addBox(-5.0F, -4.5F, 1.4F, 10.0F, 9.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.305F));
 
