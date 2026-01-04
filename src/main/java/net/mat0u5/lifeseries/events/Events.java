@@ -121,7 +121,6 @@ public class Events {
             UpdateChecker.onPlayerJoin(player);
             currentSeason.onPlayerFinishJoining(player);
             TaskScheduler.scheduleTask(10, () -> {
-                NetworkHandlerServer.tryKickFailedHandshake(player);
                 PlayerUtils.resendCommandTree(player);
             });
             MorphManager.onPlayerDisconnect(player);

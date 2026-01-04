@@ -91,6 +91,12 @@ public class SecretLife extends Season {
         initializeItemSpawner();
     }
 
+
+    @Override
+    public void reloadStart() {
+        TaskManager.initialize();
+    }
+
     @Override
     public void reload() {
         super.reload();

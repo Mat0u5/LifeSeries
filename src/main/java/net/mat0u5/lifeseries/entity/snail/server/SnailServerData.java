@@ -155,7 +155,7 @@ public class SnailServerData implements PlayerBoundEntity {
                 }
             }
             else {
-                if (!WildcardManager.isActiveWildcard(Wildcards.TRIVIA) || snail.tickCount >= 36000) {
+                if (snail.tickCount >= 36000) {
                     despawn();
                     return true;
                 }

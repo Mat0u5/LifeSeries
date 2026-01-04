@@ -38,6 +38,7 @@ import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerLoginPacketListenerImpl;
 import net.minecraft.world.scores.PlayerTeam;
 //? if > 1.20.5 {
 import net.minecraft.network.DisconnectionDetails;
@@ -88,11 +89,7 @@ public class NetworkHandlerServer {
         // Handle the response
         ServerLoginNetworking.registerGlobalReceiver(IdentifierHelper.mod("preloginpacket"),
                 (server, handler, understood, buf, synchronizer, responseSender) -> {
-                    if (understood) {
-                        GameProfile profile = ((ServerLoginPacketListenerImplAccessor) handler).getGameProfile();
-                        preLoginHandshake.add(OtherUtils.profileId(profile));
-                        LOGGER.info("Received pre-login packet from " + OtherUtils.profileName(profile));
-                    }
+                    handlePreLogin(understood, handler);
                 }
         );
 
@@ -130,11 +127,7 @@ public class NetworkHandlerServer {
         // Handle the response
         ServerLoginNetworking.registerGlobalReceiver(IdentifierHelper.mod("preloginpacket"),
                 (server, handler, understood, buf, synchronizer, responseSender) -> {
-                    if (understood) {
-                        GameProfile profile = ((ServerLoginPacketListenerImplAccessor) handler).getGameProfile();
-                        preLoginHandshake.add(OtherUtils.profileId(profile));
-                        LOGGER.info("Received pre-login packet from " + OtherUtils.profileName(profile));
-                    }
+                    handlePreLogin(understood, handler);
                 }
         );
 
@@ -160,6 +153,18 @@ public class NetworkHandlerServer {
         });
     }
     //?}
+
+    public static void handlePreLogin(boolean understood, ServerLoginPacketListenerImpl handler) {
+        GameProfile profile = ((ServerLoginPacketListenerImplAccessor) handler).getGameProfile();
+        if (understood) {
+            preLoginHandshake.add(OtherUtils.profileId(profile));
+            LOGGER.info("Received pre-login packet from " + OtherUtils.profileName(profile));
+        }
+        else if (currentSeason.getSeason().requiresClient()) {
+            LOGGER.info("Did not receive pre-login packet from " + OtherUtils.profileName(profile));
+            handler.disconnect(getDisconnectClientText());
+        }
+    }
 
     public static boolean updatedConfigThisTick = false;
     public static boolean configNeedsReload = false;
@@ -539,6 +544,8 @@ public class NetworkHandlerServer {
         else {
             sendStringListPacket(player, PacketNames.CLOUDCOLOR, List.of(String.valueOf(Season.cloudColorSetMode)));
         }
+
+        sendStringPacket(player, PacketNames.ADMIN_INFO, String.valueOf(PermissionManager.isAdmin(player)));
     }
 
     public static void sendUpdatePackets() {
@@ -568,13 +575,16 @@ public class NetworkHandlerServer {
         if (server == null) return;
         if (!currentSeason.getSeason().requiresClient()) return;
         if (wasHandshakeSuccessful(player)) return;
-        Component disconnectText = Component.literal("You must have the §2Life Series mod\n§l installed on the client§r§r§f to play "+currentSeason.getSeason().getName()+"!\n").append(
-                Component.literal("§9§nThe Life Series mod is available on Modrinth."));
         //? if <= 1.20.5 {
-        /*player.connection.disconnect(disconnectText);
+        /*player.connection.disconnect(getDisconnectClientText());
         *///?} else {
-        player.connection.disconnect(new DisconnectionDetails(disconnectText));
+        player.connection.disconnect(new DisconnectionDetails(getDisconnectClientText()));
          //?}
+    }
+
+    public static Component getDisconnectClientText() {
+        return Component.literal("You must have the §2Life Series mod\n§l installed on the client§r§r§f to play "+currentSeason.getSeason().getName()+"!\n").append(
+                Component.literal("§9§nThe Life Series mod is available on Modrinth."));
     }
 
     public static boolean wasHandshakeSuccessful(ServerPlayer player) {

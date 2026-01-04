@@ -97,6 +97,11 @@ public class DoubleLife extends Season {
     }
 
     @Override
+    public void reloadStart() {
+        loadSoulmates();
+    }
+
+    @Override
     public void onPlayerJoin(ServerPlayer player) {
         super.onPlayerJoin(player);
 

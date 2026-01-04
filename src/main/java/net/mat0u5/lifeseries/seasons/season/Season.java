@@ -137,6 +137,12 @@ public abstract class Season {
         reload();
     }
 
+    public void seasonSwitched(Seasons changedTo) {
+    }
+
+    public void reloadStart() {
+    }
+
     public void updateStuff() {
         if (server == null) return;
 

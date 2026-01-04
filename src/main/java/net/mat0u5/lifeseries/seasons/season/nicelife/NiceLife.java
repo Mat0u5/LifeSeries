@@ -86,6 +86,19 @@ public class NiceLife extends Season {
     public ConfigManager createConfig() {
         return new NiceLifeConfig();
     }
+
+    @Override
+    public void seasonSwitched(Seasons changedTo) {
+        if (changedTo != Seasons.NICE_LIFE) {
+            if (server == null) return;
+            //? if <= 1.21.9 {
+            OtherUtils.setBooleanGameRule(server.overworld(), GameRules.RULE_DAYLIGHT, true);
+            //?} else {
+            /*OtherUtils.setBooleanGameRule(server.overworld(), GameRules.ADVANCE_TIME, true);
+             *///?}
+        }
+    }
+
     @Override
     public void reload() {
         super.reload();
