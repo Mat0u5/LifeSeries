@@ -63,6 +63,7 @@ public enum PacketNames {
     ,CLOUDCOLOR
     ,TRIVIA_ALL_WRONG
     ,MIC_MUTED
+    ,ADMIN_INFO
     ;
 
     public static PacketNames fromName(String name) {

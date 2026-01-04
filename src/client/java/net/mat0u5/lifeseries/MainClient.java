@@ -50,6 +50,7 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     public static Vec3 cloudColor = null;
     public static boolean cloudColorSetMode = false;
     public static Vec3 cachedFogRenderColor = null;
+    public static boolean isAdmin = false;
 
     public static ClientConfig clientConfig;
 
@@ -168,6 +169,7 @@ public class MainClient implements ClientModInitializer, IClientHelper {
         fogColorSetMode = false;
         cloudColor = null;
         cloudColorSetMode = false;
+        isAdmin = false;
 
         MorphManager.resetMorphs();
     }

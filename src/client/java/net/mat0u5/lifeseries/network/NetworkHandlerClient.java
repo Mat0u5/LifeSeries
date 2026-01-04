@@ -22,6 +22,7 @@ import net.mat0u5.lifeseries.gui.trivia.VotingScreen;
 import net.mat0u5.lifeseries.mixin.client.GuiAccessor;
 import net.mat0u5.lifeseries.mixin.client.PlayerAccessor;
 import net.mat0u5.lifeseries.network.packets.*;
+import net.mat0u5.lifeseries.registries.ParticleRegistry;
 import net.mat0u5.lifeseries.render.TextHud;
 import net.mat0u5.lifeseries.render.VignetteRenderer;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -41,6 +42,7 @@ import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -396,6 +398,16 @@ public class NetworkHandlerClient {
             boolean boolValue = value.equalsIgnoreCase("true");
             if (CompatibilityManager.voicechatLoaded()) {
                 VoicechatClient.setMuted(boolValue);
+            }
+        }
+        if (name == PacketNames.ADMIN_INFO) {
+            MainClient.isAdmin = value.equalsIgnoreCase("true");
+        }
+        if (name == PacketNames.TRIVIA_ALL_WRONG) {
+            ClientLevel level = Minecraft.getInstance().level;
+            LocalPlayer player = Minecraft.getInstance().player;
+            if (level != null && player != null) {
+                level.addParticle(ParticleRegistry.TRIVIA_SPIRIT, player.getX(), player.getY(), player.getZ(), 0.0, 0.0, 0.0);
             }
         }
     }

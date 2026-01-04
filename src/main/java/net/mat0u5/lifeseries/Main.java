@@ -41,7 +41,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.4.5.43";
+	public static final String MOD_VERSION = "1.5.0-pre1";
 	public static final String MOD_ID = "lifeseries";
 	public static final String UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
 	public static final boolean DEBUG = false;
@@ -161,12 +161,7 @@ public class Main implements ModInitializer {
 	}
 
 	public static void softReloadStart() {
-		if (currentSeason.getSeason() == Seasons.SECRET_LIFE) {
-			TaskManager.initialize();
-		}
-		if (currentSeason.getSeason() == Seasons.DOUBLE_LIFE && currentSeason instanceof DoubleLife doubleLife) {
-			doubleLife.loadSoulmates();
-		}
+		currentSeason.reloadStart();
 		seasonConfig.loadProperties();
 		blacklist.reloadBlacklist();
 		currentSeason.reload();
@@ -179,9 +174,12 @@ public class Main implements ModInitializer {
 	}
 
 	public static boolean changeSeasonTo(String changeTo) {
+		Seasons seasonChangeTo = Seasons.getSeasonFromStringName(changeTo);
+
 		TaskScheduler.clearTasks();
 		config.setProperty("currentSeries", changeTo);
 		livesManager.resetAllPlayerLivesInner();
+		currentSeason.seasonSwitched(seasonChangeTo);
 		currentSeason.boogeymanManager.resetBoogeymen();
 		currentSeason.secretSociety.forceEndSociety();
 		currentSession.sessionEnd();
