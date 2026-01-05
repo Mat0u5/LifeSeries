@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.nicelife;
 
 import de.maxhenkel.voicechat.api.audiolistener.PlayerAudioListener;
+import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
 import net.mat0u5.lifeseries.config.ConfigManager;
@@ -20,6 +21,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.SleepStatus;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -96,6 +98,8 @@ public class NiceLife extends Season {
             //?} else {
             /*OtherUtils.setBooleanGameRule(server.overworld(), GameRules.ADVANCE_TIME, true);
              *///?}
+            NiceLifeTriviaManager.killAllSnowmen();
+            NiceLifeTriviaManager.killAllBots();
         }
     }
 
@@ -180,24 +184,21 @@ public class NiceLife extends Season {
         }
 
         if (triviaCannotStartFor.isSmaller(Time.zero())) {
-            if (overworld instanceof ServerLevelAccessor accessor) {
-                SleepStatus sleepStatus = accessor.ls$getSleepStatus();
-                //? if <= 1.21.9 {
-                int percentage = overworld.getGameRules().getInt(GameRules.RULE_PLAYERS_SLEEPING_PERCENTAGE);
-                 //?} else {
-                /*int percentage = overworld.getGameRules().get(GameRules.PLAYERS_SLEEPING_PERCENTAGE);
-                *///?}
-                if (sleepStatus.areEnoughSleeping(percentage) && isMidnight() && currentSession.statusStarted()) {
-                    if (!NiceLifeTriviaManager.triviaInProgress) {
-                        List<ServerPlayer> triviaPlayers = new ArrayList<>();
-                        for(ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
-                            if (player.isSpectator()) continue;
-                            if (!player.isSleeping()) continue;
-                            triviaPlayers.add(player);
-                        }
-                        if (!triviaPlayers.isEmpty()) {
-                            NiceLifeTriviaManager.startTrivia(triviaPlayers);
-                        }
+            //? if <= 1.21.9 {
+            int percentage = overworld.getGameRules().getInt(GameRules.RULE_PLAYERS_SLEEPING_PERCENTAGE);
+             //?} else {
+            /*int percentage = overworld.getGameRules().get(GameRules.PLAYERS_SLEEPING_PERCENTAGE);
+            *///?}
+            if (areEnoughSleeping(percentage) && isMidnight() && currentSession.statusStarted()) {
+                if (!NiceLifeTriviaManager.triviaInProgress) {
+                    List<ServerPlayer> triviaPlayers = new ArrayList<>();
+                    for(ServerPlayer player : livesManager.getAlivePlayers()) {
+                        if (player.isSpectator()) continue;
+                        if (!player.isSleeping()) continue;
+                        triviaPlayers.add(player);
+                    }
+                    if (!triviaPlayers.isEmpty()) {
+                        NiceLifeTriviaManager.startTrivia(triviaPlayers);
                     }
                 }
             }
@@ -252,6 +253,19 @@ public class NiceLife extends Season {
         }
     }
 
+    public static boolean areEnoughSleeping(int percentage) {
+        List<ServerPlayer> players = Main.livesManager.getAlivePlayers();
+        int allPlayers = players.size();
+        int sleepingPlayers = 0;
+        for (ServerPlayer player : players) {
+            if (player.isSpectator()) continue;
+            if (player.isSleeping()) {
+                sleepingPlayers++;
+            }
+        }
+        return sleepingPlayers >= Math.max(1, Mth.ceil((float)(allPlayers * percentage) / 100.0F));
+    }
+
     public static void postponeTriviaStart(Time time) {
         if (!triviaCannotStartFor.isLarger(time)) {
             triviaCannotStartFor = time;
@@ -289,7 +303,7 @@ public class NiceLife extends Season {
         });
         TaskScheduler.scheduleTask(20 + 224, () -> {
             Season.setSkyColor(new Vec3(15, -140, -255), false);
-            Season.setFogColor(new Vec3(40, -104, -143), false);
+            Season.setFogColor(new Vec3(40, -104, -163), false);
             Season.setCloudColor(new Vec3(-255, -255, -255), true);
         });
     }

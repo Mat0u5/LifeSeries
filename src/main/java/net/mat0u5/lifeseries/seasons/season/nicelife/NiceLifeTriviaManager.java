@@ -258,6 +258,18 @@ public class NiceLifeTriviaManager {
             NetworkHandlerServer.sendStringPacket(player, PacketNames.RESET_TRIVIA, "true");
         }
     }
+    public static void killAllSnowmen() {
+        if (server == null) return;
+        List<Entity> toKill = new ArrayList<>();
+        for (ServerLevel level : server.getAllLevels()) {
+            for (Entity entity : level.getAllEntities()) {
+                if (entity instanceof AngrySnowman) {
+                    toKill.add(entity);
+                }
+            }
+        }
+        toKill.forEach(Entity::discard);
+    }
 
     public static void handleAnswer(ServerPlayer player, int answer) {
         if (bots.containsKey(player.getUUID())) {

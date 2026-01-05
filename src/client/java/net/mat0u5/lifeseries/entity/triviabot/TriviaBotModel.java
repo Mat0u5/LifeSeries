@@ -79,6 +79,10 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
     private final ModelPart legs;
 
     public TriviaBotModel(ModelPart root) {
+        this(root, false);
+    }
+
+    public TriviaBotModel(ModelPart root, boolean hideNonAngryExpressions) {
         //? if >= 1.21.2 {
         /*super(root);
         *///?}
@@ -140,6 +144,15 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
         faceAngryAnimation = TriviaBotAnimations.face_angry.bake(root);
         faceHappyAnimation = TriviaBotAnimations.face_happy.bake(root);
         *///?}
+
+        if (hideNonAngryExpressions) {
+            mouth.visible = false;
+            dots.visible = false;
+            clock.visible = false;
+            processing.visible = false;
+            happy.visible = false;
+            snail.visible = false;
+        }
     }
     public static LayerDefinition getTexturedModelData() {
         MeshDefinition modelData = new MeshDefinition();

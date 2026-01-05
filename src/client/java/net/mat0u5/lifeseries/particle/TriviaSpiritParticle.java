@@ -30,7 +30,7 @@ public class TriviaSpiritParticle extends Particle {
 
     TriviaSpiritParticle(ClientLevel clientLevel, double d, double e, double f) {
         super(clientLevel, d, e, f);
-        this.model = new TriviaBotModel(Minecraft.getInstance().getEntityModels().bakeLayer(TriviaBotModel.TRIVIA_BOT));
+        this.model = new TriviaBotModel(Minecraft.getInstance().getEntityModels().bakeLayer(TriviaBotModel.TRIVIA_BOT), true);
         this.renderType = RenderType.entityTranslucent(TriviaBot.SANTABOT_TEXTURE);
 
         this.gravity = 0.0f;
@@ -130,7 +130,9 @@ public class TriviaSpiritParticle extends Particle {
 
     private TriviaSpiritParticle(final ClientLevel level, final double x, final double y, final double z) {
         super(level, x, y, z);
-        this.model = new TriviaSpiritParticleModel(Minecraft.getInstance().getEntityModels().bakeLayer(TriviaBotModel.TRIVIA_BOT));
+        TriviaBotModel particleModel = new TriviaBotModel(Minecraft.getInstance().getEntityModels().bakeLayer(TriviaBotModel.TRIVIA_BOT), true);
+        this.model = new TriviaSpiritParticleModel(particleModel.root());
+
         //? if <= 1.21.9 {
         this.renderType = RenderType.entityTranslucent(TriviaBot.SANTABOT_TEXTURE);
         //?} else {

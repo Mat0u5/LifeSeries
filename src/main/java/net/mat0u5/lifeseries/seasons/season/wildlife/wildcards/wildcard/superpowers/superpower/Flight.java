@@ -6,11 +6,14 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.Time;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+
+import static net.mat0u5.lifeseries.Main.currentSeason;
 
 //? if >= 1.21.2 {
 /*import net.minecraft.world.item.equipment.Equippable;
@@ -109,7 +112,10 @@ public class Flight extends Superpower {
         super.deactivate();
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        TaskScheduler.scheduleTask(1, () -> player.getInventory().setChanged());
+        TaskScheduler.scheduleTask(1, () -> {
+            player.getInventory().setChanged();
+            PlayerUtils.updatePlayerInventory(player);
+        });
         NetworkHandlerServer.sendStringPacket(player, PacketNames.PREVENT_GLIDING, "false");
     }
 
