@@ -5,8 +5,10 @@ import net.mat0u5.lifeseries.command.*;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanCommand;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLifeCommands;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeCommands;
+import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaCommand;
 import net.mat0u5.lifeseries.seasons.season.pastlife.PastLifeCommands;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLifeCommands;
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeTriviaCommand;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeCommands;
 import net.mat0u5.lifeseries.seasons.secretsociety.SocietyCommands;
 import net.mat0u5.lifeseries.seasons.subin.SubInCommands;
@@ -29,13 +31,15 @@ public class CommandManager {
         commands.add(new WatcherCommand());
         commands.add(new SocietyCommands());
         commands.add(new SubInCommands());
-        commands.add(new TriviaCommand());
 
         commands.add(new DoubleLifeCommands());
         commands.add(new SecretLifeCommands());
         commands.add(new WildLifeCommands());
         commands.add(new PastLifeCommands());
         commands.add(new NiceLifeCommands());
+
+        commands.add(new WildLifeTriviaCommand());
+        commands.add(new NiceLifeTriviaCommand());
 
         commands.add(new SelfMessageCommand());
         commands.add(new SideTitleCommand());

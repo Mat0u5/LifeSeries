@@ -232,7 +232,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
             Vec3 bedVector = Vec3.atBottomCenterOf(spawnInfo.bedPos()).subtract(Vec3.atBottomCenterOf(spawnInfo.spawnPos()));
             if (bedVector.length() > 4) {
                 Vec3 middlePos = Vec3.atBottomCenterOf(spawnInfo.spawnPos()).add(botPosOffset).add(bedVector.scale(0.4));
-                boolean atMiddlePos = botPos.distanceTo(middlePos) <= 0.1;
+                boolean atMiddlePos = botPos.distanceTo(middlePos) <= 0.2;
                 if (atMiddlePos) {
                     bot.setDeltaMovement(0, 0, 0);
                     bot.setWaving(78);
@@ -257,7 +257,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         Vec3 speed = new Vec3(speedX, 0,speedZ);
         bot.setDeltaMovement(speed);
 
-        boolean atPos = botPos.distanceTo(bedPos) <= 0.1;
+        boolean atPos = botPos.distanceTo(bedPos) <= 0.2;
         if (atPos || sameStateTime.isLarger(Time.seconds(10))) {
             if (!atPos) {
                 LevelUtils.teleport(bot, level, Vec3.atBottomCenterOf(spawnInfo.bedPos()).add(botPosOffset));
@@ -325,7 +325,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
 
         Vec3 speed = new Vec3(speedX, 0,speedZ);
         bot.setDeltaMovement(speed);
-        boolean atPos = botPos.distanceTo(leavePos) <= 0.1;
+        boolean atPos = botPos.distanceTo(leavePos) <= 0.2;
         if (atPos || sameStateTime.isLarger(Time.seconds(10))) {
             if (!atPos) {
                 LevelUtils.teleport(bot, level, Vec3.atBottomCenterOf(spawnInfo.spawnPos()).add(botPosOffset));

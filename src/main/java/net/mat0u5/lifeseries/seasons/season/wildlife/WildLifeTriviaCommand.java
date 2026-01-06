@@ -1,4 +1,4 @@
-package net.mat0u5.lifeseries.command;
+package net.mat0u5.lifeseries.seasons.season.wildlife;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -24,14 +24,10 @@ import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
-public class TriviaCommand extends Command {
+public class WildLifeTriviaCommand extends Command {
 
     @Override
     public boolean isAllowed() {
-        return currentSeason.getSeason() == Seasons.WILD_LIFE;
-    }
-
-    public boolean isWildLife() {
         return currentSeason.getSeason() == Seasons.WILD_LIFE;
     }
 
@@ -54,8 +50,8 @@ public class TriviaCommand extends Command {
                 literal("trivia")
                         .requires(PermissionManager::isAdmin)
                         .then(literal("assign")
+                                .requires(source -> isAllowed())
                                 .then(argument("player", EntityArgument.players())
-                                        .requires(context -> this.isWildLife())
                                         .then(argument("difficulty", StringArgumentType.string())
                                                 .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("easy","normal","hard"), builder))
 
@@ -79,6 +75,7 @@ public class TriviaCommand extends Command {
                                 )
                         )
                         .then(literal("bot")
+                                .requires(source -> isAllowed())
                                 .then(literal("spawnFor")
                                         .then(argument("player", EntityArgument.players())
                                                 .executes(context -> spawnBotFor(
@@ -89,6 +86,7 @@ public class TriviaCommand extends Command {
                                 )
                         )
                         .then(literal("punishment")
+                                .requires(source -> isAllowed())
                                 .then(literal("clear")
                                         .then(argument("player", EntityArgument.players())
                                                 .executes(context -> clearPunishment(

@@ -48,9 +48,10 @@ public class NiceLifeTriviaManager {
     public static boolean preparingForSpawn = false;
     public static List<UUID> correctAnswers = new ArrayList<>();
     public static List<UUID> incorrectAnswers = new ArrayList<>();
+    public static TriviaQuestion preAssignedTrivia = null;
 
     public static void initialize() {
-
+        triviaQuestions = new TriviaQuestionManager("./config/lifeseries/nicelife","trivia.json");
     }
 
     public static void startTrivia(List<ServerPlayer> triviaPlayers) {
@@ -69,7 +70,7 @@ public class NiceLifeTriviaManager {
         killAllBots();
         usedQuestions.clear();
         NiceLifeVotingManager.reset();
-        triviaQuestions = new TriviaQuestionManager("./config/lifeseries/nicelife","trivia.json");
+        initialize();
         triviaSpawns.clear();
         currentQuestion = getQuestion();
         NiceLifeVotingManager.chooseVote();
@@ -90,7 +91,8 @@ public class NiceLifeTriviaManager {
                 BlockPos headPos = bedPos.relative(bedDirection);
                 BlockPos frontBedPos = headPos.relative(bedDirection);
                 BlockPos spawnBotPos = frontBedPos;
-                for (int i = 0; i <= 6; i++) {
+                int maxDistance = 7 - rnd.nextInt(firstTriviaInSession ? 3 : 5);
+                for (int i = 0; i <= maxDistance; i++) {
                     BlockPos newPos = frontBedPos.relative(bedDirection, i);
                     if (!level.getBlockState(newPos.below()).isFaceSturdy(level, newPos, Direction.UP)) {
                         break;
@@ -102,22 +104,29 @@ public class NiceLifeTriviaManager {
             }
         }
 
+
         preparingForSpawn = true;
         if (firstTriviaInSession) {
             SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_introduction_long"));
             PlayerUtils.playSoundToPlayers(triviaPlayers, sound, 1f, 1);
-            breakBotSpawnBlocks(616-160);
-            TaskScheduler.scheduleTask(616-160, () -> {
-                spawnTriviaBots(160);
-            });
+            for (TriviaSpawn triviaSpawnInfo : triviaSpawns) {
+                int botSpawnHeight = 20;
+                breakBotSpawnBlocks(triviaSpawnInfo, 616-160, botSpawnHeight);
+                TaskScheduler.scheduleTask(616-160, () -> {
+                    spawnTriviaBots(triviaSpawnInfo, 160, botSpawnHeight);
+                });
+            }
         }
         else {
             SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_introduction_short"));
             PlayerUtils.playSoundToPlayers(triviaPlayers, sound, 1f, 1);
-            breakBotSpawnBlocks(71);
-            TaskScheduler.scheduleTask(71, () -> {
-                spawnTriviaBots(0);
-            });
+            for (TriviaSpawn triviaSpawnInfo : triviaSpawns) {
+                int botSpawnHeight = rnd.nextInt(15, 30);
+                breakBotSpawnBlocks(triviaSpawnInfo, 71, botSpawnHeight);
+                TaskScheduler.scheduleTask(71, () -> {
+                    spawnTriviaBots(triviaSpawnInfo, 0, botSpawnHeight);
+                });
+            }
             //TaskScheduler.scheduleTask(71+90, () -> {
             //    SoundEvent sound2 = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_christmas_soundbyte"));
             //    PlayerUtils.playSoundToPlayers(triviaPlayers, sound2, 0.8f, 1);
@@ -160,58 +169,54 @@ public class NiceLifeTriviaManager {
         });
     }
 
-    public static void breakBotSpawnBlocks(int overTicks) {
-        for (TriviaSpawn triviaSpawnInfo : triviaSpawns) {
-            ServerPlayer player = PlayerUtils.getPlayer(triviaSpawnInfo.uuid());
-            if (player == null) continue;
-            BlockPos spawnBotPos = triviaSpawnInfo.spawnPos().offset(0, 20, 0);
-            ServerLevel level = player.ls$getServerLevel();
-            //? if <= 1.21 {
-            int maxY = level.getMaxBuildHeight();
-            //?} else {
-            /*int maxY = level.getMaxY();
-             *///?}
-            List<Integer> breakYPositions = new ArrayList<>();
-            for (int breakY = spawnBotPos.getY(); breakY < maxY; breakY++) {
-                BlockPos breakBlockPos = spawnBotPos.atY(breakY);
-                BlockPos aboveBreakBlockPos = breakBlockPos.above();
-                breakYPositions.add(breakY);
-                if (level.getBlockState(breakBlockPos).isAir() && level.getBlockState(aboveBreakBlockPos).isAir()) {
-                    breakYPositions.add(breakY+1);
-                    break;
-                }
+    public static void breakBotSpawnBlocks(TriviaSpawn triviaSpawnInfo, int overTicks, int botSpawnHeight) {
+        ServerPlayer player = PlayerUtils.getPlayer(triviaSpawnInfo.uuid());
+        if (player == null) return;
+        BlockPos spawnBotPos = triviaSpawnInfo.spawnPos().offset(0, botSpawnHeight, 0);
+        ServerLevel level = player.ls$getServerLevel();
+        //? if <= 1.21 {
+        int maxY = level.getMaxBuildHeight();
+        //?} else {
+        /*int maxY = level.getMaxY();
+         *///?}
+        List<Integer> breakYPositions = new ArrayList<>();
+        for (int breakY = spawnBotPos.getY(); breakY < maxY; breakY++) {
+            BlockPos breakBlockPos = spawnBotPos.atY(breakY);
+            BlockPos aboveBreakBlockPos = breakBlockPos.above();
+            breakYPositions.add(breakY);
+            if (level.getBlockState(breakBlockPos).isAir() && level.getBlockState(aboveBreakBlockPos).isAir()) {
+                breakYPositions.add(breakY+1);
+                break;
             }
-            Collections.reverse(breakYPositions);
-            double delay = 0;
-            double step = (double) overTicks / breakYPositions.size();
-            for (int yPos : breakYPositions) {
-                BlockPos breakBlockPos = spawnBotPos.atY(yPos);
-                TaskScheduler.scheduleTask((int) delay, () -> {
-                    breakBlocksAround(level, breakBlockPos, triviaSpawnInfo.bedPos.getY());
-                });
-                delay += step;
-            }
+        }
+        Collections.reverse(breakYPositions);
+        double delay = 0;
+        double step = (double) overTicks / breakYPositions.size();
+        for (int yPos : breakYPositions) {
+            BlockPos breakBlockPos = spawnBotPos.atY(yPos);
+            TaskScheduler.scheduleTask((int) delay, () -> {
+                breakBlocksAround(level, breakBlockPos, triviaSpawnInfo.bedPos.getY());
+            });
+            delay += step;
         }
     }
 
-    public static void spawnTriviaBots(int soundDelay) {
-        for (TriviaSpawn triviaSpawnInfo : triviaSpawns) {
-            ServerPlayer player = PlayerUtils.getPlayer(triviaSpawnInfo.uuid());
-            if (player == null) continue;
-            BlockPos spawnBotPos = triviaSpawnInfo.spawnPos().offset(0, 20, 0);
-            TriviaBot bot = LevelUtils.spawnEntity(MobRegistry.TRIVIA_BOT, player.ls$getServerLevel(), spawnBotPos);
-            if (bot != null) {
-                bot.sounds.delay = soundDelay;
-                SessionTranscript.newTriviaBot(player);
-                bot.serverData.setBoundPlayer(player);
-                bots.put(player.getUUID(), bot);
-                DatapackIntegration.EVENT_TRIVIA_BOT_SPAWN.trigger(List.of(
-                        new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()),
-                        new DatapackIntegration.Events.MacroEntry("TriviaBot", bot.getStringUUID())
-                ));
-                if (bot.triviaHandler instanceof NiceLifeTriviaHandler triviaHandler) {
-                    triviaHandler.spawnInfo = triviaSpawnInfo;
-                }
+    public static void spawnTriviaBots(TriviaSpawn triviaSpawnInfo, int soundDelay, int botSpawnHeight) {
+        ServerPlayer player = PlayerUtils.getPlayer(triviaSpawnInfo.uuid());
+        if (player == null) return;
+        BlockPos spawnBotPos = triviaSpawnInfo.spawnPos().offset(0, botSpawnHeight, 0);
+        TriviaBot bot = LevelUtils.spawnEntity(MobRegistry.TRIVIA_BOT, player.ls$getServerLevel(), spawnBotPos);
+        if (bot != null) {
+            bot.sounds.delay = soundDelay;
+            SessionTranscript.newTriviaBot(player);
+            bot.serverData.setBoundPlayer(player);
+            bots.put(player.getUUID(), bot);
+            DatapackIntegration.EVENT_TRIVIA_BOT_SPAWN.trigger(List.of(
+                    new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()),
+                    new DatapackIntegration.Events.MacroEntry("TriviaBot", bot.getStringUUID())
+            ));
+            if (bot.triviaHandler instanceof NiceLifeTriviaHandler triviaHandler) {
+                triviaHandler.spawnInfo = triviaSpawnInfo;
             }
         }
         preparingForSpawn = false;
@@ -282,14 +287,19 @@ public class NiceLifeTriviaManager {
     }
 
     public static Tuple<Integer, TriviaQuestion> getTriviaQuestion(ServerPlayer player) {
-        //TODO allow pre-assigning trivia with commands
         return new Tuple<>(1, currentQuestion);
     }
 
     public static TriviaQuestion getQuestion() {
+        if (preAssignedTrivia != null) {
+            TriviaQuestion returnQuestion = preAssignedTrivia;
+            preAssignedTrivia = null;
+            return returnQuestion;
+        }
+
         try {
             if (triviaQuestions == null) {
-                triviaQuestions = new TriviaQuestionManager("./config/lifeseries/nicelife","trivia.json");
+                initialize();
             }
             List<TriviaQuestion> unusedQuestions = new ArrayList<>();
             for (TriviaQuestion trivia : triviaQuestions.getTriviaQuestions()) {

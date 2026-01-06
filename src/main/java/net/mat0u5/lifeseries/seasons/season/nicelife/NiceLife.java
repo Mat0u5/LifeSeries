@@ -77,6 +77,7 @@ public class NiceLife extends Season {
     public void initialize() {
         super.initialize();
         NiceLifeTriviaHandler.initializeItemSpawner();
+        NiceLifeTriviaManager.initialize();
     }
 
     @Override
@@ -117,6 +118,7 @@ public class NiceLife extends Season {
             currentMaxSnowLayers = seasonConfig.getOrCreateInt("current_snow_layers", 1);
         }
         updateSnowTick();
+        NiceLifeTriviaManager.initialize();
 
         NiceLifeTriviaManager.QUESTION_TIME = NiceLifeConfig.TRIVIA_QUESTION_TIME.get(seasonConfig);
         NiceLifeTriviaManager.CAN_BREAK_BEDS = NiceLifeConfig.BOT_CAN_BREAK_BEDS.get(seasonConfig);
@@ -255,10 +257,11 @@ public class NiceLife extends Season {
 
     public static boolean areEnoughSleeping(int percentage) {
         List<ServerPlayer> players = Main.livesManager.getAlivePlayers();
-        int allPlayers = players.size();
+        int allPlayers = 0;
         int sleepingPlayers = 0;
         for (ServerPlayer player : players) {
             if (player.isSpectator()) continue;
+            allPlayers++;
             if (player.isSleeping()) {
                 sleepingPlayers++;
             }
