@@ -28,9 +28,9 @@ Have questions, suggestions or bug fixes? Join the [Life Series Mod Discord serv
 ## Feature Complete
 This mod faithfully recreates all the seasons of the Life Series - everything works exactly as in the originals.
 
-| Third Life | Last Life | Double Life | Limited Life | Secret Life | **Wild Life** | Past Life |
-|------------|-----------|-------------|--------------|-------------|---------------|-----------|
-| Completed  | Completed | Completed   | Completed    | Completed   | Completed     | Completed |
+| Third Life | Last Life | Double Life | Limited Life | Secret Life | **Wild Life** | Past Life | **Nice Life** |
+|------------|-----------|-------------|--------------|-------------|---------------|-----------|---------------|
+| Completed  | Completed | Completed   | Completed    | Completed   | Completed     | Completed | Completed     |
 
 All in a single mod. No more shady, unmaintained, buggy datapacks.
 
