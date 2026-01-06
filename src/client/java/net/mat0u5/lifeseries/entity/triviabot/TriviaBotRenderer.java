@@ -77,6 +77,8 @@ public class TriviaBotRenderer extends AgeableMobRenderer<TriviaBot, TriviaBotRe
         state.santaGlideAnimationState.copyFrom(triviaBot.clientData.santaGlideAnimationState);
         state.santaIdleAnimationState.copyFrom(triviaBot.clientData.santaIdleAnimationState);
         state.santaWaveAnimationState.copyFrom(triviaBot.clientData.santaWaveAnimationState);
+        state.santaWalkAnimationState.copyFrom(triviaBot.clientData.santaWalkAnimationState);
+        state.santaLandAnimationState.copyFrom(triviaBot.clientData.santaLandAnimationState);
 
         state.faceAngryAnimationState.copyFrom(triviaBot.clientData.faceAngryAnimationState);
         state.faceHappyAnimationState.copyFrom(triviaBot.clientData.faceHappyAnimationState);
