@@ -64,6 +64,7 @@ public enum PacketNames {
     ,TRIVIA_ALL_WRONG
     ,MIC_MUTED
     ,ADMIN_INFO
+    ,STOP_TRIVIA_SOUNDS
     ;
 
     public static PacketNames fromName(String name) {

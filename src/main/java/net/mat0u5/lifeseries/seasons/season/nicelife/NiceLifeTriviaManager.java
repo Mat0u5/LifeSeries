@@ -244,6 +244,7 @@ public class NiceLifeTriviaManager {
     }
 
     public static void killAllBots() {
+        NetworkHandlerServer.sendStringPackets(PacketNames.STOP_TRIVIA_SOUNDS, "");
         if (server == null) return;
         List<Entity> toKill = new ArrayList<>();
         for (ServerLevel level : server.getAllLevels()) {

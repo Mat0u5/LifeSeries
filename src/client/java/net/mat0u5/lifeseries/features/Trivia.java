@@ -81,7 +81,6 @@ public class Trivia {
         timestamp = 0;
         ticksPassed = 0;
         closeGui();
-        ClientSounds.stopTriviaSounds();
     }
 
     public static void sendAnswer(int answer) {

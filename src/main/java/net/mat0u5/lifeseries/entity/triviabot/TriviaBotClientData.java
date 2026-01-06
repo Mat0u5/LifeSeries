@@ -25,6 +25,8 @@ public class TriviaBotClientData {
     public final AnimationState santaGlideAnimationState = new AnimationState();
     public final AnimationState santaIdleAnimationState = new AnimationState();
     public final AnimationState santaWaveAnimationState = new AnimationState();
+    public final AnimationState santaWalkAnimationState = new AnimationState(); //TODO
+    public final AnimationState santaLandAnimationState = new AnimationState(); //TODO
     public final AnimationState faceAngryAnimationState = new AnimationState();
     public final AnimationState faceHappyAnimationState = new AnimationState();
     public void tick() {
@@ -90,7 +92,16 @@ public class TriviaBotClientData {
         lastRanOutOfTime = bot.ranOutOfTime();
     }
 
+    private int notGlidingFor = 0;
     public void santaAnimations() {
+
+        if (bot.isBotGliding()) {
+            notGlidingFor = 0;
+        }
+        else {
+            notGlidingFor++;
+        }
+
         if (bot.submittedAnswer() && !lastSubmittedAnswer && bot.getAnalyzingTime() > 0) {
             pauseAllAnimations("santa_analyzing");
             santaAnalyzingAnimationState.startIfStopped(bot.tickCount);
@@ -127,9 +138,13 @@ public class TriviaBotClientData {
             pauseAllAnimations("santa_glide");
             santaGlideAnimationState.startIfStopped(bot.tickCount);
         }
+        else if (notGlidingFor < 47) {
+            pauseAllAnimations("santa_land");
+            santaLandAnimationState.startIfStopped(bot.tickCount);
+        }
         else if (bot.walkAnimation.isMoving() && bot.walkAnimation.speed() > 0.02) {
-            pauseAllAnimations("walk");
-            walkAnimationState.startIfStopped(bot.tickCount);
+            pauseAllAnimations("santa_walk");
+            santaWalkAnimationState.startIfStopped(bot.tickCount);
         }
         else {
             pauseAllAnimations("santa_idle");
@@ -167,6 +182,8 @@ public class TriviaBotClientData {
         if (!except.equalsIgnoreCase("santa_glide")) santaGlideAnimationState.stop();
         if (!except.equalsIgnoreCase("santa_idle")) santaIdleAnimationState.stop();
         if (!except.equalsIgnoreCase("santa_wave")) santaWaveAnimationState.stop();
+        if (!except.equalsIgnoreCase("santa_walk")) santaWalkAnimationState.stop();
+        if (!except.equalsIgnoreCase("santa_land")) santaLandAnimationState.stop();
 
         // These are permanent
         //if (!except.equalsIgnoreCase("face_angry")) faceAngryAnimationState.stop();

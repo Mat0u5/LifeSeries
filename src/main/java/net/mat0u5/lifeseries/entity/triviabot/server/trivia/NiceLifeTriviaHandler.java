@@ -59,6 +59,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
 
     public enum BotState {
         LANDING,
+        LANDED,
         APPROACHING,
         APPROACHED,
         QUESTION,
@@ -107,6 +108,10 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         }
         else {
             bot.setGliding(false);
+        }
+
+        if (currentState == BotState.LANDED) {
+            landedTick(level, boundPlayer);
         }
 
         if (currentState == BotState.APPROACHING) {
@@ -171,6 +176,10 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         while (newYaw > 180.0f) newYaw -= 360.0f;
         while (newYaw < -180.0f) newYaw += 360.0f;
 
+        if (turnSpeed >= 180) {
+            newYaw = targetYaw;
+        }
+
         bot.setYRot(newYaw);
         bot.setYBodyRot(newYaw);
         bot.setYHeadRot(newYaw);
@@ -178,10 +187,11 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
 
     public void landingTick(ServerLevel level) {
         sameStateTime.tick();
+        turnToBed(1000);
         if (bot.position().y() < (spawnInfo.spawnPos().getY()+botPosOffset.y) || sameStateTime.isLarger(Time.seconds(30))) {
             bot.setDeltaMovement(0, 0,0);
             bot.setPos(bot.position().x, spawnInfo.spawnPos().getY()+botPosOffset.y, bot.position().z);
-            changeStateTo(BotState.APPROACHING);
+            changeStateTo(BotState.LANDED);
             for (BlockPos pos : BlockPos.betweenClosed(spawnInfo.spawnPos().above(), spawnInfo.bedPos())) {
                 BlockState state = level.getBlockState(pos);
                 if (state.getBlock() instanceof BedBlock) continue;
@@ -198,6 +208,16 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         else {
             bot.setDeltaMovement(0, -0.25,0);
             NiceLifeTriviaManager.breakBlocksAround(level, bot.blockPosition(), spawnInfo.bedPos().getY());
+        }
+    }
+
+    public void landedTick(ServerLevel level, ServerPlayer boundPlayer) {
+        sameStateTime.tick();
+        turnToBed(1000);
+        bot.setDeltaMovement(0, 0, 0);
+
+        if (sameStateTime.getTicks() >= 55) {
+            changeStateTo(BotState.APPROACHING);
         }
     }
 
@@ -329,7 +349,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
     public void changeStateTo(BotState newState) {
         currentState = newState;
         sameStateTime = Time.zero();
-        if (newState == BotState.APPROACHING) {
+        if (newState == BotState.APPROACHING || newState == BotState.LANDED) {
             turnToBed(1000);
         }
         if (newState == BotState.APPROACHED) {
