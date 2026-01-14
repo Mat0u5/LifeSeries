@@ -173,7 +173,15 @@ public class NiceLifeVotingManager {
     }
 
     public static void announceNaughtyList() {
-        List<UUID> players = getMostVotedForPlayers(NAUGHTY_LIST_COUNT);
+        List<UUID> playersRaw = getMostVotedForPlayers(NAUGHTY_LIST_COUNT);
+        List<UUID> players = new ArrayList<>();
+        for (UUID uuid : playersRaw) {
+            ServerPlayer player = PlayerUtils.getPlayer(uuid);
+            if (player == null) continue;
+            if (player.ls$isDead()) continue;
+            if (player.ls$isOnLastLife(false) && !REDS_ON_NAUGHTY_LIST) continue;
+            players.add(uuid);
+        }
         naughtyListMembers.clear();
         if (players.isEmpty()) return;
         int delay = 80;
@@ -192,9 +200,8 @@ public class NiceLifeVotingManager {
         for (UUID uuid : players) {
             ServerPlayer player = PlayerUtils.getPlayer(uuid);
             if (player == null) continue;
-            if (player.ls$isDead()) continue;
             TaskScheduler.scheduleTask(delay, () -> {
-                if (player != null) {
+                if (player != null && !player.ls$isDead() && !(player.ls$isOnLastLife(false) && !REDS_ON_NAUGHTY_LIST)) {
                     SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_naughtylist"));
                     PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
                     naughtyListMembers.add(uuid);

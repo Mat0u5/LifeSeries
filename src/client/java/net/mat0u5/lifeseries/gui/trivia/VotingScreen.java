@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.gui.trivia;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.mat0u5.lifeseries.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.render.RenderUtils;

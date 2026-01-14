@@ -4,9 +4,12 @@ import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.minecraft.client.CameraType;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 
 public class EmptySleepScreen extends Screen {
@@ -76,6 +79,17 @@ public class EmptySleepScreen extends Screen {
         this.addRenderableWidget(wakeUpEveryoneButton);
 
         updateCommandButtons();
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (minecraft == null) return;
+        CameraType currentCamera = minecraft.options.getCameraType();
+        if (!currentCamera.isFirstPerson()) {
+            minecraft.options.setCameraType(CameraType.FIRST_PERSON);
+            minecraft.levelRenderer.needsUpdate();
+        }
     }
 
     private int getToggleButtonX() {
