@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.network;
 
+import com.mojang.authlib.minecraft.client.MinecraftClient;
 import net.fabricmc.fabric.api.client.networking.v1.ClientLoginNetworking;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -18,6 +19,7 @@ import net.mat0u5.lifeseries.gui.other.ChooseWildcardScreen;
 import net.mat0u5.lifeseries.gui.other.PastLifeChooseTwistScreen;
 import net.mat0u5.lifeseries.gui.seasons.ChooseSeasonScreen;
 import net.mat0u5.lifeseries.gui.seasons.SeasonInfoScreen;
+import net.mat0u5.lifeseries.gui.trivia.NewQuizScreen;
 import net.mat0u5.lifeseries.gui.trivia.VotingScreen;
 import net.mat0u5.lifeseries.mixin.client.GuiAccessor;
 import net.mat0u5.lifeseries.mixin.client.PlayerAccessor;
@@ -92,6 +94,10 @@ public class NetworkHandlerClient {
             TriviaQuestionPayload payload = TriviaQuestionPayload.read(buf);
             client.execute(() -> Trivia.receiveTrivia(payload));
         });
+        ClientPlayNetworking.registerGlobalReceiver(VoteScreenPayload.ID, (client, handler, buf, responseSender) -> {
+            VoteScreenPayload payload = VoteScreenPayload.read(buf);
+            client.execute(() -> handleVoteScreen(payload));
+        });
 
         ClientPlayNetworking.registerGlobalReceiver(LongPayload.ID, (client, handler, buf, responseSender) -> {
             LongPayload payload = LongPayload.read(buf);
@@ -150,6 +156,10 @@ public class NetworkHandlerClient {
         ClientPlayNetworking.registerGlobalReceiver(TriviaQuestionPayload.ID, (payload, context) -> {
             Minecraft client = context.client();
             client.execute(() -> Trivia.receiveTrivia(payload));
+        });
+        ClientPlayNetworking.registerGlobalReceiver(VoteScreenPayload.ID, (payload, context) -> {
+            Minecraft client = context.client();
+            client.execute(() -> handleVoteScreen(payload));
         });
         ClientPlayNetworking.registerGlobalReceiver(LongPayload.ID, (payload, context) -> {
             Minecraft client = context.client();
@@ -241,12 +251,6 @@ public class NetworkHandlerClient {
                     OtherUtils.throwError("[CONFIG] Error parsing item ID: " + itemId);
                 }
             }
-        }
-
-        if (name == PacketNames.VOTING_SCREEN) {
-            String voteName = value.get(0);
-            value.remove(0);
-            Minecraft.getInstance().setScreen(new VotingScreen(voteName, value));
         }
 
         if (name == PacketNames.SKYCOLOR) {
@@ -414,6 +418,12 @@ public class NetworkHandlerClient {
         if (name == PacketNames.STOP_TRIVIA_SOUNDS) {
             ClientSounds.stopTriviaSounds();
         }
+        if (name == PacketNames.REMOVE_SLEEP_SCREENS) {
+            Minecraft client = Minecraft.getInstance();
+            if (client.screen instanceof EmptySleepScreen || client.screen instanceof NewQuizScreen || (client.screen instanceof VotingScreen votingScreen && votingScreen.requiresSleep)) {
+                client.setScreen(null);
+            }
+        }
     }
 
     public static void handleNumberPacket(NumberPayload payload) {
@@ -570,6 +580,14 @@ public class NetworkHandlerClient {
         sendHandshake();
     }
 
+    public static void handleVoteScreen(VoteScreenPayload payload) {
+        Minecraft.getInstance().setScreen(new VotingScreen(payload.name(), payload.requiresSleep(), payload.closesWithEsc(), payload.showTimer(), payload.players()));
+    }
+
+    /*
+        Sending
+     */
+
     public static void sendHandshake() {
         String clientVersionStr = Main.MOD_VERSION;
         String clientCompatibilityStr = VersionControl.clientCompatibilityMin();
@@ -581,10 +599,6 @@ public class NetworkHandlerClient {
         ClientPlayNetworking.send(sendPayload);
         if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Sent handshake");
     }
-
-    /*
-        Sending
-     */
 
     public static void sendConfigUpdate(String configType, String id, List<String> args) {
         ConfigPayload configPacket = new ConfigPayload(configType, id, -1, "", "", args);

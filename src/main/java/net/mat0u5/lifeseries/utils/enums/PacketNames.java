@@ -55,7 +55,6 @@ public enum PacketNames {
     ,SNOWY_NETHER
     ,EMPTY_SCREEN
     ,HIDE_SLEEP_DARKNESS
-    ,VOTING_SCREEN
     ,VOTING_TIME
     ,SUBMIT_VOTE
     ,SKYCOLOR
@@ -65,6 +64,7 @@ public enum PacketNames {
     ,MIC_MUTED
     ,ADMIN_INFO
     ,STOP_TRIVIA_SOUNDS
+    ,REMOVE_SLEEP_SCREENS
     ;
 
     public static PacketNames fromName(String name) {

@@ -406,7 +406,9 @@ public class NiceLifeVotingManager {
                 PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§2The winner is..."), 15, 80, 20);
 
                 TaskScheduler.scheduleTask(85, ()-> {
-                    winner.ls$addLife();
+                    if (winner.ls$isAlive()) {
+                        winner.ls$addLife();
+                    }
                     currentSeason.reloadPlayerTeam(winner);
                     PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.FIREWORK_ROCKET_LAUNCH, 1f, 1);
                     PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), PlayerUtils.getPlayerNameWithIcon(winner), 15, 80, 20);
@@ -432,16 +434,15 @@ public class NiceLifeVotingManager {
 
     public static boolean openNiceListLifeVote(ServerPlayer player) {
         List<String> availableForVoting = new ArrayList<>();
-        availableForVoting.add("Vote for who should get a life");
         for (ServerPlayer availableVotePlayer : livesManager.getAlivePlayers()) {
             if (niceListMembers.contains(availableVotePlayer.getUUID())) continue;
             availableForVoting.add(availableVotePlayer.getScoreboardName());
         }
-        if (availableForVoting.size() <= 1) {
+        if (availableForVoting.isEmpty()) {
             return false;
         }
 
-        NetworkHandlerServer.sendStringListPacket(player, PacketNames.VOTING_SCREEN, availableForVoting);
+        NetworkHandlerServer.sendVoteScreenPacket(player, "Vote for who should get a life", false, true, false, availableForVoting);
         return true;
     }
 

@@ -48,17 +48,19 @@ public class VotingScreen extends Screen {
     private String selectedPlayer = null;
     private final List<String> availablePlayers;
     public int timerSeconds = 60;
-    public boolean requiresSleep = false;
+    public boolean requiresSleep;
+    public boolean closesWithEsc;
+    public boolean showTimer;
 
     private int listLeft;
     private int listRight;
     private int listWidth;
 
-    public VotingScreen(String name, List<String> availablePlayers) {
+    public VotingScreen(String name, boolean requiresSleep, boolean closesWithEsc, boolean showTimer, List<String> availablePlayers) {
         super(Component.literal(name));
-        if (name.endsWith("nice") || name.endsWith("naughty")) {
-            requiresSleep = true;
-        }
+        this.requiresSleep = requiresSleep;
+        this.closesWithEsc = closesWithEsc;
+        this.showTimer = showTimer;
         this.availablePlayers = availablePlayers;
     }
 
@@ -144,7 +146,7 @@ public class VotingScreen extends Screen {
 
     @Override
     public boolean shouldCloseOnEsc() {
-        return !requiresSleep;
+        return closesWithEsc;
     }
 
     @Override
@@ -162,7 +164,7 @@ public class VotingScreen extends Screen {
         submitButton.active = selectedPlayer != null && !selectedPlayer.isEmpty();
 
         // Timer
-        if (requiresSleep) {
+        if (showTimer) {
             long minutes = timerSeconds / 60;
             long seconds = timerSeconds - minutes * 60;
             String secondsStr = String.valueOf(seconds);

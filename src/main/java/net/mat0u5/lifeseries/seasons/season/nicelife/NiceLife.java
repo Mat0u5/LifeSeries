@@ -321,13 +321,11 @@ public class NiceLife extends Season {
     public void sleepThroughNight() {
         if (server == null) return;
         ServerLevel overworld = server.overworld();
-        if (overworld instanceof ServerLevelAccessor accessor) {
-            long newTime = overworld.getDayTime() + 24000L;
-            overworld.setDayTime(newTime - newTime % 24000L);
-            accessor.ls$wakeUpAllPlayers();
-            playedMidnightChimes = false;
-            NiceLifeTriviaManager.endTrivia();
-        }
+        long newTime = overworld.getDayTime() + 24000L;
+        overworld.setDayTime(newTime - newTime % 24000L);
+        wakeUpAllPlayers();
+        playedMidnightChimes = false;
+        NiceLifeTriviaManager.endTrivia();
     }
 
     public void wakeUpAllPlayers() {
@@ -335,6 +333,13 @@ public class NiceLife extends Season {
         ServerLevel overworld = server.overworld();
         if (overworld instanceof ServerLevelAccessor accessor) {
             accessor.ls$wakeUpAllPlayers();
+        }
+        // Just to be safe..
+        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
+            if (player.isSleeping()) {
+                player.stopSleepInBed(false, true);
+            }
+            NetworkHandlerServer.sendStringPacket(player, PacketNames.REMOVE_SLEEP_SCREENS, "");
         }
     }
 

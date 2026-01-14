@@ -205,7 +205,7 @@ public class LifeSeriesCommand extends Command {
 
     public int getDiscord(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        Component text = TextUtils.format("§7Click {}§7 to join the mod development discord if you have any questions, issues, requests, or if you just want to hang out :)\"", TextUtils.openURLText("https://discord.gg/QWJxfb4zQZ"));
+        Component text = TextUtils.format("§7Click {}§7 to join the mod development discord if you have any questions, issues, requests, or if you just want to hang out :)", TextUtils.openURLText("https://discord.gg/QWJxfb4zQZ"));
         OtherUtils.sendCommandFeedbackQuiet(source, text);
         return 1;
     }

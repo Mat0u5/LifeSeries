@@ -412,13 +412,6 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         if (voteType != NiceLifeVotingManager.VoteType.NICE_LIST && voteType != NiceLifeVotingManager.VoteType.NAUGHTY_LIST) return false;
         List<String> availableForVoting = new ArrayList<>();
 
-        // The first element of the list is the voting name.
-        if (voteType == NiceLifeVotingManager.VoteType.NICE_LIST) {
-            availableForVoting.add("Vote for who's been nice");
-        }
-        else {
-            availableForVoting.add("Vote for who's been naughty");
-        }
 
         for (ServerPlayer player : livesManager.getAlivePlayers()) {
             if (voteType == NiceLifeVotingManager.VoteType.NICE_LIST) {
@@ -432,9 +425,10 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
                 }
             }
         }
-        if (availableForVoting.size() <= 1) return false;
+        if (availableForVoting.isEmpty()) return false;
 
-        NetworkHandlerServer.sendStringListPacket(boundPlayer, PacketNames.VOTING_SCREEN, availableForVoting);
+        String screenName = (voteType == NiceLifeVotingManager.VoteType.NICE_LIST) ? "Vote for who's been nice" : "Vote for who's been naughty";
+        NetworkHandlerServer.sendVoteScreenPacket(boundPlayer, screenName, true, false, true, availableForVoting);
         NiceLifeVotingManager.allowedToVote.add(boundPlayer.getUUID());
         //TODO add the voting sound - "nicelife_santabot_vote"
         SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_suspense"));

@@ -48,7 +48,7 @@ public class AngrySnowman extends SnowGolem {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, (double)12.0F)
+                .add(Attributes.MAX_HEALTH, (double)20.0F)
                 .add(Attributes.MOVEMENT_SPEED, (double)0.2F)
                 .add(Attributes.ATTACK_KNOCKBACK, (double)1F)
                 .add(Attributes.ATTACK_DAMAGE, 1);

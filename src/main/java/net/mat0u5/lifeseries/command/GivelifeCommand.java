@@ -69,6 +69,10 @@ public class GivelifeCommand extends Command {
             return -1;
         }
         boolean isRevive = target.ls$isDead();
+        if (target.ls$isWatcher()) {
+            source.sendFailure(Component.nullToEmpty("That player is a Watcher"));
+            return -1;
+        }
         if (!Season.GIVELIFE_CAN_REVIVE && isRevive) {
             source.sendFailure(Component.nullToEmpty("That player is not alive"));
             return -1;
