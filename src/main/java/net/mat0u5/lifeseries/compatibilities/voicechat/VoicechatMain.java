@@ -21,6 +21,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Listening;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
@@ -102,10 +103,19 @@ public class VoicechatMain implements VoicechatPlugin {
     }
 
     private void onAudioPacket(MicrophonePacketEvent event) {
+        mutedVoice(event);
         roboticVoice(event);
         listeningPower(event);
     }
 
+    private void mutedVoice(MicrophonePacketEvent event) {
+        VoicechatConnection connection = event.getSenderConnection();
+        if (connection == null) return;
+        UUID senderUUID = connection.getPlayer().getUuid();
+        if (tempMutedPlayers.contains(senderUUID)) {
+            event.cancel();
+        }
+    }
     private void roboticVoice(MicrophonePacketEvent event) {
         if (currentSeason.getSeason() != Seasons.WILD_LIFE) {
             return;

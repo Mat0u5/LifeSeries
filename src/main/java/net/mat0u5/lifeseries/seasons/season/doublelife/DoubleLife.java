@@ -746,4 +746,9 @@ public class DoubleLife extends Season {
     public void preventSoulmates(ServerPlayer player, ServerPlayer soulmate) {
         soulmatesPrevent.put(player.getUUID(), soulmate.getUUID());
     }
+    @Override
+    public void tryKillLifeGain(ServerPlayer killer, ServerPlayer victim) {
+        super.tryKillLifeGain(killer, victim);
+        syncSoulboundLives(killer);
+    }
 }
