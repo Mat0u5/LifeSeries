@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.FlashbackCompatibility;
+import net.mat0u5.lifeseries.compatibilities.ReplayModCompatibility;
 import net.mat0u5.lifeseries.compatibilities.VoicechatClient;
 import net.mat0u5.lifeseries.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.gui.other.UpdateInfoScreen;
@@ -68,6 +69,10 @@ public class ClientEvents {
     }
 
     private static void onServerStart(MinecraftServer server) {
+        checkReplayServer(server);
+    }
+
+    private static void checkReplayServer(MinecraftServer server) {
         boolean isReplay = false;
         if (CompatibilityManager.flashbackLoaded()) {
             if (FlashbackCompatibility.isReplayServer(server)) {
@@ -75,11 +80,17 @@ public class ClientEvents {
                 isReplay = true;
             }
         }
+        if (CompatibilityManager.replayModLoaded()) {
+            if (ReplayModCompatibility.isReplayServer()) {
+                Main.LOGGER.info("Detected ReplayMod Replay");
+                isReplay = true;
+            }
+        }
         MainClient.isReplay = isReplay;
-        if (Main.modDisabled()) return;
     }
 
     public static void onClientJoin(ClientPacketListener handler, PacketSender sender, Minecraft client) {
+        checkReplayServer(null);
         ClientTaskScheduler.schedulePriorityTask(20, () -> {
             if (MainClient.serverHandshake == HandshakeStatus.WAITING) {
                 Main.LOGGER.info("Disabling the Life Series on the client.");
@@ -90,6 +101,7 @@ public class ClientEvents {
     }
 
     public static void onClientDisconnect(ClientPacketListener handler, Minecraft client) {
+        checkReplayServer(null);
         Main.LOGGER.info("Client disconnected from server, clearing some client data.");
         MainClient.resetClientData();
         if (Main.modDisabled()) return;

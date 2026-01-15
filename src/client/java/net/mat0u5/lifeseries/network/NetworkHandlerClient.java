@@ -202,7 +202,7 @@ public class NetworkHandlerClient {
         PacketNames name = PacketNames.fromName(nameStr);
         List<String> value = payload.value();
 
-        if (name == PacketNames.SEASON_INFO) {
+        if (name == PacketNames.SEASON_INFO && !Main.modDisabled()) {
             Seasons season = Seasons.getSeasonFromStringName(value.get(0));
             String adminCommands = value.get(1);
             String nonAdminCommands = value.get(2);
@@ -329,7 +329,7 @@ public class NetworkHandlerClient {
             Trivia.resetTrivia();
         }
 
-        if (name == PacketNames.SELECT_WILDCARDS) {
+        if (name == PacketNames.SELECT_WILDCARDS && !Main.modDisabled()) {
             Minecraft.getInstance().setScreen(new ChooseWildcardScreen());
         }
 
@@ -341,7 +341,7 @@ public class NetworkHandlerClient {
         }
 
 
-        if (name == PacketNames.SELECT_SEASON) {
+        if (name == PacketNames.SELECT_SEASON && !Main.modDisabled()) {
             Minecraft.getInstance().setScreen(new ChooseSeasonScreen(!value.isEmpty()));
         }
 
@@ -364,7 +364,7 @@ public class NetworkHandlerClient {
             }
             Minecraft.getInstance().gameRenderer.displayItemActivation(totemItem);
         }
-        if (name == PacketNames.PAST_LIFE_CHOOSE_TWIST) {
+        if (name == PacketNames.PAST_LIFE_CHOOSE_TWIST && !Main.modDisabled()) {
             Minecraft.getInstance().setScreen(new PastLifeChooseTwistScreen());
         }
         if (name == PacketNames.FIX_SIZECHANGING_BUGS) {
@@ -383,7 +383,7 @@ public class NetworkHandlerClient {
                 ClientResourcePacks.checkClientPacks();
             }
         }
-        if (name == PacketNames.EMPTY_SCREEN) {
+        if (name == PacketNames.EMPTY_SCREEN && !Main.modDisabled()) {
             boolean boolValue = value.equalsIgnoreCase("true");
             if (boolValue) {
                 Minecraft.getInstance().setScreen(new EmptySleepScreen(false));
@@ -581,6 +581,7 @@ public class NetworkHandlerClient {
     }
 
     public static void handleVoteScreen(VoteScreenPayload payload) {
+        if (Main.modDisabled()) return;
         Minecraft.getInstance().setScreen(new VotingScreen(payload.name(), payload.requiresSleep(), payload.closesWithEsc(), payload.showTimer(), payload.players()));
     }
 

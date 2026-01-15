@@ -56,6 +56,7 @@ dependencies {
 
  // Compile only for compatibility
  modCompileOnly "maven.modrinth:flashback:z0SX4zNw"
+ modCompileOnly "maven.modrinth:replaymod:1.21-2.6.23"
 
  // Runtime only QOL mods
  if (isValidVersion(project.carpet_bot_relog_version)) modRuntimeOnly "maven.modrinth:carpet-bot-relog:${project.carpet_bot_relog_version}"

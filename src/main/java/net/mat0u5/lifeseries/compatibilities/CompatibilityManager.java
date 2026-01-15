@@ -12,6 +12,10 @@ public class CompatibilityManager {
         return isModLoaded("flashback");
     }
 
+    public static boolean replayModLoaded() {
+        return isModLoaded("replaymod");
+    }
+
     public static boolean isModLoaded(String modId) {
         return FabricLoader.getInstance().isModLoaded(modId);
     }

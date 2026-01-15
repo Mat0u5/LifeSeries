@@ -40,7 +40,7 @@ public class GameRuleCommandMixin {
             reload = true;
         }
         *///?}
-        if (reload) {
+        if (reload && !Main.modDisabled()) {
             Main.softReloadStart();
         }
     }
@@ -61,7 +61,7 @@ public class GameRuleCommandMixin {
             seasonConfig.setProperty(seasonConfig.LOCATOR_BAR.key, String.valueOf(OtherUtils.getBooleanGameRule(server.overworld(), GameRules.LOCATOR_BAR)));
             reload = true;
         }
-        if (reload) {
+        if (reload && !Main.modDisabled()) {
             Main.softReloadStart();
         }
     }

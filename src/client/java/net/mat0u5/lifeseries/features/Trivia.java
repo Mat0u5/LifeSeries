@@ -57,6 +57,7 @@ public class Trivia {
     }
 
     public static void openGui() {
+        if (Main.modDisabled()) return;
         if (question.isEmpty() || answers.isEmpty()) return;
         if (MainClient.clientCurrentSeason == Seasons.NICE_LIFE) {
             Minecraft.getInstance().setScreen(new NewQuizScreen());

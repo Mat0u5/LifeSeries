@@ -13,7 +13,7 @@ public class AbstractSoundInstanceMixin {
 
     @Inject(method = "isLooping", at = @At("HEAD"), cancellable = true)
     private void isRepeatable(CallbackInfoReturnable<Boolean> cir) {
-        if (Main.modFullyDisabled()) return;
+        if (Main.modDisabled()) return;
         AbstractSoundInstance soundInstance = (AbstractSoundInstance) (Object) this;
         if (soundInstance instanceof EntityBoundSoundInstance entityTrackingSound) {
             //? if <= 1.21.9 {

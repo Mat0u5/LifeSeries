@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.render;
 
+import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.events.ClientKeybinds;
 import net.mat0u5.lifeseries.features.Trivia;
@@ -20,12 +21,14 @@ public class TextHud {
         if (client.options.hideGui) return;
         int yPos = client.getWindow().getGuiScaledHeight() - (5 + (int) Math.ceil((client.font.lineHeight) * MainClient.TEXT_HUD_SCALE));
 
-        yPos += renderGameNotBroken(client, context, yPos);
-        yPos += renderSessionTimer(client, context, yPos);
-        yPos += renderLimitedLifeTimer(client, context, yPos);
-        yPos += renderMimicryTimer(client, context, yPos);
-        yPos += renderSuperpowerCooldown(client, context, yPos);
-        yPos += renderTriviaTimer(client, context, yPos);
+        if (!Main.modDisabled()) {
+            yPos += renderGameNotBroken(client, context, yPos);
+            yPos += renderSessionTimer(client, context, yPos);
+            yPos += renderLimitedLifeTimer(client, context, yPos);
+            yPos += renderMimicryTimer(client, context, yPos);
+            yPos += renderSuperpowerCooldown(client, context, yPos);
+            yPos += renderTriviaTimer(client, context, yPos);
+        }
 
         yPos += renderSidetitle(client, context, yPos);
     }

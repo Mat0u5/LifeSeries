@@ -13,13 +13,11 @@ public abstract class LocalPlayerMixin {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void tickHead(CallbackInfo ci) {
-        if (Main.modFullyDisabled()) return;
         ClientEvents.onClientTickStart();
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void tickTail(CallbackInfo ci) {
-        if (Main.modFullyDisabled()) return;
         ClientEvents.onClientTickEnd();
     }
 }
