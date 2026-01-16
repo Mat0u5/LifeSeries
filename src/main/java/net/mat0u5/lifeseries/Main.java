@@ -41,7 +41,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.5.0.4";
+	public static final String MOD_VERSION = "dev-1.5.0.5";
 	public static final String MOD_ID = "lifeseries";
 	public static final String UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
 	public static final boolean DEBUG = false;
@@ -73,10 +73,11 @@ public class Main implements ModInitializer {
 			ResourceManagerHelper.registerBuiltinResourcePack(IdentifierHelper.mod("nicelife"), container, Component.nullToEmpty("Nice Life Resourcepack"), ResourcePackActivationType.NORMAL);
 		});
 
+		config = new MainConfig();
+		NetworkHandlerServer.reload();
 		ConfigManager.moveOldMainFileIfExists();
 		SnailSkins.createConfig();
 
-		config = new MainConfig();
 		MOD_DISABLED = config.getOrCreateProperty("modDisabled", "false").equalsIgnoreCase("true");
 		String season = config.getOrCreateProperty("currentSeries", DEFAULT_SEASON.getId());
 
@@ -163,6 +164,7 @@ public class Main implements ModInitializer {
 	public static void softReloadStart() {
 		currentSeason.reloadStart();
 		seasonConfig.loadProperties();
+		config.loadProperties();
 		blacklist.reloadBlacklist();
 		currentSeason.reload();
 		NetworkHandlerServer.sendUpdatePackets();

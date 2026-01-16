@@ -235,6 +235,7 @@ public abstract class Season {
         BROADCAST_LIFE_GAIN = seasonConfig.BROADCAST_LIFE_GAIN.get(seasonConfig);
         ADDITIONAL_WITHER_SKULL_RATE = seasonConfig.ADDITIONAL_WITHER_SKULL_RATE.get(seasonConfig);
 
+        NetworkHandlerServer.reload();
         boogeymanManager.onReload();
         secretSociety.onReload();
         createTeams();

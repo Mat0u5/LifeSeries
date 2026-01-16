@@ -54,6 +54,29 @@ import static net.mat0u5.lifeseries.Main.*;
 public class NetworkHandlerServer {
     public static final List<UUID> handshakeSuccessful = new ArrayList<>();
     public static final List<UUID> preLoginHandshake = new ArrayList<>();
+    public static RegistryOverrideBahaviours REGISTRY_OVERRIDE_BEHAVIOR = RegistryOverrideBahaviours.LOGIN;
+    public static boolean PRE_LOGIN_OVERRIDE_KICK = false;
+
+    public enum RegistryOverrideBahaviours {
+        NEVER,
+        ALWAYS,
+        LOGIN,
+        SEASON
+    }
+
+    public static void reload() {
+        String registryOverrideBehaviour = Main.getMainConfig().getOrCreateProperty("registry_override_behavior", "login");
+        if (registryOverrideBehaviour.equalsIgnoreCase("never")) REGISTRY_OVERRIDE_BEHAVIOR = RegistryOverrideBahaviours.NEVER;
+        else if (registryOverrideBehaviour.equalsIgnoreCase("always")) REGISTRY_OVERRIDE_BEHAVIOR = RegistryOverrideBahaviours.ALWAYS;
+        else if (registryOverrideBehaviour.equalsIgnoreCase("login")) REGISTRY_OVERRIDE_BEHAVIOR = RegistryOverrideBahaviours.LOGIN;
+        else if (registryOverrideBehaviour.equalsIgnoreCase("season")) REGISTRY_OVERRIDE_BEHAVIOR = RegistryOverrideBahaviours.SEASON;
+        else {
+            Main.getMainConfig().setProperty("registry_override_behavior", "login");
+            REGISTRY_OVERRIDE_BEHAVIOR = RegistryOverrideBahaviours.LOGIN;
+        }
+
+        PRE_LOGIN_OVERRIDE_KICK = Main.getMainConfig().getOrCreateBoolean("pre_login_override_kick", false);
+    }
 
     public static void registerPackets() {
         //? if > 1.20.3 {
@@ -164,7 +187,9 @@ public class NetworkHandlerServer {
         }
         else if (currentSeason.getSeason().requiresClient()) {
             LOGGER.info("Did not receive pre-login packet from " + OtherUtils.profileName(profile));
-            handler.disconnect(getDisconnectClientText());
+            if (!PRE_LOGIN_OVERRIDE_KICK) {
+                handler.disconnect(getDisconnectClientText());
+            }
         }
     }
 
