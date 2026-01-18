@@ -362,7 +362,11 @@ public class MobSwap extends Wildcard {
                 if (entity instanceof Snail) return;
                 if (entity instanceof TriviaBot) return;
                 if (entity.hasCustomName()) return;
+                //? if <= 1.21.11 {
                 if (!entity.getTags().contains("mobswap")) return;
+                //?} else {
+                /*if (!entity.entityTags().contains("mobswap")) return;
+                *///?}
                 toKill.add(entity);
             });
 
@@ -411,7 +415,7 @@ public class MobSwap extends Wildcard {
         //? if <= 1.21.4 {
         cir.setReturnValue(Objects.equals(new ChunkPos(pos), chunk.getPos()) || level.isNaturalSpawningAllowed(pos));
         //?} else {
-        /*ChunkPos chunkPos = new ChunkPos(pos);
+        /*ChunkPos chunkPos = LevelUtils.chunkPosFromBlockPos(pos);
         cir.setReturnValue(Objects.equals(chunkPos, chunk.getPos()) || level.canSpawnEntitiesInChunk(chunkPos));
         *///?}
     }

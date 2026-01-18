@@ -11,6 +11,8 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
+import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.minecraft.core.SectionPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.TicketType;
@@ -112,8 +114,8 @@ public class TriviaBotServerData implements PlayerBoundEntity {
             //? if <= 1.21.4 {
             level.getChunkSource().addRegionTicket(TicketType.PORTAL, new ChunkPos(bot.blockPosition()), 2, bot.blockPosition());
             //?} else {
-            /*level.getChunkSource().addTicketWithRadius(TicketType.PORTAL, new ChunkPos(bot.blockPosition()), 2);
-             *///?}
+            /*level.getChunkSource().addTicketWithRadius(TicketType.PORTAL, LevelUtils.chunkPosFromBlockPos(bot.blockPosition()), 2);
+            *///?}
         }
     }
 

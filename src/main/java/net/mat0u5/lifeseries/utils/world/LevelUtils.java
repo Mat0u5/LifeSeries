@@ -2,9 +2,11 @@ package net.mat0u5.lifeseries.utils.world;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.SectionPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import java.util.EnumSet;
@@ -63,9 +65,9 @@ public class LevelUtils {
     public static BlockPos getCloseBlockPos(Level level, BlockPos targetPos, double distanceFromTarget, int height, boolean bottomSupport) {
         for (int attempts = 0; attempts < 20; attempts++) {
             Vec3 offset = new Vec3(
-                    level.random.nextDouble() * 2 - 1,
+                    level.getRandom().nextDouble() * 2 - 1,
                     0,
-                    level.random.nextDouble() * 2 - 1
+                    level.getRandom().nextDouble() * 2 - 1
             ).normalize().scale(distanceFromTarget);
 
             BlockPos pos = targetPos.offset((int) offset.x(), 0, (int) offset.z());
@@ -133,5 +135,9 @@ public class LevelUtils {
         //?} else {
         /*entity.teleportTo(level, destX, destY, destZ, EnumSet.noneOf(Relative.class), yaw, pitch, false);
          *///?}
+    }
+
+    public static ChunkPos chunkPosFromBlockPos(BlockPos pos) {
+        return new ChunkPos(SectionPos.blockToSectionCoord(pos.getX()), SectionPos.blockToSectionCoord(pos.getZ()));
     }
 }

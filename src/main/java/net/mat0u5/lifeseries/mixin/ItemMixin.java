@@ -32,8 +32,10 @@ public abstract class ItemMixin {
     public abstract FoodProperties ls$foodProperties();
     *///?}
     //? if >= 1.20.5 {
+    //? if <= 1.21.11 {
     @Accessor("components")
     public abstract DataComponentMap normalComponents();
+    //?}
 
     @Inject(method = "components", at = @At("HEAD"), cancellable = true)
     public void getComponents(CallbackInfoReturnable<DataComponentMap> cir) {
@@ -55,7 +57,11 @@ public abstract class ItemMixin {
         if (hungerActive) {
             Item item = (Item) (Object) this;
             if (!Hunger.nonEdible.contains(item)) {
+                //? if <= 1.21.11 {
                 PatchedDataComponentMap components = new PatchedDataComponentMap(normalComponents());
+                //?} else {
+                /*PatchedDataComponentMap components = new PatchedDataComponentMap(item.builtInRegistryHolder().components());
+                *///?}
                 Hunger.defaultFoodComponents(item, components);
                 cir.setReturnValue(components);
             }
@@ -103,9 +109,11 @@ public abstract class ItemMixin {
             Item item = (Item) (Object) this;
             //? if < 1.20.5 {
             /*Hunger.finishUsing(item, ls$foodProperties() != null, user);
-            *///?} else {
+            *///?} else if <= 1.21.11 {
             Hunger.finishUsing(item, normalComponents(), user);
-            //?}
+            //?} else {
+            /*Hunger.finishUsing(item, item.builtInRegistryHolder().components(), user);
+            *///?}
         }
     }
 }

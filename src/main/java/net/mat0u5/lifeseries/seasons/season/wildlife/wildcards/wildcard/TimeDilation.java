@@ -23,6 +23,8 @@ import net.minecraft.server.ServerTickRateManager;
 import net.minecraft.world.level.GameRules;
 //? if > 1.21.9
 /*import net.minecraft.world.level.gamerules.GameRules;*/
+//? if >= 26.1
+/*import net.minecraft.world.clock.WorldClocks;*/
 
 public class TimeDilation extends Wildcard {
     public static float MIN_TICK_RATE = 1;
@@ -58,16 +60,25 @@ public class TimeDilation extends Wildcard {
             int weatherTicks = (int) weatherTicksBacklog;
             if (weatherTicks >= 1) {
                 weatherTicksBacklog -= weatherTicks;
-                for (ServerLevel serverLevelorld : server.getAllLevels()) {
-                    long newTicks = serverLevelorld.getDayTime() + weatherTicks;
-                    serverLevelorld.setDayTime(newTicks);
-                    for (ServerPlayer player : serverLevelorld.players()) {
+                for (ServerLevel serverLevel : server.getAllLevels()) {
+                    //? if <= 1.21.11 {
+                    long newTicks = serverLevel.getDayTime() + weatherTicks;
+                    serverLevel.setDayTime(newTicks);
+                    //?} else {
+                    /*long newTicks = serverLevel.getOverworldClockTime() + weatherTicks;
+                    serverLevel.clockManager().setTotalTicks(serverLevel.registryAccess().getOrThrow(WorldClocks.OVERWORLD), newTicks);
+                    *///?}
+                    for (ServerPlayer player : serverLevel.players()) {
                         //? if <= 1.21.9 {
-                        boolean daylightCycle = OtherUtils.getBooleanGameRule(serverLevelorld, GameRules.RULE_DAYLIGHT);
+                        boolean daylightCycle = OtherUtils.getBooleanGameRule(serverLevel, GameRules.RULE_DAYLIGHT);
                         //?} else {
-                        /*boolean daylightCycle = OtherUtils.getBooleanGameRule(serverLevelorld, GameRules.ADVANCE_TIME);
+                        /*boolean daylightCycle = OtherUtils.getBooleanGameRule(serverLevel, GameRules.ADVANCE_TIME);
                          *///?}
-                        player.connection.send(new ClientboundSetTimePacket(serverLevelorld.getGameTime(), serverLevelorld.getDayTime(), daylightCycle));
+                        //? if <= 1.21.11 {
+                        player.connection.send(new ClientboundSetTimePacket(serverLevel.getGameTime(), serverLevel.getDayTime(), daylightCycle));
+                        //?} else {
+                        /*player.connection.send(serverLevel.clockManager().createFullSyncPacket());
+                        *///?}
                     }
                 }
             }

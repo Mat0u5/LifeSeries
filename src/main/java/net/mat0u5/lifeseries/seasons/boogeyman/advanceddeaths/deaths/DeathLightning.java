@@ -43,9 +43,9 @@ public class DeathLightning extends AdvancedDeath {
         else if (ticks > 80) {
             int distanceFromTarget = rnd.nextInt(15, 100);
             Vec3 offset = new Vec3(
-                    level.random.nextDouble() * 2 - 1,
+                    rnd.nextDouble() * 2 - 1,
                     0,
-                    level.random.nextDouble() * 2 - 1
+                    rnd.nextDouble() * 2 - 1
             ).normalize().scale(distanceFromTarget);
 
             Vec3 pos = player.position().add(offset.x(), 0, offset.z());

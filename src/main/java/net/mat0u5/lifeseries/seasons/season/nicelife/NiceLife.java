@@ -47,6 +47,10 @@ import net.minecraft.world.phys.Vec3;
 //? if > 1.21.9
 /*import net.minecraft.world.level.gamerules.GameRules;*/
 
+//? if >= 26.1 {
+/*import net.minecraft.world.clock.WorldClocks;
+*///?}
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -321,8 +325,13 @@ public class NiceLife extends Season {
     public void sleepThroughNight() {
         if (server == null) return;
         ServerLevel overworld = server.overworld();
+        //? if <= 1.21.11 {
         long newTime = overworld.getDayTime() + 24000L;
         overworld.setDayTime(newTime - newTime % 24000L);
+        //?} else {
+        /*long newTime = overworld.getOverworldClockTime() + 24000L;
+        overworld.clockManager().setTotalTicks(overworld.registryAccess().getOrThrow(WorldClocks.OVERWORLD), newTime - newTime % 24000L);
+        *///?}
         wakeUpAllPlayers();
         playedMidnightChimes = false;
         NiceLifeTriviaManager.endTrivia();
@@ -372,7 +381,11 @@ public class NiceLife extends Season {
 
     public boolean isTimeBetween(int minTime, int maxTime) {
         if (server == null) return false;
+        //? if <= 1.21.11 {
         long dayTime = server.overworld().getDayTime() % 24000L;
+        //?} else {
+        /*long dayTime = server.overworld().getOverworldClockTime() % 24000L;
+        *///?}
         return dayTime >= minTime && dayTime <= maxTime;
     }
 
@@ -385,7 +398,7 @@ public class NiceLife extends Season {
             int maxX = chunkPos.getMinBlockZ();
 
             for (int i = 0; i < precipitationTicks; i++) {
-                if (level.random.nextDouble() <= chancePerTick) {
+                if (rnd.nextDouble() <= chancePerTick) {
                     customPrecipitation(level, level.getBlockRandomPos(minX, 0, maxX, 15));
                 }
             }

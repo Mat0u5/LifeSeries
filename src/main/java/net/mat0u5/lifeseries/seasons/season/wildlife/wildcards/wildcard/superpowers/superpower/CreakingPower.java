@@ -144,7 +144,7 @@ public class CreakingPower extends ToggleableSuperpower {
         if (level == null) return;
 
         int i = towardsPlayer ? 16545810 : 6250335;
-        RandomSource random = level.random;
+        RandomSource random = creaking.getRandom();
 
         for(double d = 0.0; d < count; d++) {
             AABB box = creaking.getBoundingBox();
@@ -174,7 +174,11 @@ public class CreakingPower extends ToggleableSuperpower {
             level.getAllEntities().forEach(entity -> {
                 if (!(entity instanceof Creaking)) return;
                 if (allCreatedEntities.contains(entity.getUUID())) return;
+                //? if <= 1.21.11 {
                 if (!entity.getTags().contains("creakingFromSuperpower")) return;
+                //?} else {
+                /^if (!entity.entityTags().contains("creakingFromSuperpower")) return;
+                ^///?}
                 toKill.add(entity);
             });
             toKill.forEach(Entity::discard);

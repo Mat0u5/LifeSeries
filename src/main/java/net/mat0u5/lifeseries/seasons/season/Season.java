@@ -632,14 +632,22 @@ public abstract class Season {
         if (entity instanceof ElderGuardian) return;
         if (entity instanceof Snail) return;
         if (entity instanceof TriviaBot) return;
+        //? if <= 1.21.11 {
         if (entity.getTags().contains("notNatural") && onlyNatural) return;
+        //?} else {
+        /*if (entity.entityTags().contains("notNatural") && onlyNatural) return;
+        *///?}
 
         EntityType<?> entityType = entity.getType();
+
+        //? if <= 1.21.11 {
         SpawnEggItem spawnEgg = SpawnEggItem.byId(entityType);
-
-
         if (spawnEgg == null) return;
         ItemStack spawnEggItem = spawnEgg.getDefaultInstance();
+        //?} else {
+        /*ItemStack spawnEggItem = SpawnEggItem.byId(entityType).map(ItemStack::new).orElse(null);
+        *///?}
+
         if (spawnEggItem == null) return;
         if (spawnEggItem.isEmpty()) return;
 

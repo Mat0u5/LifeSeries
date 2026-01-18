@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 //? if >= 1.21.4 {
 /*//? if <= 1.21.9 {
 import net.minecraft.client.renderer.RenderType;
-//?} else {
+//?} else if <= 1.21.11{
 /^import net.minecraft.client.renderer.rendertype.RenderType;
 ^///?}
 *///?}
@@ -30,6 +30,8 @@ import net.minecraft.client.renderer.LevelRenderer;
 @Mixin(value = LevelRenderer.class)
 //?} else {
 /*import net.minecraft.client.renderer.WeatherEffectRenderer;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+
 @Mixin(value = WeatherEffectRenderer.class)
 *///?}
 public class WeatherEffectRendererMixin {
@@ -51,24 +53,31 @@ public class WeatherEffectRendererMixin {
     *///?} else if <= 1.21.9 {
     /*@WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderType;weather(Lnet/minecraft/resources/ResourceLocation;Z)Lnet/minecraft/client/renderer/RenderType;"))
     public RenderType render(ResourceLocation resourceLocation, boolean bl, Operation<RenderType> original) {
-    *///?} else {
+    *///?} else if <= 1.21.11 {
     /*@WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/rendertype/RenderTypes;weather(Lnet/minecraft/resources/Identifier;Z)Lnet/minecraft/client/renderer/rendertype/RenderType;"))
     public RenderType render(Identifier resourceLocation, boolean bl, Operation<RenderType> original) {
+    *///?} else {
+    /*@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/texture/TextureManager;getTexture(Lnet/minecraft/resources/Identifier;)Lnet/minecraft/client/renderer/texture/AbstractTexture;"))
+    public Identifier render(Identifier resourceLocation) {
     *///?}
         if (MainClient.NICE_LIFE_LESS_SNOW && !Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE) {
             if (resourceLocation.getPath().contains("snow.png")) {
                 //? if <= 1.21.2 {
                 original.call(i, LESS_SNOW_RESOURCE_LOCATION);
                 return;
-                //?} else {
+                //?} else if <= 1.21.11 {
                 /*return original.call(LESS_SNOW_RESOURCE_LOCATION, bl);
+                *///?} else {
+                /*return LESS_SNOW_RESOURCE_LOCATION;
                 *///?}
             }
         }
         //? if <= 1.21.2 {
         original.call(i, resourceLocation);
-        //?} else {
+        //?} else if <= 1.21.11 {
         /*return original.call(resourceLocation, bl);
+        *///?} else {
+        /*return resourceLocation;
         *///?}
     }
 

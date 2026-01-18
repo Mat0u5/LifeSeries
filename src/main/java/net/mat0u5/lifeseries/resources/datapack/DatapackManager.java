@@ -43,6 +43,8 @@ public class DatapackManager {
         /*return "1.21.9";*/
         //? if = 1.21.11
         /*return "1.21.11";*/
+        //? if = 26.1
+        /*return "26.1";*/
     }
 
     public static String getResourceTriviaPackVersion() {

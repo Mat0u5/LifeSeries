@@ -1,9 +1,7 @@
 package net.mat0u5.lifeseries.network;
 
-import com.mojang.authlib.minecraft.client.MinecraftClient;
 import net.fabricmc.fabric.api.client.networking.v1.ClientLoginNetworking;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
@@ -63,6 +61,7 @@ import java.util.concurrent.CompletableFuture;
 //? if <= 1.20.3 {
 /*import net.minecraft.network.FriendlyByteBuf;
 *///?}
+import net.fabricmc.fabric.api.networking.v1.*;
 
 public class NetworkHandlerClient {
     //? if <= 1.20.3 {
@@ -136,7 +135,11 @@ public class NetworkHandlerClient {
         ClientLoginNetworking.registerGlobalReceiver(IdentifierHelper.mod("preloginpacket"),
                 (client, handler, buf, listenerAdder) -> {
                     return CompletableFuture.completedFuture(
+                            //? if <= 1.21.11 {
                             PacketByteBufs.create().writeBoolean(true)
+                            //?} else {
+                            /*FriendlyByteBufs.create().writeBoolean(true)
+                            *///?}
                     );
                 }
         );

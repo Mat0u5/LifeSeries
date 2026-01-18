@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
@@ -147,4 +148,17 @@ public abstract class PlayerMixin {
         ls$frostWalker.apply(player.ls$getServerLevel(), 5, null, player, player.position());
         //?}
     }
+
+
+    //Located in the ServerPlayer class in < 26.1
+    //? if >= 26.1 {
+    /*@Inject(method = "attack", at = @At("HEAD"))
+    private void onAttackEntity(Entity target, CallbackInfo ci) {
+        if (Main.modDisabled()) return;
+        Player player = (Player) (Object) this;
+        if (player instanceof ServerPlayer serverPlayer) {
+            currentSeason.onUpdatedInventory(serverPlayer);
+        }
+    }
+    *///?}
 }

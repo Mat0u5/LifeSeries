@@ -185,12 +185,17 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
     /*protected int getScrollbarPosition() {
         return this.width *2;//Make not invisible
     }
-    *///?} else {
+    *///?} else if <= 1.21.11 {
     @Override
     protected boolean scrollbarVisible() {
         return false;
     }
-    //?}
+    //?} else {
+    /*@Override
+    protected boolean scrollable() {
+        return false;
+    }
+    *///?}
 
     @Override
     //? if <= 1.21.6 {

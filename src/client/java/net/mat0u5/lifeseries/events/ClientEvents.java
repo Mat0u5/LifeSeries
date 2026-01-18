@@ -176,7 +176,7 @@ public class ClientEvents {
         //? if <= 1.20.3 {
         /*if (client.level.random.nextInt(30) != 0) return;
         *///?} else {
-        if (client.level.random.nextInt(15) != 0) return;
+        if (client.level.getRandom().nextInt(15) != 0) return;
         //?}
         for (Player player : client.level.players()) {
             if (MainClient.invisiblePlayers.containsKey(player.getUUID())) {

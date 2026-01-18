@@ -15,6 +15,8 @@ import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.minecraft.core.SectionPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -180,9 +182,9 @@ public class SnailServerData implements PlayerBoundEntity {
         if (snail.level() instanceof ServerLevel level) {
             //? if <= 1.21.4 {
             level.getChunkSource().addRegionTicket(TicketType.PORTAL, new ChunkPos(snail.blockPosition()), 2, snail.blockPosition());
-            //?} else {
-            /*level.getChunkSource().addTicketWithRadius(TicketType.PORTAL, new ChunkPos(snail.blockPosition()), 2);
-             *///?}
+            //?} else if <= 1.21.11 {
+            /*level.getChunkSource().addTicketWithRadius(TicketType.PORTAL, LevelUtils.chunkPosFromBlockPos(snail.blockPosition()), 2);
+            *///?}
         }
     }
 
