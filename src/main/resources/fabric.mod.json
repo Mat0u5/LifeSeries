@@ -43,7 +43,8 @@
 	},
 	"custom": {
 		"loom:injected_interfaces": {
-			"net/minecraft/class_3222": ["net/mat0u5/lifeseries/utils/interfaces/IServerPlayer"]
+			"net/minecraft/class_3222": ["net/mat0u5/lifeseries/utils/interfaces/IServerPlayer"],
+			"net/minecraft/server/level/ServerPlayer": ["net/mat0u5/lifeseries/utils/interfaces/IServerPlayer"]
 		}
 	}
 }
