@@ -26,7 +26,7 @@ on:
       full_changelog:
         description: 'Full Changelog Link'
         required: true
-        default: 'https://github.com/Mat0u5/LifeSeries'
+        default: 'https://mat0u5.github.io/LifeSeries-docs/dev/changelog/?v=1.5.0-1.5.1'
         type: string
       version_type:
         description: 'Version type'
