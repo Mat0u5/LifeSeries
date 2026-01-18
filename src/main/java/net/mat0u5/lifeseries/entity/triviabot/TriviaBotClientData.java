@@ -50,7 +50,11 @@ public class TriviaBotClientData {
             analyzingAnimationState.startIfStopped(bot.tickCount);
         }
 
-        if (bot.ranOutOfTime() && !bot.santaBot()) {
+        if (bot.isBotGliding()) {
+            pauseAllAnimations("glide");
+            glideAnimationState.startIfStopped(bot.tickCount);
+        }
+        else if (bot.ranOutOfTime() && !bot.santaBot()) {
             pauseAllAnimations("snail_transform");
             if (!lastRanOutOfTime) {
                 snailTransformAnimationState.startIfStopped(bot.tickCount);
@@ -74,10 +78,6 @@ public class TriviaBotClientData {
         else if (bot.interactedWith()) {
             pauseAllAnimations("countdown");
             countdownAnimationState.startIfStopped(bot.tickCount);
-        }
-        else if (bot.isBotGliding()) {
-            pauseAllAnimations("glide");
-            glideAnimationState.startIfStopped(bot.tickCount);
         }
         else if (bot.walkAnimation.isMoving() && bot.walkAnimation.speed() > 0.02) {
             pauseAllAnimations("walk");

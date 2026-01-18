@@ -126,6 +126,6 @@ public class VersionControl {
     public static String serverCompatibilityMin() {
         // This is the version that the CLIENT needs to have for the current server.
         if (Main.ISOLATED_ENVIRONMENT) return MOD_VERSION;
-        return "dev-1.5.0";
+        return "dev-1.5.0.1";
     }
 }

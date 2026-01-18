@@ -1,5 +1,5 @@
 plugins {
- id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
+ id 'net.fabricmc.fabric-loom' version "${loom_version}"
  id 'maven-publish'
  id "me.modmuss50.mod-publish-plugin" version "1.0.0"
 }
@@ -49,21 +49,20 @@ fabricApi {
 }
 dependencies {
  minecraft("com.mojang:minecraft:${property("minecraft_version")}")
- mappings loom.officialMojangMappings()
 
- modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
- modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
+ implementation "net.fabricmc:fabric-loader:${property("loader_version")}"
+ implementation "net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}"
 
  // Compile only for compatibility
- modCompileOnly "maven.modrinth:flashback:z0SX4zNw"
- modCompileOnly "maven.modrinth:replaymod:1.21-2.6.23"
+ //compileOnly "maven.modrinth:flashback:z0SX4zNw" //TODO
+ compileOnly "maven.modrinth:replaymod:1.21-2.6.23"
 
  // Runtime only QOL mods
- if (isValidVersion(project.carpet_bot_relog_version)) modRuntimeOnly "maven.modrinth:carpet-bot-relog:${project.carpet_bot_relog_version}"
- if (isValidVersion(project.carpet_mod_version)) modRuntimeOnly "curse.maven:carpet-349239:${project.carpet_mod_version}"
+ if (isValidVersion(project.carpet_bot_relog_version)) runtimeOnly "maven.modrinth:carpet-bot-relog:${project.carpet_bot_relog_version}"
+ if (isValidVersion(project.carpet_mod_version)) runtimeOnly "curse.maven:carpet-349239:${project.carpet_mod_version}"
 
  //Runtime and compile
- if (isValidVersion(project.voicechat_mod_version)) modImplementation modRuntimeOnly ("maven.modrinth:simple-voice-chat:fabric-${project.voicechat_mod_version}")
+ if (isValidVersion(project.voicechat_mod_version)) implementation runtimeOnly ("maven.modrinth:simple-voice-chat:fabric-${project.voicechat_mod_version}")
  if (isValidVersion(project.voicechat_api_version)) implementation "de.maxhenkel.voicechat:voicechat-api:${project.voicechat_api_version}"
 }
 loom {
@@ -110,7 +109,7 @@ jar {
 }
 
 publishMods {
- file = remapJar.archiveFile
+ file = jar.archiveFile
  changelog = providers.environmentVariable("CHANGELOG")
  type = providers.environmentVariable("VERSION_TYPE")
  displayName = "Life Series ${project.property('mod_version')} for Fabric ${project.property('min_version')}${project.property('min_version') == project.property('max_version') ? '' : '-' + project.property('max_version')}"

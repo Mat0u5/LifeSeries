@@ -86,6 +86,7 @@ public class TriviaBot extends AmbientCreature {
         }
         else {
             triviaHandler = new WildLifeTriviaHandler(this);
+            setSantaBot(false);
         }
     }
 
@@ -117,6 +118,7 @@ public class TriviaBot extends AmbientCreature {
         super.tick();
         serverData.tick();
         clientData.tick();
+        setSantaBot(currentSeason.getSeason() == Seasons.NICE_LIFE);
     }
 
     /*
@@ -224,7 +226,7 @@ public class TriviaBot extends AmbientCreature {
         this.entityData.define(interactedWith, false);
         this.entityData.define(gliding, false);
         this.entityData.define(analyzing, -1);
-        this.entityData.define(santaBot, false);
+        this.entityData.define(santaBot, currentSeason.getSeason() == Seasons.NICE_LIFE);
         this.entityData.define(waving, 0);
         this.entityData.define(leaving, false);
     }
@@ -238,7 +240,7 @@ public class TriviaBot extends AmbientCreature {
         builder.define(interactedWith, false);
         builder.define(gliding, false);
         builder.define(analyzing, -1);
-        builder.define(santaBot, false);
+        builder.define(santaBot, currentSeason.getSeason() == Seasons.NICE_LIFE);
         builder.define(waving, -1);
         builder.define(leaving, false);
     }
