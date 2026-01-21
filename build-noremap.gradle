@@ -62,8 +62,12 @@ dependencies {
  if (isValidVersion(project.carpet_mod_version)) runtimeOnly "curse.maven:carpet-349239:${project.carpet_mod_version}"
 
  //Runtime and compile
- if (isValidVersion(project.voicechat_mod_version)) implementation runtimeOnly ("maven.modrinth:simple-voice-chat:fabric-${project.voicechat_mod_version}")
- if (isValidVersion(project.voicechat_api_version)) implementation "de.maxhenkel.voicechat:voicechat-api:${project.voicechat_api_version}"
+ if (isValidVersion(project.voicechat_mod_version)) {
+  implementation runtimeOnly ("maven.modrinth:simple-voice-chat:fabric-${project.voicechat_mod_version}")
+ }
+ else {
+  compileOnly ("maven.modrinth:simple-voice-chat:fabric-2.6.11+26.1-snapshot-1")
+ }
 }
 loom {
  runConfigs.all {
