@@ -47,6 +47,7 @@
     "EntityMixin",
     "GameRendererMixin",
     "LivingEntityMixin",
-    "PlayerMixin"
+    "PlayerMixin",
+    "WorldOpenFlowsMixin"
   ]
 }

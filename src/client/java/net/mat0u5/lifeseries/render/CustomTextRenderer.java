@@ -93,14 +93,17 @@ public class CustomTextRenderer {
         if (this.text != null) textWidth = textRenderer.width(text);
         if (this.orderedText != null) textWidth = textRenderer.width(orderedText);
 
-        if (anchor == Anchor.CENTER) offsetX -= textWidth/2.0;
-        if (anchor == Anchor.RIGHT) offsetX -= textWidth;
+        if (anchor == Anchor.CENTER) offsetX = -textWidth/2.0;
+        if (anchor == Anchor.RIGHT) offsetX = -textWidth;
 
         if (this.orderedText != null) {
             if (wrapLines) {
                 List<FormattedCharSequence> wrappedText = textRenderer.split(text, wrapMaxWidth);
                 int offsetY = 0;
                 for (FormattedCharSequence line : wrappedText) {
+                    textWidth = textRenderer.width(line);
+                    if (anchor == Anchor.CENTER) offsetX = -textWidth/2.0;
+                    if (anchor == Anchor.RIGHT) offsetX = -textWidth;
                     context.drawString(textRenderer, line, (int) (x / scaleX + offsetX), (int) (y / scaleY + offsetY), textColor, shadow);
                     offsetY += textRenderer.lineHeight + wrapGapY;
                 }
