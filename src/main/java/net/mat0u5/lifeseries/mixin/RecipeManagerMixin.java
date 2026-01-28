@@ -14,7 +14,7 @@ import java.util.List;
 import static net.mat0u5.lifeseries.Main.blacklist;
 
 //? if <= 1.21 {
-import net.minecraft.resources.ResourceLocation;
+/*import net.minecraft.resources.ResourceLocation;
 import com.google.gson.JsonElement;
 import java.util.ArrayList;
 import java.util.Map;
@@ -44,8 +44,8 @@ public class RecipeManagerMixin {
     }
 
 }
-//?} else {
-/*import net.minecraft.world.item.crafting.RecipeHolder;
+*///?} else {
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeMap;
 import org.spongepowered.asm.mixin.Shadow;
 @Mixin(RecipeManager.class)
@@ -68,10 +68,10 @@ public abstract class RecipeManagerMixin {
 
         List<RecipeHolder<?>> filteredRecipes = preparedRecipes.values().stream()
                 //? if <= 1.21.9 {
-                .filter(recipe -> !blacklist.loadedListItemIdentifier.contains(recipe.id().location()) && !blacklist.loadedRecipeBlacklist.contains(recipe.id().location()))
-                //?} else {
-                /^.filter(recipe -> !blacklist.loadedListItemIdentifier.contains(recipe.id().identifier()) && !blacklist.loadedRecipeBlacklist.contains(recipe.id().identifier()))
-                ^///?}
+                /*.filter(recipe -> !blacklist.loadedListItemIdentifier.contains(recipe.id().location()) && !blacklist.loadedRecipeBlacklist.contains(recipe.id().location()))
+                *///?} else {
+                .filter(recipe -> !blacklist.loadedListItemIdentifier.contains(recipe.id().identifier()) && !blacklist.loadedRecipeBlacklist.contains(recipe.id().identifier()))
+                //?}
                 .toList();
 
         this.recipes = RecipeMap.create(filteredRecipes);
@@ -84,4 +84,4 @@ public abstract class RecipeManagerMixin {
     }
 
 }
-*///?}
+//?}

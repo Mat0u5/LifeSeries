@@ -26,7 +26,7 @@ import java.util.Optional;
 import static net.mat0u5.lifeseries.Main.blacklist;
 import static net.mat0u5.lifeseries.Main.seasonConfig;
 //? if >= 1.21.2
-/*import net.mat0u5.lifeseries.utils.player.PlayerUtils;*/
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 //? if <= 1.20.5 {
 /*import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
@@ -248,10 +248,10 @@ public class EnchantmentHelperMixin {
         if (damageSource.getEntity() == null) return;
         if (!SuperpowersWildcard.hasActivatedPower(victim, Superpowers.SUPER_PUNCH)) return;
         //? if <= 1.21 {
-        damageSource.getEntity().hurt(victim.damageSources().thorns(victim), 1F);
-        //?} else {
-        /*damageSource.getEntity().hurtServer(victim.ls$getServerLevel(), victim.damageSources().thorns(victim), 1F);
-        *///?}
+        /*damageSource.getEntity().hurt(victim.damageSources().thorns(victim), 1F);
+        *///?} else {
+        damageSource.getEntity().hurtServer(victim.ls$getServerLevel(), victim.damageSources().thorns(victim), 1F);
+        //?}
         //?}
     }
 }

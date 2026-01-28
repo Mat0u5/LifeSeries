@@ -38,11 +38,11 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.PatchedDataComponentMap;
 //?}
 //? if <= 1.21
-import java.util.Optional;
+/*import java.util.Optional;*/
 //? if >= 1.21.2 {
-/*import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.component.Consumable;
-*///?}
+//?}
 
 public class Hunger extends Wildcard {
     private static final Random rnd = new Random();
@@ -66,7 +66,7 @@ public class Hunger extends Wildcard {
     private static final List<Holder<MobEffect>> effects = List.of(
     //?}
             //? if <= 1.21.4 {
-            MobEffects.MOVEMENT_SPEED
+            /*MobEffects.MOVEMENT_SPEED
             ,MobEffects.MOVEMENT_SLOWDOWN
             ,MobEffects.DIG_SPEED
             ,MobEffects.DIG_SLOWDOWN
@@ -76,8 +76,8 @@ public class Hunger extends Wildcard {
             ,MobEffects.JUMP
             ,MobEffects.CONFUSION
             ,MobEffects.DAMAGE_RESISTANCE
-            //?} else {
-            /*MobEffects.SPEED
+            *///?} else {
+            MobEffects.SPEED
             ,MobEffects.SLOWNESS
             ,MobEffects.HASTE
             ,MobEffects.MINING_FATIGUE
@@ -87,7 +87,7 @@ public class Hunger extends Wildcard {
             ,MobEffects.JUMP_BOOST
             ,MobEffects.NAUSEA
             ,MobEffects.RESISTANCE
-            *///?}
+            //?}
             ,MobEffects.REGENERATION
             ,MobEffects.FIRE_RESISTANCE
             ,MobEffects.WATER_BREATHING
@@ -123,16 +123,16 @@ public class Hunger extends Wildcard {
     private static final List<Holder<MobEffect>> levelLimit = List.of(
     //?}
             //? if <= 1.21.4 {
-            MobEffects.DAMAGE_BOOST,
+            /*MobEffects.DAMAGE_BOOST,
             MobEffects.HEAL,
             MobEffects.HARM,
             MobEffects.DAMAGE_RESISTANCE,
-            //?} else {
-            /*MobEffects.STRENGTH,
+            *///?} else {
+            MobEffects.STRENGTH,
             MobEffects.INSTANT_HEALTH,
             MobEffects.INSTANT_DAMAGE,
             MobEffects.RESISTANCE,
-            *///?}
+            //?}
             MobEffects.REGENERATION,
             MobEffects.WITHER,
             MobEffects.ABSORPTION,
@@ -145,12 +145,12 @@ public class Hunger extends Wildcard {
     private static final List<Holder<MobEffect>> durationLimit = List.of(
     //?}
             //? if <= 1.21.4 {
-            MobEffects.HEAL,
+            /*MobEffects.HEAL,
             MobEffects.HARM,
-            //?} else {
-            /*MobEffects.INSTANT_HEALTH,
+            *///?} else {
+            MobEffects.INSTANT_HEALTH,
             MobEffects.INSTANT_DAMAGE,
-            *///?}
+            //?}
             MobEffects.SATURATION
     );
 
@@ -166,8 +166,8 @@ public class Hunger extends Wildcard {
             Items.SOUL_SAND, Items.SOUL_SOIL, Items.CRIMSON_NYLIUM, Items.WARPED_NYLIUM, Items.CACTUS, Items.SEA_PICKLE,
             Items.KELP, Items.DRIED_KELP_BLOCK, Items.WHEAT_SEEDS
             //? if >= 1.21.5 {
-            /*,Items.LEAF_LITTER
-            *///?}
+            ,Items.LEAF_LITTER
+            //?}
     );
 
     public static List<String> nonEdibleStr = new ArrayList<>();
@@ -233,10 +233,10 @@ public class Hunger extends Wildcard {
 
                 // Check if the block exists in the registry
                 //? if <= 1.21 {
-                Item item = BuiltInRegistries.ITEM.get(key);
-                //?} else {
-                /*Item item = BuiltInRegistries.ITEM.getValue(key);
-                 *///?}
+                /*Item item = BuiltInRegistries.ITEM.get(key);
+                *///?} else {
+                Item item = BuiltInRegistries.ITEM.getValue(key);
+                 //?}
                 if (item != null) {
                     nonEdible.add(item);
                 } else {
@@ -290,8 +290,8 @@ public class Hunger extends Wildcard {
             *///?} else {
             stack.set(DataComponents.FOOD, stack.getPrototype().get(DataComponents.FOOD));
             //? if >= 1.21.2 {
-            /*stack.set(DataComponents.CONSUMABLE, stack.getPrototype().get(DataComponents.CONSUMABLE));
-             *///?}
+            stack.set(DataComponents.CONSUMABLE, stack.getPrototype().get(DataComponents.CONSUMABLE));
+             //?}
 
             DataComponentPatch changes = stack.getComponentsPatch();
             ItemStack newItem = new ItemStack(stack.getItem(), stack.getCount());
@@ -328,17 +328,17 @@ public class Hunger extends Wildcard {
     );
 
     //? if >= 1.20.5 && <= 1.21 {
-    public static void defaultFoodComponents(Item item, PatchedDataComponentMap components) {
+    /*public static void defaultFoodComponents(Item item, PatchedDataComponentMap components) {
         if (item == null) return;
         if (bannedFoodItems.contains(item)) return;
         //? if <= 1.20.5 {
-        /*components.set(DataComponents.FOOD, new FoodProperties(0, 0, false, 1.6f, List.of()));
-        *///?} else {
+        /^components.set(DataComponents.FOOD, new FoodProperties(0, 0, false, 1.6f, List.of()));
+        ^///?} else {
         components.set(DataComponents.FOOD, new FoodProperties(0, 0, false, 1.6f, Optional.empty(), List.of()));
         //?}
     }
-    //?} else if > 1.21 {
-    /*public static void defaultFoodComponents(Item item, PatchedDataComponentMap components) {
+    *///?} else if > 1.21 {
+    public static void defaultFoodComponents(Item item, PatchedDataComponentMap components) {
         if (item == null) return;
         if (bannedFoodItems.contains(item)) return;
         components.set(DataComponents.CONSUMABLE,
@@ -346,7 +346,7 @@ public class Hunger extends Wildcard {
         );
         components.set(DataComponents.FOOD, new FoodProperties(0, 0, false));
     }
-    *///?}
+    //?}
 
     //? if < 1.20.5 {
     /*public static void finishUsing(Item item, boolean isNormallyEdible, LivingEntity entity) {
@@ -415,14 +415,14 @@ public class Hunger extends Wildcard {
                     List<SoundEvent> allSounds = new ArrayList<>();
                     for (SoundEvent sound : BuiltInRegistries.SOUND_EVENT.stream().toList()) {
                         //? if <= 1.21 {
-                        if (sound.getLocation().getPath().startsWith("entity.")) {
+                        /*if (sound.getLocation().getPath().startsWith("entity.")) {
                             allSounds.add(sound);
                         }
-                        //?} else {
-                        /*if (sound.location().getPath().startsWith("entity.")) {
+                        *///?} else {
+                        if (sound.location().getPath().startsWith("entity.")) {
                             allSounds.add(sound);
                         }
-                        *///?}
+                        //?}
                     }
                     if (!allSounds.isEmpty()) {
                         SoundEvent sound = allSounds.get(random.nextInt(allSounds.size()));

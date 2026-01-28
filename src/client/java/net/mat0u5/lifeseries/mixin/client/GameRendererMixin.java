@@ -11,10 +11,10 @@ import org.spongepowered.asm.mixin.injection.At;
 public class GameRendererMixin {
     @ModifyReturnValue(method = "getFov", at = @At("RETURN"))
     //? if <= 1.21 {
-    public double clampFov(double original) {
-    //?} else {
-    /*public float clampFov(float original) {
-    *///?}
+    /*public double clampFov(double original) {
+    *///?} else {
+    public float clampFov(float original) {
+    //?}
         if (Main.modFullyDisabled()) return original;
         return OtherUtils.clamp(original, 0f, 150f);
     }

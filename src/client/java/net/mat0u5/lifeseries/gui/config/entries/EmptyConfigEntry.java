@@ -3,10 +3,10 @@ package net.mat0u5.lifeseries.gui.config.entries;
 import net.minecraft.client.gui.GuiGraphics;
 
 //? if >= 1.21.9 {
-/*import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
-*///?}
+//?}
 
 public abstract class EmptyConfigEntry extends ConfigEntry {
     public EmptyConfigEntry(String fieldName, String displayName, String description) {
@@ -18,7 +18,7 @@ public abstract class EmptyConfigEntry extends ConfigEntry {
     }
 
     //? if <= 1.21.6 {
-    @Override
+    /*@Override
     protected boolean mouseClickedEntry(double mouseX, double mouseY, int button) {
         return false;
     }
@@ -32,8 +32,8 @@ public abstract class EmptyConfigEntry extends ConfigEntry {
     protected boolean charTypedEntry(char chr, int modifiers) {
         return false;
     }
-    //?} else {
-    /*@Override
+    *///?} else {
+    @Override
     protected boolean mouseClickedEntry(MouseButtonEvent click, boolean doubled) {
         return false;
     }
@@ -47,7 +47,7 @@ public abstract class EmptyConfigEntry extends ConfigEntry {
     protected boolean charTypedEntry(CharacterEvent input) {
         return false;
     }
-    *///?}
+    //?}
 
     @Override
     public void resetToDefault() {

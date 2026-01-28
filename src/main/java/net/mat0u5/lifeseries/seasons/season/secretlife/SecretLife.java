@@ -45,14 +45,14 @@ import net.minecraft.world.item.component.CustomData;
 //?}
 
 //? if >= 1.21.9 {
-/*import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.component.TypedEntityData;
-*///?}
+//?}
 
 //? if <= 1.21.9
-import net.minecraft.world.level.GameRules;
+/*import net.minecraft.world.level.GameRules;*/
 //? if > 1.21.9
-/*import net.minecraft.world.level.gamerules.GameRules;*/
+import net.minecraft.world.level.gamerules.GameRules;
 
 public class SecretLife extends Season {
     public static double MAX_HEALTH = 60.0d;
@@ -221,21 +221,21 @@ public class SecretLife extends Season {
         nbtCompCamel.putString("id", "camel");
 
         //? if <= 1.21.4 {
-        CompoundTag saddleItemComp = new CompoundTag();
+        /*CompoundTag saddleItemComp = new CompoundTag();
         saddleItemComp.putInt("Count", 1);
         saddleItemComp.putString("id", "saddle");
         nbtCompSkeleton.put("SaddleItem", saddleItemComp);
         nbtCompZombie.put("SaddleItem", saddleItemComp);
         nbtCompCamel.put("SaddleItem", saddleItemComp);
-        //?} else {
-        /*CompoundTag equipmentItemComp = new CompoundTag();
+        *///?} else {
+        CompoundTag equipmentItemComp = new CompoundTag();
         CompoundTag saddleItemComp = new CompoundTag();
         saddleItemComp.putString("id", "saddle");
         equipmentItemComp.put("saddle", saddleItemComp);
         nbtCompSkeleton.put("equipment", equipmentItemComp);
         nbtCompZombie.put("equipment", equipmentItemComp);
         nbtCompCamel.put("equipment", equipmentItemComp);
-        *///?}
+        //?}
 
 
         //? if < 1.20.5 {
@@ -249,14 +249,14 @@ public class SecretLife extends Season {
         //?}
 
         //? if >=1.20.5 && <= 1.21.6 {
-        zombieHorse.set(DataComponents.ENTITY_DATA, nbtZombie);
+        /*zombieHorse.set(DataComponents.ENTITY_DATA, nbtZombie);
         skeletonHorse.set(DataComponents.ENTITY_DATA, nbtSkeleton);
         camel.set(DataComponents.ENTITY_DATA, nbtCamel);
-        //?} else if > 1.21.6 {
-        /*zombieHorse.set(DataComponents.ENTITY_DATA, TypedEntityData.of(EntityType.ZOMBIE, nbtZombie.copyTag()));
+        *///?} else if > 1.21.6 {
+        zombieHorse.set(DataComponents.ENTITY_DATA, TypedEntityData.of(EntityType.ZOMBIE, nbtZombie.copyTag()));
         skeletonHorse.set(DataComponents.ENTITY_DATA, TypedEntityData.of(EntityType.SKELETON, nbtSkeleton.copyTag()));
         camel.set(DataComponents.ENTITY_DATA, TypedEntityData.of(EntityType.CAMEL, nbtCamel.copyTag()));
-        *///?}
+        //?}
         itemSpawner.addItem(zombieHorse, 10);
         itemSpawner.addItem(skeletonHorse, 10);
         itemSpawner.addItem(camel, 10);
@@ -400,10 +400,10 @@ public class SecretLife extends Season {
             boolean dropBook = SecretLifeConfig.PLAYERS_DROP_TASK_ON_DEATH.get(seasonConfig);
             if (dropBook || server == null) return;
             //? if <= 1.21.9 {
-            boolean keepInventory = OtherUtils.getBooleanGameRule(player.ls$getServerLevel(), GameRules.RULE_KEEPINVENTORY);
-            //?} else {
-            /*boolean keepInventory = OtherUtils.getBooleanGameRule(player.ls$getServerLevel(), GameRules.KEEP_INVENTORY);
-            *///?}
+            /*boolean keepInventory = OtherUtils.getBooleanGameRule(player.ls$getServerLevel(), GameRules.RULE_KEEPINVENTORY);
+            *///?} else {
+            boolean keepInventory = OtherUtils.getBooleanGameRule(player.ls$getServerLevel(), GameRules.KEEP_INVENTORY);
+            //?}
             if (keepInventory) return;
             giveBookOnRespawn.put(player.getUUID(), TaskManager.getPlayersTaskBook(player));
             TaskManager.removePlayersTaskBook(player);
@@ -484,9 +484,9 @@ public class SecretLife extends Season {
         }
         if (server.overworld() == null) return;
         //? if <= 1.21.9 {
-        server.overworld().getGameRules().getRule(GameRules.RULE_NATURAL_REGENERATION).set(naturalRegeneration, server);
-         //?} else {
-        /*server.overworld().getGameRules().set(GameRules.NATURAL_HEALTH_REGENERATION, naturalRegeneration, server);
-        *///?}
+        /*server.overworld().getGameRules().getRule(GameRules.RULE_NATURAL_REGENERATION).set(naturalRegeneration, server);
+         *///?} else {
+        server.overworld().getGameRules().set(GameRules.NATURAL_HEALTH_REGENERATION, naturalRegeneration, server);
+        //?}
     }
 }

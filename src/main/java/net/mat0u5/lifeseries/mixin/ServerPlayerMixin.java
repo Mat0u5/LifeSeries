@@ -35,11 +35,11 @@ import java.util.OptionalInt;
 import static net.mat0u5.lifeseries.Main.*;
 
 //? if >= 1.21.11 {
-/*import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
-*///?}
+//?}
 //? if >= 1.21.2
-/*import java.util.Collection;*/
+import java.util.Collection;
 
 @Mixin(value = ServerPlayer.class, priority = 1)
 public class ServerPlayerMixin implements IServerPlayer {
@@ -57,7 +57,7 @@ public class ServerPlayerMixin implements IServerPlayer {
     }
 
     //? if <= 1.21.6 {
-    @Inject(method = "sendSystemMessage(Lnet/minecraft/network/chat/Component;Z)V", at = @At("HEAD"), cancellable = true)
+    /*@Inject(method = "sendSystemMessage(Lnet/minecraft/network/chat/Component;Z)V", at = @At("HEAD"), cancellable = true)
     private void sendMessageToClient(Component message, boolean overlay, CallbackInfo ci) {
         if (Main.modFullyDisabled()) return;
         ServerPlayer player = ls$get();
@@ -83,7 +83,7 @@ public class ServerPlayerMixin implements IServerPlayer {
             cir.setReturnValue(false);
         }
     }
-    //?}
+    *///?}
 
     //Located in the Player class in 26.1+
     //? if <= 1.21.11 {
@@ -101,18 +101,18 @@ public class ServerPlayerMixin implements IServerPlayer {
     }
 
     //? if <= 1.21 {
-    @Inject(method = "onEffectRemoved", at = @At("TAIL"))
+    /*@Inject(method = "onEffectRemoved", at = @At("TAIL"))
     private void onStatusEffectRemoved(MobEffectInstance effect, CallbackInfo ci) {
         ls$onUpdatedEffects(effect, false);
     }
-    //?} else {
-    /*@Inject(method = "onEffectsRemoved", at = @At("TAIL"))
+    *///?} else {
+    @Inject(method = "onEffectsRemoved", at = @At("TAIL"))
     private void onStatusEffectRemoved(Collection<MobEffectInstance> effects, CallbackInfo ci) {
         for (MobEffectInstance effect : effects) {
             ls$onUpdatedEffects(effect, false);
         }
     }
-    *///?}
+    //?}
 
     @Inject(method = "onEffectUpdated", at = @At("TAIL"))
     private void onStatusEffectUpgraded(MobEffectInstance effect, boolean reapplyEffect, Entity source, CallbackInfo ci) {
@@ -210,42 +210,42 @@ public class ServerPlayerMixin implements IServerPlayer {
     @Unique @Override
     public void ls$hurt(DamageSource source, float amount) {
         //? if <= 1.21 {
-        ls$get().hurt(source, amount);
-        //?} else {
-        /*ls$get().hurtServer(ls$getServerLevel(), source, amount);
-         *///?}
+        /*ls$get().hurt(source, amount);
+        *///?} else {
+        ls$get().hurtServer(ls$getServerLevel(), source, amount);
+         //?}
     }
     @Unique @Override
     public void ls$hurt(ServerLevel level, DamageSource source, float amount) {
         //? if <= 1.21 {
-        ls$get().hurt(source, amount);
-        //?} else {
-        /*ls$get().hurtServer(level, source, amount);
-         *///?}
+        /*ls$get().hurt(source, amount);
+        *///?} else {
+        ls$get().hurtServer(level, source, amount);
+         //?}
     }
 
     @Unique @Override
     public ServerLevel ls$getServerLevel() {
         //? if <= 1.21.5 {
-        return ls$get().serverLevel();
-        //?} else {
-        /*return ls$get().level();
-         *///?}
+        /*return ls$get().serverLevel();
+        *///?} else {
+        return ls$get().level();
+         //?}
     }
 
     @Unique @Override
     public void ls$playNotifySound(SoundEvent sound, SoundSource soundSource, float volume, float pitch) {
         ServerPlayer self = ls$get();
         //? if <= 1.21.9 {
-        self.playNotifySound(sound, soundSource, volume, pitch);
-        //?} else {
-        /*self.connection
+        /*self.playNotifySound(sound, soundSource, volume, pitch);
+        *///?} else {
+        self.connection
                 .send(
                         new ClientboundSoundPacket(
                                 BuiltInRegistries.SOUND_EVENT.wrapAsHolder(sound), soundSource, self.getX(), self.getY(), self.getZ(), volume, pitch, self.getRandom().nextLong()
                         )
                 );
-        *///?}
+        //?}
     }
 
 

@@ -36,10 +36,10 @@ public class BlockListConfigEntry extends StringListPopupConfigEntry<Block> {
                 ResourceKey<Block> key = ResourceKey.create(BuiltInRegistries.BLOCK.key(), id);
 
                 //? if <= 1.21 {
-                Block block = BuiltInRegistries.BLOCK.get(key);
-                //?} else {
-                /*Block block = BuiltInRegistries.BLOCK.getValue(key);
-                *///?}
+                /*Block block = BuiltInRegistries.BLOCK.get(key);
+                *///?} else {
+                Block block = BuiltInRegistries.BLOCK.getValue(key);
+                //?}
                 if (block != null) {
                     newList.add(block);
                 } else {

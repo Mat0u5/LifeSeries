@@ -15,9 +15,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 //? if <= 1.21.5
-import net.minecraft.network.PacketSendListener;
+/*import net.minecraft.network.PacketSendListener;*/
 //? if >= 1.21.6
-/*import io.netty.channel.ChannelFutureListener;*/
+import io.netty.channel.ChannelFutureListener;
 
 //? if <= 1.20 {
 /*import net.minecraft.server.network.ServerGamePacketListenerImpl;
@@ -51,7 +51,7 @@ public class ServerCommonPacketListenerImplMixin {
         original.call(instance, packet, packetSendListener);
     }
     *///?} else if <= 1.21.5 {
-    @WrapOperation(
+    /*@WrapOperation(
             method = "send(Lnet/minecraft/network/protocol/Packet;Lnet/minecraft/network/PacketSendListener;)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/network/Connection;send(Lnet/minecraft/network/protocol/Packet;Lnet/minecraft/network/PacketSendListener;Z)V")
     )
@@ -59,8 +59,8 @@ public class ServerCommonPacketListenerImplMixin {
         if (connection instanceof FakeClientConnection) return;
         original.call(instance, packet, callbacks, flush);
     }
-    //?} else {
-    /*@WrapOperation(
+    *///?} else {
+    @WrapOperation(
             method = "send(Lnet/minecraft/network/protocol/Packet;Lio/netty/channel/ChannelFutureListener;)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/network/Connection;send(Lnet/minecraft/network/protocol/Packet;Lio/netty/channel/ChannelFutureListener;Z)V")
     )
@@ -68,7 +68,7 @@ public class ServerCommonPacketListenerImplMixin {
         if (connection instanceof FakeClientConnection) return;
         original.call(instance, packet, channelFutureListener, b);
     }
-    *///?}
+    //?}
 
     @Inject(method = "disconnect(Lnet/minecraft/network/chat/Component;)V", at = @At("HEAD"), cancellable = true)
     public void disconnect(Component reason, CallbackInfo ci) {

@@ -43,24 +43,24 @@ public class ClientLevelMixin {
 
     //? if <= 1.21.9 {
 
-    @ModifyReturnValue(method = "getSkyColor", at = @At("RETURN"))
+    /*@ModifyReturnValue(method = "getSkyColor", at = @At("RETURN"))
     //? if <= 1.21 {
-    private Vec3 customSkyColor(Vec3 original) {
-    //?} else {
-    /*private int customSkyColor(int original) {
-    *///?}
+    /^private Vec3 customSkyColor(Vec3 original) {
+    ^///?} else {
+    private int customSkyColor(int original) {
+    //?}
         return ClientRenderer.modifyColor(original, MainClient.skyColor, MainClient.skyColorSetMode, null);
     }
 
 
     @ModifyReturnValue(method = "getCloudColor", at = @At("RETURN"))
     //? if <= 1.21 {
-    private Vec3 customCloudColor(Vec3 original) {
-     //?} else {
-    /*private int customCloudColor(int original) {
-    *///?}
+    /^private Vec3 customCloudColor(Vec3 original) {
+     ^///?} else {
+    private int customCloudColor(int original) {
+    //?}
     return ClientRenderer.modifyColor(original, MainClient.cloudColor, MainClient.cloudColorSetMode, MainClient.cachedFogRenderColor);
     }
 
-    //?}
+    *///?}
 }

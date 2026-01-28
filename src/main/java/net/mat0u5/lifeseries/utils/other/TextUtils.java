@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 //? if >= 1.21.4
-/*import java.net.URI;*/
+import java.net.URI;
 
 public class TextUtils {
     private static HashMap<List<String>, List<String>> emotes = new HashMap<List<String>, List<String>>();
@@ -85,34 +85,34 @@ public class TextUtils {
 
     public static ClickEvent openURLClickEvent(String url) {
         //? if <= 1.21.4 {
-        return new ClickEvent(ClickEvent.Action.OPEN_URL, url);
-        //?} else {
-        /*return new ClickEvent.OpenUrl(URI.create(url));
-        *///?}
+        /*return new ClickEvent(ClickEvent.Action.OPEN_URL, url);
+        *///?} else {
+        return new ClickEvent.OpenUrl(URI.create(url));
+        //?}
     }
 
     public static ClickEvent runCommandClickEvent(String command) {
         //? if <= 1.21.4 {
-        return new ClickEvent(ClickEvent.Action.RUN_COMMAND, command);
-        //?} else {
-        /*return new ClickEvent.RunCommand(command);
-        *///?}
+        /*return new ClickEvent(ClickEvent.Action.RUN_COMMAND, command);
+        *///?} else {
+        return new ClickEvent.RunCommand(command);
+        //?}
     }
 
     public static ClickEvent copyClipboardClickEvent(String copy) {
         //? if <= 1.21.4 {
-        return new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, copy);
-        //?} else {
-        /*return new ClickEvent.CopyToClipboard(copy);
-        *///?}
+        /*return new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, copy);
+        *///?} else {
+        return new ClickEvent.CopyToClipboard(copy);
+        //?}
     }
 
     public static HoverEvent showTextHoverEvent(Component text) {
         //? if <= 1.21.4 {
-        return new HoverEvent(HoverEvent.Action.SHOW_TEXT, text);
-        //?} else {
-        /*return new HoverEvent.ShowText(text);
-        *///?}
+        /*return new HoverEvent(HoverEvent.Action.SHOW_TEXT, text);
+        *///?} else {
+        return new HoverEvent.ShowText(text);
+        //?}
     }
 
     public static Component withHover(Component text, Component hover) {

@@ -49,9 +49,9 @@ public enum Superpowers {
         if (this == WIND_CHARGE) return new WindCharge(player);
         //?}
         //? if >= 1.21.2 {
-        /*if (this == CREAKING) return new CreakingPower(player);
+        if (this == CREAKING) return new CreakingPower(player);
         if (this == FLIGHT) return new Flight(player);
-        *///?}
+        //?}
         if (CompatibilityManager.voicechatLoaded()) {
             if (this == LISTENING) return new Listening(player);
         }
@@ -99,9 +99,9 @@ public enum Superpowers {
         /*result.remove(WIND_CHARGE);
         *///?}
         //? if < 1.21.2 {
-        result.remove(CREAKING);
+        /*result.remove(CREAKING);
         result.remove(FLIGHT);
-        //?}
+        *///?}
         return result;
     }
 

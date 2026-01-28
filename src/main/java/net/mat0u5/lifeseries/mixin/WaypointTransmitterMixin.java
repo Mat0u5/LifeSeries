@@ -1,14 +1,14 @@
 package net.mat0u5.lifeseries.mixin;
 //? if < 1.21.6 {
-import net.minecraft.server.MinecraftServer;
+/*import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(value = MinecraftServer.class)
 public class WaypointTransmitterMixin {
     //Empty class to avoid mixin errors
 }
-//?} else {
-/*import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+*///?} else {
+import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.waypoints.WaypointTransmitter;
@@ -41,4 +41,4 @@ public interface WaypointTransmitterMixin {
         }
     }
 }
-*///?}
+//?}

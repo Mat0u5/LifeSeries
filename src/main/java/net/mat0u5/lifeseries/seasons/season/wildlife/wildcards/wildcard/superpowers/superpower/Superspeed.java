@@ -47,10 +47,10 @@ public class Superspeed extends ToggleableSuperpower {
         if (player == null) return;
         if (player.getFoodData().getFoodLevel() <= 6) {
             //? if <= 1.21 {
-            player.ls$playNotifySound(SoundEvents.GENERIC_EAT, SoundSource.MASTER, 1, 1);
-            //?} else {
-            /*player.ls$playNotifySound(SoundEvents.GENERIC_EAT.value(), SoundSource.MASTER, 1, 1);
-            *///?}
+            /*player.ls$playNotifySound(SoundEvents.GENERIC_EAT, SoundSource.MASTER, 1, 1);
+            *///?} else {
+            player.ls$playNotifySound(SoundEvents.GENERIC_EAT.value(), SoundSource.MASTER, 1, 1);
+            //?}
             return;
         }
         player.ls$playNotifySound(SoundEvents.BEACON_ACTIVATE, SoundSource.MASTER, 1, 1);

@@ -19,7 +19,7 @@ import java.util.Optional;
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
 //? if >= 1.21.9
-/*import net.minecraft.server.players.NameAndId;*/
+import net.minecraft.server.players.NameAndId;
 
 public class SubInCommands extends Command {
     @Override
@@ -71,19 +71,19 @@ public class SubInCommands extends Command {
 
         GameProfile targetProfile = null;
         //? if <= 1.21.6 {
-        if (source.getServer().getProfileCache() != null) {
+        /*if (source.getServer().getProfileCache() != null) {
             Optional<GameProfile> opt = source.getServer().getProfileCache().get(target);
             if (opt.isPresent()) {
                 targetProfile = opt.get();
             }
-        //?} else {
-        /*if (source.getServer().services().nameToIdCache() != null) {
+        *///?} else {
+        if (source.getServer().services().nameToIdCache() != null) {
             Optional<NameAndId> opt = source.getServer().services().nameToIdCache().get(target);
             if (opt.isPresent()) {
                 NameAndId playerConfigEntry = opt.get();
                 targetProfile = new GameProfile(playerConfigEntry.id(), playerConfigEntry.name());
             }
-        *///?}
+        //?}
         }
         if (targetProfile == null) {
             source.sendFailure(Component.nullToEmpty("Failed to fetch target profile"));

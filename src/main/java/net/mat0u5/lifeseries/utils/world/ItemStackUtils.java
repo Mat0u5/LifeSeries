@@ -16,11 +16,11 @@ import org.jetbrains.annotations.Nullable;
 
 import static net.mat0u5.lifeseries.Main.server;
 //? if <= 1.21
-import net.minecraft.world.item.EnchantedBookItem;
+/*import net.minecraft.world.item.EnchantedBookItem;*/
 //? if >= 1.21.2
-/*import net.minecraft.world.item.enchantment.EnchantmentHelper;*/
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 //? if >= 1.21.5
-/*import java.util.Optional;*/
+import java.util.Optional;
 
 //? if <= 1.20.3 {
 //?} else {
@@ -151,12 +151,12 @@ public class ItemStackUtils {
         CompoundTag nbtComp = nbtComponent.copyTag();
         if (!nbtComp.contains(componentKey)) return null;
         //? if <= 1.21.4 {
-        return nbtComp.getString(componentKey);
-        //?} else {
-        /*Optional<String> optional = nbtComp.getString(componentKey);
+        /*return nbtComp.getString(componentKey);
+        *///?} else {
+        Optional<String> optional = nbtComp.getString(componentKey);
         if (optional.isEmpty()) return null;
         return optional.get();
-        *///?}
+        //?}
 
     }
 
@@ -167,12 +167,12 @@ public class ItemStackUtils {
         CompoundTag nbtComp = nbtComponent.copyTag();
         if (!nbtComp.contains(componentKey)) return null;
         //? if <= 1.21.4 {
-        return nbtComp.getInt(componentKey);
-        //?} else {
-        /*Optional<Integer> optional = nbtComp.getInt(componentKey);
+        /*return nbtComp.getInt(componentKey);
+        *///?} else {
+        Optional<Integer> optional = nbtComp.getInt(componentKey);
         if (optional.isEmpty()) return null;
         return optional.get();
-        *///?}
+        //?}
     }
 
     public static Byte getCustomComponentByte(ItemStack itemStack, String componentKey) {
@@ -182,12 +182,12 @@ public class ItemStackUtils {
         CompoundTag nbtComp = nbtComponent.copyTag();
         if (!nbtComp.contains(componentKey)) return null;
         //? if <= 1.21.4 {
-        return nbtComp.getByte(componentKey);
-        //?} else {
-        /*Optional<Byte> optional = nbtComp.getByte(componentKey);
+        /*return nbtComp.getByte(componentKey);
+        *///?} else {
+        Optional<Byte> optional = nbtComp.getByte(componentKey);
         if (optional.isEmpty()) return null;
         return optional.get();
-        *///?}
+        //?}
     }
 
     public static Boolean getCustomComponentBoolean(ItemStack itemStack, String componentKey) {
@@ -197,12 +197,12 @@ public class ItemStackUtils {
         CompoundTag nbtComp = nbtComponent.copyTag();
         if (!nbtComp.contains(componentKey)) return null;
         //? if <= 1.21.4 {
-        return nbtComp.getBoolean(componentKey);
-        //?} else {
-        /*Optional<Boolean> optional = nbtComp.getBoolean(componentKey);
+        /*return nbtComp.getBoolean(componentKey);
+        *///?} else {
+        Optional<Boolean> optional = nbtComp.getBoolean(componentKey);
         if (optional.isEmpty()) return null;
         return optional.get();
-        *///?}
+        //?}
     }
 
     public static boolean hasCustomComponentEntry(ItemStack itemStack, String componentEntry) {
@@ -210,20 +210,20 @@ public class ItemStackUtils {
         CustomData nbt = itemStack.getComponents().get(DataComponents.CUSTOM_DATA);
         if (nbt == null) return false;
         //? if <= 1.21.6 {
-        return nbt.contains(componentEntry);
-        //?} else {
-        /*return nbt.copyTag().contains(componentEntry);
-         *///?}
+        /*return nbt.contains(componentEntry);
+        *///?} else {
+        return nbt.copyTag().contains(componentEntry);
+         //?}
     }
 
     public static void removeCustomComponentEntry(ItemStack itemStack, String componentEntry) {
         CustomData nbt = itemStack.getComponents().get(DataComponents.CUSTOM_DATA);
         if (nbt == null) return;
         //? if <= 1.21.6 {
-        if (!nbt.contains(componentEntry)) return;
-        //?} else {
-        /*if (!nbt.copyTag().contains(componentEntry)) return;
-         *///?}
+        /*if (!nbt.contains(componentEntry)) return;
+        *///?} else {
+        if (!nbt.copyTag().contains(componentEntry)) return;
+         //?}
         CompoundTag nbtComp = nbt.copyTag();
         nbtComp.remove(componentEntry);
         if (nbtComp.isEmpty()) {
@@ -274,31 +274,31 @@ public class ItemStackUtils {
         );
         return enchantedBook;
         *///?} else if <= 1.21 {
-        Holder<Enchantment> entry = getEnchantmentEntry(enchantment);
+        /*Holder<Enchantment> entry = getEnchantmentEntry(enchantment);
         ItemStack enchantedBook = EnchantedBookItem.createForEnchantment(
                 new EnchantmentInstance(entry, level)
         );
         return enchantedBook;
-        //?} else {
-        /*Holder<Enchantment> entry = getEnchantmentEntry(enchantment);
+        *///?} else {
+        Holder<Enchantment> entry = getEnchantmentEntry(enchantment);
         ItemStack enchantedBook = EnchantmentHelper.createBook(
                 new EnchantmentInstance(entry, level)
         );
         return enchantedBook;
-        *///?}
+        //?}
     }
 
     @Nullable
     public static Holder<Enchantment> getEnchantmentEntry(ResourceKey<Enchantment> enchantment) {
         if (server == null) return null;
         //? if <= 1.21 {
-        return server.registryAccess()
-                .lookupOrThrow(Registries.ENCHANTMENT)
-                .getOrThrow(enchantment);
-        //?} else {
         /*return server.registryAccess()
                 .lookupOrThrow(Registries.ENCHANTMENT)
                 .getOrThrow(enchantment);
-        *///?}
+        *///?} else {
+        return server.registryAccess()
+                .lookupOrThrow(Registries.ENCHANTMENT)
+                .getOrThrow(enchantment);
+        //?}
     }
 }

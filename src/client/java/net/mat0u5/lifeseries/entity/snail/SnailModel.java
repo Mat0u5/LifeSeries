@@ -6,26 +6,26 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 
 //? if >= 1.21.6
-/*import net.minecraft.client.animation.KeyframeAnimation;*/
+import net.minecraft.client.animation.KeyframeAnimation;
 
 //? if <= 1.21 {
-import com.mojang.blaze3d.vertex.PoseStack;
+/*import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HierarchicalModel;
 public class SnailModel<T extends Snail> extends HierarchicalModel<T> {
-//?} else {
-/*import net.minecraft.client.model.EntityModel;
+*///?} else {
+import net.minecraft.client.model.EntityModel;
 public class SnailModel extends EntityModel<SnailRenderState> {
-*///?}
+//?}
 
     //? if >= 1.21.6 {
-    /*private final KeyframeAnimation flyAnimation;
+    private final KeyframeAnimation flyAnimation;
     private final KeyframeAnimation glideAnimation;
     private final KeyframeAnimation walkAnimation;
     private final KeyframeAnimation idleAnimation;
     private final KeyframeAnimation startFlyAnimation;
     private final KeyframeAnimation stopFlyAnimation;
-    *///?}
+    //?}
 
     public static final ModelLayerLocation SNAIL = new ModelLayerLocation(Snail.ID, "main");
 
@@ -44,8 +44,8 @@ public class SnailModel extends EntityModel<SnailRenderState> {
     private final ModelPart strings;
     public SnailModel(ModelPart root) {
         //? if >= 1.21.2 {
-        /*super(root);
-        *///?}
+        super(root);
+        //?}
         this.main = root.getChild("main");
         this.head = this.main.getChild("head");
         this.trivia = this.head.getChild("trivia");
@@ -61,13 +61,13 @@ public class SnailModel extends EntityModel<SnailRenderState> {
         this.strings = this.parachute.getChild("strings");
 
         //? if >= 1.21.6 {
-        /*flyAnimation = SnailAnimations.fly.bake(root);
+        flyAnimation = SnailAnimations.fly.bake(root);
         glideAnimation = SnailAnimations.glide.bake(root);
         walkAnimation = SnailAnimations.walk.bake(root);
         idleAnimation = SnailAnimations.idle.bake(root);
         startFlyAnimation = SnailAnimations.startFly.bake(root);
         stopFlyAnimation = SnailAnimations.stopFly.bake(root);
-        *///?}
+        //?}
     }
     public static LayerDefinition getTexturedModelData() {
         MeshDefinition modelData = new MeshDefinition();
@@ -120,7 +120,7 @@ public class SnailModel extends EntityModel<SnailRenderState> {
     }
 
     //? if <= 1.21 {
-    @Override
+    /*@Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.root().getAllParts().forEach(ModelPart::resetPose);
         this.animate(entity.clientData.flyAnimationState, SnailAnimations.fly, ageInTicks);
@@ -140,11 +140,11 @@ public class SnailModel extends EntityModel<SnailRenderState> {
     }
 
     //? if <= 1.20.5 {
-    /*@Override
+    /^@Override
     public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float i, float j, float k, float l) {
         main.render(matrices, vertexConsumer, light, overlay, i, j, k, l);
     }
-    *///?} else {
+    ^///?} else {
     @Override
     public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, int color) {
         main.render(matrices, vertexConsumer, light, overlay, color);
@@ -155,26 +155,26 @@ public class SnailModel extends EntityModel<SnailRenderState> {
     public ModelPart root() {
         return main;
     }
-    //?} else {
-    /*@Override
+    *///?} else {
+    @Override
     public void setupAnim(SnailRenderState state) {
         super.setupAnim(state);
 
         //? if <= 1.21.5 {
-        this.animate(state.flyAnimationState, SnailAnimations.fly , state.ageInTicks);
+        /*this.animate(state.flyAnimationState, SnailAnimations.fly , state.ageInTicks);
         this.animate(state.glideAnimationState, SnailAnimations.glide , state.ageInTicks);
         this.animate(state.walkAnimationState, SnailAnimations.walk , state.ageInTicks);
         this.animate(state.idleAnimationState, SnailAnimations.idle , state.ageInTicks);
         this.animate(state.startFlyAnimationState, SnailAnimations.startFly , state.ageInTicks);
         this.animate(state.stopFlyAnimationState, SnailAnimations.stopFly , state.ageInTicks);
-        //?} else {
-        /^this.flyAnimation.apply(state.flyAnimationState, state.ageInTicks);
+        *///?} else {
+        this.flyAnimation.apply(state.flyAnimationState, state.ageInTicks);
         this.glideAnimation.apply(state.glideAnimationState, state.ageInTicks);
         this.walkAnimation.apply(state.walkAnimationState, state.ageInTicks);
         this.idleAnimation.apply(state.idleAnimationState, state.ageInTicks);
         this.startFlyAnimation.apply(state.startFlyAnimationState, state.ageInTicks);
         this.stopFlyAnimation.apply(state.stopFlyAnimationState, state.ageInTicks);
-        ^///?}
+        //?}
 
         boolean parachuteHidden = !state.glideAnimationState.isStarted();
         boolean propellerHidden = !state.flyAnimationState.isStarted() && !state.startFlyAnimationState.isStarted();
@@ -184,5 +184,5 @@ public class SnailModel extends EntityModel<SnailRenderState> {
         this.propeller.getAllParts().forEach(part -> part.skipDraw = propellerHidden);
         //this.trivia.traverse().forEach(part -> part.hidden = triviaHidden);
     }
-    *///?}
+    //?}
 }

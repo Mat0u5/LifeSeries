@@ -15,13 +15,13 @@ public abstract class EntityBoundSoundInstanceMixin {
         if (Main.modFullyDisabled()) return;
         EntityBoundSoundInstance instance = (EntityBoundSoundInstance) (Object) this;
         //? if <= 1.21.9 {
-        if (instance.getLocation().getPath().contains("wildlife_trivia")) {
+        /*if (instance.getLocation().getPath().contains("wildlife_trivia")) {
             cir.setReturnValue(true);
         }
-        //?} else {
-        /*if (instance.getIdentifier().getPath().contains("wildlife_trivia")) {
+        *///?} else {
+        if (instance.getIdentifier().getPath().contains("wildlife_trivia")) {
             cir.setReturnValue(true);
         }
-        *///?}
+        //?}
     }
 }

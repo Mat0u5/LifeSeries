@@ -1,11 +1,11 @@
 package net.mat0u5.lifeseries.particle;
 
 //? if < 1.21.9 {
-public class TriviaSpiritParticleGroup {
+/*public class TriviaSpiritParticleGroup {
 }
-//?} else {
+*///?} else {
 
-/*import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.mat0u5.lifeseries.mixin.client.ParticleAccessor;
 import net.minecraft.client.Camera;
@@ -25,10 +25,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 //? if <= 1.21.9 {
-import net.minecraft.client.renderer.RenderType;
- //?} else {
-/^import net.minecraft.client.renderer.rendertype.RenderType;
-^///?}
+/*import net.minecraft.client.renderer.RenderType;
+ *///?} else {
+import net.minecraft.client.renderer.rendertype.RenderType;
+//?}
 
 public class TriviaSpiritParticleGroup extends ParticleGroup<TriviaSpiritParticle> {
     public TriviaSpiritParticleGroup(final ParticleEngine engine) {
@@ -78,5 +78,5 @@ public class TriviaSpiritParticleGroup extends ParticleGroup<TriviaSpiritParticl
         }
     }
 }
-*///?}
+//?}
 

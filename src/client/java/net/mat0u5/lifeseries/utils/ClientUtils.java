@@ -37,9 +37,9 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 //?}
 //? if >= 1.21.2 {
-/*import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-*///?}
+//?}
 
 public class ClientUtils {
 
@@ -49,12 +49,12 @@ public class ClientUtils {
         if (client == null) return false;
         if (client.player == null) return false;
         //? if >= 1.21.2 {
-        /*if (LivingEntity.canGlideUsing(client.player.getItemBySlot(EquipmentSlot.CHEST), EquipmentSlot.CHEST) ||
+        if (LivingEntity.canGlideUsing(client.player.getItemBySlot(EquipmentSlot.CHEST), EquipmentSlot.CHEST) ||
                 LivingEntity.canGlideUsing(client.player.getItemBySlot(EquipmentSlot.LEGS), EquipmentSlot.LEGS) ||
                 LivingEntity.canGlideUsing(client.player.getItemBySlot(EquipmentSlot.FEET), EquipmentSlot.FEET)) {
             return false;
         }
-        *///?}
+        //?}
         ItemStack helmet = PlayerUtils.getEquipmentSlot(client.player, 3);
         return ItemStackUtils.hasCustomComponentEntry(helmet, "FlightSuperpower");
     }
@@ -91,10 +91,10 @@ public class ClientUtils {
         ClientPacketListener handler = client.getConnection();
         if (handler == null) return;
         //? if < 1.21.6 {
-        client.level.disconnect();
-        //?} else {
-        /*client.level.disconnect(reason);
-        *///?}
+        /*client.level.disconnect();
+        *///?} else {
+        client.level.disconnect(reason);
+        //?}
         //? if <= 1.20.5 {
         /*handler.onDisconnect(reason);
         *///?} else {

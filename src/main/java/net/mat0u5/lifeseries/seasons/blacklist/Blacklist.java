@@ -45,19 +45,19 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 //?}
 
 //? if <= 1.21.9 {
-import net.minecraft.resources.ResourceLocation;
- //?} else {
-/*import net.minecraft.resources.Identifier;
-*///?}
+/*import net.minecraft.resources.ResourceLocation;
+ *///?} else {
+import net.minecraft.resources.Identifier;
+//?}
 
 public class Blacklist {
     //? if <= 1.21.9 {
-    public List<ResourceLocation> loadedListItemIdentifier;
+    /*public List<ResourceLocation> loadedListItemIdentifier;
     public List<ResourceLocation> loadedRecipeBlacklist;
-    //?} else {
-    /*public List<Identifier> loadedListItemIdentifier;
+    *///?} else {
+    public List<Identifier> loadedListItemIdentifier;
     public List<Identifier> loadedRecipeBlacklist;
-    *///?}
+    //?}
     private List<Item> loadedListItem;
     private List<Block> loadedListBlock;
     private List<ResourceKey<Enchantment>> loadedListEnchants;
@@ -133,10 +133,10 @@ public class Blacklist {
         if (loadedListItem != null) return loadedListItem;
         List<Item> newList = new ArrayList<>();
         //? if <= 1.21.9 {
-        List<ResourceLocation> newListIdentifier = new ArrayList<>();
-        //?} else {
-        /*List<Identifier> newListIdentifier = new ArrayList<>();
-        *///?}
+        /*List<ResourceLocation> newListIdentifier = new ArrayList<>();
+        *///?} else {
+        List<Identifier> newListIdentifier = new ArrayList<>();
+        //?}
 
         for (String itemId : loadItemBlacklist()) {
             if (!itemId.contains(":")) itemId = "minecraft:" + itemId;
@@ -147,10 +147,10 @@ public class Blacklist {
 
                 // Check if the block exists in the registry
                 //? if <= 1.21 {
-                Item item = BuiltInRegistries.ITEM.get(key);
-                //?} else {
-                /*Item item = BuiltInRegistries.ITEM.getValue(key);
-                *///?}
+                /*Item item = BuiltInRegistries.ITEM.get(key);
+                *///?} else {
+                Item item = BuiltInRegistries.ITEM.getValue(key);
+                //?}
                 if (item != null) {
                     newListIdentifier.add(id);
                     newList.add(item);
@@ -168,16 +168,16 @@ public class Blacklist {
     }
 
     //? if <= 1.21.9 {
-    public List<ResourceLocation> getRecipeBlacklist() {
-    //?} else {
-    /*public List<Identifier> getRecipeBlacklist() {
-    *///?}
+    /*public List<ResourceLocation> getRecipeBlacklist() {
+    *///?} else {
+    public List<Identifier> getRecipeBlacklist() {
+    //?}
         if (loadedRecipeBlacklist != null) return loadedRecipeBlacklist;
         //? if <= 1.21.9 {
-        List<ResourceLocation> newList = new ArrayList<>();
-        //?} else {
-        /*List<Identifier> newList = new ArrayList<>();
-         *///?}
+        /*List<ResourceLocation> newList = new ArrayList<>();
+        *///?} else {
+        List<Identifier> newList = new ArrayList<>();
+         //?}
 
         if (seasonConfig != null) {
             if (!seasonConfig.SPAWNER_RECIPE.get(seasonConfig)) {
@@ -193,10 +193,10 @@ public class Blacklist {
                 ResourceKey<Item> key = ResourceKey.create(BuiltInRegistries.ITEM.key(), id);
 
                 //? if <= 1.21 {
-                Item item = BuiltInRegistries.ITEM.get(key);
-                //?} else {
-                /*Item item = BuiltInRegistries.ITEM.getValue(key);
-                 *///?}
+                /*Item item = BuiltInRegistries.ITEM.get(key);
+                *///?} else {
+                Item item = BuiltInRegistries.ITEM.getValue(key);
+                 //?}
                 if (item != null) {
                     newList.add(id);
                 } else {
@@ -224,10 +224,10 @@ public class Blacklist {
 
                 // Check if the block exists in the registry
                 //? if <= 1.21 {
-                Block block = BuiltInRegistries.BLOCK.get(key);
-                //?} else {
-                /*Block block = BuiltInRegistries.BLOCK.getValue(key);
-                *///?}
+                /*Block block = BuiltInRegistries.BLOCK.get(key);
+                *///?} else {
+                Block block = BuiltInRegistries.BLOCK.getValue(key);
+                //?}
                 if (block != null) {
                     newList.add(block);
                 } else {
@@ -251,9 +251,9 @@ public class Blacklist {
         Registry<Enchantment> enchantmentRegistry = server.registryAccess()
 
                 //? if <=1.21 {
-                .registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));
-                 //?} else
-                /*.lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));*/
+                /*.registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));
+                 *///?} else
+                .lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));
 
 
         for (String enchantmentId : loadClampedEnchants()) {
@@ -262,10 +262,10 @@ public class Blacklist {
             try {
                 var id = IdentifierHelper.parse(enchantmentId);
                 //? if <= 1.21 {
-                Enchantment enchantment = enchantmentRegistry.get(id);
-                //?} else {
-                /*Enchantment enchantment = enchantmentRegistry.getValue(id);
-                *///?}
+                /*Enchantment enchantment = enchantmentRegistry.get(id);
+                *///?} else {
+                Enchantment enchantment = enchantmentRegistry.getValue(id);
+                //?}
 
                 if (enchantment != null) {
                     newList.add(enchantmentRegistry.getResourceKey(enchantment).orElseThrow());
@@ -290,9 +290,9 @@ public class Blacklist {
         Registry<Enchantment> enchantmentRegistry = server.registryAccess()
 
                 //? if <=1.21 {
-                .registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));
-        //?} else
-        /*.lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));*/
+                /*.registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));
+        *///?} else
+        .lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));
 
 
         for (String enchantmentId : loadBlacklistedEnchants()) {
@@ -301,10 +301,10 @@ public class Blacklist {
             try {
                 var id = IdentifierHelper.parse(enchantmentId);
                 //? if <= 1.21 {
-                Enchantment enchantment = enchantmentRegistry.get(id);
-                //?} else {
-                /*Enchantment enchantment = enchantmentRegistry.getValue(id);
-                *///?}
+                /*Enchantment enchantment = enchantmentRegistry.get(id);
+                *///?} else {
+                Enchantment enchantment = enchantmentRegistry.getValue(id);
+                //?}
 
                 if (enchantment != null) {
                     newList.add(enchantmentRegistry.getResourceKey(enchantment).orElseThrow());
@@ -336,9 +336,9 @@ public class Blacklist {
 
         Registry<MobEffect> effectsRegistry = server.registryAccess()
         //? if <=1.21 {
-        .registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
-        //?} else
-        /*.lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));*/
+        /*.registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
+        *///?} else
+        .lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
 
         for (String potionId : loadBannedPotions()) {
             if (!potionId.contains(":")) potionId = "minecraft:" + potionId;
@@ -346,10 +346,10 @@ public class Blacklist {
             try {
                 var id = IdentifierHelper.parse(potionId);
                 //? if <= 1.21 {
-                MobEffect enchantment = effectsRegistry.get(id);
-                //?} else {
-                /*MobEffect enchantment = effectsRegistry.getValue(id);
-                *///?}
+                /*MobEffect enchantment = effectsRegistry.get(id);
+                *///?} else {
+                MobEffect enchantment = effectsRegistry.getValue(id);
+                //?}
 
                 if (enchantment != null) {
                     //? if <= 1.20.3 {
@@ -385,9 +385,9 @@ public class Blacklist {
 
         Registry<MobEffect> effectsRegistry = server.registryAccess()
         //? if <=1.21 {
-        .registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
-        //?} else
-        /*.lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));*/
+        /*.registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
+        *///?} else
+        .lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
 
         for (String potionId : loadClampedPotions()) {
             if (!potionId.contains(":")) potionId = "minecraft:" + potionId;
@@ -395,10 +395,10 @@ public class Blacklist {
             try {
                 var id = IdentifierHelper.parse(potionId);
                 //? if <= 1.21 {
-                MobEffect enchantment = effectsRegistry.get(id);
-                //?} else {
-                /*MobEffect enchantment = effectsRegistry.getValue(id);
-                 *///?}
+                /*MobEffect enchantment = effectsRegistry.get(id);
+                *///?} else {
+                MobEffect enchantment = effectsRegistry.getValue(id);
+                 //?}
 
                 if (enchantment != null) {
                     //? if <= 1.20.3 {
@@ -521,12 +521,12 @@ public class Blacklist {
                 }
             }
             //? if >= 1.21.2 {
-            /*if (ItemStackUtils.hasCustomComponentEntry(itemStack, "FlightSuperpower")) {
+            if (ItemStackUtils.hasCustomComponentEntry(itemStack, "FlightSuperpower")) {
                 if (SuperpowersWildcard.hasActivePower(player, Superpowers.FLIGHT)) {
                     remove = false;
                 }
             }
-            *///?}
+            //?}
             if (remove) {
                 itemStack.setCount(0);
                 player.getInventory().tick();

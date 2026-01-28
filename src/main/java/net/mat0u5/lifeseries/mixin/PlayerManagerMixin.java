@@ -25,11 +25,11 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import static net.mat0u5.lifeseries.Main.currentSeason;
 //? if <= 1.21.5
-import net.minecraft.nbt.CompoundTag;
+/*import net.minecraft.nbt.CompoundTag;*/
 //? if >= 1.21.6 {
-/*import net.minecraft.util.ProblemReporter;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.level.storage.ValueInput;
-*///?}
+//?}
 //? if > 1.20 {
 import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.world.entity.Entity;
@@ -69,18 +69,18 @@ public abstract class PlayerManagerMixin implements IPlayerManager {
     }
 
     //? if <= 1.21.6 {
-    @Inject(method = "load", at = @At(value = "RETURN", shift = At.Shift.BEFORE))
+    /*@Inject(method = "load", at = @At(value = "RETURN", shift = At.Shift.BEFORE))
             //? if <= 1.21.5 {
-    public void loadPlayerData(ServerPlayer player, CallbackInfoReturnable<Optional<CompoundTag>> cir) {
-     //?} else {
-    /*public void loadPlayerData(ServerPlayer player, ProblemReporter errorReporter, CallbackInfoReturnable<Optional<ValueInput>> cir) {
-        *///?}
+    /^public void loadPlayerData(ServerPlayer player, CallbackInfoReturnable<Optional<CompoundTag>> cir) {
+     ^///?} else {
+    public void loadPlayerData(ServerPlayer player, ProblemReporter errorReporter, CallbackInfoReturnable<Optional<ValueInput>> cir) {
+        //?}
         if (Main.modFullyDisabled()) return;
         if (player instanceof FakePlayer fakePlayer) {
             fakePlayer.fixStartingPosition.run();
         }
     }
-    //?}
+    *///?}
 
     @Inject(method = "respawn", at = @At("RETURN"))
     //? if <= 1.20.5 {

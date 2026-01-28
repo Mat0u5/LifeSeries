@@ -16,15 +16,15 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import static net.mat0u5.lifeseries.Main.server;
 //? if <= 1.21.6 {
-import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
+/*import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
-//?}
+*///?}
 //? if > 1.20.5 && <= 1.21.6
-import net.minecraft.network.DisconnectionDetails;
+/*import net.minecraft.network.DisconnectionDetails;*/
 
 //? if >= 1.21.9 {
-/*import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.minecraft.world.entity.decoration.Mannequin;
 import net.mat0u5.lifeseries.mixin.MannequinAccessor;
 import net.minecraft.world.InteractionHand;
@@ -32,16 +32,16 @@ import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.component.ResolvableProfile;
-*///?}
+//?}
 
 public class AstralProjection extends ToggleableSuperpower {
     //? if <= 1.21.6 {
-    @Nullable
-    public FakePlayer clone;
-    //?} else {
     /*@Nullable
+    public FakePlayer clone;
+    *///?} else {
+    @Nullable
     public Mannequin clone;
-    *///?}
+    //?}
     @Nullable
     private Vec3 startedPos;
     @Nullable
@@ -89,10 +89,10 @@ public class AstralProjection extends ToggleableSuperpower {
         if (player == null) return;
         if (player.isSpectator()) return;
         //? if <= 1.21 {
-        player.ls$playNotifySound(SoundEvents.EVOKER_PREPARE_ATTACK, SoundSource.MASTER, 0.3f, 1);
-        //?} else {
-        /*player.ls$playNotifySound(SoundEvents.TRIAL_SPAWNER_OMINOUS_ACTIVATE, SoundSource.MASTER, 0.3f, 1);
-        *///?}
+        /*player.ls$playNotifySound(SoundEvents.EVOKER_PREPARE_ATTACK, SoundSource.MASTER, 0.3f, 1);
+        *///?} else {
+        player.ls$playNotifySound(SoundEvents.TRIAL_SPAWNER_OMINOUS_ACTIVATE, SoundSource.MASTER, 0.3f, 1);
+        //?}
 
         String fakePlayerName = "`"+player.getScoreboardName();
 
@@ -107,13 +107,13 @@ public class AstralProjection extends ToggleableSuperpower {
         Inventory inv = player.getInventory();
 
         //? if <= 1.21.6 {
-        FakePlayer.createFake(fakePlayerName, server, startedPos, startedLooking[0], startedLooking[1], player.ls$getServerLevel().dimension(),
+        /*FakePlayer.createFake(fakePlayerName, server, startedPos, startedLooking[0], startedLooking[1], player.ls$getServerLevel().dimension(),
                 startedGameMode, false, inv, player.getUUID()).thenAccept((fakePlayer) -> {
             clone = fakePlayer;
             sendDisguisePacket();
         });
-        //?} else {
-        /*clone = EntityType.MANNEQUIN.create(startedLevel, EntitySpawnReason.COMMAND);
+        *///?} else {
+        clone = EntityType.MANNEQUIN.create(startedLevel, EntitySpawnReason.COMMAND);
         if (clone == null) return;
 
         clone.setPosRaw(player.getX(), player.getY(), player.getZ());
@@ -144,24 +144,24 @@ public class AstralProjection extends ToggleableSuperpower {
             clone.setDeltaMovement(velocity);
             clone.hurtMarked = true;
             //? if <= 1.21.9 {
-            clone.hasImpulse = true;
-            //?} else {
-            /^clone.needsSync = true;
-            ^///?}
+            /*clone.hasImpulse = true;
+            *///?} else {
+            clone.needsSync = true;
+            //?}
             clone.snapTo(player.position(), player.getYRot(), player.getXRot());
         });
-        *///?}
+        //?}
     }
 
     public void sendDisguisePacket() {
         //? if <= 1.21.6 {
-        if (!this.active) return;
+        /*if (!this.active) return;
         if (clone == null) return;
         ServerPlayer player = getPlayer();
         if (player == null) return;
         String name = TextUtils.textToLegacyString(player.getDisplayName());
         NetworkHandlerServer.sendPlayerDisguise(clone.getUUID().toString(), clone.getName().getString(), player.getUUID().toString(), name);
-        //?}
+        *///?}
     }
 
     public void cancelProjection() {
@@ -173,15 +173,15 @@ public class AstralProjection extends ToggleableSuperpower {
             toBackPos = clone.position();
             //? if <= 1.21.6 {
 
-            //? if <= 1.20.5 {
-            /*clone.connection.onDisconnect(Component.empty());
-            *///?} else {
+            /*//? if <= 1.20.5 {
+            /^clone.connection.onDisconnect(Component.empty());
+            ^///?} else {
             clone.connection.onDisconnect(new DisconnectionDetails(Component.empty()));
             //?}
             NetworkHandlerServer.sendPlayerDisguise(clone.getUUID().toString(), clone.getName().getString(), "", "");
-            //?} else {
-            /*clone.discard();
-            *///?}
+            *///?} else {
+            clone.discard();
+            //?}
         }
 
         if (player.ls$isDead()) return;
@@ -195,17 +195,17 @@ public class AstralProjection extends ToggleableSuperpower {
 
 
     //? if <= 1.21 {
-    public void onDamageClone(DamageSource source, float amount) {
-     //?} else {
-    /*public void onDamageClone(ServerLevel level, DamageSource source, float amount) {
-    *///?}
+    /*public void onDamageClone(DamageSource source, float amount) {
+     *///?} else {
+    public void onDamageClone(ServerLevel level, DamageSource source, float amount) {
+    //?}
         deactivate();
         ServerPlayer player = getPlayer();
         if (player == null) return;
         //? if <= 1.21 {
-        player.ls$hurt(source, amount);
-         //?} else {
-        /*player.ls$hurt(level, source, amount);
-        *///?}
+        /*player.ls$hurt(source, amount);
+         *///?} else {
+        player.ls$hurt(level, source, amount);
+        //?}
     }
 }

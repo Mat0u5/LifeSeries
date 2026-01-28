@@ -14,15 +14,15 @@ import java.util.UUID;
 import static net.mat0u5.lifeseries.Main.livesManager;
 import static net.mat0u5.lifeseries.Main.server;
 //? if <= 1.21.5
-import net.minecraft.nbt.CompoundTag;
+/*import net.minecraft.nbt.CompoundTag;*/
 //? if >= 1.21.6 {
-/*import net.minecraft.util.ProblemReporter;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.level.storage.ValueInput;
-*///?}
+//?}
 //? if >= 1.21.9 {
-/*import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.nbt.CompoundTag;
-*///?}
+//?}
 
 public class SubInManager {
     public static List<SubIn> subIns = new ArrayList<>();
@@ -115,25 +115,25 @@ public class SubInManager {
                 PlayerUtils.teleport(player, player.position());
             }
             *///?} else if < 1.21.6 {
-            Optional<CompoundTag> data = iPlayerManager.ls$getSaveHandler().load(player);
+            /*Optional<CompoundTag> data = iPlayerManager.ls$getSaveHandler().load(player);
             data.ifPresent(nbt -> {
                 player.load(nbt);
                 PlayerUtils.teleport(player, player.position());
             });
-            //?} else if <= 1.21.6 {
+            *///?} else if <= 1.21.6 {
             /*Optional<ValueInput> data = iPlayerManager.ls$getSaveHandler().load(player, ProblemReporter.DISCARDING);
             data.ifPresent(nbt -> {
                 player.load(nbt);
                 PlayerUtils.teleport(player, player.position());
             });
             *///?} else {
-            /*Optional<CompoundTag> data = iPlayerManager.ls$getSaveHandler().load(player.nameAndId());
+            Optional<CompoundTag> data = iPlayerManager.ls$getSaveHandler().load(player.nameAndId());
             Optional<ValueInput> optional = data.map(playerData -> TagValueInput.create(ProblemReporter.DISCARDING, server.registryAccess(), playerData));
             optional.ifPresent(readView -> {
                 player.load(readView);
                 PlayerUtils.teleport(player, player.position());
             });
-            *///?}
+            //?}
         }
     }
 

@@ -33,10 +33,10 @@ public class MorphComponent {
             ServerPlayer serverPlayer = PlayerUtils.getPlayer(playerUUID);
             if (serverPlayer != null && morph != null) {
                 //? if <= 1.21 {
-                Entity entity = morph.create(serverPlayer.level());
-                //?} else {
-                /*Entity entity = morph.create(serverPlayer.ls$getServerLevel(), EntitySpawnReason.COMMAND);
-                 *///?}
+                /*Entity entity = morph.create(serverPlayer.level());
+                *///?} else {
+                Entity entity = morph.create(serverPlayer.ls$getServerLevel(), EntitySpawnReason.COMMAND);
+                 //?}
                 if (entity != null) {
                     ((IMorph) entity).setFromMorph(true);
                 }

@@ -23,9 +23,9 @@ import static net.mat0u5.lifeseries.Main.server;
 import net.minecraft.server.ServerTickRateManager;
 
 //? if <= 1.21.9
-import net.minecraft.world.level.GameRules;
+/*import net.minecraft.world.level.GameRules;*/
 //? if > 1.21.9
-/*import net.minecraft.world.level.gamerules.GameRule;*/
+import net.minecraft.world.level.gamerules.GameRule;
 
 public class OtherUtils {
     private static final Random rnd = new Random();
@@ -146,29 +146,29 @@ public class OtherUtils {
 
     public static UUID profileId(GameProfile profile) {
         //? if <= 1.21.6 {
-        return profile.getId();
-         //?} else {
-        /*return profile.id();
-        *///?}
+        /*return profile.getId();
+         *///?} else {
+        return profile.id();
+        //?}
     }
 
     public static String profileName(GameProfile profile) {
         //? if <= 1.21.6 {
-        return profile.getName();
-         //?} else {
-        /*return profile.name();
-        *///?}
+        /*return profile.getName();
+         *///?} else {
+        return profile.name();
+        //?}
     }
 
     //? if <= 1.21.9 {
-    public static boolean getBooleanGameRule(ServerLevel level, GameRules.Key<GameRules.BooleanValue> gamerule) {
+    /*public static boolean getBooleanGameRule(ServerLevel level, GameRules.Key<GameRules.BooleanValue> gamerule) {
         return level.getGameRules().getBoolean(gamerule);
     }
     public static <T extends GameRules.Value<T>> void setBooleanGameRule(ServerLevel level, GameRules.Key<GameRules.BooleanValue> gamerule, boolean value) {
         level.getGameRules().getRule(gamerule).set(value, server);
     }
-    //?} else {
-    /*public static boolean getBooleanGameRule(ServerLevel level, GameRule<?> gamerule) {
+    *///?} else {
+    public static boolean getBooleanGameRule(ServerLevel level, GameRule<?> gamerule) {
         if (level.getGameRules().get(gamerule) instanceof Boolean bool) {
             return bool;
         }
@@ -177,7 +177,7 @@ public class OtherUtils {
     public static void setBooleanGameRule(ServerLevel level, GameRule<Boolean> gamerule, Boolean value) {
         level.getGameRules().set(gamerule, value, server);
     }
-    *///?}
+    //?}
 
     public static void setFreezeGame(boolean frozen) {
         if (server == null) return;

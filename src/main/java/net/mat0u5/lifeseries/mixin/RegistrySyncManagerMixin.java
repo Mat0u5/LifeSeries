@@ -24,15 +24,15 @@ import net.minecraft.server.network.ServerConfigurationPacketListenerImpl;
 //?}
 
 //? if <= 1.21.9 {
-import net.minecraft.resources.ResourceLocation;
-//?} else {
-/*import net.minecraft.resources.Identifier;
-*///?}
+/*import net.minecraft.resources.ResourceLocation;
+*///?} else {
+import net.minecraft.resources.Identifier;
+//?}
 
 //? if > 1.21.2 {
-/*import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-*///?}
+//?}
 
 //Don't do this at home kids
 
@@ -45,16 +45,16 @@ public class RegistrySyncManagerMixin {
         Map<ResourceLocation, Object2IntMap<ResourceLocation>> originalValue = original.call(b, map);
         UUID profileUUID = player.getUUID();
     *///?} else if <= 1.21.9 {
-    @WrapOperation(method = "configureClient", at = @At(value = "INVOKE", target = "Lnet/fabricmc/fabric/impl/registry/sync/RegistrySyncManager;createAndPopulateRegistryMap()Ljava/util/Map;"))
+    /*@WrapOperation(method = "configureClient", at = @At(value = "INVOKE", target = "Lnet/fabricmc/fabric/impl/registry/sync/RegistrySyncManager;createAndPopulateRegistryMap()Ljava/util/Map;"))
     private static @Nullable Map<ResourceLocation, Object2IntMap<ResourceLocation>> checkRemoteRemap(Operation<Map<ResourceLocation, Object2IntMap<ResourceLocation>>> original, ServerConfigurationPacketListenerImpl handler) {
         Map<ResourceLocation, Object2IntMap<ResourceLocation>> originalValue = original.call();
         UUID profileUUID = OtherUtils.profileId(handler.getOwner());
-    //?} else {
-    /*@WrapOperation(method = "configureClient", at = @At(value = "INVOKE", target = "Lnet/fabricmc/fabric/impl/registry/sync/RegistrySyncManager;createAndPopulateRegistryMap()Ljava/util/Map;"))
+    *///?} else {
+    @WrapOperation(method = "configureClient", at = @At(value = "INVOKE", target = "Lnet/fabricmc/fabric/impl/registry/sync/RegistrySyncManager;createAndPopulateRegistryMap()Ljava/util/Map;"))
     private static @Nullable Map<Identifier, Object2IntMap<Identifier>> checkRemoteRemap(Operation<Map<Identifier, Object2IntMap<Identifier>>> original, ServerConfigurationPacketListenerImpl handler) {
         Map<Identifier, Object2IntMap<Identifier>> originalValue = original.call();
         UUID profileUUID = OtherUtils.profileId(handler.getOwner());
-    *///?}
+    //?}
         if (NetworkHandlerServer.REGISTRY_OVERRIDE_BEHAVIOR == NetworkHandlerServer.RegistryOverrideBahaviours.NEVER ||
                 (NetworkHandlerServer.REGISTRY_OVERRIDE_BEHAVIOR == NetworkHandlerServer.RegistryOverrideBahaviours.LOGIN && NetworkHandlerServer.preLoginHandshake.contains(profileUUID)) ||
                 (NetworkHandlerServer.REGISTRY_OVERRIDE_BEHAVIOR == NetworkHandlerServer.RegistryOverrideBahaviours.SEASON && currentSeason.getSeason().requiresClient())) {
@@ -66,10 +66,10 @@ public class RegistrySyncManagerMixin {
         if (originalValue != null) {
             for (var location : originalValue.keySet()) {
                 //? if <= 1.21.9 {
-                Object2IntMap<ResourceLocation> registry = originalValue.get(location);
-                //?} else {
-                /*Object2IntMap<Identifier> registry = originalValue.get(location);
-                *///?}
+                /*Object2IntMap<ResourceLocation> registry = originalValue.get(location);
+                *///?} else {
+                Object2IntMap<Identifier> registry = originalValue.get(location);
+                //?}
 
                 registry.keySet().removeIf(value -> {
                     if (value.getNamespace().equalsIgnoreCase(Main.MOD_ID)) {
@@ -87,13 +87,13 @@ public class RegistrySyncManagerMixin {
     }
 
     //? if > 1.21.2 {
-    /*@Inject(method = "areAllRegistriesOptional", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "areAllRegistriesOptional", at = @At(value = "HEAD"), cancellable = true)
     //? if <= 1.21.9 {
-    private static void checkRemoteRemap(Map<ResourceLocation, Object2IntMap<ResourceLocation>> map, CallbackInfoReturnable<Boolean> cir) {
-    //?} else {
-    /^private static void checkRemoteRemap(Map<Identifier, Object2IntMap<Identifier>> map, CallbackInfoReturnable<Boolean> cir) {
-    ^///?}
+    /*private static void checkRemoteRemap(Map<ResourceLocation, Object2IntMap<ResourceLocation>> map, CallbackInfoReturnable<Boolean> cir) {
+    *///?} else {
+    private static void checkRemoteRemap(Map<Identifier, Object2IntMap<Identifier>> map, CallbackInfoReturnable<Boolean> cir) {
+    //?}
         cir.setReturnValue(true);
     }
-    *///?}
+    //?}
 }

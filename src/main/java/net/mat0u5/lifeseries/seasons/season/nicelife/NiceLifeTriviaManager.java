@@ -175,10 +175,10 @@ public class NiceLifeTriviaManager {
         BlockPos spawnBotPos = triviaSpawnInfo.spawnPos().offset(0, botSpawnHeight, 0);
         ServerLevel level = player.ls$getServerLevel();
         //? if <= 1.21 {
-        int maxY = level.getMaxBuildHeight();
-        //?} else {
-        /*int maxY = level.getMaxY();
-         *///?}
+        /*int maxY = level.getMaxBuildHeight();
+        *///?} else {
+        int maxY = level.getMaxY();
+         //?}
         List<Integer> breakYPositions = new ArrayList<>();
         for (int breakY = spawnBotPos.getY(); breakY < maxY; breakY++) {
             BlockPos breakBlockPos = spawnBotPos.atY(breakY);

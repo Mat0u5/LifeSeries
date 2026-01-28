@@ -15,10 +15,10 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import java.util.*;
 
 //? if <= 1.21.9 {
-import net.minecraft.resources.ResourceLocation;
- //?} else {
-/*import net.minecraft.resources.Identifier;
-*///?}
+/*import net.minecraft.resources.ResourceLocation;
+ *///?} else {
+import net.minecraft.resources.Identifier;
+//?}
 
 public class ItemSpawner {
     HashMap<ItemStack, Integer> lootTable = new HashMap<>();
@@ -50,23 +50,23 @@ public class ItemSpawner {
 
     public static List<ItemStack> getRandomItemsFromLootTable(MinecraftServer server, ServerLevel level, ServerPlayer player
           //? if <= 1.21.9 {
-            , ResourceLocation lootTableId, boolean silent) {
-          //?} else {
-            /*, Identifier lootTableId, boolean silent) {
-          *///?}
+            /*, ResourceLocation lootTableId, boolean silent) {
+          *///?} else {
+            , Identifier lootTableId, boolean silent) {
+          //?}
         if (server == null || level == null || player == null) return new ArrayList<>();
         try {
             //? if <= 1.21 {
-            LootParams parameters = new LootParams.Builder(level)
-                    .withParameter(LootContextParams.ORIGIN, player.position())
-                    .withParameter(LootContextParams.THIS_ENTITY, player)
-                    .create(LootContextParamSets.COMMAND);
-            //?} else {
             /*LootParams parameters = new LootParams.Builder(level)
                     .withParameter(LootContextParams.ORIGIN, player.position())
                     .withParameter(LootContextParams.THIS_ENTITY, player)
                     .create(LootContextParamSets.COMMAND);
-            *///?}
+            *///?} else {
+            LootParams parameters = new LootParams.Builder(level)
+                    .withParameter(LootContextParams.ORIGIN, player.position())
+                    .withParameter(LootContextParams.THIS_ENTITY, player)
+                    .create(LootContextParamSets.COMMAND);
+            //?}
 
             //? if <= 1.20.3 {
             /*LootTable lootTable = level.getServer().getLootData().getLootTable(lootTableId);

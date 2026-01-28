@@ -35,9 +35,9 @@ import java.util.*;
 import static net.mat0u5.lifeseries.Main.*;
 
 //? if <= 1.21.9
-import net.minecraft.world.level.GameRules;
+/*import net.minecraft.world.level.GameRules;*/
 //? if > 1.21.9
-/*import net.minecraft.world.level.gamerules.GameRules;*/
+import net.minecraft.world.level.gamerules.GameRules;
 
 public class DoubleLife extends Season {
     public static final ResourceKey<DamageType> SOULMATE_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE,  IdentifierHelper.mod("soulmate"));
@@ -455,14 +455,14 @@ public class DoubleLife extends Season {
 
         if (soulmate.hurtTime == 0) {
             //? if <=1.21 {
-            DamageSource damageSource = new DamageSource( soulmate.level().registryAccess()
+            /*DamageSource damageSource = new DamageSource( soulmate.level().registryAccess()
                     .registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(SOULMATE_DAMAGE));
             soulmate.hurt(damageSource, 0.0000001F);
-            //?} else {
-            /*DamageSource damageSource = new DamageSource( soulmate.ls$getServerLevel().registryAccess()
+            *///?} else {
+            DamageSource damageSource = new DamageSource( soulmate.ls$getServerLevel().registryAccess()
                     .lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(SOULMATE_DAMAGE));
             soulmate.hurtServer(soulmate.ls$getServerLevel(), damageSource, 0.0000001F);
-            *///?}
+            //?}
         }
 
         float newHealth = player.getHealth();
@@ -485,31 +485,31 @@ public class DoubleLife extends Season {
         if (soulmate == null) return;
         if (!soulmate.isAlive()) return;
         //? if <= 1.21.9 {
-        boolean keepInventory = OtherUtils.getBooleanGameRule(player.ls$getServerLevel(), GameRules.RULE_KEEPINVENTORY);
-        //?} else {
-        /*boolean keepInventory = OtherUtils.getBooleanGameRule(player.ls$getServerLevel(), GameRules.KEEP_INVENTORY);
-        *///?}
+        /*boolean keepInventory = OtherUtils.getBooleanGameRule(player.ls$getServerLevel(), GameRules.RULE_KEEPINVENTORY);
+        *///?} else {
+        boolean keepInventory = OtherUtils.getBooleanGameRule(player.ls$getServerLevel(), GameRules.KEEP_INVENTORY);
+        //?}
         if (SOULBOUND_INVENTORIES && server != null && !keepInventory) {
             soulmate.getInventory().clearContent();
         }
 
         //? if <=1.21 {
-        DamageSource damageSource = new DamageSource( soulmate.level().registryAccess()
+        /*DamageSource damageSource = new DamageSource( soulmate.level().registryAccess()
                 .registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(SOULMATE_DAMAGE));
         soulmate.setLastHurtByMob(player);
         soulmate.setLastHurtByPlayer(player);
         soulmate.hurt(damageSource, 1000);
-         //?} else {
-        /*DamageSource damageSource = new DamageSource( soulmate.ls$getServerLevel().registryAccess()
+         *///?} else {
+        DamageSource damageSource = new DamageSource( soulmate.ls$getServerLevel().registryAccess()
                 .lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(SOULMATE_DAMAGE));
         soulmate.setLastHurtByMob(player);
         //? if <= 1.21.4 {
-        soulmate.setLastHurtByPlayer(player);
-        //?} else {
-        /^soulmate.setLastHurtByPlayer(player, 100);
-        ^///?}
+        /*soulmate.setLastHurtByPlayer(player);
+        *///?} else {
+        soulmate.setLastHurtByPlayer(player, 100);
+        //?}
         soulmate.hurtServer(soulmate.ls$getServerLevel(), damageSource, 1000);
-        *///?}
+        //?}
 
 
         TaskScheduler.scheduleTask(1, this::checkForEnding);
@@ -681,15 +681,15 @@ public class DoubleLife extends Season {
 
     public List<ItemStack> getPlayerInventory(Inventory inventory) {
         //? if <= 1.21.4 {
-        List<ItemStack> result = new ArrayList<>(inventory.items);
+        /*List<ItemStack> result = new ArrayList<>(inventory.items);
         result.addAll(inventory.armor);
         result.addAll(inventory.offhand);
-        //?} else {
-        /*List<ItemStack> result = new ArrayList<>(inventory.getNonEquipmentItems());
+        *///?} else {
+        List<ItemStack> result = new ArrayList<>(inventory.getNonEquipmentItems());
         for (int i = result.size(); i < inventory.getContainerSize(); i++) {
             result.add(inventory.getItem(i));
         }
-        *///?}
+        //?}
         return result;
     }
 

@@ -63,16 +63,16 @@ import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
 //? if <= 1.20
 /*import net.minecraft.world.scores.Scoreboard;*/
 //? if <= 1.21.9
-import net.minecraft.world.level.GameRules;
+/*import net.minecraft.world.level.GameRules;*/
 //? if > 1.21.9
-/*import net.minecraft.world.level.gamerules.GameRules;*/
+import net.minecraft.world.level.gamerules.GameRules;
 //? if > 1.20
 import net.minecraft.world.scores.DisplaySlot;
 //? if <= 1.21.9 {
-import net.minecraft.world.entity.monster.WitherSkeleton;
-//?} else {
-/*import net.minecraft.world.entity.monster.skeleton.WitherSkeleton;
-*///?}
+/*import net.minecraft.world.entity.monster.WitherSkeleton;
+*///?} else {
+import net.minecraft.world.entity.monster.skeleton.WitherSkeleton;
+//?}
 
 public abstract class Season {
     public static final String RESOURCEPACK_MAIN_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-main-27d9e98eb6009401319a5256f7695f1bba902412/main.zip";
@@ -149,34 +149,34 @@ public abstract class Season {
         ServerLevel overworld = server.getLevel(Level.OVERWORLD);
         if (overworld != null && overworld.getWorldBorder().getStatus() == BorderStatus.STATIONARY) overworld.getWorldBorder().setSize(seasonConfig.WORLDBORDER_SIZE.get(seasonConfig));
         //? if >= 1.21.9 {
-        /*ServerLevel nether = server.getLevel(Level.NETHER);
+        ServerLevel nether = server.getLevel(Level.NETHER);
         ServerLevel end = server.getLevel(Level.END);
         if (nether != null && nether.getWorldBorder().getStatus() == BorderStatus.STATIONARY) nether.getWorldBorder().setSize(seasonConfig.WORLDBORDER_NETHER_SIZE.get(seasonConfig));
         if (end != null && end.getWorldBorder().getStatus() == BorderStatus.STATIONARY) end.getWorldBorder().setSize(seasonConfig.WORLDBORDER_END_SIZE.get(seasonConfig));
-        *///?}
+        //?}
 
         if (overworld != null) {
             //? if <= 1.21.9 {
-            OtherUtils.setBooleanGameRule(overworld, GameRules.RULE_KEEPINVENTORY, seasonConfig.KEEP_INVENTORY.get(seasonConfig));
+            /*OtherUtils.setBooleanGameRule(overworld, GameRules.RULE_KEEPINVENTORY, seasonConfig.KEEP_INVENTORY.get(seasonConfig));
             OtherUtils.setBooleanGameRule(overworld, GameRules.RULE_ANNOUNCE_ADVANCEMENTS, seasonConfig.SHOW_ADVANCEMENTS.get(seasonConfig));
             OtherUtils.setBooleanGameRule(overworld, GameRules.RULE_NATURAL_REGENERATION, getSeason() != Seasons.SECRET_LIFE);
-            //?} else {
-            /*OtherUtils.setBooleanGameRule(overworld, GameRules.KEEP_INVENTORY, seasonConfig.KEEP_INVENTORY.get(seasonConfig));
+            *///?} else {
+            OtherUtils.setBooleanGameRule(overworld, GameRules.KEEP_INVENTORY, seasonConfig.KEEP_INVENTORY.get(seasonConfig));
             OtherUtils.setBooleanGameRule(overworld, GameRules.SHOW_ADVANCEMENT_MESSAGES, seasonConfig.SHOW_ADVANCEMENTS.get(seasonConfig));
             OtherUtils.setBooleanGameRule(overworld, GameRules.NATURAL_HEALTH_REGENERATION, getSeason() != Seasons.SECRET_LIFE);
-            *///?}
+            //?}
 
             //? if >= 1.21.6 {
-            /*boolean locatorBarEnabled = seasonConfig.LOCATOR_BAR.get(seasonConfig);
+            boolean locatorBarEnabled = seasonConfig.LOCATOR_BAR.get(seasonConfig);
             if (!locatorBarEnabled && this instanceof DoubleLife) {
                 locatorBarEnabled = DoubleLife.SOULMATE_LOCATOR_BAR;
             }
             //? if <= 1.21.9 {
-            OtherUtils.setBooleanGameRule(overworld, GameRules.RULE_LOCATOR_BAR, locatorBarEnabled);
-            //?} else {
-            /^OtherUtils.setBooleanGameRule(overworld, GameRules.LOCATOR_BAR, locatorBarEnabled);
-            ^///?}
-            *///?}
+            /*OtherUtils.setBooleanGameRule(overworld, GameRules.RULE_LOCATOR_BAR, locatorBarEnabled);
+            *///?} else {
+            OtherUtils.setBooleanGameRule(overworld, GameRules.LOCATOR_BAR, locatorBarEnabled);
+            //?}
+            //?}
         }
 
         //? if <= 1.20 {
@@ -362,17 +362,17 @@ public abstract class Season {
     public void dropItemsOnLastDeath(ServerPlayer player) {
         boolean doDrop = seasonConfig.PLAYERS_DROP_ITEMS_ON_FINAL_DEATH.get(seasonConfig);
         //? if <= 1.21.9 {
-        boolean keepInventory = OtherUtils.getBooleanGameRule(player.ls$getServerLevel(), GameRules.RULE_KEEPINVENTORY);
-        //?} else {
-        /*boolean keepInventory = OtherUtils.getBooleanGameRule(player.ls$getServerLevel(), GameRules.KEEP_INVENTORY);
-        *///?}
+        /*boolean keepInventory = OtherUtils.getBooleanGameRule(player.ls$getServerLevel(), GameRules.RULE_KEEPINVENTORY);
+        *///?} else {
+        boolean keepInventory = OtherUtils.getBooleanGameRule(player.ls$getServerLevel(), GameRules.KEEP_INVENTORY);
+        //?}
 
         if (doDrop && keepInventory) {
             for (ItemStack item : PlayerUtils.getPlayerInventory(player)) {
                 //? if <= 1.21 {
-                player.spawnAtLocation(item);
-                //?} else
-                /*player.spawnAtLocation(player.ls$getServerLevel(), item);*/
+                /*player.spawnAtLocation(item);
+                *///?} else
+                player.spawnAtLocation(player.ls$getServerLevel(), item);
             }
             player.getInventory().clearContent();
         }
@@ -471,17 +471,17 @@ public abstract class Season {
     public void onPlayerDiedNaturally(ServerPlayer player, DamageSource source) {
         if (source.getEntity() instanceof TamableAnimal tamableAnimal) {
             //? if <= 1.21.4 {
-            ServerPlayer owner = PlayerUtils.getPlayer(tamableAnimal.getOwnerUUID());
-            //?} else {
-            /*ServerPlayer owner = null;
+            /*ServerPlayer owner = PlayerUtils.getPlayer(tamableAnimal.getOwnerUUID());
+            *///?} else {
+            ServerPlayer owner = null;
             if (tamableAnimal.getOwnerReference() != null) owner = PlayerUtils.getPlayer(tamableAnimal.getOwnerReference().getUUID());
-            *///?}
+            //?}
             if (owner != null) {
                 //? if <= 1.21.2 {
-                owner.awardKillScore(player, 1, source);
-                //?} else {
-                /*owner.awardKillScore(player, source);
-                *///?}
+                /*owner.awardKillScore(player, 1, source);
+                *///?} else {
+                owner.awardKillScore(player, source);
+                //?}
             }
         }
         if (server == null) return;
@@ -498,10 +498,10 @@ public abstract class Season {
         for (Map.Entry<Vec3, List<Float>> entry : info.entrySet()) {
             Vec3 pos = entry.getKey();
             //? if <= 1.21 {
-            int minY = player.ls$getServerLevel().getMinBuildHeight();
-            //?} else {
-            /*int minY = player.ls$getServerLevel().getMinY();
-            *///?}
+            /*int minY = player.ls$getServerLevel().getMinBuildHeight();
+            *///?} else {
+            int minY = player.ls$getServerLevel().getMinY();
+            //?}
             if (pos.y <= minY) continue;
 
             LevelUtils.teleport(player, player.ls$getServerLevel(), pos, entry.getValue().get(0), entry.getValue().get(1));
@@ -525,10 +525,10 @@ public abstract class Season {
         }
 
         //? if <= 1.21.2 {
-        killer.awardKillScore(victim, 1, killer.damageSources().playerAttack(killer));
-        //?} else {
-        /*killer.awardKillScore(victim, killer.damageSources().playerAttack(killer));
-        *///?}
+        /*killer.awardKillScore(victim, 1, killer.damageSources().playerAttack(killer));
+        *///?} else {
+        killer.awardKillScore(victim, killer.damageSources().playerAttack(killer));
+        //?}
     }
 
     public void tryClaimKillLifeGain(ServerPlayer killer, ServerPlayer victim) {
@@ -614,9 +614,9 @@ public abstract class Season {
             if (entity instanceof WitherSkeleton && rnd.nextDouble() <= ADDITIONAL_WITHER_SKULL_RATE) {
                 ItemStack skullItem = Items.WITHER_SKELETON_SKULL.getDefaultInstance();
                 //? if <=1.21 {
-                entity.spawnAtLocation(skullItem);
-                //?} else
-                /*entity.spawnAtLocation((ServerLevel) entity.level(), skullItem);*/
+                /*entity.spawnAtLocation(skullItem);
+                *///?} else
+                entity.spawnAtLocation((ServerLevel) entity.level(), skullItem);
                 ci.cancel();
             }
         }
@@ -653,9 +653,9 @@ public abstract class Season {
 
         if (Math.random() <= chance) {
             //? if <=1.21 {
-            entity.spawnAtLocation(spawnEggItem);
-            //?} else
-            /*entity.spawnAtLocation((ServerLevel) entity.level(), spawnEggItem);*/
+            /*entity.spawnAtLocation(spawnEggItem);
+            *///?} else
+            entity.spawnAtLocation((ServerLevel) entity.level(), spawnEggItem);
         }
     }
 

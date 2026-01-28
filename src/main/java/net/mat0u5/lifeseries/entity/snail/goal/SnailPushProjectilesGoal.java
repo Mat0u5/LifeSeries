@@ -12,24 +12,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 //? if >= 1.21.5
-/*import java.util.Optional;*/
+import java.util.Optional;
 //? if >= 1.21.6 {
-/*import net.minecraft.util.ProblemReporter;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.level.storage.TagValueOutput;
-*///?}
+//?}
 
 //? if <= 1.21.4
-import net.minecraft.world.entity.projectile.ThrownPotion;
+/*import net.minecraft.world.entity.projectile.ThrownPotion;*/
 //? if >= 1.21.5 && <= 1.21.9
 /*import net.minecraft.world.entity.projectile.AbstractThrownPotion;*/
 //? if >= 1.21.11
-/*import net.minecraft.world.entity.projectile.throwableitemprojectile.AbstractThrownPotion;*/
+import net.minecraft.world.entity.projectile.throwableitemprojectile.AbstractThrownPotion;
 
 //? if <= 1.21.9 {
-import net.minecraft.world.entity.projectile.ThrownTrident;
-//?} else {
-/*import net.minecraft.world.entity.projectile.arrow.ThrownTrident;
-*///?}
+/*import net.minecraft.world.entity.projectile.ThrownTrident;
+*///?} else {
+import net.minecraft.world.entity.projectile.arrow.ThrownTrident;
+//?}
 
 @SuppressWarnings("resource")
 public final class SnailPushProjectilesGoal extends Goal {
@@ -62,33 +62,33 @@ public final class SnailPushProjectilesGoal extends Goal {
         boolean playSound = false;
         for (Projectile projectile : projectiles) {
             //? if <= 1.21.5 {
-            CompoundTag empty = new CompoundTag();
+            /*CompoundTag empty = new CompoundTag();
             CompoundTag nbt = projectile.saveWithoutId(empty);
-            //?} else {
-            /*TagValueOutput writeView = TagValueOutput.createWithoutContext(ProblemReporter.DISCARDING);
+            *///?} else {
+            TagValueOutput writeView = TagValueOutput.createWithoutContext(ProblemReporter.DISCARDING);
             projectile.saveWithoutId(writeView);
             CompoundTag nbt = writeView.buildResult();
-            *///?}
+            //?}
             //? if <= 1.21.4 {
-            if (nbt.contains("inGround") && nbt.getBoolean("inGround")) {
+            /*if (nbt.contains("inGround") && nbt.getBoolean("inGround")) {
                 continue;
             }
-            //?} else {
-            /*Optional<Boolean> bool = nbt.getBoolean("inGround");
+            *///?} else {
+            Optional<Boolean> bool = nbt.getBoolean("inGround");
             if (nbt.contains("inGround") && bool.isPresent()) {
                 if (bool.get()) continue;
             }
-            *///?}
+            //?}
 
             //? if <= 1.21.4 {
-            if (projectile instanceof ThrownPotion && Snail.ALLOW_POTION_EFFECTS) {
+            /*if (projectile instanceof ThrownPotion && Snail.ALLOW_POTION_EFFECTS) {
                 continue;
             }
-            //?} else {
-            /*if (projectile instanceof AbstractThrownPotion && Snail.ALLOW_POTION_EFFECTS) {
+            *///?} else {
+            if (projectile instanceof AbstractThrownPotion && Snail.ALLOW_POTION_EFFECTS) {
                 continue;
             }
-            *///?}
+            //?}
 
             Entity sender = projectile.getOwner();
             if (sender instanceof LivingEntity target) {

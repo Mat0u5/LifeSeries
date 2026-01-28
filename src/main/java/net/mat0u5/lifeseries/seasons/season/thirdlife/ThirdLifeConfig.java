@@ -20,7 +20,7 @@ public class ThirdLifeConfig extends ConfigManager {
         "netherite_helmet",
         "turtle_helmet",
         //? if >= 1.21.9
-        /*"copper_helmet",*/
+        "copper_helmet",
         "elytra"
     );
 

@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
 //? if >= 1.21.2
-/*import net.minecraft.server.level.ServerLevel;*/
+import net.minecraft.server.level.ServerLevel;
 
 //? if <= 1.20.5 {
 /*import net.minecraft.world.item.enchantment.FrostWalkerEnchantment;
@@ -47,9 +47,9 @@ public abstract class PlayerMixin {
 
     @Inject(method = "actuallyHurt", at = @At("HEAD"), cancellable = true)
     //? if <=1.21 {
-    private void onApplyDamage(DamageSource source, float amount, CallbackInfo ci) {
-     //?} else
-    /*private void onApplyDamage(ServerLevel level, DamageSource source, float amount, CallbackInfo ci) {*/
+    /*private void onApplyDamage(DamageSource source, float amount, CallbackInfo ci) {
+     *///?} else
+    private void onApplyDamage(ServerLevel level, DamageSource source, float amount, CallbackInfo ci) {
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         Player player = (Player) (Object) this;
         if (WatcherManager.isWatcher(player)) return;
@@ -60,12 +60,12 @@ public abstract class PlayerMixin {
     }
 
     //? if <= 1.21 {
-    @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
+    /*@Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     private void onPreDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-    //?} else {
-    /*@Inject(method = "hurtServer", at = @At("HEAD"), cancellable = true)
+    *///?} else {
+    @Inject(method = "hurtServer", at = @At("HEAD"), cancellable = true)
     private void onPreDamage(ServerLevel level, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-    *///?}
+    //?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         Player player = (Player) (Object) this;
         if (WatcherManager.isWatcher(player)) return;
@@ -104,9 +104,9 @@ public abstract class PlayerMixin {
     *///?}
 
     //? if <= 1.21.6 {
-    //? if <= 1.20.3 {
-    /*@Inject(method = "getDimensions", at = @At("HEAD"), cancellable = true)
-    *///?} else {
+    /*//? if <= 1.20.3 {
+    /^@Inject(method = "getDimensions", at = @At("HEAD"), cancellable = true)
+    ^///?} else {
     @Inject(method = "getDefaultDimensions", at = @At("HEAD"), cancellable = true)
     //?}
     public void getBaseDimensions(Pose pose, CallbackInfoReturnable<EntityDimensions> cir) {
@@ -121,7 +121,7 @@ public abstract class PlayerMixin {
             cir.setReturnValue(dummy.getDimensions(pose).scale(scaleRatio, scaleRatio));
         }
     }
-    //?}
+    *///?}
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void updateHitbox(CallbackInfo ci) {

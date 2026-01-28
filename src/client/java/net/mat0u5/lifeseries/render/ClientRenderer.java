@@ -7,9 +7,9 @@ import net.minecraft.client.gui.GuiGraphics;
 //? if > 1.20.5
 import net.minecraft.client.DeltaTracker;
 //? if >= 1.21.2 {
-/*import net.minecraft.util.ARGB;
+import net.minecraft.util.ARGB;
 import org.joml.Vector3f;
-*///?}
+//?}
 
 public class ClientRenderer {
     public static boolean isGameFullyFrozen = false;
@@ -46,7 +46,7 @@ public class ClientRenderer {
     }
 
     //? if >= 1.21.2 {
-    /*public static int modifyColor(int originalInt, Vec3 targetColor, boolean setMode, Vec3 cache) {
+    public static int modifyColor(int originalInt, Vec3 targetColor, boolean setMode, Vec3 cache) {
         Vector3f original = ARGB.vector3fFromRGB24(originalInt);
         if (targetColor != null) {
             if (setMode) {
@@ -65,7 +65,7 @@ public class ClientRenderer {
         }
         return originalInt;
     }
-    *///?}
+    //?}
 
     public static Vec3 modifyColor(float r, float g, float b, Vec3 targetColor, boolean setMode, Vec3 cache) {
         return modifyColor(new Vec3(r, g, b), targetColor, setMode, cache);

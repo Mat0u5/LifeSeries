@@ -27,7 +27,7 @@ import net.minecraft.world.effect.MobEffects;
 import java.util.*;
 import static net.mat0u5.lifeseries.Main.*;
 //? if >= 1.21.2
-/*import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.CreakingPower;*/
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.CreakingPower;
 
 public class WildcardManager {
     public static final Map<Wildcards, Wildcard> activeWildcards = new HashMap<>();
@@ -215,8 +215,8 @@ public class WildcardManager {
                 MobSwap.killMobSwapMobs();
             }
             //? if >= 1.21.2 {
-            /*CreakingPower.killUnassignedMobs();
-            *///?}
+            CreakingPower.killUnassignedMobs();
+            //?}
         }
 
         if (TimeControl.changedSpeedFor > 0) TimeControl.changedSpeedFor--;

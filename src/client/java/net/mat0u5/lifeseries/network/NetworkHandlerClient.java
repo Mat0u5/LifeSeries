@@ -220,10 +220,10 @@ public class NetworkHandlerClient {
                 EntityType<?> morphType = null;
                 if (!morphTypeStr.equalsIgnoreCase("null") && !morphUUIDStr.isEmpty()) {
                     //? if <= 1.21 {
-                    morphType = BuiltInRegistries.ENTITY_TYPE.get(IdentifierHelper.parse(morphTypeStr));
-                    //?} else {
-                    /*morphType = BuiltInRegistries.ENTITY_TYPE.getValue(IdentifierHelper.parse(morphTypeStr));
-                    *///?}
+                    /*morphType = BuiltInRegistries.ENTITY_TYPE.get(IdentifierHelper.parse(morphTypeStr));
+                    *///?} else {
+                    morphType = BuiltInRegistries.ENTITY_TYPE.getValue(IdentifierHelper.parse(morphTypeStr));
+                    //?}
                 }
                 if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Received morph packet: {} ({})", morphType, morphUUID);
                 MorphComponent newComponent = MorphManager.setFromPacket(morphUUID, morphType);
@@ -241,10 +241,10 @@ public class NetworkHandlerClient {
                     ResourceKey<Item> key = ResourceKey.create(BuiltInRegistries.ITEM.key(), id);
 
                     //? if <= 1.21 {
-                    Item item = BuiltInRegistries.ITEM.get(key);
-                    //?} else {
-                    /*Item item = BuiltInRegistries.ITEM.getValue(key);
-                     *///?}
+                    /*Item item = BuiltInRegistries.ITEM.get(key);
+                    *///?} else {
+                    Item item = BuiltInRegistries.ITEM.getValue(key);
+                     //?}
                     if (item != null) {
                         Hunger.nonEdible.add(item);
                     } else {

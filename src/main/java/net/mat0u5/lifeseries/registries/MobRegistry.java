@@ -11,13 +11,13 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.block.Blocks;
 
 //? if >= 1.21.2 {
-/*import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-*///?}
+//?}
 
 public class MobRegistry {
     //? if >= 1.21.2 {
-    /*public static final ResourceKey<EntityType<?>> SNAIL_KEY = ResourceKey.create(
+    public static final ResourceKey<EntityType<?>> SNAIL_KEY = ResourceKey.create(
             Registries.ENTITY_TYPE,
             Snail.ID
     );
@@ -29,7 +29,7 @@ public class MobRegistry {
             Registries.ENTITY_TYPE,
             AngrySnowman.ID
     );
-    *///?}
+    //?}
     public static final EntityType<Snail> SNAIL = Registry.register(
             BuiltInRegistries.ENTITY_TYPE,
             Snail.ID,
@@ -39,10 +39,10 @@ public class MobRegistry {
                     //? if <= 1.20.3 {
                     /*.build(Snail.ID.toString())
                     *///?} else if <= 1.21 {
-                    .build()
-                    //?} else {
-                    /*.build(SNAIL_KEY)
-                    *///?}
+                    /*.build()
+                    *///?} else {
+                    .build(SNAIL_KEY)
+                    //?}
     );
     public static final EntityType<TriviaBot> TRIVIA_BOT = Registry.register(
             BuiltInRegistries.ENTITY_TYPE,
@@ -53,10 +53,10 @@ public class MobRegistry {
                     //? if <= 1.20.3 {
                     /*.build(TriviaBot.ID.toString())
                     *///?} else if <= 1.21 {
-                    .build()
-                     //?} else {
-                    /*.build(TRIVIA_KEY)
-                     *///?}
+                    /*.build()
+                     *///?} else {
+                    .build(TRIVIA_KEY)
+                     //?}
     );
     public static final EntityType<AngrySnowman> ANGRY_SNOWMAN = Registry.register(
             BuiltInRegistries.ENTITY_TYPE,
@@ -71,10 +71,10 @@ public class MobRegistry {
                     //? if <= 1.20.3 {
                     /*.build(TriviaBot.ID.toString())
                      *///?} else if <= 1.21 {
-                    .build()
-                    //?} else {
-                    /*.build(SNOWMAN_KEY)
-                     *///?}
+                    /*.build()
+                    *///?} else {
+                    .build(SNOWMAN_KEY)
+                     //?}
     );
 
     public static void registerMobs() {

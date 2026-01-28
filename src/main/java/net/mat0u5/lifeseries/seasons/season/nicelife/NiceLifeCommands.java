@@ -132,10 +132,10 @@ public class NiceLifeCommands extends Command {
         if (checkBanned(source)) return -1;
         if (currentSeason instanceof NiceLife niceLife) {
             //? if <= 1.21.4 {
-            if (!source.getServer().overworld().isNight()) {
-            //?} else {
-            /*if (!source.getServer().overworld().isDarkOutside()) {
-            *///?}
+            /*if (!source.getServer().overworld().isNight()) {
+            *///?} else {
+            if (!source.getServer().overworld().isDarkOutside()) {
+            //?}
                 source.sendFailure(Component.nullToEmpty("It is not night time"));
                 return -1;
             }

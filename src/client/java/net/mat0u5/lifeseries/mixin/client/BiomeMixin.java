@@ -13,12 +13,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = Biome.class, priority = 2)
 public class BiomeMixin {
     //? if <= 1.21 {
-    @Inject(method = "getTemperature", at = @At(value = "HEAD"), cancellable = true)
-    public void render(BlockPos blockPos, CallbackInfoReturnable<Float> cir) {
-    //?} else {
     /*@Inject(method = "getTemperature", at = @At(value = "HEAD"), cancellable = true)
+    public void render(BlockPos blockPos, CallbackInfoReturnable<Float> cir) {
+    *///?} else {
+    @Inject(method = "getTemperature", at = @At(value = "HEAD"), cancellable = true)
     public void render(BlockPos blockPos, int i, CallbackInfoReturnable<Float> cir) {
-    *///?}
+    //?}
         if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE) {
             cir.setReturnValue(0.0f);
         }

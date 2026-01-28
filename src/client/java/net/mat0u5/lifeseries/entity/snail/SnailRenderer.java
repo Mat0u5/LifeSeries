@@ -4,13 +4,13 @@ import net.mat0u5.lifeseries.features.SnailSkinsClient;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
 //? if <= 1.21.9 {
-import net.minecraft.resources.ResourceLocation;
- //?} else {
-/*import net.minecraft.resources.Identifier;
-*///?}
+/*import net.minecraft.resources.ResourceLocation;
+ *///?} else {
+import net.minecraft.resources.Identifier;
+//?}
 
 //? if <= 1.21 {
-import com.mojang.blaze3d.vertex.PoseStack;
+/*import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.MobRenderer;
 public class SnailRenderer extends MobRenderer<Snail, SnailModel<Snail>> {
@@ -35,8 +35,8 @@ public class SnailRenderer extends MobRenderer<Snail, SnailModel<Snail>> {
         super.render(entity, f, g, matrixStack, vertexConsumerProvider, i);
     }
 }
-//?} else {
-/*import net.minecraft.client.renderer.entity.AgeableMobRenderer;
+*///?} else {
+import net.minecraft.client.renderer.entity.AgeableMobRenderer;
 
 public class SnailRenderer extends AgeableMobRenderer<Snail, SnailRenderState, SnailModel> {
     public SnailRenderer(EntityRendererProvider.Context context) {
@@ -50,10 +50,10 @@ public class SnailRenderer extends AgeableMobRenderer<Snail, SnailRenderState, S
 
     @Override
     //? if <= 1.21.9 {
-    public ResourceLocation getTextureLocation(SnailRenderState state) {
-    //?} else {
-    /^public Identifier getTextureLocation(SnailRenderState state) {
-    ^///?}
+    /*public ResourceLocation getTextureLocation(SnailRenderState state) {
+    *///?} else {
+    public Identifier getTextureLocation(SnailRenderState state) {
+    //?}
         if (state.fromTrivia) return Snail.TRIVIA_TEXTURE;
         if (state.boundPlayerDead) return Snail.ZOMBIE_TEXTURE;
 
@@ -82,4 +82,4 @@ public class SnailRenderer extends AgeableMobRenderer<Snail, SnailRenderState, S
         state.boundPlayerDead = snail.isBoundPlayerDead();
     }
 }
-*///?}
+//?}

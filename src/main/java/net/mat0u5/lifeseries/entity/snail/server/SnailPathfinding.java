@@ -194,10 +194,10 @@ public class SnailPathfinding {
     public BlockPos getGroundBlock() {
         Vec3 startPos = snail.position();
         //? if <= 1.21 {
-        int minY = snail.level().getMinBuildHeight();
-        //?} else {
-        /*int minY = snail.level().getMinY();
-        *///?}
+        /*int minY = snail.level().getMinBuildHeight();
+        *///?} else {
+        int minY = snail.level().getMinY();
+        //?}
         Vec3 endPos = new Vec3(startPos.x(), minY, startPos.z());
 
         BlockHitResult result = snail.level().clip(
@@ -430,12 +430,12 @@ public class SnailPathfinding {
                 if (flyingSpeed < 0.01) flyingSpeed = 0.01;
 
                 //? if <= 1.21 {
-                Objects.requireNonNull(snail.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(movementSpeed);
-                Objects.requireNonNull(snail.getAttribute(Attributes.FLYING_SPEED)).setBaseValue(flyingSpeed);
-                //?} else {
                 /*Objects.requireNonNull(snail.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(movementSpeed);
                 Objects.requireNonNull(snail.getAttribute(Attributes.FLYING_SPEED)).setBaseValue(flyingSpeed);
-                *///?}
+                *///?} else {
+                Objects.requireNonNull(snail.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(movementSpeed);
+                Objects.requireNonNull(snail.getAttribute(Attributes.FLYING_SPEED)).setBaseValue(flyingSpeed);
+                //?}
             }
         }
     }

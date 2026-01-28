@@ -58,16 +58,16 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,KEEP_INVENTORY
 
                 //? if < 1.21.9 {
-                ,WORLDBORDER_SIZE
-                //?} else {
-                /*,WORLDBORDER_GROUP
+                /*,WORLDBORDER_SIZE
+                *///?} else {
+                ,WORLDBORDER_GROUP
                 ,WORLDBORDER_SIZE
                 ,WORLDBORDER_NETHER_SIZE
                 ,WORLDBORDER_END_SIZE
-                *///?}
+                //?}
                 //? if >= 1.21.6 {
-                /*,LOCATOR_BAR
-                 *///?}
+                ,LOCATOR_BAR
+                 //?}
                 ,ALLOW_SELF_DEFENSE
                 ,SEE_FRIENDLY_INVISIBLE_PLAYERS
                 ,SHOW_LOGIN_COMMAND_INFO
@@ -313,7 +313,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
             if (overworld != null) overworld.getWorldBorder().setSize(value);
         }
         //? if >= 1.21.9 {
-        /*if (id.equals(seasonConfig.WORLDBORDER_NETHER_SIZE.key)) {
+        if (id.equals(seasonConfig.WORLDBORDER_NETHER_SIZE.key)) {
             ServerLevel nether = server.getLevel(Level.NETHER);
             if (nether != null) nether.getWorldBorder().setSize(value);
         }
@@ -321,7 +321,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
             ServerLevel end = server.getLevel(Level.END);
             if (end != null) end.getWorldBorder().setSize(value);
         }
-        *///?}
+        //?}
     }
 
     public static void moveOldMainFileIfExists() {

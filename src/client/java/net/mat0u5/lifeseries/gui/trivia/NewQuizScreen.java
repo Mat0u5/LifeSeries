@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 //? if >= 1.21.9 {
-/*import net.minecraft.client.input.MouseButtonEvent;
- *///?}
+import net.minecraft.client.input.MouseButtonEvent;
+ //?}
 
 public class NewQuizScreen extends Screen {
     private final List<List<FormattedCharSequence>> answers = new ArrayList<>();
@@ -77,14 +77,14 @@ public class NewQuizScreen extends Screen {
 
     @Override
     //? if <= 1.21.6 {
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    /*public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0) { // Left-click
-            //?} else {
-    /*public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
+            *///?} else {
+    public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         double mouseX = click.x();
         double mouseY = click.y();
         if (click.button() == 0) { // Left-click
-    *///?}
+    //?}
             for (int i = 0; i < answerRects.size(); i++) {
                 if (answerRects.get(i).contains(mouseX, mouseY)) {
                     this.onClose();
@@ -95,10 +95,10 @@ public class NewQuizScreen extends Screen {
             }
         }
         //? if <= 1.21.6 {
-        return super.mouseClicked(mouseX, mouseY, button);
-        //?} else {
-        /*return super.mouseClicked(click, doubled);
-         *///?}
+        /*return super.mouseClicked(mouseX, mouseY, button);
+        *///?} else {
+        return super.mouseClicked(click, doubled);
+         //?}
     }
 
     @Override

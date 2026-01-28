@@ -1,15 +1,15 @@
 package net.mat0u5.lifeseries.mixin;
 
 //? if < 1.21.9 {
-import net.minecraft.server.MinecraftServer;
+/*import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(value = MinecraftServer.class)
 public class PlayerLikeEntityMixin {
     //Empty class to avoid mixin errors
 }
-//?} else {
-/*import net.mat0u5.lifeseries.Main;
+*///?} else {
+import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.minecraft.world.entity.Avatar;
@@ -40,4 +40,4 @@ public class PlayerLikeEntityMixin {
         }
     }
 }
-*///?}
+//?}

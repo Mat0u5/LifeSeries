@@ -6,23 +6,23 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 
 //? if >= 1.21.6
-/*import net.minecraft.client.animation.KeyframeAnimation;*/
+import net.minecraft.client.animation.KeyframeAnimation;
 
 //? if <= 1.21 {
-import com.mojang.blaze3d.vertex.PoseStack;
+/*import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HierarchicalModel;
 public class TriviaBotModel<T extends TriviaBot> extends HierarchicalModel<T> {
-//?} else {
-/*import net.minecraft.client.model.EntityModel;
+*///?} else {
+import net.minecraft.client.model.EntityModel;
 public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
-*///?}
+//?}
 
     public static final ModelLayerLocation TRIVIA_BOT = new ModelLayerLocation(TriviaBot.ID, "triviabot");
 
     //? if >= 1.21.6 {
     
-    /*private final KeyframeAnimation glideAnimation;
+    private final KeyframeAnimation glideAnimation;
     private final KeyframeAnimation idleAnimation;
     private final KeyframeAnimation walkAnimation;
     private final KeyframeAnimation countdownAnimation;
@@ -42,7 +42,7 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
     private final KeyframeAnimation santaLandAnimation;
     private final KeyframeAnimation faceAngryAnimation;
     private final KeyframeAnimation faceHappyAnimation;
-     *///?}
+     //?}
 
     private final ModelPart full;
     private final ModelPart triviabot;
@@ -86,8 +86,8 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
 
     public TriviaBotModel(ModelPart root, boolean hideNonAngryExpressions) {
         //? if >= 1.21.2 {
-        /*super(root);
-        *///?}
+        super(root);
+        //?}
         this.full = root.getChild("full");
         this.triviabot = this.full.getChild("triviabot");
         this.neckpivot = this.triviabot.getChild("neckpivot");
@@ -126,7 +126,7 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
 
 
         //? if >= 1.21.6 {
-        /*glideAnimation = TriviaBotAnimations.glide.bake(root);
+        glideAnimation = TriviaBotAnimations.glide.bake(root);
         idleAnimation = TriviaBotAnimations.idle.bake(root);
         walkAnimation = TriviaBotAnimations.walk.bake(root);
         countdownAnimation = TriviaBotAnimations.countdown.bake(root);
@@ -147,7 +147,7 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
 
         faceAngryAnimation = TriviaBotAnimations.face_angry.bake(root);
         faceHappyAnimation = TriviaBotAnimations.face_happy.bake(root);
-        *///?}
+        //?}
 
         if (hideNonAngryExpressions) {
             mouth.visible = false;
@@ -284,7 +284,7 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
     }
 
     //? if <= 1.21 {
-    @Override
+    /*@Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.root().getAllParts().forEach(ModelPart::resetPose);
         this.animate(entity.clientData.glideAnimationState, TriviaBotAnimations.glide, ageInTicks);
@@ -311,11 +311,11 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
     }
 
     //? if <= 1.20.5 {
-    /*@Override
+    /^@Override
     public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float i, float j, float k, float l) {
         full.render(matrices, vertexConsumer, light, overlay, i, j, k, l);
     }
-    *///?} else {
+    ^///?} else {
     @Override
     public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, int color) {
         full.render(matrices, vertexConsumer, light, overlay, color);
@@ -326,13 +326,13 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
     public ModelPart root() {
         return full;
     }
-    //?} else {
-    /*@Override
+    *///?} else {
+    @Override
     public void setupAnim(TriviaBotRenderState state) {
         super.setupAnim(state);
 
         //? if <= 1.21.5 {
-        this.animate(state.glideAnimationState, TriviaBotAnimations.glide, state.ageInTicks);
+        /*this.animate(state.glideAnimationState, TriviaBotAnimations.glide, state.ageInTicks);
         this.animate(state.idleAnimationState, TriviaBotAnimations.idle, state.ageInTicks);
         this.animate(state.walkAnimationState, TriviaBotAnimations.walk, state.ageInTicks);
         this.animate(state.countdownAnimationState, TriviaBotAnimations.countdown, state.ageInTicks);
@@ -353,8 +353,8 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
 
         this.animate(state.faceAngryAnimationState, TriviaBotAnimations.face_angry, state.ageInTicks);
         this.animate(state.faceHappyAnimationState, TriviaBotAnimations.face_happy, state.ageInTicks);
-        //?} else {
-        /^this.glideAnimation.apply(state.glideAnimationState, state.ageInTicks);
+        *///?} else {
+        this.glideAnimation.apply(state.glideAnimationState, state.ageInTicks);
         this.idleAnimation.apply(state.idleAnimationState, state.ageInTicks);
         this.walkAnimation.apply(state.walkAnimationState, state.ageInTicks);
         this.countdownAnimation.apply(state.countdownAnimationState, state.ageInTicks);
@@ -375,7 +375,7 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
 
         this.faceAngryAnimation.apply(state.faceAngryAnimationState, state.ageInTicks);
         this.faceHappyAnimation.apply(state.faceHappyAnimationState, state.ageInTicks);
-        ^///?}
+        //?}
     }
-    *///?}
+    //?}
 }

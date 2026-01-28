@@ -79,12 +79,12 @@ public class CustomTextRenderer {
     public int render(GuiGraphics context, Font textRenderer) {
         if (isScaled()) {
             //? if <= 1.21.5 {
-            context.pose().pushPose();
+            /*context.pose().pushPose();
             context.pose().scale(scaleX, scaleY, 1.0f);
-            //?} else {
-            /*context.pose().pushMatrix();
+            *///?} else {
+            context.pose().pushMatrix();
             context.pose().scale(scaleX, scaleY);
-            *///?}
+            //?}
         }
 
         int renderedTextHeight = textRenderer.lineHeight;
@@ -116,10 +116,10 @@ public class CustomTextRenderer {
 
         if (isScaled()) {
             //? if <= 1.21.5 {
-            context.pose().popPose();
-            //?} else {
-            /*context.pose().popMatrix();
-            *///?}
+            /*context.pose().popPose();
+            *///?} else {
+            context.pose().popMatrix();
+            //?}
         }
         return renderedTextHeight;
     }

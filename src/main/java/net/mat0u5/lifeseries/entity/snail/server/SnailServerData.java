@@ -181,10 +181,10 @@ public class SnailServerData implements PlayerBoundEntity {
     public void chunkLoading() {
         if (snail.level() instanceof ServerLevel level) {
             //? if <= 1.21.4 {
-            level.getChunkSource().addRegionTicket(TicketType.PORTAL, new ChunkPos(snail.blockPosition()), 2, snail.blockPosition());
-            //?} else if <= 1.21.11 {
-            /*level.getChunkSource().addTicketWithRadius(TicketType.PORTAL, LevelUtils.chunkPosFromBlockPos(snail.blockPosition()), 2);
-            *///?}
+            /*level.getChunkSource().addRegionTicket(TicketType.PORTAL, new ChunkPos(snail.blockPosition()), 2, snail.blockPosition());
+            *///?} else if <= 1.21.11 {
+            level.getChunkSource().addTicketWithRadius(TicketType.PORTAL, LevelUtils.chunkPosFromBlockPos(snail.blockPosition()), 2);
+            //?}
         }
     }
 
@@ -197,10 +197,10 @@ public class SnailServerData implements PlayerBoundEntity {
 
         if (snail.level() instanceof ServerLevel level) {
             //? if <= 1.21 {
-            snail.kill();
-            //?} else {
-            /*snail.kill(level);
-             *///?}
+            /*snail.kill();
+            *///?} else {
+            snail.kill(level);
+             //?}
         }
         snail.discard();
     }
@@ -233,14 +233,14 @@ public class SnailServerData implements PlayerBoundEntity {
                 player.setLastHurtByMob(snail);
             }
             //? if <=1.21 {
-            DamageSource damageSource = new DamageSource(serverLevel.registryAccess()
+            /*DamageSource damageSource = new DamageSource(serverLevel.registryAccess()
                     .registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(SNAIL_DAMAGE));
             entity.hurt(damageSource, 1000);
-            //?} else {
-            /*DamageSource damageSource = new DamageSource(serverLevel.registryAccess()
+            *///?} else {
+            DamageSource damageSource = new DamageSource(serverLevel.registryAccess()
                     .lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(SNAIL_DAMAGE));
             entity.hurtServer(serverLevel, damageSource, 1000);
-            *///?}
+            //?}
         }
     }
 
@@ -252,14 +252,14 @@ public class SnailServerData implements PlayerBoundEntity {
                 player.setLastHurtByMob(snail);
             }
             //? if <=1.21 {
-            DamageSource damageSource = new DamageSource(serverLevel.registryAccess()
+            /*DamageSource damageSource = new DamageSource(serverLevel.registryAccess()
                     .registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.DROWN));
             entity.hurt(damageSource, 2);
-            //?} else {
-            /*DamageSource damageSource = new DamageSource(serverLevel.registryAccess()
+            *///?} else {
+            DamageSource damageSource = new DamageSource(serverLevel.registryAccess()
                     .lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.DROWN));
             entity.hurtServer(serverLevel, damageSource, 2);
-            *///?}
+            //?}
             if (!entity.isAlive() && entity instanceof ServerPlayer) {
                 despawn();
             }

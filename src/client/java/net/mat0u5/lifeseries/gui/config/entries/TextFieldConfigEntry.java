@@ -6,10 +6,10 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 import java.util.Objects;
 //? if >= 1.21.9 {
-/*import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
-*///?}
+//?}
 
 public abstract class TextFieldConfigEntry extends ConfigEntry {
     protected final EditBox textField;
@@ -91,7 +91,7 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
     }
 
     //? if <= 1.21.6 {
-    @Override
+    /*@Override
     protected boolean mouseClickedEntry(double mouseX, double mouseY, int button) {
         if (!textField.mouseClicked(mouseX, mouseY, button)) {
             clicked = !clicked;
@@ -108,8 +108,8 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
     protected boolean charTypedEntry(char chr, int modifiers) {
         return textField.charTyped(chr, modifiers);
     }
-    //?} else {
-    /*@Override
+    *///?} else {
+    @Override
     protected boolean mouseClickedEntry(MouseButtonEvent click, boolean doubled) {
         if (!textField.mouseClicked(click, doubled)) {
             clicked = !clicked;
@@ -126,7 +126,7 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
     protected boolean charTypedEntry(CharacterEvent input) {
         return textField.charTyped(input);
     }
-    *///?}
+    //?}
 
     @Override
     public void resetToDefault() {

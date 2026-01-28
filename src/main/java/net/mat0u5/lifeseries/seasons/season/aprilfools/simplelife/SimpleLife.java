@@ -30,12 +30,12 @@ import net.minecraft.world.item.trading.ItemCost;
 //?}
 
 //? if <= 1.21.9 {
-import net.minecraft.world.entity.animal.horse.TraderLlama;
+/*import net.minecraft.world.entity.animal.horse.TraderLlama;
 import net.minecraft.world.entity.npc.WanderingTrader;
-//?} else {
-/*import net.minecraft.world.entity.animal.equine.TraderLlama;
+*///?} else {
+import net.minecraft.world.entity.animal.equine.TraderLlama;
 import net.minecraft.world.entity.npc.wanderingtrader.WanderingTrader;
-*///?}
+//?}
 
 public class SimpleLife extends ThirdLife {
     private Random rnd = new Random();

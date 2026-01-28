@@ -13,16 +13,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.mat0u5.lifeseries.Main.seasonConfig;
 //? if <= 1.21.9 {
-import net.minecraft.world.level.GameRules;
-//?} else {
-/*import net.minecraft.world.level.gamerules.GameRules;
+/*import net.minecraft.world.level.GameRules;
+*///?} else {
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.gamerules.GameRule;
-*///?}
+//?}
 
 @Mixin(value = GameRuleCommand.class, priority = 1)
 public class GameRuleCommandMixin {
     //? if <= 1.21.9 {
-    @Inject(method = "setRule", at = @At("TAIL"))
+    /*@Inject(method = "setRule", at = @At("TAIL"))
     private static <T extends GameRules.Value<T>> void onChanged(CommandContext<CommandSourceStack> commandContext, GameRules.Key<T> key, CallbackInfoReturnable<Integer> cir) {
         MinecraftServer server = commandContext.getSource().getServer();
         boolean reload = false;
@@ -35,17 +35,17 @@ public class GameRuleCommandMixin {
             reload = true;
         }
         //? if >= 1.21.6 {
-        /*if (key.equals(GameRules.RULE_LOCATOR_BAR)) {
+        if (key.equals(GameRules.RULE_LOCATOR_BAR)) {
             seasonConfig.setProperty(seasonConfig.LOCATOR_BAR.key, String.valueOf(OtherUtils.getBooleanGameRule(server.overworld(), GameRules.RULE_LOCATOR_BAR)));
             reload = true;
         }
-        *///?}
+        //?}
         if (reload && !Main.modDisabled()) {
             Main.softReloadStart();
         }
     }
-    //?} else {
-    /*@Inject(method = "setRule", at = @At("TAIL"))
+    *///?} else {
+    @Inject(method = "setRule", at = @At("TAIL"))
     private static <T> void onChanged(CommandContext<CommandSourceStack> commandContext, GameRule<T> key, CallbackInfoReturnable<Integer> cir) {
         MinecraftServer server = commandContext.getSource().getServer();
         boolean reload = false;
@@ -65,5 +65,5 @@ public class GameRuleCommandMixin {
             Main.softReloadStart();
         }
     }
-    *///?}
+    //?}
 }

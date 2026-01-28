@@ -10,10 +10,10 @@ import net.minecraft.network.chat.Component;
 
 import java.util.List;
 //? if >= 1.21.9 {
-/*import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
-*///?}
+//?}
 
 public class LivesConfigEntry extends NullableIntegerConfigEntry {
     public Button addButton;
@@ -41,22 +41,22 @@ public class LivesConfigEntry extends NullableIntegerConfigEntry {
     }
 
     //? if <= 1.21.6 {
-    @Override
+    /*@Override
     protected boolean mouseClickedEntry(double mouseX, double mouseY, int button) {
         if (addButton.mouseClicked(mouseX, mouseY, button) || subtractButton.mouseClicked(mouseX, mouseY, button)) {
             return true;
         }
         return super.mouseClickedEntry(mouseX, mouseY, button);
     }
-    //?} else {
-    /*@Override
+    *///?} else {
+    @Override
     protected boolean mouseClickedEntry(MouseButtonEvent click, boolean doubled) {
         if (addButton.mouseClicked(click, doubled) || subtractButton.mouseClicked(click, doubled)) {
             return true;
         }
         return super.mouseClickedEntry(click, doubled);
     }
-    *///?}
+    //?}
 
     public void add(Button button) {
         if (value == null) value = 0;

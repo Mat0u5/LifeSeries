@@ -19,10 +19,10 @@ public class ClientKeybinds {
     public static KeyMapping runCommand;
 
     //? if <= 1.21.6 {
-    public static final String KEYBIND_ID = "key.category.lifeseries.general";
-     //?} else {
-    /*public static final KeyMapping.Category KEYBIND_ID = new KeyMapping.Category(IdentifierHelper.mod("general"));
-    *///?}
+    /*public static final String KEYBIND_ID = "key.category.lifeseries.general";
+     *///?} else {
+    public static final KeyMapping.Category KEYBIND_ID = new KeyMapping.Category(IdentifierHelper.mod("general"));
+    //?}
 
     public static void tick() {
         while (superpower != null && superpower.consumeClick()) {
@@ -44,10 +44,10 @@ public class ClientKeybinds {
                 "key.lifeseries.superpower",
                 InputConstants.Type.KEYSYM,
                 //? if <= 1.21.5 {
-                GLFW.GLFW_KEY_G,
-                //?} else {
-                /*GLFW.GLFW_KEY_R,
-                 *///?}
+                /*GLFW.GLFW_KEY_G,
+                *///?} else {
+                GLFW.GLFW_KEY_R,
+                 //?}
 
                 KEYBIND_ID
         ));

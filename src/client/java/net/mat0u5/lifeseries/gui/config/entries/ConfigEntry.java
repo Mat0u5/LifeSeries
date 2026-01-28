@@ -20,10 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 //? if >= 1.21.9 {
-/*import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
-*///?}
+//?}
 
 public abstract class ConfigEntry {
     public static final int PREFFERED_HEIGHT = 20;
@@ -122,10 +122,10 @@ public abstract class ConfigEntry {
             if (isHovered) {
                 Component errorText = TextUtils.format("§cERROR:\n{}",getErrorMessage());
                 //? if <= 1.21.5 {
-                context.renderTooltip(textRenderer, textRenderer.split(errorText, MAX_DESCRIPTION_WIDTH), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY);
-                 //?} else {
-                /*context.setTooltipForNextFrame(textRenderer, textRenderer.split(errorText, MAX_DESCRIPTION_WIDTH), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY, false);
-                *///?}
+                /*context.renderTooltip(textRenderer, textRenderer.split(errorText, MAX_DESCRIPTION_WIDTH), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY);
+                 *///?} else {
+                context.setTooltipForNextFrame(textRenderer, textRenderer.split(errorText, MAX_DESCRIPTION_WIDTH), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY, false);
+                //?}
             }
         }
         else if (description != null && !description.isEmpty()) {
@@ -133,10 +133,10 @@ public abstract class ConfigEntry {
                 mouseY >= labelY && mouseY <= labelY + textRenderer.lineHeight) {
                 Component descriptionText = getDisplayName().withStyle(ChatFormatting.UNDERLINE).append("§r\n"+description);
                 //? if <= 1.21.5 {
-                context.renderTooltip(textRenderer, textRenderer.split(descriptionText, MAX_DESCRIPTION_WIDTH), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY);
-                 //?} else {
-                /*context.setTooltipForNextFrame(textRenderer, textRenderer.split(descriptionText, MAX_DESCRIPTION_WIDTH), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY, false);
-                *///?}
+                /*context.renderTooltip(textRenderer, textRenderer.split(descriptionText, MAX_DESCRIPTION_WIDTH), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY);
+                 *///?} else {
+                context.setTooltipForNextFrame(textRenderer, textRenderer.split(descriptionText, MAX_DESCRIPTION_WIDTH), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY, false);
+                //?}
             }
         }
 
@@ -161,7 +161,7 @@ public abstract class ConfigEntry {
     }
 
     //? if <= 1.21.6 {
-    protected abstract boolean mouseClickedEntry(double mouseX, double mouseY, int button);
+    /*protected abstract boolean mouseClickedEntry(double mouseX, double mouseY, int button);
     protected abstract boolean keyPressedEntry(int keyCode, int scanCode, int modifiers);
     protected abstract boolean charTypedEntry(char chr, int modifiers);
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
@@ -178,8 +178,8 @@ public abstract class ConfigEntry {
     public boolean charTyped(char chr, int modifiers) {
         return charTypedEntry(chr, modifiers);
     }
-    //?} else {
-    /*protected abstract boolean mouseClickedEntry(MouseButtonEvent click, boolean doubled);
+    *///?} else {
+    protected abstract boolean mouseClickedEntry(MouseButtonEvent click, boolean doubled);
     protected abstract boolean keyPressedEntry(KeyEvent keyInput);
     protected abstract boolean charTypedEntry(CharacterEvent charInput);
     public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
@@ -196,7 +196,7 @@ public abstract class ConfigEntry {
     public boolean charTyped(CharacterEvent charInput) {
         return charTypedEntry(charInput);
     }
-    *///?}
+    //?}
 
     public void setFocused(boolean focused) {
         setActualFocused(focused);

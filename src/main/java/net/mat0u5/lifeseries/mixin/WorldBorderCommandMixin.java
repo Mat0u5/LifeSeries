@@ -22,8 +22,8 @@ public class WorldBorderCommandMixin {
         ServerLevel end = server.getLevel(Level.END);
         if (overworld != null) seasonConfig.setProperty(seasonConfig.WORLDBORDER_SIZE.key, String.valueOf((int)overworld.getWorldBorder().getLerpTarget()));
         //? if >= 1.21.9 {
-        /*if (nether != null) seasonConfig.setProperty(seasonConfig.WORLDBORDER_NETHER_SIZE.key, String.valueOf((int)nether.getWorldBorder().getLerpTarget()));
+        if (nether != null) seasonConfig.setProperty(seasonConfig.WORLDBORDER_NETHER_SIZE.key, String.valueOf((int)nether.getWorldBorder().getLerpTarget()));
         if (end != null) seasonConfig.setProperty(seasonConfig.WORLDBORDER_END_SIZE.key, String.valueOf((int)end.getWorldBorder().getLerpTarget()));
-        *///?}
+        //?}
     }
 }

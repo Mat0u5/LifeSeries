@@ -46,9 +46,9 @@ import net.minecraft.world.item.component.CustomData;
 //?}
 
 //? if >= 1.21.9 {
-/*import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.component.TypedEntityData;
-*///?}
+//?}
 
 public class NiceLifeTriviaHandler extends TriviaHandler {
     public static ItemSpawner itemSpawner;
@@ -460,10 +460,10 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         if (bot.serverData.getBoundPlayer() == null) return;
         Vec3 pos = bot.position().add(0,1,0);
         //? if <= 1.21 {
-        Vec3 towardsArm = Vec3.atLowerCornerOf(spawnInfo.bedDirection().getCounterClockWise().getNormal());
-        //?} else {
-        /*Vec3 towardsArm = spawnInfo.bedDirection().getCounterClockWise().getUnitVec3();
-        *///?}
+        /*Vec3 towardsArm = Vec3.atLowerCornerOf(spawnInfo.bedDirection().getCounterClockWise().getNormal());
+        *///?} else {
+        Vec3 towardsArm = spawnInfo.bedDirection().getCounterClockWise().getUnitVec3();
+        //?}
         pos = pos.add(towardsArm.scale(0.6));
         Vec3 playerPos = bot.serverData.getBoundPlayer().position().add(towardsArm.scale(0.3));
 
@@ -570,8 +570,8 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         itemSpawner.addItem(mace, 5);
         //?}
         //? if >= 1.21.6 {
-        /*itemSpawner.addItem(new ItemStack(Items.DRIED_GHAST, 1), 10);
-        *///?}
+        itemSpawner.addItem(new ItemStack(Items.DRIED_GHAST, 1), 10);
+        //?}
 
         ItemStack endCrystal = new ItemStack(Items.END_CRYSTAL);
         ItemStackUtils.setCustomComponentBoolean(endCrystal, "IgnoreBlacklist", true);
@@ -596,17 +596,17 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         nbtCompCamel.putString("id", "camel");
 
         //? if <= 1.21.4 {
-        CompoundTag saddleItemComp = new CompoundTag();
+        /*CompoundTag saddleItemComp = new CompoundTag();
         saddleItemComp.putInt("Count", 1);
         saddleItemComp.putString("id", "saddle");
         nbtCompCamel.put("SaddleItem", saddleItemComp);
-        //?} else {
-        /*CompoundTag equipmentItemComp = new CompoundTag();
+        *///?} else {
+        CompoundTag equipmentItemComp = new CompoundTag();
         CompoundTag saddleItemComp = new CompoundTag();
         saddleItemComp.putString("id", "saddle");
         equipmentItemComp.put("saddle", saddleItemComp);
         nbtCompCamel.put("equipment", equipmentItemComp);
-        *///?}
+        //?}
 
 
         //? if < 1.20.5 {
@@ -616,10 +616,10 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         //?}
 
         //? if >=1.20.5 && <= 1.21.6 {
-        camel.set(DataComponents.ENTITY_DATA, nbtCamel);
-        //?} else if > 1.21.6 {
-        /*camel.set(DataComponents.ENTITY_DATA, TypedEntityData.of(EntityType.CAMEL, nbtCamel.copyTag()));
-        *///?}
+        /*camel.set(DataComponents.ENTITY_DATA, nbtCamel);
+        *///?} else if > 1.21.6 {
+        camel.set(DataComponents.ENTITY_DATA, TypedEntityData.of(EntityType.CAMEL, nbtCamel.copyTag()));
+        //?}
         itemSpawner.addItem(camel, 10);
     }
 }

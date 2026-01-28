@@ -29,15 +29,15 @@ public class EntityRenderDispatcherMixin {
     }
 }
 *///?} else if <= 1.21 {
-import net.minecraft.server.MinecraftServer;
+/*import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(value = MinecraftServer.class)
 public class EntityRenderDispatcherMixin {
     //Empty class to avoid mixin errors
 }
-//?} else {
-/*import net.mat0u5.lifeseries.MainClient;
+*///?} else {
+import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -70,4 +70,4 @@ public class EntityRenderDispatcherMixin {
         }
     }
 }
-*///?}
+//?}

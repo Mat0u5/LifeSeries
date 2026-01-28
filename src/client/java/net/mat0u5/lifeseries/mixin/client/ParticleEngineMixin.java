@@ -1,16 +1,16 @@
 package net.mat0u5.lifeseries.mixin.client;
 
 //? if < 1.21.9 {
-import net.minecraft.server.MinecraftServer;
+/*import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(value = MinecraftServer.class)
 public class ParticleEngineMixin {
     //Empty class to avoid mixin errors
 }
-//?} else {
+*///?} else {
 
-/*import net.mat0u5.lifeseries.particle.TriviaSpiritParticle;
+import net.mat0u5.lifeseries.particle.TriviaSpiritParticle;
 import net.mat0u5.lifeseries.particle.TriviaSpiritParticleGroup;
 import net.minecraft.client.Camera;
 import net.minecraft.client.particle.ParticleEngine;
@@ -48,4 +48,4 @@ public abstract class ParticleEngineMixin {
         }
     }
 }
-*///?}
+//?}

@@ -19,9 +19,9 @@ import net.minecraft.server.level.ClientInformation;
 
 //? if <= 1.21.6 {
 
-//? if <= 1.20 {
-/*import java.util.concurrent.atomic.AtomicReference;
-*///?}
+/*//? if <= 1.20 {
+/^import java.util.concurrent.atomic.AtomicReference;
+^///?}
 //? if > 1.20.5 {
 import net.minecraft.network.DisconnectionDetails;
 //?}
@@ -51,7 +51,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-//?}
+*///?}
 
 @SuppressWarnings("EntityConstructor")
 public class FakePlayer extends ServerPlayer {
@@ -65,7 +65,7 @@ public class FakePlayer extends ServerPlayer {
     }
     //?}
     //? if <= 1.21.6 {
-    private static final Set<String> spawning = new HashSet<>();
+    /*private static final Set<String> spawning = new HashSet<>();
     public Runnable fixStartingPosition = () -> {};
     public UUID shadow;
 
@@ -108,22 +108,22 @@ public class FakePlayer extends ServerPlayer {
             if (profile.isPresent()) current = profile.get();
 
             //? if <= 1.20 {
-            /*FakePlayer instance = new FakePlayer(server, levelIn, current);
-            *///?} else {
+            /^FakePlayer instance = new FakePlayer(server, levelIn, current);
+            ^///?} else {
             FakePlayer instance = new FakePlayer(server, levelIn, current, ClientInformation.createDefault());
             //?}
             //? if <= 1.21.4 {
-            instance.fixStartingPosition = () -> instance.moveTo(pos.x, pos.y, pos.z, (float) yaw, (float) pitch);
-            //?} else {
-            /*instance.fixStartingPosition = () -> instance.snapTo(pos.x, pos.y, pos.z, (float) yaw, (float) pitch);
-            *///?}
+            /^instance.fixStartingPosition = () -> instance.moveTo(pos.x, pos.y, pos.z, (float) yaw, (float) pitch);
+            ^///?} else {
+            instance.fixStartingPosition = () -> instance.snapTo(pos.x, pos.y, pos.z, (float) yaw, (float) pitch);
+            //?}
             FakeClientConnection connection = new FakeClientConnection(PacketFlow.SERVERBOUND);
             //? if <= 1.20 {
-            /*server.getPlayerList().placeNewPlayer(connection, instance);
-            *///?} else if <= 1.20.3 {
-            /*CommonListenerCookie data =  new CommonListenerCookie(current, 0, instance.clientInformation());
+            /^server.getPlayerList().placeNewPlayer(connection, instance);
+            ^///?} else if <= 1.20.3 {
+            /^CommonListenerCookie data =  new CommonListenerCookie(current, 0, instance.clientInformation());
             server.getPlayerList().placeNewPlayer(connection, instance, data);
-            *///?} else {
+            ^///?} else {
             CommonListenerCookie data =  new CommonListenerCookie(current, 0, instance.clientInformation(), true);
             server.getPlayerList().placeNewPlayer(connection, instance, data);
             //?}
@@ -153,7 +153,7 @@ public class FakePlayer extends ServerPlayer {
 
     private static CompletableFuture<Optional<GameProfile>> fetchGameProfile(MinecraftServer server, final String name) {
         //? if <= 1.20 {
-        /*GameProfile gameprofile;
+        /^GameProfile gameprofile;
         try {
             gameprofile = server.getProfileCache().get(name).orElse(null);
         }
@@ -171,9 +171,9 @@ public class FakePlayer extends ServerPlayer {
             gameprofile = result.get();
         }
         return CompletableFuture.completedFuture(Optional.ofNullable(gameprofile));
-        *///?} else if <= 1.20.3 {
-        /*return SkullBlockEntityAccessor.ls$fetchGameProfile(name);
-        *///?} else {
+        ^///?} else if <= 1.20.3 {
+        /^return SkullBlockEntityAccessor.ls$fetchGameProfile(name);
+        ^///?} else {
         return SkullBlockEntity.fetchGameProfile(name);
         //?}
     }
@@ -204,8 +204,8 @@ public class FakePlayer extends ServerPlayer {
             }
             if (!triggered) {
                 //? if <= 1.20.5 {
-                /*connection.onDisconnect(Component.empty());
-                *///?} else {
+                /^connection.onDisconnect(Component.empty());
+                ^///?} else {
                 connection.onDisconnect(new DisconnectionDetails(Component.empty()));
                 //?}
             }
@@ -227,30 +227,30 @@ public class FakePlayer extends ServerPlayer {
 
     @Override
             //? if <= 1.21 {
-    public boolean hurt(DamageSource source, float amount) {
-     //?} else {
-    /*public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
-        *///?}
+    /^public boolean hurt(DamageSource source, float amount) {
+     ^///?} else {
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
+        //?}
         if (shadow != null) {
             ServerPlayer player = PlayerUtils.getPlayer(shadow);
             if (player != null) {
                 if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.ASTRAL_PROJECTION)) {
                     if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof AstralProjection projection) {
                         //? if <= 1.21 {
-                        projection.onDamageClone(source, amount);
-                         //?} else {
-                        /*projection.onDamageClone(level, source, amount);
-                        *///?}
+                        /^projection.onDamageClone(source, amount);
+                         ^///?} else {
+                        projection.onDamageClone(level, source, amount);
+                        //?}
                     }
                 }
             }
         }
         //? if <= 1.21 {
-        return super.hurt(source, amount);
-         //?} else {
-        /*return super.hurtServer(level, source, amount);
-        *///?}
+        /^return super.hurt(source, amount);
+         ^///?} else {
+        return super.hurtServer(level, source, amount);
+        //?}
 
     }
-    //?}
+    *///?}
 }

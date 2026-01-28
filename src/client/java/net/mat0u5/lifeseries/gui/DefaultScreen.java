@@ -7,8 +7,8 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 //? if >= 1.21.9 {
-/*import net.minecraft.client.input.MouseButtonEvent;
-*///?}
+import net.minecraft.client.input.MouseButtonEvent;
+//?}
 
 public abstract class DefaultScreen extends Screen {
 
@@ -64,7 +64,7 @@ public abstract class DefaultScreen extends Screen {
     }
 
     //? if <= 1.21.6 {
-    @Override
+    /*@Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0 && allowCloseButton()) { // Left-click
             if (isInCloseRegion((int)mouseX, (int)mouseY)) {
@@ -74,8 +74,8 @@ public abstract class DefaultScreen extends Screen {
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
-    //?} else {
-    /*@Override
+    *///?} else {
+    @Override
     public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         if (click.button() == 0 && allowCloseButton()) { // Left-click
             if (isInCloseRegion((int)click.x(), (int)click.y())) {
@@ -85,7 +85,7 @@ public abstract class DefaultScreen extends Screen {
         }
         return super.mouseClicked(click, doubled);
     }
-    *///?}
+    //?}
 
     public void closeButtonClicked() {
         this.onClose();

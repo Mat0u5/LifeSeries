@@ -19,12 +19,12 @@ public class DefaultConfigValues {
             "Creative Ignore Blacklist", "Controls whether players in creative mode are able to bypass the blacklists."
     );
     //? if < 1.21.9 {
-    public final ConfigFileEntry<Integer> WORLDBORDER_SIZE = new ConfigFileEntry<>(
+    /*public final ConfigFileEntry<Integer> WORLDBORDER_SIZE = new ConfigFileEntry<>(
             "worldborder_size", 500, "global",
             "Worldborder Size", "Sets the worldborder size."
     );
-    //?} else {
-    /*public final ConfigFileEntry<Object> WORLDBORDER_GROUP = new ConfigFileEntry<>(
+    *///?} else {
+    public final ConfigFileEntry<Object> WORLDBORDER_GROUP = new ConfigFileEntry<>(
             "worldborder_sizes", null, ConfigTypes.TEXT, "{global.worldborder}",
             "Worldborder Sizes", ""
     );
@@ -40,7 +40,7 @@ public class DefaultConfigValues {
             "worldborder_end_size", 500, "global.worldborder",
             "Worldborder End Size", "Sets the worldborder size in the end."
     );
-    *///?}
+    //?}
     public final ConfigFileEntry<Boolean> KEEP_INVENTORY = new ConfigFileEntry<>(
             "keep_inventory", true, "global",
             "Keep Inventory", "Decides whether players drop their items when they die."

@@ -9,27 +9,27 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 //? if <= 1.21.9 {
-import net.minecraft.world.entity.projectile.ThrownEnderpearl;
-//?} else {
-/*import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrownEnderpearl;
-*///?}
+/*import net.minecraft.world.entity.projectile.ThrownEnderpearl;
+*///?} else {
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrownEnderpearl;
+//?}
 
 @Mixin(value = ThrownEnderpearl.class, priority = 1)
 public class ThrownEnderpearlMixin {
 
     //? if <= 1.21 {
-    @ModifyArg(
+    /*@ModifyArg(
             method = "onHit",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"),
             index = 1
     )
-    //?} else {
-    /*@ModifyArg(
+    *///?} else {
+    @ModifyArg(
             method = "onHit",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayer;hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z"),
             index = 2
     )
-    *///?}
+    //?}
         private float onTargetDamaged(float amount) {
         if (!Main.isLogicalSide() || Main.modDisabled()) return amount;
         ThrownEnderpearl pearl = (ThrownEnderpearl) (Object) this;

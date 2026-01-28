@@ -19,9 +19,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 //?}
 //? if >= 1.21 && <= 1.21.4
-import net.minecraft.world.item.component.Unbreakable;
+/*import net.minecraft.world.item.component.Unbreakable;*/
 //? if >= 1.21.5
-/*import net.minecraft.util.Unit;*/
+import net.minecraft.util.Unit;
 
 public class WindCharge extends ToggleableSuperpower {
     public static int MAX_MACE_DAMAGE = 2;
@@ -81,10 +81,10 @@ public class WindCharge extends ToggleableSuperpower {
             mace.enchant(ItemStackUtils.getEnchantmentEntry(Enchantments.VANISHING_CURSE), 1);
             mace.enchant(ItemStackUtils.getEnchantmentEntry(Enchantments.WIND_BURST), 3);
             //? if <= 1.21.4 {
-            mace.set(DataComponents.UNBREAKABLE, new Unbreakable(true));
-            //?} else {
-            /*mace.set(DataComponents.UNBREAKABLE, Unit.INSTANCE);
-             *///?}
+            /*mace.set(DataComponents.UNBREAKABLE, new Unbreakable(true));
+            *///?} else {
+            mace.set(DataComponents.UNBREAKABLE, Unit.INSTANCE);
+             //?}
             mace.set(DataComponents.MAX_DAMAGE, 1);
             mace.set(DataComponents.DAMAGE, 1);
             ItemStackUtils.setCustomComponentBoolean(mace, "IgnoreBlacklist", true);

@@ -5,13 +5,13 @@ import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
 //? if <= 1.21.9 {
-import net.minecraft.resources.ResourceLocation;
- //?} else {
-/*import net.minecraft.resources.Identifier;
-*///?}
+/*import net.minecraft.resources.ResourceLocation;
+ *///?} else {
+import net.minecraft.resources.Identifier;
+//?}
 
 //? if <= 1.21 {
-import com.mojang.blaze3d.vertex.PoseStack;
+/*import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.MobRenderer;
 public class TriviaBotRenderer extends MobRenderer<TriviaBot, TriviaBotModel<TriviaBot>> {
@@ -32,8 +32,8 @@ public class TriviaBotRenderer extends MobRenderer<TriviaBot, TriviaBotModel<Tri
         super.render(entity, f, g, matrixStack, vertexConsumerProvider, i);
     }
 }
-//?} else {
-/*import net.minecraft.client.renderer.entity.AgeableMobRenderer;
+*///?} else {
+import net.minecraft.client.renderer.entity.AgeableMobRenderer;
 
 public class TriviaBotRenderer extends AgeableMobRenderer<TriviaBot, TriviaBotRenderState, TriviaBotModel> {
     public TriviaBotRenderer(EntityRendererProvider.Context context) {
@@ -47,10 +47,10 @@ public class TriviaBotRenderer extends AgeableMobRenderer<TriviaBot, TriviaBotRe
 
     @Override
     //? if <= 1.21.9 {
-    public ResourceLocation getTextureLocation(TriviaBotRenderState state) {
-    //?} else {
-    /^public Identifier getTextureLocation(TriviaBotRenderState state) {
-    ^///?}
+    /*public ResourceLocation getTextureLocation(TriviaBotRenderState state) {
+    *///?} else {
+    public Identifier getTextureLocation(TriviaBotRenderState state) {
+    //?}
         if (state.santaBot) {
             return TriviaBot.SANTABOT_TEXTURE;
         }
@@ -86,4 +86,4 @@ public class TriviaBotRenderer extends AgeableMobRenderer<TriviaBot, TriviaBotRe
         state.santaBot = triviaBot.santaBot();
     }
 }
-*///?}
+//?}

@@ -36,8 +36,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static net.mat0u5.lifeseries.Main.seasonConfig;
 //? if >= 1.21.2 {
-/*import net.minecraft.server.level.ServerLevel;
-*///?}
+import net.minecraft.server.level.ServerLevel;
+//?}
 
 public class WildLife extends Season {
     @Override
@@ -197,10 +197,10 @@ public class WildLife extends Season {
         if (damageSource.getDirectEntity() instanceof Player) {
             if (entity instanceof Warden || entity instanceof WitherBoss || entity instanceof EnderDragon) {
                 //? if <= 1.21 {
-                entity.spawnAtLocation(Items.TOTEM_OF_UNDYING.getDefaultInstance());
-                 //?} else {
-                /*entity.spawnAtLocation((ServerLevel) entity.level(), Items.TOTEM_OF_UNDYING.getDefaultInstance());
-                *///?}
+                /*entity.spawnAtLocation(Items.TOTEM_OF_UNDYING.getDefaultInstance());
+                 *///?} else {
+                entity.spawnAtLocation((ServerLevel) entity.level(), Items.TOTEM_OF_UNDYING.getDefaultInstance());
+                //?}
             }
         }
     }

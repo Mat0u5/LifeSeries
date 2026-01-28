@@ -207,10 +207,10 @@ public class ClientEvents {
         //? if > 1.20.3 {
         if (MainClient.clientCurrentSeason == Seasons.WILD_LIFE && MainClient.clientActiveWildcards.contains(Wildcards.SIZE_SHIFTING)) {
             //? if <= 1.21 {
-            boolean jumping = player.input.jumping;
-            //?} else {
-            /*boolean jumping = player.input.keyPresses.jump();
-             *///?}
+            /*boolean jumping = player.input.jumping;
+            *///?} else {
+            boolean jumping = player.input.keyPresses.jump();
+             //?}
             if (jumping) {
 
                 if (MainClient.FIX_SIZECHANGING_BUGS) {
@@ -265,10 +265,10 @@ public class ClientEvents {
 
         boolean shouldJump = false;
         //? if <= 1.21 {
-        boolean holdingJump = player.input.jumping;
-        //?} else {
-        /*boolean holdingJump = player.input.keyPresses.jump();
-        *///?}
+        /*boolean holdingJump = player.input.jumping;
+        *///?} else {
+        boolean holdingJump = player.input.keyPresses.jump();
+        //?}
 
         if (!lastJumping && holdingJump) {
             shouldJump = true;
@@ -295,10 +295,10 @@ public class ClientEvents {
         for (Map.Entry<Holder<MobEffect>, MobEffectInstance> entry : player.getActiveEffectsMap().entrySet()) {
         //?}
             //? if <= 1.21.4 {
-            if (entry.getKey() != MobEffects.JUMP) continue;
-            //?} else {
-            /*if (entry.getKey() != MobEffects.JUMP_BOOST) continue;
-            *///?}
+            /*if (entry.getKey() != MobEffects.JUMP) continue;
+            *///?} else {
+            if (entry.getKey() != MobEffects.JUMP_BOOST) continue;
+            //?}
             MobEffectInstance jumpBoost = entry.getValue();
             if (jumpBoost.getAmplifier() != 2) continue;
             if (jumpBoost.getDuration() > 220 || jumpBoost.getDuration() < 200) continue;

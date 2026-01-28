@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 //? if >= 1.21.9 {
-/*import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
-*///?}
+//?}
 //? if > 1.20 && <= 1.20.3
 /*import net.minecraft.client.gui.screens.Screen;*/
 
@@ -58,10 +58,10 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
     protected void renderListItems(GuiGraphics context, int mouseX, int mouseY, float delta) {
     //?}
         //? if <= 1.21.2 {
-        int maxScroll = getMaxScroll();
-        //?} else {
-        /*int maxScroll = maxScrollAmount();
-         *///?}
+        /*int maxScroll = getMaxScroll();
+        *///?} else {
+        int maxScroll = maxScrollAmount();
+         //?}
 
         if (getScrolledAmount() > maxScroll) {
             setScrollAmount(maxScroll);
@@ -91,14 +91,14 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
                         mouseY >= currentY && mouseY < currentY + entryHeight;
 
                 //? if <= 1.21.6 {
-                entry.render(context, i, currentY, entryLeft, entryWidth, entryHeight, mouseX, mouseY, hovered, delta);
-                //?} else {
-                /*entry.setX(entryLeft);
+                /*entry.render(context, i, currentY, entryLeft, entryWidth, entryHeight, mouseX, mouseY, hovered, delta);
+                *///?} else {
+                entry.setX(entryLeft);
                 entry.setY(currentY);
                 entry.setWidth(entryWidth);
                 entry.setHeight(entryHeight);
                 entry.renderContent(context, mouseX, mouseY, hovered, delta);
-                *///?}
+                //?}
 
 
                 List<ConfigEntry> withChildren = List.of(configEntry);
@@ -162,10 +162,10 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
 
     @Override
     //? if <= 1.21.2 {
-    public int getMaxScroll() {
-    //?} else {
-    /*public int maxScrollAmount() {
-    *///?}
+    /*public int getMaxScroll() {
+    *///?} else {
+    public int maxScrollAmount() {
+    //?}
         int totalHeight = 0;
         for (int i = 0; i < getItemCount(); i++) {
             totalHeight += getEntry(i).getConfigEntry().getPreferredHeight();
@@ -199,12 +199,12 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
 
     @Override
     //? if <= 1.21.6 {
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-    //?} else {
-    /*public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
+    /*public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    *///?} else {
+    public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         int mouseX = (int) click.x();
         int mouseY = (int) click.y();
-    *///?}
+    //?}
         if (!isMouseOver(mouseX, mouseY)) {
             return false;
         }
@@ -220,10 +220,10 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
                 setFocused(entry);
                 entry.getConfigEntry().setFocused(true);
                 //? if <= 1.21.6 {
-                return entry.mouseClicked(mouseX, mouseY, button);
-                //?} else {
-                /*return entry.mouseClicked(click, doubled);
-                *///?}
+                /*return entry.mouseClicked(mouseX, mouseY, button);
+                *///?} else {
+                return entry.mouseClicked(click, doubled);
+                //?}
             }
 
             currentY += entryHeight;
@@ -234,20 +234,20 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
 
     public double getScrolledAmount() {
         //? if <= 1.21.2 {
-        return getScrollAmount();
-        //?} else {
-        /*return scrollAmount();
-        *///?}
+        /*return getScrollAmount();
+        *///?} else {
+        return scrollAmount();
+        //?}
     }
 
     //? if >= 1.21.9 {
-    /*public ConfigEntryWidget getEntry(int entry) {
+    public ConfigEntryWidget getEntry(int entry) {
         return children().get(entry);
     }
-    *///?}
+    //?}
 
     //? if <= 1.21.6 {
-    @Override
+    /*@Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         ConfigEntryWidget entry = getFocused();
         if (entry == null) return false;
@@ -260,8 +260,8 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
         if (entry == null) return false;
         return entry.charTyped(chr, modifiers);
     }
-    //?} else {
-    /*@Override
+    *///?} else {
+    @Override
     public boolean keyPressed(KeyEvent input) {
         ConfigEntryWidget entry = getFocused();
         if (entry == null) return false;
@@ -274,7 +274,7 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
         if (entry == null) return false;
         return entry.charTyped(input);
     }
-    *///?}
+    //?}
 
     public int getCurrentY() {
         return getY() + 4 - (int)getScrolledAmount();
@@ -293,7 +293,7 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
         }
 
         //? if <= 1.21.6 {
-        @Override
+        /*@Override
         public void render(GuiGraphics context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             configEntry.render(context, x, y, entryWidth, entryHeight, mouseX, mouseY, hovered, tickDelta);
         }
@@ -315,8 +315,8 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
             configEntry.setFocused(true);
             return configEntry.charTyped(chr, modifiers);
         }
-        //?} else {
-        /*@Override
+        *///?} else {
+        @Override
         public void renderContent(GuiGraphics context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             configEntry.render(context, this.getX(), this.getY(), this.getWidth(), this.getHeight(), mouseX, mouseY, hovered, tickDelta);
         }
@@ -338,7 +338,7 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
             configEntry.setFocused(true);
             return configEntry.charTyped(input);
         }
-        *///?}
+        //?}
 
         @Override
         public Component getNarration() {

@@ -26,16 +26,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
 //? if >= 1.21.2 {
-/*import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
-*///?}
+//?}
 //? if <= 1.21.9 {
-import net.minecraft.world.entity.monster.Evoker;
-//?} else {
-/*import net.minecraft.world.entity.monster.illager.Evoker;
-*///?}
+/*import net.minecraft.world.entity.monster.Evoker;
+*///?} else {
+import net.minecraft.world.entity.monster.illager.Evoker;
+//?}
 
 @Mixin(value = Entity.class, priority = 1)
 public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
@@ -114,14 +114,14 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
     }
 
     //? if <= 1.21 {
-    @Inject(method = "spawnAtLocation(Lnet/minecraft/world/item/ItemStack;F)Lnet/minecraft/world/entity/item/ItemEntity;",
+    /*@Inject(method = "spawnAtLocation(Lnet/minecraft/world/item/ItemStack;F)Lnet/minecraft/world/entity/item/ItemEntity;",
             at = @At("HEAD"), cancellable = true)
     public void dropStack(ItemStack stack, float yOffset, CallbackInfoReturnable<ItemEntity> cir) {
-    //?} else {
-    /*@Inject(method = "spawnAtLocation(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/ItemStack;F)Lnet/minecraft/world/entity/item/ItemEntity;",
+    *///?} else {
+    @Inject(method = "spawnAtLocation(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/ItemStack;F)Lnet/minecraft/world/entity/item/ItemEntity;",
             at = @At("HEAD"), cancellable = true)
     public void dropStack(ServerLevel level, ItemStack stack, float yOffset, CallbackInfoReturnable<ItemEntity> cir) {
-        *///?}
+        //?}
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (currentSeason instanceof WildLife) {
             Entity entity = (Entity) (Object) this;
@@ -133,17 +133,17 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
 
 
     //? if >= 1.21.2 {
-    /*//? if <= 1.21.6 {
-    @WrapOperation(
+    //? if <= 1.21.6 {
+    /*@WrapOperation(
             method = "startRiding(Lnet/minecraft/world/entity/Entity;Z)Z",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/EntityType;canSerialize()Z")
     )
-    //?} else {
-    /^@WrapOperation(
+    *///?} else {
+    @WrapOperation(
             method = "startRiding(Lnet/minecraft/world/entity/Entity;ZZ)Z",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/EntityType;canSerialize()Z")
     )
-    ^///?}
+    //?}
     private boolean allowRidingPlayers(EntityType instance, Operation<Boolean> original) {
         if(instance == EntityType.PLAYER) {
             return true;
@@ -151,5 +151,5 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
             return original.call(instance);
         }
     }
-    *///?}
+    //?}
 }

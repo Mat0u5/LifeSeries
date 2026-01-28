@@ -9,8 +9,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 //? if >= 1.21.9 {
-/*import net.minecraft.client.input.CharacterEvent;
-*///?}
+import net.minecraft.client.input.CharacterEvent;
+//?}
 
 @Mixin(value = InBedChatScreen.class, priority = 1)
 public abstract class InBedChatScreenMixin {
@@ -19,10 +19,10 @@ public abstract class InBedChatScreenMixin {
 
     @Inject(method = "charTyped", at = @At("HEAD"))
     //? if <= 1.21.6 {
-    private void unfocusButton(char c, int i, CallbackInfoReturnable<Boolean> cir) {
-    //?} else {
-    /*private void unfocusButton(CharacterEvent input, CallbackInfoReturnable<Boolean> cir) {
-    *///?}
+    /*private void unfocusButton(char c, int i, CallbackInfoReturnable<Boolean> cir) {
+    *///?} else {
+    private void unfocusButton(CharacterEvent input, CallbackInfoReturnable<Boolean> cir) {
+    //?}
         InBedChatScreen chatScreen = (InBedChatScreen) (Object) this;
         ls$leaveBedButton().setFocused(false);
         if (chatScreen instanceof ChatScreenAccessor accessor) {

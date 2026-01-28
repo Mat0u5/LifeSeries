@@ -38,9 +38,9 @@ public class ItemStackMixin {
         comp1.set(DataComponents.FOOD, stack.getPrototype().get(DataComponents.FOOD));
         comp2.set(DataComponents.FOOD, stack.getPrototype().get(DataComponents.FOOD));
         //? if >= 1.21.2 {
-            /*comp1.set(DataComponents.CONSUMABLE, stack.getPrototype().get(DataComponents.CONSUMABLE));
+            comp1.set(DataComponents.CONSUMABLE, stack.getPrototype().get(DataComponents.CONSUMABLE));
             comp2.set(DataComponents.CONSUMABLE, stack.getPrototype().get(DataComponents.CONSUMABLE));
-             *///?}
+             //?}
         if (Objects.equals(comp1, comp2)) {
             cir.setReturnValue(true);
             return;
@@ -55,7 +55,7 @@ public class ItemStackMixin {
         for (DataComponentType<?> type : allTypes) {
             if (type.equals(DataComponents.FOOD)) continue;
             //? if >= 1.21.2
-            /*if (type.equals(DataComponents.CONSUMABLE)) continue;*/
+            if (type.equals(DataComponents.CONSUMABLE)) continue;
 
             Object value1 = comp1.get(type);
             Object value2 = comp2.get(type);

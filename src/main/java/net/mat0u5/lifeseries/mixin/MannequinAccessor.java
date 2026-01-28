@@ -1,15 +1,15 @@
 package net.mat0u5.lifeseries.mixin;
 //? if < 1.21.9 {
-import net.minecraft.server.MinecraftServer;
+/*import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(value = MinecraftServer.class)
 public interface MannequinAccessor {
     //Empty class to avoid mixin errors
 }
-//?} else {
+*///?} else {
 
-/*import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.decoration.Mannequin;
 import net.minecraft.world.item.component.ResolvableProfile;
 import org.spongepowered.asm.mixin.Mixin;
@@ -33,4 +33,4 @@ public interface MannequinAccessor {
     @Invoker("setHideDescription")
     void ls$setHideDescription(boolean hideDescription);
 }
-*///?}
+//?}

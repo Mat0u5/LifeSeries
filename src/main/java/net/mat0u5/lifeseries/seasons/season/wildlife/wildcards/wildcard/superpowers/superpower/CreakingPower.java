@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 //? if >= 1.21.2 {
-/*import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntitySpawnReason;
@@ -24,20 +24,20 @@ import net.minecraft.world.entity.monster.creaking.Creaking;
 import net.minecraft.world.phys.AABB;
 import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.Main.server;
-*///?}
+//?}
 
 //? if = 1.21.2
 /*import net.minecraft.core.particles.TargetColorParticleOption;*/
 //? if >= 1.21.4
-/*import net.minecraft.core.particles.TrailParticleOption;*/
+import net.minecraft.core.particles.TrailParticleOption;
 
 public class CreakingPower extends ToggleableSuperpower {
     public static final List<UUID> allCreatedEntities = new ArrayList<>();
 
     private final List<String> createdTeams = new ArrayList<>();
     //? if >= 1.21.2 {
-    /*private final List<Creaking> createdEntities = new ArrayList<>();
-    *///?}
+    private final List<Creaking> createdEntities = new ArrayList<>();
+    //?}
 
     public CreakingPower(ServerPlayer player) {
         super(player);
@@ -52,8 +52,8 @@ public class CreakingPower extends ToggleableSuperpower {
     public void tick() {
         if (!active) return;
         //? if >= 1.21.2 {
-        /*spawnTrailParticles();
-        *///?}
+        spawnTrailParticles();
+        //?}
     }
 
     @Override
@@ -71,7 +71,7 @@ public class CreakingPower extends ToggleableSuperpower {
         createdTeams.add(newTeamName);
 
         //? if >= 1.21.2 {
-        /*for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             BlockPos spawnPos =  LevelUtils.getCloseBlockPos(playerLevel, player.blockPosition(), 6, 3, true);
             Creaking creaking = EntityType.CREAKING.spawn(playerLevel, spawnPos, EntitySpawnReason.COMMAND);
             if (creaking != null) {
@@ -82,7 +82,7 @@ public class CreakingPower extends ToggleableSuperpower {
                 makeFriendly(newTeamName, creaking, player);
             }
         }
-        *///?}
+        //?}
     }
 
     @Override
@@ -90,7 +90,7 @@ public class CreakingPower extends ToggleableSuperpower {
         // Also gets triggered when the players team is changed.
         super.deactivate();
         //? if >= 1.21.2 {
-        /*if (server != null) {
+        if (server != null) {
             createdEntities.forEach(Entity::discard);
             createdEntities.clear();
         }
@@ -103,7 +103,7 @@ public class CreakingPower extends ToggleableSuperpower {
                 currentSeason.reloadPlayerTeam(getPlayer());
             }
         }
-        *///?}
+        //?}
     }
 
     @Override
@@ -122,7 +122,7 @@ public class CreakingPower extends ToggleableSuperpower {
         );
     }
     //? if >= 1.21.2 {
-    /*public void spawnTrailParticles() {
+    public void spawnTrailParticles() {
         ServerPlayer player = getPlayer();
         if (player == null) return;
         ServerLevel level = player.ls$getServerLevel();
@@ -158,12 +158,12 @@ public class CreakingPower extends ToggleableSuperpower {
             }
 
             //? if = 1.21.2 {
-            /^TargetColorParticleOption trailParticleEffect2 = new TargetColorParticleOption(vec3d2, i);
+            /*TargetColorParticleOption trailParticleEffect2 = new TargetColorParticleOption(vec3d2, i);
             level.sendParticles(trailParticleEffect2, vec3d.x, vec3d.y, vec3d.z, 1, 0.0, 0.0, 0.0, 0.0);
-            ^///?} else if >= 1.21.4 {
-            /^TrailParticleOption trailParticleEffect2 = new TrailParticleOption(vec3d2, i, random.nextInt(40) + 10);
+            *///?} else if >= 1.21.4 {
+            TrailParticleOption trailParticleEffect2 = new TrailParticleOption(vec3d2, i, random.nextInt(40) + 10);
             level.sendParticles(trailParticleEffect2, true, true, vec3d.x, vec3d.y, vec3d.z, 1, 0.0, 0.0, 0.0, 0.0);
-            ^///?}
+            //?}
         }
     }
 
@@ -177,12 +177,12 @@ public class CreakingPower extends ToggleableSuperpower {
                 //? if <= 1.21.11 {
                 if (!entity.getTags().contains("creakingFromSuperpower")) return;
                 //?} else {
-                /^if (!entity.entityTags().contains("creakingFromSuperpower")) return;
-                ^///?}
+                /*if (!entity.entityTags().contains("creakingFromSuperpower")) return;
+                *///?}
                 toKill.add(entity);
             });
             toKill.forEach(Entity::discard);
         }
     }
-    *///?}
+    //?}
 }

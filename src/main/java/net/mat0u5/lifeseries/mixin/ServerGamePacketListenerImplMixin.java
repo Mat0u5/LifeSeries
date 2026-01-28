@@ -39,11 +39,11 @@ import net.minecraft.network.protocol.game.ServerboundChatCommandSignedPacket;
 //?}
 
 //? if <= 1.21
-import net.minecraft.world.entity.RelativeMovement;
+/*import net.minecraft.world.entity.RelativeMovement;*/
 //? if >= 1.21.2 {
-/*import net.minecraft.world.entity.Relative;
+import net.minecraft.world.entity.Relative;
 import net.minecraft.world.entity.PositionMoveRotation;
-*///?}
+//?}
 
 @Mixin(value = ServerGamePacketListenerImpl.class, priority = 1)
 public class ServerGamePacketListenerImplMixin {
@@ -84,13 +84,13 @@ public class ServerGamePacketListenerImplMixin {
     }
 
     //? if <= 1.21.6 {
-    //? if <= 1.21 {
-    @Inject(method = "teleport(DDDFFLjava/util/Set;)V", at = @At("TAIL"))
+    /*//? if <= 1.21 {
+    /^@Inject(method = "teleport(DDDFFLjava/util/Set;)V", at = @At("TAIL"))
     public void requestTeleport(double x, double y, double z, float yaw, float pitch, Set<RelativeMovement> flags, CallbackInfo ci) {
-    //?} else {
-    /*@Inject(method = "teleport(Lnet/minecraft/world/entity/PositionMoveRotation;Ljava/util/Set;)V", at = @At("TAIL"))
+    ^///?} else {
+    @Inject(method = "teleport(Lnet/minecraft/world/entity/PositionMoveRotation;Ljava/util/Set;)V", at = @At("TAIL"))
     public void requestTeleport(PositionMoveRotation pos, Set<Relative> flags, CallbackInfo ci) {
-        *///?}
+        //?}
         if (Main.modFullyDisabled()) return;
         ServerGamePacketListenerImpl handler = (ServerGamePacketListenerImpl) (Object) this;
         ServerPlayer player = handler.getPlayer();
@@ -102,7 +102,7 @@ public class ServerGamePacketListenerImplMixin {
             }
         }
     }
-    //?}
+    *///?}
 
     @Unique
     private static final List<String> mutedCommands = List.of("msg", "tell", "whisper", "w", "me");

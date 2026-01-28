@@ -21,10 +21,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 //? if >= 1.21.9 {
-/*import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
-*///?}
+//?}
 
 public class TeamConfigEntry extends EmptyConfigEntry {
     public String teamNum;
@@ -132,10 +132,10 @@ public class TeamConfigEntry extends EmptyConfigEntry {
                 }
                 if (hoverText != null) {
                     //? if <= 1.21.5 {
-                    context.renderTooltip(textRenderer, textRenderer.split(hoverText, 210), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY);
-                    //?} else {
-                    /*context.setTooltipForNextFrame(textRenderer, textRenderer.split(hoverText, 210), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY, false);
-                     *///?}
+                    /*context.renderTooltip(textRenderer, textRenderer.split(hoverText, 210), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY);
+                    *///?} else {
+                    context.setTooltipForNextFrame(textRenderer, textRenderer.split(hoverText, 210), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY, false);
+                     //?}
                 }
             }
 
@@ -378,7 +378,7 @@ public class TeamConfigEntry extends EmptyConfigEntry {
     }
 
     //? if <= 1.21.6 {
-    @Override
+    /*@Override
     protected boolean mouseClickedEntry(double mouseX, double mouseY, int button) {
         boolean textFieldLivesClick = textFieldLives.mouseClicked(mouseX, mouseY, button);
         boolean textFieldNameClick = textFieldName.mouseClicked(mouseX, mouseY, button);
@@ -425,8 +425,8 @@ public class TeamConfigEntry extends EmptyConfigEntry {
         }
         return super.charTypedEntry(chr, modifiers);
     }
-    //?} else {
-    /*@Override
+    *///?} else {
+    @Override
     protected boolean mouseClickedEntry(MouseButtonEvent click, boolean doubled) {
         boolean textFieldLivesClick = textFieldLives.mouseClicked(click, doubled);
         boolean textFieldNameClick = textFieldName.mouseClicked(click, doubled);
@@ -473,7 +473,7 @@ public class TeamConfigEntry extends EmptyConfigEntry {
         }
         return super.charTypedEntry(input);
     }
-    *///?}
+    //?}
 
     @Override
     public void onSave() {

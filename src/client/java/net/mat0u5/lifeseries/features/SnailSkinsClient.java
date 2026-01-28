@@ -16,17 +16,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 //? if <= 1.21.9 {
-import net.minecraft.resources.ResourceLocation;
- //?} else {
-/*import net.minecraft.resources.Identifier;
-*///?}
+/*import net.minecraft.resources.ResourceLocation;
+ *///?} else {
+import net.minecraft.resources.Identifier;
+//?}
 
 public class SnailSkinsClient {
     //? if <= 1.21.9 {
-    private static final Map<String, ResourceLocation> snailTextures = new HashMap<>();
-    //?} else {
-    /*private static final Map<String, Identifier> snailTextures = new HashMap<>();
-    *///?}
+    /*private static final Map<String, ResourceLocation> snailTextures = new HashMap<>();
+    *///?} else {
+    private static final Map<String, Identifier> snailTextures = new HashMap<>();
+    //?}
 
     public static void handleSnailTexture(String skinName, byte[] textureData) {
         try {
@@ -38,9 +38,8 @@ public class SnailSkinsClient {
             NativeImage image = NativeImage.read(new ByteArrayInputStream(textureData));
             if (image.getWidth() == 32 && image.getHeight() == 32) {
                 Main.LOGGER.info("Converting old 32x32 snail texture to the new format.");
-                if (Main.DEBUG) saveImageDebug(image, "before");
                 image = convertOldSnailTexture(image);
-                if (Main.DEBUG) saveImageDebug(image, "after");
+                if (Main.DEBUG) saveImageDebug(image,"config/lifeseries/wildlife/snailskins/convert", skinName);
             }
 
             if (!(image.getWidth() == 128 && image.getHeight() == 128)) {
@@ -49,10 +48,10 @@ public class SnailSkinsClient {
             }
 
             //? if <= 1.21.4 {
-            DynamicTexture texture = new DynamicTexture(image);
-            //?} else {
-            /*DynamicTexture texture = new DynamicTexture(() -> skinName, image);
-            *///?}
+            /*DynamicTexture texture = new DynamicTexture(image);
+            *///?} else {
+            DynamicTexture texture = new DynamicTexture(() -> skinName, image);
+            //?}
             removeSnailTexture(skinName);
             client.getTextureManager().register(textureId, texture);
             Main.LOGGER.info(TextUtils.formatString("Added snail texture '{}'", textureId));
@@ -65,10 +64,10 @@ public class SnailSkinsClient {
     }
 
     //? if <= 1.21.9 {
-    public static ResourceLocation getSnailTexture(String skinName) {
-    //?} else {
-    /*public static Identifier getSnailTexture(String skinName) {
-    *///?}
+    /*public static ResourceLocation getSnailTexture(String skinName) {
+    *///?} else {
+    public static Identifier getSnailTexture(String skinName) {
+    //?}
         if (skinName == null) return null;
         return snailTextures.get(skinName);
     }
@@ -244,23 +243,23 @@ public class SnailSkinsClient {
 
     private static int getColor(NativeImage image, int x, int y) {
         //? if <= 1.21 {
-        return image.getPixelRGBA(x, y);
-         //?} else {
-        /*return image.getPixel(x, y);
-        *///?}
+        /*return image.getPixelRGBA(x, y);
+         *///?} else {
+        return image.getPixel(x, y);
+        //?}
     }
 
     private static void setColor(NativeImage image, int x, int y, int color) {
         //? if <= 1.21 {
-        image.setPixelRGBA(x, y, color);
-         //?} else {
-        /*image.setPixel(x, y, color);
-        *///?}
+        /*image.setPixelRGBA(x, y, color);
+         *///?} else {
+        image.setPixel(x, y, color);
+        //?}
     }
 
-    private static void saveImageDebug(NativeImage image, String filename) {
+    private static void saveImageDebug(NativeImage image, String path, String filename) {
         try {
-            Path debugPath = Paths.get("debug_textures");
+            Path debugPath = Paths.get(path);
             Files.createDirectories(debugPath);
             Path outputPath = debugPath.resolve(filename + ".png");
             image.writeToFile(outputPath);

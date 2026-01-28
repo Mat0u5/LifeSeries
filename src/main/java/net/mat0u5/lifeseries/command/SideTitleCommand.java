@@ -47,10 +47,10 @@ public class SideTitleCommand extends Command {
                                                 context.getSource(),
                                                 EntityArgument.getPlayers(context, "targets"),
                                                 //? if <= 1.21.4 {
-                                                ComponentArgument.getComponent(context, "title")
-                                                //?} else {
-                                                /*ComponentArgument.getRawComponent(context, "title")
-                                                *///?}
+                                                /*ComponentArgument.getComponent(context, "title")
+                                                *///?} else {
+                                                ComponentArgument.getRawComponent(context, "title")
+                                                //?}
                                         ))
                                 )
                         )

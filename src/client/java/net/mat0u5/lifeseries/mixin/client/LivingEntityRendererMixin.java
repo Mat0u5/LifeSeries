@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class LivingEntityRendererMixin {
     //Located in EntityRenderDispatcher in <= 1.20.3
     //? if > 1.20.3 && <= 1.21 {
-    @Inject(method = "getShadowRadius(Lnet/minecraft/world/entity/LivingEntity;)F", at = @At("HEAD"), cancellable = true)
+    /*@Inject(method = "getShadowRadius(Lnet/minecraft/world/entity/LivingEntity;)F", at = @At("HEAD"), cancellable = true)
     public <T extends LivingEntity> void stopShadow(T livingEntity, CallbackInfoReturnable<Float> cir){
         if (Main.modFullyDisabled()) return;
         if (livingEntity instanceof Player player) {
@@ -25,5 +25,5 @@ public abstract class LivingEntityRendererMixin {
             }
         }
     }
-    //?}
+    *///?}
 }

@@ -36,20 +36,20 @@ public interface IPopup {
         //?}
 
         //? if <= 1.21.5 {
-        context.pose().pushPose();
+        /*context.pose().pushPose();
         context.pose().translate(0, 0, 100);
-        //?} else {
-        /*context.pose().pushMatrix();
-        *///?}
+        *///?} else {
+        context.pose().pushMatrix();
+        //?}
         int width = getActualPopupWidth();
         int height = getActualPopupHeight();
         renderBackground(context, x, y+offsetY, width, height, mouseX, mouseY, tickDelta);
         renderContent(context, x+getPadding()/2, y+getPadding()/2+offsetY, width, height, mouseX, mouseY, tickDelta);
         //? if <= 1.21.5 {
-        context.pose().popPose();
-        //?} else {
-        /*context.pose().popMatrix();
-        *///?}
+        /*context.pose().popPose();
+        *///?} else {
+        context.pose().popMatrix();
+        //?}
     }
 
     default void renderBackground(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, float tickDelta) {

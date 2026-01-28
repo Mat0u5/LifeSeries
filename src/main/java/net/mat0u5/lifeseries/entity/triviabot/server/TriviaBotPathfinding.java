@@ -96,10 +96,10 @@ public class TriviaBotPathfinding {
     public BlockPos getGroundBlock() {
         Vec3 startPos = bot.position();
         //? if <= 1.21 {
-        int minY = bot.level().getMinBuildHeight();
-        //?} else {
-        /*int minY = bot.level().getMinY();
-        *///?}
+        /*int minY = bot.level().getMinBuildHeight();
+        *///?} else {
+        int minY = bot.level().getMinY();
+        //?}
         Vec3 endPos = startPos.add(0, minY, 0);
 
         BlockHitResult result = bot.level().clip(

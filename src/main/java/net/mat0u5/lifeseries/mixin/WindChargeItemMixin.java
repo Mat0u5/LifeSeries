@@ -28,19 +28,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
 //? if <= 1.21 {
-import net.minecraft.world.InteractionResultHolder;
+/*import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.item.ItemStack;
-//?}
+*///?}
 //? if >= 1.21.2
-/*import net.minecraft.world.InteractionResult;*/
+import net.minecraft.world.InteractionResult;
 
 @Mixin(value = WindChargeItem.class, priority = 1)
 public class WindChargeItemMixin {
     @Inject(method = "use", at = @At("RETURN"))
             //? if <= 1.21 {
-    public void use(Level level, Player user, InteractionHand hand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
-        //?} else
-        /*public void use(Level level, Player user, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {*/
+    /*public void use(Level level, Player user, InteractionHand hand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
+        *///?} else
+        public void use(Level level, Player user, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (user instanceof ServerPlayer player) {
             if (currentSeason.getSeason() != Seasons.WILD_LIFE) return;

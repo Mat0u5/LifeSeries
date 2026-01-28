@@ -39,9 +39,9 @@ public class EnchantListConfigEntry extends StringConfigEntry {
         Registry<Enchantment> enchantmentRegistry = Minecraft.getInstance().level.registryAccess()
 
         //? if <=1.21 {
-        .registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.of("minecraft", "enchantment")));
-        //?} else
-        /*.lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));*/
+        /*.registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.of("minecraft", "enchantment")));
+        *///?} else
+        .lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));
 
 
         for (String enchantmentId : items) {
@@ -51,10 +51,10 @@ public class EnchantListConfigEntry extends StringConfigEntry {
             try {
                 var id = IdentifierHelper.parse(enchantmentId);
                 //? if <= 1.21 {
-                Enchantment enchantment = enchantmentRegistry.get(id);
-                //?} else {
-                /*Enchantment enchantment = enchantmentRegistry.getValue(id);
-                *///?}
+                /*Enchantment enchantment = enchantmentRegistry.get(id);
+                *///?} else {
+                Enchantment enchantment = enchantmentRegistry.getValue(id);
+                //?}
 
                 if (enchantment != null) {
                     newList.add(enchantmentRegistry.getResourceKey(enchantment).orElseThrow());

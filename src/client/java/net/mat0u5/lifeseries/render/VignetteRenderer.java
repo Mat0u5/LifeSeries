@@ -6,28 +6,28 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
 
 //? if <= 1.21 {
-import com.mojang.blaze3d.platform.GlStateManager;
+/*import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-//?} else {
-/*import net.minecraft.util.ARGB;
-*///?}
+*///?} else {
+import net.minecraft.util.ARGB;
+//?}
 //? if >= 1.21.2 && <= 1.21.5
 /*import net.minecraft.client.renderer.RenderType;*/
 //? if >= 1.21.6
-/*import net.minecraft.client.renderer.RenderPipelines;*/
+import net.minecraft.client.renderer.RenderPipelines;
 
 //? if <= 1.21.9 {
-import net.minecraft.resources.ResourceLocation;
- //?} else {
-/*import net.minecraft.resources.Identifier;
-*///?}
+/*import net.minecraft.resources.ResourceLocation;
+ *///?} else {
+import net.minecraft.resources.Identifier;
+//?}
 
 public class VignetteRenderer {
     //? if <= 1.21.9 {
-    private static final ResourceLocation VIGNETTE_TEXTURE = IdentifierHelper.vanilla("textures/misc/vignette.png");
-    //?} else {
-    /*private static final Identifier VIGNETTE_TEXTURE = IdentifierHelper.vanilla("textures/misc/vignette.png");
-    *///?}
+    /*private static final ResourceLocation VIGNETTE_TEXTURE = IdentifierHelper.vanilla("textures/misc/vignette.png");
+    *///?} else {
+    private static final Identifier VIGNETTE_TEXTURE = IdentifierHelper.vanilla("textures/misc/vignette.png");
+    //?}
     private static float vignetteDarkness = 0.0F;
     private static long vignetteEnd = 0;
 
@@ -42,7 +42,7 @@ public class VignetteRenderer {
 
 
         //? if <= 1.21 {
-        RenderSystem.disableDepthTest();
+        /*RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(
@@ -60,15 +60,15 @@ public class VignetteRenderer {
         context.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.defaultBlendFunc();
         RenderSystem.disableBlend();
-        //?} else if <= 1.21.5 {
+        *///?} else if <= 1.21.5 {
         /*int color = ARGB.colorFromFloat(1.0F, darkness, darkness, darkness);
         context.blit(RenderType::vignette, VIGNETTE_TEXTURE, 0, 0, 0.0F, 0.0F,
                 context.guiWidth(), context.guiHeight(), context.guiWidth(), context.guiHeight(), color);
         *///?} else {
-        /*int color = ARGB.colorFromFloat(1.0F, darkness, darkness, darkness);
+        int color = ARGB.colorFromFloat(1.0F, darkness, darkness, darkness);
         context.blit(RenderPipelines.VIGNETTE, VIGNETTE_TEXTURE, 0, 0, 0.0F, 0.0F,
                 context.guiWidth(), context.guiHeight(), context.guiWidth(), context.guiHeight(), color);
-        *///?}
+        //?}
     }
 
     // Call this method to show the vignette for a certain duration

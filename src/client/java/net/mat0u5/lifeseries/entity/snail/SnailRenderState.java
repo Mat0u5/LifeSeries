@@ -1,12 +1,12 @@
 package net.mat0u5.lifeseries.entity.snail;
 
 //? if <= 1.21 {
-public class SnailRenderState {
+/*public class SnailRenderState {
 //Empty class to prevent errors
 }
-//?} else {
+*///?} else {
 
-/*import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.world.entity.AnimationState;
 
 public class SnailRenderState extends LivingEntityRenderState {
@@ -25,4 +25,4 @@ public class SnailRenderState extends LivingEntityRenderState {
     public String skinName;
     public boolean boundPlayerDead;
 }
-*///?}
+//?}

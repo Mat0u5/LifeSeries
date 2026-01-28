@@ -22,10 +22,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 //? if >= 1.21.9 {
-/*import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
-*///?}
+//?}
 
 public class ConfigScreen extends Screen {
     private static int HEADER_HEIGHT_SMALL = 55;
@@ -351,19 +351,19 @@ public class ConfigScreen extends Screen {
     }
 
     //? if <= 1.21.6 {
-    @Override
+    /*@Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         boolean leftClick = button == 0;
         if (this.searchField.mouseClicked(mouseX, mouseY, button)) {
-    //?} else {
-    /*@Override
+    *///?} else {
+    @Override
     public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         int mouseX = (int) click.x();
         int mouseY = (int) click.y();
         boolean leftClick = click.button() == 0;
 
         if (this.searchField.mouseClicked(click, doubled)) {
-    *///?}
+    //?}
             focusSearch();
             return true;
         }
@@ -388,23 +388,23 @@ public class ConfigScreen extends Screen {
             }
         }
         //? if <= 1.21.6 {
-        return super.mouseClicked(mouseX, mouseY, button);
-        //?} else {
-        /*return super.mouseClicked(click, doubled);
-        *///?}
+        /*return super.mouseClicked(mouseX, mouseY, button);
+        *///?} else {
+        return super.mouseClicked(click, doubled);
+        //?}
     }
 
     //? if <= 1.21.6 {
-    @Override
+    /*@Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (this.searchField.isFocused() && this.searchField.keyPressed(keyCode, scanCode, modifiers)) {
-    //?} else {
-    /*@Override
+    *///?} else {
+    @Override
     public boolean keyPressed(KeyEvent keyInput) {
         int keyCode = keyInput.input();
         int modifiers = keyInput.modifiers();
         if (this.searchField.isFocused() && this.searchField.keyPressed(keyInput)) {
-    *///?}
+    //?}
             return true;
         }
 
@@ -415,29 +415,29 @@ public class ConfigScreen extends Screen {
         }
 
         //? if <= 1.21.6 {
-        return super.keyPressed(keyCode, scanCode, modifiers);
-        //?} else {
-        /*return super.keyPressed(keyInput);
-        *///?}
+        /*return super.keyPressed(keyCode, scanCode, modifiers);
+        *///?} else {
+        return super.keyPressed(keyInput);
+        //?}
     }
 
     //? if <= 1.21.6 {
-    @Override
+    /*@Override
     public boolean charTyped(char chr, int modifiers) {
         if (this.searchField.isFocused() && this.searchField.charTyped(chr, modifiers)) {
             return true;
         }
         return super.charTyped(chr, modifiers);
     }
-    //?} else {
-    /*@Override
+    *///?} else {
+    @Override
     public boolean charTyped(CharacterEvent charInput) {
         if (this.searchField.isFocused() && this.searchField.charTyped(charInput)) {
             return true;
         }
         return super.charTyped(charInput);
     }
-    *///?}
+    //?}
 
     public void focusSearch() {
         if (focusedEntry != null) {

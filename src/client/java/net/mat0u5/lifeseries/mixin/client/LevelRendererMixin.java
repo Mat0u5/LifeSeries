@@ -25,12 +25,12 @@ import java.util.List;
 @Mixin(value = LevelRenderer.class, priority = 1)
 public class LevelRendererMixin {
     //? if <= 1.21 {
-    @Redirect(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;entitiesForRendering()Ljava/lang/Iterable;"))
-    //?} else if <= 1.21.6 {
+    /*@Redirect(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;entitiesForRendering()Ljava/lang/Iterable;"))
+    *///?} else if <= 1.21.6 {
     /*@Redirect(method = "collectVisibleEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;entitiesForRendering()Ljava/lang/Iterable;"))
     *///?} else {
-    /*@Redirect(method = "extractVisibleEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;entitiesForRendering()Ljava/lang/Iterable;"))
-     *///?}
+    @Redirect(method = "extractVisibleEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;entitiesForRendering()Ljava/lang/Iterable;"))
+     //?}
     private Iterable<Entity> addMorphedEntities(ClientLevel instance) {
         List<Entity> entities = new ArrayList<>();
         instance.entitiesForRendering().forEach(entities::add);
@@ -52,29 +52,29 @@ public class LevelRendererMixin {
         if (player.isInvisible()) return false;
         Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
         //? if <= 1.21.9 {
-        if (player instanceof LocalPlayer && camera.getEntity() != player) {
+        /*if (player instanceof LocalPlayer && camera.getEntity() != player) {
             return false;
         }
         if (player == camera.getEntity() && !camera.isDetached() &&
                 !(camera.getEntity() instanceof LivingEntity livingEntityCamera && livingEntityCamera.isSleeping())) {
             return false;
         }
-        //?} else {
-        /*if (player instanceof LocalPlayer && camera.entity() != player) {
+        *///?} else {
+        if (player instanceof LocalPlayer && camera.entity() != player) {
             return false;
         }
         if (player == camera.entity() && !camera.isDetached() &&
                 !(camera.entity() instanceof LivingEntity livingEntityCamera && livingEntityCamera.isSleeping())) {
             return false;
         }
-        *///?}
+        //?}
         return true;
     }
 
     //? if >= 1.21.11 {
-    /*@ModifyVariable(method = "addCloudsPass", at = @At("HEAD"), index = 7, argsOnly = true)
+    @ModifyVariable(method = "addCloudsPass", at = @At("HEAD"), index = 7, argsOnly = true)
     private int setCloudColor(int value) {
         return ClientRenderer.modifyColor(value, MainClient.cloudColor, MainClient.cloudColorSetMode, MainClient.cachedFogRenderColor);
     }
-    *///?}
+    //?}
 }
