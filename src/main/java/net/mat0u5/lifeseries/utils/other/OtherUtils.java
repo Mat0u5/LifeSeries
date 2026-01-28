@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.utils.other;
 
 import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.PropertyMap;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -157,6 +158,14 @@ public class OtherUtils {
         /*return profile.getName();
          *///?} else {
         return profile.name();
+        //?}
+    }
+
+    public static PropertyMap profileProperties(GameProfile profile) {
+        //? if <= 1.21.6 {
+        /*return profile.getProperties();
+         *///?} else {
+        return profile.properties();
         //?}
     }
 

@@ -27,6 +27,7 @@
     "MobEffectMixin",
     "MobMixin",
     "NaturalSpawnerMixin",
+    "PlayerAccessor",
     "PlayerDataStorageMixin",
     "PlayerInventoryMixin",
     "PlayerLikeEntityMixin",

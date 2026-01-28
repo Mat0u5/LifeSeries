@@ -31,7 +31,6 @@
     "MinecraftMixin",
     "ParticleAccessor",
     "ParticleEngineMixin",
-    "PlayerAccessor",
     "PlayerEntityRendererMixin",
     "PlayerTabOverlayMixin",
     "SkyRendererMixin",
