@@ -7,6 +7,7 @@ import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.datafixers.util.Pair;
+import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.mixin.PlayerAccessor;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.network.protocol.game.*;
@@ -28,6 +29,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
+import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.Main.server;
 
 //? if > 1.21 {
@@ -35,27 +37,48 @@ import com.mojang.authlib.properties.PropertyMap;
 import net.minecraft.world.entity.PositionMoveRotation;
 //?}
 
-public class SkinManager {
+public class ProfileManager {
 
     private static final Map<UUID, Property> originalSkins = new HashMap<>();
+    private static final Map<UUID, String> originalNames = new HashMap<>();
 
-    public static CompletableFuture<Boolean> setSkin(ServerPlayer player, String targetUsername) {
+    public enum ProfileChange {
+        NONE,
+        EMPTY,
+        ORIGINAL,
+        SET;
+        String info = "";
+        public ProfileChange withInfo(String info) {
+            this.info = info;
+            return this;
+        }
+    }
+
+    public static CompletableFuture<Boolean> modifyProfile(ServerPlayer player, ProfileChange skinChange, ProfileChange usernameChange) {
         return CompletableFuture.supplyAsync(() -> {
             try {
                 if (!originalSkins.containsKey(player.getUUID())) {
                     Property originalSkin = getSkinProperty(player.getGameProfile());
-                    if (originalSkin != null) {
-                        originalSkins.put(player.getUUID(), originalSkin);
-                    }
+                    originalSkins.put(player.getUUID(), originalSkin);
+                }
+                if (!originalNames.containsKey(player.getUUID())) {
+                    originalNames.put(player.getUUID(), player.getScoreboardName());
                 }
 
-                Property targetSkin = fetchSkinFromUsername(targetUsername);
-                if (targetSkin == null) {
-                    return false;
+                Property targetSkin = null;
+                if (skinChange == ProfileChange.ORIGINAL) {
+                    targetSkin = originalSkins.get(player.getUUID());
+                }
+                if (skinChange == ProfileChange.SET) {
+                    targetSkin = fetchSkinFromUsername(skinChange.info);
                 }
 
-                setSkinProperty(player, targetSkin);
-                refreshPlayerSkin(player);
+                setProfile(player, skinChange, usernameChange, targetSkin);
+
+                refreshPlayerProfile(player);
+                if (usernameChange != ProfileChange.NONE) {
+                    currentSeason.onPlayerJoin(player);
+                }
                 return true;
 
             } catch (Exception e) {
@@ -65,76 +88,55 @@ public class SkinManager {
         });
     }
 
-    public static boolean resetSkin(ServerPlayer player) {
-        Property originalSkin = originalSkins.get(player.getUUID());
-        if (originalSkin == null) {
-            clearSkin(player);
+    private static void setProfile(ServerPlayer player, ProfileChange skinChange, ProfileChange usernameChange, Property targetSkin) {
+        GameProfile currentProfile = player.getGameProfile();
+
+        String name = OtherUtils.profileName(currentProfile);
+        if (usernameChange == ProfileChange.ORIGINAL) {
+            name = originalNames.get(player.getUUID());
+        }
+        if (usernameChange == ProfileChange.SET) {
+            name = usernameChange.info;
         }
 
-        setSkinProperty(player, originalSkin);
-        refreshPlayerSkin(player);
-        originalSkins.remove(player.getUUID());
-        return true;
-    }
-
-    public static void clearSkin(ServerPlayer player) {
-        GameProfile currentProfile = player.getGameProfile();
 
         //? if > 1.21.6 {
-        Multimap<String, Property> properties = ArrayListMultimap.create();
-        OtherUtils.profileProperties(currentProfile).forEach((key, property) -> {
-            if (!key.equals("textures")) {
-                properties.put(key, property);
+        Multimap<String, Property> properties;
+        if (skinChange != ProfileChange.NONE) {
+            properties = ArrayListMultimap.create();
+            OtherUtils.profileProperties(currentProfile).forEach((key, property) -> {
+                if (!key.equals("textures") && property != null) {
+                    properties.put(key, property);
+                }
+            });
+            if (skinChange != ProfileChange.EMPTY && targetSkin != null) {
+                properties.put("textures", targetSkin);
             }
-        });
+        }
+        else {
+            properties = currentProfile.properties();
+        }
         //?}
+
 
         GameProfile newProfile = new GameProfile(
                 OtherUtils.profileId(currentProfile),
-                OtherUtils.profileName(currentProfile)
+                name
                 //? if > 1.21.6 {
                 ,new PropertyMap(properties)
                 //?}
         );
         //? if <= 1.21.6 {
-        /*OtherUtils.profileProperties(currentProfile).forEach((key, property) -> {
-            if (!key.equals("textures")) {
-                newProfile.getProperties().put(key, property);
+        /*if (skinChange != ProfileChange.NONE) {
+            OtherUtils.profileProperties(currentProfile).forEach((key, property) -> {
+                if (!key.equals("textures") && property != null) {
+                    newProfile.getProperties().put(key, property);
+                }
+            });
+            if (skinChange != ProfileChange.EMPTY && targetSkin != null) {
+                newProfile.getProperties().put("textures", targetSkin);
             }
-        });
-        *///?}
-
-        ((PlayerAccessor) player).ls$setGameProfile(newProfile);
-        refreshPlayerSkin(player);
-    }
-
-    private static void setSkinProperty(ServerPlayer player, Property skin) {
-        GameProfile currentProfile = player.getGameProfile();
-
-        //? if > 1.21.6 {
-        Multimap<String, Property> properties = ArrayListMultimap.create();
-        OtherUtils.profileProperties(currentProfile).forEach((key, property) -> {
-            if (!key.equals("textures")) {
-                properties.put(key, property);
-            }
-        });
-        properties.put("textures", skin);
-        //?}
-
-        GameProfile newProfile = new GameProfile(
-                OtherUtils.profileId(currentProfile),
-                OtherUtils.profileName(currentProfile)
-                //? if > 1.21.6 {
-                ,new PropertyMap(properties)
-                //?}
-        );
-        //? if <= 1.21.6 {
-        /*OtherUtils.profileProperties(currentProfile).forEach((key, property) -> {
-            if (!key.equals("textures")) {
-                newProfile.getProperties().put(key, property);
-            }
-        });
-        newProfile.getProperties().put("textures", skin);
+        }
         *///?}
 
         ((PlayerAccessor) player).ls$setGameProfile(newProfile);
@@ -191,7 +193,7 @@ public class SkinManager {
         }
     }
 
-    private static void refreshPlayerSkin(ServerPlayer player) {
+    private static void refreshPlayerProfile(ServerPlayer player) {
         ServerLevel level = player.ls$getServerLevel();
         PlayerList playerList = server.getPlayerList();
 
@@ -343,6 +345,35 @@ public class SkinManager {
     }
 
     public static void onPlayerDisconnect(ServerPlayer player) {
-        originalSkins.remove(player.getUUID());
+        resetPlayer(player).thenRun(() -> {
+            originalSkins.remove(player.getUUID());
+            originalNames.remove(player.getUUID());
+        });
+    }
+
+    public static CompletableFuture<Boolean> resetPlayer(ServerPlayer player) {
+
+        boolean reset = false;
+        UUID uuid = player.getUUID();
+        if (originalSkins.containsKey(uuid)) {
+            Property currentSkin = getSkinProperty(player.getGameProfile());
+            Property originalSkin = originalSkins.get(uuid);
+            if (currentSkin != null && originalSkin != null && !currentSkin.value().equalsIgnoreCase(originalSkin.value())) {
+                reset = true;
+            }
+        }
+        if (originalNames.containsKey(uuid)) {
+            if (!player.getScoreboardName().equals(originalNames.get(uuid))) {
+                reset = true;
+            }
+        }
+        if (reset) {
+            return modifyProfile(player, ProfileChange.ORIGINAL, ProfileChange.ORIGINAL);
+        }
+        return CompletableFuture.completedFuture(false);
+    }
+
+    public static void resetAll() {
+        PlayerUtils.getAllPlayers().forEach(ProfileManager::resetPlayer);
     }
 }

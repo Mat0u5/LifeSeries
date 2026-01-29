@@ -2,7 +2,6 @@ package net.mat0u5.lifeseries.mixin;
 
 import com.mojang.datafixers.util.Either;
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
@@ -10,6 +9,7 @@ import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.utils.interfaces.IServerPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.player.NicknameManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
@@ -22,6 +22,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.scores.PlayerTeam;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -256,6 +257,20 @@ public class ServerPlayerMixin implements IServerPlayer {
                 cir.setReturnValue(Either.left(Player.BedSleepingProblem.OTHER_PROBLEM));
                 ls$get().displayClientMessage(Component.literal("You can't seem to sleep right now"), true);
             }
+        }
+    }
+
+    @Inject(method = "getTabListDisplayName", at = @At("TAIL"), cancellable = true)
+    private void customNickname(CallbackInfoReturnable<Component> cir) {
+        try {
+            Component nickname = NicknameManager.getNicknameText(ls$get().getUUID());
+
+            if (nickname != null) {
+                Component formattedName = PlayerTeam.formatNameForTeam(ls$get().getTeam(), nickname);
+                cir.setReturnValue(formattedName);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

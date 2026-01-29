@@ -21,7 +21,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.S
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.player.SkinManager;
+import net.mat0u5.lifeseries.utils.player.ProfileManager;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.core.BlockPos;
@@ -130,7 +130,7 @@ public class Events {
     }
 
     private static void onPlayerDisconnect(ServerPlayer player) {
-        SkinManager.onPlayerDisconnect(player);
+        ProfileManager.onPlayerDisconnect(player);
         if (Main.modDisabled()) return;
         if (isFakePlayer(player)) return;
 
@@ -144,6 +144,7 @@ public class Events {
 
     private static void onServerStopping(MinecraftServer server) {
         try {
+            //ProfileManager.resetAll();
             UpdateChecker.shutdownExecutor();
             if (Main.modDisabled()) return;
             currentSession.sessionEnd();

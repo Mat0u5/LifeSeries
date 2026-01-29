@@ -3,21 +3,21 @@ package net.mat0u5.lifeseries.mixin;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
-import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
-import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.player.NicknameManager;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static net.mat0u5.lifeseries.Main.currentSeason;
@@ -28,7 +28,6 @@ import net.minecraft.server.level.ServerLevel;
 //? if <= 1.20.5 {
 /*import net.minecraft.world.item.enchantment.FrostWalkerEnchantment;
 *///?} else {
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.Vec3i;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
@@ -43,7 +42,7 @@ import net.minecraft.world.item.enchantment.effects.ReplaceDisk;
 //?}
 
 @Mixin(value = Player.class, priority = 1)
-public abstract class PlayerMixin {
+public abstract class PlayerMixin implements IPlayer {
 
     @Inject(method = "actuallyHurt", at = @At("HEAD"), cancellable = true)
     //? if <=1.21 {
@@ -161,4 +160,54 @@ public abstract class PlayerMixin {
         }
     }
     *///?}
+
+
+
+    @Unique
+    private Component ls$cachedDisplayName = null;
+    @Unique
+    private int ls$cacheAge = -1;
+    @Unique
+    private boolean ls$preventRecursion = false;
+    @ModifyArg(method = "getDisplayName", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/scores/PlayerTeam;formatNameForTeam(Lnet/minecraft/world/scores/Team;Lnet/minecraft/network/chat/Component;)Lnet/minecraft/network/chat/MutableComponent;" ))
+    private Component ls$injectNickname(Component originalName) {
+        try {
+            Player player = (Player) (Object) this;
+            if (ls$preventRecursion) {
+                return originalName;
+            }
+
+            if (ls$cacheAge == player.tickCount && ls$cachedDisplayName != null) {
+                return ls$cachedDisplayName;
+            }
+
+            if (player.level().getServer() != null && !player.level().getServer().isSameThread()) {
+                return originalName;
+            }
+
+            ls$preventRecursion = true;
+
+            Component nickname = NicknameManager.getNicknameText(OtherUtils.profileId(player.getGameProfile()));
+
+            if (nickname != null) {
+                ls$cachedDisplayName = nickname;
+                ls$cacheAge = player.tickCount;
+                ls$preventRecursion = false;
+                return nickname;
+            }
+
+            ls$preventRecursion = false;
+        } catch (Exception e) {
+            ls$preventRecursion = false;
+            e.printStackTrace();
+        }
+
+        return originalName;
+    }
+
+    @Override
+    public void ls$resetUsernameCache() {
+        this.ls$cachedDisplayName = null;
+        this.ls$cacheAge = -1;
+    }
 }

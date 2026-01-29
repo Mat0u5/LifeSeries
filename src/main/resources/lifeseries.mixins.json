@@ -37,6 +37,7 @@
     "RecipeManagerMixin",
     "RegistrySyncManagerMixin",
     "ServerCommonPacketListenerImplMixin",
+    "ServerEntityAccessor",
     "ServerGamePacketListenerImplMixin",
     "ServerLevelAccessor",
     "ServerLevelMixin",
