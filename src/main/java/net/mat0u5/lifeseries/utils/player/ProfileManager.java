@@ -358,7 +358,11 @@ public class ProfileManager {
         if (originalSkins.containsKey(uuid)) {
             Property currentSkin = getSkinProperty(player.getGameProfile());
             Property originalSkin = originalSkins.get(uuid);
+            //? if <= 1.20 {
+            /*if (currentSkin != null && originalSkin != null && !currentSkin.getValue().equalsIgnoreCase(originalSkin.getValue())) {
+            *///?} else {
             if (currentSkin != null && originalSkin != null && !currentSkin.value().equalsIgnoreCase(originalSkin.value())) {
+            //?}
                 reset = true;
             }
         }

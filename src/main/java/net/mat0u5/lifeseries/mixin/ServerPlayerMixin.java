@@ -34,6 +34,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.OptionalInt;
 
 import static net.mat0u5.lifeseries.Main.*;
+import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 
 //? if >= 1.21.11 {
 import net.minecraft.core.registries.BuiltInRegistries;
