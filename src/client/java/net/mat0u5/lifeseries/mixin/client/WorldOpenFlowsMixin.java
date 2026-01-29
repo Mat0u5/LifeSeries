@@ -10,7 +10,7 @@ import net.minecraft.client.gui.screens.worldselection.WorldOpenFlows;
 import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.At;
 
-//? if <= 1.20 {
+//? if <= 1.20.2 {
 /*import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = WorldOpenFlows.class, priority = 1)
 public abstract class WorldOpenFlowsMixin {
 
-    //? if <= 1.20 {
+    //? if <= 1.20.2 {
     /*@Invoker("doLoadLevel")
     abstract void ls$doLoadLevel(Screen screen, String string, boolean bl, boolean bl2);
     @WrapOperation(method = "doLoadLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/worldselection/WorldOpenFlows;createWorldAccess(Ljava/lang/String;)Lnet/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess;"))

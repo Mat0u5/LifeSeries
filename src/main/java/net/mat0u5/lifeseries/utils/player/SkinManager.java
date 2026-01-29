@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.utils.player;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
@@ -15,7 +17,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.PositionMoveRotation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.biome.BiomeManager;
 
@@ -28,6 +29,11 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 import static net.mat0u5.lifeseries.Main.server;
+
+//? if > 1.21 {
+import com.mojang.authlib.properties.PropertyMap;
+import net.minecraft.world.entity.PositionMoveRotation;
+//?}
 
 public class SkinManager {
 
@@ -74,20 +80,29 @@ public class SkinManager {
     public static void clearSkin(ServerPlayer player) {
         GameProfile currentProfile = player.getGameProfile();
 
-        com.google.common.collect.Multimap<String, Property> properties =
-                com.google.common.collect.ArrayListMultimap.create();
-
+        //? if > 1.21.6 {
+        Multimap<String, Property> properties = ArrayListMultimap.create();
         OtherUtils.profileProperties(currentProfile).forEach((key, property) -> {
             if (!key.equals("textures")) {
                 properties.put(key, property);
             }
         });
+        //?}
 
         GameProfile newProfile = new GameProfile(
                 OtherUtils.profileId(currentProfile),
-                OtherUtils.profileName(currentProfile),
-                new com.mojang.authlib.properties.PropertyMap(properties)
+                OtherUtils.profileName(currentProfile)
+                //? if > 1.21.6 {
+                ,new PropertyMap(properties)
+                //?}
         );
+        //? if <= 1.21.6 {
+        /*OtherUtils.profileProperties(currentProfile).forEach((key, property) -> {
+            if (!key.equals("textures")) {
+                newProfile.getProperties().put(key, property);
+            }
+        });
+        *///?}
 
         ((PlayerAccessor) player).ls$setGameProfile(newProfile);
         refreshPlayerSkin(player);
@@ -96,22 +111,31 @@ public class SkinManager {
     private static void setSkinProperty(ServerPlayer player, Property skin) {
         GameProfile currentProfile = player.getGameProfile();
 
-        com.google.common.collect.Multimap<String, Property> properties =
-                com.google.common.collect.ArrayListMultimap.create();
-
+        //? if > 1.21.6 {
+        Multimap<String, Property> properties = ArrayListMultimap.create();
         OtherUtils.profileProperties(currentProfile).forEach((key, property) -> {
             if (!key.equals("textures")) {
                 properties.put(key, property);
             }
         });
-
         properties.put("textures", skin);
+        //?}
 
         GameProfile newProfile = new GameProfile(
                 OtherUtils.profileId(currentProfile),
-                OtherUtils.profileName(currentProfile),
-                new com.mojang.authlib.properties.PropertyMap(properties)
+                OtherUtils.profileName(currentProfile)
+                //? if > 1.21.6 {
+                ,new PropertyMap(properties)
+                //?}
         );
+        //? if <= 1.21.6 {
+        /*OtherUtils.profileProperties(currentProfile).forEach((key, property) -> {
+            if (!key.equals("textures")) {
+                newProfile.getProperties().put(key, property);
+            }
+        });
+        newProfile.getProperties().put("textures", skin);
+        *///?}
 
         ((PlayerAccessor) player).ls$setGameProfile(newProfile);
     }
@@ -177,6 +201,41 @@ public class SkinManager {
 
         refreshEntityForTrackers(player, level);
 
+        //? if <= 1.20 {
+        /*player.connection.send(new ClientboundRespawnPacket(
+                                level.dimensionTypeId(),
+                                level.dimension(),
+                                BiomeManager.obfuscateSeed(level.getSeed()),
+                                player.gameMode.getGameModeForPlayer(),
+                                player.gameMode.getPreviousGameModeForPlayer(),
+                                level.isDebug(),
+                                level.isFlat(),
+                                ClientboundRespawnPacket.KEEP_ALL_DATA,
+                                player.getLastDeathLocation(),
+                                player.getPortalCooldown()
+                )
+        );
+        *///?} else if <= 1.21 {
+        /*player.connection.send(new ClientboundRespawnPacket(
+                        new CommonPlayerSpawnInfo(
+                                //? if <= 1.20.3 {
+                                level.dimensionTypeId(),
+                                //?} else {
+                                /^level.dimensionTypeRegistration(),
+                                ^///?}
+                                level.dimension(),
+                                BiomeManager.obfuscateSeed(level.getSeed()),
+                                player.gameMode.getGameModeForPlayer(),
+                                player.gameMode.getPreviousGameModeForPlayer(),
+                                level.isDebug(),
+                                level.isFlat(),
+                                player.getLastDeathLocation(),
+                                player.getPortalCooldown()
+                        ),
+                        ClientboundRespawnPacket.KEEP_ALL_DATA
+                )
+        );
+        *///?} else {
         player.connection.send(new ClientboundRespawnPacket(
                 new CommonPlayerSpawnInfo(
                         level.dimensionTypeRegistration(),
@@ -192,6 +251,7 @@ public class SkinManager {
                 ),
                 ClientboundRespawnPacket.KEEP_ALL_DATA
         ));
+        //?}
 
         restorePlayerState(player, level, playerList);
     }
@@ -232,8 +292,19 @@ public class SkinManager {
     }
 
     private static void restorePlayerState(ServerPlayer player, ServerLevel level, PlayerList playerList) {
+        //? if <= 1.21 {
+        /*player.connection.send(new ClientboundPlayerPositionPacket(player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot(), Collections.emptySet(), 0));
+        *///?} else {
         player.connection.send(new ClientboundPlayerPositionPacket(0, PositionMoveRotation.of(player), Collections.emptySet()));
+        //?}
+
+        //? if <= 1.21 {
+        /*player.connection.send(new ClientboundSetCarriedItemPacket(player.getInventory().selected));
+        *///?} else if <= 1.21.4 {
+        /*player.connection.send(new ClientboundSetCursorItemPacket(player.getInventory().getSelected()));
+        *///?} else {
         player.connection.send(new ClientboundSetCursorItemPacket(player.getInventory().getSelectedItem()));
+        //?}
 
         player.connection.send(new ClientboundChangeDifficultyPacket(level.getDifficulty(), level.getLevelData().isDifficultyLocked()));
         player.connection.send(new ClientboundSetExperiencePacket(player.experienceProgress, player.totalExperience, player.experienceLevel));
@@ -242,7 +313,11 @@ public class SkinManager {
         playerList.sendPlayerPermissionLevel(player);
 
         for (MobEffectInstance effect : player.getActiveEffects()) {
+            //? if <= 1.20.3 {
+            /*player.connection.send(new ClientboundUpdateMobEffectPacket(player.getId(), effect));
+            *///?} else {
             player.connection.send(new ClientboundUpdateMobEffectPacket(player.getId(), effect, false));
+            //?}
         }
 
         List<Pair<EquipmentSlot, ItemStack>> equipment = new ArrayList<>();

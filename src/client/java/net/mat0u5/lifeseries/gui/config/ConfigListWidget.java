@@ -149,12 +149,12 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
         /*context.disableScissor();
         context.setColor(0.25F, 0.25F, 0.25F, 1.0F);
         //? if <= 1.20.2 {
-        /^context.blit(Screen.BACKGROUND_LOCATION, this.x0, 0, 0.0F, 0.0F, this.width, this.y0, 32, 32);
+        context.blit(Screen.BACKGROUND_LOCATION, this.x0, 0, 0.0F, 0.0F, this.width, this.y0, 32, 32);
         context.blit(Screen.BACKGROUND_LOCATION, this.x0, this.y1, 0.0F, (float)this.y1, this.width, this.height - this.y1, 32, 32);
-        ^///?} else {
-        context.blit(Screen.BACKGROUND_LOCATION, this.getX(), 0, 0.0F, 0.0F, this.width, this.getY(), 32, 32);
+        //?} else {
+        /^context.blit(Screen.BACKGROUND_LOCATION, this.getX(), 0, 0.0F, 0.0F, this.width, this.getY(), 32, 32);
         context.blit(Screen.BACKGROUND_LOCATION, this.getX(), this.getBottom(), 0.0F, (float)this.getBottom(), this.width, this.height, 32, 32);
-        //?}
+        ^///?}
         context.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         this.enableScissor(context);
         *///?}
