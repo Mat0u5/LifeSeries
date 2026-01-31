@@ -352,29 +352,40 @@ public class ProfileManager {
     }
 
     public static CompletableFuture<Boolean> resetPlayer(ServerPlayer player) {
+        if (player == null) return CompletableFuture.completedFuture(false);
+        if (hasChangedName(player) || hasChangedSkin(player)) {
+            return modifyProfile(player, ProfileChange.ORIGINAL, ProfileChange.ORIGINAL);
+        }
+        return CompletableFuture.completedFuture(false);
+    }
 
-        boolean reset = false;
+    public static boolean hasChangedName(ServerPlayer player) {
+        UUID uuid = player.getUUID();
+        if (originalNames.containsKey(uuid)) {
+            if (!player.getScoreboardName().equals(originalNames.get(uuid))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean hasChangedSkin(ServerPlayer player) {
         UUID uuid = player.getUUID();
         if (originalSkins.containsKey(uuid)) {
             Property currentSkin = getSkinProperty(player.getGameProfile());
             Property originalSkin = originalSkins.get(uuid);
             //? if <= 1.20 {
             /*if (currentSkin != null && originalSkin != null && !currentSkin.getValue().equalsIgnoreCase(originalSkin.getValue())) {
-            *///?} else {
+             *///?} else {
             if (currentSkin != null && originalSkin != null && !currentSkin.value().equalsIgnoreCase(originalSkin.value())) {
-            //?}
-                reset = true;
+                //?}
+                return true;
+            }
+            if ((currentSkin == null) != (originalSkin == null)) {
+                return true;
             }
         }
-        if (originalNames.containsKey(uuid)) {
-            if (!player.getScoreboardName().equals(originalNames.get(uuid))) {
-                reset = true;
-            }
-        }
-        if (reset) {
-            return modifyProfile(player, ProfileChange.ORIGINAL, ProfileChange.ORIGINAL);
-        }
-        return CompletableFuture.completedFuture(false);
+        return false;
     }
 
     public static void resetAll() {

@@ -249,6 +249,7 @@ public abstract class Season {
         currentSession.freezeIfNecessary();
         DatapackIntegration.reload();
         PlayerUtils.resendCommandTrees();
+        SubInManager.reload();
     }
 
     public static void setSkyColor(Vec3 color, boolean setMode) {
@@ -687,6 +688,9 @@ public abstract class Season {
         TaskScheduler.scheduleTask(1, () -> {
             if (SubInManager.isBeingSubstituted(player.getUUID())) {
                 SubInManager.removeSubIn(player);
+            }
+            if (SubInManager.isSubbingIn(player.getUUID())) {
+                SubInManager.reloadPlayerProfile(player);
             }
         });
     }

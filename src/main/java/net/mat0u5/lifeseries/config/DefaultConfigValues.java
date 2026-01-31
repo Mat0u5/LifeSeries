@@ -306,6 +306,14 @@ public class DefaultConfigValues {
             "additional_wither_skull_rate", 0.05, ConfigTypes.PERCENTAGE, "global",
             "Additional Wither Skull Rate", "Controls the additional chance for wither skeletons to drop skulls."
     );
+    public final ConfigFileEntry<Boolean> SUBIN_CHANGE_SKIN = new ConfigFileEntry<>(
+            "subin_change_skin", true, "global.subin[new]",
+            "Sub-in Change Skin", "Controls whether the player subbing in will get the skin of the player they are subbing in for."
+    );
+    public final ConfigFileEntry<Boolean> SUBIN_CHANGE_USERNAME = new ConfigFileEntry<>(
+            "subin_change_username", true, "global.subin[new]",
+            "Sub-in Change Username", "Controls whether the player subbing in will get the username of the player they are subbing in for."
+    );
 
 
 
@@ -339,6 +347,10 @@ public class DefaultConfigValues {
     public final ConfigFileEntry<Object> GROUP_WATCHERS = new ConfigFileEntry<>(
             "group_watchers", null, ConfigTypes.TEXT, "{global.watchers}",
             "Watchers §7('/watcher' command)", ""
+    );
+    public final ConfigFileEntry<Object> GROUP_SUBIN = new ConfigFileEntry<>(
+            "group_subin", null, ConfigTypes.TEXT, "{global.subin}",
+            "Sub-in Settings", ""
     );
 
     public final ConfigFileEntry<Object> GROUP_LIVES = new ConfigFileEntry<>(
