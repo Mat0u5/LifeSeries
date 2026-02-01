@@ -36,7 +36,7 @@ public class TestingCommands extends Command {
     public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         if (VersionControl.isDevVersion()) {
             dispatcher.register(
-                literal("ls")
+                literal("lsdev")
                     .requires(PermissionManager::isAdmin)
                     .then(literal("test")
                         .executes(context -> test(context.getSource()))

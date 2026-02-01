@@ -57,14 +57,14 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,MAX_PLAYER_HEALTH // Group
                 ,KEEP_INVENTORY
 
-                //? if < 1.21.9 {
-                /*,WORLDBORDER_SIZE
-                *///?} else {
                 ,WORLDBORDER_GROUP
                 ,WORLDBORDER_SIZE
+                //? if >= 1.21.9 {
                 ,WORLDBORDER_NETHER_SIZE
                 ,WORLDBORDER_END_SIZE
                 //?}
+                , WORLDBORDER_OUTSIDE_TELEPORT
+
                 //? if >= 1.21.6 {
                 ,LOCATOR_BAR
                  //?}

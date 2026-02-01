@@ -45,8 +45,7 @@ public class LifeSeriesCommand extends Command {
 
     @Override
     public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(
-            literal("lifeseries")
+          var lifeseriesTree = literal("lifeseries")
                 .executes(context -> defaultCommand(context.getSource()))
                 .then(literal("worlds")
                         .requires(PermissionManager::isAdmin)
@@ -102,8 +101,9 @@ public class LifeSeriesCommand extends Command {
                 .then(literal("disable")
                     .requires(PermissionManager::isAdmin)
                     .executes(context -> enableOrDisable(context.getSource(), true))
-                )
-        );
+                );
+        dispatcher.register(lifeseriesTree);
+        dispatcher.register(literal("ls").redirect(lifeseriesTree.build()));
     }
 
     private int enableOrDisable(CommandSourceStack source, boolean disabled) {

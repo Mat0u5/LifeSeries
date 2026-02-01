@@ -26,7 +26,7 @@ public class DefaultConfigValues {
     *///?} else {
     public final ConfigFileEntry<Object> WORLDBORDER_GROUP = new ConfigFileEntry<>(
             "worldborder_sizes", null, ConfigTypes.TEXT, "{global.worldborder}",
-            "Worldborder Sizes", ""
+            "Worldborder Settings", ""
     );
     public final ConfigFileEntry<Integer> WORLDBORDER_SIZE = new ConfigFileEntry<>(
             "worldborder_size", 500, "global.worldborder",
@@ -313,6 +313,10 @@ public class DefaultConfigValues {
     public final ConfigFileEntry<Boolean> SUBIN_CHANGE_USERNAME = new ConfigFileEntry<>(
             "subin_change_username", true, "global.subin[new]",
             "Sub-in Change Username", "Controls whether the player subbing in will get the username of the player they are subbing in for."
+    );
+    public final ConfigFileEntry<Boolean> WORLDBORDER_OUTSIDE_TELEPORT = new ConfigFileEntry<>(
+            "worldborder_outside_teleport", true, "global.worldborder[new]",
+            "Worldborder Outside Teleport", "Controls whether players that get outside the worldborder get teleported back inside."
     );
 
 
