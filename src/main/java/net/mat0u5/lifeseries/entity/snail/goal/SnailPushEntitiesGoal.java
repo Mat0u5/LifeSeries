@@ -15,7 +15,7 @@ import java.util.List;
 /*import net.minecraft.world.entity.projectile.ThrownPotion;
 *///?} else if <= 1.21.9 {
 /*import net.minecraft.world.entity.projectile.AbstractThrownPotion;
-*///?} {
+*///?} else {
 import net.minecraft.world.entity.projectile.throwableitemprojectile.AbstractThrownPotion;
 //?}
 
