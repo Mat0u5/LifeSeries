@@ -151,9 +151,11 @@ public class TriviaSpiritParticle extends Particle {
         public TriviaSpiritParticleModel(ModelPart modelPart) {
             //? if <= 1.21.9 {
             /*super(modelPart, RenderType::entityCutoutNoCull);
-            *///?} else {
+            *///?} else if <= 1.21.11 {
             super(modelPart, RenderTypes::entityCutoutNoCull);
-            //?}
+            //?} else {
+            /*super(modelPart, RenderTypes::entityCutout);
+            *///?}
         }
     }
 

@@ -11,6 +11,8 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 
+import static net.mat0u5.lifeseries.Main.server;
+
 public class DeathLightning extends AdvancedDeath {
     private Random rnd = new Random();
     private ServerLevel level;
@@ -57,12 +59,23 @@ public class DeathLightning extends AdvancedDeath {
     @Override
     protected void begin(ServerPlayer player) {
         level = player.ls$getServerLevel();
+        //? if <= 1.21.11 {
+        if (level == null) return;
         level.setWeatherParameters(0, 200, true, true);
+        //?} else {
+        /*if (server == null) return;
+        server.setWeatherParameters(0, 200, true, true);
+        *///?}
     }
 
     @Override
     protected void end() {
+        //? if <= 1.21.11 {
         if (level == null) return;
         level.setWeatherParameters(12000, 0, false, false);
+        //?} else {
+        /*if (server == null) return;
+        server.setWeatherParameters(12000, 0, false, false);
+        *///?}
     }
 }
