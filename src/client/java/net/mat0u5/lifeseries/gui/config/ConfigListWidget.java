@@ -15,7 +15,7 @@ import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 //?}
 //? if > 1.20 && <= 1.20.3
-/*import net.minecraft.client.gui.screens.Screen;*/
+//import net.minecraft.client.gui.screens.Screen;
 
 public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.ConfigEntryWidget> {
     public static final int ENTRY_GAP = 2;
@@ -57,6 +57,7 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
     @Override
     protected void renderListItems(GuiGraphics context, int mouseX, int mouseY, float delta) {
     //?}
+
         //? if <= 1.21.2 {
         /*int maxScroll = getMaxScroll();
         *///?} else {
@@ -149,12 +150,12 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
         /*context.disableScissor();
         context.setColor(0.25F, 0.25F, 0.25F, 1.0F);
         //? if <= 1.20.2 {
-        context.blit(Screen.BACKGROUND_LOCATION, this.x0, 0, 0.0F, 0.0F, this.width, this.y0, 32, 32);
+        /^context.blit(Screen.BACKGROUND_LOCATION, this.x0, 0, 0.0F, 0.0F, this.width, this.y0, 32, 32);
         context.blit(Screen.BACKGROUND_LOCATION, this.x0, this.y1, 0.0F, (float)this.y1, this.width, this.height - this.y1, 32, 32);
-        //?} else {
-        /^context.blit(Screen.BACKGROUND_LOCATION, this.getX(), 0, 0.0F, 0.0F, this.width, this.getY(), 32, 32);
+        ^///?} else {
+        context.blit(Screen.BACKGROUND_LOCATION, this.getX(), 0, 0.0F, 0.0F, this.width, this.getY(), 32, 32);
         context.blit(Screen.BACKGROUND_LOCATION, this.getX(), this.getBottom(), 0.0F, (float)this.getBottom(), this.width, this.height, 32, 32);
-        ^///?}
+        //?}
         context.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         this.enableScissor(context);
         *///?}
@@ -169,6 +170,9 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
         int totalHeight = 0;
         for (int i = 0; i < getItemCount(); i++) {
             totalHeight += getEntry(i).getConfigEntry().getPreferredHeight();
+            //?if <= 1.20.2 {
+            /*totalHeight += ENTRY_GAP;
+            *///?}
         }
         return Math.max(0, totalHeight - height + 8);
     }

@@ -17,8 +17,12 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.gui.screens.Screen;
 import java.io.IOException;
 *///?} else {
-import net.minecraft.server.WorldStem;
-import net.minecraft.server.packs.repository.PackRepository;
+    //?if <= 1.20.3 {
+    /*import com.mojang.serialization.Dynamic;
+    *///?} else {
+    import net.minecraft.server.WorldStem;
+    import net.minecraft.server.packs.repository.PackRepository;
+    //?}
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 //?}
@@ -51,11 +55,20 @@ public abstract class WorldOpenFlowsMixin {
         return null; // This "cancels" the original method.
     }
     *///?} else {
+
+    //?if <= 1.20.3 {
+    /*@Invoker("loadLevel")
+    abstract void ls$openWorldCheckWorldStemCompatibility(LevelStorageSource.LevelStorageAccess levelStorageAccess, Dynamic<?> dynamic, boolean bl, boolean bl2, Runnable runnable);
+
+    @Inject(method = "loadLevel", at = @At("HEAD"), cancellable = true)
+    private void verifyWorldOpen(LevelStorageSource.LevelStorageAccess worldAccess, Dynamic<?> dynamic, boolean bl, boolean bl2, Runnable onCancel, CallbackInfo ci) {
+    *///?} else {
     @Invoker("openWorldCheckWorldStemCompatibility")
     abstract void ls$openWorldCheckWorldStemCompatibility(final LevelStorageSource.LevelStorageAccess worldAccess, final WorldStem worldStem, final PackRepository packRepository, final Runnable onCancel);
 
     @Inject(method = "openWorldCheckWorldStemCompatibility", at = @At("HEAD"), cancellable = true)
     private void verifyWorldOpen(LevelStorageSource.LevelStorageAccess worldAccess, WorldStem worldStem, PackRepository packRepository, Runnable onCancel, CallbackInfo ci) {
+    //?}
         if (Main.modFullyDisabled()) return;
         WorldConfig worldConfig = new WorldConfig(worldAccess);
         if (worldConfig.acknowledged()) return;
@@ -63,10 +76,16 @@ public abstract class WorldOpenFlowsMixin {
         ls$askForConfirmation(worldAccess, worldAccess.getLevelId(),
                 () -> {
                     worldConfig.setProperty("acknowledged", "true");
+                    //?if <= 1.20.3 {
+                    /*ls$openWorldCheckWorldStemCompatibility(worldAccess, dynamic, bl, bl2, onCancel);
+                    *///?} else {
                     ls$openWorldCheckWorldStemCompatibility(worldAccess, worldStem, packRepository, onCancel);
+                    //?}
                 },
                 () -> {
+                    //?if > 1.20.3 {
                     worldStem.close();
+                    //?}
                     worldAccess.safeClose();
                     onCancel.run();
                 }
