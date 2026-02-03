@@ -60,7 +60,7 @@ public class Blacklist {
     //?}
     private List<Item> loadedListItem;
     private List<Block> loadedListBlock;
-    private List<ResourceKey<Enchantment>> loadedListEnchants;
+    private Map<Integer, List<ResourceKey<Enchantment>>> loadedListEnchants;
     private List<ResourceKey<Enchantment>> loadedBannedEnchants;
 
     //? if <= 1.20.3 {
@@ -97,12 +97,25 @@ public class Blacklist {
         return new ArrayList<>(Arrays.asList(raw.split(",")));
     }
 
-    public List<String> loadClampedEnchants() {
-        if (seasonConfig == null) return new ArrayList<>();
-        String raw = seasonConfig.BLACKLIST_CLAMPED_ENCHANTS.get(seasonConfig);
-        raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        if (raw.isEmpty()) return new ArrayList<>();
-        return new ArrayList<>(Arrays.asList(raw.split(",")));
+    public Map<Integer, List<String>> loadClampedEnchants() {
+        Map<Integer, List<String>> result = new HashMap<>();
+        result.put(1, new ArrayList<>());
+        result.put(2, new ArrayList<>());
+        result.put(3, new ArrayList<>());
+        result.put(4, new ArrayList<>());
+        if (seasonConfig == null) return result;
+
+        String raw_level_1 = seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.get(seasonConfig).replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
+        String raw_level_2 = seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_2.get(seasonConfig).replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
+        String raw_level_3 = seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_3.get(seasonConfig).replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
+        String raw_level_4 = seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_4.get(seasonConfig).replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
+
+        if (!raw_level_1.isEmpty()) result.get(1).addAll(Arrays.asList(raw_level_1.split(",")));
+        if (!raw_level_2.isEmpty()) result.get(2).addAll(Arrays.asList(raw_level_2.split(",")));
+        if (!raw_level_3.isEmpty()) result.get(3).addAll(Arrays.asList(raw_level_3.split(",")));
+        if (!raw_level_4.isEmpty()) result.get(4).addAll(Arrays.asList(raw_level_4.split(",")));
+
+        return result;
     }
 
     public List<String> loadBlacklistedEnchants() {
@@ -242,43 +255,49 @@ public class Blacklist {
         return newList;
     }
 
-    public List<ResourceKey<Enchantment>> getClampedEnchants() {
-        if (server == null) return new ArrayList<>();
-
+    public Map<Integer, List<ResourceKey<Enchantment>>> getClampedEnchants() {
+        Map<Integer, List<ResourceKey<Enchantment>>> result = new HashMap<>();
+        result.put(1, new ArrayList<>());
+        result.put(2, new ArrayList<>());
+        result.put(3, new ArrayList<>());
+        result.put(4, new ArrayList<>());
+        if (server == null) return result;
         if (loadedListEnchants != null) return loadedListEnchants;
-        List<ResourceKey<Enchantment>> newList = new ArrayList<>();
 
         Registry<Enchantment> enchantmentRegistry = server.registryAccess()
-
                 //? if <=1.21 {
                 /*.registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));
                  *///?} else
                 .lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));
 
+        Map<Integer, List<String>> loadedRaw = loadClampedEnchants();
+        for (int level = 1; level <= 4; level++) {
+            List<String> enchants = loadedRaw.get(level);
+            if (enchants == null) continue;
+            for (String enchantmentId : enchants) {
+                if (!enchantmentId.contains(":")) enchantmentId = "minecraft:" + enchantmentId;
 
-        for (String enchantmentId : loadClampedEnchants()) {
-            if (!enchantmentId.contains(":")) enchantmentId = "minecraft:" + enchantmentId;
+                try {
+                    var id = IdentifierHelper.parse(enchantmentId);
+                    //? if <= 1.21 {
+                    /*Enchantment enchantment = enchantmentRegistry.get(id);
+                     *///?} else {
+                    Enchantment enchantment = enchantmentRegistry.getValue(id);
+                    //?}
 
-            try {
-                var id = IdentifierHelper.parse(enchantmentId);
-                //? if <= 1.21 {
-                /*Enchantment enchantment = enchantmentRegistry.get(id);
-                *///?} else {
-                Enchantment enchantment = enchantmentRegistry.getValue(id);
-                //?}
-
-                if (enchantment != null) {
-                    newList.add(enchantmentRegistry.getResourceKey(enchantment).orElseThrow());
-                } else {
-                    OtherUtils.throwError("[CONFIG] Invalid enchantment: " + enchantmentId);
+                    if (enchantment != null) {
+                        result.get(level).add(enchantmentRegistry.getResourceKey(enchantment).orElseThrow());
+                    } else {
+                        OtherUtils.throwError("[CONFIG] Invalid enchantment: " + enchantmentId);
+                    }
+                } catch (Exception e) {
+                    OtherUtils.throwError("[CONFIG] Error parsing enchantment ID: " + enchantmentId);
                 }
-            } catch (Exception e) {
-                OtherUtils.throwError("[CONFIG] Error parsing enchantment ID: " + enchantmentId);
             }
         }
 
-        loadedListEnchants = newList;
-        return newList;
+        loadedListEnchants = result;
+        return result;
     }
 
     public List<ResourceKey<Enchantment>> getBannedEnchants() {
@@ -579,15 +598,18 @@ public class Blacklist {
     }
 
     public void clampEnchantments(Map<Enchantment, Integer>  enchants) {
-        List<ResourceKey<Enchantment>> clamp = getClampedEnchants();
-
+        var clamped = getClampedEnchants();
+        for (int level = 1; level <= 4; level++) {
+        List<ResourceKey<Enchantment>> clamp = clamped.get(level);
+        if (clamp == null) continue;
         for (Map.Entry<Enchantment, Integer> enchant : enchants.entrySet()) {
             Enchantment actualEnchant = enchant.getKey();
             Optional<ResourceKey<Enchantment>> key = BuiltInRegistries.ENCHANTMENT.getResourceKey(actualEnchant);
             if (key.isEmpty()) continue;
             if (clamp.contains(key.get())) {
-                enchant.setValue(1);
+                enchant.setValue(level);
             }
+        }
         }
     }
     *///?} else {
@@ -625,12 +647,16 @@ public class Blacklist {
     }
 
     public void clampEnchantments(ItemEnchantments enchants) {
-        List<ResourceKey<Enchantment>> clamp = getClampedEnchants();
-        for (it.unimi.dsi.fastutil.objects.Object2IntMap.Entry<Holder<Enchantment>> enchant : enchants.entrySet()) {
-            Optional<ResourceKey<Enchantment>> enchantRegistry = enchant.getKey().unwrapKey();
-            if (enchantRegistry.isEmpty()) continue;
-            if (clamp.contains(enchantRegistry.get())) {
-                enchant.setValue(1);
+        var clamped = getClampedEnchants();
+        for (int level = 1; level <= 4; level++) {
+            List<ResourceKey<Enchantment>> clamp = clamped.get(level);
+            if (clamp == null) continue;
+            for (it.unimi.dsi.fastutil.objects.Object2IntMap.Entry<Holder<Enchantment>> enchant : enchants.entrySet()) {
+                Optional<ResourceKey<Enchantment>> enchantRegistry = enchant.getKey().unwrapKey();
+                if (enchantRegistry.isEmpty()) continue;
+                if (clamp.contains(enchantRegistry.get())) {
+                    enchant.setValue(level);
+                }
             }
         }
     }

@@ -24,7 +24,7 @@ public class PastLifeConfig extends ConfigManager {
     public void instantiateProperties() {
         BLACKLIST_ITEMS.defaultValue = TextUtils.formatString("[{}]", ThirdLifeConfig.BLACKLISTED_ITEMS);
         BLACKLIST_BLOCKS.defaultValue = TextUtils.formatString("[{}]", ThirdLifeConfig.BLACKLISTED_BLOCKS);
-        BLACKLIST_CLAMPED_ENCHANTS.defaultValue = TextUtils.formatString("[{}]", ThirdLifeConfig.CLAMPED_ENCHANTMENTS);
+        BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.defaultValue = TextUtils.formatString("[{}]", ThirdLifeConfig.CLAMPED_ENCHANTMENTS);
         DEFAULT_LIVES.defaultValue = 6;
         BOOGEYMAN.defaultValue = true;
         BOOGEYMAN_ADVANCED_DEATHS.defaultValue = true;

@@ -13,7 +13,7 @@ import net.minecraft.world.effect.MobEffect;
 import java.util.ArrayList;
 import java.util.List;
 //? if <= 1.21
-/*import com.mojang.blaze3d.systems.RenderSystem;*/
+//import com.mojang.blaze3d.systems.RenderSystem;
 
 //? if >= 1.21.2 {
 import net.minecraft.util.ARGB;

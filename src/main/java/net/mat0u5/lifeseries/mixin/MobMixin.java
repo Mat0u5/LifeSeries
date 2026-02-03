@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 //? if <= 1.21
-/*import net.minecraft.world.entity.MobSpawnType;*/
+//import net.minecraft.world.entity.MobSpawnType;
 //? if >= 1.21.2
 import net.minecraft.world.entity.EntitySpawnReason;
 

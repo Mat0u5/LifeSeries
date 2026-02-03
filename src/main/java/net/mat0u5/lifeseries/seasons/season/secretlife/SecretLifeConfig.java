@@ -155,7 +155,7 @@ public class SecretLifeConfig extends ConfigManager {
     public void instantiateProperties() {
         BLACKLIST_ITEMS.defaultValue = TextUtils.formatString("[{}]", BLACKLISTED_ITEMS);
         BLACKLIST_BLOCKS.defaultValue = TextUtils.formatString("[{}]", BLACKLISTED_BLOCKS);
-        BLACKLIST_CLAMPED_ENCHANTS.defaultValue = TextUtils.formatString("[{}]", CLAMPED_ENCHANTMENTS);
+        BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.defaultValue = TextUtils.formatString("[{}]", CLAMPED_ENCHANTMENTS);
         MAX_PLAYER_HEALTH.defaultValue = 60;
         SPAWN_EGG_ALLOW_ON_SPAWNER.defaultValue = true;
         SPAWNER_RECIPE.defaultValue = true;

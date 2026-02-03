@@ -63,7 +63,7 @@ import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
 //? if <= 1.20
 /*import net.minecraft.world.scores.Scoreboard;*/
 //? if <= 1.21.9
-/*import net.minecraft.world.level.GameRules;*/
+//import net.minecraft.world.level.GameRules;
 //? if > 1.21.9
 import net.minecraft.world.level.gamerules.GameRules;
 //? if > 1.20

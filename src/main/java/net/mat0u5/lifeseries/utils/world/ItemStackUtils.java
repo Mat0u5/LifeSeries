@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static net.mat0u5.lifeseries.Main.server;
 //? if <= 1.21
-/*import net.minecraft.world.item.EnchantedBookItem;*/
+//import net.minecraft.world.item.EnchantedBookItem;
 //? if >= 1.21.2
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 //? if >= 1.21.5

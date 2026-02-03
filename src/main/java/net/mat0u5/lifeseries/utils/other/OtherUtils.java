@@ -24,7 +24,7 @@ import static net.mat0u5.lifeseries.Main.server;
 import net.minecraft.server.ServerTickRateManager;
 
 //? if <= 1.21.9
-/*import net.minecraft.world.level.GameRules;*/
+//import net.minecraft.world.level.GameRules;
 //? if > 1.21.9
 import net.minecraft.world.level.gamerules.GameRule;
 

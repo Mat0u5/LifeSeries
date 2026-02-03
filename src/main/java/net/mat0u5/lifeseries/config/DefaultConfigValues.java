@@ -113,10 +113,27 @@ public class DefaultConfigValues {
             "blacklist_blocks", "[]", ConfigTypes.BLOCK_LIST, "global.blacklist",
             "Blacklisted Blocks", "List of banned blocks."
     );
-    public final ConfigFileEntry<String> BLACKLIST_CLAMPED_ENCHANTS = new ConfigFileEntry<>(
-            "blacklist_clamped_enchants", "[]", ConfigTypes.ENCHANT_LIST, "global.blacklist",
-            "Clamped Enchants", "List of enchantments clamped to level 1 (any higher levels will be set to lvl1)."
+    public final ConfigFileEntry<Object> GROUP_CLAMPED_ENCHANTS = new ConfigFileEntry<>(
+            "group_clamped_enchants", null, ConfigTypes.TEXT, "{global.blacklist.enchants}[new]",
+            "Clamped Enchantments", ""
     );
+    public final ConfigFileEntry<String> BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1 = new ConfigFileEntry<>(
+            "blacklist_clamped_enchants_level_1", "[]", ConfigTypes.ENCHANT_LIST, "global.blacklist.enchants[new]",
+            "Clamped To Level 1", "List of enchantments clamped to level 1 (any higher levels will be set to lvl1)."
+    );
+    public final ConfigFileEntry<String> BLACKLIST_CLAMPED_ENCHANTS_LEVEL_2 = new ConfigFileEntry<>(
+            "blacklist_clamped_enchants_level_2", "[]", ConfigTypes.ENCHANT_LIST, "global.blacklist.enchants[new]",
+            "Clamped To Level 2", "List of enchantments clamped to level 2 (any higher levels will be set to lvl2)."
+    );
+    public final ConfigFileEntry<String> BLACKLIST_CLAMPED_ENCHANTS_LEVEL_3 = new ConfigFileEntry<>(
+            "blacklist_clamped_enchants_level_3", "[]", ConfigTypes.ENCHANT_LIST, "global.blacklist.enchants[new]",
+            "Clamped To Level 3", "List of enchantments clamped to level 3 (any higher levels will be set to lvl3)."
+    );
+    public final ConfigFileEntry<String> BLACKLIST_CLAMPED_ENCHANTS_LEVEL_4 = new ConfigFileEntry<>(
+            "blacklist_clamped_enchants_level_4", "[]", ConfigTypes.ENCHANT_LIST, "global.blacklist.enchants[new]",
+            "Clamped To Level 4", "List of enchantments clamped to level 4 (any higher levels will be set to lvl4)."
+    );
+
     public final ConfigFileEntry<String> BLACKLIST_RECIPES = new ConfigFileEntry<>(
             "blacklist_recipes", "[]", ConfigTypes.ITEM_LIST, "global.blacklist",
             "Blacklisted Recipes", "List of banned recipes - items you can't craft."

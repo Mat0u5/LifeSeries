@@ -38,7 +38,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.PatchedDataComponentMap;
 //?}
 //? if <= 1.21
-/*import java.util.Optional;*/
+//import java.util.Optional;
 //? if >= 1.21.2 {
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.component.Consumable;
@@ -332,10 +332,10 @@ public class Hunger extends Wildcard {
         if (item == null) return;
         if (bannedFoodItems.contains(item)) return;
         //? if <= 1.20.5 {
-        components.set(DataComponents.FOOD, new FoodProperties(0, 0, false, 1.6f, List.of()));
-        //?} else {
-        /^components.set(DataComponents.FOOD, new FoodProperties(0, 0, false, 1.6f, Optional.empty(), List.of()));
-        ^///?}
+        /^components.set(DataComponents.FOOD, new FoodProperties(0, 0, false, 1.6f, List.of()));
+        ^///?} else {
+        components.set(DataComponents.FOOD, new FoodProperties(0, 0, false, 1.6f, Optional.empty(), List.of()));
+        //?}
     }
     *///?} else if > 1.21 {
     public static void defaultFoodComponents(Item item, PatchedDataComponentMap components) {

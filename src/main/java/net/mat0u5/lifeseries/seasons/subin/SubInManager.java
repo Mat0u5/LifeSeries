@@ -16,7 +16,7 @@ import java.util.UUID;
 import static net.mat0u5.lifeseries.Main.*;
 
 //? if <= 1.21.5
-/*import net.minecraft.nbt.CompoundTag;*/
+//import net.minecraft.nbt.CompoundTag;
 //? if >= 1.21.6 {
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.level.storage.ValueInput;

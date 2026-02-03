@@ -39,7 +39,7 @@ import net.minecraft.network.protocol.game.ServerboundChatCommandSignedPacket;
 //?}
 
 //? if <= 1.21
-/*import net.minecraft.world.entity.RelativeMovement;*/
+//import net.minecraft.world.entity.RelativeMovement;
 //? if >= 1.21.2 {
 import net.minecraft.world.entity.Relative;
 import net.minecraft.world.entity.PositionMoveRotation;

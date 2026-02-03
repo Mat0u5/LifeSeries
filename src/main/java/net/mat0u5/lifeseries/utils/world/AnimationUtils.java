@@ -21,7 +21,7 @@ import org.joml.Vector3f;
 //? if >= 1.20.5
 import net.minecraft.core.component.DataComponents;
 //? if <= 1.21 && > 1.20.3
-/*import net.minecraft.world.item.component.CustomModelData;*/
+//import net.minecraft.world.item.component.CustomModelData;
 //? if >= 1.21.2 {
 import java.awt.Color;
 //?}

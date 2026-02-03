@@ -98,10 +98,18 @@ public class EnchantmentHelperMixin {
             //?}
                 for(int j = enchantment.getMaxLevel(); j > enchantment.getMinLevel() - 1; --j) {
                     if (level >= enchantment.getMinCost(j) && level <= enchantment.getMaxCost(j)) {
-                        if (key.isPresent() && blacklist.getClampedEnchants().contains(key.get())) {
-                            list.add(new EnchantmentInstance(enchantment, 1));
+                        boolean clamped = false;
+                        var clampedEnchants = blacklist.getClampedEnchants();
+                        for (int clampLevel = 1; clampLevel <= 4; clampLevel++) {
+                            var levelClamped = clampedEnchants.get(clampLevel);
+                            if (levelClamped == null) continue;
+                            if (key.isPresent() && levelClamped.contains(key.get())) {
+                                list.add(new EnchantmentInstance(enchantment, clampLevel));
+                                clamped = true;
+                                break;
+                            }
                         }
-                        else {
+                        if (!clamped) {
                             list.add(new EnchantmentInstance(enchantment, j));
                         }
                         break;
@@ -125,10 +133,18 @@ public class EnchantmentHelperMixin {
             ^///?} else {
             if ((!enchantment.isTreasureOnly() || bl) && enchantment.isDiscoverable() && (enchantment.canEnchant(stack) || bl2)) {
             //?}
-                if (key.isPresent() && blacklist.getClampedEnchants().contains(key.get())) {
-                    list.add(new EnchantmentInstance(enchantment, 1));
+                boolean clamped = false;
+                var clampedEnchants = blacklist.getClampedEnchants();
+                for (int clampLevel = 1; clampLevel <= 4; clampLevel++) {
+                    var levelClamped = clampedEnchants.get(clampLevel);
+                    if (levelClamped == null) continue;
+                    if (key.isPresent() && levelClamped.contains(key.get())) {
+                        list.add(new EnchantmentInstance(enchantment, clampLevel));
+                        clamped = true;
+                        break;
+                    }
                 }
-                else {
+                if (!clamped) {
                     for (int j = enchantment.getMaxLevel(); j >= enchantment.getMinLevel(); j--) {
                         if (j == 1) {
                             if (enchantment.getMaxLevel() <= 3 || level < 4) {
@@ -170,10 +186,18 @@ public class EnchantmentHelperMixin {
             if (isRegistryPresent && !blacklist.getBannedEnchants().contains(enchantRegistryKey.get())) {
                 for (int j = enchantment.getMaxLevel(); j >= enchantment.getMinLevel(); j--) {
                     if (level >= enchantment.getMinCost(j) && level <= enchantment.getMaxCost(j)) {
-                        if (isRegistryPresent && blacklist.getClampedEnchants().contains(enchantRegistryKey.get())) {
-                            list.add(new EnchantmentInstance(enchantmentx, 1));
+                        boolean clamped = false;
+                        var clampedEnchants = blacklist.getClampedEnchants();
+                        for (int clampLevel = 1; clampLevel <= 4; clampLevel++) {
+                            var levelClamped = clampedEnchants.get(clampLevel);
+                            if (levelClamped == null) continue;
+                            if (levelClamped.contains(enchantRegistryKey.get())) {
+                                list.add(new EnchantmentInstance(enchantmentx, clampLevel));
+                                clamped = true;
+                                break;
+                            }
                         }
-                        else {
+                        if (!clamped) {
                             list.add(new EnchantmentInstance(enchantmentx, j));
                         }
                         break;
@@ -199,10 +223,18 @@ public class EnchantmentHelperMixin {
         Optional<ResourceKey<Enchantment>> enchantRegistryKey = enchantmentx.unwrapKey();
         //?}
             if (enchantRegistryKey.isPresent() && !blacklist.getBannedEnchants().contains(enchantRegistryKey.get())) {
-                if (blacklist.getClampedEnchants().contains(enchantRegistryKey.get())) {
-                    list.add(new EnchantmentInstance(enchantmentx, 1));
+                boolean clamped = false;
+                var clampedEnchants = blacklist.getClampedEnchants();
+                for (int clampLevel = 1; clampLevel <= 4; clampLevel++) {
+                    var levelClamped = clampedEnchants.get(clampLevel);
+                    if (levelClamped == null) continue;
+                    if (levelClamped.contains(enchantRegistryKey.get())) {
+                        list.add(new EnchantmentInstance(enchantmentx, clampLevel));
+                        clamped = true;
+                        break;
+                    }
                 }
-                else {
+                if (!clamped) {
                     for (int j = enchantment.getMaxLevel(); j >= enchantment.getMinLevel(); j--) {
                         if (j == 1) {
                             if (enchantment.getMaxLevel() <= 3 || level < 4) {

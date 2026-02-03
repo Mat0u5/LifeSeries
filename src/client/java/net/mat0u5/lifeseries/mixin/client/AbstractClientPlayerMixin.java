@@ -15,7 +15,7 @@ import java.util.UUID;
 //? if <= 1.20
 /*import net.minecraft.resources.ResourceLocation;*/
 //? if > 1.20 <= 1.21.6
-/*import net.minecraft.client.resources.PlayerSkin;*/
+//import net.minecraft.client.resources.PlayerSkin;
 //? if >= 1.21.9
 import net.minecraft.world.entity.player.PlayerSkin;
 

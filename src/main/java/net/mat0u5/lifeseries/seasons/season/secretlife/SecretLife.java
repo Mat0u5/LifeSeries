@@ -50,7 +50,7 @@ import net.minecraft.world.item.component.TypedEntityData;
 //?}
 
 //? if <= 1.21.9
-/*import net.minecraft.world.level.GameRules;*/
+//import net.minecraft.world.level.GameRules;
 //? if > 1.21.9
 import net.minecraft.world.level.gamerules.GameRules;
 

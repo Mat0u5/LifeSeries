@@ -99,7 +99,11 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,BLACKLIST_ITEMS
                 ,BLACKLIST_RECIPES
                 ,BLACKLIST_BLOCKS
-                ,BLACKLIST_CLAMPED_ENCHANTS
+                ,GROUP_CLAMPED_ENCHANTS
+                    ,BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1
+                    ,BLACKLIST_CLAMPED_ENCHANTS_LEVEL_2
+                    ,BLACKLIST_CLAMPED_ENCHANTS_LEVEL_3
+                    ,BLACKLIST_CLAMPED_ENCHANTS_LEVEL_4
                 ,BLACKLIST_BANNED_ENCHANTS
                 ,BLACKLIST_BANNED_POTION_EFFECTS
                 ,BLACKLIST_CLAMPED_POTION_EFFECTS
@@ -289,6 +293,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
         renamedProperty("blacklist_banned_potions", "blacklist_banned_potion_effects");
         renamedProperty("auto_keep_inventory", "keep_inventory");
         renamedProperty("beoadcast_secret_keeper", "broadcast_secret_keeper");
+        renamedProperty("blacklist_clamped_enchants", "blacklist_clamped_enchants_level_1");
     }
 
     private void renamedProperty(String from, String to) {

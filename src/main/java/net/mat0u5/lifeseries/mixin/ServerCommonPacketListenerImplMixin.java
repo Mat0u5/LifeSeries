@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 //? if <= 1.21.5
-/*import net.minecraft.network.PacketSendListener;*/
+//import net.minecraft.network.PacketSendListener;
 //? if >= 1.21.6
 import io.netty.channel.ChannelFutureListener;
 

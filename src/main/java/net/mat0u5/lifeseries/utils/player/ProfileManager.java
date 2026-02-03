@@ -221,10 +221,10 @@ public class ProfileManager {
         /*player.connection.send(new ClientboundRespawnPacket(
                         new CommonPlayerSpawnInfo(
                                 //? if <= 1.20.3 {
-                                level.dimensionTypeId(),
-                                //?} else {
-                                /^level.dimensionTypeRegistration(),
-                                ^///?}
+                                /^level.dimensionTypeId(),
+                                ^///?} else {
+                                level.dimensionTypeRegistration(),
+                                //?}
                                 level.dimension(),
                                 BiomeManager.obfuscateSeed(level.getSeed()),
                                 player.gameMode.getGameModeForPlayer(),
