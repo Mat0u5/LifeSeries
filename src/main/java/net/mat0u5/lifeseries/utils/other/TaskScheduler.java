@@ -23,10 +23,14 @@ public class TaskScheduler {
         scheduleTask(time.getTicks(), goal);
     }
 
-    public static void schedulePriorityTask(Time time, Runnable goal) {
-        Task task = new Task(time.getTicks(), goal);
+    public static void schedulePriorityTask(int ticks, Runnable goal) {
+        Task task = new Task(ticks, goal);
         task.priority = true;
         newTasks.add(task);
+    }
+
+    public static void schedulePriorityTask(Time time, Runnable goal) {
+        schedulePriorityTask(time.getTicks(), goal);
     }
 
     public static void clearTasks() {

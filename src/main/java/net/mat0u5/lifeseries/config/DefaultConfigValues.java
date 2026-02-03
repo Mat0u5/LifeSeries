@@ -18,16 +18,16 @@ public class DefaultConfigValues {
             "creative_ignore_blacklist", true, "global.blacklist",
             "Creative Ignore Blacklist", "Controls whether players in creative mode are able to bypass the blacklists."
     );
+    public final ConfigFileEntry<Object> WORLDBORDER_GROUP = new ConfigFileEntry<>(
+            "worldborder_sizes", null, ConfigTypes.TEXT, "{global.worldborder}",
+            "Worldborder Settings", ""
+    );
     //? if < 1.21.9 {
     /*public final ConfigFileEntry<Integer> WORLDBORDER_SIZE = new ConfigFileEntry<>(
             "worldborder_size", 500, "global",
             "Worldborder Size", "Sets the worldborder size."
     );
     *///?} else {
-    public final ConfigFileEntry<Object> WORLDBORDER_GROUP = new ConfigFileEntry<>(
-            "worldborder_sizes", null, ConfigTypes.TEXT, "{global.worldborder}",
-            "Worldborder Settings", ""
-    );
     public final ConfigFileEntry<Integer> WORLDBORDER_SIZE = new ConfigFileEntry<>(
             "worldborder_size", 500, "global.worldborder",
             "Worldborder Size", "Sets the worldborder size in the overworld."
@@ -317,6 +317,22 @@ public class DefaultConfigValues {
     public final ConfigFileEntry<Boolean> WORLDBORDER_OUTSIDE_TELEPORT = new ConfigFileEntry<>(
             "worldborder_outside_teleport", true, "global.worldborder[new]",
             "Worldborder Outside Teleport", "Controls whether players that get outside the worldborder get teleported back inside."
+    );
+    public final ConfigFileEntry<Boolean> SESSION_START_COUNTDOWN = new ConfigFileEntry<>(
+            "session_start_countdown", false, "global[new]",
+            "Session Start Countdown", "Shows a countdown when the session is starting.."
+    );
+    public final ConfigFileEntry<Boolean> LIVES_RANDOMIZE = new ConfigFileEntry<>(
+            "lives_randomize", false, "{global.lives.random}[new]",
+            "Randomize Lives", "Makes every player get a random amount of lives."
+    );
+    public final ConfigFileEntry<Integer> LIVES_RANDOMIZE_MIN = new ConfigFileEntry<>(
+            "lives_randomize_min", 2, "global.lives.random[new]",
+            "Minimum Lives", "The minimum number of lives any player can have after randomization."
+    );
+    public final ConfigFileEntry<Integer> LIVES_RANDOMIZE_MAX = new ConfigFileEntry<>(
+            "lives_randomize_max", 6, "global.lives.random[new]",
+            "Maximum Lives", "The maximum number of lives any player can have after randomization."
     );
 
 

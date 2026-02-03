@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.other.Time;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -158,6 +159,24 @@ public class LimitedLifeConfig extends ConfigManager {
         GIVELIFE_LIVES_MAX.description = "The maximum amount of time a player can have from other players giving them time using /givelife.";
         GIVELIFE_LIVES_MAX.defaultValue = 3600000;
         GIVELIFE_BROADCAST.description = "Broadcasts the message when a player gives time to another player using /givelife.";
+        LIVES_RANDOMIZE_MIN.defaultValue = Time.hours(12).getSeconds();
+        LIVES_RANDOMIZE_MAX.defaultValue = Time.hours(36).getSeconds();
+
+        GROUP_GLOBAL_LIVES.displayName = "Time Stuff";
+        GROUP_LIVES.displayName = "Time Manager";
+        ONLY_TAKE_LIVES_IN_SESSION.displayName = "Only Lose Time In Session";
+        ONLY_TAKE_LIVES_IN_SESSION.description = "Makes players only lose time when they die while a session is active.";
+
+        LIVES_SYSTEM_DISABLED.displayName = "Fully Disable Time System";
+        LIVES_SYSTEM_DISABLED.description = "Fully disables the time system, if you want to implement a custom one for example :)";
+        TAB_LIST_SHOW_LIVES.displayName = "Tab List Show Time";
+        TAB_LIST_SHOW_LIVES.description = "Controls whether you can see the players' time in the tab list.";
+        LIVES_RANDOMIZE.displayName = "Randomize Time";
+        LIVES_RANDOMIZE.description = "Makes every player get a random amount of time.";
+        LIVES_RANDOMIZE_MIN.displayName = "Minimum Time";
+        LIVES_RANDOMIZE_MIN.description = "The minimum number of time any player can have after randomization, in seconds.";
+        LIVES_RANDOMIZE_MAX.displayName = "Maximum Time";
+        LIVES_RANDOMIZE_MAX.description = "The minimum number of time any player can have after randomization, in seconds.";
         super.instantiateProperties();
     }
 }

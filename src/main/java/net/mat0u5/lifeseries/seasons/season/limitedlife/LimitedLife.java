@@ -261,6 +261,9 @@ public class LimitedLife extends Season {
 
     @Override
     public Integer getDefaultLives() {
+        if (livesManager.ROLL_LIVES) {
+            return null;
+        }
         return LimitedLifeLivesManager.DEFAULT_TIME;
     }
 

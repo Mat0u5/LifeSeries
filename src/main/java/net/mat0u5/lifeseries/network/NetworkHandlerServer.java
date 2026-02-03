@@ -247,7 +247,7 @@ public class NetworkHandlerServer {
                 boolean boolValue = args.get(0).equalsIgnoreCase("true");
                 seasonConfig.setProperty(id,String.valueOf(boolValue));
                 updatedConfigThisTick = true;
-                TaskScheduler.schedulePriorityTask(Time.ticks(1), () -> {
+                TaskScheduler.schedulePriorityTask(1, () -> {
                     ConfigManager.onUpdatedBoolean(id, boolValue);
                 });
             }
@@ -263,7 +263,7 @@ public class NetworkHandlerServer {
                     int value = Integer.parseInt(args.get(0));
                     seasonConfig.setProperty(id, String.valueOf(value));
                     updatedConfigThisTick = true;
-                    TaskScheduler.schedulePriorityTask(Time.ticks(1), () -> {
+                    TaskScheduler.schedulePriorityTask(1, () -> {
                         ConfigManager.onUpdatedInteger(id, value);
                     });
                 }catch(Exception e){}

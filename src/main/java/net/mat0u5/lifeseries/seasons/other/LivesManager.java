@@ -6,12 +6,11 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeLivesManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
+import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.player.TeamUtils;
@@ -47,6 +46,18 @@ public class LivesManager {
     public boolean SEE_FRIENDLY_INVISIBLE_PLAYERS = false;
     public static int MAX_TAB_NUMBER = 4;
     public boolean LIVES_SYSTEM_DISABLED = false;
+    public boolean ROLL_LIVES = false;
+    public int ROLL_MIN_LIVES = 2;
+    public int ROLL_MAX_LIVES = 6;
+
+    public boolean assignedLives = false;
+    public SessionAction actionChooseLives = new SessionAction(Time.minutes(1),"Assign lives if necessary") {
+        @Override
+        public void trigger() {
+            assignRandomLivesToUnassignedPlayers();
+        }
+    };
+    Random rnd = new Random();
 
     public void reload() {
         SHOW_DEATH_TITLE = seasonConfig.FINAL_DEATH_TITLE_SHOW.get(seasonConfig);
@@ -56,6 +67,12 @@ public class LivesManager {
         SEE_FRIENDLY_INVISIBLE_PLAYERS = seasonConfig.SEE_FRIENDLY_INVISIBLE_PLAYERS.get(seasonConfig);
         LIVES_SYSTEM_DISABLED = seasonConfig.LIVES_SYSTEM_DISABLED.get(seasonConfig);
         updateTeams();
+
+        ROLL_LIVES = seasonConfig.LIVES_RANDOMIZE.get(seasonConfig);
+        int minLivesConfig = seasonConfig.LIVES_RANDOMIZE_MIN.get(seasonConfig);
+        int maxLivesConfig = seasonConfig.LIVES_RANDOMIZE_MAX.get(seasonConfig);
+        ROLL_MIN_LIVES = Math.min(minLivesConfig, maxLivesConfig);
+        ROLL_MAX_LIVES = Math.max(minLivesConfig, maxLivesConfig);
     }
 
     public Map<Integer, PlayerTeam> getLivesTeams() {
@@ -488,10 +505,139 @@ public class LivesManager {
         }
         return false;
     }
+
     public boolean anyPlayersAtLeastLives(int lives) {
         for (ServerPlayer player : getAlivePlayers()) {
             if (isOnAtLeastLives(player, lives, false)) return true;
         }
         return false;
+    }
+
+    public void addSessionActions() {
+        if (ROLL_LIVES) {
+            currentSession.addSessionAction(actionChooseLives);
+        }
+    }
+
+    public void assignRandomLivesToUnassignedPlayers() {
+        if (!ROLL_LIVES) return;
+        assignedLives = true;
+        List<ServerPlayer> assignTo = new ArrayList<>();
+        for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
+            if (player.ls$hasAssignedLives()) continue;
+            assignTo.add(player);
+        }
+        if (assignTo.isEmpty()) return;
+        assignRandomLives(assignTo);
+    }
+
+    public void assignRandomLives(List<ServerPlayer> players) {
+        players.forEach(this::resetPlayerLife);
+        PlayerUtils.sendTitleToPlayers(players, Component.literal("You will have...").withStyle(ChatFormatting.GRAY), 10, 40, 10);
+        TaskScheduler.scheduleTask(Time.seconds(3), ()-> rollLives(players));
+    }
+
+    public void rollLives(List<ServerPlayer> players) {
+        int delay = showRandomNumbers(players) + 20;
+
+        HashMap<ServerPlayer, Integer> lives = new HashMap<>();
+
+        int totalSize = players.size();
+        int chosenNotRandomly = ROLL_MIN_LIVES;
+        for (ServerPlayer player : players) {
+            int diff = ROLL_MAX_LIVES-ROLL_MIN_LIVES+2;
+            if (chosenNotRandomly <= ROLL_MAX_LIVES && totalSize > diff) {
+                lives.put(player, chosenNotRandomly);
+                chosenNotRandomly++;
+                continue;
+            }
+
+            int randomLives = getRandomLife();
+            lives.put(player, randomLives);
+        }
+
+        TaskScheduler.scheduleTask(delay, () -> {
+            //Show the actual amount of lives for one cycle
+            for (Map.Entry<ServerPlayer, Integer> playerEntry : lives.entrySet()) {
+                Integer livesNum = playerEntry.getValue();
+                ServerPlayer player = playerEntry.getKey();
+                Component textLives = getFormattedLives(livesNum);
+                PlayerUtils.sendTitle(player, textLives, 0, 25, 0);
+            }
+            PlayerUtils.playSoundToPlayers(players, SoundEvents.UI_BUTTON_CLICK.value());
+        });
+
+        delay += 20;
+
+        TaskScheduler.scheduleTask(delay, () -> {
+            //Show "x lives." screen
+            for (Map.Entry<ServerPlayer, Integer> playerEntry : lives.entrySet()) {
+                Integer livesNum = playerEntry.getValue();
+                ServerPlayer player = playerEntry.getKey();
+                String livesOrTime = currentSeason.getSeason() == Seasons.LIMITED_LIFE ? "to live" : TextUtils.pluralize("life","lives", livesNum);
+                Component textLives = TextUtils.format("{}§a {}.", getFormattedLives(livesNum), livesOrTime);
+                PlayerUtils.sendTitle(player, textLives, 0, 60, 20);
+                SessionTranscript.assignRandomLives(player, livesNum);
+                setPlayerLives(player, livesNum);
+            }
+            PlayerUtils.playSoundToPlayers(lives.keySet(), SoundEvents.END_PORTAL_SPAWN);
+            currentSeason. reloadAllPlayerTeams();
+        });
+    }
+
+    public int showRandomNumbers(List<ServerPlayer> players) {
+        int currentDelay = 0;
+        int lastLives = -1;
+        for (int i = 0; i < 80; i++) {
+            if (i >= 75) currentDelay += 20;
+            else if (i >= 65) currentDelay += 8;
+            else if (i >= 50) currentDelay += 4;
+            else if (i >= 30) currentDelay += 2;
+            else currentDelay += 1;
+
+            int lives = getRandomLife(lastLives);
+            lastLives = lives;
+
+            TaskScheduler.scheduleTask(currentDelay, () -> {
+                PlayerUtils.sendTitleToPlayers(players, getFormattedLives(lives), 0, 25, 0);
+                PlayerUtils.playSoundToPlayers(players, SoundEvents.UI_BUTTON_CLICK.value());
+            });
+        }
+
+        return currentDelay;
+    }
+
+    public int getRandomLife() {
+        int minLives = ROLL_MIN_LIVES;
+        int maxLives = ROLL_MAX_LIVES;
+        return rnd.nextInt(minLives, maxLives+1);
+    }
+
+    public boolean onlyOnePossibleLife() {
+        return ROLL_MIN_LIVES == ROLL_MAX_LIVES;
+    }
+
+    public int getRandomLife(int except) {
+        if (!onlyOnePossibleLife()){
+            int tries = 0;
+            while (tries < 100) {
+                tries++;
+                int lives = getRandomLife();
+                if (lives != except) {
+                    return lives;
+                }
+            }
+        }
+        return getRandomLife();
+    }
+
+    public void onPlayerFinishJoining(ServerPlayer player) {
+        if (!ROLL_LIVES) return;
+        if (!assignedLives) return;
+        if (hasAssignedLives(player)) return;
+        if (player.ls$isWatcher()) return;
+        String livesOrTime = currentSeason.getSeason() == Seasons.LIMITED_LIFE ? "times" : "lives";
+        PlayerUtils.broadcastMessageToAdmins(TextUtils.format("§7Assigning random {} to {}§7...", livesOrTime, player));
+        assignRandomLives(new ArrayList<>(List.of(player)));
     }
 }

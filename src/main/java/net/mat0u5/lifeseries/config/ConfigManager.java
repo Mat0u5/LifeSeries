@@ -78,6 +78,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 //?}
                 ,BROADCAST_LIFE_GAIN
                 ,ADDITIONAL_WITHER_SKULL_RATE
+                ,SESSION_START_COUNTDOWN
 
 
                 ,GROUP_BLACKLIST // Group
@@ -151,6 +152,9 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,WATCHERS_MUTED
                 ,SUBIN_CHANGE_SKIN
                 ,SUBIN_CHANGE_USERNAME
+                ,LIVES_RANDOMIZE
+                ,LIVES_RANDOMIZE_MIN
+                ,LIVES_RANDOMIZE_MAX
         ));
     }
 

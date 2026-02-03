@@ -7,7 +7,6 @@ import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
-import net.mat0u5.lifeseries.seasons.season.lastlife.LastLifeLivesManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Time;
@@ -45,10 +44,6 @@ public class LivesCommand extends Command {
 
     public boolean isNormalLife() {
         return currentSeason.getSeason() != Seasons.LIMITED_LIFE;
-    }
-
-    public boolean isLastLife() {
-        return currentSeason.getSeason() == Seasons.LAST_LIFE;
     }
 
     @Override
@@ -171,7 +166,7 @@ public class LivesCommand extends Command {
                     )
             )
             .then(literal("rollLives")
-                    .requires(source -> isLastLife() && PermissionManager.isAdmin(source))
+                    .requires(PermissionManager::isAdmin)
                     .executes(context -> assignRandomLives(
                             context.getSource(), PlayerUtils.getAllPlayers()
                     ))
@@ -358,8 +353,7 @@ public class LivesCommand extends Command {
     public int resetLives(CommandSourceStack source, Collection<ServerPlayer> targets) {
         if (checkBanned(source)) return -1;
         if (targets == null || targets.isEmpty()) return -1;
-        boolean normalLife = isNormalLife();
-        String timeOrLives = normalLife ? "lives" : "time";
+        String timeOrLives = isNormalLife() ? "lives" : "time";
 
         targets.forEach(livesManager::resetPlayerLife);
 
@@ -375,8 +369,7 @@ public class LivesCommand extends Command {
 
     public int resetAllLives(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        boolean normalLife = isNormalLife();
-        String timeOrLives = normalLife ? "lives" : "times";
+        String timeOrLives = isNormalLife() ? "lives" : "times";
 
         livesManager.resetAllPlayerLives();
         OtherUtils.sendCommandFeedback(source, TextUtils.format("Reset everyone's {}", timeOrLives));
@@ -386,16 +379,17 @@ public class LivesCommand extends Command {
     public int assignRandomLives(CommandSourceStack source, Collection<ServerPlayer> players) {
         if (checkBanned(source)) return -1;
         if (players == null || players.isEmpty()) return -1;
+        String timeOrLives = isNormalLife() ? "lives" : "times";
 
         if (players.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Assigning random lives to {}§7...", players.iterator().next()));
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Assigning random {} to {}§7...", timeOrLives, players.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Assigning random lives to {}§7 targets...", players.size()));
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Assigning random {} to {}§7 targets...", timeOrLives, players.size()));
         }
-        if (livesManager instanceof LastLifeLivesManager lastLifeLivesManager) {
-            lastLifeLivesManager.assignRandomLives(new ArrayList<>(players));
-        }
+
+        livesManager.assignRandomLives(new ArrayList<>(players));
+
         return 1;
     }
 }

@@ -130,6 +130,9 @@ public abstract class Season {
     }
 
     public Integer getDefaultLives() {
+        if (livesManager.ROLL_LIVES) {
+            return null;
+        }
         return seasonConfig.DEFAULT_LIVES.get(seasonConfig);
     }
 
@@ -233,6 +236,7 @@ public abstract class Season {
         HIDE_UNJUSTIFIED_KILL_MESSAGES = seasonConfig.HIDE_UNJUSTIFIED_KILL_MESSAGES.get(seasonConfig);
         Session.TICK_FREEZE_NOT_IN_SESSION = seasonConfig.TICK_FREEZE_NOT_IN_SESSION.get(seasonConfig);
         Session.WORLDBORDER_OUTSIDE_TELEPORT = seasonConfig.WORLDBORDER_OUTSIDE_TELEPORT.get(seasonConfig);
+        Session.SESSION_START_COUNTDOWN = seasonConfig.SESSION_START_COUNTDOWN.get(seasonConfig);
         BROADCAST_LIFE_GAIN = seasonConfig.BROADCAST_LIFE_GAIN.get(seasonConfig);
         ADDITIONAL_WITHER_SKULL_RATE = seasonConfig.ADDITIONAL_WITHER_SKULL_RATE.get(seasonConfig);
 
@@ -411,12 +415,14 @@ public abstract class Season {
     public void sessionEnd() {
         boogeymanManager.sessionEnd();
         secretSociety.sessionEnd();
+        livesManager.assignedLives = false;
     }
 
     public boolean sessionStart() {
         boogeymanManager.resetBoogeymen();
         secretSociety.resetMembers();
         addSessionActions();
+        livesManager.assignedLives = false;
         return true;
     }
 
@@ -437,6 +443,7 @@ public abstract class Season {
     public void addSessionActions() {
         boogeymanManager.addSessionActions();
         secretSociety.addSessionActions();
+        livesManager.addSessionActions();
     }
 
     /*
@@ -719,6 +726,7 @@ public abstract class Season {
             player.sendSystemMessage(Component.nullToEmpty("After that, use §b'/session start'§f to start the session."));
         }
         boogeymanManager.onPlayerFinishJoining(player);
+        livesManager.onPlayerFinishJoining(player);
     }
 
     public void onPlayerDisconnect(ServerPlayer player) {

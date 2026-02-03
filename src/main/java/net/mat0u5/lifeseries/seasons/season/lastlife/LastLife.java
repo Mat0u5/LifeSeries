@@ -10,8 +10,6 @@ import static net.mat0u5.lifeseries.Main.currentSession;
 import static net.mat0u5.lifeseries.Main.seasonConfig;
 
 public class LastLife extends Season {
-    public static int ROLL_MAX_LIVES = 6;
-    public static int ROLL_MIN_LIVES = 2;
 
     @Override
     public Seasons getSeason() {
@@ -21,57 +19,5 @@ public class LastLife extends Season {
     @Override
     public ConfigManager createConfig() {
         return new LastLifeConfig();
-    }
-
-    @Override
-    public LivesManager createLivesManager() {
-        return new LastLifeLivesManager();
-    }
-
-    @Override
-    public void addSessionActions() {
-        super.addSessionActions();
-        if (livesManager instanceof LastLifeLivesManager lastLifeLivesManager) {
-            currentSession.addSessionAction(lastLifeLivesManager.actionChooseLives);
-        }
-    }
-
-    @Override
-    public void reload() {
-        super.reload();
-        if (!(seasonConfig instanceof LastLifeConfig config)) return;
-        int minLivesConfig = config.RANDOM_LIVES_MIN.get(config);
-        int maxLivesConfig = config.RANDOM_LIVES_MAX.get(config);
-        ROLL_MIN_LIVES = Math.min(minLivesConfig, maxLivesConfig);
-        ROLL_MAX_LIVES = Math.max(minLivesConfig, maxLivesConfig);
-    }
-
-    @Override
-    public Integer getDefaultLives() {
-        return null;
-    }
-
-    @Override
-    public boolean sessionStart() {
-        if (livesManager instanceof LastLifeLivesManager lastLifeLivesManager) {
-            lastLifeLivesManager.reset();
-        }
-        return super.sessionStart();
-    }
-
-    @Override
-    public void sessionEnd() {
-        super.sessionEnd();
-        if (livesManager instanceof LastLifeLivesManager lastLifeLivesManager) {
-            lastLifeLivesManager.reset();
-        }
-    }
-
-    @Override
-    public void onPlayerFinishJoining(ServerPlayer player) {
-        super.onPlayerFinishJoining(player);
-        if (livesManager instanceof LastLifeLivesManager lastLifeLivesManager) {
-            lastLifeLivesManager.onPlayerFinishJoining(player);
-        }
     }
 }

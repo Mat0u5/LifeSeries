@@ -66,33 +66,8 @@ public class LastLifeConfig extends ConfigManager {
     );
 
 
-    public static final ConfigFileEntry<Integer> RANDOM_LIVES_MIN = new ConfigFileEntry<>(
-            "random_lives_min", 2, "season",
-            "Random Lives Min", "The minimum lives you can get from the random roll."
-    );
-    public static final ConfigFileEntry<Integer> RANDOM_LIVES_MAX = new ConfigFileEntry<>(
-            "random_lives_max", 6, "season",
-            "Random Lives Max", "The maximum lives you can get from the random roll."
-    );
-
-
     public LastLifeConfig() {
         super("./config/"+ Main.MOD_ID,"lastlife.properties");
-    }
-
-    @Override
-    protected List<ConfigFileEntry<?>> getDefaultConfigEntries() {
-        List<ConfigFileEntry<?>> defaultEntries = super.getDefaultConfigEntries();
-        defaultEntries.remove(DEFAULT_LIVES);
-        return defaultEntries;
-    }
-
-    @Override
-    protected List<ConfigFileEntry<?>> getSeasonSpecificConfigEntries() {
-        return new ArrayList<>(List.of(
-                RANDOM_LIVES_MIN
-                ,RANDOM_LIVES_MAX
-        ));
     }
 
     @Override
@@ -103,6 +78,7 @@ public class LastLifeConfig extends ConfigManager {
         BLACKLIST_CLAMPED_ENCHANTS.defaultValue = TextUtils.formatString("[{}]", CLAMPED_ENCHANTMENTS);
         GIVELIFE_COMMAND_ENABLED.defaultValue = true;
         BOOGEYMAN.defaultValue = true;
+        LIVES_RANDOMIZE.defaultValue = true;
         super.instantiateProperties();
     }
 }
