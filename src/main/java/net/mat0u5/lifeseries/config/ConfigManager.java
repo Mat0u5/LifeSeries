@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.secretlife.TaskManager;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
@@ -12,7 +13,6 @@ import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.border.BorderStatus;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Score;
 
@@ -244,6 +244,32 @@ public abstract class ConfigManager extends DefaultConfigValues {
             );
             sendConfigEntry(player, teamEntry, index);
             index++;
+        }
+        if (currentSeason.getSeason() == Seasons.SECRET_LIFE) {
+            for (String easyTask : TaskManager.easyTasks_all) {
+                ConfigFileEntry<Object> taskEntry = new ConfigFileEntry<>(
+                        "dynamic_task_entry_"+ UUID.randomUUID(), null, ConfigTypes.SECRET_TASK, "season.tasks.easy",
+                        "", "", List.of("easy", easyTask), true
+                );
+                sendConfigEntry(player, taskEntry, index);
+                index++;
+            }
+            for (String hardTask : TaskManager.hardTasks_all) {
+                ConfigFileEntry<Object> taskEntry = new ConfigFileEntry<>(
+                        "dynamic_task_entry_"+ UUID.randomUUID(), null, ConfigTypes.SECRET_TASK, "season.tasks.hard",
+                        "", "", List.of("hard", hardTask), true
+                );
+                sendConfigEntry(player, taskEntry, index);
+                index++;
+            }
+            for (String redTask : TaskManager.redTasks_all) {
+                ConfigFileEntry<Object> taskEntry = new ConfigFileEntry<>(
+                        "dynamic_task_entry_"+ UUID.randomUUID(), null, ConfigTypes.SECRET_TASK, "season.tasks.red",
+                        "", "", List.of("red", redTask), true
+                );
+                sendConfigEntry(player, taskEntry, index);
+                index++;
+            }
         }
     }
 

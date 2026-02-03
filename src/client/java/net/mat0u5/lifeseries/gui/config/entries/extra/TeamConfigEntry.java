@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.gui.config.entries.extra;
 
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
-import net.mat0u5.lifeseries.gui.config.entries.EmptyConfigEntry;
+import net.mat0u5.lifeseries.gui.config.entries.ModifiableListEntry;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -26,7 +26,7 @@ import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 //?}
 
-public class TeamConfigEntry extends EmptyConfigEntry {
+public class TeamConfigEntry extends ModifiableListEntry {
     public String teamNum;
     public String teamName;
     public String teamColor;
@@ -44,12 +44,10 @@ public class TeamConfigEntry extends EmptyConfigEntry {
     protected final EditBox textFieldColor;
     protected final EditBox textFieldAllowedKill;
     protected final EditBox textFieldGainLife;
-    protected final Button deleteEntryButton;
-    protected final Button addEntryButton;
 
 
     public TeamConfigEntry(String fieldName, List<String> args) {
-        super(fieldName, "", "");
+        super(fieldName);
         this.defaultTeamNum = args.get(3);
         this.defaultTeamName = args.get(4);
         this.defaultTeamColor = args.get(5);
@@ -84,63 +82,15 @@ public class TeamConfigEntry extends EmptyConfigEntry {
         textFieldColor.setMaxLength(maxTextFieldLength);
         textFieldAllowedKill.setMaxLength(maxTextFieldLength);
         textFieldGainLife.setMaxLength(maxTextFieldLength);
-
-        deleteEntryButton = Button.builder(Component.nullToEmpty("\uD83D\uDDD1"), this::deleteEntry)
-                .bounds(0, 0, 16, 16)
-                .build();
-        addEntryButton = Button.builder(Component.nullToEmpty("+"), this::addEntry)
-                .bounds(0, 0, 16, 16)
-                .build();
-
     }
 
     @Override
-    protected void renderEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    protected void renderMainEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         int field1X = x+40;
         int field2X = x+80;
         int field3X = x+170;
         int field4X = x+260;
         int field5X = x+320;
-        int field1CenterX = field1X + 15;
-        int field2CenterX = field2X + 30;
-        int field3CenterX = field3X + 30;
-        int field4CenterX = field4X + 15;
-        int field5CenterX = field5X + 15;
-        if (isFirst()) {
-            Component header1Text = Component.nullToEmpty("§f\uD83D\uDEC8 Lives");
-            Component header2Text = Component.nullToEmpty("§fName");
-            Component header3Text = Component.nullToEmpty("§fColor");
-            Component header4Text = Component.nullToEmpty("§f\uD83D\uDEC8 Can Kill");
-            Component header5Text = Component.nullToEmpty("§f\uD83D\uDEC8 Gain Life");
-
-            RenderUtils.text(header1Text, field1CenterX, y+5).anchorCenter().render(context, textRenderer);
-            RenderUtils.text(header2Text, field2CenterX, y+5).anchorCenter().render(context, textRenderer);
-            RenderUtils.text(header3Text, field3CenterX, y+5).anchorCenter().render(context, textRenderer);
-            RenderUtils.text(header4Text, field4CenterX, y+5).anchorCenter().render(context, textRenderer);
-            RenderUtils.text(header5Text, field5CenterX, y+5).anchorCenter().render(context, textRenderer);
-
-            if (hovered && mouseY >= y + 5 && mouseY <= y + 5 + textRenderer.lineHeight) {
-                Component hoverText = null;
-                if (mouseX >= field1X && mouseX <= field1X + textRenderer.width(header1Text)) {
-                    hoverText = Component.nullToEmpty("Lives boundary where players are put into this team (Rounded to nearest team with boundary <= lives).");
-                }
-                if (mouseX >= field4X && mouseX <= field4X + textRenderer.width(header4Text)) {
-                    hoverText = Component.nullToEmpty("Lives boundary where this team can kill.\nFor example if set to 2, this team can kill any players with at least 2 lives.");
-                }
-                if (mouseX >= field5X && mouseX <= field5X + textRenderer.width(header5Text)) {
-                    hoverText = Component.nullToEmpty("Lives boundary where this team can gain lives for killing.\nFor example if set to 4, this team will gain a life for killing players with at least 4 lives.");
-                }
-                if (hoverText != null) {
-                    //? if <= 1.21.5 {
-                    /*context.renderTooltip(textRenderer, textRenderer.split(hoverText, 210), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY);
-                    *///?} else {
-                    context.setTooltipForNextFrame(textRenderer, textRenderer.split(hoverText, 210), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY, false);
-                     //?}
-                }
-            }
-
-            y += PREFFERED_HEIGHT;
-        }
         textFieldLives.setY(y+1);
         textFieldName.setY(y+1);
         textFieldColor.setY(y+1);
@@ -153,27 +103,11 @@ public class TeamConfigEntry extends EmptyConfigEntry {
         textFieldAllowedKill.setX(field4X);
         textFieldGainLife.setX(field5X);
 
-
         textFieldLives.render(context, mouseX, mouseY, tickDelta);
         textFieldName.render(context, mouseX, mouseY, tickDelta);
         textFieldColor.render(context, mouseX, mouseY, tickDelta);
         textFieldAllowedKill.render(context, mouseX, mouseY, tickDelta);
         textFieldGainLife.render(context, mouseX, mouseY, tickDelta);
-
-        deleteEntryButton.setX(x+5);
-        deleteEntryButton.setY(y+2);
-        deleteEntryButton.render(context, mouseX, mouseY, tickDelta);
-
-        addEntryButton.setX(x+10);
-        addEntryButton.setY(y+PREFFERED_HEIGHT+2);
-        if (isLast()) {
-            addEntryButton.render(context, mouseX, mouseY, tickDelta);
-        }
-        boolean shouldShow = MainClient.clientCurrentSeason != Seasons.LIMITED_LIFE;
-        addEntryButton.active = shouldShow;
-        addEntryButton.visible = shouldShow;
-
-        deleteEntryButton.active = !isDefaultTeam();
         textFieldLives.setEditable(!isDefaultTeam());
 
         if (getTeamNum() == null) textFieldLives.setTextColor(TextColors.PASTEL_RED);
@@ -203,53 +137,66 @@ public class TeamConfigEntry extends EmptyConfigEntry {
         }
     }
 
+    @Override
+    public void renderFirstEntryExtras(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        int field1X = x+40;
+        int field2X = x+80;
+        int field3X = x+170;
+        int field4X = x+260;
+        int field5X = x+320;
+        int field1CenterX = field1X + 15;
+        int field2CenterX = field2X + 30;
+        int field3CenterX = field3X + 30;
+        int field4CenterX = field4X + 15;
+        int field5CenterX = field5X + 15;
+        Component header1Text = Component.nullToEmpty("§f\uD83D\uDEC8 Lives");
+        Component header2Text = Component.nullToEmpty("§fName");
+        Component header3Text = Component.nullToEmpty("§fColor");
+        Component header4Text = Component.nullToEmpty("§f\uD83D\uDEC8 Can Kill");
+        Component header5Text = Component.nullToEmpty("§f\uD83D\uDEC8 Gain Life");
+
+        RenderUtils.text(header1Text, field1CenterX, y+5).anchorCenter().render(context, textRenderer);
+        RenderUtils.text(header2Text, field2CenterX, y+5).anchorCenter().render(context, textRenderer);
+        RenderUtils.text(header3Text, field3CenterX, y+5).anchorCenter().render(context, textRenderer);
+        RenderUtils.text(header4Text, field4CenterX, y+5).anchorCenter().render(context, textRenderer);
+        RenderUtils.text(header5Text, field5CenterX, y+5).anchorCenter().render(context, textRenderer);
+
+        if (hovered && mouseY >= y + 5 && mouseY <= y + 5 + textRenderer.lineHeight) {
+            Component hoverText = null;
+            if (mouseX >= field1X && mouseX <= field1X + textRenderer.width(header1Text)) {
+                hoverText = Component.nullToEmpty("Lives boundary where players are put into this team (Rounded to nearest team with boundary <= lives).");
+            }
+            if (mouseX >= field4X && mouseX <= field4X + textRenderer.width(header4Text)) {
+                hoverText = Component.nullToEmpty("Lives boundary where this team can kill.\nFor example if set to 2, this team can kill any players with at least 2 lives.");
+            }
+            if (mouseX >= field5X && mouseX <= field5X + textRenderer.width(header5Text)) {
+                hoverText = Component.nullToEmpty("Lives boundary where this team can gain lives for killing.\nFor example if set to 4, this team will gain a life for killing players with at least 4 lives.");
+            }
+            if (hoverText != null) {
+                //? if <= 1.21.5 {
+                /*context.renderTooltip(textRenderer, textRenderer.split(hoverText, 210), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY);
+                 *///?} else {
+                context.setTooltipForNextFrame(textRenderer, textRenderer.split(hoverText, 210), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY, false);
+                //?}
+            }
+        }
+    }
+    public void renderLastEntryExtras(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        super.renderLastEntryExtras(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
+        addEntryButton.active = MainClient.clientCurrentSeason != Seasons.LIMITED_LIFE;
+    }
+    public void renderMiddleEntryExtras(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        super.renderMiddleEntryExtras(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
+        deleteEntryButton.active = !isDefaultTeam();
+    }
+
     public boolean isDefaultTeam() {
         return Objects.equals(defaultTeamNum, "0") || Objects.equals(defaultTeamNum, "1") || Objects.equals(defaultTeamNum, "2") || Objects.equals(defaultTeamNum, "3") || Objects.equals(defaultTeamNum, "4");
     }
 
     public void deleteEntry(Button button) {
         if (isDefaultTeam()) return;
-        if (parentGroup == null) return;
-        try {
-            parentGroup.getMainEntry().markChangedForever();
-            parentGroup.getChildEntries().get(0).markChangedForever();
-        }catch(Exception e) {}
-        parentGroup.removeChildEntry(this);
-    }
-
-    public void addEntry(Button button) {
-        if (parentGroup == null) return;
-        int max = getTeamNum() != null ? getTeamNum() : 0;
-        for (int i : getSisterTeamNums()) {
-            if (i > max) max = i;
-        }
-        TeamConfigEntry newEntry = new TeamConfigEntry("dynamic_teams_"+ UUID.randomUUID(), List.of("", "" ,"", String.valueOf(max+1), "New Team", "white", "", ""));
-        parentGroup.addChildEntry(newEntry);
-        newEntry.defaultTeamNum = "";
-    }
-
-    public boolean isFirst() {
-        if (parentGroup == null) return false;
-        return parentGroup.getChildEntries().indexOf(this) == 0;
-    }
-
-    public boolean isLast() {
-        if (parentGroup == null) return false;
-        if (MainClient.clientCurrentSeason == Seasons.LIMITED_LIFE) return false;
-        return parentGroup.getChildEntries().indexOf(this) == parentGroup.getChildEntries().size()-1;
-    }
-
-    @Override
-    public int getPreferredHeight() {
-        int heightMultiplier = 1;
-        if (isFirst()) heightMultiplier++;
-        if (isLast()) heightMultiplier++;
-        return PREFFERED_HEIGHT * heightMultiplier;
-    }
-
-    @Override
-    public int additionalResetButtonOffsetY() {
-        return isFirst() ? PREFFERED_HEIGHT : 0;
+        super.deleteEntry(button);
     }
 
     public void onChanged(String text) {
@@ -294,27 +241,32 @@ public class TeamConfigEntry extends EmptyConfigEntry {
         return null;
     }
 
-    public List<TeamConfigEntry> sisterEntries() {
-        List<TeamConfigEntry> result = new ArrayList<>();
-        if (parentGroup != null) {
-            for (ConfigEntry entry : parentGroup.getChildEntries()) {
-                if (entry instanceof TeamConfigEntry teamConfigEntry) {
-                    if (teamConfigEntry != this) {
-                        result.add(teamConfigEntry);
-                    }
-                }
+    public List<Integer> getSisterTeamNums() {
+        List<Integer> result = new ArrayList<>();
+        for (ModifiableListEntry entry : getSisterEntries()) {
+            if (entry instanceof TeamConfigEntry teamEntry) {
+                Integer num = teamEntry.getTeamNum();
+                if (num != null) result.add(num);
             }
         }
         return result;
     }
 
-    public List<Integer> getSisterTeamNums() {
-        List<Integer> result = new ArrayList<>();
-        for (TeamConfigEntry entry : sisterEntries()) {
-            Integer num = entry.getTeamNum();
-            if (num != null) result.add(num);
+    @Override
+    public ConfigEntry getNewEntry() {
+        int max = getTeamNum() != null ? getTeamNum() : 0;
+        for (int i : getSisterTeamNums()) {
+            if (i > max) max = i;
         }
-        return result;
+        TeamConfigEntry newEntry = new TeamConfigEntry("dynamic_teams_"+ UUID.randomUUID(), List.of("", "" ,"", String.valueOf(max+1), "New Team", "white", "", ""));
+        newEntry.defaultTeamNum = "";
+        return newEntry;
+    }
+
+    @Override
+    public boolean isLast() {
+        if (MainClient.clientCurrentSeason == Seasons.LIMITED_LIFE) return false;
+        return super.isLast();
     }
 
     public void checkErrors() {
@@ -394,9 +346,7 @@ public class TeamConfigEntry extends EmptyConfigEntry {
                 textFieldNameClick ||
                 textFieldColorClick ||
                 textFieldAllowedKillClick ||
-                textFieldGainLifeClick ||
-                deleteEntryButton.mouseClicked(mouseX, mouseY, button) ||
-                addEntryButton.mouseClicked(mouseX, mouseY, button)) {
+                textFieldGainLifeClick) {
             return true;
         }
         return super.mouseClickedEntry(mouseX, mouseY, button);
@@ -442,9 +392,7 @@ public class TeamConfigEntry extends EmptyConfigEntry {
                 textFieldNameClick ||
                 textFieldColorClick ||
                 textFieldAllowedKillClick ||
-                textFieldGainLifeClick ||
-                deleteEntryButton.mouseClicked(click, doubled) ||
-                addEntryButton.mouseClicked(click, doubled)) {
+                textFieldGainLifeClick) {
             return true;
         }
         return super.mouseClickedEntry(click, doubled);
@@ -479,8 +427,10 @@ public class TeamConfigEntry extends EmptyConfigEntry {
     public void onSave() {
         List<String> allTeams = new ArrayList<>();
         allTeams.add("lives_"+this.teamNum);
-        for (TeamConfigEntry entry : sisterEntries()) {
-            allTeams.add("lives_"+entry.teamNum);
+        for (ModifiableListEntry entry : getSisterEntries()) {
+            if (entry instanceof TeamConfigEntry teamEntry) {
+                allTeams.add("lives_"+teamEntry.teamNum);
+            }
         }
         NetworkHandlerClient.sendStringListPacket(PacketNames.SET_TEAM, List.of(
             String.join(";",allTeams), teamNum, teamName, teamColor, allowedKill, gainLifeKill
@@ -488,17 +438,7 @@ public class TeamConfigEntry extends EmptyConfigEntry {
     }
 
     @Override
-    public boolean isSearchable() {
-        return false;
-    }
-
-    @Override
     public ConfigTypes getValueType() {
         return ConfigTypes.TEAM_ENTRY;
-    }
-
-    @Override
-    public boolean hasResetButton() {
-        return true;
     }
 }

@@ -1,10 +1,13 @@
 package net.mat0u5.lifeseries.network;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.networking.v1.*;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.DefaultConfigValues;
+import net.mat0u5.lifeseries.config.StringListManager;
 import net.mat0u5.lifeseries.mixin.ServerLoginPacketListenerImplAccessor;
 import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
@@ -13,6 +16,7 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLife;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeVotingManager;
+import net.mat0u5.lifeseries.seasons.season.secretlife.TaskManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
@@ -425,6 +429,15 @@ public class NetworkHandlerServer {
                     livesManager.updateTeamConfig(packetTeamName, allowedKill, gainLife);
                 }
                 Season.reloadPlayerTeams = true;
+            }
+            if (name == PacketNames.CONFIG_SECRET_TASK) {
+                String type = value.remove(0);
+                try {
+                    StringListManager manager = new StringListManager("./config/lifeseries/secretlife",type+"-tasks.json");
+                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                    manager.setFileContent(gson.toJson(value));
+                }catch(Exception ignored) {}
+                TaskManager.reloadTasks();
             }
         }
     }

@@ -316,7 +316,11 @@ public class ConfigScreen extends Screen {
     @Override
     public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
         //?if <= 1.20.2 {
-        /*context.setColor(0.85F, 0.85F, 0.85F, 1.0F);
+        /*//?if <= 1.20 {
+        /^context.setColor(0.25F, 0.25F, 0.25F, 1.0F);
+        ^///?} else {
+        context.setColor(0.85F, 0.85F, 0.85F, 1.0F);
+        //?}
         RenderUtils.texture(Screen.BACKGROUND_LOCATION, 0, this.height - FOOTER_HEIGHT, this.width, FOOTER_HEIGHT).textureSize(32, 32).render(context);
         context.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         *///?}

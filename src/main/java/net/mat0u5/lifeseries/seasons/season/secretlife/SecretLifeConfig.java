@@ -121,6 +121,22 @@ public class SecretLifeConfig extends ConfigManager {
             "group_health", null, ConfigTypes.TEXT, "{season.health}",
             "Health Rewards / Punishments", ""
     );
+    public static final ConfigFileEntry<Object> GROUP_TASKS = new ConfigFileEntry<>(
+            "group_tasks", null, ConfigTypes.TEXT, "{season.tasks}[new]",
+            "Tasks", ""
+    );
+    public static final ConfigFileEntry<Object> GROUP_TASKS_EASY = new ConfigFileEntry<>(
+            "group_tasks_easy", null, ConfigTypes.TEXT, "{season.tasks.easy}",
+            "Easy Tasks", ""
+    );
+    public static final ConfigFileEntry<Object> GROUP_TASKS_HARD = new ConfigFileEntry<>(
+            "group_tasks_hard", null, ConfigTypes.TEXT, "{season.tasks.hard}",
+            "Hard Tasks", ""
+    );
+    public static final ConfigFileEntry<Object> GROUP_TASKS_RED = new ConfigFileEntry<>(
+            "group_tasks_red", null, ConfigTypes.TEXT, "{season.tasks.red}",
+            "Red Tasks", ""
+    );
 
 
     public SecretLifeConfig() {
@@ -139,6 +155,10 @@ public class SecretLifeConfig extends ConfigManager {
                 ,TASKS_NEED_CONFIRMATION
 
                 ,GROUP_HEALTH //Group
+                ,GROUP_TASKS
+                    ,GROUP_TASKS_EASY
+                    ,GROUP_TASKS_HARD
+                    ,GROUP_TASKS_RED
 
                 //Group stuff
                 ,ONLY_LOSE_HEARTS_IN_SESSION

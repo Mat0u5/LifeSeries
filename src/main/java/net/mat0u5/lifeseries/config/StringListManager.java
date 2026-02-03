@@ -49,7 +49,7 @@ public class StringListManager {
         }
     }
 
-    private void setFileContent(String content) {
+    public void setFileContent(String content) {
         FileWriter myWriter;
         try {
             myWriter = new FileWriter(file, false);

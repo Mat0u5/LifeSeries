@@ -65,6 +65,7 @@ public enum PacketNames {
     ,ADMIN_INFO
     ,STOP_TRIVIA_SOUNDS
     ,REMOVE_SLEEP_SCREENS
+    ,CONFIG_SECRET_TASK
     ;
 
     public static PacketNames fromName(String name) {

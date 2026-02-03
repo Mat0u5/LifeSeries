@@ -124,7 +124,7 @@ public class Task {
         if (page.contains("${kill_not_permitted}")) {
             if (anyYellowPlayers) page = page.replaceAll("\\$\\{kill_not_permitted}","");
         }
-        return page;
+        return page.replaceAll("\\\\n", "\n");
     }
 
     public int getDifficulty() {

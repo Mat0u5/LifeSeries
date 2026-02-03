@@ -72,6 +72,9 @@ public class TaskManager {
     public static List<String> easyTasks;
     public static List<String> hardTasks;
     public static List<String> redTasks;
+    public static List<String> easyTasks_all;
+    public static List<String> hardTasks_all;
+    public static List<String> redTasks_all;
     public static final Random rnd = new Random();
     public static List<UUID> pendingConfirmationTasks = new ArrayList<>();
 
@@ -89,12 +92,19 @@ public class TaskManager {
         usedTasksConfig = new StringListConfig("./config/lifeseries/main", "DO_NOT_MODIFY_secretlife_used_tasks.properties");
         locationsConfig = new SecretLifeLocationConfig();
         locationsConfig.loadLocations();
+        reloadTasks();
+    }
+
+    public static void reloadTasks() {
         StringListManager configEasyTasks = new StringListManager("./config/lifeseries/secretlife","easy-tasks.json");
         StringListManager configHardTasks = new StringListManager("./config/lifeseries/secretlife","hard-tasks.json");
         StringListManager configRedTasks = new StringListManager("./config/lifeseries/secretlife","red-tasks.json");
         easyTasks = configEasyTasks.loadStrings();
         hardTasks = configHardTasks.loadStrings();
         redTasks = configRedTasks.loadStrings();
+        easyTasks_all = configEasyTasks.loadStrings();
+        hardTasks_all = configHardTasks.loadStrings();
+        redTasks_all = configRedTasks.loadStrings();
         List<String> alreadySelected = SecretLifeUsedTasks.getUsedTasks(usedTasksConfig);
         for (String selected : alreadySelected) {
             easyTasks.remove(selected);
