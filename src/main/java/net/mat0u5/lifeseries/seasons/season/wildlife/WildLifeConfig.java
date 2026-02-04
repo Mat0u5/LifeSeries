@@ -258,6 +258,22 @@ public class WildLifeConfig extends ConfigManager {
             "group_trivia", null, ConfigTypes.TEXT, "{season.trivia}",
             "Trivia", ""
     );
+    public static final ConfigFileEntry<Object> GROUP_TRIVIA_QUESTIONS = new ConfigFileEntry<>(
+            "group_trivia_questions", null, ConfigTypes.TEXT, "{season.trivia.questions}",
+            "Trivia Questions", ""
+    );
+    public static final ConfigFileEntry<Object> GROUP_TRIVIA_QUESTIONS_EASY = new ConfigFileEntry<>(
+            "group_trivia_questions_easy", null, ConfigTypes.TEXT, "{season.trivia.questions.easy}",
+            "Easy Questions", ""
+    );
+    public static final ConfigFileEntry<Object> GROUP_TRIVIA_QUESTIONS_NORMAL = new ConfigFileEntry<>(
+            "group_trivia_questions_normal", null, ConfigTypes.TEXT, "{season.trivia.questions.normal}",
+            "Normal Questions", ""
+    );
+    public static final ConfigFileEntry<Object> GROUP_TRIVIA_QUESTIONS_HARD = new ConfigFileEntry<>(
+            "group_trivia_questions_hard", null, ConfigTypes.TEXT, "{season.trivia.questions.hard}",
+            "Hard Questions", ""
+    );
     public static final ConfigFileEntry<Object> GROUP_MOBSWAP = new ConfigFileEntry<>(
             "group_mobswap", null, ConfigTypes.TEXT, "{season.mobswap}",
             "Mob Swap", ""
@@ -323,6 +339,10 @@ public class WildLifeConfig extends ConfigManager {
                 ,WILDCARD_TRIVIA_SECONDS_EASY
                 ,WILDCARD_TRIVIA_SECONDS_NORMAL
                 ,WILDCARD_TRIVIA_SECONDS_HARD
+                ,GROUP_TRIVIA_QUESTIONS
+                    ,GROUP_TRIVIA_QUESTIONS_EASY
+                    ,GROUP_TRIVIA_QUESTIONS_NORMAL
+                    ,GROUP_TRIVIA_QUESTIONS_HARD
 
                 ,WILDCARD_MOBSWAP_START_SPAWN_DELAY
                 ,WILDCARD_MOBSWAP_END_SPAWN_DELAY

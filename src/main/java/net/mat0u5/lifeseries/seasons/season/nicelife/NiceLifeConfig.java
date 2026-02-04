@@ -117,6 +117,10 @@ public class NiceLifeConfig extends ConfigManager {
             "group_voting", null, ConfigTypes.TEXT, "{season.voting}[new]",
             "Voting", ""
     );
+    public static final ConfigFileEntry<Object> GROUP_TRIVIA_QUESTIONS = new ConfigFileEntry<>(
+            "group_trivia_questions", null, ConfigTypes.TEXT, "{season.trivia.questions}",
+            "Trivia Questions", ""
+    );
 
     public NiceLifeConfig() {
         super("./config/"+ Main.MOD_ID,"nicelife.properties");
@@ -146,6 +150,7 @@ public class NiceLifeConfig extends ConfigManager {
                 ,NAUGHTY_LIST_PLAYERS
                 ,NICE_LIST_PLAYERS
                 ,NICE_LIST_CHANCE
+                ,GROUP_TRIVIA_QUESTIONS
         ));
     }
 

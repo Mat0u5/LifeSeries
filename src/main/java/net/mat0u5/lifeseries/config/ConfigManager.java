@@ -1,11 +1,17 @@
 package net.mat0u5.lifeseries.config;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
+import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.secretlife.TaskManager;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
@@ -266,6 +272,62 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ConfigFileEntry<Object> taskEntry = new ConfigFileEntry<>(
                         "dynamic_task_entry_"+ UUID.randomUUID(), null, ConfigTypes.SECRET_TASK, "season.tasks.red",
                         "", "", List.of("red", redTask), true
+                );
+                sendConfigEntry(player, taskEntry, index);
+                index++;
+            }
+        }
+        if (currentSeason.getSeason() == Seasons.WILD_LIFE) {
+            for (TriviaQuestion question : TriviaWildcard.easyTrivia.tryGetTriviaQuestions()) {
+                List<String> info = new ArrayList<>();
+                info.add("easy");
+                info.add(question.getQuestion());
+                info.add(String.valueOf(question.getCorrectAnswerIndex()));
+                info.addAll(question.getAnswers());
+                ConfigFileEntry<Object> taskEntry = new ConfigFileEntry<>(
+                        "dynamic_trivia_entry_"+ UUID.randomUUID(), null, ConfigTypes.TRIVIA_QUESTION, "season.trivia.questions.easy",
+                        "", "", info, true
+                );
+                sendConfigEntry(player, taskEntry, index);
+                index++;
+            }
+            for (TriviaQuestion question : TriviaWildcard.normalTrivia.tryGetTriviaQuestions()) {
+                List<String> info = new ArrayList<>();
+                info.add("normal");
+                info.add(question.getQuestion());
+                info.add(String.valueOf(question.getCorrectAnswerIndex()));
+                info.addAll(question.getAnswers());
+                ConfigFileEntry<Object> taskEntry = new ConfigFileEntry<>(
+                        "dynamic_trivia_entry_"+ UUID.randomUUID(), null, ConfigTypes.TRIVIA_QUESTION, "season.trivia.questions.normal",
+                        "", "", info, true
+                );
+                sendConfigEntry(player, taskEntry, index);
+                index++;
+            }
+            for (TriviaQuestion question : TriviaWildcard.hardTrivia.tryGetTriviaQuestions()) {
+                List<String> info = new ArrayList<>();
+                info.add("hard");
+                info.add(question.getQuestion());
+                info.add(String.valueOf(question.getCorrectAnswerIndex()));
+                info.addAll(question.getAnswers());
+                ConfigFileEntry<Object> taskEntry = new ConfigFileEntry<>(
+                        "dynamic_trivia_entry_"+ UUID.randomUUID(), null, ConfigTypes.TRIVIA_QUESTION, "season.trivia.questions.hard",
+                        "", "", info, true
+                );
+                sendConfigEntry(player, taskEntry, index);
+                index++;
+            }
+        }
+        if (currentSeason.getSeason() == Seasons.NICE_LIFE) {
+            for (TriviaQuestion question : NiceLifeTriviaManager.triviaQuestions.tryGetTriviaQuestions()) {
+                List<String> info = new ArrayList<>();
+                info.add("normal");
+                info.add(question.getQuestion());
+                info.add(String.valueOf(question.getCorrectAnswerIndex()));
+                info.addAll(question.getAnswers());
+                ConfigFileEntry<Object> taskEntry = new ConfigFileEntry<>(
+                        "dynamic_trivia_entry_"+ UUID.randomUUID(), null, ConfigTypes.TRIVIA_QUESTION, "season.trivia.questions",
+                        "", "", info, true
                 );
                 sendConfigEntry(player, taskEntry, index);
                 index++;
