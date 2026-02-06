@@ -42,7 +42,7 @@ public abstract class ConfigEntry {
     public static final int MAX_DESCRIPTION_WIDTH = 250;
 
     protected Font textRenderer;
-    protected ConfigScreen screen;
+    public ConfigScreen screen;
     protected final String fieldName;
     protected final String displayName;
     protected final String description;
@@ -53,7 +53,7 @@ public abstract class ConfigEntry {
     public float highlightAlpha = 0.0f;
     protected boolean isHovered = false;
     private boolean isFocused = false;
-    protected GroupConfigEntry<?> parentGroup;
+    public GroupConfigEntry<?> parentGroup;
     protected List<GroupConfigEntry<?>> groupTopology = new ArrayList<>();
     private boolean isNew = false;
     public boolean changedForever = false;
@@ -211,6 +211,10 @@ public abstract class ConfigEntry {
 
     public boolean isFocused() {
         return isFocused;
+    }
+
+    public boolean canLoseFocusEasily() {
+        return true;
     }
 
     public boolean isTopologyFocused() {

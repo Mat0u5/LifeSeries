@@ -25,7 +25,7 @@ public abstract class ModifiableListEntry extends EmptyConfigEntry {
         deleteEntryButton = Button.builder(Component.nullToEmpty("\uD83D\uDDD1"), this::deleteEntry)
                 .bounds(0, 0, 16, 16)
                 .build();
-        addEntryButton = Button.builder(Component.nullToEmpty("+"), this::addEntry)
+        addEntryButton = Button.builder(Component.nullToEmpty("+"), button -> addEntry())
                 .bounds(0, 0, 16, 16)
                 .build();
     }
@@ -38,7 +38,7 @@ public abstract class ModifiableListEntry extends EmptyConfigEntry {
         }
         renderMiddleEntryExtras(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
         renderMainEntry(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
-        y += mainEntryPreferredHeight();
+        y += getMainEntryHeight();
 
         if (isLast()) {
             renderLastEntryExtras(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
@@ -96,14 +96,21 @@ public abstract class ModifiableListEntry extends EmptyConfigEntry {
             }
         }catch(Exception e) {}
         if (parentGroup.getChildEntries().size() == 1) {
-            addEntry(button);
+            preventZeroEntries();
         }
         parentGroup.removeChildEntry(this);
     }
 
-    public void addEntry(Button button) {
-        if (parentGroup == null) return;
-        parentGroup.addChildEntry(getNewEntry());
+    public ConfigEntry preventZeroEntries() {
+        return addEntry();
+    }
+
+    public ConfigEntry addEntry() {
+        if (parentGroup == null) return null;
+        ConfigEntry newEntry = getNewEntry();
+        parentGroup.addChildEntry(newEntry);
+        newEntry.markChangedForever();
+        return newEntry;
     }
     public abstract ConfigEntry getNewEntry();
 
@@ -132,13 +139,13 @@ public abstract class ModifiableListEntry extends EmptyConfigEntry {
 
     @Override
     public int getPreferredHeight() {
-        int totalHeight = mainEntryPreferredHeight();
+        int totalHeight = getMainEntryHeight();
         if (isFirst()) totalHeight += firstEntryHeightAdd();
         if (isLast()) totalHeight += lastEntryHeightAdd();
         return totalHeight;
     }
 
-    public int mainEntryPreferredHeight() {
+    public int getMainEntryHeight() {
         return PREFFERED_HEIGHT;
     }
 
@@ -152,6 +159,17 @@ public abstract class ModifiableListEntry extends EmptyConfigEntry {
         return false;
     }
 
+    public List<ModifiableListEntry> getListEntries() {
+        List<ModifiableListEntry> result = new ArrayList<>();
+        if (parentGroup != null) {
+            for (ConfigEntry entry : parentGroup.getChildEntries()) {
+                if (entry instanceof ModifiableListEntry modifiableListEntry) {
+                    result.add(modifiableListEntry);
+                }
+            }
+        }
+        return result;
+    }
     public List<ModifiableListEntry> getSisterEntries() {
         List<ModifiableListEntry> result = new ArrayList<>();
         if (parentGroup != null) {

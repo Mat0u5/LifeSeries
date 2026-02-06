@@ -7,7 +7,7 @@ import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
+
 import java.util.ArrayList;
 import java.util.List;
 //? if >= 1.21.9 {
@@ -95,8 +95,10 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
             mainEntry.render(context, x, y, width, entryHeight, mouseX, mouseY, entryHovered, tickDelta);
             currentY += entryHeight + ConfigListWidget.ENTRY_GAP;
 
-            String expandText = !mainEntry.shouldExpand() ? "Click to expand" : "Click to collapse";
-            RenderUtils.text(expandText, mainEntry.expandTextX(x, width), y + LABEL_OFFSET_Y).anchorRight().colored(TextColors.LIGHT_GRAY_A128).render(context, textRenderer);
+            if (showExpandText()) {
+                String expandText = !mainEntry.isExpanded() ? "Click to expand" : "Click to collapse";
+                RenderUtils.text(expandText, mainEntry.expandTextX(x, width), y + LABEL_OFFSET_Y).anchorRight().colored(TextColors.LIGHT_GRAY_A128).render(context, textRenderer);
+            }
         }
 
 
@@ -122,7 +124,9 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
 
     private void renderExpandIcon(GuiGraphics context, int x, int y, boolean expanded, int endY, int width) {
         String text = expanded ? "- " : "+ ";
-        RenderUtils.text(text, x + EXPAND_TEXT_OFFSET_X, y + EXPAND_TEXT_OFFSET_Y).anchorRight().colored(TextColors.WHITE).render(context, textRenderer);
+        if (showExpandIcon()) {
+            RenderUtils.text(text, x + EXPAND_TEXT_OFFSET_X, y + EXPAND_TEXT_OFFSET_Y).anchorRight().colored(TextColors.WHITE).render(context, textRenderer);
+        }
         if (showSidebar) {
             context.fill(x+EXPAND_SIDEBAR_OFFSET_X, y, x+EXPAND_SIDEBAR_OFFSET_X+EXPAND_SIDEBAR_THICKNESS, endY - ConfigListWidget.ENTRY_GAP, TextColors.WHITE_A128);
         }
@@ -132,7 +136,15 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
     }
 
     private boolean shouldExpand() {
-        return mainEntry.shouldExpand();
+        return mainEntry.isExpanded();
+    }
+
+    private boolean showExpandIcon() {
+        return mainEntry.showExpandIcon();
+    }
+
+    private boolean showExpandText() {
+        return mainEntry.showExpandText();
     }
 
     private boolean hasExpandingChild() {
@@ -348,6 +360,11 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
 
     @Override
     public boolean sendToServer() {
+        return false;
+    }
+
+    @Override
+    public boolean canLoseFocusEasily() {
         return false;
     }
 }

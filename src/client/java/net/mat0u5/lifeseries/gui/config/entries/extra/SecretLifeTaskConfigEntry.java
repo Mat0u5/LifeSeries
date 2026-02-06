@@ -65,10 +65,6 @@ public class SecretLifeTaskConfigEntry extends ModifiableListEntry {
         RenderUtils.text(Component.literal(" \"${yellow}\" - replaced with the word 'yellow', if there are any yellows left"), textX, textY+45).colored(TextColors.GRAY).render(context, textRenderer);
         RenderUtils.text(Component.literal(" \"${red}\" - replaced with the word 'red', if there are any reds left"), textX, textY+54).colored(TextColors.GRAY).render(context, textRenderer);
     }
-    @Override
-    public void renderLastEntryExtras(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-        super.renderLastEntryExtras(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
-    }
 
     @Override
     public int firstEntryHeightAdd() {
@@ -167,13 +163,12 @@ public class SecretLifeTaskConfigEntry extends ModifiableListEntry {
         return super.charTypedEntry(input);
     }
     //?}
-    @Override
 
+    @Override
     public void onSave() {
         List<String> list = new ArrayList<>();
         list.add(taskType);
-        if (this.text != null && !this.text.isEmpty())list.add(this.text);
-        for (ModifiableListEntry entry : getSisterEntries()) {
+        for (ModifiableListEntry entry : getListEntries()) {
             if (entry instanceof SecretLifeTaskConfigEntry taskEntry) {
                 if (taskEntry.sentToServer) return;
                 String value = taskEntry.text;

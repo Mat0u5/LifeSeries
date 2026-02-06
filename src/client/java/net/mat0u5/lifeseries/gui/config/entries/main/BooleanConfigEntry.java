@@ -97,7 +97,7 @@ public class BooleanConfigEntry extends ButtonConfigEntry implements IEntryGroup
     }
 
     @Override
-    public boolean shouldExpand() {
+    public boolean isExpanded() {
         return clicked;
     }
 

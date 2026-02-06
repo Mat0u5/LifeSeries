@@ -44,7 +44,7 @@ public class TextConfigEntry extends EmptyConfigEntry implements IEntryGroupHead
     }
 
     @Override
-    public boolean shouldExpand() {
+    public boolean isExpanded() {
         return clicked;
     }
 

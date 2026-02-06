@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.config.ClientConfigNetwork;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.GroupConfigEntry;
+import net.mat0u5.lifeseries.gui.config.entries.extra.TriviaQuestionConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.main.TextConfigEntry;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
@@ -77,6 +78,11 @@ public class ConfigScreen extends Screen {
     private void initializeConfigEntries() {
         for (List<ConfigEntry> entries : this.categories.values()) {
             for (ConfigEntry entry : entries) {
+                entry.setScreen(this);
+            }
+        }
+        for (ConfigEntry entry : getAllEntries()) {
+            if (entry.screen == null) {
                 entry.setScreen(this);
             }
         }
@@ -231,7 +237,12 @@ public class ConfigScreen extends Screen {
     public List<ConfigEntry> getAllEntries(List<ConfigEntry> currentEntries) {
         List<ConfigEntry> allEntries = new ArrayList<>();
         for (ConfigEntry entry : currentEntries) {
-            if (entry instanceof GroupConfigEntry<?> groupEntry) {
+            if (entry instanceof TriviaQuestionConfigEntry triviaQuestionConfigEntry) {
+                allEntries.add(triviaQuestionConfigEntry);
+                allEntries.addAll(getAllEntries(triviaQuestionConfigEntry.renderAsGroup.getChildEntries()));
+                allEntries.addAll(getAllEntries(List.of(triviaQuestionConfigEntry.renderAsGroup.getMainEntry())));
+            }
+            else if (entry instanceof GroupConfigEntry<?> groupEntry) {
                 allEntries.addAll(getAllEntries(groupEntry.getChildEntries()));
                 allEntries.addAll(getAllEntries(List.of(groupEntry.getMainEntry())));
             }
@@ -467,7 +478,7 @@ public class ConfigScreen extends Screen {
     }
 
     public void setFocusedEntry(ConfigEntry entry) {
-        if (entry instanceof GroupConfigEntry) return;
+        if (!entry.canLoseFocusEasily()) return;
         if (focusedEntry == entry) return;
         searchField.setFocused(false);
 

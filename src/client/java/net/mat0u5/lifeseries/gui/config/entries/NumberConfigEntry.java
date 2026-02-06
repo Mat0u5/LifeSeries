@@ -134,7 +134,7 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
     }
 
     @Override
-    public boolean shouldExpand() {
+    public boolean isExpanded() {
         return clicked;
     }
 

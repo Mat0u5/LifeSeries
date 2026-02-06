@@ -214,19 +214,15 @@ public class ClientConfigGuiManager {
                 return new SecretLifeTaskConfigEntry(textObject.id, textObject.args);
             }
             if (textObject.configType == ConfigTypes.TRIVIA_QUESTION) {
-                String triviaType = textObject.args.get(3);
-                String question = textObject.args.get(4);
-                int correctAnswerIndex = Integer.parseInt(textObject.args.get(5));
-                GroupConfigEntry<TriviaQuestionConfigEntry> mainConfigEntry = new GroupConfigEntry<>();
-                TriviaQuestionConfigEntry configEntry = new TriviaQuestionConfigEntry(textObject.id, question, triviaType);
-                for (int i = 6; i < textObject.args.size(); i++) {
-                    try {
-                        String answerText = textObject.args.get(i);
-                        int answerIndex = i-5;
-                        TriviaAnswerConfigEntry answerEntry = new TriviaAnswerConfigEntry(textObject.id+"_ans"+answerIndex, answerText, answerIndex, (answerIndex-1) == correctAnswerIndex);
-                    }catch(Exception e) {}
-                }
-                return configEntry;
+                try {
+                    textObject.args.remove(0);
+                    textObject.args.remove(0);
+                    textObject.args.remove(0);
+                    String triviaType = textObject.args.remove(0);
+                    String question = textObject.args.remove(0);
+                    int correctAnswerIndex = Integer.parseInt(textObject.args.remove(0));
+                    return TriviaQuestionConfigEntry.getEntry(triviaType, question, correctAnswerIndex, textObject.args);
+                }catch(Exception e) {}
             }
             return new TextConfigEntry(textObject.id, textObject.name, textObject.description, textObject.clickable);
         }

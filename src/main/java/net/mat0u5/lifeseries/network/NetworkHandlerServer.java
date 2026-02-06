@@ -28,6 +28,8 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.AnimalDisguise;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.TripleJump;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
@@ -438,6 +440,44 @@ public class NetworkHandlerServer {
                     manager.setFileContent(gson.toJson(value));
                 }catch(Exception ignored) {}
                 TaskManager.reloadTasks();
+            }
+            if (name == PacketNames.CONFIG_TRIVIA) {
+                String type = value.remove(0);
+                List<TriviaQuestion> triviaQuestions = new ArrayList<>();
+                for (String questionStr : value) {
+                    try {
+                        if (!questionStr.contains("~~~")) continue;
+                        String[] splitQuestion = questionStr.split("~~~");
+                        if (splitQuestion.length < 3) continue;
+                        String questionText = splitQuestion[0];
+                        int correctAnswerIndex = Integer.parseInt(splitQuestion[1]);
+                        List<String> answers = new ArrayList<>();
+                        for (int i = 2; i < splitQuestion.length; i++) {
+                            answers.add(splitQuestion[i]);
+                        }
+                        triviaQuestions.add(new TriviaQuestion(questionText, answers, correctAnswerIndex-1));
+                    }catch(Exception e) {}
+                }
+                TriviaQuestionManager manager = null;
+                if (currentSeason.getSeason() == Seasons.WILD_LIFE) {
+                    if (type.equalsIgnoreCase("easy")) {
+                        manager = TriviaWildcard.easyTrivia;
+                    }
+                    else if (type.equalsIgnoreCase("normal")) {
+                        manager = TriviaWildcard.normalTrivia;
+                    }
+                    else {
+                        manager = TriviaWildcard.hardTrivia;
+                    }
+                }
+                else {
+                    manager = NiceLifeTriviaManager.triviaQuestions;
+                }
+                if (manager == null) return;
+                try {
+                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                    manager.setFileContent(gson.toJson(triviaQuestions));
+                }catch(Exception ignored) {}
             }
         }
     }
