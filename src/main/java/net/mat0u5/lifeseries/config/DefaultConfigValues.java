@@ -249,6 +249,10 @@ public class DefaultConfigValues {
             "boogeyman_steal_life", false, "global.boogeyman",
             "Boogeyman Steal Life", "When a boogeyman gets cured, they gain a life for completing their task."
     );
+    public final ConfigFileEntry<Boolean> BOOGEYMAN_LOCATOR_BAR = new ConfigFileEntry<>(
+            "boogeyman_locator_bar", false, "global.boogeyman[new]",
+            "Boogeyman Locator Bar", "Controls whether the Boogeyman can see all other players on the locator bar."
+    );
 
     public final ConfigFileEntry<Boolean> SECRET_SOCIETY = new ConfigFileEntry<>(
             "secret_society", false, "{global.society}",

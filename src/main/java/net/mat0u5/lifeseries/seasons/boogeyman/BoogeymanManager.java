@@ -36,6 +36,7 @@ public class BoogeymanManager {
     public boolean BOOGEYMAN_TEAM_NOTICE = false;
     public int BOOGEYMAN_KILLS_NEEDED = 1;
     public boolean BOOGEYMAN_STEAL_LIFE = false;
+    public boolean BOOGEYMAN_LOCATOR_BAR = false;
 
     public List<Boogeyman> boogeymen = new ArrayList<>();
     public List<UUID> rolledPlayers = new ArrayList<>();
@@ -491,6 +492,7 @@ public class BoogeymanManager {
         BOOGEYMAN_TEAM_NOTICE = seasonConfig.BOOGEYMAN_TEAM_NOTICE.get(seasonConfig);
         BOOGEYMAN_KILLS_NEEDED = seasonConfig.BOOGEYMAN_KILLS_NEEDED.get(seasonConfig);
         BOOGEYMAN_STEAL_LIFE = seasonConfig.BOOGEYMAN_STEAL_LIFE.get(seasonConfig);
+        BOOGEYMAN_LOCATOR_BAR = seasonConfig.BOOGEYMAN_LOCATOR_BAR.get(seasonConfig);
     }
 
     public void onDisabledBoogeyman() {

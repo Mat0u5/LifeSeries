@@ -174,6 +174,9 @@ public abstract class Season {
             if (!locatorBarEnabled && this instanceof DoubleLife) {
                 locatorBarEnabled = DoubleLife.SOULMATE_LOCATOR_BAR;
             }
+            if (!locatorBarEnabled && boogeymanManager.BOOGEYMAN_ENABLED) {
+                locatorBarEnabled = boogeymanManager.BOOGEYMAN_LOCATOR_BAR;
+            }
             //? if <= 1.21.9 {
             /*OtherUtils.setBooleanGameRule(overworld, GameRules.RULE_LOCATOR_BAR, locatorBarEnabled);
             *///?} else {

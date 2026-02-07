@@ -26,18 +26,23 @@ import static net.mat0u5.lifeseries.Main.currentSeason;
 public interface WaypointTransmitterMixin {
 
     @Inject(method = "doesSourceIgnoreReceiver", at = @At("HEAD"), cancellable = true)
-    private static void cannotReceive(LivingEntity source, ServerPlayer receiver, CallbackInfoReturnable<Boolean> cir) {
+    private static void cannotReceive(LivingEntity sourceEntity, ServerPlayer receiver, CallbackInfoReturnable<Boolean> cir) {
         if (Main.modDisabled()) return;
-        if (source instanceof ServerPlayer sender) {
+        if (sourceEntity instanceof ServerPlayer source) {
+            boolean showLocatorBar = false;
             if (currentSeason instanceof DoubleLife doubleLife && DoubleLife.SOULMATE_LOCATOR_BAR) {
                 UUID receiverSoulmateUUID = doubleLife.getSoulmateUUID(receiver.getUUID());
-                if (sender.getUUID().equals(receiverSoulmateUUID)) {
-                    cir.setReturnValue(false);
-                }
-                else {
-                    cir.setReturnValue(true);
-                }
+                showLocatorBar = source.getUUID().equals(receiverSoulmateUUID);
             }
+
+            if (!showLocatorBar && currentSeason.boogeymanManager.BOOGEYMAN_ENABLED && currentSeason.boogeymanManager.BOOGEYMAN_LOCATOR_BAR && currentSeason.boogeymanManager.isBoogeyman(receiver)) {
+                showLocatorBar = true;
+            }
+
+            if (!showLocatorBar) {
+                cir.setReturnValue(true);
+            }
+            // Else do vanilla logic
         }
     }
 }
