@@ -186,9 +186,13 @@ public class WildLifeConfig extends ConfigManager {
             "wildcard_superpowers_windcharge_max_mace_damage", 2, "season.superpowers",
             "Wind Charge: Max Mace Damage", "The max amount of damage you can deal with a mace while using the Wind Charge superpower."
     );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ZOMBIES_LOSE_ITEMS = new ConfigFileEntry<>(
-            "wildcard_superpowers_zombies_lose_items", true, "season.superpowers",
-            "Necromancy: Zombies Lose Items", "Controls whether zombies keep their items when they first get respawned."
+    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ZOMBIES_FIRST_SPAWN_CLEAR_ITEMS = new ConfigFileEntry<>(
+            "wildcard_superpowers_zombies_first_spawn_clear_items", true, "season.superpowers",
+            "Necromancy: Zombies First Spawn Clear Items", "Controls whether zombies get cleared when they first get respawned."
+    );
+    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ZOMBIES_KEEP_INVENTORY = new ConfigFileEntry<>(
+            "wildcard_superpowers_zombies_keep_inventory", true, "season.superpowers",
+            "Necromancy: Zombies Keep Inventory", "Controls whether zombies keep their items when they die."
     );
     public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN = new ConfigFileEntry<>(
             "wildcard_superpowers_zombies_revive_by_killing_dark_green", false, "season.superpowers",
@@ -352,7 +356,8 @@ public class WildLifeConfig extends ConfigManager {
                 ,WILDCARD_SUPERPOWERS_POWER_BLACKLIST
                 ,WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME
                 ,WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE
-                ,WILDCARD_SUPERPOWERS_ZOMBIES_LOSE_ITEMS
+                ,WILDCARD_SUPERPOWERS_ZOMBIES_FIRST_SPAWN_CLEAR_ITEMS
+                ,WILDCARD_SUPERPOWERS_ZOMBIES_KEEP_INVENTORY
                 ,WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN
                 ,WILDCARD_SUPERPOWERS_ZOMBIES_HEALTH
                 //? if > 1.20.3 {

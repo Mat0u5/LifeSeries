@@ -206,6 +206,14 @@ public class WildLife extends Season {
     }
 
     @Override
+    public boolean modifyKeepInventory(ServerPlayer player, boolean originalKeepInventory) {
+        if (Necromancy.isRessurectedPlayer(player)) {
+            return WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_KEEP_INVENTORY.get(seasonConfig);
+        }
+        return super.modifyKeepInventory(player, originalKeepInventory);
+    }
+
+    @Override
     public void onPlayerDeath(ServerPlayer player, DamageSource source) {
         if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.CREAKING)) {
             if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof CreakingPower creakingPower) {
@@ -245,6 +253,9 @@ public class WildLife extends Season {
 
         if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.CREAKING)) {
             return "creaking_"+player.getScoreboardName();
+        }
+        if (Necromancy.isRessurectedPlayer(player) && !player.isSpectator()) {
+            return "zombie";
         }
 
         return team;

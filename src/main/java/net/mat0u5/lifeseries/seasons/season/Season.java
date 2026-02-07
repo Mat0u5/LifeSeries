@@ -27,6 +27,7 @@ import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.*;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -320,6 +321,7 @@ public abstract class Season {
 
         WatcherManager.createTeams();
         livesManager.createTeams();
+        TeamUtils.createTeam("zombie", "Zombie", ChatFormatting.GRAY);
     }
 
 
@@ -367,6 +369,9 @@ public abstract class Season {
         return livesManager.getTeamForPlayer(player);
     }
 
+    public boolean modifyKeepInventory(ServerPlayer player, boolean originalKeepInventory) {
+        return originalKeepInventory;
+    }
 
     public void dropItemsOnLastDeath(ServerPlayer player) {
         boolean doDrop = seasonConfig.PLAYERS_DROP_ITEMS_ON_FINAL_DEATH.get(seasonConfig);

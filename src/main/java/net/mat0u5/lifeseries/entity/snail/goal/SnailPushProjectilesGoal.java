@@ -21,7 +21,7 @@ import net.minecraft.world.level.storage.TagValueOutput;
 //? if <= 1.21.4
 //import net.minecraft.world.entity.projectile.ThrownPotion;
 //? if >= 1.21.5 && <= 1.21.9
-/*import net.minecraft.world.entity.projectile.AbstractThrownPotion;*/
+//import net.minecraft.world.entity.projectile.AbstractThrownPotion;
 //? if >= 1.21.11
 import net.minecraft.world.entity.projectile.throwableitemprojectile.AbstractThrownPotion;
 

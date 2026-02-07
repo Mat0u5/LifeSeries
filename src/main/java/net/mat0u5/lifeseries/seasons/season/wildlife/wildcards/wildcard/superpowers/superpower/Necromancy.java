@@ -23,8 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static net.mat0u5.lifeseries.Main.livesManager;
-import static net.mat0u5.lifeseries.Main.seasonConfig;
+import static net.mat0u5.lifeseries.Main.*;
 
 public class Necromancy extends Superpower {
     private static final List<UUID> ressurectedPlayers = new ArrayList<>();
@@ -79,7 +78,7 @@ public class Necromancy extends Superpower {
                     LevelUtils.teleport(deadPlayer, updatedPlayerLevel, tpTo);
                     deadPlayer.setGameMode(GameType.SURVIVAL);
                     if (seasonConfig instanceof WildLifeConfig config) {
-                        if (WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_LOSE_ITEMS.get(config) && !clearedPlayers.contains(deadPlayer.getUUID())) {
+                        if (WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_FIRST_SPAWN_CLEAR_ITEMS.get(config) && !clearedPlayers.contains(deadPlayer.getUUID())) {
                             clearedPlayers.add(deadPlayer.getUUID());
                             deadPlayer.getInventory().clearContent();
                         }
@@ -90,6 +89,7 @@ public class Necromancy extends Superpower {
                     ressurectedPlayers.add(deadPlayer.getUUID());
                     perPlayerRessurections.add(deadPlayer.getUUID());
                     queuedRessurectedPlayers.remove(deadPlayer.getUUID());
+                    currentSeason.reloadPlayerTeam(deadPlayer);
                 }
             }
         });

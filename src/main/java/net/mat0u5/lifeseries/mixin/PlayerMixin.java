@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
@@ -11,12 +13,6 @@ import net.mat0u5.lifeseries.utils.player.NicknameManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
-import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.Pose;
 import org.spongepowered.asm.mixin.Unique;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -46,6 +42,22 @@ import java.util.Optional;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.item.enchantment.effects.ReplaceDisk;
 //?}
+
+//?if <= 1.21.9 {
+/*import net.minecraft.world.level.GameRules;
+*///?} else {
+import net.minecraft.world.level.gamerules.GameRule;
+import net.minecraft.world.level.gamerules.GameRules;
+//?}
+//?if <= 1.21.6 {
+/*import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
+import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.Pose;
+*///?}
+//?if >= 26.1 {
+/*import net.minecraft.world.entity.Entity;
+*///?}
 
 @Mixin(value = Player.class, priority = 1)
 public abstract class PlayerMixin implements IPlayer {
@@ -216,4 +228,27 @@ public abstract class PlayerMixin implements IPlayer {
         this.ls$cachedDisplayName = null;
         this.ls$cacheAge = -1;
     }
+
+    //? if <= 1.21.9 {
+    /*@WrapOperation(method = "dropEquipment", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/GameRules;getBoolean(Lnet/minecraft/world/level/GameRules$Key;)Z"))
+    private boolean changeKeepInventory(GameRules instance, GameRules.Key<GameRules.BooleanValue> key, Operation<Boolean> original) {
+        Player player = (Player) (Object) this;
+        boolean result = original.call(instance, key);
+        if (player instanceof ServerPlayer serverPlayer) {
+            return currentSeason.modifyKeepInventory(serverPlayer, result);
+        }
+        return result;
+    }
+    *///?} else {
+    @WrapOperation(method = "dropEquipment", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/gamerules/GameRules;get(Lnet/minecraft/world/level/gamerules/GameRule;)Ljava/lang/Object;"))
+    private <T> T changeKeepInventory(GameRules instance, GameRule<T> gameRule, Operation<T> original) {
+        Player player = (Player) (Object) this;
+        T result = original.call(instance, gameRule);
+        if (result instanceof Boolean originalBoolean && originalBoolean != null && player instanceof ServerPlayer serverPlayer) {
+            Boolean modified = currentSeason.modifyKeepInventory(serverPlayer, originalBoolean);
+            return (T) modified;
+        }
+        return result;
+    }
+    //?}
 }

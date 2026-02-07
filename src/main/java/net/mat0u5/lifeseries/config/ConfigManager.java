@@ -383,6 +383,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
         renamedProperty("auto_keep_inventory", "keep_inventory");
         renamedProperty("beoadcast_secret_keeper", "broadcast_secret_keeper");
         renamedProperty("blacklist_clamped_enchants", "blacklist_clamped_enchants_level_1");
+        renamedProperty("wildcard_superpowers_zombies_lose_items", "wildcard_superpowers_zombies_first_spawn_clear_items");
     }
 
     private void renamedProperty(String from, String to) {
