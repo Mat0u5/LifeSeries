@@ -161,7 +161,7 @@ public class MobSwap extends Wildcard {
 
     @Override
     public void deactivate() {
-        killMobSwapMobs();
+        killNonNamedMobs();
         super.deactivate();
     }
 

@@ -118,7 +118,7 @@ public class LimitedLifeLivesManager extends LivesManager {
 
     @Override
     public void addToPlayerLives(ServerPlayer player, int amount) {
-        if (Math.abs(amount) >= 2) {
+        if (Math.abs(amount) >= 2 && !LIVES_SYSTEM_DISABLED) {
             sendTimeTitle(player, Time.seconds(amount), amount < 0 ? ChatFormatting.RED : ChatFormatting.GREEN);
         }
         super.addToPlayerLives(player, amount);

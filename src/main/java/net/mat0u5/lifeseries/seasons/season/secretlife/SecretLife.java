@@ -374,8 +374,11 @@ public class SecretLife extends Season {
             double amountGained = Math.min(Math.max(MAX_KILL_HEALTH, MAX_HEALTH) - getPlayerHealth(killer), 20);
             if (amountGained > 0) {
                 addPlayerHealth(killer, amountGained);
-                double roundedHearts = Math.ceil(amountGained) / 2.0;
-                String text = TextUtils.pluralize(TextUtils.formatString("+{} Heart", roundedHearts), roundedHearts);
+                int roundedGained = (int) Math.ceil(amountGained);
+                double roundedHearts = roundedGained / 2.0;
+                String roundedHeartsStr = String.valueOf(roundedHearts);
+                if (roundedGained % 2 == 0) roundedHeartsStr = String.valueOf((int)roundedHearts);
+                String text = TextUtils.pluralize(TextUtils.formatString("+{} Heart", roundedHeartsStr), roundedHearts);
                 PlayerUtils.sendTitle(killer, Component.literal(text).withStyle(ChatFormatting.RED), 0, 40, 20);
             }
         }
