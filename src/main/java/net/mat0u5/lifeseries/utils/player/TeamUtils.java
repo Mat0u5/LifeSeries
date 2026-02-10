@@ -29,6 +29,7 @@ public class TeamUtils {
         PlayerTeam team = scoreboard.addPlayerTeam(teamName);
         team.setDisplayName(Component.literal(displayName).withStyle(color));
         team.setColor(color);
+        team.setSeeFriendlyInvisibles(false);
         return true;
     }
 

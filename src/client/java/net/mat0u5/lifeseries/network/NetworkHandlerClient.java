@@ -427,6 +427,9 @@ public class NetworkHandlerClient {
                 client.setScreen(null);
             }
         }
+        if (name == PacketNames.TRIPLE_JUMP) {
+            MainClient.tripleJumpActive = value.equalsIgnoreCase("true");
+        }
     }
 
     public static void handleNumberPacket(NumberPayload payload) {

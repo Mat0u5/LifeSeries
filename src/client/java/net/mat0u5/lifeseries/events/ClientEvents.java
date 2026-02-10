@@ -278,6 +278,7 @@ public class ClientEvents {
         if (jumpCooldown > 0) return;
 
         if (!hasTripleJumpEffect(player)) return;
+        if (!MainClient.tripleJumpActive) return;
         jumpedInAir++;
         player.jumpFromGround();
         //? if < 1.21 {
