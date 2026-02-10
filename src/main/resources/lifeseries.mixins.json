@@ -49,6 +49,8 @@
     "SnowballMixin",
     "SnowLayerBlockMixin",
     "SpawnEggItemMixin",
+    "TamableAnimalMixin",
+    "TargetGoalMixin",
     "ThrownEnderpearlMixin",
     "WanderingTraderSpawnerMixin",
     "WaypointTransmitterMixin",

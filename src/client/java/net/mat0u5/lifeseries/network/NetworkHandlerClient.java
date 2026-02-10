@@ -430,6 +430,9 @@ public class NetworkHandlerClient {
         if (name == PacketNames.TRIPLE_JUMP) {
             MainClient.tripleJumpActive = value.equalsIgnoreCase("true");
         }
+        if (name == PacketNames.MOD_DISABLED) {
+            MainClient.modDisabledServerSide = value.equalsIgnoreCase("true");
+        }
     }
 
     public static void handleNumberPacket(NumberPayload payload) {

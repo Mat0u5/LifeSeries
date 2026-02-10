@@ -11,6 +11,7 @@ public interface IClientHelper {
     boolean isReplay();
     HandshakeStatus serverHandshake();
     boolean isRunningIntegratedServer();
+    boolean isDisabledServerSide();
     boolean isMainClientPlayer(UUID uuid);
     Seasons getCurrentSeason();
     List<Wildcards> getActiveWildcards();

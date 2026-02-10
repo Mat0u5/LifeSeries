@@ -12,6 +12,8 @@ import net.mat0u5.lifeseries.utils.interfaces.IMorph;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -152,4 +154,19 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
         }
     }
     //?}
+
+    @Inject(method = "considersEntityAsAlly", at = @At("HEAD"), cancellable = true)
+    private void nonAllyPets(Entity entity, CallbackInfoReturnable<Boolean> cir) {
+        if (entity instanceof TamableAnimal animal) {
+            //? if <= 1.21.4 {
+            /*LivingEntity owner = animal.getOwner();
+            *///?} else {
+            LivingEntity owner = animal.getRootOwner();
+            //?}
+            Entity thisEntity = (Entity) (Object) this;
+            if (owner != thisEntity) {
+                cir.setReturnValue(false);
+            }
+        }
+    }
 }

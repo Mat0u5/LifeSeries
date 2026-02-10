@@ -52,6 +52,7 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     public static Vec3 cachedFogRenderColor = null;
     public static boolean isAdmin = false;
     public static boolean tripleJumpActive = false;
+    public static boolean modDisabledServerSide = false;
 
     public static ClientConfig clientConfig;
 
@@ -122,6 +123,11 @@ public class MainClient implements ClientModInitializer, IClientHelper {
         return clientActiveWildcards;
     }
 
+    @Override
+    public boolean isDisabledServerSide() {
+        return modDisabledServerSide;
+    }
+
     public static void reloadConfig() {
         COLORBLIND_SUPPORT = ClientConfig.COLORBLIND_SUPPORT.get(clientConfig);
         SESSION_TIMER = ClientConfig.SESSION_TIMER.get(clientConfig);
@@ -172,6 +178,7 @@ public class MainClient implements ClientModInitializer, IClientHelper {
         cloudColorSetMode = false;
         isAdmin = false;
         tripleJumpActive = false;
+        modDisabledServerSide = false;
 
         MorphManager.resetMorphs();
     }

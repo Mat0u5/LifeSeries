@@ -41,7 +41,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.5.0.21";
+	public static final String MOD_VERSION = "dev-1.5.0.22";
 	public static final String MOD_ID = "lifeseries";
 	public static final String UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
 	public static final boolean DEBUG = false;
@@ -97,6 +97,7 @@ public class Main implements ModInitializer {
 		if (clientHelper != null) {
 			if (clientHelper.isReplay()) return true;
 			if (clientHelper.serverHandshake() == HandshakeStatus.NOT_RECEIVED) return true;
+			return clientHelper.isDisabledServerSide();
 		}
 		return MOD_DISABLED;
 	}
@@ -117,6 +118,7 @@ public class Main implements ModInitializer {
 		if (!modDisabled()) {
 			fullReload();
 		}
+		NetworkHandlerServer.sendStringPackets(PacketNames.MOD_DISABLED, String.valueOf(Main.MOD_DISABLED));
 	}
 
 	public static void fullReload() {

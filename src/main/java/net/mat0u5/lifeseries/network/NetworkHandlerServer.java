@@ -661,6 +661,7 @@ public class NetworkHandlerServer {
         }
 
         sendStringPacket(player, PacketNames.ADMIN_INFO, String.valueOf(PermissionManager.isAdmin(player)));
+        NetworkHandlerServer.sendStringPackets(PacketNames.MOD_DISABLED, String.valueOf(Main.MOD_DISABLED));
     }
 
     public static void sendUpdatePackets() {
