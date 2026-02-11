@@ -57,7 +57,7 @@ public class LivesManager {
             assignRandomLivesToUnassignedPlayers();
         }
     };
-    Random rnd = new Random();
+    public Random rnd = new Random();
 
     public void reload() {
         SHOW_DEATH_TITLE = seasonConfig.FINAL_DEATH_TITLE_SHOW.get(seasonConfig);

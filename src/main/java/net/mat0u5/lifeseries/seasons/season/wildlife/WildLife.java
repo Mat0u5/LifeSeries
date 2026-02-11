@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.*;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
@@ -334,5 +335,16 @@ public class WildLife extends Season {
     public void onUpdatedInventory(ServerPlayer player) {
         super.onUpdatedInventory(player);
         Hunger.updateInventory(player);
+    }
+    @Override
+    public void onPlayerRespawn(ServerPlayer player) {
+        super.onPlayerRespawn(player);
+        if (WildcardManager.isActiveWildcard(Wildcards.SNAILS)) {
+            Snail snail = Snails.snails.get(player.getUUID());
+            if (snail != null && player.distanceTo(snail) <= 15) {
+                snail.serverData.despawn();
+                Snails.spawnSnailFor(player);
+            }
+        }
     }
 }

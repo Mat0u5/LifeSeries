@@ -105,6 +105,10 @@ public class LimitedLifeConfig extends ConfigManager {
             "show_time_below_name", false, "season",
             "Show Time Below Name", "Show the time a player has left below their username."
     );
+    public static final ConfigFileEntry<Integer> TIME_RANDOMIZE_INTERVAL = new ConfigFileEntry<>(
+            "time_randomize_interval", Time.hours(1).getSeconds(), ConfigTypes.SECONDS, "global.lives.random[new]",
+            "Time Randomize Intervals", "The intervals on which the time randomize can land."
+    );
 
     public static final ConfigFileEntry<Object> GROUP_TIME = new ConfigFileEntry<>(
             "group_time", null, ConfigTypes.TEXT, "{season.time}",
@@ -121,6 +125,7 @@ public class LimitedLifeConfig extends ConfigManager {
         defaultEntries.remove(DEFAULT_LIVES);
         defaultEntries.remove(TAB_LIST_SHOW_EXACT_LIVES);
         defaultEntries.remove(SECRET_SOCIETY_PUNISHMENT_LIVES);
+        defaultEntries.add(TIME_RANDOMIZE_INTERVAL);
         return defaultEntries;
     }
 
@@ -177,6 +182,8 @@ public class LimitedLifeConfig extends ConfigManager {
         LIVES_RANDOMIZE_MIN.description = "The minimum number of time any player can have after randomization, in seconds.";
         LIVES_RANDOMIZE_MAX.displayName = "Maximum Time";
         LIVES_RANDOMIZE_MAX.description = "The minimum number of time any player can have after randomization, in seconds.";
+        LIVES_RANDOMIZE_MIN.type = ConfigTypes.SECONDS;
+        LIVES_RANDOMIZE_MAX.type = ConfigTypes.SECONDS;
         super.instantiateProperties();
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 public class ConfigFileEntry<T> {
     public final String key;
     public T defaultValue;
-    public final ConfigTypes type;
+    public ConfigTypes type;
     public String displayName;
     public String description;
     public final String groupInfo;
