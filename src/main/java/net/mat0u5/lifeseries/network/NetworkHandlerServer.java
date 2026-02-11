@@ -86,6 +86,194 @@ public class NetworkHandlerServer {
         PRE_LOGIN_OVERRIDE_KICK = Main.getMainConfig().getOrCreateBoolean("pre_login_override_kick", false);
     }
 
+    public static void initializeSimplePacketReceivers() {
+
+        SimplePackets.TRIVIA_ANSWER.setServerReceive((player, payload) -> {//TODO switch to int
+            int intValue = (int) payload.number();
+            if (VersionControl.isDevVersion()) Main.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received trivia answer (from {}): {}", player, intValue));
+            if (currentSeason.getSeason() == Seasons.NICE_LIFE) {
+                NiceLifeTriviaManager.handleAnswer(player, intValue);
+            }
+            else {
+                TriviaWildcard.handleAnswer(player, intValue);
+            }
+        });
+
+        SimplePackets.HOLDING_JUMP.setServerReceive((player, payload) -> {//TODO switch to empty
+            if (currentSeason.getSeason() == Seasons.WILD_LIFE && WildcardManager.isActiveWildcard(Wildcards.SIZE_SHIFTING)) {
+                SizeShifting.onHoldingJump(player);
+            }
+        });
+        SimplePackets.SUPERPOWER_KEY.setServerReceive((player, payload) -> {//TODO switch to empty
+            if (currentSeason.getSeason() == Seasons.WILD_LIFE) {
+                SuperpowersWildcard.pressedSuperpowerKey(player);
+            }
+        });
+        SimplePackets.TRANSCRIPT.setServerReceive((player, payload) -> {//TODO switch to empty
+            player.sendSystemMessage(SessionTranscript.getTranscriptMessage());
+        });
+        SimplePackets.SELECTED_WILDCARD.setServerReceive((player, payload) -> {
+            if (PermissionManager.isAdmin(player)) {
+                Wildcards wildcard = Wildcards.getFromString(payload.value());
+                if (wildcard != null && wildcard != Wildcards.NULL) {
+                    WildcardManager.chosenWildcard(wildcard);
+                }
+            }
+        });
+        SimplePackets.SET_SEASON.setServerReceive((player, payload) -> {
+            if (PermissionManager.isAdmin(player) || currentSeason.getSeason() == Seasons.UNASSIGNED) {
+                Seasons newSeason = Seasons.getSeasonFromStringName(payload.value());
+                if (newSeason == Seasons.UNASSIGNED) return;
+                boolean prevTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
+                if (Main.changeSeasonTo(newSeason.getId())) {
+                    boolean currentTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
+                    PlayerUtils.broadcastMessage(TextUtils.formatLoosely("§aSuccessfully changed the season to {}.", payload.value()));
+                    if (prevTickFreeze != currentTickFreeze) {
+                        OtherUtils.setFreezeGame(currentTickFreeze);
+                    }
+                }
+            }
+        });
+        SimplePackets.TRIPLE_JUMP.setServerReceive((player, payload) -> {
+            if (currentSeason.getSeason() == Seasons.WILD_LIFE && SuperpowersWildcard.hasActivatedPower(player, Superpowers.TRIPLE_JUMP)) {
+                Superpower power = SuperpowersWildcard.getSuperpowerInstance(player);
+                if (power instanceof TripleJump tripleJump) {
+                    tripleJump.isInAir = true;
+                }
+            }
+        });
+        SimplePackets.SUBMIT_VOTE.setServerReceive((player, payload) -> {
+            NiceLifeVotingManager.handleVote(player, payload.value());
+        });
+
+        SimplePackets.SET_LIVES.setServerReceive((player, payload) -> {
+            if (PermissionManager.isAdmin(player) && payload.value().size() >= 2) {
+                ServerPlayer settingPlayer = PlayerUtils.getPlayer(payload.value().get(0));
+                if (settingPlayer != null) {
+                    try {
+                        int lives = Integer.parseInt(payload.value().get(1));
+                        settingPlayer.ls$setLives(lives);
+                    }catch(Exception e) {
+                        ScoreboardUtils.resetScore(settingPlayer, LivesManager.SCOREBOARD_NAME);
+                    }
+                }
+                else {
+                    try {
+                        int lives = Integer.parseInt(payload.value().get(1));
+                        livesManager.setScore(payload.value().get(0), lives);
+                    }catch(Exception e) {
+                        ScoreboardUtils.resetScore(payload.value().get(0), LivesManager.SCOREBOARD_NAME);
+                    }
+                }
+
+                Season.reloadPlayerTeams = true;
+            }
+        });
+        SimplePackets.SET_TEAM.setServerReceive((player, payload) -> {
+            if (PermissionManager.isAdmin(player) && payload.value().size() >= 6) {
+                List<String> teamNames = Arrays.asList(payload.value().get(0).split(";"));
+                String packetTeamName = "lives_" + payload.value().get(1);
+                String packetTeamDisplayName = payload.value().get(2);
+                String packetTeamColor = payload.value().get(3);
+                String packetAllowedKill = payload.value().get(4);
+                String packetGainLifeKill = payload.value().get(5);
+
+                ChatFormatting newTeamColor = ChatFormatting.getByName(packetTeamColor);
+                if (newTeamColor == null) newTeamColor = ChatFormatting.WHITE;
+
+                Integer allowedKill = null;
+                Integer gainLife = null;
+                try {
+                    allowedKill = Integer.parseInt(packetAllowedKill);
+                } catch(Exception e) {}
+                try {
+                    gainLife = Integer.parseInt(packetGainLifeKill);
+                } catch(Exception e) {}
+
+                boolean teamModified = false;
+                for (PlayerTeam livesTeam : new ArrayList<>(livesManager.getLivesTeams().values())) {
+                    String teamName = livesTeam.getName();
+                    if (!teamNames.contains(teamName)) {
+                        livesManager.updateTeamConfig(teamName, null, null);
+                        TeamUtils.deleteTeam(teamName);
+                        continue;
+                    }
+                    if (!teamName.equals(packetTeamName)) continue;
+
+                    livesTeam.setColor(newTeamColor);
+                    livesTeam.setDisplayName(Component.literal(packetTeamDisplayName).withStyle(newTeamColor));
+                    livesManager.updateTeamConfig(teamName, allowedKill, gainLife);
+                    teamModified = true;
+                }
+                if (!teamModified) {
+                    TeamUtils.createTeam(packetTeamName, packetTeamDisplayName, newTeamColor);
+                    livesManager.updateTeamConfig(packetTeamName, allowedKill, gainLife);
+                }
+                Season.reloadPlayerTeams = true;
+            }
+        });
+        SimplePackets.CONFIG_SECRET_TASK.setServerReceive((player, payload) -> {
+            if (PermissionManager.isAdmin(player)) {
+                String type = payload.value().remove(0);
+                try {
+                    StringListManager manager = new StringListManager("./config/lifeseries/secretlife",type+"-tasks.json");
+                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                    manager.setFileContent(gson.toJson(payload.value()));
+                }catch(Exception ignored) {}
+                TaskManager.reloadTasks();
+            }
+        });
+        SimplePackets.CONFIG_TRIVIA.setServerReceive((player, payload) -> {
+            if (PermissionManager.isAdmin(player)) {
+                String type = payload.value().remove(0);
+                List<TriviaQuestion> triviaQuestions = new ArrayList<>();
+                for (String questionStr : payload.value()) {
+                    try {
+                        if (!questionStr.contains("~~~")) continue;
+                        String[] splitQuestion = questionStr.split("~~~");
+                        if (splitQuestion.length < 3) continue;
+                        String questionText = splitQuestion[0];
+                        int correctAnswerIndex = Integer.parseInt(splitQuestion[1]);
+                        List<String> answers = new ArrayList<>();
+                        for (int i = 2; i < splitQuestion.length; i++) {
+                            answers.add(splitQuestion[i]);
+                        }
+                        triviaQuestions.add(new TriviaQuestion(questionText, answers, correctAnswerIndex-1));
+                    }catch(Exception e) {}
+                }
+                TriviaQuestionManager manager = null;
+                if (currentSeason.getSeason() == Seasons.WILD_LIFE) {
+                    if (type.equalsIgnoreCase("easy")) {
+                        manager = TriviaWildcard.easyTrivia;
+                    }
+                    else if (type.equalsIgnoreCase("normal")) {
+                        manager = TriviaWildcard.normalTrivia;
+                    }
+                    else {
+                        manager = TriviaWildcard.hardTrivia;
+                    }
+                }
+                else {
+                    manager = NiceLifeTriviaManager.triviaQuestions;
+                }
+                if (manager == null) return;
+                try {
+                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                    manager.setFileContent(gson.toJson(triviaQuestions));
+                }catch(Exception ignored) {}
+            }
+        });
+
+        /*
+
+        SimplePackets._______.setServerReceive((player, payload) -> {
+        });
+
+        SimplePackets._______.setServerReceive((player, payload) -> );
+
+         */
+    }
+
     public static void registerPackets() {
         //? if > 1.20.3 {
         //? if <= 1.21.11 {
@@ -187,6 +375,7 @@ public class NetworkHandlerServer {
     }
     *///?} else {
     public static void registerServerReceiver() {
+
         ServerLoginConnectionEvents.QUERY_START.register((handler, server, sender, synchronizer) -> {
             //? if <= 1.21.11 {
             sender.sendPacket(IdentifierHelper.mod("preloginpacket"), PacketByteBufs.create());
@@ -206,24 +395,28 @@ public class NetworkHandlerServer {
             ServerPlayer player = context.player();
             server.execute(() -> handleHandshakeResponse(player, payload));
         });
-        ServerPlayNetworking.registerGlobalReceiver(NumberPayload.ID, (payload, context) -> {
-            ServerPlayer player = context.player();
-            server.execute(() -> handleNumberPacket(player, payload));
-        });
-        ServerPlayNetworking.registerGlobalReceiver(StringPayload.ID, (payload, context) -> {
-            ServerPlayer player = context.player();
-            server.execute(() -> handleStringPacket(player, payload));
-        });
-        ServerPlayNetworking.registerGlobalReceiver(StringListPayload.ID, (payload, context) -> {
-            ServerPlayer player = context.player();
-            server.execute(() -> handleStringListPacket(player, payload));
-        });
         ServerPlayNetworking.registerGlobalReceiver(ConfigPayload.ID, (payload, context) -> {
             ServerPlayer player = context.player();
             server.execute(() -> handleConfigPacket(player, payload));
         });
 
-        //NEW
+        //Simple Packets
+        ServerPlayNetworking.registerGlobalReceiver(NumberPayload.ID, (payload, context) -> {
+            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            if (packet != null) packet.receiveServer(context.player(), payload);
+        });
+        ServerPlayNetworking.registerGlobalReceiver(StringPayload.ID, (payload, context) -> {
+            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            if (packet != null) packet.receiveServer(context.player(), payload);
+        });
+        ServerPlayNetworking.registerGlobalReceiver(StringListPayload.ID, (payload, context) -> {
+            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            if (packet != null) packet.receiveServer(context.player(), payload);
+        });
+        ServerPlayNetworking.registerGlobalReceiver(LongPayload.ID, (payload, context) -> {
+            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            if (packet != null) packet.receiveServer(context.player(), payload);
+        });
         ServerPlayNetworking.registerGlobalReceiver(BooleanPayload.ID, (payload, context) -> {
             SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
             if (packet != null) packet.receiveServer(context.player(), payload);
@@ -317,189 +510,6 @@ public class NetworkHandlerServer {
         }
         updatedConfigThisTick = false;
         configNeedsReload = false;
-    }
-
-    public static void handleNumberPacket(ServerPlayer player, NumberPayload payload) {
-        String nameStr = payload.name();
-        PacketNames name = PacketNames.fromName(nameStr);
-        double value = payload.number();
-
-        int intValue = (int) value;
-        if (name == PacketNames.TRIVIA_ANSWER) {
-            if (VersionControl.isDevVersion()) Main.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received trivia answer (from {}): {}", player, intValue));
-            if (currentSeason.getSeason() == Seasons.NICE_LIFE) {
-                NiceLifeTriviaManager.handleAnswer(player, intValue);
-            }
-            else {
-                TriviaWildcard.handleAnswer(player, intValue);
-            }
-        }
-    }
-    public static void handleStringPacket(ServerPlayer player, StringPayload payload) {
-        String nameStr = payload.name();
-        PacketNames name = PacketNames.fromName(nameStr);
-        String value = payload.value();
-
-        if (name == PacketNames.HOLDING_JUMP && currentSeason.getSeason() == Seasons.WILD_LIFE && WildcardManager.isActiveWildcard(Wildcards.SIZE_SHIFTING)) {
-            SizeShifting.onHoldingJump(player);
-        }
-        if (name == PacketNames.SUPERPOWER_KEY && currentSeason.getSeason() == Seasons.WILD_LIFE) {
-            SuperpowersWildcard.pressedSuperpowerKey(player);
-        }
-        if (name == PacketNames.TRANSCRIPT) {
-            player.sendSystemMessage(SessionTranscript.getTranscriptMessage());
-        }
-        if (PermissionManager.isAdmin(player)) {
-            if (name == PacketNames.SELECTED_WILDCARD) {
-                Wildcards wildcard = Wildcards.getFromString(value);
-                if (wildcard != null && wildcard != Wildcards.NULL) {
-                    WildcardManager.chosenWildcard(wildcard);
-                }
-            }
-        }
-        if (name == PacketNames.SET_SEASON) {
-            if (PermissionManager.isAdmin(player) || currentSeason.getSeason() == Seasons.UNASSIGNED) {
-                Seasons newSeason = Seasons.getSeasonFromStringName(value);
-                if (newSeason == Seasons.UNASSIGNED) return;
-                boolean prevTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
-                if (Main.changeSeasonTo(newSeason.getId())) {
-                    boolean currentTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
-                    PlayerUtils.broadcastMessage(TextUtils.formatLoosely("§aSuccessfully changed the season to {}.", value));
-                    if (prevTickFreeze != currentTickFreeze) {
-                        OtherUtils.setFreezeGame(currentTickFreeze);
-                    }
-                }
-            }
-        }
-        if (name == PacketNames.TRIPLE_JUMP) {
-            if (currentSeason.getSeason() == Seasons.WILD_LIFE && SuperpowersWildcard.hasActivatedPower(player, Superpowers.TRIPLE_JUMP)) {
-                Superpower power = SuperpowersWildcard.getSuperpowerInstance(player);
-                if (power instanceof TripleJump tripleJump) {
-                    tripleJump.isInAir = true;
-                }
-            }
-        }
-        if (name == PacketNames.SUBMIT_VOTE) {
-            NiceLifeVotingManager.handleVote(player, value);
-        }
-    }
-
-    public static void handleStringListPacket(ServerPlayer player, StringListPayload payload) {
-        String nameStr = payload.name();
-        PacketNames name = PacketNames.fromName(nameStr);
-        List<String> value = payload.value();
-
-        if (PermissionManager.isAdmin(player)) {
-            if (name == PacketNames.SET_LIVES && value.size() >= 2) {
-                ServerPlayer settingPlayer = PlayerUtils.getPlayer(value.get(0));
-                if (settingPlayer != null) {
-                    try {
-                        int lives = Integer.parseInt(value.get(1));
-                        settingPlayer.ls$setLives(lives);
-                    }catch(Exception e) {
-                        ScoreboardUtils.resetScore(settingPlayer, LivesManager.SCOREBOARD_NAME);
-                    }
-                }
-                else {
-                    try {
-                        int lives = Integer.parseInt(value.get(1));
-                        livesManager.setScore(value.get(0), lives);
-                    }catch(Exception e) {
-                        ScoreboardUtils.resetScore(value.get(0), LivesManager.SCOREBOARD_NAME);
-                    }
-                }
-
-                Season.reloadPlayerTeams = true;
-            }
-            if (name == PacketNames.SET_TEAM && value.size() >= 6) {
-                List<String> teamNames = Arrays.asList(value.get(0).split(";"));
-                String packetTeamName = "lives_" + value.get(1);
-                String packetTeamDisplayName = value.get(2);
-                String packetTeamColor = value.get(3);
-                String packetAllowedKill = value.get(4);
-                String packetGainLifeKill = value.get(5);
-
-                ChatFormatting newTeamColor = ChatFormatting.getByName(packetTeamColor);
-                if (newTeamColor == null) newTeamColor = ChatFormatting.WHITE;
-
-                Integer allowedKill = null;
-                Integer gainLife = null;
-                try {
-                    allowedKill = Integer.parseInt(packetAllowedKill);
-                } catch(Exception e) {}
-                try {
-                    gainLife = Integer.parseInt(packetGainLifeKill);
-                } catch(Exception e) {}
-
-                boolean teamModified = false;
-                for (PlayerTeam livesTeam : new ArrayList<>(livesManager.getLivesTeams().values())) {
-                    String teamName = livesTeam.getName();
-                    if (!teamNames.contains(teamName)) {
-                        livesManager.updateTeamConfig(teamName, null, null);
-                        TeamUtils.deleteTeam(teamName);
-                        continue;
-                    }
-                    if (!teamName.equals(packetTeamName)) continue;
-
-                    livesTeam.setColor(newTeamColor);
-                    livesTeam.setDisplayName(Component.literal(packetTeamDisplayName).withStyle(newTeamColor));
-                    livesManager.updateTeamConfig(teamName, allowedKill, gainLife);
-                    teamModified = true;
-                }
-                if (!teamModified) {
-                    TeamUtils.createTeam(packetTeamName, packetTeamDisplayName, newTeamColor);
-                    livesManager.updateTeamConfig(packetTeamName, allowedKill, gainLife);
-                }
-                Season.reloadPlayerTeams = true;
-            }
-            if (name == PacketNames.CONFIG_SECRET_TASK) {
-                String type = value.remove(0);
-                try {
-                    StringListManager manager = new StringListManager("./config/lifeseries/secretlife",type+"-tasks.json");
-                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                    manager.setFileContent(gson.toJson(value));
-                }catch(Exception ignored) {}
-                TaskManager.reloadTasks();
-            }
-            if (name == PacketNames.CONFIG_TRIVIA) {
-                String type = value.remove(0);
-                List<TriviaQuestion> triviaQuestions = new ArrayList<>();
-                for (String questionStr : value) {
-                    try {
-                        if (!questionStr.contains("~~~")) continue;
-                        String[] splitQuestion = questionStr.split("~~~");
-                        if (splitQuestion.length < 3) continue;
-                        String questionText = splitQuestion[0];
-                        int correctAnswerIndex = Integer.parseInt(splitQuestion[1]);
-                        List<String> answers = new ArrayList<>();
-                        for (int i = 2; i < splitQuestion.length; i++) {
-                            answers.add(splitQuestion[i]);
-                        }
-                        triviaQuestions.add(new TriviaQuestion(questionText, answers, correctAnswerIndex-1));
-                    }catch(Exception e) {}
-                }
-                TriviaQuestionManager manager = null;
-                if (currentSeason.getSeason() == Seasons.WILD_LIFE) {
-                    if (type.equalsIgnoreCase("easy")) {
-                        manager = TriviaWildcard.easyTrivia;
-                    }
-                    else if (type.equalsIgnoreCase("normal")) {
-                        manager = TriviaWildcard.normalTrivia;
-                    }
-                    else {
-                        manager = TriviaWildcard.hardTrivia;
-                    }
-                }
-                else {
-                    manager = NiceLifeTriviaManager.triviaQuestions;
-                }
-                if (manager == null) return;
-                try {
-                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                    manager.setFileContent(gson.toJson(triviaQuestions));
-                }catch(Exception ignored) {}
-            }
-        }
     }
 
     public static void handleHandshakeResponse(ServerPlayer player, HandshakePayload payload) {
@@ -658,7 +668,7 @@ public class NetworkHandlerServer {
 
         sendStringPacket(player, PacketNames.ANIMAL_DISGUISE_ARMOR, String.valueOf(AnimalDisguise.SHOW_ARMOR));
         sendStringPacket(player, PacketNames.ANIMAL_DISGUISE_HANDS, String.valueOf(AnimalDisguise.SHOW_HANDS));
-        sendStringListPacket(player, PacketNames.HUNGER_NON_EDIBLE, Hunger.nonEdibleStr);
+        SimplePackets.HUNGER_NON_EDIBLE.target(player).sendToClient(Hunger.nonEdibleStr);
         sendStringPacket(player, PacketNames.SNOWY_NETHER, String.valueOf(NiceLife.SNOWY_NETHER));
 
         if (Season.skyColor != null) {
@@ -696,10 +706,7 @@ public class NetworkHandlerServer {
     }
 
     public static void sendPlayerInvisible(UUID uuid, long timestamp) {
-        LongPayload payload = new LongPayload(PacketNames.PLAYER_INVISIBLE.getName()+uuid.toString(), timestamp);
-        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-            ServerPlayNetworking.send(player, payload);
-        }
+        SimplePackets.PLAYER_INVISIBLE.sendToClient(List.of(uuid.toString(), String.valueOf(timestamp)));
     }
 
     public static void sendVignette(ServerPlayer player, long durationMillis) {

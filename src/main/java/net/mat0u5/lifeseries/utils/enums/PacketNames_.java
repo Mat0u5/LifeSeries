@@ -2,9 +2,11 @@ package net.mat0u5.lifeseries.utils.enums;
 
 import java.util.Locale;
 
-public enum PacketNames {
+public enum PacketNames_ {
     PACKET("")
 
+    ,CURSE_SLIDING
+    ,LIMITED_LIFE_TIMER("limited_life_timer__")
     ,SESSION_TIMER
 
     ,MIMICRY_COOLDOWN
@@ -14,6 +16,7 @@ public enum PacketNames {
     ,TOGGLE_TIMER
     ,PREVENT_GLIDING
     ,SNAIL_TEXTURES_INFO
+    ,SEASON_INFO
     ,SELECT_SEASON
     ,CLEAR_CONFIG
     ,OPEN_CONFIG
@@ -21,9 +24,11 @@ public enum PacketNames {
     ,RESET_TRIVIA
     ,JUMP
     ,SESSION_STATUS
+    ,MORPH
     ,TIME_DILATION
     ,PLAYER_DISGUISE // Also a packet ID
     ,SHOW_VIGNETTE
+    ,PLAYER_INVISIBLE("player_invisible__")
     ,TABLIST_SHOW_EXACT
     ,CURRENT_SEASON
     ,ACTIVE_WILDCARDS
@@ -44,6 +49,7 @@ public enum PacketNames {
     ,ANIMAL_DISGUISE_HANDS
     ,SIDETITLE
     ,TRIVIA_TIMER
+    ,HUNGER_NON_EDIBLE
     ,SET_LIVES
     ,SET_TEAM
     ,SNOWY_NETHER
@@ -64,24 +70,24 @@ public enum PacketNames {
     ,MOD_DISABLED
     ;
 
-    public static PacketNames fromName(String name) {
-        for (PacketNames packet : PacketNames.values()) {
+    public static PacketNames_ fromName(String name) {
+        for (PacketNames_ packet : PacketNames_.values()) {
             if (packet.getName().equalsIgnoreCase(name)) {
                 return packet;
             }
         }
-        PacketNames returnPacket = PACKET;
+        PacketNames_ returnPacket = PACKET;
         returnPacket.setName(name.toLowerCase(Locale.ROOT));
         return returnPacket;
     }
 
 
     private String name;
-    PacketNames(String name) {
+    PacketNames_(String name) {
         this.name = name;
     }
 
-    PacketNames() {
+    PacketNames_() {
         this.name = this.toString().toLowerCase(Locale.ROOT);
     }
 

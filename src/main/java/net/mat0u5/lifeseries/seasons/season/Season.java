@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
@@ -302,7 +303,7 @@ public abstract class Season {
     }
 
     public void sendSetSeasonPacket(ServerPlayer player) {
-        NetworkHandlerServer.sendStringListPacket(player, PacketNames.SEASON_INFO, List.of(currentSeason.getSeason().getId(), currentSeason.getAdminCommands(), currentSeason.getNonAdminCommands()));
+        SimplePackets.SEASON_INFO.target(player).sendToClient(List.of(currentSeason.getSeason().getId(), currentSeason.getAdminCommands(), currentSeason.getNonAdminCommands()));
     }
 
     public void reloadPlayers() {

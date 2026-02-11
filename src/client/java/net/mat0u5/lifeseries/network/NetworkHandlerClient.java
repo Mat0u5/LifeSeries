@@ -68,6 +68,302 @@ import net.fabricmc.fabric.api.networking.v1.*;
 import static net.mat0u5.lifeseries.command.ClientCommands.client;
 
 public class NetworkHandlerClient {
+    public static void initializeSimplePacketReceivers() {
+        //Long payload
+        SimplePackets.CURSE_SLIDING.setClientReceive(payload -> MainClient.CURSE_SLIDING = payload.number());
+
+        //String list payload
+        SimplePackets.LIMITED_LIFE_TIMER.setClientReceive(payload -> {
+            MainClient.limitedLifeTimerColor = payload.value().get(0);
+            MainClient.limitedLifeLives = Long.parseLong(payload.value().get(1));
+            MainClient.limitedLifeTimeLastUpdated = System.currentTimeMillis();
+        });
+        SimplePackets.SEASON_INFO.setClientReceive(payload -> {
+            if (!Main.modDisabled()) {
+                Seasons season = Seasons.getSeasonFromStringName(payload.value().get(0));
+                String adminCommands = payload.value().get(1);
+                String nonAdminCommands = payload.value().get(2);
+                if (season != Seasons.UNASSIGNED) Minecraft.getInstance().setScreen(new SeasonInfoScreen(season, adminCommands, nonAdminCommands));
+            }
+        });
+        SimplePackets.MORPH.setClientReceive(payload -> {
+            String morphUUIDStr = payload.value().get(0);
+            UUID morphUUID = UUID.fromString(morphUUIDStr);
+            String morphTypeStr = payload.value().get(1);
+            EntityType<?> morphType = null;
+            if (!morphTypeStr.equalsIgnoreCase("null") && !morphUUIDStr.isEmpty()) {
+                //? if <= 1.21 {
+                /*morphType = BuiltInRegistries.ENTITY_TYPE.get(IdentifierHelper.parse(morphTypeStr));
+                 *///?} else {
+                morphType = BuiltInRegistries.ENTITY_TYPE.getValue(IdentifierHelper.parse(morphTypeStr));
+                //?}
+            }
+            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Received morph packet: {} ({})", morphType, morphUUID);
+            MorphComponent newComponent = MorphManager.setFromPacket(morphUUID, morphType);
+            Morph.clientTick(newComponent);
+        });
+        SimplePackets.HUNGER_NON_EDIBLE.setClientReceive(payload -> {
+            Hunger.nonEdible.clear();
+            for (String itemId : payload.value()) {
+                if (!itemId.contains(":")) itemId = "minecraft:" + itemId;
+
+                try {
+                    var id = IdentifierHelper.parse(itemId);
+                    ResourceKey<Item> key = ResourceKey.create(BuiltInRegistries.ITEM.key(), id);
+
+                    //? if <= 1.21 {
+                    /*Item item = BuiltInRegistries.ITEM.get(key);
+                     *///?} else {
+                    Item item = BuiltInRegistries.ITEM.getValue(key);
+                    //?}
+                    if (item != null) {
+                        Hunger.nonEdible.add(item);
+                    } else {
+                        OtherUtils.throwError("[CONFIG] Invalid item: " + itemId);
+                    }
+                } catch (Exception e) {
+                    OtherUtils.throwError("[CONFIG] Error parsing item ID: " + itemId);
+                }
+            }
+        });
+        SimplePackets.SKYCOLOR.setClientReceive(payload -> {
+            MainClient.skyColorSetMode = payload.value().get(0).equalsIgnoreCase("true");
+            MainClient.skyColor = null;
+            if (payload.value().size() >= 4) {
+                try {
+                    double red = Double.parseDouble(payload.value().get(1)) / 255.0;
+                    double green = Double.parseDouble(payload.value().get(2)) / 255.0;
+                    double blue = Double.parseDouble(payload.value().get(3)) / 255.0;
+                    MainClient.skyColor = new Vec3(red, green, blue);
+                }catch (Exception ignored) {}
+            }
+        });
+        SimplePackets.FOGCOLOR.setClientReceive(payload -> {
+            MainClient.fogColorSetMode = payload.value().get(0).equalsIgnoreCase("true");
+            MainClient.fogColor = null;
+            if (payload.value().size() >= 4) {
+                try {
+                    double red = Double.parseDouble(payload.value().get(1)) / 255.0;
+                    double green = Double.parseDouble(payload.value().get(2)) / 255.0;
+                    double blue = Double.parseDouble(payload.value().get(3)) / 255.0;
+                    MainClient.fogColor = new Vec3(red, green, blue);
+                }catch (Exception ignored) {}
+            }
+        });
+        SimplePackets.CLOUDCOLOR.setClientReceive(payload -> {
+            MainClient.cloudColorSetMode = payload.value().get(0).equalsIgnoreCase("true");
+            MainClient.cloudColor = null;
+            if (payload.value().size() >= 4) {
+                try {
+                    double red = Double.parseDouble(payload.value().get(1)) / 255.0;
+                    double green = Double.parseDouble(payload.value().get(2)) / 255.0;
+                    double blue = Double.parseDouble(payload.value().get(3)) / 255.0;
+                    MainClient.cloudColor = new Vec3(red, green, blue);
+                }catch (Exception ignored) {}
+            }
+        });
+        SimplePackets.PLAYER_INVISIBLE.setClientReceive(payload -> {
+            UUID uuid = UUID.fromString(payload.value().get(0));
+            long number = Long.parseLong(payload.value().get(1));
+            if (number == 0) {
+                MainClient.invisiblePlayers.remove(uuid);
+            }
+            else {
+                MainClient.invisiblePlayers.put(uuid, number);
+            }
+        });
+
+        //String payload
+        SimplePackets.CURRENT_SEASON.setClientReceive(payload -> {
+            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated current season to {}", payload.value());
+            MainClient.clientCurrentSeason = Seasons.getSeasonFromStringName(payload.value());
+            ClientResourcePacks.checkClientPacks();
+            MainClient.reloadConfig();
+        });
+        SimplePackets.SESSION_STATUS.setClientReceive(payload -> {
+            MainClient.clientSessionStatus = SessionStatus.getSessionName(payload.value());
+        });
+        SimplePackets.ACTIVE_WILDCARDS.setClientReceive(payload -> {//TODO switch to string list
+            List<Wildcards> newList = new ArrayList<>();
+            for (String wildcardStr : payload.value().split("__")) {
+                newList.add(Wildcards.getFromString(wildcardStr));
+            }
+            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated current wildcards to {}", newList);
+            MainClient.clientActiveWildcards = newList;
+        });
+        SimplePackets.JUMP.setClientReceive(payload -> {//TODO switch to empty
+            if (Minecraft.getInstance().player != null) {
+                Minecraft.getInstance().player.jumpFromGround();
+            }
+        });
+        SimplePackets.RESET_TRIVIA.setClientReceive(payload -> {//TODO switch to empty
+            Trivia.resetTrivia();
+        });
+        SimplePackets.SELECT_WILDCARDS.setClientReceive(payload -> {//TODO switch to empty
+            if (!Main.modDisabled()) {
+                Minecraft.getInstance().setScreen(new ChooseWildcardScreen());
+            }
+        });
+        SimplePackets.CLEAR_CONFIG.setClientReceive(payload -> {//TODO switch to empty
+            ClientConfigNetwork.load();
+        });
+        SimplePackets.OPEN_CONFIG.setClientReceive(payload -> {//TODO switch to empty
+            ClientConfigGuiManager.openConfig();
+        });
+        SimplePackets.SELECT_SEASON.setClientReceive(payload -> {
+            if (!Main.modDisabled()) {
+                Minecraft.getInstance().setScreen(new ChooseSeasonScreen(!payload.value().isEmpty()));
+            }
+        });
+        SimplePackets.PREVENT_GLIDING.setClientReceive(payload -> {//TODO switch to bool
+            MainClient.preventGliding = payload.value().equalsIgnoreCase("true");
+        });
+        SimplePackets.TOGGLE_TIMER.setClientReceive(payload -> {//TODO switch to empty
+            String key = ClientConfig.SESSION_TIMER.key;
+            MainClient.clientConfig.setProperty(key, String.valueOf(!MainClient.SESSION_TIMER));
+            MainClient.reloadConfig();
+        });
+        SimplePackets.TABLIST_SHOW_EXACT.setClientReceive(payload -> {//TODO switch to bool
+            MainClient.TAB_LIST_SHOW_EXACT_LIVES = payload.value().equalsIgnoreCase("true");
+        });
+        SimplePackets.SHOW_TOTEM.setClientReceive(payload -> {
+            ItemStack totemItem = Items.TOTEM_OF_UNDYING.getDefaultInstance();
+            if (payload.value().equalsIgnoreCase("task") || payload.value().equalsIgnoreCase("task_red")) {
+                totemItem = AnimationUtils.getSecretLifeTotemItem(payload.value().equalsIgnoreCase("task_red"));
+            }
+            Minecraft.getInstance().gameRenderer.displayItemActivation(totemItem);
+        });
+        SimplePackets.PAST_LIFE_CHOOSE_TWIST.setClientReceive(payload -> {//TODO switch to empty
+            if (!Main.modDisabled()) {
+                Minecraft.getInstance().setScreen(new PastLifeChooseTwistScreen());
+            }
+        });
+        SimplePackets.FIX_SIZECHANGING_BUGS.setClientReceive(payload -> {//TODO switch to bool
+            MainClient.FIX_SIZECHANGING_BUGS = payload.value().equalsIgnoreCase("true");
+        });
+        SimplePackets.ANIMAL_DISGUISE_ARMOR.setClientReceive(payload -> {//TODO switch to bool
+            Morph.showArmor = payload.value().equalsIgnoreCase("true");
+        });
+        SimplePackets.ANIMAL_DISGUISE_HANDS.setClientReceive(payload -> {//TODO switch to bool
+            Morph.showHandItems = payload.value().equalsIgnoreCase("true");
+        });
+        SimplePackets.SNOWY_NETHER.setClientReceive(payload -> {//TODO switch to bool
+            boolean newValue = payload.value().equalsIgnoreCase("true");
+            if (MainClient.NICELIFE_SNOWY_NETHER != newValue) {
+                MainClient.NICELIFE_SNOWY_NETHER = newValue;
+                ClientResourcePacks.checkClientPacks();
+            }
+        });
+        SimplePackets.EMPTY_SCREEN.setClientReceive(payload -> {//TODO switch to bool
+            if (!Main.modDisabled()) {
+                boolean boolValue = payload.value().equalsIgnoreCase("true");
+                if (boolValue) {
+                    Minecraft.getInstance().setScreen(new EmptySleepScreen(false));
+                }
+                else {
+                    Minecraft.getInstance().setScreen(null);
+                }
+            }
+        });
+        SimplePackets.HIDE_SLEEP_DARKNESS.setClientReceive(payload -> {//TODO switch to bool
+            MainClient.hideSleepDarkness = payload.value().equalsIgnoreCase("true");
+            LocalPlayer player = Minecraft.getInstance().player;
+            if (!MainClient.hideSleepDarkness && player != null && player instanceof PlayerAccessor accessor) {
+                accessor.ls$setSleepCounter(0);
+            }
+        });
+        SimplePackets.MIC_MUTED.setClientReceive(payload -> {//TODO switch to bool
+            boolean boolValue = payload.value().equalsIgnoreCase("true");
+            if (CompatibilityManager.voicechatLoaded()) {
+                VoicechatClient.setMuted(boolValue);
+            }
+        });
+        SimplePackets.ADMIN_INFO.setClientReceive(payload -> {//TODO switch to bool
+            MainClient.isAdmin = payload.value().equalsIgnoreCase("true");
+        });
+        SimplePackets.TRIVIA_ALL_WRONG.setClientReceive(payload -> {//TODO switch to empty
+            ClientLevel level = Minecraft.getInstance().level;
+            LocalPlayer player = Minecraft.getInstance().player;
+            if (level != null && player != null) {
+                level.addParticle(ParticleRegistry.TRIVIA_SPIRIT, player.getX(), player.getY(), player.getZ(), 0.0, 0.0, 0.0);
+            }
+        });
+        SimplePackets.STOP_TRIVIA_SOUNDS.setClientReceive(payload -> {//TODO switch to empty
+            ClientSounds.stopTriviaSounds();
+        });
+        SimplePackets.REMOVE_SLEEP_SCREENS.setClientReceive(payload -> {//TODO switch to empty
+            Minecraft client = Minecraft.getInstance();
+            if (client.screen instanceof EmptySleepScreen || client.screen instanceof NewQuizScreen || (client.screen instanceof VotingScreen votingScreen && votingScreen.requiresSleep)) {
+                client.setScreen(null);
+            }
+        });
+        SimplePackets.TRIPLE_JUMP.setClientReceive(payload -> {//TODO switch to bool
+            MainClient.tripleJumpActive = payload.value().equalsIgnoreCase("true");
+        });
+        SimplePackets.MOD_DISABLED.setClientReceive(payload -> {//TODO switch to bool
+            MainClient.modDisabledServerSide = payload.value().equalsIgnoreCase("true");
+        });
+
+        //Number payload
+
+        SimplePackets.PLAYER_MIN_MSPT.setClientReceive(payload -> {
+            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated min. player MSPT to {}", payload.number());
+            TimeDilation.MIN_PLAYER_MSPT = (float) payload.number();
+        });
+        SimplePackets.SNAIL_AIR.setClientReceive(payload -> {//TODO switch to int
+            MainClient.snailAir = (int)payload.number();
+            MainClient.snailAirTimestamp = System.currentTimeMillis();
+        });
+        SimplePackets.FAKE_THUNDER.setClientReceive(payload -> {//TODO switch to int
+            if (Minecraft.getInstance().level != null) {
+                Minecraft.getInstance().level.setSkyFlashTime((int)payload.number());
+            }
+        });
+        SimplePackets.TAB_LIST_LIVES_CUTOFF.setClientReceive(payload -> {//TODO switch to int
+            MainClient.TAB_LIST_LIVES_CUTOFF = (int)payload.number();
+        });
+        SimplePackets.SIZESHIFTING_CHANGE.setClientReceive(payload -> {
+            MainClient.SIZESHIFTING_CHANGE = (float) payload.number();
+        });
+        SimplePackets.TRIVIA_TIMER.setClientReceive(payload -> {//TODO switch to int
+            Trivia.updateTicksPassed((int)payload.number());
+        });
+        SimplePackets.VOTING_TIME.setClientReceive(payload -> {
+            if (Minecraft.getInstance().screen instanceof VotingScreen votingScreen) {//TODO switch to int
+                votingScreen.timerSeconds = (int)payload.number();
+            }
+        });
+
+        //Long payloads
+        SimplePackets.SUPERPOWER_COOLDOWN.setClientReceive(payload -> {
+            MainClient.SUPERPOWER_COOLDOWN_TIMESTAMP = payload.number();
+        });
+        SimplePackets.SHOW_VIGNETTE.setClientReceive(payload -> {
+            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Showing vignette for {}", payload.number());
+            VignetteRenderer.showVignetteFor(0.35f, payload.number());
+        });
+        SimplePackets.MIMICRY_COOLDOWN.setClientReceive(payload -> {
+            MainClient.MIMICRY_COOLDOWN_TIMESTAMP = payload.number();
+        });
+        SimplePackets.TIME_DILATION.setClientReceive(payload -> {
+            MainClient.TIME_DILATION_TIMESTAMP = payload.number();
+        });
+        SimplePackets.SESSION_TIMER.setClientReceive(payload -> {
+            MainClient.sessionTime = payload.number();
+            MainClient.sessionTimeLastUpdated = System.currentTimeMillis();
+        });
+
+
+        /*
+
+        SimplePackets._______.setClientReceive(payload -> {
+        });
+
+        SimplePackets._______.setClientReceive(payload -> );
+
+         */
+    }
+
     //? if <= 1.20.3 {
     /*public static void registerClientReceiver() {
         ClientLoginNetworking.registerGlobalReceiver(IdentifierHelper.mod("preloginpacket"),
@@ -148,14 +444,6 @@ public class NetworkHandlerClient {
                 }
         );
 
-        ClientPlayNetworking.registerGlobalReceiver(NumberPayload.ID, (payload, context) -> {
-            Minecraft client = context.client();
-            client.execute(() -> handleNumberPacket(payload));
-        });
-        ClientPlayNetworking.registerGlobalReceiver(StringPayload.ID, (payload, context) -> {
-            Minecraft client = context.client();
-            client.execute(() -> handleStringPacket(payload));
-        });
         ClientPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (payload, context) -> {
             Minecraft client = context.client();
             client.execute(() -> handleHandshake(payload));
@@ -168,10 +456,6 @@ public class NetworkHandlerClient {
             Minecraft client = context.client();
             client.execute(() -> handleVoteScreen(payload));
         });
-        ClientPlayNetworking.registerGlobalReceiver(LongPayload.ID, (payload, context) -> {
-            Minecraft client = context.client();
-            client.execute(() -> handleLongPacket(payload));
-        });
         ClientPlayNetworking.registerGlobalReceiver(PlayerDisguisePayload.ID, (payload, context) -> {
             Minecraft client = context.client();
             client.execute(() -> handlePlayerDisguise(payload));
@@ -179,10 +463,6 @@ public class NetworkHandlerClient {
         ClientPlayNetworking.registerGlobalReceiver(ConfigPayload.ID, (payload, context) -> {
             Minecraft client = context.client();
             client.execute(() -> handleConfigPacket(payload));
-        });
-        ClientPlayNetworking.registerGlobalReceiver(StringListPayload.ID, (payload, context) -> {
-            Minecraft client = context.client();
-            client.execute(() -> handleStringListPacket(payload));
         });
         ClientPlayNetworking.registerGlobalReceiver(SidetitlePacket.ID, (payload, context) -> {
             Minecraft client = context.client();
@@ -194,6 +474,23 @@ public class NetworkHandlerClient {
             });
         });
 
+        //Simple Packets
+        ClientPlayNetworking.registerGlobalReceiver(StringListPayload.ID, (payload, context) -> {
+            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            if (packet != null) client.execute(() -> packet.receiveClient(payload));
+        });
+        ClientPlayNetworking.registerGlobalReceiver(NumberPayload.ID, (payload, context) -> {
+            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            if (packet != null) client.execute(() -> packet.receiveClient(payload));
+        });
+        ClientPlayNetworking.registerGlobalReceiver(StringPayload.ID, (payload, context) -> {
+            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            if (packet != null) client.execute(() -> packet.receiveClient(payload));
+        });
+        ClientPlayNetworking.registerGlobalReceiver(LongPayload.ID, (payload, context) -> {
+            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            if (packet != null) client.execute(() -> packet.receiveClient(payload));
+        });
         ClientPlayNetworking.registerGlobalReceiver(BooleanPayload.ID, (payload, context) -> {
             SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
             if (packet != null) client.execute(() -> packet.receiveClient(payload));
@@ -213,319 +510,8 @@ public class NetworkHandlerClient {
         }
     }
 
-    public static void handleStringListPacket(StringListPayload payload) {
-        String nameStr = payload.name();
-        PacketNames name = PacketNames.fromName(nameStr);
-        List<String> value = payload.value();
-
-        if (name == PacketNames.SEASON_INFO && !Main.modDisabled()) {
-            Seasons season = Seasons.getSeasonFromStringName(value.get(0));
-            String adminCommands = value.get(1);
-            String nonAdminCommands = value.get(2);
-            if (season != Seasons.UNASSIGNED) Minecraft.getInstance().setScreen(new SeasonInfoScreen(season, adminCommands, nonAdminCommands));
-        }
-
-        if (name == PacketNames.MORPH) {
-            try {
-                String morphUUIDStr = value.get(0);
-                UUID morphUUID = UUID.fromString(morphUUIDStr);
-                String morphTypeStr = value.get(1);
-                EntityType<?> morphType = null;
-                if (!morphTypeStr.equalsIgnoreCase("null") && !morphUUIDStr.isEmpty()) {
-                    //? if <= 1.21 {
-                    /*morphType = BuiltInRegistries.ENTITY_TYPE.get(IdentifierHelper.parse(morphTypeStr));
-                    *///?} else {
-                    morphType = BuiltInRegistries.ENTITY_TYPE.getValue(IdentifierHelper.parse(morphTypeStr));
-                    //?}
-                }
-                if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Received morph packet: {} ({})", morphType, morphUUID);
-                MorphComponent newComponent = MorphManager.setFromPacket(morphUUID, morphType);
-                Morph.clientTick(newComponent);
-            } catch (Exception e) {}
-        }
-
-        if (name == PacketNames.HUNGER_NON_EDIBLE) {
-            Hunger.nonEdible.clear();
-            for (String itemId : value) {
-                if (!itemId.contains(":")) itemId = "minecraft:" + itemId;
-
-                try {
-                    var id = IdentifierHelper.parse(itemId);
-                    ResourceKey<Item> key = ResourceKey.create(BuiltInRegistries.ITEM.key(), id);
-
-                    //? if <= 1.21 {
-                    /*Item item = BuiltInRegistries.ITEM.get(key);
-                    *///?} else {
-                    Item item = BuiltInRegistries.ITEM.getValue(key);
-                     //?}
-                    if (item != null) {
-                        Hunger.nonEdible.add(item);
-                    } else {
-                        OtherUtils.throwError("[CONFIG] Invalid item: " + itemId);
-                    }
-                } catch (Exception e) {
-                    OtherUtils.throwError("[CONFIG] Error parsing item ID: " + itemId);
-                }
-            }
-        }
-
-        if (name == PacketNames.SKYCOLOR) {
-            MainClient.skyColorSetMode = value.get(0).equalsIgnoreCase("true");
-            MainClient.skyColor = null;
-            if (value.size() >= 4) {
-                try {
-                    double red = Double.parseDouble(value.get(1)) / 255.0;
-                    double green = Double.parseDouble(value.get(2)) / 255.0;
-                    double blue = Double.parseDouble(value.get(3)) / 255.0;
-                    MainClient.skyColor = new Vec3(red, green, blue);
-                }catch (Exception ignored) {}
-            }
-        }
-        if (name == PacketNames.FOGCOLOR) {
-            MainClient.fogColorSetMode = value.get(0).equalsIgnoreCase("true");
-            MainClient.fogColor = null;
-            if (value.size() >= 4) {
-                try {
-                    double red = Double.parseDouble(value.get(1)) / 255.0;
-                    double green = Double.parseDouble(value.get(2)) / 255.0;
-                    double blue = Double.parseDouble(value.get(3)) / 255.0;
-                    MainClient.fogColor = new Vec3(red, green, blue);
-                }catch (Exception ignored) {}
-            }
-        }
-        if (name == PacketNames.CLOUDCOLOR) {
-            MainClient.cloudColorSetMode = value.get(0).equalsIgnoreCase("true");
-            MainClient.cloudColor = null;
-            if (value.size() >= 4) {
-                try {
-                    double red = Double.parseDouble(value.get(1)) / 255.0;
-                    double green = Double.parseDouble(value.get(2)) / 255.0;
-                    double blue = Double.parseDouble(value.get(3)) / 255.0;
-                    MainClient.cloudColor = new Vec3(red, green, blue);
-                }catch (Exception ignored) {}
-            }
-        }
-    }
-
     public static void handleConfigPacket(ConfigPayload payload) {
         ClientConfigNetwork.handleConfigPacket(payload, false);
-    }
-
-    private static boolean lastMuteState = false;
-    public static void handleStringPacket(StringPayload payload) {
-        String nameStr = payload.name();
-        PacketNames name = PacketNames.fromName(nameStr);
-        String value = payload.value();
-
-        if (name == PacketNames.CURRENT_SEASON) {
-            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated current season to {}", value);
-            MainClient.clientCurrentSeason = Seasons.getSeasonFromStringName(value);
-            ClientResourcePacks.checkClientPacks();
-            MainClient.reloadConfig();
-        }
-
-        if (name == PacketNames.SESSION_STATUS) {
-            MainClient.clientSessionStatus = SessionStatus.getSessionName(value);
-        }
-
-        if (name == PacketNames.ACTIVE_WILDCARDS) {
-            List<Wildcards> newList = new ArrayList<>();
-            for (String wildcardStr : value.split("__")) {
-                newList.add(Wildcards.getFromString(wildcardStr));
-            }
-            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated current wildcards to {}", newList);
-            MainClient.clientActiveWildcards = newList;
-        }
-
-        if (name == PacketNames.JUMP && Minecraft.getInstance().player != null) {
-            Minecraft.getInstance().player.jumpFromGround();
-        }
-
-        if (name == PacketNames.RESET_TRIVIA) {
-            Trivia.resetTrivia();
-        }
-
-        if (name == PacketNames.SELECT_WILDCARDS && !Main.modDisabled()) {
-            Minecraft.getInstance().setScreen(new ChooseWildcardScreen());
-        }
-
-        if (name == PacketNames.CLEAR_CONFIG) {
-            ClientConfigNetwork.load();
-        }
-        if (name == PacketNames.OPEN_CONFIG) {
-            ClientConfigGuiManager.openConfig();
-        }
-
-
-        if (name == PacketNames.SELECT_SEASON && !Main.modDisabled()) {
-            Minecraft.getInstance().setScreen(new ChooseSeasonScreen(!value.isEmpty()));
-        }
-
-        if (name == PacketNames.PREVENT_GLIDING) {
-            MainClient.preventGliding = value.equalsIgnoreCase("true");
-        }
-
-        if (name == PacketNames.TOGGLE_TIMER) {
-            String key = ClientConfig.SESSION_TIMER.key;
-            MainClient.clientConfig.setProperty(key, String.valueOf(!MainClient.SESSION_TIMER));
-            MainClient.reloadConfig();
-        }
-        if (name == PacketNames.TABLIST_SHOW_EXACT) {
-            MainClient.TAB_LIST_SHOW_EXACT_LIVES = value.equalsIgnoreCase("true");
-        }
-        if (name == PacketNames.SHOW_TOTEM) {
-            ItemStack totemItem = Items.TOTEM_OF_UNDYING.getDefaultInstance();
-            if (value.equalsIgnoreCase("task") || value.equalsIgnoreCase("task_red")) {
-                totemItem = AnimationUtils.getSecretLifeTotemItem(value.equalsIgnoreCase("task_red"));
-            }
-            Minecraft.getInstance().gameRenderer.displayItemActivation(totemItem);
-        }
-        if (name == PacketNames.PAST_LIFE_CHOOSE_TWIST && !Main.modDisabled()) {
-            Minecraft.getInstance().setScreen(new PastLifeChooseTwistScreen());
-        }
-        if (name == PacketNames.FIX_SIZECHANGING_BUGS) {
-            MainClient.FIX_SIZECHANGING_BUGS = value.equalsIgnoreCase("true");
-        }
-        if (name == PacketNames.ANIMAL_DISGUISE_ARMOR) {
-            Morph.showArmor = value.equalsIgnoreCase("true");
-        }
-        if (name == PacketNames.ANIMAL_DISGUISE_HANDS) {
-            Morph.showHandItems = value.equalsIgnoreCase("true");
-        }
-        if (name == PacketNames.SNOWY_NETHER) {
-            boolean newValue = value.equalsIgnoreCase("true");
-            if (MainClient.NICELIFE_SNOWY_NETHER != newValue) {
-                MainClient.NICELIFE_SNOWY_NETHER = newValue;
-                ClientResourcePacks.checkClientPacks();
-            }
-        }
-        if (name == PacketNames.EMPTY_SCREEN && !Main.modDisabled()) {
-            boolean boolValue = value.equalsIgnoreCase("true");
-            if (boolValue) {
-                Minecraft.getInstance().setScreen(new EmptySleepScreen(false));
-            }
-            else {
-                Minecraft.getInstance().setScreen(null);
-            }
-        }
-        if (name == PacketNames.HIDE_SLEEP_DARKNESS) {
-            MainClient.hideSleepDarkness = value.equalsIgnoreCase("true");
-            LocalPlayer player = Minecraft.getInstance().player;
-            if (!MainClient.hideSleepDarkness && player != null && player instanceof PlayerAccessor accessor) {
-                accessor.ls$setSleepCounter(0);
-            }
-        }
-        if (name == PacketNames.MIC_MUTED) {
-            boolean boolValue = value.equalsIgnoreCase("true");
-            if (CompatibilityManager.voicechatLoaded()) {
-                VoicechatClient.setMuted(boolValue);
-            }
-        }
-        if (name == PacketNames.ADMIN_INFO) {
-            MainClient.isAdmin = value.equalsIgnoreCase("true");
-        }
-        if (name == PacketNames.TRIVIA_ALL_WRONG) {
-            ClientLevel level = Minecraft.getInstance().level;
-            LocalPlayer player = Minecraft.getInstance().player;
-            if (level != null && player != null) {
-                level.addParticle(ParticleRegistry.TRIVIA_SPIRIT, player.getX(), player.getY(), player.getZ(), 0.0, 0.0, 0.0);
-            }
-        }
-        if (name == PacketNames.STOP_TRIVIA_SOUNDS) {
-            ClientSounds.stopTriviaSounds();
-        }
-        if (name == PacketNames.REMOVE_SLEEP_SCREENS) {
-            Minecraft client = Minecraft.getInstance();
-            if (client.screen instanceof EmptySleepScreen || client.screen instanceof NewQuizScreen || (client.screen instanceof VotingScreen votingScreen && votingScreen.requiresSleep)) {
-                client.setScreen(null);
-            }
-        }
-        if (name == PacketNames.TRIPLE_JUMP) {
-            MainClient.tripleJumpActive = value.equalsIgnoreCase("true");
-        }
-        if (name == PacketNames.MOD_DISABLED) {
-            MainClient.modDisabledServerSide = value.equalsIgnoreCase("true");
-        }
-    }
-
-    public static void handleNumberPacket(NumberPayload payload) {
-        String nameStr = payload.name();
-        PacketNames name = PacketNames.fromName(nameStr);
-        double number = payload.number();
-
-        int intNumber = (int) number;
-        if (name == PacketNames.PLAYER_MIN_MSPT) {
-            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated min. player MSPT to {}", number);
-            TimeDilation.MIN_PLAYER_MSPT = (float) number;
-        }
-        if (name == PacketNames.SNAIL_AIR) {
-            MainClient.snailAir = intNumber;
-            MainClient.snailAirTimestamp = System.currentTimeMillis();
-        }
-        if (name == PacketNames.FAKE_THUNDER && Minecraft.getInstance().level != null) {
-            Minecraft.getInstance().level.setSkyFlashTime(intNumber);
-        }
-        if (name == PacketNames.TAB_LIVES_CUTOFF) {
-            MainClient.TAB_LIST_LIVES_CUTOFF = intNumber;
-        }
-        if (name == PacketNames.SIZESHIFTING_CHANGE) {
-            MainClient.SIZESHIFTING_CHANGE = (float) number;
-        }
-        if (name == PacketNames.TRIVIA_TIMER) {
-            Trivia.updateTicksPassed(intNumber);
-        }
-        if (name == PacketNames.VOTING_TIME) {
-            if (Minecraft.getInstance().screen instanceof VotingScreen votingScreen) {
-                votingScreen.timerSeconds = intNumber;
-            }
-        }
-    }
-
-    public static void handleLongPacket(LongPayload payload) {
-        String nameStr = payload.name();
-        PacketNames name = PacketNames.fromName(nameStr);
-        long number = payload.number();
-
-        if (name == PacketNames.SUPERPOWER_COOLDOWN) {
-            MainClient.SUPERPOWER_COOLDOWN_TIMESTAMP = number;
-        }
-        if (name == PacketNames.SHOW_VIGNETTE) {
-            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Showing vignette for {}", number);
-            VignetteRenderer.showVignetteFor(0.35f, number);
-        }
-        if (name == PacketNames.MIMICRY_COOLDOWN) {
-            MainClient.MIMICRY_COOLDOWN_TIMESTAMP = number;
-        }
-        if (nameStr.startsWith(PacketNames.PLAYER_INVISIBLE.getName())) {
-            try {
-                UUID uuid = UUID.fromString(nameStr.replaceFirst(PacketNames.PLAYER_INVISIBLE.getName(),""));
-                if (number == 0) {
-                    MainClient.invisiblePlayers.remove(uuid);
-                }
-                else {
-                    MainClient.invisiblePlayers.put(uuid, number);
-                }
-            }catch(Exception ignored) {}
-        }
-
-        if (name == PacketNames.TIME_DILATION) {
-            MainClient.TIME_DILATION_TIMESTAMP = number;
-        }
-
-        if (name == PacketNames.SESSION_TIMER) {
-            MainClient.sessionTime = number;
-            MainClient.sessionTimeLastUpdated = System.currentTimeMillis();
-        }
-
-        if (nameStr.startsWith(PacketNames.LIMITED_LIFE_TIMER.getName())) {
-            MainClient.limitedLifeTimerColor = nameStr.replaceFirst(PacketNames.LIMITED_LIFE_TIMER.getName(),"");
-            MainClient.limitedLifeLives = number;
-            MainClient.limitedLifeTimeLastUpdated = System.currentTimeMillis();
-        }
-
-        if (name == PacketNames.CURSE_SLIDING) {
-            MainClient.CURSE_SLIDING = number;
-        }
     }
 
     public static void handlePlayerDisguise(PlayerDisguisePayload payload) {

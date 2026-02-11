@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.MainConfig;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.registries.ModRegistries;
 import net.mat0u5.lifeseries.resources.datapack.DatapackManager;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
@@ -89,6 +90,7 @@ public class Main implements ModInitializer {
 
 		NetworkHandlerServer.registerPackets();
 		NetworkHandlerServer.registerServerReceiver();
+		NetworkHandlerServer.initializeSimplePacketReceivers();
 	}
 
 	public static boolean modDisabled() {

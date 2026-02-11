@@ -79,6 +79,7 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     public void onInitializeClient() {
         ClientRegistries.registerModStuff();
         NetworkHandlerClient.registerClientReceiver();
+        NetworkHandlerClient.initializeSimplePacketReceivers();
         ClientRenderer.onInitialize();
         Main.setClientHelper(this);
 

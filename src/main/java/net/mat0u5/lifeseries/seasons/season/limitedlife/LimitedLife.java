@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.limitedlife;
 
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
@@ -22,6 +23,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 
 import java.util.Collection;
+import java.util.List;
 
 //? if <= 1.20.2
 //import net.minecraft.world.scores.Score;
@@ -107,7 +109,7 @@ public class LimitedLife extends Season {
                         playerLives = -1;
                     }
                     String livesColor = livesManager.getColorForLives(player).toString();
-                    NetworkHandlerServer.sendLongPacket(player, PacketNames.fromName(PacketNames.LIMITED_LIFE_TIMER.getName()+livesColor), playerLives);
+                    SimplePackets.LIMITED_LIFE_TIMER.target(player).sendToClient(List.of(livesColor, String.valueOf(playerLives)));
                 }
             }
             else {

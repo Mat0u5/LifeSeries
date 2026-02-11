@@ -12,17 +12,27 @@ import java.util.function.Consumer;
 public abstract class SimplePacket<T extends SimplePacket<T, U>, U extends CustomPacketPayload> {
     private List<ServerPlayer> targets = null;
     protected final String name;
-    private final BiConsumer<ServerPlayer, U> serverReceive;
-    private final Consumer<U> clientReceive;
+    private BiConsumer<ServerPlayer, U> serverReceive = null;
+    private Consumer<U> clientReceive = null;
 
-    protected SimplePacket(String name, BiConsumer<ServerPlayer, U> serverReceive, Consumer<U> clientReceive) {
+    protected SimplePacket(String name) {
         this.name = name;
-        this.serverReceive = serverReceive;
-        this.clientReceive = clientReceive;
+        if (SimplePackets.registeredPackets.containsKey(this.name)) {
+            Main.LOGGER.error("Simple packet duplicate key: "+this.name);
+        }
         SimplePackets.registeredPackets.put(this.name, this);
     }
 
+    public void setClientReceive(Consumer<U> clientReceive) {
+        this.clientReceive = clientReceive;
+    }
+
+    public void setServerReceive(BiConsumer<ServerPlayer, U> serverReceive) {
+        this.serverReceive = serverReceive;
+    }
+
     public void receiveClient(CustomPacketPayload payload) {
+        if (clientReceive == null) return;
         try {
             U uPayload = (U) payload;
             clientReceive.accept(uPayload);
@@ -32,6 +42,7 @@ public abstract class SimplePacket<T extends SimplePacket<T, U>, U extends Custo
     }
     
     public void receiveServer(ServerPlayer context, CustomPacketPayload payload) {
+        if (serverReceive == null) return;
         try {
             U uPayload = (U) payload;
             serverReceive.accept(context, uPayload);

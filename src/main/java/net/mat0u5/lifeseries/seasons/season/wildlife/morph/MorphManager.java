@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.morph;
 
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
@@ -65,7 +66,7 @@ public class MorphManager {
         MorphComponent component = getComponent(serverPlayer);
         String typeStr = "null";
         if (component != null) typeStr = component.getTypeAsString();
-        NetworkHandlerServer.sendStringListPackets(PacketNames.MORPH, List.of(serverPlayer.getStringUUID(), typeStr));
+        SimplePackets.MORPH.sendToClient(List.of(serverPlayer.getStringUUID(), typeStr));
     }
 
     public static void syncToPlayer(Player player) {
@@ -73,7 +74,7 @@ public class MorphManager {
         for (ServerPlayer otherPlayer : PlayerUtils.getAllPlayers()) {
             MorphComponent component = getOrCreateComponent(otherPlayer);
             String typeStr = component.getTypeAsString();
-            NetworkHandlerServer.sendStringListPacket(serverPlayer, PacketNames.MORPH, List.of(otherPlayer.getStringUUID(), typeStr));
+            SimplePackets.MORPH.target(serverPlayer).sendToClient(List.of(otherPlayer.getStringUUID(), typeStr));
         }
     }
 

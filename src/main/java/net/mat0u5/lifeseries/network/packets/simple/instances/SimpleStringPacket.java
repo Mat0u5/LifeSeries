@@ -2,14 +2,11 @@ package net.mat0u5.lifeseries.network.packets.simple.instances;
 
 import net.mat0u5.lifeseries.network.packets.StringPayload;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePacket;
-import net.minecraft.server.level.ServerPlayer;
-
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class SimpleStringPacket extends SimplePacket<SimpleStringPacket, StringPayload> {
-    public SimpleStringPacket(String name, BiConsumer<ServerPlayer, StringPayload> serverReceive, Consumer<StringPayload> clientReceive) {
-        super(name, serverReceive, clientReceive);
+
+    public SimpleStringPacket(String name) {
+        super(name);
     }
 
     public void sendToServer(String value) {

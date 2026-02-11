@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotPathfinding;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
@@ -259,7 +260,7 @@ public class TriviaWildcard extends Wildcard {
 
         WildLifeTriviaHandler.cursedSliding.remove(player.getUUID());
         WildLifeTriviaHandler.cursedRoboticVoicePlayers.remove(player.getUUID());
-        NetworkHandlerServer.sendLongPacket(player, PacketNames.CURSE_SLIDING, 0);
+        SimplePackets.CURSE_SLIDING.target(player).sendToClient(0);
     }
 
     public static void killAllBots() {

@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards;
 
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.*;
@@ -228,7 +229,7 @@ public class WildcardManager {
 
         for (UUID uuid : WildLifeTriviaHandler.cursedSliding) {
             ServerPlayer player = PlayerUtils.getPlayer(uuid);
-            NetworkHandlerServer.sendLongPacket(player, PacketNames.CURSE_SLIDING, System.currentTimeMillis());
+            SimplePackets.CURSE_SLIDING.target(player).sendToClient(System.currentTimeMillis());
         }
     }
 
