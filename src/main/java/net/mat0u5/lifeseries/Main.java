@@ -15,8 +15,6 @@ import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
-import net.mat0u5.lifeseries.seasons.season.secretlife.TaskManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkins;
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
@@ -41,10 +39,10 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.5.0.23";
+	public static final String MOD_VERSION = "dev-1.5.0.24";
 	public static final String MOD_ID = "lifeseries";
 	public static final String UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
-	public static final boolean DEBUG = false;
+	public static final boolean DEBUG = true;
 	public static final boolean ISOLATED_ENVIRONMENT = false;
 	public static final Seasons DEFAULT_SEASON = Seasons.UNASSIGNED;
 	public static boolean MOD_DISABLED = false;
@@ -126,7 +124,7 @@ public class Main implements ModInitializer {
 		changeSeasonTo(season);
 	}
 
-	public static boolean isClient() {
+	public static boolean hasClient() {
 		return FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT;
 	}
 
@@ -135,12 +133,12 @@ public class Main implements ModInitializer {
 	}
 
 	public static boolean isLogicalSide() {
-		if (!isClient()) return true;
+		if (!hasClient()) return true;
 		return clientHelper != null && clientHelper.isRunningIntegratedServer();
 	}
 
 	public static boolean isClientPlayer(UUID uuid) {
-		if (!isClient()) return false;
+		if (!hasClient()) return false;
 		return clientHelper != null && clientHelper.isMainClientPlayer(uuid);
 	}
 

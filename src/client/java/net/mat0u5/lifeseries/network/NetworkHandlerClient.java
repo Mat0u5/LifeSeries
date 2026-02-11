@@ -22,6 +22,8 @@ import net.mat0u5.lifeseries.gui.trivia.VotingScreen;
 import net.mat0u5.lifeseries.mixin.PlayerAccessor;
 import net.mat0u5.lifeseries.mixin.client.GuiAccessor;
 import net.mat0u5.lifeseries.network.packets.*;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePacket;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.registries.ParticleRegistry;
 import net.mat0u5.lifeseries.render.TextHud;
 import net.mat0u5.lifeseries.render.VignetteRenderer;
@@ -62,6 +64,8 @@ import java.util.concurrent.CompletableFuture;
 /*import net.minecraft.network.FriendlyByteBuf;
 *///?}
 import net.fabricmc.fabric.api.networking.v1.*;
+
+import static net.mat0u5.lifeseries.command.ClientCommands.client;
 
 public class NetworkHandlerClient {
     //? if <= 1.20.3 {
@@ -188,6 +192,15 @@ public class NetworkHandlerClient {
             context.client().execute(() -> {
                 SnailSkinsClient.handleSnailTexture(payload.skinName(), payload.textureData());
             });
+        });
+
+        ClientPlayNetworking.registerGlobalReceiver(BooleanPayload.ID, (payload, context) -> {
+            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            if (packet != null) client.execute(() -> packet.receiveClient(payload));
+        });
+        ClientPlayNetworking.registerGlobalReceiver(EmptyPayload.ID, (payload, context) -> {
+            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            if (packet != null) client.execute(() -> packet.receiveClient(payload));
         });
     }
     //?}

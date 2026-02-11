@@ -51,7 +51,7 @@ public class OtherUtils {
     }
 
     public static void logIfClient(String string) {
-        if (Main.isClient()) {
+        if (Main.hasClient()) {
             Main.LOGGER.info(string);
         }
     }

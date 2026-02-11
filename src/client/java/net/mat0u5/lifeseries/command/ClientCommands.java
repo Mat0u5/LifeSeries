@@ -6,6 +6,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandBuildContext;
@@ -79,9 +80,20 @@ public class ClientCommands {
                                             )
                                     )
                             )
+                            .then(literal("test")
+                                    .executes(context -> test(
+                                            context.getSource())
+                                    )
+                            )
             );
         }
     }
+
+    public static int test(FabricClientCommandSource source)  {
+        SimplePackets.TEST_BOOLEAN.sendToServer(true);
+        return 1;
+    }
+
     public static int execute(FabricClientCommandSource source)  {
         source.sendFeedback(Component.nullToEmpty("Life Series client command text."));
         return 1;

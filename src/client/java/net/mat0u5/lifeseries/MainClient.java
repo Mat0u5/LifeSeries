@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries;
 
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.mat0u5.lifeseries.config.ClientConfig;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.registries.ClientRegistries;
@@ -14,6 +15,7 @@ import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.interfaces.IClientHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.*;
@@ -121,6 +123,11 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     @Override
     public List<Wildcards> getActiveWildcards() {
         return clientActiveWildcards;
+    }
+
+    @Override
+    public void sendPacket(CustomPacketPayload payload) {
+        ClientPlayNetworking.send(payload);
     }
 
     @Override
