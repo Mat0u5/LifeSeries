@@ -73,29 +73,110 @@ public class Task {
     //? if <= 1.20.3 {
     /*public List<FilteredText> getBookLines(ServerPlayer owner) {
         formattedTask = "";
-        List<FilteredText> lines = new ArrayList<>();
-        int pageNum = 0;
-        for (String page : rawTask.split("\\\\p")) {
-            page = formatString(owner, page);
-            lines.add(FilteredText.passThrough(page));
+        List<FilteredText> pages = new ArrayList<>();
+
+        String formatted = formatString(owner, rawTask);
+        List<String> pageContents = splitIntoPages(formatted);
+
+        for (int i = 0; i < pageContents.size(); i++) {
+            String pageContent = pageContents.get(i);
+            pages.add(FilteredText.passThrough(pageContent));
+
+            if (i > 0) formattedTask += "\n";
+            formattedTask += pageContent;
+        }
+
+        return pages;
+    }
     *///?} else {
     public List<Filterable<Component>> getBookLines(ServerPlayer owner) {
         formattedTask = "";
-        List<Filterable<Component>> lines = new ArrayList<>();
-        int pageNum = 0;
-        for (String page : rawTask.split("\\\\p")) {
-            page = formatString(owner, page);
-            lines.add(Filterable.passThrough(Component.nullToEmpty(page)));
+        List<Filterable<Component>> pages = new ArrayList<>();
+
+        String formatted = formatString(owner, rawTask);
+        List<String> pageContents = splitIntoPages(formatted);
+
+        for (int i = 0; i < pageContents.size(); i++) {
+            String pageContent = pageContents.get(i);
+            pages.add(Filterable.passThrough(Component.nullToEmpty(pageContent)));
+
+            if (i > 0) formattedTask += "\n";
+            formattedTask += pageContent;
+        }
+
+        return pages;
+    }
     //?}
 
-            if (pageNum != 0) {
-                formattedTask += "\n";
-            }
-            formattedTask += page;
+    private List<String> splitIntoPages(String text) {
+        List<String> pages = new ArrayList<>();
 
-            pageNum++;
+        String[] manualPages = text.split("\\\\p");
+
+        for (String manualPage : manualPages) {
+            if (estimatePageIsTooLong(manualPage)) {
+                pages.addAll(splitLongPage(manualPage));
+            } else {
+                pages.add(manualPage);
+            }
         }
-        return lines;
+
+        return pages;
+    }
+
+    private boolean estimatePageIsTooLong(String text) {
+        final int MAX_LINES_PER_PAGE = 14;
+        final int AVG_CHARS_PER_LINE = 19;
+
+        int explicitLines = text.split("\n", -1).length;
+
+        int totalChars = text.replace("\n", "").length();
+        int estimatedWrappedLines = (totalChars + AVG_CHARS_PER_LINE - 1) / AVG_CHARS_PER_LINE;
+
+        int totalEstimatedLines = Math.max(explicitLines, estimatedWrappedLines);
+
+        return totalEstimatedLines > MAX_LINES_PER_PAGE;
+    }
+
+    private List<String> splitLongPage(String text) {
+        List<String> pages = new ArrayList<>();
+
+        final int MAX_LINES_PER_PAGE = 14;
+        final int AVG_CHARS_PER_LINE = 19;
+        final int CHARS_PER_PAGE = MAX_LINES_PER_PAGE * AVG_CHARS_PER_LINE; // ~266 chars
+        final int LOOKBACK_FOR_SPACE = 15;
+
+        String remaining = text;
+
+        while (remaining.length() > CHARS_PER_PAGE) {
+            int splitPoint = CHARS_PER_PAGE;
+
+            int spaceIndex = -1;
+            for (int i = splitPoint; i >= Math.max(0, splitPoint - LOOKBACK_FOR_SPACE); i--) {
+                if (i < remaining.length() && remaining.charAt(i) == ' ') {
+                    spaceIndex = i;
+                    break;
+                }
+            }
+
+            if (spaceIndex != -1) {
+                splitPoint = spaceIndex;
+            }
+
+            pages.add(remaining.substring(0, splitPoint).trim());
+
+            remaining = remaining.substring(splitPoint).trim();
+        }
+
+        if (!remaining.isEmpty()) {
+            pages.add(remaining);
+        }
+
+        if (pages.isEmpty()) {
+            pages.add("");
+        }
+
+        return pages;
     }
 
     public String formatString(ServerPlayer owner, String page) {

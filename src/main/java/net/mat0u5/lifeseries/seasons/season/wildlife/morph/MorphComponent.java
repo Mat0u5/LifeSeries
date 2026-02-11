@@ -31,15 +31,18 @@ public class MorphComponent {
 
         if (Main.isLogicalSide()) {
             ServerPlayer serverPlayer = PlayerUtils.getPlayer(playerUUID);
-            if (serverPlayer != null && morph != null) {
-                //? if <= 1.21 {
-                /*Entity entity = morph.create(serverPlayer.level());
-                *///?} else {
-                Entity entity = morph.create(serverPlayer.ls$getServerLevel(), EntitySpawnReason.COMMAND);
-                 //?}
-                if (entity != null) {
-                    ((IMorph) entity).setFromMorph(true);
+            if (serverPlayer != null) {
+                if (morph != null) {
+                    //? if <= 1.21 {
+                    /*Entity entity = morph.create(serverPlayer.level());
+                     *///?} else {
+                    Entity entity = morph.create(serverPlayer.ls$getServerLevel(), EntitySpawnReason.COMMAND);
+                    //?}
+                    if (entity != null) {
+                        ((IMorph) entity).setFromMorph(true);
+                    }
                 }
+                serverPlayer.refreshDimensions();
             }
         }
     }

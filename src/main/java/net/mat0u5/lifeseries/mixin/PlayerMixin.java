@@ -54,6 +54,7 @@ import net.minecraft.world.level.gamerules.GameRules;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.EntityType;
 *///?}
 //?if >= 26.1 {
 /*import net.minecraft.world.entity.Entity;
@@ -132,10 +133,11 @@ public abstract class PlayerMixin implements IPlayer {
         MorphComponent morphComponent = MorphManager.getOrCreateComponent(player);
         if (!morphComponent.isMorphed()) return;
 
-        float scaleRatio = 1 / player.getScale();
-        LivingEntity dummy = morphComponent.getDummy();
-        if (morphComponent.isMorphed() && dummy != null) {
-            cir.setReturnValue(dummy.getDimensions(pose).scale(scaleRatio, scaleRatio));
+        EntityType<?> morphType = morphComponent.getType();
+        if (morphType != null) {
+            float scaleRatio = 1 / player.getScale();
+            EntityDimensions morphDimensions = morphType.getDimensions();
+            cir.setReturnValue(morphDimensions.scale(scaleRatio, scaleRatio));
         }
     }
     *///?}
