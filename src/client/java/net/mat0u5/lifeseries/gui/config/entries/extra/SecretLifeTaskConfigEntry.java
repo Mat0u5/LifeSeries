@@ -3,10 +3,10 @@ package net.mat0u5.lifeseries.gui.config.entries.extra;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.ModifiableListEntry;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
@@ -177,6 +177,6 @@ public class SecretLifeTaskConfigEntry extends ModifiableListEntry {
             }
         }
         this.sentToServer = true;
-        NetworkHandlerClient.sendStringListPacket(PacketNames.CONFIG_SECRET_TASK, list);
+        SimplePackets.CONFIG_SECRET_TASK.sendToServer(list);
     }
 }

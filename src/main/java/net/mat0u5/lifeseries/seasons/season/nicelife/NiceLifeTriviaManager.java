@@ -6,11 +6,12 @@ import net.mat0u5.lifeseries.entity.angrysnowman.AngrySnowman;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.registries.MobRegistry;
+import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.Tuple;
@@ -75,8 +76,8 @@ public class NiceLifeTriviaManager {
         currentQuestion = getQuestion();
         NiceLifeVotingManager.chooseVote();
         for (ServerPlayer player : triviaPlayers) {
-            NetworkHandlerServer.sendStringPacket(player, PacketNames.HIDE_SLEEP_DARKNESS, "true");
-            NetworkHandlerServer.sendStringPacket(player, PacketNames.EMPTY_SCREEN, "true");
+            SimplePackets.HIDE_SLEEP_DARKNESS.target(player).sendToClient("true");
+            SimplePackets.EMPTY_SCREEN.target(player).sendToClient("true");
             BlockPos bedPos = player.getSleepingPos().orElse(null);
             if (bedPos == null) {
                 continue;
@@ -154,7 +155,8 @@ public class NiceLifeTriviaManager {
         SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_incorrect_all_wrong"));
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
         PlayerUtils.broadcastMessage(Component.literal("§f<§2§mTrivia§m§2 Santa Bot§f>§4 WRONG! WRONG! WRONG! ALL WRONG!"));
-        NetworkHandlerServer.sendStringPackets(PacketNames.TRIVIA_ALL_WRONG, "");
+
+        SimplePackets.TRIVIA_ALL_WRONG.sendToClient("");
         TaskScheduler.scheduleTask(120, () -> {
             PlayerUtils.broadcastMessage(Component.literal("§f<§2§mTrivia§m§2 Santa Bot§f>§4 SNOW MUST GO ON!"));
             for (ServerPlayer player : livesManager.getAlivePlayers()) {
@@ -249,7 +251,7 @@ public class NiceLifeTriviaManager {
     }
 
     public static void killAllBots() {
-        NetworkHandlerServer.sendStringPackets(PacketNames.STOP_TRIVIA_SOUNDS, "");
+        SimplePackets.STOP_TRIVIA_SOUNDS.sendToClient("");
         if (server == null) return;
         List<Entity> toKill = new ArrayList<>();
         for (ServerLevel level : server.getAllLevels()) {
@@ -260,9 +262,7 @@ public class NiceLifeTriviaManager {
             }
         }
         toKill.forEach(Entity::discard);
-        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-            NetworkHandlerServer.sendStringPacket(player, PacketNames.RESET_TRIVIA, "true");
-        }
+        SimplePackets.RESET_TRIVIA.sendToClient("true");
     }
     public static void killAllSnowmen() {
         if (server == null) return;

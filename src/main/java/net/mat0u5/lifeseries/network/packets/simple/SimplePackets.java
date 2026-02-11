@@ -15,7 +15,7 @@ public class SimplePackets {
     public static final SimpleStringListPacket SKYCOLOR = new SimpleStringListPacket("SKYCOLOR");
     public static final SimpleStringListPacket FOGCOLOR = new SimpleStringListPacket("FOGCOLOR");
     public static final SimpleStringListPacket CLOUDCOLOR = new SimpleStringListPacket("CLOUDCOLOR");
-    public static final SimpleStringListPacket PLAYER_INVISIBLE = new SimpleStringListPacket("PLAYER_INVISIBLE");
+    public static final SimpleStringListPacket PLAYER_INVISIBLE = new SimpleStringListPacket("PLAYER_INVISIBLE");//TODO test
     public static final SimpleStringListPacket SET_LIVES = new SimpleStringListPacket("SET_LIVES");
     public static final SimpleStringListPacket SET_TEAM = new SimpleStringListPacket("SET_TEAM");
     public static final SimpleStringListPacket CONFIG_SECRET_TASK = new SimpleStringListPacket("CONFIG_SECRET_TASK");

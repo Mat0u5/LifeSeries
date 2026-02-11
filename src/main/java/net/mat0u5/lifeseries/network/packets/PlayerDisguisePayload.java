@@ -8,13 +8,12 @@ import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-public record PlayerDisguisePayload(String name, String hiddenUUID, String hiddenName, String shownUUID, String shownName) implements FabricPacket {
+public record PlayerDisguisePayload(String hiddenUUID, String hiddenName, String shownUUID, String shownName) implements FabricPacket {
 
-    public static final ResourceLocation ID = IdentifierHelper.mod(PacketNames.PLAYER_DISGUISE.getName());
+    public static final ResourceLocation ID = IdentifierHelper.mod("player_disguise");
     public static final PacketType<PlayerDisguisePayload> TYPE = PacketType.create(ID, PlayerDisguisePayload::read);
 
     public void write(FriendlyByteBuf buf) {
-        buf.writeUtf(name);
         buf.writeUtf(hiddenUUID);
         buf.writeUtf(hiddenName);
         buf.writeUtf(shownUUID);
@@ -22,12 +21,11 @@ public record PlayerDisguisePayload(String name, String hiddenUUID, String hidde
     }
 
     public static PlayerDisguisePayload read(FriendlyByteBuf buf) {
-        String name = buf.readUtf();
         String hiddenUUID = buf.readUtf();
         String hiddenName = buf.readUtf();
         String shownUUID = buf.readUtf();
         String shownName = buf.readUtf();
-        return new PlayerDisguisePayload(name, hiddenUUID, hiddenName, shownUUID, shownName);
+        return new PlayerDisguisePayload(hiddenUUID, hiddenName, shownUUID, shownName);
     }
 
     public FriendlyByteBuf toFriendlyByteBuf() {
@@ -42,18 +40,16 @@ public record PlayerDisguisePayload(String name, String hiddenUUID, String hidde
     }
 }
 *///?} else {
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
-public record PlayerDisguisePayload(String name, String hiddenUUID, String hiddenName, String shownUUID, String shownName) implements CustomPacketPayload {
+public record PlayerDisguisePayload(String hiddenUUID, String hiddenName, String shownUUID, String shownName) implements CustomPacketPayload {
 
-    public static final CustomPacketPayload.Type<PlayerDisguisePayload> ID = new CustomPacketPayload.Type<>(IdentifierHelper.mod(PacketNames.PLAYER_DISGUISE.getName()));
+    public static final CustomPacketPayload.Type<PlayerDisguisePayload> ID = new CustomPacketPayload.Type<>(IdentifierHelper.mod("player_disguise"));
     public static final StreamCodec<RegistryFriendlyByteBuf, PlayerDisguisePayload> CODEC = StreamCodec.composite(
-            ByteBufCodecs.STRING_UTF8, PlayerDisguisePayload::name,
             ByteBufCodecs.STRING_UTF8, PlayerDisguisePayload::hiddenUUID,
             ByteBufCodecs.STRING_UTF8, PlayerDisguisePayload::hiddenName,
             ByteBufCodecs.STRING_UTF8, PlayerDisguisePayload::shownUUID,

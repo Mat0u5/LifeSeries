@@ -4,8 +4,8 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.mixin.MobEffectInstanceAccessor;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
@@ -296,7 +296,7 @@ public class Session {
         if (timer.isMultipleOf(DISPLAY_TIMER_INTERVAL)) {
             displayTimers(server);
             for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-                NetworkHandlerServer.sendStringPacket(player, PacketNames.SESSION_STATUS, status.getName());
+                SimplePackets.SESSION_STATUS.target(player).sendToClient(status.getName());
             }
             //? if <= 1.20.3 {
             /*for (MobEffect effect : blacklist.getBannedEffects()) {
@@ -475,7 +475,7 @@ public class Session {
                     timestamp = Time.now().add(remainingTime).getMillis();
                 }
                 if (timestamp != SessionTimerStates.OFF.getValue()) {
-                    NetworkHandlerServer.sendLongPacket(player, PacketNames.SESSION_TIMER, timestamp);
+                    SimplePackets.SESSION_TIMER.target(player).sendToClient(timestamp);
                 }
             }
         }

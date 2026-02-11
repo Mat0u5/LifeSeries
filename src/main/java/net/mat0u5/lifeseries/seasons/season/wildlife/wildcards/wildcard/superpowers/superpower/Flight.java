@@ -1,9 +1,9 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -66,13 +66,13 @@ public class Flight extends Superpower {
         }
         if (!isLaunchedUp) {
             onGroundTicks = 0;
-            if (timer.isMultipleOf(Time.ticks(5))) NetworkHandlerServer.sendStringPacket(player, PacketNames.PREVENT_GLIDING, "true");
+            if (timer.isMultipleOf(Time.ticks(5))) SimplePackets.PREVENT_GLIDING.target(player).sendToClient("true");
             return;
         }
 
         if (player.onGround()) {
             onGroundTicks++;
-            if (timer.isMultipleOf(Time.ticks(5))) NetworkHandlerServer.sendStringPacket(player, PacketNames.PREVENT_GLIDING, "true");
+            if (timer.isMultipleOf(Time.ticks(5))) SimplePackets.PREVENT_GLIDING.target(player).sendToClient("true");
         }
 
         else {
@@ -101,10 +101,10 @@ public class Flight extends Superpower {
         MobEffectInstance effect = new MobEffectInstance(MobEffects.JUMP_BOOST, 20, 54, false, false, false);
         //?}
         player.addEffect(effect);
-        NetworkHandlerServer.sendStringPacket(player, PacketNames.JUMP, "");
+        SimplePackets.JUMP.target(player).sendToClient("");
 
         isLaunchedUp = true;
-        NetworkHandlerServer.sendStringPacket(player, PacketNames.PREVENT_GLIDING, "false");
+        SimplePackets.PREVENT_GLIDING.target(player).sendToClient("false");
     }
 
     @Override
@@ -116,7 +116,7 @@ public class Flight extends Superpower {
             player.getInventory().setChanged();
             PlayerUtils.updatePlayerInventory(player);
         });
-        NetworkHandlerServer.sendStringPacket(player, PacketNames.PREVENT_GLIDING, "false");
+        SimplePackets.PREVENT_GLIDING.target(player).sendToClient("false");
     }
 
     private void giveHelmet() {

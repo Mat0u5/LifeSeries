@@ -36,7 +36,6 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -425,6 +424,10 @@ public class NetworkHandlerServer {
             SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
             if (packet != null) packet.receiveServer(context.player(), payload);
         });
+        ServerPlayNetworking.registerGlobalReceiver(IntPayload.ID, (payload, context) -> {
+            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            if (packet != null) packet.receiveServer(context.player(), payload);
+        });
     }
     //?}
 
@@ -602,96 +605,49 @@ public class NetworkHandlerServer {
 
     }
 
-    public static void sendStringPackets(PacketNames name, String value) {
-        StringPayload payload = new StringPayload(name.getName(), value);
-        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-            ServerPlayNetworking.send(player, payload);
-        }
-    }
-    public static void sendStringPacket(ServerPlayer player, PacketNames name, String value) {
-        if (player == null) return;
-        StringPayload payload = new StringPayload(name.getName(), value);
-        ServerPlayNetworking.send(player, payload);
-    }
-
-    public static void sendStringListPacket(ServerPlayer player, PacketNames name, List<String> value) {
-        StringListPayload payload = new StringListPayload(name.getName(), value);
-        ServerPlayNetworking.send(player, payload);
-    }
-
-    public static void sendStringListPackets(PacketNames name, List<String> value) {
-        StringListPayload payload = new StringListPayload(name.getName(), value);
-        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-            ServerPlayNetworking.send(player, payload);
-        }
-    }
-    public static void sendNumberPackets(PacketNames name, double number) {
-        NumberPayload payload = new NumberPayload(name.getName(), number);
-        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-            ServerPlayNetworking.send(player, payload);
-        }
-    }
-
-    public static void sendNumberPacket(ServerPlayer player, PacketNames name, double number) {
-        if (player == null) return;
-        NumberPayload payload = new NumberPayload(name.getName(), number);
-        ServerPlayNetworking.send(player, payload);
-    }
-
-    public static void sendLongPacket(ServerPlayer player, PacketNames name, long number) {
-        if (player == null) return;
-        LongPayload payload = new LongPayload(name.getName(), number);
-        ServerPlayNetworking.send(player, payload);
-    }
-
-    public static void sendLongPackets(PacketNames name, long number) {
-        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-            sendLongPacket(player, name, number);
-        }
-    }
-
     public static void sendUpdatePacketTo(ServerPlayer player) {
         if (currentSeason instanceof WildLife) {
-            sendNumberPacket(player, PacketNames.PLAYER_MIN_MSPT, TimeDilation.MIN_PLAYER_MSPT);
+            SimplePackets.PLAYER_MIN_MSPT.target(player).sendToClient(TimeDilation.MIN_PLAYER_MSPT);
 
             List<String> activeWildcards = new ArrayList<>();
             for (Wildcards wildcard : WildcardManager.activeWildcards.keySet()) {
                 activeWildcards.add(wildcard.getStringName());
             }
-            sendStringPacket(player, PacketNames.ACTIVE_WILDCARDS, String.join("__", activeWildcards));
+            SimplePackets.ACTIVE_WILDCARDS.target(player).sendToClient(String.join("__", activeWildcards));
         }
-        sendStringPacket(player, PacketNames.CURRENT_SEASON, currentSeason.getSeason().getId());
-        sendStringPacket(player, PacketNames.TABLIST_SHOW_EXACT, String.valueOf(Season.TAB_LIST_SHOW_EXACT_LIVES));
-        sendNumberPacket(player, PacketNames.TAB_LIVES_CUTOFF, LivesManager.MAX_TAB_NUMBER);
-        sendStringPacket(player, PacketNames.FIX_SIZECHANGING_BUGS, String.valueOf(SizeShifting.FIX_SIZECHANGING_BUGS));
-        sendNumberPacket(player, PacketNames.SIZESHIFTING_CHANGE, SizeShifting.SIZE_CHANGE_STEP * SizeShifting.SIZE_CHANGE_MULTIPLIER);
+        SimplePackets.CURRENT_SEASON.target(player).sendToClient(currentSeason.getSeason().getId());
+        SimplePackets.TABLIST_SHOW_EXACT.target(player).sendToClient(String.valueOf(Season.TAB_LIST_SHOW_EXACT_LIVES));
+        SimplePackets.TAB_LIST_LIVES_CUTOFF.target(player).sendToClient(LivesManager.MAX_TAB_NUMBER);
+        SimplePackets.FIX_SIZECHANGING_BUGS.target(player).sendToClient(String.valueOf(SizeShifting.FIX_SIZECHANGING_BUGS));
+        SimplePackets.SIZESHIFTING_CHANGE.target(player).sendToClient(SizeShifting.SIZE_CHANGE_STEP * SizeShifting.SIZE_CHANGE_MULTIPLIER);
 
-        sendStringPacket(player, PacketNames.ANIMAL_DISGUISE_ARMOR, String.valueOf(AnimalDisguise.SHOW_ARMOR));
-        sendStringPacket(player, PacketNames.ANIMAL_DISGUISE_HANDS, String.valueOf(AnimalDisguise.SHOW_HANDS));
+        SimplePackets.ANIMAL_DISGUISE_ARMOR.target(player).sendToClient(String.valueOf(AnimalDisguise.SHOW_ARMOR));
+        SimplePackets.ANIMAL_DISGUISE_HANDS.target(player).sendToClient(String.valueOf(AnimalDisguise.SHOW_HANDS));
         SimplePackets.HUNGER_NON_EDIBLE.target(player).sendToClient(Hunger.nonEdibleStr);
-        sendStringPacket(player, PacketNames.SNOWY_NETHER, String.valueOf(NiceLife.SNOWY_NETHER));
+        SimplePackets.SNOWY_NETHER.target(player).sendToClient(String.valueOf(NiceLife.SNOWY_NETHER));
 
         if (Season.skyColor != null) {
-            sendStringListPacket(player, PacketNames.SKYCOLOR, List.of(String.valueOf(Season.skyColorSetMode), String.valueOf((int)Season.skyColor.x), String.valueOf((int)Season.skyColor.y), String.valueOf((int)Season.skyColor.z)));
+            SimplePackets.SNOWY_NETHER.target(player).sendToClient(String.valueOf(NiceLife.SNOWY_NETHER));
+            SimplePackets.SKYCOLOR.target(player).sendToClient(List.of(String.valueOf(Season.skyColorSetMode), String.valueOf((int)Season.skyColor.x), String.valueOf((int)Season.skyColor.y), String.valueOf((int)Season.skyColor.z)));
         }
         else {
-            sendStringListPacket(player, PacketNames.SKYCOLOR, List.of(String.valueOf(Season.skyColorSetMode)));
+            SimplePackets.SKYCOLOR.target(player).sendToClient(List.of(String.valueOf(Season.skyColorSetMode)));
         }
         if (Season.fogColor != null) {
-            sendStringListPacket(player, PacketNames.FOGCOLOR, List.of(String.valueOf(Season.fogColorSetMode), String.valueOf((int)Season.fogColor.x), String.valueOf((int)Season.fogColor.y), String.valueOf((int)Season.fogColor.z)));
+            SimplePackets.FOGCOLOR.target(player).sendToClient(List.of(String.valueOf(Season.fogColorSetMode), String.valueOf((int)Season.fogColor.x), String.valueOf((int)Season.fogColor.y), String.valueOf((int)Season.fogColor.z)));
         }
         else {
-            sendStringListPacket(player, PacketNames.FOGCOLOR, List.of(String.valueOf(Season.fogColorSetMode)));
+            SimplePackets.FOGCOLOR.target(player).sendToClient(List.of(String.valueOf(Season.fogColorSetMode)));
         }
         if (Season.cloudColor != null) {
-            sendStringListPacket(player, PacketNames.CLOUDCOLOR, List.of(String.valueOf(Season.cloudColorSetMode), String.valueOf((int)Season.cloudColor.x), String.valueOf((int)Season.cloudColor.y), String.valueOf((int)Season.cloudColor.z)));
+            SimplePackets.CLOUDCOLOR.target(player).sendToClient(List.of(String.valueOf(Season.cloudColorSetMode), String.valueOf((int)Season.cloudColor.x), String.valueOf((int)Season.cloudColor.y), String.valueOf((int)Season.cloudColor.z)));
         }
         else {
-            sendStringListPacket(player, PacketNames.CLOUDCOLOR, List.of(String.valueOf(Season.cloudColorSetMode)));
+            SimplePackets.CLOUDCOLOR.target(player).sendToClient(List.of(String.valueOf(Season.cloudColorSetMode)));
         }
 
-        sendStringPacket(player, PacketNames.ADMIN_INFO, String.valueOf(PermissionManager.isAdmin(player)));
-        NetworkHandlerServer.sendStringPackets(PacketNames.MOD_DISABLED, String.valueOf(Main.MOD_DISABLED));
+        SimplePackets.ADMIN_INFO.target(player).sendToClient(String.valueOf(PermissionManager.isAdmin(player)));
+        SimplePackets.MOD_DISABLED.target(player).sendToClient(String.valueOf(Main.MOD_DISABLED));
     }
 
     public static void sendUpdatePackets() {
@@ -699,7 +655,7 @@ public class NetworkHandlerServer {
     }
 
     public static void sendPlayerDisguise(String hiddenUUID, String hiddenName, String shownUUID, String shownName) {
-        PlayerDisguisePayload payload = new PlayerDisguisePayload(PacketNames.PLAYER_DISGUISE.getName(), hiddenUUID, hiddenName, shownUUID, shownName);
+        PlayerDisguisePayload payload = new PlayerDisguisePayload(hiddenUUID, hiddenName, shownUUID, shownName);
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
             ServerPlayNetworking.send(player, payload);
         }
@@ -710,8 +666,7 @@ public class NetworkHandlerServer {
     }
 
     public static void sendVignette(ServerPlayer player, long durationMillis) {
-        LongPayload payload = new LongPayload(PacketNames.SHOW_VIGNETTE.getName(), durationMillis);
-        ServerPlayNetworking.send(player, payload);
+        SimplePackets.SHOW_VIGNETTE.target(player).sendToClient(durationMillis);
     }
 
     public static void tryKickFailedHandshake(ServerPlayer player) {

@@ -4,8 +4,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Time;
@@ -174,7 +174,7 @@ public class SessionCommand extends Command {
 
         if (self == null) return -1;
         if (NetworkHandlerServer.wasHandshakeSuccessful(self)) {
-            NetworkHandlerServer.sendStringPacket(self, PacketNames.TOGGLE_TIMER, "");
+            SimplePackets.TOGGLE_TIMER.target(self).sendToClient("");
         }
 
         boolean isInDisplayTimer = currentSession.isInDisplayTimer(self);

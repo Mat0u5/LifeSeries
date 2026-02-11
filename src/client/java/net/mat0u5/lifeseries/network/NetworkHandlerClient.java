@@ -38,7 +38,6 @@ import net.mat0u5.lifeseries.utils.ClientResourcePacks;
 import net.mat0u5.lifeseries.utils.ClientSounds;
 import net.mat0u5.lifeseries.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -499,6 +498,10 @@ public class NetworkHandlerClient {
             SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
             if (packet != null) client.execute(() -> packet.receiveClient(payload));
         });
+        ClientPlayNetworking.registerGlobalReceiver(IntPayload.ID, (payload, context) -> {
+            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            if (packet != null) client.execute(() -> packet.receiveClient(payload));
+        });
     }
     //?}
 
@@ -515,31 +518,25 @@ public class NetworkHandlerClient {
     }
 
     public static void handlePlayerDisguise(PlayerDisguisePayload payload) {
-        String nameStr = payload.name();
-        PacketNames name = PacketNames.fromName(nameStr);
 
         String hiddenUUID = payload.hiddenUUID();
         String hiddenName = payload.hiddenName();
         String shownUUID = payload.shownUUID();
         String shownName = payload.shownName();
-
-        if (name == PacketNames.PLAYER_DISGUISE) {
-            if (shownName.isEmpty()) {
-                MainClient.playerDisguiseNames.remove(hiddenName);
-                try {
-                    UUID hideUUID = UUID.fromString(hiddenUUID);
-                    MainClient.playerDisguiseUUIDs.remove(hideUUID);
-                }catch(Exception ignored) {}
-            }
-            else {
-                MainClient.playerDisguiseNames.put(hiddenName, shownName);
-                try {
-                    UUID hideUUID = UUID.fromString(hiddenUUID);
-                    UUID showUUID = UUID.fromString(shownUUID);
-                    MainClient.playerDisguiseUUIDs.put(hideUUID, showUUID);
-                }catch(Exception ignored) {}
-            }
-
+        if (shownName.isEmpty()) {
+            MainClient.playerDisguiseNames.remove(hiddenName);
+            try {
+                UUID hideUUID = UUID.fromString(hiddenUUID);
+                MainClient.playerDisguiseUUIDs.remove(hideUUID);
+            }catch(Exception ignored) {}
+        }
+        else {
+            MainClient.playerDisguiseNames.put(hiddenName, shownName);
+            try {
+                UUID hideUUID = UUID.fromString(hiddenUUID);
+                UUID showUUID = UUID.fromString(shownUUID);
+                MainClient.playerDisguiseUUIDs.put(hideUUID, showUUID);
+            }catch(Exception ignored) {}
         }
     }
     public static void handleHandshake(HandshakePayload payload) {
@@ -616,32 +613,20 @@ public class NetworkHandlerClient {
 
     public static void sendTriviaAnswer(int answer) {
         if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Sending trivia answer: {}", answer);
-        ClientPlayNetworking.send(new NumberPayload(PacketNames.TRIVIA_ANSWER.getName(), answer));
+        SimplePackets.TRIVIA_ANSWER.sendToServer(answer);
     }
 
     public static void sendHoldingJumpPacket() {
-        ClientPlayNetworking.send(new StringPayload(PacketNames.HOLDING_JUMP.getName(), "true"));
+        SimplePackets.HOLDING_JUMP.sendToServer("true");
     }
 
     public static void pressSuperpowerKey() {
-        ClientPlayNetworking.send(new StringPayload(PacketNames.SUPERPOWER_KEY.getName(), "true"));
+        SimplePackets.SUPERPOWER_KEY.sendToServer("true");
     }
     public static void pressRunCommandKey() {
         ClientUtils.runCommand(MainClient.RUN_COMMAND);
     }
     public static void pressOpenConfigKey() {
         ClientUtils.runCommand("/lifeseries config");
-    }
-
-    public static void sendStringPacket(PacketNames name, String value) {
-        ClientPlayNetworking.send(new StringPayload(name.getName(), value));
-    }
-
-    public static void sendStringListPacket(PacketNames name, List<String> value) {
-        ClientPlayNetworking.send(new StringListPayload(name.getName(), value));
-    }
-
-    public static void sendNumberPacket(PacketNames name, double value) {
-        ClientPlayNetworking.send(new NumberPayload(name.getName(), value));
     }
 }

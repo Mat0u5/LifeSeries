@@ -2,8 +2,8 @@ package net.mat0u5.lifeseries.gui.other;
 
 import net.mat0u5.lifeseries.gui.DefaultScreen;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.render.RenderUtils;
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
@@ -23,7 +23,7 @@ public class ChooseWildcardScreen extends DefaultScreen {
         this.addRenderableWidget(
                 Button.builder(Component.literal("Size Shifting"), btn -> {
                             this.onClose();
-                            NetworkHandlerClient.sendStringPacket(PacketNames.SELECTED_WILDCARD,"size_shifting");
+                            SimplePackets.SELECTED_WILDCARD.sendToServer("size_shifting");
                         })
                         .pos(oneThirdX - 50, startY  + 40)
                         .size(80, 20)
@@ -33,7 +33,7 @@ public class ChooseWildcardScreen extends DefaultScreen {
         this.addRenderableWidget(
                 Button.builder(Component.literal("Hunger"), btn -> {
                             this.onClose();
-                            NetworkHandlerClient.sendStringPacket(PacketNames.SELECTED_WILDCARD,"hunger");
+                            SimplePackets.SELECTED_WILDCARD.sendToServer("hunger");
                         })
                         .pos(oneThirdX - 50, startY  + 65)
                         .size(80, 20)
@@ -42,7 +42,7 @@ public class ChooseWildcardScreen extends DefaultScreen {
         this.addRenderableWidget(
                 Button.builder(Component.literal("Snails"), btn -> {
                             this.onClose();
-                            NetworkHandlerClient.sendStringPacket(PacketNames.SELECTED_WILDCARD,"snails");
+                            SimplePackets.SELECTED_WILDCARD.sendToServer("snails");
                         })
                         .pos(oneThirdX - 50, startY  + 90)
                         .size(80, 20)
@@ -51,7 +51,7 @@ public class ChooseWildcardScreen extends DefaultScreen {
         this.addRenderableWidget(
                 Button.builder(Component.literal("Time Dilation"), btn -> {
                             this.onClose();
-                            NetworkHandlerClient.sendStringPacket(PacketNames.SELECTED_WILDCARD,"time_dilation");
+                            SimplePackets.SELECTED_WILDCARD.sendToServer("time_dilation");
                         })
                         .pos(oneThirdX - 50, startY  + 115)
                         .size(80, 20)
@@ -66,7 +66,7 @@ public class ChooseWildcardScreen extends DefaultScreen {
         this.addRenderableWidget(
                 Button.builder(Component.literal("Trivia"), btn -> {
                             this.onClose();
-                            NetworkHandlerClient.sendStringPacket(PacketNames.SELECTED_WILDCARD,"trivia");
+                            SimplePackets.SELECTED_WILDCARD.sendToServer("trivia");
                         })
                         .pos(twoThirdX - 30, startY  + 40)
                         .size(80, 20)
@@ -76,7 +76,7 @@ public class ChooseWildcardScreen extends DefaultScreen {
         this.addRenderableWidget(
                 Button.builder(Component.literal("Mob Swap"), btn -> {
                             this.onClose();
-                            NetworkHandlerClient.sendStringPacket(PacketNames.SELECTED_WILDCARD,"mob_swap");
+                            SimplePackets.SELECTED_WILDCARD.sendToServer("mob_swap");
                         })
                         .pos(twoThirdX - 30, startY  + 65)
                         .size(80, 20)
@@ -85,7 +85,7 @@ public class ChooseWildcardScreen extends DefaultScreen {
         this.addRenderableWidget(
                 Button.builder(Component.literal("Superpowers"), btn -> {
                             this.onClose();
-                            NetworkHandlerClient.sendStringPacket(PacketNames.SELECTED_WILDCARD,"superpowers");
+                            SimplePackets.SELECTED_WILDCARD.sendToServer("superpowers");
                         })
                         .pos(twoThirdX - 30, startY  + 90)
                         .size(80, 20)
@@ -94,7 +94,7 @@ public class ChooseWildcardScreen extends DefaultScreen {
         this.addRenderableWidget(
                 Button.builder(Component.literal("Callback"), btn -> {
                             this.onClose();
-                            NetworkHandlerClient.sendStringPacket(PacketNames.SELECTED_WILDCARD,"callback");
+                            SimplePackets.SELECTED_WILDCARD.sendToServer("callback");
                         })
                         .pos(twoThirdX - 30, startY  + 115)
                         .size(80, 20)

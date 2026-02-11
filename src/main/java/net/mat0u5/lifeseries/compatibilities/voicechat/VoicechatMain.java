@@ -14,13 +14,13 @@ import net.mat0u5.lifeseries.compatibilities.voicechat.soundeffects.RadioEffect;
 import net.mat0u5.lifeseries.compatibilities.voicechat.soundeffects.RoboticVoice;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Listening;
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
@@ -81,7 +81,7 @@ public class VoicechatMain implements VoicechatPlugin {
                 if (!tempMutedPlayers.contains(player.getUUID())) {
                     tempMutedPlayers.add(player.getUUID());
                 }
-                NetworkHandlerServer.sendStringPacket(player, PacketNames.MIC_MUTED, "true");
+                SimplePackets.MIC_MUTED.target(player).sendToClient("true");
             }
         }
     }
@@ -95,7 +95,7 @@ public class VoicechatMain implements VoicechatPlugin {
                 if (player != null) {
                     if (!player.isSleeping()) {
                         tempMutedPlayers.remove(playerUUID);
-                        NetworkHandlerServer.sendStringPacket(player, PacketNames.MIC_MUTED, "false");
+                        SimplePackets.MIC_MUTED.target(player).sendToClient("false");
                     }
                 }
             }

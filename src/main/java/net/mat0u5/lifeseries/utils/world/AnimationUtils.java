@@ -1,7 +1,8 @@
 package net.mat0u5.lifeseries.utils.world;
 
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
+import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -40,7 +41,7 @@ public class AnimationUtils {
 
     public static void playSecretLifeTotemAnimation(ServerPlayer player, boolean red) {
         if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {
-            NetworkHandlerServer.sendStringPacket(player, PacketNames.SHOW_TOTEM, red ? "task_red" : "task");
+            SimplePackets.SHOW_TOTEM.target(player).sendToClient(red ? "task_red" : "task");
             PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.parse("secretlife_task_totem")));
             return;
         }

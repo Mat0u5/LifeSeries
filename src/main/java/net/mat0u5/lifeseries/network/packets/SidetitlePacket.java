@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public record SidetitlePacket(Component text) implements FabricPacket {
 
-    public static final ResourceLocation ID = IdentifierHelper.mod(PacketNames.SIDETITLE.getName());
+    public static final ResourceLocation ID = IdentifierHelper.mod("sidetitle");
     public static final PacketType<SidetitlePacket> TYPE = PacketType.create(ID, SidetitlePacket::read);
 
     public void write(FriendlyByteBuf buf) {
@@ -35,7 +35,6 @@ public record SidetitlePacket(Component text) implements FabricPacket {
     }
 }
 *///?} else {
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -45,7 +44,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 public record SidetitlePacket(Component text) implements CustomPacketPayload {
 
-    public static final CustomPacketPayload.Type<SidetitlePacket> ID = new CustomPacketPayload.Type<>(IdentifierHelper.mod(PacketNames.SIDETITLE.getName()));
+    public static final CustomPacketPayload.Type<SidetitlePacket> ID = new CustomPacketPayload.Type<>(IdentifierHelper.mod("sidetitle"));
     public static final StreamCodec<RegistryFriendlyByteBuf, SidetitlePacket> CODEC = StreamCodec.composite(ComponentSerialization.TRUSTED_STREAM_CODEC, SidetitlePacket::text, SidetitlePacket::new);
 
     @Override

@@ -2,10 +2,11 @@ package net.mat0u5.lifeseries.entity.triviabot.server.trivia;
 
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
+import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeVotingManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
@@ -142,7 +143,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
             if (bot.interactedWith() && getRemainingTicks() <= 0) {
                 if (!bot.ranOutOfTime()) {
                     if (boundPlayer != null) {
-                        NetworkHandlerServer.sendStringPacket(boundPlayer, PacketNames.RESET_TRIVIA, "true");
+                        SimplePackets.RESET_TRIVIA.target(boundPlayer).sendToClient("true");
                     }
                     TaskScheduler.scheduleTask(40, () -> {
                         bot.setSubmittedAnswer(true);
@@ -339,9 +340,9 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         turnToBed(20);
         bot.setDeltaMovement(0, 0, 0);
         Time remainingVotingTime = NiceLifeVotingManager.VOTING_TIME.diff(sameStateTime);
-        NetworkHandlerServer.sendNumberPacket(bot.serverData.getBoundPlayer(), PacketNames.VOTING_TIME, remainingVotingTime.getSeconds());
+        SimplePackets.VOTING_TIME.target(bot.serverData.getBoundPlayer()).sendToClient(remainingVotingTime.getSeconds());
         if (sameStateTime.isLarger(NiceLifeVotingManager.VOTING_TIME)) {
-            NetworkHandlerServer.sendNumberPacket(bot.serverData.getBoundPlayer(), PacketNames.VOTING_TIME, 0);
+            SimplePackets.VOTING_TIME.target(bot.serverData.getBoundPlayer()).sendToClient(0);
             changeStateTo(BotState.LEAVING);
         }
     }
@@ -366,7 +367,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
             });
         }
         if (newState == BotState.FLYING_UP) {
-            NetworkHandlerServer.sendStringPacket(bot.serverData.getBoundPlayer(), PacketNames.HIDE_SLEEP_DARKNESS, "false");
+            SimplePackets.HIDE_SLEEP_DARKNESS.target(bot.serverData.getBoundPlayer()).sendToClient("false");
             SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_away"));
             PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.65f, 1);
         }

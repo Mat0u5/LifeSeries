@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers;
 
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.server.level.ServerPlayer;
@@ -53,7 +53,7 @@ public abstract class Superpower {
 
     public void turnOff() {
         deactivate();
-        NetworkHandlerServer.sendLongPacket(getPlayer(), PacketNames.SUPERPOWER_COOLDOWN, 0);
+        SimplePackets.SUPERPOWER_COOLDOWN.target(getPlayer()).sendToClient(0);
     }
 
     public void cooldown(int millis) {
@@ -61,7 +61,7 @@ public abstract class Superpower {
     }
 
     public void sendCooldownPacket() {
-        NetworkHandlerServer.sendLongPacket(getPlayer(), PacketNames.SUPERPOWER_COOLDOWN, cooldown);
+        SimplePackets.SUPERPOWER_COOLDOWN.target(getPlayer()).sendToClient(cooldown);
     }
 
     public void triggerActivated() {

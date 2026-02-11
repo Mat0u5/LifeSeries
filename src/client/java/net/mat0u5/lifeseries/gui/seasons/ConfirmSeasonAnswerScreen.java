@@ -2,9 +2,9 @@ package net.mat0u5.lifeseries.gui.seasons;
 
 import net.mat0u5.lifeseries.gui.DefaultScreen;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -37,7 +37,7 @@ public class ConfirmSeasonAnswerScreen extends DefaultScreen {
         this.addRenderableWidget(
                 Button.builder(Component.literal("Confirm"), btn -> {
                             this.onClose();
-                            NetworkHandlerClient.sendStringPacket(PacketNames.SET_SEASON, season.getName());
+                            SimplePackets.SET_SEASON.sendToServer(season.getName());
                         })
                         .pos(fifth2 - 40, startY + BG_HEIGHT - 35)
                         .size(60, 20)

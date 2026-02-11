@@ -2,10 +2,10 @@ package net.mat0u5.lifeseries.gui.seasons;
 
 import net.mat0u5.lifeseries.gui.DefaultScreen;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.TextColors;
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
@@ -142,7 +142,7 @@ public class ChooseSeasonScreen extends DefaultScreen {
                     this.minecraft.setScreen(new ConfirmSeasonAnswerScreen(this, seasonRegion.season()));
                 }
                 else {
-                    NetworkHandlerClient.sendStringPacket(PacketNames.SET_SEASON, seasonRegion.season().getName());
+                    SimplePackets.SET_SEASON.sendToServer(seasonRegion.season().getName());
                     this.onClose();
                 }
             }

@@ -1,9 +1,10 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDilation;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -68,7 +69,8 @@ public class TripleJump extends ToggleableSuperpower {
         if (player == null) return;
         player.ls$playNotifySound(SoundEvents.SLIME_JUMP, SoundSource.MASTER, 1, 1);
         NetworkHandlerServer.sendVignette(player, -1);
-        NetworkHandlerServer.sendStringPacket(player, PacketNames.TRIPLE_JUMP, "true");
+        SimplePackets.PLAYER_MIN_MSPT.target(player).sendToClient(TimeDilation.MIN_PLAYER_MSPT);
+        SimplePackets.TRIPLE_JUMP.target(player).sendToClient("truue");
     }
 
     @Override
@@ -83,6 +85,6 @@ public class TripleJump extends ToggleableSuperpower {
         //?}
         player.ls$playNotifySound(SoundEvents.SLIME_SQUISH, SoundSource.MASTER, 1, 1);
         NetworkHandlerServer.sendVignette(player, 0);
-        NetworkHandlerServer.sendStringPacket(player, PacketNames.TRIPLE_JUMP, "false");
+        SimplePackets.TRIPLE_JUMP.target(player).sendToClient("false");
     }
 }

@@ -6,10 +6,10 @@ import net.mat0u5.lifeseries.gui.config.entries.EmptyConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.GroupConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.ModifiableListEntry;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
@@ -361,7 +361,7 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
             }
         }
         sentToServer = true;
-        NetworkHandlerClient.sendStringListPacket(PacketNames.CONFIG_TRIVIA, list);
+        SimplePackets.CONFIG_TRIVIA.sendToServer(list);
     }
 
     @Override

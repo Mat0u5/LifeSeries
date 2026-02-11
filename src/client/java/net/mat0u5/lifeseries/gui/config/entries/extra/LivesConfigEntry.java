@@ -2,8 +2,8 @@ package net.mat0u5.lifeseries.gui.config.entries.extra;
 
 import net.mat0u5.lifeseries.gui.config.entries.main.NullableIntegerConfigEntry;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
@@ -77,7 +77,7 @@ public class LivesConfigEntry extends NullableIntegerConfigEntry {
 
     @Override
     public void onSave() {
-        NetworkHandlerClient.sendStringListPacket(PacketNames.SET_LIVES, List.of(fieldName.replaceFirst("dynamic_lives_",""), getValueAsString()));
+        SimplePackets.SET_LIVES.sendToServer(List.of(fieldName.replaceFirst("dynamic_lives_",""), getValueAsString()));
     }
 
     @Override

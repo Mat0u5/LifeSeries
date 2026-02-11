@@ -20,7 +20,6 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.S
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.interfaces.IClientHelper;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
@@ -118,7 +117,7 @@ public class Main implements ModInitializer {
 		if (!modDisabled()) {
 			fullReload();
 		}
-		NetworkHandlerServer.sendStringPackets(PacketNames.MOD_DISABLED, String.valueOf(Main.MOD_DISABLED));
+		SimplePackets.MOD_DISABLED.sendToClient(String.valueOf(Main.MOD_DISABLED));
 	}
 
 	public static void fullReload() {
@@ -196,7 +195,7 @@ public class Main implements ModInitializer {
 			NetworkHandlerServer.tryKickFailedHandshake(player);
 			if (!modDisabled()) {
 				currentSeason.sendSetSeasonPacket(player);
-				NetworkHandlerServer.sendLongPacket(player, PacketNames.SESSION_TIMER, SessionTimerStates.NOT_STARTED.getValue());
+				SimplePackets.SESSION_TIMER.target(player).sendToClient(SessionTimerStates.NOT_STARTED.getValue());
 			}
 		}
 		SessionTranscript.resetStats();

@@ -1,10 +1,10 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.network.chat.Component;
@@ -104,7 +104,7 @@ public class Mimicry extends Superpower {
         if (mimic == null) return;
         if (System.currentTimeMillis() >= cooldown) {
             mimic.turnOff();
-            NetworkHandlerServer.sendLongPacket(getPlayer(), PacketNames.SUPERPOWER_COOLDOWN, System.currentTimeMillis()-1000);
+            SimplePackets.MIMICRY_COOLDOWN.target(getPlayer()).sendToClient(System.currentTimeMillis()-1000);
             mimic = null;
         }
         if (mimic == null) return;
@@ -114,7 +114,7 @@ public class Mimicry extends Superpower {
     @Override
     public void turnOff() {
         super.turnOff();
-        NetworkHandlerServer.sendLongPacket(getPlayer(), PacketNames.MIMICRY_COOLDOWN, System.currentTimeMillis()-1000);
+        SimplePackets.MIMICRY_COOLDOWN.target(getPlayer()).sendToClient(System.currentTimeMillis()-1000);
     }
 
     public Superpower getMimickedPower() {
@@ -124,6 +124,6 @@ public class Mimicry extends Superpower {
 
     @Override
     public void sendCooldownPacket() {
-        NetworkHandlerServer.sendLongPacket(getPlayer(), PacketNames.MIMICRY_COOLDOWN, cooldown);
+        SimplePackets.MIMICRY_COOLDOWN.target(getPlayer()).sendToClient(cooldown);
     }
 }

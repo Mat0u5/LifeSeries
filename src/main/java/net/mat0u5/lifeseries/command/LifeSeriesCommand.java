@@ -5,9 +5,9 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.Session;
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
@@ -121,7 +121,7 @@ public class LifeSeriesCommand extends Command {
             return -1;
         }
         OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Opening the season selection GUI..."));
-        NetworkHandlerServer.sendStringPacket(source.getPlayer(), PacketNames.SELECT_SEASON, currentSeason.getSeason().getId());
+        SimplePackets.SELECT_SEASON.target(source.getPlayer()).sendToClient(currentSeason.getSeason().getId());
         return 1;
     }
 
@@ -171,7 +171,7 @@ public class LifeSeriesCommand extends Command {
             return -1;
         }
 
-        NetworkHandlerServer.sendStringPacket(self, PacketNames.CLEAR_CONFIG,"");
+        SimplePackets.CLEAR_CONFIG.target(self).sendToClient("");
         if (PermissionManager.isAdmin(self) && currentSeason.getSeason() != Seasons.UNASSIGNED) {
             Main.seasonConfig.sendConfigTo(self);
             OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Opening the config GUI..."));
@@ -179,7 +179,7 @@ public class LifeSeriesCommand extends Command {
         else {
             OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7Opening the config GUI..."));
         }
-        NetworkHandlerServer.sendStringPacket(self, PacketNames.OPEN_CONFIG,"");
+        SimplePackets.OPEN_CONFIG.target(self).sendToClient("");
         return 1;
     }
 

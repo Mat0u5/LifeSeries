@@ -2,10 +2,11 @@ package net.mat0u5.lifeseries.seasons.season.nicelife;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
@@ -103,7 +104,7 @@ public class NiceLifeCommands extends Command {
             source.sendFailure(Component.nullToEmpty("You are not sleeping"));
             return -1;
         }
-        NetworkHandlerServer.sendStringPacket(self, PacketNames.REMOVE_SLEEP_SCREENS, "");
+        SimplePackets.REMOVE_SLEEP_SCREENS.target(self).sendToClient("");
 
         return 1;
     }
@@ -114,7 +115,7 @@ public class NiceLifeCommands extends Command {
             if (player.isSleeping()) {
                 player.stopSleepInBed(false, true);
             }
-            NetworkHandlerServer.sendStringPacket(player, PacketNames.REMOVE_SLEEP_SCREENS, "");
+            SimplePackets.REMOVE_SLEEP_SCREENS.target(player).sendToClient("");
         }
 
 

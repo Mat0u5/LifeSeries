@@ -9,9 +9,9 @@ import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
 import net.mat0u5.lifeseries.mixin.ServerLevelAccessor;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.BlockPos;
@@ -310,7 +310,7 @@ public class NiceLife extends Season {
             PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§cRed winter is here.."), 15, 40, 15);
         });
         TaskScheduler.scheduleTask(20 + 215, () -> {
-            NetworkHandlerServer.sendNumberPackets(PacketNames.FAKE_THUNDER, 7);
+            SimplePackets.FAKE_THUNDER.sendToServer(7);
         });
         TaskScheduler.scheduleTask(20 + 224, () -> {
             Season.setSkyColor(new Vec3(15, -140, -255), false);
@@ -352,7 +352,7 @@ public class NiceLife extends Season {
             if (player.isSleeping()) {
                 player.stopSleepInBed(false, true);
             }
-            NetworkHandlerServer.sendStringPacket(player, PacketNames.REMOVE_SLEEP_SCREENS, "");
+            SimplePackets.REMOVE_SLEEP_SCREENS.target(player).sendToClient("");
         }
     }
 

@@ -4,11 +4,11 @@ import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.ModifiableListEntry;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -432,8 +432,8 @@ public class TeamConfigEntry extends ModifiableListEntry {
                 allTeams.add("lives_"+teamEntry.teamNum);
             }
         }
-        NetworkHandlerClient.sendStringListPacket(PacketNames.SET_TEAM, List.of(
-            String.join(";",allTeams), teamNum, teamName, teamColor, allowedKill, gainLifeKill
+        SimplePackets.SET_TEAM.sendToServer(List.of(
+                String.join(";",allTeams), teamNum, teamName, teamColor, allowedKill, gainLifeKill
         ));
     }
 

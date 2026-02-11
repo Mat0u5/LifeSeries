@@ -4,9 +4,9 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Time;
@@ -53,7 +53,7 @@ public class UnassignedSeason extends Season {
     public void onPlayerFinishJoining(ServerPlayer player) {
         super.onPlayerFinishJoining(player);
         if (!Main.modDisabled()) {
-            NetworkHandlerServer.sendStringPacket(player, PacketNames.SELECT_SEASON, "");
+            SimplePackets.SELECT_SEASON.target(player).sendToClient("");
         }
     }
 
