@@ -92,7 +92,6 @@ public class ClientCommands {
     }
 
     public static int test(FabricClientCommandSource source)  {
-        SimplePackets.TEST_BOOLEAN.sendToServer(true);
         return 1;
     }
 

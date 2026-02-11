@@ -65,8 +65,6 @@ public class TestingCommands extends Command {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        SimplePackets.TEST_BOOLEAN.sendToClient(false);
-        SimplePackets.TEST_EMPTY.sendToClient();
 
         return 1;
     }

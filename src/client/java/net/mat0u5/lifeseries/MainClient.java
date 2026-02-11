@@ -15,10 +15,15 @@ import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.interfaces.IClientHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.*;
+
+//? if <= 1.20.3 {
+/*import net.fabricmc.fabric.api.networking.v1.FabricPacket;
+*///?} else {
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+ //?}
 
 public class MainClient implements ClientModInitializer, IClientHelper {
 
@@ -127,7 +132,11 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     }
 
     @Override
+    //? if <= 1.20.3 {
+    /*public void sendPacket(FabricPacket payload) {
+    *///?} else {
     public void sendPacket(CustomPacketPayload payload) {
+    //?}
         ClientPlayNetworking.send(payload);
     }
 

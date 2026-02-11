@@ -373,15 +373,6 @@ public class NetworkHandlerClient {
                 }
         );
 
-        ClientPlayNetworking.registerGlobalReceiver(NumberPayload.ID, (client, handler, buf, responseSender) -> {
-            NumberPayload payload = NumberPayload.read(buf);
-            client.execute(() -> handleNumberPacket(payload));
-        });
-
-        ClientPlayNetworking.registerGlobalReceiver(StringPayload.ID, (client, handler, buf, responseSender) -> {
-            StringPayload payload = StringPayload.read(buf);
-            client.execute(() -> handleStringPacket(payload));
-        });
 
         ClientPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (client, handler, buf, responseSender) -> {
             HandshakePayload payload = HandshakePayload.read(buf);
@@ -397,10 +388,6 @@ public class NetworkHandlerClient {
             client.execute(() -> handleVoteScreen(payload));
         });
 
-        ClientPlayNetworking.registerGlobalReceiver(LongPayload.ID, (client, handler, buf, responseSender) -> {
-            LongPayload payload = LongPayload.read(buf);
-            client.execute(() -> handleLongPacket(payload));
-        });
 
         ClientPlayNetworking.registerGlobalReceiver(PlayerDisguisePayload.ID, (client, handler, buf, responseSender) -> {
             PlayerDisguisePayload payload = PlayerDisguisePayload.read(buf);
@@ -410,11 +397,6 @@ public class NetworkHandlerClient {
         ClientPlayNetworking.registerGlobalReceiver(ConfigPayload.ID, (client, handler, buf, responseSender) -> {
             ConfigPayload payload = ConfigPayload.read(buf);
             client.execute(() -> handleConfigPacket(payload));
-        });
-
-        ClientPlayNetworking.registerGlobalReceiver(StringListPayload.ID, (client, handler, buf, responseSender) -> {
-            StringListPayload payload = StringListPayload.read(buf);
-            client.execute(() -> handleStringListPacket(payload));
         });
 
         ClientPlayNetworking.registerGlobalReceiver(SidetitlePacket.ID, (client, handler, buf, responseSender) -> {
@@ -427,6 +409,43 @@ public class NetworkHandlerClient {
             client.execute(() -> {
                 SnailSkinsClient.handleSnailTexture(payload.skinName(), payload.textureData());
             });
+        });
+
+        ClientPlayNetworking.registerGlobalReceiver(NumberPayload.ID, (client, handler, buf, responseSender) -> {
+            NumberPayload payload = NumberPayload.read(buf);
+            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            if (packet != null) client.execute(() -> packet.receiveClient(payload));
+        });
+
+        ClientPlayNetworking.registerGlobalReceiver(StringPayload.ID, (client, handler, buf, responseSender) -> {
+            StringPayload payload = StringPayload.read(buf);
+            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            if (packet != null) client.execute(() -> packet.receiveClient(payload));
+        });
+        ClientPlayNetworking.registerGlobalReceiver(LongPayload.ID, (client, handler, buf, responseSender) -> {
+            LongPayload payload = LongPayload.read(buf);
+            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            if (packet != null) client.execute(() -> packet.receiveClient(payload));
+        });
+        ClientPlayNetworking.registerGlobalReceiver(StringListPayload.ID, (client, handler, buf, responseSender) -> {
+            StringListPayload payload = StringListPayload.read(buf);
+            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            if (packet != null) client.execute(() -> packet.receiveClient(payload));
+        });
+        ClientPlayNetworking.registerGlobalReceiver(BooleanPayload.ID, (client, handler, buf, responseSender) -> {
+            BooleanPayload payload = BooleanPayload.read(buf);
+            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            if (packet != null) client.execute(() -> packet.receiveClient(payload));
+        });
+        ClientPlayNetworking.registerGlobalReceiver(IntPayload.ID, (client, handler, buf, responseSender) -> {
+            IntPayload payload = IntPayload.read(buf);
+            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            if (packet != null) client.execute(() -> packet.receiveClient(payload));
+        });
+        ClientPlayNetworking.registerGlobalReceiver(EmptyPayload.ID, (client, handler, buf, responseSender) -> {
+            EmptyPayload payload = EmptyPayload.read(buf);
+            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            if (packet != null) client.execute(() -> packet.receiveClient(payload));
         });
     }
     *///?} else {

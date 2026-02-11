@@ -7,7 +7,7 @@ import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-public record BooleanPayload(String name, String value) implements FabricPacket {
+public record BooleanPayload(String name, boolean value) implements FabricPacket {
 
     public static final ResourceLocation ID = IdentifierHelper.mod("boolean");
     public static final PacketType<BooleanPayload> TYPE = PacketType.create(ID, BooleanPayload::read);
