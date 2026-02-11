@@ -87,28 +87,27 @@ public class NetworkHandlerServer {
 
     public static void initializeSimplePacketReceivers() {
 
-        SimplePackets.TRIVIA_ANSWER.setServerReceive((player, payload) -> {//TODO switch to int
-            int intValue = (int) payload.number();
-            if (VersionControl.isDevVersion()) Main.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received trivia answer (from {}): {}", player, intValue));
+        SimplePackets.TRIVIA_ANSWER.setServerReceive((player, payload) -> {
+            if (VersionControl.isDevVersion()) Main.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received trivia answer (from {}): {}", player, payload.number()));
             if (currentSeason.getSeason() == Seasons.NICE_LIFE) {
-                NiceLifeTriviaManager.handleAnswer(player, intValue);
+                NiceLifeTriviaManager.handleAnswer(player, payload.number());
             }
             else {
-                TriviaWildcard.handleAnswer(player, intValue);
+                TriviaWildcard.handleAnswer(player, payload.number());
             }
         });
 
-        SimplePackets.HOLDING_JUMP.setServerReceive((player, payload) -> {//TODO switch to empty
+        SimplePackets.HOLDING_JUMP.setServerReceive((player, payload) -> {
             if (currentSeason.getSeason() == Seasons.WILD_LIFE && WildcardManager.isActiveWildcard(Wildcards.SIZE_SHIFTING)) {
                 SizeShifting.onHoldingJump(player);
             }
         });
-        SimplePackets.SUPERPOWER_KEY.setServerReceive((player, payload) -> {//TODO switch to empty
+        SimplePackets.SUPERPOWER_KEY.setServerReceive((player, payload) -> {
             if (currentSeason.getSeason() == Seasons.WILD_LIFE) {
                 SuperpowersWildcard.pressedSuperpowerKey(player);
             }
         });
-        SimplePackets.TRANSCRIPT.setServerReceive((player, payload) -> {//TODO switch to empty
+        SimplePackets.TRANSCRIPT.setServerReceive((player, payload) -> {
             player.sendSystemMessage(SessionTranscript.getTranscriptMessage());
         });
         SimplePackets.SELECTED_WILDCARD.setServerReceive((player, payload) -> {
@@ -289,6 +288,7 @@ public class NetworkHandlerServer {
         PayloadTypeRegistry.playS2C().register(VoteScreenPayload.ID, VoteScreenPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(EmptyPayload.ID, EmptyPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(BooleanPayload.ID, BooleanPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(IntPayload.ID, IntPayload.CODEC);
 
         PayloadTypeRegistry.playC2S().register(NumberPayload.ID, NumberPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(StringPayload.ID, StringPayload.CODEC);
@@ -303,6 +303,7 @@ public class NetworkHandlerServer {
         PayloadTypeRegistry.playC2S().register(VoteScreenPayload.ID, VoteScreenPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(EmptyPayload.ID, EmptyPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(BooleanPayload.ID, BooleanPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(IntPayload.ID, IntPayload.CODEC);
         //?} else {
         /*PayloadTypeRegistry.clientboundPlay().register(NumberPayload.ID, NumberPayload.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(StringPayload.ID, StringPayload.CODEC);
@@ -317,6 +318,7 @@ public class NetworkHandlerServer {
         PayloadTypeRegistry.clientboundPlay().register(VoteScreenPayload.ID, VoteScreenPayload.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(EmptyPayload.ID, EmptyPayload.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(BooleanPayload.ID, BooleanPayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(IntPayload.ID, IntPayload.CODEC);
 
         PayloadTypeRegistry.serverboundPlay().register(NumberPayload.ID, NumberPayload.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(StringPayload.ID, StringPayload.CODEC);
@@ -331,6 +333,7 @@ public class NetworkHandlerServer {
         PayloadTypeRegistry.serverboundPlay().register(VoteScreenPayload.ID, VoteScreenPayload.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(EmptyPayload.ID, EmptyPayload.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(BooleanPayload.ID, BooleanPayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(IntPayload.ID, IntPayload.CODEC);
         *///?}
         //?}
     }
@@ -636,21 +639,20 @@ public class NetworkHandlerServer {
             for (Wildcards wildcard : WildcardManager.activeWildcards.keySet()) {
                 activeWildcards.add(wildcard.getStringName());
             }
-            SimplePackets.ACTIVE_WILDCARDS.target(player).sendToClient(String.join("__", activeWildcards));
+            SimplePackets.ACTIVE_WILDCARDS.target(player).sendToClient(activeWildcards);
         }
         SimplePackets.CURRENT_SEASON.target(player).sendToClient(currentSeason.getSeason().getId());
-        SimplePackets.TABLIST_SHOW_EXACT.target(player).sendToClient(String.valueOf(Season.TAB_LIST_SHOW_EXACT_LIVES));
+        SimplePackets.TABLIST_SHOW_EXACT.target(player).sendToClient(Season.TAB_LIST_SHOW_EXACT_LIVES);
         SimplePackets.TAB_LIST_LIVES_CUTOFF.target(player).sendToClient(LivesManager.MAX_TAB_NUMBER);
-        SimplePackets.FIX_SIZECHANGING_BUGS.target(player).sendToClient(String.valueOf(SizeShifting.FIX_SIZECHANGING_BUGS));
+        SimplePackets.FIX_SIZECHANGING_BUGS.target(player).sendToClient(SizeShifting.FIX_SIZECHANGING_BUGS);
         SimplePackets.SIZESHIFTING_CHANGE.target(player).sendToClient(SizeShifting.SIZE_CHANGE_STEP * SizeShifting.SIZE_CHANGE_MULTIPLIER);
 
-        SimplePackets.ANIMAL_DISGUISE_ARMOR.target(player).sendToClient(String.valueOf(AnimalDisguise.SHOW_ARMOR));
-        SimplePackets.ANIMAL_DISGUISE_HANDS.target(player).sendToClient(String.valueOf(AnimalDisguise.SHOW_HANDS));
+        SimplePackets.ANIMAL_DISGUISE_ARMOR.target(player).sendToClient(AnimalDisguise.SHOW_ARMOR);
+        SimplePackets.ANIMAL_DISGUISE_HANDS.target(player).sendToClient(AnimalDisguise.SHOW_HANDS);
         SimplePackets.HUNGER_NON_EDIBLE.target(player).sendToClient(Hunger.nonEdibleStr);
-        SimplePackets.SNOWY_NETHER.target(player).sendToClient(String.valueOf(NiceLife.SNOWY_NETHER));
+        SimplePackets.SNOWY_NETHER.target(player).sendToClient(NiceLife.SNOWY_NETHER);
 
         if (Season.skyColor != null) {
-            SimplePackets.SNOWY_NETHER.target(player).sendToClient(String.valueOf(NiceLife.SNOWY_NETHER));
             SimplePackets.SKYCOLOR.target(player).sendToClient(List.of(String.valueOf(Season.skyColorSetMode), String.valueOf((int)Season.skyColor.x), String.valueOf((int)Season.skyColor.y), String.valueOf((int)Season.skyColor.z)));
         }
         else {
@@ -669,8 +671,8 @@ public class NetworkHandlerServer {
             SimplePackets.CLOUDCOLOR.target(player).sendToClient(List.of(String.valueOf(Season.cloudColorSetMode)));
         }
 
-        SimplePackets.ADMIN_INFO.target(player).sendToClient(String.valueOf(PermissionManager.isAdmin(player)));
-        SimplePackets.MOD_DISABLED.target(player).sendToClient(String.valueOf(Main.MOD_DISABLED));
+        SimplePackets.ADMIN_INFO.target(player).sendToClient(PermissionManager.isAdmin(player));
+        SimplePackets.MOD_DISABLED.target(player).sendToClient(Main.MOD_DISABLED);
     }
 
     public static void sendUpdatePackets() {

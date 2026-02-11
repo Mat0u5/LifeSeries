@@ -66,13 +66,13 @@ public class Flight extends Superpower {
         }
         if (!isLaunchedUp) {
             onGroundTicks = 0;
-            if (timer.isMultipleOf(Time.ticks(5))) SimplePackets.PREVENT_GLIDING.target(player).sendToClient("true");
+            if (timer.isMultipleOf(Time.ticks(5))) SimplePackets.PREVENT_GLIDING.target(player).sendToClient(true);
             return;
         }
 
         if (player.onGround()) {
             onGroundTicks++;
-            if (timer.isMultipleOf(Time.ticks(5))) SimplePackets.PREVENT_GLIDING.target(player).sendToClient("true");
+            if (timer.isMultipleOf(Time.ticks(5))) SimplePackets.PREVENT_GLIDING.target(player).sendToClient(true);
         }
 
         else {
@@ -101,10 +101,10 @@ public class Flight extends Superpower {
         MobEffectInstance effect = new MobEffectInstance(MobEffects.JUMP_BOOST, 20, 54, false, false, false);
         //?}
         player.addEffect(effect);
-        SimplePackets.JUMP.target(player).sendToClient("");
+        SimplePackets.JUMP.target(player).sendToClient();
 
         isLaunchedUp = true;
-        SimplePackets.PREVENT_GLIDING.target(player).sendToClient("false");
+        SimplePackets.PREVENT_GLIDING.target(player).sendToClient(false);
     }
 
     @Override
@@ -116,7 +116,7 @@ public class Flight extends Superpower {
             player.getInventory().setChanged();
             PlayerUtils.updatePlayerInventory(player);
         });
-        SimplePackets.PREVENT_GLIDING.target(player).sendToClient("false");
+        SimplePackets.PREVENT_GLIDING.target(player).sendToClient(false);
     }
 
     private void giveHelmet() {

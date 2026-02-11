@@ -238,7 +238,7 @@ public class TriviaWildcard extends Wildcard {
 
         resetPlayerPunishments(player);
 
-        SimplePackets.RESET_TRIVIA.target(player).sendToClient("true");
+        SimplePackets.RESET_TRIVIA.target(player).sendToClient();
     }
 
     public static void resetPlayerPunishments(ServerPlayer player) {
@@ -273,7 +273,7 @@ public class TriviaWildcard extends Wildcard {
             }
         }
         toKill.forEach(Entity::discard);
-        SimplePackets.RESET_TRIVIA.sendToClient("true");
+        SimplePackets.RESET_TRIVIA.sendToClient();
     }
 
     public static void killAllTriviaSnails() {

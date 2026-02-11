@@ -171,7 +171,7 @@ public class LifeSeriesCommand extends Command {
             return -1;
         }
 
-        SimplePackets.CLEAR_CONFIG.target(self).sendToClient("");
+        SimplePackets.CLEAR_CONFIG.target(self).sendToClient();
         if (PermissionManager.isAdmin(self) && currentSeason.getSeason() != Seasons.UNASSIGNED) {
             Main.seasonConfig.sendConfigTo(self);
             OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Opening the config GUI..."));
@@ -179,7 +179,7 @@ public class LifeSeriesCommand extends Command {
         else {
             OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7Opening the config GUI..."));
         }
-        SimplePackets.OPEN_CONFIG.target(self).sendToClient("");
+        SimplePackets.OPEN_CONFIG.target(self).sendToClient();
         return 1;
     }
 

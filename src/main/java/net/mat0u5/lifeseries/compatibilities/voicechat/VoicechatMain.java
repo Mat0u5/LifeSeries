@@ -81,7 +81,7 @@ public class VoicechatMain implements VoicechatPlugin {
                 if (!tempMutedPlayers.contains(player.getUUID())) {
                     tempMutedPlayers.add(player.getUUID());
                 }
-                SimplePackets.MIC_MUTED.target(player).sendToClient("true");
+                SimplePackets.MIC_MUTED.target(player).sendToClient(true);
             }
         }
     }
@@ -95,7 +95,7 @@ public class VoicechatMain implements VoicechatPlugin {
                 if (player != null) {
                     if (!player.isSleeping()) {
                         tempMutedPlayers.remove(playerUUID);
-                        SimplePackets.MIC_MUTED.target(player).sendToClient("false");
+                        SimplePackets.MIC_MUTED.target(player).sendToClient(false);
                     }
                 }
             }

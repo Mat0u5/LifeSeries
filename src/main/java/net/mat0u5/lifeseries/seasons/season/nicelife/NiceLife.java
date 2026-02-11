@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.seasons.season.nicelife;
 
-import de.maxhenkel.voicechat.api.audiolistener.PlayerAudioListener;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
@@ -8,7 +7,6 @@ import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
 import net.mat0u5.lifeseries.mixin.ServerLevelAccessor;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -19,13 +17,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.players.SleepStatus;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
@@ -105,6 +101,9 @@ public class NiceLife extends Season {
              //?}
             NiceLifeTriviaManager.killAllSnowmen();
             NiceLifeTriviaManager.killAllBots();
+            Season.setSkyColor(null, false);
+            Season.setFogColor(null, false);
+            Season.setCloudColor(null, false);
         }
     }
 
@@ -310,7 +309,7 @@ public class NiceLife extends Season {
             PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§cRed winter is here.."), 15, 40, 15);
         });
         TaskScheduler.scheduleTask(20 + 215, () -> {
-            SimplePackets.FAKE_THUNDER.sendToServer(7);
+            SimplePackets.FAKE_THUNDER.sendToClient(7);
         });
         TaskScheduler.scheduleTask(20 + 224, () -> {
             Season.setSkyColor(new Vec3(15, -140, -255), false);
@@ -321,9 +320,8 @@ public class NiceLife extends Season {
 
     public boolean shouldRedWinter() {
         if (currentSession.statusNotStarted()) return false;
-        List<ServerPlayer> redPlayers = livesManager.getAlivePlayers();
         List<ServerPlayer> nonRedPlayers = livesManager.getNonRedPlayers();
-        return !redPlayers.isEmpty() && nonRedPlayers.isEmpty();
+        return nonRedPlayers.isEmpty();
     }
 
     public void sleepThroughNight() {
@@ -352,7 +350,7 @@ public class NiceLife extends Season {
             if (player.isSleeping()) {
                 player.stopSleepInBed(false, true);
             }
-            SimplePackets.REMOVE_SLEEP_SCREENS.target(player).sendToClient("");
+            SimplePackets.REMOVE_SLEEP_SCREENS.target(player).sendToClient();
         }
     }
 

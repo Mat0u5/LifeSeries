@@ -287,7 +287,7 @@ public class ClientEvents {
         *///?} else {
         player.level().playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.WIND_CHARGE_BURST.value(), SoundSource.MASTER, 0.25f, 1f, false);
         //?}
-        SimplePackets.TRIPLE_JUMP.sendToServer("");
+        SimplePackets.TRIPLE_JUMP.sendToServer(true);
     }
 
     private static boolean hasTripleJumpEffect(LocalPlayer player) {

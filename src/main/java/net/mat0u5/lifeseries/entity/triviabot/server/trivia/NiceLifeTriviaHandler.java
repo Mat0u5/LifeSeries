@@ -143,7 +143,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
             if (bot.interactedWith() && getRemainingTicks() <= 0) {
                 if (!bot.ranOutOfTime()) {
                     if (boundPlayer != null) {
-                        SimplePackets.RESET_TRIVIA.target(boundPlayer).sendToClient("true");
+                        SimplePackets.RESET_TRIVIA.target(boundPlayer).sendToClient();
                     }
                     TaskScheduler.scheduleTask(40, () -> {
                         bot.setSubmittedAnswer(true);
@@ -367,7 +367,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
             });
         }
         if (newState == BotState.FLYING_UP) {
-            SimplePackets.HIDE_SLEEP_DARKNESS.target(bot.serverData.getBoundPlayer()).sendToClient("false");
+            SimplePackets.HIDE_SLEEP_DARKNESS.target(bot.serverData.getBoundPlayer()).sendToClient(false);
             SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_away"));
             PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.65f, 1);
         }

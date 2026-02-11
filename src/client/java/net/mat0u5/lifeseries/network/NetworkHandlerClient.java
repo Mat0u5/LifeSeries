@@ -171,6 +171,14 @@ public class NetworkHandlerClient {
                 MainClient.invisiblePlayers.put(uuid, number);
             }
         });
+        SimplePackets.ACTIVE_WILDCARDS.setClientReceive(payload -> {
+            List<Wildcards> newList = new ArrayList<>();
+            for (String wildcardStr : payload.value()) {
+                newList.add(Wildcards.getFromString(wildcardStr));
+            }
+            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated current wildcards to {}", newList);
+            MainClient.clientActiveWildcards = newList;
+        });
 
         //String payload
         SimplePackets.CURRENT_SEASON.setClientReceive(payload -> {
@@ -182,48 +190,10 @@ public class NetworkHandlerClient {
         SimplePackets.SESSION_STATUS.setClientReceive(payload -> {
             MainClient.clientSessionStatus = SessionStatus.getSessionName(payload.value());
         });
-        SimplePackets.ACTIVE_WILDCARDS.setClientReceive(payload -> {//TODO switch to string list
-            List<Wildcards> newList = new ArrayList<>();
-            for (String wildcardStr : payload.value().split("__")) {
-                newList.add(Wildcards.getFromString(wildcardStr));
-            }
-            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated current wildcards to {}", newList);
-            MainClient.clientActiveWildcards = newList;
-        });
-        SimplePackets.JUMP.setClientReceive(payload -> {//TODO switch to empty
-            if (Minecraft.getInstance().player != null) {
-                Minecraft.getInstance().player.jumpFromGround();
-            }
-        });
-        SimplePackets.RESET_TRIVIA.setClientReceive(payload -> {//TODO switch to empty
-            Trivia.resetTrivia();
-        });
-        SimplePackets.SELECT_WILDCARDS.setClientReceive(payload -> {//TODO switch to empty
-            if (!Main.modDisabled()) {
-                Minecraft.getInstance().setScreen(new ChooseWildcardScreen());
-            }
-        });
-        SimplePackets.CLEAR_CONFIG.setClientReceive(payload -> {//TODO switch to empty
-            ClientConfigNetwork.load();
-        });
-        SimplePackets.OPEN_CONFIG.setClientReceive(payload -> {//TODO switch to empty
-            ClientConfigGuiManager.openConfig();
-        });
         SimplePackets.SELECT_SEASON.setClientReceive(payload -> {
             if (!Main.modDisabled()) {
                 Minecraft.getInstance().setScreen(new ChooseSeasonScreen(!payload.value().isEmpty()));
             }
-        });
-        SimplePackets.PREVENT_GLIDING.setClientReceive(payload -> {//TODO switch to bool
-            MainClient.preventGliding = payload.value().equalsIgnoreCase("true");
-        });
-        SimplePackets.TOGGLE_TIMER.setClientReceive(payload -> {//TODO switch to empty
-            String key = ClientConfig.SESSION_TIMER.key;
-            MainClient.clientConfig.setProperty(key, String.valueOf(!MainClient.SESSION_TIMER));
-            MainClient.reloadConfig();
-        });
-        SimplePackets.TABLIST_SHOW_EXACT.setClientReceive(payload -> {//TODO switch to bool
-            MainClient.TAB_LIST_SHOW_EXACT_LIVES = payload.value().equalsIgnoreCase("true");
         });
         SimplePackets.SHOW_TOTEM.setClientReceive(payload -> {
             ItemStack totemItem = Items.TOTEM_OF_UNDYING.getDefaultInstance();
@@ -232,31 +202,24 @@ public class NetworkHandlerClient {
             }
             Minecraft.getInstance().gameRenderer.displayItemActivation(totemItem);
         });
-        SimplePackets.PAST_LIFE_CHOOSE_TWIST.setClientReceive(payload -> {//TODO switch to empty
-            if (!Main.modDisabled()) {
-                Minecraft.getInstance().setScreen(new PastLifeChooseTwistScreen());
-            }
-        });
-        SimplePackets.FIX_SIZECHANGING_BUGS.setClientReceive(payload -> {//TODO switch to bool
-            MainClient.FIX_SIZECHANGING_BUGS = payload.value().equalsIgnoreCase("true");
-        });
-        SimplePackets.ANIMAL_DISGUISE_ARMOR.setClientReceive(payload -> {//TODO switch to bool
-            Morph.showArmor = payload.value().equalsIgnoreCase("true");
-        });
-        SimplePackets.ANIMAL_DISGUISE_HANDS.setClientReceive(payload -> {//TODO switch to bool
-            Morph.showHandItems = payload.value().equalsIgnoreCase("true");
-        });
-        SimplePackets.SNOWY_NETHER.setClientReceive(payload -> {//TODO switch to bool
-            boolean newValue = payload.value().equalsIgnoreCase("true");
+
+
+        //Boolean payload
+        SimplePackets.PREVENT_GLIDING.setClientReceive(payload -> MainClient.preventGliding = payload.value());
+        SimplePackets.TABLIST_SHOW_EXACT.setClientReceive(payload -> MainClient.TAB_LIST_SHOW_EXACT_LIVES = payload.value());
+        SimplePackets.FIX_SIZECHANGING_BUGS.setClientReceive(payload -> MainClient.FIX_SIZECHANGING_BUGS = payload.value());
+        SimplePackets.ANIMAL_DISGUISE_ARMOR.setClientReceive(payload -> Morph.showArmor = payload.value());
+        SimplePackets.ANIMAL_DISGUISE_HANDS.setClientReceive(payload -> Morph.showHandItems = payload.value());
+        SimplePackets.SNOWY_NETHER.setClientReceive(payload -> {
+            boolean newValue = payload.value();
             if (MainClient.NICELIFE_SNOWY_NETHER != newValue) {
                 MainClient.NICELIFE_SNOWY_NETHER = newValue;
                 ClientResourcePacks.checkClientPacks();
             }
         });
-        SimplePackets.EMPTY_SCREEN.setClientReceive(payload -> {//TODO switch to bool
+        SimplePackets.EMPTY_SCREEN.setClientReceive(payload -> {
             if (!Main.modDisabled()) {
-                boolean boolValue = payload.value().equalsIgnoreCase("true");
-                if (boolValue) {
+                if (payload.value()) {
                     Minecraft.getInstance().setScreen(new EmptySleepScreen(false));
                 }
                 else {
@@ -264,94 +227,98 @@ public class NetworkHandlerClient {
                 }
             }
         });
-        SimplePackets.HIDE_SLEEP_DARKNESS.setClientReceive(payload -> {//TODO switch to bool
-            MainClient.hideSleepDarkness = payload.value().equalsIgnoreCase("true");
+        SimplePackets.HIDE_SLEEP_DARKNESS.setClientReceive(payload -> {
+            MainClient.hideSleepDarkness = payload.value();
             LocalPlayer player = Minecraft.getInstance().player;
             if (!MainClient.hideSleepDarkness && player != null && player instanceof PlayerAccessor accessor) {
                 accessor.ls$setSleepCounter(0);
             }
         });
-        SimplePackets.MIC_MUTED.setClientReceive(payload -> {//TODO switch to bool
-            boolean boolValue = payload.value().equalsIgnoreCase("true");
+        SimplePackets.MIC_MUTED.setClientReceive(payload -> {
             if (CompatibilityManager.voicechatLoaded()) {
-                VoicechatClient.setMuted(boolValue);
+                VoicechatClient.setMuted(payload.value());
             }
         });
-        SimplePackets.ADMIN_INFO.setClientReceive(payload -> {//TODO switch to bool
-            MainClient.isAdmin = payload.value().equalsIgnoreCase("true");
+        SimplePackets.ADMIN_INFO.setClientReceive(payload -> MainClient.isAdmin = payload.value());
+        SimplePackets.TRIPLE_JUMP.setClientReceive(payload -> MainClient.tripleJumpActive = payload.value());
+        SimplePackets.MOD_DISABLED.setClientReceive(payload -> MainClient.modDisabledServerSide = payload.value());
+
+        //Number payload
+        SimplePackets.PLAYER_MIN_MSPT.setClientReceive(payload -> {
+            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated min. player MSPT to {}", payload.number());
+            TimeDilation.MIN_PLAYER_MSPT = (float) payload.number();
         });
-        SimplePackets.TRIVIA_ALL_WRONG.setClientReceive(payload -> {//TODO switch to empty
+        SimplePackets.SIZESHIFTING_CHANGE.setClientReceive(payload -> MainClient.SIZESHIFTING_CHANGE = (float) payload.number());
+
+        //Integer payload
+        SimplePackets.SNAIL_AIR.setClientReceive(payload -> {
+            MainClient.snailAir = payload.number();
+            MainClient.snailAirTimestamp = System.currentTimeMillis();
+        });
+        SimplePackets.FAKE_THUNDER.setClientReceive(payload -> {
+            if (Minecraft.getInstance().level != null) {
+                Minecraft.getInstance().level.setSkyFlashTime(payload.number());
+            }
+        });
+        SimplePackets.TAB_LIST_LIVES_CUTOFF.setClientReceive(payload -> MainClient.TAB_LIST_LIVES_CUTOFF = payload.number());
+        SimplePackets.TRIVIA_TIMER.setClientReceive(payload -> Trivia.updateTicksPassed(payload.number()));
+        SimplePackets.VOTING_TIME.setClientReceive(payload -> {
+            if (Minecraft.getInstance().screen instanceof VotingScreen votingScreen) {
+                votingScreen.timerSeconds = payload.number();
+            }
+        });
+
+        //Long payloads
+        SimplePackets.SUPERPOWER_COOLDOWN.setClientReceive(payload -> MainClient.SUPERPOWER_COOLDOWN_TIMESTAMP = payload.number());
+        SimplePackets.SHOW_VIGNETTE.setClientReceive(payload -> {
+            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Showing vignette for {}", payload.number());
+            VignetteRenderer.showVignetteFor(0.35f, payload.number());
+        });
+        SimplePackets.MIMICRY_COOLDOWN.setClientReceive(payload -> MainClient.MIMICRY_COOLDOWN_TIMESTAMP = payload.number());
+        SimplePackets.TIME_DILATION.setClientReceive(payload -> MainClient.TIME_DILATION_TIMESTAMP = payload.number());
+        SimplePackets.SESSION_TIMER.setClientReceive(payload -> {
+            MainClient.sessionTime = payload.number();
+            MainClient.sessionTimeLastUpdated = System.currentTimeMillis();
+        });
+
+        //Empty payloads
+        SimplePackets.JUMP.setClientReceive(payload -> {
+            if (Minecraft.getInstance().player != null) {
+                Minecraft.getInstance().player.jumpFromGround();
+            }
+        });
+        SimplePackets.RESET_TRIVIA.setClientReceive(payload -> Trivia.resetTrivia());
+        SimplePackets.SELECT_WILDCARDS.setClientReceive(payload -> {
+            if (!Main.modDisabled()) {
+                Minecraft.getInstance().setScreen(new ChooseWildcardScreen());
+            }
+        });
+        SimplePackets.CLEAR_CONFIG.setClientReceive(payload -> ClientConfigNetwork.load());
+        SimplePackets.OPEN_CONFIG.setClientReceive(payload -> ClientConfigGuiManager.openConfig());
+        SimplePackets.TOGGLE_TIMER.setClientReceive(payload -> {
+            String key = ClientConfig.SESSION_TIMER.key;
+            MainClient.clientConfig.setProperty(key, String.valueOf(!MainClient.SESSION_TIMER));
+            MainClient.reloadConfig();
+        });
+        SimplePackets.PAST_LIFE_CHOOSE_TWIST.setClientReceive(payload -> {
+            if (!Main.modDisabled()) {
+                Minecraft.getInstance().setScreen(new PastLifeChooseTwistScreen());
+            }
+        });
+        SimplePackets.TRIVIA_ALL_WRONG.setClientReceive(payload -> {
             ClientLevel level = Minecraft.getInstance().level;
             LocalPlayer player = Minecraft.getInstance().player;
             if (level != null && player != null) {
                 level.addParticle(ParticleRegistry.TRIVIA_SPIRIT, player.getX(), player.getY(), player.getZ(), 0.0, 0.0, 0.0);
             }
         });
-        SimplePackets.STOP_TRIVIA_SOUNDS.setClientReceive(payload -> {//TODO switch to empty
-            ClientSounds.stopTriviaSounds();
-        });
-        SimplePackets.REMOVE_SLEEP_SCREENS.setClientReceive(payload -> {//TODO switch to empty
+        SimplePackets.STOP_TRIVIA_SOUNDS.setClientReceive(payload -> ClientSounds.stopTriviaSounds());
+        SimplePackets.REMOVE_SLEEP_SCREENS.setClientReceive(payload -> {
             Minecraft client = Minecraft.getInstance();
             if (client.screen instanceof EmptySleepScreen || client.screen instanceof NewQuizScreen || (client.screen instanceof VotingScreen votingScreen && votingScreen.requiresSleep)) {
                 client.setScreen(null);
             }
         });
-        SimplePackets.TRIPLE_JUMP.setClientReceive(payload -> {//TODO switch to bool
-            MainClient.tripleJumpActive = payload.value().equalsIgnoreCase("true");
-        });
-        SimplePackets.MOD_DISABLED.setClientReceive(payload -> {//TODO switch to bool
-            MainClient.modDisabledServerSide = payload.value().equalsIgnoreCase("true");
-        });
-
-        //Number payload
-
-        SimplePackets.PLAYER_MIN_MSPT.setClientReceive(payload -> {
-            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated min. player MSPT to {}", payload.number());
-            TimeDilation.MIN_PLAYER_MSPT = (float) payload.number();
-        });
-        SimplePackets.SNAIL_AIR.setClientReceive(payload -> {//TODO switch to int
-            MainClient.snailAir = (int)payload.number();
-            MainClient.snailAirTimestamp = System.currentTimeMillis();
-        });
-        SimplePackets.FAKE_THUNDER.setClientReceive(payload -> {//TODO switch to int
-            if (Minecraft.getInstance().level != null) {
-                Minecraft.getInstance().level.setSkyFlashTime((int)payload.number());
-            }
-        });
-        SimplePackets.TAB_LIST_LIVES_CUTOFF.setClientReceive(payload -> {//TODO switch to int
-            MainClient.TAB_LIST_LIVES_CUTOFF = (int)payload.number();
-        });
-        SimplePackets.SIZESHIFTING_CHANGE.setClientReceive(payload -> {
-            MainClient.SIZESHIFTING_CHANGE = (float) payload.number();
-        });
-        SimplePackets.TRIVIA_TIMER.setClientReceive(payload -> {//TODO switch to int
-            Trivia.updateTicksPassed((int)payload.number());
-        });
-        SimplePackets.VOTING_TIME.setClientReceive(payload -> {
-            if (Minecraft.getInstance().screen instanceof VotingScreen votingScreen) {//TODO switch to int
-                votingScreen.timerSeconds = (int)payload.number();
-            }
-        });
-
-        //Long payloads
-        SimplePackets.SUPERPOWER_COOLDOWN.setClientReceive(payload -> {
-            MainClient.SUPERPOWER_COOLDOWN_TIMESTAMP = payload.number();
-        });
-        SimplePackets.SHOW_VIGNETTE.setClientReceive(payload -> {
-            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Showing vignette for {}", payload.number());
-            VignetteRenderer.showVignetteFor(0.35f, payload.number());
-        });
-        SimplePackets.MIMICRY_COOLDOWN.setClientReceive(payload -> {
-            MainClient.MIMICRY_COOLDOWN_TIMESTAMP = payload.number();
-        });
-        SimplePackets.TIME_DILATION.setClientReceive(payload -> {
-            MainClient.TIME_DILATION_TIMESTAMP = payload.number();
-        });
-        SimplePackets.SESSION_TIMER.setClientReceive(payload -> {
-            MainClient.sessionTime = payload.number();
-            MainClient.sessionTimeLastUpdated = System.currentTimeMillis();
-        });
-
 
         /*
 
@@ -636,11 +603,11 @@ public class NetworkHandlerClient {
     }
 
     public static void sendHoldingJumpPacket() {
-        SimplePackets.HOLDING_JUMP.sendToServer("true");
+        SimplePackets.HOLDING_JUMP.sendToServer();
     }
 
     public static void pressSuperpowerKey() {
-        SimplePackets.SUPERPOWER_KEY.sendToServer("true");
+        SimplePackets.SUPERPOWER_KEY.sendToServer();
     }
     public static void pressRunCommandKey() {
         ClientUtils.runCommand(MainClient.RUN_COMMAND);

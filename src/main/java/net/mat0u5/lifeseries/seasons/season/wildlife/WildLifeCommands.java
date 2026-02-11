@@ -297,7 +297,7 @@ public class WildLifeCommands extends Command {
         }
 
         OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Opening the Wildcard selection GUI..."));
-        SimplePackets.SELECT_WILDCARDS.target(source.getPlayer()).sendToClient("true");
+        SimplePackets.SELECT_WILDCARDS.target(source.getPlayer()).sendToClient();
         return 1;
     }
 

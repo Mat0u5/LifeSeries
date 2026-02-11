@@ -76,8 +76,8 @@ public class NiceLifeTriviaManager {
         currentQuestion = getQuestion();
         NiceLifeVotingManager.chooseVote();
         for (ServerPlayer player : triviaPlayers) {
-            SimplePackets.HIDE_SLEEP_DARKNESS.target(player).sendToClient("true");
-            SimplePackets.EMPTY_SCREEN.target(player).sendToClient("true");
+            SimplePackets.HIDE_SLEEP_DARKNESS.target(player).sendToClient(true);
+            SimplePackets.EMPTY_SCREEN.target(player).sendToClient(true);
             BlockPos bedPos = player.getSleepingPos().orElse(null);
             if (bedPos == null) {
                 continue;
@@ -156,7 +156,7 @@ public class NiceLifeTriviaManager {
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
         PlayerUtils.broadcastMessage(Component.literal("§f<§2§mTrivia§m§2 Santa Bot§f>§4 WRONG! WRONG! WRONG! ALL WRONG!"));
 
-        SimplePackets.TRIVIA_ALL_WRONG.sendToClient("");
+        SimplePackets.TRIVIA_ALL_WRONG.sendToClient();
         TaskScheduler.scheduleTask(120, () -> {
             PlayerUtils.broadcastMessage(Component.literal("§f<§2§mTrivia§m§2 Santa Bot§f>§4 SNOW MUST GO ON!"));
             for (ServerPlayer player : livesManager.getAlivePlayers()) {
@@ -251,7 +251,7 @@ public class NiceLifeTriviaManager {
     }
 
     public static void killAllBots() {
-        SimplePackets.STOP_TRIVIA_SOUNDS.sendToClient("");
+        SimplePackets.STOP_TRIVIA_SOUNDS.sendToClient();
         if (server == null) return;
         List<Entity> toKill = new ArrayList<>();
         for (ServerLevel level : server.getAllLevels()) {
@@ -262,7 +262,7 @@ public class NiceLifeTriviaManager {
             }
         }
         toKill.forEach(Entity::discard);
-        SimplePackets.RESET_TRIVIA.sendToClient("true");
+        SimplePackets.RESET_TRIVIA.sendToClient();
     }
     public static void killAllSnowmen() {
         if (server == null) return;

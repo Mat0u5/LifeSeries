@@ -104,7 +104,7 @@ public class NiceLifeCommands extends Command {
             source.sendFailure(Component.nullToEmpty("You are not sleeping"));
             return -1;
         }
-        SimplePackets.REMOVE_SLEEP_SCREENS.target(self).sendToClient("");
+        SimplePackets.REMOVE_SLEEP_SCREENS.target(self).sendToClient();
 
         return 1;
     }
@@ -115,7 +115,7 @@ public class NiceLifeCommands extends Command {
             if (player.isSleeping()) {
                 player.stopSleepInBed(false, true);
             }
-            SimplePackets.REMOVE_SLEEP_SCREENS.target(player).sendToClient("");
+            SimplePackets.REMOVE_SLEEP_SCREENS.target(player).sendToClient();
         }
 
 

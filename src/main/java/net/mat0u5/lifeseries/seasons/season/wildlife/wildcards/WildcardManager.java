@@ -242,7 +242,7 @@ public class WildcardManager {
     public static void onSessionStart() {
         if (chosenWildcard == null && activeWildcards.isEmpty()) {
             for (ServerPlayer player : PlayerUtils.getAdminPlayers()) {
-                SimplePackets.SELECT_WILDCARDS.target(player).sendToClient("true");
+                SimplePackets.SELECT_WILDCARDS.target(player).sendToClient();
             }
         }
     }

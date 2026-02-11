@@ -174,7 +174,7 @@ public class SessionCommand extends Command {
 
         if (self == null) return -1;
         if (NetworkHandlerServer.wasHandshakeSuccessful(self)) {
-            SimplePackets.TOGGLE_TIMER.target(self).sendToClient("");
+            SimplePackets.TOGGLE_TIMER.target(self).sendToClient();
         }
 
         boolean isInDisplayTimer = currentSession.isInDisplayTimer(self);
