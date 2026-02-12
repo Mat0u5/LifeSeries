@@ -314,7 +314,6 @@ public class BoogeymanCommand extends Command {
         }
         if (targets.size() == 1) {
             OtherUtils.sendCommandFeedback(source, TextUtils.format("{} is no longer a Boogeyman", targets.iterator().next()));
-
         }
         else {
             OtherUtils.sendCommandFeedback(source, TextUtils.format("{} targets are no longer Boogeymen", targets.size()));

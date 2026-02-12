@@ -297,6 +297,42 @@ public class NiceLifeVotingManager {
         });
     }
 
+    public static void manuallyAddNiceListMember(ServerPlayer player) {
+        if (niceListMembers.contains(player.getUUID())) return;
+
+        niceListMembers.add(player.getUUID());
+        allowedToVote.add(player.getUUID());
+        currentSeason.reloadPlayerTeam(player);
+        PlayerUtils.playSoundToPlayer(player, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
+        player.sendSystemMessage(TextUtils.format(" §6[§e!§6]§7 You are on the nice list. Type {}§7 to choose who you would like to give a life to.\n", TextUtils.clickableText("§f§l/vote", TextUtils.runCommandClickEvent("/vote"))));
+        TaskScheduler.scheduleTask(110, () -> {
+            PlayerUtils.playSoundToPlayer(player, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
+            player.sendSystemMessage(Component.literal(" §6[§e!§6]§7 You can change your vote at anytime, but the results will be locked in at sunset.\n"));
+        });
+    }
+
+    public static void manuallyRemoveNiceListMember(ServerPlayer player) {
+        if (!niceListMembers.contains(player.getUUID())) return;
+
+        niceListMembers.remove(player.getUUID());
+        allowedToVote.remove(player.getUUID());
+        currentSeason.reloadPlayerTeam(player);
+        PlayerUtils.playSoundToPlayer(player, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
+        player.sendSystemMessage(Component.literal(" §6[§e!§6]§7 You are no longer on the Nice List"));
+    }
+
+    public static void manuallyAddNaughtyListMember(ServerPlayer player) {
+        if (naughtyListMembers.contains(player.getUUID())) return;
+        naughtyListMembers.add(player.getUUID());
+        currentSeason.reloadPlayerTeam(player);
+    }
+
+    public static void manuallyRemoveNaughtyListMember(ServerPlayer player) {
+        if (!naughtyListMembers.contains(player.getUUID())) return;
+        naughtyListMembers.remove(player.getUUID());
+        currentSeason.reloadPlayerTeam(player);
+    }
+
     public static void endNaughtyList() {
 
         SoundEvent voteSound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_vote_result"));
