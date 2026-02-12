@@ -62,10 +62,6 @@ public class TestingCommands extends Command {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        player.sendSystemMessage(ModifiableText.BOOGEYMAN_TEST.get());
-        player.sendSystemMessage(ModifiableText.ARGS_RAWR.get(player, player.getUUID(), Component.literal("§a§lMessage")));
-        player.sendSystemMessage(ModifiableText.ARGS_RAWR2.get(player));
-        player.sendSystemMessage(ModifiableText.DOES_THIS_REALLY_WORK.get(player));
 
         return 1;
     }

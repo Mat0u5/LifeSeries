@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.entity.triviabot.server.trivia;
 
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotPathfinding;
@@ -376,7 +377,8 @@ public class WildLifeTriviaHandler extends TriviaHandler {
             *///?} else {
             Component effectName = Component.translatable(effect.value().getDescriptionId());
             //?}
-            player.sendSystemMessage(TextUtils.formatLoosely(" §a§l+ §7{}§6 {}", effectName, romanNumeral));
+            player.sendSystemMessage(ModifiableText.WILDLIFE_TRIVIA_RECEIVE_EFFECT.get(effectName, romanNumeral));
+
         }
         player.sendSystemMessage(Component.empty());
     }

@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
 import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
 import net.mat0u5.lifeseries.mixin.ServerLevelAccessor;
@@ -180,7 +181,7 @@ public class NiceLife extends Season {
         if (!isMidnight()) {
             for(ServerPlayer serverPlayer : PlayerUtils.getAllPlayers()) {
                 if (serverPlayer.isSleeping()) {
-                    serverPlayer.displayClientMessage(Component.nullToEmpty("You are too excited to fall asleep"), true);
+                    serverPlayer.sendSystemMessage(ModifiableText.NICELIFE_SLEEP_FAIL_EARLY.get(), true);
                 }
             }
             if (!playedMidnightChimes && isTimeBetween(18000-23*20, 20000)) {

@@ -14,13 +14,6 @@ public class PastLifeConfig extends ConfigManager {
     }
 
     @Override
-    protected List<ConfigFileEntry<?>> getDefaultConfigEntries() {
-        List<ConfigFileEntry<?>> defaultEntries = super.getDefaultConfigEntries();
-        defaultEntries.remove(BOOGEYMAN_MESSAGE);
-        return defaultEntries;
-    }
-
-    @Override
     public void instantiateProperties() {
         BLACKLIST_ITEMS.defaultValue = TextUtils.formatString("[{}]", ThirdLifeConfig.BLACKLISTED_ITEMS);
         BLACKLIST_BLOCKS.defaultValue = TextUtils.formatString("[{}]", ThirdLifeConfig.BLACKLISTED_BLOCKS);

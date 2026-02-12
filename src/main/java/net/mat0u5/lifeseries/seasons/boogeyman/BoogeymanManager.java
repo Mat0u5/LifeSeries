@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.boogeyman;
 
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -29,7 +30,6 @@ public class BoogeymanManager {
     public boolean BOOGEYMAN_ANNOUNCE_OUTCOME = false;
     public List<String> BOOGEYMAN_IGNORE = new ArrayList<>();
     public List<String> BOOGEYMAN_FORCE = new ArrayList<>();
-    public String BOOGEYMAN_MESSAGE = "§7You are the Boogeyman. You must by any means necessary kill a §2dark green§7, §agreen§7 or §eyellow§7 name by direct action to be cured of the curse. If you fail, you will become a §cred name§7. All loyalties and friendships are removed while you are the Boogeyman.";
     public boolean BOOGEYMAN_INFINITE = false;
     public Time BOOGEYMAN_INFINITE_LAST_PICK = Time.minutes(30);
     public Time BOOGEYMAN_INFINITE_AUTO_FAIL = Time.hours(100);
@@ -128,7 +128,7 @@ public class BoogeymanManager {
     public void addBoogeymanManually(ServerPlayer player) {
         if (!BOOGEYMAN_ENABLED) return;
         Boogeyman newBoogeyman = addBoogeyman(player);
-        player.sendSystemMessage(Component.nullToEmpty("§c [NOTICE] You are now a Boogeyman!"));
+        player.sendSystemMessage(ModifiableText.BOOGEYMAN_NOTICE_ADDED.get());
         messageBoogeyman(newBoogeyman, player);
     }
 
@@ -141,7 +141,7 @@ public class BoogeymanManager {
         player.removeTag("boogeyman_cured");
         player.removeTag("boogeyman_failed");
         if (boogeymen.isEmpty()) boogeymanChosen = false;
-        player.sendSystemMessage(Component.nullToEmpty("§c [NOTICE] You are no longer a Boogeyman!"));
+        player.sendSystemMessage(ModifiableText.BOOGEYMAN_NOTICE_REMOVED.get());
     }
 
     public void resetBoogeymen() {
@@ -149,7 +149,7 @@ public class BoogeymanManager {
         for (Boogeyman boogeyman : boogeymen) {
             ServerPlayer player = PlayerUtils.getPlayer(boogeyman.uuid);
             if (player == null) continue;
-            player.sendSystemMessage(Component.nullToEmpty("§c [NOTICE] You are no longer a Boogeyman!"));
+            player.sendSystemMessage(ModifiableText.BOOGEYMAN_NOTICE_REMOVED.get());
             player.removeTag("boogeyman");
             player.removeTag("boogeyman_cured");
             player.removeTag("boogeyman_failed");
@@ -164,7 +164,7 @@ public class BoogeymanManager {
         Boogeyman boogeyman = getBoogeyman(player);
         if (boogeymen == null) return;
         if (boogeyman.failed || boogeyman.cured) {
-            player.sendSystemMessage(Component.nullToEmpty("§c [NOTICE] Your Boogeyman  fail/cure status has been reset"));
+            player.sendSystemMessage(ModifiableText.BOOGEYMAN_NOTICE_RESET.get());
         }
         boogeyman.failed = false;
         boogeyman.cured = false;
@@ -216,7 +216,7 @@ public class BoogeymanManager {
             cure(boogeyPlayer);
         }
         else {
-            boogeyPlayer.sendSystemMessage(TextUtils.formatLoosely("§7You still need {} {} to be cured of the curse.", boogeyman.killsNeeded, TextUtils.pluralize("kill", boogeyman.killsNeeded)));
+            boogeyPlayer.sendSystemMessage(ModifiableText.BOOGEYMAN_KILLS_REQUIRED.get(boogeyman.killsNeeded, TextUtils.pluralize("kill", boogeyman.killsNeeded)));
         }
     }
 
@@ -377,9 +377,9 @@ public class BoogeymanManager {
     }
 
     public void messageBoogeyman(Boogeyman boogeyman, ServerPlayer boogey) {
-        boogey.sendSystemMessage(Component.nullToEmpty(BOOGEYMAN_MESSAGE));
+        boogey.sendSystemMessage(ModifiableText.BOOGEYMAN_MESSAGE.get());
         if (boogeyman != null && boogeyman.killsNeeded != 1) {
-            boogey.sendSystemMessage(TextUtils.formatLoosely("§7You need {} {} to be cured of the curse.", boogeyman.killsNeeded, TextUtils.pluralize("kill", boogeyman.killsNeeded)));
+            boogey.sendSystemMessage(ModifiableText.BOOGEYMAN_KILLS_REQUIRED.get(boogeyman.killsNeeded, TextUtils.pluralize("kill", boogeyman.killsNeeded)));
         }
     }
 
@@ -461,7 +461,7 @@ public class BoogeymanManager {
         if (boogeymen.size() >= BOOGEYMAN_AMOUNT_MAX) return;
         if (currentSession.statusNotStarted() || currentSession.statusFinished()) return;
         TaskScheduler.scheduleTask(Time.seconds(2), () -> {
-            player.sendSystemMessage(Component.nullToEmpty("§cSince you were not present when the Boogeyman was being chosen, your chance to become the Boogeyman is now. Good luck!"));
+            player.sendSystemMessage(ModifiableText.BOOGEYMAN_LATEJOIN.get());
             chooseBoogeymen(new ArrayList<>(List.of(player)), BoogeymanRollType.LATE_JOIN);
         });
     }
@@ -475,7 +475,6 @@ public class BoogeymanManager {
         BOOGEYMAN_AMOUNT_MIN = seasonConfig.BOOGEYMAN_MIN_AMOUNT.get();
         BOOGEYMAN_AMOUNT_MAX = seasonConfig.BOOGEYMAN_MAX_AMOUNT.get();
         BOOGEYMAN_ADVANCED_DEATHS = seasonConfig.BOOGEYMAN_ADVANCED_DEATHS.get();
-        BOOGEYMAN_MESSAGE = seasonConfig.BOOGEYMAN_MESSAGE.get();
         BOOGEYMAN_IGNORE.clear();
         BOOGEYMAN_FORCE.clear();
         for (String name : seasonConfig.BOOGEYMAN_IGNORE.get().replaceAll("\\[","").replaceAll("]","").replaceAll(" ","").trim().split(",")) {
@@ -535,8 +534,7 @@ public class BoogeymanManager {
             }
 
             if (!boogeymenList.isEmpty()) {
-                player.sendSystemMessage(TextUtils.format("Current Boogeymen: {}", boogeymenList));
-
+                player.sendSystemMessage(ModifiableText.BOOGEYMAN_LIST.get(boogeymenList));
             }
         }
     }
@@ -569,7 +567,7 @@ public class BoogeymanManager {
                 ServerPlayer player = boogeyman.getPlayer();
                 if (player != null) {
                     warningAutoFail.add(boogeyman.uuid);
-                    player.sendSystemMessage(Component.nullToEmpty("§cYou only have 5 minutes left to kill someone as the Boogeyman before you fail!"));
+                    player.sendSystemMessage(ModifiableText.BOOGEYMAN_FAIL_NOTICE.get());
                 }
             }
         }

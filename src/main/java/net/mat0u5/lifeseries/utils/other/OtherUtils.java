@@ -33,7 +33,7 @@ public class OtherUtils {
 
     public static void log(Component message) {
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-            player.displayClientMessage(message, false);
+            player.sendSystemMessage(message, false);
         }
         Main.LOGGER.info(message.getString());
     }
@@ -41,7 +41,7 @@ public class OtherUtils {
     public static void log(String string) {
         Component message = Component.nullToEmpty(string);
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-            player.displayClientMessage(message, false);
+            player.sendSystemMessage(message, false);
         }
         Main.LOGGER.info(string);
     }

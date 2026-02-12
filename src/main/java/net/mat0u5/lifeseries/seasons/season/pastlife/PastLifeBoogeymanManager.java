@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.pastlife;
 
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.boogeyman.Boogeyman;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
@@ -12,25 +13,24 @@ public class PastLifeBoogeymanManager extends BoogeymanManager {
     @Override
     public void messageBoogeyman(Boogeyman boogeyman, ServerPlayer boogey) {
         TaskScheduler.scheduleTask(Time.seconds(5), () -> {
-            boogey.sendSystemMessage(Component.nullToEmpty("§7You are the boogeyman."));
+            boogey.sendSystemMessage(ModifiableText.BOOGEYMAN_PASTLIFE_MESSAGE_PT1.get());
         });
         TaskScheduler.scheduleTask(Time.seconds(7), () -> {
-            boogey.sendSystemMessage(Component.nullToEmpty("§7You must by any means necessary kill a §agreen§7 or §eyellow§7 name"));
-            boogey.sendSystemMessage(Component.nullToEmpty("§7by direct action to be cured of the curse."));
+            boogey.sendSystemMessage(ModifiableText.BOOGEYMAN_PASTLIFE_MESSAGE_PT2.get());
         });
         TaskScheduler.scheduleTask(Time.seconds(11), () -> {
-            boogey.sendSystemMessage(Component.nullToEmpty("§7If you fail, you will become a §cred name§7."));
+            boogey.sendSystemMessage(ModifiableText.BOOGEYMAN_PASTLIFE_MESSAGE_PT3.get());
         });
         TaskScheduler.scheduleTask(Time.seconds(14), () -> {
-            boogey.sendSystemMessage(Component.nullToEmpty("§7Other players may defend themselves."));
+            boogey.sendSystemMessage(ModifiableText.BOOGEYMAN_PASTLIFE_MESSAGE_PT4.get());
         });
         TaskScheduler.scheduleTask(Time.seconds(17), () -> {
-            boogey.sendSystemMessage(Component.nullToEmpty("§7Voluntary sacrifices will not cure the curse."));
+            boogey.sendSystemMessage(ModifiableText.BOOGEYMAN_PASTLIFE_MESSAGE_PT5.get());
         });
 
         if (boogeyman != null && boogeyman.killsNeeded != 1) {
             TaskScheduler.scheduleTask(Time.seconds(20), () -> {
-                boogey.sendSystemMessage(TextUtils.formatLoosely("§7You need {} {} to be cured of the curse.", boogeyman.killsNeeded, TextUtils.pluralize("kill", boogeyman.killsNeeded)));
+                boogey.sendSystemMessage(ModifiableText.BOOGEYMAN_PASTLIFE_MESSAGE_PT6.get(boogeyman.killsNeeded, TextUtils.pluralize("kill", boogeyman.killsNeeded)));
             });
         }
     }

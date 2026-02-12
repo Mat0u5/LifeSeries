@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.subin;
 
 import com.mojang.authlib.GameProfile;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayerManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -116,10 +117,10 @@ public class SubInManager {
 
         ProfileManager.resetPlayer(player1).thenRun(() -> {
             if (player1 != null) {
-                player1.sendSystemMessage(TextUtils.formatLoosely("§6You are no longer subbing in for {}", getName(subIn.target())));
+                player1.sendSystemMessage(ModifiableText.SUBIN_END.get(getName(subIn.target())));
             }
             if (player2 != null) {
-                player2.sendSystemMessage(TextUtils.formatLoosely("§6{} is no longer subbing in for you", getName(subIn.substituter())));
+                player2.sendSystemMessage(ModifiableText.SUBIN_END_OTHER.get(getName(subIn.substituter())));
             }
 
             savePlayer(player1);

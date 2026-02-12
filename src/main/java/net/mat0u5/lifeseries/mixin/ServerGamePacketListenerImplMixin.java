@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -149,19 +150,19 @@ public class ServerGamePacketListenerImplMixin {
         if (TriviaWildcard.bots.containsKey(player.getUUID())) {
             TriviaBot bot = TriviaWildcard.bots.get(player.getUUID());
             if (bot.interactedWith() && !bot.submittedAnswer()) {
-                player.sendSystemMessage(Component.nullToEmpty("<Trivia Bot> No phoning a friend allowed!"));
+                player.sendSystemMessage(ModifiableText.MUTED_TRIVIABOT.get());
                 ci.cancel();
                 return true;
             }
         }
 
         if (currentSeason.WATCHERS_MUTED && player.ls$isWatcher()) {
-            player.sendSystemMessage(Component.nullToEmpty("Watchers aren't allowed to talk in chat! Admins can change this behavior in the config."));
+            player.sendSystemMessage(ModifiableText.MUTED_WATCHER.get());
             ci.cancel();
             return true;
         }
         if (currentSeason.MUTE_DEAD_PLAYERS && player.ls$isDead() && !player.ls$isWatcher()) {
-            player.sendSystemMessage(Component.nullToEmpty("Dead players aren't allowed to talk in chat! Admins can change this behavior in the config."));
+            player.sendSystemMessage(ModifiableText.MUTED_DEADPLAYER.get());
             ci.cancel();
             return true;
         }

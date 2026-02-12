@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.doublelife;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.config.StringListConfig;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
@@ -357,11 +358,11 @@ public class DoubleLife extends Season {
 
         for (ServerPlayer player : players) {
             player.addTag("randomTeleport");
-            player.sendSystemMessage(Component.nullToEmpty("§6Woosh!"));
+            player.sendSystemMessage(ModifiableText.DOUBLELIFE_TELEPORT.get());
         }
         WorldBorder border = server.overworld().getWorldBorder();
         OtherUtils.executeCommand(TextUtils.formatString("spreadplayers {} {} 0 {} false @a[tag=randomTeleport]", border.getCenterX(), border.getCenterZ(), (border.getSize()/2)));
-        PlayerUtils.broadcastMessageToAdmins(Component.nullToEmpty("Randomly distributed players."));
+        PlayerUtils.broadcastMessageToAdmins(ModifiableText.DOUBLELIFE_TELEPORT_SUCCESS.get());
 
         for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
             player.removeTag("randomTeleport");

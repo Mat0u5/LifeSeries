@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.other;
 
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
@@ -327,10 +328,10 @@ public class LivesManager {
     public void receiveLifeFromOtherPlayer(Component playerName, ServerPlayer target, boolean isRevive) {
         target.ls$playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.MASTER, 10, 1);
         if (seasonConfig.GIVELIFE_BROADCAST.get()) {
-            PlayerUtils.broadcastMessageExcept(TextUtils.format("{} received a life from {}", target, playerName), target);
+            PlayerUtils.broadcastMessageExcept(ModifiableText.GIVELIFE_RECEIVE_OTHER.get(target, playerName), target);
         }
-        target.sendSystemMessage(TextUtils.format("You received a life from {}", playerName));
-        PlayerUtils.sendTitleWithSubtitle(target, Component.nullToEmpty("You received a life"), TextUtils.format("from {}", playerName), 10, 60, 10);
+        target.sendSystemMessage(ModifiableText.GIVELIFE_RECEIVE_SELF.get(playerName));
+        PlayerUtils.sendTitleWithSubtitle(target, ModifiableText.GIVELIFE_RECEIVE_SELF_TITLE.get(), ModifiableText.GIVELIFE_RECEIVE_SELF_TITLE_SUBTITLE.get(playerName), 10, 60, 10);
         AnimationUtils.createSpiral(target, 175);
         currentSeason.reloadPlayerTeam(target);
         SessionTranscript.givelife(playerName, target);

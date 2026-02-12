@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
@@ -149,8 +150,7 @@ public class GivelifeCommand extends Command {
             soulmateGivelifeRequests.put(self.getUUID(), request);
         }
         OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7Your soulmate must accept your request to give a life to this player."));
-        Component message = TextUtils.format("Your soulmate wants to give a life to {}.\nClick {} to accept the request.", target, TextUtils.runCommandText(TextUtils.formatString("/givelife {}", target.getScoreboardName())));
-        soulmate.sendSystemMessage(message);
+        soulmate.sendSystemMessage(ModifiableText.GIVELIFE_DOUBLELIFE_ACCEPT.get(target, TextUtils.runCommandText(TextUtils.formatString("/givelife {}", target.getScoreboardName()))));
         return false;
     }
 }

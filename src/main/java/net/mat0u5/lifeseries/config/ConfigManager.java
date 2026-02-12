@@ -118,7 +118,6 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,BOOGEYMAN_CHANCE_MULTIPLIER
                 ,BOOGEYMAN_IGNORE
                 ,BOOGEYMAN_FORCE
-                ,BOOGEYMAN_MESSAGE
                 ,BOOGEYMAN_CHOOSE_MINUTE
                 ,BOOGEYMAN_ANNOUNCE_OUTCOME
                     ,BOOGEYMAN_INFINITE // Group
@@ -385,6 +384,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
         renamedProperty("beoadcast_secret_keeper", "broadcast_secret_keeper");
         renamedProperty("blacklist_clamped_enchants", "blacklist_clamped_enchants_level_1");
         renamedProperty("wildcard_superpowers_zombies_lose_items", "wildcard_superpowers_zombies_first_spawn_clear_items");
+        renamedProperty("boogeyman_message", "text.boogeyman.message");
     }
 
     private void renamedProperty(String from, String to) {

@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.entity.triviabot.server.trivia;
 
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
@@ -428,7 +429,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         }
         if (availableForVoting.isEmpty()) return false;
 
-        String screenName = (voteType == NiceLifeVotingManager.VoteType.NICE_LIST) ? "Vote for who's been nice" : "Vote for who's been naughty";
+        String screenName = (voteType == NiceLifeVotingManager.VoteType.NICE_LIST) ? ModifiableText.NICELIFE_TRIVIA_VOTE_NICELIST.getString() : ModifiableText.NICELIFE_TRIVIA_VOTE_NAUGHTYLIST.getString();
         NetworkHandlerServer.sendVoteScreenPacket(boundPlayer, screenName, true, false, true, availableForVoting);
         NiceLifeVotingManager.allowedToVote.add(boundPlayer.getUUID());
         //TODO add the voting sound - "nicelife_santabot_vote"

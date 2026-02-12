@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.other;
 
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
@@ -61,16 +62,14 @@ public class WatcherManager {
         if (currentSeason instanceof DoubleLife doubleLife) {
             doubleLife.resetSoulmate(player);
         }
-        player.sendSystemMessage(Component.nullToEmpty("§7§nYou are now a Watcher.\n"));
-        player.sendSystemMessage(Component.nullToEmpty("§7Watchers are players that are online, but are not affected by most season mechanics. They can only observe - this is very useful for spectators and for admins."));
-        //player.sendMessage(Text.of("§8§oNOTE: This is an experimental feature, report any bugs you find!"));
+        player.sendSystemMessage(ModifiableText.WATCHER_JOIN.get());
     }
 
     public static void removeWatcher(ServerPlayer player) {
         watchers.remove(player.getScoreboardName());
         ScoreboardUtils.resetScore(player, SCOREBOARD_NAME);
         livesManager.resetPlayerLife(player);
-        player.sendSystemMessage(Component.nullToEmpty("§7You are no longer a Watcher."));
+        player.sendSystemMessage(ModifiableText.WATCHER_LEAVE.get());
     }
 
     public static boolean isWatcher(Player player) {

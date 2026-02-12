@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.secretsociety;
 
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.*;
@@ -176,7 +177,7 @@ public class SecretSociety {
                 if (member.initiated) continue;
                 ServerPlayer player = member.getPlayer();
                 if (player == null) continue;
-                player.sendSystemMessage(Component.nullToEmpty("§7When you are alone, type \"/initiate\""));
+                player.sendSystemMessage(ModifiableText.SOCIETY_INITIATE_REMINDER.get());
             }
         }
     }
@@ -196,58 +197,58 @@ public class SecretSociety {
 
         int currentTime = 20;
         TaskScheduler.scheduleTask(currentTime, () -> {
-            player.displayClientMessage(Component.nullToEmpty("§7You have been chosen to be part of the §csecret society§7."), false);
+            player.sendSystemMessage(ModifiableText.SOCIETY_INITIATED_PT1.get(), false);
         });
         currentTime += 50;
 
         int otherMembers = members.size()-1;
         if (otherMembers >= 1) {
             TaskScheduler.scheduleTask(currentTime, () -> {
-                player.displayClientMessage(TextUtils.formatLoosely("§7There {} §c{}§7 other {}. Find them.", TextUtils.pluralize("is", "are", otherMembers), otherMembers, TextUtils.pluralize("member", otherMembers)), false);
+                player.sendSystemMessage(ModifiableText.SOCIETY_INITIATED_GROUP_PT1.get(TextUtils.pluralize("is", "are", otherMembers), otherMembers, TextUtils.pluralize("member", otherMembers)), false);
             });
             currentTime += 80;
             TaskScheduler.scheduleTask(currentTime, () -> {
-                player.displayClientMessage(TextUtils.formatLoosely("§7Together, secretly kill §c{}§7 other {} by §cnon-pvp§7 means.", KILL_COUNT, TextUtils.pluralize("player", KILL_COUNT)), false);
+                player.sendSystemMessage(ModifiableText.SOCIETY_INITIATED_GROUP_PT2.get(KILL_COUNT, TextUtils.pluralize("player", KILL_COUNT)), false);
             });
             currentTime += 100;
             TaskScheduler.scheduleTask(currentTime, () -> {
-                player.displayClientMessage(Component.nullToEmpty("§7Find the other members with the secret word:"), false);
+                player.sendSystemMessage(ModifiableText.SOCIETY_INITIATED_GROUP_PT3.get(), false);
             });
             currentTime += 80;
             TaskScheduler.scheduleTask(currentTime, () -> {
-                player.displayClientMessage(Component.nullToEmpty("§d\""+secretWord+"\""), false);
+                player.sendSystemMessage(ModifiableText.SOCIETY_INITIATED_GROUP_PT4.get(secretWord), false);
             });
         }
         else {
             TaskScheduler.scheduleTask(currentTime, () -> {
-                player.displayClientMessage(Component.nullToEmpty("§7You are alone."), false);
+                player.sendSystemMessage(ModifiableText.SOCIETY_INITIATED_ALONE_PT1.get(), false);
             });
             currentTime += 80;
             TaskScheduler.scheduleTask(currentTime, () -> {
-                player.displayClientMessage(TextUtils.formatLoosely("§7Secretly kill §c{}§7 other {} by §cnon-pvp§7 means.", KILL_COUNT, TextUtils.pluralize("player", KILL_COUNT)), false);
+                player.sendSystemMessage(ModifiableText.SOCIETY_INITIATED_ALONE_PT2.get(KILL_COUNT, TextUtils.pluralize("player", KILL_COUNT)), false);
             });
         }
 
         currentTime += 80;
         TaskScheduler.scheduleTask(currentTime, () -> {
-            player.displayClientMessage(Component.nullToEmpty("§7Type \"/society success\" when you complete your goal."), false);
+            player.sendSystemMessage(ModifiableText.SOCIETY_INITIATED_PT2.get(), false);
         });
         currentTime += 80;
         TaskScheduler.scheduleTask(currentTime, () -> {
-            player.displayClientMessage(Component.nullToEmpty("§7Don't tell anyone else about the society."), false);
+            player.sendSystemMessage(ModifiableText.SOCIETY_INITIATED_PT3.get(), false);
         });
         currentTime += 70;
         TaskScheduler.scheduleTask(currentTime, () -> {
-            player.displayClientMessage(Component.nullToEmpty("§7If you fail..."), false);
+            player.sendSystemMessage(ModifiableText.SOCIETY_INITIATED_PT4.get(), false);
         });
         currentTime += 70;
         TaskScheduler.scheduleTask(currentTime, () -> {
-            player.displayClientMessage(getPunishmentText(), false);
+            player.sendSystemMessage(getPunishmentText(), false);
         });
     }
 
     public Component getPunishmentText() {
-        return TextUtils.formatLoosely("§7Type \"/society fail\", and you all lose §c{} {}§7.", Math.abs(PUNISHMENT_LIVES), TextUtils.pluralize("life", "lives", PUNISHMENT_LIVES));
+        return ModifiableText.SOCIETY_INITIATED_PUNISHMENT.get( Math.abs(PUNISHMENT_LIVES), TextUtils.pluralize("life", "lives", PUNISHMENT_LIVES));
     }
 
     public void removeMember(ServerPlayer player) {
@@ -264,16 +265,16 @@ public class SecretSociety {
 
     public void addMemberManually(ServerPlayer player) {
         if (!SOCIETY_ENABLED) return;
-        player.sendSystemMessage(Component.nullToEmpty("§c [NOTICE] You are now a Secret Society member!"));
-        sendMessageToMembers(Component.nullToEmpty("A player has been added to the Secret Society."));
+        player.sendSystemMessage(ModifiableText.SOCIETY_NOTICE_ADDED.get());
+        sendMessageToMembers(ModifiableText.SOCIETY_OTHER_MEMBER_ADDED.get());
         addMember(player);
     }
 
     public void removeMemberManually(ServerPlayer player) {
         if (!SOCIETY_ENABLED) return;
-        player.sendSystemMessage(Component.nullToEmpty("§c [NOTICE] You are no longer a Secret Society member!"));
+        player.sendSystemMessage(ModifiableText.SOCIETY_NOTICE_REMOVED.get());
         removeMember(player);
-        sendMessageToMembers(Component.nullToEmpty("A player has been removed from the Secret Society."));
+        sendMessageToMembers(ModifiableText.SOCIETY_OTHER_MEMBER_REMOVED.get());
     }
 
     public void sendMessageToMembers(Component message) {
@@ -284,7 +285,7 @@ public class SecretSociety {
 
     public void resetMembers() {
         for (ServerPlayer player : getMembers()) {
-            player.sendSystemMessage(Component.nullToEmpty("§c [NOTICE] You are no longer a Secret Society member!"));
+            player.sendSystemMessage(ModifiableText.SOCIETY_NOTICE_REMOVED.get());
             player.removeTag("society_member");
         }
         members.clear();

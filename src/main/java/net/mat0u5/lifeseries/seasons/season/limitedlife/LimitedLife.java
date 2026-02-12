@@ -120,7 +120,7 @@ public class LimitedLife extends Season {
                     if (!fullMessage.getString().isEmpty()) fullMessage.append(Component.nullToEmpty("  |  "));
                     fullMessage.append(livesManager.getFormattedLives(player));
                 }
-                player.displayClientMessage(fullMessage, true);
+                player.sendSystemMessage(fullMessage, true);
             }
         }
     }

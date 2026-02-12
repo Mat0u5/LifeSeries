@@ -462,7 +462,7 @@ public class Session {
                 }
 
                 if (!NetworkHandlerServer.wasHandshakeSuccessful(player)) {
-                    player.displayClientMessage(Component.literal(message).withStyle(ChatFormatting.GRAY), true);
+                    player.sendSystemMessage(Component.literal(message).withStyle(ChatFormatting.GRAY), true);
                 }
             }
             if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {

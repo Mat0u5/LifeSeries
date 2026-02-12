@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.secretlife;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.config.StringListConfig;
 import net.mat0u5.lifeseries.config.StringListManager;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
@@ -28,7 +29,6 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 import static net.mat0u5.lifeseries.Main.*;
 //? if <= 1.20.3 {
@@ -388,7 +388,7 @@ public class TaskManager {
 
     public static boolean hasSessionStarted(ServerPlayer player) {
         if (currentSession.statusNotStarted()) {
-            player.sendSystemMessage(Component.nullToEmpty("§cThe session has not started yet."));
+            player.sendSystemMessage(ModifiableText.SESSION_ERROR_START.get());
             return false;
         }
         return true;
@@ -396,7 +396,7 @@ public class TaskManager {
 
     public static boolean isBeingUsed(ServerPlayer player) {
         if (!secretKeeperBeingUsed) return false;
-        player.sendSystemMessage(Component.nullToEmpty("§cSomeone else is using the Secret Keeper right now."));
+        player.sendSystemMessage(ModifiableText.SECRETLIFE_SECRETKEEPER_INUSE.get());
         return true;
     }
 
@@ -404,7 +404,7 @@ public class TaskManager {
         TaskTypes type = getPlayersTaskType(player);
         if (type != null) return true;
         if (sendMessage) {
-            player.sendSystemMessage(Component.nullToEmpty("§cYou do not have a secret task book in your inventory."));
+            player.sendSystemMessage(ModifiableText.SECRETLIFE_TASK_MISSING.get());
         }
         return false;
     }
@@ -430,7 +430,7 @@ public class TaskManager {
             rawTask = task.rawTask;
         }
 
-        return TextUtils.format("§7Click {}§7 to see what {}§7's task was.", TextUtils.selfMessageText(rawTask), player);
+        return ModifiableText.SECRETLIFE_TASK_SHOW_PAST.get(TextUtils.selfMessageText(rawTask), player);
     }
 
     public static void succeedTask(ServerPlayer player, boolean fromCommand) {
@@ -445,17 +445,17 @@ public class TaskManager {
             if (TASKS_NEED_CONFIRMATION) {
                 if (!pendingConfirmationTasks.contains(player.getUUID())) {
                     pendingConfirmationTasks.add(player.getUUID());
-                    PlayerUtils.broadcastMessageToAdmins(TextUtils.format("{} wants to succeed their task.", player));
+                    PlayerUtils.broadcastMessageToAdmins(ModifiableText.SECRETLIFE_TASK_PENDING.get(player));
                     PlayerUtils.broadcastMessageToAdmins(getShowTaskMessage(player));
-                    PlayerUtils.broadcastMessageToAdmins(TextUtils.format("§7Click {}§7 to confirm this action.", TextUtils.runCommandText("/task succeed "+player.getScoreboardName())));
+                    PlayerUtils.broadcastMessageToAdmins(ModifiableText.SECRETLIFE_TASK_PENDING_ACCEPT.get(TextUtils.runCommandText("/task succeed "+player.getScoreboardName())));
                 }
-                player.sendSystemMessage(Component.nullToEmpty("§cYour task confirmation needs to be approved by an admin."));
+                player.sendSystemMessage(ModifiableText.SECRETLIFE_TASK_PENDING_NOTIFICATION.get());
                 return;
             }
         }
         pendingConfirmationTasks.remove(player.getUUID());
         if (BROADCAST_SECRET_KEEPER) {
-            PlayerUtils.broadcastMessage(TextUtils.format("{}§a succeeded their task.", player));
+            PlayerUtils.broadcastMessage(ModifiableText.SECRETLIFE_TASK_SUCCEED.get(player));
         }
         if (PUBLIC_TASKS_ON_SUBMIT) {
             PlayerUtils.broadcastMessage(getShowTaskMessage(player));
@@ -544,10 +544,10 @@ public class TaskManager {
         }
         if (type == TaskTypes.HARD) {
             if (!player.ls$isOnLastLife(true)) {
-                player.sendSystemMessage(Component.nullToEmpty("§cYou cannot re-roll a Hard task."));
+                player.sendSystemMessage(ModifiableText.SECRETLIFE_TASK_REROLL_HARD_FAIL.get());
             }
             else {
-                player.sendSystemMessage(Component.nullToEmpty("§cYou cannot re-roll a Hard task. If you want your red task instead, click the Fail button."));
+                player.sendSystemMessage(ModifiableText.SECRETLIFE_TASK_REROLL_HARD_FAIL_RED.get());
             }
         }
     }

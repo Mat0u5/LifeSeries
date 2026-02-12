@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
@@ -204,7 +205,7 @@ public class SecretLifeCommands extends Command {
         boolean hasTaskBook = TaskManager.hasTaskBookCheck(player, false);
 
         if (!hasTaskBook && !hasPreassignedTask) {
-            source.sendSystemMessage(TextUtils.formatPlain("{} does not have a task book in their inventory nor a pre-assigned task", player));
+            source.sendSystemMessage(ModifiableText.SECRETLIFE_TASK_MISSING_OTHER.get(player));
             return -1;
         }
 
@@ -212,19 +213,19 @@ public class SecretLifeCommands extends Command {
         Task task = null;
 
         if (hasTaskBook) {
-            OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("{} has a task book in their inventory", player));
+            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SECRETLIFE_TASK_PRESENT.get(player));
             if (TaskManager.assignedTasks.containsKey(player.getUUID())) {
                 task = TaskManager.assignedTasks.get(player.getUUID());
             }
         }
         else {
             //Pre-assigned task
-            OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("{} has a pre-assigned task", player));
+            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SECRETLIFE_TASK_PREASSIGNED.get(player));
             task = TaskManager.preAssignedTasks.get(player.getUUID());
         }
 
         if (task == null) {
-            source.sendFailure(Component.nullToEmpty("Failed to read task contents"));
+            source.sendFailure(ModifiableText.SECRETLIFE_TASK_READFAIL.get(player));
             return -1;
         }
 
@@ -236,7 +237,7 @@ public class SecretLifeCommands extends Command {
         }
 
         if (!rawTask.isEmpty()) {
-            OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("§7Click {}§7 to show the task they have.", TextUtils.selfMessageText(rawTask)));
+            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SECRETLIFE_TASK_SHOW.get(TextUtils.selfMessageText(rawTask)));
         }
 
         return 1;
@@ -413,25 +414,25 @@ public class SecretLifeCommands extends Command {
         SecretLife secretLife = (SecretLife) currentSeason;
 
         if (target == self) {
-            source.sendFailure(Component.nullToEmpty("Nice Try."));
+            source.sendFailure(ModifiableText.GIVEHEART_ERROR_SELF.get());
             return -1;
         }
         if (playersGiven.contains(self.getUUID())) {
-            source.sendFailure(Component.nullToEmpty("You have already gifted a heart this session"));
+            source.sendFailure(ModifiableText.GIVEHEART_ERROR_MULTIPLE.get());
             return -1;
         }
         if (target.ls$isDead()) {
-            source.sendFailure(Component.nullToEmpty("That player is not alive"));
+            source.sendFailure(ModifiableText.GIVEHEART_ERROR_DEAD.get());
             return -1;
         }
         if (!currentSession.statusStarted()) {
-            source.sendFailure(Component.nullToEmpty("The session has not started"));
+            source.sendFailure(ModifiableText.SESSION_ERROR_START.get());
             return -1;
         }
         playersGiven.add(self.getUUID());
         secretLife.addPlayerHealth(target, 2);
-        Component senderMessage = TextUtils.format("You have gifted a heart to {}", target);
-        Component recipientMessage = TextUtils.format("{} gave you a heart", self);
+        Component senderMessage = ModifiableText.GIVEHEART_SEND.get(target);
+        Component recipientMessage = ModifiableText.GIVEHEART_RECEIVE.get(self);
         SessionTranscript.giftHeart(self, target);
 
         self.sendSystemMessage(senderMessage);

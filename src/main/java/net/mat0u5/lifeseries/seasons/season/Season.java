@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.command.manager.CommandManager;
 import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.config.ModifiableTextManager;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
@@ -723,17 +724,16 @@ public abstract class Season {
     public void onPlayerFinishJoining(ServerPlayer player) {
         if (getSeason() != Seasons.UNASSIGNED && SHOW_LOGIN_COMMAND_INFO && !Main.modDisabled()) {
             if (PermissionManager.isAdmin(player)) {
-                player.sendSystemMessage(TextUtils.formatLoosely("§7{} commands: §r{}", getSeason().getName(), getAdminCommands()));
+                player.sendSystemMessage(ModifiableText.SEASON_COMMANDS_ADMIN.get(getSeason().getName(), getAdminCommands()));
             }
             else {
-                player.sendSystemMessage(TextUtils.formatLoosely("§7{} non-admin commands: §r{}", getSeason().getName(), getNonAdminCommands()));
+                player.sendSystemMessage(ModifiableText.SEASON_COMMANDS.get(getSeason().getName(), getNonAdminCommands()));
             }
         }
 
         learnRecipes();
         if (currentSession.statusNotStarted() && PermissionManager.isAdmin(player) && !Main.modDisabled()) {
-            player.sendSystemMessage(Component.nullToEmpty("\nUse §b'/session timer set <time>'§f to set the desired session time."));
-            player.sendSystemMessage(Component.nullToEmpty("After that, use §b'/session start'§f to start the session."));
+            player.sendSystemMessage(ModifiableText.SESSION_START_PROMPT.get());
         }
         boogeymanManager.onPlayerFinishJoining(player);
         livesManager.onPlayerFinishJoining(player);

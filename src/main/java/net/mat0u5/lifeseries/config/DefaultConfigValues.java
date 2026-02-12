@@ -210,9 +210,6 @@ public class DefaultConfigValues {
             "boogeyman_force", "[]", "global.boogeyman",
             "Boogeyman Force List", "A list of players that are forced to become the boogeyman."
     );
-    public final ConfigFileEntry<String> BOOGEYMAN_MESSAGE = new ConfigFileEntry<>(
-            "boogeyman_message", "§7You are the Boogeyman. You must by any means necessary kill a §2dark green§7, §agreen§7 or §eyellow§7 name by direct action to be cured of the curse. If you fail, you will become a §cred name§7. All loyalties and friendships are removed while you are the Boogeyman.", "global.boogeyman", "Boogeyman Message", "The message that shows up when you become a Boogeyman."
-    );
     public final ConfigFileEntry<Double> BOOGEYMAN_CHANCE_MULTIPLIER = new ConfigFileEntry<>(
             "boogeyman_chance_multiplier", 0.5, ConfigTypes.PERCENTAGE, "global.boogeyman",
             "Boogeyman Chance Multiplier", "Controls how likely it is to get one extra boogeyman."

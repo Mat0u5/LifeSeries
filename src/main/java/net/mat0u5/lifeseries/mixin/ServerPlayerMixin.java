@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.mixin;
 
 import com.mojang.datafixers.util.Either;
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
@@ -34,7 +35,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.OptionalInt;
 
 import static net.mat0u5.lifeseries.Main.*;
-import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 
 //? if >= 1.21.11 {
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -256,7 +256,7 @@ public class ServerPlayerMixin implements IServerPlayer {
         if (!Main.modDisabled() && currentSeason.getSeason() == Seasons.NICE_LIFE) {
             if (NiceLifeTriviaManager.triviaInProgress) {
                 cir.setReturnValue(Either.left(Player.BedSleepingProblem.OTHER_PROBLEM));
-                ls$get().displayClientMessage(Component.literal("You can't seem to sleep right now"), true);
+                ls$get().sendSystemMessage(ModifiableText.NICELIFE_SLEEP_FAIL_LATE.get(), true);
             }
         }
     }

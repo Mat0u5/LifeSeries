@@ -159,7 +159,6 @@ public class LimitedLifeConfig extends ConfigManager {
         FINAL_DEATH_MESSAGE.defaultValue = "${player} ran out of time.";
         BOOGEYMAN.defaultValue = true;
         BOOGEYMAN_MAX_AMOUNT.defaultValue = 1;
-        BOOGEYMAN_MESSAGE.defaultValue = "§7You are the Boogeyman. You must by any means necessary kill a §2dark green§7, §agreen§7 or §eyellow§7 name by direct action to be cured of the curse. If you fail, your time will be dropped to the next color. All loyalties and friendships are removed while you are the Boogeyman.";
         GIVELIFE_LIVES_MAX.displayName = "Max Givelife Time";
         GIVELIFE_LIVES_MAX.description = "The maximum amount of time a player can have from other players giving them time using /givelife.";
         GIVELIFE_LIVES_MAX.defaultValue = 3600000;
