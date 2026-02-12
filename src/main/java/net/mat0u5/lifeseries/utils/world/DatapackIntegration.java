@@ -53,6 +53,11 @@ public class DatapackIntegration {
     public static final Events EVENT_TRIVIA_FAIL = Events.TRIVIA_FAIL;
     public static final Events EVENT_SUPERPOWER_TRIGGER = Events.SUPERPOWER_TRIGGER;
 
+    public static final Events EVENT_NICE_LIST_ADD = Events.NICE_LIST_ADD;
+    public static final Events EVENT_NICE_LIST_END = Events.NICE_LIST_END;
+    public static final Events EVENT_NAUGHTY_LIST_ADD = Events.NAUGHTY_LIST_ADD;
+    public static final Events EVENT_NAUGHTY_LIST_END = Events.NAUGHTY_LIST_END;
+
     public static void reload() {
         EVENT_PLAYER_JOIN.reload();
         EVENT_PLAYER_LEAVE.reload();
@@ -83,7 +88,10 @@ public class DatapackIntegration {
         EVENT_TRIVIA_SUCCEED.reload();
         EVENT_TRIVIA_FAIL.reload();
         EVENT_SUPERPOWER_TRIGGER.reload();
-
+        EVENT_NICE_LIST_ADD.reload();
+        EVENT_NICE_LIST_END.reload();
+        EVENT_NAUGHTY_LIST_ADD.reload();
+        EVENT_NAUGHTY_LIST_END.reload();
     }
 
     public static List<Events> getAllEvents() {
@@ -117,6 +125,10 @@ public class DatapackIntegration {
                 ,EVENT_TRIVIA_SUCCEED
                 ,EVENT_TRIVIA_FAIL
                 ,EVENT_SUPERPOWER_TRIGGER
+                ,EVENT_NICE_LIST_ADD
+                ,EVENT_NICE_LIST_END
+                ,EVENT_NAUGHTY_LIST_ADD
+                ,EVENT_NAUGHTY_LIST_END
         );
     }
 
@@ -219,7 +231,11 @@ public class DatapackIntegration {
         TRIVIA_BOT_OPEN("trivia_bot_open", "Trivia Bot Open", "Triggers when a player opens a trivia bot.\nAvailable macros: $(Player), $(TriviaBot)", false),
         TRIVIA_SUCCEED("trivia_succeed", "Trivia Succeed", "Triggers when a player answers correctly in trivia.\nAvailable macros: $(Player), $(TriviaBot)", false),
         TRIVIA_FAIL("trivia_fail", "Trivia Fail", "Triggers when a player answers incorrectly in trivia.\nAvailable macros: $(Player), $(TriviaBot)", false),
-        SUPERPOWER_TRIGGER("superpower_trigger", "Superpower Trigger", "Triggers when a player triggers their superpower.\nAvailable macros: $(Player), $(SuperpowerIndex)", false);
+        SUPERPOWER_TRIGGER("superpower_trigger", "Superpower Trigger", "Triggers when a player triggers their superpower.\nAvailable macros: $(Player), $(SuperpowerIndex)", false),
+        NICE_LIST_ADD("nice_list_add", "Nice List Add Player", "Triggers when a player is added to the Nice List.\nAvailable macros: $(Player)", false),
+        NICE_LIST_END("nice_list_end", "Nice List End", "Triggers when the Nice List ends and the voting results begin.", false),
+        NAUGHTY_LIST_ADD("naughty_list_add", "Naughty List Add Player", "Triggers when a player is added to the Naughty List.\nAvailable macros: $(Player)", false),
+        NAUGHTY_LIST_END("naughty_list_end", "Naughty List End", "Triggers when the Naughty List ends.", false);
 
         //TEMP("name", "Name", "Description\nAvailable macros: $(Player)", false);
 

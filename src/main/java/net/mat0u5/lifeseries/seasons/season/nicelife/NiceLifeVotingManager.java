@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.TeamUtils;
+import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -181,7 +182,7 @@ public class NiceLifeVotingManager {
             if (player.ls$isOnLastLife(false) && !REDS_ON_NAUGHTY_LIST) continue;
             players.add(uuid);
         }
-        naughtyListMembers.clear();
+        clearNaughtyListMembers();
         if (players.isEmpty()) return;
         int delay = 80;
         TaskScheduler.scheduleTask(delay, () -> {
@@ -203,6 +204,8 @@ public class NiceLifeVotingManager {
                 if (player != null && !player.ls$isDead() && !(player.ls$isOnLastLife(false) && !REDS_ON_NAUGHTY_LIST)) {
                     SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_naughtylist"));
                     PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
+                    DatapackIntegration.EVENT_NAUGHTY_LIST_ADD.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
+                    player.addTag("naughty_list");
                     naughtyListMembers.add(uuid);
                     currentSeason.reloadPlayerTeam(player);
                     PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), PlayerUtils.getPlayerNameWithIcon(player), 15, 80, 20);
@@ -229,7 +232,7 @@ public class NiceLifeVotingManager {
     }
     public static void announceNiceList() {
         List<UUID> players = getMostVotedForPlayers(NICE_LIST_COUNT);
-        niceListMembers.clear();
+        clearNiceListMembers();
         if (players.isEmpty()) return;
         int delay = 80;
         TaskScheduler.scheduleTask(delay, () -> {
@@ -252,6 +255,8 @@ public class NiceLifeVotingManager {
                 if (player != null) {
                     SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_nicelist_person"));
                     PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
+                    DatapackIntegration.EVENT_NICE_LIST_ADD.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
+                    player.addTag("nice_list");
                     niceListMembers.add(uuid);
                     currentSeason.reloadPlayerTeam(player);
                     PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), PlayerUtils.getPlayerNameWithIcon(player), 15, 80, 20);
@@ -298,8 +303,9 @@ public class NiceLifeVotingManager {
     }
 
     public static void manuallyAddNiceListMember(ServerPlayer player) {
+        player.addTag("nice_list");
         if (niceListMembers.contains(player.getUUID())) return;
-
+        DatapackIntegration.EVENT_NICE_LIST_ADD.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
         niceListMembers.add(player.getUUID());
         allowedToVote.add(player.getUUID());
         currentSeason.reloadPlayerTeam(player);
@@ -312,8 +318,8 @@ public class NiceLifeVotingManager {
     }
 
     public static void manuallyRemoveNiceListMember(ServerPlayer player) {
+        player.removeTag("nice_list");
         if (!niceListMembers.contains(player.getUUID())) return;
-
         niceListMembers.remove(player.getUUID());
         allowedToVote.remove(player.getUUID());
         currentSeason.reloadPlayerTeam(player);
@@ -322,19 +328,22 @@ public class NiceLifeVotingManager {
     }
 
     public static void manuallyAddNaughtyListMember(ServerPlayer player) {
+        player.addTag("naughty_list");
         if (naughtyListMembers.contains(player.getUUID())) return;
+        DatapackIntegration.EVENT_NAUGHTY_LIST_ADD.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
         naughtyListMembers.add(player.getUUID());
         currentSeason.reloadPlayerTeam(player);
     }
 
     public static void manuallyRemoveNaughtyListMember(ServerPlayer player) {
+        player.removeTag("naughty_list");
         if (!naughtyListMembers.contains(player.getUUID())) return;
         naughtyListMembers.remove(player.getUUID());
         currentSeason.reloadPlayerTeam(player);
     }
 
     public static void endNaughtyList() {
-
+        DatapackIntegration.EVENT_NAUGHTY_LIST_END.trigger();
         SoundEvent voteSound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_vote_result"));
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), voteSound, 1f, 1);
         PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§cPlayers return to normal in..."), 15, 80, 20);
@@ -360,13 +369,14 @@ public class NiceLifeVotingManager {
         delay += 55;
         TaskScheduler.scheduleTask(delay, () -> {
             PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.CHICKEN_EGG, 1f, 1);
-            naughtyListMembers.clear();
+            clearNaughtyListMembers();
             currentSeason.reloadAllPlayerTeams();
         });
         NiceLife.postponeTriviaStart(Time.ticks(delay+20));
     }
 
     public static void endNiceList() {
+        DatapackIntegration.EVENT_NICE_LIST_END.trigger();
         SoundEvent voteSound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_nicelist_end"));
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), voteSound, 1f, 1);
         PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§cThe nice vote will end in..."), 15, 80, 20);
@@ -467,11 +477,23 @@ public class NiceLifeVotingManager {
                 }
             }
         }
-        niceListMembers.clear();
+        clearNiceListMembers();
         currentSeason.reloadAllPlayerTeams();
-
-
         reset();
+    }
+
+    public static void clearNaughtyListMembers() {
+        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
+            player.removeTag("naughty_list");
+        }
+        naughtyListMembers.clear();
+    }
+
+    public static void clearNiceListMembers() {
+        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
+            player.removeTag("nice_list");
+        }
+        niceListMembers.clear();
     }
 
     public static boolean openNiceListLifeVote(ServerPlayer player) {

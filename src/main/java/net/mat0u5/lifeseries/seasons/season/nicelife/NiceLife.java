@@ -584,8 +584,10 @@ public class NiceLife extends Season {
     @Override
     public void onPlayerDeath(ServerPlayer player, DamageSource source) {
         super.onPlayerDeath(player, source);
+        player.removeTag("naughty_list");
         NiceLifeVotingManager.naughtyListMembers.remove(player.getUUID());
         if (player.ls$isDead()) {
+            player.removeTag("nice_list");
             NiceLifeVotingManager.niceListMembers.remove(player.getUUID());
         }
         reloadPlayerTeam(player);
