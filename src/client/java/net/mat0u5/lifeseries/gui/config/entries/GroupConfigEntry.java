@@ -65,6 +65,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
 
     @Override
     public void render(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        renderTicks++;
         this.y = y;
         renderEntry(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
     }

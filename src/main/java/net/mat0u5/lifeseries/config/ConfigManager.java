@@ -53,6 +53,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,GROUP_LIVES
                 ,GROUP_TEAMS
                 ,GROUP_EVENTS
+                ,GROUP_TEXTS
 
                 , GROUP_GLOBAL_LIVES // Group
                 ,DEFAULT_LIVES
@@ -333,6 +334,10 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 sendConfigEntry(player, taskEntry, index);
                 index++;
             }
+        }
+        for (Map.Entry<String, ConfigFileEntry<String>> entry : ModifiableText.getRegisteredEntries().entrySet()) {
+            sendConfigEntry(player, entry.getValue(), index);
+            index++;
         }
     }
 

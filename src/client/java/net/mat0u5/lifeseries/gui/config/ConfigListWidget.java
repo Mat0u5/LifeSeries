@@ -170,9 +170,7 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
         int totalHeight = 0;
         for (int i = 0; i < getItemCount(); i++) {
             totalHeight += getEntry(i).getConfigEntry().getPreferredHeight();
-            //?if <= 1.20.2 {
-            /*totalHeight += ENTRY_GAP;
-            *///?}
+            totalHeight += ENTRY_GAP;
         }
         return Math.max(0, totalHeight - height + 8);
     }

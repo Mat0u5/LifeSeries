@@ -20,6 +20,10 @@ public interface ITextPopup extends IPopup {
         Font textRenderer = getTextRenderer();
         Component popupText = getPopupText();
         if (popupText == null) return;
-        context.drawString(textRenderer, popupText, x+1, y+1, TextColors.LIGHT_GRAY, false);
+        context.drawString(textRenderer, popupText, x+1, y+1, getTextColor(), false);
+    }
+
+    default int getTextColor() {
+        return TextColors.LIGHT_GRAY;
     }
 }

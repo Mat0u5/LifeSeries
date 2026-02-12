@@ -180,6 +180,9 @@ public class ClientConfigGuiManager {
                     return new EventConfigEntry(stringObject.id, stringObject.name, stringObject.description, stringObject.stringValue, stringObject.defaultValue, args.get(3));
                 }
             }
+            else if (stringObject.configType == ConfigTypes.MODIFIABLE_TEXT) {
+                return new ModifiableTextConfigEntry(stringObject.id, stringObject.name, stringObject.description, stringObject.stringValue, stringObject.defaultValue);
+            }
             return new StringConfigEntry(stringObject.id, stringObject.name, stringObject.description, stringObject.stringValue, stringObject.defaultValue);
         }
         else if (object instanceof IntegerObject intObject) {

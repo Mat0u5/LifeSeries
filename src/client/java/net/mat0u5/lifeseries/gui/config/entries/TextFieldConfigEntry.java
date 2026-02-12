@@ -81,7 +81,7 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
 
     protected int getTextFieldPosY(int y, int height) {
         //return y + (height - textField.getHeight()) / 2; CENTER
-        return y+TEXT_FIELD_OFFSET_Y;
+        return y+(height-textField.getHeight())/2;
     }
 
     @Override

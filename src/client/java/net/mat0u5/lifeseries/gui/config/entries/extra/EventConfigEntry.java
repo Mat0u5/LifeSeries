@@ -63,6 +63,11 @@ public class EventConfigEntry extends StringConfigEntry {
     }
 
     @Override
+    protected int getTextFieldPosY(int y, int height) {
+        return y+1;
+    }
+
+    @Override
     public int additionalLabelOffsetY() {
         return isFirst() ? PREFFERED_HEIGHT : 0;
     }

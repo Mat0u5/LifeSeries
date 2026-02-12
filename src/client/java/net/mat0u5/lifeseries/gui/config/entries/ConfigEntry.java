@@ -41,6 +41,7 @@ public abstract class ConfigEntry {
 
     public static final int MAX_DESCRIPTION_WIDTH = 250;
 
+    protected long renderTicks = 0;
     protected Font textRenderer;
     public ConfigScreen screen;
     protected final String fieldName;
@@ -75,8 +76,12 @@ public abstract class ConfigEntry {
             return;
         }
         resetButton = Button.builder(Component.nullToEmpty("Reset"), this::onResetClicked)
-                .bounds(0, 0, RESET_BUTTON_WIDTH, RESET_BUTTON_HEIGHT)
+                .bounds(0, 0, RESET_BUTTON_WIDTH, getResetButtonHeight())
                 .build();
+    }
+
+    public int getResetButtonHeight() {
+        return RESET_BUTTON_HEIGHT;
     }
 
     private void onResetClicked(Button button) {
@@ -96,6 +101,7 @@ public abstract class ConfigEntry {
     }
 
     public void render(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        renderTicks++;
         isHovered = hovered;
         updateHighlightAnimation(tickDelta);
 

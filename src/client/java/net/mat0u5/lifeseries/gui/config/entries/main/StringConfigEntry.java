@@ -6,7 +6,6 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.client.gui.GuiGraphics;
 
 public class StringConfigEntry extends TextFieldConfigEntry {
-    private static final int FIELD_WIDTH = 150;
     private static final float ANIMATION_SPEED = 0.15f;
     private static final int PADDING = 4;
 
@@ -14,17 +13,22 @@ public class StringConfigEntry extends TextFieldConfigEntry {
     protected String value;
     protected String startingValue;
 
+    private int minFieldWidth;
     private float currentWidth;
     private float targetWidth;
     private int x = -1;
 
     public StringConfigEntry(String fieldName, String displayName, String description, String value, String defaultValue) {
-        super(fieldName, displayName, description, FIELD_WIDTH);
+        this(fieldName, displayName, description, value, defaultValue, 150, DEFAULT_TEXT_FIELD_HEIGHT);
+    }
+    public StringConfigEntry(String fieldName, String displayName, String description, String value, String defaultValue, int textFieldWidth, int textFieldHeight) {
+        super(fieldName, displayName, description, textFieldWidth, textFieldHeight);
+        this.minFieldWidth = textFieldWidth;
         this.defaultValue = defaultValue;
         this.value = value;
         this.startingValue = value;
-        this.currentWidth = FIELD_WIDTH;
-        this.targetWidth = FIELD_WIDTH;
+        this.currentWidth = textFieldWidth;
+        this.targetWidth = textFieldWidth;
         initializeTextField();
     }
 
@@ -52,13 +56,6 @@ public class StringConfigEntry extends TextFieldConfigEntry {
     @Override
     protected void postTextChanged() {
         markChanged();
-        updateFieldDimensions();
-    }
-
-    @Override
-    public void setFocused(boolean focused) {
-        super.setFocused(focused);
-        updateFieldDimensions();
     }
 
     private void updateFieldDimensions() {
@@ -67,25 +64,27 @@ public class StringConfigEntry extends TextFieldConfigEntry {
 
         String text = textField.getValue();
         if (text == null) return;
-        if (text.isEmpty()) {
-            targetWidth = FIELD_WIDTH;
-            return;
-        }
 
         int textWidth = textRenderer.width(text) + 20;
 
         int labelEndX = labelEndX();
         int fieldEndX = textField.getX() + textField.getWidth();
         int maxFieldWidth = fieldEndX - labelEndX - 15;
-        if (maxFieldWidth <= FIELD_WIDTH) maxFieldWidth = FIELD_WIDTH;
+        int newMinFieldWidth = minFieldWidth;
+        if (maxFieldWidth <= newMinFieldWidth) newMinFieldWidth = maxFieldWidth;
 
-        int requiredWidth = OtherUtils.clamp(textWidth + PADDING * 2, FIELD_WIDTH, maxFieldWidth);
+        if (text.isEmpty()) {
+            targetWidth = newMinFieldWidth;
+            return;
+        }
+
+        int requiredWidth = OtherUtils.clamp(textWidth + PADDING * 2, newMinFieldWidth, maxFieldWidth);
 
         if (isFocused()) {
             targetWidth = requiredWidth;
         }
         else {
-            targetWidth = Math.min(FIELD_WIDTH, requiredWidth);
+            targetWidth = Math.min(newMinFieldWidth, requiredWidth);
         }
     }
 
@@ -97,11 +96,15 @@ public class StringConfigEntry extends TextFieldConfigEntry {
     @Override
     protected void renderEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         this.x = x;
+        updateFieldDimensions();
         updateAnimations(tickDelta);
 
         textField.setWidth((int) currentWidth);
 
         super.renderEntry(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
+        if (renderTicks < 10) {
+            currentWidth = targetWidth;
+        }
     }
 
     private void updateAnimations(float tickDelta) {
@@ -123,7 +126,6 @@ public class StringConfigEntry extends TextFieldConfigEntry {
         if (value instanceof String stringValue) {
             this.value = stringValue;
             setText(stringValue);
-            updateFieldDimensions();
         }
     }
 

@@ -406,6 +406,10 @@ public class DefaultConfigValues {
             "group_events", null, ConfigTypes.TEXT, "{events}",
             "Events", ""
     );
+    public final ConfigFileEntry<Object> GROUP_TEXTS = new ConfigFileEntry<>(
+            "group_texts", null, ConfigTypes.TEXT, "{text}[new]",
+            "Modifiable Texts", ""
+    );
 
 
     public final ConfigFileEntry<Object> NO_SEASON_SPECIFIC = new ConfigFileEntry<>(
