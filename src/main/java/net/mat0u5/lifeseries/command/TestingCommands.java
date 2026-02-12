@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -17,8 +18,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;
-
-import static net.mat0u5.lifeseries.Main.server;
 
 public class TestingCommands extends Command {
 
@@ -65,6 +64,10 @@ public class TestingCommands extends Command {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
+        player.sendSystemMessage(ModifiableText.get("boogeyman.test"));
+        //player.sendSystemMessage(ModifiableText.get("args.rawr"));
+        player.sendSystemMessage(ModifiableText.get("args.rawr", player, player.getUUID(), Component.literal("§a§lMessage")));
+        System.out.println("'"+ModifiableText.get("args.rawr", player, player.getUUID(), Component.literal("§a§lMessage"))+"'");
 
         return 1;
     }

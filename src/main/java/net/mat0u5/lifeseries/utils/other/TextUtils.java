@@ -216,7 +216,7 @@ public class TextUtils {
         return result;
     }
 
-    private static Component getTextForArgument(Object arg) {
+    public static Component getTextForArgument(Object arg) {
         if (arg == null) {
             return Component.empty();
         }

@@ -28,6 +28,7 @@ public enum ConfigTypes {
     SECRET_TASK("secret_task"),
     TRIVIA_QUESTION("trivia_question"),
     TRIVIA_ANSWER("trivia_answer"),
+    MODIFIABLE_TEXT("modifiable_text"),
 
     GROUP("group");
 
@@ -42,7 +43,7 @@ public enum ConfigTypes {
     }
 
     public boolean parentString() {
-        return this == STRING || this == ITEM_LIST || this == BLOCK_LIST || this == EFFECT_LIST || this == ENCHANT_LIST || this == STRING_LIST || this == EVENT_ENTRY;
+        return this == STRING || this == ITEM_LIST || this == BLOCK_LIST || this == EFFECT_LIST || this == ENCHANT_LIST || this == STRING_LIST || this == EVENT_ENTRY || this == MODIFIABLE_TEXT;
     }
     public boolean parentText() {
         return this == TEXT || this == TEAM_ENTRY || this == SECRET_TASK || this == TRIVIA_QUESTION || this == TRIVIA_ANSWER;

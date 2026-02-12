@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.command.manager.CommandManager;
 import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.events.Events;
@@ -138,6 +139,7 @@ public abstract class Season {
     }
 
     public void initialize() {
+        ModifiableText.initialize();
         reload();
     }
 
