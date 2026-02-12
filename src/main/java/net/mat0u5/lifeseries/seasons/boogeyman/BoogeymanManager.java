@@ -467,32 +467,32 @@ public class BoogeymanManager {
     }
 
     public void onReload() {
-        BOOGEYMAN_ENABLED = seasonConfig.BOOGEYMAN.get(seasonConfig);
+        BOOGEYMAN_ENABLED = seasonConfig.BOOGEYMAN.get();
         if (!BOOGEYMAN_ENABLED) {
             onDisabledBoogeyman();
         }
-        BOOGEYMAN_CHANCE_MULTIPLIER = seasonConfig.BOOGEYMAN_CHANCE_MULTIPLIER.get(seasonConfig);
-        BOOGEYMAN_AMOUNT_MIN = seasonConfig.BOOGEYMAN_MIN_AMOUNT.get(seasonConfig);
-        BOOGEYMAN_AMOUNT_MAX = seasonConfig.BOOGEYMAN_MAX_AMOUNT.get(seasonConfig);
-        BOOGEYMAN_ADVANCED_DEATHS = seasonConfig.BOOGEYMAN_ADVANCED_DEATHS.get(seasonConfig);
-        BOOGEYMAN_MESSAGE = seasonConfig.BOOGEYMAN_MESSAGE.get(seasonConfig);
+        BOOGEYMAN_CHANCE_MULTIPLIER = seasonConfig.BOOGEYMAN_CHANCE_MULTIPLIER.get();
+        BOOGEYMAN_AMOUNT_MIN = seasonConfig.BOOGEYMAN_MIN_AMOUNT.get();
+        BOOGEYMAN_AMOUNT_MAX = seasonConfig.BOOGEYMAN_MAX_AMOUNT.get();
+        BOOGEYMAN_ADVANCED_DEATHS = seasonConfig.BOOGEYMAN_ADVANCED_DEATHS.get();
+        BOOGEYMAN_MESSAGE = seasonConfig.BOOGEYMAN_MESSAGE.get();
         BOOGEYMAN_IGNORE.clear();
         BOOGEYMAN_FORCE.clear();
-        for (String name : seasonConfig.BOOGEYMAN_IGNORE.get(seasonConfig).replaceAll("\\[","").replaceAll("]","").replaceAll(" ","").trim().split(",")) {
+        for (String name : seasonConfig.BOOGEYMAN_IGNORE.get().replaceAll("\\[","").replaceAll("]","").replaceAll(" ","").trim().split(",")) {
             if (!name.isEmpty()) BOOGEYMAN_IGNORE.add(name.toLowerCase(Locale.ROOT));
         }
-        for (String name : seasonConfig.BOOGEYMAN_FORCE.get(seasonConfig).replaceAll("\\[","").replaceAll("]","").replaceAll(" ","").trim().split(",")) {
+        for (String name : seasonConfig.BOOGEYMAN_FORCE.get().replaceAll("\\[","").replaceAll("]","").replaceAll(" ","").trim().split(",")) {
             if (!name.isEmpty()) BOOGEYMAN_FORCE.add(name.toLowerCase(Locale.ROOT));
         }
-        BOOGEYMAN_CHOOSE_MINUTE = seasonConfig.BOOGEYMAN_CHOOSE_MINUTE.get(seasonConfig);
-        BOOGEYMAN_ANNOUNCE_OUTCOME = seasonConfig.BOOGEYMAN_ANNOUNCE_OUTCOME.get(seasonConfig);
-        BOOGEYMAN_INFINITE = seasonConfig.BOOGEYMAN_INFINITE.get(seasonConfig);
-        BOOGEYMAN_INFINITE_LAST_PICK = Time.seconds(seasonConfig.BOOGEYMAN_INFINITE_LAST_PICK.get(seasonConfig));
-        BOOGEYMAN_INFINITE_AUTO_FAIL = Time.seconds(seasonConfig.BOOGEYMAN_INFINITE_AUTO_FAIL.get(seasonConfig));
-        BOOGEYMAN_TEAM_NOTICE = seasonConfig.BOOGEYMAN_TEAM_NOTICE.get(seasonConfig);
-        BOOGEYMAN_KILLS_NEEDED = seasonConfig.BOOGEYMAN_KILLS_NEEDED.get(seasonConfig);
-        BOOGEYMAN_STEAL_LIFE = seasonConfig.BOOGEYMAN_STEAL_LIFE.get(seasonConfig);
-        BOOGEYMAN_LOCATOR_BAR = seasonConfig.BOOGEYMAN_LOCATOR_BAR.get(seasonConfig);
+        BOOGEYMAN_CHOOSE_MINUTE = seasonConfig.BOOGEYMAN_CHOOSE_MINUTE.get();
+        BOOGEYMAN_ANNOUNCE_OUTCOME = seasonConfig.BOOGEYMAN_ANNOUNCE_OUTCOME.get();
+        BOOGEYMAN_INFINITE = seasonConfig.BOOGEYMAN_INFINITE.get();
+        BOOGEYMAN_INFINITE_LAST_PICK = Time.seconds(seasonConfig.BOOGEYMAN_INFINITE_LAST_PICK.get());
+        BOOGEYMAN_INFINITE_AUTO_FAIL = Time.seconds(seasonConfig.BOOGEYMAN_INFINITE_AUTO_FAIL.get());
+        BOOGEYMAN_TEAM_NOTICE = seasonConfig.BOOGEYMAN_TEAM_NOTICE.get();
+        BOOGEYMAN_KILLS_NEEDED = seasonConfig.BOOGEYMAN_KILLS_NEEDED.get();
+        BOOGEYMAN_STEAL_LIFE = seasonConfig.BOOGEYMAN_STEAL_LIFE.get();
+        BOOGEYMAN_LOCATOR_BAR = seasonConfig.BOOGEYMAN_LOCATOR_BAR.get();
     }
 
     public void onDisabledBoogeyman() {

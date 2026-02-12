@@ -35,7 +35,7 @@ public class Boogeyman {
         killsNeeded--;
     }
     public void resetKills() {
-        killsNeeded = Math.abs(seasonConfig.BOOGEYMAN_KILLS_NEEDED.get(seasonConfig));
+        killsNeeded = Math.abs(seasonConfig.BOOGEYMAN_KILLS_NEEDED.get());
     }
     public boolean shouldCure() {
         return killsNeeded <= 0;

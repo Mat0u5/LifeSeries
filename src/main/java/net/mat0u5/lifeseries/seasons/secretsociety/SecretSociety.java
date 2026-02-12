@@ -34,27 +34,27 @@ public class SecretSociety {
     public Random rnd = new Random();
 
     public void onReload() {
-        SOCIETY_ENABLED = seasonConfig.SECRET_SOCIETY.get(seasonConfig);
+        SOCIETY_ENABLED = seasonConfig.SECRET_SOCIETY.get();
         if (!SOCIETY_ENABLED) {
             onDisabledSociety();
         }
 
-        MEMBER_COUNT = seasonConfig.SECRET_SOCIETY_MEMBER_AMOUNT.get(seasonConfig);
-        START_TIME = seasonConfig.SECRET_SOCIETY_START_TIME.get(seasonConfig);
-        KILL_COUNT = seasonConfig.SECRET_SOCIETY_KILLS_REQUIRED.get(seasonConfig);
-        PUNISHMENT_LIVES = seasonConfig.SECRET_SOCIETY_PUNISHMENT_LIVES.get(seasonConfig);
-        SOUND_ONLY_MEMBERS = seasonConfig.SECRET_SOCIETY_SOUND_ONLY_MEMBERS.get(seasonConfig);
+        MEMBER_COUNT = seasonConfig.SECRET_SOCIETY_MEMBER_AMOUNT.get();
+        START_TIME = seasonConfig.SECRET_SOCIETY_START_TIME.get();
+        KILL_COUNT = seasonConfig.SECRET_SOCIETY_KILLS_REQUIRED.get();
+        PUNISHMENT_LIVES = seasonConfig.SECRET_SOCIETY_PUNISHMENT_LIVES.get();
+        SOUND_ONLY_MEMBERS = seasonConfig.SECRET_SOCIETY_SOUND_ONLY_MEMBERS.get();
 
         FORCE_MEMBERS.clear();
         IGNORE_MEMBERS.clear();
         POSSIBLE_WORDS.clear();
-        for (String name : seasonConfig.SECRET_SOCIETY_FORCE.get(seasonConfig).replaceAll("\\[","").replaceAll("]","").replaceAll(" ","").trim().split(",")) {
+        for (String name : seasonConfig.SECRET_SOCIETY_FORCE.get().replaceAll("\\[","").replaceAll("]","").replaceAll(" ","").trim().split(",")) {
             if (!name.isEmpty()) FORCE_MEMBERS.add(name.toLowerCase(Locale.ROOT));
         }
-        for (String name : seasonConfig.SECRET_SOCIETY_IGNORE.get(seasonConfig).replaceAll("\\[","").replaceAll("]","").replaceAll(" ","").trim().split(",")) {
+        for (String name : seasonConfig.SECRET_SOCIETY_IGNORE.get().replaceAll("\\[","").replaceAll("]","").replaceAll(" ","").trim().split(",")) {
             if (!name.isEmpty()) IGNORE_MEMBERS.add(name.toLowerCase(Locale.ROOT));
         }
-        for (String name : seasonConfig.SECRET_SOCIETY_WORDS.get(seasonConfig).replaceAll("\\[","").replaceAll("]","").replaceAll(" ","").trim().split(",")) {
+        for (String name : seasonConfig.SECRET_SOCIETY_WORDS.get().replaceAll("\\[","").replaceAll("]","").replaceAll(" ","").trim().split(",")) {
             if (!name.isEmpty()) POSSIBLE_WORDS.add(name);
         }
     }

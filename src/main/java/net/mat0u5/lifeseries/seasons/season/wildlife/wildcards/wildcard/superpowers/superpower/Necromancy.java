@@ -77,11 +77,9 @@ public class Necromancy extends Superpower {
                     BlockPos tpTo = LevelUtils.getCloseBlockPos(updatedPlayerLevel, updatedPlayer.blockPosition(), 3, 2, true);
                     LevelUtils.teleport(deadPlayer, updatedPlayerLevel, tpTo);
                     deadPlayer.setGameMode(GameType.SURVIVAL);
-                    if (seasonConfig instanceof WildLifeConfig config) {
-                        if (WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_FIRST_SPAWN_CLEAR_ITEMS.get(config) && !clearedPlayers.contains(deadPlayer.getUUID())) {
-                            clearedPlayers.add(deadPlayer.getUUID());
-                            deadPlayer.getInventory().clearContent();
-                        }
+                    if (WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_FIRST_SPAWN_CLEAR_ITEMS.get() && !clearedPlayers.contains(deadPlayer.getUUID())) {
+                        clearedPlayers.add(deadPlayer.getUUID());
+                        deadPlayer.getInventory().clearContent();
                     }
                     AttributeUtils.setMaxPlayerHealth(deadPlayer, SuperpowersWildcard.ZOMBIES_HEALTH);
                     deadPlayer.setHealth(SuperpowersWildcard.ZOMBIES_HEALTH);

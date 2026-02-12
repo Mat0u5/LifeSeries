@@ -75,7 +75,7 @@ public class Blacklist {
 
     public List<String> loadItemBlacklist() {
         if (seasonConfig == null) return new ArrayList<>();
-        String raw = seasonConfig.BLACKLIST_ITEMS.get(seasonConfig);
+        String raw = seasonConfig.BLACKLIST_ITEMS.get();
         raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
         if (raw.isEmpty()) return new ArrayList<>();
         return new ArrayList<>(Arrays.asList(raw.split(",")));
@@ -83,7 +83,7 @@ public class Blacklist {
 
     public List<String> loadRecipeBlacklist() {
         if (seasonConfig == null) return new ArrayList<>();
-        String raw = seasonConfig.BLACKLIST_RECIPES.get(seasonConfig);
+        String raw = seasonConfig.BLACKLIST_RECIPES.get();
         raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
         if (raw.isEmpty()) return new ArrayList<>();
         return new ArrayList<>(Arrays.asList(raw.split(",")));
@@ -91,7 +91,7 @@ public class Blacklist {
 
     public List<String> loadBlockBlacklist() {
         if (seasonConfig == null) return new ArrayList<>();
-        String raw = seasonConfig.BLACKLIST_BLOCKS.get(seasonConfig);
+        String raw = seasonConfig.BLACKLIST_BLOCKS.get();
         raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
         if (raw.isEmpty()) return new ArrayList<>();
         return new ArrayList<>(Arrays.asList(raw.split(",")));
@@ -105,10 +105,10 @@ public class Blacklist {
         result.put(4, new ArrayList<>());
         if (seasonConfig == null) return result;
 
-        String raw_level_1 = seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.get(seasonConfig).replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        String raw_level_2 = seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_2.get(seasonConfig).replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        String raw_level_3 = seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_3.get(seasonConfig).replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        String raw_level_4 = seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_4.get(seasonConfig).replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
+        String raw_level_1 = seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.get().replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
+        String raw_level_2 = seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_2.get().replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
+        String raw_level_3 = seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_3.get().replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
+        String raw_level_4 = seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_4.get().replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
 
         if (!raw_level_1.isEmpty()) result.get(1).addAll(Arrays.asList(raw_level_1.split(",")));
         if (!raw_level_2.isEmpty()) result.get(2).addAll(Arrays.asList(raw_level_2.split(",")));
@@ -120,7 +120,7 @@ public class Blacklist {
 
     public List<String> loadBlacklistedEnchants() {
         if (seasonConfig == null) return new ArrayList<>();
-        String raw = seasonConfig.BLACKLIST_BANNED_ENCHANTS.get(seasonConfig);
+        String raw = seasonConfig.BLACKLIST_BANNED_ENCHANTS.get();
         raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
         if (raw.isEmpty()) return new ArrayList<>();
         return new ArrayList<>(Arrays.asList(raw.split(",")));
@@ -128,7 +128,7 @@ public class Blacklist {
 
     public List<String> loadBannedPotions() {
         if (seasonConfig == null) return new ArrayList<>();
-        String raw = seasonConfig.BLACKLIST_BANNED_POTION_EFFECTS.get(seasonConfig);
+        String raw = seasonConfig.BLACKLIST_BANNED_POTION_EFFECTS.get();
         raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
         if (raw.isEmpty()) return new ArrayList<>();
         return new ArrayList<>(Arrays.asList(raw.split(",")));
@@ -136,7 +136,7 @@ public class Blacklist {
 
     public List<String> loadClampedPotions() {
         if (seasonConfig == null) return new ArrayList<>();
-        String raw = seasonConfig.BLACKLIST_CLAMPED_POTION_EFFECTS.get(seasonConfig);
+        String raw = seasonConfig.BLACKLIST_CLAMPED_POTION_EFFECTS.get();
         raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
         if (raw.isEmpty()) return new ArrayList<>();
         return new ArrayList<>(Arrays.asList(raw.split(",")));
@@ -193,7 +193,7 @@ public class Blacklist {
          //?}
 
         if (seasonConfig != null) {
-            if (!seasonConfig.SPAWNER_RECIPE.get(seasonConfig)) {
+            if (!seasonConfig.SPAWNER_RECIPE.get()) {
                 newList.add(IdentifierHelper.mod("spawner_recipe"));
             }
         }
@@ -440,7 +440,7 @@ public class Blacklist {
     public void reloadBlacklist() {
         if (Main.server == null) return;
 
-        CREATIVE_IGNORE_BLACKLIST = seasonConfig.CREATIVE_IGNORE_BLACKLIST.get(seasonConfig);
+        CREATIVE_IGNORE_BLACKLIST = seasonConfig.CREATIVE_IGNORE_BLACKLIST.get();
 
         loadedListItem = null;
         loadedListBlock = null;

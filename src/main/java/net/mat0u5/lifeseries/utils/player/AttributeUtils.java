@@ -48,7 +48,7 @@ public class AttributeUtils {
     }
 
     public static void resetMaxPlayerHealth(ServerPlayer player) {
-        double health = seasonConfig.MAX_PLAYER_HEALTH.get(seasonConfig);
+        double health = seasonConfig.MAX_PLAYER_HEALTH.get();
         setMaxPlayerHealth(player, health);
     }
 

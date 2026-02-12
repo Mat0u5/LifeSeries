@@ -60,17 +60,17 @@ public class LivesManager {
     public Random rnd = new Random();
 
     public void reload() {
-        SHOW_DEATH_TITLE = seasonConfig.FINAL_DEATH_TITLE_SHOW.get(seasonConfig);
-        FINAL_DEATH_LIGHTNING = seasonConfig.FINAL_DEATH_LIGHTNING.get(seasonConfig);
-        FINAL_DEATH_SOUND = SoundEvent.createVariableRangeEvent(IdentifierHelper.parse(seasonConfig.FINAL_DEATH_SOUND.get(seasonConfig)));
-        ONLY_TAKE_LIVES_IN_SESSION = seasonConfig.ONLY_TAKE_LIVES_IN_SESSION.get(seasonConfig);
-        SEE_FRIENDLY_INVISIBLE_PLAYERS = seasonConfig.SEE_FRIENDLY_INVISIBLE_PLAYERS.get(seasonConfig);
-        LIVES_SYSTEM_DISABLED = seasonConfig.LIVES_SYSTEM_DISABLED.get(seasonConfig);
+        SHOW_DEATH_TITLE = seasonConfig.FINAL_DEATH_TITLE_SHOW.get();
+        FINAL_DEATH_LIGHTNING = seasonConfig.FINAL_DEATH_LIGHTNING.get();
+        FINAL_DEATH_SOUND = SoundEvent.createVariableRangeEvent(IdentifierHelper.parse(seasonConfig.FINAL_DEATH_SOUND.get()));
+        ONLY_TAKE_LIVES_IN_SESSION = seasonConfig.ONLY_TAKE_LIVES_IN_SESSION.get();
+        SEE_FRIENDLY_INVISIBLE_PLAYERS = seasonConfig.SEE_FRIENDLY_INVISIBLE_PLAYERS.get();
+        LIVES_SYSTEM_DISABLED = seasonConfig.LIVES_SYSTEM_DISABLED.get();
         updateTeams();
 
-        ROLL_LIVES = seasonConfig.LIVES_RANDOMIZE.get(seasonConfig);
-        int minLivesConfig = seasonConfig.LIVES_RANDOMIZE_MIN.get(seasonConfig);
-        int maxLivesConfig = seasonConfig.LIVES_RANDOMIZE_MAX.get(seasonConfig);
+        ROLL_LIVES = seasonConfig.LIVES_RANDOMIZE.get();
+        int minLivesConfig = seasonConfig.LIVES_RANDOMIZE_MIN.get();
+        int maxLivesConfig = seasonConfig.LIVES_RANDOMIZE_MAX.get();
         ROLL_MIN_LIVES = Math.min(minLivesConfig, maxLivesConfig);
         ROLL_MAX_LIVES = Math.max(minLivesConfig, maxLivesConfig);
     }
@@ -326,7 +326,7 @@ public class LivesManager {
 
     public void receiveLifeFromOtherPlayer(Component playerName, ServerPlayer target, boolean isRevive) {
         target.ls$playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.MASTER, 10, 1);
-        if (seasonConfig.GIVELIFE_BROADCAST.get(seasonConfig)) {
+        if (seasonConfig.GIVELIFE_BROADCAST.get()) {
             PlayerUtils.broadcastMessageExcept(TextUtils.format("{} received a life from {}", target, playerName), target);
         }
         target.sendSystemMessage(TextUtils.format("You received a life from {}", playerName));
@@ -438,7 +438,7 @@ public class LivesManager {
 
     public void showDeathTitle(ServerPlayer player) {
         if (SHOW_DEATH_TITLE) {
-            String subtitle = seasonConfig.FINAL_DEATH_TITLE_SUBTITLE.get(seasonConfig);
+            String subtitle = seasonConfig.FINAL_DEATH_TITLE_SUBTITLE.get();
             PlayerUtils.sendTitleWithSubtitleToPlayers(PlayerUtils.getAllPlayers(), player.getDisplayName(), Component.literal(subtitle), 20, 80, 20);
         }
         Component deathMessage = getDeathMessage(player);
@@ -448,7 +448,7 @@ public class LivesManager {
     }
 
     public Component getDeathMessage(ServerPlayer player) {
-        String message = seasonConfig.FINAL_DEATH_MESSAGE.get(seasonConfig);
+        String message = seasonConfig.FINAL_DEATH_MESSAGE.get();
         if (message.contains("${player}")) {
             return TextUtils.format(message.replace("${player}", "{}"), player);
         }

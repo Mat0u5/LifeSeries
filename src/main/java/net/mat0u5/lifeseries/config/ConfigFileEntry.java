@@ -6,6 +6,8 @@ import net.mat0u5.lifeseries.utils.other.TextUtils;
 
 import java.util.List;
 
+import static net.mat0u5.lifeseries.Main.seasonConfig;
+
 public class ConfigFileEntry<T> {
     public final String key;
     public T defaultValue;
@@ -58,6 +60,9 @@ public class ConfigFileEntry<T> {
             return ConfigTypes.STRING;
         }
         return ConfigTypes.NULL;
+    }
+    public T get() {
+        return get(seasonConfig);
     }
 
     @SuppressWarnings("unchecked")

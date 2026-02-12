@@ -136,16 +136,16 @@ public class DoubleLife extends Season {
 
     @Override
     public void reload() {
-        SOULMATE_LOCATOR_BAR = DoubleLifeConfig.SOULMATE_LOCATOR_BAR.get(seasonConfig);
+        SOULMATE_LOCATOR_BAR = DoubleLifeConfig.SOULMATE_LOCATOR_BAR.get();
         super.reload();
-        ANNOUNCE_SOULMATES = DoubleLifeConfig.ANNOUNCE_SOULMATES.get(seasonConfig);
-        SOULBOUND_FOOD = DoubleLifeConfig.SOULBOUND_FOOD.get(seasonConfig);
-        SOULBOUND_EFFECTS = DoubleLifeConfig.SOULBOUND_EFFECTS.get(seasonConfig);
-        SOULBOUND_INVENTORIES = DoubleLifeConfig.SOULBOUND_INVENTORIES.get(seasonConfig);
-        BREAKUP_LAST_PAIR_STANDING = DoubleLifeConfig.BREAKUP_LAST_PAIR_STANDING.get(seasonConfig);
-        DISABLE_START_TELEPORT = DoubleLifeConfig.DISABLE_START_TELEPORT.get(seasonConfig);
-        SOULBOUND_BOOGEYMAN = DoubleLifeConfig.SOULBOUND_BOOGEYMAN.get(seasonConfig);
-        SOULMATES_PVP_ALLOWED = DoubleLifeConfig.SOULMATES_PVP_ALLOWED.get(seasonConfig);
+        ANNOUNCE_SOULMATES = DoubleLifeConfig.ANNOUNCE_SOULMATES.get();
+        SOULBOUND_FOOD = DoubleLifeConfig.SOULBOUND_FOOD.get();
+        SOULBOUND_EFFECTS = DoubleLifeConfig.SOULBOUND_EFFECTS.get();
+        SOULBOUND_INVENTORIES = DoubleLifeConfig.SOULBOUND_INVENTORIES.get();
+        BREAKUP_LAST_PAIR_STANDING = DoubleLifeConfig.BREAKUP_LAST_PAIR_STANDING.get();
+        DISABLE_START_TELEPORT = DoubleLifeConfig.DISABLE_START_TELEPORT.get();
+        SOULBOUND_BOOGEYMAN = DoubleLifeConfig.SOULBOUND_BOOGEYMAN.get();
+        SOULMATES_PVP_ALLOWED = DoubleLifeConfig.SOULMATES_PVP_ALLOWED.get();
         syncAllPlayers();
     }
 

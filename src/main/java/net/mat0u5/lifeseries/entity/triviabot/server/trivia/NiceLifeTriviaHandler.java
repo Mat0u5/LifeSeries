@@ -281,7 +281,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         sameStateTime.tick();
         bot.setDeltaMovement(0, 0, 0);
         turnToBed(20);
-        if (sameStateTime.isLarger(NiceLifeVotingManager.VOTING_TIME.copy().add(Time.seconds(35)))) {
+        if (sameStateTime.getSeconds() >= NiceLifeTriviaManager.QUESTION_TIME + 35) {
             changeStateTo(BotState.LEAVING);
         }
     }

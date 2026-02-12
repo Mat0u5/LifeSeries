@@ -78,8 +78,8 @@ public class SubInManager {
     }
 
     public static void reload() {
-        CHANGE_SKIN = seasonConfig.SUBIN_CHANGE_SKIN.get(seasonConfig);
-        CHANGE_NAME = seasonConfig.SUBIN_CHANGE_USERNAME.get(seasonConfig);
+        CHANGE_SKIN = seasonConfig.SUBIN_CHANGE_SKIN.get();
+        CHANGE_NAME = seasonConfig.SUBIN_CHANGE_USERNAME.get();
         for (SubIn subIn : subIns) {
             ServerPlayer player = PlayerUtils.getPlayer(getId(subIn.substituter()));
             reloadPlayerProfile(player);

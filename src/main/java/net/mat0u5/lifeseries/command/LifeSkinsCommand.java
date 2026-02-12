@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -28,7 +29,8 @@ public class LifeSkinsCommand extends Command {
     }
 
     public List<String> getAdminCommands() {
-        return List.of("lifeskins");
+        if (Main.DEBUG) return List.of("lifeskins");
+        return List.of("");
     }
 
     public List<String> getNonAdminCommands() {
@@ -37,6 +39,8 @@ public class LifeSkinsCommand extends Command {
 
     @Override
     public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+        if (Main.DEBUG) {
+
         dispatcher.register(Commands.literal("lifeskins")
                 .requires(PermissionManager::isAdmin)
                         .then(literal("modify")
@@ -88,6 +92,8 @@ public class LifeSkinsCommand extends Command {
                         )
 
         );
+
+        }
     }
 
     public int setSkin(CommandSourceStack source, ServerPlayer player, String username) {

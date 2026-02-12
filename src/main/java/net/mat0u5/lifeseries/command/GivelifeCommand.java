@@ -29,7 +29,7 @@ public class GivelifeCommand extends Command {
 
     @Override
     public boolean isAllowed() {
-        return seasonConfig.GIVELIFE_COMMAND_ENABLED.get(seasonConfig);
+        return seasonConfig.GIVELIFE_COMMAND_ENABLED.get();
     }
 
     @Override

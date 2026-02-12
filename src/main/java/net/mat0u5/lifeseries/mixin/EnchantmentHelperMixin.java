@@ -62,14 +62,14 @@ public class EnchantmentHelperMixin {
         }
         //? if <= 1.20.5 {
 
-        /*if (seasonConfig.CUSTOM_ENCHANTER_ALGORITHM.get(seasonConfig)) {
+        /*if (seasonConfig.CUSTOM_ENCHANTER_ALGORITHM.get()) {
             ls$customEnchantmentTableAlgorithm(level, stack, bl, cir);
         }
         else {
             ls$blacklistEnchantments(level, stack, bl, cir);
         }
         *///?} else {
-        if (seasonConfig.CUSTOM_ENCHANTER_ALGORITHM.get(seasonConfig)) {
+        if (seasonConfig.CUSTOM_ENCHANTER_ALGORITHM.get()) {
             ls$customEnchantmentTableAlgorithm(level, stack, possibleEnchantments, cir);
         }
         else {

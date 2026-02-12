@@ -104,7 +104,7 @@ public class LimitedLifeLivesManager extends LivesManager {
         target.ls$playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.MASTER, 10, 1);
         Component amount = Component.literal(LimitedLife.NEW_DEATH_NORMAL.copy().multiply(-1).formatLong());
 
-        if (seasonConfig.GIVELIFE_BROADCAST.get(seasonConfig)) {
+        if (seasonConfig.GIVELIFE_BROADCAST.get()) {
             PlayerUtils.broadcastMessageExcept(TextUtils.format("{} received {} from {}", target, amount, playerName), target);
         }
         target.sendSystemMessage(TextUtils.format("You received {} from {}", amount, playerName));
@@ -136,7 +136,7 @@ public class LimitedLifeLivesManager extends LivesManager {
     @Override
     public void reload() {
         super.reload();
-        TIME_RANDOMIZE_INTERVAL = LimitedLifeConfig.TIME_RANDOMIZE_INTERVAL.get(seasonConfig);
+        TIME_RANDOMIZE_INTERVAL = LimitedLifeConfig.TIME_RANDOMIZE_INTERVAL.get();
 
     }
 
