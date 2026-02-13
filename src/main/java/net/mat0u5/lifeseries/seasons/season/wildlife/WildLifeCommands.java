@@ -249,8 +249,8 @@ public class WildLifeCommands extends Command {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        PlayerUtils.broadcastMessageToAdmins(TextUtils.format("{}§7 requests their snail name to be §f{}§7", player, name));
-        Component adminText = TextUtils.format("§7Click {}§7 to accept.", TextUtils.runCommandText(TextUtils.formatString("/snail names set {} {}", player, name)));
+        PlayerUtils.broadcastMessageToAdmins(ModifiableText.WILDLIFE_SNAIL_NAME_REQUEST.get(player, name));
+        Component adminText = ModifiableText.WILDLIFE_SNAIL_NAME_REQUEST_PROMPT.get(TextUtils.runCommandText(TextUtils.formatString("/snail names set {} {}", player, name)));
         PlayerUtils.broadcastMessageToAdmins(adminText);
         return 1;
     }
@@ -283,7 +283,7 @@ public class WildLifeCommands extends Command {
             OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7No snail skins have been added yet. Run '§f/snail textures info§7' to learn how to add them."));
             return -1;
         }
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("§7The following skins have been found: §f{}", textures));
+        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SNAIL_TEXTURES_LIST.get(textures));
         return 1;
     }
 
@@ -321,10 +321,10 @@ public class WildLifeCommands extends Command {
                 SuperpowersWildcard.preAssignedSuperpowers.remove(player.getUUID());
             }
             if (targets.size() == 1) {
-                OtherUtils.sendCommandFeedback(source, TextUtils.format("Reset {}'s superpower assignment", targets.iterator().next()));
+                OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_ASSIGN_RESET_SINGLE.get(targets.iterator().next()));
             }
             else {
-                OtherUtils.sendCommandFeedback(source, TextUtils.format("Reset the superpower assignment of {} targets", targets.size()));
+                OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_ASSIGN_RESET_MULTIPLE.get(targets.size()));
             }
             return 1;
         }
@@ -344,10 +344,10 @@ public class WildLifeCommands extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Forced {}'s superpower to be {} when the next superpower randomization happens", targets.iterator().next(), name));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_ASSIGN_SINGLE.get(targets.iterator().next(), name));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Forced the superpower of {} targets to be {} when the next superpower randomization happens", targets.size(), name));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_ASSIGN_MULTIPLE.get(targets.size(), name));
         }
         return 1;
     }
@@ -379,10 +379,10 @@ public class WildLifeCommands extends Command {
         if (checkBanned(source)) return -1;
         SuperpowersWildcard.rollRandomSuperpowers(new ArrayList<>(targets));
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Randomized {}'s superpower", targets.iterator().next()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_RANDOMIZE_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Randomized the superpower of {} targets", targets.size()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_RANDOMIZE_MULTIPLE.get(targets.size()));
         }
         return 1;
     }
@@ -396,10 +396,10 @@ public class WildLifeCommands extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Deactivated {}'s superpower", targets.iterator().next()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_DEACTIVATE_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Deactivated the superpower of {} targets", targets.size()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_DEACTIVATE_MULTIPLE.get(targets.size()));
         }
         return 1;
     }
@@ -407,7 +407,7 @@ public class WildLifeCommands extends Command {
     public int getSuperpower(CommandSourceStack source, ServerPlayer player) {
         if (checkBanned(source)) return -1;
         Superpowers superpower = SuperpowersWildcard.getSuperpower(player);
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("{}'s superpower is: {}", player,  superpower.getString()));
+        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SUPERPOWER_GET.get(player, superpower.getString()));
         return 1;
     }
 
@@ -430,10 +430,10 @@ public class WildLifeCommands extends Command {
             SuperpowersWildcard.setSuperpower(player, superpower);
         }
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Set {}'s superpower to {}", targets.iterator().next(), name));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_SET_SINGLE.get(targets.iterator().next(), name));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Set the superpower to {} for {} targets", name, targets.size()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_SET_MULTIPLE.get(name, targets.size()));
         }
         return 1;
     }
@@ -441,7 +441,7 @@ public class WildLifeCommands extends Command {
     public int setSnailName(CommandSourceStack source, ServerPlayer player, String name) {
         if (checkBanned(source)) return -1;
         Snails.setSnailName(player, name);
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("Set {}'s snail name to {}", player, name));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_NAME_SET.get(player, name));
         return 1;
     }
 
@@ -455,10 +455,10 @@ public class WildLifeCommands extends Command {
 
         if (targets.size() == 1) {
             ServerPlayer player = targets.iterator().next();
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Reset {}'s snail name to {}'s Snail", player, player.getScoreboardName()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_NAME_RESET_SINGLE.get(player, ModifiableText.WILDLIFE_SNAIL_DEFAULT_NAME.getString(player)));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Reset the snail name for {} targets", targets.size()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_NAME_RESET_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -470,11 +470,11 @@ public class WildLifeCommands extends Command {
 
         if (targets.size() == 1) {
             ServerPlayer player = targets.iterator().next();
-            OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("{}'s snail is called {}", player, Snails.getSnailName(player)));
+            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SNAIL_NAME_GET.get(player, Snails.getSnailName(player)));
         }
         else {
             for (ServerPlayer player : targets) {
-                OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("{}'s snail is called {}", player, Snails.getSnailName(player)));
+                OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SNAIL_NAME_GET.get(player, Snails.getSnailName(player)));
             }
         }
         return 1;
@@ -501,7 +501,7 @@ public class WildLifeCommands extends Command {
         wildcardInstance.deactivate();
         WildcardManager.activeWildcards.remove(wildcard);
 
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("Deactivated {}", wildcardName));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_WILDCARD_DEACTIVATE.get(wildcardName));
         NetworkHandlerServer.sendUpdatePackets();
         return 1;
     }
@@ -547,13 +547,13 @@ public class WildLifeCommands extends Command {
         TaskScheduler.scheduleTask(89, () -> WildcardManager.activeWildcards.put(wildcard, actualWildcard));
         WildcardManager.activateWildcards();
 
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("Activated {}", wildcardName));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_WILDCARD_ACTIVATE.get(wildcardName));
         return 1;
     }
 
     public int listWildcards(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Available Wildcards: {}", Wildcards.getWildcardsStr()));
+        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_WILDCARD_AVAILABLE.get(Wildcards.getWildcardsStr()));
         return 1;
     }
 
@@ -563,7 +563,7 @@ public class WildLifeCommands extends Command {
             OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7There are no active Wildcards right now. \nYou will be able to select a Wildcard when you start a session, or you can use '§f/wildcard activate <wildcard>§7' to activate a specific Wildcard right now."));
             return 1;
         }
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Activated Wildcards: {}", Wildcards.getActiveWildcardsStr()));
+        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_WILDCARD_ACTIVATED.get(Wildcards.getActiveWildcardsStr()));
         return 1;
     }
 }

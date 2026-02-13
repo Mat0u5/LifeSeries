@@ -110,7 +110,7 @@ public class SubInCommands extends Command {
             return -1;
         }
 
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("{} is now subbing in for {}", player, target));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.SUBIN_START.get(player, target));
         SubInManager.addSubIn(player, targetProfile);
 
         return 1;
@@ -126,7 +126,7 @@ public class SubInCommands extends Command {
 
         GameProfile profile = SubInManager.getSubstitutedPlayer(player.getUUID());
 
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("{} is no longer subbing in for {}", player, OtherUtils.profileName(profile)));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.SUBIN_STOP.get(player, OtherUtils.profileName(profile)));
         SubInManager.removeSubIn(player);
         return 1;
     }

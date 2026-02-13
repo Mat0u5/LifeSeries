@@ -4,7 +4,6 @@ import com.mojang.authlib.GameProfile;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayerManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ProfileManager;
 import net.minecraft.network.protocol.game.ClientboundSetExperiencePacket;
@@ -117,7 +116,7 @@ public class SubInManager {
 
         ProfileManager.resetPlayer(player1).thenRun(() -> {
             if (player1 != null) {
-                player1.sendSystemMessage(ModifiableText.SUBIN_END.get(getName(subIn.target())));
+                player1.sendSystemMessage(ModifiableText.SUBIN_END_NOTIFY.get(getName(subIn.target())));
             }
             if (player2 != null) {
                 player2.sendSystemMessage(ModifiableText.SUBIN_END_OTHER.get(getName(subIn.substituter())));

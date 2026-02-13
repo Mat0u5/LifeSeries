@@ -397,10 +397,10 @@ public class SecretLifeCommands extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.GIVEHEART_RESET_SINGLE.get(targets.iterator().next()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.SECRETLIFE_GIVEHEART_RESET_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.GIVEHEART_RESET_MULTIPLE.get(targets.size()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.SECRETLIFE_GIVEHEART_RESET_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -413,15 +413,15 @@ public class SecretLifeCommands extends Command {
         SecretLife secretLife = (SecretLife) currentSeason;
 
         if (target == self) {
-            source.sendFailure(ModifiableText.GIVEHEART_ERROR_SELF.get());
+            source.sendFailure(ModifiableText.SECRETLIFE_GIVEHEART_ERROR_SELF.get());
             return -1;
         }
         if (playersGiven.contains(self.getUUID())) {
-            source.sendFailure(ModifiableText.GIVEHEART_ERROR_MULTIPLE.get());
+            source.sendFailure(ModifiableText.SECRETLIFE_GIVEHEART_ERROR_MULTIPLE.get());
             return -1;
         }
         if (target.ls$isDead()) {
-            source.sendFailure(ModifiableText.GIVEHEART_ERROR_DEAD.get());
+            source.sendFailure(ModifiableText.SECRETLIFE_GIVEHEART_ERROR_DEAD.get());
             return -1;
         }
         if (!currentSession.statusStarted()) {
@@ -430,8 +430,8 @@ public class SecretLifeCommands extends Command {
         }
         playersGiven.add(self.getUUID());
         secretLife.addPlayerHealth(target, 2);
-        Component senderMessage = ModifiableText.GIVEHEART_SEND.get(target);
-        Component recipientMessage = ModifiableText.GIVEHEART_RECEIVE.get(self);
+        Component senderMessage = ModifiableText.SECRETLIFE_GIVEHEART_SEND.get(target);
+        Component recipientMessage = ModifiableText.SECRETLIFE_GIVEHEART_RECEIVE.get(self);
         SessionTranscript.giftHeart(self, target);
 
         self.sendSystemMessage(senderMessage);

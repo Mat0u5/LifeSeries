@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
@@ -203,19 +204,19 @@ public class WildLifeTriviaCommand extends Command {
 
         if (punishment.equals("robotic_voice") && totalSVC == 0) {
             if (targets.size() == 1) {
-                source.sendFailure(TextUtils.format("{} does not have Simple Voice Chat installed", targets.iterator().next()));
+                source.sendFailure(ModifiableText.MOD_SVC_MISSING.get(targets.iterator().next()));
             }
             else {
-                source.sendFailure(Component.nullToEmpty("None of the targets have Simple Voice Chat installed"));
+                source.sendFailure(ModifiableText.MOD_SVC_MISSING_ALL.get());
             }
             return -1;
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Punished {} with {}", targets.iterator().next(), punishment));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_PUNISHMENT_SET_SINGLE.get(targets.iterator().next(), punishment));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Punished {} targets with {}", targets.size(), punishment));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_PUNISHMENT_SET_MULTIPLE.get(targets.size(), punishment));
         }
         return 1;
     }
@@ -227,10 +228,10 @@ public class WildLifeTriviaCommand extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Cleared {}'s trivia punishments", targets.iterator().next()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_PUNISHMENT_CLEAR_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Cleared trivia punishments for {} targets", targets.size()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_PUNISHMENT_CLEAR_MULTIPLE.get(targets.size()));
         }
         return 1;
     }
@@ -243,10 +244,10 @@ public class WildLifeTriviaCommand extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Spawned a trivia bot for {}", targets.iterator().next()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_BOT_SPAWN_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Spawned a trivia bot for {} targets", targets.size()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_BOT_SPAWN_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -307,10 +308,10 @@ public class WildLifeTriviaCommand extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Assigned {}'s trivia", targets.iterator().next()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_SET_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Assigned trivia of {} targets", targets.size()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_SET_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -324,10 +325,10 @@ public class WildLifeTriviaCommand extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Reset {}'s assigned trivia", targets.iterator().next()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_RESET_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Reset assigned trivia of {} targets", targets.size()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_RESET_MULTIPLE.get(targets.size()));
         }
 
         return 1;

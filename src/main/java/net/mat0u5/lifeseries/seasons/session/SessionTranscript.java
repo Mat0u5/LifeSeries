@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.session;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.secretlife.Task;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
@@ -247,7 +248,7 @@ public class SessionTranscript {
     }
 
     public static Component getTranscriptMessage() {
-        return TextUtils.format("§7Click {}§7 to copy the session transcript.", TextUtils.copyClipboardText(SessionTranscript.getStats()));
+        return ModifiableText.TRANSCRIPT_COPY.get(TextUtils.copyClipboardText(SessionTranscript.getStats()));
     }
 
     public record TranscriptPlayerRecord(UUID uuid, String name, int kills, int deaths) {}

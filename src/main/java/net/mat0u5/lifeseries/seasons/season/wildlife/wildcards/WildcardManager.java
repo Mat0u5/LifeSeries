@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards;
 
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
@@ -66,8 +67,7 @@ public class WildcardManager {
     }
 
     public static void chosenWildcard(Wildcards wildcard) {
-        PlayerUtils.broadcastMessageToAdmins(TextUtils.format("The {} wildcard has been selected for this session.", wildcard));
-        PlayerUtils.broadcastMessageToAdmins(Component.nullToEmpty("§7Use the §f'/wildcard choose' §7 command if you want to change it."));
+        PlayerUtils.broadcastMessageToAdmins(ModifiableText.WILDLIFE_WILDCARD_CHOOSE.get(wildcard));
         WildcardManager.chosenWildcard = wildcard;
     }
 
