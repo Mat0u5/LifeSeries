@@ -50,13 +50,13 @@ public class Session {
     SessionAction endWarning1 = new SessionAction(Time.minutes(-5)) {
         @Override
         public void trigger() {
-            PlayerUtils.broadcastMessage(Component.literal("Session ends in 5 minutes!").withStyle(ChatFormatting.GOLD));
+            PlayerUtils.broadcastMessage(ModifiableText.SESSION_WARNING_5MIN.get());
         }
     };
     SessionAction endWarning2 = new SessionAction(Time.minutes(-30)) {
         @Override
         public void trigger() {
-            PlayerUtils.broadcastMessage(Component.literal("Session ends in 30 minutes!").withStyle(ChatFormatting.GOLD));
+            PlayerUtils.broadcastMessage(ModifiableText.SESSION_WARNING_30MIN.get());
         }
     };
     SessionAction actionInfoAction = new SessionAction(Time.seconds(7)) {
@@ -76,15 +76,15 @@ public class Session {
         }
         else {
             sessionStartInProgress = 150;
-            PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§a3"), 15, 35, 15);
+            PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), ModifiableText.COUNTDOWN_COLOR_3.get(), 15, 35, 15);
             TaskScheduler.schedulePriorityTask(50, () -> {
-                PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§e2"), 15, 35, 15);
+                PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), ModifiableText.COUNTDOWN_COLOR_2.get(), 15, 35, 15);
             });
             TaskScheduler.schedulePriorityTask(100, () -> {
-                PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§c1"), 15, 35, 15);
+                PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), ModifiableText.COUNTDOWN_COLOR_1.get(), 15, 35, 15);
             });
             TaskScheduler.schedulePriorityTask(150, () -> {
-                PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§aThe timer has begun!"), 15, 35, 15);
+                PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), ModifiableText.SESSION_START_TITLE.get(), 15, 35, 15);
                 startSession();
             });
         }
@@ -127,7 +127,7 @@ public class Session {
         SessionTranscript.sessionEnd();
         if (status != SessionStatus.FINISHED && status != SessionStatus.NOT_STARTED) {
             SessionTranscript.onSessionEnd();
-            PlayerUtils.broadcastMessage(Component.literal("The session has ended!").withStyle(ChatFormatting.GOLD));
+            PlayerUtils.broadcastMessage(ModifiableText.SESSION_ENDED.get());
         }
         changeStatus(SessionStatus.FINISHED);
         passedTime = Time.zero();
@@ -139,14 +139,14 @@ public class Session {
 
     public void sessionPause() {
         if (statusPaused()) {
-            PlayerUtils.broadcastMessage(Component.literal("Session unpaused!").withStyle(ChatFormatting.GOLD));
+            PlayerUtils.broadcastMessage(ModifiableText.SESSION_UNPAUSING.get());
             changeStatus(SessionStatus.STARTED);
             if (isInQueuedPause()) {
                 discardCurrentQueuedPause();
             }
         }
         else {
-            PlayerUtils.broadcastMessage(Component.literal("Session paused!").withStyle(ChatFormatting.GOLD));
+            PlayerUtils.broadcastMessage(ModifiableText.SESSION_PAUSED.get());
             changeStatus(SessionStatus.PAUSED);
         }
     }

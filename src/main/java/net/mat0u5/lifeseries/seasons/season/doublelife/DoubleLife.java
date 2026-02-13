@@ -305,17 +305,17 @@ public class DoubleLife extends Season {
     public void rollSoulmates() {
         List<ServerPlayer> playersToRoll = getNonAssignedPlayers();
         PlayerUtils.playSoundToPlayers(playersToRoll, SoundEvents.UI_BUTTON_CLICK.value());
-        PlayerUtils.sendTitleToPlayers(playersToRoll, Component.literal("3").withStyle(ChatFormatting.GREEN),5,20,5);
+        PlayerUtils.sendTitleToPlayers(playersToRoll, ModifiableText.COUNTDOWN_GREEN_3.get(),5,20,5);
         TaskScheduler.scheduleTask(25, () -> {
             PlayerUtils.playSoundToPlayers(playersToRoll, SoundEvents.UI_BUTTON_CLICK.value());
-            PlayerUtils.sendTitleToPlayers(playersToRoll, Component.literal("2").withStyle(ChatFormatting.GREEN),5,20,5);
+            PlayerUtils.sendTitleToPlayers(playersToRoll, ModifiableText.COUNTDOWN_GREEN_2.get(),5,20,5);
         });
         TaskScheduler.scheduleTask(50, () -> {
             PlayerUtils.playSoundToPlayers(playersToRoll, SoundEvents.UI_BUTTON_CLICK.value());
-            PlayerUtils.sendTitleToPlayers(playersToRoll, Component.literal("1").withStyle(ChatFormatting.GREEN),5,20,5);
+            PlayerUtils.sendTitleToPlayers(playersToRoll, ModifiableText.COUNTDOWN_GREEN_1.get(),5,20,5);
         });
         TaskScheduler.scheduleTask(75, () -> {
-            PlayerUtils.sendTitleToPlayers(playersToRoll, Component.literal("Your soulmate is...").withStyle(ChatFormatting.GREEN),10,50,20);
+            PlayerUtils.sendTitleToPlayers(playersToRoll, ModifiableText.DOUBLELIFE_SOULMATE_TITLE.get(),10,50,20);
             PlayerUtils.playSoundToPlayers(playersToRoll, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("doublelife_soulmate_wait")));
         });
         TaskScheduler.scheduleTask(165, () -> {
@@ -405,7 +405,7 @@ public class DoubleLife extends Season {
         saveSoulmates();
 
         for (ServerPlayer remaining : getNonAssignedPlayers()) {
-            PlayerUtils.broadcastMessageToAdmins(Component.literal("[Double Life] ").append(remaining.getDisplayName()).append(" was not paired with anyone."));
+            PlayerUtils.broadcastMessageToAdmins(ModifiableText.DOUBLELIFE_UNPAIRED.get(remaining.getDisplayName()));
         }
         soulmatesForce.clear();
         soulmatesPrevent.clear();
@@ -728,10 +728,10 @@ public class DoubleLife extends Season {
                     resetSoulmate(player1);
                     List<ServerPlayer> allPlayers = PlayerUtils.getAllPlayers();
                     TaskScheduler.scheduleTask(Time.seconds(10), () -> {
-                        PlayerUtils.sendTitleWithSubtitleToPlayers(allPlayers, Component.empty(), Component.nullToEmpty("§aYour fate is your own..."), 20, 40, 20);
+                        PlayerUtils.sendTitleWithSubtitleToPlayers(allPlayers, ModifiableText.DOUBLELIFE_LASTPAIR_PT1_TITLE.get(), ModifiableText.DOUBLELIFE_LASTPAIR_PT1_SUBTITLE.get(), 20, 40, 20);
                     });
                     TaskScheduler.scheduleTask(Time.seconds(15), () -> {
-                        PlayerUtils.sendTitleWithSubtitleToPlayers(allPlayers, Component.empty(), Component.nullToEmpty("§cThere can only be one winner."), 20, 40, 20);
+                        PlayerUtils.sendTitleWithSubtitleToPlayers(allPlayers, ModifiableText.DOUBLELIFE_LASTPAIR_PT2_TITLE.get(), ModifiableText.DOUBLELIFE_LASTPAIR_PT2_SUBTITLE.get(), 20, 40, 20);
                     });
                     TaskScheduler.scheduleTask(Time.seconds(19), () -> {
                         LevelUtils.summonHarmlessLightning(player1);

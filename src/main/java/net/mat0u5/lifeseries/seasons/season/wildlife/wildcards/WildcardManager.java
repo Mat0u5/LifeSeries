@@ -42,7 +42,7 @@ public class WildcardManager {
                     @Override
                     public void trigger() {
                         if (activeWildcards.isEmpty()) {
-                            PlayerUtils.broadcastMessage(Component.literal("A Wildcard will be activated in 2 minutes!").withStyle(ChatFormatting.GRAY));
+                            PlayerUtils.broadcastMessage(ModifiableText.WILDLIFE_WILDCARD_WARNING_2MIN.get());
                         }
                     }
                 }
@@ -130,21 +130,21 @@ public class WildcardManager {
     }
 
     public static void fadedWildcard() {
-        PlayerUtils.broadcastMessage(Component.nullToEmpty("§7A Wildcard has faded..."));
+        PlayerUtils.broadcastMessage(ModifiableText.WILDLIFE_WILDCARD_FADED.get());
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BEACON_DEACTIVATE);
     }
 
     public static void showDots() {
         List<ServerPlayer> players = PlayerUtils.getAllPlayers();
         PlayerUtils.playSoundToPlayers(players, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
-        PlayerUtils.sendTitleToPlayers(players, Component.literal("§a§l,"),0,40,0);
+        PlayerUtils.sendTitleToPlayers(players, ModifiableText.WILDLIFE_WILDCARD_DOTS_1.get(),0,40,0);
         TaskScheduler.scheduleTask(30, () -> {
             PlayerUtils.playSoundToPlayers(players, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
-            PlayerUtils.sendTitleToPlayers(players, Component.literal("§a§l, §e§l,"),0,40,0);
+            PlayerUtils.sendTitleToPlayers(players, ModifiableText.WILDLIFE_WILDCARD_DOTS_2.get(),0,40,0);
         });
         TaskScheduler.scheduleTask(60, () -> {
             PlayerUtils.playSoundToPlayers(players, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
-            PlayerUtils.sendTitleToPlayers(players, Component.literal("§a§l, §e§l, §c§l,"),0,40,0);
+            PlayerUtils.sendTitleToPlayers(players, ModifiableText.WILDLIFE_WILDCARD_DOTS_3.get(),0,40,0);
         });
     }
 

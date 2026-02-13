@@ -235,7 +235,7 @@ public class WildLifeCommands extends Command {
             return -1;
         }
 
-        OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_HUNGER_RANDOMIZE.get());
+        OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_HUNGER_RANDOMIZE_MANUAL.get());
 
         if (WildcardManager.activeWildcards.get(Wildcards.HUNGER) instanceof Hunger hungerWildcard) {
             hungerWildcard.newFoodRules();

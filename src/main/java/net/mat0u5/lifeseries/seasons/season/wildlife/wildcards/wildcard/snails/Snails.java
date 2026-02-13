@@ -47,7 +47,7 @@ public class Snails extends Wildcard {
         }
         loadSnailNames();
         if (!currentSession.statusStarted()) {
-            PlayerUtils.broadcastMessageToAdmins(Component.nullToEmpty("§7Use the §f'/snail ...'§7 command to modify snail names and to get info on how to change snail textures."));
+            PlayerUtils.broadcastMessageToAdmins(ModifiableText.WILDLIFE_SNAIL_INFO.get());
         }
         super.activate();
     }

@@ -530,7 +530,7 @@ public class NetworkHandlerServer {
     }
 
     public static void onUpdatedConfig() {
-        PlayerUtils.broadcastMessageToAdmins(Component.nullToEmpty("§7Config has been successfully updated."));
+        PlayerUtils.broadcastMessageToAdmins(ModifiableText.CONFIG_UPDATED.get());
         if (configNeedsReload) {
             OtherUtils.reloadServer();
             //PlayerUtils.broadcastMessageToAdmins(Text.of("Run §7'/lifeseries reload'§r to apply all the changes."));

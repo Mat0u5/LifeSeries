@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.nicelife;
 
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.angrysnowman.AngrySnowman;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
@@ -154,11 +155,11 @@ public class NiceLifeTriviaManager {
     public static void allWrong() {
         SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_incorrect_all_wrong"));
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
-        PlayerUtils.broadcastMessage(Component.literal("§f<§2§mTrivia§m§2 Santa Bot§f>§4 WRONG! WRONG! WRONG! ALL WRONG!"));
+        PlayerUtils.broadcastMessage(ModifiableText.NICELIFE_TRIVIA_ALL_WRONG_PT1.get());
 
         SimplePackets.TRIVIA_ALL_WRONG.sendToClient();
         TaskScheduler.scheduleTask(120, () -> {
-            PlayerUtils.broadcastMessage(Component.literal("§f<§2§mTrivia§m§2 Santa Bot§f>§4 SNOW MUST GO ON!"));
+            PlayerUtils.broadcastMessage(ModifiableText.NICELIFE_TRIVIA_ALL_WRONG_PT2.get());
             for (ServerPlayer player : livesManager.getAlivePlayers()) {
                 for (int i = 0; i < 3; i++) {
                     BlockPos pos = LevelUtils.getCloseBlockPos(player.ls$getServerLevel(), player.blockPosition(), 8, 2, true);

@@ -71,7 +71,8 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
         DatapackIntegration.EVENT_BOOGEYMAN_FAIL_REWARD.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
         if (!DatapackIntegration.EVENT_BOOGEYMAN_FAIL_REWARD.isCanceled()) {
             if (BOOGEYMAN_ADVANCED_DEATHS) {
-                PlayerUtils.sendTitle(player,Component.nullToEmpty("§cThe curse consumes you.."), 20, 30, 20);
+
+                PlayerUtils.sendTitle(player, ModifiableText.BOOGEYMAN_FAIL_ADVANCEDDEATH_NOTIFY_TITLE.get(), 20, 30, 20);
                 if (BOOGEYMAN_ANNOUNCE_OUTCOME && sendMessage) {
                     PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_FAIL_ADVANCEDDEATH.get(player));
                 }
@@ -85,7 +86,7 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
                 }
                 Component setTo = livesManager.getFormattedLives(player);
 
-                PlayerUtils.sendTitle(player,Component.nullToEmpty("§cYou have failed."), 20, 30, 20);
+                PlayerUtils.sendTitle(player, ModifiableText.BOOGEYMAN_FAIL_NOTIFY_TITLE.get(), 20, 30, 20);
                 PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("lastlife_boogeyman_fail")));
                 if (BOOGEYMAN_ANNOUNCE_OUTCOME && sendMessage) {
                     PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_FAIL.get(player, setTo));

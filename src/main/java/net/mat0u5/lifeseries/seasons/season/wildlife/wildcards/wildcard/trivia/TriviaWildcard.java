@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia;
 
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotPathfinding;
@@ -87,9 +88,9 @@ public class TriviaWildcard extends Wildcard {
         WildLifeTriviaHandler.cursedHeartPlayers.clear();
         WildLifeTriviaHandler.cursedMoonJumpPlayers.clear();
         if (!currentSession.statusStarted()) {
-            PlayerUtils.broadcastMessageToAdmins(Component.nullToEmpty("§7You must start a session for trivia bots to spawn!"));
+            PlayerUtils.broadcastMessageToAdmins(ModifiableText.WILDLIFE_TRIVIA_NOTICE_START.get());
         }
-        PlayerUtils.broadcastMessageToAdmins(Component.nullToEmpty("§7You can modify the trivia questions in the config files (./config/lifeseries/wildlife/*-trivia)"));
+        PlayerUtils.broadcastMessageToAdmins(ModifiableText.WILDLIFE_TRIVIA_NOTICE.get());
         super.activate();
     }
 

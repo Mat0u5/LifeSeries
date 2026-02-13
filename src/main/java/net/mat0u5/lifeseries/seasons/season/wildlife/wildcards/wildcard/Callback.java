@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard;
 
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
@@ -159,19 +160,19 @@ public class Callback extends Wildcard {
     public static void showEndingTitles() {
         SessionTranscript.endingIsYours();
         List<ServerPlayer> players = PlayerUtils.getAllPlayers();
-        PlayerUtils.sendTitleToPlayers(players, Component.nullToEmpty("§7The ending is §cyours§7..."), 0, 90, 0);
+        PlayerUtils.sendTitleToPlayers(players, ModifiableText.WILDLIFE_MAKEITWILD_PT1.get(), 0, 90, 0);
         TaskScheduler.scheduleTask(80, () -> {
 
             PlayerUtils.playSoundToPlayers(players, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
-            PlayerUtils.sendTitleToPlayers(players, Component.nullToEmpty("§cMake"), 0, 40, 0);
+            PlayerUtils.sendTitleToPlayers(players, ModifiableText.WILDLIFE_MAKEITWILD_PT2.get(), 0, 40, 0);
         });
         TaskScheduler.scheduleTask(110, () -> {
             PlayerUtils.playSoundToPlayers(players, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
-            PlayerUtils.sendTitleToPlayers(players, Component.nullToEmpty("§cMake §eit"), 0, 40, 0);
+            PlayerUtils.sendTitleToPlayers(players, ModifiableText.WILDLIFE_MAKEITWILD_PT3.get(), 0, 40, 0);
         });
         TaskScheduler.scheduleTask(140, () -> {
             PlayerUtils.playSoundToPlayers(players, SoundEvents.ZOMBIE_VILLAGER_CURE, 0.2f, 1);
-            PlayerUtils.sendTitleToPlayers(players, Component.nullToEmpty("§cMake §eit §a§lWILD"), 0, 90, 20);
+            PlayerUtils.sendTitleToPlayers(players, ModifiableText.WILDLIFE_MAKEITWILD_PT4.get(), 0, 90, 20);
 
         });
     }
@@ -202,7 +203,7 @@ public class Callback extends Wildcard {
         for (Wildcard wildcard : WildcardManager.activeWildcards.values()) {
             if (wildcard.getType() == Wildcards.CALLBACK) continue;
             wildcard.deactivate();
-            PlayerUtils.broadcastMessage(Component.nullToEmpty("§7A Wildcard has faded..."));
+            PlayerUtils.broadcastMessage(ModifiableText.WILDLIFE_WILDCARD_FADED.get());
         }
         WildcardManager.activeWildcards.clear();
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BEACON_DEACTIVATE);

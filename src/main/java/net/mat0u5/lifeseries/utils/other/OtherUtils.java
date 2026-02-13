@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.utils.other;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.PropertyMap;
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.commands.CommandSourceStack;
@@ -219,10 +220,10 @@ public class OtherUtils {
         serverTickRateManager.setFrozen(frozen);
 
         if (frozen) {
-            PlayerUtils.broadcastMessageToAdmins(Component.nullToEmpty("§7The game is frozen"));
+            PlayerUtils.broadcastMessageToAdmins(ModifiableText.TICK_FREEZE.get());
         }
         else {
-            PlayerUtils.broadcastMessageToAdmins(Component.nullToEmpty("§7The game is no longer frozen."));
+            PlayerUtils.broadcastMessageToAdmins(ModifiableText.TICK_UNFREEZE.get());
         }
         //?}
     }

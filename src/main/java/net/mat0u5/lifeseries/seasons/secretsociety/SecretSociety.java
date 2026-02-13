@@ -128,19 +128,19 @@ public class SecretSociety {
             PlayerUtils.playSoundToPlayers(nonMemberPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("secretlife_task")));
         }
         PlayerUtils.playSoundToPlayers(memberPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("secretlife_task")));
-        PlayerUtils.sendTitleToPlayers(memberPlayers, Component.nullToEmpty("§cThe Society calls"), 0, 30, 0);
+        PlayerUtils.sendTitleToPlayers(memberPlayers, ModifiableText.SOCIETY_CALLS_PT1.get(), 0, 30, 0);
 
         TaskScheduler.scheduleTask(15, () -> {
-            PlayerUtils.sendTitleToPlayers(memberPlayers, Component.nullToEmpty("§cThe Society calls."), 0, 30, 0);
+            PlayerUtils.sendTitleToPlayers(memberPlayers, ModifiableText.SOCIETY_CALLS_PT2.get(), 0, 30, 0);
         });
         TaskScheduler.scheduleTask(30, () -> {
-            PlayerUtils.sendTitleToPlayers(memberPlayers, Component.nullToEmpty("§cThe Society calls.."), 0, 30, 0);
+            PlayerUtils.sendTitleToPlayers(memberPlayers, ModifiableText.SOCIETY_CALLS_PT3.get(), 0, 30, 0);
         });
         TaskScheduler.scheduleTask(45, () -> {
-            PlayerUtils.sendTitleToPlayers(memberPlayers, Component.nullToEmpty("§cThe Society calls..."), 0, 45, 30);
+            PlayerUtils.sendTitleToPlayers(memberPlayers, ModifiableText.SOCIETY_CALLS_PT4.get(), 0, 45, 30);
         });
         TaskScheduler.scheduleTask(115, () -> {
-            PlayerUtils.sendTitleWithSubtitleToPlayers(memberPlayers, Component.empty(), Component.nullToEmpty("§cTake yourself somewhere quiet"), 20, 60, 20);
+            PlayerUtils.sendTitleWithSubtitleToPlayers(memberPlayers, ModifiableText.SOCIETY_CALLS_PT5_TITLE.get(), ModifiableText.SOCIETY_CALLS_PT5_SUBTITLE.get(), 20, 60, 20);
         });
     }
 
@@ -309,8 +309,7 @@ public class SecretSociety {
         if (!SOCIETY_ENABLED) return;
         if (societyStarted && !societyEnded) {
             TaskScheduler.scheduleTask(Time.seconds(2), () -> {
-                PlayerUtils.broadcastMessageToAdmins(Component.nullToEmpty("§c The Secret Society has not been ended by any Member!"));
-                PlayerUtils.broadcastMessageToAdmins(Component.nullToEmpty("§c Run \"/society members list\" to see the Members."));
+                PlayerUtils.broadcastMessageToAdmins(ModifiableText.SOCIETY_NOT_ENDED.get());
             });
         }
     }
@@ -330,24 +329,24 @@ public class SecretSociety {
     public void endSuccess() {
         endSociety();
         List<ServerPlayer> memberPlayers = getMembers();
-        PlayerUtils.sendTitleWithSubtitleToPlayers(memberPlayers, Component.empty(), Component.nullToEmpty("§aThe Society is pleased"), 20, 30, 20);
+        PlayerUtils.sendTitleWithSubtitleToPlayers(memberPlayers, ModifiableText.SOCIETY_END_SUCCESS_PT1_TITLE.get(), ModifiableText.SOCIETY_END_SUCCESS_PT1_SUBTITLE.get(), 20, 30, 20);
         TaskScheduler.scheduleTask(75, () -> {
-            PlayerUtils.sendTitleWithSubtitleToPlayers(memberPlayers, Component.empty(), Component.nullToEmpty("§aYou will not be punished"), 20, 30, 20);
+            PlayerUtils.sendTitleWithSubtitleToPlayers(memberPlayers, ModifiableText.SOCIETY_END_SUCCESS_PT2_TITLE.get(), ModifiableText.SOCIETY_END_SUCCESS_PT2_SUBTITLE.get(), 20, 30, 20);
             for (ServerPlayer member : memberPlayers) {
                 DatapackIntegration.EVENT_SOCIETY_SUCCESS_REWARD.trigger(new DatapackIntegration.Events.MacroEntry("Player", member.getScoreboardName()));
             }
         });
         TaskScheduler.scheduleTask(150, () -> {
-            PlayerUtils.sendTitleWithSubtitleToPlayers(memberPlayers, Component.empty(), Component.nullToEmpty("§cYou are still sworn to secrecy"), 20, 30, 20);
+            PlayerUtils.sendTitleWithSubtitleToPlayers(memberPlayers, ModifiableText.SOCIETY_END_SUCCESS_PT3_TITLE.get(), ModifiableText.SOCIETY_END_SUCCESS_PT3_SUBTITLE.get(), 20, 30, 20);
         });
     }
 
     public void endFail() {
         endSociety();
         List<ServerPlayer> memberPlayers = getMembers();
-        PlayerUtils.sendTitleWithSubtitleToPlayers(memberPlayers, Component.empty(), Component.nullToEmpty("§cThe Society is displeased"), 20, 30, 20);
+        PlayerUtils.sendTitleWithSubtitleToPlayers(memberPlayers, ModifiableText.SOCIETY_END_FAIL_PT1_TITLE.get(), ModifiableText.SOCIETY_END_FAIL_PT1_SUBTITLE.get(), 20, 30, 20);
         TaskScheduler.scheduleTask(75, () -> {
-            PlayerUtils.sendTitleWithSubtitleToPlayers(memberPlayers, Component.empty(), Component.nullToEmpty("§cYou will be punished"), 20, 30, 20);
+            PlayerUtils.sendTitleWithSubtitleToPlayers(memberPlayers, ModifiableText.SOCIETY_END_FAIL_PT2_TITLE.get(), ModifiableText.SOCIETY_END_FAIL_PT2_SUBTITLE.get(), 20, 30, 20);
         });
         TaskScheduler.scheduleTask(110, () -> {
             for (ServerPlayer member : memberPlayers) {
@@ -355,7 +354,7 @@ public class SecretSociety {
             }
         });
         TaskScheduler.scheduleTask(150, () -> {
-            PlayerUtils.sendTitleWithSubtitleToPlayers(memberPlayers, Component.empty(), Component.nullToEmpty("§cYou are still sworn to secrecy"), 20, 30, 20);
+            PlayerUtils.sendTitleWithSubtitleToPlayers(memberPlayers, ModifiableText.SOCIETY_END_FAIL_PT3_TITLE.get(), ModifiableText.SOCIETY_END_FAIL_PT3_SUBTITLE.get(), 20, 30, 20);
         });
     }
 

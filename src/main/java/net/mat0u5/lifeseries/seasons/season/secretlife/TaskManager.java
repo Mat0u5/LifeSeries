@@ -254,18 +254,18 @@ public class TaskManager {
                 tasksChosenFor.add(player.getUUID());
             }
         }
-        PlayerUtils.sendTitleToPlayers(allowedPlayers, Component.literal("Your secret is...").withStyle(ChatFormatting.RED),20,35,0);
+        PlayerUtils.sendTitleToPlayers(allowedPlayers, ModifiableText.SECRETLIFE_TASK_TITLE.get(),20,35,0);
 
         TaskScheduler.scheduleTask(40, () -> {
             PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvents.UI_BUTTON_CLICK.value());
-            PlayerUtils.sendTitleToPlayers(allowedPlayers, Component.literal("3").withStyle(ChatFormatting.RED),0,35,0);
+            PlayerUtils.sendTitleToPlayers(allowedPlayers, ModifiableText.COUNTDOWN_RED_3.get(),0,35,0);
         });
         TaskScheduler.scheduleTask(70, () -> {
-            PlayerUtils.sendTitleToPlayers(allowedPlayers, Component.literal("2").withStyle(ChatFormatting.RED),0,35,0);
+            PlayerUtils.sendTitleToPlayers(allowedPlayers, ModifiableText.COUNTDOWN_RED_2.get(),0,35,0);
             PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("secretlife_task")));
         });
         TaskScheduler.scheduleTask(105, () -> {
-            PlayerUtils.sendTitleToPlayers(allowedPlayers, Component.literal("1").withStyle(ChatFormatting.RED),0,35,0);
+            PlayerUtils.sendTitleToPlayers(allowedPlayers, ModifiableText.COUNTDOWN_RED_1.get(),0,35,0);
         });
         TaskScheduler.scheduleTask(130, () -> {
             for (ServerPlayer player : allowedPlayers) {
@@ -522,19 +522,19 @@ public class TaskManager {
             }
 
             PlayerUtils.playSoundToPlayer(player, SoundEvents.UI_BUTTON_CLICK.value());
-            PlayerUtils.sendTitle(player, Component.literal("The reward is more").withStyle(ChatFormatting.DARK_GREEN).withStyle(ChatFormatting.BOLD),20,35,0);
+            PlayerUtils.sendTitle(player, ModifiableText.SECRETLIFE_TASK_REROLL_PT1.get(),20,35,0);
 
             TaskScheduler.scheduleTask(50, () -> {
                 PlayerUtils.playSoundToPlayer(player, SoundEvents.UI_BUTTON_CLICK.value());
-                PlayerUtils.sendTitle(player, Component.literal("The risk is great").withStyle(ChatFormatting.GREEN).withStyle(ChatFormatting.BOLD),20,35,0);
+                PlayerUtils.sendTitle(player, ModifiableText.SECRETLIFE_TASK_REROLL_PT2.get(),20,35,0);
             });
             TaskScheduler.scheduleTask(100, () -> {
                 PlayerUtils.playSoundToPlayer(player, SoundEvents.UI_BUTTON_CLICK.value());
-                PlayerUtils.sendTitle(player, Component.literal("Let me open the door").withStyle(ChatFormatting.YELLOW).withStyle(ChatFormatting.BOLD),20,35,0);
+                PlayerUtils.sendTitle(player, ModifiableText.SECRETLIFE_TASK_REROLL_PT3.get(),20,35,0);
             });
             TaskScheduler.scheduleTask(150, () -> {
                 PlayerUtils.playSoundToPlayer(player, SoundEvents.UI_BUTTON_CLICK.value());
-                PlayerUtils.sendTitle(player, Component.literal("Accept your fate").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD),20,30,0);
+                PlayerUtils.sendTitle(player, ModifiableText.SECRETLIFE_TASK_REROLL_PT4.get(),20,30,0);
             });
             TaskScheduler.scheduleTask(200, () -> AnimationUtils.playSecretLifeTotemAnimation(player, false));
             TaskScheduler.scheduleTask(240, () -> {
@@ -671,9 +671,7 @@ public class TaskManager {
             if (successButtonPos != null && rerollButtonPos != null && failButtonPos != null) {
                 itemSpawnerPos = pos;
                 PlayerUtils.broadcastMessage(Component.literal("§a[SecretLife] All locations have been set. If you wish to change them in the future, use §2'/task changeLocations'\n"));
-
-                PlayerUtils.broadcastMessage(Component.nullToEmpty("\nUse §b'/session timer set <time>'§f to set the desired session time."));
-                PlayerUtils.broadcastMessage(Component.nullToEmpty("After that, use §b'/session start'§f to start the session."));
+                PlayerUtils.broadcastMessage(ModifiableText.SESSION_START_PROMPT.get());
             }
         }
         locationsConfig.saveLocations();

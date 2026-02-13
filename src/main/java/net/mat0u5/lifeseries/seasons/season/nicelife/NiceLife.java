@@ -304,10 +304,10 @@ public class NiceLife extends Season {
                     1f, 1);
         });
         TaskScheduler.scheduleTask(20 + 12, () -> {
-            PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§eThe last yellow falls.."), 15, 65, 15);
+            PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), ModifiableText.NICELIFE_REDWINTER_PT1.get(), 15, 65, 15);
         });
         TaskScheduler.scheduleTask(20 + 108, () -> {
-            PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§cRed winter is here.."), 15, 40, 15);
+            PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), ModifiableText.NICELIFE_REDWINTER_PT2.get(), 15, 40, 15);
         });
         TaskScheduler.scheduleTask(20 + 215, () -> {
             SimplePackets.FAKE_THUNDER.sendToClient(7);

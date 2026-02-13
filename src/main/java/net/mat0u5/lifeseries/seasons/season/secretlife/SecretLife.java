@@ -64,13 +64,13 @@ public class SecretLife extends Season {
     SessionAction taskWarningAction = new SessionAction(Time.minutes(-5).add(Time.seconds(1))) {
         @Override
         public void trigger() {
-            PlayerUtils.broadcastMessage(Component.literal("Go submit / fail your secret tasks if you haven't!").withStyle(ChatFormatting.GRAY));
+            PlayerUtils.broadcastMessage(ModifiableText.SECRETLIFE_TASK_WARNING_5MIN.get());
         }
     };
     SessionAction taskWarningAction2 = new SessionAction(Time.minutes(-30).add(Time.seconds(1))) {
         @Override
         public void trigger() {
-            PlayerUtils.broadcastMessage(Component.literal("You better start finishing your secret tasks if you haven't already!").withStyle(ChatFormatting.GRAY));
+            PlayerUtils.broadcastMessage(ModifiableText.SECRETLIFE_TASK_WARNING_30MIN.get());
         }
     };
 

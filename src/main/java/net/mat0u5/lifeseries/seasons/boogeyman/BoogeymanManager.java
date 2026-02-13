@@ -51,7 +51,7 @@ public class BoogeymanManager {
                 public void trigger() {
                     if (!BOOGEYMAN_ENABLED) return;
                     if (boogeymanChosen) return;
-                    PlayerUtils.broadcastMessage(Component.literal("The Boogeyman is being chosen in 5 minutes.").withStyle(ChatFormatting.RED));
+                    PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_NOTICE_5MIN.get());
                     PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.LIGHTNING_BOLT_THUNDER);
                 }
             }
@@ -62,7 +62,7 @@ public class BoogeymanManager {
                 public void trigger() {
                     if (!BOOGEYMAN_ENABLED) return;
                     if (boogeymanChosen) return;
-                    PlayerUtils.broadcastMessage(Component.literal("The Boogeyman is being chosen in 1 minute.").withStyle(ChatFormatting.RED));
+                    PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_NOTICE_1MIN.get());
                     PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.LIGHTNING_BOLT_THUNDER);
                 }
             }
@@ -183,7 +183,7 @@ public class BoogeymanManager {
         player.removeTag("boogeyman_failed");
         if (boogeyman.cured) return;
         boogeyman.cured = true;
-        PlayerUtils.sendTitle(player,Component.nullToEmpty("§aYou are cured!"), 20, 30, 20);
+        PlayerUtils.sendTitle(player, ModifiableText.BOOGEYMAN_CURE_TITLE.get(), 20, 30, 20);
         PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("lastlife_boogeyman_cure")));
 
         boolean stealLife = BOOGEYMAN_STEAL_LIFE && livesManager.canChangeLivesNaturally();
@@ -225,7 +225,7 @@ public class BoogeymanManager {
         if (currentSession.statusFinished() || currentSession.statusNotStarted()) return;
         if (currentSession.getRemainingTime().isSmaller(BOOGEYMAN_INFINITE_LAST_PICK)) return;
 
-        PlayerUtils.broadcastMessage(Component.literal("A new boogeyman is about to be chosen.").withStyle(ChatFormatting.RED));
+        PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_CHOSEN_NEW.get());
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.LIGHTNING_BOLT_THUNDER);
         TaskScheduler.scheduleTask(Time.seconds(5), () -> {
             List<ServerPlayer> allowedPlayers = getAllowedBoogeyPlayers();
@@ -237,7 +237,7 @@ public class BoogeymanManager {
 
     public void prepareToChooseBoogeymen() {
         if (!BOOGEYMAN_ENABLED) return;
-        PlayerUtils.broadcastMessage(Component.literal("The Boogeyman is about to be chosen.").withStyle(ChatFormatting.RED));
+        PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_CHOSEN.get());
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.LIGHTNING_BOLT_THUNDER);
         TaskScheduler.scheduleTask(Time.seconds(5), () -> {
             resetBoogeymen();
@@ -247,19 +247,19 @@ public class BoogeymanManager {
 
     public void showRolling(List<ServerPlayer> allowedPlayers) {
         PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvents.UI_BUTTON_CLICK.value());
-        PlayerUtils.sendTitleToPlayers(allowedPlayers, Component.literal("3").withStyle(ChatFormatting.GREEN),0,35,0);
+        PlayerUtils.sendTitleToPlayers(allowedPlayers, ModifiableText.COUNTDOWN_COLOR_3.get(),0,35,0);
 
         TaskScheduler.scheduleTask(30, () -> {
             PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvents.UI_BUTTON_CLICK.value());
-            PlayerUtils.sendTitleToPlayers(allowedPlayers, Component.literal("2").withStyle(ChatFormatting.YELLOW),0,35,0);
+            PlayerUtils.sendTitleToPlayers(allowedPlayers, ModifiableText.COUNTDOWN_COLOR_2.get(),0,35,0);
         });
         TaskScheduler.scheduleTask(60, () -> {
             PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvents.UI_BUTTON_CLICK.value());
-            PlayerUtils.sendTitleToPlayers(allowedPlayers, Component.literal("1").withStyle(ChatFormatting.RED),0,35,0);
+            PlayerUtils.sendTitleToPlayers(allowedPlayers, ModifiableText.COUNTDOWN_COLOR_1.get(),0,35,0);
         });
         TaskScheduler.scheduleTask(90, () -> {
             PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("lastlife_boogeyman_wait")));
-            PlayerUtils.sendTitleToPlayers(allowedPlayers, Component.literal("You are...").withStyle(ChatFormatting.YELLOW),10,50,20);
+            PlayerUtils.sendTitleToPlayers(allowedPlayers, ModifiableText.BOOGEYMAN_ROLL.get(),10,50,20);
         });
     }
     public void chooseBoogeymen(List<ServerPlayer> allowedPlayers, BoogeymanRollType rollType) {
@@ -367,8 +367,8 @@ public class BoogeymanManager {
     public void handleBoogeymanLists(List<ServerPlayer> normalPlayers, List<ServerPlayer> boogeyPlayers) {
         PlayerUtils.playSoundToPlayers(normalPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("lastlife_boogeyman_no")));
         PlayerUtils.playSoundToPlayers(boogeyPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("lastlife_boogeyman_yes")));
-        PlayerUtils.sendTitleToPlayers(normalPlayers, Component.literal("NOT the Boogeyman.").withStyle(ChatFormatting.GREEN),10,50,20);
-        PlayerUtils.sendTitleToPlayers(boogeyPlayers, Component.literal("The Boogeyman.").withStyle(ChatFormatting.RED),10,50,20);
+        PlayerUtils.sendTitleToPlayers(normalPlayers, ModifiableText.BOOGEYMAN_ROLL_NORMAL.get(),10,50,20);
+        PlayerUtils.sendTitleToPlayers(boogeyPlayers, ModifiableText.BOOGEYMAN_ROLL_BOOGEY.get(),10,50,20);
         for (ServerPlayer boogey : boogeyPlayers) {
             Boogeyman boogeyman = addBoogeyman(boogey);
             messageBoogeyman(boogeyman, boogey);
@@ -612,11 +612,11 @@ public class BoogeymanManager {
         }
 
         TaskScheduler.scheduleTask(delay, () -> {
-            PlayerUtils.sendTitle(player, Component.nullToEmpty("§cYour lives are taken..."), 20, 80, 20);
+            PlayerUtils.sendTitle(player, ModifiableText.BOOGEYMAN_FAIL_ADVANCEDDEATH_FINISH_PT1.get(), 20, 80, 20);
         });
         delay += 140;
         TaskScheduler.scheduleTask(delay, () -> {
-            PlayerUtils.sendTitle(player, Component.nullToEmpty("§c...Now take theirs."), 20, 80, 20);
+            PlayerUtils.sendTitle(player, ModifiableText.BOOGEYMAN_FAIL_ADVANCEDDEATH_FINISH_PT2.get(), 20, 80, 20);
         });
     }
 
