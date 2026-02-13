@@ -181,7 +181,7 @@ public class NiceLife extends Season {
         if (!isMidnight()) {
             for(ServerPlayer serverPlayer : PlayerUtils.getAllPlayers()) {
                 if (serverPlayer.isSleeping()) {
-                    serverPlayer.sendSystemMessage(ModifiableText.NICELIFE_SLEEP_FAIL_EARLY.get(), true);
+                    serverPlayer.ls$message(ModifiableText.NICELIFE_SLEEP_FAIL_EARLY.get(), true);
                 }
             }
             if (!playedMidnightChimes && isTimeBetween(18000-23*20, 20000)) {

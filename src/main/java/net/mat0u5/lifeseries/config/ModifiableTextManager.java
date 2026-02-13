@@ -13,6 +13,8 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static net.mat0u5.lifeseries.Main.currentSeason;
+
 public class ModifiableTextManager {
     private static Map<String, ConfigFileEntry<String>> registeredEntries = new TreeMap<>();
     private static boolean initialized = false;
@@ -20,7 +22,9 @@ public class ModifiableTextManager {
     public static void initialize() {
         initialized = true;
         registeredEntries.clear();
+        Main.LOGGER.info("Loading modifiable texts...");
         ModifiableText.registerAllTexts();
+        Main.LOGGER.info("Loaded "+registeredEntries.size()+" modifiable texts");
     }
 
     public static String toMinecraftColorFormatting(String str) {

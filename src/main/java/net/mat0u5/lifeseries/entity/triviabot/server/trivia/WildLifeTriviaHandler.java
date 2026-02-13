@@ -377,7 +377,7 @@ public class WildLifeTriviaHandler extends TriviaHandler {
             *///?} else {
             Component effectName = Component.translatable(effect.value().getDescriptionId());
             //?}
-            player.sendSystemMessage(ModifiableText.WILDLIFE_TRIVIA_RECEIVE_EFFECT.get(effectName, romanNumeral));
+            player.ls$message(ModifiableText.WILDLIFE_TRIVIA_RECEIVE_EFFECT.get(effectName, romanNumeral));
 
         }
         player.sendSystemMessage(Component.empty());

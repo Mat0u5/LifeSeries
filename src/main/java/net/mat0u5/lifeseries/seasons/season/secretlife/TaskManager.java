@@ -43,6 +43,8 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.world.item.component.WrittenBookContent;
 //?}
+//? if < 1.20.5
+//import java.util.stream.Stream;
 
 public class TaskManager {
     public static int EASY_SUCCESS = 20;
@@ -79,16 +81,6 @@ public class TaskManager {
     public static List<String> redTasks_all;
     public static final Random rnd = new Random();
     public static List<UUID> pendingConfirmationTasks = new ArrayList<>();
-
-    public static SessionAction getActionChooseTasks() {
-        return new SessionAction(Time.minutes(ASSIGN_TASKS_MINUTE), ModifiableText.SESSION_ACTION_TASKS.getString()) {
-            @Override
-            public void trigger() {
-                chooseTasks(livesManager.getAlivePlayers(), null);
-                tasksChosen = true;
-            }
-        };
-    }
 
     public static void initialize() {
         usedTasksConfig = new StringListConfig("./config/lifeseries/main", "DO_NOT_MODIFY_secretlife_used_tasks.properties");
@@ -390,7 +382,7 @@ public class TaskManager {
 
     public static boolean hasSessionStarted(ServerPlayer player) {
         if (currentSession.statusNotStarted()) {
-            player.sendSystemMessage(ModifiableText.SESSION_ERROR_START.get());
+            player.ls$message(ModifiableText.SESSION_ERROR_START.get());
             return false;
         }
         return true;
@@ -398,7 +390,7 @@ public class TaskManager {
 
     public static boolean isBeingUsed(ServerPlayer player) {
         if (!secretKeeperBeingUsed) return false;
-        player.sendSystemMessage(ModifiableText.SECRETLIFE_SECRETKEEPER_INUSE.get());
+        player.ls$message(ModifiableText.SECRETLIFE_SECRETKEEPER_INUSE.get());
         return true;
     }
 
@@ -406,7 +398,7 @@ public class TaskManager {
         TaskTypes type = getPlayersTaskType(player);
         if (type != null) return true;
         if (sendMessage) {
-            player.sendSystemMessage(ModifiableText.SECRETLIFE_TASK_MISSING.get());
+            player.ls$message(ModifiableText.SECRETLIFE_TASK_MISSING.get());
         }
         return false;
     }
@@ -451,7 +443,7 @@ public class TaskManager {
                     PlayerUtils.broadcastMessageToAdmins(getShowTaskMessage(player));
                     PlayerUtils.broadcastMessageToAdmins(ModifiableText.SECRETLIFE_TASK_PENDING_ACCEPT.get(TextUtils.runCommandText("/task succeed "+player.getScoreboardName())));
                 }
-                player.sendSystemMessage(ModifiableText.SECRETLIFE_TASK_PENDING_NOTIFICATION.get());
+                player.ls$message(ModifiableText.SECRETLIFE_TASK_PENDING_NOTIFICATION.get());
                 return;
             }
         }
@@ -546,10 +538,10 @@ public class TaskManager {
         }
         if (type == TaskTypes.HARD) {
             if (!player.ls$isOnLastLife(true)) {
-                player.sendSystemMessage(ModifiableText.SECRETLIFE_TASK_REROLL_HARD_FAIL.get());
+                player.ls$message(ModifiableText.SECRETLIFE_TASK_REROLL_HARD_FAIL.get());
             }
             else {
-                player.sendSystemMessage(ModifiableText.SECRETLIFE_TASK_REROLL_HARD_FAIL_RED.get());
+                player.ls$message(ModifiableText.SECRETLIFE_TASK_REROLL_HARD_FAIL_RED.get());
             }
         }
     }

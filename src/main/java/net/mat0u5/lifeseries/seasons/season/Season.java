@@ -724,16 +724,16 @@ public abstract class Season {
     public void onPlayerFinishJoining(ServerPlayer player) {
         if (getSeason() != Seasons.UNASSIGNED && SHOW_LOGIN_COMMAND_INFO && !Main.modDisabled()) {
             if (PermissionManager.isAdmin(player)) {
-                player.sendSystemMessage(ModifiableText.SEASON_COMMANDS_ADMIN.get(getSeason().getName(), getAdminCommands()));
+                player.ls$message(ModifiableText.SEASON_COMMANDS_ADMIN.get(getSeason().getName(), getAdminCommands()));
             }
             else {
-                player.sendSystemMessage(ModifiableText.SEASON_COMMANDS.get(getSeason().getName(), getNonAdminCommands()));
+                player.ls$message(ModifiableText.SEASON_COMMANDS.get(getSeason().getName(), getNonAdminCommands()));
             }
         }
 
         learnRecipes();
         if (currentSession.statusNotStarted() && PermissionManager.isAdmin(player) && !Main.modDisabled()) {
-            player.sendSystemMessage(ModifiableText.SESSION_START_PROMPT.get());
+            player.ls$message(ModifiableText.SESSION_START_PROMPT.get());
         }
         boogeymanManager.onPlayerFinishJoining(player);
         livesManager.onPlayerFinishJoining(player);

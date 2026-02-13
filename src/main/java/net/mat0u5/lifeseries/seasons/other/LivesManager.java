@@ -33,6 +33,8 @@ import java.util.*;
 import static net.mat0u5.lifeseries.Main.*;
 import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
 
+        //? if <= 1.20.2
+//import net.minecraft.world.scores.Score;
 //? if > 1.20.2
 import net.minecraft.world.scores.PlayerScoreEntry;
 
@@ -50,12 +52,6 @@ public class LivesManager {
     public int ROLL_MAX_LIVES = 6;
 
     public boolean assignedLives = false;
-    public SessionAction actionChooseLives = new SessionAction(Time.minutes(1), ModifiableText.SESSION_ACTION_ASSIGN_LIVES.getString()) {
-        @Override
-        public void trigger() {
-            assignRandomLivesToUnassignedPlayers();
-        }
-    };
     public Random rnd = new Random();
 
     public void reload() {
@@ -328,7 +324,7 @@ public class LivesManager {
         if (seasonConfig.GIVELIFE_BROADCAST.get()) {
             PlayerUtils.broadcastMessageExcept(ModifiableText.GIVELIFE_RECEIVE_OTHER.get(target, playerName), target);
         }
-        target.sendSystemMessage(ModifiableText.GIVELIFE_RECEIVE_SELF.get(playerName));
+        target.ls$message(ModifiableText.GIVELIFE_RECEIVE_SELF.get(playerName));
         PlayerUtils.sendTitleWithSubtitle(target, ModifiableText.GIVELIFE_RECEIVE_SELF_TITLE.get(), ModifiableText.GIVELIFE_RECEIVE_SELF_TITLE_SUBTITLE.get(playerName), 10, 60, 10);
         AnimationUtils.createSpiral(target, 175);
         currentSeason.reloadPlayerTeam(target);
@@ -505,7 +501,12 @@ public class LivesManager {
 
     public void addSessionActions() {
         if (ROLL_LIVES) {
-            currentSession.addSessionAction(actionChooseLives);
+            currentSession.addSessionAction(new SessionAction(Time.minutes(1), ModifiableText.SESSION_ACTION_ASSIGN_LIVES.getString()) {
+                @Override
+                public void trigger() {
+                    assignRandomLivesToUnassignedPlayers();
+                }
+            });
         }
     }
 

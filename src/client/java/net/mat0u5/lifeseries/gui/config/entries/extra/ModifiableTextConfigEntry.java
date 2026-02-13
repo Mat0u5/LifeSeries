@@ -41,6 +41,10 @@ public class ModifiableTextConfigEntry extends StringConfigEntry implements ITex
             currentY += 6 + RenderUtils.text(
                     Component.literal("§7Formatting codes:\n§0#0 §1#1 §2#2 §3#3 §4#4 §5#5 §6#6 §7#7 §8#8 §9#9 §a#a §b#b §c#c §d#d §e#e §f#f §k#k§r§f §l#l§r§f §m#m§r§f §n#n§r§f §o#o§r§f §p#p§r§f")
                     , x+10, currentY).wrapLines(width-10, 6).render(context, textRenderer);
+
+            currentY += RenderUtils.text(
+                            Component.literal("§7Setting any text to an empty value will completely prevent it from sending."), x+10, currentY)
+                    .wrapLines(width-10, 6).render(context, textRenderer);
         }
         firstPartHeight = currentY - y;
 

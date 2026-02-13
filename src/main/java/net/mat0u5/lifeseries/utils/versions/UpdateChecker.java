@@ -201,8 +201,8 @@ public class UpdateChecker {
                                 TextUtils.clickableText("Click to download on Modrinth", TextUtils.openURLClickEvent("https://modrinth.com/mod/life-series"))
                         );
             if (PermissionManager.isAdmin(player)) {
-                player.sendSystemMessage(updateText);
-                player.sendSystemMessage(discordText);
+                player.ls$message(updateText);
+                player.ls$message(discordText);
             }
         }
         else {
@@ -212,7 +212,7 @@ public class UpdateChecker {
                         TextUtils.clickableText("Download full releases on Modrinth", TextUtils.openURLClickEvent("https://modrinth.com/mod/life-series"))
                     );
 
-            player.sendSystemMessage(updateText);
+            player.ls$message(updateText);
         }
     }
     public static void shutdownExecutor() {

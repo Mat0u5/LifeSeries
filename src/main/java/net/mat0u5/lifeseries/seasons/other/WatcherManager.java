@@ -62,14 +62,14 @@ public class WatcherManager {
         if (currentSeason instanceof DoubleLife doubleLife) {
             doubleLife.resetSoulmate(player);
         }
-        player.sendSystemMessage(ModifiableText.WATCHER_JOIN.get());
+        player.ls$message(ModifiableText.WATCHER_JOIN.get());
     }
 
     public static void removeWatcher(ServerPlayer player) {
         watchers.remove(player.getScoreboardName());
         ScoreboardUtils.resetScore(player, SCOREBOARD_NAME);
         livesManager.resetPlayerLife(player);
-        player.sendSystemMessage(ModifiableText.WATCHER_LEAVE.get());
+        player.ls$message(ModifiableText.WATCHER_LEAVE.get());
     }
 
     public static boolean isWatcher(Player player) {

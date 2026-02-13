@@ -109,7 +109,7 @@ public class LimitedLifeLivesManager extends LivesManager {
         if (seasonConfig.GIVELIFE_BROADCAST.get()) {
             PlayerUtils.broadcastMessageExcept(ModifiableText.GIVELIFE_RECEIVE_OTHER.get(target, amount, playerName), target);
         }
-        target.sendSystemMessage(ModifiableText.GIVELIFE_RECEIVE_SELF.get(amount, playerName));
+        target.ls$message(ModifiableText.GIVELIFE_RECEIVE_SELF.get(amount, playerName));
         PlayerUtils.sendTitleWithSubtitle(target, ModifiableText.GIVELIFE_RECEIVE_SELF_TITLE.get(amount), ModifiableText.GIVELIFE_RECEIVE_SELF_TITLE_SUBTITLE.get(playerName), 10, 60, 10);
 
 

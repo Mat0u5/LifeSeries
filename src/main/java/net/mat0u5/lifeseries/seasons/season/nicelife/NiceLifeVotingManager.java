@@ -311,10 +311,10 @@ public class NiceLifeVotingManager {
         allowedToVote.add(player.getUUID());
         currentSeason.reloadPlayerTeam(player);
         PlayerUtils.playSoundToPlayer(player, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
-        player.sendSystemMessage(ModifiableText.NICELIFE_NICELIST_START_INFO_PT4.get(TextUtils.clickableText("§f§l/vote", TextUtils.runCommandClickEvent("/vote"))));
+        player.ls$message(ModifiableText.NICELIFE_NICELIST_START_INFO_PT4.get(TextUtils.clickableText("§f§l/vote", TextUtils.runCommandClickEvent("/vote"))));
         TaskScheduler.scheduleTask(110, () -> {
             PlayerUtils.playSoundToPlayer(player, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
-            player.sendSystemMessage(ModifiableText.NICELIFE_NICELIST_START_INFO_PT5.get());
+            player.ls$message(ModifiableText.NICELIFE_NICELIST_START_INFO_PT5.get());
         });
     }
 
@@ -325,7 +325,7 @@ public class NiceLifeVotingManager {
         allowedToVote.remove(player.getUUID());
         currentSeason.reloadPlayerTeam(player);
         PlayerUtils.playSoundToPlayer(player, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
-        player.sendSystemMessage(ModifiableText.NICELIFE_NICELIST_REMOVED.get());
+        player.ls$message(ModifiableText.NICELIFE_NICELIST_REMOVED.get());
     }
 
     public static void manuallyAddNaughtyListMember(ServerPlayer player) {
@@ -523,7 +523,7 @@ public class NiceLifeVotingManager {
         if (niceListMembers.contains(votedFor.getUUID())) return;
 
         PlayerUtils.playSoundToPlayer(player, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
-        player.sendSystemMessage(ModifiableText.NICELIFE_NICELIST_VOTE.get(PlayerUtils.getPlayerNameWithIcon(votedFor)), false);
+        player.ls$message(ModifiableText.NICELIFE_NICELIST_VOTE.get(PlayerUtils.getPlayerNameWithIcon(votedFor)));
         votesByPerson.put(player.getUUID(), votedFor.getUUID());
     }
 

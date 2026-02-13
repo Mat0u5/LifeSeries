@@ -460,7 +460,7 @@ public class Session {
                 }
 
                 if (!NetworkHandlerServer.wasHandshakeSuccessful(player)) {
-                    player.sendSystemMessage(message, true);
+                    player.ls$message(message, true);
                 }
             }
             if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {

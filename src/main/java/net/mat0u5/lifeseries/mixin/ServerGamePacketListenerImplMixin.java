@@ -150,19 +150,19 @@ public class ServerGamePacketListenerImplMixin {
         if (TriviaWildcard.bots.containsKey(player.getUUID())) {
             TriviaBot bot = TriviaWildcard.bots.get(player.getUUID());
             if (bot.interactedWith() && !bot.submittedAnswer()) {
-                player.sendSystemMessage(ModifiableText.MUTED_TRIVIABOT.get());
+                player.ls$message(ModifiableText.MUTED_TRIVIABOT.get());
                 ci.cancel();
                 return true;
             }
         }
 
         if (currentSeason.WATCHERS_MUTED && player.ls$isWatcher()) {
-            player.sendSystemMessage(ModifiableText.MUTED_WATCHER.get());
+            player.ls$message(ModifiableText.MUTED_WATCHER.get());
             ci.cancel();
             return true;
         }
         if (currentSeason.MUTE_DEAD_PLAYERS && player.ls$isDead() && !player.ls$isWatcher()) {
-            player.sendSystemMessage(ModifiableText.MUTED_DEADPLAYER.get());
+            player.ls$message(ModifiableText.MUTED_DEADPLAYER.get());
             ci.cancel();
             return true;
         }

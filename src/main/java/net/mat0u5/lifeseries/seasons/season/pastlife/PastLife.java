@@ -44,7 +44,7 @@ public class PastLife extends Season {
                 SimplePackets.PAST_LIFE_CHOOSE_TWIST.target(player).sendToClient();
             }
             else {
-                player.sendSystemMessage(ModifiableText.PASTLIFE_SESSION_START.get());
+                player.ls$message(ModifiableText.PASTLIFE_SESSION_START.get());
             }
         }
     }

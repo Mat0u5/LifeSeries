@@ -53,19 +53,6 @@ public class DoubleLife extends Season {
     public static boolean SOULMATE_LOCATOR_BAR = false;
     public boolean SOULMATES_PVP_ALLOWED = true;
 
-    public SessionAction actionChooseSoulmates = new SessionAction(Time.minutes(1), ModifiableText.SESSION_ACTION_ASSIGN_SOULMATES.getString()) {
-        @Override
-        public void trigger() {
-            rollSoulmates();
-        }
-    };
-    public SessionAction actionRandomTP = new SessionAction(Time.ticks(5), ModifiableText.SESSION_ACTION_RANDOM_TP.getString()) {
-        @Override
-        public void trigger() {
-            distributePlayers();
-        }
-    };
-
     public Map<UUID, UUID> soulmates = new TreeMap<>();
     public Map<UUID, UUID> soulmatesOrdered = new TreeMap<>();
     public static Map<UUID, UUID> soulmatesForce = new HashMap<>();
@@ -116,9 +103,19 @@ public class DoubleLife extends Season {
     @Override
     public void addSessionActions() {
         super.addSessionActions();
-        currentSession.addSessionAction(actionChooseSoulmates);
+        currentSession.addSessionAction(new SessionAction(Time.minutes(1), ModifiableText.SESSION_ACTION_ASSIGN_SOULMATES.getString()) {
+            @Override
+            public void trigger() {
+                rollSoulmates();
+            }
+        });
         if (!DISABLE_START_TELEPORT) {
-            currentSession.addSessionAction(actionRandomTP);
+            currentSession.addSessionAction(new SessionAction(Time.ticks(5), ModifiableText.SESSION_ACTION_RANDOM_TP.getString()) {
+                @Override
+                public void trigger() {
+                    distributePlayers();
+                }
+            });
         }
     }
 
@@ -358,7 +355,7 @@ public class DoubleLife extends Season {
 
         for (ServerPlayer player : players) {
             player.addTag("randomTeleport");
-            player.sendSystemMessage(ModifiableText.DOUBLELIFE_TELEPORT.get());
+            player.ls$message(ModifiableText.DOUBLELIFE_TELEPORT.get());
         }
         WorldBorder border = server.overworld().getWorldBorder();
         OtherUtils.executeCommand(TextUtils.formatString("spreadplayers {} {} 0 {} false @a[tag=randomTeleport]", border.getCenterX(), border.getCenterZ(), (border.getSize()/2)));

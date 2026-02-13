@@ -7,6 +7,7 @@ import net.minecraft.network.chat.Component;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
@@ -106,8 +107,8 @@ public enum ModifiableText {
     ,LIVES_RANDOMIZE_RESULT("{}§a {}.", List.of("amount", "life/lives"))
     ,LIVES_RANDOMIZE_TITLE("§7You will have...")
     ,FINAL_DEATH("{} ran out of lives.", List.of("Player"))
-    ,FINAL_DEATH_TITLE("", List.of("Player"))
-    ,FINAL_DEATH_TITLE_SUBTITLE("ran out of lives!", List.of("Player"))
+    ,FINAL_DEATH_TITLE("{}", List.of("Player"))
+    ,FINAL_DEATH_TITLE_SUBTITLE("ran out of lives!")
     ,MUTED_DEADPLAYER("Dead players aren't allowed to talk in chat! Admins can change this behavior in the config.")
 
     ,PLAYER_ERROR_WATCHER("That player is a Watcher")
@@ -369,8 +370,8 @@ public enum ModifiableText {
     ,WILDLIFE_SNAIL_NAME_GET(Seasons.WILD_LIFE, "{}'s snail is called {}", List.of("Player", "name"))
     ,WILDLIFE_SUPERPOWER_ASSIGN_RESET_SINGLE(Seasons.WILD_LIFE, "Reset {}'s superpower assignment", List.of("Player"))
     ,WILDLIFE_SUPERPOWER_ASSIGN_RESET_MULTIPLE(Seasons.WILD_LIFE, "Reset the superpower assignment of {} targets", List.of("number of targets"))
-    ,WILDLIFE_SUPERPOWER_ASSIGN_SINGLE(Seasons.WILD_LIFE, "Forced {}'s superpower to be {} when the next superpower randomization happens", List.of("Player"))
-    ,WILDLIFE_SUPERPOWER_ASSIGN_MULTIPLE(Seasons.WILD_LIFE, "Forced the superpower of {} targets to be {} when the next superpower randomization happens", List.of("number of targets"))
+    ,WILDLIFE_SUPERPOWER_ASSIGN_SINGLE(Seasons.WILD_LIFE, "Forced {}'s superpower to be {} when the next superpower randomization happens", List.of("Player", "power"))
+    ,WILDLIFE_SUPERPOWER_ASSIGN_MULTIPLE(Seasons.WILD_LIFE, "Forced the superpower of {} targets to be {} when the next superpower randomization happens", List.of("number of targets", "power"))
     ,WILDLIFE_SUPERPOWER_RANDOMIZE_SINGLE(Seasons.WILD_LIFE, "Randomized {}'s superpower", List.of("Player"))
     ,WILDLIFE_SUPERPOWER_RANDOMIZE_MULTIPLE(Seasons.WILD_LIFE, "Randomized the superpower of {} targets", List.of("number of targets"))
     ,WILDLIFE_SUPERPOWER_DEACTIVATE_SINGLE(Seasons.WILD_LIFE, "Deactivated {}'s superpower", List.of("Player"))
@@ -583,7 +584,7 @@ public enum ModifiableText {
     }
 
     public String getRegisterDefaultValue() {
-        if (currentSeason.getSeason() == Seasons.LIMITED_LIFE) {
+        if (currentSeason != null && currentSeason.getSeason() == Seasons.LIMITED_LIFE) {
             String modified = null;
 
             if (this == GIVELIFE_RECEIVE_OTHER) modified = "{} received {} from {}";
@@ -624,7 +625,7 @@ public enum ModifiableText {
     }
 
     public List<String> getRegisterArgs() {
-        if (currentSeason.getSeason() == Seasons.LIMITED_LIFE) {
+        if (currentSeason != null && currentSeason.getSeason() == Seasons.LIMITED_LIFE) {
 
             if (this == GIVELIFE_RECEIVE_OTHER) return List.of("Receiver", "time", "Giver");
             else if (this == GIVELIFE_RECEIVE_SELF) return List.of("time", "Player");
@@ -644,8 +645,18 @@ public enum ModifiableText {
 
     public static void registerAllTexts() {
         for (ModifiableText modifiableText : ModifiableText.values()) {
-            //TODO remove, this is for testing only
-            int argsInValue = modifiableText.getRegisterDefaultValue().split("%s").length-1;
+            String defaultValue = modifiableText.getRegisterDefaultValue();
+
+            /*
+            // Tests for any argument count mismatch errors
+            int argsInValue = 0;
+
+            int index = 0;
+            while ((index = defaultValue.indexOf("%s", index)) != -1) {
+                argsInValue++;
+                index += 2;
+            }
+
             int args = 0;
             if (modifiableText.getRegisterArgs() != null) {
                 args = modifiableText.getRegisterArgs().size();
@@ -653,10 +664,10 @@ public enum ModifiableText {
             if (argsInValue != args) {
                 Main.LOGGER.error("Args count mismatch in " + modifiableText.name);
             }
-            // ^^ TODO remove, this is for testing only
+            */
 
-            if (modifiableText.requiredSeason != null && currentSeason.getSeason() != modifiableText.requiredSeason) continue;
-            ModifiableTextManager.register(modifiableText.name, modifiableText.getRegisterDefaultValue(), modifiableText.getRegisterArgs());
+            if (modifiableText.requiredSeason != null && currentSeason != null && currentSeason.getSeason() != modifiableText.requiredSeason) continue;
+            ModifiableTextManager.register(modifiableText.name, defaultValue, modifiableText.getRegisterArgs());
         }
     }
     public static ModifiableText fromName(String name) {

@@ -148,7 +148,7 @@ public class GivelifeCommand extends Command {
             soulmateGivelifeRequests.put(self.getUUID(), request);
         }
         OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.GIVELIFE_DOUBLELIFE_INFO.get());
-        soulmate.sendSystemMessage(ModifiableText.GIVELIFE_DOUBLELIFE_ACCEPT.get(target, TextUtils.runCommandText(TextUtils.formatString("/givelife {}", target.getScoreboardName()))));
+        soulmate.ls$message(ModifiableText.GIVELIFE_DOUBLELIFE_ACCEPT.get(target, TextUtils.runCommandText(TextUtils.formatString("/givelife {}", target.getScoreboardName()))));
         return false;
     }
 }

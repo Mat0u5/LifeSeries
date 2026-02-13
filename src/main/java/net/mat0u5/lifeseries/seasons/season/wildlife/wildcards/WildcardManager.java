@@ -36,29 +36,6 @@ public class WildcardManager {
     public static double ACTIVATE_WILDCARD_MINUTE = 2.5;
     public static boolean FINALE = false;
 
-    public static void addSessionActions() {
-        currentSession.addSessionActionIfTime(
-                new SessionAction(Time.minutes(ACTIVATE_WILDCARD_MINUTE-2)) {
-                    @Override
-                    public void trigger() {
-                        if (activeWildcards.isEmpty()) {
-                            PlayerUtils.broadcastMessage(ModifiableText.WILDLIFE_WILDCARD_WARNING_2MIN.get());
-                        }
-                    }
-                }
-        );
-        currentSession.addSessionAction(
-            new SessionAction(Time.minutes(ACTIVATE_WILDCARD_MINUTE), ModifiableText.SESSION_ACTION_WILDCARD.getString()) {
-                @Override
-                public void trigger() {
-                    if (activeWildcards.isEmpty()) {
-                        activateWildcards();
-                    }
-                }
-            }
-        );
-    }
-
     public static Wildcards chosenWildcard = null;
 
     public static WildLife getSeason() {

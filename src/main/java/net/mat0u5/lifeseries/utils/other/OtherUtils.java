@@ -34,7 +34,7 @@ public class OtherUtils {
 
     public static void log(Component message) {
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-            player.sendSystemMessage(message, false);
+            player.ls$message(message);
         }
         Main.LOGGER.info(message.getString());
     }
@@ -42,7 +42,7 @@ public class OtherUtils {
     public static void log(String string) {
         Component message = Component.nullToEmpty(string);
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-            player.sendSystemMessage(message, false);
+            player.ls$message(message);
         }
         Main.LOGGER.info(string);
     }
@@ -138,11 +138,13 @@ public class OtherUtils {
 
     public static void sendCommandFeedback(CommandSourceStack source, Component text) {
         if (source == null || text == null) return;
+        if (text.getString().isEmpty()) return;
         source.sendSuccess(() -> text, true);
     }
 
     public static void sendCommandFeedbackQuiet(CommandSourceStack source, Component text) {
         if (source == null || text == null) return;
+        if (text.getString().isEmpty()) return;
         source.sendSuccess(() -> text, false);
     }
     public static void sendCommandFailure(CommandSourceStack source, Component text) {
@@ -150,10 +152,10 @@ public class OtherUtils {
     }
     public static void sendCommandFailure(CommandSourceStack source, Component text, boolean keepFormatting) {
         if (keepFormatting) {
-            OtherUtils.sendCommandFailure(source, text);
+            source.sendFailure(text);
         }
         else {
-            OtherUtils.sendCommandFailure(source, Component.literal(text.getString()));
+            source.sendFailure(Component.literal(text.getString()));
         }
     }
 

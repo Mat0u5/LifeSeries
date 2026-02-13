@@ -434,9 +434,9 @@ public class SecretLifeCommands extends Command {
         Component recipientMessage = ModifiableText.SECRETLIFE_GIVEHEART_RECEIVE.get(self);
         SessionTranscript.giftHeart(self, target);
 
-        self.sendSystemMessage(senderMessage);
+        self.ls$message(senderMessage);
         PlayerUtils.sendTitle(target, recipientMessage, 20, 20, 20);
-        target.sendSystemMessage(recipientMessage);
+        target.ls$message(recipientMessage);
         AnimationUtils.createSpiral(target, 40);
 
         PlayerUtils.playSoundToPlayers(List.of(self,target), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("secretlife_life")));

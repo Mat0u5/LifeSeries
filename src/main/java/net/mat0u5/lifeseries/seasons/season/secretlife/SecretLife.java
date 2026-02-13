@@ -32,6 +32,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.*;
+import static net.mat0u5.lifeseries.Main.livesManager;
 
 //? if <= 1.20.5 {
 /*import net.minecraft.world.item.EnchantedBookItem;
@@ -339,7 +340,13 @@ public class SecretLife extends Season {
     @Override
     public void addSessionActions() {
         super.addSessionActions();
-        currentSession.addSessionAction(TaskManager.getActionChooseTasks());
+        currentSession.addSessionAction(new SessionAction(Time.minutes(TaskManager.ASSIGN_TASKS_MINUTE), ModifiableText.SESSION_ACTION_TASKS.getString()) {
+            @Override
+            public void trigger() {
+                TaskManager.chooseTasks(livesManager.getAlivePlayers(), null);
+                TaskManager.tasksChosen = true;
+            }
+        });
         currentSession.addSessionActionIfTime(taskWarningAction);
         currentSession.addSessionActionIfTime(taskWarningAction2);
     }

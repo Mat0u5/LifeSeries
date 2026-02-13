@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife;
 
 import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
@@ -17,7 +18,10 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.*;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
+import net.mat0u5.lifeseries.seasons.session.SessionAction;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -35,6 +39,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import static net.mat0u5.lifeseries.Main.currentSession;
 import static net.mat0u5.lifeseries.Main.seasonConfig;
 //? if >= 1.21.2 {
 import net.minecraft.server.level.ServerLevel;
@@ -126,7 +132,26 @@ public class WildLife extends Season {
     @Override
     public void addSessionActions() {
         super.addSessionActions();
-        WildcardManager.addSessionActions();
+        currentSession.addSessionActionIfTime(
+                new SessionAction(Time.minutes(WildcardManager.ACTIVATE_WILDCARD_MINUTE-2)) {
+                    @Override
+                    public void trigger() {
+                        if (WildcardManager.activeWildcards.isEmpty()) {
+                            PlayerUtils.broadcastMessage(ModifiableText.WILDLIFE_WILDCARD_WARNING_2MIN.get());
+                        }
+                    }
+                }
+        );
+        currentSession.addSessionAction(
+                new SessionAction(Time.minutes(WildcardManager.ACTIVATE_WILDCARD_MINUTE), ModifiableText.SESSION_ACTION_WILDCARD.getString()) {
+                    @Override
+                    public void trigger() {
+                        if (WildcardManager.activeWildcards.isEmpty()) {
+                            WildcardManager.activateWildcards();
+                        }
+                    }
+                }
+        );
     }
 
     @Override

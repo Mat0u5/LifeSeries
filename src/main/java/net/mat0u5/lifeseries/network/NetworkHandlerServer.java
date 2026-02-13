@@ -109,7 +109,7 @@ public class NetworkHandlerServer {
             }
         });
         SimplePackets.TRANSCRIPT.setServerReceive((player, payload) -> {
-            player.sendSystemMessage(SessionTranscript.getTranscriptMessage());
+            player.ls$message(SessionTranscript.getTranscriptMessage());
         });
         SimplePackets.SELECTED_WILDCARD.setServerReceive((player, payload) -> {
             if (PermissionManager.isAdmin(player)) {

@@ -128,7 +128,7 @@ public class BoogeymanManager {
     public void addBoogeymanManually(ServerPlayer player) {
         if (!BOOGEYMAN_ENABLED) return;
         Boogeyman newBoogeyman = addBoogeyman(player);
-        player.sendSystemMessage(ModifiableText.BOOGEYMAN_NOTICE_ADDED.get());
+        player.ls$message(ModifiableText.BOOGEYMAN_NOTICE_ADDED.get());
         messageBoogeyman(newBoogeyman, player);
     }
 
@@ -141,7 +141,7 @@ public class BoogeymanManager {
         player.removeTag("boogeyman_cured");
         player.removeTag("boogeyman_failed");
         if (boogeymen.isEmpty()) boogeymanChosen = false;
-        player.sendSystemMessage(ModifiableText.BOOGEYMAN_NOTICE_REMOVED.get());
+        player.ls$message(ModifiableText.BOOGEYMAN_NOTICE_REMOVED.get());
     }
 
     public void resetBoogeymen() {
@@ -149,7 +149,7 @@ public class BoogeymanManager {
         for (Boogeyman boogeyman : boogeymen) {
             ServerPlayer player = PlayerUtils.getPlayer(boogeyman.uuid);
             if (player == null) continue;
-            player.sendSystemMessage(ModifiableText.BOOGEYMAN_NOTICE_REMOVED.get());
+            player.ls$message(ModifiableText.BOOGEYMAN_NOTICE_REMOVED.get());
             player.removeTag("boogeyman");
             player.removeTag("boogeyman_cured");
             player.removeTag("boogeyman_failed");
@@ -164,7 +164,7 @@ public class BoogeymanManager {
         Boogeyman boogeyman = getBoogeyman(player);
         if (boogeymen == null) return;
         if (boogeyman.failed || boogeyman.cured) {
-            player.sendSystemMessage(ModifiableText.BOOGEYMAN_NOTICE_RESET.get());
+            player.ls$message(ModifiableText.BOOGEYMAN_NOTICE_RESET.get());
         }
         boogeyman.failed = false;
         boogeyman.cured = false;
@@ -216,7 +216,7 @@ public class BoogeymanManager {
             cure(boogeyPlayer);
         }
         else {
-            boogeyPlayer.sendSystemMessage(ModifiableText.BOOGEYMAN_KILLS_REQUIRED.get(boogeyman.killsNeeded, TextUtils.pluralize("kill", boogeyman.killsNeeded)));
+            boogeyPlayer.ls$message(ModifiableText.BOOGEYMAN_KILLS_REQUIRED.get(boogeyman.killsNeeded, TextUtils.pluralize("kill", boogeyman.killsNeeded)));
         }
     }
 
@@ -377,9 +377,9 @@ public class BoogeymanManager {
     }
 
     public void messageBoogeyman(Boogeyman boogeyman, ServerPlayer boogey) {
-        boogey.sendSystemMessage(ModifiableText.BOOGEYMAN_MESSAGE.get());
+        boogey.ls$message(ModifiableText.BOOGEYMAN_MESSAGE.get());
         if (boogeyman != null && boogeyman.killsNeeded != 1) {
-            boogey.sendSystemMessage(ModifiableText.BOOGEYMAN_KILLS_REQUIRED.get(boogeyman.killsNeeded, TextUtils.pluralize("kill", boogeyman.killsNeeded)));
+            boogey.ls$message(ModifiableText.BOOGEYMAN_KILLS_REQUIRED.get(boogeyman.killsNeeded, TextUtils.pluralize("kill", boogeyman.killsNeeded)));
         }
     }
 
@@ -461,7 +461,7 @@ public class BoogeymanManager {
         if (boogeymen.size() >= BOOGEYMAN_AMOUNT_MAX) return;
         if (currentSession.statusNotStarted() || currentSession.statusFinished()) return;
         TaskScheduler.scheduleTask(Time.seconds(2), () -> {
-            player.sendSystemMessage(ModifiableText.BOOGEYMAN_LATEJOIN.get());
+            player.ls$message(ModifiableText.BOOGEYMAN_LATEJOIN.get());
             chooseBoogeymen(new ArrayList<>(List.of(player)), BoogeymanRollType.LATE_JOIN);
         });
     }
@@ -534,7 +534,7 @@ public class BoogeymanManager {
             }
 
             if (!boogeymenList.isEmpty()) {
-                player.sendSystemMessage(ModifiableText.BOOGEYMAN_LIST.get(boogeymenList));
+                player.ls$message(ModifiableText.BOOGEYMAN_LIST.get(boogeymenList));
             }
         }
     }
@@ -567,7 +567,7 @@ public class BoogeymanManager {
                 ServerPlayer player = boogeyman.getPlayer();
                 if (player != null) {
                     warningAutoFail.add(boogeyman.uuid);
-                    player.sendSystemMessage(ModifiableText.BOOGEYMAN_FAIL_NOTICE.get());
+                    player.ls$message(ModifiableText.BOOGEYMAN_FAIL_NOTICE.get());
                 }
             }
         }

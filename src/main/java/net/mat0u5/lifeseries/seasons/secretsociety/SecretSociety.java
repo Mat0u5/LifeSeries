@@ -177,7 +177,7 @@ public class SecretSociety {
                 if (member.initiated) continue;
                 ServerPlayer player = member.getPlayer();
                 if (player == null) continue;
-                player.sendSystemMessage(ModifiableText.SOCIETY_INITIATE_REMINDER.get());
+                player.ls$message(ModifiableText.SOCIETY_INITIATE_REMINDER.get());
             }
         }
     }
@@ -197,53 +197,53 @@ public class SecretSociety {
 
         int currentTime = 20;
         TaskScheduler.scheduleTask(currentTime, () -> {
-            player.sendSystemMessage(ModifiableText.SOCIETY_INITIATED_PT1.get(), false);
+            player.ls$message(ModifiableText.SOCIETY_INITIATED_PT1.get());
         });
         currentTime += 50;
 
         int otherMembers = members.size()-1;
         if (otherMembers >= 1) {
             TaskScheduler.scheduleTask(currentTime, () -> {
-                player.sendSystemMessage(ModifiableText.SOCIETY_INITIATED_GROUP_PT1.get(TextUtils.pluralize("is", "are", otherMembers), otherMembers, TextUtils.pluralize("member", otherMembers)), false);
+                player.ls$message(ModifiableText.SOCIETY_INITIATED_GROUP_PT1.get(TextUtils.pluralize("is", "are", otherMembers), otherMembers, TextUtils.pluralize("member", otherMembers)), false);
             });
             currentTime += 80;
             TaskScheduler.scheduleTask(currentTime, () -> {
-                player.sendSystemMessage(ModifiableText.SOCIETY_INITIATED_GROUP_PT2.get(KILL_COUNT, TextUtils.pluralize("player", KILL_COUNT)), false);
+                player.ls$message(ModifiableText.SOCIETY_INITIATED_GROUP_PT2.get(KILL_COUNT, TextUtils.pluralize("player", KILL_COUNT)));
             });
             currentTime += 100;
             TaskScheduler.scheduleTask(currentTime, () -> {
-                player.sendSystemMessage(ModifiableText.SOCIETY_INITIATED_GROUP_PT3.get(), false);
+                player.ls$message(ModifiableText.SOCIETY_INITIATED_GROUP_PT3.get());
             });
             currentTime += 80;
             TaskScheduler.scheduleTask(currentTime, () -> {
-                player.sendSystemMessage(ModifiableText.SOCIETY_INITIATED_GROUP_PT4.get(secretWord), false);
+                player.ls$message(ModifiableText.SOCIETY_INITIATED_GROUP_PT4.get(secretWord));
             });
         }
         else {
             TaskScheduler.scheduleTask(currentTime, () -> {
-                player.sendSystemMessage(ModifiableText.SOCIETY_INITIATED_ALONE_PT1.get(), false);
+                player.ls$message(ModifiableText.SOCIETY_INITIATED_ALONE_PT1.get());
             });
             currentTime += 80;
             TaskScheduler.scheduleTask(currentTime, () -> {
-                player.sendSystemMessage(ModifiableText.SOCIETY_INITIATED_ALONE_PT2.get(KILL_COUNT, TextUtils.pluralize("player", KILL_COUNT)), false);
+                player.ls$message(ModifiableText.SOCIETY_INITIATED_ALONE_PT2.get(KILL_COUNT, TextUtils.pluralize("player", KILL_COUNT)));
             });
         }
 
         currentTime += 80;
         TaskScheduler.scheduleTask(currentTime, () -> {
-            player.sendSystemMessage(ModifiableText.SOCIETY_INITIATED_PT2.get(), false);
+            player.ls$message(ModifiableText.SOCIETY_INITIATED_PT2.get());
         });
         currentTime += 80;
         TaskScheduler.scheduleTask(currentTime, () -> {
-            player.sendSystemMessage(ModifiableText.SOCIETY_INITIATED_PT3.get(), false);
+            player.ls$message(ModifiableText.SOCIETY_INITIATED_PT3.get());
         });
         currentTime += 70;
         TaskScheduler.scheduleTask(currentTime, () -> {
-            player.sendSystemMessage(ModifiableText.SOCIETY_INITIATED_PT4.get(), false);
+            player.ls$message(ModifiableText.SOCIETY_INITIATED_PT4.get());
         });
         currentTime += 70;
         TaskScheduler.scheduleTask(currentTime, () -> {
-            player.sendSystemMessage(getPunishmentText(), false);
+            player.ls$message(getPunishmentText());
         });
     }
 
@@ -265,27 +265,27 @@ public class SecretSociety {
 
     public void addMemberManually(ServerPlayer player) {
         if (!SOCIETY_ENABLED) return;
-        player.sendSystemMessage(ModifiableText.SOCIETY_NOTICE_ADDED.get());
+        player.ls$message(ModifiableText.SOCIETY_NOTICE_ADDED.get());
         sendMessageToMembers(ModifiableText.SOCIETY_OTHER_MEMBER_ADDED.get());
         addMember(player);
     }
 
     public void removeMemberManually(ServerPlayer player) {
         if (!SOCIETY_ENABLED) return;
-        player.sendSystemMessage(ModifiableText.SOCIETY_NOTICE_REMOVED.get());
+        player.ls$message(ModifiableText.SOCIETY_NOTICE_REMOVED.get());
         removeMember(player);
         sendMessageToMembers(ModifiableText.SOCIETY_OTHER_MEMBER_REMOVED.get());
     }
 
     public void sendMessageToMembers(Component message) {
         for (ServerPlayer player : getMembers()) {
-            player.sendSystemMessage(message);
+            player.ls$message(message);
         }
     }
 
     public void resetMembers() {
         for (ServerPlayer player : getMembers()) {
-            player.sendSystemMessage(ModifiableText.SOCIETY_NOTICE_REMOVED.get());
+            player.ls$message(ModifiableText.SOCIETY_NOTICE_REMOVED.get());
             player.removeTag("society_member");
         }
         members.clear();

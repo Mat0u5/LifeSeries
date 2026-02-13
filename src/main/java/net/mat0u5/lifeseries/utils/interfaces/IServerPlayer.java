@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.utils.interfaces;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -27,4 +28,7 @@ public interface IServerPlayer {
     default void ls$hurt(ServerLevel level, DamageSource source, float amount)             { throw new UnsupportedOperationException(error); }
     default ServerLevel ls$getServerLevel()                             { throw new UnsupportedOperationException(error); }
     default void ls$playNotifySound(SoundEvent sound, SoundSource soundSource, float volume, float pitch) { throw new UnsupportedOperationException(error); }
+
+    default void ls$message(Component text)                             { throw new UnsupportedOperationException(error); }
+    default void ls$message(Component text, boolean aboveHotbar)        { throw new UnsupportedOperationException(error); }
 }

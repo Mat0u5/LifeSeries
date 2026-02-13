@@ -116,10 +116,10 @@ public class SubInManager {
 
         ProfileManager.resetPlayer(player1).thenRun(() -> {
             if (player1 != null) {
-                player1.sendSystemMessage(ModifiableText.SUBIN_END_NOTIFY.get(getName(subIn.target())));
+                player1.ls$message(ModifiableText.SUBIN_END_NOTIFY.get(getName(subIn.target())));
             }
             if (player2 != null) {
-                player2.sendSystemMessage(ModifiableText.SUBIN_END_OTHER.get(getName(subIn.substituter())));
+                player2.ls$message(ModifiableText.SUBIN_END_OTHER.get(getName(subIn.substituter())));
             }
 
             savePlayer(player1);
