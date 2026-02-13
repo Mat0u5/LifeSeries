@@ -144,15 +144,15 @@ public class OtherUtils {
         if (source == null || text == null) return;
         source.sendSuccess(() -> text, false);
     }
-    public static void sendCommandFailure(CommandSourceStack source, Component text) {//TODO implement everywhere
+    public static void sendCommandFailure(CommandSourceStack source, Component text) {
         sendCommandFailure(source, text, false);
     }
     public static void sendCommandFailure(CommandSourceStack source, Component text, boolean keepFormatting) {
         if (keepFormatting) {
-            source.sendFailure(text);
+            OtherUtils.sendCommandFailure(source, text);
         }
         else {
-            source.sendFailure(Component.literal(text.getString()));
+            OtherUtils.sendCommandFailure(source, Component.literal(text.getString()));
         }
     }
 

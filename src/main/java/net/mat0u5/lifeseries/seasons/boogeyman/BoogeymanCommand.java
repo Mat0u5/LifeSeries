@@ -5,7 +5,6 @@ import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.pastlife.PastLifeBoogeymanManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.commands.CommandSourceStack;
@@ -121,23 +120,23 @@ public class BoogeymanCommand extends Command {
         if (bm == null) return -1;
 
         if (!bm.isBoogeyman(self)) {
-            source.sendFailure(Component.nullToEmpty("You are not a Boogeyman"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_NOTBOOGEY.get());
             return -1;
         }
         Boogeyman boogeyman = bm.getBoogeyman(self);
         if (boogeyman != null) {
             if (boogeyman.failed) {
-                OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7You were the Boogeyman, but you have already §cfailed§7."));
+                OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_ALREADY_FAILED.get());
                 return 1;
 
             }
             else if (boogeyman.cured) {
-                OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7You were the Boogeyman, and you have already been §acured§7."));
+                OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_ALREADY_CURED.get());
                 return 1;
             }
         }
         if (bm instanceof PastLifeBoogeymanManager) {
-            OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§cYou are the Boogeyman."));
+            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_IS.get());
         }
 
         bm.messageBoogeyman(boogeyman, self);
@@ -153,29 +152,28 @@ public class BoogeymanCommand extends Command {
         if (bm == null) return -1;
 
         if (!bm.isBoogeyman(self)) {
-            source.sendFailure(Component.nullToEmpty("You are not a Boogeyman"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_NOTBOOGEY.get());
             return -1;
         }
         Boogeyman boogeyman = bm.getBoogeyman(self);
         if (boogeyman != null) {
             if (boogeyman.cured) {
-                source.sendFailure(Component.nullToEmpty("You have already been cured"));
+                OtherUtils.sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_ALREADY_CURED.get());
                 return -1;
             }
             if (boogeyman.failed) {
-                source.sendFailure(Component.nullToEmpty("You have already failed"));
+                OtherUtils.sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_ALREADY_FAILED.get());
                 return -1;
             }
         }
 
         if (!confirm) {
-            source.sendFailure(Component.nullToEmpty("Warning: This will cause you to fail as the Boogeyman"));
-            source.sendFailure(Component.nullToEmpty("Run \"/boogeyman selfFail §lconfirm§r\" to confirm this action."));
+            OtherUtils.sendCommandFailure(source, ModifiableText.BOOGEYMAN_SELFFAIL_WARNING.get());
             return -1;
         }
 
         if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME) {
-            OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7Failing as the Boogeyman..."));
+            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_SELFFAIL.get());
         }
         else {
             PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_FAIL_SELF.get(self));
@@ -193,7 +191,7 @@ public class BoogeymanCommand extends Command {
         if (targets.size() == 1) {
             ServerPlayer target = targets.iterator().next();
             if (!bm.isBoogeyman(target)) {
-                source.sendFailure(Component.nullToEmpty("That player is not a Boogeyman"));
+                OtherUtils.sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_NOTBOOGEY_OTHER.get());
                 return -1;
             }
         }
@@ -221,7 +219,7 @@ public class BoogeymanCommand extends Command {
         if (targets.size() == 1) {
             ServerPlayer target = targets.iterator().next();
             if (!bm.isBoogeyman(target)) {
-                source.sendFailure(Component.nullToEmpty("That player is not a Boogeyman"));
+                OtherUtils.sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_NOTBOOGEY_OTHER.get());
                 return -1;
             }
         }
@@ -248,7 +246,7 @@ public class BoogeymanCommand extends Command {
         if (targets.size() == 1) {
             ServerPlayer target = targets.iterator().next();
             if (!bm.isBoogeyman(target)) {
-                source.sendFailure(Component.nullToEmpty("That player is not a Boogeyman"));
+                OtherUtils.sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_NOTBOOGEY_OTHER.get());
                 return -1;
             }
         }
@@ -277,7 +275,7 @@ public class BoogeymanCommand extends Command {
         if (targets.size() == 1) {
             ServerPlayer target = targets.iterator().next();
             if (bm.isBoogeyman(target)) {
-                source.sendFailure(Component.nullToEmpty("That player is already a Boogeyman"));
+                OtherUtils.sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_IS.get());
                 return -1;
             }
         }
@@ -305,7 +303,7 @@ public class BoogeymanCommand extends Command {
         if (targets.size() == 1) {
             ServerPlayer target = targets.iterator().next();
             if (!bm.isBoogeyman(target)) {
-                source.sendFailure(Component.nullToEmpty("That player is not a Boogeyman"));
+                OtherUtils.sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_NOTBOOGEY_OTHER.get());
                 return -1;
             }
         }
@@ -385,7 +383,7 @@ public class BoogeymanCommand extends Command {
         if (bm == null) return -1;
 
         bm.resetBoogeymen();
-        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("All Boogeymen have been cleared"));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.BOOGEYMAN_CLEAR.get());
         return 1;
     }
 
@@ -394,7 +392,7 @@ public class BoogeymanCommand extends Command {
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
 
-        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Choosing random Boogeymen..."));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.BOOGEYMAN_RANDOMIZE.get());
 
         bm.resetBoogeymen();
         bm.prepareToChooseBoogeymen();

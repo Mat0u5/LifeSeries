@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -87,11 +88,11 @@ public class ClaimKillCommand extends Command {
         Set<UUID> recentDeaths = currentSession.playerNaturalDeathLog.keySet();
         UUID victimUUID = victim.getUUID();
         if (!recentDeaths.contains(victimUUID)) {
-            source.sendFailure(ModifiableText.CLAIMKILL_ERROR_NODEATH.get(victim));
+            OtherUtils.sendCommandFailure(source, ModifiableText.CLAIMKILL_ERROR_NODEATH.get(victim));
             return -1;
         }
         if (player == victim) {
-            source.sendFailure(ModifiableText.CLAIMKILL_ERROR_SELF.get());
+            OtherUtils.sendCommandFailure(source, ModifiableText.CLAIMKILL_ERROR_SELF.get());
             return -1;
         }
         Component textAll = ModifiableText.CLAIMKILL.get(player, victim);

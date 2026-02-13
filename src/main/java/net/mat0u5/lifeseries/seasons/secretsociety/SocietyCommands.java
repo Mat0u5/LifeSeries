@@ -6,7 +6,6 @@ import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -101,7 +100,7 @@ public class SocietyCommands extends Command {
         if (target == null) return -1;
 
         if (!society.isMember(target)) {
-            source.sendFailure(Component.nullToEmpty("That player is not a Member"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR.get());
             return -1;
         }
 
@@ -117,7 +116,7 @@ public class SocietyCommands extends Command {
         if (target == null) return -1;
 
         if (society.isMember(target)) {
-            source.sendFailure(Component.nullToEmpty("That player already a Member"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR_DUPLICATE.get());
             return -1;
         }
 
@@ -132,7 +131,7 @@ public class SocietyCommands extends Command {
         if (checkSocietyRunning(source)) return -1;
 
         if (society.members.isEmpty()) {
-            source.sendFailure(Component.nullToEmpty("The are no Secret Society members"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR_NONE.get());
             return -1;
         }
 
@@ -150,16 +149,16 @@ public class SocietyCommands extends Command {
         SecretSociety society = get();
         if (society == null) return false;
         if (society.societyEnded) {
-            source.sendFailure(Component.nullToEmpty("The Secret Society has already ended"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.SOCIETY_ERROR_ENDED.get());
             if (PermissionManager.isAdmin(source)) {
-                OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7Use '/society begin' or '/society begin <secret_word>' to start."));
+                OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SOCIETY_START_PROMPT.get());
             }
             return true;
         }
         if (!society.societyStarted) {
-            source.sendFailure(Component.nullToEmpty("The Secret Society has not started yet"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.SOCIETY_ERROR_STARTED.get());
             if (PermissionManager.isAdmin(source)) {
-                OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7Use '/society begin' or '/society begin <secret_word>' to start."));
+                OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SOCIETY_START_PROMPT.get());
             }
             return true;
         }
@@ -171,7 +170,7 @@ public class SocietyCommands extends Command {
         SecretSociety society = get();
         if (society == null) return -1;
 
-        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Starting the Secret Society..."));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.SOCIETY_STARTING.get());
         society.startSociety(word);
         return 1;
     }
@@ -181,7 +180,7 @@ public class SocietyCommands extends Command {
         SecretSociety society = get();
         if (society == null) return -1;
 
-        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Ending the Secret Society..."));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.SOCIETY_ENDING.get());
         society.forceEndSociety();
         return 1;
     }
@@ -196,14 +195,14 @@ public class SocietyCommands extends Command {
 
         SocietyMember member = society.getMember(self);
         if (member == null) {
-            source.sendFailure(Component.nullToEmpty("You are not a member of the Secret Society"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR_SELF.get());
             if (PermissionManager.isAdmin(self)) {
-                OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Use the §f\"/society fail §lconfirm\"§l§7 command to bypass this"));
+                OtherUtils.sendCommandFeedback(source, ModifiableText.SOCIETY_MEMBER_ERROR_FAILBYPASS.get());
             }
             return -1;
         }
         if (!member.initiated) {
-            source.sendFailure(Component.nullToEmpty("You have not been initiated"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR_INITIALIZE.get());
             return -1;
         }
 
@@ -235,14 +234,14 @@ public class SocietyCommands extends Command {
 
         SocietyMember member = society.getMember(self);
         if (member == null) {
-            source.sendFailure(Component.nullToEmpty("You are not a member of the Secret Society"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR_SELF.get());
             if (PermissionManager.isAdmin(self)) {
-                OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Use the §f\"/society success §lconfirm\"§l§7 command to bypass this"));
+                OtherUtils.sendCommandFeedback(source, ModifiableText.SOCIETY_MEMBER_ERROR_SUCCESSBYPASS.get());
             }
             return -1;
         }
         if (!member.initiated) {
-            source.sendFailure(Component.nullToEmpty("You have not been initiated"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR_INITIALIZE.get());
             return -1;
         }
 
@@ -274,11 +273,11 @@ public class SocietyCommands extends Command {
 
         SocietyMember member = society.getMember(self);
         if (member == null) {
-            source.sendFailure(Component.nullToEmpty("You are not a member of the Secret Society"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR_SELF.get());
             return -1;
         }
         if (member.initiated) {
-            source.sendFailure(Component.nullToEmpty("You have already been initiated"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR_INITIALIZED.get());
             return -1;
         }
 

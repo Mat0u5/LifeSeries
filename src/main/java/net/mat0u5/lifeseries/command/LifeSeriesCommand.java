@@ -117,8 +117,8 @@ public class LifeSeriesCommand extends Command {
         if (checkBanned(source)) return -1;
         if (source.getPlayer() == null) return -1;
         if (!NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer())) {
-            source.sendFailure(Component.nullToEmpty("You must have the Life Series mod installed §nclient-side§c to open the season selection GUI."));
-            source.sendFailure(Component.nullToEmpty("Use the '/lifeseries setSeries <season>' command instead."));
+            OtherUtils.sendCommandFailure(source, Component.nullToEmpty("You must have the Life Series mod installed §nclient-side§c to open the season selection GUI."));
+            OtherUtils.sendCommandFailure(source, Component.nullToEmpty("Use the '/lifeseries setSeries <season>' command instead."));
             return -1;
         }
         OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Opening the season selection GUI..."));
@@ -129,8 +129,8 @@ public class LifeSeriesCommand extends Command {
     public int setSeason(CommandSourceStack source, String setTo, boolean confirmed) {
         if (checkBanned(source)) return -1;
         if (!ALLOWED_SEASON_NAMES.contains(setTo)) {
-            source.sendFailure(ModifiableText.SEASON_INVALID.get());
-            source.sendFailure(ModifiableText.SEASON_INVALID_HELP.get(ALLOWED_SEASON_NAMES));
+            OtherUtils.sendCommandFailure(source, ModifiableText.SEASON_INVALID.get());
+            OtherUtils.sendCommandFailure(source, ModifiableText.SEASON_INVALID_HELP.get(ALLOWED_SEASON_NAMES));
             return -1;
         }
         if (confirmed) {
@@ -166,8 +166,8 @@ public class LifeSeriesCommand extends Command {
             return -1;
         }
         if (!NetworkHandlerServer.wasHandshakeSuccessful(self)) {
-            source.sendFailure(Component.nullToEmpty("You must have the Life Series mod installed §nclient-side§c to open the config GUI."));
-            source.sendFailure(Component.nullToEmpty("Either install the mod on the client on modify the config folder."));
+            OtherUtils.sendCommandFailure(source, Component.nullToEmpty("You must have the Life Series mod installed §nclient-side§c to open the config GUI."));
+            OtherUtils.sendCommandFailure(source, Component.nullToEmpty("Either install the mod on the client on modify the config folder."));
             return -1;
         }
 

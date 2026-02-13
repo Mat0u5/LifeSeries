@@ -222,7 +222,7 @@ public class WildLifeCommands extends Command {
         if (checkBanned(source)) return -1;
 
         WildcardManager.FINALE = true;
-        OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("All wildcards will act as if the finale (so the Callback wildcard) was activated."));
+        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_FINALE.get());
 
         return 1;
     }
@@ -231,11 +231,11 @@ public class WildLifeCommands extends Command {
         if (checkBanned(source)) return -1;
 
         if (!WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
-            source.sendFailure(Component.nullToEmpty("The Hunger wildcard is not active right now."));
+            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_HUNGER_INACTIVE.get());
             return -1;
         }
 
-        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Randomizing food..."));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_HUNGER_RANDOMIZE.get());
 
         if (WildcardManager.activeWildcards.get(Wildcards.HUNGER) instanceof Hunger hungerWildcard) {
             hungerWildcard.newFoodRules();
@@ -260,7 +260,7 @@ public class WildLifeCommands extends Command {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Reloading snail textures..."));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_TEXTURES_RELOAD.get());
         SnailSkins.sendTextures();
 
         return 1;
@@ -280,7 +280,7 @@ public class WildLifeCommands extends Command {
         if (checkBanned(source)) return -1;
         List<String> textures = SnailSkins.getAllSkins();
         if (textures.isEmpty()) {
-            OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7No snail skins have been added yet. Run '§f/snail textures info§7' to learn how to add them."));
+            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SNAIL_TEXTURES_NONE.get());
             return -1;
         }
         OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SNAIL_TEXTURES_LIST.get(textures));
@@ -291,11 +291,11 @@ public class WildLifeCommands extends Command {
         if (checkBanned(source)) return -1;
         if (source.getPlayer() == null) return -1;
         if (!NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer())) {
-            source.sendFailure(Component.nullToEmpty("You must have the Life Series mod installed §nclient-side§c to open the wildcard GUI"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_WILDCARD_GUI_ERROR.get());
             return -1;
         }
 
-        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Opening the Wildcard selection GUI..."));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_WILDCARD_GUI_OPEN.get());
         SimplePackets.SELECT_WILDCARDS.target(source.getPlayer()).sendToClient();
         return 1;
     }
@@ -330,12 +330,12 @@ public class WildLifeCommands extends Command {
         }
 
         if (!Superpowers.getImplementedStr().contains(name)) {
-            source.sendFailure(Component.nullToEmpty("That superpower doesn't exist"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_INVALID.get());
             return -1;
         }
         Superpowers superpower = Superpowers.fromString(name);
         if (superpower == Superpowers.NULL) {
-            source.sendFailure(Component.nullToEmpty("That superpower doesn't exist"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_INVALID.get());
             return -1;
         }
 
@@ -358,20 +358,20 @@ public class WildLifeCommands extends Command {
         if (player == null) return -1;
         Superpower superpower = SuperpowersWildcard.getSuperpowerInstance(player);
         if (superpower == null) {
-            source.sendFailure(Component.nullToEmpty("You do not have an active superpower"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_INACTIVE.get());
             return -1;
         }
         superpower.cooldown = 0;
         SimplePackets.SUPERPOWER_COOLDOWN.target(player).sendToClient(0);
 
-        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("Your superpower cooldown has been skipped"));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_COOLDOWN.get());
         return 1;
     }
 
     public int setRandomSuperpowers(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
         SuperpowersWildcard.rollRandomSuperpowers();
-        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("Randomized everyone's superpowers"));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_RANDOMIZE.get());
         return 1;
     }
 
@@ -416,13 +416,13 @@ public class WildLifeCommands extends Command {
         if (targets == null || targets.isEmpty()) return -1;
 
         if (!Superpowers.getImplementedStr().contains(name)) {
-            source.sendFailure(Component.nullToEmpty("That superpower doesn't exist"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_INVALID.get());
             return -1;
         }
 
         Superpowers superpower = Superpowers.fromString(name);
         if (superpower == Superpowers.NULL) {
-            source.sendFailure(Component.nullToEmpty("That superpower doesn't exist"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_INVALID.get());
             return -1;
         }
 
@@ -484,16 +484,16 @@ public class WildLifeCommands extends Command {
         if (checkBanned(source)) return -1;
         if (wildcardName.equalsIgnoreCase("*")) {
             WildcardManager.onSessionEnd();
-            OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("Deactivated all wildcards"));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_WILDCARD_DEACTIVATE_ALL.get());
             return 1;
         }
         Wildcards wildcard = Wildcards.getFromString(wildcardName);
         if (wildcard == Wildcards.NULL) {
-            source.sendFailure(Component.nullToEmpty("That Wildcard doesn't exist"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_WILDCARD_INVALID.get());
             return -1;
         }
         if (!WildcardManager.isActiveWildcard(wildcard)) {
-            source.sendFailure(Component.nullToEmpty("That Wildcard is not active"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_WILDCARD_INVALID.get());
             return -1;
         }
         WildcardManager.fadedWildcard();
@@ -523,25 +523,25 @@ public class WildLifeCommands extends Command {
                     if (wildcard.active) continue;
                     wildcard.activate();
                 }
-                WildcardManager.showRainbowCryptTitle("All wildcards are active!");
+                WildcardManager.showRainbowCryptTitle(ModifiableText.WILDLIFE_WILDCARD_ACTIVATE_ALL_TITLE.getString());
             });
             NetworkHandlerServer.sendUpdatePackets();
 
-            OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("Activated all wildcards (Except Callback)"));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_WILDCARD_ACTIVATE_ALL.get());
             return 1;
         }
         Wildcards wildcard = Wildcards.getFromString(wildcardName);
         if (wildcard == Wildcards.NULL) {
-            source.sendFailure(Component.nullToEmpty("That Wildcard doesn't exist"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_WILDCARD_INVALID.get());
             return -1;
         }
         if (WildcardManager.isActiveWildcard(wildcard)) {
-            source.sendFailure(Component.nullToEmpty("That Wildcard is already active"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_WILDCARD_ACTIVATE_ERROR.get());
             return -1;
         }
         Wildcard actualWildcard = wildcard.getInstance();
         if (actualWildcard == null) {
-            source.sendFailure(Component.nullToEmpty("That Wildcard has not been implemented yet"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_WILDCARD_IMPLEMENT_ERROR.get());
             return -1;
         }
         TaskScheduler.scheduleTask(89, () -> WildcardManager.activeWildcards.put(wildcard, actualWildcard));
@@ -560,7 +560,7 @@ public class WildLifeCommands extends Command {
     public int listActiveWildcards(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
         if (Wildcards.getActiveWildcardsStr().isEmpty()) {
-            OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7There are no active Wildcards right now. \nYou will be able to select a Wildcard when you start a session, or you can use '§f/wildcard activate <wildcard>§7' to activate a specific Wildcard right now."));
+            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_WILDCARD_ACTIVATED_NONE.get());
             return 1;
         }
         OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_WILDCARD_ACTIVATED.get(Wildcards.getActiveWildcardsStr()));

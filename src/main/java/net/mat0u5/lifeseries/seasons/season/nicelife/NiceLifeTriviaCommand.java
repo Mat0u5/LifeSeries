@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.nicelife;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
@@ -92,13 +93,13 @@ public class NiceLifeTriviaCommand extends Command {
         }
 
         if (triviaQuestion == null) {
-            source.sendFailure(Component.nullToEmpty("Could not find trivia with that question."));
+            OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_TRIVIA_NOTFOUND.get());
             return -1;
         }
 
         NiceLifeTriviaManager.preAssignedTrivia = triviaQuestion;
 
-        OtherUtils.sendCommandFeedback(source, Component.literal("Successfuly assigned trivia"));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_TRIVIA_ASSIGNED.get());
 
         return 1;
     }
@@ -107,7 +108,7 @@ public class NiceLifeTriviaCommand extends Command {
         if (checkBanned(source)) return -1;
         NiceLifeTriviaManager.preAssignedTrivia = null;
 
-        OtherUtils.sendCommandFeedback(source, Component.literal("Reset assigned trivia"));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_TRIVIA_RESET.get());
 
         return 1;
     }

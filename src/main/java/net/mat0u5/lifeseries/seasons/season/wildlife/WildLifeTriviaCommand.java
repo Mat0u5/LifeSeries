@@ -134,7 +134,7 @@ public class WildLifeTriviaCommand extends Command {
     public int setPunishment(CommandSourceStack source, Collection<ServerPlayer> targets, String punishment) {
         if (checkBanned(source)) return -1;
         if (!CompatibilityManager.voicechatLoaded() && punishment.equals("robotic_voice")) {
-            source.sendFailure(Component.nullToEmpty("The server does not have Simple Voice Chat installed"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.MOD_SVC_MISSING_SERVER.get());
             return -1;
         }
 
@@ -204,10 +204,10 @@ public class WildLifeTriviaCommand extends Command {
 
         if (punishment.equals("robotic_voice") && totalSVC == 0) {
             if (targets.size() == 1) {
-                source.sendFailure(ModifiableText.MOD_SVC_MISSING.get(targets.iterator().next()));
+                OtherUtils.sendCommandFailure(source, ModifiableText.MOD_SVC_MISSING.get(targets.iterator().next()));
             }
             else {
-                source.sendFailure(ModifiableText.MOD_SVC_MISSING_ALL.get());
+                OtherUtils.sendCommandFailure(source, ModifiableText.MOD_SVC_MISSING_ALL.get());
             }
             return -1;
         }
@@ -294,7 +294,7 @@ public class WildLifeTriviaCommand extends Command {
         }
 
         if (triviaQuestion == null) {
-            source.sendFailure(Component.nullToEmpty("Could not find trivia with that question."));
+            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_TRIVIA_QUESTION_INVALID.get());
             return -1;
         }
 

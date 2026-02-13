@@ -74,7 +74,7 @@ public class WatcherCommand extends Command {
     public int listWatchers(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
         if (WatcherManager.getWatchers().isEmpty()) {
-            source.sendFailure(Component.nullToEmpty("There are no Watchers right now"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.WATCHER_ERROR_NONE.get());
             return -1;
         }
         OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WATCHER_LIST.get(WatcherManager.getWatchers()));

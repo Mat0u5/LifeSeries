@@ -14,8 +14,10 @@ public enum ModifiableText {
     MOD_VERSION("Mod version: {}", List.of("version"))
     ,MOD_ERROR_GENERAL("§cSomething went wrong")
     ,MOD_SVC_MISSING("{} does not have Simple Voice Chat installed", List.of("Player"))
+    ,MOD_SVC_MISSING_SERVER("The server does not have Simple Voice Chat installed")
     ,MOD_SVC_MISSING_ALL("None of the targets have Simple Voice Chat installed")
     ,TRANSCRIPT_COPY("§7Click {}§7 to copy the session transcript.", List.of("ClickHere"))
+    ,MOD_DISABLED_ERROR("The Life Series mod is disabled!\nEnable with \"/lifeseries enable\"")
 
     ,SEASON_COMMANDS_ADMIN(Formatted.LOOSELY_STYLED, "§7{} commands: §r{}", List.of("season", "commands"))
     ,SEASON_COMMANDS(Formatted.LOOSELY_STYLED, "§7{} non-admin commands: §r{}", List.of("season", "commands"))
@@ -41,6 +43,14 @@ public enum ModifiableText {
     ,SESSION_LENGTH_REMOVE("Removed {} from the session length", List.of("time"))
     ,SESSION_ERROR_START("§cThe session has not started")
     ,SESSION_START_PROMPT("\nUse §b'/session timer set <time>'§f to set the desired session time.\nAfter that, use §b'/session start'§f to start the session.")
+    ,SESSION_ERROR_TIME_UNSET("The session time is not set! Use '/session timer set <time>' to set the session time.")
+    ,SESSION_ERROR_STARTED("The session has already started")
+    ,SESSION_ERROR_NOTSTARTED("The session has not yet started")
+    ,SESSION_START_FAIL("Could not start session")
+    ,SESSION_STARTING("§7Starting session...")
+    ,SESSION_STOPPING("§7Stopping session...")
+    ,SESSION_PAUSING("§7Pausing session...")
+    ,SESSION_UNPAUSING("§7Unpausing session...")
 
     ,LIVES_UNASSIGNED("You have not been assigned any lives yet")
     ,LIVES_UNASSIGNED_ALL("Nobody has been assigned lives yet")
@@ -63,6 +73,11 @@ public enum ModifiableText {
     ,FINAL_DEATH("{} ran out of lives.", List.of("Player"))
     ,FINAL_DEATH_TITLE("", List.of("Player"))
     ,FINAL_DEATH_TITLE_SUBTITLE("ran out of lives!", List.of("Player"))
+    ,MUTED_DEADPLAYER("Dead players aren't allowed to talk in chat! Admins can change this behavior in the config.")
+
+    ,PLAYER_ERROR_WATCHER("That player is a Watcher")
+    ,PLAYER_ERROR_DEAD("That player is not alive")
+    ,TARGET_ERROR_MISSING("No target was found")
 
     ,GIVELIFE_DOUBLELIFE_ACCEPT("Your soulmate wants to give a life to {}.\nClick {} to accept the request.", List.of("Player", "ClickHere"))
     ,GIVELIFE_RECEIVE_SELF("You received a life from {}", List.of("Player"))
@@ -70,12 +85,16 @@ public enum ModifiableText {
     ,GIVELIFE_RECEIVE_SELF_TITLE("You received a life")
     ,GIVELIFE_RECEIVE_SELF_TITLE_SUBTITLE("from {}", List.of("Player"))
 
-    ,MUTED_WATCHER("Watchers aren't allowed to talk in chat! Admins can change this behavior in the config.")
-    ,MUTED_DEADPLAYER("Dead players aren't allowed to talk in chat! Admins can change this behavior in the config.")
 
     ,WATCHER_JOIN("§7§nYou are now a Watcher.\n\n§7Watchers are players that are online, but are not affected by most season mechanics. They can only observe - this is very useful for spectators and for admins.")
     ,WATCHER_LEAVE("§7You are no longer a Watcher.")
+    ,WATCHER_ERROR_NONE("There are no Watchers right now")
+    ,WATCHER_ADD_SINGLE("{} is now a Watcher", List.of("Player"))
+    ,WATCHER_ADD_MULTIPLE("{} targets are now Watchers", List.of("number of targets"))
+    ,WATCHER_REMOVE_SINGLE("{} is no longer a Watcher", List.of("Player"))
+    ,WATCHER_REMOVE_MULTIPLE("{} targets are no longer Watchers", List.of("number of targets"))
     ,WATCHER_LIST(Formatted.LOOSELY_STYLED,"Current Watchers: §7{}", List.of("Watchers"))
+    ,MUTED_WATCHER("Watchers aren't allowed to talk in chat! Admins can change this behavior in the config.")
 
     ,BOOGEYMAN_MESSAGE("§7You are the Boogeyman. You must by any means necessary kill a §2dark green§7, §agreen§7 or §eyellow§7 name by direct action to be cured of the curse. If you fail, you will become a §cred name§7. All loyalties and friendships are removed while you are the Boogeyman.")
     ,BOOGEYMAN_NOTICE_ADDED("§c [NOTICE] You are now a Boogeyman!")
@@ -103,6 +122,19 @@ public enum ModifiableText {
     ,SOCIETY_OTHER_MEMBER_ADDED("A player has been added to the Secret Society.")
     ,SOCIETY_OTHER_MEMBER_REMOVED("A player has been removed from the Secret Society.")
     ,SOCIETY_MEMBERS(Formatted.LOOSELY_STYLED,"Secret Society Members: §7{}", List.of("members"))
+    ,SOCIETY_MEMBER_ERROR("That player is not a Member")
+    ,SOCIETY_MEMBER_ERROR_DUPLICATE("That player already a Member")
+    ,SOCIETY_MEMBER_ERROR_NONE("The are no Secret Society members")
+    ,SOCIETY_ERROR_ENDED("The Secret Society has already ended")
+    ,SOCIETY_ERROR_STARTED("The Secret Society has not started yet")
+    ,SOCIETY_START_PROMPT("§7Use '/society begin' or '/society begin <secret_word>' to start.")
+    ,SOCIETY_STARTING("§7Starting the Secret Society...")
+    ,SOCIETY_ENDING("§7Ending the Secret Society...")
+    ,SOCIETY_MEMBER_ERROR_SELF("You are not a member of the Secret Society")
+    ,SOCIETY_MEMBER_ERROR_FAILBYPASS("§7Use the §f\"/society fail §lconfirm\"§l§7 command to bypass this")
+    ,SOCIETY_MEMBER_ERROR_SUCCESSBYPASS("§7Use the §f\"/society success §lconfirm\"§l§7 command to bypass this")
+    ,SOCIETY_MEMBER_ERROR_INITIALIZE("You have not been initiated")
+    ,SOCIETY_MEMBER_ERROR_INITIALIZED("You have already been initiated")
 
     ,SUBIN_END_NOTIFY(Formatted.LOOSELY_STYLED, "§6You are no longer subbing in for {}", List.of("Player"))
     ,SUBIN_END_OTHER(Formatted.LOOSELY_STYLED, "§6{} is no longer subbing in for you", List.of("Player"))
@@ -112,6 +144,10 @@ public enum ModifiableText {
     ,SUBIN_LIST_ENTRY(Formatted.LOOSELY_STYLED," §7{} is subbinng in for {}", List.of("Player", "Subin"))
     ,SUBIN_START("{} is now subbing in for {}", List.of("Player", "Subin"))
     ,SUBIN_STOP("{} is no longer subbing in for {}", List.of("Player", "Subin"))
+    ,SUBIN_ERROR_FETCH("Failed to fetch target profile\nMake sure the target player has logged on the server at least once")
+    ,SUBIN_ERROR_ONLINE("Online players cannot be subbed in for")
+    ,SUBIN_ERROR_NONE("There are no sub ins yet")
+    ,SUBIN_CURRENT("§7Current sub ins:")
 
     ,CLAIMKILL_ERROR_NODEATH(Formatted.PLAIN, "{} did not die in the last 2 minutes. Or they might have been killed by a player directly.", List.of("Player"))
     ,CLAIMKILL_ERROR_SELF("You cannot claim credit for your own death :P")
@@ -133,11 +169,6 @@ public enum ModifiableText {
     ,SIDETITLE_SINGLE("Showing new side title for {}", List.of("Player"))
     ,SIDETITLE_MULTIPLE("Showing new side title for {} players", List.of("number of targets"))
 
-    ,WATCHER_ADD_SINGLE("{} is now a Watcher", List.of("Player"))
-    ,WATCHER_ADD_MULTIPLE("{} targets are now Watchers", List.of("number of targets"))
-    ,WATCHER_REMOVE_SINGLE("{} is no longer a Watcher", List.of("Player"))
-    ,WATCHER_REMOVE_MULTIPLE("{} targets are no longer Watchers", List.of("number of targets"))
-
     ,BOOGEYMAN_FAIL_SELF("{}§7 voulentarily failed themselves as the Boogeyman. They have been consumed by the curse.", List.of("Player"))
     ,BOOGEYMAN_FAIL_OTHER_SINGLE("§7Failing Boogeyman for {}§7...", List.of("Player"))
     ,BOOGEYMAN_FAIL_OTHER_MULTIPLE("§7Failing Boogeyman for {} targets§7...", List.of("number of targets"))
@@ -158,6 +189,18 @@ public enum ModifiableText {
     ,BOOGEYMAN_FAIL_ADVANCEDDEATH("{}§7 failed to kill a player while being the §cBoogeyman§7. They have been consumed by the curse.", List.of("Player"))
     ,BOOGEYMAN_FAIL_NOTIFY_TITLE("§cYou have failed.")
     ,BOOGEYMAN_FAIL_ADVANCEDDEATH_NOTIFY_TITLE("§cThe curse consumes you..")
+    ,BOOGEYMAN_ERROR_NOTBOOGEY("You are not a Boogeyman")
+    ,BOOGEYMAN_ERROR_NOTBOOGEY_OTHER("That player is not a Boogeyman")
+    ,BOOGEYMAN_ERROR_IS("That player is already a Boogeyman")
+    ,BOOGEYMAN_ERROR_ALREADY_FAILED("You have already failed")
+    ,BOOGEYMAN_ERROR_ALREADY_CURED("You have already been cured")
+    ,BOOGEYMAN_ALREADY_FAILED("§7You were the Boogeyman, but you have already §cfailed§7.")
+    ,BOOGEYMAN_ALREADY_CURED("§7You were the Boogeyman, and you have already been §acured§7.")
+    ,BOOGEYMAN_IS("§cYou are the Boogeyman.")
+    ,BOOGEYMAN_SELFFAIL_WARNING("Warning: This will cause you to fail as the Boogeyman\nRun \"/boogeyman selfFail §lconfirm§r\" to confirm this action.")
+    ,BOOGEYMAN_SELFFAIL("§7Failing as the Boogeyman...")
+    ,BOOGEYMAN_CLEAR("All Boogeymen have been cleared")
+    ,BOOGEYMAN_RANDOMIZE("§7Choosing random Boogeymen...")
 
 
     ,DOUBLELIFE_TELEPORT(Seasons.DOUBLE_LIFE, "§6Woosh!")
@@ -174,6 +217,12 @@ public enum ModifiableText {
     ,DOUBLELIFE_SOULMATE_ERROR_FORCE_EXISTS(Seasons.DOUBLE_LIFE, Formatted.PLAIN, "{} is already forced with someone", List.of("Player"))
     ,DOUBLELIFE_SOULMATE_ERROR_MISSING(Seasons.DOUBLE_LIFE, Formatted.PLAIN, "{} does not have a soulmate", List.of("Player"))
     ,DOUBLELIFE_SOULMATE_ERROR_OFFLINE(Seasons.DOUBLE_LIFE, Formatted.PLAIN, "{} 's soulmate is not online right now", List.of("Player"))
+    ,DOUBLELIFE_SOULMATE_PREVENT_RESET(Seasons.DOUBLE_LIFE, "Soulmate prevent entries were reset")
+    ,DOUBLELIFE_SOULMATE_FORCE_RESET(Seasons.DOUBLE_LIFE, "Soulmate force entries were reset")
+    ,DOUBLELIFE_SOULMATE_ERROR_DUPLICATE(Seasons.DOUBLE_LIFE, "You cannot specify the same player twice")
+    ,DOUBLELIFE_SOULMATE_RESET(Seasons.DOUBLE_LIFE, "All soulmate entries were reset")
+    ,DOUBLELIFE_SOULMATE_NONE(Seasons.DOUBLE_LIFE, "There are no soulmates currently assigned")
+    ,DOUBLELIFE_SOULMATE_ROLLING(Seasons.DOUBLE_LIFE, "§7Rolling soulmates...")
 
     ,LIMITEDLIFE_CHANGE_COLOR(Seasons.LIMITED_LIFE, "{}§7 is now a {} name§7.", List.of("Player", "color"))
 
@@ -228,6 +277,8 @@ public enum ModifiableText {
     ,SECRETLIFE_GIVEHEART_ERROR_DEAD(Seasons.SECRET_LIFE, "That player is not alive")
     ,SECRETLIFE_GIVEHEART_SEND(Seasons.SECRET_LIFE, "You have gifted a heart to {}", List.of("Player"))
     ,SECRETLIFE_GIVEHEART_RECEIVE(Seasons.SECRET_LIFE, "{} gave you a heart", List.of("Player"))
+    ,SECRETLIFE_TASK_LOCATIONS(Seasons.SECRET_LIFE, "Changing Secret Life locations...")
+    ,SECRETLIFE_TASK_ERROR_BOOK_MISSING(Seasons.SECRET_LIFE, "No task books were found")
 
     ,WILDLIFE_SNAIL_TEXTURE_INFO(Seasons.WILD_LIFE, Formatted.LOOSELY_STYLED,"§fClick {}§f to open the Snail Textures info page in the Wiki.", List.of("ClickHere"))
     ,WILDLIFE_SNAIL_DEFAULT_NAME(Seasons.WILD_LIFE, Formatted.PLAIN,"{}'s Snail", List.of("Player"))
@@ -268,6 +319,25 @@ public enum ModifiableText {
     ,WILDLIFE_TRIVIA_RESET_SINGLE(Seasons.WILD_LIFE, "Reset {}'s assigned trivia", List.of("Player"))
     ,WILDLIFE_TRIVIA_RESET_MULTIPLE(Seasons.WILD_LIFE, "Reset assigned trivia of {} targets", List.of("number of targets"))
     ,MUTED_TRIVIABOT(Seasons.WILD_LIFE, "<Trivia Bot> No phoning a friend allowed!")
+    ,WILDLIFE_FINALE(Seasons.WILD_LIFE, "All wildcards will act as if the finale (so the Callback wildcard) was activated.")
+    ,WILDLIFE_HUNGER_INACTIVE(Seasons.WILD_LIFE, "The Hunger wildcard is not active right now.")
+    ,WILDLIFE_HUNGER_RANDOMIZE(Seasons.WILD_LIFE, "§7Randomizing food...")
+    ,WILDLIFE_SNAIL_TEXTURES_RELOAD(Seasons.WILD_LIFE, "§7Reloading snail textures...")
+    ,WILDLIFE_SNAIL_TEXTURES_NONE(Seasons.WILD_LIFE, "§7No snail skins have been added yet. Run '§f/snail textures info§7' to learn how to add them.")
+    ,WILDLIFE_WILDCARD_GUI_ERROR(Seasons.WILD_LIFE, "You must have the Life Series mod installed §nclient-side§c to open the wildcard GUI")
+    ,WILDLIFE_WILDCARD_GUI_OPEN(Seasons.WILD_LIFE, "§7Opening the Wildcard selection GUI...")
+    ,WILDLIFE_SUPERPOWER_INVALID(Seasons.WILD_LIFE, "That superpower doesn't exist")
+    ,WILDLIFE_SUPERPOWER_INACTIVE(Seasons.WILD_LIFE, "You do not have an active superpower")
+    ,WILDLIFE_SUPERPOWER_COOLDOWN(Seasons.WILD_LIFE, "Your superpower cooldown has been skipped")
+    ,WILDLIFE_SUPERPOWER_RANDOMIZE(Seasons.WILD_LIFE, "Randomized everyone's superpowers")
+    ,WILDLIFE_WILDCARD_DEACTIVATE_ALL(Seasons.WILD_LIFE, "Deactivated all wildcards")
+    ,WILDLIFE_WILDCARD_INVALID(Seasons.WILD_LIFE, "That Wildcard doesn't exist")
+    ,WILDLIFE_WILDCARD_ACTIVATE_ALL_TITLE(Seasons.WILD_LIFE, "All wildcards are active!")
+    ,WILDLIFE_WILDCARD_ACTIVATE_ALL(Seasons.WILD_LIFE, "Activated all wildcards (Except Callback)")
+    ,WILDLIFE_WILDCARD_ACTIVATE_ERROR(Seasons.WILD_LIFE, "That Wildcard is already active")
+    ,WILDLIFE_WILDCARD_IMPLEMENT_ERROR(Seasons.WILD_LIFE, "That Wildcard has not been implemented yet")
+    ,WILDLIFE_WILDCARD_ACTIVATED_NONE(Seasons.WILD_LIFE, "§7There are no active Wildcards right now. \nYou will be able to select a Wildcard when you start a session, or you can use '§f/wildcard activate <wildcard>§7' to activate a specific Wildcard right now.")
+    ,WILDLIFE_TRIVIA_QUESTION_INVALID(Seasons.WILD_LIFE, "Could not find trivia with that question.")
 
     ,PASTLIFE_SESSION_START(Seasons.PAST_LIFE, "§7Past Life session started:\n§7 Type §f\"/pastlife boogeyman\"§7 to have the Boogeyman in this session.\n§7 Type §f\"/pastlife society\"§7 to have the Secret Society in this session.\n§7 Or type §f\"/pastlife pickRandom\"§7 if you want the game to pick randomly.\n")
     ,BOOGEYMAN_PASTLIFE_MESSAGE_PT1(Seasons.PAST_LIFE, "§7You are the boogeyman.")
@@ -276,6 +346,17 @@ public enum ModifiableText {
     ,BOOGEYMAN_PASTLIFE_MESSAGE_PT4(Seasons.PAST_LIFE, "§7Other players may defend themselves.")
     ,BOOGEYMAN_PASTLIFE_MESSAGE_PT5(Seasons.PAST_LIFE, "§7Voluntary sacrifices will not cure the curse.")
     ,BOOGEYMAN_PASTLIFE_MESSAGE_PT6(Seasons.PAST_LIFE, "§7You need {} {}§7 to be cured of the curse.", List.of("kills amount", "kill/kills"))
+    ,PASTLIFE_TWIST_FAIL(Seasons.PAST_LIFE, "Picking failed")
+    ,PASTLIFE_TWIST_RANDOM(Seasons.PAST_LIFE, "§7Randomly picking the Boogeyman or the Secret Society...")
+    ,PASTLIFE_TWIST_SOCIETY_ERROR_DISABLED(Seasons.PAST_LIFE, "The Secret Society is disabled in the config")
+    ,PASTLIFE_TWIST_SOCIETY_ERROR_ENDED(Seasons.PAST_LIFE, "The Secret Society has already ended")
+    ,PASTLIFE_TWIST_SOCIETY_ERROR_STARTED(Seasons.PAST_LIFE, "The Secret Society has already started")
+    ,PASTLIFE_TWIST_SOCIETY_ERROR_QUEUED(Seasons.PAST_LIFE, "The Secret Society is already queued")
+    ,PASTLIFE_TWIST_SOCIETY(Seasons.PAST_LIFE, "Added the Secret Society to queued session actions")
+    ,PASTLIFE_TWIST_BOOGEYMAN_ERROR_DISABLED(Seasons.PAST_LIFE, "The Boogeyman is disabled in the config")
+    ,PASTLIFE_TWIST_BOOGEYMAN_ERROR_CHOSEN(Seasons.PAST_LIFE, "The Boogeyman has already been chosen")
+    ,PASTLIFE_TWIST_BOOGEYMAN_ERROR_QUEUED(Seasons.PAST_LIFE, "The Boogeyman is already queued")
+    ,PASTLIFE_TWIST_BOOGEYMAN(Seasons.PAST_LIFE, "Added the Boogeyman to queued session actions")
 
     ,NICELIFE_NICELIST_START_TITLE_PT1(Seasons.NICE_LIFE, "§aThese players are on...")
     ,NICELIFE_NICELIST_START_TITLE_PT2(Seasons.NICE_LIFE, "§aTHE NICE LIST")
@@ -312,19 +393,29 @@ public enum ModifiableText {
     ,NICELIFE_VOTE_SET(Seasons.NICE_LIFE, "Next midnight vote will be '{}'", List.of("vote"))
     ,NICELIFE_WAKEUP_SINGLE(Seasons.NICE_LIFE, "Woke up {}", List.of("Player"))
     ,NICELIFE_WAKEUP_MULTIPLE(Seasons.NICE_LIFE, "Woke up {}", List.of("Player"))
+    ,NICELIFE_NICELIST_ERROR(Seasons.NICE_LIFE, "The Nice List is not currently in progress")
+    ,NICELIFE_NOTSLEEPING(Seasons.NICE_LIFE, "You are not sleeping")
+    ,NICELIFE_NOT_NIGHT(Seasons.NICE_LIFE, "It is not night time")
+    ,NICELIFE_VOTE_ERROR_UNKNOWN(Seasons.NICE_LIFE, "Vote type not found")
+    ,NICELIFE_VOTE_ERROR_NICELIST_MISSING(Seasons.NICE_LIFE, "You are not on the nice list")
+    ,NICELIFE_VOTE_ERROR_NICELIST_PROGRESS(Seasons.NICE_LIFE, "Nice list voting is not in progress")
+    ,NICELIFE_VOTE_ERROR_DEAD(Seasons.NICE_LIFE, "Dead players cannot vote")
+    ,NICELIFE_VOTE_ERROR_WATCHER(Seasons.NICE_LIFE, "Watchers cannot vote")
+    ,NICELIFE_VOTE_ERROR_TARGET(Seasons.NICE_LIFE, "There are no players to vote for")
+    ,NICELIFE_TRIVIA_NOTFOUND(Seasons.NICE_LIFE, "Could not find trivia with that question")
+    ,NICELIFE_TRIVIA_ASSIGNED(Seasons.NICE_LIFE, "Successfuly assigned trivia")
+    ,NICELIFE_TRIVIA_RESET(Seasons.NICE_LIFE, "Reset assigned trivia")
 
 
+//ModifiableText.NAME.get(
+    /*
+    ,NAME("")
 
-ModifiableText.NAME.get(
-/*
-,NAME("")
-,NAME("", List.of("Player"))
-,NAME_SINGLE("", List.of("Player"))
-,NAME_MULTIPLE("", List.of("number of targets"))
-*/
-
+    ,NAME("", List.of("Player"))
+    ,NAME_SINGLE("", List.of("Player"))
+    ,NAME_MULTIPLE("", List.of("number of targets"))
+    */
     ;
-
 
     final Formatted formatted;
     final String name;

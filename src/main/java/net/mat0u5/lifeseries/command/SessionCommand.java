@@ -136,12 +136,12 @@ public class SessionCommand extends Command {
 
         Time pauseAt = OtherUtils.parseTimeFromArgument(timeArgument1);
         if (pauseAt == null || !pauseAt.isPresent()) {
-            source.sendFailure(Component.literal(INVALID_TIME_FORMAT_ERROR));
+            OtherUtils.sendCommandFailure(source, Component.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
         Time pauseFor = OtherUtils.parseTimeFromArgument(timeArgument2);
         if (pauseFor == null || !pauseFor.isPresent()) {
-            source.sendFailure(Component.literal(INVALID_TIME_FORMAT_ERROR));
+            OtherUtils.sendCommandFailure(source, Component.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
 
@@ -162,7 +162,7 @@ public class SessionCommand extends Command {
         if (checkBanned(source)) return -1;
 
         if (!currentSession.validTime()) {
-            source.sendFailure(Component.nullToEmpty("The session time has not been set yet"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.SESSION_ERROR_TIME_UNSET.get());
             return -1;
         }
         OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SESSION_END_INFO.get(currentSession.getRemainingTimeStr()));
@@ -188,22 +188,22 @@ public class SessionCommand extends Command {
         if (checkBanned(source)) return -1;
 
         if (!currentSession.validTime()) {
-            source.sendFailure(Component.nullToEmpty("The session time is not set! Use '/session timer set <time>' to set the session time."));
+            OtherUtils.sendCommandFailure(source, ModifiableText.SESSION_ERROR_TIME_UNSET.get());
             return -1;
         }
         if (currentSession.statusStarted()) {
-            source.sendFailure(Component.nullToEmpty("The session has already started"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.SESSION_ERROR_STARTED.get());
             return -1;
         }
         if (currentSession.statusPaused()) {
-            OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Unpausing session..."));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.SESSION_UNPAUSING.get());
             currentSession.sessionPause();
             return 1;
         }
 
-        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("Starting session..."));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.SESSION_STARTING.get());
         if (!currentSession.sessionStart()) {
-            source.sendFailure(Component.nullToEmpty("Could not start session"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.SESSION_START_FAIL.get());
             return -1;
         }
 
@@ -214,11 +214,11 @@ public class SessionCommand extends Command {
         if (checkBanned(source)) return -1;
 
         if (currentSession.statusNotStarted() || currentSession.statusFinished()) {
-            source.sendFailure(Component.nullToEmpty("The session has not yet started"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.SESSION_ERROR_NOTSTARTED.get());
             return -1;
         }
 
-        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Stopping session..."));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.SESSION_STOPPING.get());
         currentSession.sessionEnd();
         return 1;
     }
@@ -227,16 +227,16 @@ public class SessionCommand extends Command {
         if (checkBanned(source)) return -1;
 
         if (currentSession.statusNotStarted() || currentSession.statusFinished()) {
-            source.sendFailure(Component.nullToEmpty("The session has not yet started"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.SESSION_ERROR_NOTSTARTED.get());
             return -1;
         }
 
         if (currentSession.statusPaused()) {
-            OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Unpausing session..."));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.SESSION_UNPAUSING.get());
             currentSession.sessionPause();
         }
         else {
-            OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Pausing session..."));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.SESSION_PAUSING.get());
             currentSession.queuePause(currentSession.getPassedTime(), Time.hours(10_000));
         }
 
@@ -248,7 +248,7 @@ public class SessionCommand extends Command {
 
         Time timeTotal = OtherUtils.parseTimeFromArgument(timeArgument);
         if (timeTotal == null || !timeTotal.isPresent()) {
-            source.sendFailure(Component.literal(INVALID_TIME_FORMAT_ERROR));
+            OtherUtils.sendCommandFailure(source, Component.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
         OtherUtils.sendCommandFeedback(source, ModifiableText.SESSION_SKIP.get(timeTotal.formatLong()));
@@ -261,7 +261,7 @@ public class SessionCommand extends Command {
 
         Time timeTotal = OtherUtils.parseTimeFromArgument(timeArgument);
         if (timeTotal == null || !timeTotal.isPresent()) {
-            source.sendFailure(Component.literal(INVALID_TIME_FORMAT_ERROR));
+            OtherUtils.sendCommandFailure(source, Component.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
         currentSession.setSessionLength(timeTotal);
@@ -275,7 +275,7 @@ public class SessionCommand extends Command {
 
         Time timeTotal = OtherUtils.parseTimeFromArgument(timeArgument);
         if (timeTotal == null || !timeTotal.isPresent()) {
-            source.sendFailure(Component.literal(INVALID_TIME_FORMAT_ERROR));
+            OtherUtils.sendCommandFailure(source, Component.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
         currentSession.addSessionLength(timeTotal);
@@ -289,7 +289,7 @@ public class SessionCommand extends Command {
 
         Time timeTotal = OtherUtils.parseTimeFromArgument(timeArgument);
         if (timeTotal == null || !timeTotal.isPresent()) {
-            source.sendFailure(Component.literal(INVALID_TIME_FORMAT_ERROR));
+            OtherUtils.sendCommandFailure(source, Component.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
         currentSession.removeSessionLength(timeTotal);

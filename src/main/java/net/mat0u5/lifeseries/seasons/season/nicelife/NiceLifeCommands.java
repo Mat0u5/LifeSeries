@@ -7,7 +7,6 @@ import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.commands.CommandSourceStack;
@@ -119,7 +118,7 @@ public class NiceLifeCommands extends Command {
     private int niceListEnd(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
         if (NiceLifeVotingManager.voteType != NiceLifeVotingManager.VoteType.NICE_LIST_LIFE) {
-            source.sendFailure(Component.literal("The Nice List is not currently in progress"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_NICELIST_ERROR.get());
             return -1;
         }
         NiceLifeVotingManager.endNiceList();
@@ -130,7 +129,7 @@ public class NiceLifeCommands extends Command {
         if (checkBanned(source)) return -1;
 
         if (NiceLifeVotingManager.voteType != NiceLifeVotingManager.VoteType.NICE_LIST_LIFE) {
-            source.sendFailure(Component.literal("The Nice List is not currently in progress"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_NICELIST_ERROR.get());
             return -1;
         }
 
@@ -153,7 +152,7 @@ public class NiceLifeCommands extends Command {
         if (checkBanned(source)) return -1;
 
         if (NiceLifeVotingManager.voteType != NiceLifeVotingManager.VoteType.NICE_LIST_LIFE) {
-            source.sendFailure(Component.literal("The Nice List is not currently in progress"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_NICELIST_ERROR.get());
             return -1;
         }
 
@@ -175,7 +174,7 @@ public class NiceLifeCommands extends Command {
         if (checkBanned(source)) return -1;
 
         if (NiceLifeVotingManager.voteType != NiceLifeVotingManager.VoteType.NICE_LIST_LIFE) {
-            source.sendFailure(Component.literal("The Nice List is not currently in progress"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_NICELIST_ERROR.get());
             return -1;
         }
 
@@ -265,7 +264,7 @@ public class NiceLifeCommands extends Command {
                 NiceLifeVotingManager.forcedTriviaVote = Optional.of(NiceLifeVotingManager.VoteType.NAUGHTY_LIST);
                 break;
             default:
-                source.sendFailure(Component.nullToEmpty("Vote type not found"));
+                OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_VOTE_ERROR_UNKNOWN.get());
                 return -1;
         }
 
@@ -283,7 +282,7 @@ public class NiceLifeCommands extends Command {
             OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_WAKEUP_SINGLE.get(self));
         }
         else {
-            source.sendFailure(Component.nullToEmpty("You are not sleeping"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_NOTSLEEPING.get());
             return -1;
         }
         SimplePackets.REMOVE_SLEEP_SCREENS.target(self).sendToClient();
@@ -319,7 +318,7 @@ public class NiceLifeCommands extends Command {
             *///?} else {
             if (!source.getServer().overworld().isDarkOutside()) {
             //?}
-                source.sendFailure(Component.nullToEmpty("It is not night time"));
+                OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_NOT_NIGHT.get());
                 return -1;
             }
             niceLife.sleepThroughNight();
@@ -333,26 +332,26 @@ public class NiceLifeCommands extends Command {
         if (self == null) return -1;
 
         if (!NiceLifeVotingManager.niceListMembers.contains(self.getUUID())) {
-            source.sendFailure(Component.literal("You are not on the nice list"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_VOTE_ERROR_NICELIST_MISSING.get());
             return -1;
         }
         if (NiceLifeVotingManager.voteType != NiceLifeVotingManager.VoteType.NICE_LIST_LIFE) {
-            source.sendFailure(Component.literal("Nice list voting is not in progress"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_VOTE_ERROR_NICELIST_PROGRESS.get());
             return -1;
         }
         if (self.ls$isDead()) {
-            source.sendFailure(Component.literal("Dead players cannot vote"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_VOTE_ERROR_DEAD.get());
             return -1;
         }
         if (self.ls$isWatcher()) {
-            source.sendFailure(Component.literal("Watchers cannot vote"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_VOTE_ERROR_WATCHER.get());
             return -1;
         }
 
         boolean success = NiceLifeVotingManager.openNiceListLifeVote(self);
 
         if (!success) {
-            source.sendFailure(Component.literal("There are no players to vote for"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_VOTE_ERROR_TARGET.get());
             return -1;
         }
 

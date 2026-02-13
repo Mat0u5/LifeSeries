@@ -5,6 +5,8 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -29,12 +31,11 @@ public abstract class Command {
 
     public boolean checkBanned(CommandSourceStack source) {
         if (Main.modDisabled()) {
-            source.sendFailure(Component.nullToEmpty("The Life Series mod is disabled!"));
-            source.sendFailure(Component.nullToEmpty("Enable with \"/lifeseries enable\""));
+            OtherUtils.sendCommandFailure(source, ModifiableText.MOD_DISABLED_ERROR.get());
             return true;
         }
         if (isAllowed()) return false;
-        source.sendFailure(getBannedText());
+        OtherUtils.sendCommandFailure(source, getBannedText());
         return true;
     }
 

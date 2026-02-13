@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.pastlife;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -57,7 +58,7 @@ public class PastLifeCommands extends Command {
         if (checkBanned(source)) return -1;
 
         if (!currentSession.statusStarted()) {
-            source.sendFailure(Component.nullToEmpty("The session has not started yet"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.SESSION_ERROR_NOTSTARTED.get());
             return -1;
         }
 
@@ -73,11 +74,11 @@ public class PastLifeCommands extends Command {
         }
 
         if (bannedBoogeyman && bannedSociety) {
-            source.sendFailure(Component.nullToEmpty("Picking failed"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_FAIL.get());
             return -1;
         }
 
-        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Randomly picking the Boogeyman or the Secret Society..."));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.PASTLIFE_TWIST_RANDOM.get());
         if (!bannedBoogeyman && bannedSociety) {
             currentSeason.boogeymanManager.addSessionActions();
             return 1;
@@ -105,34 +106,34 @@ public class PastLifeCommands extends Command {
         if (checkBanned(source)) return -1;
 
         if (!currentSession.statusStarted()) {
-            source.sendFailure(Component.nullToEmpty("The session has not started yet"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.SESSION_ERROR_NOTSTARTED.get());
             return -1;
         }
 
         if (!currentSeason.secretSociety.SOCIETY_ENABLED) {
-            source.sendFailure(Component.nullToEmpty("The Secret Society is disabled in the config"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_SOCIETY_ERROR_DISABLED.get());
             return -1;
         }
 
         if (currentSeason.secretSociety.societyEnded) {
-            source.sendFailure(Component.nullToEmpty("The Secret Society has already ended"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_SOCIETY_ERROR_ENDED.get());
             return -1;
         }
 
         if (currentSeason.secretSociety.societyStarted) {
-            source.sendFailure(Component.nullToEmpty("The Secret Society has already started"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_SOCIETY_ERROR_STARTED.get());
             return -1;
         }
 
         for (SessionAction action : currentSession.getSessionActions()) {
             if (action.sessionMessage != null && action.sessionMessage.equalsIgnoreCase("Begin Secret Society")) {
-                source.sendFailure(Component.nullToEmpty("The Secret Society is already queued"));
+                OtherUtils.sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_SOCIETY_ERROR_QUEUED.get());
                 return -1;
             }
         }
 
         currentSeason.secretSociety.addSessionActions();
-        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("Added the Secret Society to queued session actions"));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.PASTLIFE_TWIST_SOCIETY.get());
         return 1;
     }
 
@@ -140,29 +141,29 @@ public class PastLifeCommands extends Command {
         if (checkBanned(source)) return -1;
 
         if (!currentSession.statusStarted()) {
-            source.sendFailure(Component.nullToEmpty("The session has not started yet"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.SESSION_ERROR_NOTSTARTED.get());
             return -1;
         }
 
         if (!currentSeason.boogeymanManager.BOOGEYMAN_ENABLED) {
-            source.sendFailure(Component.nullToEmpty("The Boogeyman is disabled in the config"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_BOOGEYMAN_ERROR_DISABLED.get());
             return -1;
         }
 
         if (currentSeason.boogeymanManager.boogeymanChosen) {
-            source.sendFailure(Component.nullToEmpty("The Boogeyman has already been chosen"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_BOOGEYMAN_ERROR_CHOSEN.get());
             return -1;
         }
 
         for (SessionAction action : currentSession.getSessionActions()) {
             if (action.sessionMessage != null && action.sessionMessage.equalsIgnoreCase("Choose Boogeymen")) {
-                source.sendFailure(Component.nullToEmpty("The Boogeyman is already queued"));
+                OtherUtils.sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_BOOGEYMAN_ERROR_QUEUED.get());
                 return -1;
             }
         }
 
         currentSeason.boogeymanManager.addSessionActions();
-        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("Added the Boogeyman to queued session actions"));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.PASTLIFE_TWIST_BOOGEYMAN.get());
         return 1;
     }
 }

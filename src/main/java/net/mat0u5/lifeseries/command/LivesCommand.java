@@ -204,7 +204,7 @@ public class LivesCommand extends Command {
         if (checkBanned(source)) return -1;
 
         if (!ScoreboardUtils.existsObjective(LivesManager.SCOREBOARD_NAME)) {
-            source.sendFailure(ModifiableText.LIVES_UNASSIGNED_ALL.get());
+            OtherUtils.sendCommandFailure(source, ModifiableText.LIVES_UNASSIGNED_ALL.get());
             return -1;
         }
 
@@ -214,7 +214,7 @@ public class LivesCommand extends Command {
         Collection<PlayerScoreEntry> entries = ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME);
         //?}
         if (entries.isEmpty()) {
-            source.sendFailure(ModifiableText.LIVES_UNASSIGNED_ALL.get());
+            OtherUtils.sendCommandFailure(source, ModifiableText.LIVES_UNASSIGNED_ALL.get());
             return -1;
         }
 
@@ -242,7 +242,7 @@ public class LivesCommand extends Command {
         if (target == null) return -1;
 
         if (!target.ls$hasAssignedLives()) {
-            source.sendFailure(ModifiableText.LIVES_UNASSIGNED_OTHER.get(target));
+            OtherUtils.sendCommandFailure(source, ModifiableText.LIVES_UNASSIGNED_OTHER.get(target));
             return -1;
         }
         Integer lives = target.ls$getLives();
@@ -262,7 +262,7 @@ public class LivesCommand extends Command {
 
         Time amount = OtherUtils.parseTimeFromArgument(timeArgument);
         if (amount == null || !amount.isPresent()) {
-            source.sendFailure(Component.literal(SessionCommand.INVALID_TIME_FORMAT_ERROR));
+            OtherUtils.sendCommandFailure(source, Component.literal(SessionCommand.INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
         if (reverse) amount.multiply(-1);

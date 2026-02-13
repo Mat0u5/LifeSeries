@@ -64,20 +64,20 @@ public class GivelifeCommand extends Command {
         if (target == null) return -1;
 
         if (self.ls$isDead()) {
-            source.sendFailure(ModifiableText.GIVELIFE_ERROR_NONE.get());
+            OtherUtils.sendCommandFailure(source, ModifiableText.GIVELIFE_ERROR_NONE.get());
             return -1;
         }
         boolean isRevive = target.ls$isDead();
         if (target.ls$isWatcher()) {
-            source.sendFailure(Component.nullToEmpty("That player is a Watcher"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.PLAYER_ERROR_WATCHER.get());
             return -1;
         }
         if (!Season.GIVELIFE_CAN_REVIVE && isRevive) {
-            source.sendFailure(Component.nullToEmpty("That player is not alive"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.PLAYER_ERROR_DEAD.get());
             return -1;
         }
         if (target == self) {
-            source.sendFailure(ModifiableText.GIVELIFE_ERROR_NOT_ENOUGH.get());
+            OtherUtils.sendCommandFailure(source, ModifiableText.GIVELIFE_ERROR_NOT_ENOUGH.get());
             return -1;
         }
 
@@ -88,19 +88,19 @@ public class GivelifeCommand extends Command {
 
         Integer currentLives = self.ls$getLives();
         if (currentLives == null || currentLives <= giveAmount) {
-            source.sendFailure(ModifiableText.GIVELIFE_ERROR_NOT_ENOUGH.get());
+            OtherUtils.sendCommandFailure(source, ModifiableText.GIVELIFE_ERROR_NOT_ENOUGH.get());
             return -1;
         }
         Integer targetLives = target.ls$getLives();
         if (targetLives == null || targetLives >= currentSeason.GIVELIFE_MAX_LIVES) {
-            source.sendFailure(ModifiableText.GIVELIFE_ERROR_TOO_MANY.get());
+            OtherUtils.sendCommandFailure(source, ModifiableText.GIVELIFE_ERROR_TOO_MANY.get());
             return -1;
         }
         if (currentSeason instanceof DoubleLife doubleLife) {
             ServerPlayer soulmate = doubleLife.getSoulmate(self);
             if (soulmate != null) {
                 if (soulmate.equals(target)) {
-                    source.sendFailure(ModifiableText.GIVELIFE_ERROR_SOULMATE.get());
+                    OtherUtils.sendCommandFailure(source, ModifiableText.GIVELIFE_ERROR_SOULMATE.get());
                     return -1;
                 }
                 boolean success = doubleLifeGiveLife(source, self, soulmate, target);

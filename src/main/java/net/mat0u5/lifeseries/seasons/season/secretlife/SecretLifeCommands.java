@@ -225,7 +225,7 @@ public class SecretLifeCommands extends Command {
         }
 
         if (task == null) {
-            source.sendFailure(ModifiableText.SECRETLIFE_TASK_READFAIL.get(player));
+            OtherUtils.sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_READFAIL.get(player));
             return -1;
         }
 
@@ -281,7 +281,7 @@ public class SecretLifeCommands extends Command {
 
     public int changeLocations(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("Changing Secret Life locations..."));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.SECRETLIFE_TASK_LOCATIONS.get());
         TaskManager.deleteLocations();
         TaskManager.checkSecretLifePositions();
         return 1;
@@ -299,7 +299,7 @@ public class SecretLifeCommands extends Command {
         }
 
         if (affected.isEmpty()) {
-            source.sendFailure(Component.nullToEmpty("No task books were found"));
+            OtherUtils.sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_ERROR_BOOK_MISSING.get());
             return -1;
         }
         if (affected.size() == 1) {
@@ -413,19 +413,19 @@ public class SecretLifeCommands extends Command {
         SecretLife secretLife = (SecretLife) currentSeason;
 
         if (target == self) {
-            source.sendFailure(ModifiableText.SECRETLIFE_GIVEHEART_ERROR_SELF.get());
+            OtherUtils.sendCommandFailure(source, ModifiableText.SECRETLIFE_GIVEHEART_ERROR_SELF.get());
             return -1;
         }
         if (playersGiven.contains(self.getUUID())) {
-            source.sendFailure(ModifiableText.SECRETLIFE_GIVEHEART_ERROR_MULTIPLE.get());
+            OtherUtils.sendCommandFailure(source, ModifiableText.SECRETLIFE_GIVEHEART_ERROR_MULTIPLE.get());
             return -1;
         }
         if (target.ls$isDead()) {
-            source.sendFailure(ModifiableText.SECRETLIFE_GIVEHEART_ERROR_DEAD.get());
+            OtherUtils.sendCommandFailure(source, ModifiableText.SECRETLIFE_GIVEHEART_ERROR_DEAD.get());
             return -1;
         }
         if (!currentSession.statusStarted()) {
-            source.sendFailure(ModifiableText.SESSION_ERROR_START.get());
+            OtherUtils.sendCommandFailure(source, ModifiableText.SESSION_ERROR_START.get());
             return -1;
         }
         playersGiven.add(self.getUUID());
