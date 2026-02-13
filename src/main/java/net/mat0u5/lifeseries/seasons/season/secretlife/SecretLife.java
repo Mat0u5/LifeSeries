@@ -386,7 +386,6 @@ public class SecretLife extends Season {
                 double roundedHearts = roundedGained / 2.0;
                 String roundedHeartsStr = String.valueOf(roundedHearts);
                 if (roundedGained % 2 == 0) roundedHeartsStr = String.valueOf((int)roundedHearts);
-                //TODO test
                 PlayerUtils.sendTitle(killer, ModifiableText.SECRETLIFE_HEART_GAIN.get(roundedHeartsStr, TextUtils.pluralize("Heart", roundedHearts)), 0, 40, 20);
             }
         }

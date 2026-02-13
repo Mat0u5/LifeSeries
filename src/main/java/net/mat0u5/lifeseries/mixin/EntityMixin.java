@@ -155,7 +155,11 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
     }
     //?}
 
+    //?if <= 1.21 {
+    /*@Inject(method = "isAlliedTo(Lnet/minecraft/world/entity/Entity;)Z", at = @At("HEAD"), cancellable = true)
+    *///?} else {
     @Inject(method = "considersEntityAsAlly", at = @At("HEAD"), cancellable = true)
+    //?}
     private void nonAllyPets(Entity entity, CallbackInfoReturnable<Boolean> cir) {
         if (entity instanceof TamableAnimal animal) {
             //? if <= 1.21.4 {

@@ -39,7 +39,7 @@ public enum ModifiableText {
     ,SEASON_SELECT_WARNING("§7WARNING: you have already selected a season, changing it might cause some saved data to be lost (lives, ...)\n§7If you are sure, use '§f/lifeseries setSeries <season> confirm§7'")
     ,SEASON_CHANGE(Formatted.LOOSELY_STYLED,"§aSuccessfully changed the season to {}.", List.of("season"))
     ,SEASON_CHANGING("§7Changing the season to {}§7...", List.of("season"))
-    ,SEASON_CHANGED(Formatted.LOOSELY_STYLED,"§aSuccessfully changed the season to {}", List.of("season"))//TODO test
+    ,SEASON_CHANGED(Formatted.LOOSELY_STYLED,"§aSuccessfully changed the season to {}", List.of("season"))
     ,SEASON_GET("Current season: {}", List.of("season"))
     ,SEASON_KILL_GAINLIFE("{}§7 gained a life for killing {}.", List.of("Killer", "Victim"))
     ,SEASON_KILL_UNJUSTIFIED("§c [Unjustified Kill?] {}§7 was killed by {}", List.of("Killer", "Victim"))

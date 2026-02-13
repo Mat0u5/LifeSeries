@@ -77,7 +77,7 @@ public class GivelifeCommand extends Command {
             return -1;
         }
         if (target == self) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.GIVELIFE_ERROR_NOT_ENOUGH.get());
+            OtherUtils.sendCommandFailure(source, ModifiableText.GIVELIFE_ERROR_SELF.get());
             return -1;
         }
 

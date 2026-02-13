@@ -39,7 +39,7 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
                     if (currentLives <= LimitedLifeLivesManager.RED_TIME) continue;
                     Integer setLives = LimitedLife.getNextLivesColorLives(currentLives);
                     if (BOOGEYMAN_ANNOUNCE_OUTCOME) {
-                        PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_FAIL.get(boogeyman.name, livesManager.getFormattedLives(setLives)));//TODO test
+                        PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_FAIL.get(boogeyman.name, livesManager.getFormattedLives(setLives)));
                     }
                     ScoreboardUtils.setScore(boogeyman.name, LivesManager.SCOREBOARD_NAME, setLives);
                     continue;

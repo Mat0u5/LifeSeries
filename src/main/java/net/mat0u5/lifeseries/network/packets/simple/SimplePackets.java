@@ -8,14 +8,14 @@ import java.util.Map;
 public class SimplePackets {
     public static final Map<String, SimplePacket<?, ?>> registeredPackets = new HashMap<>();
 
-    public static final SimpleStringListPacket LIMITED_LIFE_TIMER = new SimpleStringListPacket("LIMITED_LIFE_TIMER");//TODO test
+    public static final SimpleStringListPacket LIMITED_LIFE_TIMER = new SimpleStringListPacket("LIMITED_LIFE_TIMER");
     public static final SimpleStringListPacket SEASON_INFO = new SimpleStringListPacket("SEASON_INFO");
     public static final SimpleStringListPacket MORPH = new SimpleStringListPacket("MORPH");
     public static final SimpleStringListPacket HUNGER_NON_EDIBLE = new SimpleStringListPacket("HUNGER_NON_EDIBLE");
     public static final SimpleStringListPacket SKYCOLOR = new SimpleStringListPacket("SKYCOLOR");
     public static final SimpleStringListPacket FOGCOLOR = new SimpleStringListPacket("FOGCOLOR");
     public static final SimpleStringListPacket CLOUDCOLOR = new SimpleStringListPacket("CLOUDCOLOR");
-    public static final SimpleStringListPacket PLAYER_INVISIBLE = new SimpleStringListPacket("PLAYER_INVISIBLE");//TODO test
+    public static final SimpleStringListPacket PLAYER_INVISIBLE = new SimpleStringListPacket("PLAYER_INVISIBLE");
     public static final SimpleStringListPacket SET_LIVES = new SimpleStringListPacket("SET_LIVES");
     public static final SimpleStringListPacket SET_TEAM = new SimpleStringListPacket("SET_TEAM");
     public static final SimpleStringListPacket CONFIG_SECRET_TASK = new SimpleStringListPacket("CONFIG_SECRET_TASK");

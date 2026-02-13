@@ -629,8 +629,7 @@ public class TaskManager {
 
         ChatFormatting formatting = ChatFormatting.GREEN;
         if (finalAmount < 0) formatting = ChatFormatting.RED;
-        else finalStr = "+"+finalStr;
-        //TODO test
+        else finalStr = finalStr;
         PlayerUtils.sendTitle(player, ModifiableText.SECRETLIFE_HEART_GAIN.get(finalStr, "Hearts").copy().withStyle(formatting), 20, 40, 20);
     }
 
