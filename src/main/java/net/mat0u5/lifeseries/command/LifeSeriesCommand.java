@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -128,8 +129,8 @@ public class LifeSeriesCommand extends Command {
     public int setSeason(CommandSourceStack source, String setTo, boolean confirmed) {
         if (checkBanned(source)) return -1;
         if (!ALLOWED_SEASON_NAMES.contains(setTo)) {
-            source.sendFailure(Component.nullToEmpty("That is not a valid season!"));
-            source.sendFailure(TextUtils.formatPlain("You must choose one of the following: {}", ALLOWED_SEASON_NAMES));
+            source.sendFailure(ModifiableText.SEASON_INVALID.get());
+            source.sendFailure(ModifiableText.SEASON_INVALID_HELP.get(ALLOWED_SEASON_NAMES));
             return -1;
         }
         if (confirmed) {
@@ -140,8 +141,7 @@ public class LifeSeriesCommand extends Command {
                 setSeasonFinal(source, setTo);
             }
             else {
-                OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7WARNING: you have already selected a season, changing it might cause some saved data to be lost (lives, ...)"));
-                OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7If you are sure, use '§f/lifeseries setSeries <season> confirm§7'"));
+                OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SEASON_SELECT_WARNING.get());
             }
         }
         return 1;

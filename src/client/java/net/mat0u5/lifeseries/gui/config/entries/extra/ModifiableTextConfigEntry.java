@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.gui.config.entries.extra;
 
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.config.ModifiableTextManager;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.interfaces.IPopup;
@@ -8,6 +9,7 @@ import net.mat0u5.lifeseries.gui.config.entries.main.StringConfigEntry;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.utils.enums.Formatted;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
@@ -98,14 +100,26 @@ public class ModifiableTextConfigEntry extends StringConfigEntry implements ITex
     @Override
     public Component getPopupText() {
         if (textField == null) return null;
+        Formatted formatted = Formatted.STYLED;
+        ModifiableText modifiableText = ModifiableText.fromName(this.fieldName);
+        if (modifiableText != null) {
+            formatted = modifiableText.getFormatted();
+        }
+
         String currentText = textField.getValue();
         List<Component> args = new ArrayList<>();
         if (description != null && description.contains("Arguments: §f")) {
             for (String arg : description.split("Arguments: §f")[1].split(", ")) {
-                args.add(Component.literal("§8§o"+arg));
+                arg = "<"+arg+">";
+                if (formatted == Formatted.LOOSELY_STYLED) {
+                    args.add(Component.literal("§o"+arg));
+                }
+                else {
+                    args.add(Component.literal("§8§o"+arg));
+                }
             }
         }
-        return ModifiableTextManager.getFromRawValue(ModifiableTextManager.toMinecraftColorFormatting(currentText), true, args.toArray());
+        return ModifiableTextManager.getFromRawValue(formatted, ModifiableTextManager.toMinecraftColorFormatting(currentText).replace("\\n", "\n"), true, args.toArray());
     }
 
     @Override
@@ -126,5 +140,15 @@ public class ModifiableTextConfigEntry extends StringConfigEntry implements ITex
     @Override
     public int getTextColor() {
         return TextColors.WHITE;
+    }
+
+    @Override
+    public boolean allowMultiline() {
+        return true;
+    }
+
+    @Override
+    public int multilineWrap() {
+        return (resetButton.getX()+resetButton.getWidth()-(textField.getX() + textField.getWidth()/2))*2;
     }
 }

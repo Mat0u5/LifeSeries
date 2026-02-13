@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.config;
 
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.utils.enums.Formatted;
 import net.minecraft.network.chat.Component;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public enum ModifiableText {
     ,GIVEHEART_SEND("You have gifted a heart to {}", List.of("Player"))
     ,GIVEHEART_RECEIVE("{} gave you a heart", List.of("Player"))
 
-    ,WILDLIFE_TRIVIA_RECEIVE_EFFECT(" §a§l+ §7{}§6 {}", List.of("Effect Name", "Roman Numeral")) //TODO check, this was formatted loosely
+    ,WILDLIFE_TRIVIA_RECEIVE_EFFECT(Formatted.LOOSELY_STYLED, " §a§l+ §7{}§6 {}", List.of("Effect Name", "Roman Numeral"))
 
     ,DOUBLELIFE_TELEPORT("§6Woosh!")
     ,DOUBLELIFE_TELEPORT_SUCCESS("Randomly distributed players.")
@@ -59,7 +60,7 @@ public enum ModifiableText {
     ,BOOGEYMAN_NOTICE_ADDED("§c [NOTICE] You are now a Boogeyman!")
     ,BOOGEYMAN_NOTICE_REMOVED("§c [NOTICE] You are no longer a Boogeyman!")
     ,BOOGEYMAN_NOTICE_RESET("§c [NOTICE] Your Boogeyman  fail/cure status has been reset")
-    ,BOOGEYMAN_KILLS_REQUIRED("§7You need {} {}§7 to be cured of the curse.", List.of("Kills Amount", "Kill/kills pluralization"))
+    ,BOOGEYMAN_KILLS_REQUIRED("§7You need {} {}§7 to be cured of the curse.", List.of("Kills Amount", "Kill/kills"))
     ,BOOGEYMAN_LATEJOIN("§cSince you were not present when the Boogeyman was being chosen, your chance to become the Boogeyman is now. Good luck!")
     ,BOOGEYMAN_LIST("Current Boogeymen: {}", List.of("List"))
     ,BOOGEYMAN_FAIL_NOTICE("§cYou only have 5 minutes left to kill someone as the Boogeyman before you fail!")
@@ -68,10 +69,13 @@ public enum ModifiableText {
     ,BOOGEYMAN_PASTLIFE_MESSAGE_PT3("§7If you fail, you will become a §cred name§7.")
     ,BOOGEYMAN_PASTLIFE_MESSAGE_PT4("§7Other players may defend themselves.")
     ,BOOGEYMAN_PASTLIFE_MESSAGE_PT5("§7Voluntary sacrifices will not cure the curse.")
-    ,BOOGEYMAN_PASTLIFE_MESSAGE_PT6("§7You need {} {}§7 to be cured of the curse.", List.of("Kills Amount", "Kill/kills pluralization"))
+    ,BOOGEYMAN_PASTLIFE_MESSAGE_PT6("§7You need {} {}§7 to be cured of the curse.", List.of("Kills Amount", "Kill/kills"))
 
-    ,SEASON_COMMANDS_ADMIN("§7{} commands: §r{}", List.of("Season", "Commands")) //TODO formatLoosely
-    ,SEASON_COMMANDS("§7{} non-admin commands: §r{}", List.of("Season", "Commands")) //TODO formatLoosely
+    ,SEASON_COMMANDS_ADMIN(Formatted.LOOSELY_STYLED, "§7{} commands: §r{}", List.of("Season", "Commands"))
+    ,SEASON_COMMANDS(Formatted.LOOSELY_STYLED, "§7{} non-admin commands: §r{}", List.of("Season", "Commands"))
+    ,SEASON_INVALID("That is not a valid season!")
+    ,SEASON_INVALID_HELP(Formatted.PLAIN, "You must choose one of the following: {}", List.of("Season Names"))
+    ,SEASON_SELECT_WARNING("§7WARNING: you have already selected a season, changing it might cause some saved data to be lost (lives, ...)\n§7If you are sure, use '§f/lifeseries setSeries <season> confirm§7'")
 
     ,NICELIFE_NICELIST_START_TITLE_PT1("§aThese players are on...")
     ,NICELIFE_NICELIST_START_TITLE_PT2("§aTHE NICE LIST")
@@ -91,27 +95,54 @@ public enum ModifiableText {
 
     ,SOCIETY_INITIATE_REMINDER("§7When you are alone, type \"/initiate\"")
     ,SOCIETY_INITIATED_PT1("§7You have been chosen to be part of the §csecret society§7.")
-    ,SOCIETY_INITIATED_GROUP_PT1("§7There {} §c{}§7 other {}. Find them.", List.of("Is/are pluralization", "Member Amount", "Member/s pluralization"))//TODO formatLoosely
-    ,SOCIETY_INITIATED_GROUP_PT2("§7Together, secretly kill §c{}§7 other {} by §cnon-pvp§7 means.", List.of("Kills Needed", "Player/s pluralization"))//TODO formatLoosely
+    ,SOCIETY_INITIATED_GROUP_PT1(Formatted.LOOSELY_STYLED, "§7There {} §c{}§7 other {}. Find them.", List.of("Is/are", "Member Amount", "Member/s"))
+    ,SOCIETY_INITIATED_GROUP_PT2(Formatted.LOOSELY_STYLED, "§7Together, secretly kill §c{}§7 other {} by §cnon-pvp§7 means.", List.of("Kills Needed", "Player/s"))
     ,SOCIETY_INITIATED_GROUP_PT3("§7Find the other members with the secret word:")
-    ,SOCIETY_INITIATED_GROUP_PT4("§d\"{}\"", List.of("Secret Word"))//TODO formatLoosely
+    ,SOCIETY_INITIATED_GROUP_PT4(Formatted.LOOSELY_STYLED, "§d\"{}\"", List.of("Secret Word"))
     ,SOCIETY_INITIATED_ALONE_PT1("§7You are alone.")
-    ,SOCIETY_INITIATED_ALONE_PT2("§7Secretly kill §c{}§7 other {} by §cnon-pvp§7 means.", List.of("Kills Needed", "Player/s pluralization"))//TODO formatLoosely
+    ,SOCIETY_INITIATED_ALONE_PT2(Formatted.LOOSELY_STYLED, "§7Secretly kill §c{}§7 other {} by §cnon-pvp§7 means.", List.of("Kills Needed", "Player/s"))
     ,SOCIETY_INITIATED_PT2("§7Type \"/society success\" when you complete your goal.")
     ,SOCIETY_INITIATED_PT3("§7Don't tell anyone else about the society.")
     ,SOCIETY_INITIATED_PT4("§7If you fail...")
-    ,SOCIETY_INITIATED_PUNISHMENT("§7Type \"/society fail\", and you all lose §c{} {}§7.", List.of("Lives Lost", "Life/lives pluralization"))//TODO formatLoosely
+    ,SOCIETY_INITIATED_PUNISHMENT(Formatted.LOOSELY_STYLED, "§7Type \"/society fail\", and you all lose §c{} {}§7.", List.of("Lives Lost", "Life/lives"))
     ,SOCIETY_NOTICE_ADDED("§c [NOTICE] You are now a Secret Society member!")
     ,SOCIETY_NOTICE_REMOVED("§c [NOTICE] You are no longer a Secret Society member!")
     ,SOCIETY_OTHER_MEMBER_ADDED("A player has been added to the Secret Society.")
     ,SOCIETY_OTHER_MEMBER_REMOVED("A player has been removed from the Secret Society.")
 
-    ,SUBIN_END("§6You are no longer subbing in for {}", List.of("Player"))//TODO formatLoosely
-    ,SUBIN_END_OTHER("§6{} is no longer subbing in for you", List.of("Player"))//TODO formatLoosely
+    ,SUBIN_END(Formatted.LOOSELY_STYLED, "§6You are no longer subbing in for {}", List.of("Player"))
+    ,SUBIN_END_OTHER(Formatted.LOOSELY_STYLED, "§6{} is no longer subbing in for you", List.of("Player"))
+
+    ,CLAIMKILL_ERROR_NODEATH(Formatted.PLAIN, "{} did not die in the last 2 minutes. Or they might have been killed by a player directly.", List.of("Player"))
+    ,CLAIMKILL_ERROR_SELF("You cannot claim credit for your own death :P")
+    ,CLAIMKILL("{}§7 claims credit for {}§7's death.", List.of("Killer", "Victim"))
+    ,CLAIMKILL_VALIDATE("§7Click {}§7 to accept the claim if you think it's valid.", List.of("ClickHere"))
+
+    ,LIVES_UNASSIGNED("You have not been assigned any lives yet")
+    ,LIVES_UNASSIGNED_ALL("Nobody has been assigned lives yet")
+    ,LIVES_UNASSIGNED_OTHER("{} has not been assigned any lives")
+    ,LIVES_GET_SELF("You have {} {}", List.of("Amount", "Life/lives"))
+    ,LIVES_GET_SELF_NONE("Womp womp.")
+    ,LIVES_ASSIGNED_LIST("Assigned Lives: \n")
+    ,LIVES_ASSIGNED_LIST_ENTRY("{} has {} {}\n", List.of("Player", "Amount", "Life/lives"))
+    ,LIVES_RELOADING("§7Reloading lives...")
+    ,LIVES_SET_SINGLE("Set {}'s lives to {}", List.of("Player", "Amount"))
+    ,LIVES_SET_MULTIPLE("Set lives to {} for {} targets", List.of("Amount", "Number of Targets"))
+    ,LIVES_CHANGE_SINGLE("{} {} {} {} {}", List.of("Added/Removed", "Amount", "life/lives", "to/from", "Player"))
+    ,LIVES_CHANGE_MULTIPLE("{} {} {} {} {} targets", List.of("Added/Removed", "Amount", "life/lives", "to/from", "Number of Targets"))
+
+    ,LIVES_RESET_SINGLE("Reset {}'s lives", List.of("Player"))
+    ,LIVES_RESET_MULTIPLE("Reset lives of {} targets", List.of("Number of Targets"))
+    ,LIVES_RESET_EVERYONE("Reset everyone's lives")
+    ,LIVES_RANDOMIZE_SINGLE("§7Assigning random lives to {}§7...", List.of("Player"))
+    ,LIVES_RANDOMIZE_MULTIPLE("§7Assigning random lives to {}§7 targets...", List.of("Number of Targets"))
+
+
 
     ModifiableText.NAME.get()
     ModifiableText.NAME.getString()
     player.sendSystemMessage(ModifiableText.NAME.get());
+    /*
 
     ,NAME("")
     ,NAME("")
@@ -124,45 +155,93 @@ public enum ModifiableText {
     ,NAME("", List.of("Player"))
     ,NAME("", List.of("Player"))
     ,NAME("", List.of("Player"))
+    */
     //,NAME("")
     //,NAME("", List.of("Player"))
     ;
 
 
+    final Formatted formatted;
     final String name;
     final String defaultValue;
     final List<String> args;
 
     ModifiableText(String defaultValue) {
-        this( defaultValue, null);
+        this(Formatted.STYLED, defaultValue);
     }
 
     ModifiableText(String defaultValue, List<String> args) {
+        this(Formatted.STYLED, defaultValue, args);
+    }
+    ModifiableText(Formatted formatted, String defaultValue) {
+        this(formatted, defaultValue, null);
+    }
+
+    ModifiableText(Formatted formatted, String defaultValue, List<String> args) {
+        this.formatted = formatted;
         this.name = this.name().toLowerCase(Locale.ROOT).replace("_",".");
         this.defaultValue = ModifiableTextManager.fromMinecraftColorFormatting(defaultValue.replace("{}","%s"));
         this.args = args;
     }
 
     public Component get(Object... args) {
-        return ModifiableTextManager.get(this.name, args);
+        return ModifiableTextManager.get(this.formatted, this.name, args);
     }
 
     public String getString(Object... args) {
         return get(args).getString();
     }
 
+    public Formatted getFormatted() {
+        return formatted;
+    }
+
     public String getRegisterDefaultValue() {
-        //Make sure to actually use the custom # ans % formatting here. TODO
-        if (this == GIVELIFE_RECEIVE_OTHER && currentSeason.getSeason() == Seasons.LIMITED_LIFE) return "{} received {} from {}";
-        if (this == GIVELIFE_RECEIVE_SELF && currentSeason.getSeason() == Seasons.LIMITED_LIFE) return "You received {} from {}";
-        if (this == GIVELIFE_RECEIVE_SELF_TITLE && currentSeason.getSeason() == Seasons.LIMITED_LIFE) return "You received {}";
-        if (this == BOOGEYMAN_MESSAGE && currentSeason.getSeason() == Seasons.LIMITED_LIFE) return "§7You are the Boogeyman. You must by any means necessary kill a §2dark green§7, §agreen§7 or §eyellow§7 name by direct action to be cured of the curse. If you fail, your time will be dropped to the next color. All loyalties and friendships are removed while you are the Boogeyman.";
+        if (currentSeason.getSeason() == Seasons.LIMITED_LIFE) {
+            String modified = null;
+
+            if (this == GIVELIFE_RECEIVE_OTHER) modified = "{} received {} from {}";
+            else if (this == GIVELIFE_RECEIVE_SELF) modified = "You received {} from {}";
+            else if (this == GIVELIFE_RECEIVE_SELF_TITLE) modified = "You received {}";
+            else if (this == BOOGEYMAN_MESSAGE) modified = "§7You are the Boogeyman. You must by any means necessary kill a §2dark green§7, §agreen§7 or §eyellow§7 name by direct action to be cured of the curse. If you fail, your time will be dropped to the next color. All loyalties and friendships are removed while you are the Boogeyman.";
+            else if (this == LIVES_UNASSIGNED) modified = "You have not been assigned any time yet";
+            else if (this == LIVES_GET_SELF) modified = "You have {} left";
+            else if (this == LIVES_UNASSIGNED_ALL) modified = "Nobody has been assigned time yet";
+            else if (this == LIVES_ASSIGNED_LIST) modified = "Assigned Times: \n";
+            else if (this == LIVES_ASSIGNED_LIST_ENTRY) modified = "{} has {} left\n";
+            else if (this == LIVES_UNASSIGNED_OTHER) modified = "{} has not been assigned any time";
+            else if (this == LIVES_RELOADING) modified = "§7Reloading times...";
+            else if (this == LIVES_SET_SINGLE) modified = "Set {}'s time to {}";
+            else if (this == LIVES_SET_MULTIPLE) modified = "Set times to {} for {} targets";
+            else if (this == LIVES_CHANGE_SINGLE) modified = "{} {} {} {}";
+            else if (this == LIVES_CHANGE_MULTIPLE) modified = "{} {} {} {} targets";
+            else if (this == LIVES_RESET_SINGLE) modified = "Reset {}'s time";
+            else if (this == LIVES_RESET_MULTIPLE) modified = "Reset times of {} targets";
+            else if (this == LIVES_RESET_EVERYONE) modified = "Reset everyone's time";
+            else if (this == LIVES_RANDOMIZE_SINGLE) modified = "§7Assigning random times to {}§7...";
+            else if (this == LIVES_RANDOMIZE_MULTIPLE) modified = "§7Assigning random times to {}§7 targets...";
+
+            if (modified != null) {
+                return ModifiableTextManager.fromMinecraftColorFormatting(modified.replace("{}","%s"));
+            }
+        }
         return this.defaultValue;
     }
+
     public List<String> getRegisterArgs() {
-        if (this == GIVELIFE_RECEIVE_OTHER && currentSeason.getSeason() == Seasons.LIMITED_LIFE) return List.of("Receiver", "Time", "Giver");
-        if (this == GIVELIFE_RECEIVE_SELF && currentSeason.getSeason() == Seasons.LIMITED_LIFE) return List.of("Time", "Player");
-        if (this == GIVELIFE_RECEIVE_SELF_TITLE && currentSeason.getSeason() == Seasons.LIMITED_LIFE) return List.of("Time");
+        if (currentSeason.getSeason() == Seasons.LIMITED_LIFE) {
+
+            if (this == GIVELIFE_RECEIVE_OTHER) return List.of("Receiver", "Time", "Giver");
+            else if (this == GIVELIFE_RECEIVE_SELF) return List.of("Time", "Player");
+            else if (this == GIVELIFE_RECEIVE_SELF_TITLE) return List.of("Time");
+            else if (this == LIVES_GET_SELF) return List.of("Time");
+            else if (this == LIVES_ASSIGNED_LIST_ENTRY) return List.of("Player", "Time");
+            else if (this == LIVES_SET_SINGLE) return List.of("Player", "Time");
+            else if (this == LIVES_SET_MULTIPLE) return List.of("Time", "Number of Targets");
+            else if (this == LIVES_CHANGE_SINGLE) return List.of("Added/Removed", "Time", "to/from", "Player");
+            else if (this == LIVES_CHANGE_MULTIPLE) return List.of("Added/Removed", "Time", "to/from", "Number of Targets");
+
+        }
         return this.args;
     }
 
@@ -170,5 +249,15 @@ public enum ModifiableText {
         for (ModifiableText modifiableText : ModifiableText.values()) {
             ModifiableTextManager.register(modifiableText.name, modifiableText.getRegisterDefaultValue(), modifiableText.getRegisterArgs());
         }
+    }
+    public static ModifiableText fromName(String name) {
+        if (name == null) return null;
+        if (name.startsWith("text.")) name = name.substring(5);
+        for (ModifiableText modifiableText : ModifiableText.values()) {
+            if (modifiableText.name.equals(name)) {
+                return modifiableText;
+            }
+        }
+        return null;
     }
 }

@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.config;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.utils.enums.Formatted;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -52,13 +53,26 @@ public class ModifiableTextManager {
         registeredEntries.put(key, configEntry);
     }
 
-    public static Component get(String key, Object... args) {
+    public static Component get(Formatted formatted, String key, Object... args) {
         String value = getRawValue(key);
-        return getFromRawValue(value, false, args);
+        return getFromRawValue(formatted, value, false, args);
     }
-    public static Component getFromRawValue(String value, boolean silent, Object... args) {
+
+    public static Component getFromRawValue(Formatted formatted, String value, boolean silent, Object... args) {
+        if (formatted == Formatted.LOOSELY_STYLED) {
+            return getFromRawValue(value, silent, true, args);
+        }
+        Component styled = getFromRawValue(value, silent, false, args);
+        if (formatted == Formatted.PLAIN) {
+            Component.literal(styled.getString());
+        }
+        return styled;
+    }
+
+    public static Component getFromRawValue(String value, boolean silent, boolean looselyStyled, Object... args) {
         // %1$s
         MutableComponent result = Component.empty();
+        StringBuilder resultLooselyStyled = new StringBuilder();
 
         Pattern pattern = Pattern.compile("%(?:(\\d+)\\$)?([A-Za-z%]|$)");
         Matcher matcher = pattern.matcher(value);
@@ -73,6 +87,7 @@ public class ModifiableTextManager {
             if (start > lastIndex) {
                 String textBefore = value.substring(lastIndex, start);
                 result.append(Component.literal(textBefore));
+                resultLooselyStyled.append(textBefore);
             }
 
             String formatType = matcher.group(2);
@@ -80,6 +95,7 @@ public class ModifiableTextManager {
 
             if ("%".equals(formatType) && "%%".equals(formatString)) {
                 result.append(Component.literal("%"));
+                resultLooselyStyled.append("%");
             } else {
                 if (!"s".equals(formatType)) {
                     if (!silent) {
@@ -101,6 +117,7 @@ public class ModifiableTextManager {
                 if (argIndex >= 0 && argIndex < args.length) {
                     Component argText = TextUtils.getTextForArgument(args[argIndex]);
                     result.append(argText);
+                    resultLooselyStyled.append(argText.getString());
                 } else if (!silent) {
                     Main.LOGGER.warn("Argument index {} out of bounds for key '{}'. Got {} args.", argIndex + 1, value, args.length);
                 }
@@ -112,6 +129,11 @@ public class ModifiableTextManager {
         if (lastIndex < value.length()) {
             String remainingText = value.substring(lastIndex);
             result.append(Component.literal(remainingText));
+            resultLooselyStyled.append(remainingText);
+        }
+
+        if (looselyStyled) {
+            return Component.literal(resultLooselyStyled.toString());
         }
 
         return result;

@@ -239,13 +239,13 @@ public class NiceLifeVotingManager {
         TaskScheduler.scheduleTask(delay, () -> {
             SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_vote_result"));
             PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
-            PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), ModifiableText.NICELIFE_NICELIST_ANNOUNCE_TITLE_PT1.get(), 15, 80, 20);
+            PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), ModifiableText.NICELIFE_NICELIST_START_TITLE_PT1.get(), 15, 80, 20);
         });
         delay += 90;
         TaskScheduler.scheduleTask(delay, () -> {
             SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_nicelist_start"));
             PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
-            PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), ModifiableText.NICELIFE_NICELIST_ANNOUNCE_TITLE_PT2.get(), 15, 80, 20);
+            PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), ModifiableText.NICELIFE_NICELIST_START_TITLE_PT2.get(), 15, 80, 20);
         });
         delay += 80;
         for (UUID uuid : players) {

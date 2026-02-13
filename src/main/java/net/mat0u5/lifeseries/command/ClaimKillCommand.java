@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
@@ -86,17 +87,17 @@ public class ClaimKillCommand extends Command {
         Set<UUID> recentDeaths = currentSession.playerNaturalDeathLog.keySet();
         UUID victimUUID = victim.getUUID();
         if (!recentDeaths.contains(victimUUID)) {
-            source.sendFailure(TextUtils.formatPlain("{} did not die in the last 2 minutes. Or they might have been killed by a player directly.", victim));
+            source.sendFailure(ModifiableText.CLAIMKILL_ERROR_NODEATH.get(victim));
             return -1;
         }
         if (player == victim) {
-            source.sendFailure(Component.nullToEmpty("You cannot claim credit for your own death :P"));
+            source.sendFailure(ModifiableText.CLAIMKILL_ERROR_SELF.get());
             return -1;
         }
-        Component textAll = TextUtils.format("{}§7 claims credit for {}§7's death.", player, victim);
+        Component textAll = ModifiableText.CLAIMKILL.get(player, victim);
         PlayerUtils.broadcastMessageToAdmins(textAll, 200);
         String validateCommand = TextUtils.formatString("/claimkill validate {} {}", player, victim);
-        Component adminText = TextUtils.format("§7Click {}§7 to accept the claim if you think it's valid.", TextUtils.runCommandText(validateCommand));
+        Component adminText = ModifiableText.CLAIMKILL_VALIDATE.get(TextUtils.runCommandText(validateCommand));
         PlayerUtils.broadcastMessageToAdmins(adminText, 200);
 
         return 1;
