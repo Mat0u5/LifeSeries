@@ -50,7 +50,7 @@ public class LivesManager {
     public int ROLL_MAX_LIVES = 6;
 
     public boolean assignedLives = false;
-    public SessionAction actionChooseLives = new SessionAction(Time.minutes(1),"Assign lives if necessary") {
+    public SessionAction actionChooseLives = new SessionAction(Time.minutes(1), ModifiableText.SESSION_ACTION_ASSIGN_LIVES.getString()) {
         @Override
         public void trigger() {
             assignRandomLivesToUnassignedPlayers();

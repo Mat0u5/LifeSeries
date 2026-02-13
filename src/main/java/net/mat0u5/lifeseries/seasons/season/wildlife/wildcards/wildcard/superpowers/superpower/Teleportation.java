@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.utils.other.Time;
@@ -108,7 +109,7 @@ public class Teleportation extends Superpower {
         }
 
         if (!teleported) {
-            PlayerUtils.displayMessageToPlayer(player, Component.literal("There is nothing to teleport to."), 65);
+            PlayerUtils.displayMessageToPlayer(player, ModifiableText.WILDLIFE_POWER_TELEPORTATION_ERROR.get(), 65);
             return;
         }
         super.activate();

@@ -434,18 +434,18 @@ public class Session {
             return;
         }
 
-        String message = "";
+        Component message = Component.empty();
         if (statusNotStarted()) {
-            message = "Session has not started";
+            message = ModifiableText.SESSION_TIMER_DISPLAY_NOTSTARTED.get();
         }
         else if (statusStarted()) {
-            message = getRemainingTimeStr();
+            message = ModifiableText.SESSION_TIMER_DISPLAY.get(getRemainingTimeStr());
         }
         else if (statusPaused()) {
-            message = "Session has been paused";
+            message = ModifiableText.SESSION_TIMER_DISPLAY_PAUSE.get();
         }
         else if (statusFinished()) {
-            message = "Session has ended";
+            message = ModifiableText.SESSION_TIMER_DISPLAY_END.get();
         }
 
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
@@ -460,7 +460,7 @@ public class Session {
                 }
 
                 if (!NetworkHandlerServer.wasHandshakeSuccessful(player)) {
-                    player.sendSystemMessage(Component.literal(message).withStyle(ChatFormatting.GRAY), true);
+                    player.sendSystemMessage(message, true);
                 }
             }
             if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {
@@ -489,7 +489,7 @@ public class Session {
             if (actionMessage == null) continue;
             if (actionMessage.isEmpty()) continue;
             if (messages.isEmpty()) {
-                messages.add(Component.nullToEmpty("§7Queued session actions:"));
+                messages.add(ModifiableText.SESSION_ACTIONS.get());
             }
             if (action.showTime) {
                 messages.add(ModifiableText.SESSION_ACTION_ENTRY_LONG.get(actionMessage, action.getTriggerTime().formatLong()));

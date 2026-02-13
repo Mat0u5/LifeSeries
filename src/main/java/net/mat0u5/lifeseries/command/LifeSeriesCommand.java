@@ -121,7 +121,7 @@ public class LifeSeriesCommand extends Command {
             OtherUtils.sendCommandFailure(source, Component.nullToEmpty("Use the '/lifeseries setSeries <season>' command instead."));
             return -1;
         }
-        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Opening the season selection GUI..."));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.SEASON_SELECTION_GUI.get());
         SimplePackets.SELECT_SEASON.target(source.getPlayer()).sendToClient(currentSeason.getSeason().getId());
         return 1;
     }
@@ -174,10 +174,10 @@ public class LifeSeriesCommand extends Command {
         SimplePackets.CLEAR_CONFIG.target(self).sendToClient();
         if (PermissionManager.isAdmin(self) && currentSeason.getSeason() != Seasons.UNASSIGNED) {
             Main.seasonConfig.sendConfigTo(self);
-            OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Opening the config GUI..."));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.CONFIG_GUI_OPENING.get());
         }
         else {
-            OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7Opening the config GUI..."));
+            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.CONFIG_GUI_OPENING.get());
         }
         SimplePackets.OPEN_CONFIG.target(self).sendToClient();
         return 1;
@@ -227,7 +227,7 @@ public class LifeSeriesCommand extends Command {
 
     public int reload(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("§7Reloading the Life Series..."));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.MOD_RELOAD.get());
         OtherUtils.reloadServer();
         return 1;
     }

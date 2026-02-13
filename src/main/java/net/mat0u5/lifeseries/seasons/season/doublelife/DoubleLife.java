@@ -53,13 +53,13 @@ public class DoubleLife extends Season {
     public static boolean SOULMATE_LOCATOR_BAR = false;
     public boolean SOULMATES_PVP_ALLOWED = true;
 
-    public SessionAction actionChooseSoulmates = new SessionAction(Time.minutes(1), "Assign Soulmates if necessary") {
+    public SessionAction actionChooseSoulmates = new SessionAction(Time.minutes(1), ModifiableText.SESSION_ACTION_ASSIGN_SOULMATES.getString()) {
         @Override
         public void trigger() {
             rollSoulmates();
         }
     };
-    public SessionAction actionRandomTP = new SessionAction(Time.ticks(5), "Random teleport distribution") {
+    public SessionAction actionRandomTP = new SessionAction(Time.ticks(5), ModifiableText.SESSION_ACTION_RANDOM_TP.getString()) {
         @Override
         public void trigger() {
             distributePlayers();

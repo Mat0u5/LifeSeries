@@ -48,7 +48,7 @@ public class WildcardManager {
                 }
         );
         currentSession.addSessionAction(
-            new SessionAction(Time.minutes(ACTIVATE_WILDCARD_MINUTE), "Activate Wildcard") {
+            new SessionAction(Time.minutes(ACTIVATE_WILDCARD_MINUTE), ModifiableText.SESSION_ACTION_WILDCARD.getString()) {
                 @Override
                 public void trigger() {
                     if (activeWildcards.isEmpty()) {

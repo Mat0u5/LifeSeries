@@ -152,7 +152,7 @@ public class SessionCommand extends Command {
 
     public int pauseQueueReset(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        OtherUtils.sendCommandFeedback(source, Component.nullToEmpty("Reset all queued pauses"));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.SESSION_PAUSE_QUEUE_RESET.get());
 
         currentSession.discardAllQueuedPauses();
         return 1;

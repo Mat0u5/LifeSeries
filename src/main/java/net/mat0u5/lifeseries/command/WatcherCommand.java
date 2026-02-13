@@ -65,9 +65,7 @@ public class WatcherCommand extends Command {
 
     public int info(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7Watchers are players that are online, but are not affected by most season mechanics. They can only observe."));
-        OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7This is very useful for spectators and for admins."));
-        //OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§8§oNOTE: This is an experimental feature, report any bugs you find!"));
+        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WATCHER_INFO.get());
         return 1;
     }
 

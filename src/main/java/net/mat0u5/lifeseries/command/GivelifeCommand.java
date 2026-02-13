@@ -147,7 +147,7 @@ public class GivelifeCommand extends Command {
             request.put(target.getUUID(), System.currentTimeMillis());
             soulmateGivelifeRequests.put(self.getUUID(), request);
         }
-        OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7Your soulmate must accept your request to give a life to this player."));
+        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.GIVELIFE_DOUBLELIFE_INFO.get());
         soulmate.sendSystemMessage(ModifiableText.GIVELIFE_DOUBLELIFE_ACCEPT.get(target, TextUtils.runCommandText(TextUtils.formatString("/givelife {}", target.getScoreboardName()))));
         return false;
     }

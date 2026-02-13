@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.entity.snail.server;
 
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.PlayerBoundEntity;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.events.Events;
@@ -267,7 +268,7 @@ public class SnailServerData implements PlayerBoundEntity {
     }
 
     public Component getDefaultName() {
-        if (snail.isFromTrivia()) return Component.nullToEmpty("VHSnail");
+        if (snail.isFromTrivia()) return ModifiableText.WILDLIFE_SNAIL_TRIVIA_SNAIL_NAME.get();
         if (snailName == null) return snail.getType().getDescription();
         if (snailName.getString().isEmpty()) return snail.getType().getDescription();
         return snailName;

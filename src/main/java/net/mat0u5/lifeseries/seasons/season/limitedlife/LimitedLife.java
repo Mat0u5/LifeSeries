@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.limitedlife;
 
 import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
@@ -69,18 +70,18 @@ public class LimitedLife extends Season {
     }
 
     public void displayTimers(MinecraftServer server) {
-        String message = "";
+        Component message = Component.empty();
         if (currentSession.statusNotStarted()) {
-            message = "Session has not started";
+            message = ModifiableText.SESSION_TIMER_DISPLAY_NOTSTARTED.get();
         }
         else if (currentSession.statusStarted()) {
-            message = currentSession.getRemainingTimeStr();
+            message = ModifiableText.SESSION_TIMER_DISPLAY.get(currentSession.getRemainingTimeStr());
         }
         else if (currentSession.statusPaused()) {
-            message = "Session has been paused";
+            message = ModifiableText.SESSION_TIMER_DISPLAY_PAUSE.get();
         }
         else if (currentSession.statusFinished()) {
-            message = "Session has ended";
+            message = ModifiableText.SESSION_TIMER_DISPLAY_END.get();
         }
 
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
@@ -114,10 +115,10 @@ public class LimitedLife extends Season {
             else {
                 MutableComponent fullMessage = Component.empty();
                 if (currentSession.displayTimer.contains(player.getUUID())) {
-                    fullMessage.append(Component.literal(message).withStyle(ChatFormatting.GRAY));
+                    fullMessage.append(message);
                 }
                 if (player.ls$hasAssignedLives()) {
-                    if (!fullMessage.getString().isEmpty()) fullMessage.append(Component.nullToEmpty("  |  "));
+                    if (!fullMessage.getString().isEmpty()) fullMessage.append(ModifiableText.LIMITEDLIFE_SESSION_DISPLAY_DIVIDER.get());
                     fullMessage.append(livesManager.getFormattedLives(player));
                 }
                 player.sendSystemMessage(fullMessage, true);

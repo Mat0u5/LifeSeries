@@ -16,9 +16,11 @@ public enum ModifiableText {
     ,MOD_SVC_MISSING("{} does not have Simple Voice Chat installed", List.of("Player"))
     ,MOD_SVC_MISSING_SERVER("The server does not have Simple Voice Chat installed")
     ,MOD_SVC_MISSING_ALL("None of the targets have Simple Voice Chat installed")
-    ,TRANSCRIPT_COPY("§7Click {}§7 to copy the session transcript.", List.of("ClickHere"))
+    ,MOD_RELOAD("§7Reloading the Life Series...")
     ,MOD_DISABLED_ERROR("The Life Series mod is disabled!\nEnable with \"/lifeseries enable\"")
+    ,TRANSCRIPT_COPY("§7Click {}§7 to copy the session transcript.", List.of("ClickHere"))
     ,CONFIG_UPDATED("§7Config has been successfully updated.")
+    ,CONFIG_GUI_OPENING("§7Opening the config GUI...")
     ,COUNTDOWN_COLOR_3("§a3")
     ,COUNTDOWN_COLOR_2("§e2")
     ,COUNTDOWN_COLOR_1("§c1")
@@ -40,6 +42,7 @@ public enum ModifiableText {
     ,SEASON_GET("Current season: {}", List.of("season"))
     ,SEASON_KILL_GAINLIFE("{}§7 gained a life for killing {}.", List.of("Killer", "Victim"))
     ,SEASON_KILL_UNJUSTIFIED("§c [Unjustified Kill?] {}§7 was killed by {}", List.of("Killer", "Victim"))
+    ,SEASON_SELECTION_GUI("§7Opening the season selection GUI...")
 
     ,SESSION_STARTED(Formatted.LOOSELY_STYLED,"§6Session started! §7[{}]\n§f/session timer showDisplay§7 - toggles a session timer on your screen.", List.of("session length"))
     ,SESSION_ACTION_ENTRY(Formatted.LOOSELY_STYLED,"§7- {}", List.of("action name"))
@@ -67,6 +70,19 @@ public enum ModifiableText {
     ,SESSION_WARNING_5MIN("§6Session ends in 5 minutes!")
     ,SESSION_WARNING_30MIN("§6Session ends in 30 minutes!")
     ,SESSION_START_TITLE("§aThe timer has begun!")
+    ,SESSION_PAUSE_QUEUE_RESET("Reset all queued pauses")
+    ,SESSION_TIMER_DISPLAY_NOTSTARTED("§7Session has not started")
+    ,SESSION_TIMER_DISPLAY_PAUSE("§7Session has been paused")
+    ,SESSION_TIMER_DISPLAY_END("§7Session has ended")
+    ,SESSION_TIMER_DISPLAY("§7{}", List.of("time"))
+    ,SESSION_ACTIONS("§7Queued session actions:")
+    ,SESSION_ACTION_SOCIETY("Begin Secret Society")
+    ,SESSION_ACTION_BOOGEYMAN("Choose Boogeymen")
+    ,SESSION_ACTION_ASSIGN_LIVES("Assign lives if necessary")
+    ,SESSION_ACTION_ASSIGN_SOULMATES(Seasons.DOUBLE_LIFE, "Assign Soulmates if necessary")
+    ,SESSION_ACTION_RANDOM_TP(Seasons.DOUBLE_LIFE, "Random teleport distribution")
+    ,SESSION_ACTION_TASKS(Seasons.SECRET_LIFE, "Assign Tasks")
+    ,SESSION_ACTION_WILDCARD(Seasons.WILD_LIFE, "Activate Wildcard")
     ,TICK_FREEZE("§7The game is frozen")
     ,TICK_UNFREEZE("§7The game is no longer frozen.")
 
@@ -103,6 +119,7 @@ public enum ModifiableText {
     ,GIVELIFE_RECEIVE_OTHER("{} received a life from {}", List.of("Receiver", "Giver"))
     ,GIVELIFE_RECEIVE_SELF_TITLE("You received a life")
     ,GIVELIFE_RECEIVE_SELF_TITLE_SUBTITLE("from {}", List.of("Player"))
+    ,GIVELIFE_DOUBLELIFE_INFO("§7Your soulmate must accept your request to give a life to this player.")
 
     ,WATCHER_JOIN("§7§nYou are now a Watcher.\n\n§7Watchers are players that are online, but are not affected by most season mechanics. They can only observe - this is very useful for spectators and for admins.")
     ,WATCHER_LEAVE("§7You are no longer a Watcher.")
@@ -113,6 +130,7 @@ public enum ModifiableText {
     ,WATCHER_REMOVE_MULTIPLE("{} targets are no longer Watchers", List.of("number of targets"))
     ,WATCHER_LIST(Formatted.LOOSELY_STYLED,"Current Watchers: §7{}", List.of("Watchers"))
     ,MUTED_WATCHER("Watchers aren't allowed to talk in chat! Admins can change this behavior in the config.")
+    ,WATCHER_INFO("§7Watchers are players that are online, but are not affected by most season mechanics. They can only observe.\n§7This is very useful for spectators and for admins.")
 
     ,SOCIETY_INITIATE_REMINDER("§7When you are alone, type \"/initiate\"")
     ,SOCIETY_INITIATED_PT1("§7You have been chosen to be part of the §csecret society§7.")
@@ -277,6 +295,7 @@ public enum ModifiableText {
     ,DOUBLELIFE_LASTPAIR_PT2_SUBTITLE(Seasons.DOUBLE_LIFE, "§cThere can only be one winner.")
 
     ,LIMITEDLIFE_CHANGE_COLOR(Seasons.LIMITED_LIFE, "{}§7 is now a {} name§7.", List.of("Player", "color"))
+    ,LIMITEDLIFE_SESSION_DISPLAY_DIVIDER(Seasons.LIMITED_LIFE, "  |  ")
 
     ,SECRETLIFE_TASK_MISSING(Seasons.SECRET_LIFE, "§cYou do not have a secret task book in your inventory.")
     ,SECRETLIFE_TASK_MISSING_OTHER(Seasons.SECRET_LIFE, "{} does not have a task book in their inventory nor a pre-assigned task", List.of("Player"))
@@ -411,6 +430,14 @@ public enum ModifiableText {
     ,WILDLIFE_MAKEITWILD_PT2(Seasons.WILD_LIFE, "§cMake")
     ,WILDLIFE_MAKEITWILD_PT3(Seasons.WILD_LIFE, "§cMake §eit")
     ,WILDLIFE_MAKEITWILD_PT4(Seasons.WILD_LIFE, "§cMake §eit §a§lWILD")
+    ,WILDLIFE_SUPERPOWES_DEAD(Seasons.WILD_LIFE, "Dead players can't use superpowers!")
+    ,WILDLIFE_POWER_MIMIC_ERROR(Seasons.WILD_LIFE, "You cannot mimic that power.")
+    ,WILDLIFE_POWER_MIMIC_NOPLAYER(Seasons.WILD_LIFE, "You are not looking at a player.")
+    ,WILDLIFE_POWER_MIMIC_NOPOWER(Seasons.WILD_LIFE, "That player does not have a superpower.")
+    ,WILDLIFE_POWER_NECROMANCY_ERROR(Seasons.WILD_LIFE, "There are no dead players.")
+    ,WILDLIFE_POWER_PLAYERDISGUISE_ERROR(Seasons.WILD_LIFE, "You are not looking at a player.")
+    ,WILDLIFE_POWER_TELEPORTATION_ERROR(Seasons.WILD_LIFE, "There is nothing to teleport to.")
+    ,WILDLIFE_SNAIL_TRIVIA_SNAIL_NAME(Seasons.WILD_LIFE, "VHSnail")
 
     ,PASTLIFE_SESSION_START(Seasons.PAST_LIFE, "§7Past Life session started:\n§7 Type §f\"/pastlife boogeyman\"§7 to have the Boogeyman in this session.\n§7 Type §f\"/pastlife society\"§7 to have the Secret Society in this session.\n§7 Or type §f\"/pastlife pickRandom\"§7 if you want the game to pick randomly.\n")
     ,BOOGEYMAN_PASTLIFE_MESSAGE_PT1(Seasons.PAST_LIFE, "§7You are the boogeyman.")
@@ -491,14 +518,7 @@ public enum ModifiableText {
     ,NICELIFE_NICELIST_VOTE_ERROR_AGREEMENT(Seasons.NICE_LIFE, "§cNo agreement reached")
     ,NICELIFE_NICELIST_VOTE_RESULT(Seasons.NICE_LIFE, "§2The winner is...")
 
-
-
-
-    ////////////
-
-
-
-ModifiableText.NAME.get(
+//ModifiableText.NAME.get(
 
     /*
     ,NAME("")

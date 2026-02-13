@@ -65,7 +65,7 @@ public class PlayerDisguise extends ToggleableSuperpower {
         }
 
         if (copiedPlayerName.isEmpty() || copiedPlayerUUID.isEmpty()) {
-            PlayerUtils.displayMessageToPlayer(player, Component.nullToEmpty("You are not looking at a player."), 65);
+            PlayerUtils.displayMessageToPlayer(player, ModifiableText.WILDLIFE_POWER_PLAYERDISGUISE_ERROR.get(), 65);
             return;
         }
 

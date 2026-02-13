@@ -68,7 +68,7 @@ public class BoogeymanManager {
             }
         );
         currentSession.addSessionAction(
-                new SessionAction(Time.minutes(BOOGEYMAN_CHOOSE_MINUTE), "Choose Boogeymen") {
+                new SessionAction(Time.minutes(BOOGEYMAN_CHOOSE_MINUTE), ModifiableText.SESSION_ACTION_BOOGEYMAN.getString()) {
                     @Override
                     public void trigger() {
                         if (!BOOGEYMAN_ENABLED) return;

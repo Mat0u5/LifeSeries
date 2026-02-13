@@ -81,7 +81,7 @@ public class TaskManager {
     public static List<UUID> pendingConfirmationTasks = new ArrayList<>();
 
     public static SessionAction getActionChooseTasks() {
-        return new SessionAction(Time.minutes(ASSIGN_TASKS_MINUTE), "Assign Tasks") {
+        return new SessionAction(Time.minutes(ASSIGN_TASKS_MINUTE), ModifiableText.SESSION_ACTION_TASKS.getString()) {
             @Override
             public void trigger() {
                 chooseTasks(livesManager.getAlivePlayers(), null);

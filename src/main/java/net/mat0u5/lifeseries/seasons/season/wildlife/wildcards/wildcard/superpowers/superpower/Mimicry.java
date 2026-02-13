@@ -63,7 +63,7 @@ public class Mimicry extends Superpower {
                         player.ls$playNotifySound(SoundEvents.CHICKEN_EGG, SoundSource.MASTER, 0.3f, 1);
                     }
                     if (mimicPower == Superpowers.MIMICRY) {
-                        PlayerUtils.displayMessageToPlayer(player, Component.literal("You cannot mimic that power."), 65);
+                        PlayerUtils.displayMessageToPlayer(player, ModifiableText.WILDLIFE_POWER_MIMIC_ERROR.get(), 65);
                         return;
                     }
                 }
@@ -71,11 +71,11 @@ public class Mimicry extends Superpower {
         }
 
         if (!isLookingAtPlayer) {
-            PlayerUtils.displayMessageToPlayer(player, Component.nullToEmpty("You are not looking at a player."), 65);
+            PlayerUtils.displayMessageToPlayer(player, ModifiableText.WILDLIFE_POWER_MIMIC_NOPLAYER.get(), 65);
             return;
         }
         if (!successfullyMimicked) {
-            PlayerUtils.displayMessageToPlayer(player, Component.nullToEmpty("That player does not have a superpower."), 65);
+            PlayerUtils.displayMessageToPlayer(player, ModifiableText.WILDLIFE_POWER_MIMIC_NOPOWER.get(), 65);
             return;
         }
         super.activate();

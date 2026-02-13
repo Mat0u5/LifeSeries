@@ -62,7 +62,7 @@ public class SecretSociety {
 
     public void addSessionActions() {
         if (!SOCIETY_ENABLED) return;
-        currentSession.addSessionAction(new SessionAction(Time.minutes(START_TIME), "Begin Secret Society") {
+        currentSession.addSessionAction(new SessionAction(Time.minutes(START_TIME), ModifiableText.SESSION_ACTION_SOCIETY.getString()) {
             @Override
             public void trigger() {
                 if (!SOCIETY_ENABLED) return;

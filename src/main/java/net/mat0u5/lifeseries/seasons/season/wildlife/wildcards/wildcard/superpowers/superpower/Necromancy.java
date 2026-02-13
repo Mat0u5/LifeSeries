@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -51,7 +52,7 @@ public class Necromancy extends Superpower {
         if (player == null) return;
 
         if (getDeadSpectatorPlayers().isEmpty()) {
-            PlayerUtils.displayMessageToPlayer(player, Component.nullToEmpty("There are no dead players."), 80);
+            PlayerUtils.displayMessageToPlayer(player, ModifiableText.WILDLIFE_POWER_NECROMANCY_ERROR.get(), 80);
             return;
         }
 
