@@ -142,7 +142,7 @@ public class SubInCommands extends Command {
         OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7Current sub ins:"));
 
         for (SubInManager.SubIn subIn : SubInManager.subIns) {
-            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.NAME.get(OtherUtils.profileName(subIn.substituter()), OtherUtils.profileName(subIn.target())));
+            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SUBIN_LIST_ENTRY.get(OtherUtils.profileName(subIn.substituter()), OtherUtils.profileName(subIn.target())));
         }
 
         return 1;

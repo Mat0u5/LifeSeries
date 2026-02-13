@@ -96,7 +96,7 @@ public class Session {
         passedTime = Time.zero();
         fullPassedTime = Time.zero();
         DatapackIntegration.setSessionTimePassed(getPassedTime());
-        PlayerUtils.broadcastMessage(ModifiableText.NAME.get(sessionLength.formatLong()));
+        PlayerUtils.broadcastMessage(ModifiableText.SESSION_STARTED.get(sessionLength.formatLong()));
 
         addSessionActionIfTime(endWarning1);
         addSessionActionIfTime(endWarning2);

@@ -119,7 +119,7 @@ public class ModifiableTextConfigEntry extends StringConfigEntry implements ITex
                 }
             }
         }
-        return ModifiableTextManager.getFromRawValue(formatted, ModifiableTextManager.toMinecraftColorFormatting(currentText).replace("\\n", "\n"), true, args.toArray());
+        return ModifiableTextManager.getFromRawValue(formatted, ModifiableTextManager.toMinecraftColorFormatting(currentText), true, args.toArray());
     }
 
     @Override

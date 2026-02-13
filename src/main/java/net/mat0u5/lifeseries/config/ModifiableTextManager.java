@@ -24,11 +24,11 @@ public class ModifiableTextManager {
     }
 
     public static String toMinecraftColorFormatting(String str) {
-        return str.replace("#","§").replace("§§","#");
+        return str.replace("#","§").replace("§§","#").replace("\\n", "\n");
     }
 
     public static String fromMinecraftColorFormatting(String str) {
-        return str.replace("#","##").replace("§","#");
+        return str.replace("#","##").replace("§","#").replace("\n", "\\n");
     }
 
     public static Map<String, ConfigFileEntry<String>> getRegisteredEntries() {

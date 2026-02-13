@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.config.ClientConfigNetwork;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.GroupConfigEntry;
+import net.mat0u5.lifeseries.gui.config.entries.TextFieldConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.extra.TriviaQuestionConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.main.TextConfigEntry;
 import net.mat0u5.lifeseries.render.RenderUtils;
@@ -179,6 +180,12 @@ public class ConfigScreen extends Screen {
         String description = entry.getDescription();
         if (description != null && !description.isEmpty() && description.toLowerCase(Locale.ROOT).contains(lowerQuery)) {
             return true;
+        }
+
+        if (entry instanceof TextFieldConfigEntry textFieldConfigEntry) {
+            if (textFieldConfigEntry.textField != null && textFieldConfigEntry.textField.getValue().toLowerCase(Locale.ROOT).contains(lowerQuery)) {
+                return true;
+            }
         }
 
         return false;

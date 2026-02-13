@@ -10,48 +10,46 @@ import java.util.Locale;
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
 public enum ModifiableText {
-    //TODO test if the newlines work properly
-
     GIVELIFE_DOUBLELIFE_ACCEPT("Your soulmate wants to give a life to {}.\nClick {} to accept the request.", List.of("Player", "ClickHere"))
     ,GIVELIFE_RECEIVE_SELF("You received a life from {}", List.of("Player"))
     ,GIVELIFE_RECEIVE_OTHER("{} received a life from {}", List.of("Receiver", "Giver"))
     ,GIVELIFE_RECEIVE_SELF_TITLE("You received a life")
     ,GIVELIFE_RECEIVE_SELF_TITLE_SUBTITLE("from {}", List.of("Player"))
 
-    ,GIVEHEART_ERROR_SELF("Nice Try.")
-    ,GIVEHEART_ERROR_MULTIPLE("You have already gifted a heart this session")
-    ,GIVEHEART_ERROR_DEAD("That player is not alive")
-    ,GIVEHEART_SEND("You have gifted a heart to {}", List.of("Player"))
-    ,GIVEHEART_RECEIVE("{} gave you a heart", List.of("Player"))
+    ,GIVEHEART_ERROR_SELF(Seasons.SECRET_LIFE, "Nice Try.")
+    ,GIVEHEART_ERROR_MULTIPLE(Seasons.SECRET_LIFE, "You have already gifted a heart this session")
+    ,GIVEHEART_ERROR_DEAD(Seasons.SECRET_LIFE, "That player is not alive")
+    ,GIVEHEART_SEND(Seasons.SECRET_LIFE, "You have gifted a heart to {}", List.of("Player"))
+    ,GIVEHEART_RECEIVE(Seasons.SECRET_LIFE, "{} gave you a heart", List.of("Player"))
 
-    ,WILDLIFE_TRIVIA_RECEIVE_EFFECT(Formatted.LOOSELY_STYLED, " §a§l+ §7{}§6 {}", List.of("effect name", "amplifier"))
-    ,WILDLIFE_SNAIL_TEXTURE_INFO(Formatted.LOOSELY_STYLED,"§fClick {}§f to open the Snail Textures info page in the Wiki.", List.of("ClickHere"))
+    ,WILDLIFE_TRIVIA_RECEIVE_EFFECT(Seasons.WILD_LIFE, Formatted.LOOSELY_STYLED, " §a§l+ §7{}§6 {}", List.of("effect name", "amplifier"))
+    ,WILDLIFE_SNAIL_TEXTURE_INFO(Seasons.WILD_LIFE, Formatted.LOOSELY_STYLED,"§fClick {}§f to open the Snail Textures info page in the Wiki.", List.of("ClickHere"))
 
-    ,DOUBLELIFE_TELEPORT("§6Woosh!")
-    ,DOUBLELIFE_TELEPORT_SUCCESS("Randomly distributed players.")
+    ,DOUBLELIFE_TELEPORT(Seasons.DOUBLE_LIFE, "§6Woosh!")
+    ,DOUBLELIFE_TELEPORT_SUCCESS(Seasons.DOUBLE_LIFE, "Randomly distributed players.")
 
-    ,PASTLIFE_SESSION_START("§7Past Life session started:\n§7 Type §f\"/pastlife boogeyman\"§7 to have the Boogeyman in this session.\n§7 Type §f\"/pastlife society\"§7 to have the Secret Society in this session.\n§7 Or type §f\"/pastlife pickRandom\"§7 if you want the game to pick randomly.\n")
+    ,PASTLIFE_SESSION_START(Seasons.PAST_LIFE, "§7Past Life session started:\n§7 Type §f\"/pastlife boogeyman\"§7 to have the Boogeyman in this session.\n§7 Type §f\"/pastlife society\"§7 to have the Secret Society in this session.\n§7 Or type §f\"/pastlife pickRandom\"§7 if you want the game to pick randomly.\n")
 
-    ,SECRETLIFE_TASK_MISSING("§cYou do not have a secret task book in your inventory.")
-    ,SECRETLIFE_TASK_MISSING_OTHER("{} does not have a task book in their inventory nor a pre-assigned task", List.of("Player"))
-    ,SECRETLIFE_TASK_PRESENT("{} has a task book in their inventory", List.of("Player"))
-    ,SECRETLIFE_TASK_PREASSIGNED("{} has a pre-assigned task", List.of("Player"))
-    ,SECRETLIFE_TASK_READFAIL("Failed to read task contents")
-    ,SECRETLIFE_TASK_SHOW("§7Click {}§7 to show the task they have.", List.of("ClickHere"))
-    ,SECRETLIFE_TASK_SHOW_PAST("§7Click {}§7 to see what {}§7's task was.", List.of("ClickHere", "Player"))
-    ,SECRETLIFE_SECRETKEEPER_INUSE("§cSomeone else is using the Secret Keeper right now.")
-    ,SECRETLIFE_TASK_PENDING("{} wants to succeed their task.", List.of("Player"))
-    ,SECRETLIFE_TASK_PENDING_ACCEPT("§7Click {}§7 to confirm this action.", List.of("ClickHere"))
-    ,SECRETLIFE_TASK_PENDING_NOTIFICATION("§cYour task confirmation needs to be approved by an admin.")
-    ,SECRETLIFE_TASK_SUCCEED("{}§a succeeded their task.", List.of("Player"))
-    ,SECRETLIFE_TASK_REROLL_HARD_FAIL("§cYou cannot re-roll a Hard task.")
-    ,SECRETLIFE_TASK_REROLL_HARD_FAIL_RED("§cYou cannot re-roll a Hard task. If you want your red task instead, click the Fail button.")
-    ,SECRETLIFE_TASK_NOT_SUBMITTED(Formatted.LOOSELY_STYLED,"§4{}§c still {} not submitted / failed a task this session.", List.of("Players", "has/have"))
+    ,SECRETLIFE_TASK_MISSING(Seasons.SECRET_LIFE, "§cYou do not have a secret task book in your inventory.")
+    ,SECRETLIFE_TASK_MISSING_OTHER(Seasons.SECRET_LIFE, "{} does not have a task book in their inventory nor a pre-assigned task", List.of("Player"))
+    ,SECRETLIFE_TASK_PRESENT(Seasons.SECRET_LIFE, "{} has a task book in their inventory", List.of("Player"))
+    ,SECRETLIFE_TASK_PREASSIGNED(Seasons.SECRET_LIFE, "{} has a pre-assigned task", List.of("Player"))
+    ,SECRETLIFE_TASK_READFAIL(Seasons.SECRET_LIFE, "Failed to read task contents")
+    ,SECRETLIFE_TASK_SHOW(Seasons.SECRET_LIFE, "§7Click {}§7 to show the task they have.", List.of("ClickHere"))
+    ,SECRETLIFE_TASK_SHOW_PAST(Seasons.SECRET_LIFE, "§7Click {}§7 to see what {}§7's task was.", List.of("ClickHere", "Player"))
+    ,SECRETLIFE_SECRETKEEPER_INUSE(Seasons.SECRET_LIFE, "§cSomeone else is using the Secret Keeper right now.")
+    ,SECRETLIFE_TASK_PENDING(Seasons.SECRET_LIFE, "{} wants to succeed their task.", List.of("Player"))
+    ,SECRETLIFE_TASK_PENDING_ACCEPT(Seasons.SECRET_LIFE, "§7Click {}§7 to confirm this action.", List.of("ClickHere"))
+    ,SECRETLIFE_TASK_PENDING_NOTIFICATION(Seasons.SECRET_LIFE, "§cYour task confirmation needs to be approved by an admin.")
+    ,SECRETLIFE_TASK_SUCCEED(Seasons.SECRET_LIFE, "{}§a succeeded their task.", List.of("Player"))
+    ,SECRETLIFE_TASK_REROLL_HARD_FAIL(Seasons.SECRET_LIFE, "§cYou cannot re-roll a Hard task.")
+    ,SECRETLIFE_TASK_REROLL_HARD_FAIL_RED(Seasons.SECRET_LIFE, "§cYou cannot re-roll a Hard task. If you want your red task instead, click the Fail button.")
+    ,SECRETLIFE_TASK_NOT_SUBMITTED(Seasons.SECRET_LIFE, Formatted.LOOSELY_STYLED,"§4{}§c still {} not submitted / failed a task this session.", List.of("Players", "has/have"))
 
     ,SESSION_ERROR_START("§cThe session has not started")
     ,SESSION_START_PROMPT("\nUse §b'/session timer set <time>'§f to set the desired session time.\nAfter that, use §b'/session start'§f to start the session.")
 
-    ,MUTED_TRIVIABOT("<Trivia Bot> No phoning a friend allowed!")
+    ,MUTED_TRIVIABOT(Seasons.WILD_LIFE, "<Trivia Bot> No phoning a friend allowed!")
     ,MUTED_WATCHER("Watchers aren't allowed to talk in chat! Admins can change this behavior in the config.")
     ,MUTED_DEADPLAYER("Dead players aren't allowed to talk in chat! Admins can change this behavior in the config.")
 
@@ -85,27 +83,26 @@ public enum ModifiableText {
     ,SESSION_ACTION_ENTRY(Formatted.LOOSELY_STYLED,"§7- {}", List.of("action name"))
     ,SESSION_ACTION_ENTRY_LONG(Formatted.LOOSELY_STYLED,"§7- {} §f[{}]", List.of("action name", "trigger time"))
 
-    ,NICELIFE_NICELIST_START_TITLE_PT1("§aThese players are on...")
-    ,NICELIFE_NICELIST_START_TITLE_PT2("§aTHE NICE LIST")
-    ,NICELIFE_NICELIST_START_INFO_PT1("\n §6[§e!§6]§7 At sunset, players on the nice list will vote to give a §2non-pink§7 name a life.\n")
-    ,NICELIFE_NICELIST_START_INFO_PT2(" §6[§e!§6]§7 The majority of the §dpinks§7 must vote for the same player for the life to be given.\n")
-    ,NICELIFE_NICELIST_START_INFO_PT3(" §6[§e!§6]§7 Pink names are not allowed to be targeted by any other players, including §creds§7.\n")
-    ,NICELIFE_NICELIST_START_INFO_PT4(" §6[§e!§6]§7 You are on the nice list. Type {}§7 to choose who you would like to give a life to.\n", List.of("ClickHere"))
-    ,NICELIFE_NICELIST_START_INFO_PT5(" §6[§e!§6]§7 You can change your vote at anytime, but the results will be locked in at sunset.\n")
-    ,NICELIFE_NICELIST_REMOVED(" §6[§e!§6]§7 You are no longer on the Nice List")
-    ,NICELIFE_NICELIST_VOTE("\n §6[§e!§6]§7 You voted for {}§7.\n", List.of("Player"))
-    ,NICELIFE_NICELIST_VOTE_REMINDER("\n§7Don't forget to {}§7!\n", List.of("ClickHere"))
-    ,NICELIFE_NICELIST_VOTE_TITLE("Vote for who should get a life")
-    ,NICELIFE_TRIVIA_VOTE_NICELIST("Vote for who's been nice")
-    ,NICELIFE_TRIVIA_VOTE_NAUGHTYLIST("Vote for who's been naughty")
-    ,NICELIFE_SLEEP_FAIL_LATE("You can't seem to sleep right now")
-    ,NICELIFE_SLEEP_FAIL_EARLY("You are too excited to fall asleep")
-
-    ,NICELIFE_NAUGHTYLIST_START_TITLE_PT1("§cThese players are on...")
-    ,NICELIFE_NAUGHTYLIST_START_TITLE_PT2("§cTHE NAUGHTY LIST")
-    ,NICELIFE_NAUGHTYLIST_START_INFO_PT1(Formatted.LOOSELY_STYLED,"\n §6[§e!§6]§7 You have voted for {} {} to be on the §cNAUGHTY LIST§7.\n", List.of("count", "person/people"))
-    ,NICELIFE_NAUGHTYLIST_START_INFO_PT2(" §6[§e!§6]§7 People on the §cnaughty list§7 have a purple name and can be killed.\n")
-    ,NICELIFE_NAUGHTYLIST_START_INFO_PT3(" §6[§e!§6]§7 They return to their previous colour at sunset. They can defend themselves.\n")
+    ,NICELIFE_NICELIST_START_TITLE_PT1(Seasons.NICE_LIFE, "§aThese players are on...")
+    ,NICELIFE_NICELIST_START_TITLE_PT2(Seasons.NICE_LIFE, "§aTHE NICE LIST")
+    ,NICELIFE_NICELIST_START_INFO_PT1(Seasons.NICE_LIFE, "\n §6[§e!§6]§7 At sunset, players on the nice list will vote to give a §2non-pink§7 name a life.\n")
+    ,NICELIFE_NICELIST_START_INFO_PT2(Seasons.NICE_LIFE, " §6[§e!§6]§7 The majority of the §dpinks§7 must vote for the same player for the life to be given.\n")
+    ,NICELIFE_NICELIST_START_INFO_PT3(Seasons.NICE_LIFE, " §6[§e!§6]§7 Pink names are not allowed to be targeted by any other players, including §creds§7.\n")
+    ,NICELIFE_NICELIST_START_INFO_PT4(Seasons.NICE_LIFE, " §6[§e!§6]§7 You are on the nice list. Type {}§7 to choose who you would like to give a life to.\n", List.of("ClickHere"))
+    ,NICELIFE_NICELIST_START_INFO_PT5(Seasons.NICE_LIFE, " §6[§e!§6]§7 You can change your vote at anytime, but the results will be locked in at sunset.\n")
+    ,NICELIFE_NICELIST_REMOVED(Seasons.NICE_LIFE, " §6[§e!§6]§7 You are no longer on the Nice List")
+    ,NICELIFE_NICELIST_VOTE(Seasons.NICE_LIFE, "\n §6[§e!§6]§7 You voted for {}§7.\n", List.of("Player"))
+    ,NICELIFE_NICELIST_VOTE_REMINDER(Seasons.NICE_LIFE, "\n§7Don't forget to {}§7!\n", List.of("ClickHere"))
+    ,NICELIFE_NICELIST_VOTE_TITLE(Seasons.NICE_LIFE, "Vote for who should get a life")
+    ,NICELIFE_TRIVIA_VOTE_NICELIST(Seasons.NICE_LIFE, "Vote for who's been nice")
+    ,NICELIFE_TRIVIA_VOTE_NAUGHTYLIST(Seasons.NICE_LIFE, "Vote for who's been naughty")
+    ,NICELIFE_SLEEP_FAIL_LATE(Seasons.NICE_LIFE, "You can't seem to sleep right now")
+    ,NICELIFE_SLEEP_FAIL_EARLY(Seasons.NICE_LIFE, "You are too excited to fall asleep")
+    ,NICELIFE_NAUGHTYLIST_START_TITLE_PT1(Seasons.NICE_LIFE, "§cThese players are on...")
+    ,NICELIFE_NAUGHTYLIST_START_TITLE_PT2(Seasons.NICE_LIFE, "§cTHE NAUGHTY LIST")
+    ,NICELIFE_NAUGHTYLIST_START_INFO_PT1(Seasons.NICE_LIFE, Formatted.LOOSELY_STYLED,"\n §6[§e!§6]§7 You have voted for {} {} to be on the §cNAUGHTY LIST§7.\n", List.of("count", "person/people"))
+    ,NICELIFE_NAUGHTYLIST_START_INFO_PT2(Seasons.NICE_LIFE, " §6[§e!§6]§7 People on the §cnaughty list§7 have a purple name and can be killed.\n")
+    ,NICELIFE_NAUGHTYLIST_START_INFO_PT3(Seasons.NICE_LIFE, " §6[§e!§6]§7 They return to their previous colour at sunset. They can defend themselves.\n")
 
     ,SOCIETY_INITIATE_REMINDER("§7When you are alone, type \"/initiate\"")
     ,SOCIETY_INITIATED_PT1("§7You have been chosen to be part of the §csecret society§7.")
@@ -156,16 +153,16 @@ public enum ModifiableText {
     ,LIVES_RANDOMIZE_SINGLE("§7Assigning random lives to {}§7...", List.of("Player"))
     ,LIVES_RANDOMIZE_MULTIPLE("§7Assigning random lives to {}§7 targets...", List.of("number of targets"))
 
-    ,SOULMATE_ERROR_EXISTS(Formatted.PLAIN, "{} already has a soulmate", List.of("Player"))
-    ,SOULMATE_ERROR_FORCE_EXISTS(Formatted.PLAIN, "{} is already forced with someone", List.of("Player"))
-    ,SOULMATE_ERROR_MISSING(Formatted.PLAIN, "{} does not have a soulmate", List.of("Player"))
-    ,SOULMATE_ERROR_OFFLINE(Formatted.PLAIN, "{} 's soulmate is not online right now", List.of("Player"))
+    ,SOULMATE_ERROR_EXISTS(Seasons.DOUBLE_LIFE, Formatted.PLAIN, "{} already has a soulmate", List.of("Player"))
+    ,SOULMATE_ERROR_FORCE_EXISTS(Seasons.DOUBLE_LIFE, Formatted.PLAIN, "{} is already forced with someone", List.of("Player"))
+    ,SOULMATE_ERROR_MISSING(Seasons.DOUBLE_LIFE, Formatted.PLAIN, "{} does not have a soulmate", List.of("Player"))
+    ,SOULMATE_ERROR_OFFLINE(Seasons.DOUBLE_LIFE, Formatted.PLAIN, "{} 's soulmate is not online right now", List.of("Player"))
 
 
-    ,SECRETLIFE_HEART_GAIN(Formatted.LOOSELY_STYLED,"§c+{} {}", List.of("amount", "heart/hearts"))
-    ,SECRETLIFE_TASK_NAME("{}'s Secret Task", List.of("Player"))
-    ,SECRETLIFE_TASK_AUTHOR("Secret Keeper")
-    ,WILDLIFE_SNAIL_DEFAULT_NAME(Formatted.PLAIN,"{}'s Snail", List.of("Player"))
+    ,SECRETLIFE_HEART_GAIN(Seasons.SECRET_LIFE, Formatted.LOOSELY_STYLED,"§c+{} {}", List.of("amount", "heart/hearts"))
+    ,SECRETLIFE_TASK_NAME(Seasons.SECRET_LIFE, "{}'s Secret Task", List.of("Player"))
+    ,SECRETLIFE_TASK_AUTHOR(Seasons.SECRET_LIFE, "Secret Keeper")
+    ,WILDLIFE_SNAIL_DEFAULT_NAME(Seasons.WILD_LIFE, Formatted.PLAIN,"{}'s Snail", List.of("Player"))
 
 
 
@@ -235,34 +232,63 @@ public enum ModifiableText {
     ,SEASON_KILL_GAINLIFE("{}§7 gained a life for killing {}.", List.of("Killer", "Victim"))
     ,SEASON_KILL_UNJUSTIFIED("§c [Unjustified Kill?] {}§7 was killed by {}", List.of("Killer", "Victim"))
 
-    ,DOUBLELIFE_SOULMATE_TITLE_UNKNOWN("§a????")
-    ,DOUBLELIFE_SOULMATE_TITLE_PLAYER("{}", List.of("Player"))
+    ,DOUBLELIFE_SOULMATE_TITLE_UNKNOWN(Seasons.DOUBLE_LIFE, "§a????")
+    ,DOUBLELIFE_SOULMATE_TITLE_PLAYER(Seasons.DOUBLE_LIFE, "{}", List.of("Player"))
+    ,DOUBLELIFE_SOULMATE_PREVENT(Seasons.DOUBLE_LIFE, "{}'s soulmate now cannot be {} when the next randomization happens.", List.of("Player", "Soulmate"))
+    ,DOUBLELIFE_SOULMATE_FORCE(Seasons.DOUBLE_LIFE, "{}'s soulmate will be {} when the next randomization happens.", List.of("Player", "Soulmate"))
+    ,DOUBLELIFE_SOULMATE_SET(Seasons.DOUBLE_LIFE, "{}'s soulmate is now {}", List.of("Player", "Soulmate"))
+    ,DOUBLELIFE_SOULMATE_GET(Seasons.DOUBLE_LIFE, "{}'s soulmate is {}", List.of("Player", "Soulmate"))
+    ,DOUBLELIFE_SOULMATE_RESET_SINGLE(Seasons.DOUBLE_LIFE, "{}'s soulmate was reset", List.of("Player"))
+    ,DOUBLELIFE_SOULMATE_RESET_MULTIPLE(Seasons.DOUBLE_LIFE, "Soulmate was reset for {} targets", List.of("number of targets"))
 
-    ,DOUBLELIFE_SOULMATE_PREVENT("{}'s soulmate now cannot be {} when the next randomization happens.", List.of("Player", "Soulmate"))
-    ,DOUBLELIFE_SOULMATE_FORCE("{}'s soulmate will be {} when the next randomization happens.", List.of("Player", "Soulmate"))
-    ,DOUBLELIFE_SOULMATE_SET("{}'s soulmate is now {}", List.of("Player", "Soulmate"))
-    ,DOUBLELIFE_SOULMATE_GET("{}'s soulmate is {}", List.of("Player", "Soulmate"))
-    ,DOUBLELIFE_SOULMATE_RESET_SINGLE("{}'s soulmate was reset", List.of("Player"))
-    ,DOUBLELIFE_SOULMATE_RESET_MULTIPLE("Soulmate was reset for {} targets", List.of("number of targets"))
+    ,LIMITEDLIFE_CHANGE_COLOR(Seasons.LIMITED_LIFE, "{}§7 is now a {} name§7.", List.of("Player", "color"))
 
-    ,LIMITEDLIFE_CHANGE_COLOR("{}§7 is now a {} name§7.", List.of("Player", "color"))
+    ,NICELIFE_NICELIST_EMPTY(Seasons.NICE_LIFE, "The Nice List is empty")
+    ,NICELIFE_NICELIST_LIST(Seasons.NICE_LIFE, "Nice List: {}", List.of("list"))
+    ,NICELIFE_NICELIST_ADD_SINGLE(Seasons.NICE_LIFE, "Added {} to the Nice List", List.of("Player"))
+    ,NICELIFE_NICELIST_ADD_MULTIPLE(Seasons.NICE_LIFE, "Added {} targets to the Nice List", List.of("number of targets"))
+    ,NICELIFE_NICELIST_REMOVE_SINGLE(Seasons.NICE_LIFE, "Removed {} from the Nice List", List.of("Player"))
+    ,NICELIFE_NICELIST_REMOVE_MULTIPLE(Seasons.NICE_LIFE, "Removed {} targets from the Nice List", List.of("number of targets"))
+    ,NICELIFE_NAUGHTYLIST_EMPTY(Seasons.NICE_LIFE, "The Naughty List is empty")
+    ,NICELIFE_NAUGHTYLIST_LIST(Seasons.NICE_LIFE, "Naughty List: {}", List.of("list"))
+    ,NICELIFE_NAUGHTYLIST_ADD_SINGLE(Seasons.NICE_LIFE, "Added {} to the Naughty List", List.of("Player"))
+    ,NICELIFE_NAUGHTYLIST_ADD_MULTIPLE(Seasons.NICE_LIFE, "Added {} targets to the Naughty List", List.of("number of targets"))
+    ,NICELIFE_NAUGHTYLIST_REMOVE_SINGLE(Seasons.NICE_LIFE, "Removed {} from the Naughty List", List.of("Player"))
+    ,NICELIFE_NAUGHTYLIST_REMOVE_MULTIPLE(Seasons.NICE_LIFE, "Removed {} targets from the Naughty List", List.of("number of targets"))
 
-    ,NICELIFE_NICELIST_EMPTY("The Nice List is empty")
-    ,NICELIFE_NICELIST_LIST("Nice List: {}", List.of("list"))
-    ,NICELIFE_NICELIST_ADD_SINGLE("Added {} to the Nice List", List.of("Player"))
-    ,NICELIFE_NICELIST_ADD_MULTIPLE("Added {} targets to the Nice List", List.of("number of targets"))
-    ,NICELIFE_NICELIST_REMOVE_SINGLE("Removed {} from the Nice List", List.of("Player"))
-    ,NICELIFE_NICELIST_REMOVE_MULTIPLE("Removed {} targets from the Nice List", List.of("number of targets"))
-    ,NICELIFE_NAUGHTYLIST_EMPTY("The Naughty List is empty")
-    ,NICELIFE_NAUGHTYLIST_LIST("Naughty List: {}", List.of("list"))
-    ,NICELIFE_NAUGHTYLIST_ADD_SINGLE("Added {} to the Naughty List", List.of("Player"))
-    ,NICELIFE_NAUGHTYLIST_ADD_MULTIPLE("Added {} targets to the Naughty List", List.of("number of targets"))
-    ,NICELIFE_NAUGHTYLIST_REMOVE_SINGLE("Removed {} from the Naughty List", List.of("Player"))
-    ,NICELIFE_NAUGHTYLIST_REMOVE_MULTIPLE("Removed {} targets from the Naughty List", List.of("number of targets"))
+    ,NICELIFE_VOTE_SET(Seasons.NICE_LIFE, "Next midnight vote will be '{}'", List.of("vote"))
+    ,NICELIFE_WAKEUP_SINGLE(Seasons.NICE_LIFE, "Woke up {}", List.of("Player"))
+    ,NICELIFE_WAKEUP_MULTIPLE(Seasons.NICE_LIFE, "Woke up {}", List.of("Player"))
 
-    ,NICELIFE_VOTE_SET("Next midnight vote will be '{}'", List.of("vote"))
-    ,NICELIFE_WAKEUP_SINGLE("Woke up {}", List.of("Player"))
-    ,NICELIFE_WAKEUP_MULTIPLE("Woke up {}", List.of("Player"))
+    ,SECRETLIFE_TASK_SET(Seasons.SECRET_LIFE, "Changed {}'s task", List.of("Player"))
+    ,SECRETLIFE_TASK_PREASSIGN(Seasons.SECRET_LIFE, "Pre-assigned {}'s task for randomization\n§7They will be given the task book once you / the game rolls the tasks", List.of("Player"))
+    ,SECRETLIFE_TASK_SET_MULTIPLE(Seasons.SECRET_LIFE, "Changed or pre-assigned task of {} targets", List.of("number of targets"))
+    ,SECRETLIFE_TASK_SET_RANDOM_SINGLE(Seasons.SECRET_LIFE, "Assigning random task to {}", List.of("Player"))
+    ,SECRETLIFE_TASK_SET_RANDOM_MULTIPLE(Seasons.SECRET_LIFE, "Assigning random tasks to {} targets", List.of("number of targets"))
+    ,SECRETLIFE_TASK_REMOVE_SINGLE(Seasons.SECRET_LIFE, "Removed task book from {}", List.of("Player"))
+    ,SECRETLIFE_TASK_REMOVE_MULTIPLE(Seasons.SECRET_LIFE, "Removed task book from {} targets", List.of("number of targets"))
+    ,SECRETLIFE_TASK_SUCCESS_SINGLE(Seasons.SECRET_LIFE, "§7Succeeding task for {}§7...", List.of("Player"))
+    ,SECRETLIFE_TASK_SUCCESS_MULTIPLE(Seasons.SECRET_LIFE, "§7Succeeding task for {}§7 targets...", List.of("number of targets"))
+    ,SECRETLIFE_TASK_FAIL_SINGLE(Seasons.SECRET_LIFE, "§7Failing task for {}§7...", List.of("Player"))
+    ,SECRETLIFE_TASK_FAIL_MULTIPLE(Seasons.SECRET_LIFE, "§7Failing task for {}§7 targets...", List.of("number of targets"))
+    ,SECRETLIFE_TASK_REROLL_SINGLE(Seasons.SECRET_LIFE, "§7Rerolling task for {}§7...", List.of("Player"))
+    ,SECRETLIFE_TASK_REROLL_MULTIPLE(Seasons.SECRET_LIFE, "§7Rerolling task for {}§7 targets...", List.of("number of targets"))
+    ,GIVEHEART_RESET_SINGLE(Seasons.SECRET_LIFE, "Reset {}'s gifted hearts", List.of("Player"))
+    ,GIVEHEART_RESET_MULTIPLE(Seasons.SECRET_LIFE, "Reset the gifted hearts of {} targets", List.of("number of targets"))
+    ,SECRETLIFE_HEALTH_GET_SELF_DEAD(Seasons.SECRET_LIFE, "You're dead...")
+    ,SECRETLIFE_HEALTH_GET_SELF(Seasons.SECRET_LIFE, "You have {} health", List.of("amount"))
+    ,SECRETLIFE_HEALTH_GET_LIST(Seasons.SECRET_LIFE, "Health of targets:")
+    ,SECRETLIFE_HEALTH_GET_OTHER_DEAD(Seasons.SECRET_LIFE, "{} is dead", List.of("Player"))
+    ,SECRETLIFE_HEALTH_GET_OTHER(Seasons.SECRET_LIFE, "{} has {} health", List.of("Player", "amount"))
+    ,SECRETLIFE_HEALTH_SET_SINGLE(Seasons.SECRET_LIFE, "Set {}'s health to {}", List.of("Player", "amount"))
+    ,SECRETLIFE_HEALTH_SET_MULTIPLE(Seasons.SECRET_LIFE, "Set the health of {} targets to {}", List.of("Player", "amount"))
+    ,SECRETLIFE_HEALTH_MODIFY_SINGLE(Seasons.SECRET_LIFE, "{} {} health {} {}", List.of("Added/Removed", "amount", "to/from", "Player"))
+    ,SECRETLIFE_HEALTH_MODIFY_MULTIPLE(Seasons.SECRET_LIFE, "{} {} health {} {} targets", List.of("Added/Removed", "amount", "to/from", "number of targets"))
+    ,SECRETLIFE_HEALTH_RESET_SINGLE(Seasons.SECRET_LIFE, "Reset {}'s health to the default", List.of("Player"))
+    ,SECRETLIFE_HEALTH_RESET_MULTIPLE(Seasons.SECRET_LIFE, "Reset the health to default for {} targets", List.of("number of targets"))
+    ,SECRETLIFE_TASK_REROLL(Seasons.SECRET_LIFE,"{}§7 re-rolled their easy task.", List.of("Player"))
+    ,SECRETLIFE_TASK_FAIL(Seasons.SECRET_LIFE,"{}§c failed their task.", List.of("Player"))
+    
 
 ModifiableText.NAME.get(
 /*
@@ -278,19 +304,33 @@ ModifiableText.NAME.get(
     final String name;
     final String defaultValue;
     final List<String> args;
+    final Seasons requiredSeason;
 
     ModifiableText(String defaultValue) {
         this(Formatted.STYLED, defaultValue);
     }
-
     ModifiableText(String defaultValue, List<String> args) {
         this(Formatted.STYLED, defaultValue, args);
     }
     ModifiableText(Formatted formatted, String defaultValue) {
         this(formatted, defaultValue, null);
     }
-
     ModifiableText(Formatted formatted, String defaultValue, List<String> args) {
+        this(null, formatted, defaultValue, args);
+    }
+
+    ModifiableText(Seasons requiredSeason, String defaultValue) {
+        this(requiredSeason, Formatted.STYLED, defaultValue);
+    }
+    ModifiableText(Seasons requiredSeason, String defaultValue, List<String> args) {
+        this(requiredSeason, Formatted.STYLED, defaultValue, args);
+    }
+    ModifiableText(Seasons requiredSeason, Formatted formatted, String defaultValue) {
+        this(requiredSeason, formatted, defaultValue, null);
+    }
+
+    ModifiableText(Seasons requiredSeason, Formatted formatted, String defaultValue, List<String> args) {
+        this.requiredSeason = requiredSeason;
         this.formatted = formatted;
         this.name = this.name().toLowerCase(Locale.ROOT).replace("_",".");
         this.defaultValue = ModifiableTextManager.fromMinecraftColorFormatting(defaultValue.replace("{}","%s"));
@@ -371,6 +411,7 @@ ModifiableText.NAME.get(
 
     public static void registerAllTexts() {
         for (ModifiableText modifiableText : ModifiableText.values()) {
+            if (modifiableText.requiredSeason != null && currentSeason.getSeason() != modifiableText.requiredSeason) continue;
             ModifiableTextManager.register(modifiableText.name, modifiableText.getRegisterDefaultValue(), modifiableText.getRegisterArgs());
         }
     }

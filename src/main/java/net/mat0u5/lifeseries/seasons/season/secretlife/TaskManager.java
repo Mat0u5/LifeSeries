@@ -4,8 +4,10 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.config.StringListConfig;
 import net.mat0u5.lifeseries.config.StringListManager;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.enums.Formatted;
 import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
@@ -176,8 +178,8 @@ public class TaskManager {
         ItemStack book = new ItemStack(Items.WRITTEN_BOOK);
         //? if < 1.20.5 {
         /*List<FilteredText> lines = task.getBookLines(player);
-        book.addTagElement("author", StringTag.valueOf("Secret Keeper"));
-        book.addTagElement("title", StringTag.valueOf(TextUtils.formatString("§c{}'s Secret Task", player)));
+        book.addTagElement("author", StringTag.valueOf(ModifiableText.SECRETLIFE_TASK_AUTHOR.getString()));
+        book.addTagElement("title", StringTag.valueOf(ModifiableText.SECRETLIFE_TASK_NAME.getString(player)));
         ListTag listTag = new ListTag();
         Stream<StringTag> stream = lines.stream().map((filteredTextx) -> StringTag.valueOf(filteredTextx.filteredOrEmpty()));
         Objects.requireNonNull(listTag);
@@ -506,7 +508,7 @@ public class TaskManager {
         if (type == TaskTypes.EASY) {
             removePlayersTaskBook(player);
             if (BROADCAST_SECRET_KEEPER) {
-                PlayerUtils.broadcastMessage(TextUtils.format("{}§7 re-rolled their easy task.", player));
+                PlayerUtils.broadcastMessage(ModifiableText.SECRETLIFE_TASK_REROLL.get(player));
             }
             if (PUBLIC_TASKS_ON_SUBMIT) {
                 PlayerUtils.broadcastMessage(getShowTaskMessage(player));
@@ -562,7 +564,7 @@ public class TaskManager {
         TaskTypes type = getPlayersTaskType(player);
         if (!hasTaskBookCheck(player, !fromCommand)) return;
         if (BROADCAST_SECRET_KEEPER) {
-            PlayerUtils.broadcastMessage(TextUtils.format("{}§c failed their task.", player));
+            PlayerUtils.broadcastMessage(ModifiableText.SECRETLIFE_TASK_FAIL.get(player));
         }
         if (PUBLIC_TASKS_ON_SUBMIT) {
             PlayerUtils.broadcastMessage(getShowTaskMessage(player));
@@ -636,7 +638,8 @@ public class TaskManager {
         ChatFormatting formatting = ChatFormatting.GREEN;
         if (finalAmount < 0) formatting = ChatFormatting.RED;
         else finalStr = "+"+finalStr;
-        PlayerUtils.sendTitle(player, TextUtils.format("{} Hearts", finalStr).withStyle(formatting), 20, 40, 20);
+        //TODO test
+        PlayerUtils.sendTitle(player, ModifiableText.SECRETLIFE_HEART_GAIN.get(finalStr, "Hearts").copy().withStyle(formatting), 20, 40, 20);
     }
 
     public static boolean alreadyHasPos(BlockPos pos) {
