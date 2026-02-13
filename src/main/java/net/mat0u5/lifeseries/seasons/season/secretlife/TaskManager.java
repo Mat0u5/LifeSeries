@@ -190,8 +190,8 @@ public class TaskManager {
         *///?} else {
         List<Filterable<Component>> lines = task.getBookLines(player);
         WrittenBookContent bookContent = new WrittenBookContent(
-                Filterable.passThrough(TextUtils.formatString("§c{}'s Secret Task", player)),
-                "Secret Keeper",
+                Filterable.passThrough(ModifiableText.SECRETLIFE_TASK_NAME.getString(player)),
+                ModifiableText.SECRETLIFE_TASK_AUTHOR.getString(),
                 0,
                 lines,
                 true

@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -99,13 +100,13 @@ public class SubInCommands extends Command {
 
         if (SubInManager.isSubbingIn(player.getUUID())) {
             GameProfile profile = SubInManager.getSubstitutedPlayer(player.getUUID());
-            source.sendFailure(TextUtils.formatPlain("{} is already subbing in for {}", player, OtherUtils.profileName(profile)));
+            source.sendFailure(ModifiableText.SUBIN_ERROR_ALREADY_SUBBING.get(player, OtherUtils.profileName(profile)));
             return -1;
         }
 
         if (SubInManager.isBeingSubstituted(OtherUtils.profileId(targetProfile))) {
             GameProfile profile = SubInManager.getSubstitutingPlayer(OtherUtils.profileId(targetProfile));
-            source.sendFailure(TextUtils.formatPlain("{} is already being subbed in for by {}", target, OtherUtils.profileName(profile)));
+            source.sendFailure(ModifiableText.SUBIN_ERROR_ALREADY_SUBBED.get(target, OtherUtils.profileName(profile)));
             return -1;
         }
 
@@ -119,7 +120,7 @@ public class SubInCommands extends Command {
         if (checkBanned(source)) return -1;
 
         if (!SubInManager.isSubbingIn(player.getUUID())) {
-            source.sendFailure(TextUtils.formatPlain("{} is not subbing in for anyone", player));
+            source.sendFailure(ModifiableText.SUBIN_ERROR_MISSING.get(player));
             return -1;
         }
 
@@ -141,7 +142,7 @@ public class SubInCommands extends Command {
         OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7Current sub ins:"));
 
         for (SubInManager.SubIn subIn : SubInManager.subIns) {
-            OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.formatLoosely(" §7{} is subbinng in for {}", OtherUtils.profileName(subIn.substituter()), OtherUtils.profileName(subIn.target())));
+            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.NAME.get(OtherUtils.profileName(subIn.substituter()), OtherUtils.profileName(subIn.target())));
         }
 
         return 1;

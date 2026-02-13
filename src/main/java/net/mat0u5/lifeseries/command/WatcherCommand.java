@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -76,7 +77,7 @@ public class WatcherCommand extends Command {
             source.sendFailure(Component.nullToEmpty("There are no Watchers right now"));
             return -1;
         }
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.formatLoosely("Current Watchers: §7{}", WatcherManager.getWatchers()));
+        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WATCHER_LIST.get(WatcherManager.getWatchers()));
         return 1;
     }
 

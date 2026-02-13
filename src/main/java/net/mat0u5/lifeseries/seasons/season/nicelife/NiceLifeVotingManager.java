@@ -189,13 +189,13 @@ public class NiceLifeVotingManager {
         TaskScheduler.scheduleTask(delay, () -> {
             SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_vote_result"));
             PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
-            PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§cThese players are on..."), 15, 80, 20);
+            PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), ModifiableText.NICELIFE_NAUGHTYLIST_START_TITLE_PT1.get(), 15, 80, 20);
         });
         delay += 90;
         TaskScheduler.scheduleTask(delay, () -> {
             SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_naughtylist"));
             PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
-            PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Component.literal("§cTHE NAUGHTY LIST"), 15, 80, 20);
+            PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), ModifiableText.NICELIFE_NAUGHTYLIST_START_TITLE_PT2.get(), 15, 80, 20);
         });
         delay += 80;
         for (UUID uuid : players) {
@@ -218,17 +218,17 @@ public class NiceLifeVotingManager {
 
         TaskScheduler.scheduleTask(delay, () -> {
             PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
-            PlayerUtils.broadcastMessage(TextUtils.formatLoosely("\n §6[§e!§6]§7 You have voted for {} {} to be on the §cNAUGHTY LIST§7.\n", players.size(), TextUtils.pluralize("person", "people", players.size())));
+            PlayerUtils.broadcastMessage(ModifiableText.NICELIFE_NAUGHTYLIST_START_INFO_PT1.get(players.size(), TextUtils.pluralize("person", "people", players.size())));
         });
         delay += 110;
         TaskScheduler.scheduleTask(delay, () -> {
             PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
-            PlayerUtils.broadcastMessage(Component.literal(" §6[§e!§6]§7 People on the §cnaughty list§7 have a purple name and can be killed.\n"));
+            PlayerUtils.broadcastMessage(ModifiableText.NICELIFE_NAUGHTYLIST_START_INFO_PT2.get());
         });
         delay += 110;
         TaskScheduler.scheduleTask(delay, () -> {
             PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
-            PlayerUtils.broadcastMessage(Component.literal(" §6[§e!§6]§7 They return to their previous colour at sunset. They can defend themselves.\n"));
+            PlayerUtils.broadcastMessage(ModifiableText.NICELIFE_NAUGHTYLIST_START_INFO_PT3.get());
         });
     }
     public static void announceNiceList() {

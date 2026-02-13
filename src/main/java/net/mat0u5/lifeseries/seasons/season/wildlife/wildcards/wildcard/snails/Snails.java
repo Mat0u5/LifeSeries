@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails;
 
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.config.StringListConfig;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.snail.server.SnailPathfinding;
@@ -145,7 +146,7 @@ public class Snails extends Wildcard {
         if (snailNames.containsKey(player.getUUID())) {
             return snailNames.get(player.getUUID());
         }
-        return TextUtils.formatString("{}'s Snail", player);
+        return ModifiableText.WILDLIFE_SNAIL_DEFAULT_NAME.getString(player);
     }
 
     public static void saveSnailNames() {

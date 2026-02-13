@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.session;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.mixin.MobEffectInstanceAccessor;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
@@ -95,10 +96,7 @@ public class Session {
         passedTime = Time.zero();
         fullPassedTime = Time.zero();
         DatapackIntegration.setSessionTimePassed(getPassedTime());
-        Component line1 = TextUtils.formatLoosely("§6Session started! §7[{}]", sessionLength.formatLong());
-        Component line2 = Component.literal("§f/session timer showDisplay§7 - toggles a session timer on your screen.");
-        PlayerUtils.broadcastMessage(line1);
-        PlayerUtils.broadcastMessage(line2);
+        PlayerUtils.broadcastMessage(ModifiableText.NAME.get(sessionLength.formatLong()));
 
         addSessionActionIfTime(endWarning1);
         addSessionActionIfTime(endWarning2);
@@ -494,10 +492,10 @@ public class Session {
                 messages.add(Component.nullToEmpty("§7Queued session actions:"));
             }
             if (action.showTime) {
-                messages.add(TextUtils.formatLoosely("§7- {} §f[{}]", actionMessage, action.getTriggerTime().formatLong()));
+                messages.add(ModifiableText.SESSION_ACTION_ENTRY_LONG.get(actionMessage, action.getTriggerTime().formatLong()));
             }
             else {
-                messages.add(TextUtils.formatLoosely("§7- {}", actionMessage));
+                messages.add(ModifiableText.SESSION_ACTION_ENTRY.get(actionMessage));
             }
         }
 

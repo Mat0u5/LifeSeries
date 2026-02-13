@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -270,9 +271,7 @@ public class WildLifeCommands extends Command {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        OtherUtils.sendCommandFeedbackQuiet(source,
-                TextUtils.formatLoosely("§fClick {}§f to open the Snail Textures info page in the Wiki.", TextUtils.openURLText("mat0u5.github.io/LifeSeries-docs/config/wild-life-snails"))
-        );
+        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SNAIL_TEXTURE_INFO.get(TextUtils.openURLText("mat0u5.github.io/LifeSeries-docs/config/wild-life-snails")));
 
         return 1;
     }

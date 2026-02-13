@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.doublelife;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -115,12 +116,12 @@ public class DoubleLifeCommands extends Command {
         DoubleLife season = ((DoubleLife) currentSeason);
 
         if (season.hasSoulmate(player)) {
-            source.sendFailure(TextUtils.formatPlain("{} already has a soulmate", player));
+            source.sendFailure(ModifiableText.SOULMATE_ERROR_EXISTS.get(player));
             return -1;
         }
 
         if (season.hasSoulmate(soulmate)) {
-            source.sendFailure(TextUtils.formatPlain("{} already has a soulmate", player));
+            source.sendFailure(ModifiableText.SOULMATE_ERROR_EXISTS.get(player));
             return -1;
         }
         if (player.getUUID() == soulmate.getUUID()) {
@@ -147,12 +148,12 @@ public class DoubleLifeCommands extends Command {
         DoubleLife season = ((DoubleLife) currentSeason);
 
         if (season.hasSoulmate(player)) {
-            source.sendFailure(TextUtils.formatPlain("{} already has a soulmate", player));
+            source.sendFailure(ModifiableText.SOULMATE_ERROR_EXISTS.get(player));
             return -1;
         }
 
         if (season.hasSoulmate(soulmate)) {
-            source.sendFailure(TextUtils.formatPlain("{} already has a soulmate", player));
+            source.sendFailure(ModifiableText.SOULMATE_ERROR_EXISTS.get(player));
             return -1;
         }
         if (player.getUUID() == soulmate.getUUID()) {
@@ -161,12 +162,12 @@ public class DoubleLifeCommands extends Command {
         }
 
         if (DoubleLife.soulmatesForce.containsKey(player.getUUID()) || DoubleLife.soulmatesForce.containsValue(player.getUUID())) {
-            source.sendFailure(TextUtils.formatPlain("{} is already forced with someone", player));
+            source.sendFailure(ModifiableText.SOULMATE_ERROR_FORCE_EXISTS.get(player));
             return -1;
         }
 
         if (DoubleLife.soulmatesForce.containsKey(soulmate.getUUID()) || DoubleLife.soulmatesForce.containsValue(soulmate.getUUID())) {
-            source.sendFailure(TextUtils.formatPlain("{} is already forced with someone", soulmate));
+            source.sendFailure(ModifiableText.SOULMATE_ERROR_FORCE_EXISTS.get(player));
             return -1;
         }
 
@@ -183,12 +184,12 @@ public class DoubleLifeCommands extends Command {
         DoubleLife season = ((DoubleLife) currentSeason);
 
         if (season.hasSoulmate(player)) {
-            source.sendFailure(TextUtils.formatPlain("{} already has a soulmate", player));
+            source.sendFailure(ModifiableText.SOULMATE_ERROR_EXISTS.get(player));
             return -1;
         }
 
         if (season.hasSoulmate(soulmate)) {
-            source.sendFailure(TextUtils.formatPlain("{} already has a soulmate", player));
+            source.sendFailure(ModifiableText.SOULMATE_ERROR_EXISTS.get(player));
             return -1;
         }
 
@@ -206,11 +207,11 @@ public class DoubleLifeCommands extends Command {
         DoubleLife season = ((DoubleLife) currentSeason);
 
         if (!season.hasSoulmate(player)) {
-            source.sendFailure(TextUtils.formatPlain("{} does not have a soulmate", player));
+            source.sendFailure(ModifiableText.SOULMATE_ERROR_MISSING.get(player));
             return -1;
         }
         if (!season.isSoulmateOnline(player)) {
-            source.sendFailure(TextUtils.formatPlain("{} 's soulmate is not online right now", player));
+            source.sendFailure(ModifiableText.SOULMATE_ERROR_OFFLINE.get(player));
             return -1;
         }
 

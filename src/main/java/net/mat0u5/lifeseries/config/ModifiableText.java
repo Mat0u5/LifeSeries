@@ -25,6 +25,7 @@ public enum ModifiableText {
     ,GIVEHEART_RECEIVE("{} gave you a heart", List.of("Player"))
 
     ,WILDLIFE_TRIVIA_RECEIVE_EFFECT(Formatted.LOOSELY_STYLED, " §a§l+ §7{}§6 {}", List.of("Effect Name", "Roman Numeral"))
+    ,WILDLIFE_SNAIL_TEXTURE_INFO(Formatted.LOOSELY_STYLED,"§fClick {}§f to open the Snail Textures info page in the Wiki.", List.of("ClickHere"))
 
     ,DOUBLELIFE_TELEPORT("§6Woosh!")
     ,DOUBLELIFE_TELEPORT_SUCCESS("Randomly distributed players.")
@@ -45,6 +46,7 @@ public enum ModifiableText {
     ,SECRETLIFE_TASK_SUCCEED("{}§a succeeded their task.", List.of("Player"))
     ,SECRETLIFE_TASK_REROLL_HARD_FAIL("§cYou cannot re-roll a Hard task.")
     ,SECRETLIFE_TASK_REROLL_HARD_FAIL_RED("§cYou cannot re-roll a Hard task. If you want your red task instead, click the Fail button.")
+    ,SECRETLIFE_TASK_NOT_SUBMITTED(Formatted.LOOSELY_STYLED,"§4{}§c still {} not submitted / failed a task this session.", List.of("Player Names", "has/have"))
 
     ,SESSION_ERROR_START("§cThe session has not started")
     ,SESSION_START_PROMPT("\nUse §b'/session timer set <time>'§f to set the desired session time.\nAfter that, use §b'/session start'§f to start the session.")
@@ -55,6 +57,7 @@ public enum ModifiableText {
 
     ,WATCHER_JOIN("§7§nYou are now a Watcher.\n\n§7Watchers are players that are online, but are not affected by most season mechanics. They can only observe - this is very useful for spectators and for admins.")
     ,WATCHER_LEAVE("§7You are no longer a Watcher.")
+    ,WATCHER_LIST(Formatted.LOOSELY_STYLED,"Current Watchers: §7{}", List.of("Watchers"))
 
     ,BOOGEYMAN_MESSAGE("§7You are the Boogeyman. You must by any means necessary kill a §2dark green§7, §agreen§7 or §eyellow§7 name by direct action to be cured of the curse. If you fail, you will become a §cred name§7. All loyalties and friendships are removed while you are the Boogeyman.")
     ,BOOGEYMAN_NOTICE_ADDED("§c [NOTICE] You are now a Boogeyman!")
@@ -76,6 +79,11 @@ public enum ModifiableText {
     ,SEASON_INVALID("That is not a valid season!")
     ,SEASON_INVALID_HELP(Formatted.PLAIN, "You must choose one of the following: {}", List.of("Season Names"))
     ,SEASON_SELECT_WARNING("§7WARNING: you have already selected a season, changing it might cause some saved data to be lost (lives, ...)\n§7If you are sure, use '§f/lifeseries setSeries <season> confirm§7'")
+    ,SEASON_CHANGE(Formatted.LOOSELY_STYLED,"§aSuccessfully changed the season to {}.", List.of("Season"))
+
+    ,SESSION_STARTED(Formatted.LOOSELY_STYLED,"§6Session started! §7[{}]\n§f/session timer showDisplay§7 - toggles a session timer on your screen.", List.of("Session Length"))
+    ,SESSION_ACTION_ENTRY(Formatted.LOOSELY_STYLED,"§7- {}", List.of("Action Name"))
+    ,SESSION_ACTION_ENTRY_LONG(Formatted.LOOSELY_STYLED,"§7- {} §f[{}]", List.of("Action Name", "Trigger Time"))
 
     ,NICELIFE_NICELIST_START_TITLE_PT1("§aThese players are on...")
     ,NICELIFE_NICELIST_START_TITLE_PT2("§aTHE NICE LIST")
@@ -93,6 +101,12 @@ public enum ModifiableText {
     ,NICELIFE_SLEEP_FAIL_LATE("You can't seem to sleep right now")
     ,NICELIFE_SLEEP_FAIL_EARLY("You are too excited to fall asleep")
 
+    ,NICELIFE_NAUGHTYLIST_START_TITLE_PT1("§cThese players are on...")
+    ,NICELIFE_NAUGHTYLIST_START_TITLE_PT2("§cTHE NAUGHTY LIST")
+    ,NICELIFE_NAUGHTYLIST_START_INFO_PT1(Formatted.LOOSELY_STYLED,"\n §6[§e!§6]§7 You have voted for {} {} to be on the §cNAUGHTY LIST§7.\n", List.of("Count", "person/people"))
+    ,NICELIFE_NAUGHTYLIST_START_INFO_PT2(" §6[§e!§6]§7 People on the §cnaughty list§7 have a purple name and can be killed.\n")
+    ,NICELIFE_NAUGHTYLIST_START_INFO_PT3(" §6[§e!§6]§7 They return to their previous colour at sunset. They can defend themselves.\n")
+
     ,SOCIETY_INITIATE_REMINDER("§7When you are alone, type \"/initiate\"")
     ,SOCIETY_INITIATED_PT1("§7You have been chosen to be part of the §csecret society§7.")
     ,SOCIETY_INITIATED_GROUP_PT1(Formatted.LOOSELY_STYLED, "§7There {} §c{}§7 other {}. Find them.", List.of("Is/are", "Member Amount", "Member/s"))
@@ -109,9 +123,14 @@ public enum ModifiableText {
     ,SOCIETY_NOTICE_REMOVED("§c [NOTICE] You are no longer a Secret Society member!")
     ,SOCIETY_OTHER_MEMBER_ADDED("A player has been added to the Secret Society.")
     ,SOCIETY_OTHER_MEMBER_REMOVED("A player has been removed from the Secret Society.")
+    ,SOCIETY_MEMBERS(Formatted.LOOSELY_STYLED,"Secret Society Members: §7{}", List.of("Members"))
 
     ,SUBIN_END(Formatted.LOOSELY_STYLED, "§6You are no longer subbing in for {}", List.of("Player"))
     ,SUBIN_END_OTHER(Formatted.LOOSELY_STYLED, "§6{} is no longer subbing in for you", List.of("Player"))
+    ,SUBIN_ERROR_ALREADY_SUBBING(Formatted.PLAIN, "{} is already subbing in for {}", List.of("Player", "Subin"))
+    ,SUBIN_ERROR_ALREADY_SUBBED(Formatted.PLAIN, "{} is already being subbed in for by {}", List.of("Player", "Subbed"))
+    ,SUBIN_ERROR_MISSING(Formatted.PLAIN, "{} is not subbing in for anyone", List.of("Player"))
+    ,SUBIN_LIST_ENTRY(Formatted.LOOSELY_STYLED," §7{} is subbinng in for {}", List.of("Player", "Subin"))
 
     ,CLAIMKILL_ERROR_NODEATH(Formatted.PLAIN, "{} did not die in the last 2 minutes. Or they might have been killed by a player directly.", List.of("Player"))
     ,CLAIMKILL_ERROR_SELF("You cannot claim credit for your own death :P")
@@ -137,7 +156,16 @@ public enum ModifiableText {
     ,LIVES_RANDOMIZE_SINGLE("§7Assigning random lives to {}§7...", List.of("Player"))
     ,LIVES_RANDOMIZE_MULTIPLE("§7Assigning random lives to {}§7 targets...", List.of("Number of Targets"))
 
+    ,SOULMATE_ERROR_EXISTS(Formatted.PLAIN, "{} already has a soulmate", List.of("Player"))
+    ,SOULMATE_ERROR_FORCE_EXISTS(Formatted.PLAIN, "{} is already forced with someone", List.of("Player"))
+    ,SOULMATE_ERROR_MISSING(Formatted.PLAIN, "{} does not have a soulmate", List.of("Player"))
+    ,SOULMATE_ERROR_OFFLINE(Formatted.PLAIN, "{} 's soulmate is not online right now", List.of("Player"))
 
+
+    ,SECRETLIFE_HEART_GAIN(Formatted.LOOSELY_STYLED,"§c+{} {}", List.of("Amount", "heart/hearts"))
+    ,SECRETLIFE_TASK_NAME("{}'s Secret Task", List.of("Player"))
+    ,SECRETLIFE_TASK_AUTHOR("Secret Keeper")
+    ,WILDLIFE_SNAIL_DEFAULT_NAME(Formatted.PLAIN,"{}'s Snail", List.of("Player"))
 
     ModifiableText.NAME.get()
     ModifiableText.NAME.getString()
