@@ -76,8 +76,8 @@ public class LimitedLifeLivesManager extends LivesManager {
                 PlayerUtils.safelyPutIntoSurvival(player);
             }
             if (lives > 0 && colorBefore != null && livesBefore != null && BROADCAST_COLOR_CHANGES) {
-                Component livesText = TextUtils.format("{} name", colorNow.getName().replaceAll("_", " ").toLowerCase(Locale.ROOT)).withStyle(colorNow);
-                PlayerUtils.broadcastMessage(TextUtils.format("{}§7 is now a {}§7.", player, livesText));
+                Component colorText = Component.literal(colorNow.getName().replaceAll("_", " ").toLowerCase(Locale.ROOT)).withStyle(colorNow);
+                PlayerUtils.broadcastMessage(ModifiableText.LIMITEDLIFE_CHANGE_COLOR.get(player, colorText));
             }
         }
         currentSeason.reloadPlayerTeam(player);

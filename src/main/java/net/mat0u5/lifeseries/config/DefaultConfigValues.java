@@ -138,14 +138,6 @@ public class DefaultConfigValues {
             "blacklist_recipes", "[]", ConfigTypes.ITEM_LIST, "global.blacklist",
             "Blacklisted Recipes", "List of banned recipes - items you can't craft."
     );
-    public final ConfigFileEntry<String> FINAL_DEATH_TITLE_SUBTITLE = new ConfigFileEntry<>(
-            "final_death_title_subtitle", "ran out of lives!", "global.finaldeath",
-            "Death Subtitle", "The subtitle that shows when a player dies (requires Show Death Title on Final Death to be set to true)."
-    );
-    public final ConfigFileEntry<String> FINAL_DEATH_MESSAGE = new ConfigFileEntry<>(
-            "final_death_message", "${player} ran out of lives.", "global.finaldeath",
-            "Final Death Message", "The message that gets shown in chat when a player fully dies."
-    );
     public final ConfigFileEntry<Boolean> FINAL_DEATH_LIGHTNING = new ConfigFileEntry<>(
             "final_death_lightning", true, "global.finaldeath",
             "Final Death Lightning", "Spawns a harmless (no damage) lightning strike when a player fully dies."

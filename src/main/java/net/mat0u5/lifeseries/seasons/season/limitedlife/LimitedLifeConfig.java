@@ -155,8 +155,6 @@ public class LimitedLifeConfig extends ConfigManager {
         BLACKLIST_ITEMS.defaultValue = TextUtils.formatString("[{}]", BLACKLISTED_ITEMS);
         BLACKLIST_BLOCKS.defaultValue = TextUtils.formatString("[{}]", BLACKLISTED_BLOCKS);
         BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.defaultValue = TextUtils.formatString("[{}]", CLAMPED_ENCHANTMENTS);
-        FINAL_DEATH_TITLE_SUBTITLE.defaultValue = "ran out of time!";
-        FINAL_DEATH_MESSAGE.defaultValue = "${player} ran out of time.";
         BOOGEYMAN.defaultValue = true;
         BOOGEYMAN_MAX_AMOUNT.defaultValue = 1;
         GIVELIFE_LIVES_MAX.displayName = "Max Givelife Time";

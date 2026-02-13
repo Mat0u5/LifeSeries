@@ -144,6 +144,17 @@ public class OtherUtils {
         if (source == null || text == null) return;
         source.sendSuccess(() -> text, false);
     }
+    public static void sendCommandFailure(CommandSourceStack source, Component text) {//TODO implement everywhere
+        sendCommandFailure(source, text, false);
+    }
+    public static void sendCommandFailure(CommandSourceStack source, Component text, boolean keepFormatting) {
+        if (keepFormatting) {
+            source.sendFailure(text);
+        }
+        else {
+            source.sendFailure(Component.literal(text.getString()));
+        }
+    }
 
     public static UUID profileId(GameProfile profile) {
         //? if <= 1.21.6 {

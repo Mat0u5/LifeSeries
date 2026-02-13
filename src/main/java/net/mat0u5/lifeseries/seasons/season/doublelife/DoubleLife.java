@@ -321,11 +321,11 @@ public class DoubleLife extends Season {
         TaskScheduler.scheduleTask(165, () -> {
             chooseRandomSoulmates();
             for (ServerPlayer player : playersToRoll) {
-                Component text = Component.literal("????").withStyle(ChatFormatting.GREEN);
+                Component text = ModifiableText.DOUBLELIFE_SOULMATE_TITLE_UNKNOWN.get();
                 if (hasSoulmate(player) && ANNOUNCE_SOULMATES) {
                     ServerPlayer soulmate = getSoulmate(player);
                     if (soulmate != null) {
-                        text = TextUtils.format("{}", soulmate);
+                        text = ModifiableText.DOUBLELIFE_SOULMATE_TITLE_PLAYER.get(soulmate);
                     }
                 }
                 PlayerUtils.sendTitle(player, text,20,60,20);

@@ -63,10 +63,8 @@ public class GivelifeCommand extends Command {
         if (self == null) return -1;
         if (target == null) return -1;
 
-        String livesOrTime = currentSeason.getSeason() != Seasons.LIMITED_LIFE ? "lives" : "time";
-
         if (self.ls$isDead()) {
-            source.sendFailure(TextUtils.format("You do not have any {} to give", livesOrTime));
+            source.sendFailure(ModifiableText.GIVELIFE_ERROR_NONE.get());
             return -1;
         }
         boolean isRevive = target.ls$isDead();
@@ -79,7 +77,7 @@ public class GivelifeCommand extends Command {
             return -1;
         }
         if (target == self) {
-            source.sendFailure(TextUtils.format("You cannot give {} to yourself", livesOrTime));
+            source.sendFailure(ModifiableText.GIVELIFE_ERROR_NOT_ENOUGH.get());
             return -1;
         }
 
@@ -90,19 +88,19 @@ public class GivelifeCommand extends Command {
 
         Integer currentLives = self.ls$getLives();
         if (currentLives == null || currentLives <= giveAmount) {
-            source.sendFailure(TextUtils.format("You cannot give away any more {}", livesOrTime));
+            source.sendFailure(ModifiableText.GIVELIFE_ERROR_NOT_ENOUGH.get());
             return -1;
         }
         Integer targetLives = target.ls$getLives();
         if (targetLives == null || targetLives >= currentSeason.GIVELIFE_MAX_LIVES) {
-            source.sendFailure(TextUtils.format("That player cannot receive any more {}", livesOrTime));
+            source.sendFailure(ModifiableText.GIVELIFE_ERROR_TOO_MANY.get());
             return -1;
         }
         if (currentSeason instanceof DoubleLife doubleLife) {
             ServerPlayer soulmate = doubleLife.getSoulmate(self);
             if (soulmate != null) {
                 if (soulmate.equals(target)) {
-                    source.sendFailure(TextUtils.format("You cannot give {} to your soulmate", livesOrTime));
+                    source.sendFailure(ModifiableText.GIVELIFE_ERROR_SOULMATE.get());
                     return -1;
                 }
                 boolean success = doubleLifeGiveLife(source, self, soulmate, target);

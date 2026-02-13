@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.NicknameManager;
@@ -101,10 +102,10 @@ public class LifeSkinsCommand extends Command {
         ProfileManager.ProfileChange skinChange = (username == null) ? ProfileManager.ProfileChange.ORIGINAL : ProfileManager.ProfileChange.SET.withInfo(username);
         ProfileManager.modifyProfile(player, skinChange, ProfileManager.ProfileChange.NONE).thenAccept(success -> {
             if (success) {
-                OtherUtils.sendCommandFeedback(source, TextUtils.format("Set {}'s skin to {}", player, username));
+                OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_SKIN_SET.get(player, username));
             }
             else {
-                source.sendFailure(Component.literal("Something went wrong"));
+                OtherUtils.sendCommandFailure(source, ModifiableText.MOD_ERROR_GENERAL.get());
             }
         });
         return 1;
@@ -115,10 +116,10 @@ public class LifeSkinsCommand extends Command {
         ProfileManager.ProfileChange nameChange = (username == null) ? ProfileManager.ProfileChange.ORIGINAL : ProfileManager.ProfileChange.SET.withInfo(username);
         ProfileManager.modifyProfile(player, ProfileManager.ProfileChange.NONE, nameChange).thenAccept(success -> {
             if (success) {
-                OtherUtils.sendCommandFeedback(source, TextUtils.format("Set {}'s username to {}", player, username));
+                OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_USERNAME_SET.get(player, username));
             }
             else {
-                source.sendFailure(Component.literal("Something went wrong"));
+                OtherUtils.sendCommandFailure(source, ModifiableText.MOD_ERROR_GENERAL.get());
             }
         });
         return 1;
@@ -128,11 +129,11 @@ public class LifeSkinsCommand extends Command {
         if (checkBanned(source)) return -1;
         if (nickname != null) {
             NicknameManager.setNickname(player, nickname);
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Set {}'s nickname to {}", player, nickname));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_NICKNAME_SET.get(player, nickname));
         }
         else {
             NicknameManager.removeNickname(player);
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Reset {}'s nickname", player));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_NICKNAME_RESET.get(player));
         }
         return 1;
     }

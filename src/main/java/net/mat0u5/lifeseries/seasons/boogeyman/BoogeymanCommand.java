@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.boogeyman;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.pastlife.PastLifeBoogeymanManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -177,7 +178,7 @@ public class BoogeymanCommand extends Command {
             OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7Failing as the Boogeyman..."));
         }
         else {
-            PlayerUtils.broadcastMessage(TextUtils.format("{}§7 voulentarily failed themselves as the Boogeyman. They have been consumed by the curse.", self));
+            PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_FAIL_SELF.get(self));
         }
         bm.playerFailBoogeymanManually(self, false);
 
@@ -203,10 +204,10 @@ public class BoogeymanCommand extends Command {
 
         if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME) {
             if (targets.size() == 1) {
-                OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Failing Boogeyman for {}§7...", targets.iterator().next()));
+                OtherUtils.sendCommandFeedback(source, ModifiableText.BOOGEYMAN_FAIL_OTHER_SINGLE.get(targets.iterator().next()));
             }
             else {
-                OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Failing Boogeyman for {} targets§7...", targets.size()));
+                OtherUtils.sendCommandFeedback(source, ModifiableText.BOOGEYMAN_FAIL_OTHER_MULTIPLE.get(targets.size()));
             }
         }
 
@@ -230,10 +231,10 @@ public class BoogeymanCommand extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Resetting Boogeyman cure/failure for {}§7...", targets.iterator().next()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.BOOGEYMAN_RESET_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Resetting Boogeyman cure/failure for {} targets§7...", targets.size()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.BOOGEYMAN_RESET_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -258,10 +259,10 @@ public class BoogeymanCommand extends Command {
 
         if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME) {
             if (targets.size() == 1) {
-                OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Curing {}§7...", targets.iterator().next()));
+                OtherUtils.sendCommandFeedback(source, ModifiableText.BOOGEYMAN_CURE_SINGLE.get(targets.iterator().next()));
             }
             else {
-                OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Curing {} targets§7...", targets.size()));
+                OtherUtils.sendCommandFeedback(source, ModifiableText.BOOGEYMAN_CURE_MULTIPLE.get(targets.size()));
             }
         }
 
@@ -287,10 +288,10 @@ public class BoogeymanCommand extends Command {
             }
         }
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("{} is now a Boogeyman", targets.iterator().next()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.BOOGEYMAN_ADD_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("{} targets are now Boogeymen", targets.size()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.BOOGEYMAN_ADD_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -313,10 +314,10 @@ public class BoogeymanCommand extends Command {
             bm.removeBoogeymanManually(player);
         }
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("{} is no longer a Boogeyman", targets.iterator().next()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.BOOGEYMAN_REMOVE_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("{} targets are no longer Boogeymen", targets.size()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.BOOGEYMAN_REMOVE_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -346,9 +347,9 @@ public class BoogeymanCommand extends Command {
         if (curedBoogeymen.isEmpty()) curedBoogeymen.add("§7None");
         if (failedBoogeymen.isEmpty()) failedBoogeymen.add("§7None");
 
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Remaining Boogeymen: {}", allBoogeymen));
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Cured Boogeymen: {}", curedBoogeymen));
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Failed Boogeymen: {}", failedBoogeymen));
+        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_LIST_REMAINING.get(allBoogeymen));
+        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_LIST_CURED.get(curedBoogeymen));
+        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_LIST_FAILED.get(failedBoogeymen));
         return 1;
     }
 
@@ -372,9 +373,9 @@ public class BoogeymanCommand extends Command {
             }
         }
 
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Remaining Boogeymen: {}", allBoogeymen));
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Cured Boogeymen: {}", curedBoogeymen));
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Failed Boogeymen: {}", failedBoogeymen));
+        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_LIST_REMAINING.get(allBoogeymen));
+        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_LIST_CURED.get(curedBoogeymen));
+        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_LIST_FAILED.get(failedBoogeymen));
         return 1;
     }
 

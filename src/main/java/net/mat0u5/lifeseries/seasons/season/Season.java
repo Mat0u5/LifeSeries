@@ -579,7 +579,7 @@ public abstract class Season {
 
     public void broadcastLifeGain(ServerPlayer player, ServerPlayer victim) {
         if (BROADCAST_LIFE_GAIN) {
-            PlayerUtils.broadcastMessage(TextUtils.format("{}§7 gained a life for killing {}.", player, victim));
+            PlayerUtils.broadcastMessage(ModifiableText.SEASON_KILL_GAINLIFE.get(player, victim));
         }
     }
 
@@ -604,7 +604,7 @@ public abstract class Season {
         boolean isBoogeyCure = boogeymanManager.isBoogeymanThatCanBeCured(killer, victim);
 
         if (!isAllowedToAttack(killer, victim) && !HIDE_UNJUSTIFIED_KILL_MESSAGES) {
-            PlayerUtils.broadcastMessageToAdmins(TextUtils.format("§c [Unjustified Kill?] {}§7 was killed by {}", victim, killer));
+            PlayerUtils.broadcastMessageToAdmins(ModifiableText.SEASON_KILL_UNJUSTIFIED.get(victim, killer));
         }
 
         if (isBoogeyCure) {

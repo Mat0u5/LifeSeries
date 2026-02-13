@@ -108,8 +108,7 @@ public class ClaimKillCommand extends Command {
         if (killer == null) return -1;
         if (victim == null) return -1;
 
-        Component message = TextUtils.format("{}§7's kill claim on {}§7 was accepted.", killer, victim);
-        PlayerUtils.broadcastMessage(message);
+        PlayerUtils.broadcastMessage(ModifiableText.CLAIMKILL_ACCEPT.get(killer, victim));
         currentSeason.onClaimKill(killer, victim);
         currentSession.playerNaturalDeathLog.remove(victim.getUUID());
 

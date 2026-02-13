@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.seasons.other;
 
 import net.mat0u5.lifeseries.config.ModifiableText;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -27,7 +26,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.PlayerTeam;
-import net.minecraft.world.scores.Score;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -439,21 +437,12 @@ public class LivesManager {
 
     public void showDeathTitle(ServerPlayer player) {
         if (SHOW_DEATH_TITLE) {
-            String subtitle = seasonConfig.FINAL_DEATH_TITLE_SUBTITLE.get();
-            PlayerUtils.sendTitleWithSubtitleToPlayers(PlayerUtils.getAllPlayers(), player.getDisplayName(), Component.literal(subtitle), 20, 80, 20);
+            PlayerUtils.sendTitleWithSubtitleToPlayers(PlayerUtils.getAllPlayers(), ModifiableText.FINAL_DEATH_TITLE.get(player), ModifiableText.FINAL_DEATH_TITLE_SUBTITLE.get(player), 20, 80, 20);
         }
-        Component deathMessage = getDeathMessage(player);
+        Component deathMessage = ModifiableText.FINAL_DEATH.get(player);
         if (!deathMessage.getString().isEmpty()) {
             PlayerUtils.broadcastMessage(deathMessage);
         }
-    }
-
-    public Component getDeathMessage(ServerPlayer player) {
-        String message = seasonConfig.FINAL_DEATH_MESSAGE.get();
-        if (message.contains("${player}")) {
-            return TextUtils.format(message.replace("${player}", "{}"), player);
-        }
-        return Component.literal(message);
     }
 
     public List<ServerPlayer> getNonAssignedPlayers() {
@@ -575,8 +564,8 @@ public class LivesManager {
             for (Map.Entry<ServerPlayer, Integer> playerEntry : lives.entrySet()) {
                 Integer livesNum = playerEntry.getValue();
                 ServerPlayer player = playerEntry.getKey();
-                String livesOrTime = currentSeason.getSeason() == Seasons.LIMITED_LIFE ? "to live" : TextUtils.pluralize("life","lives", livesNum);
-                Component textLives = TextUtils.format("{}§a {}.", getFormattedLives(livesNum), livesOrTime);
+                String lifeOrLives = TextUtils.pluralize("life","lives", livesNum);
+                Component textLives = ModifiableText.LIVES_RANDOMIZE_RESULT.get(getFormattedLives(livesNum), lifeOrLives);
                 PlayerUtils.sendTitle(player, textLives, 0, 60, 20);
                 SessionTranscript.assignRandomLives(player, livesNum);
                 setPlayerLives(player, livesNum);
@@ -637,8 +626,7 @@ public class LivesManager {
         if (!assignedLives) return;
         if (hasAssignedLives(player)) return;
         if (player.ls$isWatcher()) return;
-        String livesOrTime = currentSeason.getSeason() == Seasons.LIMITED_LIFE ? "times" : "lives";
-        PlayerUtils.broadcastMessageToAdmins(TextUtils.format("§7Assigning random {} to {}§7...", livesOrTime, player));
+        PlayerUtils.broadcastMessageToAdmins(ModifiableText.LIVES_RANDOMIZE_SINGLE.get(player));
         assignRandomLives(new ArrayList<>(List.of(player)));
     }
 }

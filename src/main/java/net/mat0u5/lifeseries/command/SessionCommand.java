@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -144,7 +145,7 @@ public class SessionCommand extends Command {
             return -1;
         }
 
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("The session will pause at {} for {}", pauseAt.formatLong(), pauseFor.formatLong()));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.SESSION_PAUSE_QUEUE.get(pauseAt.formatLong(), pauseFor.formatLong()));
         currentSession.queuePause(pauseAt, pauseFor);
         return 1;
     }
@@ -164,7 +165,7 @@ public class SessionCommand extends Command {
             source.sendFailure(Component.nullToEmpty("The session time has not been set yet"));
             return -1;
         }
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("The session ends in {}",currentSession.getRemainingTimeStr()));
+        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SESSION_END_INFO.get(currentSession.getRemainingTimeStr()));
         return 1;
     }
 
@@ -250,7 +251,7 @@ public class SessionCommand extends Command {
             source.sendFailure(Component.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("Skipped {} in the session length", timeTotal.formatLong()));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.SESSION_SKIP.get(timeTotal.formatLong()));
         currentSession.passTime(timeTotal);
         return 1;
     }
@@ -265,7 +266,7 @@ public class SessionCommand extends Command {
         }
         currentSession.setSessionLength(timeTotal);
 
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("The session length has been set to {}", timeTotal.formatLong()));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.SESSION_LENGTH_SET.get(timeTotal.formatLong()));
         return 1;
     }
 
@@ -279,7 +280,7 @@ public class SessionCommand extends Command {
         }
         currentSession.addSessionLength(timeTotal);
 
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("Added {} to the session length", timeTotal.formatLong()));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.SESSION_LENGTH_ADD.get(timeTotal.formatLong()));
         return 1;
     }
 
@@ -293,7 +294,7 @@ public class SessionCommand extends Command {
         }
         currentSession.removeSessionLength(timeTotal);
 
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("Removed {} from the session length", timeTotal.formatLong()));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.SESSION_LENGTH_REMOVE.get(timeTotal.formatLong()));
         return 1;
     }
 }

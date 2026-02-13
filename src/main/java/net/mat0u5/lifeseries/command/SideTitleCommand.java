@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -64,10 +65,10 @@ public class SideTitleCommand extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Showing new side title for {}", targets.iterator().next()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.SIDETITLE_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Showing new side title for {} players", targets.size()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.SIDETITLE_MULTIPLE.get(targets.size()));
         }
 
         return targets.size();

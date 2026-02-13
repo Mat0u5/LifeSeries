@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.nicelife;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -141,10 +142,10 @@ public class NiceLifeCommands extends Command {
             }
         }
         if (niceListPlayers.isEmpty()) {
-            OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("The Nice List is empty"));
+            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.NICELIFE_NICELIST_EMPTY.get());
             return 1;
         }
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Nice List: {}", niceListPlayers));
+        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.NICELIFE_NICELIST_LIST.get(niceListPlayers));
         return 1;
     }
 
@@ -161,10 +162,10 @@ public class NiceLifeCommands extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Added {} to the Nice List", targets.iterator().next()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_NICELIST_ADD_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Added {} targets to the Nice List", targets.size()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_NICELIST_ADD_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -183,10 +184,10 @@ public class NiceLifeCommands extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Removed {} from the Nice List", targets.iterator().next()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_NICELIST_REMOVE_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Removed {} targets from the Nice List", targets.size()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_NICELIST_REMOVE_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -209,10 +210,10 @@ public class NiceLifeCommands extends Command {
             }
         }
         if (naughtyListPlayers.isEmpty()) {
-            OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("The Naughty List is empty"));
+            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.NICELIFE_NAUGHTYLIST_EMPTY.get());
             return 1;
         }
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Naughty List: {}", naughtyListPlayers));
+        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.NICELIFE_NAUGHTYLIST_LIST.get(naughtyListPlayers));
         return 1;
     }
 
@@ -224,10 +225,10 @@ public class NiceLifeCommands extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Added {} to the Naughty List", targets.iterator().next()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_NAUGHTYLIST_ADD_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Added {} targets to the Naughty List", targets.size()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_NAUGHTYLIST_ADD_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -241,10 +242,10 @@ public class NiceLifeCommands extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Removed {} from the Naughty List", targets.iterator().next()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_NAUGHTYLIST_REMOVE_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Removed {} targets from the Naughty List", targets.size()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_NAUGHTYLIST_REMOVE_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -268,7 +269,7 @@ public class NiceLifeCommands extends Command {
                 return -1;
         }
 
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("Next midnight vote will be '{}'", type));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_VOTE_SET.get(type));
         return 1;
     }
 
@@ -279,7 +280,7 @@ public class NiceLifeCommands extends Command {
 
         if (self.isSleeping()) {
             self.stopSleepInBed(false, true);
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Woke up {}", self));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_WAKEUP_SINGLE.get(self));
         }
         else {
             source.sendFailure(Component.nullToEmpty("You are not sleeping"));
@@ -301,10 +302,10 @@ public class NiceLifeCommands extends Command {
 
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Woke up {}", targets.iterator().next()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_WAKEUP_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Woke up {} players", targets.size()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_WAKEUP_MULTIPLE.get(targets.size()));
         }
 
         return 1;

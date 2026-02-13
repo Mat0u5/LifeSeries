@@ -131,7 +131,7 @@ public class DoubleLifeCommands extends Command {
 
         season.preventSoulmates(player,soulmate);
 
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("{}'s soulmate now cannot be {} when the next randomization happens.", player, soulmate));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.DOUBLELIFE_SOULMATE_PREVENT.get(player, soulmate));
         return 1;
     }
 
@@ -173,7 +173,7 @@ public class DoubleLifeCommands extends Command {
 
         season.forceSoulmates(player,soulmate);
 
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("{}'s soulmate will be {} when the next randomization happens.", player, soulmate));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.DOUBLELIFE_SOULMATE_FORCE.get(player, soulmate));
         return 1;
     }
 
@@ -196,7 +196,7 @@ public class DoubleLifeCommands extends Command {
         season.setSoulmate(player,soulmate);
         season.saveSoulmates();
 
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("{}'s soulmate is now {}", player, soulmate));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.DOUBLELIFE_SOULMATE_SET.get(player, soulmate));
         return 1;
     }
 
@@ -218,7 +218,7 @@ public class DoubleLifeCommands extends Command {
         ServerPlayer soulmate = season.getSoulmate(player);
         if (soulmate == null) return -1;
 
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("{}'s soulmate is {}", player, soulmate));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.DOUBLELIFE_SOULMATE_GET.get(player, soulmate));
         return 1;
     }
 
@@ -243,10 +243,10 @@ public class DoubleLifeCommands extends Command {
             return -1;
         }
         if (affected.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("{}'s soulmate was reset", affected.get(0)));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.DOUBLELIFE_SOULMATE_RESET_SINGLE.get(affected.get(0)));
             return 1;
         }
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("Soulmate was reset for {} targets", affected.size()));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.DOUBLELIFE_SOULMATE_RESET_MULTIPLE.get(affected.size()));
         return 1;
     }
 
@@ -276,7 +276,7 @@ public class DoubleLifeCommands extends Command {
             if (player != null) text1 = player;
             if (soulmate != null) text2 = soulmate;
 
-            OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("{}'s soulmate is {}", text1, text2));
+            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.DOUBLELIFE_SOULMATE_GET.get(text1, text2));
         }
 
         if (noSoulmates) {

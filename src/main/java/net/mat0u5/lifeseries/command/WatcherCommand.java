@@ -89,10 +89,10 @@ public class WatcherCommand extends Command {
         WatcherManager.reloadWatchers();
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("{} is now a Watcher", targets.iterator().next()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WATCHER_ADD_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("{} targets are now Watchers", targets.size()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WATCHER_ADD_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -106,10 +106,10 @@ public class WatcherCommand extends Command {
         WatcherManager.reloadWatchers();
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("{} is no longer a Watcher", targets.iterator().next()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WATCHER_REMOVE_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("{} targets are no longer Watchers", targets.size()));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WATCHER_REMOVE_MULTIPLE.get(targets.size()));
         }
 
         return 1;

@@ -108,7 +108,7 @@ public class LifeSeriesCommand extends Command {
     }
 
     private int enableOrDisable(CommandSourceStack source, boolean disabled) {
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("The Life Series has been {}", disabled ? "disabled" : "enabled"));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.SERIES_DISABLE.get(disabled ? "disabled" : "enabled"));
         Main.setDisabled(disabled);
         return 1;
     }
@@ -150,8 +150,8 @@ public class LifeSeriesCommand extends Command {
     public void setSeasonFinal(CommandSourceStack source, String setTo) {
         boolean prevTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
         if (Main.changeSeasonTo(setTo)) {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Changing the season to {}§7...", setTo));
-            PlayerUtils.broadcastMessage(TextUtils.format("Successfully changed the season to {}",setTo).withStyle(ChatFormatting.GREEN));
+            OtherUtils.sendCommandFeedback(source, ModifiableText.SEASON_CHANGING.get(setTo));
+            PlayerUtils.broadcastMessage(ModifiableText.SEASON_CHANGED.get(setTo));
             boolean currentTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
             if (prevTickFreeze != currentTickFreeze) {
                 OtherUtils.setFreezeGame(currentTickFreeze);
@@ -212,7 +212,7 @@ public class LifeSeriesCommand extends Command {
 
     public int getSeason(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Current season: {}", currentSeason.getSeason().getId()));
+        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SEASON_GET.get(currentSeason.getSeason().getId()));
         if (source.getPlayer() != null) {
             currentSeason.sendSetSeasonPacket(source.getPlayer());
         }
@@ -221,7 +221,7 @@ public class LifeSeriesCommand extends Command {
 
     public int getVersion(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Mod version: {}",Main.MOD_VERSION));
+        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.MOD_VERSION.get(Main.MOD_VERSION));
         return 1;
     }
 

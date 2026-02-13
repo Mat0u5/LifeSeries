@@ -139,8 +139,6 @@ public abstract class ConfigManager extends DefaultConfigValues {
 
                 ,PLAYERS_DROP_ITEMS_ON_FINAL_DEATH
                 ,FINAL_DEATH_TITLE_SHOW
-                ,FINAL_DEATH_TITLE_SUBTITLE
-                ,FINAL_DEATH_MESSAGE
                 ,FINAL_DEATH_LIGHTNING
                 ,FINAL_DEATH_SOUND
 
@@ -385,6 +383,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
         renamedProperty("blacklist_clamped_enchants", "blacklist_clamped_enchants_level_1");
         renamedProperty("wildcard_superpowers_zombies_lose_items", "wildcard_superpowers_zombies_first_spawn_clear_items");
         renamedProperty("boogeyman_message", "text.boogeyman.message");
+        renamedProperty("final_death_title_subtitle", "text.final.death.title.subtitle");
     }
 
     private void renamedProperty(String from, String to) {
