@@ -601,15 +601,15 @@ public class Blacklist {
         var clamped = getClampedEnchants();
         for (int level = 1; level <= 4; level++) {
         List<ResourceKey<Enchantment>> clamp = clamped.get(level);
-        if (clamp == null) continue;
-        for (Map.Entry<Enchantment, Integer> enchant : enchants.entrySet()) {
-            Enchantment actualEnchant = enchant.getKey();
-            Optional<ResourceKey<Enchantment>> key = BuiltInRegistries.ENCHANTMENT.getResourceKey(actualEnchant);
-            if (key.isEmpty()) continue;
-            if (clamp.contains(key.get())) {
-                enchant.setValue(level);
+            if (clamp == null) continue;
+            for (Map.Entry<Enchantment, Integer> enchant : enchants.entrySet()) {
+                Enchantment actualEnchant = enchant.getKey();
+                Optional<ResourceKey<Enchantment>> key = BuiltInRegistries.ENCHANTMENT.getResourceKey(actualEnchant);
+                if (key.isEmpty()) continue;
+                if (enchant.getValue() > level && clamp.contains(key.get())) {
+                    enchant.setValue(level);
+                }
             }
-        }
         }
     }
     *///?} else {
@@ -654,7 +654,7 @@ public class Blacklist {
             for (it.unimi.dsi.fastutil.objects.Object2IntMap.Entry<Holder<Enchantment>> enchant : enchants.entrySet()) {
                 Optional<ResourceKey<Enchantment>> enchantRegistry = enchant.getKey().unwrapKey();
                 if (enchantRegistry.isEmpty()) continue;
-                if (clamp.contains(enchantRegistry.get())) {
+                if (enchant.getValue() > level && clamp.contains(enchantRegistry.get())) {
                     enchant.setValue(level);
                 }
             }

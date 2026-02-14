@@ -426,15 +426,16 @@ public class ConfigScreen extends Screen {
     //? if <= 1.21.6 {
     /*@Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (this.searchField.isFocused() && this.searchField.keyPressed(keyCode, scanCode, modifiers)) {
+        if (this.searchField.isFocused()) {
+            return this.searchField.keyPressed(keyCode, scanCode, modifiers);
     *///?} else {
     @Override
     public boolean keyPressed(KeyEvent keyInput) {
         int keyCode = keyInput.input();
         int modifiers = keyInput.modifiers();
-        if (this.searchField.isFocused() && this.searchField.keyPressed(keyInput)) {
+        if (this.searchField.isFocused()) {
+            return this.searchField.keyPressed(keyInput);
     //?}
-            return true;
         }
 
         // Ctrl+F to focus search

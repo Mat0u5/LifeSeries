@@ -23,7 +23,7 @@ import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.Main.currentSession;
 
 //? if <= 1.20
-/*import net.minecraft.util.RandomSource;*/
+//import net.minecraft.util.RandomSource;
 
 //? if <= 1.21.9
 //import net.minecraft.world.level.GameRules;

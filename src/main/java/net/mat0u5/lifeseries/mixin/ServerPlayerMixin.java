@@ -61,7 +61,7 @@ public class ServerPlayerMixin implements IServerPlayer {
     }
 
     //? if <= 1.21.6 {
-    /*@Inject(method = "ls$message(Lnet/minecraft/network/chat/Component;Z)V", at = @At("HEAD"), cancellable = true)
+    /*@Inject(method = "sendSystemMessage(Lnet/minecraft/network/chat/Component;Z)V", at = @At("HEAD"), cancellable = true)
     private void sendMessageToClient(Component message, boolean overlay, CallbackInfo ci) {
         if (Main.modFullyDisabled()) return;
         ServerPlayer player = ls$get();

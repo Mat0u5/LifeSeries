@@ -24,10 +24,13 @@ public class CameraMixin {
     //? if <= 1.20.5 {
     /*@ModifyArg(method = "setup", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;getMaxZoom(D)D"), index = 0)
     private double modifyEntityScale(double originalDistance) {
-    *///?} else {
+    *///?} else if <= 1.21.11 {
     @ModifyArg(method = "setup", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;getMaxZoom(F)F"), index = 0)
     private float modifyEntityScale(float originalDistance) {
-    //?}
+    //?} else {
+    /*@ModifyArg(method = "alignWithEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;getMaxZoom(F)F"), index = 0)
+    private float modifyEntityScale(float originalDistance) {
+    *///?}
         if (!(entity instanceof Player player) || Main.modFullyDisabled()) return originalDistance;
         MorphComponent morphComponent = MorphManager.getOrCreateComponent(player);
         if (morphComponent.isMorphed()) {

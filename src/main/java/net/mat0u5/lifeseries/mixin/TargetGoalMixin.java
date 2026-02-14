@@ -5,14 +5,23 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
-import net.minecraft.world.scores.PlayerTeam;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+//? if <= 1.20.2 {
+/*import net.minecraft.world.scores.Team;
+*///?} else {
+import net.minecraft.world.scores.PlayerTeam;
+//?}
 
 @Mixin(value = TargetGoal.class, priority = 1)
 public class TargetGoalMixin {
+    //? if <= 1.20.2 {
+    /*@WrapOperation(method = "canContinueToUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Mob;getTeam()Lnet/minecraft/world/scores/Team;"))
+    private Team petsNoTeam(Mob instance, Operation<Team> original) {
+    *///?} else {
     @WrapOperation(method = "canContinueToUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Mob;getTeam()Lnet/minecraft/world/scores/PlayerTeam;"))
     private PlayerTeam petsNoTeam(Mob instance, Operation<PlayerTeam> original) {
+    //?}
         if (instance instanceof TamableAnimal) {
             return null;
         }

@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.UUID;
 //? if <= 1.20
-/*import net.minecraft.resources.ResourceLocation;*/
+//import net.minecraft.resources.ResourceLocation;
 //? if > 1.20 <= 1.21.6
 //import net.minecraft.client.resources.PlayerSkin;
 //? if >= 1.21.9

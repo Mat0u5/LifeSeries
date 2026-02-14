@@ -3,11 +3,16 @@ package net.mat0u5.lifeseries.mixin.client;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.minecraft.client.renderer.GameRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
+//? if <= 1.21.11 {
+import net.minecraft.client.renderer.GameRenderer;
 @Mixin(value = GameRenderer.class, priority = 1)
+//?} else {
+/*import net.minecraft.client.Camera;
+@Mixin(value = Camera.class, priority = 2)
+*///?}
 public class GameRendererMixin {
     @ModifyReturnValue(method = "getFov", at = @At("RETURN"))
     //? if <= 1.21 {

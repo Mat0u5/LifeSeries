@@ -106,7 +106,11 @@ public class ClientCommands {
         if (packet == null) return -1;
         if (!(packet instanceof SimpleStringPacket simpleStringPacket)) return -1;
         simpleStringPacket.sendToServer(value);
+        //? if <= 1.21.11 {
         self.displayClientMessage(Component.nullToEmpty("String packet sent."), false);
+        //?} else {
+        /*self.sendSystemMessage(Component.nullToEmpty("String packet sent."));
+        *///?}
         return 1;
     }
 
@@ -116,14 +120,22 @@ public class ClientCommands {
         if (packet == null) return -1;
         if (!(packet instanceof SimpleNumberPacket simpleNumberPacket)) return -1;
         simpleNumberPacket.sendToServer(value);
+        //? if <= 1.21.11 {
         self.displayClientMessage(Component.nullToEmpty("Number packet sent."), false);
+        //?} else {
+        /*self.sendSystemMessage(Component.nullToEmpty("Number packet sent."));
+        *///?}
         return 1;
     }
 
     public static int sendHandshakePacket(FabricClientCommandSource source)  {
         final Player self = source.getPlayer();
         NetworkHandlerClient.sendHandshake();
+        //? if <= 1.21.11 {
         self.displayClientMessage(Component.nullToEmpty("Handshake packet sent."), false);
+        //?} else {
+        /*self.sendSystemMessage(Component.nullToEmpty("Handshake packet sent."));
+        *///?}
         return 1;
     }
 
@@ -142,7 +154,11 @@ public class ClientCommands {
         }
 
         NetworkHandlerClient.sendConfigUpdate(configType, id, args);
+        //? if <= 1.21.11 {
         self.displayClientMessage(Component.nullToEmpty("Config packet sent."), false);
+        //?} else {
+        /*self.sendSystemMessage(Component.nullToEmpty("Config packet sent."));
+        *///?}
         return 1;
     }
 
