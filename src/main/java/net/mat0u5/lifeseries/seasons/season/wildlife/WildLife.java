@@ -67,6 +67,13 @@ public class WildLife extends Season {
     }
 
     @Override
+    public void switchOutOfSeason(Seasons changedTo) {
+        Snails.killAllSnails();
+        TriviaWildcard.killAllTriviaSnails();
+        TriviaWildcard.killAllBots();
+    }
+
+    @Override
     public void onPlayerJoin(ServerPlayer player) {
         super.onPlayerJoin(player);
         WildcardManager.onPlayerJoin(player);

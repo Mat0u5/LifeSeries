@@ -92,20 +92,18 @@ public class NiceLife extends Season {
     }
 
     @Override
-    public void seasonSwitched(Seasons changedTo) {
-        if (changedTo != Seasons.NICE_LIFE) {
-            if (server == null) return;
-            //? if <= 1.21.9 {
-            /*OtherUtils.setBooleanGameRule(server.overworld(), GameRules.RULE_DAYLIGHT, true);
-            *///?} else {
-            OtherUtils.setBooleanGameRule(server.overworld(), GameRules.ADVANCE_TIME, true);
-             //?}
-            NiceLifeTriviaManager.killAllSnowmen();
-            NiceLifeTriviaManager.killAllBots();
-            Season.setSkyColor(null, false);
-            Season.setFogColor(null, false);
-            Season.setCloudColor(null, false);
-        }
+    public void switchOutOfSeason(Seasons changedTo) {
+        if (server == null) return;
+        //? if <= 1.21.9 {
+        /*OtherUtils.setBooleanGameRule(server.overworld(), GameRules.RULE_DAYLIGHT, true);
+        *///?} else {
+        OtherUtils.setBooleanGameRule(server.overworld(), GameRules.ADVANCE_TIME, true);
+         //?}
+        NiceLifeTriviaManager.killAllSnowmen();
+        NiceLifeTriviaManager.killAllBots();
+        Season.setSkyColor(null, false);
+        Season.setFogColor(null, false);
+        Season.setCloudColor(null, false);
     }
 
     @Override

@@ -145,6 +145,12 @@ public abstract class Season {
     }
 
     public void seasonSwitched(Seasons changedTo) {
+        if (changedTo != getSeason()) {
+            switchOutOfSeason(changedTo);
+        }
+    }
+    public void switchOutOfSeason(Seasons changedTo) {
+
     }
 
     public void reloadStart() {
