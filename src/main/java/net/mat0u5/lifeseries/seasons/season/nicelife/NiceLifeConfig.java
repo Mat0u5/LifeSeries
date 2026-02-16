@@ -52,69 +52,69 @@ public class NiceLifeConfig extends ConfigManager {
     );
 
     public static final ConfigFileEntry<Boolean> LIGHT_MELTS_SNOW = new ConfigFileEntry<>(
-            "light_melts_snow", false, "season[new]",
+            "light_melts_snow", false, "season",
             "Light Melts Snow", "Controls whether light sources will melt snow."
     );
 
     public static final ConfigFileEntry<Boolean> SNOW_WHEN_NOT_IN_SESSION = new ConfigFileEntry<>(
-            "snow_when_not_in_session", false, "season[new]",
+            "snow_when_not_in_session", false, "season",
             "Snow When Not In Session", "Controls it snows when the session is not started."
     );
 
     public static final ConfigFileEntry<Integer> SNOW_LAYER_INCREMENT_DELAY = new ConfigFileEntry<>(
-            "snow_layer_increment_delay", 600, ConfigTypes.SECONDS, "season[new]",
+            "snow_layer_increment_delay", 600, ConfigTypes.SECONDS, "season",
             "Snow Layer Increment Delay", "Controls the interval between snow layer increments, in seconds."
     );
     public static final ConfigFileEntry<Boolean> ADVANCE_TIME_WHEN_NOT_IN_SESSION = new ConfigFileEntry<>(
-            "advance_time_not_in_session", false, "season[new]",
+            "advance_time_not_in_session", false, "season",
             "Advance Time When Not In Session", "Controls whether the daylight cycle is paused when not in session."
     );
 
     public static final ConfigFileEntry<Boolean> SNOWY_NETHER = new ConfigFileEntry<>(
-            "snowy_nether", true, "season[new]",
+            "snowy_nether", true, "season",
             "Snowy Nether", "Controls the nether is frozen."
     );
 
     public static final ConfigFileEntry<Integer> TRIVIA_QUESTION_TIME = new ConfigFileEntry<>(
-            "trivia_question_time", 68, ConfigTypes.SECONDS, "season.trivia[new]",
+            "trivia_question_time", 68, ConfigTypes.SECONDS, "season.trivia",
             "Trivia Question Time", "Controls how much time people have to answer the trivia, in seconds."
     );
     public static final ConfigFileEntry<Boolean> BOT_CAN_BREAK_BEDS = new ConfigFileEntry<>(
-            "bot_can_break_beds", true, "season.trivia[new]",
+            "bot_can_break_beds", true, "season.trivia",
             "Bots Can Break Beds", "Controls whether descending santa bots can break the beds of other players in the way."
     );
     public static final ConfigFileEntry<Boolean> BOT_BREAKING_BLOCKS_DROP_RESOURCES = new ConfigFileEntry<>(
-            "bot_breaking_blocks_drop_resources", true, "season.trivia[new]",
+            "bot_breaking_blocks_drop_resources", true, "season.trivia",
             "Bots Breaking Blocks Drop Resources", "Controls whether block broken by descending santa bots drop items."
     );
     public static final ConfigFileEntry<Integer> VOTING_TIME = new ConfigFileEntry<>(
-            "voting_time", 60, ConfigTypes.SECONDS, "season.voting[new]",
+            "voting_time", 60, ConfigTypes.SECONDS, "season.voting",
             "Voting Time", "Controls how much time people have for voting, in seconds."
     );
     public static final ConfigFileEntry<Boolean> ALLOW_REDS_ON_NAUGHTY_LIST = new ConfigFileEntry<>(
-            "allow_reds_on_naughty_list", false, "season.voting[new]",
+            "allow_reds_on_naughty_list", false, "season.voting",
             "Naughty List Allow Reds", "Controls red players can be voted for on the naughty list."
     );
     public static final ConfigFileEntry<Integer> NAUGHTY_LIST_PLAYERS = new ConfigFileEntry<>(
-            "naughty_list_players", 3, "season.voting[new]",
+            "naughty_list_players", 3, "season.voting",
             "Naughty List Player Amount", "Controls the maximum number of players that can be on the naughty list."
     );
     public static final ConfigFileEntry<Double> NICE_LIST_CHANCE = new ConfigFileEntry<>(
-            "nice_list_chance", 0.5, ConfigTypes.PERCENTAGE, "season.voting[new]",
+            "nice_list_chance", 0.5, ConfigTypes.PERCENTAGE, "season.voting",
             "Nice List Chance", "Percentage of how often the nice list will be chosen for the vote instead of the naughty list."
     );
     public static final ConfigFileEntry<Integer> NICE_LIST_PLAYERS = new ConfigFileEntry<>(
-            "nice_list_players", 3, "season.voting[new]",
+            "nice_list_players", 3, "season.voting",
             "Nice List Player Amount", "Controls the maximum number of players that can be on the nice list."
     );
 
 
     public static final ConfigFileEntry<Object> GROUP_TRIVIA = new ConfigFileEntry<>(
-            "group_trivia", null, ConfigTypes.TEXT, "{season.trivia}[new]",
+            "group_trivia", null, ConfigTypes.TEXT, "{season.trivia}",
             "Trivia", ""
     );
     public static final ConfigFileEntry<Object> GROUP_VOTING = new ConfigFileEntry<>(
-            "group_voting", null, ConfigTypes.TEXT, "{season.voting}[new]",
+            "group_voting", null, ConfigTypes.TEXT, "{season.voting}",
             "Voting", ""
     );
     public static final ConfigFileEntry<Object> GROUP_TRIVIA_QUESTIONS = new ConfigFileEntry<>(

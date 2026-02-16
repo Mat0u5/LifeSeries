@@ -122,7 +122,7 @@ public class SecretLifeConfig extends ConfigManager {
             "Health Rewards / Punishments", ""
     );
     public static final ConfigFileEntry<Object> GROUP_TASKS = new ConfigFileEntry<>(
-            "group_tasks", null, ConfigTypes.TEXT, "{season.tasks}[new]",
+            "group_tasks", null, ConfigTypes.TEXT, "{season.tasks}",
             "Tasks", ""
     );
     public static final ConfigFileEntry<Object> GROUP_TASKS_EASY = new ConfigFileEntry<>(

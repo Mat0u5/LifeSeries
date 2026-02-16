@@ -106,7 +106,7 @@ public class LimitedLifeConfig extends ConfigManager {
             "Show Time Below Name", "Show the time a player has left below their username."
     );
     public static final ConfigFileEntry<Integer> TIME_RANDOMIZE_INTERVAL = new ConfigFileEntry<>(
-            "time_randomize_interval", Time.hours(1).getSeconds(), ConfigTypes.SECONDS, "global.lives.random[new]",
+            "time_randomize_interval", Time.hours(1).getSeconds(), ConfigTypes.SECONDS, "global.lives.random",
             "Time Randomize Intervals", "The intervals on which the time randomize can land."
     );
 

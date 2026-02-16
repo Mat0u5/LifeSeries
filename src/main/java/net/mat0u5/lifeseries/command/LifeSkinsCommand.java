@@ -31,11 +31,11 @@ public class LifeSkinsCommand extends Command {
 
     public List<String> getAdminCommands() {
         if (Main.DEBUG) return List.of("lifeskins");
-        return List.of("");
+        return List.of();
     }
 
     public List<String> getNonAdminCommands() {
-        return List.of("");
+        return List.of();
     }
 
     @Override

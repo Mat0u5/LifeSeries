@@ -10,7 +10,6 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import org.jetbrains.annotations.Nullable;
@@ -178,7 +177,7 @@ public class SuperpowersWildcard extends Wildcard {
                 playerSuperpowers.get(player.getUUID()).onKeyPressed();
             }
             else {
-                PlayerUtils.displayMessageToPlayer(player, ModifiableText.WILDLIFE_SUPERPOWES_DEAD.get(), 60);
+                PlayerUtils.displayMessageToPlayer(player, ModifiableText.WILDLIFE_SUPERPOWERS_DEAD.get(), 60);
             }
         }
     }

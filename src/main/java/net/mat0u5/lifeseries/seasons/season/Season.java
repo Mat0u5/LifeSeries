@@ -293,6 +293,7 @@ public abstract class Season {
         for (Command command : CommandManager.commands) {
             if (!command.isAllowed()) continue;
             for (String commandStr : command.getAdminCommands()) {
+                if (commandStr.isEmpty()) continue;
                 allCommands.add("/"+commandStr);
             }
         }

@@ -387,6 +387,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
         renamedProperty("wildcard_superpowers_zombies_lose_items", "wildcard_superpowers_zombies_first_spawn_clear_items");
         renamedProperty("boogeyman_message", "text.boogeyman.message");
         renamedProperty("final_death_title_subtitle", "text.final.death.title.subtitle");
+        renamedProperty("text.wildlife.superpowes.dead", "text.wildlife.superpowers.dead");
     }
 
     private void renamedProperty(String from, String to) {
