@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.entity.snail.goal.*;
 import net.mat0u5.lifeseries.entity.snail.server.SnailPathfinding;
 import net.mat0u5.lifeseries.entity.snail.server.SnailServerData;
 import net.mat0u5.lifeseries.entity.snail.server.SnailSounds;
+import net.mat0u5.lifeseries.utils.interfaces.IEntity;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -177,11 +178,22 @@ public class Snail extends Monster {
     }
 
     public boolean isInLavaLocal = false;
+    //?if <= 1.21.11 {
     @Override
     public boolean updateFluidHeightAndDoFluidPushing(TagKey<Fluid> tag, double speed) {
         if (FluidTags.LAVA != tag) {
             return false;
         }
+    //?} else {
+    /*@Override
+    public boolean updateFluidInteraction() {
+        TagKey<Fluid> tag = FluidTags.LAVA;
+        if (this instanceof IEntity accessor) {
+            if (!accessor.ls$getEntityFluidInteraction().isInFluid(tag)) {
+                return false;
+            }
+        }
+    *///?}
 
         if (this.touchingUnloadedChunk()) {
             return false;

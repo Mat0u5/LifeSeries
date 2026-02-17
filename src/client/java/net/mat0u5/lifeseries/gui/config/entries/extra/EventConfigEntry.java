@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.gui.config.entries.extra;
 import net.mat0u5.lifeseries.gui.config.entries.main.StringConfigEntry;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.render.RenderUtils;
+import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -58,6 +59,8 @@ public class EventConfigEntry extends StringConfigEntry {
             int widthText = textRenderer.width(part1);
             openTutorialButton.setX(x+widthText+15);
             RenderUtils.text(part2, x+widthText+openTutorialButton.getWidth()+20, y+6).render(context, textRenderer);
+
+            RenderUtils.text(Component.literal("Run Command:"), textField.getX(), y+6).colored(TextColors.LIGHT_GRAY).render(context, textRenderer);
         }
         super.renderEntry(context, x, y + (isFirst?PREFFERED_HEIGHT:0), width, height, mouseX, mouseY, hovered, tickDelta);
     }

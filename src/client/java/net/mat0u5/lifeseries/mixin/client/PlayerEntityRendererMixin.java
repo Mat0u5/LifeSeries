@@ -83,7 +83,8 @@ public abstract class PlayerEntityRendererMixin {
     }
     *///?}
 
-    //? if > 1.21.6 {
+    // In EntityRender from 26.1+
+    //? if > 1.21.6 && <= 1.21.11 {
     @ModifyArg(
             method = "submitNameTag(Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitNameTag(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/phys/Vec3;ILnet/minecraft/network/chat/Component;ZIDLnet/minecraft/client/renderer/state/CameraRenderState;)V"),
@@ -155,7 +156,7 @@ public abstract class PlayerEntityRendererMixin {
         }
         return par2;
     }
-    *///?} else {
+    *///?} else if <= 1.21.11 {
     //? if <= 1.21.6 {
     /*@Redirect(method = "renderNameTag(Lnet/minecraft/client/renderer/entity/state/PlayerRenderState;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/PlayerRenderState;scoreText:Lnet/minecraft/network/chat/Component;"))
     public Component customBelowName(PlayerRenderState instance) {
@@ -183,6 +184,7 @@ public abstract class PlayerEntityRendererMixin {
         return original;
     }
     //?}
+    //^ In EntityRender from 26.1+
 
 
     @ModifyReturnValue(method = "getArmPose*", at = @At("RETURN"))

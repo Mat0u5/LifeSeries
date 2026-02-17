@@ -11,9 +11,7 @@ import net.mat0u5.lifeseries.utils.interfaces.IEntityDataSaver;
 import net.mat0u5.lifeseries.utils.interfaces.IMorph;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -39,8 +37,20 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.illager.Evoker;
 //?}
 
+//? if >= 26.1 {
+/*import org.spongepowered.asm.mixin.gen.Accessor;
+*///?}
+
 @Mixin(value = Entity.class, priority = 1)
 public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
+    //? if >= 26.1 {
+    /*@Accessor("fluidInteraction")
+    abstract EntityFluidInteraction ls$entityFluidInteraction();
+    @Override
+    public EntityFluidInteraction ls$getEntityFluidInteraction() {
+        return ls$entityFluidInteraction();
+    }
+    *///?}
     /*
     private NbtCompound persistentData;
     @Override
