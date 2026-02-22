@@ -298,7 +298,7 @@ public class DefaultConfigValues {
     );
     public final ConfigFileEntry<Boolean> SHOW_LOGIN_COMMAND_INFO = new ConfigFileEntry<>(
             "show_login_command_info", true, "global",
-            "Show Command Info On Login", "Controls whether players get a message in chat showing the available commands when the login."
+            "Show Command Info On Login", "Controls whether players get a message in chat showing the available commands when they login."
     );
     public final ConfigFileEntry<Boolean> HIDE_UNJUSTIFIED_KILL_MESSAGES = new ConfigFileEntry<>(
             "hide_unjustified_kills", false, "global",

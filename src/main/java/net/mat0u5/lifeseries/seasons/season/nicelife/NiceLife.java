@@ -14,7 +14,6 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -319,8 +318,10 @@ public class NiceLife extends Season {
 
     public boolean shouldRedWinter() {
         if (currentSession.statusNotStarted()) return false;
+        List<ServerPlayer> assignedPlayers = PlayerUtils.getAllFunctioningPlayers();
+        assignedPlayers.removeIf(player -> !player.ls$hasAssignedLives());
         List<ServerPlayer> nonRedPlayers = livesManager.getNonRedPlayers();
-        return nonRedPlayers.isEmpty();
+        return !assignedPlayers.isEmpty() && nonRedPlayers.isEmpty();
     }
 
     public void sleepThroughNight() {
