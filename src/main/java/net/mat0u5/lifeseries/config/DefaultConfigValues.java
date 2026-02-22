@@ -344,6 +344,10 @@ public class DefaultConfigValues {
             "lives_randomize_max", 6, "global.lives.random",
             "Maximum Lives", "The maximum number of lives any player can have after randomization."
     );
+    public final ConfigFileEntry<Double> LIVES_RANDOMIZE_MINUTE = new ConfigFileEntry<>(
+            "lives_randomize_time", 1.0, ConfigTypes.MINUTES, "global.lives.random[new]",
+            "Lives Randomize Time", "How many minutes after the session starts the lives get picked."
+    );
 
 
 

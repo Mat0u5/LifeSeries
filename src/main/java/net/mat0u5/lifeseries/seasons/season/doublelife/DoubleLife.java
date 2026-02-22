@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.seasons.season.doublelife;
 
-import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.config.StringListConfig;
@@ -15,7 +14,6 @@ import net.mat0u5.lifeseries.utils.interfaces.IHungerManager;
 import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -53,6 +51,7 @@ public class DoubleLife extends Season {
     public boolean DISABLE_START_TELEPORT = false;
     public static boolean SOULMATE_LOCATOR_BAR = false;
     public boolean SOULMATES_PVP_ALLOWED = true;
+    public double SOULMATES_ASSIGN_MINUTE = 1;
 
     public Map<UUID, UUID> soulmates = new TreeMap<>();
     public Map<UUID, UUID> soulmatesOrdered = new TreeMap<>();
@@ -109,7 +108,7 @@ public class DoubleLife extends Season {
     @Override
     public void addSessionActions() {
         super.addSessionActions();
-        currentSession.addSessionAction(new SessionAction(Time.minutes(1), ModifiableText.SESSION_ACTION_ASSIGN_SOULMATES.getString()) {
+        currentSession.addSessionAction(new SessionAction(Time.minutes(SOULMATES_ASSIGN_MINUTE), ModifiableText.SESSION_ACTION_ASSIGN_SOULMATES.getString()) {
             @Override
             public void trigger() {
                 rollSoulmates();
@@ -150,6 +149,7 @@ public class DoubleLife extends Season {
         DISABLE_START_TELEPORT = DoubleLifeConfig.DISABLE_START_TELEPORT.get();
         SOULBOUND_BOOGEYMAN = DoubleLifeConfig.SOULBOUND_BOOGEYMAN.get();
         SOULMATES_PVP_ALLOWED = DoubleLifeConfig.SOULMATES_PVP_ALLOWED.get();
+        SOULMATES_ASSIGN_MINUTE = DoubleLifeConfig.SOULMATES_ASSIGN_MINUTE.get();
         syncAllPlayers();
     }
 

@@ -146,7 +146,7 @@ public class Time {
     }
 
     public static Time minutes(double minutes) {
-        return new Time(((long)minutes * CONVERT_MINUTES));
+        return new Time((long)(minutes * CONVERT_MINUTES));
     }
 
     public static Time seconds(int seconds) {

@@ -163,6 +163,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,LIVES_RANDOMIZE
                 ,LIVES_RANDOMIZE_MIN
                 ,LIVES_RANDOMIZE_MAX
+                , LIVES_RANDOMIZE_MINUTE
         ));
     }
 

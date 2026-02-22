@@ -103,6 +103,12 @@ public class DoubleLifeConfig extends ConfigManager {
             "soulmates_pvp_allowed", true, "season",
             "Soulmates PvP Allowed", "Controls whether soulmates can hit each other."
     );
+    public static final ConfigFileEntry<Double> SOULMATES_ASSIGN_MINUTE = new ConfigFileEntry<>(
+            "soulmates_assign_time", 1.0, ConfigTypes.MINUTES, "season[new]",
+            "Soulmates Assign Time", "How many minutes after the session starts the soulmates get assigned."
+    );
+
+
 
 
     public static final ConfigFileEntry<Object> GROUP_SOULBIND = new ConfigFileEntry<>(
@@ -128,6 +134,7 @@ public class DoubleLifeConfig extends ConfigManager {
                 ,SOULBOUND_INVENTORIES
                 , SOULBOUND_BOOGEYMAN
                 ,SOULMATES_PVP_ALLOWED
+                , SOULMATES_ASSIGN_MINUTE
         ));
         //? if >= 1.21.6 {
         result.add(SOULMATE_LOCATOR_BAR);
@@ -141,6 +148,8 @@ public class DoubleLifeConfig extends ConfigManager {
         BLACKLIST_ITEMS.defaultValue = TextUtils.formatString("[{}]", BLACKLISTED_ITEMS);
         BLACKLIST_BLOCKS.defaultValue = TextUtils.formatString("[{}]", BLACKLISTED_BLOCKS);
         BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.defaultValue = TextUtils.formatString("[{}]", CLAMPED_ENCHANTMENTS);
+        LIVES_RANDOMIZE_MINUTE.defaultValue = 1.25;
+        LIVES_RANDOMIZE_MINUTE.description += "\n§cThis time should ALWAYS be after soulmates rolling!";
         super.instantiateProperties();
     }
 }

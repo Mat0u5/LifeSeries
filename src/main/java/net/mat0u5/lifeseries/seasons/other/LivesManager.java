@@ -49,6 +49,7 @@ public class LivesManager {
     public boolean ROLL_LIVES = false;
     public int ROLL_MIN_LIVES = 2;
     public int ROLL_MAX_LIVES = 6;
+    public double LIVES_RANDOMIZE_MINUTE = 1.0;
 
     public boolean assignedLives = false;
     public Random rnd = new Random();
@@ -60,6 +61,7 @@ public class LivesManager {
         ONLY_TAKE_LIVES_IN_SESSION = seasonConfig.ONLY_TAKE_LIVES_IN_SESSION.get();
         SEE_FRIENDLY_INVISIBLE_PLAYERS = seasonConfig.SEE_FRIENDLY_INVISIBLE_PLAYERS.get();
         LIVES_SYSTEM_DISABLED = seasonConfig.LIVES_SYSTEM_DISABLED.get();
+        LIVES_RANDOMIZE_MINUTE = seasonConfig.LIVES_RANDOMIZE_MINUTE.get();
         updateTeams();
 
         ROLL_LIVES = seasonConfig.LIVES_RANDOMIZE.get();
@@ -494,7 +496,7 @@ public class LivesManager {
 
     public void addSessionActions() {
         if (ROLL_LIVES) {
-            currentSession.addSessionAction(new SessionAction(Time.minutes(1), ModifiableText.SESSION_ACTION_ASSIGN_LIVES.getString()) {
+            currentSession.addSessionAction(new SessionAction(Time.minutes(LIVES_RANDOMIZE_MINUTE), ModifiableText.SESSION_ACTION_ASSIGN_LIVES.getString()) {
                 @Override
                 public void trigger() {
                     assignRandomLivesToUnassignedPlayers();
