@@ -4,7 +4,6 @@ import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeLivesManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
@@ -33,7 +32,7 @@ import java.util.*;
 import static net.mat0u5.lifeseries.Main.*;
 import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
 
-        //? if <= 1.20.2
+//? if <= 1.20.2
 //import net.minecraft.world.scores.Score;
 //? if > 1.20.2
 import net.minecraft.world.scores.PlayerScoreEntry;
@@ -272,9 +271,6 @@ public class LivesManager {
         ScoreboardUtils.resetScore(player, SCOREBOARD_NAME);
         currentSeason.reloadPlayerTeam(player);
         currentSeason.assignDefaultLives(player);
-        if (currentSeason instanceof DoubleLife doubleLife) {
-            doubleLife.syncSoulboundLives(player);
-        }
     }
 
     public void resetAllPlayerLivesInner() {
@@ -329,9 +325,6 @@ public class LivesManager {
         AnimationUtils.createSpiral(target, 175);
         currentSeason.reloadPlayerTeam(target);
         SessionTranscript.givelife(playerName, target);
-        if (currentSeason instanceof DoubleLife doubleLife) {
-            doubleLife.syncSoulboundLives(target);
-        }
         if (isRevive && isAlive(target)) {
             PlayerUtils.safelyPutIntoSurvival(target);
         }
@@ -528,10 +521,8 @@ public class LivesManager {
         TaskScheduler.scheduleTask(Time.seconds(3), ()-> rollLives(players));
     }
 
-    public void rollLives(List<ServerPlayer> players) {
-        int delay = showRandomNumbers(players) + 20;
-
-        HashMap<ServerPlayer, Integer> lives = new HashMap<>();
+    public Map<ServerPlayer, Integer> getFinalRandomLives(List<ServerPlayer> players) {
+        Map<ServerPlayer, Integer> lives = new HashMap<>();
 
         int totalSize = players.size();
         int chosenNotRandomly = ROLL_MIN_LIVES;
@@ -546,6 +537,13 @@ public class LivesManager {
             int randomLives = getRandomLife();
             lives.put(player, randomLives);
         }
+        return lives;
+    }
+
+    public void rollLives(List<ServerPlayer> players) {
+        int delay = showRandomNumbers(players) + 20;
+
+        Map<ServerPlayer, Integer> lives = getFinalRandomLives(players);
 
         TaskScheduler.scheduleTask(delay, () -> {
             //Show the actual amount of lives for one cycle

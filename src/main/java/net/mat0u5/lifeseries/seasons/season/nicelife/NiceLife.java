@@ -103,6 +103,12 @@ public class NiceLife extends Season {
         Season.setSkyColor(null, false);
         Season.setFogColor(null, false);
         Season.setCloudColor(null, false);
+        ServerLevel overworld = server.overworld();
+        //? if <= 1.21.11 {
+        overworld.setWeatherParameters(96000, 0, false, false);
+        //?} else {
+        /*server.setWeatherParameters(96000, 0, false, false);
+         *///?}
     }
 
     @Override

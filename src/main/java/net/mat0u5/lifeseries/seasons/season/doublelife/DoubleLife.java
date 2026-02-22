@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.config.StringListConfig;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
+import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
@@ -62,6 +63,11 @@ public class DoubleLife extends Season {
     public void initialize() {
         super.initialize();
         soulmateConfig = getSoulmateConfig();
+    }
+
+    @Override
+    public LivesManager createLivesManager() {
+        return new DoubleLifeLivesManager();
     }
 
     public StringListConfig getSoulmateConfig() {
@@ -334,7 +340,7 @@ public class DoubleLife extends Season {
     public List<ServerPlayer> getNonAssignedPlayers() {
         List<ServerPlayer> playersToRoll = new ArrayList<>();
         for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
-            if (player.ls$isDead()) continue;
+            if (player.ls$hasAssignedLives() && player.ls$isDead()) continue;
             if (hasSoulmate(player)) continue;
             playersToRoll.add(player);
         }
