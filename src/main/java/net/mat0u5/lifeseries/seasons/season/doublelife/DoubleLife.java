@@ -98,7 +98,10 @@ public class DoubleLife extends Season {
     public void onPlayerJoin(ServerPlayer player) {
         super.onPlayerJoin(player);
 
-        if (player == null) return;
+        if (player.ls$isWatcher()) {
+            resetSoulmate(player);
+        }
+
         if (!hasSoulmate(player)) return;
         if (!isSoulmateOnline(player)) return;
 

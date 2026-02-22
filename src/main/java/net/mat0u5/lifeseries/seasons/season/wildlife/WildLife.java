@@ -21,6 +21,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
+import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.minecraft.server.MinecraftServer;
@@ -115,6 +116,20 @@ public class WildLife extends Season {
             }
         }
     }
+
+    @Override
+    public boolean shouldBeInSpectator(ServerPlayer player) {
+        if (!PermissionManager.isAdmin(player)) {
+            if (player.ls$hasAssignedLives() && player.ls$isDead() && !Necromancy.isRessurectedPlayer(player)) {
+                return true;
+            }
+            if (player.ls$isWatcher()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 
     @Override

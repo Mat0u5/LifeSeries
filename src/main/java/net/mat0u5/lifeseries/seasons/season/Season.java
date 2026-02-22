@@ -701,14 +701,8 @@ public abstract class Season {
         if (!player.ls$hasAssignedLives()) {
             assignDefaultLives(player);
         }
-        if (player.ls$hasAssignedLives() && player.ls$isDead() && !PermissionManager.isAdmin(player)) {
+        if (shouldBeInSpectator(player)) {
             player.setGameMode(GameType.SPECTATOR);
-        }
-
-        if (player.ls$isWatcher()) {
-            if (this instanceof DoubleLife doubleLife) {
-                doubleLife.resetSoulmate(player);
-            }
         }
 
         TaskScheduler.scheduleTask(1, () -> {
@@ -719,6 +713,18 @@ public abstract class Season {
                 SubInManager.reloadPlayerProfile(player);
             }
         });
+    }
+
+    public boolean shouldBeInSpectator(ServerPlayer player) {
+        if (!PermissionManager.isAdmin(player)) {
+            if (player.ls$hasAssignedLives() && player.ls$isDead()) {
+                return true;
+            }
+            if (player.ls$isWatcher()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void assignDefaultLives(ServerPlayer player) {
