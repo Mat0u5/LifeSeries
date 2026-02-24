@@ -194,6 +194,20 @@ public abstract class ConfigManager extends DefaultConfigValues {
         }
     }
 
+    public List<String> getAvailableConfigKeys() {
+        List<String> result = new ArrayList<>();
+        for (ConfigFileEntry<?> entry : getAllConfigEntries()) {
+            if (entry.type == ConfigTypes.NULL) continue;
+            if (entry.type == ConfigTypes.TEXT) continue;
+            if (entry.type == ConfigTypes.GROUP) continue;
+            if (entry.type == ConfigTypes.NULL) continue;
+            if (entry.type == ConfigTypes.NULL) continue;
+            if (entry.type == ConfigTypes.NULL) continue;
+            result.add(entry.key);
+        }
+        return result;
+    }
+
     public void sendConfigTo(ServerPlayer player) {
         int index = 0;
         for (ConfigFileEntry<?> entry : getAllConfigEntries()) {
@@ -401,6 +415,15 @@ public abstract class ConfigManager extends DefaultConfigValues {
             }
             removeProperty(from);
         }
+    }
+
+    public static void onUpdatedUnknown(String id, String value) {
+        try {
+            onUpdatedBoolean(id, Boolean.parseBoolean(value));
+        }catch(Exception e) {}
+        try {
+            onUpdatedInteger(id, Integer.parseInt(value));
+        }catch(Exception e) {}
     }
 
     public static void onUpdatedBoolean(String id, boolean value) {

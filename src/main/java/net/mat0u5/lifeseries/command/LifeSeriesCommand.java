@@ -4,11 +4,14 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.config.DefaultConfigValues;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.Session;
+import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
@@ -21,8 +24,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;
 
-import static net.mat0u5.lifeseries.Main.ALLOWED_SEASON_NAMES;
-import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.Main.*;
 
 public class LifeSeriesCommand extends Command {
 
@@ -66,6 +68,15 @@ public class LifeSeriesCommand extends Command {
                 )
                 .then(literal("config")
                         .executes(context -> config(context.getSource()))
+                        .then(literal("set")
+                                .requires(PermissionManager::isAdmin)
+                                .then(argument("key", StringArgumentType.string())
+                                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(seasonConfig.getAvailableConfigKeys(), builder))
+                                        .then(argument("value", StringArgumentType.greedyString())
+                                                .executes(context -> configSet(context.getSource(), StringArgumentType.getString(context, "key"), StringArgumentType.getString(context, "value")))
+                                        )
+                                )
+                        )
                 )
                 .then(literal("wiki")
                         .executes(context -> wiki(context.getSource()))
@@ -180,6 +191,21 @@ public class LifeSeriesCommand extends Command {
             OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.CONFIG_GUI_OPENING.get());
         }
         SimplePackets.OPEN_CONFIG.target(self).sendToClient();
+        return 1;
+    }
+
+    public int configSet(CommandSourceStack source, String key, String value) {
+        if (checkBanned(source)) return -1;
+
+        seasonConfig.setProperty(key, value);
+        ConfigManager.onUpdatedUnknown(key, value);
+
+        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.CONFIG_SET.get(key));
+
+        NetworkHandlerServer.updatedConfigThisTick = true;
+        if (DefaultConfigValues.RELOAD_NEEDED.contains(key)) {
+            NetworkHandlerServer.configNeedsReload = true;
+        }
         return 1;
     }
 

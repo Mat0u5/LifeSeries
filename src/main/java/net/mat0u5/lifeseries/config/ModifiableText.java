@@ -20,6 +20,7 @@ public enum ModifiableText {
     ,TRANSCRIPT_COPY("§7Click {}§7 to copy the session transcript.", List.of("ClickHere"))
     ,CONFIG_UPDATED("§7Config has been successfully updated.")
     ,CONFIG_GUI_OPENING("§7Opening the config GUI...")
+    ,CONFIG_SET("Updated '{}' in the config.", List.of("key"))
     ,COUNTDOWN_COLOR_3("§a3")
     ,COUNTDOWN_COLOR_2("§e2")
     ,COUNTDOWN_COLOR_1("§c1")
