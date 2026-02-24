@@ -766,4 +766,8 @@ public abstract class Season {
             blacklist.onInventoryUpdated(player);
         }
     }
+
+    public void usernameChanged(ServerPlayer player) {
+
+    }
 }

@@ -71,10 +71,12 @@ public class SubInManager {
             player.ls$setLives(subInLives);
         }
 
-        if (!CHANGE_SKIN && !CHANGE_NAME) return;
-        ProfileManager.ProfileChange skinChange = CHANGE_SKIN ? ProfileManager.ProfileChange.SET.withInfo(targetProfileName) : ProfileManager.ProfileChange.ORIGINAL;
-        ProfileManager.ProfileChange nameChange = CHANGE_NAME ? ProfileManager.ProfileChange.SET.withInfo(targetProfileName) : ProfileManager.ProfileChange.ORIGINAL;
-        ProfileManager.modifyProfile(player, skinChange, nameChange);
+        if (CHANGE_SKIN  || CHANGE_NAME) {
+            ProfileManager.ProfileChange skinChange = CHANGE_SKIN ? ProfileManager.ProfileChange.SET.withInfo(targetProfileName) : ProfileManager.ProfileChange.ORIGINAL;
+            ProfileManager.ProfileChange nameChange = CHANGE_NAME ? ProfileManager.ProfileChange.SET.withInfo(targetProfileName) : ProfileManager.ProfileChange.ORIGINAL;
+            ProfileManager.modifyProfile(player, skinChange, nameChange);
+        }
+        currentSeason.usernameChanged(player);
     }
 
     public static void reload() {
@@ -130,6 +132,9 @@ public class SubInManager {
                 Integer startingLives = subIn.startingLives();
                 player1.ls$setLives(startingLives);
             }
+
+            if (player1 != null) currentSeason.usernameChanged(player1);
+            if (player2 != null) currentSeason.usernameChanged(player2);
         });
     }
 

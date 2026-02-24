@@ -421,18 +421,28 @@ public class SecretLife extends Season {
     }
 
     public void removePlayerHealth(ServerPlayer player, double health) {
-        addPlayerHealth(player,-health);
+        removePlayerHealth(player, health, false);
     }
-
     public void addPlayerHealth(ServerPlayer player, double health) {
-        double currentHealth = AttributeUtils.getMaxPlayerHealth(player);
-        setPlayerHealth(player, currentHealth + health);
+        addPlayerHealth(player, health, false);
+    }
+    public void setPlayerHealth(ServerPlayer player, double health) {
+        setPlayerHealth(player, health, false);
     }
 
-    public void setPlayerHealth(ServerPlayer player, double health) {
+    public void removePlayerHealth(ServerPlayer player, double health, boolean command) {
+        addPlayerHealth(player,-health, command);
+    }
+
+    public void addPlayerHealth(ServerPlayer player, double health, boolean command) {
+        double currentHealth = AttributeUtils.getMaxPlayerHealth(player);
+        setPlayerHealth(player, currentHealth + health, command);
+    }
+
+    public void setPlayerHealth(ServerPlayer player, double health, boolean command) {
         if (player == null) return;
         if (health < 0.1) health = 0.1;
-        if (canChangeHealth() || (health > getPlayerHealth(player))) {
+        if ((canChangeHealth() || command) || (health > getPlayerHealth(player))) {
             AttributeUtils.setMaxPlayerHealth(player, health);
         }
         if (health > player.getHealth() && player.isAlive()) {

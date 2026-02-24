@@ -115,6 +115,11 @@ public class Snails extends Wildcard {
         toKill.forEach(Entity::discard);
     }
 
+    public static void reloadSnails() {
+        reloadSnailNames();
+        reloadSnailSkins();
+    }
+
     public static void reloadSnailNames() {
         for (Snail snail : snails.values()) {
             if (snail == null) return;

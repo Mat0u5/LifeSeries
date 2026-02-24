@@ -78,6 +78,7 @@ public class ProfileManager {
                 refreshPlayerProfile(player);
                 if (usernameChange != ProfileChange.NONE) {
                     currentSeason.onPlayerJoin(player);
+                    currentSeason.usernameChanged(player);
                 }
                 return true;
 

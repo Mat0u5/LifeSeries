@@ -233,8 +233,7 @@ public class WildLife extends Season {
 
         Snails.loadConfig();
         Snails.loadSnailNames();
-        Snails.reloadSnailNames();
-        Snails.reloadSnailSkins();
+        Snails.reloadSnails();
         TriviaWildcard.reload();
     }
 
@@ -392,5 +391,10 @@ public class WildLife extends Season {
                 Snails.spawnSnailFor(player);
             }
         }
+    }
+
+    @Override
+    public void usernameChanged(ServerPlayer player) {
+        Snails.reloadSnails();
     }
 }

@@ -429,7 +429,7 @@ public class SecretLifeCommands extends Command {
             return -1;
         }
         playersGiven.add(self.getUUID());
-        secretLife.addPlayerHealth(target, 2);
+        secretLife.addPlayerHealth(target, 2, true);
         Component senderMessage = ModifiableText.SECRETLIFE_GIVEHEART_SEND.get(target);
         Component recipientMessage = ModifiableText.SECRETLIFE_GIVEHEART_RECEIVE.get(self);
         SessionTranscript.giftHeart(self, target);
@@ -500,7 +500,7 @@ public class SecretLifeCommands extends Command {
         SecretLife secretLife = (SecretLife) currentSeason;
         if (setNotGive) {
             for (ServerPlayer player : targets) {
-                secretLife.setPlayerHealth(player, amount);
+                secretLife.setPlayerHealth(player, amount, true);
             }
             if (targets.size() == 1) {
                 OtherUtils.sendCommandFeedback(source, ModifiableText.SECRETLIFE_HEALTH_SET_SINGLE.get(targets.iterator().next(), amount));
@@ -511,7 +511,7 @@ public class SecretLifeCommands extends Command {
         }
         else {
             for (ServerPlayer player : targets) {
-                secretLife.addPlayerHealth(player, amount);
+                secretLife.addPlayerHealth(player, amount, true);
             }
             String addOrRemove = amount >= 0 ? "Added" : "Removed";
             String toOrFrom = amount >= 0 ? "to" : "from";

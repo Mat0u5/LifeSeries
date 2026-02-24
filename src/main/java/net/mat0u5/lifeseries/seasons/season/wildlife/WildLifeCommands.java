@@ -262,6 +262,7 @@ public class WildLifeCommands extends Command {
 
         OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_TEXTURES_RELOAD.get());
         SnailSkins.sendTextures();
+        Snails.reloadSnails();
 
         return 1;
     }
