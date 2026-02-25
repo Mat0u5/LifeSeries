@@ -12,7 +12,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.util.ARGB;
 //?}
 //? if >= 1.21.2 && <= 1.21.5
-/*import net.minecraft.client.renderer.RenderType;*/
+//import net.minecraft.client.renderer.RenderType;
 //? if >= 1.21.6
 import net.minecraft.client.renderer.RenderPipelines;
 

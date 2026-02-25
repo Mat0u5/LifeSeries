@@ -160,6 +160,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,WATCHERS_MUTED
                 ,SUBIN_CHANGE_SKIN
                 ,SUBIN_CHANGE_USERNAME
+                ,LIVES_LIFE_DIFF_MESSAGE
                 ,LIVES_RANDOMIZE
                 ,LIVES_RANDOMIZE_MIN
                 ,LIVES_RANDOMIZE_MAX

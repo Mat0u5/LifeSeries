@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.datafixers.util.Either;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ModifiableText;
@@ -13,6 +15,7 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.NicknameManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.players.PlayerList;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.server.level.ServerLevel;
@@ -286,6 +289,45 @@ public class ServerPlayerMixin implements IServerPlayer {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @WrapOperation(method = "die", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Z)V"))
+    private void modifyDeathMessage(PlayerList instance, Component component, boolean bl, Operation<Void> original) {
+        if (Main.modDisabled() || !Main.isLogicalSide() || livesManager == null || !livesManager.SHOW_LIFE_DIFF) {
+            original.call(instance, component, bl);
+        }
+        else {
+            livesManager.updateLastStats();
+            TaskScheduler.schedulePriorityTask(1, () -> {
+                original.call(instance, livesManager.modifyBroadcastDeathMessage(component), bl);
+            });
+        }
+    }
+
+    @WrapOperation(method = "die", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemToTeam(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/network/chat/Component;)V"))
+    private void modifyDeathMessage2(PlayerList instance, Player player, Component component, Operation<Void> original) {
+        if (Main.modDisabled() || !Main.isLogicalSide() || livesManager == null || !livesManager.SHOW_LIFE_DIFF) {
+            original.call(instance, player, component);
+        }
+        else {
+            livesManager.updateLastStats();
+            TaskScheduler.schedulePriorityTask(1, () -> {
+                original.call(instance, player, livesManager.modifyBroadcastDeathMessage(component));
+            });
+        }
+    }
+
+    @WrapOperation(method = "die", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemToAllExceptTeam(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/network/chat/Component;)V"))
+    private void modifyDeathMessage3(PlayerList instance, Player player, Component component, Operation<Void> original) {
+        if (Main.modDisabled() || !Main.isLogicalSide() || livesManager == null || !livesManager.SHOW_LIFE_DIFF) {
+            original.call(instance, player, component);
+        }
+        else {
+            livesManager.updateLastStats();
+            TaskScheduler.schedulePriorityTask(1, () -> {
+                original.call(instance, player, livesManager.modifyBroadcastDeathMessage(component));
+            });
         }
     }
 }

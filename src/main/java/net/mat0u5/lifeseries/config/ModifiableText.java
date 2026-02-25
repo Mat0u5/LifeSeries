@@ -105,6 +105,8 @@ public enum ModifiableText {
     ,LIVES_RANDOMIZE_MULTIPLE("§7Assigning random lives to {}§7 targets...", List.of("number of targets"))
     ,LIVES_RANDOMIZE_RESULT("{}§a {}.", List.of("amount", "life/lives"))
     ,LIVES_RANDOMIZE_TITLE("§7You will have...")
+    ,LIVES_SHOW_DIFF_GAIN(Formatted.LOOSELY_STYLED, " §a[+{}]", List.of("amount"))
+    ,LIVES_SHOW_DIFF_LOSS(Formatted.LOOSELY_STYLED, " §c[-{}]", List.of("amount"))
     ,FINAL_DEATH("{} ran out of lives.", List.of("Player"))
     ,FINAL_DEATH_TITLE("{}", List.of("Player"))
     ,FINAL_DEATH_TITLE_SUBTITLE("ran out of lives!")

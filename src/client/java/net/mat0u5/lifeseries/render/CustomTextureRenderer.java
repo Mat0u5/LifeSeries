@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.render;
 import net.minecraft.client.gui.GuiGraphics;
 
 //? if >= 1.21.2 && <= 1.21.5
-/*import net.minecraft.client.renderer.RenderType;*/
+//import net.minecraft.client.renderer.RenderType;
 //? if >= 1.21.6
 import net.minecraft.client.renderer.RenderPipelines;
 

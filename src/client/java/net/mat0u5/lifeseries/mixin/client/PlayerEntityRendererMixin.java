@@ -45,7 +45,7 @@ import net.mat0u5.lifeseries.utils.interfaces.IEntityRenderState;
 import net.minecraft.world.entity.player.Player;
 //?}
 //? if >= 1.21.2 && <= 1.21.6
-/*import net.minecraft.client.renderer.entity.state.PlayerRenderState;*/
+//import net.minecraft.client.renderer.entity.state.PlayerRenderState;
 //? if >= 1.21.9
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 

@@ -348,6 +348,10 @@ public class DefaultConfigValues {
             "lives_randomize_time", 1.0, ConfigTypes.MINUTES, "global.lives.random[new]",
             "Lives Randomize Time", "How many minutes after the session starts the lives get picked."
     );
+    public final ConfigFileEntry<Boolean> LIVES_LIFE_DIFF_MESSAGE = new ConfigFileEntry<>(
+            "lives_life_diff_message", false, "global.lives[new]",
+            "Show Life Diff In Death Message", "Shows an indicator of how many lives were lost in the death messages."
+    );
 
 
 

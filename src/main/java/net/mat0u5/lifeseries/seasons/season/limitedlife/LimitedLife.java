@@ -35,8 +35,6 @@ import static net.mat0u5.lifeseries.Main.*;
 
 public class LimitedLife extends Season {
 
-    private boolean SHOW_DEATH_TITLE = true;
-
     public static Time NEW_DEATH_NORMAL = Time.hours(-1);
     private static Time NEW_DEATH_BOOGEYMAN = Time.hours(-2);
     private static Time NEW_KILL_NORMAL = Time.minutes(30);

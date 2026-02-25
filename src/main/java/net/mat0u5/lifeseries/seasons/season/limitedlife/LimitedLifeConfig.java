@@ -181,6 +181,8 @@ public class LimitedLifeConfig extends ConfigManager {
         LIVES_RANDOMIZE_MAX.description = "The minimum number of time any player can have after randomization, in seconds.";
         LIVES_RANDOMIZE_MIN.type = ConfigTypes.SECONDS;
         LIVES_RANDOMIZE_MAX.type = ConfigTypes.SECONDS;
+        LIVES_LIFE_DIFF_MESSAGE.displayName = "Show Time Diff In Death Message";
+        LIVES_LIFE_DIFF_MESSAGE.description = "Shows an indicator of how much time was lost in the death messages.";
         super.instantiateProperties();
     }
 }

@@ -31,7 +31,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 //?}
 //? if >=1.21.2 && <= 1.21.4
-/*import net.minecraft.world.item.component.Unbreakable;*/
+//import net.minecraft.world.item.component.Unbreakable;
 //? if >= 1.21.5
 import net.minecraft.world.item.component.TooltipDisplay;
 //? if >= 1.21.6
