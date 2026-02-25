@@ -66,6 +66,7 @@ public class LimitedLifeLivesManager extends LivesManager {
         if (player.getTeam() != null) {
             colorBefore = player.getTeam().getColor();
         }
+        SessionTranscript.addRecordIfMissing(player);
         ScoreboardUtils.setScore(player.getScoreboardName(), LivesManager.SCOREBOARD_NAME, lives);
         if (lives <= 0) {
             playerLostAllLives(player, livesBefore);

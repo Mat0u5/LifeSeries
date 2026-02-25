@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.session;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.secretlife.Task;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
@@ -20,8 +21,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
-import static net.mat0u5.lifeseries.Main.currentSession;
+import static net.mat0u5.lifeseries.Main.*;
 
 public class SessionTranscript {
     public static final List<String> messages = new ArrayList<>();
@@ -111,7 +111,12 @@ public class SessionTranscript {
     }
 
     public static void assignRandomLives(ServerPlayer player, int amount) {
-        addMessageWithTime(TextUtils.formatString("{} has been randomly assigned {} lives", player, amount));
+        if (currentSeason.getSeason() != Seasons.LIMITED_LIFE) {
+            addMessageWithTime(TextUtils.formatString("{} has been randomly assigned {} lives", player, amount));
+        }
+        else {
+            addMessageWithTime(TextUtils.formatString("{} has been randomly assigned {} to live", player, livesManager.getFormattedLives(amount).getString()));
+        }
     }
 
     public static void givelife(Component playerName, ServerPlayer target) {
@@ -135,29 +140,34 @@ public class SessionTranscript {
 
     public static void onPlayerDeath(ServerPlayer player, DamageSource source) {
         addMessageWithTime("<@","> ",source.getLocalizedDeathMessage(player).getString());
-        playerRecords.computeIfPresent(player.getScoreboardName(), (key, value) -> {
-            value.set(1, value.get(1)+1);
-            return value;
+        playerRecords.computeIfPresent(player.getScoreboardName(), (key, playerRecord) -> {
+            playerRecord.addDeath();
+            return playerRecord;
         });
     }
 
     public static void onPlayerKilledByPlayer(ServerPlayer victim, ServerPlayer killer) {
         addRecordIfMissing(killer);
-        playerRecords.computeIfPresent(killer.getScoreboardName(), (key, value) -> {
-            value.set(0, value.get(0)+1);
-            return value;
+        playerRecords.computeIfPresent(killer.getScoreboardName(), (key, playerRecord) -> {
+            playerRecord.addKill();
+            return playerRecord;
         });
     }
 
     public static void addRecordIfMissing(ServerPlayer player) {
         if (player.ls$isDead() || player.ls$isWatcher()) return;
         if (!playerRecords.containsKey(player.getScoreboardName())) {
-            playerRecords.put(player.getScoreboardName(), new ArrayList<>(List.of(0,0)));
+            playerRecords.put(player.getScoreboardName(), new PlayerRecord(player.getScoreboardName(), player.ls$getLives()));
         }
     }
 
     public static void onPlayerLostAllLives(ServerPlayer player) {
-        addMessageWithTime(TextUtils.formatString("{} lost all lives.", player));
+        if (currentSeason.getSeason() != Seasons.LIMITED_LIFE) {
+            addMessageWithTime(TextUtils.formatString("{} lost all lives.", player));
+        }
+        else {
+            addMessageWithTime(TextUtils.formatString("{} ran out of time.", player));
+        }
     }
 
     public static void boogeymenChosen(List<ServerPlayer> players) {
@@ -171,22 +181,55 @@ public class SessionTranscript {
         addMessageWithTime("-----  Session started!  -----");
     }
 
-    public static Map<String, List<Integer>> playerRecords = new HashMap<>();
+    public static Map<String, PlayerRecord> playerRecords = new HashMap<>();
     public static void sessionEnd() {
         addMessageWithTime("-----  The session has ended!  -----\n");
-        for (Map.Entry<String, List<Integer>> playerRecord : playerRecords.entrySet()) {
-            if (playerRecord.getValue().size() < 2) continue;
-            int kills = playerRecord.getValue().get(0);
-            int deaths = playerRecord.getValue().get(1);
-            messages.add(TextUtils.formatString("\t{}: {} {} and {} {}",
-                    playerRecord.getKey(),
-                    kills, TextUtils.pluralize("kill", kills),
-                    deaths, TextUtils.pluralize("death", deaths)));
-        }
         if (!playerRecords.isEmpty()) {
+            messages.add(" - Kills and Deaths:");
+            for (PlayerRecord playerRecord : playerRecords.values()) {
+                int kills = playerRecord.kills;
+                int deaths = playerRecord.deaths;
+                messages.add(TextUtils.formatString("\t{}: {} {} and {} {}",
+                        playerRecord.name,
+                        kills, TextUtils.pluralize("kill", kills),
+                        deaths, TextUtils.pluralize("death", deaths)));
+            }
+            messages.add(" - Starting and ending lives:");
+            for (PlayerRecord playerRecord : playerRecords.values()) {
+                Integer startLives = playerRecord.startLives;
+                Integer endLives = playerRecord.getCurrentLives();
+                if (currentSeason.getSeason() != Seasons.LIMITED_LIFE) {
+                    messages.add(TextUtils.formatString("\t{}: {} -> {}",playerRecord.name, startLives, endLives));
+                }
+                else {
+                    messages.add(TextUtils.formatString("\t{}: {} -> {}",playerRecord.name, livesManager.getFormattedLives(startLives).getString(), livesManager.getFormattedLives(endLives).getString()));
+                }
+            }
             messages.add("\n");
         }
     }
+
+    private static class PlayerRecord {
+        public int kills = 0;
+        public int deaths = 0;
+        public final Integer startLives;
+        public final String name;
+        public PlayerRecord(String name, Integer startLives) {
+            this.name = name;
+            this.startLives = startLives;
+        }
+        public void addKill() {
+            kills++;
+        }
+        public void addDeath() {
+            deaths++;
+        }
+        public Integer getCurrentLives() {
+            return livesManager.getScoreLives(this.name);
+        }
+    }
+
+
     public static void addMessageWithTime(String message) {
         addMessageWithTime("[@","] ", message);
     }

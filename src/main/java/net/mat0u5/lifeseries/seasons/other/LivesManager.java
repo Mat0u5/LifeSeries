@@ -314,6 +314,7 @@ public class LivesManager {
         if (currentLives == null) currentLives = 0;
         int lives = currentLives + amount;
         if (lives < 0) lives = 0;
+        SessionTranscript.addRecordIfMissing(player);
         ScoreboardUtils.setScore(player, SCOREBOARD_NAME, lives);
     }
 
@@ -335,6 +336,7 @@ public class LivesManager {
     public void setPlayerLives(ServerPlayer player, int lives) {
         if (player == null || isWatcher(player)) return;
         Integer livesBefore = getPlayerLives(player);
+        SessionTranscript.addRecordIfMissing(player);
         ScoreboardUtils.setScore(player, SCOREBOARD_NAME, lives);
         if (lives <= 0) {
             playerLostAllLives(player, livesBefore);
