@@ -32,7 +32,7 @@ public class DoubleLifeLivesManager extends LivesManager {
 
     @Override
     public Map<ServerPlayer, Integer> getFinalRandomLives(List<ServerPlayer> players) {
-        if (!(currentSeason instanceof DoubleLife doubleLife)) return super.getFinalRandomLives(players);
+        if (!(currentSeason instanceof DoubleLife doubleLife) || !doubleLife.SOULBOUND_LIVES) return super.getFinalRandomLives(players);
 
         Map<UUID, Integer> livesUUID = new HashMap<>();
         Map<ServerPlayer, Integer> lives = new HashMap<>();

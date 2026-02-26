@@ -96,7 +96,7 @@ public class GivelifeCommand extends Command {
             OtherUtils.sendCommandFailure(source, ModifiableText.GIVELIFE_ERROR_TOO_MANY.get());
             return -1;
         }
-        if (currentSeason instanceof DoubleLife doubleLife) {
+        if (currentSeason instanceof DoubleLife doubleLife && doubleLife.SOULBOUND_LIVES) {
             ServerPlayer soulmate = doubleLife.getSoulmate(self);
             if (soulmate != null) {
                 if (soulmate.equals(target)) {

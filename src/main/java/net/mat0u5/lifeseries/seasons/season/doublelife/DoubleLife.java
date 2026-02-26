@@ -46,6 +46,7 @@ public class DoubleLife extends Season {
     public boolean SOULBOUND_FOOD = false;
     public boolean SOULBOUND_EFFECTS = false;
     public boolean SOULBOUND_INVENTORIES = false;
+    public boolean SOULBOUND_LIVES = true;
     public static boolean SOULBOUND_BOOGEYMAN = false;
     public boolean BREAKUP_LAST_PAIR_STANDING = false;
     public boolean DISABLE_START_TELEPORT = false;
@@ -153,6 +154,7 @@ public class DoubleLife extends Season {
         SOULBOUND_BOOGEYMAN = DoubleLifeConfig.SOULBOUND_BOOGEYMAN.get();
         SOULMATES_PVP_ALLOWED = DoubleLifeConfig.SOULMATES_PVP_ALLOWED.get();
         SOULMATES_ASSIGN_MINUTE = DoubleLifeConfig.SOULMATES_ASSIGN_MINUTE.get();
+        SOULBOUND_LIVES = DoubleLifeConfig.SOULBOUND_LIVES.get();
         syncAllPlayers();
     }
 
@@ -543,14 +545,16 @@ public class DoubleLife extends Season {
                 soulmate.setHealth(sharedHealth);
             }
         }
-        
-        Integer soulmateLives = soulmate.ls$getLives();
-        Integer playerLives = player.ls$getLives();
-        if (soulmateLives != null && playerLives != null)  {
-            if (!Objects.equals(soulmateLives, playerLives)) {
-                int minLives = Math.min(soulmateLives,playerLives);
-                player.ls$setLives(minLives);
-                soulmate.ls$setLives(minLives);
+
+        if (SOULBOUND_LIVES) {
+            Integer soulmateLives = soulmate.ls$getLives();
+            Integer playerLives = player.ls$getLives();
+            if (soulmateLives != null && playerLives != null)  {
+                if (!Objects.equals(soulmateLives, playerLives)) {
+                    int minLives = Math.min(soulmateLives,playerLives);
+                    player.ls$setLives(minLives);
+                    soulmate.ls$setLives(minLives);
+                }
             }
         }
 
@@ -559,6 +563,7 @@ public class DoubleLife extends Season {
     }
 
     public void syncSoulboundLives(ServerPlayer player) {
+        if (!SOULBOUND_LIVES) return;
         if (player == null) return;
         Integer lives = player.ls$getLives();
         ServerPlayer soulmate = getSoulmate(player);

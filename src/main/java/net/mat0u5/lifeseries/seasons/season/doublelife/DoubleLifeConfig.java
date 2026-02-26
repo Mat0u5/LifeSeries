@@ -107,6 +107,10 @@ public class DoubleLifeConfig extends ConfigManager {
             "soulmates_assign_time", 1.0, ConfigTypes.MINUTES, "season[new]",
             "Soulmates Assign Time", "How many minutes after the session starts the soulmates get assigned."
     );
+    public static final ConfigFileEntry<Boolean> SOULBOUND_LIVES = new ConfigFileEntry<>(
+            "soulbound_lives", true, "season.soulbind[new]",
+            "Soulbound Lives", "Controls whether soulmates share their life count."
+    );
 
 
 
@@ -133,6 +137,7 @@ public class DoubleLifeConfig extends ConfigManager {
                 ,SOULBOUND_EFFECTS
                 ,SOULBOUND_INVENTORIES
                 , SOULBOUND_BOOGEYMAN
+                ,SOULBOUND_LIVES
                 ,SOULMATES_PVP_ALLOWED
                 , SOULMATES_ASSIGN_MINUTE
         ));
