@@ -176,7 +176,7 @@ public class BoogeymanCommand extends Command {
             OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_SELFFAIL.get());
         }
         else {
-            PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_FAIL_SELF.get(self));
+            PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_FAIL_SELFFAIL.get(self));
         }
         bm.playerFailBoogeymanManually(self, false);
 

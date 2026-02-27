@@ -225,7 +225,7 @@ public enum ModifiableText {
     ,BOOGEYMAN_LATEJOIN("§cSince you were not present when the Boogeyman was being chosen, your chance to become the Boogeyman is now. Good luck!")
     ,BOOGEYMAN_LIST("Current Boogeymen: {}", List.of("list"))
     ,BOOGEYMAN_FAIL_NOTICE("§cYou only have 5 minutes left to kill someone as the Boogeyman before you fail!")
-    ,BOOGEYMAN_FAIL_SELF("{}§7 voulentarily failed themselves as the Boogeyman. They have been consumed by the curse.", List.of("Player"))
+    ,BOOGEYMAN_FAIL_SELFFAIL("{}§7 voluntarily failed themselves as the Boogeyman. They have been consumed by the curse.", List.of("Player"))
     ,BOOGEYMAN_FAIL_OTHER_SINGLE("§7Failing Boogeyman for {}§7...", List.of("Player"))
     ,BOOGEYMAN_FAIL_OTHER_MULTIPLE("§7Failing Boogeyman for {} targets§7...", List.of("number of targets"))
     ,BOOGEYMAN_RESET_SINGLE("§7Resetting Boogeyman cure/failure for {}§7...", List.of("Player"))

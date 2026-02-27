@@ -1,6 +1,10 @@
 package net.mat0u5.lifeseries.mixin.client;
 
+import net.mat0u5.lifeseries.config.WorldConfig;
 import net.minecraft.client.Minecraft;
+import net.minecraft.server.WorldStem;
+import net.minecraft.server.packs.repository.PackRepository;
+import net.minecraft.world.level.storage.LevelStorageSource;
 import org.spongepowered.asm.mixin.Mixin;
 //? if >= 1.20.3 {
 import net.mat0u5.lifeseries.Main;
@@ -10,6 +14,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDila
 import net.minecraft.world.TickRateManager;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 //?}
 
@@ -54,4 +59,13 @@ public abstract class MinecraftMixin {
         ClientRenderer.isGameFullyFrozen = false;
     }
     //?}
+
+
+    @Inject(method = "doWorldLoad", at = @At("HEAD"))
+    private void acknowledgeWorldLoad(LevelStorageSource.LevelStorageAccess levelStorageAccess, PackRepository packRepository, WorldStem worldStem, boolean bl, CallbackInfo ci) {
+        if (Main.modFullyDisabled()) return;
+        WorldConfig worldConfig = new WorldConfig(levelStorageAccess);
+        if (worldConfig.acknowledged()) return;
+        worldConfig.setProperty("acknowledged", "true");
+    }
 }
