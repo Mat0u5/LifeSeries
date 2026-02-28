@@ -8,6 +8,7 @@
     "ChunkStatusTasksMixin",
     "CommandSourceStackMixin",
     "CraftingMenuMixin",
+    "DamageSourceMixin",
     "EnchantmentHelperMixin",
     "EntityMixin",
     "GameRuleCommandMixin",

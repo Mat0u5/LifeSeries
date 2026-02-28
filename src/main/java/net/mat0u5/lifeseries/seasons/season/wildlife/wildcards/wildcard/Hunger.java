@@ -333,10 +333,10 @@ public class Hunger extends Wildcard {
         if (item == null) return;
         if (bannedFoodItems.contains(item)) return;
         //? if <= 1.20.5 {
-        /^components.set(DataComponents.FOOD, new FoodProperties(0, 0, false, 1.6f, List.of()));
-        ^///?} else {
-        components.set(DataComponents.FOOD, new FoodProperties(0, 0, false, 1.6f, Optional.empty(), List.of()));
-        //?}
+        components.set(DataComponents.FOOD, new FoodProperties(0, 0, false, 1.6f, List.of()));
+        //?} else {
+        /^components.set(DataComponents.FOOD, new FoodProperties(0, 0, false, 1.6f, Optional.empty(), List.of()));
+        ^///?}
     }
     *///?} else if > 1.21 {
     public static void defaultFoodComponents(Item item, PatchedDataComponentMap components) {

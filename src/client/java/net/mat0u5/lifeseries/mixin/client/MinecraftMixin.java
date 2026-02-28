@@ -6,15 +6,15 @@ import net.minecraft.server.WorldStem;
 import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import org.spongepowered.asm.mixin.Mixin;
-//? if >= 1.20.3 {
+import org.spongepowered.asm.mixin.injection.At;
 import net.mat0u5.lifeseries.Main;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.Inject;
+//? if >= 1.20.3 {
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.render.ClientRenderer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDilation;
 import net.minecraft.world.TickRateManager;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 //?}
 
@@ -62,7 +62,11 @@ public abstract class MinecraftMixin {
 
 
     @Inject(method = "doWorldLoad", at = @At("HEAD"))
+    //?if <= 1.20.2 {
+    /*private void acknowledgeWorldLoad(String string, LevelStorageSource.LevelStorageAccess levelStorageAccess, PackRepository packRepository, WorldStem worldStem, boolean bl, CallbackInfo ci) {
+    *///?} else {
     private void acknowledgeWorldLoad(LevelStorageSource.LevelStorageAccess levelStorageAccess, PackRepository packRepository, WorldStem worldStem, boolean bl, CallbackInfo ci) {
+    //?}
         if (Main.modFullyDisabled()) return;
         WorldConfig worldConfig = new WorldConfig(levelStorageAccess);
         if (worldConfig.acknowledged()) return;

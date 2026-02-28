@@ -295,6 +295,8 @@ public enum ModifiableText {
     ,DOUBLELIFE_LASTPAIR_PT1_SUBTITLE(Seasons.DOUBLE_LIFE, "§aYour fate is your own...")
     ,DOUBLELIFE_LASTPAIR_PT2_TITLE(Seasons.DOUBLE_LIFE, "")
     ,DOUBLELIFE_LASTPAIR_PT2_SUBTITLE(Seasons.DOUBLE_LIFE, "§cThere can only be one winner.")
+    ,DOUBLELIFE_SOULMATE_DEATH_MSG("{} couldn't live without {}", List.of("Victim", "Killer"))
+    ,DOUBLELIFE_SOULMATE_DEATH_MSG_SOLO("{} couldn't live without their soulmate", List.of("Victim"))
 
     ,LIMITEDLIFE_CHANGE_COLOR(Seasons.LIMITED_LIFE, "{}§7 is now a {} name§7.", List.of("Player", "color"))
     ,LIMITEDLIFE_SESSION_DISPLAY_DIVIDER(Seasons.LIMITED_LIFE, "  |  ")

@@ -225,6 +225,7 @@ public class TextUtils {
         }
         if (arg instanceof ServerPlayer player) {
             Component name = player.getDisplayName();
+            //Component name = player.getFeedbackDisplayName();
             if (name == null) return Component.empty();
             return name;
         }

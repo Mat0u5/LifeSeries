@@ -40,7 +40,8 @@ import static net.mat0u5.lifeseries.Main.*;
 import net.minecraft.world.level.gamerules.GameRules;
 
 public class DoubleLife extends Season {
-    public static final ResourceKey<DamageType> SOULMATE_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE,  IdentifierHelper.mod("soulmate"));
+    public static final String SOULMATE_DAMAGE_IDENTIFIER_NAME = "soulmate";
+    public static final ResourceKey<DamageType> SOULMATE_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE,  IdentifierHelper.mod(SOULMATE_DAMAGE_IDENTIFIER_NAME));
     StringListConfig soulmateConfig;
     public boolean ANNOUNCE_SOULMATES = false;
     public boolean SOULBOUND_FOOD = false;
