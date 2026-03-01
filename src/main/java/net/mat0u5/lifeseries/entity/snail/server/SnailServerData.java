@@ -152,7 +152,7 @@ public class SnailServerData implements PlayerBoundEntity {
         }
         if (snail.tickCount % 10 == 0) {
             if (!snail.isFromTrivia()) {
-                if (!Snails.snails.containsValue(snail) || !WildcardManager.isActiveWildcard(Wildcards.SNAILS)) {
+                if (!Snails.snails.containsValue(snail)) {
                     despawn();
                     return true;
                 }

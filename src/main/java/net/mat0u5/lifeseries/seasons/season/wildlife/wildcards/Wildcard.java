@@ -36,6 +36,9 @@ public abstract class Wildcard {
     public void tick() {}
     public void softTick() {}
 
+    public boolean isActive() {
+        return active;
+    }
 
     public static boolean isFinale() {
         return WildcardManager.FINALE || (WildcardManager.isActiveWildcard(Wildcards.CALLBACK) && Callback.NERFED_WILDCARDS);

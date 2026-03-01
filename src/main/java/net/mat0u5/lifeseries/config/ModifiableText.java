@@ -443,6 +443,14 @@ public enum ModifiableText {
     ,WILDLIFE_POWER_TELEPORTATION_ERROR(Seasons.WILD_LIFE, "There is nothing to teleport to.")
     ,WILDLIFE_SNAIL_TRIVIA_SNAIL_NAME(Seasons.WILD_LIFE, "VHSnail")
 
+    ,WILDLIFE_SNAIL_SPAWN_SINGLE(Seasons.WILD_LIFE, "Spawned {}'s snail", List.of("Player"))
+    ,WILDLIFE_SNAIL_SPAWN_MULTIPLE(Seasons.WILD_LIFE, "Spawned snail of {} targets", List.of("number of targets"))
+    ,WILDLIFE_SNAIL_DESPAWN_SINGLE(Seasons.WILD_LIFE, "Despawned {}'s snail", List.of("Player"))
+    ,WILDLIFE_SNAIL_DESPAWN_MULTIPLE(Seasons.WILD_LIFE, "Despawned snail of {} targets", List.of("number of targets"))
+    ,WILDLIFE_SNAIL_SPAWN_PREVENT(Seasons.WILD_LIFE, "Prevented {}'s snail from spawning", List.of("Player"))
+    ,WILDLIFE_SNAIL_SPAWN_ALLOW(Seasons.WILD_LIFE, "Allowed {}'s snail to spawn", List.of("Player"))
+    ,WILDLIFE_SNAIL_SPAWN_TOGGLE_MULTIPLE(Seasons.WILD_LIFE, "Toggled snail spawn state for {} targets", List.of("number of targets"))
+
     ,PASTLIFE_SESSION_START(Seasons.PAST_LIFE, "§7Past Life session started:\n§7 Type §f\"/pastlife boogeyman\"§7 to have the Boogeyman in this session.\n§7 Type §f\"/pastlife society\"§7 to have the Secret Society in this session.\n§7 Or type §f\"/pastlife pickRandom\"§7 if you want the game to pick randomly.\n")
     ,BOOGEYMAN_PASTLIFE_MESSAGE_PT1(Seasons.PAST_LIFE, "§7You are the boogeyman.")
     ,BOOGEYMAN_PASTLIFE_MESSAGE_PT2(Seasons.PAST_LIFE, "§7You must by any means necessary kill a §agreen§7 or §eyellow§7 name\n§7by direct action to be cured of the curse.")

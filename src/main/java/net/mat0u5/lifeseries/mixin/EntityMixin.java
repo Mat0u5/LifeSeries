@@ -110,7 +110,7 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
         if (!Main.isLogicalSide() || Main.modDisabled()) return;
         if (currentSeason instanceof WildLife) {
             if (!Snail.SHOULD_DROWN_PLAYER) return;
-            if (!WildcardManager.isActiveWildcard(Wildcards.SNAILS)) return;
+            if (Snails.snails.isEmpty()) return;
             Entity entity = (Entity) (Object) this;
             if (entity instanceof Player player && !player.hasEffect(MobEffects.WATER_BREATHING)) {
                 if (!Snails.snails.containsKey(player.getUUID())) return;

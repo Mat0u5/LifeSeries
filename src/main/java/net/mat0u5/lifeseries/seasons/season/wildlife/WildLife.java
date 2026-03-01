@@ -384,7 +384,7 @@ public class WildLife extends Season {
     @Override
     public void onPlayerRespawn(ServerPlayer player) {
         super.onPlayerRespawn(player);
-        if (WildcardManager.isActiveWildcard(Wildcards.SNAILS)) {
+        if (!Snails.snails.isEmpty() && Snails.canHaveSnail(player)) {
             Snail snail = Snails.snails.get(player.getUUID());
             if (snail != null && player.distanceTo(snail) <= 15) {
                 snail.serverData.despawn();

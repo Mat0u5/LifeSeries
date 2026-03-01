@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -150,6 +151,33 @@ public class WildLifeCommands extends Command {
                             .executes(context -> snailTexturesReload(context.getSource()))
                     )
                 )
+                .then(literal("control")
+                        .requires(PermissionManager::isAdmin)
+                        .then(literal("despawn")
+                                .then(argument("player", EntityArgument.players())
+                                        .executes(context -> despawnSnailFor(
+                                                context.getSource(),
+                                                EntityArgument.getPlayers(context, "player")
+                                        ))
+                                )
+                        )
+                        .then(literal("spawn")
+                                .then(argument("player", EntityArgument.players())
+                                        .executes(context -> spawnSnailFor(
+                                                context.getSource(),
+                                                EntityArgument.getPlayers(context, "player")
+                                        ))
+                                )
+                        )
+                        .then(literal("toggle")
+                                .then(argument("player", EntityArgument.players())
+                                        .executes(context -> toggleSnailFor(
+                                                context.getSource(),
+                                                EntityArgument.getPlayers(context, "player")
+                                        ))
+                                )
+                        )
+                )
         );
         dispatcher.register(
             literal("superpower")
@@ -201,6 +229,68 @@ public class WildLifeCommands extends Command {
                 )
         );
     }
+
+    public int despawnSnailFor(CommandSourceStack source, Collection<ServerPlayer> targets) {
+        if (checkBanned(source)) return -1;
+
+        for (ServerPlayer player : targets) {
+            Snail snail = Snails.snails.remove(player.getUUID());
+            if (snail != null) {
+                snail.serverData.despawn();
+            }
+        }
+
+        if (targets.size() == 1) {
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_DESPAWN_SINGLE.get(targets.iterator().next()));
+        }
+        else {
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_DESPAWN_MULTIPLE.get(targets.size()));
+        }
+
+        return 1;
+    }
+    public int spawnSnailFor(CommandSourceStack source, Collection<ServerPlayer> targets) {
+        if (checkBanned(source)) return -1;
+
+        for (ServerPlayer player : targets) {
+            Snails.preventSnails.remove(player.getUUID());
+            Snails.spawnSnailFor(player);
+        }
+
+        if (targets.size() == 1) {
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_SPAWN_SINGLE.get(targets.iterator().next()));
+        }
+        else {
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_SPAWN_MULTIPLE.get(targets.size()));
+        }
+
+        return 1;
+    }
+
+    public int toggleSnailFor(CommandSourceStack source, Collection<ServerPlayer> targets) {
+        if (checkBanned(source)) return -1;
+
+
+        if (targets.size() == 1) {
+            ServerPlayer player = targets.iterator().next();
+            boolean canHaveSnail = Snails.toggleSnailPrevent(player);
+            if (canHaveSnail) {
+                OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_SPAWN_ALLOW.get(player));
+            }
+            else {
+                OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_SPAWN_PREVENT.get(player));
+            }
+        }
+        else {
+            for (ServerPlayer player : targets) {
+                Snails.toggleSnailPrevent(player);
+            }
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_SPAWN_TOGGLE_MULTIPLE.get(targets.size()));
+        }
+
+        return 1;
+    }
+
 
     public int effectDots(CommandSourceStack source) {
         if (checkBanned(source)) return -1;

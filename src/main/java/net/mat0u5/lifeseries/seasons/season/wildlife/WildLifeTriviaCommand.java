@@ -77,7 +77,7 @@ public class WildLifeTriviaCommand extends Command {
                         )
                         .then(literal("bot")
                                 .requires(source -> isAllowed())
-                                .then(literal("spawnFor")
+                                .then(literal("spawn")
                                         .then(argument("player", EntityArgument.players())
                                                 .executes(context -> spawnBotFor(
                                                         context.getSource(),
