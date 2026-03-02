@@ -612,6 +612,10 @@ public abstract class Season {
 
         if (!isAllowedToAttack(killer, victim) && !HIDE_UNJUSTIFIED_KILL_MESSAGES) {
             PlayerUtils.broadcastMessageToAdmins(ModifiableText.SEASON_KILL_UNJUSTIFIED.get(victim, killer));
+            DatapackIntegration.EVENT_UNJUSTIFIED_KILL.trigger(List.of(
+                    new DatapackIntegration.Events.MacroEntry("Killer", killer.getScoreboardName()),
+                    new DatapackIntegration.Events.MacroEntry("Victim", victim.getScoreboardName())
+            ));
         }
 
         if (isBoogeyCure) {
