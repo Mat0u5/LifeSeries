@@ -7,7 +7,7 @@ import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.datafixers.util.Pair;
-import net.mat0u5.lifeseries.events.Events;
+import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.mixin.PlayerAccessor;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.network.protocol.game.*;
@@ -32,6 +32,13 @@ import java.util.concurrent.CompletableFuture;
 import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.Main.server;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.net.*;
+import java.nio.file.Files;
+import java.nio.charset.StandardCharsets;
+
 //? if > 1.21 {
 import com.mojang.authlib.properties.PropertyMap;
 import net.minecraft.world.entity.PositionMoveRotation;
@@ -46,7 +53,8 @@ public class ProfileManager {
         NONE,
         EMPTY,
         ORIGINAL,
-        SET;
+        SET,
+        FILE;
         String info = "";
         public ProfileChange withInfo(String info) {
             this.info = info;
@@ -71,6 +79,9 @@ public class ProfileManager {
                 }
                 if (skinChange == ProfileChange.SET) {
                     targetSkin = fetchSkinFromUsername(skinChange.info);
+                }
+                if (skinChange == ProfileChange.FILE) {
+                    targetSkin = fetchSkinFromFile(skinChange.info);
                 }
 
                 setProfile(player, skinChange, usernameChange, targetSkin);
@@ -194,6 +205,100 @@ public class ProfileManager {
         }
     }
 
+    private static Property fetchSkinFromFile(String filePath) {
+        File skinFile = new File(filePath);
+        if (!skinFile.exists() || !skinFile.isFile()) {
+            Main.LOGGER.error("[ProfileManager] Skin file not found: " + filePath);
+            return null;
+        }
+
+        try {
+            BufferedImage image = ImageIO.read(skinFile);
+            if (image == null) {
+                Main.LOGGER.error("[ProfileManager] Could not read image: " + filePath);
+                return null;
+            }
+            if (image.getWidth() != 64 || (image.getHeight() != 64 && image.getHeight() != 32)) {
+                Main.LOGGER.error("[ProfileManager] Invalid skin dimensions " + image.getWidth() + "x" + image.getHeight() + " for: " + filePath);
+                return null;
+            }
+
+            String boundary = "----SkinBoundary" + UUID.randomUUID().toString().replace("-", "");
+            URL endpoint = new URL("https://api.mineskin.org/v2/generate");
+            HttpURLConnection connection = (HttpURLConnection) endpoint.openConnection();
+            connection.setDoOutput(true);
+            connection.setDoInput(true);
+            connection.setUseCaches(false);
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+            connection.setRequestProperty("User-Agent", "LifeSeries-Mod/1.0");
+            connection.setConnectTimeout(10_000);
+            connection.setReadTimeout(30_000);
+
+            final String CRLF = "\r\n";
+
+            try (OutputStream out = connection.getOutputStream();
+                 PrintWriter writer = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), true)) {
+
+                writer.append("--").append(boundary).append(CRLF);
+                writer.append("Content-Disposition: form-data; name=\"variant\"").append(CRLF);
+                writer.append(CRLF).append("classic").append(CRLF).flush();
+
+                writer.append("--").append(boundary).append(CRLF);
+                writer.append("Content-Disposition: form-data; name=\"file\"; filename=\"skin.png\"").append(CRLF);
+                writer.append("Content-Type: image/png").append(CRLF);
+                writer.append("Content-Transfer-Encoding: binary").append(CRLF);
+                writer.append(CRLF).flush();
+
+                out.write(Files.readAllBytes(skinFile.toPath()));
+                out.flush();
+
+                writer.append(CRLF);
+                writer.append("--").append(boundary).append("--").append(CRLF).flush();
+            }
+
+            int status = connection.getResponseCode();
+            if (status != HttpURLConnection.HTTP_OK && status != 201) {
+                Main.LOGGER.error("[ProfileManager] MineSkin returned HTTP " + status + " for file: " + filePath);
+                connection.disconnect();
+                return null;
+            }
+
+            StringBuilder response = new StringBuilder();
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+            }
+            connection.disconnect();
+
+            JsonObject root = JsonParser.parseString(response.toString()).getAsJsonObject();
+
+            if (!root.has("skin")) {
+                Main.LOGGER.error("[ProfileManager] Unexpected MineSkin response (no 'skin' field): " + response);
+                return null;
+            }
+
+            JsonObject data = root.getAsJsonObject("skin").getAsJsonObject("texture").getAsJsonObject("data");
+
+            if (!data.has("value")) {
+                Main.LOGGER.error("[ProfileManager] Unexpected MineSkin response (no 'value' in data): " + response);
+                return null;
+            }
+
+            String value = data.get("value").getAsString();
+            String signature = data.has("signature") ? data.get("signature").getAsString() : null;
+
+            return new Property("textures", value, signature);
+
+        } catch (Exception e) {
+            Main.LOGGER.error("[ProfileManager] fetchSkinFromFile failed for: " + filePath);
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     private static void refreshPlayerProfile(ServerPlayer player) {
         ServerLevel level = player.ls$getServerLevel();
         PlayerList playerList = server.getPlayerList();
@@ -290,7 +395,7 @@ public class ProfileManager {
                 }
             }
         } catch (Exception e) {
-            System.err.println("Entity tracker refresh failed: " + e.getMessage());
+            Main.LOGGER.error("Entity tracker refresh failed: " + e.getMessage());
         }
     }
 
