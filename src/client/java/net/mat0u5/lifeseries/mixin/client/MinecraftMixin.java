@@ -17,6 +17,10 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDila
 import net.minecraft.world.TickRateManager;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 //?}
+//? if >= 26.1 {
+/*import net.minecraft.world.level.gamerules.GameRules;
+import java.util.Optional;
+*///?}
 
 @Mixin(value = Minecraft.class, priority = 1)
 public abstract class MinecraftMixin {
@@ -64,9 +68,11 @@ public abstract class MinecraftMixin {
     @Inject(method = "doWorldLoad", at = @At("HEAD"))
     //?if <= 1.20.2 {
     /*private void acknowledgeWorldLoad(String string, LevelStorageSource.LevelStorageAccess levelStorageAccess, PackRepository packRepository, WorldStem worldStem, boolean bl, CallbackInfo ci) {
-    *///?} else {
+    *///?} else if <= 1.21.11 {
     private void acknowledgeWorldLoad(LevelStorageSource.LevelStorageAccess levelStorageAccess, PackRepository packRepository, WorldStem worldStem, boolean bl, CallbackInfo ci) {
-    //?}
+    //?} else {
+    /*private void acknowledgeWorldLoad(LevelStorageSource.LevelStorageAccess levelStorageAccess, PackRepository packRepository, WorldStem worldStem, Optional<GameRules> gameRules, boolean newWorld, CallbackInfo ci) {
+    *///?}
         if (Main.modFullyDisabled()) return;
         WorldConfig worldConfig = new WorldConfig(levelStorageAccess);
         if (worldConfig.acknowledged()) return;

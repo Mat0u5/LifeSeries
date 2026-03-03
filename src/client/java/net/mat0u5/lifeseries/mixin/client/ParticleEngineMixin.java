@@ -17,7 +17,6 @@ import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.particle.ParticleGroup;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.renderer.culling.Frustum;
-import net.minecraft.client.renderer.state.ParticlesRenderState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,6 +25,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Map;
+
+//? if <= 1.21.11 {
+import net.minecraft.client.renderer.state.ParticlesRenderState;
+//?} else {
+/*import net.minecraft.client.renderer.state.level.ParticlesRenderState;
+*///?}
 
 @Mixin(value = ParticleEngine.class)
 public abstract class ParticleEngineMixin {
