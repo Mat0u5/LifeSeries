@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
 import net.mat0u5.lifeseries.utils.player.NicknameManager;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
@@ -117,7 +118,7 @@ public class LifeSkinsCommand extends Command {
     public int listLifeSkins(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
 
-        Map<String, Map<Integer, File>> skinsCache = LifeSkinsManager.getCache();
+        Map<String, Map<Integer, Tuple<Boolean, File>>> skinsCache = LifeSkinsManager.getCache();
         if (skinsCache.isEmpty()) {
             OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.LIFESKINS_LIST_EMPTY.get());
             lifeSkinsInfo(source);
@@ -125,7 +126,7 @@ public class LifeSkinsCommand extends Command {
         }
         else {
             OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.LIFESKINS_LIST.get());
-            for (Map.Entry<String, Map<Integer, File>> holderskins : skinsCache.entrySet()) {
+            for (Map.Entry<String, Map<Integer, Tuple<Boolean, File>>> holderskins : skinsCache.entrySet()) {
                 String name = holderskins.getKey();
                 List<String> skins = new ArrayList<>();
                 for (Integer skin : holderskins.getValue().keySet()) {

@@ -56,6 +56,7 @@ public class ProfileManager {
         EMPTY,
         ORIGINAL,
         SET,
+        FILE_SLIM,
         FILE;
         String info = "";
         public ProfileChange withInfo(String info) {
@@ -83,7 +84,10 @@ public class ProfileManager {
                     targetSkin = fetchSkinFromUsername(skinChange.info);
                 }
                 if (skinChange == ProfileChange.FILE) {
-                    targetSkin = fetchSkinFromFile(skinChange.info);
+                    targetSkin = fetchSkinFromFile(skinChange.info, false);
+                }
+                if (skinChange == ProfileChange.FILE_SLIM) {
+                    targetSkin = fetchSkinFromFile(skinChange.info, true);
                 }
 
                 Tuple<Boolean, Boolean> changed = setProfile(player, skinChange, usernameChange, targetSkin);
@@ -217,7 +221,7 @@ public class ProfileManager {
         }
     }
 
-    private static Property fetchSkinFromFile(String filePath) {
+    private static Property fetchSkinFromFile(String filePath, boolean slim) {
         File skinFile = new File(filePath);
         if (!skinFile.exists() || !skinFile.isFile()) {
             Main.LOGGER.error("[ProfileManager] Skin file not found: " + filePath);
@@ -254,7 +258,7 @@ public class ProfileManager {
 
                 writer.append("--").append(boundary).append(CRLF);
                 writer.append("Content-Disposition: form-data; name=\"variant\"").append(CRLF);
-                writer.append(CRLF).append("classic").append(CRLF).flush();
+                writer.append(CRLF).append(slim ? "slim" : "classic").append(CRLF).flush();//TODO test
 
                 writer.append("--").append(boundary).append(CRLF);
                 writer.append("Content-Disposition: form-data; name=\"file\"; filename=\"skin.png\"").append(CRLF);

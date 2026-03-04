@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.resources.ResourceHandler;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.io.File;
@@ -16,9 +17,9 @@ public class LifeSkinsManager {
     private static final String SKINS_BASE_DIR = "config/lifeseries/lifeskins";
 
     private static final Map<UUID, File> lastAppliedFile = new HashMap<>();
-    private static final Map<String, Map<Integer, File>> skinsCache = new HashMap<>();
+    private static final Map<String, Map<Integer, Tuple<Boolean, File>>> skinsCache = new HashMap<>();
 
-    public static Map<String, Map<Integer, File>> getCache() {
+    public static Map<String, Map<Integer, Tuple<Boolean, File>>> getCache() {
         return skinsCache;
     }
 
@@ -30,7 +31,10 @@ public class LifeSkinsManager {
         Integer currentLives = player.ls$getLives();
         UUID uuid = player.getUUID();
 
-        File skinFile = resolveFile(player, currentLives);
+        Tuple<Boolean, File> skinInfo = resolveFile(player, currentLives);
+        boolean slim = skinInfo.x;
+        File skinFile = skinInfo.y;
+
         if (!forceReload) {
             if (lastAppliedFile.containsKey(uuid) && Objects.equals(lastAppliedFile.get(uuid), skinFile)) {
                 return;
@@ -42,8 +46,12 @@ public class LifeSkinsManager {
 
         if (skinFile != null) {
             Main.LOGGER.info("[LifeSkins] Applying skin for " + player.getScoreboardName() + " at " + currentLives + " lives: " + skinFile.getPath());
-
-            ProfileManager.modifyProfile(player, ProfileManager.ProfileChange.FILE.withInfo(skinFile.getAbsolutePath()), ProfileManager.ProfileChange.NONE);
+            if (slim) {
+                ProfileManager.modifyProfile(player, ProfileManager.ProfileChange.FILE_SLIM.withInfo(skinFile.getAbsolutePath()), ProfileManager.ProfileChange.NONE);
+            }
+            else {
+                ProfileManager.modifyProfile(player, ProfileManager.ProfileChange.FILE.withInfo(skinFile.getAbsolutePath()), ProfileManager.ProfileChange.NONE);
+            }
             lastAppliedFile.put(uuid, skinFile);
         } else {
             // No Life Skins -> Back to default skin
@@ -74,8 +82,8 @@ public class LifeSkinsManager {
         PlayerUtils.getAllPlayers().forEach(LifeSkinsManager::reloadSkin);
     }
 
-    private static File resolveFile(ServerPlayer player, Integer lifeCount) {
-        Map<Integer, File> skins = skinsCache.get(player.getScoreboardName());
+    private static Tuple<Boolean, File> resolveFile(ServerPlayer player, Integer lifeCount) {
+        Map<Integer, Tuple<Boolean, File>> skins = skinsCache.get(player.getScoreboardName());
         if (skins == null) {
             // If no name skins were found, use the UUID files
             UUID uuid = player.getUUID();
@@ -88,8 +96,8 @@ public class LifeSkinsManager {
         }
 
         if (skins != null && !skins.isEmpty()) {
-            File file = skins.get(lifeCount);
-            if (file != null) return file;
+            Tuple<Boolean, File> skinInfo = skins.get(lifeCount);
+            if (skinInfo.y != null) return skinInfo;
 
             if (lifeCount != null) {
                 List<Integer> sortedLives = new ArrayList<>();
@@ -101,14 +109,14 @@ public class LifeSkinsManager {
                 for (int i = sortedLives.size()-1; i >= 0; i--) {
                     int currentLifeCount = sortedLives.get(i);
                     if (currentLifeCount <= lifeCount) {
-                        file = skins.get(currentLifeCount);
-                        if (file != null) return file;
+                        skinInfo = skins.get(currentLifeCount);
+                        if (skinInfo.y != null) return skinInfo;
                     }
                 }
             }
         }
 
-        return null;
+        return new Tuple<>(false, null);
     }
 
     public static void reloadSkinsCache() {
@@ -126,7 +134,7 @@ public class LifeSkinsManager {
         for (File playerDir : playerDirs) {
             if (playerDir == null || !playerDir.exists() || !playerDir.isDirectory()) continue;
             String name = playerDir.getName();
-            Map<Integer, File> skins = new HashMap<>();
+            Map<Integer, Tuple<Boolean, File>> skins = new HashMap<>();
             File[] skinFiles = playerDir.listFiles();
             if (skinFiles == null) continue;
             for (File skinFile : skinFiles) {
@@ -137,8 +145,10 @@ public class LifeSkinsManager {
                     if (dotIndex > 0) {
                         skinName = skinName.substring(0, dotIndex);
                     }
+                    boolean slim = skinName.endsWith("_slim");
+                    skinName = skinName.replace("_slim","");
                     Integer intName = skinName.equalsIgnoreCase("null") ? null : Integer.parseInt(skinName);
-                    skins.put(intName, skinFile);
+                    skins.put(intName, new Tuple<>(slim, skinFile));
                 }catch(Exception ignored) {}
             }
             if (skins.isEmpty()) continue;
