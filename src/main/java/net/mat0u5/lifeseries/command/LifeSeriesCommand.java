@@ -260,9 +260,8 @@ public class LifeSeriesCommand extends Command {
 
     public int getCredits(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7The Life Series was originally created by §fGrian§7" +
-                ", and this mod, created by §fMat0u5§7, aims to recreate every single season one-to-one."));
-        OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("§7This mod uses sounds created by §fOli (TheOrionSound)§7, and uses recreated snail model (first created by §fDanny§7), and a recreated trivia bot model (first created by §fHoffen§7)."));
+        Component text = TextUtils.format("§7Click {}§7 to open the full Life Series Mod Credits", TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs/other/credits"));
+        OtherUtils.sendCommandFeedbackQuiet(source, text);
         return 1;
     }
 }
