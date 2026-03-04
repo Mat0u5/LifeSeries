@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
 import net.mat0u5.lifeseries.utils.player.NicknameManager;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.ProfileManager;
@@ -16,7 +17,10 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class LifeSkinsCommand extends Command {
     @Override
@@ -40,8 +44,6 @@ public class LifeSkinsCommand extends Command {
 
     @Override
     public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        if (Main.DEBUG) {
-
         dispatcher.register(Commands.literal("lifeskins")
                 .requires(PermissionManager::isAdmin)
                         .then(literal("modify")
@@ -91,10 +93,58 @@ public class LifeSkinsCommand extends Command {
                                         )
                                 )
                         )
-
+                .then(literal("reload")
+                        .executes(context -> reloadLifeSkins(context.getSource()))
+                )
+                .then(literal("list")
+                        .executes(context -> listLifeSkins(context.getSource()))
+                )
+                .then(literal("info")
+                        .executes(context -> lifeSkinsInfo(context.getSource()))
+                )
+                .executes(context -> lifeSkinsInfo(context.getSource()))
         );
+    }
 
+    public int lifeSkinsInfo(CommandSourceStack source) {
+        if (checkBanned(source)) return -1;
+
+        //TODO remove /dev/ when out of development
+        //TODO update URL
+        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.LIFESKINS_INFO.get(TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs/dev/features/life-skins")));
+
+        return 1;
+    }
+    public int listLifeSkins(CommandSourceStack source) {
+        if (checkBanned(source)) return -1;
+
+        Map<String, Map<Integer, File>> skinsCache = LifeSkinsManager.getCache();
+        if (skinsCache.isEmpty()) {
+            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.LIFESKINS_LIST_EMPTY.get());
+            lifeSkinsInfo(source);
+            return -1;
         }
+        else {
+            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.LIFESKINS_LIST.get());
+            for (Map.Entry<String, Map<Integer, File>> holderskins : skinsCache.entrySet()) {
+                String name = holderskins.getKey();
+                List<String> skins = new ArrayList<>();
+                for (Integer skin : holderskins.getValue().keySet()) {
+                    skins.add(String.valueOf(skin));
+                }
+                OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.LIFESKINS_LIST_PERSON.get(name, skins));
+            }
+        }
+
+        return 1;
+    }
+    public int reloadLifeSkins(CommandSourceStack source) {
+        if (checkBanned(source)) return -1;
+
+        LifeSkinsManager.reloadAll();
+        OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_RELOAD.get());
+
+        return 1;
     }
 
     public int setSkin(CommandSourceStack source, ServerPlayer player, String username) {
@@ -102,7 +152,12 @@ public class LifeSkinsCommand extends Command {
         ProfileManager.ProfileChange skinChange = (username == null) ? ProfileManager.ProfileChange.ORIGINAL : ProfileManager.ProfileChange.SET.withInfo(username);
         ProfileManager.modifyProfile(player, skinChange, ProfileManager.ProfileChange.NONE).thenAccept(success -> {
             if (success) {
-                OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_SKIN_SET.get(player, username));
+                if (username != null) {
+                    OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_SKIN_SET.get(player, username));
+                }
+                else {
+                    OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_SKIN_RESET.get(player));
+                }
             }
             else {
                 OtherUtils.sendCommandFailure(source, ModifiableText.MOD_ERROR_GENERAL.get());
@@ -116,7 +171,12 @@ public class LifeSkinsCommand extends Command {
         ProfileManager.ProfileChange nameChange = (username == null) ? ProfileManager.ProfileChange.ORIGINAL : ProfileManager.ProfileChange.SET.withInfo(username);
         ProfileManager.modifyProfile(player, ProfileManager.ProfileChange.NONE, nameChange).thenAccept(success -> {
             if (success) {
-                OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_USERNAME_SET.get(player, username));
+                if (username != null) {
+                    OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_USERNAME_SET.get(player, username));
+                }
+                else {
+                    OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_USERNAME_RESET.get(player));
+                }
             }
             else {
                 OtherUtils.sendCommandFailure(source, ModifiableText.MOD_ERROR_GENERAL.get());
