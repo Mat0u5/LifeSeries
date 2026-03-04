@@ -20,6 +20,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkins;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ProfileManager;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
@@ -107,6 +108,7 @@ public class Events {
         try {
             playerStartJoining(player);
             if (Main.modDisabled()) return;
+            LifeSkinsManager.onPlayerJoin(player);
             currentSeason.onPlayerJoin(player);
             currentSeason.onUpdatedInventory(player);
             SessionTranscript.playerJoin(player);
@@ -135,6 +137,7 @@ public class Events {
         if (isFakePlayer(player)) return;
 
         try {
+            LifeSkinsManager.onPlayerDisconnect(player);
             currentSeason.onPlayerDisconnect(player);
             SessionTranscript.playerLeave(player);
             NetworkHandlerServer.preLoginHandshake.remove(player.getUUID());

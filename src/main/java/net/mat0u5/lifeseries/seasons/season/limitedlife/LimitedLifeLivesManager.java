@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Time;
+import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
@@ -17,6 +18,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 
 import java.util.Locale;
+import java.util.Objects;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.Main.seasonConfig;
@@ -62,6 +64,7 @@ public class LimitedLifeLivesManager extends LivesManager {
     public void setPlayerLives(ServerPlayer player, int lives) {
         if (isWatcher(player)) return;
         Integer livesBefore = getPlayerLives(player);
+        boolean livesChanged = !Objects.equals(lives, livesBefore);
         ChatFormatting colorBefore = null;
         if (player.getTeam() != null) {
             colorBefore = player.getTeam().getColor();
@@ -82,6 +85,9 @@ public class LimitedLifeLivesManager extends LivesManager {
             }
         }
         currentSeason.reloadPlayerTeam(player);
+        if (livesChanged) {
+            LifeSkinsManager.refreshLifeSkin(player);
+        }
     }
 
     @Override

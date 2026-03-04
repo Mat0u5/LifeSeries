@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.other.*;
+import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.player.TeamUtils;
@@ -275,9 +276,14 @@ public class LivesManager {
     }
 
     public void resetPlayerLife(ServerPlayer player) {
+        boolean livesChanged = player.ls$getLives() != null;
         ScoreboardUtils.resetScore(player, SCOREBOARD_NAME);
         currentSeason.reloadPlayerTeam(player);
         currentSeason.assignDefaultLives(player);
+
+        if (livesChanged) {
+            LifeSkinsManager.refreshLifeSkin(player);
+        }
     }
 
     public void resetAllPlayerLivesInner() {
@@ -341,6 +347,7 @@ public class LivesManager {
     public void setPlayerLives(ServerPlayer player, int lives) {
         if (player == null || isWatcher(player)) return;
         Integer livesBefore = getPlayerLives(player);
+        boolean livesChanged = !Objects.equals(lives, livesBefore);
         SessionTranscript.addRecordIfMissing(player);
         ScoreboardUtils.setScore(player, SCOREBOARD_NAME, lives);
         if (lives <= 0) {
@@ -352,8 +359,11 @@ public class LivesManager {
         currentSeason.reloadPlayerTeam(player);
 
         if (SubInManager.isSubbingIn(player.getUUID())) {
-            String substitutedPlayerName =OtherUtils.profileName(SubInManager.getSubstitutedPlayer(player.getUUID()));
+            String substitutedPlayerName = OtherUtils.profileName(SubInManager.getSubstitutedPlayer(player.getUUID()));
             setScore(substitutedPlayerName, lives);
+        }
+        if (livesChanged) {
+            LifeSkinsManager.refreshLifeSkin(player);
         }
     }
 

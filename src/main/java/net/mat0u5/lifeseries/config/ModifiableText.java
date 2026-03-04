@@ -210,9 +210,16 @@ public enum ModifiableText {
     ,GIVELIFE_ERROR_SOULMATE("You cannot give lives to your soulmate")
 
     ,LIFESKINS_SKIN_SET("Set {}'s skin to {}", List.of("Player", "username"))
+    ,LIFESKINS_SKIN_RESET("Reset {}'s skin", List.of("Player"))
     ,LIFESKINS_USERNAME_SET("Set {}'s username to {}", List.of("Player", "username"))
+    ,LIFESKINS_USERNAME_RESET("Reset {}'s username", List.of("Player"))
     ,LIFESKINS_NICKNAME_SET("Set {}'s nickname to {}", List.of("Player", "nickname"))
     ,LIFESKINS_NICKNAME_RESET("Reset {}'s nickname", List.of("Player"))
+    ,LIFESKINS_RELOAD("§7Reloading Life Skins...")
+    ,LIFESKINS_LIST_EMPTY("There are no Life Skins currently loaded")
+    ,LIFESKINS_LIST("§7Loaded Life Skins for life boundaries:")
+    ,LIFESKINS_LIST_PERSON(Formatted.LOOSELY_STYLED, "§f {}: §7{}", List.of("Holder", "skins"))
+    ,LIFESKINS_INFO("§fClick {}§f to open the Life Skins info page on the Wiki.", List.of("ClickHere"))
 
     ,SIDETITLE_SINGLE("Showing new side title for {}", List.of("Player"))
     ,SIDETITLE_MULTIPLE("Showing new side title for {} players", List.of("number of targets"))
@@ -362,7 +369,7 @@ public enum ModifiableText {
     ,SECRETLIFE_TASK_REROLL_PT3(Seasons.SECRET_LIFE, "§e§lLet me open the door")
     ,SECRETLIFE_TASK_REROLL_PT4(Seasons.SECRET_LIFE, "§c§lAccept your fate")
 
-    ,WILDLIFE_SNAIL_TEXTURE_INFO(Seasons.WILD_LIFE, Formatted.LOOSELY_STYLED,"§fClick {}§f to open the Snail Textures info page in the Wiki.", List.of("ClickHere"))
+    ,WILDLIFE_SNAIL_TEXTURE_INFO(Seasons.WILD_LIFE,"§fClick {}§f to open the Snail Textures info page on the Wiki.", List.of("ClickHere"))
     ,WILDLIFE_SNAIL_DEFAULT_NAME(Seasons.WILD_LIFE, Formatted.PLAIN,"{}'s Snail", List.of("Player"))
     ,WILDLIFE_SNAIL_NAME_REQUEST(Seasons.WILD_LIFE, "{}§7 requests their snail name to be §f{}§7", List.of("Player", "name"))
     ,WILDLIFE_SNAIL_NAME_REQUEST_PROMPT(Seasons.WILD_LIFE, "§7Click {}§7 to accept.", List.of("ClickHere"))

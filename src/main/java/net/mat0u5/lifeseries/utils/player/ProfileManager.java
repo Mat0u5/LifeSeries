@@ -10,6 +10,7 @@ import com.mojang.datafixers.util.Pair;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.mixin.PlayerAccessor;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerChunkCache;
@@ -42,6 +43,7 @@ import java.nio.charset.StandardCharsets;
 //? if > 1.21 {
 import com.mojang.authlib.properties.PropertyMap;
 import net.minecraft.world.entity.PositionMoveRotation;
+import org.apache.logging.log4j.util.PropertySource;
 //?}
 
 public class ProfileManager {
@@ -84,14 +86,18 @@ public class ProfileManager {
                     targetSkin = fetchSkinFromFile(skinChange.info);
                 }
 
-                setProfile(player, skinChange, usernameChange, targetSkin);
+                Tuple<Boolean, Boolean> changed = setProfile(player, skinChange, usernameChange, targetSkin);
+                boolean changedSkin = changed.x;
+                boolean changedName = changed.y;
 
-                refreshPlayerProfile(player);
-                if (usernameChange != ProfileChange.NONE) {
-                    currentSeason.onPlayerJoin(player);
-                    currentSeason.usernameChanged(player);
+                if (changedSkin || changedName) {
+                    refreshPlayerProfile(player);
+                    if (usernameChange != ProfileChange.NONE && changedName) {
+                        currentSeason.onPlayerJoin(player);
+                        currentSeason.usernameChanged(player);
+                    }
                 }
-                return true;
+                return changedSkin || changedName;
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -100,7 +106,7 @@ public class ProfileManager {
         });
     }
 
-    private static void setProfile(ServerPlayer player, ProfileChange skinChange, ProfileChange usernameChange, Property targetSkin) {
+    private static Tuple<Boolean, Boolean> setProfile(ServerPlayer player, ProfileChange skinChange, ProfileChange usernameChange, Property targetSkin) {
         GameProfile currentProfile = player.getGameProfile();
 
         String name = OtherUtils.profileName(currentProfile);
@@ -151,7 +157,13 @@ public class ProfileManager {
         }
         *///?}
 
-        ((PlayerAccessor) player).ls$setGameProfile(newProfile);
+        boolean changedName = usernameChange != ProfileChange.NONE && !Objects.equals(OtherUtils.profileName(currentProfile), OtherUtils.profileName(newProfile));
+        Property originalSkin = getSkinProperty(player.getGameProfile());
+        boolean changedSkin = skinChange != ProfileChange.NONE && !areEqualSkins(originalSkin, targetSkin);
+        if (changedName  || changedSkin) {
+            ((PlayerAccessor) player).ls$setGameProfile(newProfile);
+        }
+        return new Tuple<>(changedSkin, changedName);
     }
 
     private static Property getSkinProperty(GameProfile profile) {
@@ -480,18 +492,23 @@ public class ProfileManager {
         if (originalSkins.containsKey(uuid)) {
             Property currentSkin = getSkinProperty(player.getGameProfile());
             Property originalSkin = originalSkins.get(uuid);
-            //? if <= 1.20 {
-            /*if (currentSkin != null && originalSkin != null && !currentSkin.getValue().equalsIgnoreCase(originalSkin.getValue())) {
-             *///?} else {
-            if (currentSkin != null && originalSkin != null && !currentSkin.value().equalsIgnoreCase(originalSkin.value())) {
-                //?}
-                return true;
-            }
-            if ((currentSkin == null) != (originalSkin == null)) {
-                return true;
-            }
+            return !areEqualSkins(currentSkin, originalSkin);
         }
         return false;
+    }
+
+    public static boolean areEqualSkins(Property skin1, Property skin2) {
+        //? if <= 1.20 {
+        /*if (skin1 != null && skin2 != null && !skin1.getValue().equalsIgnoreCase(skin2.getValue())) {
+         *///?} else {
+        if (skin1 != null && skin2 != null && !skin1.value().equalsIgnoreCase(skin2.value())) {
+            //?}
+            return false;
+        }
+        if ((skin1 == null) != (skin2 == null)) {
+            return false;
+        }
+        return true;
     }
 
     public static void resetAll() {

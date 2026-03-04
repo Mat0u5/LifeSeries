@@ -110,8 +110,7 @@ public class LifeSkinsCommand extends Command {
         if (checkBanned(source)) return -1;
 
         //TODO remove /dev/ when out of development
-        //TODO update URL
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.LIFESKINS_INFO.get(TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs/dev/features/life-skins")));
+        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.LIFESKINS_INFO.get(TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs/dev/features/lifeskins")));
 
         return 1;
     }
