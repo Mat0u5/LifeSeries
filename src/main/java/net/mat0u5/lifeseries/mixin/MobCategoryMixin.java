@@ -18,7 +18,7 @@ public class MobCategoryMixin {
 
     @Inject(method = "getMaxInstancesPerChunk", at = @At("HEAD"), cancellable = true)
     private void getCapacity(CallbackInfoReturnable<Integer> cir) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         MobCategory group = (MobCategory)(Object)this;
         if (!group.getName().equalsIgnoreCase("monster") && !group.getName().equalsIgnoreCase("creature")) {
             return;
@@ -33,7 +33,7 @@ public class MobCategoryMixin {
 
     @Inject(method = "isPersistent", at = @At("HEAD"), cancellable = true)
     private void isRare(CallbackInfoReturnable<Boolean> cir) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         MobCategory group = (MobCategory)(Object)this;
         if (!group.getName().equalsIgnoreCase("creature")) return;
 

@@ -26,7 +26,7 @@ import static net.mat0u5.lifeseries.Main.currentSeason;
 public class SimpleExplosionDamageCalculatorMixin {
     @Inject(method = "getKnockbackMultiplier", at = @At("RETURN"), cancellable = true)
     public void getKnockbackModifier(Entity entity, CallbackInfoReturnable<Float> cir) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         if (entity instanceof ServerPlayer player) {
             if (currentSeason.getSeason() != Seasons.WILD_LIFE) return;
             if (player.getAbilities().flying) return;

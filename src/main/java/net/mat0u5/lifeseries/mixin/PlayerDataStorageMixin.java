@@ -40,7 +40,7 @@ public class PlayerDataStorageMixin {
 
     @Unique
     private UUID ls$getStringUUIDForPlayer(NameAndId instance) {
-        if (Main.isLogicalSide() && !Main.modDisabled() && SubInManager.isSubbingIn(instance.id())) {
+        if (Main.isLogicalNonDisabled() && SubInManager.isSubbingIn(instance.id())) {
             UUID resultUUID = SubInManager.getSubstitutedPlayerUUID(instance.id());
             if (resultUUID != null) {
                 return resultUUID;
@@ -52,7 +52,7 @@ public class PlayerDataStorageMixin {
 
     @Unique
     private String ls$getStringUUIDForPlayer(Player instance) {
-        if (Main.isLogicalSide() && !Main.modDisabled() && SubInManager.isSubbingIn(instance.getUUID())) {
+        if (Main.isLogicalNonDisabled() && SubInManager.isSubbingIn(instance.getUUID())) {
             UUID resultUUID = SubInManager.getSubstitutedPlayerUUID(instance.getUUID());
             if (resultUUID != null) {
                 return resultUUID.toString();

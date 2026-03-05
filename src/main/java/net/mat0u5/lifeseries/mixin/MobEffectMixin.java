@@ -27,7 +27,7 @@ public class MobEffectMixin {
     *///?} else {
     public void applyInstantEffect(ServerLevel level, Entity effectEntity, Entity attacker, LivingEntity target, int amplifier, double proximity, CallbackInfo ci) {
     //?}
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         MobEffect effect = (MobEffect) (Object) this;
         if (target instanceof ServerPlayer) {
             //? if <= 1.20 {
@@ -49,7 +49,7 @@ public class MobEffectMixin {
     *///?} else {
     public void applyInstantEffect(ServerLevel level, LivingEntity entity, int amplifier, CallbackInfoReturnable<Boolean> cir) {
     //?}
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         MobEffect effect = (MobEffect) (Object) this;
         if (entity instanceof ServerPlayer) {
             //? if <= 1.20.3 {
@@ -85,7 +85,7 @@ public class MobEffectMixin {
 
     @Unique
     public int ls$clampEffect(int amplifier) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return amplifier;
+        if (Main.isClientOrDisabled()) return amplifier;
         MobEffect effect = (MobEffect) (Object) this;
         //? if <= 1.20.3 {
         /*if (blacklist.getClampedEffects().contains(effect)) {

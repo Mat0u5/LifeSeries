@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.5.1.18";
+	public static final String MOD_VERSION = "1.5.2-pre1";
 	public static final String MOD_ID = "lifeseries";
 	public static final String UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
 	public static final boolean DEBUG = false;
@@ -133,9 +133,23 @@ public class Main implements ModInitializer {
 		clientHelper = helper;
 	}
 
+	public static Seasons getSeason() {
+		if (!isLogicalSide() && clientHelper != null) {
+			return clientHelper.getCurrentSeason();
+		}
+		return currentSeason.getSeason();
+	}
+
 	public static boolean isLogicalSide() {
 		if (!hasClient()) return true;
 		return clientHelper != null && clientHelper.isRunningIntegratedServer();
+	}
+
+	public static boolean isLogicalNonDisabled() {
+		return isLogicalSide() && !modDisabled();
+	}
+	public static boolean isClientOrDisabled() {
+		return !isLogicalSide() || modDisabled();
 	}
 
 	public static boolean isClientPlayer(UUID uuid) {

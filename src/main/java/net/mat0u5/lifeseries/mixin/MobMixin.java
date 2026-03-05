@@ -26,12 +26,12 @@ public abstract class MobMixin {
     ^///?} else {
     private void initialize(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData, CallbackInfoReturnable<SpawnGroupData> cir) {
     //?}
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         if (spawnReason == MobSpawnType.NATURAL) return;
         if (spawnReason == MobSpawnType.CHUNK_GENERATION) return;
     *///?} else {
         private void initialize(ServerLevelAccessor world, DifficultyInstance difficulty, EntitySpawnReason spawnReason, @Nullable SpawnGroupData entityData, CallbackInfoReturnable<SpawnGroupData> cir) {
-            if (!Main.isLogicalSide() || Main.modDisabled()) return;
+            if (Main.isClientOrDisabled()) return;
             if (spawnReason == EntitySpawnReason.NATURAL) return;
             if (spawnReason == EntitySpawnReason.CHUNK_GENERATION) return;
     //?}

@@ -21,8 +21,6 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import org.joml.Vector4f;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
-
 //? if <= 1.21 {
 /*import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 *///?} else if <= 1.21.5 {
@@ -54,7 +52,7 @@ public class FogRendererMixin {
     //?}
         ClientLevel nether = Minecraft.getInstance().level;
         if (MainClient.fogColor == null && camera.getFluidInCamera() == FogType.NONE && nether != null && nether.dimension() == Level.NETHER &&
-                MainClient.NICELIFE_SNOWY_NETHER && !Main.modDisabled() && currentSeason.getSeason() == Seasons.NICE_LIFE) {
+                MainClient.NICELIFE_SNOWY_NETHER && !Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE) {
             //? if <= 1.21 {
             /*ci.cancel();
             *///?} else if <= 1.21.5 {

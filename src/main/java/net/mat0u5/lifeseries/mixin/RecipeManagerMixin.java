@@ -23,7 +23,7 @@ public class RecipeManagerMixin {
 
     @Inject(method = "apply(Ljava/util/Map;Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)V", at = @At("HEAD"))
     private void applyMixin(Map<ResourceLocation, JsonElement> map, ResourceManager resourceManager, ProfilerFiller profiler, CallbackInfo info) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         if (blacklist == null) return;
         if (blacklist.loadedListItemIdentifier == null)  {
             blacklist.getItemBlacklist();
@@ -56,7 +56,7 @@ public abstract class RecipeManagerMixin {
 
     @Inject(method = "apply(Lnet/minecraft/world/item/crafting/RecipeMap;Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)V", at = @At("HEAD"), cancellable = true)
     private void applyMixin(RecipeMap preparedRecipes, ResourceManager resourceManager, ProfilerFiller profiler, CallbackInfo ci) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         if (blacklist == null) return;
         if (blacklist.loadedListItemIdentifier == null)  {
             blacklist.getItemBlacklist();

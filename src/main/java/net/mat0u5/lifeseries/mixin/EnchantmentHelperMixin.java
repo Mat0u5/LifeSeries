@@ -53,7 +53,7 @@ public class EnchantmentHelperMixin {
     *///?} else {
     private static void getPossibleEntries(int level, ItemStack stack, Stream<Holder<Enchantment>> possibleEnchantments, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
     //?}
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         if (Main.server == null) return;
 
         if (ItemStackUtils.hasCustomComponentEntry(stack, "NoEnchants") || ItemStackUtils.hasCustomComponentEntry(stack, "NoModifications")) {
@@ -254,7 +254,7 @@ public class EnchantmentHelperMixin {
     )
     private static void onTargetDamaged(ServerLevel level, Entity victimEntity, DamageSource damageSource, CallbackInfo ci) {
     //?}
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         if (!(victimEntity instanceof ServerPlayer victim)) return;
         //? if <= 1.20.5 {
         /*if (sourceEntity == null) return;

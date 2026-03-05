@@ -20,7 +20,7 @@ import static net.mat0u5.lifeseries.Main.currentSeason;
 public abstract class SleepStatusMixin {
     @Inject(method = "areEnoughDeepSleeping", at = @At("RETURN"), cancellable = true)
     public void canResetTime(int percentage, List<ServerPlayer> players, CallbackInfoReturnable<Boolean> cir) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         if (currentSeason.getSeason() == Seasons.WILD_LIFE) {
             for (ServerPlayer player : players) {
                 if (!player.isSleepingLongEnough()) return;
@@ -36,7 +36,7 @@ public abstract class SleepStatusMixin {
 
     @Inject(method = "areEnoughSleeping", at = @At("RETURN"), cancellable = true)
     public void canSkipNight(int percentage, CallbackInfoReturnable<Boolean> cir) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         if (currentSeason.getSeason() != Seasons.WILD_LIFE) return;
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
             if (!player.isSleeping()) return;

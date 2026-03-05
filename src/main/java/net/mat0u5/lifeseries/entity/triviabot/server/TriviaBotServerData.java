@@ -58,6 +58,7 @@ public class TriviaBotServerData implements PlayerBoundEntity {
 
     public void tick() {
         if (bot.level().isClientSide()) return;
+        bot.setSantaBot(currentSeason.getSeason() == Seasons.NICE_LIFE);
         if (despawnChecks()) return;
         bot.pathfinding.tick();
         bot.triviaHandler.tick();

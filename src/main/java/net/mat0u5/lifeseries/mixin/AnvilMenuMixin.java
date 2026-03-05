@@ -32,7 +32,7 @@ public abstract class AnvilMenuMixin {
 
     @Inject(method = "createResult", at = @At("TAIL"))
     private void modifyAnvilResultName(CallbackInfo ci) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         if (blacklist == null) return;
         ItemCombinerMenuAccessor accessor = (ItemCombinerMenuAccessor) (Object) this;
         Container outputInventory = accessor.getOutput();

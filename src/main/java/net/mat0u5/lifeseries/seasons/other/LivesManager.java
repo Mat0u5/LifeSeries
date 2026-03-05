@@ -449,7 +449,14 @@ public class LivesManager {
         }
         Component deathMessage = ModifiableText.FINAL_DEATH.get(player);
         if (!deathMessage.getString().isEmpty()) {
-            PlayerUtils.broadcastMessage(deathMessage);
+            if (SHOW_LIFE_DIFF) {
+                TaskScheduler.schedulePriorityTask(1, () -> {
+                    PlayerUtils.broadcastMessage(deathMessage);
+                });
+            }
+            else {
+                PlayerUtils.broadcastMessage(deathMessage);
+            }
         }
     }
 

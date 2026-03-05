@@ -93,8 +93,8 @@ public abstract class PlayerManagerMixin implements IPlayerManager {
         *///?} else {
         if (alive || removalReason != Entity.RemovalReason.KILLED) return;
         //?}
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
-              currentSeason.onPlayerRespawn(cir.getReturnValue());
+        if (Main.isClientOrDisabled()) return;
+        currentSeason.onPlayerRespawn(cir.getReturnValue());
     }
 
     @Redirect(method = "placeNewPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Z)V"))
@@ -103,7 +103,7 @@ public abstract class PlayerManagerMixin implements IPlayerManager {
     *///?} else {
     public void skipLoginMessage(PlayerList instance, Component message, boolean overlay, Connection connection, ServerPlayer player, CommonListenerCookie clientData) {
     //?}
-        if (!Main.isLogicalSide() || Main.modDisabled() || player == null) {
+        if (Main.isClientOrDisabled() || player == null) {
             instance.broadcastSystemMessage(message, overlay);
         }
         else {

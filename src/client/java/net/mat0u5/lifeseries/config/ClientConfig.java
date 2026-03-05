@@ -41,7 +41,7 @@ public class ClientConfig extends ConfigManager {
             "Show All Lives as Hardcore", "Hearts will always appear as though you are in hardcore."
     );
     public static final ConfigFileEntry<Boolean> NICE_LIFE_LESS_SNOW = new ConfigFileEntry<>(
-            "nice_life_less_snow", true, "[new]",
+            "nice_life_less_snow", true, "",
             "Less Obstructive Snow in Nice Life", "Reduces the number of snow particles when it snows."
     );
 

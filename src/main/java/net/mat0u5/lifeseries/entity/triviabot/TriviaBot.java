@@ -60,7 +60,7 @@ public class TriviaBot extends AmbientCreature {
     public TriviaBotServerData serverData = new TriviaBotServerData(this);
     public TriviaBotSounds sounds = new TriviaBotSounds(this);
     public TriviaBotPathfinding pathfinding = new TriviaBotPathfinding(this);
-    public final TriviaHandler triviaHandler;
+    public TriviaHandler triviaHandler = new WildLifeTriviaHandler(this);
 
     private static final EntityDataAccessor<Boolean> submittedAnswer = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> ranOutOfTime = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.BOOLEAN);
@@ -75,18 +75,20 @@ public class TriviaBot extends AmbientCreature {
 
     public TriviaBot(EntityType<? extends AmbientCreature> entityType, Level level) {
         super(entityType, level);
-        setInvulnerable(true);
-        setPersistenceRequired();
-        //? if <= 1.20.3 {
-        /*this.setMaxUpStep(1.0F);
-        *///?}
-        if (currentSeason.getSeason() == Seasons.NICE_LIFE) {
-            triviaHandler = new NiceLifeTriviaHandler(this);
-            setSantaBot(true);
-        }
-        else {
-            triviaHandler = new WildLifeTriviaHandler(this);
-            setSantaBot(false);
+        if (!level.isClientSide()) {
+            setInvulnerable(true);
+            setPersistenceRequired();
+            //? if <= 1.20.3 {
+            /*this.setMaxUpStep(1.0F);
+             *///?}
+            if (currentSeason.getSeason() == Seasons.NICE_LIFE) {
+                triviaHandler = new NiceLifeTriviaHandler(this);
+                setSantaBot(true);
+            }
+            else {
+                triviaHandler = new WildLifeTriviaHandler(this);
+                setSantaBot(false);
+            }
         }
     }
 
@@ -118,7 +120,6 @@ public class TriviaBot extends AmbientCreature {
         super.tick();
         serverData.tick();
         clientData.tick();
-        setSantaBot(currentSeason.getSeason() == Seasons.NICE_LIFE);
     }
 
     /*

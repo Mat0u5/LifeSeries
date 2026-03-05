@@ -27,7 +27,7 @@ public interface WaypointTransmitterMixin {
 
     @Inject(method = "doesSourceIgnoreReceiver", at = @At("HEAD"), cancellable = true)
     private static void cannotReceive(LivingEntity sourceEntity, ServerPlayer receiver, CallbackInfoReturnable<Boolean> cir) {
-        if (Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         if (sourceEntity instanceof ServerPlayer source) {
             boolean showLocatorBar = false;
             if (currentSeason instanceof DoubleLife doubleLife && DoubleLife.SOULMATE_LOCATOR_BAR) {

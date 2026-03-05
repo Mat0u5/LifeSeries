@@ -41,7 +41,7 @@ public class WindChargeItemMixin {
     /*public void use(Level level, Player user, InteractionHand hand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
         *///?} else
         public void use(Level level, Player user, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         if (user instanceof ServerPlayer player) {
             if (currentSeason.getSeason() != Seasons.WILD_LIFE) return;
             if (!SuperpowersWildcard.hasActivatedPower(player, Superpowers.WIND_CHARGE)) return;

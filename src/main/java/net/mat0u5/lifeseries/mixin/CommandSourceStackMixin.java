@@ -23,7 +23,7 @@ public abstract class CommandSourceStackMixin {
 
     @Inject(method = "sendSuccess", at = @At("HEAD"))
     public void sendFeedback(Supplier<Component> feedbackSupplier, boolean broadcastToOps, CallbackInfo ci) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         if (!broadcastToOps) return;
         Component text = feedbackSupplier.get();
         String sourceStr = "null";

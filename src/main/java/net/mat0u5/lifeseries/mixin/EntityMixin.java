@@ -107,7 +107,7 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
 
     @Inject(method = "getAirSupply", at = @At("RETURN"), cancellable = true)
     public void getAir(CallbackInfoReturnable<Integer> cir) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         if (currentSeason instanceof WildLife) {
             if (!Snail.SHOULD_DROWN_PLAYER) return;
             if (Snails.snails.isEmpty()) return;
@@ -134,7 +134,7 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
             at = @At("HEAD"), cancellable = true)
     public void dropStack(ServerLevel level, ItemStack stack, float yOffset, CallbackInfoReturnable<ItemEntity> cir) {
         //?}
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         if (currentSeason instanceof WildLife) {
             Entity entity = (Entity) (Object) this;
             if (entity instanceof Evoker && stack.is(Items.TOTEM_OF_UNDYING)) {

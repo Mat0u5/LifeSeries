@@ -18,7 +18,7 @@ public abstract class ItemEntityMixin {
 
     @Inject(method = "playerTouch", at = @At("HEAD"), cancellable = true)
     private void onPlayerPickup(Player player, CallbackInfo ci) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         if (player instanceof ServerPlayer serverPlayer) {
             if (blacklist == null) return;
             ItemEntity itemEntity = (ItemEntity) (Object) this;
@@ -30,7 +30,7 @@ public abstract class ItemEntityMixin {
     }
     @Inject(method = "fireImmune", at = @At("HEAD"), cancellable = true)
     private void preventBurning(CallbackInfoReturnable<Boolean> cir) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         ItemEntity itemEntity = (ItemEntity) (Object) this;
         if (itemEntity instanceof ItemEntityAccessor accessor && accessor.getTarget() != null) {
             cir.setReturnValue(true);

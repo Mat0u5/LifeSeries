@@ -15,7 +15,7 @@ public class DamageSourceMixin {
     @WrapOperation(method = "getLocalizedDeathMessage", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/Component;translatable(Ljava/lang/String;[Ljava/lang/Object;)Lnet/minecraft/network/chat/MutableComponent;"))
     private MutableComponent modifyDeathMessage(String string, Object[] objects, Operation<MutableComponent> original) {
         DamageSource source = (DamageSource) (Object) this;
-        if (!Main.modDisabled()) {
+        if (Main.isLogicalNonDisabled()) {
             String deathMessageType = source.type().msgId();
             if (deathMessageType.equals(DoubleLife.SOULMATE_DAMAGE_IDENTIFIER_NAME)) {
                 if (objects.length <= 1) {

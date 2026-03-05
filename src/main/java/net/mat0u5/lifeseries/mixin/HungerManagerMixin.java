@@ -60,7 +60,7 @@ public class HungerManagerMixin implements IHungerManager {
     *///?} else {
     private void updateHead(ServerPlayer player, CallbackInfo ci) {
     //?}
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         if (player instanceof ServerPlayer serverPlayer) {
             this.ls$player = serverPlayer;
         }
@@ -74,7 +74,7 @@ public class HungerManagerMixin implements IHungerManager {
     *///?} else {
     private void updateTail(ServerPlayer player, CallbackInfo ci) {
     //?}
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         if (ls$prevFoodLevel != foodLevel || ls$prevSaturationLevel != saturationLevel) {
             ls$emitUpdate();
         }
@@ -104,7 +104,7 @@ public class HungerManagerMixin implements IHungerManager {
 
     @Unique
     private void ls$emitUpdate() {
-        if (!Main.isLogicalSide() || ls$player == null || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled() || ls$player == null) return;
         if (currentSeason instanceof DoubleLife doubleLife) {
             doubleLife.updateFoodFrom(ls$player);
         }

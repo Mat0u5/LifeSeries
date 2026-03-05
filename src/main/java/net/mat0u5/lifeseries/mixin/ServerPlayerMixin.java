@@ -53,7 +53,7 @@ public class ServerPlayerMixin implements IServerPlayer {
 
     @Inject(method = "openMenu", at = @At("HEAD"))
     private void onInventoryOpen(@Nullable MenuProvider factory, CallbackInfoReturnable<OptionalInt> cir) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         ServerPlayer player = ls$get();
         if (blacklist == null) return;
         
@@ -96,7 +96,7 @@ public class ServerPlayerMixin implements IServerPlayer {
     //? if <= 1.21.11 {
     @Inject(method = "attack", at = @At("HEAD"))
     private void onAttackEntity(Entity target, CallbackInfo ci) {
-        if (Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         ServerPlayer player = ls$get();
         currentSeason.onUpdatedInventory(player);
     }
@@ -132,7 +132,7 @@ public class ServerPlayerMixin implements IServerPlayer {
 
     @Unique
     private void ls$onUpdatedEffects(MobEffectInstance effect, boolean add) {
-        if (ls$processing || Main.modDisabled()) {
+        if (ls$processing || Main.isClientOrDisabled()) {
             return;
         }
         ServerPlayer player = ls$get();
@@ -270,7 +270,7 @@ public class ServerPlayerMixin implements IServerPlayer {
 
     @Inject(method = "startSleepInBed", at = @At("HEAD"), cancellable = true)
     private void cancelStartSleep(BlockPos blockPos, CallbackInfoReturnable<Either<Player.BedSleepingProblem, Unit>> cir) {
-        if (!Main.modDisabled() && currentSeason.getSeason() == Seasons.NICE_LIFE) {
+        if (Main.isLogicalNonDisabled() && currentSeason.getSeason() == Seasons.NICE_LIFE) {
             if (NiceLifeTriviaManager.triviaInProgress) {
                 cir.setReturnValue(Either.left(Player.BedSleepingProblem.OTHER_PROBLEM));
                 ls$get().ls$message(ModifiableText.NICELIFE_SLEEP_FAIL_LATE.get(), true);
@@ -294,7 +294,7 @@ public class ServerPlayerMixin implements IServerPlayer {
 
     @WrapOperation(method = "die", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Z)V"))
     private void modifyDeathMessage(PlayerList instance, Component component, boolean bl, Operation<Void> original) {
-        if (Main.modDisabled() || !Main.isLogicalSide() || livesManager == null || !livesManager.SHOW_LIFE_DIFF) {
+        if (Main.isClientOrDisabled() || livesManager == null || !livesManager.SHOW_LIFE_DIFF) {
             original.call(instance, component, bl);
         }
         else {
@@ -307,7 +307,7 @@ public class ServerPlayerMixin implements IServerPlayer {
 
     @WrapOperation(method = "die", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemToTeam(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/network/chat/Component;)V"))
     private void modifyDeathMessage2(PlayerList instance, Player player, Component component, Operation<Void> original) {
-        if (Main.modDisabled() || !Main.isLogicalSide() || livesManager == null || !livesManager.SHOW_LIFE_DIFF) {
+        if (Main.isClientOrDisabled() || livesManager == null || !livesManager.SHOW_LIFE_DIFF) {
             original.call(instance, player, component);
         }
         else {
@@ -320,7 +320,7 @@ public class ServerPlayerMixin implements IServerPlayer {
 
     @WrapOperation(method = "die", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemToAllExceptTeam(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/network/chat/Component;)V"))
     private void modifyDeathMessage3(PlayerList instance, Player player, Component component, Operation<Void> original) {
-        if (Main.modDisabled() || !Main.isLogicalSide() || livesManager == null || !livesManager.SHOW_LIFE_DIFF) {
+        if (Main.isClientOrDisabled() || livesManager == null || !livesManager.SHOW_LIFE_DIFF) {
             original.call(instance, player, component);
         }
         else {

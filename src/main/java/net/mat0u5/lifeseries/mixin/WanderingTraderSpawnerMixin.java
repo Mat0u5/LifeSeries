@@ -22,7 +22,7 @@ public class WanderingTraderSpawnerMixin {
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     //? if <= 1.21.4 {
     /*public void spawn(ServerLevel level, boolean spawnMonsters, boolean spawnAnimals, CallbackInfoReturnable<Integer> cir) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         if (currentSeason.getSeason() == Seasons.SIMPLE_LIFE) {
             cir.setReturnValue(0);
         }
@@ -33,7 +33,7 @@ public class WanderingTraderSpawnerMixin {
     *///?} else {
     public void spawn(ServerLevel level, boolean spawnMonsters, CallbackInfo ci) {
     //?}
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         if (currentSeason.getSeason() == Seasons.SIMPLE_LIFE) {
             ci.cancel();
         }

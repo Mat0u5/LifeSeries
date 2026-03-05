@@ -19,7 +19,7 @@ public class IceBlockMixin {
 
     @Inject(method = "melt", at = @At("HEAD"), cancellable = true)
     private void cancelMelt(BlockState blockState, Level level, BlockPos blockPos, CallbackInfo ci) {
-        if (!Main.modDisabled() && currentSeason.getSeason() == Seasons.NICE_LIFE && !NiceLife.LIGHT_MELTS_SNOW) {
+        if (Main.isLogicalNonDisabled() && currentSeason.getSeason() == Seasons.NICE_LIFE && !NiceLife.LIGHT_MELTS_SNOW) {
             ci.cancel();
         }
     }

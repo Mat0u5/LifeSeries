@@ -68,7 +68,7 @@ public abstract class PlayerMixin implements IPlayer {
     /*private void onApplyDamage(DamageSource source, float amount, CallbackInfo ci) {
      *///?} else
     private void onApplyDamage(ServerLevel level, DamageSource source, float amount, CallbackInfo ci) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         Player player = (Player) (Object) this;
         if (WatcherManager.isWatcher(player)) return;
 
@@ -84,7 +84,7 @@ public abstract class PlayerMixin implements IPlayer {
     @Inject(method = "hurtServer", at = @At("HEAD"), cancellable = true)
     private void onPreDamage(ServerLevel level, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
     //?}
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         Player player = (Player) (Object) this;
         if (WatcherManager.isWatcher(player)) return;
 
@@ -95,7 +95,7 @@ public abstract class PlayerMixin implements IPlayer {
 
     @Inject(method = "isHurt", at = @At("HEAD"), cancellable = true)
     private void canFoodHeal(CallbackInfoReturnable<Boolean> cir) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         if (currentSeason instanceof DoubleLife doubleLife)  {
             Player player = (Player) (Object) this;
             if (WatcherManager.isWatcher(player)) return;

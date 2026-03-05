@@ -51,7 +51,7 @@ public class ServerGamePacketListenerImplMixin {
 
     @Inject(method = "broadcastChatMessage", at = @At("HEAD"), cancellable = true)
     private void onHandleDecoratedMessage(PlayerChatMessage message, CallbackInfo ci) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         ServerGamePacketListenerImpl handler = (ServerGamePacketListenerImpl) (Object) this;
         ServerPlayer player = handler.player;
 
@@ -76,7 +76,7 @@ public class ServerGamePacketListenerImplMixin {
 
     @Inject(method = "handleUseItem", at = @At("HEAD"))
     private void onPlayerInteractItem(ServerboundUseItemPacket packet, CallbackInfo ci) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         ServerGamePacketListenerImpl handler = (ServerGamePacketListenerImpl) (Object) this;
         ServerPlayer player = handler.player;
         if (currentSeason instanceof WildLife) {
@@ -111,7 +111,7 @@ public class ServerGamePacketListenerImplMixin {
     //? if > 1.20.3 {
     @Inject(method = "performUnsignedChatCommand", at = @At("HEAD"), cancellable = true)
     private void executeCommand(String command, CallbackInfo ci) {
-        if (Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         ServerGamePacketListenerImpl handler = (ServerGamePacketListenerImpl) (Object) this;
         for (String mutedCmd : mutedCommands) {
             if (command.startsWith(mutedCmd + " ")) {
@@ -132,7 +132,7 @@ public class ServerGamePacketListenerImplMixin {
     @Inject(method = "performSignedChatCommand", at = @At(value = "INVOKE", target = "Lnet/minecraft/commands/Commands;performCommand(Lcom/mojang/brigadier/ParseResults;Ljava/lang/String;)V"), cancellable = true)
     private void handleCommandExecution(ServerboundChatCommandSignedPacket packet, LastSeenMessages lastSeenMessages, CallbackInfo ci) {
     //?}
-        if (Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         ServerGamePacketListenerImpl handler = (ServerGamePacketListenerImpl) (Object) this;
         for (String command : mutedCommands) {
             if (packet.command().startsWith(command + " ")) {
@@ -144,7 +144,7 @@ public class ServerGamePacketListenerImplMixin {
 
     @Unique
     private boolean ls$mute(ServerPlayer player, CallbackInfo ci) {
-        if (player == null || PermissionManager.isAdmin(player) || Main.modDisabled()) {
+        if (player == null || PermissionManager.isAdmin(player) || Main.isClientOrDisabled()) {
             return false;
         }
         if (TriviaWildcard.bots.containsKey(player.getUUID())) {
@@ -172,7 +172,7 @@ public class ServerGamePacketListenerImplMixin {
     @Inject(method = "handlePlayerAction", at = @At("RETURN"))
     public void onPlayerAction(ServerboundPlayerActionPacket packet, CallbackInfo ci) {
         ServerGamePacketListenerImpl handler = (ServerGamePacketListenerImpl) (Object) this;
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         if (packet.getAction() == ServerboundPlayerActionPacket.Action.SWAP_ITEM_WITH_OFFHAND) {
             currentSeason.onUpdatedInventory(handler.player);
         }
@@ -185,7 +185,7 @@ public class ServerGamePacketListenerImplMixin {
     //?}
     public void noLogoffMessage(PlayerList instance, Component message, boolean overlay) {
         ServerGamePacketListenerImpl handler = (ServerGamePacketListenerImpl) (Object) this;
-        if (!Main.isLogicalSide() || Main.modDisabled()) {
+        if (Main.isClientOrDisabled()) {
             instance.broadcastSystemMessage(message, overlay);
         }
         else {
@@ -195,7 +195,7 @@ public class ServerGamePacketListenerImplMixin {
     @Inject(method = "handlePlayerCommand", at = @At("HEAD"), cancellable = true)
     private void cancelStopSleeping(ServerboundPlayerCommandPacket serverboundPlayerCommandPacket, CallbackInfo ci) {
         if (serverboundPlayerCommandPacket.getAction() == ServerboundPlayerCommandPacket.Action.STOP_SLEEPING) {
-            if (!Main.modDisabled() && currentSeason instanceof NiceLife niceLife && (niceLife.isMidnight() && NiceLifeTriviaManager.triviaInProgress)) {
+            if (Main.isLogicalNonDisabled() && currentSeason instanceof NiceLife niceLife && (niceLife.isMidnight() && NiceLifeTriviaManager.triviaInProgress)) {
                 ci.cancel();
             }
         }

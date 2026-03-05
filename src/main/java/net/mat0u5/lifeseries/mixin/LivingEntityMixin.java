@@ -47,7 +47,7 @@ import net.minecraft.world.entity.decoration.Mannequin;
 public abstract class LivingEntityMixin {
     @Inject(method = "heal", at = @At("HEAD"), cancellable = true)
     private void onHealHead(float amount, CallbackInfo info) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         if (!(currentSeason instanceof SecretLife secretLife)) return;
         if (!secretLife.canChangeHealth()) return;
 
@@ -59,7 +59,7 @@ public abstract class LivingEntityMixin {
 
     @Inject(method = "heal", at = @At("TAIL"))
     private void onHeal(float amount, CallbackInfo info) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity instanceof ServerPlayer player) {
             if (player.ls$isWatcher()) return;
@@ -74,7 +74,7 @@ public abstract class LivingEntityMixin {
     @Inject(method = "hurtServer", at = @At("HEAD"), cancellable = true)
     public void hurtServer(ServerLevel level, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
     //?}
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
 
         LivingEntity entity = (LivingEntity) (Object) this;
         //? if >= 1.21.2 {
@@ -110,7 +110,7 @@ public abstract class LivingEntityMixin {
 
     @ModifyVariable(method = "addEffect(Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/world/entity/Entity;)Z", at = @At("HEAD"), ordinal = 0, argsOnly = true)
     public MobEffectInstance clampStatusEffect(MobEffectInstance value) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return value;
+        if (Main.isClientOrDisabled()) return value;
 
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity instanceof ServerPlayer) {
@@ -124,7 +124,7 @@ public abstract class LivingEntityMixin {
 
     @Inject(method = "addEffect(Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/world/entity/Entity;)Z", at = @At("HEAD"), cancellable = true)
     public void addStatusEffect(MobEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity instanceof ServerPlayer) {
             if (!effect.isAmbient() && !effect.showIcon() && !effect.isVisible()) return;
@@ -164,7 +164,7 @@ public abstract class LivingEntityMixin {
             index = 0
     )
     private double modifyKnockback(double strength) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return strength;
+        if (Main.isClientOrDisabled()) return strength;
         if (ls$lastDamageSource == null) return strength;
 
         DamageSource source = ls$lastDamageSource;
@@ -187,7 +187,7 @@ public abstract class LivingEntityMixin {
     *///?} else {
     private void onDrop(ServerLevel level, DamageSource damageSource, CallbackInfo ci) {
     //?}
-        if (!Main.isLogicalSide() || Main.modDisabled()) return;
+        if (Main.isClientOrDisabled()) return;
         Events.onEntityDropItems((LivingEntity) (Object) this, damageSource, ci);
     }
 

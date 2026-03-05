@@ -31,7 +31,7 @@ public class ThrownEnderpearlMixin {
     )
     //?}
         private float onTargetDamaged(float amount) {
-        if (!Main.isLogicalSide() || Main.modDisabled()) return amount;
+        if (Main.isClientOrDisabled()) return amount;
         ThrownEnderpearl pearl = (ThrownEnderpearl) (Object) this;
         if (!(pearl.getOwner() instanceof ServerPlayer owner)) return amount;
         if (!SuperpowersWildcard.hasActivePower(owner, Superpowers.TELEPORTATION)) return amount;
