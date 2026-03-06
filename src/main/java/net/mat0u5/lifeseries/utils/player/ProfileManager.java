@@ -258,7 +258,7 @@ public class ProfileManager {
 
                 writer.append("--").append(boundary).append(CRLF);
                 writer.append("Content-Disposition: form-data; name=\"variant\"").append(CRLF);
-                writer.append(CRLF).append(slim ? "slim" : "classic").append(CRLF).flush();//TODO test
+                writer.append(CRLF).append(slim ? "slim" : "classic").append(CRLF).flush();
 
                 writer.append("--").append(boundary).append(CRLF);
                 writer.append("Content-Disposition: form-data; name=\"file\"; filename=\"skin.png\"").append(CRLF);
