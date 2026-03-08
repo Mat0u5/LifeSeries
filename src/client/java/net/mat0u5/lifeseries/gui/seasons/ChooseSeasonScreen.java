@@ -95,7 +95,7 @@ public class ChooseSeasonScreen extends DefaultScreen {
         }
 
         if (hasAprilFoolsSeasons) {
-            Component aprilFools = Component.nullToEmpty("April Fools Seasons");
+            Component aprilFools = Component.nullToEmpty("Specials");
             int textWidth = font.width(aprilFools);
             int textHeight = font.lineHeight;
             Rectangle rect = new Rectangle(endX-9-textWidth, endY-9-textHeight, textWidth+1, textHeight+1);
@@ -163,7 +163,7 @@ public class ChooseSeasonScreen extends DefaultScreen {
         RenderUtils.text(prompt, centerX, startY + 20).anchorCenter().render(context, this.font);
 
         if (hasAprilFoolsSeasons) {
-            Component aprilFools = Component.nullToEmpty("April Fools Seasons");
+            Component aprilFools = Component.nullToEmpty("Specials");
             int textWidth = font.width(aprilFools);
             int textHeight = font.lineHeight;
 

@@ -279,6 +279,10 @@ public class DefaultConfigValues {
             "secret_society_sound_only_members", false, "global.society",
             "Whisper Sound Only For Members", "Makes the whispering sound only play for Society Members, thus making the Society fully secret."
     );
+    public final ConfigFileEntry<Boolean> SECRET_SOCIETY_ADVANCED_DEATHS = new ConfigFileEntry<>(
+            "secret_society_advanced_deaths", false, "global.society[new]",
+            "Secret Society Advanced Deaths", "Enables the advanced deaths (seen in Past Life), where you actually die by different causes instead of your lives just being changed."
+    );
 
     public final ConfigFileEntry<Boolean> WATCHERS_IN_TAB = new ConfigFileEntry<>(
             "watchers_in_tab", true, "global.watchers",

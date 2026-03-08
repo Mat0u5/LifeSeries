@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.secretsociety;
 
 import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.*;
@@ -25,6 +26,7 @@ public class SecretSociety {
     public int KILL_COUNT = 2;
     public int PUNISHMENT_LIVES = -2;
     public boolean SOUND_ONLY_MEMBERS = false;
+    public boolean ADVANCED_DEATHS = false;
 
     public static final Time INITIATE_MESSAGE_DELAYS = Time.seconds(15);
     public List<SocietyMember> members = new ArrayList<>();
@@ -45,6 +47,7 @@ public class SecretSociety {
         KILL_COUNT = seasonConfig.SECRET_SOCIETY_KILLS_REQUIRED.get();
         PUNISHMENT_LIVES = seasonConfig.SECRET_SOCIETY_PUNISHMENT_LIVES.get();
         SOUND_ONLY_MEMBERS = seasonConfig.SECRET_SOCIETY_SOUND_ONLY_MEMBERS.get();
+        ADVANCED_DEATHS = seasonConfig.SECRET_SOCIETY_ADVANCED_DEATHS.get();
 
         FORCE_MEMBERS.clear();
         IGNORE_MEMBERS.clear();
@@ -348,7 +351,7 @@ public class SecretSociety {
         TaskScheduler.scheduleTask(75, () -> {
             PlayerUtils.sendTitleWithSubtitleToPlayers(memberPlayers, ModifiableText.SOCIETY_END_FAIL_PT2_TITLE.get(), ModifiableText.SOCIETY_END_FAIL_PT2_SUBTITLE.get(), 20, 30, 20);
         });
-        TaskScheduler.scheduleTask(110, () -> {
+        TaskScheduler.scheduleTask(ADVANCED_DEATHS ? 180 : 110, () -> {
             for (ServerPlayer member : memberPlayers) {
                 punishPlayer(member);
             }
@@ -359,7 +362,6 @@ public class SecretSociety {
     }
 
     public void punishPlayer(ServerPlayer member) {
-        member.ls$hurt(member.damageSources().playerAttack(member), 0.001f);
         DatapackIntegration.EVENT_SOCIETY_FAIL_REWARD.trigger(new DatapackIntegration.Events.MacroEntry("Player", member.getScoreboardName()));
         if (DatapackIntegration.EVENT_SOCIETY_FAIL_REWARD.isCanceled()) return;
         int punishmentLives = Math.abs(PUNISHMENT_LIVES);
@@ -367,6 +369,13 @@ public class SecretSociety {
         if (currentLives != null) {
             punishmentLives = Math.min(Math.abs(currentLives-1), punishmentLives);
         }
-        member.ls$addLives(-punishmentLives);
+
+        if (ADVANCED_DEATHS && currentLives != null) {
+            AdvancedDeathsManager.setPlayerLives(member, currentLives-punishmentLives);
+        }
+        else {
+            member.ls$hurt(member.damageSources().playerAttack(member), 0.001f);
+            member.ls$addLives(-punishmentLives);
+        }
     }
 }

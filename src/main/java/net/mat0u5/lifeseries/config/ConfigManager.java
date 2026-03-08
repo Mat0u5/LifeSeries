@@ -139,6 +139,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,SECRET_SOCIETY_PUNISHMENT_LIVES
                 ,SECRET_SOCIETY_KILLS_REQUIRED
                 ,SECRET_SOCIETY_SOUND_ONLY_MEMBERS
+                ,SECRET_SOCIETY_ADVANCED_DEATHS
 
                 ,PLAYERS_DROP_ITEMS_ON_FINAL_DEATH
                 ,FINAL_DEATH_TITLE_SHOW
