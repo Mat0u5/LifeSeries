@@ -19,10 +19,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.livesManager;
 
@@ -134,9 +131,14 @@ public class LifeSkinsCommand extends Command {
             for (Map.Entry<String, Map<Integer, Tuple<Boolean, File>>> holderskins : skinsCache.entrySet()) {
                 String name = holderskins.getKey();
                 List<String> skins = new ArrayList<>();
-                for (Integer skin : holderskins.getValue().keySet()) {
-                    skins.add(String.valueOf(skin));
+                for (Map.Entry<Integer, Tuple<Boolean, File>> skin : holderskins.getValue().entrySet()) {
+                    String append = "";
+                    if (skin.getValue() != null && skin.getValue().x) {
+                        append = " (slim)";
+                    }
+                    skins.add(skin.getKey() + append);
                 }
+                Collections.sort(skins);
                 OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.LIFESKINS_LIST_PERSON.get(name, skins));
             }
         }
