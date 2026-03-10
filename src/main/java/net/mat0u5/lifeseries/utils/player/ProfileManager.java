@@ -50,6 +50,7 @@ public class ProfileManager {
 
     private static final Map<UUID, Property> originalSkins = new HashMap<>();
     private static final Map<UUID, String> originalNames = new HashMap<>();
+    public static final Map<UUID, String> manualSkins = new HashMap<>();
 
     public enum ProfileChange {
         NONE,

@@ -45,12 +45,18 @@ public class LifeSkinsManager {
         }
 
         if (skinFile != null) {
-            Main.LOGGER.info("[LifeSkins] Applying skin for " + player.getScoreboardName() + " at " + currentLives + " lives: " + skinFile.getPath());
-            if (slim) {
-                ProfileManager.modifyProfile(player, ProfileManager.ProfileChange.FILE_SLIM.withInfo(skinFile.getAbsolutePath()), ProfileManager.ProfileChange.NONE);
+            if (ProfileManager.manualSkins.containsKey(player.getUUID())) {
+                ProfileManager.ProfileChange skinChange = ProfileManager.ProfileChange.SET.withInfo(ProfileManager.manualSkins.get(player.getUUID()));
+                ProfileManager.modifyProfile(player, skinChange, ProfileManager.ProfileChange.NONE);
             }
             else {
-                ProfileManager.modifyProfile(player, ProfileManager.ProfileChange.FILE.withInfo(skinFile.getAbsolutePath()), ProfileManager.ProfileChange.NONE);
+                Main.LOGGER.info("[LifeSkins] Applying skin for " + player.getScoreboardName() + " at " + currentLives + " lives: " + skinFile.getPath());
+                if (slim) {
+                    ProfileManager.modifyProfile(player, ProfileManager.ProfileChange.FILE_SLIM.withInfo(skinFile.getAbsolutePath()), ProfileManager.ProfileChange.NONE);
+                }
+                else {
+                    ProfileManager.modifyProfile(player, ProfileManager.ProfileChange.FILE.withInfo(skinFile.getAbsolutePath()), ProfileManager.ProfileChange.NONE);
+                }
             }
             lastAppliedFile.put(uuid, skinFile);
         } else {
@@ -59,6 +65,9 @@ public class LifeSkinsManager {
             ProfileManager.ProfileChange skinChange = ProfileManager.ProfileChange.ORIGINAL;
             if (SubInManager.isSubbingIn(player.getUUID()) && SubInManager.CHANGE_SKIN) {
                 skinChange = ProfileManager.ProfileChange.SET.withInfo(OtherUtils.profileName(SubInManager.getSubstitutedPlayer(player.getUUID())));
+            }
+            if (ProfileManager.manualSkins.containsKey(player.getUUID())) {
+                skinChange = ProfileManager.ProfileChange.SET.withInfo(ProfileManager.manualSkins.get(player.getUUID()));
             }
             ProfileManager.modifyProfile(player, skinChange, ProfileManager.ProfileChange.NONE);
             lastAppliedFile.put(uuid, null);
@@ -97,7 +106,7 @@ public class LifeSkinsManager {
 
         if (skins != null && !skins.isEmpty()) {
             Tuple<Boolean, File> skinInfo = skins.get(lifeCount);
-            if (skinInfo.y != null) return skinInfo;
+            if (skinInfo != null && skinInfo.y != null) return skinInfo;
 
             if (lifeCount != null) {
                 List<Integer> sortedLives = new ArrayList<>();
@@ -110,7 +119,7 @@ public class LifeSkinsManager {
                     int currentLifeCount = sortedLives.get(i);
                     if (currentLifeCount <= lifeCount) {
                         skinInfo = skins.get(currentLifeCount);
-                        if (skinInfo.y != null) return skinInfo;
+                        if (skinInfo != null && skinInfo.y != null) return skinInfo;
                     }
                 }
             }

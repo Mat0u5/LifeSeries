@@ -20,8 +20,11 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+
+import static net.mat0u5.lifeseries.Main.livesManager;
 
 public class LifeSkinsCommand extends Command {
     @Override
@@ -95,7 +98,10 @@ public class LifeSkinsCommand extends Command {
                                 )
                         )
                 .then(literal("reload")
-                        .executes(context -> reloadLifeSkins(context.getSource()))
+                        .executes(context -> reloadLifeSkins(context.getSource(), null))
+                        .then(Commands.argument("player", EntityArgument.player())
+                                .executes(context -> reloadLifeSkins(context.getSource(), EntityArgument.getPlayers(context, "player")))
+                        )
                 )
                 .then(literal("list")
                         .executes(context -> listLifeSkins(context.getSource()))
@@ -137,11 +143,26 @@ public class LifeSkinsCommand extends Command {
 
         return 1;
     }
-    public int reloadLifeSkins(CommandSourceStack source) {
+    public int reloadLifeSkins(CommandSourceStack source, Collection<ServerPlayer> targets) {
         if (checkBanned(source)) return -1;
 
-        LifeSkinsManager.reloadAll();
-        OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_RELOAD.get());
+        if (targets == null) {
+            LifeSkinsManager.reloadAll();
+            OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_RELOAD_ALL.get());
+        }
+        else {
+            LifeSkinsManager.reloadSkinsCache();
+            for (ServerPlayer player : targets) {
+                LifeSkinsManager.reloadSkin(player);
+            }
+
+            if (targets.size() == 1) {
+                OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_RELOAD_SINGLE.get(targets.iterator().next()));
+            }
+            else {
+                OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_RELOAD_MULTIPLE.get(targets.size()));
+            }
+        }
 
         return 1;
     }
@@ -153,13 +174,17 @@ public class LifeSkinsCommand extends Command {
             if (success) {
                 if (username != null) {
                     OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_SKIN_SET.get(player, username));
+                    ProfileManager.manualSkins.put(player.getUUID(), username);
                 }
                 else {
+                    ProfileManager.manualSkins.remove(player.getUUID());
+                    LifeSkinsManager.reloadSkin(player);
                     OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_SKIN_RESET.get(player));
                 }
             }
             else {
                 OtherUtils.sendCommandFailure(source, ModifiableText.MOD_ERROR_GENERAL.get());
+                ProfileManager.manualSkins.remove(player.getUUID());
             }
         });
         return 1;
