@@ -163,6 +163,12 @@ publishMods {
  }
 }
 
+stonecutter {
+ replacements.string(stonecutter.eval(stonecutter.current.version, ">=26.1")) {
+  replace 'GuiGraphics', 'GuiGraphicsExtractor'
+ }
+}
+
 // configure the maven publication
 publishing {
  publications {
