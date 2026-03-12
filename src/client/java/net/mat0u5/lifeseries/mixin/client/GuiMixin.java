@@ -45,10 +45,13 @@ public class GuiMixin {
     //?if <= 1.20.5 {
     /*@Inject(method = "render", at = @At(value = "TAIL"))
     public void render(GuiGraphics guiGraphics, float f, CallbackInfo ci) {
-    *///?} else {
+    *///?} else if <= 1.21.11 {
     @Inject(method = "render", at = @At(value = "TAIL"))
     public void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
-    //?}
+    //?} else {
+    /*@Inject(method = "extractRenderState", at = @At(value = "TAIL"))
+    public void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+    *///?}
         ClientRenderer.render(guiGraphics);
     }
 
@@ -75,10 +78,13 @@ public class GuiMixin {
     *///?} else if <= 1.21.9 {
     /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/ResourceLocation;IIII)V"))
     private void customHearts(GuiGraphics instance, RenderPipeline renderPipeline, ResourceLocation identifier, int x, int y, int u, int v) {
-    *///?} else {
+    *///?} else if <= 1.21.11 {
     @Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V"))
     private void customHearts(GuiGraphics instance, RenderPipeline renderPipeline, Identifier identifier, int x, int y, int u, int v) {
-    //?}
+    //?} else {
+    /*@Redirect(method = "extractHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V"))
+    private void customHearts(GuiGraphics instance, RenderPipeline renderPipeline, Identifier identifier, int x, int y, int u, int v) {
+    *///?}
 
         String texturePath = identifier.getPath();
         Team playerTeam = ClientUtils.getPlayerTeam();
@@ -172,12 +178,19 @@ public class GuiMixin {
             ci.cancel();
         }
     }
-    *///?} else {
+    *///?} else if <= 1.21.11 {
     @Inject(method = "renderSleepOverlay", at = @At("HEAD"), cancellable = true)
     private void stopSleepDarkness(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
         if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().screen instanceof InBedChatScreen) && MainClient.hideSleepDarkness) {
             ci.cancel();
         }
     }
-    //?}
+    //?} else {
+    /*@Inject(method = "extractSleepOverlay", at = @At("HEAD"), cancellable = true)
+    private void stopSleepDarkness(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().screen instanceof InBedChatScreen) && MainClient.hideSleepDarkness) {
+            ci.cancel();
+        }
+    }
+    *///?}
 }

@@ -164,9 +164,9 @@ publishMods {
 }
 
 stonecutter {
- replacements.string(stonecutter.eval(stonecutter.current.version, ">=26.1"), "renames_26_1_stable") {
+ replacements.string(stonecutter.eval(stonecutter.current.version, ">=26.1"), "!renames_26_1_stable") {
   replace ('GuiGraphics', 'GuiGraphicsExtractor')
-  replace ('renderItem(', 'item(')
+  replace ('.renderItem(', '.item(')
   replace ('renderEntityInInventoryFollowsMouse(', 'extractEntityInInventoryFollowsMouse(')
  }
  replacements.string(stonecutter.eval(stonecutter.current.version, ">=26.1"), "renames_26_1_volatile") {

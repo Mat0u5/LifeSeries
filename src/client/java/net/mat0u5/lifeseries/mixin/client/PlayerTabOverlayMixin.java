@@ -57,9 +57,16 @@ public class PlayerTabOverlayMixin {
         return instance.drawString(font, s, i1, i2, i3);
     }
     *///?} else {
+
+    //?if <= 1.21.11 {
     @Redirect(method = "render",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/world/scores/ReadOnlyScoreInfo;safeFormatValue(Lnet/minecraft/world/scores/ReadOnlyScoreInfo;Lnet/minecraft/network/chat/numbers/NumberFormat;)Lnet/minecraft/network/chat/MutableComponent;"))
+    //?} else {
+    /*@Redirect(method = "extractRenderState",
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/world/scores/ReadOnlyScoreInfo;safeFormatValue(Lnet/minecraft/world/scores/ReadOnlyScoreInfo;Lnet/minecraft/network/chat/numbers/NumberFormat;)Lnet/minecraft/network/chat/MutableComponent;"))
+    *///?}
     private MutableComponent modifyFormattedScore(ReadOnlyScoreInfo readableScoreboardScore, NumberFormat numberFormat) {
         MutableComponent originalText = ReadOnlyScoreInfo.safeFormatValue(readableScoreboardScore, numberFormat);
         Objective objective = ls$getDisplayedObjective();

@@ -57,13 +57,15 @@ public class HungerManagerMixin implements IHungerManager {
     @Inject(method = "tick", at = @At("HEAD"))
     //? if <= 1.21 {
     /*private void updateHead(Player player, CallbackInfo ci) {
-    *///?} else {
-    private void updateHead(ServerPlayer player, CallbackInfo ci) {
-    //?}
         if (Main.isClientOrDisabled()) return;
         if (player instanceof ServerPlayer serverPlayer) {
             this.ls$player = serverPlayer;
         }
+    *///?} else {
+    private void updateHead(ServerPlayer player, CallbackInfo ci) {
+        if (Main.isClientOrDisabled()) return;
+        this.ls$player = player;
+    //?}
         ls$prevFoodLevel = this.foodLevel;
         ls$prevSaturationLevel = this.saturationLevel;
     }
