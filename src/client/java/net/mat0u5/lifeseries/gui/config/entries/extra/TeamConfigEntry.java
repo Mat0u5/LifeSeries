@@ -103,11 +103,13 @@ public class TeamConfigEntry extends ModifiableListEntry {
         textFieldAllowedKill.setX(field4X);
         textFieldGainLife.setX(field5X);
 
+        //~ renames_26_1_volatile
         textFieldLives.render(context, mouseX, mouseY, tickDelta);
         textFieldName.render(context, mouseX, mouseY, tickDelta);
         textFieldColor.render(context, mouseX, mouseY, tickDelta);
         textFieldAllowedKill.render(context, mouseX, mouseY, tickDelta);
         textFieldGainLife.render(context, mouseX, mouseY, tickDelta);
+        //~ !renames_26_1_volatile
         textFieldLives.setEditable(!isDefaultTeam());
 
         if (getTeamNum() == null) textFieldLives.setTextColor(TextColors.PASTEL_RED);

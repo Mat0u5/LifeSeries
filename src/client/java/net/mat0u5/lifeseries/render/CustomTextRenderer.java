@@ -96,6 +96,7 @@ public class CustomTextRenderer {
         if (anchor == Anchor.CENTER) offsetX = -textWidth/2.0;
         if (anchor == Anchor.RIGHT) offsetX = -textWidth;
 
+        //~ renames_26_1_volatile
         if (this.orderedText != null) {
             if (wrapLines) {
                 List<FormattedCharSequence> wrappedText = textRenderer.split(text, wrapMaxWidth);
@@ -116,6 +117,7 @@ public class CustomTextRenderer {
         else if (this.text != null) {
             context.drawString(textRenderer, text, (int)(x / scaleX + offsetX), (int)(y / scaleY), textColor, shadow);
         }
+        //~ !renames_26_1_volatile
 
         if (isScaled()) {
             //? if <= 1.21.5 {

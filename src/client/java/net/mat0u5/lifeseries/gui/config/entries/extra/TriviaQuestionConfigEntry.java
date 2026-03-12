@@ -64,7 +64,9 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
             textField.setX(x + 25 + textRenderer.width(questionText) + 7);
             int buttonX = resetButton != null ? resetButton.getX() : width;
             textField.setWidth(buttonX-textField.getX()-10);
+            //~ renames_26_1_volatile
             textField.render(context, mouseX, mouseY, tickDelta);
+            //~ !renames_26_1_volatile
         }
 
         @Override

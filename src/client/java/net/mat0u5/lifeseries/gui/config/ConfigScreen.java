@@ -331,6 +331,7 @@ public class ConfigScreen extends Screen {
         }
     }
 
+    //~ renames_26_1_volatile
     @Override
     public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
         //?if <= 1.20.2 {
@@ -378,6 +379,7 @@ public class ConfigScreen extends Screen {
             context.drawCenteredString(this.font, categoryName, tabX + tabWidth / 2, tabY + HEADER_CATEGORY_NAME_OFFSET_Y, textColor);
         }
     }
+    //~ !renames_26_1_volatile
 
     //? if <= 1.21.6 {
     /*@Override

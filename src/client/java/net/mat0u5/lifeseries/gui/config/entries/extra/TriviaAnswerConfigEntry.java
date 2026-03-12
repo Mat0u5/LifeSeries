@@ -60,6 +60,7 @@ public class TriviaAnswerConfigEntry extends ModifiableListEntry {
 
         setCorrectButton.setX(currentX);
         setCorrectButton.setY(y+2);
+        //~ renames_26_1_volatile
         setCorrectButton.render(context, mouseX, mouseY, tickDelta);
         setCorrectButton.active = !isCorrect;
         currentX += setCorrectButton.getWidth() + 5;
@@ -68,6 +69,7 @@ public class TriviaAnswerConfigEntry extends ModifiableListEntry {
         textField.setX(currentX);
         textField.setWidth(resetButton.getX()-textField.getX()-10);
         textField.render(context, mouseX, mouseY, tickDelta);
+        //~ !renames_26_1_volatile
     }
 
     public void onChanged(String text) {

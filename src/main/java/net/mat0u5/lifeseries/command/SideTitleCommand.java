@@ -17,6 +17,8 @@ import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Collection;
+//? if >= 26.1
+//import net.minecraft.network.chat.ResolutionContext;
 
 public class SideTitleCommand extends Command {
     @Override
@@ -61,7 +63,11 @@ public class SideTitleCommand extends Command {
 
     private int executeTitle(CommandSourceStack source, Collection<ServerPlayer> targets, Component title) throws CommandSyntaxException {
         for(ServerPlayer player : targets) {
+            //? if <= 1.21.11 {
             NetworkHandlerServer.sideTitle(player, ComponentUtils.updateForEntity(source, title, player, 0));
+            //?} else {
+            /*NetworkHandlerServer.sideTitle(player, ComponentUtils.resolve(ResolutionContext.createWithEntityOverride(source,player), title));
+            *///?}
         }
 
         if (targets.size() == 1) {

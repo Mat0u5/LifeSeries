@@ -46,9 +46,11 @@ public class WorldWarningScreen extends Screen {
         );
     }
 
+    //~ renames_26_1_volatile
     @Override
     public void render(final GuiGraphics context, final int mouseX, final int mouseY, final float a) {
         super.render(context, mouseX, mouseY, a);
+    //~ !renames_26_1_volatile
         RenderUtils.text(Component.literal("'"+levelId+"' has not been opened before with the Life Series mod.\nDoing so will automatically change the world border, gamerules and more.\nDo you want to proceed?"), this.width / 2, this.height / 2 - 50).anchorCenter().wrapLines(this.width, 6).colored(TextColors.WHITE).render(context, this.font);
     }
 

@@ -37,7 +37,9 @@ public abstract class ButtonConfigEntry extends ConfigEntry {
         int entryWidth = getEntryContentWidth(width);
         button.setX(getButtonPosX(x, entryWidth));
         button.setY(getButtonPosY(y, height));
+        //~ renames_26_1_volatile
         button.render(context, mouseX, mouseY, tickDelta);
+        //~ !renames_26_1_volatile
     }
 
     protected int getButtonPosX(int x, int entryWidth) {

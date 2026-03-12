@@ -47,11 +47,13 @@ public class EventConfigEntry extends StringConfigEntry {
     @Override
     protected void renderEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         updateButton();
+        //~ renames_26_1_volatile
         canceledButton.render(context, mouseX, mouseY, tickDelta);
         boolean isFirst = isFirst();
         openTutorialButton.visible = isFirst;
         if (isFirst) {
             openTutorialButton.render(context, mouseX, mouseY, tickDelta);
+        //~ !renames_26_1_volatile
             openTutorialButton.setY(y+1);
             Component part1 = Component.nullToEmpty("§cLearn how to use Events");
             Component part2 = Component.nullToEmpty("§cin the Life Series Wiki.");

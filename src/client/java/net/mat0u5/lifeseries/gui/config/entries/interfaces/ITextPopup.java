@@ -44,7 +44,9 @@ public interface ITextPopup extends IPopup {
             RenderUtils.text(popupText, x+1, y+1).wrapLines(width, 5).colored(getTextColor()).render(context, textRenderer);
         }
         else {
+            //~ renames_26_1_volatile
             context.drawString(textRenderer, popupText, x+1, y+1, getTextColor(), false);
+            //~ !renames_26_1_volatile
         }
     }
 

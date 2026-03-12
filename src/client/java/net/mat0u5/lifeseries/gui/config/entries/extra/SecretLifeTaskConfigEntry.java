@@ -51,7 +51,9 @@ public class SecretLifeTaskConfigEntry extends ModifiableListEntry {
         textField.setY(y+1);
         textField.setX(x + 25);
         textField.setWidth(resetButton.getX()-textField.getX()-10);
+        //~ renames_26_1_volatile
         textField.render(context, mouseX, mouseY, tickDelta);
+        //~ !renames_26_1_volatile
     }
     @Override
     public void renderFirstEntryExtras(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {

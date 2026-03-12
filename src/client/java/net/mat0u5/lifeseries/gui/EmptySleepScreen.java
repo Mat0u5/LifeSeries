@@ -119,6 +119,7 @@ public class EmptySleepScreen extends Screen {
         toggleButton.visible = MainClient.isAdmin;
     }
 
+    //~ renames_26_1_volatile
     @Override
     //? if <= 1.20 {
     /*public void renderBackground(GuiGraphics context) {}
@@ -149,6 +150,7 @@ public class EmptySleepScreen extends Screen {
             context.drawString(this.font, "<", sliverX, sliverY, TextColors.WHITE);
         }
     }
+    //~ !renames_26_1_volatile
 
     @Override
     public boolean isPauseScreen() {

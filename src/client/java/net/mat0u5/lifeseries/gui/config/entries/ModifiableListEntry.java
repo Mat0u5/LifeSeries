@@ -51,7 +51,9 @@ public abstract class ModifiableListEntry extends EmptyConfigEntry {
     public void renderMiddleEntryExtras(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         deleteEntryButton.setX(x+5);
         deleteEntryButton.setY(y+2);
+        //~ renames_26_1_volatile
         deleteEntryButton.render(context, mouseX, mouseY, tickDelta);
+        //~ !renames_26_1_volatile
     }
 
     protected abstract void renderMainEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta);
@@ -60,7 +62,9 @@ public abstract class ModifiableListEntry extends EmptyConfigEntry {
         addEntryButton.setX(x+10);
         addEntryButton.setY(y+2);
         if (isLast()) {
+            //~ renames_26_1_volatile
             addEntryButton.render(context, mouseX, mouseY, tickDelta);
+            //~ !renames_26_1_volatile
         }
     }
 

@@ -66,9 +66,11 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
             int rangeWidth = textRenderer.width(rangeText);
             int entryWidth = getEntryContentWidth(width);
 
+            //~ renames_26_1_volatile
             context.drawString(textRenderer, rangeText,
                     x + entryWidth - rangeWidth - textField.getWidth() + RANGE_LABEL_OFFSET_X,
                     getTextFieldPosY(y, height)  + RANGE_LABEL_OFFSET_Y, TextColors.LIGHT_GRAY);
+            //~ !renames_26_1_volatile
         }
     }
 

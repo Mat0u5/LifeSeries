@@ -103,12 +103,14 @@ public abstract class DefaultScreen extends Screen {
         super.init();
     }
 
+    //~ renames_26_1_volatile
     @Override
     //? if <= 1.20 {
     /*public void renderBackground(GuiGraphics context) {}
     *///?} else {
     public void renderBackground(GuiGraphics context, int mouseX, int mouseY, float delta) {}
     //?}
+    //~ !renames_26_1_volatile
 
     public void renderBackground(GuiGraphics context, int mouseX, int mouseY) {
         // Thick borders
@@ -167,13 +169,17 @@ public abstract class DefaultScreen extends Screen {
 
     }
 
+    //~ renames_26_1_volatile
     @Override
     public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
+    //~ !renames_26_1_volatile
         this.renderBackground(context, mouseX, mouseY);
         this.render(context, mouseX, mouseY);
         if (allowCloseButton()) renderClose(context, mouseX, mouseY);
+    //~ renames_26_1_volatile
         super.render(context, mouseX, mouseY, delta);
     }
+    //~ !renames_26_1_volatile
 
     public abstract void render(GuiGraphics context, int mouseX, int mouseY);
 }

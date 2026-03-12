@@ -55,7 +55,9 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
     public void renderList(GuiGraphics context, int mouseX, int mouseY, float delta) {
     *///?} else {
     @Override
+    //~ renames_26_1_volatile
     protected void renderListItems(GuiGraphics context, int mouseX, int mouseY, float delta) {
+    //~ !renames_26_1_volatile
     //?}
 
         //? if <= 1.21.2 {
@@ -98,7 +100,9 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
                 entry.setY(currentY);
                 entry.setWidth(entryWidth);
                 entry.setHeight(entryHeight);
+                //~ renames_26_1_volatile
                 entry.renderContent(context, mouseX, mouseY, hovered, delta);
+                //~ !renames_26_1_volatile
                 //?}
 
 
@@ -319,7 +323,9 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
         }
         *///?} else {
         @Override
+        //~ renames_26_1_volatile
         public void renderContent(GuiGraphics context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        //~ !renames_26_1_volatile
             configEntry.render(context, this.getX(), this.getY(), this.getWidth(), this.getHeight(), mouseX, mouseY, hovered, tickDelta);
         }
 

@@ -111,6 +111,7 @@ public class NewQuizScreen extends Screen {
         }
     }
 
+    //~ renames_26_1_volatile
     @Override
     //? if <= 1.20 {
     /*public void renderBackground(GuiGraphics context) {}
@@ -120,6 +121,7 @@ public class NewQuizScreen extends Screen {
 
     @Override
     public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
+    //~ !renames_26_1_volatile
         int quarter1 = this.width / 4;
         int quarter2 = quarter1*2;
         int quarter3 = quarter1*3;

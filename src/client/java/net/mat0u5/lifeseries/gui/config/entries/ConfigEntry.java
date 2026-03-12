@@ -113,14 +113,18 @@ public abstract class ConfigEntry {
         int textColor = hasError() ? TextColors.PASTEL_RED : TextColors.WHITE;
         int labelX = x + LABEL_OFFSET_X;
         int labelY = y + LABEL_OFFSET_Y + additionalLabelOffsetY();
+        //~ renames_26_1_volatile
         context.drawString(textRenderer, getDisplayName(), labelX, labelY, textColor);
+        //~ !renames_26_1_volatile
 
         int resetButtonX = x + width - RESET_BUTTON_WIDTH + RESET_BUTTON_OFFSET_X;
         if (hasResetButton()) {
             resetButton.setX(resetButtonX);
             resetButton.setY(y + RESET_BUTTON_OFFSET_Y + additionalResetButtonOffsetY());
             resetButton.active = canReset();
+            //~ renames_26_1_volatile
             resetButton.render(context, mouseX, mouseY, tickDelta);
+            //~ !renames_26_1_volatile
         }
 
         if (hasError()) {
@@ -147,7 +151,9 @@ public abstract class ConfigEntry {
         }
 
         if (isNew) {
+            //~ renames_26_1_volatile
             context.drawString(textRenderer, "New", 2, labelY, TextColors.LIGHT_GRAY_A128);
+            //~ !renames_26_1_volatile
         }
 
 

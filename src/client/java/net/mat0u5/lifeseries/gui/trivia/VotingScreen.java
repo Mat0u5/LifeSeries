@@ -148,6 +148,7 @@ public class VotingScreen extends Screen {
         return closesWithEsc;
     }
 
+    //~ renames_26_1_volatile
     @Override
     //? if <= 1.20 {
     /*public void renderBackground(GuiGraphics context) {}
@@ -157,8 +158,9 @@ public class VotingScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        RenderUtils.text(title, width / 2, 10).anchorCenter().colored(TextColors.WHITE).withShadow().render(graphics, font);
         searchBox.render(graphics, mouseX, mouseY, partialTick);
+    //~ !renames_26_1_volatile
+        RenderUtils.text(title, width / 2, 10).anchorCenter().colored(TextColors.WHITE).withShadow().render(graphics, font);
 
         submitButton.active = selectedPlayer != null && !selectedPlayer.isEmpty();
 
@@ -201,7 +203,9 @@ public class VotingScreen extends Screen {
             drawScrollbar(graphics, listTop, listBottom);
         }
 
+        //~ renames_26_1_volatile
         super.render(graphics, mouseX, mouseY, partialTick);
+        //~ !renames_26_1_volatile
     }
 
     private void drawPlayerEntry(GuiGraphics graphics, PlayerEntry player, int x, int y, int width, boolean hovered, boolean selected) {

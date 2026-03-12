@@ -162,8 +162,18 @@ publishMods {
 }
 
 stonecutter {
- replacements.string(stonecutter.eval(stonecutter.current.version, ">=26.1")) {
-  replace 'GuiGraphics', 'GuiGraphicsExtractor'
+ replacements.string(stonecutter.eval(stonecutter.current.version, ">=26.1"), "renames_26_1_stable") {
+  replace ('GuiGraphics', 'GuiGraphicsExtractor')
+  replace ('renderItem(', 'item(')
+  replace ('renderEntityInInventoryFollowsMouse(', 'extractEntityInInventoryFollowsMouse(')
+ }
+ replacements.string(stonecutter.eval(stonecutter.current.version, ">=26.1"), "renames_26_1_volatile") {
+  replace ('render(', 'extractRenderState(')
+  replace ('renderListItems(', 'extractListItems(')
+  replace ('renderContent(', 'extractContent(')
+  replace ('renderBackground(', 'extractBackground(')
+  replace ('drawString(', 'text(')
+  replace ('drawCenteredString(', 'centeredText(')
  }
 }
 

@@ -131,7 +131,9 @@ public class HeartsConfigEntry extends IntegerConfigEntry implements ITextFieldA
         int currentX = x+1;
         int currentY = y+1;
         for (MutableComponent text : getHeartPopupText()) {
+            //~ renames_26_1_volatile
             context.drawString(textRenderer, text, currentX, currentY, TextColors.WHITE, false);
+            //~ !renames_26_1_volatile
             currentY += getTextRenderer().lineHeight-1;
         }
     }

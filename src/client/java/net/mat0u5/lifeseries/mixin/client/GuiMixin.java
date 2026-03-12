@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.mixin.client;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.render.ClientRenderer;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
@@ -41,6 +42,16 @@ import net.minecraft.resources.Identifier;
 
 @Mixin(value = Gui.class, priority = 1)
 public class GuiMixin {
+    //?if <= 1.20.5 {
+    /*@Inject(method = "render", at = @At(value = "TAIL"))
+    public void render(GuiGraphics guiGraphics, float f, CallbackInfo ci) {
+    *///?} else {
+    @Inject(method = "render", at = @At(value = "TAIL"))
+    public void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+    //?}
+        ClientRenderer.render(guiGraphics);
+    }
+
     @Unique
     private static final List<String> ls$allowedColors = List.of(
             "aqua","black","blue","dark_aqua","dark_blue","dark_gray","dark_green",

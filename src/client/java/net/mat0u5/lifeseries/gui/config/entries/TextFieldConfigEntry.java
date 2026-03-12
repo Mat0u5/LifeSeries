@@ -65,7 +65,9 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
 
         textField.setX(getTextFieldPosX(x, entryWidth));
         textField.setY(getTextFieldPosY(y, height));
+        //~ renames_26_1_volatile
         textField.render(context, mouseX, mouseY, tickDelta);
+        //~ !renames_26_1_volatile
 
         if (hasError()) {
             textField.setTextColor(TextColors.PASTEL_RED);
