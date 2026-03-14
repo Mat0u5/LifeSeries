@@ -66,7 +66,7 @@ public class SideTitleCommand extends Command {
             //? if <= 1.21.11 {
             NetworkHandlerServer.sideTitle(player, ComponentUtils.updateForEntity(source, title, player, 0));
             //?} else {
-            /*NetworkHandlerServer.sideTitle(player, ComponentUtils.resolve(ResolutionContext.createWithEntityOverride(source,player), title));
+            /*NetworkHandlerServer.sideTitle(player, ComponentUtils.resolve(ResolutionContext.builder().withSource(source).withEntityOverride(player).build(), title));
             *///?}
         }
 
