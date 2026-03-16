@@ -1,6 +1,9 @@
 package net.mat0u5.lifeseries.seasons.season.doublelife;
 
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
+import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -53,5 +56,34 @@ public class DoubleLifeLivesManager extends LivesManager {
             lives.put(player, randomLives);
         }
         return lives;
+    }
+
+    @Override
+    public void showDeathTitle(ServerPlayer player) {
+        if (currentSeason instanceof DoubleLife doubleLife && doubleLife.isSoulmateOnline(player)) {
+            ServerPlayer soulmate = doubleLife.getSoulmate(player);
+            if (soulmate != null && doubleLife.SOULBOUND_LIVES) {
+                if (doubleLife.isMainSoulmate(player)) {
+                    if (SHOW_DEATH_TITLE) {
+                        PlayerUtils.sendTitleWithSubtitleToPlayers(PlayerUtils.getAllPlayers(), ModifiableText.DOUBLELIFE_FINAL_DEATH_TITLE.get(player, soulmate), ModifiableText.DOUBLELIFE_FINAL_DEATH_TITLE_SUBTITLE.get(), 20, 80, 20);
+                    }
+                    Component deathMessage = ModifiableText.DOUBLELIFE_FINAL_DEATH.get(player, soulmate);
+                    if (!deathMessage.getString().isEmpty()) {
+                        if (SHOW_LIFE_DIFF) {
+                            TaskScheduler.schedulePriorityTask(1, () -> {
+                                PlayerUtils.broadcastMessage(deathMessage);
+                            });
+                        }
+                        else {
+                            PlayerUtils.broadcastMessage(deathMessage);
+                        }
+                    }
+                }
+                return;
+            }
+        }
+
+
+        super.showDeathTitle(player);
     }
 }

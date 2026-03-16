@@ -92,6 +92,7 @@ public class NiceLife extends Season {
 
     @Override
     public void switchOutOfSeason(Seasons changedTo) {
+        super.switchOutOfSeason(changedTo);
         if (server == null) return;
         //? if <= 1.21.9 {
         /*OtherUtils.setBooleanGameRule(server.overworld(), GameRules.RULE_DAYLIGHT, true);

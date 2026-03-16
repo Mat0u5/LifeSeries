@@ -104,11 +104,11 @@ public class DoubleLifeConfig extends ConfigManager {
             "Soulmates PvP Allowed", "Controls whether soulmates can hit each other."
     );
     public static final ConfigFileEntry<Double> SOULMATES_ASSIGN_MINUTE = new ConfigFileEntry<>(
-            "soulmates_assign_time", 1.0, ConfigTypes.MINUTES, "season[new]",
+            "soulmates_assign_time", 1.0, ConfigTypes.MINUTES, "season",
             "Soulmates Assign Time", "How many minutes after the session starts the soulmates get assigned."
     );
     public static final ConfigFileEntry<Boolean> SOULBOUND_LIVES = new ConfigFileEntry<>(
-            "soulbound_lives", true, "season.soulbind[new]",
+            "soulbound_lives", true, "season.soulbind",
             "Soulbound Lives", "Controls whether soulmates share their life count."
     );
 

@@ -306,6 +306,9 @@ public enum ModifiableText {
     ,DOUBLELIFE_LASTPAIR_PT2_SUBTITLE(Seasons.DOUBLE_LIFE, "§cThere can only be one winner.")
     ,DOUBLELIFE_SOULMATE_DEATH_MSG("{} couldn't live without {}", List.of("Victim", "Killer"))
     ,DOUBLELIFE_SOULMATE_DEATH_MSG_SOLO("{} couldn't live without their soulmate", List.of("Victim"))
+    ,DOUBLELIFE_FINAL_DEATH(Seasons.DOUBLE_LIFE, "{} & {} ran out of lives.", List.of("Player"))
+    ,DOUBLELIFE_FINAL_DEATH_TITLE(Seasons.DOUBLE_LIFE, "{} & {}", List.of("Player"))
+    ,DOUBLELIFE_FINAL_DEATH_TITLE_SUBTITLE(Seasons.DOUBLE_LIFE, "ran out of lives!")
 
     ,LIMITEDLIFE_CHANGE_COLOR(Seasons.LIMITED_LIFE, "{}§7 is now a {} name§7.", List.of("Player", "color"))
     ,LIMITEDLIFE_SESSION_DISPLAY_DIVIDER(Seasons.LIMITED_LIFE, "  |  ")

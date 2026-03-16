@@ -349,12 +349,16 @@ public class DefaultConfigValues {
             "Maximum Lives", "The maximum number of lives any player can have after randomization."
     );
     public final ConfigFileEntry<Double> LIVES_RANDOMIZE_MINUTE = new ConfigFileEntry<>(
-            "lives_randomize_time", 1.0, ConfigTypes.MINUTES, "global.lives.random[new]",
+            "lives_randomize_time", 1.0, ConfigTypes.MINUTES, "global.lives.random",
             "Lives Randomize Time", "How many minutes after the session starts the lives get picked."
     );
     public final ConfigFileEntry<Boolean> LIVES_LIFE_DIFF_MESSAGE = new ConfigFileEntry<>(
-            "lives_life_diff_message", false, "global.lives[new]",
+            "lives_life_diff_message", false, "global.lives",
             "Show Life Diff In Death Message", "Shows an indicator of how many lives were lost in the death messages."
+    );
+    public final ConfigFileEntry<Boolean> LIVES_LOSE_KILLS_ONLY = new ConfigFileEntry<>(
+            "lives_lose_kills_only", false, "global.lives[new]",
+            "Only Lose Lives From PvP Kills", "Makes players not lose lives from natural deaths."
     );
 
 

@@ -493,7 +493,9 @@ public abstract class Season {
         }
         DatapackIntegration.EVENT_PLAYER_DEATH.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
         if (!DatapackIntegration.EVENT_PLAYER_DEATH.isCanceled() && livesManager.canChangeLivesNaturally(player) && player.ls$hasAssignedLives()) {
-            player.ls$removeLife();
+            if (killedByPlayer || !livesManager.LIVES_LOSE_KILLS_ONLY) {
+                player.ls$removeLife();
+            }
         }
     }
 
@@ -559,6 +561,9 @@ public abstract class Season {
         killer.awardKillScore(victim, killer.damageSources().playerAttack(killer));
         //?}
 
+        if (livesManager.LIVES_LOSE_KILLS_ONLY) {
+            victim.ls$removeLife();
+        }
     }
 
     public void tryClaimKillLifeGain(ServerPlayer killer, ServerPlayer victim) {

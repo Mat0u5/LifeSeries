@@ -177,7 +177,9 @@ public class LimitedLife extends Season {
         onPlayerDiedNaturally(player, source);
         DatapackIntegration.EVENT_PLAYER_DEATH.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
         if (!DatapackIntegration.EVENT_PLAYER_DEATH.isCanceled() && livesManager.canChangeLivesNaturally(player)) {
-            player.ls$addLives(NEW_DEATH_NORMAL.getSeconds());
+            if (!livesManager.LIVES_LOSE_KILLS_ONLY) {
+                player.ls$addLives(NEW_DEATH_NORMAL.getSeconds());
+            }
         }
     }
 
@@ -196,6 +198,9 @@ public class LimitedLife extends Season {
                 victim.ls$addLives(NEW_DEATH_BOOGEYMAN.diff(NEW_DEATH_NORMAL).getSeconds());
             }
             if (!cancelGain) killer.ls$addLives(NEW_KILL_BOOGEYMAN.getSeconds());
+        }
+        if (livesManager.LIVES_LOSE_KILLS_ONLY) {
+            victim.ls$addLives(NEW_DEATH_NORMAL.getSeconds());
         }
     }
 

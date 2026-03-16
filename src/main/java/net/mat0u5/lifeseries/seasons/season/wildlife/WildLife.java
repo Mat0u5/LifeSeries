@@ -69,6 +69,7 @@ public class WildLife extends Season {
 
     @Override
     public void switchOutOfSeason(Seasons changedTo) {
+        super.switchOutOfSeason(changedTo);
         Snails.killAllSnails();
         TriviaWildcard.killAllTriviaSnails();
         TriviaWildcard.killAllBots();

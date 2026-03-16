@@ -55,6 +55,7 @@ public class LivesManager {
     public int ROLL_MAX_LIVES = 6;
     public double LIVES_RANDOMIZE_MINUTE = 1.0;
     public boolean SHOW_LIFE_DIFF = false;
+    public boolean LIVES_LOSE_KILLS_ONLY = false;
 
     public boolean assignedLives = false;
     public Random rnd = new Random();
@@ -75,6 +76,7 @@ public class LivesManager {
         ROLL_MIN_LIVES = Math.min(minLivesConfig, maxLivesConfig);
         ROLL_MAX_LIVES = Math.max(minLivesConfig, maxLivesConfig);
         SHOW_LIFE_DIFF = seasonConfig.LIVES_LIFE_DIFF_MESSAGE.get();
+        LIVES_LOSE_KILLS_ONLY = seasonConfig.LIVES_LOSE_KILLS_ONLY.get();
     }
 
     public Map<Integer, PlayerTeam> getLivesTeams() {

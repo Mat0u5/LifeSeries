@@ -183,6 +183,8 @@ public class LimitedLifeConfig extends ConfigManager {
         LIVES_RANDOMIZE_MAX.type = ConfigTypes.SECONDS;
         LIVES_LIFE_DIFF_MESSAGE.displayName = "Show Time Diff In Death Message";
         LIVES_LIFE_DIFF_MESSAGE.description = "Shows an indicator of how much time was lost in the death messages.";
+        LIVES_LOSE_KILLS_ONLY.displayName = "Only Lose Time From PvP Kills";
+        LIVES_LOSE_KILLS_ONLY.description = "Makes players not lose time from natural deaths.";
         super.instantiateProperties();
     }
 }
