@@ -104,6 +104,10 @@ public class SessionTranscript {
 
     public static void claimKill(ServerPlayer killer, ServerPlayer victim) {
         addMessageWithTime(TextUtils.formatString("{}'s kill claim of {} has been accepted.", killer, victim));
+        playerRecords.computeIfPresent(killer.getScoreboardName(), (key, playerRecord) -> {
+            playerRecord.addKill();
+            return playerRecord;
+        });
     }
 
     public static void soulmate(ServerPlayer player, ServerPlayer soulmate) {

@@ -13,6 +13,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
+import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
@@ -150,7 +151,7 @@ public abstract class Season {
         }
     }
     public void switchOutOfSeason(Seasons changedTo) {
-
+        AdvancedDeathsManager.resetQueuedDeaths();
     }
 
     public void reloadStart() {
@@ -557,6 +558,7 @@ public abstract class Season {
         *///?} else {
         killer.awardKillScore(victim, killer.damageSources().playerAttack(killer));
         //?}
+
     }
 
     public void tryClaimKillLifeGain(ServerPlayer killer, ServerPlayer victim) {

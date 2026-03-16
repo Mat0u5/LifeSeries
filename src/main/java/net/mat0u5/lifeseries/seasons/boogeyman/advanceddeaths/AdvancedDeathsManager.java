@@ -78,6 +78,14 @@ public class AdvancedDeathsManager {
         }
     }
 
+    public static void resetQueuedDeaths() {
+        for (Map.Entry<UUID, PlayerAdvancedDeath> entry : queuedDeaths.entrySet()) {
+            PlayerAdvancedDeath playerAdvancedDeath = entry.getValue();
+            playerAdvancedDeath.queuedDeaths().get(0).onEnd();
+            playerAdvancedDeath.queuedDeaths().clear();
+        }
+    }
+
     public static boolean hasQueuedDeath(ServerPlayer player) {
         return queuedDeaths.containsKey(player.getUUID());
     }
