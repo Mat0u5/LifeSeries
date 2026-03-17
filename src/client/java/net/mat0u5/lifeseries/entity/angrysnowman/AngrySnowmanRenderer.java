@@ -9,7 +9,7 @@ import java.util.UUID;
 import net.minecraft.resources.Identifier;
 
 //? if <= 1.21 {
-/*import net.minecraft.world.entity.animal.SnowGolem;
+/*import net.minecraft.world.entity.animal.golem.SnowGolem;
 *///?}
 
 //? if >= 1.21.2 {

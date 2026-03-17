@@ -28,11 +28,11 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantments;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import net.minecraft.world.level.gamerules.GameRules;
 
 import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.*;
-import static net.mat0u5.lifeseries.Main.livesManager;
 
 //? if <= 1.20.5 {
 /*import net.minecraft.world.item.EnchantedBookItem;
@@ -50,11 +50,6 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.component.TypedEntityData;
 //?}
-
-//? if <= 1.21.9
-//import net.minecraft.world.level.GameRules;
-//? if > 1.21.9
-import net.minecraft.world.level.gamerules.GameRules;
 
 public class SecretLife extends Season {
     public static double MAX_HEALTH = 60.0d;
@@ -177,14 +172,7 @@ public class SecretLife extends Season {
         itemSpawner.addItem(pot3, 10);
 
         //Enchanted Books
-        //? if <= 1.20.3 {
-        /*itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.ALL_DAMAGE_PROTECTION, 3))), 10);
-        itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.FALL_PROTECTION, 3))), 10);
-        itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.SILK_TOUCH, 1))), 10);
-        itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.BLOCK_FORTUNE, 3))), 10);
-        itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.MOB_LOOTING, 3))), 10);
-        itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.BLOCK_EFFICIENCY, 4))), 10);
-        *///?} else if <= 1.20.5 {
+        //? if <= 1.20.5 {
         /*itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.PROTECTION, 3))), 10);
         itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.FEATHER_FALLING, 3))), 10);
         itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.SILK_TOUCH, 1))), 10);
@@ -409,11 +397,7 @@ public class SecretLife extends Season {
         if (entity instanceof ServerPlayer player) {
             boolean dropBook = SecretLifeConfig.PLAYERS_DROP_TASK_ON_DEATH.get();
             if (dropBook || server == null) return;
-            //? if <= 1.21.9 {
-            /*boolean keepInventory = OtherUtils.getBooleanGameRule(player.ls$getServerLevel(), GameRules.RULE_KEEPINVENTORY);
-            *///?} else {
             boolean keepInventory = OtherUtils.getBooleanGameRule(player.ls$getServerLevel(), GameRules.KEEP_INVENTORY);
-            //?}
             if (keepInventory) return;
             giveBookOnRespawn.put(player.getUUID(), TaskManager.getPlayersTaskBook(player));
             TaskManager.removePlayersTaskBook(player);
@@ -503,10 +487,6 @@ public class SecretLife extends Season {
             }
         }
         if (server.overworld() == null) return;
-        //? if <= 1.21.9 {
-        /*server.overworld().getGameRules().getRule(GameRules.RULE_NATURAL_REGENERATION).set(naturalRegeneration, server);
-         *///?} else {
-        server.overworld().getGameRules().set(GameRules.NATURAL_HEALTH_REGENERATION, naturalRegeneration, server);
-        //?}
+        OtherUtils.setBooleanGameRule(server.overworld(), GameRules.NATURAL_HEALTH_REGENERATION, naturalRegeneration);
     }
 }

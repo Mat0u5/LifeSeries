@@ -540,9 +540,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         itemSpawner.addItem(new ItemStack(Items.ENCHANTING_TABLE, 1), 10);
 
         //Enchanted Books
-        //? if <= 1.20.3 {
-        /*itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.FALL_PROTECTION, 3))), 10);
-        *///?} else if <= 1.20.5 {
+        //? if <= 1.20.5 {
         /*itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.FEATHER_FALLING, 3))), 10);
         *///?} else {
         itemSpawner.addItem(Objects.requireNonNull(ItemStackUtils.createEnchantedBook(Enchantments.FEATHER_FALLING, 3)), 10);

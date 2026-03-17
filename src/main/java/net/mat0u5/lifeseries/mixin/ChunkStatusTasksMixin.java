@@ -53,13 +53,8 @@ public abstract class ChunkStatusTasksMixin {
     //?}
         if (chunkAccess instanceof ProtoChunk) {
             if (NiceLife.SNOWY_NETHER && level.dimension() == Level.NETHER && Main.isLogicalNonDisabled() && currentSeason instanceof NiceLife niceLife) {
-                //? if <= 1.21 {
-                /*int minY = chunkAccess.getMinBuildHeight();
-                int maxY = chunkAccess.getMaxBuildHeight();
-                *///?} else {
                 int minY = chunkAccess.getMinY();
                 int maxY = chunkAccess.getMaxY();
-                //?}
                 for (int x = 0; x < 16; x++) {
                     for (int z = 0; z < 16; z++) {
                         for (int y = minY; y < maxY; y++) {

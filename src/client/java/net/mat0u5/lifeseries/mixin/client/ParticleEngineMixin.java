@@ -25,12 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Map;
-
-//? if <= 1.21.11 {
 import net.minecraft.client.renderer.state.ParticlesRenderState;
-//?} else {
-/*import net.minecraft.client.renderer.state.level.ParticlesRenderState;
-*///?}
 
 @Mixin(value = ParticleEngine.class)
 public abstract class ParticleEngineMixin {

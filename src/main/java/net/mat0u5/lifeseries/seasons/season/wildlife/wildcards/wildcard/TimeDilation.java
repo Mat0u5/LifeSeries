@@ -14,15 +14,12 @@ import net.minecraft.network.protocol.game.ClientboundSetTimePacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.gamerules.GameRules;
 
 import static net.mat0u5.lifeseries.Main.currentSession;
 import static net.mat0u5.lifeseries.Main.server;
 //? if >= 1.20.3
 import net.minecraft.server.ServerTickRateManager;
-//? if <= 1.21.9
-//import net.minecraft.world.level.GameRules;
-//? if > 1.21.9
-import net.minecraft.world.level.gamerules.GameRules;
 //? if >= 26.1
 //import net.minecraft.world.clock.WorldClocks;
 
@@ -69,11 +66,7 @@ public class TimeDilation extends Wildcard {
                     serverLevel.clockManager().setTotalTicks(serverLevel.registryAccess().getOrThrow(WorldClocks.OVERWORLD), newTicks);
                     *///?}
                     for (ServerPlayer player : serverLevel.players()) {
-                        //? if <= 1.21.9 {
-                        /*boolean daylightCycle = OtherUtils.getBooleanGameRule(serverLevel, GameRules.RULE_DAYLIGHT);
-                        *///?} else {
                         boolean daylightCycle = OtherUtils.getBooleanGameRule(serverLevel, GameRules.ADVANCE_TIME);
-                         //?}
                         //? if <= 1.21.11 {
                         player.connection.send(new ClientboundSetTimePacket(serverLevel.getGameTime(), serverLevel.getDayTime(), daylightCycle));
                         //?} else {

@@ -51,15 +51,7 @@ public class LevelRendererMixin {
         if (player.isSpectator()) return false;
         if (player.isInvisible()) return false;
         Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
-        //? if <= 1.21.9 {
-        /*if (player instanceof LocalPlayer && camera.getEntity() != player) {
-            return false;
-        }
-        if (player == camera.getEntity() && !camera.isDetached() &&
-                !(camera.getEntity() instanceof LivingEntity livingEntityCamera && livingEntityCamera.isSleeping())) {
-            return false;
-        }
-        *///?} else {
+        //~ if > 1.21.9 '.getEntity()' -> '.entity()' {
         if (player instanceof LocalPlayer && camera.entity() != player) {
             return false;
         }
@@ -67,7 +59,7 @@ public class LevelRendererMixin {
                 !(camera.entity() instanceof LivingEntity livingEntityCamera && livingEntityCamera.isSleeping())) {
             return false;
         }
-        //?}
+        //~}
         return true;
     }
 

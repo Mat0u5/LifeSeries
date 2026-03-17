@@ -14,9 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.UUID;
 //? if <= 1.20
 //import net.minecraft.resources.Identifier;
-//? if > 1.20 <= 1.21.6
-//import net.minecraft.client.resources.PlayerSkin;
-//? if >= 1.21.9
+//? if > 1.20
 import net.minecraft.world.entity.player.PlayerSkin;
 
 @Mixin(value = AbstractClientPlayer.class, priority = 1)
@@ -24,9 +22,6 @@ public class AbstractClientPlayerMixin {
     //? if <= 1.20 {
     /*@Inject(method = "getSkinTextureLocation", at = @At("HEAD"), cancellable = true)
     public void getSkinTextures(CallbackInfoReturnable<Identifier> cir) {
-    *///?} else if <= 1.21.6 {
-    /*@Inject(method = "getSkin", at = @At("HEAD"), cancellable = true)
-    public void getSkinTextures(CallbackInfoReturnable<PlayerSkin> cir) {
     *///?} else {
     @Inject(method = "getSkin", at = @At("HEAD"), cancellable = true)
     public void getSkinTextures(CallbackInfoReturnable<PlayerSkin> cir) {
@@ -43,11 +38,9 @@ public class AbstractClientPlayerMixin {
         }
         for (PlayerInfo entry : Minecraft.getInstance().getConnection().getOnlinePlayers()) {
             if (OtherUtils.profileId(entry.getProfile()).equals(disguisedUUID)) {
-                //? if <= 1.20 {
-                /*cir.setReturnValue(entry.getSkinLocation());
-                *///?} else {
+                //~ if > 1.20 '.getSkinLocation()' -> '.getSkin()' {
                 cir.setReturnValue(entry.getSkin());
-                //?}
+                //~}
                 return;
             }
         }

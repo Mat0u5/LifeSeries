@@ -23,6 +23,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import net.minecraft.world.level.gamerules.GameRules;
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
 //? if >= 1.21.2
@@ -43,12 +44,9 @@ import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.item.enchantment.effects.ReplaceDisk;
 //?}
 
-//? if <= 1.21.9 {
-/*import net.minecraft.world.level.GameRules;
-*///?} else {
+//? if > 1.21.9
 import net.minecraft.world.level.gamerules.GameRule;
-import net.minecraft.world.level.gamerules.GameRules;
-//?}
+
 //? if <= 1.21.6 {
 /*import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;

@@ -33,7 +33,7 @@ public class CraftingMenuMixin {
     *///?} else {
     private static void blockPreviewIfNoCraftingItemPresent(AbstractContainerMenu handler, ServerLevel level, Player player,
                                                             CraftingContainer craftingInventory, ResultContainer resultInventory, RecipeHolder<CraftingRecipe> recipe, CallbackInfo ci) {
-        //?}
+    //?}
         if (Main.isClientOrDisabled()) return;
 
         for (int i = 0; i < craftingInventory.getContainerSize(); i++) {

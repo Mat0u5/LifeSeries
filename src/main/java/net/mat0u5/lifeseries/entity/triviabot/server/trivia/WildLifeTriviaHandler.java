@@ -46,6 +46,7 @@ import java.util.List;
 import java.util.UUID;
 import static net.mat0u5.lifeseries.Main.blacklist;
 import static net.mat0u5.lifeseries.Main.server;
+import net.minecraft.world.entity.animal.bee.Bee;
 
 //? if <= 1.20.3 {
 /*import net.minecraft.core.particles.DustParticleOptions;
@@ -59,14 +60,8 @@ import net.minecraft.core.component.DataComponents;
 
 //? if > 1.21.9
 import net.minecraft.world.entity.EntityReference;
-
-//? if <= 1.21.9 {
-/*import net.minecraft.world.entity.animal.Bee;
-import org.apache.http.util.EntityUtils;
-import org.joml.Vector3f;
-*///?} else {
-import net.minecraft.world.entity.animal.bee.Bee;
-//?}
+//? if <= 1.20.3
+//import org.joml.Vector3f;
 
 public class WildLifeTriviaHandler extends TriviaHandler {
     public WildLifeTriviaHandler(TriviaBot bot) {

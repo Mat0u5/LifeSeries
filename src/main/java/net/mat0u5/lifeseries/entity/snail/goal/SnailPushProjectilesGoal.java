@@ -10,6 +10,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.world.entity.projectile.arrow.ThrownTrident;
 
 //? if >= 1.21.5
 import java.util.Optional;
@@ -20,16 +21,8 @@ import net.minecraft.world.level.storage.TagValueOutput;
 
 //? if <= 1.21.4
 //import net.minecraft.world.entity.projectile.ThrownPotion;
-//? if >= 1.21.5 && <= 1.21.9
-//import net.minecraft.world.entity.projectile.AbstractThrownPotion;
-//? if >= 1.21.11
+//? if >= 1.21.5
 import net.minecraft.world.entity.projectile.throwableitemprojectile.AbstractThrownPotion;
-
-//? if <= 1.21.9 {
-/*import net.minecraft.world.entity.projectile.ThrownTrident;
-*///?} else {
-import net.minecraft.world.entity.projectile.arrow.ThrownTrident;
-//?}
 
 @SuppressWarnings("resource")
 public final class SnailPushProjectilesGoal extends Goal {

@@ -84,7 +84,7 @@ public class WindCharge extends ToggleableSuperpower {
             /*mace.set(DataComponents.UNBREAKABLE, new Unbreakable(true));
             *///?} else {
             mace.set(DataComponents.UNBREAKABLE, Unit.INSTANCE);
-             //?}
+            //?}
             mace.set(DataComponents.MAX_DAMAGE, 1);
             mace.set(DataComponents.DAMAGE, 1);
             ItemStackUtils.setCustomComponentBoolean(mace, "IgnoreBlacklist", true);

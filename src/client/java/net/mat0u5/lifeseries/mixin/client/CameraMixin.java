@@ -36,13 +36,10 @@ public class CameraMixin {
         if (morphComponent.isMorphed()) {
             LivingEntity dummy = morphComponent.getDummy();
             if (dummy != null) {
-                //? if <= 1.20.3 {
-                /*float playerHeight = player.getDimensions(Pose.STANDING).height;
-                float morphedHeight = dummy.getDimensions(Pose.STANDING).height;
-                *///?} else {
+                //~ if > 1.20.3 '.height' -> '.height()' {
                 float playerHeight = player.getDimensions(Pose.STANDING).height();
                 float morphedHeight = dummy.getDimensions(Pose.STANDING).height();
-                //?}
+                //~}
                 float heightScale = morphedHeight / playerHeight;
                 float cameraDistance = 4.0F;
                 //? if >= 1.21.6 {

@@ -191,11 +191,7 @@ public abstract class LivingEntityMixin {
         Events.onEntityDropItems((LivingEntity) (Object) this, damageSource, ci);
     }
 
-    //? if <= 1.21 {
-    /*@Inject(method = "checkTotemDeathProtection", at = @At("HEAD"))
-    *///?} else {
     @Inject(method = "checkTotemDeathProtection", at = @At("HEAD"))
-    //?}
     private void stopFakeTotem(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
         if (Main.modDisabled()) return;
         LivingEntity entity = (LivingEntity) (Object) this;

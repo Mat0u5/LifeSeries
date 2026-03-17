@@ -7,12 +7,7 @@ import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-
-//? if <= 1.21.9 {
-/*import net.minecraft.world.entity.projectile.ThrownEnderpearl;
-*///?} else {
 import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrownEnderpearl;
-//?}
 
 @Mixin(value = ThrownEnderpearl.class, priority = 1)
 public class ThrownEnderpearlMixin {

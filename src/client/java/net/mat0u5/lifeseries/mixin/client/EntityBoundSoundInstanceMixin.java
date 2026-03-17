@@ -14,14 +14,10 @@ public abstract class EntityBoundSoundInstanceMixin {
     public void canPlay(CallbackInfoReturnable<Boolean> cir) {
         if (Main.modFullyDisabled()) return;
         EntityBoundSoundInstance instance = (EntityBoundSoundInstance) (Object) this;
-        //? if <= 1.21.9 {
-        /*if (instance.getLocation().getPath().contains("wildlife_trivia")) {
-            cir.setReturnValue(true);
-        }
-        *///?} else {
+        //~ if > 1.21.9 '.getLocation()' -> '.getIdentifier()' {
         if (instance.getIdentifier().getPath().contains("wildlife_trivia")) {
             cir.setReturnValue(true);
         }
-        //?}
+        //~}
     }
 }

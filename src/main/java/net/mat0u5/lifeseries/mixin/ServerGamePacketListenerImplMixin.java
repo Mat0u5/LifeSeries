@@ -41,10 +41,10 @@ import net.minecraft.network.protocol.game.ServerboundChatCommandSignedPacket;
 
 //? if <= 1.21
 //import net.minecraft.world.entity.RelativeMovement;
-//? if >= 1.21.2 {
-import net.minecraft.world.entity.Relative;
+//? if >= 1.21.2 <= 1.21.6 {
+/*import net.minecraft.world.entity.Relative;
 import net.minecraft.world.entity.PositionMoveRotation;
-//?}
+*///?}
 
 @Mixin(value = ServerGamePacketListenerImpl.class, priority = 1)
 public class ServerGamePacketListenerImplMixin {

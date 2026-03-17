@@ -6,12 +6,7 @@ import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-
-//? if <= 1.21.9 {
-/*import net.minecraft.world.entity.projectile.Snowball;
-*///?} else {
 import net.minecraft.world.entity.projectile.throwableitemprojectile.Snowball;
-//?}
 
 @Mixin(value = Snowball.class, priority = 1)
 public class SnowballMixin {

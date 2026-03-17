@@ -29,15 +29,11 @@ import net.minecraft.world.level.border.WorldBorder;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import net.minecraft.world.level.gamerules.GameRules;
 
 import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.*;
-
-//? if <= 1.21.9
-//import net.minecraft.world.level.GameRules;
-//? if > 1.21.9
-import net.minecraft.world.level.gamerules.GameRules;
 
 public class DoubleLife extends Season {
     public static final String SOULMATE_DAMAGE_IDENTIFIER_NAME = "soulmate";
@@ -494,11 +490,7 @@ public class DoubleLife extends Season {
 
         if (soulmate == null) return;
         if (!soulmate.isAlive()) return;
-        //? if <= 1.21.9 {
-        /*boolean keepInventory = OtherUtils.getBooleanGameRule(player.ls$getServerLevel(), GameRules.RULE_KEEPINVENTORY);
-        *///?} else {
         boolean keepInventory = OtherUtils.getBooleanGameRule(player.ls$getServerLevel(), GameRules.KEEP_INVENTORY);
-        //?}
         if (SOULBOUND_INVENTORIES && server != null && !keepInventory) {
             soulmate.getInventory().clearContent();
         }

@@ -42,8 +42,6 @@ import static net.mat0u5.lifeseries.Main.server;
 
 //? if <= 1.21
 //import net.minecraft.world.entity.RelativeMovement;
-//? if >= 1.21.2
-import net.minecraft.world.entity.Relative;
 //? if >= 1.21.4
 import net.minecraft.world.entity.player.PlayerModelPart;
 

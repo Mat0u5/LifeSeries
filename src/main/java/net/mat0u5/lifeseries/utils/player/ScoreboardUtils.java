@@ -91,11 +91,9 @@ public class ScoreboardUtils {
         Scoreboard scoreboard = server.getScoreboard();
         Objective objective = scoreboard.getObjective(objectiveName);
         if (objective == null) return;
-        //? if <= 1.20.2 {
-        /*scoreboard.getOrCreatePlayerScore(holder, objective).setScore(score);
-        *///?} else {
+        //~ if > 1.20.2 '.setScore(' -> '.set(' {
         scoreboard.getOrCreatePlayerScore(holder, objective).set(score);
-        //?}
+        //~}
     }
 
     //? if <= 1.20.2 {

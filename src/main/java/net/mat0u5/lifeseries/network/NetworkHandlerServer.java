@@ -275,7 +275,6 @@ public class NetworkHandlerServer {
 
     public static void registerPackets() {
         //? if > 1.20.3 {
-        //? if <= 1.21.11 {
         PayloadTypeRegistry.playS2C().register(NumberPayload.ID, NumberPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(StringPayload.ID, StringPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(StringListPayload.ID, StringListPayload.CODEC);
@@ -305,37 +304,6 @@ public class NetworkHandlerServer {
         PayloadTypeRegistry.playC2S().register(EmptyPayload.ID, EmptyPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(BooleanPayload.ID, BooleanPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(IntPayload.ID, IntPayload.CODEC);
-        //?} else {
-        /*PayloadTypeRegistry.clientboundPlay().register(NumberPayload.ID, NumberPayload.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(StringPayload.ID, StringPayload.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(StringListPayload.ID, StringListPayload.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(HandshakePayload.ID, HandshakePayload.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(LongPayload.ID, LongPayload.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(ConfigPayload.ID, ConfigPayload.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(SidetitlePacket.ID, SidetitlePacket.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(SnailTexturePacket.ID, SnailTexturePacket.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(VoteScreenPayload.ID, VoteScreenPayload.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(EmptyPayload.ID, EmptyPayload.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(BooleanPayload.ID, BooleanPayload.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(IntPayload.ID, IntPayload.CODEC);
-
-        PayloadTypeRegistry.serverboundPlay().register(NumberPayload.ID, NumberPayload.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(StringPayload.ID, StringPayload.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(StringListPayload.ID, StringListPayload.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(HandshakePayload.ID, HandshakePayload.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(LongPayload.ID, LongPayload.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(ConfigPayload.ID, ConfigPayload.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(SidetitlePacket.ID, SidetitlePacket.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(SnailTexturePacket.ID, SnailTexturePacket.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(VoteScreenPayload.ID, VoteScreenPayload.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(EmptyPayload.ID, EmptyPayload.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(BooleanPayload.ID, BooleanPayload.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(IntPayload.ID, IntPayload.CODEC);
-        *///?}
         //?}
     }
     //? if <= 1.20.3 {

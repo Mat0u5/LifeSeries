@@ -289,8 +289,8 @@ public class Blacklist {
 
                 //? if <=1.21 {
                 /*.registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));
-        *///?} else
-        .lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));
+                *///?} else
+                .lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));
 
 
         for (String enchantmentId : loadBlacklistedEnchants()) {

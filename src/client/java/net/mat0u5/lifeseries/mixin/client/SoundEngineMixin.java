@@ -28,11 +28,9 @@ public class SoundEngineMixin {
     );
     @Inject(method = "calculatePitch", at = @At("HEAD"), cancellable = true)
     private void getAdjustedPitch(SoundInstance sound, CallbackInfoReturnable<Float> cir) {
-        //? if <= 1.21.9 {
-        /*String name = sound.getLocation().getPath();
-        *///?} else {
+        //~ if > 1.21.9 '.getLocation()' -> '.getIdentifier()' {
         String name = sound.getIdentifier().getPath();
-         //?}
+        //~}
         if (ls$nonAdjustedSounds.contains(name) || Main.modFullyDisabled()) return;
         Minecraft client = Minecraft.getInstance();
         if (client.level != null) {

@@ -34,14 +34,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.gamerules.GameRules;
 
 import static net.mat0u5.lifeseries.Main.*;
-
-//? if <= 1.21.9
-//import net.minecraft.world.level.GameRules;
-import net.minecraft.world.phys.Vec3;
-//? if > 1.21.9
-import net.minecraft.world.level.gamerules.GameRules;
 
 //? if >= 26.1 {
 /*import net.minecraft.world.clock.WorldClocks;
@@ -94,11 +90,7 @@ public class NiceLife extends Season {
     public void switchOutOfSeason(Seasons changedTo) {
         super.switchOutOfSeason(changedTo);
         if (server == null) return;
-        //? if <= 1.21.9 {
-        /*OtherUtils.setBooleanGameRule(server.overworld(), GameRules.RULE_DAYLIGHT, true);
-        *///?} else {
         OtherUtils.setBooleanGameRule(server.overworld(), GameRules.ADVANCE_TIME, true);
-         //?}
         NiceLifeTriviaManager.killAllSnowmen();
         NiceLifeTriviaManager.killAllBots();
         Season.setSkyColor(null, false);
@@ -176,11 +168,7 @@ public class NiceLife extends Season {
         *///?}
 
         boolean advanceTime = !isMidnight() && (currentSession.statusStarted() || ADVANCE_TIME_WHEN_NOT_IN_SESSION);
-        //? if <= 1.21.9 {
-        /*OtherUtils.setBooleanGameRule(overworld, GameRules.RULE_DAYLIGHT, advanceTime);
-        *///?} else {
         OtherUtils.setBooleanGameRule(overworld, GameRules.ADVANCE_TIME, advanceTime);
-         //?}
 
         if (!isMidnight()) {
             for(ServerPlayer serverPlayer : PlayerUtils.getAllPlayers()) {
@@ -199,7 +187,7 @@ public class NiceLife extends Season {
 
         if (triviaCannotStartFor.isSmaller(Time.zero())) {
             //? if <= 1.21.9 {
-            /*int percentage = overworld.getGameRules().getInt(GameRules.RULE_PLAYERS_SLEEPING_PERCENTAGE);
+            /*int percentage = overworld.getGameRules().getInt(GameRules.PLAYERS_SLEEPING_PERCENTAGE);
              *///?} else {
             int percentage = overworld.getGameRules().get(GameRules.PLAYERS_SLEEPING_PERCENTAGE);
             //?}
@@ -470,13 +458,8 @@ public class NiceLife extends Season {
 
     private boolean shouldFreeze(ServerLevel level, BlockPos blockPos) {
         boolean darkEnough = level.getBrightness(LightLayer.BLOCK, blockPos) < 10 || !LIGHT_MELTS_SNOW;
-        //? if <= 1.21 {
-        /*int minY = level.getMinBuildHeight();
-        int maxY = level.getMaxBuildHeight();
-        *///?} else {
         int minY = level.getMinY();
         int maxY = level.getMaxY();
-        //?}
         if (blockPos.getY() >= minY && blockPos.getY() < maxY && darkEnough) {
             BlockState blockState = level.getBlockState(blockPos);
             FluidState fluidState = level.getFluidState(blockPos);
@@ -541,13 +524,8 @@ public class NiceLife extends Season {
 
     private boolean shouldSnow(ServerLevel level, BlockPos blockPos) {
         boolean darkEnough = level.getBrightness(LightLayer.BLOCK, blockPos) < 10 || !LIGHT_MELTS_SNOW;
-        //? if <= 1.21 {
-        /*int minY = level.getMinBuildHeight();
-        int maxY = level.getMaxBuildHeight();
-        *///?} else {
         int minY = level.getMinY();
         int maxY = level.getMaxY();
-        //?}
         if (blockPos.getY() >= minY && blockPos.getY() < maxY && darkEnough) {
             BlockState blockState = level.getBlockState(blockPos);
             boolean canSnowOverride = blockState.isAir() ||snowReplacableBlocks.contains(blockState.getBlock());

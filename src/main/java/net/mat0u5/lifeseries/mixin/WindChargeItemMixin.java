@@ -37,9 +37,9 @@ import net.minecraft.world.InteractionResult;
 @Mixin(value = WindChargeItem.class, priority = 1)
 public class WindChargeItemMixin {
     @Inject(method = "use", at = @At("RETURN"))
-            //? if <= 1.21 {
+    //? if <= 1.21 {
     /*public void use(Level level, Player user, InteractionHand hand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
-        *///?} else
+    *///?} else
         public void use(Level level, Player user, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
         if (Main.isClientOrDisabled()) return;
         if (user instanceof ServerPlayer player) {

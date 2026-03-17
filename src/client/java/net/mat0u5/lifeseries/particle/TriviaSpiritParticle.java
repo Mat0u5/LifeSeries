@@ -60,9 +60,9 @@ public class TriviaSpiritParticle extends Particle {
         //? if <= 1.21.2 {
         /^PoseStack poseStack = new PoseStack();
          ^///?} else {
-        //~ !renames_1_21_6_stable
+        //~ !renames_1_21_6
         poseStack.pushPose();
-        //~ renames_1_21_6_stable
+        //~ renames_1_21_6
         //?}
 
         poseStack.mulPose(camera.rotation());
@@ -88,9 +88,9 @@ public class TriviaSpiritParticle extends Particle {
         //? if <= 1.21.2 {
         /^bufferSource.endBatch();
          ^///?} else {
-        //~ !renames_1_21_6_stable
+        //~ !renames_1_21_6
         poseStack.popPose();
-        //~ renames_1_21_6_stable
+        //~ renames_1_21_6
         //?}
     }
 

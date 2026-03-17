@@ -503,11 +503,9 @@ public class ProfileManager {
     }
 
     public static boolean areEqualSkins(Property skin1, Property skin2) {
-        //? if <= 1.20 {
-        /*if (skin1 != null && skin2 != null && !skin1.getValue().equalsIgnoreCase(skin2.getValue())) {
-         *///?} else {
+        //~ if > 1.20 '.getValue()' -> '.value()' {
         if (skin1 != null && skin2 != null && !skin1.value().equalsIgnoreCase(skin2.value())) {
-            //?}
+        //~}
             return false;
         }
         if ((skin1 == null) != (skin2 == null)) {

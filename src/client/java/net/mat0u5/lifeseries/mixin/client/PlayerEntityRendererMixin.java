@@ -23,7 +23,7 @@ import net.mat0u5.lifeseries.Main;
 //? if > 1.20
 import net.minecraft.world.scores.DisplaySlot;
 //? if <= 1.20.2 {
-/*import net.minecraft.world.scores.Score;
+/*import net.minecraft.world.scores.PlayerScoreEntry;
 *///?} else {
 import net.minecraft.world.scores.ReadOnlyScoreInfo;
 //?}

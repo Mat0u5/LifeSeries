@@ -3,8 +3,6 @@ package net.mat0u5.lifeseries.mixin;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.utils.interfaces.IEntity;
 import net.mat0u5.lifeseries.utils.interfaces.IEntityDataSaver;
@@ -17,24 +15,22 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import net.minecraft.world.entity.monster.illager.Evoker;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
+
+//? if <= 1.20.5
+//import org.spongepowered.asm.mixin.Shadow;
 
 //? if >= 1.21.2 {
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
-//?}
-//? if <= 1.21.9 {
-/*import net.minecraft.world.entity.monster.Evoker;
-*///?} else {
-import net.minecraft.world.entity.monster.illager.Evoker;
 //?}
 
 //? if >= 26.1 {
@@ -133,7 +129,7 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
     @Inject(method = "spawnAtLocation(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/ItemStack;F)Lnet/minecraft/world/entity/item/ItemEntity;",
             at = @At("HEAD"), cancellable = true)
     public void dropStack(ServerLevel level, ItemStack stack, float yOffset, CallbackInfoReturnable<ItemEntity> cir) {
-        //?}
+    //?}
         if (Main.isClientOrDisabled()) return;
         if (currentSeason instanceof WildLife) {
             Entity entity = (Entity) (Object) this;
@@ -172,11 +168,9 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
     //?}
     private void nonAllyPets(Entity entity, CallbackInfoReturnable<Boolean> cir) {
         if (entity instanceof TamableAnimal animal) {
-            //? if <= 1.21.4 {
-            /*LivingEntity owner = animal.getOwner();
-            *///?} else {
+            //~ if > 1.21.4 '.getOwner()' -> '.getRootOwner()' {
             LivingEntity owner = animal.getRootOwner();
-            //?}
+            //~}
             Entity thisEntity = (Entity) (Object) this;
             if (owner != thisEntity) {
                 cir.setReturnValue(false);

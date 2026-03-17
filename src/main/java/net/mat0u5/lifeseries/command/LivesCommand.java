@@ -29,9 +29,6 @@ import java.util.List;
 import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.Main.livesManager;
 
-//? if <= 1.20.2
-//import net.minecraft.world.scores.Score;
-//? if > 1.20.2
 import net.minecraft.world.scores.PlayerScoreEntry;
 
 public class LivesCommand extends Command {
