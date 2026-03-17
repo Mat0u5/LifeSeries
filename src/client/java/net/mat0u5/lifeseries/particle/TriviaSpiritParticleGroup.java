@@ -23,19 +23,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-//? if <= 1.21.9 {
-/*import net.minecraft.client.renderer.RenderType;
- *///?} else {
 import net.minecraft.client.renderer.rendertype.RenderType;
-//?}
 
-//? if <= 1.21.11 {
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.state.ParticleGroupRenderState;
- //?} else {
-/*import net.minecraft.client.renderer.state.level.CameraRenderState;
-import net.minecraft.client.renderer.state.level.ParticleGroupRenderState;
-*///?}
 
 public class TriviaSpiritParticleGroup extends ParticleGroup<TriviaSpiritParticle> {
     public TriviaSpiritParticleGroup(final ParticleEngine engine) {
@@ -65,7 +56,9 @@ public class TriviaSpiritParticleGroup extends ParticleGroup<TriviaSpiritParticl
             float alpha = 0.05F + 0.5F * Mth.sin(ageScale * (float) Math.PI);
             int color = ARGB.colorFromFloat(alpha, 1.0F, 1.0F, 1.0F);
             PoseStack poseStack = new PoseStack();
+            //~ !renames_1_21_6_stable
             poseStack.pushPose();
+            //~ renames_1_21_6_stable
             poseStack.mulPose(camera.rotation());
             poseStack.mulPose(Axis.XP.rotationDegrees(60.0F - 150.0F * ageScale));
             poseStack.scale(1.0f, -1.0f, -1.0f);

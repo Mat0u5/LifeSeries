@@ -43,20 +43,20 @@ import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.item.enchantment.effects.ReplaceDisk;
 //?}
 
-//?if <= 1.21.9 {
+//? if <= 1.21.9 {
 /*import net.minecraft.world.level.GameRules;
 *///?} else {
 import net.minecraft.world.level.gamerules.GameRule;
 import net.minecraft.world.level.gamerules.GameRules;
 //?}
-//?if <= 1.21.6 {
+//? if <= 1.21.6 {
 /*import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.EntityType;
 *///?}
-//?if >= 26.1 {
+//? if >= 26.1 {
 /*import net.minecraft.world.entity.Entity;
 *///?}
 

@@ -7,10 +7,8 @@ import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-
-//? if >= 1.21.9 {
-import net.minecraft.client.input.MouseButtonEvent;
-//?}
+//? if >= 1.21.9
+import net.minecraft.client.input.*;
 
 public abstract class ModifiableListEntry extends EmptyConfigEntry {
     public final Button deleteEntryButton;
@@ -68,7 +66,7 @@ public abstract class ModifiableListEntry extends EmptyConfigEntry {
         }
     }
 
-    //?if <= 1.21.6 {
+    //? if <= 1.21.6 {
     /*@Override
     protected boolean mouseClickedEntry(double mouseX, double mouseY, int button) {
         if (deleteEntryButton.mouseClicked(mouseX, mouseY, button) || addEntryButton.mouseClicked(mouseX, mouseY, button)) {

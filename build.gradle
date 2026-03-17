@@ -164,9 +164,28 @@ publishMods {
 }
 
 stonecutter {
+ replacements.string(stonecutter.eval(stonecutter.current.version, ">=1.21.5"), "!renames_1_21_5_stable") {
+  replace ('MobEffects.MOVEMENT_SPEED', 'MobEffects.SPEED')
+  replace ('MobEffects.DIG_SPEED', 'MobEffects.HASTE')
+  replace ('MobEffects.DAMAGE_BOOST', 'MobEffects.STRENGTH')
+  replace ('MobEffects.JUMP', 'MobEffects.JUMP_BOOST')
+  replace ('MobEffects.DAMAGE_RESISTANCE', 'MobEffects.RESISTANCE')
+  replace ('MobEffects.MOVEMENT_SLOWDOWN', 'MobEffects.SLOWNESS')
+  replace ('MobEffects.DIG_SLOWDOWN', 'MobEffects.MINING_FATIGUE')
+  replace ('MobEffects.HEAL', 'MobEffects.INSTANT_HEALTH')
+  replace ('MobEffects.HEALTH_BOOST', 'MobEffects.HEALTH_BOOST')
+  replace ('MobEffects.HARM', 'MobEffects.INSTANT_DAMAGE')
+  replace ('MobEffects.CONFUSION', 'MobEffects.NAUSEA')
+ }
+ replacements.string(stonecutter.eval(stonecutter.current.version, ">=1.21.6"), "!renames_1_21_6_stable") {
+  replace ('.popPose()', '.popMatrix()')
+  replace ('.pushPose()', '.pushMatrix()')
+ }
  replacements.string(stonecutter.eval(stonecutter.current.version, ">=1.21.11"), "!renames_1_21_11_stable") {
   replace ('ResourceLocation', 'Identifier')
   replace ('IdentifierHelper', 'IdentifierHelper')
+  replace ('net.minecraft.Util', 'net.minecraft.util.Util')
+  replace ('net.minecraft.client.renderer.RenderType;', 'net.minecraft.client.renderer.rendertype.RenderType;')
  }
  replacements.string(stonecutter.eval(stonecutter.current.version, ">=26.1"), "!renames_26_1_stable") {
   replace ('GuiGraphics', 'GuiGraphicsExtractor')
@@ -174,6 +193,13 @@ stonecutter {
   replace ('renderEntityInInventoryFollowsMouse(', 'extractEntityInInventoryFollowsMouse(')
   replace ('ClientCommandManager.argument', 'ClientCommands.argument')
   replace ('ClientCommandManager.literal', 'ClientCommands.literal')
+  replace ('.registerKeyBinding(', '.registerKeyMapping(')
+  replace ('net.fabricmc.fabric.api.client.keybinding.v1', 'net.fabricmc.fabric.api.client.keymapping.v1')
+  replace ('KeyBindingHelper', 'KeyMappingHelper')
+  replace ('net.minecraft.client.renderer.state.CameraRenderState', 'net.minecraft.client.renderer.state.level.CameraRenderState')
+  replace ('net.minecraft.client.renderer.state.ParticleGroupRenderState', 'net.minecraft.client.renderer.state.level.ParticleGroupRenderState')
+  replace ('ParticleFactoryRegistry', 'ParticleProviderRegistry')
+  replace ('EntityModelLayerRegistry', 'ModelLayerRegistry')
  }
  replacements.string(stonecutter.eval(stonecutter.current.version, ">=26.1"), "renames_26_1_volatile") {
   replace ('render(', 'extractRenderState(')

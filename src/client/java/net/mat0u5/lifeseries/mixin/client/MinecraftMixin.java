@@ -66,7 +66,7 @@ public abstract class MinecraftMixin {
 
 
     @Inject(method = "doWorldLoad", at = @At("HEAD"))
-    //?if <= 1.20.2 {
+    //? if <= 1.20.2 {
     /*private void acknowledgeWorldLoad(String string, LevelStorageSource.LevelStorageAccess levelStorageAccess, PackRepository packRepository, WorldStem worldStem, boolean bl, CallbackInfo ci) {
     *///?} else if <= 1.21.11 {
     private void acknowledgeWorldLoad(LevelStorageSource.LevelStorageAccess levelStorageAccess, PackRepository packRepository, WorldStem worldStem, boolean bl, CallbackInfo ci) {

@@ -25,11 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-//? if >= 1.21.9 {
-import net.minecraft.client.input.MouseButtonEvent;
-import net.minecraft.client.input.CharacterEvent;
-import net.minecraft.client.input.KeyEvent;
-//?}
+//? if >= 1.21.9
+import net.minecraft.client.input.*;
 
 public class ConfigScreen extends Screen {
     private static int HEADER_HEIGHT_SMALL = 55;
@@ -334,8 +331,8 @@ public class ConfigScreen extends Screen {
     //~ renames_26_1_volatile
     @Override
     public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
-        //?if <= 1.20.2 {
-        /*//?if <= 1.20 {
+        //? if <= 1.20.2 {
+        /*//? if <= 1.20 {
         /^context.setColor(0.25F, 0.25F, 0.25F, 1.0F);
         ^///?} else {
         context.setColor(0.85F, 0.85F, 0.85F, 1.0F);

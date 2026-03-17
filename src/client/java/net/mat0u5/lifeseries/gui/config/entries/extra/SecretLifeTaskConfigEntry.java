@@ -2,7 +2,6 @@ package net.mat0u5.lifeseries.gui.config.entries.extra;
 
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.ModifiableListEntry;
-import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
@@ -15,12 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-
-//? if >= 1.21.9 {
-import net.minecraft.client.input.MouseButtonEvent;
-import net.minecraft.client.input.CharacterEvent;
-import net.minecraft.client.input.KeyEvent;
-//?}
+//? if >= 1.21.9
+import net.minecraft.client.input.*;
 
 public class SecretLifeTaskConfigEntry extends ModifiableListEntry {
     protected final EditBox textField;

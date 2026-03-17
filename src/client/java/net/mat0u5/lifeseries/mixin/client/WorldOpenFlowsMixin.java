@@ -17,7 +17,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.gui.screens.Screen;
 import java.io.IOException;
 *///?} else {
-    //?if <= 1.20.3 {
+    //? if <= 1.20.3 {
     /*import com.mojang.serialization.Dynamic;
     *///?} else {
     import net.minecraft.server.WorldStem;
@@ -56,7 +56,7 @@ public abstract class WorldOpenFlowsMixin {
     }
     *///?} else {
 
-    //?if <= 1.20.3 {
+    //? if <= 1.20.3 {
     /*@Invoker("loadLevel")
     abstract void ls$openWorldCheckWorldStemCompatibility(LevelStorageSource.LevelStorageAccess levelStorageAccess, Dynamic<?> dynamic, boolean bl, boolean bl2, Runnable runnable);
 
@@ -76,14 +76,14 @@ public abstract class WorldOpenFlowsMixin {
         ls$askForConfirmation(worldAccess, worldAccess.getLevelId(),
                 () -> {
                     worldConfig.setProperty("acknowledged", "true");
-                    //?if <= 1.20.3 {
+                    //? if <= 1.20.3 {
                     /*ls$openWorldCheckWorldStemCompatibility(worldAccess, dynamic, bl, bl2, onCancel);
                     *///?} else {
                     ls$openWorldCheckWorldStemCompatibility(worldAccess, worldStem, packRepository, onCancel);
                     //?}
                 },
                 () -> {
-                    //?if > 1.20.3 {
+                    //? if > 1.20.3 {
                     worldStem.close();
                     //?}
                     worldAccess.safeClose();

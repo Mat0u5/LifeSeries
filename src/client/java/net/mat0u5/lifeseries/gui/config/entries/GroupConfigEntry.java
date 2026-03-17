@@ -10,11 +10,8 @@ import net.minecraft.client.gui.GuiGraphics;
 
 import java.util.ArrayList;
 import java.util.List;
-//? if >= 1.21.9 {
-import net.minecraft.client.input.MouseButtonEvent;
-import net.minecraft.client.input.CharacterEvent;
-import net.minecraft.client.input.KeyEvent;
-//?}
+//? if >= 1.21.9
+import net.minecraft.client.input.*;
 
 public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends EmptyConfigEntry {
     private static final int CHILD_INDENT = 20;

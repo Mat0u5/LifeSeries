@@ -14,16 +14,12 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-//? if >= 1.21.9 {
-import net.minecraft.client.input.MouseButtonEvent;
-import net.minecraft.client.input.CharacterEvent;
-import net.minecraft.client.input.KeyEvent;
-//?}
+//? if >= 1.21.9
+import net.minecraft.client.input.*;
 
 public abstract class ConfigEntry {
     public static final int PREFFERED_HEIGHT = 20;

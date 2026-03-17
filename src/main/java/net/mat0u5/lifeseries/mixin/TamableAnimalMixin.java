@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = TamableAnimal.class, priority = 1)
 public class TamableAnimalMixin {
-    //?if <= 1.21 {
+    //? if <= 1.21 {
     /*@Inject(method = "isAlliedTo", at = @At("HEAD"), cancellable = true)
     *///?} else {
     @Inject(method = "considersEntityAsAlly", at = @At("HEAD"), cancellable = true)

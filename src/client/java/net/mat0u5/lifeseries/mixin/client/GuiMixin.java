@@ -26,7 +26,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.player.LocalPlayer;
 *///?}
 //? if >= 1.21.2 && <= 1.21.5 {
-/*import net.minecraft.client.renderer.RenderType;
+/*import net.minecraft.client.renderer.rendertype.RenderType;
 import java.util.function.Function;
 *///?}
 //? if >= 1.21.6
@@ -38,7 +38,7 @@ import net.minecraft.resources.Identifier;
 
 @Mixin(value = Gui.class, priority = 1)
 public class GuiMixin {
-    //?if <= 1.20.5 {
+    //? if <= 1.20.5 {
     /*@Inject(method = "render", at = @At(value = "TAIL"))
     public void render(GuiGraphics guiGraphics, float f, CallbackInfo ci) {
     *///?} else if <= 1.21.11 {

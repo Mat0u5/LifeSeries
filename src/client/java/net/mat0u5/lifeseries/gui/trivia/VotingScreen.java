@@ -18,12 +18,8 @@ import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-
-//? if >= 1.21.9 {
-import net.minecraft.client.input.MouseButtonEvent;
-import net.minecraft.client.input.CharacterEvent;
-import net.minecraft.client.input.KeyEvent;
-//?}
+//? if >= 1.21.9
+import net.minecraft.client.input.*;
 
 import net.minecraft.resources.Identifier;
 

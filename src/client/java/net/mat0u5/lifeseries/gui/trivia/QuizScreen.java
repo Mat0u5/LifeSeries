@@ -15,9 +15,8 @@ import net.minecraft.util.FormattedCharSequence;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-//? if >= 1.21.9 {
-import net.minecraft.client.input.MouseButtonEvent;
-//?}
+//? if >= 1.21.9
+import net.minecraft.client.input.*;
 
 public class QuizScreen extends DefaultScreen {
 

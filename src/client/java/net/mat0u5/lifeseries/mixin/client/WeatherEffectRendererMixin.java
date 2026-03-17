@@ -12,11 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 //? if >= 1.21.4 {
-//? if <= 1.21.9 {
-/*import net.minecraft.client.renderer.RenderType;
-*///?} else if <= 1.21.11 {
 import net.minecraft.client.renderer.rendertype.RenderType;
-//?}
 //?}
 
 import net.minecraft.resources.Identifier;

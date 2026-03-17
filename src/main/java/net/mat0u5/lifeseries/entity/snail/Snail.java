@@ -167,7 +167,7 @@ public class Snail extends Monster {
     }
 
     public boolean isInLavaLocal = false;
-    //?if <= 1.21.11 {
+    //? if <= 1.21.11 {
     @Override
     public boolean updateFluidHeightAndDoFluidPushing(TagKey<Fluid> tag, double speed) {
         if (FluidTags.LAVA != tag) {

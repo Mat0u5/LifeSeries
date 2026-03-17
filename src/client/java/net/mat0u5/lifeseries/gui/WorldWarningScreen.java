@@ -6,11 +6,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-
-//? if >= 1.21.9 {
-import net.minecraft.client.input.KeyEvent;
-import net.minecraft.network.chat.FormattedText;
-//?}
+//? if >= 1.21.9
+import net.minecraft.client.input.*;
 
 public class WorldWarningScreen extends Screen {
     private final Runnable onCancel;

@@ -9,11 +9,8 @@ import net.minecraft.network.chat.Component;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-//? if >= 1.21.9 {
-import net.minecraft.client.input.MouseButtonEvent;
-import net.minecraft.client.input.CharacterEvent;
-import net.minecraft.client.input.KeyEvent;
-//?}
+//? if >= 1.21.9
+import net.minecraft.client.input.*;
 //? if > 1.20 && <= 1.20.3
 //import net.minecraft.client.gui.screens.Screen;
 

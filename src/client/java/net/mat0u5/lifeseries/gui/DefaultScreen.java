@@ -1,14 +1,11 @@
 package net.mat0u5.lifeseries.gui;
 
-import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-
-//? if >= 1.21.9 {
-import net.minecraft.client.input.MouseButtonEvent;
-//?}
+//? if >= 1.21.9
+import net.minecraft.client.input.*;
 
 public abstract class DefaultScreen extends Screen {
 

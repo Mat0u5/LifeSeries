@@ -19,7 +19,7 @@ import java.util.List;
 import net.minecraft.util.ARGB;
 //?}
 //? if >= 1.21.2 && <= 1.21.5 {
-/*import net.minecraft.client.renderer.RenderType;
+/*import net.minecraft.client.renderer.rendertype.RenderType;
 *///?}
 
 //? if <= 1.21.5 {

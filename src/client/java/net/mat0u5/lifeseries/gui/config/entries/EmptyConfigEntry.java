@@ -1,12 +1,8 @@
 package net.mat0u5.lifeseries.gui.config.entries;
 
 import net.minecraft.client.gui.GuiGraphics;
-
-//? if >= 1.21.9 {
-import net.minecraft.client.input.MouseButtonEvent;
-import net.minecraft.client.input.CharacterEvent;
-import net.minecraft.client.input.KeyEvent;
-//?}
+//? if >= 1.21.9
+import net.minecraft.client.input.*;
 
 public abstract class EmptyConfigEntry extends ConfigEntry {
     public EmptyConfigEntry(String fieldName, String displayName, String description) {

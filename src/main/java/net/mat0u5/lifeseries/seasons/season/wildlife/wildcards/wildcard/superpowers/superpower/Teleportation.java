@@ -81,11 +81,7 @@ public class Teleportation extends Superpower {
                     playTeleportSound(playerLevel, playerPos);
                     playTeleportSound(lookingAtPlayerLevel, lookingAtPlayerPos);
 
-                    //? if <= 1.21.4 {
-                    /*MobEffectInstance resistance = new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 100, 3);
-                    *///?} else {
                     MobEffectInstance resistance = new MobEffectInstance(MobEffects.RESISTANCE, 100, 3);
-                    //?}
                     lookingAtPlayer.addEffect(resistance);
 
                     teleported = true;

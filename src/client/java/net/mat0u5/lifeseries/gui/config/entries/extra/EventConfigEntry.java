@@ -11,15 +11,9 @@ import net.minecraft.network.chat.Component;
 
 import java.util.List;
 import java.util.Objects;
-//? if >= 1.21.9 {
-import net.minecraft.client.input.MouseButtonEvent;
-//?}
-
-//? if <= 1.21.9 {
-/*import net.minecraft.Util;
-*///?} else {
 import net.minecraft.util.Util;
- //?}
+//? if >= 1.21.9
+import net.minecraft.client.input.*;
 
 public class EventConfigEntry extends StringConfigEntry {
     Boolean canceled;

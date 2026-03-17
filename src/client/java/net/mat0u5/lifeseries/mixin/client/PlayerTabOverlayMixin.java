@@ -58,7 +58,7 @@ public class PlayerTabOverlayMixin {
     }
     *///?} else {
 
-    //?if <= 1.21.11 {
+    //? if <= 1.21.11 {
     @Redirect(method = "render",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/world/scores/ReadOnlyScoreInfo;safeFormatValue(Lnet/minecraft/world/scores/ReadOnlyScoreInfo;Lnet/minecraft/network/chat/numbers/NumberFormat;)Lnet/minecraft/network/chat/MutableComponent;"))

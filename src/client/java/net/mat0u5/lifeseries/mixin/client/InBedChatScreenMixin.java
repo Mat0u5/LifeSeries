@@ -8,14 +8,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-//? if >= 1.21.9 {
-import net.minecraft.client.input.CharacterEvent;
-//?}
+//? if >= 1.21.9
+import net.minecraft.client.input.*;
 
 @Mixin(value = InBedChatScreen.class, priority = 1)
 public abstract class InBedChatScreenMixin {
     //26.1+ logic is in ChatScreenMixin
-    //?if <= 1.21.11 {
+    //? if <= 1.21.11 {
     @Inject(method = "charTyped", at = @At("HEAD"))
     //? if <= 1.21.6 {
     /*private void unfocusButton(char c, int i, CallbackInfoReturnable<Boolean> cir) {

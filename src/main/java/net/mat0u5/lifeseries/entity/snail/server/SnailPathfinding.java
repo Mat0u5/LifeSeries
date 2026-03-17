@@ -322,7 +322,7 @@ public class SnailPathfinding {
         snail.setPathfindingMalus(PathType.FENCE, -1);
         snail.setPathfindingMalus(PathType.WALKABLE, 0);
         snail.setPathfindingMalus(PathType.OPEN, 0);
-            //?if <= 1.21.11 {
+            //? if <= 1.21.11 {
             snail.setPathfindingMalus(PathType.DANGER_TRAPDOOR, -1);
             snail.setPathfindingMalus(PathType.DAMAGE_OTHER, 0);
             snail.setPathfindingMalus(PathType.DANGER_OTHER, 0);
@@ -361,7 +361,7 @@ public class SnailPathfinding {
         snail.setPathfindingMalus(PathType.FENCE, 0);
         snail.setPathfindingMalus(PathType.WALKABLE, 0);
         snail.setPathfindingMalus(PathType.OPEN, 0);
-            //?if <= 1.21.11 {
+            //? if <= 1.21.11 {
             snail.setPathfindingMalus(PathType.DANGER_TRAPDOOR, -1);
             snail.setPathfindingMalus(PathType.DAMAGE_OTHER, 0);
             snail.setPathfindingMalus(PathType.DANGER_OTHER, 0);
@@ -397,7 +397,7 @@ public class SnailPathfinding {
         snail.setPathfindingMalus(PathType.FENCE, 0);
         snail.setPathfindingMalus(PathType.WALKABLE, 0);
         snail.setPathfindingMalus(PathType.OPEN, 0);
-            //?if <= 1.21.11 {
+            //? if <= 1.21.11 {
             snail.setPathfindingMalus(PathType.DANGER_TRAPDOOR, -1);
             snail.setPathfindingMalus(PathType.DAMAGE_OTHER, 0);
             snail.setPathfindingMalus(PathType.DANGER_OTHER, 0);

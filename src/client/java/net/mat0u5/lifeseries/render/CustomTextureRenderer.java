@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.render;
 import net.minecraft.client.gui.GuiGraphics;
 
 //? if >= 1.21.2 && <= 1.21.5
-//import net.minecraft.client.renderer.RenderType;
+//import net.minecraft.client.renderer.rendertype.RenderType;
 //? if >= 1.21.6
 import net.minecraft.client.renderer.RenderPipelines;
 
@@ -66,11 +66,10 @@ public class CustomTextureRenderer {
 
     public void render(GuiGraphics context) {
         if (isScaled()) {
-            //? if <= 1.21.5 {
-            /*context.pose().pushPose();
-            context.pose().scale(scaleX, scaleY, 1.0f);
-            *///?} else {
             context.pose().pushMatrix();
+            //? if <= 1.21.5 {
+            /*context.pose().scale(scaleX, scaleY, 1.0f);
+            *///?} else {
             context.pose().scale(scaleX, scaleY);
             //?}
         }
@@ -84,11 +83,7 @@ public class CustomTextureRenderer {
         //?}
 
         if (isScaled()) {
-            //? if <= 1.21.5 {
-            /*context.pose().popPose();
-            *///?} else {
             context.pose().popMatrix();
-             //?}
         }
     }
 }

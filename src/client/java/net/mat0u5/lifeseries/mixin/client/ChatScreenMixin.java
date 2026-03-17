@@ -7,14 +7,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-//? if >= 1.21.9 {
-import net.minecraft.client.input.KeyEvent;
-//?}
+//? if >= 1.21.9
+import net.minecraft.client.input.*;
 
 @Mixin(value = ChatScreen.class, priority = 1)
 public class ChatScreenMixin {
     //1.21.11- logic is in ChatScreenMixin
-    //?if >= 26.1 {
+    //? if >= 26.1 {
     /*@Inject(method = "keyPressed", at = @At("HEAD"))
     private void unfocusButton(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
         ChatScreen chatScreen = (ChatScreen) (Object) this;
