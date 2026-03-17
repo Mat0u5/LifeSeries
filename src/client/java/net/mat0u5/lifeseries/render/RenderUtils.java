@@ -5,11 +5,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 
-//? if <= 1.21.9 {
-/*import net.minecraft.resources.ResourceLocation;
- *///?} else {
 import net.minecraft.resources.Identifier;
-//?}
 
 public class RenderUtils {
 
@@ -28,11 +24,7 @@ public class RenderUtils {
         context.fill(x + width - 1, y + 1, x + width, y + height - 1, color);
     }
 
-    //? if <= 1.21.9 {
-    /*public static CustomTextureRenderer texture(ResourceLocation texture, float x, float y, int width, int height) {
-        *///?} else {
-        public static CustomTextureRenderer texture(Identifier texture, float x, float y, int width, int height) {
-         //?}
+    public static CustomTextureRenderer texture(Identifier texture, float x, float y, int width, int height) {
         return new CustomTextureRenderer(texture, x, y, width, height);
     }
 

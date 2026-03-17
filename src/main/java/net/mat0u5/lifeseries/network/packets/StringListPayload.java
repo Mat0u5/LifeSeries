@@ -5,14 +5,14 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public record StringListPayload(String name, List<String> value) implements FabricPacket {
 
-    public static final ResourceLocation ID = IdentifierHelper.mod("stringlist");
+    public static final Identifier ID = IdentifierHelper.mod("stringlist");
     public static final PacketType<StringListPayload> TYPE = PacketType.create(ID, StringListPayload::read);
 
     public void write(FriendlyByteBuf buf) {

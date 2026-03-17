@@ -25,11 +25,7 @@ import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 //?}
 
-//? if <= 1.21.9 {
-/*import net.minecraft.resources.ResourceLocation;
-*///?} else {
 import net.minecraft.resources.Identifier;
- //?}
 
 public class VotingScreen extends Screen {
     private static final int PLAYER_ENTRY_HEIGHT = 32;
@@ -85,9 +81,9 @@ public class VotingScreen extends Screen {
             for (PlayerInfo playerInfo : connection.getOnlinePlayers()) {
                 String name = OtherUtils.profileName(playerInfo.getProfile());
                 //? if <= 1.20 {
-                /*ResourceLocation skin = playerInfo.getSkinLocation();
+                /*Identifier skin = playerInfo.getSkinLocation();
                 *///?} else if <= 1.21.6 {
-                /*ResourceLocation skin = playerInfo.getSkin().texture();
+                /*Identifier skin = playerInfo.getSkin().texture();
                 *///?} else {
                 var skin = playerInfo.getSkin().body().texturePath();
                 //?}
@@ -335,19 +331,10 @@ public class VotingScreen extends Screen {
 
     private static class PlayerEntry {
         final String name;
-        //? if <= 1.21.9 {
-        /*final ResourceLocation skin;
-        PlayerEntry(String name, ResourceLocation skin) {
-            this.name = name;
-            this.skin = skin;
-        }
-        *///?} else {
         final Identifier skin;
         PlayerEntry(String name, Identifier skin) {
             this.name = name;
             this.skin = skin;
         }
-        //?}
-
     }
 }

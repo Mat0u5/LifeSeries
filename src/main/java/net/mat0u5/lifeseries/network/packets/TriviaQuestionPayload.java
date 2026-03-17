@@ -5,14 +5,14 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public record TriviaQuestionPayload(String question, int difficulty, long timestamp, int timeToComplete, List<String> answers) implements FabricPacket {
 
-    public static final ResourceLocation ID = IdentifierHelper.mod("triviaquestion");
+    public static final Identifier ID = IdentifierHelper.mod("triviaquestion");
     public static final PacketType<TriviaQuestionPayload> TYPE = PacketType.create(ID, TriviaQuestionPayload::read);
 
     public void write(FriendlyByteBuf buf) {

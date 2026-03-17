@@ -44,20 +44,11 @@ import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 //?}
 
-//? if <= 1.21.9 {
-/*import net.minecraft.resources.ResourceLocation;
- *///?} else {
 import net.minecraft.resources.Identifier;
-//?}
 
 public class Blacklist {
-    //? if <= 1.21.9 {
-    /*public List<ResourceLocation> loadedListItemIdentifier;
-    public List<ResourceLocation> loadedRecipeBlacklist;
-    *///?} else {
     public List<Identifier> loadedListItemIdentifier;
     public List<Identifier> loadedRecipeBlacklist;
-    //?}
     private List<Item> loadedListItem;
     private List<Block> loadedListBlock;
     private Map<Integer, List<ResourceKey<Enchantment>>> loadedListEnchants;
@@ -145,11 +136,7 @@ public class Blacklist {
     public List<Item> getItemBlacklist() {
         if (loadedListItem != null) return loadedListItem;
         List<Item> newList = new ArrayList<>();
-        //? if <= 1.21.9 {
-        /*List<ResourceLocation> newListIdentifier = new ArrayList<>();
-        *///?} else {
         List<Identifier> newListIdentifier = new ArrayList<>();
-        //?}
 
         for (String itemId : loadItemBlacklist()) {
             if (!itemId.contains(":")) itemId = "minecraft:" + itemId;
@@ -180,17 +167,9 @@ public class Blacklist {
         return newList;
     }
 
-    //? if <= 1.21.9 {
-    /*public List<ResourceLocation> getRecipeBlacklist() {
-    *///?} else {
     public List<Identifier> getRecipeBlacklist() {
-    //?}
         if (loadedRecipeBlacklist != null) return loadedRecipeBlacklist;
-        //? if <= 1.21.9 {
-        /*List<ResourceLocation> newList = new ArrayList<>();
-        *///?} else {
         List<Identifier> newList = new ArrayList<>();
-         //?}
 
         if (seasonConfig != null) {
             if (!seasonConfig.SPAWNER_RECIPE.get()) {

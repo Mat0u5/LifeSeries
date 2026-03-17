@@ -5,11 +5,11 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public record StringPayload(String name, String value) implements FabricPacket {
 
-    public static final ResourceLocation ID = IdentifierHelper.mod("string");
+    public static final Identifier ID = IdentifierHelper.mod("string");
     public static final PacketType<StringPayload> TYPE = PacketType.create(ID, StringPayload::read);
 
     public void write(FriendlyByteBuf buf) {

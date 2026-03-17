@@ -34,11 +34,7 @@ import com.mojang.blaze3d.pipeline.RenderPipeline;
 //? if >= 1.21
 import net.minecraft.client.DeltaTracker;
 
-//? if <= 1.21.9 {
-/*import net.minecraft.resources.ResourceLocation;
-*///?} else {
 import net.minecraft.resources.Identifier;
-//?}
 
 @Mixin(value = Gui.class, priority = 1)
 public class GuiMixin {
@@ -67,17 +63,14 @@ public class GuiMixin {
     );
 
     //? if <= 1.20 {
-    /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blit(Lnet/minecraft/resources/ResourceLocation;IIIIII)V"))
-    private void customHearts(GuiGraphics instance, ResourceLocation identifier, int x, int y, int u, int v, int m, int n) {
+    /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blit(Lnet/minecraft/resources/Identifier;IIIIII)V"))
+    private void customHearts(GuiGraphics instance, Identifier identifier, int x, int y, int u, int v, int m, int n) {
     *///?} else if <= 1.21 {
-    /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lnet/minecraft/resources/ResourceLocation;IIII)V"))
-    private void customHearts(GuiGraphics instance, ResourceLocation identifier, int x, int y, int u, int v) {
+    /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lnet/minecraft/resources/Identifier;IIII)V"))
+    private void customHearts(GuiGraphics instance, Identifier identifier, int x, int y, int u, int v) {
     *///?} else if <= 1.21.5 {
-    /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Ljava/util/function/Function;Lnet/minecraft/resources/ResourceLocation;IIII)V"))
-    private void customHearts(GuiGraphics instance, Function<ResourceLocation, RenderType> renderLayers, ResourceLocation identifier, int x, int y, int u, int v) {
-    *///?} else if <= 1.21.9 {
-    /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/ResourceLocation;IIII)V"))
-    private void customHearts(GuiGraphics instance, RenderPipeline renderPipeline, ResourceLocation identifier, int x, int y, int u, int v) {
+    /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Ljava/util/function/Function;Lnet/minecraft/resources/Identifier;IIII)V"))
+    private void customHearts(GuiGraphics instance, Function<Identifier, RenderType> renderLayers, Identifier identifier, int x, int y, int u, int v) {
     *///?} else if <= 1.21.11 {
     @Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V"))
     private void customHearts(GuiGraphics instance, RenderPipeline renderPipeline, Identifier identifier, int x, int y, int u, int v) {
@@ -134,11 +127,9 @@ public class GuiMixin {
 
     @Unique
     //? if <= 1.21 {
-    /*private void ls$afterHeartDraw(GuiGraphics instance, ResourceLocation identifier, int x, int y, int u, int v) {
+    /*private void ls$afterHeartDraw(GuiGraphics instance, Identifier identifier, int x, int y, int u, int v) {
     *///?} else if <= 1.21.5 {
-    /*private void ls$afterHeartDraw(GuiGraphics instance, Function<ResourceLocation, RenderType> renderLayers, ResourceLocation identifier, int x, int y, int u, int v) {
-    *///?} else if <= 1.21.9 {
-    /*private void ls$afterHeartDraw(GuiGraphics instance, RenderPipeline renderPipeline, ResourceLocation identifier, int x, int y, int u, int v) {
+    /*private void ls$afterHeartDraw(GuiGraphics instance, Function<Identifier, RenderType> renderLayers, Identifier identifier, int x, int y, int u, int v) {
     *///?} else {
     private void ls$afterHeartDraw(GuiGraphics instance, RenderPipeline renderPipeline, Identifier identifier, int x, int y, int u, int v) {
     //?}

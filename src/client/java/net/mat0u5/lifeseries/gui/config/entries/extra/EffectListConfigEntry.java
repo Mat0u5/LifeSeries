@@ -31,20 +31,14 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.RenderPipelines;
 //?}
 
-//? if <= 1.21.9 {
-/*import net.minecraft.resources.ResourceLocation;
- *///?} else {
 import net.minecraft.resources.Identifier;
-//?}
 //? if <= 1.20.3 {
 /*public class EffectListConfigEntry extends StringListPopupConfigEntry<MobEffect> {
 *///?} else {
 public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<MobEffect>> {
 //?}
      //? if <= 1.20 {
-    /*private static final ResourceLocation EFFECT_BACKGROUND_TEXTURE = IdentifierHelper.vanilla("textures/gui/container/inventory.png");
-    *///?} else if <= 1.21.9 {
-    /*private static final ResourceLocation EFFECT_BACKGROUND_TEXTURE = IdentifierHelper.vanilla("hud/effect_background");
+    /*private static final Identifier EFFECT_BACKGROUND_TEXTURE = IdentifierHelper.vanilla("textures/gui/container/inventory.png");
     *///?} else {
     private static final Identifier EFFECT_BACKGROUND_TEXTURE = IdentifierHelper.vanilla("hud/effect_background");
     //?}

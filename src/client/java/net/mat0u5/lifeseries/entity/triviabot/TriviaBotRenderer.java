@@ -3,12 +3,7 @@ package net.mat0u5.lifeseries.entity.triviabot;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-
-//? if <= 1.21.9 {
-/*import net.minecraft.resources.ResourceLocation;
- *///?} else {
 import net.minecraft.resources.Identifier;
-//?}
 
 //? if <= 1.21 {
 /*import com.mojang.blaze3d.vertex.PoseStack;
@@ -20,7 +15,7 @@ public class TriviaBotRenderer extends MobRenderer<TriviaBot, TriviaBotModel<Tri
     }
 
     @Override
-    public ResourceLocation getTextureLocation(TriviaBot entity) {
+    public Identifier getTextureLocation(TriviaBot entity) {
         if (entity.santaBot()) {
             return TriviaBot.SANTABOT_TEXTURE;
         }
@@ -46,11 +41,7 @@ public class TriviaBotRenderer extends AgeableMobRenderer<TriviaBot, TriviaBotRe
     }
 
     @Override
-    //? if <= 1.21.9 {
-    /*public ResourceLocation getTextureLocation(TriviaBotRenderState state) {
-    *///?} else {
     public Identifier getTextureLocation(TriviaBotRenderState state) {
-    //?}
         if (state.santaBot) {
             return TriviaBot.SANTABOT_TEXTURE;
         }

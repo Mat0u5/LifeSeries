@@ -6,13 +6,11 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.SnowGolemRenderer;
 import java.util.Random;
 import java.util.UUID;
-
-//? if <= 1.21.9 {
-/*import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.animal.SnowGolem;
-*///?} else {
 import net.minecraft.resources.Identifier;
- //?}
+
+//? if <= 1.21 {
+/*import net.minecraft.world.entity.animal.SnowGolem;
+*///?}
 
 //? if >= 1.21.2 {
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
@@ -29,11 +27,9 @@ public class AngrySnowmanRenderer extends SnowGolemRenderer {
     }
     @Override
     //? if <= 1.21 {
-    /*public ResourceLocation getTextureLocation(SnowGolem entity) {
+    /*public Identifier getTextureLocation(SnowGolem entity) {
     *///?} else if <= 1.21.3 {
-    /*public ResourceLocation getTextureLocation(LivingEntityRenderState state) {
-    *///?} else if <= 1.21.9 {
-    /*public ResourceLocation getTextureLocation(SnowGolemRenderState state) {
+    /*public Identifier getTextureLocation(LivingEntityRenderState state) {
     *///?} else {
     public Identifier getTextureLocation(SnowGolemRenderState state) {
     //?}

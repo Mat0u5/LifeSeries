@@ -14,7 +14,7 @@ import java.util.List;
 import static net.mat0u5.lifeseries.Main.blacklist;
 
 //? if <= 1.21 {
-/*import net.minecraft.resources.ResourceLocation;
+/*import net.minecraft.resources.Identifier;
 import com.google.gson.JsonElement;
 import java.util.ArrayList;
 import java.util.Map;
@@ -22,7 +22,7 @@ import java.util.Map;
 public class RecipeManagerMixin {
 
     @Inject(method = "apply(Ljava/util/Map;Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)V", at = @At("HEAD"))
-    private void applyMixin(Map<ResourceLocation, JsonElement> map, ResourceManager resourceManager, ProfilerFiller profiler, CallbackInfo info) {
+    private void applyMixin(Map<Identifier, JsonElement> map, ResourceManager resourceManager, ProfilerFiller profiler, CallbackInfo info) {
         if (Main.isClientOrDisabled()) return;
         if (blacklist == null) return;
         if (blacklist.loadedListItemIdentifier == null)  {
@@ -33,9 +33,9 @@ public class RecipeManagerMixin {
         }
         if (blacklist.loadedListItemIdentifier.isEmpty() && blacklist.loadedRecipeBlacklist.isEmpty()) return;
 
-        List<ResourceLocation> toRemove = new ArrayList<>();
+        List<Identifier> toRemove = new ArrayList<>();
 
-        for (ResourceLocation identifier : map.keySet()) {
+        for (Identifier identifier : map.keySet()) {
             if (blacklist.loadedListItemIdentifier.contains(identifier) || blacklist.loadedRecipeBlacklist.contains(identifier)) {
                 toRemove.add(identifier);
             }

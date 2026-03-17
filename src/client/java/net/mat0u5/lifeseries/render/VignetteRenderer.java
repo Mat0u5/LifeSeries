@@ -16,18 +16,10 @@ import net.minecraft.util.ARGB;
 //? if >= 1.21.6
 import net.minecraft.client.renderer.RenderPipelines;
 
-//? if <= 1.21.9 {
-/*import net.minecraft.resources.ResourceLocation;
- *///?} else {
 import net.minecraft.resources.Identifier;
-//?}
 
 public class VignetteRenderer {
-    //? if <= 1.21.9 {
-    /*private static final ResourceLocation VIGNETTE_TEXTURE = IdentifierHelper.vanilla("textures/misc/vignette.png");
-    *///?} else {
     private static final Identifier VIGNETTE_TEXTURE = IdentifierHelper.vanilla("textures/misc/vignette.png");
-    //?}
     private static float vignetteDarkness = 0.0F;
     private static long vignetteEnd = 0;
 

@@ -14,19 +14,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-
-//? if <= 1.21.9 {
-/*import net.minecraft.resources.ResourceLocation;
- *///?} else {
 import net.minecraft.resources.Identifier;
-//?}
 
 public class SnailSkinsClient {
-    //? if <= 1.21.9 {
-    /*private static final Map<String, ResourceLocation> snailTextures = new HashMap<>();
-    *///?} else {
     private static final Map<String, Identifier> snailTextures = new HashMap<>();
-    //?}
 
     public static void handleSnailTexture(String skinName, byte[] textureData) {
         try {
@@ -63,11 +54,7 @@ public class SnailSkinsClient {
         }
     }
 
-    //? if <= 1.21.9 {
-    /*public static ResourceLocation getSnailTexture(String skinName) {
-    *///?} else {
     public static Identifier getSnailTexture(String skinName) {
-    //?}
         if (skinName == null) return null;
         return snailTextures.get(skinName);
     }

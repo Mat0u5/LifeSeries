@@ -14,11 +14,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 import java.util.*;
 
-//? if <= 1.21.9 {
-/*import net.minecraft.resources.ResourceLocation;
- *///?} else {
 import net.minecraft.resources.Identifier;
-//?}
 
 public class ItemSpawner {
     HashMap<ItemStack, Integer> lootTable = new HashMap<>();
@@ -48,12 +44,7 @@ public class ItemSpawner {
     }
 
 
-    public static List<ItemStack> getRandomItemsFromLootTable(MinecraftServer server, ServerLevel level, ServerPlayer player
-          //? if <= 1.21.9 {
-            /*, ResourceLocation lootTableId, boolean silent) {
-          *///?} else {
-            , Identifier lootTableId, boolean silent) {
-          //?}
+    public static List<ItemStack> getRandomItemsFromLootTable(MinecraftServer server, ServerLevel level, ServerPlayer player, Identifier lootTableId, boolean silent) {
         if (server == null || level == null || player == null) return new ArrayList<>();
         try {
             //? if <= 1.21 {

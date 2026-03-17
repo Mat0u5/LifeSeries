@@ -38,24 +38,13 @@ import org.jetbrains.annotations.Nullable;
 
 import static net.mat0u5.lifeseries.Main.currentSession;
 
-//? if <= 1.21.9 {
-/*import net.minecraft.resources.ResourceLocation;
- *///?} else {
 import net.minecraft.resources.Identifier;
-//?}
 
 public class Snail extends Monster {
-    //? if <= 1.21.9 {
-    /*public static final ResourceLocation DEFAULT_TEXTURE = IdentifierHelper.mod("textures/entity/snail/default.png");
-    public static final ResourceLocation TRIVIA_TEXTURE = IdentifierHelper.mod("textures/entity/snail/trivia.png");
-    public static final ResourceLocation ZOMBIE_TEXTURE = IdentifierHelper.mod("textures/entity/snail/zombie.png");
-    public static final ResourceLocation ID = IdentifierHelper.mod("snail");
-    *///?} else {
     public static final Identifier DEFAULT_TEXTURE = IdentifierHelper.mod("textures/entity/snail/default.png");
     public static final Identifier TRIVIA_TEXTURE = IdentifierHelper.mod("textures/entity/snail/trivia.png");
     public static final Identifier ZOMBIE_TEXTURE = IdentifierHelper.mod("textures/entity/snail/zombie.png");
     public static final Identifier ID = IdentifierHelper.mod("snail");
-    //?}
     public static double GLOBAL_SPEED_MULTIPLIER = 1;
     public static boolean SHOULD_DROWN_PLAYER = true;
     public static boolean ALLOW_POTION_EFFECTS = false;

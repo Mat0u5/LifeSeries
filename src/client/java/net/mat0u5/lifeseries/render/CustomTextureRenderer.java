@@ -7,18 +7,10 @@ import net.minecraft.client.gui.GuiGraphics;
 //? if >= 1.21.6
 import net.minecraft.client.renderer.RenderPipelines;
 
-//? if <= 1.21.9 {
-/*import net.minecraft.resources.ResourceLocation;
-*///?} else {
 import net.minecraft.resources.Identifier;
- //?}
 
 public class CustomTextureRenderer {
-    //? if <= 1.21.9 {
-    /*private final ResourceLocation texture;
-    *///?} else {
     private final Identifier texture;
-    //?}
     private final float x;
     private final float y;
     private final int width;
@@ -32,11 +24,7 @@ public class CustomTextureRenderer {
     private float scaleX = 1;
     private float scaleY = 1;
 
-    //? if <= 1.21.9 {
-    /*public CustomTextureRenderer(ResourceLocation texture, float x, float y, int width, int height) {
-    *///?} else {
     public CustomTextureRenderer(Identifier texture, float x, float y, int width, int height) {
-     //?}
         this.x = x;
         this.y = y;
         this.width = width;

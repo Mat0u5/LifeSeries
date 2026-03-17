@@ -164,10 +164,16 @@ publishMods {
 }
 
 stonecutter {
+ replacements.string(stonecutter.eval(stonecutter.current.version, ">=1.21.11"), "!renames_1_21_11_stable") {
+  replace ('ResourceLocation', 'Identifier')
+  replace ('IdentifierHelper', 'IdentifierHelper')
+ }
  replacements.string(stonecutter.eval(stonecutter.current.version, ">=26.1"), "!renames_26_1_stable") {
   replace ('GuiGraphics', 'GuiGraphicsExtractor')
   replace ('.renderItem(', '.item(')
   replace ('renderEntityInInventoryFollowsMouse(', 'extractEntityInInventoryFollowsMouse(')
+  replace ('ClientCommandManager.argument', 'ClientCommands.argument')
+  replace ('ClientCommandManager.literal', 'ClientCommands.literal')
  }
  replacements.string(stonecutter.eval(stonecutter.current.version, ">=26.1"), "renames_26_1_volatile") {
   replace ('render(', 'extractRenderState(')

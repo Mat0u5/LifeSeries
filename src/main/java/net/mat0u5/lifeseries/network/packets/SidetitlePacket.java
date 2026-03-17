@@ -6,11 +6,11 @@ import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public record SidetitlePacket(Component text) implements FabricPacket {
 
-    public static final ResourceLocation ID = IdentifierHelper.mod("sidetitle");
+    public static final Identifier ID = IdentifierHelper.mod("sidetitle");
     public static final PacketType<SidetitlePacket> TYPE = PacketType.create(ID, SidetitlePacket::read);
 
     public void write(FriendlyByteBuf buf) {

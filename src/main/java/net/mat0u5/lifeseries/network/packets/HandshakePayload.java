@@ -5,11 +5,11 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public record HandshakePayload(String modVersionStr, int modVersion, String compatibilityStr, int compatibility) implements FabricPacket {
 
-    public static final ResourceLocation ID = IdentifierHelper.mod("handshake");
+    public static final Identifier ID = IdentifierHelper.mod("handshake");
     public static final PacketType<HandshakePayload> TYPE = PacketType.create(ID, HandshakePayload::read);
 
     public void write(FriendlyByteBuf buf) {

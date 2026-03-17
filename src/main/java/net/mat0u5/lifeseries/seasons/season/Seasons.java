@@ -16,11 +16,7 @@ import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-//? if <= 1.21.9 {
-/*import net.minecraft.resources.ResourceLocation;
- *///?} else {
 import net.minecraft.resources.Identifier;
-//?}
 
 public enum Seasons {
     UNASSIGNED("Unassigned", "unassigned"),
@@ -68,11 +64,7 @@ public enum Seasons {
         return new UnassignedSeason();
     }
 
-    //? if <= 1.21.9 {
-    /*public ResourceLocation getLogo() {
-    *///?} else {
     public Identifier getLogo() {
-    //?}
         return IdentifierHelper.mod("textures/gui/" + this.getId() + ".png");
     }
 

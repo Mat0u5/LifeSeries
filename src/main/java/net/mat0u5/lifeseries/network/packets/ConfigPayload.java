@@ -5,14 +5,14 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public record ConfigPayload(String configType, String id, int index, String name, String description, List<String> args) implements FabricPacket {
 
-    public static final ResourceLocation ID = IdentifierHelper.mod("config");
+    public static final Identifier ID = IdentifierHelper.mod("config");
     public static final PacketType<ConfigPayload> TYPE = PacketType.create(ID, ConfigPayload::read);
 
     public void write(FriendlyByteBuf buf) {

@@ -6,14 +6,14 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public record VoteScreenPayload(String name, boolean requiresSleep, boolean closesWithEsc, boolean showTimer, List<String> players) implements FabricPacket {
 
-    public static final ResourceLocation ID = IdentifierHelper.mod("votescreen");
+    public static final Identifier ID = IdentifierHelper.mod("votescreen");
     public static final PacketType<VoteScreenPayload> TYPE = PacketType.create(ID, VoteScreenPayload::read);
 
     public void write(FriendlyByteBuf buf) {
