@@ -13,6 +13,7 @@ import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IHungerManager;
 import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -280,6 +281,10 @@ public class DoubleLife extends Season {
         soulmates.put(player1UUID, player2UUID);
         soulmates.put(player2UUID, player1UUID);
         updateOrderedSoulmates();
+        DatapackIntegration.EVENT_SOULMATE_SET.trigger(List.of(
+                new DatapackIntegration.Events.MacroEntry("Player1", player1UUID.toString()),
+                new DatapackIntegration.Events.MacroEntry("Player2", player2UUID.toString())
+        ));
     }
     public void setSoulmate(ServerPlayer player1, ServerPlayer player2) {
         soulmates.put(player1.getUUID(), player2.getUUID());
@@ -287,9 +292,28 @@ public class DoubleLife extends Season {
         SessionTranscript.soulmate(player1, player2);
         syncPlayers(player1, player2);
         updateOrderedSoulmates();
+        DatapackIntegration.EVENT_SOULMATE_SET.trigger(List.of(
+                new DatapackIntegration.Events.MacroEntry("Player1", player1.getScoreboardName()),
+                new DatapackIntegration.Events.MacroEntry("Player2", player2.getScoreboardName())
+        ));
     }
 
     public void resetSoulmate(ServerPlayer player) {
+        UUID soulmateUUID = getSoulmateUUID(player.getUUID());
+        ServerPlayer soulmate = getSoulmate(player);
+        if (soulmate != null) {
+            DatapackIntegration.EVENT_SOULMATE_REMOVE.trigger(List.of(
+                    new DatapackIntegration.Events.MacroEntry("Player1", player.getScoreboardName()),
+                    new DatapackIntegration.Events.MacroEntry("Player2", soulmate.getScoreboardName())
+            ));
+        }
+        else if (soulmateUUID != null){
+            DatapackIntegration.EVENT_SOULMATE_REMOVE.trigger(List.of(
+                    new DatapackIntegration.Events.MacroEntry("Player1", player.getScoreboardName()),
+                    new DatapackIntegration.Events.MacroEntry("Player2", soulmateUUID.toString())
+            ));
+        }
+
         UUID playerUUID = player.getUUID();
         Map<UUID, UUID> newSoulmates = new HashMap<>();
         for (Map.Entry<UUID, UUID> entry : soulmates.entrySet()) {
@@ -309,6 +333,9 @@ public class DoubleLife extends Season {
 
     public void rollSoulmates() {
         List<ServerPlayer> playersToRoll = getNonAssignedPlayers();
+        if (!playersToRoll.isEmpty()) {
+            DatapackIntegration.EVENT_SOULMATE_ROLL.trigger();
+        }
         PlayerUtils.playSoundToPlayers(playersToRoll, SoundEvents.UI_BUTTON_CLICK.value());
         PlayerUtils.sendTitleToPlayers(playersToRoll, ModifiableText.COUNTDOWN_GREEN_3.get(),5,20,5);
         TaskScheduler.scheduleTask(25, () -> {

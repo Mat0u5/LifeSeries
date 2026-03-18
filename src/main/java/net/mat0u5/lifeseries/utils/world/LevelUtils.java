@@ -6,19 +6,12 @@ import net.minecraft.core.SectionPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+
 import java.util.EnumSet;
-
-//? if >= 1.21.2
-import net.minecraft.world.entity.EntitySpawnReason;
-
-//? if <= 1.21.9 {
-/*import net.minecraft.world.entity.monster.Zombie;
-*///?} else {
-import net.minecraft.world.entity.monster.zombie.Zombie;
-//?}
 
 public class LevelUtils {
 
