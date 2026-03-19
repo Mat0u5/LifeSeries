@@ -319,6 +319,9 @@ public class NetworkHandlerClient {
                 client.setScreen(null);
             }
         });
+        SimplePackets.SUPERPOWER_SHOW_COOLDOWN.setClientReceive(payload -> {
+            TextHud.lastPressedSuperpowerKey = System.currentTimeMillis();
+        });
 
         /*
 

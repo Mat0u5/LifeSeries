@@ -83,7 +83,7 @@ public class LifeSeriesCommand extends Command {
                                         .then(argument("canceled", StringArgumentType.string())
                                                 .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("allow","override"), builder))
                                                 .then(argument("command", StringArgumentType.greedyString())
-                                                        .executes(context -> configSetEvent(context.getSource(), StringArgumentType.getString(context, "key"), StringArgumentType.getString(context, "canceled"), StringArgumentType.getString(context, "value")))
+                                                        .executes(context -> configSetEvent(context.getSource(), StringArgumentType.getString(context, "key"), StringArgumentType.getString(context, "canceled"), StringArgumentType.getString(context, "command")))
                                                 )
                                         )
                                 )

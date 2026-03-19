@@ -73,6 +73,7 @@ public class SimplePackets {
     public static final SimpleEmptyPacket TRIVIA_ALL_WRONG = new SimpleEmptyPacket("TRIVIA_ALL_WRONG");
     public static final SimpleEmptyPacket STOP_TRIVIA_SOUNDS = new SimpleEmptyPacket("STOP_TRIVIA_SOUNDS");
     public static final SimpleEmptyPacket REMOVE_SLEEP_SCREENS = new SimpleEmptyPacket("REMOVE_SLEEP_SCREENS");
+    public static final SimpleEmptyPacket SUPERPOWER_SHOW_COOLDOWN = new SimpleEmptyPacket("SUPERPOWER_SHOW_COOLDOWN");
 
 
     //public static final SimpleLongPacket _______ = new SimpleLongPacket("_______");

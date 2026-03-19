@@ -425,6 +425,8 @@ public enum ModifiableText {
     ,WILDLIFE_WILDCARD_GUI_OPEN(Seasons.WILD_LIFE, "§7Opening the Wildcard selection GUI...")
     ,WILDLIFE_SUPERPOWER_INVALID(Seasons.WILD_LIFE, "That superpower doesn't exist")
     ,WILDLIFE_SUPERPOWER_INACTIVE(Seasons.WILD_LIFE, "You do not have an active superpower")
+    ,WILDLIFE_SUPERPOWER_INACTIVE_OTHER(Seasons.WILD_LIFE, "{} does not have an active superpower")
+    ,WILDLIFE_SUPERPOWER_INACTIVE_OTHER_ALL(Seasons.WILD_LIFE, "No targets have an active superpower")
     ,WILDLIFE_SUPERPOWER_COOLDOWN_GET(Seasons.WILD_LIFE, "{}'s superpower cooldown is {} seconds", List.of("Player", "amount"))
     ,WILDLIFE_SUPERPOWER_COOLDOWN_SET_SINGLE(Seasons.WILD_LIFE, "Set {}'s superpower cooldown to {} seconds", List.of("Player", "amount"))
     ,WILDLIFE_SUPERPOWER_COOLDOWN_SET_MULTIPLE(Seasons.WILD_LIFE, "Set superpower cooldown of {} targets to {} seconds", List.of("number of targets", "amount"))

@@ -63,6 +63,9 @@ public abstract class Superpower {
     public void sendCooldownPacket() {
         SimplePackets.SUPERPOWER_COOLDOWN.target(getPlayer()).sendToClient(cooldown);
     }
+    public void sendShowCooldownPacket() {
+        SimplePackets.SUPERPOWER_SHOW_COOLDOWN.target(getPlayer()).sendToClient();
+    }
 
     public void triggerActivated() {
         ServerPlayer player = getPlayer();

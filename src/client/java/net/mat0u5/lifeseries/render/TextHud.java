@@ -7,7 +7,6 @@ import net.mat0u5.lifeseries.features.Trivia;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.minecraft.client.Minecraft;
@@ -178,9 +177,9 @@ public class TextHud {
         return drawHudText(client, context, timerText, x - client.font.width(actualTimer), y);
     }
 
-    private static long lastPressed = 0;
+    public static long lastPressedSuperpowerKey = 0;
     public static int renderSuperpowerCooldown(Minecraft client, GuiGraphics context, int y) {
-        if (ClientKeybinds.superpower != null && ClientKeybinds.superpower.isDown()) lastPressed = System.currentTimeMillis();
+        if (ClientKeybinds.superpower != null && ClientKeybinds.superpower.isDown()) lastPressedSuperpowerKey = System.currentTimeMillis();
 
         if (MainClient.SUPERPOWER_COOLDOWN_TIMESTAMP == 0) return 0;
         long currentMillis = System.currentTimeMillis();
@@ -188,7 +187,7 @@ public class TextHud {
         long millisLeft = roundTime(MainClient.SUPERPOWER_COOLDOWN_TIMESTAMP) - currentMillis;
         if (millisLeft > 10000000) return 0;
 
-        long pressedAgo = System.currentTimeMillis() - lastPressed;
+        long pressedAgo = System.currentTimeMillis() - lastPressedSuperpowerKey;
         boolean keyPressed = pressedAgo < 500;
         if (pressedAgo > 6000) return 0;
 

@@ -204,6 +204,7 @@ public class WildLife extends Season {
         Snail.GLOBAL_SPEED_MULTIPLIER = WildLifeConfig.WILDCARD_SNAILS_SPEED_MULTIPLIER.get();
         Snail.SHOULD_DROWN_PLAYER = WildLifeConfig.WILDCARD_SNAILS_DROWN_PLAYERS.get();
         Snail.ALLOW_POTION_EFFECTS = WildLifeConfig.WILDCARD_SNAILS_EFFECTS.get();
+        Snails.WILDCARD_SNAILS_RED_LIVES = WildLifeConfig.WILDCARD_SNAILS_RED_LIVES.get();
 
         TimeDilation.MIN_TICK_RATE = (float) (20.0 * WildLifeConfig.WILDCARD_TIMEDILATION_MIN_SPEED.get());
         TimeDilation.MAX_TICK_RATE = (float) (20.0 * WildLifeConfig.WILDCARD_TIMEDILATION_MAX_SPEED.get());

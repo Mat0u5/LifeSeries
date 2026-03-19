@@ -28,6 +28,8 @@ import static net.mat0u5.lifeseries.Main.currentSession;
 import static net.mat0u5.lifeseries.Main.server;
 
 public class Snails extends Wildcard {
+    public static boolean WILDCARD_SNAILS_RED_LIVES = true;
+
     public static StringListConfig snailNameConfig;
 
     public static Map<UUID, Snail> snails = new HashMap<>();
@@ -88,6 +90,7 @@ public class Snails extends Wildcard {
         if (Events.joiningPlayers.contains(player.getUUID())) return false;
         if (player.isSpectator() && !SuperpowersWildcard.hasActivatedPower(player, Superpowers.ASTRAL_PROJECTION)) return false;
         if (preventSnails.contains(player.getUUID())) return false;
+        if (player.ls$isOnLastLife(false) && !WILDCARD_SNAILS_RED_LIVES) return false;
         return true;
     }
 

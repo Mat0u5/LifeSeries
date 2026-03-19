@@ -458,11 +458,14 @@ public class WildLifeCommands extends Command {
 
     public int setSuperpowerCooldown(CommandSourceStack source, Collection<ServerPlayer> targets, Integer cooldown) {
         if (checkBanned(source)) return -1;
+        boolean setAny = false;
         for (ServerPlayer player : targets) {
             Superpower superpower = SuperpowersWildcard.getSuperpowerInstance(player);
             if (superpower == null) {
                 continue;
             }
+
+            setAny = true;
             if (cooldown != null) {
                 superpower.cooldown(cooldown*1000);
             }
@@ -470,8 +473,11 @@ public class WildLifeCommands extends Command {
                 superpower.cooldown(superpower.getCooldownMillis());
             }
             superpower.sendCooldownPacket();
-
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_COOLDOWN_GET.get(player, superpower.cooldown));
+            superpower.sendShowCooldownPacket();
+        }
+        if (!setAny) {
+            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_INACTIVE_OTHER_ALL.get());
+            return -1;
         }
         if (cooldown == null) {
             if (targets.size() == 1) {
@@ -496,12 +502,11 @@ public class WildLifeCommands extends Command {
         for (ServerPlayer player : targets) {
             Superpower superpower = SuperpowersWildcard.getSuperpowerInstance(player);
             if (superpower == null) {
+                OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_INACTIVE_OTHER.get(player));
                 continue;
             }
-            //superpower.cooldown = 0;
-            //SimplePackets.SUPERPOWER_COOLDOWN.target(player).sendToClient(0);
-
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_COOLDOWN_GET.get(player, superpower.cooldown));
+            long cooldownSeconds = Math.max(0, (superpower.cooldown - System.currentTimeMillis())) / 1000;
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_COOLDOWN_GET.get(player, cooldownSeconds));
         }
         return 1;
     }

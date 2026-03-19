@@ -146,7 +146,12 @@ public class SnailServerData implements PlayerBoundEntity {
             despawnPlayerChecks = 0;
         }
 
-        if (despawnPlayerChecks > 200) {
+        if (player != null && player.ls$isOnLastLife(false) && !Snails.WILDCARD_SNAILS_RED_LIVES) {
+            despawn();
+            return true;
+        }
+
+        if (despawnPlayerChecks > 100) {
             despawn();
             return true;
         }
