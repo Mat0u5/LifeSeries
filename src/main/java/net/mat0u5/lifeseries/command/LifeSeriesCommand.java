@@ -11,12 +11,11 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.Session;
-import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.ChatFormatting;
+import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
@@ -74,6 +73,18 @@ public class LifeSeriesCommand extends Command {
                                         .suggests((context, builder) -> SharedSuggestionProvider.suggest(seasonConfig.getAvailableConfigKeys(), builder))
                                         .then(argument("value", StringArgumentType.greedyString())
                                                 .executes(context -> configSet(context.getSource(), StringArgumentType.getString(context, "key"), StringArgumentType.getString(context, "value")))
+                                        )
+                                )
+                        )
+                        .then(literal("setEvent")
+                                .requires(PermissionManager::isAdmin)
+                                .then(argument("key", StringArgumentType.string())
+                                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(DatapackIntegration.getAvailableEvents(), builder))
+                                        .then(argument("canceled", StringArgumentType.string())
+                                                .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("allow","override"), builder))
+                                                .then(argument("command", StringArgumentType.greedyString())
+                                                        .executes(context -> configSetEvent(context.getSource(), StringArgumentType.getString(context, "key"), StringArgumentType.getString(context, "canceled"), StringArgumentType.getString(context, "value")))
+                                                )
                                         )
                                 )
                         )
@@ -194,13 +205,22 @@ public class LifeSeriesCommand extends Command {
         return 1;
     }
 
+    public int configSetEvent(CommandSourceStack source, String key, String canceled, String command) {
+        if (checkBanned(source)) return -1;
+        seasonConfig.setProperty(key, command);
+        seasonConfig.setProperty(key+"_canceled", String.valueOf(canceled.equalsIgnoreCase("override")));
+        DatapackIntegration.reload();
+        OtherUtils.sendCommandFeedback(source, ModifiableText.CONFIG_SETEVENT.get(key));
+        return 1;
+    }
+
     public int configSet(CommandSourceStack source, String key, String value) {
         if (checkBanned(source)) return -1;
 
         seasonConfig.setProperty(key, value);
         ConfigManager.onUpdatedUnknown(key, value);
 
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.CONFIG_SET.get(key));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.CONFIG_SET.get(key));
 
         NetworkHandlerServer.updatedConfigThisTick = true;
         if (DefaultConfigValues.RELOAD_NEEDED.contains(key)) {

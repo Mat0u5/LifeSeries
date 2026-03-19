@@ -213,6 +213,20 @@ public class DatapackIntegration {
         ScoreboardUtils.setScore("PassedTime", SCOREBOARD_SESSION_INFO, time.getTicks());
     }
 
+    public static final List<String> events = new ArrayList<>();
+    public static List<String> getAvailableEvents() {
+        if (events.isEmpty()) {
+            loadAvailableEvents();
+        }
+        return events;
+    }
+    public static void loadAvailableEvents() {
+        events.clear();
+        for (Events event : Events.values()) {
+            events.add(event.eventName);
+        }
+    }
+
     public enum Events {
         PLAYER_JOIN("player_join", "Player Join", "Triggers when a player joins the game.\nAvailable macros: $(Player)", false),
         PLAYER_LEAVE("player_leave", "Player Leave", "Triggers when a player leaves the game.\nAvailable macros: $(Player)", false),

@@ -215,6 +215,7 @@ stonecutter {
   replace ('net.minecraft.world.entity.projectile.ThrownEnderpearl', 'net.minecraft.world.entity.projectile.throwableitemprojectile.ThrownEnderpearl')
   replace ('net.minecraft.world.entity.npc.WanderingTraderSpawner', 'net.minecraft.world.entity.npc.wanderingtrader.WanderingTraderSpawner')
   replace ('net.minecraft.world.entity.monster.WitherSkeleton', 'net.minecraft.world.entity.monster.skeleton.WitherSkeleton')
+  replace ('net.minecraft.world.entity.monster.Zombie', 'net.minecraft.world.entity.monster.zombie.Zombie')
 
   replace ('net.minecraft.world.entity.animal.horse.TraderLlama', 'net.minecraft.world.entity.animal.equine.TraderLlama')
   replace ('net.minecraft.world.entity.npc.WanderingTrader;', 'net.minecraft.world.entity.npc.wanderingtrader.WanderingTrader;')

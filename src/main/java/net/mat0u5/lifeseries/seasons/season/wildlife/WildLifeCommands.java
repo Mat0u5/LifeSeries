@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.config.ModifiableText;
@@ -206,8 +207,20 @@ public class WildLifeCommands extends Command {
                         .executes(context -> getSuperpower(context.getSource(), EntityArgument.getPlayer(context, "player")))
                     )
                 )
-                .then(literal("skipCooldown")
-                    .executes(context -> skipSuperpowerCooldown(context.getSource()))
+                .then(literal("cooldown")
+                        .then(argument("player", EntityArgument.players())
+                                .then(literal("set")
+                                        .then(argument("amount", IntegerArgumentType.integer(0))
+                                                .executes(context -> setSuperpowerCooldown(context.getSource(), EntityArgument.getPlayers(context, "player"), IntegerArgumentType.getInteger(context, "amount")))
+                                        )
+                                )
+                                .then(literal("reset")
+                                        .executes(context -> setSuperpowerCooldown(context.getSource(), EntityArgument.getPlayers(context, "player"), null))
+                                )
+                                .then(literal("get")
+                                        .executes(context -> getSuperpowerCooldown(context.getSource(), EntityArgument.getPlayers(context, "player")))
+                                )
+                        )
                 )
                 .then(literal("force")
                     .then(argument("player", EntityArgument.players())
@@ -443,19 +456,53 @@ public class WildLifeCommands extends Command {
         return 1;
     }
 
-    public int skipSuperpowerCooldown(CommandSourceStack source) {
+    public int setSuperpowerCooldown(CommandSourceStack source, Collection<ServerPlayer> targets, Integer cooldown) {
         if (checkBanned(source)) return -1;
-        ServerPlayer player = source.getPlayer();
-        if (player == null) return -1;
-        Superpower superpower = SuperpowersWildcard.getSuperpowerInstance(player);
-        if (superpower == null) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_INACTIVE.get());
-            return -1;
-        }
-        superpower.cooldown = 0;
-        SimplePackets.SUPERPOWER_COOLDOWN.target(player).sendToClient(0);
+        for (ServerPlayer player : targets) {
+            Superpower superpower = SuperpowersWildcard.getSuperpowerInstance(player);
+            if (superpower == null) {
+                continue;
+            }
+            if (cooldown != null) {
+                superpower.cooldown(cooldown*1000);
+            }
+            else {
+                superpower.cooldown(superpower.getCooldownMillis());
+            }
+            superpower.sendCooldownPacket();
 
-        OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_COOLDOWN.get());
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_COOLDOWN_GET.get(player, superpower.cooldown));
+        }
+        if (cooldown == null) {
+            if (targets.size() == 1) {
+                OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_COOLDOWN_RESET_SINGLE.get(targets.iterator().next()));
+            }
+            else {
+                OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_COOLDOWN_RESET_MULTIPLE.get(targets.size()));
+            }
+        }
+        else {
+            if (targets.size() == 1) {
+                OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_COOLDOWN_SET_SINGLE.get(targets.iterator().next(), cooldown));
+            }
+            else {
+                OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_COOLDOWN_SET_MULTIPLE.get(targets.size(), cooldown));
+            }
+        }
+        return 1;
+    }
+    public int getSuperpowerCooldown(CommandSourceStack source, Collection<ServerPlayer> targets) {
+        if (checkBanned(source)) return -1;
+        for (ServerPlayer player : targets) {
+            Superpower superpower = SuperpowersWildcard.getSuperpowerInstance(player);
+            if (superpower == null) {
+                continue;
+            }
+            //superpower.cooldown = 0;
+            //SimplePackets.SUPERPOWER_COOLDOWN.target(player).sendToClient(0);
+
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_COOLDOWN_GET.get(player, superpower.cooldown));
+        }
         return 1;
     }
 
