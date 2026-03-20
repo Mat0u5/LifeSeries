@@ -113,10 +113,19 @@ public class LivesManager {
     }
 
     public Integer getTeamGainLives(String teamName) {
-        Integer teamConfig = seasonConfig.getOrCreateInt("team_gainlvies-"+teamName, defaultTeamGainLife(teamName));
+        String keyOld = "team_gainlvies-"+teamName;
+        String key = "team_gainlives-"+teamName;
+
+        String oldValue = seasonConfig.getProperty(keyOld);
+        if (oldValue != null && seasonConfig.getProperty(key) == null) {
+            seasonConfig.removeProperty(keyOld);
+            seasonConfig.setProperty(key, oldValue);
+        }
+
+        Integer teamConfig = seasonConfig.getOrCreateInt(key, defaultTeamGainLife(teamName));
         if (teamConfig <= -1) {
             teamConfig = defaultTeamGainLife(teamName);
-            seasonConfig.setProperty("team_gainlvies-"+teamName, String.valueOf(teamConfig));
+            seasonConfig.setProperty(key, String.valueOf(teamConfig));
         }
         if (teamConfig <= -1) teamConfig = null;
         return teamConfig;
@@ -160,7 +169,7 @@ public class LivesManager {
         if (canKill == null) canKill = -1;
         if (gainLife == null) gainLife = -1;
         seasonConfig.setProperty("team_cankill-"+teamName, String.valueOf(canKill));
-        seasonConfig.setProperty("team_gainlvies-"+teamName, String.valueOf(gainLife));
+        seasonConfig.setProperty("team_gainlives-"+teamName, String.valueOf(gainLife));
     }
 
     public void createTeams() {
