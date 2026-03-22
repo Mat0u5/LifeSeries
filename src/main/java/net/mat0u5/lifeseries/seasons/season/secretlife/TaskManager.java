@@ -4,10 +4,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.config.StringListConfig;
 import net.mat0u5.lifeseries.config.StringListManager;
-import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
-import net.mat0u5.lifeseries.utils.enums.Formatted;
 import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
@@ -620,17 +617,18 @@ public class TaskManager {
             if (amount > 0) finalAmount = (int) (SecretLife.MAX_HEALTH-healthBefore);
             else finalAmount = amount;
         }
-        double finalHearts = (double) finalAmount / 2;
+        double finalHearts = Math.abs(finalAmount) / 2.0;
         if (finalHearts == 0) return;
 
         String finalStr = String.valueOf(finalHearts);
         if (finalAmount%2==0) finalStr = String.valueOf((int)finalHearts);
 
-
-        ChatFormatting formatting = ChatFormatting.GREEN;
-        if (finalAmount < 0) formatting = ChatFormatting.RED;
-        else finalStr = finalStr;
-        PlayerUtils.sendTitle(player, ModifiableText.SECRETLIFE_HEART_GAIN.get(finalStr, "Hearts").copy().withStyle(formatting), 20, 40, 20);
+        if (finalAmount >= 0) {
+            PlayerUtils.sendTitle(player, ModifiableText.SECRETLIFE_HEART_ADD.get(finalStr, TextUtils.pluralize("Heart", finalHearts)), 20, 40, 20);
+        }
+        else {
+            PlayerUtils.sendTitle(player, ModifiableText.SECRETLIFE_HEART_REMOVE.get(finalStr, TextUtils.pluralize("Heart", finalHearts)), 20, 40, 20);
+        }
     }
 
     public static boolean alreadyHasPos(BlockPos pos) {

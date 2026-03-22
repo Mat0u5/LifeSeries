@@ -15,7 +15,6 @@ import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
-import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
@@ -371,10 +370,15 @@ public class SecretLife extends Season {
             if (amountGained > 0) {
                 addPlayerHealth(killer, amountGained);
                 int roundedGained = (int) Math.ceil(amountGained);
-                double roundedHearts = roundedGained / 2.0;
+                double roundedHearts = Math.abs(roundedGained) / 2.0;
                 String roundedHeartsStr = String.valueOf(roundedHearts);
                 if (roundedGained % 2 == 0) roundedHeartsStr = String.valueOf((int)roundedHearts);
-                PlayerUtils.sendTitle(killer, ModifiableText.SECRETLIFE_HEART_GAIN.get(roundedHeartsStr, TextUtils.pluralize("Heart", roundedHearts)), 0, 40, 20);
+                if (roundedGained >= 0) {
+                    PlayerUtils.sendTitle(killer, ModifiableText.SECRETLIFE_HEART_ADD.get(roundedHeartsStr, TextUtils.pluralize("Heart", roundedHearts)), 0, 40, 20);
+                }
+                else {
+                    PlayerUtils.sendTitle(killer, ModifiableText.SECRETLIFE_HEART_REMOVE.get(roundedHeartsStr, TextUtils.pluralize("Heart", roundedHearts)), 0, 40, 20);
+                }
             }
         }
     }
