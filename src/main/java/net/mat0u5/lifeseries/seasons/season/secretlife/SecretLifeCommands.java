@@ -188,6 +188,7 @@ public class SecretLifeCommands extends Command {
                     )
                 )
                 .then(literal("reset")
+                        .requires(PermissionManager::isAdmin)
                         .then(argument("player", EntityArgument.players())
                             .executes(context -> resetGift(context.getSource(), EntityArgument.getPlayers(context, "player")))
                         )

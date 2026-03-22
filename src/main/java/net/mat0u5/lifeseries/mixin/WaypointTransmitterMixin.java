@@ -9,8 +9,10 @@ public class WaypointTransmitterMixin {
 }
 *///?} else {
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.waypoints.WaypointTransmitter;
 import net.mat0u5.lifeseries.Main;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,8 +31,8 @@ public interface WaypointTransmitterMixin {
     private static void cannotReceive(LivingEntity sourceEntity, ServerPlayer receiver, CallbackInfoReturnable<Boolean> cir) {
         if (Main.isClientOrDisabled()) return;
         if (sourceEntity instanceof ServerPlayer source) {
-            boolean showLocatorBar = false;
-            if (currentSeason instanceof DoubleLife doubleLife && DoubleLife.SOULMATE_LOCATOR_BAR) {
+            boolean showLocatorBar = currentSeason.LOCATOR_BAR;
+            if (!showLocatorBar && currentSeason instanceof DoubleLife doubleLife && DoubleLife.SOULMATE_LOCATOR_BAR) {
                 UUID receiverSoulmateUUID = doubleLife.getSoulmateUUID(receiver.getUUID());
                 showLocatorBar = source.getUUID().equals(receiverSoulmateUUID);
             }

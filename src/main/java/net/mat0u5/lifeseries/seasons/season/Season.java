@@ -95,6 +95,7 @@ public abstract class Season {
     public boolean HIDE_UNJUSTIFIED_KILL_MESSAGES = false;
     public static boolean reloadPlayerTeams = false;
     private static boolean BROADCAST_LIFE_GAIN = false;
+    public boolean LOCATOR_BAR = false;
     private double ADDITIONAL_WITHER_SKULL_RATE = 0.05;
     public static Random rnd = new Random();
     public static Vec3 skyColor = null;
@@ -168,7 +169,7 @@ public abstract class Season {
             OtherUtils.setBooleanGameRule(overworld, GameRules.NATURAL_HEALTH_REGENERATION, getSeason() != Seasons.SECRET_LIFE);
 
             //? if >= 1.21.6 {
-            boolean locatorBarEnabled = seasonConfig.LOCATOR_BAR.get();
+            boolean locatorBarEnabled = LOCATOR_BAR;
             if (!locatorBarEnabled && this instanceof DoubleLife) {
                 locatorBarEnabled = DoubleLife.SOULMATE_LOCATOR_BAR;
             }
@@ -236,6 +237,7 @@ public abstract class Season {
         Session.SESSION_START_COUNTDOWN = seasonConfig.SESSION_START_COUNTDOWN.get();
         BROADCAST_LIFE_GAIN = seasonConfig.BROADCAST_LIFE_GAIN.get();
         ADDITIONAL_WITHER_SKULL_RATE = seasonConfig.ADDITIONAL_WITHER_SKULL_RATE.get();
+        LOCATOR_BAR = seasonConfig.LOCATOR_BAR.get();
 
         NetworkHandlerServer.reload();
         boogeymanManager.onReload();
