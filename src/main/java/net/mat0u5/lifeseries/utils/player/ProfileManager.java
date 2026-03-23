@@ -8,7 +8,9 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.datafixers.util.Pair;
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.mixin.ChunkMapAccessor;
 import net.mat0u5.lifeseries.mixin.PlayerAccessor;
+import net.mat0u5.lifeseries.mixin.TrackedEntityAccessor;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.minecraft.network.protocol.game.*;
@@ -51,6 +53,7 @@ public class ProfileManager {
     private static final Map<UUID, Property> originalSkins = new HashMap<>();
     private static final Map<UUID, String> originalNames = new HashMap<>();
     public static final Map<UUID, String> manualSkins = new HashMap<>();
+    public static final Map<String, Property> skinFileCache = new HashMap<>();
 
     public enum ProfileChange {
         NONE,
@@ -222,11 +225,30 @@ public class ProfileManager {
         }
     }
 
+    private static String getFileHash(File file) {
+        try {
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+            byte[] bytes = Files.readAllBytes(file.toPath());
+            byte[] digest = md.digest(bytes);
+            StringBuilder sb = new StringBuilder();
+            for (byte b : digest) sb.append(String.format("%02x", b));
+            return sb.toString();
+        } catch (Exception e) {
+            return file.getAbsolutePath();
+        }
+    }
+
     private static Property fetchSkinFromFile(String filePath, boolean slim) {
         File skinFile = new File(filePath);
         if (!skinFile.exists() || !skinFile.isFile()) {
             Main.LOGGER.error("[ProfileManager] Skin file not found: " + filePath);
             return null;
+        }
+
+        String cacheKey = getFileHash(skinFile) + (slim ? "_slim" : "_classic");
+        if (skinFileCache.containsKey(cacheKey)) {
+            Main.LOGGER.info("[ProfileManager] Using cached skin for: " + filePath);
+            return skinFileCache.get(cacheKey);
         }
 
         try {
@@ -240,6 +262,36 @@ public class ProfileManager {
                 return null;
             }
 
+            // Retry with exponential backoff on 429
+            int maxRetries = 4;
+            long delayMs = 2000;
+
+            for (int attempt = 1; attempt <= maxRetries; attempt++) {
+                Property result = attemptMineSkinUpload(skinFile, slim, filePath);
+                if (result != null) {
+                    skinFileCache.put(cacheKey, result);
+                    return result;
+                }
+
+                if (attempt < maxRetries) {
+                    Main.LOGGER.warn("[ProfileManager] MineSkin rate limited (attempt " + attempt + "/" + maxRetries + "), retrying in " + (delayMs / 1000) + "s...");
+                    Thread.sleep(delayMs);
+                    delayMs *= 3; // 2, 6, 18
+                }
+            }
+
+            Main.LOGGER.error("[ProfileManager] All MineSkin attempts exhausted for: " + filePath);
+            return null;
+
+        } catch (Exception e) {
+            Main.LOGGER.error("[ProfileManager] fetchSkinFromFile failed for: " + filePath);
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static Property attemptMineSkinUpload(File skinFile, boolean slim, String filePath) {
+        try {
             String boundary = "----SkinBoundary" + UUID.randomUUID().toString().replace("-", "");
             URL endpoint = new URL("https://api.mineskin.org/v2/generate");
             HttpURLConnection connection = (HttpURLConnection) endpoint.openConnection();
@@ -275,6 +327,16 @@ public class ProfileManager {
             }
 
             int status = connection.getResponseCode();
+
+            if (status == 429) {
+                String retryAfter = connection.getHeaderField("Retry-After");
+                if (retryAfter != null) {
+                    Main.LOGGER.warn("[ProfileManager] MineSkin Retry-After: " + retryAfter + "s");
+                }
+                connection.disconnect();
+                return null;
+            }
+
             if (status != HttpURLConnection.HTTP_OK && status != 201) {
                 Main.LOGGER.error("[ProfileManager] MineSkin returned HTTP " + status + " for file: " + filePath);
                 connection.disconnect();
@@ -310,8 +372,7 @@ public class ProfileManager {
             return new Property("textures", value, signature);
 
         } catch (Exception e) {
-            Main.LOGGER.error("[ProfileManager] fetchSkinFromFile failed for: " + filePath);
-            e.printStackTrace();
+            Main.LOGGER.error("[ProfileManager] attemptMineSkinUpload exception: " + e.getMessage());
             return null;
         }
     }
@@ -384,33 +445,12 @@ public class ProfileManager {
     private static void refreshEntityForTrackers(ServerPlayer player, ServerLevel level) {
         try {
             ServerChunkCache chunkSource = level.getChunkSource();
-            ChunkMap chunkMap = chunkSource.chunkMap;
+            TrackedEntityAccessor trackedEntity = ((ChunkMapAccessor) chunkSource.chunkMap).getEntityTrackers().get(player.getId());
+            if (trackedEntity == null) return;
 
-            Field entityMapField = ChunkMap.class.getDeclaredField("entityMap");
-            entityMapField.setAccessible(true);
-            @SuppressWarnings("unchecked")
-            Map<Integer, Object> entityMap = (Map<Integer, Object>) entityMapField.get(chunkMap);
-
-            Object trackedEntity = entityMap.get(player.getId());
-            if (trackedEntity != null) {
-                Field seenByField = trackedEntity.getClass().getDeclaredField("seenBy");
-                seenByField.setAccessible(true);
-                @SuppressWarnings("unchecked")
-                Set<Object> seenBy = (Set<Object>) seenByField.get(trackedEntity);
-
-                Field serverEntityField = trackedEntity.getClass().getDeclaredField("serverEntity");
-                serverEntityField.setAccessible(true);
-                Object serverEntity = serverEntityField.get(trackedEntity);
-
-                for (Object connection : seenBy) {
-                    Field playerField = connection.getClass().getDeclaredField("player");
-                    playerField.setAccessible(true);
-                    ServerPlayer trackingPlayer = (ServerPlayer) playerField.get(connection);
-
-                    serverEntity.getClass().getMethod("addPairing", ServerPlayer.class)
-                            .invoke(serverEntity, trackingPlayer);
-                }
-            }
+            trackedEntity.getSeenBy().forEach(connection ->
+                    trackedEntity.getServerEntity().addPairing(connection.getPlayer())
+            );
         } catch (Exception e) {
             Main.LOGGER.error("Entity tracker refresh failed: " + e.getMessage());
         }

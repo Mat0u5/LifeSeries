@@ -499,12 +499,15 @@ public class NetworkHandlerServer {
 
     public static void onUpdatedConfig() {
         PlayerUtils.broadcastMessageToAdmins(ModifiableText.CONFIG_UPDATED.get());
-        if (configNeedsReload) {
-            OtherUtils.reloadServer();
-            //PlayerUtils.broadcastMessageToAdmins(Text.of("Run §7'/lifeseries reload'§r to apply all the changes."));
-        }
-        else {
-            Main.softReloadStart();
+        try {
+            if (configNeedsReload) {
+                OtherUtils.reloadServer();
+            }
+            else {
+                Main.softReloadStart();
+            }
+        }catch(Exception e) {
+            e.printStackTrace();
         }
         updatedConfigThisTick = false;
         configNeedsReload = false;

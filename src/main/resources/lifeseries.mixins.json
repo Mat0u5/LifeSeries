@@ -5,6 +5,7 @@
   "mixins": [
     "AnvilMenuMixin",
     "BiomeMixin",
+    "ChunkMapAccessor",
     "ChunkStatusTasksMixin",
     "CommandSourceStackMixin",
     "CraftingMenuMixin",
@@ -53,6 +54,7 @@
     "TamableAnimalMixin",
     "TargetGoalMixin",
     "ThrownEnderpearlMixin",
+    "TrackedEntityAccessor",
     "WanderingTraderSpawnerMixin",
     "WaypointTransmitterMixin",
     "WindChargeItemMixin",

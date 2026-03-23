@@ -129,6 +129,7 @@ public class LifeSkinsManager {
     }
 
     public static void reloadSkinsCache() {
+        ProfileManager.skinFileCache.clear();
         skinsCache.clear();
         File rootFolder = new File(SKINS_BASE_DIR);
         if (!rootFolder.exists()) {
