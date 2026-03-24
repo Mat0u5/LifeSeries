@@ -124,7 +124,7 @@ public class LifeSkinsManager {
 
                 String skinId = lifeSkinPlayerName+"_"+ teamName;
                 String identifier = "dynamic/lifeskins/" + skinId.toLowerCase(Locale.ROOT);
-                if (!Identifier.isValidPath(identifier)) {
+                if (!isValidIdentifier(identifier)) {
                     Main.LOGGER.error(TextUtils.formatString("LifeSkins error: Non [a-z0-9/._-] character in path of location: {}:{}", "lifeseries", identifier));
                     continue;
                 }
@@ -159,6 +159,19 @@ public class LifeSkinsManager {
                 }
             }
         }
+    }
+
+    public static boolean isValidIdentifier(String string) {
+        for(int i = 0; i < string.length(); ++i) {
+            if (!validIdentifierChar(string.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean validIdentifierChar(char c) {
+        return c == '_' || c == '-' || c >= 'a' && c <= 'z' || c >= '0' && c <= '9' || c == '/' || c == '.';
     }
 
     public static void sendTeamNumUpdates() {
