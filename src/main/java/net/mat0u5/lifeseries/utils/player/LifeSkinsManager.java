@@ -51,9 +51,7 @@ public class LifeSkinsManager {
     private static void reloadSkinsCache() {
         skinsCache.clear();
         File rootFolder = new File(SKINS_BASE_DIR);
-        if (!rootFolder.exists()) {
-            createLifeSkinsFolder(rootFolder);
-        }
+        createLifeSkinsFolder(rootFolder);
         if (!rootFolder.exists() || !rootFolder.isDirectory()) {
             Main.LOGGER.error("[LifeSkins] failed to create main folder.");
             return;

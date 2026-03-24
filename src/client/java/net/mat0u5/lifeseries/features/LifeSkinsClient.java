@@ -54,12 +54,12 @@ public class LifeSkinsClient {
             /*lifeSkinsTextures.put(skinId, textureId);
             *///?} else if <= 1.21.6 {
             /*PlayerSkin.Model modelType = slim ? PlayerSkin.Model.SLIM : PlayerSkin.Model.WIDE;
-            PlayerSkin skin = new PlayerSkin(textureId, "", textureId, textureId, modelType, false);
+            PlayerSkin skin = new PlayerSkin(textureId, "", null, null, modelType, false);
             lifeSkinsTextures.put(skinId, new Tuple<>(textureId, skin));
             *///?} else {
             ClientAsset.DownloadedTexture resourceTexture = new ClientAsset.DownloadedTexture(textureId, "");
             PlayerModelType modelType = slim ? PlayerModelType.SLIM : PlayerModelType.WIDE;
-            PlayerSkin skin = new PlayerSkin(resourceTexture, resourceTexture, resourceTexture, modelType, false);
+            PlayerSkin skin = new PlayerSkin(resourceTexture, null, null, modelType, false);
             lifeSkinsTextures.put(skinId, new Tuple<>(textureId, skin));
             //?}
         } catch (IOException e) {
