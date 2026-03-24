@@ -192,7 +192,7 @@ stonecutter {
   replace ('MobEffects.HARM', 'MobEffects.INSTANT_DAMAGE')
   replace ('MobEffects.CONFUSION', 'MobEffects.NAUSEA')
  }
- replacements.string(stonecutter.eval(stonecutter.current.version, ">=1.21.6"), "!renames_1_21_6") {
+ replacements.string(stonecutter.eval(stonecutter.current.version, ">=1.21.6"), "renames_1_21_6_volatile") {
   replace ('.popPose()', '.popMatrix()')
   replace ('.pushPose()', '.pushMatrix()')
  }

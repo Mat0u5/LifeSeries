@@ -64,6 +64,7 @@ public class CustomTextureRenderer {
         return scaleX != 1 || scaleY != 1;
     }
 
+    //~ renames_1_21_6_volatile
     public void render(GuiGraphics context) {
         if (isScaled()) {
             context.pose().pushMatrix();
@@ -86,4 +87,5 @@ public class CustomTextureRenderer {
             context.pose().popMatrix();
         }
     }
+    //~ !renames_1_21_6_volatile
 }

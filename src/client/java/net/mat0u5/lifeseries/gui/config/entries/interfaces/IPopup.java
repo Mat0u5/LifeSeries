@@ -35,6 +35,7 @@ public interface IPopup {
         int offsetY = 0;
         //?}
 
+        //~ renames_1_21_6_volatile
         context.pose().pushMatrix();
         //? if <= 1.21.5 {
         /*context.pose().translate(0, 0, 100);
@@ -44,6 +45,7 @@ public interface IPopup {
         renderBackground(context, x, y+offsetY, width, height, mouseX, mouseY, tickDelta);
         renderContent(context, x+getPadding()/2, y+getPadding()/2+offsetY, width, height, mouseX, mouseY, tickDelta);
         context.pose().popMatrix();
+        //~ !renames_1_21_6_volatile
     }
 
     default void renderBackground(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, float tickDelta) {

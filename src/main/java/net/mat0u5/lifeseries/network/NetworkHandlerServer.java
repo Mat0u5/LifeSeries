@@ -38,10 +38,7 @@ import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.*;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
-import net.mat0u5.lifeseries.utils.player.TeamUtils;
+import net.mat0u5.lifeseries.utils.player.*;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -289,6 +286,7 @@ public class NetworkHandlerServer {
         PayloadTypeRegistry.playS2C().register(EmptyPayload.ID, EmptyPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(BooleanPayload.ID, BooleanPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(IntPayload.ID, IntPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(LifeSkinsTexturePayload.ID, LifeSkinsTexturePayload.CODEC);
 
         PayloadTypeRegistry.playC2S().register(NumberPayload.ID, NumberPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(StringPayload.ID, StringPayload.CODEC);
@@ -304,6 +302,7 @@ public class NetworkHandlerServer {
         PayloadTypeRegistry.playC2S().register(EmptyPayload.ID, EmptyPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(BooleanPayload.ID, BooleanPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(IntPayload.ID, IntPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(LifeSkinsTexturePayload.ID, LifeSkinsTexturePayload.CODEC);
         //?}
     }
     //? if <= 1.20.3 {
@@ -645,6 +644,8 @@ public class NetworkHandlerServer {
 
         SimplePackets.ADMIN_INFO.target(player).sendToClient(PermissionManager.isAdmin(player));
         SimplePackets.MOD_DISABLED.target(player).sendToClient(Main.MOD_DISABLED);
+        Season.updateClientPlayerTeam(player);
+        LifeSkinsManager.sendTeamNumUpdatesTo(player);
     }
 
     public static void sendUpdatePackets() {

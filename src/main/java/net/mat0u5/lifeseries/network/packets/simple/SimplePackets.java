@@ -21,6 +21,7 @@ public class SimplePackets {
     public static final SimpleStringListPacket CONFIG_SECRET_TASK = new SimpleStringListPacket("CONFIG_SECRET_TASK");
     public static final SimpleStringListPacket CONFIG_TRIVIA = new SimpleStringListPacket("CONFIG_TRIVIA");
     public static final SimpleStringListPacket ACTIVE_WILDCARDS = new SimpleStringListPacket("ACTIVE_WILDCARDS");
+    public static final SimpleStringListPacket LIFESKINS_PLAYER = new SimpleStringListPacket("LIFESKINS_PLAYER");
 
     public static final SimpleStringPacket CURRENT_SEASON = new SimpleStringPacket("CURRENT_SEASON");
     public static final SimpleStringPacket SESSION_STATUS = new SimpleStringPacket("SESSION_STATUS");
@@ -76,6 +77,7 @@ public class SimplePackets {
     public static final SimpleEmptyPacket STOP_TRIVIA_SOUNDS = new SimpleEmptyPacket("STOP_TRIVIA_SOUNDS");
     public static final SimpleEmptyPacket REMOVE_SLEEP_SCREENS = new SimpleEmptyPacket("REMOVE_SLEEP_SCREENS");
     public static final SimpleEmptyPacket SUPERPOWER_SHOW_COOLDOWN = new SimpleEmptyPacket("SUPERPOWER_SHOW_COOLDOWN");
+    public static final SimpleEmptyPacket LIFESKINS_RELOAD_START = new SimpleEmptyPacket("LIFESKINS_RELOAD_START");
 
 
     //public static final SimpleLongPacket _______ = new SimpleLongPacket("_______");

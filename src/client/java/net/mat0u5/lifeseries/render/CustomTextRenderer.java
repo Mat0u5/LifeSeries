@@ -77,6 +77,7 @@ public class CustomTextRenderer {
     }
 
     public int render(GuiGraphics context, Font textRenderer) {
+        //~ renames_1_21_6_volatile
         if (isScaled()) {
             context.pose().pushMatrix();
             //? if <= 1.21.5 {
@@ -121,6 +122,7 @@ public class CustomTextRenderer {
         if (isScaled()) {
             context.pose().popMatrix();
         }
+        //~ !renames_1_21_6_volatile
         return renderedTextHeight;
     }
 

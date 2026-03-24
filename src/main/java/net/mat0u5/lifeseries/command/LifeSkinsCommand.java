@@ -93,10 +93,7 @@ public class LifeSkinsCommand extends Command {
                                 )
                         )
                 .then(literal("reload")
-                        .executes(context -> reloadLifeSkins(context.getSource(), null))
-                        .then(Commands.argument("player", EntityArgument.player())
-                                .executes(context -> reloadLifeSkins(context.getSource(), EntityArgument.getPlayers(context, "player")))
-                        )
+                        .executes(context -> reloadLifeSkins(context.getSource()))
                 )
                 .then(literal("list")
                         .executes(context -> listLifeSkins(context.getSource()))
@@ -118,7 +115,7 @@ public class LifeSkinsCommand extends Command {
     public int listLifeSkins(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
 
-        Map<String, Map<Integer, Tuple<Boolean, File>>> skinsCache = LifeSkinsManager.getCache();
+        Map<String, Map<String, Tuple<Boolean, File>>> skinsCache = LifeSkinsManager.getCache();
         if (skinsCache.isEmpty()) {
             OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.LIFESKINS_LIST_EMPTY.get());
             lifeSkinsInfo(source);
@@ -126,15 +123,15 @@ public class LifeSkinsCommand extends Command {
         }
         else {
             OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.LIFESKINS_LIST.get());
-            for (Map.Entry<String, Map<Integer, Tuple<Boolean, File>>> holderskins : skinsCache.entrySet()) {
+            for (Map.Entry<String, Map<String, Tuple<Boolean, File>>> holderskins : skinsCache.entrySet()) {
                 String name = holderskins.getKey();
                 List<String> skins = new ArrayList<>();
-                for (Map.Entry<Integer, Tuple<Boolean, File>> skin : holderskins.getValue().entrySet()) {
+                for (Map.Entry<String, Tuple<Boolean, File>> skin : holderskins.getValue().entrySet()) {
                     String append = "";
                     if (skin.getValue() != null && skin.getValue().x) {
                         append = " (slim)";
                     }
-                    skins.add(skin.getKey() + append);
+                    skins.add(skin.getKey().replaceAll("lives_", "") + append);
                 }
                 Collections.sort(skins);
                 OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.LIFESKINS_LIST_PERSON.get(name, skins));
@@ -143,26 +140,12 @@ public class LifeSkinsCommand extends Command {
 
         return 1;
     }
-    public int reloadLifeSkins(CommandSourceStack source, Collection<ServerPlayer> targets) {
+
+    public int reloadLifeSkins(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
 
-        if (targets == null) {
-            LifeSkinsManager.reloadAll();
-            OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_RELOAD_ALL.get());
-        }
-        else {
-            LifeSkinsManager.reloadSkinsCache();
-            for (ServerPlayer player : targets) {
-                LifeSkinsManager.reloadSkin(player);
-            }
-
-            if (targets.size() == 1) {
-                OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_RELOAD_SINGLE.get(targets.iterator().next()));
-            }
-            else {
-                OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_RELOAD_MULTIPLE.get(targets.size()));
-            }
-        }
+        LifeSkinsManager.reloadAll();
+        OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_RELOAD_ALL.get());
 
         return 1;
     }
@@ -178,7 +161,7 @@ public class LifeSkinsCommand extends Command {
                 }
                 else {
                     ProfileManager.manualSkins.remove(player.getUUID());
-                    LifeSkinsManager.reloadSkin(player);
+                    LifeSkinsManager.refreshLifeSkin(player);
                     OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_SKIN_RESET.get(player));
                 }
             }

@@ -254,7 +254,7 @@ public abstract class Season {
         DatapackIntegration.reload();
         PlayerUtils.resendCommandTrees();
         SubInManager.reload();
-        LifeSkinsManager.reloadSkinsCache();
+        LifeSkinsManager.reloadCache();
     }
 
     public static void setSkyColor(Vec3 color, boolean setMode) {
@@ -331,6 +331,7 @@ public abstract class Season {
 
     public void reloadAllPlayerTeams() {
         PlayerUtils.getAllPlayers().forEach(this::reloadPlayerTeam);
+        LifeSkinsManager.sendTeamNumUpdates();
     }
 
     public void reloadPlayerTeam(ServerPlayer player) {
@@ -360,6 +361,7 @@ public abstract class Season {
     }
 
     public static void updateClientPlayerTeam(ServerPlayer player) {
+        LifeSkinsManager.sendTeamNumUpdatesFrom(player);
         Team team = player.getTeam();
         if (team != null) {
             SimplePackets.TEAM_NAME.target(player).sendToClient(team.getName());

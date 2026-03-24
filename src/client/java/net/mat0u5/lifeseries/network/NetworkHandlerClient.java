@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.compatibilities.VoicechatClient;
 import net.mat0u5.lifeseries.config.ClientConfig;
 import net.mat0u5.lifeseries.config.ClientConfigGuiManager;
 import net.mat0u5.lifeseries.config.ClientConfigNetwork;
+import net.mat0u5.lifeseries.features.LifeSkinsClient;
 import net.mat0u5.lifeseries.features.Morph;
 import net.mat0u5.lifeseries.features.SnailSkinsClient;
 import net.mat0u5.lifeseries.features.Trivia;
@@ -72,6 +73,11 @@ public class NetworkHandlerClient {
         SimplePackets.CURSE_SLIDING.setClientReceive(payload -> MainClient.CURSE_SLIDING = payload.number());
 
         //String list payload
+        SimplePackets.LIFESKINS_PLAYER.setClientReceive(payload -> {
+            UUID uuid = UUID.fromString(payload.value().get(0));
+            String teamName = payload.value().get(1);
+            LifeSkinsClient.setCurrentSkinId(uuid, teamName);
+        });
         SimplePackets.LIMITED_LIFE_TIMER.setClientReceive(payload -> {
             MainClient.limitedLifeTimerColor = payload.value().get(0);
             MainClient.limitedLifeLives = Long.parseLong(payload.value().get(1));
@@ -181,6 +187,8 @@ public class NetworkHandlerClient {
         });
 
         //String payload
+        SimplePackets.TEAM_NAME.setClientReceive(payload -> MainClient.teamName = payload.value());
+        SimplePackets.TEAM_COLOR.setClientReceive(payload -> MainClient.teamColor = payload.value());
         SimplePackets.CURRENT_SEASON.setClientReceive(payload -> {
             if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated current season to {}", payload.value());
             MainClient.clientCurrentSeason = Seasons.getSeasonFromStringName(payload.value());
@@ -282,6 +290,9 @@ public class NetworkHandlerClient {
         });
 
         //Empty payloads
+        SimplePackets.LIFESKINS_RELOAD_START.setClientReceive(payload -> {
+            LifeSkinsClient.clearTextures();
+        });
         SimplePackets.JUMP.setClientReceive(payload -> {
             if (Minecraft.getInstance().player != null) {
                 Minecraft.getInstance().player.jumpFromGround();
@@ -381,6 +392,13 @@ public class NetworkHandlerClient {
             });
         });
 
+        ClientPlayNetworking.registerGlobalReceiver(LifeSkinsTexturePayload.ID, (client, handler, buf, responseSender) -> {
+            LifeSkinsTexturePayload payload = LifeSkinsTexturePayload.read(buf);
+            client.execute(() -> {
+                LifeSkinsClient.handleTexture(payload.skinName(), payload.teamName(), payload.slim(), payload.textureData());
+            });
+        });
+
         ClientPlayNetworking.registerGlobalReceiver(NumberPayload.ID, (client, handler, buf, responseSender) -> {
             NumberPayload payload = NumberPayload.read(buf);
             SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
@@ -459,6 +477,11 @@ public class NetworkHandlerClient {
         ClientPlayNetworking.registerGlobalReceiver(SnailTexturePacket.ID, (payload, context) -> {
             context.client().execute(() -> {
                 SnailSkinsClient.handleSnailTexture(payload.skinName(), payload.textureData());
+            });
+        });
+        ClientPlayNetworking.registerGlobalReceiver(LifeSkinsTexturePayload.ID, (payload, context) -> {
+            context.client().execute(() -> {
+                LifeSkinsClient.handleTexture(payload.skinName(), payload.teamName(), payload.slim(), payload.textureData());
             });
         });
 

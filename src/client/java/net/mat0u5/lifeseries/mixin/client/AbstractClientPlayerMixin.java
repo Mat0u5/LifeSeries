@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.mixin.client;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.features.LifeSkinsClient;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerInfo;
@@ -30,19 +31,24 @@ public class AbstractClientPlayerMixin {
         AbstractClientPlayer abstrPlayer = (AbstractClientPlayer) (Object) this;
         UUID uuid = abstrPlayer.getUUID();
         if (uuid == null) return;
-        if (!MainClient.playerDisguiseUUIDs.containsKey(uuid)) return;
-        
-        UUID disguisedUUID = MainClient.playerDisguiseUUIDs.get(uuid);
-        if (Minecraft.getInstance().getConnection() == null) {
-            return;
-        }
-        for (PlayerInfo entry : Minecraft.getInstance().getConnection().getOnlinePlayers()) {
-            if (OtherUtils.profileId(entry.getProfile()).equals(disguisedUUID)) {
-                //~ if > 1.20 '.getSkinLocation()' -> '.getSkin()' {
-                cir.setReturnValue(entry.getSkin());
-                //~}
-                return;
+        if (MainClient.playerDisguiseUUIDs.containsKey(uuid)) {
+            UUID disguisedUUID = MainClient.playerDisguiseUUIDs.get(uuid);
+            if (LifeSkinsClient.getTexture(disguisedUUID) == null && Minecraft.getInstance().getConnection() != null) {
+                for (PlayerInfo entry : Minecraft.getInstance().getConnection().getOnlinePlayers()) {
+                    if (OtherUtils.profileId(entry.getProfile()).equals(disguisedUUID)) {
+                        //~ if > 1.20 '.getSkinLocation()' -> '.getSkin()' {
+                        cir.setReturnValue(entry.getSkin());
+                        //~}
+                        return;
+                    }
+                }
             }
+            uuid = disguisedUUID;
+        }
+
+        var lifeSkinsLocation = LifeSkinsClient.getTexture(uuid);
+        if (lifeSkinsLocation != null) {
+            cir.setReturnValue(lifeSkinsLocation);
         }
     }
 }

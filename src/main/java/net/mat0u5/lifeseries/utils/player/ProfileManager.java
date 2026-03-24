@@ -14,7 +14,6 @@ import net.mat0u5.lifeseries.mixin.TrackedEntityAccessor;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.minecraft.network.protocol.game.*;
-import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,7 +25,6 @@ import net.minecraft.world.level.biome.BiomeManager;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
@@ -35,17 +33,11 @@ import java.util.concurrent.CompletableFuture;
 import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.Main.server;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.*;
-import java.nio.file.Files;
-import java.nio.charset.StandardCharsets;
 
 //? if > 1.21 {
 import com.mojang.authlib.properties.PropertyMap;
 import net.minecraft.world.entity.PositionMoveRotation;
-import org.apache.logging.log4j.util.PropertySource;
 //?}
 
 public class ProfileManager {
@@ -53,20 +45,35 @@ public class ProfileManager {
     private static final Map<UUID, Property> originalSkins = new HashMap<>();
     private static final Map<UUID, String> originalNames = new HashMap<>();
     public static final Map<UUID, String> manualSkins = new HashMap<>();
-    public static final Map<String, Property> skinFileCache = new HashMap<>();
 
-    public enum ProfileChange {
+    public static class ProfileChange {
+        final ProfileChangeType type;
+        final String info;
+        public ProfileChange(ProfileChangeType type) {
+            this(type, "");
+        }
+        public ProfileChange(ProfileChangeType type, String info) {
+            this.type = type;
+            this.info = info;
+        }
+        public static ProfileChange none() {
+            return new ProfileChange(ProfileChangeType.NONE);
+        }
+        public static ProfileChange empty() {
+            return new ProfileChange(ProfileChangeType.EMPTY);
+        }
+        public static ProfileChange original() {
+            return new ProfileChange(ProfileChangeType.ORIGINAL);
+        }
+        public static ProfileChange set(String info) {
+            return new ProfileChange(ProfileChangeType.SET, info);
+        }
+    }
+    public enum ProfileChangeType {
         NONE,
         EMPTY,
         ORIGINAL,
-        SET,
-        FILE_SLIM,
-        FILE;
-        String info = "";
-        public ProfileChange withInfo(String info) {
-            this.info = info;
-            return this;
-        }
+        SET;
     }
 
     public static CompletableFuture<Boolean> modifyProfile(ServerPlayer player, ProfileChange skinChange, ProfileChange usernameChange) {
@@ -81,17 +88,11 @@ public class ProfileManager {
                 }
 
                 Property targetSkin = null;
-                if (skinChange == ProfileChange.ORIGINAL) {
+                if (skinChange.type == ProfileChangeType.ORIGINAL) {
                     targetSkin = originalSkins.get(player.getUUID());
                 }
-                if (skinChange == ProfileChange.SET) {
+                if (skinChange.type == ProfileChangeType.SET) {
                     targetSkin = fetchSkinFromUsername(skinChange.info);
-                }
-                if (skinChange == ProfileChange.FILE) {
-                    targetSkin = fetchSkinFromFile(skinChange.info, false);
-                }
-                if (skinChange == ProfileChange.FILE_SLIM) {
-                    targetSkin = fetchSkinFromFile(skinChange.info, true);
                 }
 
                 Tuple<Boolean, Boolean> changed = setProfile(player, skinChange, usernameChange, targetSkin);
@@ -100,9 +101,12 @@ public class ProfileManager {
 
                 if (changedSkin || changedName) {
                     refreshPlayerProfile(player);
-                    if (usernameChange != ProfileChange.NONE && changedName) {
+                    if (usernameChange.type != ProfileChangeType.NONE && changedName) {
                         currentSeason.onPlayerJoin(player);
                         currentSeason.usernameChanged(player);
+                    }
+                    if (changedSkin) {
+                        LifeSkinsManager.refreshLifeSkin(player);
                     }
                 }
                 return changedSkin || changedName;
@@ -118,24 +122,24 @@ public class ProfileManager {
         GameProfile currentProfile = player.getGameProfile();
 
         String name = OtherUtils.profileName(currentProfile);
-        if (usernameChange == ProfileChange.ORIGINAL) {
+        if (usernameChange.type == ProfileChangeType.ORIGINAL) {
             name = originalNames.get(player.getUUID());
         }
-        if (usernameChange == ProfileChange.SET) {
+        if (usernameChange.type == ProfileChangeType.SET) {
             name = usernameChange.info;
         }
 
 
         //? if > 1.21.6 {
         Multimap<String, Property> properties;
-        if (skinChange != ProfileChange.NONE) {
+        if (skinChange.type != ProfileChangeType.NONE) {
             properties = ArrayListMultimap.create();
             OtherUtils.profileProperties(currentProfile).forEach((key, property) -> {
                 if (!key.equals("textures") && property != null) {
                     properties.put(key, property);
                 }
             });
-            if (skinChange != ProfileChange.EMPTY && targetSkin != null) {
+            if (skinChange.type != ProfileChangeType.EMPTY && targetSkin != null) {
                 properties.put("textures", targetSkin);
             }
         }
@@ -153,21 +157,21 @@ public class ProfileManager {
                 //?}
         );
         //? if <= 1.21.6 {
-        /*if (skinChange != ProfileChange.NONE) {
+        /*if (skinChange.type != ProfileChangeType.NONE) {
             OtherUtils.profileProperties(currentProfile).forEach((key, property) -> {
                 if (!key.equals("textures") && property != null) {
                     newProfile.getProperties().put(key, property);
                 }
             });
-            if (skinChange != ProfileChange.EMPTY && targetSkin != null) {
+            if (skinChange.type != ProfileChangeType.EMPTY && targetSkin != null) {
                 newProfile.getProperties().put("textures", targetSkin);
             }
         }
         *///?}
 
-        boolean changedName = usernameChange != ProfileChange.NONE && !Objects.equals(OtherUtils.profileName(currentProfile), OtherUtils.profileName(newProfile));
+        boolean changedName = usernameChange.type != ProfileChangeType.NONE && !Objects.equals(OtherUtils.profileName(currentProfile), OtherUtils.profileName(newProfile));
         Property originalSkin = getSkinProperty(player.getGameProfile());
-        boolean changedSkin = skinChange != ProfileChange.NONE && !areEqualSkins(originalSkin, targetSkin);
+        boolean changedSkin = skinChange.type != ProfileChangeType.NONE && !areEqualSkins(originalSkin, targetSkin);
         if (changedName  || changedSkin) {
             ((PlayerAccessor) player).ls$setGameProfile(newProfile);
         }
@@ -221,158 +225,6 @@ public class ProfileManager {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
-        }
-    }
-
-    private static String getFileHash(File file) {
-        try {
-            java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
-            byte[] bytes = Files.readAllBytes(file.toPath());
-            byte[] digest = md.digest(bytes);
-            StringBuilder sb = new StringBuilder();
-            for (byte b : digest) sb.append(String.format("%02x", b));
-            return sb.toString();
-        } catch (Exception e) {
-            return file.getAbsolutePath();
-        }
-    }
-
-    private static Property fetchSkinFromFile(String filePath, boolean slim) {
-        File skinFile = new File(filePath);
-        if (!skinFile.exists() || !skinFile.isFile()) {
-            Main.LOGGER.error("[ProfileManager] Skin file not found: " + filePath);
-            return null;
-        }
-
-        String cacheKey = getFileHash(skinFile) + (slim ? "_slim" : "_classic");
-        if (skinFileCache.containsKey(cacheKey)) {
-            Main.LOGGER.info("[ProfileManager] Using cached skin for: " + filePath);
-            return skinFileCache.get(cacheKey);
-        }
-
-        try {
-            BufferedImage image = ImageIO.read(skinFile);
-            if (image == null) {
-                Main.LOGGER.error("[ProfileManager] Could not read image: " + filePath);
-                return null;
-            }
-            if (image.getWidth() != 64 || (image.getHeight() != 64 && image.getHeight() != 32)) {
-                Main.LOGGER.error("[ProfileManager] Invalid skin dimensions " + image.getWidth() + "x" + image.getHeight() + " for: " + filePath);
-                return null;
-            }
-
-            // Retry with exponential backoff on 429
-            int maxRetries = 4;
-            long delayMs = 2000;
-
-            for (int attempt = 1; attempt <= maxRetries; attempt++) {
-                Property result = attemptMineSkinUpload(skinFile, slim, filePath);
-                if (result != null) {
-                    skinFileCache.put(cacheKey, result);
-                    return result;
-                }
-
-                if (attempt < maxRetries) {
-                    Main.LOGGER.warn("[ProfileManager] MineSkin rate limited (attempt " + attempt + "/" + maxRetries + "), retrying in " + (delayMs / 1000) + "s...");
-                    Thread.sleep(delayMs);
-                    delayMs *= 3; // 2, 6, 18
-                }
-            }
-
-            Main.LOGGER.error("[ProfileManager] All MineSkin attempts exhausted for: " + filePath);
-            return null;
-
-        } catch (Exception e) {
-            Main.LOGGER.error("[ProfileManager] fetchSkinFromFile failed for: " + filePath);
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private static Property attemptMineSkinUpload(File skinFile, boolean slim, String filePath) {
-        try {
-            String boundary = "----SkinBoundary" + UUID.randomUUID().toString().replace("-", "");
-            URL endpoint = new URL("https://api.mineskin.org/v2/generate");
-            HttpURLConnection connection = (HttpURLConnection) endpoint.openConnection();
-            connection.setDoOutput(true);
-            connection.setDoInput(true);
-            connection.setUseCaches(false);
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
-            connection.setRequestProperty("User-Agent", "LifeSeries-Mod/1.0");
-            connection.setConnectTimeout(10_000);
-            connection.setReadTimeout(30_000);
-
-            final String CRLF = "\r\n";
-
-            try (OutputStream out = connection.getOutputStream();
-                 PrintWriter writer = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), true)) {
-
-                writer.append("--").append(boundary).append(CRLF);
-                writer.append("Content-Disposition: form-data; name=\"variant\"").append(CRLF);
-                writer.append(CRLF).append(slim ? "slim" : "classic").append(CRLF).flush();
-
-                writer.append("--").append(boundary).append(CRLF);
-                writer.append("Content-Disposition: form-data; name=\"file\"; filename=\"skin.png\"").append(CRLF);
-                writer.append("Content-Type: image/png").append(CRLF);
-                writer.append("Content-Transfer-Encoding: binary").append(CRLF);
-                writer.append(CRLF).flush();
-
-                out.write(Files.readAllBytes(skinFile.toPath()));
-                out.flush();
-
-                writer.append(CRLF);
-                writer.append("--").append(boundary).append("--").append(CRLF).flush();
-            }
-
-            int status = connection.getResponseCode();
-
-            if (status == 429) {
-                String retryAfter = connection.getHeaderField("Retry-After");
-                if (retryAfter != null) {
-                    Main.LOGGER.warn("[ProfileManager] MineSkin Retry-After: " + retryAfter + "s");
-                }
-                connection.disconnect();
-                return null;
-            }
-
-            if (status != HttpURLConnection.HTTP_OK && status != 201) {
-                Main.LOGGER.error("[ProfileManager] MineSkin returned HTTP " + status + " for file: " + filePath);
-                connection.disconnect();
-                return null;
-            }
-
-            StringBuilder response = new StringBuilder();
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    response.append(line);
-                }
-            }
-            connection.disconnect();
-
-            JsonObject root = JsonParser.parseString(response.toString()).getAsJsonObject();
-
-            if (!root.has("skin")) {
-                Main.LOGGER.error("[ProfileManager] Unexpected MineSkin response (no 'skin' field): " + response);
-                return null;
-            }
-
-            JsonObject data = root.getAsJsonObject("skin").getAsJsonObject("texture").getAsJsonObject("data");
-
-            if (!data.has("value")) {
-                Main.LOGGER.error("[ProfileManager] Unexpected MineSkin response (no 'value' in data): " + response);
-                return null;
-            }
-
-            String value = data.get("value").getAsString();
-            String signature = data.has("signature") ? data.get("signature").getAsString() : null;
-
-            return new Property("textures", value, signature);
-
-        } catch (Exception e) {
-            Main.LOGGER.error("[ProfileManager] attemptMineSkinUpload exception: " + e.getMessage());
             return null;
         }
     }
@@ -517,7 +369,7 @@ public class ProfileManager {
     public static CompletableFuture<Boolean> resetPlayer(ServerPlayer player) {
         if (player == null) return CompletableFuture.completedFuture(false);
         if (hasChangedName(player) || hasChangedSkin(player)) {
-            return modifyProfile(player, ProfileChange.ORIGINAL, ProfileChange.ORIGINAL);
+            return modifyProfile(player, ProfileChange.original(), ProfileChange.original());
         }
         return CompletableFuture.completedFuture(false);
     }

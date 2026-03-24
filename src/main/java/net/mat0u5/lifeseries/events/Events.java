@@ -137,7 +137,6 @@ public class Events {
         if (isFakePlayer(player)) return;
 
         try {
-            LifeSkinsManager.onPlayerDisconnect(player);
             currentSeason.onPlayerDisconnect(player);
             SessionTranscript.playerLeave(player);
             NetworkHandlerServer.preLoginHandshake.remove(player.getUUID());

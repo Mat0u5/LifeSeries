@@ -160,6 +160,7 @@ public class OtherUtils {
     }
 
     public static UUID profileId(GameProfile profile) {
+        if (profile == null) return null;
         //? if <= 1.21.6 {
         /*return profile.getId();
          *///?} else {
@@ -168,6 +169,7 @@ public class OtherUtils {
     }
 
     public static String profileName(GameProfile profile) {
+        if (profile == null) return null;
         //? if <= 1.21.6 {
         /*return profile.getName();
          *///?} else {
@@ -176,6 +178,7 @@ public class OtherUtils {
     }
 
     public static PropertyMap profileProperties(GameProfile profile) {
+        if (profile == null) return null;
         //? if <= 1.21.6 {
         /*return profile.getProperties();
          *///?} else {

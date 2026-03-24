@@ -1,11 +1,17 @@
 package net.mat0u5.lifeseries.utils.player;
 
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.network.packets.LifeSkinsTexturePayload;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.resources.ResourceHandler;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Tuple;
+import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.scores.Team;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -16,119 +22,32 @@ public class LifeSkinsManager {
 
     private static final String SKINS_BASE_DIR = "config/lifeseries/lifeskins";
 
-    private static final Map<UUID, File> lastAppliedFile = new HashMap<>();
-    private static final Map<String, Map<Integer, Tuple<Boolean, File>>> skinsCache = new HashMap<>();
+    private static final Map<String, Map<String, Tuple<Boolean, File>>> skinsCache = new HashMap<>();
 
-    public static Map<String, Map<Integer, Tuple<Boolean, File>>> getCache() {
+    public static Map<String, Map<String, Tuple<Boolean, File>>> getCache() {
         return skinsCache;
     }
 
     public static void refreshLifeSkin(ServerPlayer player) {
-        refreshLifeSkin(player, false);
-    }
-
-    private static void refreshLifeSkin(ServerPlayer player, boolean forceReload) {
-        Integer currentLives = player.ls$getLives();
-        UUID uuid = player.getUUID();
-
-        Tuple<Boolean, File> skinInfo = resolveFile(player, currentLives);
-        boolean slim = skinInfo.x;
-        File skinFile = skinInfo.y;
-
-        if (!forceReload) {
-            if (lastAppliedFile.containsKey(uuid) && Objects.equals(lastAppliedFile.get(uuid), skinFile)) {
-                return;
-            }
-            if (!lastAppliedFile.containsKey(uuid) && skinFile == null) {
-                return;
-            }
-        }
-
-        if (skinFile != null) {
-            if (ProfileManager.manualSkins.containsKey(player.getUUID())) {
-                ProfileManager.ProfileChange skinChange = ProfileManager.ProfileChange.set(ProfileManager.manualSkins.get(player.getUUID()));
-                ProfileManager.modifyProfile(player, skinChange, ProfileManager.ProfileChange.none());
-            }
-            else {
-                Main.LOGGER.info("[LifeSkins] Applying skin for " + player.getScoreboardName() + " at " + currentLives + " lives: " + skinFile.getPath());
-                if (slim) {
-                    ProfileManager.modifyProfile(player, ProfileManager.ProfileChange.fileSlim(skinFile.getAbsolutePath()), ProfileManager.ProfileChange.none());
-                }
-                else {
-                    ProfileManager.modifyProfile(player, ProfileManager.ProfileChange.file(skinFile.getAbsolutePath()), ProfileManager.ProfileChange.none());
-                }
-            }
-            lastAppliedFile.put(uuid, skinFile);
-        } else {
-            // No Life Skins -> Back to default skin
-            Main.LOGGER.info("[LifeSkins] No skin file for " + player.getScoreboardName() + " at " + currentLives + " lives, restoring original.");
-            ProfileManager.ProfileChange skinChange = ProfileManager.ProfileChange.original();
-            if (SubInManager.isSubbingIn(player.getUUID()) && SubInManager.CHANGE_SKIN) {
-                skinChange = ProfileManager.ProfileChange.set(OtherUtils.profileName(SubInManager.getSubstitutedPlayer(player.getUUID())));
-            }
-            if (ProfileManager.manualSkins.containsKey(player.getUUID())) {
-                skinChange = ProfileManager.ProfileChange.set(ProfileManager.manualSkins.get(player.getUUID()));
-            }
-            ProfileManager.modifyProfile(player, skinChange, ProfileManager.ProfileChange.none());
-            lastAppliedFile.put(uuid, null);
-        }
-    }
-
-    public static void reloadSkin(ServerPlayer player) {
-        refreshLifeSkin(player, true);
-    }
-
-    public static void onPlayerDisconnect(ServerPlayer player) {
-        lastAppliedFile.remove(player.getUUID());
+        sendTeamNumUpdatesFrom(player);
     }
 
     public static void onPlayerJoin(ServerPlayer player) {
-        reloadSkin(player);
+        refreshLifeSkin(player);
+        sendImagePackets(List.of(player));
     }
 
     public static void reloadAll() {
+        reloadCache();
+        PlayerUtils.getAllPlayers().forEach(LifeSkinsManager::refreshLifeSkin);
+    }
+
+    public static void reloadCache() {
         reloadSkinsCache();
-        PlayerUtils.getAllPlayers().forEach(LifeSkinsManager::reloadSkin);
+        sendImagePackets();
     }
 
-    private static Tuple<Boolean, File> resolveFile(ServerPlayer player, Integer lifeCount) {
-        Map<Integer, Tuple<Boolean, File>> skins = skinsCache.get(player.getScoreboardName());
-        if (skins == null) {
-            // If no name skins were found, use the UUID files
-            UUID uuid = player.getUUID();
-            if (SubInManager.isSubbingIn(player.getUUID())) {
-                uuid = SubInManager.getSubstitutedPlayerUUID(player.getUUID());
-            }
-            if (uuid != null) {
-                skins = skinsCache.get(uuid.toString());
-            }
-        }
-
-        if (skins != null && !skins.isEmpty()) {
-            Tuple<Boolean, File> skinInfo = skins.get(lifeCount);
-            if (skinInfo != null && skinInfo.y != null) return skinInfo;
-
-            if (lifeCount != null) {
-                List<Integer> sortedLives = new ArrayList<>();
-                for (Integer availableCount : skins.keySet()) {
-                    if (availableCount == null) continue;
-                    sortedLives.add(availableCount);
-                }
-                Collections.sort(sortedLives);
-                for (int i = sortedLives.size()-1; i >= 0; i--) {
-                    int currentLifeCount = sortedLives.get(i);
-                    if (currentLifeCount <= lifeCount) {
-                        skinInfo = skins.get(currentLifeCount);
-                        if (skinInfo != null && skinInfo.y != null) return skinInfo;
-                    }
-                }
-            }
-        }
-
-        return new Tuple<>(false, null);
-    }
-
-    public static void reloadSkinsCache() {
+    private static void reloadSkinsCache() {
         skinsCache.clear();
         File rootFolder = new File(SKINS_BASE_DIR);
         if (!rootFolder.exists()) {
@@ -143,7 +62,7 @@ public class LifeSkinsManager {
         for (File playerDir : playerDirs) {
             if (playerDir == null || !playerDir.exists() || !playerDir.isDirectory()) continue;
             String name = playerDir.getName();
-            Map<Integer, Tuple<Boolean, File>> skins = new HashMap<>();
+            Map<String, Tuple<Boolean, File>> skins = new HashMap<>();
             File[] skinFiles = playerDir.listFiles();
             if (skinFiles == null) continue;
             for (File skinFile : skinFiles) {
@@ -156,8 +75,12 @@ public class LifeSkinsManager {
                     }
                     boolean slim = skinName.endsWith("_slim");
                     skinName = skinName.replace("_slim","");
-                    Integer intName = skinName.equalsIgnoreCase("null") ? null : Integer.parseInt(skinName);
-                    skins.put(intName, new Tuple<>(slim, skinFile));
+                    String teamName = skinName;
+                    try {
+                        Integer intName = skinName.equalsIgnoreCase("null") ? null : Integer.parseInt(skinName);
+                        teamName = "lives_"+intName;
+                    } catch (Exception ignored) {}
+                    skins.put(teamName, new Tuple<>(slim, skinFile));
                 }catch(Exception ignored) {}
             }
             if (skins.isEmpty()) continue;
@@ -167,7 +90,6 @@ public class LifeSkinsManager {
 
     public static void createLifeSkinsFolder(File rootFolder) {
         Path exampleSkins = rootFolder.toPath().resolve("Steve");
-
         try {
             Files.createDirectories(rootFolder.toPath());
             Files.createDirectories(exampleSkins);
@@ -178,5 +100,93 @@ public class LifeSkinsManager {
         handler.copyBundledSingleFile("/files/lifeskins/Steve/1.png", exampleSkins.resolve("1.png"));
         handler.copyBundledSingleFile("/files/lifeskins/Steve/2.png", exampleSkins.resolve("2.png"));
         handler.copyBundledSingleFile("/files/lifeskins/Steve/3.png", exampleSkins.resolve("3.png"));
+    }
+
+    public static void sendImagePackets() {
+        sendImagePackets(PlayerUtils.getAllPlayers());
+    }
+
+    public static void sendImagePackets(List<ServerPlayer> targets) {
+        SimplePackets.LIFESKINS_RELOAD_START.target(targets).sendToClient();
+        for (Map.Entry<String, Map<String, Tuple<Boolean, File>>> entry : skinsCache.entrySet()) {
+            String lifeSkinPlayerName = entry.getKey();
+            if (lifeSkinPlayerName == null) continue;
+            if (entry.getValue() == null) continue;
+            for (Map.Entry<String, Tuple<Boolean, File>> entry2 : entry.getValue().entrySet()) {
+                if (entry2.getValue() == null) continue;
+                String teamName = entry2.getKey();
+                Boolean slim = entry2.getValue().x;
+                File file = entry2.getValue().y;
+                if (file == null) continue;
+                if (slim == null) slim = false;
+                try {
+                    byte[] textureData = Files.readAllBytes(file.toPath());
+
+                    LifeSkinsTexturePayload packet = new LifeSkinsTexturePayload(lifeSkinPlayerName, teamName, slim, textureData);
+                    for (ServerPlayer player : targets) {
+                        if (VersionControl.isDevVersion()) {
+                            Main.LOGGER.info(TextUtils.formatString("Sending life skins '{}' at '{}' to {}", lifeSkinPlayerName, teamName, player));
+                        }
+                        ServerPlayNetworking.send(player, packet);
+                    }
+                }catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static void sendTeamNumUpdates() {
+        PlayerUtils.getAllPlayers().forEach(LifeSkinsManager::sendTeamNumUpdatesFrom);
+    }
+
+    public static void sendTeamNumUpdatesFrom(ServerPlayer player) {
+        SimplePackets.LIFESKINS_PLAYER.sendToClient(getLifeSkinsPacketInfo(player));
+    }
+
+    public static void sendTeamNumUpdatesTo(ServerPlayer target) {
+        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
+            SimplePackets.LIFESKINS_PLAYER.target(target).sendToClient(getLifeSkinsPacketInfo(player));
+        }
+    }
+
+    public static List<String> getLifeSkinsPacketInfo(ServerPlayer player) {
+        String teamName = "";
+        Team team = player.getTeam();
+        if (team != null) {
+            teamName = team.getName();
+        }
+
+        UUID uuid = player.getUUID();
+        String playerName = null;
+        if (SubInManager.isSubbingIn(uuid)) {
+            playerName = OtherUtils.profileName(SubInManager.getSubstitutedPlayer(uuid));
+        }
+        if (playerName == null) {
+            playerName = player.getScoreboardName();
+        }
+
+        if (teamName.startsWith("lives_")) {
+            try {
+                String lastPart = teamName.replaceAll("lives_", "");
+                Integer teamNum = lastPart.equalsIgnoreCase("null") ? null : Integer.parseInt(lastPart);
+                var lifeSkins = skinsCache.get(playerName);
+                if (teamNum != null && lifeSkins != null) {
+                    for (int closestTeam = teamNum; closestTeam >= 0; closestTeam--) {
+                        if (lifeSkins.containsKey("lives_"+closestTeam)) {
+                            teamName = "lives_"+closestTeam;
+                            break;
+                        }
+                    }
+                }
+            }catch(Exception e) {}
+        }
+
+        if (ProfileManager.hasChangedSkin(player)) {
+            teamName = "";
+        }
+
+        String skinId = playerName+"_"+teamName;
+        return List.of(uuid.toString(), skinId);
     }
 }

@@ -75,9 +75,7 @@ public class SubInManager {
         if (CHANGE_SKIN  || CHANGE_NAME) {
             ProfileManager.ProfileChange skinChange = CHANGE_SKIN ? ProfileManager.ProfileChange.set(targetProfileName) : ProfileManager.ProfileChange.original();
             ProfileManager.ProfileChange nameChange = CHANGE_NAME ? ProfileManager.ProfileChange.set(targetProfileName) : ProfileManager.ProfileChange.original();
-            ProfileManager.modifyProfile(player, skinChange, nameChange).thenRun(() -> {
-                LifeSkinsManager.reloadSkin(player);
-            });
+            ProfileManager.modifyProfile(player, skinChange, nameChange);
         }
         currentSeason.usernameChanged(player);
     }
@@ -103,9 +101,7 @@ public class SubInManager {
 
         ProfileManager.ProfileChange skinChange = CHANGE_SKIN ? ProfileManager.ProfileChange.set(targetProfileName) : ProfileManager.ProfileChange.original();
         ProfileManager.ProfileChange nameChange = CHANGE_NAME ? ProfileManager.ProfileChange.set(targetProfileName) : ProfileManager.ProfileChange.original();
-        ProfileManager.modifyProfile(player, skinChange, nameChange).thenRun(() -> {
-            LifeSkinsManager.reloadSkin(player);
-        });
+        ProfileManager.modifyProfile(player, skinChange, nameChange);
     }
 
     public static void removeSubIn(ServerPlayer player) {
@@ -138,8 +134,12 @@ public class SubInManager {
                 player1.ls$setLives(startingLives);
             }
 
-            if (player1 != null) currentSeason.usernameChanged(player1);
-            if (player2 != null) currentSeason.usernameChanged(player2);
+            if (player1 != null) {
+                currentSeason.usernameChanged(player1);
+            }
+            if (player2 != null) {
+                currentSeason.usernameChanged(player2);
+            }
         });
     }
 

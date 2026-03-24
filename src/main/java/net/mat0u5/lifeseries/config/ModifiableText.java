@@ -217,8 +217,6 @@ public enum ModifiableText {
     ,LIFESKINS_NICKNAME_SET("Set {}'s nickname to {}", List.of("Player", "nickname"))
     ,LIFESKINS_NICKNAME_RESET("Reset {}'s nickname", List.of("Player"))
     ,LIFESKINS_RELOAD_ALL("§7Reloading Life Skins...")
-    ,LIFESKINS_RELOAD_SINGLE("§7Reloading {}'s Life Skins...", List.of("Player"))
-    ,LIFESKINS_RELOAD_MULTIPLE("§7Reloading Life Skins of {} players...", List.of("number of targets"))
     ,LIFESKINS_LIST_EMPTY("There are no Life Skins currently loaded")
     ,LIFESKINS_LIST("§7Loaded Life Skins for life boundaries:")
     ,LIFESKINS_LIST_PERSON(Formatted.LOOSELY_STYLED, "§f {}: §7{}", List.of("Holder", "skins"))
