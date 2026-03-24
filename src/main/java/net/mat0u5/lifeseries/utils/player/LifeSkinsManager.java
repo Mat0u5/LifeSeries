@@ -10,6 +10,7 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.scores.Team;
 
@@ -69,6 +70,7 @@ public class LifeSkinsManager {
                 if (skinFile == null || !skinFile.exists() || !skinFile.isFile()) continue;
                 try {
                     String skinName = skinFile.getName();
+                    if (!skinName.toLowerCase(Locale.ROOT).endsWith(".png")) continue;
                     int dotIndex = skinName.lastIndexOf('.');
                     if (dotIndex > 0) {
                         skinName = skinName.substring(0, dotIndex);
@@ -119,8 +121,31 @@ public class LifeSkinsManager {
                 File file = entry2.getValue().y;
                 if (file == null) continue;
                 if (slim == null) slim = false;
+
+                String skinId = lifeSkinPlayerName+"_"+ teamName;
+                String identifier = "dynamic/lifeskins/" + skinId.toLowerCase(Locale.ROOT);
+                if (!Identifier.isValidPath(identifier)) {
+                    Main.LOGGER.error(TextUtils.formatString("LifeSkins error: Non [a-z0-9/._-] character in path of location: {}:{}", "lifeseries", identifier));
+                    continue;
+                }
+
                 try {
                     byte[] textureData = Files.readAllBytes(file.toPath());
+                    // Validate a valid PNG struct
+                    if (textureData == null || textureData.length < 8 ||
+                            (textureData[0] & 0xFF) != 0x89 ||
+                            (textureData[1] & 0xFF) != 0x50 ||
+                            (textureData[2] & 0xFF) != 0x4E ||
+                            (textureData[3] & 0xFF) != 0x47) {
+                        Main.LOGGER.error(
+                                "LifeSkins error: Received invalid PNG for skin '{}' ({}). Length={}, first bytes={}",
+                                lifeSkinPlayerName, teamName, textureData == null ? "null" : textureData.length,
+                                textureData != null && textureData.length >= 4
+                                        ? String.format("%02X %02X %02X %02X", textureData[0] & 0xFF, textureData[1] & 0xFF, textureData[2] & 0xFF, textureData[3] & 0xFF)
+                                        : "N/A"
+                        );
+                        continue;
+                    }
 
                     LifeSkinsTexturePayload packet = new LifeSkinsTexturePayload(lifeSkinPlayerName, teamName, slim, textureData);
                     for (ServerPlayer player : targets) {
@@ -160,7 +185,15 @@ public class LifeSkinsManager {
         UUID uuid = player.getUUID();
         String playerName = null;
         if (SubInManager.isSubbingIn(uuid)) {
-            playerName = OtherUtils.profileName(SubInManager.getSubstitutedPlayer(uuid));
+            boolean changeSkin = SubInManager.CHANGE_SKIN;
+            boolean changeName = SubInManager.CHANGE_NAME;
+
+            if (changeSkin && !changeName) {
+                playerName = OtherUtils.profileName(SubInManager.getSubstitutedPlayer(uuid));
+            }
+            if (!changeSkin && changeName) {
+                playerName = OtherUtils.profileName(SubInManager.getSubstituterOriginal(uuid));
+            }
         }
         if (playerName == null) {
             playerName = player.getScoreboardName();
@@ -182,8 +215,10 @@ public class LifeSkinsManager {
             }catch(Exception e) {}
         }
 
-        if (ProfileManager.hasChangedSkin(player)) {
-            teamName = "";
+        if (ProfileManager.manualSkins.containsKey(uuid)) {
+            if (!ProfileManager.manualSkins.get(uuid).equalsIgnoreCase(playerName)) {
+                teamName = "";
+            }
         }
 
         String skinId = playerName+"_"+teamName;

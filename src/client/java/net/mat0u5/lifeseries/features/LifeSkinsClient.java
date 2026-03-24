@@ -33,10 +33,10 @@ public class LifeSkinsClient {
     private static final Map<UUID, String> currentPlayerSkinIds = new ConcurrentHashMap<>();
 
     public static void handleTexture(String skinName, String teamName, boolean slim, byte[] textureData) {
+        String skinId = skinName+"_"+ teamName;
         try {
             Minecraft client = Minecraft.getInstance();
 
-            String skinId = skinName+"_"+ teamName;
             var textureId = IdentifierHelper.mod("dynamic/lifeskins/" + skinId.toLowerCase(Locale.ROOT));
 
             NativeImage image = NativeImage.read(new ByteArrayInputStream(textureData));
@@ -63,6 +63,7 @@ public class LifeSkinsClient {
             lifeSkinsTextures.put(skinId, new Tuple<>(textureId, skin));
             //?}
         } catch (IOException e) {
+            Main.LOGGER.error("Error while processing life skins texture '"+skinId+"'");
             e.printStackTrace();
         }
     }

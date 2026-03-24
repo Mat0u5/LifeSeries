@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.mixin.ChunkMapAccessor;
 import net.mat0u5.lifeseries.mixin.PlayerAccessor;
 import net.mat0u5.lifeseries.mixin.TrackedEntityAccessor;
+import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.minecraft.network.protocol.game.*;
@@ -32,8 +33,6 @@ import java.util.concurrent.CompletableFuture;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.Main.server;
-
-import java.io.*;
 
 //? if > 1.21 {
 import com.mojang.authlib.properties.PropertyMap;
@@ -105,9 +104,7 @@ public class ProfileManager {
                         currentSeason.onPlayerJoin(player);
                         currentSeason.usernameChanged(player);
                     }
-                    if (changedSkin) {
-                        LifeSkinsManager.refreshLifeSkin(player);
-                    }
+                    LifeSkinsManager.refreshLifeSkin(player);
                 }
                 return changedSkin || changedName;
 

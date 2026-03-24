@@ -200,6 +200,14 @@ public class SubInManager {
         return false;
     }
 
+    public static GameProfile getSubstituterOriginal(UUID uuid) {
+        if (uuid == null) return null;
+        for (SubIn subIn : subIns) {
+            if (getId(subIn.substituter()).equals(uuid)) return subIn.substituter();
+        }
+        return null;
+    }
+
     public static GameProfile getSubstitutedPlayer(UUID uuid) {
         if (uuid == null) return null;
         for (SubIn subIn : subIns) {
