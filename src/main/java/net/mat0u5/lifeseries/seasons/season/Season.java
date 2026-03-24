@@ -356,6 +356,19 @@ public abstract class Season {
 
     public void playerChangedTeam(ServerPlayer player) {
         Events.updatePlayerListsNextTick = true;
+        updateClientPlayerTeam(player);
+    }
+
+    public static void updateClientPlayerTeam(ServerPlayer player) {
+        Team team = player.getTeam();
+        if (team != null) {
+            SimplePackets.TEAM_NAME.target(player).sendToClient(team.getName());
+            SimplePackets.TEAM_COLOR.target(player).sendToClient(team.getColor().getName());
+        }
+        else {
+            SimplePackets.TEAM_NAME.target(player).sendToClient("");
+            SimplePackets.TEAM_COLOR.target(player).sendToClient("");
+        }
     }
 
     public String getTeamForPlayer(ServerPlayer player) {

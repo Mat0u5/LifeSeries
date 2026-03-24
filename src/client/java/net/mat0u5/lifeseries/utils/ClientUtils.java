@@ -68,11 +68,24 @@ public class ClientUtils {
     }
 
     @Nullable
-    public static Team getPlayerTeam() {
+    public static String getPlayerTeamColor() {
+        if (MainClient.teamColor != null && !MainClient.teamColor.isEmpty()) return MainClient.teamColor;
+
         Minecraft client = Minecraft.getInstance();
-        if (client == null) return null;
         if (client.player == null) return null;
-        return client.player.getTeam();
+        Team team = client.player.getTeam();
+        if (team != null) return team.getColor().getName();
+        return null;
+    }
+    @Nullable
+    public static String getPlayerTeamName() {
+        if (MainClient.teamName != null && !MainClient.teamName.isEmpty()) return MainClient.teamName;
+
+        Minecraft client = Minecraft.getInstance();
+        if (client.player == null) return null;
+        Team team = client.player.getTeam();
+        if (team != null) return team.getName();
+        return null;
     }
 
     public static void runCommand(String command) {

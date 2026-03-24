@@ -21,8 +21,6 @@ import net.minecraft.server.level.ServerPlayer;
 import java.io.File;
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.livesManager;
-
 public class LifeSkinsCommand extends Command {
     @Override
     public boolean isAllowed() {
@@ -171,8 +169,8 @@ public class LifeSkinsCommand extends Command {
 
     public int setSkin(CommandSourceStack source, ServerPlayer player, String username) {
         if (checkBanned(source)) return -1;
-        ProfileManager.ProfileChange skinChange = (username == null) ? ProfileManager.ProfileChange.ORIGINAL : ProfileManager.ProfileChange.SET.withInfo(username);
-        ProfileManager.modifyProfile(player, skinChange, ProfileManager.ProfileChange.NONE).thenAccept(success -> {
+        ProfileManager.ProfileChange skinChange = (username == null) ? ProfileManager.ProfileChange.original() : ProfileManager.ProfileChange.set(username);
+        ProfileManager.modifyProfile(player, skinChange, ProfileManager.ProfileChange.none()).thenAccept(success -> {
             if (success) {
                 if (username != null) {
                     OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_SKIN_SET.get(player, username));
@@ -194,8 +192,8 @@ public class LifeSkinsCommand extends Command {
 
     public int setUsername(CommandSourceStack source, ServerPlayer player, String username) {
         if (checkBanned(source)) return -1;
-        ProfileManager.ProfileChange nameChange = (username == null) ? ProfileManager.ProfileChange.ORIGINAL : ProfileManager.ProfileChange.SET.withInfo(username);
-        ProfileManager.modifyProfile(player, ProfileManager.ProfileChange.NONE, nameChange).thenAccept(success -> {
+        ProfileManager.ProfileChange nameChange = (username == null) ? ProfileManager.ProfileChange.original() : ProfileManager.ProfileChange.set(username);
+        ProfileManager.modifyProfile(player, ProfileManager.ProfileChange.none(), nameChange).thenAccept(success -> {
             if (success) {
                 if (username != null) {
                     OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_USERNAME_SET.get(player, username));

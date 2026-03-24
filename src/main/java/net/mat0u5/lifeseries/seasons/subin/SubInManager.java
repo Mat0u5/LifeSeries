@@ -73,8 +73,8 @@ public class SubInManager {
         }
 
         if (CHANGE_SKIN  || CHANGE_NAME) {
-            ProfileManager.ProfileChange skinChange = CHANGE_SKIN ? ProfileManager.ProfileChange.SET.withInfo(targetProfileName) : ProfileManager.ProfileChange.ORIGINAL;
-            ProfileManager.ProfileChange nameChange = CHANGE_NAME ? ProfileManager.ProfileChange.SET.withInfo(targetProfileName) : ProfileManager.ProfileChange.ORIGINAL;
+            ProfileManager.ProfileChange skinChange = CHANGE_SKIN ? ProfileManager.ProfileChange.set(targetProfileName) : ProfileManager.ProfileChange.original();
+            ProfileManager.ProfileChange nameChange = CHANGE_NAME ? ProfileManager.ProfileChange.set(targetProfileName) : ProfileManager.ProfileChange.original();
             ProfileManager.modifyProfile(player, skinChange, nameChange).thenRun(() -> {
                 LifeSkinsManager.reloadSkin(player);
             });
@@ -101,8 +101,8 @@ public class SubInManager {
         String targetProfileName = getName(getSubstitutedPlayer(player.getUUID()));
         if (targetProfileName == null) return;
 
-        ProfileManager.ProfileChange skinChange = CHANGE_SKIN ? ProfileManager.ProfileChange.SET.withInfo(targetProfileName) : ProfileManager.ProfileChange.ORIGINAL;
-        ProfileManager.ProfileChange nameChange = CHANGE_NAME ? ProfileManager.ProfileChange.SET.withInfo(targetProfileName) : ProfileManager.ProfileChange.ORIGINAL;
+        ProfileManager.ProfileChange skinChange = CHANGE_SKIN ? ProfileManager.ProfileChange.set(targetProfileName) : ProfileManager.ProfileChange.original();
+        ProfileManager.ProfileChange nameChange = CHANGE_NAME ? ProfileManager.ProfileChange.set(targetProfileName) : ProfileManager.ProfileChange.original();
         ProfileManager.modifyProfile(player, skinChange, nameChange).thenRun(() -> {
             LifeSkinsManager.reloadSkin(player);
         });

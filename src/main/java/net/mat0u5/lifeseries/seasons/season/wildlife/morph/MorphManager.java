@@ -8,13 +8,13 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MorphManager {
-    public static final Map<UUID, MorphComponent> morphComponents = new HashMap<>();
+    public static final Map<UUID, MorphComponent> morphComponents = new ConcurrentHashMap<>();
 
     public static MorphComponent getOrCreateComponent(Player player) {
         return getOrCreateComponent(player.getUUID());

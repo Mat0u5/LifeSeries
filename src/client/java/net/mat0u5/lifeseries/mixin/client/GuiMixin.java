@@ -80,9 +80,10 @@ public class GuiMixin {
     *///?}
 
         String texturePath = identifier.getPath();
-        Team playerTeam = ClientUtils.getPlayerTeam();
-        if (!MainClient.COLORED_HEARTS || playerTeam == null || playerTeam.getColor() == null ||
-                !ls$allowedColors.contains(playerTeam.getColor().getName().toLowerCase(Locale.ROOT)) ||
+        String playerTeamColor = ClientUtils.getPlayerTeamColor();
+        String playerTeamName = ClientUtils.getPlayerTeamName();
+        if (!MainClient.COLORED_HEARTS || playerTeamColor == null || playerTeamName == null ||
+                !ls$allowedColors.contains(playerTeamColor.toLowerCase(Locale.ROOT)) ||
                 !ls$allowedHearts.contains(texturePath) || Main.modFullyDisabled()) {
             if (MainClient.clientCurrentSeason == Seasons.SECRET_LIFE && texturePath.startsWith("hud/heart/container")) {
                 return;
@@ -103,12 +104,12 @@ public class GuiMixin {
             return;
         }
 
-        String color = playerTeam.getColor().getName().toLowerCase(Locale.ROOT);
+        String color = playerTeamColor.toLowerCase(Locale.ROOT);
 
         String heartType = texturePath.replaceFirst("hud/heart/", "");
 
         if (!heartType.startsWith("hardcore_")) {
-            if (MainClient.COLORED_HEARTS_HARDCORE_ALL_LIVES || (playerTeam.getName().equals("lives_1") & MainClient.COLORED_HEARTS_HARDCORE_LAST_LIFE)) {
+            if (MainClient.COLORED_HEARTS_HARDCORE_ALL_LIVES || (playerTeamName.equals("lives_1") & MainClient.COLORED_HEARTS_HARDCORE_LAST_LIFE)) {
                 heartType = "hardcore_"+heartType;
             }
         }

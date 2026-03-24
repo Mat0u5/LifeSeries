@@ -46,30 +46,30 @@ public class LifeSkinsManager {
 
         if (skinFile != null) {
             if (ProfileManager.manualSkins.containsKey(player.getUUID())) {
-                ProfileManager.ProfileChange skinChange = ProfileManager.ProfileChange.SET.withInfo(ProfileManager.manualSkins.get(player.getUUID()));
-                ProfileManager.modifyProfile(player, skinChange, ProfileManager.ProfileChange.NONE);
+                ProfileManager.ProfileChange skinChange = ProfileManager.ProfileChange.set(ProfileManager.manualSkins.get(player.getUUID()));
+                ProfileManager.modifyProfile(player, skinChange, ProfileManager.ProfileChange.none());
             }
             else {
                 Main.LOGGER.info("[LifeSkins] Applying skin for " + player.getScoreboardName() + " at " + currentLives + " lives: " + skinFile.getPath());
                 if (slim) {
-                    ProfileManager.modifyProfile(player, ProfileManager.ProfileChange.FILE_SLIM.withInfo(skinFile.getAbsolutePath()), ProfileManager.ProfileChange.NONE);
+                    ProfileManager.modifyProfile(player, ProfileManager.ProfileChange.fileSlim(skinFile.getAbsolutePath()), ProfileManager.ProfileChange.none());
                 }
                 else {
-                    ProfileManager.modifyProfile(player, ProfileManager.ProfileChange.FILE.withInfo(skinFile.getAbsolutePath()), ProfileManager.ProfileChange.NONE);
+                    ProfileManager.modifyProfile(player, ProfileManager.ProfileChange.file(skinFile.getAbsolutePath()), ProfileManager.ProfileChange.none());
                 }
             }
             lastAppliedFile.put(uuid, skinFile);
         } else {
             // No Life Skins -> Back to default skin
             Main.LOGGER.info("[LifeSkins] No skin file for " + player.getScoreboardName() + " at " + currentLives + " lives, restoring original.");
-            ProfileManager.ProfileChange skinChange = ProfileManager.ProfileChange.ORIGINAL;
+            ProfileManager.ProfileChange skinChange = ProfileManager.ProfileChange.original();
             if (SubInManager.isSubbingIn(player.getUUID()) && SubInManager.CHANGE_SKIN) {
-                skinChange = ProfileManager.ProfileChange.SET.withInfo(OtherUtils.profileName(SubInManager.getSubstitutedPlayer(player.getUUID())));
+                skinChange = ProfileManager.ProfileChange.set(OtherUtils.profileName(SubInManager.getSubstitutedPlayer(player.getUUID())));
             }
             if (ProfileManager.manualSkins.containsKey(player.getUUID())) {
-                skinChange = ProfileManager.ProfileChange.SET.withInfo(ProfileManager.manualSkins.get(player.getUUID()));
+                skinChange = ProfileManager.ProfileChange.set(ProfileManager.manualSkins.get(player.getUUID()));
             }
-            ProfileManager.modifyProfile(player, skinChange, ProfileManager.ProfileChange.NONE);
+            ProfileManager.modifyProfile(player, skinChange, ProfileManager.ProfileChange.none());
             lastAppliedFile.put(uuid, null);
         }
     }
@@ -129,7 +129,6 @@ public class LifeSkinsManager {
     }
 
     public static void reloadSkinsCache() {
-        ProfileManager.skinFileCache.clear();
         skinsCache.clear();
         File rootFolder = new File(SKINS_BASE_DIR);
         if (!rootFolder.exists()) {
