@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.gui.trivia;
 import net.mat0u5.lifeseries.features.Trivia;
 import net.mat0u5.lifeseries.gui.DefaultScreen;
 import net.mat0u5.lifeseries.render.RenderUtils;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 
@@ -47,7 +47,7 @@ public class ConfirmQuizAnswerScreen extends DefaultScreen {
     }
 
     @Override
-    public void render(GuiGraphics context, int mouseX, int mouseY) {
+    public void render(GuiGraphicsExtractor context, int mouseX, int mouseY) {
         RenderUtils.text("Submit answer?", centerX, startY + 10).anchorCenter().render(context, this.font);
     }
 

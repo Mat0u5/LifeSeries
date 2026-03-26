@@ -5,7 +5,7 @@ import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -104,9 +104,9 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<Mob
 
     @Override
     //? if <= 1.20.3 {
-    /*protected void renderListEntry(GuiGraphics context, MobEffect effectType, int x, int y, int mouseX, int mouseY, float tickDelta) {
+    /*protected void renderListEntry(GuiGraphicsExtractor context, MobEffect effectType, int x, int y, int mouseX, int mouseY, float tickDelta) {
     *///?} else {
-    protected void renderListEntry(GuiGraphics context, Holder<MobEffect> effectType, int x, int y, int mouseX, int mouseY, float tickDelta) {
+    protected void renderListEntry(GuiGraphicsExtractor context, Holder<MobEffect> effectType, int x, int y, int mouseX, int mouseY, float tickDelta) {
     //?}
         //? if <= 1.21 {
         /*MobEffectTextureManager statusEffectSpriteManager = Minecraft.getInstance().getMobEffectTextures();

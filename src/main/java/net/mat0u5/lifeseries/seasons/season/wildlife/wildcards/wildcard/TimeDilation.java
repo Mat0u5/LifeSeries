@@ -21,7 +21,7 @@ import static net.mat0u5.lifeseries.Main.server;
 //? if >= 1.20.3
 import net.minecraft.server.ServerTickRateManager;
 //? if >= 26.1
-//import net.minecraft.world.clock.WorldClocks;
+import net.minecraft.world.clock.WorldClocks;
 
 public class TimeDilation extends Wildcard {
     public static float MIN_TICK_RATE = 1;
@@ -59,19 +59,19 @@ public class TimeDilation extends Wildcard {
                 weatherTicksBacklog -= weatherTicks;
                 for (ServerLevel serverLevel : server.getAllLevels()) {
                     //? if <= 1.21.11 {
-                    long newTicks = serverLevel.getDayTime() + weatherTicks;
+                    /*long newTicks = serverLevel.getDayTime() + weatherTicks;
                     serverLevel.setDayTime(newTicks);
-                    //?} else {
-                    /*long newTicks = serverLevel.getOverworldClockTime() + weatherTicks;
+                    *///?} else {
+                    long newTicks = serverLevel.getOverworldClockTime() + weatherTicks;
                     serverLevel.clockManager().setTotalTicks(serverLevel.registryAccess().getOrThrow(WorldClocks.OVERWORLD), newTicks);
-                    *///?}
+                    //?}
                     for (ServerPlayer player : serverLevel.players()) {
                         boolean daylightCycle = OtherUtils.getBooleanGameRule(serverLevel, GameRules.ADVANCE_TIME);
                         //? if <= 1.21.11 {
-                        player.connection.send(new ClientboundSetTimePacket(serverLevel.getGameTime(), serverLevel.getDayTime(), daylightCycle));
-                        //?} else {
-                        /*player.connection.send(serverLevel.clockManager().createFullSyncPacket());
-                        *///?}
+                        /*player.connection.send(new ClientboundSetTimePacket(serverLevel.getGameTime(), serverLevel.getDayTime(), daylightCycle));
+                        *///?} else {
+                        player.connection.send(serverLevel.clockManager().createFullSyncPacket());
+                        //?}
                     }
                 }
             }

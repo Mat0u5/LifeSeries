@@ -4,7 +4,7 @@ import net.mat0u5.lifeseries.gui.config.entries.StringListPopupConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
@@ -59,8 +59,8 @@ public class ItemListConfigEntry extends StringListPopupConfigEntry<Item> {
     }
 
     @Override
-    protected void renderListEntry(GuiGraphics context, Item item, int x, int y, int mouseX, int mouseY, float tickDelta) {
-        context.renderItem(item.getDefaultInstance(), x, y);
+    protected void renderListEntry(GuiGraphicsExtractor context, Item item, int x, int y, int mouseX, int mouseY, float tickDelta) {
+        context.item(item.getDefaultInstance(), x, y);
     }
 
     @Override

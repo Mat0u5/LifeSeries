@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.gui.config;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.network.chat.Component;
 import java.util.List;
@@ -49,11 +49,11 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
 
     //? if < 1.20.5 {
     /*@Override
-    public void renderList(GuiGraphics context, int mouseX, int mouseY, float delta) {
+    public void renderList(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
     *///?} else {
     @Override
     //~ renames_26_1_volatile
-    protected void renderListItems(GuiGraphics context, int mouseX, int mouseY, float delta) {
+    protected void extractListItems(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
     //~ !renames_26_1_volatile
     //?}
 
@@ -98,7 +98,7 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
                 entry.setWidth(entryWidth);
                 entry.setHeight(entryHeight);
                 //~ renames_26_1_volatile
-                entry.renderContent(context, mouseX, mouseY, hovered, delta);
+                entry.extractContent(context, mouseX, mouseY, hovered, delta);
                 //~ !renames_26_1_volatile
                 //?}
 
@@ -189,16 +189,16 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
         return this.width *2;//Make not invisible
     }
     *///?} else if <= 1.21.11 {
-    @Override
+    /*@Override
     protected boolean scrollbarVisible() {
         return false;
     }
-    //?} else {
-    /*@Override
+    *///?} else {
+    @Override
     protected boolean scrollable() {
         return false;
     }
-    *///?}
+    //?}
 
     @Override
     //? if <= 1.21.6 {
@@ -297,7 +297,7 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
 
         //? if <= 1.21.6 {
         /*@Override
-        public void render(GuiGraphics context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        public void render(GuiGraphicsExtractor context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             configEntry.render(context, x, y, entryWidth, entryHeight, mouseX, mouseY, hovered, tickDelta);
         }
 
@@ -321,7 +321,7 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
         *///?} else {
         @Override
         //~ renames_26_1_volatile
-        public void renderContent(GuiGraphics context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        public void extractContent(GuiGraphicsExtractor context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         //~ !renames_26_1_volatile
             configEntry.render(context, this.getX(), this.getY(), this.getWidth(), this.getHeight(), mouseX, mouseY, hovered, tickDelta);
         }

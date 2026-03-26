@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 //? if <= 1.20.2 {
 /*import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 *///?} else {
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.numbers.NumberFormat;
@@ -34,8 +34,8 @@ public class PlayerTabOverlayMixin {
     //? if <= 1.20.2 {
     /*@Redirect(method = "renderTablistScore",
             at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;III)I"))
-    private int modifyFormattedScore(GuiGraphics instance, Font font, String s, int i1, int i2, int i3, Objective objective, int i, String string, int j, int k) {
+                    target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;III)I"))
+    private int modifyFormattedScore(GuiGraphicsExtractor instance, Font font, String s, int i1, int i2, int i3, Objective objective, int i, String string, int j, int k) {
         if (objective != null && Main.modFullyDisabled()) {
             int score = objective.getScoreboard().getOrCreatePlayerScore(string, objective).getScore();
             if (objective.getName().equals(LivesManager.SCOREBOARD_NAME)) {
@@ -59,14 +59,14 @@ public class PlayerTabOverlayMixin {
     *///?} else {
 
     //? if <= 1.21.11 {
-    @Redirect(method = "render",
+    /*@Redirect(method = "render",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/world/scores/ReadOnlyScoreInfo;safeFormatValue(Lnet/minecraft/world/scores/ReadOnlyScoreInfo;Lnet/minecraft/network/chat/numbers/NumberFormat;)Lnet/minecraft/network/chat/MutableComponent;"))
-    //?} else {
-    /*@Redirect(method = "extractRenderState",
+    *///?} else {
+    @Redirect(method = "extractRenderState",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/world/scores/ReadOnlyScoreInfo;safeFormatValue(Lnet/minecraft/world/scores/ReadOnlyScoreInfo;Lnet/minecraft/network/chat/numbers/NumberFormat;)Lnet/minecraft/network/chat/MutableComponent;"))
-    *///?}
+    //?}
     private MutableComponent modifyFormattedScore(ReadOnlyScoreInfo readableScoreboardScore, NumberFormat numberFormat) {
         MutableComponent originalText = ReadOnlyScoreInfo.safeFormatValue(readableScoreboardScore, numberFormat);
         Objective objective = ls$getDisplayedObjective();

@@ -6,7 +6,7 @@ import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 
@@ -42,16 +42,16 @@ public class SecretLifeTaskConfigEntry extends ModifiableListEntry {
     }
 
     @Override
-    protected void renderMainEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    protected void renderMainEntry(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         textField.setY(y+1);
         textField.setX(x + 25);
         textField.setWidth(resetButton.getX()-textField.getX()-10);
         //~ renames_26_1_volatile
-        textField.render(context, mouseX, mouseY, tickDelta);
+        textField.extractRenderState(context, mouseX, mouseY, tickDelta);
         //~ !renames_26_1_volatile
     }
     @Override
-    public void renderFirstEntryExtras(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    public void renderFirstEntryExtras(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         int textX = x - 5;
         int textY = y;
         RenderUtils.text(Component.literal("Available text replacements:"), textX, textY).colored(TextColors.GRAY).render(context, textRenderer);

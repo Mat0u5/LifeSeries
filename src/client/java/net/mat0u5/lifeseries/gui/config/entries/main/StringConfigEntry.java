@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.gui.config.entries.main;
 import net.mat0u5.lifeseries.gui.config.entries.TextFieldConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 public class StringConfigEntry extends TextFieldConfigEntry {
     private static final float ANIMATION_SPEED = 0.15f;
@@ -94,7 +94,7 @@ public class StringConfigEntry extends TextFieldConfigEntry {
 
 
     @Override
-    protected void renderEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    protected void renderEntry(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         this.x = x;
         updateFieldDimensions();
         updateAnimations(tickDelta);

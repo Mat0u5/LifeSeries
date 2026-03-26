@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.gui.config.entries;
 
 import net.mat0u5.lifeseries.utils.TextColors;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 import java.util.Objects;
@@ -51,11 +51,11 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
     protected void postTextChanged() {
     }
 
-    protected void renderAdditionalContent(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    protected void renderAdditionalContent(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
     }
 
     @Override
-    protected void renderEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    protected void renderEntry(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         int entryWidth = getEntryContentWidth(width);
 
         renderAdditionalContent(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
@@ -63,7 +63,7 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
         textField.setX(getTextFieldPosX(x, entryWidth));
         textField.setY(getTextFieldPosY(y, height));
         //~ renames_26_1_volatile
-        textField.render(context, mouseX, mouseY, tickDelta);
+        textField.extractRenderState(context, mouseX, mouseY, tickDelta);
         //~ !renames_26_1_volatile
 
         if (hasError()) {

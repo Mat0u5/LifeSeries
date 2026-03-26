@@ -2,13 +2,13 @@ package net.mat0u5.lifeseries.gui.config.entries.interfaces;
 
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 public interface IPopup {
     boolean shouldShowPopup();
     int getPopupWidth();
     int getPopupHeight();
-    void renderContent(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, float tickDelta);
+    void renderContent(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, float tickDelta);
 
     default int getActualPopupWidth() {
         int width = getPopupWidth() + getPadding();
@@ -24,7 +24,7 @@ public interface IPopup {
         return 4;
     }
 
-    default void renderPopup(GuiGraphics context, int x, int y, int mouseX, int mouseY, float tickDelta) {
+    default void renderPopup(GuiGraphicsExtractor context, int x, int y, int mouseX, int mouseY, float tickDelta) {
         if (!shouldShowPopup()) return;
 
         //? if <= 1.20 {
@@ -48,7 +48,7 @@ public interface IPopup {
         //~ !renames_1_21_6_volatile
     }
 
-    default void renderBackground(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, float tickDelta) {
+    default void renderBackground(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, float tickDelta) {
         context.fill(x, y, x + width, y + height, TextColors.LIGHT_BLACK);
         RenderUtils.drawBorder(context, x, y, width, height, TextColors.LIGHT_GRAY);
     }

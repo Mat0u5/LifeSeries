@@ -24,7 +24,7 @@ import net.minecraft.network.chat.Component;
 *///?}
 
 //? if >= 26.1 {
-/*import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.ClientUtils;
@@ -36,7 +36,7 @@ import net.minecraft.world.scores.ReadOnlyScoreInfo;
 import net.minecraft.world.scores.Scoreboard;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
-*///?}
+//?}
 
 
 @Mixin(value = EntityRenderer.class, priority = 1)
@@ -94,7 +94,7 @@ public class EntityRendererMixin<T extends Entity, S extends EntityRenderState> 
 
     // In PlayerEntityRendererMixin for <= 1.21.11
     //? if >= 26.1 {
-    /*@ModifyArg(
+    @ModifyArg(
             method = "submitNameDisplay(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;I)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitNameTag(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/phys/Vec3;ILnet/minecraft/network/chat/Component;ZIDLnet/minecraft/client/renderer/state/level/CameraRenderState;)V"),
             index = 3
@@ -119,5 +119,5 @@ public class EntityRendererMixin<T extends Entity, S extends EntityRenderState> 
         }
         return original;
     }
-    *///?}
+    //?}
 }

@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.gui.other;
 import net.mat0u5.lifeseries.gui.DefaultScreen;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.ClientUtils;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 
@@ -61,7 +61,7 @@ public class PastLifeChooseTwistScreen extends DefaultScreen {
     }
 
     @Override
-    public void render(GuiGraphics context, int mouseX, int mouseY) {
+    public void render(GuiGraphicsExtractor context, int mouseX, int mouseY) {
         RenderUtils.text("Choose Past Life session twist:", centerX, startY + 10).anchorCenter().render(context, font);
     }
 }

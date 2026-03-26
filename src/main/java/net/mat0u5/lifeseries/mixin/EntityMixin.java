@@ -34,19 +34,19 @@ import net.minecraft.world.entity.EntityType;
 //?}
 
 //? if >= 26.1 {
-/*import org.spongepowered.asm.mixin.gen.Accessor;
-*///?}
+import org.spongepowered.asm.mixin.gen.Accessor;
+//?}
 
 @Mixin(value = Entity.class, priority = 1)
 public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
     //? if >= 26.1 {
-    /*@Accessor("fluidInteraction")
+    @Accessor("fluidInteraction")
     abstract EntityFluidInteraction ls$entityFluidInteraction();
     @Override
     public EntityFluidInteraction ls$getEntityFluidInteraction() {
         return ls$entityFluidInteraction();
     }
-    *///?}
+    //?}
     /*
     private NbtCompound persistentData;
     @Override

@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.render;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 //? if >= 1.21.2 && <= 1.21.5
 //import net.minecraft.client.renderer.rendertype.RenderType;
@@ -65,7 +65,7 @@ public class CustomTextureRenderer {
     }
 
     //~ renames_1_21_6_volatile
-    public void render(GuiGraphics context) {
+    public void render(GuiGraphicsExtractor context) {
         if (isScaled()) {
             context.pose().pushMatrix();
             //? if <= 1.21.5 {

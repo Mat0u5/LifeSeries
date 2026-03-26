@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.gui.config.entries;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfigEntry implements IEntryGroupHeader {
     protected static final int RANGE_LABEL_OFFSET_X = -12;
@@ -60,14 +60,14 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
     }
 
     @Override
-    protected void renderAdditionalContent(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    protected void renderAdditionalContent(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         if (minValue != null && maxValue != null) {
             String rangeText = TextUtils.formatString("({}-{})", minValue, maxValue);
             int rangeWidth = textRenderer.width(rangeText);
             int entryWidth = getEntryContentWidth(width);
 
             //~ renames_26_1_volatile
-            context.drawString(textRenderer, rangeText,
+            context.text(textRenderer, rangeText,
                     x + entryWidth - rangeWidth - textField.getWidth() + RANGE_LABEL_OFFSET_X,
                     getTextFieldPosY(y, height)  + RANGE_LABEL_OFFSET_Y, TextColors.LIGHT_GRAY);
             //~ !renames_26_1_volatile

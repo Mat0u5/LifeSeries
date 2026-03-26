@@ -272,37 +272,37 @@ public class NetworkHandlerServer {
 
     public static void registerPackets() {
         //? if > 1.20.3 {
-        PayloadTypeRegistry.playS2C().register(NumberPayload.ID, NumberPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(StringPayload.ID, StringPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(StringListPayload.ID, StringListPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(HandshakePayload.ID, HandshakePayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(LongPayload.ID, LongPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(ConfigPayload.ID, ConfigPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(SidetitlePacket.ID, SidetitlePacket.CODEC);
-        PayloadTypeRegistry.playS2C().register(SnailTexturePacket.ID, SnailTexturePacket.CODEC);
-        PayloadTypeRegistry.playS2C().register(VoteScreenPayload.ID, VoteScreenPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(EmptyPayload.ID, EmptyPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(BooleanPayload.ID, BooleanPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(IntPayload.ID, IntPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(LifeSkinsTexturePayload.ID, LifeSkinsTexturePayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(NumberPayload.ID, NumberPayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(StringPayload.ID, StringPayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(StringListPayload.ID, StringListPayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(HandshakePayload.ID, HandshakePayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(LongPayload.ID, LongPayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(ConfigPayload.ID, ConfigPayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(SidetitlePacket.ID, SidetitlePacket.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(SnailTexturePacket.ID, SnailTexturePacket.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(VoteScreenPayload.ID, VoteScreenPayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(EmptyPayload.ID, EmptyPayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(BooleanPayload.ID, BooleanPayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(IntPayload.ID, IntPayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(LifeSkinsTexturePayload.ID, LifeSkinsTexturePayload.CODEC);
 
-        PayloadTypeRegistry.playC2S().register(NumberPayload.ID, NumberPayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(StringPayload.ID, StringPayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(StringListPayload.ID, StringListPayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(HandshakePayload.ID, HandshakePayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(LongPayload.ID, LongPayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(ConfigPayload.ID, ConfigPayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(SidetitlePacket.ID, SidetitlePacket.CODEC);
-        PayloadTypeRegistry.playC2S().register(SnailTexturePacket.ID, SnailTexturePacket.CODEC);
-        PayloadTypeRegistry.playC2S().register(VoteScreenPayload.ID, VoteScreenPayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(EmptyPayload.ID, EmptyPayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(BooleanPayload.ID, BooleanPayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(IntPayload.ID, IntPayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(LifeSkinsTexturePayload.ID, LifeSkinsTexturePayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(NumberPayload.ID, NumberPayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(StringPayload.ID, StringPayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(StringListPayload.ID, StringListPayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(HandshakePayload.ID, HandshakePayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(LongPayload.ID, LongPayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(ConfigPayload.ID, ConfigPayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(SidetitlePacket.ID, SidetitlePacket.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(SnailTexturePacket.ID, SnailTexturePacket.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(VoteScreenPayload.ID, VoteScreenPayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(EmptyPayload.ID, EmptyPayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(BooleanPayload.ID, BooleanPayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(IntPayload.ID, IntPayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(LifeSkinsTexturePayload.ID, LifeSkinsTexturePayload.CODEC);
         //?}
     }
     //? if <= 1.20.3 {
@@ -371,10 +371,10 @@ public class NetworkHandlerServer {
 
         ServerLoginConnectionEvents.QUERY_START.register((handler, server, sender, synchronizer) -> {
             //? if <= 1.21.11 {
-            sender.sendPacket(IdentifierHelper.mod("preloginpacket"), PacketByteBufs.create());
-            //?} else {
-            /*sender.sendPacket(IdentifierHelper.mod("preloginpacket"), FriendlyByteBufs.create());
-            *///?}
+            /*sender.sendPacket(IdentifierHelper.mod("preloginpacket"), PacketByteBufs.create());
+            *///?} else {
+            sender.sendPacket(IdentifierHelper.mod("preloginpacket"), FriendlyByteBufs.create());
+            //?}
         });
 
         // Handle the response

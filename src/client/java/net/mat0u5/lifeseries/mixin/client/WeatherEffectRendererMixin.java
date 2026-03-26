@@ -42,31 +42,31 @@ public class WeatherEffectRendererMixin {
     /*@WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderType;weather(Lnet/minecraft/resources/Identifier;Z)Lnet/minecraft/client/renderer/RenderType;"))
     public RenderType render(Identifier resourceLocation, boolean bl, Operation<RenderType> original) {
     *///?} else if <= 1.21.11 {
-    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/rendertype/RenderTypes;weather(Lnet/minecraft/resources/Identifier;Z)Lnet/minecraft/client/renderer/rendertype/RenderType;"))
+    /*@WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/rendertype/RenderTypes;weather(Lnet/minecraft/resources/Identifier;Z)Lnet/minecraft/client/renderer/rendertype/RenderType;"))
     public RenderType render(Identifier resourceLocation, boolean bl, Operation<RenderType> original) {
-    //?} else {
-    /*@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/texture/TextureManager;getTexture(Lnet/minecraft/resources/Identifier;)Lnet/minecraft/client/renderer/texture/AbstractTexture;"))
+    *///?} else {
+    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/texture/TextureManager;getTexture(Lnet/minecraft/resources/Identifier;)Lnet/minecraft/client/renderer/texture/AbstractTexture;"))
     public Identifier render(Identifier resourceLocation) {
-    *///?}
+    //?}
         if (MainClient.NICE_LIFE_LESS_SNOW && !Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE) {
             if (resourceLocation.getPath().contains("snow.png")) {
                 //? if <= 1.21.2 {
                 /*original.call(i, LESS_SNOW_RESOURCE_LOCATION);
                 return;
                 *///?} else if <= 1.21.11 {
-                return original.call(LESS_SNOW_RESOURCE_LOCATION, bl);
-                //?} else {
-                /*return LESS_SNOW_RESOURCE_LOCATION;
-                *///?}
+                /*return original.call(LESS_SNOW_RESOURCE_LOCATION, bl);
+                *///?} else {
+                return LESS_SNOW_RESOURCE_LOCATION;
+                //?}
             }
         }
         //? if <= 1.21.2 {
         /*original.call(i, resourceLocation);
         *///?} else if <= 1.21.11 {
-        return original.call(resourceLocation, bl);
-        //?} else {
-        /*return resourceLocation;
-        *///?}
+        /*return original.call(resourceLocation, bl);
+        *///?} else {
+        return resourceLocation;
+        //?}
     }
 
     //? if <= 1.21 {

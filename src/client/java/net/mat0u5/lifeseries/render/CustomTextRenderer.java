@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.render;
 
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 
@@ -76,7 +76,7 @@ public class CustomTextRenderer {
         return scaleX != 1 || scaleY != 1;
     }
 
-    public int render(GuiGraphics context, Font textRenderer) {
+    public int render(GuiGraphicsExtractor context, Font textRenderer) {
         //~ renames_1_21_6_volatile
         if (isScaled()) {
             context.pose().pushMatrix();
@@ -105,17 +105,17 @@ public class CustomTextRenderer {
                     textWidth = textRenderer.width(line);
                     if (anchor == Anchor.CENTER) offsetX = -textWidth/2.0;
                     if (anchor == Anchor.RIGHT) offsetX = -textWidth;
-                    context.drawString(textRenderer, line, (int) (x / scaleX + offsetX), (int) (y / scaleY + offsetY), textColor, shadow);
+                    context.text(textRenderer, line, (int) (x / scaleX + offsetX), (int) (y / scaleY + offsetY), textColor, shadow);
                     offsetY += textRenderer.lineHeight + wrapGapY;
                 }
                 renderedTextHeight = offsetY;
             }
             else {
-                context.drawString(textRenderer, orderedText, (int) (x / scaleX + offsetX), (int) (y / scaleY), textColor, shadow);
+                context.text(textRenderer, orderedText, (int) (x / scaleX + offsetX), (int) (y / scaleY), textColor, shadow);
             }
         }
         else if (this.text != null) {
-            context.drawString(textRenderer, text, (int)(x / scaleX + offsetX), (int)(y / scaleY), textColor, shadow);
+            context.text(textRenderer, text, (int)(x / scaleX + offsetX), (int)(y / scaleY), textColor, shadow);
         }
         //~ !renames_26_1_volatile
 

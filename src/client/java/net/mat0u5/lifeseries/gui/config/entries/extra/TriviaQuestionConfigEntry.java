@@ -11,7 +11,7 @@ import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 
@@ -53,7 +53,7 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
         }
 
         @Override
-        public void renderEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        public void renderEntry(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             Component questionText = Component.literal("Question:");
             RenderUtils.text(questionText,x + 25, y+6).colored(TextColors.LIGHT_GRAY).render(context, textRenderer);
             textField.setY(y+1);
@@ -61,7 +61,7 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
             int buttonX = resetButton != null ? resetButton.getX() : width;
             textField.setWidth(buttonX-textField.getX()-10);
             //~ renames_26_1_volatile
-            textField.render(context, mouseX, mouseY, tickDelta);
+            textField.extractRenderState(context, mouseX, mouseY, tickDelta);
             //~ !renames_26_1_volatile
         }
 
@@ -278,7 +278,7 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
     }
 
     @Override
-    protected void renderMainEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    protected void renderMainEntry(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         renderAsGroup.render(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
     }
 

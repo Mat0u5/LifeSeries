@@ -85,7 +85,7 @@ public abstract class PlayerEntityRendererMixin {
 
     // In EntityRender from 26.1+
     //? if > 1.21.6 && <= 1.21.11 {
-    @ModifyArg(
+    /*@ModifyArg(
             method = "submitNameTag(Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitNameTag(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/phys/Vec3;ILnet/minecraft/network/chat/Component;ZIDLnet/minecraft/client/renderer/state/CameraRenderState;)V"),
             index = 3
@@ -93,7 +93,7 @@ public abstract class PlayerEntityRendererMixin {
     public Component render(Component text) {
         return ClientUtils.getPlayerName(text);
     }
-    //?}
+    *///?}
 
     //? if <= 1.20.2 {
     /*@Redirect(method = "renderNameTag(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/Component;literal(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;"))
@@ -157,18 +157,18 @@ public abstract class PlayerEntityRendererMixin {
         return par2;
     }
     *///?} else if <= 1.21.11 {
-    //? if <= 1.21.6 {
-    /*@Redirect(method = "renderNameTag(Lnet/minecraft/client/renderer/entity/state/PlayerRenderState;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/PlayerRenderState;scoreText:Lnet/minecraft/network/chat/Component;"))
+    /*//? if <= 1.21.6 {
+    /^@Redirect(method = "renderNameTag(Lnet/minecraft/client/renderer/entity/state/PlayerRenderState;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/PlayerRenderState;scoreText:Lnet/minecraft/network/chat/Component;"))
     public Component customBelowName(PlayerRenderState instance) {
-    *///?} else {
+    ^///?} else {
     @Redirect(method = "submitNameTag(Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;scoreText:Lnet/minecraft/network/chat/Component;"))
     public Component customBelowName(AvatarRenderState instance) {
     //?}
         Component original = instance.scoreText;
         if (instance instanceof IEntityRenderState accessor && accessor.ls$getEntity() instanceof Player player) {
             //? if <= 1.21.6 {
-            /*Scoreboard scoreboard = player.getScoreboard();
-            *///?} else {
+            /^Scoreboard scoreboard = player.getScoreboard();
+            ^///?} else {
             Scoreboard scoreboard = player.level().getScoreboard();
             //?}
             Objective objective = scoreboard.getDisplayObjective(DisplaySlot.BELOW_NAME);
@@ -183,7 +183,7 @@ public abstract class PlayerEntityRendererMixin {
         }
         return original;
     }
-    //?}
+    *///?}
     //^ In EntityRender from 26.1+
 
 

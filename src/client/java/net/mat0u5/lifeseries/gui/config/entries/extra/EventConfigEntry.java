@@ -5,7 +5,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 
@@ -39,14 +39,14 @@ public class EventConfigEntry extends StringConfigEntry {
     }
 
     @Override
-    protected void renderEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    protected void renderEntry(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         updateButton();
         //~ renames_26_1_volatile
-        canceledButton.render(context, mouseX, mouseY, tickDelta);
+        canceledButton.extractRenderState(context, mouseX, mouseY, tickDelta);
         boolean isFirst = isFirst();
         openTutorialButton.visible = isFirst;
         if (isFirst) {
-            openTutorialButton.render(context, mouseX, mouseY, tickDelta);
+            openTutorialButton.extractRenderState(context, mouseX, mouseY, tickDelta);
         //~ !renames_26_1_volatile
             openTutorialButton.setY(y+1);
             Component part1 = Component.nullToEmpty("§cLearn how to use Events");

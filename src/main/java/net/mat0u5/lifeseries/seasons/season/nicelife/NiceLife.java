@@ -40,8 +40,8 @@ import net.minecraft.world.level.gamerules.GameRules;
 import static net.mat0u5.lifeseries.Main.*;
 
 //? if >= 26.1 {
-/*import net.minecraft.world.clock.WorldClocks;
-*///?}
+import net.minecraft.world.clock.WorldClocks;
+//?}
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,10 +98,10 @@ public class NiceLife extends Season {
         Season.setCloudColor(null, false);
         ServerLevel overworld = server.overworld();
         //? if <= 1.21.11 {
-        overworld.setWeatherParameters(96000, 0, false, false);
-        //?} else {
-        /*server.setWeatherParameters(96000, 0, false, false);
-         *///?}
+        /*overworld.setWeatherParameters(96000, 0, false, false);
+        *///?} else {
+        server.setWeatherParameters(96000, 0, false, false);
+         //?}
     }
 
     @Override
@@ -162,10 +162,10 @@ public class NiceLife extends Season {
         }
         ServerLevel overworld = server.overworld();
         //? if <= 1.21.11 {
-        overworld.setWeatherParameters(0, 1000, true, false);
-        //?} else {
-        /*server.setWeatherParameters(0, 1000, true, false);
-        *///?}
+        /*overworld.setWeatherParameters(0, 1000, true, false);
+        *///?} else {
+        server.setWeatherParameters(0, 1000, true, false);
+        //?}
 
         boolean advanceTime = !isMidnight() && (currentSession.statusStarted() || ADVANCE_TIME_WHEN_NOT_IN_SESSION);
         OtherUtils.setBooleanGameRule(overworld, GameRules.ADVANCE_TIME, advanceTime);
@@ -323,12 +323,12 @@ public class NiceLife extends Season {
         if (server == null) return;
         ServerLevel overworld = server.overworld();
         //? if <= 1.21.11 {
-        long newTime = overworld.getDayTime() + 24000L;
+        /*long newTime = overworld.getDayTime() + 24000L;
         overworld.setDayTime(newTime - newTime % 24000L);
-        //?} else {
-        /*long newTime = overworld.getOverworldClockTime() + 24000L;
+        *///?} else {
+        long newTime = overworld.getOverworldClockTime() + 24000L;
         overworld.clockManager().setTotalTicks(overworld.registryAccess().getOrThrow(WorldClocks.OVERWORLD), newTime - newTime % 24000L);
-        *///?}
+        //?}
         wakeUpAllPlayers();
         playedMidnightChimes = false;
         NiceLifeTriviaManager.endTrivia();
@@ -379,10 +379,10 @@ public class NiceLife extends Season {
     public boolean isTimeBetween(int minTime, int maxTime) {
         if (server == null) return false;
         //? if <= 1.21.11 {
-        long dayTime = server.overworld().getDayTime() % 24000L;
-        //?} else {
-        /*long dayTime = server.overworld().getOverworldClockTime() % 24000L;
-        *///?}
+        /*long dayTime = server.overworld().getDayTime() % 24000L;
+        *///?} else {
+        long dayTime = server.overworld().getOverworldClockTime() % 24000L;
+        //?}
         return dayTime >= minTime && dayTime <= maxTime;
     }
 

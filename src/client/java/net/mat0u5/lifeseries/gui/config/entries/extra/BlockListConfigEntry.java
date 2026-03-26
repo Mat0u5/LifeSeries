@@ -4,7 +4,7 @@ import net.mat0u5.lifeseries.gui.config.entries.StringListPopupConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.Block;
@@ -59,8 +59,8 @@ public class BlockListConfigEntry extends StringListPopupConfigEntry<Block> {
     }
 
     @Override
-    protected void renderListEntry(GuiGraphics context, Block block, int x, int y, int mouseX, int mouseY, float tickDelta) {
-        context.renderItem(block.asItem().getDefaultInstance(), x, y);
+    protected void renderListEntry(GuiGraphicsExtractor context, Block block, int x, int y, int mouseX, int mouseY, float tickDelta) {
+        context.item(block.asItem().getDefaultInstance(), x, y);
     }
 
     @Override

@@ -9,7 +9,7 @@ import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -31,7 +31,7 @@ public class HeartsConfigEntry extends IntegerConfigEntry implements ITextFieldA
     }
 
     @Override
-    protected void renderEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    protected void renderEntry(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         super.renderEntry(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
         renderPopup(context, mouseX, mouseY, tickDelta);
     }
@@ -126,13 +126,13 @@ public class HeartsConfigEntry extends IntegerConfigEntry implements ITextFieldA
     }
 
     @Override
-    public void renderContent(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, float tickDelta) {
+    public void renderContent(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, float tickDelta) {
         Font textRenderer = getTextRenderer();
         int currentX = x+1;
         int currentY = y+1;
         for (MutableComponent text : getHeartPopupText()) {
             //~ renames_26_1_volatile
-            context.drawString(textRenderer, text, currentX, currentY, TextColors.WHITE, false);
+            context.text(textRenderer, text, currentX, currentY, TextColors.WHITE, false);
             //~ !renames_26_1_volatile
             currentY += getTextRenderer().lineHeight-1;
         }

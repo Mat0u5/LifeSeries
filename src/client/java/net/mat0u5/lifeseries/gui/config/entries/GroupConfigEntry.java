@@ -6,7 +6,7 @@ import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,14 +61,14 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
     }
 
     @Override
-    public void render(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    public void render(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         renderTicks++;
         this.y = y;
         renderEntry(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
     }
 
     @Override
-    protected void renderEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    protected void renderEntry(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         int maxHeight = getMaxHeight();
         if (hasExpandingChild()) {
             currentHeight = maxHeight;
@@ -120,7 +120,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
         renderExpandIcon(context, x, y, isExpanded, y+currentHeight+1, width);
     }
 
-    private void renderExpandIcon(GuiGraphics context, int x, int y, boolean expanded, int endY, int width) {
+    private void renderExpandIcon(GuiGraphicsExtractor context, int x, int y, boolean expanded, int endY, int width) {
         String text = expanded ? "- " : "+ ";
         if (showExpandIcon()) {
             RenderUtils.text(text, x + EXPAND_TEXT_OFFSET_X, y + EXPAND_TEXT_OFFSET_Y).anchorRight().colored(TextColors.WHITE).render(context, textRenderer);

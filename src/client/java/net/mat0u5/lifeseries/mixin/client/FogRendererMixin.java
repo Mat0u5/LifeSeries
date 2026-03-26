@@ -77,21 +77,21 @@ public class FogRendererMixin {
         RenderSystem.setShaderFogColor((float) result.x, (float) result.y, (float) result.z);
     }
     *///?} else if <= 1.21.11{
-    @ModifyReturnValue(method = "computeFogColor", at = @At("RETURN"))
+    /*@ModifyReturnValue(method = "computeFogColor", at = @At("RETURN"))
     private static Vector4f customFogColor(Vector4f original) {
         Vector4f result = ClientRenderer.modifyColor(original, MainClient.fogColor, MainClient.fogColorSetMode, null);
         MainClient.cachedFogRenderColor = new Vec3(result.x, result.y, result.z);
         return result;
     }
-    //?} else {
-    /*@WrapOperation(method = "computeFogColor", at = @At(value = "INVOKE", target = "Lorg/joml/Vector4f;set(FFFF)Lorg/joml/Vector4f;"))
+    *///?} else {
+    @WrapOperation(method = "computeFogColor", at = @At(value = "INVOKE", target = "Lorg/joml/Vector4f;set(FFFF)Lorg/joml/Vector4f;"))
     private static Vector4f customFogColor(Vector4f instance, float x, float y, float z, float w, Operation<Vector4f> original) {
         Vector4f originalColor = new Vector4f(x, y, z, w);
         Vector4f result = ClientRenderer.modifyColor(originalColor, MainClient.fogColor, MainClient.fogColorSetMode, null);
         MainClient.cachedFogRenderColor = new Vec3(result.x, result.y, result.z);
         return original.call(instance, result.x, result.y, result.z, result.w);
     }
-    *///?}
+    //?}
 
 
 }

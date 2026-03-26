@@ -168,13 +168,13 @@ public class Snail extends Monster {
 
     public boolean isInLavaLocal = false;
     //? if <= 1.21.11 {
-    @Override
+    /*@Override
     public boolean updateFluidHeightAndDoFluidPushing(TagKey<Fluid> tag, double speed) {
         if (FluidTags.LAVA != tag) {
             return false;
         }
-    //?} else {
-    /*@Override
+    *///?} else {
+    @Override
     public boolean updateFluidInteraction() {
         TagKey<Fluid> tag = FluidTags.LAVA;
         if (this instanceof IEntity accessor) {
@@ -182,7 +182,7 @@ public class Snail extends Monster {
                 return false;
             }
         }
-    *///?}
+    //?}
 
         if (this.touchingUnloadedChunk()) {
             return false;

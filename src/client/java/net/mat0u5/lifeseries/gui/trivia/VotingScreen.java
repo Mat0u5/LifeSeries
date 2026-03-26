@@ -8,7 +8,7 @@ import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -143,14 +143,14 @@ public class VotingScreen extends Screen {
     //~ renames_26_1_volatile
     @Override
     //? if <= 1.20 {
-    /*public void renderBackground(GuiGraphics context) {}
+    /*public void extractBackground(GuiGraphicsExtractor context) {}
     *///?} else {
-    public void renderBackground(GuiGraphics context, int mouseX, int mouseY, float delta) {}
+    public void extractBackground(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {}
     //?}
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        searchBox.render(graphics, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        searchBox.extractRenderState(graphics, mouseX, mouseY, partialTick);
     //~ !renames_26_1_volatile
         RenderUtils.text(title, width / 2, 10).anchorCenter().colored(TextColors.WHITE).withShadow().render(graphics, font);
 
@@ -196,11 +196,11 @@ public class VotingScreen extends Screen {
         }
 
         //~ renames_26_1_volatile
-        super.render(graphics, mouseX, mouseY, partialTick);
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
         //~ !renames_26_1_volatile
     }
 
-    private void drawPlayerEntry(GuiGraphics graphics, PlayerEntry player, int x, int y, int width, boolean hovered, boolean selected) {
+    private void drawPlayerEntry(GuiGraphicsExtractor graphics, PlayerEntry player, int x, int y, int width, boolean hovered, boolean selected) {
         int bgColor = selected ? TextColors.BLACK_A192 : (hovered ? TextColors.BLACK_A128 : TextColors.BLACK_A96);
         graphics.fill(x, y, x + width, y + PLAYER_ENTRY_HEIGHT, bgColor);
 
@@ -212,7 +212,7 @@ public class VotingScreen extends Screen {
         RenderUtils.text(player.name, x + 32, y + 12).colored(TextColors.WHITE).withShadow().render(graphics, font);
     }
 
-    private void drawScrollbar(GuiGraphics graphics, int listTop, int listBottom) {
+    private void drawScrollbar(GuiGraphicsExtractor graphics, int listTop, int listBottom) {
         int scrollbarX = listRight + 9;
         int scrollbarHeight = listBottom - listTop;
         int thumbHeight = Math.max(20, (scrollbarHeight * scrollbarHeight) / (filteredPlayers.size() * PLAYER_ENTRY_HEIGHT));

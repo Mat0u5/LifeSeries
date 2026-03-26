@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.gui.config.entries.extra;
 import net.mat0u5.lifeseries.gui.config.entries.StringListPopupConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +44,7 @@ public class StringListConfigEntry extends StringListPopupConfigEntry<String> {
     }
 
     @Override
-    protected void renderListEntry(GuiGraphics context, String entry, int x, int y, int mouseX, int mouseY, float tickDelta) {
+    protected void renderListEntry(GuiGraphicsExtractor context, String entry, int x, int y, int mouseX, int mouseY, float tickDelta) {
 
     }
 

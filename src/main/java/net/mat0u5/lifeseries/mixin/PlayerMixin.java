@@ -55,8 +55,8 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.EntityType;
 *///?}
 //? if >= 26.1 {
-/*import net.minecraft.world.entity.Entity;
-*///?}
+import net.minecraft.world.entity.Entity;
+//?}
 
 @Mixin(value = Player.class, priority = 1)
 public abstract class PlayerMixin implements IPlayer {
@@ -169,7 +169,7 @@ public abstract class PlayerMixin implements IPlayer {
 
     //Located in the ServerPlayer class in < 26.1
     //? if >= 26.1 {
-    /*@Inject(method = "attack", at = @At("HEAD"))
+    @Inject(method = "attack", at = @At("HEAD"))
     private void onAttackEntity(Entity target, CallbackInfo ci) {
         if (Main.modDisabled()) return;
         Player player = (Player) (Object) this;
@@ -177,7 +177,7 @@ public abstract class PlayerMixin implements IPlayer {
             currentSeason.onUpdatedInventory(serverPlayer);
         }
     }
-    *///?}
+    //?}
 
 
 

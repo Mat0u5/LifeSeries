@@ -6,7 +6,7 @@ import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Util;
@@ -71,7 +71,7 @@ public class UpdateInfoScreen extends DefaultScreen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics context, int mouseX, int mouseY) {
+    public void renderBackground(GuiGraphicsExtractor context, int mouseX, int mouseY) {
         if (isInCheckboxRegion(mouseX, mouseY)) {
             context.fill(endX - textWidth/2-3-40, startY - 23, endX + textWidth/2+3-40, startY, TextColors.BLACK);
             context.fill(endX - textWidth/2-2-40, startY - 22, endX + textWidth/2+2-40, startY - 1, TextColors.GUI_BACKGROUND);
@@ -83,7 +83,7 @@ public class UpdateInfoScreen extends DefaultScreen {
         super.renderBackground(context, mouseX, mouseY);
     }
     @Override
-    public void render(GuiGraphics context, int mouseX, int mouseY) {
+    public void render(GuiGraphicsExtractor context, int mouseX, int mouseY) {
         RenderUtils.text("§0§nA new Life Series mod update is available!", centerX, startY + 7).anchorCenter().render(context, this.font);
         RenderUtils.text(TextUtils.formatLoosely("§0§nChangelog in version §l{}§0:",versionName), startX + 7, startY + 25 + font.lineHeight).render(context, this.font);
         RenderUtils.text(description, startX + 7, startY + 30 + font.lineHeight*2).wrapLines(BG_WIDTH-14, 5).render(context, this.font);

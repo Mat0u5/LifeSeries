@@ -150,10 +150,10 @@ public class TriviaSpiritParticle extends Particle {
             //? if <= 1.21.9 {
             /*super(modelPart, RenderType::entityCutoutNoCull);
             *///?} else if <= 1.21.11 {
-            super(modelPart, RenderTypes::entityCutoutNoCull);
-            //?} else {
-            /*super(modelPart, RenderTypes::entityCutout);
-            *///?}
+            /*super(modelPart, RenderTypes::entityCutoutNoCull);
+            *///?} else {
+            super(modelPart, RenderTypes::entityCutout);
+            //?}
         }
     }
 

@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.render;
 
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector4f;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 //? if > 1.20.5
 import net.minecraft.client.DeltaTracker;
 //? if >= 1.21.2 {
@@ -13,10 +13,10 @@ import org.joml.Vector3f;
 public class ClientRenderer {
     public static boolean isGameFullyFrozen = false;
 
-    public static void render(GuiGraphics context) {
+    public static void render(GuiGraphicsExtractor context) {
         renderText(context);
     }
-    private static void renderText(GuiGraphics context) {
+    private static void renderText(GuiGraphicsExtractor context) {
         TextHud.renderText(context);
         VignetteRenderer.renderVignette(context);
     }

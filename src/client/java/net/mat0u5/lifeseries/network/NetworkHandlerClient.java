@@ -442,10 +442,10 @@ public class NetworkHandlerClient {
                 (client, handler, buf, listenerAdder) -> {
                     return CompletableFuture.completedFuture(
                             //? if <= 1.21.11 {
-                            PacketByteBufs.create().writeBoolean(true)
-                            //?} else {
-                            /*FriendlyByteBufs.create().writeBoolean(true)
-                            *///?}
+                            /*PacketByteBufs.create().writeBoolean(true)
+                            *///?} else {
+                            FriendlyByteBufs.create().writeBoolean(true)
+                            //?}
                     );
                 }
         );

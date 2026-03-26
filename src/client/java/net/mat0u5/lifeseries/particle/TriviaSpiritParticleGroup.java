@@ -25,8 +25,8 @@ import java.util.List;
 
 import net.minecraft.client.renderer.rendertype.RenderType;
 
-import net.minecraft.client.renderer.state.CameraRenderState;
-import net.minecraft.client.renderer.state.ParticleGroupRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.client.renderer.state.level.ParticleGroupRenderState;
 
 public class TriviaSpiritParticleGroup extends ParticleGroup<TriviaSpiritParticle> {
     public TriviaSpiritParticleGroup(final ParticleEngine engine) {

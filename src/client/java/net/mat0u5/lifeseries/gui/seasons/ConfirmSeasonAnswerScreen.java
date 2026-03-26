@@ -6,7 +6,7 @@ import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -55,7 +55,7 @@ public class ConfirmSeasonAnswerScreen extends DefaultScreen {
     }
 
     @Override
-    public void render(GuiGraphics context, int mouseX, int mouseY) {
+    public void render(GuiGraphicsExtractor context, int mouseX, int mouseY) {
         Component prompt1 = Component.nullToEmpty("WARNING: you have already selected a season.");
         Component prompt2 = Component.nullToEmpty("Changing it might cause some saved data to be lost (lives, ...).");
         Component prompt3 = TextUtils.formatPlain("Change the season to {}?", season.getName());

@@ -8,7 +8,7 @@ import net.mat0u5.lifeseries.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.InBedChatScreen;
 import net.minecraft.world.scores.Team;
 import org.spongepowered.asm.mixin.Mixin;
@@ -40,14 +40,14 @@ import net.minecraft.resources.Identifier;
 public class GuiMixin {
     //? if <= 1.20.5 {
     /*@Inject(method = "render", at = @At(value = "TAIL"))
-    public void render(GuiGraphics guiGraphics, float f, CallbackInfo ci) {
+    public void render(GuiGraphicsExtractor guiGraphics, float f, CallbackInfo ci) {
     *///?} else if <= 1.21.11 {
-    @Inject(method = "render", at = @At(value = "TAIL"))
-    public void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
-    //?} else {
-    /*@Inject(method = "extractRenderState", at = @At(value = "TAIL"))
-    public void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
-    *///?}
+    /*@Inject(method = "render", at = @At(value = "TAIL"))
+    public void render(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+    *///?} else {
+    @Inject(method = "extractRenderState", at = @At(value = "TAIL"))
+    public void render(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+    //?}
         ClientRenderer.render(guiGraphics);
     }
 
@@ -63,21 +63,21 @@ public class GuiMixin {
     );
 
     //? if <= 1.20 {
-    /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blit(Lnet/minecraft/resources/Identifier;IIIIII)V"))
-    private void customHearts(GuiGraphics instance, Identifier identifier, int x, int y, int u, int v, int m, int n) {
+    /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blit(Lnet/minecraft/resources/Identifier;IIIIII)V"))
+    private void customHearts(GuiGraphicsExtractor instance, Identifier identifier, int x, int y, int u, int v, int m, int n) {
     *///?} else if <= 1.21 {
-    /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lnet/minecraft/resources/Identifier;IIII)V"))
-    private void customHearts(GuiGraphics instance, Identifier identifier, int x, int y, int u, int v) {
+    /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lnet/minecraft/resources/Identifier;IIII)V"))
+    private void customHearts(GuiGraphicsExtractor instance, Identifier identifier, int x, int y, int u, int v) {
     *///?} else if <= 1.21.5 {
-    /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Ljava/util/function/Function;Lnet/minecraft/resources/Identifier;IIII)V"))
-    private void customHearts(GuiGraphics instance, Function<Identifier, RenderType> renderLayers, Identifier identifier, int x, int y, int u, int v) {
+    /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Ljava/util/function/Function;Lnet/minecraft/resources/Identifier;IIII)V"))
+    private void customHearts(GuiGraphicsExtractor instance, Function<Identifier, RenderType> renderLayers, Identifier identifier, int x, int y, int u, int v) {
     *///?} else if <= 1.21.11 {
-    @Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V"))
-    private void customHearts(GuiGraphics instance, RenderPipeline renderPipeline, Identifier identifier, int x, int y, int u, int v) {
-    //?} else {
-    /*@Redirect(method = "extractHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V"))
-    private void customHearts(GuiGraphics instance, RenderPipeline renderPipeline, Identifier identifier, int x, int y, int u, int v) {
-    *///?}
+    /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V"))
+    private void customHearts(GuiGraphicsExtractor instance, RenderPipeline renderPipeline, Identifier identifier, int x, int y, int u, int v) {
+    *///?} else {
+    @Redirect(method = "extractHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V"))
+    private void customHearts(GuiGraphicsExtractor instance, RenderPipeline renderPipeline, Identifier identifier, int x, int y, int u, int v) {
+    //?}
 
         String texturePath = identifier.getPath();
         String playerTeamColor = ClientUtils.getPlayerTeamColor();
@@ -128,11 +128,11 @@ public class GuiMixin {
 
     @Unique
     //? if <= 1.21 {
-    /*private void ls$afterHeartDraw(GuiGraphics instance, Identifier identifier, int x, int y, int u, int v) {
+    /*private void ls$afterHeartDraw(GuiGraphicsExtractor instance, Identifier identifier, int x, int y, int u, int v) {
     *///?} else if <= 1.21.5 {
-    /*private void ls$afterHeartDraw(GuiGraphics instance, Function<Identifier, RenderType> renderLayers, Identifier identifier, int x, int y, int u, int v) {
+    /*private void ls$afterHeartDraw(GuiGraphicsExtractor instance, Function<Identifier, RenderType> renderLayers, Identifier identifier, int x, int y, int u, int v) {
     *///?} else {
-    private void ls$afterHeartDraw(GuiGraphics instance, RenderPipeline renderPipeline, Identifier identifier, int x, int y, int u, int v) {
+    private void ls$afterHeartDraw(GuiGraphicsExtractor instance, RenderPipeline renderPipeline, Identifier identifier, int x, int y, int u, int v) {
     //?}
         if (MainClient.clientCurrentSeason != Seasons.SECRET_LIFE || Main.modFullyDisabled()) {
             return;
@@ -165,24 +165,24 @@ public class GuiMixin {
     }
     *///?} else if <= 1.20.5 {
     /*@Inject(method = "renderSleepOverlay", at = @At("HEAD"), cancellable = true)
-    private void stopSleepDarkness(GuiGraphics guiGraphics, float f, CallbackInfo ci) {
+    private void stopSleepDarkness(GuiGraphicsExtractor guiGraphics, float f, CallbackInfo ci) {
         if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().screen instanceof InBedChatScreen) && MainClient.hideSleepDarkness) {
             ci.cancel();
         }
     }
     *///?} else if <= 1.21.11 {
-    @Inject(method = "renderSleepOverlay", at = @At("HEAD"), cancellable = true)
-    private void stopSleepDarkness(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+    /*@Inject(method = "renderSleepOverlay", at = @At("HEAD"), cancellable = true)
+    private void stopSleepDarkness(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
         if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().screen instanceof InBedChatScreen) && MainClient.hideSleepDarkness) {
             ci.cancel();
         }
     }
-    //?} else {
-    /*@Inject(method = "extractSleepOverlay", at = @At("HEAD"), cancellable = true)
-    private void stopSleepDarkness(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+    *///?} else {
+    @Inject(method = "extractSleepOverlay", at = @At("HEAD"), cancellable = true)
+    private void stopSleepDarkness(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
         if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().screen instanceof InBedChatScreen) && MainClient.hideSleepDarkness) {
             ci.cancel();
         }
     }
-    *///?}
+    //?}
 }

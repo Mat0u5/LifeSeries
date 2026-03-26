@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.render;
 
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.util.Mth;
 
 //? if <= 1.21 {
@@ -23,7 +23,7 @@ public class VignetteRenderer {
     private static float vignetteDarkness = 0.0F;
     private static long vignetteEnd = 0;
 
-    public static void renderVignette(GuiGraphics context) {
+    public static void renderVignette(GuiGraphicsExtractor context) {
         if (System.currentTimeMillis() >= vignetteEnd && vignetteEnd != -1) return;
 
         Minecraft client = Minecraft.getInstance();

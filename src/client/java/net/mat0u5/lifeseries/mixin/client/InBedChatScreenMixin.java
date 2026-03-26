@@ -13,10 +13,10 @@ import net.minecraft.client.input.*;
 public abstract class InBedChatScreenMixin {
     //26.1+ logic is in ChatScreenMixin
     //? if <= 1.21.11 {
-    @Inject(method = "charTyped", at = @At("HEAD"))
+    /*@Inject(method = "charTyped", at = @At("HEAD"))
     //? if <= 1.21.6 {
-    /*private void unfocusButton(char c, int i, CallbackInfoReturnable<Boolean> cir) {
-     *///?} else {
+    /^private void unfocusButton(char c, int i, CallbackInfoReturnable<Boolean> cir) {
+     ^///?} else {
     private void unfocusButton(CharacterEvent input, CallbackInfoReturnable<Boolean> cir) {
         //?}
         InBedChatScreen chatScreen = (InBedChatScreen) (Object) this;
@@ -27,5 +27,5 @@ public abstract class InBedChatScreenMixin {
             chatScreen.setFocused(accessor.ls$input());
         }
     }
-    //?}
+    *///?}
 }

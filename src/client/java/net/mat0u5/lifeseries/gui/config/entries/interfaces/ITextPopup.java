@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.gui.config.entries.interfaces;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 
@@ -36,7 +36,7 @@ public interface ITextPopup extends IPopup {
         return 1000;
     }
 
-    default void renderContent(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, float tickDelta) {
+    default void renderContent(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, float tickDelta) {
         Font textRenderer = getTextRenderer();
         Component popupText = getPopupText();
         if (popupText == null) return;
@@ -45,7 +45,7 @@ public interface ITextPopup extends IPopup {
         }
         else {
             //~ renames_26_1_volatile
-            context.drawString(textRenderer, popupText, x+1, y+1, getTextColor(), false);
+            context.text(textRenderer, popupText, x+1, y+1, getTextColor(), false);
             //~ !renames_26_1_volatile
         }
     }

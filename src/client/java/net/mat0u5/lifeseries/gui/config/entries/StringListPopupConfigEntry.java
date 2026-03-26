@@ -5,7 +5,7 @@ import net.mat0u5.lifeseries.gui.config.entries.interfaces.ITextFieldAddonPopup;
 import net.mat0u5.lifeseries.gui.config.entries.main.StringConfigEntry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 
@@ -33,7 +33,7 @@ public abstract class StringListPopupConfigEntry<T> extends StringConfigEntry im
     }
 
     @Override
-    protected void renderEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    protected void renderEntry(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         super.renderEntry(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
         renderPopup(context, mouseX, mouseY, tickDelta);
     }
@@ -107,7 +107,7 @@ public abstract class StringListPopupConfigEntry<T> extends StringConfigEntry im
     }
 
     @Override
-    public void renderContent(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, float tickDelta) {
+    public void renderContent(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, float tickDelta) {
         if (entries == null || entries.isEmpty()) {
             ITextFieldAddonPopup.super.renderContent(context, x, y, width, height, mouseX, mouseY, tickDelta);
             return;
@@ -130,5 +130,5 @@ public abstract class StringListPopupConfigEntry<T> extends StringConfigEntry im
     }
 
     protected abstract void reloadEntries(List<String> items);
-    protected abstract void renderListEntry(GuiGraphics context, T entry, int x, int y, int mouseX, int mouseY, float tickDelta);
+    protected abstract void renderListEntry(GuiGraphicsExtractor context, T entry, int x, int y, int mouseX, int mouseY, float tickDelta);
 }

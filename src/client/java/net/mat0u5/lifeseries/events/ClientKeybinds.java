@@ -6,7 +6,7 @@ import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.client.KeyMapping;
 import org.lwjgl.glfw.GLFW;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 
 public class ClientKeybinds {
     public static KeyMapping superpower;
@@ -32,7 +32,7 @@ public class ClientKeybinds {
         }
     }
     public static void registerKeybinds() {
-        superpower = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+        superpower = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "key.lifeseries.superpower",
                 InputConstants.Type.KEYSYM,
                 //? if <= 1.21.5 {
@@ -43,14 +43,14 @@ public class ClientKeybinds {
 
                 KEYBIND_ID
         ));
-        openConfig = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+        openConfig = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "key.lifeseries.openconfig",
                 InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_UNKNOWN,
                 KEYBIND_ID
         ));
         if (VersionControl.isDevVersion()) {
-            runCommand = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+            runCommand = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                     "key.lifeseries.runcommand",
                     InputConstants.Type.KEYSYM,
                     GLFW.GLFW_KEY_RIGHT_ALT,

@@ -5,7 +5,7 @@ import net.mat0u5.lifeseries.gui.config.entries.ModifiableListEntry;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
@@ -47,7 +47,7 @@ public class TriviaAnswerConfigEntry extends ModifiableListEntry {
     }
 
     @Override
-    protected void renderMainEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    protected void renderMainEntry(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         int currentX = x + 25;
 
         Component questionText = Component.literal("Answer #"+answerIndex+":");
@@ -57,14 +57,14 @@ public class TriviaAnswerConfigEntry extends ModifiableListEntry {
         setCorrectButton.setX(currentX);
         setCorrectButton.setY(y+2);
         //~ renames_26_1_volatile
-        setCorrectButton.render(context, mouseX, mouseY, tickDelta);
+        setCorrectButton.extractRenderState(context, mouseX, mouseY, tickDelta);
         setCorrectButton.active = !isCorrect;
         currentX += setCorrectButton.getWidth() + 5;
 
         textField.setY(y+1);
         textField.setX(currentX);
         textField.setWidth(resetButton.getX()-textField.getX()-10);
-        textField.render(context, mouseX, mouseY, tickDelta);
+        textField.extractRenderState(context, mouseX, mouseY, tickDelta);
         //~ !renames_26_1_volatile
     }
 

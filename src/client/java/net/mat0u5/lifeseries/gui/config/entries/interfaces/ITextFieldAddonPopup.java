@@ -2,14 +2,14 @@ package net.mat0u5.lifeseries.gui.config.entries.interfaces;
 
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 
 public interface ITextFieldAddonPopup extends ITextPopup {
     EditBox getTextField();
 
     @Override
-    default void renderBackground(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, float tickDelta) {
+    default void renderBackground(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, float tickDelta) {
         EditBox textField = getTextField();
         context.fill(x, y, x + width, y + height, TextColors.LIGHT_BLACK);
 
@@ -34,7 +34,7 @@ public interface ITextFieldAddonPopup extends ITextPopup {
         }
     }
 
-    default void renderPopup(GuiGraphics context, int mouseX, int mouseY, float tickDelta) {
+    default void renderPopup(GuiGraphicsExtractor context, int mouseX, int mouseY, float tickDelta) {
         if (!shouldShowPopup()) return;
         EditBox textField = getTextField();
         int popupWidth = getActualPopupWidth();

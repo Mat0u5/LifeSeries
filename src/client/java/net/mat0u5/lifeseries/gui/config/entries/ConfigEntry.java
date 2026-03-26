@@ -9,7 +9,7 @@ import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.network.chat.Component;
@@ -96,7 +96,7 @@ public abstract class ConfigEntry {
         return 0;
     }
 
-    public void render(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    public void render(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         renderTicks++;
         isHovered = hovered;
         updateHighlightAnimation(tickDelta);
@@ -110,7 +110,7 @@ public abstract class ConfigEntry {
         int labelX = x + LABEL_OFFSET_X;
         int labelY = y + LABEL_OFFSET_Y + additionalLabelOffsetY();
         //~ renames_26_1_volatile
-        context.drawString(textRenderer, getDisplayName(), labelX, labelY, textColor);
+        context.text(textRenderer, getDisplayName(), labelX, labelY, textColor);
         //~ !renames_26_1_volatile
 
         int resetButtonX = x + width - RESET_BUTTON_WIDTH + RESET_BUTTON_OFFSET_X;
@@ -119,7 +119,7 @@ public abstract class ConfigEntry {
             resetButton.setY(y + RESET_BUTTON_OFFSET_Y + additionalResetButtonOffsetY());
             resetButton.active = canReset();
             //~ renames_26_1_volatile
-            resetButton.render(context, mouseX, mouseY, tickDelta);
+            resetButton.extractRenderState(context, mouseX, mouseY, tickDelta);
             //~ !renames_26_1_volatile
         }
 
@@ -148,7 +148,7 @@ public abstract class ConfigEntry {
 
         if (isNew) {
             //~ renames_26_1_volatile
-            context.drawString(textRenderer, "New", 2, labelY, TextColors.LIGHT_GRAY_A128);
+            context.text(textRenderer, "New", 2, labelY, TextColors.LIGHT_GRAY_A128);
             //~ !renames_26_1_volatile
         }
 
@@ -236,7 +236,7 @@ public abstract class ConfigEntry {
         return PREFFERED_HEIGHT;
     }
 
-    protected abstract void renderEntry(GuiGraphics context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta);
+    protected abstract void renderEntry(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta);
     public abstract void resetToDefault();
 
     public abstract Object getValue();
