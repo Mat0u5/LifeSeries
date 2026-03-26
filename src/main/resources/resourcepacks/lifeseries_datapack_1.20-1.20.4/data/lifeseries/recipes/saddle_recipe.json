@@ -1,19 +1,19 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        " #",
-        "P "
+        " # ",
+        "#i#"
     ],
     "key": {
         "#": {
-            "item": "minecraft:iron_nugget"
+            "item": "minecraft:leather"
         },
-        "P": {
-            "item": "minecraft:paper"
+        "i": {
+            "item": "minecraft:iron_ingot"
         }
     },
     "result": {
-        "id": "minecraft:name_tag",
+        "item": "minecraft:saddle",
         "count": 1
     }
 }

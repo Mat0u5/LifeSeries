@@ -1,0 +1,9 @@
+{
+	"pack":{
+		"pack_format":15,
+		"min_format": 15,
+		"max_format": 1000,
+		"supported_formats": {"min_inclusive": 15, "max_inclusive": 1000},
+		"description":"Life Series datapack for 1.20"
+	}
+}

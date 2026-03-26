@@ -1,19 +1,19 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        " #",
-        "P "
+        "#",
+        "L"
     ],
     "key": {
         "#": {
-            "item": "minecraft:iron_nugget"
+            "item": "minecraft:string"
         },
-        "P": {
-            "item": "minecraft:paper"
+        "L": {
+            "item": "minecraft:leather"
         }
     },
     "result": {
-        "id": "minecraft:name_tag",
+        "id": "minecraft:bundle",
         "count": 1
     }
 }

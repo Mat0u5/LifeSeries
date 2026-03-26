@@ -22,6 +22,12 @@
 			},
 			{
 				"min_format": 57,
+				"max_format": 95,
+				"formats": {"min_inclusive": 57, "max_inclusive": 95},
+				"directory": "data_1.21.2-1.21.11"
+			},
+			{
+				"min_format": 57,
 				"max_format": 1000,
 				"formats": {"min_inclusive": 57, "max_inclusive": 1000},
 				"directory": "data_1.21.2-latest"

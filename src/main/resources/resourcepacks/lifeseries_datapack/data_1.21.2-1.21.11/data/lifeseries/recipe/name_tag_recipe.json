@@ -1,12 +1,11 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "  #",
-        " P ",
-        "P  "
+        " #",
+        "P "
     ],
     "key": {
-        "#": "minecraft:string",
+        "#": "minecraft:iron_nugget",
         "P": "minecraft:paper"
     },
     "result": {

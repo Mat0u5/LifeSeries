@@ -13,7 +13,7 @@
         }
     },
     "result": {
-        "id": "minecraft:name_tag",
+        "item": "minecraft:name_tag",
         "count": 1
     }
 }
