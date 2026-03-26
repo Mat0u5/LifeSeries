@@ -131,7 +131,7 @@ public class WildLifeConfig extends ConfigManager {
             "Can Have Potion Effects", "Controls whether snails can have potion effects, like invisibility."
     );
     public static final ConfigFileEntry<Boolean> WILDCARD_SNAILS_RED_LIVES = new ConfigFileEntry<>(
-            "wildcard_snails_red_lives", true, "season.snails[new]",
+            "wildcard_snails_red_lives", true, "season.snails",
             "Can Red Players Have Snails", "Controls whether red players have snails or not."
     );
 

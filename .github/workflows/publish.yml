@@ -16,7 +16,7 @@ on:
       platform_changelog:
         description: 'Platform Changelog'
         required: true
-        default: '[Click here to open the **full changelog**]()'
+        default: '\n\n[Click here to open the **full changelog**](https://mat0u5.github.io/LifeSeries-docs/changelog/?v=1.5.3-1.5.4)'
         type: string
       changelog:
         description: 'Github and Discord Changelog'
@@ -26,7 +26,7 @@ on:
       full_changelog:
         description: 'Full Changelog Link'
         required: true
-        default: 'https://mat0u5.github.io/LifeSeries-docs/dev/changelog/?v=1.5.0-1.5.1'
+        default: 'https://mat0u5.github.io/LifeSeries-docs/changelog/?v=1.5.3-1.5.4'
         type: string
       version_type:
         description: 'Version type'

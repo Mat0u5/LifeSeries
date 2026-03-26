@@ -280,7 +280,7 @@ public class DefaultConfigValues {
             "Whisper Sound Only For Members", "Makes the whispering sound only play for Society Members, thus making the Society fully secret."
     );
     public final ConfigFileEntry<Boolean> SECRET_SOCIETY_ADVANCED_DEATHS = new ConfigFileEntry<>(
-            "secret_society_advanced_deaths", false, "global.society[new]",
+            "secret_society_advanced_deaths", false, "global.society",
             "Secret Society Advanced Deaths", "Enables the advanced deaths (seen in Past Life), where you actually die by different causes instead of your lives just being changed."
     );
 
@@ -357,7 +357,7 @@ public class DefaultConfigValues {
             "Show Life Diff In Death Message", "Shows an indicator of how many lives were lost in the death messages."
     );
     public final ConfigFileEntry<Boolean> LIVES_LOSE_KILLS_ONLY = new ConfigFileEntry<>(
-            "lives_lose_kills_only", false, "global.lives[new]",
+            "lives_lose_kills_only", false, "global.lives",
             "Only Lose Lives From PvP Kills", "Makes players not lose lives from natural deaths."
     );
 
