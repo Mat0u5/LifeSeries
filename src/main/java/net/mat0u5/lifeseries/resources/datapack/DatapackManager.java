@@ -32,7 +32,7 @@ public class DatapackManager {
         //? if = 1.21
         //return "1.21-1.21.1";
         //? if = 1.21.2
-        /*return "1.21.2-1.21.3";*/
+        //return "1.21.2-1.21.3";
         //? if = 1.21.4
         //return "1.21.4";
         //? if = 1.21.5
@@ -45,6 +45,8 @@ public class DatapackManager {
         //return "1.21.11";
         //? if = 26.1
         return "26.1";
+        //? if = 26.2
+        //return "26.2";
     }
 
     public static String getResourceTriviaPackVersion() {
