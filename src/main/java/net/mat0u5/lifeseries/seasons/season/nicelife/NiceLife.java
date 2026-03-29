@@ -13,6 +13,7 @@ import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -53,6 +54,7 @@ public class NiceLife extends Season {
     public static boolean LIGHT_MELTS_SNOW = false;
     public boolean SNOW_WHEN_NOT_IN_SESSION = false;
     public static boolean ADVANCE_TIME_WHEN_NOT_IN_SESSION = false;
+    public static boolean RED_WINTER = true;
     public Time SNOW_LAYER_INCREASE_INTERVAL = Time.seconds(600);
     public Time snowTicks = Time.zero();
     public double snowLayerTickChance = 1.0 / 43;
@@ -128,6 +130,7 @@ public class NiceLife extends Season {
         NiceLifeVotingManager.REDS_ON_NAUGHTY_LIST = NiceLifeConfig.ALLOW_REDS_ON_NAUGHTY_LIST.get();
         NiceLifeVotingManager.NAUGHTY_LIST_COUNT = NiceLifeConfig.NAUGHTY_LIST_PLAYERS.get();
         NiceLifeVotingManager.NICE_LIST_COUNT = NiceLifeConfig.NICE_LIST_PLAYERS.get();
+        RED_WINTER = NiceLifeConfig.RED_WINTER.get();
     }
 
     public void updateSnowTick() {
@@ -291,6 +294,7 @@ public class NiceLife extends Season {
 
     public void triggerRedWinter() {
         TaskScheduler.scheduleTask(20, () -> {
+            DatapackIntegration.EVENT_RED_WINTER_START.trigger();
             PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(),
                     SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_red_winter")),
                     1f, 1);
@@ -312,6 +316,7 @@ public class NiceLife extends Season {
     }
 
     public boolean shouldRedWinter() {
+        if (!RED_WINTER) return false;
         if (currentSession.statusNotStarted()) return false;
         List<ServerPlayer> assignedPlayers = PlayerUtils.getAllFunctioningPlayers();
         assignedPlayers.removeIf(player -> !player.ls$hasAssignedLives());
