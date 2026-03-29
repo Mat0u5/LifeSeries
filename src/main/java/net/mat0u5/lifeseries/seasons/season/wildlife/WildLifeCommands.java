@@ -247,9 +247,13 @@ public class WildLifeCommands extends Command {
         if (checkBanned(source)) return -1;
 
         for (ServerPlayer player : targets) {
-            Snail snail = Snails.snails.remove(player.getUUID());
-            if (snail != null) {
-                snail.serverData.despawn();
+            List<Snail> snails = Snails.snails.remove(player.getUUID());
+            if (snails != null) {
+                for (Snail snail : snails) {
+                    if (snail != null) {
+                        snail.serverData.despawn();
+                    }
+                }
             }
         }
 

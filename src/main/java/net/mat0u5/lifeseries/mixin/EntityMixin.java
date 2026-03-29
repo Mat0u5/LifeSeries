@@ -20,6 +20,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.minecraft.world.entity.monster.illager.Evoker;
+import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
@@ -110,10 +111,14 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
             Entity entity = (Entity) (Object) this;
             if (entity instanceof Player player && !player.hasEffect(MobEffects.WATER_BREATHING)) {
                 if (!Snails.snails.containsKey(player.getUUID())) return;
-                Snail snail = Snails.snails.get(player.getUUID());
-                if (snail == null) return;
-                int snailAir = snail.getAirSupply();
+                List<Snail> snails = Snails.snails.get(player.getUUID());
+                if (snails == null) return;
                 int initialAir = cir.getReturnValue();
+                int snailAir = initialAir;
+                for (Snail snail : snails) {
+                    if (snail == null) continue;
+                    snailAir = Math.min(snailAir, snail.getAirSupply());
+                }
                 if (snailAir < initialAir) {
                     cir.setReturnValue(snailAir);
                 }

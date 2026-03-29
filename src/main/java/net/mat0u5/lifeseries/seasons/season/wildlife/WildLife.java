@@ -40,6 +40,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import java.util.ArrayList;
+import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.currentSession;
 import static net.mat0u5.lifeseries.Main.seasonConfig;
@@ -205,6 +207,7 @@ public class WildLife extends Season {
         Snail.SHOULD_DROWN_PLAYER = WildLifeConfig.WILDCARD_SNAILS_DROWN_PLAYERS.get();
         Snail.ALLOW_POTION_EFFECTS = WildLifeConfig.WILDCARD_SNAILS_EFFECTS.get();
         Snails.WILDCARD_SNAILS_RED_LIVES = WildLifeConfig.WILDCARD_SNAILS_RED_LIVES.get();
+        Snails.SNAILS_PER_PLAYER = Math.max(1, WildLifeConfig.WILDCARD_SNAILS_PER_PLAYER.get());
 
         TimeDilation.MIN_TICK_RATE = (float) (20.0 * WildLifeConfig.WILDCARD_TIMEDILATION_MIN_SPEED.get());
         TimeDilation.MAX_TICK_RATE = (float) (20.0 * WildLifeConfig.WILDCARD_TIMEDILATION_MAX_SPEED.get());
@@ -387,10 +390,13 @@ public class WildLife extends Season {
     public void onPlayerRespawn(ServerPlayer player) {
         super.onPlayerRespawn(player);
         if (!Snails.snails.isEmpty() && Snails.canHaveSnail(player)) {
-            Snail snail = Snails.snails.get(player.getUUID());
-            if (snail != null && player.distanceTo(snail) <= 15) {
-                snail.serverData.despawn();
-                Snails.spawnSnailFor(player);
+            List<Snail> snails = Snails.snails.get(player.getUUID());
+            if (snails == null) return;
+            for (Snail snail : new ArrayList<>(snails)) {
+                if (snail != null && player.distanceTo(snail) <= 15) {
+                    snail.serverData.despawn();
+                    Snails.spawnSnailFor(player);
+                }
             }
         }
     }

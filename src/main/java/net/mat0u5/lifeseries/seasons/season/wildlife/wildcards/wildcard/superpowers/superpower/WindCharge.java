@@ -71,7 +71,6 @@ public class WindCharge extends ToggleableSuperpower {
             ItemStack windCharge = new ItemStack(Items.WIND_CHARGE, 4);
             player.getInventory().add(windCharge);
         }
-
     }
 
     private void giveMace() {

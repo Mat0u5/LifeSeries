@@ -142,6 +142,11 @@ public class TriviaBot extends AmbientCreature {
     //?}
 
     @Override
+    public boolean isPushedByFluid() {
+        return false;
+    }
+
+    @Override
     public boolean isInWater() {
         return false;
     }
