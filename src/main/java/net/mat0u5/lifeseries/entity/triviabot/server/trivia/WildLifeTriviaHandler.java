@@ -381,12 +381,10 @@ public class WildLifeTriviaHandler extends TriviaHandler {
         List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, (ServerLevel) bot.level(), bot.serverData.getBoundPlayer(), IdentifierHelper.of("lifeseriesdynamic", "trivia_reward_loottable"), false);
         if (!lootTableItems.isEmpty()) {
             for (ItemStack item : lootTableItems) {
-                ItemStackUtils.spawnItemForPlayerWithVelocity((ServerLevel) bot.level(), pos, item, bot.serverData.getBoundPlayer(), vector);
             }
         }
         else {
             ItemStack randomItem = itemSpawner.getRandomItem();
-            ItemStackUtils.spawnItemForPlayerWithVelocity((ServerLevel) bot.level(), pos, randomItem, bot.serverData.getBoundPlayer(), vector);
         }
     }
 
@@ -472,7 +470,6 @@ public class WildLifeTriviaHandler extends TriviaHandler {
 
     public static void curseBindingArmor(ServerPlayer player) {
         for (ItemStack item : PlayerUtils.getArmorItems(player)) {
-            ItemStackUtils.spawnItemForPlayer(player.ls$getServerLevel(), player.position(), item.copy(), player);
         }
         ItemStack head = Items.LEATHER_HELMET.getDefaultInstance();
         ItemStack chest = Items.LEATHER_CHESTPLATE.getDefaultInstance();

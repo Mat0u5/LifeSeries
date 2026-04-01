@@ -19,7 +19,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
@@ -361,10 +360,6 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
             SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_turn"));
             PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.65f, 1);
             TaskScheduler.scheduleTask(40, () -> {
-                for (ItemEntity item : droppedItems) {
-                    if (item == null) continue;
-                    item.setPickUpDelay(0);
-                }
             });
         }
         if (newState == BotState.FLYING_UP) {
@@ -455,7 +450,6 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         });
     }
 
-    public List<ItemEntity> droppedItems = new ArrayList<>();
     public void spawnItemForPlayer(boolean success) {
         if (bot.level().isClientSide()) return;
         if (itemSpawner == null) return;
@@ -484,28 +478,6 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
             }
         }
 
-        if (success) {
-            List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, (ServerLevel) bot.level(), bot.serverData.getBoundPlayer(), IdentifierHelper.of("lifeseriesdynamic", "nicelife_trivia_reward_loottable"), false);
-            if (!lootTableItems.isEmpty()) {
-                for (ItemStack item : lootTableItems) {
-                    ItemEntity itemEntity = ItemStackUtils.spawnItemForPlayerWithVelocity((ServerLevel) bot.level(), pos, item, bot.serverData.getBoundPlayer(), vector);
-                    itemEntity.setNeverPickUp();
-                    droppedItems.add(itemEntity);
-                }
-            }
-            else {
-                ItemStack randomItem = itemSpawner.getRandomItem();
-                ItemEntity itemEntity = ItemStackUtils.spawnItemForPlayerWithVelocity((ServerLevel) bot.level(), pos, randomItem, bot.serverData.getBoundPlayer(), vector);
-                itemEntity.setNeverPickUp();
-                droppedItems.add(itemEntity);
-            }
-        }
-        else {
-            ItemStack coal = Items.COAL.getDefaultInstance();
-            ItemEntity itemEntity = ItemStackUtils.spawnItemForPlayerWithVelocity((ServerLevel) bot.level(), pos, coal, bot.serverData.getBoundPlayer(), vector);
-            itemEntity.setNeverPickUp();
-            droppedItems.add(itemEntity);
-        }
     }
 
     public static void initializeItemSpawner() {

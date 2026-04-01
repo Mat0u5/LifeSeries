@@ -10,7 +10,6 @@ import net.mat0u5.lifeseries.utils.interfaces.IMorph;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -122,24 +121,6 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
                 if (snailAir < initialAir) {
                     cir.setReturnValue(snailAir);
                 }
-            }
-        }
-    }
-
-    //? if <= 1.21 {
-    /*@Inject(method = "spawnAtLocation(Lnet/minecraft/world/item/ItemStack;F)Lnet/minecraft/world/entity/item/ItemEntity;",
-            at = @At("HEAD"), cancellable = true)
-    public void dropStack(ItemStack stack, float yOffset, CallbackInfoReturnable<ItemEntity> cir) {
-    *///?} else {
-    @Inject(method = "spawnAtLocation(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/ItemStack;F)Lnet/minecraft/world/entity/item/ItemEntity;",
-            at = @At("HEAD"), cancellable = true)
-    public void dropStack(ServerLevel level, ItemStack stack, float yOffset, CallbackInfoReturnable<ItemEntity> cir) {
-    //?}
-        if (Main.isClientOrDisabled()) return;
-        if (currentSeason instanceof WildLife) {
-            Entity entity = (Entity) (Object) this;
-            if (entity instanceof Evoker && stack.is(Items.TOTEM_OF_UNDYING)) {
-                cir.setReturnValue(null);
             }
         }
     }

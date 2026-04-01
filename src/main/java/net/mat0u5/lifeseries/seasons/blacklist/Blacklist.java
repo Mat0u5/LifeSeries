@@ -468,9 +468,12 @@ public class Blacklist {
     }
 
     public void onInventoryUpdated(ServerPlayer player) {
+        if (player == null) return;
         if (Main.server == null) return;
         Inventory inventory = player.getInventory();
-        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST) return;
+        try {
+            if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST) return;
+        }catch(Exception e) {}
         for (int i = 0; i < inventory.getContainerSize(); i++) {
             processItemStack(player, inventory.getItem(i));
         }
@@ -502,7 +505,9 @@ public class Blacklist {
     }
 
     public void processItemStack(ServerPlayer player, ItemStack itemStack) {
+        try {
         if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST) return;
+        }catch(Exception e) {}
         if (itemStack.isEmpty()) return;
         if (itemStack.getItem() == Items.AIR) return;
         if (isBlacklistedItem(itemStack) && !ItemStackUtils.hasCustomComponentEntry(itemStack, "IgnoreBlacklist")) {

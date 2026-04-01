@@ -5,7 +5,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -234,35 +233,6 @@ public class ItemStackUtils {
         }
     }
     //?}
-
-    public static ItemEntity spawnItem(ServerLevel level, Vec3 position, ItemStack stack) {
-        return spawnItemForPlayer(level, position, stack, null);
-    }
-
-    public static ItemEntity spawnItemForPlayer(ServerLevel level, Vec3 position, ItemStack stack, Player player) {
-        if (level == null || stack.isEmpty()) {
-            return null;
-        }
-        ItemEntity itemEntity = new ItemEntity(level, position.x, position.y, position.z, stack);
-        itemEntity.setPickUpDelay(20);
-        itemEntity.setDeltaMovement(itemEntity.getDeltaMovement().x()/4, 0.2, itemEntity.getDeltaMovement().z()/4);
-        if (player != null) itemEntity.setTarget(player.getUUID());
-
-        level.addFreshEntity(itemEntity);
-        return itemEntity;
-    }
-    public static ItemEntity spawnItemForPlayerWithVelocity(ServerLevel level, Vec3 position, ItemStack stack, Player player, Vec3 velocity) {
-        if (level == null || stack.isEmpty()) {
-            return null;
-        }
-        ItemEntity itemEntity = new ItemEntity(level, position.x, position.y, position.z, stack);
-        itemEntity.setPickUpDelay(20);
-        itemEntity.setDeltaMovement(velocity);
-        if (player != null) itemEntity.setTarget(player.getUUID());
-
-        level.addFreshEntity(itemEntity);
-        return itemEntity;
-    }
 
     public static ItemStack createEnchantedBook(ResourceKey<Enchantment> enchantment, int level) {
         if (server == null) return null;

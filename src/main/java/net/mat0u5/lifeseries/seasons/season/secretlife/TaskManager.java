@@ -218,7 +218,6 @@ public class TaskManager {
         }
         ItemStack book = getTaskBook(player, task);
         if (!player.addItem(book)) {
-            ItemStackUtils.spawnItemForPlayer(player.ls$getServerLevel(), player.position(), book, player);
         }
         assignedTasks.put(player.getUUID(), task);
         DatapackIntegration.setPlayerTask(player, type);
@@ -363,12 +362,10 @@ public class TaskManager {
 
                     if (!lootTableItems.isEmpty()) {
                         for (ItemStack item : lootTableItems) {
-                            ItemStackUtils.spawnItemForPlayer(server.overworld(), spawnPos, item, player);
                         }
                     }
                     else {
                         ItemStack randomItem = season.itemSpawner.getRandomItem();
-                        ItemStackUtils.spawnItemForPlayer(server.overworld(), spawnPos, randomItem, player);
                     }
 
                 });
