@@ -2,6 +2,7 @@
   "required": true,
   "package": "net.mat0u5.lifeseries.mixin.client",
   "compatibilityLevel": "${javaVersion}",
+  "plugin": "net.mat0u5.lifeseries.mixin.client.plugin.ClientMixinPlugin",
   "injectors": {
     "defaultRequire": 1
   },
@@ -40,7 +41,8 @@
     "SoundEngineMixin",
     "SoundManagerAccessor",
     "SoundManagerMixin",
-    "WeatherEffectRendererMixin"
+    "WeatherEffectRendererMixin",
+    "compat.appleskin.TextureHelperMixin"
   ],
   "mixins": [
     "BiomeMixin",

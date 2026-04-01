@@ -68,6 +68,7 @@ dependencies {
  else {
   compileOnly ("maven.modrinth:simple-voice-chat:fabric-2.6.11+26.1-snapshot-1")
  }
+ if (isValidVersion(project.appleskin_mod_version)) compileOnly "maven.modrinth:appleskin:${project.appleskin_mod_version}"
 }
 loom {
  runConfigs.all {

@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.mixin.client;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.render.ClientRenderer;
+import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
@@ -51,17 +52,6 @@ public class GuiMixin {
         ClientRenderer.render(guiGraphics);
     }
 
-    @Unique
-    private static final List<String> ls$allowedColors = List.of(
-            "aqua","black","blue","dark_aqua","dark_blue","dark_gray","dark_green",
-            "dark_purple","dark_red","gold","gray","green","light_purple","white","yellow", "red"
-    );
-    @Unique
-    private static final List<String> ls$allowedHearts = List.of(
-            "hud/heart/full", "hud/heart/full_blinking", "hud/heart/half", "hud/heart/half_blinking",
-            "hud/heart/hardcore_full", "hud/heart/hardcore_full_blinking", "hud/heart/hardcore_half", "hud/heart/hardcore_half_blinking"
-    );
-
     //? if <= 1.20 {
     /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blit(Lnet/minecraft/resources/Identifier;IIIIII)V"))
     private void customHearts(GuiGraphicsExtractor instance, Identifier identifier, int x, int y, int u, int v, int m, int n) {
@@ -83,8 +73,8 @@ public class GuiMixin {
         String playerTeamColor = ClientUtils.getPlayerTeamColor();
         String playerTeamName = ClientUtils.getPlayerTeamName();
         if (!MainClient.COLORED_HEARTS || playerTeamColor == null || playerTeamName == null ||
-                !ls$allowedColors.contains(playerTeamColor.toLowerCase(Locale.ROOT)) ||
-                !ls$allowedHearts.contains(texturePath) || Main.modFullyDisabled()) {
+                !RenderUtils.lifeSkinsAllowedColors.contains(playerTeamColor.toLowerCase(Locale.ROOT)) ||
+                !RenderUtils.lifeSkinsAllowedHearts.contains(texturePath) || Main.modFullyDisabled()) {
             if (MainClient.clientCurrentSeason == Seasons.SECRET_LIFE && texturePath.startsWith("hud/heart/container")) {
                 return;
             }
@@ -113,15 +103,18 @@ public class GuiMixin {
                 heartType = "hardcore_"+heartType;
             }
         }
-        var customHeart = IdentifierHelper.mod("textures/gui/hearts/"+color+"_"+heartType+".png");
-        //? if <= 1.21 {
-        /*instance.blit(customHeart, x, y, 100, u, v, u, v, u, v);
+        var customHeart = IdentifierHelper.mod(color+"_"+heartType);
+        //? if <= 1.20 {
+        /*instance.blit(customHeart, x, y, u, v, m, n);
+        ls$afterHeartDraw(instance, identifier, x, y, u, v);
+        *///? } else if <= 1.21 {
+        /*instance.blitSprite(customHeart, x, y, u, v);
         ls$afterHeartDraw(instance, identifier, x, y, u, v);
         *///?} else if <= 1.21.5 {
-        /*instance.blit(renderLayers, customHeart, x, y, u, v, u, v, u, v);
+        /*instance.blitSprite(renderLayers, customHeart, x, y, u, v);
         ls$afterHeartDraw(instance, renderLayers, identifier, x, y, u, v);
         *///?} else {
-        instance.blit(renderPipeline, customHeart, x, y, u, v, u, v, u, v);
+        instance.blitSprite(renderPipeline, customHeart, x, y, u, v);
         ls$afterHeartDraw(instance, renderPipeline, identifier, x, y, u, v);
         //?}
     }
@@ -144,13 +137,15 @@ public class GuiMixin {
         if (blinking) heartName += "_blinking";
         if (half) heartName += "_half";
 
-        var customHeart = IdentifierHelper.mod("textures/gui/hearts/secretlife/"+heartName+".png");
-        //? if <= 1.21 {
-        /*instance.blit(customHeart, x, y, 100, u, v, u, v, u, v);
+        var customHeart = IdentifierHelper.mod("secretlife_"+heartName);
+        //? if <= 1.20 {
+        /*instance.blit(customHeart, x, y, u, v, u, v);
+        *///? } else if <= 1.21 {
+        /*instance.blitSprite(customHeart, x, y, u, v);
         *///?} else if <= 1.21.5 {
-        /*instance.blit(renderLayers, customHeart, x, y, u, v, u, v, u, v);
+        /*instance.blitSprite(renderLayers, customHeart, x, y, u, v);
         *///?} else {
-        instance.blit(renderPipeline, customHeart, x, y, u, v, u, v, u, v);
+        instance.blitSprite(renderPipeline, customHeart, x, y, u, v);
         //?}
     }
 

@@ -16,6 +16,10 @@ public class CompatibilityManager {
         return isModLoaded("replaymod");
     }
 
+    public static boolean appleSkinLoaded() {
+        return isModLoaded("appleskin");
+    }
+
     public static boolean isModLoaded(String modId) {
         return FabricLoader.getInstance().isModLoaded(modId);
     }

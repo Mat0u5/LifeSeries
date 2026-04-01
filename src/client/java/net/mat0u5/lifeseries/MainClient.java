@@ -153,7 +153,11 @@ public class MainClient implements ClientModInitializer, IClientHelper {
         if (RUN_COMMAND.startsWith("/")) {
             RUN_COMMAND = RUN_COMMAND.substring(1);
         }
+        //? if <= 1.20 {
+        /*COLORED_HEARTS = false;
+        *///?} else {
         COLORED_HEARTS = ClientConfig.COLORED_HEARTS.get(clientConfig);
+        //?}
         COLORED_HEARTS_HARDCORE_LAST_LIFE = ClientConfig.COLORED_HEARTS_HARDCORE_LAST_LIFE.get(clientConfig);
         COLORED_HEARTS_HARDCORE_ALL_LIVES = ClientConfig.COLORED_HEARTS_HARDCORE_ALL_LIVES.get(clientConfig);
 
