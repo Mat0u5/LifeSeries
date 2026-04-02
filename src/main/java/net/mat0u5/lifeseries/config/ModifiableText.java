@@ -460,6 +460,7 @@ public enum ModifiableText {
     ,WILDLIFE_POWER_PLAYERDISGUISE_ERROR(Seasons.WILD_LIFE, "You are not looking at a player.")
     ,WILDLIFE_POWER_TELEPORTATION_ERROR(Seasons.WILD_LIFE, "There is nothing to teleport to.")
     ,WILDLIFE_SNAIL_TRIVIA_SNAIL_NAME(Seasons.WILD_LIFE, "VHSnail")
+    ,WILDLIFE_WILDCARD_ACTIVATE_TITLE(Seasons.WILD_LIFE, "A wildcard is active!")
 
     ,WILDLIFE_SNAIL_SPAWN_SINGLE(Seasons.WILD_LIFE, "Spawned {}'s snail", List.of("Player"))
     ,WILDLIFE_SNAIL_SPAWN_MULTIPLE(Seasons.WILD_LIFE, "Spawned snail of {} targets", List.of("number of targets"))

@@ -104,6 +104,11 @@ public class WildLifeCommands extends Command {
                                         context.getSource())
                                 )
                         )
+                        .then(literal("activate")
+                                .executes(context -> effectActivate(
+                                        context.getSource())
+                                )
+                        )
                         .then(literal("makeItWild")
                                 .executes(context -> effectMakeItWild(
                                         context.getSource())
@@ -313,6 +318,17 @@ public class WildLifeCommands extends Command {
         if (checkBanned(source)) return -1;
 
         WildcardManager.showDots();
+
+        return 1;
+    }
+
+    public int effectActivate(CommandSourceStack source) {
+        if (checkBanned(source)) return -1;
+
+        WildcardManager.showDots();
+        TaskScheduler.scheduleTask(90, () -> {
+            WildcardManager.showCryptTitle(ModifiableText.WILDLIFE_WILDCARD_ACTIVATE_TITLE.getString());
+        });
 
         return 1;
     }

@@ -97,7 +97,7 @@ public class WildcardManager {
                 if (wildcard.active) continue;
                 wildcard.activate();
             }
-            showCryptTitle("A wildcard is active!");
+            showCryptTitle(ModifiableText.WILDLIFE_WILDCARD_ACTIVATE_TITLE.getString());
         });
         TaskScheduler.scheduleTask(92, NetworkHandlerServer::sendUpdatePackets);
     }
