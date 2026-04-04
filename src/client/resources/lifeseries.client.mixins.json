@@ -35,6 +35,7 @@
     "ParticleAccessor",
     "ParticleEngineMixin",
     "PlayerEntityRendererMixin",
+    "PlayerInfoMixin",
     "PlayerTabOverlayMixin",
     "SkyRendererMixin",
     "SoundEngineAccessor",

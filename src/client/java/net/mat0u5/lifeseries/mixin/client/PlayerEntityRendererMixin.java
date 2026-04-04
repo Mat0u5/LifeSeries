@@ -158,19 +158,19 @@ public abstract class PlayerEntityRendererMixin {
     }
     *///?} else if <= 1.21.11 {
     /*//? if <= 1.21.6 {
-    /^@Redirect(method = "renderNameTag(Lnet/minecraft/client/renderer/entity/state/PlayerRenderState;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/PlayerRenderState;scoreText:Lnet/minecraft/network/chat/Component;"))
+    @Redirect(method = "renderNameTag(Lnet/minecraft/client/renderer/entity/state/PlayerRenderState;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/PlayerRenderState;scoreText:Lnet/minecraft/network/chat/Component;"))
     public Component customBelowName(PlayerRenderState instance) {
-    ^///?} else {
-    @Redirect(method = "submitNameTag(Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;scoreText:Lnet/minecraft/network/chat/Component;"))
+    //?} else {
+    /^@Redirect(method = "submitNameTag(Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;scoreText:Lnet/minecraft/network/chat/Component;"))
     public Component customBelowName(AvatarRenderState instance) {
-    //?}
+    ^///?}
         Component original = instance.scoreText;
         if (instance instanceof IEntityRenderState accessor && accessor.ls$getEntity() instanceof Player player) {
             //? if <= 1.21.6 {
-            /^Scoreboard scoreboard = player.getScoreboard();
-            ^///?} else {
-            Scoreboard scoreboard = player.level().getScoreboard();
-            //?}
+            Scoreboard scoreboard = player.getScoreboard();
+            //?} else {
+            /^Scoreboard scoreboard = player.level().getScoreboard();
+            ^///?}
             Objective objective = scoreboard.getDisplayObjective(DisplaySlot.BELOW_NAME);
             if (objective != null) {
                 ReadOnlyScoreInfo scoreInfo = scoreboard.getPlayerScoreInfo(player, objective);

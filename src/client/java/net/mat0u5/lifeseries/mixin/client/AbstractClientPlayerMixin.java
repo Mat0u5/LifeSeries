@@ -43,12 +43,10 @@ public class AbstractClientPlayerMixin {
                     }
                 }
             }
-            uuid = disguisedUUID;
-        }
-
-        var lifeSkinsLocation = LifeSkinsClient.getTexture(uuid);
-        if (lifeSkinsLocation != null) {
-            cir.setReturnValue(lifeSkinsLocation);
+            var lifeSkinsLocation = LifeSkinsClient.getTexture(disguisedUUID);
+            if (lifeSkinsLocation != null) {
+                cir.setReturnValue(lifeSkinsLocation);
+            }
         }
     }
 }
