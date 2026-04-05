@@ -42,7 +42,6 @@ public class AnimationUtils {
     public static void playSecretLifeTotemAnimation(ServerPlayer player, boolean red) {
         if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {
             SimplePackets.SHOW_TOTEM.target(player).sendToClient(red ? "task_red" : "task");
-            PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.parse("secretlife_task_totem")));
             return;
         }
 
@@ -51,7 +50,6 @@ public class AnimationUtils {
         player.setItemInHand(InteractionHand.MAIN_HAND, totemItem);
         TaskScheduler.scheduleTask(1, () -> {
             player.connection.send(new ClientboundEntityEventPacket(player, (byte) 35));
-            PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.parse("secretlife_task_totem")));
         });
         TaskScheduler.scheduleTask(2, () -> {
             player.setItemInHand(InteractionHand.MAIN_HAND, mainhandItem);
