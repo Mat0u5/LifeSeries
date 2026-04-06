@@ -28,6 +28,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
     private boolean showSidebar;
     private boolean renderBottomBar = false;
     private int currentHeight;
+    private List<ConfigEntry> searchFilteredChildren = null;
 
     private int y;
 
@@ -70,6 +71,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
     @Override
     protected void renderEntry(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         int maxHeight = getMaxHeight();
+
         if (hasExpandingChild()) {
             currentHeight = maxHeight;
         }
@@ -99,14 +101,13 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
             }
         }
 
-
         boolean shouldBeExpanded = shouldExpand();
         if (shouldBeExpanded != isExpanded) {
             isExpanded = shouldBeExpanded;
         }
 
         if (isExpanded) {
-            for (ConfigEntry child : childEntries) {
+            for (ConfigEntry child : getActiveChildren()) {
                 int entryHeight = child.getPreferredHeight();
                 if ((currentY+entryHeight + ConfigListWidget.ENTRY_GAP) - 10 <= y+currentHeight) {
                     boolean entryHovered = mouseX >= x && mouseX < x + width &&
@@ -134,6 +135,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
     }
 
     private boolean shouldExpand() {
+        if (searchFilteredChildren != null) return isExpanded;
         return mainEntry.isExpanded();
     }
 
@@ -146,7 +148,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
     }
 
     private boolean hasExpandingChild() {
-        for (ConfigEntry child : childEntries) {
+        for (ConfigEntry child : getActiveChildren()) {
             if (child instanceof GroupConfigEntry<?> groupChild) {
                 if (groupChild.isAnimating() || groupChild.hasExpandingChild()) {
                     return true;
@@ -173,6 +175,10 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
         if (currentY < 0 || mainEntry == null) return false;
 
         if (currentY <= mainEntry.getPreferredHeight()) {
+            if (searchFilteredChildren != null) {
+                isExpanded = !isExpanded;
+                return true;
+            }
             mainEntry.setFocused(true);
             //? if <= 1.21.6 {
             /*if (mainEntry.mouseClicked(mouseX, mouseY, button)) return true;
@@ -183,7 +189,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
 
         if (isExpanded) {
             double childY = mainEntry.getPreferredHeight();
-            for (ConfigEntry child : childEntries) {
+            for (ConfigEntry child : getActiveChildren()) {
                 int childHeight = child.getPreferredHeight() + ConfigListWidget.ENTRY_GAP;
                 if ((childY+childHeight + ConfigListWidget.ENTRY_GAP) - 10 <= currentY+currentHeight) {
                     if (currentY >= childY && currentY < childY + childHeight) {
@@ -219,7 +225,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
         }
 
         if (isExpanded) {
-            for (ConfigEntry child : childEntries) {
+            for (ConfigEntry child : getActiveChildren()) {
                 if (!child.isFocused()) continue;
                 //? if <= 1.21.6 {
                 /*if (child.keyPressed(keyCode, scanCode, modifiers)) {
@@ -251,7 +257,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
         }
 
         if (isExpanded) {
-            for (ConfigEntry child : childEntries) {
+            for (ConfigEntry child : getActiveChildren()) {
                 if (!child.isFocused()) continue;
                 //? if <= 1.21.6 {
                 /*if (child.charTyped(chr, modifiers)) {
@@ -277,7 +283,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
             height = mainEntry.getPreferredHeight();
         }
         if (isExpanded) {
-            for (ConfigEntry child : childEntries) {
+            for (ConfigEntry child : getActiveChildren()) {
                 height += child.getPreferredHeight() + ConfigListWidget.ENTRY_GAP;
             }
         }
@@ -348,7 +354,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
         if (isFocused) {
             return true;
         }
-        for (ConfigEntry child : childEntries) {
+        for (ConfigEntry child : getActiveChildren()) {
             if (child.isFocused()) {
                 return true;
             }
@@ -364,5 +370,20 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
     @Override
     public boolean canLoseFocusEasily() {
         return false;
+    }
+
+    public void setSearchFilter(List<ConfigEntry> filtered) {
+        this.searchFilteredChildren = filtered;
+        this.isExpanded = true;
+    }
+
+    public void clearSearchFilter() {
+        this.searchFilteredChildren = null;
+        this.isExpanded = false;
+        this.currentHeight = mainEntry != null ? mainEntry.getPreferredHeight() : PREFFERED_HEIGHT;
+    }
+
+    private List<ConfigEntry> getActiveChildren() {
+        return searchFilteredChildren != null ? searchFilteredChildren : childEntries;
     }
 }

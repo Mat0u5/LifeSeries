@@ -210,20 +210,64 @@ public class ConfigScreen extends Screen {
             if (entries != null) {
                 String searchQuery = this.currentSearchQuery.trim();
                 if (searchQuery.isEmpty()) {
+                    clearAllSearchFilters(entries);
                     for (ConfigEntry entry : entries) {
                         if (!entry.isSearchable()) continue;
                         this.listWidget.addEntry(entry);
                     }
-                }
-                else {
-                    for (ConfigEntry entry : getFilteredEntries(getAllEntries(entries), searchQuery)) {
-                        if (!entry.isSearchable()) continue;
+                } else {
+                    for (ConfigEntry entry : buildSearchResults(entries, searchQuery)) {
                         this.listWidget.addEntry(entry);
                     }
                 }
             }
         }
         this.updateButtonStates();
+    }
+
+    private void clearAllSearchFilters(List<ConfigEntry> entries) {
+        for (ConfigEntry entry : entries) {
+            if (entry instanceof GroupConfigEntry<?> group) {
+                group.clearSearchFilter();
+                clearAllSearchFilters(group.getChildEntries());
+            }
+        }
+    }
+
+    private List<ConfigEntry> buildSearchResults(List<ConfigEntry> entries, String query) {
+        List<ConfigEntry> result = new ArrayList<>();
+        for (ConfigEntry entry : entries) {
+            if (!entry.isSearchable()) continue;
+
+            if (entry instanceof GroupConfigEntry<?> group) {
+                List<ConfigEntry> qualifyingChildren = buildSearchResults(group.getChildEntries(), query);
+
+                if (!qualifyingChildren.isEmpty()) {
+                    boolean hasQualifyingSubGroup = qualifyingChildren.stream()
+                            .anyMatch(c -> c instanceof GroupConfigEntry);
+                    long leafMatches = qualifyingChildren.stream()
+                            .filter(c -> !(c instanceof GroupConfigEntry))
+                            .count();
+
+                    if (hasQualifyingSubGroup || leafMatches >= 2) {
+                        // Group qualifies: show it with only its matching children
+                        group.setSearchFilter(qualifyingChildren);
+                        result.add(group);
+                    } else {
+                        // Only 1 leaf match, no qualifying sub-group: surface flat
+                        group.clearSearchFilter();
+                        result.addAll(qualifyingChildren);
+                    }
+                } else {
+                    group.clearSearchFilter();
+                }
+            } else {
+                if (matchesSearch(entry, query)) {
+                    result.add(entry);
+                }
+            }
+        }
+        return result;
     }
 
     public void onEntryValueChanged() {

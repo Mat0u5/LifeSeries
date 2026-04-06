@@ -35,7 +35,7 @@ public class ChooseExtraSeasonScreen extends DefaultScreen {
 
     public void addSeasonRegions() {
         seasonRegions.clear();
-        List<Seasons> seasons = Seasons.getAprilFoolsSeasons();
+        List<Seasons> seasons = Seasons.getSpecialSeasons();
 
         int PADDING = ChooseSeasonScreen.PADDING;
 

@@ -35,13 +35,13 @@ public class ChooseSeasonScreen extends DefaultScreen {
     public void init() {
         super.init();
         addSeasonRegions();
-        hasAprilFoolsSeasons = !Seasons.getAprilFoolsSeasons().isEmpty();
+        hasAprilFoolsSeasons = !Seasons.getSpecialSeasons().isEmpty();
     }
 
     public void addSeasonRegions() {
         seasonRegions.clear();
         List<Seasons> seasons = Seasons.getSeasons();
-        seasons.removeAll(Seasons.getAprilFoolsSeasons());
+        seasons.removeAll(Seasons.getSpecialSeasons());
 
         List<List<Seasons>> rows = splitIntoRows(seasons, ROWS);
         int currentRegionIndex = 1;

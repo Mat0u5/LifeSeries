@@ -255,6 +255,7 @@ public abstract class Season {
         PlayerUtils.resendCommandTrees();
         SubInManager.reload();
         LifeSkinsManager.reloadCache();
+        DatapackIntegration.setSeason(getSeason());
     }
 
     public static void setSkyColor(Vec3 color, boolean setMode) {

@@ -74,6 +74,30 @@ public enum Seasons {
         return false;
     }
 
+    public boolean isSpecial() {
+        if (this == REAL_LIFE) return true;
+        if (this == SIMPLE_LIFE) return true;
+        return false;
+    }
+
+    public int getIndex() {
+        if (this == UNASSIGNED) return 0;
+
+        int index = 0;
+        for (Seasons season : getSeasons()) {
+            if (season.isSpecial() != this.isSpecial()) continue;
+
+            if (this.isSpecial()) {
+                index--;
+            }
+            else {
+                index++;
+            }
+            if (season == this) break;
+        }
+        return index;
+    }
+
     public static Seasons getSeasonFromStringName(String name) {
         for (Seasons season : Seasons.values()) {
             if (season.getName().equalsIgnoreCase(name) || season.getId().equalsIgnoreCase(name)) {
@@ -89,8 +113,10 @@ public enum Seasons {
         return allSeasons;
     }
 
-    public static List<Seasons> getAprilFoolsSeasons() {
-        return new ArrayList<>(List.of(REAL_LIFE, SIMPLE_LIFE));
+    public static List<Seasons> getSpecialSeasons() {
+        List<Seasons> allSeasons = new ArrayList<>(List.of(Seasons.values()));
+        allSeasons.removeIf(season -> !season.isSpecial());
+        return allSeasons;
     }
 
     public static List<String> getSeasonIds() {
