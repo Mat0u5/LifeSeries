@@ -49,9 +49,19 @@
             "secretlife/task"
         ]
     },
-    "secretlife_whisper": {
+    "secretlife_task_reroll": {
         "sounds": [
-            "secretlife/whisper"
+            "secretlife/task_reroll"
+        ]
+    },
+    "secretlife_task_succeed": {
+        "sounds": [
+            "secretlife/task_succeed"
+        ]
+    },
+    "secretlife_task_fail": {
+        "sounds": [
+            "secretlife/task_fail"
         ]
     },
 
