@@ -117,7 +117,7 @@ public class ChooseSeasonScreen extends DefaultScreen {
     //?}
             int region = getRegion((int) mouseX, (int) mouseY);
             if (region == -1 && this.minecraft != null) {
-                this.minecraft.setScreen(new ChooseExtraSeasonScreen(hasSelectedBefore));
+                this.minecraft.ls$setScreen(new ChooseExtraSeasonScreen(hasSelectedBefore));
                 return true;
             }
             else if (region != 0) {
@@ -136,7 +136,7 @@ public class ChooseSeasonScreen extends DefaultScreen {
         for (SeasonRegion seasonRegion : seasonRegions) {
             if (seasonRegion.id() == region) {
                 if (hasSelectedBefore && this.minecraft != null) {
-                    this.minecraft.setScreen(new ConfirmSeasonAnswerScreen(this, seasonRegion.season()));
+                    this.minecraft.ls$setScreen(new ConfirmSeasonAnswerScreen(this, seasonRegion.season()));
                 }
                 else {
                     SimplePackets.SET_SEASON.sendToServer(seasonRegion.season().getName());

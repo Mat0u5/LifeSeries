@@ -12,7 +12,7 @@ import net.minecraft.client.input.*;
 
 @Mixin(value = ChatScreen.class, priority = 1)
 public class ChatScreenMixin {
-    //1.21.11- logic is in ChatScreenMixin
+    //1.21.11- logic is in InBedChatScreenMixin
     //? if >= 26.1 {
     @Inject(method = "keyPressed", at = @At("HEAD"))
     private void unfocusButton(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {

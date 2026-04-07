@@ -88,7 +88,7 @@ public class NetworkHandlerClient {
                 Seasons season = Seasons.getSeasonFromStringName(payload.value().get(0));
                 String adminCommands = payload.value().get(1);
                 String nonAdminCommands = payload.value().get(2);
-                if (season != Seasons.UNASSIGNED) Minecraft.getInstance().setScreen(new SeasonInfoScreen(season, adminCommands, nonAdminCommands));
+                if (season != Seasons.UNASSIGNED) Minecraft.getInstance().ls$setScreen(new SeasonInfoScreen(season, adminCommands, nonAdminCommands));
             }
         });
         SimplePackets.MORPH.setClientReceive(payload -> {
@@ -200,7 +200,7 @@ public class NetworkHandlerClient {
         });
         SimplePackets.SELECT_SEASON.setClientReceive(payload -> {
             if (!Main.modDisabled()) {
-                Minecraft.getInstance().setScreen(new ChooseSeasonScreen(!payload.value().isEmpty()));
+                Minecraft.getInstance().ls$setScreen(new ChooseSeasonScreen(!payload.value().isEmpty()));
             }
         });
         SimplePackets.SHOW_TOTEM.setClientReceive(payload -> {
@@ -228,10 +228,10 @@ public class NetworkHandlerClient {
         SimplePackets.EMPTY_SCREEN.setClientReceive(payload -> {
             if (!Main.modDisabled()) {
                 if (payload.value()) {
-                    Minecraft.getInstance().setScreen(new EmptySleepScreen(false));
+                    Minecraft.getInstance().ls$setScreen(new EmptySleepScreen(false));
                 }
                 else {
-                    Minecraft.getInstance().setScreen(null);
+                    Minecraft.getInstance().ls$setScreen(null);
                 }
             }
         });
@@ -271,7 +271,7 @@ public class NetworkHandlerClient {
         SimplePackets.TAB_LIST_LIVES_CUTOFF.setClientReceive(payload -> MainClient.TAB_LIST_LIVES_CUTOFF = payload.number());
         SimplePackets.TRIVIA_TIMER.setClientReceive(payload -> Trivia.updateTicksPassed(payload.number()));
         SimplePackets.VOTING_TIME.setClientReceive(payload -> {
-            if (Minecraft.getInstance().screen instanceof VotingScreen votingScreen) {
+            if (Minecraft.getInstance().ls$getScreen() instanceof VotingScreen votingScreen) {
                 votingScreen.timerSeconds = payload.number();
             }
         });
@@ -301,7 +301,7 @@ public class NetworkHandlerClient {
         SimplePackets.RESET_TRIVIA.setClientReceive(payload -> Trivia.resetTrivia());
         SimplePackets.SELECT_WILDCARDS.setClientReceive(payload -> {
             if (!Main.modDisabled()) {
-                Minecraft.getInstance().setScreen(new ChooseWildcardScreen());
+                Minecraft.getInstance().ls$setScreen(new ChooseWildcardScreen());
             }
         });
         SimplePackets.CLEAR_CONFIG.setClientReceive(payload -> ClientConfigNetwork.load());
@@ -313,7 +313,7 @@ public class NetworkHandlerClient {
         });
         SimplePackets.PAST_LIFE_CHOOSE_TWIST.setClientReceive(payload -> {
             if (!Main.modDisabled()) {
-                Minecraft.getInstance().setScreen(new PastLifeChooseTwistScreen());
+                Minecraft.getInstance().ls$setScreen(new PastLifeChooseTwistScreen());
             }
         });
         SimplePackets.TRIVIA_ALL_WRONG.setClientReceive(payload -> {
@@ -326,8 +326,8 @@ public class NetworkHandlerClient {
         SimplePackets.STOP_TRIVIA_SOUNDS.setClientReceive(payload -> ClientSounds.stopTriviaSounds());
         SimplePackets.REMOVE_SLEEP_SCREENS.setClientReceive(payload -> {
             Minecraft client = Minecraft.getInstance();
-            if (client.screen instanceof EmptySleepScreen || client.screen instanceof NewQuizScreen || (client.screen instanceof VotingScreen votingScreen && votingScreen.requiresSleep)) {
-                client.setScreen(null);
+            if (client.ls$getScreen() instanceof EmptySleepScreen || client.ls$getScreen() instanceof NewQuizScreen || (client.ls$getScreen() instanceof VotingScreen votingScreen && votingScreen.requiresSleep)) {
+                client.ls$setScreen(null);
             }
         });
         SimplePackets.SUPERPOWER_SHOW_COOLDOWN.setClientReceive(payload -> {
@@ -599,7 +599,7 @@ public class NetworkHandlerClient {
 
     public static void handleVoteScreen(VoteScreenPayload payload) {
         if (Main.modDisabled()) return;
-        Minecraft.getInstance().setScreen(new VotingScreen(payload.name(), payload.requiresSleep(), payload.closesWithEsc(), payload.showTimer(), payload.players()));
+        Minecraft.getInstance().ls$setScreen(new VotingScreen(payload.name(), payload.requiresSleep(), payload.closesWithEsc(), payload.showTimer(), payload.players()));
     }
 
     /*

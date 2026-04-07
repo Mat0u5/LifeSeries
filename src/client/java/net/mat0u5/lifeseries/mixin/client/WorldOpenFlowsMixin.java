@@ -46,7 +46,7 @@ public abstract class WorldOpenFlowsMixin {
                     ls$doLoadLevel(screen, e, bl, bl2);
                 },
                 () -> {
-                    Minecraft.getInstance().setScreen(screen);
+                    Minecraft.getInstance().ls$setScreen(screen);
                 }
         );
         try {
@@ -93,7 +93,7 @@ public abstract class WorldOpenFlowsMixin {
     }
     //?}
     private void ls$askForConfirmation(final LevelStorageSource.LevelStorageAccess worldAccess, String levelId, final Runnable proceedCallback, final Runnable cancelCallback) {
-        Minecraft.getInstance().setScreen(new WorldWarningScreen(levelId, cancelCallback, disable -> {
+        Minecraft.getInstance().ls$setScreen(new WorldWarningScreen(levelId, cancelCallback, disable -> {
             if (disable) {
                 Main.setDisabled(true);
             }

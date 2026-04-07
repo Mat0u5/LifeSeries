@@ -22,7 +22,7 @@ import java.util.Map;
 
 public class ClientConfigGuiManager {
     public static void openConfig() {
-        ConfigScreen.Builder builder = new ConfigScreen.Builder(Minecraft.getInstance().screen, Component.nullToEmpty("Life Series Config"));
+        ConfigScreen.Builder builder = new ConfigScreen.Builder(Minecraft.getInstance().ls$getScreen(), Component.nullToEmpty("Life Series Config"));
         if (!ClientConfigNetwork.configObjects.isEmpty()) {
             ConfigScreen.Builder.CategoryBuilder categoryGeneral = builder.addCategory("Server");
             addConfig(categoryGeneral, ClientConfigNetwork.configObjects);
@@ -35,7 +35,7 @@ public class ClientConfigGuiManager {
             addTestingCategory(builder);
         }
 
-        Minecraft.getInstance().setScreen(builder.build());
+        Minecraft.getInstance().ls$setScreen(builder.build());
     }
 
     public static void addConfig(ConfigScreen.Builder.CategoryBuilder category, Map<Integer, ConfigObject> allConfigObjects) {

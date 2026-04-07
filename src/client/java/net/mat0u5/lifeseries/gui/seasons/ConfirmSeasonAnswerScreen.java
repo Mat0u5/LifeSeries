@@ -46,7 +46,7 @@ public class ConfirmSeasonAnswerScreen extends DefaultScreen {
 
         this.addRenderableWidget(
                 Button.builder(Component.literal("Cancel"), btn -> {
-                            if (this.minecraft != null) this.minecraft.setScreen(parent);
+                            if (this.minecraft != null) this.minecraft.ls$setScreen(parent);
                         })
                         .pos(fifth3 - 20, startY + BG_HEIGHT - 35)
                         .size(60, 20)

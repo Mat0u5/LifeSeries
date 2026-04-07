@@ -116,7 +116,7 @@ public class ClientEvents {
 
             if (screen instanceof TitleScreen && !hasShownUpdateScreen) {
                 client.execute(() -> {
-                    client.setScreen(new UpdateInfoScreen(UpdateChecker.versionName, UpdateChecker.versionDescription));
+                    client.ls$setScreen(new UpdateInfoScreen(UpdateChecker.versionName, UpdateChecker.versionDescription));
                     hasShownUpdateScreen = true;
                 });
             }
@@ -150,8 +150,8 @@ public class ClientEvents {
             if (player != null) {
                 tryTripleJump(player);
                 checkOnGroundFor(player);
-                if (!player.isSleeping() && (client.screen instanceof EmptySleepScreen || client.screen instanceof NewQuizScreen || (client.screen instanceof VotingScreen votingScreen && votingScreen.requiresSleep))) {
-                    client.setScreen(null);
+                if (!player.isSleeping() && (client.ls$getScreen() instanceof EmptySleepScreen || client.ls$getScreen() instanceof NewQuizScreen || (client.ls$getScreen() instanceof VotingScreen votingScreen && votingScreen.requiresSleep))) {
+                    client.ls$setScreen(null);
                 }
             }
             ClientKeybinds.tick();

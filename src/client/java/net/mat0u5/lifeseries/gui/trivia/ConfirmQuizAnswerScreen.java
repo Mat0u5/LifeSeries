@@ -38,7 +38,7 @@ public class ConfirmQuizAnswerScreen extends DefaultScreen {
 
         this.addRenderableWidget(
                 Button.builder(Component.literal("Cancel"), btn -> {
-                            if (this.minecraft != null) this.minecraft.setScreen(parent);
+                            if (this.minecraft != null) this.minecraft.ls$setScreen(parent);
                         })
                         .pos(endX  - 68, endY - 28)
                         .size(60, 20)

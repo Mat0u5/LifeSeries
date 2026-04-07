@@ -348,18 +348,18 @@ public class ConfigScreen extends Screen {
         }
         MainClient.reloadConfig();
 
-        this.minecraft.setScreen(this.parent);
+        this.minecraft.ls$setScreen(this.parent);
     }
 
     @Override
     public void onClose() {
         if (this.hasChanges) {
-            this.minecraft.setScreen(new ConfirmScreen(
+            this.minecraft.ls$setScreen(new ConfirmScreen(
                     confirmed -> {
                         if (confirmed) {
-                            this.minecraft.setScreen(this.parent);
+                            this.minecraft.ls$setScreen(this.parent);
                         } else {
-                            this.minecraft.setScreen(this);
+                            this.minecraft.ls$setScreen(this);
                         }
                     },
                     Component.nullToEmpty("Changes Not Saved"),
@@ -368,7 +368,7 @@ public class ConfigScreen extends Screen {
                     Component.nullToEmpty("Cancel")
             ));
         } else {
-            this.minecraft.setScreen(this.parent);
+            this.minecraft.ls$setScreen(this.parent);
         }
     }
 

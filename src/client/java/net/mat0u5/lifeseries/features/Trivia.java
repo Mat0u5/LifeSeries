@@ -60,17 +60,17 @@ public class Trivia {
         if (Main.modDisabled()) return;
         if (question.isEmpty() || answers.isEmpty()) return;
         if (MainClient.clientCurrentSeason == Seasons.NICE_LIFE) {
-            Minecraft.getInstance().setScreen(new NewQuizScreen());
+            Minecraft.getInstance().ls$setScreen(new NewQuizScreen());
         }
         else {
-            Minecraft.getInstance().setScreen(new QuizScreen());
+            Minecraft.getInstance().ls$setScreen(new QuizScreen());
         }
     }
 
     public static void closeGui() {
-        if (Minecraft.getInstance().screen == null) return;
-        if (Minecraft.getInstance().screen instanceof QuizScreen || Minecraft.getInstance().screen instanceof ConfirmQuizAnswerScreen) {
-            Minecraft.getInstance().screen.onClose();
+        if (Minecraft.getInstance().ls$getScreen() == null) return;
+        if (Minecraft.getInstance().ls$getScreen() instanceof QuizScreen || Minecraft.getInstance().ls$getScreen() instanceof ConfirmQuizAnswerScreen) {
+            Minecraft.getInstance().ls$getScreen().onClose();
         }
     }
 

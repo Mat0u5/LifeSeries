@@ -86,7 +86,7 @@ public class NewQuizScreen extends Screen {
             for (int i = 0; i < answerRects.size(); i++) {
                 if (answerRects.get(i).contains(mouseX, mouseY)) {
                     this.onClose();
-                    Minecraft.getInstance().setScreen(new EmptySleepScreen(false));
+                    Minecraft.getInstance().ls$setScreen(new EmptySleepScreen(false));
                     Trivia.sendAnswer(i);
                     return true;
                 }
@@ -105,7 +105,7 @@ public class NewQuizScreen extends Screen {
         timerSeconds = (Trivia.getRemainingTicks()-1)/20;
         if (timerSeconds <= 0) {
             this.onClose();
-            Minecraft.getInstance().setScreen(new EmptySleepScreen(false));
+            Minecraft.getInstance().ls$setScreen(new EmptySleepScreen(false));
         }
     }
 

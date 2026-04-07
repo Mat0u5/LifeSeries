@@ -1,11 +1,14 @@
 package net.mat0u5.lifeseries.mixin.client;
 
 import net.mat0u5.lifeseries.config.WorldConfig;
+import net.mat0u5.lifeseries.utils.interfaces.IMinecraft;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.server.WorldStem;
 import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import net.mat0u5.lifeseries.Main;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -23,7 +26,7 @@ import java.util.Optional;
 //?}
 
 @Mixin(value = Minecraft.class, priority = 1)
-public abstract class MinecraftMixin {
+public abstract class MinecraftMixin implements IMinecraft {
 
     //? if >= 1.20.3 {
     @Inject(method = "getTickTargetMillis", at = @At("HEAD"), cancellable = true)
@@ -77,5 +80,27 @@ public abstract class MinecraftMixin {
         WorldConfig worldConfig = new WorldConfig(levelStorageAccess);
         if (worldConfig.acknowledged()) return;
         worldConfig.setProperty("acknowledged", "true");
+    }
+
+    @Unique
+    @Override
+    public Screen ls$getScreen() {
+        Minecraft self = (Minecraft) (Object) this;
+        //? if <= 26.1 {
+        /*return self.screen;
+         *///?} else {
+        return self.gui.screen();
+        //?}
+    }
+
+    @Unique
+    @Override
+    public void ls$setScreen(Screen screen) {
+        Minecraft self = (Minecraft) (Object) this;
+        //? if <= 26.1 {
+        /*self.setScreen(screen);
+         *///?} else {
+        self.gui.setScreen(screen);
+        //?}
     }
 }

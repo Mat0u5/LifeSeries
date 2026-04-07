@@ -31,7 +31,7 @@ public class ItemInHandLayerMixin {
     @ModifyVariable(method = "submitArmWithItem", at = @At("HEAD"), index = 2, argsOnly = true)
     private ItemStackRenderState noHandItem(ItemStackRenderState value) {
     //?}
-        if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && (Minecraft.getInstance().screen instanceof EmptySleepScreen || Minecraft.getInstance().screen instanceof NewQuizScreen || Minecraft.getInstance().screen instanceof VotingScreen)) {
+        if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && (Minecraft.getInstance().ls$getScreen() instanceof EmptySleepScreen || Minecraft.getInstance().ls$getScreen() instanceof NewQuizScreen || Minecraft.getInstance().ls$getScreen() instanceof VotingScreen)) {
             //? if <= 1.21.2 {
             /*return ItemStack.EMPTY;
             *///?} else {

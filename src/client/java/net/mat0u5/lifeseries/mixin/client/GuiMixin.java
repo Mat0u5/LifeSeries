@@ -8,7 +8,6 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.InBedChatScreen;
 import net.minecraft.world.scores.Team;
@@ -37,7 +36,13 @@ import net.minecraft.client.DeltaTracker;
 
 import net.minecraft.resources.Identifier;
 
+//? if <= 26.1 {
+/*import net.minecraft.client.gui.Gui;
 @Mixin(value = Gui.class, priority = 1)
+*///?} else {
+import net.minecraft.client.gui.Hud;
+@Mixin(value = Hud.class, priority = 1)
+//?}
 public class GuiMixin {
     //? if <= 1.20.5 {
     /*@Inject(method = "render", at = @At(value = "TAIL"))
@@ -153,7 +158,7 @@ public class GuiMixin {
     //? if <= 1.20.3 {
     /*@WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getSleepTimer()I"))
     private int stopSleepDarkness(LocalPlayer instance, Operation<Integer> original) {
-        if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().screen instanceof InBedChatScreen) && MainClient.hideSleepDarkness) {
+        if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().ls$getScreen() instanceof InBedChatScreen) && MainClient.hideSleepDarkness) {
             return 0;
         }
         return original.call(instance);
@@ -161,21 +166,21 @@ public class GuiMixin {
     *///?} else if <= 1.20.5 {
     /*@Inject(method = "renderSleepOverlay", at = @At("HEAD"), cancellable = true)
     private void stopSleepDarkness(GuiGraphicsExtractor guiGraphics, float f, CallbackInfo ci) {
-        if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().screen instanceof InBedChatScreen) && MainClient.hideSleepDarkness) {
+        if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().ls$getScreen() instanceof InBedChatScreen) && MainClient.hideSleepDarkness) {
             ci.cancel();
         }
     }
     *///?} else if <= 1.21.11 {
     /*@Inject(method = "renderSleepOverlay", at = @At("HEAD"), cancellable = true)
     private void stopSleepDarkness(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
-        if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().screen instanceof InBedChatScreen) && MainClient.hideSleepDarkness) {
+        if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().ls$getScreen() instanceof InBedChatScreen) && MainClient.hideSleepDarkness) {
             ci.cancel();
         }
     }
     *///?} else {
     @Inject(method = "extractSleepOverlay", at = @At("HEAD"), cancellable = true)
     private void stopSleepDarkness(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
-        if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().screen instanceof InBedChatScreen) && MainClient.hideSleepDarkness) {
+        if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().ls$getScreen() instanceof InBedChatScreen) && MainClient.hideSleepDarkness) {
             ci.cancel();
         }
     }

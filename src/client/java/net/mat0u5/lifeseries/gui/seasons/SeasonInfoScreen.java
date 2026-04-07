@@ -63,7 +63,7 @@ public class SeasonInfoScreen extends DefaultScreen {
     @Override
     public void onClose() {
         if (season == Seasons.PAST_LIFE && this.minecraft != null) {
-            this.minecraft.setScreen(new PastLifeInfoScreen());
+            this.minecraft.ls$setScreen(new PastLifeInfoScreen());
             return;
         }
         super.onClose();
