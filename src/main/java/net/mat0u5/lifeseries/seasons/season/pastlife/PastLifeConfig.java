@@ -1,16 +1,13 @@
 package net.mat0u5.lifeseries.seasons.season.pastlife;
 
-import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.config.ConfigFileEntry;
-import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.config.SeasonConfig;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.thirdlife.ThirdLifeConfig;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 
-import java.util.List;
-
-public class PastLifeConfig extends ConfigManager {
+public class PastLifeConfig extends SeasonConfig {
     public PastLifeConfig() {
-        super("./config/"+ Main.MOD_ID,"pastlife.properties");
+        super(Seasons.PAST_LIFE);
     }
 
     @Override

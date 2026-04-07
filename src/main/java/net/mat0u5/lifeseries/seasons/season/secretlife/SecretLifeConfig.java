@@ -2,14 +2,15 @@ package net.mat0u5.lifeseries.seasons.season.secretlife;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ConfigFileEntry;
-import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.config.SeasonConfig;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SecretLifeConfig extends ConfigManager {
+public class SecretLifeConfig extends SeasonConfig {
     public static final List<String> BLACKLISTED_ITEMS = List.of(
             "lectern",
             //? if >= 1.21
@@ -140,7 +141,7 @@ public class SecretLifeConfig extends ConfigManager {
 
 
     public SecretLifeConfig() {
-        super("./config/"+ Main.MOD_ID,"secretlife.properties");
+        super(Seasons.SECRET_LIFE);
     }
 
     @Override

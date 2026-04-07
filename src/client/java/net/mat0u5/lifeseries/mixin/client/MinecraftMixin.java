@@ -87,10 +87,10 @@ public abstract class MinecraftMixin implements IMinecraft {
     public Screen ls$getScreen() {
         Minecraft self = (Minecraft) (Object) this;
         //? if <= 26.1 {
-        /*return self.screen;
-         *///?} else {
-        return self.gui.screen();
-        //?}
+        return self.screen;
+         //?} else {
+        /*return self.gui.screen();
+        *///?}
     }
 
     @Unique
@@ -98,9 +98,9 @@ public abstract class MinecraftMixin implements IMinecraft {
     public void ls$setScreen(Screen screen) {
         Minecraft self = (Minecraft) (Object) this;
         //? if <= 26.1 {
-        /*self.setScreen(screen);
-         *///?} else {
-        self.gui.setScreen(screen);
-        //?}
+        self.setScreen(screen);
+         //?} else {
+        /*self.gui.setScreen(screen);
+        *///?}
     }
 }

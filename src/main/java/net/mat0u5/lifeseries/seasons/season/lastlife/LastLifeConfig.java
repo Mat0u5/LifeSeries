@@ -1,12 +1,13 @@
 package net.mat0u5.lifeseries.seasons.season.lastlife;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.config.SeasonConfig;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 
 import java.util.List;
 
-public class LastLifeConfig extends ConfigManager {
+public class LastLifeConfig extends SeasonConfig {
     public static final List<String> BLACKLISTED_ITEMS = List.of(
             "lectern",
             "bookshelf",
@@ -65,7 +66,7 @@ public class LastLifeConfig extends ConfigManager {
 
 
     public LastLifeConfig() {
-        super("./config/"+ Main.MOD_ID,"lastlife.properties");
+        super(Seasons.LAST_LIFE);
     }
 
     @Override

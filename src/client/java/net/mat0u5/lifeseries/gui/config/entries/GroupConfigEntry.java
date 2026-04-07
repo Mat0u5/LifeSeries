@@ -175,16 +175,18 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
         if (currentY < 0 || mainEntry == null) return false;
 
         if (currentY <= mainEntry.getPreferredHeight()) {
-            if (searchFilteredChildren != null) {
-                isExpanded = !isExpanded;
-                return true;
-            }
             mainEntry.setFocused(true);
             //? if <= 1.21.6 {
-            /*if (mainEntry.mouseClicked(mouseX, mouseY, button)) return true;
+            /*boolean clickSuccess = mainEntry.mouseClicked(mouseX, mouseY, button);
             *///?} else {
-            if (mainEntry.mouseClicked(click, doubled)) return true;
+            boolean clickSuccess = mainEntry.mouseClicked(click, doubled);
             //?}
+            if (searchFilteredChildren != null) {
+                isExpanded = mainEntry.isExpanded();
+            }
+            if (clickSuccess) {
+                return true;
+            }
         }
 
         if (isExpanded) {

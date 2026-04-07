@@ -32,7 +32,7 @@ import net.minecraft.client.renderer.RenderPipelines;
 //? if >= 1.21.6 <= 26.1
 import net.minecraft.client.gui.Gui;
 //? if >= 26.2
-import net.minecraft.client.gui.Hud;
+//import net.minecraft.client.gui.Hud;
 
 import net.minecraft.resources.Identifier;
 //? if <= 1.20.3 {
@@ -132,12 +132,12 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<Mob
         TextureAtlasSprite sprite = statusEffectSpriteManager.get(effectType);
         context.blitSprite(RenderType::guiTextured, sprite, x + 3, y + 3, 18, 18, ARGB.white(1.0f));
         *///?} else if <= 26.1 {
-        /*context.blitSprite(RenderPipelines.GUI_TEXTURED, EFFECT_BACKGROUND_TEXTURE, x, y, 24, 24);
-        context.blitSprite(RenderPipelines.GUI_TEXTURED, Gui.getMobEffectSprite(effectType), x + 3, y + 3, 18, 18, ARGB.white(1.0f));
-        *///?} else {
         context.blitSprite(RenderPipelines.GUI_TEXTURED, EFFECT_BACKGROUND_TEXTURE, x, y, 24, 24);
+        context.blitSprite(RenderPipelines.GUI_TEXTURED, Gui.getMobEffectSprite(effectType), x + 3, y + 3, 18, 18, ARGB.white(1.0f));
+        //?} else {
+        /*context.blitSprite(RenderPipelines.GUI_TEXTURED, EFFECT_BACKGROUND_TEXTURE, x, y, 24, 24);
         context.blitSprite(RenderPipelines.GUI_TEXTURED, Hud.getMobEffectSprite(effectType), x + 3, y + 3, 18, 18, ARGB.white(1.0f));
-        //?}
+        *///?}
     }
 
     @Override

@@ -151,6 +151,7 @@ public class ConfigScreen extends Screen {
     }
 
     private void onSearchChanged(String query) {
+        this.listWidget.setScrollAmount(0);
         this.currentSearchQuery = query;
         this.refreshList();
     }

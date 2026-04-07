@@ -2,14 +2,15 @@ package net.mat0u5.lifeseries.seasons.season.nicelife;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ConfigFileEntry;
-import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.config.SeasonConfig;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class NiceLifeConfig extends ConfigManager {
+public class NiceLifeConfig extends SeasonConfig {
     public static final List<String> BLACKLISTED_ITEMS = List.of(
             //? if >= 1.21
             "mace",
@@ -127,7 +128,7 @@ public class NiceLifeConfig extends ConfigManager {
     );
 
     public NiceLifeConfig() {
-        super("./config/"+ Main.MOD_ID,"nicelife.properties");
+        super(Seasons.NICE_LIFE);
     }
 
     public NiceLifeConfig(String folderPath, String filePath) {

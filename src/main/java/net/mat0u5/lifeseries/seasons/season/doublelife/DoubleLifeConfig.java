@@ -2,14 +2,15 @@ package net.mat0u5.lifeseries.seasons.season.doublelife;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ConfigFileEntry;
-import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.config.SeasonConfig;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DoubleLifeConfig extends ConfigManager {
+public class DoubleLifeConfig extends SeasonConfig {
     public static final List<String> BLACKLISTED_ITEMS = List.of(
             "lectern",
             "bookshelf",
@@ -121,7 +122,7 @@ public class DoubleLifeConfig extends ConfigManager {
     );
 
     public DoubleLifeConfig() {
-        super("./config/"+ Main.MOD_ID,"doublelife.properties");
+        super(Seasons.DOUBLE_LIFE);
     }
 
     @Override

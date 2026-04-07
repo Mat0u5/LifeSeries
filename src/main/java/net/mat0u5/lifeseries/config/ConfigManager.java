@@ -200,9 +200,6 @@ public abstract class ConfigManager extends DefaultConfigValues {
             if (entry.type == ConfigTypes.NULL) continue;
             if (entry.type == ConfigTypes.TEXT) continue;
             if (entry.type == ConfigTypes.GROUP) continue;
-            if (entry.type == ConfigTypes.NULL) continue;
-            if (entry.type == ConfigTypes.NULL) continue;
-            if (entry.type == ConfigTypes.NULL) continue;
             result.add(entry.key);
         }
         return result;

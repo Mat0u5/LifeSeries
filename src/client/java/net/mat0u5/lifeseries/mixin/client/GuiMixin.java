@@ -37,12 +37,12 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.resources.Identifier;
 
 //? if <= 26.1 {
-/*import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.Gui;
 @Mixin(value = Gui.class, priority = 1)
-*///?} else {
-import net.minecraft.client.gui.Hud;
+//?} else {
+/*import net.minecraft.client.gui.Hud;
 @Mixin(value = Hud.class, priority = 1)
-//?}
+*///?}
 public class GuiMixin {
     //? if <= 1.20.5 {
     /*@Inject(method = "render", at = @At(value = "TAIL"))

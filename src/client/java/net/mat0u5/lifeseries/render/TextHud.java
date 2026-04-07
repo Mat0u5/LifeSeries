@@ -18,10 +18,10 @@ public class TextHud {
     public static void renderText(GuiGraphicsExtractor context) {
         Minecraft client = Minecraft.getInstance();
         //? if <= 26.1 {
-        /*if (client.options.hideGui) return;
-        *///?} else {
-        if (client.gui.hud.isHidden()) return;
-        //?}
+        if (client.options.hideGui) return;
+        //?} else {
+        /*if (client.gui.hud.isHidden()) return;
+        *///?}
         int yPos = client.getWindow().getGuiScaledHeight() - (5 + (int) Math.ceil((client.font.lineHeight) * MainClient.TEXT_HUD_SCALE));
 
         if (!Main.modDisabled()) {

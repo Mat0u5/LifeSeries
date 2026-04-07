@@ -58,6 +58,7 @@ dependencies {
  modCompileOnly "maven.modrinth:flashback:z0SX4zNw"
  modCompileOnly "maven.modrinth:replaymod:1.21-2.6.23"
  modCompileOnly "de.maxhenkel.voicechat:voicechat-api:2.5.27" //TODO this is a patch for older versions of SVC
+ modCompileOnly "maven.modrinth:appleskin:3.0.6+mc1.21"
 
  // Runtime only QOL mods
  if (isValidVersion(project.carpet_bot_relog_version)) modRuntimeOnly "maven.modrinth:carpet-bot-relog:${project.carpet_bot_relog_version}"
@@ -70,7 +71,6 @@ dependencies {
  else {
   modCompileOnly ("maven.modrinth:simple-voice-chat:fabric-1.21.1-2.5.35")
  }
- if (isValidVersion(project.appleskin_mod_version)) modCompileOnly "maven.modrinth:appleskin:${project.appleskin_mod_version}"
 }
 loom {
  runConfigs.all {

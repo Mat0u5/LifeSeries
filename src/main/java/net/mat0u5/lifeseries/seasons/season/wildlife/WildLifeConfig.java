@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife;
 
-import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ConfigFileEntry;
-import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.config.SeasonConfig;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
@@ -12,7 +12,7 @@ import net.mat0u5.lifeseries.utils.other.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WildLifeConfig extends ConfigManager {
+public class WildLifeConfig extends SeasonConfig {
     public static final List<String> BLACKLISTED_ITEMS = List.of(
             "lectern",
             "bookshelf",
@@ -305,7 +305,7 @@ public class WildLifeConfig extends ConfigManager {
     );
 
     public WildLifeConfig() {
-        super("./config/"+ Main.MOD_ID,"wildlife.properties");
+        super(Seasons.WILD_LIFE);
     }
 
     @Override

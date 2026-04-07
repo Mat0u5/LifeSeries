@@ -56,6 +56,7 @@ dependencies {
  // Compile only for compatibility
  //compileOnly "maven.modrinth:flashback:z0SX4zNw" //TODO
  compileOnly "maven.modrinth:replaymod:1.21-2.6.23"
+ compileOnly "maven.modrinth:appleskin:3.0.6+mc1.21"
 
  // Runtime only QOL mods
  if (isValidVersion(project.carpet_bot_relog_version)) runtimeOnly "maven.modrinth:carpet-bot-relog:${project.carpet_bot_relog_version}"
@@ -68,7 +69,6 @@ dependencies {
  else {
   compileOnly ("maven.modrinth:simple-voice-chat:fabric-2.6.11+26.1-snapshot-1")
  }
- if (isValidVersion(project.appleskin_mod_version)) compileOnly "maven.modrinth:appleskin:${project.appleskin_mod_version}"
 }
 loom {
  runConfigs.all {

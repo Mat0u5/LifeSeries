@@ -1,13 +1,13 @@
 package net.mat0u5.lifeseries.seasons.season.thirdlife;
 
-import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.config.SeasonConfig;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ThirdLifeConfig extends ConfigManager {
+public class ThirdLifeConfig extends SeasonConfig {
     public static final List<String> BLACKLISTED_ITEMS = List.of(
         //? if >= 1.21
         "mace",
@@ -59,8 +59,9 @@ public class ThirdLifeConfig extends ConfigManager {
     );
 
     public ThirdLifeConfig() {
-        super("./config/"+ Main.MOD_ID,"thirdlife.properties");
+        super(Seasons.THIRD_LIFE);
     }
+
     public ThirdLifeConfig(String folderPath, String filePath) {
         super(folderPath, filePath);
     }

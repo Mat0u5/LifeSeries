@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.seasons.season.limitedlife;
 
-import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ConfigFileEntry;
-import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.config.SeasonConfig;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Time;
@@ -10,7 +10,7 @@ import net.mat0u5.lifeseries.utils.other.Time;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LimitedLifeConfig extends ConfigManager {
+public class LimitedLifeConfig extends SeasonConfig {
     public static final List<String> BLACKLISTED_ITEMS = List.of(
             "lectern",
             "bookshelf",
@@ -116,7 +116,7 @@ public class LimitedLifeConfig extends ConfigManager {
     );
 
     public LimitedLifeConfig() {
-        super("./config/"+ Main.MOD_ID,"limitedlife.properties");
+        super(Seasons.LIMITED_LIFE);
     }
 
     @Override
