@@ -6,7 +6,6 @@ import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotPathfinding;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
@@ -64,6 +63,11 @@ import net.minecraft.world.entity.EntityReference;
 //import org.joml.Vector3f;
 
 public class WildLifeTriviaHandler extends TriviaHandler {
+    private static int AUTO_OPEN_TIME = Time.seconds(120).getTicks();
+    private static int AUTO_OPEN_NEAR_PLAYER_TIME = Time.seconds(15).getTicks();
+    private long ticks = 0;
+    private long ticksNearPlayer = 0;
+
     public WildLifeTriviaHandler(TriviaBot bot) {
         super(bot);
     }
@@ -118,6 +122,30 @@ public class WildLifeTriviaHandler extends TriviaHandler {
             }
             if (snailTransformation > 66) {
                 transformIntoSnail();
+            }
+        }
+
+
+        float distanceToPlayer = 1000;
+        ServerPlayer player = bot.serverData.getBoundPlayer();
+        if (player != null) {
+            distanceToPlayer = bot.distanceTo(player);
+        }
+
+        ticks++;
+        if (distanceToPlayer <= 4) ticksNearPlayer++;
+        if (player != null && !bot.interactedWith()) {
+            if (ticks > AUTO_OPEN_TIME) {
+                if (distanceToPlayer <= 4) {
+                    startTrivia(player);
+                }
+                else {
+                    bot.pathfinding.fakeTeleportToPlayer();
+                    startTrivia(player);
+                }
+            }
+            if (ticksNearPlayer > AUTO_OPEN_NEAR_PLAYER_TIME) {
+                startTrivia(player);
             }
         }
     }

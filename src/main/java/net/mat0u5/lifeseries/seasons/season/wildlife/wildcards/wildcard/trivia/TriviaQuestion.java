@@ -11,9 +11,15 @@ public class TriviaQuestion {
         this.question = question;
         this.answers = answers;
         this.correct_answer_index = correct_answer_index;
+        if (this.question != null) {
+            this.question = this.question.trim();
+        }
     }
 
     public String getQuestion() {
+        if (this.question != null) {
+            this.question = this.question.trim();
+        }
         return question;
     }
 
