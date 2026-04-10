@@ -73,6 +73,9 @@ public class NetworkHandlerClient {
         SimplePackets.CURSE_SLIDING.setClientReceive(payload -> MainClient.CURSE_SLIDING = payload.number());
 
         //String list payload
+        SimplePackets.LVL1_CLAMPED_ENCHANTS.setClientReceive(payload -> {
+            MainClient.lvl1ClampedEnchants = payload.value();
+        });
         SimplePackets.LIFESKINS_PLAYER.setClientReceive(payload -> {
             UUID uuid = UUID.fromString(payload.value().get(0));
             String teamName = payload.value().get(1);

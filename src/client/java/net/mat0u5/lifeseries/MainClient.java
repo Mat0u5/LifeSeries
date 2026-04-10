@@ -62,6 +62,7 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     public static boolean modDisabledServerSide = false;
     public static String teamColor = null;
     public static String teamName = null;
+    public static List<String> lvl1ClampedEnchants = new ArrayList<>();
 
     public static ClientConfig clientConfig;
 
@@ -203,6 +204,7 @@ public class MainClient implements ClientModInitializer, IClientHelper {
         modDisabledServerSide = false;
         teamColor = null;
         teamName = null;
+        lvl1ClampedEnchants = new ArrayList<>();
 
         MorphManager.resetMorphs();
     }

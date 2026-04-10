@@ -42,8 +42,10 @@ import net.mat0u5.lifeseries.utils.player.*;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerLoginPacketListenerImpl;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.scores.PlayerTeam;
 //? if > 1.20.5 {
 import net.minecraft.network.DisconnectionDetails;
@@ -646,6 +648,20 @@ public class NetworkHandlerServer {
         SimplePackets.MOD_DISABLED.target(player).sendToClient(Main.MOD_DISABLED);
         Season.updateClientPlayerTeam(player);
         LifeSkinsManager.sendTeamNumUpdatesTo(player);
+        if (blacklist != null) {
+            List<ResourceKey<Enchantment>> lvl1ClampedEnchants = blacklist.getClampedEnchants().get(1);
+            if (lvl1ClampedEnchants != null) {
+                List<String> result = new ArrayList<>();
+                for (ResourceKey<Enchantment> enchant : lvl1ClampedEnchants) {
+                    //? if <= 1.21.9 {
+                    /*result.add(enchant.location().toString());
+                    *///?} else {
+                    result.add(enchant.identifier().toString());
+                    //?}
+                }
+                SimplePackets.LVL1_CLAMPED_ENCHANTS.target(player).sendToClient(result);
+            }
+        }
     }
 
     public static void sendUpdatePackets() {

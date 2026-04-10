@@ -72,14 +72,14 @@ import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
 import net.minecraft.world.scores.DisplaySlot;
 
 public abstract class Season {
-    public static final String RESOURCEPACK_MAIN_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-main-27d9e98eb6009401319a5256f7695f1bba902412/main.zip";
-    public static final String RESOURCEPACK_MAIN_SHA = "6b3b1e6225156de119926dd32003060b42dbab82";
+    public static final String RESOURCEPACK_MAIN_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-main-42337c925d3356b32b14b7747b1d199b9a4ade58/main.zip";
+    public static final String RESOURCEPACK_MAIN_SHA = "d1b0317e0ee96b02f9e2a93f67a8c45157fc2c4c";
     public static final String RESOURCEPACK_SECRETLIFE_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-secretlife-fc0fa2a3efe2aefdba5a3c0deda61039fc43a008/secretlife.zip";
     public static final String RESOURCEPACK_SECRETLIFE_SHA = "1befd668fa775f2b8715b348172e1ba776e57294";
     public static final String RESOURCEPACK_MINIMAL_ARMOR_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-minimal_armor-27d9e98eb6009401319a5256f7695f1bba902412/minimal_armor.zip";
     public static final String RESOURCEPACK_MINIMAL_ARMOR_SHA = "e078d9085ea74891ebc4f8ec5686c4da08176a38";
-    public static final String RESOURCEPACK_COMBINED_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-combined-27d9e98eb6009401319a5256f7695f1bba902412/combined.zip";
-    public static final String RESOURCEPACK_COMBINED_SHA = "d9ef5b0c1074c006820494ca0524de8f8810a77c";
+    public static final String RESOURCEPACK_COMBINED_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-combined-42337c925d3356b32b14b7747b1d199b9a4ade58/combined.zip";
+    public static final String RESOURCEPACK_COMBINED_SHA = "96007440a16c04153378fbd2ea7cb6e71d869e10";
 
     public int GIVELIFE_MAX_LIVES = 99;
     public boolean TAB_LIST_SHOW_DEAD_PLAYERS = true;
