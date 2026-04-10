@@ -87,6 +87,7 @@ public class WindCharge extends ToggleableSuperpower {
             mace.set(DataComponents.MAX_DAMAGE, 1);
             mace.set(DataComponents.DAMAGE, 1);
             ItemStackUtils.setCustomComponentBoolean(mace, "IgnoreBlacklist", true);
+            ItemStackUtils.setCustomComponentBoolean(mace, "NoModifications", true);
             ItemStackUtils.setCustomComponentBoolean(mace, "FromSuperpower", true);
             ItemStackUtils.setCustomComponentBoolean(mace, "WindChargeSuperpower", true);
             player.getInventory().add(mace);
