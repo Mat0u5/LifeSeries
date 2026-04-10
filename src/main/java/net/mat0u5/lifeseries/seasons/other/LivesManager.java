@@ -320,11 +320,16 @@ public class LivesManager {
 
     public void addToPlayerLives(ServerPlayer player, int amount) {
         if (amount == 0) return;
+        setPlayerLives(player, getAddLivesResult(player, amount));
+    }
+
+    public int getAddLivesResult(ServerPlayer player, int amount) {
+        if (amount == 0) return 0;
         Integer currentLives = getPlayerLives(player);
         if (currentLives == null) currentLives = 0;
         int lives = currentLives + amount;
         if (lives < 0 && !Necromancy.isRessurectedPlayer(player)) lives = 0;
-        setPlayerLives(player, lives);
+        return lives;
     }
 
     public void addToLivesNoUpdate(ServerPlayer player, int amount) {

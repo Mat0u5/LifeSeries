@@ -32,6 +32,7 @@ public class TimeDilation extends Wildcard {
     public static float MAX_TICK_RATE_NERFED = 30;
 
     public static float MIN_PLAYER_MSPT = 25.0F;
+    public static boolean START_RAIN = true;
 
     public static int updateRate = 100;
     public static int lastDiv = -1;
@@ -84,7 +85,7 @@ public class TimeDilation extends Wildcard {
         if (!active) return;
         float sessionPassedTime = currentSession.getPassedTime().diff(activatedAt).getTicks();
         if (sessionPassedTime < 0) return;
-        if (sessionPassedTime > 3600 && sessionPassedTime < 3700 && !isFinale()) OtherUtils.executeCommand("weather clear");
+        if (sessionPassedTime > 3600 && sessionPassedTime < 3700 && !isFinale() && START_RAIN) OtherUtils.executeCommand("weather clear");
         int currentDiv = (int) (((double)currentSession.getPassedTime().getTicks()) / updateRate);
         if (lastDiv != currentDiv) {
             lastDiv = currentDiv;
@@ -126,11 +127,12 @@ public class TimeDilation extends Wildcard {
         setWorldSpeed(NORMAL_TICK_RATE);
         lastDiv = -1;
         OtherUtils.executeCommand("/execute as @e[type=minecraft:creeper] run data modify entity @s Fuse set value 30s");
+        if (!isFinale() && START_RAIN) OtherUtils.executeCommand("weather clear");
     }
 
     @Override
     public void activate() {
-        if (!isFinale()) TaskScheduler.scheduleTask(50, () -> OtherUtils.executeCommand("weather rain"));
+        if (!isFinale() && START_RAIN) TaskScheduler.scheduleTask(50, () -> OtherUtils.executeCommand("weather rain"));
         TaskScheduler.scheduleTask(115, () -> {
             activatedAt = currentSession.getPassedTime().add(Time.seconds(20));
             lastDiv = -1;

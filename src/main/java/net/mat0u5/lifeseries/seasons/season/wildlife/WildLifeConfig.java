@@ -152,6 +152,10 @@ public class WildLifeConfig extends SeasonConfig {
             "wildcard_timedilation_player_max_speed", 2.0, "season.timedilation",
             "Max Player Speed Multiplier", "Controls the maximum speed the PLAYERS themselves can move (not the world)."
     );
+    public static final ConfigFileEntry<Boolean> WILDCARD_TIMEDILATION_START_RAIN = new ConfigFileEntry<>(
+            "wildcard_timedilation_start_rain", true, "season.timedilation[new]",
+            "Start Rain", "Controls whether it starts raining when this wildcard starts (helps give an indication of game speed)."
+    );
     public static final ConfigFileEntry<Boolean> WILDCARD_TRIVIA_BOTS_CAN_ENTER_BOATS = new ConfigFileEntry<>(
             "wildcard_trivia_bots_can_enter_boats", true, "season.trivia",
             "Trivia Bots Can Enter Boats", "Controls whether trivia bots can enter boats."
@@ -246,7 +250,7 @@ public class WildLifeConfig extends SeasonConfig {
             "Nerfed Wildcards", "Controls whether wildcards are nerfed in callback (recommended)."
     );
     public static final ConfigFileEntry<Integer> WILDCARD_CALLBACK_INITIAL_ACTIVATION_INTERVAL = new ConfigFileEntry<>(
-            "wildcard_callback_initial_activation_interval", 300, ConfigTypes.SECONDS, "season.callback",
+            "wildcard_callback_initial_activation_interval", 300, ConfigTypes.SECONDS, "season.callback[new]",
             "Initial Activation Interval", "Controls in what intervals will the wildcards get activated (it speeds up throughout the session). Changing this mid-session might have unexpected consequences."
     );
 
@@ -352,6 +356,7 @@ public class WildLifeConfig extends SeasonConfig {
                 ,WILDCARD_TIMEDILATION_MIN_SPEED
                 ,WILDCARD_TIMEDILATION_MAX_SPEED
                 ,WILDCARD_TIMEDILATION_PLAYER_MAX_SPEED
+                ,WILDCARD_TIMEDILATION_START_RAIN
 
                 ,WILDCARD_TRIVIA_BOTS_CAN_ENTER_BOATS
                 ,WILDCARD_TRIVIA_BOTS_PER_PLAYER

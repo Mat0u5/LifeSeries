@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
@@ -78,12 +79,12 @@ public class LivesCommand extends Command {
                 .requires(PermissionManager::isAdmin)
                 .then(argument("player", EntityArgument.players())
                     .executes(context -> lifeManager(
-                        context.getSource(), EntityArgument.getPlayers(context, "player"), 1, false)
+                        context.getSource(), EntityArgument.getPlayers(context, "player"), 1, false, false)
                     )
                     .then(argument("amount", IntegerArgumentType.integer(1))
                         .requires(source -> isAllowedNormal())
                         .executes(context -> lifeManager(
-                            context.getSource(), EntityArgument.getPlayers(context, "player"), IntegerArgumentType.getInteger(context, "amount"), false)
+                            context.getSource(), EntityArgument.getPlayers(context, "player"), IntegerArgumentType.getInteger(context, "amount"), false, false)
                         )
                     )
                     .then(argument("time", StringArgumentType.greedyString())
@@ -91,7 +92,7 @@ public class LivesCommand extends Command {
                         .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("30m", "1h"), builder))
                         .executes(context -> lifeManager(
                             context.getSource(), EntityArgument.getPlayers(context, "player"),
-                            StringArgumentType.getString(context, "time"), false, false)
+                            StringArgumentType.getString(context, "time"), false, false, false)
                         )
                     )
                 )
@@ -100,12 +101,17 @@ public class LivesCommand extends Command {
                 .requires(PermissionManager::isAdmin)
                 .then(argument("player", EntityArgument.players())
                     .executes(context -> lifeManager(
-                        context.getSource(), EntityArgument.getPlayers(context, "player"), -1, false)
+                        context.getSource(), EntityArgument.getPlayers(context, "player"), -1, false, false)
                     )
                     .then(argument("amount", IntegerArgumentType.integer(1))
                         .requires(source -> isAllowedNormal())
                         .executes(context -> lifeManager(
-                            context.getSource(), EntityArgument.getPlayers(context, "player"), -IntegerArgumentType.getInteger(context, "amount"), false)
+                            context.getSource(), EntityArgument.getPlayers(context, "player"), -IntegerArgumentType.getInteger(context, "amount"), false, false)
+                        )
+                        .then(literal("advancedDeath")
+                                .executes(context -> lifeManager(
+                                        context.getSource(), EntityArgument.getPlayers(context, "player"), -IntegerArgumentType.getInteger(context, "amount"), false, true)
+                                )
                         )
                     )
                     .then(argument("time", StringArgumentType.greedyString())
@@ -113,7 +119,13 @@ public class LivesCommand extends Command {
                         .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("30m", "1h"), builder))
                         .executes(context -> lifeManager(
                             context.getSource(), EntityArgument.getPlayers(context, "player"),
-                            StringArgumentType.getString(context, "time"), false, true)
+                            StringArgumentType.getString(context, "time"), false, true, false)
+                        )
+                        .then(literal("advancedDeath")
+                                .executes(context -> lifeManager(
+                                        context.getSource(), EntityArgument.getPlayers(context, "player"),
+                                        StringArgumentType.getString(context, "time"), false, true, true)
+                                )
                         )
                     )
                 )
@@ -124,7 +136,7 @@ public class LivesCommand extends Command {
                     .then(argument("amount", IntegerArgumentType.integer(0))
                         .requires(source -> isAllowedNormal())
                         .executes(context -> lifeManager(
-                            context.getSource(), EntityArgument.getPlayers(context, "player"), IntegerArgumentType.getInteger(context, "amount"), true)
+                            context.getSource(), EntityArgument.getPlayers(context, "player"), IntegerArgumentType.getInteger(context, "amount"), true, false)
                         )
                     )
                     .then(argument("time", StringArgumentType.greedyString())
@@ -132,7 +144,7 @@ public class LivesCommand extends Command {
                         .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("8h", "16h", "24h"), builder))
                         .executes(context -> lifeManager(
                             context.getSource(), EntityArgument.getPlayers(context, "player"),
-                            StringArgumentType.getString(context, "time"), true, false)
+                            StringArgumentType.getString(context, "time"), true, false, false)
                         )
                     )
                 )
@@ -257,7 +269,7 @@ public class LivesCommand extends Command {
         return 1;
     }
 
-    public int lifeManager(CommandSourceStack source, Collection<ServerPlayer> targets, String timeArgument, boolean setNotGive, boolean reverse) {
+    public int lifeManager(CommandSourceStack source, Collection<ServerPlayer> targets, String timeArgument, boolean setNotGive, boolean reverse, boolean advancedDeath) {
 
         Time amount = OtherUtils.parseTimeFromArgument(timeArgument);
         if (amount == null || !amount.isPresent()) {
@@ -266,10 +278,10 @@ public class LivesCommand extends Command {
         }
         if (reverse) amount.multiply(-1);
 
-        return lifeManager(source, targets, amount.getSeconds(), setNotGive);
+        return lifeManager(source, targets, amount.getSeconds(), setNotGive, advancedDeath);
     }
 
-    public int lifeManager(CommandSourceStack source, Collection<ServerPlayer> targets, int amount, boolean setNotGive) {
+    public int lifeManager(CommandSourceStack source, Collection<ServerPlayer> targets, int amount, boolean setNotGive, boolean advancedDeath) {
         if (checkBanned(source)) return -1;
         if (targets == null || targets.isEmpty()) return -1;
         boolean normalLife = isNormalLife();
@@ -284,7 +296,12 @@ public class LivesCommand extends Command {
             }
 
             for (ServerPlayer player : targets) {
-                player.ls$setLives(amount);
+                if (!advancedDeath) {
+                    player.ls$setLives(amount);
+                }
+                else {
+                    AdvancedDeathsManager.setPlayerLives(player, amount);
+                }
             }
         }
         else {
@@ -314,7 +331,13 @@ public class LivesCommand extends Command {
             }
 
             for (ServerPlayer player : targets) {
-                player.ls$addLives(amount);
+                if (!advancedDeath) {
+                    player.ls$addLives(amount);
+                }
+                else {
+                    int setAmount = livesManager.getAddLivesResult(player, amount);
+                    AdvancedDeathsManager.setPlayerLives(player, setAmount);
+                }
             }
         }
         if (currentSeason instanceof DoubleLife doubleLife) {
