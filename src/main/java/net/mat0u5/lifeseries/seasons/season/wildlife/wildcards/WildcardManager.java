@@ -22,12 +22,14 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffects;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
 import static net.mat0u5.lifeseries.Main.*;
 //? if >= 1.21.2
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.CreakingPower;
 
 public class WildcardManager {
-    public static final Map<Wildcards, Wildcard> activeWildcards = new HashMap<>();
+    public static final Map<Wildcards, Wildcard> activeWildcards = new ConcurrentHashMap<>();
     public static final Random rnd = new Random();
     public static double ACTIVATE_WILDCARD_MINUTE = 2.5;
     public static boolean FINALE = false;

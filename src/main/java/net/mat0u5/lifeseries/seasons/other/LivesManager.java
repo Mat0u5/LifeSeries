@@ -371,8 +371,12 @@ public class LivesManager {
             setScore(substitutedPlayerName, lives);
         }
         if (livesChanged) {
-            LifeSkinsManager.refreshLifeSkin(player);
+            onPlayerLivesChanged(player);
         }
+    }
+
+    public void onPlayerLivesChanged(ServerPlayer player) {
+        LifeSkinsManager.refreshLifeSkin(player);
     }
 
     public void setScore(String playerName, int lives) {

@@ -20,10 +20,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.utils.other.Time;
-import net.mat0u5.lifeseries.utils.player.AttributeUtils;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
+import net.mat0u5.lifeseries.utils.player.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -59,6 +56,11 @@ public class WildLife extends Season {
     public ConfigManager createConfig() {
         Snails.loadConfig();
         return new WildLifeConfig();
+    }
+
+    @Override
+    public LivesManager createLivesManager() {
+        return new WildLifeLivesManager();
     }
 
     @Override
@@ -232,6 +234,8 @@ public class WildLife extends Season {
         Callback.setBlacklist(WildLifeConfig.WILDCARD_CALLBACK_WILDCARDS_BLACKLIST.get());
         Callback.TURN_OFF = WildLifeConfig.WILDCARD_CALLBACK_TURN_OFF.get();
         Callback.NERFED_WILDCARDS = WildLifeConfig.WILDCARD_CALLBACK_NERFED_WILDCARDS.get();
+        Callback.INITIAL_ACTIVATION_INTERVAL = 20 * WildLifeConfig.WILDCARD_CALLBACK_INITIAL_ACTIVATION_INTERVAL.get();
+        Callback.INITIAL_DEACTIVATION_INTERVAL = 30*20 * (Callback.INITIAL_ACTIVATION_INTERVAL / Callback.INITIAL_ACTIVATION_INTERVAL_DEFAULT);
 
         AnimalDisguise.SHOW_ARMOR = WildLifeConfig.WILDCARD_SUPERPOWERS_ANIMALDISGUISE_ARMOR.get();
         AnimalDisguise.SHOW_HANDS = WildLifeConfig.WILDCARD_SUPERPOWERS_ANIMALDISGUISE_HANDS.get();

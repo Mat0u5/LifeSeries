@@ -207,4 +207,8 @@ public class AstralProjection extends ToggleableSuperpower {
         player.ls$hurt(level, source, amount);
         //?}
     }
+
+    public void onChangeLives() {
+        deactivate();
+    }
 }

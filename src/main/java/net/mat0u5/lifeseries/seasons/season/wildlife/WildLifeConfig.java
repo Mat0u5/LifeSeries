@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.other.Time;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -244,6 +245,10 @@ public class WildLifeConfig extends SeasonConfig {
             "wildcard_callback_nerfed_wildcards", true, "season.callback",
             "Nerfed Wildcards", "Controls whether wildcards are nerfed in callback (recommended)."
     );
+    public static final ConfigFileEntry<Integer> WILDCARD_CALLBACK_INITIAL_ACTIVATION_INTERVAL = new ConfigFileEntry<>(
+            "wildcard_callback_initial_activation_interval", 300, ConfigTypes.SECONDS, "season.callback",
+            "Initial Activation Interval", "Controls in what intervals will the wildcards get activated (it speeds up throughout the session). Changing this mid-session might have unexpected consequences."
+    );
 
     //Groups
     public static final ConfigFileEntry<Object> GROUP_GENERAL = new ConfigFileEntry<>(
@@ -379,6 +384,7 @@ public class WildLifeConfig extends SeasonConfig {
                 ,WILDCARD_CALLBACK_WILDCARDS_BLACKLIST
                 ,WILDCARD_CALLBACK_TURN_OFF
                 ,WILDCARD_CALLBACK_NERFED_WILDCARDS
+                ,WILDCARD_CALLBACK_INITIAL_ACTIVATION_INTERVAL
         ));
     }
 
