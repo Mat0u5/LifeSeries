@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -13,11 +12,9 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
 
 //? if >= 1.21.2 {
 import net.minecraft.world.item.equipment.Equippable;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Unit;
@@ -38,6 +35,7 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.core.registries.BuiltInRegistries;
 
 public class Flight extends Superpower {
+    public static int COOLDOWN_MILLIS = 45000;
     public boolean isLaunchedUp = false;
     private int onGroundTicks = 0;
     private Time timer = Time.zero();
@@ -53,7 +51,7 @@ public class Flight extends Superpower {
 
     @Override
     public int getCooldownMillis() {
-        return 45000;
+        return COOLDOWN_MILLIS;
     }
 
     @Override

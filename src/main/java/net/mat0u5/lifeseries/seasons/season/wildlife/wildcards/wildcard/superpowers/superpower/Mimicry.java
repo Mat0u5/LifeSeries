@@ -18,6 +18,7 @@ import net.minecraft.world.entity.decoration.Mannequin;
 //?}
 
 public class Mimicry extends Superpower {
+    public static int COOLDOWN_MILLIS = 300000;
 
     private Superpower mimic = null;
 
@@ -32,7 +33,7 @@ public class Mimicry extends Superpower {
 
     @Override
     public int getCooldownMillis() {
-        return 300000;
+        return COOLDOWN_MILLIS;
     }
 
     @Override

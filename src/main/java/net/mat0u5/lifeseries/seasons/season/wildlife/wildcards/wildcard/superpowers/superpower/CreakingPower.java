@@ -32,6 +32,7 @@ import static net.mat0u5.lifeseries.Main.server;
 import net.minecraft.core.particles.TrailParticleOption;
 
 public class CreakingPower extends ToggleableSuperpower {
+    public static int COOLDOWN_MILLIS = 10000;
     public static final List<UUID> allCreatedEntities = new ArrayList<>();
 
     private final List<String> createdTeams = new ArrayList<>();
@@ -108,7 +109,7 @@ public class CreakingPower extends ToggleableSuperpower {
 
     @Override
     public int deactivateCooldownMillis() {
-        return 10000;
+        return COOLDOWN_MILLIS;
     }
 
     private static void makeFriendly(String teamName, Entity entity, ServerPlayer player) {

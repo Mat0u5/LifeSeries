@@ -13,6 +13,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 
 public class TripleJump extends ToggleableSuperpower {
+    public static int COOLDOWN_MILLIS = 1000;
     public boolean isInAir = false;
     private Time onGround = Time.zero();
 
@@ -23,6 +24,11 @@ public class TripleJump extends ToggleableSuperpower {
     @Override
     public Superpowers getSuperpower() {
         return Superpowers.TRIPLE_JUMP;
+    }
+
+    @Override
+    public int deactivateCooldownMillis() {
+        return COOLDOWN_MILLIS;
     }
 
     @Override

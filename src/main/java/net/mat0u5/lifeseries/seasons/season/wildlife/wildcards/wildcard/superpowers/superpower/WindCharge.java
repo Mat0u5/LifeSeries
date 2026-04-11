@@ -24,6 +24,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.util.Unit;
 
 public class WindCharge extends ToggleableSuperpower {
+    public static int COOLDOWN_MILLIS = 1000;
     public static int MAX_MACE_DAMAGE = 2;
 
     public WindCharge(ServerPlayer player) {
@@ -33,6 +34,11 @@ public class WindCharge extends ToggleableSuperpower {
     @Override
     public Superpowers getSuperpower() {
         return Superpowers.WIND_CHARGE;
+    }
+
+    @Override
+    public int deactivateCooldownMillis() {
+        return COOLDOWN_MILLIS;
     }
 
     @Override

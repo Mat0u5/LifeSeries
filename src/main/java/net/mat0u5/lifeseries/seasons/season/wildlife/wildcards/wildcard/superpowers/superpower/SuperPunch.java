@@ -15,6 +15,7 @@ import net.minecraft.world.entity.EntityType;
 import java.util.List;
 
 public class SuperPunch extends ToggleableSuperpower {
+    public static int COOLDOWN_MILLIS = 1000;
     private Time timer = Time.zero();
     private Entity riding = null;
     private static final List<EntityType<?>> bannedSittingEntities = List.of(MobRegistry.SNAIL, MobRegistry.TRIVIA_BOT);
@@ -26,6 +27,11 @@ public class SuperPunch extends ToggleableSuperpower {
     @Override
     public Superpowers getSuperpower() {
         return Superpowers.SUPER_PUNCH;
+    }
+
+    @Override
+    public int deactivateCooldownMillis() {
+        return COOLDOWN_MILLIS;
     }
 
     @Override

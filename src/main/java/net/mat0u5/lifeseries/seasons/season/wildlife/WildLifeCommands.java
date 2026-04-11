@@ -19,6 +19,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.S
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -490,7 +491,12 @@ public class WildLifeCommands extends Command {
                 superpower.cooldown(cooldown*1000);
             }
             else {
-                superpower.cooldown(superpower.getCooldownMillis());
+                if (superpower instanceof ToggleableSuperpower togglePower) {
+                    superpower.cooldown(Math.max(togglePower.activateCooldownMillis(), togglePower.deactivateCooldownMillis()));
+                }
+                else {
+                    superpower.cooldown(superpower.getCooldownMillis());
+                }
             }
             superpower.sendCooldownPacket();
             superpower.sendShowCooldownPacket();

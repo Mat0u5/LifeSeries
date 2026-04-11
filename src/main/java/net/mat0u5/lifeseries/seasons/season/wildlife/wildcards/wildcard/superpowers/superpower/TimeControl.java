@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 
 public class TimeControl extends Superpower {
+    public static int COOLDOWN_MILLIS = 300000;
     public static int changedSpeedFor = 0;
     public TimeControl(ServerPlayer player) {
         super(player);
@@ -22,7 +23,7 @@ public class TimeControl extends Superpower {
 
     @Override
     public int getCooldownMillis() {
-        return 300000;
+        return COOLDOWN_MILLIS;
     }
 
     @Override

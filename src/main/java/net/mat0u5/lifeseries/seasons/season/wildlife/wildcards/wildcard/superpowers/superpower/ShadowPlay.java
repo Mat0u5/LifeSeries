@@ -14,6 +14,7 @@ import net.minecraft.world.effect.MobEffects;
 import java.util.List;
 
 public class ShadowPlay extends Superpower {
+    public static int COOLDOWN_MILLIS = 30000;
     public ShadowPlay(ServerPlayer player) {
         super(player);
     }
@@ -25,7 +26,7 @@ public class ShadowPlay extends Superpower {
 
     @Override
     public int getCooldownMillis() {
-        return 30000;
+        return COOLDOWN_MILLIS;
     }
 
     @Override

@@ -12,6 +12,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 
 public class Invisibility extends ToggleableSuperpower {
+    public static int COOLDOWN_MILLIS = 1000;
     public Invisibility(ServerPlayer player) {
         super(player);
     }
@@ -23,7 +24,7 @@ public class Invisibility extends ToggleableSuperpower {
 
     @Override
     public int deactivateCooldownMillis() {
-        return 5000;
+        return COOLDOWN_MILLIS;
     }
 
     @Override

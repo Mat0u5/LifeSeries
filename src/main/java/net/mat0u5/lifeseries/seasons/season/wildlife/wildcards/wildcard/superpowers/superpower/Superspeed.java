@@ -16,6 +16,7 @@ import net.minecraft.world.effect.MobEffects;
 import static net.mat0u5.lifeseries.Main.server;
 
 public class Superspeed extends ToggleableSuperpower {
+    public static int COOLDOWN_MILLIS = 3000;
 
     public static boolean STEP_UP = false;
 
@@ -66,7 +67,11 @@ public class Superspeed extends ToggleableSuperpower {
 
     @Override
     public int activateCooldownMillis() {
-        return 3050;
+        return 1000;
+    }
+    @Override
+    public int deactivateCooldownMillis() {
+        return COOLDOWN_MILLIS+50;
     }
 
     @Override

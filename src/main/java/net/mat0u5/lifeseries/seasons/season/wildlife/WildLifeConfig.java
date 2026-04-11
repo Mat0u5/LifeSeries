@@ -1,10 +1,12 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife;
 
+import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.*;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -236,6 +238,27 @@ public class WildLifeConfig extends SeasonConfig {
             "Animal Disguise: Show Hand Items", "Controls whether hand items are seen on players disguised as mobs."
     );
 
+    public static final ConfigFileEntry<Object> GROUP_SUPERPOWER_COOLDOWNS = new ConfigFileEntry<>(
+            "group_superpower_cooldown", null, ConfigTypes.TEXT, "{season.superpowers.cooldowns}[new]",
+            "Superpower Cooldowns", ""
+    );
+
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_TIME_CONTROL = new ConfigFileEntry<>("superpower_cooldown_time_control", 300, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Time Control Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_CREAKING = new ConfigFileEntry<>("superpower_cooldown_creaking", 10, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Creaking Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_WIND_CHARGE = new ConfigFileEntry<>("superpower_cooldown_wind_charge", 1, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Wind Charge Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_ASTRAL_PROJECTION = new ConfigFileEntry<>("superpower_cooldown_astral_projection", 5, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Astral Projection Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_SUPER_PUNCH = new ConfigFileEntry<>("superpower_cooldown_super_punch", 1, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Super Punch Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_MIMICRY = new ConfigFileEntry<>("superpower_cooldown_mimicry", 300, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Mimicry Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_TELEPORTATION = new ConfigFileEntry<>("superpower_cooldown_teleportation", 5, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Teleportation Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_LISTENING = new ConfigFileEntry<>("superpower_cooldown_listening", 1, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Listening Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_SHADOW_PLAY = new ConfigFileEntry<>("superpower_cooldown_shadow_play", 30, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Shadow Play Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_FLIGHT = new ConfigFileEntry<>("superpower_cooldown_flight", 45, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Flight Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_PLAYER_DISGUISE = new ConfigFileEntry<>("superpower_cooldown_player_disguise", 10, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Player Disguise Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_ANIMAL_DISGUISE = new ConfigFileEntry<>("superpower_cooldown_animal_disguise", 1, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Animal Disguise Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_TRIPLE_JUMP = new ConfigFileEntry<>("superpower_cooldown_triple_jump", 1, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Triple Jump Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_INVISIBILITY = new ConfigFileEntry<>("superpower_cooldown_invisibility", 1, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Invisibility Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_SUPERSPEED = new ConfigFileEntry<>("superpower_cooldown_superspeed", 3, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Superspeed Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_NECROMANCY = new ConfigFileEntry<>("superpower_cooldown_necromancy", 300, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Necromancy Cooldown", "");
 
     public static final ConfigFileEntry<String> WILDCARD_CALLBACK_WILDCARDS_BLACKLIST = new ConfigFileEntry<>(
             "wildcard_callback_wildcards_blacklist", "[hunger]", ConfigTypes.STRING_LIST, "season.callback",
@@ -319,7 +342,7 @@ public class WildLifeConfig extends SeasonConfig {
 
     @Override
     protected List<ConfigFileEntry<?>> getSeasonSpecificConfigEntries() {
-        return new ArrayList<>(List.of(
+        List<ConfigFileEntry<?>> result = new ArrayList<>(List.of(
                 GROUP_GENERAL //Group
                 ,GROUP_SIZESHIFTING //Group
                 ,GROUP_HUNGER //Group
@@ -386,11 +409,41 @@ public class WildLifeConfig extends SeasonConfig {
                 ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_ARMOR
                 ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_HANDS
 
+                ,GROUP_SUPERPOWER_COOLDOWNS
+                ,SUPERPOWER_COOLDOWN_ASTRAL_PROJECTION
+                ,SUPERPOWER_COOLDOWN_SUPER_PUNCH
+                ,SUPERPOWER_COOLDOWN_MIMICRY
+                ,SUPERPOWER_COOLDOWN_TELEPORTATION
+                ,SUPERPOWER_COOLDOWN_SHADOW_PLAY
+                ,SUPERPOWER_COOLDOWN_PLAYER_DISGUISE
+                ,SUPERPOWER_COOLDOWN_ANIMAL_DISGUISE
+                ,SUPERPOWER_COOLDOWN_TRIPLE_JUMP
+                ,SUPERPOWER_COOLDOWN_INVISIBILITY
+                ,SUPERPOWER_COOLDOWN_SUPERSPEED
+                ,SUPERPOWER_COOLDOWN_NECROMANCY
+
+                //? if >= 1.20.3 {
+                ,SUPERPOWER_COOLDOWN_TIME_CONTROL
+                //?}
+                //? if >= 1.21 {
+                ,SUPERPOWER_COOLDOWN_WIND_CHARGE
+                //?}
+                //? if >= 1.21.2 {
+                ,SUPERPOWER_COOLDOWN_CREAKING
+                ,SUPERPOWER_COOLDOWN_FLIGHT
+                //?}
+
                 ,WILDCARD_CALLBACK_WILDCARDS_BLACKLIST
                 ,WILDCARD_CALLBACK_TURN_OFF
                 ,WILDCARD_CALLBACK_NERFED_WILDCARDS
                 ,WILDCARD_CALLBACK_INITIAL_ACTIVATION_INTERVAL
         ));
+
+        if (CompatibilityManager.voicechatLoaded()) {
+            result.add(SUPERPOWER_COOLDOWN_LISTENING);
+        }
+
+        return result;
     }
 
     @Override

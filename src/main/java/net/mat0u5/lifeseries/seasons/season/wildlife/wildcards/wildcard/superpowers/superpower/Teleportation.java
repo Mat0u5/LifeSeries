@@ -20,6 +20,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 
 public class Teleportation extends Superpower {
+    public static int COOLDOWN_MILLIS = 5000;
     private Time timer = Time.zero();
 
     public Teleportation(ServerPlayer player) {
@@ -33,7 +34,7 @@ public class Teleportation extends Superpower {
 
     @Override
     public int getCooldownMillis() {
-        return 5000;
+        return COOLDOWN_MILLIS;
     }
 
     @Override

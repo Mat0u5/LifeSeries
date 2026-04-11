@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers;
 
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -26,10 +25,7 @@ public abstract class Superpower {
     }
 
     public abstract Superpowers getSuperpower();
-
-    public int getCooldownMillis() {
-        return 1000;
-    }
+    public abstract int getCooldownMillis();
 
     public void tick() {}
 

@@ -22,6 +22,11 @@ public abstract class ToggleableSuperpower extends Superpower {
         }
     }
 
+    @Override
+    public int getCooldownMillis() {
+        return 1000;
+    }
+
     public int activateCooldownMillis() {
         return 50;
     }

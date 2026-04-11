@@ -34,6 +34,8 @@ import net.minecraft.world.item.component.ResolvableProfile;
 //?}
 
 public class AstralProjection extends ToggleableSuperpower {
+    public static int COOLDOWN_MILLIS = 5000;
+
     //? if <= 1.21.6 {
     /*@Nullable
     public FakePlayer clone;
@@ -73,7 +75,7 @@ public class AstralProjection extends ToggleableSuperpower {
 
     @Override
     public int deactivateCooldownMillis() {
-        return 5000;
+        return COOLDOWN_MILLIS;
     }
 
     public void resetParams() {

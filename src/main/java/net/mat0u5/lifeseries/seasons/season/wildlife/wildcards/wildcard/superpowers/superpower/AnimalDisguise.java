@@ -19,12 +19,18 @@ import net.minecraft.world.entity.player.Player;
 import java.util.List;
 
 public class AnimalDisguise extends ToggleableSuperpower {
+    public static int COOLDOWN_MILLIS = 1000;
 
     public static boolean SHOW_ARMOR = false;
     public static boolean SHOW_HANDS = true;
 
     public AnimalDisguise(ServerPlayer player) {
         super(player);
+    }
+
+    @Override
+    public int deactivateCooldownMillis() {
+        return COOLDOWN_MILLIS;
     }
 
     @Override

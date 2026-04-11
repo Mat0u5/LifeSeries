@@ -241,6 +241,23 @@ public class WildLife extends Season {
         AnimalDisguise.SHOW_ARMOR = WildLifeConfig.WILDCARD_SUPERPOWERS_ANIMALDISGUISE_ARMOR.get();
         AnimalDisguise.SHOW_HANDS = WildLifeConfig.WILDCARD_SUPERPOWERS_ANIMALDISGUISE_HANDS.get();
 
+        TimeControl.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_TIME_CONTROL.get();
+        CreakingPower.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_CREAKING.get();
+        WindCharge.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_WIND_CHARGE.get();
+        AstralProjection.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_ASTRAL_PROJECTION.get();
+        SuperPunch.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_SUPER_PUNCH.get();
+        Mimicry.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_MIMICRY.get();
+        Teleportation.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_TELEPORTATION.get();
+        Listening.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_LISTENING.get();
+        ShadowPlay.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_SHADOW_PLAY.get();
+        Flight.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_FLIGHT.get();
+        PlayerDisguise.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_PLAYER_DISGUISE.get();
+        AnimalDisguise.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_ANIMAL_DISGUISE.get();
+        TripleJump.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_TRIPLE_JUMP.get();
+        Invisibility.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_INVISIBILITY.get();
+        Superspeed.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_SUPERSPEED.get();
+        Necromancy.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_NECROMANCY.get();
+
         Snails.loadConfig();
         Snails.loadSnailNames();
         Snails.reloadSnails();

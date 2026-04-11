@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Listening extends ToggleableSuperpower {
+    public static int COOLDOWN_MILLIS = 1000;
     public static final double MAX_RANGE = 20;
     public static List<UUID> listeningPlayers = new ArrayList<>();
     public Vec3 lookingAt = null;
@@ -28,6 +29,11 @@ public class Listening extends ToggleableSuperpower {
     @Override
     public Superpowers getSuperpower() {
         return Superpowers.LISTENING;
+    }
+
+    @Override
+    public int deactivateCooldownMillis() {
+        return COOLDOWN_MILLIS;
     }
 
     @Override
