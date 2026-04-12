@@ -13,6 +13,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 
 public class TripleJump extends ToggleableSuperpower {
+    public static int JUMP_COUNT = 3;
     public static int COOLDOWN_MILLIS = 1000;
     public boolean isInAir = false;
     private Time onGround = Time.zero();
@@ -68,6 +69,7 @@ public class TripleJump extends ToggleableSuperpower {
         player.ls$playNotifySound(SoundEvents.SLIME_JUMP, SoundSource.MASTER, 1, 1);
         NetworkHandlerServer.sendVignette(player, -1);
         SimplePackets.TRIPLE_JUMP.target(player).sendToClient(true);
+        SimplePackets.POWER_TJ_JUMPS.target(player).sendToClient(JUMP_COUNT);
     }
 
     @Override

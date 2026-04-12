@@ -277,6 +277,10 @@ public class WildLife extends Season {
         Invisibility.SHOW_PARTICLES = WildLifeConfig.WILDCARD_SUPERPOWERS_INVISIBILITY_SHOW_PARTICLES.get();
         Invisibility.ATTACK_CANCELS = WildLifeConfig.WILDCARD_SUPERPOWERS_INVISIBILITY_ATTACK_CANCELS.get();
         Invisibility.DAMAGE_CANCELS = WildLifeConfig.WILDCARD_SUPERPOWERS_INVISIBILITY_DAMAGE_CANCELS.get();
+        Superspeed.FROST_WALKER_LEVEL = WildLifeConfig.WILDCARD_SUPERPOWERS_SUPERSPEED_FROST_WALKER_LEVEL.get();
+        Superspeed.HUNGER_EFFECT_LEVEL = WildLifeConfig.WILDCARD_SUPERPOWERS_SUPERSPEED_HUNGER_LEVEL.get();
+        Superspeed.TARGET_SPEED = WildLifeConfig.WILDCARD_SUPERPOWERS_SUPERSPEED_TARGET_SPEED.get();
+        TripleJump.JUMP_COUNT = WildLifeConfig.WILDCARD_SUPERPOWERS_TRIPLE_JUMP_JUMPS.get();
 
         Snails.loadConfig();
         Snails.loadSnailNames();

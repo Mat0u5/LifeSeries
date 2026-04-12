@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Superspeed;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.NicknameManager;
@@ -160,9 +161,9 @@ public abstract class PlayerMixin implements IPlayer {
         if (!SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPERSPEED)) return;
 
         //? if <= 1.20.5 {
-        /*FrostWalkerEnchantment.onEntityMoved(entity, entity.level(), entity.blockPosition(), 5);
+        /*FrostWalkerEnchantment.onEntityMoved(entity, entity.level(), entity.blockPosition(), Superspeed.FROST_WALKER_LEVEL);
         *///?} else {
-        ls$frostWalker.apply(player.ls$getServerLevel(), 5, null, player, player.position());
+        ls$frostWalker.apply(player.ls$getServerLevel(), Superspeed.FROST_WALKER_LEVEL, null, player, player.position());
         //?}
     }
 

@@ -354,6 +354,23 @@ public class WildLifeConfig extends SeasonConfig {
             "Show Transluscent Particles", ""
     );
 
+    public static final ConfigFileEntry<Double> WILDCARD_SUPERPOWERS_SUPERSPEED_TARGET_SPEED = new ConfigFileEntry<>(
+            "wildcard_superpowers_superspeed_target_speed", 0.35, "season.superpowers.superspeed[new]",
+            "Maximum Speed", "Controls the maximum speed."
+    );
+    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_SUPERSPEED_FROST_WALKER_LEVEL = new ConfigFileEntry<>(
+            "wildcard_superpowers_superspeed_frost_walker_level", 5, "season.superpowers.superspeed[new]",
+            "Frost Walker Level", "Controls the frost walker enchant level."
+    );
+    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_SUPERSPEED_HUNGER_LEVEL = new ConfigFileEntry<>(
+            "wildcard_superpowers_superspeed_hunger_level", 5, "season.superpowers.superspeed[new]",
+            "Hunger Level", "Controls the hunger level amplifier."
+    );
+    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_TRIPLE_JUMP_JUMPS = new ConfigFileEntry<>(
+            "wildcard_superpowers_triple_jump_jumps", 3, "season.superpowers.triple_jump[new]",
+            "Max Jump Amount", "Controls the maximum jump amount."
+    );
+
     /*
     public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_ = new ConfigFileEntry<>(
             "wildcard_superpowers_", 70, "season.superpowers.xxxx[new]",
@@ -552,9 +569,12 @@ public class WildLifeConfig extends SeasonConfig {
                 ,SUPERPOWER_MIMICRY
                 ,SUPERPOWER_COOLDOWN_MIMICRY
 
+                // Triple Jump
                 ,SUPERPOWER_TRIPLE_JUMP
                 ,SUPERPOWER_COOLDOWN_TRIPLE_JUMP
+                ,WILDCARD_SUPERPOWERS_TRIPLE_JUMP_JUMPS
 
+                // Invisibility
                 ,SUPERPOWER_INVISIBILITY
                 ,SUPERPOWER_COOLDOWN_INVISIBILITY
                 ,WILDCARD_SUPERPOWERS_INVISIBILITY_DAMAGE_CANCELS
@@ -595,6 +615,9 @@ public class WildLifeConfig extends SeasonConfig {
                 //? if > 1.20.3 {
                 //Superspeed
                 ,WILDCARD_SUPERPOWERS_SUPERSPEED_STEP
+                ,WILDCARD_SUPERPOWERS_SUPERSPEED_FROST_WALKER_LEVEL
+                ,WILDCARD_SUPERPOWERS_SUPERSPEED_HUNGER_LEVEL
+                ,WILDCARD_SUPERPOWERS_SUPERSPEED_TARGET_SPEED
                 //?}
 
                 ,WILDCARD_CALLBACK_WILDCARDS_BLACKLIST

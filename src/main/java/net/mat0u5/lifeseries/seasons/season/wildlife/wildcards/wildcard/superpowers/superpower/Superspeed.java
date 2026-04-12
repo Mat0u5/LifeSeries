@@ -16,6 +16,9 @@ import net.minecraft.world.effect.MobEffects;
 import static net.mat0u5.lifeseries.Main.server;
 
 public class Superspeed extends ToggleableSuperpower {
+    public static double TARGET_SPEED = 0.35;
+    public static int HUNGER_EFFECT_LEVEL = 5;
+    public static int FROST_WALKER_LEVEL = 5;
     public static int COOLDOWN_MILLIS = 3000;
 
     public static boolean STEP_UP = false;
@@ -34,7 +37,7 @@ public class Superspeed extends ToggleableSuperpower {
         if (!active) return;
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        MobEffectInstance hunger = new MobEffectInstance(MobEffects.HUNGER, 219, 4, false, false, false);
+        MobEffectInstance hunger = new MobEffectInstance(MobEffects.HUNGER, 219, HUNGER_EFFECT_LEVEL-1, false, false, false);
         player.addEffect(hunger);
         player.getFoodData().setSaturation(0);
         if (player.getFoodData().getFoodLevel() <= 6) {
@@ -55,7 +58,7 @@ public class Superspeed extends ToggleableSuperpower {
             return;
         }
         player.ls$playNotifySound(SoundEvents.BEACON_ACTIVATE, SoundSource.MASTER, 1, 1);
-        slowlySetSpeed(player, 0.35, 60);
+        slowlySetSpeed(player, TARGET_SPEED, 60);
         NetworkHandlerServer.sendVignette(player, -1);
         if (STEP_UP) {
             //? if > 1.20.3 {
@@ -82,7 +85,7 @@ public class Superspeed extends ToggleableSuperpower {
         slowlySetSpeed(player, AttributeUtils.DEFAULT_PLAYER_MOVEMENT_SPEED, 30);
         if (!WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
             player.removeEffect(MobEffects.HUNGER);
-            MobEffectInstance hunger = new MobEffectInstance(MobEffects.HUNGER, 30, 4, false, false, false);
+            MobEffectInstance hunger = new MobEffectInstance(MobEffects.HUNGER, 30, HUNGER_EFFECT_LEVEL-1, false, false, false);
             player.addEffect(hunger);
         }
         NetworkHandlerServer.sendVignette(player, 0);
