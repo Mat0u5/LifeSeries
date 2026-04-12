@@ -216,6 +216,7 @@ public class NetworkHandlerClient {
 
 
         //Boolean payload
+        SimplePackets.POWER_INVISIBILITY_PARTICLES.setClientReceive(payload -> MainClient.powerInvisParticles = payload.value());
         SimplePackets.PREVENT_GLIDING.setClientReceive(payload -> MainClient.preventGliding = payload.value());
         SimplePackets.TABLIST_SHOW_EXACT.setClientReceive(payload -> MainClient.TAB_LIST_SHOW_EXACT_LIVES = payload.value());
         SimplePackets.FIX_SIZECHANGING_BUGS.setClientReceive(payload -> MainClient.FIX_SIZECHANGING_BUGS = payload.value());
@@ -262,6 +263,7 @@ public class NetworkHandlerClient {
         SimplePackets.SIZESHIFTING_CHANGE.setClientReceive(payload -> MainClient.SIZESHIFTING_CHANGE = (float) payload.number());
 
         //Integer payload
+        SimplePackets.POWER_TJ_JUMPS.setClientReceive(payload -> MainClient.powerTripleJumpCount = payload.number());
         SimplePackets.SNAIL_AIR.setClientReceive(payload -> {
             MainClient.snailAir = payload.number();
             MainClient.snailAirTimestamp = System.currentTimeMillis();

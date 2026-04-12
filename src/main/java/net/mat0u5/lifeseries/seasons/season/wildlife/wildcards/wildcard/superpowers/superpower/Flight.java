@@ -35,6 +35,8 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.core.registries.BuiltInRegistries;
 
 public class Flight extends Superpower {
+    public static int LAUNGH_JUMP_AMPLIFIER = 54;
+    public static boolean ELYTRA_LAUNCH_NEEDED = true;
     public static int COOLDOWN_MILLIS = 45000;
     public boolean isLaunchedUp = false;
     private int onGroundTicks = 0;
@@ -64,13 +66,13 @@ public class Flight extends Superpower {
         }
         if (!isLaunchedUp) {
             onGroundTicks = 0;
-            if (timer.isMultipleOf(Time.ticks(5))) SimplePackets.PREVENT_GLIDING.target(player).sendToClient(true);
+            if (timer.isMultipleOf(Time.ticks(5))) SimplePackets.PREVENT_GLIDING.target(player).sendToClient(ELYTRA_LAUNCH_NEEDED);
             return;
         }
 
         if (player.onGround()) {
             onGroundTicks++;
-            if (timer.isMultipleOf(Time.ticks(5))) SimplePackets.PREVENT_GLIDING.target(player).sendToClient(true);
+            if (timer.isMultipleOf(Time.ticks(5))) SimplePackets.PREVENT_GLIDING.target(player).sendToClient(ELYTRA_LAUNCH_NEEDED);
         }
 
         else {

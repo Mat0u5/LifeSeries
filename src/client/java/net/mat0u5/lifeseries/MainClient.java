@@ -63,6 +63,8 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     public static String teamColor = null;
     public static String teamName = null;
     public static List<String> lvl1ClampedEnchants = new ArrayList<>();
+    public static boolean powerInvisParticles = true;
+    public static int powerTripleJumpCount = 3;
 
     public static ClientConfig clientConfig;
 
@@ -205,6 +207,8 @@ public class MainClient implements ClientModInitializer, IClientHelper {
         teamColor = null;
         teamName = null;
         lvl1ClampedEnchants = new ArrayList<>();
+        powerInvisParticles = true;
+        powerTripleJumpCount = 3;
 
         MorphManager.resetMorphs();
     }

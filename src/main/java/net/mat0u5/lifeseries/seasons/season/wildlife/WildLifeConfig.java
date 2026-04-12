@@ -333,6 +333,27 @@ public class WildLifeConfig extends SeasonConfig {
             "Blind Time", "Controls the time for which players are blinded."
     );
 
+    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_FLIGHT_JUMP_AMPLIFIER = new ConfigFileEntry<>(
+            "wildcard_superpowers_flight_jump_amplifier", 54, "season.superpowers.flight[new]",
+            "Jump Boost Amplifier", "Controls the jump boost amplifier."
+    );
+    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_FLIGHT_ELYTRA_LAUNCH_NEEDED = new ConfigFileEntry<>(
+            "wildcard_superpowers_flight_elytra_launch_needed", true, "season.superpowers.flight[new]",
+            "Needs Launch To Use Elytra", ""
+    );
+    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_INVISIBILITY_DAMAGE_CANCELS = new ConfigFileEntry<>(
+            "wildcard_superpowers_invisibility_damage_cancels", true, "season.superpowers.invisibility[new]",
+            "Taking Damage Cancels Invis", ""
+    );
+    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_INVISIBILITY_ATTACK_CANCELS = new ConfigFileEntry<>(
+            "wildcard_superpowers_invisibility_attack_cancels", true, "season.superpowers.invisibility[new]",
+            "Attacking Cancels Invis", ""
+    );
+    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_INVISIBILITY_SHOW_PARTICLES = new ConfigFileEntry<>(
+            "wildcard_superpowers_invisibility_show_particles", true, "season.superpowers.invisibility[new]",
+            "Show Transluscent Particles", ""
+    );
+
     /*
     public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_ = new ConfigFileEntry<>(
             "wildcard_superpowers_", 70, "season.superpowers.xxxx[new]",
@@ -536,6 +557,9 @@ public class WildLifeConfig extends SeasonConfig {
 
                 ,SUPERPOWER_INVISIBILITY
                 ,SUPERPOWER_COOLDOWN_INVISIBILITY
+                ,WILDCARD_SUPERPOWERS_INVISIBILITY_DAMAGE_CANCELS
+                ,WILDCARD_SUPERPOWERS_INVISIBILITY_ATTACK_CANCELS
+                ,WILDCARD_SUPERPOWERS_INVISIBILITY_SHOW_PARTICLES
 
                 ,SUPERPOWER_SUPERSPEED
                 ,SUPERPOWER_COOLDOWN_SUPERSPEED
@@ -564,6 +588,8 @@ public class WildLifeConfig extends SeasonConfig {
                 //Flight
                 ,SUPERPOWER_FLIGHT
                 ,SUPERPOWER_COOLDOWN_FLIGHT
+                ,WILDCARD_SUPERPOWERS_FLIGHT_JUMP_AMPLIFIER
+                ,WILDCARD_SUPERPOWERS_FLIGHT_ELYTRA_LAUNCH_NEEDED
                 //?}
 
                 //? if > 1.20.3 {

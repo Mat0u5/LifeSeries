@@ -173,6 +173,7 @@ public class ClientEvents {
     }
 
     public static void spawnInvisibilityParticles(Minecraft client) {
+        if (!MainClient.powerInvisParticles) return;
         if (client.level == null) return;
         //? if <= 1.20.3 {
         /*if (client.level.random.nextInt(30) != 0) return;
@@ -262,7 +263,7 @@ public class ClientEvents {
             return;
         }
 
-        if (jumpedInAir >= 2) return;
+        if ((jumpedInAir+1) > MainClient.powerTripleJumpCount) return;
 
         boolean shouldJump = false;
         //? if <= 1.21 {

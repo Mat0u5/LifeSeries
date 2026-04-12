@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.minecraft.core.particles.ParticleTypes;
@@ -12,6 +13,9 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 
 public class Invisibility extends ToggleableSuperpower {
+    public static boolean SHOW_PARTICLES = true;
+    public static boolean DAMAGE_CANCELS = true;
+    public static boolean ATTACK_CANCELS = true;
     public static int COOLDOWN_MILLIS = 1000;
     public Invisibility(ServerPlayer player) {
         super(player);
@@ -51,6 +55,7 @@ public class Invisibility extends ToggleableSuperpower {
 
         playerLevel.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.SHULKER_SHOOT, SoundSource.MASTER, 1, 1);
         sendInvisibilityPacket();
+        SimplePackets.POWER_INVISIBILITY_PARTICLES.sendToClient(SHOW_PARTICLES);
     }
 
     @Override
@@ -71,10 +76,14 @@ public class Invisibility extends ToggleableSuperpower {
     }
 
     public void onTakeDamage() {
-        deactivate();
+        if (DAMAGE_CANCELS) {
+            deactivate();
+        }
     }
 
     public void onAttack() {
-        deactivate();
+        if (ATTACK_CANCELS) {
+            deactivate();
+        }
     }
 }

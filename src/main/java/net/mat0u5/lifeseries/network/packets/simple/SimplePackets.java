@@ -46,6 +46,7 @@ public class SimplePackets {
     public static final SimpleBooleanPacket ADMIN_INFO = new SimpleBooleanPacket("ADMIN_INFO");
     public static final SimpleBooleanPacket TRIPLE_JUMP = new SimpleBooleanPacket("TRIPLE_JUMP");
     public static final SimpleBooleanPacket MOD_DISABLED = new SimpleBooleanPacket("MOD_DISABLED");
+    public static final SimpleBooleanPacket POWER_INVISIBILITY_PARTICLES = new SimpleBooleanPacket("POWER_INVISIBILITY_PARTICLES");
 
     public static final SimpleNumberPacket PLAYER_MIN_MSPT = new SimpleNumberPacket("PLAYER_MIN_MSPT");
     public static final SimpleNumberPacket SIZESHIFTING_CHANGE = new SimpleNumberPacket("SIZESHIFTING_CHANGE");
@@ -63,6 +64,7 @@ public class SimplePackets {
     public static final SimpleIntegerPacket TAB_LIST_LIVES_CUTOFF = new SimpleIntegerPacket("TAB_LIST_LIVES_CUTOFF");
     public static final SimpleIntegerPacket TRIVIA_TIMER = new SimpleIntegerPacket("TRIVIA_TIMER");
     public static final SimpleIntegerPacket VOTING_TIME = new SimpleIntegerPacket("VOTING_TIME");
+    public static final SimpleIntegerPacket POWER_TJ_JUMPS = new SimpleIntegerPacket("POWER_TJ_JUMPS");
 
     public static final SimpleEmptyPacket HOLDING_JUMP = new SimpleEmptyPacket("HOLDING_JUMP");
     public static final SimpleEmptyPacket SUPERPOWER_KEY = new SimpleEmptyPacket("SUPERPOWER_KEY");
