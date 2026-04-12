@@ -15,6 +15,8 @@ import net.minecraft.world.entity.EntityType;
 import java.util.List;
 
 public class SuperPunch extends ToggleableSuperpower {
+    public static double KNOCKBACK_STRENGTH = 3.0;
+    public static double THORNS_DAMAGE = 1.0;
     public static int COOLDOWN_MILLIS = 1000;
     private Time timer = Time.zero();
     private Entity riding = null;

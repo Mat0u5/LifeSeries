@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.SuperPunch;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.WindCharge;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -176,7 +177,7 @@ public abstract class LivingEntityMixin {
         if (source.getEntity() instanceof ServerPlayer attacker &&
                 source.type() == attacker.damageSources().playerAttack(attacker).type() &&
                 SuperpowersWildcard.hasActivatedPower(attacker, Superpowers.SUPER_PUNCH)) {
-            return 3;
+            return SuperPunch.KNOCKBACK_STRENGTH;
         }
         return strength;
     }

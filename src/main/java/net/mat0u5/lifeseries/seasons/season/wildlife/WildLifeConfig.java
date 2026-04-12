@@ -299,6 +299,14 @@ public class WildLifeConfig extends SeasonConfig {
             "Damage Cancels Projection", "Controls if your projection ends when you take damage."
     );
 
+    public static final ConfigFileEntry<Double> WILDCARD_SUPERPOWERS_SUPER_PUNCH_THORNS_DAMAGE = new ConfigFileEntry<>(
+            "wildcard_superpowers_super_punch_thorns_damage", 1.0, "season.superpowers.super_punch[new]",
+            "Thorns Damage", "Controls the damage others take when they hit you."
+    );
+    public static final ConfigFileEntry<Double> WILDCARD_SUPERPOWERS_SUPER_PUNCH_KNOCKBACK_STRENGTH = new ConfigFileEntry<>(
+            "wildcard_superpowers_super_punch_knockback_strength", 3.0, "season.superpowers.super_punch[new]",
+            "Knockback Strength", "Controls the knockback strength when you punch someone."
+    );
 
     /*
     public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_ = new ConfigFileEntry<>(
@@ -452,65 +460,78 @@ public class WildLifeConfig extends SeasonConfig {
                 ,WILDCARD_SUPERPOWERS_POWER_BLACKLIST
                 ,WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME
 
-
+                //Astral Projection
                 ,SUPERPOWER_ASTRAL_PROJECTION
                 ,SUPERPOWER_COOLDOWN_ASTRAL_PROJECTION
                 ,WILDCARD_SUPERPOWERS_ASTRAL_PROJECTION_DAMAGE_CANCELS
 
-                
+                //Super Punch
                 ,SUPERPOWER_SUPER_PUNCH
+                ,SUPERPOWER_COOLDOWN_SUPER_PUNCH
+                ,WILDCARD_SUPERPOWERS_SUPER_PUNCH_THORNS_DAMAGE
+                ,WILDCARD_SUPERPOWERS_SUPER_PUNCH_KNOCKBACK_STRENGTH
+
+                //Necromancy
+                ,SUPERPOWER_NECROMANCY
+                ,SUPERPOWER_COOLDOWN_NECROMANCY
+                ,WILDCARD_SUPERPOWERS_ZOMBIES_FIRST_SPAWN_CLEAR_ITEMS
+                ,WILDCARD_SUPERPOWERS_ZOMBIES_KEEP_INVENTORY
+                ,WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN
+                ,WILDCARD_SUPERPOWERS_ZOMBIES_HEALTH
+
+                //Animal Disguise
+                ,SUPERPOWER_ANIMAL_DISGUISE
+                ,SUPERPOWER_COOLDOWN_ANIMAL_DISGUISE
+                ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_ARMOR
+                ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_HANDS
+
+
                 ,SUPERPOWER_MIMICRY
                 ,SUPERPOWER_TELEPORTATION
                 ,SUPERPOWER_SHADOW_PLAY
                 ,SUPERPOWER_PLAYER_DISGUISE
-                ,SUPERPOWER_ANIMAL_DISGUISE
                 ,SUPERPOWER_TRIPLE_JUMP
                 ,SUPERPOWER_INVISIBILITY
                 ,SUPERPOWER_SUPERSPEED
-                ,SUPERPOWER_NECROMANCY
 
-                ,SUPERPOWER_COOLDOWN_SUPER_PUNCH
                 ,SUPERPOWER_COOLDOWN_MIMICRY
                 ,SUPERPOWER_COOLDOWN_TELEPORTATION
                 ,SUPERPOWER_COOLDOWN_SHADOW_PLAY
                 ,SUPERPOWER_COOLDOWN_PLAYER_DISGUISE
-                ,SUPERPOWER_COOLDOWN_ANIMAL_DISGUISE
                 ,SUPERPOWER_COOLDOWN_TRIPLE_JUMP
                 ,SUPERPOWER_COOLDOWN_INVISIBILITY
                 ,SUPERPOWER_COOLDOWN_SUPERSPEED
-                ,SUPERPOWER_COOLDOWN_NECROMANCY
 
                 //? if >= 1.20.3 {
+                //Time Control
                 ,SUPERPOWER_TIME_CONTROL
                 ,SUPERPOWER_COOLDOWN_TIME_CONTROL
                 ,WILDCARD_SUPERPOWERS_TIME_DILATION_TICK_RATE
                 ,WILDCARD_SUPERPOWERS_TIME_DILATION_DURATION
                 //?}
                 //? if >= 1.21 {
+                //Wind Charge
                 ,SUPERPOWER_WIND_CHARGE
                 ,SUPERPOWER_COOLDOWN_WIND_CHARGE
                 ,WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE
                 ,WILDCARD_SUPERPOWERS_WIND_CHARGE_EXPLOSION_POWER
                 //?}
                 //? if >= 1.21.2 {
+                //Creaking
                 ,SUPERPOWER_CREAKING
                 ,SUPERPOWER_COOLDOWN_CREAKING
                 ,WILDCARD_SUPERPOWERS_CREAKING_AMOUNT
                 ,WILDCARD_SUPERPOWERS_CREAKING_PARTICLES
 
+                //Flight
                 ,SUPERPOWER_FLIGHT
                 ,SUPERPOWER_COOLDOWN_FLIGHT
                 //?}
 
-                ,WILDCARD_SUPERPOWERS_ZOMBIES_FIRST_SPAWN_CLEAR_ITEMS
-                ,WILDCARD_SUPERPOWERS_ZOMBIES_KEEP_INVENTORY
-                ,WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN
-                ,WILDCARD_SUPERPOWERS_ZOMBIES_HEALTH
                 //? if > 1.20.3 {
+                //Superspeed
                 ,WILDCARD_SUPERPOWERS_SUPERSPEED_STEP
                 //?}
-                ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_ARMOR
-                ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_HANDS
 
                 ,WILDCARD_CALLBACK_WILDCARDS_BLACKLIST
                 ,WILDCARD_CALLBACK_TURN_OFF

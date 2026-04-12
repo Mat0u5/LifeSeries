@@ -264,6 +264,8 @@ public class WildLife extends Season {
         CreakingPower.SHOW_PARTICLES =  WildLifeConfig.WILDCARD_SUPERPOWERS_CREAKING_PARTICLES.get();
         WindCharge.EXPLOSION_POWER = WildLifeConfig.WILDCARD_SUPERPOWERS_WIND_CHARGE_EXPLOSION_POWER.get();
         AstralProjection.DAMAGE_CANCELS = WildLifeConfig.WILDCARD_SUPERPOWERS_ASTRAL_PROJECTION_DAMAGE_CANCELS.get();
+        SuperPunch.THORNS_DAMAGE = WildLifeConfig.WILDCARD_SUPERPOWERS_SUPER_PUNCH_THORNS_DAMAGE.get();
+        SuperPunch.KNOCKBACK_STRENGTH = WildLifeConfig.WILDCARD_SUPERPOWERS_SUPER_PUNCH_KNOCKBACK_STRENGTH.get();
 
         Snails.loadConfig();
         Snails.loadSnailNames();

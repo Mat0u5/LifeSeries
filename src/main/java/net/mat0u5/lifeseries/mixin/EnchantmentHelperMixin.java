@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.SuperPunch;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
@@ -259,15 +260,15 @@ public class EnchantmentHelperMixin {
         //? if <= 1.20.5 {
         /*if (sourceEntity == null) return;
         if (!SuperpowersWildcard.hasActivatedPower(victim, Superpowers.SUPER_PUNCH)) return;
-        sourceEntity.hurt(victim.damageSources().thorns(victim), 1F);
+        sourceEntity.hurt(victim.damageSources().thorns(victim), (float) SuperPunch.THORNS_DAMAGE);
         *///?} else {
         if (damageSource == null) return;
         if (damageSource.getEntity() == null) return;
         if (!SuperpowersWildcard.hasActivatedPower(victim, Superpowers.SUPER_PUNCH)) return;
         //? if <= 1.21 {
-        /*damageSource.getEntity().hurt(victim.damageSources().thorns(victim), 1F);
+        /*damageSource.getEntity().hurt(victim.damageSources().thorns(victim), (float) SuperPunch.THORNS_DAMAGE);
         *///?} else {
-        damageSource.getEntity().hurtServer(victim.ls$getServerLevel(), victim.damageSources().thorns(victim), 1F);
+        damageSource.getEntity().hurtServer(victim.ls$getServerLevel(), victim.damageSources().thorns(victim), (float) SuperPunch.THORNS_DAMAGE);
         //?}
         //?}
     }
