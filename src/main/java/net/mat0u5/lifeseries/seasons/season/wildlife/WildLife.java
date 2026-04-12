@@ -262,6 +262,8 @@ public class WildLife extends Season {
         TimeControl.SLOW_DURATION =  WildLifeConfig.WILDCARD_SUPERPOWERS_TIME_DILATION_DURATION.get();
         CreakingPower.CREAKING_AMOUNT =  WildLifeConfig.WILDCARD_SUPERPOWERS_CREAKING_AMOUNT.get();
         CreakingPower.SHOW_PARTICLES =  WildLifeConfig.WILDCARD_SUPERPOWERS_CREAKING_PARTICLES.get();
+        WindCharge.EXPLOSION_POWER = WildLifeConfig.WILDCARD_SUPERPOWERS_WIND_CHARGE_EXPLOSION_POWER.get();
+        AstralProjection.DAMAGE_CANCELS = WildLifeConfig.WILDCARD_SUPERPOWERS_ASTRAL_PROJECTION_DAMAGE_CANCELS.get();
 
         Snails.loadConfig();
         Snails.loadSnailNames();

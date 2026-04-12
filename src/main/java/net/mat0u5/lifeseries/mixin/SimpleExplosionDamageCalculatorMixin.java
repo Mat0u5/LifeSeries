@@ -13,6 +13,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.WindCharge;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.SimpleExplosionDamageCalculator;
@@ -31,7 +32,7 @@ public class SimpleExplosionDamageCalculatorMixin {
             if (currentSeason.getSeason() != Seasons.WILD_LIFE) return;
             if (player.getAbilities().flying) return;
             if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.WIND_CHARGE)) {
-                cir.setReturnValue(3f); // Default is 1.22f
+                cir.setReturnValue((float) WindCharge.EXPLOSION_POWER); // Default is 1.22f
             }
         }
     }

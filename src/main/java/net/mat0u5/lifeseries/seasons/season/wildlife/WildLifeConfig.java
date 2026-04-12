@@ -209,7 +209,7 @@ public class WildLifeConfig extends SeasonConfig {
     public static final ConfigFileEntry<Object> SUPERPOWER_TIME_CONTROL = new ConfigFileEntry<>("superpower_time_control", null, ConfigTypes.TEXT, "{season.superpowers.time_control[new]}", "Time Control", "");
     public static final ConfigFileEntry<Object> SUPERPOWER_CREAKING = new ConfigFileEntry<>("superpower_creaking", null, ConfigTypes.TEXT, "{season.superpowers.creaking[new]}", "Creaking", "");
     public static final ConfigFileEntry<Object> SUPERPOWER_WIND_CHARGE = new ConfigFileEntry<>("superpower_wind_charge", null, ConfigTypes.TEXT, "{season.superpowers.wind_charge[new]}", "Wind Charge", "");
-    public static final ConfigFileEntry<Object> SUPERPOWER_ASTRAL_PROJECTION = new ConfigFileEntry<>("superpower_astral_projection", null, ConfigTypes.TEXT, "{season.superpowers._astral_projection[new]}", "Astral Projection", "");
+    public static final ConfigFileEntry<Object> SUPERPOWER_ASTRAL_PROJECTION = new ConfigFileEntry<>("superpower_astral_projection", null, ConfigTypes.TEXT, "{season.superpowers.astral_projection[new]}", "Astral Projection", "");
     public static final ConfigFileEntry<Object> SUPERPOWER_SUPER_PUNCH = new ConfigFileEntry<>("superpower_super_punch", null, ConfigTypes.TEXT, "{season.superpowers.super_punch[new]}", "Super Punch", "");
     public static final ConfigFileEntry<Object> SUPERPOWER_MIMICRY = new ConfigFileEntry<>("superpower_mimicry", null, ConfigTypes.TEXT, "{season.superpowers.mimicry[new]}", "Mimicry", "");
     public static final ConfigFileEntry<Object> SUPERPOWER_TELEPORTATION = new ConfigFileEntry<>("superpower_teleportation", null, ConfigTypes.TEXT, "{season.superpowers.teleportation[new]}", "Teleportation", "");
@@ -226,7 +226,7 @@ public class WildLifeConfig extends SeasonConfig {
     public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_TIME_CONTROL = new ConfigFileEntry<>("superpower_cooldown_time_control", 300, ConfigTypes.SECONDS, "season.superpowers.time_control[new]", "Time Control Power Cooldown", "");
     public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_CREAKING = new ConfigFileEntry<>("superpower_cooldown_creaking", 10, ConfigTypes.SECONDS, "season.superpowers.creaking[new]", "Creaking Power Cooldown", "");
     public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_WIND_CHARGE = new ConfigFileEntry<>("superpower_cooldown_wind_charge", 1, ConfigTypes.SECONDS, "season.superpowers.wind_charge[new]", "Wind Charge Power Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_ASTRAL_PROJECTION = new ConfigFileEntry<>("superpower_cooldown_astral_projection", 5, ConfigTypes.SECONDS, "season.superpowers._astral_projection[new]", "Astral Projection Power Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_ASTRAL_PROJECTION = new ConfigFileEntry<>("superpower_cooldown_astral_projection", 5, ConfigTypes.SECONDS, "season.superpowers.astral_projection[new]", "Astral Projection Power Cooldown", "");
     public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_SUPER_PUNCH = new ConfigFileEntry<>("superpower_cooldown_super_punch", 1, ConfigTypes.SECONDS, "season.superpowers.super_punch[new]", "Super Punch Power Cooldown", "");
     public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_MIMICRY = new ConfigFileEntry<>("superpower_cooldown_mimicry", 300, ConfigTypes.SECONDS, "season.superpowers.mimicry[new]", "Mimicry Power Cooldown", "");
     public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_TELEPORTATION = new ConfigFileEntry<>("superpower_cooldown_teleportation", 5, ConfigTypes.SECONDS, "season.superpowers.teleportation[new]", "Teleportation Power Cooldown", "");
@@ -288,6 +288,15 @@ public class WildLifeConfig extends SeasonConfig {
     public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_CREAKING_PARTICLES = new ConfigFileEntry<>(
             "wildcard_superpowers_creaking_particles", true, "season.superpowers.creaking[new]",
             "Show Trail Particles", "Controls whether the trail particles towards the creaking show up."
+    );
+
+    public static final ConfigFileEntry<Double> WILDCARD_SUPERPOWERS_WIND_CHARGE_EXPLOSION_POWER = new ConfigFileEntry<>(
+            "wildcard_superpowers_wind_charge_explosion_power", 3.0, "season.superpowers.wind_charge[new]",
+            "Wind Charge Explosion Power", "Controls the explosion power of wind charges."
+    );
+    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ASTRAL_PROJECTION_DAMAGE_CANCELS = new ConfigFileEntry<>(
+            "wildcard_superpowers_astral_projection_damage_cancels", true, "season.superpowers.astral_projection[new]",
+            "Damage Cancels Projection", "Controls if your projection ends when you take damage."
     );
 
 
@@ -443,7 +452,12 @@ public class WildLifeConfig extends SeasonConfig {
                 ,WILDCARD_SUPERPOWERS_POWER_BLACKLIST
                 ,WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME
 
+
                 ,SUPERPOWER_ASTRAL_PROJECTION
+                ,SUPERPOWER_COOLDOWN_ASTRAL_PROJECTION
+                ,WILDCARD_SUPERPOWERS_ASTRAL_PROJECTION_DAMAGE_CANCELS
+
+                
                 ,SUPERPOWER_SUPER_PUNCH
                 ,SUPERPOWER_MIMICRY
                 ,SUPERPOWER_TELEPORTATION
@@ -455,7 +469,6 @@ public class WildLifeConfig extends SeasonConfig {
                 ,SUPERPOWER_SUPERSPEED
                 ,SUPERPOWER_NECROMANCY
 
-                ,SUPERPOWER_COOLDOWN_ASTRAL_PROJECTION
                 ,SUPERPOWER_COOLDOWN_SUPER_PUNCH
                 ,SUPERPOWER_COOLDOWN_MIMICRY
                 ,SUPERPOWER_COOLDOWN_TELEPORTATION
@@ -477,6 +490,7 @@ public class WildLifeConfig extends SeasonConfig {
                 ,SUPERPOWER_WIND_CHARGE
                 ,SUPERPOWER_COOLDOWN_WIND_CHARGE
                 ,WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE
+                ,WILDCARD_SUPERPOWERS_WIND_CHARGE_EXPLOSION_POWER
                 //?}
                 //? if >= 1.21.2 {
                 ,SUPERPOWER_CREAKING

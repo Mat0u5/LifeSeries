@@ -24,6 +24,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.util.Unit;
 
 public class WindCharge extends ToggleableSuperpower {
+    public static double EXPLOSION_POWER = 3.0;
     public static int COOLDOWN_MILLIS = 1000;
     public static int MAX_MACE_DAMAGE = 2;
 

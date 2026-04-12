@@ -34,6 +34,7 @@ import net.minecraft.world.item.component.ResolvableProfile;
 //?}
 
 public class AstralProjection extends ToggleableSuperpower {
+    public static boolean DAMAGE_CANCELS = true;
     public static int COOLDOWN_MILLIS = 5000;
 
     //? if <= 1.21.6 {
@@ -200,6 +201,7 @@ public class AstralProjection extends ToggleableSuperpower {
      *///?} else {
     public void onDamageClone(ServerLevel level, DamageSource source, float amount) {
     //?}
+        if (!DAMAGE_CANCELS) return;
         deactivate();
         ServerPlayer player = getPlayer();
         if (player == null) return;
