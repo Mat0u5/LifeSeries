@@ -258,6 +258,10 @@ public class WildLife extends Season {
         Superspeed.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_SUPERSPEED.get();
         Necromancy.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_NECROMANCY.get();
 
+        TimeControl.TARGET_TICK_RATE = Math.max(1, WildLifeConfig.WILDCARD_SUPERPOWERS_TIME_DILATION_TICK_RATE.get());
+        TimeControl.SLOW_DURATION =  WildLifeConfig.WILDCARD_SUPERPOWERS_TIME_DILATION_DURATION.get();
+
+
         Snails.loadConfig();
         Snails.loadSnailNames();
         Snails.reloadSnails();

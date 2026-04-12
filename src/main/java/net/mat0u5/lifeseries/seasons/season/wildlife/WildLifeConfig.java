@@ -197,30 +197,6 @@ public class WildLifeConfig extends SeasonConfig {
             "Boss Chance Multiplier", "Multiplier for boss chance (wither / warden)."
     );
 
-    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE = new ConfigFileEntry<>(
-            "wildcard_superpowers_windcharge_max_mace_damage", 2, "season.superpowers",
-            "Wind Charge: Max Mace Damage", "The max amount of damage you can deal with a mace while using the Wind Charge superpower."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ZOMBIES_FIRST_SPAWN_CLEAR_ITEMS = new ConfigFileEntry<>(
-            "wildcard_superpowers_zombies_first_spawn_clear_items", true, "season.superpowers",
-            "Necromancy: Zombies First Spawn Clear Items", "Controls whether zombies get cleared when they first get respawned."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ZOMBIES_KEEP_INVENTORY = new ConfigFileEntry<>(
-            "wildcard_superpowers_zombies_keep_inventory", true, "season.superpowers",
-            "Necromancy: Zombies Keep Inventory", "Controls whether zombies keep their items when they die."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN = new ConfigFileEntry<>(
-            "wildcard_superpowers_zombies_revive_by_killing_dark_green", false, "season.superpowers",
-            "Necromancy: Zombies Can Revive", "Controls whether zombies can be revived (gain a life) by killing a dark green player."
-    );
-    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_ZOMBIES_HEALTH = new ConfigFileEntry<>(
-            "wildcard_superpowers_zombies_health", 8, "season.superpowers",
-            "Necromancy: Zombie Health Amount", "Controls how much health zombies will have."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_SUPERSPEED_STEP = new ConfigFileEntry<>(
-            "wildcard_superpowers_superspeed_step", false, "season.superpowers",
-            "Superspeed: Step Up Blocks", "Controls whether players with the superspeed power active can step up blocks without jumping (like when riding a horse)."
-    );
     public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME = new ConfigFileEntry<>(
             "wildcard_superpowers_disable_intro_theme", false, "season.superpowers",
             "Disable Intro Theme", "Disables the theme music that plays when this wildcard is activated."
@@ -229,36 +205,83 @@ public class WildLifeConfig extends SeasonConfig {
             "wildcard_superpowers_power_blacklist", "[]", ConfigTypes.STRING_LIST, "season.superpowers",
             "Blacklisted Powers", "List of superpowers that cannot be rolled randomly.", Superpowers.getAllStr()
     );
+
+    public static final ConfigFileEntry<Object> SUPERPOWER_TIME_CONTROL = new ConfigFileEntry<>("superpower_time_control", null, ConfigTypes.TEXT, "{season.superpowers.time_control[new]}", "Time Control", "");
+    public static final ConfigFileEntry<Object> SUPERPOWER_CREAKING = new ConfigFileEntry<>("superpower_creaking", null, ConfigTypes.TEXT, "{season.superpowers.creaking[new]}", "Creaking", "");
+    public static final ConfigFileEntry<Object> SUPERPOWER_WIND_CHARGE = new ConfigFileEntry<>("superpower_wind_charge", null, ConfigTypes.TEXT, "{season.superpowers.wind_charge[new]}", "Wind Charge", "");
+    public static final ConfigFileEntry<Object> SUPERPOWER_ASTRAL_PROJECTION = new ConfigFileEntry<>("superpower_astral_projection", null, ConfigTypes.TEXT, "{season.superpowers._astral_projection[new]}", "Astral Projection", "");
+    public static final ConfigFileEntry<Object> SUPERPOWER_SUPER_PUNCH = new ConfigFileEntry<>("superpower_super_punch", null, ConfigTypes.TEXT, "{season.superpowers.super_punch[new]}", "Super Punch", "");
+    public static final ConfigFileEntry<Object> SUPERPOWER_MIMICRY = new ConfigFileEntry<>("superpower_mimicry", null, ConfigTypes.TEXT, "{season.superpowers.mimicry[new]}", "Mimicry", "");
+    public static final ConfigFileEntry<Object> SUPERPOWER_TELEPORTATION = new ConfigFileEntry<>("superpower_teleportation", null, ConfigTypes.TEXT, "{season.superpowers.teleportation[new]}", "Teleportation", "");
+    public static final ConfigFileEntry<Object> SUPERPOWER_LISTENING = new ConfigFileEntry<>("superpower_listening", null, ConfigTypes.TEXT, "{season.superpowers.listening[new]}", "Listening", "");
+    public static final ConfigFileEntry<Object> SUPERPOWER_SHADOW_PLAY = new ConfigFileEntry<>("superpower_shadow_play", null, ConfigTypes.TEXT, "{season.superpowers.shadow_play[new]}", "Shadow Play", "");
+    public static final ConfigFileEntry<Object> SUPERPOWER_FLIGHT = new ConfigFileEntry<>("superpower_flight", null, ConfigTypes.TEXT, "{season.superpowers.flight[new]}", "Flight", "");
+    public static final ConfigFileEntry<Object> SUPERPOWER_PLAYER_DISGUISE = new ConfigFileEntry<>("superpower_player_disguise", null, ConfigTypes.TEXT, "{season.superpowers.player_disguise[new]}", "Player Disguise", "");
+    public static final ConfigFileEntry<Object> SUPERPOWER_ANIMAL_DISGUISE = new ConfigFileEntry<>("superpower_animal_disguise", null, ConfigTypes.TEXT, "{season.superpowers.animal_disguise[new]}", "Animal Disguise", "");
+    public static final ConfigFileEntry<Object> SUPERPOWER_TRIPLE_JUMP = new ConfigFileEntry<>("superpower_triple_jump", null, ConfigTypes.TEXT, "{season.superpowers.triple_jump[new]}", "Triple Jump", "");
+    public static final ConfigFileEntry<Object> SUPERPOWER_INVISIBILITY = new ConfigFileEntry<>("superpower_invisibility", null, ConfigTypes.TEXT, "{season.superpowers.invisibility[new]}", "Invisibility", "");
+    public static final ConfigFileEntry<Object> SUPERPOWER_SUPERSPEED = new ConfigFileEntry<>("superpower_superspeed", null, ConfigTypes.TEXT, "{season.superpowers.superspeed[new]}", "Superspeed", "");
+    public static final ConfigFileEntry<Object> SUPERPOWER_NECROMANCY = new ConfigFileEntry<>("superpower_necromancy", null, ConfigTypes.TEXT, "{season.superpowers.necromancy[new]}", "Necromancy", "");
+
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_TIME_CONTROL = new ConfigFileEntry<>("superpower_cooldown_time_control", 300, ConfigTypes.SECONDS, "season.superpowers.time_control[new]", "Time Control Power Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_CREAKING = new ConfigFileEntry<>("superpower_cooldown_creaking", 10, ConfigTypes.SECONDS, "season.superpowers.creaking[new]", "Creaking Power Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_WIND_CHARGE = new ConfigFileEntry<>("superpower_cooldown_wind_charge", 1, ConfigTypes.SECONDS, "season.superpowers.wind_charge[new]", "Wind Charge Power Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_ASTRAL_PROJECTION = new ConfigFileEntry<>("superpower_cooldown_astral_projection", 5, ConfigTypes.SECONDS, "season.superpowers._astral_projection[new]", "Astral Projection Power Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_SUPER_PUNCH = new ConfigFileEntry<>("superpower_cooldown_super_punch", 1, ConfigTypes.SECONDS, "season.superpowers.super_punch[new]", "Super Punch Power Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_MIMICRY = new ConfigFileEntry<>("superpower_cooldown_mimicry", 300, ConfigTypes.SECONDS, "season.superpowers.mimicry[new]", "Mimicry Power Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_TELEPORTATION = new ConfigFileEntry<>("superpower_cooldown_teleportation", 5, ConfigTypes.SECONDS, "season.superpowers.teleportation[new]", "Teleportation Power Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_LISTENING = new ConfigFileEntry<>("superpower_cooldown_listening", 1, ConfigTypes.SECONDS, "season.superpowers.listening[new]", "Listening Power Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_SHADOW_PLAY = new ConfigFileEntry<>("superpower_cooldown_shadow_play", 30, ConfigTypes.SECONDS, "season.superpowers.shadow_play[new]", "Shadow Play Power Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_FLIGHT = new ConfigFileEntry<>("superpower_cooldown_flight", 45, ConfigTypes.SECONDS, "season.superpowers.flight[new]", "Flight Power Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_PLAYER_DISGUISE = new ConfigFileEntry<>("superpower_cooldown_player_disguise", 10, ConfigTypes.SECONDS, "season.superpowers.player_disguise[new]", "Player Disguise Power Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_ANIMAL_DISGUISE = new ConfigFileEntry<>("superpower_cooldown_animal_disguise", 1, ConfigTypes.SECONDS, "season.superpowers.animal_disguise[new]", "Animal Disguise Power Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_TRIPLE_JUMP = new ConfigFileEntry<>("superpower_cooldown_triple_jump", 1, ConfigTypes.SECONDS, "season.superpowers.triple_jump[new]", "Triple Jump Power Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_INVISIBILITY = new ConfigFileEntry<>("superpower_cooldown_invisibility", 1, ConfigTypes.SECONDS, "season.superpowers.invisibility[new]", "Invisibility Power Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_SUPERSPEED = new ConfigFileEntry<>("superpower_cooldown_superspeed", 3, ConfigTypes.SECONDS, "season.superpowers.superspeed[new]", "Superspeed Power Cooldown", "");
+    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_NECROMANCY = new ConfigFileEntry<>("superpower_cooldown_necromancy", 300, ConfigTypes.SECONDS, "season.superpowers.necromancy[new]", "Necromancy Power Cooldown", "");
+
+    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE = new ConfigFileEntry<>(
+            "wildcard_superpowers_windcharge_max_mace_damage", 2, "season.superpowers.wind_charge",
+            "Max Mace Damage", "The max amount of damage you can deal with a mace while using the Wind Charge superpower."
+    );
+    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ZOMBIES_FIRST_SPAWN_CLEAR_ITEMS = new ConfigFileEntry<>(
+            "wildcard_superpowers_zombies_first_spawn_clear_items", true, "season.superpowers.necromancy",
+            "Zombies First Spawn Clear Items", "Controls whether zombies get cleared when they first get respawned."
+    );
+    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ZOMBIES_KEEP_INVENTORY = new ConfigFileEntry<>(
+            "wildcard_superpowers_zombies_keep_inventory", true, "season.superpowers.necromancy",
+            "Zombies Keep Inventory", "Controls whether zombies keep their items when they die."
+    );
+    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN = new ConfigFileEntry<>(
+            "wildcard_superpowers_zombies_revive_by_killing_dark_green", false, "season.superpowers.necromancy",
+            "Zombies Can Revive", "Controls whether zombies can be revived (gain a life) by killing a dark green player."
+    );
+    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_ZOMBIES_HEALTH = new ConfigFileEntry<>(
+            "wildcard_superpowers_zombies_health", 8, "season.superpowers.necromancy",
+            "Zombie Health Amount", "Controls how much health zombies will have."
+    );
+    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_SUPERSPEED_STEP = new ConfigFileEntry<>(
+            "wildcard_superpowers_superspeed_step", false, "season.superpowers.superspeed",
+            "Step Up Blocks", "Controls whether players with the superspeed power active can step up blocks without jumping (like when riding a horse)."
+    );
     public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ANIMALDISGUISE_ARMOR = new ConfigFileEntry<>(
-            "wildcard_superpowers_animaldisguise_armor", false, "season.superpowers",
-            "Animal Disguise: Show Armor", "Controls whether armor is seen on players disguised as mobs."
+            "wildcard_superpowers_animaldisguise_armor", false, "season.superpowers.animal_disguise",
+            "Show Armor", "Controls whether armor is seen on players disguised as mobs."
     );
     public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ANIMALDISGUISE_HANDS = new ConfigFileEntry<>(
-            "wildcard_superpowers_animaldisguise_hands", true, "season.superpowers",
-            "Animal Disguise: Show Hand Items", "Controls whether hand items are seen on players disguised as mobs."
+            "wildcard_superpowers_animaldisguise_hands", true, "season.superpowers.animal_disguise",
+            "Show Hand Items", "Controls whether hand items are seen on players disguised as mobs."
+    );
+    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_TIME_DILATION_TICK_RATE = new ConfigFileEntry<>(
+            "wildcard_superpowers_time_dilation_tick_rate", 4, "season.superpowers.time_control[new]",
+            "Target Tick Rate", "Controls the target tick rate."
+    );
+    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_TIME_DILATION_DURATION = new ConfigFileEntry<>(
+            "wildcard_superpowers_time_dilation_duration", 70, "season.superpowers.time_control[new]",
+            "Slow Duration", "Controls the slowdown duration."
     );
 
-    public static final ConfigFileEntry<Object> GROUP_SUPERPOWER_COOLDOWNS = new ConfigFileEntry<>(
-            "group_superpower_cooldown", null, ConfigTypes.TEXT, "{season.superpowers.cooldowns}[new]",
-            "Superpower Cooldowns", ""
-    );
 
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_TIME_CONTROL = new ConfigFileEntry<>("superpower_cooldown_time_control", 300, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Time Control Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_CREAKING = new ConfigFileEntry<>("superpower_cooldown_creaking", 10, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Creaking Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_WIND_CHARGE = new ConfigFileEntry<>("superpower_cooldown_wind_charge", 1, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Wind Charge Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_ASTRAL_PROJECTION = new ConfigFileEntry<>("superpower_cooldown_astral_projection", 5, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Astral Projection Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_SUPER_PUNCH = new ConfigFileEntry<>("superpower_cooldown_super_punch", 1, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Super Punch Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_MIMICRY = new ConfigFileEntry<>("superpower_cooldown_mimicry", 300, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Mimicry Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_TELEPORTATION = new ConfigFileEntry<>("superpower_cooldown_teleportation", 5, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Teleportation Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_LISTENING = new ConfigFileEntry<>("superpower_cooldown_listening", 1, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Listening Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_SHADOW_PLAY = new ConfigFileEntry<>("superpower_cooldown_shadow_play", 30, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Shadow Play Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_FLIGHT = new ConfigFileEntry<>("superpower_cooldown_flight", 45, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Flight Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_PLAYER_DISGUISE = new ConfigFileEntry<>("superpower_cooldown_player_disguise", 10, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Player Disguise Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_ANIMAL_DISGUISE = new ConfigFileEntry<>("superpower_cooldown_animal_disguise", 1, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Animal Disguise Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_TRIPLE_JUMP = new ConfigFileEntry<>("superpower_cooldown_triple_jump", 1, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Triple Jump Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_INVISIBILITY = new ConfigFileEntry<>("superpower_cooldown_invisibility", 1, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Invisibility Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_SUPERSPEED = new ConfigFileEntry<>("superpower_cooldown_superspeed", 3, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Superspeed Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_NECROMANCY = new ConfigFileEntry<>("superpower_cooldown_necromancy", 300, ConfigTypes.SECONDS, "season.superpowers.cooldowns[new]", "Necromancy Cooldown", "");
 
     public static final ConfigFileEntry<String> WILDCARD_CALLBACK_WILDCARDS_BLACKLIST = new ConfigFileEntry<>(
             "wildcard_callback_wildcards_blacklist", "[hunger]", ConfigTypes.STRING_LIST, "season.callback",
@@ -398,18 +421,19 @@ public class WildLifeConfig extends SeasonConfig {
 
                 ,WILDCARD_SUPERPOWERS_POWER_BLACKLIST
                 ,WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME
-                ,WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE
-                ,WILDCARD_SUPERPOWERS_ZOMBIES_FIRST_SPAWN_CLEAR_ITEMS
-                ,WILDCARD_SUPERPOWERS_ZOMBIES_KEEP_INVENTORY
-                ,WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN
-                ,WILDCARD_SUPERPOWERS_ZOMBIES_HEALTH
-                //? if > 1.20.3 {
-                ,WILDCARD_SUPERPOWERS_SUPERSPEED_STEP
-                //?}
-                ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_ARMOR
-                ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_HANDS
 
-                ,GROUP_SUPERPOWER_COOLDOWNS
+                ,SUPERPOWER_ASTRAL_PROJECTION
+                ,SUPERPOWER_SUPER_PUNCH
+                ,SUPERPOWER_MIMICRY
+                ,SUPERPOWER_TELEPORTATION
+                ,SUPERPOWER_SHADOW_PLAY
+                ,SUPERPOWER_PLAYER_DISGUISE
+                ,SUPERPOWER_ANIMAL_DISGUISE
+                ,SUPERPOWER_TRIPLE_JUMP
+                ,SUPERPOWER_INVISIBILITY
+                ,SUPERPOWER_SUPERSPEED
+                ,SUPERPOWER_NECROMANCY
+
                 ,SUPERPOWER_COOLDOWN_ASTRAL_PROJECTION
                 ,SUPERPOWER_COOLDOWN_SUPER_PUNCH
                 ,SUPERPOWER_COOLDOWN_MIMICRY
@@ -423,15 +447,32 @@ public class WildLifeConfig extends SeasonConfig {
                 ,SUPERPOWER_COOLDOWN_NECROMANCY
 
                 //? if >= 1.20.3 {
+                ,SUPERPOWER_TIME_CONTROL
                 ,SUPERPOWER_COOLDOWN_TIME_CONTROL
+                ,WILDCARD_SUPERPOWERS_TIME_DILATION_TICK_RATE
+                ,WILDCARD_SUPERPOWERS_TIME_DILATION_DURATION
                 //?}
                 //? if >= 1.21 {
+                ,SUPERPOWER_WIND_CHARGE
                 ,SUPERPOWER_COOLDOWN_WIND_CHARGE
+                ,WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE
                 //?}
                 //? if >= 1.21.2 {
+                ,SUPERPOWER_CREAKING
+                ,SUPERPOWER_FLIGHT
                 ,SUPERPOWER_COOLDOWN_CREAKING
                 ,SUPERPOWER_COOLDOWN_FLIGHT
                 //?}
+
+                ,WILDCARD_SUPERPOWERS_ZOMBIES_FIRST_SPAWN_CLEAR_ITEMS
+                ,WILDCARD_SUPERPOWERS_ZOMBIES_KEEP_INVENTORY
+                ,WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN
+                ,WILDCARD_SUPERPOWERS_ZOMBIES_HEALTH
+                //? if > 1.20.3 {
+                ,WILDCARD_SUPERPOWERS_SUPERSPEED_STEP
+                //?}
+                ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_ARMOR
+                ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_HANDS
 
                 ,WILDCARD_CALLBACK_WILDCARDS_BLACKLIST
                 ,WILDCARD_CALLBACK_TURN_OFF
@@ -440,6 +481,7 @@ public class WildLifeConfig extends SeasonConfig {
         ));
 
         if (CompatibilityManager.voicechatLoaded()) {
+            result.add(SUPERPOWER_LISTENING);
             result.add(SUPERPOWER_COOLDOWN_LISTENING);
         }
 

@@ -10,6 +10,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 
 public class TimeControl extends Superpower {
+    public static int TARGET_TICK_RATE = 4;
+    public static int SLOW_DURATION = 70;
     public static int COOLDOWN_MILLIS = 300000;
     public static int changedSpeedFor = 0;
     public TimeControl(ServerPlayer player) {
@@ -30,11 +32,10 @@ public class TimeControl extends Superpower {
     public void activate() {
         super.activate();
         float previousSpeed = TimeDilation.getWorldSpeed();
-        if (previousSpeed <= 4) return;
-        changedSpeedFor += 90;
-        TimeDilation.slowlySetWorldSpeed(4, 20);
+        changedSpeedFor += 20 + SLOW_DURATION;
+        TimeDilation.slowlySetWorldSpeed(TARGET_TICK_RATE, 20);
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_time_slow_down")));
-        TaskScheduler.scheduleTask(70, () -> {
+        TaskScheduler.scheduleTask(SLOW_DURATION, () -> {
             PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_time_speed_up")), 0.65f, 1);
             TimeDilation.slowlySetWorldSpeed(previousSpeed, 20);
         });
