@@ -307,6 +307,14 @@ public class WildLifeConfig extends SeasonConfig {
             "wildcard_superpowers_super_punch_knockback_strength", 3.0, "season.superpowers.super_punch[new]",
             "Knockback Strength", "Controls the knockback strength when you punch someone."
     );
+    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_PLAYER_DISGUISE_DAMAGE_CANCELS = new ConfigFileEntry<>(
+            "wildcard_superpowers_player_disguise_damage_cancels", true, "season.superpowers.player_disguise[new]",
+            "Damage Cancels Disguise", "Controls if your disguise ends when you take damage."
+    );
+    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ANIMAL_DISGUISE_DAMAGE_CANCELS = new ConfigFileEntry<>(
+            "wildcard_superpowers_animal_disguise_damage_cancels", true, "season.superpowers.animal_disguise[new]",
+            "Damage Cancels Disguise", "Controls if your disguise ends when you take damage."
+    );
 
     /*
     public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_ = new ConfigFileEntry<>(
@@ -479,17 +487,21 @@ public class WildLifeConfig extends SeasonConfig {
                 ,WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN
                 ,WILDCARD_SUPERPOWERS_ZOMBIES_HEALTH
 
+                // Player Disguise
+                ,SUPERPOWER_PLAYER_DISGUISE
+                ,SUPERPOWER_COOLDOWN_PLAYER_DISGUISE
+                ,WILDCARD_SUPERPOWERS_PLAYER_DISGUISE_DAMAGE_CANCELS
+
                 //Animal Disguise
                 ,SUPERPOWER_ANIMAL_DISGUISE
                 ,SUPERPOWER_COOLDOWN_ANIMAL_DISGUISE
                 ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_ARMOR
                 ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_HANDS
-
+                ,WILDCARD_SUPERPOWERS_ANIMAL_DISGUISE_DAMAGE_CANCELS
 
                 ,SUPERPOWER_MIMICRY
                 ,SUPERPOWER_TELEPORTATION
                 ,SUPERPOWER_SHADOW_PLAY
-                ,SUPERPOWER_PLAYER_DISGUISE
                 ,SUPERPOWER_TRIPLE_JUMP
                 ,SUPERPOWER_INVISIBILITY
                 ,SUPERPOWER_SUPERSPEED
@@ -497,7 +509,6 @@ public class WildLifeConfig extends SeasonConfig {
                 ,SUPERPOWER_COOLDOWN_MIMICRY
                 ,SUPERPOWER_COOLDOWN_TELEPORTATION
                 ,SUPERPOWER_COOLDOWN_SHADOW_PLAY
-                ,SUPERPOWER_COOLDOWN_PLAYER_DISGUISE
                 ,SUPERPOWER_COOLDOWN_TRIPLE_JUMP
                 ,SUPERPOWER_COOLDOWN_INVISIBILITY
                 ,SUPERPOWER_COOLDOWN_SUPERSPEED

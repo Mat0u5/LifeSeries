@@ -19,6 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import java.util.List;
 
 public class AnimalDisguise extends ToggleableSuperpower {
+    public static boolean DAMAGE_CANCELS = true;
     public static int COOLDOWN_MILLIS = 1000;
 
     public static boolean SHOW_ARMOR = false;
@@ -84,6 +85,7 @@ public class AnimalDisguise extends ToggleableSuperpower {
     }
 
     public void onTakeDamage() {
+        if (!DAMAGE_CANCELS) return;
         deactivate();
     }
 

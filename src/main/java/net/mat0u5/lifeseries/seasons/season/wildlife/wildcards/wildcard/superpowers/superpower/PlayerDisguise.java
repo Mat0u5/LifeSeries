@@ -20,6 +20,7 @@ import net.minecraft.world.entity.decoration.Mannequin;
 //?}
 
 public class PlayerDisguise extends ToggleableSuperpower {
+    public static boolean DAMAGE_CANCELS = true;
     public static int COOLDOWN_MILLIS = 10000;
 
     private String copiedPlayerName = "";
@@ -107,6 +108,7 @@ public class PlayerDisguise extends ToggleableSuperpower {
     }
 
     public void onTakeDamage() {
+        if (!DAMAGE_CANCELS) return;
         deactivate();
     }
 }

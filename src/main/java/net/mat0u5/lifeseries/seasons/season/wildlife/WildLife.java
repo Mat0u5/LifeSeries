@@ -266,6 +266,8 @@ public class WildLife extends Season {
         AstralProjection.DAMAGE_CANCELS = WildLifeConfig.WILDCARD_SUPERPOWERS_ASTRAL_PROJECTION_DAMAGE_CANCELS.get();
         SuperPunch.THORNS_DAMAGE = WildLifeConfig.WILDCARD_SUPERPOWERS_SUPER_PUNCH_THORNS_DAMAGE.get();
         SuperPunch.KNOCKBACK_STRENGTH = WildLifeConfig.WILDCARD_SUPERPOWERS_SUPER_PUNCH_KNOCKBACK_STRENGTH.get();
+        PlayerDisguise.DAMAGE_CANCELS = WildLifeConfig.WILDCARD_SUPERPOWERS_PLAYER_DISGUISE_DAMAGE_CANCELS.get();
+        AnimalDisguise.DAMAGE_CANCELS = WildLifeConfig.WILDCARD_SUPERPOWERS_ANIMAL_DISGUISE_DAMAGE_CANCELS.get();
 
         Snails.loadConfig();
         Snails.loadSnailNames();
