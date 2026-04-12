@@ -268,6 +268,10 @@ public class WildLife extends Season {
         SuperPunch.KNOCKBACK_STRENGTH = WildLifeConfig.WILDCARD_SUPERPOWERS_SUPER_PUNCH_KNOCKBACK_STRENGTH.get();
         PlayerDisguise.DAMAGE_CANCELS = WildLifeConfig.WILDCARD_SUPERPOWERS_PLAYER_DISGUISE_DAMAGE_CANCELS.get();
         AnimalDisguise.DAMAGE_CANCELS = WildLifeConfig.WILDCARD_SUPERPOWERS_ANIMAL_DISGUISE_DAMAGE_CANCELS.get();
+        Teleportation.MAX_SWAP_DISTANCE = WildLifeConfig.WILDCARD_SUPERPOWERS_TELEPORTATION_SWAP_DISTANCE.get();
+        Teleportation.MAX_TELEPORT_DISTANCE = WildLifeConfig.WILDCARD_SUPERPOWERS_TELEPORTATION_TP_DISTANCE.get();
+        ShadowPlay.BLIND_TIME = 20 * WildLifeConfig.WILDCARD_SUPERPOWERS_SHADOW_PLAY_BLIND_TIME.get();
+        ShadowPlay.BLIND_RANGE = WildLifeConfig.WILDCARD_SUPERPOWERS_SHADOW_PLAY_BLIND_RANGE.get();
 
         Snails.loadConfig();
         Snails.loadSnailNames();

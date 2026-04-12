@@ -20,6 +20,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 
 public class Teleportation extends Superpower {
+    public static int MAX_TELEPORT_DISTANCE = 100;
+    public static int MAX_SWAP_DISTANCE = 100;
     public static int COOLDOWN_MILLIS = 5000;
     private Time timer = Time.zero();
 
@@ -61,7 +63,7 @@ public class Teleportation extends Superpower {
         ServerLevel playerLevel = player.ls$getServerLevel();
         Vec3 playerPos = player.position();
         boolean teleported = false;
-        Entity lookingAt = PlayerUtils.getEntityLookingAt(player, 100);
+        Entity lookingAt = PlayerUtils.getEntityLookingAt(player, MAX_SWAP_DISTANCE);
         if (lookingAt != null)  {
             if (lookingAt instanceof ServerPlayer lookingAtPlayer) {
                 if (!PlayerUtils.isFakePlayer(lookingAtPlayer)) {
@@ -91,7 +93,7 @@ public class Teleportation extends Superpower {
         }
 
         if (!teleported) {
-            Vec3 lookingAtPos = PlayerUtils.getPosLookingAt(player, 100);
+            Vec3 lookingAtPos = PlayerUtils.getPosLookingAt(player, MAX_TELEPORT_DISTANCE);
             if (lookingAtPos != null) {
                 playTeleportSound(playerLevel, playerPos);
                 spawnTeleportParticles(playerLevel, playerPos);

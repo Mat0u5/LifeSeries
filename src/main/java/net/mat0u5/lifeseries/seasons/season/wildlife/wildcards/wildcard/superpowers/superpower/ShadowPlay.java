@@ -14,6 +14,8 @@ import net.minecraft.world.effect.MobEffects;
 import java.util.List;
 
 public class ShadowPlay extends Superpower {
+    public static int BLIND_RANGE = 10;
+    public static int BLIND_TIME = 100;
     public static int COOLDOWN_MILLIS = 30000;
     public ShadowPlay(ServerPlayer player) {
         super(player);
@@ -35,8 +37,8 @@ public class ShadowPlay extends Superpower {
         ServerPlayer player = getPlayer();
         if (player == null) return;
         ServerLevel playerLevel = player.ls$getServerLevel();
-        List<ServerPlayer> affectedPlayers = playerLevel.getEntitiesOfClass(ServerPlayer.class, player.getBoundingBox().inflate(10), playerEntity -> playerEntity.distanceTo(player) <= 10);
-        MobEffectInstance blindness = new MobEffectInstance(MobEffects.BLINDNESS, 100, 0);
+        List<ServerPlayer> affectedPlayers = playerLevel.getEntitiesOfClass(ServerPlayer.class, player.getBoundingBox().inflate(BLIND_RANGE), playerEntity -> playerEntity.distanceTo(player) <= BLIND_RANGE);
+        MobEffectInstance blindness = new MobEffectInstance(MobEffects.BLINDNESS, BLIND_TIME, 0);
         MobEffectInstance invis = new MobEffectInstance(MobEffects.INVISIBILITY, 60, 0, false, false, false);
         affectedPlayers.remove(player);
         for (ServerPlayer affectedPlayer : affectedPlayers) {

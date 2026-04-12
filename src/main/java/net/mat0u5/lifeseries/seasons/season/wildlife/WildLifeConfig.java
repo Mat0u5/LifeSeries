@@ -316,6 +316,23 @@ public class WildLifeConfig extends SeasonConfig {
             "Damage Cancels Disguise", "Controls if your disguise ends when you take damage."
     );
 
+    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_TELEPORTATION_SWAP_DISTANCE = new ConfigFileEntry<>(
+            "wildcard_superpowers_teleportation_swap_distance", 100, "season.superpowers.teleportation[new]",
+            "Max Swap Distance", "Controls the max player swap distance.\nVery high numbers may cause performance issues."
+    );
+    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_TELEPORTATION_TP_DISTANCE = new ConfigFileEntry<>(
+            "wildcard_superpowers_teleportation_tp_distance", 100, "season.superpowers.teleportation[new]",
+            "Max Teleport Distance", "Controls the max teleport distance.\nVery high numbers may cause performance issues."
+    );
+    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_SHADOW_PLAY_BLIND_RANGE = new ConfigFileEntry<>(
+            "wildcard_superpowers_shadow_play_blind_range", 10, "season.superpowers.shadow_play[new]",
+            "Blint Range", "Controls the range in which players are blinded."
+    );
+    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_SHADOW_PLAY_BLIND_TIME = new ConfigFileEntry<>(
+            "wildcard_superpowers_shadow_play_blind_time", 5, ConfigTypes.SECONDS, "season.superpowers.shadow_play[new]",
+            "Blind Time", "Controls the time for which players are blinded."
+    );
+
     /*
     public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_ = new ConfigFileEntry<>(
             "wildcard_superpowers_", 70, "season.superpowers.xxxx[new]",
@@ -499,18 +516,28 @@ public class WildLifeConfig extends SeasonConfig {
                 ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_HANDS
                 ,WILDCARD_SUPERPOWERS_ANIMAL_DISGUISE_DAMAGE_CANCELS
 
-                ,SUPERPOWER_MIMICRY
+                //Teleportation
                 ,SUPERPOWER_TELEPORTATION
-                ,SUPERPOWER_SHADOW_PLAY
-                ,SUPERPOWER_TRIPLE_JUMP
-                ,SUPERPOWER_INVISIBILITY
-                ,SUPERPOWER_SUPERSPEED
-
-                ,SUPERPOWER_COOLDOWN_MIMICRY
                 ,SUPERPOWER_COOLDOWN_TELEPORTATION
+                ,WILDCARD_SUPERPOWERS_TELEPORTATION_SWAP_DISTANCE
+                ,WILDCARD_SUPERPOWERS_TELEPORTATION_TP_DISTANCE
+
+                //Shadow Play
+                ,SUPERPOWER_SHADOW_PLAY
                 ,SUPERPOWER_COOLDOWN_SHADOW_PLAY
+                ,WILDCARD_SUPERPOWERS_SHADOW_PLAY_BLIND_RANGE
+                ,WILDCARD_SUPERPOWERS_SHADOW_PLAY_BLIND_TIME
+
+                ,SUPERPOWER_MIMICRY
+                ,SUPERPOWER_COOLDOWN_MIMICRY
+
+                ,SUPERPOWER_TRIPLE_JUMP
                 ,SUPERPOWER_COOLDOWN_TRIPLE_JUMP
+
+                ,SUPERPOWER_INVISIBILITY
                 ,SUPERPOWER_COOLDOWN_INVISIBILITY
+
+                ,SUPERPOWER_SUPERSPEED
                 ,SUPERPOWER_COOLDOWN_SUPERSPEED
 
                 //? if >= 1.20.3 {
