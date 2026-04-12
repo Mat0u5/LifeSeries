@@ -260,7 +260,8 @@ public class WildLife extends Season {
 
         TimeControl.TARGET_TICK_RATE = Math.max(1, WildLifeConfig.WILDCARD_SUPERPOWERS_TIME_DILATION_TICK_RATE.get());
         TimeControl.SLOW_DURATION =  WildLifeConfig.WILDCARD_SUPERPOWERS_TIME_DILATION_DURATION.get();
-
+        CreakingPower.CREAKING_AMOUNT =  WildLifeConfig.WILDCARD_SUPERPOWERS_CREAKING_AMOUNT.get();
+        CreakingPower.SHOW_PARTICLES =  WildLifeConfig.WILDCARD_SUPERPOWERS_CREAKING_PARTICLES.get();
 
         Snails.loadConfig();
         Snails.loadSnailNames();

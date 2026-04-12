@@ -32,6 +32,8 @@ import static net.mat0u5.lifeseries.Main.server;
 import net.minecraft.core.particles.TrailParticleOption;
 
 public class CreakingPower extends ToggleableSuperpower {
+    public static int CREAKING_AMOUNT = 3;
+    public static boolean SHOW_PARTICLES = true;
     public static int COOLDOWN_MILLIS = 10000;
     public static final List<UUID> allCreatedEntities = new ArrayList<>();
 
@@ -53,7 +55,9 @@ public class CreakingPower extends ToggleableSuperpower {
     public void tick() {
         if (!active) return;
         //? if >= 1.21.2 {
-        spawnTrailParticles();
+        if (SHOW_PARTICLES) {
+            spawnTrailParticles();
+        }
         //?}
     }
 
@@ -72,7 +76,7 @@ public class CreakingPower extends ToggleableSuperpower {
         createdTeams.add(newTeamName);
 
         //? if >= 1.21.2 {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < CREAKING_AMOUNT; i++) {
             BlockPos spawnPos =  LevelUtils.getCloseBlockPos(playerLevel, player.blockPosition(), 6, 3, true);
             Creaking creaking = EntityType.CREAKING.spawn(playerLevel, spawnPos, EntitySpawnReason.COMMAND);
             if (creaking != null) {

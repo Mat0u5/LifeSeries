@@ -281,6 +281,27 @@ public class WildLifeConfig extends SeasonConfig {
             "Slow Duration", "Controls the slowdown duration."
     );
 
+    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_CREAKING_AMOUNT = new ConfigFileEntry<>(
+            "wildcard_superpowers_creaking_amount", 3, "season.superpowers.creaking[new]",
+            "Creaking Amount", "Controls the number of creakings that spawn."
+    );
+    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_CREAKING_PARTICLES = new ConfigFileEntry<>(
+            "wildcard_superpowers_creaking_particles", true, "season.superpowers.creaking[new]",
+            "Show Trail Particles", "Controls whether the trail particles towards the creaking show up."
+    );
+
+
+    /*
+    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_ = new ConfigFileEntry<>(
+            "wildcard_superpowers_", 70, "season.superpowers.xxxx[new]",
+            "XXX", "Controls XXX."
+    );
+    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ = new ConfigFileEntry<>(
+            "wildcard_superpowers_", true, "season.superpowers.xxxx[new]",
+            "XXX", "Controls XXX."
+    );
+     */
+
 
 
     public static final ConfigFileEntry<String> WILDCARD_CALLBACK_WILDCARDS_BLACKLIST = new ConfigFileEntry<>(
@@ -459,8 +480,11 @@ public class WildLifeConfig extends SeasonConfig {
                 //?}
                 //? if >= 1.21.2 {
                 ,SUPERPOWER_CREAKING
-                ,SUPERPOWER_FLIGHT
                 ,SUPERPOWER_COOLDOWN_CREAKING
+                ,WILDCARD_SUPERPOWERS_CREAKING_AMOUNT
+                ,WILDCARD_SUPERPOWERS_CREAKING_PARTICLES
+
+                ,SUPERPOWER_FLIGHT
                 ,SUPERPOWER_COOLDOWN_FLIGHT
                 //?}
 
