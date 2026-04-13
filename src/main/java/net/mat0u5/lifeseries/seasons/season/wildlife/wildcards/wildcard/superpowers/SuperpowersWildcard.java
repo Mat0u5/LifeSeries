@@ -203,6 +203,14 @@ public class SuperpowersWildcard extends Wildcard {
         }
         return power.active;
     }
+    public static boolean anyoneHasActivatedPower(Superpowers superpower) {
+        for (ServerPlayer player : livesManager.getAlivePlayers()) {
+            if (hasActivatedPower(player, superpower)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public static Superpowers getSuperpower(ServerPlayer player) {
         if (playerSuperpowers.containsKey(player.getUUID())) {

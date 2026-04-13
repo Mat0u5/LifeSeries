@@ -359,7 +359,7 @@ public class WildLifeConfig extends SeasonConfig {
             "Maximum Speed", "Controls the maximum speed."
     );
     public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_SUPERSPEED_FROST_WALKER_LEVEL = new ConfigFileEntry<>(
-            "wildcard_superpowers_superspeed_frost_walker_level", 5, "season.superpowers.superspeed[new]",
+            "wildcard_superpowers_superspeed_frost_walker_level", 3, "season.superpowers.superspeed[new]",
             "Frost Walker Level", "Controls the frost walker enchant level."
     );
     public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_SUPERSPEED_HUNGER_LEVEL = new ConfigFileEntry<>(
@@ -370,18 +370,6 @@ public class WildLifeConfig extends SeasonConfig {
             "wildcard_superpowers_triple_jump_jumps", 3, "season.superpowers.triple_jump[new]",
             "Max Jump Amount", "Controls the maximum jump amount."
     );
-
-    /*
-    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_ = new ConfigFileEntry<>(
-            "wildcard_superpowers_", 70, "season.superpowers.xxxx[new]",
-            "XXX", "Controls XXX."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ = new ConfigFileEntry<>(
-            "wildcard_superpowers_", true, "season.superpowers.xxxx[new]",
-            "XXX", "Controls XXX."
-    );
-     */
-
 
 
     public static final ConfigFileEntry<String> WILDCARD_CALLBACK_WILDCARDS_BLACKLIST = new ConfigFileEntry<>(

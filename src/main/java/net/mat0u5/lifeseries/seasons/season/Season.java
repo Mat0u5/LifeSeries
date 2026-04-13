@@ -18,6 +18,9 @@ import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.CreakingPower;
 import net.mat0u5.lifeseries.seasons.secretsociety.SecretSociety;
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
@@ -310,9 +313,11 @@ public abstract class Season {
     public void createTeams() {
         Collection<PlayerTeam> allTeams = TeamUtils.getAllTeams();
         if (allTeams != null) {
-            for (PlayerTeam team : allTeams) {
-                if (team.getName().startsWith("creaking_")) {
-                    TeamUtils.deleteTeam(team.getName());
+            if (currentSeason.getSeason() != Seasons.WILD_LIFE || CreakingPower.allCreatedEntities.isEmpty() || !SuperpowersWildcard.anyoneHasActivatedPower(Superpowers.CREAKING)) {
+                for (PlayerTeam team : allTeams) {
+                    if (team.getName().startsWith("creaking_")) {
+                        TeamUtils.deleteTeam(team.getName());
+                    }
                 }
             }
         }

@@ -263,7 +263,7 @@ public class ClientEvents {
             return;
         }
 
-        if ((jumpedInAir+1) > MainClient.powerTripleJumpCount) return;
+        if ((jumpedInAir+1) >= MainClient.powerTripleJumpCount) return;
 
         boolean shouldJump = false;
         //? if <= 1.21 {

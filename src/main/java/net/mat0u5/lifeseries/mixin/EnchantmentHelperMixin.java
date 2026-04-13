@@ -2,13 +2,8 @@ package net.mat0u5.lifeseries.mixin;
 
 import com.google.common.collect.Lists;
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.SuperPunch;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -243,33 +238,4 @@ public class EnchantmentHelperMixin {
         cir.setReturnValue(list);
     }
     //?}
-
-    //? if <= 1.20.5 {
-    /*@Inject(
-            method = "doPostDamageEffects", at = @At("HEAD")
-    )
-    private static void onTargetDamaged(LivingEntity victimEntity, Entity sourceEntity, CallbackInfo ci) {
-    *///?} else {
-    @Inject(
-            method = "doPostAttackEffects(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/damagesource/DamageSource;)V", at = @At("HEAD")
-    )
-    private static void onTargetDamaged(ServerLevel level, Entity victimEntity, DamageSource damageSource, CallbackInfo ci) {
-    //?}
-        if (Main.isClientOrDisabled()) return;
-        if (!(victimEntity instanceof ServerPlayer victim)) return;
-        //? if <= 1.20.5 {
-        /*if (sourceEntity == null) return;
-        if (!SuperpowersWildcard.hasActivatedPower(victim, Superpowers.SUPER_PUNCH)) return;
-        sourceEntity.hurt(victim.damageSources().thorns(victim), (float) SuperPunch.THORNS_DAMAGE);
-        *///?} else {
-        if (damageSource == null) return;
-        if (damageSource.getEntity() == null) return;
-        if (!SuperpowersWildcard.hasActivatedPower(victim, Superpowers.SUPER_PUNCH)) return;
-        //? if <= 1.21 {
-        /*damageSource.getEntity().hurt(victim.damageSources().thorns(victim), (float) SuperPunch.THORNS_DAMAGE);
-        *///?} else {
-        damageSource.getEntity().hurtServer(victim.ls$getServerLevel(), victim.damageSources().thorns(victim), (float) SuperPunch.THORNS_DAMAGE);
-        //?}
-        //?}
-    }
 }

@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife;
 
+import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.snail.Snail;
@@ -361,6 +362,7 @@ public class WildLife extends Season {
     @Override
     public void onPlayerDamage(ServerPlayer player, DamageSource source, float amount, CallbackInfo ci) {
         super.onPlayerDamage(player, source, amount, ci);
+        if (Main.isClientOrDisabled()) return;
         if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.PLAYER_DISGUISE)) {
             if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof PlayerDisguise power) {
                 power.onTakeDamage();
@@ -375,6 +377,14 @@ public class WildLife extends Season {
             if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof Invisibility power) {
                 power.onTakeDamage();
             }
+        }
+        Entity sourceEntity = source.getEntity();
+        if (sourceEntity != null && SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPER_PUNCH)) {
+            //? if <= 1.21 {
+            /*sourceEntity.hurt(player.damageSources().thorns(player), (float) SuperPunch.THORNS_DAMAGE);
+             *///?} else {
+            sourceEntity.hurtServer(player.ls$getServerLevel(), player.damageSources().thorns(player), (float) SuperPunch.THORNS_DAMAGE);
+            //?}
         }
     }
 

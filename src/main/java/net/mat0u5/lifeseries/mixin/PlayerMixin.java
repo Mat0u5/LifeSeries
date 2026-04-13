@@ -149,7 +149,7 @@ public abstract class PlayerMixin implements IPlayer {
 
     //? if > 1.20.5 {
     @Unique
-    private static final ReplaceDisk ls$frostWalker =  new ReplaceDisk(LevelBasedValue.constant(5.0F), LevelBasedValue.constant(1.0F), new Vec3i(0, -1, 0), Optional.of(BlockPredicate.allOf(BlockPredicate.matchesTag(new Vec3i(0, 1, 0), BlockTags.AIR), BlockPredicate.matchesBlocks(Blocks.WATER), BlockPredicate.matchesFluids(Fluids.WATER), BlockPredicate.unobstructed())), BlockStateProvider.simple(Blocks.FROSTED_ICE), Optional.of(GameEvent.BLOCK_PLACE));
+    private static final ReplaceDisk ls$frostWalker =  new ReplaceDisk(LevelBasedValue.perLevel(3.0F, 1.0F), LevelBasedValue.constant(1.0F), new Vec3i(0, -1, 0), Optional.of(BlockPredicate.allOf(BlockPredicate.matchesTag(new Vec3i(0, 1, 0), BlockTags.AIR), BlockPredicate.matchesBlocks(Blocks.WATER), BlockPredicate.matchesFluids(Fluids.WATER), BlockPredicate.unobstructed())), BlockStateProvider.simple(Blocks.FROSTED_ICE), Optional.of(GameEvent.BLOCK_PLACE));
     //?}
 
     @Inject(method = "travel", at = @At("HEAD"))
