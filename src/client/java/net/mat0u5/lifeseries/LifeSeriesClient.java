@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.mat0u5.lifeseries.config.ClientConfig;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.registries.ClientRegistries;
@@ -92,7 +91,6 @@ public class LifeSeriesClient implements ClientModInitializer, IClientHelper {
     }
     @Override
     public void onInitializeClient() {
-        NetworkHandlerClient.registerClientReceiver();
         NetworkHandlerClient.initializeSimplePacketReceivers();
         ClientRegistries.registerModStuff();
     }
@@ -142,7 +140,7 @@ public class LifeSeriesClient implements ClientModInitializer, IClientHelper {
     *///?} else {
     public void sendPacket(CustomPacketPayload payload) {
     //?}
-        ClientPlayNetworking.send(payload);
+        NetworkHandlerClient.send(payload);
     }
 
     @Override

@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.events.Events;
+import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLife;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
@@ -16,6 +17,7 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.LastSeenMessages;
 import net.minecraft.network.chat.PlayerChatMessage;
+import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -238,7 +240,11 @@ public class ServerGamePacketListenerImplMixin {
     *///?} else {
     private void onDisconnect(DisconnectionDetails details, CallbackInfo ci) {
     //?}
-        ServerPlayer player = ((ServerGamePacketListenerImpl)(Object)this).player;
-        Events.onPlayerDisconnect(player);
+        Events.onPlayerDisconnect(this.player);
+    }
+
+    @Inject(method = "handleCustomPayload", at = @At("HEAD"), cancellable = true)
+    private void onHandlePayload(ServerboundCustomPayloadPacket packet, CallbackInfo ci) {
+        NetworkHandlerServer.onCustomPayload(packet.payload(), this.player);
     }
 }

@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.ChunkPos;
 
 import java.util.List;
 
@@ -104,7 +105,12 @@ public class SuperPunch extends ToggleableSuperpower {
     private void syncEntityPassengers(Entity entity, ServerLevel level) {
         ClientboundSetPassengersPacket passengersPacket = new ClientboundSetPassengersPacket(entity);
 
-        for (ServerPlayer trackingPlayer : PlayerLookup.tracking(level, entity.blockPosition())) {
+        //? if <= 1.21.11 {
+        /*List<ServerPlayer> players = level.getChunkSource().chunkMap.getPlayers(new ChunkPos(entity.blockPosition()), false);
+        *///?} else {
+        List<ServerPlayer> players = level.getChunkSource().chunkMap.getPlayers(ChunkPos.containing(entity.blockPosition()), false);
+        //?}
+        for (ServerPlayer trackingPlayer : players) {
             trackingPlayer.connection.send(passengersPacket);
         }
 

@@ -52,6 +52,8 @@
   ],
   "mixins": [
     "BiomeMixin",
+    "ClientboundCustomPayloadPacketMixin",
+    "ClientHandshakePacketListenerImplMixin",
     "ClientPacketListenerMixin",
     "ConnectionMixin",
     "EnchantmentMixin",
@@ -61,6 +63,6 @@
     "MinecraftServerMixin",
     "PlayerMixin",
     "ScreenMixin",
-    "WorldOpenFlowsMixin"
+    "WorldOpenFlowsMixin",
   ]
 }

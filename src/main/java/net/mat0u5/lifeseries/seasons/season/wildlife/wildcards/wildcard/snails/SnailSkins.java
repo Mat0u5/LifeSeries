@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails;
 
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.SnailTexturePacket;
 import net.mat0u5.lifeseries.resources.ResourceHandler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -33,7 +33,7 @@ public class SnailSkins {
                     if (VersionControl.isDevVersion()) {
                         LifeSeries.LOGGER.info(TextUtils.formatString("Sending snail texture '{}' to {}", name, player));
                     }
-                    ServerPlayNetworking.send(player, packet);
+                    NetworkHandlerServer.sendPacket(player, packet);
                 }
             }catch(Exception e) {
                 e.printStackTrace();

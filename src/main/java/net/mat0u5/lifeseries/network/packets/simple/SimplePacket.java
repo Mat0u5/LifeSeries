@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.network.packets.simple;
 
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 //? if <= 1.20.3 {
 /*import net.fabricmc.fabric.api.networking.v1.FabricPacket;
@@ -112,7 +112,7 @@ public abstract class SimplePacket<T extends SimplePacket<T, U>, U extends Custo
         }
         for (ServerPlayer player : targets) {
             if (player == null) continue;
-            ServerPlayNetworking.send(player, packet);
+            NetworkHandlerServer.sendPacket(player, packet);
         }
         targets = null;
     }

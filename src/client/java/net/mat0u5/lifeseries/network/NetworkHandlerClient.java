@@ -1,7 +1,5 @@
 package net.mat0u5.lifeseries.network;
 
-import net.fabricmc.fabric.api.client.networking.v1.ClientLoginNetworking;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.LifeSeriesClient;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
@@ -48,7 +46,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -58,12 +59,12 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 //? if <= 1.20.3 {
 /*import net.minecraft.network.FriendlyByteBuf;
 *///?}
-import net.fabricmc.fabric.api.networking.v1.*;
 
 public class NetworkHandlerClient {
     public static void initializeSimplePacketReceivers() {
@@ -347,179 +348,86 @@ public class NetworkHandlerClient {
          */
     }
 
-    //? if <= 1.20.3 {
-    /*public static void registerClientReceiver() {
-        ClientLoginNetworking.registerGlobalReceiver(IdentifierHelper.mod("preloginpacket"),
-                (client, handler, buf, listenerAdder) -> {
-                    FriendlyByteBuf response = PacketByteBufs.create();
-                    response.writeBoolean(true);
-                    return CompletableFuture.completedFuture(response);
-                }
-        );
+    public static final List<CustomPacketPayload.TypeAndCodec<? super RegistryFriendlyByteBuf, ? extends CustomPacketPayload>> CLIENTBOUND_PACKETS = List.of(
+            new CustomPacketPayload.TypeAndCodec<>(NumberPayload.ID, NumberPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(StringPayload.ID, StringPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(StringListPayload.ID, StringListPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(HandshakePayload.ID, HandshakePayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(LongPayload.ID, LongPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(ConfigPayload.ID, ConfigPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(SidetitlePacket.ID, SidetitlePacket.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(SnailTexturePacket.ID, SnailTexturePacket.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(VoteScreenPayload.ID, VoteScreenPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(EmptyPayload.ID, EmptyPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(BooleanPayload.ID, BooleanPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(IntPayload.ID, IntPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(LifeSkinsTexturePayload.ID, LifeSkinsTexturePayload.CODEC)
+    );
 
-
-        ClientPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (client, handler, buf, responseSender) -> {
-            HandshakePayload payload = HandshakePayload.read(buf);
+    public static boolean onCustomPayload(CustomPacketPayload customPacketPayload) {
+        Minecraft client = Minecraft.getInstance();
+        if (customPacketPayload instanceof HandshakePayload payload) {
             client.execute(() -> handleHandshake(payload));
-        });
-
-        ClientPlayNetworking.registerGlobalReceiver(TriviaQuestionPayload.ID, (client, handler, buf, responseSender) -> {
-            TriviaQuestionPayload payload = TriviaQuestionPayload.read(buf);
+        }
+        else if (customPacketPayload instanceof TriviaQuestionPayload payload) {
             client.execute(() -> Trivia.receiveTrivia(payload));
-        });
-        ClientPlayNetworking.registerGlobalReceiver(VoteScreenPayload.ID, (client, handler, buf, responseSender) -> {
-            VoteScreenPayload payload = VoteScreenPayload.read(buf);
+        }
+        else if (customPacketPayload instanceof VoteScreenPayload payload) {
             client.execute(() -> handleVoteScreen(payload));
-        });
-
-
-        ClientPlayNetworking.registerGlobalReceiver(PlayerDisguisePayload.ID, (client, handler, buf, responseSender) -> {
-            PlayerDisguisePayload payload = PlayerDisguisePayload.read(buf);
+        }
+        else if (customPacketPayload instanceof PlayerDisguisePayload payload) {
             client.execute(() -> handlePlayerDisguise(payload));
-        });
-
-        ClientPlayNetworking.registerGlobalReceiver(ConfigPayload.ID, (client, handler, buf, responseSender) -> {
-            ConfigPayload payload = ConfigPayload.read(buf);
+        }
+        else if (customPacketPayload instanceof ConfigPayload payload) {
             client.execute(() -> handleConfigPacket(payload));
-        });
-
-        ClientPlayNetworking.registerGlobalReceiver(SidetitlePacket.ID, (client, handler, buf, responseSender) -> {
-            SidetitlePacket payload = SidetitlePacket.read(buf);
+        }
+        else if (customPacketPayload instanceof SidetitlePacket payload) {
             client.execute(() -> handleSidetitle(payload));
-        });
-
-        ClientPlayNetworking.registerGlobalReceiver(SnailTexturePacket.ID, (client, handler, buf, responseSender) -> {
-            SnailTexturePacket payload = SnailTexturePacket.read(buf);
-            client.execute(() -> {
-                SnailSkinsClient.handleSnailTexture(payload.skinName(), payload.textureData());
-            });
-        });
-
-        ClientPlayNetworking.registerGlobalReceiver(LifeSkinsTexturePayload.ID, (client, handler, buf, responseSender) -> {
-            LifeSkinsTexturePayload payload = LifeSkinsTexturePayload.read(buf);
-            client.execute(() -> {
-                LifeSkinsClient.handleTexture(payload.skinName(), payload.teamName(), payload.slim(), payload.textureData());
-            });
-        });
-
-        ClientPlayNetworking.registerGlobalReceiver(NumberPayload.ID, (client, handler, buf, responseSender) -> {
-            NumberPayload payload = NumberPayload.read(buf);
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) client.execute(() -> packet.receiveClient(payload));
-        });
-
-        ClientPlayNetworking.registerGlobalReceiver(StringPayload.ID, (client, handler, buf, responseSender) -> {
-            StringPayload payload = StringPayload.read(buf);
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) client.execute(() -> packet.receiveClient(payload));
-        });
-        ClientPlayNetworking.registerGlobalReceiver(LongPayload.ID, (client, handler, buf, responseSender) -> {
-            LongPayload payload = LongPayload.read(buf);
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) client.execute(() -> packet.receiveClient(payload));
-        });
-        ClientPlayNetworking.registerGlobalReceiver(StringListPayload.ID, (client, handler, buf, responseSender) -> {
-            StringListPayload payload = StringListPayload.read(buf);
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) client.execute(() -> packet.receiveClient(payload));
-        });
-        ClientPlayNetworking.registerGlobalReceiver(BooleanPayload.ID, (client, handler, buf, responseSender) -> {
-            BooleanPayload payload = BooleanPayload.read(buf);
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) client.execute(() -> packet.receiveClient(payload));
-        });
-        ClientPlayNetworking.registerGlobalReceiver(IntPayload.ID, (client, handler, buf, responseSender) -> {
-            IntPayload payload = IntPayload.read(buf);
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) client.execute(() -> packet.receiveClient(payload));
-        });
-        ClientPlayNetworking.registerGlobalReceiver(EmptyPayload.ID, (client, handler, buf, responseSender) -> {
-            EmptyPayload payload = EmptyPayload.read(buf);
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) client.execute(() -> packet.receiveClient(payload));
-        });
-    }
-    *///?} else {
-    public static void registerClientReceiver() {
-        ClientLoginNetworking.registerGlobalReceiver(IdentifierHelper.mod("preloginpacket"),
-                (client, handler, buf, listenerAdder) -> {
-                    return CompletableFuture.completedFuture(
-                            //? if <= 1.21.11 {
-                            /*PacketByteBufs.create().writeBoolean(true)
-                            *///?} else {
-                            FriendlyByteBufs.create().writeBoolean(true)
-                            //?}
-                    );
-                }
-        );
-
-        ClientPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (payload, context) -> {
-            Minecraft client = context.client();
-            client.execute(() -> handleHandshake(payload));
-        });
-        ClientPlayNetworking.registerGlobalReceiver(TriviaQuestionPayload.ID, (payload, context) -> {
-            Minecraft client = context.client();
-            client.execute(() -> Trivia.receiveTrivia(payload));
-        });
-        ClientPlayNetworking.registerGlobalReceiver(VoteScreenPayload.ID, (payload, context) -> {
-            Minecraft client = context.client();
-            client.execute(() -> handleVoteScreen(payload));
-        });
-        ClientPlayNetworking.registerGlobalReceiver(PlayerDisguisePayload.ID, (payload, context) -> {
-            Minecraft client = context.client();
-            client.execute(() -> handlePlayerDisguise(payload));
-        });
-        ClientPlayNetworking.registerGlobalReceiver(ConfigPayload.ID, (payload, context) -> {
-            Minecraft client = context.client();
-            client.execute(() -> handleConfigPacket(payload));
-        });
-        ClientPlayNetworking.registerGlobalReceiver(SidetitlePacket.ID, (payload, context) -> {
-            Minecraft client = context.client();
-            client.execute(() -> handleSidetitle(payload));
-        });
-        ClientPlayNetworking.registerGlobalReceiver(SnailTexturePacket.ID, (payload, context) -> {
-            context.client().execute(() -> {
-                SnailSkinsClient.handleSnailTexture(payload.skinName(), payload.textureData());
-            });
-        });
-        ClientPlayNetworking.registerGlobalReceiver(LifeSkinsTexturePayload.ID, (payload, context) -> {
-            context.client().execute(() -> {
-                LifeSkinsClient.handleTexture(payload.skinName(), payload.teamName(), payload.slim(), payload.textureData());
-            });
-        });
+        }
+        else if (customPacketPayload instanceof SnailTexturePacket payload) {
+            client.execute(() -> SnailSkinsClient.handleSnailTexture(payload.skinName(), payload.textureData()));
+        }
+        else if (customPacketPayload instanceof LifeSkinsTexturePayload payload) {
+            client.execute(() -> LifeSkinsClient.handleTexture(payload.skinName(), payload.teamName(), payload.slim(), payload.textureData()));
+        }
 
         //Simple Packets
-        Minecraft client = Minecraft.getInstance();
-        ClientPlayNetworking.registerGlobalReceiver(StringListPayload.ID, (payload, context) -> {
+        else if (customPacketPayload instanceof StringListPayload payload) {
             SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
             if (packet != null) client.execute(() -> packet.receiveClient(payload));
-        });
-        ClientPlayNetworking.registerGlobalReceiver(NumberPayload.ID, (payload, context) -> {
+        }
+        else if (customPacketPayload instanceof NumberPayload payload) {
             SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
             if (packet != null) client.execute(() -> packet.receiveClient(payload));
-        });
-        ClientPlayNetworking.registerGlobalReceiver(StringPayload.ID, (payload, context) -> {
+        }
+        else if (customPacketPayload instanceof StringPayload payload) {
             SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
             if (packet != null) client.execute(() -> packet.receiveClient(payload));
-        });
-        ClientPlayNetworking.registerGlobalReceiver(LongPayload.ID, (payload, context) -> {
+        }
+        else if (customPacketPayload instanceof LongPayload payload) {
             SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
             if (packet != null) client.execute(() -> packet.receiveClient(payload));
-        });
-        ClientPlayNetworking.registerGlobalReceiver(BooleanPayload.ID, (payload, context) -> {
+        }
+        else if (customPacketPayload instanceof BooleanPayload payload) {
             SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
             if (packet != null) client.execute(() -> packet.receiveClient(payload));
-        });
-        ClientPlayNetworking.registerGlobalReceiver(EmptyPayload.ID, (payload, context) -> {
+        }
+        else if (customPacketPayload instanceof EmptyPayload payload) {
             SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
             if (packet != null) client.execute(() -> packet.receiveClient(payload));
-        });
-        ClientPlayNetworking.registerGlobalReceiver(IntPayload.ID, (payload, context) -> {
+        }
+        else if (customPacketPayload instanceof IntPayload payload) {
             SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
             if (packet != null) client.execute(() -> packet.receiveClient(payload));
-        });
+        }
+        else {
+            return false;
+        }
+
+        return true;
     }
-    //?}
 
     public static void handleSidetitle(SidetitlePacket payload) {
         LifeSeriesClient.sideTitle = payload.text();
@@ -609,6 +517,18 @@ public class NetworkHandlerClient {
     /*
         Sending
      */
+    public static void send(CustomPacketPayload payload) {
+        Objects.requireNonNull(payload, "Payload cannot be null");
+        Objects.requireNonNull(payload.type(), "CustomPacketPayload#type() cannot return null for payload class: " + payload.getClass());
+
+        var connection = Minecraft.getInstance().getConnection();
+        if (connection != null) {
+            connection.send(new ServerboundCustomPayloadPacket(payload));
+            return;
+        }
+
+        throw new IllegalStateException("Cannot send packets when not in game!");
+    }
 
     public static void sendHandshake() {
         String clientVersionStr = LifeSeries.MOD_VERSION;
@@ -618,13 +538,13 @@ public class NetworkHandlerClient {
         int clientCompatibility = VersionControl.getModVersionInt(clientCompatibilityStr);
 
         HandshakePayload sendPayload = new HandshakePayload(clientVersionStr, clientVersion, clientCompatibilityStr, clientCompatibility);
-        ClientPlayNetworking.send(sendPayload);
+        send(sendPayload);
         if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info("[PACKET_CLIENT] Sent handshake");
     }
 
     public static void sendConfigUpdate(String configType, String id, List<String> args) {
         ConfigPayload configPacket = new ConfigPayload(configType, id, -1, "", "", args);
-        ClientPlayNetworking.send(configPacket);
+        send(configPacket);
     }
 
     public static void sendTriviaAnswer(int answer) {

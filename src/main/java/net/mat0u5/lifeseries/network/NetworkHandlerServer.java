@@ -3,7 +3,6 @@ package net.mat0u5.lifeseries.network;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
-import net.fabricmc.fabric.api.networking.v1.*;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.DefaultConfigValues;
@@ -41,7 +40,11 @@ import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.*;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.ChatFormatting;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerLoginPacketListenerImpl;
@@ -51,18 +54,34 @@ import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.network.DisconnectionDetails;
 //?}
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
 
 public class NetworkHandlerServer {
+    public static final String preLoginPacketID = "preloginpacket";
     public static final List<UUID> handshakeSuccessful = new ArrayList<>();
     public static final List<UUID> preLoginHandshake = new ArrayList<>();
     public static RegistryOverrideBahaviours REGISTRY_OVERRIDE_BEHAVIOR = RegistryOverrideBahaviours.LOGIN;
     public static boolean PRE_LOGIN_OVERRIDE_KICK = false;
+
+    public static final List<CustomPacketPayload.TypeAndCodec<? super RegistryFriendlyByteBuf, ? extends CustomPacketPayload>> PAYLOADS = List.of(
+            new CustomPacketPayload.TypeAndCodec<>(NumberPayload.ID, NumberPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(StringPayload.ID, StringPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(StringListPayload.ID, StringListPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(HandshakePayload.ID, HandshakePayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(LongPayload.ID, LongPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(ConfigPayload.ID, ConfigPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(SidetitlePacket.ID, SidetitlePacket.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(SnailTexturePacket.ID, SnailTexturePacket.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(VoteScreenPayload.ID, VoteScreenPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(EmptyPayload.ID, EmptyPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(BooleanPayload.ID, BooleanPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(IntPayload.ID, IntPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(LifeSkinsTexturePayload.ID, LifeSkinsTexturePayload.CODEC)
+    );
 
     public enum RegistryOverrideBahaviours {
         NEVER,
@@ -272,160 +291,62 @@ public class NetworkHandlerServer {
          */
     }
 
-    public static void registerPackets() {
-        //? if > 1.20.3 {
-        PayloadTypeRegistry.clientboundPlay().register(NumberPayload.ID, NumberPayload.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(StringPayload.ID, StringPayload.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(StringListPayload.ID, StringListPayload.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(HandshakePayload.ID, HandshakePayload.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(LongPayload.ID, LongPayload.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(ConfigPayload.ID, ConfigPayload.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(SidetitlePacket.ID, SidetitlePacket.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(SnailTexturePacket.ID, SnailTexturePacket.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(VoteScreenPayload.ID, VoteScreenPayload.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(EmptyPayload.ID, EmptyPayload.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(BooleanPayload.ID, BooleanPayload.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(IntPayload.ID, IntPayload.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(LifeSkinsTexturePayload.ID, LifeSkinsTexturePayload.CODEC);
+    public static final List<CustomPacketPayload.TypeAndCodec<? super RegistryFriendlyByteBuf, ? extends CustomPacketPayload>> SERVERBOUND_PACKETS = List.of(
+              new CustomPacketPayload.TypeAndCodec<>(NumberPayload.ID, NumberPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(StringPayload.ID, StringPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(StringListPayload.ID, StringListPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(HandshakePayload.ID, HandshakePayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(LongPayload.ID, LongPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(ConfigPayload.ID, ConfigPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(SidetitlePacket.ID, SidetitlePacket.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(SnailTexturePacket.ID, SnailTexturePacket.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(VoteScreenPayload.ID, VoteScreenPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(EmptyPayload.ID, EmptyPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(BooleanPayload.ID, BooleanPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(IntPayload.ID, IntPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(LifeSkinsTexturePayload.ID, LifeSkinsTexturePayload.CODEC)
+    );
 
-        PayloadTypeRegistry.serverboundPlay().register(NumberPayload.ID, NumberPayload.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(StringPayload.ID, StringPayload.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(StringListPayload.ID, StringListPayload.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(HandshakePayload.ID, HandshakePayload.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(LongPayload.ID, LongPayload.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(ConfigPayload.ID, ConfigPayload.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(SidetitlePacket.ID, SidetitlePacket.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(SnailTexturePacket.ID, SnailTexturePacket.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(VoteScreenPayload.ID, VoteScreenPayload.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(EmptyPayload.ID, EmptyPayload.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(BooleanPayload.ID, BooleanPayload.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(IntPayload.ID, IntPayload.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(LifeSkinsTexturePayload.ID, LifeSkinsTexturePayload.CODEC);
-        //?}
-    }
-    //? if <= 1.20.3 {
-    /*public static void registerServerReceiver() {
-        ServerLoginConnectionEvents.QUERY_START.register((handler, server, sender, synchronizer) -> {
-            sender.sendPacket(IdentifierHelper.mod("preloginpacket"), PacketByteBufs.create());
-        });
-
-        // Handle the response
-        ServerLoginNetworking.registerGlobalReceiver(IdentifierHelper.mod("preloginpacket"),
-                (server, handler, understood, buf, synchronizer, responseSender) -> {
-                    handlePreLogin(understood, handler);
-                }
-        );
-
-        ServerPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (server, player, handler, buf, responseSender) -> {
-            HandshakePayload payload = HandshakePayload.read(buf);
+    public static void onCustomPayload(CustomPacketPayload customPacketPayload, ServerPlayer player) {
+        if (customPacketPayload instanceof HandshakePayload payload) {
             server.execute(() -> handleHandshakeResponse(player, payload));
-        });
-
-
-        ServerPlayNetworking.registerGlobalReceiver(ConfigPayload.ID, (server, player, handler, buf, responseSender) -> {
-            ConfigPayload payload = ConfigPayload.read(buf);
+        }
+        if (customPacketPayload instanceof ConfigPayload payload) {
             server.execute(() -> handleConfigPacket(player, payload));
-        });
-        ServerPlayNetworking.registerGlobalReceiver(NumberPayload.ID, (server, player, handler, buf, responseSender) -> {
-            NumberPayload payload = NumberPayload.read(buf);
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) packet.receiveServer(player, payload);
-        });
-
-        ServerPlayNetworking.registerGlobalReceiver(StringPayload.ID, (server, player, handler, buf, responseSender) -> {
-            StringPayload payload = StringPayload.read(buf);
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) packet.receiveServer(player, payload);
-        });
-
-        ServerPlayNetworking.registerGlobalReceiver(StringListPayload.ID, (server, player, handler, buf, responseSender) -> {
-            StringListPayload payload = StringListPayload.read(buf);
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) packet.receiveServer(player, payload);
-        });
-        ServerPlayNetworking.registerGlobalReceiver(LongPayload.ID, (server, player, handler, buf, responseSender) -> {
-            LongPayload payload = LongPayload.read(buf);
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) packet.receiveServer(player, payload);
-        });
-        ServerPlayNetworking.registerGlobalReceiver(BooleanPayload.ID, (server, player, handler, buf, responseSender) -> {
-            BooleanPayload payload = BooleanPayload.read(buf);
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) packet.receiveServer(player, payload);
-        });
-        ServerPlayNetworking.registerGlobalReceiver(EmptyPayload.ID, (server, player, handler, buf, responseSender) -> {
-            EmptyPayload payload = EmptyPayload.read(buf);
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) packet.receiveServer(player, payload);
-        });
-        ServerPlayNetworking.registerGlobalReceiver(IntPayload.ID, (server, player, handler, buf, responseSender) -> {
-            IntPayload payload = IntPayload.read(buf);
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) packet.receiveServer(player, payload);
-        });
-    }
-    *///?} else {
-    public static void registerServerReceiver() {
-
-        ServerLoginConnectionEvents.QUERY_START.register((handler, server, sender, synchronizer) -> {
-            //? if <= 1.21.11 {
-            /*sender.sendPacket(IdentifierHelper.mod("preloginpacket"), PacketByteBufs.create());
-            *///?} else {
-            sender.sendPacket(IdentifierHelper.mod("preloginpacket"), FriendlyByteBufs.create());
-            //?}
-        });
-
-        // Handle the response
-        ServerLoginNetworking.registerGlobalReceiver(IdentifierHelper.mod("preloginpacket"),
-                (server, handler, understood, buf, synchronizer, responseSender) -> {
-                    handlePreLogin(understood, handler);
-                }
-        );
-
-        ServerPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (payload, context) -> {
-            ServerPlayer player = context.player();
-            server.execute(() -> handleHandshakeResponse(player, payload));
-        });
-        ServerPlayNetworking.registerGlobalReceiver(ConfigPayload.ID, (payload, context) -> {
-            ServerPlayer player = context.player();
-            server.execute(() -> handleConfigPacket(player, payload));
-        });
+        }
 
         //Simple Packets
-        ServerPlayNetworking.registerGlobalReceiver(NumberPayload.ID, (payload, context) -> {
+        if (customPacketPayload instanceof NumberPayload payload) {
             SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) packet.receiveServer(context.player(), payload);
-        });
-        ServerPlayNetworking.registerGlobalReceiver(StringPayload.ID, (payload, context) -> {
+            if (packet != null) packet.receiveServer(player, payload);
+        }
+        if (customPacketPayload instanceof StringPayload payload) {
             SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) packet.receiveServer(context.player(), payload);
-        });
-        ServerPlayNetworking.registerGlobalReceiver(StringListPayload.ID, (payload, context) -> {
+            if (packet != null) packet.receiveServer(player, payload);
+        }
+        if (customPacketPayload instanceof StringListPayload payload) {
             SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) packet.receiveServer(context.player(), payload);
-        });
-        ServerPlayNetworking.registerGlobalReceiver(LongPayload.ID, (payload, context) -> {
+            if (packet != null) packet.receiveServer(player, payload);
+        }
+        if (customPacketPayload instanceof LongPayload payload) {
             SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) packet.receiveServer(context.player(), payload);
-        });
-        ServerPlayNetworking.registerGlobalReceiver(BooleanPayload.ID, (payload, context) -> {
+            if (packet != null) packet.receiveServer(player, payload);
+        }
+        if (customPacketPayload instanceof BooleanPayload payload) {
             SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) packet.receiveServer(context.player(), payload);
-        });
-        ServerPlayNetworking.registerGlobalReceiver(EmptyPayload.ID, (payload, context) -> {
+            if (packet != null) packet.receiveServer(player, payload);
+        }
+        if (customPacketPayload instanceof EmptyPayload payload) {
             SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) packet.receiveServer(context.player(), payload);
-        });
-        ServerPlayNetworking.registerGlobalReceiver(IntPayload.ID, (payload, context) -> {
+            if (packet != null) packet.receiveServer(player, payload);
+        }
+        if (customPacketPayload instanceof IntPayload payload) {
             SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) packet.receiveServer(context.player(), payload);
-        });
+            if (packet != null) packet.receiveServer(player, payload);
+        }
     }
-    //?}
 
     public static void handlePreLogin(boolean understood, ServerLoginPacketListenerImpl handler) {
         GameProfile profile = ((ServerLoginPacketListenerImplAccessor) handler).getGameProfile();
@@ -574,20 +495,27 @@ public class NetworkHandlerServer {
     /*
         Sending
      */
+    public static void sendPacket(ServerPlayer player, CustomPacketPayload payload) {
+        Objects.requireNonNull(player, "Server player cannot be null");
+        Objects.requireNonNull(payload, "Payload cannot be null");
+
+        player.connection.send(new ClientboundCustomPayloadPacket(payload));
+    }
+    
     public static void sendTriviaPacket(ServerPlayer player, String question, int difficulty, long timestamp, int timeToComplete, List<String> answers) {
         TriviaQuestionPayload triviaQuestionPacket = new TriviaQuestionPayload(question, difficulty, timestamp, timeToComplete, answers);
         if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Sending trivia question packet to {}): {{}, {}, {}, {}, {}}", player, question, difficulty, timestamp, timeToComplete, answers));
 
-        ServerPlayNetworking.send(player, triviaQuestionPacket);
+        sendPacket(player, triviaQuestionPacket);
     }
 
     public static void sendVoteScreenPacket(ServerPlayer player, String screenName, boolean requiresSleep, boolean closesWithEsc, boolean showTimer, List<String> players) {
         VoteScreenPayload voteScreenPayload = new VoteScreenPayload(screenName, requiresSleep, closesWithEsc, showTimer, players);
-        ServerPlayNetworking.send(player, voteScreenPayload);
+        sendPacket(player, voteScreenPayload);
     }
 
     public static void sendConfig(ServerPlayer player, ConfigPayload configPacket) {
-        ServerPlayNetworking.send(player, configPacket);
+        sendPacket(player, configPacket);
     }
 
     public static void sendHandshake(ServerPlayer player) {
@@ -598,7 +526,7 @@ public class NetworkHandlerServer {
         int serverCompatibility = VersionControl.getModVersionInt(serverCompatibilityStr);
 
         HandshakePayload payload = new HandshakePayload(serverVersionStr, serverVersion, serverCompatibilityStr, serverCompatibility);
-        ServerPlayNetworking.send(player, payload);
+        sendPacket(player, payload);
         handshakeSuccessful.remove(player.getUUID());
         if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Sending handshake to {}: {{}, {}}", player, serverVersionStr, serverVersion));
 
@@ -671,7 +599,7 @@ public class NetworkHandlerServer {
     public static void sendPlayerDisguise(String hiddenUUID, String hiddenName, String shownUUID, String shownName) {
         PlayerDisguisePayload payload = new PlayerDisguisePayload(hiddenUUID, hiddenName, shownUUID, shownName);
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-            ServerPlayNetworking.send(player, payload);
+            sendPacket(player, payload);
         }
     }
 
@@ -710,6 +638,6 @@ public class NetworkHandlerServer {
     }
 
     public static void sideTitle(ServerPlayer player, Component text) {
-        ServerPlayNetworking.send(player, new SidetitlePacket(text));
+        sendPacket(player, new SidetitlePacket(text));
     }
 }

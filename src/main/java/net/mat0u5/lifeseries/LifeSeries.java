@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class LifeSeries implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.5.3.30";
+	public static final String MOD_VERSION = "dev-1.5.3.31";
 	public static final String MOD_ID = "lifeseries";
 	public static final String UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
 	public static final boolean DEBUG = false;
@@ -73,8 +73,6 @@ public class LifeSeries implements ModInitializer {
 			ResourceManagerHelper.registerBuiltinResourcePack(IdentifierHelper.mod("nicelife"), container, Component.nullToEmpty("Nice Life Resourcepack"), ResourcePackActivationType.NORMAL);
 		});
 		ModRegistries.registerModStuff();
-		NetworkHandlerServer.registerPackets();
-		NetworkHandlerServer.registerServerReceiver();
 		NetworkHandlerServer.initializeSimplePacketReceivers();
 	}
 	public static void onInitialize_() {

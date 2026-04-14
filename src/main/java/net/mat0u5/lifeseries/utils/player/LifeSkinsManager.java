@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.utils.player;
 
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.LifeSkinsTexturePayload;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.resources.ResourceHandler;
@@ -149,7 +149,7 @@ public class LifeSkinsManager {
                         if (VersionControl.isDevVersion()) {
                             LifeSeries.LOGGER.info(TextUtils.formatString("Sending life skins '{}' at '{}' to {}", lifeSkinPlayerName, teamName, player));
                         }
-                        ServerPlayNetworking.send(player, packet);
+                        NetworkHandlerServer.sendPacket(player, packet);
                     }
                 }catch(Exception e) {
                     e.printStackTrace();
