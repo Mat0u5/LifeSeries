@@ -158,6 +158,7 @@ public class Events {
                 NetworkHandlerServer.onUpdatedConfig();
             }
             AdvancedDeathsManager.tick();
+            TaskScheduler.onTick();
         }catch(Exception e) {
             e.printStackTrace();
         }

@@ -53,11 +53,14 @@
   "mixins": [
     "BiomeMixin",
     "ClientPacketListenerMixin",
+    "ConnectionMixin",
     "EnchantmentMixin",
     "EntityMixin",
     "GameRendererMixin",
     "LivingEntityMixin",
+    "MinecraftServerMixin",
     "PlayerMixin",
+    "ScreenMixin",
     "WorldOpenFlowsMixin"
   ]
 }

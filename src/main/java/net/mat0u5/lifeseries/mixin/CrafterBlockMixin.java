@@ -35,13 +35,13 @@ public class CrafterBlockMixin {
     //? if <= 1.20.5 {
     /*private static void cancelResult(Level level, CraftingContainer input, CallbackInfoReturnable<Optional<RecipeHolder<CraftingRecipe>>> cir) {
         for (ItemStack item : input.getItems()) {
+    *///?} else if <= 1.21 {
+    /*private static void cancelResult(Level level, CraftingInput input, CallbackInfoReturnable<Optional<RecipeHolder<CraftingRecipe>>> cir) {
+        for (ItemStack item : input.items()) {
     *///?} else {
-    private static void cancelResult(Level level, CraftingInput input, CallbackInfoReturnable<Optional<RecipeHolder<CraftingRecipe>>> cir) {
+    private static void cancelResult(ServerLevel level, CraftingInput input, CallbackInfoReturnable<Optional<RecipeHolder<CraftingRecipe>>> cir) {
         for (ItemStack item : input.items()) {
-    //?} else {
-    /*private static void cancelResult(ServerLevel level, CraftingInput input, CallbackInfoReturnable<Optional<RecipeHolder<CraftingRecipe>>> cir) {
-        for (ItemStack item : input.items()) {
-    *///?}
+    //?}
             if (ItemStackUtils.hasCustomComponentEntry(item, "NoCrafting") ||
                     ItemStackUtils.hasCustomComponentEntry(item, "NoModifications")) {
                 cir.setReturnValue(Optional.empty());

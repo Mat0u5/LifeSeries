@@ -7,6 +7,7 @@
     "BiomeMixin",
     "ChunkMapAccessor",
     "ChunkStatusTasksMixin",
+    "CommandsMixin",
     "CommandSourceStackMixin",
     "CrafterBlockMixin",
     "CraftingMenuMixin",

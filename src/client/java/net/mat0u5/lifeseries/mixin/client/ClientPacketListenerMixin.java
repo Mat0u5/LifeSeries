@@ -3,14 +3,18 @@ package net.mat0u5.lifeseries.mixin.client;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.mat0u5.lifeseries.events.ClientEvents;
 import net.mat0u5.lifeseries.utils.ClientUtils;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.network.protocol.game.ClientboundLoginPacket;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = ClientPacketListener.class, priority = 1)
 public class ClientPacketListenerMixin {
@@ -25,4 +29,9 @@ public class ClientPacketListenerMixin {
         }
     }
     //?}
+
+    @Inject(method = "handleLogin", at = @At("RETURN"))
+    private void handleServerPlayReady(ClientboundLoginPacket packet, CallbackInfo ci) {
+        ClientEvents.onClientJoin();
+    }
 }

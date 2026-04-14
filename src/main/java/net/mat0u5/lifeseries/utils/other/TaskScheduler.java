@@ -38,42 +38,39 @@ public class TaskScheduler {
         newTasks.clear();
     }
 
-    public static void registerTickHandler() {
-        ServerTickEvents.END_SERVER_TICK.register(server -> {
-            try {
-
-                if (clearTasks) {
-                    clearTasks = false;
-                    tasks.clear();
-                    return;
-                }
-
-                Iterator<Task> iterator = tasks.iterator();
-
-                while (iterator.hasNext()) {
-                    Task task = iterator.next();
-                    task.tickCount--;
-
-                    if (task.tickCount <= 0) {
-                        try {
-                            //Inner try-catch to prevent errors from preventing the task from being removed
-                            if (!LifeSeries.modDisabled() || task.priority) {
-                                task.goal.run();
-                            }
-                        }catch(Exception e) {
-                            LifeSeries.LOGGER.error("Fatal error while running task " + task);
-                            e.printStackTrace();
-                        }
-                        iterator.remove();
-                    }
-                }
-
-                tasks.addAll(newTasks);
-                newTasks.clear();
-            }catch(Exception e){
-                e.printStackTrace();
+    public static void onTick() {
+        try {
+            if (clearTasks) {
+                clearTasks = false;
+                tasks.clear();
+                return;
             }
-        });
+
+            Iterator<Task> iterator = tasks.iterator();
+
+            while (iterator.hasNext()) {
+                Task task = iterator.next();
+                task.tickCount--;
+
+                if (task.tickCount <= 0) {
+                    try {
+                        //Inner try-catch to prevent errors from preventing the task from being removed
+                        if (!LifeSeries.modDisabled() || task.priority) {
+                            task.goal.run();
+                        }
+                    }catch(Exception e) {
+                        LifeSeries.LOGGER.error("Fatal error while running task " + task);
+                        e.printStackTrace();
+                    }
+                    iterator.remove();
+                }
+            }
+
+            tasks.addAll(newTasks);
+            newTasks.clear();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     public static class Task {

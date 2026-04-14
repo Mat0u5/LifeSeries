@@ -65,8 +65,6 @@ import java.util.concurrent.CompletableFuture;
 *///?}
 import net.fabricmc.fabric.api.networking.v1.*;
 
-import static net.mat0u5.lifeseries.command.ClientCommands.client;
-
 public class NetworkHandlerClient {
     public static void initializeSimplePacketReceivers() {
         //Long payload
@@ -491,6 +489,7 @@ public class NetworkHandlerClient {
         });
 
         //Simple Packets
+        Minecraft client = Minecraft.getInstance();
         ClientPlayNetworking.registerGlobalReceiver(StringListPayload.ID, (payload, context) -> {
             SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
             if (packet != null) client.execute(() -> packet.receiveClient(payload));

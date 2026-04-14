@@ -1,10 +1,5 @@
 package net.mat0u5.lifeseries.events;
 
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.LifeSeriesClient;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
@@ -28,7 +23,6 @@ import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
-import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Holder;
@@ -59,16 +53,11 @@ public class ClientEvents {
     public static long onGroundFor = 0;
     private static boolean hasShownUpdateScreen = false;
 
-    public static void registerClientEvents() {
-        ClientPlayConnectionEvents.JOIN.register(ClientEvents::onClientJoin);
-        ClientPlayConnectionEvents.DISCONNECT.register(ClientEvents::onClientDisconnect);
-        ClientLifecycleEvents.CLIENT_STARTED.register(ClientEvents::onClientStart);
-        ScreenEvents.AFTER_INIT.register(ClientEvents::onScreenOpen);
-        ServerLifecycleEvents.SERVER_STARTING.register(ClientEvents::onServerStart);
-        ServerLifecycleEvents.SERVER_STARTED.register(ClientEvents::onServerStart);
+    public static void onServerStarting(MinecraftServer server) {
+        checkReplayServer(server);
     }
 
-    private static void onServerStart(MinecraftServer server) {
+    public static void onServerStart(MinecraftServer server) {
         checkReplayServer(server);
     }
 
@@ -89,7 +78,7 @@ public class ClientEvents {
         LifeSeriesClient.isReplay = isReplay;
     }
 
-    public static void onClientJoin(ClientPacketListener handler, PacketSender sender, Minecraft client) {
+    public static void onClientJoin() {
         checkReplayServer(null);
         ClientTaskScheduler.schedulePriorityTask(20, () -> {
             if (LifeSeriesClient.serverHandshake == HandshakeStatus.WAITING) {
@@ -100,7 +89,7 @@ public class ClientEvents {
         if (LifeSeries.modDisabled()) return;
     }
 
-    public static void onClientDisconnect(ClientPacketListener handler, Minecraft client) {
+    public static void onClientDisconnect() {
         checkReplayServer(null);
         LifeSeries.LOGGER.info("Client disconnected from server, clearing some client data.");
         LifeSeriesClient.resetClientData();
@@ -124,6 +113,9 @@ public class ClientEvents {
 
     public static void onClientStart(Minecraft client) {
         if (LifeSeries.modDisabled()) return;
+    }
+    public static void onClientStopping(Minecraft client) {
+
     }
 
     public static void onClientTickStart() {
