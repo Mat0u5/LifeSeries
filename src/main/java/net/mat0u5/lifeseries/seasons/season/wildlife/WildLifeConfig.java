@@ -326,7 +326,7 @@ public class WildLifeConfig extends SeasonConfig {
     );
     public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_SHADOW_PLAY_BLIND_RANGE = new ConfigFileEntry<>(
             "wildcard_superpowers_shadow_play_blind_range", 10, "season.superpowers.shadow_play[new]",
-            "Blint Range", "Controls the range in which players are blinded."
+            "Blind Range", "Controls the range in which players are blinded."
     );
     public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_SHADOW_PLAY_BLIND_TIME = new ConfigFileEntry<>(
             "wildcard_superpowers_shadow_play_blind_time", 5, ConfigTypes.SECONDS, "season.superpowers.shadow_play[new]",

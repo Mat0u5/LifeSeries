@@ -278,6 +278,12 @@ public class DoubleLife extends Season {
     }
 
     public void setOfflineSoulmate(UUID player1UUID, UUID player2UUID) {
+        if (SubInManager.isSubbingIn(player1UUID)) {
+            player1UUID = SubInManager.getSubstitutedPlayerUUID(player1UUID);
+        }
+        if (SubInManager.isSubbingIn(player2UUID)) {
+            player2UUID = SubInManager.getSubstitutedPlayerUUID(player2UUID);
+        }
         soulmates.put(player1UUID, player2UUID);
         soulmates.put(player2UUID, player1UUID);
         updateOrderedSoulmates();
@@ -287,8 +293,17 @@ public class DoubleLife extends Season {
         ));
     }
     public void setSoulmate(ServerPlayer player1, ServerPlayer player2) {
-        soulmates.put(player1.getUUID(), player2.getUUID());
-        soulmates.put(player2.getUUID(), player1.getUUID());
+        UUID player1UUID = player1.getUUID();
+        UUID player2UUID = player2.getUUID();
+        if (SubInManager.isSubbingIn(player1UUID)) {
+            player1UUID = SubInManager.getSubstitutedPlayerUUID(player1UUID);
+        }
+        if (SubInManager.isSubbingIn(player2UUID)) {
+            player2UUID = SubInManager.getSubstitutedPlayerUUID(player2UUID);
+        }
+
+        soulmates.put(player1UUID, player2UUID);
+        soulmates.put(player2UUID, player1UUID);
         SessionTranscript.soulmate(player1, player2);
         syncPlayers(player1, player2);
         updateOrderedSoulmates();

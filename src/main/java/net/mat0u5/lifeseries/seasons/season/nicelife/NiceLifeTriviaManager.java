@@ -171,6 +171,7 @@ public class NiceLifeTriviaManager {
     }
 
     public static void breakBotSpawnBlocks(TriviaSpawn triviaSpawnInfo, int overTicks, int botSpawnHeight) {
+        if (!triviaInProgress) return;
         ServerPlayer player = PlayerUtils.getPlayer(triviaSpawnInfo.uuid());
         if (player == null) return;
         BlockPos spawnBotPos = triviaSpawnInfo.spawnPos().offset(0, botSpawnHeight, 0);
@@ -199,6 +200,7 @@ public class NiceLifeTriviaManager {
     }
 
     public static void spawnTriviaBots(TriviaSpawn triviaSpawnInfo, int soundDelay, int botSpawnHeight) {
+        if (!triviaInProgress) return;
         ServerPlayer player = PlayerUtils.getPlayer(triviaSpawnInfo.uuid());
         if (player == null) return;
         BlockPos spawnBotPos = triviaSpawnInfo.spawnPos().offset(0, botSpawnHeight, 0);

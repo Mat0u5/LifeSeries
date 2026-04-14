@@ -15,13 +15,14 @@ import net.minecraft.sounds.SoundEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static net.mat0u5.lifeseries.LifeSeries.livesManager;
 
 public class SuperpowersWildcard extends Wildcard {
     public static boolean WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME = false;
     public static List<Superpowers> blacklistedPowers = List.of();
-    private static final Map<UUID, Superpower> playerSuperpowers = new LinkedHashMap<>();
+    private static final Map<UUID, Superpower> playerSuperpowers = new ConcurrentHashMap<>();
     public static final Map<UUID, Superpowers> preAssignedSuperpowers = new HashMap<>();
     public static int ZOMBIES_HEALTH = 8;
 

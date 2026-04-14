@@ -25,6 +25,8 @@ public class ClientSounds {
             "wildlife_trivia_suspense_end",
             "wildlife_trivia_analyzing",
 
+            "nicelife_santabot_introduction_long",
+            "nicelife_santabot_introduction_short",
             "nicelife_santabot_intro",
             "nicelife_santabot_suspense",
             "nicelife_santabot_suspense_end",
