@@ -15,6 +15,7 @@ base {
  archivesName = project.archives_base_name
 }
 loom {
+ accessWidenerPath = rootProject.file("src/main/resources/"+project.property('access_widener'))
  splitEnvironmentSourceSets()
 
  mods {
@@ -87,7 +88,8 @@ processResources {
           "targetVersion": project.property('target_version'),
           "fabricApiVersion": project.property('fabric_api_target_version'),
           "minecraftVersion": project.property('minecraft_version'),
-          "javaVersion": project.property('java_version')
+          "javaVersion": project.property('java_version'),
+          "accessWidenerFile": project.property('access_widener')
  }
  filesMatching("lifeseries.mixins.json") {
   expand "javaVersion": java25 ? "JAVA_25" : java21 ? "JAVA_21" : "JAVA_17"

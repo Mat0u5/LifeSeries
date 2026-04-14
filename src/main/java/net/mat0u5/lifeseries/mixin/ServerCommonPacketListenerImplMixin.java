@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakeClientConnection;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
@@ -34,7 +34,7 @@ public class ServerCommonPacketListenerImplMixin {
 
     @Inject(method = "send(Lnet/minecraft/network/protocol/Packet;)V", at = @At("HEAD"), cancellable = true)
     public void sendPacket(Packet<?> packet, CallbackInfo ci) {
-        if (Main.modFullyDisabled()) return;
+        if (LifeSeries.modFullyDisabled()) return;
         if (connection instanceof FakeClientConnection) {
             ci.cancel();
         }
@@ -76,7 +76,7 @@ public class ServerCommonPacketListenerImplMixin {
             ci.cancel();
             return;
         }
-        if (Main.modFullyDisabled()) return;
+        if (LifeSeries.modFullyDisabled()) return;
         if (connection instanceof FakeClientConnection) {
             ci.cancel();
         }

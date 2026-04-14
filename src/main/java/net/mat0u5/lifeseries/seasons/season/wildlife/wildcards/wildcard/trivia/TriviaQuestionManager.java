@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.resources.ResourceHandler;
 
 import java.io.File;
@@ -20,7 +20,7 @@ public class TriviaQuestionManager {
         this.folder = new File(folder);
         if (!this.folder.exists()) {
             if (!this.folder.mkdirs()) {
-                Main.LOGGER.error("Failed to create folder {}", this.folder);
+                LifeSeries.LOGGER.error("Failed to create folder {}", this.folder);
                 return;
             }
         }
@@ -48,7 +48,7 @@ public class TriviaQuestionManager {
             myWriter.write(content);
             myWriter.close();
         } catch (IOException e) {
-            Main.LOGGER.error(e.getMessage());
+            LifeSeries.LOGGER.error(e.getMessage());
         }
     }
 

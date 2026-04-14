@@ -1,9 +1,8 @@
 package net.mat0u5.lifeseries.gui.config.entries.extra;
 
-import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.LifeSeriesClient;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.ModifiableListEntry;
-import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -182,7 +181,7 @@ public class TeamConfigEntry extends ModifiableListEntry {
     }
     public void renderLastEntryExtras(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         super.renderLastEntryExtras(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
-        addEntryButton.active = MainClient.clientCurrentSeason != Seasons.LIMITED_LIFE;
+        addEntryButton.active = LifeSeriesClient.clientCurrentSeason != Seasons.LIMITED_LIFE;
     }
     public void renderMiddleEntryExtras(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         super.renderMiddleEntryExtras(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
@@ -264,7 +263,7 @@ public class TeamConfigEntry extends ModifiableListEntry {
 
     @Override
     public boolean isLast() {
-        if (MainClient.clientCurrentSeason == Seasons.LIMITED_LIFE) return false;
+        if (LifeSeriesClient.clientCurrentSeason == Seasons.LIMITED_LIFE) return false;
         return super.isLast();
     }
 

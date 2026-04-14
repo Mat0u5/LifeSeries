@@ -1,7 +1,7 @@
 
 package net.mat0u5.lifeseries.mixin.client;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class EntityBoundSoundInstanceMixin {
     @Inject(method = "canPlaySound", at = @At("HEAD"), cancellable = true)
     public void canPlay(CallbackInfoReturnable<Boolean> cir) {
-        if (Main.modFullyDisabled()) return;
+        if (LifeSeries.modFullyDisabled()) return;
         EntityBoundSoundInstance instance = (EntityBoundSoundInstance) (Object) this;
         //~ if > 1.21.9 '.getLocation()' -> '.getIdentifier()' {
         if (instance.getIdentifier().getPath().contains("wildlife_trivia")) {

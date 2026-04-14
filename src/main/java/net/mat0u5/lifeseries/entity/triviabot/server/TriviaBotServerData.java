@@ -11,12 +11,14 @@ import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.TicketType;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
+
+//? if <= 1.21.4
+//import net.minecraft.world.level.ChunkPos;
 
 public class TriviaBotServerData implements PlayerBoundEntity {
     private TriviaBot bot;

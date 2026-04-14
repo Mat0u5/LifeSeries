@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
@@ -11,14 +11,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 @Mixin(value = MobCategory.class, priority = 1)
 public class MobCategoryMixin {
 
     @Inject(method = "getMaxInstancesPerChunk", at = @At("HEAD"), cancellable = true)
     private void getCapacity(CallbackInfoReturnable<Integer> cir) {
-        if (Main.isClientOrDisabled()) return;
+        if (LifeSeries.isClientOrDisabled()) return;
         MobCategory group = (MobCategory)(Object)this;
         if (!group.getName().equalsIgnoreCase("monster") && !group.getName().equalsIgnoreCase("creature")) {
             return;
@@ -33,7 +33,7 @@ public class MobCategoryMixin {
 
     @Inject(method = "isPersistent", at = @At("HEAD"), cancellable = true)
     private void isRare(CallbackInfoReturnable<Boolean> cir) {
-        if (Main.isClientOrDisabled()) return;
+        if (LifeSeries.isClientOrDisabled()) return;
         MobCategory group = (MobCategory)(Object)this;
         if (!group.getName().equalsIgnoreCase("creature")) return;
 

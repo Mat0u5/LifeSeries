@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.utils;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,7 +12,7 @@ public class ClientTaskScheduler {
     private static final List<Task> newTasks = new ArrayList<>();
 
     public static void scheduleTask(int tickNumber, Runnable goal) {
-        if (Main.modDisabled()) return;
+        if (LifeSeries.modDisabled()) return;
         Task task = new Task(tickNumber, goal);
         newTasks.add(task);
     }
@@ -34,7 +34,7 @@ public class ClientTaskScheduler {
                 if (task.tickCount <= 0) {
                     try {
                         //Inner try-catch to prevent errors from preventing the task from being removed
-                        if (!Main.modDisabled() || task.priority) {
+                        if (!LifeSeries.modDisabled() || task.priority) {
                             task.goal.run();
                         }
                     }catch (Exception e) {

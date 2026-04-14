@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.AnvilMenu;
@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 
-import static net.mat0u5.lifeseries.Main.blacklist;
+import static net.mat0u5.lifeseries.LifeSeries.blacklist;
 
 //? if < 1.20.5 {
 /*import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -22,7 +22,6 @@ import java.util.Map;
 import net.minecraft.core.component.DataComponents;
 import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import java.util.Optional;
 //?}
@@ -32,7 +31,7 @@ public abstract class AnvilMenuMixin {
 
     @Inject(method = "createResult", at = @At("TAIL"))
     private void modifyAnvilResultName(CallbackInfo ci) {
-        if (Main.isClientOrDisabled()) return;
+        if (LifeSeries.isClientOrDisabled()) return;
         if (blacklist == null) return;
         ItemCombinerMenuAccessor accessor = (ItemCombinerMenuAccessor) (Object) this;
         Container outputInventory = accessor.getOutput();

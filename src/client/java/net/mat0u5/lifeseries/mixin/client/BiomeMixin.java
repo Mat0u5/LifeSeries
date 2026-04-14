@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.mixin.client;
 
-import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.LifeSeriesClient;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.biome.Biome;
@@ -19,7 +19,7 @@ public class BiomeMixin {
     @Inject(method = "getTemperature", at = @At(value = "HEAD"), cancellable = true)
     public void render(BlockPos blockPos, int i, CallbackInfoReturnable<Float> cir) {
     //?}
-        if (!Main.modDisabled() && MainClient.clientCurrentSeason == Seasons.NICE_LIFE) {
+        if (!LifeSeries.modDisabled() && LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE) {
             cir.setReturnValue(0.0f);
         }
     }

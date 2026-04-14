@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.mat0u5.lifeseries.Main.seasonConfig;
+import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
 
 public class DatapackIntegration {
     private static final String SCOREBOARD_WILDCARDS = "Wildcards";

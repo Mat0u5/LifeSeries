@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.config;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ClientConfig extends ConfigManager {
     public ClientConfig() {
-        super("./config/lifeseries/client", Main.MOD_ID+"_client.properties");
+        super("./config/lifeseries/client", LifeSeries.MOD_ID+"_client.properties");
     }
 
     public static final ConfigFileEntry<Boolean> MINIMAL_ARMOR = new ConfigFileEntry<>(

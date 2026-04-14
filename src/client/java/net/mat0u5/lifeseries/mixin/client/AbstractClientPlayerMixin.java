@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.mixin.client;
 
-import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.LifeSeriesClient;
 import net.mat0u5.lifeseries.features.LifeSkinsClient;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.client.Minecraft;
@@ -27,12 +27,12 @@ public class AbstractClientPlayerMixin {
     @Inject(method = "getSkin", at = @At("HEAD"), cancellable = true)
     public void getSkinTextures(CallbackInfoReturnable<PlayerSkin> cir) {
     //?}
-        if (Main.modFullyDisabled()) return;
+        if (LifeSeries.modFullyDisabled()) return;
         AbstractClientPlayer abstrPlayer = (AbstractClientPlayer) (Object) this;
         UUID uuid = abstrPlayer.getUUID();
         if (uuid == null) return;
-        if (MainClient.playerDisguiseUUIDs.containsKey(uuid)) {
-            UUID disguisedUUID = MainClient.playerDisguiseUUIDs.get(uuid);
+        if (LifeSeriesClient.playerDisguiseUUIDs.containsKey(uuid)) {
+            UUID disguisedUUID = LifeSeriesClient.playerDisguiseUUIDs.get(uuid);
             if (LifeSkinsClient.getTexture(disguisedUUID) == null && Minecraft.getInstance().getConnection() != null) {
                 for (PlayerInfo entry : Minecraft.getInstance().getConnection().getOnlinePlayers()) {
                     if (OtherUtils.profileId(entry.getProfile()).equals(disguisedUUID)) {

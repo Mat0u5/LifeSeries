@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.config;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 
 import java.io.File;
 import java.io.FileReader;
@@ -24,14 +24,14 @@ public class StringListManager {
         File folder1 = new File(folder);
         if (!folder1.exists()) {
             if (!folder1.mkdirs()) {
-                Main.LOGGER.error("Failed to create folder {}", folder);
+                LifeSeries.LOGGER.error("Failed to create folder {}", folder);
                 return;
             }
         }
         if (!this.file.exists()) {
             try {
                 if (!this.file.createNewFile()) {
-                    Main.LOGGER.error("Failed to create file {}", this.file);
+                    LifeSeries.LOGGER.error("Failed to create file {}", this.file);
                     return;
                 }
                 if (file.startsWith("easy-")) {
@@ -56,7 +56,7 @@ public class StringListManager {
             myWriter.write(content);
             myWriter.close();
         } catch (IOException e) {
-            Main.LOGGER.error(e.getMessage());
+            LifeSeries.LOGGER.error(e.getMessage());
         }
     }
 
@@ -71,7 +71,7 @@ public class StringListManager {
             strings.removeIf(str -> str == null || str.isEmpty());
             return strings;
         } catch (IOException e) {
-            Main.LOGGER.error(e.getMessage());
+            LifeSeries.LOGGER.error(e.getMessage());
             return new ArrayList<>();
         }
     }

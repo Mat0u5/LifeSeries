@@ -1,9 +1,8 @@
 package net.mat0u5.lifeseries.seasons.season.unassigned;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.lifeseries.config.ConfigManager;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -18,7 +17,7 @@ import net.minecraft.server.level.ServerPlayer;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 public class UnassignedSeason extends Season {
     @Override
@@ -52,7 +51,7 @@ public class UnassignedSeason extends Season {
     @Override
     public void onPlayerFinishJoining(ServerPlayer player) {
         super.onPlayerFinishJoining(player);
-        if (!Main.modDisabled()) {
+        if (!LifeSeries.modDisabled()) {
             SimplePackets.SELECT_SEASON.target(player).sendToClient("");
         }
     }
@@ -69,7 +68,7 @@ public class UnassignedSeason extends Season {
     }
 
     public void broadcastNotice() {
-        if (Main.modDisabled()) return;
+        if (LifeSeries.modDisabled()) return;
         if (currentSeason.getSeason() != Seasons.UNASSIGNED) return;
         PlayerUtils.broadcastMessage(Component.literal("[LifeSeries] You must select a season with ").withStyle(ChatFormatting.RED)
                 .append(Component.literal("'/lifeseries setSeries <series>'").withStyle(ChatFormatting.GRAY)), 120);

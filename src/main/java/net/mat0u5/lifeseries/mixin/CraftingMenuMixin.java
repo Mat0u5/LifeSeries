@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -34,7 +34,7 @@ public class CraftingMenuMixin {
     private static void blockPreviewIfNoCraftingItemPresent(AbstractContainerMenu handler, ServerLevel level, Player player,
                                                             CraftingContainer craftingInventory, ResultContainer resultInventory, RecipeHolder<CraftingRecipe> recipe, CallbackInfo ci) {
     //?}
-        if (Main.isClientOrDisabled()) return;
+        if (LifeSeries.isClientOrDisabled()) return;
 
         for (int i = 0; i < craftingInventory.getContainerSize(); i++) {
             ItemStack stack = craftingInventory.getItem(i);

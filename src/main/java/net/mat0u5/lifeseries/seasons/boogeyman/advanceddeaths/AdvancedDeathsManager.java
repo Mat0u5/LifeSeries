@@ -7,8 +7,8 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
-import static net.mat0u5.lifeseries.Main.livesManager;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.livesManager;
 
 public class AdvancedDeathsManager {
     private static final Random rnd = new Random();

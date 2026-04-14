@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.utils.other;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -14,7 +14,7 @@ public class TaskScheduler {
     private static boolean clearTasks = false;
 
     public static void scheduleTask(int ticks, Runnable goal) {
-        if (Main.modDisabled()) return;
+        if (LifeSeries.modDisabled()) return;
         Task task = new Task(ticks, goal);
         newTasks.add(task);
     }
@@ -57,11 +57,11 @@ public class TaskScheduler {
                     if (task.tickCount <= 0) {
                         try {
                             //Inner try-catch to prevent errors from preventing the task from being removed
-                            if (!Main.modDisabled() || task.priority) {
+                            if (!LifeSeries.modDisabled() || task.priority) {
                                 task.goal.run();
                             }
                         }catch(Exception e) {
-                            Main.LOGGER.error("Fatal error while running task " + task);
+                            LifeSeries.LOGGER.error("Fatal error while running task " + task);
                             e.printStackTrace();
                         }
                         iterator.remove();

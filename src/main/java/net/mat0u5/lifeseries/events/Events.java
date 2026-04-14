@@ -1,14 +1,6 @@
 package net.mat0u5.lifeseries.events;
 
-import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
-import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.fabricmc.fabric.api.event.player.UseEntityCallback;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.resources.datapack.DatapackManager;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
@@ -26,6 +18,7 @@ import net.mat0u5.lifeseries.utils.player.ProfileManager;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -44,70 +37,41 @@ import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.*;
-import static net.mat0u5.lifeseries.Main.*;
+import static net.mat0u5.lifeseries.LifeSeries.*;
 import static net.mat0u5.lifeseries.utils.player.PlayerUtils.isFakePlayer;
 
 //? if >= 1.21.2 {
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Items;
-import net.fabricmc.fabric.api.event.player.*;
 //?}
 
 public class Events {
     public static boolean skipNextTickReload = false;
     public static boolean updatePlayerListsNextTick = false;
 
-    public static void register() {
-        ServerLifecycleEvents.SERVER_STARTING.register(Events::onServerStarting);
-        ServerLifecycleEvents.SERVER_STARTED.register(Events::onServerStart);
-        ServerLifecycleEvents.SERVER_STOPPING.register(Events::onServerStopping);
-
-        ServerLifecycleEvents.START_DATA_PACK_RELOAD.register(Events::onReloadStart);
-        ServerLifecycleEvents.END_DATA_PACK_RELOAD.register(Events::onReloadEnd);
-
-        AttackBlockCallback.EVENT.register((player, level, hand, pos, direction) -> {
-            if (!(player instanceof ServerPlayer) || modDisabled()) {
-                return InteractionResult.PASS; // Only handle server-side events
-            }
-
-            return Events.onBlockAttack((ServerPlayer) player, level, pos);
-        });
-        UseBlockCallback.EVENT.register(Events::onBlockUse);
-        //? if >= 1.21.2 {
-        UseItemCallback.EVENT.register(Events::onItemUse);
-        //?}
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> onPlayerJoin(handler.getPlayer()));
-        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> onPlayerDisconnect(handler.getPlayer()));
-        ServerTickEvents.END_SERVER_TICK.register(Events::onServerTickEnd);
-
-        ServerLivingEntityEvents.AFTER_DEATH.register(Events::onEntityDeath);
-        UseEntityCallback.EVENT.register(Events::onRightClickEntity);
-        AttackEntityCallback.EVENT.register(Events::onAttackEntity);
-    }
-
-    private static void onReloadStart(MinecraftServer server, CloseableResourceManager resourceManager) {
+    public static void onReloadStart(MinecraftServer server, CloseableResourceManager resourceManager) {
         try {
-            if (Main.modDisabled()) return;
-            if (!Main.isLogicalSide()) return;
-            Main.reloadStart();
+            if (LifeSeries.modDisabled()) return;
+            if (!LifeSeries.isLogicalSide()) return;
+            LifeSeries.reloadStart();
         } catch(Exception e) {e.printStackTrace();}
     }
 
-    private static void onReloadEnd(MinecraftServer server, CloseableResourceManager resourceManager, boolean success) {
+    public static void onReloadEnd(MinecraftServer server, CloseableResourceManager resourceManager, boolean success) {
         try {
-            if (Main.modDisabled()) return;
-            if (!Main.isLogicalSide()) return;
-            Main.reloadEnd();
+            if (LifeSeries.modDisabled()) return;
+            if (!LifeSeries.isLogicalSide()) return;
+            LifeSeries.reloadEnd();
         } catch(Exception e) {e.printStackTrace();}
     }
 
-    private static void onPlayerJoin(ServerPlayer player) {
+    public static void onPlayerJoin(ServerPlayer player) {
         if (isFakePlayer(player)) return;
 
         try {
             playerStartJoining(player);
-            if (Main.modDisabled()) return;
+            if (LifeSeries.modDisabled()) return;
             LifeSkinsManager.onPlayerJoin(player);
             currentSeason.onPlayerJoin(player);
             currentSeason.onUpdatedInventory(player);
@@ -117,8 +81,8 @@ public class Events {
         } catch(Exception e) {e.printStackTrace();}
     }
 
-    private static void onPlayerFinishJoining(ServerPlayer player) {
-        if (isFakePlayer(player) || Main.modDisabled()) return;
+    public static void onPlayerFinishJoining(ServerPlayer player) {
+        if (isFakePlayer(player) || LifeSeries.modDisabled()) return;
 
         try {
             UpdateChecker.onPlayerJoin(player);
@@ -131,9 +95,9 @@ public class Events {
         } catch(Exception e) {e.printStackTrace();}
     }
 
-    private static void onPlayerDisconnect(ServerPlayer player) {
+    public static void onPlayerDisconnect(ServerPlayer player) {
         ProfileManager.onPlayerDisconnect(player);
-        if (Main.modDisabled()) return;
+        if (LifeSeries.modDisabled()) return;
         if (isFakePlayer(player)) return;
 
         try {
@@ -144,24 +108,24 @@ public class Events {
         } catch(Exception e) {e.printStackTrace();}
     }
 
-    private static void onServerStopping(MinecraftServer server) {
+    public static void onServerStopping(MinecraftServer server) {
         try {
             //ProfileManager.resetAll();
             UpdateChecker.shutdownExecutor();
-            if (Main.modDisabled()) return;
+            if (LifeSeries.modDisabled()) return;
             currentSession.sessionEnd();
         }catch (Exception e) {e.printStackTrace();}
     }
 
-    private static void onServerStarting(MinecraftServer server) {
-        Main.server = server;
+    public static void onServerStarting(MinecraftServer server) {
+        LifeSeries.server = server;
     }
 
-    private static void onServerStart(MinecraftServer server) {
+    public static void onServerStart(MinecraftServer server) {
         try {
-            Main.server = server;
+            LifeSeries.server = server;
             DatapackManager.onServerStarted(server);
-            if (Main.modDisabled()) return;
+            if (LifeSeries.modDisabled()) return;
             currentSeason.initialize();
             blacklist.reloadBlacklist();
             if (currentSeason.getSeason() == Seasons.DOUBLE_LIFE) {
@@ -170,23 +134,23 @@ public class Events {
         } catch(Exception e) {e.printStackTrace();}
     }
 
-    private static void onServerTickEnd(MinecraftServer server) {
+    public static void onServerTickEnd(MinecraftServer server) {
         try {
             skipNextTickReload = false;
-            if (!Main.isLogicalSide()) return;
+            if (!LifeSeries.isLogicalSide()) return;
             checkPlayerFinishJoiningTick();
-            if (Main.modDisabled()) return;
+            if (LifeSeries.modDisabled()) return;
             if (updatePlayerListsNextTick) {
                 updatePlayerListsNextTick = false;
                 PlayerUtils.updatePlayerLists();
             }
-            if (Main.currentSession != null) {
-                Main.currentSession.tick(server);
+            if (LifeSeries.currentSession != null) {
+                LifeSeries.currentSession.tick(server);
             }
             //? if >= 1.20.3 {
             if (server.tickRateManager().isFrozen()) return;
             //?}
-            if (Main.currentSession != null) {
+            if (LifeSeries.currentSession != null) {
                 currentSeason.tick(server);
             }
             PlayerUtils.onTick();
@@ -200,10 +164,10 @@ public class Events {
     }
 
     public static void onEntityDeath(LivingEntity entity, DamageSource source) {
-        if (Main.modDisabled()) return;
+        if (LifeSeries.modDisabled()) return;
         if (isFakePlayer(entity)) return;
         try {
-            if (!Main.isLogicalSide()) return;
+            if (!LifeSeries.isLogicalSide()) return;
             if (entity instanceof ServerPlayer player) {
                 Events.onPlayerDeath(player, source);
                 return;
@@ -214,7 +178,7 @@ public class Events {
     public static void onEntityDropItems(LivingEntity entity, DamageSource source, CallbackInfo ci) {
         if (isFakePlayer(entity)) return;
         try {
-            if (!Main.isLogicalSide()) return;
+            if (!LifeSeries.isLogicalSide()) return;
             currentSeason.onEntityDropItems(entity, source, ci);
         } catch(Exception e) {e.printStackTrace();}
     }
@@ -223,18 +187,18 @@ public class Events {
         if (isExcludedPlayer(player)) return;
 
         try {
-            if (!Main.isLogicalSide()) return;
+            if (!LifeSeries.isLogicalSide()) return;
             currentSeason.onPlayerDeath(player, source);
             AdvancedDeathsManager.onPlayerDeath(player);
         } catch(Exception e) {e.printStackTrace();}
     }
 
     public static InteractionResult onBlockUse(Player player, Level level, InteractionHand hand, BlockHitResult hitResult) {
-        if (Main.modDisabled()) return InteractionResult.PASS;
+        if (LifeSeries.modDisabled()) return InteractionResult.PASS;
         if (isFakePlayer(player)) return InteractionResult.PASS;
 
         if (player instanceof ServerPlayer serverPlayer &&
-                level instanceof ServerLevel serverLevel && Main.isLogicalSide()) {
+                level instanceof ServerLevel serverLevel && LifeSeries.isLogicalSide()) {
             try {
                 if (currentSeason instanceof SecretLife) {
                     TaskManager.onBlockUse(serverPlayer, serverLevel, hitResult);
@@ -253,7 +217,7 @@ public class Events {
         if (isFakePlayer(player) || modDisabled()) return InteractionResult.PASS;
 
         if (player instanceof ServerPlayer serverPlayer &&
-                level instanceof ServerLevel serverLevel && Main.isLogicalSide()) {
+                level instanceof ServerLevel serverLevel && LifeSeries.isLogicalSide()) {
             try {
                 ItemStack itemStack = player.getItemInHand(hand);
                 //? if >= 1.21.2 {
@@ -275,11 +239,19 @@ public class Events {
         return InteractionResult.PASS;
     }
 
-    public static InteractionResult onBlockAttack(ServerPlayer player, Level level, BlockPos pos) {
+    public static InteractionResult onBlockAttack(ServerPlayer player, ServerLevel level, InteractionHand hand, BlockPos pos, Direction dir) {
+        if (!(player instanceof ServerPlayer) || modDisabled()) {
+            return InteractionResult.PASS; // Only handle server-side events
+        }
+
+        return Events.onBlockAttack((ServerPlayer) player, level, pos);
+    }
+
+    public static InteractionResult onBlockAttack(ServerPlayer player, ServerLevel level, BlockPos pos) {
         if (isFakePlayer(player)) return InteractionResult.PASS;
 
         try {
-            if (!Main.isLogicalSide()) return InteractionResult.PASS;
+            if (!LifeSeries.isLogicalSide()) return InteractionResult.PASS;
             if (blacklist == null) return InteractionResult.PASS;
             if (level.isClientSide()) return InteractionResult.PASS;
             return blacklist.onBlockAttack(player, level,pos);
@@ -289,11 +261,11 @@ public class Events {
         }
     }
 
-    private static InteractionResult onRightClickEntity(Player player, Level level, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
+    public static InteractionResult onRightClickEntity(Player player, Level level, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
         if (isFakePlayer(player) || modDisabled()) return InteractionResult.PASS;
 
         try {
-            if (!Main.isLogicalSide()) return InteractionResult.PASS;
+            if (!LifeSeries.isLogicalSide()) return InteractionResult.PASS;
             if (player instanceof ServerPlayer serverPlayer) {
                 currentSeason.onRightClickEntity(serverPlayer, level, hand, entity, hitResult);
             }
@@ -302,11 +274,11 @@ public class Events {
         }
         return InteractionResult.PASS;
     }
-    private static InteractionResult onAttackEntity(Player player, Level level, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
+    public static InteractionResult onAttackEntity(Player player, Level level, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
         if (isFakePlayer(player) || modDisabled()) return InteractionResult.PASS;
 
         try {
-            if (!Main.isLogicalSide()) return InteractionResult.PASS;
+            if (!LifeSeries.isLogicalSide()) return InteractionResult.PASS;
             if (player instanceof ServerPlayer serverPlayer) {
                 currentSeason.onAttackEntity(serverPlayer, level, hand, entity, hitResult);
             }
@@ -320,9 +292,9 @@ public class Events {
         Non-events
      */
     public static final List<UUID> joiningPlayers = new ArrayList<>();
-    private static final Map<UUID, Vec3> joiningPlayersPos = new HashMap<>();
-    private static final Map<UUID, Float> joiningPlayersYaw = new HashMap<>();
-    private static final Map<UUID, Float> joiningPlayersPitch = new HashMap<>();
+    public static final Map<UUID, Vec3> joiningPlayersPos = new HashMap<>();
+    public static final Map<UUID, Float> joiningPlayersYaw = new HashMap<>();
+    public static final Map<UUID, Float> joiningPlayersPitch = new HashMap<>();
     public static void playerStartJoining(ServerPlayer player) {
         NetworkHandlerServer.sendHandshake(player);
         NetworkHandlerServer.sendUpdatePacketTo(player);

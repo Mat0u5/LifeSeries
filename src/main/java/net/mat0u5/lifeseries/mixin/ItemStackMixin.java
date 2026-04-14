@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.mixin;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 //? if >= 1.20.5 {
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.PatchedDataComponentMap;
@@ -22,7 +22,7 @@ public class ItemStackMixin {
     //? if >= 1.20.5 {
     @Inject(method = "isSameItemSameComponents", at = @At("HEAD"), cancellable = true)
     private static void areItemsAndComponentsEqual(ItemStack stack, ItemStack otherStack, CallbackInfoReturnable<Boolean> cir) {
-        if (!stack.is(otherStack.getItem()) || Main.modDisabled()) return;
+        if (!stack.is(otherStack.getItem()) || LifeSeries.modDisabled()) return;
 
         if (stack.isEmpty() && otherStack.isEmpty()) {
             cir.setReturnValue(true);

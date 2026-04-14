@@ -27,8 +27,8 @@ import net.minecraft.world.level.gamerules.GameRules;
 
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.currentSession;
-import static net.mat0u5.lifeseries.Main.server;
+import static net.mat0u5.lifeseries.LifeSeries.currentSession;
+import static net.mat0u5.lifeseries.LifeSeries.server;
 
 
 public class MobSwap extends Wildcard {

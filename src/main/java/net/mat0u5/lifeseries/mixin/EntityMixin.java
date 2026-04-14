@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.minecraft.world.entity.monster.illager.Evoker;
 import java.util.List;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 //? if <= 1.20.5
 //import org.spongepowered.asm.mixin.Shadow;
@@ -104,7 +104,7 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
 
     @Inject(method = "getAirSupply", at = @At("RETURN"), cancellable = true)
     public void getAir(CallbackInfoReturnable<Integer> cir) {
-        if (Main.isClientOrDisabled()) return;
+        if (LifeSeries.isClientOrDisabled()) return;
         if (currentSeason instanceof WildLife) {
             if (!Snail.SHOULD_DROWN_PLAYER) return;
             if (Snails.snails.isEmpty()) return;
@@ -135,7 +135,7 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
             at = @At("HEAD"), cancellable = true)
     public void dropStack(ServerLevel level, ItemStack stack, float yOffset, CallbackInfoReturnable<ItemEntity> cir) {
     //?}
-        if (Main.isClientOrDisabled()) return;
+        if (LifeSeries.isClientOrDisabled()) return;
         if (currentSeason instanceof WildLife) {
             Entity entity = (Entity) (Object) this;
             if (entity instanceof Evoker && stack.is(Items.TOTEM_OF_UNDYING)) {

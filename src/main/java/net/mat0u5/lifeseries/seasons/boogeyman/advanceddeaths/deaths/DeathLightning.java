@@ -11,7 +11,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 
-import static net.mat0u5.lifeseries.Main.server;
+import static net.mat0u5.lifeseries.LifeSeries.server;
 
 public class DeathLightning extends AdvancedDeath {
     private Random rnd = new Random();

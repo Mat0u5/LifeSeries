@@ -1,7 +1,5 @@
 package net.mat0u5.lifeseries.entity.triviabot;
 
-import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.Identifier;
 

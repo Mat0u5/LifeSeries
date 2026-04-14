@@ -10,7 +10,7 @@ public class SkyRendererMixin {
 }
 *///?} else {
 
-import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.LifeSeriesClient;
 import net.mat0u5.lifeseries.render.ClientRenderer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -25,7 +25,7 @@ import net.minecraft.client.renderer.state.level.SkyRenderState;
 public class SkyRendererMixin {
     @Inject(method = "extractRenderState", at = @At("TAIL"))
     private void customSkyColor(ClientLevel clientLevel, float f, Camera camera, SkyRenderState skyRenderState, CallbackInfo ci) {
-        skyRenderState.skyColor = ClientRenderer.modifyColor(skyRenderState.skyColor, MainClient.skyColor, MainClient.skyColorSetMode, null);
+        skyRenderState.skyColor = ClientRenderer.modifyColor(skyRenderState.skyColor, LifeSeriesClient.skyColor, LifeSeriesClient.skyColorSetMode, null);
     }
 }
 //?}

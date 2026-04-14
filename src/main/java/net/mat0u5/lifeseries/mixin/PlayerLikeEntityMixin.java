@@ -9,7 +9,7 @@ public class PlayerLikeEntityMixin {
     //Empty class to avoid mixin errors
 }
 *///?} else {
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.minecraft.world.entity.*;
@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class PlayerLikeEntityMixin {
     @Inject(method = "getDefaultDimensions", at = @At("HEAD"), cancellable = true)
     public void getBaseDimensions(Pose pose, CallbackInfoReturnable<EntityDimensions> cir) {
-        if (Main.modFullyDisabled()) return;
+        if (LifeSeries.modFullyDisabled()) return;
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity instanceof Player player) {
             MorphComponent morphComponent = MorphManager.getOrCreateComponent(player);

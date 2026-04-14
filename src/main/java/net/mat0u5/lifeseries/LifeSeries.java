@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries;
 
-import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
@@ -38,8 +37,8 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.UUID;
 
-public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.5.3.27";
+public class LifeSeries implements ModInitializer {
+	public static final String MOD_VERSION = "dev-1.5.3.28";
 	public static final String MOD_ID = "lifeseries";
 	public static final String UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
 	public static final boolean DEBUG = false;
@@ -62,19 +61,24 @@ public class Main implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		LOGGER.info("Initializing Life Series...");
-
-		FabricLoader.getInstance().getModContainer(Main.MOD_ID).ifPresent(container -> {
+		FabricLoader.getInstance().getModContainer(LifeSeries.MOD_ID).ifPresent(container -> {
 			ResourceManagerHelper.registerBuiltinResourcePack(IdentifierHelper.mod("lifeseries"), container, Component.nullToEmpty("Main Life Series Resourcepack"), ResourcePackActivationType.ALWAYS_ENABLED);
 			ResourceManagerHelper.registerBuiltinResourcePack(IdentifierHelper.mod("minimal_armor"), container, Component.nullToEmpty("Minimal Armor Resourcepack"), ResourcePackActivationType.NORMAL);
 			ResourceManagerHelper.registerBuiltinResourcePack(IdentifierHelper.mod("lifeseries_datapack"), container, ResourcePackActivationType.ALWAYS_ENABLED);
 			//? if <= 1.20.4 {
 			/*ResourceManagerHelper.registerBuiltinResourcePack(IdentifierHelper.mod("lifeseries_datapack_1.20-1.20.4"), container, ResourcePackActivationType.ALWAYS_ENABLED);
-			*///?} else if <= 1.20.5 {
+			 *///?} else if <= 1.20.5 {
 			/*ResourceManagerHelper.registerBuiltinResourcePack(IdentifierHelper.mod("lifeseries_datapack_1.20.5"), container, ResourcePackActivationType.ALWAYS_ENABLED);
-			*///?}
+			 *///?}
 			ResourceManagerHelper.registerBuiltinResourcePack(IdentifierHelper.mod("nicelife"), container, Component.nullToEmpty("Nice Life Resourcepack"), ResourcePackActivationType.NORMAL);
 		});
+		ModRegistries.registerModStuff();
+		NetworkHandlerServer.registerPackets();
+		NetworkHandlerServer.registerServerReceiver();
+		NetworkHandlerServer.initializeSimplePacketReceivers();
+	}
+	public static void onInitialize_() {
+		LOGGER.info("Initializing Life Series...");
 
 		config = new MainConfig();
 		NetworkHandlerServer.reload();
@@ -87,14 +91,9 @@ public class Main implements ModInitializer {
 		parseSeason(season);
 		Seasons.getSeasons().forEach(seasons -> seasons.getSeasonInstance().createConfig());
 
-		ModRegistries.registerModStuff();
 		if (!ISOLATED_ENVIRONMENT) {
 			UpdateChecker.checkForMajorUpdates();
 		}
-
-		NetworkHandlerServer.registerPackets();
-		NetworkHandlerServer.registerServerReceiver();
-		NetworkHandlerServer.initializeSimplePacketReceivers();
 	}
 
 	public static boolean modDisabled() {
@@ -122,7 +121,7 @@ public class Main implements ModInitializer {
 		if (!modDisabled()) {
 			fullReload();
 		}
-		SimplePackets.MOD_DISABLED.sendToClient(Main.MOD_DISABLED);
+		SimplePackets.MOD_DISABLED.sendToClient(LifeSeries.MOD_DISABLED);
 	}
 
 	public static void fullReload() {
@@ -131,7 +130,7 @@ public class Main implements ModInitializer {
 	}
 
 	public static boolean hasClient() {
-		return FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT;
+		return clientHelper != null;
 	}
 
 	public static void setClientHelper(IClientHelper helper) {
@@ -146,7 +145,6 @@ public class Main implements ModInitializer {
 	}
 
 	public static boolean isLogicalSide() {
-		if (!hasClient()) return true;
 		return clientHelper != null && clientHelper.isRunningIntegratedServer();
 	}
 
@@ -158,7 +156,6 @@ public class Main implements ModInitializer {
 	}
 
 	public static boolean isClientPlayer(UUID uuid) {
-		if (!hasClient()) return false;
 		return clientHelper != null && clientHelper.isMainClientPlayer(uuid);
 	}
 
@@ -205,7 +202,7 @@ public class Main implements ModInitializer {
 		currentSeason.boogeymanManager.resetBoogeymen();
 		currentSeason.secretSociety.forceEndSociety();
 		currentSession.sessionEnd();
-		Main.parseSeason(changeTo);
+		LifeSeries.parseSeason(changeTo);
 		currentSeason.initialize();
 		reloadStart();
 		for (ServerPlayer player : PlayerUtils.getAllPlayers()) {

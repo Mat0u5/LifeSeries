@@ -1,9 +1,7 @@
 package net.mat0u5.lifeseries.mixin;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.entity.angrysnowman.AngrySnowman;
-import net.mat0u5.lifeseries.entity.snail.Snail;
-import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -27,8 +25,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 
-import static net.mat0u5.lifeseries.Main.blacklist;
-import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.blacklist;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 //? if >= 1.21.2
 import net.minecraft.world.entity.monster.creaking.Creaking;
@@ -48,7 +46,7 @@ import net.minecraft.world.entity.decoration.Mannequin;
 public abstract class LivingEntityMixin {
     @Inject(method = "heal", at = @At("HEAD"), cancellable = true)
     private void onHealHead(float amount, CallbackInfo info) {
-        if (Main.isClientOrDisabled()) return;
+        if (LifeSeries.isClientOrDisabled()) return;
         if (!(currentSeason instanceof SecretLife secretLife)) return;
         if (!secretLife.canChangeHealth()) return;
 
@@ -60,7 +58,7 @@ public abstract class LivingEntityMixin {
 
     @Inject(method = "heal", at = @At("TAIL"))
     private void onHeal(float amount, CallbackInfo info) {
-        if (Main.isClientOrDisabled()) return;
+        if (LifeSeries.isClientOrDisabled()) return;
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity instanceof ServerPlayer player) {
             if (player.ls$isWatcher()) return;
@@ -75,7 +73,7 @@ public abstract class LivingEntityMixin {
     @Inject(method = "hurtServer", at = @At("HEAD"), cancellable = true)
     public void hurtServer(ServerLevel level, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
     //?}
-        if (Main.isClientOrDisabled()) return;
+        if (LifeSeries.isClientOrDisabled()) return;
 
         LivingEntity entity = (LivingEntity) (Object) this;
         //? if >= 1.21.2 {
@@ -111,7 +109,7 @@ public abstract class LivingEntityMixin {
 
     @ModifyVariable(method = "addEffect(Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/world/entity/Entity;)Z", at = @At("HEAD"), ordinal = 0, argsOnly = true)
     public MobEffectInstance clampStatusEffect(MobEffectInstance value) {
-        if (Main.isClientOrDisabled()) return value;
+        if (LifeSeries.isClientOrDisabled()) return value;
 
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity instanceof ServerPlayer) {
@@ -125,7 +123,7 @@ public abstract class LivingEntityMixin {
 
     @Inject(method = "addEffect(Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/world/entity/Entity;)Z", at = @At("HEAD"), cancellable = true)
     public void addStatusEffect(MobEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir) {
-        if (Main.isClientOrDisabled()) return;
+        if (LifeSeries.isClientOrDisabled()) return;
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity instanceof ServerPlayer) {
             if (!effect.isAmbient() && !effect.showIcon() && !effect.isVisible()) return;
@@ -165,7 +163,7 @@ public abstract class LivingEntityMixin {
             index = 0
     )
     private double modifyKnockback(double strength) {
-        if (Main.isClientOrDisabled()) return strength;
+        if (LifeSeries.isClientOrDisabled()) return strength;
         if (ls$lastDamageSource == null) return strength;
 
         DamageSource source = ls$lastDamageSource;
@@ -188,13 +186,13 @@ public abstract class LivingEntityMixin {
     *///?} else {
     private void onDrop(ServerLevel level, DamageSource damageSource, CallbackInfo ci) {
     //?}
-        if (Main.isClientOrDisabled()) return;
+        if (LifeSeries.isClientOrDisabled()) return;
         Events.onEntityDropItems((LivingEntity) (Object) this, damageSource, ci);
     }
 
     @Inject(method = "checkTotemDeathProtection", at = @At("HEAD"))
     private void stopFakeTotem(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
-        if (Main.modDisabled()) return;
+        if (LifeSeries.modDisabled()) return;
         LivingEntity entity = (LivingEntity) (Object) this;
         if (ItemStackUtils.hasCustomComponentEntry(entity.getMainHandItem(), "FakeTotem")) {
             entity.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
@@ -253,4 +251,9 @@ public abstract class LivingEntityMixin {
         return original;
     }
 */
+
+    @Inject(method = "die", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;broadcastEntityEvent(Lnet/minecraft/world/entity/Entity;B)V"))
+    private void notifyDeath(DamageSource source, CallbackInfo ci) {
+        Events.onEntityDeath((LivingEntity) (Object) this, source);
+    }
 }

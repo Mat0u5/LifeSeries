@@ -2,23 +2,21 @@ package net.mat0u5.lifeseries.gui.config;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.LifeSeriesClient;
 import net.mat0u5.lifeseries.config.ClientConfigNetwork;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.GroupConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.TextFieldConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.extra.TriviaQuestionConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.main.TextConfigEntry;
-import net.mat0u5.lifeseries.render.RenderUtils;
+
 import net.mat0u5.lifeseries.utils.TextColors;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.PostChain;
 import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 import java.util.ArrayList;
@@ -27,6 +25,8 @@ import java.util.Locale;
 import java.util.Map;
 //? if >= 1.21.9
 import net.minecraft.client.input.*;
+//? if <= 1.20.2
+//import net.mat0u5.lifeseries.render.RenderUtils;
 
 public class ConfigScreen extends Screen {
     private static int HEADER_HEIGHT_SMALL = 55;
@@ -347,7 +347,7 @@ public class ConfigScreen extends Screen {
             if (entry instanceof GroupConfigEntry) continue;
             ClientConfigNetwork.onConfigSave(entry);
         }
-        MainClient.reloadConfig();
+        LifeSeriesClient.reloadConfig();
 
         this.minecraft.ls$setScreen(this.parent);
     }

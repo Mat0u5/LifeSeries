@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.resources.datapack;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.resources.ResourceHandler;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.server.MinecraftServer;
@@ -88,7 +88,7 @@ public class DynamicDatapackManager {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Main.LOGGER.error("Error copying loot tables: {}", e.getMessage());
+            LifeSeries.LOGGER.error("Error copying loot tables: {}", e.getMessage());
         }
     }
 

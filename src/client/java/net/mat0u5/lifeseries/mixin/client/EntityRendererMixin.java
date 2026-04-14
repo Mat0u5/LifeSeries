@@ -24,7 +24,7 @@ import net.minecraft.network.chat.Component;
 *///?}
 
 //? if >= 26.1 {
-import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.LifeSeriesClient;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.ClientUtils;
@@ -111,7 +111,7 @@ public class EntityRendererMixin<T extends Entity, S extends EntityRenderState> 
             if (objective != null) {
                 ReadOnlyScoreInfo scoreInfo = scoreboard.getPlayerScoreInfo(player, objective);
                 if (scoreInfo != null && objective.getName().equalsIgnoreCase(LivesManager.SCOREBOARD_NAME)) {
-                    if (MainClient.clientCurrentSeason == Seasons.LIMITED_LIFE) {
+                    if (LifeSeriesClient.clientCurrentSeason == Seasons.LIMITED_LIFE) {
                         return Component.literal(Time.seconds(scoreInfo.value()).formatLong()).setStyle(player.getDisplayName().getStyle());
                     }
                 }

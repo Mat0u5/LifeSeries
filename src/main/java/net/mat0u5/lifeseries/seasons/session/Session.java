@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.seasons.session;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.mixin.MobEffectInstanceAccessor;
@@ -10,11 +10,9 @@ import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
@@ -24,8 +22,8 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.phys.Vec3;
 import java.util.*;
-import static net.mat0u5.lifeseries.Main.blacklist;
-import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.blacklist;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 public class Session {
     public Map<UUID, Integer> playerNaturalDeathLog = new HashMap<>();
@@ -164,13 +162,13 @@ public class Session {
 
     public void setSessionLength(Time time) {
         sessionLength = time;
-        Main.getMainConfig().setProperty("session_length", String.valueOf(sessionLength.getTicks()));
+        LifeSeries.getMainConfig().setProperty("session_length", String.valueOf(sessionLength.getTicks()));
         DatapackIntegration.setSessionLength(time);
     }
 
     public void addSessionLength(Time time) {
         sessionLength.add(time);
-        Main.getMainConfig().setProperty("session_length", String.valueOf(sessionLength.getTicks()));
+        LifeSeries.getMainConfig().setProperty("session_length", String.valueOf(sessionLength.getTicks()));
         DatapackIntegration.setSessionLength(time);
     }
 

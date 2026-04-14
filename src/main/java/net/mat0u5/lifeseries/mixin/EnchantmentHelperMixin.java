@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.mixin;
 
 import com.google.common.collect.Lists;
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
@@ -19,8 +19,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 import java.util.Optional;
 
-import static net.mat0u5.lifeseries.Main.blacklist;
-import static net.mat0u5.lifeseries.Main.seasonConfig;
+import static net.mat0u5.lifeseries.LifeSeries.blacklist;
+import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
 //? if >= 1.21.2
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 //? if <= 1.20.5 {
@@ -49,8 +49,8 @@ public class EnchantmentHelperMixin {
     *///?} else {
     private static void getPossibleEntries(int level, ItemStack stack, Stream<Holder<Enchantment>> possibleEnchantments, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
     //?}
-        if (Main.isClientOrDisabled()) return;
-        if (Main.server == null) return;
+        if (LifeSeries.isClientOrDisabled()) return;
+        if (LifeSeries.server == null) return;
 
         if (ItemStackUtils.hasCustomComponentEntry(stack, "NoEnchants") || ItemStackUtils.hasCustomComponentEntry(stack, "NoModifications")) {
             cir.setReturnValue(Lists.<EnchantmentInstance>newArrayList());

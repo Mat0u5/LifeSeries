@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,7 +26,7 @@ public class ThrownEnderpearlMixin {
     )
     //?}
         private float onTargetDamaged(float amount) {
-        if (Main.isClientOrDisabled()) return amount;
+        if (LifeSeries.isClientOrDisabled()) return amount;
         ThrownEnderpearl pearl = (ThrownEnderpearl) (Object) this;
         if (!(pearl.getOwner() instanceof ServerPlayer owner)) return amount;
         if (!SuperpowersWildcard.hasActivePower(owner, Superpowers.TELEPORTATION)) return amount;

@@ -13,8 +13,8 @@ import net.minecraft.network.chat.Component;
 import java.util.List;
 import java.util.Random;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
-import static net.mat0u5.lifeseries.Main.currentSession;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.currentSession;
 
 public class PastLifeCommands extends Command {
     public Random rnd = new Random();

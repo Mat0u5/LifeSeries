@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.utils.player;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -10,8 +10,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
-import static net.mat0u5.lifeseries.Main.seasonConfig;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
 
 public class AttributeUtils {
     public static final double DEFAULT_PLAYER_JUMP_HEIGHT = 0.41999998688697815;
@@ -36,7 +36,7 @@ public class AttributeUtils {
     }
 
     public static void resetMaxPlayerHealthIfNecessary(ServerPlayer player) {
-        if (Main.modDisabled()) {
+        if (LifeSeries.modDisabled()) {
             resetMaxPlayerHealth(player);
             return;
         }

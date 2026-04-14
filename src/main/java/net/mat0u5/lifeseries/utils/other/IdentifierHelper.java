@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.utils.other;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 
 import net.minecraft.resources.Identifier;
 
@@ -10,7 +10,7 @@ public class IdentifierHelper {
         return new Identifier(namespace, path);
     }
     public static Identifier mod(String path) {
-        return new Identifier(Main.MOD_ID, path);
+        return new Identifier(LifeSeries.MOD_ID, path);
     }
     public static Identifier vanilla(String path) {
         return new Identifier("minecraft", path);
@@ -23,7 +23,7 @@ public class IdentifierHelper {
         return Identifier.fromNamespaceAndPath(namespace, path);
     }
     public static Identifier mod(String path) {
-        return Identifier.fromNamespaceAndPath(Main.MOD_ID, path);
+        return Identifier.fromNamespaceAndPath(LifeSeries.MOD_ID, path);
     }
     public static Identifier vanilla(String path) {
         return Identifier.withDefaultNamespace(path);

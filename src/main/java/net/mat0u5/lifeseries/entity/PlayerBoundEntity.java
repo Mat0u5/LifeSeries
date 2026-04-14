@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.entity;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.AstralProjection;
@@ -33,7 +33,7 @@ public interface PlayerBoundEntity {
 
     @Nullable
     default ServerPlayer getBoundPlayer() {
-        if (Main.isLogicalSide()) {
+        if (LifeSeries.isLogicalSide()) {
             return PlayerUtils.getPlayer(getBoundPlayerUUID());
         }
         return null;
@@ -41,7 +41,7 @@ public interface PlayerBoundEntity {
 
     @Nullable
     default LivingEntity getBoundEntity() {
-        if (Main.isLogicalSide()) {
+        if (LifeSeries.isLogicalSide()) {
             ServerPlayer player = PlayerUtils.getPlayer(getBoundPlayerUUID());
             if (player != null) {
                 if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.ASTRAL_PROJECTION)) {
@@ -58,7 +58,7 @@ public interface PlayerBoundEntity {
     }
 
     default Vec3 getPlayerPos() {
-        if (!Main.isLogicalSide()) return null;
+        if (!LifeSeries.isLogicalSide()) return null;
         Entity entity = getBoundEntity();
         if (entity != null) {
             return entity.position();

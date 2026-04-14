@@ -2,7 +2,8 @@ package net.mat0u5.lifeseries.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -13,6 +14,8 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.NicknameManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import org.spongepowered.asm.mixin.Unique;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,7 +28,8 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.minecraft.world.level.gamerules.GameRules;
-import static net.mat0u5.lifeseries.Main.currentSeason;
+import net.minecraft.world.entity.Entity;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 //? if >= 1.21.2
 import net.minecraft.server.level.ServerLevel;
@@ -55,9 +59,6 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.EntityType;
 *///?}
-//? if >= 26.1 {
-import net.minecraft.world.entity.Entity;
-//?}
 
 @Mixin(value = Player.class, priority = 1)
 public abstract class PlayerMixin implements IPlayer {
@@ -67,7 +68,7 @@ public abstract class PlayerMixin implements IPlayer {
     /*private void onApplyDamage(DamageSource source, float amount, CallbackInfo ci) {
      *///?} else
     private void onApplyDamage(ServerLevel level, DamageSource source, float amount, CallbackInfo ci) {
-        if (Main.isClientOrDisabled()) return;
+        if (LifeSeries.isClientOrDisabled()) return;
         Player player = (Player) (Object) this;
         if (WatcherManager.isWatcher(player)) return;
 
@@ -83,7 +84,7 @@ public abstract class PlayerMixin implements IPlayer {
     @Inject(method = "hurtServer", at = @At("HEAD"), cancellable = true)
     private void onPreDamage(ServerLevel level, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
     //?}
-        if (Main.isClientOrDisabled()) return;
+        if (LifeSeries.isClientOrDisabled()) return;
         Player player = (Player) (Object) this;
         if (WatcherManager.isWatcher(player)) return;
 
@@ -94,7 +95,7 @@ public abstract class PlayerMixin implements IPlayer {
 
     @Inject(method = "isHurt", at = @At("HEAD"), cancellable = true)
     private void canFoodHeal(CallbackInfoReturnable<Boolean> cir) {
-        if (Main.isClientOrDisabled()) return;
+        if (LifeSeries.isClientOrDisabled()) return;
         if (currentSeason instanceof DoubleLife doubleLife)  {
             Player player = (Player) (Object) this;
             if (WatcherManager.isWatcher(player)) return;
@@ -107,7 +108,7 @@ public abstract class PlayerMixin implements IPlayer {
     //? if <= 1.20.3 {
     /*@Inject(method = "getStandingEyeHeight", at = @At("HEAD"), cancellable = true)
     public void getBaseDimensions(Pose pose, EntityDimensions entityDimensions, CallbackInfoReturnable<Float> cir) {
-        if (Main.modFullyDisabled()) return;
+        if (LifeSeries.modFullyDisabled()) return;
         Player player = (Player) (Object) this;
         MorphComponent morphComponent = MorphManager.getOrCreateComponent(player);
         if (!morphComponent.isMorphed()) return;
@@ -127,7 +128,7 @@ public abstract class PlayerMixin implements IPlayer {
     @Inject(method = "getDefaultDimensions", at = @At("HEAD"), cancellable = true)
     //?}
     public void getBaseDimensions(Pose pose, CallbackInfoReturnable<EntityDimensions> cir) {
-        if (Main.modFullyDisabled()) return;
+        if (LifeSeries.modFullyDisabled()) return;
         Player player = (Player) (Object) this;
         MorphComponent morphComponent = MorphManager.getOrCreateComponent(player);
         if (!morphComponent.isMorphed()) return;
@@ -143,7 +144,7 @@ public abstract class PlayerMixin implements IPlayer {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void updateHitbox(CallbackInfo ci) {
-        if (Main.modFullyDisabled()) return;
+        if (LifeSeries.modFullyDisabled()) return;
         ((Player) (Object) this).refreshDimensions();
     }
 
@@ -154,9 +155,9 @@ public abstract class PlayerMixin implements IPlayer {
 
     @Inject(method = "travel", at = @At("HEAD"))
     private void travel(Vec3 movementInput, CallbackInfo ci) {
-        if (Main.modFullyDisabled()) return;
+        if (LifeSeries.modFullyDisabled()) return;
         LivingEntity entity = (LivingEntity) (Object) this;
-        if (!(entity instanceof ServerPlayer player) || Main.modDisabled()) return;
+        if (!(entity instanceof ServerPlayer player) || LifeSeries.modDisabled()) return;
         if (!player.onGround()) return;
         if (!SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPERSPEED)) return;
 
@@ -172,7 +173,7 @@ public abstract class PlayerMixin implements IPlayer {
     //? if >= 26.1 {
     @Inject(method = "attack", at = @At("HEAD"))
     private void onAttackEntity(Entity target, CallbackInfo ci) {
-        if (Main.modDisabled()) return;
+        if (LifeSeries.modDisabled()) return;
         Player player = (Player) (Object) this;
         if (player instanceof ServerPlayer serverPlayer) {
             currentSeason.onUpdatedInventory(serverPlayer);
@@ -252,4 +253,15 @@ public abstract class PlayerMixin implements IPlayer {
         return result;
     }
     //?}
+
+    @Inject(method = "attack", at = @At("HEAD"), cancellable = true)
+    public void onPlayerInteractEntity(Entity target, CallbackInfo info) {
+        if ((Object) this instanceof ServerPlayer player) {
+            InteractionResult result = Events.onAttackEntity(player, player.level(), InteractionHand.MAIN_HAND, target, null);
+
+            if (result != InteractionResult.PASS) {
+                info.cancel();
+            }
+        }
+    }
 }

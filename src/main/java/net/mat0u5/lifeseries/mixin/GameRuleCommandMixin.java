@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.mixin;
 
 import com.mojang.brigadier.context.CommandContext;
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.minecraft.world.level.gamerules.GameRules;
 
-import static net.mat0u5.lifeseries.Main.seasonConfig;
+import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
 
 //? if > 1.21.9
 import net.minecraft.world.level.gamerules.GameRule;
@@ -41,8 +41,8 @@ public class GameRuleCommandMixin {
             reload = true;
         }
         //?}
-        if (reload && !Main.modDisabled()) {
-            Main.softReloadStart();
+        if (reload && !LifeSeries.modDisabled()) {
+            LifeSeries.softReloadStart();
         }
     }
 }

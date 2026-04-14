@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.utils.other;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.PropertyMap;
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static net.mat0u5.lifeseries.Main.server;
+import static net.mat0u5.lifeseries.LifeSeries.server;
 
 //? if >= 1.20.3
 import net.minecraft.server.ServerTickRateManager;
@@ -36,7 +36,7 @@ public class OtherUtils {
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
             player.ls$message(message);
         }
-        Main.LOGGER.info(message.getString());
+        LifeSeries.LOGGER.info(message.getString());
     }
 
     public static void log(String string) {
@@ -44,16 +44,16 @@ public class OtherUtils {
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
             player.ls$message(message);
         }
-        Main.LOGGER.info(string);
+        LifeSeries.LOGGER.info(string);
     }
 
     public static void logConsole(String string) {
-        Main.LOGGER.info(string);
+        LifeSeries.LOGGER.info(string);
     }
 
     public static void logIfClient(String string) {
-        if (Main.hasClient()) {
-            Main.LOGGER.info(string);
+        if (LifeSeries.hasClient()) {
+            LifeSeries.LOGGER.info(string);
         }
     }
 
@@ -86,13 +86,13 @@ public class OtherUtils {
             CommandSourceStack commandSource = server.createCommandSourceStack().withSuppressedOutput();
             manager.performPrefixedCommand(commandSource, command);
         } catch (Exception e) {
-            Main.LOGGER.error("Error executing command: " + command, e);
+            LifeSeries.LOGGER.error("Error executing command: " + command, e);
         }
     }
 
     public static void throwError(String error) {
         PlayerUtils.broadcastMessageToAdmins(Component.nullToEmpty("§c"+error));
-        Main.LOGGER.error(error);
+        LifeSeries.LOGGER.error(error);
     }
 
     public static SoundEvent getRandomSound(String name, int from, int to) {
@@ -126,13 +126,13 @@ public class OtherUtils {
             }
 
             if (inInterval >= 3) {
-                Main.LOGGER.error("Detected and prevented possible reload loop!");
+                LifeSeries.LOGGER.error("Detected and prevented possible reload loop!");
                 return;
             }
             reloads.add(System.currentTimeMillis());
             OtherUtils.executeCommand("reload");
         } catch (Exception e) {
-            Main.LOGGER.error("Error reloading server", e);
+            LifeSeries.LOGGER.error("Error reloading server", e);
         }
     }
 

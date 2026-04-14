@@ -10,18 +10,19 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.network.protocol.game.ClientboundSetTimePacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.gamerules.GameRules;
 
-import static net.mat0u5.lifeseries.Main.currentSession;
-import static net.mat0u5.lifeseries.Main.server;
+import static net.mat0u5.lifeseries.LifeSeries.currentSession;
+import static net.mat0u5.lifeseries.LifeSeries.server;
 //? if >= 1.20.3
 import net.minecraft.server.ServerTickRateManager;
 //? if >= 26.1
 import net.minecraft.world.clock.WorldClocks;
+//? if <= 1.21.11
+//import net.minecraft.network.protocol.game.ClientboundSetTimePacket;
 
 public class TimeDilation extends Wildcard {
     public static float MIN_TICK_RATE = 1;

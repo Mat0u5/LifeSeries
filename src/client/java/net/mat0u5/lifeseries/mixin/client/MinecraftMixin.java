@@ -10,11 +10,11 @@ import net.minecraft.world.level.storage.LevelStorageSource;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.LifeSeriesClient;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.Inject;
 //? if >= 1.20.3 {
-import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.render.ClientRenderer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDilation;
 import net.minecraft.world.TickRateManager;
@@ -28,15 +28,20 @@ import java.util.Optional;
 @Mixin(value = Minecraft.class, priority = 1)
 public abstract class MinecraftMixin implements IMinecraft {
 
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void onInit(CallbackInfo ci) {
+        LifeSeriesClient.onInitializeClient_();
+    }
+
     //? if >= 1.20.3 {
     @Inject(method = "getTickTargetMillis", at = @At("HEAD"), cancellable = true)
     private void getTargetMillisPerTick(float millis, CallbackInfoReturnable<Float> cir) {
-        if (Main.modFullyDisabled()) return;
+        if (LifeSeries.modFullyDisabled()) return;
         Minecraft client = Minecraft.getInstance();
         if (client.level != null) {
             TickRateManager tickManager = client.level.tickRateManager();
-            if (MainClient.TIME_DILATION_TIMESTAMP != 0) {
-                long timeSinceDilationActivate = System.currentTimeMillis() - MainClient.TIME_DILATION_TIMESTAMP;
+            if (LifeSeriesClient.TIME_DILATION_TIMESTAMP != 0) {
+                long timeSinceDilationActivate = System.currentTimeMillis() - LifeSeriesClient.TIME_DILATION_TIMESTAMP;
                 if (timeSinceDilationActivate < 14000) {
                     if (timeSinceDilationActivate < 1000) {
                         float tickRate = 1000/(1-(timeSinceDilationActivate / 4050.0f));
@@ -76,7 +81,7 @@ public abstract class MinecraftMixin implements IMinecraft {
     *///?} else {
     private void acknowledgeWorldLoad(LevelStorageSource.LevelStorageAccess levelStorageAccess, PackRepository packRepository, WorldStem worldStem, Optional<GameRules> gameRules, boolean newWorld, CallbackInfo ci) {
     //?}
-        if (Main.modFullyDisabled()) return;
+        if (LifeSeries.modFullyDisabled()) return;
         WorldConfig worldConfig = new WorldConfig(levelStorageAccess);
         if (worldConfig.acknowledged()) return;
         worldConfig.setProperty("acknowledged", "true");

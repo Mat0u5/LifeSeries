@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 //? if <= 1.21.5
 //import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 //? if >= 1.21.6 {
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.minecraft.client.sounds.SoundEngine;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 //?}
@@ -24,7 +24,7 @@ public class SoundManagerMixin {
     *///?} else {
     @Inject(method = "play(Lnet/minecraft/client/resources/sounds/SoundInstance;)Lnet/minecraft/client/sounds/SoundEngine$PlayResult;", at = @At("HEAD"))
     private void play(SoundInstance sound, CallbackInfoReturnable<SoundEngine.PlayResult> cir) {
-        if (Main.modFullyDisabled()) return;
+        if (LifeSeries.modFullyDisabled()) return;
         ClientSounds.onSoundPlay(sound);
     }
     //?}

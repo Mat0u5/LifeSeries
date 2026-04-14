@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.WorldConfig;
 import net.mat0u5.lifeseries.gui.WorldWarningScreen;
 import net.minecraft.client.Minecraft;
@@ -37,7 +37,7 @@ public abstract class WorldOpenFlowsMixin {
     private LevelStorageSource.LevelStorageAccess verifyWorldOpen(WorldOpenFlows instance, String e, Operation<LevelStorageSource.LevelStorageAccess> originalCall, @Local(argsOnly = true) Screen screen, @Local(argsOnly = true, ordinal = 0) boolean bl,@Local(argsOnly = true, ordinal = 1) boolean bl2) {
         LevelStorageSource.LevelStorageAccess worldAccess = originalCall.call(instance, e);
         if (worldAccess == null) return worldAccess;
-        if (Main.modFullyDisabled()) return worldAccess;
+        if (LifeSeries.modFullyDisabled()) return worldAccess;
         WorldConfig worldConfig = new WorldConfig(worldAccess);
         if (worldConfig.acknowledged()) return worldAccess;
         ls$askForConfirmation(worldAccess, worldAccess.getLevelId(),
@@ -69,7 +69,7 @@ public abstract class WorldOpenFlowsMixin {
     @Inject(method = "openWorldCheckWorldStemCompatibility", at = @At("HEAD"), cancellable = true)
     private void verifyWorldOpen(LevelStorageSource.LevelStorageAccess worldAccess, WorldStem worldStem, PackRepository packRepository, Runnable onCancel, CallbackInfo ci) {
     //?}
-        if (Main.modFullyDisabled()) return;
+        if (LifeSeries.modFullyDisabled()) return;
         WorldConfig worldConfig = new WorldConfig(worldAccess);
         if (worldConfig.acknowledged()) return;
         ci.cancel();
@@ -95,7 +95,7 @@ public abstract class WorldOpenFlowsMixin {
     private void ls$askForConfirmation(final LevelStorageSource.LevelStorageAccess worldAccess, String levelId, final Runnable proceedCallback, final Runnable cancelCallback) {
         Minecraft.getInstance().ls$setScreen(new WorldWarningScreen(levelId, cancelCallback, disable -> {
             if (disable) {
-                Main.setDisabled(true);
+                LifeSeries.setDisabled(true);
             }
 
             proceedCallback.run();

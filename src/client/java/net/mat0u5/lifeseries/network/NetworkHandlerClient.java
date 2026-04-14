@@ -2,8 +2,8 @@ package net.mat0u5.lifeseries.network;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientLoginNetworking;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.LifeSeriesClient;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.VoicechatClient;
 import net.mat0u5.lifeseries.config.ClientConfig;
@@ -70,11 +70,11 @@ import static net.mat0u5.lifeseries.command.ClientCommands.client;
 public class NetworkHandlerClient {
     public static void initializeSimplePacketReceivers() {
         //Long payload
-        SimplePackets.CURSE_SLIDING.setClientReceive(payload -> MainClient.CURSE_SLIDING = payload.number());
+        SimplePackets.CURSE_SLIDING.setClientReceive(payload -> LifeSeriesClient.CURSE_SLIDING = payload.number());
 
         //String list payload
         SimplePackets.LVL1_CLAMPED_ENCHANTS.setClientReceive(payload -> {
-            MainClient.lvl1ClampedEnchants = payload.value();
+            LifeSeriesClient.lvl1ClampedEnchants = payload.value();
         });
         SimplePackets.LIFESKINS_PLAYER.setClientReceive(payload -> {
             UUID uuid = UUID.fromString(payload.value().get(0));
@@ -82,12 +82,12 @@ public class NetworkHandlerClient {
             LifeSkinsClient.setCurrentSkinId(uuid, teamName);
         });
         SimplePackets.LIMITED_LIFE_TIMER.setClientReceive(payload -> {
-            MainClient.limitedLifeTimerColor = payload.value().get(0);
-            MainClient.limitedLifeLives = Long.parseLong(payload.value().get(1));
-            MainClient.limitedLifeTimeLastUpdated = System.currentTimeMillis();
+            LifeSeriesClient.limitedLifeTimerColor = payload.value().get(0);
+            LifeSeriesClient.limitedLifeLives = Long.parseLong(payload.value().get(1));
+            LifeSeriesClient.limitedLifeTimeLastUpdated = System.currentTimeMillis();
         });
         SimplePackets.SEASON_INFO.setClientReceive(payload -> {
-            if (!Main.modDisabled()) {
+            if (!LifeSeries.modDisabled()) {
                 Seasons season = Seasons.getSeasonFromStringName(payload.value().get(0));
                 String adminCommands = payload.value().get(1);
                 String nonAdminCommands = payload.value().get(2);
@@ -106,7 +106,7 @@ public class NetworkHandlerClient {
                 morphType = BuiltInRegistries.ENTITY_TYPE.getValue(IdentifierHelper.parse(morphTypeStr));
                 //?}
             }
-            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Received morph packet: {} ({})", morphType, morphUUID);
+            if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info("[PACKET_CLIENT] Received morph packet: {} ({})", morphType, morphUUID);
             MorphComponent newComponent = MorphManager.setFromPacket(morphUUID, morphType);
             Morph.clientTick(newComponent);
         });
@@ -135,38 +135,38 @@ public class NetworkHandlerClient {
             }
         });
         SimplePackets.SKYCOLOR.setClientReceive(payload -> {
-            MainClient.skyColorSetMode = payload.value().get(0).equalsIgnoreCase("true");
-            MainClient.skyColor = null;
+            LifeSeriesClient.skyColorSetMode = payload.value().get(0).equalsIgnoreCase("true");
+            LifeSeriesClient.skyColor = null;
             if (payload.value().size() >= 4) {
                 try {
                     double red = Double.parseDouble(payload.value().get(1)) / 255.0;
                     double green = Double.parseDouble(payload.value().get(2)) / 255.0;
                     double blue = Double.parseDouble(payload.value().get(3)) / 255.0;
-                    MainClient.skyColor = new Vec3(red, green, blue);
+                    LifeSeriesClient.skyColor = new Vec3(red, green, blue);
                 }catch (Exception ignored) {}
             }
         });
         SimplePackets.FOGCOLOR.setClientReceive(payload -> {
-            MainClient.fogColorSetMode = payload.value().get(0).equalsIgnoreCase("true");
-            MainClient.fogColor = null;
+            LifeSeriesClient.fogColorSetMode = payload.value().get(0).equalsIgnoreCase("true");
+            LifeSeriesClient.fogColor = null;
             if (payload.value().size() >= 4) {
                 try {
                     double red = Double.parseDouble(payload.value().get(1)) / 255.0;
                     double green = Double.parseDouble(payload.value().get(2)) / 255.0;
                     double blue = Double.parseDouble(payload.value().get(3)) / 255.0;
-                    MainClient.fogColor = new Vec3(red, green, blue);
+                    LifeSeriesClient.fogColor = new Vec3(red, green, blue);
                 }catch (Exception ignored) {}
             }
         });
         SimplePackets.CLOUDCOLOR.setClientReceive(payload -> {
-            MainClient.cloudColorSetMode = payload.value().get(0).equalsIgnoreCase("true");
-            MainClient.cloudColor = null;
+            LifeSeriesClient.cloudColorSetMode = payload.value().get(0).equalsIgnoreCase("true");
+            LifeSeriesClient.cloudColor = null;
             if (payload.value().size() >= 4) {
                 try {
                     double red = Double.parseDouble(payload.value().get(1)) / 255.0;
                     double green = Double.parseDouble(payload.value().get(2)) / 255.0;
                     double blue = Double.parseDouble(payload.value().get(3)) / 255.0;
-                    MainClient.cloudColor = new Vec3(red, green, blue);
+                    LifeSeriesClient.cloudColor = new Vec3(red, green, blue);
                 }catch (Exception ignored) {}
             }
         });
@@ -174,10 +174,10 @@ public class NetworkHandlerClient {
             UUID uuid = UUID.fromString(payload.value().get(0));
             long number = Long.parseLong(payload.value().get(1));
             if (number == 0) {
-                MainClient.invisiblePlayers.remove(uuid);
+                LifeSeriesClient.invisiblePlayers.remove(uuid);
             }
             else {
-                MainClient.invisiblePlayers.put(uuid, number);
+                LifeSeriesClient.invisiblePlayers.put(uuid, number);
             }
         });
         SimplePackets.ACTIVE_WILDCARDS.setClientReceive(payload -> {
@@ -185,24 +185,24 @@ public class NetworkHandlerClient {
             for (String wildcardStr : payload.value()) {
                 newList.add(Wildcards.getFromString(wildcardStr));
             }
-            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated current wildcards to {}", newList);
-            MainClient.clientActiveWildcards = newList;
+            if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info("[PACKET_CLIENT] Updated current wildcards to {}", newList);
+            LifeSeriesClient.clientActiveWildcards = newList;
         });
 
         //String payload
-        SimplePackets.TEAM_NAME.setClientReceive(payload -> MainClient.teamName = payload.value());
-        SimplePackets.TEAM_COLOR.setClientReceive(payload -> MainClient.teamColor = payload.value());
+        SimplePackets.TEAM_NAME.setClientReceive(payload -> LifeSeriesClient.teamName = payload.value());
+        SimplePackets.TEAM_COLOR.setClientReceive(payload -> LifeSeriesClient.teamColor = payload.value());
         SimplePackets.CURRENT_SEASON.setClientReceive(payload -> {
-            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated current season to {}", payload.value());
-            MainClient.clientCurrentSeason = Seasons.getSeasonFromStringName(payload.value());
+            if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info("[PACKET_CLIENT] Updated current season to {}", payload.value());
+            LifeSeriesClient.clientCurrentSeason = Seasons.getSeasonFromStringName(payload.value());
             ClientResourcePacks.checkClientPacks();
-            MainClient.reloadConfig();
+            LifeSeriesClient.reloadConfig();
         });
         SimplePackets.SESSION_STATUS.setClientReceive(payload -> {
-            MainClient.clientSessionStatus = SessionStatus.getSessionName(payload.value());
+            LifeSeriesClient.clientSessionStatus = SessionStatus.getSessionName(payload.value());
         });
         SimplePackets.SELECT_SEASON.setClientReceive(payload -> {
-            if (!Main.modDisabled()) {
+            if (!LifeSeries.modDisabled()) {
                 Minecraft.getInstance().ls$setScreen(new ChooseSeasonScreen(!payload.value().isEmpty()));
             }
         });
@@ -216,21 +216,21 @@ public class NetworkHandlerClient {
 
 
         //Boolean payload
-        SimplePackets.POWER_INVISIBILITY_PARTICLES.setClientReceive(payload -> MainClient.powerInvisParticles = payload.value());
-        SimplePackets.PREVENT_GLIDING.setClientReceive(payload -> MainClient.preventGliding = payload.value());
-        SimplePackets.TABLIST_SHOW_EXACT.setClientReceive(payload -> MainClient.TAB_LIST_SHOW_EXACT_LIVES = payload.value());
-        SimplePackets.FIX_SIZECHANGING_BUGS.setClientReceive(payload -> MainClient.FIX_SIZECHANGING_BUGS = payload.value());
+        SimplePackets.POWER_INVISIBILITY_PARTICLES.setClientReceive(payload -> LifeSeriesClient.powerInvisParticles = payload.value());
+        SimplePackets.PREVENT_GLIDING.setClientReceive(payload -> LifeSeriesClient.preventGliding = payload.value());
+        SimplePackets.TABLIST_SHOW_EXACT.setClientReceive(payload -> LifeSeriesClient.TAB_LIST_SHOW_EXACT_LIVES = payload.value());
+        SimplePackets.FIX_SIZECHANGING_BUGS.setClientReceive(payload -> LifeSeriesClient.FIX_SIZECHANGING_BUGS = payload.value());
         SimplePackets.ANIMAL_DISGUISE_ARMOR.setClientReceive(payload -> Morph.showArmor = payload.value());
         SimplePackets.ANIMAL_DISGUISE_HANDS.setClientReceive(payload -> Morph.showHandItems = payload.value());
         SimplePackets.SNOWY_NETHER.setClientReceive(payload -> {
             boolean newValue = payload.value();
-            if (MainClient.NICELIFE_SNOWY_NETHER != newValue) {
-                MainClient.NICELIFE_SNOWY_NETHER = newValue;
+            if (LifeSeriesClient.NICELIFE_SNOWY_NETHER != newValue) {
+                LifeSeriesClient.NICELIFE_SNOWY_NETHER = newValue;
                 ClientResourcePacks.checkClientPacks();
             }
         });
         SimplePackets.EMPTY_SCREEN.setClientReceive(payload -> {
-            if (!Main.modDisabled()) {
+            if (!LifeSeries.modDisabled()) {
                 if (payload.value()) {
                     Minecraft.getInstance().ls$setScreen(new EmptySleepScreen(false));
                 }
@@ -240,9 +240,9 @@ public class NetworkHandlerClient {
             }
         });
         SimplePackets.HIDE_SLEEP_DARKNESS.setClientReceive(payload -> {
-            MainClient.hideSleepDarkness = payload.value();
+            LifeSeriesClient.hideSleepDarkness = payload.value();
             LocalPlayer player = Minecraft.getInstance().player;
-            if (!MainClient.hideSleepDarkness && player != null && player instanceof PlayerAccessor accessor) {
+            if (!LifeSeriesClient.hideSleepDarkness && player != null && player instanceof PlayerAccessor accessor) {
                 accessor.ls$setSleepCounter(0);
             }
         });
@@ -251,29 +251,29 @@ public class NetworkHandlerClient {
                 VoicechatClient.setMuted(payload.value());
             }
         });
-        SimplePackets.ADMIN_INFO.setClientReceive(payload -> MainClient.isAdmin = payload.value());
-        SimplePackets.TRIPLE_JUMP.setClientReceive(payload -> MainClient.tripleJumpActive = payload.value());
-        SimplePackets.MOD_DISABLED.setClientReceive(payload -> MainClient.modDisabledServerSide = payload.value());
+        SimplePackets.ADMIN_INFO.setClientReceive(payload -> LifeSeriesClient.isAdmin = payload.value());
+        SimplePackets.TRIPLE_JUMP.setClientReceive(payload -> LifeSeriesClient.tripleJumpActive = payload.value());
+        SimplePackets.MOD_DISABLED.setClientReceive(payload -> LifeSeriesClient.modDisabledServerSide = payload.value());
 
         //Number payload
         SimplePackets.PLAYER_MIN_MSPT.setClientReceive(payload -> {
-            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated min. player MSPT to {}", payload.number());
+            if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info("[PACKET_CLIENT] Updated min. player MSPT to {}", payload.number());
             TimeDilation.MIN_PLAYER_MSPT = (float) payload.number();
         });
-        SimplePackets.SIZESHIFTING_CHANGE.setClientReceive(payload -> MainClient.SIZESHIFTING_CHANGE = (float) payload.number());
+        SimplePackets.SIZESHIFTING_CHANGE.setClientReceive(payload -> LifeSeriesClient.SIZESHIFTING_CHANGE = (float) payload.number());
 
         //Integer payload
-        SimplePackets.POWER_TJ_JUMPS.setClientReceive(payload -> MainClient.powerTripleJumpCount = payload.number());
+        SimplePackets.POWER_TJ_JUMPS.setClientReceive(payload -> LifeSeriesClient.powerTripleJumpCount = payload.number());
         SimplePackets.SNAIL_AIR.setClientReceive(payload -> {
-            MainClient.snailAir = payload.number();
-            MainClient.snailAirTimestamp = System.currentTimeMillis();
+            LifeSeriesClient.snailAir = payload.number();
+            LifeSeriesClient.snailAirTimestamp = System.currentTimeMillis();
         });
         SimplePackets.FAKE_THUNDER.setClientReceive(payload -> {
             if (Minecraft.getInstance().level != null) {
                 Minecraft.getInstance().level.setSkyFlashTime(payload.number());
             }
         });
-        SimplePackets.TAB_LIST_LIVES_CUTOFF.setClientReceive(payload -> MainClient.TAB_LIST_LIVES_CUTOFF = payload.number());
+        SimplePackets.TAB_LIST_LIVES_CUTOFF.setClientReceive(payload -> LifeSeriesClient.TAB_LIST_LIVES_CUTOFF = payload.number());
         SimplePackets.TRIVIA_TIMER.setClientReceive(payload -> Trivia.updateTicksPassed(payload.number()));
         SimplePackets.VOTING_TIME.setClientReceive(payload -> {
             if (Minecraft.getInstance().ls$getScreen() instanceof VotingScreen votingScreen) {
@@ -282,16 +282,16 @@ public class NetworkHandlerClient {
         });
 
         //Long payloads
-        SimplePackets.SUPERPOWER_COOLDOWN.setClientReceive(payload -> MainClient.SUPERPOWER_COOLDOWN_TIMESTAMP = payload.number());
+        SimplePackets.SUPERPOWER_COOLDOWN.setClientReceive(payload -> LifeSeriesClient.SUPERPOWER_COOLDOWN_TIMESTAMP = payload.number());
         SimplePackets.SHOW_VIGNETTE.setClientReceive(payload -> {
-            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Showing vignette for {}", payload.number());
+            if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info("[PACKET_CLIENT] Showing vignette for {}", payload.number());
             VignetteRenderer.showVignetteFor(0.35f, payload.number());
         });
-        SimplePackets.MIMICRY_COOLDOWN.setClientReceive(payload -> MainClient.MIMICRY_COOLDOWN_TIMESTAMP = payload.number());
-        SimplePackets.TIME_DILATION.setClientReceive(payload -> MainClient.TIME_DILATION_TIMESTAMP = payload.number());
+        SimplePackets.MIMICRY_COOLDOWN.setClientReceive(payload -> LifeSeriesClient.MIMICRY_COOLDOWN_TIMESTAMP = payload.number());
+        SimplePackets.TIME_DILATION.setClientReceive(payload -> LifeSeriesClient.TIME_DILATION_TIMESTAMP = payload.number());
         SimplePackets.SESSION_TIMER.setClientReceive(payload -> {
-            MainClient.sessionTime = payload.number();
-            MainClient.sessionTimeLastUpdated = System.currentTimeMillis();
+            LifeSeriesClient.sessionTime = payload.number();
+            LifeSeriesClient.sessionTimeLastUpdated = System.currentTimeMillis();
         });
 
         //Empty payloads
@@ -305,7 +305,7 @@ public class NetworkHandlerClient {
         });
         SimplePackets.RESET_TRIVIA.setClientReceive(payload -> Trivia.resetTrivia());
         SimplePackets.SELECT_WILDCARDS.setClientReceive(payload -> {
-            if (!Main.modDisabled()) {
+            if (!LifeSeries.modDisabled()) {
                 Minecraft.getInstance().ls$setScreen(new ChooseWildcardScreen());
             }
         });
@@ -313,11 +313,11 @@ public class NetworkHandlerClient {
         SimplePackets.OPEN_CONFIG.setClientReceive(payload -> ClientConfigGuiManager.openConfig());
         SimplePackets.TOGGLE_TIMER.setClientReceive(payload -> {
             String key = ClientConfig.SESSION_TIMER.key;
-            MainClient.clientConfig.setProperty(key, String.valueOf(!MainClient.SESSION_TIMER));
-            MainClient.reloadConfig();
+            LifeSeriesClient.clientConfig.setProperty(key, String.valueOf(!LifeSeriesClient.SESSION_TIMER));
+            LifeSeriesClient.reloadConfig();
         });
         SimplePackets.PAST_LIFE_CHOOSE_TWIST.setClientReceive(payload -> {
-            if (!Main.modDisabled()) {
+            if (!LifeSeries.modDisabled()) {
                 Minecraft.getInstance().ls$setScreen(new PastLifeChooseTwistScreen());
             }
         });
@@ -523,7 +523,7 @@ public class NetworkHandlerClient {
     //?}
 
     public static void handleSidetitle(SidetitlePacket payload) {
-        MainClient.sideTitle = payload.text();
+        LifeSeriesClient.sideTitle = payload.text();
         Minecraft client = Minecraft.getInstance();
         if (client.gui instanceof GuiAccessor hudAccessor) {
             TextHud.sideTitleRemainTicks = hudAccessor.ls$titleFadeInTicks() + hudAccessor.ls$titleStayTicks() + hudAccessor.ls$titleFadeOutTicks();
@@ -541,30 +541,30 @@ public class NetworkHandlerClient {
         String shownUUID = payload.shownUUID();
         String shownName = payload.shownName();
         if (shownName.isEmpty()) {
-            MainClient.playerDisguiseNames.remove(hiddenName);
+            LifeSeriesClient.playerDisguiseNames.remove(hiddenName);
             try {
                 UUID hideUUID = UUID.fromString(hiddenUUID);
-                MainClient.playerDisguiseUUIDs.remove(hideUUID);
+                LifeSeriesClient.playerDisguiseUUIDs.remove(hideUUID);
             }catch(Exception ignored) {}
         }
         else {
-            MainClient.playerDisguiseNames.put(hiddenName, shownName);
+            LifeSeriesClient.playerDisguiseNames.put(hiddenName, shownName);
             try {
                 UUID hideUUID = UUID.fromString(hiddenUUID);
                 UUID showUUID = UUID.fromString(shownUUID);
-                MainClient.playerDisguiseUUIDs.put(hideUUID, showUUID);
+                LifeSeriesClient.playerDisguiseUUIDs.put(hideUUID, showUUID);
             }catch(Exception ignored) {}
         }
     }
     public static void handleHandshake(HandshakePayload payload) {
-        MainClient.serverHandshake = HandshakeStatus.RECEIVED;
+        LifeSeriesClient.serverHandshake = HandshakeStatus.RECEIVED;
 
         String serverVersionStr = payload.modVersionStr();
         String serverCompatibilityStr = payload.compatibilityStr();
-        String clientVersionStr = Main.MOD_VERSION;
+        String clientVersionStr = LifeSeries.MOD_VERSION;
         String clientCompatibilityStr = VersionControl.clientCompatibilityMin();
 
-        if (!Main.ISOLATED_ENVIRONMENT) {
+        if (!LifeSeries.ISOLATED_ENVIRONMENT) {
             int serverVersion = payload.modVersion();
             int serverCompatibility = payload.compatibility();
             int clientVersion = VersionControl.getModVersionInt(clientVersionStr);
@@ -598,12 +598,12 @@ public class NetworkHandlerClient {
             }
         }
 
-        Main.LOGGER.info(TextUtils.formatString("[PACKET_CLIENT] Received handshake (from server): {{}, {}}", payload.modVersionStr(), payload.modVersion()));
+        LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_CLIENT] Received handshake (from server): {{}, {}}", payload.modVersionStr(), payload.modVersion()));
         sendHandshake();
     }
 
     public static void handleVoteScreen(VoteScreenPayload payload) {
-        if (Main.modDisabled()) return;
+        if (LifeSeries.modDisabled()) return;
         Minecraft.getInstance().ls$setScreen(new VotingScreen(payload.name(), payload.requiresSleep(), payload.closesWithEsc(), payload.showTimer(), payload.players()));
     }
 
@@ -612,7 +612,7 @@ public class NetworkHandlerClient {
      */
 
     public static void sendHandshake() {
-        String clientVersionStr = Main.MOD_VERSION;
+        String clientVersionStr = LifeSeries.MOD_VERSION;
         String clientCompatibilityStr = VersionControl.clientCompatibilityMin();
 
         int clientVersion = VersionControl.getModVersionInt(clientVersionStr);
@@ -620,7 +620,7 @@ public class NetworkHandlerClient {
 
         HandshakePayload sendPayload = new HandshakePayload(clientVersionStr, clientVersion, clientCompatibilityStr, clientCompatibility);
         ClientPlayNetworking.send(sendPayload);
-        if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Sent handshake");
+        if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info("[PACKET_CLIENT] Sent handshake");
     }
 
     public static void sendConfigUpdate(String configType, String id, List<String> args) {
@@ -629,7 +629,7 @@ public class NetworkHandlerClient {
     }
 
     public static void sendTriviaAnswer(int answer) {
-        if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Sending trivia answer: {}", answer);
+        if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info("[PACKET_CLIENT] Sending trivia answer: {}", answer);
         SimplePackets.TRIVIA_ANSWER.sendToServer(answer);
     }
 
@@ -641,7 +641,7 @@ public class NetworkHandlerClient {
         SimplePackets.SUPERPOWER_KEY.sendToServer();
     }
     public static void pressRunCommandKey() {
-        ClientUtils.runCommand(MainClient.RUN_COMMAND);
+        ClientUtils.runCommand(LifeSeriesClient.RUN_COMMAND);
     }
     public static void pressOpenConfigKey() {
         ClientUtils.runCommand("/lifeseries config");

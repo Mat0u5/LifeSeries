@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.utils.other;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.*;
 import net.minecraft.server.level.ServerPlayer;
@@ -177,13 +177,13 @@ public class TextUtils {
         int placeholderIndex = template.indexOf("{}");
 
         if (placeholderIndex == -1) {
-            Main.LOGGER.error("String ("+template+") formatting does not contain {}.");
+            LifeSeries.LOGGER.error("String ("+template+") formatting does not contain {}.");
         }
         if (args.length <= 0) {
-            Main.LOGGER.error("String ("+template+") formatting does have arguments.");
+            LifeSeries.LOGGER.error("String ("+template+") formatting does have arguments.");
         }
         if (("_"+template+"_").split("\\{\\}").length-1 != args.length) {
-            Main.LOGGER.error("String ("+template+") formatting has incorrect number of arguments.");
+            LifeSeries.LOGGER.error("String ("+template+") formatting has incorrect number of arguments.");
         }
 
         while (placeholderIndex != -1 && argIndex < args.length) {

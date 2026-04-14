@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.mixin.client.compat.appleskin;
 
-import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.LifeSeriesClient;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
@@ -24,9 +24,9 @@ public class TextureHelperMixin {
         String texturePath = original.getPath();
         String playerTeamColor = ClientUtils.getPlayerTeamColor();
         String playerTeamName = ClientUtils.getPlayerTeamName();
-        if (!MainClient.COLORED_HEARTS || playerTeamColor == null || playerTeamName == null ||
+        if (!LifeSeriesClient.COLORED_HEARTS || playerTeamColor == null || playerTeamName == null ||
                 !RenderUtils.lifeSkinsAllowedColors.contains(playerTeamColor.toLowerCase(Locale.ROOT)) ||
-                !RenderUtils.lifeSkinsAllowedHearts.contains(texturePath) || Main.modFullyDisabled()) {
+                !RenderUtils.lifeSkinsAllowedHearts.contains(texturePath) || LifeSeries.modFullyDisabled()) {
             return;
         }
         String color = playerTeamColor.toLowerCase(Locale.ROOT);

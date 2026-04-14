@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.utils;
 
-import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.LifeSeriesClient;
 import net.mat0u5.lifeseries.utils.enums.Direction;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -44,7 +44,7 @@ import net.minecraft.world.entity.LivingEntity;
 public class ClientUtils {
 
     public static boolean shouldPreventGliding() {
-        if (!MainClient.preventGliding) return false;
+        if (!LifeSeriesClient.preventGliding) return false;
         Minecraft client = Minecraft.getInstance();
         if (client == null) return false;
         if (client.player == null) return false;
@@ -69,7 +69,7 @@ public class ClientUtils {
 
     @Nullable
     public static String getPlayerTeamColor() {
-        if (MainClient.teamColor != null && !MainClient.teamColor.isEmpty()) return MainClient.teamColor;
+        if (LifeSeriesClient.teamColor != null && !LifeSeriesClient.teamColor.isEmpty()) return LifeSeriesClient.teamColor;
 
         Minecraft client = Minecraft.getInstance();
         if (client.player == null) return null;
@@ -79,7 +79,7 @@ public class ClientUtils {
     }
     @Nullable
     public static String getPlayerTeamName() {
-        if (MainClient.teamName != null && !MainClient.teamName.isEmpty()) return MainClient.teamName;
+        if (LifeSeriesClient.teamName != null && !LifeSeriesClient.teamName.isEmpty()) return LifeSeriesClient.teamName;
 
         Minecraft client = Minecraft.getInstance();
         if (client.player == null) return null;
@@ -120,12 +120,12 @@ public class ClientUtils {
         Entity entity = level.getEntity(packet.getEntityId());
         if (entity == null) return false;
         if (!(entity instanceof LocalPlayer player)) return false;
-        if (!MainClient.isClientPlayer(player.getUUID())) return false;
+        if (!LifeSeriesClient.isClientPlayer(player.getUUID())) return false;
         Holder<Attribute> scaleAttribute = Attributes.SCALE;
         if (instance.getAttribute() != scaleAttribute) return false;
-        if (MainClient.clientCurrentSeason != Seasons.WILD_LIFE) return false;
-        if (!MainClient.clientActiveWildcards.contains(Wildcards.SIZE_SHIFTING)) return false;
-        if (!MainClient.FIX_SIZECHANGING_BUGS) return false;
+        if (LifeSeriesClient.clientCurrentSeason != Seasons.WILD_LIFE) return false;
+        if (!LifeSeriesClient.clientActiveWildcards.contains(Wildcards.SIZE_SHIFTING)) return false;
+        if (!LifeSeriesClient.FIX_SIZECHANGING_BUGS) return false;
 
         double oldBaseValue = player.getAttributeBaseValue(scaleAttribute);
         if (oldBaseValue == baseValue) return false;
@@ -222,11 +222,11 @@ public class ClientUtils {
     }
 
     public static Component getPlayerName(Component text) {
-        if (text == null || Main.modFullyDisabled()) return text;
+        if (text == null || LifeSeries.modFullyDisabled()) return text;
         if (Minecraft.getInstance().getConnection() == null) return text;
 
-        if (MainClient.playerDisguiseNames.containsKey(text.getString())) {
-            String name = MainClient.playerDisguiseNames.get(text.getString());
+        if (LifeSeriesClient.playerDisguiseNames.containsKey(text.getString())) {
+            String name = LifeSeriesClient.playerDisguiseNames.get(text.getString());
             for (PlayerInfo entry : Minecraft.getInstance().getConnection().getOnlinePlayers()) {
                 if (OtherUtils.profileName(entry.getProfile()).equalsIgnoreCase(TextUtils.removeFormattingCodes(name))) {
                     if (entry.getTabListDisplayName() != null) {
@@ -246,7 +246,7 @@ public class ClientUtils {
         return text;
     }
     public static Component applyColorblindToName(Component original, PlayerTeam team) {
-        if (!MainClient.COLORBLIND_SUPPORT) return original;
+        if (!LifeSeriesClient.COLORBLIND_SUPPORT) return original;
         if (original == null) return original;
         if (team == null) return original;
         return TextUtils.format("[{}] ",team.getDisplayName().getString()).withStyle(team.getColor()).append(original);

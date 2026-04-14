@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
-import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.LifeSeriesClient;
 import net.mat0u5.lifeseries.render.ClientRenderer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
@@ -66,7 +66,7 @@ public class LevelRendererMixin {
     //? if >= 1.21.11 {
     @ModifyVariable(method = "addCloudsPass", at = @At("HEAD"), index = 7, argsOnly = true)
     private int setCloudColor(int value) {
-        return ClientRenderer.modifyColor(value, MainClient.cloudColor, MainClient.cloudColorSetMode, MainClient.cachedFogRenderColor);
+        return ClientRenderer.modifyColor(value, LifeSeriesClient.cloudColor, LifeSeriesClient.cloudColorSetMode, LifeSeriesClient.cachedFogRenderColor);
     }
     //?}
 }

@@ -1,10 +1,9 @@
 package net.mat0u5.lifeseries.mixin.client;
 
-import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.LifeSeriesClient;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.minecraft.client.Minecraft;
@@ -36,13 +35,13 @@ public class PlayerTabOverlayMixin {
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;III)I"))
     private int modifyFormattedScore(GuiGraphicsExtractor instance, Font font, String s, int i1, int i2, int i3, Objective objective, int i, String string, int j, int k) {
-        if (objective != null && Main.modFullyDisabled()) {
+        if (objective != null && LifeSeries.modFullyDisabled()) {
             int score = objective.getScoreboard().getOrCreatePlayerScore(string, objective).getScore();
             if (objective.getName().equals(LivesManager.SCOREBOARD_NAME)) {
                 Component renderOverride = null;
-                if (MainClient.clientCurrentSeason != Seasons.LIMITED_LIFE) {
-                    if (score >= MainClient.TAB_LIST_LIVES_CUTOFF && !MainClient.TAB_LIST_SHOW_EXACT_LIVES && !Main.DEBUG) {
-                        renderOverride = Component.literal(MainClient.TAB_LIST_LIVES_CUTOFF+"+").withStyle(ChatFormatting.YELLOW);
+                if (LifeSeriesClient.clientCurrentSeason != Seasons.LIMITED_LIFE) {
+                    if (score >= LifeSeriesClient.TAB_LIST_LIVES_CUTOFF && !LifeSeriesClient.TAB_LIST_SHOW_EXACT_LIVES && !LifeSeries.DEBUG) {
+                        renderOverride = Component.literal(LifeSeriesClient.TAB_LIST_LIVES_CUTOFF+"+").withStyle(ChatFormatting.YELLOW);
                     }
                 }
                 else {
@@ -70,13 +69,13 @@ public class PlayerTabOverlayMixin {
     private MutableComponent modifyFormattedScore(ReadOnlyScoreInfo readableScoreboardScore, NumberFormat numberFormat) {
         MutableComponent originalText = ReadOnlyScoreInfo.safeFormatValue(readableScoreboardScore, numberFormat);
         Objective objective = ls$getDisplayedObjective();
-        if (readableScoreboardScore == null || originalText == null || Main.modFullyDisabled()) return originalText;
+        if (readableScoreboardScore == null || originalText == null || LifeSeries.modFullyDisabled()) return originalText;
 
         if (objective != null && objective.getName().equals(LivesManager.SCOREBOARD_NAME)) {
             int score = readableScoreboardScore.value();
-            if (MainClient.clientCurrentSeason != Seasons.LIMITED_LIFE) {
-                if (score >= MainClient.TAB_LIST_LIVES_CUTOFF && !MainClient.TAB_LIST_SHOW_EXACT_LIVES && !Main.DEBUG) {
-                    return Component.literal(MainClient.TAB_LIST_LIVES_CUTOFF+"+").setStyle(originalText.getStyle());
+            if (LifeSeriesClient.clientCurrentSeason != Seasons.LIMITED_LIFE) {
+                if (score >= LifeSeriesClient.TAB_LIST_LIVES_CUTOFF && !LifeSeriesClient.TAB_LIST_SHOW_EXACT_LIVES && !LifeSeries.DEBUG) {
+                    return Component.literal(LifeSeriesClient.TAB_LIST_LIVES_CUTOFF+"+").setStyle(originalText.getStyle());
                 }
             }
             else {
@@ -104,7 +103,7 @@ public class PlayerTabOverlayMixin {
 
     @Inject(method = "getNameForDisplay", at = @At("RETURN"), cancellable = true)
     private void getName(PlayerInfo entry, CallbackInfoReturnable<Component> cir) {
-        if (!MainClient.COLORBLIND_SUPPORT || Main.modFullyDisabled()) return;
+        if (!LifeSeriesClient.COLORBLIND_SUPPORT || LifeSeries.modFullyDisabled()) return;
         Component original = cir.getReturnValue();
         if (entry == null) return;
         PlayerTeam team = entry.getTeam();

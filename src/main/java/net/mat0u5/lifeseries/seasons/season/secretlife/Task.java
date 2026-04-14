@@ -12,7 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.network.Filterable;
 //?}
 
-import static net.mat0u5.lifeseries.Main.livesManager;
+import static net.mat0u5.lifeseries.LifeSeries.livesManager;
 
 public class Task {
     public String rawTask;

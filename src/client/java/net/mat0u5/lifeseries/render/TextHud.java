@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.render;
 
-import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.LifeSeriesClient;
 import net.mat0u5.lifeseries.events.ClientKeybinds;
 import net.mat0u5.lifeseries.features.Trivia;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -22,9 +22,9 @@ public class TextHud {
         //?} else {
         /*if (client.gui.hud.isHidden()) return;
         *///?}
-        int yPos = client.getWindow().getGuiScaledHeight() - (5 + (int) Math.ceil((client.font.lineHeight) * MainClient.TEXT_HUD_SCALE));
+        int yPos = client.getWindow().getGuiScaledHeight() - (5 + (int) Math.ceil((client.font.lineHeight) * LifeSeriesClient.TEXT_HUD_SCALE));
 
-        if (!Main.modDisabled()) {
+        if (!LifeSeries.modDisabled()) {
             yPos += renderGameNotBroken(client, context, yPos);
             yPos += renderSessionTimer(client, context, yPos);
             yPos += renderLimitedLifeTimer(client, context, yPos);
@@ -44,11 +44,11 @@ public class TextHud {
 
     public static int sideTitleRemainTicks = 0;
     public static int renderSidetitle(Minecraft client, GuiGraphicsExtractor context, int y) {
-        if (MainClient.sideTitle == null) return 0;
-        if (MainClient.sideTitle.getString().isEmpty()) return 0;
+        if (LifeSeriesClient.sideTitle == null) return 0;
+        if (LifeSeriesClient.sideTitle.getString().isEmpty()) return 0;
         if (sideTitleRemainTicks <= 0) return 0;
 
-        return drawHudText(client, context, MainClient.sideTitle, y);
+        return drawHudText(client, context, LifeSeriesClient.sideTitle, y);
     }
 
     public static int renderGameNotBroken(Minecraft client, GuiGraphicsExtractor context, int y) {
@@ -105,16 +105,16 @@ public class TextHud {
     public static int renderSessionTimer(Minecraft client, GuiGraphicsExtractor context, int y) {
         sessionSecondChanged = true;
         sessionSeconds = -1;
-        if (!MainClient.SESSION_TIMER) return 0;
-        if (System.currentTimeMillis()-MainClient.sessionTimeLastUpdated > 15000) return 0;
-        if (MainClient.sessionTime == SessionTimerStates.OFF.getValue()) return 0;
+        if (!LifeSeriesClient.SESSION_TIMER) return 0;
+        if (System.currentTimeMillis()- LifeSeriesClient.sessionTimeLastUpdated > 15000) return 0;
+        if (LifeSeriesClient.sessionTime == SessionTimerStates.OFF.getValue()) return 0;
 
         MutableComponent timerText = Component.empty();
-        if (MainClient.sessionTime == SessionTimerStates.ENDED.getValue()) timerText = timerText.append(Component.nullToEmpty("§7Session has ended"));
-        else if (MainClient.sessionTime == SessionTimerStates.PAUSED.getValue()) timerText = timerText.append(Component.nullToEmpty("§7Session has been paused"));
-        else if (MainClient.sessionTime == SessionTimerStates.NOT_STARTED.getValue()) timerText = timerText.append(Component.nullToEmpty("§7Session has not started"));
+        if (LifeSeriesClient.sessionTime == SessionTimerStates.ENDED.getValue()) timerText = timerText.append(Component.nullToEmpty("§7Session has ended"));
+        else if (LifeSeriesClient.sessionTime == SessionTimerStates.PAUSED.getValue()) timerText = timerText.append(Component.nullToEmpty("§7Session has been paused"));
+        else if (LifeSeriesClient.sessionTime == SessionTimerStates.NOT_STARTED.getValue()) timerText = timerText.append(Component.nullToEmpty("§7Session has not started"));
         else {
-            long remainingTime = roundTime(MainClient.sessionTime) - System.currentTimeMillis();
+            long remainingTime = roundTime(LifeSeriesClient.sessionTime) - System.currentTimeMillis();
             sessionSeconds = (int) Math.ceil(remainingTime / 1000.0);
             if (lastSessionSeconds != sessionSeconds) {
                 lastSessionSeconds = sessionSeconds;
@@ -132,14 +132,14 @@ public class TextHud {
 
     private static long limitedLifeTime = -1;
     public static int renderLimitedLifeTimer(Minecraft client, GuiGraphicsExtractor context, int y) {
-        if (MainClient.clientCurrentSeason != Seasons.LIMITED_LIFE) return 0;
-        if (System.currentTimeMillis()-MainClient.limitedLifeTimeLastUpdated > 15000) return 0;
+        if (LifeSeriesClient.clientCurrentSeason != Seasons.LIMITED_LIFE) return 0;
+        if (System.currentTimeMillis()- LifeSeriesClient.limitedLifeTimeLastUpdated > 15000) return 0;
 
         MutableComponent timerText = Component.empty();
-        if (sessionSecondChanged || MainClient.sessionTime <= 0 || Math.abs(limitedLifeTime - MainClient.limitedLifeLives) > 10) {
-            limitedLifeTime = MainClient.limitedLifeLives;
+        if (sessionSecondChanged || LifeSeriesClient.sessionTime <= 0 || Math.abs(limitedLifeTime - LifeSeriesClient.limitedLifeLives) > 10) {
+            limitedLifeTime = LifeSeriesClient.limitedLifeLives;
         }
-        if (limitedLifeTime == -1) timerText = timerText.append(TextUtils.formatLoosely("{}0:00:00", MainClient.limitedLifeTimerColor));
+        if (limitedLifeTime == -1) timerText = timerText.append(TextUtils.formatLoosely("{}0:00:00", LifeSeriesClient.limitedLifeTimerColor));
         else {
             long currentSeconds = limitedLifeTime;
             if (sessionSeconds != -1 && currentSeconds > 60) {
@@ -150,8 +150,8 @@ public class TextHud {
             }
             long remainingTime = currentSeconds * 1000;
 
-            if (remainingTime < 0) timerText = timerText.append(TextUtils.formatLoosely("{}0:00:00", MainClient.limitedLifeTimerColor));
-            else timerText = timerText.append(Component.nullToEmpty(MainClient.limitedLifeTimerColor+ Time.millis(remainingTime).formatLong()));
+            if (remainingTime < 0) timerText = timerText.append(TextUtils.formatLoosely("{}0:00:00", LifeSeriesClient.limitedLifeTimerColor));
+            else timerText = timerText.append(Component.nullToEmpty(LifeSeriesClient.limitedLifeTimerColor+ Time.millis(remainingTime).formatLong()));
         }
 
         return drawHudText(client, context, timerText, y);
@@ -160,9 +160,9 @@ public class TextHud {
     private static int triviaTimer = -1;
     public static int renderTriviaTimer(Minecraft client, GuiGraphicsExtractor context, int y) {
         if (!Trivia.isDoingTrivia()) return 0;
-        if (MainClient.clientCurrentSeason == Seasons.NICE_LIFE) return 0;
+        if (LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE) return 0;
 
-        if (sessionSecondChanged || MainClient.sessionTime <= 0 || Math.abs(triviaTimer - Trivia.getRemainingSeconds()) >= 2) {
+        if (sessionSecondChanged || LifeSeriesClient.sessionTime <= 0 || Math.abs(triviaTimer - Trivia.getRemainingSeconds()) >= 2) {
             triviaTimer = Trivia.getRemainingSeconds();
         }
 
@@ -185,10 +185,10 @@ public class TextHud {
     public static int renderSuperpowerCooldown(Minecraft client, GuiGraphicsExtractor context, int y) {
         if (ClientKeybinds.superpower != null && ClientKeybinds.superpower.isDown()) lastPressedSuperpowerKey = System.currentTimeMillis();
 
-        if (MainClient.SUPERPOWER_COOLDOWN_TIMESTAMP == 0) return 0;
+        if (LifeSeriesClient.SUPERPOWER_COOLDOWN_TIMESTAMP == 0) return 0;
         long currentMillis = System.currentTimeMillis();
-        if (currentMillis >= MainClient.SUPERPOWER_COOLDOWN_TIMESTAMP) return 0;
-        long millisLeft = roundTime(MainClient.SUPERPOWER_COOLDOWN_TIMESTAMP) - currentMillis;
+        if (currentMillis >= LifeSeriesClient.SUPERPOWER_COOLDOWN_TIMESTAMP) return 0;
+        long millisLeft = roundTime(LifeSeriesClient.SUPERPOWER_COOLDOWN_TIMESTAMP) - currentMillis;
         if (millisLeft > 10000000) return 0;
 
         long pressedAgo = System.currentTimeMillis() - lastPressedSuperpowerKey;
@@ -201,10 +201,10 @@ public class TextHud {
     }
 
     public static int renderMimicryTimer(Minecraft client, GuiGraphicsExtractor context, int y) {
-        if (MainClient.MIMICRY_COOLDOWN_TIMESTAMP == 0) return 0;
+        if (LifeSeriesClient.MIMICRY_COOLDOWN_TIMESTAMP == 0) return 0;
         long currentMillis = System.currentTimeMillis();
-        if (currentMillis >= MainClient.MIMICRY_COOLDOWN_TIMESTAMP) return 0;
-        long millisLeft = roundTime(MainClient.MIMICRY_COOLDOWN_TIMESTAMP) - currentMillis;
+        if (currentMillis >= LifeSeriesClient.MIMICRY_COOLDOWN_TIMESTAMP) return 0;
+        long millisLeft = roundTime(LifeSeriesClient.MIMICRY_COOLDOWN_TIMESTAMP) - currentMillis;
         if (millisLeft > 10000000) return 0;
 
         Component timerText = TextUtils.formatLoosely("§7Mimic power cooldown: §f{}", Time.millis(millisLeft).format());
@@ -223,11 +223,11 @@ public class TextHud {
     }
 
     public static int drawHudText(Minecraft client, GuiGraphicsExtractor context, int color, Component text, int x, int y) {
-        if (MainClient.TEXT_HUD_SCALE != 1) {
-            float scaleX = (float) MainClient.TEXT_HUD_SCALE;
-            float scaleY = (float) MainClient.TEXT_HUD_SCALE;
+        if (LifeSeriesClient.TEXT_HUD_SCALE != 1) {
+            float scaleX = (float) LifeSeriesClient.TEXT_HUD_SCALE;
+            float scaleY = (float) LifeSeriesClient.TEXT_HUD_SCALE;
             RenderUtils.text(text, x, y).anchorRight().colored(color).scaled(scaleX, scaleY).withShadow().render(context, client.font);
-            return -((int) Math.ceil((client.font.lineHeight) * MainClient.TEXT_HUD_SCALE) + 5);
+            return -((int) Math.ceil((client.font.lineHeight) * LifeSeriesClient.TEXT_HUD_SCALE) + 5);
         }
         RenderUtils.text(text, x, y).anchorRight().colored(color).withShadow().render(context, client.font);
         return -client.font.lineHeight -5;

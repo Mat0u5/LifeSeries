@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.DefaultConfigValues;
@@ -23,7 +23,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;
 
-import static net.mat0u5.lifeseries.Main.*;
+import static net.mat0u5.lifeseries.LifeSeries.*;
 
 public class LifeSeriesCommand extends Command {
 
@@ -131,7 +131,7 @@ public class LifeSeriesCommand extends Command {
 
     private int enableOrDisable(CommandSourceStack source, boolean disabled) {
         OtherUtils.sendCommandFeedback(source, ModifiableText.SERIES_DISABLE.get(disabled ? "disabled" : "enabled"));
-        Main.setDisabled(disabled);
+        LifeSeries.setDisabled(disabled);
         return 1;
     }
 
@@ -171,7 +171,7 @@ public class LifeSeriesCommand extends Command {
 
     public void setSeasonFinal(CommandSourceStack source, String setTo) {
         boolean prevTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
-        if (Main.changeSeasonTo(setTo)) {
+        if (LifeSeries.changeSeasonTo(setTo)) {
             OtherUtils.sendCommandFeedback(source, ModifiableText.SEASON_CHANGING.get(setTo));
             PlayerUtils.broadcastMessage(ModifiableText.SEASON_CHANGED.get(setTo));
             boolean currentTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
@@ -195,7 +195,7 @@ public class LifeSeriesCommand extends Command {
 
         SimplePackets.CLEAR_CONFIG.target(self).sendToClient();
         if (PermissionManager.isAdmin(self) && currentSeason.getSeason() != Seasons.UNASSIGNED) {
-            Main.seasonConfig.sendConfigTo(self);
+            LifeSeries.seasonConfig.sendConfigTo(self);
             OtherUtils.sendCommandFeedback(source, ModifiableText.CONFIG_GUI_OPENING.get());
         }
         else {
@@ -267,7 +267,7 @@ public class LifeSeriesCommand extends Command {
 
     public int getVersion(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.MOD_VERSION.get(Main.MOD_VERSION));
+        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.MOD_VERSION.get(LifeSeries.MOD_VERSION));
         return 1;
     }
 

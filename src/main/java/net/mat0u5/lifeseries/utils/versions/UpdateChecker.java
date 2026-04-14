@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.minecraft.network.chat.Component;
@@ -38,11 +38,12 @@ public class UpdateChecker {
             version = 2_000_000_000;
             return;
         }
+        if (executor.isShutdown()) return;
         executor.submit(() -> {
             HttpURLConnection connection = null;
             try {
                 // Connect to the GitHub API
-                connection = (HttpURLConnection) new URI(Main.UPDATES_URL + "/latest").toURL().openConnection();
+                connection = (HttpURLConnection) new URI(LifeSeries.UPDATES_URL + "/latest").toURL().openConnection();
                 connection.setRequestMethod("GET");
                 connection.setRequestProperty("User-Agent", "Mozilla/5.0");
                 connection.setConnectTimeout(5000);
@@ -55,12 +56,12 @@ public class UpdateChecker {
 
                     String name = json.get("tag_name").getAsString();
 
-                    int currentVersionNumber = VersionControl.getModVersionInt(Main.MOD_VERSION);
+                    int currentVersionNumber = VersionControl.getModVersionInt(LifeSeries.MOD_VERSION);
                     int updateVersionNumber = VersionControl.getModVersionInt(name);
 
                     // Compare the current version with the latest version
                     if (currentVersionNumber < updateVersionNumber || TEST_UPDATE_LAST) {
-                        Main.LOGGER.info("New major version found: "+name);
+                        LifeSeries.LOGGER.info("New major version found: "+name);
                         updateAvailable = true;
                         majorUpdateAvailable = true;
                         versionName = name;
@@ -71,11 +72,11 @@ public class UpdateChecker {
 
 
                 } else {
-                    Main.LOGGER.error("Failed to fetch update info: " + connection.getResponseCode());
+                    LifeSeries.LOGGER.error("Failed to fetch update info: " + connection.getResponseCode());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                Main.LOGGER.error("Error while checking for updates: " + e.getMessage());
+                LifeSeries.LOGGER.error("Error while checking for updates: " + e.getMessage());
             } finally {
                 if (connection != null) {
                     connection.disconnect();
@@ -90,7 +91,7 @@ public class UpdateChecker {
             HttpURLConnection connection = null;
             try {
                 // Connect to the GitHub API
-                connection = (HttpURLConnection) new URI(Main.UPDATES_URL).toURL().openConnection();
+                connection = (HttpURLConnection) new URI(LifeSeries.UPDATES_URL).toURL().openConnection();
                 connection.setRequestMethod("GET");
                 connection.setRequestProperty("User-Agent", "Mozilla/5.0");
                 connection.setConnectTimeout(5000);
@@ -111,11 +112,11 @@ public class UpdateChecker {
                         if (draft || prerelease) continue;
 
                         try {
-                            int currentVersionNumber = VersionControl.getModVersionInt(Main.MOD_VERSION);
+                            int currentVersionNumber = VersionControl.getModVersionInt(LifeSeries.MOD_VERSION);
                             int updateVersionNumber = VersionControl.getModVersionInt(name);
 
                             if (version < updateVersionNumber && currentVersionNumber < updateVersionNumber) {
-                                Main.LOGGER.info("New minor version found: "+name);
+                                LifeSeries.LOGGER.info("New minor version found: "+name);
                                 updateAvailable = true;
                                 versionName = name;
                                 version = updateVersionNumber;
@@ -124,16 +125,16 @@ public class UpdateChecker {
                             }
                         }catch(Exception e) {
                             e.printStackTrace();
-                            Main.LOGGER.error(TextUtils.formatString("Error while parsing version number for update: {} - {}", name, e.getMessage()));
+                            LifeSeries.LOGGER.error(TextUtils.formatString("Error while parsing version number for update: {} - {}", name, e.getMessage()));
                         }
                     }
 
                 } else {
-                    Main.LOGGER.error("Failed to fetch update info: " + connection.getResponseCode());
+                    LifeSeries.LOGGER.error("Failed to fetch update info: " + connection.getResponseCode());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                Main.LOGGER.error("Error while checking for updates: " + e.getMessage());
+                LifeSeries.LOGGER.error("Error while checking for updates: " + e.getMessage());
             } finally {
                 if (connection != null) {
                     connection.disconnect();

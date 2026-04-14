@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.networking.v1.*;
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.DefaultConfigValues;
 import net.mat0u5.lifeseries.config.ModifiableText;
@@ -56,7 +56,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static net.mat0u5.lifeseries.Main.*;
+import static net.mat0u5.lifeseries.LifeSeries.*;
 
 public class NetworkHandlerServer {
     public static final List<UUID> handshakeSuccessful = new ArrayList<>();
@@ -72,23 +72,23 @@ public class NetworkHandlerServer {
     }
 
     public static void reload() {
-        String registryOverrideBehaviour = Main.getMainConfig().getOrCreateProperty("registry_override_behavior", "login");
+        String registryOverrideBehaviour = LifeSeries.getMainConfig().getOrCreateProperty("registry_override_behavior", "login");
         if (registryOverrideBehaviour.equalsIgnoreCase("never")) REGISTRY_OVERRIDE_BEHAVIOR = RegistryOverrideBahaviours.NEVER;
         else if (registryOverrideBehaviour.equalsIgnoreCase("always")) REGISTRY_OVERRIDE_BEHAVIOR = RegistryOverrideBahaviours.ALWAYS;
         else if (registryOverrideBehaviour.equalsIgnoreCase("login")) REGISTRY_OVERRIDE_BEHAVIOR = RegistryOverrideBahaviours.LOGIN;
         else if (registryOverrideBehaviour.equalsIgnoreCase("season")) REGISTRY_OVERRIDE_BEHAVIOR = RegistryOverrideBahaviours.SEASON;
         else {
-            Main.getMainConfig().setProperty("registry_override_behavior", "login");
+            LifeSeries.getMainConfig().setProperty("registry_override_behavior", "login");
             REGISTRY_OVERRIDE_BEHAVIOR = RegistryOverrideBahaviours.LOGIN;
         }
 
-        PRE_LOGIN_OVERRIDE_KICK = Main.getMainConfig().getOrCreateBoolean("pre_login_override_kick", false);
+        PRE_LOGIN_OVERRIDE_KICK = LifeSeries.getMainConfig().getOrCreateBoolean("pre_login_override_kick", false);
     }
 
     public static void initializeSimplePacketReceivers() {
 
         SimplePackets.TRIVIA_ANSWER.setServerReceive((player, payload) -> {
-            if (VersionControl.isDevVersion()) Main.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received trivia answer (from {}): {}", player, payload.number()));
+            if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received trivia answer (from {}): {}", player, payload.number()));
             if (currentSeason.getSeason() == Seasons.NICE_LIFE) {
                 NiceLifeTriviaManager.handleAnswer(player, payload.number());
             }
@@ -123,7 +123,7 @@ public class NetworkHandlerServer {
                 Seasons newSeason = Seasons.getSeasonFromStringName(payload.value());
                 if (newSeason == Seasons.UNASSIGNED) return;
                 boolean prevTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
-                if (Main.changeSeasonTo(newSeason.getId())) {
+                if (LifeSeries.changeSeasonTo(newSeason.getId())) {
                     boolean currentTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
                     PlayerUtils.broadcastMessage(ModifiableText.SEASON_CHANGE.get(payload.value()));
                     if (prevTickFreeze != currentTickFreeze) {
@@ -448,7 +448,7 @@ public class NetworkHandlerServer {
             ConfigTypes configType = ConfigTypes.getFromString(payload.configType());
             String id = payload.id();
             List<String> args = payload.args();
-            if (VersionControl.isDevVersion()) Main.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received config update from {}: {{}, {}, {}}", player, configType, id, args));
+            if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received config update from {}: {{}, {}, {}}", player, configType, id, args));
 
             if (configType == ConfigTypes.EVENT_ENTRY && args.size() >= 2) {
                 String command = args.get(0).strip();
@@ -505,7 +505,7 @@ public class NetworkHandlerServer {
                 OtherUtils.reloadServer();
             }
             else {
-                Main.softReloadStart();
+                LifeSeries.softReloadStart();
             }
         }catch(Exception e) {
             e.printStackTrace();
@@ -517,10 +517,10 @@ public class NetworkHandlerServer {
     public static void handleHandshakeResponse(ServerPlayer player, HandshakePayload payload) {
         String clientVersionStr = payload.modVersionStr();
         String clientCompatibilityStr = payload.compatibilityStr();
-        String serverVersionStr = Main.MOD_VERSION;
+        String serverVersionStr = LifeSeries.MOD_VERSION;
         String serverCompatibilityStr = VersionControl.serverCompatibilityMin();
 
-        if (!Main.ISOLATED_ENVIRONMENT) {
+        if (!LifeSeries.ISOLATED_ENVIRONMENT) {
             int clientVersion = payload.modVersion();
             int clientCompatibility = payload.compatibility();
             int serverVersion = VersionControl.getModVersionInt(serverVersionStr);
@@ -566,7 +566,7 @@ public class NetworkHandlerServer {
             }
         }
 
-        Main.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received handshake (from {}): {{}, {}}", player, payload.modVersionStr(), payload.modVersion()));
+        LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received handshake (from {}): {{}, {}}", player, payload.modVersionStr(), payload.modVersion()));
         handshakeSuccessful.add(player.getUUID());
         PlayerUtils.resendCommandTree(player);
     }
@@ -576,7 +576,7 @@ public class NetworkHandlerServer {
      */
     public static void sendTriviaPacket(ServerPlayer player, String question, int difficulty, long timestamp, int timeToComplete, List<String> answers) {
         TriviaQuestionPayload triviaQuestionPacket = new TriviaQuestionPayload(question, difficulty, timestamp, timeToComplete, answers);
-        if (VersionControl.isDevVersion()) Main.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Sending trivia question packet to {}): {{}, {}, {}, {}, {}}", player, question, difficulty, timestamp, timeToComplete, answers));
+        if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Sending trivia question packet to {}): {{}, {}, {}, {}, {}}", player, question, difficulty, timestamp, timeToComplete, answers));
 
         ServerPlayNetworking.send(player, triviaQuestionPacket);
     }
@@ -591,7 +591,7 @@ public class NetworkHandlerServer {
     }
 
     public static void sendHandshake(ServerPlayer player) {
-        String serverVersionStr = Main.MOD_VERSION;
+        String serverVersionStr = LifeSeries.MOD_VERSION;
         String serverCompatibilityStr = VersionControl.serverCompatibilityMin();
 
         int serverVersion = VersionControl.getModVersionInt(serverVersionStr);
@@ -600,7 +600,7 @@ public class NetworkHandlerServer {
         HandshakePayload payload = new HandshakePayload(serverVersionStr, serverVersion, serverCompatibilityStr, serverCompatibility);
         ServerPlayNetworking.send(player, payload);
         handshakeSuccessful.remove(player.getUUID());
-        if (VersionControl.isDevVersion()) Main.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Sending handshake to {}: {{}, {}}", player, serverVersionStr, serverVersion));
+        if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Sending handshake to {}: {{}, {}}", player, serverVersionStr, serverVersion));
 
     }
 
@@ -645,7 +645,7 @@ public class NetworkHandlerServer {
         }
 
         SimplePackets.ADMIN_INFO.target(player).sendToClient(PermissionManager.isAdmin(player));
-        SimplePackets.MOD_DISABLED.target(player).sendToClient(Main.MOD_DISABLED);
+        SimplePackets.MOD_DISABLED.target(player).sendToClient(LifeSeries.MOD_DISABLED);
         Season.updateClientPlayerTeam(player);
         LifeSkinsManager.sendTeamNumUpdatesTo(player);
         if (blacklist != null) {

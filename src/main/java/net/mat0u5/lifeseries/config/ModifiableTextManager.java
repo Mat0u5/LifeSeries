@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.config;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.enums.Formatted;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -13,8 +13,6 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
-
 public class ModifiableTextManager {
     private static Map<String, ConfigFileEntry<String>> registeredEntries = new TreeMap<>();
     private static boolean initialized = false;
@@ -22,9 +20,9 @@ public class ModifiableTextManager {
     public static void initialize() {
         initialized = true;
         registeredEntries.clear();
-        Main.LOGGER.info("Loading modifiable texts...");
+        LifeSeries.LOGGER.info("Loading modifiable texts...");
         ModifiableText.registerAllTexts();
-        Main.LOGGER.info("Loaded "+registeredEntries.size()+" modifiable texts");
+        LifeSeries.LOGGER.info("Loaded "+registeredEntries.size()+" modifiable texts");
     }
 
     public static String toMinecraftColorFormatting(String str) {
@@ -45,7 +43,7 @@ public class ModifiableTextManager {
 
     public static void register(String key, String value, List<String> args) {
         if (registeredEntries.containsKey(key)) {
-            Main.LOGGER.error("Tried to register duplicate key for modifiable text: "+key);
+            LifeSeries.LOGGER.error("Tried to register duplicate key for modifiable text: "+key);
             return;
         }
         String description = "";
@@ -103,7 +101,7 @@ public class ModifiableTextManager {
             } else {
                 if (!"s".equals(formatType)) {
                     if (!silent) {
-                        Main.LOGGER.error("Unsupported format: '{}' in key '{}'", formatString, value);
+                        LifeSeries.LOGGER.error("Unsupported format: '{}' in key '{}'", formatString, value);
                     }
                     lastIndex = end;
                     continue;
@@ -123,7 +121,7 @@ public class ModifiableTextManager {
                     result.append(argText);
                     resultLooselyStyled.append(argText.getString());
                 } else if (!silent) {
-                    Main.LOGGER.warn("Argument index {} out of bounds for key '{}'. Got {} args.", argIndex + 1, value, args.length);
+                    LifeSeries.LOGGER.warn("Argument index {} out of bounds for key '{}'. Got {} args.", argIndex + 1, value, args.length);
                 }
             }
 
@@ -149,7 +147,7 @@ public class ModifiableTextManager {
         }
         ConfigFileEntry<String> configEntry = registeredEntries.get(key);
         if (configEntry == null) {
-            Main.LOGGER.warn("Could not find modifiable text " + key);
+            LifeSeries.LOGGER.warn("Could not find modifiable text " + key);
             return key;
         }
         return toMinecraftColorFormatting(configEntry.get());

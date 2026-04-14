@@ -4,7 +4,7 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.minecraft.server.MinecraftServer;
 
-import static net.mat0u5.lifeseries.Main.server;
+import static net.mat0u5.lifeseries.LifeSeries.server;
 
 public class DatapackManager {
     public static void onServerStarted(MinecraftServer server) {

@@ -7,11 +7,10 @@ import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.datafixers.util.Pair;
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.mixin.ChunkMapAccessor;
 import net.mat0u5.lifeseries.mixin.PlayerAccessor;
 import net.mat0u5.lifeseries.mixin.TrackedEntityAccessor;
-import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.minecraft.network.protocol.game.*;
@@ -31,8 +30,8 @@ import java.net.URL;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
-import static net.mat0u5.lifeseries.Main.server;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.server;
 
 //? if > 1.21 {
 import com.mojang.authlib.properties.PropertyMap;
@@ -254,10 +253,10 @@ public class ProfileManager {
         /*player.connection.send(new ClientboundRespawnPacket(
                         new CommonPlayerSpawnInfo(
                                 //? if <= 1.20.3 {
-                                /^level.dimensionTypeId(),
-                                ^///?} else {
-                                level.dimensionTypeRegistration(),
-                                //?}
+                                level.dimensionTypeId(),
+                                //?} else {
+                                /^level.dimensionTypeRegistration(),
+                                ^///?}
                                 level.dimension(),
                                 BiomeManager.obfuscateSeed(level.getSeed()),
                                 player.gameMode.getGameModeForPlayer(),
@@ -301,7 +300,7 @@ public class ProfileManager {
                     trackedEntity.getServerEntity().addPairing(connection.getPlayer())
             );
         } catch (Exception e) {
-            Main.LOGGER.error("Entity tracker refresh failed: " + e.getMessage());
+            LifeSeries.LOGGER.error("Entity tracker refresh failed: " + e.getMessage());
         }
     }
 

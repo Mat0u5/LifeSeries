@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static net.mat0u5.lifeseries.MainClient.clientConfig;
+import static net.mat0u5.lifeseries.LifeSeriesClient.clientConfig;
 
 public class ClientConfigNetwork {
 

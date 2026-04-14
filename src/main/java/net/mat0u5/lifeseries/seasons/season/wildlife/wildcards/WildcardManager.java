@@ -24,7 +24,7 @@ import net.minecraft.world.effect.MobEffects;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static net.mat0u5.lifeseries.Main.*;
+import static net.mat0u5.lifeseries.LifeSeries.*;
 //? if >= 1.21.2
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.CreakingPower;
 

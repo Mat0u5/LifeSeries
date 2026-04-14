@@ -9,11 +9,10 @@ import de.maxhenkel.voicechat.api.opus.OpusDecoder;
 import de.maxhenkel.voicechat.api.opus.OpusEncoder;
 import de.maxhenkel.voicechat.api.packets.LocationalSoundPacket;
 import de.maxhenkel.voicechat.api.packets.MicrophonePacket;
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.compatibilities.voicechat.soundeffects.RadioEffect;
 import net.mat0u5.lifeseries.compatibilities.voicechat.soundeffects.RoboticVoice;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
@@ -21,14 +20,13 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Listening;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 public class VoicechatMain implements VoicechatPlugin {
 
@@ -46,7 +44,7 @@ public class VoicechatMain implements VoicechatPlugin {
 
     @Override
     public void initialize(VoicechatApi api) {
-        Main.LOGGER.info("Life Series Voice Chat plugin initialized!");
+        LifeSeries.LOGGER.info("Life Series Voice Chat plugin initialized!");
         this.encoder = api.createEncoder();
         this.decoder = api.createDecoder();
     }
@@ -136,7 +134,7 @@ public class VoicechatMain implements VoicechatPlugin {
 
             event.getPacket().setOpusEncodedData(processedOpusData);
         } catch (Exception e) {
-            Main.LOGGER.error("Error processing audio", e);
+            LifeSeries.LOGGER.error("Error processing audio", e);
         }
     }
 
@@ -204,7 +202,7 @@ public class VoicechatMain implements VoicechatPlugin {
         try {
             short[] pcmData = decoder.decode(opusData);
             if (pcmData == null) {
-                Main.LOGGER.warn("Failed to decode Opus data");
+                LifeSeries.LOGGER.warn("Failed to decode Opus data");
                 return opusData;
             }
 
@@ -212,7 +210,7 @@ public class VoicechatMain implements VoicechatPlugin {
 
             return encoder.encode(processedPcm);
         } catch (Exception e) {
-            Main.LOGGER.error("Error processing Opus audio", e);
+            LifeSeries.LOGGER.error("Error processing Opus audio", e);
             return opusData;
         }
     }
@@ -221,7 +219,7 @@ public class VoicechatMain implements VoicechatPlugin {
         try {
             short[] pcmData = decoder.decode(opusData);
             if (pcmData == null) {
-                Main.LOGGER.warn("Failed to decode Opus data");
+                LifeSeries.LOGGER.warn("Failed to decode Opus data");
                 return opusData;
             }
 
@@ -229,7 +227,7 @@ public class VoicechatMain implements VoicechatPlugin {
 
             return encoder.encode(processedPcm);
         } catch (Exception e) {
-            Main.LOGGER.error("Error processing Opus audio", e);
+            LifeSeries.LOGGER.error("Error processing Opus audio", e);
             return opusData;
         }
     }

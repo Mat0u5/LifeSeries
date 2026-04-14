@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static net.mat0u5.lifeseries.Main.blacklist;
+import static net.mat0u5.lifeseries.LifeSeries.blacklist;
 
 //? if >= 1.21.2
 import net.minecraft.server.level.ServerLevel;
@@ -31,7 +31,7 @@ public class MobEffectMixin {
     /*@Inject(method = "applyInstantaneousEffect", at = @At("HEAD"), cancellable = true)
     public void applyInstantEffect(ServerLevel level, Entity effectEntity, Entity attacker, LivingEntity target, int amplifier, double proximity, CallbackInfo ci) {
     *///?}
-        if (Main.isClientOrDisabled()) return;
+        if (LifeSeries.isClientOrDisabled()) return;
         MobEffect effect = (MobEffect) (Object) this;
         if (target instanceof ServerPlayer) {
             //? if <= 1.20 {
@@ -53,7 +53,7 @@ public class MobEffectMixin {
     *///?} else {
     public void applyInstantEffect(ServerLevel level, LivingEntity entity, int amplifier, CallbackInfoReturnable<Boolean> cir) {
     //?}
-        if (Main.isClientOrDisabled()) return;
+        if (LifeSeries.isClientOrDisabled()) return;
         MobEffect effect = (MobEffect) (Object) this;
         if (entity instanceof ServerPlayer) {
             //? if <= 1.20.3 {
@@ -91,7 +91,7 @@ public class MobEffectMixin {
 
     @Unique
     public int ls$clampEffect(int amplifier) {
-        if (Main.isClientOrDisabled()) return amplifier;
+        if (LifeSeries.isClientOrDisabled()) return amplifier;
         MobEffect effect = (MobEffect) (Object) this;
         //? if <= 1.20.3 {
         /*if (blacklist.getClampedEffects().contains(effect)) {

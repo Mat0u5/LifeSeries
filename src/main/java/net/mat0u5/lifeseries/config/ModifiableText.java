@@ -7,7 +7,7 @@ import net.minecraft.network.chat.Component;
 import java.util.List;
 import java.util.Locale;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 public enum ModifiableText {
     MOD_VERSION("Mod version: {}", List.of("version"))
@@ -692,7 +692,7 @@ public enum ModifiableText {
                 args = modifiableText.getRegisterArgs().size();
             }
             if (argsInValue != args) {
-                Main.LOGGER.error("Args count mismatch in " + modifiableText.name);
+                LifeSeries.LOGGER.error("Args count mismatch in " + modifiableText.name);
             }
             */
 

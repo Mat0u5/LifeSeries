@@ -1,9 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.morph;
 
-import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShifting;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.interfaces.IMorph;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;
@@ -29,7 +27,7 @@ public class MorphComponent {
         this.morph = morph;
         if (morph == null) this.dummy = null;
 
-        if (Main.isLogicalSide()) {
+        if (LifeSeries.isLogicalSide()) {
             ServerPlayer serverPlayer = PlayerUtils.getPlayer(playerUUID);
             if (serverPlayer != null) {
                 if (morph != null) {

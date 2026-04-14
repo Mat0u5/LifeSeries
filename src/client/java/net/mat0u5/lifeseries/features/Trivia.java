@@ -1,17 +1,13 @@
 package net.mat0u5.lifeseries.features;
 
-import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.MainClient;
-import net.mat0u5.lifeseries.config.ClientConfig;
-import net.mat0u5.lifeseries.gui.EmptySleepScreen;
+import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.LifeSeriesClient;
 import net.mat0u5.lifeseries.gui.trivia.ConfirmQuizAnswerScreen;
 import net.mat0u5.lifeseries.gui.trivia.NewQuizScreen;
 import net.mat0u5.lifeseries.gui.trivia.QuizScreen;
-import net.mat0u5.lifeseries.gui.trivia.VotingScreen;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.network.packets.TriviaQuestionPayload;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.ClientSounds;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.client.Minecraft;
@@ -32,7 +28,7 @@ public class Trivia {
         difficulty = payload.difficulty();
         timestamp = payload.timestamp();
         secondsToComplete = payload.timeToComplete();
-        if (VersionControl.isDevVersion()) Main.LOGGER.info(TextUtils.formatString("[PACKET_CLIENT] Received trivia question: {{}, {}, {}}", question, difficulty, answers));
+        if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_CLIENT] Received trivia question: {{}, {}, {}}", question, difficulty, answers));
         openGui();
     }
 
@@ -57,9 +53,9 @@ public class Trivia {
     }
 
     public static void openGui() {
-        if (Main.modDisabled()) return;
+        if (LifeSeries.modDisabled()) return;
         if (question.isEmpty() || answers.isEmpty()) return;
-        if (MainClient.clientCurrentSeason == Seasons.NICE_LIFE) {
+        if (LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE) {
             Minecraft.getInstance().ls$setScreen(new NewQuizScreen());
         }
         else {

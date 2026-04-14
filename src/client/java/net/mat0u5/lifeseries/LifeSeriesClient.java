@@ -5,7 +5,6 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.mat0u5.lifeseries.config.ClientConfig;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.registries.ClientRegistries;
-import net.mat0u5.lifeseries.render.ClientRenderer;
 import net.mat0u5.lifeseries.render.TextHud;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
@@ -25,9 +24,9 @@ import java.util.*;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
  //?}
 
-public class MainClient implements ClientModInitializer, IClientHelper {
+public class LifeSeriesClient implements ClientModInitializer, IClientHelper {
 
-    public static Seasons clientCurrentSeason = Main.DEFAULT_SEASON;
+    public static Seasons clientCurrentSeason = LifeSeries.DEFAULT_SEASON;
     public static SessionStatus clientSessionStatus = SessionStatus.NOT_STARTED;
     public static List<Wildcards> clientActiveWildcards = new ArrayList<>();
     public static long TIME_DILATION_TIMESTAMP = 0;
@@ -85,15 +84,17 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     public static boolean isReplay = false;
     public static HandshakeStatus serverHandshake = HandshakeStatus.WAITING;
 
-    @Override
-    public void onInitializeClient() {
-        ClientRegistries.registerModStuff();
-        NetworkHandlerClient.registerClientReceiver();
-        NetworkHandlerClient.initializeSimplePacketReceivers();
-        Main.setClientHelper(this);
+    public static void onInitializeClient_() {
+        LifeSeries.setClientHelper(new LifeSeriesClient());
 
         clientConfig = new ClientConfig();
         reloadConfig();
+    }
+    @Override
+    public void onInitializeClient() {
+        NetworkHandlerClient.registerClientReceiver();
+        NetworkHandlerClient.initializeSimplePacketReceivers();
+        ClientRegistries.registerModStuff();
     }
 
     public static boolean isClientPlayer(UUID uuid) {

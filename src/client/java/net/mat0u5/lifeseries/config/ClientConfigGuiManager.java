@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.config;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.entries.*;
 import net.mat0u5.lifeseries.gui.config.ConfigScreen;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
@@ -31,7 +31,7 @@ public class ClientConfigGuiManager {
         ConfigScreen.Builder.CategoryBuilder categoryClient = builder.addCategory("Client");
         addConfig(categoryClient, ClientConfigNetwork.clientConfigObjects);
 
-        if (Main.DEBUG) {
+        if (LifeSeries.DEBUG) {
             addTestingCategory(builder);
         }
 
@@ -48,7 +48,7 @@ public class ClientConfigGuiManager {
             String groupInfo = configObject.getGroupInfo();
             ConfigEntry configEntry = handleConfigObject(configObject);
             if (configEntry == null) {
-                Main.LOGGER.error("Config entry is null");
+                LifeSeries.LOGGER.error("Config entry is null");
                 continue;
             }
             if (groupInfo.contains("[new]")) {
@@ -106,14 +106,14 @@ public class ClientConfigGuiManager {
             targetGroup.addChildEntry(configEntry);
         }
         else {
-            Main.LOGGER.error("Could not find parent group {} for entry {}", groupInfo, configEntry.getFieldName());
+            LifeSeries.LOGGER.error("Could not find parent group {} for entry {}", groupInfo, configEntry.getFieldName());
             category.addEntry(configEntry);
         }
     }
 
     private static GroupConfigEntry<?> createGroupEntry(ConfigEntry configEntry, String modifier) {
         if (!(configEntry instanceof IEntryGroupHeader)) {
-            Main.LOGGER.error("Warning: Group entry does not implement IEntryGroupHeader");
+            LifeSeries.LOGGER.error("Warning: Group entry does not implement IEntryGroupHeader");
             return null;
         }
 

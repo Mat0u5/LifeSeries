@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.seasons.session;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.*;
+import static net.mat0u5.lifeseries.LifeSeries.*;
 
 public class SessionTranscript {
     public static final List<String> messages = new ArrayList<>();
@@ -258,7 +258,7 @@ public class SessionTranscript {
     }
 
     public static void addDefaultMessages() {
-        messages.add(TextUtils.formatString("-----  Life Series Mod by Mat0u5  |  Mod version: {}  -----", Main.MOD_VERSION));
+        messages.add(TextUtils.formatString("-----  Life Series Mod by Mat0u5  |  Mod version: {}  -----", LifeSeries.MOD_VERSION));
         messages.add(TextUtils.formatString("-----  {}  |  Time and date: {}  -----", currentSeason.getSeason().name(), OtherUtils.getTimeAndDate()));
         messages.add("-----  Session Transcript  -----\n");
     }
@@ -290,7 +290,7 @@ public class SessionTranscript {
             Path filePath = Paths.get("transcripts", filename);
             Files.createDirectories(filePath.getParent());
             Files.write(filePath, content.getBytes());
-            Main.LOGGER.info("Session transcript file created: " + filePath);
+            LifeSeries.LOGGER.info("Session transcript file created: " + filePath);
         }catch(Exception ignored) {}
     }
 

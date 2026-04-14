@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.gui.other;
 
-import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.LifeSeriesClient;
 import net.mat0u5.lifeseries.gui.DefaultScreen;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
@@ -61,7 +61,7 @@ public class UpdateInfoScreen extends DefaultScreen {
         );
         dismissButton = this.addRenderableWidget(
                 Button.builder(dismissText, btn -> {
-                            MainClient.clientConfig.setProperty("ignore_update", String.valueOf(UpdateChecker.version));
+                            LifeSeriesClient.clientConfig.setProperty("ignore_update", String.valueOf(UpdateChecker.version));
                             this.onClose();
                         })
                         .pos(endX - textWidth/2-40, startY - 20)

@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Callback;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
@@ -18,7 +18,7 @@ public abstract class Wildcard {
         WildLife season = getSeason();
         if (season == null) return;
         active = true;
-        Main.LOGGER.info("[WildLife] Activated Wildcard: {}", getType());
+        LifeSeries.LOGGER.info("[WildLife] Activated Wildcard: {}", getType());
         SessionTranscript.activateWildcard(getType());
         DatapackIntegration.activateWildcard(getType());
     }
@@ -27,7 +27,7 @@ public abstract class Wildcard {
         WildLife season = getSeason();
         if (season == null) return;
         active = false;
-        Main.LOGGER.info("[WildLife] Dectivated Wildcard: {}", getType());
+        LifeSeries.LOGGER.info("[WildLife] Dectivated Wildcard: {}", getType());
         SessionTranscript.deactivateWildcard(getType());
         DatapackIntegration.deactivateWildcard(getType());
     }

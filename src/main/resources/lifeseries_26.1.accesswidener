@@ -1,0 +1,3 @@
+classTweaker	v2	official
+accessible	class	net/minecraft/server/MinecraftServer$ReloadableResources
+accessible method net/minecraft/client/particle/ParticleResources register (Lnet/minecraft/core/particles/ParticleType;Lnet/minecraft/client/particle/ParticleProvider;)V

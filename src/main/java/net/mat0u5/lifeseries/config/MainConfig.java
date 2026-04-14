@@ -1,12 +1,12 @@
 package net.mat0u5.lifeseries.config;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 
 import java.util.List;
 
 public class MainConfig extends ConfigManager {
     public MainConfig() {
-        super("./config/lifeseries/main", Main.MOD_ID+".properties");
+        super("./config/lifeseries/main", LifeSeries.MOD_ID+".properties");
     }
 
     @Override
@@ -15,6 +15,6 @@ public class MainConfig extends ConfigManager {
     }
     @Override
     public void instantiateProperties() {
-        getOrCreateProperty("currentSeries", Main.DEFAULT_SEASON.getId());
+        getOrCreateProperty("currentSeries", LifeSeries.DEFAULT_SEASON.getId());
     }
 }

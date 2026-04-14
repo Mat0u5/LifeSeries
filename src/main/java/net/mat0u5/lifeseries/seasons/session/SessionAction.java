@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.seasons.session;
 
 import net.mat0u5.lifeseries.utils.other.Time;
-import static net.mat0u5.lifeseries.Main.currentSession;
+import static net.mat0u5.lifeseries.LifeSeries.currentSession;
 
 public abstract class SessionAction {
     public boolean hasTriggered = false;

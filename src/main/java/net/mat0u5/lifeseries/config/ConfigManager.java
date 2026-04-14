@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.config;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
@@ -23,7 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.*;
+import static net.mat0u5.lifeseries.LifeSeries.*;
 
 import net.minecraft.world.scores.PlayerScoreEntry;
 
@@ -455,25 +455,25 @@ public abstract class ConfigManager extends DefaultConfigValues {
         File newFolder = new File("./config/lifeseries/main/");
         if (!newFolder.exists()) {
             if (!newFolder.mkdirs()) {
-                Main.LOGGER.error("Failed to create folder {}", newFolder);
+                LifeSeries.LOGGER.error("Failed to create folder {}", newFolder);
                 return;
             }
         }
 
-        File oldFile = new File("./config/"+ Main.MOD_ID+".properties");
+        File oldFile = new File("./config/"+ LifeSeries.MOD_ID+".properties");
         if (!oldFile.exists()) return;
-        File newFile = new File("./config/lifeseries/main/"+ Main.MOD_ID+".properties");
+        File newFile = new File("./config/lifeseries/main/"+ LifeSeries.MOD_ID+".properties");
         if (newFile.exists()) {
             if (oldFile.delete()) {
-                Main.LOGGER.info("Deleted old config file.");
+                LifeSeries.LOGGER.info("Deleted old config file.");
             }
         }
         else {
             try {
                 Files.move(oldFile.toPath(), newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                Main.LOGGER.info("Moved old config file.");
+                LifeSeries.LOGGER.info("Moved old config file.");
             } catch (IOException e) {
-                Main.LOGGER.info("Failed to move old config file.");
+                LifeSeries.LOGGER.info("Failed to move old config file.");
             }
         }
     }
@@ -483,7 +483,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
         File configDir = new File(folderPath);
         if (!configDir.exists()) {
             if (!configDir.mkdirs()) {
-                Main.LOGGER.error("Failed to create folder {}", configDir);
+                LifeSeries.LOGGER.error("Failed to create folder {}", configDir);
                 return;
             }
         }
@@ -492,7 +492,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
         if (!configFile.exists()) {
             try {
                 if (!configFile.createNewFile()) {
-                    Main.LOGGER.error("Failed to create file {}", configFile);
+                    LifeSeries.LOGGER.error("Failed to create file {}", configFile);
                     return;
                 }
                 try (OutputStream output = new FileOutputStream(configFile)) {

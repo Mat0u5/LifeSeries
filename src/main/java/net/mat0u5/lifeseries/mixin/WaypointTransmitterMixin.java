@@ -9,12 +9,10 @@ public class WaypointTransmitterMixin {
 }
 *///?} else {
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.waypoints.WaypointTransmitter;
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,14 +20,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.UUID;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 @Mixin(value = WaypointTransmitter.class, priority = 1)
 public interface WaypointTransmitterMixin {
 
     @Inject(method = "doesSourceIgnoreReceiver", at = @At("HEAD"), cancellable = true)
     private static void cannotReceive(LivingEntity sourceEntity, ServerPlayer receiver, CallbackInfoReturnable<Boolean> cir) {
-        if (Main.isClientOrDisabled()) return;
+        if (LifeSeries.isClientOrDisabled()) return;
         if (sourceEntity instanceof ServerPlayer source) {
             boolean showLocatorBar = currentSeason.LOCATOR_BAR;
             if (!showLocatorBar && currentSeason instanceof DoubleLife doubleLife && DoubleLife.SOULMATE_LOCATOR_BAR) {

@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.secretlife;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.config.StringListConfig;
 import net.mat0u5.lifeseries.config.StringListManager;
@@ -11,7 +11,6 @@ import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -29,7 +28,7 @@ import org.joml.Vector3f;
 
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.*;
+import static net.mat0u5.lifeseries.LifeSeries.*;
 //? if <= 1.20.3 {
 /*import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -738,7 +737,7 @@ public class TaskManager {
         if (secretKeeperBeingUsedFor > 500) {
             secretKeeperBeingUsed = false;
             secretKeeperBeingUsedFor = 0;
-            Main.LOGGER.error("Resetting Secret Keeper.");
+            LifeSeries.LOGGER.error("Resetting Secret Keeper.");
         }
     }
 }

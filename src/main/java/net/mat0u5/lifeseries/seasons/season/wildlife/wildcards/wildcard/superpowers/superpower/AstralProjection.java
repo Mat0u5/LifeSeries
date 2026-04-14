@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 /*import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
-import static net.mat0u5.lifeseries.Main.server;
+import static net.mat0u5.lifeseries.LifeSeries.server;
 *///?}
 //? if > 1.20.5 && <= 1.21.6
 //import net.minecraft.network.DisconnectionDetails;

@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.utils.world;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
@@ -68,14 +68,14 @@ public class ItemSpawner {
             //?}
 
             if (lootTable == null) {
-                if (!silent) Main.LOGGER.error("Loot table not found: " + lootTableId);
+                if (!silent) LifeSeries.LOGGER.error("Loot table not found: " + lootTableId);
                 return new ArrayList<>();
             }
 
             List<ItemStack> generatedLoot = lootTable.getRandomItems(parameters);
 
             if (generatedLoot == null || generatedLoot.isEmpty()) {
-                Main.LOGGER.error("No loot generated from table: " + lootTableId);
+                LifeSeries.LOGGER.error("No loot generated from table: " + lootTableId);
                 return new ArrayList<>();
             }
 

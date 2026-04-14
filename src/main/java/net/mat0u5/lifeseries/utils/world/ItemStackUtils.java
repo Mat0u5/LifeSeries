@@ -14,7 +14,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 
-import static net.mat0u5.lifeseries.Main.server;
+import static net.mat0u5.lifeseries.LifeSeries.server;
 //? if <= 1.21
 //import net.minecraft.world.item.EnchantedBookItem;
 //? if >= 1.21.2

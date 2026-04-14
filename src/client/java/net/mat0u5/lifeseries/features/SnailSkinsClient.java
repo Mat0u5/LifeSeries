@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.features;
 
 import com.mojang.blaze3d.platform.NativeImage;
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.Minecraft;
@@ -21,20 +21,20 @@ public class SnailSkinsClient {
 
     public static void handleSnailTexture(String skinName, byte[] textureData) {
         try {
-            Main.LOGGER.info(TextUtils.formatString("Received snail texture '{}'", skinName));
+            LifeSeries.LOGGER.info(TextUtils.formatString("Received snail texture '{}'", skinName));
             Minecraft client = Minecraft.getInstance();
 
             var textureId = IdentifierHelper.mod("dynamic/snailskin/" + skinName);
 
             NativeImage image = NativeImage.read(new ByteArrayInputStream(textureData));
             if (image.getWidth() == 32 && image.getHeight() == 32) {
-                Main.LOGGER.info("Converting old 32x32 snail texture to the new format.");
+                LifeSeries.LOGGER.info("Converting old 32x32 snail texture to the new format.");
                 image = convertOldSnailTexture(image);
-                if (Main.DEBUG) saveImageDebug(image,"config/lifeseries/wildlife/snailskins/convert", skinName);
+                if (LifeSeries.DEBUG) saveImageDebug(image,"config/lifeseries/wildlife/snailskins/convert", skinName);
             }
 
             if (!(image.getWidth() == 128 && image.getHeight() == 128)) {
-                Main.LOGGER.info("Snail texture has wrong dimensions, ignoring.");
+                LifeSeries.LOGGER.info("Snail texture has wrong dimensions, ignoring.");
                 return;
             }
 
@@ -45,7 +45,7 @@ public class SnailSkinsClient {
             //?}
             removeSnailTexture(skinName);
             client.getTextureManager().register(textureId, texture);
-            Main.LOGGER.info(TextUtils.formatString("Added snail texture '{}'", textureId));
+            LifeSeries.LOGGER.info(TextUtils.formatString("Added snail texture '{}'", textureId));
 
             snailTextures.put(skinName, textureId);
 
@@ -63,7 +63,7 @@ public class SnailSkinsClient {
         var textureId = snailTextures.remove(skinName);
         if (textureId != null) {
             Minecraft.getInstance().getTextureManager().release(textureId);
-            Main.LOGGER.info(TextUtils.formatString("Removed old snail texture '{}'", textureId));
+            LifeSeries.LOGGER.info(TextUtils.formatString("Removed old snail texture '{}'", textureId));
         }
     }
 

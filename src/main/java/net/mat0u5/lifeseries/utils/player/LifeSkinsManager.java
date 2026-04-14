@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.utils.player;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.network.packets.LifeSkinsTexturePayload;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.resources.ResourceHandler;
@@ -10,7 +10,6 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.scores.Team;
 
@@ -53,7 +52,7 @@ public class LifeSkinsManager {
         File rootFolder = new File(SKINS_BASE_DIR);
         createLifeSkinsFolder(rootFolder);
         if (!rootFolder.exists() || !rootFolder.isDirectory()) {
-            Main.LOGGER.error("[LifeSkins] failed to create main folder.");
+            LifeSeries.LOGGER.error("[LifeSkins] failed to create main folder.");
             return;
         }
         File[] playerDirs = rootFolder.listFiles();
@@ -123,7 +122,7 @@ public class LifeSkinsManager {
                 String skinId = lifeSkinPlayerName+"_"+ teamName;
                 String identifier = "dynamic/lifeskins/" + skinId.toLowerCase(Locale.ROOT);
                 if (!isValidIdentifier(identifier)) {
-                    Main.LOGGER.error(TextUtils.formatString("LifeSkins error: Non [a-z0-9/._-] character in path of location: {}:{}", "lifeseries", identifier));
+                    LifeSeries.LOGGER.error(TextUtils.formatString("LifeSkins error: Non [a-z0-9/._-] character in path of location: {}:{}", "lifeseries", identifier));
                     continue;
                 }
 
@@ -135,7 +134,7 @@ public class LifeSkinsManager {
                             (textureData[1] & 0xFF) != 0x50 ||
                             (textureData[2] & 0xFF) != 0x4E ||
                             (textureData[3] & 0xFF) != 0x47) {
-                        Main.LOGGER.error(
+                        LifeSeries.LOGGER.error(
                                 "LifeSkins error: Received invalid PNG for skin '{}' ({}). Length={}, first bytes={}",
                                 lifeSkinPlayerName, teamName, textureData == null ? "null" : textureData.length,
                                 textureData != null && textureData.length >= 4
@@ -148,7 +147,7 @@ public class LifeSkinsManager {
                     LifeSkinsTexturePayload packet = new LifeSkinsTexturePayload(lifeSkinPlayerName, teamName, slim, textureData);
                     for (ServerPlayer player : targets) {
                         if (VersionControl.isDevVersion()) {
-                            Main.LOGGER.info(TextUtils.formatString("Sending life skins '{}' at '{}' to {}", lifeSkinPlayerName, teamName, player));
+                            LifeSeries.LOGGER.info(TextUtils.formatString("Sending life skins '{}' at '{}' to {}", lifeSkinPlayerName, teamName, player));
                         }
                         ServerPlayNetworking.send(player, packet);
                     }

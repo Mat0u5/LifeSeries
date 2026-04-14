@@ -1,10 +1,9 @@
 package net.mat0u5.lifeseries.mixin;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.utils.interfaces.IHungerManager;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -13,7 +12,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
+//? if <= 1.21
+//import net.minecraft.world.entity.player.Player;
 
 @Mixin(value = FoodData.class, priority = 1)
 public class HungerManagerMixin implements IHungerManager {
@@ -57,13 +58,13 @@ public class HungerManagerMixin implements IHungerManager {
     @Inject(method = "tick", at = @At("HEAD"))
     //? if <= 1.21 {
     /*private void updateHead(Player player, CallbackInfo ci) {
-        if (Main.isClientOrDisabled()) return;
+        if (LifeSeries.isClientOrDisabled()) return;
         if (player instanceof ServerPlayer serverPlayer) {
             this.ls$player = serverPlayer;
         }
     *///?} else {
     private void updateHead(ServerPlayer player, CallbackInfo ci) {
-        if (Main.isClientOrDisabled()) return;
+        if (LifeSeries.isClientOrDisabled()) return;
         this.ls$player = player;
     //?}
         ls$prevFoodLevel = this.foodLevel;
@@ -76,7 +77,7 @@ public class HungerManagerMixin implements IHungerManager {
     *///?} else {
     private void updateTail(ServerPlayer player, CallbackInfo ci) {
     //?}
-        if (Main.isClientOrDisabled()) return;
+        if (LifeSeries.isClientOrDisabled()) return;
         if (ls$prevFoodLevel != foodLevel || ls$prevSaturationLevel != saturationLevel) {
             ls$emitUpdate();
         }
@@ -106,7 +107,7 @@ public class HungerManagerMixin implements IHungerManager {
 
     @Unique
     private void ls$emitUpdate() {
-        if (Main.isClientOrDisabled() || ls$player == null) return;
+        if (LifeSeries.isClientOrDisabled() || ls$player == null) return;
         if (currentSeason instanceof DoubleLife doubleLife) {
             doubleLife.updateFoodFrom(ls$player);
         }

@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.utils.player;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -11,7 +11,7 @@ import net.minecraft.world.scores.Scoreboard;
 
 import java.util.Collection;
 
-import static net.mat0u5.lifeseries.Main.server;
+import static net.mat0u5.lifeseries.LifeSeries.server;
 
 public class TeamUtils {
 
@@ -53,7 +53,7 @@ public class TeamUtils {
 
         PlayerTeam team = scoreboard.getPlayersTeam(playerName);
         if (team == null) {
-            Main.LOGGER.warn(TextUtils.formatString("Player {} is not part of any team!", playerName));
+            LifeSeries.LOGGER.warn(TextUtils.formatString("Player {} is not part of any team!", playerName));
             return false;
         }
 

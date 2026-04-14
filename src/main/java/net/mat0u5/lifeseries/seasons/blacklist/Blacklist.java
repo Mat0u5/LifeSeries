@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.seasons.blacklist;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
@@ -31,8 +31,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.seasonConfig;
-import static net.mat0u5.lifeseries.Main.server;
+import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
+import static net.mat0u5.lifeseries.LifeSeries.server;
 //? if <= 1.20.3 {
 /*import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
@@ -417,7 +417,7 @@ public class Blacklist {
     }
 
     public void reloadBlacklist() {
-        if (Main.server == null) return;
+        if (LifeSeries.server == null) return;
 
         CREATIVE_IGNORE_BLACKLIST = seasonConfig.CREATIVE_IGNORE_BLACKLIST.get();
 
@@ -468,7 +468,7 @@ public class Blacklist {
     }
 
     public void onInventoryUpdated(ServerPlayer player) {
-        if (Main.server == null) return;
+        if (LifeSeries.server == null) return;
         Inventory inventory = player.getInventory();
         if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST) return;
         for (int i = 0; i < inventory.getContainerSize(); i++) {

@@ -1,12 +1,12 @@
 package net.mat0u5.lifeseries.config;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 
 import java.util.List;
 
-import static net.mat0u5.lifeseries.Main.seasonConfig;
+import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
 
 public class ConfigFileEntry<T> {
     public final String key;
@@ -82,7 +82,7 @@ public class ConfigFileEntry<T> {
         }
         }catch(Exception e) {}
 
-        Main.LOGGER.error(TextUtils.formatString("Config value {} was null, returning default value - {}", key, defaultValue));
+        LifeSeries.LOGGER.error(TextUtils.formatString("Config value {} was null, returning default value - {}", key, defaultValue));
         return defaultValue;
     }
 }

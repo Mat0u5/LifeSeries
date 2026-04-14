@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.mixin.client;
 
-import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.LifeSeriesClient;
 import net.mat0u5.lifeseries.utils.interfaces.IClientEntity;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -20,15 +20,15 @@ public class EntityMixin implements IClientEntity {
 
     @Inject(method = "getAirSupply", at = @At("RETURN"), cancellable = true)
     public void getAir(CallbackInfoReturnable<Integer> cir) {
-        if (Main.isLogicalSide() || Main.modDisabled()) return;
-        if (System.currentTimeMillis() - MainClient.snailAirTimestamp > 5000) return;
-        if (MainClient.snailAir >= 300) return;
+        if (LifeSeries.isLogicalSide() || LifeSeries.modDisabled()) return;
+        if (System.currentTimeMillis() - LifeSeriesClient.snailAirTimestamp > 5000) return;
+        if (LifeSeriesClient.snailAir >= 300) return;
 
         Entity entity = (Entity) (Object) this;
         if (entity instanceof Player player && !player.hasEffect(MobEffects.WATER_BREATHING)) {
             int initialAir = cir.getReturnValue();
-            if (MainClient.snailAir < initialAir) {
-                cir.setReturnValue(MainClient.snailAir);
+            if (LifeSeriesClient.snailAir < initialAir) {
+                cir.setReturnValue(LifeSeriesClient.snailAir);
             }
         }
     }

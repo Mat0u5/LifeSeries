@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -33,7 +33,7 @@ public class LifeSkinsCommand extends Command {
     }
 
     public List<String> getAdminCommands() {
-        if (Main.DEBUG) return List.of("lifeskins");
+        if (LifeSeries.DEBUG) return List.of("lifeskins");
         return List.of();
     }
 

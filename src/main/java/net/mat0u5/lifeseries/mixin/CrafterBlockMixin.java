@@ -25,6 +25,7 @@ import java.util.Optional;
 import net.minecraft.world.level.Level;
 *///?} else {
 import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
 //?}
 
@@ -35,9 +36,12 @@ public class CrafterBlockMixin {
     /*private static void cancelResult(Level level, CraftingContainer input, CallbackInfoReturnable<Optional<RecipeHolder<CraftingRecipe>>> cir) {
         for (ItemStack item : input.getItems()) {
     *///?} else {
-    private static void cancelResult(ServerLevel level, CraftingInput input, CallbackInfoReturnable<Optional<RecipeHolder<CraftingRecipe>>> cir) {
+    private static void cancelResult(Level level, CraftingInput input, CallbackInfoReturnable<Optional<RecipeHolder<CraftingRecipe>>> cir) {
         for (ItemStack item : input.items()) {
-    //?}
+    //?} else {
+    /*private static void cancelResult(ServerLevel level, CraftingInput input, CallbackInfoReturnable<Optional<RecipeHolder<CraftingRecipe>>> cir) {
+        for (ItemStack item : input.items()) {
+    *///?}
             if (ItemStackUtils.hasCustomComponentEntry(item, "NoCrafting") ||
                     ItemStackUtils.hasCustomComponentEntry(item, "NoModifications")) {
                 cir.setReturnValue(Optional.empty());

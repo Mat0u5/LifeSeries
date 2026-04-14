@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.utils.player;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.mixin.PlayerListS2CPacketAccessor;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
@@ -18,7 +18,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.RemoteChatSession;
 import net.minecraft.network.protocol.game.*;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -37,8 +36,8 @@ import net.minecraft.world.phys.Vec3;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
-import static net.mat0u5.lifeseries.Main.server;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.server;
 
 //? if <= 1.21
 //import net.minecraft.world.entity.RelativeMovement;
@@ -445,7 +444,7 @@ public class PlayerUtils {
         for (ServerPlayer player : PlayerUtils.getAdminPlayers()) {
             player.ls$message(message);
         }
-        Main.LOGGER.info(message.getString());
+        LifeSeries.LOGGER.info(message.getString());
     }
 
     public static void teleport(ServerPlayer player, BlockPos pos) {

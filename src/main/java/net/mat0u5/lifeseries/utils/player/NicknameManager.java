@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.utils.player;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static net.mat0u5.lifeseries.Main.server;
+import static net.mat0u5.lifeseries.LifeSeries.server;
 
 public class NicknameManager {
 
@@ -79,7 +79,7 @@ public class NicknameManager {
     public static void loadNicknameData(ServerPlayer player) {
         UUID uuid = player.getUUID();
         if (hasNickname(uuid)) {
-            Main.LOGGER.info("Loaded nickname for {}: {}", player.getName().getString(), getNickname(uuid));
+            LifeSeries.LOGGER.info("Loaded nickname for {}: {}", player.getName().getString(), getNickname(uuid));
         }
     }
 }

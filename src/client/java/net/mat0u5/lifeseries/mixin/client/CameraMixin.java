@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.minecraft.client.Camera;
@@ -31,7 +31,7 @@ public class CameraMixin {
     @ModifyArg(method = "alignWithEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;getMaxZoom(F)F"), index = 0)
     private float modifyEntityScale(float originalDistance) {
     //?}
-        if (!(entity instanceof Player player) || Main.modFullyDisabled()) return originalDistance;
+        if (!(entity instanceof Player player) || LifeSeries.modFullyDisabled()) return originalDistance;
         MorphComponent morphComponent = MorphManager.getOrCreateComponent(player);
         if (morphComponent.isMorphed()) {
             LivingEntity dummy = morphComponent.getDummy();

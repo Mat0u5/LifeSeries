@@ -19,7 +19,7 @@ import net.minecraft.resources.Identifier;
 
 import net.minecraft.world.entity.animal.golem.SnowGolem;
 
-import static net.mat0u5.lifeseries.Main.livesManager;
+import static net.mat0u5.lifeseries.LifeSeries.livesManager;
 
 public class AngrySnowman extends SnowGolem {
     public static final SoundEvent HURT_SOUND = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_snowman_hit"));

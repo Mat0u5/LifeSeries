@@ -2,15 +2,17 @@ package net.mat0u5.lifeseries.utils.player;
 
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.scores.*;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 
 import java.util.Collection;
 import java.util.Collections;
 
-import static net.mat0u5.lifeseries.Main.livesManager;
-import static net.mat0u5.lifeseries.Main.server;
+import static net.mat0u5.lifeseries.LifeSeries.livesManager;
+import static net.mat0u5.lifeseries.LifeSeries.server;
+
+//? if <= 1.20.2
+//import net.minecraft.server.level.ServerPlayer;
 
 public class ScoreboardUtils {
 

@@ -1,13 +1,13 @@
 package net.mat0u5.lifeseries.utils;
 
-import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.LifeSeriesClient;
 import net.mat0u5.lifeseries.config.ClientConfig;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.repository.Pack;
 
-import static net.mat0u5.lifeseries.MainClient.clientConfig;
+import static net.mat0u5.lifeseries.LifeSeriesClient.clientConfig;
 
 public class ClientResourcePacks {
     private static final String MINIMAL_ARMOR_RESOURCEPACK = "lifeseries:minimal_armor";
@@ -15,7 +15,7 @@ public class ClientResourcePacks {
 
     public static void checkClientPacks() {
         handleClientResourcepack(MINIMAL_ARMOR_RESOURCEPACK, ClientConfig.MINIMAL_ARMOR.get(clientConfig));
-        handleClientResourcepack(NICELIFE_ARMOR_RESOURCEPACK, (MainClient.clientCurrentSeason == Seasons.NICE_LIFE && MainClient.NICELIFE_SNOWY_NETHER));
+        handleClientResourcepack(NICELIFE_ARMOR_RESOURCEPACK, (LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE && LifeSeriesClient.NICELIFE_SNOWY_NETHER));
     }
 
     public static void handleClientResourcepack(String id, boolean action) {
@@ -37,14 +37,14 @@ public class ClientResourcePacks {
             for (Pack profile : client.getResourcePackRepository().getAvailablePacks()) {
                 if (profile.getId().equals(id)) {
                     client.getResourcePackRepository().addPack(id);
-                    Main.LOGGER.info("Enabling resourcepack " + id);
+                    LifeSeries.LOGGER.info("Enabling resourcepack " + id);
                     client.reloadResourcePacks();
                     return;
                 }
             }
         }
         if (forceReload) {
-            Main.LOGGER.info("Force enabling resourcepack " + id);
+            LifeSeries.LOGGER.info("Force enabling resourcepack " + id);
             client.reloadResourcePacks();
         }
     }
@@ -57,7 +57,7 @@ public class ClientResourcePacks {
         for (Pack profile : client.getResourcePackRepository().getAvailablePacks()) {
             if (profile.getId().equals(id)) {
                 client.getResourcePackRepository().removePack(id);
-                Main.LOGGER.info("Disabling resourcepack " + id);
+                LifeSeries.LOGGER.info("Disabling resourcepack " + id);
                 client.reloadResourcePacks();
                 return;
             }

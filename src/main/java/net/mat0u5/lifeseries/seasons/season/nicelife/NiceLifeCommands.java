@@ -17,7 +17,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 public class NiceLifeCommands extends Command {
     @Override

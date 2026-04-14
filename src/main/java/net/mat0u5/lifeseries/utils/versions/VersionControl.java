@@ -1,13 +1,13 @@
 package net.mat0u5.lifeseries.utils.versions;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 
-import static net.mat0u5.lifeseries.Main.MOD_VERSION;
+import static net.mat0u5.lifeseries.LifeSeries.MOD_VERSION;
 
 public class VersionControl {
     public static boolean isDevVersion() {
-        return MOD_VERSION.contains("dev") || MOD_VERSION.contains("pre") || Main.DEBUG;
+        return MOD_VERSION.contains("dev") || MOD_VERSION.contains("pre") || LifeSeries.DEBUG;
     }
 
     public static String strippedVersionName() {
@@ -43,7 +43,7 @@ public class VersionControl {
                 patch = parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
                 build = parts.length > 3 ? Integer.parseInt(parts[3]) : 0;
             }catch(Exception e) {
-                Main.LOGGER.error(TextUtils.formatString("Failed to parse mod version to int: {} (formatted to {})", originalVersion, string));
+                LifeSeries.LOGGER.error(TextUtils.formatString("Failed to parse mod version to int: {} (formatted to {})", originalVersion, string));
             }
 
             if (originalVersion.contains("-pre")) {
@@ -131,13 +131,13 @@ public class VersionControl {
 
     public static String clientCompatibilityMin() {
         // This is the version that the SERVER needs to have for the current client.
-        if (Main.ISOLATED_ENVIRONMENT) return MOD_VERSION;
+        if (LifeSeries.ISOLATED_ENVIRONMENT) return MOD_VERSION;
         return "dev-1.5.3.26";
     }
 
     public static String serverCompatibilityMin() {
         // This is the version that the CLIENT needs to have for the current server.
-        if (Main.ISOLATED_ENVIRONMENT) return MOD_VERSION;
+        if (LifeSeries.ISOLATED_ENVIRONMENT) return MOD_VERSION;
         return "dev-1.5.3.26";
     }
 }

@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLife;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -11,7 +11,7 @@ import net.minecraft.world.level.chunk.ProtoChunk;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 //? if < 1.20.5 {
 /*import net.minecraft.server.level.WorldGenRegion;
@@ -32,12 +32,12 @@ public abstract class ChunkStatusTasksMixin {
     //? if < 1.20.5 {
     /*@Inject(method = "generateBorderTicks", at = @At(value = "RETURN"))
     private static void snowNether(WorldGenRegion worldGenRegion, ChunkAccess chunkAccess, CallbackInfo ci) {
-        if (Main.isClientOrDisabled()) return;
+        if (LifeSeries.isClientOrDisabled()) return;
         ServerLevel level = worldGenRegion.getLevel();
     *///?} else if <= 1.20.5 {
     /*@ModifyVariable(method = "generateFull", at = @At("HEAD"), index = 5, argsOnly = true)
     private static ChunkAccess snowNether(ChunkAccess chunkAccess, WorldGenContext context) {
-        if (Main.isClientOrDisabled()) return chunkAccess;
+        if (LifeSeries.isClientOrDisabled()) return chunkAccess;
         ServerLevel level = context.level();
         if (chunkAccess instanceof ImposterProtoChunk) {
             return chunkAccess;
@@ -45,14 +45,14 @@ public abstract class ChunkStatusTasksMixin {
     *///?} else {
     @ModifyVariable(method = "full", at = @At("HEAD"), index = 3, argsOnly = true)
     private static ChunkAccess snowNether(ChunkAccess chunkAccess, WorldGenContext context) {
-        if (Main.isClientOrDisabled()) return chunkAccess;
+        if (LifeSeries.isClientOrDisabled()) return chunkAccess;
         ServerLevel level = context.level();
         if (chunkAccess instanceof ImposterProtoChunk) {
             return chunkAccess;
         }
     //?}
         if (chunkAccess instanceof ProtoChunk) {
-            if (NiceLife.SNOWY_NETHER && level.dimension() == Level.NETHER && Main.isLogicalNonDisabled() && currentSeason instanceof NiceLife niceLife) {
+            if (NiceLife.SNOWY_NETHER && level.dimension() == Level.NETHER && LifeSeries.isLogicalNonDisabled() && currentSeason instanceof NiceLife niceLife) {
                 int minY = chunkAccess.getMinY();
                 int maxY = chunkAccess.getMaxY();
                 for (int x = 0; x < 16; x++) {

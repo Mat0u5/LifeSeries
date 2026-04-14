@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.network.packets.SnailTexturePacket;
 import net.mat0u5.lifeseries.resources.ResourceHandler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -31,7 +31,7 @@ public class SnailSkins {
                 SnailTexturePacket packet = new SnailTexturePacket(name, textureData);
                 for (ServerPlayer player : players) {
                     if (VersionControl.isDevVersion()) {
-                        Main.LOGGER.info(TextUtils.formatString("Sending snail texture '{}' to {}", name, player));
+                        LifeSeries.LOGGER.info(TextUtils.formatString("Sending snail texture '{}' to {}", name, player));
                     }
                     ServerPlayNetworking.send(player, packet);
                 }
@@ -77,7 +77,7 @@ public class SnailSkins {
         File folder = new File("./config/lifeseries/wildlife/snailskins/");
         if (!folder.exists()) {
             if (!folder.mkdirs()) {
-                Main.LOGGER.error("Failed to create folder {}", folder);
+                LifeSeries.LOGGER.error("Failed to create folder {}", folder);
                 return;
             }
         }

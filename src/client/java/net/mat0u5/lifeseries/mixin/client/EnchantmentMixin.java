@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.mixin.client;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.LifeSeriesClient;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
@@ -17,7 +17,7 @@ public class EnchantmentMixin {
         Minecraft minecraft = Minecraft.getInstance();
         Enchantment enchantment = (Enchantment) (Object) this;
         if (minecraft.level == null || enchantment == null) return original;
-        if (MainClient.lvl1ClampedEnchants == null || MainClient.lvl1ClampedEnchants.isEmpty()) return original;
+        if (LifeSeriesClient.lvl1ClampedEnchants == null || LifeSeriesClient.lvl1ClampedEnchants.isEmpty()) return original;
         try {
             Registry<Enchantment> enchantmentRegistry = Minecraft.getInstance().level.registryAccess()
                     //? if <=1.21 {
@@ -30,7 +30,7 @@ public class EnchantmentMixin {
             *///?} else {
             String name = enchant.identifier().toString();
             //?}
-            if (MainClient.lvl1ClampedEnchants.contains(name)) {
+            if (LifeSeriesClient.lvl1ClampedEnchants.contains(name)) {
                 return 1;
             }
         }catch(Exception ignored) {}

@@ -4,7 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.commands.CommandBuildContext;
@@ -30,7 +30,7 @@ public abstract class Command {
     }
 
     public boolean checkBanned(CommandSourceStack source) {
-        if (Main.modDisabled()) {
+        if (LifeSeries.modDisabled()) {
             OtherUtils.sendCommandFailure(source, ModifiableText.MOD_DISABLED_ERROR.get());
             return true;
         }

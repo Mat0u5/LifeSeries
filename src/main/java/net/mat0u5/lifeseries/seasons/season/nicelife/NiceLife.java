@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.nicelife;
 
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
 import net.mat0u5.lifeseries.config.ConfigManager;
@@ -38,7 +38,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.gamerules.GameRules;
 
-import static net.mat0u5.lifeseries.Main.*;
+import static net.mat0u5.lifeseries.LifeSeries.*;
 
 //? if >= 26.1 {
 import net.minecraft.world.clock.WorldClocks;
@@ -259,7 +259,7 @@ public class NiceLife extends Season {
     }
 
     public static boolean areEnoughSleeping(int percentage) {
-        List<ServerPlayer> players = Main.livesManager.getAlivePlayers();
+        List<ServerPlayer> players = LifeSeries.livesManager.getAlivePlayers();
         int allPlayers = 0;
         int sleepingPlayers = 0;
         for (ServerPlayer player : players) {

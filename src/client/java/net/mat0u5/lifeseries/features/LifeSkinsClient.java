@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.features;
 
 import com.mojang.blaze3d.platform.NativeImage;
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Tuple;
@@ -48,7 +48,7 @@ public class LifeSkinsClient {
             //?}
             removeTexture(skinId);
             client.getTextureManager().register(textureId, texture);
-            Main.LOGGER.info(TextUtils.formatString("Updated life skins texture '{}'", textureId));
+            LifeSeries.LOGGER.info(TextUtils.formatString("Updated life skins texture '{}'", textureId));
 
             //? if <= 1.20 {
             /*lifeSkinsTextures.put(skinId, textureId);
@@ -63,7 +63,7 @@ public class LifeSkinsClient {
             lifeSkinsTextures.put(skinId, new Tuple<>(textureId, skin));
             //?}
         } catch (IOException e) {
-            Main.LOGGER.error("Error while processing life skins texture '"+skinId+"'");
+            LifeSeries.LOGGER.error("Error while processing life skins texture '"+skinId+"'");
             e.printStackTrace();
         }
     }

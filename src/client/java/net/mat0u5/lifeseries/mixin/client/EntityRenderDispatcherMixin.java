@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.mixin.client;
 
 //? if <= 1.20.3 {
 /*import com.mojang.blaze3d.vertex.PoseStack;
-import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class EntityRenderDispatcherMixin {
     @Inject(method = "renderShadow", at = @At("HEAD"), cancellable = true)
     private static void stopShadow(PoseStack poseStack, MultiBufferSource multiBufferSource, Entity entity, float f, float g, LevelReader levelReader, float h, CallbackInfo ci){
-        if (Main.modFullyDisabled()) return;
+        if (LifeSeries.modFullyDisabled()) return;
         if (entity instanceof Player player) {
             MorphComponent morphComponent = MorphManager.getComponent(player);
             if (morphComponent != null && morphComponent.isMorphed()) {
@@ -37,7 +37,7 @@ public class EntityRenderDispatcherMixin {
     //Empty class to avoid mixin errors
 }
 *///?} else {
-import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.LifeSeriesClient;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -55,8 +55,8 @@ public class EntityRenderDispatcherMixin {
     @Inject(method = "shouldRender", at = @At("HEAD"), cancellable = true)
     public <E extends Entity> void render(E entity, Frustum frustum, double x, double y, double z, CallbackInfoReturnable<Boolean> cir) {
         if (entity instanceof Player playerEntity) {
-            if (MainClient.invisiblePlayers.containsKey(playerEntity.getUUID())) {
-                long time = MainClient.invisiblePlayers.get(playerEntity.getUUID());
+            if (LifeSeriesClient.invisiblePlayers.containsKey(playerEntity.getUUID())) {
+                long time = LifeSeriesClient.invisiblePlayers.get(playerEntity.getUUID());
                 if (time > System.currentTimeMillis() || time == -1) {
                     cir.setReturnValue(false);
                 }

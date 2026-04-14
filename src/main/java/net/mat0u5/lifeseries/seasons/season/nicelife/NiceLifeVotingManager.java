@@ -19,8 +19,8 @@ import net.minecraft.sounds.SoundEvents;
 
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
-import static net.mat0u5.lifeseries.Main.livesManager;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.livesManager;
 
 public class NiceLifeVotingManager {
     public static Random rnd = new Random();
