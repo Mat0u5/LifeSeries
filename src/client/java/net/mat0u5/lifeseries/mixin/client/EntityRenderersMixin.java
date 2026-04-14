@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(EntityRenderers.class)
 public class EntityRenderersMixin {
     @Inject(method = "<clinit>", at = @At("TAIL"))
-    private static void lifeseries$registerRenderers(CallbackInfo ci) {
+    private static void registerRenderers(CallbackInfo ci) {
         EntityRenderers.register(MobRegistry.SNAIL, SnailRenderer::new);
         EntityRenderers.register(MobRegistry.TRIVIA_BOT, TriviaBotRenderer::new);
         EntityRenderers.register(MobRegistry.ANGRY_SNOWMAN, AngrySnowmanRenderer::new);

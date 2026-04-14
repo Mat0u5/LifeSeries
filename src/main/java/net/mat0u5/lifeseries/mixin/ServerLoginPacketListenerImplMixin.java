@@ -27,7 +27,7 @@ public abstract class ServerLoginPacketListenerImplMixin {
     @Unique private GameProfile ls$pendingProfile = null;
 
     @Inject(method = "finishLoginAndWaitForClient", at = @At("HEAD"), cancellable = true)
-    private void lifeseries$interceptFinish(GameProfile profile, CallbackInfo ci) {
+    private void interceptFinish(GameProfile profile, CallbackInfo ci) {
         if (ls$queryAnswered) return;
 
         if (!ls$querySent) {
@@ -46,7 +46,7 @@ public abstract class ServerLoginPacketListenerImplMixin {
     }
 
     @Inject(method = "handleCustomQueryPacket", at = @At("HEAD"), cancellable = true)
-    private void lifeseries$onHandleAnswer(ServerboundCustomQueryAnswerPacket packet, CallbackInfo ci) {
+    private void onHandleAnswer(ServerboundCustomQueryAnswerPacket packet, CallbackInfo ci) {
         if (packet.transactionId() != PRELOGIN_TRANSACTION_ID) return;
 
         boolean understood = packet.payload() != null;
@@ -54,7 +54,7 @@ public abstract class ServerLoginPacketListenerImplMixin {
 
         ServerLoginPacketListenerImpl self = (ServerLoginPacketListenerImpl)(Object)this;
         NetworkHandlerServer.handlePreLogin(understood, self);
-        lifeseries$finishLogin(ls$pendingProfile);
+        finishLogin(ls$pendingProfile);
         ci.cancel();
     }
 
@@ -62,7 +62,7 @@ public abstract class ServerLoginPacketListenerImplMixin {
     private void finishLoginAndWaitForClient(GameProfile profile) {}
 
     @Unique
-    private void lifeseries$finishLogin(GameProfile profile) {
+    private void finishLogin(GameProfile profile) {
         finishLoginAndWaitForClient(profile);
     }
 }

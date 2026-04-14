@@ -16,7 +16,7 @@ import net.minecraft.client.particle.ParticleResources;
 //?}
 public class ParticleResourcesMixin {
     @Inject(method = "registerProviders", at = @At("TAIL"))
-    private void lifeseries$registerParticles(CallbackInfo ci) {
+    private void registerParticles(CallbackInfo ci) {
         //? if <= 1.21.6 {
         /*ParticleEngine self = (ParticleEngine)(Object)this;
          *///?} else {

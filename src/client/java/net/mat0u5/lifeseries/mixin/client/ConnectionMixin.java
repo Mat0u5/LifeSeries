@@ -15,7 +15,11 @@ public class ConnectionMixin {
         ClientEvents.onClientDisconnect();
     }
 
+    //? if <= 1.20.5 {
+    /*@Inject(method = "handleDisconnection", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/PacketListener;onDisconnect(Lnet/minecraft/network/chat/Component;)V"))
+    *///?} else {
     @Inject(method = "handleDisconnection", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/PacketListener;onDisconnect(Lnet/minecraft/network/DisconnectionDetails;)V"))
+    //?}
     private void disconnectAddon(CallbackInfo ci) {
         ClientEvents.onClientDisconnect();
     }

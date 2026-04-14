@@ -10,6 +10,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Screen.class)
 public class ScreenMixin {
+    //? if <= 1.21.9 {
+    /*@Inject(method = "init(Lnet/minecraft/client/Minecraft;II)V", at = @At("TAIL"))
+    private void afterInitScreen(Minecraft minecraft, int width, int height, CallbackInfo ci) {
+        ClientEvents.onScreenOpen(Minecraft.getInstance(), (Screen) (Object) this, width, height);
+    }
+    @Inject(method = "resize", at = @At("TAIL"))
+    private void afterResizeScreen(Minecraft minecraft, int width, int height, CallbackInfo ci) {
+        ClientEvents.onScreenOpen(Minecraft.getInstance(), (Screen) (Object) this, width, height);
+    }
+    *///?} else {
     @Inject(method = "init(II)V", at = @At("TAIL"))
     private void afterInitScreen(int width, int height, CallbackInfo ci) {
         ClientEvents.onScreenOpen(Minecraft.getInstance(), (Screen) (Object) this, width, height);
@@ -18,4 +28,5 @@ public class ScreenMixin {
     private void afterResizeScreen(int width, int height, CallbackInfo ci) {
         ClientEvents.onScreenOpen(Minecraft.getInstance(), (Screen) (Object) this, width, height);
     }
+    //?}
 }

@@ -18,7 +18,6 @@
     "ClientLevelMixin",
     "EntityBoundSoundInstanceAccessor",
     "EntityBoundSoundInstanceMixin",
-    "EntityModelSetMixin",
     "EntityRenderDispatcherMixin",
     "EntityRendererMixin",
     "EntityRenderersMixin",
@@ -29,6 +28,8 @@
     "InBedChatScreenAccessor",
     "InBedChatScreenMixin",
     "ItemInHandLayerMixin",
+    "KeyMappingAccessor",
+    "LayerDefinitionsMixin",
     "LevelMixin",
     "LevelRendererMixin",
     "LivingEntityRendererMixin",
@@ -63,6 +64,6 @@
     "MinecraftServerMixin",
     "PlayerMixin",
     "ScreenMixin",
-    "WorldOpenFlowsMixin",
+    "WorldOpenFlowsMixin"
   ]
 }
