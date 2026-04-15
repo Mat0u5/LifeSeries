@@ -1,17 +1,15 @@
 package net.mat0u5.lifeseries.network.packets;
 //? if <= 1.20.3 {
-/*import net.fabricmc.fabric.api.networking.v1.FabricPacket;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+/*import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 
-public record IntPayload(String name, int number) implements FabricPacket {
+public record IntPayload(String name, int number) implements CustomPacketPayload {
 
     public static final Identifier ID = IdentifierHelper.mod("int");
-    public static final PacketType<IntPayload> TYPE = PacketType.create(ID, IntPayload::read);
 
+    @Override
     public void write(FriendlyByteBuf buf) {
         buf.writeUtf(name);
         buf.writeInt(number);
@@ -23,15 +21,9 @@ public record IntPayload(String name, int number) implements FabricPacket {
         return new IntPayload(name, number);
     }
 
-    public FriendlyByteBuf toFriendlyByteBuf() {
-        FriendlyByteBuf buf = PacketByteBufs.create();
-        write(buf);
-        return buf;
-    }
-
     @Override
-    public PacketType<?> getType() {
-        return TYPE;
+    public Identifier id() {
+        return ID;
     }
 }
 *///?} else {

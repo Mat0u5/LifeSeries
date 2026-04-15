@@ -1,21 +1,19 @@
 package net.mat0u5.lifeseries.network.packets;
 
 //? if <= 1.20.3 {
-/*import net.fabricmc.fabric.api.networking.v1.FabricPacket;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+/*import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public record VoteScreenPayload(String name, boolean requiresSleep, boolean closesWithEsc, boolean showTimer, List<String> players) implements FabricPacket {
+public record VoteScreenPayload(String name, boolean requiresSleep, boolean closesWithEsc, boolean showTimer, List<String> players) implements CustomPacketPayload {
 
     public static final Identifier ID = IdentifierHelper.mod("votescreen");
-    public static final PacketType<VoteScreenPayload> TYPE = PacketType.create(ID, VoteScreenPayload::read);
 
+    @Override
     public void write(FriendlyByteBuf buf) {
         buf.writeUtf(name);
         buf.writeBoolean(requiresSleep);
@@ -40,15 +38,9 @@ public record VoteScreenPayload(String name, boolean requiresSleep, boolean clos
         return new VoteScreenPayload(name, requiresSleep, closesWithEsc, showTimer, players);
     }
 
-    public FriendlyByteBuf toFriendlyByteBuf() {
-        FriendlyByteBuf buf = PacketByteBufs.create();
-        write(buf);
-        return buf;
-    }
-
     @Override
-    public PacketType<?> getType() {
-        return TYPE;
+    public Identifier id() {
+        return ID;
     }
 }
 *///?} else {

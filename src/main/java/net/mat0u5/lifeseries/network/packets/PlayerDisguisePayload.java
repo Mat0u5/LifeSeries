@@ -1,17 +1,15 @@
 package net.mat0u5.lifeseries.network.packets;
 //? if <= 1.20.3 {
-/*import net.fabricmc.fabric.api.networking.v1.FabricPacket;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+/*import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 
-public record PlayerDisguisePayload(String hiddenUUID, String hiddenName, String shownUUID, String shownName) implements FabricPacket {
+public record PlayerDisguisePayload(String hiddenUUID, String hiddenName, String shownUUID, String shownName) implements CustomPacketPayload {
 
     public static final Identifier ID = IdentifierHelper.mod("player_disguise");
-    public static final PacketType<PlayerDisguisePayload> TYPE = PacketType.create(ID, PlayerDisguisePayload::read);
 
+    @Override
     public void write(FriendlyByteBuf buf) {
         buf.writeUtf(hiddenUUID);
         buf.writeUtf(hiddenName);
@@ -27,15 +25,9 @@ public record PlayerDisguisePayload(String hiddenUUID, String hiddenName, String
         return new PlayerDisguisePayload(hiddenUUID, hiddenName, shownUUID, shownName);
     }
 
-    public FriendlyByteBuf toFriendlyByteBuf() {
-        FriendlyByteBuf buf = PacketByteBufs.create();
-        write(buf);
-        return buf;
-    }
-
     @Override
-    public PacketType<?> getType() {
-        return TYPE;
+    public Identifier id() {
+        return ID;
     }
 }
 *///?} else {

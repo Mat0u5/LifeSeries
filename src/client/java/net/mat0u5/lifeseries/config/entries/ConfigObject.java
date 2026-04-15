@@ -16,7 +16,7 @@ public class ConfigObject {
     public ConfigObject(ConfigPayload payload) {
         configType = ConfigTypes.getFromString(payload.configType());
         index = payload.index();
-        id = payload.id();
+        id = payload.configId();
         name = payload.name();
         description = payload.description();
         args = payload.args();

@@ -19,6 +19,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 //? if >= 1.21.6
 import io.netty.channel.ChannelFutureListener;
 
+//? if <= 1.20.3 {
+/*import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
+*///?}
+
 //? if <= 1.20 {
 /*import net.minecraft.server.network.ServerGamePacketListenerImpl;
 @Mixin(value = ServerGamePacketListenerImpl.class, priority = 1)
@@ -81,4 +87,13 @@ public class ServerCommonPacketListenerImplMixin {
             ci.cancel();
         }
     }
+
+    //? if <= 1.20.3 {
+    /*@Inject(method = "handleCustomPayload", at = @At("HEAD"), cancellable = true)
+    private void onHandlePayload(ServerboundCustomPayloadPacket packet, CallbackInfo ci) {
+        if ((Object)this instanceof ServerGamePacketListenerImpl gameListener) {
+            NetworkHandlerServer.onCustomPayload(packet.payload(), gameListener.player);
+        }
+    }
+    *///?}
 }

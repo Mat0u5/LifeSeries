@@ -17,7 +17,6 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.LastSeenMessages;
 import net.minecraft.network.chat.PlayerChatMessage;
-import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -40,9 +39,11 @@ import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 *///?} else {
 import net.minecraft.network.protocol.game.ServerboundChatCommandSignedPacket;
 //?}
+import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
 
 //? if >= 1.21
 import net.minecraft.network.DisconnectionDetails;
+//? if >= 1.20.5
 
 //? if <= 1.21
 //import net.minecraft.world.entity.RelativeMovement;
@@ -243,8 +244,10 @@ public class ServerGamePacketListenerImplMixin {
         Events.onPlayerDisconnect(this.player);
     }
 
+    //? if >= 1.20.5 {
     @Inject(method = "handleCustomPayload", at = @At("HEAD"), cancellable = true)
     private void onHandlePayload(ServerboundCustomPayloadPacket packet, CallbackInfo ci) {
         NetworkHandlerServer.onCustomPayload(packet.payload(), this.player);
     }
+    //?}
 }

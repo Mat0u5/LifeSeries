@@ -46,7 +46,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -348,24 +347,6 @@ public class NetworkHandlerClient {
          */
     }
 
-    public static final List<CustomPacketPayload.TypeAndCodec<? super RegistryFriendlyByteBuf, ? extends CustomPacketPayload>> CLIENTBOUND_PACKETS = List.of(
-            new CustomPacketPayload.TypeAndCodec<>(NumberPayload.ID, NumberPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(StringPayload.ID, StringPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(StringListPayload.ID, StringListPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(HandshakePayload.ID, HandshakePayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(LongPayload.ID, LongPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(ConfigPayload.ID, ConfigPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(SidetitlePacket.ID, SidetitlePacket.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(SnailTexturePacket.ID, SnailTexturePacket.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(VoteScreenPayload.ID, VoteScreenPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(EmptyPayload.ID, EmptyPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(BooleanPayload.ID, BooleanPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(IntPayload.ID, IntPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(LifeSkinsTexturePayload.ID, LifeSkinsTexturePayload.CODEC)
-    );
-
     public static boolean onCustomPayload(CustomPacketPayload customPacketPayload) {
         Minecraft client = Minecraft.getInstance();
         if (customPacketPayload instanceof HandshakePayload payload) {
@@ -519,7 +500,6 @@ public class NetworkHandlerClient {
      */
     public static void send(CustomPacketPayload payload) {
         Objects.requireNonNull(payload, "Payload cannot be null");
-        Objects.requireNonNull(payload.type(), "CustomPacketPayload#type() cannot return null for payload class: " + payload.getClass());
 
         var connection = Minecraft.getInstance().getConnection();
         if (connection != null) {

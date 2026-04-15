@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(ServerLoginPacketListenerImpl.class)
+@Mixin(value = ServerLoginPacketListenerImpl.class, priority = 1)
 public abstract class ServerLoginPacketListenerImplMixin {
     private static final int PRELOGIN_TRANSACTION_ID = 104242;
 

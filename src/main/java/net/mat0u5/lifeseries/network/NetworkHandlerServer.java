@@ -40,9 +40,7 @@ import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.*;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
@@ -52,6 +50,15 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.scores.PlayerTeam;
 //? if > 1.20.5 {
 import net.minecraft.network.DisconnectionDetails;
+ //?}
+
+//? if <= 1.20.3 {
+/*import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.Identifier;
+import java.util.function.Function;
+*///?} else {
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 //?}
 
 import java.util.*;
@@ -65,6 +72,26 @@ public class NetworkHandlerServer {
     public static RegistryOverrideBahaviours REGISTRY_OVERRIDE_BEHAVIOR = RegistryOverrideBahaviours.LOGIN;
     public static boolean PRE_LOGIN_OVERRIDE_KICK = false;
 
+    //? if <= 1.20.3 {
+    /*public static final Map<Identifier, Function<FriendlyByteBuf, CustomPacketPayload>> PAYLOAD_READERS = new HashMap<>();
+    static {
+        PAYLOAD_READERS.put(NumberPayload.ID, NumberPayload::read);
+        PAYLOAD_READERS.put(StringPayload.ID, StringPayload::read);
+        PAYLOAD_READERS.put(StringListPayload.ID, StringListPayload::read);
+        PAYLOAD_READERS.put(HandshakePayload.ID, HandshakePayload::read);
+        PAYLOAD_READERS.put(TriviaQuestionPayload.ID, TriviaQuestionPayload::read);
+        PAYLOAD_READERS.put(LongPayload.ID, LongPayload::read);
+        PAYLOAD_READERS.put(PlayerDisguisePayload.ID, PlayerDisguisePayload::read);
+        PAYLOAD_READERS.put(ConfigPayload.ID, ConfigPayload::read);
+        PAYLOAD_READERS.put(SidetitlePacket.ID, SidetitlePacket::read);
+        PAYLOAD_READERS.put(SnailTexturePacket.ID, SnailTexturePacket::read);
+        PAYLOAD_READERS.put(VoteScreenPayload.ID, VoteScreenPayload::read);
+        PAYLOAD_READERS.put(EmptyPayload.ID, EmptyPayload::read);
+        PAYLOAD_READERS.put(BooleanPayload.ID, BooleanPayload::read);
+        PAYLOAD_READERS.put(IntPayload.ID, IntPayload::read);
+        PAYLOAD_READERS.put(LifeSkinsTexturePayload.ID, LifeSkinsTexturePayload::read);
+    }
+    *///?} else {
     public static final List<CustomPacketPayload.TypeAndCodec<? super RegistryFriendlyByteBuf, ? extends CustomPacketPayload>> PAYLOADS = List.of(
             new CustomPacketPayload.TypeAndCodec<>(NumberPayload.ID, NumberPayload.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(StringPayload.ID, StringPayload.CODEC)
@@ -82,6 +109,7 @@ public class NetworkHandlerServer {
             , new CustomPacketPayload.TypeAndCodec<>(IntPayload.ID, IntPayload.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(LifeSkinsTexturePayload.ID, LifeSkinsTexturePayload.CODEC)
     );
+    //?}
 
     public enum RegistryOverrideBahaviours {
         NEVER,
@@ -291,24 +319,6 @@ public class NetworkHandlerServer {
          */
     }
 
-    public static final List<CustomPacketPayload.TypeAndCodec<? super RegistryFriendlyByteBuf, ? extends CustomPacketPayload>> SERVERBOUND_PACKETS = List.of(
-              new CustomPacketPayload.TypeAndCodec<>(NumberPayload.ID, NumberPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(StringPayload.ID, StringPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(StringListPayload.ID, StringListPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(HandshakePayload.ID, HandshakePayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(LongPayload.ID, LongPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(ConfigPayload.ID, ConfigPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(SidetitlePacket.ID, SidetitlePacket.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(SnailTexturePacket.ID, SnailTexturePacket.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(VoteScreenPayload.ID, VoteScreenPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(EmptyPayload.ID, EmptyPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(BooleanPayload.ID, BooleanPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(IntPayload.ID, IntPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(LifeSkinsTexturePayload.ID, LifeSkinsTexturePayload.CODEC)
-    );
-
     public static void onCustomPayload(CustomPacketPayload customPacketPayload, ServerPlayer player) {
         if (customPacketPayload instanceof HandshakePayload payload) {
             server.execute(() -> handleHandshakeResponse(player, payload));
@@ -367,7 +377,7 @@ public class NetworkHandlerServer {
     public static void handleConfigPacket(ServerPlayer player, ConfigPayload payload) {
         if (PermissionManager.isAdmin(player)) {
             ConfigTypes configType = ConfigTypes.getFromString(payload.configType());
-            String id = payload.id();
+            String id = payload.configId();
             List<String> args = payload.args();
             if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received config update from {}: {{}, {}, {}}", player, configType, id, args));
 

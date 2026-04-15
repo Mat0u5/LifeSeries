@@ -17,11 +17,11 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.*;
 
-//? if <= 1.20.3 {
+//? if <= 1.20 {
 /*import net.fabricmc.fabric.api.networking.v1.FabricPacket;
 *///?} else {
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
- //?}
+//?}
 
 public class LifeSeriesClient implements ClientModInitializer, IClientHelper {
 
@@ -135,7 +135,7 @@ public class LifeSeriesClient implements ClientModInitializer, IClientHelper {
     }
 
     @Override
-    //? if <= 1.20.3 {
+    //? if <= 1.20 {
     /*public void sendPacket(FabricPacket payload) {
     *///?} else {
     public void sendPacket(CustomPacketPayload payload) {

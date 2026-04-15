@@ -1,20 +1,18 @@
 package net.mat0u5.lifeseries.network.packets;
 //? if <= 1.20.3 {
-/*import net.fabricmc.fabric.api.networking.v1.FabricPacket;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+/*import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public record TriviaQuestionPayload(String question, int difficulty, long timestamp, int timeToComplete, List<String> answers) implements FabricPacket {
+public record TriviaQuestionPayload(String question, int difficulty, long timestamp, int timeToComplete, List<String> answers) implements CustomPacketPayload {
 
     public static final Identifier ID = IdentifierHelper.mod("triviaquestion");
-    public static final PacketType<TriviaQuestionPayload> TYPE = PacketType.create(ID, TriviaQuestionPayload::read);
 
+    @Override
     public void write(FriendlyByteBuf buf) {
         buf.writeUtf(question);
         buf.writeInt(difficulty);
@@ -39,15 +37,9 @@ public record TriviaQuestionPayload(String question, int difficulty, long timest
         return new TriviaQuestionPayload(question, difficulty, timestamp, timeToComplete, answers);
     }
 
-    public FriendlyByteBuf toFriendlyByteBuf() {
-        FriendlyByteBuf buf = PacketByteBufs.create();
-        write(buf);
-        return buf;
-    }
-
     @Override
-    public PacketType<?> getType() {
-        return TYPE;
+    public Identifier id() {
+        return ID;
     }
 }
 *///?} else {

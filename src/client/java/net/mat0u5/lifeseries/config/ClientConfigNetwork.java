@@ -42,7 +42,7 @@ public class ClientConfigNetwork {
 
     public static ConfigObject getConfigEntry(ConfigPayload payload) {
         ConfigTypes configType = ConfigTypes.getFromString(payload.configType());
-        String id = payload.id();
+        String id = payload.configId();
         String name = payload.name();
         String description = payload.description();
         List<String> args = payload.args();
