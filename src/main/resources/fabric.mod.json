@@ -8,7 +8,7 @@
 		"Mat0u5"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
+		"homepage": "https://modrinth.com/mod/life-series",
 		"sources": "https://github.com/Mat0u5/LifeSeries"
 	},
 	"license": "MIT",
@@ -36,8 +36,7 @@
 	"depends": {
 		"fabricloader": ">=0.14.21",
 		"minecraft": "${targetVersion}",
-		"java": ">=${javaVersion}",
-		"fabric-api": "${fabricApiVersion}"
+		"java": ">=${javaVersion}"
 	},
 	"breaks": {
 		"pastlife": "*"

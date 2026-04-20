@@ -32,7 +32,7 @@ public abstract class MinecraftMixin implements IMinecraft {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void onInit(CallbackInfo ci) {
-        LifeSeriesClient.onInitializeClient_();
+        //LifeSeriesClient.onInitializeClient();
     }
 
     //? if >= 1.20.3 {
@@ -111,7 +111,11 @@ public abstract class MinecraftMixin implements IMinecraft {
         *///?}
     }
 
+    //? if <= 26.1 {
     @Inject(at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;info(Ljava/lang/String;)V", shift = At.Shift.AFTER), method = "destroy")
+    //?} else {
+    /*@Inject(at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;info(Ljava/lang/String;)V", shift = At.Shift.AFTER), method = "exitWorldAndClose")
+    *///?}
     private void onStopping(CallbackInfo ci) {
         ClientEvents.onClientStopping((Minecraft) (Object) this);
     }

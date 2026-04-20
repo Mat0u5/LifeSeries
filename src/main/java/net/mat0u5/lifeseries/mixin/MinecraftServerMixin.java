@@ -28,7 +28,7 @@ public abstract class MinecraftServerMixin {
 
     @Inject(method = "runServer", at = @At("HEAD"))
     private void onInit(CallbackInfo ci) {
-        LifeSeries.onInitialize_();
+        //LifeSeries.onInitialize();
     }
 
     //? if <= 1.20.2 {

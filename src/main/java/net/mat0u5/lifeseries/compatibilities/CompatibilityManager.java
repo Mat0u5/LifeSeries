@@ -4,6 +4,10 @@ import net.fabricmc.loader.api.FabricLoader;
 
 public class CompatibilityManager {
 
+    public static boolean fabricApiLoaded() {
+        return isModLoaded("fabric-api");
+    }
+
     public static boolean voicechatLoaded() {
         return isModLoaded("voicechat");
     }

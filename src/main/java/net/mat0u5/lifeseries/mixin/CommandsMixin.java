@@ -19,7 +19,7 @@ public abstract class CommandsMixin {
     private CommandDispatcher<CommandSourceStack> dispatcher;
 
     @Inject(at = @At(value = "INVOKE", target = "Lcom/mojang/brigadier/CommandDispatcher;setConsumer(Lcom/mojang/brigadier/ResultConsumer;)V"), method = "<init>")
-    private void fabric_addCommands(Commands.CommandSelection selection, CommandBuildContext buildContext, CallbackInfo ci) {
+    private void addCommands(Commands.CommandSelection selection, CommandBuildContext buildContext, CallbackInfo ci) {
         CommandManager.registerAllCommands(this.dispatcher, buildContext, selection);
     }
 }

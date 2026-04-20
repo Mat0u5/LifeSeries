@@ -79,16 +79,15 @@ public class LifeSeriesClient implements ClientModInitializer, IClientHelper {
     public static boolean isReplay = false;
     public static HandshakeStatus serverHandshake = HandshakeStatus.WAITING;
 
-    public static void onInitializeClient_() {
-        LifeSeries.setClientHelper(new LifeSeriesClient());
+    @Override
+    public void onInitializeClient() {
+        ClientRegistries.registerModStuff();
+        NetworkHandlerClient.initializeSimplePacketReceivers();
+
+        LifeSeries.setClientHelper(this);
 
         clientConfig = new ClientConfig();
         reloadConfig();
-    }
-    @Override
-    public void onInitializeClient() {
-        NetworkHandlerClient.initializeSimplePacketReceivers();
-        ClientRegistries.registerModStuff();
     }
 
     public static boolean isClientPlayer(UUID uuid) {

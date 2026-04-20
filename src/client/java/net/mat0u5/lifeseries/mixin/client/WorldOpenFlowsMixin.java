@@ -1,10 +1,15 @@
 package net.mat0u5.lifeseries.mixin.client;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.mojang.serialization.Lifecycle;
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.config.WorldConfig;
 import net.mat0u5.lifeseries.gui.WorldWarningScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.storage.LevelStorageSource;
+import net.minecraft.world.level.storage.WorldData;
 import org.spongepowered.asm.mixin.Mixin;
 import net.minecraft.client.gui.screens.worldselection.WorldOpenFlows;
 import org.spongepowered.asm.mixin.gen.Invoker;
@@ -100,5 +105,16 @@ public abstract class WorldOpenFlowsMixin {
 
             proceedCallback.run();
         }));
+    }
+
+    //? if <= 1.20.2 {
+    /*@WrapOperation(method = "doLoadLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/storage/WorldData;worldGenSettingsLifecycle()Lcom/mojang/serialization/Lifecycle;"))
+    *///?} else if <= 1.20.3 {
+    /*@WrapOperation(method = "loadLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/storage/WorldData;worldGenSettingsLifecycle()Lcom/mojang/serialization/Lifecycle;"))
+    *///?} else {
+    @WrapOperation(method = "openWorldCheckWorldStemCompatibility", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/storage/WorldData;worldGenSettingsLifecycle()Lcom/mojang/serialization/Lifecycle;"))
+    //?}
+    private Lifecycle noExperimental(WorldData instance, Operation<Lifecycle> original) {
+        return Lifecycle.stable();
     }
 }

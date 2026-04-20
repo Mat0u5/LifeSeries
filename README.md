@@ -40,7 +40,7 @@ A big part of this mod that it is very customizable.
 There are over 100 customizable features, including default lives, boogeyman in any season, custom item blacklists, players subbing in, and much more.
 
 ## Requirements
-[Fabric API](https://modrinth.com/mod/fabric-api) is required to run this mod, there are no other mod dependencies - although [Simple Voice Chat](https://modrinth.com/plugin/simple-voice-chat) is recommended.
+There are no other mod dependencies (not even Fabric API) - although [Simple Voice Chat](https://modrinth.com/plugin/simple-voice-chat) is recommended.
 
 The mod is server-side required and optional client-side.
 

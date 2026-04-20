@@ -45,19 +45,17 @@ repositories {
  }
 }
 
-fabricApi {
- configureDataGeneration()
-}
 dependencies {
  minecraft("com.mojang:minecraft:${property("minecraft_version")}")
 
  implementation "net.fabricmc:fabric-loader:${property("loader_version")}"
- implementation "net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}"
 
  // Compile only for compatibility
  //compileOnly "maven.modrinth:flashback:z0SX4zNw" //TODO
  compileOnly "maven.modrinth:replaymod:1.21-2.6.23"
  compileOnly "maven.modrinth:appleskin:3.0.6+mc1.21"
+ compileOnly "net.fabricmc.fabric-api:fabric-api:${property("fabric_api_version")}"
+ //runtimeOnly "net.fabricmc.fabric-api:fabric-api:${property("fabric_api_version")}"
 
  // Runtime only QOL mods
  if (isValidVersion(project.carpet_bot_relog_version)) runtimeOnly "maven.modrinth:carpet-bot-relog:${project.carpet_bot_relog_version}"
@@ -65,7 +63,8 @@ dependencies {
 
  //Runtime and compile
  if (isValidVersion(project.voicechat_mod_version)) {
-  implementation runtimeOnly ("maven.modrinth:simple-voice-chat:fabric-${project.voicechat_mod_version}")
+  compileOnly ("maven.modrinth:simple-voice-chat:fabric-${project.voicechat_mod_version}")
+  //runtimeOnly ("maven.modrinth:simple-voice-chat:fabric-${project.voicechat_mod_version}")
  }
  else {
   compileOnly ("maven.modrinth:simple-voice-chat:fabric-2.6.11+26.1-snapshot-1")
@@ -84,7 +83,6 @@ processResources {
  filesMatching("fabric.mod.json") {
   expand "version": project.property('mod_version'),
           "targetVersion": project.property('target_version'),
-          "fabricApiVersion": project.property('fabric_api_target_version'),
           "minecraftVersion": project.property('minecraft_version'),
           "javaVersion": project.property('java_version'),
           "accessWidenerFile": project.property('access_widener')
@@ -141,7 +139,6 @@ publishMods {
     includeSnapshots = shouldIncludeSnapshots
    }
 
-   requires("fabric-api")
    optional("simple-voice-chat")
   }
  }
@@ -158,7 +155,6 @@ publishMods {
    clientRequired = true
    serverRequired = true
 
-   requires("fabric-api")
    optional("simple-voice-chat")
   }
  }

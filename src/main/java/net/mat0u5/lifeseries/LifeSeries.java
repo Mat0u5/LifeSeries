@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.config.MainConfig;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
+import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.registries.ModRegistries;
 import net.mat0u5.lifeseries.resources.datapack.DatapackManager;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
@@ -18,13 +19,11 @@ import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.interfaces.IClientHelper;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.Nullable;
@@ -35,7 +34,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class LifeSeries implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.5.3.35";
+	public static final String MOD_VERSION = "dev-1.5.3.36";
 	public static final String MOD_ID = "lifeseries";
 	public static final String UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
 	public static final boolean DEBUG = false;
@@ -58,10 +57,6 @@ public class LifeSeries implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		ModRegistries.registerModStuff();
-		NetworkHandlerServer.initializeSimplePacketReceivers();
-	}
-	public static void onInitialize_() {
 		LOGGER.info("Initializing Life Series...");
 
 		config = new MainConfig();
@@ -75,9 +70,11 @@ public class LifeSeries implements ModInitializer {
 		parseSeason(season);
 		Seasons.getSeasons().forEach(seasons -> seasons.getSeasonInstance().createConfig());
 
+		MobRegistry.registerAttributes();
 		if (!ISOLATED_ENVIRONMENT) {
 			UpdateChecker.checkForMajorUpdates();
 		}
+		NetworkHandlerServer.initializeSimplePacketReceivers();
 	}
 
 	public static boolean modDisabled() {
