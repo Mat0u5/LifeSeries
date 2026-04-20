@@ -5,25 +5,80 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.login.ClientboundCustomQueryPacket;
-import net.minecraft.network.protocol.login.ServerboundCustomQueryAnswerPacket;
-import net.minecraft.network.protocol.login.custom.DiscardedQueryPayload;
 import net.minecraft.server.network.ServerLoginPacketListenerImpl;
-import com.mojang.authlib.GameProfile;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+//? if <= 1.20 {
+/*import net.minecraft.network.protocol.login.ServerboundCustomQueryPacket;
+import org.spongepowered.asm.mixin.Final;
+import net.minecraft.server.MinecraftServer;
+*///?} else {
+import net.minecraft.network.protocol.login.ServerboundCustomQueryAnswerPacket;
+import net.minecraft.network.protocol.login.custom.DiscardedQueryPayload;
+import com.mojang.authlib.GameProfile;
+//?}
 
 @Mixin(value = ServerLoginPacketListenerImpl.class, priority = 1)
 public abstract class ServerLoginPacketListenerImplMixin {
-    private static final int PRELOGIN_TRANSACTION_ID = 104242;
-
-    @Shadow public abstract void handleCustomQueryPacket(ServerboundCustomQueryAnswerPacket packet);
-
+    private static final int PRELOGIN_TRANSACTION_ID = 10942422;
     @Unique private boolean ls$querySent = false;
     @Unique private boolean ls$queryAnswered = false;
+
+    //? if <= 1.20 {
+    /*@Shadow @Final
+    MinecraftServer server;
+    @Shadow ServerLoginPacketListenerImpl.State state;
+    @Shadow public abstract void handleAcceptedLogin();
+
+    @Inject(method = "handleAcceptedLogin", at = @At("HEAD"), cancellable = true)
+    private void onHandleAcceptedLogin(CallbackInfo ci) {
+        if (ls$queryAnswered) {
+            return;
+        }
+
+        if (!ls$querySent) {
+            ls$querySent = true;
+
+            ServerLoginPacketListenerImpl self = (ServerLoginPacketListenerImpl)(Object)this;
+            FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+
+            self.connection.send(new ClientboundCustomQueryPacket(
+                    PRELOGIN_TRANSACTION_ID,
+                    IdentifierHelper.mod(NetworkHandlerServer.preLoginPacketID),
+                    buf
+            ));
+
+            this.state = ServerLoginPacketListenerImpl.State.NEGOTIATING;
+        }
+
+        ci.cancel();
+    }
+
+    @Inject(method = "handleCustomQueryPacket", at = @At("HEAD"), cancellable = true)
+    private void onHandleAnswer(ServerboundCustomQueryPacket packet, CallbackInfo ci) {
+        if (packet.getTransactionId() != PRELOGIN_TRANSACTION_ID) return;
+
+        boolean understood = packet.getData() != null;
+        ls$queryAnswered = true;
+
+        ServerLoginPacketListenerImpl self = (ServerLoginPacketListenerImpl)(Object)this;
+
+        this.server.execute(() -> {
+            NetworkHandlerServer.handlePreLogin(understood, self);
+
+            this.state = ServerLoginPacketListenerImpl.State.READY_TO_ACCEPT;
+            this.handleAcceptedLogin();
+        });
+
+        ci.cancel();
+    }
+    *///?} else {
+    @Shadow public abstract void handleCustomQueryPacket(ServerboundCustomQueryAnswerPacket packet);
+
     @Unique private GameProfile ls$pendingProfile = null;
 
     @Inject(method = "finishLoginAndWaitForClient", at = @At("HEAD"), cancellable = true)
@@ -65,4 +120,5 @@ public abstract class ServerLoginPacketListenerImplMixin {
     private void finishLogin(GameProfile profile) {
         finishLoginAndWaitForClient(profile);
     }
+    //?}
 }

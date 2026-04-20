@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.utils.other;
 
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.mat0u5.lifeseries.LifeSeries;
 
 import java.util.ArrayList;

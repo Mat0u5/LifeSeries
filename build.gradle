@@ -167,6 +167,9 @@ publishMods {
 }
 
 stonecutter {
+ replacements.string(stonecutter.eval(stonecutter.current.version, ">=1.20.2"), "!renames_1_20_2") {
+  replace ('net.mat0u5.lifeseries.utils.interfaces.CustomPacketPayload;', 'net.minecraft.network.protocol.common.custom.CustomPacketPayload;')
+ }
  replacements.string(stonecutter.eval(stonecutter.current.version, ">=1.20.3"), "!renames_1_20_3") {
   replace ('net.minecraft.world.scores.Score;', 'net.minecraft.world.scores.PlayerScoreEntry;')
  }
@@ -206,6 +209,8 @@ stonecutter {
  }
  replacements.string(stonecutter.eval(stonecutter.current.version, ">=1.21.11"), "!renames_1_21_11") {
   replace ('ResourceLocation', 'Identifier')
+  replace ('getResourceLocation', 'getResourceLocation')
+  replace ('getIdentifier', 'getIdentifier')
   replace ('IdentifierHelper', 'IdentifierHelper')
   replace ('net.minecraft.Util', 'net.minecraft.util.Util')
   replace ('net.minecraft.client.renderer.RenderType;', 'net.minecraft.client.renderer.rendertype.RenderType;')
@@ -240,7 +245,6 @@ stonecutter {
   replace ('ClientCommandManager.argument', 'ClientCommands.argument')
   replace ('ClientCommandManager.literal', 'ClientCommands.literal')
   replace ('.registerKeyBinding(', '.registerKeyMapping(')
-  replace ('net.fabricmc.fabric.api.client.keybinding.v1', 'net.fabricmc.fabric.api.client.keymapping.v1')
   replace ('KeyBindingHelper', 'KeyMappingHelper')
   replace ('net.minecraft.client.renderer.state.CameraRenderState', 'net.minecraft.client.renderer.state.level.CameraRenderState')
   replace ('net.minecraft.client.renderer.state.ParticleGroupRenderState', 'net.minecraft.client.renderer.state.level.ParticleGroupRenderState')

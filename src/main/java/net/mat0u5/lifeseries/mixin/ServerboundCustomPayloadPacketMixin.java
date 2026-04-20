@@ -1,5 +1,16 @@
 package net.mat0u5.lifeseries.mixin;
 
+//? if <= 1.20 {
+/*import net.minecraft.server.MinecraftServer;
+import org.spongepowered.asm.mixin.Mixin;
+
+@Mixin(value = MinecraftServer.class)
+public interface ServerboundCustomPayloadPacketMixin {
+    //Empty class to avoid mixin errors
+}
+*///?} else {
+
+
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -48,3 +59,5 @@ public class ServerboundCustomPayloadPacketMixin {
     }
     //?}
 }
+
+//?}

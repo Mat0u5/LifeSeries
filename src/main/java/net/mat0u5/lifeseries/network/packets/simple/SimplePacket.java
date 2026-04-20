@@ -3,21 +3,13 @@ package net.mat0u5.lifeseries.network.packets.simple;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-//? if <= 1.20 {
-/*import net.fabricmc.fabric.api.networking.v1.FabricPacket;
-*///?} else {
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-//?}
 import net.minecraft.server.level.ServerPlayer;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-//? if <= 1.20 {
-/*public abstract class SimplePacket<T extends SimplePacket<T, U>, U extends FabricPacket> {
-*///?} else {
 public abstract class SimplePacket<T extends SimplePacket<T, U>, U extends CustomPacketPayload> {
-//?}
     private List<ServerPlayer> targets = null;
     protected final String name;
     private BiConsumer<ServerPlayer, U> serverReceive = null;
@@ -39,11 +31,7 @@ public abstract class SimplePacket<T extends SimplePacket<T, U>, U extends Custo
         this.serverReceive = serverReceive;
     }
 
-    //? if <= 1.20 {
-    /*public void receiveClient(FabricPacket payload) {
-    *///?} else {
     public void receiveClient(CustomPacketPayload payload) {
-    //?}
         if (clientReceive == null) return;
         try {
             U uPayload = (U) payload;
@@ -53,11 +41,7 @@ public abstract class SimplePacket<T extends SimplePacket<T, U>, U extends Custo
         }
     }
 
-    //? if <= 1.20 {
-    /*public void receiveServer(ServerPlayer context, FabricPacket payload) {
-    *///?} else {
     public void receiveServer(ServerPlayer context, CustomPacketPayload payload) {
-    //?}
         if (serverReceive == null) return;
         try {
             U uPayload = (U) payload;
@@ -79,11 +63,7 @@ public abstract class SimplePacket<T extends SimplePacket<T, U>, U extends Custo
         return (T) this;
     }
 
-    //? if <= 1.20 {
-    /*protected void sendPacketToServer(FabricPacket packet) {
-    *///?} else {
     protected void sendPacketToServer(CustomPacketPayload packet) {
-    //?}
         if (packet == null) {
             LifeSeries.LOGGER.error("Packet was not initialized correctly.");
             targets = null;
@@ -96,11 +76,7 @@ public abstract class SimplePacket<T extends SimplePacket<T, U>, U extends Custo
         targets = null;
     }
 
-    //? if <= 1.20 {
-    /*protected void sendPacketToClient(FabricPacket packet) {
-    *///?} else {
     protected void sendPacketToClient(CustomPacketPayload packet) {
-    //?}
         if (packet == null) {
             LifeSeries.LOGGER.error("Packet was not initialized correctly.");
             targets = null;

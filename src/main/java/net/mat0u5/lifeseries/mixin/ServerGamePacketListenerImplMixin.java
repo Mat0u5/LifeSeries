@@ -39,11 +39,11 @@ import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 *///?} else {
 import net.minecraft.network.protocol.game.ServerboundChatCommandSignedPacket;
 //?}
-import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
 
 //? if >= 1.21
 import net.minecraft.network.DisconnectionDetails;
 //? if >= 1.20.5
+import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
 
 //? if <= 1.21
 //import net.minecraft.world.entity.RelativeMovement;

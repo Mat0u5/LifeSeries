@@ -47,14 +47,13 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +63,13 @@ import java.util.concurrent.CompletableFuture;
 //? if <= 1.20.3 {
 /*import net.minecraft.network.FriendlyByteBuf;
 *///?}
+//? if <= 1.20 {
+/*import io.netty.buffer.Unpooled;
+import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
+*///?} else {
+import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
+//?}
+
 
 public class NetworkHandlerClient {
     public static void initializeSimplePacketReceivers() {
@@ -503,7 +509,13 @@ public class NetworkHandlerClient {
 
         var connection = Minecraft.getInstance().getConnection();
         if (connection != null) {
+            //? if <= 1.20 {
+            /*FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+            payload.write(buf);
+            connection.send(new ServerboundCustomPayloadPacket(payload.id(), buf));
+            *///?} else {
             connection.send(new ServerboundCustomPayloadPacket(payload));
+            //?}
             return;
         }
 

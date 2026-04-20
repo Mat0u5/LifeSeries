@@ -41,7 +41,6 @@ import net.mat0u5.lifeseries.utils.player.*;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
@@ -59,6 +58,13 @@ import java.util.function.Function;
 *///?} else {
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+//?}
+
+//? if <= 1.20 {
+/*import io.netty.buffer.Unpooled;
+import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
+*///?} else {
+import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
 //?}
 
 import java.util.*;
@@ -364,9 +370,9 @@ public class NetworkHandlerServer {
             preLoginHandshake.add(OtherUtils.profileId(profile));
             LOGGER.info("Received pre-login packet from " + OtherUtils.profileName(profile));
         }
-        else if (currentSeason.getSeason().requiresClient()) {
+        else {
             LOGGER.info("Did not receive pre-login packet from " + OtherUtils.profileName(profile));
-            if (!PRE_LOGIN_OVERRIDE_KICK) {
+            if (currentSeason.getSeason().requiresClient() && !PRE_LOGIN_OVERRIDE_KICK) {
                 handler.disconnect(getDisconnectClientText());
             }
         }
@@ -509,7 +515,13 @@ public class NetworkHandlerServer {
         Objects.requireNonNull(player, "Server player cannot be null");
         Objects.requireNonNull(payload, "Payload cannot be null");
 
+        //? if <= 1.20 {
+        /*FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+        payload.write(buf);
+        player.connection.send(new ClientboundCustomPayloadPacket(payload.id(), buf));
+        *///?} else {
         player.connection.send(new ClientboundCustomPayloadPacket(payload));
+        //?}
     }
     
     public static void sendTriviaPacket(ServerPlayer player, String question, int difficulty, long timestamp, int timeToComplete, List<String> answers) {
