@@ -5,6 +5,7 @@
   "mixins": [
     "AnvilMenuMixin",
     "BiomeMixin",
+    "BuiltInPackSourceMixin",
     "ChunkMapAccessor",
     "ChunkStatusTasksMixin",
     "CommandsMixin",
@@ -12,6 +13,7 @@
     "CrafterBlockMixin",
     "CraftingMenuMixin",
     "DamageSourceMixin",
+    "DefaultAttributesAccessor",
     "EnchantmentHelperMixin",
     "EntityMixin",
     "GameRuleCommandMixin",

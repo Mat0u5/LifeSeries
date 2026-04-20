@@ -1,9 +1,6 @@
 package net.mat0u5.lifeseries;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
-import net.fabricmc.loader.api.FabricLoader;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.MainConfig;
 import net.mat0u5.lifeseries.events.Events;
@@ -38,7 +35,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class LifeSeries implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.5.3.34";
+	public static final String MOD_VERSION = "dev-1.5.3.35";
 	public static final String MOD_ID = "lifeseries";
 	public static final String UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
 	public static final boolean DEBUG = false;
@@ -61,17 +58,6 @@ public class LifeSeries implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		FabricLoader.getInstance().getModContainer(LifeSeries.MOD_ID).ifPresent(container -> {
-			ResourceManagerHelper.registerBuiltinResourcePack(IdentifierHelper.mod("lifeseries"), container, Component.nullToEmpty("Main Life Series Resourcepack"), ResourcePackActivationType.ALWAYS_ENABLED);
-			ResourceManagerHelper.registerBuiltinResourcePack(IdentifierHelper.mod("minimal_armor"), container, Component.nullToEmpty("Minimal Armor Resourcepack"), ResourcePackActivationType.NORMAL);
-			ResourceManagerHelper.registerBuiltinResourcePack(IdentifierHelper.mod("lifeseries_datapack"), container, ResourcePackActivationType.ALWAYS_ENABLED);
-			//? if <= 1.20.4 {
-			/*ResourceManagerHelper.registerBuiltinResourcePack(IdentifierHelper.mod("lifeseries_datapack_1.20-1.20.4"), container, ResourcePackActivationType.ALWAYS_ENABLED);
-			 *///?} else if <= 1.20.5 {
-			/*ResourceManagerHelper.registerBuiltinResourcePack(IdentifierHelper.mod("lifeseries_datapack_1.20.5"), container, ResourcePackActivationType.ALWAYS_ENABLED);
-			 *///?}
-			ResourceManagerHelper.registerBuiltinResourcePack(IdentifierHelper.mod("nicelife"), container, Component.nullToEmpty("Nice Life Resourcepack"), ResourcePackActivationType.NORMAL);
-		});
 		ModRegistries.registerModStuff();
 		NetworkHandlerServer.initializeSimplePacketReceivers();
 	}

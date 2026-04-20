@@ -53,6 +53,7 @@
   ],
   "mixins": [
     "BiomeMixin",
+    "BuiltInPackSourceMixin",
     "ClientboundCustomPayloadPacketMixin",
     "ClientHandshakePacketListenerImplMixin",
     "ClientPacketListenerMixin",

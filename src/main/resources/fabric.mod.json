@@ -12,7 +12,7 @@
 		"sources": "https://github.com/Mat0u5/LifeSeries"
 	},
 	"license": "MIT",
-	"icon": "assets/icon.png",
+	"icon": "icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
@@ -25,7 +25,7 @@
           "net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain"
 		]
 	},
-	"accessWidener": "${accessWidenerFile}",
+	"accessWidener": "aw/${accessWidenerFile}",
 	"mixins": [
 		"lifeseries.mixins.json",
 		{

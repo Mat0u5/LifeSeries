@@ -15,7 +15,7 @@ base {
  archivesName = project.archives_base_name
 }
 loom {
- accessWidenerPath = rootProject.file("src/main/resources/"+project.property('access_widener'))
+ accessWidenerPath = rootProject.file("src/main/resources/aw/"+project.property('access_widener'))
  splitEnvironmentSourceSets()
 
  mods {
