@@ -28,7 +28,11 @@ import net.minecraft.world.food.Foods;
 //? if <= 1.21.11
 //import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(value = Item.class, priority = 1)
+//? if <= 1.21.11 {
+/*@Mixin(value = Item.class, priority = 1)
+*///?} else {
+@Mixin(value = ItemStack.class, priority = 2)
+//?}
 public abstract class ItemMixin {
     //? if < 1.20.5 {
     /*@Accessor("foodProperties")
@@ -40,7 +44,11 @@ public abstract class ItemMixin {
     public abstract DataComponentMap normalComponents();
     *///?}
 
-    @Inject(method = "components", at = @At("HEAD"), cancellable = true)
+    //? if <= 1.21.11 {
+    /*@Inject(method = "components", at = @At("HEAD"), cancellable = true)
+    *///?} else {
+    @Inject(method = "getComponents", at = @At("HEAD"), cancellable = true)
+    //?}
     public void getComponents(CallbackInfoReturnable<DataComponentMap> cir) {
         if (LifeSeries.modDisabled()) return;
         boolean isLogicalSide = LifeSeries.isLogicalSide();
@@ -58,7 +66,12 @@ public abstract class ItemMixin {
             }
         }
         if (hungerActive) {
-            Item item = (Item) (Object) this;
+            //? if <= 1.21.11 {
+            /*Item item = (Item) (Object) this;
+             *///?} else {
+            ItemStack itemStack = (ItemStack) (Object) this;
+            Item item = itemStack.getItem();
+            //?}
             if (!Hunger.nonEdible.contains(item)) {
                 //? if <= 1.21.11 {
                 /*PatchedDataComponentMap components = new PatchedDataComponentMap(normalComponents());
@@ -106,10 +119,20 @@ public abstract class ItemMixin {
     *///?}
 
     @Inject(method = "finishUsingItem", at = @At("HEAD"))
-    public void finishUsing(ItemStack stack, Level level, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {
+    //? if <= 1.21.11 {
+    /*public void finishUsing(ItemStack stack, Level level, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {
+    *///?} else {
+    public void finishUsing(Level level, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {
+    //?}
         if (LifeSeries.isClientOrDisabled()) return;
         if (currentSeason instanceof WildLife && WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
-            Item item = (Item) (Object) this;
+            //? if <= 1.21.11 {
+            /*Item item = (Item) (Object) this;
+            *///?} else {
+            ItemStack itemStack = (ItemStack) (Object) this;
+            Item item = itemStack.getItem();
+            //?}
+
             //? if < 1.20.5 {
             /*Hunger.finishUsing(item, ls$foodProperties() != null, user);
             *///?} else if <= 1.21.11 {

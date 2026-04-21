@@ -7,7 +7,6 @@ import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.registries.MobRegistry;
-import net.mat0u5.lifeseries.registries.ModRegistries;
 import net.mat0u5.lifeseries.resources.datapack.DatapackManager;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
@@ -34,7 +33,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class LifeSeries implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.5.3.37";
+	public static final String MOD_VERSION = "dev-1.5.3.38";
 	public static final String MOD_ID = "lifeseries";
 	public static final String UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
 	public static final boolean DEBUG = false;

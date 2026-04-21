@@ -328,7 +328,7 @@ public class WildLifeCommands extends Command {
 
         WildcardManager.showDots();
         TaskScheduler.scheduleTask(90, () -> {
-            WildcardManager.showCryptTitle(ModifiableText.WILDLIFE_WILDCARD_ACTIVATE_TITLE.getString());
+            WildcardManager.showCryptTitle(ModifiableText.WILDLIFE_WILDCARD_ACTIVATE_CRYPT_TITLE.get());
         });
 
         return 1;
