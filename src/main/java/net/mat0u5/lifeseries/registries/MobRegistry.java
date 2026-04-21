@@ -7,7 +7,7 @@ import net.mat0u5.lifeseries.entity.angrysnowman.AngrySnowman;
 import net.mat0u5.lifeseries.mixin.DefaultAttributesAccessor;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;

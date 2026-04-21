@@ -6,9 +6,14 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.LifeSeriesClient;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
-import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+
+//? if <= 26.1 {
+import net.minecraft.world.level.Level;
+//?} else {
+/*import net.minecraft.client.multiplayer.ClientLevel;
+*///?}
 
 //? if >= 1.21.4 {
 import net.minecraft.client.renderer.rendertype.RenderType;
@@ -76,10 +81,13 @@ public class WeatherEffectRendererMixin {
     *///?} else if <= 1.21.9 {
     /*@WrapOperation(method = "tickRainParticles", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;getRainLevel(F)F"))
     public float renderRain(ClientLevel instance, float v, Operation<Float> original) {
-    *///?} else {
+    *///?} else if <= 26.1 {
     @WrapOperation(method = "extractRenderState", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getRainLevel(F)F"))
     public float renderRain(Level instance, float v, Operation<Float> original) {
-    //?}
+    //?} else {
+    /*@WrapOperation(method = "extractRenderState", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;getRainLevel(F)F"))
+    public float renderRain(ClientLevel instance, float v, Operation<Float> original) {
+    *///?}
         if (!LifeSeries.modDisabled() && LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE) {
             return 1;
         }

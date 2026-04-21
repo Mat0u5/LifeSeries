@@ -51,7 +51,7 @@ dependencies {
  implementation "net.fabricmc:fabric-loader:${property("loader_version")}"
 
  // Compile only for compatibility
- //compileOnly "maven.modrinth:flashback:z0SX4zNw" //TODO
+ compileOnly "maven.modrinth:flashback:xs2Obe8Z"
  compileOnly "maven.modrinth:replaymod:1.21-2.6.23"
  compileOnly "maven.modrinth:appleskin:3.0.6+mc1.21"
  compileOnly "net.fabricmc.fabric-api:fabric-api:${property("fabric_api_version")}"
@@ -256,6 +256,11 @@ stonecutter {
   replace ('renderBackground(', 'extractBackground(')
   replace ('drawString(', 'text(')
   replace ('drawCenteredString(', 'centeredText(')
+ }
+ replacements.string(stonecutter.eval(stonecutter.current.version, ">=26.2"), "!renames_26_2") {
+  replace ('net.minecraft.world.entity.EntityType', 'net.minecraft.world.entity.EntityTypes')
+  replace ('EntityType.', 'EntityTypes.')
+  replace ('EntityType.Builder', 'EntityType.Builder')
  }
 }
 

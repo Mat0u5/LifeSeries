@@ -107,7 +107,6 @@ public final class ModBuiltInPacks {
 
             URI uri = url.toURI();
 
-            //TODO test
             if ("jar".equals(uri.getScheme())) {
                 try {
                     return FileSystems.getFileSystem(uri).getPath(path);

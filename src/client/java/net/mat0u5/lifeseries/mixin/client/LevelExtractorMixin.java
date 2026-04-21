@@ -1,43 +1,42 @@
 package net.mat0u5.lifeseries.mixin.client;
 
-import net.mat0u5.lifeseries.LifeSeriesClient;
-import net.mat0u5.lifeseries.render.ClientRenderer;
-import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
+/**
+ * For <= 26.1, located in:
+ * {@link net.mat0u5.lifeseries.mixin.client.LevelRendererMixin}
+ */
+
+//? if <= 26.1 {
+import net.minecraft.server.MinecraftServer;
+import org.spongepowered.asm.mixin.Mixin;
+
+@Mixin(value = MinecraftServer.class)
+public interface LevelExtractorMixin {
+    //Empty class to avoid mixin errors
+}
+//?} else {
+
+/*import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.utils.ClientUtils;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.extract.LevelExtractor;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Mixin(value = LevelRenderer.class, priority = 1)
-public class LevelRendererMixin {
-
-/**
- * For >= 26.2, located in:
- * {@link net.mat0u5.lifeseries.mixin.client.LevelExtractorMixin}
- */
-//? if <= 26.1 {
-
-    //? if <= 1.21 {
-    /*@Redirect(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;entitiesForRendering()Ljava/lang/Iterable;"))
-     *///?} else if <= 1.21.6 {
-    /*@Redirect(method = "collectVisibleEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;entitiesForRendering()Ljava/lang/Iterable;"))
-     *///?} else {
+@Mixin(value = LevelExtractor.class, priority = 1)
+public class LevelExtractorMixin {
     @Redirect(method = "extractVisibleEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;entitiesForRendering()Ljava/lang/Iterable;"))
-            //?}
     private Iterable<Entity> addMorphedEntities(ClientLevel instance) {
         List<Entity> entities = new ArrayList<>();
         instance.entitiesForRendering().forEach(entities::add);
@@ -57,8 +56,9 @@ public class LevelRendererMixin {
         if (player == null) return true;
         if (player.isSpectator()) return false;
         if (player.isInvisible()) return false;
-        Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
-        //~ if > 1.21.9 '.getEntity()' -> '.entity()' {
+
+        Camera camera = Minecraft.getInstance().gameRenderer.mainCamera();
+
         if (player instanceof LocalPlayer && camera.entity() != player) {
             return false;
         }
@@ -66,15 +66,8 @@ public class LevelRendererMixin {
                 !(camera.entity() instanceof LivingEntity livingEntityCamera && livingEntityCamera.isSleeping())) {
             return false;
         }
-        //~}
         return true;
     }
-//?}
-
-    //? if >= 1.21.11 {
-    @ModifyVariable(method = "addCloudsPass", at = @At("HEAD"), index = 7, argsOnly = true)
-    private int setCloudColor(int value) {
-        return ClientRenderer.modifyColor(value, LifeSeriesClient.cloudColor, LifeSeriesClient.cloudColorSetMode, LifeSeriesClient.cachedFogRenderColor);
-    }
-    //?}
 }
+
+*///?}
