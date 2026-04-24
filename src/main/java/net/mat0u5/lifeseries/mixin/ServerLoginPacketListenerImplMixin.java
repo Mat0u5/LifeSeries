@@ -24,7 +24,6 @@ import com.mojang.authlib.GameProfile;
 
 @Mixin(value = ServerLoginPacketListenerImpl.class, priority = 1)
 public abstract class ServerLoginPacketListenerImplMixin {
-    private static final int PRELOGIN_TRANSACTION_ID = 10942422;
     @Unique private boolean ls$querySent = false;
     @Unique private boolean ls$queryAnswered = false;
 
@@ -47,7 +46,7 @@ public abstract class ServerLoginPacketListenerImplMixin {
             FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 
             self.connection.send(new ClientboundCustomQueryPacket(
-                    PRELOGIN_TRANSACTION_ID,
+                    NetworkHandlerServer.PRELOGIN_TRANSACTION_ID,
                     IdentifierHelper.mod(NetworkHandlerServer.preLoginPacketID),
                     buf
             ));
@@ -60,7 +59,7 @@ public abstract class ServerLoginPacketListenerImplMixin {
 
     @Inject(method = "handleCustomQueryPacket", at = @At("HEAD"), cancellable = true)
     private void onHandleAnswer(ServerboundCustomQueryPacket packet, CallbackInfo ci) {
-        if (packet.getTransactionId() != PRELOGIN_TRANSACTION_ID) return;
+        if (packet.getTransactionId() != NetworkHandlerServer.PRELOGIN_TRANSACTION_ID) return;
 
         boolean understood = packet.getData() != null;
         ls$queryAnswered = true;
@@ -94,7 +93,7 @@ public abstract class ServerLoginPacketListenerImplMixin {
             DiscardedQueryPayload payload = new DiscardedQueryPayload(IdentifierHelper.mod(NetworkHandlerServer.preLoginPacketID));
             payload.write(buf);
             self.connection.send(new ClientboundCustomQueryPacket(
-                    PRELOGIN_TRANSACTION_ID, payload
+                    NetworkHandlerServer.PRELOGIN_TRANSACTION_ID, payload
             ));
         }
         ci.cancel();
@@ -102,9 +101,17 @@ public abstract class ServerLoginPacketListenerImplMixin {
 
     @Inject(method = "handleCustomQueryPacket", at = @At("HEAD"), cancellable = true)
     private void onHandleAnswer(ServerboundCustomQueryAnswerPacket packet, CallbackInfo ci) {
-        if (packet.transactionId() != PRELOGIN_TRANSACTION_ID) return;
+        if (packet.transactionId() != NetworkHandlerServer.PRELOGIN_TRANSACTION_ID) return;
 
-        boolean understood = packet.payload() != null;
+        boolean understood = false;
+
+        if (packet.payload() != null) {
+            FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+            packet.payload().write(buf);
+            if (buf.isReadable()) {
+                understood = buf.readBoolean();
+            }
+        }
         ls$queryAnswered = true;
 
         ServerLoginPacketListenerImpl self = (ServerLoginPacketListenerImpl)(Object)this;

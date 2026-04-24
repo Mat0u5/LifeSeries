@@ -47,6 +47,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.item.Item;
@@ -354,6 +355,14 @@ public class NetworkHandlerClient {
     }
 
     public static boolean onCustomPayload(CustomPacketPayload customPacketPayload) {
+        //? if <= 1.20.3 {
+        /*Identifier id = customPacketPayload.id();
+         *///?} else {
+        Identifier id = customPacketPayload.type().id();
+        //?}
+        if (LifeSeries.DEBUG) LifeSeries.LOGGER.info(TextUtils.formatString("[SERVER -> CLIENT] Received {}", id.toString()));
+
+
         Minecraft client = Minecraft.getInstance();
         if (customPacketPayload instanceof HandshakePayload payload) {
             client.execute(() -> handleHandshake(payload));
@@ -505,6 +514,14 @@ public class NetworkHandlerClient {
         Sending
      */
     public static void send(CustomPacketPayload payload) {
+        //? if <= 1.20.3 {
+        /*Identifier id = payload.id();
+         *///?} else {
+        Identifier id = payload.type().id();
+        //?}
+        if (LifeSeries.DEBUG) LifeSeries.LOGGER.info(TextUtils.formatString("[CLIENT -> SERVER] Sending {}", id.toString()));
+
+
         Objects.requireNonNull(payload, "Payload cannot be null");
 
         var connection = Minecraft.getInstance().getConnection();

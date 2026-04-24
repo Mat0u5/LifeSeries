@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /*import net.minecraft.network.protocol.login.ServerboundCustomQueryPacket;
 *///?} else {
 import net.minecraft.network.protocol.login.ServerboundCustomQueryAnswerPacket;
-import net.minecraft.network.protocol.login.custom.DiscardedQueryAnswerPayload;
+import net.mat0u5.lifeseries.network.packets.CustomQueryPacket;
 //?}
 
 @Mixin(value = ClientHandshakePacketListenerImpl.class, priority = 1)
@@ -40,8 +40,7 @@ public class ClientHandshakePacketListenerImplMixin {
             FriendlyByteBuf responseBuf = new FriendlyByteBuf(Unpooled.buffer());
             responseBuf.writeBoolean(true);
 
-            DiscardedQueryAnswerPayload answerPayload = new DiscardedQueryAnswerPayload();
-            answerPayload.write(responseBuf);
+            CustomQueryPacket answerPayload = new CustomQueryPacket(responseBuf);
 
             handler.connection.send(new ServerboundCustomQueryAnswerPacket(packet.transactionId(), answerPayload));
             ci.cancel();

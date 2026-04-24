@@ -1,4 +1,4 @@
-package net.mat0u5.lifeseries.mixin.client;
+package net.mat0u5.lifeseries.mixin;
 
 //? if <= 1.20 {
 /*import net.minecraft.server.MinecraftServer;

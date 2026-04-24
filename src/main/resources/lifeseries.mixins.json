@@ -10,6 +10,7 @@
     "BuiltInRegistriesMixin",
     "ChunkMapAccessor",
     "ChunkStatusTasksMixin",
+    "ClientboundCustomPayloadPacketMixin",
     "CommandsMixin",
     "CommandSourceStackMixin",
     "CrafterBlockMixin",
@@ -46,8 +47,8 @@
     "PlayerManagerMixin",
     "PlayerMixin",
     "RecipeManagerMixin",
-    "compat.fabricapi.RegistrySyncManagerMixin",
     "ServerboundCustomPayloadPacketMixin",
+    "ServerboundCustomQueryAnswerPacketMixin",
     "ServerCommonPacketListenerImplMixin",
     "ServerGamePacketListenerImplMixin",
     "ServerLevelAccessor",
@@ -71,7 +72,8 @@
     "WaypointTransmitterMixin",
     "WindChargeItemMixin",
     "WorldBorderCommandMixin",
-    "WorldDataMixin"
+    "WorldDataMixin",
+    "compat.fabricapi.RegistrySyncManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

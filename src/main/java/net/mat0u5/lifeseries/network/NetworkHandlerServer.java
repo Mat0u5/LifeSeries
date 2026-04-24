@@ -42,6 +42,7 @@ import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerLoginPacketListenerImpl;
@@ -72,6 +73,7 @@ import java.util.*;
 import static net.mat0u5.lifeseries.LifeSeries.*;
 
 public class NetworkHandlerServer {
+    public static final int PRELOGIN_TRANSACTION_ID = 10942422;
     public static final String preLoginPacketID = "preloginpacket";
     public static final List<UUID> handshakeSuccessful = new ArrayList<>();
     public static final List<UUID> preLoginHandshake = new ArrayList<>();
@@ -326,6 +328,13 @@ public class NetworkHandlerServer {
     }
 
     public static void onCustomPayload(CustomPacketPayload customPacketPayload, ServerPlayer player) {
+        //? if <= 1.20.3 {
+        /*Identifier id = customPacketPayload.id();
+         *///?} else {
+        Identifier id = customPacketPayload.type().id();
+        //?}
+        if (LifeSeries.DEBUG) LifeSeries.LOGGER.info(TextUtils.formatString("[{} -> PACKET_SERVER] Received {}", player, id.toString()));
+
         if (customPacketPayload instanceof HandshakePayload payload) {
             server.execute(() -> handleHandshakeResponse(player, payload));
         }
@@ -522,6 +531,12 @@ public class NetworkHandlerServer {
         *///?} else {
         player.connection.send(new ClientboundCustomPayloadPacket(payload));
         //?}
+        //? if <= 1.20.3 {
+        /*Identifier id = payload.id();
+        *///?} else {
+        Identifier id = payload.type().id();
+        //?}
+        if (LifeSeries.DEBUG) LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_SERVER -> {}] Sending {}", player, id.toString()));
     }
     
     public static void sendTriviaPacket(ServerPlayer player, String question, int difficulty, long timestamp, int timeToComplete, List<String> answers) {
