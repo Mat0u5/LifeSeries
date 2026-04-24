@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class LifeSeries implements ModInitializer {
-	public static final String MOD_VERSION = "1.5.4-pre1";
+	public static final String MOD_VERSION = "1.5.4";
 	public static final String MOD_ID = "lifeseries";
 	public static final String UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
 	public static final boolean DEBUG = false;
