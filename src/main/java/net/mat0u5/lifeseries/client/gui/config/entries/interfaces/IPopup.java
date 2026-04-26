@@ -1,0 +1,55 @@
+package net.mat0u5.lifeseries.client.gui.config.entries.interfaces;
+
+import net.mat0u5.lifeseries.render.RenderUtils;
+import net.mat0u5.lifeseries.utils.TextColors;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+
+public interface IPopup {
+    boolean shouldShowPopup();
+    int getPopupWidth();
+    int getPopupHeight();
+    void renderContent(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, float tickDelta);
+
+    default int getActualPopupWidth() {
+        int width = getPopupWidth() + getPadding();
+        if (width % 2 != 0) width++;
+        return width;
+    }
+
+    default int getActualPopupHeight() {
+        return getPopupHeight() + getPadding();
+    }
+
+    default int getPadding() {
+        return 4;
+    }
+
+    default void renderPopup(GuiGraphicsExtractor context, int x, int y, int mouseX, int mouseY, float tickDelta) {
+        if (!shouldShowPopup()) return;
+
+        //? if <= 1.20 {
+        /*int offsetX = 0;
+        int offsetY = -1;
+        *///?} else {
+        int offsetX = 0;
+        int offsetY = 0;
+        //?}
+
+        //~ renames_1_21_6_volatile
+        context.pose().pushMatrix();
+        //? if <= 1.21.5 {
+        /*context.pose().translate(0, 0, 100);
+        *///?}
+        int width = getActualPopupWidth();
+        int height = getActualPopupHeight();
+        renderBackground(context, x, y+offsetY, width, height, mouseX, mouseY, tickDelta);
+        renderContent(context, x+getPadding()/2, y+getPadding()/2+offsetY, width, height, mouseX, mouseY, tickDelta);
+        context.pose().popMatrix();
+        //~ !renames_1_21_6_volatile
+    }
+
+    default void renderBackground(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, float tickDelta) {
+        context.fill(x, y, x + width, y + height, TextColors.LIGHT_BLACK);
+        RenderUtils.drawBorder(context, x, y, width, height, TextColors.LIGHT_GRAY);
+    }
+}
