@@ -8,7 +8,7 @@ public class EntityRenderStateMixin {
     //Empty class to avoid mixin errors
 }
 *///?} else {
-import net.mat0u5.lifeseries.utils.interfaces.IEntityRenderState;
+import net.mat0u5.lifeseries.client.utils.interfaces.IEntityRenderState;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Nullable;

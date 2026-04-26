@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.mixin.client;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.LifeSeriesClient;
-import net.mat0u5.lifeseries.features.LifeSkinsClient;
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.features.LifeSkinsClient;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerInfo;

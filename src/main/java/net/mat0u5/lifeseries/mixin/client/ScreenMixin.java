@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
-import net.mat0u5.lifeseries.events.ClientEvents;
+import net.mat0u5.lifeseries.client.events.ClientEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import org.spongepowered.asm.mixin.Mixin;

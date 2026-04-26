@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.mixin.client;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.mat0u5.lifeseries.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;

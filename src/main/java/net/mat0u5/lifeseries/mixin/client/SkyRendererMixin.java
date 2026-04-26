@@ -10,8 +10,8 @@ public class SkyRendererMixin {
 }
 *///?} else {
 
-import net.mat0u5.lifeseries.LifeSeriesClient;
-import net.mat0u5.lifeseries.render.ClientRenderer;
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.render.ClientRenderer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.SkyRenderer;

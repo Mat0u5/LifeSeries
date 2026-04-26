@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
-import net.mat0u5.lifeseries.utils.ClientSounds;
+import net.mat0u5.lifeseries.client.utils.ClientSounds;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import org.spongepowered.asm.mixin.Mixin;

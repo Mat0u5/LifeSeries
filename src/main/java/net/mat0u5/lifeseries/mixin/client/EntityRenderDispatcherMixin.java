@@ -37,7 +37,7 @@ public class EntityRenderDispatcherMixin {
     //Empty class to avoid mixin errors
 }
 *///?} else {
-import net.mat0u5.lifeseries.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.minecraft.client.renderer.culling.Frustum;

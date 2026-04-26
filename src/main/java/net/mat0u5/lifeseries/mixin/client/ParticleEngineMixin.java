@@ -10,8 +10,8 @@ public class ParticleEngineMixin {
 }
 *///?} else {
 
-import net.mat0u5.lifeseries.particle.TriviaSpiritParticle;
-import net.mat0u5.lifeseries.particle.TriviaSpiritParticleGroup;
+import net.mat0u5.lifeseries.client.particle.TriviaSpiritParticle;
+import net.mat0u5.lifeseries.client.particle.TriviaSpiritParticleGroup;
 import net.minecraft.client.Camera;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.particle.ParticleGroup;

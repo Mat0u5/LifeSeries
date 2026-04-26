@@ -2,9 +2,9 @@ package net.mat0u5.lifeseries.mixin.client;
 
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.mat0u5.lifeseries.gui.EmptySleepScreen;
-import net.mat0u5.lifeseries.gui.trivia.NewQuizScreen;
-import net.mat0u5.lifeseries.gui.trivia.VotingScreen;
+import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
+import net.mat0u5.lifeseries.client.gui.trivia.NewQuizScreen;
+import net.mat0u5.lifeseries.client.gui.trivia.VotingScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,7 +15,7 @@ import net.minecraft.world.scores.Scoreboard;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
 
 //? if > 1.20
 import net.minecraft.world.scores.DisplaySlot;
@@ -37,7 +37,7 @@ import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 *///?} else {
-import net.mat0u5.lifeseries.utils.interfaces.IEntityRenderState;
+import net.mat0u5.lifeseries.client.utils.interfaces.IEntityRenderState;
 import net.minecraft.world.entity.player.Player;
 //?}
 //? if >= 1.21.2 && <= 1.21.6

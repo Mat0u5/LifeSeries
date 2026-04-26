@@ -5,7 +5,7 @@ import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 //? if >= 1.21.2 {
-import net.mat0u5.lifeseries.utils.interfaces.IEntityRenderState;
+import net.mat0u5.lifeseries.client.utils.interfaces.IEntityRenderState;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,10 +24,10 @@ import net.minecraft.network.chat.Component;
 *///?}
 
 //? if >= 26.1 {
-import net.mat0u5.lifeseries.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.ClientUtils;
+import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.scores.DisplaySlot;

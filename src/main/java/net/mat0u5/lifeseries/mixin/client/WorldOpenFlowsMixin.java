@@ -6,7 +6,7 @@ import com.mojang.serialization.Lifecycle;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.config.WorldConfig;
-import net.mat0u5.lifeseries.gui.WorldWarningScreen;
+import net.mat0u5.lifeseries.client.gui.WorldWarningScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraft.world.level.storage.WorldData;

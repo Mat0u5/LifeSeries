@@ -1,11 +1,11 @@
 package net.mat0u5.lifeseries.mixin.client;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.LifeSeriesClient;
-import net.mat0u5.lifeseries.render.ClientRenderer;
-import net.mat0u5.lifeseries.render.RenderUtils;
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.render.ClientRenderer;
+import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.ClientUtils;
+import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;

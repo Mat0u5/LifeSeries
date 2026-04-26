@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.mixin.client;
 
-import net.mat0u5.lifeseries.entity.angrysnowman.AngrySnowmanRenderer;
-import net.mat0u5.lifeseries.entity.snail.SnailRenderer;
-import net.mat0u5.lifeseries.entity.triviabot.TriviaBotRenderer;
+import net.mat0u5.lifeseries.client.entity.angrysnowman.AngrySnowmanRenderer;
+import net.mat0u5.lifeseries.client.entity.snail.SnailRenderer;
+import net.mat0u5.lifeseries.client.entity.triviabot.TriviaBotRenderer;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import org.spongepowered.asm.mixin.Mixin;

@@ -129,7 +129,7 @@ public class LimitedLife extends Season {
         secondCounter--;
         if (secondCounter <= 0) {
             secondCounter = 20;
-            livesManager.getAlivePlayers().forEach(ServerPlayer::ls$removeLife);
+            livesManager.getAlivePlayers().forEach(player -> player.ls$removeLife());
 
             if (TICK_OFFLINE_PLAYERS) {
                 //? if <= 1.20.2 {

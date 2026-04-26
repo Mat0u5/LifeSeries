@@ -80,8 +80,8 @@ public class SuperpowersWildcard extends Wildcard {
     }
 
     public static void rollRandomSuperpowers(List<ServerPlayer> allPlayers) {
-        allPlayers.removeIf(ServerPlayer::ls$isDead);
-        allPlayers.removeIf(ServerPlayer::ls$isWatcher);
+        allPlayers.removeIf(player -> player.ls$isDead());
+        allPlayers.removeIf(player -> player.ls$isWatcher());
         allPlayers.forEach(SuperpowersWildcard::resetSuperpower);
 
         List<ServerPlayer> prioritizedList = new ArrayList<>();

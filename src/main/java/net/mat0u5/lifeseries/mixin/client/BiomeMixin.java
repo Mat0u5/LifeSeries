@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.mixin.client;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.biome.Biome;

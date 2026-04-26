@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.mixin.client;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.LifeSeriesClient;
-import net.mat0u5.lifeseries.events.ClientEvents;
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.events.ClientEvents;
 import net.mat0u5.lifeseries.utils.interfaces.IEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;

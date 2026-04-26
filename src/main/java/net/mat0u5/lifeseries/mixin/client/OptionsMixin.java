@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
-import net.mat0u5.lifeseries.events.ClientKeybinds;
+import net.mat0u5.lifeseries.client.events.ClientKeybinds;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Options;
 import org.spongepowered.asm.mixin.Final;

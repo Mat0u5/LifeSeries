@@ -1,10 +1,10 @@
 package net.mat0u5.lifeseries.mixin.client;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.LifeSeriesClient;
-import net.mat0u5.lifeseries.gui.EmptySleepScreen;
-import net.mat0u5.lifeseries.gui.trivia.NewQuizScreen;
-import net.mat0u5.lifeseries.gui.trivia.VotingScreen;
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
+import net.mat0u5.lifeseries.client.gui.trivia.NewQuizScreen;
+import net.mat0u5.lifeseries.client.gui.trivia.VotingScreen;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;

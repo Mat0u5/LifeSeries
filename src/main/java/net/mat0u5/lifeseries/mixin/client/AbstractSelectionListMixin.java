@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.mixin.client;
 import net.minecraft.client.gui.components.AbstractSelectionList;
 import org.spongepowered.asm.mixin.Mixin;
 //? if >= 1.21.9 {
-import net.mat0u5.lifeseries.gui.config.ConfigListWidget;
+import net.mat0u5.lifeseries.client.gui.config.ConfigListWidget;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;

@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.mixin.client;
 
-import net.mat0u5.lifeseries.entity.snail.SnailModel;
-import net.mat0u5.lifeseries.entity.triviabot.TriviaBotModel;
+import net.mat0u5.lifeseries.client.entity.snail.SnailModel;
+import net.mat0u5.lifeseries.client.entity.triviabot.TriviaBotModel;
 import net.minecraft.client.model.geom.LayerDefinitions;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;

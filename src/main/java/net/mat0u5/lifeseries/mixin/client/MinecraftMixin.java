@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.mixin.client;
 
 import net.mat0u5.lifeseries.config.WorldConfig;
-import net.mat0u5.lifeseries.events.ClientEvents;
-import net.mat0u5.lifeseries.utils.interfaces.IMinecraft;
+import net.mat0u5.lifeseries.client.events.ClientEvents;
+import net.mat0u5.lifeseries.client.utils.interfaces.IMinecraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.server.WorldStem;
@@ -13,11 +13,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.Inject;
 //? if >= 1.20.3 {
-import net.mat0u5.lifeseries.render.ClientRenderer;
+import net.mat0u5.lifeseries.client.render.ClientRenderer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDilation;
 import net.minecraft.world.TickRateManager;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;

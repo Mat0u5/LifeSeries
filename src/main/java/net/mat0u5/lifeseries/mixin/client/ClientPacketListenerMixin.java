@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.mixin.client;
 
 import io.netty.buffer.Unpooled;
-import net.mat0u5.lifeseries.events.ClientEvents;
-import net.mat0u5.lifeseries.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.client.events.ClientEvents;
+import net.mat0u5.lifeseries.client.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.game.ClientboundLoginPacket;
@@ -15,7 +15,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.mat0u5.lifeseries.utils.ClientUtils;
+import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;

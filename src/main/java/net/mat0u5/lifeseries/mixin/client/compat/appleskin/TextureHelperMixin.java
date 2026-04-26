@@ -1,9 +1,9 @@
 package net.mat0u5.lifeseries.mixin.client.compat.appleskin;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.LifeSeriesClient;
-import net.mat0u5.lifeseries.render.RenderUtils;
-import net.mat0u5.lifeseries.utils.ClientUtils;
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.render.RenderUtils;
+import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.resources.Identifier;
 import org.spongepowered.asm.mixin.Mixin;

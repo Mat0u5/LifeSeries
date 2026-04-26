@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
-import net.mat0u5.lifeseries.particle.TriviaSpiritParticle;
+import net.mat0u5.lifeseries.client.particle.TriviaSpiritParticle;
 import net.mat0u5.lifeseries.registries.ParticleRegistry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
