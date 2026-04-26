@@ -126,12 +126,6 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 					modid.set("fabricloader")
 					versionRange.set(prop("mod.loader_range").ifBlank { "*" })
 				}
-
-				required.maybeCreate("fabric-api").apply {
-					val legacyFabricApi = stonecutter.eval(stonecutter.current.version, "<=1.19")
-					modid.set(if (legacyFabricApi) "fabric" else "fabric-api")
-					versionRange.set(prop("mod.api_range").ifBlank { "*" })
-				}
 			}
 		}
 
