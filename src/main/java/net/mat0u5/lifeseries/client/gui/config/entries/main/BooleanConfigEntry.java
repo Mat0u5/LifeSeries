@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.client.gui.config.entries.main;
 
 import net.mat0u5.lifeseries.client.gui.config.entries.ButtonConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
+import net.mat0u5.lifeseries.client.utils.interfaces.IEntryGroupHeader;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 

@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.client.gui.trivia;
 
-import net.mat0u5.lifeseries.features.Trivia;
+import net.mat0u5.lifeseries.client.features.Trivia;
 import net.mat0u5.lifeseries.client.gui.DefaultScreen;
-import net.mat0u5.lifeseries.render.RenderUtils;
+import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;

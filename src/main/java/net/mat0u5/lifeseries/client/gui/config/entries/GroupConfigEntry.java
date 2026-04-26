@@ -2,10 +2,10 @@ package net.mat0u5.lifeseries.client.gui.config.entries;
 
 import net.mat0u5.lifeseries.client.gui.config.ConfigListWidget;
 import net.mat0u5.lifeseries.client.gui.config.ConfigScreen;
-import net.mat0u5.lifeseries.render.RenderUtils;
-import net.mat0u5.lifeseries.utils.TextColors;
+import net.mat0u5.lifeseries.client.render.RenderUtils;
+import net.mat0u5.lifeseries.client.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
+import net.mat0u5.lifeseries.client.utils.interfaces.IEntryGroupHeader;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 import java.util.ArrayList;

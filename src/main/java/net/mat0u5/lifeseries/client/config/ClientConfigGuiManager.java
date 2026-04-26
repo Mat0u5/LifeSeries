@@ -1,17 +1,17 @@
 package net.mat0u5.lifeseries.client.config;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.config.entries.*;
-import net.mat0u5.lifeseries.gui.config.ConfigScreen;
-import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
-import net.mat0u5.lifeseries.gui.config.entries.GroupConfigEntry;
-import net.mat0u5.lifeseries.gui.config.entries.NumberConfigEntry;
-import net.mat0u5.lifeseries.gui.config.entries.extra.*;
-import net.mat0u5.lifeseries.gui.config.entries.extra.time.MinutesConfigEntry;
-import net.mat0u5.lifeseries.gui.config.entries.extra.time.SecondsConfigEntry;
-import net.mat0u5.lifeseries.gui.config.entries.main.*;
+import net.mat0u5.lifeseries.client.config.entries.*;
+import net.mat0u5.lifeseries.client.gui.config.ConfigScreen;
+import net.mat0u5.lifeseries.client.gui.config.entries.ConfigEntry;
+import net.mat0u5.lifeseries.client.gui.config.entries.GroupConfigEntry;
+import net.mat0u5.lifeseries.client.gui.config.entries.NumberConfigEntry;
+import net.mat0u5.lifeseries.client.gui.config.entries.extra.*;
+import net.mat0u5.lifeseries.client.gui.config.entries.extra.time.MinutesConfigEntry;
+import net.mat0u5.lifeseries.client.gui.config.entries.extra.time.SecondsConfigEntry;
+import net.mat0u5.lifeseries.client.gui.config.entries.main.*;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
+import net.mat0u5.lifeseries.client.utils.interfaces.IEntryGroupHeader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 

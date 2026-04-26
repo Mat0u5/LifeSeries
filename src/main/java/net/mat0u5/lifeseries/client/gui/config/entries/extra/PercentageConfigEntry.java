@@ -4,7 +4,7 @@ package net.mat0u5.lifeseries.client.gui.config.entries.extra;
 import net.mat0u5.lifeseries.client.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.client.gui.config.entries.interfaces.IPopup;
 import net.mat0u5.lifeseries.client.gui.config.entries.interfaces.ITextFieldAddonPopup;
-import net.mat0u5.lifeseries.gui.config.entries.main.DoubleConfigEntry;
+import net.mat0u5.lifeseries.client.gui.config.entries.main.DoubleConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.gui.Font;

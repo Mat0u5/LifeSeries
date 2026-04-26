@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.client.gui.config;
 
-import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
-import net.mat0u5.lifeseries.utils.TextColors;
+import net.mat0u5.lifeseries.client.gui.config.entries.ConfigEntry;
+import net.mat0u5.lifeseries.client.utils.TextColors;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.ObjectSelectionList;

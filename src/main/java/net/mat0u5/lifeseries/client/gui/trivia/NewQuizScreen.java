@@ -1,9 +1,9 @@
 package net.mat0u5.lifeseries.client.gui.trivia;
 
-import net.mat0u5.lifeseries.features.Trivia;
+import net.mat0u5.lifeseries.client.features.Trivia;
 import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
-import net.mat0u5.lifeseries.render.RenderUtils;
-import net.mat0u5.lifeseries.utils.TextColors;
+import net.mat0u5.lifeseries.client.render.RenderUtils;
+import net.mat0u5.lifeseries.client.utils.TextColors;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;

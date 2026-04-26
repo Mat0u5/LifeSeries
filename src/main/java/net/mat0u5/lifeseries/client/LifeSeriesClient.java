@@ -1,10 +1,11 @@
 package net.mat0u5.lifeseries.client;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.mat0u5.lifeseries.config.ClientConfig;
-import net.mat0u5.lifeseries.network.NetworkHandlerClient;
-import net.mat0u5.lifeseries.registries.ClientRegistries;
-import net.mat0u5.lifeseries.render.TextHud;
+import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.client.config.ClientConfig;
+import net.mat0u5.lifeseries.client.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.client.registries.ClientRegistries;
+import net.mat0u5.lifeseries.client.render.TextHud;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;

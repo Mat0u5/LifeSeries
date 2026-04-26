@@ -9,7 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.Identifier;
 
-import javax.annotation.Nullable;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.*;
@@ -21,6 +20,7 @@ import net.minecraft.core.ClientAsset;
 //?}
 //? if > 1.20 {
 import net.minecraft.world.entity.player.PlayerSkin;
+import org.jetbrains.annotations.Nullable;
 //?}
 
 public class LifeSkinsClient {

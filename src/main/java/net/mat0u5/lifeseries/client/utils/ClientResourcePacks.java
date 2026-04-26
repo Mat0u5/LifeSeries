@@ -1,13 +1,13 @@
 package net.mat0u5.lifeseries.client.utils;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.LifeSeriesClient;
-import net.mat0u5.lifeseries.config.ClientConfig;
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.config.ClientConfig;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.repository.Pack;
 
-import static net.mat0u5.lifeseries.LifeSeriesClient.clientConfig;
+import static net.mat0u5.lifeseries.client.LifeSeriesClient.clientConfig;
 
 public class ClientResourcePacks {
     private static final String MINIMAL_ARMOR_RESOURCEPACK = "lifeseries:minimal_armor";

@@ -1,9 +1,9 @@
 package net.mat0u5.lifeseries.client.gui.config.entries.extra;
 
-import net.mat0u5.lifeseries.gui.config.entries.main.StringConfigEntry;
-import net.mat0u5.lifeseries.network.NetworkHandlerClient;
-import net.mat0u5.lifeseries.render.RenderUtils;
-import net.mat0u5.lifeseries.utils.TextColors;
+import net.mat0u5.lifeseries.client.gui.config.entries.main.StringConfigEntry;
+import net.mat0u5.lifeseries.client.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.client.render.RenderUtils;
+import net.mat0u5.lifeseries.client.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;

@@ -5,7 +5,7 @@ package net.mat0u5.lifeseries.client.particle;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
-import net.mat0u5.lifeseries.entity.triviabot.TriviaBotModel;
+import net.mat0u5.lifeseries.client.entity.triviabot.TriviaBotModel;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.Model;
@@ -106,7 +106,7 @@ public class TriviaSpiritParticle extends Particle {
 *///?} else {
 
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
-import net.mat0u5.lifeseries.entity.triviabot.TriviaBotModel;
+import net.mat0u5.lifeseries.client.entity.triviabot.TriviaBotModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;

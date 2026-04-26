@@ -1,11 +1,11 @@
 package net.mat0u5.lifeseries.client.render;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.LifeSeriesClient;
-import net.mat0u5.lifeseries.events.ClientKeybinds;
-import net.mat0u5.lifeseries.features.Trivia;
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.events.ClientKeybinds;
+import net.mat0u5.lifeseries.client.features.Trivia;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.TextColors;
+import net.mat0u5.lifeseries.client.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Time;

@@ -1,12 +1,12 @@
 package net.mat0u5.lifeseries.client.gui.config.entries.extra;
 
-import net.mat0u5.lifeseries.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.client.gui.config.entries.ModifiableListEntry;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
-import net.mat0u5.lifeseries.render.RenderUtils;
+import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.TextColors;
+import net.mat0u5.lifeseries.client.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;

@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.client.utils;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.utils.enums.Direction;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;

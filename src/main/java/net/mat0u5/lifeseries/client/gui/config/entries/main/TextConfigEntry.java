@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.client.gui.config.entries.main;
 
 import net.mat0u5.lifeseries.client.gui.config.entries.EmptyConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
+import net.mat0u5.lifeseries.client.utils.interfaces.IEntryGroupHeader;
 //? if >= 1.21.9
 import net.minecraft.client.input.*;
 

@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.client.entity.snail;
 
 import net.mat0u5.lifeseries.entity.snail.Snail;
-import net.mat0u5.lifeseries.features.SnailSkinsClient;
+import net.mat0u5.lifeseries.client.features.SnailSkinsClient;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.Identifier;
 

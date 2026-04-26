@@ -2,15 +2,15 @@ package net.mat0u5.lifeseries.client.gui.config;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import net.mat0u5.lifeseries.LifeSeriesClient;
-import net.mat0u5.lifeseries.config.ClientConfigNetwork;
-import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
-import net.mat0u5.lifeseries.gui.config.entries.GroupConfigEntry;
-import net.mat0u5.lifeseries.gui.config.entries.TextFieldConfigEntry;
-import net.mat0u5.lifeseries.gui.config.entries.extra.TriviaQuestionConfigEntry;
-import net.mat0u5.lifeseries.gui.config.entries.main.TextConfigEntry;
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.config.ClientConfigNetwork;
+import net.mat0u5.lifeseries.client.gui.config.entries.ConfigEntry;
+import net.mat0u5.lifeseries.client.gui.config.entries.GroupConfigEntry;
+import net.mat0u5.lifeseries.client.gui.config.entries.TextFieldConfigEntry;
+import net.mat0u5.lifeseries.client.gui.config.entries.extra.TriviaQuestionConfigEntry;
+import net.mat0u5.lifeseries.client.gui.config.entries.main.TextConfigEntry;
 
-import net.mat0u5.lifeseries.utils.TextColors;
+import net.mat0u5.lifeseries.client.utils.TextColors;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;

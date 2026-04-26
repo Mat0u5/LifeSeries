@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.client.gui.other;
 
 import net.mat0u5.lifeseries.client.gui.DefaultScreen;
-import net.mat0u5.lifeseries.render.RenderUtils;
-import net.mat0u5.lifeseries.utils.ClientUtils;
+import net.mat0u5.lifeseries.client.render.RenderUtils;
+import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;

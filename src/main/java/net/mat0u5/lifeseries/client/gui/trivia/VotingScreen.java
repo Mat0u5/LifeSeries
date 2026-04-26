@@ -1,10 +1,9 @@
 package net.mat0u5.lifeseries.client.gui.trivia;
 
 import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
-import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
-import net.mat0u5.lifeseries.render.RenderUtils;
-import net.mat0u5.lifeseries.utils.TextColors;
+import net.mat0u5.lifeseries.client.render.RenderUtils;
+import net.mat0u5.lifeseries.client.utils.TextColors;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.Minecraft;

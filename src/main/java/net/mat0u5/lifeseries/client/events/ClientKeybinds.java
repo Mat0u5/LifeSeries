@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.client.events;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import net.mat0u5.lifeseries.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.client.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.client.KeyMapping;

@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.client.features;
 
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
-import net.mat0u5.lifeseries.utils.ClientUtils;
+import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.interfaces.IMorph;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.world.InteractionHand;
