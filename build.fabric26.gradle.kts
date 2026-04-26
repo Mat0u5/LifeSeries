@@ -3,15 +3,15 @@ plugins {
 	id("net.fabricmc.fabric-loom")
 }
 
+fun isValidVersion(string: String?): Boolean {
+	return string != null && string.isNotEmpty() && !string.equals("null", ignoreCase = true) && !string.equals("[VERSIONED]", ignoreCase = true)
+}
+
 platform {
 	loader = "fabric"
 	dependencies {
 		required("minecraft") {
 			versionRange = prop("deps.minecraft")
-		}
-		required("fabric-api") {
-			slug("fabric-api")
-			versionRange = ">=${prop("deps.fabric-api")}"
 		}
 		required("fabricloader") {
 			versionRange = ">=${libs.fabric.loader.get().version}"
@@ -55,6 +55,24 @@ dependencies {
 
 	implementation(libs.fabric.loader)
 	implementation("net.fabricmc.fabric-api:fabric-api:${prop("deps.fabric-api")}")
+
+	compileOnly("maven.modrinth:flashback:xs2Obe8Z")
+	compileOnly("maven.modrinth:replaymod:1.21-2.6.23")
+	compileOnly("maven.modrinth:appleskin:3.0.6+mc1.21")
+	compileOnly("net.fabricmc.fabric-api:fabric-api:${prop("deps.fabric-api")}")
+	//runtimeOnly("net.fabricmc.fabric-api:fabric-api:${prop("deps.fabric-api")}")
+
+	if (isValidVersion(prop("deps.carpet")) && isValidVersion(prop("deps.carpet_bot_relog"))) runtimeOnly("maven.modrinth:carpet-bot-relog:${prop("deps.carpet_bot_relog")}")
+	if (isValidVersion(prop("deps.carpet"))) runtimeOnly("curse.maven:carpet-349239:${prop("deps.carpet")}")
+
+	//Runtime and compile
+	if (isValidVersion(prop("deps.voicechat"))) {
+		compileOnly ("maven.modrinth:simple-voice-chat:fabric-${prop("deps.voicechat")}")
+		//runtimeOnly ("maven.modrinth:simple-voice-chat:fabric-${prop("deps.voicechat")}")
+	}
+	else {
+		compileOnly ("maven.modrinth:simple-voice-chat:fabric-2.6.11+26.1-snapshot-1")
+	}
 }
 
 stonecutter {

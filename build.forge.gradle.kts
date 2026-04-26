@@ -3,6 +3,10 @@ plugins {
 	id("net.neoforged.moddev.legacyforge")
 }
 
+fun isValidVersion(string: String?): Boolean {
+	return string != null && string.isNotEmpty() && !string.equals("null", ignoreCase = true) && !string.equals("[VERSIONED]", ignoreCase = true)
+}
+
 platform {
 	loader = "forge"
 	dependencies {
