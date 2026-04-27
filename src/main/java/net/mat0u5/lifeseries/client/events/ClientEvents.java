@@ -4,8 +4,6 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
-import net.mat0u5.lifeseries.client.compatibilities.FlashbackCompatibility;
-import net.mat0u5.lifeseries.client.compatibilities.ReplayModCompatibility;
 import net.mat0u5.lifeseries.client.compatibilities.VoicechatClient;
 import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.client.gui.other.UpdateInfoScreen;
@@ -50,6 +48,13 @@ import org.joml.Vector3f;
 import net.minecraft.core.particles.ColorParticleOption;
  //?}
 
+//? fabric {
+/*import net.mat0u5.lifeseries.client.compatibilities.FlashbackCompatibility;
+*///?}
+//? fabric || forge {
+/*import net.mat0u5.lifeseries.client.compatibilities.ReplayModCompatibility;
+*///?}
+
 public class ClientEvents {
     public static long onGroundFor = 0;
     private static boolean hasShownUpdateScreen = false;
@@ -65,16 +70,20 @@ public class ClientEvents {
     private static void checkReplayServer(MinecraftServer server) {
         boolean isReplay = false;
         if (CompatibilityManager.flashbackLoaded()) {
-            if (FlashbackCompatibility.isReplayServer(server)) {
+            //? fabric {
+            /*if (FlashbackCompatibility.isReplayServer(server)) {
                 LifeSeries.LOGGER.info("Detected Flashback Replay");
                 isReplay = true;
             }
+            *///?}
         }
         if (CompatibilityManager.replayModLoaded()) {
-            if (ReplayModCompatibility.isReplayServer()) {
+            //? fabric || forge {
+            /*if (ReplayModCompatibility.isReplayServer()) {
                 LifeSeries.LOGGER.info("Detected ReplayMod Replay");
                 isReplay = true;
             }
+            *///?}
         }
         LifeSeriesClient.isReplay = isReplay;
     }

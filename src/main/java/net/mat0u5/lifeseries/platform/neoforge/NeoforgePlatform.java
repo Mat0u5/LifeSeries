@@ -2,15 +2,15 @@ package net.mat0u5.lifeseries.platform.neoforge;
 
 //? neoforge {
 
-/*import net.mat0u5.lifeseries.platform.Platform;
+import net.mat0u5.lifeseries.platform.Platform;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
-import net.neoforged.fml.loading.VersionInfo;
 
 public class NeoforgePlatform implements Platform {
 
 	@Override
 	public boolean isModLoaded(String modId) {
+		if (ModList.get() == null) return false;
 		return ModList.get().isLoaded(modId);
 	}
 
@@ -26,7 +26,7 @@ public class NeoforgePlatform implements Platform {
 
 	@Override
 	public boolean isDevelopmentEnvironment() {
-		return !FMLLoader/^? if > 1.21.7 {^/.getCurrent()/^?}^/.isProduction();
+		return !FMLLoader/*? if > 1.21.7 {*/.getCurrent()/*?}*/.isProduction();
 	}
 }
-*///?}
+//?}

@@ -33,10 +33,10 @@ import java.util.List;
 import java.util.UUID;
 
 //? fabric {
-import net.mat0u5.lifeseries.platform.fabric.FabricPlatform;
-//?} neoforge {
-/*import net.mat0u5.lifeseries.platform.neoforge.NeoforgePlatform;
- *///?} forge {
+/*import net.mat0u5.lifeseries.platform.fabric.FabricPlatform;
+*///?} neoforge {
+import net.mat0u5.lifeseries.platform.neoforge.NeoforgePlatform;
+ //?} forge {
 /*import net.mat0u5.lifeseries.platform.forge.ForgePlatform;
  *///?}
 
@@ -66,7 +66,7 @@ public class LifeSeries {
 	public static final List<String> ALLOWED_SEASON_NAMES = Seasons.getSeasonIds();
 
 	public static void onInitialize() {
-		LOGGER.info("Initializing Life Series...");
+		LOGGER.info("Initializing Life Series [{} {} ({})]...", platform().loader().name(), platform().mcVersion(), MOD_VERSION);
 
 		config = new MainConfig();
 		NetworkHandlerServer.reload();
@@ -79,23 +79,25 @@ public class LifeSeries {
 		parseSeason(season);
 		Seasons.getSeasons().forEach(seasons -> seasons.getSeasonInstance().createConfig());
 
-		MobRegistry.registerAttributes();
+		//? !neoforge {
+		/*MobRegistry.registerAttributes();
+		*///?}
 		if (!ISOLATED_ENVIRONMENT) {
 			UpdateChecker.checkForMajorUpdates();
 		}
 		NetworkHandlerServer.initializeSimplePacketReceivers();
 	}
 
-	static Platform platform() {
+	public static Platform platform() {
 		return PLATFORM;
 	}
 
 	private static Platform createPlatformInstance() {
 		//? fabric {
-		return new FabricPlatform();
-		//?} neoforge {
-		/*return new NeoforgePlatform();
-		 *///?} forge {
+		/*return new FabricPlatform();
+		*///?} neoforge {
+		return new NeoforgePlatform();
+		 //?} forge {
 		/*return new ForgePlatform();
 		 *///?}
 	}

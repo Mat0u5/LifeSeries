@@ -80,6 +80,7 @@ public class LifeSeriesClient implements IClientHelper {
     public static HandshakeStatus serverHandshake = HandshakeStatus.WAITING;
 
     public static void onInitializeClient() {
+        LifeSeries.LOGGER.info("Initializing Life Series Client [{} {} ({})]...", LifeSeries.platform().loader().name(), LifeSeries.platform().mcVersion(), LifeSeries.MOD_VERSION);
         ClientRegistries.registerModStuff();
         NetworkHandlerClient.initializeSimplePacketReceivers();
 

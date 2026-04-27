@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.platform.fabric;
 
 //? fabric {
 
-import net.fabricmc.loader.api.FabricLoader;
+/*import net.fabricmc.loader.api.FabricLoader;
 import net.mat0u5.lifeseries.platform.Platform;
 
 public class FabricPlatform implements Platform {
@@ -27,4 +27,4 @@ public class FabricPlatform implements Platform {
 		return FabricLoader.getInstance().isDevelopmentEnvironment();
 	}
 }
-//?}
+*///?}
