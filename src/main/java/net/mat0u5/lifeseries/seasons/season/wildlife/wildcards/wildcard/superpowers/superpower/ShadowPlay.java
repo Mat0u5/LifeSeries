@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -36,14 +37,14 @@ public class ShadowPlay extends Superpower {
         super.activate();
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        ServerLevel playerLevel = player.ls$getServerLevel();
+        ServerLevel playerLevel = ((IPlayer) player).ls$getServerLevel();
         List<ServerPlayer> affectedPlayers = playerLevel.getEntitiesOfClass(ServerPlayer.class, player.getBoundingBox().inflate(BLIND_RANGE), playerEntity -> playerEntity.distanceTo(player) <= BLIND_RANGE);
         MobEffectInstance blindness = new MobEffectInstance(MobEffects.BLINDNESS, BLIND_TIME, 0);
         MobEffectInstance invis = new MobEffectInstance(MobEffects.INVISIBILITY, 60, 0, false, false, false);
         affectedPlayers.remove(player);
         for (ServerPlayer affectedPlayer : affectedPlayers) {
             affectedPlayer.addEffect(blindness);
-            affectedPlayer.ls$getServerLevel().sendParticles(
+            ((IPlayer) affectedPlayer).ls$getServerLevel().sendParticles(
                     ParticleTypes.SMOKE,
                     affectedPlayer.getX(), affectedPlayer.getY()+0.9, affectedPlayer.getZ(),
                     40, 0.3, 0.5, 0.3, 0

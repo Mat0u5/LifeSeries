@@ -12,6 +12,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShifting;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -236,7 +237,7 @@ public class WildLifeTriviaHandler extends TriviaHandler {
     public void cursePlayer() {
         ServerPlayer player = bot.serverData.getBoundPlayer();
         if (player == null) return;
-        player.ls$playNotifySound(SoundEvents.ELDER_GUARDIAN_CURSE, SoundSource.MASTER, 0.2f, 1f);
+        ((IPlayer) player).ls$playNotifySound(SoundEvents.ELDER_GUARDIAN_CURSE, SoundSource.MASTER, 0.2f, 1f);
         ServerLevel level = (ServerLevel) bot.level();
         Vec3 pos = bot.position();
 
@@ -263,7 +264,7 @@ public class WildLifeTriviaHandler extends TriviaHandler {
         *///?}
         if (CompatibilityManager.voicechatLoaded() && VoicechatMain.isConnectedToSVC(player.getUUID())) numOfCurses = 10;
 
-        Integer punishmentWeight = player.ls$getLives();
+        Integer punishmentWeight = ((IPlayer) player).ls$getLives();
         if (punishmentWeight == null) punishmentWeight = 1;
         if (difficulty == 1) punishmentWeight++;
         if (difficulty == 3) punishmentWeight--;
@@ -383,7 +384,7 @@ public class WildLifeTriviaHandler extends TriviaHandler {
             *///?} else {
             Component effectName = Component.translatable(effect.value().getDescriptionId());
             //?}
-            player.ls$message(ModifiableText.WILDLIFE_TRIVIA_RECEIVE_EFFECT.get(effectName, romanNumeral));
+            ((IPlayer) player).ls$message(ModifiableText.WILDLIFE_TRIVIA_RECEIVE_EFFECT.get(effectName, romanNumeral));
 
         }
         player.sendSystemMessage(Component.empty());
@@ -474,7 +475,7 @@ public class WildLifeTriviaHandler extends TriviaHandler {
 
     public static void curseRavager(ServerPlayer player, BlockPos pos) {
         BlockPos spawnPos = TriviaBotPathfinding.getBlockPosNearPlayer(player, pos, 5);
-        LevelUtils.spawnEntity(EntityType.RAVAGER, player.ls$getServerLevel(), spawnPos);
+        LevelUtils.spawnEntity(EntityType.RAVAGER, ((IPlayer) player).ls$getServerLevel(), spawnPos);
     }
 
     //? if >= 1.21 {
@@ -499,7 +500,7 @@ public class WildLifeTriviaHandler extends TriviaHandler {
 
     public static void curseBindingArmor(ServerPlayer player) {
         for (ItemStack item : PlayerUtils.getArmorItems(player)) {
-            ItemStackUtils.spawnItemForPlayer(player.ls$getServerLevel(), player.position(), item.copy(), player);
+            ItemStackUtils.spawnItemForPlayer(((IPlayer) player).ls$getServerLevel(), player.position(), item.copy(), player);
         }
         ItemStack head = Items.LEATHER_HELMET.getDefaultInstance();
         ItemStack chest = Items.LEATHER_CHESTPLATE.getDefaultInstance();
@@ -546,11 +547,11 @@ public class WildLifeTriviaHandler extends TriviaHandler {
 
     public static void curseBeeswarm(ServerPlayer player, BlockPos pos) {
         BlockPos spawnPos = TriviaBotPathfinding.getBlockPosNearPlayer(player, pos, 1);
-        Bee bee1 = LevelUtils.spawnEntity(EntityType.BEE, player.ls$getServerLevel(), spawnPos);
-        Bee bee2 = LevelUtils.spawnEntity(EntityType.BEE, player.ls$getServerLevel(), spawnPos);
-        Bee bee3 = LevelUtils.spawnEntity(EntityType.BEE, player.ls$getServerLevel(), spawnPos);
-        Bee bee4 = LevelUtils.spawnEntity(EntityType.BEE, player.ls$getServerLevel(), spawnPos);
-        Bee bee5 = LevelUtils.spawnEntity(EntityType.BEE, player.ls$getServerLevel(), spawnPos);
+        Bee bee1 = LevelUtils.spawnEntity(EntityType.BEE, ((IPlayer) player).ls$getServerLevel(), spawnPos);
+        Bee bee2 = LevelUtils.spawnEntity(EntityType.BEE, ((IPlayer) player).ls$getServerLevel(), spawnPos);
+        Bee bee3 = LevelUtils.spawnEntity(EntityType.BEE, ((IPlayer) player).ls$getServerLevel(), spawnPos);
+        Bee bee4 = LevelUtils.spawnEntity(EntityType.BEE, ((IPlayer) player).ls$getServerLevel(), spawnPos);
+        Bee bee5 = LevelUtils.spawnEntity(EntityType.BEE, ((IPlayer) player).ls$getServerLevel(), spawnPos);
         //? if <= 1.21.9 {
         /*if (bee1 != null) bee1.setPersistentAngerTarget(player.getUUID());
         if (bee2 != null) bee2.setPersistentAngerTarget(player.getUUID());

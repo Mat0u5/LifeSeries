@@ -10,6 +10,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Superspeed;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayerUsername;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.NicknameManager;
 import net.minecraft.network.chat.Component;
@@ -61,7 +62,7 @@ import net.minecraft.world.entity.EntityType;
 *///?}
 
 @Mixin(value = Player.class, priority = 1)
-public abstract class PlayerMixin implements IPlayer {
+public abstract class PlayerMixin implements IPlayerUsername {
 
     @Inject(method = "actuallyHurt", at = @At("HEAD"), cancellable = true)
     //? if <=1.21 {
@@ -164,7 +165,7 @@ public abstract class PlayerMixin implements IPlayer {
         //? if <= 1.20.5 {
         /*FrostWalkerEnchantment.onEntityMoved(entity, entity.level(), entity.blockPosition(), Superspeed.FROST_WALKER_LEVEL);
         *///?} else {
-        ls$frostWalker.apply(player.ls$getServerLevel(), Superspeed.FROST_WALKER_LEVEL, null, player, player.position());
+        ls$frostWalker.apply(((IPlayer) player).ls$getServerLevel(), Superspeed.FROST_WALKER_LEVEL, null, player, player.position());
         //?}
     }
 

@@ -17,10 +17,10 @@
 	"accessWidener": "aw/${minecraft}.accesswidener",
 	"entrypoints": {
 		"main": [
-			"${group}.${id}.platform.fabric.FabricEntrypoint"
+			"${group}.platform.fabric.FabricEntrypoint"
 		],
 		"client": [
-			"${group}.${id}.platform.fabric.FabricClientEntrypoint"
+			"${group}.client.platform.fabric.FabricClientEntrypoint"
 		],
 		"voicechat": [
 			"net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain"
@@ -31,14 +31,6 @@
 	],
 	"breaks": {
 		"pastlife": "*"
-	},
-	"custom": {
-		"loom:injected_interfaces": {
-			"net/minecraft/class_3222": ["net/mat0u5/lifeseries/utils/interfaces/IServerPlayer"],
-			"net/minecraft/class_310": ["net/mat0u5/lifeseries/utils/interfaces/IMinecraft"],
-			"net/minecraft/server/level/ServerPlayer": ["net/mat0u5/lifeseries/utils/interfaces/IServerPlayer"],
-			"net/minecraft/client/Minecraft": ["net/mat0u5/lifeseries/utils/interfaces/IMinecraft"]
-		}
 	},
 	"depends": {}
 }

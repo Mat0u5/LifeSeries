@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.mixin.ChunkMapAccessor;
 import net.mat0u5.lifeseries.mixin.PlayerAccessor;
 import net.mat0u5.lifeseries.mixin.TrackedEntityAccessor;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.minecraft.network.protocol.game.*;
@@ -226,7 +227,7 @@ public class ProfileManager {
     }
 
     private static void refreshPlayerProfile(ServerPlayer player) {
-        ServerLevel level = player.ls$getServerLevel();
+        ServerLevel level = ((IPlayer) player).ls$getServerLevel();
         PlayerList playerList = server.getPlayerList();
 
         List<UUID> uuidList = Collections.singletonList(player.getUUID());

@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.NewQuizScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.VotingScreen;
+import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
@@ -32,7 +33,7 @@ public class ItemInHandLayerMixin {
     @ModifyVariable(method = "submitArmWithItem", at = @At("HEAD"), index = 2, argsOnly = true)
     private ItemStackRenderState noHandItem(ItemStackRenderState value) {
     //?}
-        if (!LifeSeries.modDisabled() && LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE && (Minecraft.getInstance().ls$getScreen() instanceof EmptySleepScreen || Minecraft.getInstance().ls$getScreen() instanceof NewQuizScreen || Minecraft.getInstance().ls$getScreen() instanceof VotingScreen)) {
+        if (!LifeSeries.modDisabled() && LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE && (RenderUtils.getScreen() instanceof EmptySleepScreen || RenderUtils.getScreen() instanceof NewQuizScreen || RenderUtils.getScreen() instanceof VotingScreen)) {
             //? if <= 1.21.2 {
             /*return ItemStack.EMPTY;
             *///?} else {

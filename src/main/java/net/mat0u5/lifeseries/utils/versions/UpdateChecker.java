@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.minecraft.network.chat.Component;
@@ -202,8 +203,8 @@ public class UpdateChecker {
                                 TextUtils.clickableText("Click to download on Modrinth", TextUtils.openURLClickEvent("https://modrinth.com/mod/life-series"))
                         );
             if (PermissionManager.isAdmin(player)) {
-                player.ls$message(updateText);
-                player.ls$message(discordText);
+                ((IPlayer) player).ls$message(updateText);
+                ((IPlayer) player).ls$message(discordText);
             }
         }
         else {
@@ -213,7 +214,7 @@ public class UpdateChecker {
                         TextUtils.clickableText("Download full releases on Modrinth", TextUtils.openURLClickEvent("https://modrinth.com/mod/life-series"))
                     );
 
-            player.ls$message(updateText);
+            ((IPlayer) player).ls$message(updateText);
         }
     }
     public static void shutdownExecutor() {

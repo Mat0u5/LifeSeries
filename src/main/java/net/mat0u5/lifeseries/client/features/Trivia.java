@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.client.gui.trivia.ConfirmQuizAnswerScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.NewQuizScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.QuizScreen;
 import net.mat0u5.lifeseries.client.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.network.packets.TriviaQuestionPayload;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -56,17 +57,17 @@ public class Trivia {
         if (LifeSeries.modDisabled()) return;
         if (question.isEmpty() || answers.isEmpty()) return;
         if (LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE) {
-            Minecraft.getInstance().ls$setScreen(new NewQuizScreen());
+            RenderUtils.setScreen(new NewQuizScreen());
         }
         else {
-            Minecraft.getInstance().ls$setScreen(new QuizScreen());
+            RenderUtils.setScreen(new QuizScreen());
         }
     }
 
     public static void closeGui() {
-        if (Minecraft.getInstance().ls$getScreen() == null) return;
-        if (Minecraft.getInstance().ls$getScreen() instanceof QuizScreen || Minecraft.getInstance().ls$getScreen() instanceof ConfirmQuizAnswerScreen) {
-            Minecraft.getInstance().ls$getScreen().onClose();
+        if (RenderUtils.getScreen() == null) return;
+        if (RenderUtils.getScreen() instanceof QuizScreen || RenderUtils.getScreen() instanceof ConfirmQuizAnswerScreen) {
+            RenderUtils.getScreen().onClose();
         }
     }
 

@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.player.TeamUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -65,7 +66,7 @@ public class CreakingPower extends ToggleableSuperpower {
         super.activate();
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        ServerLevel playerLevel = player.ls$getServerLevel();
+        ServerLevel playerLevel = ((IPlayer) player).ls$getServerLevel();
 
         PlayerTeam playerTeam = TeamUtils.getPlayerTeam(player);
         if (playerTeam == null) return;
@@ -119,7 +120,7 @@ public class CreakingPower extends ToggleableSuperpower {
         TeamUtils.addEntityToTeam(teamName, player);
         TeamUtils.addEntityToTeam(teamName, entity);
         Vec3 entityPos = entity.position();
-        player.ls$getServerLevel().sendParticles(
+        ((IPlayer) player).ls$getServerLevel().sendParticles(
                 ParticleTypes.EXPLOSION,
                 entityPos.x(), entityPos.y(), entityPos.z(),
                 1, 0, 0, 0, 0
@@ -129,7 +130,7 @@ public class CreakingPower extends ToggleableSuperpower {
     public void spawnTrailParticles() {
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        ServerLevel level = player.ls$getServerLevel();
+        ServerLevel level = ((IPlayer) player).ls$getServerLevel();
         if (level == null) return;
         for (Creaking creakingEntity : createdEntities) {
             if (creakingEntity.getRandom().nextInt(50)==0) {
@@ -144,7 +145,7 @@ public class CreakingPower extends ToggleableSuperpower {
     public void spawnTrailParticles(Creaking creaking, int count, boolean towardsPlayer) {
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        ServerLevel level = player.ls$getServerLevel();
+        ServerLevel level = ((IPlayer) player).ls$getServerLevel();
         if (level == null) return;
 
         int i = towardsPlayer ? 16545810 : 6250335;

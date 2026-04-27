@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
 import net.mat0u5.lifeseries.seasons.session.Session;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
@@ -107,7 +108,7 @@ public class PlayerUtils {
     public static void playSoundToPlayers(Collection<ServerPlayer> players, SoundEvent sound, SoundSource soundCategory, float volume, float pitch) {
         for (ServerPlayer player : players) {
             if (player == null) continue;
-            player.ls$playNotifySound(sound, soundCategory, volume, pitch);
+            ((IPlayer) player).ls$playNotifySound(sound, soundCategory, volume, pitch);
         }
     }
 
@@ -117,7 +118,7 @@ public class PlayerUtils {
 
     public static void playSoundToPlayer(ServerPlayer player, SoundEvent sound, float volume, float pitch) {
         if (player == null) return;
-        player.ls$playNotifySound(sound, SoundSource.MASTER, volume, pitch);
+        ((IPlayer) player).ls$playNotifySound(sound, SoundSource.MASTER, volume, pitch);
     }
 
     private static final Random rnd = new Random();
@@ -263,7 +264,7 @@ public class PlayerUtils {
     }
     public static void displayMessageToPlayer(ServerPlayer player, Component text, int timeFor) {
         Session.skipTimer.put(player.getUUID(), timeFor/5);
-        player.ls$message(text, true);
+        ((IPlayer) player).ls$message(text, true);
     }
 
     public static List<UUID> updateInventoryQueue = new ArrayList<>();
@@ -360,9 +361,9 @@ public class PlayerUtils {
         if (!player.isSpectator()) return false;
 
         if (currentSeason.TAB_LIST_SHOW_DEAD_PLAYERS) return false;
-        if (receivingPlayer.ls$isDead()) return false;
-        if (player.ls$isAlive()) return false;
-        if (player.ls$isWatcher()) return false;
+        if (((IPlayer) receivingPlayer).ls$isDead()) return false;
+        if (((IPlayer) player).ls$isAlive()) return false;
+        if (((IPlayer) player).ls$isWatcher()) return false;
         if (Necromancy.preIsRessurectedPlayer(player)) return false;
         return true;
     }
@@ -372,8 +373,8 @@ public class PlayerUtils {
         if (!player.isSpectator()) return false;
 
         if (currentSeason.WATCHERS_IN_TAB) return false;
-        if (receivingPlayer.ls$isWatcher()) return false;
-        if (!player.ls$isWatcher()) return false;
+        if (((IPlayer) receivingPlayer).ls$isWatcher()) return false;
+        if (!((IPlayer) player).ls$isWatcher()) return false;
         return true;
     }
 
@@ -417,14 +418,14 @@ public class PlayerUtils {
 
     public static void broadcastMessage(List<ServerPlayer> players, Component message) {
         for (ServerPlayer player : players) {
-            player.ls$message(message);
+            ((IPlayer) player).ls$message(message);
         }
     }
 
     public static void broadcastMessageExcept(Component message, ServerPlayer exceptPlayer) {
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
             if (player == exceptPlayer) continue;
-            player.ls$message(message);
+            ((IPlayer) player).ls$message(message);
         }
     }
 
@@ -433,7 +434,7 @@ public class PlayerUtils {
         broadcastCooldown.put(message, cooldownTicks);
 
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-            player.ls$message(message);
+            ((IPlayer) player).ls$message(message);
         }
     }
 
@@ -442,21 +443,21 @@ public class PlayerUtils {
         broadcastCooldown.put(message, cooldownTicks);
 
         for (ServerPlayer player : PlayerUtils.getAdminPlayers()) {
-            player.ls$message(message);
+            ((IPlayer) player).ls$message(message);
         }
         LifeSeries.LOGGER.info(message.getString());
     }
 
     public static void teleport(ServerPlayer player, BlockPos pos) {
-        LevelUtils.teleport(player, player.ls$getServerLevel(), Vec3.atBottomCenterOf(pos));
+        LevelUtils.teleport(player, ((IPlayer) player).ls$getServerLevel(), Vec3.atBottomCenterOf(pos));
     }
 
     public static void teleport(ServerPlayer player, Vec3 pos) {
-        LevelUtils.teleport(player, player.ls$getServerLevel(), pos);
+        LevelUtils.teleport(player, ((IPlayer) player).ls$getServerLevel(), pos);
     }
 
     public static void teleport(ServerPlayer player, double destX, double destY, double destZ) {
-        LevelUtils.teleport(player, player.ls$getServerLevel(), destX, destY, destZ);
+        LevelUtils.teleport(player, ((IPlayer) player).ls$getServerLevel(), destX, destY, destZ);
     }
 
     public static void safelyPutIntoSurvival(ServerPlayer player) {
@@ -464,7 +465,7 @@ public class PlayerUtils {
 
         //Teleport to the highest block in the terrain
         BlockPos.MutableBlockPos playerBlockPos = player.blockPosition().mutable();
-        int safeY = LevelUtils.findTopSafeY(player.ls$getServerLevel(), Vec3.atBottomCenterOf(playerBlockPos));
+        int safeY = LevelUtils.findTopSafeY(((IPlayer) player).ls$getServerLevel(), Vec3.atBottomCenterOf(playerBlockPos));
         playerBlockPos.setY(safeY);
         teleport(player, playerBlockPos);
 
@@ -485,12 +486,12 @@ public class PlayerUtils {
 
     public static void killFromSource(ServerPlayer player, DamageSource source) {
         player.setHealth(0.0001f);
-        player.ls$hurt(source, 10);
+        ((IPlayer) player).ls$hurt(source, 10);
         if (player.isAlive()) {
             //? if <= 1.21 {
             /*player.kill();
             *///?} else {
-            player.kill(player.ls$getServerLevel());
+            player.kill(((IPlayer) player).ls$getServerLevel());
             //?}
         }
     }
@@ -498,7 +499,7 @@ public class PlayerUtils {
     public static void broadcastToVisiblePlayers(ServerPlayer broadcaster, Component message) {
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
             if (hidePlayerFrom(player, broadcaster)) continue;
-            player.ls$message(message);
+            ((IPlayer) player).ls$message(message);
         }
     }
 

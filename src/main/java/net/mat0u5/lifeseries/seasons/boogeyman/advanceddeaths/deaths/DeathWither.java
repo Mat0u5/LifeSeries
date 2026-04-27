@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.deaths;
 
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeath;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeaths;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -34,7 +35,7 @@ public class DeathWither extends AdvancedDeath {
         MobEffectInstance witherEffect = new MobEffectInstance(MobEffects.WITHER, -1, 2, false, false, false);
         player.addEffect(witherEffect);
         if (player.hurtTime == 10 && ticks < 80) {
-            player.ls$playNotifySound(SoundEvents.WITHER_SHOOT, SoundSource.PLAYERS, 1, 1);
+            ((IPlayer) player).ls$playNotifySound(SoundEvents.WITHER_SHOOT, SoundSource.PLAYERS, 1, 1);
         }
     }
 

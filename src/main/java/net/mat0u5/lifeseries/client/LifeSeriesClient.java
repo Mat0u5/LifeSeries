@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.client;
 
-import net.fabricmc.api.ClientModInitializer;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.config.ClientConfig;
 import net.mat0u5.lifeseries.client.network.NetworkHandlerClient;
@@ -20,7 +19,7 @@ import java.util.*;
 
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
-public class LifeSeriesClient implements ClientModInitializer, IClientHelper {
+public class LifeSeriesClient implements IClientHelper {
 
     public static Seasons clientCurrentSeason = LifeSeries.DEFAULT_SEASON;
     public static SessionStatus clientSessionStatus = SessionStatus.NOT_STARTED;
@@ -80,12 +79,11 @@ public class LifeSeriesClient implements ClientModInitializer, IClientHelper {
     public static boolean isReplay = false;
     public static HandshakeStatus serverHandshake = HandshakeStatus.WAITING;
 
-    @Override
-    public void onInitializeClient() {
+    public static void onInitializeClient() {
         ClientRegistries.registerModStuff();
         NetworkHandlerClient.initializeSimplePacketReceivers();
 
-        LifeSeries.setClientHelper(this);
+        LifeSeries.setClientHelper(new LifeSeriesClient());
 
         clientConfig = new ClientConfig();
         reloadConfig();

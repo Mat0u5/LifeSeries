@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.NewQuizScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.VotingScreen;
+import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import org.spongepowered.asm.mixin.Mixin;
@@ -48,7 +49,7 @@ import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 //?if <= 1.21.11 {
 /*import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
-import net.mat0u5.lifeseries.utils.ClientUtils;
+import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 *///?}
 
@@ -189,7 +190,7 @@ public abstract class PlayerEntityRendererMixin {
 
     @ModifyReturnValue(method = "getArmPose*", at = @At("RETURN"))
     private static HumanoidModel.ArmPose noHands(HumanoidModel.ArmPose original) {
-        if (!LifeSeries.modDisabled() && LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE && (Minecraft.getInstance().ls$getScreen() instanceof EmptySleepScreen || Minecraft.getInstance().ls$getScreen() instanceof NewQuizScreen || Minecraft.getInstance().ls$getScreen() instanceof VotingScreen)) {
+        if (!LifeSeries.modDisabled() && LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE && (RenderUtils.getScreen() instanceof EmptySleepScreen || RenderUtils.getScreen() instanceof NewQuizScreen || RenderUtils.getScreen() instanceof VotingScreen)) {
             return HumanoidModel.ArmPose.EMPTY;
         }
         return original;

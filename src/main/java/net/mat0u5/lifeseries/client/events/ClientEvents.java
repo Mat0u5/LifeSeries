@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.client.events;
 
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.client.compatibilities.FlashbackCompatibility;
 import net.mat0u5.lifeseries.client.compatibilities.ReplayModCompatibility;
@@ -104,7 +105,7 @@ public class ClientEvents {
 
             if (screen instanceof TitleScreen && !hasShownUpdateScreen) {
                 client.execute(() -> {
-                    client.ls$setScreen(new UpdateInfoScreen(UpdateChecker.versionName, UpdateChecker.versionDescription));
+                    RenderUtils.setScreen(new UpdateInfoScreen(UpdateChecker.versionName, UpdateChecker.versionDescription));
                     hasShownUpdateScreen = true;
                 });
             }
@@ -141,8 +142,8 @@ public class ClientEvents {
             if (player != null) {
                 tryTripleJump(player);
                 checkOnGroundFor(player);
-                if (!player.isSleeping() && (client.ls$getScreen() instanceof EmptySleepScreen || client.ls$getScreen() instanceof NewQuizScreen || (client.ls$getScreen() instanceof VotingScreen votingScreen && votingScreen.requiresSleep))) {
-                    client.ls$setScreen(null);
+                if (!player.isSleeping() && (RenderUtils.getScreen() instanceof EmptySleepScreen || RenderUtils.getScreen() instanceof NewQuizScreen || (RenderUtils.getScreen() instanceof VotingScreen votingScreen && votingScreen.requiresSleep))) {
+                    RenderUtils.setScreen(null);
                 }
             }
             ClientKeybinds.tick();

@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.secretlife;
 
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class Task {
     public static boolean anyPlayersOnLives(ServerPlayer exception, int lives) {
         for (ServerPlayer player : livesManager.getAlivePlayers()) {
             if (player == exception) continue;
-            if (player.ls$isOnSpecificLives(lives, false)) return true;
+            if (((IPlayer) player).ls$isOnSpecificLives(lives, false)) return true;
         }
         return false;
     }

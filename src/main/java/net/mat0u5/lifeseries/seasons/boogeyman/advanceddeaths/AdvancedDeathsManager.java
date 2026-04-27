@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths;
 
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -22,7 +23,7 @@ public class AdvancedDeathsManager {
             PlayerAdvancedDeath playerAdvancedDeath = entry.getValue();
 
             ServerPlayer player = PlayerUtils.getPlayer(uuid);
-            Integer playerLives = player == null ? null : player.ls$getLives();
+            Integer playerLives = player == null ? null : ((IPlayer) player).ls$getLives();
             if (player == null || playerAdvancedDeath.queuedDeaths().isEmpty() || playerLives == null
                     || playerLives <= playerAdvancedDeath.lives()) {
                 toRemove.add(uuid);
@@ -47,9 +48,9 @@ public class AdvancedDeathsManager {
     }
 
     public static void setPlayerLives(ServerPlayer player, int lives) {
-        Integer currentLives = player.ls$getLives();
+        Integer currentLives = ((IPlayer) player).ls$getLives();
         if (currentLives == null || currentLives <= lives) {
-            player.ls$setLives(lives);
+            ((IPlayer) player).ls$setLives(lives);
             return;
         }
         int amountOfDeaths = currentLives - lives;
@@ -60,7 +61,7 @@ public class AdvancedDeathsManager {
         List<AdvancedDeath> queuedPlayerDeaths = getRandomDeaths(player, amountOfDeaths);
 
         if (queuedPlayerDeaths.isEmpty()) {
-            player.ls$setLives(lives);
+            ((IPlayer) player).ls$setLives(lives);
             return;
         }
 

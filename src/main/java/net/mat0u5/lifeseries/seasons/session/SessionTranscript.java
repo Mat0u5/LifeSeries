@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.secretlife.Task;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -159,9 +160,9 @@ public class SessionTranscript {
     }
 
     public static void addRecordIfMissing(ServerPlayer player) {
-        if (player.ls$isDead() || player.ls$isWatcher()) return;
+        if (((IPlayer) player).ls$isDead() || ((IPlayer) player).ls$isWatcher()) return;
         if (!playerRecords.containsKey(player.getScoreboardName())) {
-            playerRecords.put(player.getScoreboardName(), new PlayerRecord(player.getScoreboardName(), player.ls$getLives()));
+            playerRecords.put(player.getScoreboardName(), new PlayerRecord(player.getScoreboardName(), ((IPlayer) player).ls$getLives()));
         }
     }
 

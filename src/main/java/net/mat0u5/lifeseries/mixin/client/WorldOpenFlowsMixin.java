@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.serialization.Lifecycle;
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.config.WorldConfig;
 import net.mat0u5.lifeseries.client.gui.WorldWarningScreen;
@@ -51,7 +52,7 @@ public abstract class WorldOpenFlowsMixin {
                     ls$doLoadLevel(screen, e, bl, bl2);
                 },
                 () -> {
-                    Minecraft.getInstance().ls$setScreen(screen);
+                    RenderUtils.setScreen(screen);
                 }
         );
         try {
@@ -98,7 +99,7 @@ public abstract class WorldOpenFlowsMixin {
     }
     //?}
     private void ls$askForConfirmation(final LevelStorageSource.LevelStorageAccess worldAccess, String levelId, final Runnable proceedCallback, final Runnable cancelCallback) {
-        Minecraft.getInstance().ls$setScreen(new WorldWarningScreen(levelId, cancelCallback, disable -> {
+        RenderUtils.setScreen(new WorldWarningScreen(levelId, cancelCallback, disable -> {
             if (disable) {
                 LifeSeries.setDisabled(true);
             }

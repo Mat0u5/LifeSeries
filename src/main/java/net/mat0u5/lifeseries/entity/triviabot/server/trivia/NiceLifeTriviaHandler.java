@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeVotingManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
@@ -421,7 +422,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
                 }
             }
             else {
-                if (player.ls$isOnAtLeastLives(2, false) || NiceLifeVotingManager.REDS_ON_NAUGHTY_LIST) {
+                if (((IPlayer) player).ls$isOnAtLeastLives(2, false) || NiceLifeVotingManager.REDS_ON_NAUGHTY_LIST) {
                     availableForVoting.add(player.getScoreboardName());
                 }
             }

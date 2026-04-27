@@ -310,10 +310,10 @@ public class VotingScreen extends Screen {
     private void onSubmitVote() {
         if (selectedPlayer != null) {
             if (requiresSleep) {
-                Minecraft.getInstance().ls$setScreen(new EmptySleepScreen(false));
+                RenderUtils.setScreen(new EmptySleepScreen(false));
             }
             else {
-                Minecraft.getInstance().ls$setScreen(null);
+                RenderUtils.setScreen(null);
             }
             SimplePackets.SUBMIT_VOTE.sendToServer(selectedPlayer);
         }

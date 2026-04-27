@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandle
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
@@ -45,7 +46,7 @@ public class SizeShifting extends Wildcard {
     public static void onHoldingJump(ServerPlayer player) {
         if (WildLifeTriviaHandler.cursedGigantificationPlayers.contains(player.getUUID())) return;
         if (player.isSpectator()) return;
-        if (player.ls$isWatcher()) return;
+        if (((IPlayer) player).ls$isWatcher()) return;
         //? if > 1.20.3 {
         addPlayerSize(player, SIZE_CHANGE_STEP * SIZE_CHANGE_MULTIPLIER);
         //?}
@@ -82,8 +83,8 @@ public class SizeShifting extends Wildcard {
 
     public static void resetSizesTick(boolean isActive) {
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-            boolean isWatcher = player.ls$isWatcher();
-            boolean isDeadSpectator = player.isSpectator() && player.ls$isDead();
+            boolean isWatcher = ((IPlayer) player).ls$isWatcher();
+            boolean isDeadSpectator = player.isSpectator() && ((IPlayer) player).ls$isDead();
             if (!isActive || isDeadSpectator || isWatcher) {
                 double size = getPlayerSize(player);
                 if (WildLifeTriviaHandler.cursedGigantificationPlayers.contains(player.getUUID()) && !isWatcher && !isDeadSpectator) continue;

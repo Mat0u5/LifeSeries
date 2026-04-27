@@ -10,6 +10,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -284,7 +285,7 @@ public class LivesManager {
     }
 
     public void resetPlayerLife(ServerPlayer player) {
-        boolean livesChanged = player.ls$getLives() != null;
+        boolean livesChanged = ((IPlayer) player).ls$getLives() != null;
         ScoreboardUtils.resetScore(player, SCOREBOARD_NAME);
         currentSeason.reloadPlayerTeam(player);
         currentSeason.assignDefaultLives(player);
@@ -343,11 +344,11 @@ public class LivesManager {
     }
 
     public void receiveLifeFromOtherPlayer(Component playerName, ServerPlayer target, boolean isRevive) {
-        target.ls$playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.MASTER, 10, 1);
+        ((IPlayer) target).ls$playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.MASTER, 10, 1);
         if (seasonConfig.GIVELIFE_BROADCAST.get()) {
             PlayerUtils.broadcastMessageExcept(ModifiableText.GIVELIFE_RECEIVE_OTHER.get(target, playerName), target);
         }
-        target.ls$message(ModifiableText.GIVELIFE_RECEIVE_SELF.get(playerName));
+        ((IPlayer) target).ls$message(ModifiableText.GIVELIFE_RECEIVE_SELF.get(playerName));
         PlayerUtils.sendTitleWithSubtitle(target, ModifiableText.GIVELIFE_RECEIVE_SELF_TITLE.get(), ModifiableText.GIVELIFE_RECEIVE_SELF_TITLE_SUBTITLE.get(playerName), 10, 60, 10);
         AnimationUtils.createSpiral(target, 175);
         currentSeason.reloadPlayerTeam(target);
@@ -551,7 +552,7 @@ public class LivesManager {
         assignedLives = true;
         List<ServerPlayer> assignTo = new ArrayList<>();
         for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
-            if (player.ls$hasAssignedLives()) continue;
+            if (((IPlayer) player).ls$hasAssignedLives()) continue;
             assignTo.add(player);
         }
         if (assignTo.isEmpty()) return;
@@ -667,7 +668,7 @@ public class LivesManager {
         if (!ROLL_LIVES) return;
         if (!assignedLives) return;
         if (hasAssignedLives(player)) return;
-        if (player.ls$isWatcher()) return;
+        if (((IPlayer) player).ls$isWatcher()) return;
         PlayerUtils.broadcastMessageToAdmins(ModifiableText.LIVES_RANDOMIZE_SINGLE.get(player));
         assignRandomLives(new ArrayList<>(List.of(player)));
     }
@@ -676,7 +677,7 @@ public class LivesManager {
     public static Map<UUID, Double> lastPlayerHealth = new HashMap<>();
     public void updateLastStats() {
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-            lastPlayerLives.put(player.getUUID(), player.ls$getLives());
+            lastPlayerLives.put(player.getUUID(), ((IPlayer) player).ls$getLives());
             if (currentSeason instanceof SecretLife secretLife) {
                 lastPlayerHealth.put(player.getUUID(), secretLife.getPlayerHealth(player));
             }
@@ -711,7 +712,7 @@ public class LivesManager {
 
     public Component getDeathMessageAdd(ServerPlayer player) {
         Integer lastLives = lastPlayerLives.get(player.getUUID());
-        Integer currentLives = player.ls$getLives();
+        Integer currentLives = ((IPlayer) player).ls$getLives();
 
         if (lastLives == null || currentLives == null) return null;
         int livesDiff = currentLives - lastLives;

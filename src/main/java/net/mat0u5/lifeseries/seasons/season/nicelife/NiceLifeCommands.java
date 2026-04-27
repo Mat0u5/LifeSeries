@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -339,11 +340,11 @@ public class NiceLifeCommands extends Command {
             OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_VOTE_ERROR_NICELIST_PROGRESS.get());
             return -1;
         }
-        if (self.ls$isDead()) {
+        if (((IPlayer) self).ls$isDead()) {
             OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_VOTE_ERROR_DEAD.get());
             return -1;
         }
-        if (self.ls$isWatcher()) {
+        if (((IPlayer) self).ls$isWatcher()) {
             OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_VOTE_ERROR_WATCHER.get());
             return -1;
         }

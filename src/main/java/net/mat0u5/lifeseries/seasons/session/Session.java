@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.Time;
@@ -392,7 +393,7 @@ public class Session {
     private Map<UUID, Vec3> lastNonBorderPositions = new HashMap<>();
     public void checkPlayerPosition(ServerPlayer player) {
         if (!WORLDBORDER_OUTSIDE_TELEPORT) return;
-        WorldBorder border = player.ls$getServerLevel().getWorldBorder();
+        WorldBorder border = ((IPlayer) player).ls$getServerLevel().getWorldBorder();
         double playerSize = player.getBoundingBox().getXsize()/2;
         double minX = Math.floor(border.getMinX()) + playerSize;
         double maxX = Math.ceil(border.getMaxX()) - playerSize;
@@ -458,7 +459,7 @@ public class Session {
                 }
 
                 if (!NetworkHandlerServer.wasHandshakeSuccessful(player)) {
-                    player.ls$message(message, true);
+                    ((IPlayer) player).ls$message(message, true);
                 }
             }
             if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {

@@ -1,7 +1,9 @@
 package net.mat0u5.lifeseries.client.render;
 
 import net.mat0u5.lifeseries.client.utils.TextColors;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 
@@ -49,5 +51,21 @@ public class RenderUtils {
 
     public static CustomTextRenderer text(String text, int x, int y) {
         return new CustomTextRenderer(Component.nullToEmpty(text), x, y);
+    }
+
+    public static void setScreen(Screen screen) {
+        //? if <= 26.1 {
+        Minecraft.getInstance().setScreen(screen);
+        //?} else {
+        /*Minecraft.getInstance().gui.setScreen(screen);
+         *///?}
+    }
+
+    public static Screen getScreen() {
+        //? if <= 26.1 {
+        return Minecraft.getInstance().screen;
+        //?} else {
+        /*return Minecraft.getInstance().gui.screen();
+         *///?}
     }
 }

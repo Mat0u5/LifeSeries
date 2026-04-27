@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 //? if <= 1.21.6 {
 /*import org.spongepowered.asm.mixin.injection.ModifyArg;
-import net.mat0u5.lifeseries.utils.ClientUtils;
+import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.minecraft.network.chat.Component;
 *///?}
 

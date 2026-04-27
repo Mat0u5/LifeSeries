@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.morph;
 
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.interfaces.IMorph;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;
@@ -34,7 +35,7 @@ public class MorphComponent {
                     //? if <= 1.21 {
                     /*Entity entity = morph.create(serverPlayer.level());
                      *///?} else {
-                    Entity entity = morph.create(serverPlayer.ls$getServerLevel(), EntitySpawnReason.COMMAND);
+                    Entity entity = morph.create(((IPlayer) serverPlayer).ls$getServerLevel(), EntitySpawnReason.COMMAND);
                     //?}
                     if (entity != null) {
                         ((IMorph) entity).setFromMorph(true);

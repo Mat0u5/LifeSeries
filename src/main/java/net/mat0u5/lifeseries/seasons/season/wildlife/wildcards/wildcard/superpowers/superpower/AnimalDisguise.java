@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
@@ -67,7 +68,7 @@ public class AnimalDisguise extends ToggleableSuperpower {
                 spawnMobs(player, morph);
             }
         }
-        player.ls$getServerLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PUFFER_FISH_BLOW_UP, SoundSource.MASTER, 1, 1);
+        ((IPlayer) player).ls$getServerLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PUFFER_FISH_BLOW_UP, SoundSource.MASTER, 1, 1);
 
         EntityType<?> finalMorph = morph;
 
@@ -79,7 +80,7 @@ public class AnimalDisguise extends ToggleableSuperpower {
         super.deactivate();
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        player.ls$getServerLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PUFFER_FISH_BLOW_OUT, SoundSource.MASTER, 1, 1);
+        ((IPlayer) player).ls$getServerLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PUFFER_FISH_BLOW_OUT, SoundSource.MASTER, 1, 1);
 
         MorphManager.resetMorph(player);
     }
@@ -92,8 +93,8 @@ public class AnimalDisguise extends ToggleableSuperpower {
     public void spawnMobs(ServerPlayer player, EntityType<?> morph) {
         if (morph == null) return;
         for (int i = 0; i < 2; i++) {
-            BlockPos spawnPos =  LevelUtils.getCloseBlockPos(player.ls$getServerLevel(), player.blockPosition(), 6, 3, true);
-            Entity spawnedEntity = LevelUtils.spawnEntity(morph, player.ls$getServerLevel(), spawnPos);
+            BlockPos spawnPos =  LevelUtils.getCloseBlockPos(((IPlayer) player).ls$getServerLevel(), player.blockPosition(), 6, 3, true);
+            Entity spawnedEntity = LevelUtils.spawnEntity(morph, ((IPlayer) player).ls$getServerLevel(), spawnPos);
         }
     }
 }

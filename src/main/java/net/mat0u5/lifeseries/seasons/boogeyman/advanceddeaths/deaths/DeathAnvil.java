@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.deaths;
 
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeath;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeaths;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -45,7 +46,7 @@ public class DeathAnvil extends AdvancedDeath {
         }
         if (ticks % 5 == 0 && anvilAmount > 0) {
             BlockPos spawnPos = player.blockPosition().offset(anvilAmount, 15, 0);
-            ServerLevel level = player.ls$getServerLevel();
+            ServerLevel level = ((IPlayer) player).ls$getServerLevel();
             FallingBlockEntity entity = FallingBlockEntity.fall(level, spawnPos, Blocks.ANVIL.defaultBlockState());
             PlayerUtils.playSoundWithSourceToPlayers(entity, SoundEvents.ANVIL_PLACE, SoundSource.BLOCKS, 1, 1);
             entity.disableDrop();

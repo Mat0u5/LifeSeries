@@ -36,6 +36,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.*;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
@@ -163,7 +164,7 @@ public class NetworkHandlerServer {
             }
         });
         SimplePackets.TRANSCRIPT.setServerReceive((player, payload) -> {
-            player.ls$message(SessionTranscript.getTranscriptMessage());
+            ((IPlayer) player).ls$message(SessionTranscript.getTranscriptMessage());
         });
         SimplePackets.SELECTED_WILDCARD.setServerReceive((player, payload) -> {
             if (PermissionManager.isAdmin(player)) {
@@ -205,7 +206,7 @@ public class NetworkHandlerServer {
                 if (settingPlayer != null) {
                     try {
                         int lives = Integer.parseInt(payload.value().get(1));
-                        settingPlayer.ls$setLives(lives);
+                        ((IPlayer) settingPlayer).ls$setLives(lives);
                     }catch(Exception e) {
                         ScoreboardUtils.resetScore(settingPlayer, LivesManager.SCOREBOARD_NAME);
                     }

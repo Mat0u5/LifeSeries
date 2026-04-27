@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.seasons.boogeyman.Boogeyman;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
@@ -52,7 +53,7 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
         if (!BOOGEYMAN_ENABLED) return false;
         Boogeyman boogeyman = getBoogeyman(player);
         if (boogeymen == null) return false;
-        if (player.ls$isDead()) return false;
+        if (((IPlayer) player).ls$isDead()) return false;
 
         player.removeTag("boogeyman_cured");
         player.addTag("boogeyman_failed");
@@ -60,9 +61,9 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
         if (boogeyman.failed) return false;
         boogeyman.failed = true;
 
-        boolean canChangeLives = player.ls$isAlive() && !player.ls$isOnLastLife(true);
+        boolean canChangeLives = ((IPlayer) player).ls$isAlive() && !((IPlayer) player).ls$isOnLastLife(true);
 
-        Integer currentLives = player.ls$getLives();
+        Integer currentLives = ((IPlayer) player).ls$getLives();
         if (currentLives == null) return false;
         Integer setToLives = LimitedLife.getNextLivesColorLives(currentLives);
         if (setToLives == null) return false;
@@ -81,7 +82,7 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
             }
             else {
                 if (canChangeLives) {
-                    player.ls$setLives(setToLives);
+                    ((IPlayer) player).ls$setLives(setToLives);
                 }
                 Component setTo = livesManager.getFormattedLives(player);
 

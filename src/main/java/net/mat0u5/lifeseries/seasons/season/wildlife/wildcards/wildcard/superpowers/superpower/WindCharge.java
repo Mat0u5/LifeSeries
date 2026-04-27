@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -48,7 +49,7 @@ public class WindCharge extends ToggleableSuperpower {
         //? if >= 1.21 {
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        player.ls$playNotifySound(SoundEvents.ARROW_SHOOT, SoundSource.MASTER, 0.3f, 1);
+        ((IPlayer) player).ls$playNotifySound(SoundEvents.ARROW_SHOOT, SoundSource.MASTER, 0.3f, 1);
         AttributeUtils.setSafeFallHeight(player, 100000);
         giveMace();
         giveWindCharge();
@@ -62,7 +63,7 @@ public class WindCharge extends ToggleableSuperpower {
         //? if >= 1.21 {
         ServerPlayer player = getPlayer();
         if (player != null) {
-            player.ls$playNotifySound(SoundEvents.WIND_CHARGE_BURST.value(), SoundSource.MASTER, 0.3f, 1);
+            ((IPlayer) player).ls$playNotifySound(SoundEvents.WIND_CHARGE_BURST.value(), SoundSource.MASTER, 0.3f, 1);
             TaskScheduler.scheduleTask(1, () -> {
                 player.getInventory().setChanged();
                 PlayerUtils.updatePlayerInventory(player);

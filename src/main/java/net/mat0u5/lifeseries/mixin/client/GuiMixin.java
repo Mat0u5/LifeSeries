@@ -157,7 +157,7 @@ public class GuiMixin {
     //? if <= 1.20.3 {
     /*@WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getSleepTimer()I"))
     private int stopSleepDarkness(LocalPlayer instance, Operation<Integer> original) {
-        if (!LifeSeries.modDisabled() && LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().ls$getScreen() instanceof InBedChatScreen) && LifeSeriesClient.hideSleepDarkness) {
+        if (!LifeSeries.modDisabled() && LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE && !(RenderUtils.getScreen() instanceof InBedChatScreen) && LifeSeriesClient.hideSleepDarkness) {
             return 0;
         }
         return original.call(instance);
@@ -165,21 +165,21 @@ public class GuiMixin {
     *///?} else if <= 1.20.5 {
     /*@Inject(method = "renderSleepOverlay", at = @At("HEAD"), cancellable = true)
     private void stopSleepDarkness(GuiGraphicsExtractor guiGraphics, float f, CallbackInfo ci) {
-        if (!LifeSeries.modDisabled() && LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().ls$getScreen() instanceof InBedChatScreen) && LifeSeriesClient.hideSleepDarkness) {
+        if (!LifeSeries.modDisabled() && LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE && !(RenderUtils.getScreen() instanceof InBedChatScreen) && LifeSeriesClient.hideSleepDarkness) {
             ci.cancel();
         }
     }
     *///?} else if <= 1.21.11 {
     /*@Inject(method = "renderSleepOverlay", at = @At("HEAD"), cancellable = true)
     private void stopSleepDarkness(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
-        if (!LifeSeries.modDisabled() && LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().ls$getScreen() instanceof InBedChatScreen) && LifeSeriesClient.hideSleepDarkness) {
+        if (!LifeSeries.modDisabled() && LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE && !(RenderUtils.getScreen() instanceof InBedChatScreen) && LifeSeriesClient.hideSleepDarkness) {
             ci.cancel();
         }
     }
     *///?} else {
     @Inject(method = "extractSleepOverlay", at = @At("HEAD"), cancellable = true)
     private void stopSleepDarkness(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
-        if (!LifeSeries.modDisabled() && LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE && !(Minecraft.getInstance().ls$getScreen() instanceof InBedChatScreen) && LifeSeriesClient.hideSleepDarkness) {
+        if (!LifeSeries.modDisabled() && LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE && !(RenderUtils.getScreen() instanceof InBedChatScreen) && LifeSeriesClient.hideSleepDarkness) {
             ci.cancel();
         }
     }

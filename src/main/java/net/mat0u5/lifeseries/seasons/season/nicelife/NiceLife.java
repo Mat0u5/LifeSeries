@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.mixin.ServerLevelAccessor;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
@@ -176,7 +177,7 @@ public class NiceLife extends Season {
         if (!isMidnight()) {
             for(ServerPlayer serverPlayer : PlayerUtils.getAllPlayers()) {
                 if (serverPlayer.isSleeping()) {
-                    serverPlayer.ls$message(ModifiableText.NICELIFE_SLEEP_FAIL_EARLY.get(), true);
+                    ((IPlayer) serverPlayer).ls$message(ModifiableText.NICELIFE_SLEEP_FAIL_EARLY.get(), true);
                 }
             }
             if (!playedMidnightChimes && isTimeBetween(18000-23*20, 20000)) {
@@ -218,7 +219,7 @@ public class NiceLife extends Season {
                 ServerPlayer player = PlayerUtils.getPlayer(playerUUID);
                 if (player == null) continue;
                 if (!player.isSleeping()) continue;
-                if (player.ls$isDead()) continue;
+                if (((IPlayer) player).ls$isDead()) continue;
                 TriviaBot bot = NiceLifeTriviaManager.bots.get(playerUUID);
                 if (bot == null) continue;
                 if (!bot.isAlive()) continue;
@@ -319,7 +320,7 @@ public class NiceLife extends Season {
         if (!RED_WINTER) return false;
         if (currentSession.statusNotStarted()) return false;
         List<ServerPlayer> assignedPlayers = PlayerUtils.getAllFunctioningPlayers();
-        assignedPlayers.removeIf(player -> !player.ls$hasAssignedLives());
+        assignedPlayers.removeIf(player -> !((IPlayer) player).ls$hasAssignedLives());
         List<ServerPlayer> nonRedPlayers = livesManager.getNonRedPlayers();
         return !assignedPlayers.isEmpty() && nonRedPlayers.isEmpty();
     }
@@ -601,7 +602,7 @@ public class NiceLife extends Season {
         super.onPlayerDeath(player, source);
         player.removeTag("naughty_list");
         NiceLifeVotingManager.naughtyListMembers.remove(player.getUUID());
-        if (player.ls$isDead()) {
+        if (((IPlayer) player).ls$isDead()) {
             player.removeTag("nice_list");
             NiceLifeVotingManager.niceListMembers.remove(player.getUUID());
         }

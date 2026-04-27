@@ -10,6 +10,7 @@ import net.mat0u5.lifeseries.client.gui.config.entries.TextFieldConfigEntry;
 import net.mat0u5.lifeseries.client.gui.config.entries.extra.TriviaQuestionConfigEntry;
 import net.mat0u5.lifeseries.client.gui.config.entries.main.TextConfigEntry;
 
+import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.client.utils.TextColors;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -26,7 +27,7 @@ import java.util.Map;
 //? if >= 1.21.9
 import net.minecraft.client.input.*;
 //? if <= 1.20.2
-//import net.mat0u5.lifeseries.render.RenderUtils;
+//import net.mat0u5.lifeseries.client.render.RenderUtils;
 
 public class ConfigScreen extends Screen {
     private static int HEADER_HEIGHT_SMALL = 55;
@@ -349,18 +350,18 @@ public class ConfigScreen extends Screen {
         }
         LifeSeriesClient.reloadConfig();
 
-        this.minecraft.ls$setScreen(this.parent);
+        RenderUtils.setScreen(this.parent);
     }
 
     @Override
     public void onClose() {
         if (this.hasChanges) {
-            this.minecraft.ls$setScreen(new ConfirmScreen(
+            RenderUtils.setScreen(new ConfirmScreen(
                     confirmed -> {
                         if (confirmed) {
-                            this.minecraft.ls$setScreen(this.parent);
+                            RenderUtils.setScreen(this.parent);
                         } else {
-                            this.minecraft.ls$setScreen(this);
+                            RenderUtils.setScreen(this);
                         }
                     },
                     Component.nullToEmpty("Changes Not Saved"),
@@ -369,7 +370,7 @@ public class ConfigScreen extends Screen {
                     Component.nullToEmpty("Cancel")
             ));
         } else {
-            this.minecraft.ls$setScreen(this.parent);
+            RenderUtils.setScreen(this.parent);
         }
     }
 

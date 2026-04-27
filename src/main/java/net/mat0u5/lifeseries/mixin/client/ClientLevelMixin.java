@@ -15,9 +15,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 //? if <= 1.21
 //import net.minecraft.world.phys.Vec3;
 //? if <= 1.21.9 {
-/*import net.mat0u5.lifeseries.render.ClientRenderer;
+/*import net.mat0u5.lifeseries.client.render.ClientRenderer;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.mat0u5.lifeseries.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
 *///?}
 
 @Mixin(value = ClientLevel.class, priority = 1)

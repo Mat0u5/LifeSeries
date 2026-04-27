@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Mimicry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
@@ -80,8 +81,8 @@ public class SuperpowersWildcard extends Wildcard {
     }
 
     public static void rollRandomSuperpowers(List<ServerPlayer> allPlayers) {
-        allPlayers.removeIf(player -> player.ls$isDead());
-        allPlayers.removeIf(player -> player.ls$isWatcher());
+        allPlayers.removeIf(player -> ((IPlayer) player).ls$isDead());
+        allPlayers.removeIf(player -> ((IPlayer) player).ls$isWatcher());
         allPlayers.forEach(SuperpowersWildcard::resetSuperpower);
 
         List<ServerPlayer> prioritizedList = new ArrayList<>();
@@ -174,7 +175,7 @@ public class SuperpowersWildcard extends Wildcard {
 
     public static void pressedSuperpowerKey(ServerPlayer player) {
         if (playerSuperpowers.containsKey(player.getUUID())) {
-            if (player.ls$isAlive()) {
+            if (((IPlayer) player).ls$isAlive()) {
                 playerSuperpowers.get(player.getUUID()).onKeyPressed();
             }
             else {

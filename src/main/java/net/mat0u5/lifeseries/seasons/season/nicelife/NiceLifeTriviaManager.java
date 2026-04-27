@@ -12,6 +12,7 @@ import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.Tuple;
@@ -82,7 +83,7 @@ public class NiceLifeTriviaManager {
                 continue;
             }
 
-            ServerLevel level = player.ls$getServerLevel();
+            ServerLevel level = ((IPlayer) player).ls$getServerLevel();
             BlockState bedState = level.getBlockState(bedPos);
 
             if (bedState.getBlock() instanceof BedBlock) {
@@ -160,8 +161,8 @@ public class NiceLifeTriviaManager {
             PlayerUtils.broadcastMessage(ModifiableText.NICELIFE_TRIVIA_ALL_WRONG_PT2.get());
             for (ServerPlayer player : livesManager.getAlivePlayers()) {
                 for (int i = 0; i < 3; i++) {
-                    BlockPos pos = LevelUtils.getCloseBlockPos(player.ls$getServerLevel(), player.blockPosition(), 8, 2, true);
-                    AngrySnowman snowman = LevelUtils.spawnEntity(MobRegistry.ANGRY_SNOWMAN, player.ls$getServerLevel(), pos);
+                    BlockPos pos = LevelUtils.getCloseBlockPos(((IPlayer) player).ls$getServerLevel(), player.blockPosition(), 8, 2, true);
+                    AngrySnowman snowman = LevelUtils.spawnEntity(MobRegistry.ANGRY_SNOWMAN, ((IPlayer) player).ls$getServerLevel(), pos);
                     if (snowman != null) {
                         snowman.setPumpkin(false);
                     }
@@ -175,7 +176,7 @@ public class NiceLifeTriviaManager {
         ServerPlayer player = PlayerUtils.getPlayer(triviaSpawnInfo.uuid());
         if (player == null) return;
         BlockPos spawnBotPos = triviaSpawnInfo.spawnPos().offset(0, botSpawnHeight, 0);
-        ServerLevel level = player.ls$getServerLevel();
+        ServerLevel level = ((IPlayer) player).ls$getServerLevel();
         int maxY = level.getMaxY();
         List<Integer> breakYPositions = new ArrayList<>();
         for (int breakY = spawnBotPos.getY(); breakY < maxY; breakY++) {
@@ -204,7 +205,7 @@ public class NiceLifeTriviaManager {
         ServerPlayer player = PlayerUtils.getPlayer(triviaSpawnInfo.uuid());
         if (player == null) return;
         BlockPos spawnBotPos = triviaSpawnInfo.spawnPos().offset(0, botSpawnHeight, 0);
-        TriviaBot bot = LevelUtils.spawnEntity(MobRegistry.TRIVIA_BOT, player.ls$getServerLevel(), spawnBotPos);
+        TriviaBot bot = LevelUtils.spawnEntity(MobRegistry.TRIVIA_BOT, ((IPlayer) player).ls$getServerLevel(), spawnBotPos);
         if (bot != null) {
             bot.sounds.delay = soundDelay;
             SessionTranscript.newTriviaBot(player);

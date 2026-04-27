@@ -10,6 +10,7 @@ import net.mat0u5.lifeseries.client.gui.config.entries.extra.*;
 import net.mat0u5.lifeseries.client.gui.config.entries.extra.time.MinutesConfigEntry;
 import net.mat0u5.lifeseries.client.gui.config.entries.extra.time.SecondsConfigEntry;
 import net.mat0u5.lifeseries.client.gui.config.entries.main.*;
+import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.client.utils.interfaces.IEntryGroupHeader;
 import net.minecraft.client.Minecraft;
@@ -22,7 +23,7 @@ import java.util.Map;
 
 public class ClientConfigGuiManager {
     public static void openConfig() {
-        ConfigScreen.Builder builder = new ConfigScreen.Builder(Minecraft.getInstance().ls$getScreen(), Component.nullToEmpty("Life Series Config"));
+        ConfigScreen.Builder builder = new ConfigScreen.Builder(RenderUtils.getScreen(), Component.nullToEmpty("Life Series Config"));
         if (!ClientConfigNetwork.configObjects.isEmpty()) {
             ConfigScreen.Builder.CategoryBuilder categoryGeneral = builder.addCategory("Server");
             addConfig(categoryGeneral, ClientConfigNetwork.configObjects);
@@ -35,7 +36,7 @@ public class ClientConfigGuiManager {
             addTestingCategory(builder);
         }
 
-        Minecraft.getInstance().ls$setScreen(builder.build());
+        RenderUtils.setScreen(builder.build());
     }
 
     public static void addConfig(ConfigScreen.Builder.CategoryBuilder category, Map<Integer, ConfigObject> allConfigObjects) {

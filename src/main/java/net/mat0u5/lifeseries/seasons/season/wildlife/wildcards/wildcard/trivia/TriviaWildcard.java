@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShifting;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
@@ -212,12 +213,12 @@ public class TriviaWildcard extends Wildcard {
     }
     public static void spawnBotFor(ServerPlayer player, BlockPos pos) {
         resetPlayerOnBotSpawn(player);
-        TriviaBot bot = LevelUtils.spawnEntity(MobRegistry.TRIVIA_BOT, player.ls$getServerLevel(), pos);
+        TriviaBot bot = LevelUtils.spawnEntity(MobRegistry.TRIVIA_BOT, ((IPlayer) player).ls$getServerLevel(), pos);
         if (bot != null) {
             SessionTranscript.newTriviaBot(player);
             bot.serverData.setBoundPlayer(player);
             bots.put(player.getUUID(), bot);
-            player.ls$playNotifySound(SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.MASTER, 0.5f, 1);
+            ((IPlayer) player).ls$playNotifySound(SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.MASTER, 0.5f, 1);
             SimplePackets.FAKE_THUNDER.target(player).sendToClient(7);
             DatapackIntegration.EVENT_TRIVIA_BOT_SPAWN.trigger(List.of(
                     new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()),

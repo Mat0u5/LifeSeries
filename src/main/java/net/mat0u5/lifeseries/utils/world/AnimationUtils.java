@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.utils.world;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Season;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -36,7 +37,7 @@ public class AnimationUtils {
 
     public static void playRealTotemAnimation(ServerPlayer player) {
         // Visible by other players too
-        player.ls$getServerLevel().broadcastEntityEvent(player, (byte) 35);
+        ((IPlayer) player).ls$getServerLevel().broadcastEntityEvent(player, (byte) 35);
     }
 
     public static void playSecretLifeTotemAnimation(ServerPlayer player, boolean red) {
@@ -94,7 +95,7 @@ public class AnimationUtils {
     }
 
     private static void processSpiral(ServerPlayer player, int step) {
-        ServerLevel level = player.ls$getServerLevel();
+        ServerLevel level = ((IPlayer) player).ls$getServerLevel();
         double x = player.getX();
         double z = player.getZ();
         double yStart = player.getY();

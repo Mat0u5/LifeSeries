@@ -13,6 +13,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import org.jetbrains.annotations.Nullable;
 
 //? if >= 1.21.9 {
 import net.minecraft.world.entity.player.PlayerModelType;
@@ -20,7 +21,6 @@ import net.minecraft.core.ClientAsset;
 //?}
 //? if > 1.20 {
 import net.minecraft.world.entity.player.PlayerSkin;
-import org.jetbrains.annotations.Nullable;
 //?}
 
 public class LifeSkinsClient {

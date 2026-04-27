@@ -18,6 +18,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.*;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.*;
 import net.minecraft.server.MinecraftServer;
@@ -102,10 +103,10 @@ public class WildLife extends Season {
         boolean wasAllowedToAttack = isAllowedToAttack(killer, victim, false);
         boolean wasBoogeyCure = boogeymanManager.isBoogeymanThatCanBeCured(killer, victim);
         super.onPlayerKilledByPlayer(victim, killer);
-        if (victim.ls$isOnAtLeastLives(4, false) && wasAllowedToAttack && !wasBoogeyCure) {
+        if (((IPlayer) victim).ls$isOnAtLeastLives(4, false) && wasAllowedToAttack && !wasBoogeyCure) {
             if (Necromancy.isRessurectedPlayer(killer)) {
                 if (WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN.get()) {
-                    Integer currentLives = killer.ls$getLives();
+                    Integer currentLives = ((IPlayer)killer).ls$getLives();
                     if (currentLives == null) currentLives = 0;
                     int lives = currentLives + 1;
                     if (lives <= 0) {
@@ -113,7 +114,7 @@ public class WildLife extends Season {
                     }
                     else {
                         broadcastLifeGain(killer, victim);
-                        killer.ls$addLife();
+                        ((IPlayer) killer).ls$addLife();
                     }
                 }
             }
@@ -123,10 +124,10 @@ public class WildLife extends Season {
     @Override
     public boolean shouldBeInSpectator(ServerPlayer player) {
         if (!PermissionManager.isAdmin(player)) {
-            if (player.ls$hasAssignedLives() && player.ls$isDead() && !Necromancy.isRessurectedPlayer(player)) {
+            if (((IPlayer) player).ls$hasAssignedLives() && ((IPlayer) player).ls$isDead() && !Necromancy.isRessurectedPlayer(player)) {
                 return true;
             }
-            if (player.ls$isWatcher()) {
+            if (((IPlayer) player).ls$isWatcher()) {
                 return true;
             }
         }
@@ -380,7 +381,7 @@ public class WildLife extends Season {
             //? if <= 1.21 {
             /*sourceEntity.hurt(player.damageSources().thorns(player), (float) SuperPunch.THORNS_DAMAGE);
              *///?} else {
-            sourceEntity.hurtServer(player.ls$getServerLevel(), player.damageSources().thorns(player), (float) SuperPunch.THORNS_DAMAGE);
+            sourceEntity.hurtServer(((IPlayer) player).ls$getServerLevel(), player.damageSources().thorns(player), (float) SuperPunch.THORNS_DAMAGE);
             //?}
         }
     }
