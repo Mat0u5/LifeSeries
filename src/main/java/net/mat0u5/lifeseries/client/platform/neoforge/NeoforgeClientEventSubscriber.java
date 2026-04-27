@@ -1,5 +1,4 @@
 package net.mat0u5.lifeseries.client.platform.neoforge;
-
 //? neoforge {
 
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
@@ -26,4 +25,5 @@ public class NeoforgeClientEventSubscriber {
 		LifeSeriesClient.onInitializeClient();
 	}
 }
+
 //?}

@@ -47,6 +47,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerLoginPacketListenerImpl;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.scores.PlayerTeam;
 //? if > 1.20.5 {
@@ -328,6 +329,11 @@ public class NetworkHandlerServer {
          */
     }
 
+    public static void onCustomPayload(CustomPacketPayload customPacketPayload, Player player) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            onCustomPayload(customPacketPayload, serverPlayer);
+        }
+    }
     public static void onCustomPayload(CustomPacketPayload customPacketPayload, ServerPlayer player) {
         //? if <= 1.20.3 {
         /*Identifier id = customPacketPayload.id();

@@ -1,5 +1,4 @@
 package net.mat0u5.lifeseries.platform.neoforge;
-
 //? neoforge {
 
 import net.mat0u5.lifeseries.platform.Platform;
