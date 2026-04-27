@@ -5,7 +5,7 @@ plugins {
 }
 
 fun isValidVersion(string: String?): Boolean {
-	return string != null && string.isNotEmpty() && !string.equals("null", ignoreCase = true) && !string.equals("[VERSIONED]", ignoreCase = true)
+	return !string.isNullOrEmpty() && !string.equals("null", ignoreCase = true) && !string.equals("[VERSIONED]", ignoreCase = true)
 }
 
 fun prop(key: String) = project.property(key) as String
@@ -56,6 +56,8 @@ repositories {
 	maven(fg.forgeMaven)
 	maven(fg.minecraftLibsMaven)
 	strictMaven("https://api.modrinth.com/maven", "maven.modrinth") { name = "Modrinth" }
+	strictMaven("https://www.cursemaven.com", "curse.maven") { name = "CurseForge" }
+	maven ( "https://maven.maxhenkel.de/repository/public")
 	mavenCentral()
 }
 
@@ -67,6 +69,11 @@ dependencies {
 	implementation(minecraft.dependency("net.minecraftforge:forge:${prop("deps.forge")}"))
 	annotationProcessor("org.spongepowered:mixin:${libs.versions.mixin.get()}:processor")
 	implementation(libs.moulberry.mixinconstraints)
+	compileOnly("maven.modrinth:appleskin:2.5.1+mc1.20.2")
+	compileOnly("de.maxhenkel.voicechat:voicechat-api:2.5.27")
+	if (isValidVersion(prop("deps.voicechat"))) {
+		implementation ("maven.modrinth:simple-voice-chat:${prop("deps.voicechat")}")
+	}
 }
 
 tasks.withType<JavaCompile>().configureEach {

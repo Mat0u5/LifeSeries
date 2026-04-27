@@ -4,7 +4,7 @@ plugins {
 }
 
 fun isValidVersion(string: String?): Boolean {
-	return string != null && string.isNotEmpty() && !string.equals("null", ignoreCase = true) && !string.equals("[VERSIONED]", ignoreCase = true)
+	return !string.isNullOrEmpty() && !string.equals("null", ignoreCase = true) && !string.equals("[VERSIONED]", ignoreCase = true)
 }
 
 platform {
@@ -38,16 +38,10 @@ loom {
 	}
 }
 
-fabricApi {
-	configureDataGeneration {
-		outputDirectory = file("${rootDir}/versions/datagen/${stonecutter.current.version.split("-")[0]}/src/main/generated")
-		client = true
-	}
-}
-
 repositories {
 	mavenCentral()
 	strictMaven("https://api.modrinth.com/maven", "maven.modrinth") { name = "Modrinth" }
+	strictMaven("https://www.cursemaven.com", "curse.maven") { name = "CurseForge" }
 }
 
 dependencies {
@@ -67,8 +61,8 @@ dependencies {
 
 	//Runtime and compile
 	if (isValidVersion(prop("deps.voicechat"))) {
-		compileOnly ("maven.modrinth:simple-voice-chat:fabric-${prop("deps.voicechat")}")
-		//runtimeOnly ("maven.modrinth:simple-voice-chat:fabric-${prop("deps.voicechat")}")
+		compileOnly ("maven.modrinth:simple-voice-chat:${prop("deps.voicechat")}")
+		//runtimeOnly ("maven.modrinth:simple-voice-chat:${prop("deps.voicechat")}")
 	}
 	else {
 		compileOnly ("maven.modrinth:simple-voice-chat:fabric-2.6.11+26.1-snapshot-1")
