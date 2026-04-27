@@ -12,10 +12,6 @@ platform {
 		required("minecraft") {
 			versionRange = prop("deps.minecraft")
 		}
-		required("fabric-api") {
-			slug("fabric-api")
-			versionRange = ">=${prop("deps.fabric-api")}"
-		}
 		required("fabricloader") {
 			versionRange = ">=${libs.fabric.loader.get().version}"
 		}

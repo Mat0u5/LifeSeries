@@ -14,12 +14,10 @@ import java.util.function.Consumer;
 
 @Mixin(BuiltInPackSource.class)
 public class BuiltInPackSourceMixin {
-    //? if fabric {
     @Inject(method = "loadPacks", at = @At("RETURN"))
     private void addBuiltInDatapacks(Consumer<Pack> consumer, CallbackInfo ci) {
         if ((Object) this instanceof ServerPacksSource) {
             ModBuiltInPacks.loadPacks(consumer, PackType.SERVER_DATA);
         }
     }
-    //?}
 }

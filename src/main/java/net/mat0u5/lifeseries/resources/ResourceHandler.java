@@ -11,7 +11,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 public class ResourceHandler {
-    public void copyBundledSingleFile(String resourcePath, Path targetFile) {
+    //? if fabric {
+    /*public void copyBundledSingleFile(String resourcePath, Path targetFile) {
         try {
             Files.createDirectories(targetFile.getParent());
 
@@ -35,7 +36,6 @@ public class ResourceHandler {
             LifeSeries.LOGGER.error("Error copying bundled file: " + resourcePath, e);
         }
     }
-
     private void handleSingleFileNormal(Path targetFile, URL resourceUrl) {
         try {
             Path sourcePath = Paths.get(resourceUrl.toURI());
@@ -66,4 +66,32 @@ public class ResourceHandler {
             LifeSeries.LOGGER.error("Error copying file from JAR: " + resourcePath, e);
         }
     }
+    *///?} else {
+    public void copyBundledSingleFile(String resourcePath, Path targetFile) {
+        try {
+            Files.createDirectories(targetFile.getParent());
+
+            InputStream in = getClass().getResourceAsStream(resourcePath);
+
+            if (in == null) {
+                in = getClass().getClassLoader().getResourceAsStream(
+                        resourcePath.startsWith("/") ? resourcePath.substring(1) : resourcePath
+                );
+            }
+
+            if (in == null) {
+                LifeSeries.LOGGER.error("File not found: " + resourcePath);
+                return;
+            }
+
+            InputStream inFinal = in;
+            try (inFinal) {
+                Files.copy(inFinal, targetFile, StandardCopyOption.REPLACE_EXISTING);
+                LifeSeries.LOGGER.info(TextUtils.formatString("Copied bundled file: {} -> {}", resourcePath, targetFile));
+            }
+        } catch (Exception e) {
+            LifeSeries.LOGGER.error("Error copying bundled file: " + resourcePath, e);
+        }
+    }
+    //?}
 }

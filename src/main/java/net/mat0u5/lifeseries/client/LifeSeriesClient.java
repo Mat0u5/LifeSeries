@@ -19,6 +19,11 @@ import java.util.*;
 
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
+//? if neoforge && <= 1.21.6 {
+/*import net.mat0u5.lifeseries.client.platform.neoforge.NeoForgeClientNetworkRegistration;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+*///?}
+
 public class LifeSeriesClient implements IClientHelper {
 
     public static Seasons clientCurrentSeason = LifeSeries.DEFAULT_SEASON;
@@ -138,6 +143,13 @@ public class LifeSeriesClient implements IClientHelper {
     public boolean isDisabledServerSide() {
         return modDisabledServerSide;
     }
+
+    //? if neoforge && <= 1.21.6 {
+    /*@Override
+    public <T extends CustomPacketPayload> void handlePacket(T payload, IPayloadContext context) {
+        NeoForgeClientNetworkRegistration.handleClientPacket(payload, context);
+    }
+    *///?}
 
     public static void reloadConfig() {
         COLORBLIND_SUPPORT = ClientConfig.COLORBLIND_SUPPORT.get(clientConfig);
