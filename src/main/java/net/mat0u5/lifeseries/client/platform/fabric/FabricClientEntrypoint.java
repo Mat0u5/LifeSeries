@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.client.platform.fabric;
 
-//? fabric {
+//? if fabric {
 
-/*import dev.kikugie.fletching_table.annotation.fabric.Entrypoint;
+import dev.kikugie.fletching_table.annotation.fabric.Entrypoint;
 import net.fabricmc.api.ClientModInitializer;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 
@@ -15,4 +15,4 @@ public class FabricClientEntrypoint implements ClientModInitializer {
 	}
 
 }
-*///?}
+//?}

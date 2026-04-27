@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.platform.neoforge;
-//? neoforge {
+//? if neoforge {
 
-import net.mat0u5.lifeseries.platform.Platform;
+/*import net.mat0u5.lifeseries.platform.Platform;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
 
@@ -25,7 +25,7 @@ public class NeoforgePlatform implements Platform {
 
 	@Override
 	public boolean isDevelopmentEnvironment() {
-		return !FMLLoader/*? if > 1.21.7 {*/.getCurrent()/*?}*/.isProduction();
+		return !FMLLoader/^? if > 1.21.7 {^/.getCurrent()/^?}^/.isProduction();
 	}
 }
-//?}
+*///?}

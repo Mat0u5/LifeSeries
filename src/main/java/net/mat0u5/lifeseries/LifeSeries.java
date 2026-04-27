@@ -32,17 +32,17 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.UUID;
 
-//? fabric {
-/*import net.mat0u5.lifeseries.platform.fabric.FabricPlatform;
-*///?} neoforge {
-import net.mat0u5.lifeseries.platform.neoforge.NeoforgePlatform;
- //?} forge {
+//? if fabric {
+import net.mat0u5.lifeseries.platform.fabric.FabricPlatform;
+//?} neoforge {
+/*import net.mat0u5.lifeseries.platform.neoforge.NeoforgePlatform;
+ *///?} forge {
 /*import net.mat0u5.lifeseries.platform.forge.ForgePlatform;
  *///?}
 
 
 public class LifeSeries {
-	public static final String MOD_VERSION = "dev-1.5.4.1";
+	public static final String MOD_VERSION = "dev-1.5.4.2";
 	public static final String MOD_ID = "lifeseries";
 	private static final Platform PLATFORM = createPlatformInstance();
 
@@ -80,8 +80,8 @@ public class LifeSeries {
 		Seasons.getSeasons().forEach(seasons -> seasons.getSeasonInstance().createConfig());
 
 		//? !neoforge {
-		/*MobRegistry.registerAttributes();
-		*///?}
+		MobRegistry.registerAttributes();
+		//?}
 		if (!ISOLATED_ENVIRONMENT) {
 			UpdateChecker.checkForMajorUpdates();
 		}
@@ -93,11 +93,11 @@ public class LifeSeries {
 	}
 
 	private static Platform createPlatformInstance() {
-		//? fabric {
-		/*return new FabricPlatform();
-		*///?} neoforge {
-		return new NeoforgePlatform();
-		 //?} forge {
+		//? if fabric {
+		return new FabricPlatform();
+		//?} neoforge {
+		/*return new NeoforgePlatform();
+		 *///?} forge {
 		/*return new ForgePlatform();
 		 *///?}
 	}

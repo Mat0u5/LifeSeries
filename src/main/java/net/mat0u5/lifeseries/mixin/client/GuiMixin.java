@@ -37,7 +37,7 @@ import net.minecraft.resources.Identifier;
 
 //? if <= 26.1 {
 import net.minecraft.client.gui.Gui;
-@Mixin(value = Gui.class, priority = 1)
+@Mixin(value = Gui.class)
 //?} else {
 /*import net.minecraft.client.gui.Hud;
 @Mixin(value = Hud.class, priority = 1)
@@ -53,7 +53,9 @@ public class GuiMixin {
     @Inject(method = "extractRenderState", at = @At(value = "TAIL"))
     public void render(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
     //?}
+        //? if !neoforge || >= 1.20.5 {
         ClientRenderer.render(guiGraphics);
+        //?}
     }
 
     //? if <= 1.20 {

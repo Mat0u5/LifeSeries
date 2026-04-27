@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.client.platform.forge;
 
-//? forge {
+//? if forge {
 
 /*import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.LifeSeries;

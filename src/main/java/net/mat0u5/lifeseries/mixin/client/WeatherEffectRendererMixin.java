@@ -36,26 +36,6 @@ public class WeatherEffectRendererMixin {
     private static Identifier LESS_SNOW_RESOURCE_LOCATION = IdentifierHelper.mod("textures/environment/less-snow.png");
 
 //? if fabric {
-    /*//? if <= 1.21 {
-    /^@WrapOperation(method = "renderSnowAndRain", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/resources/Identifier;)V"))
-    public void render(int i, Identifier resourceLocation, Operation<Void> original) {
-    ^///?} else if <= 1.21.2 {
-    /^@WrapOperation(method = "render(Lnet/minecraft/client/renderer/LightTexture;Lnet/minecraft/world/phys/Vec3;IFLjava/util/List;Ljava/util/List;)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/resources/Identifier;)V"))
-    public void render(int i, Identifier resourceLocation, Operation<Void> original) {
-    ^///?} else if <= 1.21.6 {
-    /^@WrapOperation(method = "render(Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/world/phys/Vec3;IFLjava/util/List;Ljava/util/List;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderType;weather(Lnet/minecraft/resources/Identifier;Z)Lnet/minecraft/client/renderer/RenderType;"))
-    public RenderType render(Identifier resourceLocation, boolean bl, Operation<RenderType> original) {
-    ^///?} else if <= 1.21.9 {
-    /^@WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderType;weather(Lnet/minecraft/resources/Identifier;Z)Lnet/minecraft/client/renderer/RenderType;"))
-    public RenderType render(Identifier resourceLocation, boolean bl, Operation<RenderType> original) {
-    ^///?} else if <= 1.21.11 {
-    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/rendertype/RenderTypes;weather(Lnet/minecraft/resources/Identifier;Z)Lnet/minecraft/client/renderer/rendertype/RenderType;"))
-    public RenderType render(Identifier resourceLocation, boolean bl, Operation<RenderType> original) {
-    //?} else {
-    /^@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/texture/TextureManager;getTexture(Lnet/minecraft/resources/Identifier;)Lnet/minecraft/client/renderer/texture/AbstractTexture;"))
-    public Identifier render(Identifier resourceLocation) {
-    ^///?}
-*///?} else {
     //? if <= 1.21 {
     /*@WrapOperation(method = "renderSnowAndRain", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/resources/Identifier;)V"))
     public void render(int i, Identifier resourceLocation, Operation<Void> original) {
@@ -66,16 +46,36 @@ public class WeatherEffectRendererMixin {
     /*@WrapOperation(method = "render(Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/world/phys/Vec3;IFLjava/util/List;Ljava/util/List;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderType;weather(Lnet/minecraft/resources/Identifier;Z)Lnet/minecraft/client/renderer/RenderType;"))
     public RenderType render(Identifier resourceLocation, boolean bl, Operation<RenderType> original) {
     *///?} else if <= 1.21.9 {
-    /*@WrapOperation(method = "render(Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/client/renderer/state/WeatherRenderState;Lnet/minecraft/client/renderer/state/LevelRenderState;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderType;weather(Lnet/minecraft/resources/Identifier;Z)Lnet/minecraft/client/renderer/RenderType;"))
+    /*@WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderType;weather(Lnet/minecraft/resources/Identifier;Z)Lnet/minecraft/client/renderer/RenderType;"))
     public RenderType render(Identifier resourceLocation, boolean bl, Operation<RenderType> original) {
     *///?} else if <= 1.21.11 {
-    /*@WrapOperation(method = "render(Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/client/renderer/state/WeatherRenderState;Lnet/minecraft/client/renderer/state/LevelRenderState;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/rendertype/RenderTypes;weather(Lnet/minecraft/resources/Identifier;Z)Lnet/minecraft/client/renderer/rendertype/RenderType;"))
+    /*@WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/rendertype/RenderTypes;weather(Lnet/minecraft/resources/Identifier;Z)Lnet/minecraft/client/renderer/rendertype/RenderType;"))
     public RenderType render(Identifier resourceLocation, boolean bl, Operation<RenderType> original) {
     *///?} else {
+    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/texture/TextureManager;getTexture(Lnet/minecraft/resources/Identifier;)Lnet/minecraft/client/renderer/texture/AbstractTexture;"))
+    public Identifier render(Identifier resourceLocation) {
+    //?}
+//?} else {
+    /*//? if <= 1.21 {
+    /^@WrapOperation(method = "renderSnowAndRain", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/resources/Identifier;)V"))
+    public void render(int i, Identifier resourceLocation, Operation<Void> original) {
+    ^///?} else if <= 1.21.2 {
+    /^@WrapOperation(method = "render(Lnet/minecraft/client/renderer/LightTexture;Lnet/minecraft/world/phys/Vec3;IFLjava/util/List;Ljava/util/List;)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/resources/Identifier;)V"))
+    public void render(int i, Identifier resourceLocation, Operation<Void> original) {
+    ^///?} else if <= 1.21.6 {
+    /^@WrapOperation(method = "render(Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/world/phys/Vec3;IFLjava/util/List;Ljava/util/List;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderType;weather(Lnet/minecraft/resources/Identifier;Z)Lnet/minecraft/client/renderer/RenderType;"))
+    public RenderType render(Identifier resourceLocation, boolean bl, Operation<RenderType> original) {
+    ^///?} else if <= 1.21.9 {
+    /^@WrapOperation(method = "render(Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/client/renderer/state/WeatherRenderState;Lnet/minecraft/client/renderer/state/LevelRenderState;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderType;weather(Lnet/minecraft/resources/Identifier;Z)Lnet/minecraft/client/renderer/RenderType;"))
+    public RenderType render(Identifier resourceLocation, boolean bl, Operation<RenderType> original) {
+    ^///?} else if <= 1.21.11 {
+    /^@WrapOperation(method = "render(Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/client/renderer/state/WeatherRenderState;Lnet/minecraft/client/renderer/state/LevelRenderState;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/rendertype/RenderTypes;weather(Lnet/minecraft/resources/Identifier;Z)Lnet/minecraft/client/renderer/rendertype/RenderType;"))
+    public RenderType render(Identifier resourceLocation, boolean bl, Operation<RenderType> original) {
+    ^///?} else {
     @ModifyArg(method = "render(Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/client/renderer/state/level/WeatherRenderState;Lnet/minecraft/client/renderer/state/level/LevelRenderState;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/texture/TextureManager;getTexture(Lnet/minecraft/resources/Identifier;)Lnet/minecraft/client/renderer/texture/AbstractTexture;"))
     public Identifier render(Identifier resourceLocation) {
     //?}
-//?}
+*///?}
         if (LifeSeriesClient.NICE_LIFE_LESS_SNOW && !LifeSeries.modDisabled() && LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE) {
             if (resourceLocation.getPath().contains("snow.png")) {
                 //? if <= 1.21.2 {

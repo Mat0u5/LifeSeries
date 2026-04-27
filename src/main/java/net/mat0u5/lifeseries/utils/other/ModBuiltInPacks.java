@@ -25,12 +25,12 @@ import java.util.Optional;
 //?}
 
 //? if neoforge {
-import net.neoforged.fml.ModList;
+/*import net.neoforged.fml.ModList;
     //? if > 1.21.6 {
     import net.neoforged.neoforgespi.language.IModFileInfo;
     import net.neoforged.neoforgespi.locating.IModFile;
     //?}
-//?}
+*///?}
 
 public final class ModBuiltInPacks implements RepositorySource {
     private static final Logger LOGGER = LoggerFactory.getLogger("LifeSeriesPackLoader");
@@ -128,7 +128,7 @@ public final class ModBuiltInPacks implements RepositorySource {
 
     private static @Nullable Path getResourceAsPath(String path) {
     //? if fabric {
-        /*try {
+        try {
             URL url = ModBuiltInPacks.class.getResource(path);
             if (url == null) return null;
 
@@ -148,12 +148,12 @@ public final class ModBuiltInPacks implements RepositorySource {
             LOGGER.error("Failed to resolve path for built-in pack: " + path, e);
             return null;
         }
-    *///?} else if neoforge {
-        //? if <= 1.21.6 {
-        /*return ModList.get().getModFileById(LifeSeries.MOD_ID)
+    //?} else if neoforge {
+        /*//? if <= 1.21.6 {
+        /^return ModList.get().getModFileById(LifeSeries.MOD_ID)
                 .getFile()
                 .findResource(path);
-        *///?} else {
+        ^///?} else {
         IModFileInfo info = ModList.get().getModFileById(LifeSeries.MOD_ID);
         if (info == null) return null;
         IModFile modFile = info.getFile();
@@ -174,6 +174,6 @@ public final class ModBuiltInPacks implements RepositorySource {
 
         return null;
         //?}
-    //?}
+    *///?}
     }
 }

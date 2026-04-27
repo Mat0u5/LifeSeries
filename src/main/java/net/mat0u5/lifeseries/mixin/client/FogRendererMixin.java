@@ -86,23 +86,23 @@ public class FogRendererMixin {
         return result;
     }
 *///?} else {
-    //? fabric {
-    /*@WrapOperation(method = "computeFogColor", at = @At(value = "INVOKE", target = "Lorg/joml/Vector4f;set(FFFF)Lorg/joml/Vector4f;"))
+    //? if fabric {
+    @WrapOperation(method = "computeFogColor", at = @At(value = "INVOKE", target = "Lorg/joml/Vector4f;set(FFFF)Lorg/joml/Vector4f;"))
     private static Vector4f customFogColor(Vector4f instance, float x, float y, float z, float w, Operation<Vector4f> original) {
         Vector4f originalColor = new Vector4f(x, y, z, w);
         Vector4f result = ClientRenderer.modifyColor(originalColor, LifeSeriesClient.fogColor, LifeSeriesClient.fogColorSetMode, null);
         LifeSeriesClient.cachedFogRenderColor = new Vec3(result.x, result.y, result.z);
         return original.call(instance, result.x, result.y, result.z, result.w);
     }
-    *///?} else {
-    @WrapOperation(method = "computeFogColor", at = @At(value = "INVOKE", target = "Lnet/neoforged/neoforge/client/ClientHooks;getFogColor(Lnet/minecraft/client/Camera;FLnet/minecraft/client/multiplayer/ClientLevel;IFFFFLorg/joml/Vector4f;)V"))
+    //?} else {
+    /*@WrapOperation(method = "computeFogColor", at = @At(value = "INVOKE", target = "Lnet/neoforged/neoforge/client/ClientHooks;getFogColor(Lnet/minecraft/client/Camera;FLnet/minecraft/client/multiplayer/ClientLevel;IFFFFLorg/joml/Vector4f;)V"))
     private static void customFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, float fogRed, float fogGreen, float fogBlue, Vector4f dest, Operation<Void> original) {
         Vec3 originalColor = new Vec3(fogRed, fogGreen, fogBlue);
         Vec3 result = ClientRenderer.modifyColor(originalColor, LifeSeriesClient.fogColor, LifeSeriesClient.fogColorSetMode, null);
         LifeSeriesClient.cachedFogRenderColor = new Vec3(result.x, result.y, result.z);
         original.call(camera, partialTick, level, renderDistance, darkenWorldAmount, (float)result.x, (float)result.y, (float)result.z, dest);
     }
-    //?}
+    *///?}
 //?}
 
 

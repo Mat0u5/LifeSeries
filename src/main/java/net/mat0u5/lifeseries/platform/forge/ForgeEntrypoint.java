@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.platform.forge;
 
-//? forge {
+//? if forge {
 
 /*import net.mat0u5.lifeseries.LifeSeries;
 import net.minecraftforge.fml.common.Mod;

@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.platform.neoforge;
-//? neoforge {
+//? if neoforge {
 
-import net.mat0u5.lifeseries.LifeSeries;
+/*import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.entity.angrysnowman.AngrySnowman;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
@@ -24,4 +24,4 @@ public class NeoforgeEntrypoint {
 		event.put(MobRegistry.ANGRY_SNOWMAN, AngrySnowman.createAttributes().build());
 	}
 }
-//?}
+*///?}

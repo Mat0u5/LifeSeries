@@ -12,7 +12,7 @@ import java.nio.file.StandardCopyOption;
 
 public class ResourceHandler {
     //? if fabric {
-    /*public void copyBundledSingleFile(String resourcePath, Path targetFile) {
+    public void copyBundledSingleFile(String resourcePath, Path targetFile) {
         try {
             Files.createDirectories(targetFile.getParent());
 
@@ -66,8 +66,8 @@ public class ResourceHandler {
             LifeSeries.LOGGER.error("Error copying file from JAR: " + resourcePath, e);
         }
     }
-    *///?} else {
-    public void copyBundledSingleFile(String resourcePath, Path targetFile) {
+    //?} else {
+    /*public void copyBundledSingleFile(String resourcePath, Path targetFile) {
         try {
             Files.createDirectories(targetFile.getParent());
 
@@ -93,5 +93,5 @@ public class ResourceHandler {
             LifeSeries.LOGGER.error("Error copying bundled file: " + resourcePath, e);
         }
     }
-    //?}
+    *///?}
 }
