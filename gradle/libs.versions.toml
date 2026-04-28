@@ -15,7 +15,7 @@ kotlin-jvm = "2.3.20"
 fletching-table = "0.1.0-alpha.22"
 moulberry-mixinconstraints = "1.1.0"
 vanniktech-maven-publish = "0.35.0"
-mixin = "0.8.5"
+mixin = "0.8.7"
 
 [libraries]
 kikugie-postprocess = { module = "dev.kikugie:postprocess", version.ref = "stonecutter-postprocess" }

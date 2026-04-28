@@ -34,11 +34,12 @@ public class WaypointTransmitterMixin {
     //? if !forge {
     /*@Inject(method = "doesSourceIgnoreReceiver", at = @At("HEAD"), cancellable = true)
     private static void cannotReceive(LivingEntity sourceEntity, ServerPlayer receiver, CallbackInfoReturnable<Boolean> cir) {
+        if (LifeSeries.isClientOrDisabled()) return;
      *///?} else {
     @Redirect(method = "makeWaypointConnectionWith", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/waypoints/WaypointTransmitter;doesSourceIgnoreReceiver(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/server/level/ServerPlayer;)Z"))
     private static boolean cannotReceive(LivingEntity sourceEntity, ServerPlayer receiver) {
+        if (LifeSeries.isClientOrDisabled()) return WaypointTransmitter.doesSourceIgnoreReceiver(sourceEntity, receiver);
     //?}
-        if (LifeSeries.isClientOrDisabled()) return false;
         if (sourceEntity instanceof ServerPlayer source) {
             boolean showLocatorBar = currentSeason.LOCATOR_BAR;
             if (!showLocatorBar && currentSeason instanceof DoubleLife doubleLife && DoubleLife.SOULMATE_LOCATOR_BAR) {

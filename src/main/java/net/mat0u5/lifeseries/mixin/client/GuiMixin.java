@@ -53,7 +53,7 @@ public class GuiMixin {
     @Inject(method = "extractRenderState", at = @At(value = "HEAD"))
     public void render(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
     //?}
-        //? if !(neoforge && <= 1.20.3) {
+        //? if !(neoforge && <= 1.20.3) && !(forge && <= 1.20) {
         ClientRenderer.render(guiGraphics);
         //?}
     }

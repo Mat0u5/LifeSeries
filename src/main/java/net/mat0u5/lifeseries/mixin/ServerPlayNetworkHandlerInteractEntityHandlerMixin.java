@@ -21,22 +21,22 @@ import net.minecraft.world.phys.Vec3;
 @Mixin(targets = "net.minecraft.server.network.ServerGamePacketListenerImpl$1")
 public abstract class ServerPlayNetworkHandlerInteractEntityHandlerMixin implements ServerboundInteractPacket.Handler {
     //? if fabric || forge {
-    /^@Shadow
+    @Shadow
     @Final
     ServerGamePacketListenerImpl field_28963;
 
     @Shadow
     @Final
     Entity val$target;
-    ^///?} else {
-    @Shadow(aliases = {"this$0"})
+    //?} else {
+    /^@Shadow(aliases = {"this$0"})
     @Final
     ServerGamePacketListenerImpl field_28963;
 
     @Shadow(aliases = {"val$entity"})
     @Final
     Entity val$target;
-    //?}
+    ^///?}
 
     @Inject(method = "onInteraction(Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/Vec3;)V", at = @At(value = "HEAD"), cancellable = true)
     public void onPlayerInteractEntity(InteractionHand hand, Vec3 hitPosition, CallbackInfo info) {

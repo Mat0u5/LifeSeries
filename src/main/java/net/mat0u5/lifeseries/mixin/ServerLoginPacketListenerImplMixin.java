@@ -30,7 +30,7 @@ public abstract class ServerLoginPacketListenerImplMixin {
     //? if <= 1.20 {
     /*@Shadow @Final
     MinecraftServer server;
-    @Shadow ServerLoginPacketListenerImpl.State state;
+    @Shadow  ServerLoginPacketListenerImpl.State state;
     @Shadow public abstract void handleAcceptedLogin();
 
     @Inject(method = "handleAcceptedLogin", at = @At("HEAD"), cancellable = true)
@@ -51,7 +51,9 @@ public abstract class ServerLoginPacketListenerImplMixin {
                     buf
             ));
 
+            //? if !(forge && <= 1.20) {
             this.state = ServerLoginPacketListenerImpl.State.NEGOTIATING;
+            //?}
         }
 
         ci.cancel();
@@ -67,10 +69,19 @@ public abstract class ServerLoginPacketListenerImplMixin {
         ServerLoginPacketListenerImpl self = (ServerLoginPacketListenerImpl)(Object)this;
 
         this.server.execute(() -> {
+            //? if !forge {
             NetworkHandlerServer.handlePreLogin(understood, self);
 
             this.state = ServerLoginPacketListenerImpl.State.READY_TO_ACCEPT;
             this.handleAcceptedLogin();
+            //?} else {
+
+            /^if (self.connection.getPacketListener() != self) return;
+
+            NetworkHandlerServer.handlePreLogin(understood, self);
+
+            this.state = ServerLoginPacketListenerImpl.State.READY_TO_ACCEPT;
+            ^///?}
         });
 
         ci.cancel();

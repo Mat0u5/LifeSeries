@@ -42,7 +42,7 @@ import net.mat0u5.lifeseries.platform.forge.ForgePlatform;
 
 
 public class LifeSeries {
-	public static final String MOD_VERSION = "dev-1.5.4.2";
+	public static final String MOD_VERSION = "dev-1.5.4.3";
 	public static final String MOD_ID = "lifeseries";
 	private static final Platform PLATFORM = createPlatformInstance();
 
@@ -79,7 +79,7 @@ public class LifeSeries {
 		parseSeason(season);
 		Seasons.getSeasons().forEach(seasons -> seasons.getSeasonInstance().createConfig());
 
-		//? !neoforge {
+		//? fabric || (forge && > 1.21) {
 		MobRegistry.registerAttributes();
 		//?}
 		if (!ISOLATED_ENVIRONMENT) {

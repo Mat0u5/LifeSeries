@@ -65,12 +65,19 @@ repositories {
 dependencies {
 	annotationProcessor("org.spongepowered:mixin:${libs.versions.mixin.get()}:processor")
 
+	compileOnly("io.github.llamalad7:mixinextras-common:0.5.4")
+	implementation("io.github.llamalad7:mixinextras-forge:0.5.4")
+	"jarJar"("io.github.llamalad7:mixinextras-forge:0.5.4")
+
 	implementation(libs.moulberry.mixinconstraints)
 	jarJar(libs.moulberry.mixinconstraints)
 	compileOnly("maven.modrinth:appleskin:2.5.1+mc1.20.2")
 	compileOnly("de.maxhenkel.voicechat:voicechat-api:2.5.27")
 	if (isValidVersion(prop("deps.voicechat"))) {
 		implementation ("maven.modrinth:simple-voice-chat:${prop("deps.voicechat")}")
+	}
+	else {
+		compileOnly ("maven.modrinth:simple-voice-chat:forge-1.20.1-2.6.16")
 	}
 }
 
