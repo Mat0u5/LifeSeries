@@ -46,7 +46,7 @@ public class ClientPacketListenerMixin {
         ClientEvents.onClientJoin();
     }
 
-//? if fabric {
+//? if fabric || forge {
     //? if <= 1.20 {
     /*@Inject(method = "handleCustomPayload", at = @At("HEAD"), cancellable = true)
     private void onHandlePayload(ClientboundCustomPayloadPacket clientboundCustomPayloadPacket, CallbackInfo ci) {

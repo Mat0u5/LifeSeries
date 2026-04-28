@@ -127,7 +127,7 @@ public final class ModBuiltInPacks implements RepositorySource {
     }
 
     private static @Nullable Path getResourceAsPath(String path) {
-    //? if fabric {
+    //? if fabric || forge {
         try {
             URL url = ModBuiltInPacks.class.getResource(path);
             if (url == null) return null;

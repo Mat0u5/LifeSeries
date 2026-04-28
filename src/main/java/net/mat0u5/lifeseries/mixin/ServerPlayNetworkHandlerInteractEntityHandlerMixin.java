@@ -20,7 +20,7 @@ import net.minecraft.world.phys.Vec3;
 
 @Mixin(targets = "net.minecraft.server.network.ServerGamePacketListenerImpl$1")
 public abstract class ServerPlayNetworkHandlerInteractEntityHandlerMixin implements ServerboundInteractPacket.Handler {
-    //? if fabric {
+    //? if fabric || forge {
     /^@Shadow
     @Final
     ServerGamePacketListenerImpl field_28963;

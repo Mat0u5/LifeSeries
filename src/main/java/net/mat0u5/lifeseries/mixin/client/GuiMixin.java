@@ -44,16 +44,16 @@ import net.minecraft.client.gui.Gui;
 *///?}
 public class GuiMixin {
     //? if <= 1.20.5 {
-    /*@Inject(method = "render", at = @At(value = "TAIL"))
+    /*@Inject(method = "render", at = @At(value = "HEAD"))
     public void render(GuiGraphicsExtractor guiGraphics, float f, CallbackInfo ci) {
     *///?} else if <= 1.21.11 {
-    /*@Inject(method = "render", at = @At(value = "TAIL"))
+    /*@Inject(method = "render", at = @At(value = "HEAD"))
     public void render(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
     *///?} else {
-    @Inject(method = "extractRenderState", at = @At(value = "TAIL"))
+    @Inject(method = "extractRenderState", at = @At(value = "HEAD"))
     public void render(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
     //?}
-        //? if !neoforge || >= 1.20.5 {
+        //? if !(neoforge && <= 1.20.3) {
         ClientRenderer.render(guiGraphics);
         //?}
     }

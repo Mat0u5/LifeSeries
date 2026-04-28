@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
-//? if <= 1.20 || !fabric {
+//? if <= 1.20 || neoforge {
 /*import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
 

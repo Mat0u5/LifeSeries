@@ -42,7 +42,6 @@ stonecutter {
 			}
 		}
 
-		/*
 		match("26.2", "fabric")
 		match("26.1", "fabric", "forge", "neoforge")
 
@@ -58,25 +57,6 @@ stonecutter {
 		match("1.20.3", "fabric", "neoforge")
 		match("1.20.2", "fabric")
 		match("1.20", "fabric", "forge")
-		*/
-
-
-		match("26.2", "fabric")
-		match("26.1", "fabric", "neoforge")
-
-		match("1.21.11", "fabric", "neoforge")
-		match("1.21.9", "fabric", "neoforge")
-		match("1.21.6", "fabric", "neoforge")
-		match("1.21.5", "fabric", "neoforge")
-		match("1.21.4", "fabric", "neoforge")
-		match("1.21.2", "fabric", "neoforge")
-		match("1.21", "fabric", "neoforge")
-
-		match("1.20.5", "fabric", "neoforge")
-		match("1.20.3", "fabric", "neoforge")
-		match("1.20.2", "fabric")
-		match("1.20", "fabric")
-
 
 		/*
 		match("26.2", "fabric")

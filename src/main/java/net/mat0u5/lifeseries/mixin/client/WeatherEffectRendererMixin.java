@@ -35,7 +35,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 public class WeatherEffectRendererMixin {
     private static Identifier LESS_SNOW_RESOURCE_LOCATION = IdentifierHelper.mod("textures/environment/less-snow.png");
 
-//? if fabric {
+//? if fabric || forge {
     //? if <= 1.21 {
     /*@WrapOperation(method = "renderSnowAndRain", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/resources/Identifier;)V"))
     public void render(int i, Identifier resourceLocation, Operation<Void> original) {
