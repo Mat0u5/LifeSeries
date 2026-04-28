@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.mixin.compat.fabricapi;
 
 //? if fabric {
-/*import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.fabricmc.fabric.impl.registry.sync.RegistrySyncManager;
@@ -18,8 +18,8 @@ import java.util.UUID;
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 //? if <= 1.20 {
-/^import net.minecraft.server.level.ServerPlayer;
-^///?} else {
+/*import net.minecraft.server.level.ServerPlayer;
+*///?} else {
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.server.network.ServerConfigurationPacketListenerImpl;
 //?}
@@ -37,11 +37,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class RegistrySyncManagerMixin {
 
     //? if <= 1.20 {
-    /^@WrapOperation(method = "sendPacket(Lnet/minecraft/server/level/ServerPlayer;Lnet/fabricmc/fabric/impl/registry/sync/packet/RegistryPacketHandler;)V", at = @At(value = "INVOKE", target = "Lnet/fabricmc/fabric/impl/registry/sync/RegistrySyncManager;createAndPopulateRegistryMap(ZLjava/util/Map;)Ljava/util/Map;"))
+    /*@WrapOperation(method = "sendPacket(Lnet/minecraft/server/level/ServerPlayer;Lnet/fabricmc/fabric/impl/registry/sync/packet/RegistryPacketHandler;)V", at = @At(value = "INVOKE", target = "Lnet/fabricmc/fabric/impl/registry/sync/RegistrySyncManager;createAndPopulateRegistryMap(ZLjava/util/Map;)Ljava/util/Map;"))
     private static @Nullable Map<Identifier, Object2IntMap<Identifier>> checkRemoteRemap(boolean b, Map map, Operation<Map<Identifier, Object2IntMap<Identifier>>> original, ServerPlayer player) {
         Map<Identifier, Object2IntMap<Identifier>> originalValue = original.call(b, map);
         UUID profileUUID = player.getUUID();
-    ^///?} else {
+    *///?} else {
     @WrapOperation(method = "configureClient", at = @At(value = "INVOKE", target = "Lnet/fabricmc/fabric/impl/registry/sync/RegistrySyncManager;createAndPopulateRegistryMap()Ljava/util/Map;"))
     private static @Nullable Map<Identifier, Object2IntMap<Identifier>> checkRemoteRemap(Operation<Map<Identifier, Object2IntMap<Identifier>>> original, ServerConfigurationPacketListenerImpl handler) {
         Map<Identifier, Object2IntMap<Identifier>> originalValue = original.call();
@@ -81,11 +81,11 @@ public class RegistrySyncManagerMixin {
     }
     //?}
 }
-*///?} else {
-import net.minecraft.server.MinecraftServer;
+//?} else {
+/*import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(value = MinecraftServer.class)
 public interface RegistrySyncManagerMixin {
 }
-//?}
+*///?}

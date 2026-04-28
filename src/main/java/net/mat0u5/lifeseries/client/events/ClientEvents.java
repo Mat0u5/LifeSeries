@@ -49,9 +49,9 @@ import net.minecraft.core.particles.ColorParticleOption;
  //?}
 
 //? if fabric {
-/*import net.mat0u5.lifeseries.client.compatibilities.FlashbackCompatibility;
+import net.mat0u5.lifeseries.client.compatibilities.FlashbackCompatibility;
 import net.mat0u5.lifeseries.client.compatibilities.ReplayModCompatibility;
-*///?}
+//?}
 
 public class ClientEvents {
     public static long onGroundFor = 0;
@@ -69,19 +69,19 @@ public class ClientEvents {
         boolean isReplay = false;
         if (CompatibilityManager.flashbackLoaded()) {
             //? if fabric {
-            /*if (FlashbackCompatibility.isReplayServer(server)) {
+            if (FlashbackCompatibility.isReplayServer(server)) {
                 LifeSeries.LOGGER.info("Detected Flashback Replay");
                 isReplay = true;
             }
-            *///?}
+            //?}
         }
         if (CompatibilityManager.replayModLoaded()) {
             //? if fabric {
-            /*if (ReplayModCompatibility.isReplayServer()) {
+            if (ReplayModCompatibility.isReplayServer()) {
                 LifeSeries.LOGGER.info("Detected ReplayMod Replay");
                 isReplay = true;
             }
-            *///?}
+            //?}
         }
         LifeSeriesClient.isReplay = isReplay;
     }

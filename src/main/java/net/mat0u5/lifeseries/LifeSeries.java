@@ -33,12 +33,12 @@ import java.util.List;
 import java.util.UUID;
 
 //? if fabric {
-/*import net.mat0u5.lifeseries.platform.fabric.FabricPlatform;
-*///?} neoforge {
+import net.mat0u5.lifeseries.platform.fabric.FabricPlatform;
+//?} neoforge {
 /*import net.mat0u5.lifeseries.platform.neoforge.NeoforgePlatform;
  *///?} forge {
-import net.mat0u5.lifeseries.platform.forge.ForgePlatform;
- //?}
+/*import net.mat0u5.lifeseries.platform.forge.ForgePlatform;
+ *///?}
 
 
 public class LifeSeries {
@@ -94,12 +94,12 @@ public class LifeSeries {
 
 	private static Platform createPlatformInstance() {
 		//? if fabric {
-		/*return new FabricPlatform();
-		*///?} neoforge {
+		return new FabricPlatform();
+		//?} neoforge {
 		/*return new NeoforgePlatform();
 		 *///?} forge {
-		return new ForgePlatform();
-		 //?}
+		/*return new ForgePlatform();
+		 *///?}
 	}
 
 	public static boolean modDisabled() {

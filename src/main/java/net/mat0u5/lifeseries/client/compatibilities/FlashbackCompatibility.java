@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.client.compatibilities;
 
 //? if fabric {
-/*import com.moulberry.flashback.playback.ReplayServer;
+import com.moulberry.flashback.playback.ReplayServer;
 import net.minecraft.server.MinecraftServer;
 
 public class FlashbackCompatibility {
@@ -9,4 +9,4 @@ public class FlashbackCompatibility {
         return server instanceof ReplayServer;
     }
 }
-*///?}
+//?}

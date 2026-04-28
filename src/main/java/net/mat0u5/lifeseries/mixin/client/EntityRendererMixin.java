@@ -38,7 +38,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 //?}
 //? if forge
-import net.minecraftforge.client.event.RenderNameTagEvent;
+//import net.minecraftforge.client.event.RenderNameTagEvent;
 
 
 @Mixin(value = EntityRenderer.class, priority = 1)
@@ -120,15 +120,15 @@ public class EntityRendererMixin<T extends Entity, S extends EntityRenderState> 
 
 
     //? if !forge {
-    /*@Redirect(method = "submitNameDisplay(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;I)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/EntityRenderState;scoreText:Lnet/minecraft/network/chat/Component;"))
+    @Redirect(method = "submitNameDisplay(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;I)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/EntityRenderState;scoreText:Lnet/minecraft/network/chat/Component;"))
     public Component customBelowName(EntityRenderState instance) {
         Component original = instance.scoreText;
-    *///?} else {
-    @Redirect(method = "submitNameDisplay(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/client/event/RenderNameTagEvent;getScoreContent()Lnet/minecraft/network/chat/Component;"))
+    //?} else {
+    /*@Redirect(method = "submitNameDisplay(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/client/event/RenderNameTagEvent;getScoreContent()Lnet/minecraft/network/chat/Component;"))
     public Component customBelowName(RenderNameTagEvent event) {
         var instance = event.getEntityRenderer();
         Component original = event.getScoreContent();
-    //?}
+    *///?}
         if (instance instanceof IEntityRenderState accessor && accessor.ls$getEntity() instanceof Player player) {
             Scoreboard scoreboard = player.level().getScoreboard();
             Objective objective = scoreboard.getDisplayObjective(DisplaySlot.BELOW_NAME);
