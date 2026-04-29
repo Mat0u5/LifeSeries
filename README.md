@@ -11,7 +11,7 @@
 
 # Life Series Mod
 
-This mod is a one-to-one recreation of [Grian](https://www.youtube.com/c/Grian)'s Life Series in Minecraft Fabric.
+This mod is a one-to-one recreation of [Grian](https://www.youtube.com/c/Grian)'s Life Series in Minecraft Fabric, Forge and Neoforge.
 
 It adds everything from the original series, along with an incredible amount of quality of life features, and endless customizability.
 
