@@ -161,13 +161,13 @@ publishMods {
 			webhookUrl = webhook
 
 			if (!isDev) {
-				content = changelog.map { "# [ModId version `$version` is out!](https://modrinth.com/mod/life-series/versions)\n" +
+				content = changelog.map { "# [Life Series version `$version` is out!](https://modrinth.com/mod/life-series/versions)\n" +
 						"### Changelog:\n" +
 						"```\n$it```\n\n" +
 						"[Click here to open the **full changelog**]($changelogLink)" }
 			}
 			else {
-				content = changelog.map { "# [ModId version `$version` is out!](https://modrinth.com/mod/life-series-dev/versions)\n" +
+				content = changelog.map { "# [Life Series version `$version` is out!](https://modrinth.com/mod/life-series-dev/versions)\n" +
 						"### Changelog:\n" +
 						"```\n$it```\n\n" +
 						"[Click here to open the **full changelog**]($changelogLink)" }
