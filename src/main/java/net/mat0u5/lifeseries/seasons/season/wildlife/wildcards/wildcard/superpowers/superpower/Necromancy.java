@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
@@ -57,7 +58,7 @@ public class Necromancy extends Superpower {
             return;
         }
 
-        ServerLevel playerLevel = player.ls$getServerLevel();
+        ServerLevel playerLevel = ((IPlayer) player).ls$getServerLevel();
         playerLevel.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.WARDEN_EMERGE, SoundSource.MASTER, 1, 1);
 
         List<ServerPlayer> affectedPlayers = playerLevel.getEntitiesOfClass(ServerPlayer.class, player.getBoundingBox().inflate(10), playerEntity -> playerEntity.distanceTo(player) <= 10);
@@ -73,7 +74,7 @@ public class Necromancy extends Superpower {
         TaskScheduler.scheduleTask(Time.seconds(5), () -> {
             ServerPlayer updatedPlayer = getPlayer();
             if (updatedPlayer != null) {
-                ServerLevel updatedPlayerLevel = updatedPlayer.ls$getServerLevel();
+                ServerLevel updatedPlayerLevel = ((IPlayer) updatedPlayer).ls$getServerLevel();
                 List<ServerPlayer> deadPlayers = getDeadSpectatorPlayers();
                 for (ServerPlayer deadPlayer : deadPlayers) {
                     BlockPos tpTo = LevelUtils.getCloseBlockPos(updatedPlayerLevel, updatedPlayer.blockPosition(), 3, 2, true);
@@ -121,7 +122,7 @@ public class Necromancy extends Superpower {
     public void tick() {
         for (UUID uuid : new ArrayList<>(perPlayerRessurections)) {
             ServerPlayer player = PlayerUtils.getPlayer(uuid);
-            if (player != null && player.ls$isAlive()) {
+            if (player != null && ((IPlayer) player).ls$isAlive()) {
                 perPlayerRessurections.remove(uuid);
                 ressurectedPlayers.remove(uuid);
                 queuedRessurectedPlayers.remove(uuid);

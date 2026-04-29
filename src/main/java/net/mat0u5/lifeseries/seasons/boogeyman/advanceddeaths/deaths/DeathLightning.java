@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.deaths;
 
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeath;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeaths;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -37,7 +38,7 @@ public class DeathLightning extends AdvancedDeath {
 
     @Override
     protected void tick(ServerPlayer player) {
-        ServerLevel level = player.ls$getServerLevel();
+        ServerLevel level = ((IPlayer) player).ls$getServerLevel();
         if (ticks > 160) {
             LevelUtils.summonHarmlessLightning(player);
             PlayerUtils.killFromSource(player, player.damageSources().lightningBolt());
@@ -58,7 +59,7 @@ public class DeathLightning extends AdvancedDeath {
 
     @Override
     protected void begin(ServerPlayer player) {
-        level = player.ls$getServerLevel();
+        level = ((IPlayer) player).ls$getServerLevel();
         //? if <= 1.21.11 {
         /*if (level == null) return;
         level.setWeatherParameters(0, 200, true, true);

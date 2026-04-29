@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket;
 import net.minecraft.server.level.ServerLevel;
@@ -51,7 +52,7 @@ public class SuperPunch extends ToggleableSuperpower {
             NetworkHandlerServer.sendVignette(player, 0);
             if (player.isPassenger()) {
                 player.removeVehicle();
-                syncEntityPassengers(riding, player.ls$getServerLevel());
+                syncEntityPassengers(riding, ((IPlayer) player).ls$getServerLevel());
             }
         }
     }
@@ -66,7 +67,7 @@ public class SuperPunch extends ToggleableSuperpower {
                 player.removeVehicle();
             }
             if (riding != null && !player.isPassenger()) {
-                syncEntityPassengers(riding, player.ls$getServerLevel());
+                syncEntityPassengers(riding, ((IPlayer) player).ls$getServerLevel());
                 riding = null;
             }
         }
@@ -80,7 +81,7 @@ public class SuperPunch extends ToggleableSuperpower {
 
         if (entity.isVehicle()) return;
 
-        ServerLevel riderLevel = rider.ls$getServerLevel();
+        ServerLevel riderLevel = ((IPlayer) rider).ls$getServerLevel();
 
         if (rider.isPassenger()) {
             Entity vehicle = rider.getVehicle();

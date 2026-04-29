@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.other;
 
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.player.TeamUtils;
@@ -59,14 +60,14 @@ public class WatcherManager {
         if (currentSeason instanceof DoubleLife doubleLife) {
             doubleLife.resetSoulmate(player);
         }
-        player.ls$message(ModifiableText.WATCHER_JOIN.get());
+        ((IPlayer) player).ls$message(ModifiableText.WATCHER_JOIN.get());
     }
 
     public static void removeWatcher(ServerPlayer player) {
         watchers.remove(player.getScoreboardName());
         ScoreboardUtils.resetScore(player, SCOREBOARD_NAME);
         livesManager.resetPlayerLife(player);
-        player.ls$message(ModifiableText.WATCHER_LEAVE.get());
+        ((IPlayer) player).ls$message(ModifiableText.WATCHER_LEAVE.get());
     }
 
     public static boolean isWatcher(Player player) {

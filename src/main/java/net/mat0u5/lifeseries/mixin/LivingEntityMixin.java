@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.SuperPunch;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.WindCharge;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -61,7 +62,7 @@ public abstract class LivingEntityMixin {
         if (LifeSeries.isClientOrDisabled()) return;
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity instanceof ServerPlayer player) {
-            if (player.ls$isWatcher()) return;
+            if (((IPlayer) player).ls$isWatcher()) return;
             currentSeason.onPlayerHeal(player, amount);
         }
     }

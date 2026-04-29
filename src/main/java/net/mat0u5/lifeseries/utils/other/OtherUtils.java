@@ -5,6 +5,7 @@ import com.mojang.authlib.properties.PropertyMap;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.events.Events;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -34,7 +35,7 @@ public class OtherUtils {
 
     public static void log(Component message) {
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-            player.ls$message(message);
+            ((IPlayer) player).ls$message(message);
         }
         LifeSeries.LOGGER.info(message.getString());
     }
@@ -42,7 +43,7 @@ public class OtherUtils {
     public static void log(String string) {
         Component message = Component.nullToEmpty(string);
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-            player.ls$message(message);
+            ((IPlayer) player).ls$message(message);
         }
         LifeSeries.LOGGER.info(string);
     }

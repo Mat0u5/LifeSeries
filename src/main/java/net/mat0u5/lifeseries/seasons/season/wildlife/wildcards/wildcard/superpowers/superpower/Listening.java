@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
@@ -52,7 +53,7 @@ public class Listening extends ToggleableSuperpower {
         super.activate();
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        player.ls$playNotifySound(SoundEvents.PUFFER_FISH_BLOW_UP, SoundSource.MASTER, 1, 1);
+        ((IPlayer) player).ls$playNotifySound(SoundEvents.PUFFER_FISH_BLOW_UP, SoundSource.MASTER, 1, 1);
         NetworkHandlerServer.sendVignette(player, -1);
         listeningPlayers.add(player.getUUID());
         updateLooking();
@@ -65,7 +66,7 @@ public class Listening extends ToggleableSuperpower {
         if (player == null) return;
         NetworkHandlerServer.sendVignette(player, 0);
         listeningPlayers.remove(player.getUUID());
-        player.ls$playNotifySound(SoundEvents.PUFFER_FISH_BLOW_OUT, SoundSource.MASTER, 1, 1);
+        ((IPlayer) player).ls$playNotifySound(SoundEvents.PUFFER_FISH_BLOW_OUT, SoundSource.MASTER, 1, 1);
     }
 
     public void updateLooking() {

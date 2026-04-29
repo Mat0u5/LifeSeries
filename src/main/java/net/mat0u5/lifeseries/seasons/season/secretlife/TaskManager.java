@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.config.StringListConfig;
 import net.mat0u5.lifeseries.config.StringListManager;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
@@ -206,7 +207,7 @@ public class TaskManager {
         }
 
         removePlayersTaskBook(player);
-        if (player.ls$isDead()) return;
+        if (((IPlayer) player).ls$isDead()) return;
         Task task;
         if (preAssignedTasks.containsKey(player.getUUID())) {
             task = preAssignedTasks.get(player.getUUID());
@@ -217,7 +218,7 @@ public class TaskManager {
         }
         ItemStack book = getTaskBook(player, task);
         if (!player.addItem(book)) {
-            ItemStackUtils.spawnItemForPlayer(player.ls$getServerLevel(), player.position(), book, player);
+            ItemStackUtils.spawnItemForPlayer(((IPlayer) player).ls$getServerLevel(), player.position(), book, player);
         }
         assignedTasks.put(player.getUUID(), task);
         DatapackIntegration.setPlayerTask(player, type);
@@ -225,11 +226,11 @@ public class TaskManager {
 
     public static void assignRandomTasks(List<ServerPlayer> allowedPlayers, TaskTypes type) {
         for (ServerPlayer player : allowedPlayers) {
-            if (player.ls$isDead()) continue;
+            if (((IPlayer) player).ls$isDead()) continue;
             TaskTypes thisType = type;
             if (thisType == null) {
                 thisType = TaskTypes.EASY;
-                if (player.ls$isOnLastLife(false)) thisType = TaskTypes.RED;
+                if (((IPlayer) player).ls$isOnLastLife(false)) thisType = TaskTypes.RED;
             }
             assignRandomTaskToPlayer(player, thisType);
         }
@@ -259,7 +260,7 @@ public class TaskManager {
         });
         TaskScheduler.scheduleTask(140, () -> {
             for (ServerPlayer player : allowedPlayers) {
-                boolean redTask = type == TaskTypes.RED || (type == null && player.ls$isOnLastLife(false));
+                boolean redTask = type == TaskTypes.RED || (type == null && ((IPlayer) player).ls$isOnLastLife(false));
                 AnimationUtils.playSecretLifeTotemAnimation(player, redTask);
             }
         });
@@ -380,7 +381,7 @@ public class TaskManager {
 
     public static boolean hasSessionStarted(ServerPlayer player) {
         if (currentSession.statusNotStarted()) {
-            player.ls$message(ModifiableText.SESSION_ERROR_START.get());
+            ((IPlayer) player).ls$message(ModifiableText.SESSION_ERROR_START.get());
             return false;
         }
         return true;
@@ -388,7 +389,7 @@ public class TaskManager {
 
     public static boolean isBeingUsed(ServerPlayer player) {
         if (!secretKeeperBeingUsed) return false;
-        player.ls$message(ModifiableText.SECRETLIFE_SECRETKEEPER_INUSE.get());
+        ((IPlayer) player).ls$message(ModifiableText.SECRETLIFE_SECRETKEEPER_INUSE.get());
         return true;
     }
 
@@ -396,7 +397,7 @@ public class TaskManager {
         TaskTypes type = getPlayersTaskType(player);
         if (type != null) return true;
         if (sendMessage) {
-            player.ls$message(ModifiableText.SECRETLIFE_TASK_MISSING.get());
+            ((IPlayer) player).ls$message(ModifiableText.SECRETLIFE_TASK_MISSING.get());
         }
         return false;
     }
@@ -441,7 +442,7 @@ public class TaskManager {
                     PlayerUtils.broadcastMessageToAdmins(getShowTaskMessage(player));
                     PlayerUtils.broadcastMessageToAdmins(ModifiableText.SECRETLIFE_TASK_PENDING_ACCEPT.get(TextUtils.runCommandText("/task succeed "+player.getScoreboardName())));
                 }
-                player.ls$message(ModifiableText.SECRETLIFE_TASK_PENDING_NOTIFICATION.get());
+                ((IPlayer) player).ls$message(ModifiableText.SECRETLIFE_TASK_PENDING_NOTIFICATION.get());
                 return;
             }
         }
@@ -508,7 +509,7 @@ public class TaskManager {
             SessionTranscript.rerollTask(player);
             secretKeeperBeingUsed = true;
             TaskTypes newType = TaskTypes.HARD;
-            if (player.ls$isOnLastLife(false)) {
+            if (((IPlayer) player).ls$isOnLastLife(false)) {
                 chooseTasks(List.of(player), TaskTypes.RED);
                 return;
             }
@@ -540,11 +541,11 @@ public class TaskManager {
             return;
         }
         if (type == TaskTypes.HARD) {
-            if (!player.ls$isOnLastLife(true)) {
-                player.ls$message(ModifiableText.SECRETLIFE_TASK_REROLL_HARD_FAIL.get());
+            if (!((IPlayer) player).ls$isOnLastLife(true)) {
+                ((IPlayer) player).ls$message(ModifiableText.SECRETLIFE_TASK_REROLL_HARD_FAIL.get());
             }
             else {
-                player.ls$message(ModifiableText.SECRETLIFE_TASK_REROLL_HARD_FAIL_RED.get());
+                ((IPlayer) player).ls$message(ModifiableText.SECRETLIFE_TASK_REROLL_HARD_FAIL_RED.get());
             }
         }
     }
@@ -589,7 +590,7 @@ public class TaskManager {
                 showHeartTitle(player, RED_FAIL);
                 season.removePlayerHealth(player, -RED_FAIL);
             }
-            if (!player.ls$isOnLastLife(false)) {
+            if (!((IPlayer) player).ls$isOnLastLife(false)) {
                 secretKeeperBeingUsed = false;
             }
         });
@@ -599,9 +600,9 @@ public class TaskManager {
 
     public static void chooseNewTaskForPlayerIfNecessary(ServerPlayer player) {
         if (currentSession.statusFinished()) return;
-        if (player.ls$isOnLastLife(false) || CONSTANT_TASKS) {
+        if (((IPlayer) player).ls$isOnLastLife(false) || CONSTANT_TASKS) {
             TaskScheduler.scheduleTask(Time.seconds(6), () -> {
-                TaskTypes newType = player.ls$isOnLastLife(false) ? TaskTypes.RED : TaskTypes.EASY;
+                TaskTypes newType = ((IPlayer) player).ls$isOnLastLife(false) ? TaskTypes.RED : TaskTypes.EASY;
                 chooseTasks(List.of(player), newType);
             });
         }

@@ -18,7 +18,15 @@ public abstract class CommandsMixin {
     @Final
     private CommandDispatcher<CommandSourceStack> dispatcher;
 
+//? if !forge {
     @Inject(at = @At(value = "INVOKE", target = "Lcom/mojang/brigadier/CommandDispatcher;setConsumer(Lcom/mojang/brigadier/ResultConsumer;)V"), method = "<init>")
+//?} else {
+    /*//? if <= 1.20.5 {
+    /^@Inject(method = "<init>", at = @At("RETURN"))
+    ^///?} else {
+    @Inject(at = @At(value = "INVOKE", target = "Lcom/mojang/brigadier/CommandDispatcher;setConsumer(Lcom/mojang/brigadier/ResultConsumer;)V", unsafe = true), method = "<init>")
+    //?}
+*///?}
     private void addCommands(Commands.CommandSelection selection, CommandBuildContext buildContext, CallbackInfo ci) {
         CommandManager.registerAllCommands(this.dispatcher, buildContext, selection);
     }

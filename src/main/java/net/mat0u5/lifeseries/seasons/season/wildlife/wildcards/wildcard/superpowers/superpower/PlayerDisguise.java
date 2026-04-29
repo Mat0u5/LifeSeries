@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.particles.ParticleTypes;
@@ -59,7 +60,7 @@ public class PlayerDisguise extends ToggleableSuperpower {
                 if (!PlayerUtils.isFakePlayer(lookingAtPlayer)) {
                     copiedPlayerUUID = lookingAtPlayer.getStringUUID();
                     copiedPlayerName = TextUtils.textToLegacyString(lookingAtPlayer.getDisplayName());
-                    player.ls$playNotifySound(SoundEvents.RESPAWN_ANCHOR_CHARGE, SoundSource.MASTER, 0.3f, 1);
+                    ((IPlayer) player).ls$playNotifySound(SoundEvents.RESPAWN_ANCHOR_CHARGE, SoundSource.MASTER, 0.3f, 1);
                     PlayerUtils.displayMessageToPlayer(player, ModifiableText.WILDLIFE_POWER_PLAYERDISGUISE.get(lookingAtPlayer), 65);
                     return;
                 }
@@ -71,7 +72,7 @@ public class PlayerDisguise extends ToggleableSuperpower {
             return;
         }
 
-        ServerLevel playerLevel = player.ls$getServerLevel();
+        ServerLevel playerLevel = ((IPlayer) player).ls$getServerLevel();
         playerLevel.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PUFFER_FISH_BLOW_UP, SoundSource.MASTER, 1, 1);
         Vec3 playerPos = player.position();
         playerLevel.sendParticles(
@@ -96,7 +97,7 @@ public class PlayerDisguise extends ToggleableSuperpower {
         super.deactivate();
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        ServerLevel playerLevel = player.ls$getServerLevel();
+        ServerLevel playerLevel = ((IPlayer) player).ls$getServerLevel();
         playerLevel.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PUFFER_FISH_BLOW_OUT, SoundSource.MASTER, 1, 1);
         Vec3 playerPos = player.position();
         playerLevel.sendParticles(

@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.secretsociety.SecretSociety;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
@@ -93,10 +94,10 @@ public class LimitedLife extends Season {
                     SimplePackets.SESSION_TIMER.target(player).sendToClient(timestamp);
                 }
 
-                if (player.ls$hasAssignedLives() && player.ls$getLives() != null) {
+                if (((IPlayer) player).ls$hasAssignedLives() && ((IPlayer) player).ls$getLives() != null) {
                     long playerLives;
-                    if (player.ls$isAlive()) {
-                        Integer playerLivesInt = player.ls$getLives();
+                    if (((IPlayer) player).ls$isAlive()) {
+                        Integer playerLivesInt = ((IPlayer) player).ls$getLives();
                         playerLives = playerLivesInt == null ? -1 : playerLivesInt;
                     }
                     else {
@@ -111,11 +112,11 @@ public class LimitedLife extends Season {
                 if (currentSession.displayTimer.contains(player.getUUID())) {
                     fullMessage.append(message);
                 }
-                if (player.ls$hasAssignedLives()) {
+                if (((IPlayer) player).ls$hasAssignedLives()) {
                     if (!fullMessage.getString().isEmpty()) fullMessage.append(ModifiableText.LIMITEDLIFE_SESSION_DISPLAY_DIVIDER.get());
                     fullMessage.append(livesManager.getFormattedLives(player));
                 }
-                player.ls$message(fullMessage, true);
+                ((IPlayer) player).ls$message(fullMessage, true);
             }
         }
     }
@@ -129,7 +130,7 @@ public class LimitedLife extends Season {
         secondCounter--;
         if (secondCounter <= 0) {
             secondCounter = 20;
-            livesManager.getAlivePlayers().forEach(ServerPlayer::ls$removeLife);
+            livesManager.getAlivePlayers().forEach(player -> ((IPlayer) player).ls$removeLife());
 
             if (TICK_OFFLINE_PLAYERS) {
                 //? if <= 1.20.2 {
@@ -174,7 +175,7 @@ public class LimitedLife extends Season {
         DatapackIntegration.EVENT_PLAYER_DEATH.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
         if (!DatapackIntegration.EVENT_PLAYER_DEATH.isCanceled() && livesManager.canChangeLivesNaturally(player)) {
             if (!livesManager.LIVES_LOSE_KILLS_ONLY) {
-                player.ls$addLives(NEW_DEATH_NORMAL.getSeconds());
+                ((IPlayer) player).ls$addLives(NEW_DEATH_NORMAL.getSeconds());
             }
         }
     }
@@ -189,14 +190,14 @@ public class LimitedLife extends Season {
 
         if (wasBoogeyCure && livesManager.canChangeLivesNaturally()) {
             //Victim was killed by boogeyman - remove 2 hours from victim and add 1 hour to boogey
-            boolean wasAlive = victim.ls$isAlive();
+            boolean wasAlive = ((IPlayer) victim).ls$isAlive();
             if (wasAlive && !cancelPunishment) {
-                victim.ls$addLives(NEW_DEATH_BOOGEYMAN.diff(NEW_DEATH_NORMAL).getSeconds());
+                ((IPlayer) victim).ls$addLives(NEW_DEATH_BOOGEYMAN.diff(NEW_DEATH_NORMAL).getSeconds());
             }
-            if (!cancelGain) killer.ls$addLives(NEW_KILL_BOOGEYMAN.getSeconds());
+            if (!cancelGain) ((IPlayer) killer).ls$addLives(NEW_KILL_BOOGEYMAN.getSeconds());
         }
         if (livesManager.LIVES_LOSE_KILLS_ONLY) {
-            victim.ls$addLives(NEW_DEATH_NORMAL.getSeconds());
+            ((IPlayer) victim).ls$addLives(NEW_DEATH_NORMAL.getSeconds());
         }
     }
 
@@ -205,12 +206,12 @@ public class LimitedLife extends Season {
         Team team = killer.getTeam();
         if (team != null) {
             Integer canGainLife = livesManager.getTeamGainLives(team.getName());
-            Integer victimLives = victim.ls$getLives();
+            Integer victimLives = ((IPlayer)victim).ls$getLives();
             int amount = NEW_KILL_NORMAL.getSeconds();
             if (canGainLife != null && victimLives != null && victimLives > 0) {
                 if (victimLives + amount >= canGainLife) { // +amount because the victim already lost time
                     broadcastLifeGain(killer, victim);
-                    killer.ls$addLives(amount);
+                    ((IPlayer) killer).ls$addLives(amount);
                 }
             }
         }
@@ -221,9 +222,9 @@ public class LimitedLife extends Season {
         Team team = killer.getTeam();
         if (team != null) {
             Integer canGainLife = livesManager.getTeamGainLives(team.getName());
-            if (canGainLife != null && victim.ls$isOnAtLeastLives(canGainLife, false)) {
+            if (canGainLife != null && ((IPlayer) victim).ls$isOnAtLeastLives(canGainLife, false)) {
                 broadcastLifeGain(killer, victim);
-                killer.ls$addLives(NEW_KILL_NORMAL.getSeconds());
+                ((IPlayer) killer).ls$addLives(NEW_KILL_NORMAL.getSeconds());
             }
         }
     }
@@ -235,11 +236,11 @@ public class LimitedLife extends Season {
         if (DatapackIntegration.EVENT_PLAYER_PVP_KILLED.isCanceled()) return;
 
         if (!wasBoogeyCure && livesManager.canChangeLivesNaturally()) {
-            victim.ls$addLives(NEW_DEATH_NORMAL.getSeconds());
+            ((IPlayer) victim).ls$addLives(NEW_DEATH_NORMAL.getSeconds());
         }
         else if (livesManager.canChangeLivesNaturally()) {
             //Victim was killed by boogeyman - remove 2 hours from victim and add 1 hour to boogey
-            victim.ls$addLives(NEW_DEATH_BOOGEYMAN.getSeconds());
+            ((IPlayer) victim).ls$addLives(NEW_DEATH_BOOGEYMAN.getSeconds());
             livesManager.addToLivesNoUpdate(killer, NEW_KILL_BOOGEYMAN.getSeconds());
             currentSeason.reloadPlayerTeam(killer);
         }

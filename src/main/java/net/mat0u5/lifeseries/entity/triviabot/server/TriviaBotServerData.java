@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -68,7 +69,7 @@ public class TriviaBotServerData implements PlayerBoundEntity {
 
     public boolean despawnChecks() {
         ServerPlayer player = getBoundPlayer();
-        if (player == null || (player.isSpectator() && player.ls$isDead())) {
+        if (player == null || (player.isSpectator() && ((IPlayer) player).ls$isDead())) {
             despawnPlayerChecks++;
         }
         if (despawnPlayerChecks > 200) {

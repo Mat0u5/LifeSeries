@@ -14,6 +14,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
@@ -55,7 +56,7 @@ public class SnailServerData implements PlayerBoundEntity {
         resetAirPacket();
         updateSnailName();
         updateSkin(player);
-        snail.setBoundPlayerDead(player.ls$isDead());
+        snail.setBoundPlayerDead(((IPlayer) player).ls$isDead());
     }
 
     @Override
@@ -108,7 +109,7 @@ public class SnailServerData implements PlayerBoundEntity {
         if (snail.tickCount % 20 == 0) {
             updateSnailName();
             if (boundPlayer != null) {
-                snail.setBoundPlayerDead(boundPlayer.ls$isDead());
+                snail.setBoundPlayerDead(((IPlayer) boundPlayer).ls$isDead());
             }
         }
 
@@ -140,14 +141,14 @@ public class SnailServerData implements PlayerBoundEntity {
 
     public boolean despawnChecks() {
         ServerPlayer player = getBoundPlayer();
-        if (player == null || (player.isSpectator() && player.ls$isDead())) {
+        if (player == null || (player.isSpectator() && ((IPlayer) player).ls$isDead())) {
             despawnPlayerChecks++;
         }
         else {
             despawnPlayerChecks = 0;
         }
 
-        if (player != null && player.ls$isOnLastLife(false) && !Snails.WILDCARD_SNAILS_RED_LIVES) {
+        if (player != null && ((IPlayer) player).ls$isOnLastLife(false) && !Snails.WILDCARD_SNAILS_RED_LIVES) {
             despawn();
             return true;
         }

@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -422,7 +423,7 @@ public class SecretLifeCommands extends Command {
             OtherUtils.sendCommandFailure(source, ModifiableText.SECRETLIFE_GIVEHEART_ERROR_MULTIPLE.get());
             return -1;
         }
-        if (target.ls$isDead()) {
+        if (((IPlayer) target).ls$isDead()) {
             OtherUtils.sendCommandFailure(source, ModifiableText.SECRETLIFE_GIVEHEART_ERROR_DEAD.get());
             return -1;
         }
@@ -436,9 +437,9 @@ public class SecretLifeCommands extends Command {
         Component recipientMessage = ModifiableText.SECRETLIFE_GIVEHEART_RECEIVE.get(self);
         SessionTranscript.giftHeart(self, target);
 
-        self.ls$message(senderMessage);
+        ((IPlayer) self).ls$message(senderMessage);
         PlayerUtils.sendTitle(target, recipientMessage, 20, 20, 20);
-        target.ls$message(recipientMessage);
+        ((IPlayer) target).ls$message(recipientMessage);
         AnimationUtils.createSpiral(target, 40);
 
         PlayerUtils.playSoundToPlayers(List.of(self,target), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("secretlife_life")));
@@ -455,7 +456,7 @@ public class SecretLifeCommands extends Command {
 
         SecretLife secretLife = (SecretLife) currentSeason;
 
-        if (self.ls$isDead()) {
+        if (((IPlayer) self).ls$isDead()) {
             OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SECRETLIFE_HEALTH_GET_SELF_DEAD.get());
             return -1;
         }
@@ -476,7 +477,7 @@ public class SecretLifeCommands extends Command {
 
         for (ServerPlayer player : targets) {
             SecretLife secretLife = (SecretLife) currentSeason;
-            if (player.ls$isDead()) {
+            if (((IPlayer) player).ls$isDead()) {
                 OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SECRETLIFE_HEALTH_GET_OTHER_DEAD.get(player));
                 continue;
             }

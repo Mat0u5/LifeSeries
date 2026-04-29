@@ -36,6 +36,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.*;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
@@ -46,6 +47,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerLoginPacketListenerImpl;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.scores.PlayerTeam;
 //? if > 1.20.5 {
@@ -163,7 +165,7 @@ public class NetworkHandlerServer {
             }
         });
         SimplePackets.TRANSCRIPT.setServerReceive((player, payload) -> {
-            player.ls$message(SessionTranscript.getTranscriptMessage());
+            ((IPlayer) player).ls$message(SessionTranscript.getTranscriptMessage());
         });
         SimplePackets.SELECTED_WILDCARD.setServerReceive((player, payload) -> {
             if (PermissionManager.isAdmin(player)) {
@@ -205,7 +207,7 @@ public class NetworkHandlerServer {
                 if (settingPlayer != null) {
                     try {
                         int lives = Integer.parseInt(payload.value().get(1));
-                        settingPlayer.ls$setLives(lives);
+                        ((IPlayer) settingPlayer).ls$setLives(lives);
                     }catch(Exception e) {
                         ScoreboardUtils.resetScore(settingPlayer, LivesManager.SCOREBOARD_NAME);
                     }
@@ -327,6 +329,11 @@ public class NetworkHandlerServer {
          */
     }
 
+    public static void onCustomPayload(CustomPacketPayload customPacketPayload, Player player) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            onCustomPayload(customPacketPayload, serverPlayer);
+        }
+    }
     public static void onCustomPayload(CustomPacketPayload customPacketPayload, ServerPlayer player) {
         //? if <= 1.20.3 {
         /*Identifier id = customPacketPayload.id();

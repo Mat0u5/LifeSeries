@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsMana
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Time;
@@ -195,12 +196,12 @@ public class LivesCommand extends Command {
         ServerPlayer self = source.getPlayer();
 
         if (self == null) return -1;
-        if (!self.ls$hasAssignedLives()) {
+        if (!((IPlayer) self).ls$hasAssignedLives()) {
             OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.LIVES_UNASSIGNED.get());
             return 1;
         }
 
-        Integer playerLives = self.ls$getLives();
+        Integer playerLives = ((IPlayer) self).ls$getLives();
 
         OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.LIVES_GET_SELF.get(livesManager.getFormattedLives(playerLives), TextUtils.pluralize("life", "lives", playerLives)));
 
@@ -252,11 +253,11 @@ public class LivesCommand extends Command {
         if (checkBanned(source)) return -1;
         if (target == null) return -1;
 
-        if (!target.ls$hasAssignedLives()) {
+        if (!((IPlayer) target).ls$hasAssignedLives()) {
             OtherUtils.sendCommandFailure(source, ModifiableText.LIVES_UNASSIGNED_OTHER.get(target));
             return -1;
         }
-        Integer lives = target.ls$getLives();
+        Integer lives = ((IPlayer) target).ls$getLives();
         OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.LIVES_ASSIGNED_LIST_ENTRY.get(target, livesManager.getFormattedLives(lives), TextUtils.pluralize("life", "lives", lives)));
         return 1;
     }
@@ -297,7 +298,7 @@ public class LivesCommand extends Command {
 
             for (ServerPlayer player : targets) {
                 if (!advancedDeath) {
-                    player.ls$setLives(amount);
+                    ((IPlayer) player).ls$setLives(amount);
                 }
                 else {
                     AdvancedDeathsManager.setPlayerLives(player, amount);
@@ -332,7 +333,7 @@ public class LivesCommand extends Command {
 
             for (ServerPlayer player : targets) {
                 if (!advancedDeath) {
-                    player.ls$addLives(amount);
+                    ((IPlayer) player).ls$addLives(amount);
                 }
                 else {
                     int setAmount = livesManager.getAddLivesResult(player, amount);

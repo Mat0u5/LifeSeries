@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.compatibilities;
 
-import net.fabricmc.loader.api.FabricLoader;
+import net.mat0u5.lifeseries.LifeSeries;
 
 public class CompatibilityManager {
 
@@ -25,6 +25,6 @@ public class CompatibilityManager {
     }
 
     public static boolean isModLoaded(String modId) {
-        return FabricLoader.getInstance().isModLoaded(modId);
+        return LifeSeries.platform().isModLoaded(modId);
     }
 }

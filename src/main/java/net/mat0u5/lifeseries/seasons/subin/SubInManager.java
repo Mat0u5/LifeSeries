@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.subin;
 
 import com.mojang.authlib.GameProfile;
 import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayerManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -39,7 +40,7 @@ public class SubInManager {
     }
 
     public static void addSubIn(ServerPlayer player, GameProfile targetProfile) {
-        Integer startingLives = player.ls$getLives();
+        Integer startingLives = ((IPlayer) player).ls$getLives();
         UUID playerUUID = player.getUUID();
         GameProfile playerProfile = player.getGameProfile();
 
@@ -68,7 +69,7 @@ public class SubInManager {
             livesManager.resetPlayerLife(player);
         }
         else {
-            player.ls$setLives(subInLives);
+            ((IPlayer) player).ls$setLives(subInLives);
         }
 
         if (CHANGE_SKIN  || CHANGE_NAME) {
@@ -118,10 +119,10 @@ public class SubInManager {
 
         ProfileManager.resetPlayer(player1).thenRun(() -> {
             if (player1 != null) {
-                player1.ls$message(ModifiableText.SUBIN_END_NOTIFY.get(getName(subIn.target())));
+                ((IPlayer) player1).ls$message(ModifiableText.SUBIN_END_NOTIFY.get(getName(subIn.target())));
             }
             if (player2 != null) {
-                player2.ls$message(ModifiableText.SUBIN_END_OTHER.get(getName(subIn.substituter())));
+                ((IPlayer) player2).ls$message(ModifiableText.SUBIN_END_OTHER.get(getName(subIn.substituter())));
             }
 
             savePlayer(player1);
@@ -130,7 +131,7 @@ public class SubInManager {
             loadPlayer(player2);
             if (player1 != null) {
                 Integer startingLives = subIn.startingLives();
-                player1.ls$setLives(startingLives);
+                ((IPlayer) player1).ls$setLives(startingLives);
             }
 
             if (player1 != null) {

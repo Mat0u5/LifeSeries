@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.doublelife;
 
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.network.chat.Component;
@@ -44,8 +45,8 @@ public class DoubleLifeLivesManager extends LivesManager {
 
             ServerPlayer soulmate = doubleLife.getSoulmate(player);
             if (soulmate != null) {
-                if (soulmate.ls$hasAssignedLives()) {
-                    randomLives = soulmate.ls$getLives();
+                if (((IPlayer) soulmate).ls$hasAssignedLives()) {
+                    randomLives = ((IPlayer)soulmate).ls$getLives();
                 }
                 if (livesUUID.containsKey(soulmate.getUUID())) {
                     randomLives = livesUUID.get(soulmate.getUUID());

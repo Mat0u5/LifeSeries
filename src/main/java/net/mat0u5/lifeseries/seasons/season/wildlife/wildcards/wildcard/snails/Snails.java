@@ -10,6 +10,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
@@ -101,7 +102,7 @@ public class Snails extends Wildcard {
         if (Events.joiningPlayers.contains(player.getUUID())) return false;
         if (player.isSpectator() && !SuperpowersWildcard.hasActivatedPower(player, Superpowers.ASTRAL_PROJECTION)) return false;
         if (preventSnails.contains(player.getUUID())) return false;
-        if (player.ls$isOnLastLife(false) && !WILDCARD_SNAILS_RED_LIVES) return false;
+        if (((IPlayer) player).ls$isOnLastLife(false) && !WILDCARD_SNAILS_RED_LIVES) return false;
         return true;
     }
 
@@ -132,7 +133,7 @@ public class Snails extends Wildcard {
 
     public static void spawnSnailFor(ServerPlayer player, BlockPos pos) {
         if (player == null || pos == null) return;
-        Snail snail = LevelUtils.spawnEntity(MobRegistry.SNAIL, player.ls$getServerLevel(), pos);
+        Snail snail = LevelUtils.spawnEntity(MobRegistry.SNAIL, ((IPlayer) player).ls$getServerLevel(), pos);
         if (snail != null) {
             snail.serverData.setBoundPlayer(player);
             if (snails.containsKey(player.getUUID())) {

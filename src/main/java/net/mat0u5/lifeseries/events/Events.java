@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.seasons.season.secretlife.TaskManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkins;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -347,7 +348,7 @@ public class Events {
 
     public static boolean isExcludedPlayer(Entity entity) {
         if (entity instanceof ServerPlayer player) {
-            if (player.ls$isWatcher()) {
+            if (((IPlayer) player).ls$isWatcher()) {
                 return true;
             }
         }

@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
@@ -180,7 +181,7 @@ public class SecretSociety {
                 if (member.initiated) continue;
                 ServerPlayer player = member.getPlayer();
                 if (player == null) continue;
-                player.ls$message(ModifiableText.SOCIETY_INITIATE_REMINDER.get());
+                ((IPlayer) player).ls$message(ModifiableText.SOCIETY_INITIATE_REMINDER.get());
             }
         }
     }
@@ -200,53 +201,53 @@ public class SecretSociety {
 
         int currentTime = 20;
         TaskScheduler.scheduleTask(currentTime, () -> {
-            player.ls$message(ModifiableText.SOCIETY_INITIATED_PT1.get());
+            ((IPlayer) player).ls$message(ModifiableText.SOCIETY_INITIATED_PT1.get());
         });
         currentTime += 50;
 
         int otherMembers = members.size()-1;
         if (otherMembers >= 1) {
             TaskScheduler.scheduleTask(currentTime, () -> {
-                player.ls$message(ModifiableText.SOCIETY_INITIATED_GROUP_PT1.get(TextUtils.pluralize("is", "are", otherMembers), otherMembers, TextUtils.pluralize("member", otherMembers)), false);
+                ((IPlayer) player).ls$message(ModifiableText.SOCIETY_INITIATED_GROUP_PT1.get(TextUtils.pluralize("is", "are", otherMembers), otherMembers, TextUtils.pluralize("member", otherMembers)), false);
             });
             currentTime += 80;
             TaskScheduler.scheduleTask(currentTime, () -> {
-                player.ls$message(ModifiableText.SOCIETY_INITIATED_GROUP_PT2.get(KILL_COUNT, TextUtils.pluralize("player", KILL_COUNT)));
+                ((IPlayer) player).ls$message(ModifiableText.SOCIETY_INITIATED_GROUP_PT2.get(KILL_COUNT, TextUtils.pluralize("player", KILL_COUNT)));
             });
             currentTime += 100;
             TaskScheduler.scheduleTask(currentTime, () -> {
-                player.ls$message(ModifiableText.SOCIETY_INITIATED_GROUP_PT3.get());
+                ((IPlayer) player).ls$message(ModifiableText.SOCIETY_INITIATED_GROUP_PT3.get());
             });
             currentTime += 80;
             TaskScheduler.scheduleTask(currentTime, () -> {
-                player.ls$message(ModifiableText.SOCIETY_INITIATED_GROUP_PT4.get(secretWord));
+                ((IPlayer) player).ls$message(ModifiableText.SOCIETY_INITIATED_GROUP_PT4.get(secretWord));
             });
         }
         else {
             TaskScheduler.scheduleTask(currentTime, () -> {
-                player.ls$message(ModifiableText.SOCIETY_INITIATED_ALONE_PT1.get());
+                ((IPlayer) player).ls$message(ModifiableText.SOCIETY_INITIATED_ALONE_PT1.get());
             });
             currentTime += 80;
             TaskScheduler.scheduleTask(currentTime, () -> {
-                player.ls$message(ModifiableText.SOCIETY_INITIATED_ALONE_PT2.get(KILL_COUNT, TextUtils.pluralize("player", KILL_COUNT)));
+                ((IPlayer) player).ls$message(ModifiableText.SOCIETY_INITIATED_ALONE_PT2.get(KILL_COUNT, TextUtils.pluralize("player", KILL_COUNT)));
             });
         }
 
         currentTime += 80;
         TaskScheduler.scheduleTask(currentTime, () -> {
-            player.ls$message(ModifiableText.SOCIETY_INITIATED_PT2.get());
+            ((IPlayer) player).ls$message(ModifiableText.SOCIETY_INITIATED_PT2.get());
         });
         currentTime += 80;
         TaskScheduler.scheduleTask(currentTime, () -> {
-            player.ls$message(ModifiableText.SOCIETY_INITIATED_PT3.get());
+            ((IPlayer) player).ls$message(ModifiableText.SOCIETY_INITIATED_PT3.get());
         });
         currentTime += 70;
         TaskScheduler.scheduleTask(currentTime, () -> {
-            player.ls$message(ModifiableText.SOCIETY_INITIATED_PT4.get());
+            ((IPlayer) player).ls$message(ModifiableText.SOCIETY_INITIATED_PT4.get());
         });
         currentTime += 70;
         TaskScheduler.scheduleTask(currentTime, () -> {
-            player.ls$message(getPunishmentText());
+            ((IPlayer) player).ls$message(getPunishmentText());
         });
     }
 
@@ -268,27 +269,27 @@ public class SecretSociety {
 
     public void addMemberManually(ServerPlayer player) {
         if (!SOCIETY_ENABLED) return;
-        player.ls$message(ModifiableText.SOCIETY_NOTICE_ADDED.get());
+        ((IPlayer) player).ls$message(ModifiableText.SOCIETY_NOTICE_ADDED.get());
         sendMessageToMembers(ModifiableText.SOCIETY_OTHER_MEMBER_ADDED.get());
         addMember(player);
     }
 
     public void removeMemberManually(ServerPlayer player) {
         if (!SOCIETY_ENABLED) return;
-        player.ls$message(ModifiableText.SOCIETY_NOTICE_REMOVED.get());
+        ((IPlayer) player).ls$message(ModifiableText.SOCIETY_NOTICE_REMOVED.get());
         removeMember(player);
         sendMessageToMembers(ModifiableText.SOCIETY_OTHER_MEMBER_REMOVED.get());
     }
 
     public void sendMessageToMembers(Component message) {
         for (ServerPlayer player : getMembers()) {
-            player.ls$message(message);
+            ((IPlayer) player).ls$message(message);
         }
     }
 
     public void resetMembers() {
         for (ServerPlayer player : getMembers()) {
-            player.ls$message(ModifiableText.SOCIETY_NOTICE_REMOVED.get());
+            ((IPlayer) player).ls$message(ModifiableText.SOCIETY_NOTICE_REMOVED.get());
             player.removeTag("society_member");
         }
         members.clear();
@@ -374,7 +375,7 @@ public class SecretSociety {
         DatapackIntegration.EVENT_SOCIETY_FAIL_REWARD.trigger(new DatapackIntegration.Events.MacroEntry("Player", member.getScoreboardName()));
         if (DatapackIntegration.EVENT_SOCIETY_FAIL_REWARD.isCanceled()) return;
         int punishmentLives = Math.abs(PUNISHMENT_LIVES);
-        Integer currentLives = member.ls$getLives();
+        Integer currentLives = ((IPlayer) member).ls$getLives();
         if (currentLives != null) {
             punishmentLives = Math.min(Math.abs(currentLives-1), punishmentLives);
         }
@@ -383,8 +384,8 @@ public class SecretSociety {
             AdvancedDeathsManager.setPlayerLives(member, currentLives-punishmentLives);
         }
         else {
-            member.ls$hurt(member.damageSources().playerAttack(member), 0.001f);
-            member.ls$addLives(-punishmentLives);
+            ((IPlayer) member).ls$hurt(member.damageSources().playerAttack(member), 0.001f);
+            ((IPlayer) member).ls$addLives(-punishmentLives);
         }
     }
 }

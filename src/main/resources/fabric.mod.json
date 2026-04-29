@@ -1,52 +1,36 @@
 {
 	"schemaVersion": 1,
-	"id": "lifeseries",
-	"version": "${version}+${minecraftVersion}",
-	"name": "Life Series",
-	"description": "A one-to-one recreation of Grian's Life Series in fabric.",
-	"authors": [
-		"Mat0u5"
-	],
+	"id": "${id}",
+	"name": "${name}",
+	"version": "${version}",
+	"authors": ["${authors}"],
+	"contributors": ["${contributors}"],
 	"contact": {
-		"homepage": "https://modrinth.com/mod/life-series",
-		"sources": "https://github.com/Mat0u5/LifeSeries"
+		"sources": "${sources_url}",
+		"issues": "${issues_url}",
+		"homepage": "${homepage_url}"
 	},
-	"license": "MIT",
+	"description": "${description}",
 	"icon": "icon.png",
+	"license": "${license}",
 	"environment": "*",
+	"accessWidener": "aw/${minecraft}.accesswidener",
 	"entrypoints": {
 		"main": [
-			"net.mat0u5.lifeseries.LifeSeries"
+			"${group}.platform.fabric.FabricEntrypoint"
 		],
 		"client": [
-			"net.mat0u5.lifeseries.LifeSeriesClient"
+			"${group}.client.platform.fabric.FabricClientEntrypoint"
 		],
 		"voicechat": [
-          "net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain"
+			"net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain"
 		]
 	},
-	"accessWidener": "aw/${accessWidenerFile}",
 	"mixins": [
-		"lifeseries.mixins.json",
-		{
-			"config": "lifeseries.client.mixins.json",
-			"environment": "client"
-		}
+		"${id}.mixins.json"
 	],
-	"depends": {
-		"fabricloader": ">=0.14.21",
-		"minecraft": "${targetVersion}",
-		"java": ">=${javaVersion}"
-	},
 	"breaks": {
 		"pastlife": "*"
 	},
-	"custom": {
-		"loom:injected_interfaces": {
-			"net/minecraft/class_3222": ["net/mat0u5/lifeseries/utils/interfaces/IServerPlayer"],
-			"net/minecraft/class_310": ["net/mat0u5/lifeseries/utils/interfaces/IMinecraft"],
-			"net/minecraft/server/level/ServerPlayer": ["net/mat0u5/lifeseries/utils/interfaces/IServerPlayer"],
-			"net/minecraft/client/Minecraft": ["net/mat0u5/lifeseries/utils/interfaces/IMinecraft"]
-		}
-	}
+	"depends": {}
 }

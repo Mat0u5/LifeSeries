@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -45,7 +46,7 @@ public class Invisibility extends ToggleableSuperpower {
         super.activate();
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        ServerLevel playerLevel = player.ls$getServerLevel();
+        ServerLevel playerLevel = ((IPlayer) player).ls$getServerLevel();
 
         playerLevel.sendParticles(
                 ParticleTypes.SMOKE,
@@ -63,7 +64,7 @@ public class Invisibility extends ToggleableSuperpower {
         super.deactivate();
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        player.ls$getServerLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.CHICKEN_EGG, SoundSource.MASTER, 1, 1);
+        ((IPlayer) player).ls$getServerLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.CHICKEN_EGG, SoundSource.MASTER, 1, 1);
         NetworkHandlerServer.sendPlayerInvisible(player.getUUID(), 0);
         player.removeEffect(MobEffects.INVISIBILITY);
     }

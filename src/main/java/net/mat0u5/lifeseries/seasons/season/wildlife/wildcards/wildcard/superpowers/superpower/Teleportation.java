@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
@@ -60,14 +61,14 @@ public class Teleportation extends Superpower {
     public void activate() {
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        ServerLevel playerLevel = player.ls$getServerLevel();
+        ServerLevel playerLevel = ((IPlayer) player).ls$getServerLevel();
         Vec3 playerPos = player.position();
         boolean teleported = false;
         Entity lookingAt = PlayerUtils.getEntityLookingAt(player, MAX_SWAP_DISTANCE);
         if (lookingAt != null)  {
             if (lookingAt instanceof ServerPlayer lookingAtPlayer) {
                 if (!PlayerUtils.isFakePlayer(lookingAtPlayer)) {
-                    ServerLevel lookingAtPlayerLevel = lookingAtPlayer.ls$getServerLevel();
+                    ServerLevel lookingAtPlayerLevel = ((IPlayer) lookingAtPlayer).ls$getServerLevel();
                     Vec3 lookingAtPlayerPos = lookingAtPlayer.position();
 
                     spawnTeleportParticles(playerLevel, playerPos);

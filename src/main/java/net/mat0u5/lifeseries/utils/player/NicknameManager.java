@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.utils.player;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayerUsername;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
 import net.minecraft.server.MinecraftServer;
@@ -64,7 +64,7 @@ public class NicknameManager {
     }
 
     private static void updatePlayerDisplay(ServerPlayer player, MinecraftServer server) {
-        if (player instanceof IPlayer holder) {
+        if (player instanceof IPlayerUsername holder) {
             holder.ls$resetUsernameCache();
         }
 

@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -44,7 +45,7 @@ public class PastLife extends Season {
                 SimplePackets.PAST_LIFE_CHOOSE_TWIST.target(player).sendToClient();
             }
             else {
-                player.ls$message(ModifiableText.PASTLIFE_SESSION_START.get());
+                ((IPlayer) player).ls$message(ModifiableText.PASTLIFE_SESSION_START.get());
             }
         }
     }

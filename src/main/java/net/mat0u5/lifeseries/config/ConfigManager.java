@@ -173,7 +173,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
         ));
     }
 
-    protected List<ConfigFileEntry<?>> getAllConfigEntries() {
+    public List<ConfigFileEntry<?>> getAllConfigEntries() {
         List<ConfigFileEntry<?>> allEntries = new ArrayList<>();
         allEntries.addAll(getDefaultConfigEntries());
         allEntries.addAll(getSeasonSpecificConfigEntries());

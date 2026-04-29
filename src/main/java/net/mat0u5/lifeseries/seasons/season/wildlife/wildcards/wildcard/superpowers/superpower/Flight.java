@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -92,8 +93,8 @@ public class Flight extends Superpower {
         if (player == null) return;
         giveHelmet();
 
-        player.ls$getServerLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.MASTER, 1, 1);
-        player.ls$playNotifySound(SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.MASTER, 1, 1);
+        ((IPlayer) player).ls$getServerLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.MASTER, 1, 1);
+        ((IPlayer) player).ls$playNotifySound(SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.MASTER, 1, 1);
 
         MobEffectInstance effect = new MobEffectInstance(MobEffects.JUMP_BOOST, 20, LAUNGH_JUMP_AMPLIFIER, false, false, false);
         player.addEffect(effect);
@@ -156,7 +157,7 @@ public class Flight extends Superpower {
             ItemStackUtils.setCustomComponentBoolean(helmet, "FromSuperpower", true);
             ItemStackUtils.setCustomComponentBoolean(helmet, "FlightSuperpower", true);
 
-            ItemStackUtils.spawnItemForPlayer(player.ls$getServerLevel(), player.position(), PlayerUtils.getEquipmentSlot(player, 3).copy(), player);
+            ItemStackUtils.spawnItemForPlayer(((IPlayer) player).ls$getServerLevel(), player.position(), PlayerUtils.getEquipmentSlot(player, 3).copy(), player);
             player.setItemSlot(EquipmentSlot.HEAD, helmet);
         }
         //?}

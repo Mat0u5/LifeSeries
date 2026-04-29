@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin.compat.fabricapi;
 
+//? if fabric {
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -80,3 +81,11 @@ public class RegistrySyncManagerMixin {
     }
     //?}
 }
+//?} else {
+/*import net.minecraft.server.MinecraftServer;
+import org.spongepowered.asm.mixin.Mixin;
+
+@Mixin(value = MinecraftServer.class)
+public interface RegistrySyncManagerMixin {
+}
+*///?}

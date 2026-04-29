@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
@@ -96,7 +97,7 @@ public class BoogeymanManager {
         if (boogeyman.failed) return false;
         List<ServerPlayer> nonReds = livesManager.getNonRedPlayers();
         nonReds.remove(player);
-        if (victim.ls$isOnLastLife(true) && !nonReds.isEmpty()) return false;
+        if (((IPlayer) victim).ls$isOnLastLife(true) && !nonReds.isEmpty()) return false;
         return true;
     }
 
@@ -127,7 +128,7 @@ public class BoogeymanManager {
     public void addBoogeymanManually(ServerPlayer player) {
         if (!BOOGEYMAN_ENABLED) return;
         Boogeyman newBoogeyman = addBoogeyman(player);
-        player.ls$message(ModifiableText.BOOGEYMAN_NOTICE_ADDED.get());
+        ((IPlayer) player).ls$message(ModifiableText.BOOGEYMAN_NOTICE_ADDED.get());
         messageBoogeyman(newBoogeyman, player);
     }
 
@@ -140,7 +141,7 @@ public class BoogeymanManager {
         player.removeTag("boogeyman_cured");
         player.removeTag("boogeyman_failed");
         if (boogeymen.isEmpty()) boogeymanChosen = false;
-        player.ls$message(ModifiableText.BOOGEYMAN_NOTICE_REMOVED.get());
+        ((IPlayer) player).ls$message(ModifiableText.BOOGEYMAN_NOTICE_REMOVED.get());
     }
 
     public void resetBoogeymen() {
@@ -148,7 +149,7 @@ public class BoogeymanManager {
         for (Boogeyman boogeyman : boogeymen) {
             ServerPlayer player = PlayerUtils.getPlayer(boogeyman.uuid);
             if (player == null) continue;
-            player.ls$message(ModifiableText.BOOGEYMAN_NOTICE_REMOVED.get());
+            ((IPlayer) player).ls$message(ModifiableText.BOOGEYMAN_NOTICE_REMOVED.get());
             player.removeTag("boogeyman");
             player.removeTag("boogeyman_cured");
             player.removeTag("boogeyman_failed");
@@ -163,7 +164,7 @@ public class BoogeymanManager {
         Boogeyman boogeyman = getBoogeyman(player);
         if (boogeymen == null) return;
         if (boogeyman.failed || boogeyman.cured) {
-            player.ls$message(ModifiableText.BOOGEYMAN_NOTICE_RESET.get());
+            ((IPlayer) player).ls$message(ModifiableText.BOOGEYMAN_NOTICE_RESET.get());
         }
         boogeyman.failed = false;
         boogeyman.cured = false;
@@ -197,7 +198,7 @@ public class BoogeymanManager {
         }
         DatapackIntegration.EVENT_BOOGEYMAN_CURE_REWARD.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
         if (!DatapackIntegration.EVENT_BOOGEYMAN_CURE_REWARD.isCanceled() && stealLife) {
-            player.ls$addLife();
+            ((IPlayer) player).ls$addLife();
         }
     }
 
@@ -215,7 +216,7 @@ public class BoogeymanManager {
             cure(boogeyPlayer);
         }
         else {
-            boogeyPlayer.ls$message(ModifiableText.BOOGEYMAN_KILLS_REQUIRED.get(boogeyman.killsNeeded, TextUtils.pluralize("kill", boogeyman.killsNeeded)));
+            ((IPlayer) boogeyPlayer).ls$message(ModifiableText.BOOGEYMAN_KILLS_REQUIRED.get(boogeyman.killsNeeded, TextUtils.pluralize("kill", boogeyman.killsNeeded)));
         }
     }
 
@@ -376,9 +377,9 @@ public class BoogeymanManager {
     }
 
     public void messageBoogeyman(Boogeyman boogeyman, ServerPlayer boogey) {
-        boogey.ls$message(ModifiableText.BOOGEYMAN_MESSAGE.get());
+        ((IPlayer) boogey).ls$message(ModifiableText.BOOGEYMAN_MESSAGE.get());
         if (boogeyman != null && boogeyman.killsNeeded != 1) {
-            boogey.ls$message(ModifiableText.BOOGEYMAN_KILLS_REQUIRED.get(boogeyman.killsNeeded, TextUtils.pluralize("kill", boogeyman.killsNeeded)));
+            ((IPlayer) boogey).ls$message(ModifiableText.BOOGEYMAN_KILLS_REQUIRED.get(boogeyman.killsNeeded, TextUtils.pluralize("kill", boogeyman.killsNeeded)));
         }
     }
 
@@ -417,7 +418,7 @@ public class BoogeymanManager {
         if (boogeyman.failed) return false;
         boogeyman.failed = true;
 
-        boolean canChangeLives = player.ls$isAlive() && !player.ls$isOnLastLife(true);
+        boolean canChangeLives = ((IPlayer) player).ls$isAlive() && !((IPlayer) player).ls$isOnLastLife(true);
 
 
         DatapackIntegration.EVENT_BOOGEYMAN_FAIL_REWARD.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
@@ -438,7 +439,7 @@ public class BoogeymanManager {
                     PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_FAIL.get(player));
                 }
                 if (canChangeLives) {
-                    player.ls$setLives(1);
+                    ((IPlayer) player).ls$setLives(1);
                 }
             }
         }
@@ -456,11 +457,11 @@ public class BoogeymanManager {
         if (!BOOGEYMAN_ENABLED) return;
         if (!boogeymanChosen) return;
         if (rolledPlayers.contains(player.getUUID())) return;
-        if (player.ls$isDead()) return;
+        if (((IPlayer) player).ls$isDead()) return;
         if (boogeymen.size() >= BOOGEYMAN_AMOUNT_MAX) return;
         if (currentSession.statusNotStarted() || currentSession.statusFinished()) return;
         TaskScheduler.scheduleTask(Time.seconds(2), () -> {
-            player.ls$message(ModifiableText.BOOGEYMAN_LATEJOIN.get());
+            ((IPlayer) player).ls$message(ModifiableText.BOOGEYMAN_LATEJOIN.get());
             chooseBoogeymen(new ArrayList<>(List.of(player)), BoogeymanRollType.LATE_JOIN);
         });
     }
@@ -533,7 +534,7 @@ public class BoogeymanManager {
             }
 
             if (!boogeymenList.isEmpty()) {
-                player.ls$message(ModifiableText.BOOGEYMAN_LIST.get(boogeymenList));
+                ((IPlayer) player).ls$message(ModifiableText.BOOGEYMAN_LIST.get(boogeymenList));
             }
         }
     }
@@ -566,7 +567,7 @@ public class BoogeymanManager {
                 ServerPlayer player = boogeyman.getPlayer();
                 if (player != null) {
                     warningAutoFail.add(boogeyman.uuid);
-                    player.ls$message(ModifiableText.BOOGEYMAN_FAIL_NOTICE.get());
+                    ((IPlayer) player).ls$message(ModifiableText.BOOGEYMAN_FAIL_NOTICE.get());
                 }
             }
         }

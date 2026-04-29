@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -111,7 +112,7 @@ public class ServerGamePacketListenerImplMixin {
         ServerGamePacketListenerImpl handler = (ServerGamePacketListenerImpl) (Object) this;
         ServerPlayer player = handler.getPlayer();
         if (player instanceof FakePlayer) {
-            ServerLevel level = player.ls$getServerLevel();
+            ServerLevel level = ((IPlayer) player).ls$getServerLevel();
             if (level.getPlayerByUUID(player.getUUID()) != null) {
                 handler.resetPosition();
                 level.getChunkSource().move(player);
@@ -165,19 +166,19 @@ public class ServerGamePacketListenerImplMixin {
         if (TriviaWildcard.bots.containsKey(player.getUUID())) {
             TriviaBot bot = TriviaWildcard.bots.get(player.getUUID());
             if (bot.interactedWith() && !bot.submittedAnswer()) {
-                player.ls$message(ModifiableText.MUTED_TRIVIABOT.get());
+                ((IPlayer) player).ls$message(ModifiableText.MUTED_TRIVIABOT.get());
                 ci.cancel();
                 return true;
             }
         }
 
-        if (currentSeason.WATCHERS_MUTED && player.ls$isWatcher()) {
-            player.ls$message(ModifiableText.MUTED_WATCHER.get());
+        if (currentSeason.WATCHERS_MUTED && ((IPlayer) player).ls$isWatcher()) {
+            ((IPlayer) player).ls$message(ModifiableText.MUTED_WATCHER.get());
             ci.cancel();
             return true;
         }
-        if (currentSeason.MUTE_DEAD_PLAYERS && player.ls$isDead() && !player.ls$isWatcher()) {
-            player.ls$message(ModifiableText.MUTED_DEADPLAYER.get());
+        if (currentSeason.MUTE_DEAD_PLAYERS && ((IPlayer) player).ls$isDead() && !((IPlayer) player).ls$isWatcher()) {
+            ((IPlayer) player).ls$message(ModifiableText.MUTED_DEADPLAYER.get());
             ci.cancel();
             return true;
         }

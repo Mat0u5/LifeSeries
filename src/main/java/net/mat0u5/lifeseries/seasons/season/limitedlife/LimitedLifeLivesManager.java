@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.limitedlife;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -106,13 +107,13 @@ public class LimitedLifeLivesManager extends LivesManager {
 
     @Override
     public void receiveLifeFromOtherPlayer(Component playerName, ServerPlayer target, boolean isRevive) {
-        target.ls$playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.MASTER, 10, 1);
+        ((IPlayer) target).ls$playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.MASTER, 10, 1);
         Component amount = Component.literal(LimitedLife.NEW_DEATH_NORMAL.copy().multiply(-1).formatLong());
 
         if (seasonConfig.GIVELIFE_BROADCAST.get()) {
             PlayerUtils.broadcastMessageExcept(ModifiableText.GIVELIFE_RECEIVE_OTHER.get(target, amount, playerName), target);
         }
-        target.ls$message(ModifiableText.GIVELIFE_RECEIVE_SELF.get(amount, playerName));
+        ((IPlayer) target).ls$message(ModifiableText.GIVELIFE_RECEIVE_SELF.get(amount, playerName));
         PlayerUtils.sendTitleWithSubtitle(target, ModifiableText.GIVELIFE_RECEIVE_SELF_TITLE.get(amount), ModifiableText.GIVELIFE_RECEIVE_SELF_TITLE_SUBTITLE.get(playerName), 10, 60, 10);
 
 

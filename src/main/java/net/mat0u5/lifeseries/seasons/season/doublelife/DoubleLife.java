@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IHungerManager;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
@@ -97,7 +98,7 @@ public class DoubleLife extends Season {
     public void onPlayerJoin(ServerPlayer player) {
         super.onPlayerJoin(player);
 
-        if (player.ls$isWatcher()) {
+        if (((IPlayer) player).ls$isWatcher()) {
             resetSoulmate(player);
         }
 
@@ -384,7 +385,7 @@ public class DoubleLife extends Season {
     public List<ServerPlayer> getNonAssignedPlayers() {
         List<ServerPlayer> playersToRoll = new ArrayList<>();
         for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
-            if (player.ls$hasAssignedLives() && player.ls$isDead()) continue;
+            if (((IPlayer) player).ls$hasAssignedLives() && ((IPlayer) player).ls$isDead()) continue;
             if (hasSoulmate(player)) continue;
             playersToRoll.add(player);
         }
@@ -405,7 +406,7 @@ public class DoubleLife extends Season {
 
         for (ServerPlayer player : players) {
             player.addTag("randomTeleport");
-            player.ls$message(ModifiableText.DOUBLELIFE_TELEPORT.get());
+            ((IPlayer) player).ls$message(ModifiableText.DOUBLELIFE_TELEPORT.get());
         }
         WorldBorder border = server.overworld().getWorldBorder();
         OtherUtils.executeCommand(TextUtils.formatString("spreadplayers {} {} 0 {} false @a[tag=randomTeleport]", border.getCenterX(), border.getCenterZ(), (border.getSize()/2)));
@@ -507,9 +508,9 @@ public class DoubleLife extends Season {
                     .registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(SOULMATE_DAMAGE));
             soulmate.hurt(damageSource, 0.0000001F);
             *///?} else {
-            DamageSource damageSource = new DamageSource( soulmate.ls$getServerLevel().registryAccess()
+            DamageSource damageSource = new DamageSource( ((IPlayer) soulmate).ls$getServerLevel().registryAccess()
                     .lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(SOULMATE_DAMAGE));
-            soulmate.hurtServer(soulmate.ls$getServerLevel(), damageSource, 0.0000001F);
+            soulmate.hurtServer(((IPlayer) soulmate).ls$getServerLevel(), damageSource, 0.0000001F);
             //?}
         }
 
@@ -532,7 +533,7 @@ public class DoubleLife extends Season {
 
         if (soulmate == null) return;
         if (!soulmate.isAlive()) return;
-        boolean keepInventory = OtherUtils.getBooleanGameRule(player.ls$getServerLevel(), GameRules.KEEP_INVENTORY);
+        boolean keepInventory = OtherUtils.getBooleanGameRule(((IPlayer) player).ls$getServerLevel(), GameRules.KEEP_INVENTORY);
         if (SOULBOUND_INVENTORIES && server != null && !keepInventory) {
             soulmate.getInventory().clearContent();
         }
@@ -544,7 +545,7 @@ public class DoubleLife extends Season {
         soulmate.setLastHurtByPlayer(player);
         soulmate.hurt(damageSource, 1000);
          *///?} else {
-        DamageSource damageSource = new DamageSource( soulmate.ls$getServerLevel().registryAccess()
+        DamageSource damageSource = new DamageSource( ((IPlayer) soulmate).ls$getServerLevel().registryAccess()
                 .lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(SOULMATE_DAMAGE));
         soulmate.setLastHurtByMob(player);
         //? if <= 1.21.4 {
@@ -552,7 +553,7 @@ public class DoubleLife extends Season {
         *///?} else {
         soulmate.setLastHurtByPlayer(player, 100);
         //?}
-        soulmate.hurtServer(soulmate.ls$getServerLevel(), damageSource, 1000);
+        soulmate.hurtServer(((IPlayer) soulmate).ls$getServerLevel(), damageSource, 1000);
         //?}
 
 
@@ -582,13 +583,13 @@ public class DoubleLife extends Season {
         }
 
         if (SOULBOUND_LIVES) {
-            Integer soulmateLives = soulmate.ls$getLives();
-            Integer playerLives = player.ls$getLives();
+            Integer soulmateLives = ((IPlayer)soulmate).ls$getLives();
+            Integer playerLives = ((IPlayer) player).ls$getLives();
             if (soulmateLives != null && playerLives != null)  {
                 if (!Objects.equals(soulmateLives, playerLives)) {
                     int minLives = Math.min(soulmateLives,playerLives);
-                    player.ls$setLives(minLives);
-                    soulmate.ls$setLives(minLives);
+                    ((IPlayer) player).ls$setLives(minLives);
+                    ((IPlayer) soulmate).ls$setLives(minLives);
                 }
             }
         }
@@ -600,12 +601,12 @@ public class DoubleLife extends Season {
     public void syncSoulboundLives(ServerPlayer player) {
         if (!SOULBOUND_LIVES) return;
         if (player == null) return;
-        Integer lives = player.ls$getLives();
+        Integer lives = ((IPlayer) player).ls$getLives();
         ServerPlayer soulmate = getSoulmate(player);
         if (lives == null) return;
         if (soulmate == null) return;
         if (!player.isAlive() || !soulmate.isAlive()) return;
-        soulmate.ls$setLives(lives);
+        ((IPlayer) soulmate).ls$setLives(lives);
     }
 
     public void canFoodHeal(ServerPlayer player, CallbackInfoReturnable<Boolean> cir) {
@@ -782,8 +783,8 @@ public class DoubleLife extends Season {
                     TaskScheduler.scheduleTask(Time.seconds(19), () -> {
                         LevelUtils.summonHarmlessLightning(player1);
                         LevelUtils.summonHarmlessLightning(player2);
-                        player1.ls$hurt(player1.damageSources().lightningBolt(), 0.0000001F);
-                        player2.ls$hurt(player2.damageSources().lightningBolt(), 0.0000001F);
+                        ((IPlayer) player1).ls$hurt(player1.damageSources().lightningBolt(), 0.0000001F);
+                        ((IPlayer) player2).ls$hurt(player2.damageSources().lightningBolt(), 0.0000001F);
                     });
                 }
             }

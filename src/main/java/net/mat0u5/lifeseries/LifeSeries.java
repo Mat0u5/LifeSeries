@@ -1,11 +1,11 @@
 package net.mat0u5.lifeseries;
 
-import net.fabricmc.api.ModInitializer;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.MainConfig;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
+import net.mat0u5.lifeseries.platform.Platform;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.resources.datapack.DatapackManager;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
@@ -32,9 +32,20 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.UUID;
 
-public class LifeSeries implements ModInitializer {
-	public static final String MOD_VERSION = "1.5.4";
+//? if fabric {
+import net.mat0u5.lifeseries.platform.fabric.FabricPlatform;
+//?} neoforge {
+/*import net.mat0u5.lifeseries.platform.neoforge.NeoforgePlatform;
+ *///?} forge {
+/*import net.mat0u5.lifeseries.platform.forge.ForgePlatform;
+ *///?}
+
+
+public class LifeSeries {
+	public static final String MOD_VERSION = "dev-1.5.4.3";
 	public static final String MOD_ID = "lifeseries";
+	private static final Platform PLATFORM = createPlatformInstance();
+
 	public static final String UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
 	public static final boolean DEBUG = false;
 	public static final boolean ISOLATED_ENVIRONMENT = false;
@@ -54,9 +65,8 @@ public class LifeSeries implements ModInitializer {
 	public static ConfigManager seasonConfig;
 	public static final List<String> ALLOWED_SEASON_NAMES = Seasons.getSeasonIds();
 
-	@Override
-	public void onInitialize() {
-		LOGGER.info("Initializing Life Series...");
+	public static void onInitialize() {
+		LOGGER.info("Initializing Life Series [{} {} ({})]...", platform().loader().name(), platform().mcVersion(), MOD_VERSION);
 
 		config = new MainConfig();
 		NetworkHandlerServer.reload();
@@ -69,11 +79,27 @@ public class LifeSeries implements ModInitializer {
 		parseSeason(season);
 		Seasons.getSeasons().forEach(seasons -> seasons.getSeasonInstance().createConfig());
 
+		//? fabric || (forge && > 1.21) {
 		MobRegistry.registerAttributes();
+		//?}
 		if (!ISOLATED_ENVIRONMENT) {
 			UpdateChecker.checkForMajorUpdates();
 		}
 		NetworkHandlerServer.initializeSimplePacketReceivers();
+	}
+
+	public static Platform platform() {
+		return PLATFORM;
+	}
+
+	private static Platform createPlatformInstance() {
+		//? if fabric {
+		return new FabricPlatform();
+		//?} neoforge {
+		/*return new NeoforgePlatform();
+		 *///?} forge {
+		/*return new ForgePlatform();
+		 *///?}
 	}
 
 	public static boolean modDisabled() {

@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -91,9 +92,9 @@ public class AstralProjection extends ToggleableSuperpower {
         if (player == null) return;
         if (player.isSpectator()) return;
         //? if <= 1.21 {
-        /*player.ls$playNotifySound(SoundEvents.EVOKER_PREPARE_ATTACK, SoundSource.MASTER, 0.3f, 1);
+        /*((IPlayer) player).ls$playNotifySound(SoundEvents.EVOKER_PREPARE_ATTACK, SoundSource.MASTER, 0.3f, 1);
         *///?} else {
-        player.ls$playNotifySound(SoundEvents.TRIAL_SPAWNER_OMINOUS_ACTIVATE, SoundSource.MASTER, 0.3f, 1);
+        ((IPlayer) player).ls$playNotifySound(SoundEvents.TRIAL_SPAWNER_OMINOUS_ACTIVATE, SoundSource.MASTER, 0.3f, 1);
         //?}
 
         String fakePlayerName = "`"+player.getScoreboardName();
@@ -101,7 +102,7 @@ public class AstralProjection extends ToggleableSuperpower {
         startedPos = player.position();
         startedLooking[0] = player.getYRot();
         startedLooking[1] = player.getXRot();
-        startedLevel = player.ls$getServerLevel();
+        startedLevel = ((IPlayer) player).ls$getServerLevel();
         if (startedLevel == null) return;
         startedGameMode = player.gameMode.getGameModeForPlayer();
         Vec3 velocity = player.getDeltaMovement();
@@ -109,7 +110,7 @@ public class AstralProjection extends ToggleableSuperpower {
         Inventory inv = player.getInventory();
 
         //? if <= 1.21.6 {
-        /*FakePlayer.createFake(fakePlayerName, server, startedPos, startedLooking[0], startedLooking[1], player.ls$getServerLevel().dimension(),
+        /*FakePlayer.createFake(fakePlayerName, server, startedPos, startedLooking[0], startedLooking[1], ((IPlayer) player).ls$getServerLevel().dimension(),
                 startedGameMode, false, inv, player.getUUID()).thenAccept((fakePlayer) -> {
             clone = fakePlayer;
             sendDisguisePacket();
@@ -186,13 +187,13 @@ public class AstralProjection extends ToggleableSuperpower {
             //?}
         }
 
-        if (player.ls$isDead()) return;
+        if (((IPlayer) player).ls$isDead()) return;
 
         if (startedLevel != null && toBackPos != null) {
             LevelUtils.teleport(player, startedLevel, toBackPos, startedLooking[0], startedLooking[1]);
         }
         player.setGameMode(startedGameMode);
-        player.ls$playNotifySound(SoundEvents.EVOKER_DEATH, SoundSource.MASTER, 0.3f, 1);
+        ((IPlayer) player).ls$playNotifySound(SoundEvents.EVOKER_DEATH, SoundSource.MASTER, 0.3f, 1);
     }
 
 
@@ -204,9 +205,9 @@ public class AstralProjection extends ToggleableSuperpower {
         ServerPlayer player = getPlayer();
         if (player != null) {
             //? if <= 1.21 {
-            /*player.ls$hurt(source, amount);
+            /*((IPlayer) player).ls$hurt(source, amount);
              *///?} else {
-            player.ls$hurt(level, source, amount);
+            ((IPlayer) player).ls$hurt(level, source, amount);
             //?}
         }
         if (DAMAGE_CANCELS) {

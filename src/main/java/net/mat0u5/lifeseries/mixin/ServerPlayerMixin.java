@@ -10,7 +10,7 @@ import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
-import net.mat0u5.lifeseries.utils.interfaces.IServerPlayer;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.NicknameManager;
@@ -50,7 +50,7 @@ import java.util.Collection;
 //import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 
 @Mixin(value = ServerPlayer.class, priority = 1)
-public class ServerPlayerMixin implements IServerPlayer {
+public class ServerPlayerMixin implements IPlayer {
 
     @Inject(method = "openMenu", at = @At("HEAD"))
     private void onInventoryOpen(@Nullable MenuProvider factory, CallbackInfoReturnable<OptionalInt> cir) {
@@ -154,7 +154,7 @@ public class ServerPlayerMixin implements IServerPlayer {
 
 
     /*
-        Injected Interface
+        Injected Interface (not anymore xd)
      */
     @Unique @Override @Nullable
     public Integer ls$getLives() {
@@ -274,7 +274,7 @@ public class ServerPlayerMixin implements IServerPlayer {
         if (LifeSeries.isLogicalNonDisabled() && currentSeason.getSeason() == Seasons.NICE_LIFE) {
             if (NiceLifeTriviaManager.triviaInProgress) {
                 cir.setReturnValue(Either.left(Player.BedSleepingProblem.OTHER_PROBLEM));
-                ls$get().ls$message(ModifiableText.NICELIFE_SLEEP_FAIL_LATE.get(), true);
+                ((IPlayer)ls$get()).ls$message(ModifiableText.NICELIFE_SLEEP_FAIL_LATE.get(), true);
             }
         }
     }

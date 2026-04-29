@@ -26,6 +26,7 @@ import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.Time;
@@ -391,14 +392,14 @@ public abstract class Season {
 
     public void dropItemsOnLastDeath(ServerPlayer player) {
         boolean doDrop = seasonConfig.PLAYERS_DROP_ITEMS_ON_FINAL_DEATH.get();
-        boolean keepInventory = OtherUtils.getBooleanGameRule(player.ls$getServerLevel(), GameRules.KEEP_INVENTORY);
+        boolean keepInventory = OtherUtils.getBooleanGameRule(((IPlayer) player).ls$getServerLevel(), GameRules.KEEP_INVENTORY);
 
         if (doDrop && keepInventory) {
             for (ItemStack item : PlayerUtils.getPlayerInventory(player)) {
                 //? if <= 1.21 {
                 /*player.spawnAtLocation(item);
                 *///?} else
-                player.spawnAtLocation(player.ls$getServerLevel(), item);
+                player.spawnAtLocation(((IPlayer) player).ls$getServerLevel(), item);
             }
             player.getInventory().clearContent();
         }
@@ -409,7 +410,7 @@ public abstract class Season {
     }
 
     public boolean isAllowedToAttack(ServerPlayer attacker, ServerPlayer victim, boolean allowSelfDefense) {
-        if (attacker.ls$isOnLastLife(false)) {
+        if (((IPlayer) attacker).ls$isOnLastLife(false)) {
             return true;
         }
         if (boogeymanManager.isBoogeymanThatCanBeCured(attacker, victim)) {
@@ -424,7 +425,7 @@ public abstract class Season {
         Team team = attacker.getTeam();
         if (team != null) {
             Integer canKillLives = livesManager.getTeamCanKill(team.getName());
-            if (canKillLives != null && victim.ls$isOnAtLeastLives(canKillLives, false)) {
+            if (canKillLives != null && ((IPlayer) victim).ls$isOnAtLeastLives(canKillLives, false)) {
                 return true;
             }
         }
@@ -492,9 +493,9 @@ public abstract class Season {
             onPlayerDiedNaturally(player, source);
         }
         DatapackIntegration.EVENT_PLAYER_DEATH.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
-        if (!DatapackIntegration.EVENT_PLAYER_DEATH.isCanceled() && livesManager.canChangeLivesNaturally(player) && player.ls$hasAssignedLives()) {
+        if (!DatapackIntegration.EVENT_PLAYER_DEATH.isCanceled() && livesManager.canChangeLivesNaturally(player) && ((IPlayer) player).ls$hasAssignedLives()) {
             if (killedByPlayer || !livesManager.LIVES_LOSE_KILLS_ONLY) {
-                player.ls$removeLife();
+                ((IPlayer) player).ls$removeLife();
             }
         }
     }
@@ -525,13 +526,13 @@ public abstract class Season {
         if (!respawnPositions.containsKey(player.getUUID())) return;
         HashMap<Vec3, List<Float>> info = respawnPositions.get(player.getUUID());
         respawnPositions.remove(player.getUUID());
-        if (player.ls$isAlive()) return;
+        if (((IPlayer) player).ls$isAlive()) return;
         for (Map.Entry<Vec3, List<Float>> entry : info.entrySet()) {
             Vec3 pos = entry.getKey();
-            int minY = player.ls$getServerLevel().getMinY();
+            int minY = ((IPlayer) player).ls$getServerLevel().getMinY();
             if (pos.y <= minY) continue;
 
-            LevelUtils.teleport(player, player.ls$getServerLevel(), pos, entry.getValue().get(0), entry.getValue().get(1));
+            LevelUtils.teleport(player, ((IPlayer) player).ls$getServerLevel(), pos, entry.getValue().get(0), entry.getValue().get(1));
             break;
         }
     }
@@ -558,7 +559,7 @@ public abstract class Season {
         //?}
 
         if (livesManager.LIVES_LOSE_KILLS_ONLY) {
-            victim.ls$removeLife();
+            ((IPlayer) victim).ls$removeLife();
         }
     }
 
@@ -566,11 +567,11 @@ public abstract class Season {
         Team team = killer.getTeam();
         if (team != null) {
             Integer canGainLife = livesManager.getTeamGainLives(team.getName());
-            Integer victimLives = victim.ls$getLives();
+            Integer victimLives = ((IPlayer)victim).ls$getLives();
             if (canGainLife != null && victimLives != null && victimLives > 0) {
                 if (victimLives + 1 >= canGainLife) { // +1 because the victim already lost a life
                     broadcastLifeGain(killer, victim);
-                    killer.ls$addLife();
+                    ((IPlayer) killer).ls$addLife();
                 }
             }
         }
@@ -580,9 +581,9 @@ public abstract class Season {
         Team team = killer.getTeam();
         if (team != null) {
             Integer canGainLife = livesManager.getTeamGainLives(team.getName());
-            if (canGainLife != null && victim.ls$isOnAtLeastLives(canGainLife, false)) {
+            if (canGainLife != null && ((IPlayer) victim).ls$isOnAtLeastLives(canGainLife, false)) {
                 broadcastLifeGain(killer, victim);
-                killer.ls$addLife();
+                ((IPlayer) killer).ls$addLife();
             }
         }
     }
@@ -713,7 +714,7 @@ public abstract class Season {
         AttributeUtils.resetAttributesOnPlayerJoin(player);
         reloadPlayerTeam(player);
         TaskScheduler.scheduleTask(2, () -> PlayerUtils.applyResourcepack(player.getUUID()));
-        if (!player.ls$hasAssignedLives()) {
+        if (!((IPlayer) player).ls$hasAssignedLives()) {
             assignDefaultLives(player);
         }
         if (shouldBeInSpectator(player)) {
@@ -732,10 +733,10 @@ public abstract class Season {
 
     public boolean shouldBeInSpectator(ServerPlayer player) {
         if (!PermissionManager.isAdmin(player)) {
-            if (player.ls$hasAssignedLives() && player.ls$isDead()) {
+            if (((IPlayer) player).ls$hasAssignedLives() && ((IPlayer) player).ls$isDead()) {
                 return true;
             }
-            if (player.ls$isWatcher()) {
+            if (((IPlayer) player).ls$isWatcher()) {
                 return true;
             }
         }
@@ -745,23 +746,23 @@ public abstract class Season {
     public void assignDefaultLives(ServerPlayer player) {
         Integer lives = getDefaultLives();
         if (lives != null) {
-            player.ls$setLives(lives);
+            ((IPlayer) player).ls$setLives(lives);
         }
     }
 
     public void onPlayerFinishJoining(ServerPlayer player) {
         if (getSeason() != Seasons.UNASSIGNED && SHOW_LOGIN_COMMAND_INFO && !LifeSeries.modDisabled()) {
             if (PermissionManager.isAdmin(player)) {
-                player.ls$message(ModifiableText.SEASON_COMMANDS_ADMIN.get(getSeason().getName(), getAdminCommands()));
+                ((IPlayer) player).ls$message(ModifiableText.SEASON_COMMANDS_ADMIN.get(getSeason().getName(), getAdminCommands()));
             }
             else {
-                player.ls$message(ModifiableText.SEASON_COMMANDS.get(getSeason().getName(), getNonAdminCommands()));
+                ((IPlayer) player).ls$message(ModifiableText.SEASON_COMMANDS.get(getSeason().getName(), getNonAdminCommands()));
             }
         }
 
         learnRecipes();
         if (currentSession.statusNotStarted() && PermissionManager.isAdmin(player) && !LifeSeries.modDisabled()) {
-            player.ls$message(ModifiableText.SESSION_START_PROMPT.get());
+            ((IPlayer) player).ls$message(ModifiableText.SESSION_START_PROMPT.get());
         }
         boogeymanManager.onPlayerFinishJoining(player);
         livesManager.onPlayerFinishJoining(player);

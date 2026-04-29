@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.minecraft.server.level.ServerPlayer;
@@ -53,13 +54,13 @@ public class Superspeed extends ToggleableSuperpower {
         if (player == null) return;
         if (player.getFoodData().getFoodLevel() <= 6) {
             //? if <= 1.21 {
-            /*player.ls$playNotifySound(SoundEvents.GENERIC_EAT, SoundSource.MASTER, 1, 1);
+            /*((IPlayer) player).ls$playNotifySound(SoundEvents.GENERIC_EAT, SoundSource.MASTER, 1, 1);
             *///?} else {
-            player.ls$playNotifySound(SoundEvents.GENERIC_EAT.value(), SoundSource.MASTER, 1, 1);
+            ((IPlayer) player).ls$playNotifySound(SoundEvents.GENERIC_EAT.value(), SoundSource.MASTER, 1, 1);
             //?}
             return;
         }
-        player.ls$playNotifySound(SoundEvents.BEACON_ACTIVATE, SoundSource.MASTER, 1, 1);
+        ((IPlayer) player).ls$playNotifySound(SoundEvents.BEACON_ACTIVATE, SoundSource.MASTER, 1, 1);
         slowlySetSpeed(player, TARGET_SPEED, 60);
         NetworkHandlerServer.sendVignette(player, -1);
         if (STEP_UP) {
@@ -83,7 +84,7 @@ public class Superspeed extends ToggleableSuperpower {
     public void deactivate() {
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        player.ls$playNotifySound(SoundEvents.BEACON_DEACTIVATE, SoundSource.MASTER, 1, 1);
+        ((IPlayer) player).ls$playNotifySound(SoundEvents.BEACON_DEACTIVATE, SoundSource.MASTER, 1, 1);
         slowlySetSpeed(player, AttributeUtils.DEFAULT_PLAYER_MOVEMENT_SPEED, 30);
         if (!WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
             player.removeEffect(MobEffects.HUNGER);

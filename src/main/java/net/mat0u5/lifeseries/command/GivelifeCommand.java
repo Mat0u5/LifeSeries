@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -63,12 +64,12 @@ public class GivelifeCommand extends Command {
         if (self == null) return -1;
         if (target == null) return -1;
 
-        if (self.ls$isDead()) {
+        if (((IPlayer) self).ls$isDead()) {
             OtherUtils.sendCommandFailure(source, ModifiableText.GIVELIFE_ERROR_NONE.get());
             return -1;
         }
-        boolean isRevive = target.ls$isDead();
-        if (target.ls$isWatcher()) {
+        boolean isRevive = ((IPlayer) target).ls$isDead();
+        if (((IPlayer) target).ls$isWatcher()) {
             OtherUtils.sendCommandFailure(source, ModifiableText.PLAYER_ERROR_WATCHER.get());
             return -1;
         }
@@ -86,12 +87,12 @@ public class GivelifeCommand extends Command {
             giveAmount = -LimitedLife.NEW_DEATH_NORMAL.getSeconds();
         }
 
-        Integer currentLives = self.ls$getLives();
+        Integer currentLives = ((IPlayer) self).ls$getLives();
         if (currentLives == null || currentLives <= giveAmount) {
             OtherUtils.sendCommandFailure(source, ModifiableText.GIVELIFE_ERROR_NOT_ENOUGH.get());
             return -1;
         }
-        Integer targetLives = target.ls$getLives();
+        Integer targetLives = ((IPlayer) target).ls$getLives();
         if (targetLives == null || targetLives >= currentSeason.GIVELIFE_MAX_LIVES) {
             OtherUtils.sendCommandFailure(source, ModifiableText.GIVELIFE_ERROR_TOO_MANY.get());
             return -1;
@@ -111,7 +112,7 @@ public class GivelifeCommand extends Command {
         }
 
         Component currentPlayerName = self.getDisplayName();
-        self.ls$addLives(-giveAmount);
+        ((IPlayer) self).ls$addLives(-giveAmount);
         livesManager.addToLivesNoUpdate(target, giveAmount);
         AnimationUtils.playTotemAnimation(self);
         TaskScheduler.scheduleTask(Time.seconds(2), () -> livesManager.receiveLifeFromOtherPlayer(currentPlayerName, target, isRevive));
@@ -148,7 +149,7 @@ public class GivelifeCommand extends Command {
             soulmateGivelifeRequests.put(self.getUUID(), request);
         }
         OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.GIVELIFE_DOUBLELIFE_INFO.get());
-        soulmate.ls$message(ModifiableText.GIVELIFE_DOUBLELIFE_ACCEPT.get(target, TextUtils.runCommandText(TextUtils.formatString("/givelife {}", target.getScoreboardName()))));
+        ((IPlayer) soulmate).ls$message(ModifiableText.GIVELIFE_DOUBLELIFE_ACCEPT.get(target, TextUtils.runCommandText(TextUtils.formatString("/givelife {}", target.getScoreboardName()))));
         return false;
     }
 }

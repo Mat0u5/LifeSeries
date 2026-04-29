@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.utils.world;
 
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.SectionPos;
@@ -40,7 +41,7 @@ public class LevelUtils {
     }
 
     public static void summonHarmlessLightning(ServerPlayer player) {
-        summonHarmlessLightning(player.ls$getServerLevel(), player.position());
+        summonHarmlessLightning(((IPlayer) player).ls$getServerLevel(), player.position());
     }
 
     public static void summonHarmlessLightning(ServerLevel level, Vec3 pos) {

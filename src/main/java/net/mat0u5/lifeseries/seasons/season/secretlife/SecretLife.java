@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -123,7 +124,7 @@ public class SecretLife extends Season {
             }
         }
         TaskTypes type = TaskManager.getPlayersTaskType(player);
-        if (player.ls$isOnLastLife(false) && TaskManager.submittedOrFailed.contains(player.getUUID()) && type == null && currentSession.statusStarted()) {
+        if (((IPlayer) player).ls$isOnLastLife(false) && TaskManager.submittedOrFailed.contains(player.getUUID()) && type == null && currentSession.statusStarted()) {
             TaskManager.chooseTasks(List.of(player), TaskTypes.RED);
         }
     }
@@ -344,7 +345,7 @@ public class SecretLife extends Season {
         super.sessionEnd();
         List<String> playersWithTaskBooks = new ArrayList<>();
         for (ServerPlayer player : livesManager.getNonRedPlayers()) {
-            if (player.ls$isDead()) continue;
+            if (((IPlayer) player).ls$isDead()) continue;
             if (TaskManager.submittedOrFailed.contains(player.getUUID())) continue;
             if (TaskManager.CONSTANT_TASKS) continue;
             playersWithTaskBooks.add(player.getScoreboardName());
@@ -365,7 +366,7 @@ public class SecretLife extends Season {
     @Override
     public void onPlayerKilledByPlayer(ServerPlayer victim, ServerPlayer killer) {
         super.onPlayerKilledByPlayer(victim, killer);
-        if (killer.ls$isOnLastLife(false)) {
+        if (((IPlayer) killer).ls$isOnLastLife(false)) {
             double amountGained = Math.min(Math.max(MAX_KILL_HEALTH, MAX_HEALTH) - getPlayerHealth(killer), 20);
             if (amountGained > 0) {
                 addPlayerHealth(killer, amountGained);
@@ -401,7 +402,7 @@ public class SecretLife extends Season {
         if (entity instanceof ServerPlayer player) {
             boolean dropBook = SecretLifeConfig.PLAYERS_DROP_TASK_ON_DEATH.get();
             if (dropBook || server == null) return;
-            boolean keepInventory = OtherUtils.getBooleanGameRule(player.ls$getServerLevel(), GameRules.KEEP_INVENTORY);
+            boolean keepInventory = OtherUtils.getBooleanGameRule(((IPlayer) player).ls$getServerLevel(), GameRules.KEEP_INVENTORY);
             if (keepInventory) return;
             giveBookOnRespawn.put(player.getUUID(), TaskManager.getPlayersTaskBook(player));
             TaskManager.removePlayersTaskBook(player);

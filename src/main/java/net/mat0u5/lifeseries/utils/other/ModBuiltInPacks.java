@@ -6,6 +6,7 @@ import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.PathPackResources;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
+import net.minecraft.server.packs.repository.RepositorySource;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +24,33 @@ import net.minecraft.server.packs.PackSelectionConfig;
 import java.util.Optional;
 //?}
 
-public final class ModBuiltInPacks {
+//? if neoforge {
+/*import net.neoforged.fml.ModList;
+    //? if > 1.21.6 {
+    import net.neoforged.neoforgespi.language.IModFileInfo;
+    import net.neoforged.neoforgespi.locating.IModFile;
+    //?}
+*///?}
+
+public final class ModBuiltInPacks implements RepositorySource {
     private static final Logger LOGGER = LoggerFactory.getLogger("LifeSeriesPackLoader");
+
+
+    public static ModBuiltInPacks server() {
+        return new ModBuiltInPacks(PackType.SERVER_DATA);
+    }
+    public static ModBuiltInPacks client() {
+        return new ModBuiltInPacks(PackType.CLIENT_RESOURCES);
+    }
+    public final PackType type;
+
+    public ModBuiltInPacks(PackType type) {
+        this.type = type;
+    }
+    @Override
+    public void loadPacks(Consumer<Pack> consumer) {
+        ModBuiltInPacks.loadPacks(consumer, type);
+    }
 
     private record PackDef(String name, Component title, boolean required) {}
 
@@ -101,6 +127,7 @@ public final class ModBuiltInPacks {
     }
 
     private static @Nullable Path getResourceAsPath(String path) {
+    //? if fabric || forge {
         try {
             URL url = ModBuiltInPacks.class.getResource(path);
             if (url == null) return null;
@@ -121,7 +148,32 @@ public final class ModBuiltInPacks {
             LOGGER.error("Failed to resolve path for built-in pack: " + path, e);
             return null;
         }
-    }
+    //?} else if neoforge {
+        /*//? if <= 1.21.6 {
+        /^return ModList.get().getModFileById(LifeSeries.MOD_ID)
+                .getFile()
+                .findResource(path);
+        ^///?} else {
+        IModFileInfo info = ModList.get().getModFileById(LifeSeries.MOD_ID);
+        if (info == null) return null;
+        IModFile modFile = info.getFile();
 
-    private ModBuiltInPacks() {}
+        String cleanedPath = path.startsWith("/") ? path.substring(1) : path;
+
+        Optional<URI> metaUri = modFile.getContents().findFile(cleanedPath + "/pack.mcmeta");
+        if (metaUri.isPresent()) {
+            return Path.of(metaUri.get()).getParent();
+        }
+
+        for (Path root : modFile.getContents().getContentRoots()) {
+            Path candidate = root.resolve(cleanedPath);
+            if (Files.exists(candidate)) {
+                return candidate;
+            }
+        }
+
+        return null;
+        //?}
+    *///?}
+    }
 }
