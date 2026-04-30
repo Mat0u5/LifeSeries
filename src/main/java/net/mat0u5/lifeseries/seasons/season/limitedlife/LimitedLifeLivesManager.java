@@ -22,6 +22,10 @@ import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
 import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
 
+//? if >= 26.2 {
+/*import net.minecraft.world.scores.TeamColor;
+ *///?}
+
 public class LimitedLifeLivesManager extends LivesManager {
     public static int DEFAULT_TIME = 86400;
     public static int YELLOW_TIME = 57600;
@@ -29,6 +33,7 @@ public class LimitedLifeLivesManager extends LivesManager {
     public static boolean BROADCAST_COLOR_CHANGES = false;
     public static int TIME_RANDOMIZE_INTERVAL = Time.hours(1).getSeconds();
 
+    //~ if >= 26.2 'ChatFormatting' -> 'TeamColor' {
     @Override
     public ChatFormatting getColorForLives(Integer lives) {
         lives = getEquivalentLives(lives);
@@ -44,7 +49,9 @@ public class LimitedLifeLivesManager extends LivesManager {
     public Component getFormattedLives(Integer lives) {
         if (lives == null) return Component.empty();
         ChatFormatting color = getColorForLives(lives);
+        //~ if >= 26.2 '.withStyle(color)' -> '.withColor(color.textColor())' {
         return Component.literal(Time.seconds(lives).formatLong()).withStyle(color);
+        //~}
     }
 
     @Override
@@ -65,7 +72,11 @@ public class LimitedLifeLivesManager extends LivesManager {
         boolean livesChanged = !Objects.equals(lives, livesBefore);
         ChatFormatting colorBefore = null;
         if (player.getTeam() != null) {
+            //? if <= 26.1 {
             colorBefore = player.getTeam().getColor();
+            //?} else {
+            /*colorBefore = player.getTeam().getColor().orElse(null);
+            *///?}
         }
         SessionTranscript.addRecordIfMissing(player);
         ScoreboardUtils.setScore(player.getScoreboardName(), LivesManager.SCOREBOARD_NAME, lives);
@@ -78,7 +89,11 @@ public class LimitedLifeLivesManager extends LivesManager {
                 PlayerUtils.safelyPutIntoSurvival(player);
             }
             if (lives > 0 && colorBefore != null && livesBefore != null && BROADCAST_COLOR_CHANGES) {
+                //? if <= 26.1 {
                 Component colorText = Component.literal(colorNow.getName().replaceAll("_", " ").toLowerCase(Locale.ROOT)).withStyle(colorNow);
+                //?} else {
+                /*Component colorText = Component.literal(colorNow.getSerializedName().replaceAll("_", " ").toLowerCase(Locale.ROOT)).withColor(colorNow.textColor());
+                *///?}
                 PlayerUtils.broadcastMessage(ModifiableText.LIMITEDLIFE_CHANGE_COLOR.get(player, colorText));
             }
         }
@@ -87,6 +102,7 @@ public class LimitedLifeLivesManager extends LivesManager {
             LifeSkinsManager.refreshLifeSkin(player);
         }
     }
+    //~}
 
     @Override
     public Boolean isOnSpecificLives(ServerPlayer player, int check) {

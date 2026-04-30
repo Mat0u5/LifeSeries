@@ -40,7 +40,6 @@ import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.*;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
@@ -53,6 +52,12 @@ import net.minecraft.world.scores.PlayerTeam;
 //? if > 1.20.5 {
 import net.minecraft.network.DisconnectionDetails;
  //?}
+
+//? if <= 26.1 {
+import net.minecraft.ChatFormatting;
+ //?} else {
+/*import net.minecraft.world.scores.TeamColor;
+*///?}
 
 //? if <= 1.20.3 {
 /*import net.minecraft.network.FriendlyByteBuf;
@@ -233,8 +238,13 @@ public class NetworkHandlerServer {
                 String packetAllowedKill = payload.value().get(4);
                 String packetGainLifeKill = payload.value().get(5);
 
+                //? if <= 26.1 {
                 ChatFormatting newTeamColor = ChatFormatting.getByName(packetTeamColor);
                 if (newTeamColor == null) newTeamColor = ChatFormatting.WHITE;
+                //?} else {
+                /*TeamColor newTeamColor = TeamColor.byName(packetTeamColor);
+                if (newTeamColor == null) newTeamColor = TeamColor.WHITE;
+                *///?}
 
                 Integer allowedKill = null;
                 Integer gainLife = null;
@@ -255,8 +265,13 @@ public class NetworkHandlerServer {
                     }
                     if (!teamName.equals(packetTeamName)) continue;
 
+                    //? if <= 26.1 {
                     livesTeam.setColor(newTeamColor);
                     livesTeam.setDisplayName(Component.literal(packetTeamDisplayName).withStyle(newTeamColor));
+                    //?} else {
+                    /*livesTeam.setColor(Optional.of(newTeamColor));
+                    livesTeam.setDisplayName(Component.literal(packetTeamDisplayName).withColor(newTeamColor.textColor()));
+                    *///?}
                     livesManager.updateTeamConfig(teamName, allowedKill, gainLife);
                     teamModified = true;
                 }

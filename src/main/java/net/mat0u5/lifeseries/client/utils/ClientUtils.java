@@ -40,6 +40,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 //?}
+//? if >= 26.2
+//import net.minecraft.world.scores.TeamColor;
 
 public class ClientUtils {
 
@@ -74,7 +76,9 @@ public class ClientUtils {
         Minecraft client = Minecraft.getInstance();
         if (client.player == null) return null;
         Team team = client.player.getTeam();
+        //~ if >= 26.2 'team.getColor().getName()' -> 'team.getColor().orElse(TeamColor.WHITE).getSerializedName()' {
         if (team != null) return team.getColor().getName();
+        //~}
         return null;
     }
     @Nullable
@@ -249,6 +253,8 @@ public class ClientUtils {
         if (!LifeSeriesClient.COLORBLIND_SUPPORT) return original;
         if (original == null) return original;
         if (team == null) return original;
+        //~ if >= 26.2 '.withStyle(team.getColor())' -> '.withColor(team.getColor().orElse(TeamColor.WHITE).textColor())' {
         return TextUtils.format("[{}] ",team.getDisplayName().getString()).withStyle(team.getColor()).append(original);
+        //~}
     }
 }

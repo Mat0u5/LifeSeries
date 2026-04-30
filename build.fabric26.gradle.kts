@@ -48,7 +48,6 @@ dependencies {
 	minecraft("com.mojang:minecraft:${prop("deps.minecraft")}")
 
 	implementation(libs.fabric.loader)
-	implementation("net.fabricmc.fabric-api:fabric-api:${prop("deps.fabric-api")}")
 
 	compileOnly("maven.modrinth:flashback:xs2Obe8Z")
 	compileOnly("maven.modrinth:replaymod:1.21-2.6.23")

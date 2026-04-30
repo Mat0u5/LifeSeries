@@ -19,7 +19,6 @@ import net.mat0u5.lifeseries.utils.player.TeamUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -38,6 +37,12 @@ import static net.mat0u5.lifeseries.LifeSeries.*;
 import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
 
 import net.minecraft.world.scores.PlayerScoreEntry;
+
+//? if <= 26.1 {
+import net.minecraft.ChatFormatting;
+//?} else {
+/*import net.minecraft.world.scores.TeamColor;
+*///?}
 
 public class LivesManager {
     public static final String SCOREBOARD_NAME = "Lives";
@@ -174,18 +179,21 @@ public class LivesManager {
     }
 
     public void createTeams() {
+        //~ if >= 26.2 'ChatFormatting' -> 'TeamColor' {
         TeamUtils.createTeam("lives_null", "Unassigned", ChatFormatting.GRAY);
         TeamUtils.createTeam("lives_0", "Dead", ChatFormatting.DARK_GRAY);
         TeamUtils.createTeam("lives_1", "Red", ChatFormatting.RED);
         TeamUtils.createTeam("lives_2", "Yellow", ChatFormatting.YELLOW);
         TeamUtils.createTeam("lives_3", "Green", ChatFormatting.GREEN);
         TeamUtils.createTeam("lives_4", "Dark Green", ChatFormatting.DARK_GREEN);
+        //~}
     }
 
     public void createScoreboards() {
         ScoreboardUtils.createObjective(SCOREBOARD_NAME);
     }
 
+    //~ if >= 26.2 'ChatFormatting' -> 'TeamColor' {
     public ChatFormatting getColorForLives(ServerPlayer player) {
         return getColorForLives(getPlayerLives(player));
     }
@@ -193,10 +201,17 @@ public class LivesManager {
     public ChatFormatting getColorForLives(Integer lives) {
         PlayerTeam team = TeamUtils.getTeam(getTeamForLives(lives));
         if (team != null) {
+            //? if <= 26.1 {
             ChatFormatting color = team.getColor();
             if (color != null) {
                 return color;
             }
+            //?} else {
+            /*var color = team.getColor();
+            if (color.isPresent()) {
+                return color.get();
+            }
+            *///?}
         }
         return ChatFormatting.DARK_GRAY;
     }
@@ -210,8 +225,11 @@ public class LivesManager {
             lives = 0;
         }
         ChatFormatting color = getColorForLives(lives);
+        //~ if >= 26.2 '.withStyle(color)' -> '.withColor(color.textColor())' {
         return Component.literal(String.valueOf(lives)).withStyle(color);
+        //~}
     }
+    //~}
     public String getTeamForPlayer(ServerPlayer player) {
         if (LIVES_SYSTEM_DISABLED) {
             return null;

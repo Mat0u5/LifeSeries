@@ -72,11 +72,19 @@ public class TextUtils {
     }
 
     public static String getColorCode(TextColor color) {
+        //? if <= 26.1 {
         for (ChatFormatting formatting : ChatFormatting.values()) {
             if (formatting.getColor() == color.getValue()) {
                 return "§" + formatting.getChar();
             }
         }
+        //?} else {
+        /*for (ChatFormatting formatting : ChatFormatting.values()) {
+            if (TextColor.fromLegacyFormat(formatting) == color) {
+                return formatting.toString();
+            }
+        }
+        *///?}
         return "";
     }
     public static String removeFormattingCodes(String input) {

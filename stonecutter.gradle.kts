@@ -48,11 +48,8 @@ gradle.projectsEvaluated {
 		}
 
 		sorted.forEach { task ->
-			val loader = task.project.name.substringAfterLast('-')
-			val delayMs = 2000L;
 			task.doFirst {
-				logger.lifecycle("\n>>> [WAITING] ${delayMs/1000}s before uploading ${task.project.name}...")
-				Thread.sleep(delayMs)
+				logger.lifecycle("\n>>> Uploading ${task.project.name}...")
 			}
 		}
 	}
@@ -114,10 +111,13 @@ publishMods {
 			val githubAccessToken = env("GITHUB_TOKEN")
 			val forcePrerelease = property("publish.github.prerelease").toString() == "true"
 
-			val versionName = property("mod.version").toString()
+			val versionName = project.findProperty("mod.version")?.toString()
+			val versionPrefix = project.findProperty("mod.version_prefix")?.toString()
+			val versionSuffix = project.findProperty("mod.version_suffix")?.toString()
+			val versionNameFull = versionPrefix+versionName+versionSuffix
 
-			version = versionName
-			displayName = "Version $versionName"
+			version = versionNameFull
+			displayName = "Version $versionNameFull"
 			changelog = rootProject.file("CHANGELOG.md").readText()
 			type = when {
 				forcePrerelease -> me.modmuss50.mpp.ReleaseType.BETA
@@ -138,6 +138,7 @@ publishMods {
 		val versionPrefix = project.findProperty("mod.version_prefix")?.toString()
 		val versionSuffix = project.findProperty("mod.version_suffix")?.toString()
 		val isDev = project.findProperty("publish.discord.dev")?.toString() == "true"
+		val ping = project.findProperty("publish.discord.ping")?.toString() == "true"
 		val version = versionPrefix+versionName+versionSuffix
 		val webhook = if (isDev) env("DISCORD_WEBHOOK_DEV") else env("DISCORD_WEBHOOK")
 		val changelogLink = project.findProperty("publish.changelog.link")?.toString()
@@ -146,11 +147,16 @@ publishMods {
 			username = "Mat0u5"
 			avatarUrl = "https://github.com/Mat0u5.png"
 			webhookUrl = webhook
-			if (!isDev) {
-				content = "<@&1346438113169510421>";
+			if (ping) {
+				if (!isDev) {
+					content = "<@&1346438113169510421>";
+				}
+				else {
+					content = "<@&1346434430683844658>";
+				}
 			}
 			else {
-				content = "<@&1346434430683844658>";
+				content = "*Ping Skipped*";
 			}
 			setPlatformsAllFrom()
 		}

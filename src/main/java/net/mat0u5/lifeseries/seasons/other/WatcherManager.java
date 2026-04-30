@@ -6,7 +6,6 @@ import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.player.TeamUtils;
-import net.minecraft.ChatFormatting;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
@@ -19,6 +18,12 @@ import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 import static net.mat0u5.lifeseries.LifeSeries.livesManager;
 import net.minecraft.world.scores.PlayerScoreEntry;
 
+//? if <= 26.1 {
+import net.minecraft.ChatFormatting;
+ //?} else {
+/*import net.minecraft.world.scores.TeamColor;
+*///?}
+
 public class WatcherManager {
     public static final String SCOREBOARD_NAME = "Watchers";
     public static final String TEAM_NAME = "watcher";
@@ -26,7 +31,9 @@ public class WatcherManager {
     private static List<String> watchers = new ArrayList<>();
 
     public static void createTeams() {
+        //~ if >= 26.2 'ChatFormatting' -> 'TeamColor' {
         TeamUtils.createTeam(WatcherManager.TEAM_NAME, WatcherManager.TEAM_DISPLAY_NAME, ChatFormatting.DARK_GRAY);
+        //~}
     }
 
     public static void createScoreboards() {

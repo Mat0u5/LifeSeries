@@ -30,6 +30,8 @@ import static net.mat0u5.lifeseries.LifeSeries.server;
 //import net.minecraft.core.particles.TargetColorParticleOption;
 //? if >= 1.21.4
 import net.minecraft.core.particles.TrailParticleOption;
+//? if >= 26.2
+//import net.minecraft.world.scores.TeamColor;
 
 public class CreakingPower extends ToggleableSuperpower {
     public static int CREAKING_AMOUNT = 3;
@@ -72,7 +74,11 @@ public class CreakingPower extends ToggleableSuperpower {
         if (playerTeam == null) return;
         String newTeamName = "creaking_"+player.getScoreboardName();
         TeamUtils.deleteTeam(newTeamName);
+        //? if <= 26.1 {
         TeamUtils.createTeam(newTeamName, playerTeam.getDisplayName().getString(), playerTeam.getColor());
+        //?} else {
+        /*TeamUtils.createTeam(newTeamName, playerTeam.getDisplayName().getString(), playerTeam.getColor().orElse(TeamColor.WHITE));
+        *///?}
         createdTeams.add(newTeamName);
 
         //? if >= 1.21.2 {

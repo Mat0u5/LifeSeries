@@ -26,6 +26,9 @@ import java.util.*;
 import static net.mat0u5.lifeseries.LifeSeries.*;
 
 import net.minecraft.world.scores.PlayerScoreEntry;
+//? if >= 26.2 {
+/*import net.minecraft.world.scores.TeamColor;
+*///?}
 
 public abstract class ConfigManager extends DefaultConfigValues {
 
@@ -246,9 +249,15 @@ public abstract class ConfigManager extends DefaultConfigValues {
             Integer gainLife = livesManager.getTeamGainLives(teamName);
             String validKillStr = validKill != null ? String.valueOf(validKill) : "";
             String gainLifeStr = gainLife != null ? String.valueOf(gainLife) : "";
+            //? if <= 26.1 {
+            String teamColorName = team.getColor().getName();
+            //?} else {
+            /*String teamColorName = team.getColor().orElse(TeamColor.WHITE).getSerializedName();
+            *///?}
+
             ConfigFileEntry<Object> teamEntry = new ConfigFileEntry<>(
                     "dynamic_teams_"+ UUID.randomUUID(), null, ConfigTypes.TEAM_ENTRY, "teams",
-                    "", "", List.of(String.valueOf(teamNum), team.getDisplayName().getString(), team.getColor().getName(), validKillStr, gainLifeStr), true
+                    "", "", List.of(String.valueOf(teamNum), team.getDisplayName().getString(), teamColorName, validKillStr, gainLifeStr), true
             );
             sendConfigEntry(player, teamEntry, index);
             index++;

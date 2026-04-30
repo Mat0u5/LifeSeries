@@ -11,12 +11,16 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.level.block.Blocks;
 
 //? if >= 1.21.2 {
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 //?}
+//? if <= 26.1 {
+import net.minecraft.world.level.block.Blocks;
+//?} else {
+/*import net.minecraft.tags.BlockTags;
+*///?}
 
 public class MobRegistry {
     //? if >= 1.21.2 {
@@ -61,8 +65,14 @@ public class MobRegistry {
             BuiltInRegistries.ENTITY_TYPE,
             AngrySnowman.ID,
             EntityType.Builder.of(AngrySnowman::new, MobCategory.MISC)
+                    //? if <= 26.1 {
                     .immuneTo(Blocks.POWDER_SNOW)
+                    //?} else {
+                    /*.immuneTo(BlockTags.POLAR_BEAR_IMMUNE_TO)
+                    *///?}
+
                     .sized(0.7F, 1.9F)
+
                     //? if >= 1.20.5 {
                     .eyeHeight(1.7F)
                     //?}

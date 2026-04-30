@@ -61,13 +61,21 @@ public class PlayerTabOverlayMixin {
     /*@Redirect(method = "render",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/world/scores/ReadOnlyScoreInfo;safeFormatValue(Lnet/minecraft/world/scores/ReadOnlyScoreInfo;Lnet/minecraft/network/chat/numbers/NumberFormat;)Lnet/minecraft/network/chat/MutableComponent;"))
-    *///?} else {
+    *///?} else if <= 26.1 {
     @Redirect(method = "extractRenderState",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/world/scores/ReadOnlyScoreInfo;safeFormatValue(Lnet/minecraft/world/scores/ReadOnlyScoreInfo;Lnet/minecraft/network/chat/numbers/NumberFormat;)Lnet/minecraft/network/chat/MutableComponent;"))
-    //?}
+    //?} else {
+    /*@Redirect(method = "extractRenderState",
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/world/scores/ReadOnlyScoreInfo;formatValue(Lnet/minecraft/network/chat/numbers/NumberFormat;)Lnet/minecraft/network/chat/MutableComponent;"))
+    *///?}
     private MutableComponent modifyFormattedScore(ReadOnlyScoreInfo readableScoreboardScore, NumberFormat numberFormat) {
+        //? if <= 26.1 {
         MutableComponent originalText = ReadOnlyScoreInfo.safeFormatValue(readableScoreboardScore, numberFormat);
+        //?} else {
+        /*MutableComponent originalText = readableScoreboardScore.formatValue(numberFormat);
+        *///?}
         Objective objective = ls$getDisplayedObjective();
         if (readableScoreboardScore == null || originalText == null || LifeSeries.modFullyDisabled()) return originalText;
 
@@ -108,6 +116,8 @@ public class PlayerTabOverlayMixin {
         if (entry == null) return;
         PlayerTeam team = entry.getTeam();
         if (team == null) return;
+        //~ if >= 26.2 '.withStyle(team.getColor())' -> '.withColor(team.getColor().orElse(TeamColor.WHITE).textColor())' {
         cir.setReturnValue(TextUtils.format("[{}] ", team.getDisplayName().getString()).withStyle(team.getColor()).append(original));
+        //~}
     }
 }

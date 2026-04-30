@@ -8,7 +8,6 @@ import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.client.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -21,6 +20,11 @@ import java.util.Objects;
 import java.util.UUID;
 //? if >= 1.21.9
 import net.minecraft.client.input.*;
+//? if <= 26.1 {
+import net.minecraft.ChatFormatting;
+//?} else {
+/*import net.minecraft.world.scores.TeamColor;
+*///?}
 
 public class TeamConfigEntry extends ModifiableListEntry {
     public String teamNum;
@@ -110,14 +114,22 @@ public class TeamConfigEntry extends ModifiableListEntry {
 
         if (getTeamNum() == null) textFieldLives.setTextColor(TextColors.PASTEL_RED);
         else textFieldLives.setTextColor(TextColors.WHITE);
-        ChatFormatting teamColor = getTeamColor();
+        var teamColor = getTeamColor();
+        //? if <= 26.1 {
         if (teamColor == null || teamColor.getColor() == null) {
+        //?} else {
+        /*if (teamColor == null) {
+        *///?}
             textFieldColor.setTextColor(TextColors.PASTEL_RED);
             textFieldName.setTextColor(TextColors.WHITE);
         }
         else {
             textFieldColor.setTextColor(TextColors.WHITE);
+            //? if <= 26.1 {
             textFieldName.setTextColor(TextColors.toArgb(255, teamColor.getColor()));
+            //?} else {
+            /*textFieldName.setTextColor(TextColors.toArgb(255, teamColor.rgb()));
+            *///?}
         }
         Integer currentTeamAllowed = getTeamAllowedKill();
         Integer currentTeamGain = getTeamGainLifeKill();
@@ -218,12 +230,21 @@ public class TeamConfigEntry extends ModifiableListEntry {
         return this.teamName;
     }
 
+    //? if <= 26.1 {
     public ChatFormatting getTeamColor() {
         try {
             return ChatFormatting.getByName(textFieldColor.getValue());
         } catch (Exception e) {}
         return null;
     }
+    //?} else {
+    /*public TeamColor getTeamColor() {
+        try {
+            return TeamColor.byName(textFieldColor.getValue());
+        } catch (Exception e) {}
+        return null;
+    }
+    *///?}
 
     public Integer getTeamAllowedKill() {
         try {

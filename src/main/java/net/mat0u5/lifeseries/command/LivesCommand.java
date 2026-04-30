@@ -241,8 +241,10 @@ public class LivesCommand extends Command {
             int lives = entry.value();
         //?}
             if (name.startsWith("`")) continue;
-            ChatFormatting color = livesManager.getColorForLives(lives);
+            var color = livesManager.getColorForLives(lives);
+            //~ if >= 26.2 '.withStyle(color)' -> '.withColor(color.textColor())' {
             text.append(ModifiableText.LIVES_ASSIGNED_LIST_ENTRY.get(Component.literal(name).withStyle(color), livesManager.getFormattedLives(lives), TextUtils.pluralize("life", "lives", lives)));
+            //~}
         }
 
         OtherUtils.sendCommandFeedbackQuiet(source, text);
