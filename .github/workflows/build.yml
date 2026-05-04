@@ -1,4 +1,4 @@
-#Available Tags: {skip_ping}, {build}, {skip_discord}
+#Available Tags: {skip_ping}, {build_skip}, {build_all}, {build_fabric}, {skip_discord}
 
 name: build
 
@@ -67,7 +67,7 @@ jobs:
           payload: '{ "content": "${{ env.MESSAGE_TITLE }}", "embeds": [{ "title": "[${{ github.repository }}:${{ env.BRANCH_NAME }}] - new commit", "author": {"name": "${{ github.event.head_commit.author.name}}","url": "https://github.com/${{ github.event.head_commit.author.name}}","icon_url": "https://github.com/${{ github.event.head_commit.author.name}}.png"},"description": "`Commit Message:` ```\n${{ env.COMMIT_MESSAGE }}```${{ env.COMMIT_FOOTER }}", "url": "https://github.com/${{ github.repository }}/commit/${{ github.sha }}", "color": 5315202 }] }'
 
   build:
-    if: ${{ contains(github.event.head_commit.message, '{build}') }}
+    if: ${{ !contains(github.event.head_commit.message, '{build_skip}') }}
     runs-on: ubuntu-22.04
     steps:
       - name: checkout repository
@@ -84,6 +84,20 @@ jobs:
 
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
+
+      - name: Set build scope
+        run: |
+          if echo "${{ github.event.head_commit.message }}" | grep -q "{build_all}"; then
+            echo "GRADLE_ONLY_FABRIC=false" >> $GITHUB_ENV
+            echo "GRADLE_ONLY_IMPORTANT_FABRIC=false" >> $GITHUB_ENV
+          elif echo "${{ github.event.head_commit.message }}" | grep -q "{build_fabric}"; then
+            echo "GRADLE_ONLY_FABRIC=true" >> $GITHUB_ENV
+            echo "GRADLE_ONLY_IMPORTANT_FABRIC=false" >> $GITHUB_ENV
+          else
+            echo "GRADLE_ONLY_FABRIC=false" >> $GITHUB_ENV
+            echo "GRADLE_ONLY_IMPORTANT_FABRIC=true" >> $GITHUB_ENV
+          fi
+
       - name: build
         run: ./gradlew build
 

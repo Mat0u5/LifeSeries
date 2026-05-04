@@ -22,6 +22,8 @@ plugins {
 	id("dev.kikugie.stonecutter") version "0.9"
 }
 
+val settingsRootDir = rootDir
+
 stonecutter {
 	create(rootProject) {
 		fun match(version: String, vararg loaders: String) {
@@ -42,39 +44,61 @@ stonecutter {
 			}
 		}
 
-		match("26.2", "fabric")
-		match("26.1", "fabric", "forge", "neoforge")
+		fun env(variable: String): String? {
+			val value = System.getenv(variable)
+			if (value != null) return value
 
-		match("1.21.11", "fabric", "forge", "neoforge")
-		match("1.21.9", "fabric", "forge", "neoforge")
-		match("1.21.6", "fabric", "forge", "neoforge")
-		match("1.21.5", "fabric", "forge", "neoforge")
-		match("1.21.4", "fabric", "forge", "neoforge")
-		match("1.21.2", "fabric", "forge", "neoforge")
-		match("1.21", "fabric", "forge", "neoforge")
+			val envFile = java.io.File(settingsRootDir, ".env")
+			if (envFile.exists()) {
+				val props = java.util.Properties()
+				envFile.inputStream().use { props.load(it) }
+				val fromFile = props.getProperty(variable)
+				if (fromFile != null) return fromFile
+			}
 
-		match("1.20.5", "fabric", "forge", "neoforge")
-		match("1.20.3", "fabric", "neoforge")
-		match("1.20.2", "fabric")
-		match("1.20", "fabric", "forge")
+			return null
+		}
 
-		/*
-		match("26.2", "fabric")
-		match("26.1", "fabric")
+		if (env("GRADLE_ONLY_IMPORTANT_FABRIC") == "true") {
+			match("26.2", "fabric")
+			match("26.1", "fabric")
+			match("1.21.11", "fabric")
+			match("1.21", "fabric")
+		}
+		else if (env("GRADLE_ONLY_FABRIC") == "true") {
+			match("26.2", "fabric")
+			match("26.1", "fabric")
 
-		match("1.21.11", "fabric")
-		match("1.21.9", "fabric")
-		match("1.21.6", "fabric")
-		match("1.21.5", "fabric")
-		match("1.21.4", "fabric")
-		match("1.21.2", "fabric")
-		match("1.21", "fabric")
+			match("1.21.11", "fabric")
+			match("1.21.9", "fabric")
+			match("1.21.6", "fabric")
+			match("1.21.5", "fabric")
+			match("1.21.4", "fabric")
+			match("1.21.2", "fabric")
+			match("1.21", "fabric")
 
-		match("1.20.5", "fabric")
-		match("1.20.3", "fabric")
-		match("1.20.2", "fabric")
-		match("1.20", "fabric")
-		 */
+			match("1.20.5", "fabric")
+			match("1.20.3", "fabric")
+			match("1.20.2", "fabric")
+			match("1.20", "fabric")
+		}
+		else {
+			match("26.2", "fabric")
+			match("26.1", "fabric", "forge", "neoforge")
+
+			match("1.21.11", "fabric", "forge", "neoforge")
+			match("1.21.9", "fabric", "forge", "neoforge")
+			match("1.21.6", "fabric", "forge", "neoforge")
+			match("1.21.5", "fabric", "forge", "neoforge")
+			match("1.21.4", "fabric", "forge", "neoforge")
+			match("1.21.2", "fabric", "forge", "neoforge")
+			match("1.21", "fabric", "forge", "neoforge")
+
+			match("1.20.5", "fabric", "forge", "neoforge")
+			match("1.20.3", "fabric", "neoforge")
+			match("1.20.2", "fabric")
+			match("1.20", "fabric", "forge")
+		}
 
 		vcsVersion = "26.1-fabric"
 	}
