@@ -53,13 +53,13 @@ public abstract class SimplePacket<T extends SimplePacket<T, U>, U extends Custo
 
     @SuppressWarnings("unchecked")
     public T target(ServerPlayer player) {
-        targets = List.of(player);
+        targets = player == null ? List.of() : List.of(player);
         return (T) this;
     }
 
     @SuppressWarnings("unchecked")
     public T target(List<ServerPlayer> players) {
-        targets = players;
+        targets = players == null ? List.of() : players;
         return (T) this;
     }
 

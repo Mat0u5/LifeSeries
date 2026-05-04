@@ -225,7 +225,7 @@ public class BoogeymanManager {
         if (currentSession.statusFinished() || currentSession.statusNotStarted()) return;
         if (currentSession.getRemainingTime().isSmaller(BOOGEYMAN_INFINITE_LAST_PICK)) return;
 
-        PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_CHOSEN_NEW.get());
+        PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_CHOOSE_NEW.get());
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.LIGHTNING_BOLT_THUNDER);
         TaskScheduler.scheduleTask(Time.seconds(5), () -> {
             List<ServerPlayer> allowedPlayers = getAllowedBoogeyPlayers();
@@ -237,7 +237,7 @@ public class BoogeymanManager {
 
     public void prepareToChooseBoogeymen() {
         if (!BOOGEYMAN_ENABLED) return;
-        PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_CHOSEN.get());
+        PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_CHOOSE.get());
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.LIGHTNING_BOLT_THUNDER);
         TaskScheduler.scheduleTask(Time.seconds(5), () -> {
             resetBoogeymen();
