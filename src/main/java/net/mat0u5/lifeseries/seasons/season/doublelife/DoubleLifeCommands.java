@@ -179,6 +179,12 @@ public class DoubleLifeCommands extends Command {
     public int setSoulmate(CommandSourceStack source, ServerPlayer player, ServerPlayer soulmate) {
         if (checkBanned(source)) return -1;
         if (player == null) return -1;
+        if (soulmate == null) return -1;
+
+        if (player.getUUID() == soulmate.getUUID()) {
+            OtherUtils.sendCommandFailure(source, ModifiableText.DOUBLELIFE_SOULMATE_ERROR_DUPLICATE.get());
+            return -1;
+        }
 
         DoubleLife season = ((DoubleLife) currentSeason);
 

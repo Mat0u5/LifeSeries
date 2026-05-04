@@ -19,16 +19,21 @@ import net.minecraft.resources.Identifier;
 
 import net.minecraft.world.entity.animal.golem.SnowGolem;
 
+import java.util.Random;
+
 import static net.mat0u5.lifeseries.LifeSeries.livesManager;
 
 public class AngrySnowman extends SnowGolem {
     public static final SoundEvent HURT_SOUND = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_snowman_hit"));
     public static final SoundEvent GROWL = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_snowman_growl"));
     public static final Identifier ID = IdentifierHelper.mod("angrysnowman");
+    public static Random rnd = new Random();
 
+    public int calmDuration;
 
     public AngrySnowman(EntityType<? extends SnowGolem> entityType, Level level) {
         super(entityType, level);
+        calmDuration = rnd.nextInt(50);
     }
 
     protected void registerGoals() {
@@ -52,7 +57,7 @@ public class AngrySnowman extends SnowGolem {
         if (this.level().isClientSide()) return;
         this.setPumpkin(false);
         ticks++;
-        if (ticks % 20 == 0) {
+        if (ticks >= calmDuration && (ticks == calmDuration || ticks % 20 == 0)) {
             ServerPlayer closestPlayer = null;
             double closestDistance = 100000;
             for (ServerPlayer player : livesManager.getAlivePlayers()) {
