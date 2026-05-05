@@ -344,7 +344,7 @@ public class TaskManager {
                 secretKeeperBeingUsed = false;
                 return;
             }
-            Vec3 spawnPos = itemSpawnerPos.getCenter();
+            Vec3 spawnPos = OtherUtils.getCenter(itemSpawnerPos);
             for (int i = 0; i <= itemsNum; i++) {
                 if (i == 0) continue;
                 TaskScheduler.scheduleTask(3*i, () -> {
@@ -458,7 +458,7 @@ public class TaskManager {
         submittedOrFailed.add(player.getUUID());
         secretKeeperBeingUsed = true;
 
-        Vec3 centerPos = itemSpawnerPos.getCenter();
+        Vec3 centerPos = OtherUtils.getCenter(itemSpawnerPos);
         server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("secretlife_task_succeed")), SoundSource.PLAYERS, 1.0F, 1.0F);
         TaskScheduler.scheduleTask(60, () -> {
             AnimationUtils.createGlyphAnimation(server.overworld(), centerPos, 45);
@@ -570,7 +570,7 @@ public class TaskManager {
         submittedOrFailed.add(player.getUUID());
         secretKeeperBeingUsed = true;
 
-        Vec3 centerPos = itemSpawnerPos.getCenter();
+        Vec3 centerPos = OtherUtils.getCenter(itemSpawnerPos);
 
         server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("secretlife_task_fail")), SoundSource.PLAYERS, 1.0F, 1.0F);
         TaskScheduler.scheduleTask(60, () -> {

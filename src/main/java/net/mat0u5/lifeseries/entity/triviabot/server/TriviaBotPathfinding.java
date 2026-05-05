@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.entity.triviabot.server;
 
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
@@ -52,7 +53,7 @@ public class TriviaBotPathfinding {
                 entityWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.PLAYER_TELEPORT, bot.getSoundSource(), bot.soundVolume(), bot.getVoicePitch());
                 //?}
                 AnimationUtils.spawnTeleportParticles(level, bot.position());
-                AnimationUtils.spawnTeleportParticles(level, tpTo.getCenter());
+                AnimationUtils.spawnTeleportParticles(level, OtherUtils.getCenter(tpTo));
                 bot.serverData.despawn();
                 TriviaWildcard.spawnBotFor(boundPlayer, tpTo);
             }

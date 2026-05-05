@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.entity.snail.server;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.snail.goal.MiningNavigation;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
@@ -145,7 +146,7 @@ public class SnailPathfinding {
                 snail.setOnGround(wasOnGround);
             }
 
-            cachedCanPathOnGround =  groundPath != null && groundPath.getEndNode() != null && groundPath.getEndNode().asBlockPos().getCenter().distanceTo(targetPos) < 2;
+            cachedCanPathOnGround =  groundPath != null && groundPath.getEndNode() != null && OtherUtils.getCenter(groundPath.getEndNode().asBlockPos()).distanceTo(targetPos) < 2;
         }
         else {
             cachedCanPathOnGround = false;
@@ -153,7 +154,7 @@ public class SnailPathfinding {
 
         if (!cachedCanPathOnGround) {
             Path flyingPath = flyingNavigation.createPath(target, 0);
-            cachedCanPathFlying =  flyingPath != null && flyingPath.getEndNode() != null && flyingPath.getEndNode().asBlockPos().getCenter().distanceTo(targetPos) < 2;
+            cachedCanPathFlying =  flyingPath != null && flyingPath.getEndNode() != null && OtherUtils.getCenter(flyingPath.getEndNode().asBlockPos()).distanceTo(targetPos) < 2;
         }
         else {
             cachedCanPathFlying = true;
@@ -227,7 +228,7 @@ public class SnailPathfinding {
                 entityWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.PLAYER_TELEPORT, snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
                 //?}
                 AnimationUtils.spawnTeleportParticles(level, snail.position());
-                AnimationUtils.spawnTeleportParticles(entityWorld, tpTo.getCenter());
+                AnimationUtils.spawnTeleportParticles(entityWorld, OtherUtils.getCenter(tpTo));
                 snail.serverData.despawn();
                 Snails.spawnSnailFor(boundPlayer, tpTo);
             }

@@ -59,7 +59,10 @@ stonecutter {
 			return null
 		}
 
-		if (env("GRADLE_ONLY_IMPORTANT_FABRIC") == "true") {
+		if (env("GRADLE_ONLY_SNAPSHOT") == "true") {
+			match("26.2", "fabric")
+		}
+		else if (env("GRADLE_ONLY_IMPORTANT_FABRIC") == "true") {
 			match("26.2", "fabric")
 			match("26.1", "fabric")
 			match("1.21.11", "fabric")
@@ -100,6 +103,11 @@ stonecutter {
 			match("1.20", "fabric", "forge")
 		}
 
-		vcsVersion = "26.1-fabric"
+		if (env("GRADLE_ONLY_SNAPSHOT") == "true") {
+			vcsVersion = "26.2-fabric"
+		}
+		else {
+			vcsVersion = "26.1-fabric"
+		}
 	}
 }

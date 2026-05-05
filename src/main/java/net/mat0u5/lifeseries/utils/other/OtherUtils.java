@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -29,6 +30,7 @@ import net.minecraft.server.ServerTickRateManager;
 //import net.minecraft.world.level.gamerules.GameRules;
 //? if > 1.21.9
 import net.minecraft.world.level.gamerules.GameRule;
+import net.minecraft.world.phys.Vec3;
 
 public class OtherUtils {
     private static final Random rnd = new Random();
@@ -290,4 +292,13 @@ public class OtherUtils {
         }
         return Math.min(max, Math.max(value, min));
     }
+
+    public static Vec3 getCenter(BlockPos pos) {
+        //? if <= 26.1 {
+        return pos.getCenter();
+        //?} else {
+        /*return Vec3.atCenterOf(pos);
+        *///?}
+    }
+
 }

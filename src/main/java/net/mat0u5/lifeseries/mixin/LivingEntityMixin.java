@@ -154,15 +154,14 @@ public abstract class LivingEntityMixin {
     }
     //?}
 
-    @ModifyArg(
-            //? if <= 1.21 {
-            /*method = "hurt",
-            *///?} else {
-            method = "hurtServer",
-            //?}
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"),
-            index = 0
-    )
+
+    //? if <= 1.21 {
+    /*@ModifyArg(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"), index = 0)
+    *///?} else if <= 26.1 {
+    @ModifyArg(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"), index = 0)
+    //?} else {
+    /*@ModifyArg(method = "dealDefaultKnockback", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDDLnet/minecraft/world/damagesource/DamageSource;F)V"), index = 0)
+    *///?}
     private double modifyKnockback(double strength) {
         if (LifeSeries.isClientOrDisabled()) return strength;
         if (ls$lastDamageSource == null) return strength;
