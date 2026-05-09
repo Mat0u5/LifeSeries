@@ -66,7 +66,7 @@ public class LimitedLifeLivesManager extends LivesManager {
     }
 
     @Override
-    public void setPlayerLives(ServerPlayer player, int lives) {
+    public void setPlayerLives(ServerPlayer player, int lives, boolean ignoreFinalDeath) {
         if (isWatcher(player)) return;
         Integer livesBefore = getPlayerLives(player);
         boolean livesChanged = !Objects.equals(lives, livesBefore);
@@ -80,7 +80,7 @@ public class LimitedLifeLivesManager extends LivesManager {
         }
         SessionTranscript.addRecordIfMissing(player);
         ScoreboardUtils.setScore(player.getScoreboardName(), LivesManager.SCOREBOARD_NAME, lives);
-        if (lives <= 0) {
+        if (lives <= 0 && !ignoreFinalDeath) {
             playerLostAllLives(player, livesBefore);
         }
         ChatFormatting colorNow = getColorForLives(lives);

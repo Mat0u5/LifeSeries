@@ -76,7 +76,9 @@ public class WildLife extends Season {
         Snails.killAllSnails();
         TriviaWildcard.killAllTriviaSnails();
         TriviaWildcard.killAllBots();
+        //? if > 1.20.3 {
         PlayerUtils.getAllPlayers().forEach(player -> SizeShifting.setPlayerSize(player, 1));
+        //?}
     }
 
     @Override

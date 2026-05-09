@@ -131,7 +131,7 @@ public class SubInManager {
             loadPlayer(player2);
             if (player1 != null) {
                 Integer startingLives = subIn.startingLives();
-                ((IPlayer) player1).ls$setLives(startingLives);
+                livesManager.setPlayerLives(player1, startingLives, true);
             }
 
             if (player1 != null) {

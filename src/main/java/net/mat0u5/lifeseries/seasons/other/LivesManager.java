@@ -377,12 +377,16 @@ public class LivesManager {
     }
 
     public void setPlayerLives(ServerPlayer player, int lives) {
+        setPlayerLives(player, lives, false);
+    }
+
+    public void setPlayerLives(ServerPlayer player, int lives, boolean ignoreFinalDeath) {
         if (player == null || isWatcher(player)) return;
         Integer livesBefore = getPlayerLives(player);
         boolean livesChanged = !Objects.equals(lives, livesBefore);
         SessionTranscript.addRecordIfMissing(player);
         ScoreboardUtils.setScore(player, SCOREBOARD_NAME, lives);
-        if (lives <= 0) {
+        if (lives <= 0 && !ignoreFinalDeath) {
             playerLostAllLives(player, livesBefore);
         }
         else if (player.isSpectator()) {
