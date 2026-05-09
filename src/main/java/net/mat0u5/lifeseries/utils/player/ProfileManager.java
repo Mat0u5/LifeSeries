@@ -106,6 +106,7 @@ public class ProfileManager {
                     }
                     LifeSkinsManager.refreshLifeSkin(player);
                 }
+                currentSeason.updateClientPlayerTeam(player);
                 return changedSkin || changedName;
 
             } catch (Exception e) {
