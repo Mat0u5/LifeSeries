@@ -20,24 +20,61 @@ import net.minecraft.world.phys.Vec3;
 
 @Mixin(targets = "net.minecraft.server.network.ServerGamePacketListenerImpl$1")
 public abstract class ServerPlayNetworkHandlerInteractEntityHandlerMixin implements ServerboundInteractPacket.Handler {
-    //? if fabric {
-    @Shadow
+//? if fabric {
+    /^@Shadow
     @Final
     ServerGamePacketListenerImpl field_28963;
 
     @Shadow
     @Final
     Entity val$target;
-    //?} else {
-    /^@Shadow(aliases = {"this$0"})
+^///?} else {
+    //? if <= 1.20 {
+    /^private static java.lang.reflect.Field lifeseries$handlerField;
+    private static java.lang.reflect.Field lifeseries$entityField;
+
+    private ServerGamePacketListenerImpl ls$getHandler() {
+        try {
+            if (lifeseries$handlerField == null) {
+                for (java.lang.reflect.Field f : this.getClass().getDeclaredFields()) {
+                    if (f.getType() == ServerGamePacketListenerImpl.class) {
+                        f.setAccessible(true);
+                        lifeseries$handlerField = f;
+                        break;
+                    }
+                }
+            }
+            return (ServerGamePacketListenerImpl) lifeseries$handlerField.get(this);
+        } catch (Exception e) { throw new RuntimeException("Failed to find handler field", e); }
+    }
+
+    private Entity ls$getTarget() {
+        try {
+            if (lifeseries$entityField == null) {
+                for (java.lang.reflect.Field f : this.getClass().getDeclaredFields()) {
+                    if (Entity.class.isAssignableFrom(f.getType())) {
+                        f.setAccessible(true);
+                        lifeseries$entityField = f;
+                        break;
+                    }
+                }
+            }
+            return (Entity) lifeseries$entityField.get(this);
+        } catch (Exception e) { throw new RuntimeException("Failed to find entity field", e); }
+    }
+    ^///?} else {
+    @Shadow(aliases = {"this$0"})
     @Final
     ServerGamePacketListenerImpl field_28963;
 
     @Shadow(aliases = {"val$entity"})
     @Final
     Entity val$target;
-    ^///?}
+    //?}
+//?}
 
+    //~ if !fabric && <= 1.20 'field_28963' -> 'ls$getHandler()' {
+    //~ if !fabric && <= 1.20 'val$target' -> 'ls$getTarget()' {
     @Inject(method = "onInteraction(Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/Vec3;)V", at = @At(value = "HEAD"), cancellable = true)
     public void onPlayerInteractEntity(InteractionHand hand, Vec3 hitPosition, CallbackInfo info) {
         Player player = this.field_28963.player;
@@ -62,6 +99,8 @@ public abstract class ServerPlayNetworkHandlerInteractEntityHandlerMixin impleme
             info.cancel();
         }
     }
+    //~}
+    //~}
 }
 *///?} else {
 import net.minecraft.server.MinecraftServer;

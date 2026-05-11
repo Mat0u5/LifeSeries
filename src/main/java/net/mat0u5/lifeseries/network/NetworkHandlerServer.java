@@ -79,7 +79,7 @@ import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
 
-//? if neoforge && > 1.21.3
+//? if neoforge && > 1.20.3
 //import net.neoforged.neoforge.network.registration.NetworkRegistry;
 
 public class NetworkHandlerServer {
@@ -555,11 +555,17 @@ public class NetworkHandlerServer {
         Identifier id = payload.type().id();
         //?}
 
-        //? if neoforge && > 1.21.3 {
-        /*if (!NetworkRegistry.hasChannel(player.connection, id)) {
+    //? if neoforge {
+        /*//? if <= 1.20.3 {
+        /^if (!wasHandshakeSuccessful(player) && id != HandshakePayload.ID) {
             return;
         }
-        *///?}
+        ^///?} else {
+        if (!NetworkRegistry.hasChannel(player.connection, id)) {
+            return;
+        }
+        //?}
+    *///?}
 
         //? if <= 1.20 {
         /*FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());

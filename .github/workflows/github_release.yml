@@ -76,7 +76,7 @@ jobs:
       - name: Filter non-source JAR files
         id: filtered_jars
         run: |
-          jars=$(find ./versions/**/build/libs/ -type f -name "*.jar" ! -name "*-sources.jar")
+          jars=$(find ./versions/**/build/libs/ -type f -name "*.jar" ! -name "*-sources.jar" ! -name "*-slim.jar")
           echo "jar_files<<EOF" >> $GITHUB_OUTPUT
           echo "$jars" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT

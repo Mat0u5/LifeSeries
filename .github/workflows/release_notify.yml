@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Sleep to wait for any files to upload
-        run: sleep 120
+        run: sleep 200
 
       - name: Fetch current release data
         id: fetch_release

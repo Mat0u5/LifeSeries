@@ -70,18 +70,18 @@ public abstract class ServerLoginPacketListenerImplMixin {
 
         this.server.execute(() -> {
             //? if !forge {
-            NetworkHandlerServer.handlePreLogin(understood, self);
+            /^NetworkHandlerServer.handlePreLogin(understood, self);
 
             this.state = ServerLoginPacketListenerImpl.State.READY_TO_ACCEPT;
             this.handleAcceptedLogin();
-            //?} else {
+            ^///?} else {
 
-            /^if (self.connection.getPacketListener() != self) return;
+            if (self.connection.getPacketListener() != self) return;
 
             NetworkHandlerServer.handlePreLogin(understood, self);
 
             this.state = ServerLoginPacketListenerImpl.State.READY_TO_ACCEPT;
-            ^///?}
+            //?}
         });
 
         ci.cancel();
