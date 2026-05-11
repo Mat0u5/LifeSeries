@@ -1,2 +1,1 @@
-Fixed Forge crash on launch in 1.20.5+
-Hopefully fixed the Forge 1.20 entity hit crash
+Fixed NeoForge launch issues in 1.20.4-6

@@ -61,6 +61,9 @@ dependencies {
 	if (isValidVersion(prop("deps.voicechat"))) {
 		implementation ("maven.modrinth:simple-voice-chat:${prop("deps.voicechat")}")
 	}
+	else {
+		compileOnly ("maven.modrinth:simple-voice-chat:neoforge-1.20.4-2.5.22")
+	}
 }
 
 tasks.named("createMinecraftArtifacts") {
