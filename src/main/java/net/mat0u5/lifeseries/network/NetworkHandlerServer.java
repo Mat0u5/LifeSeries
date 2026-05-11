@@ -79,6 +79,9 @@ import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
 
+//? if neoforge && > 1.21.3
+//import net.neoforged.neoforge.network.registration.NetworkRegistry;
+
 public class NetworkHandlerServer {
     public static final int PRELOGIN_TRANSACTION_ID = 10942422;
     public static final String preLoginPacketID = "preloginpacket";
@@ -546,17 +549,24 @@ public class NetworkHandlerServer {
         Objects.requireNonNull(player, "Server player cannot be null");
         Objects.requireNonNull(payload, "Payload cannot be null");
 
+        //? if <= 1.20.3 {
+        /*Identifier id = payload.id();
+         *///?} else {
+        Identifier id = payload.type().id();
+        //?}
+
+        //? if neoforge && > 1.21.3 {
+        /*if (!NetworkRegistry.hasChannel(player.connection, id)) {
+            return;
+        }
+        *///?}
+
         //? if <= 1.20 {
         /*FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
         payload.write(buf);
         player.connection.send(new ClientboundCustomPayloadPacket(payload.id(), buf));
         *///?} else {
         player.connection.send(new ClientboundCustomPayloadPacket(payload));
-        //?}
-        //? if <= 1.20.3 {
-        /*Identifier id = payload.id();
-        *///?} else {
-        Identifier id = payload.type().id();
         //?}
         if (LifeSeries.DEBUG) LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_SERVER -> {}] Sending {}", player, id.toString()));
     }

@@ -95,7 +95,7 @@ public static void registerPackets(RegisterPayloadHandlerEvent event) {
                 type,
                 codec,
                 ServerPacketHandler::handle,
-                null
+                LifeSeries.hasClient() ? LifeSeries.clientHelper::handlePacket : null
         );
         //?}
     }

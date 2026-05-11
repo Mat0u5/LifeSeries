@@ -8,7 +8,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import java.util.List;
 import java.util.UUID;
 
-//? if neoforge && <= 1.21.6
+//? if neoforge
 //import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public interface IClientHelper {
@@ -21,7 +21,7 @@ public interface IClientHelper {
     List<Wildcards> getActiveWildcards();
     void sendPacket(CustomPacketPayload payload);
 
-    //? if neoforge && <= 1.21.6 {
+    //? if neoforge {
     /*<T extends CustomPacketPayload> void handlePacket(T payload, IPayloadContext context);
     *///?}
 }

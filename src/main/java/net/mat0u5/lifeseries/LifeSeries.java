@@ -40,9 +40,8 @@ import net.mat0u5.lifeseries.platform.fabric.FabricPlatform;
 /*import net.mat0u5.lifeseries.platform.forge.ForgePlatform;
  *///?}
 
-
 public class LifeSeries {
-	public static final String MOD_VERSION = "1.5.4.9-dev";
+	public static final String MOD_VERSION = "1.5.4.10-dev";
 	public static final String MOD_ID = "lifeseries";
 	private static final Platform PLATFORM = createPlatformInstance();
 

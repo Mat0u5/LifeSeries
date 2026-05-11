@@ -28,6 +28,10 @@ import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
+//? if forge || neoforge {
+/*import de.maxhenkel.voicechat.api.ForgeVoicechatPlugin;
+@ForgeVoicechatPlugin
+*///?}
 public class VoicechatMain implements VoicechatPlugin {
 
     private static Map<UUID, VoicechatConnection> connectedPlayers = new HashMap();

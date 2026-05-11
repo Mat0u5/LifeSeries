@@ -60,15 +60,22 @@ stonecutter {
 		}
 
 		if (env("GRADLE_ONLY_SNAPSHOT") == "true") {
+			// Only the snapshot
 			match("26.2", "fabric")
 		}
+		else if (env("GRADLE_ONLY_26_1") == "true") {
+			// 26.1 all platform
+			match("26.1", "fabric", "forge", "neoforge")
+		}
 		else if (env("GRADLE_ONLY_IMPORTANT_FABRIC") == "true") {
+			// Main Fabric versions, this is the recommended setting for development
 			match("26.2", "fabric")
 			match("26.1", "fabric")
 			match("1.21.11", "fabric")
 			match("1.21", "fabric")
 		}
 		else if (env("GRADLE_ONLY_FABRIC") == "true") {
+			// All Fabric versions
 			match("26.2", "fabric")
 			match("26.1", "fabric")
 
@@ -86,6 +93,7 @@ stonecutter {
 			match("1.20", "fabric")
 		}
 		else {
+			// All versions
 			match("26.2", "fabric")
 			match("26.1", "fabric", "forge", "neoforge")
 

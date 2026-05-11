@@ -19,7 +19,7 @@ import java.util.*;
 
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
-//? if neoforge && <= 1.21.6 {
+//? if neoforge {
 /*import net.mat0u5.lifeseries.client.platform.neoforge.NeoForgeClientNetworkRegistration;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 *///?}
@@ -144,7 +144,7 @@ public class LifeSeriesClient implements IClientHelper {
         return modDisabledServerSide;
     }
 
-    //? if neoforge && <= 1.21.6 {
+    //? if neoforge {
     /*@Override
     public <T extends CustomPacketPayload> void handlePacket(T payload, IPayloadContext context) {
         NeoForgeClientNetworkRegistration.handleClientPacket(payload, context);

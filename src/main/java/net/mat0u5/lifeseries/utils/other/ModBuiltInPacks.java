@@ -154,21 +154,36 @@ public final class ModBuiltInPacks implements RepositorySource {
                 .getFile()
                 .findResource(path);
         ^///?} else {
+        String cleanPath = path.startsWith("/") ? path.substring(1) : path;
         IModFileInfo info = ModList.get().getModFileById(LifeSeries.MOD_ID);
         if (info == null) return null;
+
         IModFile modFile = info.getFile();
 
-        String cleanedPath = path.startsWith("/") ? path.substring(1) : path;
+        for (Path jarOrRoot : modFile.getContents().getContentRoots()) {
+            try {
+                FileSystem zipFs;
+                Path root;
+                if (Files.isRegularFile(jarOrRoot)) {
+                    zipFs = FileSystems.newFileSystem(jarOrRoot, (ClassLoader) null);
+                    root = zipFs.getRootDirectories().iterator().next();
+                } else {
+                    zipFs = null;
+                    root = jarOrRoot;
+                }
 
-        Optional<URI> metaUri = modFile.getContents().findFile(cleanedPath + "/pack.mcmeta");
-        if (metaUri.isPresent()) {
-            return Path.of(metaUri.get()).getParent();
-        }
+                Path candidate = root;
+                for (String segment : cleanPath.split("/")) {
+                    candidate = candidate.resolve(segment);
+                }
 
-        for (Path root : modFile.getContents().getContentRoots()) {
-            Path candidate = root.resolve(cleanedPath);
-            if (Files.exists(candidate)) {
-                return candidate;
+                if (Files.exists(candidate.resolve("pack.mcmeta"))) {
+                    return candidate;
+                }
+
+                if (zipFs != null) zipFs.close();
+            } catch (Exception e) {
+                LOGGER.error("[LifeSeries] Failed to open mod JAR as ZIP filesystem", e);
             }
         }
 
