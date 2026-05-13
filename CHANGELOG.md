@@ -1,1 +1,1 @@
-Fixed NeoForge launch issues in 1.20.4-6
+Bug fixes.
