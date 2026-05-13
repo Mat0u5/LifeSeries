@@ -86,6 +86,7 @@ public class Session {
                 PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), ModifiableText.SESSION_START_TITLE.get(), 15, 35, 15);
                 startSession();
             });
+            checkTickFreeze();
         }
         return true;
     }
@@ -521,13 +522,13 @@ public class Session {
         SessionStatus prevStatus = status;
         status = newStatus;
         currentSeason.sessionChangeStatus(status);
-        freezeIfNecessary();
+        checkTickFreeze();
         DatapackIntegration.changeSessionStatus(prevStatus, newStatus);
     }
 
-    public void freezeIfNecessary() {
+    public void checkTickFreeze() {
         if (!TICK_FREEZE_NOT_IN_SESSION) return;
-        boolean frozen = status != SessionStatus.STARTED;
+        boolean frozen = status != SessionStatus.STARTED && sessionStartInProgress <= 0;
         OtherUtils.setFreezeGame(frozen);
     }
 }

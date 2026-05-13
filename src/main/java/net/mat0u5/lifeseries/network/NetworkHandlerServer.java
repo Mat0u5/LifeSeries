@@ -188,7 +188,7 @@ public class NetworkHandlerServer {
                 Seasons newSeason = Seasons.getSeasonFromStringName(payload.value());
                 if (newSeason == Seasons.UNASSIGNED) return;
                 boolean prevTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
-                if (LifeSeries.changeSeasonTo(newSeason.getId())) {
+                if (LifeSeries.changeSeasonTo(newSeason.getId(), false)) {
                     boolean currentTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
                     PlayerUtils.broadcastMessage(ModifiableText.SEASON_CHANGE.get(payload.value()));
                     if (prevTickFreeze != currentTickFreeze) {

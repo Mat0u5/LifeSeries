@@ -41,7 +41,7 @@ import net.mat0u5.lifeseries.platform.fabric.FabricPlatform;
  *///?}
 
 public class LifeSeries {
-	public static final String MOD_VERSION = "1.5.4.12-dev";
+	public static final String MOD_VERSION = "1.5.4.13-dev";
 	public static final String MOD_ID = "lifeseries";
 	private static final Platform PLATFORM = createPlatformInstance();
 
@@ -121,7 +121,7 @@ public class LifeSeries {
 		config.setProperty("modDisabled", String.valueOf(MOD_DISABLED));
 
 		if (!previouslyDisabled && disabled) {
-			changeSeasonTo(Seasons.UNASSIGNED.getId());
+			changeSeasonTo(Seasons.UNASSIGNED.getId(), true);
 		}
 		if (!modDisabled()) {
 			fullReload();
@@ -131,7 +131,7 @@ public class LifeSeries {
 
 	public static void fullReload() {
 		String season = config.getOrCreateProperty("currentSeries", DEFAULT_SEASON.getId());
-		changeSeasonTo(season);
+		changeSeasonTo(season, false);
 	}
 
 	public static boolean hasClient() {
@@ -198,7 +198,7 @@ public class LifeSeries {
 		DatapackManager.onReloadEnd();
 	}
 
-	public static boolean changeSeasonTo(String changeTo) {
+	public static boolean changeSeasonTo(String changeTo, boolean silent) {
 		Seasons seasonChangeTo = Seasons.getSeasonFromStringName(changeTo);
 
 		TaskScheduler.clearTasks();
@@ -216,7 +216,7 @@ public class LifeSeries {
 			currentSeason.onPlayerFinishJoining(player);
 			NetworkHandlerServer.tryKickFailedHandshake(player);
 			if (!modDisabled()) {
-				currentSeason.sendSetSeasonPacket(player);
+				if (!silent) currentSeason.sendSetSeasonPacket(player);
 				SimplePackets.SESSION_TIMER.target(player).sendToClient(SessionTimerStates.NOT_STARTED.getValue());
 			}
 		}

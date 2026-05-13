@@ -37,6 +37,7 @@ public enum ModifiableText {
     ,SEASON_INVALID("That is not a valid season!")
     ,SEASON_INVALID_HELP(Formatted.PLAIN, "You must choose one of the following: {}", List.of("season names"))
     ,SEASON_SELECT_WARNING("§7WARNING: you have already selected a season, changing it might cause some saved data to be lost (lives, ...)\n§7If you are sure, use '§f/lifeseries setSeries <season> confirm§7'")
+    ,SEASON_SELECT_WARNING_SILENT("§7WARNING: you have already selected a season, changing it might cause some saved data to be lost (lives, ...)\n§7If you are sure, use '§f/lifeseries setSeries <season> confirm silent§7'")
     ,SEASON_CHANGE(Formatted.LOOSELY_STYLED,"§aSuccessfully changed the season to {}.", List.of("season"))
     ,SEASON_CHANGING("§7Changing the season to {}§7...", List.of("season"))
     ,SEASON_CHANGED(Formatted.LOOSELY_STYLED,"§aSuccessfully changed the season to {}", List.of("season"))

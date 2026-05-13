@@ -257,7 +257,7 @@ public abstract class Season {
         Events.updatePlayerListsNextTick = true;
         WatcherManager.reloadWatchers();
         livesManager.reload();
-        currentSession.freezeIfNecessary();
+        currentSession.checkTickFreeze();
         DatapackIntegration.reload();
         PlayerUtils.resendCommandTrees();
         SubInManager.reload();

@@ -108,11 +108,16 @@ public class LifeSeriesCommand extends Command {
                     .then(argument("season", StringArgumentType.string())
                         .suggests((context, builder) -> SharedSuggestionProvider.suggest(ALLOWED_SEASON_NAMES, builder))
                         .executes(context -> setSeason(
-                            context.getSource(), StringArgumentType.getString(context, "season"), false)
+                            context.getSource(), StringArgumentType.getString(context, "season"), false, false)
                         )
                         .then(literal("confirm")
                             .executes(context -> setSeason(
-                                context.getSource(), StringArgumentType.getString(context, "season"), true)
+                                context.getSource(), StringArgumentType.getString(context, "season"), true, false)
+                            )
+                            .then(literal(("silent"))
+                                    .executes(context -> setSeason(
+                                            context.getSource(), StringArgumentType.getString(context, "season"), true, true)
+                                    )
                             )
                         )
                     )
@@ -148,31 +153,31 @@ public class LifeSeriesCommand extends Command {
         return 1;
     }
 
-    public int setSeason(CommandSourceStack source, String setTo, boolean confirmed) {
+    public int setSeason(CommandSourceStack source, String setTo, boolean confirmed, boolean silent) {
         if (checkBanned(source)) return -1;
         if (!ALLOWED_SEASON_NAMES.contains(setTo)) {
             OtherUtils.sendCommandFailure(source, ModifiableText.SEASON_INVALID.get());
             OtherUtils.sendCommandFailure(source, ModifiableText.SEASON_INVALID_HELP.get(ALLOWED_SEASON_NAMES));
             return -1;
         }
-        if (confirmed) {
-            setSeasonFinal(source, setTo);
+        if (confirmed || currentSeason.getSeason() == Seasons.UNASSIGNED) {
+            setSeasonFinal(source, setTo, silent);
         }
         else {
-            if (currentSeason.getSeason() == Seasons.UNASSIGNED) {
-                setSeasonFinal(source, setTo);
+            if (!silent) {
+                OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SEASON_SELECT_WARNING.get());
             }
             else {
-                OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SEASON_SELECT_WARNING.get());
+                OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SEASON_SELECT_WARNING_SILENT.get());
             }
         }
         return 1;
     }
 
-    public void setSeasonFinal(CommandSourceStack source, String setTo) {
+    public void setSeasonFinal(CommandSourceStack source, String setTo, boolean silent) {
         boolean prevTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
-        if (LifeSeries.changeSeasonTo(setTo)) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.SEASON_CHANGING.get(setTo));
+        OtherUtils.sendCommandFeedback(source, ModifiableText.SEASON_CHANGING.get(setTo));
+        if (LifeSeries.changeSeasonTo(setTo, silent)) {
             PlayerUtils.broadcastMessage(ModifiableText.SEASON_CHANGED.get(setTo));
             boolean currentTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
             if (prevTickFreeze != currentTickFreeze) {

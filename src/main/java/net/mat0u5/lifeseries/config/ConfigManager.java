@@ -434,7 +434,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
 
     public static void onUpdatedBoolean(String id, boolean value) {
         if (id.equals(seasonConfig.TICK_FREEZE_NOT_IN_SESSION.key)) {
-            currentSession.freezeIfNecessary();
+            currentSession.checkTickFreeze();
             if (!value) {
                 OtherUtils.setFreezeGame(false);
             }
