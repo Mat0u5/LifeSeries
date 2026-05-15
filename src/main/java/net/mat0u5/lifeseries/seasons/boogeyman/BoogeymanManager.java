@@ -141,7 +141,9 @@ public class BoogeymanManager {
         player.removeTag("boogeyman_cured");
         player.removeTag("boogeyman_failed");
         if (boogeymen.isEmpty()) boogeymanChosen = false;
-        ((IPlayer) player).ls$message(ModifiableText.BOOGEYMAN_NOTICE_REMOVED.get());
+        if (!boogeyman.cured && !boogeyman.failed) {
+            ((IPlayer) player).ls$message(ModifiableText.BOOGEYMAN_NOTICE_REMOVED.get());
+        }
     }
 
     public void resetBoogeymen() {
@@ -149,7 +151,9 @@ public class BoogeymanManager {
         for (Boogeyman boogeyman : boogeymen) {
             ServerPlayer player = PlayerUtils.getPlayer(boogeyman.uuid);
             if (player == null) continue;
-            ((IPlayer) player).ls$message(ModifiableText.BOOGEYMAN_NOTICE_REMOVED.get());
+            if (!boogeyman.cured && !boogeyman.failed) {
+                ((IPlayer) player).ls$message(ModifiableText.BOOGEYMAN_NOTICE_REMOVED.get());
+            }
             player.removeTag("boogeyman");
             player.removeTag("boogeyman_cured");
             player.removeTag("boogeyman_failed");

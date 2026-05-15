@@ -296,8 +296,11 @@ public class SessionTranscript {
     }
 
     public static Component getTranscriptMessage() {
-        return ModifiableText.TRANSCRIPT_COPY.get(TextUtils.copyClipboardText(SessionTranscript.getStats()));
+        String content = SessionTranscript.getStats();
+        String truncatedContent = content.substring(0, Math.min(content.length(), 65000));
+        if (content.length() > 65000) {
+            truncatedContent += "\n... Stopped due to network packet size limit.";
+        }
+        return ModifiableText.TRANSCRIPT_COPY.get(TextUtils.copyClipboardText(truncatedContent));
     }
-
-    public record TranscriptPlayerRecord(UUID uuid, String name, int kills, int deaths) {}
 }
