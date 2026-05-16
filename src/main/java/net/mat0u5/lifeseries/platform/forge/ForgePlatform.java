@@ -5,6 +5,7 @@ package net.mat0u5.lifeseries.platform.forge;
 /*import net.mat0u5.lifeseries.platform.Platform;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 
 public class ForgePlatform implements Platform {
 
@@ -30,6 +31,11 @@ public class ForgePlatform implements Platform {
 	@Override
 	public boolean isDevelopmentEnvironment() {
 		return !FMLLoader.isProduction();
+	}
+
+	@Override
+	public boolean isClient() {
+		return FMLEnvironment.dist.isClient();
 	}
 }
 *///?}

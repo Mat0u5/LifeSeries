@@ -83,6 +83,7 @@ dependencies {
 	compileOnly("de.maxhenkel.voicechat:voicechat-api:2.5.27")
 	if (isValidVersion(prop("deps.voicechat"))) {
 		implementation ("maven.modrinth:simple-voice-chat:${prop("deps.voicechat")}")
+		//compileOnly ("maven.modrinth:simple-voice-chat:${prop("deps.voicechat")}")
 	}
 	else {
 		compileOnly ("maven.modrinth:simple-voice-chat:forge-1.20.1-2.6.16")

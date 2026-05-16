@@ -9,6 +9,8 @@ public interface Platform {
 
 	boolean isDevelopmentEnvironment();
 
+	boolean isClient();
+
 	default boolean isDebug() {
 		return isDevelopmentEnvironment();
 	}

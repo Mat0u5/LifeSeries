@@ -21,16 +21,16 @@ import net.minecraft.world.phys.Vec3;
 @Mixin(targets = "net.minecraft.server.network.ServerGamePacketListenerImpl$1")
 public abstract class ServerPlayNetworkHandlerInteractEntityHandlerMixin implements ServerboundInteractPacket.Handler {
 //? if fabric {
-    /^@Shadow
+    @Shadow
     @Final
     ServerGamePacketListenerImpl field_28963;
 
     @Shadow
     @Final
     Entity val$target;
-^///?} else {
-    //? if <= 1.20 {
-    /^private static java.lang.reflect.Field lifeseries$handlerField;
+//?} else {
+    /^//? if <= 1.20 {
+    /^¹private static java.lang.reflect.Field lifeseries$handlerField;
     private static java.lang.reflect.Field lifeseries$entityField;
 
     private ServerGamePacketListenerImpl ls$getHandler() {
@@ -62,7 +62,7 @@ public abstract class ServerPlayNetworkHandlerInteractEntityHandlerMixin impleme
             return (Entity) lifeseries$entityField.get(this);
         } catch (Exception e) { throw new RuntimeException("Failed to find entity field", e); }
     }
-    ^///?} else {
+    ¹^///?} else {
     @Shadow(aliases = {"this$0"})
     @Final
     ServerGamePacketListenerImpl field_28963;
@@ -71,7 +71,7 @@ public abstract class ServerPlayNetworkHandlerInteractEntityHandlerMixin impleme
     @Final
     Entity val$target;
     //?}
-//?}
+^///?}
 
     //~ if !fabric && <= 1.20 'field_28963' -> 'ls$getHandler()' {
     //~ if !fabric && <= 1.20 'val$target' -> 'ls$getTarget()' {

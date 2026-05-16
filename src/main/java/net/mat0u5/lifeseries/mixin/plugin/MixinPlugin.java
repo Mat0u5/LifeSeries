@@ -13,6 +13,10 @@ public class MixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+        if (mixinClassName.contains(".client.") || mixinClassName.startsWith("client.")) {
+            return LifeSeries.platform().isClient();
+        }
+
         //? if fabric {
         if (mixinClassName.contains("compat.fabricapi")) {
             return CompatibilityManager.fabricApiLoaded();
