@@ -343,6 +343,7 @@ public abstract class Season {
 
     public void reloadAllPlayerTeams() {
         PlayerUtils.getAllPlayers().forEach(this::reloadPlayerTeam);
+        PlayerUtils.getAllPlayers().forEach(Season::updateClientPlayerTeam);
         LifeSkinsManager.sendTeamNumUpdates();
     }
 

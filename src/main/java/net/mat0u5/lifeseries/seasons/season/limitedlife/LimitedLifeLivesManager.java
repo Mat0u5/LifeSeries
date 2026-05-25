@@ -33,18 +33,6 @@ public class LimitedLifeLivesManager extends LivesManager {
     public static boolean BROADCAST_COLOR_CHANGES = false;
     public static int TIME_RANDOMIZE_INTERVAL = Time.hours(1).getSeconds();
 
-    //~ if >= 26.2 'ChatFormatting' -> 'TeamColor' {
-    @Override
-    public ChatFormatting getColorForLives(Integer lives) {
-        lives = getEquivalentLives(lives);
-        if (lives == null) return ChatFormatting.GRAY;
-        if (lives == 1) return ChatFormatting.RED;
-        if (lives == 2) return ChatFormatting.YELLOW;
-        if (lives == 3) return ChatFormatting.GREEN;
-        if (lives >= 4) return ChatFormatting.DARK_GREEN;
-        return ChatFormatting.DARK_GRAY;
-    }
-
     @Override
     public Component getFormattedLives(Integer lives) {
         if (lives == null) return Component.empty();
