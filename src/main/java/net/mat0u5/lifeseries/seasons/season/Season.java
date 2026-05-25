@@ -612,7 +612,7 @@ public abstract class Season {
     }
 
     public void onPrePlayerDamage(ServerPlayer player, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        if (source.is(DamageTypes.OUTSIDE_BORDER)) {
+        if (source.is(DamageTypes.OUTSIDE_BORDER) && Session.WORLDBORDER_OUTSIDE_TELEPORT) {
             cir.setReturnValue(false);
         }
     }

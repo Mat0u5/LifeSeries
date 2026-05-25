@@ -273,7 +273,15 @@ public class LivesCommand extends Command {
     }
 
     public int lifeManager(CommandSourceStack source, Collection<ServerPlayer> targets, String timeArgument, boolean setNotGive, boolean reverse, boolean advancedDeath) {
-
+        //Fix for the cost of using a greedy string on the time argument.
+        if (timeArgument.endsWith(" true")) {
+            timeArgument = timeArgument.replace(" true", "");
+            advancedDeath = true;
+        }
+        if (timeArgument.endsWith(" false")) {
+            timeArgument = timeArgument.replace(" false", "");
+            advancedDeath = false;
+        }
         Time amount = OtherUtils.parseTimeFromArgument(timeArgument);
         if (amount == null || !amount.isPresent()) {
             OtherUtils.sendCommandFailure(source, Component.literal(SessionCommand.INVALID_TIME_FORMAT_ERROR));

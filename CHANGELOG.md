@@ -1,2 +1,1 @@
-Added native support for Forge and NeoForge [BETA].
-Bug fixes.
+The game no longer crashes when it's launched in a server environment.
