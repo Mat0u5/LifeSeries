@@ -112,6 +112,8 @@ public enum ModifiableText {
     ,FINAL_DEATH("{} ran out of lives.", List.of("Player"))
     ,FINAL_DEATH_TITLE("{}", List.of("Player"))
     ,FINAL_DEATH_TITLE_SUBTITLE("ran out of lives!")
+    ,FINAL_DEATH_SELF_TITLE("§cYou ran out of lives!")
+    ,FINAL_DEATH_SELF_TITLE_SUBTITLE("")
     ,MUTED_DEADPLAYER("Dead players aren't allowed to talk in chat! Admins can change this behavior in the config.")
 
     ,PLAYER_ERROR_WATCHER("That player is a Watcher")
@@ -645,6 +647,7 @@ public enum ModifiableText {
             else if (this == GIVELIFE_ERROR_SOULMATE) modified = "You cannot give time to your soulmate";
             else if (this == FINAL_DEATH) modified = "{} ran out of time.";
             else if (this == FINAL_DEATH_TITLE_SUBTITLE) modified = "ran out of time!";
+            else if (this == FINAL_DEATH_SELF_TITLE) modified = "§cYou ran out of time!";
             else if (this == LIVES_RANDOMIZE_RESULT) modified = "{}§a to live.";
             else if (this == BOOGEYMAN_FAIL) modified = "{}§7 failed to kill a player while being the §cBoogeyman§7. Their time has been dropped to {}";
 

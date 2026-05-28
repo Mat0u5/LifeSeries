@@ -3,9 +3,11 @@ package net.mat0u5.lifeseries.mixin;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -22,6 +24,8 @@ public abstract class CommandSourceStackMixin {
     /*@Accessor
     public abstract boolean isSilent();
     *///?}
+    @Accessor
+    abstract CommandSource getSource();
 
     @Inject(method = "sendSuccess", at = @At("HEAD"))
     public void sendFeedback(Supplier<Component> feedbackSupplier, boolean broadcastToOps, CallbackInfo ci) {
@@ -35,6 +39,7 @@ public abstract class CommandSourceStackMixin {
         *///?} else {
         if (source.isSilent()) return;
         //?}
+        if (!source.isPlayer() && !getSource().shouldInformAdmins()) return;
         if (!source.isPlayer()) {
             sourceStr = "console";
         }

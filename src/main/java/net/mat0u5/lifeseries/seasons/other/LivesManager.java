@@ -485,7 +485,10 @@ public class LivesManager {
 
     public void showDeathTitle(ServerPlayer player) {
         if (SHOW_DEATH_TITLE) {
-            PlayerUtils.sendTitleWithSubtitleToPlayers(PlayerUtils.getAllPlayers(), ModifiableText.FINAL_DEATH_TITLE.get(player), ModifiableText.FINAL_DEATH_TITLE_SUBTITLE.get(), 20, 80, 20);
+            List<ServerPlayer> otherPlayers = PlayerUtils.getAllPlayers();
+            otherPlayers.remove(player);
+            PlayerUtils.sendTitleWithSubtitleToPlayers(otherPlayers, ModifiableText.FINAL_DEATH_TITLE.get(player), ModifiableText.FINAL_DEATH_TITLE_SUBTITLE.get(), 20, 80, 20);
+            PlayerUtils.sendTitleWithSubtitleToPlayers(List.of(player), ModifiableText.FINAL_DEATH_SELF_TITLE.get(), ModifiableText.FINAL_DEATH_SELF_TITLE_SUBTITLE.get(), 20, 80, 20);
         }
         Component deathMessage = ModifiableText.FINAL_DEATH.get(player);
         if (!deathMessage.getString().isEmpty()) {
