@@ -20,6 +20,7 @@ public enum ConfigTypes {
     SECONDS("seconds"),
     MINUTES("minutes"),
     STRING_LIST("list"),
+    ENUM("enum"),
 
     LIVES_ENTRY("lives"),
     TEAM_ENTRY("teams"),
@@ -43,7 +44,7 @@ public enum ConfigTypes {
     }
 
     public boolean parentString() {
-        return this == STRING || this == ITEM_LIST || this == BLOCK_LIST || this == EFFECT_LIST || this == ENCHANT_LIST || this == STRING_LIST || this == EVENT_ENTRY || this == MODIFIABLE_TEXT;
+        return this == STRING || this == ITEM_LIST || this == BLOCK_LIST || this == EFFECT_LIST || this == ENCHANT_LIST || this == STRING_LIST || this == ENUM || this == EVENT_ENTRY || this == MODIFIABLE_TEXT;
     }
     public boolean parentText() {
         return this == TEXT || this == TEAM_ENTRY || this == SECRET_TASK || this == TRIVIA_QUESTION || this == TRIVIA_ANSWER;

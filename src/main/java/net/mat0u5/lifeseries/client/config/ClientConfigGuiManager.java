@@ -184,6 +184,15 @@ public class ClientConfigGuiManager {
             else if (stringObject.configType == ConfigTypes.MODIFIABLE_TEXT) {
                 return new ModifiableTextConfigEntry(stringObject.id, stringObject.name, stringObject.description, stringObject.stringValue, stringObject.defaultValue);
             }
+            else if (stringObject.configType == ConfigTypes.ENUM) {
+                List<String> args = new ArrayList<>(stringObject.args);
+                if (args.size() >= 3) {
+                    args.remove(0);
+                    args.remove(0);
+                    args.remove(0);
+                    return new EnumConfigEntry(stringObject.id, stringObject.name, stringObject.description, stringObject.stringValue, stringObject.defaultValue, args);
+                }
+            }
             return new StringConfigEntry(stringObject.id, stringObject.name, stringObject.description, stringObject.stringValue, stringObject.defaultValue);
         }
         else if (object instanceof IntegerObject intObject) {

@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
@@ -15,7 +16,7 @@ public class ConfigFileEntry<T> {
     public String displayName;
     public String description;
     public final String groupInfo;
-    public final List<String> args;
+    public List<String> args;
     public final boolean dynamic;
 
     public ConfigFileEntry(String key, T defaultValue, String groupInfo, String displayName, String description) {
@@ -44,6 +45,13 @@ public class ConfigFileEntry<T> {
         this.groupInfo = groupInfo;
         this.args = args;
         this.dynamic = dynamic;
+
+        if (defaultValue instanceof Enum<?> enumType && type == ConfigTypes.ENUM) {
+            if (this.args == null) this.args = new ArrayList<>();
+            for (Enum<?> constant : enumType.getClass().getEnumConstants()) {
+                this.args.add(constant.name());
+            }
+        }
     }
 
     public static ConfigTypes getTypeFromValue(Object defaultValue) {
@@ -59,13 +67,16 @@ public class ConfigFileEntry<T> {
         else if (defaultValue instanceof String) {
             return ConfigTypes.STRING;
         }
+        else if (defaultValue instanceof Enum<?>) {
+            return ConfigTypes.ENUM;
+        }
         return ConfigTypes.NULL;
     }
     public T get() {
         return get(seasonConfig);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public T get(ConfigManager config) {
         try {
         if (defaultValue instanceof Integer i) {
@@ -79,6 +90,10 @@ public class ConfigFileEntry<T> {
         }
         else if (defaultValue instanceof String s) {
             return (T) config.getOrCreateProperty(key, s);
+        }
+        else if (defaultValue instanceof Enum<?> e) {
+            String configString = config.getOrCreateProperty(key, e.name());
+            return (T) Enum.valueOf((Class<Enum>) e.getClass(), configString);
         }
         }catch(Exception e) {}
 

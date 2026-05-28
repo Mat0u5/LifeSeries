@@ -193,6 +193,8 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 getOrCreateDouble(entry.key, doubleValue);
             } else if (entry.defaultValue instanceof String stringValue) {
                 getOrCreateProperty(entry.key, stringValue);
+            } else if (entry.defaultValue instanceof Enum<?> enumValue) {
+                getOrCreateProperty(entry.key, enumValue.name());
             }
         }
     }
@@ -392,6 +394,8 @@ public abstract class ConfigManager extends DefaultConfigValues {
             return String.valueOf(getOrCreateDouble(key, doubleValue));
         } else if (defaultValue instanceof String stringValue) {
             return getOrCreateProperty(key, stringValue);
+        } else if (defaultValue instanceof Enum<?> enumValue) {
+            return getOrCreateProperty(key, enumValue.name());
         }
         if (defaultValue == null) return "";
         return defaultValue.toString();
