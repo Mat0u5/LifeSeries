@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
+import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
 import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,6 +20,7 @@ public abstract class TriviaHandler {
     public int interactedAtAge = 0;
     public int timeToComplete = 0;
     public TriviaQuestion question;
+    public static TriviaGuiType guiType = TriviaGuiType.WILD_LIFE;
 
     public TriviaHandler(TriviaBot bot) {
         this.bot = bot;
@@ -44,7 +46,7 @@ public abstract class TriviaHandler {
             setTimeBasedOnDifficulty(difficulty);
         }
         sendTimeUpdatePacket();
-        NetworkHandlerServer.sendTriviaPacket(boundPlayer, question.getQuestion(), difficulty, System.currentTimeMillis(), timeToComplete, question.getAnswers());
+        NetworkHandlerServer.sendTriviaPacket(boundPlayer, question.getQuestion(), difficulty, System.currentTimeMillis(), timeToComplete, question.getAnswers(), guiType);
         bot.setInteractedWith(true);
     }
 

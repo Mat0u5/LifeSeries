@@ -39,6 +39,7 @@ public class NiceLifeTriviaManager {
     private static List<String> usedQuestions = new ArrayList<>();
     public static boolean triviaInProgress = false;
     public static boolean firstTriviaInSession = true;
+    public static NightLength nightLength = NightLength.FIRST_LONG;
     public static TriviaQuestion currentQuestion = TriviaQuestion.getDefault();
     public static Random rnd = new Random();
     public static int QUESTION_TIME = 68;
@@ -75,6 +76,9 @@ public class NiceLifeTriviaManager {
         triviaSpawns.clear();
         currentQuestion = getQuestion();
         NiceLifeVotingManager.chooseVote();
+
+        boolean longIntro = (nightLength == NightLength.FIRST_LONG && firstTriviaInSession) || nightLength == NightLength.ALL_LONG;
+
         for (ServerPlayer player : triviaPlayers) {
             SimplePackets.HIDE_SLEEP_DARKNESS.target(player).sendToClient(true);
             SimplePackets.EMPTY_SCREEN.target(player).sendToClient(true);
@@ -92,7 +96,7 @@ public class NiceLifeTriviaManager {
                 BlockPos headPos = bedPos.relative(bedDirection);
                 BlockPos frontBedPos = headPos.relative(bedDirection);
                 BlockPos spawnBotPos = frontBedPos;
-                int maxDistance = 7 - rnd.nextInt(firstTriviaInSession ? 3 : 5);
+                int maxDistance = 7 - rnd.nextInt(longIntro ? 3 : 5);
                 for (int i = 0; i <= maxDistance; i++) {
                     BlockPos newPos = frontBedPos.relative(bedDirection, i);
                     if (!level.getBlockState(newPos.below()).isFaceSturdy(level, newPos, Direction.UP)) {
@@ -107,7 +111,7 @@ public class NiceLifeTriviaManager {
 
 
         preparingForSpawn = true;
-        if (firstTriviaInSession) {
+        if (longIntro) {
             SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_introduction_long"));
             PlayerUtils.playSoundToPlayers(triviaPlayers, sound, 1f, 1);
             for (TriviaSpawn triviaSpawnInfo : triviaSpawns) {

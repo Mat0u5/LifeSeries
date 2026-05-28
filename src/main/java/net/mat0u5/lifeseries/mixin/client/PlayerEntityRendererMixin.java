@@ -4,6 +4,7 @@ package net.mat0u5.lifeseries.mixin.client;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.NewQuizScreen;
+import net.mat0u5.lifeseries.client.gui.trivia.QuizScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.VotingScreen;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.minecraft.client.Minecraft;
@@ -190,7 +191,7 @@ public abstract class PlayerEntityRendererMixin {
 
     @ModifyReturnValue(method = "getArmPose*", at = @At("RETURN"))
     private static HumanoidModel.ArmPose noHands(HumanoidModel.ArmPose original) {
-        if (!LifeSeries.modDisabled() && LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE && (RenderUtils.getScreen() instanceof EmptySleepScreen || RenderUtils.getScreen() instanceof NewQuizScreen || RenderUtils.getScreen() instanceof VotingScreen)) {
+        if (!LifeSeries.modDisabled() && LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE && (RenderUtils.getScreen() instanceof EmptySleepScreen || (RenderUtils.getScreen() instanceof NewQuizScreen quizScreen && !quizScreen.shouldCloseOnEsc()) || (RenderUtils.getScreen() instanceof QuizScreen quizScreenOld && !quizScreenOld.shouldCloseOnEsc()) || RenderUtils.getScreen() instanceof VotingScreen)) {
             return HumanoidModel.ArmPose.EMPTY;
         }
         return original;

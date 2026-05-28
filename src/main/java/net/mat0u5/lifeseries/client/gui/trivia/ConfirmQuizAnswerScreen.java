@@ -1,8 +1,11 @@
 package net.mat0u5.lifeseries.client.gui.trivia;
 
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.features.Trivia;
 import net.mat0u5.lifeseries.client.gui.DefaultScreen;
+import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
@@ -29,6 +32,9 @@ public class ConfirmQuizAnswerScreen extends DefaultScreen {
         this.addRenderableWidget(
                 Button.builder(Component.literal("Confirm"), btn -> {
                             this.onClose();
+                             if (LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE) {
+                                 RenderUtils.setScreen(new EmptySleepScreen(false));
+                             }
                             Trivia.sendAnswer(answerIndex);
                         })
                         .pos(startX + 8, endY - 28)

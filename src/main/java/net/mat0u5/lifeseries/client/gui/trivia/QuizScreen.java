@@ -1,10 +1,13 @@
 package net.mat0u5.lifeseries.client.gui.trivia;
 
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.client.features.Trivia;
 import net.mat0u5.lifeseries.client.gui.DefaultScreen;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.client.utils.TextColors;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -89,6 +92,7 @@ public class QuizScreen extends DefaultScreen {
         timerSeconds = Trivia.getRemainingSeconds();
         if (timerSeconds <= 0) {
             this.onClose();
+            if (LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE) RenderUtils.setScreen(new EmptySleepScreen(false));
         }
     }
 
@@ -223,5 +227,15 @@ public class QuizScreen extends DefaultScreen {
     @Override
     public boolean isPauseScreen() {
         return false;
+    }
+
+    @Override
+    public boolean shouldCloseOnEsc() {
+        return LifeSeriesClient.clientCurrentSeason != Seasons.NICE_LIFE;
+    }
+
+    @Override
+    public boolean allowCloseButton() {
+        return shouldCloseOnEsc();
     }
 }

@@ -1,9 +1,11 @@
 package net.mat0u5.lifeseries.client.gui.trivia;
 
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.features.Trivia;
 import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.client.utils.TextColors;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -65,7 +67,7 @@ public class NewQuizScreen extends Screen {
 
     @Override
     public boolean shouldCloseOnEsc() {
-        return false;
+        return LifeSeriesClient.clientCurrentSeason != Seasons.NICE_LIFE;
     }
 
     //@Override
@@ -86,7 +88,7 @@ public class NewQuizScreen extends Screen {
             for (int i = 0; i < answerRects.size(); i++) {
                 if (answerRects.get(i).contains(mouseX, mouseY)) {
                     this.onClose();
-                    RenderUtils.setScreen(new EmptySleepScreen(false));
+                    if (LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE) RenderUtils.setScreen(new EmptySleepScreen(false));
                     Trivia.sendAnswer(i);
                     return true;
                 }
@@ -105,7 +107,7 @@ public class NewQuizScreen extends Screen {
         timerSeconds = (Trivia.getRemainingTicks()-1)/20;
         if (timerSeconds <= 0) {
             this.onClose();
-            RenderUtils.setScreen(new EmptySleepScreen(false));
+            if (LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE) RenderUtils.setScreen(new EmptySleepScreen(false));
         }
     }
 

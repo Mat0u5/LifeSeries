@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.client.network;
 
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.gui.trivia.QuizScreen;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.client.compatibilities.VoicechatClient;
@@ -38,6 +39,7 @@ import net.mat0u5.lifeseries.client.utils.ClientResourcePacks;
 import net.mat0u5.lifeseries.client.utils.ClientSounds;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
+import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -219,6 +221,14 @@ public class NetworkHandlerClient {
             }
             Minecraft.getInstance().gameRenderer.displayItemActivation(totemItem);
         });
+        SimplePackets.TRIVIA_GUI_TYPE.setClientReceive(payload -> {
+            if (payload.value().equalsIgnoreCase(TriviaGuiType.NICE_LIFE.name())) {
+                Trivia.triviaGuiType = TriviaGuiType.NICE_LIFE;
+            }
+            else {
+                Trivia.triviaGuiType = TriviaGuiType.WILD_LIFE;
+            }
+        });
 
 
         //Boolean payload
@@ -337,7 +347,7 @@ public class NetworkHandlerClient {
         SimplePackets.STOP_TRIVIA_SOUNDS.setClientReceive(payload -> ClientSounds.stopTriviaSounds());
         SimplePackets.REMOVE_SLEEP_SCREENS.setClientReceive(payload -> {
             Minecraft client = Minecraft.getInstance();
-            if (RenderUtils.getScreen() instanceof EmptySleepScreen || RenderUtils.getScreen() instanceof NewQuizScreen || (RenderUtils.getScreen() instanceof VotingScreen votingScreen && votingScreen.requiresSleep)) {
+            if (RenderUtils.getScreen() instanceof EmptySleepScreen || (RenderUtils.getScreen() instanceof NewQuizScreen quizScreen && !quizScreen.shouldCloseOnEsc()) || (RenderUtils.getScreen() instanceof QuizScreen quizScreenOld && !quizScreenOld.shouldCloseOnEsc()) || (RenderUtils.getScreen() instanceof VotingScreen votingScreen && votingScreen.requiresSleep)) {
                 RenderUtils.setScreen(null);
             }
         });

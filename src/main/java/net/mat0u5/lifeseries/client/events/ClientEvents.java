@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.client.events;
 
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.gui.trivia.QuizScreen;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.client.compatibilities.VoicechatClient;
@@ -149,7 +150,7 @@ public class ClientEvents {
             if (player != null) {
                 tryTripleJump(player);
                 checkOnGroundFor(player);
-                if (!player.isSleeping() && (RenderUtils.getScreen() instanceof EmptySleepScreen || RenderUtils.getScreen() instanceof NewQuizScreen || (RenderUtils.getScreen() instanceof VotingScreen votingScreen && votingScreen.requiresSleep))) {
+                if (!player.isSleeping() && (RenderUtils.getScreen() instanceof EmptySleepScreen || (RenderUtils.getScreen() instanceof NewQuizScreen quizScreen && !quizScreen.shouldCloseOnEsc()) || (RenderUtils.getScreen() instanceof QuizScreen quizScreenOld && !quizScreenOld.shouldCloseOnEsc()) || (RenderUtils.getScreen() instanceof VotingScreen votingScreen && votingScreen.requiresSleep))) {
                     RenderUtils.setScreen(null);
                 }
             }

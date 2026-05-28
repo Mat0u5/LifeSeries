@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
+import net.mat0u5.lifeseries.entity.triviabot.server.trivia.TriviaHandler;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
@@ -283,6 +284,7 @@ public class WildLife extends Season {
         Superspeed.HUNGER_EFFECT_LEVEL = WildLifeConfig.WILDCARD_SUPERPOWERS_SUPERSPEED_HUNGER_LEVEL.get();
         Superspeed.TARGET_SPEED = WildLifeConfig.WILDCARD_SUPERPOWERS_SUPERSPEED_TARGET_SPEED.get();
         TripleJump.JUMP_COUNT = WildLifeConfig.WILDCARD_SUPERPOWERS_TRIPLE_JUMP_JUMPS.get();
+        TriviaHandler.guiType = WildLifeConfig.WILDCARD_TRIVIA_GUI_TYPE.get();
 
         Snails.loadConfig();
         Snails.loadSnailNames();

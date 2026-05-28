@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
+import net.mat0u5.lifeseries.entity.triviabot.server.trivia.TriviaHandler;
 import net.mat0u5.lifeseries.mixin.ServerLevelAccessor;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Season;
@@ -132,6 +133,8 @@ public class NiceLife extends Season {
         NiceLifeVotingManager.NAUGHTY_LIST_COUNT = NiceLifeConfig.NAUGHTY_LIST_PLAYERS.get();
         NiceLifeVotingManager.NICE_LIST_COUNT = NiceLifeConfig.NICE_LIST_PLAYERS.get();
         RED_WINTER = NiceLifeConfig.RED_WINTER.get();
+        TriviaHandler.guiType = NiceLifeConfig.TRIVIA_GUI_TYPE.get();
+        NiceLifeTriviaManager.nightLength = NiceLifeConfig.TRIVIA_NIGHT_LENGTH.get();
     }
 
     public void updateSnowTick() {

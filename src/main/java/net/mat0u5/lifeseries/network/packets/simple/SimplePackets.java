@@ -33,6 +33,7 @@ public class SimplePackets {
     public static final SimpleStringPacket SUBMIT_VOTE = new SimpleStringPacket("SUBMIT_VOTE");
     public static final SimpleStringPacket TEAM_NAME = new SimpleStringPacket("TEAM_NAME");
     public static final SimpleStringPacket TEAM_COLOR = new SimpleStringPacket("TEAM_COLOR");
+    public static final SimpleStringPacket TRIVIA_GUI_TYPE = new SimpleStringPacket("TRIVIA_GUI_TYPE");
 
     public static final SimpleBooleanPacket PREVENT_GLIDING = new SimpleBooleanPacket("PREVENT_GLIDING");
     public static final SimpleBooleanPacket TABLIST_SHOW_EXACT = new SimpleBooleanPacket("TABLIST_SHOW_EXACT");

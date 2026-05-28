@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 
 import java.util.ArrayList;
@@ -108,8 +109,16 @@ public class NiceLifeConfig extends SeasonConfig {
             "Nice List Player Amount", "Controls the maximum number of players that can be on the nice list."
     );
     public static final ConfigFileEntry<Boolean> RED_WINTER = new ConfigFileEntry<>(
-            "red_winter", true, "season[new]",
+            "red_winter", true, "season",
             "Allow Red Winter", "Controls whether the Red Winter triggers."
+    );
+    public static final ConfigFileEntry<TriviaGuiType> TRIVIA_GUI_TYPE = new ConfigFileEntry<>(
+            "gui_type", TriviaGuiType.NICE_LIFE, "season.trivia[new]",
+            "Gui Type", "Controls the trivia gui style."
+    );
+    public static final ConfigFileEntry<NightLength> TRIVIA_NIGHT_LENGTH = new ConfigFileEntry<>(
+            "night_length", NightLength.FIRST_LONG, "season.trivia[new]",
+            "Night Length", "Controls when there are long nights in trivia."
     );
 
 
@@ -147,6 +156,8 @@ public class NiceLifeConfig extends SeasonConfig {
                 ,GROUP_TRIVIA
                 ,GROUP_VOTING
 
+                ,TRIVIA_GUI_TYPE
+                ,TRIVIA_NIGHT_LENGTH
                 ,TRIVIA_QUESTION_TIME
                 ,BOT_CAN_BREAK_BEDS
                 ,BOT_BREAKING_BLOCKS_DROP_RESOURCES

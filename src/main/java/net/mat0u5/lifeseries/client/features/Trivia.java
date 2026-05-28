@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.client.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.network.packets.TriviaQuestionPayload;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.client.Minecraft;
@@ -23,6 +24,7 @@ public class Trivia {
     public static int secondsToComplete = 0;
     public static long timestamp = 0;
     public static int ticksPassed = 0;
+    public static TriviaGuiType triviaGuiType = null;
     public static void receiveTrivia(TriviaQuestionPayload payload) {
         question = payload.question();
         answers = payload.answers();
@@ -56,7 +58,8 @@ public class Trivia {
     public static void openGui() {
         if (LifeSeries.modDisabled()) return;
         if (question.isEmpty() || answers.isEmpty()) return;
-        if (LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE) {
+        boolean newScreen = (triviaGuiType == null && LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE) || triviaGuiType == TriviaGuiType.NICE_LIFE;
+        if (newScreen) {
             RenderUtils.setScreen(new NewQuizScreen());
         }
         else {
