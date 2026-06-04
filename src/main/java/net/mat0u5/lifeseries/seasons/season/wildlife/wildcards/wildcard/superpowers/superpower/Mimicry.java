@@ -93,11 +93,13 @@ public class Mimicry extends Superpower {
     }
 
     @Override
-    public void onKeyPressed() {
+    public KeyPressResult onKeyPressed() {
+        KeyPressResult mimicResult = null;
         if (mimic != null) {
-            mimic.onKeyPressed();
+            mimicResult = mimic.onKeyPressed();
         }
-        super.onKeyPressed();
+        KeyPressResult thisResult = super.onKeyPressed();
+        return mimicResult != null ? mimicResult : thisResult;
     }
 
     @Override

@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.entity.snail.server;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.snail.goal.MiningNavigation;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
@@ -213,6 +214,7 @@ public class SnailPathfinding {
 
     public void fakeTeleportNearPlayer(double minDistanceFromPlayer) {
         if (snail.level() instanceof ServerLevel level) {
+            boolean fromTrivia = snail.isFromTrivia();
             Entity boundEntity = snail.serverData.getBoundEntity();
             ServerPlayer boundPlayer = snail.serverData.getBoundPlayer();
             if (boundEntity == null || boundPlayer == null) return;
@@ -230,7 +232,12 @@ public class SnailPathfinding {
                 AnimationUtils.spawnTeleportParticles(level, snail.position());
                 AnimationUtils.spawnTeleportParticles(entityWorld, OtherUtils.getCenter(tpTo));
                 snail.serverData.despawn();
-                Snails.spawnSnailFor(boundPlayer, tpTo);
+                if (!fromTrivia) {
+                    Snails.spawnSnailFor(boundPlayer, tpTo);
+                }
+                else {
+                    TriviaWildcard.spawnTriviaSnailFor(boundPlayer, tpTo);
+                }
             }
         }
     }

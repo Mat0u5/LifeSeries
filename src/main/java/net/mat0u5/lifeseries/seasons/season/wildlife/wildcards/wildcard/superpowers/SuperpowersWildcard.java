@@ -173,15 +173,17 @@ public class SuperpowersWildcard extends Wildcard {
         Necromancy.checkRessurectedPlayersReset();
     }
 
-    public static void pressedSuperpowerKey(ServerPlayer player) {
+    public static Superpower.KeyPressResult pressedSuperpowerKey(ServerPlayer player) {
         if (playerSuperpowers.containsKey(player.getUUID())) {
             if (((IPlayer) player).ls$isAlive()) {
-                playerSuperpowers.get(player.getUUID()).onKeyPressed();
+                return playerSuperpowers.get(player.getUUID()).onKeyPressed();
             }
             else {
                 PlayerUtils.displayMessageToPlayer(player, ModifiableText.WILDLIFE_SUPERPOWERS_DEAD.get(), 60);
+                return Superpower.KeyPressResult.DEAD;
             }
         }
+        return Superpower.KeyPressResult.MISSING;
     }
 
     public static boolean hasPower(ServerPlayer player) {

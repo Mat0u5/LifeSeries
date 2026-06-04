@@ -125,14 +125,14 @@ public class Snails extends Wildcard {
         }
     }
 
-    public static void spawnSnailFor(ServerPlayer player) {
+    public static Snail spawnSnailFor(ServerPlayer player) {
         BlockPos pos = SnailPathfinding.getBlockPosNearPlayer(player, 30);
         if (pos == null) pos = player.blockPosition().offset(0,30,0);
-        spawnSnailFor(player, pos);
+        return spawnSnailFor(player, pos);
     }
 
-    public static void spawnSnailFor(ServerPlayer player, BlockPos pos) {
-        if (player == null || pos == null) return;
+    public static Snail spawnSnailFor(ServerPlayer player, BlockPos pos) {
+        if (player == null || pos == null) return null;
         Snail snail = LevelUtils.spawnEntity(MobRegistry.SNAIL, ((IPlayer) player).ls$getServerLevel(), pos);
         if (snail != null) {
             snail.serverData.setBoundPlayer(player);
@@ -145,6 +145,7 @@ public class Snails extends Wildcard {
                 snails.put(player.getUUID(), list);
             }
         }
+        return snail;
     }
 
     public static void killAllSnails() {

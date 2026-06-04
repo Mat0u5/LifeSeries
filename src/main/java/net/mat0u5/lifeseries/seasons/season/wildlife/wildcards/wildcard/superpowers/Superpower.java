@@ -11,6 +11,15 @@ import java.util.List;
 import java.util.UUID;
 
 public abstract class Superpower {
+
+    public enum KeyPressResult {
+        MISSING,
+        DEAD,
+        COOLDOWN,
+        ACTIVATED,
+        DEACTIVATED
+    }
+
     public boolean active = false;
     public long cooldown = 0;
     private final UUID playerUUID;
@@ -29,12 +38,13 @@ public abstract class Superpower {
 
     public void tick() {}
 
-    public void onKeyPressed() {
+    public KeyPressResult onKeyPressed() {
         if (System.currentTimeMillis() < cooldown) {
             sendCooldownPacket();
-            return;
+            return KeyPressResult.COOLDOWN;
         }
         activate();
+        return KeyPressResult.ACTIVATED;
     }
 
     public void activate() {

@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia;
 
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.snail.Snail;
+import net.mat0u5.lifeseries.entity.snail.server.SnailPathfinding;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotPathfinding;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
@@ -225,6 +226,23 @@ public class TriviaWildcard extends Wildcard {
                     new DatapackIntegration.Events.MacroEntry("TriviaBot", bot.getStringUUID())
             ));
         }
+    }
+
+    public static Snail spawnTriviaSnailFor(ServerPlayer player) {
+        BlockPos pos = SnailPathfinding.getBlockPosNearPlayer(player, 30);
+        if (pos == null) pos = player.blockPosition().offset(0,30,0);
+        return spawnTriviaSnailFor(player, pos);
+    }
+
+    public static Snail spawnTriviaSnailFor(ServerPlayer player, BlockPos pos) {
+        if (player == null || pos == null) return null;
+        Snail snail = LevelUtils.spawnEntity(MobRegistry.SNAIL, ((IPlayer) player).ls$getServerLevel(), pos);
+        if (snail != null) {
+            snail.setFromTrivia(true);
+            snail.serverData.setBoundPlayer(player);
+            snails.put(player.getUUID(), snail);
+        }
+        return snail;
     }
 
     public static void resetPlayerOnBotSpawn(ServerPlayer player) {

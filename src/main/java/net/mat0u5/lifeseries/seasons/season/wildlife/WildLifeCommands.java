@@ -239,6 +239,11 @@ public class WildLifeCommands extends Command {
                         )
                     )
                 )
+                .then(literal("trigger")
+                        .then(argument("player", EntityArgument.players())
+                                .executes(context -> triggerSuperpower(context.getSource(), EntityArgument.getPlayers(context, "player")))
+                        )
+                )
         );
         dispatcher.register(
             literal("hunger")
@@ -541,6 +546,26 @@ public class WildLifeCommands extends Command {
         if (checkBanned(source)) return -1;
         SuperpowersWildcard.rollRandomSuperpowers();
         OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_RANDOMIZE.get());
+        return 1;
+    }
+
+    public int triggerSuperpower(CommandSourceStack source, Collection<ServerPlayer> targets) {
+        if (checkBanned(source)) return -1;
+        if (targets.size() == 1) {
+            ServerPlayer player = targets.iterator().next();
+            Superpower.KeyPressResult result = SuperpowersWildcard.pressedSuperpowerKey(player);
+            if (result == Superpower.KeyPressResult.MISSING) OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_TRIGGER_RESPONSE_MISSING.get(player));
+            else if (result == Superpower.KeyPressResult.DEAD) OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_TRIGGER_RESPONSE_DEAD.get(player));
+            else if (result == Superpower.KeyPressResult.COOLDOWN) OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_TRIGGER_RESPONSE_COOLDOWN.get(player));
+            else if (result == Superpower.KeyPressResult.ACTIVATED) OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_TRIGGER_RESPONSE_ACTIVATED.get(player));
+            else if (result == Superpower.KeyPressResult.DEACTIVATED) OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_TRIGGER_RESPONSE_DEACTIVATED.get(player));
+        }
+        else {
+            for (ServerPlayer player : targets) {
+                SuperpowersWildcard.pressedSuperpowerKey(player);
+            }
+            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_TRIGGER_MULTIPLE.get(targets.size()));
+        }
         return 1;
     }
 

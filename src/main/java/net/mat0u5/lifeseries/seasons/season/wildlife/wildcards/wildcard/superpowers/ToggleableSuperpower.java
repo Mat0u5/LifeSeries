@@ -9,16 +9,18 @@ public abstract class ToggleableSuperpower extends Superpower {
     }
 
     @Override
-    public void onKeyPressed() {
+    public KeyPressResult onKeyPressed() {
         if (System.currentTimeMillis() < cooldown) {
             sendCooldownPacket();
-            return;
+            return KeyPressResult.COOLDOWN;
         }
         if (active) {
             deactivate();
+            return KeyPressResult.DEACTIVATED;
         }
         else {
             activate();
+            return KeyPressResult.ACTIVATED;
         }
     }
 
