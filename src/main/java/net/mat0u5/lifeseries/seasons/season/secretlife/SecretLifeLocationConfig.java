@@ -20,24 +20,24 @@ public class SecretLifeLocationConfig extends ConfigManager {
     public void instantiateProperties() {}
 
     public void loadLocations() {
-        TaskManager.successButtonPos = getLocation("successButtonPos");
-        TaskManager.rerollButtonPos = getLocation("rerollButtonPos");
-        TaskManager.failButtonPos = getLocation("failButtonPos");
-        TaskManager.itemSpawnerPos = getLocation("itemSpawnerPos");
+        SecretKeeper.successButtonPos = getLocation("successButtonPos");
+        SecretKeeper.rerollButtonPos = getLocation("rerollButtonPos");
+        SecretKeeper.failButtonPos = getLocation("failButtonPos");
+        SecretKeeper.itemSpawnerPos = getLocation("itemSpawnerPos");
     }
 
     public void saveLocations() {
-        setLocation("successButtonPos", TaskManager.successButtonPos);
-        setLocation("rerollButtonPos", TaskManager.rerollButtonPos);
-        setLocation("failButtonPos", TaskManager.failButtonPos);
-        setLocation("itemSpawnerPos", TaskManager.itemSpawnerPos);
+        setLocation("successButtonPos", SecretKeeper.successButtonPos);
+        setLocation("rerollButtonPos", SecretKeeper.rerollButtonPos);
+        setLocation("failButtonPos", SecretKeeper.failButtonPos);
+        setLocation("itemSpawnerPos", SecretKeeper.itemSpawnerPos);
     }
 
     public void deleteLocations() {
-        TaskManager.successButtonPos = null;
-        TaskManager.rerollButtonPos = null;
-        TaskManager.failButtonPos = null;
-        TaskManager.itemSpawnerPos = null;
+        SecretKeeper.successButtonPos = null;
+        SecretKeeper.rerollButtonPos = null;
+        SecretKeeper.failButtonPos = null;
+        SecretKeeper.itemSpawnerPos = null;
         resetProperties("-- DO NOT MODIFY --");
     }
 

@@ -307,13 +307,13 @@ public class SecretLife extends Season {
 
     @Override
     public void onPlayerFinishJoining(ServerPlayer player, boolean showMessages) {
-        TaskManager.checkSecretLifePositions();
+        SecretKeeper.checkSecretLifePositions();
         super.onPlayerFinishJoining(player, showMessages);
     }
 
     @Override
     public boolean sessionStart() {
-        if (TaskManager.checkSecretLifePositions()) {
+        if (SecretKeeper.checkSecretLifePositions()) {
             super.sessionStart();
             SecretLifeCommands.playersGiven.clear();
             TaskManager.tasksChosen = false;
@@ -388,7 +388,7 @@ public class SecretLife extends Season {
     @Override
     public void tick(MinecraftServer server) {
         super.tick(server);
-        TaskManager.tick();
+        SecretKeeper.tick();
         timer.tick();
         if (timer.isMultipleOf(Time.seconds(1))) {
             checkNaturalRegeneration();

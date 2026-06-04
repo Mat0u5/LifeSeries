@@ -1,1 +1,4 @@
-The game no longer crashes when it's launched in a server environment.
+Improved Secret Life task picking logic, and added '/task resetUsed'
+Snail skins now defaults to the new format.
+New configs.
+Bug fixes.

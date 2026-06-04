@@ -6,8 +6,8 @@ import net.mat0u5.lifeseries.resources.datapack.DatapackManager;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.seasons.season.secretlife.SecretKeeper;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
-import net.mat0u5.lifeseries.seasons.season.secretlife.TaskManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkins;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
@@ -207,7 +207,7 @@ public class Events {
                 level instanceof ServerLevel serverLevel && LifeSeries.isLogicalSide()) {
             try {
                 if (currentSeason instanceof SecretLife) {
-                    TaskManager.onBlockUse(serverPlayer, serverLevel, hitResult);
+                    SecretKeeper.onBlockUse(serverPlayer, serverLevel, hitResult);
                 }
                 if (blacklist == null) return InteractionResult.PASS;
                 return blacklist.onBlockUse(serverPlayer,serverLevel,hand,hitResult);

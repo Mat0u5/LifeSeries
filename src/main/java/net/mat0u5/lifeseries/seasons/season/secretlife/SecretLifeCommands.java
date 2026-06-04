@@ -180,6 +180,11 @@ public class SecretLifeCommands extends Command {
                                     context.getSource())
                             )
                     )
+                    .then(literal("resetUsed")
+                            .executes(context -> resetUsedTasks(
+                                    context.getSource())
+                            )
+                    )
         );
         dispatcher.register(
             literal("gift")
@@ -201,10 +206,10 @@ public class SecretLifeCommands extends Command {
         if (checkBanned(source)) return -1;
         if (player == null) return -1;
 
-        if (!TaskManager.checkSecretLifePositions()) return -1;
+        if (!SecretKeeper.checkSecretLifePositions()) return -1;
 
         boolean hasPreassignedTask = TaskManager.preAssignedTasks.containsKey(player.getUUID());
-        boolean hasTaskBook = TaskManager.hasTaskBookCheck(player, false);
+        boolean hasTaskBook = SecretKeeper.hasTaskBookCheck(player, false);
 
         if (!hasTaskBook && !hasPreassignedTask) {
             source.sendSystemMessage(ModifiableText.SECRETLIFE_TASK_MISSING_OTHER.get(player));
@@ -249,7 +254,7 @@ public class SecretLifeCommands extends Command {
         if (checkBanned(source)) return -1;
         if (targets == null || targets.isEmpty()) return -1;
 
-        if (!TaskManager.checkSecretLifePositions()) return -1;
+        if (!SecretKeeper.checkSecretLifePositions()) return -1;
 
         TaskTypes taskType = TaskTypes.EASY;
 
@@ -286,14 +291,21 @@ public class SecretLifeCommands extends Command {
         if (checkBanned(source)) return -1;
         OtherUtils.sendCommandFeedback(source, ModifiableText.SECRETLIFE_TASK_LOCATIONS.get());
         TaskManager.deleteLocations();
-        TaskManager.checkSecretLifePositions();
+        SecretKeeper.checkSecretLifePositions();
+        return 1;
+    }
+
+    public int resetUsedTasks(CommandSourceStack source) {
+        if (checkBanned(source)) return -1;
+        SecretLifeUsedTasks.deleteAllTasks(TaskManager.usedTasksConfig);
+        OtherUtils.sendCommandFeedback(source, ModifiableText.SECRETLIFE_TASK_RESET_USED.get());
         return 1;
     }
 
     public int clearTask(CommandSourceStack source, Collection<ServerPlayer> targets) {
         if (checkBanned(source)) return -1;
 
-        if (!TaskManager.checkSecretLifePositions()) return -1;
+        if (!SecretKeeper.checkSecretLifePositions()) return -1;
         List<ServerPlayer> affected = new ArrayList<>();
         for (ServerPlayer player : targets) {
             if (TaskManager.removePlayersTaskBook(player)) {
@@ -317,7 +329,7 @@ public class SecretLifeCommands extends Command {
     public int assignTask(CommandSourceStack source, Collection<ServerPlayer> targets) {
         if (checkBanned(source)) return -1;
 
-        if (!TaskManager.checkSecretLifePositions()) return -1;
+        if (!SecretKeeper.checkSecretLifePositions()) return -1;
 
         if (targets.size() == 1) {
             OtherUtils.sendCommandFeedback(source, ModifiableText.SECRETLIFE_TASK_SET_RANDOM_SINGLE.get(targets.iterator().next()));
@@ -335,7 +347,7 @@ public class SecretLifeCommands extends Command {
         if (checkBanned(source)) return -1;
         if (targets == null || targets.isEmpty()) return -1;
 
-        if (!TaskManager.checkSecretLifePositions()) return -1;
+        if (!SecretKeeper.checkSecretLifePositions()) return -1;
 
         if (targets.size() == 1) {
             OtherUtils.sendCommandFeedback(source, ModifiableText.SECRETLIFE_TASK_SUCCESS_SINGLE.get(targets.iterator().next()));
@@ -345,7 +357,7 @@ public class SecretLifeCommands extends Command {
         }
 
         for (ServerPlayer player : targets) {
-            TaskManager.succeedTask(player, true);
+            SecretKeeper.clickSucceed(player, true);
         }
 
         return 1;
@@ -355,7 +367,7 @@ public class SecretLifeCommands extends Command {
         if (checkBanned(source)) return -1;
         if (targets == null || targets.isEmpty()) return -1;
 
-        if (!TaskManager.checkSecretLifePositions()) return -1;
+        if (!SecretKeeper.checkSecretLifePositions()) return -1;
 
         if (targets.size() == 1) {
             OtherUtils.sendCommandFeedback(source, ModifiableText.SECRETLIFE_TASK_FAIL_SINGLE.get(targets.iterator().next()));
@@ -365,7 +377,7 @@ public class SecretLifeCommands extends Command {
         }
 
         for (ServerPlayer player : targets) {
-            TaskManager.failTask(player, true);
+            SecretKeeper.clickFail(player, true);
         }
 
         return 1;
@@ -375,7 +387,7 @@ public class SecretLifeCommands extends Command {
         if (checkBanned(source)) return -1;
         if (targets == null || targets.isEmpty()) return -1;
 
-        if (!TaskManager.checkSecretLifePositions()) return -1;
+        if (!SecretKeeper.checkSecretLifePositions()) return -1;
 
         if (targets.size() == 1) {
             OtherUtils.sendCommandFeedback(source, ModifiableText.SECRETLIFE_TASK_REROLL_SINGLE.get(targets.iterator().next()));
@@ -385,7 +397,7 @@ public class SecretLifeCommands extends Command {
         }
 
         for (ServerPlayer player : targets) {
-            TaskManager.rerollTask(player, true);
+            SecretKeeper.clickReroll(player, true);
         }
 
         return 1;

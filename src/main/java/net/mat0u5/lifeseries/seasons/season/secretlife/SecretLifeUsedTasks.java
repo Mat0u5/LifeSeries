@@ -6,15 +6,42 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SecretLifeUsedTasks {
-    public static void deleteAllTasks(StringListConfig config, List<String> tasks) {
+
+    public static void deleteAllTasks(StringListConfig config, List<String> tasks, double keepPercentage) {
         if (config == null) return;
 
-        List<String> allTasks = getUsedTasks(config);
-        for (String task : tasks) {
-            allTasks.remove(task);
+        int keepLast = (int) Math.floor(tasks.size() * keepPercentage);
+
+        List<String> usedTasks = getUsedTasks(config);
+
+        List<String> usedFromPool = new ArrayList<>();
+        for (String task : usedTasks) {
+            if (tasks.contains(task)) {
+                usedFromPool.add(task);
+            }
         }
 
-        config.save(allTasks);
+        int keepFrom = Math.max(0, usedFromPool.size() - keepLast);
+        List<String> toKeep = usedFromPool.subList(keepFrom, usedFromPool.size());
+
+        for (String task : tasks) {
+            usedTasks.remove(task);
+        }
+        for (String task : toKeep) {
+            if (!usedTasks.contains(task)) {
+                usedTasks.add(task);
+            }
+        }
+
+        config.save(usedTasks);
+    }
+
+    public static void deleteAllTasks(StringListConfig config, List<String> tasks) {
+        deleteAllTasks(config, tasks, 0.0);
+    }
+
+    public static void deleteAllTasks(StringListConfig config) {
+        config.save(List.of());
     }
 
     public static void addUsedTask(StringListConfig config, String task) {
