@@ -124,7 +124,11 @@ public class TriviaSpiritParticle extends Particle {
     protected final TriviaSpiritParticleModel model;
     protected final RenderType renderType;
 
+    //? if <= 26.1 {
     public static final ParticleRenderType GROUP = new ParticleRenderType("TRIVIA_SPIRITS");
+    //?} else {
+    /*public static final ParticleRenderType GROUP = new ParticleRenderType("TRIVIA_SPIRITS", "TS");
+    *///?}
 
     private TriviaSpiritParticle(final ClientLevel level, final double x, final double y, final double z) {
         super(level, x, y, z);
