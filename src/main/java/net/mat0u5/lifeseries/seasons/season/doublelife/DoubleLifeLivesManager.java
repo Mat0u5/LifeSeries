@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.doublelife;
 
 import net.mat0u5.lifeseries.config.ModifiableText;
-import net.mat0u5.lifeseries.seasons.other.LivesManager;
+import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;

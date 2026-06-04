@@ -306,9 +306,9 @@ public class SecretLife extends Season {
     }
 
     @Override
-    public void onPlayerFinishJoining(ServerPlayer player) {
+    public void onPlayerFinishJoining(ServerPlayer player, boolean showMessages) {
         TaskManager.checkSecretLifePositions();
-        super.onPlayerFinishJoining(player);
+        super.onPlayerFinishJoining(player, showMessages);
     }
 
     @Override

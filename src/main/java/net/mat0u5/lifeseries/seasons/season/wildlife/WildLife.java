@@ -7,7 +7,7 @@ import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.TriviaHandler;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
-import net.mat0u5.lifeseries.seasons.other.LivesManager;
+import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
@@ -89,8 +89,8 @@ public class WildLife extends Season {
     }
 
     @Override
-    public void onPlayerFinishJoining(ServerPlayer player) {
-        super.onPlayerFinishJoining(player);
+    public void onPlayerFinishJoining(ServerPlayer player, boolean showMessages) {
+        super.onPlayerFinishJoining(player, showMessages);
         WildcardManager.onPlayerFinishJoining(player);
     }
 

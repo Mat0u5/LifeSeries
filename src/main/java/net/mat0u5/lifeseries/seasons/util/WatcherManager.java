@@ -1,4 +1,4 @@
-package net.mat0u5.lifeseries.seasons.other;
+package net.mat0u5.lifeseries.seasons.util;
 
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
@@ -20,7 +20,7 @@ import net.minecraft.world.scores.PlayerScoreEntry;
 
 //? if <= 26.1 {
 import net.minecraft.ChatFormatting;
- //?} else {
+//?} else {
 /*import net.minecraft.world.scores.TeamColor;
 *///?}
 

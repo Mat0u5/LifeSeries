@@ -4,7 +4,7 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.mixin.PlayerListS2CPacketAccessor;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
-import net.mat0u5.lifeseries.seasons.other.WatcherManager;
+import net.mat0u5.lifeseries.seasons.util.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;

@@ -1,4 +1,4 @@
-package net.mat0u5.lifeseries.seasons.other;
+package net.mat0u5.lifeseries.seasons.util;
 
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
-import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
+import static net.mat0u5.lifeseries.seasons.util.WatcherManager.isWatcher;
 
 import net.minecraft.world.scores.PlayerScoreEntry;
 

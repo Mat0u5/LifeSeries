@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.utils.player;
 
-import net.mat0u5.lifeseries.seasons.other.LivesManager;
+import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.scores.*;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;

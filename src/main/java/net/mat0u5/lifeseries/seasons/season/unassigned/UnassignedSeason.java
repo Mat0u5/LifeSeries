@@ -49,9 +49,9 @@ public class UnassignedSeason extends Season {
         TaskScheduler.scheduleTask(Time.seconds(5), this::broadcastNotice);
     }
     @Override
-    public void onPlayerFinishJoining(ServerPlayer player) {
-        super.onPlayerFinishJoining(player);
-        if (!LifeSeries.modDisabled()) {
+    public void onPlayerFinishJoining(ServerPlayer player, boolean showMessages) {
+        super.onPlayerFinishJoining(player, showMessages);
+        if (!LifeSeries.modDisabled() && showMessages) {
             SimplePackets.SELECT_SEASON.target(player).sendToClient("");
         }
     }

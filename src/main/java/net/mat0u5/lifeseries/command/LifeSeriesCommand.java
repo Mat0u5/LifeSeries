@@ -2,6 +2,8 @@ package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.config.ConfigManager;
@@ -11,6 +13,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.Session;
+import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
@@ -22,6 +25,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
 
@@ -108,15 +113,16 @@ public class LifeSeriesCommand extends Command {
                     .then(argument("season", StringArgumentType.string())
                         .suggests((context, builder) -> SharedSuggestionProvider.suggest(ALLOWED_SEASON_NAMES, builder))
                         .executes(context -> setSeason(
-                            context.getSource(), StringArgumentType.getString(context, "season"), false, false)
+                            context.getSource(), StringArgumentType.getString(context, "season"))
                         )
                         .then(literal("confirm")
                             .executes(context -> setSeason(
-                                context.getSource(), StringArgumentType.getString(context, "season"), true, false)
+                                context.getSource(), StringArgumentType.getString(context, "season"), true)
                             )
-                            .then(literal(("silent"))
+                            .then(argument("args", StringArgumentType.greedyString())
+                                    .suggests((context, builder) -> suggestArgs(SeasonChanger.AVAILABLE_SEASON_ARGS, builder))
                                     .executes(context -> setSeason(
-                                            context.getSource(), StringArgumentType.getString(context, "season"), true, true)
+                                            context.getSource(), StringArgumentType.getString(context, "season"), true, StringArgumentType.getString(context, "args"))
                                     )
                             )
                         )
@@ -132,6 +138,26 @@ public class LifeSeriesCommand extends Command {
                 );
         dispatcher.register(lifeseriesTree);
         dispatcher.register(literal("ls").redirect(lifeseriesTree.build()));
+    }
+
+    static CompletableFuture<Suggestions> suggestArgs(final Iterable<String> values, final SuggestionsBuilder builder) {
+        String prefix = builder.getRemaining();
+        String lowerPrefix = prefix.toLowerCase(Locale.ROOT);
+        String suggestPrefix = "";
+        if (lowerPrefix.contains(" ")) {
+            suggestPrefix = prefix.substring(0,prefix.lastIndexOf(" ")+1);
+            lowerPrefix = lowerPrefix.substring(lowerPrefix.lastIndexOf(" ")+1);
+        }
+        String fullLowerPrefix = prefix.toLowerCase(Locale.ROOT);
+
+        for(String name : values) {
+            String lowerName = name.toLowerCase(Locale.ROOT);
+            if (!fullLowerPrefix.contains(lowerName+" ") && SharedSuggestionProvider.matchesSubStr(lowerPrefix, lowerName)) {
+                builder.suggest(suggestPrefix+name);
+            }
+        }
+
+        return builder.buildFuture();
     }
 
     private int enableOrDisable(CommandSourceStack source, boolean disabled) {
@@ -153,7 +179,15 @@ public class LifeSeriesCommand extends Command {
         return 1;
     }
 
-    public int setSeason(CommandSourceStack source, String setTo, boolean confirmed, boolean silent) {
+    public int setSeason(CommandSourceStack source, String setTo) {
+        return setSeason(source, setTo, false);
+    }
+
+    public int setSeason(CommandSourceStack source, String setTo, boolean confirmed) {
+        return setSeason(source, setTo, confirmed, "");
+    }
+
+    public int setSeason(CommandSourceStack source, String setTo, boolean confirmed, String args) {
         if (checkBanned(source)) return -1;
         if (!ALLOWED_SEASON_NAMES.contains(setTo)) {
             OtherUtils.sendCommandFailure(source, ModifiableText.SEASON_INVALID.get());
@@ -161,24 +195,24 @@ public class LifeSeriesCommand extends Command {
             return -1;
         }
         if (confirmed || currentSeason.getSeason() == Seasons.UNASSIGNED) {
-            setSeasonFinal(source, setTo, silent);
+            setSeasonFinal(source, setTo, args);
         }
         else {
-            if (!silent) {
-                OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SEASON_SELECT_WARNING.get());
-            }
-            else {
-                OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SEASON_SELECT_WARNING_SILENT.get());
-            }
+            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SEASON_SELECT_WARNING.get());
         }
         return 1;
     }
 
-    public void setSeasonFinal(CommandSourceStack source, String setTo, boolean silent) {
+    public void setSeasonFinal(CommandSourceStack source, String setTo, String argsStr) {
         boolean prevTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
-        OtherUtils.sendCommandFeedback(source, ModifiableText.SEASON_CHANGING.get(setTo));
-        if (LifeSeries.changeSeasonTo(setTo, silent)) {
-            PlayerUtils.broadcastMessage(ModifiableText.SEASON_CHANGED.get(setTo));
+
+        Seasons season = Seasons.getSeasonFromStringName(setTo);
+        SeasonChanger.ChangeSeasonArgs args = SeasonChanger.parseChangeSeasonArgs(argsStr);
+
+        if (args.showChatMessage()) OtherUtils.sendCommandFeedback(source, ModifiableText.SEASON_CHANGING.get(setTo));
+
+        if (SeasonChanger.changeSeasonTo(season, args)) {
+            if (args.showChatMessage()) PlayerUtils.broadcastMessage(ModifiableText.SEASON_CHANGED.get(setTo));
             boolean currentTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
             if (prevTickFreeze != currentTickFreeze) {
                 OtherUtils.setFreezeGame(currentTickFreeze);

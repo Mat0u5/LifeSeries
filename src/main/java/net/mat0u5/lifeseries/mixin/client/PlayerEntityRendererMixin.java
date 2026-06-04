@@ -49,7 +49,7 @@ import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 
 //?if <= 1.21.11 {
 /*import net.mat0u5.lifeseries.utils.other.Time;
-import net.mat0u5.lifeseries.seasons.other.LivesManager;
+import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 *///?}

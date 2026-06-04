@@ -14,8 +14,8 @@ import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
-import net.mat0u5.lifeseries.seasons.other.LivesManager;
-import net.mat0u5.lifeseries.seasons.other.WatcherManager;
+import net.mat0u5.lifeseries.seasons.util.LivesManager;
+import net.mat0u5.lifeseries.seasons.util.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -65,7 +65,7 @@ import java.util.*;
 import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.entity.monster.skeleton.WitherSkeleton;
 import static net.mat0u5.lifeseries.LifeSeries.*;
-import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
+import static net.mat0u5.lifeseries.seasons.util.WatcherManager.isWatcher;
 
 //? if <= 1.20
 //import net.minecraft.world.scores.Scoreboard;
@@ -761,7 +761,10 @@ public abstract class Season {
     }
 
     public void onPlayerFinishJoining(ServerPlayer player) {
-        if (getSeason() != Seasons.UNASSIGNED && SHOW_LOGIN_COMMAND_INFO && !LifeSeries.modDisabled()) {
+        onPlayerFinishJoining(player, true);
+    }
+    public void onPlayerFinishJoining(ServerPlayer player, boolean showMessages) {
+        if (getSeason() != Seasons.UNASSIGNED && SHOW_LOGIN_COMMAND_INFO && !LifeSeries.modDisabled() && showMessages) {
             if (PermissionManager.isAdmin(player)) {
                 ((IPlayer) player).ls$message(ModifiableText.SEASON_COMMANDS_ADMIN.get(getSeason().getName(), getAdminCommands()));
             }
@@ -772,7 +775,7 @@ public abstract class Season {
 
         learnRecipes();
         if (currentSession.statusNotStarted() && PermissionManager.isAdmin(player) && !LifeSeries.modDisabled()) {
-            ((IPlayer) player).ls$message(ModifiableText.SESSION_START_PROMPT.get());
+            if (showMessages) ((IPlayer) player).ls$message(ModifiableText.SESSION_START_PROMPT.get());
         }
         boogeymanManager.onPlayerFinishJoining(player);
         livesManager.onPlayerFinishJoining(player);

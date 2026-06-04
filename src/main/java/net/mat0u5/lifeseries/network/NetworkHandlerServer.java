@@ -12,7 +12,7 @@ import net.mat0u5.lifeseries.mixin.ServerLoginPacketListenerImplAccessor;
 import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePacket;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
-import net.mat0u5.lifeseries.seasons.other.LivesManager;
+import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLife;
@@ -35,6 +35,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
@@ -66,7 +67,6 @@ import net.minecraft.resources.Identifier;
 import java.util.function.Function;
 *///?} else {
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
 //?}
 
 //? if <= 1.20 {
@@ -189,7 +189,7 @@ public class NetworkHandlerServer {
                 Seasons newSeason = Seasons.getSeasonFromStringName(payload.value());
                 if (newSeason == Seasons.UNASSIGNED) return;
                 boolean prevTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
-                if (LifeSeries.changeSeasonTo(newSeason.getId(), false)) {
+                if (SeasonChanger.changeSeasonTo(newSeason)) {
                     boolean currentTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
                     PlayerUtils.broadcastMessage(ModifiableText.SEASON_CHANGE.get(payload.value()));
                     if (prevTickFreeze != currentTickFreeze) {
@@ -477,7 +477,7 @@ public class NetworkHandlerServer {
                 OtherUtils.reloadServer();
             }
             else {
-                LifeSeries.softReloadStart();
+                SeasonChanger.reloadConfig();
             }
         }catch(Exception e) {
             e.printStackTrace();

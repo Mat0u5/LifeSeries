@@ -2,29 +2,21 @@ package net.mat0u5.lifeseries;
 
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.MainConfig;
-import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.platform.Platform;
 import net.mat0u5.lifeseries.registries.MobRegistry;
-import net.mat0u5.lifeseries.resources.datapack.DatapackManager;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
-import net.mat0u5.lifeseries.seasons.other.LivesManager;
+import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkins;
 import net.mat0u5.lifeseries.seasons.session.Session;
-import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
 import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
-import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.interfaces.IClientHelper;
-import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.other.Time;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
-import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +33,7 @@ import net.mat0u5.lifeseries.platform.fabric.FabricPlatform;
  *///?}
 
 public class LifeSeries {
-	public static final String MOD_VERSION = "1.5.5.7-dev";
+	public static final String MOD_VERSION = "1.5.5.8-dev";
 	public static final String MOD_ID = "lifeseries";
 	private static final Platform PLATFORM = createPlatformInstance();
 
@@ -73,9 +65,9 @@ public class LifeSeries {
 		SnailSkins.createConfig();
 
 		MOD_DISABLED = config.getOrCreateProperty("modDisabled", "false").equalsIgnoreCase("true");
-		String season = config.getOrCreateProperty("currentSeries", DEFAULT_SEASON.getId());
+		String seasonStr = config.getOrCreateProperty("currentSeries", DEFAULT_SEASON.getId());
 
-		parseSeason(season);
+		SeasonChanger.initializeSeason(Seasons.getSeasonFromStringName(seasonStr));
 		Seasons.getSeasons().forEach(seasons -> seasons.getSeasonInstance().createConfig());
 
 		//? fabric || (forge && > 1.21) {
@@ -121,17 +113,12 @@ public class LifeSeries {
 		config.setProperty("modDisabled", String.valueOf(MOD_DISABLED));
 
 		if (!previouslyDisabled && disabled) {
-			changeSeasonTo(Seasons.UNASSIGNED.getId(), true);
+			SeasonChanger.changeSeasonTo(Seasons.UNASSIGNED);
 		}
 		if (!modDisabled()) {
-			fullReload();
+			SeasonChanger.resetSeason();
 		}
 		SimplePackets.MOD_DISABLED.sendToClient(LifeSeries.MOD_DISABLED);
-	}
-
-	public static void fullReload() {
-		String season = config.getOrCreateProperty("currentSeries", DEFAULT_SEASON.getId());
-		changeSeasonTo(season, false);
 	}
 
 	public static boolean hasClient() {
@@ -165,64 +152,6 @@ public class LifeSeries {
 		return clientHelper != null && clientHelper.isMainClientPlayer(uuid);
 	}
 
-	public static void parseSeason(String seasonStr) {
-		currentSeason = Seasons.getSeasonFromStringName(seasonStr).getSeasonInstance();
-
-		currentSession = new Session();
-		int configSessionLength = config.getOrCreateInt("session_length", Time.hours(2).getTicks());
-		currentSession.setSessionLength(Time.ticks(configSessionLength));
-		DatapackIntegration.setSessionLength(currentSession.getSessionLength());
-
-		livesManager = currentSeason.livesManager;
-		seasonConfig = currentSeason.createConfig();
-		blacklist = currentSeason.createBlacklist();
-	}
-
-	public static void reloadStart() {
-		if (Events.skipNextTickReload) return;
-		softReloadStart();
-		DatapackManager.onReloadStart();
-	}
-
-	public static void softReloadStart() {
-		currentSeason.reloadStart();
-		seasonConfig.loadProperties();
-		config.loadProperties();
-		blacklist.reloadBlacklist();
-		currentSeason.reload();
-		NetworkHandlerServer.sendUpdatePackets();
-		PlayerUtils.resendCommandTrees();
-		SnailSkins.sendTextures();
-	}
-	public static void reloadEnd() {
-		DatapackManager.onReloadEnd();
-	}
-
-	public static boolean changeSeasonTo(String changeTo, boolean silent) {
-		Seasons seasonChangeTo = Seasons.getSeasonFromStringName(changeTo);
-
-		TaskScheduler.clearTasks();
-		config.setProperty("currentSeries", changeTo);
-		livesManager.resetAllPlayerLivesInner();
-		currentSeason.seasonSwitched(seasonChangeTo);
-		currentSeason.boogeymanManager.resetBoogeymen();
-		currentSeason.secretSociety.forceEndSociety();
-		currentSession.sessionEnd();
-		LifeSeries.parseSeason(changeTo);
-		currentSeason.initialize();
-		reloadStart();
-		for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-			currentSeason.onPlayerJoin(player);
-			currentSeason.onPlayerFinishJoining(player);
-			NetworkHandlerServer.tryKickFailedHandshake(player);
-			if (!modDisabled()) {
-				if (!silent) currentSeason.sendSetSeasonPacket(player);
-				SimplePackets.SESSION_TIMER.target(player).sendToClient(SessionTimerStates.NOT_STARTED.getValue());
-			}
-		}
-		SessionTranscript.resetStats();
-		return true;
-	}
 
 	public static ConfigManager getMainConfig() {
 		return config;

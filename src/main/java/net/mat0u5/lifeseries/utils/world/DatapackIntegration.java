@@ -205,7 +205,7 @@ public class DatapackIntegration {
                 new DatapackIntegration.Events.MacroEntry("Status", String.valueOf(index))
         );
 
-        if (status == SessionStatus.FINISHED) DatapackIntegration.EVENT_SESSION_END.trigger();
+        if (status == SessionStatus.FINISHED && prevStatus != SessionStatus.NOT_STARTED && prevStatus != SessionStatus.FINISHED) DatapackIntegration.EVENT_SESSION_END.trigger();
         else if (status == SessionStatus.PAUSED && prevStatus != SessionStatus.PAUSED) DatapackIntegration.EVENT_SESSION_PAUSE.trigger();
         else if (prevStatus == SessionStatus.PAUSED && status != SessionStatus.PAUSED) DatapackIntegration.EVENT_SESSION_UNPAUSE.trigger();
         else if (status == SessionStatus.STARTED) DatapackIntegration.EVENT_SESSION_START.trigger();

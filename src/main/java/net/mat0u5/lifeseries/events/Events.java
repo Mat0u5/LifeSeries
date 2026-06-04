@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.seasons.season.secretlife.TaskManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkins;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
@@ -55,7 +56,10 @@ public class Events {
         try {
             if (LifeSeries.modDisabled()) return;
             if (!LifeSeries.isLogicalSide()) return;
-            LifeSeries.reloadStart();
+            if (!Events.skipNextTickReload) {
+                SeasonChanger.reloadConfig();
+                DatapackManager.onReloadStart();
+            }
         } catch(Exception e) {e.printStackTrace();}
     }
 
@@ -63,7 +67,7 @@ public class Events {
         try {
             if (LifeSeries.modDisabled()) return;
             if (!LifeSeries.isLogicalSide()) return;
-            LifeSeries.reloadEnd();
+            DatapackManager.onReloadEnd();
         } catch(Exception e) {e.printStackTrace();}
     }
 

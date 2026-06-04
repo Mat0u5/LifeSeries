@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.mixin;
 
 import com.mojang.brigadier.context.CommandContext;
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
@@ -42,7 +43,7 @@ public class GameRuleCommandMixin {
         }
         //?}
         if (reload && !LifeSeries.modDisabled()) {
-            LifeSeries.softReloadStart();
+            SeasonChanger.reloadConfig();
         }
     }
 }
