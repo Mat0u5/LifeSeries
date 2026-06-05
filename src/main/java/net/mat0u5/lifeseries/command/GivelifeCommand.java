@@ -65,20 +65,20 @@ public class GivelifeCommand extends Command {
         if (target == null) return -1;
 
         if (((IPlayer) self).ls$isDead()) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.GIVELIFE_ERROR_NONE.get());
+            sendCommandFailure(source, ModifiableText.GIVELIFE_ERROR_NONE.get());
             return -1;
         }
         boolean isRevive = ((IPlayer) target).ls$isDead();
         if (((IPlayer) target).ls$isWatcher()) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.PLAYER_ERROR_WATCHER.get());
+            sendCommandFailure(source, ModifiableText.PLAYER_ERROR_WATCHER.get());
             return -1;
         }
         if (!Season.GIVELIFE_CAN_REVIVE && isRevive) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.PLAYER_ERROR_DEAD.get());
+            sendCommandFailure(source, ModifiableText.PLAYER_ERROR_DEAD.get());
             return -1;
         }
         if (target == self) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.GIVELIFE_ERROR_SELF.get());
+            sendCommandFailure(source, ModifiableText.GIVELIFE_ERROR_SELF.get());
             return -1;
         }
 
@@ -89,19 +89,19 @@ public class GivelifeCommand extends Command {
 
         Integer currentLives = ((IPlayer) self).ls$getLives();
         if (currentLives == null || currentLives <= giveAmount) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.GIVELIFE_ERROR_NOT_ENOUGH.get());
+            sendCommandFailure(source, ModifiableText.GIVELIFE_ERROR_NOT_ENOUGH.get());
             return -1;
         }
         Integer targetLives = ((IPlayer) target).ls$getLives();
         if (targetLives == null || targetLives >= currentSeason.GIVELIFE_MAX_LIVES) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.GIVELIFE_ERROR_TOO_MANY.get());
+            sendCommandFailure(source, ModifiableText.GIVELIFE_ERROR_TOO_MANY.get());
             return -1;
         }
         if (currentSeason instanceof DoubleLife doubleLife && doubleLife.SOULBOUND_LIVES) {
             ServerPlayer soulmate = doubleLife.getSoulmate(self);
             if (soulmate != null) {
                 if (soulmate.equals(target)) {
-                    OtherUtils.sendCommandFailure(source, ModifiableText.GIVELIFE_ERROR_SOULMATE.get());
+                    sendCommandFailure(source, ModifiableText.GIVELIFE_ERROR_SOULMATE.get());
                     return -1;
                 }
                 boolean success = doubleLifeGiveLife(source, self, soulmate, target);
@@ -148,7 +148,7 @@ public class GivelifeCommand extends Command {
             request.put(target.getUUID(), System.currentTimeMillis());
             soulmateGivelifeRequests.put(self.getUUID(), request);
         }
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.GIVELIFE_DOUBLELIFE_INFO.get());
+        sendCommandFeedbackQuiet(source, ModifiableText.GIVELIFE_DOUBLELIFE_INFO.get());
         ((IPlayer) soulmate).ls$message(ModifiableText.GIVELIFE_DOUBLELIFE_ACCEPT.get(target, TextUtils.runCommandText(TextUtils.formatString("/givelife {}", target.getScoreboardName()))));
         return false;
     }

@@ -108,7 +108,7 @@ public class LifeSkinsCommand extends Command {
     public int lifeSkinsInfo(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
 
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.LIFESKINS_INFO.get(TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs/features/lifeskins")));
+        sendCommandFeedbackQuiet(source, ModifiableText.LIFESKINS_INFO.get(TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs/features/lifeskins")));
 
         return 1;
     }
@@ -117,12 +117,12 @@ public class LifeSkinsCommand extends Command {
 
         Map<String, Map<String, Triple<Boolean, File, Integer>>> skinsCache = LifeSkinsManager.getCache();
         if (skinsCache.isEmpty()) {
-            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.LIFESKINS_LIST_EMPTY.get());
+            sendCommandFeedbackQuiet(source, ModifiableText.LIFESKINS_LIST_EMPTY.get());
             lifeSkinsInfo(source);
             return -1;
         }
         else {
-            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.LIFESKINS_LIST.get());
+            sendCommandFeedbackQuiet(source, ModifiableText.LIFESKINS_LIST.get());
             for (Map.Entry<String, Map<String, Triple<Boolean, File, Integer>>> holderskins : skinsCache.entrySet()) {
                 String name = holderskins.getKey();
                 List<String> skins = new ArrayList<>();
@@ -134,7 +134,7 @@ public class LifeSkinsCommand extends Command {
                     skins.add(skin.getKey().replaceAll("lives_", "") + append);
                 }
                 Collections.sort(skins);
-                OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.LIFESKINS_LIST_PERSON.get(name, skins));
+                sendCommandFeedbackQuiet(source, ModifiableText.LIFESKINS_LIST_PERSON.get(name, skins));
             }
         }
 
@@ -145,7 +145,7 @@ public class LifeSkinsCommand extends Command {
         if (checkBanned(source)) return -1;
 
         LifeSkinsManager.reloadAll();
-        OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_RELOAD_ALL.get());
+        sendCommandFeedback(source, ModifiableText.LIFESKINS_RELOAD_ALL.get());
 
         return 1;
     }
@@ -156,17 +156,17 @@ public class LifeSkinsCommand extends Command {
         ProfileManager.modifyProfile(player, skinChange, ProfileManager.ProfileChange.none()).thenAccept(success -> {
             if (success) {
                 if (username != null) {
-                    OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_SKIN_SET.get(player, username));
+                    sendCommandFeedback(source, ModifiableText.LIFESKINS_SKIN_SET.get(player, username));
                     ProfileManager.manualSkins.put(player.getUUID(), username);
                 }
                 else {
                     ProfileManager.manualSkins.remove(player.getUUID());
                     LifeSkinsManager.refreshLifeSkin(player);
-                    OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_SKIN_RESET.get(player));
+                    sendCommandFeedback(source, ModifiableText.LIFESKINS_SKIN_RESET.get(player));
                 }
             }
             else {
-                OtherUtils.sendCommandFailure(source, ModifiableText.MOD_ERROR_GENERAL.get());
+                sendCommandFailure(source, ModifiableText.MOD_ERROR_GENERAL.get());
                 ProfileManager.manualSkins.remove(player.getUUID());
             }
         });
@@ -179,14 +179,14 @@ public class LifeSkinsCommand extends Command {
         ProfileManager.modifyProfile(player, ProfileManager.ProfileChange.none(), nameChange).thenAccept(success -> {
             if (success) {
                 if (username != null) {
-                    OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_USERNAME_SET.get(player, username));
+                    sendCommandFeedback(source, ModifiableText.LIFESKINS_USERNAME_SET.get(player, username));
                 }
                 else {
-                    OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_USERNAME_RESET.get(player));
+                    sendCommandFeedback(source, ModifiableText.LIFESKINS_USERNAME_RESET.get(player));
                 }
             }
             else {
-                OtherUtils.sendCommandFailure(source, ModifiableText.MOD_ERROR_GENERAL.get());
+                sendCommandFailure(source, ModifiableText.MOD_ERROR_GENERAL.get());
             }
         });
         return 1;
@@ -196,11 +196,11 @@ public class LifeSkinsCommand extends Command {
         if (checkBanned(source)) return -1;
         if (nickname != null) {
             NicknameManager.setNickname(player, nickname);
-            OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_NICKNAME_SET.get(player, nickname));
+            sendCommandFeedback(source, ModifiableText.LIFESKINS_NICKNAME_SET.get(player, nickname));
         }
         else {
             NicknameManager.removeNickname(player);
-            OtherUtils.sendCommandFeedback(source, ModifiableText.LIFESKINS_NICKNAME_RESET.get(player));
+            sendCommandFeedback(source, ModifiableText.LIFESKINS_NICKNAME_RESET.get(player));
         }
         return 1;
     }

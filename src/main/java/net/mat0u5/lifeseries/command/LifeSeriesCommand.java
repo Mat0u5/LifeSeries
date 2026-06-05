@@ -22,6 +22,7 @@ import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;
@@ -93,6 +94,10 @@ public class LifeSeriesCommand extends Command {
                                         )
                                 )
                         )
+                        .then(literal("viewChanges")
+                                .requires(PermissionManager::isAdmin)
+                                .executes(context -> configChanges(context.getSource()))
+                        )
                 )
                 .then(literal("wiki")
                         .executes(context -> wiki(context.getSource()))
@@ -161,7 +166,7 @@ public class LifeSeriesCommand extends Command {
     }
 
     private int enableOrDisable(CommandSourceStack source, boolean disabled) {
-        OtherUtils.sendCommandFeedback(source, ModifiableText.SERIES_DISABLE.get(disabled ? "disabled" : "enabled"));
+        sendCommandFeedback(source, ModifiableText.SERIES_DISABLE.get(disabled ? "disabled" : "enabled"));
         LifeSeries.setDisabled(disabled);
         return 1;
     }
@@ -170,11 +175,11 @@ public class LifeSeriesCommand extends Command {
         if (checkBanned(source)) return -1;
         if (source.getPlayer() == null) return -1;
         if (!NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer())) {
-            OtherUtils.sendCommandFailure(source, Component.nullToEmpty("You must have the Life Series mod installed §nclient-side§c to open the season selection GUI."));
-            OtherUtils.sendCommandFailure(source, Component.nullToEmpty("Use the '/lifeseries setSeries <season>' command instead."));
+            sendCommandFailure(source, Component.nullToEmpty("You must have the Life Series mod installed §nclient-side§c to open the season selection GUI."));
+            sendCommandFailure(source, Component.nullToEmpty("Use the '/lifeseries setSeries <season>' command instead."));
             return -1;
         }
-        OtherUtils.sendCommandFeedback(source, ModifiableText.SEASON_SELECTION_GUI.get());
+        sendCommandFeedback(source, ModifiableText.SEASON_SELECTION_GUI.get());
         SimplePackets.SELECT_SEASON.target(source.getPlayer()).sendToClient(currentSeason.getSeason().getId());
         return 1;
     }
@@ -190,15 +195,15 @@ public class LifeSeriesCommand extends Command {
     public int setSeason(CommandSourceStack source, String setTo, boolean confirmed, String args) {
         if (checkBanned(source)) return -1;
         if (!ALLOWED_SEASON_NAMES.contains(setTo)) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.SEASON_INVALID.get());
-            OtherUtils.sendCommandFailure(source, ModifiableText.SEASON_INVALID_HELP.get(ALLOWED_SEASON_NAMES));
+            sendCommandFailure(source, ModifiableText.SEASON_INVALID.get());
+            sendCommandFailure(source, ModifiableText.SEASON_INVALID_HELP.get(ALLOWED_SEASON_NAMES));
             return -1;
         }
         if (confirmed || currentSeason.getSeason() == Seasons.UNASSIGNED) {
             setSeasonFinal(source, setTo, args);
         }
         else {
-            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SEASON_SELECT_WARNING.get());
+            sendCommandFeedbackQuiet(source, ModifiableText.SEASON_SELECT_WARNING.get());
         }
         return 1;
     }
@@ -209,7 +214,7 @@ public class LifeSeriesCommand extends Command {
         Seasons season = Seasons.getSeasonFromStringName(setTo);
         SeasonChanger.ChangeSeasonArgs args = SeasonChanger.parseChangeSeasonArgs(argsStr);
 
-        if (args.showChatMessage()) OtherUtils.sendCommandFeedback(source, ModifiableText.SEASON_CHANGING.get(setTo));
+        if (args.showChatMessage()) sendCommandFeedback(source, ModifiableText.SEASON_CHANGING.get(setTo));
 
         if (SeasonChanger.changeSeasonTo(season, args)) {
             if (args.showChatMessage()) PlayerUtils.broadcastMessage(ModifiableText.SEASON_CHANGED.get(setTo));
@@ -227,18 +232,18 @@ public class LifeSeriesCommand extends Command {
             return -1;
         }
         if (!NetworkHandlerServer.wasHandshakeSuccessful(self)) {
-            OtherUtils.sendCommandFailure(source, Component.nullToEmpty("You must have the Life Series mod installed §nclient-side§c to open the config GUI."));
-            OtherUtils.sendCommandFailure(source, Component.nullToEmpty("Either install the mod on the client on modify the config folder."));
+            sendCommandFailure(source, Component.nullToEmpty("You must have the Life Series mod installed §nclient-side§c to open the config GUI."));
+            sendCommandFailure(source, Component.nullToEmpty("Either install the mod on the client on modify the config folder."));
             return -1;
         }
 
         SimplePackets.CLEAR_CONFIG.target(self).sendToClient();
         if (PermissionManager.isAdmin(self) && currentSeason.getSeason() != Seasons.UNASSIGNED) {
             LifeSeries.seasonConfig.sendConfigTo(self);
-            OtherUtils.sendCommandFeedback(source, ModifiableText.CONFIG_GUI_OPENING.get());
+            sendCommandFeedback(source, ModifiableText.CONFIG_GUI_OPENING.get());
         }
         else {
-            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.CONFIG_GUI_OPENING.get());
+            sendCommandFeedbackQuiet(source, ModifiableText.CONFIG_GUI_OPENING.get());
         }
         SimplePackets.OPEN_CONFIG.target(self).sendToClient();
         return 1;
@@ -249,7 +254,25 @@ public class LifeSeriesCommand extends Command {
         seasonConfig.setProperty(key, command);
         seasonConfig.setProperty(key+"_canceled", String.valueOf(canceled.equalsIgnoreCase("override")));
         DatapackIntegration.reload();
-        OtherUtils.sendCommandFeedback(source, ModifiableText.CONFIG_SETEVENT.get(key));
+        sendCommandFeedback(source, ModifiableText.CONFIG_SETEVENT.get(key));
+        return 1;
+    }
+
+    public int configChanges(CommandSourceStack source) {
+        if (checkBanned(source)) return -1;
+
+        if (NetworkHandlerServer.configChanges.isEmpty()) {
+            sendCommandFailure(source, Component.literal("No recent config changes."));
+            return -1;
+        }
+
+        MutableComponent changes = Component.literal("\nRecent config changes:\n");
+        for (Component component : NetworkHandlerServer.configChanges) {
+            changes.append(component).append("\n");
+        }
+
+        sendCommandFeedbackQuiet(source, changes);
+
         return 1;
     }
 
@@ -259,7 +282,7 @@ public class LifeSeriesCommand extends Command {
         seasonConfig.setProperty(key, value);
         ConfigManager.onUpdatedUnknown(key, value);
 
-        OtherUtils.sendCommandFeedback(source, ModifiableText.CONFIG_SET.get(key));
+        sendCommandFeedback(source, ModifiableText.CONFIG_SET.get(key));
 
         NetworkHandlerServer.updatedConfigThisTick = true;
         if (DefaultConfigValues.RELOAD_NEEDED.contains(key)) {
@@ -271,7 +294,7 @@ public class LifeSeriesCommand extends Command {
     public int getWorlds(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
         Component worldSavesText = TextUtils.format("§7If you want to play on the exact same world seeds as Grian did, click {}§7 to open a dropbox where you can download the pre-made worlds.", TextUtils.openURLText("https://www.dropbox.com/scl/fo/jk9fhqx0jjbgeo2qa6v5i/AOZZxMx6S7MlS9HrIRJkkX4?rlkey=2khwcnf2zhgi6s4ik01e3z9d0&st=ghw1d8k6&dl=0"));
-        OtherUtils.sendCommandFeedbackQuiet(source, worldSavesText);
+        sendCommandFeedbackQuiet(source, worldSavesText);
         return 1;
     }
 
@@ -284,20 +307,20 @@ public class LifeSeriesCommand extends Command {
     public int wiki(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
         Component text = TextUtils.format("§7Click {}§7 to open the Life Series Mod wiki", TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs"));
-        OtherUtils.sendCommandFeedbackQuiet(source, text);
+        sendCommandFeedbackQuiet(source, text);
         return 1;
     }
 
     public int getDiscord(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
         Component text = TextUtils.format("§7Click {}§7 to join the mod development discord if you have any questions, issues, requests, or if you just want to hang out :)", TextUtils.openURLText("https://discord.gg/QWJxfb4zQZ"));
-        OtherUtils.sendCommandFeedbackQuiet(source, text);
+        sendCommandFeedbackQuiet(source, text);
         return 1;
     }
 
     public int getSeason(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SEASON_GET.get(currentSeason.getSeason().getId()));
+        sendCommandFeedbackQuiet(source, ModifiableText.SEASON_GET.get(currentSeason.getSeason().getId()));
         if (source.getPlayer() != null) {
             currentSeason.sendSetSeasonPacket(source.getPlayer());
         }
@@ -306,13 +329,13 @@ public class LifeSeriesCommand extends Command {
 
     public int getVersion(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.MOD_VERSION.get(LifeSeries.MOD_VERSION));
+        sendCommandFeedbackQuiet(source, ModifiableText.MOD_VERSION.get(LifeSeries.MOD_VERSION));
         return 1;
     }
 
     public int reload(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        OtherUtils.sendCommandFeedback(source, ModifiableText.MOD_RELOAD.get());
+        sendCommandFeedback(source, ModifiableText.MOD_RELOAD.get());
         OtherUtils.reloadServer();
         return 1;
     }
@@ -320,7 +343,7 @@ public class LifeSeriesCommand extends Command {
     public int getCredits(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
         Component text = TextUtils.format("§7Click {}§7 to open the full Life Series Mod Credits", TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs/other/credits"));
-        OtherUtils.sendCommandFeedbackQuiet(source, text);
+        sendCommandFeedbackQuiet(source, text);
         return 1;
     }
 }

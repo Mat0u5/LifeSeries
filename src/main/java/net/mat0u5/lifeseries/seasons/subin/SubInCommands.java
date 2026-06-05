@@ -86,29 +86,29 @@ public class SubInCommands extends Command {
         //?}
         }
         if (targetProfile == null) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.SUBIN_ERROR_FETCH.get());
+            sendCommandFailure(source, ModifiableText.SUBIN_ERROR_FETCH.get());
             return -1;
         }
 
         ServerPlayer targetPlayer = PlayerUtils.getPlayer(target);
         if (targetPlayer != null) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.SUBIN_ERROR_ONLINE.get());
+            sendCommandFailure(source, ModifiableText.SUBIN_ERROR_ONLINE.get());
             return -1;
         }
 
         if (SubInManager.isSubbingIn(player.getUUID())) {
             GameProfile profile = SubInManager.getSubstitutedPlayer(player.getUUID());
-            OtherUtils.sendCommandFailure(source, ModifiableText.SUBIN_ERROR_ALREADY_SUBBING.get(player, OtherUtils.profileName(profile)));
+            sendCommandFailure(source, ModifiableText.SUBIN_ERROR_ALREADY_SUBBING.get(player, OtherUtils.profileName(profile)));
             return -1;
         }
 
         if (SubInManager.isBeingSubstituted(OtherUtils.profileId(targetProfile))) {
             GameProfile profile = SubInManager.getSubstitutingPlayer(OtherUtils.profileId(targetProfile));
-            OtherUtils.sendCommandFailure(source, ModifiableText.SUBIN_ERROR_ALREADY_SUBBED.get(target, OtherUtils.profileName(profile)));
+            sendCommandFailure(source, ModifiableText.SUBIN_ERROR_ALREADY_SUBBED.get(target, OtherUtils.profileName(profile)));
             return -1;
         }
 
-        OtherUtils.sendCommandFeedback(source, ModifiableText.SUBIN_START.get(player, target));
+        sendCommandFeedback(source, ModifiableText.SUBIN_START.get(player, target));
         SubInManager.addSubIn(player, targetProfile);
 
         return 1;
@@ -118,13 +118,13 @@ public class SubInCommands extends Command {
         if (checkBanned(source)) return -1;
 
         if (!SubInManager.isSubbingIn(player.getUUID())) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.SUBIN_ERROR_MISSING.get(player));
+            sendCommandFailure(source, ModifiableText.SUBIN_ERROR_MISSING.get(player));
             return -1;
         }
 
         GameProfile profile = SubInManager.getSubstitutedPlayer(player.getUUID());
 
-        OtherUtils.sendCommandFeedback(source, ModifiableText.SUBIN_STOP.get(player, OtherUtils.profileName(profile)));
+        sendCommandFeedback(source, ModifiableText.SUBIN_STOP.get(player, OtherUtils.profileName(profile)));
         SubInManager.removeSubIn(player);
         return 1;
     }
@@ -133,14 +133,14 @@ public class SubInCommands extends Command {
         if (checkBanned(source)) return -1;
 
         if (SubInManager.subIns.isEmpty()) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.SUBIN_ERROR_NONE.get());
+            sendCommandFailure(source, ModifiableText.SUBIN_ERROR_NONE.get());
             return -1;
         }
 
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SUBIN_CURRENT.get());
+        sendCommandFeedbackQuiet(source, ModifiableText.SUBIN_CURRENT.get());
 
         for (SubInManager.SubIn subIn : SubInManager.subIns) {
-            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SUBIN_LIST_ENTRY.get(OtherUtils.profileName(subIn.substituter()), OtherUtils.profileName(subIn.target())));
+            sendCommandFeedbackQuiet(source, ModifiableText.SUBIN_LIST_ENTRY.get(OtherUtils.profileName(subIn.substituter()), OtherUtils.profileName(subIn.target())));
         }
 
         return 1;

@@ -100,7 +100,7 @@ public class SocietyCommands extends Command {
         if (target == null) return -1;
 
         if (!society.isMember(target)) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR.get());
+            sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR.get());
             return -1;
         }
 
@@ -116,7 +116,7 @@ public class SocietyCommands extends Command {
         if (target == null) return -1;
 
         if (society.isMember(target)) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR_DUPLICATE.get());
+            sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR_DUPLICATE.get());
             return -1;
         }
 
@@ -131,7 +131,7 @@ public class SocietyCommands extends Command {
         if (checkSocietyRunning(source)) return -1;
 
         if (society.members.isEmpty()) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR_NONE.get());
+            sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR_NONE.get());
             return -1;
         }
 
@@ -141,7 +141,7 @@ public class SocietyCommands extends Command {
             if (player == null) continue;
             societyMembers.add(player.getScoreboardName());
         }
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SOCIETY_MEMBERS.get(societyMembers));
+        sendCommandFeedbackQuiet(source, ModifiableText.SOCIETY_MEMBERS.get(societyMembers));
         return 1;
     }
 
@@ -149,16 +149,16 @@ public class SocietyCommands extends Command {
         SecretSociety society = get();
         if (society == null) return false;
         if (society.societyEnded) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.SOCIETY_ERROR_ENDED.get());
+            sendCommandFailure(source, ModifiableText.SOCIETY_ERROR_ENDED.get());
             if (PermissionManager.isAdmin(source)) {
-                OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SOCIETY_START_PROMPT.get());
+                sendCommandFeedbackQuiet(source, ModifiableText.SOCIETY_START_PROMPT.get());
             }
             return true;
         }
         if (!society.societyStarted) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.SOCIETY_ERROR_STARTED.get());
+            sendCommandFailure(source, ModifiableText.SOCIETY_ERROR_STARTED.get());
             if (PermissionManager.isAdmin(source)) {
-                OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SOCIETY_START_PROMPT.get());
+                sendCommandFeedbackQuiet(source, ModifiableText.SOCIETY_START_PROMPT.get());
             }
             return true;
         }
@@ -170,7 +170,7 @@ public class SocietyCommands extends Command {
         SecretSociety society = get();
         if (society == null) return -1;
 
-        OtherUtils.sendCommandFeedback(source, ModifiableText.SOCIETY_STARTING.get());
+        sendCommandFeedback(source, ModifiableText.SOCIETY_STARTING.get());
         society.startSociety(word);
         return 1;
     }
@@ -180,7 +180,7 @@ public class SocietyCommands extends Command {
         SecretSociety society = get();
         if (society == null) return -1;
 
-        OtherUtils.sendCommandFeedback(source, ModifiableText.SOCIETY_ENDING.get());
+        sendCommandFeedback(source, ModifiableText.SOCIETY_ENDING.get());
         society.forceEndSociety();
         return 1;
     }
@@ -195,14 +195,14 @@ public class SocietyCommands extends Command {
 
         SocietyMember member = society.getMember(self);
         if (member == null) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR_SELF.get());
+            sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR_SELF.get());
             if (PermissionManager.isAdmin(self)) {
-                OtherUtils.sendCommandFeedback(source, ModifiableText.SOCIETY_MEMBER_ERROR_FAILBYPASS.get());
+                sendCommandFeedback(source, ModifiableText.SOCIETY_MEMBER_ERROR_FAILBYPASS.get());
             }
             return -1;
         }
         if (!member.initiated) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR_INITIALIZE.get());
+            sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR_INITIALIZE.get());
             return -1;
         }
 
@@ -234,14 +234,14 @@ public class SocietyCommands extends Command {
 
         SocietyMember member = society.getMember(self);
         if (member == null) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR_SELF.get());
+            sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR_SELF.get());
             if (PermissionManager.isAdmin(self)) {
-                OtherUtils.sendCommandFeedback(source, ModifiableText.SOCIETY_MEMBER_ERROR_SUCCESSBYPASS.get());
+                sendCommandFeedback(source, ModifiableText.SOCIETY_MEMBER_ERROR_SUCCESSBYPASS.get());
             }
             return -1;
         }
         if (!member.initiated) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR_INITIALIZE.get());
+            sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR_INITIALIZE.get());
             return -1;
         }
 
@@ -273,11 +273,11 @@ public class SocietyCommands extends Command {
 
         SocietyMember member = society.getMember(self);
         if (member == null) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR_SELF.get());
+            sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR_SELF.get());
             return -1;
         }
         if (member.initiated) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR_INITIALIZED.get());
+            sendCommandFailure(source, ModifiableText.SOCIETY_MEMBER_ERROR_INITIALIZED.get());
             return -1;
         }
 

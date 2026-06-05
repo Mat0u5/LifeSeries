@@ -88,11 +88,11 @@ public class ClaimKillCommand extends Command {
         Set<UUID> recentDeaths = currentSession.playerNaturalDeathLog.keySet();
         UUID victimUUID = victim.getUUID();
         if (!recentDeaths.contains(victimUUID)) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.CLAIMKILL_ERROR_NODEATH.get(victim));
+            sendCommandFailure(source, ModifiableText.CLAIMKILL_ERROR_NODEATH.get(victim));
             return -1;
         }
         if (player == victim) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.CLAIMKILL_ERROR_SELF.get());
+            sendCommandFailure(source, ModifiableText.CLAIMKILL_ERROR_SELF.get());
             return -1;
         }
         Component textAll = ModifiableText.CLAIMKILL.get(player, victim);

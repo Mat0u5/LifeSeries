@@ -86,8 +86,8 @@ public class TestingCommands extends Command {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("Test Command 2"));
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Test: {}", PlayerUtils.getAllPlayers()));
+        sendCommandFeedbackQuiet(source, Component.nullToEmpty("Test Command 2"));
+        sendCommandFeedbackQuiet(source, TextUtils.format("Test: {}", PlayerUtils.getAllPlayers()));
 
         return 1;
     }
@@ -97,7 +97,7 @@ public class TestingCommands extends Command {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        OtherUtils.sendCommandFeedbackQuiet(source, Component.nullToEmpty("Test Command 3"));
+        sendCommandFeedbackQuiet(source, Component.nullToEmpty("Test Command 3"));
 
         System.out.println("=== Original Example: Range 0-9, Lives 1-3 ===");
         WeightedRandomizer randomizer = new WeightedRandomizer();

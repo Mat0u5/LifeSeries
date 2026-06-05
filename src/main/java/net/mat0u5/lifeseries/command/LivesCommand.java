@@ -196,16 +196,16 @@ public class LivesCommand extends Command {
 
         if (self == null) return -1;
         if (!((IPlayer) self).ls$hasAssignedLives()) {
-            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.LIVES_UNASSIGNED.get());
+            sendCommandFeedbackQuiet(source, ModifiableText.LIVES_UNASSIGNED.get());
             return 1;
         }
 
         Integer playerLives = ((IPlayer) self).ls$getLives();
 
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.LIVES_GET_SELF.get(livesManager.getFormattedLives(playerLives), TextUtils.pluralize("life", "lives", playerLives)));
+        sendCommandFeedbackQuiet(source, ModifiableText.LIVES_GET_SELF.get(livesManager.getFormattedLives(playerLives), TextUtils.pluralize("life", "lives", playerLives)));
 
         if (playerLives == null || playerLives <= 0) {
-            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.LIVES_GET_SELF_NONE.get());
+            sendCommandFeedbackQuiet(source, ModifiableText.LIVES_GET_SELF_NONE.get());
         }
 
         return 1;
@@ -215,7 +215,7 @@ public class LivesCommand extends Command {
         if (checkBanned(source)) return -1;
 
         if (!ScoreboardUtils.existsObjective(LivesManager.SCOREBOARD_NAME)) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.LIVES_UNASSIGNED_ALL.get());
+            sendCommandFailure(source, ModifiableText.LIVES_UNASSIGNED_ALL.get());
             return -1;
         }
 
@@ -225,7 +225,7 @@ public class LivesCommand extends Command {
         Collection<PlayerScoreEntry> entries = ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME);
         //?}
         if (entries.isEmpty()) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.LIVES_UNASSIGNED_ALL.get());
+            sendCommandFailure(source, ModifiableText.LIVES_UNASSIGNED_ALL.get());
             return -1;
         }
 
@@ -246,7 +246,7 @@ public class LivesCommand extends Command {
             //~}
         }
 
-        OtherUtils.sendCommandFeedbackQuiet(source, text);
+        sendCommandFeedbackQuiet(source, text);
         return 1;
     }
 
@@ -255,18 +255,18 @@ public class LivesCommand extends Command {
         if (target == null) return -1;
 
         if (!((IPlayer) target).ls$hasAssignedLives()) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.LIVES_UNASSIGNED_OTHER.get(target));
+            sendCommandFailure(source, ModifiableText.LIVES_UNASSIGNED_OTHER.get(target));
             return -1;
         }
         Integer lives = ((IPlayer) target).ls$getLives();
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.LIVES_ASSIGNED_LIST_ENTRY.get(target, livesManager.getFormattedLives(lives), TextUtils.pluralize("life", "lives", lives)));
+        sendCommandFeedbackQuiet(source, ModifiableText.LIVES_ASSIGNED_LIST_ENTRY.get(target, livesManager.getFormattedLives(lives), TextUtils.pluralize("life", "lives", lives)));
         return 1;
     }
 
     public int reloadLives(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
 
-        OtherUtils.sendCommandFeedback(source, ModifiableText.LIVES_RELOADING.get());
+        sendCommandFeedback(source, ModifiableText.LIVES_RELOADING.get());
         currentSeason.reloadAllPlayerTeams();
         return 1;
     }
@@ -283,7 +283,7 @@ public class LivesCommand extends Command {
         }
         Time amount = OtherUtils.parseTimeFromArgument(timeArgument);
         if (amount == null || !amount.isPresent()) {
-            OtherUtils.sendCommandFailure(source, Component.literal(SessionCommand.INVALID_TIME_FORMAT_ERROR));
+            sendCommandFailure(source, Component.literal(SessionCommand.INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
         if (reverse) amount.multiply(-1);
@@ -299,10 +299,10 @@ public class LivesCommand extends Command {
         if (setNotGive) {
 
             if (targets.size() == 1) {
-                OtherUtils.sendCommandFeedback(source, ModifiableText.LIVES_SET_SINGLE.get(targets.iterator().next(), livesManager.getFormattedLives(amount)));
+                sendCommandFeedback(source, ModifiableText.LIVES_SET_SINGLE.get(targets.iterator().next(), livesManager.getFormattedLives(amount)));
             }
             else {
-                OtherUtils.sendCommandFeedback(source, ModifiableText.LIVES_SET_MULTIPLE.get(livesManager.getFormattedLives(amount), targets.size()));
+                sendCommandFeedback(source, ModifiableText.LIVES_SET_MULTIPLE.get(livesManager.getFormattedLives(amount), targets.size()));
             }
 
             for (ServerPlayer player : targets) {
@@ -325,18 +325,18 @@ public class LivesCommand extends Command {
 
             if (targets.size() == 1) {
                 if (normalLife) {
-                    OtherUtils.sendCommandFeedback(source, ModifiableText.LIVES_CHANGE_SINGLE.get(addOrRemove, Math.abs(amount), timeOrLives2, toOrFrom, targets.iterator().next()));
+                    sendCommandFeedback(source, ModifiableText.LIVES_CHANGE_SINGLE.get(addOrRemove, Math.abs(amount), timeOrLives2, toOrFrom, targets.iterator().next()));
                 }
                 else {
-                    OtherUtils.sendCommandFeedback(source, ModifiableText.LIVES_CHANGE_SINGLE.get(addOrRemove, timeOrLives2, toOrFrom, targets.iterator().next()));
+                    sendCommandFeedback(source, ModifiableText.LIVES_CHANGE_SINGLE.get(addOrRemove, timeOrLives2, toOrFrom, targets.iterator().next()));
                 }
             }
             else {
                 if (normalLife) {
-                    OtherUtils.sendCommandFeedback(source, ModifiableText.LIVES_CHANGE_MULTIPLE.get(addOrRemove, Math.abs(amount), timeOrLives2, toOrFrom, targets.size()));
+                    sendCommandFeedback(source, ModifiableText.LIVES_CHANGE_MULTIPLE.get(addOrRemove, Math.abs(amount), timeOrLives2, toOrFrom, targets.size()));
                 }
                 else {
-                    OtherUtils.sendCommandFeedback(source, ModifiableText.LIVES_CHANGE_MULTIPLE.get(addOrRemove, timeOrLives2, toOrFrom, targets.size()));
+                    sendCommandFeedback(source, ModifiableText.LIVES_CHANGE_MULTIPLE.get(addOrRemove, timeOrLives2, toOrFrom, targets.size()));
                 }
             }
 
@@ -363,10 +363,10 @@ public class LivesCommand extends Command {
         targets.forEach(livesManager::resetPlayerLife);
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.LIVES_RESET_SINGLE.get(targets.iterator().next()));
+            sendCommandFeedback(source, ModifiableText.LIVES_RESET_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.LIVES_RESET_MULTIPLE.get(targets.size()));
+            sendCommandFeedback(source, ModifiableText.LIVES_RESET_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -376,7 +376,7 @@ public class LivesCommand extends Command {
         if (checkBanned(source)) return -1;
 
         livesManager.resetAllPlayerLives();
-        OtherUtils.sendCommandFeedback(source, ModifiableText.LIVES_RESET_EVERYONE.get());
+        sendCommandFeedback(source, ModifiableText.LIVES_RESET_EVERYONE.get());
         return 1;
     }
 
@@ -385,10 +385,10 @@ public class LivesCommand extends Command {
         if (players == null || players.isEmpty()) return -1;
 
         if (players.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.LIVES_RANDOMIZE_SINGLE.get(players.iterator().next()));
+            sendCommandFeedback(source, ModifiableText.LIVES_RANDOMIZE_SINGLE.get(players.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.LIVES_RANDOMIZE_MULTIPLE.get(players.size()));
+            sendCommandFeedback(source, ModifiableText.LIVES_RANDOMIZE_MULTIPLE.get(players.size()));
         }
 
         livesManager.assignRandomLives(new ArrayList<>(players));

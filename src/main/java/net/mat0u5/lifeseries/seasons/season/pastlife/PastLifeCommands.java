@@ -58,7 +58,7 @@ public class PastLifeCommands extends Command {
         if (checkBanned(source)) return -1;
 
         if (!currentSession.statusStarted()) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.SESSION_ERROR_NOTSTARTED.get());
+            sendCommandFailure(source, ModifiableText.SESSION_ERROR_NOTSTARTED.get());
             return -1;
         }
 
@@ -74,11 +74,11 @@ public class PastLifeCommands extends Command {
         }
 
         if (bannedBoogeyman && bannedSociety) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_FAIL.get());
+            sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_FAIL.get());
             return -1;
         }
 
-        OtherUtils.sendCommandFeedback(source, ModifiableText.PASTLIFE_TWIST_RANDOM.get());
+        sendCommandFeedback(source, ModifiableText.PASTLIFE_TWIST_RANDOM.get());
         if (!bannedBoogeyman && bannedSociety) {
             currentSeason.boogeymanManager.addSessionActions();
             return 1;
@@ -106,34 +106,34 @@ public class PastLifeCommands extends Command {
         if (checkBanned(source)) return -1;
 
         if (!currentSession.statusStarted()) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.SESSION_ERROR_NOTSTARTED.get());
+            sendCommandFailure(source, ModifiableText.SESSION_ERROR_NOTSTARTED.get());
             return -1;
         }
 
         if (!currentSeason.secretSociety.SOCIETY_ENABLED) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_SOCIETY_ERROR_DISABLED.get());
+            sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_SOCIETY_ERROR_DISABLED.get());
             return -1;
         }
 
         if (currentSeason.secretSociety.societyEnded) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_SOCIETY_ERROR_ENDED.get());
+            sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_SOCIETY_ERROR_ENDED.get());
             return -1;
         }
 
         if (currentSeason.secretSociety.societyStarted) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_SOCIETY_ERROR_STARTED.get());
+            sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_SOCIETY_ERROR_STARTED.get());
             return -1;
         }
 
         for (SessionAction action : currentSession.getSessionActions()) {
             if (action.sessionMessage != null && action.sessionMessage.equalsIgnoreCase(ModifiableText.SESSION_ACTION_SOCIETY.getString())) {
-                OtherUtils.sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_SOCIETY_ERROR_QUEUED.get());
+                sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_SOCIETY_ERROR_QUEUED.get());
                 return -1;
             }
         }
 
         currentSeason.secretSociety.addSessionActions();
-        OtherUtils.sendCommandFeedback(source, ModifiableText.PASTLIFE_TWIST_SOCIETY.get());
+        sendCommandFeedback(source, ModifiableText.PASTLIFE_TWIST_SOCIETY.get());
         return 1;
     }
 
@@ -141,29 +141,29 @@ public class PastLifeCommands extends Command {
         if (checkBanned(source)) return -1;
 
         if (!currentSession.statusStarted()) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.SESSION_ERROR_NOTSTARTED.get());
+            sendCommandFailure(source, ModifiableText.SESSION_ERROR_NOTSTARTED.get());
             return -1;
         }
 
         if (!currentSeason.boogeymanManager.BOOGEYMAN_ENABLED) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_BOOGEYMAN_ERROR_DISABLED.get());
+            sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_BOOGEYMAN_ERROR_DISABLED.get());
             return -1;
         }
 
         if (currentSeason.boogeymanManager.boogeymanChosen) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_BOOGEYMAN_ERROR_CHOSEN.get());
+            sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_BOOGEYMAN_ERROR_CHOSEN.get());
             return -1;
         }
 
         for (SessionAction action : currentSession.getSessionActions()) {
             if (action.sessionMessage != null && action.sessionMessage.equalsIgnoreCase(ModifiableText.SESSION_ACTION_BOOGEYMAN.getString())) {
-                OtherUtils.sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_BOOGEYMAN_ERROR_QUEUED.get());
+                sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_BOOGEYMAN_ERROR_QUEUED.get());
                 return -1;
             }
         }
 
         currentSeason.boogeymanManager.addSessionActions();
-        OtherUtils.sendCommandFeedback(source, ModifiableText.PASTLIFE_TWIST_BOOGEYMAN.get());
+        sendCommandFeedback(source, ModifiableText.PASTLIFE_TWIST_BOOGEYMAN.get());
         return 1;
     }
 }

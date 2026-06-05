@@ -119,7 +119,7 @@ public class NiceLifeCommands extends Command {
     private int niceListEnd(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
         if (NiceLifeVotingManager.voteType != NiceLifeVotingManager.VoteType.NICE_LIST_LIFE) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_NICELIST_ERROR.get());
+            sendCommandFailure(source, ModifiableText.NICELIFE_NICELIST_ERROR.get());
             return -1;
         }
         NiceLifeVotingManager.endNiceList();
@@ -130,7 +130,7 @@ public class NiceLifeCommands extends Command {
         if (checkBanned(source)) return -1;
 
         if (NiceLifeVotingManager.voteType != NiceLifeVotingManager.VoteType.NICE_LIST_LIFE) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_NICELIST_ERROR.get());
+            sendCommandFailure(source, ModifiableText.NICELIFE_NICELIST_ERROR.get());
             return -1;
         }
 
@@ -142,10 +142,10 @@ public class NiceLifeCommands extends Command {
             }
         }
         if (niceListPlayers.isEmpty()) {
-            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.NICELIFE_NICELIST_EMPTY.get());
+            sendCommandFeedbackQuiet(source, ModifiableText.NICELIFE_NICELIST_EMPTY.get());
             return 1;
         }
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.NICELIFE_NICELIST_LIST.get(niceListPlayers));
+        sendCommandFeedbackQuiet(source, ModifiableText.NICELIFE_NICELIST_LIST.get(niceListPlayers));
         return 1;
     }
 
@@ -153,7 +153,7 @@ public class NiceLifeCommands extends Command {
         if (checkBanned(source)) return -1;
 
         if (NiceLifeVotingManager.voteType != NiceLifeVotingManager.VoteType.NICE_LIST_LIFE) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_NICELIST_ERROR.get());
+            sendCommandFailure(source, ModifiableText.NICELIFE_NICELIST_ERROR.get());
             return -1;
         }
 
@@ -162,10 +162,10 @@ public class NiceLifeCommands extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_NICELIST_ADD_SINGLE.get(targets.iterator().next()));
+            sendCommandFeedback(source, ModifiableText.NICELIFE_NICELIST_ADD_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_NICELIST_ADD_MULTIPLE.get(targets.size()));
+            sendCommandFeedback(source, ModifiableText.NICELIFE_NICELIST_ADD_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -175,7 +175,7 @@ public class NiceLifeCommands extends Command {
         if (checkBanned(source)) return -1;
 
         if (NiceLifeVotingManager.voteType != NiceLifeVotingManager.VoteType.NICE_LIST_LIFE) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_NICELIST_ERROR.get());
+            sendCommandFailure(source, ModifiableText.NICELIFE_NICELIST_ERROR.get());
             return -1;
         }
 
@@ -184,10 +184,10 @@ public class NiceLifeCommands extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_NICELIST_REMOVE_SINGLE.get(targets.iterator().next()));
+            sendCommandFeedback(source, ModifiableText.NICELIFE_NICELIST_REMOVE_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_NICELIST_REMOVE_MULTIPLE.get(targets.size()));
+            sendCommandFeedback(source, ModifiableText.NICELIFE_NICELIST_REMOVE_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -210,10 +210,10 @@ public class NiceLifeCommands extends Command {
             }
         }
         if (naughtyListPlayers.isEmpty()) {
-            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.NICELIFE_NAUGHTYLIST_EMPTY.get());
+            sendCommandFeedbackQuiet(source, ModifiableText.NICELIFE_NAUGHTYLIST_EMPTY.get());
             return 1;
         }
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.NICELIFE_NAUGHTYLIST_LIST.get(naughtyListPlayers));
+        sendCommandFeedbackQuiet(source, ModifiableText.NICELIFE_NAUGHTYLIST_LIST.get(naughtyListPlayers));
         return 1;
     }
 
@@ -225,10 +225,10 @@ public class NiceLifeCommands extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_NAUGHTYLIST_ADD_SINGLE.get(targets.iterator().next()));
+            sendCommandFeedback(source, ModifiableText.NICELIFE_NAUGHTYLIST_ADD_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_NAUGHTYLIST_ADD_MULTIPLE.get(targets.size()));
+            sendCommandFeedback(source, ModifiableText.NICELIFE_NAUGHTYLIST_ADD_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -242,10 +242,10 @@ public class NiceLifeCommands extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_NAUGHTYLIST_REMOVE_SINGLE.get(targets.iterator().next()));
+            sendCommandFeedback(source, ModifiableText.NICELIFE_NAUGHTYLIST_REMOVE_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_NAUGHTYLIST_REMOVE_MULTIPLE.get(targets.size()));
+            sendCommandFeedback(source, ModifiableText.NICELIFE_NAUGHTYLIST_REMOVE_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -265,11 +265,11 @@ public class NiceLifeCommands extends Command {
                 NiceLifeVotingManager.forcedTriviaVote = Optional.of(NiceLifeVotingManager.VoteType.NAUGHTY_LIST);
                 break;
             default:
-                OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_VOTE_ERROR_UNKNOWN.get());
+                sendCommandFailure(source, ModifiableText.NICELIFE_VOTE_ERROR_UNKNOWN.get());
                 return -1;
         }
 
-        OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_VOTE_SET.get(type));
+        sendCommandFeedback(source, ModifiableText.NICELIFE_VOTE_SET.get(type));
         return 1;
     }
 
@@ -280,10 +280,10 @@ public class NiceLifeCommands extends Command {
 
         if (self.isSleeping()) {
             self.stopSleepInBed(false, true);
-            OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_WAKEUP_SINGLE.get(self));
+            sendCommandFeedback(source, ModifiableText.NICELIFE_WAKEUP_SINGLE.get(self));
         }
         else {
-            OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_NOTSLEEPING.get());
+            sendCommandFailure(source, ModifiableText.NICELIFE_NOTSLEEPING.get());
             return -1;
         }
         SimplePackets.REMOVE_SLEEP_SCREENS.target(self).sendToClient();
@@ -302,10 +302,10 @@ public class NiceLifeCommands extends Command {
 
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_WAKEUP_SINGLE.get(targets.iterator().next()));
+            sendCommandFeedback(source, ModifiableText.NICELIFE_WAKEUP_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_WAKEUP_MULTIPLE.get(targets.size()));
+            sendCommandFeedback(source, ModifiableText.NICELIFE_WAKEUP_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -319,7 +319,7 @@ public class NiceLifeCommands extends Command {
             *///?} else {
             if (!source.getServer().overworld().isDarkOutside()) {
             //?}
-                OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_NOT_NIGHT.get());
+                sendCommandFailure(source, ModifiableText.NICELIFE_NOT_NIGHT.get());
                 return -1;
             }
             niceLife.sleepThroughNight();
@@ -333,26 +333,26 @@ public class NiceLifeCommands extends Command {
         if (self == null) return -1;
 
         if (!NiceLifeVotingManager.niceListMembers.contains(self.getUUID())) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_VOTE_ERROR_NICELIST_MISSING.get());
+            sendCommandFailure(source, ModifiableText.NICELIFE_VOTE_ERROR_NICELIST_MISSING.get());
             return -1;
         }
         if (NiceLifeVotingManager.voteType != NiceLifeVotingManager.VoteType.NICE_LIST_LIFE) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_VOTE_ERROR_NICELIST_PROGRESS.get());
+            sendCommandFailure(source, ModifiableText.NICELIFE_VOTE_ERROR_NICELIST_PROGRESS.get());
             return -1;
         }
         if (((IPlayer) self).ls$isDead()) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_VOTE_ERROR_DEAD.get());
+            sendCommandFailure(source, ModifiableText.NICELIFE_VOTE_ERROR_DEAD.get());
             return -1;
         }
         if (((IPlayer) self).ls$isWatcher()) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_VOTE_ERROR_WATCHER.get());
+            sendCommandFailure(source, ModifiableText.NICELIFE_VOTE_ERROR_WATCHER.get());
             return -1;
         }
 
         boolean success = NiceLifeVotingManager.openNiceListLifeVote(self);
 
         if (!success) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_VOTE_ERROR_TARGET.get());
+            sendCommandFailure(source, ModifiableText.NICELIFE_VOTE_ERROR_TARGET.get());
             return -1;
         }
 

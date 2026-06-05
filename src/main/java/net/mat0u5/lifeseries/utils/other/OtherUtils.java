@@ -139,29 +139,6 @@ public class OtherUtils {
         }
     }
 
-    public static void sendCommandFeedback(CommandSourceStack source, Component text) {
-        if (source == null || text == null) return;
-        if (text.getString().isEmpty()) return;
-        source.sendSuccess(() -> text, true);
-    }
-
-    public static void sendCommandFeedbackQuiet(CommandSourceStack source, Component text) {
-        if (source == null || text == null) return;
-        if (text.getString().isEmpty()) return;
-        source.sendSuccess(() -> text, false);
-    }
-    public static void sendCommandFailure(CommandSourceStack source, Component text) {
-        sendCommandFailure(source, text, false);
-    }
-    public static void sendCommandFailure(CommandSourceStack source, Component text, boolean keepFormatting) {
-        if (keepFormatting) {
-            source.sendFailure(text);
-        }
-        else {
-            source.sendFailure(Component.literal(text.getString()));
-        }
-    }
-
     public static UUID profileId(GameProfile profile) {
         if (profile == null) return null;
         //? if <= 1.21.6 {

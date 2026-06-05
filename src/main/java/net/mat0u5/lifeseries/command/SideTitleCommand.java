@@ -71,10 +71,10 @@ public class SideTitleCommand extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.SIDETITLE_SINGLE.get(targets.iterator().next()));
+            sendCommandFeedback(source, ModifiableText.SIDETITLE_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.SIDETITLE_MULTIPLE.get(targets.size()));
+            sendCommandFeedback(source, ModifiableText.SIDETITLE_MULTIPLE.get(targets.size()));
         }
 
         return targets.size();

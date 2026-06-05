@@ -133,7 +133,7 @@ public class WildLifeTriviaCommand extends Command {
     public int setPunishment(CommandSourceStack source, Collection<ServerPlayer> targets, String punishment) {
         if (checkBanned(source)) return -1;
         if (!CompatibilityManager.voicechatLoaded() && punishment.equals("robotic_voice")) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.MOD_SVC_MISSING_SERVER.get());
+            sendCommandFailure(source, ModifiableText.MOD_SVC_MISSING_SERVER.get());
             return -1;
         }
 
@@ -203,19 +203,19 @@ public class WildLifeTriviaCommand extends Command {
 
         if (punishment.equals("robotic_voice") && totalSVC == 0) {
             if (targets.size() == 1) {
-                OtherUtils.sendCommandFailure(source, ModifiableText.MOD_SVC_MISSING.get(targets.iterator().next()));
+                sendCommandFailure(source, ModifiableText.MOD_SVC_MISSING.get(targets.iterator().next()));
             }
             else {
-                OtherUtils.sendCommandFailure(source, ModifiableText.MOD_SVC_MISSING_ALL.get());
+                sendCommandFailure(source, ModifiableText.MOD_SVC_MISSING_ALL.get());
             }
             return -1;
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_PUNISHMENT_SET_SINGLE.get(targets.iterator().next(), punishment));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_PUNISHMENT_SET_SINGLE.get(targets.iterator().next(), punishment));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_PUNISHMENT_SET_MULTIPLE.get(targets.size(), punishment));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_PUNISHMENT_SET_MULTIPLE.get(targets.size(), punishment));
         }
         return 1;
     }
@@ -227,10 +227,10 @@ public class WildLifeTriviaCommand extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_PUNISHMENT_CLEAR_SINGLE.get(targets.iterator().next()));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_PUNISHMENT_CLEAR_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_PUNISHMENT_CLEAR_MULTIPLE.get(targets.size()));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_PUNISHMENT_CLEAR_MULTIPLE.get(targets.size()));
         }
         return 1;
     }
@@ -243,10 +243,10 @@ public class WildLifeTriviaCommand extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_BOT_SPAWN_SINGLE.get(targets.iterator().next()));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_BOT_SPAWN_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_BOT_SPAWN_MULTIPLE.get(targets.size()));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_BOT_SPAWN_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -293,7 +293,7 @@ public class WildLifeTriviaCommand extends Command {
         }
 
         if (triviaQuestion == null) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_TRIVIA_QUESTION_INVALID.get());
+            sendCommandFailure(source, ModifiableText.WILDLIFE_TRIVIA_QUESTION_INVALID.get());
             return -1;
         }
 
@@ -307,10 +307,10 @@ public class WildLifeTriviaCommand extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_SET_SINGLE.get(targets.iterator().next()));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_SET_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_SET_MULTIPLE.get(targets.size()));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_SET_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -324,10 +324,10 @@ public class WildLifeTriviaCommand extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_RESET_SINGLE.get(targets.iterator().next()));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_RESET_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_RESET_MULTIPLE.get(targets.size()));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_RESET_MULTIPLE.get(targets.size()));
         }
 
         return 1;

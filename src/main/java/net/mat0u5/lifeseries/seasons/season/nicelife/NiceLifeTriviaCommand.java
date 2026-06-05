@@ -93,13 +93,13 @@ public class NiceLifeTriviaCommand extends Command {
         }
 
         if (triviaQuestion == null) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.NICELIFE_TRIVIA_NOTFOUND.get());
+            sendCommandFailure(source, ModifiableText.NICELIFE_TRIVIA_NOTFOUND.get());
             return -1;
         }
 
         NiceLifeTriviaManager.preAssignedTrivia = triviaQuestion;
 
-        OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_TRIVIA_ASSIGNED.get());
+        sendCommandFeedback(source, ModifiableText.NICELIFE_TRIVIA_ASSIGNED.get());
 
         return 1;
     }
@@ -108,7 +108,7 @@ public class NiceLifeTriviaCommand extends Command {
         if (checkBanned(source)) return -1;
         NiceLifeTriviaManager.preAssignedTrivia = null;
 
-        OtherUtils.sendCommandFeedback(source, ModifiableText.NICELIFE_TRIVIA_RESET.get());
+        sendCommandFeedback(source, ModifiableText.NICELIFE_TRIVIA_RESET.get());
 
         return 1;
     }

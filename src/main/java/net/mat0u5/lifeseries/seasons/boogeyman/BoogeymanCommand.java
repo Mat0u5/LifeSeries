@@ -120,23 +120,23 @@ public class BoogeymanCommand extends Command {
         if (bm == null) return -1;
 
         if (!bm.isBoogeyman(self)) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_NOTBOOGEY.get());
+            sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_NOTBOOGEY.get());
             return -1;
         }
         Boogeyman boogeyman = bm.getBoogeyman(self);
         if (boogeyman != null) {
             if (boogeyman.failed) {
-                OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_ALREADY_FAILED.get());
+                sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_ALREADY_FAILED.get());
                 return 1;
 
             }
             else if (boogeyman.cured) {
-                OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_ALREADY_CURED.get());
+                sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_ALREADY_CURED.get());
                 return 1;
             }
         }
         if (bm instanceof PastLifeBoogeymanManager) {
-            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_IS.get());
+            sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_IS.get());
         }
 
         bm.messageBoogeyman(boogeyman, self);
@@ -152,28 +152,28 @@ public class BoogeymanCommand extends Command {
         if (bm == null) return -1;
 
         if (!bm.isBoogeyman(self)) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_NOTBOOGEY.get());
+            sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_NOTBOOGEY.get());
             return -1;
         }
         Boogeyman boogeyman = bm.getBoogeyman(self);
         if (boogeyman != null) {
             if (boogeyman.cured) {
-                OtherUtils.sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_ALREADY_CURED.get());
+                sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_ALREADY_CURED.get());
                 return -1;
             }
             if (boogeyman.failed) {
-                OtherUtils.sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_ALREADY_FAILED.get());
+                sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_ALREADY_FAILED.get());
                 return -1;
             }
         }
 
         if (!confirm) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.BOOGEYMAN_SELFFAIL_WARNING.get());
+            sendCommandFailure(source, ModifiableText.BOOGEYMAN_SELFFAIL_WARNING.get());
             return -1;
         }
 
         if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME) {
-            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_SELFFAIL.get());
+            sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_SELFFAIL.get());
         }
         else {
             PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_FAIL_SELFFAIL.get(self));
@@ -191,7 +191,7 @@ public class BoogeymanCommand extends Command {
         if (targets.size() == 1) {
             ServerPlayer target = targets.iterator().next();
             if (!bm.isBoogeyman(target)) {
-                OtherUtils.sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_NOTBOOGEY_OTHER.get());
+                sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_NOTBOOGEY_OTHER.get());
                 return -1;
             }
         }
@@ -202,10 +202,10 @@ public class BoogeymanCommand extends Command {
 
         if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME) {
             if (targets.size() == 1) {
-                OtherUtils.sendCommandFeedback(source, ModifiableText.BOOGEYMAN_FAIL_OTHER_SINGLE.get(targets.iterator().next()));
+                sendCommandFeedback(source, ModifiableText.BOOGEYMAN_FAIL_OTHER_SINGLE.get(targets.iterator().next()));
             }
             else {
-                OtherUtils.sendCommandFeedback(source, ModifiableText.BOOGEYMAN_FAIL_OTHER_MULTIPLE.get(targets.size()));
+                sendCommandFeedback(source, ModifiableText.BOOGEYMAN_FAIL_OTHER_MULTIPLE.get(targets.size()));
             }
         }
 
@@ -219,7 +219,7 @@ public class BoogeymanCommand extends Command {
         if (targets.size() == 1) {
             ServerPlayer target = targets.iterator().next();
             if (!bm.isBoogeyman(target)) {
-                OtherUtils.sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_NOTBOOGEY_OTHER.get());
+                sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_NOTBOOGEY_OTHER.get());
                 return -1;
             }
         }
@@ -229,10 +229,10 @@ public class BoogeymanCommand extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.BOOGEYMAN_RESET_SINGLE.get(targets.iterator().next()));
+            sendCommandFeedback(source, ModifiableText.BOOGEYMAN_RESET_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.BOOGEYMAN_RESET_MULTIPLE.get(targets.size()));
+            sendCommandFeedback(source, ModifiableText.BOOGEYMAN_RESET_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -246,7 +246,7 @@ public class BoogeymanCommand extends Command {
         if (targets.size() == 1) {
             ServerPlayer target = targets.iterator().next();
             if (!bm.isBoogeyman(target)) {
-                OtherUtils.sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_NOTBOOGEY_OTHER.get());
+                sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_NOTBOOGEY_OTHER.get());
                 return -1;
             }
         }
@@ -257,10 +257,10 @@ public class BoogeymanCommand extends Command {
 
         if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME) {
             if (targets.size() == 1) {
-                OtherUtils.sendCommandFeedback(source, ModifiableText.BOOGEYMAN_CURE_SINGLE.get(targets.iterator().next()));
+                sendCommandFeedback(source, ModifiableText.BOOGEYMAN_CURE_SINGLE.get(targets.iterator().next()));
             }
             else {
-                OtherUtils.sendCommandFeedback(source, ModifiableText.BOOGEYMAN_CURE_MULTIPLE.get(targets.size()));
+                sendCommandFeedback(source, ModifiableText.BOOGEYMAN_CURE_MULTIPLE.get(targets.size()));
             }
         }
 
@@ -275,7 +275,7 @@ public class BoogeymanCommand extends Command {
         if (targets.size() == 1) {
             ServerPlayer target = targets.iterator().next();
             if (bm.isBoogeyman(target)) {
-                OtherUtils.sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_IS.get());
+                sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_IS.get());
                 return -1;
             }
         }
@@ -286,10 +286,10 @@ public class BoogeymanCommand extends Command {
             }
         }
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.BOOGEYMAN_ADD_SINGLE.get(targets.iterator().next()));
+            sendCommandFeedback(source, ModifiableText.BOOGEYMAN_ADD_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.BOOGEYMAN_ADD_MULTIPLE.get(targets.size()));
+            sendCommandFeedback(source, ModifiableText.BOOGEYMAN_ADD_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -303,7 +303,7 @@ public class BoogeymanCommand extends Command {
         if (targets.size() == 1) {
             ServerPlayer target = targets.iterator().next();
             if (!bm.isBoogeyman(target)) {
-                OtherUtils.sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_NOTBOOGEY_OTHER.get());
+                sendCommandFailure(source, ModifiableText.BOOGEYMAN_ERROR_NOTBOOGEY_OTHER.get());
                 return -1;
             }
         }
@@ -312,10 +312,10 @@ public class BoogeymanCommand extends Command {
             bm.removeBoogeymanManually(player);
         }
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.BOOGEYMAN_REMOVE_SINGLE.get(targets.iterator().next()));
+            sendCommandFeedback(source, ModifiableText.BOOGEYMAN_REMOVE_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.BOOGEYMAN_REMOVE_MULTIPLE.get(targets.size()));
+            sendCommandFeedback(source, ModifiableText.BOOGEYMAN_REMOVE_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -345,9 +345,9 @@ public class BoogeymanCommand extends Command {
         if (curedBoogeymen.isEmpty()) curedBoogeymen.add("§7None");
         if (failedBoogeymen.isEmpty()) failedBoogeymen.add("§7None");
 
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_LIST_REMAINING.get(allBoogeymen));
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_LIST_CURED.get(curedBoogeymen));
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_LIST_FAILED.get(failedBoogeymen));
+        sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_LIST_REMAINING.get(allBoogeymen));
+        sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_LIST_CURED.get(curedBoogeymen));
+        sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_LIST_FAILED.get(failedBoogeymen));
         return 1;
     }
 
@@ -371,9 +371,9 @@ public class BoogeymanCommand extends Command {
             }
         }
 
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_LIST_REMAINING.get(allBoogeymen));
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_LIST_CURED.get(curedBoogeymen));
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_LIST_FAILED.get(failedBoogeymen));
+        sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_LIST_REMAINING.get(allBoogeymen));
+        sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_LIST_CURED.get(curedBoogeymen));
+        sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_LIST_FAILED.get(failedBoogeymen));
         return 1;
     }
 
@@ -383,7 +383,7 @@ public class BoogeymanCommand extends Command {
         if (bm == null) return -1;
 
         bm.resetBoogeymen();
-        OtherUtils.sendCommandFeedback(source, ModifiableText.BOOGEYMAN_CLEAR.get());
+        sendCommandFeedback(source, ModifiableText.BOOGEYMAN_CLEAR.get());
         return 1;
     }
 
@@ -392,7 +392,7 @@ public class BoogeymanCommand extends Command {
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
 
-        OtherUtils.sendCommandFeedback(source, ModifiableText.BOOGEYMAN_RANDOMIZE.get());
+        sendCommandFeedback(source, ModifiableText.BOOGEYMAN_RANDOMIZE.get());
 
         bm.resetBoogeymen();
         bm.prepareToChooseBoogeymen();

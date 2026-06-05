@@ -135,23 +135,23 @@ public class SessionCommand extends Command {
 
         Time pauseAt = OtherUtils.parseTimeFromArgument(timeArgument1);
         if (pauseAt == null || !pauseAt.isPresent()) {
-            OtherUtils.sendCommandFailure(source, Component.literal(INVALID_TIME_FORMAT_ERROR));
+            sendCommandFailure(source, Component.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
         Time pauseFor = OtherUtils.parseTimeFromArgument(timeArgument2);
         if (pauseFor == null || !pauseFor.isPresent()) {
-            OtherUtils.sendCommandFailure(source, Component.literal(INVALID_TIME_FORMAT_ERROR));
+            sendCommandFailure(source, Component.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
 
-        OtherUtils.sendCommandFeedback(source, ModifiableText.SESSION_PAUSE_QUEUE.get(pauseAt.formatLong(), pauseFor.formatLong()));
+        sendCommandFeedback(source, ModifiableText.SESSION_PAUSE_QUEUE.get(pauseAt.formatLong(), pauseFor.formatLong()));
         currentSession.queuePause(pauseAt, pauseFor);
         return 1;
     }
 
     public int pauseQueueReset(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        OtherUtils.sendCommandFeedback(source, ModifiableText.SESSION_PAUSE_QUEUE_RESET.get());
+        sendCommandFeedback(source, ModifiableText.SESSION_PAUSE_QUEUE_RESET.get());
 
         currentSession.discardAllQueuedPauses();
         return 1;
@@ -161,10 +161,10 @@ public class SessionCommand extends Command {
         if (checkBanned(source)) return -1;
 
         if (!currentSession.validTime()) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.SESSION_ERROR_TIME_UNSET.get());
+            sendCommandFailure(source, ModifiableText.SESSION_ERROR_TIME_UNSET.get());
             return -1;
         }
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.SESSION_END_INFO.get(currentSession.getRemainingTimeStr()));
+        sendCommandFeedbackQuiet(source, ModifiableText.SESSION_END_INFO.get(currentSession.getRemainingTimeStr()));
         return 1;
     }
 
@@ -187,22 +187,22 @@ public class SessionCommand extends Command {
         if (checkBanned(source)) return -1;
 
         if (!currentSession.validTime()) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.SESSION_ERROR_TIME_UNSET.get());
+            sendCommandFailure(source, ModifiableText.SESSION_ERROR_TIME_UNSET.get());
             return -1;
         }
         if (currentSession.statusStarted()) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.SESSION_ERROR_STARTED.get());
+            sendCommandFailure(source, ModifiableText.SESSION_ERROR_STARTED.get());
             return -1;
         }
         if (currentSession.statusPaused()) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.SESSION_UNPAUSING.get());
+            sendCommandFeedback(source, ModifiableText.SESSION_UNPAUSING.get());
             currentSession.sessionPause();
             return 1;
         }
 
-        OtherUtils.sendCommandFeedback(source, ModifiableText.SESSION_STARTING.get());
+        sendCommandFeedback(source, ModifiableText.SESSION_STARTING.get());
         if (!currentSession.sessionStart()) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.SESSION_START_FAIL.get());
+            sendCommandFailure(source, ModifiableText.SESSION_START_FAIL.get());
             return -1;
         }
 
@@ -213,11 +213,11 @@ public class SessionCommand extends Command {
         if (checkBanned(source)) return -1;
 
         if (currentSession.statusNotStarted() || currentSession.statusFinished()) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.SESSION_ERROR_NOTSTARTED.get());
+            sendCommandFailure(source, ModifiableText.SESSION_ERROR_NOTSTARTED.get());
             return -1;
         }
 
-        OtherUtils.sendCommandFeedback(source, ModifiableText.SESSION_STOPPING.get());
+        sendCommandFeedback(source, ModifiableText.SESSION_STOPPING.get());
         currentSession.sessionEnd();
         return 1;
     }
@@ -226,16 +226,16 @@ public class SessionCommand extends Command {
         if (checkBanned(source)) return -1;
 
         if (currentSession.statusNotStarted() || currentSession.statusFinished()) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.SESSION_ERROR_NOTSTARTED.get());
+            sendCommandFailure(source, ModifiableText.SESSION_ERROR_NOTSTARTED.get());
             return -1;
         }
 
         if (currentSession.statusPaused()) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.SESSION_UNPAUSING.get());
+            sendCommandFeedback(source, ModifiableText.SESSION_UNPAUSING.get());
             currentSession.sessionPause();
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.SESSION_PAUSING.get());
+            sendCommandFeedback(source, ModifiableText.SESSION_PAUSING.get());
             currentSession.queuePause(currentSession.getPassedTime(), Time.hours(10_000));
         }
 
@@ -247,10 +247,10 @@ public class SessionCommand extends Command {
 
         Time timeTotal = OtherUtils.parseTimeFromArgument(timeArgument);
         if (timeTotal == null || !timeTotal.isPresent()) {
-            OtherUtils.sendCommandFailure(source, Component.literal(INVALID_TIME_FORMAT_ERROR));
+            sendCommandFailure(source, Component.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
-        OtherUtils.sendCommandFeedback(source, ModifiableText.SESSION_SKIP.get(timeTotal.formatLong()));
+        sendCommandFeedback(source, ModifiableText.SESSION_SKIP.get(timeTotal.formatLong()));
         currentSession.passTime(timeTotal);
         return 1;
     }
@@ -260,12 +260,12 @@ public class SessionCommand extends Command {
 
         Time timeTotal = OtherUtils.parseTimeFromArgument(timeArgument);
         if (timeTotal == null || !timeTotal.isPresent()) {
-            OtherUtils.sendCommandFailure(source, Component.literal(INVALID_TIME_FORMAT_ERROR));
+            sendCommandFailure(source, Component.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
         currentSession.setSessionLength(timeTotal);
 
-        OtherUtils.sendCommandFeedback(source, ModifiableText.SESSION_LENGTH_SET.get(timeTotal.formatLong()));
+        sendCommandFeedback(source, ModifiableText.SESSION_LENGTH_SET.get(timeTotal.formatLong()));
         return 1;
     }
 
@@ -274,12 +274,12 @@ public class SessionCommand extends Command {
 
         Time timeTotal = OtherUtils.parseTimeFromArgument(timeArgument);
         if (timeTotal == null || !timeTotal.isPresent()) {
-            OtherUtils.sendCommandFailure(source, Component.literal(INVALID_TIME_FORMAT_ERROR));
+            sendCommandFailure(source, Component.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
         currentSession.addSessionLength(timeTotal);
 
-        OtherUtils.sendCommandFeedback(source, ModifiableText.SESSION_LENGTH_ADD.get(timeTotal.formatLong()));
+        sendCommandFeedback(source, ModifiableText.SESSION_LENGTH_ADD.get(timeTotal.formatLong()));
         return 1;
     }
 
@@ -288,12 +288,12 @@ public class SessionCommand extends Command {
 
         Time timeTotal = OtherUtils.parseTimeFromArgument(timeArgument);
         if (timeTotal == null || !timeTotal.isPresent()) {
-            OtherUtils.sendCommandFailure(source, Component.literal(INVALID_TIME_FORMAT_ERROR));
+            sendCommandFailure(source, Component.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
         currentSession.removeSessionLength(timeTotal);
 
-        OtherUtils.sendCommandFeedback(source, ModifiableText.SESSION_LENGTH_REMOVE.get(timeTotal.formatLong()));
+        sendCommandFeedback(source, ModifiableText.SESSION_LENGTH_REMOVE.get(timeTotal.formatLong()));
         return 1;
     }
 }

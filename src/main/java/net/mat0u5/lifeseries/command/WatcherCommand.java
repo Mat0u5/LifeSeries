@@ -64,17 +64,17 @@ public class WatcherCommand extends Command {
 
     public int info(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WATCHER_INFO.get());
+        sendCommandFeedbackQuiet(source, ModifiableText.WATCHER_INFO.get());
         return 1;
     }
 
     public int listWatchers(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
         if (WatcherManager.getWatchers().isEmpty()) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.WATCHER_ERROR_NONE.get());
+            sendCommandFailure(source, ModifiableText.WATCHER_ERROR_NONE.get());
             return -1;
         }
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WATCHER_LIST.get(WatcherManager.getWatchers()));
+        sendCommandFeedbackQuiet(source, ModifiableText.WATCHER_LIST.get(WatcherManager.getWatchers()));
         return 1;
     }
 
@@ -86,10 +86,10 @@ public class WatcherCommand extends Command {
         WatcherManager.reloadWatchers();
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WATCHER_ADD_SINGLE.get(targets.iterator().next()));
+            sendCommandFeedback(source, ModifiableText.WATCHER_ADD_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WATCHER_ADD_MULTIPLE.get(targets.size()));
+            sendCommandFeedback(source, ModifiableText.WATCHER_ADD_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -103,10 +103,10 @@ public class WatcherCommand extends Command {
         WatcherManager.reloadWatchers();
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WATCHER_REMOVE_SINGLE.get(targets.iterator().next()));
+            sendCommandFeedback(source, ModifiableText.WATCHER_REMOVE_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WATCHER_REMOVE_MULTIPLE.get(targets.size()));
+            sendCommandFeedback(source, ModifiableText.WATCHER_REMOVE_MULTIPLE.get(targets.size()));
         }
 
         return 1;

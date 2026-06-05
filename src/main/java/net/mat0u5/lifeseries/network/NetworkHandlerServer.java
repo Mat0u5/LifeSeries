@@ -43,6 +43,7 @@ import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.*;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -422,6 +423,8 @@ public class NetworkHandlerServer {
             List<String> args = payload.args();
             if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received config update from {}: {{}, {}, {}}", player, configType, id, args));
 
+            String oldValue = seasonConfig.getProperty(id);
+            boolean previousUpdatedConfig = updatedConfigThisTick;
             if (configType == ConfigTypes.EVENT_ENTRY && args.size() >= 2) {
                 String command = args.get(0).strip();
                 String canceled = args.get(1);
@@ -463,6 +466,13 @@ public class NetworkHandlerServer {
                     seasonConfig.removeProperty(id);
                 }catch(Exception e){}
             }
+            String newValue = seasonConfig.getProperty(id);
+            if (!previousUpdatedConfig && updatedConfigThisTick) {
+                configChanges.clear();
+            }
+            if (!Objects.equals(oldValue, newValue))  {
+                configChanges.add(ModifiableText.CONFIG_MODIFY.get(id, oldValue, newValue));
+            }
 
             if (updatedConfigThisTick && DefaultConfigValues.RELOAD_NEEDED.contains(id)) {
                 configNeedsReload = true;
@@ -470,8 +480,9 @@ public class NetworkHandlerServer {
         }
     }
 
+    public static List<Component> configChanges = new ArrayList<>();
     public static void onUpdatedConfig() {
-        PlayerUtils.broadcastMessageToAdmins(ModifiableText.CONFIG_UPDATED.get());
+        PlayerUtils.broadcastMessageToAdmins(ModifiableText.CONFIG_UPDATED_CHANGES.get(TextUtils.runCommandText("/ls config viewChanges")));
         try {
             if (configNeedsReload) {
                 OtherUtils.reloadServer();

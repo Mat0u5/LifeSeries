@@ -269,10 +269,10 @@ public class WildLifeCommands extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_DESPAWN_SINGLE.get(targets.iterator().next()));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_DESPAWN_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_DESPAWN_MULTIPLE.get(targets.size()));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_DESPAWN_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -286,10 +286,10 @@ public class WildLifeCommands extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_SPAWN_SINGLE.get(targets.iterator().next()));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_SPAWN_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_SPAWN_MULTIPLE.get(targets.size()));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_SPAWN_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -303,17 +303,17 @@ public class WildLifeCommands extends Command {
             ServerPlayer player = targets.iterator().next();
             boolean canHaveSnail = Snails.toggleSnailPrevent(player);
             if (canHaveSnail) {
-                OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_SPAWN_ALLOW.get(player));
+                sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_SPAWN_ALLOW.get(player));
             }
             else {
-                OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_SPAWN_PREVENT.get(player));
+                sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_SPAWN_PREVENT.get(player));
             }
         }
         else {
             for (ServerPlayer player : targets) {
                 Snails.toggleSnailPrevent(player);
             }
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_SPAWN_TOGGLE_MULTIPLE.get(targets.size()));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_SPAWN_TOGGLE_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -351,7 +351,7 @@ public class WildLifeCommands extends Command {
         if (checkBanned(source)) return -1;
 
         WildcardManager.FINALE = true;
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_FINALE.get());
+        sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_FINALE.get());
 
         return 1;
     }
@@ -360,11 +360,11 @@ public class WildLifeCommands extends Command {
         if (checkBanned(source)) return -1;
 
         if (!WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_HUNGER_INACTIVE.get());
+            sendCommandFailure(source, ModifiableText.WILDLIFE_HUNGER_INACTIVE.get());
             return -1;
         }
 
-        OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_HUNGER_RANDOMIZE_MANUAL.get());
+        sendCommandFeedback(source, ModifiableText.WILDLIFE_HUNGER_RANDOMIZE_MANUAL.get());
 
         if (WildcardManager.activeWildcards.get(Wildcards.HUNGER) instanceof Hunger hungerWildcard) {
             hungerWildcard.newFoodRules();
@@ -389,7 +389,7 @@ public class WildLifeCommands extends Command {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_TEXTURES_RELOAD.get());
+        sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_TEXTURES_RELOAD.get());
         SnailSkins.sendTextures();
         Snails.reloadSnails();
 
@@ -401,7 +401,7 @@ public class WildLifeCommands extends Command {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SNAIL_TEXTURE_INFO.get(TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs/config/wild-life-snails")));
+        sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SNAIL_TEXTURE_INFO.get(TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs/config/wild-life-snails")));
 
         return 1;
     }
@@ -410,10 +410,10 @@ public class WildLifeCommands extends Command {
         if (checkBanned(source)) return -1;
         List<String> textures = SnailSkins.getAllSkins();
         if (textures.isEmpty()) {
-            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SNAIL_TEXTURES_NONE.get());
+            sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SNAIL_TEXTURES_NONE.get());
             return -1;
         }
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SNAIL_TEXTURES_LIST.get(textures));
+        sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SNAIL_TEXTURES_LIST.get(textures));
         return 1;
     }
 
@@ -421,11 +421,11 @@ public class WildLifeCommands extends Command {
         if (checkBanned(source)) return -1;
         if (source.getPlayer() == null) return -1;
         if (!NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer())) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_WILDCARD_GUI_ERROR.get());
+            sendCommandFailure(source, ModifiableText.WILDLIFE_WILDCARD_GUI_ERROR.get());
             return -1;
         }
 
-        OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_WILDCARD_GUI_OPEN.get());
+        sendCommandFeedback(source, ModifiableText.WILDLIFE_WILDCARD_GUI_OPEN.get());
         SimplePackets.SELECT_WILDCARDS.target(source.getPlayer()).sendToClient();
         return 1;
     }
@@ -451,21 +451,21 @@ public class WildLifeCommands extends Command {
                 SuperpowersWildcard.preAssignedSuperpowers.remove(player.getUUID());
             }
             if (targets.size() == 1) {
-                OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_ASSIGN_RESET_SINGLE.get(targets.iterator().next()));
+                sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_ASSIGN_RESET_SINGLE.get(targets.iterator().next()));
             }
             else {
-                OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_ASSIGN_RESET_MULTIPLE.get(targets.size()));
+                sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_ASSIGN_RESET_MULTIPLE.get(targets.size()));
             }
             return 1;
         }
 
         if (!Superpowers.getImplementedStr().contains(name)) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_INVALID.get());
+            sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_INVALID.get());
             return -1;
         }
         Superpowers superpower = Superpowers.fromString(name);
         if (superpower == Superpowers.NULL) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_INVALID.get());
+            sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_INVALID.get());
             return -1;
         }
 
@@ -474,10 +474,10 @@ public class WildLifeCommands extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_ASSIGN_SINGLE.get(targets.iterator().next(), name));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_ASSIGN_SINGLE.get(targets.iterator().next(), name));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_ASSIGN_MULTIPLE.get(targets.size(), name));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_ASSIGN_MULTIPLE.get(targets.size(), name));
         }
         return 1;
     }
@@ -507,23 +507,23 @@ public class WildLifeCommands extends Command {
             superpower.sendShowCooldownPacket();
         }
         if (!setAny) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_INACTIVE_OTHER_ALL.get());
+            sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_INACTIVE_OTHER_ALL.get());
             return -1;
         }
         if (cooldown == null) {
             if (targets.size() == 1) {
-                OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_COOLDOWN_RESET_SINGLE.get(targets.iterator().next()));
+                sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_COOLDOWN_RESET_SINGLE.get(targets.iterator().next()));
             }
             else {
-                OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_COOLDOWN_RESET_MULTIPLE.get(targets.size()));
+                sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_COOLDOWN_RESET_MULTIPLE.get(targets.size()));
             }
         }
         else {
             if (targets.size() == 1) {
-                OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_COOLDOWN_SET_SINGLE.get(targets.iterator().next(), cooldown));
+                sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_COOLDOWN_SET_SINGLE.get(targets.iterator().next(), cooldown));
             }
             else {
-                OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_COOLDOWN_SET_MULTIPLE.get(targets.size(), cooldown));
+                sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_COOLDOWN_SET_MULTIPLE.get(targets.size(), cooldown));
             }
         }
         return 1;
@@ -533,11 +533,11 @@ public class WildLifeCommands extends Command {
         for (ServerPlayer player : targets) {
             Superpower superpower = SuperpowersWildcard.getSuperpowerInstance(player);
             if (superpower == null) {
-                OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_INACTIVE_OTHER.get(player));
+                sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_INACTIVE_OTHER.get(player));
                 continue;
             }
             long cooldownSeconds = Math.max(0, (superpower.cooldown - System.currentTimeMillis())) / 1000;
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_COOLDOWN_GET.get(player, cooldownSeconds));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_COOLDOWN_GET.get(player, cooldownSeconds));
         }
         return 1;
     }
@@ -545,7 +545,7 @@ public class WildLifeCommands extends Command {
     public int setRandomSuperpowers(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
         SuperpowersWildcard.rollRandomSuperpowers();
-        OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_RANDOMIZE.get());
+        sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_RANDOMIZE.get());
         return 1;
     }
 
@@ -554,17 +554,17 @@ public class WildLifeCommands extends Command {
         if (targets.size() == 1) {
             ServerPlayer player = targets.iterator().next();
             Superpower.KeyPressResult result = SuperpowersWildcard.pressedSuperpowerKey(player);
-            if (result == Superpower.KeyPressResult.MISSING) OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_TRIGGER_RESPONSE_MISSING.get(player));
-            else if (result == Superpower.KeyPressResult.DEAD) OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_TRIGGER_RESPONSE_DEAD.get(player));
-            else if (result == Superpower.KeyPressResult.COOLDOWN) OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_TRIGGER_RESPONSE_COOLDOWN.get(player));
-            else if (result == Superpower.KeyPressResult.ACTIVATED) OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_TRIGGER_RESPONSE_ACTIVATED.get(player));
-            else if (result == Superpower.KeyPressResult.DEACTIVATED) OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_TRIGGER_RESPONSE_DEACTIVATED.get(player));
+            if (result == Superpower.KeyPressResult.MISSING) sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_TRIGGER_RESPONSE_MISSING.get(player));
+            else if (result == Superpower.KeyPressResult.DEAD) sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_TRIGGER_RESPONSE_DEAD.get(player));
+            else if (result == Superpower.KeyPressResult.COOLDOWN) sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_TRIGGER_RESPONSE_COOLDOWN.get(player));
+            else if (result == Superpower.KeyPressResult.ACTIVATED) sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_TRIGGER_RESPONSE_ACTIVATED.get(player));
+            else if (result == Superpower.KeyPressResult.DEACTIVATED) sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_TRIGGER_RESPONSE_DEACTIVATED.get(player));
         }
         else {
             for (ServerPlayer player : targets) {
                 SuperpowersWildcard.pressedSuperpowerKey(player);
             }
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_TRIGGER_MULTIPLE.get(targets.size()));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_TRIGGER_MULTIPLE.get(targets.size()));
         }
         return 1;
     }
@@ -573,10 +573,10 @@ public class WildLifeCommands extends Command {
         if (checkBanned(source)) return -1;
         SuperpowersWildcard.rollRandomSuperpowers(new ArrayList<>(targets));
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_RANDOMIZE_SINGLE.get(targets.iterator().next()));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_RANDOMIZE_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_RANDOMIZE_MULTIPLE.get(targets.size()));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_RANDOMIZE_MULTIPLE.get(targets.size()));
         }
         return 1;
     }
@@ -590,10 +590,10 @@ public class WildLifeCommands extends Command {
         }
 
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_DEACTIVATE_SINGLE.get(targets.iterator().next()));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_DEACTIVATE_SINGLE.get(targets.iterator().next()));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_DEACTIVATE_MULTIPLE.get(targets.size()));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_DEACTIVATE_MULTIPLE.get(targets.size()));
         }
         return 1;
     }
@@ -601,7 +601,7 @@ public class WildLifeCommands extends Command {
     public int getSuperpower(CommandSourceStack source, ServerPlayer player) {
         if (checkBanned(source)) return -1;
         Superpowers superpower = SuperpowersWildcard.getSuperpower(player);
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SUPERPOWER_GET.get(player, superpower.getString()));
+        sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SUPERPOWER_GET.get(player, superpower.getString()));
         return 1;
     }
 
@@ -610,13 +610,13 @@ public class WildLifeCommands extends Command {
         if (targets == null || targets.isEmpty()) return -1;
 
         if (!Superpowers.getImplementedStr().contains(name)) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_INVALID.get());
+            sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_INVALID.get());
             return -1;
         }
 
         Superpowers superpower = Superpowers.fromString(name);
         if (superpower == Superpowers.NULL) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_INVALID.get());
+            sendCommandFailure(source, ModifiableText.WILDLIFE_SUPERPOWER_INVALID.get());
             return -1;
         }
 
@@ -624,10 +624,10 @@ public class WildLifeCommands extends Command {
             SuperpowersWildcard.setSuperpower(player, superpower);
         }
         if (targets.size() == 1) {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_SET_SINGLE.get(targets.iterator().next(), name));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_SET_SINGLE.get(targets.iterator().next(), name));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_SET_MULTIPLE.get(name, targets.size()));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_SUPERPOWER_SET_MULTIPLE.get(name, targets.size()));
         }
         return 1;
     }
@@ -635,7 +635,7 @@ public class WildLifeCommands extends Command {
     public int setSnailName(CommandSourceStack source, ServerPlayer player, String name) {
         if (checkBanned(source)) return -1;
         Snails.setSnailName(player, name);
-        OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_NAME_SET.get(player, name));
+        sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_NAME_SET.get(player, name));
         return 1;
     }
 
@@ -649,10 +649,10 @@ public class WildLifeCommands extends Command {
 
         if (targets.size() == 1) {
             ServerPlayer player = targets.iterator().next();
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_NAME_RESET_SINGLE.get(player, ModifiableText.WILDLIFE_SNAIL_DEFAULT_NAME.getString(player)));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_NAME_RESET_SINGLE.get(player, ModifiableText.WILDLIFE_SNAIL_DEFAULT_NAME.getString(player)));
         }
         else {
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_NAME_RESET_MULTIPLE.get(targets.size()));
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_NAME_RESET_MULTIPLE.get(targets.size()));
         }
 
         return 1;
@@ -664,11 +664,11 @@ public class WildLifeCommands extends Command {
 
         if (targets.size() == 1) {
             ServerPlayer player = targets.iterator().next();
-            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SNAIL_NAME_GET.get(player, Snails.getSnailName(player)));
+            sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SNAIL_NAME_GET.get(player, Snails.getSnailName(player)));
         }
         else {
             for (ServerPlayer player : targets) {
-                OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SNAIL_NAME_GET.get(player, Snails.getSnailName(player)));
+                sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SNAIL_NAME_GET.get(player, Snails.getSnailName(player)));
             }
         }
         return 1;
@@ -678,16 +678,16 @@ public class WildLifeCommands extends Command {
         if (checkBanned(source)) return -1;
         if (wildcardName.equalsIgnoreCase("*")) {
             WildcardManager.onSessionEnd();
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_WILDCARD_DEACTIVATE_ALL.get());
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_WILDCARD_DEACTIVATE_ALL.get());
             return 1;
         }
         Wildcards wildcard = Wildcards.getFromString(wildcardName);
         if (wildcard == Wildcards.NULL) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_WILDCARD_INVALID.get());
+            sendCommandFailure(source, ModifiableText.WILDLIFE_WILDCARD_INVALID.get());
             return -1;
         }
         if (!WildcardManager.isActiveWildcard(wildcard)) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_WILDCARD_INVALID.get());
+            sendCommandFailure(source, ModifiableText.WILDLIFE_WILDCARD_INVALID.get());
             return -1;
         }
         WildcardManager.fadedWildcard();
@@ -695,7 +695,7 @@ public class WildLifeCommands extends Command {
         wildcardInstance.deactivate();
         WildcardManager.activeWildcards.remove(wildcard);
 
-        OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_WILDCARD_DEACTIVATE.get(wildcardName));
+        sendCommandFeedback(source, ModifiableText.WILDLIFE_WILDCARD_DEACTIVATE.get(wildcardName));
         NetworkHandlerServer.sendUpdatePackets();
         return 1;
     }
@@ -721,43 +721,43 @@ public class WildLifeCommands extends Command {
             });
             NetworkHandlerServer.sendUpdatePackets();
 
-            OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_WILDCARD_ACTIVATE_ALL.get());
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_WILDCARD_ACTIVATE_ALL.get());
             return 1;
         }
         Wildcards wildcard = Wildcards.getFromString(wildcardName);
         if (wildcard == Wildcards.NULL) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_WILDCARD_INVALID.get());
+            sendCommandFailure(source, ModifiableText.WILDLIFE_WILDCARD_INVALID.get());
             return -1;
         }
         if (WildcardManager.isActiveWildcard(wildcard)) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_WILDCARD_ACTIVATE_ERROR.get());
+            sendCommandFailure(source, ModifiableText.WILDLIFE_WILDCARD_ACTIVATE_ERROR.get());
             return -1;
         }
         Wildcard actualWildcard = wildcard.getInstance();
         if (actualWildcard == null) {
-            OtherUtils.sendCommandFailure(source, ModifiableText.WILDLIFE_WILDCARD_IMPLEMENT_ERROR.get());
+            sendCommandFailure(source, ModifiableText.WILDLIFE_WILDCARD_IMPLEMENT_ERROR.get());
             return -1;
         }
         TaskScheduler.scheduleTask(89, () -> WildcardManager.activeWildcards.put(wildcard, actualWildcard));
         WildcardManager.activateWildcards();
 
-        OtherUtils.sendCommandFeedback(source, ModifiableText.WILDLIFE_WILDCARD_ACTIVATE.get(wildcardName));
+        sendCommandFeedback(source, ModifiableText.WILDLIFE_WILDCARD_ACTIVATE.get(wildcardName));
         return 1;
     }
 
     public int listWildcards(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_WILDCARD_AVAILABLE.get(Wildcards.getWildcardsStr()));
+        sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_WILDCARD_AVAILABLE.get(Wildcards.getWildcardsStr()));
         return 1;
     }
 
     public int listActiveWildcards(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
         if (Wildcards.getActiveWildcardsStr().isEmpty()) {
-            OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_WILDCARD_ACTIVATED_NONE.get());
+            sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_WILDCARD_ACTIVATED_NONE.get());
             return 1;
         }
-        OtherUtils.sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_WILDCARD_ACTIVATED.get(Wildcards.getActiveWildcardsStr()));
+        sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_WILDCARD_ACTIVATED.get(Wildcards.getActiveWildcardsStr()));
         return 1;
     }
 }
