@@ -211,12 +211,15 @@ public class LifeSeriesCommand extends Command {
     public void setSeasonFinal(CommandSourceStack source, String setTo, String argsStr) {
         boolean prevTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
 
+        Seasons currentSeason = LifeSeries.getSeason();
         Seasons season = Seasons.getSeasonFromStringName(setTo);
         SeasonChanger.ChangeSeasonArgs args = SeasonChanger.parseChangeSeasonArgs(argsStr);
 
         if (args.showChatMessage()) sendCommandFeedback(source, ModifiableText.SEASON_CHANGING.get(setTo));
 
+        SeasonChanger.preChangeEvent(currentSeason, season);
         if (SeasonChanger.changeSeasonTo(season, args)) {
+            SeasonChanger.postChangeEvent(currentSeason, season);
             if (args.showChatMessage()) PlayerUtils.broadcastMessage(ModifiableText.SEASON_CHANGED.get(setTo));
             boolean currentTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
             if (prevTickFreeze != currentTickFreeze) {

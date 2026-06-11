@@ -187,10 +187,13 @@ public class NetworkHandlerServer {
         });
         SimplePackets.SET_SEASON.setServerReceive((player, payload) -> {
             if (PermissionManager.isAdmin(player) || currentSeason.getSeason() == Seasons.UNASSIGNED) {
+                Seasons currentSeason = LifeSeries.getSeason();
                 Seasons newSeason = Seasons.getSeasonFromStringName(payload.value());
                 if (newSeason == Seasons.UNASSIGNED) return;
                 boolean prevTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
+                SeasonChanger.preChangeEvent(currentSeason, newSeason);
                 if (SeasonChanger.changeSeasonTo(newSeason)) {
+                    SeasonChanger.postChangeEvent(currentSeason, newSeason);
                     boolean currentTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
                     PlayerUtils.broadcastMessage(ModifiableText.SEASON_CHANGE.get(payload.value()));
                     if (prevTickFreeze != currentTickFreeze) {

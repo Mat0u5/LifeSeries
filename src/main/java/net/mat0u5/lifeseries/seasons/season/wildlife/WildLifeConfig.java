@@ -515,18 +515,44 @@ public class WildLifeConfig extends SeasonConfig {
                 ,WILDCARD_SUPERPOWERS_POWER_BLACKLIST
                 ,WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME
 
-                //Astral Projection
+                // Animal Disguise
+                ,SUPERPOWER_ANIMAL_DISGUISE
+                ,SUPERPOWER_COOLDOWN_ANIMAL_DISGUISE
+                ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_ARMOR
+                ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_HANDS
+                ,WILDCARD_SUPERPOWERS_ANIMAL_DISGUISE_DAMAGE_CANCELS
+
+                // Astral Projection
                 ,SUPERPOWER_ASTRAL_PROJECTION
                 ,SUPERPOWER_COOLDOWN_ASTRAL_PROJECTION
                 ,WILDCARD_SUPERPOWERS_ASTRAL_PROJECTION_DAMAGE_CANCELS
 
-                //Super Punch
-                ,SUPERPOWER_SUPER_PUNCH
-                ,SUPERPOWER_COOLDOWN_SUPER_PUNCH
-                ,WILDCARD_SUPERPOWERS_SUPER_PUNCH_THORNS_DAMAGE
-                ,WILDCARD_SUPERPOWERS_SUPER_PUNCH_KNOCKBACK_STRENGTH
+                //? if >= 1.21.2 {
+                // Creaking
+                ,SUPERPOWER_CREAKING
+                ,SUPERPOWER_COOLDOWN_CREAKING
+                ,WILDCARD_SUPERPOWERS_CREAKING_AMOUNT
+                ,WILDCARD_SUPERPOWERS_CREAKING_PARTICLES
 
-                //Necromancy
+                // Flight
+                ,SUPERPOWER_FLIGHT
+                ,SUPERPOWER_COOLDOWN_FLIGHT
+                ,WILDCARD_SUPERPOWERS_FLIGHT_JUMP_AMPLIFIER
+                ,WILDCARD_SUPERPOWERS_FLIGHT_ELYTRA_LAUNCH_NEEDED
+                //?}
+
+                // Invisibility
+                ,SUPERPOWER_INVISIBILITY
+                ,SUPERPOWER_COOLDOWN_INVISIBILITY
+                ,WILDCARD_SUPERPOWERS_INVISIBILITY_DAMAGE_CANCELS
+                ,WILDCARD_SUPERPOWERS_INVISIBILITY_ATTACK_CANCELS
+                ,WILDCARD_SUPERPOWERS_INVISIBILITY_SHOW_PARTICLES
+
+                // Mimicry
+                ,SUPERPOWER_MIMICRY
+                ,SUPERPOWER_COOLDOWN_MIMICRY
+
+                // Necromancy
                 ,SUPERPOWER_NECROMANCY
                 ,SUPERPOWER_COOLDOWN_NECROMANCY
                 ,WILDCARD_SUPERPOWERS_ZOMBIES_FIRST_SPAWN_CLEAR_ITEMS
@@ -539,77 +565,53 @@ public class WildLifeConfig extends SeasonConfig {
                 ,SUPERPOWER_COOLDOWN_PLAYER_DISGUISE
                 ,WILDCARD_SUPERPOWERS_PLAYER_DISGUISE_DAMAGE_CANCELS
 
-                //Animal Disguise
-                ,SUPERPOWER_ANIMAL_DISGUISE
-                ,SUPERPOWER_COOLDOWN_ANIMAL_DISGUISE
-                ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_ARMOR
-                ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_HANDS
-                ,WILDCARD_SUPERPOWERS_ANIMAL_DISGUISE_DAMAGE_CANCELS
-
-                //Teleportation
-                ,SUPERPOWER_TELEPORTATION
-                ,SUPERPOWER_COOLDOWN_TELEPORTATION
-                ,WILDCARD_SUPERPOWERS_TELEPORTATION_SWAP_DISTANCE
-                ,WILDCARD_SUPERPOWERS_TELEPORTATION_TP_DISTANCE
-
-                //Shadow Play
+                // Shadow Play
                 ,SUPERPOWER_SHADOW_PLAY
                 ,SUPERPOWER_COOLDOWN_SHADOW_PLAY
                 ,WILDCARD_SUPERPOWERS_SHADOW_PLAY_BLIND_RANGE
                 ,WILDCARD_SUPERPOWERS_SHADOW_PLAY_BLIND_TIME
 
-                ,SUPERPOWER_MIMICRY
-                ,SUPERPOWER_COOLDOWN_MIMICRY
+                // Super Punch
+                ,SUPERPOWER_SUPER_PUNCH
+                ,SUPERPOWER_COOLDOWN_SUPER_PUNCH
+                ,WILDCARD_SUPERPOWERS_SUPER_PUNCH_THORNS_DAMAGE
+                ,WILDCARD_SUPERPOWERS_SUPER_PUNCH_KNOCKBACK_STRENGTH
+
+                //? if > 1.20.3 {
+                // Superspeed
+                ,SUPERPOWER_SUPERSPEED
+                ,SUPERPOWER_COOLDOWN_SUPERSPEED
+                ,WILDCARD_SUPERPOWERS_SUPERSPEED_STEP
+                ,WILDCARD_SUPERPOWERS_SUPERSPEED_FROST_WALKER_LEVEL
+                ,WILDCARD_SUPERPOWERS_SUPERSPEED_HUNGER_LEVEL
+                ,WILDCARD_SUPERPOWERS_SUPERSPEED_TARGET_SPEED
+                //?}
+
+                // Teleportation
+                ,SUPERPOWER_TELEPORTATION
+                ,SUPERPOWER_COOLDOWN_TELEPORTATION
+                ,WILDCARD_SUPERPOWERS_TELEPORTATION_SWAP_DISTANCE
+                ,WILDCARD_SUPERPOWERS_TELEPORTATION_TP_DISTANCE
+
+                //? if >= 1.20.3 {
+                // Time Control
+                ,SUPERPOWER_TIME_CONTROL
+                ,SUPERPOWER_COOLDOWN_TIME_CONTROL
+                ,WILDCARD_SUPERPOWERS_TIME_DILATION_TICK_RATE
+                ,WILDCARD_SUPERPOWERS_TIME_DILATION_DURATION
+                //?}
 
                 // Triple Jump
                 ,SUPERPOWER_TRIPLE_JUMP
                 ,SUPERPOWER_COOLDOWN_TRIPLE_JUMP
                 ,WILDCARD_SUPERPOWERS_TRIPLE_JUMP_JUMPS
 
-                // Invisibility
-                ,SUPERPOWER_INVISIBILITY
-                ,SUPERPOWER_COOLDOWN_INVISIBILITY
-                ,WILDCARD_SUPERPOWERS_INVISIBILITY_DAMAGE_CANCELS
-                ,WILDCARD_SUPERPOWERS_INVISIBILITY_ATTACK_CANCELS
-                ,WILDCARD_SUPERPOWERS_INVISIBILITY_SHOW_PARTICLES
-
-                ,SUPERPOWER_SUPERSPEED
-                ,SUPERPOWER_COOLDOWN_SUPERSPEED
-
-                //? if >= 1.20.3 {
-                //Time Control
-                ,SUPERPOWER_TIME_CONTROL
-                ,SUPERPOWER_COOLDOWN_TIME_CONTROL
-                ,WILDCARD_SUPERPOWERS_TIME_DILATION_TICK_RATE
-                ,WILDCARD_SUPERPOWERS_TIME_DILATION_DURATION
-                //?}
                 //? if >= 1.21 {
-                //Wind Charge
+                // Wind Charge
                 ,SUPERPOWER_WIND_CHARGE
                 ,SUPERPOWER_COOLDOWN_WIND_CHARGE
                 ,WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE
                 ,WILDCARD_SUPERPOWERS_WIND_CHARGE_EXPLOSION_POWER
-                //?}
-                //? if >= 1.21.2 {
-                //Creaking
-                ,SUPERPOWER_CREAKING
-                ,SUPERPOWER_COOLDOWN_CREAKING
-                ,WILDCARD_SUPERPOWERS_CREAKING_AMOUNT
-                ,WILDCARD_SUPERPOWERS_CREAKING_PARTICLES
-
-                //Flight
-                ,SUPERPOWER_FLIGHT
-                ,SUPERPOWER_COOLDOWN_FLIGHT
-                ,WILDCARD_SUPERPOWERS_FLIGHT_JUMP_AMPLIFIER
-                ,WILDCARD_SUPERPOWERS_FLIGHT_ELYTRA_LAUNCH_NEEDED
-                //?}
-
-                //? if > 1.20.3 {
-                //Superspeed
-                ,WILDCARD_SUPERPOWERS_SUPERSPEED_STEP
-                ,WILDCARD_SUPERPOWERS_SUPERSPEED_FROST_WALKER_LEVEL
-                ,WILDCARD_SUPERPOWERS_SUPERSPEED_HUNGER_LEVEL
-                ,WILDCARD_SUPERPOWERS_SUPERSPEED_TARGET_SPEED
                 //?}
 
                 ,WILDCARD_CALLBACK_WILDCARDS_BLACKLIST

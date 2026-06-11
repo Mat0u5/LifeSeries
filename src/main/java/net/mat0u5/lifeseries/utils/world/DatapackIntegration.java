@@ -36,6 +36,8 @@ public class DatapackIntegration {
     public static final Events EVENT_SESSION_PAUSE = Events.SESSION_PAUSE;
     public static final Events EVENT_SESSION_UNPAUSE = Events.SESSION_UNPAUSE;
     public static final Events EVENT_SESSION_END = Events.SESSION_END;
+    public static final Events EVENT_SEASON_CHANGE_PRE = Events.SEASON_CHANGE_PRE;
+    public static final Events EVENT_SEASON_CHANGE_POST = Events.SEASON_CHANGE_POST;
     public static final Events EVENT_BOOGEYMAN_ADDED = Events.BOOGEYMAN_ADDED;
     public static final Events EVENT_BOOGEYMAN_CURE_REWARD = Events.BOOGEYMAN_CURE_REWARD;
     public static final Events EVENT_BOOGEYMAN_FAIL_REWARD = Events.BOOGEYMAN_FAIL_REWARD;
@@ -102,6 +104,8 @@ public class DatapackIntegration {
         EVENT_SOULMATE_SET.reload();
         EVENT_SOULMATE_REMOVE.reload();
         EVENT_RED_WINTER_START.reload();
+        EVENT_SEASON_CHANGE_PRE.reload();
+        EVENT_SEASON_CHANGE_POST.reload();
     }
 
     public static List<Events> getAllEvents() {
@@ -144,6 +148,8 @@ public class DatapackIntegration {
                 ,EVENT_SOULMATE_SET
                 ,EVENT_SOULMATE_REMOVE
                 ,EVENT_RED_WINTER_START
+                ,EVENT_SEASON_CHANGE_PRE
+                ,EVENT_SEASON_CHANGE_POST
         );
     }
 
@@ -247,6 +253,8 @@ public class DatapackIntegration {
         SESSION_PAUSE("session_pause", "Session Pause", "Triggers when a session is paused.", false),
         SESSION_UNPAUSE("session_unpause", "Session Unpause", "Triggers when a session is unpaused.", false),
         SESSION_END("session_end", "Session End", "Triggers when a session ends.", false),
+        SEASON_CHANGE_PRE("season_change_pre", "Pre Season Change", "Triggers right before you change the season.\nAvailable macros: $(PreviousSeasonIndex), $(NextSeasonIndex)", false),
+        SEASON_CHANGE_POST("season_change_post", "Post Season Change", "Triggers right after you change the season.\nAvailable macros: $(PreviousSeasonIndex), $(NextSeasonIndex)", false),
         BOOGEYMAN_ADDED("boogeyman_added", "Boogeyman Added", "Triggers when a boogeyman is added.\nAvailable macros: $(Player)", false),
         BOOGEYMAN_CURE_REWARD("boogeyman_cure_reward", "Boogeyman Cure §7Reward", "Triggers when a boogeyman cures.\nAvailable macros: $(Player)", true),
         BOOGEYMAN_FAIL_REWARD("boogeyman_fail_reward", "Boogeyman Fail §7Punishment", "Triggers when a boogeyman fails.\nAvailable macros: $(Player)", true),

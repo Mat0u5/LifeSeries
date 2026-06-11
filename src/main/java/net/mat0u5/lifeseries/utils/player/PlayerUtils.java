@@ -138,7 +138,7 @@ public class PlayerUtils {
 
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
             if (isFakePlayer(player)) continue;
-            result.add(player);
+			result.add(player);
         }
         return result;
     }

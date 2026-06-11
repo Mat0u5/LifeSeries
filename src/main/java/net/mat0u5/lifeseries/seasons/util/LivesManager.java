@@ -475,7 +475,7 @@ public class LivesManager {
                 if (FINAL_DEATH_SOUND != null) {
                     PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), FINAL_DEATH_SOUND);
                 }
-                showDeathTitle(player);
+                TaskScheduler.schedulePriorityTask(1, () -> showDeathTitle(player));
                 DatapackIntegration.EVENT_PLAYER_FINAL_DEATH.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
             }
         }
