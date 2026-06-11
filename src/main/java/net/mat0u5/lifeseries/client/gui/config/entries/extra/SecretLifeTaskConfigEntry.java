@@ -24,6 +24,7 @@ public class SecretLifeTaskConfigEntry extends ModifiableListEntry {
     String defaultText;
     private int maxTextFieldLength = 8192;
     private boolean sentToServer = false;
+    private boolean isUsedTask;
 
     public SecretLifeTaskConfigEntry(String fieldName, List<String> info) {
         super(fieldName);
@@ -31,6 +32,7 @@ public class SecretLifeTaskConfigEntry extends ModifiableListEntry {
         this.taskType = info.get(3);
         this.defaultText = info.get(4);
         this.text = info.get(4);
+        this.isUsedTask = info.get(5).equalsIgnoreCase("true");
         textField.setMaxLength(maxTextFieldLength);
         textField.setValue(defaultText);
         textField.setResponder(this::onChanged);
@@ -44,6 +46,10 @@ public class SecretLifeTaskConfigEntry extends ModifiableListEntry {
     @Override
     protected void renderMainEntry(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         textField.setY(y+1);
+        if (isUsedTask) {
+            Component usedText = Component.literal("§8[USED]");
+            RenderUtils.text(usedText, x-this.textRenderer.width(usedText)+6, y+6).colored(TextColors.GRAY).render(context, textRenderer);
+        }
         textField.setX(x + 25);
         textField.setWidth(resetButton.getX()-textField.getX()-10);
         //~ renames_26_1_volatile

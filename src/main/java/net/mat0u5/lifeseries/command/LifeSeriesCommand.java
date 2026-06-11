@@ -98,6 +98,13 @@ public class LifeSeriesCommand extends Command {
                                 .requires(PermissionManager::isAdmin)
                                 .executes(context -> configChanges(context.getSource()))
                         )
+                        .then(literal("get")
+                                .requires(PermissionManager::isAdmin)
+                                .then(argument("key", StringArgumentType.string())
+                                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(seasonConfig.getAvailableConfigKeys(), builder))
+                                        .executes(context -> configGet(context.getSource(), StringArgumentType.getString(context, "key")))
+                                )
+                        )
                 )
                 .then(literal("wiki")
                         .executes(context -> wiki(context.getSource()))
@@ -259,6 +266,20 @@ public class LifeSeriesCommand extends Command {
         DatapackIntegration.reload();
         sendCommandFeedback(source, ModifiableText.CONFIG_SETEVENT.get(key));
         return 1;
+    }
+
+    public int configGet(CommandSourceStack source, String key) {
+        if (checkBanned(source)) return 0;
+        String value = seasonConfig.getProperty(key);
+        boolean nullValue = value == null;
+        if (nullValue) value = "null";
+        sendCommandFeedbackQuiet(source, ModifiableText.CONFIG_GET.get(key, value));
+
+        try {
+            return Integer.parseInt(value);
+        }catch(Exception ignored) {}
+
+        return nullValue ? 0 : 1;
     }
 
     public int configChanges(CommandSourceStack source) {

@@ -23,6 +23,7 @@ public enum ModifiableText {
     ,CONFIG_SET("Updated '{}' in the config.", List.of("key"))
     ,CONFIG_SETEVENT("Updated event '{}' in the config.", List.of("key"))
     ,CONFIG_MODIFY("§7 \"{}§7\":  {}§7 -> {}", List.of("key", "previous", "current"))
+    ,CONFIG_GET("{}={}", List.of("key", "value"))
     ,COUNTDOWN_COLOR_3("§a3")
     ,COUNTDOWN_COLOR_2("§e2")
     ,COUNTDOWN_COLOR_1("§c1")
