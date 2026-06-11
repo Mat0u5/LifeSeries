@@ -133,14 +133,13 @@ public class TextHud {
     private static long limitedLifeTime = -1;
     public static int renderLimitedLifeTimer(Minecraft client, GuiGraphicsExtractor context, int y) {
         if (LifeSeriesClient.clientCurrentSeason != Seasons.LIMITED_LIFE) return 0;
-        if (System.currentTimeMillis()- LifeSeriesClient.limitedLifeTimeLastUpdated > 15000) return 0;
+        if (System.currentTimeMillis()- LifeSeriesClient.limitedLifeTimeLastUpdated > 151000) return 0;
 
-        MutableComponent timerText = Component.empty();
+        Component timerText = TextUtils.formatLoosely("{}0:00:00", LifeSeriesClient.limitedLifeTimerColor);
         if (sessionSecondChanged || LifeSeriesClient.sessionTime <= 0 || Math.abs(limitedLifeTime - LifeSeriesClient.limitedLifeLives) > 10) {
             limitedLifeTime = LifeSeriesClient.limitedLifeLives;
         }
-        if (limitedLifeTime == -1) timerText = timerText.append(TextUtils.formatLoosely("{}0:00:00", LifeSeriesClient.limitedLifeTimerColor));
-        else {
+        if (limitedLifeTime >= 0) {
             long currentSeconds = limitedLifeTime;
             if (sessionSeconds != -1 && currentSeconds > 60) {
                 long secondsDifference = (sessionSeconds % 60) - (currentSeconds % 60);
@@ -150,8 +149,9 @@ public class TextHud {
             }
             long remainingTime = currentSeconds * 1000;
 
-            if (remainingTime < 0) timerText = timerText.append(TextUtils.formatLoosely("{}0:00:00", LifeSeriesClient.limitedLifeTimerColor));
-            else timerText = timerText.append(Component.nullToEmpty(LifeSeriesClient.limitedLifeTimerColor+ Time.millis(remainingTime).formatLong()));
+            if (remainingTime >= 0) {
+                timerText = Component.nullToEmpty(LifeSeriesClient.limitedLifeTimerColor+ Time.millis(remainingTime).formatLong());
+            }
         }
 
         return drawHudText(client, context, timerText, y);

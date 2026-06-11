@@ -78,7 +78,7 @@ public class MobRegistry {
                     //?}
                     .clientTrackingRange(8)
                     //? if <= 1.21 {
-                    /*.build(TriviaBot.ID.toString())
+                    /*.build(AngrySnowman.ID.toString())
                     *///?} else {
                     .build(SNOWMAN_KEY)
                      //?}
