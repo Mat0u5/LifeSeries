@@ -62,6 +62,11 @@ public class OtherUtils {
 
     private static final Pattern TIME_PATTERN = Pattern.compile("(?:(\\d+)h)?(?:(\\d+)m)?(?:(\\d+)s)?");
     public static Time parseTimeFromArgument(String time) {
+        try {
+            int totalSeconds = Integer.parseInt(time);
+            return Time.seconds(totalSeconds);
+        }catch(Exception e) {}
+
         time = time.replaceAll(" ", "").replaceAll("\"", "");
         Matcher matcher = TIME_PATTERN.matcher(time);
         if (!matcher.matches()) {

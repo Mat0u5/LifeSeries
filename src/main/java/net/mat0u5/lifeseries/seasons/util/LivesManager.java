@@ -477,9 +477,9 @@ public class LivesManager {
                 }
                 TaskScheduler.schedulePriorityTask(1, () -> showDeathTitle(player));
                 DatapackIntegration.EVENT_PLAYER_FINAL_DEATH.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
+                SessionTranscript.onPlayerLostAllLives(player);
             }
         }
-        SessionTranscript.onPlayerLostAllLives(player);
         currentSeason.boogeymanManager.playerLostAllLives(player);
     }
 
