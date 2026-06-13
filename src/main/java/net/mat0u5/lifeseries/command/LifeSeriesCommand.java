@@ -286,13 +286,13 @@ public class LifeSeriesCommand extends Command {
         if (checkBanned(source)) return -1;
 
         if (NetworkHandlerServer.configChanges.isEmpty()) {
-            sendCommandFailure(source, Component.literal("No recent config changes."));
+            sendCommandFailure(source, ModifiableText.CONFIG_MODIFY_NONE.get());
             return -1;
         }
 
-        MutableComponent changes = Component.literal("\nRecent config changes:\n");
+        MutableComponent changes = ModifiableText.CONFIG_MODIFY_HEADER.get().copy();
         for (Component component : NetworkHandlerServer.configChanges) {
-            changes.append(component).append("\n");
+            changes.append(component);
         }
 
         sendCommandFeedbackQuiet(source, changes);

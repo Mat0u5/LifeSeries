@@ -43,7 +43,6 @@ import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.*;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -474,7 +473,7 @@ public class NetworkHandlerServer {
                 configChanges.clear();
             }
             if (!Objects.equals(oldValue, newValue))  {
-                configChanges.add(ModifiableText.CONFIG_MODIFY.get(id, oldValue, newValue));
+                configChanges.add(ModifiableText.CONFIG_MODIFY_KEY.get(id, oldValue, newValue));
             }
 
             if (updatedConfigThisTick && DefaultConfigValues.RELOAD_NEEDED.contains(id)) {

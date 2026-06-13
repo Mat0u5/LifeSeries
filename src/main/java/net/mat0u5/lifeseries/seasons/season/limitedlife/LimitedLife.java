@@ -12,10 +12,12 @@ import net.mat0u5.lifeseries.seasons.secretsociety.SecretSociety;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.MinecraftServer;
@@ -90,7 +92,11 @@ public class LimitedLife extends Season {
                     else {
                         playerLives = -1;
                     }
+                    //? if <= 26.1 {
                     String livesColor = livesManager.getColorForLives(player).toString();
+                    //?} else {
+                    /*String livesColor = TextUtils.getColorCode(livesManager.getColorForLives(player).textColor());
+                    *///?}
                     SimplePackets.LIMITED_LIFE_TIMER.target(player).sendToClient(List.of(livesColor, String.valueOf(playerLives)));
                 }
                 if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {

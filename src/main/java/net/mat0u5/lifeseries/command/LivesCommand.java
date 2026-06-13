@@ -259,7 +259,7 @@ public class LivesCommand extends Command {
             return -1;
         }
         Integer lives = ((IPlayer) target).ls$getLives();
-        sendCommandFeedbackQuiet(source, ModifiableText.LIVES_ASSIGNED_LIST_ENTRY.get(target, livesManager.getFormattedLives(lives), TextUtils.pluralize("life", "lives", lives)));
+        sendCommandFeedbackQuiet(source, ModifiableText.LIVES_ASSIGNED_GET.get(target, livesManager.getFormattedLives(lives), TextUtils.pluralize("life", "lives", lives)));
         return 1;
     }
 

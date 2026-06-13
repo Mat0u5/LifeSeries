@@ -1,4 +1,3 @@
-Improved Secret Life task picking logic, and added '/task resetUsed'
-Snail skins now defaults to the new format.
-New configs.
+26.2 full release preparations.
+New commands.
 Bug fixes.

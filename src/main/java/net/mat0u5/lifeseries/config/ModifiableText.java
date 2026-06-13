@@ -22,7 +22,9 @@ public enum ModifiableText {
     ,CONFIG_GUI_OPENING("§7Opening the config GUI...")
     ,CONFIG_SET("Updated '{}' in the config.", List.of("key"))
     ,CONFIG_SETEVENT("Updated event '{}' in the config.", List.of("key"))
-    ,CONFIG_MODIFY("§7 \"{}§7\":  {}§7 -> {}", List.of("key", "previous", "current"))
+    ,CONFIG_MODIFY_NONE("No recent config changes.")
+    ,CONFIG_MODIFY_HEADER("\nRecent config changes:\n")
+    ,CONFIG_MODIFY_KEY("§7 \"{}§7\":  {}§7 -> {}\n", List.of("key", "previous", "current"))
     ,CONFIG_GET("{}={}", List.of("key", "value"))
     ,COUNTDOWN_COLOR_3("§a3")
     ,COUNTDOWN_COLOR_2("§e2")
@@ -96,6 +98,7 @@ public enum ModifiableText {
     ,LIVES_GET_SELF_NONE("Womp womp.")
     ,LIVES_ASSIGNED_LIST("Assigned Lives: \n")
     ,LIVES_ASSIGNED_LIST_ENTRY("{} has {} {}\n", List.of("Player", "amount", "life/lives"))
+    ,LIVES_ASSIGNED_GET("{} has {} {}", List.of("Player", "amount", "life/lives"))
     ,LIVES_RELOADING("§7Reloading lives...")
     ,LIVES_SET_SINGLE("Set {}'s lives to {}", List.of("Player", "amount"))
     ,LIVES_SET_MULTIPLE("Set lives to {} for {} targets", List.of("amount", "number of targets"))
@@ -637,6 +640,7 @@ public enum ModifiableText {
             else if (this == LIVES_UNASSIGNED_ALL) modified = "Nobody has been assigned time yet";
             else if (this == LIVES_ASSIGNED_LIST) modified = "Assigned Times: \n";
             else if (this == LIVES_ASSIGNED_LIST_ENTRY) modified = "{} has {} left\n";
+            else if (this == LIVES_ASSIGNED_GET) modified = "{} has {} left";
             else if (this == LIVES_UNASSIGNED_OTHER) modified = "{} has not been assigned any time";
             else if (this == LIVES_RELOADING) modified = "§7Reloading times...";
             else if (this == LIVES_SET_SINGLE) modified = "Set {}'s time to {}";
@@ -674,6 +678,7 @@ public enum ModifiableText {
             else if (this == GIVELIFE_RECEIVE_SELF_TITLE) return List.of("time");
             else if (this == LIVES_GET_SELF) return List.of("time");
             else if (this == LIVES_ASSIGNED_LIST_ENTRY) return List.of("Player", "time");
+            else if (this == LIVES_ASSIGNED_GET) return List.of("Player", "time");
             else if (this == LIVES_SET_SINGLE) return List.of("Player", "time");
             else if (this == LIVES_SET_MULTIPLE) return List.of("time", "number of targets");
             else if (this == LIVES_CHANGE_SINGLE) return List.of("Added/Removed", "time", "to/from", "Player");

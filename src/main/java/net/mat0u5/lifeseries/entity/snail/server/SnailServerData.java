@@ -219,7 +219,7 @@ public class SnailServerData implements PlayerBoundEntity {
         }
         snail.discard();
 
-        if (boundPlayerUUID != null&& !snail.isFromTrivia() && Snails.snails.containsKey(boundPlayerUUID)) {
+        if (boundPlayerUUID != null && !snail.isFromTrivia() && Snails.snails.containsKey(boundPlayerUUID)) {
             Snails.snails.get(boundPlayerUUID).remove(snail);
         }
     }
