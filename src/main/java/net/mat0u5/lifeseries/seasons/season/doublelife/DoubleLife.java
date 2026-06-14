@@ -207,12 +207,7 @@ public class DoubleLife extends Season {
     }
 
     public boolean isMainSoulmate(ServerPlayer player) {
-        UUID playerUUID = player.getUUID();
-        if (SubInManager.isSubbingIn(playerUUID)) {
-            playerUUID = SubInManager.getSubstitutedPlayerUUID(playerUUID);
-        }
-        if (playerUUID == null) return false;
-        return soulmatesOrdered.containsKey(playerUUID);
+		return soulmatesOrdered.containsKey(player.getUUID());
     }
 
     public boolean hasSoulmate(ServerPlayer player) {
@@ -220,9 +215,6 @@ public class DoubleLife extends Season {
         return hasSoulmate(player.getUUID());
     }
     public boolean hasSoulmate(UUID playerUUID) {
-        if (SubInManager.isSubbingIn(playerUUID)) {
-            playerUUID = SubInManager.getSubstitutedPlayerUUID(playerUUID);
-        }
         if (playerUUID == null) return false;
         return soulmates.containsKey(playerUUID);
     }
@@ -233,14 +225,8 @@ public class DoubleLife extends Season {
 
     public boolean isSoulmateOnline(UUID playerUUID) {
         if (!hasSoulmate(playerUUID)) return false;
-        if (SubInManager.isSubbingIn(playerUUID)) {
-            playerUUID = SubInManager.getSubstitutedPlayerUUID(playerUUID);
-        }
         if (playerUUID == null) return false;
         UUID soulmateUUID = soulmates.get(playerUUID);
-        if (SubInManager.isBeingSubstituted(soulmateUUID)) {
-            soulmateUUID = SubInManager.getSubstitutingPlayerUUID(soulmateUUID);
-        }
         return PlayerUtils.getPlayer(soulmateUUID) != null;
     }
 
@@ -252,39 +238,21 @@ public class DoubleLife extends Season {
     @Nullable
     public ServerPlayer getSoulmate(UUID playerUUID) {
         if (!isSoulmateOnline(playerUUID)) return null;
-        if (SubInManager.isSubbingIn(playerUUID)) {
-            playerUUID = SubInManager.getSubstitutedPlayerUUID(playerUUID);
-        }
         if (playerUUID == null) return null;
         UUID soulmateUUID = soulmates.get(playerUUID);
-        if (SubInManager.isBeingSubstituted(soulmateUUID)) {
-            soulmateUUID = SubInManager.getSubstitutingPlayerUUID(soulmateUUID);
-        }
         return PlayerUtils.getPlayer(soulmateUUID);
     }
 
     @Nullable
     public UUID getSoulmateUUID(UUID playerUUID) {
         if (playerUUID == null) return null;
-        if (SubInManager.isSubbingIn(playerUUID)) {
-            playerUUID = SubInManager.getSubstitutedPlayerUUID(playerUUID);
-        }
         if (playerUUID == null) return null;
         if (!soulmates.containsKey(playerUUID)) return null;
         UUID soulmateUUID = soulmates.get(playerUUID);
-        if (SubInManager.isBeingSubstituted(soulmateUUID)) {
-            soulmateUUID = SubInManager.getSubstitutingPlayerUUID(soulmateUUID);
-        }
         return soulmateUUID;
     }
 
     public void setOfflineSoulmate(UUID player1UUID, UUID player2UUID) {
-        if (SubInManager.isSubbingIn(player1UUID)) {
-            player1UUID = SubInManager.getSubstitutedPlayerUUID(player1UUID);
-        }
-        if (SubInManager.isSubbingIn(player2UUID)) {
-            player2UUID = SubInManager.getSubstitutedPlayerUUID(player2UUID);
-        }
         soulmates.put(player1UUID, player2UUID);
         soulmates.put(player2UUID, player1UUID);
         updateOrderedSoulmates();
@@ -296,12 +264,6 @@ public class DoubleLife extends Season {
     public void setSoulmate(ServerPlayer player1, ServerPlayer player2) {
         UUID player1UUID = player1.getUUID();
         UUID player2UUID = player2.getUUID();
-        if (SubInManager.isSubbingIn(player1UUID)) {
-            player1UUID = SubInManager.getSubstitutedPlayerUUID(player1UUID);
-        }
-        if (SubInManager.isSubbingIn(player2UUID)) {
-            player2UUID = SubInManager.getSubstitutedPlayerUUID(player2UUID);
-        }
 
         soulmates.put(player1UUID, player2UUID);
         soulmates.put(player2UUID, player1UUID);

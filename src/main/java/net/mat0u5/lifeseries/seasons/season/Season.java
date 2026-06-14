@@ -723,7 +723,7 @@ public abstract class Season {
     public void onPlayerJoin(ServerPlayer player) {
         AttributeUtils.resetAttributesOnPlayerJoin(player);
         reloadPlayerTeam(player);
-        TaskScheduler.scheduleTask(2, () -> PlayerUtils.applyResourcepack(player.getUUID()));
+        TaskScheduler.scheduleTask(2, () -> PlayerUtils.applyResourcepack(player));
         if (!((IPlayer) player).ls$hasAssignedLives()) {
             assignDefaultLives(player);
         }
@@ -732,10 +732,10 @@ public abstract class Season {
         }
 
         TaskScheduler.scheduleTask(1, () -> {
-            if (SubInManager.isBeingSubstituted(player.getUUID())) {
+            if (SubInManager.isBeingSubstituted(ProfileManager.getRealUUID(player).get())) {
                 SubInManager.removeSubIn(player);
             }
-            if (SubInManager.isSubbingIn(player.getUUID())) {
+            if (SubInManager.isSubbingIn(player)) {
                 SubInManager.reloadPlayerProfile(player);
             }
         });
