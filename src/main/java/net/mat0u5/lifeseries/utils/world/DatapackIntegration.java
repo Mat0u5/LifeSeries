@@ -216,12 +216,15 @@ public class DatapackIntegration {
         else if (prevStatus == SessionStatus.PAUSED && status != SessionStatus.PAUSED) DatapackIntegration.EVENT_SESSION_UNPAUSE.trigger();
         else if (status == SessionStatus.STARTED) DatapackIntegration.EVENT_SESSION_START.trigger();
     }
+
     public static void setSessionLength(Time time) {
         ScoreboardUtils.setScore("Length", SCOREBOARD_SESSION_INFO, time.getTicks());
     }
+
     public static void setSessionTimePassed(Time time) {
         ScoreboardUtils.setScore("PassedTime", SCOREBOARD_SESSION_INFO, time.getTicks());
     }
+
     public static void setSeason(Seasons season) {
         ScoreboardUtils.setScore("Season", SCOREBOARD_SESSION_INFO, season.getIndex());
     }

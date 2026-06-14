@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.seasons.season.secretlife;
 
-import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.config.StringListConfig;
 import net.mat0u5.lifeseries.config.StringListManager;
@@ -10,26 +9,16 @@ import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
-import net.mat0u5.lifeseries.utils.world.ItemSpawner;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3f;
 
 import java.util.*;
 
-import static net.mat0u5.lifeseries.LifeSeries.*;
 //? if <= 1.20.3 {
 /*import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -59,8 +48,8 @@ public class TaskManager {
     // Fraction of the tasks to keep as used when resetting happens.
     public static double RECENT_TASK_PERCENTAGE = 0.5;
     public static boolean tasksChosen = false;
-    public static List<UUID> tasksChosenFor = new ArrayList<>();
-    public static List<UUID> submittedOrFailed = new ArrayList<>();
+    public static Set<UUID> tasksChosenFor = new HashSet<>();
+    public static Set<UUID> submittedOrFailed = new HashSet<>();
     public static StringListConfig usedTasksConfig;
     public static SecretLifeLocationConfig locationsConfig;
     public static Map<UUID, Task> preAssignedTasks = new HashMap<>();
@@ -238,9 +227,7 @@ public class TaskManager {
     public static void chooseTasks(List<ServerPlayer> allowedPlayers, TaskTypes type) {
         SecretKeeper.secretKeeperBeingUsed = true;
         for (ServerPlayer player : allowedPlayers) {
-            if (!tasksChosenFor.contains(player.getUUID())) {
-                tasksChosenFor.add(player.getUUID());
-            }
+			tasksChosenFor.add(player.getUUID());
         }
         PlayerUtils.sendTitleToPlayers(allowedPlayers, ModifiableText.SECRETLIFE_TASK_TITLE.get(),20,35,0);
         PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("secretlife_task")));

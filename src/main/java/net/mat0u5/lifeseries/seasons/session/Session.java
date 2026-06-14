@@ -95,6 +95,7 @@ public class Session {
         changeStatus(SessionStatus.STARTED);
         passedTime = Time.zero();
         fullPassedTime = Time.zero();
+        updateSessionLength();
         DatapackIntegration.setSessionTimePassed(getPassedTime());
         PlayerUtils.broadcastMessage(ModifiableText.SESSION_STARTED.get(sessionLength.formatLong()));
 
@@ -164,15 +165,19 @@ public class Session {
 
     public void setSessionLength(Time time) {
         sessionLength = time;
-        LifeSeries.getMainConfig().setProperty("session_length", String.valueOf(sessionLength.getTicks()));
-        DatapackIntegration.setSessionLength(time);
+        updateSessionLength();
     }
 
     public void addSessionLength(Time time) {
         sessionLength.add(time);
-        LifeSeries.getMainConfig().setProperty("session_length", String.valueOf(sessionLength.getTicks()));
-        DatapackIntegration.setSessionLength(time);
+        updateSessionLength();
     }
+
+    public void updateSessionLength() {
+        LifeSeries.getMainConfig().setProperty("session_length", String.valueOf(sessionLength.getTicks()));
+        DatapackIntegration.setSessionLength(sessionLength);
+    }
+
 
     public void removeSessionLength(Time time) {
         addSessionLength(time.multiply(-1));
