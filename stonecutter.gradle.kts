@@ -127,7 +127,7 @@ publishMods {
 			accessToken = githubAccessToken
 			repository = property("publish.github.target").toString().removeSuffix("/")
 			commitish = property("publish.github.branch").toString().ifBlank { "main" }
-			tagName = property("mod.version").toString()
+			tagName = versionNameFull
 			allowEmptyFiles = true
 		}
 	}
