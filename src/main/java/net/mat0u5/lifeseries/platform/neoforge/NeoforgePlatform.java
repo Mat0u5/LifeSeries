@@ -10,8 +10,24 @@ public class NeoforgePlatform implements Platform {
 
 	@Override
 	public boolean isModLoaded(String modId) {
-		if (ModList.get() == null) return false;
-		return ModList.get().isLoaded(modId);
+		try {
+			//? if <= 1.21.6 {
+			/^if (FMLLoader.getLoadingModList() != null) {
+				return FMLLoader.getLoadingModList().getModFileById(modId) != null;
+			}
+			^///?} else {
+			if (FMLLoader.getCurrent().getLoadingModList() != null) {
+				return FMLLoader.getCurrent().getLoadingModList().getModFileById(modId) != null;
+			}
+			//?}
+		} catch (Throwable ignored) {}
+
+		try {
+			if (ModList.get() != null) {
+				return ModList.get().isLoaded(modId);
+			}
+		} catch (Throwable ignored) {}
+		return false;
 	}
 
 	@Override

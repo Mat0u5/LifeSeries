@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -62,6 +63,11 @@ public class TestingCommands extends Command {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
+        sendCommandFeedbackQuiet(source, Component.literal("replaymod_"+CompatibilityManager.replayModLoaded()));
+        sendCommandFeedbackQuiet(source, Component.literal("flashback_"+CompatibilityManager.flashbackLoaded()));
+        sendCommandFeedbackQuiet(source, Component.literal("fabricapi_"+CompatibilityManager.fabricApiLoaded()));
+        sendCommandFeedbackQuiet(source, Component.literal("appleskin_"+CompatibilityManager.appleSkinLoaded()));
+        sendCommandFeedbackQuiet(source, Component.literal("voicechat_"+CompatibilityManager.voicechatLoaded()));
 
         return 1;
     }
