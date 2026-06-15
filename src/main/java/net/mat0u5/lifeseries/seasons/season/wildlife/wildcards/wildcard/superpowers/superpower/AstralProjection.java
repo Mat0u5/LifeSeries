@@ -97,8 +97,6 @@ public class AstralProjection extends ToggleableSuperpower {
         ((IPlayer) player).ls$playNotifySound(SoundEvents.TRIAL_SPAWNER_OMINOUS_ACTIVATE, SoundSource.MASTER, 0.3f, 1);
         //?}
 
-        String fakePlayerName = "`"+player.getScoreboardName();
-
         startedPos = player.position();
         startedLooking[0] = player.getYRot();
         startedLooking[1] = player.getXRot();
@@ -110,7 +108,9 @@ public class AstralProjection extends ToggleableSuperpower {
         Inventory inv = player.getInventory();
 
         //? if <= 1.21.6 {
-        /*FakePlayer.createFake(fakePlayerName, server, startedPos, startedLooking[0], startedLooking[1], ((IPlayer) player).ls$getServerLevel().dimension(),
+        /*String fakePlayerName = "`"+player.getScoreboardName();
+        if (fakePlayerName.length() > 16) fakePlayerName = fakePlayerName.substring(0,16);
+        FakePlayer.createFake(fakePlayerName, server, startedPos, startedLooking[0], startedLooking[1], ((IPlayer) player).ls$getServerLevel().dimension(),
                 startedGameMode, false, inv, player.getUUID()).thenAccept((fakePlayer) -> {
             clone = fakePlayer;
             sendDisguisePacket();

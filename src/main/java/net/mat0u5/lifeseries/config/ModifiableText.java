@@ -219,6 +219,7 @@ public enum ModifiableText {
 
     ,LIFESKINS_SKIN_SET("Set {}'s skin to {}", List.of("Player", "username"))
     ,LIFESKINS_SKIN_RESET("Reset {}'s skin", List.of("Player"))
+    ,LIFESKINS_USERNAME_INVALID("Invalid player name")
     ,LIFESKINS_USERNAME_SET("Set {}'s username to {}", List.of("Player", "username"))
     ,LIFESKINS_USERNAME_RESET("Reset {}'s username", List.of("Player"))
     ,LIFESKINS_NICKNAME_SET("Set {}'s nickname to {}", List.of("Player", "nickname"))
