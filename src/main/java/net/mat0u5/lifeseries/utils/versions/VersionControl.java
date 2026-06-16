@@ -18,6 +18,9 @@ public class VersionControl {
         if (string.contains("-pre")) {
             string = string.split("-pre")[0];
         }
+        if (string.contains("-rc")) {
+            string = string.split("-rc")[0];
+        }
         string = string.replaceAll("[^\\d.]", ""); //Remove all non-digit and non-dot characters.
         string = string.replaceAll("^\\.+|\\.+$", ""); //Remove all leading or trailing dots.
         while (string.contains("..")) string = string.replace("..",".");
@@ -53,6 +56,13 @@ public class VersionControl {
                 }catch(Exception ignored) {}
             }
 
+            if (originalVersion.contains("-rc")) {
+                build = -10;
+                try {
+                    build += Integer.parseInt(originalVersion.split("-rc")[1]);
+                }catch(Exception ignored) {}
+            }
+
             /*
                 Supports up to:
                  213 major versions
@@ -63,6 +73,7 @@ public class VersionControl {
                  So 213.99.99.999 is a valid version for example.
 
                  Pre-releases act as if 900 build versions are already added, so 100 pre-releases are supported
+                 Release candidates act as if 990 build versions are already added, so 10 rc's are supported
              */
 
             return (major * 10_000_000) + (minor * 100_000) + (patch * 1_000) + build;

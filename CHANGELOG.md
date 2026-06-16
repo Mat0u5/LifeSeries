@@ -1,1 +1,1 @@
-Bug fixes.
+Support for minecraft 26.2
