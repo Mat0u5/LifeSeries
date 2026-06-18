@@ -65,8 +65,7 @@ stonecutter {
 		}
 		else if (env("GRADLE_ONLY_26_2") == "true") {
 			// 26.2 all platform
-			//match("26.2", "fabric", "forge", "neoforge")
-			match("26.2", "fabric", "neoforge")
+			match("26.2", "fabric", "forge", "neoforge")
 		}
 		else if (env("GRADLE_ONLY_26_1") == "true") {
 			// 26.1 all platform
@@ -100,7 +99,7 @@ stonecutter {
 			match("1.20", "fabric")
 		}
 		else if (env("GRADLE_ONLY_FORGE") == "true") {
-			//match("26.2", "forge")
+			match("26.2", "forge")
 			match("26.1", "forge")
 
 			match("1.21.11", "forge")
@@ -133,8 +132,7 @@ stonecutter {
 		else {
 			// All versions
 			//match("26.3", "fabric")
-			//match("26.2", "fabric", "forge", "neoforge")
-			match("26.2", "fabric", "neoforge")
+			match("26.2", "fabric", "forge", "neoforge")
 			match("26.1", "fabric", "forge", "neoforge")
 
 			match("1.21.11", "fabric", "forge", "neoforge")
