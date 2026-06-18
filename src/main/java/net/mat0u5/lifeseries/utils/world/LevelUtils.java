@@ -45,7 +45,7 @@ public class LevelUtils {
     }
 
     public static void summonHarmlessLightning(ServerLevel level, Vec3 pos) {
-        LightningBolt lightning = new LightningBolt(EntityType.LIGHTNING_BOLT, level);
+        LightningBolt lightning = new LightningBolt(EntityTypes.LIGHTNING_BOLT, level);
         lightning.setPosRaw(pos.x, pos.y, pos.z);
         lightning.setVisualOnly(true);
         level.addFreshEntity(lightning);

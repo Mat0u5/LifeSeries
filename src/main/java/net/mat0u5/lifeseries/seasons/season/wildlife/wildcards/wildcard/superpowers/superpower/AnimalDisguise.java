@@ -39,11 +39,11 @@ public class AnimalDisguise extends ToggleableSuperpower {
     public Superpowers getSuperpower() {
         return Superpowers.ANIMAL_DISGUISE;
     }
-    List<EntityType<?>> defaultRandom = List.of(EntityType.COW, EntityType.SHEEP, EntityType.CHICKEN, EntityType.PIG);
+    List<EntityType<?>> defaultRandom = List.of(EntityTypes.COW, EntityTypes.SHEEP, EntityTypes.CHICKEN, EntityTypes.PIG);
     List<EntityType<?>> bannedEntities = List.of(
             MobRegistry.SNAIL, MobRegistry.TRIVIA_BOT,
-            EntityType.PLAYER, EntityType.ENDER_DRAGON, EntityType.WITHER, EntityType.ARMOR_STAND,
-            EntityType.AXOLOTL, EntityType.DOLPHIN
+            EntityTypes.PLAYER, EntityTypes.ENDER_DRAGON, EntityTypes.WITHER, EntityTypes.ARMOR_STAND,
+            EntityTypes.AXOLOTL, EntityTypes.DOLPHIN
     );
 
     @Override

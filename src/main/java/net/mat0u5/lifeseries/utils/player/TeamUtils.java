@@ -11,28 +11,28 @@ import net.minecraft.world.scores.Scoreboard;
 import java.util.Collection;
 import java.util.Optional;
 //? if <= 26.1 {
-import net.minecraft.ChatFormatting;
- //?} else {
-/*import net.minecraft.world.scores.TeamColor;
-*///?}
+/*import net.minecraft.ChatFormatting;
+ *///?} else {
+import net.minecraft.world.scores.TeamColor;
+//?}
 
 import static net.mat0u5.lifeseries.LifeSeries.server;
 
 public class TeamUtils {
 
     //? if <= 26.1 {
-    public static void createTeam(String teamName, ChatFormatting color) {
-    //?} else {
-    /*public static void createTeam(String teamName, TeamColor color) {
-    *///?}
+    /*public static void createTeam(String teamName, ChatFormatting color) {
+    *///?} else {
+    public static void createTeam(String teamName, TeamColor color) {
+    //?}
         createTeam(teamName, teamName, color);
     }
 
     //? if <= 26.1 {
-    public static boolean createTeam(String teamName, String displayName, ChatFormatting color) {
-    //?} else {
-    /*public static boolean createTeam(String teamName, String displayName, TeamColor color) {
-    *///?}
+    /*public static boolean createTeam(String teamName, String displayName, ChatFormatting color) {
+    *///?} else {
+    public static boolean createTeam(String teamName, String displayName, TeamColor color) {
+    //?}
         if (server == null) return false;
         Scoreboard scoreboard = server.getScoreboard();
         if (scoreboard.getPlayerTeam(teamName) != null) {
@@ -41,12 +41,12 @@ public class TeamUtils {
         }
         PlayerTeam team = scoreboard.addPlayerTeam(teamName);
         //? if <= 26.1 {
-        team.setDisplayName(Component.literal(displayName).withStyle(color));
+        /*team.setDisplayName(Component.literal(displayName).withStyle(color));
         team.setColor(color);
-        //?} else {
-        /*team.setDisplayName(Component.literal(displayName).withColor(color.textColor()));
+        *///?} else {
+        team.setDisplayName(Component.literal(displayName).withColor(color.textColor()));
         team.setColor(Optional.of(color));
-        *///?}
+        //?}
         team.setSeeFriendlyInvisibles(false);
         return true;
     }

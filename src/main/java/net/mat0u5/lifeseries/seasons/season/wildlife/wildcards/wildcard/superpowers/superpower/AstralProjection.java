@@ -29,7 +29,7 @@ import net.minecraft.world.entity.decoration.Mannequin;
 import net.mat0u5.lifeseries.mixin.MannequinAccessor;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.component.ResolvableProfile;
 //?}
@@ -116,7 +116,7 @@ public class AstralProjection extends ToggleableSuperpower {
             sendDisguisePacket();
         });
         *///?} else {
-        clone = EntityType.MANNEQUIN.create(startedLevel, EntitySpawnReason.COMMAND);
+        clone = EntityTypes.MANNEQUIN.create(startedLevel, EntitySpawnReason.COMMAND);
         if (clone == null) return;
 
         clone.setPosRaw(player.getX(), player.getY(), player.getZ());

@@ -277,10 +277,10 @@ public class OtherUtils {
 
     public static Vec3 getCenter(BlockPos pos) {
         //? if <= 26.1 {
-        return pos.getCenter();
-        //?} else {
-        /*return Vec3.atCenterOf(pos);
-        *///?}
+        /*return pos.getCenter();
+        *///?} else {
+        return Vec3.atCenterOf(pos);
+        //?}
     }
 
 }

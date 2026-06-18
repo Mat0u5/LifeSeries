@@ -53,76 +53,76 @@ public class MobSwap extends Wildcard {
     public static final Map<EntityType<?>, Integer> entityEntries = new HashMap<>();
 
     public static void initializeEntityEntries() {
-        entityEntries.put(EntityType.ALLAY, 1);
-        entityEntries.put(EntityType.BAT, 2);
-        entityEntries.put(EntityType.CAT, 3);
-        entityEntries.put(EntityType.CHICKEN, 4);
-        entityEntries.put(EntityType.RABBIT, 5);
-        entityEntries.put(EntityType.SQUID, 6);
-        entityEntries.put(EntityType.TROPICAL_FISH, 7);
-        entityEntries.put(EntityType.TURTLE, 8);
-        entityEntries.put(EntityType.COD, 9);
-        entityEntries.put(EntityType.COW, 10);
+        entityEntries.put(EntityTypes.ALLAY, 1);
+        entityEntries.put(EntityTypes.BAT, 2);
+        entityEntries.put(EntityTypes.CAT, 3);
+        entityEntries.put(EntityTypes.CHICKEN, 4);
+        entityEntries.put(EntityTypes.RABBIT, 5);
+        entityEntries.put(EntityTypes.SQUID, 6);
+        entityEntries.put(EntityTypes.TROPICAL_FISH, 7);
+        entityEntries.put(EntityTypes.TURTLE, 8);
+        entityEntries.put(EntityTypes.COD, 9);
+        entityEntries.put(EntityTypes.COW, 10);
 
-        entityEntries.put(EntityType.DONKEY, 11);
-        entityEntries.put(EntityType.GLOW_SQUID, 12);
-        entityEntries.put(EntityType.MOOSHROOM, 13);
-        entityEntries.put(EntityType.MULE, 14);
-        entityEntries.put(EntityType.PIG, 15);
-        entityEntries.put(EntityType.SHEEP, 16);
-        entityEntries.put(EntityType.SNIFFER, 17);
-        entityEntries.put(EntityType.WANDERING_TRADER, 19);
+        entityEntries.put(EntityTypes.DONKEY, 11);
+        entityEntries.put(EntityTypes.GLOW_SQUID, 12);
+        entityEntries.put(EntityTypes.MOOSHROOM, 13);
+        entityEntries.put(EntityTypes.MULE, 14);
+        entityEntries.put(EntityTypes.PIG, 15);
+        entityEntries.put(EntityTypes.SHEEP, 16);
+        entityEntries.put(EntityTypes.SNIFFER, 17);
+        entityEntries.put(EntityTypes.WANDERING_TRADER, 19);
 
-        entityEntries.put(EntityType.FROG, 20);
-        entityEntries.put(EntityType.CAMEL, 20);
-        entityEntries.put(EntityType.HORSE, 22);
-        entityEntries.put(EntityType.OCELOT, 24);
-        entityEntries.put(EntityType.PARROT, 26);
-        entityEntries.put(EntityType.AXOLOTL, 28);
-        entityEntries.put(EntityType.FOX, 30);
-        entityEntries.put(EntityType.GOAT, 32);
-        entityEntries.put(EntityType.PANDA, 34);
-        entityEntries.put(EntityType.LLAMA, 36);
-        entityEntries.put(EntityType.DOLPHIN, 38);
-        entityEntries.put(EntityType.BEE, 40);
-        entityEntries.put(EntityType.WOLF, 42);
-        entityEntries.put(EntityType.TRADER_LLAMA, 44);
+        entityEntries.put(EntityTypes.FROG, 20);
+        entityEntries.put(EntityTypes.CAMEL, 20);
+        entityEntries.put(EntityTypes.HORSE, 22);
+        entityEntries.put(EntityTypes.OCELOT, 24);
+        entityEntries.put(EntityTypes.PARROT, 26);
+        entityEntries.put(EntityTypes.AXOLOTL, 28);
+        entityEntries.put(EntityTypes.FOX, 30);
+        entityEntries.put(EntityTypes.GOAT, 32);
+        entityEntries.put(EntityTypes.PANDA, 34);
+        entityEntries.put(EntityTypes.LLAMA, 36);
+        entityEntries.put(EntityTypes.DOLPHIN, 38);
+        entityEntries.put(EntityTypes.BEE, 40);
+        entityEntries.put(EntityTypes.WOLF, 42);
+        entityEntries.put(EntityTypes.TRADER_LLAMA, 44);
 
-        entityEntries.put(EntityType.POLAR_BEAR, 45);
-        entityEntries.put(EntityType.PIGLIN, 48);
-        entityEntries.put(EntityType.ZOMBIFIED_PIGLIN, 50);
-        entityEntries.put(EntityType.SILVERFISH, 52);
-        entityEntries.put(EntityType.SLIME, 54);
-        entityEntries.put(EntityType.SPIDER, 56);
-        entityEntries.put(EntityType.ENDERMAN, 58);
-        entityEntries.put(EntityType.PHANTOM, 60);
-        entityEntries.put(EntityType.PILLAGER, 62);
+        entityEntries.put(EntityTypes.POLAR_BEAR, 45);
+        entityEntries.put(EntityTypes.PIGLIN, 48);
+        entityEntries.put(EntityTypes.ZOMBIFIED_PIGLIN, 50);
+        entityEntries.put(EntityTypes.SILVERFISH, 52);
+        entityEntries.put(EntityTypes.SLIME, 54);
+        entityEntries.put(EntityTypes.SPIDER, 56);
+        entityEntries.put(EntityTypes.ENDERMAN, 58);
+        entityEntries.put(EntityTypes.PHANTOM, 60);
+        entityEntries.put(EntityTypes.PILLAGER, 62);
 
-        entityEntries.put(EntityType.CAVE_SPIDER, 64);
-        entityEntries.put(EntityType.DROWNED, 66);
-        entityEntries.put(EntityType.HOGLIN, 68);
-        entityEntries.put(EntityType.HUSK, 70);
-        entityEntries.put(EntityType.SKELETON, 72);
-        entityEntries.put(EntityType.STRAY, 74);
-        entityEntries.put(EntityType.ZOMBIE, 76);
-        entityEntries.put(EntityType.ZOMBIE_VILLAGER, 78);
+        entityEntries.put(EntityTypes.CAVE_SPIDER, 64);
+        entityEntries.put(EntityTypes.DROWNED, 66);
+        entityEntries.put(EntityTypes.HOGLIN, 68);
+        entityEntries.put(EntityTypes.HUSK, 70);
+        entityEntries.put(EntityTypes.SKELETON, 72);
+        entityEntries.put(EntityTypes.STRAY, 74);
+        entityEntries.put(EntityTypes.ZOMBIE, 76);
+        entityEntries.put(EntityTypes.ZOMBIE_VILLAGER, 78);
 
-        entityEntries.put(EntityType.CREEPER, 80);
-        entityEntries.put(EntityType.GUARDIAN, 82);
-        entityEntries.put(EntityType.WITCH, 84);
-        entityEntries.put(EntityType.EVOKER, 86);
-        entityEntries.put(EntityType.BLAZE, 88);
-        entityEntries.put(EntityType.ENDERMITE, 90);
-        entityEntries.put(EntityType.GHAST, 92);
-        entityEntries.put(EntityType.MAGMA_CUBE, 94);
-        entityEntries.put(EntityType.VEX, 96);
-        entityEntries.put(EntityType.WITHER_SKELETON, 98);
-        entityEntries.put(EntityType.ILLUSIONER, 100);
-        entityEntries.put(EntityType.PIGLIN_BRUTE, 102);
-        entityEntries.put(EntityType.SHULKER, 104);
-        entityEntries.put(EntityType.VINDICATOR, 106);
-        entityEntries.put(EntityType.ZOGLIN, 108);
-        entityEntries.put(EntityType.RAVAGER, 110);
+        entityEntries.put(EntityTypes.CREEPER, 80);
+        entityEntries.put(EntityTypes.GUARDIAN, 82);
+        entityEntries.put(EntityTypes.WITCH, 84);
+        entityEntries.put(EntityTypes.EVOKER, 86);
+        entityEntries.put(EntityTypes.BLAZE, 88);
+        entityEntries.put(EntityTypes.ENDERMITE, 90);
+        entityEntries.put(EntityTypes.GHAST, 92);
+        entityEntries.put(EntityTypes.MAGMA_CUBE, 94);
+        entityEntries.put(EntityTypes.VEX, 96);
+        entityEntries.put(EntityTypes.WITHER_SKELETON, 98);
+        entityEntries.put(EntityTypes.ILLUSIONER, 100);
+        entityEntries.put(EntityTypes.PIGLIN_BRUTE, 102);
+        entityEntries.put(EntityTypes.SHULKER, 104);
+        entityEntries.put(EntityTypes.VINDICATOR, 106);
+        entityEntries.put(EntityTypes.ZOGLIN, 108);
+        entityEntries.put(EntityTypes.RAVAGER, 110);
     }
 
     @Override
@@ -326,13 +326,13 @@ public class MobSwap extends Wildcard {
             if (Math.random() < bossChance) {
                 double random = Math.random();
                 if (random < 0.33) {
-                    return EntityType.WARDEN;
+                    return EntityTypes.WARDEN;
                 }
                 else if (random < 0.66) {
-                    return EntityType.WITHER;
+                    return EntityTypes.WITHER;
                 }
                 else {
-                    return EntityType.ELDER_GUARDIAN;
+                    return EntityTypes.ELDER_GUARDIAN;
                 }
             }
         }

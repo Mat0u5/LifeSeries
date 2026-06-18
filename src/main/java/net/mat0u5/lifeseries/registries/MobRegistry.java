@@ -17,10 +17,10 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 //?}
 //? if <= 26.1 {
-import net.minecraft.world.level.block.Blocks;
-//?} else {
-/*import net.minecraft.tags.BlockTags;
-*///?}
+/*import net.minecraft.world.level.block.Blocks;
+*///?} else {
+import net.minecraft.tags.BlockTags;
+//?}
 
 public class MobRegistry {
     //? if >= 1.21.2 {
@@ -66,10 +66,10 @@ public class MobRegistry {
             AngrySnowman.ID,
             EntityType.Builder.of(AngrySnowman::new, MobCategory.MISC)
                     //? if <= 26.1 {
-                    .immuneTo(Blocks.POWDER_SNOW)
-                    //?} else {
-                    /*.immuneTo(BlockTags.POLAR_BEAR_IMMUNE_TO)
-                    *///?}
+                    /*.immuneTo(Blocks.POWDER_SNOW)
+                    *///?} else {
+                    .immuneTo(BlockTags.POLAR_BEAR_IMMUNE_TO)
+                    //?}
 
                     .sized(0.7F, 1.9F)
 

@@ -31,7 +31,7 @@ import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 //?}
 
 //? if >= 26.1 {
@@ -158,7 +158,7 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
     )
     //?}
     private boolean allowRidingPlayers(EntityType instance, Operation<Boolean> original) {
-        if(instance == EntityType.PLAYER) {
+        if(instance == EntityTypes.PLAYER) {
             return true;
         } else {
             return original.call(instance);

@@ -33,7 +33,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -475,7 +475,7 @@ public class WildLifeTriviaHandler extends TriviaHandler {
 
     public static void curseRavager(ServerPlayer player, BlockPos pos) {
         BlockPos spawnPos = TriviaBotPathfinding.getBlockPosNearPlayer(player, pos, 5);
-        LevelUtils.spawnEntity(EntityType.RAVAGER, ((IPlayer) player).ls$getServerLevel(), spawnPos);
+        LevelUtils.spawnEntity(EntityTypes.RAVAGER, ((IPlayer) player).ls$getServerLevel(), spawnPos);
     }
 
     //? if >= 1.21 {
@@ -547,11 +547,11 @@ public class WildLifeTriviaHandler extends TriviaHandler {
 
     public static void curseBeeswarm(ServerPlayer player, BlockPos pos) {
         BlockPos spawnPos = TriviaBotPathfinding.getBlockPosNearPlayer(player, pos, 1);
-        Bee bee1 = LevelUtils.spawnEntity(EntityType.BEE, ((IPlayer) player).ls$getServerLevel(), spawnPos);
-        Bee bee2 = LevelUtils.spawnEntity(EntityType.BEE, ((IPlayer) player).ls$getServerLevel(), spawnPos);
-        Bee bee3 = LevelUtils.spawnEntity(EntityType.BEE, ((IPlayer) player).ls$getServerLevel(), spawnPos);
-        Bee bee4 = LevelUtils.spawnEntity(EntityType.BEE, ((IPlayer) player).ls$getServerLevel(), spawnPos);
-        Bee bee5 = LevelUtils.spawnEntity(EntityType.BEE, ((IPlayer) player).ls$getServerLevel(), spawnPos);
+        Bee bee1 = LevelUtils.spawnEntity(EntityTypes.BEE, ((IPlayer) player).ls$getServerLevel(), spawnPos);
+        Bee bee2 = LevelUtils.spawnEntity(EntityTypes.BEE, ((IPlayer) player).ls$getServerLevel(), spawnPos);
+        Bee bee3 = LevelUtils.spawnEntity(EntityTypes.BEE, ((IPlayer) player).ls$getServerLevel(), spawnPos);
+        Bee bee4 = LevelUtils.spawnEntity(EntityTypes.BEE, ((IPlayer) player).ls$getServerLevel(), spawnPos);
+        Bee bee5 = LevelUtils.spawnEntity(EntityTypes.BEE, ((IPlayer) player).ls$getServerLevel(), spawnPos);
         //? if <= 1.21.9 {
         /*if (bee1 != null) bee1.setPersistentAngerTarget(player.getUUID());
         if (bee2 != null) bee2.setPersistentAngerTarget(player.getUUID());

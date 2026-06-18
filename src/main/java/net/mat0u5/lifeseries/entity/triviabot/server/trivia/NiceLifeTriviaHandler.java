@@ -48,7 +48,7 @@ import net.minecraft.world.item.component.CustomData;
 //?}
 
 //? if >= 1.21.9 {
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.component.TypedEntityData;
 //?}
 
@@ -618,7 +618,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         //? if >=1.20.5 && <= 1.21.6 {
         /*camel.set(DataComponents.ENTITY_DATA, nbtCamel);
         *///?} else if > 1.21.6 {
-        camel.set(DataComponents.ENTITY_DATA, TypedEntityData.of(EntityType.CAMEL, nbtCamel.copyTag()));
+        camel.set(DataComponents.ENTITY_DATA, TypedEntityData.of(EntityTypes.CAMEL, nbtCamel.copyTag()));
         //?}
         itemSpawner.addItem(camel, 10);
     }

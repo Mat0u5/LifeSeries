@@ -25,12 +25,12 @@ public class MobEffectMixin {
     /*@Inject(method = "applyInstantenousEffect", at = @At("HEAD"), cancellable = true)
     public void applyInstantEffect(Entity source, Entity attacker, LivingEntity target, int amplifier, double proximity, CallbackInfo ci) {
     *///?} else if <= 26.1 {
-    @Inject(method = "applyInstantenousEffect", at = @At("HEAD"), cancellable = true)
+    /*@Inject(method = "applyInstantenousEffect", at = @At("HEAD"), cancellable = true)
     public void applyInstantEffect(ServerLevel level, Entity effectEntity, Entity attacker, LivingEntity target, int amplifier, double proximity, CallbackInfo ci) {
-    //?} else {
-    /*@Inject(method = "applyInstantaneousEffect", at = @At("HEAD"), cancellable = true)
+    *///?} else {
+    @Inject(method = "applyInstantaneousEffect", at = @At("HEAD"), cancellable = true)
     public void applyInstantEffect(ServerLevel level, Entity effectEntity, Entity attacker, LivingEntity target, int amplifier, double proximity, CallbackInfo ci) {
-    *///?}
+    //?}
         if (LifeSeries.isClientOrDisabled()) return;
         MobEffect effect = (MobEffect) (Object) this;
         if (target instanceof ServerPlayer) {
@@ -72,10 +72,10 @@ public class MobEffectMixin {
     //? if <= 1.21 {
     /*@ModifyVariable(method = "applyInstantenousEffect", at = @At("HEAD"), index = 4, argsOnly = true)
     *///?} else if <= 26.1 {
-    @ModifyVariable(method = "applyInstantenousEffect", at = @At("HEAD"), index = 5, argsOnly = true)
-    //?} else {
-    /*@ModifyVariable(method = "applyInstantaneousEffect", at = @At("HEAD"), index = 5, argsOnly = true)
-    *///?}
+    /*@ModifyVariable(method = "applyInstantenousEffect", at = @At("HEAD"), index = 5, argsOnly = true)
+    *///?} else {
+    @ModifyVariable(method = "applyInstantaneousEffect", at = @At("HEAD"), index = 5, argsOnly = true)
+    //?}
     private int clampInstantEffect(int amplifier) {
         return ls$clampEffect(amplifier);
     }

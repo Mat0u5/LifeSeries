@@ -19,10 +19,10 @@ import static net.mat0u5.lifeseries.LifeSeries.livesManager;
 import net.minecraft.world.scores.PlayerScoreEntry;
 
 //? if <= 26.1 {
-import net.minecraft.ChatFormatting;
-//?} else {
-/*import net.minecraft.world.scores.TeamColor;
-*///?}
+/*import net.minecraft.ChatFormatting;
+*///?} else {
+import net.minecraft.world.scores.TeamColor;
+//?}
 
 public class WatcherManager {
     public static final String SCOREBOARD_NAME = "Watchers";
@@ -32,7 +32,7 @@ public class WatcherManager {
 
     public static void createTeams() {
         //~ if >= 26.2 'ChatFormatting' -> 'TeamColor' {
-        TeamUtils.createTeam(WatcherManager.TEAM_NAME, WatcherManager.TEAM_DISPLAY_NAME, ChatFormatting.DARK_GRAY);
+        TeamUtils.createTeam(WatcherManager.TEAM_NAME, WatcherManager.TEAM_DISPLAY_NAME, TeamColor.DARK_GRAY);
         //~}
     }
 

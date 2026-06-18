@@ -47,7 +47,7 @@ import net.minecraft.world.item.component.CustomData;
 //?}
 
 //? if >= 1.21.9 {
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.component.TypedEntityData;
 //?}
 
@@ -243,9 +243,9 @@ public class SecretLife extends Season {
         skeletonHorse.set(DataComponents.ENTITY_DATA, nbtSkeleton);
         camel.set(DataComponents.ENTITY_DATA, nbtCamel);
         *///?} else if > 1.21.6 {
-        zombieHorse.set(DataComponents.ENTITY_DATA, TypedEntityData.of(EntityType.ZOMBIE, nbtZombie.copyTag()));
-        skeletonHorse.set(DataComponents.ENTITY_DATA, TypedEntityData.of(EntityType.SKELETON, nbtSkeleton.copyTag()));
-        camel.set(DataComponents.ENTITY_DATA, TypedEntityData.of(EntityType.CAMEL, nbtCamel.copyTag()));
+        zombieHorse.set(DataComponents.ENTITY_DATA, TypedEntityData.of(EntityTypes.ZOMBIE, nbtZombie.copyTag()));
+        skeletonHorse.set(DataComponents.ENTITY_DATA, TypedEntityData.of(EntityTypes.SKELETON, nbtSkeleton.copyTag()));
+        camel.set(DataComponents.ENTITY_DATA, TypedEntityData.of(EntityTypes.CAMEL, nbtCamel.copyTag()));
         //?}
         itemSpawner.addItem(zombieHorse, 10);
         itemSpawner.addItem(skeletonHorse, 10);

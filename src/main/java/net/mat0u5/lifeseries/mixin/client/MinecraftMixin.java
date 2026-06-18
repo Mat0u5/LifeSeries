@@ -87,10 +87,10 @@ public abstract class MinecraftMixin {
     }
 
     //? if <= 26.1 {
-    @Inject(at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;info(Ljava/lang/String;)V", shift = At.Shift.AFTER), method = "destroy")
-    //?} else {
-    /*@Inject(at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;info(Ljava/lang/String;)V", shift = At.Shift.AFTER), method = "exitWorldAndClose")
-    *///?}
+    /*@Inject(at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;info(Ljava/lang/String;)V", shift = At.Shift.AFTER), method = "destroy")
+    *///?} else {
+    @Inject(at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;info(Ljava/lang/String;)V", shift = At.Shift.AFTER), method = "exitWorldAndClose")
+    //?}
     private void onStopping(CallbackInfo ci) {
         ClientEvents.onClientStopping((Minecraft) (Object) this);
     }

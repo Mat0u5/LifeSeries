@@ -41,7 +41,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 //?}
 //? if >= 26.2
-//import net.minecraft.world.scores.TeamColor;
+import net.minecraft.world.scores.TeamColor;
 
 public class ClientUtils {
 
@@ -77,7 +77,7 @@ public class ClientUtils {
         if (client.player == null) return null;
         Team team = client.player.getTeam();
         //~ if >= 26.2 'team.getColor().getName()' -> 'team.getColor().orElse(TeamColor.WHITE).getSerializedName()' {
-        if (team != null) return team.getColor().getName();
+        if (team != null) return team.getColor().orElse(TeamColor.WHITE).getSerializedName();
         //~}
         return null;
     }
@@ -254,7 +254,7 @@ public class ClientUtils {
         if (original == null) return original;
         if (team == null) return original;
         //~ if >= 26.2 '.withStyle(team.getColor())' -> '.withColor(team.getColor().orElse(TeamColor.WHITE).textColor())' {
-        return TextUtils.format("[{}] ",team.getDisplayName().getString()).withStyle(team.getColor()).append(original);
+        return TextUtils.format("[{}] ",team.getDisplayName().getString()).withColor(team.getColor().orElse(TeamColor.WHITE).textColor()).append(original);
         //~}
     }
 }

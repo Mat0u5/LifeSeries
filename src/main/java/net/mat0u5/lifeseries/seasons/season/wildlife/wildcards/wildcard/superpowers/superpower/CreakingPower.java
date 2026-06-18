@@ -19,7 +19,7 @@ import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.monster.creaking.Creaking;
 import net.minecraft.world.phys.AABB;
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
@@ -31,7 +31,7 @@ import static net.mat0u5.lifeseries.LifeSeries.server;
 //? if >= 1.21.4
 import net.minecraft.core.particles.TrailParticleOption;
 //? if >= 26.2
-//import net.minecraft.world.scores.TeamColor;
+import net.minecraft.world.scores.TeamColor;
 
 public class CreakingPower extends ToggleableSuperpower {
     public static int CREAKING_AMOUNT = 3;
@@ -75,16 +75,16 @@ public class CreakingPower extends ToggleableSuperpower {
         String newTeamName = "creaking_"+player.getScoreboardName();
         TeamUtils.deleteTeam(newTeamName);
         //? if <= 26.1 {
-        TeamUtils.createTeam(newTeamName, playerTeam.getDisplayName().getString(), playerTeam.getColor());
-        //?} else {
-        /*TeamUtils.createTeam(newTeamName, playerTeam.getDisplayName().getString(), playerTeam.getColor().orElse(TeamColor.WHITE));
-        *///?}
+        /*TeamUtils.createTeam(newTeamName, playerTeam.getDisplayName().getString(), playerTeam.getColor());
+        *///?} else {
+        TeamUtils.createTeam(newTeamName, playerTeam.getDisplayName().getString(), playerTeam.getColor().orElse(TeamColor.WHITE));
+        //?}
         createdTeams.add(newTeamName);
 
         //? if >= 1.21.2 {
         for (int i = 0; i < CREAKING_AMOUNT; i++) {
             BlockPos spawnPos =  LevelUtils.getCloseBlockPos(playerLevel, player.blockPosition(), 6, 3, true);
-            Creaking creaking = EntityType.CREAKING.spawn(playerLevel, spawnPos, EntitySpawnReason.COMMAND);
+            Creaking creaking = EntityTypes.CREAKING.spawn(playerLevel, spawnPos, EntitySpawnReason.COMMAND);
             if (creaking != null) {
                 creaking.setInvulnerable(true);
                 creaking.addTag("creakingFromSuperpower");

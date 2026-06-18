@@ -23,10 +23,10 @@ public class Morph {
             Player player = ClientUtils.getPlayer(morphComponent.playerUUID);
             if (player == null) return;
 
-            boolean isHorse = morph == EntityType.HORSE || morph == EntityType.SKELETON_HORSE || morph == EntityType.ZOMBIE_HORSE;
-            boolean fixedHead = isHorse || morph == EntityType.GOAT;
-            boolean clampedPitch = isHorse || morph == EntityType.GOAT;
-            boolean reversePitch = morph == EntityType.PHANTOM;
+            boolean isHorse = morph == EntityTypes.HORSE || morph == EntityTypes.SKELETON_HORSE || morph == EntityTypes.ZOMBIE_HORSE;
+            boolean fixedHead = isHorse || morph == EntityTypes.GOAT;
+            boolean clampedPitch = isHorse || morph == EntityTypes.GOAT;
+            boolean reversePitch = morph == EntityTypes.PHANTOM;
 
             if (dummy == null || dummy.getType() != morph) {
                 //? if <= 1.21 {

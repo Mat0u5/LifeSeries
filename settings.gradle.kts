@@ -153,13 +153,13 @@ stonecutter {
 			//vcsVersion = "26.3-fabric"
 		}
 		else if (env("GRADLE_ONLY_FORGE") == "true") {
-			vcsVersion = "26.1-forge"
+			vcsVersion = "26.2-forge"
 		}
 		else if (env("GRADLE_ONLY_NEOFORGE") == "true") {
-			vcsVersion = "26.1-neoforge"
+			vcsVersion = "26.2-neoforge"
 		}
 		else {
-			vcsVersion = "26.1-fabric"
+			vcsVersion = "26.2-fabric"
 		}
 	}
 }

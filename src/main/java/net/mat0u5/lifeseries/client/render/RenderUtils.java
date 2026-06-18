@@ -55,17 +55,17 @@ public class RenderUtils {
 
     public static void setScreen(Screen screen) {
         //? if <= 26.1 {
-        Minecraft.getInstance().setScreen(screen);
-        //?} else {
-        /*Minecraft.getInstance().gui.setScreen(screen);
-         *///?}
+        /*Minecraft.getInstance().setScreen(screen);
+        *///?} else {
+        Minecraft.getInstance().gui.setScreen(screen);
+         //?}
     }
 
     public static Screen getScreen() {
         //? if <= 26.1 {
-        return Minecraft.getInstance().screen;
-        //?} else {
-        /*return Minecraft.getInstance().gui.screen();
-         *///?}
+        /*return Minecraft.getInstance().screen;
+        *///?} else {
+        return Minecraft.getInstance().gui.screen();
+         //?}
     }
 }

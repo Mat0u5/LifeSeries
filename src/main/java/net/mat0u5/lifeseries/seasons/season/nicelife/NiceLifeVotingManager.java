@@ -23,10 +23,10 @@ import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 import static net.mat0u5.lifeseries.LifeSeries.livesManager;
 
 //? if <= 26.1 {
-import net.minecraft.ChatFormatting;
- //?} else {
-/*import net.minecraft.world.scores.TeamColor;
-*///?}
+/*import net.minecraft.ChatFormatting;
+ *///?} else {
+import net.minecraft.world.scores.TeamColor;
+//?}
 
 public class NiceLifeVotingManager {
     public static Random rnd = new Random();
@@ -57,8 +57,8 @@ public class NiceLifeVotingManager {
 
     public static void createTeams() {
         //~ if >= 26.2 'ChatFormatting' -> 'TeamColor' {
-        TeamUtils.createTeam(NAUGHTY_LIST_TEAM, NAUGHTY_LIST_TEAM_NAME, ChatFormatting.DARK_PURPLE);
-        TeamUtils.createTeam(NICE_LIST_TEAM, NICE_LIST_TEAM_NAME, ChatFormatting.LIGHT_PURPLE);
+        TeamUtils.createTeam(NAUGHTY_LIST_TEAM, NAUGHTY_LIST_TEAM_NAME, TeamColor.DARK_PURPLE);
+        TeamUtils.createTeam(NICE_LIST_TEAM, NICE_LIST_TEAM_NAME, TeamColor.LIGHT_PURPLE);
         //~}
     }
 

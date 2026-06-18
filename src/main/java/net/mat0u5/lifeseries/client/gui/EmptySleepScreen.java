@@ -86,8 +86,8 @@ public class EmptySleepScreen extends Screen {
         if (!currentCamera.isFirstPerson()) {
             minecraft.options.setCameraType(CameraType.FIRST_PERSON);
             //? if <= 26.1 {
-            minecraft.levelRenderer.needsUpdate();
-            //?}
+            /*minecraft.levelRenderer.needsUpdate();
+            *///?}
         }
     }
 

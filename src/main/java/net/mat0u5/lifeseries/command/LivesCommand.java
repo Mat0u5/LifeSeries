@@ -242,7 +242,7 @@ public class LivesCommand extends Command {
             if (name.startsWith("`")) continue;
             var color = livesManager.getColorForLives(lives);
             //~ if >= 26.2 '.withStyle(color)' -> '.withColor(color.textColor())' {
-            text.append(ModifiableText.LIVES_ASSIGNED_LIST_ENTRY.get(Component.literal(name).withStyle(color), livesManager.getFormattedLives(lives), TextUtils.pluralize("life", "lives", lives)));
+            text.append(ModifiableText.LIVES_ASSIGNED_LIST_ENTRY.get(Component.literal(name).withColor(color.textColor()), livesManager.getFormattedLives(lives), TextUtils.pluralize("life", "lives", lives)));
             //~}
         }
 

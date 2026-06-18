@@ -58,7 +58,7 @@ import net.minecraft.world.level.gamerules.GameRule;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 *///?}
 
 @Mixin(value = Player.class, priority = 1)

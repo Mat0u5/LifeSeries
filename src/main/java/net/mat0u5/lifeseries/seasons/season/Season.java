@@ -73,10 +73,10 @@ import static net.mat0u5.lifeseries.seasons.util.WatcherManager.isWatcher;
 import net.minecraft.world.scores.DisplaySlot;
 
 //? if <= 26.1 {
-import net.minecraft.ChatFormatting;
- //?} else {
-/*import net.minecraft.world.scores.TeamColor;
-*///?}
+/*import net.minecraft.ChatFormatting;
+ *///?} else {
+import net.minecraft.world.scores.TeamColor;
+//?}
 
 public abstract class Season {
     public static final String RESOURCEPACK_MAIN_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-main-42337c925d3356b32b14b7747b1d199b9a4ade58/main.zip";
@@ -329,7 +329,7 @@ public abstract class Season {
         WatcherManager.createTeams();
         livesManager.createTeams();
         //~ if >= 26.2 'ChatFormatting' -> 'TeamColor' {
-        TeamUtils.createTeam("zombie", "Zombie", ChatFormatting.GRAY);
+        TeamUtils.createTeam("zombie", "Zombie", TeamColor.GRAY);
         //~}
     }
 
@@ -379,7 +379,7 @@ public abstract class Season {
         if (team != null) {
             SimplePackets.TEAM_NAME.target(player).sendToClient(team.getName());
             //~ if >= 26.2 'team.getColor().getName()' -> 'team.getColor().orElse(TeamColor.WHITE).getSerializedName()' {
-            SimplePackets.TEAM_COLOR.target(player).sendToClient(team.getColor().getName());
+            SimplePackets.TEAM_COLOR.target(player).sendToClient(team.getColor().orElse(TeamColor.WHITE).getSerializedName());
             //~}
         }
         else {

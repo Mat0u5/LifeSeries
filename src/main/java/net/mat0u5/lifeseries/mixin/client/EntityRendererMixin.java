@@ -99,7 +99,7 @@ public class EntityRendererMixin<T extends Entity, S extends EntityRenderState> 
 
 
     //? if <= 26.1 {
-    @ModifyArg(
+    /*@ModifyArg(
             method = "submitNameDisplay(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;I)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitNameTag(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/phys/Vec3;ILnet/minecraft/network/chat/Component;ZIDLnet/minecraft/client/renderer/state/level/CameraRenderState;)V"),
             index = 3
@@ -107,8 +107,8 @@ public class EntityRendererMixin<T extends Entity, S extends EntityRenderState> 
     public Component render(Component text) {
         return ClientUtils.getPlayerName(text);
     }
-    //?} else {
-    /*@ModifyArg(
+    *///?} else {
+    @ModifyArg(
             method = "submitNameDisplay(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;I)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitNameTag(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/phys/Vec3;ILnet/minecraft/network/chat/Component;ZILnet/minecraft/client/renderer/state/level/CameraRenderState;)V"),
             index = 3
@@ -116,7 +116,7 @@ public class EntityRendererMixin<T extends Entity, S extends EntityRenderState> 
     public Component render(Component text) {
         return ClientUtils.getPlayerName(text);
     }
-    *///?}
+    //?}
 
 
     //? if !forge {

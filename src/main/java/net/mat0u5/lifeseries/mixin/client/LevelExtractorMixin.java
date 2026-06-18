@@ -6,16 +6,16 @@ package net.mat0u5.lifeseries.mixin.client;
  */
 
 //? if <= 26.1 {
-import net.minecraft.server.MinecraftServer;
+/*import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(value = MinecraftServer.class)
 public interface LevelExtractorMixin {
     //Empty class to avoid mixin errors
 }
-//?} else {
+*///?} else {
 
-/*import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
+import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.minecraft.client.Camera;
@@ -70,4 +70,4 @@ public class LevelExtractorMixin {
     }
 }
 
-*///?}
+//?}

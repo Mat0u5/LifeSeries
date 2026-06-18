@@ -23,8 +23,8 @@ import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
 import static net.mat0u5.lifeseries.seasons.util.WatcherManager.isWatcher;
 
 //? if >= 26.2 {
-/*import net.minecraft.world.scores.TeamColor;
- *///?}
+import net.minecraft.world.scores.TeamColor;
+ //?}
 
 public class LimitedLifeLivesManager extends LivesManager {
     public static int DEFAULT_TIME = 86400;
@@ -37,9 +37,9 @@ public class LimitedLifeLivesManager extends LivesManager {
     @Override
     public Component getFormattedLives(Integer lives) {
         if (lives == null) return Component.empty();
-        ChatFormatting color = getColorForLives(lives);
+        TeamColor color = getColorForLives(lives);
         //~ if >= 26.2 '.withStyle(color)' -> '.withColor(color.textColor())' {
-        return Component.literal(Time.seconds(lives).formatLong()).withStyle(color);
+        return Component.literal(Time.seconds(lives).formatLong()).withColor(color.textColor());
         //~}
     }
 
@@ -59,30 +59,30 @@ public class LimitedLifeLivesManager extends LivesManager {
         if (isWatcher(player)) return;
         Integer livesBefore = getPlayerLives(player);
         boolean livesChanged = !Objects.equals(lives, livesBefore);
-        ChatFormatting colorBefore = null;
+        TeamColor colorBefore = null;
         if (player.getTeam() != null) {
             //? if <= 26.1 {
-            colorBefore = player.getTeam().getColor();
-            //?} else {
-            /*colorBefore = player.getTeam().getColor().orElse(null);
-            *///?}
+            /*colorBefore = player.getTeam().getColor();
+            *///?} else {
+            colorBefore = player.getTeam().getColor().orElse(null);
+            //?}
         }
         SessionTranscript.addRecordIfMissing(player);
         ScoreboardUtils.setScore(player.getScoreboardName(), LivesManager.SCOREBOARD_NAME, lives);
         if (lives <= 0 && !ignoreFinalDeath) {
             playerLostAllLives(player, livesBefore);
         }
-        ChatFormatting colorNow = getColorForLives(lives);
+        TeamColor colorNow = getColorForLives(lives);
         if (colorBefore != colorNow) {
             if (player.isSpectator() && lives > 0) {
                 PlayerUtils.safelyPutIntoSurvival(player);
             }
             if (lives > 0 && colorBefore != null && livesBefore != null && BROADCAST_COLOR_CHANGES) {
                 //? if <= 26.1 {
-                Component colorText = Component.literal(colorNow.getName().replaceAll("_", " ").toLowerCase(Locale.ROOT)).withStyle(colorNow);
-                //?} else {
-                /*Component colorText = Component.literal(colorNow.getSerializedName().replaceAll("_", " ").toLowerCase(Locale.ROOT)).withColor(colorNow.textColor());
-                *///?}
+                /*Component colorText = Component.literal(colorNow.getName().replaceAll("_", " ").toLowerCase(Locale.ROOT)).withStyle(colorNow);
+                *///?} else {
+                Component colorText = Component.literal(colorNow.getSerializedName().replaceAll("_", " ").toLowerCase(Locale.ROOT)).withColor(colorNow.textColor());
+                //?}
                 PlayerUtils.broadcastMessage(ModifiableText.LIMITEDLIFE_CHANGE_COLOR.get(player, colorText));
             }
         }

@@ -85,7 +85,7 @@ public class SimpleLife extends ThirdLife {
             BlockPos blockPos2 = (BlockPos)optional.orElse(blockPos);
             BlockPos blockPos3 = this.getNearbySpawnPos(level, blockPos2, 64);
             if (blockPos3 != null && this.doesNotSuffocateAt(level, blockPos3)) {
-                WanderingTrader wanderingTraderEntity = LevelUtils.spawnEntity(EntityType.WANDERING_TRADER, level, blockPos3);
+                WanderingTrader wanderingTraderEntity = LevelUtils.spawnEntity(EntityTypes.WANDERING_TRADER, level, blockPos3);
                 if (wanderingTraderEntity != null) {
                     for(int j = 0; j < 2; ++j) {
                         this.spawnLlama(level, wanderingTraderEntity, 4);
@@ -134,7 +134,7 @@ public class SimpleLife extends ThirdLife {
     private void spawnLlama(ServerLevel level, WanderingTrader wanderingTrader, int range) {
         BlockPos blockPos = this.getNearbySpawnPos(level, wanderingTrader.blockPosition(), range);
         if (blockPos != null) {
-            TraderLlama traderLlamaEntity = LevelUtils.spawnEntity(EntityType.TRADER_LLAMA, level, blockPos);
+            TraderLlama traderLlamaEntity = LevelUtils.spawnEntity(EntityTypes.TRADER_LLAMA, level, blockPos);
             if (traderLlamaEntity != null) {
                 traderLlamaEntity.setLeashedTo(wanderingTrader, true);
             }
@@ -144,7 +144,7 @@ public class SimpleLife extends ThirdLife {
     private BlockPos getNearbySpawnPos(LevelReader world, BlockPos pos, int range) {
         BlockPos blockPos = null;
         //? if > 1.20.3 {
-        SpawnPlacementType spawnLocation = SpawnPlacements.getPlacementType(EntityType.WANDERING_TRADER);
+        SpawnPlacementType spawnLocation = SpawnPlacements.getPlacementType(EntityTypes.WANDERING_TRADER);
         //?}
 
         for(int i = 0; i < 10; ++i) {
@@ -153,9 +153,9 @@ public class SimpleLife extends ThirdLife {
             int l = world.getHeight(Heightmap.Types.WORLD_SURFACE, j, k);
             BlockPos blockPos2 = new BlockPos(j, l, k);
             //? if <= 1.20.3 {
-            /*if (NaturalSpawner.isSpawnPositionOk(SpawnPlacements.Type.ON_GROUND, world, blockPos2, EntityType.WANDERING_TRADER)) {
+            /*if (NaturalSpawner.isSpawnPositionOk(SpawnPlacements.Type.ON_GROUND, world, blockPos2, EntityTypes.WANDERING_TRADER)) {
             *///?} else {
-            if (spawnLocation.isSpawnPositionOk(world, blockPos2, EntityType.WANDERING_TRADER)) {
+            if (spawnLocation.isSpawnPositionOk(world, blockPos2, EntityTypes.WANDERING_TRADER)) {
             //?}
                 blockPos = blockPos2;
                 break;
