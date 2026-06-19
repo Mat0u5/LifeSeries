@@ -394,8 +394,8 @@ public class LivesManager {
         }
         currentSeason.reloadPlayerTeam(player);
 
-        if (SubInManager.isSubbingIn(player.getUUID())) {
-            String substitutedPlayerName = OtherUtils.profileName(SubInManager.getSubstitutedPlayer(player.getUUID()));
+        if (SubInManager.isSubbingIn(player)) {
+            String substitutedPlayerName = OtherUtils.profileName(SubInManager.getTargetPlayer(player));
             setScore(substitutedPlayerName, lives);
         }
         if (livesChanged) {

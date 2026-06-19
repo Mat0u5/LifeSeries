@@ -204,22 +204,7 @@ public class LifeSkinsManager {
             teamName = team.getName();
         }
 
-        UUID uuid = player.getUUID();
-        String playerName = null;
-        if (SubInManager.isSubbingIn(uuid)) {
-            boolean changeSkin = SubInManager.CHANGE_SKIN;
-            boolean changeName = SubInManager.CHANGE_NAME;
-
-            if (changeSkin && !changeName) {
-                playerName = OtherUtils.profileName(SubInManager.getSubstitutedPlayer(uuid));
-            }
-            if (!changeSkin && changeName) {
-                playerName = OtherUtils.profileName(SubInManager.getSubstituterOriginal(uuid));
-            }
-        }
-        if (playerName == null) {
-            playerName = player.getScoreboardName();
-        }
+        String playerName = ProfileManager.getSkinName(player);
 
         if (teamName.startsWith("lives_")) {
             try {
@@ -244,14 +229,15 @@ public class LifeSkinsManager {
             }catch(Exception e) {}
         }
 
-        if (ProfileManager.manualSkins.containsKey(uuid)) {
-            if (!ProfileManager.manualSkins.get(uuid).equalsIgnoreCase(playerName)) {
+        RealUUID realUUID = ProfileManager.getRealUUID(player);
+        if (ProfileManager.manualSkins.containsKey(realUUID)) {
+            if (!ProfileManager.manualSkins.get(realUUID).equalsIgnoreCase(playerName)) {
                 teamName = "";
             }
         }
 
         String skinId = playerName+"_"+teamName;
-        return List.of(uuid.toString(), skinId);
+        return List.of(player.getUUID().toString(), skinId);
     }
 
     public static void upgradeSkinIfNeeded(String playerName, File skinFile) {

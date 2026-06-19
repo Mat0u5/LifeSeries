@@ -4,11 +4,9 @@ import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.PlayerBoundEntity;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.events.Events;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
@@ -17,22 +15,18 @@ import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.world.LevelUtils;
-import net.minecraft.core.SectionPos;
+import net.mat0u5.lifeseries.utils.player.ProfileManager;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.level.TicketType;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -293,12 +287,9 @@ public class SnailServerData implements PlayerBoundEntity {
     }
 
 
-    public void updateSkin(Player player) {
+    public void updateSkin(ServerPlayer player) {
         if (player == null) return;
-        String skinName = player.getScoreboardName().toLowerCase(Locale.ROOT);
-        if (SubInManager.isSubbingIn(player.getUUID())) {
-            skinName = OtherUtils.profileName(SubInManager.getSubstitutedPlayer(player.getUUID())).toLowerCase(Locale.ROOT);
-        }
+        String skinName = ProfileManager.getSkinName(player).toLowerCase(Locale.ROOT);
         snail.setSkinName(skinName);
     }
 }

@@ -5,13 +5,11 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.utils.interfaces.IEntity;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Triple;
-import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
-import net.mat0u5.lifeseries.utils.player.NicknameManager;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
-import net.mat0u5.lifeseries.utils.player.ProfileManager;
+import net.mat0u5.lifeseries.utils.player.*;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -152,27 +150,23 @@ public class LifeSkinsCommand extends Command {
 
     public int setSkin(CommandSourceStack source, ServerPlayer player, String username) {
         if (checkBanned(source)) return -1;
-        if (username != null && username.length() > 16) {
-            sendCommandFailure(source, ModifiableText.LIFESKINS_USERNAME_INVALID.get());
-            return -1;
-        }
-        Component playerName = player.getDisplayName();
         ProfileManager.ProfileChange skinChange = (username == null) ? ProfileManager.ProfileChange.original() : ProfileManager.ProfileChange.set(username);
-        ProfileManager.modifyProfile(player, skinChange, ProfileManager.ProfileChange.none()).thenAccept(success -> {
+        RealUUID realUUID = ProfileManager.getRealUUID(player);
+        ProfileManager.modifyProfile(player, skinChange, ProfileManager.ProfileChange.none(), ProfileManager.ProfileChange.none()).thenAccept(success -> {
             if (success) {
                 if (username != null) {
-                    sendCommandFeedback(source, ModifiableText.LIFESKINS_SKIN_SET.get(playerName, username));
-                    ProfileManager.manualSkins.put(player.getUUID(), username);
+                    sendCommandFeedback(source, ModifiableText.LIFESKINS_SKIN_SET.get(player, username));
+                    ProfileManager.manualSkins.put(realUUID, username);
                 }
                 else {
-                    ProfileManager.manualSkins.remove(player.getUUID());
+                    ProfileManager.manualSkins.remove(realUUID);
                     LifeSkinsManager.refreshLifeSkin(player);
-                    sendCommandFeedback(source, ModifiableText.LIFESKINS_SKIN_RESET.get(playerName));
+                    sendCommandFeedback(source, ModifiableText.LIFESKINS_SKIN_RESET.get(player));
                 }
             }
             else {
                 sendCommandFailure(source, ModifiableText.MOD_ERROR_GENERAL.get());
-                ProfileManager.manualSkins.remove(player.getUUID());
+                ProfileManager.manualSkins.remove(realUUID);
             }
         });
         return 1;
@@ -180,19 +174,14 @@ public class LifeSkinsCommand extends Command {
 
     public int setUsername(CommandSourceStack source, ServerPlayer player, String username) {
         if (checkBanned(source)) return -1;
-        if (username != null && username.length() > 16) {
-            sendCommandFailure(source, ModifiableText.LIFESKINS_USERNAME_INVALID.get());
-            return -1;
-        }
-        Component playerName = player.getDisplayName();
         ProfileManager.ProfileChange nameChange = (username == null) ? ProfileManager.ProfileChange.original() : ProfileManager.ProfileChange.set(username);
-        ProfileManager.modifyProfile(player, ProfileManager.ProfileChange.none(), nameChange).thenAccept(success -> {
+        ProfileManager.modifyProfile(player, ProfileManager.ProfileChange.none(), nameChange, ProfileManager.ProfileChange.none()).thenAccept(success -> {
             if (success) {
                 if (username != null) {
-                    sendCommandFeedback(source, ModifiableText.LIFESKINS_USERNAME_SET.get(playerName, username));
+                    sendCommandFeedback(source, ModifiableText.LIFESKINS_USERNAME_SET.get(player, username));
                 }
                 else {
-                    sendCommandFeedback(source, ModifiableText.LIFESKINS_USERNAME_RESET.get(playerName));
+                    sendCommandFeedback(source, ModifiableText.LIFESKINS_USERNAME_RESET.get(player));
                 }
             }
             else {
@@ -204,14 +193,13 @@ public class LifeSkinsCommand extends Command {
 
     public int setNickname(CommandSourceStack source, ServerPlayer player, String nickname) {
         if (checkBanned(source)) return -1;
-        Component playerName = player.getDisplayName();
         if (nickname != null) {
             NicknameManager.setNickname(player, nickname);
-            sendCommandFeedback(source, ModifiableText.LIFESKINS_NICKNAME_SET.get(playerName, nickname));
+            sendCommandFeedback(source, ModifiableText.LIFESKINS_NICKNAME_SET.get(player, nickname));
         }
         else {
             NicknameManager.removeNickname(player);
-            sendCommandFeedback(source, ModifiableText.LIFESKINS_NICKNAME_RESET.get(playerName));
+            sendCommandFeedback(source, ModifiableText.LIFESKINS_NICKNAME_RESET.get(player));
         }
         return 1;
     }

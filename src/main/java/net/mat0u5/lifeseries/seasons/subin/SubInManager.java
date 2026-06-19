@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.utils.interfaces.IPlayerManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ProfileManager;
+import net.mat0u5.lifeseries.utils.player.RealUUID;
 import net.minecraft.network.protocol.game.ClientboundSetExperiencePacket;
 import net.minecraft.server.level.ServerPlayer;
 import java.util.ArrayList;
@@ -19,7 +20,9 @@ import static net.mat0u5.lifeseries.LifeSeries.*;
 //? if <= 1.21.5
 //import net.minecraft.nbt.CompoundTag;
 //? if >= 1.21.6 {
+import net.minecraft.server.players.NameAndId;
 import net.minecraft.util.ProblemReporter;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 //?}
 //? if >= 1.21.9 {
@@ -41,7 +44,7 @@ public class SubInManager {
 
     public static void addSubIn(ServerPlayer player, GameProfile targetProfile) {
         Integer startingLives = ((IPlayer) player).ls$getLives();
-        UUID playerUUID = player.getUUID();
+        UUID realUUID = ProfileManager.getRealUUID(player).get();
         GameProfile playerProfile = player.getGameProfile();
 
         UUID targetProfileId = getId(targetProfile);
@@ -51,7 +54,7 @@ public class SubInManager {
             UUID substituteeId = getId(subIn.target());
 
             if (substituterId.equals(targetProfileId) || substituteeId.equals(targetProfileId) || 
-                    substituterId.equals(playerUUID) || substituteeId.equals(playerUUID)
+                    substituterId.equals(realUUID) || substituteeId.equals(realUUID)
             ) {
                 removeSubIn(subIn);
             }
@@ -75,7 +78,8 @@ public class SubInManager {
         if (CHANGE_SKIN  || CHANGE_NAME) {
             ProfileManager.ProfileChange skinChange = CHANGE_SKIN ? ProfileManager.ProfileChange.set(targetProfileName) : ProfileManager.ProfileChange.original();
             ProfileManager.ProfileChange nameChange = CHANGE_NAME ? ProfileManager.ProfileChange.set(targetProfileName) : ProfileManager.ProfileChange.original();
-            ProfileManager.modifyProfile(player, skinChange, nameChange);
+            ProfileManager.ProfileChange uuidChange = ProfileManager.ProfileChange.set(targetProfileId);
+            ProfileManager.modifyProfile(player, skinChange, nameChange, uuidChange);
         }
         currentSeason.usernameChanged(player);
     }
@@ -86,28 +90,38 @@ public class SubInManager {
         for (SubIn subIn : subIns) {
             ServerPlayer player = PlayerUtils.getPlayer(getId(subIn.substituter()));
             reloadPlayerProfile(player);
+            ServerPlayer target = PlayerUtils.getPlayer(getId(subIn.target()));
+            reloadPlayerProfile(target);
         }
     }
 
     public static void reloadPlayerProfile(ServerPlayer player) {
         if (player == null) return;
 
-        if ((ProfileManager.hasChangedSkin(player) == CHANGE_SKIN) && (ProfileManager.hasChangedName(player) == CHANGE_NAME)) {
+        GameProfile targetProfile = getTargetPlayer(player);
+        UUID targetProfileId = getId(targetProfile);
+        String targetProfileName = getName(targetProfile);
+        if (targetProfileId == null || targetProfileName == null) return;
+
+        boolean skinFine = ProfileManager.hasChangedSkin(player) == CHANGE_SKIN;
+        boolean nameFine = ProfileManager.hasChangedName(player) == CHANGE_NAME;
+        boolean idFine = player.getUUID().equals(targetProfileId);
+
+        if (skinFine && nameFine && idFine) {
             return;
         }
 
-        String targetProfileName = getName(getSubstitutedPlayer(player.getUUID()));
-        if (targetProfileName == null) return;
-
         ProfileManager.ProfileChange skinChange = CHANGE_SKIN ? ProfileManager.ProfileChange.set(targetProfileName) : ProfileManager.ProfileChange.original();
         ProfileManager.ProfileChange nameChange = CHANGE_NAME ? ProfileManager.ProfileChange.set(targetProfileName) : ProfileManager.ProfileChange.original();
-        ProfileManager.modifyProfile(player, skinChange, nameChange);
+        ProfileManager.ProfileChange uuidChange = ProfileManager.ProfileChange.set(targetProfileId);
+        ProfileManager.modifyProfile(player, skinChange, nameChange, uuidChange);
     }
 
     public static void removeSubIn(ServerPlayer player) {
         UUID playerUUID = player.getUUID();
+        UUID realPlayerUUID = ProfileManager.getRealUUID(player).get();
         for (SubIn subIn : new ArrayList<>(subIns)) {
-            if (getId(subIn.substituter()).equals(playerUUID) || getId(subIn.target()).equals(playerUUID)) {
+            if (getId(subIn.substituter()).equals(playerUUID) || getId(subIn.target()).equals(playerUUID) || getId(subIn.substituter()).equals(realPlayerUUID) || getId(subIn.target()).equals(realPlayerUUID)) {
                 removeSubIn(subIn);
             }
         }
@@ -143,7 +157,7 @@ public class SubInManager {
         });
     }
 
-    public static void savePlayer(ServerPlayer player) {
+    private static void savePlayer(ServerPlayer player) {
         if (player == null || server == null) return;
 
         if (server.getPlayerList() instanceof IPlayerManager iPlayerManager) {
@@ -151,7 +165,7 @@ public class SubInManager {
         }
     }
 
-    public static void loadPlayer(ServerPlayer player) {
+    private static void loadPlayer(ServerPlayer player) {
         if (player == null || server == null) return;
 
         if (server.getPlayerList() instanceof IPlayerManager iPlayerManager) {
@@ -174,7 +188,12 @@ public class SubInManager {
                 PlayerUtils.teleport(player, player.position());
             });
             *///?} else {
-            Optional<CompoundTag> data = iPlayerManager.ls$getSaveHandler().load(player.nameAndId());
+            NameAndId nameAndId = player.nameAndId();
+            GameProfile subbedProfile = getTargetPlayer(player);
+            if (subbedProfile != null) {
+                nameAndId = new NameAndId(subbedProfile);
+            }
+            Optional<CompoundTag> data = iPlayerManager.ls$getSaveHandler().load(nameAndId);
             Optional<ValueInput> optional = data.map(playerData -> TagValueInput.create(ProblemReporter.DISCARDING, server.registryAccess(), playerData));
             optional.ifPresent(readView -> {
                 player.load(readView);
@@ -184,10 +203,11 @@ public class SubInManager {
         }
     }
 
-    public static boolean isSubbingIn(UUID uuid) {
-        if (uuid == null) return false;
+    public static boolean isSubbingIn(Player player) {
+        RealUUID realUUID = ProfileManager.getRealUUID(player);
+        if (realUUID == null) return false;
         for (SubIn subIn : subIns) {
-            if (getId(subIn.substituter()).equals(uuid)) return true;
+            if (getId(subIn.substituter()).equals(realUUID.get())) return true;
         }
         return false;
     }
@@ -200,18 +220,11 @@ public class SubInManager {
         return false;
     }
 
-    public static GameProfile getSubstituterOriginal(UUID uuid) {
-        if (uuid == null) return null;
+    public static GameProfile getTargetPlayer(Player player) {
+        RealUUID realUUID = ProfileManager.getRealUUID(player);
+        if (realUUID == null) return null;
         for (SubIn subIn : subIns) {
-            if (getId(subIn.substituter()).equals(uuid)) return subIn.substituter();
-        }
-        return null;
-    }
-
-    public static GameProfile getSubstitutedPlayer(UUID uuid) {
-        if (uuid == null) return null;
-        for (SubIn subIn : subIns) {
-            if (getId(subIn.substituter()).equals(uuid)) return subIn.target();
+            if (getId(subIn.substituter()).equals(realUUID.get())) return subIn.target();
         }
         return null;
     }
@@ -222,18 +235,6 @@ public class SubInManager {
             if (getId(subIn.target()).equals(uuid)) return subIn.substituter();
         }
         return null;
-    }
-
-    public static UUID getSubstitutedPlayerUUID(UUID uuid) {
-        GameProfile profile = getSubstitutedPlayer(uuid);
-        if (profile == null) return null;
-        return getId(profile);
-    }
-
-    public static UUID getSubstitutingPlayerUUID(UUID uuid) {
-        GameProfile profile = getSubstitutingPlayer(uuid);
-        if (profile == null) return null;
-        return getId(profile);
     }
 
     public record SubIn(GameProfile substituter, GameProfile target, Integer startingLives) {
