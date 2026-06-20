@@ -12,7 +12,6 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.network.chat.Component;
@@ -69,24 +68,8 @@ public class ServerGamePacketListenerImplMixin {
     private void onHandleDecoratedMessage(PlayerChatMessage message, CallbackInfo ci) {
         if (LifeSeries.isClientOrDisabled()) return;
         ServerGamePacketListenerImpl handler = (ServerGamePacketListenerImpl) (Object) this;
-        ServerPlayer player = handler.player;
-
         if (ls$mute(handler.player, ci)) {
             return;
-        }
-
-        Component originalText = message.decoratedContent();
-        String originalContent = originalText.getString();
-        if (!originalContent.contains(":")) return;
-
-        String formattedContent = TextUtils.replaceEmotes(originalContent);
-
-        if (!originalContent.equals(formattedContent)) {
-            Component formattedContentText = Component.literal(formattedContent).setStyle(originalText.getStyle());
-            Component finalMessage = TextUtils.format("<{}> {}",player, formattedContentText);
-
-            PlayerUtils.broadcastMessage(finalMessage);
-            ci.cancel();
         }
     }
 
