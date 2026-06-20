@@ -20,7 +20,7 @@ public class PermissionManager {
         if (LifeSeries.isClientPlayer(realUUID)) return true;
         if (server == null) return false;
         //? if < 1.21.9 {
-        /*return server.getPlayerList().isOp(realProfile));
+        /*return server.getPlayerList().isOp(realProfile);
         *///?} else {
         return server.getPlayerList().isOp(new NameAndId(realProfile));
         //?}

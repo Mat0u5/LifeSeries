@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ProfileManager;
 import net.mat0u5.lifeseries.utils.player.RealUUID;
 import net.minecraft.network.protocol.game.ClientboundSetExperiencePacket;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerPlayer;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +21,11 @@ import static net.mat0u5.lifeseries.LifeSeries.*;
 //? if <= 1.21.5
 //import net.minecraft.nbt.CompoundTag;
 //? if >= 1.21.6 {
-import net.minecraft.server.players.NameAndId;
 import net.minecraft.util.ProblemReporter;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 //?}
 //? if >= 1.21.9 {
+import net.minecraft.server.players.NameAndId;
 import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.nbt.CompoundTag;
 //?}

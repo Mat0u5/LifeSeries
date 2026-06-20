@@ -11,10 +11,8 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.S
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
-import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.ProfileManager;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -33,6 +31,13 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
+
+//? if > 1.21.4 <= 1.21.11
+//import net.mat0u5.lifeseries.utils.world.LevelUtils;
+//? if <= 1.21.11
+//import net.minecraft.server.level.TicketType;
+//? if <= 1.21.4
+//import net.minecraft.world.level.ChunkPos;
 
 @SuppressWarnings("resource")
 public class SnailServerData implements PlayerBoundEntity {
