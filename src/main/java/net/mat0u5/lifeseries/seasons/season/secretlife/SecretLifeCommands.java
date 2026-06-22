@@ -331,6 +331,18 @@ public class SecretLifeCommands extends Command {
 
         if (!SecretKeeper.checkSecretLifePositions()) return -1;
 
+        List<ServerPlayer> players = new ArrayList<>();
+        for (ServerPlayer player : targets) {
+            if (((IPlayer) player).ls$isAlive()) {
+                players.add(player);
+            }
+        }
+
+        if (players.isEmpty()) {
+            sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_SET_DEAD.get());
+            return -1;
+        }
+
         if (targets.size() == 1) {
             sendCommandFeedback(source, ModifiableText.SECRETLIFE_TASK_SET_RANDOM_SINGLE.get(targets.iterator().next()));
         }
@@ -338,7 +350,7 @@ public class SecretLifeCommands extends Command {
             sendCommandFeedback(source, ModifiableText.SECRETLIFE_TASK_SET_RANDOM_MULTIPLE.get(targets.size()));
         }
 
-        TaskManager.chooseTasks(targets.stream().toList(), null);
+        TaskManager.chooseTasks(players, null);
 
         return 1;
     }

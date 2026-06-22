@@ -93,9 +93,7 @@ public abstract class ModifiableListEntry extends EmptyConfigEntry {
         if (parentGroup == null) return;
         try {
             parentGroup.getMainEntry().markChangedForever();
-            if (!parentGroup.getChildEntries().isEmpty()) {
-                parentGroup.getChildEntries().get(0).markChangedForever();
-            }
+            parentGroup.getChildEntries().forEach(ConfigEntry::markChangedForever);
         }catch(Exception e) {}
         if (parentGroup.getChildEntries().size() == 1) {
             preventZeroEntries();

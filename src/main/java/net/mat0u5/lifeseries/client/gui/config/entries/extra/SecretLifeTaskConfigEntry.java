@@ -81,7 +81,7 @@ public class SecretLifeTaskConfigEntry extends ModifiableListEntry {
 
     @Override
     public ConfigEntry getNewEntry() {
-        return new SecretLifeTaskConfigEntry("dynamic_task_entry_"+ UUID.randomUUID(), List.of("", "", "", taskType, "New Task"));
+        return new SecretLifeTaskConfigEntry("dynamic_task_entry_"+ UUID.randomUUID(), List.of("", "", "", taskType, "New Task", "false"));
     }
 
     @Override

@@ -55,8 +55,8 @@ dependencies {
 	compileOnly("net.fabricmc.fabric-api:fabric-api:${prop("deps.fabric-api")}")
 	//runtimeOnly("net.fabricmc.fabric-api:fabric-api:${prop("deps.fabric-api")}")
 
-	if (isValidVersion(prop("deps.carpet")) && isValidVersion(prop("deps.carpet_bot_relog"))) runtimeOnly("maven.modrinth:carpet-bot-relog:${prop("deps.carpet_bot_relog")}")
 	if (isValidVersion(prop("deps.carpet"))) runtimeOnly("curse.maven:carpet-349239:${prop("deps.carpet")}")
+	if (isValidVersion(prop("deps.carpet_bot_relog"))) runtimeOnly("maven.modrinth:carpet-bot-relog:${prop("deps.carpet_bot_relog")}")
 
 	//Runtime and compile
 	if (isValidVersion(prop("deps.voicechat"))) {

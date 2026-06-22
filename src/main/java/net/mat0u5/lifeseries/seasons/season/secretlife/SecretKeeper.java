@@ -105,10 +105,16 @@ public class SecretKeeper {
 		TaskScheduler.scheduleTask(3*itemsNum+20, () -> secretKeeperBeingUsed = false);
 	}
 
-	public static boolean isBeingUsed(ServerPlayer player) {
-		if (!secretKeeperBeingUsed) return false;
-		((IPlayer) player).ls$message(ModifiableText.SECRETLIFE_SECRETKEEPER_INUSE.get());
-		return true;
+	public static boolean preventSecretKeeper(ServerPlayer player) {
+		if (((IPlayer) player).ls$isDead()) {
+			((IPlayer) player).ls$message(ModifiableText.SECRETLIFE_SECRETKEEPER_CANNOT.get());
+			return true;
+		}
+		if (secretKeeperBeingUsed) {
+			((IPlayer) player).ls$message(ModifiableText.SECRETLIFE_SECRETKEEPER_INUSE.get());
+			return true;
+		}
+		return false;
 	}
 
 
@@ -133,7 +139,7 @@ public class SecretKeeper {
 		if (server == null) return;
 		if (!fromCommand) {
 			if (!hasSessionStarted(player)) return;
-			if (isBeingUsed(player)) return;
+			if (preventSecretKeeper(player)) return;
 		}
 		TaskTypes type = getPlayersTaskType(player);
 		if (!hasTaskBookCheck(player, !fromCommand)) return;
@@ -197,7 +203,7 @@ public class SecretKeeper {
 	public static void clickReroll(ServerPlayer player, boolean fromCommand) {
 		if (!fromCommand) {
 			if (!hasSessionStarted(player)) return;
-			if (isBeingUsed(player)) return;
+			if (preventSecretKeeper(player)) return;
 		}
 		TaskTypes type = getPlayersTaskType(player);
 		if (!hasTaskBookCheck(player, !fromCommand)) return;
@@ -265,7 +271,7 @@ public class SecretKeeper {
 		if (server == null) return;
 		if (!fromCommand) {
 			if (!hasSessionStarted(player)) return;
-			if (isBeingUsed(player)) return;
+			if (preventSecretKeeper(player)) return;
 		}
 		SecretLife season = (SecretLife) currentSeason;
 		TaskTypes type = getPlayersTaskType(player);

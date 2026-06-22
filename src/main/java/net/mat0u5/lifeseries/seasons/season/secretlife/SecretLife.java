@@ -123,6 +123,9 @@ public class SecretLife extends Season {
                 player.getInventory().add(book);
             }
         }
+
+        if (((IPlayer) player).ls$isDead()) return;
+
         TaskTypes type = TaskManager.getPlayersTaskType(player);
         if (((IPlayer) player).ls$isOnLastLife(false) && TaskManager.submittedOrFailed.contains(player.getUUID()) && type == null && currentSession.statusStarted()) {
             TaskManager.chooseTasks(List.of(player), TaskTypes.RED);
@@ -292,6 +295,8 @@ public class SecretLife extends Season {
     @Override
     public void onPlayerJoin(ServerPlayer player) {
         super.onPlayerJoin(player);
+
+        if (((IPlayer) player).ls$isDead()) return;
 
         if (TaskManager.tasksChosen && !TaskManager.tasksChosenFor.contains(player.getUUID())) {
             TaskScheduler.scheduleTask(Time.seconds(5), () -> TaskManager.chooseTasks(List.of(player), null));
