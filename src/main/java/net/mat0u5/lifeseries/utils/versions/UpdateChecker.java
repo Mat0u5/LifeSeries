@@ -184,7 +184,7 @@ public class UpdateChecker {
     }
 
     public static void onPlayerJoin(ServerPlayer player) {
-        if (!updateAvailable || versionName == null) {
+        if (!updateAvailable || versionName == null || versionDescription == null) {
             return;
         }
         if (!VersionControl.isDevVersion()) {
@@ -195,7 +195,7 @@ public class UpdateChecker {
                         .withStyle(style -> style
                             .withHoverEvent(
                                 TextUtils.showTextHoverEvent(TextUtils.formatLoosely(
-                                    "§7§nUpdate Description:§r\n\n{}", versionDescription
+                                    "§7§nUpdate Description:§r\n\n{}", versionDescription.replace("\r", "")
                                 ))
                             )
                         )

@@ -238,6 +238,14 @@ public class SubInManager {
         return getId(profile);
     }
 
+    public static UUID getOrSub(ServerPlayer player) {
+        GameProfile subinProfile = getSubstitutingPlayer(player.getUUID());
+        if (subinProfile != null)  {
+            return getId(subinProfile);
+        }
+        return player.getUUID();
+    }
+
     public record SubIn(GameProfile substituter, GameProfile target, Integer startingLives) {
     }
 }

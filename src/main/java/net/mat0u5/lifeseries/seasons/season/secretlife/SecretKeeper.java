@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.secretlife;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -143,10 +144,11 @@ public class SecretKeeper {
 		}
 		TaskTypes type = getPlayersTaskType(player);
 		if (!hasTaskBookCheck(player, !fromCommand)) return;
+		UUID uuid = SubInManager.getOrSub(player);
 		if (!fromCommand) {
 			if (TASKS_NEED_CONFIRMATION) {
-				if (!pendingConfirmationTasks.contains(player.getUUID())) {
-					pendingConfirmationTasks.add(player.getUUID());
+				if (!pendingConfirmationTasks.contains(uuid)) {
+					pendingConfirmationTasks.add(uuid);
 					PlayerUtils.broadcastMessageToAdmins(ModifiableText.SECRETLIFE_TASK_PENDING.get(player));
 					PlayerUtils.broadcastMessageToAdmins(getShowTaskMessage(player));
 					PlayerUtils.broadcastMessageToAdmins(ModifiableText.SECRETLIFE_TASK_PENDING_ACCEPT.get(TextUtils.runCommandText("/task succeed "+player.getScoreboardName())));
@@ -155,7 +157,7 @@ public class SecretKeeper {
 				return;
 			}
 		}
-		pendingConfirmationTasks.remove(player.getUUID());
+		pendingConfirmationTasks.remove(uuid);
 		if (BROADCAST_SECRET_KEEPER) {
 			PlayerUtils.broadcastMessage(ModifiableText.SECRETLIFE_TASK_SUCCEED.get(player));
 		}
@@ -168,7 +170,8 @@ public class SecretKeeper {
 	public static void succeedTask(ServerPlayer player, TaskTypes type) {
 		SessionTranscript.successTask(player);
 		removePlayersTaskBook(player);
-		submittedOrFailed.add(player.getUUID());
+		UUID uuid = SubInManager.getOrSub(player);
+		submittedOrFailed.add(uuid);
 		secretKeeperBeingUsed = true;
 
 		Vec3 centerPos = OtherUtils.getCenter(itemSpawnerPos);
@@ -289,7 +292,8 @@ public class SecretKeeper {
 		SecretLife season = (SecretLife) currentSeason;
 		SessionTranscript.failTask(player);
 		removePlayersTaskBook(player);
-		submittedOrFailed.add(player.getUUID());
+		UUID uuid = SubInManager.getOrSub(player);
+		submittedOrFailed.add(uuid);
 		secretKeeperBeingUsed = true;
 
 		Vec3 centerPos = OtherUtils.getCenter(itemSpawnerPos);
@@ -325,11 +329,12 @@ public class SecretKeeper {
 
 		Task task = null;
 
-		if (hasTaskBookCheck(player, false) && assignedTasks.containsKey(player.getUUID())) {
-			task = assignedTasks.get(player.getUUID());
+		UUID uuid = SubInManager.getOrSub(player);
+		if (hasTaskBookCheck(player, false) && assignedTasks.containsKey(uuid)) {
+			task = assignedTasks.get(uuid);
 		}
-		else if (preAssignedTasks.containsKey(player.getUUID())) {
-			task = preAssignedTasks.get(player.getUUID());
+		else if (preAssignedTasks.containsKey(uuid)) {
+			task = preAssignedTasks.get(uuid);
 		}
 
 		if (task == null) return Component.empty();

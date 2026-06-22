@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -207,8 +208,9 @@ public class SecretLifeCommands extends Command {
         if (player == null) return -1;
 
         if (!SecretKeeper.checkSecretLifePositions()) return -1;
+        UUID uuid = SubInManager.getOrSub(player);
 
-        boolean hasPreassignedTask = TaskManager.preAssignedTasks.containsKey(player.getUUID());
+        boolean hasPreassignedTask = TaskManager.preAssignedTasks.containsKey(uuid);
         boolean hasTaskBook = SecretKeeper.hasTaskBookCheck(player, false);
 
         if (!hasTaskBook && !hasPreassignedTask) {
@@ -221,14 +223,14 @@ public class SecretLifeCommands extends Command {
 
         if (hasTaskBook) {
             sendCommandFeedbackQuiet(source, ModifiableText.SECRETLIFE_TASK_PRESENT.get(player));
-            if (TaskManager.assignedTasks.containsKey(player.getUUID())) {
-                task = TaskManager.assignedTasks.get(player.getUUID());
+            if (TaskManager.assignedTasks.containsKey(uuid)) {
+                task = TaskManager.assignedTasks.get(uuid);
             }
         }
         else {
             //Pre-assigned task
             sendCommandFeedbackQuiet(source, ModifiableText.SECRETLIFE_TASK_PREASSIGNED.get(player));
-            task = TaskManager.preAssignedTasks.get(player.getUUID());
+            task = TaskManager.preAssignedTasks.get(uuid);
         }
 
         if (task == null) {
@@ -264,7 +266,8 @@ public class SecretLifeCommands extends Command {
         task = task.replaceAll("\\\\n","\n");
 
         for (ServerPlayer player : targets) {
-            TaskManager.preAssignedTasks.put(player.getUUID(), new Task(task, taskType));
+            UUID uuid = SubInManager.getOrSub(player);
+            TaskManager.preAssignedTasks.put(uuid, new Task(task, taskType));
 
             boolean inSession = TaskManager.tasksChosen && !currentSession.statusFinished();
             if (TaskManager.removePlayersTaskBook(player) || inSession) {

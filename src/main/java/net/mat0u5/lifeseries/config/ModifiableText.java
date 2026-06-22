@@ -385,6 +385,7 @@ public enum ModifiableText {
     ,SECRETLIFE_TASK_REROLL_PT3(Seasons.SECRET_LIFE, "§e§lLet me open the door")
     ,SECRETLIFE_TASK_REROLL_PT4(Seasons.SECRET_LIFE, "§c§lAccept your fate")
     ,SECRETLIFE_TASK_RESET_USED(Seasons.SECRET_LIFE, "Reset all saved tasks")
+    ,SECRETLIFE_SESSION_START_INFO(Seasons.SECRET_LIFE, "§fClick {}§f to learn more about Task Selection on the Wiki.", List.of("ClickHere"))
 
     ,WILDLIFE_SNAIL_TEXTURE_INFO(Seasons.WILD_LIFE,"§fClick {}§f to open the Snail Textures info page on the Wiki.", List.of("ClickHere"))
     ,WILDLIFE_SNAIL_DEFAULT_NAME(Seasons.WILD_LIFE, Formatted.PLAIN,"{}'s Snail", List.of("Player"))

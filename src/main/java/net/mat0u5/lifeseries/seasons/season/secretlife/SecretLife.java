@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
@@ -116,6 +117,7 @@ public class SecretLife extends Season {
     @Override
     public void onPlayerRespawn(ServerPlayer player) {
         super.onPlayerRespawn(player);
+        UUID uuid = SubInManager.getOrSub(player);
         if (giveBookOnRespawn.containsKey(player.getUUID())) {
             ItemStack book = giveBookOnRespawn.get(player.getUUID());
             giveBookOnRespawn.remove(player.getUUID());
@@ -127,7 +129,7 @@ public class SecretLife extends Season {
         if (((IPlayer) player).ls$isDead()) return;
 
         TaskTypes type = TaskManager.getPlayersTaskType(player);
-        if (((IPlayer) player).ls$isOnLastLife(false) && TaskManager.submittedOrFailed.contains(player.getUUID()) && type == null && currentSession.statusStarted()) {
+        if (((IPlayer) player).ls$isOnLastLife(false) && TaskManager.submittedOrFailed.contains(uuid) && type == null && currentSession.statusStarted()) {
             TaskManager.chooseTasks(List.of(player), TaskTypes.RED);
         }
     }
@@ -297,8 +299,8 @@ public class SecretLife extends Season {
         super.onPlayerJoin(player);
 
         if (((IPlayer) player).ls$isDead()) return;
-
-        if (TaskManager.tasksChosen && !TaskManager.tasksChosenFor.contains(player.getUUID())) {
+        UUID uuid = SubInManager.getOrSub(player);
+        if (TaskManager.tasksChosen && !TaskManager.tasksChosenFor.contains(uuid)) {
             TaskScheduler.scheduleTask(Time.seconds(5), () -> TaskManager.chooseTasks(List.of(player), null));
         }
     }
@@ -318,6 +320,9 @@ public class SecretLife extends Season {
 
     @Override
     public boolean sessionStart() {
+        TaskScheduler.scheduleTask(200, () -> {
+            PlayerUtils.broadcastMessageToAdmins(ModifiableText.SECRETLIFE_SESSION_START_INFO.get(TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs/dev/seasons/secret-life.html#task-selection")));
+        });
         if (SecretKeeper.checkSecretLifePositions()) {
             super.sessionStart();
             SecretLifeCommands.playersGiven.clear();
@@ -350,8 +355,9 @@ public class SecretLife extends Season {
         super.sessionEnd();
         List<String> playersWithTaskBooks = new ArrayList<>();
         for (ServerPlayer player : livesManager.getNonRedPlayers()) {
+            UUID uuid = SubInManager.getOrSub(player);
             if (((IPlayer) player).ls$isDead()) continue;
-            if (TaskManager.submittedOrFailed.contains(player.getUUID())) continue;
+            if (TaskManager.submittedOrFailed.contains(uuid)) continue;
             if (TaskManager.CONSTANT_TASKS) continue;
             playersWithTaskBooks.add(player.getScoreboardName());
         }

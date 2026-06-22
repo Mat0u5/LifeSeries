@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.config.StringListConfig;
 import net.mat0u5.lifeseries.config.StringListManager;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -190,16 +191,17 @@ public class TaskManager {
     }
 
     public static void assignRandomTaskToPlayer(ServerPlayer player, TaskTypes type) {
+        UUID uuid = SubInManager.getOrSub(player);
         if (type != TaskTypes.RED || CONSTANT_TASKS) {
-            submittedOrFailed.remove(player.getUUID());
+            submittedOrFailed.remove(uuid);
         }
 
         removePlayersTaskBook(player);
         if (((IPlayer) player).ls$isDead()) return;
         Task task;
-        if (preAssignedTasks.containsKey(player.getUUID())) {
-            task = preAssignedTasks.get(player.getUUID());
-            preAssignedTasks.remove(player.getUUID());
+        if (preAssignedTasks.containsKey(uuid)) {
+            task = preAssignedTasks.get(uuid);
+            preAssignedTasks.remove(uuid);
         }
         else {
             task = getRandomTask(player, type);
@@ -208,7 +210,7 @@ public class TaskManager {
         if (!player.addItem(book)) {
             ItemStackUtils.spawnItemForPlayer(((IPlayer) player).ls$getServerLevel(), player.position(), book, player);
         }
-        assignedTasks.put(player.getUUID(), task);
+        assignedTasks.put(uuid, task);
         DatapackIntegration.setPlayerTask(player, type);
     }
 
@@ -227,7 +229,8 @@ public class TaskManager {
     public static void chooseTasks(List<ServerPlayer> allowedPlayers, TaskTypes type) {
         SecretKeeper.secretKeeperBeingUsed = true;
         for (ServerPlayer player : allowedPlayers) {
-			tasksChosenFor.add(player.getUUID());
+            UUID uuid = SubInManager.getOrSub(player);
+			tasksChosenFor.add(uuid);
         }
         PlayerUtils.sendTitleToPlayers(allowedPlayers, ModifiableText.SECRETLIFE_TASK_TITLE.get(),20,35,0);
         PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("secretlife_task")));
