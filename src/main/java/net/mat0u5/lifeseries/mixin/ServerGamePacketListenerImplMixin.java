@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
@@ -12,27 +14,29 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
+import net.mat0u5.lifeseries.utils.interfaces.IServerGamePacketListenerImpl;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.LastSeenMessages;
-import net.minecraft.network.chat.PlayerChatMessage;
+import net.mat0u5.lifeseries.utils.player.ProfileManager;
+import net.mat0u5.lifeseries.utils.player.RealUUID;
+import net.minecraft.network.chat.*;
 import net.minecraft.network.protocol.game.*;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.server.players.PlayerList;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
-import org.spongepowered.asm.mixin.Shadow;
 import java.util.Set;
+import java.util.UUID;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.server;
 
 //? if <= 1.20.3 {
 /*import net.minecraft.network.protocol.game.ServerboundChatCommandPacket;
@@ -57,10 +61,12 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
+
+import javax.annotation.Nullable;
 //?}
 
 @Mixin(value = ServerGamePacketListenerImpl.class, priority = 1)
-public class ServerGamePacketListenerImplMixin {
+public class ServerGamePacketListenerImplMixin implements IServerGamePacketListenerImpl {
     @Shadow
     public ServerPlayer player;
 
@@ -233,5 +239,30 @@ public class ServerGamePacketListenerImplMixin {
     private void onHandlePayload(ServerboundCustomPayloadPacket packet, CallbackInfo ci) {
         NetworkHandlerServer.onCustomPayload(packet.payload(), this.player);
     }
+
+    @Shadow private @Nullable RemoteChatSession chatSession;
+    @Shadow private SignedMessageChain.Decoder signedMessageDecoder;
+    @Mutable @Final @Shadow private LastSeenMessagesValidator lastSeenMessages;
+
+    @Override
+    @Unique
+    public void ls$resetChatState() {
+        this.chatSession = null;
+        this.signedMessageDecoder = SignedMessageChain.Decoder.unsigned(
+                this.player.getUUID(), server::enforceSecureProfile
+        );
+        this.lastSeenMessages = new LastSeenMessagesValidator(20);
+    }
     //?}
+    /*//TODO
+    @WrapOperation(method = "resetPlayerChatState", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayer;getUUID()Ljava/util/UUID;"))
+    private UUID realUUID(ServerPlayer instance, Operation<UUID> original) {
+        return ProfileManager.getRealUUID(instance).get();
+    }
+
+    @WrapOperation(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayer;getUUID()Ljava/util/UUID;"))
+    private UUID realUUID2(ServerPlayer instance, Operation<UUID> original) {
+        return ProfileManager.getRealUUID(instance).get();
+    }
+    */
 }

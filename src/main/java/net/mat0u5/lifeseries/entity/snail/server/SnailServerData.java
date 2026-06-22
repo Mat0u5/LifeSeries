@@ -14,6 +14,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.player.ProfileManager;
+import net.mat0u5.lifeseries.utils.player.RealUUID;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -76,7 +77,8 @@ public class SnailServerData implements PlayerBoundEntity {
         if (player.isCreative()) return false;
         if (!player.isAlive()) return false;
         if (getPlayerPos() == null) return false;
-        if (Events.joiningPlayers.contains(player.getUUID())) return false;
+        RealUUID realUUID = ProfileManager.getRealUUID(player);
+        if (Events.joiningPlayers.contains(realUUID)) return false;
         if (player.isSpectator() && !SuperpowersWildcard.hasActivatedPower(player, Superpowers.ASTRAL_PROJECTION)) return false;
         return true;
     }

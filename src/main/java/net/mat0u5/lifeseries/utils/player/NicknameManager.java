@@ -6,60 +6,61 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static net.mat0u5.lifeseries.LifeSeries.server;
 
 public class NicknameManager {
 
-    private static final Map<UUID, String> nicknameStorage = new ConcurrentHashMap<>();
-    private static final Map<UUID, Component> textCache = new ConcurrentHashMap<>();
+    private static final Map<RealUUID, String> nicknameStorage = new ConcurrentHashMap<>();
+    private static final Map<RealUUID, Component> textCache = new ConcurrentHashMap<>();
 
     public static void setNickname(ServerPlayer player, String nickname) {
-        UUID uuid = player.getUUID();
+        RealUUID realUUID = ProfileManager.getRealUUID(player);
         if (server == null) return;
         if (nickname == null || nickname.trim().isEmpty()) {
             removeNickname(player);
             return;
         }
 
-        nicknameStorage.put(uuid, nickname);
+        nicknameStorage.put(realUUID, nickname);
 
         Component parsedComponent = Component.literal(nickname);
-        textCache.put(uuid, parsedComponent);
+        textCache.put(realUUID, parsedComponent);
 
         updatePlayerDisplay(player, server);
     }
 
     public static void removeNickname(ServerPlayer player) {
-        UUID uuid = player.getUUID();
+        RealUUID realUUID = ProfileManager.getRealUUID(player);
         if (server == null) return;
-        nicknameStorage.remove(uuid);
-        textCache.remove(uuid);
+        nicknameStorage.remove(realUUID);
+        textCache.remove(realUUID);
 
         updatePlayerDisplay(player, server);
     }
 
     @Nullable
-    public static String getNickname(UUID uuid) {
-        return nicknameStorage.get(uuid);
+    public static String getNickname(RealUUID realUUID) {
+        return nicknameStorage.get(realUUID);
     }
 
     @Nullable
-    public static Component getNicknameText(UUID uuid) {
-        return textCache.get(uuid);
+    public static Component getNicknameText(Player player) {
+        RealUUID realUUID = ProfileManager.getRealUUID(player);
+        return textCache.get(realUUID);
     }
 
-    public static boolean hasNickname(UUID uuid) {
-        return nicknameStorage.containsKey(uuid);
+    public static boolean hasNickname(RealUUID realUUID) {
+        return nicknameStorage.containsKey(realUUID);
     }
 
     public static Component getDisplayName(ServerPlayer player) {
-        Component nickname = getNicknameText(player.getUUID());
+        Component nickname = getNicknameText(player);
         return nickname != null ? nickname : player.getName();
     }
 
@@ -77,9 +78,9 @@ public class NicknameManager {
     }
 
     public static void loadNicknameData(ServerPlayer player) {
-        UUID uuid = player.getUUID();
-        if (hasNickname(uuid)) {
-            LifeSeries.LOGGER.info("Loaded nickname for {}: {}", player.getName().getString(), getNickname(uuid));
+        RealUUID realUUID = ProfileManager.getRealUUID(player);
+        if (hasNickname(realUUID)) {
+            LifeSeries.LOGGER.info("Loaded nickname for {}: {}", player.getName().getString(), getNickname(realUUID));
         }
     }
 }

@@ -11,7 +11,6 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Superspeed;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayerUsername;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.NicknameManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -208,7 +207,7 @@ public abstract class PlayerMixin implements IPlayerUsername {
 
             ls$preventRecursion = true;
 
-            Component nickname = NicknameManager.getNicknameText(OtherUtils.profileId(player.getGameProfile()));
+            Component nickname = NicknameManager.getNicknameText(player);
 
             if (nickname != null) {
                 ls$cachedDisplayName = nickname;

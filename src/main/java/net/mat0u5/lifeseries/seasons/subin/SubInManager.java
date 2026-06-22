@@ -88,9 +88,9 @@ public class SubInManager {
         CHANGE_SKIN = seasonConfig.SUBIN_CHANGE_SKIN.get();
         CHANGE_NAME = seasonConfig.SUBIN_CHANGE_USERNAME.get();
         for (SubIn subIn : subIns) {
-            ServerPlayer player = PlayerUtils.getPlayer(getId(subIn.substituter()));
+            ServerPlayer player = PlayerUtils.getRealPlayer(getId(subIn.substituter()));
             reloadPlayerProfile(player);
-            ServerPlayer target = PlayerUtils.getPlayer(getId(subIn.target()));
+            ServerPlayer target = PlayerUtils.getRealPlayer(getId(subIn.target()));
             reloadPlayerProfile(target);
         }
     }
@@ -128,8 +128,8 @@ public class SubInManager {
     }
 
     private static void removeSubIn(SubIn subIn) {
-        ServerPlayer player1 = PlayerUtils.getPlayer(getId(subIn.substituter()));
-        ServerPlayer player2 = PlayerUtils.getPlayer(getId(subIn.target()));
+        ServerPlayer player1 = PlayerUtils.getRealPlayer(getId(subIn.substituter()));
+        ServerPlayer player2 = PlayerUtils.getRealPlayer(getId(subIn.target()));
 
         ProfileManager.resetPlayer(player1).thenRun(() -> {
             if (player1 != null) {

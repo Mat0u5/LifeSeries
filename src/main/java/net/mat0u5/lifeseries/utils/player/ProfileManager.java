@@ -14,12 +14,15 @@ import net.mat0u5.lifeseries.mixin.TrackedEntityAccessor;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IGameProfile;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
+import net.mat0u5.lifeseries.utils.interfaces.IServerGamePacketListenerImpl;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.Triple;
+import net.minecraft.network.chat.RemoteChatSession;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -299,6 +302,8 @@ public class ProfileManager {
                 ClientboundRespawnPacket.KEEP_ALL_DATA
         ));
         //?}
+
+        ((IServerGamePacketListenerImpl) player.connection).ls$resetChatState();
 
         restorePlayerState(player, level, playerList);
     }

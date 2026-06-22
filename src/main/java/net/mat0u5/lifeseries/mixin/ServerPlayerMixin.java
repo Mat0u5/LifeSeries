@@ -282,7 +282,7 @@ public class ServerPlayerMixin implements IPlayer {
     @Inject(method = "getTabListDisplayName", at = @At("TAIL"), cancellable = true)
     private void customNickname(CallbackInfoReturnable<Component> cir) {
         try {
-            Component nickname = NicknameManager.getNicknameText(ls$get().getUUID());
+            Component nickname = NicknameManager.getNicknameText(ls$get());
 
             if (nickname != null) {
                 Component formattedName = PlayerTeam.formatNameForTeam(ls$get().getTeam(), nickname);

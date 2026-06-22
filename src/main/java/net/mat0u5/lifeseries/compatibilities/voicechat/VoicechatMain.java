@@ -33,7 +33,7 @@ import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 @ForgeVoicechatPlugin
 *///?}
 public class VoicechatMain implements VoicechatPlugin {
-
+    //TODO test
     private static Map<UUID, VoicechatConnection> connectedPlayers = new HashMap();
     private static List<UUID> tempMutedPlayers = new ArrayList<>();
 

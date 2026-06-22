@@ -86,8 +86,8 @@ import static net.mat0u5.lifeseries.LifeSeries.*;
 public class NetworkHandlerServer {
     public static final int PRELOGIN_TRANSACTION_ID = 10942422;
     public static final String preLoginPacketID = "preloginpacket";
-    public static final List<UUID> handshakeSuccessful = new ArrayList<>();
-    public static final List<UUID> preLoginHandshake = new ArrayList<>();
+    public static final List<RealUUID> handshakeSuccessful = new ArrayList<>();
+    public static final List<RealUUID> preLoginHandshake = new ArrayList<>();
     public static RegistryOverrideBahaviours REGISTRY_OVERRIDE_BEHAVIOR = RegistryOverrideBahaviours.LOGIN;
     public static boolean PRE_LOGIN_OVERRIDE_KICK = false;
 
@@ -405,7 +405,7 @@ public class NetworkHandlerServer {
     public static void handlePreLogin(boolean understood, ServerLoginPacketListenerImpl handler) {
         GameProfile profile = ((ServerLoginPacketListenerImplAccessor) handler).getGameProfile();
         if (understood) {
-            preLoginHandshake.add(OtherUtils.profileId(profile));
+            preLoginHandshake.add(RealUUID.of(OtherUtils.profileId(profile)));
             LOGGER.info("Received pre-login packet from " + OtherUtils.profileName(profile));
         }
         else {
@@ -552,7 +552,8 @@ public class NetworkHandlerServer {
         }
 
         LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received handshake (from {}): {{}, {}}", player, payload.modVersionStr(), payload.modVersion()));
-        handshakeSuccessful.add(player.getUUID());
+        RealUUID realUUID = ProfileManager.getRealUUID(player);
+        handshakeSuccessful.add(realUUID);
         PlayerUtils.resendCommandTree(player);
     }
 
@@ -617,7 +618,8 @@ public class NetworkHandlerServer {
 
         HandshakePayload payload = new HandshakePayload(serverVersionStr, serverVersion, serverCompatibilityStr, serverCompatibility);
         sendPacket(player, payload);
-        handshakeSuccessful.remove(player.getUUID());
+        RealUUID realUUID = ProfileManager.getRealUUID(player);
+        handshakeSuccessful.remove(realUUID);
         if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Sending handshake to {}: {{}, {}}", player, serverVersionStr, serverVersion));
 
     }
@@ -719,13 +721,8 @@ public class NetworkHandlerServer {
 
     public static boolean wasHandshakeSuccessful(ServerPlayer player) {
         if (player == null) return false;
-        UUID uuid = ProfileManager.getRealUUID(player).get();
-        return handshakeSuccessful.contains(uuid) || preLoginHandshake.contains(uuid);
-    }
-
-    public static boolean wasHandshakeSuccessful(UUID uuid) {
-        if (uuid == null) return false;
-        return handshakeSuccessful.contains(uuid) || preLoginHandshake.contains(uuid);
+        RealUUID realUUID = ProfileManager.getRealUUID(player);
+        return handshakeSuccessful.contains(realUUID) || preLoginHandshake.contains(realUUID);
     }
 
     public static void sideTitle(ServerPlayer player, Component text) {

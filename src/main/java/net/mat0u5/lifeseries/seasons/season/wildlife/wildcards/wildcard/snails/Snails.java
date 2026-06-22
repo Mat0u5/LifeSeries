@@ -12,6 +12,8 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.player.ProfileManager;
+import net.mat0u5.lifeseries.utils.player.RealUUID;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -99,7 +101,8 @@ public class Snails extends Wildcard {
     public static boolean canHaveSnail(ServerPlayer player) {
         if (player.isCreative()) return false;
         if (!player.isAlive()) return false;
-        if (Events.joiningPlayers.contains(player.getUUID())) return false;
+        RealUUID realUUID = ProfileManager.getRealUUID(player);
+        if (Events.joiningPlayers.contains(realUUID)) return false;
         if (player.isSpectator() && !SuperpowersWildcard.hasActivatedPower(player, Superpowers.ASTRAL_PROJECTION)) return false;
         if (preventSnails.contains(player.getUUID())) return false;
         if (((IPlayer) player).ls$isOnLastLife(false) && !WILDCARD_SNAILS_RED_LIVES) return false;

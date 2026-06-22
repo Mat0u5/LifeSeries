@@ -165,6 +165,21 @@ public class PlayerUtils {
         return server.getPlayerList().getPlayer(uuid);
     }
 
+    public static ServerPlayer getRealPlayer(UUID uuid) {
+        if (server == null || uuid == null) return null;
+        for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+            RealUUID realUUID = ProfileManager.getRealUUID(player);
+            if (realUUID.get().equals(uuid)) {
+                return player;
+            }
+        }
+        return null;
+    }
+
+    public static ServerPlayer getRealPlayer(RealUUID uuid) {
+        return getRealPlayer(uuid.get());
+    }
+
     public static void applyResourcepack(ServerPlayer player) {
         if (NetworkHandlerServer.wasHandshakeSuccessful(player)) return;
         applyServerResourcepack(player);

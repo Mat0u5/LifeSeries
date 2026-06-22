@@ -17,6 +17,7 @@ import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ProfileManager;
+import net.mat0u5.lifeseries.utils.player.RealUUID;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.core.BlockPos;
@@ -101,6 +102,7 @@ public class Events {
     }
 
     public static void onPlayerDisconnect(ServerPlayer player) {
+        RealUUID realUUID = ProfileManager.getRealUUID(player);
         ProfileManager.onPlayerDisconnect(player);
         if (LifeSeries.modDisabled()) return;
         if (isFakePlayer(player)) return;
@@ -108,7 +110,7 @@ public class Events {
         try {
             currentSeason.onPlayerDisconnect(player);
             SessionTranscript.playerLeave(player);
-            NetworkHandlerServer.preLoginHandshake.remove(player.getUUID());
+            NetworkHandlerServer.preLoginHandshake.remove(realUUID);
             DatapackIntegration.EVENT_PLAYER_LEAVE.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
         } catch(Exception e) {e.printStackTrace();}
     }
@@ -297,57 +299,59 @@ public class Events {
     /*
         Non-events
      */
-    public static final List<UUID> joiningPlayers = new ArrayList<>();
-    public static final Map<UUID, Vec3> joiningPlayersPos = new HashMap<>();
-    public static final Map<UUID, Float> joiningPlayersYaw = new HashMap<>();
-    public static final Map<UUID, Float> joiningPlayersPitch = new HashMap<>();
+    // TODO test
+    public static final List<RealUUID> joiningPlayers = new ArrayList<>();
+    private static final Map<RealUUID, Vec3> joiningPlayersPos = new HashMap<>();
+    private static final Map<RealUUID, Float> joiningPlayersYaw = new HashMap<>();
+    private static final Map<RealUUID, Float> joiningPlayersPitch = new HashMap<>();
     public static void playerStartJoining(ServerPlayer player) {
         NetworkHandlerServer.sendHandshake(player);
         NetworkHandlerServer.sendUpdatePacketTo(player);
         SnailSkins.sendTexturesTo(player);
-        if (!joiningPlayers.contains(player.getUUID())) joiningPlayers.add(player.getUUID());
-        joiningPlayersPos.put(player.getUUID(), player.position());
-        joiningPlayersYaw.put(player.getUUID(), player.getYRot());
-        joiningPlayersPitch.put(player.getUUID(), player.getXRot());
+        RealUUID realUUID = ProfileManager.getRealUUID(player);
+        if (!joiningPlayers.contains(realUUID)) joiningPlayers.add(realUUID);
+        joiningPlayersPos.put(realUUID, player.position());
+        joiningPlayersYaw.put(realUUID, player.getYRot());
+        joiningPlayersPitch.put(realUUID, player.getXRot());
     }
     public static void checkPlayerFinishJoiningTick() {
-        for (Map.Entry<UUID, Vec3> entry : joiningPlayersPos.entrySet()) {
-            UUID uuid = entry.getKey();
-            ServerPlayer player = PlayerUtils.getPlayer(uuid);
+        for (Map.Entry<RealUUID, Vec3> entry : joiningPlayersPos.entrySet()) {
+            RealUUID uuid = entry.getKey();
+            ServerPlayer player = PlayerUtils.getRealPlayer(uuid);
             if (player == null) continue;
             if (player.position().equals(entry.getValue())) continue;
             onPlayerFinishJoining(player);
-            finishedJoining(player.getUUID());
+            finishedJoining(uuid);
             return;
         }
         //Yaw
-        for (Map.Entry<UUID, Float> entry : joiningPlayersYaw.entrySet()) {
-            UUID uuid = entry.getKey();
-            ServerPlayer player = PlayerUtils.getPlayer(uuid);
+        for (Map.Entry<RealUUID, Float> entry : joiningPlayersYaw.entrySet()) {
+            RealUUID uuid = entry.getKey();
+            ServerPlayer player = PlayerUtils.getRealPlayer(uuid);
             if (player == null) continue;
             if (player.getYRot() == entry.getValue()) continue;
             onPlayerFinishJoining(player);
-            finishedJoining(player.getUUID());
+            finishedJoining(uuid);
             return;
         }
         //Pitch
-        for (Map.Entry<UUID, Float> entry : joiningPlayersPitch.entrySet()) {
-            UUID uuid = entry.getKey();
-            ServerPlayer player = PlayerUtils.getPlayer(uuid);
+        for (Map.Entry<RealUUID, Float> entry : joiningPlayersPitch.entrySet()) {
+            RealUUID uuid = entry.getKey();
+            ServerPlayer player = PlayerUtils.getRealPlayer(uuid);
             if (player == null) continue;
             if (player.getXRot() == entry.getValue()) continue;
             onPlayerFinishJoining(player);
-            finishedJoining(player.getUUID());
+            finishedJoining(uuid);
             return;
         }
 
     }
 
-    public static void finishedJoining(UUID uuid) {
-        joiningPlayers.remove(uuid);
-        joiningPlayersPos.remove(uuid);
-        joiningPlayersYaw.remove(uuid);
-        joiningPlayersPitch.remove(uuid);
+    public static void finishedJoining(RealUUID realUUID) {
+        joiningPlayers.remove(realUUID);
+        joiningPlayersPos.remove(realUUID);
+        joiningPlayersYaw.remove(realUUID);
+        joiningPlayersPitch.remove(realUUID);
     }
 
     public static boolean isExcludedPlayer(Entity entity) {
