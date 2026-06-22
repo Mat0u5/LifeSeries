@@ -11,9 +11,10 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.S
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
+import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
-import net.mat0u5.lifeseries.utils.player.ProfileManager;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -25,6 +26,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -292,9 +294,12 @@ public class SnailServerData implements PlayerBoundEntity {
     }
 
 
-    public void updateSkin(ServerPlayer player) {
+    public void updateSkin(Player player) {
         if (player == null) return;
-        String skinName = ProfileManager.getSkinName(player).toLowerCase(Locale.ROOT);
+        String skinName = player.getScoreboardName().toLowerCase(Locale.ROOT);
+        if (SubInManager.isSubbingIn(player.getUUID())) {
+            skinName = OtherUtils.profileName(SubInManager.getSubstitutedPlayer(player.getUUID())).toLowerCase(Locale.ROOT);
+        }
         snail.setSkinName(skinName);
     }
 }

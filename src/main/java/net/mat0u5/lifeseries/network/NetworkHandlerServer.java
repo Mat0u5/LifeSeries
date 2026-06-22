@@ -719,8 +719,7 @@ public class NetworkHandlerServer {
 
     public static boolean wasHandshakeSuccessful(ServerPlayer player) {
         if (player == null) return false;
-        UUID uuid = ProfileManager.getRealUUID(player).get();
-        return handshakeSuccessful.contains(uuid) || preLoginHandshake.contains(uuid);
+        return wasHandshakeSuccessful(player.getUUID());
     }
 
     public static boolean wasHandshakeSuccessful(UUID uuid) {

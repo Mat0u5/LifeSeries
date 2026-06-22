@@ -11,11 +11,9 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.mixin.ChunkMapAccessor;
 import net.mat0u5.lifeseries.mixin.PlayerAccessor;
 import net.mat0u5.lifeseries.mixin.TrackedEntityAccessor;
-import net.mat0u5.lifeseries.seasons.subin.SubInManager;
-import net.mat0u5.lifeseries.utils.interfaces.IGameProfile;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.other.Triple;
+import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
@@ -23,7 +21,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.biome.BiomeManager;
 
@@ -44,19 +41,19 @@ import net.minecraft.world.entity.PositionMoveRotation;
 
 public class ProfileManager {
 
-    public static final Map<RealUUID, String> manualSkins = new HashMap<>();
+    private static final Map<UUID, Property> originalSkins = new HashMap<>();
+    private static final Map<UUID, String> originalNames = new HashMap<>();
+    public static final Map<UUID, String> manualSkins = new HashMap<>();
 
     public static class ProfileChange {
         final ProfileChangeType type;
         final String info;
-        final UUID id;
         public ProfileChange(ProfileChangeType type) {
-            this(type, "", null);
+            this(type, "");
         }
-        public ProfileChange(ProfileChangeType type, String info, UUID id) {
+        public ProfileChange(ProfileChangeType type, String info) {
             this.type = type;
             this.info = info;
-            this.id = id;
         }
         public static ProfileChange none() {
             return new ProfileChange(ProfileChangeType.NONE);
@@ -68,10 +65,7 @@ public class ProfileManager {
             return new ProfileChange(ProfileChangeType.ORIGINAL);
         }
         public static ProfileChange set(String info) {
-            return new ProfileChange(ProfileChangeType.SET, info, null);
-        }
-        public static ProfileChange set(UUID id) {
-            return new ProfileChange(ProfileChangeType.SET, "", id);
+            return new ProfileChange(ProfileChangeType.SET, info);
         }
     }
     public enum ProfileChangeType {
@@ -81,33 +75,39 @@ public class ProfileManager {
         SET;
     }
 
-    public static CompletableFuture<Boolean> modifyProfile(ServerPlayer player, ProfileChange skinChange, ProfileChange usernameChange, ProfileChange uuidChange) {
+    public static CompletableFuture<Boolean> modifyProfile(ServerPlayer player, ProfileChange skinChange, ProfileChange usernameChange) {
         return CompletableFuture.supplyAsync(() -> {
             try {
-                UUID previousUUID = player.getUUID();
+                if (!originalSkins.containsKey(player.getUUID())) {
+                    Property originalSkin = getSkinProperty(player.getGameProfile());
+                    originalSkins.put(player.getUUID(), originalSkin);
+                }
+                if (!originalNames.containsKey(player.getUUID())) {
+                    originalNames.put(player.getUUID(), player.getScoreboardName());
+                }
+
                 Property targetSkin = null;
                 if (skinChange.type == ProfileChangeType.ORIGINAL) {
-                    targetSkin = getRealSkin(player);
+                    targetSkin = originalSkins.get(player.getUUID());
                 }
                 if (skinChange.type == ProfileChangeType.SET) {
                     targetSkin = fetchSkinFromUsername(skinChange.info);
                 }
 
-                Triple<Boolean, Boolean, Boolean> changed = setProfile(player, skinChange, usernameChange, uuidChange, targetSkin);
+                Tuple<Boolean, Boolean> changed = setProfile(player, skinChange, usernameChange, targetSkin);
                 boolean changedSkin = changed.x;
                 boolean changedName = changed.y;
-                boolean changedUUID = changed.z;
 
-                if (changedSkin || changedName || changedUUID) {
-                    refreshPlayerProfile(player, previousUUID);
-                    if (changedName || changedUUID) {
+                if (changedSkin || changedName) {
+                    refreshPlayerProfile(player);
+                    if (usernameChange.type != ProfileChangeType.NONE && changedName) {
                         currentSeason.onPlayerJoin(player);
                         currentSeason.usernameChanged(player);
                     }
                     LifeSkinsManager.refreshLifeSkin(player);
                 }
                 currentSeason.updateClientPlayerTeam(player);
-                return changedSkin || changedName || changedUUID;
+                return changedSkin || changedName;
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -116,25 +116,17 @@ public class ProfileManager {
         });
     }
 
-    private static Triple<Boolean, Boolean, Boolean> setProfile(ServerPlayer player, ProfileChange skinChange, ProfileChange usernameChange, ProfileChange uuidChange, Property targetSkin) {
-        GameProfile realProfile = getRealProfile(player);
+    private static Tuple<Boolean, Boolean> setProfile(ServerPlayer player, ProfileChange skinChange, ProfileChange usernameChange, Property targetSkin) {
         GameProfile currentProfile = player.getGameProfile();
 
         String name = OtherUtils.profileName(currentProfile);
-        UUID uuid = OtherUtils.profileId(currentProfile);
         if (usernameChange.type == ProfileChangeType.ORIGINAL) {
-            name = getRealName(player);
+            name = originalNames.get(player.getUUID());
         }
         if (usernameChange.type == ProfileChangeType.SET) {
             name = usernameChange.info;
         }
 
-        if (uuidChange.type == ProfileChangeType.ORIGINAL) {
-            uuid = getRealUUID(player).get();
-        }
-        if (uuidChange.type == ProfileChangeType.SET) {
-            uuid = uuidChange.id;
-        }
 
         //? if > 1.21.6 {
         Multimap<String, Property> properties;
@@ -154,15 +146,14 @@ public class ProfileManager {
         }
         //?}
 
+
         GameProfile newProfile = new GameProfile(
-                uuid,
+                OtherUtils.profileId(currentProfile),
                 name
                 //? if > 1.21.6 {
                 ,new PropertyMap(properties)
                 //?}
         );
-        setRealProfile(newProfile, realProfile);
-
         //? if <= 1.21.6 {
         /*if (skinChange.type != ProfileChangeType.NONE) {
             OtherUtils.profileProperties(currentProfile).forEach((key, property) -> {
@@ -179,12 +170,10 @@ public class ProfileManager {
         boolean changedName = usernameChange.type != ProfileChangeType.NONE && !Objects.equals(OtherUtils.profileName(currentProfile), OtherUtils.profileName(newProfile));
         Property originalSkin = getSkinProperty(player.getGameProfile());
         boolean changedSkin = skinChange.type != ProfileChangeType.NONE && !areEqualSkins(originalSkin, targetSkin);
-        boolean changedUUID = uuidChange.type != ProfileChangeType.NONE && !Objects.equals(OtherUtils.profileId(currentProfile), OtherUtils.profileId(newProfile));
-        if (changedName  || changedSkin || changedUUID) {
+        if (changedName  || changedSkin) {
             ((PlayerAccessor) player).ls$setGameProfile(newProfile);
-            player.setUUID(uuid);
         }
-        return new Triple<>(changedSkin, changedName, changedUUID);
+        return new Tuple<>(changedSkin, changedName);
     }
 
     private static Property getSkinProperty(GameProfile profile) {
@@ -238,11 +227,11 @@ public class ProfileManager {
         }
     }
 
-    private static void refreshPlayerProfile(ServerPlayer player, UUID previousUUID) {
+    private static void refreshPlayerProfile(ServerPlayer player) {
         ServerLevel level = ((IPlayer) player).ls$getServerLevel();
         PlayerList playerList = server.getPlayerList();
 
-        List<UUID> uuidList = List.of(previousUUID, player.getUUID());
+        List<UUID> uuidList = Collections.singletonList(player.getUUID());
         playerList.broadcastAll(new ClientboundPlayerInfoRemovePacket(uuidList));
         playerList.broadcastAll(ClientboundPlayerInfoUpdatePacket.createPlayerInitializing(Collections.singleton(player)));
 
@@ -369,78 +358,38 @@ public class ProfileManager {
     }
 
     public static void onPlayerDisconnect(ServerPlayer player) {
-        resetPlayer(player);
+        resetPlayer(player).thenRun(() -> {
+            originalSkins.remove(player.getUUID());
+            originalNames.remove(player.getUUID());
+        });
     }
 
     public static CompletableFuture<Boolean> resetPlayer(ServerPlayer player) {
         if (player == null) return CompletableFuture.completedFuture(false);
-        if (hasChangedName(player) || hasChangedSkin(player) || hasChangedUUID(player)) {
-            return modifyProfile(player, ProfileChange.original(), ProfileChange.original(), ProfileChange.original());
+        if (hasChangedName(player) || hasChangedSkin(player)) {
+            return modifyProfile(player, ProfileChange.original(), ProfileChange.original());
         }
         return CompletableFuture.completedFuture(false);
     }
 
     public static boolean hasChangedName(ServerPlayer player) {
-        String realName = getRealName(player);
-        return !player.getScoreboardName().equals(realName);
-    }
-
-    public static boolean hasChangedUUID(ServerPlayer player) {
-        RealUUID realUUID = getRealUUID(player);
-        return !player.getUUID().equals(realUUID.get());
+        UUID uuid = player.getUUID();
+        if (originalNames.containsKey(uuid)) {
+            if (!player.getScoreboardName().equals(originalNames.get(uuid))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static boolean hasChangedSkin(ServerPlayer player) {
-        Property currentSkin = getSkinProperty(player.getGameProfile());
-        Property originalSkin = getRealSkin(player);
-        return !areEqualSkins(currentSkin, originalSkin);
-    }
-
-    public static GameProfile getRealProfile(Player player) {
-        GameProfile profile = player.getGameProfile();
-        if ((Object)profile instanceof IGameProfile accessor) {
-            return accessor.ls$getRealProfile();
+        UUID uuid = player.getUUID();
+        if (originalSkins.containsKey(uuid)) {
+            Property currentSkin = getSkinProperty(player.getGameProfile());
+            Property originalSkin = originalSkins.get(uuid);
+            return !areEqualSkins(currentSkin, originalSkin);
         }
-        return player.getGameProfile();
-    }
-
-    public static RealUUID getRealUUID(Player player) {
-        return RealUUID.of(OtherUtils.profileId(getRealProfile(player)));
-    }
-
-    public static String getRealName(Player player) {
-        return OtherUtils.profileName(getRealProfile(player));
-    }
-
-    public static Property getRealSkin(Player player) {
-        return getSkinProperty(getRealProfile(player));
-    }
-
-    public static void setRealProfile(GameProfile profile, GameProfile realProfile) {
-        if ((Object)profile instanceof IGameProfile accessor) {
-            accessor.ls$setRealProfile(realProfile);
-        }
-    }
-
-    public static String getSkinName(ServerPlayer player) {
-        RealUUID realUUID = ProfileManager.getRealUUID(player);
-        if (ProfileManager.manualSkins.containsKey(realUUID)) {
-            return ProfileManager.manualSkins.get(realUUID);
-        }
-
-        String playerName = player.getScoreboardName();
-        if (SubInManager.isSubbingIn(player)) {
-            boolean changeSkin = SubInManager.CHANGE_SKIN;
-            boolean changeName = SubInManager.CHANGE_NAME;
-
-            if (changeSkin && !changeName) {
-                playerName = OtherUtils.profileName(SubInManager.getTargetPlayer(player));
-            }
-            if (!changeSkin && changeName) {
-                playerName = getRealName(player);
-            }
-        }
-        return playerName;
+        return false;
     }
 
     public static boolean areEqualSkins(Property skin1, Property skin2) {

@@ -104,8 +104,8 @@ public class SubInCommands extends Command {
             return -1;
         }
 
-        if (SubInManager.isSubbingIn(player)) {
-            GameProfile profile = SubInManager.getTargetPlayer(player);
+        if (SubInManager.isSubbingIn(player.getUUID())) {
+            GameProfile profile = SubInManager.getSubstitutedPlayer(player.getUUID());
             sendCommandFailure(source, ModifiableText.SUBIN_ERROR_ALREADY_SUBBING.get(player, OtherUtils.profileName(profile)));
             return -1;
         }
@@ -125,12 +125,12 @@ public class SubInCommands extends Command {
     public int removeSubIn(CommandSourceStack source, ServerPlayer player) {
         if (checkBanned(source)) return -1;
 
-        if (!SubInManager.isSubbingIn(player)) {
+        if (!SubInManager.isSubbingIn(player.getUUID())) {
             sendCommandFailure(source, ModifiableText.SUBIN_ERROR_MISSING.get(player));
             return -1;
         }
 
-        GameProfile profile = SubInManager.getTargetPlayer(player);
+        GameProfile profile = SubInManager.getSubstitutedPlayer(player.getUUID());
 
         sendCommandFeedback(source, ModifiableText.SUBIN_STOP.get(player, OtherUtils.profileName(profile)));
         SubInManager.removeSubIn(player);
