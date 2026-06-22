@@ -366,17 +366,18 @@ public class SecretLife extends Season {
     @Override
     public void onPlayerKilledByPlayer(ServerPlayer victim, ServerPlayer killer) {
         super.onPlayerKilledByPlayer(victim, killer);
-        checkKillHeartGain(killer);
+        checkKillHeartGain(killer, victim);
     }
 
     @Override
     public void onClaimKill(ServerPlayer killer, ServerPlayer victim) {
         super.onClaimKill(killer, victim);
-        checkKillHeartGain(killer);
+        checkKillHeartGain(killer, victim);
     }
 
-    public void checkKillHeartGain(ServerPlayer player) {
+    public void checkKillHeartGain(ServerPlayer player, ServerPlayer victim) {
         if (!((IPlayer) player).ls$isOnLastLife(false)) return;
+        if (((IPlayer) victim).ls$isDead()) return;
         double amountGained = Math.min(Math.max(MAX_KILL_HEALTH, MAX_HEALTH) - getPlayerHealth(player), 20);
         if (amountGained > 0) {
             addPlayerHealth(player, amountGained);
@@ -385,7 +386,7 @@ public class SecretLife extends Season {
             String roundedHeartsStr = String.valueOf(roundedHearts);
             if (roundedGained % 2 == 0) roundedHeartsStr = String.valueOf((int)roundedHearts);
             if (roundedGained >= 0) {
-                PlayerUtils.sendTitle(player, ModifiableText.SECRETLIFE_HEART_ADD.get(roundedHeartsStr, TextUtils.pluralize("Heart", roundedHearts)), 0, 40, 20);
+                PlayerUtils.sendTitle(player, ModifiableText.SECRETLIFE_HEART_ADD_RED.get(roundedHeartsStr, TextUtils.pluralize("Heart", roundedHearts)), 0, 40, 20);
             }
             else {
                 PlayerUtils.sendTitle(player, ModifiableText.SECRETLIFE_HEART_REMOVE.get(roundedHeartsStr, TextUtils.pluralize("Heart", roundedHearts)), 0, 40, 20);
