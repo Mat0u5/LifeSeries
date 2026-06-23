@@ -36,6 +36,7 @@ minecraft {
 			workingDir.convention(layout.projectDirectory.dir("run"))
 			systemProperty("forge.logging.console.level", "debug")
 			args("--mixin.config=${prop("mod.id")}.mixins.json")
+			ideaModule = null
 		}
 		register("client") {
 			args("--username", "Player")

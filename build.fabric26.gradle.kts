@@ -23,7 +23,7 @@ loom {
 	accessWidenerPath = rootProject.file("src/main/resources/aw/${stonecutter.current.version}.accesswidener")
 	runs.named("client") {
 		client()
-		ideConfigGenerated(true)
+		ideConfigGenerated(false)
 		runDir = "run/"
 		environment = "client"
 		programArgs("--username=Player")
@@ -31,7 +31,7 @@ loom {
 	}
 	runs.named("server") {
 		server()
-		ideConfigGenerated(true)
+		ideConfigGenerated(false)
 		runDir = "run/"
 		environment = "server"
 		configName = "Fabric Server"
