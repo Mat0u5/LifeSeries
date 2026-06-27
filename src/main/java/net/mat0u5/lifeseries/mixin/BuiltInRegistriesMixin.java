@@ -9,9 +9,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BuiltInRegistries.class)
 public class BuiltInRegistriesMixin {
-
+    //? !(fabric && <= 1.20.5) {
     @Inject(method = "freeze", at = @At("HEAD"))
     private static void registerPreFreeze(CallbackInfo ci) {
         ModRegistries.registerModStuff();
     }
+    //?}
 }
