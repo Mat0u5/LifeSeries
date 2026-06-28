@@ -16,6 +16,30 @@ plugins {
 
 stonecutter active file(".sc_active_version")
 
+subprojects {
+	afterEvaluate {
+		val outputDir = rootProject.layout.projectDirectory.dir("output")
+		val task = (tasks.findByName("remapJar") ?: tasks.findByName("jar")) as? AbstractArchiveTask
+		task?.doLast {
+			project.copy {
+				from(task.archiveFile)
+				into(outputDir)
+			}
+		}
+	}
+}
+
+val cleanOutput by tasks.registering(Delete::class) {
+	delete(fileTree(rootProject.layout.projectDirectory.dir("output")))
+}
+
+allprojects {
+	tasks.withType<Delete>().configureEach {
+		if (name == "clean") {
+			dependsOn(cleanOutput)
+		}
+	}
+}
 
 for (version in stonecutter.versions.map { it.version }.distinct()) tasks.register("publish$version") {
 	group = "publishing"
