@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.registries.ModRegistries;
 import net.minecraft.core.registries.BuiltInRegistries;
 import org.spongepowered.asm.mixin.Mixin;
@@ -9,10 +10,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BuiltInRegistries.class)
 public class BuiltInRegistriesMixin {
-    //? !(fabric && <= 1.20.5) {
     @Inject(method = "freeze", at = @At("HEAD"))
     private static void registerPreFreeze(CallbackInfo ci) {
+		//? fabric && <= 1.20.5 {
+		/*if (CompatibilityManager.fabricApiLoaded()) {
+			return;
+		}
+		*///?}
         ModRegistries.registerModStuff();
     }
-    //?}
 }

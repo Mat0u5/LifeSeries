@@ -6,7 +6,6 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.platform.Platform;
 import net.mat0u5.lifeseries.registries.MobRegistry;
-import net.mat0u5.lifeseries.registries.ModRegistries;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
@@ -32,9 +31,13 @@ import net.mat0u5.lifeseries.platform.fabric.FabricPlatform;
  *///?} forge {
 /*import net.mat0u5.lifeseries.platform.forge.ForgePlatform;
  *///?}
+//? fabric && <= 1.20.5 {
+import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
+import net.mat0u5.lifeseries.registries.ModRegistries;
+//?}
 
 public class LifeSeries {
-	public static final String MOD_VERSION = "1.5.6.6-dev";
+	public static final String MOD_VERSION = "1.5.6.6ev";
 	public static final String MOD_ID = "lifeseries";
 	private static final Platform PLATFORM = createPlatformInstance();
 
@@ -75,8 +78,11 @@ public class LifeSeries {
 		MobRegistry.registerAttributes();
 		//?}
 		//? fabric && <= 1.20.5 {
-		/*ModRegistries.registerModStuff();
+		/*if (CompatibilityManager.fabricApiLoaded()) {
+			ModRegistries.registerModStuff();
+		}
 		*///?}
+
 		if (!ISOLATED_ENVIRONMENT) {
 			UpdateChecker.checkForMajorUpdates();
 		}
