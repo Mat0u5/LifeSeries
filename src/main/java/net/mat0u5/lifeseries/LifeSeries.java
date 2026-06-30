@@ -32,12 +32,12 @@ import net.mat0u5.lifeseries.platform.fabric.FabricPlatform;
 /*import net.mat0u5.lifeseries.platform.forge.ForgePlatform;
  *///?}
 //? fabric && <= 1.20.5 {
-import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
+/*import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.registries.ModRegistries;
-//?}
+*///?}
 
 public class LifeSeries {
-	public static final String MOD_VERSION = "1.5.6.6ev";
+	public static final String MOD_VERSION = "1.5.6.7-dev";
 	public static final String MOD_ID = "lifeseries";
 	private static final Platform PLATFORM = createPlatformInstance();
 
