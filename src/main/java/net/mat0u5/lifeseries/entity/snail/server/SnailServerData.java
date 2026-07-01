@@ -233,7 +233,7 @@ public class SnailServerData implements PlayerBoundEntity {
     }
 
     public void sendAirPacket(ServerPlayer player, int amount) {
-        SimplePackets.SNAIL_AIR.target(player).sendToClient(amount);
+        SimplePackets.SNAIL_AIR.sendToClient(amount, player);
     }
 
     public void handleHighVelocity() {

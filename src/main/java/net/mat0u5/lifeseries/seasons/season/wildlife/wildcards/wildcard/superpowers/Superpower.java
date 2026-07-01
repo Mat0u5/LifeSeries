@@ -59,7 +59,7 @@ public abstract class Superpower {
 
     public void turnOff() {
         deactivate();
-        SimplePackets.SUPERPOWER_COOLDOWN.target(getPlayer()).sendToClient(0);
+        SimplePackets.SUPERPOWER_COOLDOWN.sendToClient(0L, getPlayer());
     }
 
     public void cooldown(int millis) {
@@ -67,10 +67,10 @@ public abstract class Superpower {
     }
 
     public void sendCooldownPacket() {
-        SimplePackets.SUPERPOWER_COOLDOWN.target(getPlayer()).sendToClient(cooldown);
+        SimplePackets.SUPERPOWER_COOLDOWN.sendToClient(cooldown, getPlayer());
     }
     public void sendShowCooldownPacket() {
-        SimplePackets.SUPERPOWER_SHOW_COOLDOWN.target(getPlayer()).sendToClient();
+        SimplePackets.SUPERPOWER_SHOW_COOLDOWN.sendToClient(getPlayer());
     }
 
     public void triggerActivated() {

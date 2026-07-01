@@ -119,11 +119,18 @@ public class Events {
             UpdateChecker.shutdownExecutor();
             if (LifeSeries.modDisabled()) return;
             currentSession.sessionEnd();
-        }catch (Exception e) {e.printStackTrace();}
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            LifeSeries.server = null;
+            LifeSeries.serverThread = null;
+            TaskScheduler.clearTasks();
+        }
     }
 
     public static void onServerStarting(MinecraftServer server) {
         LifeSeries.server = server;
+        LifeSeries.serverThread = Thread.currentThread();
     }
 
     public static void onServerStart(MinecraftServer server) {

@@ -16,6 +16,7 @@ import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
 import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.interfaces.IClientHelper;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
+import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.server.MinecraftServer;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -37,7 +38,7 @@ import net.mat0u5.lifeseries.registries.ModRegistries;
 *///?}
 
 public class LifeSeries {
-	public static final String MOD_VERSION = "1.5.6.7-dev";
+	public static final String MOD_VERSION = "1.5.6.8-dev";
 	public static final String MOD_ID = "lifeseries";
 	private static final Platform PLATFORM = createPlatformInstance();
 
@@ -52,7 +53,8 @@ public class LifeSeries {
 	public static IClientHelper clientHelper;
 
 	@Nullable
-	public static MinecraftServer server;
+	public static volatile MinecraftServer server;
+	public static volatile Thread serverThread;
 	public static Season currentSeason;
 	public static Session currentSession;
 	public static LivesManager livesManager;
@@ -128,7 +130,7 @@ public class LifeSeries {
 		if (!modDisabled()) {
 			SeasonChanger.resetSeason();
 		}
-		SimplePackets.MOD_DISABLED.sendToClient(LifeSeries.MOD_DISABLED);
+		SimplePackets.MOD_DISABLED.sendToAllClients(LifeSeries.MOD_DISABLED);
 	}
 
 	public static boolean hasClient() {
@@ -165,5 +167,21 @@ public class LifeSeries {
 
 	public static ConfigManager getMainConfig() {
 		return config;
+	}
+
+	public static boolean isMainThread() {
+		Thread thread = serverThread;
+		return thread != null && Thread.currentThread() == thread;
+	}
+
+	public static void requireMainThread() {
+		if (!isMainThread()) {
+			if (VersionControl.isDevVersion()) {
+				throw new IllegalStateException("[LifeSeries] requireMainThread fail: " + Thread.currentThread().getName());
+			}
+			else {
+				LifeSeries.LOGGER.error("[LifeSeries] requireMainThread fail", new Throwable());
+			}
+		}
 	}
 }

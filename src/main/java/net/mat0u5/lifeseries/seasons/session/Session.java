@@ -299,7 +299,7 @@ public class Session {
         if (timer.isMultipleOf(DISPLAY_TIMER_INTERVAL)) {
             displayTimers(server);
             for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-                SimplePackets.SESSION_STATUS.target(player).sendToClient(status.getName());
+                SimplePackets.SESSION_STATUS.sendToClient(status.getName(), player);
             }
             //? if <= 1.20.3 {
             /*for (MobEffect effect : blacklist.getBannedEffects()) {
@@ -478,7 +478,7 @@ public class Session {
                     timestamp = Time.now().add(remainingTime).getMillis();
                 }
                 if (timestamp != SessionTimerStates.OFF.getValue()) {
-                    SimplePackets.SESSION_TIMER.target(player).sendToClient(timestamp);
+                    SimplePackets.SESSION_TIMER.sendToClient(timestamp, player);
                 }
             }
         }

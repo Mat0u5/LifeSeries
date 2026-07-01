@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SimplePackets {
-    public static final Map<String, SimplePacket<?, ?>> registeredPackets = new HashMap<>();
+    public static final Map<String, SimplePacket<?, ?, ?>> registeredPackets = new HashMap<>();
 
     public static final SimpleStringListPacket LIMITED_LIFE_TIMER = new SimpleStringListPacket("LIMITED_LIFE_TIMER");
     public static final SimpleStringListPacket SEASON_INFO = new SimpleStringListPacket("SEASON_INFO");

@@ -69,8 +69,8 @@ public class TripleJump extends ToggleableSuperpower {
         if (player == null) return;
         ((IPlayer) player).ls$playNotifySound(SoundEvents.SLIME_JUMP, SoundSource.MASTER, 1, 1);
         NetworkHandlerServer.sendVignette(player, -1);
-        SimplePackets.TRIPLE_JUMP.target(player).sendToClient(true);
-        SimplePackets.POWER_TJ_JUMPS.target(player).sendToClient(JUMP_COUNT);
+        SimplePackets.TRIPLE_JUMP.sendToClient(true, player);
+        SimplePackets.POWER_TJ_JUMPS.sendToClient(JUMP_COUNT, player);
     }
 
     @Override
@@ -81,6 +81,6 @@ public class TripleJump extends ToggleableSuperpower {
         player.removeEffect(MobEffects.JUMP_BOOST);
         ((IPlayer) player).ls$playNotifySound(SoundEvents.SLIME_SQUISH, SoundSource.MASTER, 1, 1);
         NetworkHandlerServer.sendVignette(player, 0);
-        SimplePackets.TRIPLE_JUMP.target(player).sendToClient(false);
+        SimplePackets.TRIPLE_JUMP.sendToClient(false, player);
     }
 }

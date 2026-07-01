@@ -307,7 +307,7 @@ public abstract class Season {
     }
 
     public void sendSetSeasonPacket(ServerPlayer player) {
-        SimplePackets.SEASON_INFO.target(player).sendToClient(List.of(currentSeason.getSeason().getId(), currentSeason.getAdminCommands(), currentSeason.getNonAdminCommands()));
+        SimplePackets.SEASON_INFO.sendToClient(List.of(currentSeason.getSeason().getId(), currentSeason.getAdminCommands(), currentSeason.getNonAdminCommands()), player);
     }
 
     public void reloadPlayers() {
@@ -377,14 +377,14 @@ public abstract class Season {
         LifeSkinsManager.sendTeamNumUpdatesFrom(player);
         Team team = player.getTeam();
         if (team != null) {
-            SimplePackets.TEAM_NAME.target(player).sendToClient(team.getName());
+            SimplePackets.TEAM_NAME.sendToClient(team.getName(), player);
             //~ if >= 26.2 'team.getColor().getName()' -> 'team.getColor().orElse(TeamColor.WHITE).getSerializedName()' {
-            SimplePackets.TEAM_COLOR.target(player).sendToClient(team.getColor().orElse(TeamColor.WHITE).getSerializedName());
+            SimplePackets.TEAM_COLOR.sendToClient(team.getColor().orElse(TeamColor.WHITE).getSerializedName(), player);
             //~}
         }
         else {
-            SimplePackets.TEAM_NAME.target(player).sendToClient("");
-            SimplePackets.TEAM_COLOR.target(player).sendToClient("");
+            SimplePackets.TEAM_NAME.sendToClient("", player);
+            SimplePackets.TEAM_COLOR.sendToClient("", player);
         }
     }
 
@@ -625,19 +625,26 @@ public abstract class Season {
         boolean isAllowedToAttack = isAllowedToAttack(killer, victim, false);
         boolean isBoogeyCure = boogeymanManager.isBoogeymanThatCanBeCured(killer, victim);
 
-        if (!isAllowedToAttack(killer, victim) && !HIDE_UNJUSTIFIED_KILL_MESSAGES) {
-            if (livesManager.SHOW_LIFE_DIFF) {
-                TaskScheduler.schedulePriorityTask(1, () -> {
+        List<DatapackIntegration.Events.MacroEntry> eventMacros = List.of(
+                new DatapackIntegration.Events.MacroEntry("Killer", killer.getScoreboardName()),
+                new DatapackIntegration.Events.MacroEntry("Victim", victim.getScoreboardName())
+        );
+
+        if (!isAllowedToAttack(killer, victim)) {
+            if (!HIDE_UNJUSTIFIED_KILL_MESSAGES) {
+                if (livesManager.SHOW_LIFE_DIFF) {
+                    TaskScheduler.schedulePriorityTask(1, () -> {
+                        PlayerUtils.broadcastMessageToAdmins(ModifiableText.SEASON_KILL_UNJUSTIFIED.get(victim, killer));
+                    });
+                }
+                else {
                     PlayerUtils.broadcastMessageToAdmins(ModifiableText.SEASON_KILL_UNJUSTIFIED.get(victim, killer));
-                });
+                }
             }
-            else {
-                PlayerUtils.broadcastMessageToAdmins(ModifiableText.SEASON_KILL_UNJUSTIFIED.get(victim, killer));
-            }
-            DatapackIntegration.EVENT_UNJUSTIFIED_KILL.trigger(List.of(
-                    new DatapackIntegration.Events.MacroEntry("Killer", killer.getScoreboardName()),
-                    new DatapackIntegration.Events.MacroEntry("Victim", victim.getScoreboardName())
-            ));
+            DatapackIntegration.EVENT_UNJUSTIFIED_KILL.trigger(eventMacros);
+        }
+        else {
+            DatapackIntegration.EVENT_JUSTIFIED_KILL.trigger(eventMacros);
         }
 
         if (isBoogeyCure) {
@@ -645,10 +652,7 @@ public abstract class Season {
         }
         SessionTranscript.onPlayerKilledByPlayer(victim, killer);
 
-        DatapackIntegration.EVENT_PLAYER_PVP_KILLED.trigger(List.of(
-                new DatapackIntegration.Events.MacroEntry("Killer", killer.getScoreboardName()),
-                new DatapackIntegration.Events.MacroEntry("Victim", victim.getScoreboardName())
-        ));
+        DatapackIntegration.EVENT_PLAYER_PVP_KILLED.trigger(eventMacros);
         if (!DatapackIntegration.EVENT_PLAYER_PVP_KILLED.isCanceled() && !isBoogeyCure && isAllowedToAttack) {
             tryKillLifeGain(killer, victim);
         }

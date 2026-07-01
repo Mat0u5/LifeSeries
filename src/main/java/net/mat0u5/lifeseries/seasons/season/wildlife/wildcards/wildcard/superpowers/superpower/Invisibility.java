@@ -56,7 +56,7 @@ public class Invisibility extends ToggleableSuperpower {
 
         playerLevel.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.SHULKER_SHOOT, SoundSource.MASTER, 1, 1);
         sendInvisibilityPacket();
-        SimplePackets.POWER_INVISIBILITY_PARTICLES.sendToClient(SHOW_PARTICLES);
+        SimplePackets.POWER_INVISIBILITY_PARTICLES.sendToAllClients(SHOW_PARTICLES);
     }
 
     @Override

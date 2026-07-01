@@ -118,7 +118,7 @@ public class LifeSkinsManager {
     }
 
     public static void sendImagePackets(List<ServerPlayer> targets) {
-        SimplePackets.LIFESKINS_RELOAD_START.target(targets).sendToClient();
+        SimplePackets.LIFESKINS_RELOAD_START.sendToClient(targets);
         for (Map.Entry<String, Map<String, Triple<Boolean, File, Integer>>> entry : skinsCache.entrySet()) {
             String lifeSkinPlayerName = entry.getKey();
             if (lifeSkinPlayerName == null) continue;
@@ -188,12 +188,12 @@ public class LifeSkinsManager {
     }
 
     public static void sendTeamNumUpdatesFrom(ServerPlayer player) {
-        SimplePackets.LIFESKINS_PLAYER.sendToClient(getLifeSkinsPacketInfo(player));
+        SimplePackets.LIFESKINS_PLAYER.sendToAllClients(getLifeSkinsPacketInfo(player));
     }
 
     public static void sendTeamNumUpdatesTo(ServerPlayer target) {
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-            SimplePackets.LIFESKINS_PLAYER.target(target).sendToClient(getLifeSkinsPacketInfo(player));
+            SimplePackets.LIFESKINS_PLAYER.sendToClient(getLifeSkinsPacketInfo(player), target);
         }
     }
 

@@ -80,8 +80,8 @@ public class NiceLifeTriviaManager {
         boolean longIntro = (nightLength == NightLength.FIRST_LONG && firstTriviaInSession) || nightLength == NightLength.ALL_LONG;
 
         for (ServerPlayer player : triviaPlayers) {
-            SimplePackets.HIDE_SLEEP_DARKNESS.target(player).sendToClient(true);
-            SimplePackets.EMPTY_SCREEN.target(player).sendToClient(true);
+            SimplePackets.HIDE_SLEEP_DARKNESS.sendToClient(true, player);
+            SimplePackets.EMPTY_SCREEN.sendToClient(true, player);
             BlockPos bedPos = player.getSleepingPos().orElse(null);
             if (bedPos == null) {
                 continue;
@@ -160,7 +160,7 @@ public class NiceLifeTriviaManager {
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
         PlayerUtils.broadcastMessage(ModifiableText.NICELIFE_TRIVIA_ALL_WRONG_PT1.get());
 
-        SimplePackets.TRIVIA_ALL_WRONG.sendToClient();
+        SimplePackets.TRIVIA_ALL_WRONG.sendToAllClients();
         TaskScheduler.scheduleTask(120, () -> {
             PlayerUtils.broadcastMessage(ModifiableText.NICELIFE_TRIVIA_ALL_WRONG_PT2.get());
             for (ServerPlayer player : livesManager.getAlivePlayers()) {
@@ -253,7 +253,7 @@ public class NiceLifeTriviaManager {
     }
 
     public static void killAllBots() {
-        SimplePackets.STOP_TRIVIA_SOUNDS.sendToClient();
+        SimplePackets.STOP_TRIVIA_SOUNDS.sendToAllClients();
         if (server == null) return;
         List<Entity> toKill = new ArrayList<>();
         for (ServerLevel level : server.getAllLevels()) {
@@ -264,7 +264,7 @@ public class NiceLifeTriviaManager {
             }
         }
         toKill.forEach(Entity::discard);
-        SimplePackets.RESET_TRIVIA.sendToClient();
+        SimplePackets.RESET_TRIVIA.sendToAllClients();
     }
     public static void killAllSnowmen() {
         if (server == null) return;

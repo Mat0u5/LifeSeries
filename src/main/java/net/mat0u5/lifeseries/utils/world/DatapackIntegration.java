@@ -60,6 +60,7 @@ public class DatapackIntegration {
     public static final Events EVENT_NAUGHTY_LIST_ADD = Events.NAUGHTY_LIST_ADD;
     public static final Events EVENT_NAUGHTY_LIST_END = Events.NAUGHTY_LIST_END;
     public static final Events EVENT_UNJUSTIFIED_KILL = Events.UNJUSTIFIED_KILL;
+    public static final Events EVENT_JUSTIFIED_KILL = Events.JUSTIFIED_KILL;
     public static final Events EVENT_SOULMATE_ROLL = Events.SOULMATE_ROLL;
     public static final Events EVENT_SOULMATE_SET = Events.SOULMATE_SET;
     public static final Events EVENT_SOULMATE_REMOVE = Events.SOULMATE_REMOVE;
@@ -100,6 +101,7 @@ public class DatapackIntegration {
         EVENT_NAUGHTY_LIST_ADD.reload();
         EVENT_NAUGHTY_LIST_END.reload();
         EVENT_UNJUSTIFIED_KILL.reload();
+        EVENT_JUSTIFIED_KILL.reload();
         EVENT_SOULMATE_ROLL.reload();
         EVENT_SOULMATE_SET.reload();
         EVENT_SOULMATE_REMOVE.reload();
@@ -144,6 +146,7 @@ public class DatapackIntegration {
                 ,EVENT_NAUGHTY_LIST_ADD
                 ,EVENT_NAUGHTY_LIST_END
                 ,EVENT_UNJUSTIFIED_KILL
+                ,EVENT_JUSTIFIED_KILL
                 ,EVENT_SOULMATE_ROLL
                 ,EVENT_SOULMATE_SET
                 ,EVENT_SOULMATE_REMOVE
@@ -280,6 +283,7 @@ public class DatapackIntegration {
         NAUGHTY_LIST_ADD("naughty_list_add", "Naughty List Add Player", "Triggers when a player is added to the Naughty List.\nAvailable macros: $(Player)", false),
         NAUGHTY_LIST_END("naughty_list_end", "Naughty List End", "Triggers when the Naughty List ends.", false),
         UNJUSTIFIED_KILL("unjustified_kill", "Possible Unjustified Kill", "Triggers when a possible unjustified kill happens.\nAvailable macros: $(Killer), $(Victim)", false),
+        JUSTIFIED_KILL("justified_kill", "Justified Kill", "Triggers when a justified kill happens.\nAvailable macros: $(Killer), $(Victim)", false),
         SOULMATE_ROLL("soulmate_roll", "Soulmate Roll", "Triggers when soulmate rolling starts.", false),
         SOULMATE_SET("soulmate_set", "Soulmate Add", "Triggers two soulmates are paired.\nAvailable macros: $(Player1), $(Player2)", false),
         SOULMATE_REMOVE("soulmate_remove", "Soulmate Remove", "Triggers two soulmates are broken apart.\nAvailable macros: $(Player1), $(Player2)", false),

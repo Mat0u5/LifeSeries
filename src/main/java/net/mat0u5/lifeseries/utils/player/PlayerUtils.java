@@ -133,12 +133,13 @@ public class PlayerUtils {
     }
 
     public static List<ServerPlayer> getAllPlayers() {
+        LifeSeries.requireMainThread();
         List<ServerPlayer> result = new ArrayList<>();
         if (server == null) return result;
 
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
             if (isFakePlayer(player)) continue;
-			result.add(player);
+            result.add(player);
         }
         return result;
     }

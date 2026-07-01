@@ -97,7 +97,7 @@ public class LimitedLife extends Season {
                     *///?} else {
                     String livesColor = TextUtils.getColorCode(livesManager.getColorForLives(player).textColor());
                     //?}
-                    SimplePackets.LIMITED_LIFE_TIMER.target(player).sendToClient(List.of(livesColor, String.valueOf(playerLives)));
+                    SimplePackets.LIMITED_LIFE_TIMER.sendToClient(List.of(livesColor, String.valueOf(playerLives)), player);
                 }
                 if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {
                     long timestamp = SessionTimerStates.OFF.getValue();
@@ -109,7 +109,7 @@ public class LimitedLife extends Season {
                         timestamp = Time.now().add(remainingTime).getMillis();
                     }
                     if (timestamp != SessionTimerStates.OFF.getValue()) {
-                        SimplePackets.SESSION_TIMER.target(player).sendToClient(timestamp);
+                        SimplePackets.SESSION_TIMER.sendToClient(timestamp, player);
                     }
                 }
                 else {

@@ -115,7 +115,7 @@ public class WildLifeTriviaHandler extends TriviaHandler {
                 if (!bot.ranOutOfTime()) {
                     ServerPlayer boundPlayer = bot.serverData.getBoundPlayer();
                     if (boundPlayer != null) {
-                        SimplePackets.RESET_TRIVIA.target(boundPlayer).sendToClient();
+                        SimplePackets.RESET_TRIVIA.sendToClient(boundPlayer);
                     }
                 }
                 bot.setRanOutOfTime(true);

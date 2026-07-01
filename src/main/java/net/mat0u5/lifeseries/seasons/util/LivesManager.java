@@ -105,7 +105,7 @@ public class LivesManager {
             MAX_TAB_NUMBER = Math.max(MAX_TAB_NUMBER, entry.getKey());
             entry.getValue().setSeeFriendlyInvisibles(SEE_FRIENDLY_INVISIBLE_PLAYERS);
         }
-        SimplePackets.TAB_LIST_LIVES_CUTOFF.sendToClient(MAX_TAB_NUMBER);
+        SimplePackets.TAB_LIST_LIVES_CUTOFF.sendToAllClients(MAX_TAB_NUMBER);
     }
 
     public Integer getTeamCanKill(String teamName) {

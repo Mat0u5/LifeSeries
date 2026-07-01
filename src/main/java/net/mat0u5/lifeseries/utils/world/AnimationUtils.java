@@ -42,7 +42,7 @@ public class AnimationUtils {
 
     public static void playSecretLifeTotemAnimation(ServerPlayer player, boolean red) {
         if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {
-            SimplePackets.SHOW_TOTEM.target(player).sendToClient(red ? "task_red" : "task");
+            SimplePackets.SHOW_TOTEM.sendToClient(red ? "task_red" : "task", player);
             return;
         }
 

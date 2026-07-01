@@ -5,12 +5,13 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-public abstract class SimplePacket<T extends SimplePacket<T, U>, U extends CustomPacketPayload> {
-    private List<ServerPlayer> targets = null;
+public abstract class SimplePacket<T extends SimplePacket<T, U, V>, U extends CustomPacketPayload, V> {
     protected final String name;
     private BiConsumer<ServerPlayer, U> serverReceive = null;
     private Consumer<U> clientReceive = null;
@@ -22,6 +23,12 @@ public abstract class SimplePacket<T extends SimplePacket<T, U>, U extends Custo
         }
         SimplePackets.registeredPackets.put(this.name, this);
     }
+
+    protected abstract U generatePayload(V value);
+
+    /**
+     * Receiving
+     */
 
     public void setClientReceive(Consumer<U> clientReceive) {
         this.clientReceive = clientReceive;
@@ -51,45 +58,53 @@ public abstract class SimplePacket<T extends SimplePacket<T, U>, U extends Custo
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public T target(ServerPlayer player) {
-        targets = player == null ? List.of() : List.of(player);
-        return (T) this;
+
+    /**
+     * Client -> Server
+     */
+    public void sendToServer(V value) {
+        sendPacketToServer(generatePayload(value));
     }
 
-    @SuppressWarnings("unchecked")
-    public T target(List<ServerPlayer> players) {
-        targets = players == null ? List.of() : players;
-        return (T) this;
-    }
-
-    protected void sendPacketToServer(CustomPacketPayload packet) {
+    private void sendPacketToServer(CustomPacketPayload packet) {
         if (packet == null) {
             LifeSeries.LOGGER.error("Packet was not initialized correctly.");
-            targets = null;
             return;
         }
 
         if (LifeSeries.clientHelper != null) {
             LifeSeries.clientHelper.sendPacket(packet);
         }
-        targets = null;
     }
 
-    protected void sendPacketToClient(CustomPacketPayload packet) {
+
+    /**
+     * Server -> Client
+     */
+    public void sendToAllClients(V value) {
+        sendPacketToClient(generatePayload(value), PlayerUtils.getAllPlayers());
+    }
+
+    public void sendToClient(V value, ServerPlayer target) {
+        if (target == null) return;
+        sendPacketToClient(generatePayload(value), List.of(target));
+    }
+
+    public void sendToClient(V value, @NotNull List<ServerPlayer> targets) {
+        sendPacketToClient(generatePayload(value), targets);
+    }
+
+    private void sendPacketToClient(CustomPacketPayload packet, @NotNull List<ServerPlayer> targets) {
         if (packet == null) {
             LifeSeries.LOGGER.error("Packet was not initialized correctly.");
-            targets = null;
             return;
         }
 
-        if (targets == null) {
-            targets = PlayerUtils.getAllPlayers();
-        }
+        if (targets == null) return;
+
         for (ServerPlayer player : targets) {
             if (player == null) continue;
             NetworkHandlerServer.sendPacket(player, packet);
         }
-        targets = null;
     }
 }

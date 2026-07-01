@@ -139,7 +139,7 @@ public class TimeDilation extends Wildcard {
             lastDiv = -1;
             PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_time_slow_down")));
             slowlySetWorldSpeed(getMinTickRate(), 18);
-            if (!isFinale() && getMinTickRate() <= 4) TaskScheduler.scheduleTask(18, () -> SimplePackets.TIME_DILATION.sendToClient(System.currentTimeMillis()));
+            if (!isFinale() && getMinTickRate() <= 4) TaskScheduler.scheduleTask(18, () -> SimplePackets.TIME_DILATION.sendToAllClients(System.currentTimeMillis()));
             TaskScheduler.scheduleTask(19, super::activate);
         });
     }

@@ -42,7 +42,7 @@ public class PastLife extends Season {
     public void requestSessionAction() {
         for (ServerPlayer player : PlayerUtils.getAdminPlayers()) {
             if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {
-                SimplePackets.PAST_LIFE_CHOOSE_TWIST.target(player).sendToClient();
+                SimplePackets.PAST_LIFE_CHOOSE_TWIST.sendToClient(player);
             }
             else {
                 ((IPlayer) player).ls$message(ModifiableText.PASTLIFE_SESSION_START.get());

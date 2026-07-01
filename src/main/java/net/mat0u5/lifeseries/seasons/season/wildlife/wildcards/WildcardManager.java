@@ -237,7 +237,7 @@ public class WildcardManager {
 
         for (UUID uuid : WildLifeTriviaHandler.cursedSliding) {
             ServerPlayer player = PlayerUtils.getPlayer(uuid);
-            SimplePackets.CURSE_SLIDING.target(player).sendToClient(System.currentTimeMillis());
+            SimplePackets.CURSE_SLIDING.sendToClient(System.currentTimeMillis(), player);
         }
     }
 
@@ -251,7 +251,7 @@ public class WildcardManager {
     public static void onSessionStart() {
         if (chosenWildcard == null && activeWildcards.isEmpty()) {
             for (ServerPlayer player : PlayerUtils.getAdminPlayers()) {
-                SimplePackets.SELECT_WILDCARDS.target(player).sendToClient();
+                SimplePackets.SELECT_WILDCARDS.sendToClient(player);
             }
         }
     }

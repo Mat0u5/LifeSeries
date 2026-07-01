@@ -426,7 +426,7 @@ public class WildLifeCommands extends Command {
         }
 
         sendCommandFeedback(source, ModifiableText.WILDLIFE_WILDCARD_GUI_OPEN.get());
-        SimplePackets.SELECT_WILDCARDS.target(source.getPlayer()).sendToClient();
+        SimplePackets.SELECT_WILDCARDS.sendToClient(source.getPlayer());
         return 1;
     }
 

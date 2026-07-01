@@ -310,7 +310,7 @@ public class NiceLife extends Season {
             PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), ModifiableText.NICELIFE_REDWINTER_PT2.get(), 15, 40, 15);
         });
         TaskScheduler.scheduleTask(20 + 215, () -> {
-            SimplePackets.FAKE_THUNDER.sendToClient(7);
+            SimplePackets.FAKE_THUNDER.sendToAllClients(7);
         });
         TaskScheduler.scheduleTask(20 + 224, () -> {
             Season.setSkyColor(new Vec3(15, -140, -255), false);
@@ -354,7 +354,7 @@ public class NiceLife extends Season {
             if (player.isSleeping()) {
                 player.stopSleepInBed(false, true);
             }
-            SimplePackets.REMOVE_SLEEP_SCREENS.target(player).sendToClient();
+            SimplePackets.REMOVE_SLEEP_SCREENS.sendToClient(player);
         }
     }
 

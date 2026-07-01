@@ -220,7 +220,7 @@ public class TriviaWildcard extends Wildcard {
             bot.serverData.setBoundPlayer(player);
             bots.put(player.getUUID(), bot);
             ((IPlayer) player).ls$playNotifySound(SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.MASTER, 0.5f, 1);
-            SimplePackets.FAKE_THUNDER.target(player).sendToClient(7);
+            SimplePackets.FAKE_THUNDER.sendToClient(7, player);
             DatapackIntegration.EVENT_TRIVIA_BOT_SPAWN.trigger(List.of(
                     new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()),
                     new DatapackIntegration.Events.MacroEntry("TriviaBot", bot.getStringUUID())
@@ -256,7 +256,7 @@ public class TriviaWildcard extends Wildcard {
 
         resetPlayerPunishments(player);
 
-        SimplePackets.RESET_TRIVIA.target(player).sendToClient();
+        SimplePackets.RESET_TRIVIA.sendToClient(player);
     }
 
     public static void resetPlayerPunishments(ServerPlayer player) {
@@ -277,7 +277,7 @@ public class TriviaWildcard extends Wildcard {
 
         WildLifeTriviaHandler.cursedSliding.remove(player.getUUID());
         WildLifeTriviaHandler.cursedRoboticVoicePlayers.remove(player.getUUID());
-        SimplePackets.CURSE_SLIDING.target(player).sendToClient(0);
+        SimplePackets.CURSE_SLIDING.sendToClient(0L, player);
     }
 
     public static void killAllBots() {
@@ -291,7 +291,7 @@ public class TriviaWildcard extends Wildcard {
             }
         }
         toKill.forEach(Entity::discard);
-        SimplePackets.RESET_TRIVIA.sendToClient();
+        SimplePackets.RESET_TRIVIA.sendToAllClients();
     }
 
     public static void killAllTriviaSnails() {

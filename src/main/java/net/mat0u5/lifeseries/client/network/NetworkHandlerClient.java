@@ -402,31 +402,31 @@ public class NetworkHandlerClient {
 
         //Simple Packets
         else if (customPacketPayload instanceof StringListPayload payload) {
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            SimplePacket<?, ?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
             if (packet != null) client.execute(() -> packet.receiveClient(payload));
         }
         else if (customPacketPayload instanceof NumberPayload payload) {
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            SimplePacket<?, ?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
             if (packet != null) client.execute(() -> packet.receiveClient(payload));
         }
         else if (customPacketPayload instanceof StringPayload payload) {
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            SimplePacket<?, ?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
             if (packet != null) client.execute(() -> packet.receiveClient(payload));
         }
         else if (customPacketPayload instanceof LongPayload payload) {
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            SimplePacket<?, ?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
             if (packet != null) client.execute(() -> packet.receiveClient(payload));
         }
         else if (customPacketPayload instanceof BooleanPayload payload) {
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            SimplePacket<?, ?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
             if (packet != null) client.execute(() -> packet.receiveClient(payload));
         }
         else if (customPacketPayload instanceof EmptyPayload payload) {
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            SimplePacket<?, ?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
             if (packet != null) client.execute(() -> packet.receiveClient(payload));
         }
         else if (customPacketPayload instanceof IntPayload payload) {
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
+            SimplePacket<?, ?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
             if (packet != null) client.execute(() -> packet.receiveClient(payload));
         }
         else {

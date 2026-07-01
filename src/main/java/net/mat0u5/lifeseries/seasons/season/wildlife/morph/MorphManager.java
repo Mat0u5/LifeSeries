@@ -64,7 +64,7 @@ public class MorphManager {
         MorphComponent component = getComponent(serverPlayer);
         String typeStr = "null";
         if (component != null) typeStr = component.getTypeAsString();
-        SimplePackets.MORPH.sendToClient(List.of(serverPlayer.getStringUUID(), typeStr));
+        SimplePackets.MORPH.sendToAllClients(List.of(serverPlayer.getStringUUID(), typeStr));
     }
 
     public static void syncToPlayer(Player player) {
@@ -72,7 +72,7 @@ public class MorphManager {
         for (ServerPlayer otherPlayer : PlayerUtils.getAllPlayers()) {
             MorphComponent component = getOrCreateComponent(otherPlayer);
             String typeStr = component.getTypeAsString();
-            SimplePackets.MORPH.target(serverPlayer).sendToClient(List.of(otherPlayer.getStringUUID(), typeStr));
+            SimplePackets.MORPH.sendToClient(List.of(otherPlayer.getStringUUID(), typeStr), serverPlayer);
         }
     }
 

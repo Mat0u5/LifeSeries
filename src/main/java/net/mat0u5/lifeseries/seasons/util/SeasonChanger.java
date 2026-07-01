@@ -88,7 +88,7 @@ public class SeasonChanger {
 			NetworkHandlerServer.tryKickFailedHandshake(player);
 			if (!modDisabled()) {
 				if (args.openGui()) currentSeason.sendSetSeasonPacket(player);
-				if (args.changeSession()) SimplePackets.SESSION_TIMER.target(player).sendToClient(SessionTimerStates.NOT_STARTED.getValue());
+				if (args.changeSession()) SimplePackets.SESSION_TIMER.sendToClient((long) SessionTimerStates.NOT_STARTED.getValue(), player);
 			}
 		}
 		SessionTranscript.resetStats();

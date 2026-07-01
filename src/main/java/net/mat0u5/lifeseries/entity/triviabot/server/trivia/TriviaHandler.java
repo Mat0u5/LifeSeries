@@ -61,7 +61,7 @@ public abstract class TriviaHandler {
         ServerPlayer player = bot.serverData.getBoundPlayer();
         if (player != null) {
             int ticksSinceStart = bot.tickCount - interactedAtAge;
-            SimplePackets.TRIVIA_TIMER.target(player).sendToClient(ticksSinceStart);
+            SimplePackets.TRIVIA_TIMER.sendToClient(ticksSinceStart, player);
         }
     }
 

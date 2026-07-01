@@ -187,7 +187,7 @@ public class LifeSeriesCommand extends Command {
             return -1;
         }
         sendCommandFeedback(source, ModifiableText.SEASON_SELECTION_GUI.get());
-        SimplePackets.SELECT_SEASON.target(source.getPlayer()).sendToClient(currentSeason.getSeason().getId());
+        SimplePackets.SELECT_SEASON.sendToClient(currentSeason.getSeason().getId(), source.getPlayer());
         return 1;
     }
 
@@ -247,7 +247,7 @@ public class LifeSeriesCommand extends Command {
             return -1;
         }
 
-        SimplePackets.CLEAR_CONFIG.target(self).sendToClient();
+        SimplePackets.CLEAR_CONFIG.sendToClient(self);
         if (PermissionManager.isAdmin(self) && currentSeason.getSeason() != Seasons.UNASSIGNED) {
             LifeSeries.seasonConfig.sendConfigTo(self);
             sendCommandFeedback(source, ModifiableText.CONFIG_GUI_OPENING.get());
@@ -255,7 +255,7 @@ public class LifeSeriesCommand extends Command {
         else {
             sendCommandFeedbackQuiet(source, ModifiableText.CONFIG_GUI_OPENING.get());
         }
-        SimplePackets.OPEN_CONFIG.target(self).sendToClient();
+        SimplePackets.OPEN_CONFIG.sendToClient(self);
         return 1;
     }
 

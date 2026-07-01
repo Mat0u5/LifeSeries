@@ -107,7 +107,7 @@ public class Mimicry extends Superpower {
         if (mimic == null) return;
         if (System.currentTimeMillis() >= cooldown) {
             mimic.turnOff();
-            SimplePackets.MIMICRY_COOLDOWN.target(getPlayer()).sendToClient(System.currentTimeMillis()-1000);
+            SimplePackets.MIMICRY_COOLDOWN.sendToClient(System.currentTimeMillis()-1000, getPlayer());
             mimic = null;
         }
         if (mimic == null) return;
@@ -117,7 +117,7 @@ public class Mimicry extends Superpower {
     @Override
     public void turnOff() {
         super.turnOff();
-        SimplePackets.MIMICRY_COOLDOWN.target(getPlayer()).sendToClient(System.currentTimeMillis()-1000);
+        SimplePackets.MIMICRY_COOLDOWN.sendToClient(System.currentTimeMillis()-1000, getPlayer());
     }
 
     public Superpower getMimickedPower() {
@@ -127,6 +127,6 @@ public class Mimicry extends Superpower {
 
     @Override
     public void sendCooldownPacket() {
-        SimplePackets.MIMICRY_COOLDOWN.target(getPlayer()).sendToClient(cooldown);
+        SimplePackets.MIMICRY_COOLDOWN.sendToClient(cooldown, getPlayer());
     }
 }

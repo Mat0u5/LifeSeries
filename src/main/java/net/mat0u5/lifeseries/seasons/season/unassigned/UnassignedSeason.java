@@ -52,7 +52,7 @@ public class UnassignedSeason extends Season {
     public void onPlayerFinishJoining(ServerPlayer player, boolean showMessages) {
         super.onPlayerFinishJoining(player, showMessages);
         if (!LifeSeries.modDisabled() && showMessages) {
-            SimplePackets.SELECT_SEASON.target(player).sendToClient("");
+            SimplePackets.SELECT_SEASON.sendToClient("", player);
         }
     }
 
