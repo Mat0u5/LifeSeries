@@ -7,31 +7,39 @@ import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Time;
+import net.mat0u5.lifeseries.utils.player.PlayerReference;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 public class PastLifeBoogeymanManager extends BoogeymanManager {
     @Override
     public void messageBoogeyman(Boogeyman boogeyman, ServerPlayer boogey) {
+        PlayerReference ref = PlayerReference.of(boogey);
         TaskScheduler.scheduleTask(Time.seconds(5), () -> {
-            ((IPlayer) boogey).ls$message(ModifiableText.BOOGEYMAN_PASTLIFE_MESSAGE_PT1.get());
+            ServerPlayer boogeyNew = ref.get();
+            if (boogeyNew != null) ((IPlayer) boogeyNew).ls$message(ModifiableText.BOOGEYMAN_PASTLIFE_MESSAGE_PT1.get());
         });
         TaskScheduler.scheduleTask(Time.seconds(7), () -> {
-            ((IPlayer) boogey).ls$message(ModifiableText.BOOGEYMAN_PASTLIFE_MESSAGE_PT2.get());
+            ServerPlayer boogeyNew = ref.get();
+            if (boogeyNew != null) ((IPlayer) boogeyNew).ls$message(ModifiableText.BOOGEYMAN_PASTLIFE_MESSAGE_PT2.get());
         });
         TaskScheduler.scheduleTask(Time.seconds(11), () -> {
-            ((IPlayer) boogey).ls$message(ModifiableText.BOOGEYMAN_PASTLIFE_MESSAGE_PT3.get());
+            ServerPlayer boogeyNew = ref.get();
+            if (boogeyNew != null) ((IPlayer) boogeyNew).ls$message(ModifiableText.BOOGEYMAN_PASTLIFE_MESSAGE_PT3.get());
         });
         TaskScheduler.scheduleTask(Time.seconds(14), () -> {
-            ((IPlayer) boogey).ls$message(ModifiableText.BOOGEYMAN_PASTLIFE_MESSAGE_PT4.get());
+            ServerPlayer boogeyNew = ref.get();
+            if (boogeyNew != null) ((IPlayer) boogeyNew).ls$message(ModifiableText.BOOGEYMAN_PASTLIFE_MESSAGE_PT4.get());
         });
         TaskScheduler.scheduleTask(Time.seconds(17), () -> {
-            ((IPlayer) boogey).ls$message(ModifiableText.BOOGEYMAN_PASTLIFE_MESSAGE_PT5.get());
+            ServerPlayer boogeyNew = ref.get();
+            if (boogeyNew != null) ((IPlayer) boogeyNew).ls$message(ModifiableText.BOOGEYMAN_PASTLIFE_MESSAGE_PT5.get());
         });
 
         if (boogeyman != null && boogeyman.killsNeeded != 1) {
             TaskScheduler.scheduleTask(Time.seconds(20), () -> {
-                ((IPlayer) boogey).ls$message(ModifiableText.BOOGEYMAN_PASTLIFE_MESSAGE_PT6.get(boogeyman.killsNeeded, TextUtils.pluralize("kill", boogeyman.killsNeeded)));
+                ServerPlayer boogeyNew = ref.get();
+                if (boogeyNew != null) ((IPlayer) boogeyNew).ls$message(ModifiableText.BOOGEYMAN_PASTLIFE_MESSAGE_PT6.get(boogeyman.killsNeeded, TextUtils.pluralize("kill", boogeyman.killsNeeded)));
             });
         }
     }

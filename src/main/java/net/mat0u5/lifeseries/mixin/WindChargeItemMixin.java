@@ -13,6 +13,7 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -46,10 +47,14 @@ public class WindChargeItemMixin {
             if (currentSeason.getSeason() != Seasons.WILD_LIFE) return;
             if (!SuperpowersWildcard.hasActivatedPower(player, Superpowers.WIND_CHARGE)) return;
 
+            PlayerReference ref = PlayerReference.of(player);
             TaskScheduler.scheduleTask(1, () -> {
-                player.getInventory().add(Items.WIND_CHARGE.getDefaultInstance());
-                player.getInventory().setChanged();
-                PlayerUtils.updatePlayerInventory(player);
+                ServerPlayer playerNew = ref.get();
+                if (playerNew != null) {
+                    playerNew.getInventory().add(Items.WIND_CHARGE.getDefaultInstance());
+                    playerNew.getInventory().setChanged();
+                    PlayerUtils.updatePlayerInventory(playerNew);
+                }
             });
         }
     }

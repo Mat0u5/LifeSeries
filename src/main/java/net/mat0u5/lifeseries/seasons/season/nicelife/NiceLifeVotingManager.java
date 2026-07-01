@@ -9,6 +9,8 @@ import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Time;
+import net.mat0u5.lifeseries.utils.player.PlayerListReference;
+import net.mat0u5.lifeseries.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.TeamUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
@@ -209,15 +211,17 @@ public class NiceLifeVotingManager {
         for (UUID uuid : players) {
             ServerPlayer player = PlayerUtils.getPlayer(uuid);
             if (player == null) continue;
+            PlayerReference ref = PlayerReference.of(player);
             TaskScheduler.scheduleTask(delay, () -> {
-                if (player != null && !((IPlayer) player).ls$isDead() && !(((IPlayer) player).ls$isOnLastLife(false) && !REDS_ON_NAUGHTY_LIST)) {
+                ServerPlayer playerNew = ref.get();
+                if (playerNew != null && !((IPlayer) playerNew).ls$isDead() && !(((IPlayer) playerNew).ls$isOnLastLife(false) && !REDS_ON_NAUGHTY_LIST)) {
                     SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_naughtylist"));
                     PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
-                    DatapackIntegration.EVENT_NAUGHTY_LIST_ADD.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
-                    player.addTag("naughty_list");
+                    DatapackIntegration.EVENT_NAUGHTY_LIST_ADD.trigger(new DatapackIntegration.Events.MacroEntry("Player", playerNew.getScoreboardName()));
+                    playerNew.addTag("naughty_list");
                     naughtyListMembers.add(uuid);
-                    currentSeason.reloadPlayerTeam(player);
-                    PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), PlayerUtils.getPlayerNameWithIcon(player), 15, 80, 20);
+                    currentSeason.reloadPlayerTeam(playerNew);
+                    PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), PlayerUtils.getPlayerNameWithIcon(playerNew), 15, 80, 20);
                 }
             });
             delay += 55;
@@ -260,15 +264,17 @@ public class NiceLifeVotingManager {
             ServerPlayer player = PlayerUtils.getPlayer(uuid);
             if (player == null) continue;
             if (((IPlayer) player).ls$isDead()) continue;
+            PlayerReference ref = PlayerReference.of(player);
             TaskScheduler.scheduleTask(delay, () -> {
-                if (player != null) {
+                ServerPlayer playerNew = ref.get();
+                if (playerNew != null) {
                     SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_nicelist_person"));
                     PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
-                    DatapackIntegration.EVENT_NICE_LIST_ADD.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
-                    player.addTag("nice_list");
+                    DatapackIntegration.EVENT_NICE_LIST_ADD.trigger(new DatapackIntegration.Events.MacroEntry("Player", playerNew.getScoreboardName()));
+                    playerNew.addTag("nice_list");
                     niceListMembers.add(uuid);
-                    currentSeason.reloadPlayerTeam(player);
-                    PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), PlayerUtils.getPlayerNameWithIcon(player), 15, 80, 20);
+                    currentSeason.reloadPlayerTeam(playerNew);
+                    PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), PlayerUtils.getPlayerNameWithIcon(playerNew), 15, 80, 20);
                 }
             });
             delay += 55;
@@ -298,16 +304,19 @@ public class NiceLifeVotingManager {
             }
         }
         delay += 150;
+        PlayerListReference ref = PlayerListReference.of(niceListPlayers);
         TaskScheduler.scheduleTask(delay, () -> {
             voteType = VoteType.NICE_LIST_LIFE;
-            PlayerUtils.playSoundToPlayers(niceListPlayers, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
-            PlayerUtils.broadcastMessage(niceListPlayers, ModifiableText.NICELIFE_NICELIST_START_INFO_PT4.get(TextUtils.clickableText("§f§l/vote", TextUtils.runCommandClickEvent("/vote"))));
+            var newList = ref.get();
+            PlayerUtils.playSoundToPlayers(newList, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
+            PlayerUtils.broadcastMessage(newList, ModifiableText.NICELIFE_NICELIST_START_INFO_PT4.get(TextUtils.clickableText("§f§l/vote", TextUtils.runCommandClickEvent("/vote"))));
         });
         delay += 110;
         TaskScheduler.scheduleTask(delay, () -> {
             voteType = VoteType.NICE_LIST_LIFE;
-            PlayerUtils.playSoundToPlayers(niceListPlayers, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
-            PlayerUtils.broadcastMessage(niceListPlayers, ModifiableText.NICELIFE_NICELIST_START_INFO_PT5.get());
+            var newList = ref.get();
+            PlayerUtils.playSoundToPlayers(newList, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
+            PlayerUtils.broadcastMessage(newList, ModifiableText.NICELIFE_NICELIST_START_INFO_PT5.get());
         });
     }
 
@@ -320,9 +329,13 @@ public class NiceLifeVotingManager {
         currentSeason.reloadPlayerTeam(player);
         PlayerUtils.playSoundToPlayer(player, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
         ((IPlayer) player).ls$message(ModifiableText.NICELIFE_NICELIST_START_INFO_PT4.get(TextUtils.clickableText("§f§l/vote", TextUtils.runCommandClickEvent("/vote"))));
+        PlayerReference ref = PlayerReference.of(player);
         TaskScheduler.scheduleTask(110, () -> {
-            PlayerUtils.playSoundToPlayer(player, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
-            ((IPlayer) player).ls$message(ModifiableText.NICELIFE_NICELIST_START_INFO_PT5.get());
+            ServerPlayer playerNew = ref.get();
+            if (playerNew != null) {
+                PlayerUtils.playSoundToPlayer(playerNew, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
+                ((IPlayer) playerNew).ls$message(ModifiableText.NICELIFE_NICELIST_START_INFO_PT5.get());
+            }
         });
     }
 
@@ -466,13 +479,17 @@ public class NiceLifeVotingManager {
                 PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
                 PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), ModifiableText.NICELIFE_NICELIST_VOTE_RESULT.get(), 15, 80, 20);
 
+                PlayerReference ref = PlayerReference.of(winner);
                 TaskScheduler.scheduleTask(85, ()-> {
-                    if (((IPlayer) winner).ls$isAlive()) {
-                        ((IPlayer) winner).ls$addLife();
+                    ServerPlayer winnerNew = ref.get();
+                    if (winnerNew != null) {
+                        if (((IPlayer) winnerNew).ls$isAlive()) {
+                            ((IPlayer) winnerNew).ls$addLife();
+                        }
+                        currentSeason.reloadPlayerTeam(winnerNew);
+                        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.FIREWORK_ROCKET_LAUNCH, 1f, 1);
+                        PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), PlayerUtils.getPlayerNameWithIcon(winnerNew), 15, 80, 20);
                     }
-                    currentSeason.reloadPlayerTeam(winner);
-                    PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.FIREWORK_ROCKET_LAUNCH, 1f, 1);
-                    PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), PlayerUtils.getPlayerNameWithIcon(winner), 15, 80, 20);
                 });
             }
             else {
@@ -547,9 +564,11 @@ public class NiceLifeVotingManager {
             Component message = ModifiableText.NICELIFE_NICELIST_VOTE_REMINDER.get(TextUtils.clickableText("§f§l/vote", TextUtils.runCommandClickEvent("/vote")));
             PlayerUtils.playSoundToPlayers(niceListPlayers, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
             PlayerUtils.broadcastMessage(niceListPlayers, message);
+            PlayerListReference ref = PlayerListReference.of(niceListPlayers);
             TaskScheduler.scheduleTask(Time.seconds(30), () -> {
-                PlayerUtils.playSoundToPlayers(niceListPlayers, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
-                PlayerUtils.broadcastMessage(niceListPlayers, message);
+                var niceListPlayersNew = ref.get();
+                PlayerUtils.playSoundToPlayers(niceListPlayersNew, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
+                PlayerUtils.broadcastMessage(niceListPlayersNew, message);
             });
         }
     }

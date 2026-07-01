@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.Time;
+import net.mat0u5.lifeseries.utils.player.PlayerListReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
@@ -222,15 +223,16 @@ public class MobSwap extends Wildcard {
 
         int timeForSpawning = Math.max(120, (int)(spawnMobs/2.5));
 
+        PlayerListReference ref = PlayerListReference.of(players);
         for (int i = timeForSpawning; i > 120; i -= 20) {
             TaskScheduler.scheduleTask(i, () -> {
-                PlayerUtils.playSoundToPlayers(players, SoundEvents.CHICKEN_EGG);
+                PlayerUtils.playSoundToPlayers(ref.get(), SoundEvents.CHICKEN_EGG);
             });
         }
 
         for (int delay : eggSounds) {
             TaskScheduler.scheduleTask(timeForSpawning + delay, () -> {
-                PlayerUtils.playSoundToPlayers(players, SoundEvents.CHICKEN_EGG);
+                PlayerUtils.playSoundToPlayers(ref.get(), SoundEvents.CHICKEN_EGG);
             });
         }
 
@@ -241,8 +243,9 @@ public class MobSwap extends Wildcard {
         });
 
         TaskScheduler.scheduleTask(timeForSpawning + 240, () -> {
-            PlayerUtils.playSoundToPlayers(players, SoundEvents.ELDER_GUARDIAN_CURSE, 0.2f, 1);
-            PlayerUtils.playSoundToPlayers(players, SoundEvents.ZOMBIE_VILLAGER_CURE, 0.2f, 1);
+            var listNew = ref.get();
+            PlayerUtils.playSoundToPlayers(listNew, SoundEvents.ELDER_GUARDIAN_CURSE, 0.2f, 1);
+            PlayerUtils.playSoundToPlayers(listNew, SoundEvents.ZOMBIE_VILLAGER_CURE, 0.2f, 1);
             transformNonNamedMobs(progress);
         });
     }

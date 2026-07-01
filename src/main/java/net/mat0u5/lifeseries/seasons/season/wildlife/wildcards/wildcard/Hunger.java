@@ -10,6 +10,7 @@ import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.Time;
+import net.mat0u5.lifeseries.utils.player.PlayerListReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -233,10 +234,11 @@ public class Hunger extends Wildcard {
             PlayerUtils.playSoundToPlayers(players, SoundEvents.NOTE_BLOCK_PLING.value());
             PlayerUtils.sendTitleWithSubtitleToPlayers(players, ModifiableText.WILDLIFE_HUNGER_RANDOMIZE_TITLE.get(), ModifiableText.WILDLIFE_HUNGER_RANDOMIZE_SUBTITLE.get(), 0, 140, 0);
             TaskScheduler.scheduleTask(Time.seconds(2), WildcardManager::showDots);
+            PlayerListReference ref = PlayerListReference.of(players);
             TaskScheduler.scheduleTask(Time.seconds(7), () -> {
                 addHunger();
                 updateInventories();
-                PlayerUtils.playSoundToPlayers(players, SoundEvents.ELDER_GUARDIAN_CURSE, 0.2f, 1);
+                PlayerUtils.playSoundToPlayers(ref.get(), SoundEvents.ELDER_GUARDIAN_CURSE, 0.2f, 1);
                 shuffleVersion++;
             });
         }

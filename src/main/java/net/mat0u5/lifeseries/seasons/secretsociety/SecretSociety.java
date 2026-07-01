@@ -6,6 +6,8 @@ import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.*;
+import net.mat0u5.lifeseries.utils.player.PlayerListReference;
+import net.mat0u5.lifeseries.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.network.chat.Component;
@@ -134,17 +136,18 @@ public class SecretSociety {
         PlayerUtils.playSoundToPlayers(memberPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("pastlife_society")));
         PlayerUtils.sendTitleToPlayers(memberPlayers, ModifiableText.SOCIETY_CALLS_PT1.get(), 0, 30, 0);
 
+        PlayerListReference ref = PlayerListReference.of(memberPlayers);
         TaskScheduler.scheduleTask(15, () -> {
-            PlayerUtils.sendTitleToPlayers(memberPlayers, ModifiableText.SOCIETY_CALLS_PT2.get(), 0, 30, 0);
+            PlayerUtils.sendTitleToPlayers(ref.get(), ModifiableText.SOCIETY_CALLS_PT2.get(), 0, 30, 0);
         });
         TaskScheduler.scheduleTask(35, () -> {
-            PlayerUtils.sendTitleToPlayers(memberPlayers, ModifiableText.SOCIETY_CALLS_PT3.get(), 0, 30, 0);
+            PlayerUtils.sendTitleToPlayers(ref.get(), ModifiableText.SOCIETY_CALLS_PT3.get(), 0, 30, 0);
         });
         TaskScheduler.scheduleTask(55, () -> {
-            PlayerUtils.sendTitleToPlayers(memberPlayers, ModifiableText.SOCIETY_CALLS_PT4.get(), 0, 45, 30);
+            PlayerUtils.sendTitleToPlayers(ref.get(), ModifiableText.SOCIETY_CALLS_PT4.get(), 0, 45, 30);
         });
         TaskScheduler.scheduleTask(141, () -> {
-            PlayerUtils.sendTitleWithSubtitleToPlayers(memberPlayers, ModifiableText.SOCIETY_CALLS_PT5_TITLE.get(), ModifiableText.SOCIETY_CALLS_PT5_SUBTITLE.get(), 20, 60, 20);
+            PlayerUtils.sendTitleWithSubtitleToPlayers(ref.get(), ModifiableText.SOCIETY_CALLS_PT5_TITLE.get(), ModifiableText.SOCIETY_CALLS_PT5_SUBTITLE.get(), 20, 60, 20);
         });
     }
 
@@ -200,54 +203,70 @@ public class SecretSociety {
         PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.parse("pastlife_society")), 1, 1);
 
         int currentTime = 20;
+        PlayerReference ref = PlayerReference.of(player);
         TaskScheduler.scheduleTask(currentTime, () -> {
-            ((IPlayer) player).ls$message(ModifiableText.SOCIETY_INITIATED_PT1.get());
+            ServerPlayer playerNew = ref.get();
+            if (playerNew != null) ((IPlayer) playerNew).ls$message(ModifiableText.SOCIETY_INITIATED_PT1.get());
         });
         currentTime += 50;
 
         int otherMembers = members.size()-1;
         if (otherMembers >= 1) {
             TaskScheduler.scheduleTask(currentTime, () -> {
-                ((IPlayer) player).ls$message(ModifiableText.SOCIETY_INITIATED_GROUP_PT1.get(TextUtils.pluralize("is", "are", otherMembers), otherMembers, TextUtils.pluralize("member", otherMembers)), false);
+                ServerPlayer playerNew = ref.get();
+                if (playerNew != null) {
+                    ((IPlayer) playerNew).ls$message(ModifiableText.SOCIETY_INITIATED_GROUP_PT1.get(TextUtils.pluralize("is", "are", otherMembers), otherMembers, TextUtils.pluralize("member", otherMembers)), false);
+                }
             });
             currentTime += 80;
             TaskScheduler.scheduleTask(currentTime, () -> {
-                ((IPlayer) player).ls$message(ModifiableText.SOCIETY_INITIATED_GROUP_PT2.get(KILL_COUNT, TextUtils.pluralize("player", KILL_COUNT)));
+                ServerPlayer playerNew = ref.get();
+                if (playerNew != null) {
+                    ((IPlayer) playerNew).ls$message(ModifiableText.SOCIETY_INITIATED_GROUP_PT2.get(KILL_COUNT, TextUtils.pluralize("player", KILL_COUNT)));
+                }
             });
             currentTime += 100;
             TaskScheduler.scheduleTask(currentTime, () -> {
-                ((IPlayer) player).ls$message(ModifiableText.SOCIETY_INITIATED_GROUP_PT3.get());
+                ServerPlayer playerNew = ref.get();
+                if (playerNew != null) ((IPlayer) playerNew).ls$message(ModifiableText.SOCIETY_INITIATED_GROUP_PT3.get());
             });
             currentTime += 80;
             TaskScheduler.scheduleTask(currentTime, () -> {
-                ((IPlayer) player).ls$message(ModifiableText.SOCIETY_INITIATED_GROUP_PT4.get(secretWord));
+                ServerPlayer playerNew = ref.get();
+                if (playerNew != null) ((IPlayer) playerNew).ls$message(ModifiableText.SOCIETY_INITIATED_GROUP_PT4.get(secretWord));
             });
         }
         else {
             TaskScheduler.scheduleTask(currentTime, () -> {
-                ((IPlayer) player).ls$message(ModifiableText.SOCIETY_INITIATED_ALONE_PT1.get());
+                ServerPlayer playerNew = ref.get();
+                if (playerNew != null) ((IPlayer) playerNew).ls$message(ModifiableText.SOCIETY_INITIATED_ALONE_PT1.get());
             });
             currentTime += 80;
             TaskScheduler.scheduleTask(currentTime, () -> {
-                ((IPlayer) player).ls$message(ModifiableText.SOCIETY_INITIATED_ALONE_PT2.get(KILL_COUNT, TextUtils.pluralize("player", KILL_COUNT)));
+                ServerPlayer playerNew = ref.get();
+                if (playerNew != null) ((IPlayer) playerNew).ls$message(ModifiableText.SOCIETY_INITIATED_ALONE_PT2.get(KILL_COUNT, TextUtils.pluralize("player", KILL_COUNT)));
             });
         }
 
         currentTime += 80;
         TaskScheduler.scheduleTask(currentTime, () -> {
-            ((IPlayer) player).ls$message(ModifiableText.SOCIETY_INITIATED_PT2.get());
+            ServerPlayer playerNew = ref.get();
+            if (playerNew != null) ((IPlayer) playerNew).ls$message(ModifiableText.SOCIETY_INITIATED_PT2.get());
         });
         currentTime += 80;
         TaskScheduler.scheduleTask(currentTime, () -> {
-            ((IPlayer) player).ls$message(ModifiableText.SOCIETY_INITIATED_PT3.get());
+            ServerPlayer playerNew = ref.get();
+            if (playerNew != null) ((IPlayer) playerNew).ls$message(ModifiableText.SOCIETY_INITIATED_PT3.get());
         });
         currentTime += 70;
         TaskScheduler.scheduleTask(currentTime, () -> {
-            ((IPlayer) player).ls$message(ModifiableText.SOCIETY_INITIATED_PT4.get());
+            ServerPlayer playerNew = ref.get();
+            if (playerNew != null) ((IPlayer) playerNew).ls$message(ModifiableText.SOCIETY_INITIATED_PT4.get());
         });
         currentTime += 70;
         TaskScheduler.scheduleTask(currentTime, () -> {
-            ((IPlayer) player).ls$message(getPunishmentText());
+            ServerPlayer playerNew = ref.get();
+            if (playerNew != null) ((IPlayer) playerNew).ls$message(getPunishmentText());
         });
     }
 
@@ -343,14 +362,15 @@ public class SecretSociety {
         endSociety();
         List<ServerPlayer> memberPlayers = getMembers();
         PlayerUtils.sendTitleWithSubtitleToPlayers(memberPlayers, ModifiableText.SOCIETY_END_SUCCESS_PT1_TITLE.get(), ModifiableText.SOCIETY_END_SUCCESS_PT1_SUBTITLE.get(), 20, 30, 20);
+        PlayerListReference ref = PlayerListReference.of(memberPlayers);
         TaskScheduler.scheduleTask(75, () -> {
-            PlayerUtils.sendTitleWithSubtitleToPlayers(memberPlayers, ModifiableText.SOCIETY_END_SUCCESS_PT2_TITLE.get(), ModifiableText.SOCIETY_END_SUCCESS_PT2_SUBTITLE.get(), 20, 30, 20);
-            for (ServerPlayer member : memberPlayers) {
+            PlayerUtils.sendTitleWithSubtitleToPlayers(ref.get(), ModifiableText.SOCIETY_END_SUCCESS_PT2_TITLE.get(), ModifiableText.SOCIETY_END_SUCCESS_PT2_SUBTITLE.get(), 20, 30, 20);
+            for (ServerPlayer member : ref.get()) {
                 DatapackIntegration.EVENT_SOCIETY_SUCCESS_REWARD.trigger(new DatapackIntegration.Events.MacroEntry("Player", member.getScoreboardName()));
             }
         });
         TaskScheduler.scheduleTask(135, () -> {
-            PlayerUtils.sendTitleWithSubtitleToPlayers(memberPlayers, ModifiableText.SOCIETY_END_SUCCESS_PT3_TITLE.get(), ModifiableText.SOCIETY_END_SUCCESS_PT3_SUBTITLE.get(), 20, 30, 20);
+            PlayerUtils.sendTitleWithSubtitleToPlayers(ref.get(), ModifiableText.SOCIETY_END_SUCCESS_PT3_TITLE.get(), ModifiableText.SOCIETY_END_SUCCESS_PT3_SUBTITLE.get(), 20, 30, 20);
         });
     }
 
@@ -358,16 +378,17 @@ public class SecretSociety {
         endSociety();
         List<ServerPlayer> memberPlayers = getMembers();
         PlayerUtils.sendTitleWithSubtitleToPlayers(memberPlayers, ModifiableText.SOCIETY_END_FAIL_PT1_TITLE.get(), ModifiableText.SOCIETY_END_FAIL_PT1_SUBTITLE.get(), 20, 30, 20);
+        PlayerListReference ref = PlayerListReference.of(memberPlayers);
         TaskScheduler.scheduleTask(75, () -> {
-            PlayerUtils.sendTitleWithSubtitleToPlayers(memberPlayers, ModifiableText.SOCIETY_END_FAIL_PT2_TITLE.get(), ModifiableText.SOCIETY_END_FAIL_PT2_SUBTITLE.get(), 20, 30, 20);
+            PlayerUtils.sendTitleWithSubtitleToPlayers(ref.get(), ModifiableText.SOCIETY_END_FAIL_PT2_TITLE.get(), ModifiableText.SOCIETY_END_FAIL_PT2_SUBTITLE.get(), 20, 30, 20);
         });
         TaskScheduler.scheduleTask(ADVANCED_DEATHS ? 165 : 95, () -> {
-            for (ServerPlayer member : memberPlayers) {
+            for (ServerPlayer member : ref.get()) {
                 punishPlayer(member);
             }
         });
         TaskScheduler.scheduleTask(135, () -> {
-            PlayerUtils.sendTitleWithSubtitleToPlayers(memberPlayers, ModifiableText.SOCIETY_END_FAIL_PT3_TITLE.get(), ModifiableText.SOCIETY_END_FAIL_PT3_SUBTITLE.get(), 20, 30, 20);
+            PlayerUtils.sendTitleWithSubtitleToPlayers(ref.get(), ModifiableText.SOCIETY_END_FAIL_PT3_TITLE.get(), ModifiableText.SOCIETY_END_FAIL_PT3_SUBTITLE.get(), 20, 30, 20);
         });
     }
 

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class SimpleEmptyPacket extends SimplePacket<SimpleEmptyPacket, EmptyPayload, Object> {
+public class SimpleEmptyPacket extends SimplePacket<EmptyPayload, Object> {
 
     public SimpleEmptyPacket(String name) {
         super(name);

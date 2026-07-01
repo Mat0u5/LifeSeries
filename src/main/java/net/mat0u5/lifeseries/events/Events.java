@@ -15,6 +15,7 @@ import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
+import net.mat0u5.lifeseries.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ProfileManager;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
@@ -92,9 +93,8 @@ public class Events {
         try {
             UpdateChecker.onPlayerJoin(player);
             currentSeason.onPlayerFinishJoining(player);
-            TaskScheduler.scheduleTask(10, () -> {
-                PlayerUtils.resendCommandTree(player);
-            });
+            PlayerReference ref = PlayerReference.of(player);
+            TaskScheduler.scheduleTask(10, () -> PlayerUtils.resendCommandTree(ref.get()));
             MorphManager.onPlayerDisconnect(player);
             MorphManager.syncToPlayer(player);
         } catch(Exception e) {e.printStackTrace();}
@@ -310,7 +310,7 @@ public class Events {
     public static final Map<UUID, Float> joiningPlayersPitch = new HashMap<>();
     public static void playerStartJoining(ServerPlayer player) {
         NetworkHandlerServer.sendHandshake(player);
-        NetworkHandlerServer.sendUpdatePacketTo(player);
+        NetworkHandlerServer.sendUpdatePacket(List.of(player));
         SnailSkins.sendTexturesTo(player);
         if (!joiningPlayers.contains(player.getUUID())) joiningPlayers.add(player.getUUID());
         joiningPlayersPos.put(player.getUUID(), player.position());

@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -41,6 +42,7 @@ public class AnimationUtils {
     }
 
     public static void playSecretLifeTotemAnimation(ServerPlayer player, boolean red) {
+        if (player == null) return;
         if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {
             SimplePackets.SHOW_TOTEM.sendToClient(red ? "task_red" : "task", player);
             return;
@@ -49,11 +51,14 @@ public class AnimationUtils {
         ItemStack totemItem = getSecretLifeTotemItem(red);
         ItemStack mainhandItem = player.getMainHandItem().copy();
         player.setItemInHand(InteractionHand.MAIN_HAND, totemItem);
+        PlayerReference ref = PlayerReference.of(player);
         TaskScheduler.scheduleTask(1, () -> {
-            player.connection.send(new ClientboundEntityEventPacket(player, (byte) 35));
+            ServerPlayer playerNew = ref.get();
+            if (playerNew != null) playerNew.connection.send(new ClientboundEntityEventPacket(player, (byte) 35));
         });
         TaskScheduler.scheduleTask(2, () -> {
-            player.setItemInHand(InteractionHand.MAIN_HAND, mainhandItem);
+            ServerPlayer playerNew = ref.get();
+            if (playerNew != null) playerNew.setItemInHand(InteractionHand.MAIN_HAND, mainhandItem);
         });
     }
 
@@ -74,11 +79,13 @@ public class AnimationUtils {
 
     public static void createSpiral(ServerPlayer player, int duration) {
         spiralDuration = duration;
-        TaskScheduler.scheduleTask(1, () -> startSpiral(player));
+        PlayerReference ref = PlayerReference.of(player);
+        TaskScheduler.scheduleTask(1, () -> startSpiral(ref.get()));
     }
 
     private static void startSpiral(ServerPlayer player) {
-        TaskScheduler.scheduleTask(1, () -> runSpiralStep(player, 0));
+        PlayerReference ref = PlayerReference.of(player);
+        TaskScheduler.scheduleTask(1, () -> runSpiralStep(ref.get(), 0));
     }
 
     private static void runSpiralStep(ServerPlayer player, int step) {
@@ -90,7 +97,8 @@ public class AnimationUtils {
         processSpiral(player, step+3);
 
         if (step <= spiralDuration) {
-            TaskScheduler.scheduleTask(1, () -> runSpiralStep(player, step + 4));
+            PlayerReference ref = PlayerReference.of(player);
+            TaskScheduler.scheduleTask(1, () -> runSpiralStep(ref.get(), step + 4));
         }
     }
 

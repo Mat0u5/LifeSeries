@@ -14,6 +14,7 @@ import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
+import net.mat0u5.lifeseries.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
@@ -285,7 +286,8 @@ public class SecretLife extends Season {
         if (player.hasEffect(MobEffects.HEALTH_BOOST)) {
             player.removeEffect(MobEffects.HEALTH_BOOST);
         }
-        TaskScheduler.scheduleTask(1, () -> syncPlayerHealth(player));
+        PlayerReference ref = PlayerReference.of(player);
+        TaskScheduler.scheduleTask(1, () -> syncPlayerHealth(ref.get()));
     }
 
     @Override
@@ -301,7 +303,11 @@ public class SecretLife extends Season {
         if (((IPlayer) player).ls$isDead()) return;
         UUID uuid = SubInManager.getOrSub(player);
         if (TaskManager.tasksChosen && !TaskManager.tasksChosenFor.contains(uuid)) {
-            TaskScheduler.scheduleTask(Time.seconds(5), () -> TaskManager.chooseTasks(List.of(player), null));
+            PlayerReference ref = PlayerReference.of(player);
+            TaskScheduler.scheduleTask(Time.seconds(5), () -> {
+                ServerPlayer playerNew = ref.get();
+                if (playerNew != null) TaskManager.chooseTasks(List.of(playerNew), null);
+            });
         }
     }
 

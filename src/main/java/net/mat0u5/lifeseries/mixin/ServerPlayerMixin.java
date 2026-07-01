@@ -12,6 +12,7 @@ import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.NicknameManager;
 import net.minecraft.core.BlockPos;
@@ -57,10 +58,14 @@ public class ServerPlayerMixin implements IPlayer {
         if (LifeSeries.isClientOrDisabled()) return;
         ServerPlayer player = ls$get();
         if (blacklist == null) return;
-        
+
+        PlayerReference ref = PlayerReference.of(player);
         TaskScheduler.scheduleTask(1, () -> {
-            player.containerMenu.getItems().forEach(itemStack -> blacklist.processItemStack(player, itemStack));
-            PlayerUtils.updatePlayerInventory(player);
+            ServerPlayer playerNew = ref.get();
+            if (playerNew != null) {
+                playerNew.containerMenu.getItems().forEach(itemStack -> blacklist.processItemStack(playerNew, itemStack));
+                PlayerUtils.updatePlayerInventory(playerNew);
+            }
         });
     }
 

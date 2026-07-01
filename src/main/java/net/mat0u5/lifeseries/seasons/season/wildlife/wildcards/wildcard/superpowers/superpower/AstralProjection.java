@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
+import net.mat0u5.lifeseries.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -137,25 +138,29 @@ public class AstralProjection extends ToggleableSuperpower {
 
         startedLevel.addFreshEntity(clone);
 
+        PlayerReference ref = PlayerReference.of(player);
         TaskScheduler.scheduleTask(1, () -> {
-            clone.yHeadRot = player.yHeadRot;
-            clone.yHeadRotO = player.yHeadRotO;
-            clone.yBodyRot = player.yBodyRot;
-            clone.yBodyRotO = player.yBodyRotO;
-            clone.yRotO = player.yRotO;
-            clone.setXRot(player.getXRot());
-            clone.setDeltaMovement(velocity);
-            //? if <= 26.2 {
-            clone.hurtMarked = true;
-            //?} else {
-            /*clone.syncVelocity = true;
-            *///?}
-            //? if <= 1.21.9 {
-            /*clone.hasImpulse = true;
-            *///?} else {
-            clone.needsSync = true;
-            //?}
-            clone.snapTo(player.position(), player.getYRot(), player.getXRot());
+            ServerPlayer playerNew = ref.get();
+            if (playerNew != null) {
+                clone.yHeadRot = playerNew.yHeadRot;
+                clone.yHeadRotO = playerNew.yHeadRotO;
+                clone.yBodyRot = playerNew.yBodyRot;
+                clone.yBodyRotO = playerNew.yBodyRotO;
+                clone.yRotO = playerNew.yRotO;
+                clone.setXRot(playerNew.getXRot());
+                clone.setDeltaMovement(velocity);
+                //? if <= 26.2 {
+                clone.hurtMarked = true;
+                //?} else {
+                /*clone.syncVelocity = true;
+                 *///?}
+                //? if <= 1.21.9 {
+                /*clone.hasImpulse = true;
+                 *///?} else {
+                clone.needsSync = true;
+                //?}
+                clone.snapTo(playerNew.position(), playerNew.getYRot(), playerNew.getXRot());
+            }
         });
         //?}
     }

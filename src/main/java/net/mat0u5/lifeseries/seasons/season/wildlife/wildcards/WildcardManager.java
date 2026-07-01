@@ -16,6 +16,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.player.PlayerListReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.network.chat.Component;
@@ -114,13 +115,16 @@ public class WildcardManager {
         List<ServerPlayer> players = PlayerUtils.getAllPlayers();
         PlayerUtils.playSoundToPlayers(players, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
         PlayerUtils.sendTitleToPlayers(players, ModifiableText.WILDLIFE_WILDCARD_DOTS_1.get(),0,40,0);
+        PlayerListReference ref = PlayerListReference.of(players);
         TaskScheduler.scheduleTask(30, () -> {
-            PlayerUtils.playSoundToPlayers(players, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
-            PlayerUtils.sendTitleToPlayers(players, ModifiableText.WILDLIFE_WILDCARD_DOTS_2.get(),0,40,0);
+            var listNew = ref.get();
+            PlayerUtils.playSoundToPlayers(listNew, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
+            PlayerUtils.sendTitleToPlayers(listNew, ModifiableText.WILDLIFE_WILDCARD_DOTS_2.get(),0,40,0);
         });
         TaskScheduler.scheduleTask(60, () -> {
-            PlayerUtils.playSoundToPlayers(players, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
-            PlayerUtils.sendTitleToPlayers(players, ModifiableText.WILDLIFE_WILDCARD_DOTS_3.get(),0,40,0);
+            var listNew = ref.get();
+            PlayerUtils.playSoundToPlayers(listNew, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
+            PlayerUtils.sendTitleToPlayers(listNew, ModifiableText.WILDLIFE_WILDCARD_DOTS_3.get(),0,40,0);
         });
     }
 

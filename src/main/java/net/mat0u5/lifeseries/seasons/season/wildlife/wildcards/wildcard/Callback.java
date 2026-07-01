@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.player.PlayerListReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -160,18 +161,21 @@ public class Callback extends Wildcard {
         SessionTranscript.endingIsYours();
         List<ServerPlayer> players = PlayerUtils.getAllPlayers();
         PlayerUtils.sendTitleToPlayers(players, ModifiableText.WILDLIFE_MAKEITWILD_PT1.get(), 0, 90, 0);
+        PlayerListReference ref = PlayerListReference.of(players);
         TaskScheduler.scheduleTask(80, () -> {
-
-            PlayerUtils.playSoundToPlayers(players, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
-            PlayerUtils.sendTitleToPlayers(players, ModifiableText.WILDLIFE_MAKEITWILD_PT2.get(), 0, 40, 0);
+            var listNew = ref.get();
+            PlayerUtils.playSoundToPlayers(listNew, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
+            PlayerUtils.sendTitleToPlayers(listNew, ModifiableText.WILDLIFE_MAKEITWILD_PT2.get(), 0, 40, 0);
         });
         TaskScheduler.scheduleTask(110, () -> {
-            PlayerUtils.playSoundToPlayers(players, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
-            PlayerUtils.sendTitleToPlayers(players, ModifiableText.WILDLIFE_MAKEITWILD_PT3.get(), 0, 40, 0);
+            var listNew = ref.get();
+            PlayerUtils.playSoundToPlayers(listNew, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
+            PlayerUtils.sendTitleToPlayers(listNew, ModifiableText.WILDLIFE_MAKEITWILD_PT3.get(), 0, 40, 0);
         });
         TaskScheduler.scheduleTask(140, () -> {
-            PlayerUtils.playSoundToPlayers(players, SoundEvents.ZOMBIE_VILLAGER_CURE, 0.2f, 1);
-            PlayerUtils.sendTitleToPlayers(players, ModifiableText.WILDLIFE_MAKEITWILD_PT4.get(), 0, 90, 20);
+            var listNew = ref.get();
+            PlayerUtils.playSoundToPlayers(listNew, SoundEvents.ZOMBIE_VILLAGER_CURE, 0.2f, 1);
+            PlayerUtils.sendTitleToPlayers(listNew, ModifiableText.WILDLIFE_MAKEITWILD_PT4.get(), 0, 90, 20);
 
         });
     }

@@ -191,9 +191,9 @@ public class LifeSkinsManager {
         SimplePackets.LIFESKINS_PLAYER.sendToAllClients(getLifeSkinsPacketInfo(player));
     }
 
-    public static void sendTeamNumUpdatesTo(ServerPlayer target) {
+    public static void sendTeamNumUpdatesTo(List<ServerPlayer> targets) {
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-            SimplePackets.LIFESKINS_PLAYER.sendToClient(getLifeSkinsPacketInfo(player), target);
+            SimplePackets.LIFESKINS_PLAYER.sendToClient(getLifeSkinsPacketInfo(player), targets);
         }
     }
 

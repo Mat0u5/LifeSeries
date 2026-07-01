@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.network.packets.simple.instances;
 import net.mat0u5.lifeseries.network.packets.StringPayload;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePacket;
 
-public class SimpleStringPacket extends SimplePacket<SimpleStringPacket, StringPayload, String> {
+public class SimpleStringPacket extends SimplePacket<StringPayload, String> {
 
     public SimpleStringPacket(String name) {
         super(name);

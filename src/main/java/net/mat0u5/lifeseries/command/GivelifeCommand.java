@@ -12,6 +12,7 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Time;
+import net.mat0u5.lifeseries.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -115,7 +116,8 @@ public class GivelifeCommand extends Command {
         ((IPlayer) self).ls$addLives(-giveAmount);
         livesManager.addToLivesNoUpdate(target, giveAmount);
         AnimationUtils.playTotemAnimation(self);
-        TaskScheduler.scheduleTask(Time.seconds(2), () -> livesManager.receiveLifeFromOtherPlayer(currentPlayerName, target, isRevive));
+        PlayerReference ref = PlayerReference.of(target);
+        TaskScheduler.scheduleTask(Time.seconds(2), () -> livesManager.receiveLifeFromOtherPlayer(currentPlayerName, ref.get(), isRevive));
 
         if (currentSeason instanceof DoubleLife doubleLife) {
             doubleLife.syncSoulboundLives(self);

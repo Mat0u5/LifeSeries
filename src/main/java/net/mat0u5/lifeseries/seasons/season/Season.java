@@ -355,7 +355,8 @@ public abstract class Season {
         if (player == null) return;
 
         if (!player.isAlive() && !waited) {
-            TaskScheduler.scheduleTask(1, () -> reloadPlayerTeam(player, true));
+            PlayerReference ref = PlayerReference.of(player);
+            TaskScheduler.scheduleTask(1, () -> reloadPlayerTeam(ref.get(), true));
             return;
         }
 
@@ -468,6 +469,12 @@ public abstract class Season {
         if (timer.isMultipleOf(Time.seconds(5)) || reloadPlayerTeams) {
             reloadPlayerTeams = false;
             reloadAllPlayerTeams();
+        }
+        if (timer.isMultipleOf(Time.seconds(1))) {
+            NetworkHandlerServer.sendSmallUpdatePackets();
+        }
+        if (timer.isMultipleOf(Time.seconds(60))) {
+            NetworkHandlerServer.sendUpdatePackets();
         }
     }
     public void tickSessionOn(MinecraftServer server) {}
@@ -633,9 +640,8 @@ public abstract class Season {
         if (!isAllowedToAttack(killer, victim)) {
             if (!HIDE_UNJUSTIFIED_KILL_MESSAGES) {
                 if (livesManager.SHOW_LIFE_DIFF) {
-                    TaskScheduler.schedulePriorityTask(1, () -> {
-                        PlayerUtils.broadcastMessageToAdmins(ModifiableText.SEASON_KILL_UNJUSTIFIED.get(victim, killer));
-                    });
+                    var msg = ModifiableText.SEASON_KILL_UNJUSTIFIED.get(victim, killer);
+                    TaskScheduler.schedulePriorityTask(1, () -> PlayerUtils.broadcastMessageToAdmins(msg));
                 }
                 else {
                     PlayerUtils.broadcastMessageToAdmins(ModifiableText.SEASON_KILL_UNJUSTIFIED.get(victim, killer));
@@ -727,7 +733,8 @@ public abstract class Season {
     public void onPlayerJoin(ServerPlayer player) {
         AttributeUtils.resetAttributesOnPlayerJoin(player);
         reloadPlayerTeam(player);
-        TaskScheduler.scheduleTask(2, () -> PlayerUtils.applyResourcepack(player.getUUID()));
+        UUID uuid = player.getUUID();
+        TaskScheduler.scheduleTask(2, () -> PlayerUtils.applyResourcepack(uuid));
         if (!((IPlayer) player).ls$hasAssignedLives()) {
             assignDefaultLives(player);
         }
@@ -735,12 +742,13 @@ public abstract class Season {
             player.setGameMode(GameType.SPECTATOR);
         }
 
+        PlayerReference ref = PlayerReference.of(player);
         TaskScheduler.scheduleTask(1, () -> {
-            if (SubInManager.isBeingSubstituted(player.getUUID())) {
-                SubInManager.removeSubIn(player);
+            if (SubInManager.isBeingSubstituted(uuid)) {
+                SubInManager.removeSubIn(ref.get());
             }
-            if (SubInManager.isSubbingIn(player.getUUID())) {
-                SubInManager.reloadPlayerProfile(player);
+            if (SubInManager.isSubbingIn(uuid)) {
+                SubInManager.reloadPlayerProfile(ref.get());
             }
         });
     }

@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.*;
+import net.mat0u5.lifeseries.utils.player.PlayerListReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
@@ -191,6 +192,7 @@ public class TaskManager {
     }
 
     public static void assignRandomTaskToPlayer(ServerPlayer player, TaskTypes type) {
+        if (player == null) return;
         UUID uuid = SubInManager.getOrSub(player);
         if (type != TaskTypes.RED || CONSTANT_TASKS) {
             submittedOrFailed.remove(uuid);
@@ -235,26 +237,30 @@ public class TaskManager {
         PlayerUtils.sendTitleToPlayers(allowedPlayers, ModifiableText.SECRETLIFE_TASK_TITLE.get(),20,35,0);
         PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("secretlife_task")));
 
+        PlayerListReference ref = PlayerListReference.of(allowedPlayers);
         TaskScheduler.scheduleTask(50, () -> {
-            PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvents.UI_BUTTON_CLICK.value());
-            PlayerUtils.sendTitleToPlayers(allowedPlayers, ModifiableText.COUNTDOWN_RED_3.get(),0,35,0);
+            var newList = ref.get();
+            PlayerUtils.playSoundToPlayers(newList, SoundEvents.UI_BUTTON_CLICK.value());
+            PlayerUtils.sendTitleToPlayers(newList, ModifiableText.COUNTDOWN_RED_3.get(),0,35,0);
         });
         TaskScheduler.scheduleTask(80, () -> {
-            PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvents.UI_BUTTON_CLICK.value());
-            PlayerUtils.sendTitleToPlayers(allowedPlayers, ModifiableText.COUNTDOWN_RED_2.get(),0,35,0);
+            var newList = ref.get();
+            PlayerUtils.playSoundToPlayers(newList, SoundEvents.UI_BUTTON_CLICK.value());
+            PlayerUtils.sendTitleToPlayers(newList, ModifiableText.COUNTDOWN_RED_2.get(),0,35,0);
         });
         TaskScheduler.scheduleTask(115, () -> {
-            PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvents.UI_BUTTON_CLICK.value());
-            PlayerUtils.sendTitleToPlayers(allowedPlayers, ModifiableText.COUNTDOWN_RED_1.get(),0,35,0);
+            var newList = ref.get();
+            PlayerUtils.playSoundToPlayers(newList, SoundEvents.UI_BUTTON_CLICK.value());
+            PlayerUtils.sendTitleToPlayers(newList, ModifiableText.COUNTDOWN_RED_1.get(),0,35,0);
         });
         TaskScheduler.scheduleTask(140, () -> {
-            for (ServerPlayer player : allowedPlayers) {
+            for (ServerPlayer player : ref.get()) {
                 boolean redTask = type == TaskTypes.RED || (type == null && ((IPlayer) player).ls$isOnLastLife(false));
                 AnimationUtils.playSecretLifeTotemAnimation(player, redTask);
             }
         });
         TaskScheduler.scheduleTask(175, () -> {
-            assignRandomTasks(allowedPlayers, type);
+            assignRandomTasks(ref.get(), type);
             SecretKeeper.secretKeeperBeingUsed = false;
         });
     }

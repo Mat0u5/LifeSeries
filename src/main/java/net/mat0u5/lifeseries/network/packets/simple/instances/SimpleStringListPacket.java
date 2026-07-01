@@ -5,7 +5,7 @@ import net.mat0u5.lifeseries.network.packets.simple.SimplePacket;
 
 import java.util.List;
 
-public class SimpleStringListPacket extends SimplePacket<SimpleStringListPacket, StringListPayload, List<String>> {
+public class SimpleStringListPacket extends SimplePacket<StringListPayload, List<String>> {
 
     public SimpleStringListPacket(String name) {
         super(name);

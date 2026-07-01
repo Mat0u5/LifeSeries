@@ -8,6 +8,8 @@ import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.*;
+import net.mat0u5.lifeseries.utils.player.PlayerListReference;
+import net.mat0u5.lifeseries.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
@@ -231,11 +233,11 @@ public class BoogeymanManager {
 
         PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_CHOOSE_NEW.get());
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.LIGHTNING_BOLT_THUNDER);
-        TaskScheduler.scheduleTask(Time.seconds(5), () -> {
+        TaskScheduler.scheduleTask(Time.seconds(14), () -> {
             List<ServerPlayer> allowedPlayers = getAllowedBoogeyPlayers();
             if (allowedPlayers.isEmpty()) return;
             Collections.shuffle(allowedPlayers);
-            TaskScheduler.scheduleTask(Time.seconds(9), () -> chooseBoogeymen(allowedPlayers, BoogeymanRollType.INFINITE));
+            chooseBoogeymen(allowedPlayers, BoogeymanRollType.INFINITE);
         });
     }
 
@@ -253,24 +255,29 @@ public class BoogeymanManager {
         PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvents.UI_BUTTON_CLICK.value());
         PlayerUtils.sendTitleToPlayers(allowedPlayers, ModifiableText.COUNTDOWN_COLOR_3.get(),0,35,0);
 
+        PlayerListReference ref = PlayerListReference.of(allowedPlayers);
         TaskScheduler.scheduleTask(30, () -> {
-            PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvents.UI_BUTTON_CLICK.value());
-            PlayerUtils.sendTitleToPlayers(allowedPlayers, ModifiableText.COUNTDOWN_COLOR_2.get(),0,35,0);
+            var listNew = ref.get();
+            PlayerUtils.playSoundToPlayers(listNew, SoundEvents.UI_BUTTON_CLICK.value());
+            PlayerUtils.sendTitleToPlayers(listNew, ModifiableText.COUNTDOWN_COLOR_2.get(),0,35,0);
         });
         TaskScheduler.scheduleTask(60, () -> {
-            PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvents.UI_BUTTON_CLICK.value());
-            PlayerUtils.sendTitleToPlayers(allowedPlayers, ModifiableText.COUNTDOWN_COLOR_1.get(),0,35,0);
+            var listNew = ref.get();
+            PlayerUtils.playSoundToPlayers(listNew, SoundEvents.UI_BUTTON_CLICK.value());
+            PlayerUtils.sendTitleToPlayers(listNew, ModifiableText.COUNTDOWN_COLOR_1.get(),0,35,0);
         });
         TaskScheduler.scheduleTask(90, () -> {
-            PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("lastlife_boogeyman_wait")));
-            PlayerUtils.sendTitleToPlayers(allowedPlayers, ModifiableText.BOOGEYMAN_ROLL.get(),10,50,20);
+            var listNew = ref.get();
+            PlayerUtils.playSoundToPlayers(listNew, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("lastlife_boogeyman_wait")));
+            PlayerUtils.sendTitleToPlayers(listNew, ModifiableText.BOOGEYMAN_ROLL.get(),10,50,20);
         });
     }
     public void chooseBoogeymen(List<ServerPlayer> allowedPlayers, BoogeymanRollType rollType) {
         if (!BOOGEYMAN_ENABLED) return;
         allowedPlayers.removeIf(this::isBoogeyman);
         showRolling(allowedPlayers);
-        TaskScheduler.scheduleTask(Time.seconds(9), () -> boogeymenChooseRandom(allowedPlayers, rollType));
+        PlayerListReference ref = PlayerListReference.of(allowedPlayers);
+        TaskScheduler.scheduleTask(Time.seconds(9), () -> boogeymenChooseRandom(ref.get(), rollType));
     }
 
     public int getBoogeymanAmount(BoogeymanRollType rollType) {
@@ -464,9 +471,11 @@ public class BoogeymanManager {
         if (((IPlayer) player).ls$isDead()) return;
         if (boogeymen.size() >= BOOGEYMAN_AMOUNT_MAX) return;
         if (currentSession.statusNotStarted() || currentSession.statusFinished()) return;
+        PlayerReference ref = PlayerReference.of(player);
         TaskScheduler.scheduleTask(Time.seconds(2), () -> {
-            ((IPlayer) player).ls$message(ModifiableText.BOOGEYMAN_LATEJOIN.get());
-            chooseBoogeymen(new ArrayList<>(List.of(player)), BoogeymanRollType.LATE_JOIN);
+            ServerPlayer playerNew = ref.get();
+            ((IPlayer) playerNew).ls$message(ModifiableText.BOOGEYMAN_LATEJOIN.get());
+            chooseBoogeymen(new ArrayList<>(List.of(playerNew)), BoogeymanRollType.LATE_JOIN);
         });
     }
 
@@ -615,12 +624,13 @@ public class BoogeymanManager {
             delay = 140;
         }
 
+        PlayerReference ref = PlayerReference.of(player);
         TaskScheduler.scheduleTask(delay, () -> {
-            PlayerUtils.sendTitle(player, ModifiableText.BOOGEYMAN_FAIL_ADVANCEDDEATH_FINISH_PT1.get(), 20, 80, 20);
+            PlayerUtils.sendTitle(ref.get(), ModifiableText.BOOGEYMAN_FAIL_ADVANCEDDEATH_FINISH_PT1.get(), 20, 80, 20);
         });
         delay += 140;
         TaskScheduler.scheduleTask(delay, () -> {
-            PlayerUtils.sendTitle(player, ModifiableText.BOOGEYMAN_FAIL_ADVANCEDDEATH_FINISH_PT2.get(), 20, 80, 20);
+            PlayerUtils.sendTitle(ref.get(), ModifiableText.BOOGEYMAN_FAIL_ADVANCEDDEATH_FINISH_PT2.get(), 20, 80, 20);
         });
     }
 

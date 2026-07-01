@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-public abstract class SimplePacket<T extends SimplePacket<T, U, V>, U extends CustomPacketPayload, V> {
+public abstract class SimplePacket<U extends CustomPacketPayload, V> {
     protected final String name;
     private BiConsumer<ServerPlayer, U> serverReceive = null;
     private Consumer<U> clientReceive = null;

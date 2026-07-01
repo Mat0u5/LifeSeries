@@ -107,6 +107,7 @@ public class SubInManager {
     }
 
     public static void removeSubIn(ServerPlayer player) {
+        if (player == null) return;
         UUID playerUUID = player.getUUID();
         for (SubIn subIn : new ArrayList<>(subIns)) {
             if (getId(subIn.substituter()).equals(playerUUID) || getId(subIn.target()).equals(playerUUID)) {

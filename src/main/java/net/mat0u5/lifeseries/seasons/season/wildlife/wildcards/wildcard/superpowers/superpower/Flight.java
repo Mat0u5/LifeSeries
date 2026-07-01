@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.Time;
+import net.mat0u5.lifeseries.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -109,9 +110,13 @@ public class Flight extends Superpower {
         super.deactivate();
         ServerPlayer player = getPlayer();
         if (player == null) return;
+        PlayerReference ref = PlayerReference.of(player);
         TaskScheduler.scheduleTask(1, () -> {
-            player.getInventory().setChanged();
-            PlayerUtils.updatePlayerInventory(player);
+            ServerPlayer playerNew = ref.get();
+            if (playerNew != null) {
+                playerNew.getInventory().setChanged();
+                PlayerUtils.updatePlayerInventory(playerNew);
+            }
         });
         SimplePackets.PREVENT_GLIDING.sendToClient(false, player);
     }

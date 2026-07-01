@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.network.packets.simple.instances;
 import net.mat0u5.lifeseries.network.packets.BooleanPayload;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePacket;
 
-public class SimpleBooleanPacket extends SimplePacket<SimpleBooleanPacket, BooleanPayload, Boolean> {
+public class SimpleBooleanPacket extends SimplePacket<BooleanPayload, Boolean> {
 
     public SimpleBooleanPacket(String name) {
         super(name);

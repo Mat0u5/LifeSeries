@@ -132,10 +132,6 @@ public class NiceLifeTriviaManager {
                     spawnTriviaBots(triviaSpawnInfo, 0, botSpawnHeight);
                 });
             }
-            //TaskScheduler.scheduleTask(71+90, () -> {
-            //    SoundEvent sound2 = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_christmas_soundbyte"));
-            //    PlayerUtils.playSoundToPlayers(triviaPlayers, sound2, 0.8f, 1);
-            //});
         }
         firstTriviaInSession = false;
     }
