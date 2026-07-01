@@ -87,7 +87,10 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 		val modVersionPrefix = prop("mod.version_prefix")
 		val modVersionSuffix = prop("mod.version_suffix")
 		val mcVersion = prop("deps.minecraft")
-		val mcRange = prop("mod.mc_range").ifBlank { "[$mcVersion]" }
+		var mcRange = prop("mod.mc_range").ifBlank { "[$mcVersion]" }
+		if (env("BUILD_UNBOUND_VERSION_RANGE") == "true") {
+			mcRange = "*"
+		}
 
 		val stonecutter = extensions.getByType<StonecutterBuildExtension>()
 		configureStonecutterReplacements(stonecutter)
