@@ -50,7 +50,7 @@ fun RepositoryHandler.strictMaven(
 abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 	override fun apply(project: Project) = with(project) {
 		val inferredLoader = project.buildFile.name.substringAfter('.').replace(".gradle.kts", "")
-		val inferredLoaderIsFabric = inferredLoader == "fabric"
+		val inferredLoaderIsFabric = inferredLoader == "fabric-legacy"
 		val inferredLoaderIsForge = inferredLoader == "forge"
 
 		val extension = extensions.create("platform", ModPlatformExtension::class.java).apply {
@@ -183,7 +183,7 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 			dependsOn("kspKotlin")
 
 			filesMatching("*.mixins.json") {
-				val mixinJava = if (isForge) {
+				val mixinJava = if (isForge && requiredJava > JavaVersion.VERSION_17) {
 					"JAVA_17"
 				} else {
 					"JAVA_${requiredJava.majorVersion}"
@@ -321,7 +321,7 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 			from(
 				tasks.named(extension.jarTask.get())
 			)
-			into(rootProject.layout.buildDirectory.file("libs/$modVersion"))
+			into(rootProject.file("output/$modVersion"))
 			dependsOn("build")
 		}
 	}

@@ -16,24 +16,12 @@ plugins {
 
 stonecutter active file(".sc_active_version")
 
-subprojects {
-	afterEvaluate {
-		val outputDir = rootProject.layout.projectDirectory.dir("output")
-		var task = (tasks.findByName("remapJar") ?: tasks.findByName("jar")) as? AbstractArchiveTask
-		if (plugins.hasPlugin("net.minecraftforge.gradle")) {
-			task = (tasks.findByName("jarJar") ?: tasks.findByName("remapJar") ?: tasks.findByName("jar")) as? AbstractArchiveTask
-		}
-		task?.doLast {
-			project.copy {
-				from(task.archiveFile)
-				into(outputDir)
-			}
-		}
-	}
-}
-
 val cleanOutput by tasks.registering(Delete::class) {
-	delete(fileTree(rootProject.layout.projectDirectory.dir("output")))
+	val versionName = project.findProperty("mod.version")?.toString()
+	val versionPrefix = project.findProperty("mod.version_prefix")?.toString()
+	val versionSuffix = project.findProperty("mod.version_suffix")?.toString()
+	val version = versionPrefix+versionName+versionSuffix
+	delete(fileTree(rootProject.layout.projectDirectory.dir("output/"+ version)))
 }
 
 allprojects {

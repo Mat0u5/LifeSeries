@@ -54,7 +54,7 @@ public class AnimationUtils {
         PlayerReference ref = PlayerReference.of(player);
         TaskScheduler.scheduleTask(1, () -> {
             ServerPlayer playerNew = ref.get();
-            if (playerNew != null) playerNew.connection.send(new ClientboundEntityEventPacket(player, (byte) 35));
+            if (playerNew != null) playerNew.connection.send(new ClientboundEntityEventPacket(playerNew, (byte) 35));
         });
         TaskScheduler.scheduleTask(2, () -> {
             ServerPlayer playerNew = ref.get();
