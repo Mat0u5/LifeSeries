@@ -88,7 +88,6 @@ public class ClientEvents {
     }
 
     public static void onClientJoin() {
-        checkReplayServer(null);
         ClientTaskScheduler.schedulePriorityTask(20, () -> {
             if (LifeSeriesClient.serverHandshake == HandshakeStatus.WAITING) {
                 LifeSeries.LOGGER.info("Disabling the Life Series on the client.");

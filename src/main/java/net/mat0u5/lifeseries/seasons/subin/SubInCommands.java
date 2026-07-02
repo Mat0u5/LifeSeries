@@ -40,8 +40,8 @@ public class SubInCommands extends Command {
     public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
             literal("subin")
-                .requires(PermissionManager::isAdmin)
                     .then(literal("add")
+                        .requires(PermissionManager::isAdmin)
                         .then(argument("player", EntityArgument.player())
                                 .then(argument("subin", StringArgumentType.string())
                                         .executes(context -> addSubIn(
@@ -53,6 +53,7 @@ public class SubInCommands extends Command {
                         )
                     )
                     .then(literal("remove")
+                            .requires(PermissionManager::isAdmin)
                             .then(argument("player", EntityArgument.player())
                                     .executes(context -> removeSubIn(
                                             context.getSource(),
