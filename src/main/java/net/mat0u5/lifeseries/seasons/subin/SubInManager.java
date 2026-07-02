@@ -246,6 +246,17 @@ public class SubInManager {
         }
         return player.getUUID();
     }
+    public static UUID subOrSubout(UUID uuid) {
+        GameProfile subinProfile = getSubstitutingPlayer(uuid);
+        if (subinProfile != null)  {
+            return getId(subinProfile);
+        }
+        GameProfile suboutProfile = getSubstitutedPlayer(uuid);
+        if (suboutProfile != null)  {
+            return getId(suboutProfile);
+        }
+        return uuid;
+    }
 
     public record SubIn(GameProfile substituter, GameProfile target, Integer startingLives) {
     }

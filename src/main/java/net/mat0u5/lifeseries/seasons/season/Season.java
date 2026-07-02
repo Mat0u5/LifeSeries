@@ -158,7 +158,7 @@ public abstract class Season {
     public void reloadStart() {
     }
 
-    public void updateStuff() {
+    public void postReload() {
         if (server == null) return;
 
         ServerLevel overworld = server.getLevel(Level.OVERWORLD);
@@ -251,7 +251,7 @@ public abstract class Season {
         secretSociety.onReload();
         createTeams();
         createScoreboards();
-        updateStuff();
+        postReload();
         reloadAllPlayerTeams();
         reloadPlayers();
         Events.updatePlayerListsNextTick = true;
