@@ -253,8 +253,10 @@ public class ClientUtils {
         if (!LifeSeriesClient.COLORBLIND_SUPPORT) return original;
         if (original == null) return original;
         if (team == null) return original;
+        String name = team.getDisplayName().getString();
+        if (name == null || name.isEmpty()) return original;
         //~ if >= 26.2 '.withStyle(team.getColor())' -> '.withColor(team.getColor().orElse(TeamColor.WHITE).textColor())' {
-        return TextUtils.format("[{}] ",team.getDisplayName().getString()).withColor(team.getColor().orElse(TeamColor.WHITE).textColor()).append(original);
+        return TextUtils.format("[{}] ", name).withColor(team.getColor().orElse(TeamColor.WHITE).textColor()).append(original);
         //~}
     }
 }

@@ -116,8 +116,10 @@ public class PlayerTabOverlayMixin {
         if (entry == null) return;
         PlayerTeam team = entry.getTeam();
         if (team == null) return;
+        String name = team.getDisplayName().getString();
+        if (name == null || name.isEmpty()) return;
         //~ if >= 26.2 '.withStyle(team.getColor())' -> '.withColor(team.getColor().orElse(TeamColor.WHITE).textColor())' {
-        cir.setReturnValue(TextUtils.format("[{}] ", team.getDisplayName().getString()).withColor(team.getColor().orElse(TeamColor.WHITE).textColor()).append(original));
+        cir.setReturnValue(TextUtils.format("[{}] ", name).withColor(team.getColor().orElse(TeamColor.WHITE).textColor()).append(original));
         //~}
     }
 }

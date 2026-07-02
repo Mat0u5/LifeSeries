@@ -51,6 +51,7 @@ public class LivesManager {
     public static int MAX_TAB_NUMBER = 4;
     public boolean LIVES_SYSTEM_DISABLED = false;
     public boolean ROLL_LIVES = false;
+    public boolean ROLL_LIVES_PSEUDORANDOM = true;
     public int ROLL_MIN_LIVES = 2;
     public int ROLL_MAX_LIVES = 6;
     public double LIVES_RANDOMIZE_MINUTE = 1.0;
@@ -71,6 +72,7 @@ public class LivesManager {
         updateTeams();
 
         ROLL_LIVES = seasonConfig.LIVES_RANDOMIZE.get();
+        ROLL_LIVES_PSEUDORANDOM = seasonConfig.LIVES_RANDOMIZE_PSEUDORANDOM.get();
         int minLivesConfig = seasonConfig.LIVES_RANDOMIZE_MIN.get();
         int maxLivesConfig = seasonConfig.LIVES_RANDOMIZE_MAX.get();
         ROLL_MIN_LIVES = Math.min(minLivesConfig, maxLivesConfig);
@@ -597,11 +599,13 @@ public class LivesManager {
         int totalSize = players.size();
         int chosenNotRandomly = ROLL_MIN_LIVES;
         for (ServerPlayer player : players) {
-            int diff = ROLL_MAX_LIVES-ROLL_MIN_LIVES+2;
-            if (chosenNotRandomly <= ROLL_MAX_LIVES && totalSize > diff) {
-                lives.put(player, chosenNotRandomly);
-                chosenNotRandomly++;
-                continue;
+            if (ROLL_LIVES_PSEUDORANDOM) {
+                int diff = ROLL_MAX_LIVES-ROLL_MIN_LIVES+2;
+                if (chosenNotRandomly <= ROLL_MAX_LIVES && totalSize > diff) {
+                    lives.put(player, chosenNotRandomly);
+                    chosenNotRandomly++;
+                    continue;
+                }
             }
 
             int randomLives = getRandomLife();

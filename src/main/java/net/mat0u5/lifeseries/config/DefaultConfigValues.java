@@ -340,6 +340,10 @@ public class DefaultConfigValues {
             "lives_randomize", false, "{global.lives.random}",
             "Randomize Lives", "Makes every player get a random amount of lives."
     );
+    public final ConfigFileEntry<Boolean> LIVES_RANDOMIZE_PSEUDORANDOM = new ConfigFileEntry<>(
+            "lives_randomize_pseudorandom", true, "global.lives.random[new]",
+            "Pseudorandom Lives", "If there are enough players, it forces at least one occurrence of every possible life amount."
+    );
     public final ConfigFileEntry<Integer> LIVES_RANDOMIZE_MIN = new ConfigFileEntry<>(
             "lives_randomize_min", 2, "global.lives.random",
             "Minimum Lives", "The minimum number of lives any player can have after randomization."

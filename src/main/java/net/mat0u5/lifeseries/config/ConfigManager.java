@@ -164,6 +164,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,SUBIN_CHANGE_USERNAME
                 ,LIVES_LIFE_DIFF_MESSAGE
                 ,LIVES_RANDOMIZE
+                ,LIVES_RANDOMIZE_PSEUDORANDOM
                 ,LIVES_RANDOMIZE_MIN
                 ,LIVES_RANDOMIZE_MAX
                 , LIVES_RANDOMIZE_MINUTE

@@ -178,7 +178,7 @@ public class WildLifeConfig extends SeasonConfig {
             "Hard Timer", "Hard question timer length, in seconds."
     );
     public static final ConfigFileEntry<TriviaGuiType> WILDCARD_TRIVIA_GUI_TYPE = new ConfigFileEntry<>(
-            "gui_type", TriviaGuiType.WILD_LIFE, "season.trivia[new]",
+            "gui_type", TriviaGuiType.WILD_LIFE, "season.trivia",
             "Gui Type", "Controls the trivia gui style."
     );
 

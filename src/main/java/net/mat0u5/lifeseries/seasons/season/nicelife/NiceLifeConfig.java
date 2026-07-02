@@ -113,11 +113,11 @@ public class NiceLifeConfig extends SeasonConfig {
             "Allow Red Winter", "Controls whether the Red Winter triggers."
     );
     public static final ConfigFileEntry<TriviaGuiType> TRIVIA_GUI_TYPE = new ConfigFileEntry<>(
-            "gui_type", TriviaGuiType.NICE_LIFE, "season.trivia[new]",
+            "gui_type", TriviaGuiType.NICE_LIFE, "season.trivia",
             "Gui Type", "Controls the trivia gui style."
     );
     public static final ConfigFileEntry<NightLength> TRIVIA_NIGHT_LENGTH = new ConfigFileEntry<>(
-            "night_length", NightLength.FIRST_LONG, "season.trivia[new]",
+            "night_length", NightLength.FIRST_LONG, "season.trivia",
             "Night Length", "Controls when there are long nights in trivia."
     );
 
