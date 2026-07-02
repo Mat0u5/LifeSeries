@@ -33,6 +33,11 @@ import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.*;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.ChatType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.OutgoingChatMessage;
+import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -95,7 +100,7 @@ public abstract class Season {
     public static boolean SHOW_HEALTH_BELOW_NAME = false;
     public boolean WATCHERS_IN_TAB = true;
     public boolean MUTE_DEAD_PLAYERS = false;
-    public boolean WATCHERS_MUTED = false;
+    public boolean MUTE_WATCHERS = false;
     public boolean ALLOW_SELF_DEFENSE = true;
     public static boolean GIVELIFE_CAN_REVIVE = false;
     public boolean SHOW_LOGIN_COMMAND_INFO = true;
@@ -234,7 +239,7 @@ public abstract class Season {
         TAB_LIST_SHOW_EXACT_LIVES = seasonConfig.TAB_LIST_SHOW_EXACT_LIVES.get();
         SHOW_HEALTH_BELOW_NAME = seasonConfig.SHOW_HEALTH_BELOW_NAME.get();
         WATCHERS_IN_TAB = seasonConfig.WATCHERS_IN_TAB.get();
-        WATCHERS_MUTED = seasonConfig.WATCHERS_MUTED.get();
+        MUTE_WATCHERS = seasonConfig.WATCHERS_MUTED.get();
         ALLOW_SELF_DEFENSE = seasonConfig.ALLOW_SELF_DEFENSE.get();
         GIVELIFE_CAN_REVIVE = seasonConfig.GIVELIFE_CAN_REVIVE.get();
         SHOW_LOGIN_COMMAND_INFO = seasonConfig.SHOW_LOGIN_COMMAND_INFO.get();
@@ -483,10 +488,6 @@ public abstract class Season {
         secretSociety.addSessionActions();
         livesManager.addSessionActions();
     }
-
-    /*
-        Events
-     */
 
     public void onPlayerDeath(ServerPlayer player, DamageSource source) {
         boolean soulmateKill = source.is(DoubleLife.SOULMATE_DAMAGE);
@@ -810,5 +811,19 @@ public abstract class Season {
 
     public void usernameChanged(ServerPlayer player) {
 
+    }
+
+    public void mutedPlayersChat(ServerPlayer sender, PlayerChatMessage message) {
+        OutgoingChatMessage outgoingChatMessage = OutgoingChatMessage.create(message);
+        Component prefixedName = Component.literal("§7[MUTED] ").append(sender.getDisplayName());
+        var bind = ChatType.bind(net.minecraft.network.chat.ChatType.CHAT, sender.level().registryAccess(), prefixedName);
+        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
+            boolean adminPass = PermissionManager.isAdmin(player);
+            boolean deadPass = MUTE_DEAD_PLAYERS && ((IPlayer) player).ls$isDead() && !((IPlayer) player).ls$isWatcher();
+            boolean watcherPass = MUTE_WATCHERS && ((IPlayer) player).ls$isWatcher();
+            if (adminPass || deadPass || watcherPass) {
+                player.sendChatMessage(outgoingChatMessage, true, bind);
+            }
+        }
     }
 }
