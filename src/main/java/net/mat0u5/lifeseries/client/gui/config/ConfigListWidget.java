@@ -19,6 +19,7 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
     private static final int MAX_HIGHLIGHTED_ENTRIES = 3;
     private static final int SCROLLBAR_OFFSET_X = 6;
     protected ConfigScreen screen;
+    private boolean scrolling;
 
     //? if <= 1.20.2 {
     /*public ConfigListWidget(Minecraft client, int width, int height, int y, int endY, int headerHeight) {
@@ -61,7 +62,7 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
         /*int maxScroll = getMaxScroll();
         *///?} else {
         int maxScroll = maxScrollAmount();
-         //?}
+        //?}
 
         if (getScrolledAmount() > maxScroll) {
             setScrollAmount(maxScroll);
@@ -208,8 +209,25 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
         int mouseX = (int) click.x();
         int mouseY = (int) click.y();
     //?}
+        this.scrolling = false;
+
         if (!isMouseOver(mouseX, mouseY)) {
             return false;
+        }
+
+        //? if <= 1.21.2 {
+        /*int maxScroll = getMaxScroll();
+         *///?} else {
+        int maxScroll = maxScrollAmount();
+        //?}
+
+        if (maxScroll > 0) {
+            int listRight = getX() + width;
+            int scrollbarX = listRight - SCROLLBAR_OFFSET_X;
+            if (mouseX >= scrollbarX && mouseX <= scrollbarX + SCROLLBAR_OFFSET_X) {
+                this.scrolling = true;
+                return true;
+            }
         }
 
         int listTop = getY();
@@ -234,6 +252,66 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
 
         return false;
     }
+
+    //? if <= 1.21.6 {
+    /*@Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        if (button == 0 && this.scrolling) {
+            this.scrolling = false;
+            return true;
+        }
+        return super.mouseReleased(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+        if (super.mouseDragged(mouseX, mouseY, button, dragX, dragY)) {
+            return true;
+        } else if (button == 0 && this.scrolling) {
+            //? if <= 1.21.2 {
+            /^int maxScroll = getMaxScroll();
+            ^///?} else {
+            int maxScroll = maxScrollAmount();
+            //?}
+
+            if (maxScroll > 0) {
+                int scrollbarHeight = height;
+                int handleHeight = Math.max(10, scrollbarHeight * scrollbarHeight / (scrollbarHeight + maxScroll));
+                double scrollMultiplier = (double) maxScroll / (double) Math.max(1, scrollbarHeight - handleHeight);
+                setScrollAmount(getScrolledAmount() + dragY * scrollMultiplier);
+            }
+            return true;
+        }
+        return false;
+    }
+    *///?} else {
+    @Override
+    public boolean mouseReleased(MouseButtonEvent click) {
+        if (click.button() == 0 && this.scrolling) {
+            this.scrolling = false;
+            return true;
+        }
+        return super.mouseReleased(click);
+    }
+
+    @Override
+    public boolean mouseDragged(MouseButtonEvent event, double dx, double dy) {
+        if (super.mouseDragged(event, dx, dy)) {
+            return true;
+        } else if (this.scrolling) {
+            int maxScroll = maxScrollAmount();
+            if (maxScroll > 0) {
+                int scrollbarHeight = height;
+                int handleHeight = Math.max(10, scrollbarHeight * scrollbarHeight / (scrollbarHeight + maxScroll));
+                double scrollMultiplier = (double) maxScroll / (double) Math.max(1, scrollbarHeight - handleHeight);
+
+                setScrollAmount(getScrolledAmount() + dy * scrollMultiplier);
+            }
+            return true;
+        }
+        return false;
+    }
+    //?}
 
     public double getScrolledAmount() {
         //? if <= 1.21.2 {
