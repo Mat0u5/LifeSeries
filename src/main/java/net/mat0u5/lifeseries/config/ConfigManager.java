@@ -94,14 +94,19 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,GIVELIFE_COMMAND_ENABLED // Group
                 ,GROUP_FINAL_DEATH // Group
                 ,CUSTOM_ENCHANTER_ALGORITHM
-                ,MUTE_DEAD_PLAYERS
                 ,TAB_LIST_SHOW_DEAD_PLAYERS
                 ,GROUP_SPAWN_EGG // Group
                 ,GROUP_WATCHERS // Group
                 ,GROUP_SUBIN // Group
+                ,GROUP_MUTED
 
 
                 //Group stuff
+
+                ,MUTE_DEAD_PLAYERS
+                ,WATCHERS_MUTED
+                ,MUTED_CHAT
+                ,MUTED_CHAT_ADMIN
                 ,SHOW_HEALTH_BELOW_NAME
                 ,BLACKLIST_ITEMS
                 ,BLACKLIST_RECIPES
@@ -159,7 +164,6 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,SPAWNER_RECIPE
 
                 ,WATCHERS_IN_TAB
-                ,WATCHERS_MUTED
                 ,SUBIN_CHANGE_SKIN
                 ,SUBIN_CHANGE_USERNAME
                 ,LIVES_LIFE_DIFF_MESSAGE

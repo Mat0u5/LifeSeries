@@ -101,6 +101,8 @@ public abstract class Season {
     public boolean WATCHERS_IN_TAB = true;
     public boolean MUTE_DEAD_PLAYERS = false;
     public boolean MUTE_WATCHERS = false;
+    public boolean MUTED_CHAT = true;
+    public boolean MUTED_CHAT_ADMIN = true;
     public boolean ALLOW_SELF_DEFENSE = true;
     public static boolean GIVELIFE_CAN_REVIVE = false;
     public boolean SHOW_LOGIN_COMMAND_INFO = true;
@@ -240,6 +242,8 @@ public abstract class Season {
         SHOW_HEALTH_BELOW_NAME = seasonConfig.SHOW_HEALTH_BELOW_NAME.get();
         WATCHERS_IN_TAB = seasonConfig.WATCHERS_IN_TAB.get();
         MUTE_WATCHERS = seasonConfig.WATCHERS_MUTED.get();
+        MUTED_CHAT = seasonConfig.MUTED_CHAT.get();
+        MUTED_CHAT_ADMIN = seasonConfig.MUTED_CHAT_ADMIN.get();
         ALLOW_SELF_DEFENSE = seasonConfig.ALLOW_SELF_DEFENSE.get();
         GIVELIFE_CAN_REVIVE = seasonConfig.GIVELIFE_CAN_REVIVE.get();
         SHOW_LOGIN_COMMAND_INFO = seasonConfig.SHOW_LOGIN_COMMAND_INFO.get();
@@ -818,7 +822,7 @@ public abstract class Season {
         Component prefixedName = Component.literal("§7[MUTED] ").append(sender.getDisplayName());
         var bind = ChatType.bind(net.minecraft.network.chat.ChatType.CHAT, sender.level().registryAccess(), prefixedName);
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-            boolean adminPass = PermissionManager.isAdmin(player);
+            boolean adminPass = PermissionManager.isAdmin(player) && MUTED_CHAT_ADMIN;
             boolean deadPass = MUTE_DEAD_PLAYERS && ((IPlayer) player).ls$isDead() && !((IPlayer) player).ls$isWatcher();
             boolean watcherPass = MUTE_WATCHERS && ((IPlayer) player).ls$isWatcher();
             if (adminPass || deadPass || watcherPass) {
