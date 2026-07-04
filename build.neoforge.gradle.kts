@@ -30,11 +30,13 @@ neoForge {
 			gameDirectory = file("run/")
 			ideName = "NeoForge Client (${stonecutter.active?.version})"
 			programArgument("--username=Player")
+			disableIdeRun()
 		}
 		register("server") {
 			server()
 			gameDirectory = file("run/")
 			ideName = "NeoForge Server (${stonecutter.active?.version})"
+			disableIdeRun()
 		}
 	}
 
