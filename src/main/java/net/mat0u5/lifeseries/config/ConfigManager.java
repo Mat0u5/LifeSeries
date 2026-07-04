@@ -59,7 +59,6 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,DEFAULT_LIVES
                 ,ONLY_TAKE_LIVES_IN_SESSION
                 ,TAB_LIST_SHOW_LIVES // Group
-                , LIVES_SYSTEM_DISABLED
 
                 ,MAX_PLAYER_HEALTH // Group
                 ,KEEP_INVENTORY
@@ -98,7 +97,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,GROUP_SPAWN_EGG // Group
                 ,GROUP_WATCHERS // Group
                 ,GROUP_SUBIN // Group
-                ,GROUP_MUTED
+                ,GROUP_MUTED // Group
 
 
                 //Group stuff
@@ -173,6 +172,10 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,LIVES_RANDOMIZE_MAX
                 , LIVES_RANDOMIZE_MINUTE
                 ,LIVES_LOSE_KILLS_ONLY
+
+                ,GROUP_DISABLE // Group
+                ,LIVES_SYSTEM_DISABLED
+                ,TEAMS_SYSTEM_DISABLED
         ));
     }
 

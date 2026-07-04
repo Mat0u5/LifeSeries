@@ -98,8 +98,12 @@ public class DefaultConfigValues {
             "Tick Freeze When Not In Session", "Automatically freezes the game when the session is paused or ended or not started."
     );
     public final ConfigFileEntry<Boolean> LIVES_SYSTEM_DISABLED = new ConfigFileEntry<>(
-            "lives_system_disabled", false, "global.lives",
+            "lives_system_disabled", false, "global.disable",
             "Fully Disable Lives System", "Fully disables the lives system, if you want to implement a custom one for example :)"
+    );
+    public final ConfigFileEntry<Boolean> TEAMS_SYSTEM_DISABLED = new ConfigFileEntry<>(
+            "teams_system_disabled", false, "global.disable[new]",
+            "Fully Disable Teams System", "Fully disables the teams system, if you want to implement a custom one for example :)"
     );
     public final ConfigFileEntry<Boolean> CUSTOM_ENCHANTER_ALGORITHM = new ConfigFileEntry<>(
             "custom_enchanter_algorithm", false, "global",
@@ -428,8 +432,12 @@ public class DefaultConfigValues {
             "Modifiable Texts", ""
     );
     public final ConfigFileEntry<Object> GROUP_MUTED = new ConfigFileEntry<>(
-            "group_muted", null, ConfigTypes.TEXT, "{global.muted}",
+            "group_muted", null, ConfigTypes.TEXT, "{global.muted}[new]",
             "Muted Players", ""
+    );
+    public final ConfigFileEntry<Object> GROUP_DISABLE = new ConfigFileEntry<>(
+            "group_disable", null, ConfigTypes.TEXT, "{global.disable}[new]",
+            "Disable Functionality", ""
     );
 
 
