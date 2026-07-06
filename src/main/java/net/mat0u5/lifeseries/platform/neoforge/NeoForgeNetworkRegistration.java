@@ -77,7 +77,7 @@ public static void registerPackets(RegisterPayloadHandlerEvent event) {
         CustomPacketPayload.Type<T> type = (CustomPacketPayload.Type<T>) packetInfo.type();
         StreamCodec<? super RegistryFriendlyByteBuf, T> codec = (StreamCodec<? super RegistryFriendlyByteBuf, T>) packetInfo.codec();
 
-        //? if <= 1.21.6 {
+        //? if <= 1.21.5 {
         /^registrar.playBidirectional(
                 type,
                 codec,
@@ -90,6 +90,29 @@ public static void registerPackets(RegisterPayloadHandlerEvent event) {
                     }
                 }
         );
+        ^///?} else if = 1.21.6 {
+        /^//NeoForge decided to change this in 1.21.7 of all places...
+        try {
+            registrar.playBidirectional(
+                    type,
+                    codec,
+                    ServerPacketHandler::handle,
+                    LifeSeries.hasClient() ? LifeSeries.clientHelper::handlePacket : null
+            );
+        } catch (NoSuchMethodError e) {
+            registrar.playBidirectional(
+                    type,
+                    codec,
+                    (payload, context) -> {
+                        if (context.flow().isServerbound()) {
+                            ServerPacketHandler.handle(payload, context);
+                        }
+                        else if (LifeSeries.hasClient()) {
+                            LifeSeries.clientHelper.handlePacket(payload, context);
+                        }
+                    }
+            );
+        }
         ^///?} else {
         registrar.playBidirectional(
                 type,

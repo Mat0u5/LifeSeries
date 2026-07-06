@@ -16,6 +16,7 @@ val unobfuscated = stonecutter.eval(stonecutter.current.version, ">=26.1")
 val legacyForge = stonecutter.eval(stonecutter.current.version, "<=1.20")
 val usesOfficialMappings = stonecutter.eval(stonecutter.current.version, ">=1.17")
 val modernRuntimeLibs = stonecutter.eval(stonecutter.current.version, ">=1.18")
+val hasMixins = stonecutter.eval(stonecutter.current.version, ">=1.16")
 
 platform {
 	loader = "forge"
@@ -47,8 +48,10 @@ minecraft {
 		configureEach {
 			workingDir.convention(layout.projectDirectory.dir("run"))
 			systemProperty("forge.logging.console.level", "debug")
-			systemProperty("mixin.env.disableRefMap", "true")
-			args("--mixin.config=${prop("mod.id")}.mixins.json")
+			if (hasMixins) {
+				systemProperty("mixin.env.disableRefMap", "true")
+				args("--mixin.config=${prop("mod.id")}.mixins.json")
+			}
 		}
 		register("client") {
 			args("--username", "Player")
@@ -206,27 +209,37 @@ if (legacyForge) {
 		dependsOn("extractMcpToSrg")
 		doLast {
 			val jarFile = archiveFile.get().asFile
-			val tmp = File(jarFile.parentFile, jarFile.name + ".reobf")
-			val tsrg = layout.buildDirectory.file("mappings/map2srg.tsrg").get().asFile
-			val javaBin = File(System.getProperty("java.home"), "bin/java")
-			val args = mutableListOf(
-				javaBin.absolutePath, "-jar", fart.singleFile.absolutePath,
-				"--input", jarFile.absolutePath,
-				"--output", tmp.absolutePath,
-				"--map", tsrg.absolutePath,
-				"--ann-fix", "--ids-fix", "--src-fix", "--record-fix"
-			)
-			sourceSets["main"].compileClasspath.files
-				.filter { it.exists() && it.extension == "jar" }
-				.forEach { args += listOf("--lib", it.absolutePath) }
+			val vanillaMap = layout.buildDirectory.file("mappings/map2srg.tsrg").get().asFile
+			val mixinMap = layout.buildDirectory.file("mappings/compileJava-mappings.tsrg").get().asFile
 
-			val proc = ProcessBuilder(args).redirectErrorStream(true).start()
-			val output = proc.inputStream.bufferedReader().readText()
-			val exit = proc.waitFor()
-			if (exit != 0) throw GradleException("FART reobfuscation failed (exit $exit):\n$output")
-			logger.info(output)
-			jarFile.delete()
-			tmp.renameTo(jarFile)
+			fun runFart(input: File, output: File, map: File) {
+				val javaBin = File(System.getProperty("java.home"), "bin/java")
+				val args = mutableListOf(
+					javaBin.absolutePath, "-jar", fart.singleFile.absolutePath,
+					"--input", input.absolutePath,
+					"--output", output.absolutePath,
+					"--map", map.absolutePath,
+					"--ann-fix", "--ids-fix", "--src-fix", "--record-fix"
+				)
+				sourceSets["main"].compileClasspath.files
+					.filter { it.exists() && it.extension == "jar" }
+					.forEach { args += listOf("--lib", it.absolutePath) }
+				val proc = ProcessBuilder(args).redirectErrorStream(true).start()
+				val output_ = proc.inputStream.bufferedReader().readText()
+				if (proc.waitFor() != 0) throw GradleException("FART failed:\n$output_")
+				logger.info(output_)
+			}
+
+			val tmp1 = File(jarFile.parentFile, jarFile.name + ".reobf1")
+			val tmp2 = File(jarFile.parentFile, jarFile.name + ".reobf2")
+			runFart(jarFile, tmp1, vanillaMap)
+			if (mixinMap.exists() && mixinMap.length() > 0) {
+				runFart(tmp1, tmp2, mixinMap)
+				tmp1.delete()
+				jarFile.delete(); tmp2.renameTo(jarFile)
+			} else {
+				jarFile.delete(); tmp1.renameTo(jarFile)
+			}
 		}
 	}
 }

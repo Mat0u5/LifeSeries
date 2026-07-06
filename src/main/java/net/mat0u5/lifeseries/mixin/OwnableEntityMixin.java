@@ -18,6 +18,7 @@ import net.minecraft.world.entity.LivingEntity;
 @Mixin(value = OwnableEntity.class, priority = 1)
 public interface OwnableEntityMixin {
 
+//? if !forge || >= 1.21 {
 //? if <= 1.21.4 {
 	/*@ModifyArg(method = "getOwner", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/EntityGetter;getPlayerByUUID(Ljava/util/UUID;)Lnet/minecraft/world/entity/player/Player;"), index = 0)
 	private @Nullable UUID subinOwner(UUID uuid) {
@@ -43,5 +44,6 @@ public interface OwnableEntityMixin {
 		}
 		return original;
 	}
+//?}
 //?}
 }
