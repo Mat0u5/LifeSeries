@@ -70,7 +70,7 @@ public class WeatherEffectRendererMixin {
     @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/texture/TextureManager;getTexture(Lnet/minecraft/resources/Identifier;)Lnet/minecraft/client/renderer/texture/AbstractTexture;"))
     public Identifier render(Identifier resourceLocation) {
     //?} else {
-    /*@ModifyArg(method = "render(Lnet/minecraft/client/renderer/state/level/WeatherRenderState;Lcom/mojang/blaze3d/systems/RenderPass;Lcom/mojang/blaze3d/pipeline/RenderPipeline;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/WeatherEffectRenderer;renderWeather(Lcom/mojang/blaze3d/systems/RenderPass;Lnet/minecraft/client/renderer/texture/AbstractTexture;II)V"), index = 1)
+    /*@ModifyArg(method = "render(Lnet/minecraft/client/renderer/state/level/WeatherRenderState;Lcom/mojang/renderpearl/api/commands/RenderPass;Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/WeatherEffectRenderer;renderWeather(Lcom/mojang/renderpearl/api/commands/RenderPass;Lnet/minecraft/client/renderer/texture/AbstractTexture;II)V"), index = 1)
     public AbstractTexture render(AbstractTexture texture) {
     *///?}
 //?} else {
