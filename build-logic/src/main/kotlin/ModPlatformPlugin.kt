@@ -83,9 +83,7 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 		val isForge = loader == "forge"
 
 		val modId = prop("mod.id")
-		val modVersion = prop("mod.version")
-		val modVersionPrefix = prop("mod.version_prefix")
-		val modVersionSuffix = prop("mod.version_suffix")
+		val modVersion = prop("mod.version_prefix")+prop("mod.version")+prop("mod.version_suffix")
 		val mcVersion = prop("deps.minecraft")
 		var mcRange = prop("mod.mc_range").ifBlank { "[$mcVersion]" }
 		if (env("BUILD_UNBOUND_VERSION_RANGE") == "true") {
@@ -101,8 +99,6 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 			"idea",
 		).forEach { apply(plugin = it) }
 
-		version = "$modVersionPrefix$modVersion$modVersionSuffix+$mcVersion-$loader"
-
 		extension.requiredJava.set(
 			when {
 				stonecutter.eval(stonecutter.current.version, ">=26") -> JavaVersion.VERSION_25
@@ -112,6 +108,10 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 				else -> JavaVersion.VERSION_1_8
 			}
 		)
+
+		val fullVersion = "$modVersion+$mcVersion-$loader"
+		val publishDisplayVersion = "$loader-$modVersion+$mcVersion"
+		version = fullVersion
 
 		extension.dependencies {
 			required.maybeCreate("minecraft").apply {
@@ -141,17 +141,15 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 			isNeoForge,
 			isForge,
 			modId,
-			"$modVersionPrefix$modVersion$modVersionSuffix",
+			modVersion,
 			mcVersion,
 			extension,
 			extension.requiredJava.get(),
 			stonecutter
 		)
 		configureJava(stonecutter, extension.requiredJava.get())
-		registerBuildAndCollectTask(extension, "$modVersionPrefix$modVersion$modVersionSuffix")
-		configurePublishing(extension, loader, stonecutter,
-			"$modVersionPrefix$modVersion$modVersionSuffix",
-			"$loader-$modVersionPrefix$modVersion$modVersionSuffix+$mcVersion")
+		registerBuildAndCollectTask(extension, modVersion)
+		configurePublishing(extension, loader, stonecutter, modVersion, publishDisplayVersion)
 	}
 
 	private fun Project.configureJarTask(modId: String, loader: String) {
@@ -183,6 +181,13 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 			dependsOn("kspKotlin")
 
 			filesMatching("*.mixins.json") {
+				val needsRefmap = isForge && stonecutter.eval(stonecutter.current.version, "<=1.20") // legacyForge
+				if (!needsRefmap) {
+					filter { line: String ->
+						if (line.trimStart().startsWith("\"refmap\"")) null else line
+					}
+				}
+
 				val mixinJava = if (isForge && requiredJava > JavaVersion.VERSION_17) {
 					"JAVA_17"
 				} else {
@@ -240,16 +245,16 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 					val usesLegacyToml = stonecutter.eval(stonecutter.current.version, "<=1.20.3")
 					if (usesLegacyToml) {
 						filesMatching("META-INF/mods.toml") { expand(props) }
-						exclude("META-INF/neoforge.mods.toml", "fabric.mod.json", "aw/*.accesswidener", ".cache", "pack.mcmeta")
+						exclude("META-INF/neoforge.mods.toml", "fabric.mod.json", "aw/*.accesswidener", "aw/*.classtweaker", ".cache", "pack.mcmeta")
 					} else {
 						filesMatching("META-INF/neoforge.mods.toml") { expand(props) }
-						exclude("META-INF/mods.toml", "fabric.mod.json", "aw/*.accesswidener", ".cache", "pack.mcmeta")
+						exclude("META-INF/mods.toml", "fabric.mod.json", "aw/*.accesswidener", "aw/*.classtweaker", ".cache", "pack.mcmeta")
 					}
 				}
 
 				isForge -> {
 					filesMatching("META-INF/mods.toml") { expand(props) }
-					exclude("META-INF/neoforge.mods.toml", "fabric.mod.json", "aw/*.accesswidener", ".cache")
+					exclude("META-INF/neoforge.mods.toml", "fabric.mod.json", "aw/*.accesswidener", "aw/*.classtweaker", ".cache")
 				}
 			}
 		}
