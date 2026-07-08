@@ -1,1 +1,1 @@
-Updated to 26.3-snapshot-2
+Fixed a crash issue with Animal Disguise
