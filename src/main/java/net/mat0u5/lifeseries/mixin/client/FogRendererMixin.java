@@ -38,7 +38,8 @@ import net.minecraft.client.renderer.fog.FogRenderer;
 import net.minecraft.client.DeltaTracker;
 //? if >= 1.21.2
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
+//? if >= 26.1
+import net.minecraft.client.renderer.fog.FogData;
 
 @Mixin(value = FogRenderer.class, priority = 1)
 public class FogRendererMixin {
@@ -50,8 +51,10 @@ public class FogRendererMixin {
     /*private static void stopFog(Camera camera, FogRenderer.FogMode fogMode, Vector4f vector4f, float f, boolean bl, float g, CallbackInfoReturnable<FogParameters> cir) {
     *///?} else if <= 1.21.9 {
     /*private static void stopFog(Camera camera, int i, boolean bl, DeltaTracker deltaTracker, float f, ClientLevel clientLevel, CallbackInfoReturnable<Vector4f> cir) {
+    *///?} else if <= 1.21.11 {
+    /*private static void stopFog(Camera camera, int i, DeltaTracker deltaTracker, float f, ClientLevel clientLevel, CallbackInfoReturnable<Vector4f> cir) {
     *///?} else {
-    private static void stopFog(Camera camera, int i, DeltaTracker deltaTracker, float f, ClientLevel clientLevel, CallbackInfoReturnable<Vector4f> cir) {
+    private static void stopFog(Camera camera, int renderDistanceInChunks, DeltaTracker deltaTracker, float darkenWorldAmount, ClientLevel level, CallbackInfoReturnable<FogData> cir) {
     //?}
 //?} else {
     /*//? if <= 1.21 {
@@ -60,8 +63,10 @@ public class FogRendererMixin {
     /^private static void stopFog(Camera camera, FogRenderer.FogMode fogMode, Vector4f vector4f, float f, boolean bl, float g, CallbackInfoReturnable<FogParameters> cir) {
     ^///?} else if <= 1.21.9 {
     /^private void stopFog(Camera camera, int i, boolean bl, DeltaTracker deltaTracker, float f, ClientLevel clientLevel, CallbackInfoReturnable<Vector4f> cir) {
+    ^///?} else if <= 1.21.11 {
+    /^private void stopFog(Camera camera, int i, DeltaTracker deltaTracker, float f, ClientLevel clientLevel, CallbackInfoReturnable<Vector4f> cir) {
     ^///?} else {
-    private void stopFog(Camera camera, int i, DeltaTracker deltaTracker, float f, ClientLevel clientLevel, CallbackInfoReturnable<Vector4f> cir) {
+    private void stopFog(Camera camera, int i, DeltaTracker deltaTracker, float f, ClientLevel clientLevel, CallbackInfoReturnable<FogData> cir) {
     //?}
 *///?}
         ClientLevel nether = Minecraft.getInstance().level;
@@ -71,8 +76,12 @@ public class FogRendererMixin {
             /*ci.cancel();
             *///?} else if <= 1.21.5 {
             /*cir.setReturnValue(FogParameters.NO_FOG);
+            *///?} else if <= 1.21.11 {
+            /*cir.setReturnValue(new Vector4f(0, 0, 0, 0));
             *///?} else {
-            cir.setReturnValue(new Vector4f(0, 0, 0, 0));
+            FogData fog = new FogData();
+            fog.color = new Vector4f(0, 0, 0, 0);
+            cir.setReturnValue(fog);
             //?}
         }
     }
