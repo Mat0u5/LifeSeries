@@ -38,6 +38,8 @@ public class MorphComponent {
                     Entity entity = morph.create(((IPlayer) serverPlayer).ls$getServerLevel(), EntitySpawnReason.COMMAND);
                     //?}
                     if (entity != null) {
+                        //? if >= 26.2
+                        entity.setId(1);
                         ((IMorph) entity).setFromMorph(true);
                     }
                 }
