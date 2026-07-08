@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.nicelife;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -21,7 +22,7 @@ public class NiceLifeTriviaCommand extends Command {
 
     @Override
     public boolean isAllowed() {
-        return currentSeason.getSeason() == Seasons.NICE_LIFE;
+        return LifeSeries.isSeason(Seasons.NICE_LIFE);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.doublelife;
 
 import com.mojang.brigadier.CommandDispatcher;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -20,7 +21,7 @@ public class DoubleLifeCommands extends Command {
 
     @Override
     public boolean isAllowed() {
-        return currentSeason.getSeason() == Seasons.DOUBLE_LIFE;
+        return LifeSeries.isSeason(Seasons.DOUBLE_LIFE);
     }
 
     @Override

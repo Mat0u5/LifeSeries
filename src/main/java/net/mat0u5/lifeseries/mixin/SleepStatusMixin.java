@@ -21,7 +21,7 @@ public abstract class SleepStatusMixin {
     @Inject(method = "areEnoughDeepSleeping", at = @At("RETURN"), cancellable = true)
     public void canResetTime(int percentage, List<ServerPlayer> players, CallbackInfoReturnable<Boolean> cir) {
         if (LifeSeries.isClientOrDisabled()) return;
-        if (currentSeason.getSeason() == Seasons.WILD_LIFE) {
+        if (LifeSeries.isSeason(Seasons.WILD_LIFE)) {
             for (ServerPlayer player : players) {
                 if (!player.isSleepingLongEnough()) return;
                 if (SuperpowersWildcard.hasActivePower(player, Superpowers.TIME_CONTROL)) {
@@ -29,7 +29,7 @@ public abstract class SleepStatusMixin {
                 }
             }
         }
-        if (currentSeason.getSeason() == Seasons.NICE_LIFE) {
+        if (LifeSeries.isSeason(Seasons.NICE_LIFE)) {
             cir.setReturnValue(false);
         }
     }
@@ -37,7 +37,7 @@ public abstract class SleepStatusMixin {
     @Inject(method = "areEnoughSleeping", at = @At("RETURN"), cancellable = true)
     public void canSkipNight(int percentage, CallbackInfoReturnable<Boolean> cir) {
         if (LifeSeries.isClientOrDisabled()) return;
-        if (currentSeason.getSeason() != Seasons.WILD_LIFE) return;
+        if (!LifeSeries.isSeason(Seasons.WILD_LIFE)) return;
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
             if (!player.isSleeping()) return;
             if (SuperpowersWildcard.hasActivePower(player, Superpowers.TIME_CONTROL)) {

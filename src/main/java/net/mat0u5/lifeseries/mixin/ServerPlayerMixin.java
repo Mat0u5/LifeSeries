@@ -285,7 +285,7 @@ public class ServerPlayerMixin implements IPlayer {
     //?} else {
     /*private void cancelStartSleep(AbstractBedBlock bedBlock, BlockState bedBlockState, BedRule rule, BlockPos pos, CallbackInfoReturnable<Either<Player.BedSleepingProblem, Unit>> cir) {
     *///?}
-        if (LifeSeries.isLogicalNonDisabled() && currentSeason.getSeason() == Seasons.NICE_LIFE) {
+        if (LifeSeries.isLogicalNonDisabled() && LifeSeries.isSeason(Seasons.NICE_LIFE)) {
             if (NiceLifeTriviaManager.triviaInProgress) {
                 cir.setReturnValue(Either.left(Player.BedSleepingProblem.OTHER_PROBLEM));
                 ((IPlayer)ls$get()).ls$message(ModifiableText.NICELIFE_SLEEP_FAIL_LATE.get(), true);

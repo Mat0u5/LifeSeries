@@ -281,7 +281,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
             sendConfigEntry(player, teamEntry, index);
             index++;
         }
-        if (currentSeason.getSeason() == Seasons.SECRET_LIFE) {
+        if (LifeSeries.isSeason(Seasons.SECRET_LIFE)) {
             List<String> alreadySelected = SecretLifeUsedTasks.getUsedTasks(TaskManager.usedTasksConfig);
             for (String easyTask : TaskManager.easyTasks_all) {
 
@@ -309,7 +309,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 index++;
             }
         }
-        if (currentSeason.getSeason() == Seasons.WILD_LIFE) {
+        if (LifeSeries.isSeason(Seasons.WILD_LIFE)) {
             for (TriviaQuestion question : TriviaWildcard.easyTrivia.tryGetTriviaQuestions()) {
                 List<String> info = new ArrayList<>();
                 info.add("easy");
@@ -350,7 +350,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 index++;
             }
         }
-        if (currentSeason.getSeason() == Seasons.NICE_LIFE) {
+        if (LifeSeries.isSeason(Seasons.NICE_LIFE)) {
             for (TriviaQuestion question : NiceLifeTriviaManager.triviaQuestions.tryGetTriviaQuestions()) {
                 List<String> info = new ArrayList<>();
                 info.add("normal");

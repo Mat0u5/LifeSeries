@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.entity.triviabot;
 
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.entity.triviabot.goal.TriviaBotGlideGoal;
 import net.mat0u5.lifeseries.entity.triviabot.goal.TriviaBotLookAtPlayerGoal;
 import net.mat0u5.lifeseries.entity.triviabot.goal.TriviaBotTeleportGoal;
@@ -73,7 +74,7 @@ public class TriviaBot extends AmbientCreature {
             //? if <= 1.20.3 {
             /*this.setMaxUpStep(1.0F);
              *///?}
-            if (currentSeason.getSeason() == Seasons.NICE_LIFE) {
+            if (LifeSeries.isSeason(Seasons.NICE_LIFE)) {
                 triviaHandler = new NiceLifeTriviaHandler(this);
                 setSantaBot(true);
             }
@@ -228,8 +229,8 @@ public class TriviaBot extends AmbientCreature {
         this.entityData.define(interactedWith, false);
         this.entityData.define(gliding, false);
         this.entityData.define(analyzing, -1);
-        this.entityData.define(santaBot, currentSeason.getSeason() == Seasons.NICE_LIFE);
-        this.entityData.define(waving, 0);
+        this.entityData.define(santaBot, false);
+        this.entityData.define(waving, -1);
         this.entityData.define(leaving, false);
     }
     *///?} else {
@@ -242,7 +243,7 @@ public class TriviaBot extends AmbientCreature {
         builder.define(interactedWith, false);
         builder.define(gliding, false);
         builder.define(analyzing, -1);
-        builder.define(santaBot, currentSeason.getSeason() == Seasons.NICE_LIFE);
+        builder.define(santaBot, false);
         builder.define(waving, -1);
         builder.define(leaving, false);
     }

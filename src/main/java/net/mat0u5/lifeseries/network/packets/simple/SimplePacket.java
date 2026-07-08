@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.network.packets.simple;
 
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.utils.interfaces.ClientAccessor;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
@@ -72,8 +73,9 @@ public abstract class SimplePacket<U extends CustomPacketPayload, V> {
             return;
         }
 
-        if (LifeSeries.clientHelper != null) {
-            LifeSeries.clientHelper.sendPacket(packet);
+        ClientAccessor clientAccessor = LifeSeries.getClientAccessor();
+        if (clientAccessor != null) {
+            clientAccessor.sendPacket(packet);
         }
     }
 

@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Season;
@@ -84,7 +85,7 @@ public class GivelifeCommand extends Command {
         }
 
         int giveAmount = 1;
-        if (currentSeason.getSeason() == Seasons.LIMITED_LIFE) {
+        if (LifeSeries.isSeason(Seasons.LIMITED_LIFE)) {
             giveAmount = -LimitedLife.NEW_DEATH_NORMAL.getSeconds();
         }
 

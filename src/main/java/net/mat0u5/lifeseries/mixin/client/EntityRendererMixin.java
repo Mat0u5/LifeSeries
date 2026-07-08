@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
+import net.mat0u5.lifeseries.LifeSeries;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -135,7 +136,7 @@ public class EntityRendererMixin<T extends Entity, S extends EntityRenderState> 
             if (objective != null) {
                 ReadOnlyScoreInfo scoreInfo = scoreboard.getPlayerScoreInfo(player, objective);
                 if (scoreInfo != null && objective.getName().equalsIgnoreCase(LivesManager.SCOREBOARD_NAME)) {
-                    if (LifeSeriesClient.clientCurrentSeason == Seasons.LIMITED_LIFE) {
+                    if (LifeSeries.isSeason(Seasons.LIMITED_LIFE)) {
                         return Component.literal(Time.seconds(scoreInfo.value()).formatLong()).setStyle(player.getDisplayName().getStyle());
                     }
                 }

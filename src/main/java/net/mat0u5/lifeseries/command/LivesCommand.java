@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
@@ -43,12 +44,12 @@ public class LivesCommand extends Command {
     }
 
     public boolean isNormalLife() {
-        return currentSeason.getSeason() != Seasons.LIMITED_LIFE;
+        return !LifeSeries.isSeason(Seasons.LIMITED_LIFE);
     }
 
     @Override
     public boolean isAllowed() {
-        return currentSeason.getSeason() != Seasons.UNASSIGNED;
+        return !LifeSeries.isSeason(Seasons.UNASSIGNED);
     }
 
     @Override

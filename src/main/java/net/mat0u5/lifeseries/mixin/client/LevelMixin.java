@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public class LevelMixin {
     @ModifyReturnValue(method = "getRainLevel", at = @At(value = "RETURN"))
     public float getRainLevel(float original) {
-        if (!LifeSeries.modDisabled() && LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE) {
+        if (!LifeSeries.modDisabled() && LifeSeries.isSeason(Seasons.NICE_LIFE)) {
             return 0;
         }
         return original;

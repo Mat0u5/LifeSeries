@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths;
 
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
@@ -54,7 +55,7 @@ public class AdvancedDeathsManager {
             return;
         }
         int amountOfDeaths = currentLives - lives;
-        if (currentSeason.getSeason() == Seasons.LIMITED_LIFE) {
+        if (LifeSeries.isSeason(Seasons.LIMITED_LIFE)) {
             amountOfDeaths = (int) Math.ceil(((double) amountOfDeaths) / Math.abs(LimitedLife.NEW_DEATH_NORMAL.getSeconds()));
         }
 

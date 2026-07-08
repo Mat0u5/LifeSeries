@@ -44,7 +44,7 @@ public class WindChargeItemMixin {
         public void use(Level level, Player user, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
         if (LifeSeries.isClientOrDisabled()) return;
         if (user instanceof ServerPlayer player) {
-            if (currentSeason.getSeason() != Seasons.WILD_LIFE) return;
+            if (!LifeSeries.isSeason(Seasons.WILD_LIFE)) return;
             if (!SuperpowersWildcard.hasActivatedPower(player, Superpowers.WIND_CHARGE)) return;
 
             PlayerReference ref = PlayerReference.of(player);

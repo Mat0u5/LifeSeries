@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.pastlife;
 
 import com.mojang.brigadier.CommandDispatcher;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -21,7 +22,7 @@ public class PastLifeCommands extends Command {
 
     @Override
     public boolean isAllowed() {
-        return currentSeason.getSeason() == Seasons.PAST_LIFE;
+        return LifeSeries.isSeason(Seasons.PAST_LIFE);
     }
 
     @Override

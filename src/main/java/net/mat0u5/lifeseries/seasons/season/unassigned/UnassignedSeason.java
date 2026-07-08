@@ -69,7 +69,7 @@ public class UnassignedSeason extends Season {
 
     public void broadcastNotice() {
         if (LifeSeries.modDisabled()) return;
-        if (currentSeason.getSeason() != Seasons.UNASSIGNED) return;
+        if (!LifeSeries.isSeason(Seasons.UNASSIGNED)) return;
         PlayerUtils.broadcastMessage(Component.literal("[LifeSeries] You must select a season with ").withStyle(ChatFormatting.RED)
                 .append(Component.literal("'/lifeseries setSeries <series>'").withStyle(ChatFormatting.GRAY)), 120);
         PlayerUtils.broadcastMessage(Component.literal("You must have §noperator permissions§c to use most commands in this mod.").withStyle(ChatFormatting.RED), 120);

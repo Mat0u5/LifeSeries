@@ -11,7 +11,7 @@ import java.util.UUID;
 //? if neoforge
 //import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public interface IClientHelper {
+public interface ClientAccessor {
     boolean isReplay();
     HandshakeStatus serverHandshake();
     boolean isRunningIntegratedServer();

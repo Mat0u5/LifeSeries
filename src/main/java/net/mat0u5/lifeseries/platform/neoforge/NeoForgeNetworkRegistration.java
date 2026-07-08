@@ -54,7 +54,7 @@ public static void registerPackets(RegisterPayloadHandlerEvent event) {
                     if (context.flow().isServerbound()) {
                         ServerPacketHandler.handle(payload, context);
                     } else if (LifeSeries.hasClient()) {
-                        LifeSeries.clientHelper.handlePacket(payload, context);
+                        LifeSeries.getClientAccessor().handlePacket(payload, context);
                     }
                 }
         );
@@ -86,7 +86,7 @@ public static void registerPackets(RegisterPayloadHandlerEvent event) {
                         ServerPacketHandler.handle(payload, context);
                     }
                     else if (LifeSeries.hasClient()) {
-                        LifeSeries.clientHelper.handlePacket(payload, context);
+                        LifeSeries.getClientAccessor().handlePacket(payload, context);
                     }
                 }
         );
@@ -97,7 +97,7 @@ public static void registerPackets(RegisterPayloadHandlerEvent event) {
                     type,
                     codec,
                     ServerPacketHandler::handle,
-                    LifeSeries.hasClient() ? LifeSeries.clientHelper::handlePacket : null
+                    LifeSeries.hasClient() ? LifeSeries.getClientAccessor()::handlePacket : null
             );
         } catch (NoSuchMethodError e) {
             registrar.playBidirectional(
@@ -108,7 +108,7 @@ public static void registerPackets(RegisterPayloadHandlerEvent event) {
                             ServerPacketHandler.handle(payload, context);
                         }
                         else if (LifeSeries.hasClient()) {
-                            LifeSeries.clientHelper.handlePacket(payload, context);
+                            LifeSeries.getClientAccessor().handlePacket(payload, context);
                         }
                     }
             );
@@ -118,7 +118,7 @@ public static void registerPackets(RegisterPayloadHandlerEvent event) {
                 type,
                 codec,
                 ServerPacketHandler::handle,
-                LifeSeries.hasClient() ? LifeSeries.clientHelper::handlePacket : null
+                LifeSeries.hasClient() ? LifeSeries.getClientAccessor()::handlePacket : null
         );
         //?}
     }

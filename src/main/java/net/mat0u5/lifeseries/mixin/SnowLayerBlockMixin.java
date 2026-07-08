@@ -20,7 +20,7 @@ public class SnowLayerBlockMixin {
 
     @Inject(method = "randomTick", at = @At("HEAD"), cancellable = true)
     private void cancelMelt(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource randomSource, CallbackInfo ci) {
-        if (LifeSeries.isLogicalNonDisabled() && currentSeason.getSeason() == Seasons.NICE_LIFE && !NiceLife.LIGHT_MELTS_SNOW) {
+        if (LifeSeries.isLogicalNonDisabled() && LifeSeries.isSeason(Seasons.NICE_LIFE) && !NiceLife.LIGHT_MELTS_SNOW) {
             ci.cancel();
         }
     }

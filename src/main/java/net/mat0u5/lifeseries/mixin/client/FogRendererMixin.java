@@ -66,7 +66,7 @@ public class FogRendererMixin {
 *///?}
         ClientLevel nether = Minecraft.getInstance().level;
         if (LifeSeriesClient.fogColor == null && camera.getFluidInCamera() == FogType.NONE && nether != null && nether.dimension() == Level.NETHER &&
-                LifeSeriesClient.NICELIFE_SNOWY_NETHER && !LifeSeries.modDisabled() && LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE) {
+                LifeSeriesClient.NICELIFE_SNOWY_NETHER && !LifeSeries.modDisabled() && LifeSeries.isSeason(Seasons.NICE_LIFE)) {
             //? if <= 1.21 {
             /*ci.cancel();
             *///?} else if <= 1.21.5 {

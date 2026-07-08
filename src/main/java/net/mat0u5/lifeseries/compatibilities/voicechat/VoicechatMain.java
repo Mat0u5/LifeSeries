@@ -119,7 +119,7 @@ public class VoicechatMain implements VoicechatPlugin {
         }
     }
     private void roboticVoice(MicrophonePacketEvent event) {
-        if (currentSeason.getSeason() != Seasons.WILD_LIFE) {
+        if (!LifeSeries.isSeason(Seasons.WILD_LIFE)) {
             return;
         }
         if (!WildcardManager.isActiveWildcard(Wildcards.TRIVIA)) {
@@ -143,7 +143,7 @@ public class VoicechatMain implements VoicechatPlugin {
     }
 
     private void listeningPower(MicrophonePacketEvent event) {
-        if (currentSeason.getSeason() != Seasons.WILD_LIFE) {
+        if (!LifeSeries.isSeason(Seasons.WILD_LIFE)) {
             return;
         }
         if (Listening.listeningPlayers.isEmpty()) {

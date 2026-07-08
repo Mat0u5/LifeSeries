@@ -14,7 +14,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.S
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
 import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
-import net.mat0u5.lifeseries.utils.interfaces.IClientHelper;
+import net.mat0u5.lifeseries.utils.interfaces.ClientAccessor;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.server.MinecraftServer;
@@ -22,7 +22,6 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
 import java.util.UUID;
 
 //? if fabric {
@@ -38,29 +37,26 @@ import net.mat0u5.lifeseries.registries.ModRegistries;
 *///?}
 
 public class LifeSeries {
-	public static final String MOD_VERSION = "1.5.6.19-dev";
+	public static final String MOD_VERSION = "1.5.6.20-dev";
 	public static final String MOD_ID = "lifeseries";
 	private static final Platform PLATFORM = createPlatformInstance();
 
-	public static final String UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
 	public static final boolean DEBUG = false;
 	public static final boolean ISOLATED_ENVIRONMENT = false;
 	public static final Seasons DEFAULT_SEASON = Seasons.UNASSIGNED;
 	public static boolean MOD_DISABLED = false;
-
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-	private static ConfigManager config;
-	public static IClientHelper clientHelper;
-
 	@Nullable
 	public static volatile MinecraftServer server;
 	public static volatile Thread serverThread;
+
+	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	private static ConfigManager config;
+	private static ClientAccessor clientAccessor;
 	public static Season currentSeason;
 	public static Session currentSession;
 	public static LivesManager livesManager;
 	public static Blacklist blacklist;
 	public static ConfigManager seasonConfig;
-	public static final List<String> ALLOWED_SEASON_NAMES = Seasons.getSeasonIds();
 
 	public static void onInitialize() {
 		LOGGER.info("Initializing Life Series [{} {} ({})]...", platform().loader().name(), platform().mcVersion(), MOD_VERSION);
@@ -106,17 +102,17 @@ public class LifeSeries {
 	}
 
 	public static boolean modDisabled() {
-		if (clientHelper != null) {
-			if (clientHelper.isReplay()) return true;
-			if (clientHelper.serverHandshake() == HandshakeStatus.NOT_RECEIVED) return true;
-			return clientHelper.isDisabledServerSide();
+		if (clientAccessor != null) {
+			if (clientAccessor.isReplay()) return true;
+			if (clientAccessor.serverHandshake() == HandshakeStatus.NOT_RECEIVED) return true;
+			return clientAccessor.isDisabledServerSide();
 		}
 		return MOD_DISABLED;
 	}
 
 	public static boolean modFullyDisabled() {
-		if (clientHelper == null) return false;
-		return clientHelper.serverHandshake() == HandshakeStatus.NOT_RECEIVED;
+		if (clientAccessor == null) return false;
+		return clientAccessor.serverHandshake() == HandshakeStatus.NOT_RECEIVED;
 	}
 
 	public static void setDisabled(boolean disabled) {
@@ -134,23 +130,31 @@ public class LifeSeries {
 	}
 
 	public static boolean hasClient() {
-		return clientHelper != null;
+		return clientAccessor != null;
 	}
 
-	public static void setClientHelper(IClientHelper helper) {
-		clientHelper = helper;
+	public static ClientAccessor getClientAccessor() {
+		return clientAccessor;
+	}
+
+	public static void setClientAccessor(ClientAccessor helper) {
+		clientAccessor = helper;
 	}
 
 	public static Seasons getSeason() {
-		if (!isLogicalSide() && clientHelper != null) {
-			return clientHelper.getCurrentSeason();
+		if (!isLogicalSide() && clientAccessor != null) {
+			return clientAccessor.getCurrentSeason();
 		}
 		return currentSeason.getSeason();
 	}
 
+	public static boolean isSeason(Seasons season) {
+		return getSeason() == season;
+	}
+
 	public static boolean isLogicalSide() {
-		if (clientHelper == null) return true;
-		return clientHelper != null && clientHelper.isRunningIntegratedServer();
+		if (clientAccessor == null) return true;
+		return clientAccessor != null && clientAccessor.isRunningIntegratedServer();
 	}
 
 	public static boolean isLogicalNonDisabled() {
@@ -161,12 +165,19 @@ public class LifeSeries {
 	}
 
 	public static boolean isClientPlayer(UUID uuid) {
-		return clientHelper != null && clientHelper.isMainClientPlayer(uuid);
+		return clientAccessor != null && clientAccessor.isMainClientPlayer(uuid);
 	}
-
 
 	public static ConfigManager getMainConfig() {
 		return config;
+	}
+
+	public static Season currentSeason() {
+		return currentSeason;
+	}
+
+	public static Session currentSession() {
+		return currentSession;
 	}
 
 	public static boolean isMainThread() {

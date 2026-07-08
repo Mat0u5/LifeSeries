@@ -206,7 +206,7 @@ public class ClientEvents {
 
     public static void sendPackets(LocalPlayer player) {
         //? if > 1.20.3 {
-        if (LifeSeriesClient.clientCurrentSeason == Seasons.WILD_LIFE && LifeSeriesClient.clientActiveWildcards.contains(Wildcards.SIZE_SHIFTING)) {
+        if (LifeSeries.isSeason(Seasons.WILD_LIFE) && LifeSeriesClient.clientActiveWildcards.contains(Wildcards.SIZE_SHIFTING)) {
             //? if <= 1.21 {
             /*boolean jumping = player.input.jumping;
             *///?} else {

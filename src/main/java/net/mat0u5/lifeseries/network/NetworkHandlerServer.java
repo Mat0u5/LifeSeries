@@ -155,7 +155,7 @@ public class NetworkHandlerServer {
 
         SimplePackets.TRIVIA_ANSWER.setServerReceive((player, payload) -> {
             if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received trivia answer (from {}): {}", player, payload.number()));
-            if (currentSeason.getSeason() == Seasons.NICE_LIFE) {
+            if (LifeSeries.isSeason(Seasons.NICE_LIFE)) {
                 NiceLifeTriviaManager.handleAnswer(player, payload.number());
             }
             else {
@@ -164,12 +164,12 @@ public class NetworkHandlerServer {
         });
 
         SimplePackets.HOLDING_JUMP.setServerReceive((player, payload) -> {
-            if (currentSeason.getSeason() == Seasons.WILD_LIFE && WildcardManager.isActiveWildcard(Wildcards.SIZE_SHIFTING)) {
+            if (LifeSeries.isSeason(Seasons.WILD_LIFE) && WildcardManager.isActiveWildcard(Wildcards.SIZE_SHIFTING)) {
                 SizeShifting.onHoldingJump(player);
             }
         });
         SimplePackets.SUPERPOWER_KEY.setServerReceive((player, payload) -> {
-            if (currentSeason.getSeason() == Seasons.WILD_LIFE) {
+            if (LifeSeries.isSeason(Seasons.WILD_LIFE)) {
                 SuperpowersWildcard.pressedSuperpowerKey(player);
             }
         });
@@ -185,7 +185,7 @@ public class NetworkHandlerServer {
             }
         });
         SimplePackets.SET_SEASON.setServerReceive((player, payload) -> {
-            if (PermissionManager.isAdmin(player) || currentSeason.getSeason() == Seasons.UNASSIGNED) {
+            if (PermissionManager.isAdmin(player) || LifeSeries.isSeason(Seasons.UNASSIGNED)) {
                 Seasons currentSeason = LifeSeries.getSeason();
                 Seasons newSeason = Seasons.getSeasonFromStringName(payload.value());
                 if (newSeason == Seasons.UNASSIGNED) return;
@@ -202,7 +202,7 @@ public class NetworkHandlerServer {
             }
         });
         SimplePackets.TRIPLE_JUMP.setServerReceive((player, payload) -> {
-            if (currentSeason.getSeason() == Seasons.WILD_LIFE && SuperpowersWildcard.hasActivatedPower(player, Superpowers.TRIPLE_JUMP)) {
+            if (LifeSeries.isSeason(Seasons.WILD_LIFE) && SuperpowersWildcard.hasActivatedPower(player, Superpowers.TRIPLE_JUMP)) {
                 Superpower power = SuperpowersWildcard.getSuperpowerInstance(player);
                 if (power instanceof TripleJump tripleJump) {
                     tripleJump.isInAir = true;
@@ -319,7 +319,7 @@ public class NetworkHandlerServer {
                     }catch(Exception e) {}
                 }
                 TriviaQuestionManager manager = null;
-                if (currentSeason.getSeason() == Seasons.WILD_LIFE) {
+                if (LifeSeries.isSeason(Seasons.WILD_LIFE)) {
                     if (type.equalsIgnoreCase("easy")) {
                         manager = TriviaWildcard.easyTrivia;
                     }

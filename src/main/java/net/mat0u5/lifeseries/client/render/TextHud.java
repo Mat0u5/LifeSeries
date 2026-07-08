@@ -132,7 +132,7 @@ public class TextHud {
 
     private static long limitedLifeTime = -1;
     public static int renderLimitedLifeTimer(Minecraft client, GuiGraphicsExtractor context, int y) {
-        if (LifeSeriesClient.clientCurrentSeason != Seasons.LIMITED_LIFE) return 0;
+        if (!LifeSeries.isSeason(Seasons.LIMITED_LIFE)) return 0;
         if (System.currentTimeMillis()- LifeSeriesClient.limitedLifeTimeLastUpdated > 15000) return 0;
 
         Component timerText = TextUtils.formatLoosely("{}0:00:00", LifeSeriesClient.limitedLifeTimerColor);
@@ -160,7 +160,7 @@ public class TextHud {
     private static int triviaTimer = -1;
     public static int renderTriviaTimer(Minecraft client, GuiGraphicsExtractor context, int y) {
         if (!Trivia.isDoingTrivia()) return 0;
-        if (LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE) return 0;
+        if (LifeSeries.isSeason(Seasons.NICE_LIFE)) return 0;
 
         if (sessionSecondChanged || LifeSeriesClient.sessionTime <= 0 || Math.abs(triviaTimer - Trivia.getRemainingSeconds()) >= 2) {
             triviaTimer = Trivia.getRemainingSeconds();

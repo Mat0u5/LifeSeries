@@ -110,7 +110,7 @@ public abstract class PlayerEntityRendererMixin {
         if (objective != null) {
             Score score = scoreboard.getOrCreatePlayerScore(abstractClientPlayer.getScoreboardName(), objective);
             if (objective.getName().equalsIgnoreCase(LivesManager.SCOREBOARD_NAME)) {
-                if (LifeSeriesClient.clientCurrentSeason == Seasons.LIMITED_LIFE) {
+                if (LifeSeries.isSeason(Seasons.LIMITED_LIFE)) {
                     Time timeLeft = Time.seconds(Math.max(0, score.getScore()));
                     return Component.literal(timeLeft.formatLong() + ";").setStyle(abstractClientPlayer.getDisplayName().getStyle());
                 }
@@ -138,7 +138,7 @@ public abstract class PlayerEntityRendererMixin {
         Objective objective = scoreboard.getDisplayObjective(DisplaySlot.BELOW_NAME);
         if (objective != null && readOnlyScoreInfo != null) {
             if (objective.getName().equalsIgnoreCase(LivesManager.SCOREBOARD_NAME)) {
-                if (LifeSeriesClient.clientCurrentSeason == Seasons.LIMITED_LIFE) {
+                if (LifeSeries.isSeason(Seasons.LIMITED_LIFE)) {
                     Time timeLeft = Time.seconds(Math.max(0, readOnlyScoreInfo.value()));
                     return Component.literal(timeLeft.formatLong() + ";").setStyle(abstractClientPlayer.getDisplayName().getStyle());
                 }
@@ -177,7 +177,7 @@ public abstract class PlayerEntityRendererMixin {
             if (objective != null) {
                 ReadOnlyScoreInfo scoreInfo = scoreboard.getPlayerScoreInfo(player, objective);
                 if (scoreInfo != null && objective.getName().equalsIgnoreCase(LivesManager.SCOREBOARD_NAME)) {
-                    if (LifeSeriesClient.clientCurrentSeason == Seasons.LIMITED_LIFE) {
+                    if (LifeSeries.isSeason(Seasons.LIMITED_LIFE)) {
                         return Component.literal(Time.seconds(scoreInfo.value()).formatLong()).setStyle(player.getDisplayName().getStyle());
                     }
                 }
@@ -191,7 +191,7 @@ public abstract class PlayerEntityRendererMixin {
 
     @ModifyReturnValue(method = "getArmPose*", at = @At("RETURN"))
     private static HumanoidModel.ArmPose noHands(HumanoidModel.ArmPose original) {
-        if (!LifeSeries.modDisabled() && LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE && (RenderUtils.getScreen() instanceof EmptySleepScreen || (RenderUtils.getScreen() instanceof NewQuizScreen quizScreen && !quizScreen.shouldCloseOnEsc()) || (RenderUtils.getScreen() instanceof QuizScreen quizScreenOld && !quizScreenOld.shouldCloseOnEsc()) || RenderUtils.getScreen() instanceof VotingScreen)) {
+        if (!LifeSeries.modDisabled() && LifeSeries.isSeason(Seasons.NICE_LIFE) && (RenderUtils.getScreen() instanceof EmptySleepScreen || (RenderUtils.getScreen() instanceof NewQuizScreen quizScreen && !quizScreen.shouldCloseOnEsc()) || (RenderUtils.getScreen() instanceof QuizScreen quizScreenOld && !quizScreenOld.shouldCloseOnEsc()) || RenderUtils.getScreen() instanceof VotingScreen)) {
             return HumanoidModel.ArmPose.EMPTY;
         }
         return original;

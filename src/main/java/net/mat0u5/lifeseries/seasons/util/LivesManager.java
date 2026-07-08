@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.util;
 
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
@@ -137,12 +138,12 @@ public class LivesManager {
     }
 
     public int defaultTeamCanKill(String teamName) {
-        if (currentSeason.getSeason() == Seasons.WILD_LIFE) {
+        if (LifeSeries.isSeason(Seasons.WILD_LIFE)) {
             if (teamName.equals("lives_2")) {
                 return 3;
             }
         }
-        if (currentSeason.getSeason() == Seasons.LIMITED_LIFE) {
+        if (LifeSeries.isSeason(Seasons.LIMITED_LIFE)) {
             if (teamName.equals("lives_2")) {
                 return LimitedLifeLivesManager.YELLOW_TIME;
             }
@@ -154,12 +155,12 @@ public class LivesManager {
     }
 
     public int defaultTeamGainLife(String teamName) {
-        if (currentSeason.getSeason() == Seasons.WILD_LIFE) {
+        if (LifeSeries.isSeason(Seasons.WILD_LIFE)) {
             if (teamName.equals("lives_1") || teamName.equals("lives_2")) {
                 return 4;
             }
         }
-        if (currentSeason.getSeason() == Seasons.LIMITED_LIFE) {
+        if (LifeSeries.isSeason(Seasons.LIMITED_LIFE)) {
             if (teamName.equals("lives_1")) {
                 return 1;
             }

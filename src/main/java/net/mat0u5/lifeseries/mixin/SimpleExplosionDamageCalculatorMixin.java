@@ -29,7 +29,7 @@ public class SimpleExplosionDamageCalculatorMixin {
     public void getKnockbackModifier(Entity entity, CallbackInfoReturnable<Float> cir) {
         if (LifeSeries.isClientOrDisabled()) return;
         if (entity instanceof ServerPlayer player) {
-            if (currentSeason.getSeason() != Seasons.WILD_LIFE) return;
+            if (!LifeSeries.isSeason(Seasons.WILD_LIFE)) return;
             if (player.getAbilities().flying) return;
             if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.WIND_CHARGE)) {
                 cir.setReturnValue((float) WindCharge.EXPLOSION_POWER); // Default is 1.22f

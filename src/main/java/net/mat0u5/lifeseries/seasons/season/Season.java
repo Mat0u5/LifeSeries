@@ -328,7 +328,7 @@ public abstract class Season {
     public void createTeams() {
         Collection<PlayerTeam> allTeams = TeamUtils.getAllTeams();
         if (allTeams != null) {
-            if (currentSeason.getSeason() != Seasons.WILD_LIFE || CreakingPower.allCreatedEntities.isEmpty() || !SuperpowersWildcard.anyoneHasActivatedPower(Superpowers.CREAKING)) {
+            if (!LifeSeries.isSeason(Seasons.WILD_LIFE) || CreakingPower.allCreatedEntities.isEmpty() || !SuperpowersWildcard.anyoneHasActivatedPower(Superpowers.CREAKING)) {
                 for (PlayerTeam team : allTeams) {
                     if (team.getName().startsWith("creaking_")) {
                         TeamUtils.deleteTeam(team.getName());

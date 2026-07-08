@@ -10,7 +10,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
-import net.mat0u5.lifeseries.utils.interfaces.IClientHelper;
+import net.mat0u5.lifeseries.utils.interfaces.ClientAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.phys.Vec3;
@@ -24,7 +24,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 *///?}
 
-public class LifeSeriesClient implements IClientHelper {
+public class LifeSeriesClient implements ClientAccessor {
 
     public static Seasons clientCurrentSeason = LifeSeries.DEFAULT_SEASON;
     public static SessionStatus clientSessionStatus = SessionStatus.NOT_STARTED;
@@ -89,7 +89,7 @@ public class LifeSeriesClient implements IClientHelper {
         ClientRegistries.registerModStuff();
         NetworkHandlerClient.initializeSimplePacketReceivers();
 
-        LifeSeries.setClientHelper(new LifeSeriesClient());
+        LifeSeries.setClientAccessor(new LifeSeriesClient());
 
         clientConfig = new ClientConfig();
         reloadConfig();

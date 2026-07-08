@@ -116,7 +116,7 @@ public class SessionTranscript {
     }
 
     public static void assignRandomLives(ServerPlayer player, int amount) {
-        if (currentSeason.getSeason() != Seasons.LIMITED_LIFE) {
+        if (!LifeSeries.isSeason(Seasons.LIMITED_LIFE)) {
             addMessageWithTime(TextUtils.formatString("{} has been randomly assigned {} lives", player, amount));
         }
         else {
@@ -167,7 +167,7 @@ public class SessionTranscript {
     }
 
     public static void onPlayerLostAllLives(ServerPlayer player) {
-        if (currentSeason.getSeason() != Seasons.LIMITED_LIFE) {
+        if (!LifeSeries.isSeason(Seasons.LIMITED_LIFE)) {
             addMessageWithTime(TextUtils.formatString("{} lost all lives.", player));
         }
         else {
@@ -203,7 +203,7 @@ public class SessionTranscript {
             for (PlayerRecord playerRecord : playerRecords.values()) {
                 Integer startLives = playerRecord.startLives;
                 Integer endLives = playerRecord.getCurrentLives();
-                if (currentSeason.getSeason() != Seasons.LIMITED_LIFE) {
+                if (!LifeSeries.isSeason(Seasons.LIMITED_LIFE)) {
                     messages.add(TextUtils.formatString("\t{}: {} -> {}",playerRecord.name, startLives, endLives));
                 }
                 else {

@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.subin;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -24,7 +25,7 @@ import net.minecraft.server.players.NameAndId;
 public class SubInCommands extends Command {
     @Override
     public boolean isAllowed() {
-        return currentSeason.getSeason() != Seasons.UNASSIGNED;
+        return !LifeSeries.isSeason(Seasons.UNASSIGNED);
     }
 
     @Override

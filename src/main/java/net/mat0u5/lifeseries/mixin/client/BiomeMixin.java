@@ -19,7 +19,7 @@ public class BiomeMixin {
     @Inject(method = "getTemperature", at = @At(value = "HEAD"), cancellable = true)
     public void render(BlockPos blockPos, int i, CallbackInfoReturnable<Float> cir) {
     //?}
-        if (!LifeSeries.modDisabled() && LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE) {
+        if (!LifeSeries.modDisabled() && LifeSeries.isSeason(Seasons.NICE_LIFE)) {
             cir.setReturnValue(0.0f);
         }
     }

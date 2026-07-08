@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.config;
 
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.enums.Formatted;
 import net.minecraft.network.chat.Component;
@@ -633,7 +634,7 @@ public enum ModifiableText {
     }
 
     public String getRegisterDefaultValue() {
-        if (currentSeason != null && currentSeason.getSeason() == Seasons.LIMITED_LIFE) {
+        if (currentSeason != null && LifeSeries.isSeason(Seasons.LIMITED_LIFE)) {
             String modified = null;
 
             if (this == GIVELIFE_RECEIVE_OTHER) modified = "{} received {} from {}";
@@ -676,7 +677,7 @@ public enum ModifiableText {
     }
 
     public List<String> getRegisterArgs() {
-        if (currentSeason != null && currentSeason.getSeason() == Seasons.LIMITED_LIFE) {
+        if (currentSeason != null && LifeSeries.isSeason(Seasons.LIMITED_LIFE)) {
 
             if (this == GIVELIFE_RECEIVE_OTHER) return List.of("Receiver", "time", "Giver");
             else if (this == GIVELIFE_RECEIVE_SELF) return List.of("time", "Player");

@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.entity.triviabot.server;
 
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.entity.PlayerBoundEntity;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -57,7 +58,7 @@ public class TriviaBotServerData implements PlayerBoundEntity {
 
     public void tick() {
         if (bot.level().isClientSide()) return;
-        bot.setSantaBot(currentSeason.getSeason() == Seasons.NICE_LIFE);
+        bot.setSantaBot(LifeSeries.isSeason(Seasons.NICE_LIFE));
         if (despawnChecks()) return;
         bot.pathfinding.tick();
         bot.triviaHandler.tick();
@@ -77,13 +78,13 @@ public class TriviaBotServerData implements PlayerBoundEntity {
             return true;
         }
         if (bot.tickCount % 10 == 0) {
-            if (currentSeason.getSeason() == Seasons.WILD_LIFE) {
+            if (LifeSeries.isSeason(Seasons.WILD_LIFE)) {
                 if (!TriviaWildcard.bots.containsValue(bot)) {
                     despawn();
                     return true;
                 }
             }
-            else if (currentSeason.getSeason() == Seasons.NICE_LIFE) {
+            else if (LifeSeries.isSeason(Seasons.NICE_LIFE)) {
                 if (!NiceLifeTriviaManager.bots.containsValue(bot)) {
                     despawn();
                     return true;

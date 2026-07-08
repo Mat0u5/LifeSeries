@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Hunger;
+import net.mat0u5.lifeseries.utils.interfaces.ClientAccessor;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -59,9 +60,10 @@ public abstract class ItemMixin {
             }
         }
         else {
-            if (LifeSeries.clientHelper != null &&
-                    LifeSeries.clientHelper.getCurrentSeason() == Seasons.WILD_LIFE &&
-                    LifeSeries.clientHelper.getActiveWildcards().contains(Wildcards.HUNGER)) {
+            ClientAccessor clientAccessor = LifeSeries.getClientAccessor();
+            if (LifeSeries.hasClient() &&
+                    clientAccessor.getCurrentSeason() == Seasons.WILD_LIFE &&
+                    clientAccessor.getActiveWildcards().contains(Wildcards.HUNGER)) {
                 hungerActive = true;
             }
         }
@@ -103,9 +105,10 @@ public abstract class ItemMixin {
             }
         }
         else {
-            if (LifeSeries.clientHelper != null &&
-                    LifeSeries.clientHelper.getCurrentSeason() == Seasons.WILD_LIFE &&
-                    LifeSeries.clientHelper.getActiveWildcards().contains(Wildcards.HUNGER)) {
+            ClientAccessor clientAccessor = LifeSeries.getClientAccessor();
+            if (clientAccessor != null &&
+                    clientAccessor.getCurrentSeason() == Seasons.WILD_LIFE &&
+                    clientAccessor.getActiveWildcards().contains(Wildcards.HUNGER)) {
                 hungerActive = true;
             }
         }

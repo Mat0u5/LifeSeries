@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.boogeyman;
 
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
@@ -620,7 +621,7 @@ public class BoogeymanManager {
         if (!BOOGEYMAN_ADVANCED_DEATHS) {
             delay = 140;
         }
-        if (currentSeason.getSeason() == Seasons.LIMITED_LIFE) {
+        if (LifeSeries.isSeason(Seasons.LIMITED_LIFE)) {
             delay = 140;
         }
 

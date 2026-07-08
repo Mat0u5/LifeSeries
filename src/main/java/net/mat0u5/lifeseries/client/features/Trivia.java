@@ -58,7 +58,7 @@ public class Trivia {
     public static void openGui() {
         if (LifeSeries.modDisabled()) return;
         if (question.isEmpty() || answers.isEmpty()) return;
-        boolean newScreen = (triviaGuiType == null && LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE) || triviaGuiType == TriviaGuiType.NICE_LIFE;
+        boolean newScreen = (triviaGuiType == null && LifeSeries.isSeason(Seasons.NICE_LIFE)) || triviaGuiType == TriviaGuiType.NICE_LIFE;
         if (newScreen) {
             RenderUtils.setScreen(new NewQuizScreen());
         }

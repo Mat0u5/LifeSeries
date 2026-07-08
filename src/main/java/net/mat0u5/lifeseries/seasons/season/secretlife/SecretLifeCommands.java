@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.secretlife;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -34,7 +35,7 @@ public class SecretLifeCommands extends Command {
 
     @Override
     public boolean isAllowed() {
-        return currentSeason.getSeason() == Seasons.SECRET_LIFE;
+        return LifeSeries.isSeason(Seasons.SECRET_LIFE);
     }
 
     @Override

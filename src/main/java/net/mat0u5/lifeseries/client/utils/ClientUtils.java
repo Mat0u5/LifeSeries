@@ -127,7 +127,7 @@ public class ClientUtils {
         if (!LifeSeriesClient.isClientPlayer(player.getUUID())) return false;
         Holder<Attribute> scaleAttribute = Attributes.SCALE;
         if (instance.getAttribute() != scaleAttribute) return false;
-        if (LifeSeriesClient.clientCurrentSeason != Seasons.WILD_LIFE) return false;
+        if (!LifeSeries.isSeason(Seasons.WILD_LIFE)) return false;
         if (!LifeSeriesClient.clientActiveWildcards.contains(Wildcards.SIZE_SHIFTING)) return false;
         if (!LifeSeriesClient.FIX_SIZECHANGING_BUGS) return false;
 

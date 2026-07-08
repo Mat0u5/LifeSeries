@@ -140,7 +140,7 @@ public class Events {
             if (LifeSeries.modDisabled()) return;
             currentSeason.initialize();
             blacklist.reloadBlacklist();
-            if (currentSeason.getSeason() == Seasons.DOUBLE_LIFE) {
+            if (LifeSeries.isSeason(Seasons.DOUBLE_LIFE)) {
                 ((DoubleLife) currentSeason).loadSoulmates();
             }
         } catch(Exception e) {e.printStackTrace();}

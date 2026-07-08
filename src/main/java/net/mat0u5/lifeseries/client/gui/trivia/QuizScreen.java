@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.client.gui.trivia;
 
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
@@ -92,7 +93,7 @@ public class QuizScreen extends DefaultScreen {
         timerSeconds = Trivia.getRemainingSeconds();
         if (timerSeconds <= 0) {
             this.onClose();
-            if (LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE) RenderUtils.setScreen(new EmptySleepScreen(false));
+            if (LifeSeries.isSeason(Seasons.NICE_LIFE)) RenderUtils.setScreen(new EmptySleepScreen(false));
         }
     }
 
@@ -231,7 +232,7 @@ public class QuizScreen extends DefaultScreen {
 
     @Override
     public boolean shouldCloseOnEsc() {
-        return LifeSeriesClient.clientCurrentSeason != Seasons.NICE_LIFE;
+        return !LifeSeries.isSeason(Seasons.NICE_LIFE);
     }
 
     @Override

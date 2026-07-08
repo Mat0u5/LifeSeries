@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.client.gui.trivia;
 
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.features.Trivia;
 import net.mat0u5.lifeseries.client.gui.DefaultScreen;
@@ -32,7 +33,7 @@ public class ConfirmQuizAnswerScreen extends DefaultScreen {
         this.addRenderableWidget(
                 Button.builder(Component.literal("Confirm"), btn -> {
                             this.onClose();
-                             if (LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE) {
+                             if (LifeSeries.isSeason(Seasons.NICE_LIFE)) {
                                  RenderUtils.setScreen(new EmptySleepScreen(false));
                              }
                             Trivia.sendAnswer(answerIndex);

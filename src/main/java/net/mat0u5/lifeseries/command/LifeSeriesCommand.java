@@ -32,6 +32,7 @@ import java.util.concurrent.CompletableFuture;
 import static net.mat0u5.lifeseries.LifeSeries.*;
 
 public class LifeSeriesCommand extends Command {
+    public static final List<String> ALLOWED_SEASON_NAMES = Seasons.getSeasonIds();
 
     @Override
     public boolean isAllowed() {
@@ -206,7 +207,7 @@ public class LifeSeriesCommand extends Command {
             sendCommandFailure(source, ModifiableText.SEASON_INVALID_HELP.get(ALLOWED_SEASON_NAMES));
             return -1;
         }
-        if (confirmed || currentSeason.getSeason() == Seasons.UNASSIGNED) {
+        if (confirmed || LifeSeries.isSeason(Seasons.UNASSIGNED)) {
             setSeasonFinal(source, setTo, args);
         }
         else {
@@ -248,7 +249,7 @@ public class LifeSeriesCommand extends Command {
         }
 
         SimplePackets.CLEAR_CONFIG.sendToClient(self);
-        if (PermissionManager.isAdmin(self) && currentSeason.getSeason() != Seasons.UNASSIGNED) {
+        if (PermissionManager.isAdmin(self) && !LifeSeries.isSeason(Seasons.UNASSIGNED)) {
             LifeSeries.seasonConfig.sendConfigTo(self);
             sendCommandFeedback(source, ModifiableText.CONFIG_GUI_OPENING.get());
         }

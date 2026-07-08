@@ -15,7 +15,7 @@ public class ClientResourcePacks {
 
     public static void checkClientPacks() {
         handleClientResourcepack(MINIMAL_ARMOR_RESOURCEPACK, ClientConfig.MINIMAL_ARMOR.get(clientConfig));
-        handleClientResourcepack(NICELIFE_ARMOR_RESOURCEPACK, (LifeSeriesClient.clientCurrentSeason == Seasons.NICE_LIFE && LifeSeriesClient.NICELIFE_SNOWY_NETHER));
+        handleClientResourcepack(NICELIFE_ARMOR_RESOURCEPACK, (LifeSeries.isSeason(Seasons.NICE_LIFE) && LifeSeriesClient.NICELIFE_SNOWY_NETHER));
     }
 
     public static void handleClientResourcepack(String id, boolean action) {
