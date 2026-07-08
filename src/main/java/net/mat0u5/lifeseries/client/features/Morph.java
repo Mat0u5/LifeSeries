@@ -34,6 +34,8 @@ public class Morph {
                 *///?} else {
                 Entity entity = morph.create(player.level(), EntitySpawnReason.COMMAND);
                 //?}
+                //? if >= 26.2
+                entity.setId(1);
                 if (entity != null) ((IMorph) entity).setFromMorph(true);
                 if(!(entity instanceof LivingEntity)){
                     morph = null;

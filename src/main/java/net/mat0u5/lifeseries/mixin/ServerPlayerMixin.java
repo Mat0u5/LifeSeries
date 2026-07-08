@@ -24,13 +24,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Unit;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.attribute.BedRule;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.AbstractBedBlock;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.scores.PlayerTeam;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -52,6 +49,11 @@ import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import java.util.Collection;
 //? if <= 1.21.6
 //import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
+//? if >= 26.3 {
+/*import net.minecraft.world.attribute.BedRule;
+import net.minecraft.world.level.block.AbstractBedBlock;
+import net.minecraft.world.level.block.state.BlockState;
+*///?}
 
 @Mixin(value = ServerPlayer.class, priority = 1)
 public class ServerPlayerMixin implements IPlayer {

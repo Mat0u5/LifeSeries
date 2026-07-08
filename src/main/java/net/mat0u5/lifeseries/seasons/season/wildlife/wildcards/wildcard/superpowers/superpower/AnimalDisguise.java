@@ -44,6 +44,8 @@ public class AnimalDisguise extends ToggleableSuperpower {
             MobRegistry.SNAIL, MobRegistry.TRIVIA_BOT,
             EntityTypes.PLAYER, EntityTypes.ENDER_DRAGON, EntityTypes.WITHER, EntityTypes.ARMOR_STAND,
             EntityTypes.AXOLOTL, EntityTypes.DOLPHIN
+            //? if >= 26.3
+            //, EntityTypes.CUSHION
     );
 
     @Override

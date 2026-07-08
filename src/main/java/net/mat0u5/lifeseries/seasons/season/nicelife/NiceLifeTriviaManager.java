@@ -25,13 +25,18 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.livesManager;
 import static net.mat0u5.lifeseries.LifeSeries.server;
+
+//? if <= 26.2 {
+import net.minecraft.world.level.block.BedBlock;
+//?} else {
+/*import net.minecraft.world.level.block.AbstractBedBlock;
+*///?}
 
 public class NiceLifeTriviaManager {
     public static Map<UUID, TriviaBot> bots = new HashMap<>();
@@ -90,8 +95,13 @@ public class NiceLifeTriviaManager {
             ServerLevel level = ((IPlayer) player).ls$getServerLevel();
             BlockState bedState = level.getBlockState(bedPos);
 
+            //? if <= 26.2 {
             if (bedState.getBlock() instanceof BedBlock) {
                 Direction bedDirection = BedBlock.getConnectedDirection(bedState);
+            //?} else {
+            /*if (bedState.getBlock() instanceof AbstractBedBlock) {
+                Direction bedDirection = AbstractBedBlock.getConnectedDirection(bedState);
+            *///?}
 
                 BlockPos headPos = bedPos.relative(bedDirection);
                 BlockPos frontBedPos = headPos.relative(bedDirection);
@@ -226,9 +236,15 @@ public class NiceLifeTriviaManager {
         for (int dirX = -1; dirX <= 1; dirX++) {
             for (int dirZ = -1; dirZ <= 1; dirZ++) {
                 BlockPos breakBlockPos = pos.offset(dirX, 0, dirZ);
+                //? if <= 26.2 {
                 if ((breakBlockPos.getY() <= bedYPos || !CAN_BREAK_BEDS) && level.getBlockState(breakBlockPos).getBlock() instanceof BedBlock) {
                     continue;
                 }
+                //?} else {
+                /*if ((breakBlockPos.getY() <= bedYPos || !CAN_BREAK_BEDS) && level.getBlockState(breakBlockPos).getBlock() instanceof AbstractBedBlock) {
+                    continue;
+                }
+                *///?}
                 if (level.getBlockState(breakBlockPos).getBlock().defaultDestroyTime() == -1) {
                     //Unbreakable blocks
                     continue;
