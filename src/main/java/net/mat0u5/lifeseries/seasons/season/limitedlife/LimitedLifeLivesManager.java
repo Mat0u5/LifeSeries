@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -133,7 +134,15 @@ public class LimitedLifeLivesManager extends LivesManager {
     @Override
     public void addToPlayerLives(ServerPlayer player, int amount) {
         if (Math.abs(amount) >= 2 && !LIVES_SYSTEM_DISABLED) {
-            sendTimeTitle(player, Time.seconds(amount), amount < 0 ? ChatFormatting.RED : ChatFormatting.GREEN);
+            // Ignore final deaths
+            Integer currentLives = ((IPlayer)player).ls$getLives();
+            boolean finalDeath = false;
+            if (currentLives != null && currentLives > 0 && (currentLives+amount) <=0) {
+                finalDeath = true;
+            }
+            if (!finalDeath) {
+                sendTimeTitle(player, Time.seconds(amount), amount < 0 ? ChatFormatting.RED : ChatFormatting.GREEN);
+            }
         }
         super.addToPlayerLives(player, amount);
     }
