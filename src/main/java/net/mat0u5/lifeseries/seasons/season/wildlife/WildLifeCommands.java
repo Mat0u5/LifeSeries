@@ -150,7 +150,10 @@ public class WildLifeCommands extends Command {
                     .requires(PermissionManager::isAdmin)
                     .executes(context -> getSnailTexturesInfo(context.getSource()))
                     .then(literal("list")
-                            .executes(context -> getSnailTextures(context.getSource()))
+                            .executes(context -> getSnailTextures(context.getSource(), false))
+                            .then(literal("all")
+                                    .executes(context -> getSnailTextures(context.getSource(), true))
+                            )
                     )
                     .then(literal("info")
                         .executes(context -> getSnailTexturesInfo(context.getSource()))
@@ -407,9 +410,9 @@ public class WildLifeCommands extends Command {
         return 1;
     }
 
-    public int getSnailTextures(CommandSourceStack source) {
+    public int getSnailTextures(CommandSourceStack source, boolean containBuiltin) {
         if (checkBanned(source)) return -1;
-        List<String> textures = SnailSkins.getAllSkins();
+        List<String> textures = SnailSkins.getAllSkins(containBuiltin);
         if (textures.isEmpty()) {
             sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SNAIL_TEXTURES_NONE.get());
             return -1;

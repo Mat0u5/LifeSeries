@@ -102,7 +102,7 @@ public class DefaultConfigValues {
             "Fully Disable Lives System", "Fully disables the lives system, if you want to implement a custom one for example :)"
     );
     public final ConfigFileEntry<Boolean> TEAMS_SYSTEM_DISABLED = new ConfigFileEntry<>(
-            "teams_system_disabled", false, "global.disable[new]",
+            "teams_system_disabled", false, "global.disable",
             "Fully Disable Teams System", "Fully disables the teams system, if you want to implement a custom one for example :)"
     );
     public final ConfigFileEntry<Boolean> CUSTOM_ENCHANTER_ALGORITHM = new ConfigFileEntry<>(
@@ -345,7 +345,7 @@ public class DefaultConfigValues {
             "Randomize Lives", "Makes every player get a random amount of lives."
     );
     public final ConfigFileEntry<Boolean> LIVES_RANDOMIZE_PSEUDORANDOM = new ConfigFileEntry<>(
-            "lives_randomize_pseudorandom", true, "global.lives.random[new]",
+            "lives_randomize_pseudorandom", true, "global.lives.random",
             "Pseudorandom Lives", "If there are enough players, it forces at least one occurrence of every possible life amount."
     );
     public final ConfigFileEntry<Integer> LIVES_RANDOMIZE_MIN = new ConfigFileEntry<>(
@@ -369,11 +369,11 @@ public class DefaultConfigValues {
             "Only Lose Lives From PvP Kills", "Makes players not lose lives from natural deaths."
     );
     public final ConfigFileEntry<Boolean> MUTED_CHAT = new ConfigFileEntry<>(
-            "muted_chat", true, "{global.muted.chat}[new]",
+            "muted_chat", true, "{global.muted.chat}",
             "Allow Muted Only Chat", "Controls whether the muted players can still talk to each other, or to noone at all."
     );
     public final ConfigFileEntry<Boolean> MUTED_CHAT_ADMIN = new ConfigFileEntry<>(
-            "muted_chat_admin", true, "global.muted.chat[new]",
+            "muted_chat_admin", true, "global.muted.chat",
             "Muted Chat Admin Broadcast", "Controls whether the muted player chat gets broadcast to admins too."
     );
 
@@ -432,11 +432,11 @@ public class DefaultConfigValues {
             "Modifiable Texts", ""
     );
     public final ConfigFileEntry<Object> GROUP_MUTED = new ConfigFileEntry<>(
-            "group_muted", null, ConfigTypes.TEXT, "{global.muted}[new]",
+            "group_muted", null, ConfigTypes.TEXT, "{global.muted}",
             "Muted Players", ""
     );
     public final ConfigFileEntry<Object> GROUP_DISABLE = new ConfigFileEntry<>(
-            "group_disable", null, ConfigTypes.TEXT, "{global.disable}[new]",
+            "group_disable", null, ConfigTypes.TEXT, "{global.disable}",
             "Disable Functionality", ""
     );
 

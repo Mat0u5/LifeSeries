@@ -22,13 +22,14 @@ import java.util.List;
 import java.util.Locale;
 
 public class SnailSkins {
+    private static final List<String> prebuiltSkins = List.of("Mat0u5", "BdoubleO100", "Bigbst4tz2", "Etho", "GeminiTay", "GoodTimeWithScar", "Grian", "impulseSV", "InTheLittleWood", "LDShadowLady", "Mumbo", "PearlescentMoon", "Renthedog", "Skizzleman", "Smajor1995", "Smallishbeans", "SolidarityGaming", "TangoTek", "ZombieCleo");
 
     public static void sendTexturesTo(ServerPlayer player) {
         sendTexturesTo(List.of(player));
     }
 
-    public static void sendTexturesTo(List<ServerPlayer> players) {
-        for (File file : getAllSkinFiles()) {
+    private static void sendTexturesTo(List<ServerPlayer> players) {
+        for (File file : getAllSkinFiles(true)) {
             try {
                 String name = file.getName().toLowerCase(Locale.ROOT).replaceAll(".png","");
                 byte[] textureData = Files.readAllBytes(file.toPath());
@@ -50,12 +51,21 @@ public class SnailSkins {
         sendTexturesTo(PlayerUtils.getAllPlayers());
     }
 
-    public static List<File> getAllSkinFiles() {
+    public static List<File> getAllSkinFiles(boolean containBuiltin) {
         List<File> result = new ArrayList<>();
         try {
+            List<File> files = new ArrayList<>();
+
             File folder = new File("./config/lifeseries/wildlife/snailskins/");
-            File[] files = folder.listFiles();
-            if (files == null) return result;
+            File[] filesMain = folder.listFiles();
+            if (filesMain != null) files.addAll(List.of(filesMain));
+
+            if (containBuiltin) {
+                File folderBuiltin = new File("./config/lifeseries/wildlife/snailskins/builtin/");
+                File[] filesBuiltin = folderBuiltin.listFiles();
+                if (filesBuiltin != null) files.addAll(List.of(filesBuiltin));
+            }
+
             for (File file : files) {
                 if (!file.isFile()) continue;
                 String name = file.getName().toLowerCase(Locale.ROOT);
@@ -70,9 +80,9 @@ public class SnailSkins {
         return result;
     }
 
-    public static List<String> getAllSkins() {
+    public static List<String> getAllSkins(boolean containBuiltin) {
         List<String> result = new ArrayList<>();
-        for (File file : getAllSkinFiles()) {
+        for (File file : getAllSkinFiles(containBuiltin)) {
             String name = file.getName().toLowerCase(Locale.ROOT).replaceAll(".png","");
             result.add(name);
         }
@@ -80,20 +90,35 @@ public class SnailSkins {
     }
 
     public static void createConfig() {
-        File folder = new File("./config/lifeseries/wildlife/snailskins/");
+        File folder = new File("./config/lifeseries/wildlife/snailskins");
         if (!folder.exists()) {
             if (!folder.mkdirs()) {
                 LifeSeries.LOGGER.error("Failed to create folder {}", folder);
                 return;
             }
         }
+        copyConfigFiles();
+    }
+
+    private static void copyConfigFiles() {
         ResourceHandler handler = new ResourceHandler();
 
         Path modelResult = new File("./config/lifeseries/wildlife/snailskins/snail.bbmodel").toPath();
         handler.copyBundledSingleFile("/files/snails/snail-skins.bbmodel", modelResult);
+        handler.copyBundledSingleFile("/files/snails/example.png", new File("./config/lifeseries/wildlife/snailskins/example.png").toPath());
 
-        Path textureResult = new File("./config/lifeseries/wildlife/snailskins/example.png").toPath();
-        handler.copyBundledSingleFile("/files/snails/example.png", textureResult);
+        // Builtin skins
+        File folder = new File("./config/lifeseries/wildlife/snailskins/builtin");
+        if (!folder.exists()) {
+            if (!folder.mkdirs()) {
+                LifeSeries.LOGGER.error("Failed to create folder {}", folder);
+                return;
+            }
+        }
+
+        for (String skinName : prebuiltSkins) {
+            handler.copyBundledSingleFile("/files/snails/builtin/"+skinName+".png", new File("./config/lifeseries/wildlife/snailskins/builtin/"+skinName+".png").toPath(), true);
+        }
     }
 
     public static void upgradeSnailSkinIfNeeded(File skinFile) {
