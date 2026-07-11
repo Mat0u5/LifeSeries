@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
@@ -34,6 +35,7 @@ import net.minecraft.world.food.Foods;
 *///?} else {
 @Mixin(value = ItemStack.class, priority = 2)
 //?}
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class ItemMixin {
     //? if < 1.20.5 {
     /*@Accessor("foodProperties")

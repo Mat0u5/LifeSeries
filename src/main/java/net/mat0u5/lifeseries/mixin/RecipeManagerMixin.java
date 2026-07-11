@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.minecraft.world.item.crafting.RecipeManager;
 import org.spongepowered.asm.mixin.Mixin;
@@ -9,6 +10,7 @@ import static net.mat0u5.lifeseries.LifeSeries.blacklist;
 
 //? if <= 1.21 {
 /*import net.minecraft.resources.Identifier;
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import com.google.gson.JsonElement;
 import java.util.ArrayList;
 import java.util.Map;
@@ -18,6 +20,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 @Mixin(value = RecipeManager.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class RecipeManagerMixin {
 
     @Inject(method = "apply(Ljava/util/Map;Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)V", at = @At("HEAD"))
@@ -53,6 +56,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 @Mixin(RecipeManager.class)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class RecipeManagerMixin {
 
     @Shadow
@@ -96,10 +100,12 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeMap;
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 
 import java.util.stream.Stream;
 
 @Mixin(RecipeManager.class)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class RecipeManagerMixin {
 
 	@SuppressWarnings("unchecked")

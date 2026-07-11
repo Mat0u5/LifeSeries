@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.world.Container;
@@ -27,6 +28,7 @@ import java.util.Optional;
 //?}
 
 @Mixin(value = AnvilMenu.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class AnvilMenuMixin {
 
     @Inject(method = "createResult", at = @At("TAIL"))

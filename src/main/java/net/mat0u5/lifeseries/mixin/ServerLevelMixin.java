@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLife;
@@ -24,6 +25,7 @@ import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 //import net.minecraft.util.RandomSource;
 
 @Mixin(value = ServerLevel.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class ServerLevelMixin {
 
     @Inject(method = "broadcastEntityEvent", at = @At("HEAD"))

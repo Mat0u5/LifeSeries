@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -17,6 +18,7 @@ import java.util.List;
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 @Mixin(value = SleepStatus.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class SleepStatusMixin {
     @Inject(method = "areEnoughDeepSleeping", at = @At("RETURN"), cancellable = true)
     public void canResetTime(int percentage, List<ServerPlayer> players, CallbackInfoReturnable<Boolean> cir) {

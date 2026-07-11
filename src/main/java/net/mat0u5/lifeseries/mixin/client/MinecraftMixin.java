@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.config.WorldConfig;
 import net.mat0u5.lifeseries.client.events.ClientEvents;
 import net.minecraft.client.Minecraft;
@@ -25,6 +26,7 @@ import java.util.Optional;
 //?}
 
 @Mixin(value = Minecraft.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public abstract class MinecraftMixin {
 
     @Inject(method = "<init>", at = @At("TAIL"))

@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.mixin.compat.fabricapi;
 //? if fabric {
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.fabricmc.fabric.impl.registry.sync.RegistrySyncManager;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
@@ -34,6 +35,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 //Don't do this at home kids
 
 @Mixin(value = RegistrySyncManager.class, priority = 1, remap = false)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class RegistrySyncManagerMixin {
 
     //? if <= 1.20 {
@@ -84,8 +86,10 @@ public class RegistrySyncManagerMixin {
 //?} else {
 /*import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 
 @Mixin(value = MinecraftServer.class)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public interface RegistrySyncManagerMixin {
 }
 *///?}

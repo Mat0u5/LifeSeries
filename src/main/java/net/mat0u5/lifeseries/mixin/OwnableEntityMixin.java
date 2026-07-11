@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.minecraft.world.entity.OwnableEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,6 +17,7 @@ import net.minecraft.world.entity.LivingEntity;
 //?}
 
 @Mixin(value = OwnableEntity.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public interface OwnableEntityMixin {
 
 //? if !forge || >= 1.21 {

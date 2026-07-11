@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
@@ -10,6 +11,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import net.minecraft.client.gui.Hud;
 @Mixin(value = Hud.class, priority = 2)
 //?}
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public interface GuiAccessor {
     @Accessor("titleFadeInTime")
     int ls$titleFadeInTicks();

@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.client.entity.snail.SnailModel;
 import net.mat0u5.lifeseries.client.entity.triviabot.TriviaBotModel;
 import net.minecraft.client.model.geom.LayerDefinitions;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Mixin(LayerDefinitions.class)
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public class LayerDefinitionsMixin {
     @Inject(method = "createRoots", at = @At("RETURN"), cancellable = true)
     private static void injectLayerDefinitions(CallbackInfoReturnable<Map<ModelLayerLocation, LayerDefinition>> cir) {

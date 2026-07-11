@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.world.inventory.GrindstoneMenu;
 import net.minecraft.world.item.ItemStack;
@@ -15,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 //?}
 
 @Mixin(value = GrindstoneMenu.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class GrindstoneMenuMixin {
 
     //? if <= 1.20.3 {

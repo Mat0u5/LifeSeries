@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.mixin;
 
 import com.google.common.collect.Lists;
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.resources.ResourceKey;
@@ -40,6 +41,7 @@ import net.minecraft.world.flag.FeatureFlagSet;
 *///?}
 
 @Mixin(value = EnchantmentHelper.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class EnchantmentHelperMixin {
     @Inject(method = "getAvailableEnchantmentResults", at = @At("HEAD"), cancellable = true)
     //? if <= 1.20.3 {

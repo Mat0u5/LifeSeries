@@ -2,12 +2,15 @@ package net.mat0u5.lifeseries.mixin;
 //? if < 1.21.6 {
 /*import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 
 @Mixin(value = MinecraftServer.class)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class WaypointTransmitterMixin {
     //Empty class to avoid mixin errors
 }
 *///?} else {
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,10 +27,12 @@ import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = WaypointTransmitter.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public interface WaypointTransmitterMixin {
 //?} else {
 /*import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(value = LivingEntity.class, priority = 3)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class WaypointTransmitterMixin {
 *///?}
 

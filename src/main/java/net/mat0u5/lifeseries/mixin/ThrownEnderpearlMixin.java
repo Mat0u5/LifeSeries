@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
@@ -10,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrownEnderpearl;
 
 @Mixin(value = ThrownEnderpearl.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class ThrownEnderpearlMixin {
 
     //? if <= 1.21 {

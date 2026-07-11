@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -18,6 +19,7 @@ import java.util.function.Supplier;
 //import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(value = CommandSourceStack.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class CommandSourceStackMixin {
 
     //? if <= 1.20.2 {

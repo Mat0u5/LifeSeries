@@ -3,12 +3,15 @@ package net.mat0u5.lifeseries.mixin;
 //? if < 1.21.9 {
 /*import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 
 @Mixin(value = MinecraftServer.class)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class PlayerLikeEntityMixin {
     //Empty class to avoid mixin errors
 }
 *///?} else {
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
@@ -20,6 +23,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = Avatar.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class PlayerLikeEntityMixin {
     @Inject(method = "getDefaultDimensions", at = @At("HEAD"), cancellable = true)
     public void getBaseDimensions(Pose pose, CallbackInfoReturnable<EntityDimensions> cir) {

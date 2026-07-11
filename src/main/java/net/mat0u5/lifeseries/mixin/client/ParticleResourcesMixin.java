@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.client.particle.TriviaSpiritParticle;
 import net.mat0u5.lifeseries.registries.ParticleRegistry;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.client.particle.ParticleResources;
 @Mixin(value = ParticleResources.class)
 //?}
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public class ParticleResourcesMixin {
     @Inject(method = "registerProviders", at = @At("TAIL"))
     private void registerParticles(CallbackInfo ci) {

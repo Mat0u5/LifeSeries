@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.minecraft.client.gui.screens.InBedChatScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -10,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.minecraft.client.input.*;
 
 @Mixin(value = InBedChatScreen.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public abstract class InBedChatScreenMixin {
     //26.1+ logic is in ChatScreenMixin
     //? if <= 1.21.11 {

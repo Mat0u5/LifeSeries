@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
@@ -15,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 @Mixin(value = Inventory.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class PlayerInventoryMixin {
 
     @Inject(method = "setChanged", at = @At("TAIL"))

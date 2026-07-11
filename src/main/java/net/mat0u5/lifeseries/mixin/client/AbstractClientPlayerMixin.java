@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.features.LifeSkinsClient;
@@ -19,6 +20,7 @@ import java.util.UUID;
 import net.minecraft.world.entity.player.PlayerSkin;
 
 @Mixin(value = AbstractClientPlayer.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public class AbstractClientPlayerMixin {
     //? if <= 1.20 {
     /*@Inject(method = "getSkinTextureLocation", at = @At("HEAD"), cancellable = true)

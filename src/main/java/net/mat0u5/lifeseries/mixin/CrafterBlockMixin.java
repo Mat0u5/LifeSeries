@@ -2,13 +2,16 @@ package net.mat0u5.lifeseries.mixin;
 //? if <= 1.20.2 {
 /*import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 
 @Mixin(value = MinecraftServer.class)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public interface CrafterBlockMixin {
     //Empty class to avoid mixin errors
 }
 *///?} else {
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
@@ -30,6 +33,7 @@ import net.minecraft.server.level.ServerLevel;
 //?}
 
 @Mixin(value = CrafterBlock.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class CrafterBlockMixin {
     @Inject(method = "getPotentialResults", at = @At("HEAD"), cancellable = true)
     //? if <= 1.20.5 {

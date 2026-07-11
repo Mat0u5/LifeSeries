@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.minecraft.world.level.storage.WorldData;
 import org.spongepowered.asm.mixin.Mixin;
 //? if = 1.21.2 {
@@ -12,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 *///?}
 
 @Mixin(value = WorldData.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public interface WorldDataMixin {
     //? if = 1.21.2 {
     /*@Inject(method = "enabledFeatures", at = @At("HEAD"), cancellable = true)

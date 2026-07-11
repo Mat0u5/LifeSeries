@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.minecraft.world.entity.player.Player;
@@ -15,6 +16,7 @@ import java.util.UUID;
 import net.minecraft.server.players.NameAndId;
 
 @Mixin(value = PlayerDataStorage.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class PlayerDataStorageMixin {
 
     @Redirect(method = "save", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getStringUUID()Ljava/lang/String;"))

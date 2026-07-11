@@ -2,14 +2,17 @@ package net.mat0u5.lifeseries.mixin.client;
 
 //? if < 1.21.9 {
 /*import net.minecraft.server.MinecraftServer;
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(value = MinecraftServer.class)
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public class ParticleEngineMixin {
     //Empty class to avoid mixin errors
 }
 *///?} else {
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.client.particle.TriviaSpiritParticle;
 import net.mat0u5.lifeseries.client.particle.TriviaSpiritParticleGroup;
 import net.minecraft.client.Camera;
@@ -28,6 +31,7 @@ import java.util.Map;
 import net.minecraft.client.renderer.state.level.ParticlesRenderState;
 
 @Mixin(value = ParticleEngine.class)
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public abstract class ParticleEngineMixin {
 
     @Accessor("particles")

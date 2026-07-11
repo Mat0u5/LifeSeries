@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.mixin.client;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.serialization.Lifecycle;
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
@@ -34,6 +35,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 //?}
 
 @Mixin(value = WorldOpenFlows.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public abstract class WorldOpenFlowsMixin {
 
     //? if <= 1.20.2 {

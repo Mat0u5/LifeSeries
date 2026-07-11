@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLife;
 import net.minecraft.core.BlockPos;
@@ -28,6 +29,7 @@ import net.minecraft.world.level.chunk.ImposterProtoChunk;
 
 @Mixin(value = ChunkStatusTasks.class, priority = 1)
 //?}
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class ChunkStatusTasksMixin {
     //? if < 1.20.5 {
     /*@Inject(method = "generateBorderTicks", at = @At(value = "RETURN"))

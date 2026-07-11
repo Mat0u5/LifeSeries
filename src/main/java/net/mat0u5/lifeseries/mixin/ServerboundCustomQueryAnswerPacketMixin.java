@@ -3,13 +3,16 @@ package net.mat0u5.lifeseries.mixin;
 //? if <= 1.20 {
 /*import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 
 @Mixin(value = MinecraftServer.class)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public interface ServerboundCustomQueryAnswerPacketMixin {
     //Empty class to avoid mixin errors
 }
 *///?} else {
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import io.netty.buffer.Unpooled;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.CustomQueryPacket;
@@ -25,6 +28,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = ServerboundCustomQueryAnswerPacket.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class ServerboundCustomQueryAnswerPacketMixin {
     @Shadow
     @Final

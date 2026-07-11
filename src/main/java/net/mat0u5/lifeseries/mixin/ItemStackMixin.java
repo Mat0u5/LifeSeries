@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 //? if >= 1.20.5 {
@@ -17,6 +18,7 @@ import java.util.Set;
 //?}
 
 @Mixin(value = ItemStack.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class ItemStackMixin {
     //isSameItemSameTags in 1.20, but i think it'll work fine without it?
     //? if >= 1.20.5 {

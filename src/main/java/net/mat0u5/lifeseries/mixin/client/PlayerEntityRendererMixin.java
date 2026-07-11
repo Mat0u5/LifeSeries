@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.mixin.client;
 
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.NewQuizScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.QuizScreen;
@@ -62,6 +63,7 @@ import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 
 @Mixin(value = AvatarRenderer.class, priority = 1)
 //?}
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public abstract class PlayerEntityRendererMixin {
 
     //? if <= 1.21 {

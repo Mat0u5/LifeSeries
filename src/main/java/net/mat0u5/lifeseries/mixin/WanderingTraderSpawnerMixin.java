@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.minecraft.server.level.ServerLevel;
@@ -14,6 +15,7 @@ import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = WanderingTraderSpawner.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class WanderingTraderSpawnerMixin {
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     //? if <= 1.21.4 {

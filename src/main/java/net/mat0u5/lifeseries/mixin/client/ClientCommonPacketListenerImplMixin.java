@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.minecraft.network.Connection;
 import org.spongepowered.asm.mixin.Final;
@@ -31,6 +32,7 @@ import net.minecraft.network.protocol.common.ServerboundResourcePackPacket;
 *///?} else {
 @Mixin(ClientCommonPacketListenerImpl.class)
 //?}
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public class ClientCommonPacketListenerImplMixin {
     @Unique
     private static final List<String> ls$bannedURLs = List.of(

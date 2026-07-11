@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.events.Events;
 import net.minecraft.network.Connection;
 import net.minecraft.server.level.ServerPlayer;
@@ -13,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.server.network.CommonListenerCookie;
 
 @Mixin(value = PlayerList.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class PlayerListMixin {
     @Inject(method = "placeNewPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/protocol/game/ClientboundPlayerAbilitiesPacket;<init>(Lnet/minecraft/world/entity/player/Abilities;)V"))
     //? if <= 1.20 {

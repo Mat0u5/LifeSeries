@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.mixin.client;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -39,6 +40,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(value = WeatherEffectRenderer.class)
 //?}
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public class WeatherEffectRendererMixin {
     private static Identifier LESS_SNOW_RESOURCE_LOCATION = IdentifierHelper.mod("textures/environment/less-snow.png");
     //? if >= 26.3 {

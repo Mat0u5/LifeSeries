@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,6 +21,7 @@ import static net.mat0u5.lifeseries.LifeSeries.blacklist;
 import net.minecraft.server.level.ServerLevel;
 
 @Mixin(value = MobEffect.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class MobEffectMixin {
     //? if <= 1.21 {
     /*@Inject(method = "applyInstantenousEffect", at = @At("HEAD"), cancellable = true)

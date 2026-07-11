@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.minecraft.client.resources.sounds.AbstractSoundInstance;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
@@ -9,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = AbstractSoundInstance.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public class AbstractSoundInstanceMixin {
     //~ if > 1.21.9 '.getLocation()' -> '.getIdentifier()' {
     @Inject(method = "isLooping", at = @At("HEAD"), cancellable = true)

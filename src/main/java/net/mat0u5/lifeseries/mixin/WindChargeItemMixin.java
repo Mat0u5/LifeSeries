@@ -2,12 +2,15 @@ package net.mat0u5.lifeseries.mixin;
 //? if < 1.21 {
 /*import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 
 @Mixin(value = MinecraftServer.class)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public interface WindChargeItemMixin {
     //Empty class to avoid mixin errors
 }
 *///?} else {
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -36,6 +39,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.InteractionResult;
 
 @Mixin(value = WindChargeItem.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class WindChargeItemMixin {
     @Inject(method = "use", at = @At("RETURN"))
     //? if <= 1.21 {

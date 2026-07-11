@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.mixin.client;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.client.features.LifeSkinsClient;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.client.multiplayer.PlayerInfo;
@@ -16,6 +17,7 @@ import net.minecraft.world.entity.player.PlayerSkin;
 //?}
 
 @Mixin(value = PlayerInfo.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public class PlayerInfoMixin {
 
     //? if <= 1.20 {

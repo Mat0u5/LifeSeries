@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.world.entity.player.Player;
@@ -23,6 +24,7 @@ import net.minecraft.server.level.ServerLevel;
 //?}
 
 @Mixin(value = CraftingMenu.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class CraftingMenuMixin {
     @Inject(method = "slotChangedCraftingGrid", at = @At("HEAD"), cancellable = true)
     //? if <= 1.20.5 {

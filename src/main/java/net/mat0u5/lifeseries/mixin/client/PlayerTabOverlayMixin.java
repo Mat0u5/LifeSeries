@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
@@ -28,6 +29,7 @@ import net.minecraft.network.chat.numbers.NumberFormat;
 //?}
 
 @Mixin(value = PlayerTabOverlay.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public class PlayerTabOverlayMixin {
 
     //? if <= 1.20.2 {

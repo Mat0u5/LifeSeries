@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import io.netty.buffer.Unpooled;
 import net.mat0u5.lifeseries.client.events.ClientEvents;
 import net.mat0u5.lifeseries.client.network.NetworkHandlerClient;
@@ -28,6 +29,7 @@ import net.minecraft.resources.Identifier;
 *///?}
 
 @Mixin(value = ClientPacketListener.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public class ClientPacketListenerMixin {
     //? if > 1.20.3 {
     @Shadow

@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
@@ -60,6 +61,7 @@ import net.minecraft.world.phys.EntityHitResult;
 //?}
 
 @Mixin(value = ServerGamePacketListenerImpl.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class ServerGamePacketListenerImplMixin {
     @Shadow
     public ServerPlayer player;

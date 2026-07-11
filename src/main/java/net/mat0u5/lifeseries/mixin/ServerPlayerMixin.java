@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.mixin;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.datafixers.util.Either;
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.events.Events;
@@ -56,6 +57,7 @@ import net.minecraft.world.level.block.state.BlockState;
 *///?}
 
 @Mixin(value = ServerPlayer.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class ServerPlayerMixin implements IPlayer {
 
     @Inject(method = "openMenu", at = @At("HEAD"))

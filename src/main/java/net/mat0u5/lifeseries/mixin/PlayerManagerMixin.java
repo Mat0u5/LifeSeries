@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayerManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -38,6 +39,7 @@ import java.util.Optional;
 *///?}
 
 @Mixin(value = PlayerList.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class PlayerManagerMixin implements IPlayerManager {
 
     @Final

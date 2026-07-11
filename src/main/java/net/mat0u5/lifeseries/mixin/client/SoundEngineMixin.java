@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import org.spongepowered.asm.mixin.Mixin;
 import net.minecraft.client.sounds.SoundEngine;
 
@@ -18,6 +19,7 @@ import java.util.List;
 //?}
 
 @Mixin(value = SoundEngine.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public class SoundEngineMixin {
     //? if >= 1.20.3 {
     @Unique

@@ -8,13 +8,16 @@ package net.mat0u5.lifeseries.mixin.client;
 //? if <= 26.1 {
 /*import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 
 @Mixin(value = MinecraftServer.class)
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public interface LevelExtractorMixin {
     //Empty class to avoid mixin errors
 }
 *///?} else {
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
@@ -35,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(value = LevelExtractor.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public class LevelExtractorMixin {
     @Redirect(method = "extractVisibleEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;entitiesForRendering()Ljava/lang/Iterable;"))
     private Iterable<Entity> addMorphedEntities(ClientLevel instance) {

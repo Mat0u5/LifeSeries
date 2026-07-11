@@ -3,12 +3,15 @@ package net.mat0u5.lifeseries.mixin;
 //? if < 1.21 {
 /*import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 
 @Mixin(value = MinecraftServer.class)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public interface SimpleExplosionDamageCalculatorMixin {
     //Empty class to avoid mixin errors
 }
 *///?} else {
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -24,6 +27,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 @Mixin(value = SimpleExplosionDamageCalculator.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class SimpleExplosionDamageCalculatorMixin {
     @Inject(method = "getKnockbackMultiplier", at = @At("RETURN"), cancellable = true)
     public void getKnockbackModifier(Entity entity, CallbackInfoReturnable<Float> cir) {

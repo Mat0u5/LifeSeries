@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
@@ -17,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
 @Mixin(Camera.class)
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public class CameraMixin {
     @Shadow
     private Entity entity;

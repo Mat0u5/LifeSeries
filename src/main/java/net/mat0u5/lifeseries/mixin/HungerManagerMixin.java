@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.utils.interfaces.IHungerManager;
@@ -17,6 +18,7 @@ import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 //import net.minecraft.world.entity.player.Player;
 
 @Mixin(value = FoodData.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class HungerManagerMixin implements IHungerManager {
     @Shadow
     private int foodLevel;

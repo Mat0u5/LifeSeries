@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 //? if > 1.20.3 && <= 1.21 {
@@ -14,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 *///?}
 
 @Mixin(value = LivingEntityRenderer.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public abstract class LivingEntityRendererMixin {
     //Located in EntityRenderDispatcher in <= 1.20.3
     //? if > 1.20.3 && <= 1.21 {

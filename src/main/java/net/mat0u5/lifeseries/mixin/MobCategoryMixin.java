@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
@@ -14,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 @Mixin(value = MobCategory.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class MobCategoryMixin {
 
     @Inject(method = "getMaxInstancesPerChunk", at = @At("HEAD"), cancellable = true)

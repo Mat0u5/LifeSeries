@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.utils.other.ModBuiltInPacks;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.BuiltInPackSource;
@@ -13,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.function.Consumer;
 
 @Mixin(BuiltInPackSource.class)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class BuiltInPackSourceMixin {
     @Inject(method = "loadPacks", at = @At("RETURN"))
     private void addBuiltInDatapacks(Consumer<Pack> consumer, CallbackInfo ci) {

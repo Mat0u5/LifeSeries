@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.TamableAnimal;
@@ -18,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 //?}
 
 @Mixin(value = TamableAnimal.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class TamableAnimalMixin {
     //? if <= 1.21 {
     /*@Inject(method = "isAlliedTo", at = @At("HEAD"), cancellable = true)

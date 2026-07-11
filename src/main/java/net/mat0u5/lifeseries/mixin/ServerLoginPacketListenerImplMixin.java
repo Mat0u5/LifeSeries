@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import io.netty.buffer.Unpooled;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
@@ -23,6 +24,7 @@ import com.mojang.authlib.GameProfile;
 //?}
 
 @Mixin(value = ServerLoginPacketListenerImpl.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class ServerLoginPacketListenerImplMixin {
     @Unique private boolean ls$querySent = false;
     @Unique private boolean ls$queryAnswered = false;

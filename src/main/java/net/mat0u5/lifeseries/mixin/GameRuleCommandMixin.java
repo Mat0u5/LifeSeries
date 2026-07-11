@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.mixin;
 
 import com.mojang.brigadier.context.CommandContext;
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -19,6 +20,7 @@ import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
 import net.minecraft.world.level.gamerules.GameRule;
 
 @Mixin(value = GameRuleCommand.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class GameRuleCommandMixin {
     @Inject(method = "setRule", at = @At("TAIL"))
     //? if <= 1.21.9 {

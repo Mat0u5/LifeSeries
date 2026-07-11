@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.minecraft.core.BlockPos;
@@ -10,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = Biome.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class BiomeMixin {
     //? if <= 1.21 {
     /*@Inject(method = "getTemperature", at = @At(value = "HEAD"), cancellable = true)

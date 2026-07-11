@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLife;
@@ -15,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 @Mixin(value = IceBlock.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class IceBlockMixin {
 
     @Inject(method = "melt", at = @At("HEAD"), cancellable = true)

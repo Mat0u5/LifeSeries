@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.features.Morph;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
@@ -21,6 +22,7 @@ import net.mat0u5.lifeseries.client.LifeSeriesClient;
 *///?}
 
 @Mixin(value = ClientLevel.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public class ClientLevelMixin {
 
     @Inject(method = "tickNonPassenger", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;tick()V", shift = At.Shift.AFTER))

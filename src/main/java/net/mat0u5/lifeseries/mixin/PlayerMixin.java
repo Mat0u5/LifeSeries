@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.seasons.util.WatcherManager;
@@ -62,6 +63,7 @@ import net.minecraft.world.entity.EntityTypes;
 *///?}
 
 @Mixin(value = Player.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class PlayerMixin implements IPlayerUsername {
 
     @Inject(method = "actuallyHurt", at = @At("HEAD"), cancellable = true)

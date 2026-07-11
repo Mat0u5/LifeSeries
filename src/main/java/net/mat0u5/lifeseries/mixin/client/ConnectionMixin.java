@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import io.netty.channel.ChannelHandlerContext;
 import net.mat0u5.lifeseries.client.events.ClientEvents;
 import net.minecraft.network.Connection;
@@ -9,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Connection.class)
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public class ConnectionMixin {
     @Inject(method = "channelInactive", at = @At("HEAD"))
     private void disconnectAddon(ChannelHandlerContext channelHandlerContext, CallbackInfo ci) {

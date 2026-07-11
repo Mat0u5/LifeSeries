@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.mixin;
 //? if <= 1.21.11 {
-/*import net.mat0u5.lifeseries.events.Events;
+/*import dev.kikugie.fletching_table.annotation.MixinEnvironment;
+import net.mat0u5.lifeseries.events.Events;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -19,6 +20,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 @Mixin(targets = "net.minecraft.server.network.ServerGamePacketListenerImpl$1")
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class ServerPlayNetworkHandlerInteractEntityHandlerMixin implements ServerboundInteractPacket.Handler {
 //? if fabric {
     @Shadow
@@ -103,10 +105,12 @@ public abstract class ServerPlayNetworkHandlerInteractEntityHandlerMixin impleme
     //~}
 }
 *///?} else {
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(value = MinecraftServer.class)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public interface ServerPlayNetworkHandlerInteractEntityHandlerMixin {
 }
 //?}

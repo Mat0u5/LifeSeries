@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.commands.WorldBorderCommand;
@@ -13,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
 
 @Mixin(value = WorldBorderCommand.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class WorldBorderCommandMixin {
     @Inject(method = "setSize", at = @At("TAIL"))
     private static void onSizeUpdated(CommandSourceStack commandSourceStack, double d, long l, CallbackInfoReturnable<Integer> cir) {

@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.mixin.client;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import net.minecraft.client.Camera;
 @Mixin(value = Camera.class, priority = 2)
 //?}
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public class GameRendererMixin {
     @ModifyReturnValue(method = "getFov", at = @At("RETURN"))
     //? if <= 1.21 {

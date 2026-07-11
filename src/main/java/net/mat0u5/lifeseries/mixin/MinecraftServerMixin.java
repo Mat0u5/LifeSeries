@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.events.Events;
 import net.minecraft.server.MinecraftServer;
@@ -22,6 +23,7 @@ import java.util.Optional;
 *///?}
 
 @Mixin(value = MinecraftServer.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class MinecraftServerMixin {
     @Shadow
     private MinecraftServer.ReloadableResources resources;
