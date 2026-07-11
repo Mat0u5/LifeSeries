@@ -64,11 +64,9 @@ public class ClientConfig extends ConfigManager {
                 ,SESSION_TIMER
                 ,COLORBLIND_SUPPORT
 
-                //? if > 1.20 {
                 ,COLORED_HEARTS // Group
-                ,COLORED_HEARTS_HARDCORE_LAST_LIFE
-                ,COLORED_HEARTS_HARDCORE_ALL_LIVES
-                //?}
+                    ,COLORED_HEARTS_HARDCORE_LAST_LIFE
+                    ,COLORED_HEARTS_HARDCORE_ALL_LIVES
 
                 ,TEXT_HUD_SCALE
                 ,NICE_LIFE_LESS_SNOW

@@ -6,3 +6,4 @@ accessible field net/minecraft/client/multiplayer/ClientHandshakePacketListenerI
 accessible field net/minecraft/server/network/ServerLoginPacketListenerImpl connection Lnet/minecraft/network/Connection;
 accessible class net/minecraft/server/network/ServerLoginPacketListenerImpl$State
 accessible method net/minecraft/core/Holder$Reference bindValue (Ljava/lang/Object;)V
+accessible class net/minecraft/client/gui/Gui$HeartType

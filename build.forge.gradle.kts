@@ -143,7 +143,7 @@ dependencies {
 		compileOnly("org.spongepowered:mixin:${libs.versions.mixin.get()}")
 	}
 
-	compileOnly("maven.modrinth:appleskin:2.5.1+mc1.20.2")
+	compileOnly("maven.modrinth:appleskin:2.5.1+mc1.20.1")
 	compileOnly("de.maxhenkel.voicechat:voicechat-api:2.5.27")
 	if (isValidVersion(prop("deps.voicechat"))) {
 		implementation ("maven.modrinth:simple-voice-chat:${prop("deps.voicechat")}")

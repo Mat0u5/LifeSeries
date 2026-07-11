@@ -7,13 +7,14 @@ import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.InBedChatScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+
+//? if > 1.20
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.Locale;
@@ -59,8 +60,8 @@ public class GuiMixin {
     }
 
     //? if <= 1.20 {
-    /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blit(Lnet/minecraft/resources/Identifier;IIIIII)V"))
-    private void customHearts(GuiGraphicsExtractor instance, Identifier identifier, int x, int y, int u, int v, int m, int n) {
+    /*@Inject(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blit(Lnet/minecraft/resources/Identifier;IIIIII)V"), cancellable = true)
+    private void customHearts(GuiGraphicsExtractor guiGraphics, Gui.HeartType heartType, int x, int y, int k, boolean isBlinking, boolean isHalf, CallbackInfo ci) {
     *///?} else if <= 1.21 {
     /*@Redirect(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lnet/minecraft/resources/Identifier;IIII)V"))
     private void customHearts(GuiGraphicsExtractor instance, Identifier identifier, int x, int y, int u, int v) {
@@ -78,7 +79,19 @@ public class GuiMixin {
     private void customHearts(GuiGraphicsExtractor instance, RenderPipeline renderPipeline, Identifier identifier, int x, int y, int u, int v) {
     *///?}
 
+        //? if <= 1.20 {
+        /*String texturePath = "hud/heart/";
+        boolean isHardcore = k > 0;
+        if (isHardcore) texturePath += "hardcore_";
+        if (isHalf) texturePath += "half";
+        else texturePath += "full";
+        if (isBlinking) texturePath += "_blinking";
+        if (heartType != Gui.HeartType.NORMAL) {
+            return;
+        }
+        *///?} else {
         String texturePath = identifier.getPath();
+        //?}
         String playerTeamColor = ClientUtils.getPlayerTeamColor();
         String playerTeamName = ClientUtils.getPlayerTeamName();
         if (!LifeSeriesClient.COLORED_HEARTS || playerTeamColor == null || playerTeamName == null ||
@@ -88,9 +101,7 @@ public class GuiMixin {
                 return;
             }
             //? if <= 1.20 {
-            /*instance.blit(identifier, x, y, u, v, m, n);
-            ls$afterHeartDraw(instance, identifier, x, y, u, v);
-            *///?} else if <= 1.21 {
+            //?} else if <= 1.21 {
             /*instance.blitSprite(identifier, x, y, u, v);
             ls$afterHeartDraw(instance, identifier, x, y, u, v);
             *///?} else if <= 1.21.5 {
@@ -105,17 +116,24 @@ public class GuiMixin {
 
         String color = playerTeamColor.toLowerCase(Locale.ROOT);
 
-        String heartType = texturePath.replaceFirst("hud/heart/", "");
+        String heartTypeStr = texturePath.replaceFirst("hud/heart/", "");
 
-        if (!heartType.startsWith("hardcore_")) {
+        if (!heartTypeStr.startsWith("hardcore_")) {
             if (LifeSeriesClient.COLORED_HEARTS_HARDCORE_ALL_LIVES || (playerTeamName.equals("lives_1") & LifeSeriesClient.COLORED_HEARTS_HARDCORE_LAST_LIFE)) {
-                heartType = "hardcore_"+heartType;
+                heartTypeStr = "hardcore_"+heartTypeStr;
             }
         }
-        var customHeart = IdentifierHelper.mod(color+"_"+heartType);
+
         //? if <= 1.20 {
-        /*instance.blit(customHeart, x, y, u, v, m, n);
-        ls$afterHeartDraw(instance, identifier, x, y, u, v);
+        /*var customHeart = IdentifierHelper.mod("textures/gui/sprites/"+color+"_"+heartTypeStr+".png");
+         *///?} else {
+        var customHeart = IdentifierHelper.mod(color+"_"+heartTypeStr);
+        //?}
+
+        //? if <= 1.20 {
+        /*guiGraphics.blit(customHeart, x, y, 0, 0, 9, 9, 9, 9);
+        ls$afterHeartDraw(guiGraphics, customHeart, x, y, 0, 0);
+        ci.cancel();
         *///? } else if <= 1.21 {
         /*instance.blitSprite(customHeart, x, y, u, v);
         ls$afterHeartDraw(instance, identifier, x, y, u, v);

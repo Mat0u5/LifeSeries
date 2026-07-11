@@ -1,5 +1,35 @@
 package net.mat0u5.lifeseries.mixin.client.compat.appleskin;
 
+//? if <= 1.20 {
+/*import org.spongepowered.asm.mixin.Pseudo;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import squeek.appleskin.api.event.HUDOverlayEvent;
+import squeek.appleskin.client.HUDOverlayHandler;
+
+//? if forge {
+/^import org.spongepowered.asm.mixin.injection.Redirect;
+^///?} else {
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+//?}
+
+@Pseudo
+@Mixin(value = HUDOverlayHandler.class, priority = 1, remap = false)
+public class TextureHelperMixin {
+    //? if forge {
+    /^@Redirect(method = "renderFoodOrHealthOverlay", at = @At(value = "INVOKE", target = "Lsqueek/appleskin/api/event/HUDOverlayEvent$HealthRestored;isCanceled()Z"), remap = false)
+    private static boolean cancelHealthPreview(HUDOverlayEvent.HealthRestored instance) {
+        return true;
+    }
+    ^///?} else {
+    @WrapOperation(method = "onRender", at = @At(value = "FIELD", target = "Lsqueek/appleskin/api/event/HUDOverlayEvent$HealthRestored;isCanceled:Z"))
+    private boolean cancelHealthPreview(HUDOverlayEvent.HealthRestored instance, Operation<Boolean> original) {
+        return true;
+    }
+    //?}
+}
+*///?} else {
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
@@ -19,7 +49,7 @@ import java.util.Locale;
 @Mixin(value = TextureHelper.class, priority = 1, remap = false)
 public class TextureHelperMixin {
     @Inject(method = "getHeartTexture", at = @At("RETURN"), cancellable = true)
-    private static void lifeSkins(boolean hardcore, TextureHelper.HeartType type, CallbackInfoReturnable<Identifier> cir) {
+    private static void teamHearts(boolean hardcore, TextureHelper.HeartType type, CallbackInfoReturnable<Identifier> cir) {
         Identifier original = cir.getReturnValue();
         String texturePath = original.getPath();
         String playerTeamColor = ClientUtils.getPlayerTeamColor();
@@ -35,3 +65,4 @@ public class TextureHelperMixin {
         cir.setReturnValue(customHeart);
     }
 }
+//?}

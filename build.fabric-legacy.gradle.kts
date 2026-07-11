@@ -57,7 +57,12 @@ dependencies {
 	modCompileOnly("maven.modrinth:flashback:z0SX4zNw")
 	modCompileOnly("maven.modrinth:replaymod:1.21-2.6.23")
 	modCompileOnly("de.maxhenkel.voicechat:voicechat-api:2.5.27") //TODO this is a patch for older versions of SVC
-	modCompileOnly("maven.modrinth:appleskin:3.0.6+mc1.21")
+	if (stonecutter.eval(stonecutter.current.version, "<=1.20")) {
+		compileOnly("maven.modrinth:appleskin:2.5.2+mc1.20.1")
+	}
+	else {
+		modCompileOnly("maven.modrinth:appleskin:3.0.6+mc1.21")
+	}
 	modCompileOnly("net.fabricmc.fabric-api:fabric-api:${prop("deps.fabric-api")}")
 	//modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:${prop("deps.fabric-api")}")
 

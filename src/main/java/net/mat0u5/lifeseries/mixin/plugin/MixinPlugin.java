@@ -23,11 +23,7 @@ public class MixinPlugin implements IMixinConfigPlugin {
         //?}
         if (isClient) {
             if (mixinClassName.contains("client.compat.appleskin")) {
-                //? if <= 1.20 {
-                /*boolean ret = false;
-                 *///?} else {
                 boolean ret = CompatibilityManager.appleSkinLoaded();
-                //?}
                 LifeSeries.LOGGER.info("[Life Series] Compat - Appleskin - " + ret);
                 return ret;
             }
