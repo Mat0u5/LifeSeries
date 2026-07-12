@@ -140,6 +140,10 @@ public class WildLifeConfig extends SeasonConfig {
             "wildcard_snails_per_player", 1, "season.snails",
             "Number of Snails Per Player", "Controls how many snails each player has.\n§cNOTE: Higher numbers can be very laggy, use high number with caution."
     );
+    public static final ConfigFileEntry<Boolean> WILDCARD_SNAILS_RANDOM_PRESET_SKIN = new ConfigFileEntry<>(
+            "wildcard_snails_random_preset_skin", true, "season.snails[new]",
+            "Assign Random Preset Snail Skin", "Assigns a random snail skin preset to any players without their own snail skin."
+    );
 
     public static final ConfigFileEntry<Double> WILDCARD_TIMEDILATION_MIN_SPEED = new ConfigFileEntry<>(
             "wildcard_timedilation_min_speed", 0.05, "season.timedilation",
@@ -490,6 +494,7 @@ public class WildLifeConfig extends SeasonConfig {
                 ,WILDCARD_SNAILS_EFFECTS
                 ,WILDCARD_SNAILS_RED_LIVES
                 ,WILDCARD_SNAILS_PER_PLAYER
+                ,WILDCARD_SNAILS_RANDOM_PRESET_SKIN
 
                 ,WILDCARD_TIMEDILATION_MIN_SPEED
                 ,WILDCARD_TIMEDILATION_MAX_SPEED

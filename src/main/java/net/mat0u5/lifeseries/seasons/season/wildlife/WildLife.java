@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.TriviaHandler;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.PreBuiltSnailSkins;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -69,6 +70,7 @@ public class WildLife extends Season {
         Snails.loadConfig();
         Snails.loadSnailNames();
         WildLifeTriviaHandler.initializeItemSpawner();
+        PreBuiltSnailSkins.initialize();
     }
 
     @Override
@@ -285,6 +287,7 @@ public class WildLife extends Season {
         Superspeed.TARGET_SPEED = WildLifeConfig.WILDCARD_SUPERPOWERS_SUPERSPEED_TARGET_SPEED.get();
         TripleJump.JUMP_COUNT = WildLifeConfig.WILDCARD_SUPERPOWERS_TRIPLE_JUMP_JUMPS.get();
         TriviaHandler.guiType = WildLifeConfig.WILDCARD_TRIVIA_GUI_TYPE.get();
+        PreBuiltSnailSkins.SNAILS_RANDOM_PRESET_SKIN = WildLifeConfig.WILDCARD_SNAILS_RANDOM_PRESET_SKIN.get();
 
         Snails.loadConfig();
         Snails.loadSnailNames();

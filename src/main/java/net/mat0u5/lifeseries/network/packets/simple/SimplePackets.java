@@ -23,6 +23,7 @@ public class SimplePackets {
     public static final SimpleStringListPacket ACTIVE_WILDCARDS = new SimpleStringListPacket("ACTIVE_WILDCARDS");
     public static final SimpleStringListPacket LIFESKINS_PLAYER = new SimpleStringListPacket("LIFESKINS_PLAYER");
     public static final SimpleStringListPacket LVL1_CLAMPED_ENCHANTS = new SimpleStringListPacket("LVL1_CLAMPED_ENCHANTS");
+    public static final SimpleStringListPacket PREBUILT_SNAILSKINS= new SimpleStringListPacket("PREBUILT_SNAILSKINS");
 
     public static final SimpleStringPacket CURRENT_SEASON = new SimpleStringPacket("CURRENT_SEASON");
     public static final SimpleStringPacket SESSION_STATUS = new SimpleStringPacket("SESSION_STATUS");

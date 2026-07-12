@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class SnailSkins {
-    private static final List<String> prebuiltSkins = List.of("Mat0u5", "BdoubleO100", "Bigbst4tz2", "Etho", "GeminiTay", "GoodTimeWithScar", "Grian", "impulseSV", "InTheLittleWood", "LDShadowLady", "Mumbo", "PearlescentMoon", "Renthedog", "Skizzleman", "Smajor1995", "Smallishbeans", "SolidarityGaming", "TangoTek", "ZombieCleo");
 
     public static void sendTexturesTo(ServerPlayer player) {
         sendTexturesTo(List.of(player));
@@ -45,6 +44,7 @@ public class SnailSkins {
                 e.printStackTrace();
             }
         }
+        PreBuiltSnailSkins.sendPrebuiltSkinsTo(players);
     }
 
     public static void sendTextures() {
@@ -107,18 +107,7 @@ public class SnailSkins {
         handler.copyBundledSingleFile("/files/snails/snail-skins.bbmodel", modelResult);
         handler.copyBundledSingleFile("/files/snails/example.png", new File("./config/lifeseries/wildlife/snailskins/example.png").toPath());
 
-        // Builtin skins
-        File folder = new File("./config/lifeseries/wildlife/snailskins/builtin");
-        if (!folder.exists()) {
-            if (!folder.mkdirs()) {
-                LifeSeries.LOGGER.error("Failed to create folder {}", folder);
-                return;
-            }
-        }
-
-        for (String skinName : prebuiltSkins) {
-            handler.copyBundledSingleFile("/files/snails/builtin/"+skinName+".png", new File("./config/lifeseries/wildlife/snailskins/builtin/"+skinName+".png").toPath(), true);
-        }
+        PreBuiltSnailSkins.copyConfigFiles(handler);
     }
 
     public static void upgradeSnailSkinIfNeeded(File skinFile) {

@@ -80,6 +80,9 @@ public class NetworkHandlerClient {
         SimplePackets.CURSE_SLIDING.setClientReceive(payload -> LifeSeriesClient.CURSE_SLIDING = payload.number());
 
         //String list payload
+        SimplePackets.PREBUILT_SNAILSKINS.setClientReceive(payload -> {
+            SnailSkinsClient.handlePrebuiltAssignPacket(payload.value());
+        });
         SimplePackets.LVL1_CLAMPED_ENCHANTS.setClientReceive(payload -> {
             LifeSeriesClient.lvl1ClampedEnchants = payload.value();
         });

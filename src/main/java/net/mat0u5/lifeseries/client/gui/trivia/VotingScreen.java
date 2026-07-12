@@ -17,6 +17,7 @@ import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 //? if >= 1.21.9
 import net.minecraft.client.input.*;
 
@@ -87,7 +88,7 @@ public class VotingScreen extends Screen {
                 filteredPlayers.add(new PlayerEntry(name, skin));
             }
         }
-        filteredPlayers.sort((entry1, entry2) -> entry1.name.toLowerCase().compareTo(entry2.name.toLowerCase()));
+        filteredPlayers.sort((entry1, entry2) -> entry1.name.toLowerCase(Locale.ROOT).compareTo(entry2.name.toLowerCase(Locale.ROOT)));
 
         searchBox = new EditBox(
                 font,
@@ -115,14 +116,14 @@ public class VotingScreen extends Screen {
 
     private void onSearchChanged(String search) {
         filteredPlayers.clear();
-        String lowerSearch = search.toLowerCase();
+        String lowerSearch = search.toLowerCase(Locale.ROOT);
 
         for (PlayerEntry player : players) {
-            if (player.name.toLowerCase().contains(lowerSearch)) {
+            if (player.name.toLowerCase(Locale.ROOT).contains(lowerSearch)) {
                 filteredPlayers.add(player);
             }
         }
-        filteredPlayers.sort((entry1, entry2) -> entry1.name.toLowerCase().compareTo(entry2.name.toLowerCase()));
+        filteredPlayers.sort((entry1, entry2) -> entry1.name.toLowerCase(Locale.ROOT).compareTo(entry2.name.toLowerCase(Locale.ROOT)));
 
         scrollOffset = 0;
         updateMaxScroll();

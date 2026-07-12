@@ -51,6 +51,8 @@ public class SnailRenderer extends AgeableMobRenderer<Snail, SnailRenderState, S
 
         var dynamicTexture = SnailSkinsClient.getSnailTexture(state.skinName);
         if (dynamicTexture != null) return dynamicTexture;
+        var prebuiltAssignTexture = SnailSkinsClient.getPrebuiltAssignTexture(state.skinName);
+        if (prebuiltAssignTexture != null) return prebuiltAssignTexture;
 
         return Snail.DEFAULT_TEXTURE;
     }

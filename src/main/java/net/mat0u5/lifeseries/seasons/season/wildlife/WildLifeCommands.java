@@ -15,6 +15,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Callback;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Hunger;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.PreBuiltSnailSkins;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkins;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
@@ -35,6 +36,7 @@ import net.minecraft.server.level.ServerPlayer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
@@ -161,6 +163,26 @@ public class WildLifeCommands extends Command {
                     .then(literal("reload")
                             .executes(context -> snailTexturesReload(context.getSource()))
                     )
+                    .then(literal("preset")
+                            .then(literal("set")
+                                    .then(argument("players", EntityArgument.players())
+                                            .then(argument("skin", StringArgumentType.greedyString())
+                                                    .suggests((context, builder) -> SharedSuggestionProvider.suggest(PreBuiltSnailSkins.prebuiltSkins, builder))
+                                                    .executes(context -> snailTexturesPreset(context.getSource(), EntityArgument.getPlayers(context, "players"), StringArgumentType.getString(context, "skin")))
+                                            )
+                                    )
+                            )
+                            .then(literal("randomize")
+                                    .then(argument("players", EntityArgument.players())
+                                                .executes(context -> snailTexturesPresetRandom(context.getSource(), EntityArgument.getPlayers(context, "players")))
+                                    )
+                            )
+                            .then(literal("reset")
+                                    .then(argument("players", EntityArgument.players())
+                                            .executes(context -> snailTexturesPresetReset(context.getSource(), EntityArgument.getPlayers(context, "players")))
+                                    )
+                            )
+                    )
                 )
                 .then(literal("control")
                         .requires(PermissionManager::isAdmin)
@@ -256,6 +278,72 @@ public class WildLifeCommands extends Command {
                         .executes(context -> randomizeFood(context.getSource()))
                 )
         );
+    }
+
+    public int snailTexturesPreset(CommandSourceStack source, Collection<ServerPlayer> targets, String name) {
+        if (checkBanned(source)) return -1;
+
+        if (targets.size() == 1 && SnailSkins.getAllSkins(true).contains(targets.iterator().next().getScoreboardName().toLowerCase(Locale.ROOT))) {
+            sendCommandFailure(source, ModifiableText.WILDLIFE_SNAIL_TEXTURES_PRESET_ERROR_CUSTOM.get());
+            return -1;
+        }
+
+        if (!PreBuiltSnailSkins.isValidPrebuiltSkin(name)) {
+            sendCommandFailure(source, ModifiableText.WILDLIFE_SNAIL_TEXTURES_PRESET_ERROR.get());
+            return -1;
+        }
+
+        for (ServerPlayer player : targets) {
+            PreBuiltSnailSkins.setPrebuiltSkin(player, name);
+        }
+        PreBuiltSnailSkins.sendPrebuiltSkins();
+
+        if (targets.size() == 1) {
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_TEXTURES_PRESET_SET_SINGLE.get(targets.iterator().next(), name));
+        }
+        else {
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_TEXTURES_PRESET_SET_MULTIPLE.get(targets.size(), name));
+        }
+        return 1;
+    }
+
+    public int snailTexturesPresetRandom(CommandSourceStack source, Collection<ServerPlayer> targets) {
+        if (checkBanned(source)) return -1;
+
+        if (targets.size() == 1 && SnailSkins.getAllSkins(true).contains(targets.iterator().next().getScoreboardName().toLowerCase(Locale.ROOT))) {
+            sendCommandFailure(source, ModifiableText.WILDLIFE_SNAIL_TEXTURES_PRESET_ERROR_CUSTOM.get());
+            return -1;
+        }
+
+        for (ServerPlayer player : targets) {
+            PreBuiltSnailSkins.randomPrebuiltSkin(player);
+        }
+        PreBuiltSnailSkins.sendPrebuiltSkins();
+
+        if (targets.size() == 1) {
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_TEXTURES_PRESET_RANDOM_SINGLE.get(targets.iterator().next()));
+        }
+        else {
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_TEXTURES_PRESET_RANDOM_MULTIPLE.get(targets.size()));
+        }
+        return 1;
+    }
+
+    public int snailTexturesPresetReset(CommandSourceStack source, Collection<ServerPlayer> targets) {
+        if (checkBanned(source)) return -1;
+
+        for (ServerPlayer player : targets) {
+            PreBuiltSnailSkins.resetPrebuiltSkin(player);
+        }
+        PreBuiltSnailSkins.sendPrebuiltSkins();
+
+        if (targets.size() == 1) {
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_TEXTURES_PRESET_RESET_SINGLE.get(targets.iterator().next()));
+        }
+        else {
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_SNAIL_TEXTURES_PRESET_RESET_MULTIPLE.get(targets.size()));
+        }
+        return 1;
     }
 
     public int despawnSnailFor(CommandSourceStack source, Collection<ServerPlayer> targets) {
