@@ -95,7 +95,7 @@ public class PreBuiltSnailSkins {
 		List<String> skins = new ArrayList<>();
 
 		//? if <= 1.20.2 {
-        /*for (Score entry : ScoreboardUtils.getScores(LivesManageSCOREBOARD_NAME)) {
+        /*for (Score entry : ScoreboardUtils.getScores(SCOREBOARD_NAME)) {
             String name = entry.getOwner();
             int skinIndex = entry.getScore();
         *///?} else {

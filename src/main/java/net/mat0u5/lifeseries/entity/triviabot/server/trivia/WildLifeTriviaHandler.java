@@ -41,6 +41,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.phys.Vec3;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import static net.mat0u5.lifeseries.LifeSeries.blacklist;
@@ -343,26 +344,16 @@ public class WildLifeTriviaHandler extends TriviaHandler {
         ServerPlayer player = bot.serverData.getBoundPlayer();
         if (player == null) return;
         player.sendSystemMessage(Component.empty());
+
+        var availableEffects = new ArrayList<>(blessEffects);
+        if (blacklist != null) availableEffects.removeAll(blacklist.getBannedEffects());
+
         for (int i = 0; i < 3; i++) {
-            int attempts = 0;
-            //? if <= 1.20.3 {
-            /*MobEffect effect = null;
-            *///?} else {
-            Holder<MobEffect> effect = null;
-             //?}
-            while (effect == null && attempts < 50) {
-                attempts++;
-                //? if <= 1.20.3 {
-                /*MobEffect pickedEffect = blessEffects.get(player.getRandom().nextInt(blessEffects.size()));
-                *///?} else {
-                Holder<MobEffect> pickedEffect = blessEffects.get(player.getRandom().nextInt(blessEffects.size()));
-                //?}
-                if (blacklist != null && blacklist.getBannedEffects().contains(pickedEffect)) {
-                    continue;
-                }
-                effect = pickedEffect;
-            }
+            if (availableEffects.isEmpty()) continue;
+            Collections.shuffle(availableEffects);
+            var effect = availableEffects.get(player.getRandom().nextInt(availableEffects.size()));
             if (effect == null) continue;
+            availableEffects.remove(effect);
             int amplifier;
             if (effect == MobEffects.FIRE_RESISTANCE || effect == MobEffects.WATER_BREATHING || effect == MobEffects.NIGHT_VISION ||
                     effect == MobEffects.REGENERATION || effect == MobEffects.STRENGTH || effect == MobEffects.HEALTH_BOOST || effect == MobEffects.RESISTANCE) {

@@ -17,8 +17,6 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
 
-import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
-
 //? if <= 1.21.4
 //import net.minecraft.world.level.ChunkPos;
 

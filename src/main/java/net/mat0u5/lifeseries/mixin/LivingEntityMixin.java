@@ -3,6 +3,8 @@ package net.mat0u5.lifeseries.mixin;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.entity.angrysnowman.AngrySnowman;
+import net.mat0u5.lifeseries.entity.snail.Snail;
+import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -20,6 +22,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
@@ -243,16 +246,18 @@ public abstract class LivingEntityMixin {
     }
     //?}
 
-/*
-    @ModifyVariable(method = "handleRelativeFrictionAndCalculateMovement", at = @At("HEAD"), index = 2, argsOnly = true)
-    private float noSpecialFriction(float original) {
+    //? if <= 1.21 {
+    /*@Redirect(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;getFriction()F"))
+    *///?} else {
+    @Redirect(method = "travelInAir", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;getFriction()F"))
+    //?}
+    private float noSpecialFriction(Block instance) {
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity instanceof Snail || entity instanceof TriviaBot) {
             return 0.6F;
         }
-        return original;
+        return instance.getFriction();
     }
-*/
 
     @Inject(method = "die", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;broadcastEntityEvent(Lnet/minecraft/world/entity/Entity;B)V"))
     private void notifyDeath(DamageSource source, CallbackInfo ci) {

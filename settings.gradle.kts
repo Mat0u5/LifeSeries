@@ -71,6 +71,7 @@ stonecutter {
 			match("26.1", "fabric")
 			match("1.21.11", "fabric")
 			match("1.21", "fabric")
+			match("1.20", "fabric")
 		}
 		else if (env("GRADLE_ONLY_FABRIC") == "true") {
 			// All Fabric versions
