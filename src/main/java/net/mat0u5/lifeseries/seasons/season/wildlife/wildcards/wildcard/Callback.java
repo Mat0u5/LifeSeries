@@ -196,7 +196,7 @@ public class Callback extends Wildcard {
                 if (wildcard.active) continue;
                 wildcard.activate();
             }
-            WildcardManager.showRainbowCryptTitle("All wildcards are active!");
+            WildcardManager.showRainbowCryptTitle(ModifiableText.WILDLIFE_WILDCARD_ACTIVATE_ALL_TITLE.getString());
         });
         TaskScheduler.scheduleTask(92, NetworkHandlerServer::sendUpdatePackets);
 

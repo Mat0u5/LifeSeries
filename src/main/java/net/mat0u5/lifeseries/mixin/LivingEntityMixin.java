@@ -185,7 +185,7 @@ public abstract class LivingEntityMixin {
         return strength;
     }
 
-    @Inject(method = "dropAllDeathLoot", at = @At("HEAD"))
+    @Inject(method = "dropAllDeathLoot", at = @At("HEAD"), cancellable = true)
     //? if <= 1.20.5 {
     /*private void onDrop(DamageSource damageSource, CallbackInfo ci) {
     *///?} else {

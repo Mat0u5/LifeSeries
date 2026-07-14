@@ -110,7 +110,12 @@ public class WildLifeCommands extends Command {
                         )
                         .then(literal("activate")
                                 .executes(context -> effectActivate(
-                                        context.getSource())
+                                        context.getSource(), false)
+                                )
+                                .then(literal("all")
+                                        .executes(context -> effectActivate(
+                                                context.getSource(), true)
+                                        )
                                 )
                         )
                         .then(literal("makeItWild")
@@ -420,12 +425,17 @@ public class WildLifeCommands extends Command {
         return 1;
     }
 
-    public int effectActivate(CommandSourceStack source) {
+    public int effectActivate(CommandSourceStack source, boolean rainbowTitle) {
         if (checkBanned(source)) return -1;
 
         WildcardManager.showDots();
         TaskScheduler.scheduleTask(90, () -> {
-            WildcardManager.showCryptTitle(ModifiableText.WILDLIFE_WILDCARD_ACTIVATE_CRYPT_TITLE.get());
+            if (rainbowTitle) {
+                WildcardManager.showRainbowCryptTitle(ModifiableText.WILDLIFE_WILDCARD_ACTIVATE_ALL_TITLE.getString());
+            }
+            else {
+                WildcardManager.showCryptTitle(ModifiableText.WILDLIFE_WILDCARD_ACTIVATE_CRYPT_TITLE.get());
+            }
         });
 
         return 1;
