@@ -35,9 +35,9 @@ import static net.mat0u5.lifeseries.LifeSeries.*;
 public class LimitedLife extends Season {
 
     public static Time NEW_DEATH_NORMAL = Time.hours(-1);
-    private static Time NEW_DEATH_BOOGEYMAN = Time.hours(-2);
-    private static Time NEW_KILL_NORMAL = Time.minutes(30);
-    private static Time NEW_KILL_BOOGEYMAN = Time.hours(1);
+    public static Time NEW_DEATH_BOOGEYMAN = Time.hours(-2);
+    public static Time NEW_KILL_NORMAL = Time.minutes(30);
+    public static Time NEW_KILL_BOOGEYMAN = Time.hours(1);
     public static boolean TICK_OFFLINE_PLAYERS = false;
     public static boolean SHOW_TIME_BELOW_NAME = false;
 
@@ -127,6 +127,12 @@ public class LimitedLife extends Season {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void tick(MinecraftServer server) {
+        super.tick(server);
+        DatapackIntegration.limlifeTick();
     }
 
     private int secondCounter = 0;

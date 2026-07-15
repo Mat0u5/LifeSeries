@@ -130,23 +130,29 @@ public class SecretSociety {
         memberPlayers.forEach(this::addMember);
         SessionTranscript.societyMembersChosen(memberPlayers);
 
-        if (!SOUND_ONLY_MEMBERS) {
-            PlayerUtils.playSoundToPlayers(nonMemberPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("pastlife_society")));
-        }
-        PlayerUtils.playSoundToPlayers(memberPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("pastlife_society")));
-        PlayerUtils.sendTitleToPlayers(memberPlayers, ModifiableText.SOCIETY_CALLS_PT1.get(), 0, 30, 0);
-
         PlayerListReference ref = PlayerListReference.of(memberPlayers);
-        TaskScheduler.scheduleTask(15, () -> {
+        PlayerListReference nonMemberRef = PlayerListReference.of(nonMemberPlayers);
+
+        PlayerUtils.broadcastMessage(memberPlayers, ModifiableText.SOCIETY_DONT_READ.get());
+
+        TaskScheduler.scheduleTask(50, () -> {
+            if (!SOUND_ONLY_MEMBERS) {
+                PlayerUtils.playSoundToPlayers(nonMemberRef.get(), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("pastlife_society")));
+            }
+            PlayerUtils.playSoundToPlayers(ref.get(), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("pastlife_society")));
+            PlayerUtils.sendTitleToPlayers(ref.get(), ModifiableText.SOCIETY_CALLS_PT1.get(), 0, 30, 0);
+        });
+
+        TaskScheduler.scheduleTask(65, () -> {
             PlayerUtils.sendTitleToPlayers(ref.get(), ModifiableText.SOCIETY_CALLS_PT2.get(), 0, 30, 0);
         });
-        TaskScheduler.scheduleTask(35, () -> {
+        TaskScheduler.scheduleTask(85, () -> {
             PlayerUtils.sendTitleToPlayers(ref.get(), ModifiableText.SOCIETY_CALLS_PT3.get(), 0, 30, 0);
         });
-        TaskScheduler.scheduleTask(55, () -> {
+        TaskScheduler.scheduleTask(105, () -> {
             PlayerUtils.sendTitleToPlayers(ref.get(), ModifiableText.SOCIETY_CALLS_PT4.get(), 0, 45, 30);
         });
-        TaskScheduler.scheduleTask(141, () -> {
+        TaskScheduler.scheduleTask(191, () -> {
             PlayerUtils.sendTitleWithSubtitleToPlayers(ref.get(), ModifiableText.SOCIETY_CALLS_PT5_TITLE.get(), ModifiableText.SOCIETY_CALLS_PT5_SUBTITLE.get(), 20, 60, 20);
         });
     }

@@ -174,6 +174,7 @@ public enum ModifiableText {
     ,SOCIETY_MEMBER_ERROR_INITIALIZE("You have not been initiated")
     ,SOCIETY_MEMBER_ERROR_INITIALIZED("You have already been initiated")
     ,SOCIETY_NOT_ENDED("§c The Secret Society has not been ended by any Member!\n§c Run \"/society members list\" to see the Members.")
+    ,SOCIETY_DONT_READ("§7Do not read out loud. Only you will see the way forward.")
     ,SOCIETY_CALLS_PT1("§cThe Society calls")
     ,SOCIETY_CALLS_PT2("§cThe Society calls.")
     ,SOCIETY_CALLS_PT3("§cThe Society calls..")

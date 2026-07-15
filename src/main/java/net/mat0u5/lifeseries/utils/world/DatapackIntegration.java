@@ -1,6 +1,8 @@
 package net.mat0u5.lifeseries.utils.world;
 
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
+import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeLivesManager;
 import net.mat0u5.lifeseries.seasons.season.secretlife.TaskTypes;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -16,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.mat0u5.lifeseries.LifeSeries.livesManager;
 import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
 
 public class DatapackIntegration {
@@ -23,6 +26,7 @@ public class DatapackIntegration {
     private static final String SCOREBOARD_SUPERPOWERS = "PlayerSuperpowers";
     private static final String SCOREBOARD_SESSION_INFO = "Session";
     private static final String SCOREBOARD_TASK_DIFFICULTY = "TaskDifficulty";
+    private static final String SCOREBOARD_LIMITEDLIFE = "LimitedLife";
 
     public static final Events EVENT_PLAYER_JOIN = Events.PLAYER_JOIN;
     public static final Events EVENT_PLAYER_LEAVE = Events.PLAYER_LEAVE;
@@ -161,6 +165,17 @@ public class DatapackIntegration {
         ScoreboardUtils.createObjective(SCOREBOARD_SUPERPOWERS);
         ScoreboardUtils.createObjective(SCOREBOARD_SESSION_INFO);
         ScoreboardUtils.createObjective(SCOREBOARD_TASK_DIFFICULTY);
+        ScoreboardUtils.createObjective(SCOREBOARD_LIMITEDLIFE);
+    }
+
+    public static void limlifeTick() {
+        ScoreboardUtils.setScore("TimeBoundaryDefault", SCOREBOARD_LIMITEDLIFE, LimitedLifeLivesManager.DEFAULT_TIME);
+        ScoreboardUtils.setScore("TimeBoundaryYellow", SCOREBOARD_LIMITEDLIFE, LimitedLifeLivesManager.YELLOW_TIME);
+        ScoreboardUtils.setScore("TimeBoundaryRed", SCOREBOARD_LIMITEDLIFE, LimitedLifeLivesManager.RED_TIME);
+        ScoreboardUtils.setScore("TimeKill", SCOREBOARD_LIMITEDLIFE, LimitedLife.NEW_KILL_NORMAL.getSeconds());
+        ScoreboardUtils.setScore("TimeDeath", SCOREBOARD_LIMITEDLIFE, LimitedLife.NEW_DEATH_NORMAL.getSeconds());
+        ScoreboardUtils.setScore("TimeBoogeymanKill", SCOREBOARD_LIMITEDLIFE, LimitedLife.NEW_KILL_BOOGEYMAN.getSeconds());
+        ScoreboardUtils.setScore("TimeBoogeymanDeath", SCOREBOARD_LIMITEDLIFE, LimitedLife.NEW_DEATH_BOOGEYMAN.getSeconds());
     }
 
     public static void initWildcards() {
