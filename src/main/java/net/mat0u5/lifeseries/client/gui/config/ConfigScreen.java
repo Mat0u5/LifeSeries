@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.client.gui.config;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.mojang.blaze3d.platform.InputConstants;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.config.ClientConfigNetwork;
 import net.mat0u5.lifeseries.client.gui.config.entries.ConfigEntry;
@@ -19,7 +20,6 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import org.lwjgl.glfw.GLFW;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -427,14 +427,14 @@ public class ConfigScreen extends Screen {
     //? if <= 1.21.6 {
     /*@Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        boolean leftClick = button == 0;
+        boolean leftClick = button == InputConstants.MOUSE_BUTTON_LEFT;
         if (this.searchField.mouseClicked(mouseX, mouseY, button)) {
     *///?} else {
     @Override
     public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         int mouseX = (int) click.x();
         int mouseY = (int) click.y();
-        boolean leftClick = click.button() == 0;
+        boolean leftClick = click.button() == InputConstants.MOUSE_BUTTON_LEFT;
 
         if (this.searchField.mouseClicked(click, doubled)) {
     //?}
@@ -484,7 +484,7 @@ public class ConfigScreen extends Screen {
         }
 
         // Ctrl+F to focus search
-        if (keyCode == GLFW.GLFW_KEY_F && (modifiers & GLFW.GLFW_MOD_CONTROL) != 0) {
+        if (keyCode == InputConstants.KEY_F && (modifiers & InputConstants.MOD_CONTROL) != 0) {
             focusSearch();
             return true;
         }

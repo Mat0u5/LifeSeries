@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.client.gui.config.entries.main;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.mat0u5.lifeseries.client.gui.config.entries.EmptyConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.client.utils.interfaces.IEntryGroupHeader;
@@ -22,10 +23,10 @@ public class TextConfigEntry extends EmptyConfigEntry implements IEntryGroupHead
     @Override
     //? if <= 1.21.6 {
     /*protected boolean mouseClickedEntry(double mouseX, double mouseY, int button) {
-        if (clickable && button == 0) {
+        if (clickable && button == InputConstants.MOUSE_BUTTON_LEFT) {
     *///?} else {
     protected boolean mouseClickedEntry(MouseButtonEvent click, boolean doubled) {
-    if (clickable && click.button() == 0) {
+    if (clickable && click.button() == InputConstants.MOUSE_BUTTON_LEFT) {
     //?}
             clicked = !clicked;
         }

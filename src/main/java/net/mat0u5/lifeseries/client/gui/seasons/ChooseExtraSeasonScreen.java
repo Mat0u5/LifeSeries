@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.client.gui.seasons;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.mat0u5.lifeseries.client.gui.DefaultScreen;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
@@ -78,12 +79,12 @@ public class ChooseExtraSeasonScreen extends DefaultScreen {
     @Override
     //? if <= 1.21.6 {
     /*public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button == 0) { // Left-click
+        if (button == InputConstants.MOUSE_BUTTON_LEFT) { // Left-click
     *///?} else {
     public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         double mouseX = click.x();
         double mouseY = click.y();
-        if (click.button() == 0) { // Left-click
+        if (click.button() == InputConstants.MOUSE_BUTTON_LEFT) { // Left-click
     //?}
             int region = getRegion((int) mouseX, (int) mouseY);
             if (region == -1 && this.minecraft != null) {

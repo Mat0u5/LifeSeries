@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.client.gui.trivia;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
@@ -100,12 +101,12 @@ public class QuizScreen extends DefaultScreen {
     @Override
     //? if <= 1.21.6 {
     /*public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button == 0) { // Left-click
+        if (button == InputConstants.MOUSE_BUTTON_LEFT) { // Left-click
     *///?} else {
     public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         double mouseX = click.x();
         double mouseY = click.y();
-        if (click.button() == 0) { // Left-click
+        if (click.button() == InputConstants.MOUSE_BUTTON_LEFT) { // Left-click
     //?}
             for (int i = 0; i < answerRects.size(); i++) {
                 if (answerRects.get(i).contains(mouseX, mouseY)) {

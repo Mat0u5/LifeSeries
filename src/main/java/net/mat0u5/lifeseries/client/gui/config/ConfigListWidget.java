@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.client.gui.config;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.mat0u5.lifeseries.client.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.client.utils.TextColors;
 import net.minecraft.client.Minecraft;
@@ -267,7 +268,7 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
         if (super.mouseDragged(mouseX, mouseY, button, dragX, dragY)) {
             return true;
-        } else if (button == 0 && this.scrolling) {
+        } else if (button == InputConstants.MOUSE_BUTTON_LEFT && this.scrolling) {
             //? if <= 1.21.2 {
             /^int maxScroll = getMaxScroll();
             ^///?} else {
@@ -287,7 +288,7 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
     *///?} else {
     @Override
     public boolean mouseReleased(MouseButtonEvent click) {
-        if (click.button() == 0 && this.scrolling) {
+        if (click.button() == InputConstants.MOUSE_BUTTON_LEFT && this.scrolling) {
             this.scrolling = false;
             return true;
         }

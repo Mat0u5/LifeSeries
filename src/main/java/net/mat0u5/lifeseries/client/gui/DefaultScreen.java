@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.client.gui;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.mat0u5.lifeseries.client.utils.TextColors;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
@@ -63,7 +64,7 @@ public abstract class DefaultScreen extends Screen {
     //? if <= 1.21.6 {
     /*@Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button == 0 && allowCloseButton()) { // Left-click
+        if (button == InputConstants.MOUSE_BUTTON_LEFT && allowCloseButton()) { // Left-click
             if (isInCloseRegion((int)mouseX, (int)mouseY)) {
                 closeButtonClicked();
                 return true;
@@ -74,7 +75,7 @@ public abstract class DefaultScreen extends Screen {
     *///?} else {
     @Override
     public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
-        if (click.button() == 0 && allowCloseButton()) { // Left-click
+        if (click.button() == InputConstants.MOUSE_BUTTON_LEFT && allowCloseButton()) { // Left-click
             if (isInCloseRegion((int)click.x(), (int)click.y())) {
                 closeButtonClicked();
                 return true;

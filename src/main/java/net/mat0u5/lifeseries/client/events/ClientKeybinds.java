@@ -5,7 +5,6 @@ import net.mat0u5.lifeseries.client.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.client.KeyMapping;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,27 +36,33 @@ public class ClientKeybinds {
     public static void init() {
         if (superpower != null) return;
 
+        //? if <= 26.2 {
+        var type = InputConstants.Type.KEYSYM;
+        //?} else {
+        /*var type = InputConstants.Type.KEYBOARD;
+        *///?}
+
         superpower = new KeyMapping(
                 "key.lifeseries.superpower",
-                InputConstants.Type.KEYSYM,
+                type,
                 //? if <= 1.21.5 {
-                /*GLFW.GLFW_KEY_G,
+                /*InputConstants.KEY_G,
                  *///?} else {
-                GLFW.GLFW_KEY_R,
+                InputConstants.KEY_R,
                 //?}
                 KEYBIND_ID
         );
         openConfig = new KeyMapping(
                 "key.lifeseries.openconfig",
-                InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_UNKNOWN,
+                type,
+                InputConstants.UNKNOWN.getValue(),
                 KEYBIND_ID
         );
         if (VersionControl.isDevVersion()) {
             runCommand = new KeyMapping(
                     "key.lifeseries.runcommand",
-                    InputConstants.Type.KEYSYM,
-                    GLFW.GLFW_KEY_RIGHT_ALT,
+                    type,
+                    InputConstants.KEY_RALT,
                     KEYBIND_ID
             );
         }
