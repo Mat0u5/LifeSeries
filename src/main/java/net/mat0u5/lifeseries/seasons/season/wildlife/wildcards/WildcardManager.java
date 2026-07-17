@@ -54,7 +54,9 @@ public class WildcardManager {
             activeWildcards.put(chosenWildcard, chosenWildcard.getInstance());
             return;
         }
-        Wildcards wildcard = Wildcards.getWildcards().get(rnd.nextInt(Wildcards.getWildcards().size()));
+        List<Wildcards> wildcards = Wildcards.getWildcards();
+        wildcards.remove(Wildcards.EMPTY);
+        Wildcards wildcard = wildcards.get(rnd.nextInt(wildcards.size()));
         activeWildcards.put(wildcard, wildcard.getInstance());
     }
 

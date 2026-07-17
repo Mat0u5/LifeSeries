@@ -18,7 +18,8 @@ public enum Wildcards {
     TRIVIA,
     MOB_SWAP,
     SUPERPOWERS,
-    CALLBACK;
+    CALLBACK,
+    EMPTY;
 
 
     public Wildcard getInstance() {
@@ -32,6 +33,7 @@ public enum Wildcards {
         if (this == MOB_SWAP) return new MobSwap();
         if (this == SUPERPOWERS) return new SuperpowersWildcard();
         if (this == CALLBACK) return new Callback();
+        if (this == EMPTY) return new EmptyWildcard();
         return null;
     }
 

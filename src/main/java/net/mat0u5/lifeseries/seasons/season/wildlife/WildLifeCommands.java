@@ -540,6 +540,7 @@ public class WildLifeCommands extends Command {
 
     public List<String> suggestionsActivateWildcard() {
         List<String> allWildcards = Wildcards.getInactiveWildcardsStr();
+        allWildcards.remove("empty");
         allWildcards.add("*");
         return allWildcards;
     }

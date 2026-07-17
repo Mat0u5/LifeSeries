@@ -237,6 +237,7 @@ public class Callback extends Wildcard {
     public Wildcards getRandomInactiveWildcard() {
         List<Wildcards> inactiveWildcards = Wildcards.getInactiveWildcards();
         inactiveWildcards.remove(Wildcards.CALLBACK);
+        inactiveWildcards.remove(Wildcards.EMPTY);
         inactiveWildcards.removeIf(blacklistedWildcards::contains);
         if (inactiveWildcards.isEmpty()) return null;
         return inactiveWildcards.get(rnd.nextInt(inactiveWildcards.size()));
@@ -245,6 +246,7 @@ public class Callback extends Wildcard {
     public Wildcards getRandomActiveWildcard() {
         List<Wildcards> activeWildcards = Wildcards.getActiveWildcards();
         activeWildcards.remove(Wildcards.CALLBACK);
+        activeWildcards.remove(Wildcards.EMPTY);
         activeWildcards.removeIf(blacklistedWildcards::contains);
         if (activeWildcards.isEmpty()) return null;
         if (lastActivatedWildcard != null) {
