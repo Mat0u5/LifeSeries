@@ -63,7 +63,10 @@ public class NiceLifeCommands extends Command {
                                         )
                         )
                         .then(literal("skipNight")
-                                        .executes(context -> skipNight(context.getSource()))
+                                .executes(context -> skipNight(context.getSource()))
+                        )
+                        .then(literal("forceSleep")
+                                .executes(context -> forceSleep(context.getSource()))
                         )
         );
         dispatcher.register(
@@ -324,6 +327,23 @@ public class NiceLifeCommands extends Command {
                 return -1;
             }
             niceLife.sleepThroughNight();
+        }
+        return 1;
+    }
+
+    private int forceSleep(CommandSourceStack source) {
+        if (checkBanned(source)) return -1;
+        if (currentSeason instanceof NiceLife niceLife) {
+            //? if <= 1.21.4 {
+            /*if (!source.getServer().overworld().isNight()) {
+             *///?} else {
+            if (!source.getServer().overworld().isDarkOutside()) {
+                //?}
+                sendCommandFailure(source, ModifiableText.NICELIFE_NOT_NIGHT.get());
+                return -1;
+            }
+
+            NiceLife.forceSleepTicks = 5;
         }
         return 1;
     }

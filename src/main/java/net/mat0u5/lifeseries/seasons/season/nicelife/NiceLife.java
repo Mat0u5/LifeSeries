@@ -154,6 +154,7 @@ public class NiceLife extends Season {
     @Override
     public void tick(MinecraftServer server) {
         super.tick(server);
+        if (forceSleepTicks > 0) forceSleepTicks--;
         timePassed.tick();
         if (currentSession.statusStarted() || SNOW_WHEN_NOT_IN_SESSION) {
             snowTicks.tick();
@@ -262,6 +263,7 @@ public class NiceLife extends Season {
         }
     }
 
+    public static int forceSleepTicks = 0;
     public static boolean areEnoughSleeping(int percentage) {
         List<ServerPlayer> players = LifeSeries.livesManager.getAlivePlayers();
         int allPlayers = 0;
@@ -273,6 +275,7 @@ public class NiceLife extends Season {
                 sleepingPlayers++;
             }
         }
+        if (sleepingPlayers >= 1 && forceSleepTicks > 0) return true;
         return sleepingPlayers >= Math.max(1, Mth.ceil((float)(allPlayers * percentage) / 100.0F));
     }
 

@@ -27,8 +27,7 @@ import net.minecraft.core.component.PatchedDataComponentMap;
 /*import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.food.Foods;
 *///?}
-//? if <= 1.21.11
-//import org.spongepowered.asm.mixin.gen.Accessor;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
 //? if <= 1.21.11 {
 /*@Mixin(value = Item.class, priority = 1)
@@ -45,7 +44,10 @@ public abstract class ItemMixin {
     //? if <= 1.21.11 {
     /*@Accessor("components")
     public abstract DataComponentMap normalComponents();
-    *///?}
+    *///?} else {
+    @Accessor("components")
+    public abstract PatchedDataComponentMap normalComponents();
+    //?}
 
     //? if <= 1.21.11 {
     /*@Inject(method = "components", at = @At("HEAD"), cancellable = true)
@@ -80,7 +82,7 @@ public abstract class ItemMixin {
                 //? if <= 1.21.11 {
                 /*PatchedDataComponentMap components = new PatchedDataComponentMap(normalComponents());
                 *///?} else {
-                PatchedDataComponentMap components = new PatchedDataComponentMap(item.builtInRegistryHolder().components());
+                PatchedDataComponentMap components = normalComponents();
                 //?}
                 Hunger.defaultFoodComponents(item, components);
                 cir.setReturnValue(components);
