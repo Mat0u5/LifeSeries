@@ -696,6 +696,8 @@ public class NetworkHandlerServer {
             SimplePackets.ADMIN_INFO.sendToClient(PermissionManager.isAdmin(player), player);
             Season.updateClientPlayerTeam(player);
         }
+
+        SimplePackets.NICELIFE_LIVE_VOTING_ENABLED.sendToClient(NiceLifeVotingManager.PUBLIC_VOTING, players);
     }
 
     public static void sendUpdatePackets() {

@@ -80,7 +80,20 @@ public class NetworkHandlerClient {
         SimplePackets.CURSE_SLIDING.setClientReceive(payload -> LifeSeriesClient.CURSE_SLIDING = payload.number());
 
         //String list payload
-        SimplePackets.TRIVIA_NONSLEEPING.setClientReceive(payload -> {
+        SimplePackets.NICELIFE_LIVE_VOTING.setClientReceive(payload -> {
+            LifeSeriesClient.liveVoting.clear();
+            for (String string : payload.value()) {
+                if (!string.contains(":")) continue;
+                try {
+                    String[] split = string.split(":");
+                    String player = split[0];
+                    Integer votes = Integer.parseInt(split[1]);
+                    LifeSeriesClient.liveVoting.put(player, votes);
+                }catch (Exception e) {}
+            }
+            LifeSeriesClient.liveVotingTimestamp = System.currentTimeMillis();
+        });
+        SimplePackets.NICELIFE_TRIVIA_NONSLEEPING.setClientReceive(payload -> {
             LifeSeriesClient.nonSleepingPlayers = payload.value();
             LifeSeriesClient.nonSleepingPlayersTimestamp = System.currentTimeMillis();
         });
@@ -238,6 +251,7 @@ public class NetworkHandlerClient {
 
 
         //Boolean payload
+        SimplePackets.NICELIFE_LIVE_VOTING_ENABLED.setClientReceive(payload -> LifeSeriesClient.liveVotingEnabled = payload.value());
         SimplePackets.POWER_INVISIBILITY_PARTICLES.setClientReceive(payload -> LifeSeriesClient.powerInvisParticles = payload.value());
         SimplePackets.PREVENT_GLIDING.setClientReceive(payload -> LifeSeriesClient.preventGliding = payload.value());
         SimplePackets.TABLIST_SHOW_EXACT.setClientReceive(payload -> LifeSeriesClient.TAB_LIST_SHOW_EXACT_LIVES = payload.value());

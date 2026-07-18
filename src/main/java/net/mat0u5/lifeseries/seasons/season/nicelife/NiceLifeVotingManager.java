@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
@@ -49,6 +50,7 @@ public class NiceLifeVotingManager {
     public static String NICE_LIST_TEAM = "nice_list";
     public static String NICE_LIST_TEAM_NAME = "Nice List";
     public static Optional<VoteType> forcedTriviaVote = Optional.empty();
+    public static boolean PUBLIC_VOTING = false;
 
     public enum VoteType {
         NICE_LIST,
@@ -131,6 +133,18 @@ public class NiceLifeVotingManager {
         }
         votesByCount.put(votedFor.getUUID(), votesByCount.get(votedFor.getUUID())+1);
         votesByPerson.put(player.getUUID(), votedFor.getUUID());
+
+        List<String> liveVoting = new ArrayList<>();
+        if (PUBLIC_VOTING) {
+            for (Map.Entry<UUID, Integer> entry : votesByCount.entrySet()) {
+                ServerPlayer playerVoted = PlayerUtils.getPlayer(entry.getKey());
+                if (playerVoted == null) continue;
+                Integer votes = entry.getValue();
+                if (votes == null) continue;
+                liveVoting.add(playerVoted.getScoreboardName()+":"+votes);
+            }
+        }
+        SimplePackets.NICELIFE_LIVE_VOTING.sendToAllClients(liveVoting);
     }
 
     public static List<UUID> getMostVotedForPlayers(int count) {

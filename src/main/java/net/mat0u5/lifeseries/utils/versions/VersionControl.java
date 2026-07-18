@@ -158,12 +158,12 @@ public class VersionControl {
     public static String clientCompatibilityMin() {
         // This is the version that the SERVER needs to have for the current client.
         if (LifeSeries.ISOLATED_ENVIRONMENT) return MOD_VERSION;
-        return "1.5.7.10-dev";
+        return "1.5.7.11-dev";
     }
 
     public static String serverCompatibilityMin() {
         // This is the version that the CLIENT needs to have for the current server.
         if (LifeSeries.ISOLATED_ENVIRONMENT) return MOD_VERSION;
-        return "1.5.7.10-dev";
+        return "1.5.7.11-dev";
     }
 }

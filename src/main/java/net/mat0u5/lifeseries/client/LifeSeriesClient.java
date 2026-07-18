@@ -66,6 +66,9 @@ public class LifeSeriesClient implements ClientAccessor {
     public static int powerTripleJumpCount = 3;
     public static List<String> nonSleepingPlayers = new ArrayList<>();
     public static long nonSleepingPlayersTimestamp = 0;
+    public static Map<String, Integer> liveVoting = new HashMap<>();
+    public static long liveVotingTimestamp = 0;
+    public static boolean liveVotingEnabled = false;
 
     public static ClientConfig clientConfig;
 
@@ -211,6 +214,9 @@ public class LifeSeriesClient implements ClientAccessor {
         powerTripleJumpCount = 3;
         nonSleepingPlayers = new ArrayList<>();
         nonSleepingPlayersTimestamp = 0;
+        liveVoting = new HashMap<>();
+        liveVotingTimestamp = 0;
+        liveVotingEnabled = false;
 
         MorphManager.resetMorphs();
     }

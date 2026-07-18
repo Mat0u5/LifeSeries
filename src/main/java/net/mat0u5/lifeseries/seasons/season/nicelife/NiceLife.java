@@ -133,6 +133,7 @@ public class NiceLife extends Season {
         NiceLifeVotingManager.REDS_ON_NAUGHTY_LIST = NiceLifeConfig.ALLOW_REDS_ON_NAUGHTY_LIST.get();
         NiceLifeVotingManager.NAUGHTY_LIST_COUNT = NiceLifeConfig.NAUGHTY_LIST_PLAYERS.get();
         NiceLifeVotingManager.NICE_LIST_COUNT = NiceLifeConfig.NICE_LIST_PLAYERS.get();
+        NiceLifeVotingManager.PUBLIC_VOTING = NiceLifeConfig.PUBLIC_VOTING.get();
         RED_WINTER = NiceLifeConfig.RED_WINTER.get();
         TriviaHandler.guiType = NiceLifeConfig.TRIVIA_GUI_TYPE.get();
         NiceLifeTriviaManager.nightLength = NiceLifeConfig.TRIVIA_NIGHT_LENGTH.get();
@@ -265,7 +266,7 @@ public class NiceLife extends Season {
             if (CompatibilityManager.voicechatLoaded()) {
                 VoicechatMain.niceLifeTick();
             }
-            SimplePackets.TRIVIA_NONSLEEPING.sendToAllClients(nonSleepingPlayers);
+            SimplePackets.NICELIFE_TRIVIA_NONSLEEPING.sendToAllClients(nonSleepingPlayers);
         }
     }
 

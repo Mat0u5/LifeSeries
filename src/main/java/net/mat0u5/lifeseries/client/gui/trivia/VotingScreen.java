@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.client.gui.trivia;
 
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
@@ -18,10 +19,12 @@ import net.minecraft.network.chat.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 //? if >= 1.21.9
 import net.minecraft.client.input.*;
 
 import net.minecraft.resources.Identifier;
+import org.spongepowered.asm.mixin.injection.struct.InjectorGroupInfo;
 
 public class VotingScreen extends Screen {
     private static final int PLAYER_ENTRY_HEIGHT = 32;
@@ -210,6 +213,23 @@ public class VotingScreen extends Screen {
 
         // Player name
         RenderUtils.text(player.name, x + 32, y + 12).colored(TextColors.WHITE).withShadow().render(graphics, font);
+
+        // Voting
+        if (LifeSeriesClient.liveVotingEnabled) {
+            int votes = 0;
+            if (System.currentTimeMillis() - LifeSeriesClient.liveVotingTimestamp < 60000) {
+                for (Map.Entry<String, Integer> entry : LifeSeriesClient.liveVoting.entrySet()) {
+                    String name = entry.getKey();
+                    if (name == null || entry.getValue() == null) continue;
+                    if (name.equalsIgnoreCase(player.name)) {
+                        votes = entry.getValue();
+                        break;
+                    }
+                }
+            }
+            Component text = Component.literal("Votes: " + votes);
+            RenderUtils.text(text, x +width - 5 - font.width(text), y + 12).colored(TextColors.GUI_GRAY).withShadow().render(graphics, font);
+        }
     }
 
     private void drawScrollbar(GuiGraphicsExtractor graphics, int listTop, int listBottom) {

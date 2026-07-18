@@ -24,7 +24,8 @@ public class SimplePackets {
     public static final SimpleStringListPacket LIFESKINS_PLAYER = new SimpleStringListPacket("LIFESKINS_PLAYER");
     public static final SimpleStringListPacket LVL1_CLAMPED_ENCHANTS = new SimpleStringListPacket("LVL1_CLAMPED_ENCHANTS");
     public static final SimpleStringListPacket PREBUILT_SNAILSKINS = new SimpleStringListPacket("PREBUILT_SNAILSKINS");
-    public static final SimpleStringListPacket TRIVIA_NONSLEEPING = new SimpleStringListPacket("TRIVIA_NONSLEEPING");
+    public static final SimpleStringListPacket NICELIFE_TRIVIA_NONSLEEPING = new SimpleStringListPacket("NICELIFE_TRIVIA_NONSLEEPING");
+    public static final SimpleStringListPacket NICELIFE_LIVE_VOTING = new SimpleStringListPacket("NICELIFE_LIVE_VOTING");
 
     public static final SimpleStringPacket CURRENT_SEASON = new SimpleStringPacket("CURRENT_SEASON");
     public static final SimpleStringPacket SESSION_STATUS = new SimpleStringPacket("SESSION_STATUS");
@@ -50,6 +51,7 @@ public class SimplePackets {
     public static final SimpleBooleanPacket TRIPLE_JUMP = new SimpleBooleanPacket("TRIPLE_JUMP");
     public static final SimpleBooleanPacket MOD_DISABLED = new SimpleBooleanPacket("MOD_DISABLED");
     public static final SimpleBooleanPacket POWER_INVISIBILITY_PARTICLES = new SimpleBooleanPacket("POWER_INVISIBILITY_PARTICLES");
+    public static final SimpleBooleanPacket NICELIFE_LIVE_VOTING_ENABLED = new SimpleBooleanPacket("NICELIFE_LIVE_VOTING_ENABLED");
 
     public static final SimpleNumberPacket PLAYER_MIN_MSPT = new SimpleNumberPacket("PLAYER_MIN_MSPT");
     public static final SimpleNumberPacket SIZESHIFTING_CHANGE = new SimpleNumberPacket("SIZESHIFTING_CHANGE");
