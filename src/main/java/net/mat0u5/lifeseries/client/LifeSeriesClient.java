@@ -64,6 +64,8 @@ public class LifeSeriesClient implements ClientAccessor {
     public static List<String> lvl1ClampedEnchants = new ArrayList<>();
     public static boolean powerInvisParticles = true;
     public static int powerTripleJumpCount = 3;
+    public static List<String> nonSleepingPlayers = new ArrayList<>();
+    public static long nonSleepingPlayersTimestamp = 0;
 
     public static ClientConfig clientConfig;
 
@@ -207,6 +209,8 @@ public class LifeSeriesClient implements ClientAccessor {
         lvl1ClampedEnchants = new ArrayList<>();
         powerInvisParticles = true;
         powerTripleJumpCount = 3;
+        nonSleepingPlayers = new ArrayList<>();
+        nonSleepingPlayersTimestamp = 0;
 
         MorphManager.resetMorphs();
     }

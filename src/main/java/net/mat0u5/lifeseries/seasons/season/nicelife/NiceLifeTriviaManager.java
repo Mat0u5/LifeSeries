@@ -56,6 +56,7 @@ public class NiceLifeTriviaManager {
     public static List<UUID> correctAnswers = new ArrayList<>();
     public static List<UUID> incorrectAnswers = new ArrayList<>();
     public static TriviaQuestion preAssignedTrivia = null;
+    public static boolean SHOW_NONSLEEPING = false;
 
     public static void initialize() {
         triviaQuestions = new TriviaQuestionManager("./config/lifeseries/nicelife","trivia.json");

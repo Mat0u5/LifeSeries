@@ -17,9 +17,15 @@ import net.mat0u5.lifeseries.client.render.ClientRenderer;
 public class NeoforgeClientEvents {
     //? if <= 1.20.3 {
     /^@SubscribeEvent
-    public static void onRenderGui(RenderGuiOverlayEvent.Post event) {
+    public static void onRenderGui(RenderGuiOverlayEvent.Pre event) {
         if (event.getOverlay() == VanillaGuiOverlay.HOTBAR.type()) {
             ClientRenderer.render(event.getGuiGraphicsExtractor());
+        }
+    }
+    @SubscribeEvent
+    public static void onRenderGui(RenderGuiOverlayEvent.Post event) {
+        if (event.getOverlay() == VanillaGuiOverlay.HOTBAR.type()) {
+            ClientRenderer.postRender(event.getGuiGraphicsExtractor());
         }
     }
     ^///?}

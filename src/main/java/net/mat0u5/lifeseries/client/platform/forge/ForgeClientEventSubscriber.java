@@ -14,8 +14,12 @@ import net.minecraftforge.fml.common.Mod;
 public class ForgeClientEventSubscriber {
     //? if <= 1.20 {
     /^@SubscribeEvent
-    public static void onRenderGui(RenderGuiEvent.Post event) {
+    public static void onRenderGui(RenderGuiEvent.Pre event) {
         ClientRenderer.render(event.getGuiGraphicsExtractor());
+    }
+    @SubscribeEvent
+    public static void onRenderGui(RenderGuiEvent.Post event) {
+        ClientRenderer.postRender(event.getGuiGraphicsExtractor());
     }
     ^///?}
 }

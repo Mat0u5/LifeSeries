@@ -80,6 +80,10 @@ public class NetworkHandlerClient {
         SimplePackets.CURSE_SLIDING.setClientReceive(payload -> LifeSeriesClient.CURSE_SLIDING = payload.number());
 
         //String list payload
+        SimplePackets.TRIVIA_NONSLEEPING.setClientReceive(payload -> {
+            LifeSeriesClient.nonSleepingPlayers = payload.value();
+            LifeSeriesClient.nonSleepingPlayersTimestamp = System.currentTimeMillis();
+        });
         SimplePackets.PREBUILT_SNAILSKINS.setClientReceive(payload -> {
             SnailSkinsClient.handlePrebuiltAssignPacket(payload.value());
         });

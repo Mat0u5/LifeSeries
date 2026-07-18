@@ -61,6 +61,37 @@ public class GuiMixin {
         //?}
     }
 
+//? if forge {
+    /*//? if <= 1.20.5 {
+    /^@Inject(method = "render", at = @At(value = "TAIL"))
+    public void renderPost(GuiGraphicsExtractor guiGraphics, float f, CallbackInfo ci) {
+    ^///?} else if <= 1.21.6 {
+    /^@Inject(method = "render", at = @At(value = "TAIL"))
+    public void renderPost(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+    ^///?} else if <= 1.21.11 {
+    /^@Inject(method = "render", at = @At(value = "RETURN"))
+    public void renderPost(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+    ^///?} else {
+    @Inject(method = "extractRenderState", at = @At(value = "RETURN"))
+    public void renderPost(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+    //?}
+*///?} else {
+    //? if <= 1.20.5 {
+    /*@Inject(method = "render", at = @At(value = "TAIL"))
+    public void renderPost(GuiGraphicsExtractor guiGraphics, float f, CallbackInfo ci) {
+    *///?} else if <= 1.21.11 {
+    /*@Inject(method = "render", at = @At(value = "TAIL"))
+    public void renderPost(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+    *///?} else {
+    @Inject(method = "extractRenderState", at = @At(value = "TAIL"))
+    public void renderPost(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+    //?}
+//?}
+        //? if !(neoforge && <= 1.20.3) && !(forge && <= 1.20) {
+        ClientRenderer.postRender(guiGraphics);
+        //?}
+    }
+
     //? if <= 1.20 {
     /*@Inject(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blit(Lnet/minecraft/resources/Identifier;IIIIII)V"), cancellable = true)
     private void customHearts(GuiGraphicsExtractor guiGraphics, Gui.HeartType heartType, int x, int y, int k, boolean isBlinking, boolean isHalf, CallbackInfo ci) {

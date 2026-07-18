@@ -13,6 +13,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.WindCharge;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -22,7 +23,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
@@ -246,6 +249,20 @@ public abstract class LivingEntityMixin {
     }
     //?}
 
+//? if forge || neoforge {
+    /*//? if <= 1.21 {
+    /^@Redirect(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;getFriction(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/Entity;)F"))
+    ^///?} else {
+    @Redirect(method = "travelInAir", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;getFriction(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/Entity;)F"))
+    //?}
+    private float noSpecialFriction(BlockState instance, LevelReader levelReader, BlockPos blockPos, Entity thisEntity) {
+        LivingEntity entity = (LivingEntity) (Object) this;
+        if (entity instanceof Snail || entity instanceof TriviaBot) {
+            return 0.6F;
+        }
+        return instance.getFriction(levelReader, blockPos, thisEntity);
+    }
+*///?} else {
     //? if <= 1.21 {
     /*@Redirect(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;getFriction()F"))
     *///?} else {
@@ -258,6 +275,7 @@ public abstract class LivingEntityMixin {
         }
         return instance.getFriction();
     }
+//?}
 
     @Inject(method = "die", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;broadcastEntityEvent(Lnet/minecraft/world/entity/Entity;B)V"))
     private void notifyDeath(DamageSource source, CallbackInfo ci) {

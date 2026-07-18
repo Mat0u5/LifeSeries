@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.screens.InBedChatScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
@@ -36,10 +37,39 @@ public class TextHud {
         yPos += renderSidetitle(client, context, yPos);
     }
 
+    public static void renderTextPost(GuiGraphicsExtractor context) {
+        Minecraft client = Minecraft.getInstance();
+        //? if <= 26.1 {
+        /*if (client.options.hideGui) return;
+         *///?} else {
+        if (client.gui.hud.isHidden()) return;
+        //?}
+        int yPosTop = (int) Math.ceil((client.font.lineHeight) * LifeSeriesClient.TEXT_HUD_SCALE);
+        int yPosBottom = client.getWindow().getGuiScaledHeight() - (5 + (int) Math.ceil((client.font.lineHeight) * LifeSeriesClient.TEXT_HUD_SCALE));
+
+        if (!LifeSeries.modDisabled()) {
+            yPosTop += renderNonSleeping(client, context, yPosTop);
+        }
+    }
+
     public static void tick() {
         if (sideTitleRemainTicks > 0) {
             sideTitleRemainTicks--;
         }
+    }
+
+    public static int renderNonSleeping(Minecraft client, GuiGraphicsExtractor context, int y) {
+        if (System.currentTimeMillis() - LifeSeriesClient.nonSleepingPlayersTimestamp > 10000) return 0;
+        if (LifeSeriesClient.nonSleepingPlayers.isEmpty()) return 0;
+        if (!(RenderUtils.getScreen() instanceof InBedChatScreen)) return 0;
+
+        y -= drawHudText(client, context, Component.literal("§fNon-Sleeping Players:"), y);
+
+        for (String name : LifeSeriesClient.nonSleepingPlayers) {
+            y -= drawHudText(client, context, Component.literal(name), y)+2;
+        }
+
+        return y;
     }
 
     public static int sideTitleRemainTicks = 0;

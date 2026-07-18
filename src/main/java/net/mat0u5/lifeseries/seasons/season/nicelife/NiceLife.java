@@ -127,6 +127,7 @@ public class NiceLife extends Season {
         NiceLifeTriviaManager.QUESTION_TIME = NiceLifeConfig.TRIVIA_QUESTION_TIME.get();
         NiceLifeTriviaManager.CAN_BREAK_BEDS = NiceLifeConfig.BOT_CAN_BREAK_BEDS.get();
         NiceLifeTriviaManager.BREAKING_DROPS_RESOURCES = NiceLifeConfig.BOT_BREAKING_BLOCKS_DROP_RESOURCES.get();
+        NiceLifeTriviaManager.SHOW_NONSLEEPING = NiceLifeConfig.TRIVIA_SHOW_NONSLEEPING.get();
         NiceLifeVotingManager.NICE_LIST_CHANCE = NiceLifeConfig.NICE_LIST_CHANCE.get();
         NiceLifeVotingManager.VOTING_TIME = Time.seconds(NiceLifeConfig.VOTING_TIME.get());
         NiceLifeVotingManager.REDS_ON_NAUGHTY_LIST = NiceLifeConfig.ALLOW_REDS_ON_NAUGHTY_LIST.get();
@@ -175,6 +176,8 @@ public class NiceLife extends Season {
         server.setWeatherParameters(0, 1000, true, false);
         //?}
 
+        List<String> nonSleepingPlayers = new ArrayList<>();
+
         boolean advanceTime = !isMidnight() && (currentSession.statusStarted() || ADVANCE_TIME_WHEN_NOT_IN_SESSION);
         OtherUtils.setBooleanGameRule(overworld, GameRules.ADVANCE_TIME, advanceTime);
 
@@ -199,7 +202,7 @@ public class NiceLife extends Season {
              *///?} else {
             int percentage = overworld.getGameRules().get(GameRules.PLAYERS_SLEEPING_PERCENTAGE);
             //?}
-            if (areEnoughSleeping(percentage) && isMidnight() && currentSession.statusStarted()) {
+            if (areEnoughSleeping(percentage, nonSleepingPlayers) && isMidnight() && currentSession.statusStarted()) {
                 if (!NiceLifeTriviaManager.triviaInProgress) {
                     List<ServerPlayer> triviaPlayers = new ArrayList<>();
                     for(ServerPlayer player : livesManager.getAlivePlayers()) {
@@ -258,13 +261,16 @@ public class NiceLife extends Season {
                 Season.setCloudColor(null, false);
             }
         }
-        if (timePassed.getTicks() % 20 == 0 && CompatibilityManager.voicechatLoaded()) {
-            VoicechatMain.niceLifeTick();
+        if (timePassed.getTicks() % 20 == 0) {
+            if (CompatibilityManager.voicechatLoaded()) {
+                VoicechatMain.niceLifeTick();
+            }
+            SimplePackets.TRIVIA_NONSLEEPING.sendToAllClients(nonSleepingPlayers);
         }
     }
 
     public static int forceSleepTicks = 0;
-    public static boolean areEnoughSleeping(int percentage) {
+    public static boolean areEnoughSleeping(int percentage, List<String> nonSleepingPlayers) {
         List<ServerPlayer> players = LifeSeries.livesManager.getAlivePlayers();
         int allPlayers = 0;
         int sleepingPlayers = 0;
@@ -273,6 +279,9 @@ public class NiceLife extends Season {
             allPlayers++;
             if (player.isSleeping()) {
                 sleepingPlayers++;
+            }
+            else if (NiceLifeTriviaManager.SHOW_NONSLEEPING) {
+                nonSleepingPlayers.add(TextUtils.textToLegacyString(player.getDisplayName()));
             }
         }
         if (sleepingPlayers >= 1 && forceSleepTicks > 0) return true;
