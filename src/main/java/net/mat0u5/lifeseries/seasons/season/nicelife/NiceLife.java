@@ -191,7 +191,7 @@ public class NiceLife extends Season {
             if (!playedMidnightChimes && isTimeBetween(18000-23*20, 20000)) {
                 playedMidnightChimes = true;
                 PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(),
-                        SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_midnight_chimes")),
+                        SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_midnight_chimes")),
                         1f, 1);
                 postponeTriviaStart(Time.ticks(779));
             }
@@ -313,7 +313,7 @@ public class NiceLife extends Season {
         TaskScheduler.scheduleTask(20, () -> {
             DatapackIntegration.EVENT_RED_WINTER_START.trigger();
             PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(),
-                    SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_red_winter")),
+                    SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_red_winter")),
                     1f, 1);
         });
         TaskScheduler.scheduleTask(20 + 12, () -> {

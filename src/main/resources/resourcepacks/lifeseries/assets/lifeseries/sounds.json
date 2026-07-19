@@ -1,356 +1,356 @@
 {
     "lastlife_boogeyman_wait": {
         "sounds": [
-            "lastlife/boogeyman_wait"
+            "lifeseries:lastlife/boogeyman_wait"
         ]
     },
     "lastlife_boogeyman_yes": {
         "sounds": [
-            "lastlife/boogeyman_yes"
+            "lifeseries:lastlife/boogeyman_yes"
         ]
     },
     "lastlife_boogeyman_no": {
         "sounds": [
-            "lastlife/boogeyman_no"
+            "lifeseries:lastlife/boogeyman_no"
         ]
     },
     "lastlife_boogeyman_cure": {
         "sounds": [
-            "lastlife/boogeyman_cure"
+            "lifeseries:lastlife/boogeyman_cure"
         ]
     },
     "lastlife_boogeyman_fail": {
         "sounds": [
-            "lastlife/boogeyman_fail"
+            "lifeseries:lastlife/boogeyman_fail"
         ]
     },
     "doublelife_soulmate_wait": {
         "sounds": [
-            "doublelife/soulmate_wait"
+            "lifeseries:doublelife/soulmate_wait"
         ]
     },
     "doublelife_soulmate_chosen": {
         "sounds": [
-            "doublelife/soulmate_chosen"
+            "lifeseries:doublelife/soulmate_chosen"
         ]
     },
     "secretlife_life": {
         "sounds": [
-            "secretlife/life"
+            "lifeseries:secretlife/life"
         ]
     },
     "secretlife_task_totem": {
         "sounds": [
-            "secretlife/task_totem"
+            "lifeseries:secretlife/task_totem"
         ]
     },
     "secretlife_task": {
         "sounds": [
-            "secretlife/task"
+            "lifeseries:secretlife/task"
         ]
     },
     "secretlife_task_reroll": {
         "sounds": [
-            "secretlife/task_reroll"
+            "lifeseries:secretlife/task_reroll"
         ]
     },
     "secretlife_task_succeed": {
         "sounds": [
-            "secretlife/task_succeed"
+            "lifeseries:secretlife/task_succeed"
         ]
     },
     "secretlife_task_fail": {
         "sounds": [
-            "secretlife/task_fail"
+            "lifeseries:secretlife/task_fail"
         ]
     },
 
     "wildlife_snail_attack1": {
         "sounds": [
-            "wildlife/snail/attack/attack1"
+            "lifeseries:wildlife/snail/attack/attack1"
         ]
     },
     "wildlife_snail_attack2": {
         "sounds": [
-            "wildlife/snail/attack/attack2"
+            "lifeseries:wildlife/snail/attack/attack2"
         ]
     },
     "wildlife_snail_attack3": {
         "sounds": [
-            "wildlife/snail/attack/attack3"
+            "lifeseries:wildlife/snail/attack/attack3"
         ]
     },
     "wildlife_snail_attack4": {
         "sounds": [
-            "wildlife/snail/attack/attack4"
+            "lifeseries:wildlife/snail/attack/attack4"
         ]
     },
     "wildlife_snail_attack5": {
         "sounds": [
-            "wildlife/snail/attack/attack5"
+            "lifeseries:wildlife/snail/attack/attack5"
         ]
     },
     "wildlife_snail_attack6": {
         "sounds": [
-            "wildlife/snail/attack/attack6"
+            "lifeseries:wildlife/snail/attack/attack6"
         ]
     },
     "wildlife_snail_attack7": {
         "sounds": [
-            "wildlife/snail/attack/attack7"
+            "lifeseries:wildlife/snail/attack/attack7"
         ]
     },
     "wildlife_snail_attack8": {
         "sounds": [
-            "wildlife/snail/attack/attack8"
+            "lifeseries:wildlife/snail/attack/attack8"
         ]
     },
     "wildlife_snail_attack9": {
         "sounds": [
-            "wildlife/snail/attack/attack9"
+            "lifeseries:wildlife/snail/attack/attack9"
         ]
     },
 
 
     "wildlife_snail_burn1": {
         "sounds": [
-            "wildlife/snail/burn/burn1"
+            "lifeseries:wildlife/snail/burn/burn1"
         ]
     },
     "wildlife_snail_burn2": {
         "sounds": [
-            "wildlife/snail/burn/burn2"
+            "lifeseries:wildlife/snail/burn/burn2"
         ]
     },
     "wildlife_snail_burn3": {
         "sounds": [
-            "wildlife/snail/burn/burn3"
+            "lifeseries:wildlife/snail/burn/burn3"
         ]
     },
     "wildlife_snail_burn4": {
         "sounds": [
-            "wildlife/snail/burn/burn4"
+            "lifeseries:wildlife/snail/burn/burn4"
         ]
     },
     "wildlife_snail_burn5": {
         "sounds": [
-            "wildlife/snail/burn/burn5"
+            "lifeseries:wildlife/snail/burn/burn5"
         ]
     },
     "wildlife_snail_burn6": {
         "sounds": [
-            "wildlife/snail/burn/burn6"
+            "lifeseries:wildlife/snail/burn/burn6"
         ]
     },
     "wildlife_snail_burn7": {
         "sounds": [
-            "wildlife/snail/burn/burn7"
+            "lifeseries:wildlife/snail/burn/burn7"
         ]
     },
     "wildlife_snail_burn8": {
         "sounds": [
-            "wildlife/snail/burn/burn8"
+            "lifeseries:wildlife/snail/burn/burn8"
         ]
     },
     "wildlife_snail_burn9": {
         "sounds": [
-            "wildlife/snail/burn/burn9"
+            "lifeseries:wildlife/snail/burn/burn9"
         ]
     },
 
 
     "wildlife_snail_drown1": {
         "sounds": [
-            "wildlife/snail/drown/drown1"
+            "lifeseries:wildlife/snail/drown/drown1"
         ]
     },
     "wildlife_snail_drown2": {
         "sounds": [
-            "wildlife/snail/drown/drown2"
+            "lifeseries:wildlife/snail/drown/drown2"
         ]
     },
     "wildlife_snail_drown3": {
         "sounds": [
-            "wildlife/snail/drown/drown3"
+            "lifeseries:wildlife/snail/drown/drown3"
         ]
     },
     "wildlife_snail_drown4": {
         "sounds": [
-            "wildlife/snail/drown/drown4"
+            "lifeseries:wildlife/snail/drown/drown4"
         ]
     },
     "wildlife_snail_drown5": {
         "sounds": [
-            "wildlife/snail/drown/drown5"
+            "lifeseries:wildlife/snail/drown/drown5"
         ]
     },
     "wildlife_snail_drown6": {
         "sounds": [
-            "wildlife/snail/drown/drown6"
+            "lifeseries:wildlife/snail/drown/drown6"
         ]
     },
     "wildlife_snail_drown7": {
         "sounds": [
-            "wildlife/snail/drown/drown7"
+            "lifeseries:wildlife/snail/drown/drown7"
         ]
     },
     "wildlife_snail_drown8": {
         "sounds": [
-            "wildlife/snail/drown/drown8"
+            "lifeseries:wildlife/snail/drown/drown8"
         ]
     },
     "wildlife_snail_drown9": {
         "sounds": [
-            "wildlife/snail/drown/drown9"
+            "lifeseries:wildlife/snail/drown/drown9"
         ]
     },
 
 
     "wildlife_snail_fall1": {
         "sounds": [
-            "wildlife/snail/fall/fall1"
+            "lifeseries:wildlife/snail/fall/fall1"
         ]
     },
     "wildlife_snail_fall2": {
         "sounds": [
-            "wildlife/snail/fall/fall2"
+            "lifeseries:wildlife/snail/fall/fall2"
         ]
     },
     "wildlife_snail_fall3": {
         "sounds": [
-            "wildlife/snail/fall/fall3"
+            "lifeseries:wildlife/snail/fall/fall3"
         ]
     },
     "wildlife_snail_fall4": {
         "sounds": [
-            "wildlife/snail/fall/fall4"
+            "lifeseries:wildlife/snail/fall/fall4"
         ]
     },
     "wildlife_snail_fall5": {
         "sounds": [
-            "wildlife/snail/fall/fall5"
+            "lifeseries:wildlife/snail/fall/fall5"
         ]
     },
 
 
     "wildlife_snail_propeller": {
         "sounds": [
-            "wildlife/snail/fly/propeller"
+            "lifeseries:wildlife/snail/fly/propeller"
         ]
     },
 
 
     "wildlife_snail_fly1": {
         "sounds": [
-            "wildlife/snail/fly/fly1"
+            "lifeseries:wildlife/snail/fly/fly1"
         ]
     },
     "wildlife_snail_fly2": {
         "sounds": [
-            "wildlife/snail/fly/fly2"
+            "lifeseries:wildlife/snail/fly/fly2"
         ]
     },
     "wildlife_snail_fly3": {
         "sounds": [
-            "wildlife/snail/fly/fly3"
+            "lifeseries:wildlife/snail/fly/fly3"
         ]
     },
     "wildlife_snail_fly4": {
         "sounds": [
-            "wildlife/snail/fly/fly4"
+            "lifeseries:wildlife/snail/fly/fly4"
         ]
     },
     "wildlife_snail_fly5": {
         "sounds": [
-            "wildlife/snail/fly/fly5"
+            "lifeseries:wildlife/snail/fly/fly5"
         ]
     },
     "wildlife_snail_fly6": {
         "sounds": [
-            "wildlife/snail/fly/fly6"
+            "lifeseries:wildlife/snail/fly/fly6"
         ]
     },
     "wildlife_snail_fly7": {
         "sounds": [
-            "wildlife/snail/fly/fly7"
+            "lifeseries:wildlife/snail/fly/fly7"
         ]
     },
     "wildlife_snail_fly8": {
         "sounds": [
-            "wildlife/snail/fly/fly8"
+            "lifeseries:wildlife/snail/fly/fly8"
         ]
     },
 
 
     "wildlife_snail_lava1": {
         "sounds": [
-            "wildlife/snail/lava/lava1"
+            "lifeseries:wildlife/snail/lava/lava1"
         ]
     },
     "wildlife_snail_lava2": {
         "sounds": [
-            "wildlife/snail/lava/lava2"
+            "lifeseries:wildlife/snail/lava/lava2"
         ]
     },
     "wildlife_snail_throw1": {
         "sounds": [
-            "wildlife/snail/throw/throw1"
+            "lifeseries:wildlife/snail/throw/throw1"
         ]
     },
     "wildlife_snail_throw2": {
         "sounds": [
-            "wildlife/snail/throw/throw2"
+            "lifeseries:wildlife/snail/throw/throw2"
         ]
     },
     "wildlife_snail_throw3": {
         "sounds": [
-            "wildlife/snail/throw/throw3"
+            "lifeseries:wildlife/snail/throw/throw3"
         ]
     },
     "wildlife_snail_throw4": {
         "sounds": [
-            "wildlife/snail/throw/throw4"
+            "lifeseries:wildlife/snail/throw/throw4"
         ]
     },
     "wildlife_snail_throw5": {
         "sounds": [
-            "wildlife/snail/throw/throw5"
+            "lifeseries:wildlife/snail/throw/throw5"
         ]
     },
     "wildlife_snail_throw6": {
         "sounds": [
-            "wildlife/snail/throw/throw6"
+            "lifeseries:wildlife/snail/throw/throw6"
         ]
     },
     "wildlife_snail_throw7": {
         "sounds": [
-            "wildlife/snail/throw/throw7"
+            "lifeseries:wildlife/snail/throw/throw7"
         ]
     },
 
 
     "wildlife_snail_walk": {
         "sounds": [
-            "wildlife/snail/walk"
+            "lifeseries:wildlife/snail/walk"
         ]
     },
 
 
     "wildlife_superpowers": {
         "sounds": [
-            "wildlife/superpowers/theme"
+            "lifeseries:wildlife/superpowers/theme"
         ]
     },
 
 
     "wildlife_time_slow_down": {
         "sounds": [
-            "wildlife/other/time_slow_down"
+            "lifeseries:wildlife/other/time_slow_down"
         ]
     },
     "wildlife_time_speed_up": {
         "sounds": [
-            "wildlife/other/time_speed_up"
+            "lifeseries:wildlife/other/time_speed_up"
         ]
     },
 
@@ -359,7 +359,7 @@
         "sounds": [
             {
                 "attenuation_distance": 32,
-                "name": "wildlife/trivia/triviabot_intro",
+                "name": "lifeseries:wildlife/trivia/triviabot_intro",
                 "stream": true
             }
         ]
@@ -368,7 +368,7 @@
         "sounds": [
             {
                 "attenuation_distance": 32,
-                "name": "wildlife/trivia/triviabot_suspense",
+                "name": "lifeseries:wildlife/trivia/triviabot_suspense",
                 "stream": true
             }
         ]
@@ -377,7 +377,7 @@
         "sounds": [
             {
                 "attenuation_distance": 32,
-                "name": "wildlife/trivia/triviabot_suspense_end",
+                "name": "lifeseries:wildlife/trivia/triviabot_suspense_end",
                 "stream": true
             }
         ]
@@ -386,7 +386,7 @@
         "sounds": [
             {
                 "attenuation_distance": 32,
-                "name": "wildlife/trivia/triviabot_analyzing"
+                "name": "lifeseries:wildlife/trivia/triviabot_analyzing"
             }
         ]
     },
@@ -394,7 +394,7 @@
         "sounds": [
             {
                 "attenuation_distance": 32,
-                "name": "wildlife/trivia/triviabot_correct"
+                "name": "lifeseries:wildlife/trivia/triviabot_correct"
             }
         ]
     },
@@ -402,19 +402,19 @@
         "sounds": [
             {
                 "attenuation_distance": 32,
-                "name": "wildlife/trivia/triviabot_incorrect"
+                "name": "lifeseries:wildlife/trivia/triviabot_incorrect"
             }
         ]
     },
 
     "pastlife_society": {
         "sounds": [
-            "pastlife/society"
+            "lifeseries:pastlife/society"
         ]
     },
     "pastlife_society_end_member": {
         "sounds": [
-            "pastlife/society_end_member"
+            "lifeseries:pastlife/society_end_member"
         ]
     },
 
@@ -422,177 +422,177 @@
 
     "nicelife_midnight_chimes": {
         "sounds": [
-            "nicelife/midnight_chimes"
+            "lifeseries:nicelife/midnight_chimes"
         ]
     },
     "nicelife_red_winter": {
         "sounds": [
-            "nicelife/red_winter"
+            "lifeseries:nicelife/red_winter"
         ]
     },
 
     "nicelife_snowman_growl": {
         "sounds": [
-            "nicelife/snowman_growl"
+            "lifeseries:nicelife/snowman_growl"
         ]
     },
     "nicelife_snowman_hit": {
         "sounds": [
-            "nicelife/snowman_hit"
+            "lifeseries:nicelife/snowman_hit"
         ]
     },
     "nicelife_vote_result": {
         "sounds": [
-            "nicelife/vote_result"
+            "lifeseries:nicelife/vote_result"
         ]
     },
 
     "nicelife_nicelist_countdown_1": {
         "sounds": [
-            "nicelife/nicelist_countdown_1"
+            "lifeseries:nicelife/nicelist_countdown_1"
         ]
     },
     "nicelife_nicelist_countdown_2": {
         "sounds": [
-            "nicelife/nicelist_countdown_2"
+            "lifeseries:nicelife/nicelist_countdown_2"
         ]
     },
     "nicelife_nicelist_countdown_3": {
         "sounds": [
-            "nicelife/nicelist_countdown_3"
+            "lifeseries:nicelife/nicelist_countdown_3"
         ]
     },
     "nicelife_nicelist_end": {
         "sounds": [
-            "nicelife/nicelist_end"
+            "lifeseries:nicelife/nicelist_end"
         ]
     },
     "nicelife_nicelist_person": {
         "sounds": [
-            "nicelife/nicelist_person"
+            "lifeseries:nicelife/nicelist_person"
         ]
     },
     "nicelife_nicelist_start": {
         "sounds": [
-            "nicelife/nicelist_start"
+            "lifeseries:nicelife/nicelist_start"
         ]
     },
     "nicelife_naughtylist": {
         "sounds": [
-            "nicelife/naughtylist"
+            "lifeseries:nicelife/naughtylist"
         ]
     },
 
     "nicelife_santabot_analyzing": {
         "sounds": [
-            "nicelife/santabot_analyzing"
+            "lifeseries:nicelife/santabot_analyzing"
         ]
     },
     "nicelife_santabot_away": {
         "sounds": [
-            "nicelife/santabot_away"
+            "lifeseries:nicelife/santabot_away"
         ]
     },
     "nicelife_santabot_christmas_soundbyte": {
         "sounds": [
-            "nicelife/santabot_christmas_soundbyte"
+            "lifeseries:nicelife/santabot_christmas_soundbyte"
         ]
     },
 
     "nicelife_santabot_correct1": {
         "sounds": [
-            "nicelife/santabot_correct1"
+            "lifeseries:nicelife/santabot_correct1"
         ]
     },
     "nicelife_santabot_correct2": {
         "sounds": [
-            "nicelife/santabot_correct2"
+            "lifeseries:nicelife/santabot_correct2"
         ]
     },
     "nicelife_santabot_correct3": {
         "sounds": [
-            "nicelife/santabot_correct3"
+            "lifeseries:nicelife/santabot_correct3"
         ]
     },
     "nicelife_santabot_correct4": {
         "sounds": [
-            "nicelife/santabot_correct4"
+            "lifeseries:nicelife/santabot_correct4"
         ]
     },
     "nicelife_santabot_correct5": {
         "sounds": [
-            "nicelife/santabot_correct5"
+            "lifeseries:nicelife/santabot_correct5"
         ]
     },
     "nicelife_santabot_correct6": {
         "sounds": [
-            "nicelife/santabot_correct6"
+            "lifeseries:nicelife/santabot_correct6"
         ]
     },
     "nicelife_santabot_incorrect1": {
         "sounds": [
-            "nicelife/santabot_incorrect1"
+            "lifeseries:nicelife/santabot_incorrect1"
         ]
     },
     "nicelife_santabot_incorrect2": {
         "sounds": [
-            "nicelife/santabot_incorrect2"
+            "lifeseries:nicelife/santabot_incorrect2"
         ]
     },
     "nicelife_santabot_incorrect3": {
         "sounds": [
-            "nicelife/santabot_incorrect3"
+            "lifeseries:nicelife/santabot_incorrect3"
         ]
     },
     "nicelife_santabot_incorrect4": {
         "sounds": [
-            "nicelife/santabot_incorrect4"
+            "lifeseries:nicelife/santabot_incorrect4"
         ]
     },
     "nicelife_santabot_incorrect5": {
         "sounds": [
-            "nicelife/santabot_incorrect5"
+            "lifeseries:nicelife/santabot_incorrect5"
         ]
     },
     "nicelife_santabot_incorrect6": {
         "sounds": [
-            "nicelife/santabot_incorrect6"
+            "lifeseries:nicelife/santabot_incorrect6"
         ]
     },
 
     "nicelife_santabot_incorrect_all_wrong": {
         "sounds": [
-            "nicelife/santabot_incorrect_all_wrong"
+            "lifeseries:nicelife/santabot_incorrect_all_wrong"
         ]
     },
     "nicelife_santabot_intro": {
         "sounds": [
-            "nicelife/santabot_intro"
+            "lifeseries:nicelife/santabot_intro"
         ]
     },
     "nicelife_santabot_introduction_long": {
         "sounds": [
-            "nicelife/santabot_introduction_long"
+            "lifeseries:nicelife/santabot_introduction_long"
         ]
     },
     "nicelife_santabot_introduction_short": {
         "sounds": [
-            "nicelife/santabot_introduction_short"
+            "lifeseries:nicelife/santabot_introduction_short"
         ]
     },
     "nicelife_santabot_suspense": {
         "sounds": [
-            "nicelife/santabot_suspense"
+            "lifeseries:nicelife/santabot_suspense"
         ]
     },
     "nicelife_santabot_suspense_end": {
         "sounds": [
-            "nicelife/santabot_suspense_end"
+            "lifeseries:nicelife/santabot_suspense_end"
         ]
     },
     "nicelife_santabot_turn": {
       "sounds": [
-        "nicelife/santabot_turn"
+        "lifeseries:nicelife/santabot_turn"
       ]
     }
 }

@@ -108,7 +108,7 @@ public class OtherUtils {
             int index = rnd.nextInt(from, to + 1);
             name += index;
         }
-        return SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla(name));
+        return SoundEvent.createVariableRangeEvent(IdentifierHelper.mod(name));
     }
 
     public static String getTimeAndDate() {

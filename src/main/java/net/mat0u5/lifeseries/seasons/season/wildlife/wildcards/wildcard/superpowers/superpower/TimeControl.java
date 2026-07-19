@@ -34,9 +34,9 @@ public class TimeControl extends Superpower {
         float previousSpeed = TimeDilation.getWorldSpeed();
         changedSpeedFor += 20 + SLOW_DURATION;
         TimeDilation.slowlySetWorldSpeed(TARGET_TICK_RATE, 20);
-        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_time_slow_down")));
+        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("wildlife_time_slow_down")));
         TaskScheduler.scheduleTask(SLOW_DURATION, () -> {
-            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_time_speed_up")), 0.65f, 1);
+            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("wildlife_time_speed_up")), 0.65f, 1);
             TimeDilation.slowlySetWorldSpeed(previousSpeed, 20);
         });
     }

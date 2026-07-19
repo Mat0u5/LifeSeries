@@ -358,7 +358,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
             bot.setWaving(78);
         }
         if (newState == BotState.LEAVING) {
-            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_turn"));
+            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_santabot_turn"));
             PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.65f, 1);
             TaskScheduler.scheduleTask(40, () -> {
                 for (ItemEntity item : droppedItems) {
@@ -369,7 +369,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         }
         if (newState == BotState.FLYING_UP) {
             SimplePackets.HIDE_SLEEP_DARKNESS.sendToClient(false, bot.serverData.getBoundPlayer());
-            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_away"));
+            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_santabot_away"));
             PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.65f, 1);
         }
     }
@@ -379,7 +379,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
             bot.setAnalyzingTime(87);
             PlayerUtils.playSoundToPlayer(
                     bot.serverData.getBoundPlayer(),
-                    SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_analyzing")), 1f, 1);
+                    SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_santabot_analyzing")), 1f, 1);
             return true;
         }
         return false;
@@ -433,7 +433,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         NetworkHandlerServer.sendVoteScreenPacket(boundPlayer, screenName, true, false, true, availableForVoting);
         NiceLifeVotingManager.allowedToVote.add(boundPlayer.getUUID());
         //TODO add the voting sound - "nicelife_santabot_vote"
-        SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_suspense"));
+        SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_santabot_suspense"));
         PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.65f, 1);
         return true;
     }

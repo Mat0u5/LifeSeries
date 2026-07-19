@@ -191,7 +191,7 @@ public class BoogeymanManager {
         if (boogeyman.cured) return;
         boogeyman.cured = true;
         PlayerUtils.sendTitle(player, ModifiableText.BOOGEYMAN_CURE_TITLE.get(), 20, 30, 20);
-        PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("lastlife_boogeyman_cure")));
+        PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("lastlife_boogeyman_cure")));
 
         boolean stealLife = BOOGEYMAN_STEAL_LIFE && livesManager.canChangeLivesNaturally();
 
@@ -269,7 +269,7 @@ public class BoogeymanManager {
         });
         TaskScheduler.scheduleTask(90, () -> {
             var listNew = ref.get();
-            PlayerUtils.playSoundToPlayers(listNew, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("lastlife_boogeyman_wait")));
+            PlayerUtils.playSoundToPlayers(listNew, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("lastlife_boogeyman_wait")));
             PlayerUtils.sendTitleToPlayers(listNew, ModifiableText.BOOGEYMAN_ROLL.get(),10,50,20);
         });
     }
@@ -377,8 +377,8 @@ public class BoogeymanManager {
     }
 
     public void handleBoogeymanLists(List<ServerPlayer> normalPlayers, List<ServerPlayer> boogeyPlayers) {
-        PlayerUtils.playSoundToPlayers(normalPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("lastlife_boogeyman_no")));
-        PlayerUtils.playSoundToPlayers(boogeyPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("lastlife_boogeyman_yes")));
+        PlayerUtils.playSoundToPlayers(normalPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("lastlife_boogeyman_no")));
+        PlayerUtils.playSoundToPlayers(boogeyPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("lastlife_boogeyman_yes")));
         PlayerUtils.sendTitleToPlayers(normalPlayers, ModifiableText.BOOGEYMAN_ROLL_NORMAL.get(),10,50,20);
         PlayerUtils.sendTitleToPlayers(boogeyPlayers, ModifiableText.BOOGEYMAN_ROLL_BOOGEY.get(),10,50,20);
         for (ServerPlayer boogey : boogeyPlayers) {
@@ -446,7 +446,7 @@ public class BoogeymanManager {
             }
             else {
                 PlayerUtils.sendTitle(player,ModifiableText.BOOGEYMAN_FAIL_NOTIFY_TITLE.get(), 20, 30, 20);
-                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("lastlife_boogeyman_fail")));
+                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("lastlife_boogeyman_fail")));
                 if (BOOGEYMAN_ANNOUNCE_OUTCOME && sendMessage) {
                     PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_FAIL.get(player));
                 }

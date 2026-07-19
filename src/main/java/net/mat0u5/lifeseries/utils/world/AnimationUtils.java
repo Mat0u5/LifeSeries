@@ -71,8 +71,6 @@ public class AnimationUtils {
         /*totemItem.set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(red ? 2 : 1));
         *///?} else {
         totemItem.set(DataComponents.ITEM_MODEL, IdentifierHelper.mod(red ? "task_red_totem" : "task_totem"));
-        //PlaySoundConsumeEffect playSoundEvent = new PlaySoundConsumeEffect(RegistryEntry.of(SoundEvent.of(Identifier.of("secretlife_task_totem"))));
-        //totemItem.set(DataComponentTypes.DEATH_PROTECTION, new DeathProtectionComponent(List.of(playSoundEvent)));
         //?}
         return totemItem;
     }

@@ -34,7 +34,7 @@ public class ServerLevelMixin {
             return;
         }
         // This sound doesnt exist client-side, so it won't double
-        PlayerUtils.playSoundWithSourceToPlayers(entity, SoundEvent.createVariableRangeEvent(IdentifierHelper.parse("secretlife_normal_totem")), entity.getSoundSource(), 1, 1);
+        PlayerUtils.playSoundWithSourceToPlayers(entity, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("secretlife_normal_totem")), entity.getSoundSource(), 1, 1); //TODO test
     }
     //? if <= 1.20 {
     /*@WrapOperation(method = "tickChunk", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextInt(I)I", ordinal = 1))

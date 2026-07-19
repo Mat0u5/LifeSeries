@@ -123,7 +123,7 @@ public class NiceLifeTriviaManager {
 
         preparingForSpawn = true;
         if (longIntro) {
-            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_introduction_long"));
+            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_santabot_introduction_long"));
             PlayerUtils.playSoundToPlayers(triviaPlayers, sound, 1f, 1);
             for (TriviaSpawn triviaSpawnInfo : triviaSpawns) {
                 int botSpawnHeight = 20;
@@ -134,7 +134,7 @@ public class NiceLifeTriviaManager {
             }
         }
         else {
-            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_introduction_short"));
+            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_santabot_introduction_short"));
             PlayerUtils.playSoundToPlayers(triviaPlayers, sound, 1f, 1);
             for (TriviaSpawn triviaSpawnInfo : triviaSpawns) {
                 int botSpawnHeight = rnd.nextInt(15, 30);
@@ -163,7 +163,7 @@ public class NiceLifeTriviaManager {
     }
 
     public static void allWrong() {
-        SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("nicelife_santabot_incorrect_all_wrong"));
+        SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_santabot_incorrect_all_wrong"));
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
         PlayerUtils.broadcastMessage(ModifiableText.NICELIFE_TRIVIA_ALL_WRONG_PT1.get());
 

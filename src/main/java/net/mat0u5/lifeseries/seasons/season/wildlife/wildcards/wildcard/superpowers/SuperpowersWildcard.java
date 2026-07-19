@@ -104,7 +104,7 @@ public class SuperpowersWildcard extends Wildcard {
             }
         }
         if (!WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME) {
-            PlayerUtils.playSoundToPlayers(allPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_superpowers")), 0.2f, 1);
+            PlayerUtils.playSoundToPlayers(allPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("wildlife_superpowers")), 0.2f, 1);
         }
     }
 
@@ -168,7 +168,7 @@ public class SuperpowersWildcard extends Wildcard {
             DatapackIntegration.activateSuperpower(player, superpower);
         }
         if (!WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME) {
-            PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("wildlife_superpowers")), 0.2f, 1);
+            PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("wildlife_superpowers")), 0.2f, 1);
         }
         Necromancy.checkRessurectedPlayersReset();
     }

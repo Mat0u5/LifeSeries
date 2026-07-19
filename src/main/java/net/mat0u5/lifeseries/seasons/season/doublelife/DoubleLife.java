@@ -370,7 +370,7 @@ public class DoubleLife extends Season {
         TaskScheduler.scheduleTask(75, () -> {
             var listNew = ref.get();
             PlayerUtils.sendTitleToPlayers(listNew, ModifiableText.DOUBLELIFE_SOULMATE_TITLE.get(),10,50,20);
-            PlayerUtils.playSoundToPlayers(listNew, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("doublelife_soulmate_wait")));
+            PlayerUtils.playSoundToPlayers(listNew, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("doublelife_soulmate_wait")));
         });
         TaskScheduler.scheduleTask(165, () -> {
             chooseRandomSoulmates();
@@ -383,7 +383,7 @@ public class DoubleLife extends Season {
                     }
                 }
                 PlayerUtils.sendTitle(player, text,20,60,20);
-                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("doublelife_soulmate_chosen")));
+                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("doublelife_soulmate_chosen")));
             }
         });
     }

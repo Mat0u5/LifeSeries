@@ -87,7 +87,7 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
                 Component setTo = livesManager.getFormattedLives(player);
 
                 PlayerUtils.sendTitle(player, ModifiableText.BOOGEYMAN_FAIL_NOTIFY_TITLE.get(), 20, 30, 20);
-                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("lastlife_boogeyman_fail")));
+                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("lastlife_boogeyman_fail")));
                 if (BOOGEYMAN_ANNOUNCE_OUTCOME && sendMessage) {
                     PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_FAIL.get(player, setTo));
                 }

@@ -274,7 +274,7 @@ public class SecretLifeCommands extends Command {
             if (TaskManager.removePlayersTaskBook(player) || inSession) {
                 TaskManager.assignRandomTaskToPlayer(player, taskType);
                 AnimationUtils.playSecretLifeTotemAnimation(player, taskType == TaskTypes.RED);
-                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.parse("secretlife_task_totem")));
+                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("secretlife_task_totem"))); //TODO test
                 if (targets.size() == 1) {
                     sendCommandFeedback(source, ModifiableText.SECRETLIFE_TASK_SET.get(player));
                 }
@@ -470,7 +470,7 @@ public class SecretLifeCommands extends Command {
         ((IPlayer) target).ls$message(recipientMessage);
         AnimationUtils.createSpiral(target, 40);
 
-        PlayerUtils.playSoundToPlayers(List.of(self,target), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("secretlife_life")));
+        PlayerUtils.playSoundToPlayers(List.of(self,target), SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("secretlife_life")));
 
         return 1;
     }

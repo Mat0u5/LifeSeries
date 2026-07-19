@@ -137,9 +137,9 @@ public class SecretSociety {
 
         TaskScheduler.scheduleTask(50, () -> {
             if (!SOUND_ONLY_MEMBERS) {
-                PlayerUtils.playSoundToPlayers(nonMemberRef.get(), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("pastlife_society")));
+                PlayerUtils.playSoundToPlayers(nonMemberRef.get(), SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("pastlife_society")));
             }
-            PlayerUtils.playSoundToPlayers(ref.get(), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("pastlife_society")));
+            PlayerUtils.playSoundToPlayers(ref.get(), SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("pastlife_society")));
             PlayerUtils.sendTitleToPlayers(ref.get(), ModifiableText.SOCIETY_CALLS_PT1.get(), 0, 30, 0);
         });
 
@@ -206,7 +206,7 @@ public class SecretSociety {
     }
 
     public void afterInitiate(ServerPlayer player) {
-        PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.parse("pastlife_society")), 1, 1);
+        PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("pastlife_society")), 1, 1);
 
         int currentTime = 20;
         PlayerReference ref = PlayerReference.of(player);
@@ -348,7 +348,7 @@ public class SecretSociety {
         societyEnded = true;
         SessionTranscript.societyEnded();
         if (SOUND_ONLY_MEMBERS) {
-            PlayerUtils.playSoundToPlayers(getMembers(), SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("pastlife_society_end_member")));
+            PlayerUtils.playSoundToPlayers(getMembers(), SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("pastlife_society_end_member")));
         }
         else {
             List<ServerPlayer> memberPlayers = getMembers();
@@ -359,8 +359,8 @@ public class SecretSociety {
                 nonMemberPlayers.add(player);
             }
 
-            PlayerUtils.playSoundToPlayers(memberPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("pastlife_society_end_member")));
-            PlayerUtils.playSoundToPlayers(nonMemberPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.vanilla("pastlife_society")));
+            PlayerUtils.playSoundToPlayers(memberPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("pastlife_society_end_member")));
+            PlayerUtils.playSoundToPlayers(nonMemberPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("pastlife_society")));
         }
     }
 
