@@ -34,6 +34,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import static net.mat0u5.lifeseries.LifeSeries.currentSession;
+
 //? if > 1.21.4 <= 1.21.11
 //import net.mat0u5.lifeseries.utils.world.LevelUtils;
 //? if <= 1.21.11
@@ -184,7 +186,7 @@ public class SnailServerData implements PlayerBoundEntity {
 
     public boolean isNerfed() {
         if (snail.isFromTrivia()) return true;
-        if (WildcardManager.FINALE) return true;
+        if (currentSession.isFinale()) return true;
         return Wildcard.isFinale();
     }
 

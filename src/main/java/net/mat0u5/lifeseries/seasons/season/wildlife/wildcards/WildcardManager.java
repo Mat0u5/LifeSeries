@@ -35,7 +35,6 @@ public class WildcardManager {
     public static final Map<Wildcards, Wildcard> activeWildcards = new ConcurrentHashMap<>();
     public static final Random rnd = new Random();
     public static double ACTIVATE_WILDCARD_MINUTE = 2.5;
-    public static boolean FINALE = false;
 
     public static Wildcards chosenWildcard = null;
 
@@ -257,7 +256,10 @@ public class WildcardManager {
     }
 
     public static void onSessionStart() {
-        if (chosenWildcard == null && activeWildcards.isEmpty()) {
+        if (currentSession.isFinale()) {
+            chosenWildcard = Wildcards.CALLBACK;
+        }
+        else if (chosenWildcard == null && activeWildcards.isEmpty()) {
             for (ServerPlayer player : PlayerUtils.getAdminPlayers()) {
                 SimplePackets.SELECT_WILDCARDS.sendToClient(player);
             }
@@ -265,7 +267,6 @@ public class WildcardManager {
     }
 
     public static void onSessionEnd() {
-        FINALE = false;
         if (!activeWildcards.isEmpty()) {
             fadedWildcard();
         }

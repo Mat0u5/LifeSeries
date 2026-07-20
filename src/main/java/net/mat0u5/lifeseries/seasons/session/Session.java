@@ -42,6 +42,7 @@ public class Session {
     private Time passedTime = Time.zero();
     private Time fullPassedTime = Time.zero();
     public List<Time[]> sessionPauses = new ArrayList<>();
+    private boolean finale = false;
 
     private SessionStatus status = SessionStatus.NOT_STARTED;
     private int sessionStartInProgress = 0;
@@ -64,6 +65,13 @@ public class Session {
             showActionInfo();
         }
     };
+
+    public boolean sessionStartFinale() {
+        updateSessionLength();
+        finale = true;
+        setSessionLength(Time.infinite());
+        return sessionStart();
+    }
 
     public boolean sessionStart() {
         if (!canStartSession()) return false;
@@ -141,6 +149,10 @@ public class Session {
         DatapackIntegration.setSessionTimePassed(getPassedTime());
         currentSeason.sessionEnd();
         discardQueuedPauses();
+        if (isFinale()) {
+            this.finale = false;
+            loadSessionLength();
+        }
     }
 
     public void sessionPause() {
@@ -176,6 +188,9 @@ public class Session {
     public boolean isInfiniteSession() {
         return sessionLength.isInfinite();
     }
+    public boolean isFinale() {
+        return finale;
+    }
 
     public void addSessionLength(Time time) {
         sessionLength.add(time);
@@ -194,7 +209,9 @@ public class Session {
     }
 
     public void updateSessionLength() {
-        LifeSeries.getMainConfig().setProperty("session_length", isInfiniteSession() ? "infinite" : String.valueOf(sessionLength.getTicks()));
+        if (!isFinale()) {
+            LifeSeries.getMainConfig().setProperty("session_length", isInfiniteSession() ? "infinite" : String.valueOf(sessionLength.getTicks()));
+        }
         DatapackIntegration.setSessionLength(sessionLength);
     }
 

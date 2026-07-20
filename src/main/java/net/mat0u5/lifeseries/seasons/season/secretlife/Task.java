@@ -213,6 +213,7 @@ public class Task {
         if (type == TaskTypes.EASY) return 1;
         if (type == TaskTypes.HARD) return 2;
         if (type == TaskTypes.RED) return 3;
+        if (type == TaskTypes.FINALE) return 4;
         return 0;
     }
 }

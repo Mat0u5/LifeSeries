@@ -273,7 +273,7 @@ public class SecretLifeCommands extends Command {
             boolean inSession = TaskManager.tasksChosen && !currentSession.statusFinished();
             if (TaskManager.removePlayersTaskBook(player) || inSession) {
                 TaskManager.assignRandomTaskToPlayer(player, taskType);
-                AnimationUtils.playSecretLifeTotemAnimation(player, taskType == TaskTypes.RED);
+                AnimationUtils.playSecretLifeTotemAnimation(player, (taskType == TaskTypes.RED || taskType == TaskTypes.FINALE));
                 PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("secretlife_task_totem"))); //TODO test
                 if (targets.size() == 1) {
                     sendCommandFeedback(source, ModifiableText.SECRETLIFE_TASK_SET.get(player));

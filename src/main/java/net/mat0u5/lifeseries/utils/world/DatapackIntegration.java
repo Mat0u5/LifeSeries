@@ -215,6 +215,7 @@ public class DatapackIntegration {
         if (type == TaskTypes.EASY) index = 1;
         else if (type == TaskTypes.HARD) index = 2;
         else if (type == TaskTypes.RED) index = 3;
+        else if (type == TaskTypes.FINALE) index = 4;
         ScoreboardUtils.setScore(player, SCOREBOARD_TASK_DIFFICULTY, index);
     }
 

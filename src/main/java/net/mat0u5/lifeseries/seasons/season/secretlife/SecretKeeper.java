@@ -131,6 +131,17 @@ public class SecretKeeper {
 		return true;
 	}
 
+	public static boolean hasFinalTaskCheck(ServerPlayer player, boolean sendMessage, TaskTypes type) {
+		if (type == TaskTypes.FINALE) {
+			if (sendMessage) {
+				((IPlayer) player).ls$message(ModifiableText.SECRETLIFE_TASK_ERROR_FINALTASK.get());
+			}
+			return false;
+		}
+
+		return true;
+	}
+
 	public static boolean hasTaskBookCheck(ServerPlayer player, boolean sendMessage) {
 		TaskTypes type = getPlayersTaskType(player);
 		if (type != null) return true;
@@ -217,6 +228,7 @@ public class SecretKeeper {
 			if (preventSecretKeeper(player)) return;
 		}
 		TaskTypes type = getPlayersTaskType(player);
+		if (!hasFinalTaskCheck(player, !fromCommand, type)) return;
 		if (!hasTaskBookCheck(player, !fromCommand)) return;
 		if (type == TaskTypes.RED) {
 			clickFail(player, false);
@@ -290,6 +302,7 @@ public class SecretKeeper {
 		}
 		SecretLife season = (SecretLife) currentSeason;
 		TaskTypes type = getPlayersTaskType(player);
+		if (!hasFinalTaskCheck(player, !fromCommand, type)) return;
 		if (!hasTaskBookCheck(player, !fromCommand)) return;
 		if (BROADCAST_SECRET_KEEPER) {
 			PlayerUtils.broadcastMessage(ModifiableText.SECRETLIFE_TASK_FAIL.get(player));
@@ -367,7 +380,7 @@ public class SecretKeeper {
 
 
 	public static void chooseNewTaskForPlayerIfNecessary(ServerPlayer player) {
-		if (currentSession.statusFinished()) return;
+		if (currentSession.statusFinished() || currentSession.isFinale()) return;
 		if (((IPlayer) player).ls$isOnLastLife(false) || CONSTANT_TASKS) {
 			PlayerReference ref = PlayerReference.of(player);
 			TaskScheduler.scheduleTask(Time.seconds(6), () -> {

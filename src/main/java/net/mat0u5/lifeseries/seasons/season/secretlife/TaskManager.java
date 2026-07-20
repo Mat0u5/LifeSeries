@@ -30,6 +30,8 @@ import net.minecraft.server.network.FilteredText;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.world.item.component.WrittenBookContent;
+
+import static net.mat0u5.lifeseries.LifeSeries.currentSession;
 //?}
 //? if < 1.20.5
 //import java.util.stream.Stream;
@@ -56,6 +58,7 @@ public class TaskManager {
     public static SecretLifeLocationConfig locationsConfig;
     public static Map<UUID, Task> preAssignedTasks = new HashMap<>();
     public static Map<UUID, Task> assignedTasks = new HashMap<>();
+    public static Task finalTask = new Task("Win Secret Life.", TaskTypes.FINALE);
 
     public static List<String> easyTasks;
     public static List<String> hardTasks;
@@ -94,6 +97,11 @@ public class TaskManager {
     }
 
     public static Task getRandomTask(ServerPlayer owner, TaskTypes type) {
+
+        if (currentSession.isFinale() || type == TaskTypes.FINALE) {
+            return finalTask;
+        }
+
         String selectedTask = "";
 
         if (easyTasks.isEmpty()) {
@@ -229,6 +237,7 @@ public class TaskManager {
     }
 
     public static void chooseTasks(List<ServerPlayer> allowedPlayers, TaskTypes type) {
+        if (currentSession.isFinale()) type = TaskTypes.FINALE;
         SecretKeeper.secretKeeperBeingUsed = true;
         for (ServerPlayer player : allowedPlayers) {
             UUID uuid = SubInManager.getOrSub(player);
@@ -253,14 +262,15 @@ public class TaskManager {
             PlayerUtils.playSoundToPlayers(newList, SoundEvents.UI_BUTTON_CLICK.value());
             PlayerUtils.sendTitleToPlayers(newList, ModifiableText.COUNTDOWN_RED_1.get(),0,35,0);
         });
+        TaskTypes finalType = type;
         TaskScheduler.scheduleTask(140, () -> {
             for (ServerPlayer player : ref.get()) {
-                boolean redTask = type == TaskTypes.RED || (type == null && ((IPlayer) player).ls$isOnLastLife(false));
+                boolean redTask = (finalType == TaskTypes.RED || finalType == TaskTypes.FINALE) || (finalType == null && ((IPlayer) player).ls$isOnLastLife(false));
                 AnimationUtils.playSecretLifeTotemAnimation(player, redTask);
             }
         });
         TaskScheduler.scheduleTask(175, () -> {
-            assignRandomTasks(ref.get(), type);
+            assignRandomTasks(ref.get(), finalType);
             SecretKeeper.secretKeeperBeingUsed = false;
         });
     }
@@ -312,6 +322,7 @@ public class TaskManager {
         if (difficulty == 1) return TaskTypes.EASY;
         if (difficulty == 2) return TaskTypes.HARD;
         if (difficulty == 3) return TaskTypes.RED;
+        if (difficulty == 4) return TaskTypes.FINALE;
         return null;
     }
 }

@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Callback
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 
+import static net.mat0u5.lifeseries.LifeSeries.currentSession;
 import static net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager.getSeason;
 
 public abstract class Wildcard {
@@ -41,6 +42,6 @@ public abstract class Wildcard {
     }
 
     public static boolean isFinale() {
-        return WildcardManager.FINALE || (WildcardManager.isActiveWildcard(Wildcards.CALLBACK) && Callback.NERFED_WILDCARDS);
+        return currentSession.isFinale() || (WildcardManager.isActiveWildcard(Wildcards.CALLBACK) && Callback.NERFED_WILDCARDS);
     }
 }

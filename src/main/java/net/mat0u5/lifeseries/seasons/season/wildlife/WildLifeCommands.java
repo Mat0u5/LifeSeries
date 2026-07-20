@@ -97,11 +97,6 @@ public class WildLifeCommands extends Command {
                         context.getSource())
                     )
                 )
-                .then(literal("finale")
-                        .executes(context -> activateFinale(
-                                context.getSource())
-                        )
-                )
                 .then(literal("effect")
                         .then(literal("dots")
                                 .executes(context -> effectDots(
@@ -445,15 +440,6 @@ public class WildLifeCommands extends Command {
         if (checkBanned(source)) return -1;
 
         Callback.showEndingTitles();
-
-        return 1;
-    }
-
-    public int activateFinale(CommandSourceStack source) {
-        if (checkBanned(source)) return -1;
-
-        WildcardManager.FINALE = true;
-        sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_FINALE.get());
 
         return 1;
     }

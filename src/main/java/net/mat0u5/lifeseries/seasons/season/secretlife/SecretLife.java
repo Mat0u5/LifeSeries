@@ -130,7 +130,7 @@ public class SecretLife extends Season {
         if (((IPlayer) player).ls$isDead()) return;
 
         TaskTypes type = TaskManager.getPlayersTaskType(player);
-        if (((IPlayer) player).ls$isOnLastLife(false) && TaskManager.submittedOrFailed.contains(uuid) && type == null && currentSession.statusStarted()) {
+        if (((IPlayer) player).ls$isOnLastLife(false) && TaskManager.submittedOrFailed.contains(uuid) && type == null && currentSession.statusStarted() && !currentSession().isFinale()) {
             TaskManager.chooseTasks(List.of(player), TaskTypes.RED);
         }
     }

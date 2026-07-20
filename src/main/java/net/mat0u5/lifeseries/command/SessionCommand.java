@@ -51,6 +51,11 @@ public class SessionCommand extends Command {
                     .executes(context -> startSession(
                         context.getSource()
                     ))
+                    .then(literal("finale")
+                        .executes(context -> startSessionFinale(
+                                context.getSource()
+                        ))
+                    )
                 )
                 .then(literal("stop")
                     .requires(PermissionManager::isAdmin)
@@ -184,6 +189,23 @@ public class SessionCommand extends Command {
         boolean isInDisplayTimer = currentSession.isInDisplayTimer(self);
         if (isInDisplayTimer) currentSession.removeFromDisplayTimer(self);
         else currentSession.addToDisplayTimer(self);
+        return 1;
+    }
+
+    public int startSessionFinale(CommandSourceStack source) {
+        if (checkBanned(source)) return -1;
+
+        if (currentSession.statusStarted() || currentSession.statusPaused()) {
+            sendCommandFailure(source, ModifiableText.SESSION_ERROR_STARTED.get());
+            return -1;
+        }
+
+        sendCommandFeedback(source, ModifiableText.SESSION_STARTING_FINALE.get());
+        if (!currentSession.sessionStartFinale()) {
+            sendCommandFailure(source, ModifiableText.SESSION_START_FAIL.get());
+            return -1;
+        }
+
         return 1;
     }
 
