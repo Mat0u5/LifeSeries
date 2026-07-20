@@ -230,7 +230,7 @@ public class BoogeymanManager {
     public void chooseNewBoogeyman() {
         if (!BOOGEYMAN_ENABLED) return;
         if (currentSession.statusFinished() || currentSession.statusNotStarted()) return;
-        if (currentSession.getRemainingTime().isSmaller(BOOGEYMAN_INFINITE_LAST_PICK)) return;
+        if (currentSession.getRemainingTime().isSmallerThan(BOOGEYMAN_INFINITE_LAST_PICK)) return;
 
         PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_CHOOSE_NEW.get());
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.LIGHTNING_BOLT_THUNDER);
@@ -576,7 +576,7 @@ public class BoogeymanManager {
 
         Time boogeymanTime = boogeyman.timeBoogeyman;
         Time warningTime = BOOGEYMAN_INFINITE_AUTO_FAIL.diff(Time.minutes(5));
-        if (boogeymanTime.isLarger(warningTime) && warningTime.isLarger(Time.zero())) {
+        if (boogeymanTime.isLargerThan(warningTime) && warningTime.isLargerThan(Time.zero())) {
             if (!warningAutoFail.contains(boogeyman.uuid)) {
                 ServerPlayer player = boogeyman.getPlayer();
                 if (player != null) {
@@ -589,7 +589,7 @@ public class BoogeymanManager {
             warningAutoFail.remove(boogeyman.uuid);
         }
 
-        if (boogeymanTime.isLarger(BOOGEYMAN_INFINITE_AUTO_FAIL)) {
+        if (boogeymanTime.isLargerThan(BOOGEYMAN_INFINITE_AUTO_FAIL)) {
             ServerPlayer player = boogeyman.getPlayer();
             if (player != null) {
                 if (!playerFailBoogeyman(player, true)) {

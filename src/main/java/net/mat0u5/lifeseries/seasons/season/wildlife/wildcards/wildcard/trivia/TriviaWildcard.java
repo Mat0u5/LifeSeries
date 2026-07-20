@@ -32,6 +32,7 @@ import java.util.*;
 import static net.mat0u5.lifeseries.LifeSeries.*;
 
 public class TriviaWildcard extends Wildcard {
+    private static Time infiniteSessionFakeTime = Time.hours(2);
     private static final Map<UUID, Queue<Integer>> playerSpawnQueue = new HashMap<>();
     private static final Map<UUID, Integer> spawnedBotsFor = new HashMap<>();
     public static final Map<UUID, Snail> snails = new HashMap<>();
@@ -116,7 +117,8 @@ public class TriviaWildcard extends Wildcard {
     public void trySpawnBots() {
         int currentTick = currentSession.getPassedTime().getTicks();
         int sessionStart = activatedAt.getTicks();
-        int sessionEnd = currentSession.getSessionLength().getTicks() - 6000; // Don't spawn bots 5 minutes before the end
+        int sessionLengthTicks = currentSession.isInfiniteSession() ? infiniteSessionFakeTime.getTicks() : currentSession.getSessionLength().getTicks();
+        int sessionEnd = sessionLengthTicks - 6000; // Don't spawn bots 5 minutes before the end
         int availableTime = sessionEnd - sessionStart;
 
         List<ServerPlayer> players = livesManager.getAlivePlayers();

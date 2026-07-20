@@ -46,8 +46,7 @@ public class SeasonChanger {
 
 		if (args.changeSession()) {
 			currentSession = new Session();
-			int configSessionLength = LifeSeries.getMainConfig().getOrCreateInt("session_length", Time.hours(2).getTicks());
-			currentSession.setSessionLength(Time.ticks(configSessionLength));
+			currentSession.loadSessionLength();
 		}
 
 		livesManager = currentSeason.livesManager;

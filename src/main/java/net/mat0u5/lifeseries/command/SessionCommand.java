@@ -89,6 +89,9 @@ public class SessionCommand extends Command {
                                 context.getSource(), StringArgumentType.getString(context, "time")
                             ))
                         )
+                        .then(literal("infinite")
+                                .executes(context -> setTime(context.getSource(), Time.infinite()))
+                        )
                     )
                     .then(literal("add")
                         .requires(PermissionManager::isAdmin)
@@ -264,9 +267,20 @@ public class SessionCommand extends Command {
             sendCommandFailure(source, Component.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
-        currentSession.setSessionLength(timeTotal);
 
-        sendCommandFeedback(source, ModifiableText.SESSION_LENGTH_SET.get(timeTotal.formatLong()));
+        return setTime(source, timeTotal);
+    }
+
+    public int setTime(CommandSourceStack source, Time time) {
+        currentSession.setSessionLength(time);
+
+        if (!time.isInfinite()) {
+            sendCommandFeedback(source, ModifiableText.SESSION_LENGTH_SET.get(time.formatLong()));
+        }
+        else {
+            sendCommandFeedback(source, ModifiableText.SESSION_LENGTH_SET_INFINITE.get());
+        }
+
         return 1;
     }
 

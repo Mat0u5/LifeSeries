@@ -23,8 +23,8 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.phys.Vec3;
 import java.util.*;
-import static net.mat0u5.lifeseries.LifeSeries.blacklist;
-import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
+
+import static net.mat0u5.lifeseries.LifeSeries.*;
 
 public class Session {
     public Map<UUID, Integer> playerNaturalDeathLog = new HashMap<>();
@@ -97,7 +97,12 @@ public class Session {
         fullPassedTime = Time.zero();
         updateSessionLength();
         DatapackIntegration.setSessionTimePassed(getPassedTime());
-        PlayerUtils.broadcastMessage(ModifiableText.SESSION_STARTED.get(sessionLength.formatLong()));
+        if (!sessionLength.isInfinite()) {
+            PlayerUtils.broadcastMessage(ModifiableText.SESSION_STARTED.get(sessionLength.formatLong()));
+        }
+        else {
+            PlayerUtils.broadcastMessage(ModifiableText.SESSION_STARTED_INFINITE.get());
+        }
 
         addSessionActionIfTime(endWarning1);
         addSessionActionIfTime(endWarning2);
@@ -168,13 +173,28 @@ public class Session {
         updateSessionLength();
     }
 
+    public boolean isInfiniteSession() {
+        return sessionLength.isInfinite();
+    }
+
     public void addSessionLength(Time time) {
         sessionLength.add(time);
         updateSessionLength();
     }
 
+    public void loadSessionLength() {
+        String configLength = LifeSeries.getMainConfig().getOrCreateProperty("session_length", String.valueOf(Time.hours(2).getTicks()));
+        if (configLength.equalsIgnoreCase("infinite")) {
+            currentSession.setSessionLength(Time.infinite());
+            return;
+        }
+        try {
+            currentSession.setSessionLength(Time.ticks(Integer.parseInt(configLength)));
+        }catch (Exception e) {}
+    }
+
     public void updateSessionLength() {
-        LifeSeries.getMainConfig().setProperty("session_length", String.valueOf(sessionLength.getTicks()));
+        LifeSeries.getMainConfig().setProperty("session_length", isInfiniteSession() ? "infinite" : String.valueOf(sessionLength.getTicks()));
         DatapackIntegration.setSessionLength(sessionLength);
     }
 
@@ -201,12 +221,12 @@ public class Session {
     }
 
     public double progress() {
-        if (!validTime()) return 0;
+        if (!validTime() || sessionLength.isInfinite()) return 0;
         return (double) passedTime.getMillis() / (double) sessionLength.getMillis();
     }
 
     public double progress(Time offset) {
-        if (!validTime()) return 0;
+        if (!validTime() || sessionLength.isInfinite()) return 0;
         return ((double) passedTime.getMillis() - offset.getMillis()) / ((double) sessionLength.getMillis() - offset.getMillis());
     }
 
@@ -240,7 +260,7 @@ public class Session {
             Time startPause = pauseEntry[0];
             Time pauseLength = pauseEntry[1];
             Time endPause = startPause.copy().add(pauseLength);
-            if (fullPassedTime.isLarger(startPause) && fullPassedTime.isSmaller(endPause)) {
+            if (fullPassedTime.isLargerThan(startPause) && fullPassedTime.isSmallerThan(endPause)) {
                 return true;
             }
         }
@@ -252,7 +272,7 @@ public class Session {
             Time startPause = pauseEntry[0];
             Time pauseLength = pauseEntry[1];
             Time endPause = startPause.copy().add(pauseLength);
-            return fullPassedTime.isLarger(startPause) && fullPassedTime.isSmaller(endPause);
+            return fullPassedTime.isLargerThan(startPause) && fullPassedTime.isSmallerThan(endPause);
         });
     }
 
@@ -261,7 +281,7 @@ public class Session {
             Time startPause = pauseEntry[0];
             Time pauseLength = pauseEntry[1];
             Time endPause = startPause.copy().add(pauseLength);
-            return fullPassedTime.isLarger(endPause);
+            return fullPassedTime.isLargerThan(endPause);
         });
     }
 
@@ -379,7 +399,7 @@ public class Session {
         fullPassedTime = passedTime.copy();
         DatapackIntegration.setSessionTimePassed(getPassedTime());
 
-        if (passedTime.isLarger(sessionLength)) {
+        if (passedTime.isLargerThan(sessionLength)) {
             sessionEnd();
         }
 
@@ -444,7 +464,12 @@ public class Session {
             message = ModifiableText.SESSION_TIMER_DISPLAY_NOTSTARTED.get();
         }
         else if (statusStarted()) {
-            message = ModifiableText.SESSION_TIMER_DISPLAY.get(getRemainingTimeStr());
+            if (!sessionLength.isInfinite()) {
+                message = ModifiableText.SESSION_TIMER_DISPLAY.get(getRemainingTimeStr());
+            }
+            else {
+                message = ModifiableText.SESSION_TIMER_DISPLAY_STARTED.get();
+            }
         }
         else if (statusPaused()) {
             message = ModifiableText.SESSION_TIMER_DISPLAY_PAUSE.get();
@@ -473,6 +498,7 @@ public class Session {
                 if (statusNotStarted()) timestamp = SessionTimerStates.NOT_STARTED.getValue();
                 else if (statusPaused()) timestamp = SessionTimerStates.PAUSED.getValue();
                 else if (statusFinished()) timestamp = SessionTimerStates.ENDED.getValue();
+                else if (isInfiniteSession()) timestamp = SessionTimerStates.INFINITE.getValue();
                 else if (sessionLength.isPresent()) {
                     Time remainingTime = getRemainingTime();
                     timestamp = Time.now().add(remainingTime).getMillis();

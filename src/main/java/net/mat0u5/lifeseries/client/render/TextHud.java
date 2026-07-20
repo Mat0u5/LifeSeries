@@ -140,7 +140,8 @@ public class TextHud {
         if (LifeSeriesClient.sessionTime == SessionTimerStates.OFF.getValue()) return 0;
 
         MutableComponent timerText = Component.empty();
-        if (LifeSeriesClient.sessionTime == SessionTimerStates.ENDED.getValue()) timerText = timerText.append(Component.nullToEmpty("§7Session has ended"));
+        if (LifeSeriesClient.sessionTime == SessionTimerStates.INFINITE.getValue()) timerText = timerText.append(Component.nullToEmpty("§7Session started"));
+        else if (LifeSeriesClient.sessionTime == SessionTimerStates.ENDED.getValue()) timerText = timerText.append(Component.nullToEmpty("§7Session has ended"));
         else if (LifeSeriesClient.sessionTime == SessionTimerStates.PAUSED.getValue()) timerText = timerText.append(Component.nullToEmpty("§7Session has been paused"));
         else if (LifeSeriesClient.sessionTime == SessionTimerStates.NOT_STARTED.getValue()) timerText = timerText.append(Component.nullToEmpty("§7Session has not started"));
         else {

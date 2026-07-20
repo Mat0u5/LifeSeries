@@ -33,6 +33,7 @@ import static net.mat0u5.lifeseries.LifeSeries.server;
 
 
 public class MobSwap extends Wildcard {
+    private static Time infiniteSessionFakeTime = Time.hours(2);
     public static Time activatedAt = Time.nullTime();
     public static int lastDiv0 = 0;
     public static int lastDiv = 0;
@@ -166,7 +167,7 @@ public class MobSwap extends Wildcard {
     public int getDiv() {
         List<Integer> triggerTimes = new ArrayList<>();
         int lastTime = 0;
-        int sessionLengthTicks = currentSession.getSessionLength().getTicks();
+        int sessionLengthTicks = currentSession.isInfiniteSession() ? infiniteSessionFakeTime.getTicks() : currentSession.getSessionLength().getTicks();
         int passedTicks = currentSession.getPassedTime().diff(activatedAt).getTicks();
         if (MAX_DELAY > 2400) {
             lastTime = 2400;

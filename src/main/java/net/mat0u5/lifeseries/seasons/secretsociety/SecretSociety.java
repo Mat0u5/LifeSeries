@@ -184,7 +184,7 @@ public class SecretSociety {
         if (!societyStarted) return;
         if (societyEnded) return;
         timer.tick();
-        if (timer.isSmaller(Time.ticks(250))) return;
+        if (timer.isSmallerThan(Time.ticks(250))) return;
         if (timer.isMultipleOf(INITIATE_MESSAGE_DELAYS)) {
             for (SocietyMember member : members) {
                 if (member.initiated) continue;

@@ -72,7 +72,12 @@ public class LimitedLife extends Season {
             message = ModifiableText.SESSION_TIMER_DISPLAY_NOTSTARTED.get();
         }
         else if (currentSession.statusStarted()) {
-            message = ModifiableText.SESSION_TIMER_DISPLAY.get(currentSession.getRemainingTimeStr());
+            if (!currentSession.isInfiniteSession()) {
+                message = ModifiableText.SESSION_TIMER_DISPLAY.get(currentSession.getRemainingTimeStr());
+            }
+            else {
+                message = ModifiableText.SESSION_TIMER_DISPLAY_STARTED.get();
+            }
         }
         else if (currentSession.statusPaused()) {
             message = ModifiableText.SESSION_TIMER_DISPLAY_PAUSE.get();
@@ -104,6 +109,7 @@ public class LimitedLife extends Season {
                     if (currentSession.statusNotStarted()) timestamp = SessionTimerStates.NOT_STARTED.getValue();
                     else if (currentSession.statusPaused()) timestamp = SessionTimerStates.PAUSED.getValue();
                     else if (currentSession.statusFinished()) timestamp = SessionTimerStates.ENDED.getValue();
+                    else if (currentSession.isInfiniteSession()) timestamp = SessionTimerStates.INFINITE.getValue();
                     else if (currentSession.validTime()) {
                         Time remainingTime = currentSession.getRemainingTime();
                         timestamp = Time.now().add(remainingTime).getMillis();

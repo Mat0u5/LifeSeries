@@ -156,7 +156,7 @@ public class Hunger extends Wildcard {
 
     @Override
     public void tick() {
-        if (currentSession.validTime() || currentSession.getRemainingTime().getTicks() > 6000) {
+        if (currentSession.validTime() && (currentSession.getRemainingTime().getTicks() > 6000 || currentSession.isInfiniteSession())) {
             int currentVersion = (int) Math.floor((double) currentSession.getPassedTime().getTicks() / (SWITCH_DELAY));
             if (lastVersion != currentVersion) {
                 lastVersion = currentVersion;

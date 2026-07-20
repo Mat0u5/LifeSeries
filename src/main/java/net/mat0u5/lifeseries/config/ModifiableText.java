@@ -51,6 +51,7 @@ public enum ModifiableText {
     ,SEASON_SELECTION_GUI("§7Opening the season selection GUI...")
 
     ,SESSION_STARTED(Formatted.LOOSELY_STYLED,"§6Session started! §7[{}]\n§f/session timer showDisplay§7 - toggles a session timer on your screen.", List.of("session length"))
+    ,SESSION_STARTED_INFINITE(Formatted.LOOSELY_STYLED,"§6Session started!")
     ,SESSION_ACTION_ENTRY(Formatted.LOOSELY_STYLED,"§7- {}", List.of("action name"))
     ,SESSION_ACTION_ENTRY_LONG(Formatted.LOOSELY_STYLED,"§7- {} §f[{}]", List.of("action name", "trigger time"))
     ,SERIES_DISABLE("The Life Series has been {}", List.of("enabled/disabled"))
@@ -58,6 +59,7 @@ public enum ModifiableText {
     ,SESSION_END_INFO("The session ends in {}", List.of("time"))
     ,SESSION_SKIP("Skipped {} in the session length", List.of("time"))
     ,SESSION_LENGTH_SET("The session length has been set to {}", List.of("time"))
+    ,SESSION_LENGTH_SET_INFINITE("The session length has been set to be infinite.")
     ,SESSION_LENGTH_ADD("Added {} to the session length", List.of("time"))
     ,SESSION_LENGTH_REMOVE("Removed {} from the session length", List.of("time"))
     ,SESSION_ERROR_START("§cThe session has not started")
@@ -78,6 +80,7 @@ public enum ModifiableText {
     ,SESSION_START_TITLE("§aThe timer has begun!")
     ,SESSION_PAUSE_QUEUE_RESET("Reset all queued pauses")
     ,SESSION_TIMER_DISPLAY_NOTSTARTED("§7Session has not started")
+    ,SESSION_TIMER_DISPLAY_STARTED("§7Session started")
     ,SESSION_TIMER_DISPLAY_PAUSE("§7Session has been paused")
     ,SESSION_TIMER_DISPLAY_END("§7Session has ended")
     ,SESSION_TIMER_DISPLAY("§7{}", List.of("time"))

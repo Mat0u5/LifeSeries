@@ -160,7 +160,7 @@ public class NiceLife extends Season {
         timePassed.tick();
         if (currentSession.statusStarted() || SNOW_WHEN_NOT_IN_SESSION) {
             snowTicks.tick();
-            if (snowTicks.isLarger(SNOW_LAYER_INCREASE_INTERVAL)) {
+            if (snowTicks.isLargerThan(SNOW_LAYER_INCREASE_INTERVAL)) {
                 snowTicks = Time.zero();
                 currentMaxSnowLayers++;
                 if (currentMaxSnowLayers > 8) {
@@ -197,7 +197,7 @@ public class NiceLife extends Season {
             }
         }
 
-        if (triviaCannotStartFor.isSmaller(Time.zero())) {
+        if (triviaCannotStartFor.isSmallerThan(Time.zero())) {
             //? if <= 1.21.9 {
             /*int percentage = overworld.getGameRules().getInt(GameRules.PLAYERS_SLEEPING_PERCENTAGE);
              *///?} else {
@@ -290,7 +290,7 @@ public class NiceLife extends Season {
     }
 
     public static void postponeTriviaStart(Time time) {
-        if (!triviaCannotStartFor.isLarger(time)) {
+        if (!triviaCannotStartFor.isLargerThan(time)) {
             triviaCannotStartFor = time;
         }
     }

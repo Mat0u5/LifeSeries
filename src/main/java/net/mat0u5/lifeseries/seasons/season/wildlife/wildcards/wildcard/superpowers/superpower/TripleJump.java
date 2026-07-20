@@ -2,7 +2,6 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDilation;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
@@ -56,7 +55,7 @@ public class TripleJump extends ToggleableSuperpower {
             return;
         }
 
-        if (onGround.isLarger(Time.ticks(10))) {
+        if (onGround.isLargerThan(Time.ticks(10))) {
             isInAir = false;
             onGround = Time.zero();
         }

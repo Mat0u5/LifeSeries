@@ -16,7 +16,9 @@ public class Time {
         this.nanos = (long) nanos;
     }
 
-
+    public boolean isInfinite() {
+        return this instanceof TimeInf;
+    }
 
     public long getNanos() {
         return nanos;
@@ -47,6 +49,7 @@ public class Time {
     }
 
     public Time add(Time time) {
+        if (time.isInfinite()) return Time.infinite();
         if (nanos == null) nanos = 0L;
         nanos += time.getNanos();
         return this;
@@ -69,6 +72,7 @@ public class Time {
     }
 
     public boolean isMultipleOf(Time interval) {
+        if (interval.isInfinite()) return false;
         return nanos % interval.getNanos() == 0;
     }
 
@@ -76,12 +80,14 @@ public class Time {
         return new Time(this.getNanos() - time2.getNanos());
     }
 
-    public boolean isLarger(Time time2) {
-        return this.getNanos() >= time2.getNanos();
+    public boolean isLargerThan(Time time) {
+        if (time.isInfinite()) return false;
+        return this.getNanos() >= time.getNanos();
     }
 
-    public boolean isSmaller(Time time2) {
-        return this.getNanos() <= time2.getNanos();
+    public boolean isSmallerThan(Time time) {
+        if (time.isInfinite()) return true;
+        return this.getNanos() <= time.getNanos();
     }
 
     public Time copy() {
@@ -175,5 +181,9 @@ public class Time {
 
     public static Time zero() {
         return new Time(0L);
+    }
+
+    public static TimeInf infinite() {
+        return new TimeInf();
     }
 }

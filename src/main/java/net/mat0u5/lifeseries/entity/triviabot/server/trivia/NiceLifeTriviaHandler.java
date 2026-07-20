@@ -190,7 +190,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
     public void landingTick(ServerLevel level) {
         sameStateTime.tick();
         turnToBed(1000);
-        if (bot.position().y() < (spawnInfo.spawnPos().getY()+botPosOffset.y) || sameStateTime.isLarger(Time.seconds(30))) {
+        if (bot.position().y() < (spawnInfo.spawnPos().getY()+botPosOffset.y) || sameStateTime.isLargerThan(Time.seconds(30))) {
             bot.setDeltaMovement(0, 0,0);
             bot.setPos(bot.position().x, spawnInfo.spawnPos().getY()+botPosOffset.y, bot.position().z);
             changeStateTo(BotState.LANDED);
@@ -260,7 +260,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         bot.setDeltaMovement(speed);
 
         boolean atPos = botPos.distanceTo(bedPos) <= 0.2;
-        if (atPos || sameStateTime.isLarger(Time.seconds(10))) {
+        if (atPos || sameStateTime.isLargerThan(Time.seconds(10))) {
             if (!atPos) {
                 LevelUtils.teleport(bot, level, Vec3.atBottomCenterOf(spawnInfo.bedPos()).add(botPosOffset));
             }
@@ -303,7 +303,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         }
 
         bot.setDeltaMovement(0,velocity,0);
-        if (sameStateTime.isLarger(Time.seconds(10))) {
+        if (sameStateTime.isLargerThan(Time.seconds(10))) {
             changeStateTo(BotState.FINISHED);
             bot.serverData.despawn();
         }
@@ -328,7 +328,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         Vec3 speed = new Vec3(speedX, 0,speedZ);
         bot.setDeltaMovement(speed);
         boolean atPos = botPos.distanceTo(leavePos) <= 0.2;
-        if (atPos || sameStateTime.isLarger(Time.seconds(10))) {
+        if (atPos || sameStateTime.isLargerThan(Time.seconds(10))) {
             if (!atPos) {
                 LevelUtils.teleport(bot, level, Vec3.atBottomCenterOf(spawnInfo.spawnPos()).add(botPosOffset));
             }
@@ -342,7 +342,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         bot.setDeltaMovement(0, 0, 0);
         Time remainingVotingTime = NiceLifeVotingManager.VOTING_TIME.diff(sameStateTime);
         SimplePackets.VOTING_TIME.sendToClient(remainingVotingTime.getSeconds(), bot.serverData.getBoundPlayer());
-        if (sameStateTime.isLarger(NiceLifeVotingManager.VOTING_TIME)) {
+        if (sameStateTime.isLargerThan(NiceLifeVotingManager.VOTING_TIME)) {
             SimplePackets.VOTING_TIME.sendToClient(0, bot.serverData.getBoundPlayer());
             changeStateTo(BotState.LEAVING);
         }

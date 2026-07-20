@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerListReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,6 +24,7 @@ public class Callback extends Wildcard {
     private static final Random rnd = new Random();
     private static int activatedAt = -1;
 
+    private static Time infiniteSessionFakeTime = Time.hours(2);
     public static double TURN_OFF = 0.75; // When all wildcards stop
     public static final int INITIAL_ACTIVATION_INTERVAL_DEFAULT = 300*20;
     public static int INITIAL_ACTIVATION_INTERVAL = 300*20;
@@ -55,7 +57,7 @@ public class Callback extends Wildcard {
     public void tick() {
         if (!currentSession.validTime()) return;
         int passedTimeTicks = currentSession.getPassedTime().getTicks();
-        int sessionLengthTicks = currentSession.getSessionLength().getTicks();
+        int sessionLengthTicks = currentSession.isInfiniteSession() ? infiniteSessionFakeTime.getTicks() : currentSession.getSessionLength().getTicks();
 
         double sessionProgress = (passedTimeTicks -activatedAt) / (sessionLengthTicks -activatedAt);
 

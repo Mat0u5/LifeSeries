@@ -40,6 +40,7 @@ public abstract class SessionAction {
             return passedTime >= triggerAtTicks;
         }
         else {
+            if (currentSession().isInfiniteSession()) return false;
             // Trigger before end
             int remainingTime = currentSession.getRemainingTime().getTicks();
             return remainingTime <= Math.abs(triggerAtTicks);
