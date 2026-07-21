@@ -129,6 +129,13 @@ public class DoubleLifeConfig extends SeasonConfig {
     }
 
     @Override
+    protected List<ConfigFileEntry<?>> getDefaultConfigEntries() {
+        List<ConfigFileEntry<?>> defaultEntries = super.getDefaultConfigEntries();
+        defaultEntries.remove(DEATH_TITLE_MATCH_DEATH_MESSAGE);
+        return defaultEntries;
+    }
+
+    @Override
     protected List<ConfigFileEntry<?>> getSeasonSpecificConfigEntries() {
         List<ConfigFileEntry<?>> result =  new ArrayList<>(List.of(
                 ANNOUNCE_SOULMATES

@@ -148,6 +148,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
 
                 ,PLAYERS_DROP_ITEMS_ON_FINAL_DEATH
                 ,FINAL_DEATH_TITLE_SHOW
+                ,DEATH_TITLE_MATCH_DEATH_MESSAGE
                 ,FINAL_DEATH_LIGHTNING
                 ,FINAL_DEATH_SOUND
 

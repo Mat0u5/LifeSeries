@@ -311,6 +311,7 @@ public class ServerPlayerMixin implements IPlayer {
 
     @WrapOperation(method = "die", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Z)V"))
     private void modifyDeathMessage(PlayerList instance, Component component, boolean bl, Operation<Void> original) {
+        livesManager.deathMessage(ls$get(), component);
         if (LifeSeries.isClientOrDisabled() || livesManager == null || !livesManager.SHOW_LIFE_DIFF) {
             original.call(instance, component, bl);
         }

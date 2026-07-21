@@ -30,6 +30,7 @@ import net.minecraft.world.scores.PlayerTeam;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
 import static net.mat0u5.lifeseries.seasons.util.WatcherManager.isWatcher;
@@ -47,6 +48,7 @@ public class LivesManager {
     public boolean FINAL_DEATH_LIGHTNING = true;
     public SoundEvent FINAL_DEATH_SOUND = SoundEvents.LIGHTNING_BOLT_THUNDER;
     public boolean SHOW_DEATH_TITLE = false;
+    public boolean DEATH_TITLE_MATCH_DEATH_MESSAGE = false;
     public boolean ONLY_TAKE_LIVES_IN_SESSION = false;
     public boolean SEE_FRIENDLY_INVISIBLE_PLAYERS = false;
     public static int MAX_TAB_NUMBER = 4;
@@ -64,6 +66,7 @@ public class LivesManager {
 
     public void reload() {
         SHOW_DEATH_TITLE = seasonConfig.FINAL_DEATH_TITLE_SHOW.get();
+        DEATH_TITLE_MATCH_DEATH_MESSAGE = seasonConfig.DEATH_TITLE_MATCH_DEATH_MESSAGE.get();
         FINAL_DEATH_LIGHTNING = seasonConfig.FINAL_DEATH_LIGHTNING.get();
         FINAL_DEATH_SOUND = SoundEvent.createVariableRangeEvent(IdentifierHelper.parse(seasonConfig.FINAL_DEATH_SOUND.get()));
         ONLY_TAKE_LIVES_IN_SESSION = seasonConfig.ONLY_TAKE_LIVES_IN_SESSION.get();
@@ -490,7 +493,18 @@ public class LivesManager {
         if (SHOW_DEATH_TITLE) {
             List<ServerPlayer> otherPlayers = PlayerUtils.getAllPlayers();
             otherPlayers.remove(player);
-            PlayerUtils.sendTitleWithSubtitleToPlayers(otherPlayers, ModifiableText.FINAL_DEATH_TITLE.get(player), ModifiableText.FINAL_DEATH_TITLE_SUBTITLE.get(), 20, 80, 20);
+            UUID uuid = player.getUUID();
+            boolean showedDeathTitle = false;
+            if (latestDeathMessages.containsKey(uuid) && DEATH_TITLE_MATCH_DEATH_MESSAGE) {
+                Tuple<Boolean, Component> latestDeathMessage = removeFirstPlayerComponent(latestDeathMessages.get(uuid));
+                if (Objects.equals(latestDeathMessage.x, true)) {
+                    PlayerUtils.sendTitleWithSubtitleToPlayers(otherPlayers, ModifiableText.FINAL_DEATH_TITLE.get(player), latestDeathMessage.y, 20, 80, 20);
+                    showedDeathTitle = true;
+                }
+            }
+            if (!showedDeathTitle) {
+                PlayerUtils.sendTitleWithSubtitleToPlayers(otherPlayers, ModifiableText.FINAL_DEATH_TITLE.get(player), ModifiableText.FINAL_DEATH_TITLE_SUBTITLE.get(), 20, 80, 20);
+            }
             PlayerUtils.sendTitleWithSubtitleToPlayers(List.of(player), ModifiableText.FINAL_DEATH_SELF_TITLE.get(), ModifiableText.FINAL_DEATH_SELF_TITLE_SUBTITLE.get(), 20, 80, 20);
         }
         Component deathMessage = ModifiableText.FINAL_DEATH.get(player);
@@ -745,6 +759,35 @@ public class LivesManager {
         return original;
     }
 
+    public Tuple<Boolean, Component> removeFirstPlayerComponent(Component original) {
+        boolean removed = false;
+        try {
+            MutableComponent result = Component.empty();
+            int partNum = 0;
+            for (Component part : original.toFlatList()) {
+                if (partNum == 0) {
+                    //? if <= 1.21.4 {
+                    /*if (part.getStyle().getClickEvent() != null && part.getStyle().getClickEvent().getAction() == ClickEvent.Action.SUGGEST_COMMAND) {
+                        String command = part.getStyle().getClickEvent().getValue();
+                    *///?} else {
+                    if (part.getStyle().getClickEvent() instanceof ClickEvent.SuggestCommand suggestCommandEvent) {
+                        String command = suggestCommandEvent.command();
+                    //?}
+                        if (command.startsWith("/tell ")) {
+                            removed = true;
+                        }
+                    }
+                }
+                if (partNum > 0 || !removed)  {
+                    result.append(part);
+                }
+                partNum++;
+            }
+            return new Tuple<>(removed, result);
+        }catch(Exception ignored) {}
+        return new Tuple<>(false, original);
+    }
+
     public Component getDeathMessageAdd(ServerPlayer player) {
         Integer lastLives = lastPlayerLives.get(player.getUUID());
         Integer currentLives = ((IPlayer) player).ls$getLives();
@@ -765,5 +808,13 @@ public class LivesManager {
         else {
             return ModifiableText.LIVES_SHOW_DIFF_LOSS.get(message);
         }
+    }
+
+    private Map<UUID, Component> latestDeathMessages = new ConcurrentHashMap<>();
+    public void deathMessage(ServerPlayer player, Component component) {
+        if (player == null) return;
+        UUID uuid = player.getUUID();
+        latestDeathMessages.put(uuid, component);
+        TaskScheduler.scheduleTask(10, () -> latestDeathMessages.remove(uuid));
     }
 }
