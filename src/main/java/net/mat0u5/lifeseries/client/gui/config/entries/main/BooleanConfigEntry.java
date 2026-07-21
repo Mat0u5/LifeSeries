@@ -15,14 +15,20 @@ public class BooleanConfigEntry extends ButtonConfigEntry implements IEntryGroup
     private final boolean defaultValue;
     protected boolean value;
     private boolean startingValue;
+    private boolean reverseHeaderOpen;
 
     public BooleanConfigEntry(String fieldName, String displayName, String description, boolean value, boolean defaultValue) {
+        this(fieldName, displayName, description, value, defaultValue, false);
+    }
+
+    public BooleanConfigEntry(String fieldName, String displayName, String description, boolean value, boolean defaultValue, boolean reverseHeader) {
         super(fieldName, displayName, description, BUTTON_WIDTH, BUTTON_HEIGHT);
         this.defaultValue = defaultValue;
         this.value = value;
         this.startingValue = value;
+        this.reverseHeaderOpen = reverseHeader;
         updateButtonText();
-        clicked = false;
+        clicked = reverseHeader;
     }
 
     @Override
@@ -98,6 +104,7 @@ public class BooleanConfigEntry extends ButtonConfigEntry implements IEntryGroup
 
     @Override
     public boolean isExpanded() {
+        if (reverseHeaderOpen) return !clicked;
         return clicked;
     }
 

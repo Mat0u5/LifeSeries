@@ -108,8 +108,12 @@ public class DoubleLifeConfig extends SeasonConfig {
             "Soulmates Assign Time", "How many minutes after the session starts the soulmates get assigned."
     );
     public static final ConfigFileEntry<Boolean> SOULBOUND_LIVES = new ConfigFileEntry<>(
-            "soulbound_lives", true, "season.soulbind",
+            "soulbound_lives", true, ConfigTypes.BOOLEAN_REVERSE_HEADER, "{season.soulbind.lives}",
             "Soulbound Lives", "Controls whether soulmates share their life count."
+    );
+    public static final ConfigFileEntry<Boolean> SOULBOUND_LIVES_ASSIGN_MATCH = new ConfigFileEntry<>(
+            "soulbound_lives_assign_match", false, "season.soulbind.lives[new]",
+            "Only Assign Soulmates With Same Lives", "Makes it so that during assignment, only the players with the same amount of lives can become soulmates."
     );
 
 
@@ -136,10 +140,11 @@ public class DoubleLifeConfig extends SeasonConfig {
                 ,SOULBOUND_FOOD
                 ,SOULBOUND_EFFECTS
                 ,SOULBOUND_INVENTORIES
-                , SOULBOUND_BOOGEYMAN
+                ,SOULBOUND_BOOGEYMAN
                 ,SOULBOUND_LIVES
+                ,SOULBOUND_LIVES_ASSIGN_MATCH
                 ,SOULMATES_PVP_ALLOWED
-                , SOULMATES_ASSIGN_MINUTE
+                ,SOULMATES_ASSIGN_MINUTE
         ));
         //? if >= 1.21.6 {
         result.add(SOULMATE_LOCATOR_BAR);

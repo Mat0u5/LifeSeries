@@ -19,6 +19,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class Necromancy extends Superpower {
     public static int COOLDOWN_MILLIS = 300000;
 
     private static final List<UUID> ressurectedPlayers = new ArrayList<>();
+    private static final List<UUID> manuallyRessurectedPlayers = new ArrayList<>();
     private static final List<UUID> queuedRessurectedPlayers = new ArrayList<>();
     public static final List<UUID> clearedPlayers = new ArrayList<>();
     private List<UUID> perPlayerRessurections = new ArrayList<>();
@@ -79,18 +81,11 @@ public class Necromancy extends Superpower {
                 for (ServerPlayer deadPlayer : deadPlayers) {
                     BlockPos tpTo = LevelUtils.getCloseBlockPos(updatedPlayerLevel, updatedPlayer.blockPosition(), 3, 2, true);
                     LevelUtils.teleport(deadPlayer, updatedPlayerLevel, tpTo);
-                    deadPlayer.setGameMode(GameType.SURVIVAL);
-                    if (WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_FIRST_SPAWN_CLEAR_ITEMS.get() && !clearedPlayers.contains(deadPlayer.getUUID())) {
-                        clearedPlayers.add(deadPlayer.getUUID());
-                        deadPlayer.getInventory().clearContent();
-                    }
-                    AttributeUtils.setMaxPlayerHealth(deadPlayer, SuperpowersWildcard.ZOMBIES_HEALTH);
-                    deadPlayer.setHealth(SuperpowersWildcard.ZOMBIES_HEALTH);
-                    LevelUtils.summonHarmlessLightning(deadPlayer);
                     ressurectedPlayers.add(deadPlayer.getUUID());
                     perPlayerRessurections.add(deadPlayer.getUUID());
                     queuedRessurectedPlayers.remove(deadPlayer.getUUID());
-                    currentSeason.reloadPlayerTeam(deadPlayer);
+                    manuallyRessurectedPlayers.remove(deadPlayer.getUUID());
+                    zombieSpawn(player);
                 }
             }
         });
@@ -110,6 +105,7 @@ public class Necromancy extends Superpower {
                 player.setGameMode(GameType.SPECTATOR);
             }
         }
+        manuallyRessurectedPlayers.removeAll(deadAgain);
         ressurectedPlayers.removeAll(deadAgain);
         perPlayerRessurections.removeAll(deadAgain);
         queuedRessurectedPlayers.removeAll(deadAgain);
@@ -126,6 +122,7 @@ public class Necromancy extends Superpower {
                 perPlayerRessurections.remove(uuid);
                 ressurectedPlayers.remove(uuid);
                 queuedRessurectedPlayers.remove(uuid);
+                manuallyRessurectedPlayers.remove(uuid);
                 AttributeUtils.resetAttributesOnPlayerJoin(player);
             }
         }
@@ -145,7 +142,7 @@ public class Necromancy extends Superpower {
     }
 
     public static boolean isRessurectedPlayer(ServerPlayer player) {
-        return ressurectedPlayers.contains(player.getUUID());
+        return ressurectedPlayers.contains(player.getUUID()) || manuallyRessurectedPlayers.contains(player.getUUID());
     }
 
     public static void checkRessurectedPlayersReset() {
@@ -163,6 +160,37 @@ public class Necromancy extends Superpower {
     }
 
     public static boolean preIsRessurectedPlayer(ServerPlayer player) {
-        return queuedRessurectedPlayers.contains(player.getUUID()) || ressurectedPlayers.contains(player.getUUID());
+        return queuedRessurectedPlayers.contains(player.getUUID()) || isRessurectedPlayer(player);
+    }
+
+    public static void onPlayerDeath(ServerPlayer player) {
+        if (manuallyRessurectedPlayers.contains(player.getUUID())) {
+            manuallyRessurectedPlayers.remove(player.getUUID());
+            AttributeUtils.resetAttributesOnPlayerJoin(player);
+        }
+    }
+
+    private static void zombieSpawn(ServerPlayer player) {
+        player.setGameMode(GameType.SURVIVAL);
+        if (WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_FIRST_SPAWN_CLEAR_ITEMS.get() && !clearedPlayers.contains(player.getUUID())) {
+            clearedPlayers.add(player.getUUID());
+            player.getInventory().clearContent();
+        }
+        AttributeUtils.setMaxPlayerHealth(player, SuperpowersWildcard.ZOMBIES_HEALTH);
+        player.setHealth(SuperpowersWildcard.ZOMBIES_HEALTH);
+        LevelUtils.summonHarmlessLightning(player);
+        currentSeason.reloadPlayerTeam(player);
+    }
+
+    public static void addManuallyRessurectedPlayer(ServerPlayer player, Vec3 pos) {
+        manuallyRessurectedPlayers.add(player.getUUID());
+        ServerLevel playerLevel = ((IPlayer) player).ls$getServerLevel();
+        if (pos != null) {
+            LevelUtils.teleport(player, playerLevel, pos);
+        }
+        else {
+            PlayerUtils.safelyPutIntoSurvival(player);
+        }
+        zombieSpawn(player);
     }
 }

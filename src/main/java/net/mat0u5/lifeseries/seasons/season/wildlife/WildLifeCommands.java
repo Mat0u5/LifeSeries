@@ -22,6 +22,8 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -30,8 +32,10 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -278,6 +282,58 @@ public class WildLifeCommands extends Command {
                         .executes(context -> randomizeFood(context.getSource()))
                 )
         );
+        dispatcher.register(
+                literal("zombie")
+                        .requires(PermissionManager::isAdmin)
+                        .then(argument("player", EntityArgument.players())
+                                .executes(context -> spawnZombies(context.getSource(), EntityArgument.getPlayers(context, "player"), null))
+                                .then(argument("location", Vec3Argument.vec3())
+                                        .executes(context -> spawnZombies(context.getSource(), EntityArgument.getPlayers(context, "player"), Vec3Argument.getVec3(context, "location")))
+                                )
+                        )
+        );
+    }
+
+    public int spawnZombies(CommandSourceStack source, Collection<ServerPlayer> targets, Vec3 pos) {
+        if (checkBanned(source)) return -1;
+
+        boolean singleTarget = targets.size() == 1;
+
+        List<ServerPlayer> spawnedPlayers = new ArrayList<>();
+
+        for (ServerPlayer player : targets) {
+            if (((IPlayer) player).ls$isWatcher()) {
+                if (singleTarget) {
+                    sendCommandFailure(source, ModifiableText.PLAYER_ERROR_WATCHER.get());
+                    return -1;
+                }
+                continue;
+            }
+            if (!((IPlayer) player).ls$isDead()) {
+                if (singleTarget) {
+                    sendCommandFailure(source, ModifiableText.PLAYER_ERROR_ALIVE.get());
+                    return -1;
+                }
+                continue;
+            }
+            if (Necromancy.isRessurectedPlayer(player)) {
+                if (singleTarget) {
+                    sendCommandFailure(source, ModifiableText.WILDLIFE_ERROR_ZOMBIE_ALREADY.get());
+                    return -1;
+                }
+                continue;
+            }
+            Necromancy.addManuallyRessurectedPlayer(player, pos);
+            spawnedPlayers.add(player);
+        }
+
+        if (spawnedPlayers.size() == 1) {
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_ZOMBIE_SPAWN_SINGLE.get(spawnedPlayers.get(0)));
+        }
+        else {
+            sendCommandFeedback(source, ModifiableText.WILDLIFE_ZOMBIE_SPAWN_MULTIPLE.get(spawnedPlayers.size()));
+        }
+        return 1;
     }
 
     public int snailTexturesPreset(CommandSourceStack source, Collection<ServerPlayer> targets, String name) {

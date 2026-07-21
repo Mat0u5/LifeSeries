@@ -21,6 +21,8 @@ import net.minecraft.world.item.Items;
 
 import java.util.*;
 
+import static net.mat0u5.lifeseries.LifeSeries.currentSession;
+
 //? if <= 1.20.3 {
 /*import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -30,8 +32,6 @@ import net.minecraft.server.network.FilteredText;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.world.item.component.WrittenBookContent;
-
-import static net.mat0u5.lifeseries.LifeSeries.currentSession;
 //?}
 //? if < 1.20.5
 //import java.util.stream.Stream;

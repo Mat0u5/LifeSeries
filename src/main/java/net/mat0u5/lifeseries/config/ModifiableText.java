@@ -127,6 +127,7 @@ public enum ModifiableText {
 
     ,PLAYER_ERROR_WATCHER("That player is a Watcher")
     ,PLAYER_ERROR_DEAD("That player is not alive")
+    ,PLAYER_ERROR_ALIVE("That player is not dead")
     ,TARGET_ERROR_MISSING("No target was found")
 
     ,GIVELIFE_DOUBLELIFE_ACCEPT("Your soulmate wants to give a life to {}.\nClick {} to accept the request.", List.of("Player", "ClickHere"))
@@ -494,7 +495,6 @@ public enum ModifiableText {
     ,WILDLIFE_POWER_TELEPORTATION_ERROR(Seasons.WILD_LIFE, "There is nothing to teleport to.")
     ,WILDLIFE_SNAIL_TRIVIA_SNAIL_NAME(Seasons.WILD_LIFE, "VHSnail")
     ,WILDLIFE_WILDCARD_ACTIVATE_CRYPT_TITLE(Seasons.WILD_LIFE, "§6A wildcard is active!")
-
     ,WILDLIFE_SNAIL_SPAWN_SINGLE(Seasons.WILD_LIFE, "Spawned {}'s snail", List.of("Player"))
     ,WILDLIFE_SNAIL_SPAWN_MULTIPLE(Seasons.WILD_LIFE, "Spawned snail of {} targets", List.of("number of targets"))
     ,WILDLIFE_SNAIL_DESPAWN_SINGLE(Seasons.WILD_LIFE, "Despawned {}'s snail", List.of("Player"))
@@ -502,6 +502,9 @@ public enum ModifiableText {
     ,WILDLIFE_SNAIL_SPAWN_PREVENT(Seasons.WILD_LIFE, "Prevented {}'s snail from spawning", List.of("Player"))
     ,WILDLIFE_SNAIL_SPAWN_ALLOW(Seasons.WILD_LIFE, "Allowed {}'s snail to spawn", List.of("Player"))
     ,WILDLIFE_SNAIL_SPAWN_TOGGLE_MULTIPLE(Seasons.WILD_LIFE, "Toggled snail spawn state for {} targets", List.of("number of targets"))
+    ,WILDLIFE_ERROR_ZOMBIE_ALREADY(Seasons.WILD_LIFE, "That player is already a zombie")
+    ,WILDLIFE_ZOMBIE_SPAWN_SINGLE(Seasons.WILD_LIFE, "Spawned {} as a zombie", List.of("Player"))
+    ,WILDLIFE_ZOMBIE_SPAWN_MULTIPLE(Seasons.WILD_LIFE, "Spawned {} targets as zombies", List.of("number of targets"))
 
     ,PASTLIFE_SESSION_START(Seasons.PAST_LIFE, "§7Past Life session started:\n§7 Type §f\"/pastlife boogeyman\"§7 to have the Boogeyman in this session.\n§7 Type §f\"/pastlife society\"§7 to have the Secret Society in this session.\n§7 Or type §f\"/pastlife pickRandom\"§7 if you want the game to pick randomly.\n")
     ,BOOGEYMAN_PASTLIFE_MESSAGE_PT1(Seasons.PAST_LIFE, "§7You are the boogeyman.")

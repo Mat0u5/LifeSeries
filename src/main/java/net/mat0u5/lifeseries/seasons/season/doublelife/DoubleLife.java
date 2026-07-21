@@ -48,6 +48,7 @@ public class DoubleLife extends Season {
     public boolean SOULBOUND_EFFECTS = false;
     public boolean SOULBOUND_INVENTORIES = false;
     public boolean SOULBOUND_LIVES = true;
+    public boolean SOULBOUND_LIVES_ASSIGN_MATCH = false;
     public static boolean SOULBOUND_BOOGEYMAN = false;
     public boolean BREAKUP_LAST_PAIR_STANDING = false;
     public boolean DISABLE_START_TELEPORT = false;
@@ -156,6 +157,7 @@ public class DoubleLife extends Season {
         SOULMATES_PVP_ALLOWED = DoubleLifeConfig.SOULMATES_PVP_ALLOWED.get();
         SOULMATES_ASSIGN_MINUTE = DoubleLifeConfig.SOULMATES_ASSIGN_MINUTE.get();
         SOULBOUND_LIVES = DoubleLifeConfig.SOULBOUND_LIVES.get();
+        SOULBOUND_LIVES_ASSIGN_MATCH = DoubleLifeConfig.SOULBOUND_LIVES_ASSIGN_MATCH.get();
         syncAllPlayers();
     }
 
@@ -447,6 +449,7 @@ public class DoubleLife extends Season {
             for (ServerPlayer player : playersToRoll) {
                 if (Objects.equals(soulmatesPrevent.get(player1.getUUID()), player.getUUID())) continue;
                 if (Objects.equals(soulmatesPrevent.get(player.getUUID()), player1.getUUID())) continue;
+                if (SOULBOUND_LIVES_ASSIGN_MATCH && !Objects.equals(((IPlayer)player1).ls$getLives(), ((IPlayer)player).ls$getLives())) continue;
                 player2 = player;
                 break;
             }

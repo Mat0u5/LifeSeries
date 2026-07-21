@@ -319,6 +319,7 @@ public class WildLife extends Season {
 
     @Override
     public void onPlayerDeath(ServerPlayer player, DamageSource source) {
+        Necromancy.onPlayerDeath(player);
         if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.CREAKING)) {
             if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof CreakingPower creakingPower) {
                 creakingPower.deactivate();

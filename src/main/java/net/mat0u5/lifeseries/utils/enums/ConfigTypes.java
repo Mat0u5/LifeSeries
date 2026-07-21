@@ -30,6 +30,7 @@ public enum ConfigTypes {
     TRIVIA_QUESTION("trivia_question"),
     TRIVIA_ANSWER("trivia_answer"),
     MODIFIABLE_TEXT("modifiable_text"),
+    BOOLEAN_REVERSE_HEADER("boolean_reverse_header"),
 
     GROUP("group");
 
@@ -50,7 +51,7 @@ public enum ConfigTypes {
         return this == TEXT || this == TEAM_ENTRY || this == SECRET_TASK || this == TRIVIA_QUESTION || this == TRIVIA_ANSWER;
     }
     public boolean parentBoolean() {
-        return this == BOOLEAN || this == BOOGEYMAN;
+        return this == BOOLEAN || this == BOOGEYMAN || this == BOOLEAN_REVERSE_HEADER;
     }
     public boolean parentInteger() {
         return this == INTEGER || this == HEARTS || this == SECONDS;
