@@ -11,8 +11,10 @@ import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandle
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaSkins;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.minecraft.commands.CommandSourceStack;
@@ -127,7 +129,53 @@ public class WildLifeTriviaCommand extends Command {
                                         )
                                 )
                         )
+                        .then(literal("textures")
+                                .requires(PermissionManager::isAdmin)
+                                .executes(context -> getTriviaTexturesInfo(context.getSource()))
+                                .then(literal("list")
+                                        .executes(context -> getTriviaTextures(context.getSource()))
+                                )
+                                .then(literal("info")
+                                        .executes(context -> getTriviaTexturesInfo(context.getSource()))
+                                )
+                                .then(literal("reload")
+                                        .executes(context -> triviaTexturesReload(context.getSource()))
+                                )
+                        )
         );
+    }
+
+    public int triviaTexturesReload(CommandSourceStack source) {
+        if (checkBanned(source)) return -1;
+        ServerPlayer player = source.getPlayer();
+        if (player == null) return -1;
+
+        sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_TEXTURES_RELOAD.get());
+        TriviaSkins.sendTextures();
+        TriviaWildcard.reloadSkins();
+
+        return 1;
+    }
+
+    public int getTriviaTexturesInfo(CommandSourceStack source) {
+        if (checkBanned(source)) return -1;
+        ServerPlayer player = source.getPlayer();
+        if (player == null) return -1;
+
+        sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_TRIVIA_TEXTURE_INFO.get(TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs/dev/config/wild-life-trivia"))); //TODO remove dev
+
+        return 1;
+    }
+
+    public int getTriviaTextures(CommandSourceStack source) {
+        if (checkBanned(source)) return -1;
+        List<String> textures = TriviaSkins.getAllSkins();
+        if (textures.isEmpty()) {
+            sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_TRIVIA_TEXTURES_NONE.get());
+            return -1;
+        }
+        sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_TRIVIA_TEXTURES_LIST.get(textures));
+        return 1;
     }
 
     private static Random rnd = new Random();

@@ -64,6 +64,7 @@ public class TriviaBot extends AmbientCreature {
     private static final EntityDataAccessor<Boolean> santaBot = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> waving = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> leaving = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<String> skinName = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.STRING);
 
 
     public TriviaBot(EntityType<? extends AmbientCreature> entityType, Level level) {
@@ -232,6 +233,7 @@ public class TriviaBot extends AmbientCreature {
         this.entityData.define(santaBot, false);
         this.entityData.define(waving, -1);
         this.entityData.define(leaving, false);
+        this.entityData.define(skinName, "");
     }
     *///?} else {
     @Override
@@ -246,6 +248,7 @@ public class TriviaBot extends AmbientCreature {
         builder.define(santaBot, false);
         builder.define(waving, -1);
         builder.define(leaving, false);
+        builder.define(skinName, "");
     }
     //?}
     public void setRanOutOfTime(boolean value) {
@@ -275,6 +278,9 @@ public class TriviaBot extends AmbientCreature {
     public void setLeaving(boolean value) {
         this.entityData.set(leaving, value);
     }
+    public void setSkinName(String value) {
+        this.entityData.set(skinName, value);
+    }
 
     public boolean ranOutOfTime() {
         return this.entityData.get(ranOutOfTime);
@@ -302,5 +308,8 @@ public class TriviaBot extends AmbientCreature {
     }
     public boolean leaving() {
         return this.entityData.get(leaving);
+    }
+    public String getSkinName() {
+        return this.entityData.get(skinName);
     }
 }

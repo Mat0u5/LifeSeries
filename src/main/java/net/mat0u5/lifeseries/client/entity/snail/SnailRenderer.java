@@ -20,8 +20,10 @@ public class SnailRenderer extends MobRenderer<Snail, SnailModel<Snail>> {
         if (entity.isFromTrivia()) return Snail.TRIVIA_TEXTURE;
         if (entity.isBoundPlayerDead()) return Snail.ZOMBIE_TEXTURE;
 
-        Identifier dynamicTexture = SnailSkinsClient.getSnailTexture(entity.getSkinName());
+        var dynamicTexture = SnailSkinsClient.getSnailTexture(entity.getSkinName());
         if (dynamicTexture != null) return dynamicTexture;
+        var prebuiltAssignTexture = SnailSkinsClient.getPrebuiltAssignTexture(entity.getSkinName());
+        if (prebuiltAssignTexture != null) return prebuiltAssignTexture;
 
         return Snail.DEFAULT_TEXTURE;
     }

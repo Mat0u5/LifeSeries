@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.client.entity.triviabot;
 
+import net.mat0u5.lifeseries.client.features.TriviaSkinsClient;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.Identifier;
@@ -18,6 +19,10 @@ public class TriviaBotRenderer extends MobRenderer<TriviaBot, TriviaBotModel<Tri
         if (entity.santaBot()) {
             return TriviaBot.SANTABOT_TEXTURE;
         }
+
+        var dynamicTexture = TriviaSkinsClient.getTriviaTexture(entity.getSkinName());
+        if (dynamicTexture != null) return dynamicTexture;
+
         return TriviaBot.DEFAULT_TEXTURE;
     }
 
@@ -44,6 +49,10 @@ public class TriviaBotRenderer extends AgeableMobRenderer<TriviaBot, TriviaBotRe
         if (state.santaBot) {
             return TriviaBot.SANTABOT_TEXTURE;
         }
+
+        var dynamicTexture = TriviaSkinsClient.getTriviaTexture(state.skinName);
+        if (dynamicTexture != null) return dynamicTexture;
+
         return TriviaBot.DEFAULT_TEXTURE;
     }
 
@@ -74,6 +83,7 @@ public class TriviaBotRenderer extends AgeableMobRenderer<TriviaBot, TriviaBotRe
         state.faceHappyAnimationState.copyFrom(triviaBot.clientData.faceHappyAnimationState);
 
         state.santaBot = triviaBot.santaBot();
+        state.skinName = triviaBot.getSkinName();
     }
 }
 //?}

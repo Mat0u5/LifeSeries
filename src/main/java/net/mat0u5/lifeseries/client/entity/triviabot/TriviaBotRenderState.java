@@ -32,5 +32,6 @@ public class TriviaBotRenderState extends LivingEntityRenderState {
     public final AnimationState faceHappyAnimationState = new AnimationState();
 
     public boolean santaBot = false;
+    public String skinName;
 }
 //?}

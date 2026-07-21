@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.client.network;
 
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.features.*;
 import net.mat0u5.lifeseries.client.gui.trivia.QuizScreen;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
@@ -9,10 +10,6 @@ import net.mat0u5.lifeseries.client.compatibilities.VoicechatClient;
 import net.mat0u5.lifeseries.client.config.ClientConfig;
 import net.mat0u5.lifeseries.client.config.ClientConfigGuiManager;
 import net.mat0u5.lifeseries.client.config.ClientConfigNetwork;
-import net.mat0u5.lifeseries.client.features.LifeSkinsClient;
-import net.mat0u5.lifeseries.client.features.Morph;
-import net.mat0u5.lifeseries.client.features.SnailSkinsClient;
-import net.mat0u5.lifeseries.client.features.Trivia;
 import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.client.gui.other.ChooseWildcardScreen;
 import net.mat0u5.lifeseries.client.gui.other.PastLifeChooseTwistScreen;
@@ -415,6 +412,9 @@ public class NetworkHandlerClient {
         }
         else if (customPacketPayload instanceof SnailTexturePacket payload) {
             client.execute(() -> SnailSkinsClient.handleSnailTexture(payload.skinName(), payload.textureData()));
+        }
+        else if (customPacketPayload instanceof TriviaTexturePacket payload) {
+            client.execute(() -> TriviaSkinsClient.handleTriviaTexture(payload.skinName(), payload.textureData()));
         }
         else if (customPacketPayload instanceof LifeSkinsTexturePayload payload) {
             client.execute(() -> LifeSkinsClient.handleTexture(payload.skinName(), payload.teamName(), payload.slim(), payload.textureData()));

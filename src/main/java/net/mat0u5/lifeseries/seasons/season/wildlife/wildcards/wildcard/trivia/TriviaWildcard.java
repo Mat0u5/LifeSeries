@@ -419,4 +419,11 @@ public class TriviaWildcard extends Wildcard {
     public static boolean isBuffed() {
         return Wildcard.isFinale();
     }
+
+    public static void reloadSkins() {
+        for (TriviaBot triviaBot : bots.values()) {
+            if (triviaBot == null) continue;
+            triviaBot.serverData.updateSkin(triviaBot.serverData.getBoundPlayer());
+        }
+    }
 }

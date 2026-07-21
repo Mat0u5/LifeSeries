@@ -104,6 +104,7 @@ public class NetworkHandlerServer {
         PAYLOAD_READERS.put(ConfigPayload.ID, ConfigPayload::read);
         PAYLOAD_READERS.put(SidetitlePacket.ID, SidetitlePacket::read);
         PAYLOAD_READERS.put(SnailTexturePacket.ID, SnailTexturePacket::read);
+        PAYLOAD_READERS.put(TriviaTexturePacket.ID, TriviaTexturePacket::read);
         PAYLOAD_READERS.put(VoteScreenPayload.ID, VoteScreenPayload::read);
         PAYLOAD_READERS.put(EmptyPayload.ID, EmptyPayload::read);
         PAYLOAD_READERS.put(BooleanPayload.ID, BooleanPayload::read);
@@ -122,6 +123,7 @@ public class NetworkHandlerServer {
             , new CustomPacketPayload.TypeAndCodec<>(ConfigPayload.ID, ConfigPayload.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(SidetitlePacket.ID, SidetitlePacket.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(SnailTexturePacket.ID, SnailTexturePacket.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(TriviaTexturePacket.ID, TriviaTexturePacket.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(VoteScreenPayload.ID, VoteScreenPayload.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(EmptyPayload.ID, EmptyPayload.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(BooleanPayload.ID, BooleanPayload.CODEC)

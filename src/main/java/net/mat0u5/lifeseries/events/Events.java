@@ -10,6 +10,7 @@ import net.mat0u5.lifeseries.seasons.season.secretlife.SecretKeeper;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkins;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaSkins;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
@@ -312,6 +313,7 @@ public class Events {
         NetworkHandlerServer.sendHandshake(player);
         NetworkHandlerServer.sendUpdatePacket(List.of(player));
         SnailSkins.sendTexturesTo(player);
+        TriviaSkins.sendTexturesTo(player);
         if (!joiningPlayers.contains(player.getUUID())) joiningPlayers.add(player.getUUID());
         joiningPlayersPos.put(player.getUUID(), player.position());
         joiningPlayersYaw.put(player.getUUID(), player.getYRot());

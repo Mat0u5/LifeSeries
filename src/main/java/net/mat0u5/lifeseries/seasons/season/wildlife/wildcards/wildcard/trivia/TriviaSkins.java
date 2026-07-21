@@ -1,0 +1,97 @@
+package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia;
+
+import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.TriviaTexturePacket;
+import net.mat0u5.lifeseries.resources.ResourceHandler;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.versions.VersionControl;
+import net.minecraft.server.level.ServerPlayer;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+public class TriviaSkins {
+
+	public static void sendTexturesTo(ServerPlayer player) {
+		sendTexturesTo(List.of(player));
+	}
+
+	private static void sendTexturesTo(List<ServerPlayer> players) {
+		for (File file : getAllSkinFiles()) {
+			try {
+				String name = file.getName().toLowerCase(Locale.ROOT).replaceAll(".png","");
+				byte[] textureData = Files.readAllBytes(file.toPath());
+
+				TriviaTexturePacket packet = new TriviaTexturePacket(name, textureData);
+				for (ServerPlayer player : players) {
+					if (VersionControl.isDevVersion()) {
+						LifeSeries.LOGGER.info(TextUtils.formatString("Sending trivia texture '{}' to {}", name, player));
+					}
+					NetworkHandlerServer.sendPacket(player, packet);
+				}
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static void sendTextures() {
+		sendTexturesTo(PlayerUtils.getAllPlayers());
+	}
+
+	public static List<File> getAllSkinFiles() {
+		List<File> result = new ArrayList<>();
+		try {
+			List<File> files = new ArrayList<>();
+
+			File folder = new File("./config/lifeseries/wildlife/triviaskins/");
+			File[] filesMain = folder.listFiles();
+			if (filesMain != null) files.addAll(List.of(filesMain));
+
+			for (File file : files) {
+				if (!file.isFile()) continue;
+				String name = file.getName().toLowerCase(Locale.ROOT);
+				if (name.equalsIgnoreCase("example.png")) continue;
+				if (!name.endsWith(".png")) continue;
+				result.add(file);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public static List<String> getAllSkins() {
+		List<String> result = new ArrayList<>();
+		for (File file : getAllSkinFiles()) {
+			String name = file.getName().toLowerCase(Locale.ROOT).replaceAll(".png","");
+			result.add(name);
+		}
+		return result;
+	}
+
+	public static void createConfig() {
+		File folder = new File("./config/lifeseries/wildlife/triviaskins");
+		if (!folder.exists()) {
+			if (!folder.mkdirs()) {
+				LifeSeries.LOGGER.error("Failed to create folder {}", folder);
+				return;
+			}
+		}
+		copyConfigFiles();
+	}
+
+	private static void copyConfigFiles() {
+		ResourceHandler handler = new ResourceHandler();
+
+		Path modelResult = new File("./config/lifeseries/wildlife/triviaskins/triviabot.bbmodel").toPath();
+		handler.copyBundledSingleFile("/files/trivia/triviabot-skins.bbmodel", modelResult);
+		handler.copyBundledSingleFile("/files/trivia/example.png", new File("./config/lifeseries/wildlife/triviaskins/example.png").toPath());
+	}
+}

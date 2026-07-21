@@ -8,13 +8,17 @@ import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
+import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.TicketType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.Locale;
 import java.util.UUID;
 
 //? if <= 1.21.4
@@ -129,5 +133,14 @@ public class TriviaBotServerData implements PlayerBoundEntity {
              //?}
         }
         bot.discard();
+    }
+
+    public void updateSkin(Player player) {
+        if (player == null) return;
+        String skinName = player.getScoreboardName().toLowerCase(Locale.ROOT);
+        if (SubInManager.isSubbingIn(player.getUUID())) {
+            skinName = OtherUtils.profileName(SubInManager.getSubstitutedPlayer(player.getUUID())).toLowerCase(Locale.ROOT);
+        }
+        bot.setSkinName(skinName);
     }
 }

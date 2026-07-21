@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.platform.Platform;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaSkins;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -37,7 +38,7 @@ import net.mat0u5.lifeseries.registries.ModRegistries;
 *///?}
 
 public class LifeSeries {
-	public static final String MOD_VERSION = "1.5.7.16-dev";
+	public static final String MOD_VERSION = "1.5.7.17-dev";
 	public static final String MOD_ID = "lifeseries";
 	private static final Platform PLATFORM = createPlatformInstance();
 
@@ -65,6 +66,7 @@ public class LifeSeries {
 		NetworkHandlerServer.reload();
 		ConfigManager.moveOldMainFileIfExists();
 		SnailSkins.createConfig();
+		TriviaSkins.createConfig();
 
 		MOD_DISABLED = config.getOrCreateProperty("modDisabled", "false").equalsIgnoreCase("true");
 		String seasonStr = config.getOrCreateProperty("currentSeries", DEFAULT_SEASON.getId());
