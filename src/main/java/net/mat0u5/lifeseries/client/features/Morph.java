@@ -74,10 +74,14 @@ public class Morph {
              //?}
             dummy.walkAnimation.setSpeed(player.walkAnimation.speed());
 
+            //? if <= 26.2 {
             dummy.oAttackAnim = player.oAttackAnim;
             dummy.attackAnim = player.attackAnim;
             dummy.swinging = player.swinging;
             dummy.swingTime = player.swingTime;
+            //?} else {
+            /*dummy.swingState = player.swingState;
+            *///?}
 
             dummy.xOld = player.xOld;
             dummy.yOld = player.yOld;

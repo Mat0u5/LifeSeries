@@ -15,6 +15,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
+//? if >= 26.3
+//import net.minecraft.util.Prediction;
+
 @Mixin(value = Inventory.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class PlayerInventoryMixin {
@@ -24,8 +27,13 @@ public abstract class PlayerInventoryMixin {
         ls$onUpdatedInventory();
     }
 
+    //? if <= 26.2 {
     @Inject(method = "placeItemBackInInventory(Lnet/minecraft/world/item/ItemStack;Z)V", at = @At("TAIL"))
     private void onOffer(ItemStack stack, boolean notifiesClient, CallbackInfo info) {
+    //?} else {
+    /*@Inject(method = "placeItemBackInInventory(Lnet/minecraft/world/item/ItemStack;ZLnet/minecraft/util/Prediction;)V", at = @At("TAIL"))
+    private void onOffer(ItemStack itemStack, boolean shouldSendSetSlotPacket, Prediction prediction, CallbackInfo ci) {
+    *///?}
         ls$onUpdatedInventory();
     }
 
