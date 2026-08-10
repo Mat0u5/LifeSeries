@@ -75,7 +75,11 @@ public class Snail extends Monster {
 
     public Snail(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
-        setInvulnerable(true);
+        //? if <= 26.2 {
+        this.setInvulnerable(true);
+        //?} else {
+        /*this.setPermanentlyInvulnerable(true);
+        *///?}
         setPersistenceRequired();
         //? if <= 1.20.3 {
         /*this.setMaxUpStep(1.2F);
