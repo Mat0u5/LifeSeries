@@ -459,7 +459,11 @@ public class NetworkHandlerClient {
     public static void handleSidetitle(SidetitlePacket payload) {
         LifeSeriesClient.sideTitle = payload.text();
         Minecraft client = Minecraft.getInstance();
-        if (client.gui instanceof GuiAccessor hudAccessor) {
+        //? if <= 26.2 {
+        /*if (client.gui instanceof GuiAccessor hudAccessor) {
+        *///?} else {
+        if (client.gui.hud instanceof GuiAccessor hudAccessor) {
+        //?}
             TextHud.sideTitleRemainTicks = hudAccessor.ls$titleFadeInTicks() + hudAccessor.ls$titleStayTicks() + hudAccessor.ls$titleFadeOutTicks();
         }
     }

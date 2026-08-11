@@ -203,6 +203,10 @@ public class WildLifeConfig extends SeasonConfig {
             "wildcard_mobswap_boss_chance_multiplier", 1.0, "season.mobswap",
             "Boss Chance Multiplier", "Multiplier for boss chance (wither / warden)."
     );
+    public static final ConfigFileEntry<Double> WILDCARD_MOBSWAP_BOSS_SPAWN_CUTOFF = new ConfigFileEntry<>(
+            "wildcard_mobswap_boss_spawn_cutoff", 0.7, ConfigTypes.PERCENTAGE, "season.mobswap[new]",
+            "Boss Spawn Session Percentage", "Controls after which point in the session bosses can spawn."
+    );
 
     public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME = new ConfigFileEntry<>(
             "wildcard_superpowers_disable_intro_theme", false, "season.superpowers",
@@ -516,6 +520,7 @@ public class WildLifeConfig extends SeasonConfig {
                 ,WILDCARD_MOBSWAP_END_SPAWN_DELAY
                 ,WILDCARD_MOBSWAP_SPAWN_MOBS
                 ,WILDCARD_MOBSWAP_BOSS_CHANCE_MULTIPLIER
+                ,WILDCARD_MOBSWAP_BOSS_SPAWN_CUTOFF
 
                 ,WILDCARD_SUPERPOWERS_POWER_BLACKLIST
                 ,WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME

@@ -225,6 +225,7 @@ public class WildLife extends Season {
         MobSwap.MIN_DELAY = 20 * WildLifeConfig.WILDCARD_MOBSWAP_END_SPAWN_DELAY.get();
         MobSwap.SPAWN_MOBS = WildLifeConfig.WILDCARD_MOBSWAP_SPAWN_MOBS.get();
         MobSwap.BOSS_CHANCE_MULTIPLIER = WildLifeConfig.WILDCARD_MOBSWAP_BOSS_CHANCE_MULTIPLIER.get();
+        MobSwap.BOSS_SPAWN_CUTOFF = WildLifeConfig.WILDCARD_MOBSWAP_BOSS_SPAWN_CUTOFF.get();
 
         TriviaBot.CAN_START_RIDING = WildLifeConfig.WILDCARD_TRIVIA_BOTS_CAN_ENTER_BOATS.get();
         TriviaWildcard.TRIVIA_BOTS_PER_PLAYER = WildLifeConfig.WILDCARD_TRIVIA_BOTS_PER_PLAYER.get();

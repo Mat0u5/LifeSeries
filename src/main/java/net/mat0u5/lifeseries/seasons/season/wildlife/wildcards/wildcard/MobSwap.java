@@ -41,6 +41,7 @@ public class MobSwap extends Wildcard {
     public static int swaps = -1;
 
     public static double BOSS_CHANCE_MULTIPLIER = 1;
+    public static double BOSS_SPAWN_CUTOFF = 0.7;
     public static int MIN_DELAY = 2400;
     public static int MAX_DELAY = 7200;
     public static int SPAWN_MOBS = 250;
@@ -200,7 +201,7 @@ public class MobSwap extends Wildcard {
         }
 
         double progress = currentSession.progress(activatedAt);
-        if (progress > 0.7) {
+        if (progress > BOSS_SPAWN_CUTOFF) {
             if (mobsLeftDiv == 0) {
                 mobsLeftDiv = lastDiv;
             }
@@ -326,7 +327,7 @@ public class MobSwap extends Wildcard {
             }
         }
 
-        if (progress > 0.7) {
+        if (progress > BOSS_SPAWN_CUTOFF) {
             if (Math.random() < bossChance) {
                 double random = Math.random();
                 if (random < 0.33) {
