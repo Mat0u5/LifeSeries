@@ -21,7 +21,10 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ButtonBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
@@ -485,8 +488,9 @@ public class SecretKeeper {
 
 	public static void onBlockUse(ServerPlayer player, ServerLevel level, BlockHitResult hitResult) {
 		BlockPos pos = hitResult.getBlockPos();
-		String name = level.getBlockState(pos).getBlock().getName().getString().toLowerCase(Locale.ROOT);
-		if (name.contains("button")) {
+		BlockState state = level.getBlockState(pos);
+		Block block = state.getBlock();
+		if (block instanceof ButtonBlock) {
 			if (searchingForLocations) {
 				positionFound(pos, true);
 			}
@@ -506,9 +510,13 @@ public class SecretKeeper {
 		if (successButtonPos == null || rerollButtonPos == null || failButtonPos == null) return;
 		BlockPos placePos = pos.relative(hitResult.getDirection());
 		TaskScheduler.scheduleTask(1, () -> {
-			if (level.getBlockState(placePos).getBlock() == Blocks.BEDROCK) {
+			if (level.getBlockState(placePos).getBlock() == Blocks.BEDROCK || level.getBlockState(pos).getBlock() == Blocks.BEDROCK) {
 				positionFound(placePos, false);
 				level.destroyBlock(placePos, false);
+			}
+			if (level.getBlockState(pos).getBlock() == Blocks.BEDROCK) {
+				positionFound(pos, false);
+				level.destroyBlock(pos, false);
 			}
 		});
 	}

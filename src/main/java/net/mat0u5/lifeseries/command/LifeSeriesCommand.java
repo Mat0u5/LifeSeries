@@ -309,6 +309,7 @@ public class LifeSeriesCommand extends Command {
 
         sendCommandFeedback(source, ModifiableText.CONFIG_SET.get(key));
 
+        NetworkHandlerServer.updatedConfigThisTickFromCommand = true;
         NetworkHandlerServer.updatedConfigThisTick = true;
         if (DefaultConfigValues.RELOAD_NEEDED.contains(key)) {
             NetworkHandlerServer.configNeedsReload = true;

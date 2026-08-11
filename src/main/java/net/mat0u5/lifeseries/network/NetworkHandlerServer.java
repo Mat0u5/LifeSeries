@@ -429,6 +429,7 @@ public class NetworkHandlerServer {
     }
 
     public static boolean updatedConfigThisTick = false;
+    public static boolean updatedConfigThisTickFromCommand = false;
     public static boolean configNeedsReload = false;
     public static void handleConfigPacket(ServerPlayer player, ConfigPayload payload) {
         if (PermissionManager.isAdmin(player)) {
@@ -496,7 +497,9 @@ public class NetworkHandlerServer {
 
     public static List<Component> configChanges = new ArrayList<>();
     public static void onUpdatedConfig() {
-        PlayerUtils.broadcastMessageToAdmins(ModifiableText.CONFIG_UPDATED_CHANGES.get(TextUtils.runCommandText("/ls config viewChanges")));
+        if (!updatedConfigThisTickFromCommand) {
+            PlayerUtils.broadcastMessageToAdmins(ModifiableText.CONFIG_UPDATED_CHANGES.get(TextUtils.runCommandText("/ls config viewChanges")));
+        }
         try {
             if (configNeedsReload) {
                 OtherUtils.reloadServer();
@@ -508,6 +511,7 @@ public class NetworkHandlerServer {
             e.printStackTrace();
         }
         updatedConfigThisTick = false;
+        updatedConfigThisTickFromCommand = false;
         configNeedsReload = false;
     }
 

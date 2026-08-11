@@ -625,6 +625,8 @@ public class BoogeymanManager {
             delay = 140;
         }
 
+        if (DatapackIntegration.EVENT_BOOGEYMAN_FAIL_REWARD.isCanceled()) return;
+
         PlayerReference ref = PlayerReference.of(player);
         TaskScheduler.scheduleTask(delay, () -> {
             PlayerUtils.sendTitle(ref.get(), ModifiableText.BOOGEYMAN_FAIL_ADVANCEDDEATH_FINISH_PT1.get(), 20, 80, 20);
