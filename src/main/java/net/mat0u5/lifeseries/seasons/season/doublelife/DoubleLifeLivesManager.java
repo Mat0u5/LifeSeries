@@ -7,11 +7,9 @@ import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
@@ -59,12 +57,15 @@ public class DoubleLifeLivesManager extends LivesManager {
         return lives;
     }
 
+    private final List<UUID> lastShownDeathTitles = new ArrayList<>();
     @Override
     public void showDeathTitle(ServerPlayer player) {
         if (currentSeason instanceof DoubleLife doubleLife && doubleLife.isSoulmateOnline(player)) {
             ServerPlayer soulmate = doubleLife.getSoulmate(player);
             if (soulmate != null && doubleLife.SOULBOUND_LIVES) {
-                if (doubleLife.isMainSoulmate(player)) {
+                if (!lastShownDeathTitles.contains(player.getUUID())) {
+                    lastShownDeathTitles.add(player.getUUID());
+                    lastShownDeathTitles.add(soulmate.getUUID());
                     if (SHOW_DEATH_TITLE) {
                         PlayerUtils.sendTitleWithSubtitleToPlayers(PlayerUtils.getAllPlayers(), ModifiableText.DOUBLELIFE_FINAL_DEATH_TITLE.get(player, soulmate), ModifiableText.DOUBLELIFE_FINAL_DEATH_TITLE_SUBTITLE.get(), 20, 80, 20);
                     }
@@ -79,6 +80,10 @@ public class DoubleLifeLivesManager extends LivesManager {
                             PlayerUtils.broadcastMessage(deathMessage);
                         }
                     }
+                    TaskScheduler.schedulePriorityTask(2, () -> {
+                        lastShownDeathTitles.remove(player.getUUID());
+                        lastShownDeathTitles.remove(soulmate.getUUID());
+                    });
                 }
                 return;
             }
