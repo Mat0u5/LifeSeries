@@ -396,6 +396,7 @@ public enum ModifiableText {
     ,SECRETLIFE_SESSION_START_INFO(Seasons.SECRET_LIFE, "§fClick {}§f to learn more about Task Selection on the Wiki.", List.of("ClickHere"))
 
     ,WILDLIFE_SNAIL_TEXTURE_INFO(Seasons.WILD_LIFE,"§fClick {}§f to open the Snail Textures info page on the Wiki.", List.of("ClickHere"))
+    ,WILDLIFE_SNAIL_TEXTURE_PRESET_INFO(Seasons.WILD_LIFE,"§fClick {}§f to open the Snail Texture Presets info page on the Wiki.", List.of("ClickHere"))
     ,WILDLIFE_SNAIL_DEFAULT_NAME(Seasons.WILD_LIFE, Formatted.PLAIN,"{}'s Snail", List.of("Player"))
     ,WILDLIFE_SNAIL_NAME_REQUEST(Seasons.WILD_LIFE, "{}§7 requests their snail name to be §f{}§7", List.of("Player", "name"))
     ,WILDLIFE_SNAIL_NAME_REQUEST_PROMPT(Seasons.WILD_LIFE, "§7Click {}§7 to accept.", List.of("ClickHere"))

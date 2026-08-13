@@ -203,7 +203,7 @@ public class NiceLife extends Season {
              *///?} else {
             int percentage = overworld.getGameRules().get(GameRules.PLAYERS_SLEEPING_PERCENTAGE);
             //?}
-            if (areEnoughSleeping(percentage, nonSleepingPlayers) && isMidnight() && currentSession.statusStarted()) {
+            if (isMidnight() && currentSession.statusStarted() && areEnoughSleeping(percentage, nonSleepingPlayers)) {
                 if (!NiceLifeTriviaManager.triviaInProgress) {
                     List<ServerPlayer> triviaPlayers = new ArrayList<>();
                     for(ServerPlayer player : livesManager.getAlivePlayers()) {

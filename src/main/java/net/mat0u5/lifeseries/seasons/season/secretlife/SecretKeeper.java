@@ -266,7 +266,7 @@ public class SecretKeeper {
 			return;
 		}
 
-		PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("secretlife_task_reroll"))); //TODO test
+		PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("secretlife_task_reroll")));
 		PlayerUtils.playSoundToPlayer(player, SoundEvents.UI_BUTTON_CLICK.value());
 		PlayerUtils.sendTitle(player, ModifiableText.SECRETLIFE_TASK_REROLL_PT1.get(),20,35,0);
 

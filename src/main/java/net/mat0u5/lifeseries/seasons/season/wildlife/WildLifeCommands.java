@@ -168,6 +168,10 @@ public class WildLifeCommands extends Command {
                             .executes(context -> snailTexturesReload(context.getSource()))
                     )
                     .then(literal("preset")
+                            .executes(context -> getSnailPresetsInfo(context.getSource()))
+                            .then(literal("info")
+                                    .executes(context -> getSnailPresetsInfo(context.getSource()))
+                            )
                             .then(literal("set")
                                     .then(argument("players", EntityArgument.players())
                                             .then(argument("skin", StringArgumentType.greedyString())
@@ -546,6 +550,16 @@ public class WildLifeCommands extends Command {
         if (player == null) return -1;
 
         sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SNAIL_TEXTURE_INFO.get(TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs/config/wild-life-snails")));
+
+        return 1;
+    }
+
+    public int getSnailPresetsInfo(CommandSourceStack source) {
+        if (checkBanned(source)) return -1;
+        ServerPlayer player = source.getPlayer();
+        if (player == null) return -1;
+
+        sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SNAIL_TEXTURE_PRESET_INFO.get(TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs/dev/commands/detailed/snail.html#snail-textures-preset"))); //TODO remove dev
 
         return 1;
     }

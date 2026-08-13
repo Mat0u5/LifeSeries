@@ -128,6 +128,16 @@ public class Necromancy extends Superpower {
         }
     }
 
+    public static void tickManuallyRessurectedPlayers() {
+        for (UUID uuid : new ArrayList<>(manuallyRessurectedPlayers)) {
+            ServerPlayer player = PlayerUtils.getPlayer(uuid);
+            if (player != null && ((IPlayer) player).ls$isAlive()) {
+                manuallyRessurectedPlayers.remove(uuid);
+                AttributeUtils.resetAttributesOnPlayerJoin(player);
+            }
+        }
+    }
+
     public static List<ServerPlayer> getDeadSpectatorPlayers() {
         List<ServerPlayer> deadPlayers = new ArrayList<>();
         for (ServerPlayer player : livesManager.getDeadPlayers()) {

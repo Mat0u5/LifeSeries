@@ -55,6 +55,7 @@ public class SuperpowersWildcard extends Wildcard {
     }
 
     public static void onTick() {
+        Necromancy.tickManuallyRessurectedPlayers();
         playerSuperpowers.values().forEach(Superpower::tick);
     }
 
