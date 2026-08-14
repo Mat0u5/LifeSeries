@@ -559,7 +559,7 @@ public class WildLifeCommands extends Command {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SNAIL_TEXTURE_PRESET_INFO.get(TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs/dev/commands/detailed/snail.html#snail-textures-preset"))); //TODO remove dev
+        sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SNAIL_TEXTURE_PRESET_INFO.get(TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs/commands/detailed/snail.html#snail-textures-preset")));
 
         return 1;
     }

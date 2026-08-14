@@ -442,6 +442,9 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 		this.accessToken = accessToken
 		minecraftVersions.addAll(listOf(currentVersion) + additionalVersions)
 
+		clientRequired = true
+		serverRequired = true
+
 		deps.required.forEach { dep -> whenNotNull(dep.curseforge) { requires(it) } }
 		deps.optional.forEach { dep -> whenNotNull(dep.curseforge) { optional(it) } }
 		deps.incompatible.forEach { dep -> whenNotNull(dep.curseforge) { incompatible(it) } }

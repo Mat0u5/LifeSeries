@@ -162,7 +162,7 @@ public class WildLifeTriviaCommand extends Command {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_TRIVIA_TEXTURE_INFO.get(TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs/dev/config/wild-life-trivia"))); //TODO remove dev
+        sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_TRIVIA_TEXTURE_INFO.get(TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs/config/wild-life-trivia")));
 
         return 1;
     }

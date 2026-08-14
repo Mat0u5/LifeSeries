@@ -327,7 +327,7 @@ public class SecretLife extends Season {
     @Override
     public boolean sessionStart() {
         TaskScheduler.scheduleTask(200, () -> {
-            PlayerUtils.broadcastMessageToAdmins(ModifiableText.SECRETLIFE_SESSION_START_INFO.get(TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs/dev/seasons/secret-life.html#task-selection")));
+            PlayerUtils.broadcastMessageToAdmins(ModifiableText.SECRETLIFE_SESSION_START_INFO.get(TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs/seasons/secret-life.html#task-selection")));
         });
         if (SecretKeeper.checkSecretLifePositions()) {
             super.sessionStart();
