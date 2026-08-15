@@ -112,7 +112,7 @@ public class DoubleLifeConfig extends SeasonConfig {
             "Soulbound Lives", "Controls whether soulmates share their life count."
     );
     public static final ConfigFileEntry<Boolean> SOULBOUND_LIVES_ASSIGN_MATCH = new ConfigFileEntry<>(
-            "soulbound_lives_assign_match", false, "season.soulbind.lives[new]",
+            "soulbound_lives_assign_match", false, "season.soulbind.lives",
             "Only Assign Soulmates With Same Lives", "Makes it so that during assignment, only the players with the same amount of lives can become soulmates."
     );
 

@@ -54,7 +54,7 @@ public class DefaultConfigValues {
             "Show Death Title on Final Death", "Controls whether the death title (the one covering like half the screen) should show up when a player fully dies."
     );
     public final ConfigFileEntry<Boolean> DEATH_TITLE_MATCH_DEATH_MESSAGE = new ConfigFileEntry<>(
-            "final_death_title_match_death_message", false, "global.finaldeath.title[new]",
+            "final_death_title_match_death_message", false, "global.finaldeath.title",
             "Death Title Match Death Message", "Makes the death title match the death message."
     );
     public final ConfigFileEntry<String> BLACKLIST_BANNED_ENCHANTS = new ConfigFileEntry<>(

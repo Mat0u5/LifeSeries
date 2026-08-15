@@ -121,11 +121,11 @@ public class NiceLifeConfig extends SeasonConfig {
             "Night Length", "Controls when there are long nights in trivia."
     );
     public static final ConfigFileEntry<Boolean> TRIVIA_SHOW_NONSLEEPING = new ConfigFileEntry<>(
-            "trivia_show_nonsleeping", false, "season.trivia[new]",
+            "trivia_show_nonsleeping", false, "season.trivia",
             "Display Non-Sleeping Players", "Displays players that are not sleeping yet when you are in bed."
     );
     public static final ConfigFileEntry<Boolean> PUBLIC_VOTING = new ConfigFileEntry<>(
-            "public_voting", false, "season.voting[new]",
+            "public_voting", false, "season.voting",
             "Public Voting", "Displays how many players have voted for each player in the voting screen."
     );
 

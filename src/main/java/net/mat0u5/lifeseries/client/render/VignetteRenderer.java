@@ -63,7 +63,6 @@ public class VignetteRenderer {
         //?}
     }
 
-    // Call this method to show the vignette for a certain duration
     public static void showVignetteFor(float darkness, long durationMillis) {
         vignetteDarkness = Mth.clamp(darkness, 0.0F, 1.0F);
         if (durationMillis == -1) {

@@ -141,7 +141,7 @@ public class WildLifeConfig extends SeasonConfig {
             "Number of Snails Per Player", "Controls how many snails each player has.\n§cNOTE: Higher numbers can be very laggy, use high number with caution."
     );
     public static final ConfigFileEntry<Boolean> WILDCARD_SNAILS_RANDOM_PRESET_SKIN = new ConfigFileEntry<>(
-            "wildcard_snails_random_preset_skin", true, "season.snails[new]",
+            "wildcard_snails_random_preset_skin", true, "season.snails",
             "Assign Random Preset Snail Skin", "Assigns a random snail skin preset to any players without their own snail skin."
     );
 
@@ -204,7 +204,7 @@ public class WildLifeConfig extends SeasonConfig {
             "Boss Chance Multiplier", "Multiplier for boss chance (wither / warden)."
     );
     public static final ConfigFileEntry<Double> WILDCARD_MOBSWAP_BOSS_SPAWN_CUTOFF = new ConfigFileEntry<>(
-            "wildcard_mobswap_boss_spawn_cutoff", 0.7, ConfigTypes.PERCENTAGE, "season.mobswap[new]",
+            "wildcard_mobswap_boss_spawn_cutoff", 0.7, ConfigTypes.PERCENTAGE, "season.mobswap",
             "Boss Spawn Session Percentage", "Controls after which point in the session bosses can spawn."
     );
 

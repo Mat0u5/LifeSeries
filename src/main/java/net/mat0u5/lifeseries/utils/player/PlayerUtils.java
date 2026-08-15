@@ -133,7 +133,7 @@ public class PlayerUtils {
     }
 
     public static List<ServerPlayer> getAllPlayers() {
-        LifeSeries.requireMainThread();
+        //LifeSeries.requireMainThread();
         List<ServerPlayer> result = new ArrayList<>();
         if (server == null) return result;
 
