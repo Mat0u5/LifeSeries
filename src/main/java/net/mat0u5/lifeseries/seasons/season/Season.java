@@ -119,6 +119,7 @@ public abstract class Season {
     public static Vec3 cloudColor = null;
     public static boolean cloudColorSetMode = false;
     public boolean TEAMS_SYSTEM_DISABLED = false;
+    public static boolean ONLY_LOSE_DURABILITY_IN_SESSION = false;
 
     public BoogeymanManager boogeymanManager = createBoogeymanManager();
     public SecretSociety secretSociety = createSecretSociety();
@@ -256,6 +257,7 @@ public abstract class Season {
         ADDITIONAL_WITHER_SKULL_RATE = seasonConfig.ADDITIONAL_WITHER_SKULL_RATE.get();
         LOCATOR_BAR = seasonConfig.LOCATOR_BAR.get();
         TEAMS_SYSTEM_DISABLED = seasonConfig.TEAMS_SYSTEM_DISABLED.get();
+        ONLY_LOSE_DURABILITY_IN_SESSION = seasonConfig.ONLY_LOSE_DURABILITY_IN_SESSION.get();
 
         NetworkHandlerServer.reload();
         boogeymanManager.onReload();

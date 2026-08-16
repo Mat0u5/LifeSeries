@@ -56,8 +56,8 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,GROUP_TEXTS
 
                 , GROUP_GLOBAL_LIVES // Group
+                ,GROUP_SESSION // Group
                 ,DEFAULT_LIVES
-                ,ONLY_TAKE_LIVES_IN_SESSION
                 ,TAB_LIST_SHOW_LIVES // Group
 
                 ,MAX_PLAYER_HEALTH // Group
@@ -79,12 +79,8 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,SHOW_LOGIN_COMMAND_INFO
                 ,HIDE_UNJUSTIFIED_KILL_MESSAGES
                 ,SHOW_ADVANCEMENTS
-                //? if >= 1.20.3 {
-                ,TICK_FREEZE_NOT_IN_SESSION
-                //?}
                 ,BROADCAST_LIFE_GAIN
                 ,ADDITIONAL_WITHER_SKULL_RATE
-                ,SESSION_START_COUNTDOWN
 
 
                 ,GROUP_BLACKLIST // Group
@@ -101,6 +97,13 @@ public abstract class ConfigManager extends DefaultConfigValues {
 
 
                 //Group stuff
+
+                ,ONLY_TAKE_LIVES_IN_SESSION
+                ,ONLY_LOSE_DURABILITY_IN_SESSION
+                ,SESSION_START_COUNTDOWN
+                //? if >= 1.20.3 {
+                ,TICK_FREEZE_NOT_IN_SESSION
+                //?}
 
                 ,MUTE_DEAD_PLAYERS
                 ,WATCHERS_MUTED

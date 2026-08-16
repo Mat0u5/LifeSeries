@@ -160,18 +160,23 @@ public class Events {
             if (LifeSeries.currentSession != null) {
                 LifeSeries.currentSession.tick(server);
             }
-            //? if >= 1.20.3 {
-            if (server.tickRateManager().isFrozen()) return;
+            //? if < 1.20.3 {
+            /*boolean gameFrozen = false;
+            *///?} else {
+            boolean gameFrozen = server.tickRateManager().isFrozen();
             //?}
-            if (LifeSeries.currentSession != null) {
-                currentSeason.tick(server);
+            if (!gameFrozen) {
+                if (LifeSeries.currentSession != null) {
+                    currentSeason.tick(server);
+                }
+                if (NetworkHandlerServer.updatedConfigThisTick) {
+                    NetworkHandlerServer.onUpdatedConfig();
+                }
+                AdvancedDeathsManager.tick();
             }
             PlayerUtils.onTick();
-            if (NetworkHandlerServer.updatedConfigThisTick) {
-                NetworkHandlerServer.onUpdatedConfig();
-            }
-            AdvancedDeathsManager.tick();
-            TaskScheduler.onTick();
+
+            TaskScheduler.onTick(gameFrozen);
         }catch(Exception e) {
             e.printStackTrace();
         }

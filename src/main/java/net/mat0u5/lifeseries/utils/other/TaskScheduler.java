@@ -37,7 +37,7 @@ public class TaskScheduler {
         newTasks.clear();
     }
 
-    public static void onTick() {
+    public static void onTick(boolean gameFrozen) {
         try {
             if (clearTasks) {
                 clearTasks = false;
@@ -49,19 +49,21 @@ public class TaskScheduler {
 
             while (iterator.hasNext()) {
                 Task task = iterator.next();
-                task.tickCount--;
+                if (!gameFrozen || task.priority) {
+                    task.tickCount--;
 
-                if (task.tickCount <= 0) {
-                    try {
-                        //Inner try-catch to prevent errors from preventing the task from being removed
-                        if (!LifeSeries.modDisabled() || task.priority) {
-                            task.goal.run();
+                    if (task.tickCount <= 0) {
+                        try {
+                            //Inner try-catch to prevent errors from preventing the task from being removed
+                            if (!LifeSeries.modDisabled() || task.priority) {
+                                task.goal.run();
+                            }
+                        }catch(Exception e) {
+                            LifeSeries.LOGGER.error("Fatal error while running task " + task);
+                            e.printStackTrace();
                         }
-                    }catch(Exception e) {
-                        LifeSeries.LOGGER.error("Fatal error while running task " + task);
-                        e.printStackTrace();
+                        iterator.remove();
                     }
-                    iterator.remove();
                 }
             }
 

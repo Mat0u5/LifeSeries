@@ -94,12 +94,20 @@ public class DefaultConfigValues {
             "Default Lives", "The number of lives every player will have by default."
     );
     public final ConfigFileEntry<Boolean> ONLY_TAKE_LIVES_IN_SESSION = new ConfigFileEntry<>(
-            "only_take_lives_in_session", false, "global.lives",
+            "only_take_lives_in_session", false, "global.session",
             "Only Lose Lives In Session", "Makes players only lose lives when they die while a session is active."
     );
     public final ConfigFileEntry<Boolean> TICK_FREEZE_NOT_IN_SESSION = new ConfigFileEntry<>(
-            "tick_freeze_not_in_session", false, "global",
+            "tick_freeze_not_in_session", false, "global.session",
             "Tick Freeze When Not In Session", "Automatically freezes the game when the session is paused or ended or not started."
+    );
+    public final ConfigFileEntry<Boolean> ONLY_LOSE_DURABILITY_IN_SESSION = new ConfigFileEntry<>(
+            "only_lose_durability_in_session", false, "global.session[new]",
+            "Only Lose Durability In Session", "Makes players only lose durability on their items and gear while a session is active."
+    );
+    public final ConfigFileEntry<Boolean> SESSION_START_COUNTDOWN = new ConfigFileEntry<>(
+            "session_start_countdown", false, "global.session",
+            "Session Start Countdown", "Shows a countdown when the session is starting."
     );
     public final ConfigFileEntry<Boolean> LIVES_SYSTEM_DISABLED = new ConfigFileEntry<>(
             "lives_system_disabled", false, "global.disable",
@@ -340,10 +348,6 @@ public class DefaultConfigValues {
             "worldborder_outside_teleport", true, "global.worldborder",
             "Worldborder Outside Teleport", "Controls whether players that get outside the worldborder get teleported back inside."
     );
-    public final ConfigFileEntry<Boolean> SESSION_START_COUNTDOWN = new ConfigFileEntry<>(
-            "session_start_countdown", false, "global",
-            "Session Start Countdown", "Shows a countdown when the session is starting.."
-    );
     public final ConfigFileEntry<Boolean> LIVES_RANDOMIZE = new ConfigFileEntry<>(
             "lives_randomize", false, "{global.lives.random}",
             "Randomize Lives", "Makes every player get a random amount of lives."
@@ -397,6 +401,10 @@ public class DefaultConfigValues {
     public final ConfigFileEntry<Object> GROUP_GLOBAL_LIVES = new ConfigFileEntry<>(
             "group_global_lives", null, ConfigTypes.TEXT, "{global.lives}",
             "Lives Stuff", ""
+    );
+    public final ConfigFileEntry<Object> GROUP_SESSION = new ConfigFileEntry<>(
+            "group_session", null, ConfigTypes.TEXT, "{global.session}[new]",
+            "Session", ""
     );
     public final ConfigFileEntry<Object> GROUP_BLACKLIST = new ConfigFileEntry<>(
             "group_blacklist", null, ConfigTypes.TEXT, "{global.blacklist}",

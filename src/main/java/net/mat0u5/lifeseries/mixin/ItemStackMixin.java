@@ -3,18 +3,40 @@ package net.mat0u5.lifeseries.mixin;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
-//? if >= 1.20.5 {
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.seasons.season.Season;
+import static net.mat0u5.lifeseries.LifeSeries.currentSession;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+//? if >= 1.20.5 {
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.PatchedDataComponentMap;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+//?}
+
+//? if <= 1.20.3 {
+/*import net.minecraft.world.entity.LivingEntity;
+import java.util.function.Consumer;
+*///?} else if <= 1.20.5 {
+/*import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
+*///?} else if <= 1.21 {
+/*import org.jetbrains.annotations.Nullable;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
+import java.util.function.Consumer;
+*///?} else {
+import org.jetbrains.annotations.Nullable;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
+import java.util.function.Consumer;
 //?}
 
 @Mixin(value = ItemStack.class, priority = 1)
@@ -71,4 +93,24 @@ public class ItemStackMixin {
         cir.setReturnValue(componentsEqual);
     }
     //?}
+
+    //? if <= 1.20.3 {
+    /*@Inject(method = "hurtAndBreak", at = @At("HEAD"), cancellable = true)
+    private <T extends LivingEntity> void cancelItemDamage(int i, LivingEntity livingEntity, Consumer<T> consumer, CallbackInfo ci) {
+    *///?} else if <= 1.20.5 {
+    /*@Inject(method = "hurtAndBreak(ILnet/minecraft/util/RandomSource;Lnet/minecraft/server/level/ServerPlayer;Ljava/lang/Runnable;)V", at = @At("HEAD"), cancellable = true)
+    private void cancelItemDamage(int i, RandomSource randomSource, ServerPlayer serverPlayer, Runnable runnable, CallbackInfo ci) {
+    *///?} else if <= 1.21 {
+    /*@Inject(method = "hurtAndBreak(ILnet/minecraft/server/level/ServerLevel;Lnet/minecraft/server/level/ServerPlayer;Ljava/util/function/Consumer;)V", at = @At("HEAD"), cancellable = true)
+    private void cancelItemDamage(int i, ServerLevel serverLevel, @Nullable ServerPlayer serverPlayer, Consumer<Item> consumer, CallbackInfo ci) {
+    *///?} else {
+    @Inject(method = "applyDamage", at = @At("HEAD"), cancellable = true)
+    private void cancelItemDamage(int newDamage, @Nullable ServerPlayer player, Consumer<Item> onBreak, CallbackInfo ci) {
+    //?}
+        if (LifeSeries.isClientOrDisabled() || !Season.ONLY_LOSE_DURABILITY_IN_SESSION) return;
+        if (!currentSession.statusStarted()) {
+            ci.cancel();
+        }
+    }
+
 }

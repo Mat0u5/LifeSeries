@@ -67,6 +67,9 @@ public class TestingCommands extends Command {
         TaskScheduler.scheduleTask(1, () -> {
             PlayerUtils.broadcastMessage(Component.literal("test"));
         });
+        TaskScheduler.schedulePriorityTask(1, () -> {
+            PlayerUtils.broadcastMessage(Component.literal("test-priority"));
+        });
 
         return 1;
     }
