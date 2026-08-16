@@ -14,6 +14,7 @@ import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
+import net.mat0u5.lifeseries.utils.other.ActionText;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
@@ -319,7 +320,7 @@ public class LifeSeriesCommand extends Command {
 
     public int getWorlds(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        Component worldSavesText = TextUtils.format("§7If you want to play on the exact same world seeds as Grian did, click {}§7 to open a dropbox where you can download the pre-made worlds.", TextUtils.openURLText("https://www.dropbox.com/scl/fo/jk9fhqx0jjbgeo2qa6v5i/AOZZxMx6S7MlS9HrIRJkkX4?rlkey=2khwcnf2zhgi6s4ik01e3z9d0&st=ghw1d8k6&dl=0"));
+        Component worldSavesText = TextUtils.format("§7If you want to play on the exact same world seeds as Grian did, click {}§7 to open a dropbox where you can download the pre-made worlds.", ActionText.hereTextOpenURL("https://www.dropbox.com/scl/fo/jk9fhqx0jjbgeo2qa6v5i/AOZZxMx6S7MlS9HrIRJkkX4?rlkey=2khwcnf2zhgi6s4ik01e3z9d0&st=ghw1d8k6&dl=0"));
         sendCommandFeedbackQuiet(source, worldSavesText);
         return 1;
     }
@@ -332,14 +333,14 @@ public class LifeSeriesCommand extends Command {
 
     public int wiki(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        Component text = TextUtils.format("§7Click {}§7 to open the Life Series Mod wiki", TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs"));
+        Component text = TextUtils.format("§7Click {}§7 to open the Life Series Mod wiki", ActionText.hereTextOpenURL("https://mat0u5.github.io/LifeSeries-docs"));
         sendCommandFeedbackQuiet(source, text);
         return 1;
     }
 
     public int getDiscord(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        Component text = TextUtils.format("§7Click {}§7 to join the mod development discord if you have any questions, issues, requests, or if you just want to hang out :)", TextUtils.openURLText("https://discord.gg/QWJxfb4zQZ"));
+        Component text = TextUtils.format("§7Click {}§7 to join the mod development discord if you have any questions, issues, requests, or if you just want to hang out :)", ActionText.hereTextOpenURL("https://discord.gg/QWJxfb4zQZ"));
         sendCommandFeedbackQuiet(source, text);
         return 1;
     }
@@ -368,7 +369,7 @@ public class LifeSeriesCommand extends Command {
 
     public int getCredits(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        Component text = TextUtils.format("§7Click {}§7 to open the full Life Series Mod Credits", TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs/other/credits"));
+        Component text = TextUtils.format("§7Click {}§7 to open the full Life Series Mod Credits", ActionText.hereTextOpenURL("https://mat0u5.github.io/LifeSeries-docs/other/credits"));
         sendCommandFeedbackQuiet(source, text);
         return 1;
     }

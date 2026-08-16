@@ -9,10 +9,7 @@ import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.mat0u5.lifeseries.utils.other.Time;
+import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -59,13 +56,13 @@ public class SecretLife extends Season {
     public static boolean ONLY_LOSE_HEARTS_IN_SESSION = false;
 
     public ItemSpawner itemSpawner;
-    SessionAction taskWarningAction = new SessionAction(Time.minutes(-5).add(Time.seconds(1))) {
+    SessionAction taskWarningAction = new SessionAction.Invisible(Time.minutes(-5).add(Time.seconds(1)), "Task end 5 minute warning") {
         @Override
         public void trigger() {
             PlayerUtils.broadcastMessage(ModifiableText.SECRETLIFE_TASK_WARNING_5MIN.get());
         }
     };
-    SessionAction taskWarningAction2 = new SessionAction(Time.minutes(-30).add(Time.seconds(1))) {
+    SessionAction taskWarningAction2 = new SessionAction.Invisible(Time.minutes(-30).add(Time.seconds(1)), "Task end 30 minute warning") {
         @Override
         public void trigger() {
             PlayerUtils.broadcastMessage(ModifiableText.SECRETLIFE_TASK_WARNING_30MIN.get());
@@ -327,7 +324,7 @@ public class SecretLife extends Season {
     @Override
     public boolean sessionStart() {
         TaskScheduler.scheduleTask(200, () -> {
-            PlayerUtils.broadcastMessageToAdmins(ModifiableText.SECRETLIFE_SESSION_START_INFO.get(TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs/seasons/secret-life.html#task-selection")));
+            PlayerUtils.broadcastMessageToAdmins(ModifiableText.SECRETLIFE_SESSION_START_INFO.get(ActionText.hereTextOpenURL("https://mat0u5.github.io/LifeSeries-docs/seasons/secret-life.html#task-selection")));
         });
         if (SecretKeeper.checkSecretLifePositions()) {
             super.sessionStart();

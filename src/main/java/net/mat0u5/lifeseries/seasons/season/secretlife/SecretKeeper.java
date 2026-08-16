@@ -169,7 +169,7 @@ public class SecretKeeper {
 					pendingConfirmationTasks.add(uuid);
 					PlayerUtils.broadcastMessageToAdmins(ModifiableText.SECRETLIFE_TASK_PENDING.get(player));
 					PlayerUtils.broadcastMessageToAdmins(getShowTaskMessage(player));
-					PlayerUtils.broadcastMessageToAdmins(ModifiableText.SECRETLIFE_TASK_PENDING_ACCEPT.get(TextUtils.runCommandText("/task succeed "+player.getScoreboardName())));
+					PlayerUtils.broadcastMessageToAdmins(ModifiableText.SECRETLIFE_TASK_PENDING_ACCEPT.get(ActionText.hereTextRunCommand("Click to accept task success", "/task succeed "+player.getScoreboardName())));
 				}
 				((IPlayer) player).ls$message(ModifiableText.SECRETLIFE_TASK_PENDING_NOTIFICATION.get());
 				return;
@@ -378,7 +378,7 @@ public class SecretKeeper {
 			rawTask = task.rawTask;
 		}
 
-		return ModifiableText.SECRETLIFE_TASK_SHOW_PAST.get(TextUtils.selfMessageText(rawTask), player);
+		return ModifiableText.SECRETLIFE_TASK_SHOW_PAST.get(ActionText.hereTextRunCommand("Click to show task", "/selfmsg " + rawTask), player);
 	}
 
 

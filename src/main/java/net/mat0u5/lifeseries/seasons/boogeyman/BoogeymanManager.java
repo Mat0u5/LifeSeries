@@ -49,7 +49,7 @@ public class BoogeymanManager {
     public void addSessionActions() {
         if (!BOOGEYMAN_ENABLED) return;
         currentSession.addSessionActionIfTime(
-            new SessionAction(Time.minutes(BOOGEYMAN_CHOOSE_MINUTE-5)) {
+            new SessionAction.Invisible(Time.minutes(BOOGEYMAN_CHOOSE_MINUTE-5), "Boogeyman 5 minute warning") {
                 @Override
                 public void trigger() {
                     if (!BOOGEYMAN_ENABLED) return;
@@ -60,7 +60,7 @@ public class BoogeymanManager {
             }
         );
         currentSession.addSessionActionIfTime(
-            new SessionAction(Time.minutes(BOOGEYMAN_CHOOSE_MINUTE-1)) {
+            new SessionAction.Invisible(Time.minutes(BOOGEYMAN_CHOOSE_MINUTE-1), "Boogeyman 1 minute warning") {
                 @Override
                 public void trigger() {
                     if (!BOOGEYMAN_ENABLED) return;

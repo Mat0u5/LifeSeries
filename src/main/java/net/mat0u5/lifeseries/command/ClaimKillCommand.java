@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.utils.other.ActionText;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
@@ -99,7 +100,7 @@ public class ClaimKillCommand extends Command {
         Component textAll = ModifiableText.CLAIMKILL.get(player, victim);
         PlayerUtils.broadcastMessageToAdmins(textAll, 200);
         String validateCommand = TextUtils.formatString("/claimkill validate {} {}", player, victim);
-        Component adminText = ModifiableText.CLAIMKILL_VALIDATE.get(TextUtils.runCommandText(validateCommand));
+        Component adminText = ModifiableText.CLAIMKILL_VALIDATE.get(ActionText.hereTextRunCommand("Click to validate the kill claim", validateCommand));
         PlayerUtils.broadcastMessageToAdmins(adminText, 200);
 
         return 1;

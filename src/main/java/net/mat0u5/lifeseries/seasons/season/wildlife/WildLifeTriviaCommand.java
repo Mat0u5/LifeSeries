@@ -13,6 +13,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaSkins;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
+import net.mat0u5.lifeseries.utils.other.ActionText;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Tuple;
@@ -162,7 +163,7 @@ public class WildLifeTriviaCommand extends Command {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_TRIVIA_TEXTURE_INFO.get(TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs/config/wild-life-trivia")));
+        sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_TRIVIA_TEXTURE_INFO.get(ActionText.hereTextOpenURL("https://mat0u5.github.io/LifeSeries-docs/config/wild-life-trivia")));
 
         return 1;
     }

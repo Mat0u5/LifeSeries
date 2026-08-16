@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.seasons.season.secretlife.Task;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
+import net.mat0u5.lifeseries.utils.other.ActionText;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -301,6 +302,6 @@ public class SessionTranscript {
         if (content.length() > 65000) {
             truncatedContent += "\n... Stopped due to network packet size limit.";
         }
-        return ModifiableText.TRANSCRIPT_COPY.get(TextUtils.copyClipboardText(truncatedContent));
+        return ModifiableText.TRANSCRIPT_COPY.get(ActionText.hereTextCopyClipboard(truncatedContent));
     }
 }

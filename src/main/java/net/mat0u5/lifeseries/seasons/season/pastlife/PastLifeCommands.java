@@ -66,10 +66,10 @@ public class PastLifeCommands extends Command {
         boolean bannedSociety = !currentSeason.secretSociety.SOCIETY_ENABLED || currentSeason.secretSociety.societyStarted || currentSeason.secretSociety.societyEnded;
         boolean bannedBoogeyman = !currentSeason.boogeymanManager.BOOGEYMAN_ENABLED || currentSeason.boogeymanManager.boogeymanChosen;
         for (SessionAction action : currentSession.getSessionActions()) {
-            if (action.sessionMessage != null && action.sessionMessage.equalsIgnoreCase(ModifiableText.SESSION_ACTION_SOCIETY.getString())) {
+            if (action.sessionMessage.equalsIgnoreCase(ModifiableText.SESSION_ACTION_SOCIETY.getString())) {
                 bannedSociety = true;
             }
-            if (action.sessionMessage != null && action.sessionMessage.equalsIgnoreCase(ModifiableText.SESSION_ACTION_BOOGEYMAN.getString())) {
+            if (action.sessionMessage.equalsIgnoreCase(ModifiableText.SESSION_ACTION_BOOGEYMAN.getString())) {
                 bannedBoogeyman = true;
             }
         }
@@ -127,7 +127,7 @@ public class PastLifeCommands extends Command {
         }
 
         for (SessionAction action : currentSession.getSessionActions()) {
-            if (action.sessionMessage != null && action.sessionMessage.equalsIgnoreCase(ModifiableText.SESSION_ACTION_SOCIETY.getString())) {
+            if (action.sessionMessage.equalsIgnoreCase(ModifiableText.SESSION_ACTION_SOCIETY.getString())) {
                 sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_SOCIETY_ERROR_QUEUED.get());
                 return -1;
             }
@@ -157,7 +157,7 @@ public class PastLifeCommands extends Command {
         }
 
         for (SessionAction action : currentSession.getSessionActions()) {
-            if (action.sessionMessage != null && action.sessionMessage.equalsIgnoreCase(ModifiableText.SESSION_ACTION_BOOGEYMAN.getString())) {
+            if (action.sessionMessage.equalsIgnoreCase(ModifiableText.SESSION_ACTION_BOOGEYMAN.getString())) {
                 sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_BOOGEYMAN_ERROR_QUEUED.get());
                 return -1;
             }

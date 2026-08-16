@@ -52,8 +52,6 @@ public enum ModifiableText {
 
     ,SESSION_STARTED(Formatted.LOOSELY_STYLED,"§6Session started! §7[{}]\n§f/session timer showDisplay§7 - toggles a session timer on your screen.", List.of("session length"))
     ,SESSION_STARTED_INFINITE(Formatted.LOOSELY_STYLED,"§6Session started!")
-    ,SESSION_ACTION_ENTRY(Formatted.LOOSELY_STYLED,"§7- {}", List.of("action name"))
-    ,SESSION_ACTION_ENTRY_LONG(Formatted.LOOSELY_STYLED,"§7- {} §f[{}]", List.of("action name", "trigger time"))
     ,SERIES_DISABLE("The Life Series has been {}", List.of("enabled/disabled"))
     ,SESSION_PAUSE_QUEUE("The session will pause at {} for {}", List.of("time", "duration"))
     ,SESSION_END_INFO("The session ends in {}", List.of("time"))
@@ -93,6 +91,10 @@ public enum ModifiableText {
     ,SESSION_ACTION_RANDOM_TP(Seasons.DOUBLE_LIFE, "Random teleport distribution")
     ,SESSION_ACTION_TASKS(Seasons.SECRET_LIFE, "Assign Tasks")
     ,SESSION_ACTION_WILDCARD(Seasons.WILD_LIFE, "Activate Wildcard")
+    ,SESSION_ACTION_ENTRY_LONG(Formatted.LOOSELY_STYLED,"§7- {} §f[{}]", List.of("action name", "trigger time"))
+    ,SESSION_ACTION_ENTRY_REMOVABLE("{} {} §f[{}]", List.of("ClickHere", "action name", "trigger time"))
+    ,SESSION_ACTION_REMOVE_ERROR("That session action does not exist")
+    ,SESSION_ACTION_REMOVE("Removed action '§7{}§f'", List.of("action name"))
     ,TICK_FREEZE("§7The game is frozen")
     ,TICK_UNFREEZE("§7The game is no longer frozen.")
 

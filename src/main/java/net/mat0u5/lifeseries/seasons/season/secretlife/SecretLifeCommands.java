@@ -10,6 +10,7 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
+import net.mat0u5.lifeseries.utils.other.ActionText;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -247,7 +248,7 @@ public class SecretLifeCommands extends Command {
         }
 
         if (!rawTask.isEmpty()) {
-            sendCommandFeedbackQuiet(source, ModifiableText.SECRETLIFE_TASK_SHOW.get(TextUtils.selfMessageText(rawTask)));
+            sendCommandFeedbackQuiet(source, ModifiableText.SECRETLIFE_TASK_SHOW.get(ActionText.hereTextRunCommand("Click to show task", "/selfmsg " + rawTask)));
         }
 
         return 1;

@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.utils.other.ActionText;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Triple;
@@ -108,7 +109,7 @@ public class LifeSkinsCommand extends Command {
     public int lifeSkinsInfo(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
 
-        sendCommandFeedbackQuiet(source, ModifiableText.LIFESKINS_INFO.get(TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs/features/lifeskins")));
+        sendCommandFeedbackQuiet(source, ModifiableText.LIFESKINS_INFO.get(ActionText.hereTextOpenURL("https://mat0u5.github.io/LifeSeries-docs/features/lifeskins")));
 
         return 1;
     }

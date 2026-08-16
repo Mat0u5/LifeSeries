@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.command.manager.Command;
@@ -8,17 +9,22 @@ import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.session.SessionAction;
+import net.mat0u5.lifeseries.utils.other.ActionText;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
-import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 import static net.mat0u5.lifeseries.LifeSeries.currentSession;
 
 public class SessionCommand extends Command {
@@ -136,9 +142,57 @@ public class SessionCommand extends Command {
                         ))
                     )
                 )
+                .then(literal("actions")
+                        .requires(PermissionManager::isAdmin)
+                        .executes(context -> showSessionActions(
+                                context.getSource()
+                        ))
+                        .then(literal("remove")
+                                .then(argument("id", IntegerArgumentType.integer(0))
+                                        .executes(context -> removeSessionAction(
+                                                context.getSource(), IntegerArgumentType.getInteger(context, "id")
+                                        ))
+                                )
+                        )
+                )
 
         );
     }
+
+    public int removeSessionAction(CommandSourceStack source, int id) {
+        if (checkBanned(source)) return -1;
+
+        boolean removedAny = currentSession.getSessionActions().removeIf(action -> {
+            if (action.id == id) {
+                sendCommandFeedback(source, ModifiableText.SESSION_ACTION_REMOVE.get(action.sessionMessage));
+                return true;
+            }
+            return false;
+        });
+
+        if (!removedAny) {
+            sendCommandFailure(source, ModifiableText.SESSION_ACTION_REMOVE_ERROR.get());
+            return -1;
+        }
+
+        return 1;
+    }
+
+    public int showSessionActions(CommandSourceStack source) {
+        if (checkBanned(source)) return -1;
+        sendCommandFeedback(source, ModifiableText.SESSION_ACTIONS.get());
+
+        List<SessionAction> actions = new ArrayList<>(currentSession.getSessionActions());
+        actions.sort(Comparator.comparingInt(action -> action.getTriggerTime().getTicks()));
+        for (SessionAction action : actions) {
+            Component actionName = Component.literal((action.visible ? "§f" : "§7")+action.sessionMessage);
+            Component removeAction = new ActionText("§l§c[-]").runCommand("Click to remove action", "/session actions remove " + action.id).get();
+            sendCommandFeedback(source, ModifiableText.SESSION_ACTION_ENTRY_REMOVABLE.get(removeAction, actionName, action.getTriggerTime().formatLong()));
+        }
+
+        return 1;
+    }
+
     public int pauseQueue(CommandSourceStack source, String timeArgument1, String timeArgument2) {
         if (checkBanned(source)) return -1;
 

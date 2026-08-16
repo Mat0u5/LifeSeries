@@ -165,7 +165,7 @@ public class WildLife extends Season {
     public void addSessionActions() {
         super.addSessionActions();
         currentSession.addSessionActionIfTime(
-                new SessionAction(Time.minutes(WildcardManager.ACTIVATE_WILDCARD_MINUTE-2)) {
+                new SessionAction.Invisible(Time.minutes(WildcardManager.ACTIVATE_WILDCARD_MINUTE-2), "Wildcard activate 2 minute warning") {
                     @Override
                     public void trigger() {
                         if (WildcardManager.activeWildcards.isEmpty()) {

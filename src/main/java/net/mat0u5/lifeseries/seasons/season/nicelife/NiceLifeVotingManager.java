@@ -6,10 +6,7 @@ import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandle
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
-import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.mat0u5.lifeseries.utils.other.Time;
+import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerListReference;
 import net.mat0u5.lifeseries.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -51,6 +48,7 @@ public class NiceLifeVotingManager {
     public static String NICE_LIST_TEAM_NAME = "Nice List";
     public static Optional<VoteType> forcedTriviaVote = Optional.empty();
     public static boolean PUBLIC_VOTING = false;
+    private static final Component clickVote =  new ActionText("§f§l/vote").runCommand("Click to open the voting screen", "/vote").get();
 
     public enum VoteType {
         NICE_LIST,
@@ -323,7 +321,7 @@ public class NiceLifeVotingManager {
             voteType = VoteType.NICE_LIST_LIFE;
             var newList = ref.get();
             PlayerUtils.playSoundToPlayers(newList, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
-            PlayerUtils.broadcastMessage(newList, ModifiableText.NICELIFE_NICELIST_START_INFO_PT4.get(TextUtils.clickableText("§f§l/vote", TextUtils.runCommandClickEvent("/vote"))));
+            PlayerUtils.broadcastMessage(newList, ModifiableText.NICELIFE_NICELIST_START_INFO_PT4.get(clickVote));
         });
         delay += 110;
         TaskScheduler.scheduleTask(delay, () -> {
@@ -342,7 +340,7 @@ public class NiceLifeVotingManager {
         allowedToVote.add(player.getUUID());
         currentSeason.reloadPlayerTeam(player);
         PlayerUtils.playSoundToPlayer(player, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
-        ((IPlayer) player).ls$message(ModifiableText.NICELIFE_NICELIST_START_INFO_PT4.get(TextUtils.clickableText("§f§l/vote", TextUtils.runCommandClickEvent("/vote"))));
+        ((IPlayer) player).ls$message(ModifiableText.NICELIFE_NICELIST_START_INFO_PT4.get(clickVote));
         PlayerReference ref = PlayerReference.of(player);
         TaskScheduler.scheduleTask(110, () -> {
             ServerPlayer playerNew = ref.get();
@@ -575,7 +573,7 @@ public class NiceLifeVotingManager {
             }
         }
         if (!niceListPlayers.isEmpty()) {
-            Component message = ModifiableText.NICELIFE_NICELIST_VOTE_REMINDER.get(TextUtils.clickableText("§f§l/vote", TextUtils.runCommandClickEvent("/vote")));
+            Component message = ModifiableText.NICELIFE_NICELIST_VOTE_REMINDER.get(clickVote);
             PlayerUtils.playSoundToPlayers(niceListPlayers, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
             PlayerUtils.broadcastMessage(niceListPlayers, message);
             PlayerListReference ref = PlayerListReference.of(niceListPlayers);

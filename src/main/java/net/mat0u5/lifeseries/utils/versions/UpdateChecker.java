@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
+import net.mat0u5.lifeseries.utils.other.ActionText;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.minecraft.network.chat.Component;
@@ -29,7 +30,7 @@ public class UpdateChecker {
     public static String changelogLink = null;
     public static int version;
     public static final boolean TEST_UPDATE_FAKE = false;
-    public static final boolean TEST_UPDATE_LAST = false;
+    public static final boolean TEST_UPDATE_LAST = true;
 
     public static void checkForMajorUpdates() {
         if (TEST_UPDATE_FAKE) {
@@ -189,7 +190,7 @@ public class UpdateChecker {
             return;
         }
         if (!VersionControl.isDevVersion()) {
-            Component discordText = TextUtils.format("§7Click {}§7 to join the mod development discord if you have any questions, issues, requests, or if you just want to hang out :)", TextUtils.openURLText("https://discord.gg/QWJxfb4zQZ"));
+            Component discordText = TextUtils.format("§7Click {}§7 to join the mod development discord if you have any questions, issues, requests, or if you just want to hang out :)", ActionText.hereTextOpenURL("https://discord.gg/QWJxfb4zQZ"));
 
             Component updateText =
                     TextUtils.formatLoosely("A new version of the Life Series Mod is available ({}) §nserver-side§f. \n",versionName)
@@ -201,7 +202,7 @@ public class UpdateChecker {
                             )
                         )
                         .append(
-                                TextUtils.clickableText("Click to download on Modrinth", TextUtils.openURLClickEvent("https://modrinth.com/mod/life-series"))
+                                new ActionText("Click to download on Modrinth").styledBlueUnderline().defaultOpenURL("https://modrinth.com/mod/life-series").get()
                         );
             if (PermissionManager.isAdmin(player)) {
                 ((IPlayer) player).ls$message(updateText);
@@ -212,7 +213,7 @@ public class UpdateChecker {
             Component updateText =
                 Component.literal("§c[Life Series] You are playing on a developer version, there are probably some bugs, and it's possible that some features don't work.\n")
                     .append(
-                        TextUtils.clickableText("Download full releases on Modrinth", TextUtils.openURLClickEvent("https://modrinth.com/mod/life-series"))
+                            new ActionText("Download full releases on Modrinth").styledBlueUnderline().defaultOpenURL("https://modrinth.com/mod/life-series").get()
                     );
 
             ((IPlayer) player).ls$message(updateText);

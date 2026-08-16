@@ -4,19 +4,28 @@ import net.mat0u5.lifeseries.utils.other.Time;
 import static net.mat0u5.lifeseries.LifeSeries.currentSession;
 
 public abstract class SessionAction {
+    private static int totalId = 1;
     public boolean hasTriggered = false;
-    private Time triggerTime;
+    private final Time triggerTime;
     public String sessionMessage;
-    public boolean showTime = false;
+    public final boolean visible;
+    public final int id;
 
-    public SessionAction(Time triggerTime) {
-        this.triggerTime = triggerTime;
+    public abstract static class Invisible extends SessionAction {
+        protected Invisible(Time triggerTime, String message) {
+            super(triggerTime, message, false);
+        }
     }
 
-    public SessionAction(Time triggerTime, String message) {
+    protected SessionAction(Time triggerTime, String message) {
+        this(triggerTime, message, true);
+    }
+
+    private SessionAction(Time triggerTime, String message, boolean visible) {
         this.triggerTime = triggerTime;
         this.sessionMessage = message;
-        this.showTime = true;
+        this.visible = visible;
+        this.id = totalId++;
     }
 
     public boolean tick() {
@@ -48,7 +57,14 @@ public abstract class SessionAction {
     }
 
     public Time getTriggerTime() {
-        return triggerTime;
+        int triggerAtTicks = triggerTime.getTicks();
+        if (triggerAtTicks >= 0) {
+            return triggerTime;
+        }
+        else {
+            if (currentSession().isInfiniteSession()) return Time.infinite();
+            return currentSession.getSessionLength().add(triggerTime);
+        }
     }
 
     public abstract void trigger();

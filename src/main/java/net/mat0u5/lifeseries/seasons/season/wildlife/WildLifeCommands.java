@@ -24,6 +24,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
+import net.mat0u5.lifeseries.utils.other.ActionText;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -527,7 +528,7 @@ public class WildLifeCommands extends Command {
         if (player == null) return -1;
 
         PlayerUtils.broadcastMessageToAdmins(ModifiableText.WILDLIFE_SNAIL_NAME_REQUEST.get(player, name));
-        Component adminText = ModifiableText.WILDLIFE_SNAIL_NAME_REQUEST_PROMPT.get(TextUtils.runCommandText(TextUtils.formatString("/snail names set {} {}", player, name)));
+        Component adminText = ModifiableText.WILDLIFE_SNAIL_NAME_REQUEST_PROMPT.get(ActionText.hereTextRunCommand("Click to apply snail name", TextUtils.formatString("/snail names set {} {}", player, name)));
         PlayerUtils.broadcastMessageToAdmins(adminText);
         return 1;
     }
@@ -549,7 +550,7 @@ public class WildLifeCommands extends Command {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SNAIL_TEXTURE_INFO.get(TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs/config/wild-life-snails")));
+        sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SNAIL_TEXTURE_INFO.get(ActionText.hereTextOpenURL("https://mat0u5.github.io/LifeSeries-docs/config/wild-life-snails")));
 
         return 1;
     }
@@ -559,7 +560,7 @@ public class WildLifeCommands extends Command {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SNAIL_TEXTURE_PRESET_INFO.get(TextUtils.openURLText("https://mat0u5.github.io/LifeSeries-docs/commands/detailed/snail.html#snail-textures-preset")));
+        sendCommandFeedbackQuiet(source, ModifiableText.WILDLIFE_SNAIL_TEXTURE_PRESET_INFO.get(ActionText.hereTextOpenURL("https://mat0u5.github.io/LifeSeries-docs/commands/detailed/snail.html#snail-textures-preset")));
 
         return 1;
     }

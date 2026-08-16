@@ -4,6 +4,8 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.*;
 import net.minecraft.server.level.ServerPlayer;
+import org.spongepowered.asm.mixin.Mutable;
+
 import java.util.List;
 //? if >= 1.21.4
 import java.net.URI;
@@ -86,42 +88,6 @@ public class TextUtils {
         *///?} else {
         return new HoverEvent.ShowText(text);
         //?}
-    }
-
-    public static Component withHover(Component text, Component hover) {
-        return text.copy().withStyle(style -> style.withHoverEvent(showTextHoverEvent(hover)));
-    }
-    public static Component withHover(String text, String hover) {
-        return Component.literal(text).withStyle(style -> style.withHoverEvent(showTextHoverEvent(Component.literal(hover))));
-    }
-
-    public static Component selfMessageText(String message) {
-        return runCommandText("/selfmsg " + message);
-    }
-
-    public static Component runCommandText(String command) {
-        return hereText(runCommandClickEvent(command));
-    }
-
-    public static Component openURLText(String url) {
-        return hereText(openURLClickEvent(url));
-    }
-
-    public static Component copyClipboardText(String copy) {
-        return hereText(copyClipboardClickEvent(copy));
-    }
-
-    public static Component hereText(ClickEvent event) {
-        return clickableText("here", event);
-    }
-
-    public static Component clickableText(String label, ClickEvent event) {
-        return Component.literal(label)
-                .withStyle(style -> style
-                        .withColor(ChatFormatting.BLUE)
-                        .withClickEvent(event)
-                        .withUnderlined(true)
-                );
     }
 
 

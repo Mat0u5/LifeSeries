@@ -498,7 +498,7 @@ public class NetworkHandlerServer {
     public static List<Component> configChanges = new ArrayList<>();
     public static void onUpdatedConfig() {
         if (!updatedConfigThisTickFromCommand) {
-            PlayerUtils.broadcastMessageToAdmins(ModifiableText.CONFIG_UPDATED_CHANGES.get(TextUtils.runCommandText("/ls config viewChanges")));
+            PlayerUtils.broadcastMessageToAdmins(ModifiableText.CONFIG_UPDATED_CHANGES.get(ActionText.hereTextRunCommand("Click to view config changes", "/ls config viewChanges")));
         }
         try {
             if (configNeedsReload) {

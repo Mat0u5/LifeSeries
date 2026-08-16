@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.utils.other.ActionText;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Time;
@@ -73,7 +74,7 @@ public class UnassignedSeason extends Season {
         PlayerUtils.broadcastMessage(Component.literal("[LifeSeries] You must select a season with ").withStyle(ChatFormatting.RED)
                 .append(Component.literal("'/lifeseries setSeries <series>'").withStyle(ChatFormatting.GRAY)), 120);
         PlayerUtils.broadcastMessage(Component.literal("You must have §noperator permissions§c to use most commands in this mod.").withStyle(ChatFormatting.RED), 120);
-        Component text = TextUtils.format("§7Click {}§7 to join the mod development discord if you have any questions, issues, requests, or if you just want to hang out :)", TextUtils.openURLText("https://discord.gg/QWJxfb4zQZ"));
+        Component text = TextUtils.format("§7Click {}§7 to join the mod development discord if you have any questions, issues, requests, or if you just want to hang out :)", ActionText.hereTextOpenURL("https://discord.gg/QWJxfb4zQZ"));
         PlayerUtils.broadcastMessage(text, 120);
     }
 }

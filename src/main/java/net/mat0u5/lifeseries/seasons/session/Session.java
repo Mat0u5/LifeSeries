@@ -47,19 +47,19 @@ public class Session {
     private SessionStatus status = SessionStatus.NOT_STARTED;
     private int sessionStartInProgress = 0;
 
-    SessionAction endWarning1 = new SessionAction(Time.minutes(-5)) {
+    SessionAction endWarning1 = new SessionAction.Invisible(Time.minutes(-5), "Session end 5 minute warning") {
         @Override
         public void trigger() {
             PlayerUtils.broadcastMessage(ModifiableText.SESSION_WARNING_5MIN.get());
         }
     };
-    SessionAction endWarning2 = new SessionAction(Time.minutes(-30)) {
+    SessionAction endWarning2 = new SessionAction.Invisible(Time.minutes(-30), "Session end 30 minute warning") {
         @Override
         public void trigger() {
             PlayerUtils.broadcastMessage(ModifiableText.SESSION_WARNING_30MIN.get());
         }
     };
-    SessionAction actionInfoAction = new SessionAction(Time.seconds(7)) {
+    SessionAction actionInfoAction = new SessionAction.Invisible(Time.seconds(7), "Show session actions") {
         @Override
         public void trigger() {
             showActionInfo();
@@ -533,18 +533,14 @@ public class Session {
         actions.sort(Comparator.comparingInt(action -> action.getTriggerTime().getTicks()));
         List<Component> messages = new ArrayList<>();
         for (SessionAction action : actions) {
+            if (!action.visible) continue;
             String actionMessage = action.sessionMessage;
             if (actionMessage == null) continue;
             if (actionMessage.isEmpty()) continue;
             if (messages.isEmpty()) {
                 messages.add(ModifiableText.SESSION_ACTIONS.get());
             }
-            if (action.showTime) {
-                messages.add(ModifiableText.SESSION_ACTION_ENTRY_LONG.get(actionMessage, action.getTriggerTime().formatLong()));
-            }
-            else {
-                messages.add(ModifiableText.SESSION_ACTION_ENTRY.get(actionMessage));
-            }
+            messages.add(ModifiableText.SESSION_ACTION_ENTRY_LONG.get(actionMessage, action.getTriggerTime().formatLong()));
         }
 
         messages.forEach(PlayerUtils::broadcastMessageToAdmins);
