@@ -94,6 +94,7 @@ public class ClientEvents {
                 LifeSeriesClient.serverHandshake = HandshakeStatus.NOT_RECEIVED;
             }
         });
+        NetworkHandlerClient.sendUpdatePackets();
         if (LifeSeries.modDisabled()) return;
     }
 

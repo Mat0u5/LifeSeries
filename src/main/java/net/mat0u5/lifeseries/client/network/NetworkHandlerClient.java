@@ -540,6 +540,7 @@ public class NetworkHandlerClient {
             }
         }
 
+        NetworkHandlerClient.sendUpdatePackets();
         LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_CLIENT] Received handshake (from server): {{}, {}}", payload.modVersionStr(), payload.modVersion()));
         sendHandshake();
     }
@@ -607,10 +608,16 @@ public class NetworkHandlerClient {
     public static void pressSuperpowerKey() {
         SimplePackets.SUPERPOWER_KEY.sendToServer();
     }
+
     public static void pressRunCommandKey() {
         ClientUtils.runCommand(LifeSeriesClient.RUN_COMMAND);
     }
+
     public static void pressOpenConfigKey() {
         ClientUtils.runCommand("/lifeseries config");
+    }
+
+    public static void sendUpdatePackets() {
+        SimplePackets.LIMITED_LIFE_ACTIONBAR_TIME.sendToServer(LifeSeriesClient.LIMITED_LIFE_ACTIONBAR_TIME);
     }
 }

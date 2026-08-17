@@ -12,6 +12,7 @@ import net.mat0u5.lifeseries.mixin.ServerLoginPacketListenerImplAccessor;
 import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePacket;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
+import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -202,6 +203,9 @@ public class NetworkHandlerServer {
                     }
                 }
             }
+        });
+        SimplePackets.LIMITED_LIFE_ACTIONBAR_TIME.setServerReceive((player, payload) -> {
+            LimitedLife.actionbarTime.put(player.getUUID(), payload.value());
         });
         SimplePackets.TRIPLE_JUMP.setServerReceive((player, payload) -> {
             if (LifeSeries.isSeason(Seasons.WILD_LIFE) && SuperpowersWildcard.hasActivatedPower(player, Superpowers.TRIPLE_JUMP)) {

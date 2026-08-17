@@ -163,6 +163,7 @@ public class TextHud {
 
     private static long limitedLifeTime = -1;
     public static int renderLimitedLifeTimer(Minecraft client, GuiGraphicsExtractor context, int y) {
+        if (LifeSeriesClient.LIMITED_LIFE_ACTIONBAR_TIME) return 0;
         if (!LifeSeries.isSeason(Seasons.LIMITED_LIFE)) return 0;
         if (System.currentTimeMillis()- LifeSeriesClient.limitedLifeTimeLastUpdated > 15000) return 0;
 

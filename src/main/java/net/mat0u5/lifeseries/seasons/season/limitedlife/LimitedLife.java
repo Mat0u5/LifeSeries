@@ -24,8 +24,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.world.scores.PlayerScoreEntry;
 import net.minecraft.world.scores.Team;
@@ -40,6 +40,7 @@ public class LimitedLife extends Season {
     public static Time NEW_KILL_BOOGEYMAN = Time.hours(1);
     public static boolean TICK_OFFLINE_PLAYERS = false;
     public static boolean SHOW_TIME_BELOW_NAME = false;
+    public static Map<UUID, Boolean> actionbarTime = new ConcurrentHashMap<>();
 
     @Override
     public Seasons getSeason() {
@@ -116,6 +117,10 @@ public class LimitedLife extends Season {
                     }
                     if (timestamp != SessionTimerStates.OFF.getValue()) {
                         SimplePackets.SESSION_TIMER.sendToClient(timestamp, player);
+                    }
+
+                    if (Objects.equals(actionbarTime.get(player.getUUID()), true)) {
+                        ((IPlayer) player).ls$message(livesManager.getFormattedLives(player), true);
                     }
                 }
                 else {

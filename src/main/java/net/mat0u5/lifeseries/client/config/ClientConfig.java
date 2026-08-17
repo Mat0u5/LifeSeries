@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.client.config;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 
 import java.util.ArrayList;
@@ -46,6 +47,10 @@ public class ClientConfig extends ConfigManager {
             "nice_life_less_snow", true, "",
             "Less Obstructive Snow in Nice Life", "Reduces the number of snow particles when it snows."
     );
+    public static final ConfigFileEntry<Boolean> LIMITED_LIFE_ACTIONBAR_TIME = new ConfigFileEntry<>(
+            "limited_life_actionbar_time", false, "[new]",
+            "Move Time to Actionbar in Limited Life", "Shows the remaining time in the actionbar instead of the side title."
+    );
 
     public static final ConfigFileEntry<Double> TEXT_HUD_SCALE = new ConfigFileEntry<>(
             "text_hud_scale", 1.0, "",
@@ -69,8 +74,13 @@ public class ClientConfig extends ConfigManager {
                     ,COLORED_HEARTS_HARDCORE_ALL_LIVES
 
                 ,TEXT_HUD_SCALE
-                ,NICE_LIFE_LESS_SNOW
         ));
+        if (LifeSeries.isSeason(Seasons.NICE_LIFE)) {
+            result.add(NICE_LIFE_LESS_SNOW);
+        }
+        if (LifeSeries.isSeason(Seasons.LIMITED_LIFE)) {
+            result.add(LIMITED_LIFE_ACTIONBAR_TIME);
+        }
 
         if (VersionControl.isDevVersion()) {
             result.add(RUN_COMMAND);

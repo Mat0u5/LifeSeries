@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.client.config.ClientConfig;
 import net.mat0u5.lifeseries.client.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.client.registries.ClientRegistries;
 import net.mat0u5.lifeseries.client.render.TextHud;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
@@ -85,6 +86,7 @@ public class LifeSeriesClient implements ClientAccessor {
     public static float SIZESHIFTING_CHANGE = 0;
     public static double TEXT_HUD_SCALE = 1.0;
     public static boolean NICE_LIFE_LESS_SNOW = true;
+    public static boolean LIMITED_LIFE_ACTIONBAR_TIME = false;
 
     public static boolean isReplay = false;
     public static HandshakeStatus serverHandshake = HandshakeStatus.WAITING;
@@ -170,6 +172,11 @@ public class LifeSeriesClient implements ClientAccessor {
         TEXT_HUD_SCALE = ClientConfig.TEXT_HUD_SCALE.get(clientConfig);
 
         NICE_LIFE_LESS_SNOW = ClientConfig.NICE_LIFE_LESS_SNOW.get(clientConfig);
+        LIMITED_LIFE_ACTIONBAR_TIME = ClientConfig.LIMITED_LIFE_ACTIONBAR_TIME.get(clientConfig);
+
+        if (serverHandshake == HandshakeStatus.RECEIVED) {
+            NetworkHandlerClient.sendUpdatePackets();
+        }
     }
 
     public static void resetClientData() {

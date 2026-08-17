@@ -58,15 +58,15 @@ public class Mimicry extends Superpower {
                 isLookingAtPlayer = true;
                 Superpowers mimicPower = SuperpowersWildcard.getSuperpower(lookingAtPlayer);
                 if (!PlayerUtils.isFakePlayer(lookingAtPlayer) && mimicPower != null) {
-                    if (mimicPower != Superpowers.NULL && mimicPower != Superpowers.MIMICRY) {
+                    if (mimicPower == Superpowers.MIMICRY) {
+                        PlayerUtils.displayMessageToPlayer(player, ModifiableText.WILDLIFE_POWER_MIMIC_ERROR.get(), 65);
+                        return;
+                    }
+                    if (mimicPower != Superpowers.NULL) {
                         mimic = mimicPower.getInstance(player);
                         successfullyMimicked = true;
                         PlayerUtils.displayMessageToPlayer(player, ModifiableText.WILDLIFE_POWER_MIMIC.get(lookingAtPlayer), 65);
                         ((IPlayer) player).ls$playNotifySound(SoundEvents.CHICKEN_EGG, SoundSource.MASTER, 0.3f, 1);
-                    }
-                    if (mimicPower == Superpowers.MIMICRY) {
-                        PlayerUtils.displayMessageToPlayer(player, ModifiableText.WILDLIFE_POWER_MIMIC_ERROR.get(), 65);
-                        return;
                     }
                 }
             }
