@@ -15,6 +15,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Callback;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Hunger;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.MobSwap;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.PreBuiltSnailSkins;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkins;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
@@ -58,7 +59,7 @@ public class WildLifeCommands extends Command {
     }
 
     public List<String> getAdminCommands() {
-        return List.of("wildcard", "snail", "superpower", "hunger");
+        return List.of("wildcard", "snail", "superpower", "hunger", "mobswap");
     }
 
     public List<String> getNonAdminCommands() {
@@ -288,6 +289,13 @@ public class WildLifeCommands extends Command {
                 )
         );
         dispatcher.register(
+            literal("mobswap")
+                .requires(PermissionManager::isAdmin)
+                .then(literal("swap")
+                        .executes(context -> mobSwapTrigger(context.getSource()))
+                )
+        );
+        dispatcher.register(
                 literal("zombie")
                         .requires(PermissionManager::isAdmin)
                         .then(argument("player", EntityArgument.players())
@@ -501,6 +509,23 @@ public class WildLifeCommands extends Command {
         if (checkBanned(source)) return -1;
 
         Callback.showEndingTitles();
+
+        return 1;
+    }
+
+    public int mobSwapTrigger(CommandSourceStack source) {
+        if (checkBanned(source)) return -1;
+
+        if (!WildcardManager.isActiveWildcard(Wildcards.MOB_SWAP)) {
+            sendCommandFailure(source, ModifiableText.WILDLIFE_MOBSWAP_INACTIVE.get());
+            return -1;
+        }
+
+        sendCommandFeedback(source, ModifiableText.WILDLIFE_MOBSWAP_SWAP_MANUAL.get());
+
+        if (WildcardManager.activeWildcards.get(Wildcards.MOB_SWAP) instanceof MobSwap mobSwapWildcard) {
+            mobSwapWildcard.mobSwap();
+        }
 
         return 1;
     }

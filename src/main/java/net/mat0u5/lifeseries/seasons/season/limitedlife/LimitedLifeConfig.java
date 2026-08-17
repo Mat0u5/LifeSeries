@@ -166,8 +166,8 @@ public class LimitedLifeConfig extends SeasonConfig {
 
         GROUP_GLOBAL_LIVES.displayName = "Time Stuff";
         GROUP_LIVES.displayName = "Time Manager";
-        ONLY_TAKE_LIVES_IN_SESSION.displayName = "Only Lose Time In Session";
-        ONLY_TAKE_LIVES_IN_SESSION.description = "Makes players only lose time when they die while a session is active.";
+        ONLY_CHANGE_LIVES_IN_SESSION.displayName = "Only Change Time In Session";
+        ONLY_CHANGE_LIVES_IN_SESSION.description = "Makes players only lose/gain time when they die while a session is active.";
 
         LIVES_SYSTEM_DISABLED.displayName = "Fully Disable Time System";
         LIVES_SYSTEM_DISABLED.description = "Fully disables the time system, if you want to implement a custom one for example :)";

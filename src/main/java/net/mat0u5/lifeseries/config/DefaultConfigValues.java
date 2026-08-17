@@ -93,9 +93,9 @@ public class DefaultConfigValues {
             "default_lives", 3, "global.lives",
             "Default Lives", "The number of lives every player will have by default."
     );
-    public final ConfigFileEntry<Boolean> ONLY_TAKE_LIVES_IN_SESSION = new ConfigFileEntry<>(
-            "only_take_lives_in_session", false, "global.session",
-            "Only Lose Lives In Session", "Makes players only lose lives when they die while a session is active."
+    public final ConfigFileEntry<Boolean> ONLY_CHANGE_LIVES_IN_SESSION = new ConfigFileEntry<>(
+            "only_change_lives_in_session", false, "global.session",
+            "Only Change Lives In Session", "Makes players only lose/gain lives when they die while a session is active."
     );
     public final ConfigFileEntry<Boolean> TICK_FREEZE_NOT_IN_SESSION = new ConfigFileEntry<>(
             "tick_freeze_not_in_session", false, "global.session",

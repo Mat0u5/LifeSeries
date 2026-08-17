@@ -107,19 +107,6 @@ public class TestingCommands extends Command {
 
         sendCommandFeedbackQuiet(source, Component.nullToEmpty("Test Command 3"));
 
-        System.out.println("=== Original Example: Range 0-9, Lives 1-3 ===");
-        WeightedRandomizer randomizer = new WeightedRandomizer();
-
-        randomizer.testDistribution(0, 9, 1, 4, 1.5);
-
-        // Test different example: Range 1-100 with 1-5 difficulty levels
-        System.out.println("\n=== Different Example: Range 1-100, Difficulty 1-5 ===");
-        randomizer.testDistribution(1, 100, 1, 5, 1);
-
-        // Test edge case: Range 0-1 with 1-2 states
-        System.out.println("\n=== Edge Case: Range 0-1, States 1-2 ===");
-        randomizer.testDistribution(0, 1, 1, 2, 1);
-
         return 1;
     }
 

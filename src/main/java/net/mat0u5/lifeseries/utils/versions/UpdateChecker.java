@@ -30,7 +30,7 @@ public class UpdateChecker {
     public static String changelogLink = null;
     public static int version;
     public static final boolean TEST_UPDATE_FAKE = false;
-    public static final boolean TEST_UPDATE_LAST = true;
+    public static final boolean TEST_UPDATE_LAST = false;
 
     public static void checkForMajorUpdates() {
         if (TEST_UPDATE_FAKE) {

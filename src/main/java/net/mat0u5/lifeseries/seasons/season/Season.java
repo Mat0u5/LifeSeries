@@ -575,7 +575,7 @@ public abstract class Season {
                 new DatapackIntegration.Events.MacroEntry("Killer", killer.getScoreboardName()),
                 new DatapackIntegration.Events.MacroEntry("Victim", victim.getScoreboardName())
         ));
-        if (!DatapackIntegration.EVENT_CLAIM_KILL.isCanceled() && !isBoogeyCure) {
+        if (!DatapackIntegration.EVENT_CLAIM_KILL.isCanceled() && !isBoogeyCure && livesManager.canChangeLivesNaturally()) {
             tryClaimKillLifeGain(killer, victim);
         }
 
@@ -669,7 +669,7 @@ public abstract class Season {
         SessionTranscript.onPlayerKilledByPlayer(victim, killer);
 
         DatapackIntegration.EVENT_PLAYER_PVP_KILLED.trigger(eventMacros);
-        if (!DatapackIntegration.EVENT_PLAYER_PVP_KILLED.isCanceled() && !isBoogeyCure && isAllowedToAttack) {
+        if (!DatapackIntegration.EVENT_PLAYER_PVP_KILLED.isCanceled() && !isBoogeyCure && isAllowedToAttack && livesManager.canChangeLivesNaturally()) {
             tryKillLifeGain(killer, victim);
         }
     }

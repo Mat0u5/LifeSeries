@@ -455,6 +455,8 @@ public enum ModifiableText {
     ,WILDLIFE_HUNGER_RANDOMIZE_TITLE(Seasons.WILD_LIFE, "")
     ,WILDLIFE_HUNGER_RANDOMIZE_SUBTITLE(Seasons.WILD_LIFE, "§7Food is about to be randomised...")
     ,WILDLIFE_HUNGER_RANDOMIZE_MANUAL(Seasons.WILD_LIFE, "§7Randomizing food...")
+    ,WILDLIFE_MOBSWAP_INACTIVE(Seasons.WILD_LIFE, "The Mob Swap wildcard is not active right now.")
+    ,WILDLIFE_MOBSWAP_SWAP_MANUAL(Seasons.WILD_LIFE, "§7Swapping...")
     ,WILDLIFE_SNAIL_TEXTURES_RELOAD(Seasons.WILD_LIFE, "§7Reloading snail textures...")
     ,WILDLIFE_SNAIL_TEXTURES_NONE(Seasons.WILD_LIFE, "§7No snail skins have been added yet. Run '§f/snail textures info§7' to learn how to add them.")
     ,WILDLIFE_TRIVIA_TEXTURES_RELOAD(Seasons.WILD_LIFE, "§7Reloading trivia textures...")

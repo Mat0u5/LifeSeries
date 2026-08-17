@@ -49,7 +49,7 @@ public class LivesManager {
     public SoundEvent FINAL_DEATH_SOUND = SoundEvents.LIGHTNING_BOLT_THUNDER;
     public boolean SHOW_DEATH_TITLE = false;
     public boolean DEATH_TITLE_MATCH_DEATH_MESSAGE = false;
-    public boolean ONLY_TAKE_LIVES_IN_SESSION = false;
+    public boolean ONLY_CHANGE_LIVES_IN_SESSION = false;
     public boolean SEE_FRIENDLY_INVISIBLE_PLAYERS = false;
     public static int MAX_TAB_NUMBER = 4;
     public boolean LIVES_SYSTEM_DISABLED = false;
@@ -69,7 +69,7 @@ public class LivesManager {
         DEATH_TITLE_MATCH_DEATH_MESSAGE = seasonConfig.DEATH_TITLE_MATCH_DEATH_MESSAGE.get();
         FINAL_DEATH_LIGHTNING = seasonConfig.FINAL_DEATH_LIGHTNING.get();
         FINAL_DEATH_SOUND = SoundEvent.createVariableRangeEvent(IdentifierHelper.parse(seasonConfig.FINAL_DEATH_SOUND.get()));
-        ONLY_TAKE_LIVES_IN_SESSION = seasonConfig.ONLY_TAKE_LIVES_IN_SESSION.get();
+        ONLY_CHANGE_LIVES_IN_SESSION = seasonConfig.ONLY_CHANGE_LIVES_IN_SESSION.get();
         SEE_FRIENDLY_INVISIBLE_PLAYERS = seasonConfig.SEE_FRIENDLY_INVISIBLE_PLAYERS.get();
         LIVES_SYSTEM_DISABLED = seasonConfig.LIVES_SYSTEM_DISABLED.get();
         LIVES_RANDOMIZE_MINUTE = seasonConfig.LIVES_RANDOMIZE_MINUTE.get();
@@ -551,14 +551,14 @@ public class LivesManager {
     }
 
     public boolean canChangeLivesNaturally(ServerPlayer player) {
-        if (ONLY_TAKE_LIVES_IN_SESSION && currentSession != null && !AdvancedDeathsManager.hasQueuedDeath(player)) {
+        if (ONLY_CHANGE_LIVES_IN_SESSION && currentSession != null && !AdvancedDeathsManager.hasQueuedDeath(player)) {
             return currentSession.statusStarted();
         }
         return true;
     }
 
     public boolean canChangeLivesNaturally() {
-        if (ONLY_TAKE_LIVES_IN_SESSION && currentSession != null) {
+        if (ONLY_CHANGE_LIVES_IN_SESSION && currentSession != null) {
             return currentSession.statusStarted();
         }
         return true;

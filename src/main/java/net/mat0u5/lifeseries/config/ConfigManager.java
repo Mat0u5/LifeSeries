@@ -98,7 +98,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
 
                 //Group stuff
 
-                ,ONLY_TAKE_LIVES_IN_SESSION
+                , ONLY_CHANGE_LIVES_IN_SESSION
                 ,ONLY_LOSE_DURABILITY_IN_SESSION
                 ,SESSION_START_COUNTDOWN
                 //? if >= 1.20.3 {
@@ -428,6 +428,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
         renamedProperty("boogeyman_message", "text.boogeyman.message");
         renamedProperty("final_death_title_subtitle", "text.final.death.title.subtitle");
         renamedProperty("text.wildlife.superpowes.dead", "text.wildlife.superpowers.dead");
+        renamedProperty("only_take_lives_in_session", "only_change_lives_in_session");
     }
 
     private void renamedProperty(String from, String to) {
