@@ -9,6 +9,8 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.server.level.ServerPlayer;
@@ -177,7 +179,12 @@ public class SuperpowersWildcard extends Wildcard {
     public static Superpower.KeyPressResult pressedSuperpowerKey(ServerPlayer player) {
         if (playerSuperpowers.containsKey(player.getUUID())) {
             if (((IPlayer) player).ls$isAlive()) {
-                return playerSuperpowers.get(player.getUUID()).onKeyPressed();
+                Superpower power = playerSuperpowers.get(player.getUUID());
+                Superpower.KeyPressResult result = power.onKeyPressed();
+                if (result == Superpower.KeyPressResult.STOLEN) {
+                    Mimicry.displayStolenPowerActionbar(power, player);
+                }
+                return result;
             }
             else {
                 PlayerUtils.displayMessageToPlayer(player, ModifiableText.WILDLIFE_SUPERPOWERS_DEAD.get(), 60);

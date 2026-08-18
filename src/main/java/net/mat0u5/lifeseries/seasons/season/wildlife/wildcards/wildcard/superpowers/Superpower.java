@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers;
 
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Mimicry;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
@@ -17,10 +18,12 @@ public abstract class Superpower {
         DEAD,
         COOLDOWN,
         ACTIVATED,
-        DEACTIVATED
+        DEACTIVATED,
+        STOLEN
     }
 
     public boolean active = false;
+    public long stolenUntil = 0;
     public long cooldown = 0;
     private final UUID playerUUID;
     public Superpower(ServerPlayer player) {
@@ -39,6 +42,9 @@ public abstract class Superpower {
     public void tick() {}
 
     public KeyPressResult onKeyPressed() {
+        if (Mimicry.DISABLE_OTHER_POWER && System.currentTimeMillis() < stolenUntil) {
+            return KeyPressResult.STOLEN;
+        }
         if (System.currentTimeMillis() < cooldown) {
             sendCooldownPacket();
             return KeyPressResult.COOLDOWN;

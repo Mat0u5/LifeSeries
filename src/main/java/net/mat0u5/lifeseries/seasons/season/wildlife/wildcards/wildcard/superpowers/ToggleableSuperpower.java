@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers;
 
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Mimicry;
 import net.minecraft.server.level.ServerPlayer;
 
 public abstract class ToggleableSuperpower extends Superpower {
@@ -10,6 +11,9 @@ public abstract class ToggleableSuperpower extends Superpower {
 
     @Override
     public KeyPressResult onKeyPressed() {
+        if (Mimicry.DISABLE_OTHER_POWER && System.currentTimeMillis() < stolenUntil) {
+            return KeyPressResult.STOLEN;
+        }
         if (System.currentTimeMillis() < cooldown) {
             sendCooldownPacket();
             return KeyPressResult.COOLDOWN;

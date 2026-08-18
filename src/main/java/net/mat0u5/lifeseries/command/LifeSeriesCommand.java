@@ -305,6 +305,8 @@ public class LifeSeriesCommand extends Command {
     public int configSet(CommandSourceStack source, String key, String value) {
         if (checkBanned(source)) return -1;
 
+        if (value.equalsIgnoreCase("\"\"")) value = "";
+
         seasonConfig.setProperty(key, value);
         ConfigManager.onUpdatedUnknown(key, value);
 

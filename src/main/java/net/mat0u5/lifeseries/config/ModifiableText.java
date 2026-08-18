@@ -496,6 +496,7 @@ public enum ModifiableText {
     ,WILDLIFE_MAKEITWILD_PT3(Seasons.WILD_LIFE, "§cMake §eit")
     ,WILDLIFE_MAKEITWILD_PT4(Seasons.WILD_LIFE, "§cMake §eit §a§lWILD")
     ,WILDLIFE_SUPERPOWERS_DEAD(Seasons.WILD_LIFE, "Dead players can't use superpowers!")
+    ,WILDLIFE_SUPERPOWERS_STOLEN(Seasons.WILD_LIFE, "Your power has been stolen for {}", List.of("time"))
     ,WILDLIFE_POWER_MIMIC_ERROR(Seasons.WILD_LIFE, "You cannot mimic that power.")
     ,WILDLIFE_POWER_MIMIC_NOPLAYER(Seasons.WILD_LIFE, "You are not looking at a player.")
     ,WILDLIFE_POWER_MIMIC_NOPOWER(Seasons.WILD_LIFE, "That player does not have a superpower.")

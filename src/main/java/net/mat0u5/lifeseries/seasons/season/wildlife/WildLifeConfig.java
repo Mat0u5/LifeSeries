@@ -251,6 +251,10 @@ public class WildLifeConfig extends SeasonConfig {
     public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_SUPERSPEED = new ConfigFileEntry<>("superpower_cooldown_superspeed", 3, ConfigTypes.SECONDS, "season.superpowers.superspeed", "Superspeed Power Cooldown", "");
     public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_NECROMANCY = new ConfigFileEntry<>("superpower_cooldown_necromancy", 300, ConfigTypes.SECONDS, "season.superpowers.necromancy", "Necromancy Power Cooldown", "");
 
+    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_MIMICRY_DISABLE_OTHER_POWER = new ConfigFileEntry<>(
+            "wildcard_superpowers_mimicry_disable_other_power", false, "season.superpowers.mimicry[new]",
+            "Disable Stolen Power", "Disables the power of the person you mimic for the duration of the effect."
+    );
     public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE = new ConfigFileEntry<>(
             "wildcard_superpowers_windcharge_max_mace_damage", 2, "season.superpowers.wind_charge",
             "Max Mace Damage", "The max amount of damage you can deal with a mace while using the Wind Charge superpower."
@@ -561,6 +565,7 @@ public class WildLifeConfig extends SeasonConfig {
                 // Mimicry
                 ,SUPERPOWER_MIMICRY
                 ,SUPERPOWER_COOLDOWN_MIMICRY
+                ,WILDCARD_SUPERPOWERS_MIMICRY_DISABLE_OTHER_POWER
 
                 // Necromancy
                 ,SUPERPOWER_NECROMANCY

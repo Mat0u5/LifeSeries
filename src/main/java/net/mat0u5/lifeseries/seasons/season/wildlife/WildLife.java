@@ -288,6 +288,7 @@ public class WildLife extends Season {
         Superspeed.TARGET_SPEED = WildLifeConfig.WILDCARD_SUPERPOWERS_SUPERSPEED_TARGET_SPEED.get();
         TripleJump.JUMP_COUNT = WildLifeConfig.WILDCARD_SUPERPOWERS_TRIPLE_JUMP_JUMPS.get();
         TriviaHandler.guiType = WildLifeConfig.WILDCARD_TRIVIA_GUI_TYPE.get();
+        Mimicry.DISABLE_OTHER_POWER = WildLifeConfig.WILDCARD_SUPERPOWERS_MIMICRY_DISABLE_OTHER_POWER.get();
         PreBuiltSnailSkins.SNAILS_RANDOM_PRESET_SKIN = WildLifeConfig.WILDCARD_SNAILS_RANDOM_PRESET_SKIN.get();
 
         Snails.loadConfig();
