@@ -39,6 +39,7 @@ import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.RegistryUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
@@ -136,25 +137,11 @@ public class NetworkHandlerClient {
         });
         SimplePackets.HUNGER_NON_EDIBLE.setClientReceive(payload -> {
             Hunger.nonEdible.clear();
-            for (String itemId : payload.value()) {
-                if (!itemId.contains(":")) itemId = "minecraft:" + itemId;
-
+            for (String entryId : payload.value()) {
                 try {
-                    var id = IdentifierHelper.parse(itemId);
-                    ResourceKey<Item> key = ResourceKey.create(BuiltInRegistries.ITEM.key(), id);
-
-                    //? if <= 1.21 {
-                    /*Item item = BuiltInRegistries.ITEM.get(key);
-                     *///?} else {
-                    Item item = BuiltInRegistries.ITEM.getValue(key);
-                    //?}
-                    if (item != null) {
-                        Hunger.nonEdible.add(item);
-                    } else {
-                        OtherUtils.throwError("[CONFIG] Invalid item: " + itemId);
-                    }
+                    Hunger.nonEdible.addAll(RegistryUtils.resolveItems(entryId));
                 } catch (Exception e) {
-                    OtherUtils.throwError("[CONFIG] Error parsing item ID: " + itemId);
+                    OtherUtils.throwError("[CONFIG] " + e.getMessage());
                 }
             }
         });

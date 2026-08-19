@@ -2,11 +2,9 @@ package net.mat0u5.lifeseries.client.gui.config.entries.extra;
 
 import net.mat0u5.lifeseries.client.gui.config.entries.StringListPopupConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.RegistryUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 
 import java.util.ArrayList;
@@ -30,25 +28,10 @@ public class ItemListConfigEntry extends StringListPopupConfigEntry<Item> {
 
         for (String itemId : items) {
             if (itemId.isEmpty()) continue;
-            if (!itemId.contains(":")) itemId = "minecraft:" + itemId;
-
             try {
-                var id = IdentifierHelper.parse(itemId);
-                ResourceKey<Item> key = ResourceKey.create(BuiltInRegistries.ITEM.key(), id);
-
-                //? if <= 1.21 {
-                /*Item item = BuiltInRegistries.ITEM.get(key);
-                *///?} else {
-                Item item = BuiltInRegistries.ITEM.getValue(key);
-                //?}
-                if (item != null) {
-                    newList.add(item);
-                } else {
-                    setError(TextUtils.formatString("Invalid item: '{}'", itemId));
-                    errors = true;
-                }
+                newList.addAll(RegistryUtils.resolveItems(itemId));
             } catch (Exception e) {
-                setError(TextUtils.formatString("Error parsing item ID: '{}'", itemId));
+                setError(TextUtils.formatString("Invalid item or tag: '{}'", itemId));
                 errors = true;
             }
         }

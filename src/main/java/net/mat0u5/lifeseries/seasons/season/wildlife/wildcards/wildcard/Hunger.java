@@ -6,15 +6,11 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.other.Time;
+import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerListReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -194,32 +190,14 @@ public class Hunger extends Wildcard {
     }
 
     public static void newNonEdibleItems(String raw) {
-        raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
+        nonEdibleStr = RegistryUtils.parseStringList(raw);
         nonEdible = new ArrayList<>();
-        nonEdibleStr = new ArrayList<>();
-        if (!raw.isEmpty()) {
-            nonEdibleStr = new ArrayList<>(Arrays.asList(raw.split(",")));
-        }
-        for (String itemId : nonEdibleStr) {
-            if (!itemId.contains(":")) itemId = "minecraft:" + itemId;
 
+        for (String entryId : nonEdibleStr) {
             try {
-                var id = IdentifierHelper.parse(itemId);
-                ResourceKey<Item> key = ResourceKey.create(BuiltInRegistries.ITEM.key(), id);
-
-                // Check if the block exists in the registry
-                //? if <= 1.21 {
-                /*Item item = BuiltInRegistries.ITEM.get(key);
-                *///?} else {
-                Item item = BuiltInRegistries.ITEM.getValue(key);
-                 //?}
-                if (item != null) {
-                    nonEdible.add(item);
-                } else {
-                    OtherUtils.throwError("[CONFIG] Invalid item: " + itemId);
-                }
+                nonEdible.addAll(RegistryUtils.resolveItems(entryId));
             } catch (Exception e) {
-                OtherUtils.throwError("[CONFIG] Error parsing item ID: " + itemId);
+                OtherUtils.throwError("[CONFIG] " + e.getMessage());
             }
         }
         NetworkHandlerServer.sendUpdatePackets();

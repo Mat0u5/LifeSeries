@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.RegistryUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.core.BlockPos;
@@ -139,26 +140,14 @@ public class Blacklist {
         List<Identifier> newListIdentifier = new ArrayList<>();
 
         for (String itemId : loadItemBlacklist()) {
-            if (!itemId.contains(":")) itemId = "minecraft:" + itemId;
-
             try {
-                var id = IdentifierHelper.parse(itemId);
-                ResourceKey<Item> key = ResourceKey.create(BuiltInRegistries.ITEM.key(), id);
-
-                // Check if the block exists in the registry
-                //? if <= 1.21 {
-                /*Item item = BuiltInRegistries.ITEM.get(key);
-                *///?} else {
-                Item item = BuiltInRegistries.ITEM.getValue(key);
-                //?}
-                if (item != null) {
-                    newListIdentifier.add(id);
-                    newList.add(item);
-                } else {
-                    OtherUtils.throwError("[CONFIG] Invalid item: " + itemId);
+                List<Item> resolved = RegistryUtils.resolveItems(itemId);
+                newList.addAll(resolved);
+                for (Item item : resolved) {
+                    newListIdentifier.add(BuiltInRegistries.ITEM.getKey(item));
                 }
             } catch (Exception e) {
-                OtherUtils.throwError("[CONFIG] Error parsing item ID: " + itemId);
+                OtherUtils.throwError("[CONFIG] " + e.getMessage());
             }
         }
 
@@ -178,24 +167,13 @@ public class Blacklist {
         }
 
         for (String itemId : loadRecipeBlacklist()) {
-            if (!itemId.contains(":")) itemId = "minecraft:" + itemId;
-
             try {
-                var id = IdentifierHelper.parse(itemId);
-                ResourceKey<Item> key = ResourceKey.create(BuiltInRegistries.ITEM.key(), id);
-
-                //? if <= 1.21 {
-                /*Item item = BuiltInRegistries.ITEM.get(key);
-                *///?} else {
-                Item item = BuiltInRegistries.ITEM.getValue(key);
-                 //?}
-                if (item != null) {
-                    newList.add(id);
-                } else {
-                    OtherUtils.throwError("[CONFIG] Invalid item: " + itemId);
+                List<Item> resolved = RegistryUtils.resolveItems(itemId);
+                for (Item item : resolved) {
+                    newList.add(BuiltInRegistries.ITEM.getKey(item));
                 }
             } catch (Exception e) {
-                OtherUtils.throwError("[CONFIG] Error parsing item ID: " + itemId);
+                OtherUtils.throwError("[CONFIG] " + e.getMessage());
             }
         }
 
@@ -208,25 +186,11 @@ public class Blacklist {
         List<Block> newList = new ArrayList<>();
 
         for (String blockId : loadBlockBlacklist()) {
-            if (!blockId.contains(":")) blockId = "minecraft:" + blockId;
-
             try {
-                var id = IdentifierHelper.parse(blockId);
-                ResourceKey<Block> key = ResourceKey.create(BuiltInRegistries.BLOCK.key(), id);
-
-                // Check if the block exists in the registry
-                //? if <= 1.21 {
-                /*Block block = BuiltInRegistries.BLOCK.get(key);
-                *///?} else {
-                Block block = BuiltInRegistries.BLOCK.getValue(key);
-                //?}
-                if (block != null) {
-                    newList.add(block);
-                } else {
-                    OtherUtils.throwError("[CONFIG] Invalid block: " + blockId);
-                }
+                Block block = RegistryUtils.resolveRegistryEntry(BuiltInRegistries.BLOCK, blockId);
+                if (block != null) newList.add(block);
             } catch (Exception e) {
-                OtherUtils.throwError("[CONFIG] Error parsing block ID: " + blockId);
+                OtherUtils.throwError("[CONFIG] " + e.getMessage());
             }
         }
 
@@ -254,23 +218,13 @@ public class Blacklist {
             List<String> enchants = loadedRaw.get(level);
             if (enchants == null) continue;
             for (String enchantmentId : enchants) {
-                if (!enchantmentId.contains(":")) enchantmentId = "minecraft:" + enchantmentId;
-
                 try {
-                    var id = IdentifierHelper.parse(enchantmentId);
-                    //? if <= 1.21 {
-                    /*Enchantment enchantment = enchantmentRegistry.get(id);
-                     *///?} else {
-                    Enchantment enchantment = enchantmentRegistry.getValue(id);
-                    //?}
-
+                    Enchantment enchantment = RegistryUtils.resolveRegistryEntry(enchantmentRegistry, enchantmentId);
                     if (enchantment != null) {
                         result.get(level).add(enchantmentRegistry.getResourceKey(enchantment).orElseThrow());
-                    } else {
-                        OtherUtils.throwError("[CONFIG] Invalid enchantment: " + enchantmentId);
                     }
                 } catch (Exception e) {
-                    OtherUtils.throwError("[CONFIG] Error parsing enchantment ID: " + enchantmentId);
+                    OtherUtils.throwError("[CONFIG] " + e.getMessage());
                 }
             }
         }
@@ -286,7 +240,6 @@ public class Blacklist {
         List<ResourceKey<Enchantment>> newList = new ArrayList<>();
 
         Registry<Enchantment> enchantmentRegistry = server.registryAccess()
-
                 //? if <=1.21 {
                 /*.registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));
                 *///?} else
@@ -294,23 +247,13 @@ public class Blacklist {
 
 
         for (String enchantmentId : loadBlacklistedEnchants()) {
-            if (!enchantmentId.contains(":")) enchantmentId = "minecraft:" + enchantmentId;
-
             try {
-                var id = IdentifierHelper.parse(enchantmentId);
-                //? if <= 1.21 {
-                /*Enchantment enchantment = enchantmentRegistry.get(id);
-                *///?} else {
-                Enchantment enchantment = enchantmentRegistry.getValue(id);
-                //?}
-
+                Enchantment enchantment = RegistryUtils.resolveRegistryEntry(enchantmentRegistry, enchantmentId);
                 if (enchantment != null) {
                     newList.add(enchantmentRegistry.getResourceKey(enchantment).orElseThrow());
-                } else {
-                    OtherUtils.throwError("[CONFIG] Invalid enchantment: " + enchantmentId);
                 }
             } catch (Exception e) {
-                OtherUtils.throwError("[CONFIG] Error parsing enchantment ID: " + enchantmentId);
+                OtherUtils.throwError("[CONFIG] " + e.getMessage());
             }
         }
 
@@ -333,33 +276,23 @@ public class Blacklist {
         //?}
 
         Registry<MobEffect> effectsRegistry = server.registryAccess()
-        //? if <=1.21 {
-        /*.registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
-        *///?} else
-        .lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
+                //? if <=1.21 {
+                /*.registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
+                *///?} else
+                .lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
 
         for (String potionId : loadBannedPotions()) {
-            if (!potionId.contains(":")) potionId = "minecraft:" + potionId;
-
             try {
-                var id = IdentifierHelper.parse(potionId);
-                //? if <= 1.21 {
-                /*MobEffect enchantment = effectsRegistry.get(id);
-                *///?} else {
-                MobEffect enchantment = effectsRegistry.getValue(id);
-                //?}
-
-                if (enchantment != null) {
+                MobEffect effect = RegistryUtils.resolveRegistryEntry(effectsRegistry, potionId);
+                if (effect != null) {
                     //? if <= 1.20.3 {
-                    /*newList.add(enchantment);
+                    /*newList.add(effect);
                     *///?} else {
-                    newList.add(effectsRegistry.wrapAsHolder(enchantment));
+                    newList.add(effectsRegistry.wrapAsHolder(effect));
                     //?}
-                } else {
-                    OtherUtils.throwError("[CONFIG] Invalid effect: " + potionId);
                 }
             } catch (Exception e) {
-                OtherUtils.throwError("[CONFIG] Error parsing effect ID: " + potionId);
+                OtherUtils.throwError("[CONFIG] " + e.getMessage());
             }
         }
 
@@ -388,27 +321,17 @@ public class Blacklist {
         .lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
 
         for (String potionId : loadClampedPotions()) {
-            if (!potionId.contains(":")) potionId = "minecraft:" + potionId;
-
             try {
-                var id = IdentifierHelper.parse(potionId);
-                //? if <= 1.21 {
-                /*MobEffect enchantment = effectsRegistry.get(id);
-                *///?} else {
-                MobEffect enchantment = effectsRegistry.getValue(id);
-                 //?}
-
-                if (enchantment != null) {
+                MobEffect effect = RegistryUtils.resolveRegistryEntry(effectsRegistry, potionId);
+                if (effect != null) {
                     //? if <= 1.20.3 {
-                    /*newList.add(enchantment);
-                     *///?} else {
-                    newList.add(effectsRegistry.wrapAsHolder(enchantment));
+                    /*newList.add(effect);
+                    *///?} else {
+                    newList.add(effectsRegistry.wrapAsHolder(effect));
                     //?}
-                } else {
-                    OtherUtils.throwError("[CONFIG] Invalid effect: " + potionId);
                 }
             } catch (Exception e) {
-                OtherUtils.throwError("[CONFIG] Error parsing effect ID: " + potionId);
+                OtherUtils.throwError("[CONFIG] " + e.getMessage());
             }
         }
 

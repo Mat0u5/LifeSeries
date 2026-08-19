@@ -17,15 +17,7 @@ public class DoubleLifeConfig extends SeasonConfig {
             //? if >= 1.21
             "mace",
             "end_crystal",
-            "leather_helmet",
-            "chainmail_helmet",
-            "golden_helmet",
-            "iron_helmet",
-            "diamond_helmet",
-            "netherite_helmet",
-            "turtle_helmet",
-            //? if >= 1.21.9
-            "copper_helmet",
+            "#minecraft:head_armor",
             "elytra"
     );
 

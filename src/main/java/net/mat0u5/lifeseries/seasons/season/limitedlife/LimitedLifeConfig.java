@@ -16,15 +16,7 @@ public class LimitedLifeConfig extends SeasonConfig {
             "bookshelf",
             //? if >= 1.21
             "mace",
-            "leather_helmet",
-            "chainmail_helmet",
-            "golden_helmet",
-            "iron_helmet",
-            "diamond_helmet",
-            "netherite_helmet",
-            "turtle_helmet",
-            //? if >= 1.21.9
-            "copper_helmet",
+            "#minecraft:head_armor",
             "elytra"
     );
 
