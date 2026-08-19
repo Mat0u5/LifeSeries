@@ -85,7 +85,7 @@ public class Necromancy extends Superpower {
                     perPlayerRessurections.add(deadPlayer.getUUID());
                     queuedRessurectedPlayers.remove(deadPlayer.getUUID());
                     manuallyRessurectedPlayers.remove(deadPlayer.getUUID());
-                    zombieSpawn(player);
+                    zombieSpawn(deadPlayer);
                 }
             }
         });
