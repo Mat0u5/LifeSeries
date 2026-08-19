@@ -36,6 +36,17 @@ public class LimitedLifeLivesManager extends LivesManager {
 
     //~ if >= 26.2 'ChatFormatting' -> 'TeamColor' {
     @Override
+    public Component getFormattedLives(ServerPlayer player) {
+        Integer lives = getPlayerLives(player);
+        if (lives == null) return Component.empty();
+        TeamColor color = getColorForLives(player);
+        //~ if >= 26.2 '.withStyle(color)' -> '.withColor(color.textColor())' {
+        return Component.literal(Time.seconds(lives).formatLong()).withColor(color.textColor());
+        //~}
+    }
+
+
+    @Override
     public Component getFormattedLives(Integer lives) {
         if (lives == null) return Component.empty();
         TeamColor color = getColorForLives(lives);

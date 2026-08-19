@@ -203,7 +203,7 @@ public class LivesCommand extends Command {
 
         Integer playerLives = ((IPlayer) self).ls$getLives();
 
-        sendCommandFeedbackQuiet(source, ModifiableText.LIVES_GET_SELF.get(livesManager.getFormattedLives(playerLives), TextUtils.pluralize("life", "lives", playerLives)));
+        sendCommandFeedbackQuiet(source, ModifiableText.LIVES_GET_SELF.get(livesManager.getFormattedLives(self), TextUtils.pluralize("life", "lives", playerLives)));
 
         if (playerLives == null || playerLives <= 0) {
             sendCommandFeedbackQuiet(source, ModifiableText.LIVES_GET_SELF_NONE.get());
@@ -260,7 +260,7 @@ public class LivesCommand extends Command {
             return -1;
         }
         Integer lives = ((IPlayer) target).ls$getLives();
-        sendCommandFeedbackQuiet(source, ModifiableText.LIVES_ASSIGNED_GET.get(target, livesManager.getFormattedLives(lives), TextUtils.pluralize("life", "lives", lives)));
+        sendCommandFeedbackQuiet(source, ModifiableText.LIVES_ASSIGNED_GET.get(target, livesManager.getFormattedLives(target), TextUtils.pluralize("life", "lives", lives)));
         return 1;
     }
 

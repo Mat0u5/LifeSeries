@@ -290,6 +290,7 @@ public class WildLife extends Season {
         TriviaHandler.guiType = WildLifeConfig.WILDCARD_TRIVIA_GUI_TYPE.get();
         Mimicry.DISABLE_OTHER_POWER = WildLifeConfig.WILDCARD_SUPERPOWERS_MIMICRY_DISABLE_OTHER_POWER.get();
         PreBuiltSnailSkins.SNAILS_RANDOM_PRESET_SKIN = WildLifeConfig.WILDCARD_SNAILS_RANDOM_PRESET_SKIN.get();
+        Snail.KILL_ANY_PLAYER = WildLifeConfig.WILDCARD_SNAILS_KILL_ANY_PLAYER.get();
 
         Snails.loadConfig();
         Snails.loadSnailNames();

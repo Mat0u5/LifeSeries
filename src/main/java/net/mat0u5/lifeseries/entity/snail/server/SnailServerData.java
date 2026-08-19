@@ -15,6 +15,7 @@ import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -118,6 +119,14 @@ public class SnailServerData implements PlayerBoundEntity {
 
         if (boundEntity != null && shouldPathfind() && snail.getBoundingBox().inflate(0.05).intersects(boundEntity.getBoundingBox())) {
             killBoundEntity(boundEntity);
+        }
+        else if (Snail.KILL_ANY_PLAYER) {
+            for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
+                if (player == null || player.isSpectator() || player.isCreative()) continue;
+                if (snail.getBoundingBox().inflate(0.05).intersects(player.getBoundingBox())) {
+                    killBoundEntity(player);
+                }
+            }
         }
 
         if (boundPlayer != null && boundEntity != null) {

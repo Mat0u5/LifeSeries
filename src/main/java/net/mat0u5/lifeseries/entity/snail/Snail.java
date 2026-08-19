@@ -49,6 +49,7 @@ public class Snail extends Monster {
     public static double GLOBAL_SPEED_MULTIPLIER = 1;
     public static boolean SHOULD_DROWN_PLAYER = true;
     public static boolean ALLOW_POTION_EFFECTS = false;
+    public static boolean KILL_ANY_PLAYER = false;
 
     private static final EntityDataAccessor<Boolean> attacking = SynchedEntityData.defineId(Snail.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> flying = SynchedEntityData.defineId(Snail.class, EntityDataSerializers.BOOLEAN);

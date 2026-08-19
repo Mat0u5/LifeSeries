@@ -198,6 +198,14 @@ public class LivesManager {
 
     //~ if >= 26.2 'ChatFormatting' -> 'TeamColor' {
     public TeamColor getColorForLives(ServerPlayer player) {
+        var team = player.getTeam();
+        if (currentSeason.TEAMS_SYSTEM_DISABLED && team != null) {
+            //? if <= 26.1 {
+            /*return team.getColor();
+            *///?} else {
+            return team.getColor().orElse(TeamColor.WHITE);
+            //?}
+        }
         return getColorForLives(getPlayerLives(player));
     }
 
@@ -220,7 +228,14 @@ public class LivesManager {
     }
 
     public Component getFormattedLives(ServerPlayer player) {
-        return getFormattedLives(getPlayerLives(player));
+        Integer lives = getPlayerLives(player);
+        if (lives == null) {
+            lives = 0;
+        }
+        TeamColor color = getColorForLives(player);
+        //~ if >= 26.2 '.withStyle(color)' -> '.withColor(color.textColor())' {
+        return Component.literal(String.valueOf(lives)).withColor(color.textColor());
+        //~}
     }
 
     public Component getFormattedLives(@Nullable Integer lives) {
@@ -233,6 +248,7 @@ public class LivesManager {
         //~}
     }
     //~}
+
     public String getTeamForPlayer(ServerPlayer player) {
         if (LIVES_SYSTEM_DISABLED) {
             return null;
@@ -240,6 +256,7 @@ public class LivesManager {
         Integer lives = getPlayerLives(player);
         return getTeamForLives(lives);
     }
+
     public String getTeamForLives(Integer lives) {
         String prefix = "lives_";
         String nullTeam = prefix+"null";

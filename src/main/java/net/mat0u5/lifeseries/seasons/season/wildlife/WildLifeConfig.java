@@ -144,6 +144,10 @@ public class WildLifeConfig extends SeasonConfig {
             "wildcard_snails_random_preset_skin", true, "season.snails",
             "Assign Random Preset Snail Skin", "Assigns a random snail skin preset to any players without their own snail skin."
     );
+    public static final ConfigFileEntry<Boolean> WILDCARD_SNAILS_KILL_ANY_PLAYER = new ConfigFileEntry<>(
+            "wildcard_snails_kill_any_player", false, "season.snails[new]",
+            "Kill Any Player On Touch", "Makes the snails kill any player they touch, not just their bound player."
+    );
 
     public static final ConfigFileEntry<Double> WILDCARD_TIMEDILATION_MIN_SPEED = new ConfigFileEntry<>(
             "wildcard_timedilation_min_speed", 0.05, "season.timedilation",
@@ -503,6 +507,7 @@ public class WildLifeConfig extends SeasonConfig {
                 ,WILDCARD_SNAILS_RED_LIVES
                 ,WILDCARD_SNAILS_PER_PLAYER
                 ,WILDCARD_SNAILS_RANDOM_PRESET_SKIN
+                ,WILDCARD_SNAILS_KILL_ANY_PLAYER
 
                 ,WILDCARD_TIMEDILATION_MIN_SPEED
                 ,WILDCARD_TIMEDILATION_MAX_SPEED
