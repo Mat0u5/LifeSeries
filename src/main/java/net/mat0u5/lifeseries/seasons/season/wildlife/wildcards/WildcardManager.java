@@ -35,6 +35,7 @@ public class WildcardManager {
     public static final Map<Wildcards, Wildcard> activeWildcards = new ConcurrentHashMap<>();
     public static final Random rnd = new Random();
     public static double ACTIVATE_WILDCARD_MINUTE = 2.5;
+    public static boolean INSTANTLY_ACTIVATE_WILDCARDS = false;
 
     public static Wildcards chosenWildcard = null;
 
@@ -95,8 +96,9 @@ public class WildcardManager {
     }
 
     public static void activateWildcards() {
-        showDots();
-        TaskScheduler.scheduleTask(90, () -> {
+        int delay = INSTANTLY_ACTIVATE_WILDCARDS ? 0 : 90;
+        if (!INSTANTLY_ACTIVATE_WILDCARDS) showDots();
+        TaskScheduler.scheduleTask(delay, () -> {
             if (activeWildcards.isEmpty()) {
                 chooseRandomWildcard();
             }
@@ -106,7 +108,7 @@ public class WildcardManager {
             }
             showCryptTitle(ModifiableText.WILDLIFE_WILDCARD_ACTIVATE_CRYPT_TITLE.get());
         });
-        TaskScheduler.scheduleTask(92, NetworkHandlerServer::sendUpdatePackets);
+        TaskScheduler.scheduleTask(delay+2, NetworkHandlerServer::sendUpdatePackets);
     }
 
     public static void fadedWildcard() {
@@ -132,6 +134,7 @@ public class WildcardManager {
     }
 
     public static void showCryptTitle(Component component) {
+        if (component.getString().isEmpty()) return;
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ZOMBIE_VILLAGER_CURE, 0.2f, 1);
         String textRaw = component.getString();
         String textClean = "";
@@ -191,6 +194,7 @@ public class WildcardManager {
 
     private static final List<String> allColorCodes = List.of("6","9","a","b","c","d","e");
     public static void showRainbowCryptTitle(String text) {
+        if (text.isEmpty()) return;
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ZOMBIE_VILLAGER_CURE, 0.2f, 1);
         String colorCrypt = "§r§_§l§k";
         String colorNormal = "§r§_§l";

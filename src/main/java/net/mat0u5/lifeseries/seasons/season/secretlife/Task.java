@@ -60,6 +60,9 @@ public class Task {
         if (rawTask.contains("${green}") && !anyGreenPlayers) return false;
         if (rawTask.contains("${yellow}") && !anyYellowPlayers) return false;
         if (rawTask.contains("${red}") && !anyRedPlayers) return false;
+        if (rawTask.contains("${green_player}") && !anyGreenPlayers) return false;
+        if (rawTask.contains("${yellow_player}") && !anyYellowPlayers) return false;
+        if (rawTask.contains("${red_player}") && !anyRedPlayers) return false;
         return true;
     }
     /*
@@ -70,6 +73,9 @@ public class Task {
     ${green} - Replaced with "green". Tasks are only available when a green player is alive.
     ${yellow} - Replaced with "yellow". Tasks are only available when a yellow player is alive.
     ${red} - Replaced with "red". Tasks are only available when a red player is alive.
+    ${green_player} - Replaced with a random green player. Tasks are only available when a green player is alive.
+    ${yellow_player} - Replaced with a random yellow player. Tasks are only available when a yellow player is alive.
+    ${red_player} - Replaced with a random red player. Tasks are only available when a red player is alive.
      */
     //? if <= 1.20.3 {
     /*public List<FilteredText> getBookLines(ServerPlayer owner) {
@@ -202,6 +208,30 @@ public class Task {
         }
         if (page.contains("${red}")) {
             if (anyRedPlayers) page = page.replaceAll("\\$\\{red}","red");
+        }
+        if (page.contains("${green_player}")) {
+            List<ServerPlayer> players = livesManager.getPlayersOnLives(3);
+            players.remove(owner);
+            if (!players.isEmpty()) {
+                Collections.shuffle(players);
+                page = page.replaceAll("\\$\\{green_player}",players.get(0).getScoreboardName());
+            }
+        }
+        if (page.contains("${yellow_player}")) {
+            List<ServerPlayer> players = livesManager.getPlayersOnLives(2);
+            players.remove(owner);
+            if (!players.isEmpty()) {
+                Collections.shuffle(players);
+                page = page.replaceAll("\\$\\{yellow_player}",players.get(0).getScoreboardName());
+            }
+        }
+        if (page.contains("${red_player}")) {
+            List<ServerPlayer> players = livesManager.getPlayersOnLives(1);
+            players.remove(owner);
+            if (!players.isEmpty()) {
+                Collections.shuffle(players);
+                page = page.replaceAll("\\$\\{red_player}",players.get(0).getScoreboardName());
+            }
         }
         if (page.contains("${kill_not_permitted}")) {
             if (anyYellowPlayers) page = page.replaceAll("\\$\\{kill_not_permitted}","");

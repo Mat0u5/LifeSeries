@@ -31,7 +31,7 @@ public class RegistryUtils {
 		if (!cleanId.contains(":")) cleanId = "minecraft:" + cleanId;
 
 		//? if <= 1.20.3
-		//if (cleanId.equalsIgnoreCase("minecraft:head_armor")) return List.of(Items.LEATHER_HELMET, Items.GOLDEN_HELMET, Items.CHAINMAIL_HELMET, Items.IRON_HELMET, Items.DIAMOND_HELMET, Items.NETHERITE_HELMET, Items.TURTLE_HELMET);
+		//if (isTag && cleanId.equalsIgnoreCase("minecraft:head_armor")) return List.of(Items.LEATHER_HELMET, Items.GOLDEN_HELMET, Items.CHAINMAIL_HELMET, Items.IRON_HELMET, Items.DIAMOND_HELMET, Items.NETHERITE_HELMET, Items.TURTLE_HELMET);
 
 		try {
 			var id = IdentifierHelper.parse(cleanId);

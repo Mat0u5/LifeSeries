@@ -887,6 +887,7 @@ public class WildLifeCommands extends Command {
 
     public int activateWildcard(CommandSourceStack source, String wildcardName) {
         if (checkBanned(source)) return -1;
+        int delay = WildcardManager.INSTANTLY_ACTIVATE_WILDCARDS ? 0 : 90;
         if (wildcardName.equalsIgnoreCase("*")) {
             List<Wildcards> inactiveWildcards = Wildcards.getInactiveWildcards();
             for (Wildcards wildcard : inactiveWildcards) {
@@ -896,8 +897,8 @@ public class WildLifeCommands extends Command {
                 WildcardManager.activeWildcards.put(wildcard, wildcardInstance);
             }
 
-            WildcardManager.showDots();
-            TaskScheduler.scheduleTask(90, () -> {
+            if (!WildcardManager.INSTANTLY_ACTIVATE_WILDCARDS) WildcardManager.showDots();
+            TaskScheduler.scheduleTask(delay, () -> {
                 for (Wildcard wildcard : WildcardManager.activeWildcards.values()) {
                     if (wildcard.active) continue;
                     wildcard.activate();
@@ -923,7 +924,12 @@ public class WildLifeCommands extends Command {
             sendCommandFailure(source, ModifiableText.WILDLIFE_WILDCARD_IMPLEMENT_ERROR.get());
             return -1;
         }
-        TaskScheduler.scheduleTask(89, () -> WildcardManager.activeWildcards.put(wildcard, actualWildcard));
+        if (WildcardManager.INSTANTLY_ACTIVATE_WILDCARDS) {
+            WildcardManager.activeWildcards.put(wildcard, actualWildcard);
+        }
+        else {
+            TaskScheduler.scheduleTask(delay-1, () -> WildcardManager.activeWildcards.put(wildcard, actualWildcard));
+        }
         WildcardManager.activateWildcards();
 
         sendCommandFeedback(source, ModifiableText.WILDLIFE_WILDCARD_ACTIVATE.get(wildcardName));

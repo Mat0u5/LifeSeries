@@ -458,6 +458,10 @@ public class WildLifeConfig extends SeasonConfig {
             "activate_wildcard_minute", 2.5, ConfigTypes.MINUTES, "season.general",
             "Activate Wildcard Time", "The number of minutes (in the session) after which the wildcard is activated."
     );
+    public static final ConfigFileEntry<Boolean> INSTANTLY_ACTIVATE_WILDCARDS = new ConfigFileEntry<>(
+            "instantly_activate_wildcards", false, "season.general[new]",
+            "Disable Wildcards Activate Cooldown", "Skips the wildcard activate dots cooldown."
+    );
 
     public WildLifeConfig() {
         super(Seasons.WILD_LIFE);
@@ -478,6 +482,7 @@ public class WildLifeConfig extends SeasonConfig {
 
                 //Group stuff
                 ,ACTIVATE_WILDCARD_MINUTE
+                ,INSTANTLY_ACTIVATE_WILDCARDS
 
                 ,WILDCARD_SIZESHIFTING_MIN_SIZE
                 ,WILDCARD_SIZESHIFTING_MAX_SIZE

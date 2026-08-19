@@ -62,16 +62,19 @@ public class SecretLifeTaskConfigEntry extends ModifiableListEntry {
         int textY = y;
         RenderUtils.text(Component.literal("Available text replacements:"), textX, textY).colored(TextColors.GRAY).render(context, textRenderer);
         RenderUtils.text(Component.literal(" \"\\n\" - creates a new line in the task book"), textX, textY+9).colored(TextColors.GRAY).render(context, textRenderer);
-        RenderUtils.text(Component.literal(" \"\\p\" - creates a new page in the task book"), textX, textY+18).colored(TextColors.GRAY).render(context, textRenderer);
-        RenderUtils.text(Component.literal(" \"${random_player}\" - replaced with a random player name"), textX, textY+27).colored(TextColors.GRAY).render(context, textRenderer);
-        RenderUtils.text(Component.literal(" \"${green}\" - replaced with the word 'green', if there are any greens left"), textX, textY+36).colored(TextColors.GRAY).render(context, textRenderer);
-        RenderUtils.text(Component.literal(" \"${yellow}\" - replaced with the word 'yellow', if there are any yellows left"), textX, textY+45).colored(TextColors.GRAY).render(context, textRenderer);
-        RenderUtils.text(Component.literal(" \"${red}\" - replaced with the word 'red', if there are any reds left"), textX, textY+54).colored(TextColors.GRAY).render(context, textRenderer);
+        RenderUtils.text(Component.literal(" \"\\p\" - creates a new page in the task book"), textX, textY+9*2).colored(TextColors.GRAY).render(context, textRenderer);
+        RenderUtils.text(Component.literal(" \"${random_player}\" - replaced with a random player name"), textX, textY+9*3).colored(TextColors.GRAY).render(context, textRenderer);
+        RenderUtils.text(Component.literal(" \"${green}\" - replaced with the word 'green', if there are any greens left"), textX, textY+9*4).colored(TextColors.GRAY).render(context, textRenderer);
+        RenderUtils.text(Component.literal(" \"${yellow}\" - replaced with the word 'yellow', if there are any yellows left"), textX, textY+9*5).colored(TextColors.GRAY).render(context, textRenderer);
+        RenderUtils.text(Component.literal(" \"${red}\" - replaced with the word 'red', if there are any reds left"), textX, textY+9*6).colored(TextColors.GRAY).render(context, textRenderer);
+        RenderUtils.text(Component.literal(" \"${green_player}\" - replaced with a random green player, if there are any"), textX, textY+9*7).colored(TextColors.GRAY).render(context, textRenderer);
+        RenderUtils.text(Component.literal(" \"${yellow_player}\" - replaced with a random yellow player, if there are any"), textX, textY+9*8).colored(TextColors.GRAY).render(context, textRenderer);
+        RenderUtils.text(Component.literal(" \"${red_player}\" - replaced with a random red player, if there are any"), textX, textY+9*9).colored(TextColors.GRAY).render(context, textRenderer);
     }
 
     @Override
     public int firstEntryHeightAdd() {
-        return 64;
+        return 9*9+10;
     }
 
     public void onChanged(String text) {

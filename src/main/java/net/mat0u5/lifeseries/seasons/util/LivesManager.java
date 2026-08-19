@@ -549,6 +549,12 @@ public class LivesManager {
         return players;
     }
 
+    public List<ServerPlayer> getPlayersOnLives(int lives) {
+        List<ServerPlayer> players = PlayerUtils.getAllFunctioningPlayers();
+        players.removeIf(player -> !isOnSpecificLives(player, lives, false));
+        return players;
+    }
+
     public List<ServerPlayer> getRedPlayers() {
         List<ServerPlayer> players = PlayerUtils.getAllFunctioningPlayers();
         players.removeIf(player -> !isOnLastLife(player, false));
