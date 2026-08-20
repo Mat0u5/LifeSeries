@@ -106,6 +106,10 @@ public class LimitedLifeConfig extends SeasonConfig {
             "group_time", null, ConfigTypes.TEXT, "{season.time}",
             "Time Rewards / Punishments", ""
     );
+    public static final ConfigFileEntry<Integer> TIME_RANDOMIZE_AVERAGE = new ConfigFileEntry<>(
+            "time_randomize_average", Time.hours(24).getSeconds(), ConfigTypes.SECONDS, "global.lives.random.customavg[new]",
+            "Average Time", "The average time a player gets after randomization."
+    );
 
     public LimitedLifeConfig() {
         super(Seasons.LIMITED_LIFE);
@@ -118,6 +122,9 @@ public class LimitedLifeConfig extends SeasonConfig {
         defaultEntries.remove(TAB_LIST_SHOW_EXACT_LIVES);
         defaultEntries.remove(SECRET_SOCIETY_PUNISHMENT_LIVES);
         defaultEntries.add(TIME_RANDOMIZE_INTERVAL);
+        defaultEntries.remove(LIVES_RANDOMIZE_AVERAGE);
+        defaultEntries.remove(LIVES_RANDOMIZE_PSEUDORANDOM);
+        defaultEntries.add(TIME_RANDOMIZE_AVERAGE);
         return defaultEntries;
     }
 
@@ -177,6 +184,9 @@ public class LimitedLifeConfig extends SeasonConfig {
         LIVES_LIFE_DIFF_MESSAGE.description = "Shows an indicator of how much time was lost in the death messages.";
         LIVES_LOSE_KILLS_ONLY.displayName = "Only Lose Time From PvP Kills";
         LIVES_LOSE_KILLS_ONLY.description = "Makes players not lose time from natural deaths.";
+        LIVES_RANDOMIZE_CUSTOMAVG.displayName = "Custom Average Time";
+        LIVES_RANDOMIZE_AVERAGE.displayName = "Average Time";
+        LIVES_RANDOMIZE_AVERAGE.type = ConfigTypes.SECONDS;
         super.instantiateProperties();
     }
 }

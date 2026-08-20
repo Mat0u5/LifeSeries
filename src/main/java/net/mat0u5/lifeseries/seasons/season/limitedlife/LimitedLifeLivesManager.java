@@ -16,8 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
@@ -33,6 +32,7 @@ public class LimitedLifeLivesManager extends LivesManager {
     public static int RED_TIME = 28800;
     public static boolean BROADCAST_COLOR_CHANGES = false;
     public static int TIME_RANDOMIZE_INTERVAL = Time.hours(1).getSeconds();
+    public static int CUSTOM_AVERAGE_TIME = Time.hours(24).getSeconds();
 
     //~ if >= 26.2 'ChatFormatting' -> 'TeamColor' {
     @Override
@@ -170,7 +170,43 @@ public class LimitedLifeLivesManager extends LivesManager {
     public void reload() {
         super.reload();
         TIME_RANDOMIZE_INTERVAL = LimitedLifeConfig.TIME_RANDOMIZE_INTERVAL.get();
+        CUSTOM_AVERAGE_TIME = LimitedLifeConfig.TIME_RANDOMIZE_AVERAGE.get();
+    }
 
+    @Override
+    public Map<ServerPlayer, Integer> getFinalRandomLives(List<ServerPlayer> players) {
+        if (!CUSTOM_AVERAGE_ENABLED) {
+            return super.getFinalRandomLives(players);
+        }
+
+        Map<ServerPlayer, Integer> lives = new HashMap<>();
+        int totalSize = players.size();
+        int interval = TIME_RANDOMIZE_INTERVAL;
+
+        double targetTotal = totalSize * CUSTOM_AVERAGE_TIME;
+        int minTotal = totalSize * ROLL_MIN_LIVES;
+        int maxTotal = totalSize * ROLL_MAX_LIVES;
+        targetTotal = Math.max(minTotal, Math.min(targetTotal, maxTotal));
+
+        for (ServerPlayer player : players) {
+            lives.put(player, ROLL_MIN_LIVES);
+        }
+
+        int remaining = (int) (targetTotal - minTotal);
+        List<ServerPlayer> playerList = new ArrayList<>(players);
+
+        while (remaining >= interval && !playerList.isEmpty()) {
+            ServerPlayer player = playerList.get(rnd.nextInt(playerList.size()));
+            int current = lives.get(player);
+            if (current + interval <= ROLL_MAX_LIVES) {
+                lives.put(player, current + interval);
+                remaining -= interval;
+            }
+            else {
+                playerList.remove(player);
+            }
+        }
+        return lives;
     }
 
     @Override

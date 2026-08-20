@@ -174,6 +174,8 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,LIVES_RANDOMIZE_PSEUDORANDOM
                 ,LIVES_RANDOMIZE_MIN
                 ,LIVES_RANDOMIZE_MAX
+                ,LIVES_RANDOMIZE_CUSTOMAVG
+                    ,LIVES_RANDOMIZE_AVERAGE
                 , LIVES_RANDOMIZE_MINUTE
                 ,LIVES_LOSE_KILLS_ONLY
 

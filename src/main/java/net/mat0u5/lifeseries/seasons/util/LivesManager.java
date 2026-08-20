@@ -60,6 +60,8 @@ public class LivesManager {
     public double LIVES_RANDOMIZE_MINUTE = 1.0;
     public boolean SHOW_LIFE_DIFF = false;
     public boolean LIVES_LOSE_KILLS_ONLY = false;
+    public boolean CUSTOM_AVERAGE_ENABLED = false;
+    public double CUSTOM_AVERAGE = 4;
 
     public boolean assignedLives = false;
     public Random rnd = new Random();
@@ -83,6 +85,8 @@ public class LivesManager {
         ROLL_MAX_LIVES = Math.max(minLivesConfig, maxLivesConfig);
         SHOW_LIFE_DIFF = seasonConfig.LIVES_LIFE_DIFF_MESSAGE.get();
         LIVES_LOSE_KILLS_ONLY = seasonConfig.LIVES_LOSE_KILLS_ONLY.get();
+        CUSTOM_AVERAGE_ENABLED = seasonConfig.LIVES_RANDOMIZE_CUSTOMAVG.get();
+        CUSTOM_AVERAGE = seasonConfig.LIVES_RANDOMIZE_AVERAGE.get();
     }
 
     public Map<Integer, PlayerTeam> getLivesTeams() {
@@ -635,6 +639,35 @@ public class LivesManager {
         Map<ServerPlayer, Integer> lives = new HashMap<>();
 
         int totalSize = players.size();
+
+        if (CUSTOM_AVERAGE_ENABLED) {
+            int targetTotal = (int) Math.round(totalSize * CUSTOM_AVERAGE);
+            int minTotal = totalSize * ROLL_MIN_LIVES;
+            int maxTotal = totalSize * ROLL_MAX_LIVES;
+
+            targetTotal = Math.max(minTotal, Math.min(targetTotal, maxTotal));
+
+            for (ServerPlayer player : players) {
+                lives.put(player, ROLL_MIN_LIVES);
+            }
+
+            int remaining = targetTotal - minTotal;
+            List<ServerPlayer> playerList = new ArrayList<>(players);
+
+            while (remaining > 0 && !playerList.isEmpty()) {
+                ServerPlayer player = playerList.get(rnd.nextInt(playerList.size()));
+                int current = lives.get(player);
+                if (current < ROLL_MAX_LIVES) {
+                    lives.put(player, current + 1);
+                    remaining--;
+                }
+                else {
+                    playerList.remove(player);
+                }
+            }
+            return lives;
+        }
+
         int chosenNotRandomly = ROLL_MIN_LIVES;
         for (ServerPlayer player : players) {
             if (ROLL_LIVES_PSEUDORANDOM) {
