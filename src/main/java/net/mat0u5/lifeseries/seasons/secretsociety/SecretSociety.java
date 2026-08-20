@@ -92,7 +92,7 @@ public class SecretSociety {
         SessionTranscript.societyStarted();
         timer = Time.zero();
         resetMembers();
-        chooseMembers(PlayerUtils.getAllFunctioningPlayers());
+        chooseMembers(livesManager.getAlivePlayers());
     }
 
     public void forceEndSociety() {
@@ -163,8 +163,7 @@ public class SecretSociety {
         for (ServerPlayer player : allowedPlayers) {
             if (IGNORE_MEMBERS.contains(player.getScoreboardName().toLowerCase(Locale.ROOT))) continue;
             if (FORCE_MEMBERS.contains(player.getScoreboardName().toLowerCase(Locale.ROOT))) {
-                memberPlayers.add(player);
-                remainingMembers--;
+                remainingMembers -= addMember(memberPlayers, player);
             }
         }
 
@@ -173,10 +172,14 @@ public class SecretSociety {
             if (IGNORE_MEMBERS.contains(player.getScoreboardName().toLowerCase(Locale.ROOT))) continue;
             if (FORCE_MEMBERS.contains(player.getScoreboardName().toLowerCase(Locale.ROOT))) continue;
             if (memberPlayers.contains(player)) continue;
-            memberPlayers.add(player);
-            remainingMembers--;
+            remainingMembers -= addMember(memberPlayers, player);
         }
         return memberPlayers;
+    }
+
+    public int addMember(List<ServerPlayer> memberPlayers, ServerPlayer player) {
+        memberPlayers.add(player);
+        return 1;
     }
 
     public void tick() {

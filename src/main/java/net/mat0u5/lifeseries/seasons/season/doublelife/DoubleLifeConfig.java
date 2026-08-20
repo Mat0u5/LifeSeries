@@ -91,6 +91,10 @@ public class DoubleLifeConfig extends SeasonConfig {
             "soulbound_boogeyman", false, "season.soulbind",
             "Soulbound Boogeymen (If enabled)", "Makes you become the Boogeyman if your soulmate is one - curing one will cure the other as well."
     );
+    public static final ConfigFileEntry<Boolean> SOULBOUND_SECRET_SOCIETY = new ConfigFileEntry<>(
+            "soulbound_secret_society", false, "season.soulbind[new]",
+            "Soulbound Secret Society (If enabled)", "Makes you become a member of the Secret Society if your soulmate is one."
+    );
     public static final ConfigFileEntry<Boolean> SOULMATES_PVP_ALLOWED = new ConfigFileEntry<>(
             "soulmates_pvp_allowed", true, "season",
             "Soulmates PvP Allowed", "Controls whether soulmates can hit each other."
@@ -140,6 +144,7 @@ public class DoubleLifeConfig extends SeasonConfig {
                 ,SOULBOUND_EFFECTS
                 ,SOULBOUND_INVENTORIES
                 ,SOULBOUND_BOOGEYMAN
+                ,SOULBOUND_SECRET_SOCIETY
                 ,SOULBOUND_LIVES
                 ,SOULBOUND_LIVES_ASSIGN_MATCH
                 ,SOULMATES_PVP_ALLOWED

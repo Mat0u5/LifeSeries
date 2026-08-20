@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.config.StringListConfig;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
+import net.mat0u5.lifeseries.seasons.secretsociety.SecretSociety;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -50,6 +51,7 @@ public class DoubleLife extends Season {
     public boolean SOULBOUND_LIVES = true;
     public boolean SOULBOUND_LIVES_ASSIGN_MATCH = false;
     public static boolean SOULBOUND_BOOGEYMAN = false;
+    public static boolean SOULBOUND_SECRET_SOCIETY = false;
     public boolean BREAKUP_LAST_PAIR_STANDING = false;
     public boolean DISABLE_START_TELEPORT = false;
     public static boolean SOULMATE_LOCATOR_BAR = false;
@@ -90,6 +92,11 @@ public class DoubleLife extends Season {
     @Override
     public BoogeymanManager createBoogeymanManager() {
         return new DoubleLifeBoogeymanManager();
+    }
+
+    @Override
+    public SecretSociety createSecretSociety() {
+        return new DoubleLifeSecretSociety();
     }
 
     @Override
@@ -154,6 +161,7 @@ public class DoubleLife extends Season {
         BREAKUP_LAST_PAIR_STANDING = DoubleLifeConfig.BREAKUP_LAST_PAIR_STANDING.get();
         DISABLE_START_TELEPORT = DoubleLifeConfig.DISABLE_START_TELEPORT.get();
         SOULBOUND_BOOGEYMAN = DoubleLifeConfig.SOULBOUND_BOOGEYMAN.get();
+        SOULBOUND_SECRET_SOCIETY = DoubleLifeConfig.SOULBOUND_SECRET_SOCIETY.get();
         SOULMATES_PVP_ALLOWED = DoubleLifeConfig.SOULMATES_PVP_ALLOWED.get();
         SOULMATES_ASSIGN_MINUTE = DoubleLifeConfig.SOULMATES_ASSIGN_MINUTE.get();
         SOULBOUND_LIVES = DoubleLifeConfig.SOULBOUND_LIVES.get();

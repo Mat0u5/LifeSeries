@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerPlayer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 //? if <= 1.20.3 {
 /*import net.minecraft.server.network.FilteredText;
 *///?} else {
@@ -63,6 +64,10 @@ public class Task {
         if (rawTask.contains("${green_player}") && !anyGreenPlayers) return false;
         if (rawTask.contains("${yellow_player}") && !anyYellowPlayers) return false;
         if (rawTask.contains("${red_player}") && !anyRedPlayers) return false;
+        if (rawTask.contains("${name!="+owner.getScoreboardName()+"}")) return false;
+        if (rawTask.matches(".*\\$\\{name=[a-zA-Z0-9_]+\\}.*") && !rawTask.toLowerCase(Locale.ROOT).contains("${name=" + owner.getScoreboardName().toLowerCase(Locale.ROOT) + "}")) {
+            return false;
+        }
         return true;
     }
     /*
@@ -76,6 +81,8 @@ public class Task {
     ${green_player} - Replaced with a random green player. Tasks are only available when a green player is alive.
     ${yellow_player} - Replaced with a random yellow player. Tasks are only available when a yellow player is alive.
     ${red_player} - Replaced with a random red player. Tasks are only available when a red player is alive.
+    ${name=<player>} - Deleted. Task is given to <player>
+    ${name!=<player>} - Deleted. Task cannot be given to <player>
      */
     //? if <= 1.20.3 {
     /*public List<FilteredText> getBookLines(ServerPlayer owner) {
@@ -236,6 +243,7 @@ public class Task {
         if (page.contains("${kill_not_permitted}")) {
             if (anyYellowPlayers) page = page.replaceAll("\\$\\{kill_not_permitted}","");
         }
+        page = page.replaceAll("\\$\\{name!?=[a-zA-Z0-9_]+\\}", "");
         return page.replaceAll("\\\\n", "\n");
     }
 
