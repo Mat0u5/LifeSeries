@@ -35,6 +35,7 @@
     "ItemEntityMixin",
     "ItemMixin",
     "ItemStackMixin",
+    "LanguageMixin",
     "LivingEntityMixin",
     "MannequinAccessor",
     "MinecraftServerMixin",
