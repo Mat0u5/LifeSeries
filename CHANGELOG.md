@@ -1,1 +1,4 @@
-Updated to 26.3-snapshot-9
+Necromancy power critical fix.
+Config item lists now support item tags.
+New configs.
+Bug fixes.

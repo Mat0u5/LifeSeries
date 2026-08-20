@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.client.utils;
 
 import net.mat0u5.lifeseries.mixin.client.AbstractSoundInstanceAccessor;
-import net.mat0u5.lifeseries.mixin.client.EntityBoundSoundInstanceAccessor;
 import net.mat0u5.lifeseries.mixin.client.SoundManagerAccessor;
 import net.mat0u5.lifeseries.mixin.client.SoundEngineAccessor;
 import net.minecraft.client.Minecraft;
@@ -10,6 +9,7 @@ import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.SoundEngine;
 import net.minecraft.client.sounds.SoundManager;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 
@@ -41,7 +41,6 @@ public class ClientSounds {
     );
 
     public static void onSoundPlay(SoundInstance sound) {
-
         //? if <= 1.21.9 {
         /*if (!onlyPlayLatestSounds.contains(sound.getLocation().getPath())) return;
         *///?} else {
@@ -49,21 +48,19 @@ public class ClientSounds {
         //?}
 
         if (sound instanceof EntityBoundSoundInstance entityTrackingSound) {
-            if ((entityTrackingSound instanceof EntityBoundSoundInstanceAccessor entityTrackingSoundAccessor)) {
-                Entity entity = entityTrackingSoundAccessor.getEntity();
-                if (entity == null) return;
-                UUID uuid = entity.getUUID();
-                if (uuid == null) return;
+            Entity entity = entityTrackingSound.entity;
+            if (entity == null) return;
+            UUID uuid = entity.getUUID();
+            if (uuid == null) return;
 
-                if (onlyPlayLatestEntities.containsKey(uuid)) {
-                    SoundInstance stopSound = onlyPlayLatestEntities.get(uuid);
-                    if (stopSound != null) {
-                        Minecraft.getInstance().getSoundManager().stop(stopSound);
-                    }
+            if (onlyPlayLatestEntities.containsKey(uuid)) {
+                SoundInstance stopSound = onlyPlayLatestEntities.get(uuid);
+                if (stopSound != null) {
+                    Minecraft.getInstance().getSoundManager().stop(stopSound);
                 }
-                onlyPlayLatestEntities.put(uuid, sound);
-                return;
             }
+            onlyPlayLatestEntities.put(uuid, sound);
+            return;
         }
 
         for (SoundInstance stopSound : onlyPlayLatest) {
@@ -82,13 +79,10 @@ public class ClientSounds {
             "wildlife_trivia_suspense",
             "wildlife_trivia_suspense_end"
     );
-    private static long ticks = 0;
     public static void updateSingleSoundVolumes() {
         Minecraft client = Minecraft.getInstance();
         LocalPlayer player = client.player;
         if (player == null) return;
-        ticks++;
-        if (ticks % 15 != 0) return;
         SoundManager soundManager = Minecraft.getInstance().getSoundManager();
         if (!(soundManager instanceof SoundManagerAccessor managerAccessor)) return;
         SoundEngine soundSystem = managerAccessor.getSoundSystem();
@@ -102,6 +96,10 @@ public class ClientSounds {
                 String name = sound.getIdentifier().getPath();
                 //?}
                 if (!onlyOneOf.contains(name)) continue;
+                if (sound instanceof EntityBoundSoundInstance entitySound && sound.getSource() == SoundSource.MASTER && name.equalsIgnoreCase("wildlife_trivia_suspense_end")) {
+                    entitySound.entity = player;
+                    entitySound.tick();
+                }
                 Vec3 soundPosition = new Vec3(sound.getX(), sound.getY(), sound.getZ());
                 double distance = player.position().distanceTo(soundPosition);
                 if (soundMap.containsKey(name)) {

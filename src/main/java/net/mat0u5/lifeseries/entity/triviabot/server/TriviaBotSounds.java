@@ -3,8 +3,11 @@ package net.mat0u5.lifeseries.entity.triviabot.server;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+
+import java.util.List;
 
 public class TriviaBotSounds {
     private TriviaBot bot;
@@ -40,7 +43,14 @@ public class TriviaBotSounds {
                 && ((!bot.santaBot() && bot.triviaHandler.getRemainingTicks() <= 676) || (bot.santaBot() && bot.triviaHandler.getRemainingTicks() <= 643))) {
             if (!bot.santaBot()) {
                 SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("wildlife_trivia_suspense_end"));
-                PlayerUtils.playSoundWithSourceToPlayers(PlayerUtils.getAllPlayers(), bot, sound, SoundSource.NEUTRAL, 0.65f, 1);
+                List<ServerPlayer> otherPlayers = PlayerUtils.getAllPlayers();
+                ServerPlayer boundPlayer = bot.serverData.getBoundPlayer();
+                if (boundPlayer != null) {
+                    otherPlayers.remove(boundPlayer);
+                    PlayerUtils.playSoundWithSourceToPlayers(List.of(boundPlayer), bot, sound, SoundSource.MASTER, 0.65f, 1);
+                }
+                PlayerUtils.playSoundWithSourceToPlayers(otherPlayers, bot, sound, SoundSource.NEUTRAL, 0.65f, 1);
+
             }
             else {
                 SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_santabot_suspense_end"));

@@ -98,7 +98,6 @@
     "client.CloudRendererMixin",
     "client.ConnectionMixin",
     "client.EnchantmentMixin",
-    "client.EntityBoundSoundInstanceAccessor",
     "client.EntityBoundSoundInstanceMixin",
     "client.EntityMixin",
     "client.EntityRenderDispatcherMixin",

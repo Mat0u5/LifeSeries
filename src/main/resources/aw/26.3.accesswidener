@@ -7,3 +7,5 @@ accessible field net/minecraft/server/network/ServerLoginPacketListenerImpl conn
 accessible method net/minecraft/core/Holder$Reference bindValue (Ljava/lang/Object;)V
 accessible field net/minecraft/world/entity/LivingEntity swingState Lnet/minecraft/world/entity/LivingEntity$SwingState;
 mutable field net/minecraft/world/entity/LivingEntity swingState Lnet/minecraft/world/entity/LivingEntity$SwingState;
+accessible field net/minecraft/client/resources/sounds/EntityBoundSoundInstance entity Lnet/minecraft/world/entity/Entity;
+mutable field net/minecraft/client/resources/sounds/EntityBoundSoundInstance entity Lnet/minecraft/world/entity/Entity;

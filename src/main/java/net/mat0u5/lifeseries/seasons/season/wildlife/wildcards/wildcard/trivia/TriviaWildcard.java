@@ -192,6 +192,7 @@ public class TriviaWildcard extends Wildcard {
 
     public static void reload() {
         resetQueue();
+        WildLifeTriviaHandler.reload();
     }
 
     public static void resetQueue() {

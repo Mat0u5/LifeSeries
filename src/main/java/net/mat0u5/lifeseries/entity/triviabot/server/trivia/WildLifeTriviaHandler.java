@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotPathfinding;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.registries.MobRegistry;
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShifting;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
@@ -21,8 +22,10 @@ import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -40,12 +43,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.phys.Vec3;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
-import static net.mat0u5.lifeseries.LifeSeries.blacklist;
-import static net.mat0u5.lifeseries.LifeSeries.server;
+
+import java.util.*;
+
 import net.minecraft.world.entity.animal.bee.Bee;
 
 //? if <= 1.20.3 {
@@ -60,6 +60,9 @@ import net.minecraft.core.component.DataComponents;
 
 //? if > 1.21.9
 import net.minecraft.world.entity.EntityReference;
+
+import static net.mat0u5.lifeseries.LifeSeries.*;
+import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
 //? if <= 1.20.3
 //import org.joml.Vector3f;
 
@@ -323,29 +326,70 @@ public class WildLifeTriviaHandler extends TriviaHandler {
         }
     }
 
+    public static void reload() {
+        loadedBlessEffects = null;
+        loadBlessEffects();
+    }
+
+    public static List<String> loadBlessEffects() {
+        if (seasonConfig == null) return new ArrayList<>();
+        String raw = WildLifeConfig.WILDCARD_TRIVIA_EFFECTS.get();
+        raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
+        if (raw.isEmpty()) return new ArrayList<>();
+        return new ArrayList<>(Arrays.asList(raw.split(",")));
+    }
+
     //? if <= 1.20.3 {
-    /*private static final List<MobEffect> blessEffects = List.of(
+    /*private static List<MobEffect> loadedBlessEffects;
     *///?} else {
-    private static final List<Holder<MobEffect>> blessEffects = List.of(
+    private static List<Holder<MobEffect>> loadedBlessEffects;
     //?}
-            MobEffects.SPEED,
-            MobEffects.HASTE,
-            MobEffects.STRENGTH,
-            MobEffects.JUMP_BOOST,
-            MobEffects.RESISTANCE,
-            MobEffects.REGENERATION,
-            MobEffects.FIRE_RESISTANCE,
-            MobEffects.WATER_BREATHING,
-            MobEffects.NIGHT_VISION,
-            MobEffects.HEALTH_BOOST,
-            MobEffects.ABSORPTION
-    );
+
+    //? if <= 1.20.3 {
+    /*public static List<MobEffect> getBlessEffects() {
+     *///?} else {
+    public static List<Holder<MobEffect>> getBlessEffects() {
+        //?}
+        if (server == null) return new ArrayList<>();
+
+        if (loadedBlessEffects != null) return loadedBlessEffects;
+        //? if <= 1.20.3 {
+        /*List<MobEffect> newList = new ArrayList<>();
+         *///?} else {
+        List<Holder<MobEffect>> newList = new ArrayList<>();
+        //?}
+
+        Registry<MobEffect> effectsRegistry = server.registryAccess()
+                //? if <=1.21 {
+                /*.registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
+                 *///?} else
+                .lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
+
+        for (String potionId : loadBlessEffects()) {
+            try {
+                MobEffect effect = RegistryUtils.resolveRegistryEntry(effectsRegistry, potionId);
+                if (effect != null) {
+                    //? if <= 1.20.3 {
+                    /*newList.add(effect);
+                     *///?} else {
+                    newList.add(effectsRegistry.wrapAsHolder(effect));
+                    //?}
+                }
+            } catch (Exception e) {
+                OtherUtils.throwError("[CONFIG] " + e.getMessage());
+            }
+        }
+
+        loadedBlessEffects = newList;
+        return newList;
+    }
+
     public void blessPlayer() {
         ServerPlayer player = bot.serverData.getBoundPlayer();
         if (player == null) return;
         player.sendSystemMessage(Component.empty());
 
-        var availableEffects = new ArrayList<>(blessEffects);
+        var availableEffects = new ArrayList<>(getBlessEffects());
         if (blacklist != null) availableEffects.removeAll(blacklist.getBannedEffects());
 
         for (int i = 0; i < 3; i++) {

@@ -400,6 +400,11 @@ public class WildLifeConfig extends SeasonConfig {
             "Initial Activation Interval", "Controls in what intervals will the wildcards get activated (it speeds up throughout the session). Changing this mid-session might have unexpected consequences."
     );
 
+    public static final ConfigFileEntry<String> WILDCARD_TRIVIA_EFFECTS = new ConfigFileEntry<>(
+            "wildcard_trivia_effects", "[speed, haste, strength, jump_boost, resistance, regeneration, fire_resistance, water_breathing, night_vision, health_boost, absorption]", ConfigTypes.EFFECT_LIST, "season.trivia[new]",
+            "Trivia Reward Effects", "List of potion effects you can get from trivia rewards."
+    );
+
     //Groups
     public static final ConfigFileEntry<Object> GROUP_GENERAL = new ConfigFileEntry<>(
             "group_general", null, ConfigTypes.TEXT, "{season.general}",
@@ -517,6 +522,7 @@ public class WildLifeConfig extends SeasonConfig {
                 ,WILDCARD_TRIVIA_SECONDS_EASY
                 ,WILDCARD_TRIVIA_SECONDS_NORMAL
                 ,WILDCARD_TRIVIA_SECONDS_HARD
+                ,WILDCARD_TRIVIA_EFFECTS
                 ,GROUP_TRIVIA_QUESTIONS
                     ,GROUP_TRIVIA_QUESTIONS_EASY
                     ,GROUP_TRIVIA_QUESTIONS_NORMAL

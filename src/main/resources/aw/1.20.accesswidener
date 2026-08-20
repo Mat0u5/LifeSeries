@@ -7,3 +7,5 @@ accessible field net/minecraft/server/network/ServerLoginPacketListenerImpl conn
 accessible class net/minecraft/server/network/ServerLoginPacketListenerImpl$State
 accessible method net/minecraft/core/Holder$Reference bindValue (Ljava/lang/Object;)V
 accessible class net/minecraft/client/gui/Gui$HeartType
+accessible field net/minecraft/client/resources/sounds/EntityBoundSoundInstance entity Lnet/minecraft/world/entity/Entity;
+mutable field net/minecraft/client/resources/sounds/EntityBoundSoundInstance entity Lnet/minecraft/world/entity/Entity;
