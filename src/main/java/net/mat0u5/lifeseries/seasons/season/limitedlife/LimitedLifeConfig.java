@@ -101,6 +101,10 @@ public class LimitedLifeConfig extends SeasonConfig {
             "time_randomize_interval", Time.hours(1).getSeconds(), ConfigTypes.SECONDS, "global.lives.random",
             "Time Randomize Intervals", "The intervals on which the time randomize can land."
     );
+    public static final ConfigFileEntry<Boolean> PAUSE_SESSION_TIME_UNTIL_ROLL = new ConfigFileEntry<>(
+            "pause_session_time_until_roll", false, "global.lives.random[new]",
+            "Pause Session Time Until Roll", "Makes the session time stay at max untill the lives roll happens."
+    );
 
     public static final ConfigFileEntry<Object> GROUP_TIME = new ConfigFileEntry<>(
             "group_time", null, ConfigTypes.TEXT, "{season.time}",
@@ -125,6 +129,7 @@ public class LimitedLifeConfig extends SeasonConfig {
         defaultEntries.remove(LIVES_RANDOMIZE_AVERAGE);
         defaultEntries.remove(LIVES_RANDOMIZE_PSEUDORANDOM);
         defaultEntries.add(TIME_RANDOMIZE_AVERAGE);
+        defaultEntries.add(PAUSE_SESSION_TIME_UNTIL_ROLL);
         return defaultEntries;
     }
 

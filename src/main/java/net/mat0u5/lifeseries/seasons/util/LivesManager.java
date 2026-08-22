@@ -64,6 +64,7 @@ public class LivesManager {
     public double CUSTOM_AVERAGE = 4;
 
     public boolean assignedLives = false;
+    public boolean assignedLivesFinished = false;
     public Random rnd = new Random();
 
     public void reload() {
@@ -717,8 +718,13 @@ public class LivesManager {
                 setPlayerLives(player, livesNum);
             }
             PlayerUtils.playSoundToPlayers(lives.keySet(), SoundEvents.END_PORTAL_SPAWN);
-            currentSeason. reloadAllPlayerTeams();
+            currentSeason.reloadAllPlayerTeams();
+            rollLivesFinished();
         });
+    }
+
+    public void rollLivesFinished() {
+        assignedLivesFinished = true;
     }
 
     public int showRandomNumbers(List<ServerPlayer> players) {

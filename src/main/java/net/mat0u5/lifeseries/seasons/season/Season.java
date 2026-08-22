@@ -462,6 +462,7 @@ public abstract class Season {
         boogeymanManager.sessionEnd();
         secretSociety.sessionEnd();
         livesManager.assignedLives = false;
+        livesManager.assignedLivesFinished = false;
     }
 
     public boolean sessionStart() {
@@ -469,6 +470,7 @@ public abstract class Season {
         secretSociety.resetMembers();
         addSessionActions();
         livesManager.assignedLives = false;
+        livesManager.assignedLivesFinished = false;
         return true;
     }
 

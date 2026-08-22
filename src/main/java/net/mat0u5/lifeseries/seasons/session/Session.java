@@ -120,6 +120,11 @@ public class Session {
         SessionTranscript.logPlayers();
     }
 
+    public void resetPassedTime() {
+        passedTime = Time.zero();
+        fullPassedTime = Time.zero();
+    }
+
     public void clearSessionActions() {
         activeActions.clear();
     }

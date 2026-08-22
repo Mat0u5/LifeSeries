@@ -18,8 +18,7 @@ import net.minecraft.sounds.SoundSource;
 
 import java.util.*;
 
-import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
-import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
+import static net.mat0u5.lifeseries.LifeSeries.*;
 import static net.mat0u5.lifeseries.seasons.util.WatcherManager.isWatcher;
 
 //? if >= 26.2 {
@@ -33,6 +32,7 @@ public class LimitedLifeLivesManager extends LivesManager {
     public static boolean BROADCAST_COLOR_CHANGES = false;
     public static int TIME_RANDOMIZE_INTERVAL = Time.hours(1).getSeconds();
     public static int CUSTOM_AVERAGE_TIME = Time.hours(24).getSeconds();
+    public static boolean PAUSE_SESSION_TIME_UNTIL_ROLL = false;
 
     //~ if >= 26.2 'ChatFormatting' -> 'TeamColor' {
     @Override
@@ -171,6 +171,7 @@ public class LimitedLifeLivesManager extends LivesManager {
         super.reload();
         TIME_RANDOMIZE_INTERVAL = Math.max(1, LimitedLifeConfig.TIME_RANDOMIZE_INTERVAL.get());
         CUSTOM_AVERAGE_TIME = LimitedLifeConfig.TIME_RANDOMIZE_AVERAGE.get();
+        PAUSE_SESSION_TIME_UNTIL_ROLL = LimitedLifeConfig.PAUSE_SESSION_TIME_UNTIL_ROLL.get();
     }
 
     @Override
@@ -220,5 +221,11 @@ public class LimitedLifeLivesManager extends LivesManager {
         int randomInterval = rnd.nextInt(numIntervals + 1);
 
         return minLives + (interval * randomInterval);
+    }
+
+    @Override
+    public void rollLivesFinished() {
+        super.rollLivesFinished();
+        currentSession.resetPassedTime();
     }
 }

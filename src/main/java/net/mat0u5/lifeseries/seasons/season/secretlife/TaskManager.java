@@ -58,7 +58,6 @@ public class TaskManager {
     public static SecretLifeLocationConfig locationsConfig;
     public static Map<UUID, Task> preAssignedTasks = new HashMap<>();
     public static Map<UUID, Task> assignedTasks = new HashMap<>();
-    public static Task finalTask = new Task("Win Secret Life.", TaskTypes.FINALE);
 
     public static List<String> easyTasks;
     public static List<String> hardTasks;
@@ -99,7 +98,7 @@ public class TaskManager {
     public static Task getRandomTask(ServerPlayer owner, TaskTypes type) {
 
         if (currentSession.isFinale() || type == TaskTypes.FINALE) {
-            return finalTask;
+            return new Task(ModifiableText.SECRETLIFE_FINALE_TASK.getString(), TaskTypes.FINALE);
         }
 
         String selectedTask = "";

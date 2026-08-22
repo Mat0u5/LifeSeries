@@ -31,6 +31,7 @@ import net.minecraft.world.scores.PlayerScoreEntry;
 import net.minecraft.world.scores.Team;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
+import static net.mat0u5.lifeseries.LifeSeries.livesManager;
 
 public class LimitedLife extends Season {
 
@@ -69,11 +70,24 @@ public class LimitedLife extends Season {
 
     public void displayTimers(MinecraftServer server) {
         Component message = Component.empty();
+        boolean shouldPassTime = true;
         if (currentSession.statusNotStarted()) {
             message = ModifiableText.SESSION_TIMER_DISPLAY_NOTSTARTED.get();
         }
         else if (currentSession.statusStarted()) {
-            if (!currentSession.isInfiniteSession()) {
+            if (livesManager instanceof LimitedLifeLivesManager lllm) {
+                boolean anyNonAssignedPlayers = false;
+                for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
+                    if (((IPlayer) player).ls$hasAssignedLives()) continue;
+                    anyNonAssignedPlayers = true;
+                    break;
+                }
+                if (anyNonAssignedPlayers && lllm.ROLL_LIVES && !lllm.assignedLivesFinished && LimitedLifeLivesManager.PAUSE_SESSION_TIME_UNTIL_ROLL) {
+                    shouldPassTime = false;
+                }
+            }
+
+            if (!currentSession.isInfiniteSession() && shouldPassTime) {
                 message = ModifiableText.SESSION_TIMER_DISPLAY.get(currentSession.getRemainingTimeStr());
             }
             else {
@@ -110,7 +124,7 @@ public class LimitedLife extends Season {
                     if (currentSession.statusNotStarted()) timestamp = SessionTimerStates.NOT_STARTED.getValue();
                     else if (currentSession.statusPaused()) timestamp = SessionTimerStates.PAUSED.getValue();
                     else if (currentSession.statusFinished()) timestamp = SessionTimerStates.ENDED.getValue();
-                    else if (currentSession.isInfiniteSession()) timestamp = SessionTimerStates.INFINITE.getValue();
+                    else if (currentSession.isInfiniteSession() || !shouldPassTime) timestamp = SessionTimerStates.INFINITE.getValue();
                     else if (currentSession.validTime()) {
                         Time remainingTime = currentSession.getRemainingTime();
                         timestamp = Time.now().add(remainingTime).getMillis();
