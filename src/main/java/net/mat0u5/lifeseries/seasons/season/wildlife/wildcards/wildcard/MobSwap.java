@@ -177,7 +177,8 @@ public class MobSwap extends Wildcard {
         while (lastTime < sessionLengthTicks) {
             float sessionProgress = ((float) lastTime) / sessionLengthTicks;
             sessionProgress = OtherUtils.clamp(sessionProgress, 0, 1);
-            lastTime += (int) (MAX_DELAY - sessionProgress * (MAX_DELAY - MIN_DELAY));
+            int step = Math.max(1, (int) (MAX_DELAY - sessionProgress * (MAX_DELAY - MIN_DELAY)));
+            lastTime += step;
             if (lastTime > passedTicks && lastTime < (sessionLengthTicks - MIN_DELAY)) {
                 triggerTimes.add(lastTime);
             }

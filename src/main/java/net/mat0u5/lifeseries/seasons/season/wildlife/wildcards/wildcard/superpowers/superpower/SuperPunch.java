@@ -51,8 +51,9 @@ public class SuperPunch extends ToggleableSuperpower {
         if (player != null) {
             NetworkHandlerServer.sendVignette(player, 0);
             if (player.isPassenger()) {
+                Entity vehicle = player.getVehicle();
                 player.removeVehicle();
-                syncEntityPassengers(riding, ((IPlayer) player).ls$getServerLevel());
+                syncEntityPassengers(vehicle, ((IPlayer) player).ls$getServerLevel());
             }
         }
     }
@@ -103,6 +104,7 @@ public class SuperPunch extends ToggleableSuperpower {
     }
 
     private void syncEntityPassengers(Entity entity, ServerLevel level) {
+        if (entity == null || level == null) return;
         ClientboundSetPassengersPacket passengersPacket = new ClientboundSetPassengersPacket(entity);
 
         //? if <= 1.21.11 {

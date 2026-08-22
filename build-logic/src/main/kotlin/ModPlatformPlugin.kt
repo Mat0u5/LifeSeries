@@ -389,7 +389,13 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 			}
 
 			val mcVersionRange = if (additionalVersions.isNotEmpty()) "$currentVersion-${additionalVersions.last()}" else currentVersion
-			displayName = "${prop("mod.name")} $modVersion for ${loader.replaceFirstChar(Char::titlecase)} $mcVersionRange"
+			val fullDisplayName = "${prop("mod.name")} $modVersion for ${loader.replaceFirstChar(Char::titlecase)} $mcVersionRange"
+
+			displayName = if (fullDisplayName.length > 64) {
+				fullDisplayName.take(64).trim()
+			} else {
+				fullDisplayName
+			}
 
 			if (modrinthPublish && !modrinthAccessToken.isNullOrBlank() && modrinthProjectId.isNotBlank()) {
 				modrinth(deps, currentVersion, additionalVersions, mrStaging, modrinthAccessToken)

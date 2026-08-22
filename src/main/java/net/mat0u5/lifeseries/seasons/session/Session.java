@@ -217,7 +217,7 @@ public class Session {
 
 
     public void removeSessionLength(Time time) {
-        addSessionLength(time.multiply(-1));
+        addSessionLength(time.copy().multiply(-1));
     }
 
     public String getRemainingTimeStr() {

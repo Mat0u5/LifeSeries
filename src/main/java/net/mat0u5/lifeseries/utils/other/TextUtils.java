@@ -119,7 +119,7 @@ public class TextUtils {
             LifeSeries.LOGGER.error("String ("+template+") formatting does not contain {}.");
         }
         if (args.length <= 0) {
-            LifeSeries.LOGGER.error("String ("+template+") formatting does have arguments.");
+            LifeSeries.LOGGER.error("String ("+template+") formatting does not have arguments.");
         }
         if (("_"+template+"_").split("\\{\\}").length-1 != args.length) {
             LifeSeries.LOGGER.error("String ("+template+") formatting has incorrect number of arguments.");

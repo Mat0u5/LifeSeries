@@ -52,7 +52,7 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
     public boolean playerFailBoogeyman(ServerPlayer player, boolean sendMessage) {
         if (!BOOGEYMAN_ENABLED) return false;
         Boogeyman boogeyman = getBoogeyman(player);
-        if (boogeymen == null) return false;
+        if (boogeyman == null) return false;
         if (((IPlayer) player).ls$isDead()) return false;
 
         player.removeTag("boogeyman_cured");

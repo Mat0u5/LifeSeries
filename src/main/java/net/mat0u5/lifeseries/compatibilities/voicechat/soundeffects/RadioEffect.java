@@ -5,6 +5,7 @@ public class RadioEffect {
     private static double SAMPLE_RATE = 16000.0;
 
     public static short[] applyEffect(short[] audio) {
+        if (audio == null || audio.length == 0) return audio;
         short[] modified1 = lowerQuality(audio);
         short[] modified2 = midrangeBoostEQ(modified1, 1500, 7000);
         short[] modified3 = midrangeBoostEQ(modified2, 400, 600);
@@ -17,12 +18,13 @@ public class RadioEffect {
 
         short[] result = new short[audio.length];
         for (int i = 0; i < audio.length; i += reduction) {
+            int blockSize = Math.min(reduction, audio.length - i);
             int sum = 0;
-            for (int j = 0; j < reduction; j++) {
+            for (int j = 0; j < blockSize; j++) {
                 sum += audio[i + j];
             }
-            int avg = sum / reduction;
-            for (int j = 0; j < reduction; j++) {
+            int avg = sum / blockSize;
+            for (int j = 0; j < blockSize; j++) {
                 result[i + j] = (short) avg;
             }
         }

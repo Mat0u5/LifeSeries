@@ -18,9 +18,10 @@ public class LevelUtils {
 
     public static int findTopSafeY(Level level, Vec3 pos) {
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos(pos.x(), level.getHeight(), pos.z());
+        Zombie sampleEntity = new Zombie(level);
         // Check upwards or downwards for the first safe position
         while (mutablePos.getY() >= level.getMinY()) {
-            if (isSafeSpot(level, mutablePos)) {
+            if (isSafeSpot(level, mutablePos, sampleEntity)) {
                 return mutablePos.getY(); // Found a safe spot
             }
             mutablePos.move(0, -1, 0);
@@ -30,8 +31,12 @@ public class LevelUtils {
     }
 
     public static boolean isSafeSpot(Level level, BlockPos.MutableBlockPos pos) {
+        return isSafeSpot(level, pos, new Zombie(level));
+    }
+
+    public static boolean isSafeSpot(Level level, BlockPos.MutableBlockPos pos, Zombie sampleEntity) {
         // Check if the block below is solid
-        boolean isSolidBlockBelow = level.getBlockState(pos.below()).entityCanStandOn(level, pos.below(), new Zombie(level));
+        boolean isSolidBlockBelow = level.getBlockState(pos.below()).entityCanStandOn(level, pos.below(), sampleEntity);
 
         // Check if the current position and one above are non-collision blocks (air, water, etc.)
         boolean isNonCollisionAbove = level.getBlockState(pos).getCollisionShape(level, pos).isEmpty()

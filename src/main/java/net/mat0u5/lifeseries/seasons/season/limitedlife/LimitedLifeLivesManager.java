@@ -169,7 +169,7 @@ public class LimitedLifeLivesManager extends LivesManager {
     @Override
     public void reload() {
         super.reload();
-        TIME_RANDOMIZE_INTERVAL = LimitedLifeConfig.TIME_RANDOMIZE_INTERVAL.get();
+        TIME_RANDOMIZE_INTERVAL = Math.max(1, LimitedLifeConfig.TIME_RANDOMIZE_INTERVAL.get());
         CUSTOM_AVERAGE_TIME = LimitedLifeConfig.TIME_RANDOMIZE_AVERAGE.get();
     }
 
@@ -181,7 +181,7 @@ public class LimitedLifeLivesManager extends LivesManager {
 
         Map<ServerPlayer, Integer> lives = new HashMap<>();
         int totalSize = players.size();
-        int interval = TIME_RANDOMIZE_INTERVAL;
+        int interval = Math.max(1, TIME_RANDOMIZE_INTERVAL);
 
         double targetTotal = totalSize * CUSTOM_AVERAGE_TIME;
         int minTotal = totalSize * ROLL_MIN_LIVES;
@@ -213,7 +213,7 @@ public class LimitedLifeLivesManager extends LivesManager {
     public int getRandomLife() {
         int minLives = ROLL_MIN_LIVES;
         int maxLives = ROLL_MAX_LIVES;
-        int interval = TIME_RANDOMIZE_INTERVAL;
+        int interval = Math.max(1, TIME_RANDOMIZE_INTERVAL);
 
         int numIntervals = (maxLives - minLives) / interval;
 

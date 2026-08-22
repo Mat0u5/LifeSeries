@@ -169,7 +169,7 @@ public class BoogeymanManager {
     public void reset(ServerPlayer player) {
         if (!BOOGEYMAN_ENABLED) return;
         Boogeyman boogeyman = getBoogeyman(player);
-        if (boogeymen == null) return;
+        if (boogeyman == null) return;
         if (boogeyman.failed || boogeyman.cured) {
             ((IPlayer) player).ls$message(ModifiableText.BOOGEYMAN_NOTICE_RESET.get());
         }
@@ -184,7 +184,7 @@ public class BoogeymanManager {
     public void cure(ServerPlayer player) {
         if (!BOOGEYMAN_ENABLED) return;
         Boogeyman boogeyman = getBoogeyman(player);
-        if (boogeymen == null) return;
+        if (boogeyman == null) return;
         boogeyman.failed = false;
         player.addTag("boogeyman_cured");
         player.removeTag("boogeyman_failed");
@@ -212,7 +212,7 @@ public class BoogeymanManager {
     public void onBoogeymanKill(ServerPlayer boogeyPlayer, ServerPlayer victim) {
         if (!BOOGEYMAN_ENABLED) return;
         Boogeyman boogeyman = getBoogeyman(boogeyPlayer);
-        if (boogeymen == null) return;
+        if (boogeyman == null) return;
         if (boogeyman.cured || boogeyman.failed) return;
         DatapackIntegration.EVENT_BOOGEYMAN_KILL.trigger(List.of(
                 new DatapackIntegration.Events.MacroEntry("Boogeyman", boogeyPlayer.getScoreboardName()),
@@ -422,7 +422,7 @@ public class BoogeymanManager {
     public boolean playerFailBoogeyman(ServerPlayer player, boolean sendMessage) {
         if (!BOOGEYMAN_ENABLED) return false;
         Boogeyman boogeyman = getBoogeyman(player);
-        if (boogeymen == null) return false;
+        if (boogeyman == null) return false;
 
         player.removeTag("boogeyman_cured");
         player.addTag("boogeyman_failed");
