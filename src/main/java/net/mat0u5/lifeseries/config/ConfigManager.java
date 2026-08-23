@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.config;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
+import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeLivesManager;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLifeUsedTasks;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -274,7 +275,9 @@ public abstract class ConfigManager extends DefaultConfigValues {
 
             ConfigFileEntry<Object> teamEntry = new ConfigFileEntry<>(
                     "dynamic_teams_"+ UUID.randomUUID(), null, ConfigTypes.TEAM_ENTRY, "teams",
-                    "", "", List.of(String.valueOf(teamNum), team.getDisplayName().getString(), teamColorName, validKillStr, gainLifeStr), true
+                    "", "",
+                    List.of(String.valueOf(teamNum), team.getDisplayName().getString(), teamColorName, validKillStr, gainLifeStr, String.valueOf(LimitedLifeLivesManager.RED_TIME), String.valueOf(LimitedLifeLivesManager.YELLOW_TIME), String.valueOf(LimitedLifeLivesManager.DEFAULT_TIME))
+                    , true
             );
             sendConfigEntry(player, teamEntry, index);
             index++;

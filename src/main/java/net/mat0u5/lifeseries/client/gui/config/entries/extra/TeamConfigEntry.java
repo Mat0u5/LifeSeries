@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.client.gui.config.entries.extra;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.client.gui.config.entries.ModifiableListEntry;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
@@ -9,6 +8,8 @@ import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.client.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.Time;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -46,21 +47,29 @@ public class TeamConfigEntry extends ModifiableListEntry {
     protected final EditBox textFieldAllowedKill;
     protected final EditBox textFieldGainLife;
 
+    private int RED_TIME = 0;
+    private int YELLOW_TIME = 0;
+    private int DEFAULT_TIME = 0;
 
     public TeamConfigEntry(String fieldName, List<String> args) {
         super(fieldName);
-        this.defaultTeamNum = args.get(3);
+        try {
+            RED_TIME = Integer.parseInt(args.get(8));
+            YELLOW_TIME = Integer.parseInt(args.get(9));
+            DEFAULT_TIME = Integer.parseInt(args.get(10));
+        }catch(Exception e) {}
+        this.defaultTeamNum = livesOrTime(args.get(3));
         this.defaultTeamName = args.get(4);
         this.defaultTeamColor = args.get(5);
-        this.defaultAllowedKill = args.get(6);
-        this.defaultGainLifeKill = args.get(7);
+        this.defaultAllowedKill = livesOrTime(args.get(6));
+        this.defaultGainLifeKill = livesOrTime(args.get(7));
         this.teamNum = defaultTeamNum;
         this.teamName = defaultTeamName;
         this.teamColor = defaultTeamColor;
         this.allowedKill = defaultAllowedKill;
         this.gainLifeKill = defaultGainLifeKill;
 
-        textFieldLives = new EditBox(textRenderer, 0, 0, 30, 18, Component.empty());
+        textFieldLives = new EditBox(textRenderer, 0, 0, isLimitedLife()?45:30, 18, Component.empty());
         textFieldName = new EditBox(textRenderer, 0, 0, 80, 18, Component.empty());
         textFieldColor = new EditBox(textRenderer, 0, 0, 80, 18, Component.empty());
         textFieldAllowedKill = new EditBox(textRenderer, 0, 0, 45, 18, Component.empty());
@@ -98,7 +107,7 @@ public class TeamConfigEntry extends ModifiableListEntry {
         textFieldAllowedKill.setY(y+1);
         textFieldGainLife.setY(y+1);
 
-        textFieldLives.setX(field1X);
+        textFieldLives.setX(isLimitedLife() ? field1X-9 : field1X);
         textFieldName.setX(field2X);
         textFieldColor.setX(field3X);
         textFieldAllowedKill.setX(field4X);
@@ -194,7 +203,7 @@ public class TeamConfigEntry extends ModifiableListEntry {
     }
     public void renderLastEntryExtras(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         super.renderLastEntryExtras(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
-        addEntryButton.active = !LifeSeries.isSeason(Seasons.LIMITED_LIFE);
+        addEntryButton.active = true;
     }
     public void renderMiddleEntryExtras(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         super.renderMiddleEntryExtras(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
@@ -202,7 +211,8 @@ public class TeamConfigEntry extends ModifiableListEntry {
     }
 
     public boolean isDefaultTeam() {
-        return Objects.equals(defaultTeamNum, "0") || Objects.equals(defaultTeamNum, "1") || Objects.equals(defaultTeamNum, "2") || Objects.equals(defaultTeamNum, "3") || Objects.equals(defaultTeamNum, "4");
+        String parsed = parseLivesOrTime(defaultTeamNum);
+        return Objects.equals(parsed, "0") || Objects.equals(parsed, "1") || Objects.equals(parsed, "2") || Objects.equals(parsed, "3") || Objects.equals(parsed, "4");
     }
 
     public void deleteEntry(Button button) {
@@ -220,11 +230,73 @@ public class TeamConfigEntry extends ModifiableListEntry {
         checkErrors();
     }
 
+    public String livesOrTime(String str) {
+        if (isLimitedLife()) {
+            try {
+                if (str.isEmpty()) return str;
+                Integer num = Integer.parseInt(str);
+                Integer parsed = undoEquivalentLivesBoundary(num);
+                if (parsed != null) {
+                    return OtherUtils.formatTimeArgumentFromSeconds(parsed);
+                }
+            }catch(Exception e) {}
+        }
+        return str;
+    }
+
+    public String parseLivesOrTime(String str) {
+        if (isLimitedLife()) {
+            if (str.isEmpty()) return str;
+            Time time = OtherUtils.parseTimeFromArgument(str);
+            if (time == null) return str;
+            return String.valueOf(getEquivalentLivesBoundary(time.getSeconds()));
+        }
+        return str;
+    }
+
+    public String parseLivesOrTimeNoBoundary(String str) {
+        if (isLimitedLife()) {
+            if (str.isEmpty()) return str;
+            Time time = OtherUtils.parseTimeFromArgument(str);
+            if (time == null) return str;
+            return String.valueOf(time.getSeconds());
+        }
+        return str;
+    }
+
+    public Integer getEquivalentLivesBoundary(Integer limitedLifeLives) {
+        if (limitedLifeLives == null) return null;
+        if (limitedLifeLives == 0) return 0;
+        if (limitedLifeLives == 1) return 1;
+        if (limitedLifeLives == RED_TIME) return 2;
+        if (limitedLifeLives == YELLOW_TIME) return 3;
+        if (limitedLifeLives == DEFAULT_TIME) return 4;
+        return limitedLifeLives;
+    }
+
+    public Integer undoEquivalentLivesBoundary(Integer normalLives) {
+        if (normalLives == null) return null;
+        if (normalLives == 0) return 0;
+        if (normalLives == 1) return 1;
+        if (normalLives == 2) return RED_TIME;
+        if (normalLives == 3) return YELLOW_TIME;
+        if (normalLives == 4) return DEFAULT_TIME;
+        return normalLives;
+    }
+
     public Integer getTeamNum() {
         try {
-            return Integer.parseInt(this.teamNum);
+            return Integer.parseInt(parseLivesOrTime(this.teamNum));
         } catch (Exception e) {}
         return null;
+    }
+
+    public boolean isLimitedLife() {
+        return LifeSeries.isSeason(Seasons.LIMITED_LIFE);
+    }
+
+    public String getTeamNumAsString() {
+        return String.valueOf(getTeamNum());
     }
 
     public String getTeamName() {
@@ -234,14 +306,14 @@ public class TeamConfigEntry extends ModifiableListEntry {
     //? if <= 26.1 {
     /*public ChatFormatting getTeamColor() {
         try {
-            return ChatFormatting.getByName(textFieldColor.getValue());
+            return ChatFormatting.getByName(this.teamColor);
         } catch (Exception e) {}
         return null;
     }
     *///?} else {
     public TeamColor getTeamColor() {
         try {
-            return TeamColor.byName(textFieldColor.getValue());
+            return TeamColor.byName(this.teamColor);
         } catch (Exception e) {}
         return null;
     }
@@ -249,14 +321,14 @@ public class TeamConfigEntry extends ModifiableListEntry {
 
     public Integer getTeamAllowedKill() {
         try {
-            return Integer.parseInt(this.allowedKill);
+            return Integer.parseInt(parseLivesOrTime(this.allowedKill));
         } catch (Exception e) {}
         return null;
     }
 
     public Integer getTeamGainLifeKill() {
         try {
-            return Integer.parseInt(this.gainLifeKill);
+            return Integer.parseInt(parseLivesOrTime(this.gainLifeKill));
         } catch (Exception e) {}
         return null;
     }
@@ -265,28 +337,29 @@ public class TeamConfigEntry extends ModifiableListEntry {
         List<Integer> result = new ArrayList<>();
         for (ModifiableListEntry entry : getSisterEntries()) {
             if (entry instanceof TeamConfigEntry teamEntry) {
-                Integer num = teamEntry.getTeamNum();
+                Integer num = teamEntry.maxTeamNumGet();
                 if (num != null) result.add(num);
             }
         }
         return result;
     }
 
-    @Override
-    public ConfigEntry getNewEntry() {
-        int max = getTeamNum() != null ? getTeamNum() : 0;
-        for (int i : getSisterTeamNums()) {
-            if (i > max) max = i;
-        }
-        TeamConfigEntry newEntry = new TeamConfigEntry("dynamic_teams_"+ UUID.randomUUID(), List.of("", "" ,"", String.valueOf(max+1), "New Team", "white", "", ""));
-        newEntry.defaultTeamNum = "";
-        return newEntry;
+    public Integer maxTeamNumGet() {
+        try {
+            return Integer.parseInt(parseLivesOrTimeNoBoundary(this.teamNum));
+        } catch (Exception e) {}
+        return null;
     }
 
     @Override
-    public boolean isLast() {
-        if (LifeSeries.isSeason(Seasons.LIMITED_LIFE)) return false;
-        return super.isLast();
+    public ConfigEntry getNewEntry() {
+        int max = maxTeamNumGet() != null ? maxTeamNumGet() : 0;
+        for (int i : getSisterTeamNums()) {
+            if (i > max) max = i;
+        }
+        TeamConfigEntry newEntry = new TeamConfigEntry("dynamic_teams_"+ UUID.randomUUID(), List.of("", "" ,"", String.valueOf(max+(isLimitedLife()?8*3600:1)), "New Team", "white", "", "", String.valueOf(RED_TIME), String.valueOf(YELLOW_TIME), String.valueOf(DEFAULT_TIME)));
+        newEntry.defaultTeamNum = "";
+        return newEntry;
     }
 
     public void checkErrors() {
@@ -307,6 +380,10 @@ public class TeamConfigEntry extends ModifiableListEntry {
         }
         if (getSisterTeamNums().contains(currentTeamNum)) {
             setError("Team boundary cannot be the same as another team.");
+            return;
+        }
+        if (!isDefaultTeam() && currentTeamNum <= DEFAULT_TIME) {
+            setError("Team boundary must be greater than the default teams.");
             return;
         }
         clearError();
@@ -446,14 +523,16 @@ public class TeamConfigEntry extends ModifiableListEntry {
     @Override
     public void onSave() {
         List<String> allTeams = new ArrayList<>();
-        allTeams.add("lives_"+this.teamNum);
+        allTeams.add("lives_"+this.getTeamNumAsString());
         for (ModifiableListEntry entry : getSisterEntries()) {
             if (entry instanceof TeamConfigEntry teamEntry) {
-                allTeams.add("lives_"+teamEntry.teamNum);
+                allTeams.add("lives_"+teamEntry.getTeamNumAsString());
             }
         }
+        String kill = parseLivesOrTimeNoBoundary(allowedKill);
+        String gainlife = parseLivesOrTimeNoBoundary(gainLifeKill);
         SimplePackets.SET_TEAM.sendToServer(List.of(
-                String.join(";",allTeams), teamNum, teamName, teamColor, allowedKill, gainLifeKill
+                String.join(";",allTeams), this.getTeamNumAsString(), teamName, teamColor, kill, gainlife
         ));
     }
 

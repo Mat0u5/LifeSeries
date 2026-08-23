@@ -4,7 +4,6 @@ import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -57,13 +56,7 @@ public class LimitedLifeLivesManager extends LivesManager {
 
     @Override
     public String getTeamForLives(Integer lives) {
-        lives = getEquivalentLives(lives);
-        if (lives == null) return "lives_null";
-        if (lives == 1) return "lives_1";
-        if (lives == 2) return "lives_2";
-        if (lives == 3) return "lives_3";
-        if (lives >= 4) return "lives_4";
-        return "lives_0";
+        return super.getTeamForLives(getEquivalentLives(lives));
     }
 
     @Override
@@ -113,13 +106,13 @@ public class LimitedLifeLivesManager extends LivesManager {
         return lives == check;
     }
 
-    public Integer getEquivalentLives(Integer limitedLifeLives) {
+    public static Integer getEquivalentLives(Integer limitedLifeLives) {
         if (limitedLifeLives == null) return null;
         if (limitedLifeLives <= 0) return 0;
         if (limitedLifeLives <= RED_TIME) return 1;
         if (limitedLifeLives <= YELLOW_TIME) return 2;
         if (limitedLifeLives <= DEFAULT_TIME) return 3;
-        return 4;
+        return limitedLifeLives;
     }
 
     @Override
