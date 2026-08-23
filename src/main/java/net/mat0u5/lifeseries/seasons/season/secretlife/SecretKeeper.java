@@ -13,6 +13,7 @@ import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,14 +25,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ButtonBlock;
+import net.minecraft.world.level.block.FaceAttachedHorizontalDirectionalBlock;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
@@ -45,6 +51,8 @@ public class SecretKeeper {
 	public static boolean secretKeeperBeingUsed = false;
 	public static int secretKeeperBeingUsedFor = 0;
 	public static List<UUID> pendingConfirmationTasks = new ArrayList<>();
+	public static boolean UNBREAKABLE_BUTTONS = true;
+	private static final Map<BlockPos, BlockState> lastKnownButtonStates = new HashMap<>();
 
 	public static void rewardHealth(ServerPlayer player, int addHealth, TaskTypes taskType) {
 		if (server == null) return;
@@ -424,6 +432,91 @@ public class SecretKeeper {
 		}
 	}
 
+	public static List<BlockPos> getButtonPositions() {
+		List<BlockPos> positions = new ArrayList<>();
+		if (successButtonPos != null) positions.add(successButtonPos);
+		if (rerollButtonPos != null) positions.add(rerollButtonPos);
+		if (failButtonPos != null) positions.add(failButtonPos);
+		return positions;
+	}
+
+	private static BlockState defaultButtonState() {
+		return Blocks.OAK_BUTTON.defaultBlockState()
+				.setValue(FaceAttachedHorizontalDirectionalBlock.FACE, AttachFace.FLOOR)
+				.setValue(HorizontalDirectionalBlock.FACING, Direction.NORTH);
+	}
+
+	private static Direction getConnectedDirection(BlockState state) {
+		if (!state.hasProperty(FaceAttachedHorizontalDirectionalBlock.FACE)) return Direction.UP;
+		AttachFace face = state.getValue(FaceAttachedHorizontalDirectionalBlock.FACE);
+		if (face == AttachFace.CEILING) return Direction.DOWN;
+		if (face == AttachFace.FLOOR) return Direction.UP;
+		if (!state.hasProperty(HorizontalDirectionalBlock.FACING)) return Direction.UP;
+		return state.getValue(HorizontalDirectionalBlock.FACING);
+	}
+
+	private static Direction getSupportDirection(BlockPos buttonPos) {
+		BlockState known = lastKnownButtonStates.get(buttonPos);
+		if (known == null) return Direction.DOWN;
+		return getConnectedDirection(known).getOpposite();
+	}
+
+	public static boolean isProtectedPos(BlockPos pos) {
+		if (!UNBREAKABLE_BUTTONS) return false;
+		if (pos == null) return false;
+		return isButtonOrSupport(successButtonPos, pos) || isButtonOrSupport(rerollButtonPos, pos) || isButtonOrSupport(failButtonPos, pos);
+	}
+
+	private static boolean isButtonOrSupport(BlockPos buttonPos, BlockPos pos) {
+		if (buttonPos == null) return false;
+		if (buttonPos.getX() == pos.getX() && buttonPos.getY() == pos.getY() && buttonPos.getZ() == pos.getZ()) {
+			return true;
+		}
+		Direction toSupport = getSupportDirection(buttonPos);
+		return buttonPos.getX() + toSupport.getStepX() == pos.getX() && buttonPos.getY() + toSupport.getStepY() == pos.getY() && buttonPos.getZ() + toSupport.getStepZ() == pos.getZ();
+	}
+
+	public static boolean preventBlockBreak(ServerPlayer player, BlockPos pos) {
+		if (!isProtectedPos(pos)) return false;
+		if (player.isCreative()) {
+			PlayerUtils.displayMessageToPlayer(player, ModifiableText.SECRETLIFE_SECRETKEEPER_UNBREAKABLE.get(), 60);
+		}
+		return true;
+	}
+
+	public static void tickUnbreakableButtons() {
+		if (!UNBREAKABLE_BUTTONS) return;
+		if (server == null) return;
+		ServerLevel level = server.overworld();
+		if (level == null) return;
+
+		for (BlockPos buttonPos : getButtonPositions()) {
+			if (!level.isLoaded(buttonPos)) continue;
+
+			BlockState current = level.getBlockState(buttonPos);
+			boolean buttonPresent = current.getBlock() instanceof ButtonBlock;
+			if (buttonPresent) {
+				lastKnownButtonStates.put(buttonPos.immutable(), current);
+			}
+
+			BlockState desired = buttonPresent ? current : lastKnownButtonStates.get(buttonPos);
+			if (desired == null) desired = defaultButtonState();
+
+			Direction toSupport = getConnectedDirection(desired).getOpposite();
+			BlockPos supportPos = buttonPos.relative(toSupport);
+			if (level.isLoaded(supportPos) && !FaceAttachedHorizontalDirectionalBlock.canAttach(level, buttonPos, toSupport)) {
+				level.setBlockAndUpdate(supportPos, Blocks.STONE.defaultBlockState());
+			}
+
+			if (!buttonPresent) {
+				if (desired.hasProperty(ButtonBlock.POWERED)) {
+					desired = desired.setValue(ButtonBlock.POWERED, false);
+				}
+				level.setBlockAndUpdate(buttonPos, desired);
+			}
+		}
+	}
+
 	public static boolean alreadyHasPos(BlockPos pos) {
 		if (successButtonPos != null && successButtonPos.equals(pos)) return true;
 		if (rerollButtonPos != null && rerollButtonPos.equals(pos)) return true;
@@ -522,6 +615,7 @@ public class SecretKeeper {
 	}
 
 	public static void tick() {
+		tickUnbreakableButtons();
 		if (secretKeeperBeingUsed) {
 			secretKeeperBeingUsedFor++;
 		}

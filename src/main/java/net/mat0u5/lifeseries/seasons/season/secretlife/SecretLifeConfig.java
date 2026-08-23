@@ -103,6 +103,10 @@ public class SecretLifeConfig extends SeasonConfig {
             "tasks_need_confirmation", false, "season",
             "Tasks Need Confirmation", "Requires an admin to confirm when someone is succeeding a task."
     );
+    public static final ConfigFileEntry<Boolean> UNBREAKABLE_BUTTONS = new ConfigFileEntry<>(
+            "unbreakable_buttons", true, "season[new]",
+            "Unbreakable Buttons", "Makes the task buttons and supporting blocks unbreakable."
+    );
 
     public static final ConfigFileEntry<Boolean> ONLY_LOSE_HEARTS_IN_SESSION = new ConfigFileEntry<>(
             "only_lose_hearts_in_session", false, "season.health",
@@ -145,6 +149,7 @@ public class SecretLifeConfig extends SeasonConfig {
                 ,BROADCAST_TASKS_WHEN_SUBMITTED
                 ,CONSTANT_TASKS
                 ,TASKS_NEED_CONFIRMATION
+                ,UNBREAKABLE_BUTTONS
 
                 ,GROUP_HEALTH //Group
                 ,GROUP_TASKS

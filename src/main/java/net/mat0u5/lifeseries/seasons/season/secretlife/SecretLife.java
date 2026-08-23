@@ -110,6 +110,7 @@ public class SecretLife extends Season {
         TaskManager.PUBLIC_TASKS_ON_SUBMIT = SecretLifeConfig.BROADCAST_TASKS_WHEN_SUBMITTED.get();
         ONLY_LOSE_HEARTS_IN_SESSION = SecretLifeConfig.ONLY_LOSE_HEARTS_IN_SESSION.get();
         TaskManager.TASKS_NEED_CONFIRMATION = SecretLifeConfig.TASKS_NEED_CONFIRMATION.get();
+        SecretKeeper.UNBREAKABLE_BUTTONS = SecretLifeConfig.UNBREAKABLE_BUTTONS.get();
     }
 
     @Override

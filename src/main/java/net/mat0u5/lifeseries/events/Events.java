@@ -271,8 +271,11 @@ public class Events {
 
         try {
             if (!LifeSeries.isLogicalSide()) return InteractionResult.PASS;
-            if (blacklist == null) return InteractionResult.PASS;
             if (level.isClientSide()) return InteractionResult.PASS;
+            if (currentSeason instanceof SecretLife && SecretKeeper.preventBlockBreak(player, pos)) {
+                return InteractionResult.FAIL;
+            }
+            if (blacklist == null) return InteractionResult.PASS;
             return blacklist.onBlockAttack(player, level,pos);
         } catch(Exception e) {
             e.printStackTrace();
