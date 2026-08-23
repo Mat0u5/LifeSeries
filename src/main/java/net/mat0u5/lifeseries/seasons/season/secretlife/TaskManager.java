@@ -57,6 +57,7 @@ public class TaskManager {
     public static StringListConfig usedTasksConfig;
     public static SecretLifeLocationConfig locationsConfig;
     public static Map<UUID, Task> preAssignedTasks = new HashMap<>();
+    public static Map<UUID, String> appendTask = new HashMap<>();
     public static Map<UUID, Task> assignedTasks = new HashMap<>();
 
     public static List<String> easyTasks;
@@ -215,6 +216,17 @@ public class TaskManager {
         else {
             task = getRandomTask(player, type);
         }
+
+        if (appendTask.containsKey(uuid)) {
+            String append = appendTask.remove(uuid);
+            task.rawTask += append;
+        }
+
+        setPlayerTask(player, type, task);
+    }
+
+    public static void setPlayerTask(ServerPlayer player, TaskTypes type, Task task) {
+        UUID uuid = SubInManager.getOrSub(player);
         ItemStack book = getTaskBook(player, task);
         if (!player.addItem(book)) {
             ItemStackUtils.spawnItemForPlayer(((IPlayer) player).ls$getServerLevel(), player.position(), book, player);

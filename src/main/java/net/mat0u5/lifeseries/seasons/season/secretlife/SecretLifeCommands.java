@@ -23,6 +23,7 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -161,11 +162,23 @@ public class SecretLifeCommands extends Command {
                                             .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("easy","hard","red"), builder))
                                             .then(argument("task", StringArgumentType.greedyString())
                                                     .executes(context -> setTask(
+                                                                    context.getSource(),
+                                                                    EntityArgument.getPlayers(context, "player"),
+                                                                    StringArgumentType.getString(context, "type"),
+                                                                    StringArgumentType.getString(context, "task")
+                                                            )
+                                                    )
+                                            )
+                                    )
+                            )
+                    )
+                    .then(literal("append")
+                            .then(argument("player", EntityArgument.players())
+                                    .then(argument("string", StringArgumentType.greedyString())
+                                            .executes(context -> appendTask(
                                                             context.getSource(),
                                                             EntityArgument.getPlayers(context, "player"),
-                                                            StringArgumentType.getString(context, "type"),
-                                                            StringArgumentType.getString(context, "task")
-                                                            )
+                                                            StringArgumentType.getString(context, "string")
                                                     )
                                             )
                                     )
@@ -250,6 +263,34 @@ public class SecretLifeCommands extends Command {
         if (!rawTask.isEmpty()) {
             sendCommandFeedbackQuiet(source, ModifiableText.SECRETLIFE_TASK_SHOW.get(ActionText.hereTextRunCommand("Click to show task", "/selfmsg " + rawTask)));
         }
+
+        return 1;
+    }
+
+    public int appendTask(CommandSourceStack source, Collection<ServerPlayer> targets, String append) {
+        if (checkBanned(source)) return -1;
+        if (targets == null || targets.isEmpty()) return -1;
+
+        append = "\n"+append;
+
+        for (ServerPlayer player : targets) {
+            UUID uuid = SubInManager.getOrSub(player);
+
+            boolean inSession = TaskManager.tasksChosen && !currentSession.statusFinished();
+            TaskTypes taskType = TaskManager.getPlayersTaskType(player);
+            if (inSession && TaskManager.assignedTasks.containsKey(uuid) && TaskManager.removePlayersTaskBook(player)) {
+                Task task = TaskManager.assignedTasks.get(uuid);
+                task.rawTask += append;
+                TaskManager.setPlayerTask(player, taskType, task);
+                AnimationUtils.playSecretLifeTotemAnimation(player, (taskType == TaskTypes.RED || taskType == TaskTypes.FINALE));
+                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("secretlife_task_totem")));
+            }
+            else {
+                TaskManager.appendTask.put(uuid, append);
+            }
+        }
+
+        sendCommandFeedback(source, ModifiableText.SECRETLIFE_TASK_APPEND.get());
 
         return 1;
     }
