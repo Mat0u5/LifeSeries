@@ -432,9 +432,8 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         String screenName = (voteType == NiceLifeVotingManager.VoteType.NICE_LIST) ? ModifiableText.NICELIFE_TRIVIA_VOTE_NICELIST.getString() : ModifiableText.NICELIFE_TRIVIA_VOTE_NAUGHTYLIST.getString();
         NetworkHandlerServer.sendVoteScreenPacket(boundPlayer, screenName, true, false, true, availableForVoting);
         NiceLifeVotingManager.allowedToVote.add(boundPlayer.getUUID());
-        //TODO add the voting sound - "nicelife_santabot_vote"
-        SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_santabot_suspense"));
-        PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.65f, 1);
+        SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_santabot_vote"));
+        PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.75f, 1);
         return true;
     }
 

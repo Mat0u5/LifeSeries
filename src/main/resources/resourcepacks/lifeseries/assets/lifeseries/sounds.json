@@ -591,8 +591,13 @@
         ]
     },
     "nicelife_santabot_turn": {
-      "sounds": [
-        "lifeseries:nicelife/santabot_turn"
-      ]
+        "sounds": [
+            "lifeseries:nicelife/santabot_turn"
+        ]
+    },
+    "nicelife_santabot_vote": {
+        "sounds": [
+            "lifeseries:nicelife/santabot_vote"
+        ]
     }
 }
