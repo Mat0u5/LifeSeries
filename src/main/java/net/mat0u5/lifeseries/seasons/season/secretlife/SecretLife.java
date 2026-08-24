@@ -324,6 +324,7 @@ public class SecretLife extends Season {
 
     @Override
     public boolean sessionStart() {
+        TaskManager.infectedPlayers.clear();
         TaskScheduler.scheduleTask(200, () -> {
             PlayerUtils.broadcastMessageToAdmins(ModifiableText.SECRETLIFE_SESSION_START_INFO.get(ActionText.hereTextOpenURL("https://mat0u5.github.io/LifeSeries-docs/seasons/secret-life.html#task-selection")));
         });
@@ -362,6 +363,7 @@ public class SecretLife extends Season {
             UUID uuid = SubInManager.getOrSub(player);
             if (((IPlayer) player).ls$isDead()) continue;
             if (TaskManager.submittedOrFailed.contains(uuid)) continue;
+            if (TaskManager.infectedPlayers.contains(uuid)) continue;
             if (TaskManager.CONSTANT_TASKS) continue;
             playersWithTaskBooks.add(player.getScoreboardName());
         }
@@ -370,6 +372,7 @@ public class SecretLife extends Season {
             String playerNames = String.join(", ", playersWithTaskBooks);
             PlayerUtils.broadcastMessageToAdmins(ModifiableText.SECRETLIFE_TASK_NOT_SUBMITTED.get(playerNames, (isOne?"has":"have")));
         }
+        TaskManager.infectedPlayers.clear();
     }
 
     public void heartsTranscript() {
@@ -391,6 +394,9 @@ public class SecretLife extends Season {
     }
 
     public void checkKillHeartGain(ServerPlayer player, ServerPlayer victim) {
+        if (TaskManager.infectedPlayers.contains(SubInManager.getOrSub(player))) {
+            TaskManager.infectedPlayers.add(SubInManager.getOrSub(victim));
+        }
         if (!((IPlayer) player).ls$isOnLastLife(false)) return;
         if (((IPlayer) victim).ls$isDead()) return;
         double amountGained = Math.min(Math.max(MAX_KILL_HEALTH, MAX_HEALTH) - getPlayerHealth(player), 20);
@@ -518,5 +524,11 @@ public class SecretLife extends Season {
         }
         if (server.overworld() == null) return;
         OtherUtils.setBooleanGameRule(server.overworld(), GameRules.NATURAL_HEALTH_REGENERATION, naturalRegeneration);
+    }
+
+    @Override
+    public boolean isAllowedToAttack(ServerPlayer attacker, ServerPlayer victim, boolean allowSelfDefense) {
+        if (TaskManager.infectedPlayers.contains(SubInManager.getOrSub(attacker))) return true;
+        return super.isAllowedToAttack(attacker, victim, allowSelfDefense);
     }
 }

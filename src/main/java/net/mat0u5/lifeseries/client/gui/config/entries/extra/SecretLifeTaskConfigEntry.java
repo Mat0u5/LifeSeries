@@ -72,11 +72,12 @@ public class SecretLifeTaskConfigEntry extends ModifiableListEntry {
         RenderUtils.text(Component.literal(" \"${red_player}\" - replaced with a random red player, if there are any"), textX, textY+9*9).colored(TextColors.GRAY).render(context, textRenderer);
         RenderUtils.text(Component.literal(" \"${name=<player>}\" - deleted, the task is given to <player>"), textX, textY+9*10).colored(TextColors.GRAY).render(context, textRenderer);
         RenderUtils.text(Component.literal(" \"${name!=<player>}\" - deleted, the task cannot be given to <player>"), textX, textY+9*11).colored(TextColors.GRAY).render(context, textRenderer);
+        RenderUtils.text(Component.literal(" \"${boogeypocalypse}\" - deleted, starting infection player"), textX, textY+9*12).colored(TextColors.GRAY).render(context, textRenderer);
     }
 
     @Override
     public int firstEntryHeightAdd() {
-        return 9*11+10;
+        return 9*12+10;
     }
 
     public void onChanged(String text) {

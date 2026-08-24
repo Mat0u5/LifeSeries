@@ -83,6 +83,7 @@ public class Task {
     ${red_player} - Replaced with a random red player. Tasks are only available when a red player is alive.
     ${name=<player>} - Deleted. Task is given to <player>
     ${name!=<player>} - Deleted. Task cannot be given to <player>
+    ${boogeypocalypse} - Deleted. Starting infection player
      */
     //? if <= 1.20.3 {
     /*public List<FilteredText> getBookLines(ServerPlayer owner) {
@@ -243,6 +244,9 @@ public class Task {
         if (page.contains("${kill_not_permitted}")) {
             if (anyYellowPlayers) page = page.replaceAll("\\$\\{kill_not_permitted}","");
         }
+        if (page.contains("${boogeypocalypse}")) {
+            page = page.replaceAll("\\$\\{boogeypocalypse}","");
+        }
         page = page.replaceAll("\\$\\{name!?=[a-zA-Z0-9_]+\\}", "");
         return page.replaceAll("\\\\n", "\n");
     }
@@ -253,5 +257,9 @@ public class Task {
         if (type == TaskTypes.RED) return 3;
         if (type == TaskTypes.FINALE) return 4;
         return 0;
+    }
+
+    public boolean isBoogeypocalypse() {
+        return rawTask.contains("${boogeypocalypse}");
     }
 }

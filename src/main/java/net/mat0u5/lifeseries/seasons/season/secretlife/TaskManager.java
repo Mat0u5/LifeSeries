@@ -59,6 +59,7 @@ public class TaskManager {
     public static Map<UUID, Task> preAssignedTasks = new HashMap<>();
     public static Map<UUID, String> appendTask = new HashMap<>();
     public static Map<UUID, Task> assignedTasks = new HashMap<>();
+    public static Set<UUID> infectedPlayers = new HashSet<>();
 
     public static List<String> easyTasks;
     public static List<String> hardTasks;
@@ -227,6 +228,7 @@ public class TaskManager {
 
     public static void setPlayerTask(ServerPlayer player, TaskTypes type, Task task) {
         UUID uuid = SubInManager.getOrSub(player);
+        if (task.isBoogeypocalypse()) infectedPlayers.add(uuid);
         ItemStack book = getTaskBook(player, task);
         if (!player.addItem(book)) {
             ItemStackUtils.spawnItemForPlayer(((IPlayer) player).ls$getServerLevel(), player.position(), book, player);
