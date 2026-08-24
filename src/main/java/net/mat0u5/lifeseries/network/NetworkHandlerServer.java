@@ -13,6 +13,7 @@ import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePacket;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
+import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeConfig;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -243,13 +244,33 @@ public class NetworkHandlerServer {
             }
         });
         SimplePackets.SET_TEAM.setServerReceive((player, payload) -> {
-            if (PermissionManager.isAdmin(player) && payload.value().size() >= 6) {
+            if (PermissionManager.isAdmin(player) && payload.value().size() >= 7) {
                 List<String> teamNames = Arrays.asList(payload.value().get(0).split(";"));
                 String packetTeamName = "lives_" + payload.value().get(1);
                 String packetTeamDisplayName = payload.value().get(2);
                 String packetTeamColor = payload.value().get(3);
                 String packetAllowedKill = payload.value().get(4);
                 String packetGainLifeKill = payload.value().get(5);
+                String packetOptionalLimLifeTeam = payload.value().get(6);
+                if (!packetOptionalLimLifeTeam.isEmpty()) {
+                    try {
+                        Integer num = Integer.parseInt(packetOptionalLimLifeTeam);
+                        if (num != null && LifeSeries.isSeason(Seasons.LIMITED_LIFE)) {
+                            if (packetTeamName.equalsIgnoreCase("lives_2")) {
+                                seasonConfig.setProperty(LimitedLifeConfig.TIME_RED.key, String.valueOf(num));
+                                updatedConfigThisTick = true;
+                            }
+                            else if (packetTeamName.equalsIgnoreCase("lives_3")) {
+                                seasonConfig.setProperty(LimitedLifeConfig.TIME_YELLOW.key, String.valueOf(num));
+                                updatedConfigThisTick = true;
+                            }
+                            else if (packetTeamName.equalsIgnoreCase("lives_4")) {
+                                seasonConfig.setProperty(LimitedLifeConfig.TIME_DEFAULT.key, String.valueOf(num));
+                                updatedConfigThisTick = true;
+                            }
+                        }
+                    }catch(Exception e) {}
+                }
 
                 //? if <= 26.1 {
                 /*ChatFormatting newTeamColor = ChatFormatting.getByName(packetTeamColor);

@@ -16,10 +16,7 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.network.chat.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 //? if >= 1.21.9
 import net.minecraft.client.input.*;
 //? if <= 26.1 {
@@ -120,7 +117,7 @@ public class TeamConfigEntry extends ModifiableListEntry {
         textFieldAllowedKill.extractRenderState(context, mouseX, mouseY, tickDelta);
         textFieldGainLife.extractRenderState(context, mouseX, mouseY, tickDelta);
         //~ !renames_26_1_volatile
-        textFieldLives.setEditable(!isDefaultTeam());
+        textFieldLives.setEditable(!isNonEditableLivesTeam());
 
         if (getTeamNum() == null) textFieldLives.setTextColor(TextColors.PASTEL_RED);
         else textFieldLives.setTextColor(TextColors.WHITE);
@@ -169,11 +166,11 @@ public class TeamConfigEntry extends ModifiableListEntry {
         int field3CenterX = field3X + 30;
         int field4CenterX = field4X + 15;
         int field5CenterX = field5X + 15;
-        Component header1Text = Component.nullToEmpty("§f\uD83D\uDEC8 Lives");
+        Component header1Text = Component.nullToEmpty("§f\uD83D\uDEC8 "+(isLimitedLife()?"Time":"Lives"));
         Component header2Text = Component.nullToEmpty("§fName");
         Component header3Text = Component.nullToEmpty("§fColor");
         Component header4Text = Component.nullToEmpty("§f\uD83D\uDEC8 Can Kill");
-        Component header5Text = Component.nullToEmpty("§f\uD83D\uDEC8 Gain Life");
+        Component header5Text = Component.nullToEmpty("§f\uD83D\uDEC8 Gain "+(isLimitedLife()?"Time":"Life"));
 
         RenderUtils.text(header1Text, field1CenterX, y+5).anchorCenter().render(context, textRenderer);
         RenderUtils.text(header2Text, field2CenterX, y+5).anchorCenter().render(context, textRenderer);
@@ -184,13 +181,28 @@ public class TeamConfigEntry extends ModifiableListEntry {
         if (hovered && mouseY >= y + 5 && mouseY <= y + 5 + textRenderer.lineHeight) {
             Component hoverText = null;
             if (mouseX >= field1X && mouseX <= field1X + textRenderer.width(header1Text)) {
-                hoverText = Component.nullToEmpty("Lives boundary where players are put into this team (Rounded to nearest team with boundary <= lives).");
+                if (isLimitedLife()) {
+                    hoverText = Component.nullToEmpty("Time boundary where players are put into this team (Rounded to nearest team with boundary <= time).");
+                }
+                else {
+                    hoverText = Component.nullToEmpty("Lives boundary where players are put into this team (Rounded to nearest team with boundary <= lives).");
+                }
             }
             if (mouseX >= field4X && mouseX <= field4X + textRenderer.width(header4Text)) {
-                hoverText = Component.nullToEmpty("Lives boundary where this team can kill.\nFor example if set to 2, this team can kill any players with at least 2 lives.");
+                if (isLimitedLife()) {
+                    hoverText = Component.nullToEmpty("Time boundary where this team can kill.\nFor example if set to 8h, this team can kill any players with at least 8h of time.");
+                }
+                else {
+                    hoverText = Component.nullToEmpty("Lives boundary where this team can kill.\nFor example if set to 2, this team can kill any players with at least 2 lives.");
+                }
             }
             if (mouseX >= field5X && mouseX <= field5X + textRenderer.width(header5Text)) {
-                hoverText = Component.nullToEmpty("Lives boundary where this team can gain lives for killing.\nFor example if set to 4, this team will gain a life for killing players with at least 4 lives.");
+                if (isLimitedLife()) {
+                    hoverText = Component.nullToEmpty("Time boundary where this team can gain time for killing.\nFor example if set to 16h, this team will gain a life for killing players with at least 16h of time.");
+                }
+                else {
+                    hoverText = Component.nullToEmpty("Lives boundary where this team can gain lives for killing.\nFor example if set to 4, this team will gain a life for killing players with at least 4 lives.");
+                }
             }
             if (hoverText != null) {
                 //? if <= 1.21.5 {
@@ -211,8 +223,16 @@ public class TeamConfigEntry extends ModifiableListEntry {
     }
 
     public boolean isDefaultTeam() {
-        String parsed = parseLivesOrTime(defaultTeamNum);
+        String parsed = parseDefaultTeamNum();
         return Objects.equals(parsed, "0") || Objects.equals(parsed, "1") || Objects.equals(parsed, "2") || Objects.equals(parsed, "3") || Objects.equals(parsed, "4");
+    }
+
+    public boolean isNonEditableLivesTeam() {
+        if (isLimitedLife()) {
+            String parsed = parseDefaultTeamNum();
+            return Objects.equals(parsed, "0") || Objects.equals(parsed, "1");
+        }
+        return isDefaultTeam();
     }
 
     public void deleteEntry(Button button) {
@@ -244,7 +264,8 @@ public class TeamConfigEntry extends ModifiableListEntry {
         return str;
     }
 
-    public String parseLivesOrTime(String str) {
+    public String parseDefaultTeamNum() {
+        String str = defaultTeamNum;
         if (isLimitedLife()) {
             if (str.isEmpty()) return str;
             Time time = OtherUtils.parseTimeFromArgument(str);
@@ -286,11 +307,13 @@ public class TeamConfigEntry extends ModifiableListEntry {
 
     public Integer getTeamNum() {
         try {
-            return Integer.parseInt(parseLivesOrTime(this.teamNum));
+            if (isLimitedLife() && isDefaultTeam()) {
+                return Integer.parseInt(parseDefaultTeamNum());
+            }
+            return Integer.parseInt(parseLivesOrTimeNoBoundary(this.teamNum));
         } catch (Exception e) {}
         return null;
     }
-
     public boolean isLimitedLife() {
         return LifeSeries.isSeason(Seasons.LIMITED_LIFE);
     }
@@ -321,14 +344,14 @@ public class TeamConfigEntry extends ModifiableListEntry {
 
     public Integer getTeamAllowedKill() {
         try {
-            return Integer.parseInt(parseLivesOrTime(this.allowedKill));
+            return Integer.parseInt(parseLivesOrTimeNoBoundary(this.allowedKill));
         } catch (Exception e) {}
         return null;
     }
 
     public Integer getTeamGainLifeKill() {
         try {
-            return Integer.parseInt(parseLivesOrTime(this.gainLifeKill));
+            return Integer.parseInt(parseLivesOrTimeNoBoundary(this.gainLifeKill));
         } catch (Exception e) {}
         return null;
     }
@@ -339,6 +362,19 @@ public class TeamConfigEntry extends ModifiableListEntry {
             if (entry instanceof TeamConfigEntry teamEntry) {
                 Integer num = teamEntry.maxTeamNumGet();
                 if (num != null) result.add(num);
+            }
+        }
+        return result;
+    }
+
+    public Map<Integer, Integer> getDefaultTeamNums() {
+        Map<Integer, Integer> result = new HashMap<>();
+        for (ModifiableListEntry entry : getListEntries()) {
+            if (entry instanceof TeamConfigEntry teamEntry) {
+                if (!teamEntry.isDefaultTeam()) continue;
+                Integer num = teamEntry.getTeamNum();
+                Integer numReal = teamEntry.maxTeamNumGet();
+                if (num != null && numReal != null) result.put(num, numReal);
             }
         }
         return result;
@@ -370,7 +406,7 @@ public class TeamConfigEntry extends ModifiableListEntry {
         Integer currentTeamNum = getTeamNum();
         Integer currentAllowedKill = getTeamAllowedKill();
         Integer currentGainLife = getTeamGainLifeKill();
-        if (currentTeamNum == null || (currentAllowedKill == null && !this.allowedKill.isEmpty()) || (currentGainLife == null && !this.gainLifeKill.isEmpty())) {
+        if (currentTeamNum == null || maxTeamNumGet() == null || (currentAllowedKill == null && !this.allowedKill.isEmpty()) || (currentGainLife == null && !this.gainLifeKill.isEmpty())) {
             setError("Invalid number format");
             return;
         }
@@ -382,9 +418,26 @@ public class TeamConfigEntry extends ModifiableListEntry {
             setError("Team boundary cannot be the same as another team.");
             return;
         }
-        if (!isDefaultTeam() && currentTeamNum <= DEFAULT_TIME) {
-            setError("Team boundary must be greater than the default teams.");
-            return;
+        if (isLimitedLife()) {
+            Map<Integer, Integer> defaultTeamNums = getDefaultTeamNums();
+
+            if (isDefaultTeam()) {
+                if (currentTeamNum >= 2) {
+                    Integer prevRealTeamNum = defaultTeamNums.get(currentTeamNum - 1);
+                    Integer currentRealTeamNum = defaultTeamNums.get(currentTeamNum);
+                    if (prevRealTeamNum != null && currentRealTeamNum != null && currentRealTeamNum <= prevRealTeamNum) {
+                        setError("Default team boundaries must be in ascending order.");
+                        return;
+                    }
+                }
+            }
+            else {
+                Integer defaultTeamNum =  defaultTeamNums.get(4);
+                if (defaultTeamNum != null && currentTeamNum <= defaultTeamNum) {
+                    setError("Team boundary must be greater than the default teams.");
+                    return;
+                }
+            }
         }
         clearError();
         markChanged();
@@ -532,7 +585,7 @@ public class TeamConfigEntry extends ModifiableListEntry {
         String kill = parseLivesOrTimeNoBoundary(allowedKill);
         String gainlife = parseLivesOrTimeNoBoundary(gainLifeKill);
         SimplePackets.SET_TEAM.sendToServer(List.of(
-                String.join(";",allTeams), this.getTeamNumAsString(), teamName, teamColor, kill, gainlife
+                String.join(";",allTeams), this.getTeamNumAsString(), teamName, teamColor, kill, gainlife, isLimitedLife() ? parseLivesOrTimeNoBoundary(this.teamNum) : ""
         ));
     }
 
