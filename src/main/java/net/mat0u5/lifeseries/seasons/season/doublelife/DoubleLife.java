@@ -359,6 +359,59 @@ public class DoubleLife extends Season {
         soulmateConfig.resetProperties("-- DO NOT MODIFY --");
     }
 
+    public void setAllSoulmatePairs(Map<UUID, UUID> newPairs) {
+        Map<UUID, UUID> previousSoulmates = new HashMap<>(soulmates);
+
+        Map<UUID, UUID> updatedSoulmates = new HashMap<>();
+        List<Map.Entry<UUID, UUID>> addedPairs = new ArrayList<>();
+        for (Map.Entry<UUID, UUID> entry : newPairs.entrySet()) {
+            UUID player1UUID = entry.getKey();
+            UUID player2UUID = entry.getValue();
+            if (player1UUID == null || player2UUID == null) continue;
+            if (player1UUID.equals(player2UUID)) continue;
+            if (updatedSoulmates.containsKey(player1UUID) || updatedSoulmates.containsKey(player2UUID)) continue;
+            updatedSoulmates.put(player1UUID, player2UUID);
+            updatedSoulmates.put(player2UUID, player1UUID);
+            if (!Objects.equals(previousSoulmates.get(player1UUID), player2UUID)) {
+                addedPairs.add(Map.entry(player1UUID, player2UUID));
+            }
+        }
+
+        soulmates = updatedSoulmates;
+        saveSoulmates();
+
+        for (Map.Entry<UUID, UUID> entry : previousSoulmates.entrySet()) {
+            UUID player1UUID = entry.getKey();
+            UUID player2UUID = entry.getValue();
+            if (Objects.equals(updatedSoulmates.get(player1UUID), player2UUID)) continue;
+            if (player1UUID.compareTo(player2UUID) > 0) continue;
+            DatapackIntegration.EVENT_SOULMATE_REMOVE.trigger(List.of(
+                    new DatapackIntegration.Events.MacroEntry("Player1", PlayerUtils.getNameFromUUIDOrRaw(player1UUID)),
+                    new DatapackIntegration.Events.MacroEntry("Player2", PlayerUtils.getNameFromUUIDOrRaw(player2UUID))
+            ));
+        }
+        for (Map.Entry<UUID, UUID> entry : addedPairs) {
+            DatapackIntegration.EVENT_SOULMATE_SET.trigger(List.of(
+                    new DatapackIntegration.Events.MacroEntry("Player1", PlayerUtils.getNameFromUUIDOrRaw(entry.getKey())),
+                    new DatapackIntegration.Events.MacroEntry("Player2", PlayerUtils.getNameFromUUIDOrRaw(entry.getValue()))
+            ));
+        }
+
+        syncAllPlayers();
+    }
+
+    public List<Map.Entry<String, String>> getSoulmatePairNames() {
+        List<Map.Entry<String, String>> result = new ArrayList<>();
+        for (Map.Entry<UUID, UUID> entry : soulmatesOrdered.entrySet()) {
+            result.add(Map.entry(
+                    PlayerUtils.getNameFromUUIDOrRaw(entry.getKey()),
+                    PlayerUtils.getNameFromUUIDOrRaw(entry.getValue())
+            ));
+        }
+        result.sort(Comparator.comparing(entry -> entry.getKey().toLowerCase(Locale.ROOT)));
+        return result;
+    }
+
     public void rollSoulmates() {
         List<ServerPlayer> playersToRoll = getNonAssignedPlayers();
         if (!playersToRoll.isEmpty()) {

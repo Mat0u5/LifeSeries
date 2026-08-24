@@ -120,6 +120,11 @@ public class DoubleLifeConfig extends SeasonConfig {
             "More Soulbind Options", ""
     );
 
+    public static final ConfigFileEntry<Object> GROUP_SOULMATES = new ConfigFileEntry<>(
+            "group_soulmates", null, ConfigTypes.TEXT, "{season.soulmates}",
+            "Soulmates", "Manually edit soulmate pairings. Both players need to have joined this server at least once."
+    );
+
     public DoubleLifeConfig() {
         super(Seasons.DOUBLE_LIFE);
     }
@@ -135,6 +140,7 @@ public class DoubleLifeConfig extends SeasonConfig {
     protected List<ConfigFileEntry<?>> getSeasonSpecificConfigEntries() {
         List<ConfigFileEntry<?>> result =  new ArrayList<>(List.of(
                 ANNOUNCE_SOULMATES
+                ,GROUP_SOULMATES //Group
                 ,GROUP_SOULBIND //Group
                 ,BREAKUP_LAST_PAIR_STANDING
                 ,DISABLE_START_TELEPORT

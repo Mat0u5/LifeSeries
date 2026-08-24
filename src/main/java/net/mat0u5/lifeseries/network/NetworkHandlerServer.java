@@ -12,6 +12,7 @@ import net.mat0u5.lifeseries.mixin.ServerLoginPacketListenerImplAccessor;
 import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePacket;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
+import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeConfig;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
@@ -314,6 +315,39 @@ public class NetworkHandlerServer {
                     livesManager.updateTeamConfig(packetTeamName, allowedKill, gainLife);
                 }
                 Season.reloadPlayerTeams = true;
+            }
+        });
+        SimplePackets.SET_SOULMATES.setServerReceive((player, payload) -> {
+            if (!PermissionManager.isAdmin(player)) return;
+            if (!LifeSeries.isSeason(Seasons.DOUBLE_LIFE)) return;
+            if (!(currentSeason instanceof DoubleLife doubleLife)) return;
+
+            List<String> values = payload.value();
+            Map<UUID, UUID> newPairs = new LinkedHashMap<>();
+            Set<UUID> alreadyPaired = new HashSet<>();
+            Set<String> unknownPlayers = new LinkedHashSet<>();
+            for (int i = 0; i + 1 < values.size(); i += 2) {
+                String name1 = values.get(i).trim();
+                String name2 = values.get(i + 1).trim();
+                if (name1.isEmpty() && name2.isEmpty()) continue;
+
+                UUID player1UUID = PlayerUtils.getUUIDFromNameOrUUID(name1);
+                UUID player2UUID = PlayerUtils.getUUIDFromNameOrUUID(name2);
+                if (player1UUID == null && !name1.isEmpty()) unknownPlayers.add(name1);
+                if (player2UUID == null && !name2.isEmpty()) unknownPlayers.add(name2);
+                if (player1UUID == null || player2UUID == null) continue;
+                if (player1UUID.equals(player2UUID)) continue;
+                if (alreadyPaired.contains(player1UUID) || alreadyPaired.contains(player2UUID)) continue;
+
+                alreadyPaired.add(player1UUID);
+                alreadyPaired.add(player2UUID);
+                newPairs.put(player1UUID, player2UUID);
+            }
+
+            doubleLife.setAllSoulmatePairs(newPairs);
+
+            if (!unknownPlayers.isEmpty()) {
+                ((IPlayer) player).ls$message(ModifiableText.DOUBLELIFE_SOULMATE_ERROR_UNKNOWN.get(String.join(", ", unknownPlayers)));
             }
         });
         SimplePackets.CONFIG_SECRET_TASK.setServerReceive((player, payload) -> {

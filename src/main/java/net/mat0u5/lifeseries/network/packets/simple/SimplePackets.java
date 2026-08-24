@@ -18,6 +18,7 @@ public class SimplePackets {
     public static final SimpleStringListPacket PLAYER_INVISIBLE = new SimpleStringListPacket("PLAYER_INVISIBLE");
     public static final SimpleStringListPacket SET_LIVES = new SimpleStringListPacket("SET_LIVES");
     public static final SimpleStringListPacket SET_TEAM = new SimpleStringListPacket("SET_TEAM");
+    public static final SimpleStringListPacket SET_SOULMATES = new SimpleStringListPacket("SET_SOULMATES");
     public static final SimpleStringListPacket CONFIG_SECRET_TASK = new SimpleStringListPacket("CONFIG_SECRET_TASK");
     public static final SimpleStringListPacket CONFIG_TRIVIA = new SimpleStringListPacket("CONFIG_TRIVIA");
     public static final SimpleStringListPacket ACTIVE_WILDCARDS = new SimpleStringListPacket("ACTIVE_WILDCARDS");

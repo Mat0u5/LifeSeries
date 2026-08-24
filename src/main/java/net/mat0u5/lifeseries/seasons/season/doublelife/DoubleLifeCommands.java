@@ -216,15 +216,14 @@ public class DoubleLifeCommands extends Command {
             sendCommandFailure(source, ModifiableText.DOUBLELIFE_SOULMATE_ERROR_MISSING.get(player));
             return -1;
         }
-        if (!season.isSoulmateOnline(player)) {
-            sendCommandFailure(source, ModifiableText.DOUBLELIFE_SOULMATE_ERROR_OFFLINE.get(player));
+
+        UUID soulmateUUID = season.getSoulmateUUID(player.getUUID());
+        if (soulmateUUID == null) {
+            sendCommandFailure(source, ModifiableText.DOUBLELIFE_SOULMATE_ERROR_MISSING.get(player));
             return -1;
         }
 
-        ServerPlayer soulmate = season.getSoulmate(player);
-        if (soulmate == null) return -1;
-
-        sendCommandFeedback(source, ModifiableText.DOUBLELIFE_SOULMATE_GET.get(player, soulmate));
+        sendCommandFeedback(source, ModifiableText.DOUBLELIFE_SOULMATE_GET.get(player, PlayerUtils.getDisplayNameFromUUID(soulmateUUID)));
         return 1;
     }
 
@@ -275,14 +274,10 @@ public class DoubleLifeCommands extends Command {
         boolean noSoulmates = true;
         for (Map.Entry<UUID, UUID> entry : season.soulmatesOrdered.entrySet()) {
             noSoulmates = false;
-            Object text1 = entry.getKey();
-            Object text2 = entry.getValue();
-            ServerPlayer player = PlayerUtils.getPlayer(entry.getKey());
-            ServerPlayer soulmate = PlayerUtils.getPlayer(entry.getValue());
-            if (player != null) text1 = player;
-            if (soulmate != null) text2 = soulmate;
-
-            sendCommandFeedbackQuiet(source, ModifiableText.DOUBLELIFE_SOULMATE_GET.get(text1, text2));
+            sendCommandFeedbackQuiet(source, ModifiableText.DOUBLELIFE_SOULMATE_GET.get(
+                    PlayerUtils.getDisplayNameFromUUID(entry.getKey()),
+                    PlayerUtils.getDisplayNameFromUUID(entry.getValue())
+            ));
         }
 
         if (noSoulmates) {

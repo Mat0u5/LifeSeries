@@ -223,6 +223,9 @@ public class ClientConfigGuiManager {
             return new DoubleConfigEntry(doubleObject.id, doubleObject.name, doubleObject.description, doubleObject.doubleValue, doubleObject.defaultValue);
         }
         else if (object instanceof TextObject textObject) {
+            if (textObject.configType == ConfigTypes.SOULMATE_ENTRY) {
+                return new SoulmateConfigEntry(textObject.id, textObject.args);
+            }
             if (textObject.configType == ConfigTypes.TEAM_ENTRY) {
                 return new TeamConfigEntry(textObject.id, textObject.args);
             }

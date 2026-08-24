@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.config;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
+import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeLivesManager;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLifeUsedTasks;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
@@ -281,6 +282,20 @@ public abstract class ConfigManager extends DefaultConfigValues {
             );
             sendConfigEntry(player, teamEntry, index);
             index++;
+        }
+        if (LifeSeries.isSeason(Seasons.DOUBLE_LIFE) && currentSeason instanceof DoubleLife doubleLife) {
+            List<Map.Entry<String, String>> soulmatePairs = doubleLife.getSoulmatePairNames();
+            if (soulmatePairs.isEmpty()) {
+                soulmatePairs = List.of(Map.entry("", ""));
+            }
+            for (Map.Entry<String, String> pair : soulmatePairs) {
+                ConfigFileEntry<Object> soulmateEntry = new ConfigFileEntry<>(
+                        "dynamic_soulmate_"+ UUID.randomUUID(), null, ConfigTypes.SOULMATE_ENTRY, "season.soulmates",
+                        "", "", List.of(pair.getKey(), pair.getValue()), true
+                );
+                sendConfigEntry(player, soulmateEntry, index);
+                index++;
+            }
         }
         for (DatapackIntegration.Events event : DatapackIntegration.getAllEvents()) {
             ConfigFileEntry<String> teamEntry = new ConfigFileEntry<>(

@@ -247,7 +247,9 @@ public class TeamConfigEntry extends ModifiableListEntry {
         this.allowedKill = textFieldAllowedKill.getValue();
         this.gainLifeKill = textFieldGainLife.getValue();
         markChanged();
-        checkErrors();
+        for (var entry : getListEntries()) {
+            if (entry instanceof TeamConfigEntry teamConfigEntry) teamConfigEntry.checkErrors();
+        }
     }
 
     public String livesOrTime(String str) {
@@ -425,7 +427,12 @@ public class TeamConfigEntry extends ModifiableListEntry {
                 if (currentTeamNum >= 2) {
                     Integer prevRealTeamNum = defaultTeamNums.get(currentTeamNum - 1);
                     Integer currentRealTeamNum = defaultTeamNums.get(currentTeamNum);
+                    Integer nextRealTeamNum = defaultTeamNums.get(currentTeamNum+1);
                     if (prevRealTeamNum != null && currentRealTeamNum != null && currentRealTeamNum <= prevRealTeamNum) {
+                        setError("Default team boundaries must be in ascending order.");
+                        return;
+                    }
+                    if (currentRealTeamNum != null && nextRealTeamNum != null && nextRealTeamNum <= currentRealTeamNum) {
                         setError("Default team boundaries must be in ascending order.");
                         return;
                     }

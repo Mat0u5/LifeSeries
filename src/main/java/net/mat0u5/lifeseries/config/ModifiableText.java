@@ -313,6 +313,7 @@ public enum ModifiableText {
     ,DOUBLELIFE_SOULMATE_ERROR_DUPLICATE(Seasons.DOUBLE_LIFE, "You cannot specify the same player twice")
     ,DOUBLELIFE_SOULMATE_RESET(Seasons.DOUBLE_LIFE, "All soulmate entries were reset")
     ,DOUBLELIFE_SOULMATE_NONE(Seasons.DOUBLE_LIFE, "There are no soulmates currently assigned")
+    ,DOUBLELIFE_SOULMATE_ERROR_UNKNOWN(Seasons.DOUBLE_LIFE, Formatted.PLAIN, "§cCould find players, parings skipped: {}", List.of("Player names"))
     ,DOUBLELIFE_SOULMATE_ROLLING(Seasons.DOUBLE_LIFE, "§7Rolling soulmates...")
     ,DOUBLELIFE_UNPAIRED(Seasons.DOUBLE_LIFE, "[Double Life] {} was not paired with anyone.", List.of("Player"))
     ,DOUBLELIFE_SOULMATE_TITLE(Seasons.DOUBLE_LIFE, "§aYour soulmate is...")
