@@ -61,6 +61,11 @@ public class ClientRenderer {
         }
         return originalInt;
     }
+
+    public static Vector3f modifyColor(Vector3f original, Vec3 targetColor, boolean setMode, Vec3 cache) {
+        Vec3 newColor =  modifyColor(new Vec3(original.x, original.y, original.z), targetColor, setMode, cache);
+        return new Vector3f((float) newColor.x, (float) newColor.y, (float) newColor.z);
+    }
     //?}
 
     public static Vec3 modifyColor(float r, float g, float b, Vec3 targetColor, boolean setMode, Vec3 cache) {

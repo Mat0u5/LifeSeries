@@ -64,12 +64,13 @@ public class TestingCommands extends Command {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        TaskScheduler.scheduleTask(1, () -> {
-            PlayerUtils.broadcastMessage(Component.literal("test"));
-        });
-        TaskScheduler.schedulePriorityTask(1, () -> {
-            PlayerUtils.broadcastMessage(Component.literal("test-priority"));
-        });
+        PlayerUtils.broadcastMessage(Component.literal("1.5.8: "+VersionControl.getModVersionInt("1.5.8")));
+        PlayerUtils.broadcastMessage(Component.literal("1.5.9-pre1: "+VersionControl.getModVersionInt("1.5.9-pre1")));
+        PlayerUtils.broadcastMessage(Component.literal("1.5.9: "+VersionControl.getModVersionInt("1.5.9")));
+        PlayerUtils.broadcastMessage(Component.literal("1.5.10-pre1: "+VersionControl.getModVersionInt("1.5.10-pre1")));
+        PlayerUtils.broadcastMessage(Component.literal("1.5.10: "+VersionControl.getModVersionInt("1.5.10")));
+        PlayerUtils.broadcastMessage(Component.literal("1.6.0-pre1: "+VersionControl.getModVersionInt("1.6.0-pre1")));
+        PlayerUtils.broadcastMessage(Component.literal("1.6.0: "+VersionControl.getModVersionInt("1.6.0")));
 
         return 1;
     }

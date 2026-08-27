@@ -18,6 +18,7 @@ import net.mat0u5.lifeseries.client.render.ClientRenderer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.SkyRenderer;
+import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -29,7 +30,13 @@ import net.minecraft.client.renderer.state.level.SkyRenderState;
 public class SkyRendererMixin {
     @Inject(method = "extractRenderState", at = @At("TAIL"))
     private void customSkyColor(ClientLevel clientLevel, float f, Camera camera, SkyRenderState skyRenderState, CallbackInfo ci) {
+        //? if <= 26.2 {
         skyRenderState.skyColor = ClientRenderer.modifyColor(skyRenderState.skyColor, LifeSeriesClient.skyColor, LifeSeriesClient.skyColorSetMode, null);
+        //?} else {
+        /*if (skyRenderState.skyColor instanceof Vector3f vector3f) {
+            skyRenderState.skyColor = ClientRenderer.modifyColor(vector3f, LifeSeriesClient.skyColor, LifeSeriesClient.skyColorSetMode, null);
+        }
+        *///?}
     }
 }
 //?}

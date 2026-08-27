@@ -57,8 +57,13 @@ public class TriviaSpiritParticleGroup extends ParticleGroup<TriviaSpiritParticl
             int color = ARGB.colorFromFloat(alpha, 1.0F, 1.0F, 1.0F);
             PoseStack poseStack = new PoseStack();
             poseStack.pushPose();
+            //? if <= 26.2 {
             poseStack.mulPose(camera.rotation());
             poseStack.mulPose(Axis.XP.rotationDegrees(60.0F - 150.0F * ageScale));
+            //?} else {
+            /*poseStack.rotate(camera.rotation());
+            poseStack.rotate(Axis.XP, 60.0F - 150.0F * ageScale);
+            *///?}
             poseStack.scale(1.0f, -1.0f, -1.0f);
             poseStack.translate(0.0f, 0, 1f);
             return new TriviaSpiritParticleRenderState(particle.model, poseStack, particle.renderType, color);
