@@ -219,6 +219,6 @@ public class LimitedLifeLivesManager extends LivesManager {
     @Override
     public void rollLivesFinished() {
         super.rollLivesFinished();
-        currentSession.resetPassedTime();
+        if (PAUSE_SESSION_TIME_UNTIL_ROLL) currentSession.resetPassedTime();
     }
 }

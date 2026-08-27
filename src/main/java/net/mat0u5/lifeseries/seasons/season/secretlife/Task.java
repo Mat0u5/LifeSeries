@@ -65,9 +65,9 @@ public class Task {
         if (rawTask.contains("${yellow_player}") && !anyYellowPlayers) return false;
         if (rawTask.contains("${red_player}") && !anyRedPlayers) return false;
         if (rawTask.contains("${name!="+owner.getScoreboardName()+"}")) return false;
-        if (rawTask.matches(".*\\$\\{name=[a-zA-Z0-9_]+\\}.*") && !rawTask.toLowerCase(Locale.ROOT).contains("${name=" + owner.getScoreboardName().toLowerCase(Locale.ROOT) + "}")) {
+        /*if (rawTask.matches(".*\\$\\{name=[a-zA-Z0-9_]+\\}.*") && !rawTask.toLowerCase(Locale.ROOT).contains("${name=" + owner.getScoreboardName().toLowerCase(Locale.ROOT) + "}")) {
             return false;
-        }
+        }*/
         return true;
     }
     /*
@@ -81,7 +81,7 @@ public class Task {
     ${green_player} - Replaced with a random green player. Tasks are only available when a green player is alive.
     ${yellow_player} - Replaced with a random yellow player. Tasks are only available when a yellow player is alive.
     ${red_player} - Replaced with a random red player. Tasks are only available when a red player is alive.
-    ${name=<player>} - Deleted. Task is given to <player>
+    //${name=<player>} - Deleted. Task is given to <player>
     ${name!=<player>} - Deleted. Task cannot be given to <player>
     ${boogeypocalypse} - Deleted. Starting infection player
      */
