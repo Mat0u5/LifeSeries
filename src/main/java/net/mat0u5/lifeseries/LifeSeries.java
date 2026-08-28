@@ -38,11 +38,12 @@ import net.mat0u5.lifeseries.registries.ModRegistries;
 *///?}
 
 public class LifeSeries {
-	public static final String MOD_VERSION = "1.5.9";
+	public static final String MOD_VERSION = "1.5.9.1-dev";
 	public static final String MOD_ID = "lifeseries";
 	private static final Platform PLATFORM = createPlatformInstance();
 
 	public static final boolean DEBUG = false;
+	public static final boolean FORCE_DEV = false;
 	public static final boolean ISOLATED_ENVIRONMENT = false;
 	public static final Seasons DEFAULT_SEASON = Seasons.UNASSIGNED;
 	public static boolean MOD_DISABLED = false;
