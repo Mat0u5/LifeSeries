@@ -8,10 +8,11 @@ import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Util;
 
 import java.util.List;
 import java.util.Objects;
-import net.minecraft.util.Util;
+
 //? if >= 1.21.9
 import net.minecraft.client.input.*;
 

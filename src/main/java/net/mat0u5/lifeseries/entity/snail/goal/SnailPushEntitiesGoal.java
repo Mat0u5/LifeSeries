@@ -4,14 +4,13 @@ import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.entity.vehicle.minecart.MinecartTNT;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.world.entity.vehicle.minecart.MinecartTNT;
 
 //? if <= 1.21.4
 //import net.minecraft.world.entity.projectile.ThrownPotion;

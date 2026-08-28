@@ -1,13 +1,13 @@
 package net.mat0u5.lifeseries.client.gui.config.entries.extra;
 
-import net.mat0u5.lifeseries.config.ModifiableText;
-import net.mat0u5.lifeseries.config.ModifiableTextManager;
 import net.mat0u5.lifeseries.client.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.client.gui.config.entries.interfaces.IPopup;
 import net.mat0u5.lifeseries.client.gui.config.entries.interfaces.ITextFieldAddonPopup;
 import net.mat0u5.lifeseries.client.gui.config.entries.main.StringConfigEntry;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.client.utils.TextColors;
+import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.config.ModifiableTextManager;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.enums.Formatted;
 import net.minecraft.client.gui.Font;

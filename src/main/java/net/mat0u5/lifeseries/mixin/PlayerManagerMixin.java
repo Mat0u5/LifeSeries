@@ -23,6 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
+
 //? if <= 1.21.5
 //import net.minecraft.nbt.CompoundTag;
 //? if = 1.21.6 {

@@ -5,10 +5,10 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrownEnderpearl;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrownEnderpearl;
 
 @Mixin(value = ThrownEnderpearl.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)

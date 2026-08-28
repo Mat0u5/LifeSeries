@@ -14,7 +14,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 
-
 //? if >= 1.21.2 {
 import net.minecraft.world.item.equipment.Equippable;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;

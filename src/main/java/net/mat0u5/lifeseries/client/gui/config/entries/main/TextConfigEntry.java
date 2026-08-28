@@ -2,8 +2,9 @@ package net.mat0u5.lifeseries.client.gui.config.entries.main;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.mat0u5.lifeseries.client.gui.config.entries.EmptyConfigEntry;
-import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.client.utils.interfaces.IEntryGroupHeader;
+import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+
 //? if >= 1.21.9
 import net.minecraft.client.input.*;
 

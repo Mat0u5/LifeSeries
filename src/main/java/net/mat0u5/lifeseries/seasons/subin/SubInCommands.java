@@ -17,7 +17,6 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;
 import java.util.Optional;
-import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 //? if >= 1.21.9
 import net.minecraft.server.players.NameAndId;

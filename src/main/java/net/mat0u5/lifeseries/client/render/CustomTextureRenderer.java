@@ -2,12 +2,12 @@ package net.mat0u5.lifeseries.client.render;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 
+import net.minecraft.resources.Identifier;
+
 //? if >= 1.21.2 && <= 1.21.5
 //import net.minecraft.client.renderer.rendertype.RenderType;
 //? if >= 1.21.6
 import net.minecraft.client.renderer.RenderPipelines;
-
-import net.minecraft.resources.Identifier;
 
 public class CustomTextureRenderer {
     private final Identifier texture;

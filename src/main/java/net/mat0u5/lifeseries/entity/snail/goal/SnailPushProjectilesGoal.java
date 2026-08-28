@@ -6,11 +6,12 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.arrow.ThrownTrident;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.world.entity.projectile.arrow.ThrownTrident;
 
 //? if >= 1.21.5
 import java.util.Optional;
@@ -18,7 +19,6 @@ import java.util.Optional;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.level.storage.TagValueOutput;
 //?}
-
 //? if <= 1.21.4
 //import net.minecraft.world.entity.projectile.ThrownPotion;
 //? if >= 1.21.5

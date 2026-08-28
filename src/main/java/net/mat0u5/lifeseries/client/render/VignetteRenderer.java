@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.client.render;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 
 //? if <= 1.21 {
@@ -15,8 +16,6 @@ import net.minecraft.util.ARGB;
 //import net.minecraft.client.renderer.rendertype.RenderType;
 //? if >= 1.21.6
 import net.minecraft.client.renderer.RenderPipelines;
-
-import net.minecraft.resources.Identifier;
 
 public class VignetteRenderer {
     private static final Identifier VIGNETTE_TEXTURE = IdentifierHelper.vanilla("textures/misc/vignette.png");

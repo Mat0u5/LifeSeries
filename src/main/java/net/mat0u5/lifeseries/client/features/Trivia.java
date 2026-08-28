@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.client.features;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.gui.trivia.ConfirmQuizAnswerScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.NewQuizScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.QuizScreen;
@@ -12,7 +11,6 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
-import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
 import java.util.List;

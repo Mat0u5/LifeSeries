@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
+
 //? if <= 1.21
 //import net.minecraft.world.entity.player.Player;
 

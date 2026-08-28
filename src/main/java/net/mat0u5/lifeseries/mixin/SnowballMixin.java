@@ -4,10 +4,10 @@ import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.entity.angrysnowman.AngrySnowman;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.Snowball;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import net.minecraft.world.entity.projectile.throwableitemprojectile.Snowball;
 
 @Mixin(value = Snowball.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)

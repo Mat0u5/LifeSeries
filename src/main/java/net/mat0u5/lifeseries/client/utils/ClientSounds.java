@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.client.utils;
 
 import net.mat0u5.lifeseries.mixin.client.AbstractSoundInstanceAccessor;
-import net.mat0u5.lifeseries.mixin.client.SoundManagerAccessor;
 import net.mat0u5.lifeseries.mixin.client.SoundEngineAccessor;
+import net.mat0u5.lifeseries.mixin.client.SoundManagerAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;

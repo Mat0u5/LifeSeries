@@ -2,22 +2,22 @@ package net.mat0u5.lifeseries.client.events;
 
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
-import net.mat0u5.lifeseries.client.gui.trivia.QuizScreen;
-import net.mat0u5.lifeseries.client.render.RenderUtils;
-import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.client.compatibilities.VoicechatClient;
 import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.client.gui.other.UpdateInfoScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.NewQuizScreen;
+import net.mat0u5.lifeseries.client.gui.trivia.QuizScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.VotingScreen;
 import net.mat0u5.lifeseries.client.network.NetworkHandlerClient;
-import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
+import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.client.render.TextHud;
-import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.client.utils.ClientSounds;
 import net.mat0u5.lifeseries.client.utils.ClientTaskScheduler;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
+import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.minecraft.client.Minecraft;
@@ -48,7 +48,6 @@ import org.joml.Vector3f;
 *///?} else {
 import net.minecraft.core.particles.ColorParticleOption;
  //?}
-
 //? if fabric {
 import net.mat0u5.lifeseries.client.compatibilities.FlashbackCompatibility;
 import net.mat0u5.lifeseries.client.compatibilities.ReplayModCompatibility;

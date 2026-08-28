@@ -15,6 +15,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+
 //? if <= 1.21.6 {
 /*import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
@@ -23,14 +24,17 @@ import static net.mat0u5.lifeseries.LifeSeries.server;
 *///?}
 //? if > 1.20.5 && <= 1.21.6
 //import net.minecraft.network.DisconnectionDetails;
-
 //? if >= 1.21.9 {
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.minecraft.world.entity.decoration.Mannequin;
 import net.mat0u5.lifeseries.mixin.MannequinAccessor;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntitySpawnReason;
+//? if <= 26.1 {
+import net.minecraft.world.entity.EntityType;
+//?} else {
 import net.minecraft.world.entity.EntityTypes;
+//?}
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.component.ResolvableProfile;
 //?}

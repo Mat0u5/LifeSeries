@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.entity.triviabot;
 
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.world.entity.AnimationState;
 
 public class TriviaBotClientData {

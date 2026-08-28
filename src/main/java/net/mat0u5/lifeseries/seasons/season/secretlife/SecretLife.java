@@ -26,8 +26,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantments;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.world.level.gamerules.GameRules;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.*;
 
@@ -44,9 +44,12 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.component.CustomData;
 //?}
-
 //? if >= 1.21.9 {
+//? if <= 26.1 {
+import net.minecraft.world.entity.EntityType;
+//?} else {
 import net.minecraft.world.entity.EntityTypes;
+//?}
 import net.minecraft.world.item.component.TypedEntityData;
 //?}
 

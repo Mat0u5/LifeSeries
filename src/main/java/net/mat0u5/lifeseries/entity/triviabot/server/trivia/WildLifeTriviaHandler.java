@@ -36,8 +36,8 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -46,25 +46,25 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.*;
 
-import net.minecraft.world.entity.animal.bee.Bee;
+import static net.mat0u5.lifeseries.LifeSeries.*;
 
 //? if <= 1.20.3 {
 /*import net.minecraft.core.particles.DustParticleOptions;
 *///?} else {
 import net.minecraft.core.particles.ColorParticleOption;
 //?}
-
 //? if >= 1.20.5 {
 import net.minecraft.core.component.DataComponents;
 //?}
-
 //? if > 1.21.9
 import net.minecraft.world.entity.EntityReference;
-
-import static net.mat0u5.lifeseries.LifeSeries.*;
-import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
 //? if <= 1.20.3
 //import org.joml.Vector3f;
+//? if <= 26.1 {
+import net.minecraft.world.entity.EntityType;
+//?} else {
+import net.minecraft.world.entity.EntityTypes;
+//?}
 
 public class WildLifeTriviaHandler extends TriviaHandler {
     private static int AUTO_OPEN_TIME = Time.seconds(120).getTicks();

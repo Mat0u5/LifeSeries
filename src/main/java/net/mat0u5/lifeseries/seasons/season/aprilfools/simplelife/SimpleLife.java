@@ -7,9 +7,12 @@ import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiTypes;
+import net.minecraft.world.entity.animal.equine.TraderLlama;
+import net.minecraft.world.entity.npc.wanderingtrader.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
@@ -17,8 +20,6 @@ import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.entity.animal.equine.TraderLlama;
-import net.minecraft.world.entity.npc.wanderingtrader.WanderingTrader;
 
 import java.util.Iterator;
 import java.util.Optional;
@@ -29,6 +30,12 @@ import java.util.Random;
 import net.minecraft.world.level.NaturalSpawner;
 *///?} else {
 import net.minecraft.world.item.trading.ItemCost;
+import net.minecraft.world.entity.SpawnPlacementType;
+//?}
+//? if <= 26.1 {
+import net.minecraft.world.entity.EntityType;
+//?} else {
+import net.minecraft.world.entity.EntityTypes;
 //?}
 
 public class SimpleLife extends ThirdLife {

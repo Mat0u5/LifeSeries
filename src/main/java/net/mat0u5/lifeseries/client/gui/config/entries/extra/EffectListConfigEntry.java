@@ -8,20 +8,21 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffect;
+
 import java.util.ArrayList;
 import java.util.List;
+
 //? if <= 1.21
 //import com.mojang.blaze3d.systems.RenderSystem;
-
 //? if >= 1.21.2 {
 import net.minecraft.util.ARGB;
 //?}
 //? if >= 1.21.2 && <= 1.21.5 {
 /*import net.minecraft.client.renderer.rendertype.RenderType;
 *///?}
-
 //? if <= 1.21.5 {
 /*import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.MobEffectTextureManager;
@@ -34,7 +35,6 @@ import net.minecraft.client.renderer.RenderPipelines;
 //? if >= 26.2
 import net.minecraft.client.gui.Hud;
 
-import net.minecraft.resources.Identifier;
 //? if <= 1.20.3 {
 /*public class EffectListConfigEntry extends StringListPopupConfigEntry<MobEffect> {
 *///?} else {

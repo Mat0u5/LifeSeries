@@ -4,14 +4,14 @@ import net.mat0u5.lifeseries.client.utils.interfaces.IEntityRenderState;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.SnowGolemRenderer;
+import net.minecraft.resources.Identifier;
+
 import java.util.Random;
 import java.util.UUID;
-import net.minecraft.resources.Identifier;
 
 //? if <= 1.21 {
 /*import net.minecraft.world.entity.animal.golem.SnowGolem;
 *///?}
-
 //? if >= 1.21.2 {
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
  //?}

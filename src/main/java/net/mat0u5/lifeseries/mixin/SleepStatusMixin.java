@@ -15,8 +15,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 
-import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
-
 @Mixin(value = SleepStatus.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class SleepStatusMixin {

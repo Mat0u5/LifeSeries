@@ -18,8 +18,6 @@ import net.minecraft.server.level.ServerPlayer;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
-
 public class UnassignedSeason extends Season {
     @Override
     public Seasons getSeason() {

@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.utils.player.TeamUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.scores.PlayerScoreEntry;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,7 +17,6 @@ import java.util.List;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 import static net.mat0u5.lifeseries.LifeSeries.livesManager;
-import net.minecraft.world.scores.PlayerScoreEntry;
 
 //? if <= 26.1 {
 /*import net.minecraft.ChatFormatting;

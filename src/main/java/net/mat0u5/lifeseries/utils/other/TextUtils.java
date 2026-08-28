@@ -4,9 +4,9 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.*;
 import net.minecraft.server.level.ServerPlayer;
-import org.spongepowered.asm.mixin.Mutable;
 
 import java.util.List;
+
 //? if >= 1.21.4
 import java.net.URI;
 

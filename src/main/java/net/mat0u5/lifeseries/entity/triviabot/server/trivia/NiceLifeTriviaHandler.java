@@ -46,9 +46,12 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.component.CustomData;
 //?}
-
 //? if >= 1.21.9 {
+//? if <= 26.1 {
+import net.minecraft.world.entity.EntityType;
+//?} else {
 import net.minecraft.world.entity.EntityTypes;
+//?}
 import net.minecraft.world.item.component.TypedEntityData;
 //?}
 

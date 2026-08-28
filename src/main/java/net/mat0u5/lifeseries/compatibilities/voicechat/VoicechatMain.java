@@ -26,8 +26,6 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.*;
 
-import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
-
 //? if forge || neoforge {
 /*import de.maxhenkel.voicechat.api.ForgeVoicechatPlugin;
 @ForgeVoicechatPlugin

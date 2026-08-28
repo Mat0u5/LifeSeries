@@ -2,16 +2,17 @@ package net.mat0u5.lifeseries.client.gui.seasons;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.mat0u5.lifeseries.client.gui.DefaultScreen;
-import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
-import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.client.utils.TextColors;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+
 //? if >= 1.21.9
 import net.minecraft.client.input.*;
 
