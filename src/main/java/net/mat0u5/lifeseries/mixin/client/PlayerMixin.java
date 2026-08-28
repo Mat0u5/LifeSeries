@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.mixin.client;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
+
 //? if >= 1.21.2 {
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;

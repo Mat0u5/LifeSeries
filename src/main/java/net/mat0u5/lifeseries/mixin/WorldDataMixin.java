@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.mixin;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.minecraft.world.level.storage.WorldData;
 import org.spongepowered.asm.mixin.Mixin;
+
 //? if = 1.21.2 {
 /*import net.mat0u5.lifeseries.LifeSeries;
 import net.minecraft.world.flag.FeatureFlagSet;

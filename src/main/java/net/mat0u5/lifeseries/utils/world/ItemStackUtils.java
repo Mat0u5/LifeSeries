@@ -13,15 +13,14 @@ import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-
 import static net.mat0u5.lifeseries.LifeSeries.server;
+
 //? if <= 1.21
 //import net.minecraft.world.item.EnchantedBookItem;
 //? if >= 1.21.2
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 //? if >= 1.21.5
 import java.util.Optional;
-
 //? if <= 1.20.3 {
 //?} else {
 import net.minecraft.core.component.DataComponents;

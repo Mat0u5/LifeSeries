@@ -18,7 +18,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.mat0u5.lifeseries.LifeSeries.livesManager;
 import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
 
 public class DatapackIntegration {

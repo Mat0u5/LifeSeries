@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.mixin.client;
 
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
-import org.spongepowered.asm.mixin.Mixin;
 import net.minecraft.client.sounds.SoundEngine;
+import org.spongepowered.asm.mixin.Mixin;
 
 //? if >= 1.20.3 {
 import net.mat0u5.lifeseries.LifeSeries;

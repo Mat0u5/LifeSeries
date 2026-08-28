@@ -3,7 +3,6 @@ package net.mat0u5.lifeseries.mixin;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ModifiableText;
-import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
@@ -19,33 +18,33 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.LastSeenMessages;
 import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.network.protocol.game.*;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.server.players.PlayerList;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 import java.util.List;
-import org.spongepowered.asm.mixin.Shadow;
-import java.util.Set;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
+import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
+import net.minecraft.server.level.ServerLevel;
+import java.util.Set;
 
 //? if <= 1.20.3 {
 /*import net.minecraft.network.protocol.game.ServerboundChatCommandPacket;
 *///?} else {
 import net.minecraft.network.protocol.game.ServerboundChatCommandSignedPacket;
 //?}
-
 //? if >= 1.21
 import net.minecraft.network.DisconnectionDetails;
 //? if >= 1.20.5
 import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
-
 //? if <= 1.21
 //import net.minecraft.world.entity.RelativeMovement;
 //? if >= 1.21.2 <= 1.21.6 {

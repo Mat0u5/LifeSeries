@@ -4,12 +4,13 @@ import net.mat0u5.lifeseries.client.gui.config.ConfigListWidget;
 import net.mat0u5.lifeseries.client.gui.config.ConfigScreen;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.client.utils.TextColors;
-import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.client.utils.interfaces.IEntryGroupHeader;
+import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 import java.util.ArrayList;
 import java.util.List;
+
 //? if >= 1.21.9
 import net.minecraft.client.input.*;
 

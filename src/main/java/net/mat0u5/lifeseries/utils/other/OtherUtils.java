@@ -14,10 +14,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.phys.Vec3;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,12 +29,10 @@ import static net.mat0u5.lifeseries.LifeSeries.server;
 
 //? if >= 1.20.3
 import net.minecraft.server.ServerTickRateManager;
-
 //? if <= 1.21.9
 //import net.minecraft.world.level.gamerules.GameRules;
 //? if > 1.21.9
 import net.minecraft.world.level.gamerules.GameRule;
-import net.minecraft.world.phys.Vec3;
 
 public class OtherUtils {
     private static final Random rnd = new Random();

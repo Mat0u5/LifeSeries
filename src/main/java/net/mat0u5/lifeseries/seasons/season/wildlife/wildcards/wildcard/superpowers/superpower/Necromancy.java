@@ -25,7 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static net.mat0u5.lifeseries.LifeSeries.*;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.livesManager;
 
 public class Necromancy extends Superpower {
     public static int COOLDOWN_MILLIS = 300000;

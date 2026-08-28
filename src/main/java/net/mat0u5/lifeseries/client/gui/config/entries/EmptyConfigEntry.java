@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.client.gui.config.entries;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+
 //? if >= 1.21.9
 import net.minecraft.client.input.*;
 

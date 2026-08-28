@@ -13,6 +13,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -27,7 +28,6 @@ import net.minecraft.core.component.PatchedDataComponentMap;
 /*import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.food.Foods;
 *///?}
-import org.spongepowered.asm.mixin.gen.Accessor;
 
 //? if <= 1.21.11 {
 /*@Mixin(value = Item.class, priority = 1)

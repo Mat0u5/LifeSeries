@@ -34,21 +34,21 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.level.gamerules.GameRules;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
 
 //? if >= 26.1 {
 import net.minecraft.world.clock.WorldClocks;
 //?}
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class NiceLife extends Season {
 

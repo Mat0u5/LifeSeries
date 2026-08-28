@@ -11,9 +11,8 @@ import net.mat0u5.lifeseries.client.gui.config.entries.extra.time.MinutesConfigE
 import net.mat0u5.lifeseries.client.gui.config.entries.extra.time.SecondsConfigEntry;
 import net.mat0u5.lifeseries.client.gui.config.entries.main.*;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
-import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.client.utils.interfaces.IEntryGroupHeader;
-import net.minecraft.client.Minecraft;
+import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;

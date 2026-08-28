@@ -1,11 +1,10 @@
 package net.mat0u5.lifeseries.mixin;
 
-import com.mojang.authlib.GameProfile;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
+import com.mojang.authlib.GameProfile;
 import org.spongepowered.asm.mixin.gen.Invoker;
-
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
