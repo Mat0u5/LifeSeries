@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.mixin;
 
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
@@ -32,9 +32,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
-import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
+//? if <= 1.21.6 {
+/*import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.minecraft.server.level.ServerLevel;
 import java.util.Set;
+*///?}
 
 //? if <= 1.20.3 {
 /*import net.minecraft.network.protocol.game.ServerboundChatCommandPacket;

@@ -31,6 +31,7 @@ public enum ConfigTypes {
     TRIVIA_QUESTION("trivia_question"),
     TRIVIA_ANSWER("trivia_answer"),
     MODIFIABLE_TEXT("modifiable_text"),
+    MODIFIABLE_SOUND("modifiable_sound"),
     BOOLEAN_REVERSE_HEADER("boolean_reverse_header"),
 
     GROUP("group");
@@ -46,7 +47,7 @@ public enum ConfigTypes {
     }
 
     public boolean parentString() {
-        return this == STRING || this == ITEM_LIST || this == BLOCK_LIST || this == EFFECT_LIST || this == ENCHANT_LIST || this == STRING_LIST || this == ENUM || this == EVENT_ENTRY || this == MODIFIABLE_TEXT;
+        return this == STRING || this == ITEM_LIST || this == BLOCK_LIST || this == EFFECT_LIST || this == ENCHANT_LIST || this == STRING_LIST || this == ENUM || this == EVENT_ENTRY || this == MODIFIABLE_TEXT || this == MODIFIABLE_SOUND;
     }
     public boolean parentText() {
         return this == TEXT || this == TEAM_ENTRY || this == SECRET_TASK || this == TRIVIA_QUESTION || this == TRIVIA_ANSWER || this == SOULMATE_ENTRY;

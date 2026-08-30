@@ -1,4 +1,4 @@
-package net.mat0u5.lifeseries.config;
+package net.mat0u5.lifeseries.config.modifiable;
 
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.Seasons;

@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife;
 
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ConfigManager;
-import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.TriviaHandler;
@@ -47,7 +47,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSession;
-import net.mat0u5.lifeseries.utils.player.*;
 
 //? if >= 1.21.2 {
 import net.minecraft.server.level.ServerLevel;

@@ -4,8 +4,8 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.command.manager.CommandManager;
 import net.mat0u5.lifeseries.config.ConfigManager;
-import net.mat0u5.lifeseries.config.ModifiableText;
-import net.mat0u5.lifeseries.config.ModifiableTextManager;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableTextManager;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.events.Events;
@@ -72,8 +72,6 @@ import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
 import static net.mat0u5.lifeseries.seasons.util.WatcherManager.isWatcher;
-import net.minecraft.ChatFormatting;
-import net.minecraft.world.entity.*;
 
 //? if <= 1.20
 //import net.minecraft.world.scores.Scoreboard;

@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.entity.triviabot.server.trivia;
 
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
-import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotPathfinding;
@@ -61,8 +61,8 @@ import net.minecraft.world.entity.EntityReference;
 //? if <= 1.20.3
 //import org.joml.Vector3f;
 //? if <= 26.1 {
-import net.minecraft.world.entity.EntityType;
-//?} else {
+/*import net.minecraft.world.entity.EntityType;
+*///?} else {
 import net.minecraft.world.entity.EntityTypes;
 //?}
 

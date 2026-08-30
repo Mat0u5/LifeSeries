@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard;
 
-import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Random;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSession;
-import java.util.*;
 
 //? if >= 1.20.5 {
 import net.minecraft.core.component.DataComponentMap;

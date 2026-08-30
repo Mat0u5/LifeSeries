@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.seasons.subin;
 
 import com.mojang.authlib.GameProfile;
-import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayerManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -24,7 +24,6 @@ import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.level.storage.ValueInput;
 //?}
 //? if >= 1.21.9 {
-import net.minecraft.server.players.NameAndId;
 import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.nbt.CompoundTag;
 //?}

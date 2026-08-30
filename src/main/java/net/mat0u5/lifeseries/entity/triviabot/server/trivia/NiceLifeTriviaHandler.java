@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.entity.triviabot.server.trivia;
 
-import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
@@ -48,8 +48,8 @@ import net.minecraft.world.item.component.CustomData;
 //?}
 //? if >= 1.21.9 {
 //? if <= 26.1 {
-import net.minecraft.world.entity.EntityType;
-//?} else {
+/*import net.minecraft.world.entity.EntityType;
+*///?} else {
 import net.minecraft.world.entity.EntityTypes;
 //?}
 import net.minecraft.world.item.component.TypedEntityData;

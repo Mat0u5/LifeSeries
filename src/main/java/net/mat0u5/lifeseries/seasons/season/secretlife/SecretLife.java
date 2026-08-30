@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.secretlife;
 
 import net.mat0u5.lifeseries.config.ConfigManager;
-import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
@@ -46,8 +46,8 @@ import net.minecraft.world.item.component.CustomData;
 //?}
 //? if >= 1.21.9 {
 //? if <= 26.1 {
-import net.minecraft.world.entity.EntityType;
-//?} else {
+/*import net.minecraft.world.entity.EntityType;
+*///?} else {
 import net.minecraft.world.entity.EntityTypes;
 //?}
 import net.minecraft.world.item.component.TypedEntityData;
