@@ -161,18 +161,19 @@ public class VersionControl {
         *   1.5.8.19    -   1.5.8.20
         *   1.5.8.21    -   1.5.8.23
         *   1.5.9-pre1
-        *   1.5.9       -   *
+        *   1.5.9       -   1.5.9.1
+        *   1.5.9.2     -   *
      */
 
     public static String clientCompatibilityMin() {
         // This is the version that the SERVER needs to have for the current client.
         if (LifeSeries.ISOLATED_ENVIRONMENT) return MOD_VERSION;
-        return "1.5.9";
+        return "1.5.9.2-dev";
     }
 
     public static String serverCompatibilityMin() {
         // This is the version that the CLIENT needs to have for the current server.
         if (LifeSeries.ISOLATED_ENVIRONMENT) return MOD_VERSION;
-        return "1.5.9";
+        return "1.5.9.2-dev";
     }
 }

@@ -70,6 +70,9 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
         if (hasError()) {
             textField.setTextColor(TextColors.PASTEL_RED);
         }
+        else if (hasWarn()) {
+            textField.setTextColor(TextColors.PASTEL_YELLOW);
+        }
         else {
             textField.setTextColor(TextColors.WHITE);
         }

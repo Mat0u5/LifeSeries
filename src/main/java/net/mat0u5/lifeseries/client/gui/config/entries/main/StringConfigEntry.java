@@ -69,7 +69,7 @@ public class StringConfigEntry extends TextFieldConfigEntry {
 
         int labelEndX = labelEndX();
         int fieldEndX = textField.getX() + textField.getWidth();
-        int maxFieldWidth = fieldEndX - labelEndX - 15;
+        int maxFieldWidth = maxFieldWidth(labelEndX, fieldEndX);
         int newMinFieldWidth = minFieldWidth;
         if (maxFieldWidth <= newMinFieldWidth) newMinFieldWidth = maxFieldWidth;
 
@@ -86,6 +86,10 @@ public class StringConfigEntry extends TextFieldConfigEntry {
         else {
             targetWidth = Math.min(newMinFieldWidth, requiredWidth);
         }
+    }
+
+    protected int maxFieldWidth(int labelEndX, int fieldEndX) {
+        return fieldEndX - labelEndX - 15;
     }
 
     public int labelEndX() {
