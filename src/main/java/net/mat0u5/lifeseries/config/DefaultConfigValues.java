@@ -451,6 +451,10 @@ public class DefaultConfigValues {
             "group_texts", null, ConfigTypes.TEXT, "{text}",
             "Modifiable Texts", ""
     );
+    public final ConfigFileEntry<Object> GROUP_SOUNDS = new ConfigFileEntry<>(
+            "group_sounds", null, ConfigTypes.TEXT, "{sound}",
+            "Modifiable Sounds", ""
+    );
     public final ConfigFileEntry<Object> GROUP_MUTED = new ConfigFileEntry<>(
             "group_muted", null, ConfigTypes.TEXT, "{global.muted}",
             "Muted Players", ""

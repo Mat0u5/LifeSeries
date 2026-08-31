@@ -1,7 +1,9 @@
 package net.mat0u5.lifeseries.config;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.config.modifiable.ModifiableTextManager;import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSoundManager;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableTextManager;
+import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
@@ -56,6 +58,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,GROUP_TEAMS
                 ,GROUP_EVENTS
                 ,GROUP_TEXTS
+                ,GROUP_SOUNDS
 
                 , GROUP_GLOBAL_LIVES // Group
                 ,GROUP_SESSION // Group
@@ -390,6 +393,10 @@ public abstract class ConfigManager extends DefaultConfigValues {
             }
         }
         for (Map.Entry<String, ConfigFileEntry<String>> entry : ModifiableTextManager.getRegisteredEntries().entrySet()) {
+            sendConfigEntry(player, entry.getValue(), index);
+            index++;
+        }
+        for (Map.Entry<String, ConfigFileEntry<String>> entry : ModifiableSoundManager.getRegisteredEntries().entrySet()) {
             sendConfigEntry(player, entry.getValue(), index);
             index++;
         }

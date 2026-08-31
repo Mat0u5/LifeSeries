@@ -186,6 +186,9 @@ public class ClientConfigGuiManager {
             else if (stringObject.configType == ConfigTypes.MODIFIABLE_TEXT) {
                 return new ModifiableTextConfigEntry(stringObject.id, stringObject.name, stringObject.description, stringObject.stringValue, stringObject.defaultValue);
             }
+            else if (stringObject.configType == ConfigTypes.MODIFIABLE_SOUND) {
+                return new ModifiableSoundConfigEntry(stringObject.id, stringObject.name, stringObject.stringValue, stringObject.defaultValue);
+            }
             else if (stringObject.configType == ConfigTypes.ENUM) {
                 List<String> args = new ArrayList<>(stringObject.args);
                 if (args.size() >= 3) {

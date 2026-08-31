@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
@@ -60,13 +61,7 @@ public class TestingCommands extends Command {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        PlayerUtils.broadcastMessage(Component.literal("1.5.8: "+VersionControl.getModVersionInt("1.5.8")));
-        PlayerUtils.broadcastMessage(Component.literal("1.5.9-pre1: "+VersionControl.getModVersionInt("1.5.9-pre1")));
-        PlayerUtils.broadcastMessage(Component.literal("1.5.9: "+VersionControl.getModVersionInt("1.5.9")));
-        PlayerUtils.broadcastMessage(Component.literal("1.5.10-pre1: "+VersionControl.getModVersionInt("1.5.10-pre1")));
-        PlayerUtils.broadcastMessage(Component.literal("1.5.10: "+VersionControl.getModVersionInt("1.5.10")));
-        PlayerUtils.broadcastMessage(Component.literal("1.6.0-pre1: "+VersionControl.getModVersionInt("1.6.0-pre1")));
-        PlayerUtils.broadcastMessage(Component.literal("1.6.0: "+VersionControl.getModVersionInt("1.6.0")));
+        ModifiableSound.TEST.play(player);
 
         return 1;
     }
@@ -76,12 +71,7 @@ public class TestingCommands extends Command {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        DatapackIntegration.EVENT_PLAYER_LEAVE.trigger(List.of(
-                new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()),
-                new DatapackIntegration.Events.MacroEntry("PosX", String.valueOf(player.blockPosition().getX())),
-                new DatapackIntegration.Events.MacroEntry("PosY", String.valueOf(player.blockPosition().getY())),
-                new DatapackIntegration.Events.MacroEntry("PosZ", String.valueOf(player.blockPosition().getZ()))
-        ));
+        ModifiableSound.TEST2.play(player);
 
         return 1;
     }

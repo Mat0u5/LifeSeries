@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.command.manager.CommandManager;
 import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSoundManager;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableTextManager;
 import net.mat0u5.lifeseries.entity.snail.Snail;
@@ -152,6 +153,7 @@ public abstract class Season {
 
     public void initialize() {
         ModifiableTextManager.initialize();
+        ModifiableSoundManager.initialize();
         reload();
     }
 

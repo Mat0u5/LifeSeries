@@ -24,12 +24,16 @@ public class ModifiableSoundManager {
 		LifeSeries.LOGGER.info("Loaded "+registeredEntries.size()+" modifiable sounds");
 	}
 
-	public static void register(String key, String soundId) {
+	public static Map<String, ConfigFileEntry<String>> getRegisteredEntries() {
+		return registeredEntries;
+	}
+
+	public static void register(String key, String defaultSoundId, String soundId) {
 		if (registeredEntries.containsKey(key)) {
 			LifeSeries.LOGGER.error("Tried to register duplicate key for modifiable sound: "+key);
 			return;
 		}
-		ConfigFileEntry<String> configEntry = new ConfigFileEntry<>("sound."+key, soundId, ConfigTypes.MODIFIABLE_SOUND, "sound", key, "");
+		ConfigFileEntry<String> configEntry = new ConfigFileEntry<>("sound."+key, defaultSoundId, ConfigTypes.MODIFIABLE_SOUND, "sound", key, "");
 		configEntry.get(); // To initialize it
 		registeredEntries.put(key, configEntry);
 	}
@@ -45,20 +49,30 @@ public class ModifiableSoundManager {
 			return SoundEvents.EMPTY;
 		}
 		String configSoundId = configEntry.get();
-		if (configSoundId.equalsIgnoreCase(modifiableSound.cachedSoundId)) {
+		if (!configSoundId.contains(":")) {
+			configSoundId = "minecraft:"+configSoundId;
+		}
+		if (configSoundId.equalsIgnoreCase(modifiableSound.cachedSoundId) && modifiableSound.cachedSound != null) {
 			return modifiableSound.cachedSound;
 		}
 
 		modifiableSound.cachedSoundId = configSoundId;
-
+		modifiableSound.cachedSound = null;
 		try {
-			ResourceKey<SoundEvent> soundResource = ResourceKey.create(BuiltInRegistries.SOUND_EVENT.key(), IdentifierHelper.parse(configSoundId));
+			var identifier = IdentifierHelper.parse(configSoundId);
+			ResourceKey<SoundEvent> soundResource = ResourceKey.create(BuiltInRegistries.SOUND_EVENT.key(), identifier);
 			//? if <= 1.21 {
 			/*SoundEvent sound = BuiltInRegistries.SOUND_EVENT.get(soundResource);
 			 *///?} else {
 			SoundEvent sound = BuiltInRegistries.SOUND_EVENT.getValue(soundResource);
 			//?}
 			if (sound != null) {
+				modifiableSound.cachedSound = sound;
+				return sound;
+			}
+			else {
+				sound = SoundEvent.createVariableRangeEvent(identifier);
+				modifiableSound.cachedSound = sound;
 				return sound;
 			}
 		}catch(Exception e) {}
