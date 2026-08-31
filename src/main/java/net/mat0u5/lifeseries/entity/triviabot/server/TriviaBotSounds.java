@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.entity.triviabot.server;
 
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -28,13 +29,11 @@ public class TriviaBotSounds {
 
         if (introSoundCooldown == 0 && !bot.interactedWith()) {
             if (!bot.santaBot()) {
-                SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("wildlife_trivia_intro"));
-                PlayerUtils.playSoundWithSourceToPlayers(PlayerUtils.getAllPlayers(), bot, sound, SoundSource.NEUTRAL, 1, 1);
+                ModifiableSound.WILDLIFE_TRIVIA_INTRO.playWithSource(PlayerUtils.getAllPlayers(), bot, SoundSource.NEUTRAL, 1, 1);
                 introSoundCooldown = 830;
             }
             else {
-                SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_santabot_intro"));
-                PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.65f, 1);
+                ModifiableSound.NICELIFE_SANTABOT_INTRO.play(bot.serverData.getBoundPlayer(), 0.65f, 1);
                 introSoundCooldown = 624;
             }
         }
@@ -42,31 +41,27 @@ public class TriviaBotSounds {
         if (!playedCountdownEndingSound && bot.interactedWith() && !bot.submittedAnswer() && !bot.ranOutOfTime()
                 && ((!bot.santaBot() && bot.triviaHandler.getRemainingTicks() <= 676) || (bot.santaBot() && bot.triviaHandler.getRemainingTicks() <= 643))) {
             if (!bot.santaBot()) {
-                SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("wildlife_trivia_suspense_end"));
                 List<ServerPlayer> otherPlayers = PlayerUtils.getAllPlayers();
                 ServerPlayer boundPlayer = bot.serverData.getBoundPlayer();
                 if (boundPlayer != null) {
                     otherPlayers.remove(boundPlayer);
-                    PlayerUtils.playSoundWithSourceToPlayers(List.of(boundPlayer), bot, sound, SoundSource.MASTER, 0.65f, 1);
+                    ModifiableSound.WILDLIFE_TRIVIA_SUSPENSE_END.playWithSource(List.of(boundPlayer), bot, SoundSource.MASTER, 0.65f, 1);
                 }
-                PlayerUtils.playSoundWithSourceToPlayers(otherPlayers, bot, sound, SoundSource.NEUTRAL, 0.65f, 1);
+                ModifiableSound.WILDLIFE_TRIVIA_SUSPENSE_END.playWithSource(otherPlayers, bot, SoundSource.NEUTRAL, 0.65f, 1);
 
             }
             else {
-                SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_santabot_suspense_end"));
-                PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.65f, 1);
+                ModifiableSound.NICELIFE_SANTABOT_SUSPENSE_END.play(bot.serverData.getBoundPlayer(), 0.65f, 1);
             }
             playedCountdownEndingSound = true;
             playedCountdownSound = true;
         }
         else if (!playedCountdownSound && bot.interactedWith() && !bot.submittedAnswer() && !bot.ranOutOfTime()) {
             if (!bot.santaBot()) {
-                SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("wildlife_trivia_suspense"));
-                PlayerUtils.playSoundWithSourceToPlayers(PlayerUtils.getAllPlayers(), bot, sound, SoundSource.NEUTRAL, 0.65f, 1);
+                ModifiableSound.WILDLIFE_TRIVIA_SUSPENSE.playWithSource(PlayerUtils.getAllPlayers(), bot, SoundSource.NEUTRAL, 0.65f, 1);
             }
             else  {
-                SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_santabot_suspense"));
-                PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.65f, 1);
+                ModifiableSound.NICELIFE_SANTABOT_SUSPENSE.play(bot.serverData.getBoundPlayer(), 0.65f, 1);
             }
             playedCountdownSound = true;
         }

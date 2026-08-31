@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard;
 
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
@@ -138,7 +138,7 @@ public class TimeDilation extends Wildcard {
         TaskScheduler.scheduleTask(115, () -> {
             activatedAt = currentSession.getPassedTime().add(Time.seconds(20));
             lastDiv = -1;
-            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("wildlife_time_slow_down")));
+            ModifiableSound.WILDLIFE_TIME_SLOW_DOWN.broadcast();
             slowlySetWorldSpeed(getMinTickRate(), 18);
             if (!isFinale() && getMinTickRate() <= 4) TaskScheduler.scheduleTask(18, () -> SimplePackets.TIME_DILATION.sendToAllClients(System.currentTimeMillis()));
             TaskScheduler.scheduleTask(19, super::activate);

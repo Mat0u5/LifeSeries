@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
@@ -105,7 +106,7 @@ public class SuperpowersWildcard extends Wildcard {
             }
         }
         if (!WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME) {
-            PlayerUtils.playSoundToPlayers(allPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("wildlife_superpowers")), 0.2f, 1);
+            ModifiableSound.WILDLIFE_SUPERPOWERS.play(allPlayers, 0.2f, 1);
         }
     }
 
@@ -169,7 +170,7 @@ public class SuperpowersWildcard extends Wildcard {
             DatapackIntegration.activateSuperpower(player, superpower);
         }
         if (!WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME) {
-            PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("wildlife_superpowers")), 0.2f, 1);
+            ModifiableSound.WILDLIFE_SUPERPOWERS.play(player, 0.2f, 1);
         }
         Necromancy.checkRessurectedPlayersReset();
     }

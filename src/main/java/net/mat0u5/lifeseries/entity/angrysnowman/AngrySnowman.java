@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.entity.angrysnowman;
 
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,8 +24,6 @@ import java.util.Random;
 import static net.mat0u5.lifeseries.LifeSeries.livesManager;
 
 public class AngrySnowman extends SnowGolem {
-    public static final SoundEvent HURT_SOUND = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_snowman_hit"));
-    public static final SoundEvent GROWL = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_snowman_growl"));
     public static final Identifier ID = IdentifierHelper.mod("angrysnowman");
     public static Random rnd = new Random();
 
@@ -75,16 +74,16 @@ public class AngrySnowman extends SnowGolem {
 
     @Nullable
     protected SoundEvent getAmbientSound() {
-        return GROWL;
+        return ModifiableSound.NICELIFE_SNOWMAN_GROWL.get();
     }
 
     @Nullable
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return HURT_SOUND;
+        return ModifiableSound.NICELIFE_SNOWMAN_HIT.get();
     }
 
     @Nullable
     protected SoundEvent getDeathSound() {
-        return HURT_SOUND;
+        return ModifiableSound.NICELIFE_SNOWMAN_HIT.get();
     }
 }

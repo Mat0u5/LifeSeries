@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
@@ -54,14 +55,10 @@ public class Superspeed extends ToggleableSuperpower {
         ServerPlayer player = getPlayer();
         if (player == null) return;
         if (player.getFoodData().getFoodLevel() <= 6) {
-            //? if <= 1.21 {
-            /*((IPlayer) player).ls$playNotifySound(SoundEvents.GENERIC_EAT, SoundSource.MASTER, 1, 1);
-            *///?} else {
-            ((IPlayer) player).ls$playNotifySound(SoundEvents.GENERIC_EAT.value(), SoundSource.MASTER, 1, 1);
-            //?}
+            ModifiableSound.WILDLIFE_SUPERPOWERS_SUPERSPEED_FOOD.play(player);
             return;
         }
-        ((IPlayer) player).ls$playNotifySound(SoundEvents.BEACON_ACTIVATE, SoundSource.MASTER, 1, 1);
+        ModifiableSound.WILDLIFE_SUPERPOWERS_SUPERSPEED_START.play(player);
         slowlySetSpeed(player, TARGET_SPEED, 60);
         NetworkHandlerServer.sendVignette(player, -1);
         if (STEP_UP) {
@@ -85,7 +82,7 @@ public class Superspeed extends ToggleableSuperpower {
     public void deactivate() {
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        ((IPlayer) player).ls$playNotifySound(SoundEvents.BEACON_DEACTIVATE, SoundSource.MASTER, 1, 1);
+        ModifiableSound.WILDLIFE_SUPERPOWERS_SUPERSPEED_END.play(player);
         slowlySetSpeed(player, AttributeUtils.DEFAULT_PLAYER_MOVEMENT_SPEED, 30);
         if (!WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
             player.removeEffect(MobEffects.HUNGER);

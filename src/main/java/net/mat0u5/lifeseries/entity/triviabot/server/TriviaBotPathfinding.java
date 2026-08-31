@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.entity.triviabot.server;
 
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -45,13 +46,8 @@ public class TriviaBotPathfinding {
         if (bot.level() instanceof ServerLevel level) {
             if (boundEntity.level() instanceof ServerLevel entityWorld) {
                 BlockPos tpTo = getBlockPosNearTarget(boundEntity,5);
-                //? if <= 1.20.2 {
-                /*level.playSound(null, bot.getX(), bot.getY(), bot.getZ(), SoundEvents.ENDERMAN_TELEPORT, bot.getSoundSource(), bot.soundVolume(), bot.getVoicePitch());
-                entityWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.ENDERMAN_TELEPORT, bot.getSoundSource(), bot.soundVolume(), bot.getVoicePitch());
-                *///?} else {
-                level.playSound(null, bot.getX(), bot.getY(), bot.getZ(), SoundEvents.PLAYER_TELEPORT, bot.getSoundSource(), bot.soundVolume(), bot.getVoicePitch());
-                entityWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.PLAYER_TELEPORT, bot.getSoundSource(), bot.soundVolume(), bot.getVoicePitch());
-                //?}
+                level.playSound(null, bot.getX(), bot.getY(), bot.getZ(), ModifiableSound.WILDLIFE_TRIVIA_TELEPORT.get(), bot.getSoundSource(), bot.soundVolume(), bot.getVoicePitch());
+                entityWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), ModifiableSound.WILDLIFE_TRIVIA_TELEPORT.get(), bot.getSoundSource(), bot.soundVolume(), bot.getVoicePitch());
                 AnimationUtils.spawnTeleportParticles(level, bot.position());
                 AnimationUtils.spawnTeleportParticles(level, OtherUtils.getCenter(tpTo));
                 bot.serverData.despawn();

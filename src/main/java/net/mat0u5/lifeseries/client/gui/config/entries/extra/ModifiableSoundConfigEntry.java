@@ -8,7 +8,6 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
-import net.minecraft.client.sounds.SoundEngine;
 import net.minecraft.network.chat.Component;
 
 //? if >= 1.21.9
@@ -55,11 +54,19 @@ public class ModifiableSoundConfigEntry extends StringConfigEntry {
     @Override
     protected void onTextChanged(String text) {
         super.onTextChanged(text);
+        if (text.trim().isEmpty()) {
+            soundInstance = null;
+            clearError();
+            clearWarn();
+            return;
+        }
         try {
             Identifier soundId = IdentifierHelper.parse(getValue());
             clearError();
             SoundInstance instance = SimpleSoundInstance.forUI(SoundEvent.createVariableRangeEvent(soundId), 1);
+            //~ if >= 26.3 '.resolve(' -> '.getOrResolve(' {
             var resolved = instance.resolve(Minecraft.getInstance().getSoundManager());
+            //~}
             if (resolved == null) {
                 setWarn("Unknown Sound Event");
                 soundInstance = null;

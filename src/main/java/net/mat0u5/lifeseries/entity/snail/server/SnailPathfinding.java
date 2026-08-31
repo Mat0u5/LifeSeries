@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.entity.snail.server;
 
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.snail.goal.MiningNavigation;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
@@ -222,13 +223,8 @@ public class SnailPathfinding {
                 if (!snail.serverData.shouldPathfind()) return;
                 BlockPos tpTo = getBlockPosNearTarget(boundEntity, minDistanceFromPlayer);
                 if (tpTo == null) return;
-                //? if <= 1.20.2 {
-                /*level.playSound(null, snail.getX(), snail.getY(), snail.getZ(), SoundEvents.ENDERMAN_TELEPORT, snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
-                entityWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.ENDERMAN_TELEPORT, snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
-                *///?} else {
-                level.playSound(null, snail.getX(), snail.getY(), snail.getZ(), SoundEvents.PLAYER_TELEPORT, snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
-                entityWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.PLAYER_TELEPORT, snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
-                //?}
+                level.playSound(null, snail.getX(), snail.getY(), snail.getZ(), ModifiableSound.WILDLIFE_SNAIL_TELEPORT.get(), snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
+                entityWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), ModifiableSound.WILDLIFE_SNAIL_TELEPORT.get(), snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
                 AnimationUtils.spawnTeleportParticles(level, snail.position());
                 AnimationUtils.spawnTeleportParticles(entityWorld, OtherUtils.getCenter(tpTo));
                 snail.serverData.despawn();

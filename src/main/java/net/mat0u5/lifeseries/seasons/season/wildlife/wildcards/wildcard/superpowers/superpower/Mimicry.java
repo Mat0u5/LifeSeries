@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.mixin.MannequinAccessor;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
@@ -70,7 +71,7 @@ public class Mimicry extends Superpower {
                         mimic = mimicPower.getInstance(player);
                         successfullyMimicked = true;
                         PlayerUtils.displayMessageToPlayer(player, ModifiableText.WILDLIFE_POWER_MIMIC.get(lookingAtPlayer), 65);
-                        ((IPlayer) player).ls$playNotifySound(SoundEvents.CHICKEN_EGG, SoundSource.MASTER, 0.3f, 1);
+                        ModifiableSound.WILDLIFE_SUPERPOWERS_MIMICRY.play(player, 0.3f, 1);
                     }
                 }
             }

@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard;
 
-import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
@@ -215,14 +215,14 @@ public class Hunger extends Wildcard {
         List<ServerPlayer> players = PlayerUtils.getAllFunctioningPlayers();
         SessionTranscript.newHungerRule();
         if (shuffledBefore) {
-            PlayerUtils.playSoundToPlayers(players, SoundEvents.NOTE_BLOCK_PLING.value());
+            ModifiableSound.WILDLIFE_HUNGER_NEW_RULES_START.play(players);
             PlayerUtils.sendTitleWithSubtitleToPlayers(players, ModifiableText.WILDLIFE_HUNGER_RANDOMIZE_TITLE.get(), ModifiableText.WILDLIFE_HUNGER_RANDOMIZE_SUBTITLE.get(), 0, 140, 0);
             TaskScheduler.scheduleTask(Time.seconds(2), WildcardManager::showDots);
             PlayerListReference ref = PlayerListReference.of(players);
             TaskScheduler.scheduleTask(Time.seconds(7), () -> {
                 addHunger();
                 updateInventories();
-                PlayerUtils.playSoundToPlayers(ref.get(), SoundEvents.ELDER_GUARDIAN_CURSE, 0.2f, 1);
+                ModifiableSound.WILDLIFE_HUNGER_NEW_RULES.play(ref.get(), 0.2f, 1);
                 shuffleVersion++;
             });
         }
@@ -386,8 +386,8 @@ public class Hunger extends Wildcard {
                         //?}
                     }
                     if (!allSounds.isEmpty()) {
-                        SoundEvent sound = allSounds.get(random.nextInt(allSounds.size()));
-                        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 0.5f, 1f);
+                        SoundEvent randomSound = allSounds.get(random.nextInt(allSounds.size()));
+                        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), randomSound, 0.5f, 1f);
                     }
                 }
             }

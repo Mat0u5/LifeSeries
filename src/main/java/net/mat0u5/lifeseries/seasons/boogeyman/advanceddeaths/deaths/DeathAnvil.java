@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.deaths;
 
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeath;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeaths;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
@@ -48,7 +49,7 @@ public class DeathAnvil extends AdvancedDeath {
             BlockPos spawnPos = player.blockPosition().offset(anvilAmount, 15, 0);
             ServerLevel level = ((IPlayer) player).ls$getServerLevel();
             FallingBlockEntity entity = FallingBlockEntity.fall(level, spawnPos, Blocks.ANVIL.defaultBlockState());
-            PlayerUtils.playSoundWithSourceToPlayers(entity, SoundEvents.ANVIL_PLACE, SoundSource.BLOCKS, 1, 1);
+            ModifiableSound.ADVANCEDDEATH_ANVIL.playWithSource(entity, SoundSource.BLOCKS, 1, 1);
             entity.disableDrop();
             anvilAmount--;
         }

@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.limitedlife;
 
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
@@ -117,7 +118,7 @@ public class LimitedLifeLivesManager extends LivesManager {
 
     @Override
     public void receiveLifeFromOtherPlayer(Component playerName, ServerPlayer target, boolean isRevive) {
-        ((IPlayer) target).ls$playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.MASTER, 10, 1);
+        ModifiableSound.LIVES_RECEIVE.play(target, 10, 1);
         Component amount = Component.literal(LimitedLife.NEW_DEATH_NORMAL.copy().multiply(-1).formatLong());
 
         if (seasonConfig.GIVELIFE_BROADCAST.get()) {

@@ -4,7 +4,7 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
 import net.mat0u5.lifeseries.config.ConfigManager;
-import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.TriviaHandler;
@@ -190,9 +190,7 @@ public class NiceLife extends Season {
             }
             if (!playedMidnightChimes && isTimeBetween(18000-23*20, 20000)) {
                 playedMidnightChimes = true;
-                PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(),
-                        SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_midnight_chimes")),
-                        1f, 1);
+                ModifiableSound.NICELIFE_MIDNIGHT_CHIMES.broadcast();
                 postponeTriviaStart(Time.ticks(779));
             }
         }
@@ -312,9 +310,7 @@ public class NiceLife extends Season {
     public void triggerRedWinter() {
         TaskScheduler.scheduleTask(20, () -> {
             DatapackIntegration.EVENT_RED_WINTER_START.trigger();
-            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(),
-                    SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_red_winter")),
-                    1f, 1);
+            ModifiableSound.NICELIFE_RED_WINTER.broadcast();
         });
         TaskScheduler.scheduleTask(20 + 12, () -> {
             PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), ModifiableText.NICELIFE_REDWINTER_PT1.get(), 15, 65, 15);

@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.secretlife;
 
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
@@ -82,7 +83,7 @@ public class SecretKeeper {
 			TaskScheduler.scheduleTask(3*i, () -> {
 				ServerPlayer playerNew = ref.get();
 				if (playerNew != null) {
-					server.overworld().playSound(null, spawnPos.x(), spawnPos.y(), spawnPos.z(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
+					server.overworld().playSound(null, spawnPos.x(), spawnPos.y(), spawnPos.z(), ModifiableSound.SECRETLIFE_ITEM_SPAWN.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
 
 					List<ItemStack> lootTableItems = new ArrayList<>();
 
@@ -192,17 +193,13 @@ public class SecretKeeper {
 		secretKeeperBeingUsed = true;
 
 		Vec3 centerPos = OtherUtils.getCenter(itemSpawnerPos);
-		server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("secretlife_task_succeed")), SoundSource.PLAYERS, 1.0F, 1.0F);
+		server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), ModifiableSound.SECRETLIFE_TASK_SUCCEED.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
 		TaskScheduler.scheduleTask(60, () -> {
 			AnimationUtils.createGlyphAnimation(server.overworld(), centerPos, 45);
 		});
 		PlayerReference ref = PlayerReference.of(player);
 		TaskScheduler.scheduleTask(130, () -> {
-			//? if < 1.21 {
-			/*server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.PLAYERS, 1.0F, 1.0F);
-			 *///?} else {
-			server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvents.TRIAL_SPAWNER_EJECT_ITEM, SoundSource.PLAYERS, 1.0F, 1.0F);
-			//?}
+			server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), ModifiableSound.SECRETLIFE_ITEM_SPAWN_START.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
 			AnimationUtils.spawnFireworkBall(server.overworld(), centerPos, 40, 0.3, new Vector3f(0, 1, 0));
 			ServerPlayer playerNew = ref.get();
 			if (playerNew != null) {
@@ -265,24 +262,24 @@ public class SecretKeeper {
 			return;
 		}
 
-		PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("secretlife_task_reroll")));
-		PlayerUtils.playSoundToPlayer(player, SoundEvents.UI_BUTTON_CLICK.value());
+		ModifiableSound.SECRETLIFE_TASK_REROLL.play(player);
+		ModifiableSound.SECRETLIFE_TASK_REROLL_TEXT.play(player);
 		PlayerUtils.sendTitle(player, ModifiableText.SECRETLIFE_TASK_REROLL_PT1.get(),20,35,0);
 
 		PlayerReference ref = PlayerReference.of(player);
 		TaskScheduler.scheduleTask(35, () -> {
 			ServerPlayer playerNew = ref.get();
-			PlayerUtils.playSoundToPlayer(playerNew, SoundEvents.UI_BUTTON_CLICK.value());
+			ModifiableSound.SECRETLIFE_TASK_REROLL_TEXT.play(playerNew);
 			PlayerUtils.sendTitle(playerNew, ModifiableText.SECRETLIFE_TASK_REROLL_PT2.get(),20,35,0);
 		});
 		TaskScheduler.scheduleTask(70, () -> {
 			ServerPlayer playerNew = ref.get();
-			PlayerUtils.playSoundToPlayer(playerNew, SoundEvents.UI_BUTTON_CLICK.value());
+			ModifiableSound.SECRETLIFE_TASK_REROLL_TEXT.play(playerNew);
 			PlayerUtils.sendTitle(playerNew, ModifiableText.SECRETLIFE_TASK_REROLL_PT3.get(),20,35,0);
 		});
 		TaskScheduler.scheduleTask(105, () -> {
 			ServerPlayer playerNew = ref.get();
-			PlayerUtils.playSoundToPlayer(playerNew, SoundEvents.UI_BUTTON_CLICK.value());
+			ModifiableSound.SECRETLIFE_TASK_REROLL_TEXT.play(playerNew);
 			PlayerUtils.sendTitle(playerNew, ModifiableText.SECRETLIFE_TASK_REROLL_PT4.get(),20,30,0);
 		});
 		TaskScheduler.scheduleTask(140, () -> {
@@ -325,7 +322,7 @@ public class SecretKeeper {
 
 		Vec3 centerPos = OtherUtils.getCenter(itemSpawnerPos);
 
-		server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("secretlife_task_fail")), SoundSource.PLAYERS, 1.0F, 1.0F);
+		server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), ModifiableSound.SECRETLIFE_TASK_FAIL.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
 		TaskScheduler.scheduleTask(60, () -> {
 			AnimationUtils.createGlyphAnimation(server.overworld(), centerPos, 45);
 		});

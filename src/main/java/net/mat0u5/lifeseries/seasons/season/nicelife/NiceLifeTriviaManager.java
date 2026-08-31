@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.nicelife;
 
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.entity.angrysnowman.AngrySnowman;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
@@ -123,8 +124,7 @@ public class NiceLifeTriviaManager {
 
         preparingForSpawn = true;
         if (longIntro) {
-            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_santabot_introduction_long"));
-            PlayerUtils.playSoundToPlayers(triviaPlayers, sound, 1f, 1);
+            ModifiableSound.NICELIFE_SANTABOT_INTRODUCTION_LONG.play(triviaPlayers);
             for (TriviaSpawn triviaSpawnInfo : triviaSpawns) {
                 int botSpawnHeight = 20;
                 breakBotSpawnBlocks(triviaSpawnInfo, 616-160, botSpawnHeight);
@@ -134,8 +134,7 @@ public class NiceLifeTriviaManager {
             }
         }
         else {
-            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_santabot_introduction_short"));
-            PlayerUtils.playSoundToPlayers(triviaPlayers, sound, 1f, 1);
+            ModifiableSound.NICELIFE_SANTABOT_INTRODUCTION_SHORT.play(triviaPlayers);
             for (TriviaSpawn triviaSpawnInfo : triviaSpawns) {
                 int botSpawnHeight = rnd.nextInt(15, 30);
                 breakBotSpawnBlocks(triviaSpawnInfo, 71, botSpawnHeight);
@@ -163,8 +162,7 @@ public class NiceLifeTriviaManager {
     }
 
     public static void allWrong() {
-        SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_santabot_incorrect_all_wrong"));
-        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
+        ModifiableSound.NICELIFE_SANTABOT_INCORRECT_ALL_WRONG.broadcast();
         PlayerUtils.broadcastMessage(ModifiableText.NICELIFE_TRIVIA_ALL_WRONG_PT1.get());
 
         SimplePackets.TRIVIA_ALL_WRONG.sendToAllClients();

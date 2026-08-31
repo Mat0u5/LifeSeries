@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards;
 
-import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
@@ -114,29 +114,29 @@ public class WildcardManager {
 
     public static void fadedWildcard() {
         PlayerUtils.broadcastMessage(ModifiableText.WILDLIFE_WILDCARD_FADED.get());
-        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BEACON_DEACTIVATE);
+        ModifiableSound.WILDLIFE_WILDCARD_FADE.broadcast();
     }
 
     public static void showDots() {
         List<ServerPlayer> players = PlayerUtils.getAllPlayers();
-        PlayerUtils.playSoundToPlayers(players, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
+        ModifiableSound.WILDLIFE_WILDCARD_DOTS_1.broadcast(0.4f, 1);
         PlayerUtils.sendTitleToPlayers(players, ModifiableText.WILDLIFE_WILDCARD_DOTS_1.get(),0,40,0);
         PlayerListReference ref = PlayerListReference.of(players);
         TaskScheduler.scheduleTask(30, () -> {
             var listNew = ref.get();
-            PlayerUtils.playSoundToPlayers(listNew, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
+            ModifiableSound.WILDLIFE_WILDCARD_DOTS_2.broadcast(0.4f, 1);
             PlayerUtils.sendTitleToPlayers(listNew, ModifiableText.WILDLIFE_WILDCARD_DOTS_2.get(),0,40,0);
         });
         TaskScheduler.scheduleTask(60, () -> {
             var listNew = ref.get();
-            PlayerUtils.playSoundToPlayers(listNew, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
+            ModifiableSound.WILDLIFE_WILDCARD_DOTS_3.broadcast(0.4f, 1);
             PlayerUtils.sendTitleToPlayers(listNew, ModifiableText.WILDLIFE_WILDCARD_DOTS_3.get(),0,40,0);
         });
     }
 
     public static void showCryptTitle(Component component) {
         if (component.getString().isEmpty()) return;
-        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ZOMBIE_VILLAGER_CURE, 0.2f, 1);
+        ModifiableSound.WILDLIFE_WILDCARD_TITLE.broadcast(0.2f, 1);
         String textRaw = component.getString();
         String textClean = "";
         String text = "";
@@ -196,7 +196,7 @@ public class WildcardManager {
     private static final List<String> allColorCodes = List.of("6","9","a","b","c","d","e");
     public static void showRainbowCryptTitle(String text) {
         if (text.isEmpty()) return;
-        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ZOMBIE_VILLAGER_CURE, 0.2f, 1);
+        ModifiableSound.WILDLIFE_WILDCARD_TITLE.broadcast(0.2f, 1);
         String colorCrypt = "§r§_§l§k";
         String colorNormal = "§r§_§l";
 

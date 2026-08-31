@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia;
 
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.snail.server.SnailPathfinding;
@@ -222,7 +223,7 @@ public class TriviaWildcard extends Wildcard {
             SessionTranscript.newTriviaBot(player);
             bot.serverData.setBoundPlayer(player);
             bots.put(player.getUUID(), bot);
-            ((IPlayer) player).ls$playNotifySound(SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.MASTER, 0.5f, 1);
+            ModifiableSound.WILDLIFE_TRIVIA_BOT_SPAWN.play(player, 0.5f, 1);
             SimplePackets.FAKE_THUNDER.sendToClient(7, player);
             DatapackIntegration.EVENT_TRIVIA_BOT_SPAWN.trigger(List.of(
                     new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()),

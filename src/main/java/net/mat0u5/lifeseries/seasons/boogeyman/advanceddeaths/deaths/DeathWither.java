@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.deaths;
 
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeath;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeaths;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
@@ -35,7 +36,7 @@ public class DeathWither extends AdvancedDeath {
         MobEffectInstance witherEffect = new MobEffectInstance(MobEffects.WITHER, -1, 2, false, false, false);
         player.addEffect(witherEffect);
         if (player.hurtTime == 10 && ticks < 80) {
-            ((IPlayer) player).ls$playNotifySound(SoundEvents.WITHER_SHOOT, SoundSource.PLAYERS, 1, 1);
+            ModifiableSound.ADVANCEDDEATH_WITHER.play(player);
         }
     }
 

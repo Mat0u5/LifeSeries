@@ -48,7 +48,7 @@ public class ModifiableSoundManager {
 			LifeSeries.LOGGER.warn("Could not find modifiable sound " + key);
 			return SoundEvents.EMPTY;
 		}
-		String configSoundId = configEntry.get();
+		String configSoundId = configEntry.get().trim();
 		if (!configSoundId.contains(":")) {
 			configSoundId = "minecraft:"+configSoundId;
 		}
@@ -60,6 +60,10 @@ public class ModifiableSoundManager {
 		modifiableSound.cachedSound = null;
 		try {
 			var identifier = IdentifierHelper.parse(configSoundId);
+			if (identifier.getPath().isEmpty()) {
+				modifiableSound.cachedSound = SoundEvents.EMPTY;
+				return SoundEvents.EMPTY;
+			}
 			ResourceKey<SoundEvent> soundResource = ResourceKey.create(BuiltInRegistries.SOUND_EVENT.key(), identifier);
 			//? if <= 1.21 {
 			/*SoundEvent sound = BuiltInRegistries.SOUND_EVENT.get(soundResource);

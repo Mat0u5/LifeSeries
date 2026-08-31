@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -83,6 +84,8 @@ public class Teleportation extends Superpower {
 
                     playTeleportSound(playerLevel, playerPos);
                     playTeleportSound(lookingAtPlayerLevel, lookingAtPlayerPos);
+                    ModifiableSound.WILDLIFE_SUPERPOWERS_TELEPORTATION.play(player);
+                    ModifiableSound.WILDLIFE_SUPERPOWERS_TELEPORTATION.play(lookingAtPlayer);
 
                     MobEffectInstance resistance = new MobEffectInstance(MobEffects.RESISTANCE, 100, 3);
                     lookingAtPlayer.addEffect(resistance);
@@ -99,6 +102,7 @@ public class Teleportation extends Superpower {
                 spawnTeleportParticles(playerLevel, playerPos);
 
                 PlayerUtils.teleport(player, lookingAtPos);
+                ModifiableSound.WILDLIFE_SUPERPOWERS_TELEPORTATION.play(player);
 
                 playTeleportSound(playerLevel, playerPos);
                 spawnTeleportParticles(playerLevel, playerPos);
@@ -122,10 +126,6 @@ public class Teleportation extends Superpower {
         );
     }
     public void playTeleportSound(ServerLevel level, Vec3 pos) {
-        //? if <= 1.20.2 {
-        /*level.playSound(null, pos.x(), pos.y(), pos.z(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.MASTER, 1, 1);
-        *///?} else {
-        level.playSound(null, pos.x(), pos.y(), pos.z(), SoundEvents.PLAYER_TELEPORT, SoundSource.MASTER, 1, 1);
-        //?}
+        level.playSound(null, pos.x(), pos.y(), pos.z(), ModifiableSound.WILDLIFE_SUPERPOWERS_TELEPORTATION.get(), SoundSource.MASTER, 1, 1);
     }
 }

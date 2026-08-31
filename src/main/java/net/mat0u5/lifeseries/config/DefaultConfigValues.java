@@ -158,10 +158,6 @@ public class DefaultConfigValues {
             "final_death_lightning", true, "global.finaldeath",
             "Final Death Lightning", "Spawns a harmless (no damage) lightning strike when a player fully dies."
     );
-    public final ConfigFileEntry<String> FINAL_DEATH_SOUND = new ConfigFileEntry<>(
-            "final_death_sound", "minecraft:entity.lightning_bolt.thunder", "global.finaldeath",
-            "Final Death Sound", "The sound that gets played to all players when anyone fully dies."
-    );
     public final ConfigFileEntry<Boolean> GIVELIFE_COMMAND_ENABLED = new ConfigFileEntry<>(
             "givelife_command_enabled", false, "{global.givelife}",
             "Givelife Command Enabled", "Controls whether the '/givelife' command is available."

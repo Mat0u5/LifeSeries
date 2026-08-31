@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
@@ -62,7 +63,7 @@ public class Necromancy extends Superpower {
         }
 
         ServerLevel playerLevel = ((IPlayer) player).ls$getServerLevel();
-        playerLevel.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.WARDEN_EMERGE, SoundSource.MASTER, 1, 1);
+        playerLevel.playSound(null, player.getX(), player.getY(), player.getZ(), ModifiableSound.WILDLIFE_SUPERPOWERS_NECROMANCY.get(), SoundSource.MASTER, 1, 1);
 
         List<ServerPlayer> affectedPlayers = playerLevel.getEntitiesOfClass(ServerPlayer.class, player.getBoundingBox().inflate(10), playerEntity -> playerEntity.distanceTo(player) <= 10);
         MobEffectInstance blindness = new MobEffectInstance(MobEffects.BLINDNESS, 115, 0);

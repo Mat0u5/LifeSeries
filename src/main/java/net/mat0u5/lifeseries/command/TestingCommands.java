@@ -61,7 +61,6 @@ public class TestingCommands extends Command {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        ModifiableSound.TEST.play(player);
 
         return 1;
     }
@@ -71,7 +70,6 @@ public class TestingCommands extends Command {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        ModifiableSound.TEST2.play(player);
 
         return 1;
     }

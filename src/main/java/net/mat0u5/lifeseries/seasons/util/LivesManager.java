@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.util;
 
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
@@ -45,7 +46,6 @@ import net.minecraft.world.scores.TeamColor;
 public class LivesManager {
     public static final String SCOREBOARD_NAME = "Lives";
     public boolean FINAL_DEATH_LIGHTNING = true;
-    public SoundEvent FINAL_DEATH_SOUND = SoundEvents.LIGHTNING_BOLT_THUNDER;
     public boolean SHOW_DEATH_TITLE = false;
     public boolean DEATH_TITLE_MATCH_DEATH_MESSAGE = false;
     public boolean ONLY_CHANGE_LIVES_IN_SESSION = false;
@@ -70,7 +70,6 @@ public class LivesManager {
         SHOW_DEATH_TITLE = seasonConfig.FINAL_DEATH_TITLE_SHOW.get();
         DEATH_TITLE_MATCH_DEATH_MESSAGE = seasonConfig.DEATH_TITLE_MATCH_DEATH_MESSAGE.get();
         FINAL_DEATH_LIGHTNING = seasonConfig.FINAL_DEATH_LIGHTNING.get();
-        FINAL_DEATH_SOUND = SoundEvent.createVariableRangeEvent(IdentifierHelper.parse(seasonConfig.FINAL_DEATH_SOUND.get()));
         ONLY_CHANGE_LIVES_IN_SESSION = seasonConfig.ONLY_CHANGE_LIVES_IN_SESSION.get();
         SEE_FRIENDLY_INVISIBLE_PLAYERS = seasonConfig.SEE_FRIENDLY_INVISIBLE_PLAYERS.get();
         LIVES_SYSTEM_DISABLED = seasonConfig.LIVES_SYSTEM_DISABLED.get();
@@ -387,7 +386,7 @@ public class LivesManager {
 
     public void receiveLifeFromOtherPlayer(Component playerName, ServerPlayer target, boolean isRevive) {
         if (target == null) return;
-        ((IPlayer) target).ls$playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.MASTER, 10, 1);
+        ModifiableSound.LIVES_RECEIVE.play(target, 10, 1);
         if (seasonConfig.GIVELIFE_BROADCAST.get()) {
             PlayerUtils.broadcastMessageExcept(ModifiableText.GIVELIFE_RECEIVE_OTHER.get(target, playerName), target);
         }
@@ -497,9 +496,7 @@ public class LivesManager {
             }
             if (livesBefore > 0) {
                 Necromancy.clearedPlayers.remove(player.getUUID());
-                if (FINAL_DEATH_SOUND != null) {
-                    PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), FINAL_DEATH_SOUND);
-                }
+                ModifiableSound.DEATH_FINAL.broadcast();
                 PlayerReference ref = PlayerReference.of(player);
                 TaskScheduler.schedulePriorityTask(1, () -> showDeathTitle(ref.get()));
                 DatapackIntegration.EVENT_PLAYER_FINAL_DEATH.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
@@ -700,7 +697,7 @@ public class LivesManager {
                 Component textLives = getFormattedLives(livesNum);
                 PlayerUtils.sendTitle(player, textLives, 0, 25, 0);
             }
-            PlayerUtils.playSoundToPlayers(ref.get(), SoundEvents.UI_BUTTON_CLICK.value());
+            ModifiableSound.LIVES_ROLL.play(ref.get());
         });
 
         delay += 20;
@@ -716,7 +713,7 @@ public class LivesManager {
                 SessionTranscript.assignRandomLives(player, livesNum);
                 setPlayerLives(player, livesNum);
             }
-            PlayerUtils.playSoundToPlayers(lives.keySet(), SoundEvents.END_PORTAL_SPAWN);
+            ModifiableSound.LIVES_ROLL_ASSIGN.play(lives.keySet());
             currentSeason.reloadAllPlayerTeams();
             rollLivesFinished();
         });
@@ -743,7 +740,7 @@ public class LivesManager {
             TaskScheduler.scheduleTask(currentDelay, () -> {
                 var listNew = ref.get();
                 PlayerUtils.sendTitleToPlayers(listNew, getFormattedLives(lives), 0, 25, 0);
-                PlayerUtils.playSoundToPlayers(listNew, SoundEvents.UI_BUTTON_CLICK.value());
+                ModifiableSound.LIVES_ROLL.play(listNew);
             });
         }
 

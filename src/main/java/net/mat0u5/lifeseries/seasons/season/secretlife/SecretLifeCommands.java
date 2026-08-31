@@ -5,13 +5,13 @@ import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.ActionText;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
@@ -20,7 +20,6 @@ import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -280,7 +279,7 @@ public class SecretLifeCommands extends Command {
                 task.rawTask += append;
                 TaskManager.setPlayerTask(player, taskType, task);
                 AnimationUtils.playSecretLifeTotemAnimation(player, (taskType == TaskTypes.RED || taskType == TaskTypes.FINALE));
-                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("secretlife_task_totem")));
+                ModifiableSound.SECRETLIFE_TASK_TOTEM.play(player);
             }
             else {
                 TaskManager.appendTask.put(uuid, append);
@@ -313,7 +312,7 @@ public class SecretLifeCommands extends Command {
             if (TaskManager.removePlayersTaskBook(player) || inSession) {
                 TaskManager.assignRandomTaskToPlayer(player, taskType);
                 AnimationUtils.playSecretLifeTotemAnimation(player, (taskType == TaskTypes.RED || taskType == TaskTypes.FINALE));
-                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("secretlife_task_totem")));
+                ModifiableSound.SECRETLIFE_TASK_TOTEM.play(player);
                 if (targets.size() == 1) {
                     sendCommandFeedback(source, ModifiableText.SECRETLIFE_TASK_SET.get(player));
                 }
@@ -509,7 +508,7 @@ public class SecretLifeCommands extends Command {
         ((IPlayer) target).ls$message(recipientMessage);
         AnimationUtils.createSpiral(target, 40);
 
-        PlayerUtils.playSoundToPlayers(List.of(self,target), SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("secretlife_life")));
+        ModifiableSound.SECRETLIFE_GIFT_HEART.play(List.of(self,target));
 
         return 1;
     }

@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.secretlife;
 
-import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.config.StringListConfig;
 import net.mat0u5.lifeseries.config.StringListManager;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
@@ -258,22 +258,22 @@ public class TaskManager {
 			tasksChosenFor.add(uuid);
         }
         PlayerUtils.sendTitleToPlayers(allowedPlayers, ModifiableText.SECRETLIFE_TASK_TITLE.get(),20,35,0);
-        PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("secretlife_task")));
+        ModifiableSound.SECRETLIFE_TASK.play(allowedPlayers);
 
         PlayerListReference ref = PlayerListReference.of(allowedPlayers);
         TaskScheduler.scheduleTask(50, () -> {
             var newList = ref.get();
-            PlayerUtils.playSoundToPlayers(newList, SoundEvents.UI_BUTTON_CLICK.value());
+            ModifiableSound.SECRETLIFE_TASK_ROLL_3.play(newList);
             PlayerUtils.sendTitleToPlayers(newList, ModifiableText.COUNTDOWN_RED_3.get(),0,35,0);
         });
         TaskScheduler.scheduleTask(80, () -> {
             var newList = ref.get();
-            PlayerUtils.playSoundToPlayers(newList, SoundEvents.UI_BUTTON_CLICK.value());
+            ModifiableSound.SECRETLIFE_TASK_ROLL_2.play(newList);
             PlayerUtils.sendTitleToPlayers(newList, ModifiableText.COUNTDOWN_RED_2.get(),0,35,0);
         });
         TaskScheduler.scheduleTask(115, () -> {
             var newList = ref.get();
-            PlayerUtils.playSoundToPlayers(newList, SoundEvents.UI_BUTTON_CLICK.value());
+            ModifiableSound.SECRETLIFE_TASK_ROLL_1.play(newList);
             PlayerUtils.sendTitleToPlayers(newList, ModifiableText.COUNTDOWN_RED_1.get(),0,35,0);
         });
         TaskTypes finalType = type;

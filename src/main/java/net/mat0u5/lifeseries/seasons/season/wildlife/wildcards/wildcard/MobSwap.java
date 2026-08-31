@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard;
 
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
@@ -213,7 +214,7 @@ public class MobSwap extends Wildcard {
         }
 
         if (swaps > 1) {
-            PlayerUtils.playSoundToPlayers(players, SoundEvents.BEACON_DEACTIVATE);
+            ModifiableSound.WILDLIFE_WILDCARD_FADE.play(players);
         }
 
         killNonNamedMobs();
@@ -229,13 +230,13 @@ public class MobSwap extends Wildcard {
         PlayerListReference ref = PlayerListReference.of(players);
         for (int i = timeForSpawning; i > 120; i -= 20) {
             TaskScheduler.scheduleTask(i, () -> {
-                PlayerUtils.playSoundToPlayers(ref.get(), SoundEvents.CHICKEN_EGG);
+                ModifiableSound.WILDLIFE_MOBSWAP_SPAWN.play(ref.get());
             });
         }
 
         for (int delay : eggSounds) {
             TaskScheduler.scheduleTask(timeForSpawning + delay, () -> {
-                PlayerUtils.playSoundToPlayers(ref.get(), SoundEvents.CHICKEN_EGG);
+                ModifiableSound.WILDLIFE_MOBSWAP_SPAWN.play(ref.get());
             });
         }
 
@@ -247,8 +248,8 @@ public class MobSwap extends Wildcard {
 
         TaskScheduler.scheduleTask(timeForSpawning + 240, () -> {
             var listNew = ref.get();
-            PlayerUtils.playSoundToPlayers(listNew, SoundEvents.ELDER_GUARDIAN_CURSE, 0.2f, 1);
-            PlayerUtils.playSoundToPlayers(listNew, SoundEvents.ZOMBIE_VILLAGER_CURE, 0.2f, 1);
+            ModifiableSound.WILDLIFE_MOBSWAP_SWAP_1.play(listNew, 0.2f, 1);
+            ModifiableSound.WILDLIFE_MOBSWAP_SWAP_2.play(listNew, 0.2f, 1);
             transformNonNamedMobs(progress);
         });
     }
