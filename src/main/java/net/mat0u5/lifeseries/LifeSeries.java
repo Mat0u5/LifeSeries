@@ -38,7 +38,7 @@ import net.mat0u5.lifeseries.registries.ModRegistries;
 *///?}
 
 public class LifeSeries {
-	public static final String MOD_VERSION = "1.5.9.5-dev";
+	public static final String MOD_VERSION = "1.5.9.6-dev";
 	public static final String MOD_ID = "lifeseries";
 	private static final Platform PLATFORM = createPlatformInstance();
 

@@ -1,8 +1,4 @@
-Necromancy superpower critical fix.
-Fixed missing server-side message translations.
-Config item lists now support item tags.
-Limited Life now works with the teams manager in the config.
-Added a soulmate manager to the config.
-Added the Nice Life reconstructed voting sound.
-New configs.
+All server-side sounds in the mod are now Modifiable Sounds (see config).
+Added the '/task guess <player> <string>' command.
+Updated to 26.3-pre-1
 Bug fixes.
