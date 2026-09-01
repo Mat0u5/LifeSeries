@@ -114,6 +114,11 @@ public class SecretLife extends Season {
         ONLY_LOSE_HEARTS_IN_SESSION = SecretLifeConfig.ONLY_LOSE_HEARTS_IN_SESSION.get();
         TaskManager.TASKS_NEED_CONFIRMATION = SecretLifeConfig.TASKS_NEED_CONFIRMATION.get();
         SecretKeeper.UNBREAKABLE_BUTTONS = SecretLifeConfig.UNBREAKABLE_BUTTONS.get();
+        TaskManager.GUESS_TASKS = SecretLifeConfig.GUESS_TASKS.get();
+        TaskManager.GUESS_TASKS_PUBLIC = SecretLifeConfig.GUESS_TASKS_PUBLIC.get();
+        TaskManager.GUESS_TASKS_LIFE_GUESSER_MIN = SecretLifeConfig.GUESS_TASKS_LIFE_GUESSER_MIN.get();
+        TaskManager.GUESS_TASKS_LIFE_GUESSER_MAX = SecretLifeConfig.GUESS_TASKS_LIFE_GUESSER_MAX.get();
+        TaskManager.GUESS_TASKS_LIFE_GUESSED_MIN = SecretLifeConfig.GUESS_TASKS_LIFE_GUESSED_MIN.get();
     }
 
     @Override
@@ -337,6 +342,7 @@ public class SecretLife extends Season {
             TaskManager.tasksChosen = false;
             TaskManager.tasksChosenFor.clear();
             TaskManager.submittedOrFailed.clear();
+            TaskManager.taskGuesses.clear();
             TaskScheduler.scheduleTask(1, this::heartsTranscript);
             return true;
         }

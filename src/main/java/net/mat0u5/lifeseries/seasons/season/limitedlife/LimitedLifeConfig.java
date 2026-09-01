@@ -102,7 +102,7 @@ public class LimitedLifeConfig extends SeasonConfig {
             "Time Randomize Intervals", "The intervals on which the time randomize can land."
     );
     public static final ConfigFileEntry<Boolean> PAUSE_SESSION_TIME_UNTIL_ROLL = new ConfigFileEntry<>(
-            "pause_session_time_until_roll", false, "global.lives.random[new]",
+            "pause_session_time_until_roll", false, "global.lives.random",
             "Pause Session Time Until Roll", "Makes the session time stay at max untill the lives roll happens."
     );
 
@@ -111,7 +111,7 @@ public class LimitedLifeConfig extends SeasonConfig {
             "Time Rewards / Punishments", ""
     );
     public static final ConfigFileEntry<Integer> TIME_RANDOMIZE_AVERAGE = new ConfigFileEntry<>(
-            "time_randomize_average", Time.hours(24).getSeconds(), ConfigTypes.SECONDS, "global.lives.random.customavg[new]",
+            "time_randomize_average", Time.hours(24).getSeconds(), ConfigTypes.SECONDS, "global.lives.random.customavg",
             "Average Time", "The average time a player gets after randomization."
     );
 

@@ -12,6 +12,7 @@ import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.ActionText;
+import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
@@ -21,10 +22,7 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 import static net.mat0u5.lifeseries.LifeSeries.currentSession;
@@ -116,8 +114,8 @@ public class SecretLifeCommands extends Command {
         );
         dispatcher.register(
             literal("task")
-                    .requires(PermissionManager::isAdmin)
                     .then(literal("succeed")
+                            .requires(PermissionManager::isAdmin)
                             .then(argument("player", EntityArgument.players())
                                     .executes(context -> succeedTask(
                                             context.getSource(), EntityArgument.getPlayers(context, "player"))
@@ -125,6 +123,7 @@ public class SecretLifeCommands extends Command {
                             )
                     )
                     .then(literal("fail")
+                            .requires(PermissionManager::isAdmin)
                             .then(argument("player", EntityArgument.players())
                                     .executes(context -> failTask(
                                             context.getSource(), EntityArgument.getPlayers(context, "player"))
@@ -132,6 +131,7 @@ public class SecretLifeCommands extends Command {
                             )
                     )
                     .then(literal("reroll")
+                            .requires(PermissionManager::isAdmin)
                             .then(argument("player", EntityArgument.players())
                                     .executes(context -> rerollTask(
                                             context.getSource(), EntityArgument.getPlayers(context, "player"))
@@ -139,6 +139,7 @@ public class SecretLifeCommands extends Command {
                             )
                     )
                     .then(literal("randomize")
+                            .requires(PermissionManager::isAdmin)
                             .then(argument("player", EntityArgument.players())
                                     .executes(context -> assignTask(
                                             context.getSource(), EntityArgument.getPlayers(context, "player"))
@@ -146,6 +147,7 @@ public class SecretLifeCommands extends Command {
                             )
                     )
                     .then(literal("clear")
+                            .requires(PermissionManager::isAdmin)
                             .then(argument("player", EntityArgument.players())
                                     .executes(context -> clearTask(
                                             context.getSource(), EntityArgument.getPlayers(context, "player"))
@@ -153,6 +155,7 @@ public class SecretLifeCommands extends Command {
                             )
                     )
                     .then(literal("set")
+                            .requires(PermissionManager::isAdmin)
                             .then(argument("player", EntityArgument.players())
                                     .then(argument("type", StringArgumentType.string())
                                             .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("easy","hard","red"), builder))
@@ -169,6 +172,7 @@ public class SecretLifeCommands extends Command {
                             )
                     )
                     .then(literal("append")
+                            .requires(PermissionManager::isAdmin)
                             .then(argument("player", EntityArgument.players())
                                     .then(argument("string", StringArgumentType.greedyString())
                                             .executes(context -> appendTask(
@@ -181,6 +185,7 @@ public class SecretLifeCommands extends Command {
                             )
                     )
                     .then(literal("get")
+                            .requires(PermissionManager::isAdmin)
                             .then(argument("player", EntityArgument.player())
                                     .executes(context -> getTask(
                                             context.getSource(), EntityArgument.getPlayer(context, "player"))
@@ -188,13 +193,45 @@ public class SecretLifeCommands extends Command {
                             )
                     )
                     .then(literal("changeLocations")
+                            .requires(PermissionManager::isAdmin)
                             .executes(context -> changeLocations(
                                     context.getSource())
                             )
                     )
                     .then(literal("resetUsed")
+                            .requires(PermissionManager::isAdmin)
                             .executes(context -> resetUsedTasks(
                                     context.getSource())
+                            )
+                    )
+                    .then(literal("guess")
+                            .then(argument("player", EntityArgument.player())
+                                    .then(argument("task", StringArgumentType.greedyString())
+                                            .executes(context -> guessTask(
+                                                            context.getSource(),
+                                                            EntityArgument.getPlayer(context, "player"),
+                                                            StringArgumentType.getString(context, "task")
+                                                    )
+                                            )
+                                    )
+                            )
+                            .then(literal("decide")
+                                    .then(argument("player", EntityArgument.player())
+                                            .then(literal("correct")
+                                                    .executes(context -> guessTaskDecision(
+                                                                    context.getSource(),
+                                                                    EntityArgument.getPlayer(context, "player"), true
+                                                            )
+                                                    )
+                                            )
+                                            .then(literal("wrong")
+                                                    .executes(context -> guessTaskDecision(
+                                                                    context.getSource(),
+                                                                    EntityArgument.getPlayer(context, "player"), false
+                                                            )
+                                                    )
+                                            )
+                                    )
                             )
                     )
         );
@@ -212,6 +249,147 @@ public class SecretLifeCommands extends Command {
                         )
                 )
         );
+    }
+
+    public int guessTaskDecision(CommandSourceStack source, ServerPlayer target, boolean decision) {
+        if (checkBanned(source)) return -1;
+        final ServerPlayer self = source.getPlayer();
+        if (self == null) return -1;
+        if (target == null) return -1;
+
+        if (Objects.equals(self.getUUID(), target.getUUID())) {
+            sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_DECISION_ERROR_MISSING.get(target));
+            return -1;
+        }
+
+        if (!TaskManager.GUESS_TASKS) {
+            sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_ERROR.get());
+            return -1;
+        }
+
+        if (TaskManager.getPlayersTaskBook(self) == null) {
+            sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_DECISION_ERROR_BOOK.get());
+            return -1;
+        }
+
+        if (!TaskManager.taskGuesses.containsKey(target.getUUID())) {
+            sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_DECISION_ERROR_MISSING.get(target));
+            return -1;
+        }
+
+        List<TaskManager.TaskGuess> taskGuesses = TaskManager.taskGuesses.get(target.getUUID());
+        for (TaskManager.TaskGuess taskGuess : taskGuesses) {
+            if (Objects.equals(taskGuess.player, self.getUUID())) {
+                if (taskGuess.confirmed != null) {
+                    break;
+                }
+                taskGuess.confirmed = decision;
+                List<ServerPlayer> allPlayers = TaskManager.GUESS_TASKS_PUBLIC ? PlayerUtils.getAllPlayers() : new ArrayList<>(List.of(self, target));
+
+                if (decision) {
+                    PlayerUtils.broadcastMessage(allPlayers, ModifiableText.SECRETLIFE_TASK_GUESS_DECISION_CORRECT.get(target, self));
+                    PlayerUtils.broadcastMessage(List.of(self), ModifiableText.SECRETLIFE_TASK_GUESS_DECISION_CORRECT_SELF.get());
+
+                }
+                else {
+                    PlayerUtils.broadcastMessage(allPlayers, ModifiableText.SECRETLIFE_TASK_GUESS_DECISION_WRONG.get(target, self));
+                }
+                return 1;
+            }
+        }
+
+
+        sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_DECISION_ERROR_MISSING.get(target));
+        return -1;
+    }
+
+    public int guessTask(CommandSourceStack source, ServerPlayer target, String guessedTaskStr) {
+        if (checkBanned(source)) return -1;
+        final ServerPlayer self = source.getPlayer();
+        if (self == null) return -1;
+        if (target == null) return -1;
+
+        if (!TaskManager.GUESS_TASKS) {
+            sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_ERROR.get());
+            return -1;
+        }
+
+        if (Objects.equals(self.getUUID(), target.getUUID())) {
+            sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_ERROR_SELF.get());
+            return -1;
+        }
+
+        if (!TaskManager.tasksChosen) {
+            sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_ERROR_TASKS.get());
+            return -1;
+        }
+
+        if (((IPlayer) self).ls$isDead()) {
+            sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_ERROR_GUESSER_DEAD.get());
+            return -1;
+        }
+        if (((IPlayer) target).ls$isDead()) {
+            sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_ERROR_GUESSED_DEAD.get());
+            return -1;
+        }
+
+        Integer selfLives = ((IPlayer) self).ls$getLives();
+        Integer targetLives = ((IPlayer) target).ls$getLives();
+        if (selfLives == null || targetLives == null) return -1;
+
+        if (selfLives < TaskManager.GUESS_TASKS_LIFE_GUESSER_MIN) {
+            sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_ERROR_GUESSER_MIN.get(TaskManager.GUESS_TASKS_LIFE_GUESSER_MIN));
+            return -1;
+        }
+        if (selfLives > TaskManager.GUESS_TASKS_LIFE_GUESSER_MAX) {
+            sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_ERROR_GUESSER_MAX.get(TaskManager.GUESS_TASKS_LIFE_GUESSER_MAX));
+            return -1;
+        }
+        if (targetLives < TaskManager.GUESS_TASKS_LIFE_GUESSED_MIN) {
+            sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_ERROR_GUESSED_MIN.get(TaskManager.GUESS_TASKS_LIFE_GUESSED_MIN));
+            return -1;
+        }
+        if (!TaskManager.taskGuesses.containsKey(self.getUUID())) {
+            TaskManager.taskGuesses.put(self.getUUID(), new ArrayList<>());
+        }
+
+        List<TaskManager.TaskGuess> taskGuesses = TaskManager.taskGuesses.get(self.getUUID());
+        for (TaskManager.TaskGuess taskGuess : taskGuesses) {
+            if (Objects.equals(taskGuess.player, target.getUUID())) {
+                sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_ERROR_GUESSER_ALREADY.get());
+                return -1;
+            }
+        }
+
+        if (TaskManager.getPlayersTaskBook(target) == null) {
+            sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_ERROR_NO_BOOK.get(target));
+            return -1;
+        }
+
+        if (!TaskManager.hasNonRedTaskBook(target)) {
+            sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_ERROR_RED.get());
+            return -1;
+        }
+
+        taskGuesses.add(new TaskManager.TaskGuess(target.getUUID(), null));
+
+        List<ServerPlayer> allPlayers = TaskManager.GUESS_TASKS_PUBLIC ? PlayerUtils.getAllPlayers() : new ArrayList<>(List.of(self, target));
+        List<ServerPlayer> otherPlayers = new ArrayList<>(allPlayers);
+        otherPlayers.remove(target);
+
+        PlayerUtils.broadcastMessage(List.of(target), ModifiableText.SECRETLIFE_TASK_GUESS_HEADER.get(self));
+        PlayerUtils.broadcastMessage(otherPlayers, ModifiableText.SECRETLIFE_TASK_GUESS_HEADER_PUBLIC.get(self, target));
+
+        PlayerUtils.broadcastMessage(allPlayers, ModifiableText.SECRETLIFE_TASK_GUESS_BODY.get(guessedTaskStr));
+
+        PlayerUtils.broadcastMessage(List.of(target), ModifiableText.SECRETLIFE_TASK_GUESS_PROMPT.get());
+        PlayerUtils.broadcastMessage(otherPlayers, ModifiableText.SECRETLIFE_TASK_GUESS_PROMPT_PUBLIC.get(target));
+
+        Component correctClick = new ActionText(Component.literal("§a[CORRECT]")).runCommand("Click if the task guess is correct", "/task guess decide " + self.getScoreboardName() + " correct").get();
+        Component wrongClick = new ActionText(Component.literal("§c[WRONG]")).runCommand("Click if the task guess is wrong", "/task guess decide " + self.getScoreboardName() + " wrong").get();
+
+        PlayerUtils.broadcastMessage(List.of(target), ModifiableText.SECRETLIFE_TASK_GUESS_VERDICT.get(correctClick, wrongClick));
+        return 1;
     }
 
     public int getTask(CommandSourceStack source, ServerPlayer player) {

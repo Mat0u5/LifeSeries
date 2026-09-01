@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.mat0u5.lifeseries.utils.player.PlayerListReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
@@ -49,6 +50,11 @@ public class TaskManager {
     public static boolean CONSTANT_TASKS = false;
     public static boolean PUBLIC_TASKS_ON_SUBMIT = false;
     public static boolean TASKS_NEED_CONFIRMATION = false;
+    public static boolean GUESS_TASKS = false;
+    public static boolean GUESS_TASKS_PUBLIC = false;
+    public static int GUESS_TASKS_LIFE_GUESSER_MIN = 2;
+    public static int GUESS_TASKS_LIFE_GUESSER_MAX = 2;
+    public static int GUESS_TASKS_LIFE_GUESSED_MIN = 3;
 
     // Fraction of the tasks to keep as used when resetting happens.
     public static double RECENT_TASK_PERCENTAGE = 0.5;
@@ -61,6 +67,16 @@ public class TaskManager {
     public static Map<UUID, String> appendTask = new HashMap<>();
     public static Map<UUID, Task> assignedTasks = new HashMap<>();
     public static Set<UUID> infectedPlayers = new HashSet<>();
+    public static Map<UUID, List<TaskGuess>> taskGuesses = new HashMap<>();
+
+    public static class TaskGuess {
+        final UUID player;
+        Boolean confirmed;
+        public TaskGuess(UUID player, Boolean confirmed) {
+            this.player = player;
+            this.confirmed = confirmed;
+        }
+    }
 
     public static List<String> easyTasks;
     public static List<String> hardTasks;

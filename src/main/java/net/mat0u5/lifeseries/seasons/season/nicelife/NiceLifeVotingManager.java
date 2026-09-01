@@ -209,7 +209,6 @@ public class NiceLifeVotingManager {
         if (players.isEmpty()) return;
         int delay = 80;
         TaskScheduler.scheduleTask(delay, () -> {
-            ModifiableSound.NICELIFE_SANTABOT_INCORRECT_ALL_WRONG.broadcast();
             ModifiableSound.NICELIFE_VOTE_RESULT.broadcast();
             PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), ModifiableText.NICELIFE_NAUGHTYLIST_START_TITLE_PT1.get(), 15, 80, 20);
         });

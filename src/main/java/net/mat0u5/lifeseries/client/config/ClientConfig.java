@@ -48,7 +48,7 @@ public class ClientConfig extends ConfigManager {
             "Less Obstructive Snow in Nice Life", "Reduces the number of snow particles when it snows."
     );
     public static final ConfigFileEntry<Boolean> LIMITED_LIFE_ACTIONBAR_TIME = new ConfigFileEntry<>(
-            "limited_life_actionbar_time", false, "[new]",
+            "limited_life_actionbar_time", false, "",
             "Move Time to Actionbar in Limited Life", "Shows the remaining time in the actionbar instead of the side title."
     );
 

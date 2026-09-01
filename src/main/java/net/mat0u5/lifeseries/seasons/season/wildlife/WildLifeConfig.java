@@ -137,7 +137,7 @@ public class WildLifeConfig extends SeasonConfig {
             "Assign Random Preset Snail Skin", "Assigns a random snail skin preset to any players without their own snail skin."
     );
     public static final ConfigFileEntry<Boolean> WILDCARD_SNAILS_KILL_ANY_PLAYER = new ConfigFileEntry<>(
-            "wildcard_snails_kill_any_player", false, "season.snails[new]",
+            "wildcard_snails_kill_any_player", false, "season.snails",
             "Kill Any Player On Touch", "Makes the snails kill any player they touch, not just their bound player."
     );
 
@@ -248,7 +248,7 @@ public class WildLifeConfig extends SeasonConfig {
     public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_NECROMANCY = new ConfigFileEntry<>("superpower_cooldown_necromancy", 300, ConfigTypes.SECONDS, "season.superpowers.necromancy", "Necromancy Power Cooldown", "");
 
     public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_MIMICRY_DISABLE_OTHER_POWER = new ConfigFileEntry<>(
-            "wildcard_superpowers_mimicry_disable_other_power", false, "season.superpowers.mimicry[new]",
+            "wildcard_superpowers_mimicry_disable_other_power", false, "season.superpowers.mimicry",
             "Disable Stolen Power", "Disables the power of the person you mimic for the duration of the effect."
     );
     public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE = new ConfigFileEntry<>(
@@ -401,7 +401,7 @@ public class WildLifeConfig extends SeasonConfig {
     );
 
     public static final ConfigFileEntry<String> WILDCARD_TRIVIA_EFFECTS = new ConfigFileEntry<>(
-            "wildcard_trivia_effects", "[speed, haste, strength, jump_boost, resistance, regeneration, fire_resistance, water_breathing, night_vision, health_boost, absorption]", ConfigTypes.EFFECT_LIST, "season.trivia[new]",
+            "wildcard_trivia_effects", "[speed, haste, strength, jump_boost, resistance, regeneration, fire_resistance, water_breathing, night_vision, health_boost, absorption]", ConfigTypes.EFFECT_LIST, "season.trivia",
             "Trivia Reward Effects", "List of potion effects you can get from trivia rewards."
     );
 
@@ -464,7 +464,7 @@ public class WildLifeConfig extends SeasonConfig {
             "Activate Wildcard Time", "The number of minutes (in the session) after which the wildcard is activated."
     );
     public static final ConfigFileEntry<Boolean> INSTANTLY_ACTIVATE_WILDCARDS = new ConfigFileEntry<>(
-            "instantly_activate_wildcards", false, "season.general[new]",
+            "instantly_activate_wildcards", false, "season.general",
             "Disable Wildcards Activate Cooldown", "Skips the wildcard activate dots cooldown."
     );
 

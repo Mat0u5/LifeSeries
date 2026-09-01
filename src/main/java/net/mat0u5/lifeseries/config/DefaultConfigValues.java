@@ -102,7 +102,7 @@ public class DefaultConfigValues {
             "Tick Freeze When Not In Session", "Automatically freezes the game when the session is paused or ended or not started."
     );
     public final ConfigFileEntry<Boolean> ONLY_LOSE_DURABILITY_IN_SESSION = new ConfigFileEntry<>(
-            "only_lose_durability_in_session", false, "global.session[new]",
+            "only_lose_durability_in_session", false, "global.session",
             "Only Lose Durability In Session", "Makes players only lose durability on their items and gear while a session is active."
     );
     public final ConfigFileEntry<Boolean> SESSION_START_COUNTDOWN = new ConfigFileEntry<>(
@@ -361,11 +361,11 @@ public class DefaultConfigValues {
             "Maximum Lives", "The maximum number of lives any player can have after randomization."
     );
     public final ConfigFileEntry<Boolean> LIVES_RANDOMIZE_CUSTOMAVG = new ConfigFileEntry<>(
-            "lives_randomize_custom_average", false, "{global.lives.random.customavg}[new]",
+            "lives_randomize_custom_average", false, "{global.lives.random.customavg}",
             "Custom Average Lives", ""
     );
     public final ConfigFileEntry<Double> LIVES_RANDOMIZE_AVERAGE = new ConfigFileEntry<>(
-            "lives_randomize_average", 4.0, "global.lives.random.customavg[new]",
+            "lives_randomize_average", 4.0, "global.lives.random.customavg",
             "Average Lives", "The average number of lives a player gets after randomization."
     );
     public final ConfigFileEntry<Double> LIVES_RANDOMIZE_MINUTE = new ConfigFileEntry<>(
@@ -407,7 +407,7 @@ public class DefaultConfigValues {
             "Lives Stuff", ""
     );
     public final ConfigFileEntry<Object> GROUP_SESSION = new ConfigFileEntry<>(
-            "group_session", null, ConfigTypes.TEXT, "{global.session}[new]",
+            "group_session", null, ConfigTypes.TEXT, "{global.session}",
             "Session", ""
     );
     public final ConfigFileEntry<Object> GROUP_BLACKLIST = new ConfigFileEntry<>(
@@ -448,7 +448,7 @@ public class DefaultConfigValues {
             "Modifiable Texts", ""
     );
     public final ConfigFileEntry<Object> GROUP_SOUNDS = new ConfigFileEntry<>(
-            "group_sounds", null, ConfigTypes.TEXT, "{sound}",
+            "group_sounds", null, ConfigTypes.TEXT, "{sound}[new]",
             "Modifiable Sounds", ""
     );
     public final ConfigFileEntry<Object> GROUP_MUTED = new ConfigFileEntry<>(

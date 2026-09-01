@@ -104,13 +104,32 @@ public class SecretLifeConfig extends SeasonConfig {
             "Tasks Need Confirmation", "Requires an admin to confirm when someone is succeeding a task."
     );
     public static final ConfigFileEntry<Boolean> UNBREAKABLE_BUTTONS = new ConfigFileEntry<>(
-            "unbreakable_buttons", true, "season[new]",
+            "unbreakable_buttons", true, "season",
             "Unbreakable Buttons", "Makes the task buttons and supporting blocks unbreakable."
     );
-
     public static final ConfigFileEntry<Boolean> ONLY_LOSE_HEARTS_IN_SESSION = new ConfigFileEntry<>(
             "only_lose_hearts_in_session", false, "season.health",
             "Only Lose Hearts In Session", "Makes players only lose hearts while a session is active."
+    );
+    public static final ConfigFileEntry<Boolean> GUESS_TASKS = new ConfigFileEntry<>(
+            "guess_tasks", false, "{season.tasks.guess}[new]",
+            "Enable Task Guess Command", "Makes players be able to use /task guess."
+    );
+    public static final ConfigFileEntry<Boolean> GUESS_TASKS_PUBLIC = new ConfigFileEntry<>(
+            "guess_tasks_public", false, "season.tasks.guess[new]",
+            "Public Guessing", "Makes the guess be broadcast publicly."
+    );
+    public static final ConfigFileEntry<Integer> GUESS_TASKS_LIFE_GUESSER_MIN = new ConfigFileEntry<>(
+            "guess_tasks_life_guesser_min", 2, "season.tasks.guess[new]",
+            "Guessing Player Minimum Lives", "Minimum number of lives the player that's guessing needs to have."
+    );
+    public static final ConfigFileEntry<Integer> GUESS_TASKS_LIFE_GUESSER_MAX = new ConfigFileEntry<>(
+            "guess_tasks_life_guesser_max", 2, "season.tasks.guess[new]",
+            "Guessing Player Maximum Lives", "Maximum number of lives the player that's guessing can have."
+    );
+    public static final ConfigFileEntry<Integer> GUESS_TASKS_LIFE_GUESSED_MIN = new ConfigFileEntry<>(
+            "guess_tasks_life_guessed_min", 3, "season.tasks.guess[new]",
+            "Guessed Player Minimum Lives", "Minimum number of lives the player who's task you're guessing needs to have."
     );
 
     public static final ConfigFileEntry<Object> GROUP_HEALTH = new ConfigFileEntry<>(
@@ -153,6 +172,7 @@ public class SecretLifeConfig extends SeasonConfig {
 
                 ,GROUP_HEALTH //Group
                 ,GROUP_TASKS
+                    ,GUESS_TASKS
                     ,GROUP_TASKS_EASY
                     ,GROUP_TASKS_HARD
                     ,GROUP_TASKS_RED
@@ -165,6 +185,10 @@ public class SecretLifeConfig extends SeasonConfig {
                 ,TASK_HEALTH_HARD_FAIL
                 ,TASK_HEALTH_RED_PASS
                 ,TASK_HEALTH_RED_FAIL
+                ,GUESS_TASKS_PUBLIC
+                ,GUESS_TASKS_LIFE_GUESSER_MIN
+                ,GUESS_TASKS_LIFE_GUESSER_MAX
+                ,GUESS_TASKS_LIFE_GUESSED_MIN
         ));
     }
 
