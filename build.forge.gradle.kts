@@ -28,6 +28,9 @@ platform {
 		required("forge") {
 			forgeVersionRange = "[1,)"
 		}
+		required("matlib") {
+			forgeVersionRange = "[${prop("deps.matlib")},)"
+		}
 	}
 }
 
@@ -91,6 +94,7 @@ else {
 }
 
 repositories {
+	mavenLocal()
 	minecraft.mavenizer(this)
 	maven(fg.forgeMaven)
 	maven(fg.minecraftLibsMaven)
@@ -106,6 +110,10 @@ repositories {
 			}
 		}
 	}
+}
+
+configurations.all {
+	resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
 }
 
 jarJar.register()
@@ -158,6 +166,7 @@ dependencies {
 	else {
 		compileOnly ("maven.modrinth:simple-voice-chat:forge-1.20.1-2.6.16")
 	}
+	implementation("net.mat0u5:matlib-forge-${stonecutter.current.version}:local-SNAPSHOT") { isChanging = true }
 }
 
 if (legacyForge) {
