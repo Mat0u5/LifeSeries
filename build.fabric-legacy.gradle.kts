@@ -15,6 +15,9 @@ platform {
 		required("fabricloader") {
 			versionRange = ">=${libs.fabric.loader.get().version}"
 		}
+		required("matlib") {
+			versionRange = ">=${prop("deps.matlib")}"
+		}
 	}
 }
 
@@ -41,10 +44,15 @@ loom {
 }
 
 repositories {
+	mavenLocal()
 	mavenCentral()
 	strictMaven("https://api.modrinth.com/maven", "maven.modrinth") { name = "Modrinth" }
 	strictMaven("https://www.cursemaven.com", "curse.maven") { name = "CurseForge" }
 	maven ( "https://maven.maxhenkel.de/repository/public")
+}
+
+configurations.all {
+	resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
 }
 
 dependencies {
@@ -77,6 +85,7 @@ dependencies {
 	else {
 		modCompileOnly ("maven.modrinth:simple-voice-chat:fabric-1.21.1-2.5.35")
 	}
+	modImplementation("net.mat0u5:matlib-fabric-${stonecutter.current.version}:local-SNAPSHOT") { isChanging = true }
 }
 
 project.afterEvaluate {
