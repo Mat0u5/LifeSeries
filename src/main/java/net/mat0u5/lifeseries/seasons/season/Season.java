@@ -99,7 +99,6 @@ public abstract class Season {
     public boolean TAB_LIST_SHOW_LIVES = false;
     public static boolean TAB_LIST_SHOW_EXACT_LIVES = false;
     public static boolean SHOW_HEALTH_BELOW_NAME = false;
-    public boolean WATCHERS_IN_TAB = true;
     public boolean MUTE_DEAD_PLAYERS = false;
     public boolean MUTE_WATCHERS = false;
     public boolean MUTED_CHAT = true;
@@ -244,7 +243,8 @@ public abstract class Season {
         TAB_LIST_SHOW_DEAD_PLAYERS = seasonConfig.TAB_LIST_SHOW_DEAD_PLAYERS.get();
         TAB_LIST_SHOW_EXACT_LIVES = seasonConfig.TAB_LIST_SHOW_EXACT_LIVES.get();
         SHOW_HEALTH_BELOW_NAME = seasonConfig.SHOW_HEALTH_BELOW_NAME.get();
-        WATCHERS_IN_TAB = seasonConfig.WATCHERS_IN_TAB.get();
+        WatcherManager.WATCHERS_IN_TAB = seasonConfig.WATCHERS_IN_TAB.get();
+        WatcherManager.WATCHERS_SEE_BOOGEY_AND_SOCIETY = seasonConfig.WATCHERS_SEE_BOOGEY_AND_SOCIETY.get();
         MUTE_WATCHERS = seasonConfig.WATCHERS_MUTED.get();
         MUTED_CHAT = seasonConfig.MUTED_CHAT.get();
         MUTED_CHAT_ADMIN = seasonConfig.MUTED_CHAT_ADMIN.get();

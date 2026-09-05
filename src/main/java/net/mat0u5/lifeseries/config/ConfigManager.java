@@ -171,6 +171,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,SPAWNER_RECIPE
 
                 ,WATCHERS_IN_TAB
+                ,WATCHERS_SEE_BOOGEY_AND_SOCIETY
                 ,SUBIN_CHANGE_SKIN
                 ,SUBIN_CHANGE_USERNAME
                 ,LIVES_LIFE_DIFF_MESSAGE

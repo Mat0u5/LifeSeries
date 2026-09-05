@@ -4,6 +4,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.command.manager.Command;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.pastlife.PastLifeBoogeymanManager;
+import net.mat0u5.lifeseries.seasons.util.WatcherManager;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.commands.CommandSourceStack;
@@ -51,7 +53,11 @@ public class BoogeymanCommand extends Command {
                     ))
                 )
                 .then(literal("list")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(source -> {
+                        if (PermissionManager.isAdmin(source)) return true;
+                        ServerPlayer self = source.getPlayer();
+						return self != null && WatcherManager.WATCHERS_SEE_BOOGEY_AND_SOCIETY && ((IPlayer) self).ls$isWatcher();
+					})
                     .executes(context -> boogeyList(
                         context.getSource()
                     ))

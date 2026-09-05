@@ -454,7 +454,7 @@ public class PlayerUtils {
         if (receivingPlayer.isSpectator()) return false;
         if (!player.isSpectator()) return false;
 
-        if (currentSeason.WATCHERS_IN_TAB) return false;
+        if (WatcherManager.WATCHERS_IN_TAB) return false;
         if (((IPlayer) receivingPlayer).ls$isWatcher()) return false;
         if (!((IPlayer) player).ls$isWatcher()) return false;
         return true;

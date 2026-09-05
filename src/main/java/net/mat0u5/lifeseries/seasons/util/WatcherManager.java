@@ -29,6 +29,8 @@ public class WatcherManager {
     public static final String TEAM_NAME = "watcher";
     public static final String TEAM_DISPLAY_NAME = "Watcher";
     private static List<String> watchers = new ArrayList<>();
+    public static boolean WATCHERS_IN_TAB = true;
+    public static boolean WATCHERS_SEE_BOOGEY_AND_SOCIETY = false;
 
     public static void createTeams() {
         //~ if >= 26.2 'ChatFormatting' -> 'TeamColor' {
@@ -68,6 +70,7 @@ public class WatcherManager {
             doubleLife.resetSoulmate(player);
         }
         ((IPlayer) player).ls$message(ModifiableText.WATCHER_JOIN.get());
+        PlayerUtils.resendCommandTree(player);
     }
 
     public static void removeWatcher(ServerPlayer player) {
@@ -75,6 +78,7 @@ public class WatcherManager {
         ScoreboardUtils.resetScore(player, SCOREBOARD_NAME);
         livesManager.resetPlayerLife(player);
         ((IPlayer) player).ls$message(ModifiableText.WATCHER_LEAVE.get());
+        PlayerUtils.resendCommandTree(player);
     }
 
     public static boolean isWatcher(Player player) {

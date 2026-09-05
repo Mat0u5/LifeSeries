@@ -300,6 +300,10 @@ public class DefaultConfigValues {
             "watchers_in_tab", true, "global.watchers",
             "Show Watchers In Tab", "Controls whether Watchers should show up in the tab list."
     );
+    public final ConfigFileEntry<Boolean> WATCHERS_SEE_BOOGEY_AND_SOCIETY = new ConfigFileEntry<>(
+            "watchers_see_boogey_and_society", false, "global.watchers[new]",
+            "Show Boogeymen And Society Members", "Controls whether Watchers have permissions for the '/boogeyman list' and '/society members list' commands."
+    );
     public final ConfigFileEntry<Boolean> WATCHERS_MUTED = new ConfigFileEntry<>(
             "watchers_muted", false, "global.muted",
             "Mute Watchers", "Controls whether the Watchers should be allowed to type in chat."
