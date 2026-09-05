@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.interfaces.ClientAccessor;
+import net.mat0u5.matlib.MatLib;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -90,7 +91,7 @@ public class LifeSeriesClient implements ClientAccessor {
     public static HandshakeStatus serverHandshake = HandshakeStatus.WAITING;
 
     public static void onInitializeClient() {
-        LifeSeries.LOGGER.info("Initializing Life Series Client [{} {} ({})]...", LifeSeries.platform().loader().name(), LifeSeries.platform().mcVersion(), LifeSeries.MOD_VERSION);
+        LifeSeries.LOGGER.info("Initializing Life Series Client [{} {} ({})] with MatLib [{}]...", MatLib.platform().loader().name(), MatLib.platform().mcVersion(), LifeSeries.MOD_VERSION, MatLib.MOD_VERSION);
         ClientRegistries.registerModStuff();
         NetworkHandlerClient.initializeSimplePacketReceivers();
 

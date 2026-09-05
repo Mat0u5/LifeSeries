@@ -18,6 +18,7 @@ import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.interfaces.ClientAccessor;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
+import net.mat0u5.matlib.MatLib;
 import net.minecraft.server.MinecraftServer;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -25,13 +26,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
 
-//? if fabric {
-import net.mat0u5.lifeseries.platform.fabric.FabricPlatform;
-//?} neoforge {
-/*import net.mat0u5.lifeseries.platform.neoforge.NeoforgePlatform;
- *///?} forge {
-/*import net.mat0u5.lifeseries.platform.forge.ForgePlatform;
- *///?}
 //? fabric && <= 1.20.5 {
 /*import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.registries.ModRegistries;
@@ -40,7 +34,6 @@ import net.mat0u5.lifeseries.registries.ModRegistries;
 public class LifeSeries {
 	public static final String MOD_VERSION = "1.5.9.7-dev";
 	public static final String MOD_ID = "lifeseries";
-	private static final Platform PLATFORM = createPlatformInstance();
 
 	public static final boolean DEBUG = false;
 	public static final boolean FORCE_DEV = false;
@@ -61,7 +54,7 @@ public class LifeSeries {
 	public static ConfigManager seasonConfig;
 
 	public static void onInitialize() {
-		LOGGER.info("Initializing Life Series [{} {} ({})]...", platform().loader().name(), platform().mcVersion(), MOD_VERSION);
+		LOGGER.info("Initializing Life Series [{} {} ({})] with MatLib [{}]...", MatLib.platform().loader().name(), MatLib.platform().mcVersion(), MOD_VERSION, MatLib.MOD_VERSION);
 
 		config = new MainConfig();
 		NetworkHandlerServer.reload();
@@ -88,20 +81,6 @@ public class LifeSeries {
 			UpdateChecker.checkForMajorUpdates();
 		}
 		NetworkHandlerServer.initializeSimplePacketReceivers();
-	}
-
-	public static Platform platform() {
-		return PLATFORM;
-	}
-
-	private static Platform createPlatformInstance() {
-		//? if fabric {
-		return new FabricPlatform();
-		//?} neoforge {
-		/*return new NeoforgePlatform();
-		 *///?} forge {
-		/*return new ForgePlatform();
-		 *///?}
 	}
 
 	public static boolean modDisabled() {
