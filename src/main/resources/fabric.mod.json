@@ -29,8 +29,6 @@
 	"mixins": [
 		"${id}.mixins.json"
 	],
-	"breaks": {
-		"pastlife": "*"
-	},
-	"depends": {}
+	"depends": {},
+	"breaks": {}
 }
