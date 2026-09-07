@@ -25,13 +25,6 @@ import java.util.Optional;
 @Mixin(value = MinecraftServer.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class MinecraftServerMixin {
-    @Shadow
-    private MinecraftServer.ReloadableResources resources;
-
-    @Inject(method = "runServer", at = @At("HEAD"))
-    private void onInit(CallbackInfo ci) {
-        //LifeSeries.onInitialize();
-    }
 
     //? if <= 1.20.2 {
     /*@Inject(method = "getServerResourcePack", at = @At("HEAD"), cancellable = true)
@@ -44,37 +37,8 @@ public abstract class MinecraftServerMixin {
     }
     *///?}
 
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/server/MinecraftServer;initServer()Z"), method = "runServer")
-    private void beforeSetupServer(CallbackInfo info) {
-        Events.onServerStarting((MinecraftServer) (Object) this);
-    }
-
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/server/MinecraftServer;buildServerStatus()Lnet/minecraft/network/protocol/status/ServerStatus;", ordinal = 0), method = "runServer")
-    private void afterSetupServer(CallbackInfo info) {
-        Events.onServerStart((MinecraftServer) (Object) this);
-    }
-
-    @Inject(at = @At("HEAD"), method = "stopServer")
-    private void beforeShutdownServer(CallbackInfo info) {
-        Events.onServerStopping((MinecraftServer) (Object) this);
-    }
-
     @Inject(at = @At("TAIL"), method = "tickServer")
     private void onEndTick(BooleanSupplier shouldKeepTicking, CallbackInfo info) {
         Events.onServerTickEnd((MinecraftServer) (Object) this);
-    }
-
-    @Inject(method = "reloadResources", at = @At("HEAD"))
-    private void startResourceReload(Collection<String> collection, CallbackInfoReturnable<CompletableFuture<Void>> cir) {
-        Events.onReloadStart((MinecraftServer) (Object) this, this.resources.resourceManager());
-    }
-
-    @Inject(method = "reloadResources", at = @At("TAIL"))
-    private void endResourceReload(Collection<String> collection, CallbackInfoReturnable<CompletableFuture<Void>> cir) {
-        cir.getReturnValue().handleAsync((value, throwable) -> {
-            // Hook into fail
-            Events.onReloadEnd((MinecraftServer) (Object) this, this.resources.resourceManager(), throwable == null);
-            return value;
-        }, (MinecraftServer) (Object) this);
     }
 }
