@@ -21,6 +21,8 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ProfileManager;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.mat0u5.matlib.events.common.ServerLifecycleEvents;
+import net.mat0u5.matlib.events.common.ServerResourceEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.MinecraftServer;
@@ -53,6 +55,14 @@ import net.minecraft.world.item.Items;
 public class Events {
     public static boolean skipNextTickReload = false;
     public static boolean updatePlayerListsNextTick = false;
+
+    public static void registerAllEvents() {
+        ServerLifecycleEvents.SERVER_STARTING.register(Events::onServerStarting);
+        ServerLifecycleEvents.SERVER_STARTED.register(Events::onServerStart);
+        ServerLifecycleEvents.SERVER_STOPPING.register(Events::onServerStopping);
+        ServerResourceEvents.RELOAD_START.register(Events::onReloadStart);
+        ServerResourceEvents.RELOAD_STOPPING.register(Events::onReloadEnd);
+    }
 
     public static void onReloadStart(MinecraftServer server, CloseableResourceManager resourceManager) {
         try {

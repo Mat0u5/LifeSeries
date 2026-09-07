@@ -4,7 +4,7 @@ import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.MainConfig;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
-import net.mat0u5.lifeseries.platform.Platform;
+import net.mat0u5.lifeseries.registries.MatLibRegistry;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
 import net.mat0u5.lifeseries.seasons.season.Season;
@@ -55,6 +55,8 @@ public class LifeSeries {
 
 	public static void onInitialize() {
 		LOGGER.info("Initializing Life Series [{} {} ({})] with MatLib [{}]...", MatLib.platform().loader().name(), MatLib.platform().mcVersion(), MOD_VERSION, MatLib.MOD_VERSION);
+
+		MatLibRegistry.register();
 
 		config = new MainConfig();
 		NetworkHandlerServer.reload();
