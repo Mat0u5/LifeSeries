@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
@@ -24,7 +24,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.*;
 
-public class WildLifeTriviaCommand extends Command {
+public class WildLifeTriviaCommand extends CustomCommand {
 
     @Override
     public boolean isAllowed() {

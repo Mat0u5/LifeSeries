@@ -5,7 +5,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.DefaultConfigValues;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
@@ -33,7 +33,7 @@ import java.util.concurrent.CompletableFuture;
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
 
-public class LifeSeriesCommand extends Command {
+public class LifeSeriesCommand extends CustomCommand {
     public static final List<String> ALLOWED_SEASON_NAMES = Seasons.getSeasonIds();
 
     @Override

@@ -2,11 +2,11 @@ package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 
-public class SelfMessageCommand extends Command {
+public class SelfMessageCommand extends CustomCommand {
 
     @Override
     public boolean isAllowed() {

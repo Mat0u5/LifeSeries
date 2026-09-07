@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.seasons.boogeyman;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.pastlife.PastLifeBoogeymanManager;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
@@ -17,7 +17,7 @@ import java.util.List;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
-public class BoogeymanCommand extends Command {
+public class BoogeymanCommand extends CustomCommand {
 
     @Override
     public boolean isAllowed() {

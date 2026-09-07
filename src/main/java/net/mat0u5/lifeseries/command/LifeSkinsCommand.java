@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.utils.other.ActionText;
 import net.mat0u5.lifeseries.utils.other.Triple;
@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class LifeSkinsCommand extends Command {
+public class LifeSkinsCommand extends CustomCommand {
     @Override
     public boolean isAllowed() {
         return true;

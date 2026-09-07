@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.util.WatcherManager;
@@ -15,7 +15,7 @@ import net.minecraft.server.level.ServerPlayer;
 import java.util.Collection;
 import java.util.List;
 
-public class WatcherCommand extends Command {
+public class WatcherCommand extends CustomCommand {
 
     @Override
     public boolean isAllowed() {

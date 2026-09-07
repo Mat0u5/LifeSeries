@@ -4,7 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -32,7 +32,7 @@ import java.util.List;
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 import static net.mat0u5.lifeseries.LifeSeries.livesManager;
 
-public class LivesCommand extends Command {
+public class LivesCommand extends CustomCommand {
 
     public boolean isAllowedNormal() {
         return isAllowed() && isNormalLife();

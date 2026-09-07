@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -27,7 +27,7 @@ import java.util.UUID;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
 
-public class GivelifeCommand extends Command {
+public class GivelifeCommand extends CustomCommand {
 
     private Map<UUID, Map<UUID, Long>> soulmateGivelifeRequests = new HashMap<>();
 

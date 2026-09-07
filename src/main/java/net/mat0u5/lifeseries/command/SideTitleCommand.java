@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
@@ -19,7 +19,7 @@ import java.util.Collection;
 //? if >= 26.1
 import net.minecraft.network.chat.ResolutionContext;
 
-public class SideTitleCommand extends Command {
+public class SideTitleCommand extends CustomCommand {
     @Override
     public boolean isAllowed() {
         return true;

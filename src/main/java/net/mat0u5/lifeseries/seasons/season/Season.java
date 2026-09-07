@@ -1,8 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.command.manager.Command;
-import net.mat0u5.lifeseries.command.manager.CommandManager;
+import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSoundManager;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
@@ -34,6 +33,7 @@ import net.mat0u5.lifeseries.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.*;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.mat0u5.matlib.command.Command;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.OutgoingChatMessage;
@@ -300,9 +300,9 @@ public abstract class Season {
 
     public String getAdminCommands() {
         List<String> allCommands = new ArrayList<>();
-        for (Command command : CommandManager.commands) {
-            if (!command.isAllowed()) continue;
-            for (String commandStr : command.getAdminCommands()) {
+        for (Command command : CustomCommand.getAllCommands()) {
+            if (!command.isAllowed() || !(command instanceof CustomCommand customCommand)) continue;
+            for (String commandStr : customCommand.getAdminCommands()) {
                 if (commandStr.isEmpty()) continue;
                 allCommands.add("/"+commandStr);
             }
@@ -312,9 +312,9 @@ public abstract class Season {
 
     public String getNonAdminCommands() {
         List<String> allCommands = new ArrayList<>();
-        for (Command command : CommandManager.commands) {
-            if (!command.isAllowed()) continue;
-            for (String commandStr : command.getNonAdminCommands()) {
+        for (Command command : CustomCommand.getAllCommands()) {
+            if (!command.isAllowed() || !(command instanceof CustomCommand customCommand)) continue;
+            for (String commandStr : customCommand.getNonAdminCommands()) {
                 allCommands.add("/"+commandStr);
             }
         }

@@ -4,7 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -21,7 +21,7 @@ import java.util.Optional;
 //? if >= 1.21.9
 import net.minecraft.server.players.NameAndId;
 
-public class SubInCommands extends Command {
+public class SubInCommands extends CustomCommand {
     @Override
     public boolean isAllowed() {
         return !LifeSeries.isSeason(Seasons.UNASSIGNED);

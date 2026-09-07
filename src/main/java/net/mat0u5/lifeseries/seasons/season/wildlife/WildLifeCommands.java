@@ -4,7 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
@@ -43,7 +43,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-public class WildLifeCommands extends Command {
+public class WildLifeCommands extends CustomCommand {
 
     @Override
     public boolean isAllowed() {

@@ -16,7 +16,6 @@
     "ChunkMapAccessor",
     "ChunkStatusTasksMixin",
     "ClientboundCustomPayloadPacketMixin",
-    "CommandsMixin",
     "CommandSourceStackMixin",
     "CrafterBlockMixin",
     "CraftingMenuMixin",

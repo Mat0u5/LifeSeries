@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.doublelife;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
@@ -16,7 +16,7 @@ import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
-public class DoubleLifeCommands extends Command {
+public class DoubleLifeCommands extends CustomCommand {
 
     @Override
     public boolean isAllowed() {
