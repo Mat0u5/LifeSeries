@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
@@ -15,7 +15,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;
 
-public class TestingCommands extends Command {
+public class TestingCommands extends CustomCommand {
 
     @Override
     public boolean isAllowed() {
