@@ -244,6 +244,7 @@ public class NetworkHandlerClient {
         SimplePackets.FIX_SIZECHANGING_BUGS.setClientReceive(payload -> LifeSeriesClient.FIX_SIZECHANGING_BUGS = payload.value());
         SimplePackets.ANIMAL_DISGUISE_ARMOR.setClientReceive(payload -> Morph.showArmor = payload.value());
         SimplePackets.ANIMAL_DISGUISE_HANDS.setClientReceive(payload -> Morph.showHandItems = payload.value());
+        SimplePackets.NICELIFE_DISABLE_SNOW.setClientReceive(payload -> LifeSeriesClient.NICELIFE_DISABLE_SNOW = payload.value());
         SimplePackets.SNOWY_NETHER.setClientReceive(payload -> {
             boolean newValue = payload.value();
             if (LifeSeriesClient.NICELIFE_SNOWY_NETHER != newValue) {

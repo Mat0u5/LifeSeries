@@ -96,7 +96,7 @@ public class WeatherEffectRendererMixin {
     public Identifier render(Identifier resourceLocation) {
     //?}
 *///?}
-        if (LifeSeriesClient.NICE_LIFE_LESS_SNOW && !LifeSeries.modDisabled() && LifeSeries.isSeason(Seasons.NICE_LIFE)) {
+        if (LifeSeriesClient.NICE_LIFE_LESS_SNOW && !LifeSeries.modDisabled() && LifeSeries.isSeason(Seasons.NICE_LIFE) && !LifeSeriesClient.NICELIFE_DISABLE_SNOW) {
             //? if <= 26.2 {
             boolean isSnow = resourceLocation.getPath().contains("snow.png");
             //?} else {
@@ -139,7 +139,7 @@ public class WeatherEffectRendererMixin {
     @WrapOperation(method = "extractRenderState", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;getRainLevel(F)F"))
     public float renderRain(ClientLevel instance, float v, Operation<Float> original) {
     //?}
-        if (!LifeSeries.modDisabled() && LifeSeries.isSeason(Seasons.NICE_LIFE)) {
+        if (!LifeSeries.modDisabled() && LifeSeries.isSeason(Seasons.NICE_LIFE) && !LifeSeriesClient.NICELIFE_DISABLE_SNOW) {
             return 1;
         }
         return original.call(instance, v);

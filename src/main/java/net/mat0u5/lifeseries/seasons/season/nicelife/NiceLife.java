@@ -56,6 +56,8 @@ public class NiceLife extends Season {
     public static boolean SNOWY_NETHER = true;
     public static boolean LIGHT_MELTS_SNOW = false;
     public boolean SNOW_WHEN_NOT_IN_SESSION = false;
+    public static boolean DISABLE_SNOW = false;
+    public static boolean DISABLE_COLD_WORLD_GENERATION = false;
     public static boolean ADVANCE_TIME_WHEN_NOT_IN_SESSION = false;
     public static boolean RED_WINTER = true;
     public Time SNOW_LAYER_INCREASE_INTERVAL = Time.seconds(600);
@@ -117,6 +119,7 @@ public class NiceLife extends Season {
         SNOW_WHEN_NOT_IN_SESSION = NiceLifeConfig.SNOW_WHEN_NOT_IN_SESSION.get();
         SNOW_LAYER_INCREASE_INTERVAL = Time.seconds(NiceLifeConfig.SNOW_LAYER_INCREMENT_DELAY.get());
         ADVANCE_TIME_WHEN_NOT_IN_SESSION = NiceLifeConfig.ADVANCE_TIME_WHEN_NOT_IN_SESSION.get();
+        DISABLE_SNOW = NiceLifeConfig.DISABLE_SNOW.get();
         SNOWY_NETHER = NiceLifeConfig.SNOWY_NETHER.get();
         snowLayerTickChance = 280.0 / Math.max(SNOW_LAYER_INCREASE_INTERVAL.getTicks(), 1);
         if (currentMaxSnowLayers == -1) {
@@ -173,9 +176,9 @@ public class NiceLife extends Season {
         }
         ServerLevel overworld = server.overworld();
         //? if <= 1.21.11 {
-        /*overworld.setWeatherParameters(0, 1000, true, false);
+        /*overworld.setWeatherParameters(DISABLE_SNOW?1000:0, DISABLE_SNOW?0:1000, !DISABLE_SNOW, false);
         *///?} else {
-        server.setWeatherParameters(0, 1000, true, false);
+        server.setWeatherParameters(DISABLE_SNOW?1000:0, DISABLE_SNOW?0:1000, !DISABLE_SNOW, false);
         //?}
 
         List<String> nonSleepingPlayers = new ArrayList<>();
@@ -406,10 +409,10 @@ public class NiceLife extends Season {
     }
 
     public void tickChunk(ServerLevel level, ChunkPos chunkPos) {
-        if (level.dimension() != Level.OVERWORLD) {
+        if (level.dimension() != Level.OVERWORLD || DISABLE_SNOW) {
             return;
         }
-        if (currentSession.statusStarted()  || SNOW_WHEN_NOT_IN_SESSION) {
+        if (currentSession.statusStarted() || SNOW_WHEN_NOT_IN_SESSION) {
             int minX = chunkPos.getMinBlockX();
             int maxX = chunkPos.getMinBlockZ();
 

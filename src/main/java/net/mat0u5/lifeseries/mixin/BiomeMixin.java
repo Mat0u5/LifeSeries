@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.mixin;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLife;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.biome.Biome;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,7 +21,7 @@ public class BiomeMixin {
     @Inject(method = "getTemperature", at = @At(value = "HEAD"), cancellable = true)
     public void render(BlockPos blockPos, int i, CallbackInfoReturnable<Float> cir) {
     //?}
-        if (!LifeSeries.modDisabled() && LifeSeries.getSeason() == Seasons.NICE_LIFE) {
+        if (!LifeSeries.modDisabled() && LifeSeries.isSeason(Seasons.NICE_LIFE) && !NiceLife.DISABLE_SNOW) {
             cir.setReturnValue(0.0f);
         }
     }

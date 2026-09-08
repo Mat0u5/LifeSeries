@@ -722,6 +722,7 @@ public class NetworkHandlerServer {
         SimplePackets.ANIMAL_DISGUISE_HANDS.sendToClient(AnimalDisguise.SHOW_HANDS, players);
         SimplePackets.HUNGER_NON_EDIBLE.sendToClient(Hunger.nonEdibleStr, players);
         SimplePackets.SNOWY_NETHER.sendToClient(NiceLife.SNOWY_NETHER, players);
+        SimplePackets.NICELIFE_DISABLE_SNOW.sendToClient(NiceLife.DISABLE_SNOW, players);
 
         if (Season.skyColor != null) {
             SimplePackets.SKYCOLOR.sendToClient(List.of(String.valueOf(Season.skyColorSetMode), String.valueOf((int)Season.skyColor.x), String.valueOf((int)Season.skyColor.y), String.valueOf((int)Season.skyColor.z)), players);

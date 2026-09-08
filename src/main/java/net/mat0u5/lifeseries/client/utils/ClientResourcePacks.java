@@ -11,11 +11,11 @@ import static net.mat0u5.lifeseries.client.LifeSeriesClient.clientConfig;
 
 public class ClientResourcePacks {
     private static final String MINIMAL_ARMOR_RESOURCEPACK = "lifeseries:minimal_armor";
-    private static final String NICELIFE_ARMOR_RESOURCEPACK = "lifeseries:nicelife";
+    private static final String NICELIFE_NETHER_RESOURCEPACK = "lifeseries:nicelife";
 
     public static void checkClientPacks() {
         handleClientResourcepack(MINIMAL_ARMOR_RESOURCEPACK, ClientConfig.MINIMAL_ARMOR.get(clientConfig));
-        handleClientResourcepack(NICELIFE_ARMOR_RESOURCEPACK, (LifeSeries.isSeason(Seasons.NICE_LIFE) && LifeSeriesClient.NICELIFE_SNOWY_NETHER));
+        handleClientResourcepack(NICELIFE_NETHER_RESOURCEPACK, (LifeSeries.isSeason(Seasons.NICE_LIFE) && LifeSeriesClient.NICELIFE_SNOWY_NETHER));
     }
 
     public static void handleClientResourcepack(String id, boolean action) {

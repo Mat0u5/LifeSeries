@@ -66,6 +66,11 @@ public class NiceLifeConfig extends SeasonConfig {
             "snow_layer_increment_delay", 600, ConfigTypes.SECONDS, "season",
             "Snow Layer Increment Delay", "Controls the interval between snow layer increments, in seconds."
     );
+
+    public static final ConfigFileEntry<Boolean> DISABLE_SNOW = new ConfigFileEntry<>(
+            "disable_snow", false, "season[new]",
+            "Disable Snowing", "Controls whether it snows at all."
+    );
     public static final ConfigFileEntry<Boolean> ADVANCE_TIME_WHEN_NOT_IN_SESSION = new ConfigFileEntry<>(
             "advance_time_not_in_session", false, "season",
             "Advance Time When Not In Session", "Controls whether the daylight cycle is paused when not in session."
@@ -73,7 +78,7 @@ public class NiceLifeConfig extends SeasonConfig {
 
     public static final ConfigFileEntry<Boolean> SNOWY_NETHER = new ConfigFileEntry<>(
             "snowy_nether", true, "season",
-            "Snowy Nether", "Controls the nether is frozen."
+            "Snowy Nether", "Controls whether the nether is frozen."
     );
 
     public static final ConfigFileEntry<Integer> TRIVIA_QUESTION_TIME = new ConfigFileEntry<>(
@@ -157,6 +162,7 @@ public class NiceLifeConfig extends SeasonConfig {
                 LIGHT_MELTS_SNOW
                 ,SNOW_WHEN_NOT_IN_SESSION
                 ,SNOW_LAYER_INCREMENT_DELAY
+                ,DISABLE_SNOW
                 ,ADVANCE_TIME_WHEN_NOT_IN_SESSION
                 ,SNOWY_NETHER
                 ,RED_WINTER

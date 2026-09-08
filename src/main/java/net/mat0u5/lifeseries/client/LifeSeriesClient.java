@@ -33,6 +33,7 @@ public class LifeSeriesClient implements ClientAccessor {
     public static long MIMICRY_COOLDOWN_TIMESTAMP = 0;
     public static long CURSE_SLIDING = 0;
     public static boolean NICELIFE_SNOWY_NETHER = true;
+    public static boolean NICELIFE_DISABLE_SNOW = false;
 
     public static Map<String, String> playerDisguiseNames = new HashMap<>();
     public static Map<UUID, UUID> playerDisguiseUUIDs = new HashMap<>();
