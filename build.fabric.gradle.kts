@@ -52,7 +52,7 @@ repositories {
 }
 
 configurations.all {
-	resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
+	resolutionStrategy.cacheDynamicVersionsFor(0, TimeUnit.SECONDS)
 }
 
 dependencies {
@@ -77,7 +77,7 @@ dependencies {
 	else {
 		compileOnly ("maven.modrinth:simple-voice-chat:fabric-2.6.11+26.1-snapshot-1")
 	}
-	implementation("net.mat0u5:matlib-fabric-${prop("deps.minecraft")}:local-SNAPSHOT") { isChanging = true }
+	implementation("net.mat0u5:matlib-fabric-${prop("deps.minecraft")}:local-+")
 }
 
 project.afterEvaluate {
