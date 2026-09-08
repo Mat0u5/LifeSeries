@@ -166,7 +166,7 @@ dependencies {
 	else {
 		compileOnly ("maven.modrinth:simple-voice-chat:forge-1.20.1-2.6.16")
 	}
-	implementation("net.mat0u5:matlib-forge-${stonecutter.current.version}:local-SNAPSHOT") { isChanging = true }
+	implementation("net.mat0u5:matlib-forge-${prop("deps.minecraft")}:local-SNAPSHOT") { isChanging = true }
 }
 
 if (legacyForge) {
