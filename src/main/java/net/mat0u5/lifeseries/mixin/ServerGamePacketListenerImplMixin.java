@@ -43,8 +43,6 @@ import java.util.Set;
 *///?} else {
 import net.minecraft.network.protocol.game.ServerboundChatCommandSignedPacket;
 //?}
-//? if >= 1.21
-import net.minecraft.network.DisconnectionDetails;
 //? if >= 1.20.5
 import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
 //? if <= 1.21
@@ -231,15 +229,6 @@ public class ServerGamePacketListenerImplMixin {
         }
     }
     //?}
-
-    @Inject(method = "onDisconnect", at = @At("HEAD"))
-    //? if <= 1.20.5 {
-    /*private void onDisconnect(Component component, CallbackInfo ci) {
-    *///?} else {
-    private void onDisconnect(DisconnectionDetails details, CallbackInfo ci) {
-    //?}
-        Events.onPlayerDisconnect(this.player);
-    }
 
     //? if >= 1.20.5 {
     @Inject(method = "handleCustomPayload", at = @At("HEAD"), cancellable = true)

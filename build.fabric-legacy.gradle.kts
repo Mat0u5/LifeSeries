@@ -85,7 +85,7 @@ dependencies {
 	else {
 		modCompileOnly ("maven.modrinth:simple-voice-chat:fabric-1.21.1-2.5.35")
 	}
-	modImplementation("net.mat0u5:matlib-fabric-${stonecutter.current.version}:local-SNAPSHOT") { isChanging = true }
+	modImplementation("net.mat0u5:matlib-fabric-${prop("deps.minecraft")}:local-SNAPSHOT") { isChanging = true }
 }
 
 project.afterEvaluate {
