@@ -29,6 +29,8 @@ public class MatLibRegistry {
 		ServerPlayerEvents.CONNECT.register((connection, player) -> Events.onPlayerJoin(player));
 		ServerPlayerEvents.DISCONNECT.register((details, player) -> Events.onPlayerDisconnect(player));
 		ServerTickEvents.END_TICK.register(Events::onServerTickEnd);
+		ServerEntityEvents.DEATH.register(Events::onEntityDeath);
+		ServerEntityEvents.DROP_LOOT.register(Events::onEntityDropItems);
 	}
 
 	public static void registerCommands() {
@@ -42,7 +44,7 @@ public class MatLibRegistry {
 			String hash = Season.RESOURCEPACK_COMBINED_SHA;
 			boolean isRequired = false;
 			Component prompt = Component.nullToEmpty("Life Series Resourcepack.");
-			return Optional.of(new MinecraftServer().ServerResourcePackInfo(url, hash, isRequired, prompt));
+			return Optional.of(new MinecraftServer.ServerResourcePackInfo(url, hash, isRequired, prompt));
 		});
 	}
 	*///?}

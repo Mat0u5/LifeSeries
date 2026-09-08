@@ -21,6 +21,7 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ProfileManager;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.mat0u5.matlib.events.EventResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.MinecraftServer;
@@ -55,37 +56,31 @@ public class Events {
     public static boolean updatePlayerListsNextTick = false;
 
     public static void onReloadStart(MinecraftServer server, CloseableResourceManager resourceManager) {
-        try {
-            if (LifeSeries.modDisabled()) return;
-            if (!LifeSeries.isLogicalSide()) return;
-            if (!Events.skipNextTickReload) {
-                SeasonChanger.reloadConfig();
-                DatapackManager.onReloadStart();
-            }
-        } catch(Exception e) {e.printStackTrace();}
+        if (LifeSeries.modDisabled()) return;
+        if (!LifeSeries.isLogicalSide()) return;
+        if (!Events.skipNextTickReload) {
+            SeasonChanger.reloadConfig();
+            DatapackManager.onReloadStart();
+        }
     }
 
     public static void onReloadEnd(MinecraftServer server, CloseableResourceManager resourceManager, boolean success) {
-        try {
-            if (LifeSeries.modDisabled()) return;
-            if (!LifeSeries.isLogicalSide()) return;
-            DatapackManager.onReloadEnd();
-        } catch(Exception e) {e.printStackTrace();}
+        if (LifeSeries.modDisabled()) return;
+        if (!LifeSeries.isLogicalSide()) return;
+        DatapackManager.onReloadEnd();
     }
 
     public static void onPlayerJoin(ServerPlayer player) {
         if (isFakePlayer(player)) return;
 
-        try {
-            playerStartJoining(player);
-            if (LifeSeries.modDisabled()) return;
-            LifeSkinsManager.onPlayerJoin(player);
-            currentSeason.onPlayerJoin(player);
-            currentSeason.onUpdatedInventory(player);
-            SessionTranscript.playerJoin(player);
-            MorphManager.onPlayerJoin(player);
-            DatapackIntegration.EVENT_PLAYER_JOIN.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
-        } catch(Exception e) {e.printStackTrace();}
+        playerStartJoining(player);
+        if (LifeSeries.modDisabled()) return;
+        LifeSkinsManager.onPlayerJoin(player);
+        currentSeason.onPlayerJoin(player);
+        currentSeason.onUpdatedInventory(player);
+        SessionTranscript.playerJoin(player);
+        MorphManager.onPlayerJoin(player);
+        DatapackIntegration.EVENT_PLAYER_JOIN.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
     }
 
     public static void onPlayerFinishJoining(ServerPlayer player) {
@@ -106,12 +101,10 @@ public class Events {
         if (LifeSeries.modDisabled()) return;
         if (isFakePlayer(player)) return;
 
-        try {
-            currentSeason.onPlayerDisconnect(player);
-            SessionTranscript.playerLeave(player);
-            NetworkHandlerServer.preLoginHandshake.remove(player.getUUID());
-            DatapackIntegration.EVENT_PLAYER_LEAVE.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
-        } catch(Exception e) {e.printStackTrace();}
+        currentSeason.onPlayerDisconnect(player);
+        SessionTranscript.playerLeave(player);
+        NetworkHandlerServer.preLoginHandshake.remove(player.getUUID());
+        DatapackIntegration.EVENT_PLAYER_LEAVE.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
     }
 
     public static void onServerStopping(MinecraftServer server) {
@@ -135,81 +128,67 @@ public class Events {
     }
 
     public static void onServerStart(MinecraftServer server) {
-        try {
-            LifeSeries.server = server;
-            DatapackManager.onServerStarted(server);
-            if (LifeSeries.modDisabled()) return;
-            currentSeason.initialize();
-            blacklist.reloadBlacklist();
-            if (LifeSeries.isSeason(Seasons.DOUBLE_LIFE)) {
-                ((DoubleLife) currentSeason).loadSoulmates();
-            }
-        } catch(Exception e) {e.printStackTrace();}
-    }
-
-    public static void onServerTickEnd(MinecraftServer server) {
-        try {
-            skipNextTickReload = false;
-            if (!LifeSeries.isLogicalSide()) return;
-            checkPlayerFinishJoiningTick();
-            if (LifeSeries.modDisabled()) return;
-            if (updatePlayerListsNextTick) {
-                updatePlayerListsNextTick = false;
-                PlayerUtils.updatePlayerLists();
-            }
-            if (LifeSeries.currentSession != null) {
-                LifeSeries.currentSession.tick(server);
-            }
-            //? if < 1.20.3 {
-            /*boolean gameFrozen = false;
-            *///?} else {
-            boolean gameFrozen = server.tickRateManager().isFrozen();
-            //?}
-            if (!gameFrozen) {
-                if (LifeSeries.currentSession != null) {
-                    currentSeason.tick(server);
-                }
-                if (NetworkHandlerServer.updatedConfigThisTick) {
-                    NetworkHandlerServer.onUpdatedConfig();
-                }
-                AdvancedDeathsManager.tick();
-            }
-            PlayerUtils.onTick();
-
-            TaskScheduler.onTick(gameFrozen);
-        }catch(Exception e) {
-            e.printStackTrace();
+        LifeSeries.server = server;
+        DatapackManager.onServerStarted(server);
+        if (LifeSeries.modDisabled()) return;
+        currentSeason.initialize();
+        blacklist.reloadBlacklist();
+        if (LifeSeries.isSeason(Seasons.DOUBLE_LIFE)) {
+            ((DoubleLife) currentSeason).loadSoulmates();
         }
     }
 
-    public static void onEntityDeath(LivingEntity entity, DamageSource source) {
+    public static void onServerTickEnd(MinecraftServer server) {
+        skipNextTickReload = false;
+        if (!LifeSeries.isLogicalSide()) return;
+        checkPlayerFinishJoiningTick();
         if (LifeSeries.modDisabled()) return;
-        if (isFakePlayer(entity)) return;
-        try {
-            if (!LifeSeries.isLogicalSide()) return;
-            if (entity instanceof ServerPlayer player) {
-                Events.onPlayerDeath(player, source);
-                return;
+        if (updatePlayerListsNextTick) {
+            updatePlayerListsNextTick = false;
+            PlayerUtils.updatePlayerLists();
+        }
+        if (LifeSeries.currentSession != null) {
+            LifeSeries.currentSession.tick(server);
+        }
+        //? if < 1.20.3 {
+        /*boolean gameFrozen = false;
+        *///?} else {
+        boolean gameFrozen = server.tickRateManager().isFrozen();
+        //?}
+        if (!gameFrozen) {
+            if (LifeSeries.currentSession != null) {
+                currentSeason.tick(server);
             }
-            currentSeason.onMobDeath(entity, source);
-        } catch(Exception e) {e.printStackTrace();}
+            if (NetworkHandlerServer.updatedConfigThisTick) {
+                NetworkHandlerServer.onUpdatedConfig();
+            }
+            AdvancedDeathsManager.tick();
+        }
+        PlayerUtils.onTick();
+
+        TaskScheduler.onTick(gameFrozen);
     }
-    public static void onEntityDropItems(LivingEntity entity, DamageSource source, CallbackInfo ci) {
-        if (isFakePlayer(entity)) return;
-        try {
-            if (!LifeSeries.isLogicalSide()) return;
-            currentSeason.onEntityDropItems(entity, source, ci);
-        } catch(Exception e) {e.printStackTrace();}
+
+    public static void onEntityDeath(LivingEntity entity, DamageSource source) {
+        if (LifeSeries.isClientOrDisabled() || isFakePlayer(entity)) return;
+        if (entity instanceof ServerPlayer player) {
+            Events.onPlayerDeath(player, source);
+            return;
+        }
+        currentSeason.onMobDeath(entity, source);
+    }
+
+    public static EventResult onEntityDropItems(LivingEntity entity, DamageSource source) {
+        if (isClientOrDisabled() || isFakePlayer(entity)) return EventResult.PASS;
+        return currentSeason.modifyEntityDrops(entity, source);
     }
 
     public static void onPlayerDeath(ServerPlayer player, DamageSource source) {
         if (isExcludedPlayer(player)) return;
 
-        try {
-            if (!LifeSeries.isLogicalSide()) return;
-            currentSeason.onPlayerDeath(player, source);
-            AdvancedDeathsManager.onPlayerDeath(player);
-        } catch(Exception e) {e.printStackTrace();}
+        if (!LifeSeries.isLogicalSide()) return;
+        currentSeason.onPlayerDeath(player, source);
+        AdvancedDeathsManager.onPlayerDeath(player);
     }
 
     public static InteractionResult onBlockUse(Player player, Level level, InteractionHand hand, BlockHitResult hitResult) {

@@ -26,6 +26,7 @@ import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
+import net.mat0u5.matlib.events.EventResult;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -305,8 +306,8 @@ public class WildLife extends Season {
     }
 
     @Override
-    public void modifyEntityDrops(LivingEntity entity, DamageSource damageSource, CallbackInfo ci) {
-        super.modifyEntityDrops(entity, damageSource, ci);
+    public EventResult modifyEntityDrops(LivingEntity entity, DamageSource damageSource) {
+        EventResult original = super.modifyEntityDrops(entity, damageSource);
         if (damageSource.getDirectEntity() instanceof Player) {
             if (entity instanceof Warden || entity instanceof WitherBoss || entity instanceof EnderDragon) {
                 //? if <= 1.21 {
@@ -316,6 +317,7 @@ public class WildLife extends Season {
                 //?}
             }
         }
+        return original;
     }
 
     @Override

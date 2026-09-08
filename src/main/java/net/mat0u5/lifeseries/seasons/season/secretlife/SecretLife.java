@@ -15,6 +15,7 @@ import net.mat0u5.lifeseries.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
+import net.mat0u5.matlib.events.EventResult;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
@@ -437,16 +438,17 @@ public class SecretLife extends Season {
 
     private Map<UUID, ItemStack> giveBookOnRespawn = new HashMap<>();
     @Override
-    public void modifyEntityDrops(LivingEntity entity, DamageSource damageSource, CallbackInfo ci) {
-        super.modifyEntityDrops(entity, damageSource, ci);
+    public EventResult modifyEntityDrops(LivingEntity entity, DamageSource damageSource) {
+        EventResult original = super.modifyEntityDrops(entity, damageSource);
         if (entity instanceof ServerPlayer player) {
             boolean dropBook = SecretLifeConfig.PLAYERS_DROP_TASK_ON_DEATH.get();
-            if (dropBook || server == null) return;
+            if (dropBook || server == null) return original;
             boolean keepInventory = OtherUtils.getBooleanGameRule(((IPlayer) player).ls$getServerLevel(), GameRules.KEEP_INVENTORY);
-            if (keepInventory) return;
+            if (keepInventory) return original;
             giveBookOnRespawn.put(player.getUUID(), TaskManager.getPlayersTaskBook(player));
             TaskManager.removePlayersTaskBook(player);
         }
+        return original;
     }
 
     public void removePlayerHealth(ServerPlayer player, double health) {

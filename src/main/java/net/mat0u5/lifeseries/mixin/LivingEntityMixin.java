@@ -185,16 +185,6 @@ public abstract class LivingEntityMixin {
         return strength;
     }
 
-    @Inject(method = "dropAllDeathLoot", at = @At("HEAD"), cancellable = true)
-    //? if <= 1.20.5 {
-    /*private void onDrop(DamageSource damageSource, CallbackInfo ci) {
-    *///?} else {
-    private void onDrop(ServerLevel level, DamageSource damageSource, CallbackInfo ci) {
-    //?}
-        if (LifeSeries.isClientOrDisabled()) return;
-        Events.onEntityDropItems((LivingEntity) (Object) this, damageSource, ci);
-    }
-
     @Inject(method = "checkTotemDeathProtection", at = @At("HEAD"))
     private void stopFakeTotem(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
         if (LifeSeries.modDisabled()) return;
@@ -273,9 +263,4 @@ public abstract class LivingEntityMixin {
         return instance.getFriction();
     }
 //?}
-
-    @Inject(method = "die", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;broadcastEntityEvent(Lnet/minecraft/world/entity/Entity;B)V"))
-    private void notifyDeath(DamageSource source, CallbackInfo ci) {
-        Events.onEntityDeath((LivingEntity) (Object) this, source);
-    }
 }

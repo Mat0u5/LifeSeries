@@ -34,6 +34,7 @@ import net.mat0u5.lifeseries.utils.player.*;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.mat0u5.matlib.command.Command;
+import net.mat0u5.matlib.events.EventResult;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.OutgoingChatMessage;
@@ -681,11 +682,7 @@ public abstract class Season {
     public void onMobDeath(LivingEntity entity, DamageSource damageSource) {
     }
 
-    public void onEntityDropItems(LivingEntity entity, DamageSource damageSource, CallbackInfo ci) {
-        modifyEntityDrops(entity, damageSource, ci);
-    }
-
-    public void modifyEntityDrops(LivingEntity entity, DamageSource damageSource, CallbackInfo ci) {
+    public EventResult modifyEntityDrops(LivingEntity entity, DamageSource damageSource) {
         if (!entity.level().isClientSide() && (damageSource.getEntity() instanceof ServerPlayer)) {
             spawnEggChance(entity);
             if (entity instanceof WitherSkeleton && rnd.nextDouble() <= ADDITIONAL_WITHER_SKULL_RATE) {
@@ -694,9 +691,10 @@ public abstract class Season {
                 /*entity.spawnAtLocation(skullItem);
                 *///?} else
                 entity.spawnAtLocation((ServerLevel) entity.level(), skullItem);
-                ci.cancel();
+                return EventResult.DENY;
             }
         }
+        return EventResult.PASS;
     }
 
     private void spawnEggChance(LivingEntity entity) {
