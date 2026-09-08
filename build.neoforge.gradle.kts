@@ -60,7 +60,7 @@ repositories {
 }
 
 configurations.all {
-	resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
+	resolutionStrategy.cacheDynamicVersionsFor(0, TimeUnit.SECONDS)
 }
 
 dependencies {
@@ -74,7 +74,7 @@ dependencies {
 	else {
 		compileOnly ("maven.modrinth:simple-voice-chat:neoforge-1.20.4-2.5.22")
 	}
-	implementation("net.mat0u5:matlib-neoforge-${prop("deps.minecraft")}:local-SNAPSHOT") { isChanging = true }
+	implementation("net.mat0u5:matlib-neoforge-${prop("deps.minecraft")}:local-+")
 }
 
 tasks.named("createMinecraftArtifacts") {
