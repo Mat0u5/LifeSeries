@@ -43,6 +43,13 @@ import net.minecraft.world.entity.LivingEntity;
 //? if >= 26.2
 import net.minecraft.world.scores.TeamColor;
 
+//? if <= 26.2 {
+import net.minecraft.util.Util;
+//?} else {
+/*import com.mojang.blaze3d.Blaze3D;
+import java.net.URI;
+*///?}
+
 public class ClientUtils {
 
     public static boolean shouldPreventGliding() {
@@ -258,5 +265,12 @@ public class ClientUtils {
         //~ if >= 26.2 '.withStyle(team.getColor())' -> '.withColor(team.getColor().orElse(TeamColor.WHITE).textColor())' {
         return TextUtils.format("[{}] ", name).withColor(team.getColor().orElse(TeamColor.WHITE).textColor()).append(original);
         //~}
+    }
+    public static void openExternalLink(String str) {
+        //? if <= 26.2 {
+        Util.getPlatform().openUri(str);
+        //?} else {
+        /*Blaze3D.openUri(URI.create(str));
+        *///?}
     }
 }
