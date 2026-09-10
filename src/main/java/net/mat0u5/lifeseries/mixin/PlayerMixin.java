@@ -152,12 +152,12 @@ public abstract class PlayerMixin implements IPlayerUsername {
     }
 
     //? if >= 26.3 {
-    /*@Unique
-    private static final ReplaceDisk ls$frostWalker =  new ReplaceDisk(LevelBasedValue.perLevel(3.0F, 1.0F), LevelBasedValue.constant(1.0F), new Vec3i(0, -1, 0), Optional.of(BlockPredicate.allOf(BlockPredicate.matchesTag(new Vec3i(0, 1, 0), BlockTags.AIR), BlockPredicate.matchesBlocks(Blocks.WATER), BlockPredicate.matchesFluids(Fluids.WATER), BlockPredicate.unobstructed())), BlockStateProvider.holderOf(Blocks.FROSTED_ICE), Optional.of(GameEvent.BLOCK_PLACE));
-    *///?} else if > 1.20.5 {
     @Unique
+    private static final ReplaceDisk ls$frostWalker =  new ReplaceDisk(LevelBasedValue.perLevel(3.0F, 1.0F), LevelBasedValue.constant(1.0F), new Vec3i(0, -1, 0), Optional.of(BlockPredicate.allOf(BlockPredicate.matchesTag(new Vec3i(0, 1, 0), BlockTags.AIR), BlockPredicate.matchesBlocks(Blocks.WATER), BlockPredicate.matchesFluids(Fluids.WATER), BlockPredicate.unobstructed())), BlockStateProvider.holderOf(Blocks.FROSTED_ICE), Optional.of(GameEvent.BLOCK_PLACE));
+    //?} else if > 1.20.5 {
+    /*@Unique
     private static final ReplaceDisk ls$frostWalker =  new ReplaceDisk(LevelBasedValue.perLevel(3.0F, 1.0F), LevelBasedValue.constant(1.0F), new Vec3i(0, -1, 0), Optional.of(BlockPredicate.allOf(BlockPredicate.matchesTag(new Vec3i(0, 1, 0), BlockTags.AIR), BlockPredicate.matchesBlocks(Blocks.WATER), BlockPredicate.matchesFluids(Fluids.WATER), BlockPredicate.unobstructed())), BlockStateProvider.simple(Blocks.FROSTED_ICE), Optional.of(GameEvent.BLOCK_PLACE));
-    //?}
+    *///?}
 
     @Inject(method = "travel", at = @At("HEAD"))
     private void travel(Vec3 movementInput, CallbackInfo ci) {

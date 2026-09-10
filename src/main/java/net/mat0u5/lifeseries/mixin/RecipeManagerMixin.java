@@ -47,7 +47,7 @@ public class RecipeManagerMixin {
 
 }
 *///?} else if <= 26.2 {
-import net.minecraft.world.item.crafting.RecipeHolder;
+/*import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeMap;
 import org.spongepowered.asm.mixin.Shadow;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -76,8 +76,8 @@ public abstract class RecipeManagerMixin {
 
         List<RecipeHolder<?>> filteredRecipes = preparedRecipes.values().stream()
                 //? if <= 1.21.9 {
-                /*.filter(recipe -> !blacklist.loadedListItemIdentifier.contains(recipe.id().location()) && !blacklist.loadedRecipeBlacklist.contains(recipe.id().location()))
-                *///?} else {
+                /^.filter(recipe -> !blacklist.loadedListItemIdentifier.contains(recipe.id().location()) && !blacklist.loadedRecipeBlacklist.contains(recipe.id().location()))
+                ^///?} else {
                 .filter(recipe -> !blacklist.loadedListItemIdentifier.contains(recipe.id().identifier()) && !blacklist.loadedRecipeBlacklist.contains(recipe.id().identifier()))
                 //?}
                 .toList();
@@ -92,8 +92,8 @@ public abstract class RecipeManagerMixin {
     }
 
 }
-//?} else {
-/*import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+*///?} else {
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -146,4 +146,4 @@ public abstract class RecipeManagerMixin {
 		return filtered;
 	}
 }
-*///?}
+//?}

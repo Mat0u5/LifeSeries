@@ -58,12 +58,12 @@ public class TriviaSpiritParticleGroup extends ParticleGroup<TriviaSpiritParticl
             PoseStack poseStack = new PoseStack();
             poseStack.pushPose();
             //? if <= 26.2 {
-            poseStack.mulPose(camera.rotation());
+            /*poseStack.mulPose(camera.rotation());
             poseStack.mulPose(Axis.XP.rotationDegrees(60.0F - 150.0F * ageScale));
-            //?} else {
-            /*poseStack.rotate(camera.rotation());
+            *///?} else {
+            poseStack.rotate(camera.rotation());
             poseStack.rotate(Axis.XP, 60.0F - 150.0F * ageScale);
-            *///?}
+            //?}
             poseStack.scale(1.0f, -1.0f, -1.0f);
             poseStack.translate(0.0f, 0, 1f);
             return new TriviaSpiritParticleRenderState(particle.model, poseStack, particle.renderType, color);
@@ -76,10 +76,10 @@ public class TriviaSpiritParticleGroup extends ParticleGroup<TriviaSpiritParticl
             for (TriviaSpiritParticleRenderState state : this.states) {
                 submitNodeCollector.submitModel(
                         //? if <= 26.2 {
-                        state.model, Unit.INSTANCE, state.poseStack, state.renderType, 15728880, OverlayTexture.NO_OVERLAY, state.color, null, 0, null
-                        //?} else {
-                        /*state.model, Unit.INSTANCE, state.poseStack, state.renderType, 15728880, OverlayTexture.NO_OVERLAY, state.color, null, 0
-                        *///?}
+                        /*state.model, Unit.INSTANCE, state.poseStack, state.renderType, 15728880, OverlayTexture.NO_OVERLAY, state.color, null, 0, null
+                        *///?} else {
+                        state.model, Unit.INSTANCE, state.poseStack, state.renderType, 15728880, OverlayTexture.NO_OVERLAY, state.color, null, 0
+                        //?}
                 );
             }
         }

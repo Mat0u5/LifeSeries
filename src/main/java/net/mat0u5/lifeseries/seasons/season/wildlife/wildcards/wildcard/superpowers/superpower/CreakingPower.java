@@ -87,10 +87,10 @@ public class CreakingPower extends ToggleableSuperpower {
             Creaking creaking = EntityTypes.CREAKING.spawn(playerLevel, spawnPos, EntitySpawnReason.COMMAND);
             if (creaking != null) {
                 //? if <= 26.2 {
-                creaking.setInvulnerable(true);
-                 //?} else {
-                /*creaking.setPermanentlyInvulnerable(true);
-                *///?}
+                /*creaking.setInvulnerable(true);
+                 *///?} else {
+                creaking.setPermanentlyInvulnerable(true);
+                //?}
                 creaking.addTag("creakingFromSuperpower");
                 createdEntities.add(creaking);
                 allCreatedEntities.add(creaking.getUUID());

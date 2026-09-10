@@ -71,10 +71,10 @@ public class TriviaBot extends AmbientCreature {
         super(entityType, level);
         if (!level.isClientSide()) {
             //? if <= 26.2 {
-            this.setInvulnerable(true);
-             //?} else {
-            /*this.setPermanentlyInvulnerable(true);
-            *///?}
+            /*this.setInvulnerable(true);
+             *///?} else {
+            this.setPermanentlyInvulnerable(true);
+            //?}
             setPersistenceRequired();
             //? if <= 1.20.3 {
             /*this.setMaxUpStep(1.0F);

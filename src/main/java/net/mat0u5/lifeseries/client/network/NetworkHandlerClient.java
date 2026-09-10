@@ -223,10 +223,10 @@ public class NetworkHandlerClient {
                 totemItem = AnimationUtils.getSecretLifeTotemItem(payload.value().equalsIgnoreCase("task_red"));
             }
             //? if <= 26.2 {
-            Minecraft.getInstance().gameRenderer.displayItemActivation(totemItem);
-            //?} else {
-            /*Minecraft.getInstance().player.displayItemActivation(totemItem);
-            *///?}
+            /*Minecraft.getInstance().gameRenderer.displayItemActivation(totemItem);
+            *///?} else {
+            Minecraft.getInstance().player.displayItemActivation(totemItem);
+            //?}
         });
         SimplePackets.TRIVIA_GUI_TYPE.setClientReceive(payload -> {
             if (payload.value().equalsIgnoreCase(TriviaGuiType.NICE_LIFE.name())) {
@@ -451,10 +451,10 @@ public class NetworkHandlerClient {
         LifeSeriesClient.sideTitle = payload.text();
         Minecraft client = Minecraft.getInstance();
         //? if <= 26.2 {
-        if (client.gui instanceof GuiAccessor hudAccessor) {
-        //?} else {
-        /*if (client.gui.hud instanceof GuiAccessor hudAccessor) {
-        *///?}
+        /*if (client.gui instanceof GuiAccessor hudAccessor) {
+        *///?} else {
+        if (client.gui.hud instanceof GuiAccessor hudAccessor) {
+        //?}
             TextHud.sideTitleRemainTicks = hudAccessor.ls$titleFadeInTicks() + hudAccessor.ls$titleStayTicks() + hudAccessor.ls$titleFadeOutTicks();
         }
     }

@@ -31,12 +31,12 @@ public class SkyRendererMixin {
     @Inject(method = "extractRenderState", at = @At("TAIL"))
     private void customSkyColor(ClientLevel clientLevel, float f, Camera camera, SkyRenderState skyRenderState, CallbackInfo ci) {
         //? if <= 26.2 {
-        skyRenderState.skyColor = ClientRenderer.modifyColor(skyRenderState.skyColor, LifeSeriesClient.skyColor, LifeSeriesClient.skyColorSetMode, null);
-        //?} else {
-        /*if (skyRenderState.skyColor instanceof Vector3f vector3f) {
+        /*skyRenderState.skyColor = ClientRenderer.modifyColor(skyRenderState.skyColor, LifeSeriesClient.skyColor, LifeSeriesClient.skyColorSetMode, null);
+        *///?} else {
+        if (skyRenderState.skyColor instanceof Vector3f vector3f) {
             skyRenderState.skyColor = ClientRenderer.modifyColor(vector3f, LifeSeriesClient.skyColor, LifeSeriesClient.skyColorSetMode, null);
         }
-        *///?}
+        //?}
     }
 }
 //?}

@@ -78,9 +78,9 @@ public class LevelRendererMixin {
      * {@link net.mat0u5.lifeseries.mixin.client.CloudRendererMixin}
      */
     //? if >= 1.21.11 <= 26.2 {
-    @ModifyVariable(method = "addCloudsPass", at = @At("HEAD"), index = 7, argsOnly = true)
+    /*@ModifyVariable(method = "addCloudsPass", at = @At("HEAD"), index = 7, argsOnly = true)
     private int setCloudColor(int value) {
         return ClientRenderer.modifyColor(value, LifeSeriesClient.cloudColor, LifeSeriesClient.cloudColorSetMode, LifeSeriesClient.cachedFogRenderColor);
     }
-    //?}
+    *///?}
 }
