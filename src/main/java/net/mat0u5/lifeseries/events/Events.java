@@ -191,75 +191,51 @@ public class Events {
         AdvancedDeathsManager.onPlayerDeath(player);
     }
 
-    public static InteractionResult onBlockUse(Player player, Level level, InteractionHand hand, BlockHitResult hitResult) {
+    public static InteractionResult onBlockUse(ServerPlayer player, Level level, ItemStack stack, InteractionHand hand, BlockHitResult hitResult) {
         if (LifeSeries.modDisabled()) return InteractionResult.PASS;
         if (isFakePlayer(player)) return InteractionResult.PASS;
 
-        if (player instanceof ServerPlayer serverPlayer &&
-                level instanceof ServerLevel serverLevel && LifeSeries.isLogicalSide()) {
-            try {
-                if (currentSeason instanceof SecretLife) {
-                    SecretKeeper.onBlockUse(serverPlayer, serverLevel, hitResult);
-                }
-                if (blacklist == null) return InteractionResult.PASS;
-                return blacklist.onBlockUse(serverPlayer,serverLevel,hand,hitResult);
-            } catch(Exception e) {
-                e.printStackTrace();
-                return InteractionResult.PASS;
-            }
-        }
-        return InteractionResult.PASS;
-    }
-
-    public static InteractionResult onItemUse(Player player, Level level, InteractionHand hand) {
-        if (isFakePlayer(player) || modDisabled()) return InteractionResult.PASS;
-
-        if (player instanceof ServerPlayer serverPlayer &&
-                level instanceof ServerLevel serverLevel && LifeSeries.isLogicalSide()) {
-            try {
-                ItemStack itemStack = player.getItemInHand(hand);
-                //? if >= 1.21.2 {
-                if (itemStack.is(Items.FIREWORK_ROCKET)) {
-                    if (ItemStackUtils.hasCustomComponentEntry(PlayerUtils.getEquipmentSlot(serverPlayer, 3), "FlightSuperpower")) {
-                        if (!(LivingEntity.canGlideUsing(serverPlayer.getItemBySlot(EquipmentSlot.CHEST), EquipmentSlot.CHEST) ||
-                                LivingEntity.canGlideUsing(serverPlayer.getItemBySlot(EquipmentSlot.LEGS), EquipmentSlot.LEGS) ||
-                                LivingEntity.canGlideUsing(serverPlayer.getItemBySlot(EquipmentSlot.FEET), EquipmentSlot.FEET))) {
-                            return InteractionResult.FAIL;
-                        }
-                    }
-                }
-                //?}
-            } catch(Exception e) {
-                e.printStackTrace();
-                return InteractionResult.PASS;
-            }
-        }
-        return InteractionResult.PASS;
-    }
-
-    public static InteractionResult onBlockAttack(ServerPlayer player, ServerLevel level, InteractionHand hand, BlockPos pos, Direction dir) {
-        if (!(player instanceof ServerPlayer) || modDisabled()) {
-            return InteractionResult.PASS; // Only handle server-side events
-        }
-
-        return Events.onBlockAttack((ServerPlayer) player, level, pos);
-    }
-
-    public static InteractionResult onBlockAttack(ServerPlayer player, ServerLevel level, BlockPos pos) {
-        if (isFakePlayer(player)) return InteractionResult.PASS;
-
-        try {
-            if (!LifeSeries.isLogicalSide()) return InteractionResult.PASS;
-            if (level.isClientSide()) return InteractionResult.PASS;
-            if (currentSeason instanceof SecretLife && SecretKeeper.preventBlockBreak(player, pos)) {
-                return InteractionResult.FAIL;
+        if (level instanceof ServerLevel serverLevel && LifeSeries.isLogicalSide()) {
+            if (currentSeason instanceof SecretLife) {
+                SecretKeeper.onBlockUse(player, serverLevel, hitResult);
             }
             if (blacklist == null) return InteractionResult.PASS;
-            return blacklist.onBlockAttack(player, level,pos);
-        } catch(Exception e) {
-            e.printStackTrace();
-            return InteractionResult.PASS;
+            return blacklist.onBlockUse(player,serverLevel,hand,hitResult);
         }
+        return InteractionResult.PASS;
+    }
+
+    public static InteractionResult onItemUse(ServerPlayer player, Level level, ItemStack stack, InteractionHand hand) {
+        if (isFakePlayer(player) || modDisabled()) return InteractionResult.PASS;
+
+        if (level instanceof ServerLevel serverLevel && LifeSeries.isLogicalSide()) {
+            ItemStack itemStack = player.getItemInHand(hand);
+            //? if >= 1.21.2 {
+            if (itemStack.is(Items.FIREWORK_ROCKET)) {
+                if (ItemStackUtils.hasCustomComponentEntry(PlayerUtils.getEquipmentSlot(player, 3), "FlightSuperpower")) {
+                    if (!(LivingEntity.canGlideUsing(player.getItemBySlot(EquipmentSlot.CHEST), EquipmentSlot.CHEST) ||
+                            LivingEntity.canGlideUsing(player.getItemBySlot(EquipmentSlot.LEGS), EquipmentSlot.LEGS) ||
+                            LivingEntity.canGlideUsing(player.getItemBySlot(EquipmentSlot.FEET), EquipmentSlot.FEET))) {
+                        return InteractionResult.FAIL;
+                    }
+                }
+            }
+            //?}
+        }
+        return InteractionResult.PASS;
+    }
+
+    public static InteractionResult onBlockAttack(ServerPlayer player, ServerLevel level, BlockPos pos, Direction direction) {
+        if (modDisabled()) return InteractionResult.PASS;
+        if (isFakePlayer(player)) return InteractionResult.PASS;
+
+        if (!LifeSeries.isLogicalSide()) return InteractionResult.PASS;
+        if (level.isClientSide()) return InteractionResult.PASS;
+        if (currentSeason instanceof SecretLife && SecretKeeper.preventBlockBreak(player, pos)) {
+            return InteractionResult.FAIL;
+        }
+        if (blacklist == null) return InteractionResult.PASS;
+        return blacklist.onBlockAttack(player, level,pos);
     }
 
     public static InteractionResult onRightClickEntity(Player player, Level level, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
@@ -275,13 +251,13 @@ public class Events {
         }
         return InteractionResult.PASS;
     }
-    public static InteractionResult onAttackEntity(Player player, Level level, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
+    public static InteractionResult onAttackEntity(Player player, Entity entity) {
         if (isFakePlayer(player) || modDisabled()) return InteractionResult.PASS;
 
         try {
             if (!LifeSeries.isLogicalSide()) return InteractionResult.PASS;
             if (player instanceof ServerPlayer serverPlayer) {
-                currentSeason.onAttackEntity(serverPlayer, level, hand, entity, hitResult);
+                currentSeason.onAttackEntity(serverPlayer, serverPlayer.level(), entity);
             }
         } catch(Exception e) {
             e.printStackTrace();
