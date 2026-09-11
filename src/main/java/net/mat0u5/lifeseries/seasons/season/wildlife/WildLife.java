@@ -447,7 +447,7 @@ public class WildLife extends Season {
     }
 
     @Override
-    public void onAttackEntity(ServerPlayer player, Level level, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
+    public void onAttackEntity(ServerPlayer player, Level level, Entity entity) {
         if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.INVISIBILITY)) {
             if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof Invisibility power) {
                 power.onAttack();

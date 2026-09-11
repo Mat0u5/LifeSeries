@@ -811,7 +811,7 @@ public abstract class Season {
     public void onRightClickEntity(ServerPlayer player, Level level, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
     }
 
-    public void onAttackEntity(ServerPlayer player, Level level, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
+    public void onAttackEntity(ServerPlayer player, Level level, Entity entity) {
     }
 
     public void onUpdatedInventory(ServerPlayer player) {
