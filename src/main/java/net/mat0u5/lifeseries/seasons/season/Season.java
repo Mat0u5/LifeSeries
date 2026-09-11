@@ -679,9 +679,6 @@ public abstract class Season {
         }
     }
 
-    public void onMobDeath(LivingEntity entity, DamageSource damageSource) {
-    }
-
     public EventResult modifyEntityDrops(LivingEntity entity, DamageSource damageSource) {
         if (!entity.level().isClientSide() && (damageSource.getEntity() instanceof ServerPlayer)) {
             spawnEggChance(entity);
@@ -805,13 +802,16 @@ public abstract class Season {
         livesManager.onPlayerFinishJoining(player);
     }
 
+    public void onMobDeath(LivingEntity entity, DamageSource damageSource) {
+    }
+
     public void onPlayerDisconnect(ServerPlayer player) {
     }
 
     public void onRightClickEntity(ServerPlayer player, Level level, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
     }
 
-    public void onAttackEntity(ServerPlayer player, Level level, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
+    public void onAttackEntity(ServerPlayer player, Level level, Entity entity) {
     }
 
     public void onUpdatedInventory(ServerPlayer player) {

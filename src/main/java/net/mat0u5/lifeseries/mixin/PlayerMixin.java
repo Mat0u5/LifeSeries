@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
@@ -16,11 +15,8 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.NicknameManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Entity;import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.phys.Vec3;
@@ -257,15 +253,4 @@ public abstract class PlayerMixin implements IPlayerUsername {
         return result;
     }
     //?}
-
-    @Inject(method = "attack", at = @At("HEAD"), cancellable = true)
-    public void onPlayerInteractEntity(Entity target, CallbackInfo info) {
-        if ((Object) this instanceof ServerPlayer player) {
-            InteractionResult result = Events.onAttackEntity(player, player.level(), InteractionHand.MAIN_HAND, target, null);
-
-            if (result != InteractionResult.PASS) {
-                info.cancel();
-            }
-        }
-    }
 }

@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.registries;
 import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.matlib.events.common.*;
+import net.mat0u5.matlib.events.server.*;
 
 //? if <= 1.20.2 {
 /*import net.mat0u5.lifeseries.seasons.season.Season;
@@ -31,6 +32,11 @@ public class MatLibRegistry {
 		ServerTickEvents.END_TICK.register(Events::onServerTickEnd);
 		ServerEntityEvents.DEATH.register(Events::onEntityDeath);
 		ServerEntityEvents.DROP_LOOT.register(Events::onEntityDropItems);
+		ServerPlayerEvents.ATTACK_BLOCK.register(Events::onBlockAttack);
+		ServerPlayerEvents.CLICK_BLOCK.register(Events::onBlockUse);
+		ServerPlayerEvents.ITEM_USE.register(Events::onItemUse);
+		ServerPlayerEvents.CLICK_ENTITY.register(Events::onRightClickEntity);
+		CommonPlayerEvents.ATTACK_ENTITY.register(Events::onAttackEntity);
 	}
 
 	public static void registerCommands() {

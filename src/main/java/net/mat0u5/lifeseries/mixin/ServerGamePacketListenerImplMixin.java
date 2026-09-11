@@ -4,7 +4,6 @@ import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
-import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLife;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
@@ -210,25 +209,6 @@ public class ServerGamePacketListenerImplMixin {
             }
         }
     }
-
-    //? if >= 26.1 {
-    @Inject(method = "handleInteract", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayer;getItemInHand(Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/item/ItemStack;"), cancellable = true)
-    public void handleInteract(ServerboundInteractPacket packet, CallbackInfo info, @Local(name = "target") Entity target) {
-        Level level = player.level();
-
-        //? if <= 1.21.11 {
-        /*EntityHitResult hitResult = new EntityHitResult(target, packet.location().add(target.getX(), target.getY(), target.getZ()));
-        InteractionResult result = Events.onRightClickEntity(player, level, packet.hand(), target, hitResult);
-        *///?} else {
-        EntityHitResult hitResult = new EntityHitResult(target, packet.location().add(target.getX(), target.getY(), target.getZ()));
-        InteractionResult result = Events.onRightClickEntity(player, level, packet.hand(), target, hitResult);
-        //?}
-
-        if (result != InteractionResult.PASS) {
-            info.cancel();
-        }
-    }
-    //?}
 
     //? if >= 1.20.5 {
     @Inject(method = "handleCustomPayload", at = @At("HEAD"), cancellable = true)
