@@ -10,6 +10,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
@@ -78,10 +79,10 @@ public class SeasonChanger {
 		currentSeason.boogeymanManager.resetBoogeymen();
 		currentSeason.secretSociety.forceEndSociety();
 		if (args.changeSession()) currentSession.sessionEnd();
+
 		initializeSeason(season, args);
 		currentSeason.initialize();
-		reloadConfig();
-		DatapackManager.onReloadStart();
+		OtherUtils.reloadServer();
 		for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
 			currentSeason.onPlayerJoin(player);
 			currentSeason.onPlayerFinishJoining(player, args.showChatMessage());

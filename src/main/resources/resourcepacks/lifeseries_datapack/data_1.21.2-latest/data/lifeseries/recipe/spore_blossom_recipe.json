@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:moss_block",
+    "minecraft:lilac"
+  ],
+  "result": {
+    "id": "minecraft:spore_blossom"
+  }
+}

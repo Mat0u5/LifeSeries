@@ -744,6 +744,9 @@ public abstract class Season {
         OtherUtils.executeCommand("recipe give @a lifeseries:spawner_recipe");
         OtherUtils.executeCommand("recipe give @a lifeseries:tnt_recipe_variation");
         OtherUtils.executeCommand("recipe give @a lifeseries:bundle_recipe");
+        OtherUtils.executeCommand("recipe give @a lifeseries:moss_block_recipe");
+        OtherUtils.executeCommand("recipe give @a lifeseries:spore_blossom_recipe");
+        OtherUtils.executeCommand("recipe give @a lifeseries:magma_cream_recipe");
     }
 
     public void onPlayerJoin(ServerPlayer player) {
