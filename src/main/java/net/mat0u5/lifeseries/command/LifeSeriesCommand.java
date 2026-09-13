@@ -30,7 +30,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
-import static net.mat0u5.lifeseries.LifeSeries.*;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
 
 public class LifeSeriesCommand extends Command {
     public static final List<String> ALLOWED_SEASON_NAMES = Seasons.getSeasonIds();

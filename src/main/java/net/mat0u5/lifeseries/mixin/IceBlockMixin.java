@@ -13,8 +13,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
-
 @Mixin(value = IceBlock.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class IceBlockMixin {

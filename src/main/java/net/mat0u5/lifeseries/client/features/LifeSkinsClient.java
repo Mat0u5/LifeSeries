@@ -8,12 +8,15 @@ import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import org.jetbrains.annotations.Nullable;
 
 //? if >= 1.21.9 {
 import net.minecraft.world.entity.player.PlayerModelType;

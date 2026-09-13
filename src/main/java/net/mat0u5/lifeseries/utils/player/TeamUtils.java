@@ -10,13 +10,14 @@ import net.minecraft.world.scores.Scoreboard;
 
 import java.util.Collection;
 import java.util.Optional;
+
+import static net.mat0u5.lifeseries.LifeSeries.server;
+
 //? if <= 26.1 {
 /*import net.minecraft.ChatFormatting;
  *///?} else {
 import net.minecraft.world.scores.TeamColor;
 //?}
-
-import static net.mat0u5.lifeseries.LifeSeries.server;
 
 public class TeamUtils {
 

@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.client.gui.trivia;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.features.Trivia;
 import net.mat0u5.lifeseries.client.gui.DefaultScreen;
 import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;

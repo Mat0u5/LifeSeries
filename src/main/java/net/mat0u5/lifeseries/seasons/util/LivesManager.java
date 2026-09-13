@@ -26,6 +26,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.scores.PlayerScoreEntry;
 import net.minecraft.world.scores.PlayerTeam;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,8 +35,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
 import static net.mat0u5.lifeseries.seasons.util.WatcherManager.isWatcher;
-
-import net.minecraft.world.scores.PlayerScoreEntry;
 
 //? if <= 26.1 {
 /*import net.minecraft.ChatFormatting;

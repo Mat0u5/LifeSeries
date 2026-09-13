@@ -19,13 +19,16 @@ import net.mat0u5.lifeseries.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntitySpawnReason;
+//? if <= 26.1 {
+import net.minecraft.world.entity.EntityType;
+//?} else {
 import net.minecraft.world.entity.EntityTypes;
+//?}
 import net.minecraft.world.entity.monster.creaking.Creaking;
 import net.minecraft.world.phys.AABB;
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 import static net.mat0u5.lifeseries.LifeSeries.server;
 //?}
-
 //? if = 1.21.2
 //import net.minecraft.core.particles.TargetColorParticleOption;
 //? if >= 1.21.4

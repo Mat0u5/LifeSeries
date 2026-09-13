@@ -5,11 +5,11 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.events.Events;
-import net.mat0u5.lifeseries.seasons.util.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Superspeed;
+import net.mat0u5.lifeseries.seasons.util.WatcherManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayerUsername;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -19,23 +19,23 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import org.spongepowered.asm.mixin.Unique;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import net.minecraft.world.level.gamerules.GameRules;
-import net.minecraft.world.entity.Entity;
+
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 //? if >= 1.21.2
 import net.minecraft.server.level.ServerLevel;
-
 //? if <= 1.20.5 {
 /*import net.minecraft.world.item.enchantment.FrostWalkerEnchantment;
 *///?} else {
@@ -50,16 +50,14 @@ import java.util.Optional;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.item.enchantment.effects.ReplaceDisk;
 //?}
-
 //? if > 1.21.9
 import net.minecraft.world.level.gamerules.GameRule;
-
 //? if <= 1.21.6 {
 /*import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EntityType;
 *///?}
 
 @Mixin(value = Player.class, priority = 1)

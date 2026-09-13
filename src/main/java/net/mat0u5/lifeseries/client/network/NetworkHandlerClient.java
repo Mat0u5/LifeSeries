@@ -2,29 +2,32 @@ package net.mat0u5.lifeseries.client.network;
 
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
-import net.mat0u5.lifeseries.client.features.*;
-import net.mat0u5.lifeseries.client.gui.trivia.QuizScreen;
-import net.mat0u5.lifeseries.client.render.RenderUtils;
-import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.client.compatibilities.VoicechatClient;
 import net.mat0u5.lifeseries.client.config.ClientConfig;
 import net.mat0u5.lifeseries.client.config.ClientConfigGuiManager;
 import net.mat0u5.lifeseries.client.config.ClientConfigNetwork;
+import net.mat0u5.lifeseries.client.features.*;
 import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.client.gui.other.ChooseWildcardScreen;
 import net.mat0u5.lifeseries.client.gui.other.PastLifeChooseTwistScreen;
 import net.mat0u5.lifeseries.client.gui.seasons.ChooseSeasonScreen;
 import net.mat0u5.lifeseries.client.gui.seasons.SeasonInfoScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.NewQuizScreen;
+import net.mat0u5.lifeseries.client.gui.trivia.QuizScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.VotingScreen;
+import net.mat0u5.lifeseries.client.render.RenderUtils;
+import net.mat0u5.lifeseries.client.render.TextHud;
+import net.mat0u5.lifeseries.client.render.VignetteRenderer;
+import net.mat0u5.lifeseries.client.utils.ClientResourcePacks;
+import net.mat0u5.lifeseries.client.utils.ClientSounds;
+import net.mat0u5.lifeseries.client.utils.ClientUtils;
+import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.mixin.PlayerAccessor;
 import net.mat0u5.lifeseries.mixin.client.GuiAccessor;
 import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePacket;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.registries.ParticleRegistry;
-import net.mat0u5.lifeseries.client.render.TextHud;
-import net.mat0u5.lifeseries.client.render.VignetteRenderer;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
@@ -32,9 +35,6 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Hunger;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDilation;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
-import net.mat0u5.lifeseries.client.utils.ClientResourcePacks;
-import net.mat0u5.lifeseries.client.utils.ClientSounds;
-import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
@@ -48,19 +48,18 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+
 //? if <= 1.20.3 {
 /*import net.minecraft.network.FriendlyByteBuf;
 *///?}
@@ -70,7 +69,6 @@ import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
 *///?} else {
 import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
 //?}
-
 
 public class NetworkHandlerClient {
     public static void initializeSimplePacketReceivers() {

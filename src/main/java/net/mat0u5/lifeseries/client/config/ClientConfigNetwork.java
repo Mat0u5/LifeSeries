@@ -1,10 +1,10 @@
 package net.mat0u5.lifeseries.client.config;
 
-import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.lifeseries.client.config.entries.*;
 import net.mat0u5.lifeseries.client.gui.config.entries.ConfigEntry;
-import net.mat0u5.lifeseries.network.packets.ConfigPayload;
 import net.mat0u5.lifeseries.client.utils.ClientResourcePacks;
+import net.mat0u5.lifeseries.config.ConfigFileEntry;
+import net.mat0u5.lifeseries.network.packets.ConfigPayload;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 
 import java.util.List;

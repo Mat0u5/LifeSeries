@@ -14,7 +14,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
@@ -22,6 +21,7 @@ import java.util.Optional;
 
 import static net.mat0u5.lifeseries.LifeSeries.blacklist;
 import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
+
 //? if >= 1.21.2
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 //? if <= 1.20.5 {

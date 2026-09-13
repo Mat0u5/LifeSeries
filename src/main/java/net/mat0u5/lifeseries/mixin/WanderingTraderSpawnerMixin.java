@@ -4,11 +4,12 @@ import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.npc.wanderingtrader.WanderingTraderSpawner;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import net.minecraft.world.entity.npc.wanderingtrader.WanderingTraderSpawner;
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
+
 //? if <= 1.21.4
 //import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 //? if >= 1.21.5

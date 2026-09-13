@@ -23,7 +23,6 @@ import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackSelectionConfig;
 import java.util.Optional;
 //?}
-
 //? if neoforge {
 /*import net.neoforged.fml.ModList;
     //? if > 1.21.6 {

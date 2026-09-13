@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.entity.triviabot.goal;
 
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
-import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
 import net.minecraft.world.entity.ai.goal.Goal;
 import org.jetbrains.annotations.NotNull;
 

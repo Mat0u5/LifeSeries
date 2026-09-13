@@ -14,8 +14,6 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaSkins;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.other.ActionText;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.minecraft.commands.CommandSourceStack;
@@ -25,8 +23,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.*;
-
-import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 public class WildLifeTriviaCommand extends Command {
 

@@ -5,12 +5,13 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-//? if <= 1.20.3
-//import net.minecraft.world.item.Items;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+//? if <= 1.20.3
+//import net.minecraft.world.item.Items;
 
 public class RegistryUtils {
 

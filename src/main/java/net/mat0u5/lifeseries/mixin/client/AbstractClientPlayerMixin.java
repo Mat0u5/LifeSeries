@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.UUID;
+
 //? if <= 1.20
 //import net.minecraft.resources.Identifier;
 //? if > 1.20

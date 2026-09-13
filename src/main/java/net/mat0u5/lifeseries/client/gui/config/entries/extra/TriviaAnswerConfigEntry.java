@@ -10,6 +10,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 import java.util.Objects;
+
 //? if >= 1.21.9
 import net.minecraft.client.input.*;
 

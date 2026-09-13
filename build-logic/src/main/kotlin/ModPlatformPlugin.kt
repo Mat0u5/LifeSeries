@@ -575,7 +575,6 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 			replace ("drawCenteredString(", "centeredText(")
 		}
 		stonecutter.replacements.string(stonecutter.eval(stonecutter.current.version, ">=26.2"), "!renames_26_2") {
-			replace ("net.minecraft.world.entity.EntityType", "net.minecraft.world.entity.EntityTypes")
 			replace ("EntityType.", "EntityTypes.")
 			replace ("EntityType.Builder", "EntityType.Builder")
 		}

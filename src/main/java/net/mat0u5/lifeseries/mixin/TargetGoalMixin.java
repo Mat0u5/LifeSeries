@@ -8,6 +8,7 @@ import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+
 //? if <= 1.20.2 {
 /*import net.minecraft.world.scores.Team;
 *///?} else {

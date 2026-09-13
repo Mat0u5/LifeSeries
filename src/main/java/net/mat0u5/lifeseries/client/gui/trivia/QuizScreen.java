@@ -2,13 +2,12 @@ package net.mat0u5.lifeseries.client.gui.trivia;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.client.LifeSeriesClient;
-import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
-import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.client.features.Trivia;
 import net.mat0u5.lifeseries.client.gui.DefaultScreen;
+import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.client.utils.TextColors;
+import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.ChatFormatting;
@@ -17,9 +16,11 @@ import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.FormattedCharSequence;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+
 //? if >= 1.21.9
 import net.minecraft.client.input.*;
 

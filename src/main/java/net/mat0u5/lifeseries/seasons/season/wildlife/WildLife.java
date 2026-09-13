@@ -7,12 +7,11 @@ import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.TriviaHandler;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.PreBuiltSnailSkins;
-import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.*;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.PreBuiltSnailSkins;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -20,9 +19,13 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.*;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
+import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.Time;
-import net.mat0u5.lifeseries.utils.player.*;
+import net.mat0u5.lifeseries.utils.player.AttributeUtils;
+import net.mat0u5.lifeseries.utils.player.PermissionManager;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -39,10 +42,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSession;
+import net.mat0u5.lifeseries.utils.player.*;
+
 //? if >= 1.21.2 {
 import net.minecraft.server.level.ServerLevel;
 //?}

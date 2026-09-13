@@ -12,11 +12,10 @@ import net.mat0u5.lifeseries.seasons.season.thirdlife.ThirdLife;
 import net.mat0u5.lifeseries.seasons.season.unassigned.UnassignedSeason;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.resources.Identifier;
 
 public enum Seasons {
     UNASSIGNED("Unassigned", "unassigned"),

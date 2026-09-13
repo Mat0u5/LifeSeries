@@ -7,12 +7,12 @@ import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.platform.Platform;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaSkins;
-import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkins;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaSkins;
 import net.mat0u5.lifeseries.seasons.session.Session;
+import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
 import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.interfaces.ClientAccessor;
@@ -43,6 +43,7 @@ public class LifeSeries {
 	private static final Platform PLATFORM = createPlatformInstance();
 
 	public static final boolean DEBUG = false;
+	public static final boolean FORCE_DEV = false;
 	public static final boolean ISOLATED_ENVIRONMENT = false;
 	public static final Seasons DEFAULT_SEASON = Seasons.UNASSIGNED;
 	public static boolean MOD_DISABLED = false;

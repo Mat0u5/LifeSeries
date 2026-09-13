@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.utils.world;
 
 import net.mat0u5.lifeseries.LifeSeries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -13,8 +14,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 import java.util.*;
-
-import net.minecraft.resources.Identifier;
 
 public class ItemSpawner {
     HashMap<ItemStack, Integer> lootTable = new HashMap<>();
