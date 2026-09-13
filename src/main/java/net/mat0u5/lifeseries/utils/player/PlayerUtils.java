@@ -256,8 +256,14 @@ public class PlayerUtils {
         if (server == null) return;
         ServerPlayer player = getPlayer(uuid);
         if (player == null) return;
+        //TODO maybe have a list of resourcepacks stored for each player, and
         applySingleResourcepack(player, Season.RESOURCEPACK_MAIN_URL, Season.RESOURCEPACK_MAIN_SHA, "Life Series Resourcepack.");
-        applySingleResourcepack(player, Season.RESOURCEPACK_MINIMAL_ARMOR_URL, Season.RESOURCEPACK_MINIMAL_ARMOR_SHA, "Life Series Resourcepack.");
+        if (!currentSeason.DISABLE_MINIMAL_ARMOR_PACK) {
+            applySingleResourcepack(player, Season.RESOURCEPACK_MINIMAL_ARMOR_URL, Season.RESOURCEPACK_MINIMAL_ARMOR_SHA, "Life Series Resourcepack.");
+        }
+        else {
+            removeSingleResourcepack(player, Season.RESOURCEPACK_MINIMAL_ARMOR_URL);
+        }
         if (currentSeason instanceof SecretLife) {
             applySingleResourcepack(player, Season.RESOURCEPACK_SECRETLIFE_URL, Season.RESOURCEPACK_SECRETLIFE_SHA, "Life Series Resourcepack.");
         }
@@ -266,7 +272,7 @@ public class PlayerUtils {
         }
     }
 
-    private static void applySingleResourcepack(ServerPlayer player, String link, String sha1, String message) {
+    public static void applySingleResourcepack(ServerPlayer player, String link, String sha1, String message) {
         //? if > 1.20.2 {
         UUID id = UUID.nameUUIDFromBytes(link.getBytes(StandardCharsets.UTF_8));
         ClientboundResourcePackPushPacket resourcepackPacket = new ClientboundResourcePackPushPacket(
@@ -284,7 +290,7 @@ public class PlayerUtils {
         //?}
     }
 
-    private static void removeSingleResourcepack(ServerPlayer player, String link) {
+    public static void removeSingleResourcepack(ServerPlayer player, String link) {
         //? if > 1.20.2 {
         UUID id = UUID.nameUUIDFromBytes(link.getBytes(StandardCharsets.UTF_8));
         ClientboundResourcePackPopPacket removePackPacket = new ClientboundResourcePackPopPacket(Optional.of(id));

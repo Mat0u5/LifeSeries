@@ -55,6 +55,7 @@ public class SimplePackets {
     public static final SimpleBooleanPacket NICELIFE_LIVE_VOTING_ENABLED = new SimpleBooleanPacket("NICELIFE_LIVE_VOTING_ENABLED");
     public static final SimpleBooleanPacket LIMITED_LIFE_ACTIONBAR_TIME = new SimpleBooleanPacket("LIMITED_LIFE_ACTIONBAR_TIME");
     public static final SimpleBooleanPacket NICELIFE_DISABLE_SNOW = new SimpleBooleanPacket("NICELIFE_DISABLE_SNOW");
+    public static final SimpleBooleanPacket SERVER_MINIMAL_ARMOR = new SimpleBooleanPacket("SERVER_MINIMAL_ARMOR");
 
     public static final SimpleNumberPacket PLAYER_MIN_MSPT = new SimpleNumberPacket("PLAYER_MIN_MSPT");
     public static final SimpleNumberPacket SIZESHIFTING_CHANGE = new SimpleNumberPacket("SIZESHIFTING_CHANGE");

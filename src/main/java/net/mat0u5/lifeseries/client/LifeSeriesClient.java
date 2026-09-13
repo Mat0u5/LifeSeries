@@ -34,6 +34,7 @@ public class LifeSeriesClient implements ClientAccessor {
     public static long CURSE_SLIDING = 0;
     public static boolean NICELIFE_SNOWY_NETHER = true;
     public static boolean NICELIFE_DISABLE_SNOW = false;
+    public static boolean SERVER_MINIMAL_ARMOR = false;
 
     public static Map<String, String> playerDisguiseNames = new HashMap<>();
     public static Map<UUID, UUID> playerDisguiseUUIDs = new HashMap<>();
@@ -186,6 +187,9 @@ public class LifeSeriesClient implements ClientAccessor {
         SUPERPOWER_COOLDOWN_TIMESTAMP = 0;
         MIMICRY_COOLDOWN_TIMESTAMP = 0;
         CURSE_SLIDING = 0;
+        NICELIFE_SNOWY_NETHER = true;
+        NICELIFE_DISABLE_SNOW = false;
+        SERVER_MINIMAL_ARMOR = false;
 
 
         playerDisguiseNames = new HashMap<>();

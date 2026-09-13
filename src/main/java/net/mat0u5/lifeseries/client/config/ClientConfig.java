@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.client.config;
 
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.client.utils.enums.MinimalArmorBehavior;
 import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -14,8 +15,8 @@ public class ClientConfig extends ConfigManager {
         super("./config/lifeseries/client", LifeSeries.MOD_ID+"_client.properties");
     }
 
-    public static final ConfigFileEntry<Boolean> MINIMAL_ARMOR = new ConfigFileEntry<>(
-            "minimal_armor", true, "",
+    public static final ConfigFileEntry<MinimalArmorBehavior> MINIMAL_ARMOR = new ConfigFileEntry<>(
+            "minimal_armor", MinimalArmorBehavior.MATCH_SERVER, "",
             "Minimal Armor Resourcepack", "Enables the minimal armor resourcepack."
     );
     public static final ConfigFileEntry<Boolean> SESSION_TIMER = new ConfigFileEntry<>(

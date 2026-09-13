@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.client.utils;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.config.ClientConfig;
+import net.mat0u5.lifeseries.client.utils.enums.MinimalArmorBehavior;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.repository.Pack;
@@ -14,7 +15,12 @@ public class ClientResourcePacks {
     private static final String NICELIFE_NETHER_RESOURCEPACK = "lifeseries:nicelife";
 
     public static void checkClientPacks() {
-        handleClientResourcepack(MINIMAL_ARMOR_RESOURCEPACK, ClientConfig.MINIMAL_ARMOR.get(clientConfig));
+        boolean enableMinimalArmorPack = true;
+        MinimalArmorBehavior armorbehavior = ClientConfig.MINIMAL_ARMOR.get(clientConfig);
+        if (armorbehavior == MinimalArmorBehavior.FALSE) enableMinimalArmorPack = false;
+        if (armorbehavior == MinimalArmorBehavior.MATCH_SERVER) enableMinimalArmorPack = LifeSeriesClient.SERVER_MINIMAL_ARMOR;
+
+        handleClientResourcepack(MINIMAL_ARMOR_RESOURCEPACK, enableMinimalArmorPack);
         handleClientResourcepack(NICELIFE_NETHER_RESOURCEPACK, (LifeSeries.isSeason(Seasons.NICE_LIFE) && LifeSeriesClient.NICELIFE_SNOWY_NETHER));
     }
 

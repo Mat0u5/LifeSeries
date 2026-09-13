@@ -117,6 +117,10 @@ public class DefaultConfigValues {
             "teams_system_disabled", false, "global.disable",
             "Fully Disable Teams System", "Fully disables the teams system, if you want to implement a custom one for example :)"
     );
+    public final ConfigFileEntry<Boolean> DISABLE_MINIMAL_ARMOR_PACK = new ConfigFileEntry<>(
+            "disable_minimal_armor_pack", false, "global.disable",
+            "Disable Minimal Armor Pack", "Controls whether the minimal armor pack is disabled."
+    );
     public final ConfigFileEntry<Boolean> CUSTOM_ENCHANTER_ALGORITHM = new ConfigFileEntry<>(
             "custom_enchanter_algorithm", false, "global",
             "Custom Enchanter Algorithm", "Modifies the enchanting table algorithm to allow players to get all enchants even without bookshelves."

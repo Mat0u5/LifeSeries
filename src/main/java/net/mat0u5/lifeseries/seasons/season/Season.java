@@ -120,6 +120,7 @@ public abstract class Season {
     public static boolean cloudColorSetMode = false;
     public boolean TEAMS_SYSTEM_DISABLED = false;
     public static boolean ONLY_LOSE_DURABILITY_IN_SESSION = false;
+    public static boolean DISABLE_MINIMAL_ARMOR_PACK = false;
 
     public BoogeymanManager boogeymanManager = createBoogeymanManager();
     public SecretSociety secretSociety = createSecretSociety();
@@ -260,6 +261,7 @@ public abstract class Season {
         LOCATOR_BAR = seasonConfig.LOCATOR_BAR.get();
         TEAMS_SYSTEM_DISABLED = seasonConfig.TEAMS_SYSTEM_DISABLED.get();
         ONLY_LOSE_DURABILITY_IN_SESSION = seasonConfig.ONLY_LOSE_DURABILITY_IN_SESSION.get();
+        DISABLE_MINIMAL_ARMOR_PACK = seasonConfig.DISABLE_MINIMAL_ARMOR_PACK.get();
 
         NetworkHandlerServer.reload();
         boogeymanManager.onReload();

@@ -5,7 +5,7 @@ import net.mat0u5.lifeseries.config.modifiable.ModifiableSoundManager;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableTextManager;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
-import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.Season;import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeLivesManager;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
@@ -16,7 +16,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -187,6 +187,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,GROUP_DISABLE // Group
                 ,LIVES_SYSTEM_DISABLED
                 ,TEAMS_SYSTEM_DISABLED
+                ,DISABLE_MINIMAL_ARMOR_PACK
         ));
     }
 
@@ -484,6 +485,20 @@ public abstract class ConfigManager extends DefaultConfigValues {
             currentSession.checkTickFreeze();
             if (!value) {
                 OtherUtils.setFreezeGame(false);
+            }
+        }
+        if (id.equals(seasonConfig.DISABLE_MINIMAL_ARMOR_PACK.key)) {
+            if (value) {
+                // Disable
+                for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
+                    PlayerUtils.removeSingleResourcepack(player, Season.RESOURCEPACK_MINIMAL_ARMOR_URL);
+                }
+            }
+            else {
+                // Enable
+                for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
+                    PlayerUtils.applySingleResourcepack(player, Season.RESOURCEPACK_MINIMAL_ARMOR_URL, Season.RESOURCEPACK_MINIMAL_ARMOR_SHA, "Minimal Armor Resourcepack.");
+                }
             }
         }
     }
