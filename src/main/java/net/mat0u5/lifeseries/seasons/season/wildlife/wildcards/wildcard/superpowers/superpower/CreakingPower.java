@@ -20,8 +20,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntitySpawnReason;
 //? if <= 26.1 {
-import net.minecraft.world.entity.EntityType;
-//?} else {
+/*import net.minecraft.world.entity.EntityType;
+*///?} else {
 import net.minecraft.world.entity.EntityTypes;
 //?}
 import net.minecraft.world.entity.monster.creaking.Creaking;

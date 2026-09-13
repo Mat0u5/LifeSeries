@@ -7,7 +7,7 @@ import static net.mat0u5.lifeseries.LifeSeries.MOD_VERSION;
 
 public class VersionControl {
     public static boolean isDevVersion() {
-        return MOD_VERSION.contains("dev") || MOD_VERSION.contains("pre") || LifeSeries.DEBUG;
+        return MOD_VERSION.contains("dev") || MOD_VERSION.contains("pre") || LifeSeries.DEBUG || LifeSeries.FORCE_DEV;
     }
 
     public static String strippedVersionName() {
