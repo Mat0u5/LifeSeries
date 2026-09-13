@@ -73,6 +73,8 @@ import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
 import static net.mat0u5.lifeseries.seasons.util.WatcherManager.isWatcher;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.entity.*;
 
 //? if <= 1.20
 //import net.minecraft.world.scores.Scoreboard;

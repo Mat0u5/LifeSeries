@@ -26,6 +26,16 @@ val settingsRootDir = rootDir
 
 stonecutter {
 	create(rootProject) {
+		val currentBranch = runCatching {
+			ProcessBuilder("git", "rev-parse", "--abbrev-ref", "HEAD")
+				.directory(settingsRootDir)
+				.start()
+				.inputStream
+				.bufferedReader()
+				.readText()
+				.trim()
+		}.getOrNull()
+
 		fun match(version: String, vararg loaders: String) {
 			loaders.forEach { loader ->
 				val buildscriptName = when {
@@ -40,6 +50,8 @@ stonecutter {
 		fun env(variable: String): String? {
 			val value = System.getenv(variable)
 			if (value != null) return value
+			if (variable == "GRADLE_ONLY_SNAPSHOT" && currentBranch == "snapshot") return "true"
+			if (variable.startsWith("GRADLE_ONLY_") && currentBranch == "main") return "false"
 
 			val envFile = java.io.File(settingsRootDir, ".env")
 			if (envFile.exists()) {

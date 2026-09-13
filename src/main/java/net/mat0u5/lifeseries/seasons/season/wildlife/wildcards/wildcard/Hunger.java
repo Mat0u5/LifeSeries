@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Random;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSession;
+import java.util.*;
 
 //? if >= 1.20.5 {
 import net.minecraft.core.component.DataComponentMap;
