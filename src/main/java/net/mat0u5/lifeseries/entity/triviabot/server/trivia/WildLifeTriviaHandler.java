@@ -61,8 +61,8 @@ import net.minecraft.world.entity.EntityReference;
 //? if <= 1.20.3
 //import org.joml.Vector3f;
 //? if <= 26.1 {
-import net.minecraft.world.entity.EntityType;
-//?} else {
+/*import net.minecraft.world.entity.EntityType;
+*///?} else {
 import net.minecraft.world.entity.EntityTypes;
 //?}
 

@@ -20,8 +20,8 @@ import net.minecraft.world.entity.player.Player;
 import java.util.List;
 
 //? if <= 26.1 {
-import net.minecraft.world.entity.EntityType;
-//?} else {
+/*import net.minecraft.world.entity.EntityType;
+*///?} else {
 import net.minecraft.world.entity.EntityTypes;
 //?}
 

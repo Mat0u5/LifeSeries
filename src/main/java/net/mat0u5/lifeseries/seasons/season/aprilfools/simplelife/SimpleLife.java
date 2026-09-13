@@ -33,8 +33,8 @@ import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.entity.SpawnPlacementType;
 //?}
 //? if <= 26.1 {
-import net.minecraft.world.entity.EntityType;
-//?} else {
+/*import net.minecraft.world.entity.EntityType;
+*///?} else {
 import net.minecraft.world.entity.EntityTypes;
 //?}
 
