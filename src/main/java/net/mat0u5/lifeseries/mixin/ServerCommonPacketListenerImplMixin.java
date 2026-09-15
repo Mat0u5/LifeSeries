@@ -39,6 +39,7 @@ import net.minecraft.server.network.ServerCommonPacketListenerImpl;
 @Mixin(value = ServerCommonPacketListenerImpl.class, priority = 1)
 //?}
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
+@Deprecated
 public class ServerCommonPacketListenerImplMixin {
 
     @Final

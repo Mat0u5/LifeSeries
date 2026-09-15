@@ -29,7 +29,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import java.util.ArrayList;
 import java.util.List;
 //?}
-
+@Deprecated
 @Mixin(ServerboundCustomPayloadPacket.class)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class ServerboundCustomPayloadPacketMixin {

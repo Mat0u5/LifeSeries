@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.resources.datapack;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.resources.ResourceHandler;
+import net.mat0u5.matlib.util.resource.ResourceHandler;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.storage.LevelResource;

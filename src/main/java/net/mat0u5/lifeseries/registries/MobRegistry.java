@@ -4,7 +4,7 @@ import net.mat0u5.lifeseries.entity.angrysnowman.AngrySnowman;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.matlib.events.common.CommonRegistryEvents;
-import net.mat0u5.matlib.util.AttributeEntity;
+import net.mat0u5.matlib.util.world.AttributeEntity;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;

@@ -24,6 +24,7 @@ import net.minecraft.network.protocol.login.custom.DiscardedQueryPayload;
 import com.mojang.authlib.GameProfile;
 //?}
 
+@Deprecated
 @Mixin(value = ServerLoginPacketListenerImpl.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class ServerLoginPacketListenerImplMixin {

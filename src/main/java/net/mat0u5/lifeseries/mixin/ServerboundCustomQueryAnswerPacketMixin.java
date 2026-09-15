@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
+@Deprecated
 @Mixin(value = ServerboundCustomQueryAnswerPacket.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class ServerboundCustomQueryAnswerPacketMixin {

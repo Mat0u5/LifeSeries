@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.config;
 
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.enums.Formatted;
+import net.mat0u5.matlib.util.enums.Formatted;
 import net.minecraft.network.chat.Component;
 
 import java.util.List;

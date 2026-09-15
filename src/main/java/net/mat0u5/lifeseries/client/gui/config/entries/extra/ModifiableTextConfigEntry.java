@@ -9,7 +9,7 @@ import net.mat0u5.lifeseries.client.utils.TextColors;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.config.ModifiableTextManager;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.mat0u5.lifeseries.utils.enums.Formatted;
+import net.mat0u5.matlib.util.enums.Formatted;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;

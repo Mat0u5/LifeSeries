@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.TriviaTexturePacket;
-import net.mat0u5.lifeseries.resources.ResourceHandler;
+import net.mat0u5.matlib.util.resource.ResourceHandler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;

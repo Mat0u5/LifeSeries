@@ -58,6 +58,7 @@ import net.minecraft.world.phys.EntityHitResult;
 
 @Mixin(value = ServerGamePacketListenerImpl.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
+@Deprecated
 public class ServerGamePacketListenerImplMixin {
     @Shadow
     public ServerPlayer player;
@@ -200,6 +201,7 @@ public class ServerGamePacketListenerImplMixin {
     }
 
     //? if >= 1.20.5 {
+    @Deprecated
     @Inject(method = "handleCustomPayload", at = @At("HEAD"), cancellable = true)
     private void onHandlePayload(ServerboundCustomPayloadPacket packet, CallbackInfo ci) {
         NetworkHandlerServer.onCustomPayload(packet.payload(), this.player);
