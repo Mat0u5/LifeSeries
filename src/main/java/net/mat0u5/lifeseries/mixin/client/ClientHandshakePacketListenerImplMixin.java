@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.mixin.client;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import io.netty.buffer.Unpooled;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
 import net.minecraft.client.multiplayer.ClientHandshakePacketListenerImpl;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.login.ClientboundCustomQueryPacket;
@@ -26,7 +26,7 @@ public class ClientHandshakePacketListenerImplMixin {
     private void handleCustomQuery(ClientboundCustomQueryPacket packet, CallbackInfo ci) {
         //? if <= 1.20 {
 
-        /*if (packet.getIdentifier().equals(IdentifierHelper.mod(NetworkHandlerServer.preLoginPacketID))) {
+        /*if (packet.getIdentifier().equals(LSIdentifierHelper.lifeseries(NetworkHandlerServer.preLoginPacketID))) {
             ClientHandshakePacketListenerImpl handler = (ClientHandshakePacketListenerImpl) (Object) this;
 
             FriendlyByteBuf responseBuf = new FriendlyByteBuf(Unpooled.buffer());
@@ -36,7 +36,7 @@ public class ClientHandshakePacketListenerImplMixin {
             ci.cancel();
         }
         *///?} else {
-        if (packet.payload().id().equals(IdentifierHelper.mod(NetworkHandlerServer.preLoginPacketID))) {
+        if (packet.payload().id().equals(LSIdentifierHelper.lifeseries(NetworkHandlerServer.preLoginPacketID))) {
             ClientHandshakePacketListenerImpl handler = (ClientHandshakePacketListenerImpl) (Object) this;
 
             FriendlyByteBuf responseBuf = new FriendlyByteBuf(Unpooled.buffer());

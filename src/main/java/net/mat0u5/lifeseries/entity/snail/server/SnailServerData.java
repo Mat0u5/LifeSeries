@@ -12,7 +12,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.registries.Registries;
@@ -45,7 +45,7 @@ import static net.mat0u5.lifeseries.LifeSeries.currentSession;
 
 @SuppressWarnings("resource")
 public class SnailServerData implements PlayerBoundEntity {
-    public static final ResourceKey<DamageType> SNAIL_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE, IdentifierHelper.mod("snail"));
+    public static final ResourceKey<DamageType> SNAIL_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE, LSIdentifierHelper.lifeseries("snail"));
     public final Snail snail;
 
     public SnailServerData(Snail snail) {

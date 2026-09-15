@@ -37,7 +37,7 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
 import net.minecraft.resources.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
@@ -65,7 +65,7 @@ public class TextureHelperMixin {
         }
         String color = playerTeamColor.toLowerCase(Locale.ROOT);
         String heartType = texturePath.replaceFirst("hud/heart/", "");
-        Identifier customHeart = IdentifierHelper.mod(color+"_"+heartType);
+        Identifier customHeart = LSIdentifierHelper.lifeseries(color+"_"+heartType);
         cir.setReturnValue(customHeart);
     }
 }

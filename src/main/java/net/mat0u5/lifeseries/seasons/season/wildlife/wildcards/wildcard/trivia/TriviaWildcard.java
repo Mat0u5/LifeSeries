@@ -13,8 +13,8 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShifting;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.Time;
-import net.mat0u5.lifeseries.utils.other.Tuple;
+import net.mat0u5.matlib.util.other.Time;
+import net.mat0u5.matlib.util.other.Tuple;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
@@ -340,15 +340,15 @@ public class TriviaWildcard extends Wildcard {
         int difficulty = 1 + player.getRandom().nextInt(3);
         try {
             if (difficulty == 1) {
-                return new Tuple<>(difficulty, getEasyQuestion());
+                return Tuple.of(difficulty, getEasyQuestion());
             }
             if (difficulty == 2) {
-                return new Tuple<>(difficulty, getNormalQuestion());
+                return Tuple.of(difficulty, getNormalQuestion());
             }
-            return new Tuple<>(difficulty, getHardQuestion());
+            return Tuple.of(difficulty, getHardQuestion());
         } catch(Exception e) {
             LOGGER.error(e.toString());
-            return new Tuple<>(difficulty, TriviaQuestion.getDefault());
+            return Tuple.of(difficulty, TriviaQuestion.getDefault());
         }
     }
 

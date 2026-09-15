@@ -20,6 +20,7 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.mat0u5.matlib.util.other.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -206,7 +207,7 @@ public class WildLifeTriviaHandler extends TriviaHandler {
             bot.setAnalyzingTime(42);
             PlayerUtils.playSoundWithSourceToPlayers(
                     PlayerUtils.getAllPlayers(), bot,
-                    SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("wildlife_trivia_analyzing")),
+                    SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("wildlife_trivia_analyzing")),
                     SoundSource.NEUTRAL, 1f, 1);
             return true;
         }
@@ -222,7 +223,7 @@ public class WildLifeTriviaHandler extends TriviaHandler {
         TaskScheduler.scheduleTask(72, () -> {
             PlayerUtils.playSoundWithSourceToPlayers(
                     PlayerUtils.getAllPlayers(), bot,
-                    SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("wildlife_trivia_correct")),
+                    SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("wildlife_trivia_correct")),
                     SoundSource.NEUTRAL, 1f, 1);
         });
     }
@@ -233,7 +234,7 @@ public class WildLifeTriviaHandler extends TriviaHandler {
         TaskScheduler.scheduleTask(72, () -> {
             PlayerUtils.playSoundWithSourceToPlayers(
                     PlayerUtils.getAllPlayers(), bot,
-                    SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("wildlife_trivia_incorrect")),
+                    SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("wildlife_trivia_incorrect")),
                     SoundSource.NEUTRAL, 1f, 1);
         });
     }

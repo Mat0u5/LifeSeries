@@ -19,6 +19,7 @@ import net.mat0u5.lifeseries.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.mat0u5.matlib.util.other.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -43,7 +44,7 @@ import static net.mat0u5.lifeseries.LifeSeries.server;
 
 public class DoubleLife extends Season {
     public static final String SOULMATE_DAMAGE_IDENTIFIER_NAME = "soulmate";
-    public static final ResourceKey<DamageType> SOULMATE_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE,  IdentifierHelper.mod(SOULMATE_DAMAGE_IDENTIFIER_NAME));
+    public static final ResourceKey<DamageType> SOULMATE_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE,  LSIdentifierHelper.lifeseries(SOULMATE_DAMAGE_IDENTIFIER_NAME));
     StringListConfig soulmateConfig;
     public boolean ANNOUNCE_SOULMATES = false;
     public boolean SOULBOUND_FOOD = false;
@@ -434,7 +435,7 @@ public class DoubleLife extends Season {
         TaskScheduler.scheduleTask(75, () -> {
             var listNew = ref.get();
             PlayerUtils.sendTitleToPlayers(listNew, ModifiableText.DOUBLELIFE_SOULMATE_TITLE.get(),10,50,20);
-            PlayerUtils.playSoundToPlayers(listNew, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("doublelife_soulmate_wait")));
+            PlayerUtils.playSoundToPlayers(listNew, SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("doublelife_soulmate_wait")));
         });
         TaskScheduler.scheduleTask(165, () -> {
             chooseRandomSoulmates();
@@ -447,7 +448,7 @@ public class DoubleLife extends Season {
                     }
                 }
                 PlayerUtils.sendTitle(player, text,20,60,20);
-                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("doublelife_soulmate_chosen")));
+                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("doublelife_soulmate_chosen")));
             }
         });
     }

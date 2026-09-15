@@ -7,7 +7,7 @@ import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.client.utils.TextColors;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.matlib.util.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;

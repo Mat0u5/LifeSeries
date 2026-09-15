@@ -17,6 +17,7 @@ import net.mat0u5.lifeseries.utils.player.*;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.mat0u5.matlib.util.other.*;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -844,9 +845,9 @@ public class LivesManager {
                 }
                 partNum++;
             }
-            return new Tuple<>(removed, result);
+            return Tuple.of(removed, result);
         }catch(Exception ignored) {}
-        return new Tuple<>(false, original);
+        return Tuple.of(false, original);
     }
 
     public Component getDeathMessageAdd(ServerPlayer player) {

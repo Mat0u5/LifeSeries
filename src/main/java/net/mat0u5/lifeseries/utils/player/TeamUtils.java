@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.utils.player;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.matlib.util.other.TextUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;

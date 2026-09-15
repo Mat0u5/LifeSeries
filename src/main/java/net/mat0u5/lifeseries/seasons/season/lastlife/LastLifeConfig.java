@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.lastlife;
 
 import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.matlib.util.other.TextUtils;
 
 import java.util.List;
 

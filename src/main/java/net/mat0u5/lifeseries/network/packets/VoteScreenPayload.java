@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.network.packets;
 
 //? if <= 1.20.3 {
-/*import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+/*import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
@@ -11,7 +11,7 @@ import java.util.List;
 
 public record VoteScreenPayload(String name, boolean requiresSleep, boolean closesWithEsc, boolean showTimer, List<String> players) implements CustomPacketPayload {
 
-    public static final Identifier ID = IdentifierHelper.mod("votescreen");
+    public static final Identifier ID = LSIdentifierHelper.lifeseries("votescreen");
 
     @Override
     public void write(FriendlyByteBuf buf) {
@@ -44,7 +44,7 @@ public record VoteScreenPayload(String name, boolean requiresSleep, boolean clos
     }
 }
 *///?} else {
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -54,7 +54,7 @@ import java.util.List;
 
 public record VoteScreenPayload(String name, boolean requiresSleep, boolean closesWithEsc, boolean showTimer, List<String> players) implements CustomPacketPayload {
 
-    public static final CustomPacketPayload.Type<VoteScreenPayload> ID = new CustomPacketPayload.Type<>(IdentifierHelper.mod("votescreen"));
+    public static final CustomPacketPayload.Type<VoteScreenPayload> ID = new CustomPacketPayload.Type<>(LSIdentifierHelper.lifeseries("votescreen"));
     public static final StreamCodec<RegistryFriendlyByteBuf, VoteScreenPayload> CODEC = StreamCodec.composite(
             ByteBufCodecs.STRING_UTF8, VoteScreenPayload::name,
             ByteBufCodecs.BOOL, VoteScreenPayload::requiresSleep,

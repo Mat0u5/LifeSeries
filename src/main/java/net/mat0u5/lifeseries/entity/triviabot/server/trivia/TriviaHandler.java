@@ -5,7 +5,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
-import net.mat0u5.lifeseries.utils.other.Tuple;
+import net.mat0u5.matlib.util.other.Tuple;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;

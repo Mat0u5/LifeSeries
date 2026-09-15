@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.matlib.util.other.Time;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
@@ -133,7 +134,7 @@ public class OtherUtils {
             int index = rnd.nextInt(from, to + 1);
             name += index;
         }
-        return SoundEvent.createVariableRangeEvent(IdentifierHelper.mod(name));
+        return SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries(name));
     }
 
     public static String getTimeAndDate() {

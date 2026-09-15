@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.utils.other;
 
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.matlib.util.other.Time;
 
 import java.util.ArrayList;
 import java.util.Iterator;

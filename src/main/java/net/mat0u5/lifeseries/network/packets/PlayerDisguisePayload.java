@@ -1,13 +1,13 @@
 package net.mat0u5.lifeseries.network.packets;
 //? if <= 1.20.3 {
-/*import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+/*import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 
 public record PlayerDisguisePayload(String hiddenUUID, String hiddenName, String shownUUID, String shownName) implements CustomPacketPayload {
 
-    public static final Identifier ID = IdentifierHelper.mod("player_disguise");
+    public static final Identifier ID = LSIdentifierHelper.lifeseries("player_disguise");
 
     @Override
     public void write(FriendlyByteBuf buf) {
@@ -31,7 +31,7 @@ public record PlayerDisguisePayload(String hiddenUUID, String hiddenName, String
     }
 }
 *///?} else {
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -39,7 +39,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 public record PlayerDisguisePayload(String hiddenUUID, String hiddenName, String shownUUID, String shownName) implements CustomPacketPayload {
 
-    public static final CustomPacketPayload.Type<PlayerDisguisePayload> ID = new CustomPacketPayload.Type<>(IdentifierHelper.mod("player_disguise"));
+    public static final CustomPacketPayload.Type<PlayerDisguisePayload> ID = new CustomPacketPayload.Type<>(LSIdentifierHelper.lifeseries("player_disguise"));
     public static final StreamCodec<RegistryFriendlyByteBuf, PlayerDisguisePayload> CODEC = StreamCodec.composite(
             ByteBufCodecs.STRING_UTF8, PlayerDisguisePayload::hiddenUUID,
             ByteBufCodecs.STRING_UTF8, PlayerDisguisePayload::hiddenName,

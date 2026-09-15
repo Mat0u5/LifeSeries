@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.client.events;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.mat0u5.lifeseries.client.network.NetworkHandlerClient;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.client.KeyMapping;
 
@@ -18,7 +18,7 @@ public class ClientKeybinds {
     //? if <= 1.21.6 {
     /*public static final String KEYBIND_ID = "key.category.lifeseries.general";
      *///?} else {
-    public static KeyMapping.Category KEYBIND_ID = KeyMapping.Category.register(IdentifierHelper.mod("general"));
+    public static KeyMapping.Category KEYBIND_ID = KeyMapping.Category.register(LSIdentifierHelper.lifeseries("general"));
     //?}
 
     public static void tick() {

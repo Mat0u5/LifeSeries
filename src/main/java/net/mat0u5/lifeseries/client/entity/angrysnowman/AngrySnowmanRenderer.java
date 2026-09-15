@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.client.entity.angrysnowman;
 
 import net.mat0u5.lifeseries.client.utils.interfaces.IEntityRenderState;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.SnowGolemRenderer;
 import net.minecraft.resources.Identifier;
@@ -13,8 +13,7 @@ import java.util.UUID;
 /*import net.minecraft.world.entity.animal.golem.SnowGolem;
 *///?}
 //? if >= 1.21.2 {
-import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
- //?}
+//?}
 //? if >= 1.21.4 {
 import net.minecraft.client.renderer.entity.state.SnowGolemRenderState;
  //?}
@@ -45,6 +44,6 @@ public class AngrySnowmanRenderer extends SnowGolemRenderer {
             if (uuid != null) {
                 variation = new Random(uuid.hashCode()).nextInt(SKIN_VARIATIONS);
             }
-            return IdentifierHelper.mod("textures/entity/angrysnowman/variation_"+variation+".png");
+            return LSIdentifierHelper.lifeseries("textures/entity/angrysnowman/variation_"+variation+".png");
         }
 }

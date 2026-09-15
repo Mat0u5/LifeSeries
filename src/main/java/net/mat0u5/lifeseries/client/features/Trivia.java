@@ -9,7 +9,7 @@ import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.network.packets.TriviaQuestionPayload;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.matlib.util.other.TextUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 
 import java.util.ArrayList;

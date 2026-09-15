@@ -9,8 +9,8 @@ import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeLivesManager;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.mat0u5.lifeseries.utils.other.Triple;
+import net.mat0u5.matlib.util.other.TextUtils;
+import net.mat0u5.matlib.util.other.Triple;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.scores.Team;
@@ -91,7 +91,7 @@ public class LifeSkinsManager {
                         intName = skinName.equalsIgnoreCase("null") ? null : Integer.parseInt(skinName);
                         teamName = "lives_"+intName;
                     } catch (Exception ignored) {}
-                    skins.put(teamName, new Triple<>(slim, skinFile, intName));
+                    skins.put(teamName, Triple.of(slim, skinFile, intName));
                 }catch(Exception ignored) {}
             }
             if (skins.isEmpty()) continue;

@@ -5,7 +5,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.SnailTexturePacket;
 import net.mat0u5.matlib.util.resource.ResourceHandler;
 import net.mat0u5.matlib.util.resource.BufferedImageUtils;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.matlib.util.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.server.level.ServerPlayer;

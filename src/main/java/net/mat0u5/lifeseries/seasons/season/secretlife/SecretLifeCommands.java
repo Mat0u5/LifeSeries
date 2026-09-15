@@ -10,8 +10,8 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.ActionText;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.matlib.util.other.ActionText;
+import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
@@ -280,7 +280,7 @@ public class SecretLifeCommands extends CustomCommand {
                 task.rawTask += append;
                 TaskManager.setPlayerTask(player, taskType, task);
                 AnimationUtils.playSecretLifeTotemAnimation(player, (taskType == TaskTypes.RED || taskType == TaskTypes.FINALE));
-                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("secretlife_task_totem")));
+                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("secretlife_task_totem")));
             }
             else {
                 TaskManager.appendTask.put(uuid, append);
@@ -313,7 +313,7 @@ public class SecretLifeCommands extends CustomCommand {
             if (TaskManager.removePlayersTaskBook(player) || inSession) {
                 TaskManager.assignRandomTaskToPlayer(player, taskType);
                 AnimationUtils.playSecretLifeTotemAnimation(player, (taskType == TaskTypes.RED || taskType == TaskTypes.FINALE));
-                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("secretlife_task_totem")));
+                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("secretlife_task_totem")));
                 if (targets.size() == 1) {
                     sendCommandFeedback(source, ModifiableText.SECRETLIFE_TASK_SET.get(player));
                 }
@@ -509,7 +509,7 @@ public class SecretLifeCommands extends CustomCommand {
         ((IPlayer) target).ls$message(recipientMessage);
         AnimationUtils.createSpiral(target, 40);
 
-        PlayerUtils.playSoundToPlayers(List.of(self,target), SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("secretlife_life")));
+        PlayerUtils.playSoundToPlayers(List.of(self,target), SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("secretlife_life")));
 
         return 1;
     }

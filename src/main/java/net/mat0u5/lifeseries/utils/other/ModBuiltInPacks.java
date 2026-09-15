@@ -31,6 +31,7 @@ import java.util.Optional;
     //?}
 *///?}
 
+@Deprecated
 public final class ModBuiltInPacks implements RepositorySource {
     private static final Logger LOGGER = LoggerFactory.getLogger("LifeSeriesPackLoader");
 

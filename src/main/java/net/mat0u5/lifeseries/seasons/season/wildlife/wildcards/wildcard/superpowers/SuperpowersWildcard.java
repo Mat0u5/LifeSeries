@@ -8,7 +8,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Mimicry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.server.level.ServerPlayer;
@@ -105,7 +105,7 @@ public class SuperpowersWildcard extends Wildcard {
             }
         }
         if (!WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME) {
-            PlayerUtils.playSoundToPlayers(allPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("wildlife_superpowers")), 0.2f, 1);
+            PlayerUtils.playSoundToPlayers(allPlayers, SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("wildlife_superpowers")), 0.2f, 1);
         }
     }
 
@@ -169,7 +169,7 @@ public class SuperpowersWildcard extends Wildcard {
             DatapackIntegration.activateSuperpower(player, superpower);
         }
         if (!WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME) {
-            PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("wildlife_superpowers")), 0.2f, 1);
+            PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("wildlife_superpowers")), 0.2f, 1);
         }
         Necromancy.checkRessurectedPlayersReset();
     }

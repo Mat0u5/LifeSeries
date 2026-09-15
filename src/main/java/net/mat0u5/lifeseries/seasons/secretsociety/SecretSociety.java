@@ -5,10 +5,10 @@ import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsMana
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.mat0u5.lifeseries.utils.other.Time;
+import net.mat0u5.matlib.util.other.TextUtils;
+import net.mat0u5.matlib.util.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerListReference;
 import net.mat0u5.lifeseries.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -140,9 +140,9 @@ public class SecretSociety {
 
         TaskScheduler.scheduleTask(50, () -> {
             if (!SOUND_ONLY_MEMBERS) {
-                PlayerUtils.playSoundToPlayers(nonMemberRef.get(), SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("pastlife_society")));
+                PlayerUtils.playSoundToPlayers(nonMemberRef.get(), SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("pastlife_society")));
             }
-            PlayerUtils.playSoundToPlayers(ref.get(), SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("pastlife_society")));
+            PlayerUtils.playSoundToPlayers(ref.get(), SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("pastlife_society")));
             PlayerUtils.sendTitleToPlayers(ref.get(), ModifiableText.SOCIETY_CALLS_PT1.get(), 0, 30, 0);
         });
 
@@ -212,7 +212,7 @@ public class SecretSociety {
     }
 
     public void afterInitiate(ServerPlayer player) {
-        PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("pastlife_society")), 1, 1);
+        PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("pastlife_society")), 1, 1);
 
         int currentTime = 20;
         PlayerReference ref = PlayerReference.of(player);
@@ -354,7 +354,7 @@ public class SecretSociety {
         societyEnded = true;
         SessionTranscript.societyEnded();
         if (SOUND_ONLY_MEMBERS) {
-            PlayerUtils.playSoundToPlayers(getMembers(), SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("pastlife_society_end_member")));
+            PlayerUtils.playSoundToPlayers(getMembers(), SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("pastlife_society_end_member")));
         }
         else {
             List<ServerPlayer> memberPlayers = getMembers();
@@ -365,8 +365,8 @@ public class SecretSociety {
                 nonMemberPlayers.add(player);
             }
 
-            PlayerUtils.playSoundToPlayers(memberPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("pastlife_society_end_member")));
-            PlayerUtils.playSoundToPlayers(nonMemberPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("pastlife_society")));
+            PlayerUtils.playSoundToPlayers(memberPlayers, SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("pastlife_society_end_member")));
+            PlayerUtils.playSoundToPlayers(nonMemberPlayers, SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("pastlife_society")));
         }
     }
 

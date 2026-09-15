@@ -6,7 +6,7 @@ import net.mat0u5.lifeseries.config.StringListManager;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerListReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -258,7 +258,7 @@ public class TaskManager {
 			tasksChosenFor.add(uuid);
         }
         PlayerUtils.sendTitleToPlayers(allowedPlayers, ModifiableText.SECRETLIFE_TASK_TITLE.get(),20,35,0);
-        PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("secretlife_task")));
+        PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("secretlife_task")));
 
         PlayerListReference ref = PlayerListReference.of(allowedPlayers);
         TaskScheduler.scheduleTask(50, () -> {

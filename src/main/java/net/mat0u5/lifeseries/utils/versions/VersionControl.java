@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.utils.versions;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.matlib.util.other.TextUtils;
 
 import static net.mat0u5.lifeseries.LifeSeries.MOD_VERSION;
 

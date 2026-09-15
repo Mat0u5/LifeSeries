@@ -2,9 +2,9 @@ package net.mat0u5.lifeseries.client.features;
 
 import com.mojang.blaze3d.platform.NativeImage;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.mat0u5.lifeseries.utils.other.Tuple;
+import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
+import net.mat0u5.matlib.util.other.TextUtils;
+import net.mat0u5.matlib.util.other.Tuple;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.Identifier;
@@ -40,7 +40,7 @@ public class LifeSkinsClient {
         try {
             Minecraft client = Minecraft.getInstance();
 
-            var textureId = IdentifierHelper.mod("dynamic/lifeskins/" + skinId.toLowerCase(Locale.ROOT));
+            var textureId = LSIdentifierHelper.lifeseries("dynamic/lifeskins/" + skinId.toLowerCase(Locale.ROOT));
 
             NativeImage image = NativeImage.read(new ByteArrayInputStream(textureData));
 
@@ -58,12 +58,12 @@ public class LifeSkinsClient {
             *///?} else if <= 1.21.6 {
             /*PlayerSkin.Model modelType = slim ? PlayerSkin.Model.SLIM : PlayerSkin.Model.WIDE;
             PlayerSkin skin = new PlayerSkin(textureId, "", null, null, modelType, false);
-            lifeSkinsTextures.put(skinId, new Tuple<>(textureId, skin));
+            lifeSkinsTextures.put(skinId, Tuple.of(textureId, skin));
             *///?} else {
             ClientAsset.DownloadedTexture resourceTexture = new ClientAsset.DownloadedTexture(textureId, "");
             PlayerModelType modelType = slim ? PlayerModelType.SLIM : PlayerModelType.WIDE;
             PlayerSkin skin = new PlayerSkin(resourceTexture, null, null, modelType, false);
-            lifeSkinsTextures.put(skinId, new Tuple<>(textureId, skin));
+            lifeSkinsTextures.put(skinId, Tuple.of(textureId, skin));
             //?}
         } catch (IOException e) {
             LifeSeries.LOGGER.error("Error while processing life skins texture '"+skinId+"'");

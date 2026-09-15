@@ -16,6 +16,7 @@ import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.mat0u5.matlib.util.other.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -191,7 +192,7 @@ public class NiceLife extends Season {
             if (!playedMidnightChimes && isTimeBetween(18000-23*20, 20000)) {
                 playedMidnightChimes = true;
                 PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(),
-                        SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_midnight_chimes")),
+                        SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("nicelife_midnight_chimes")),
                         1f, 1);
                 postponeTriviaStart(Time.ticks(779));
             }
@@ -313,7 +314,7 @@ public class NiceLife extends Season {
         TaskScheduler.scheduleTask(20, () -> {
             DatapackIntegration.EVENT_RED_WINTER_START.trigger();
             PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(),
-                    SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_red_winter")),
+                    SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("nicelife_red_winter")),
                     1f, 1);
         });
         TaskScheduler.scheduleTask(20 + 12, () -> {

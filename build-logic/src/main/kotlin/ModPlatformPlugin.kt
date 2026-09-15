@@ -554,6 +554,7 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 			replace ("getResourceLocation", "getResourceLocation")
 			replace ("getIdentifier", "getIdentifier")
 			replace ("IdentifierHelper", "IdentifierHelper")
+			replace ("LSIdentifierHelper", "LSIdentifierHelper")
 			replace ("net.minecraft.Util", "net.minecraft.util.Util")
 			replace ("net.minecraft.client.renderer.RenderType;", "net.minecraft.client.renderer.rendertype.RenderType;")
 			replace ("net.minecraft.world.entity.animal.SnowGolem", "net.minecraft.world.entity.animal.golem.SnowGolem")

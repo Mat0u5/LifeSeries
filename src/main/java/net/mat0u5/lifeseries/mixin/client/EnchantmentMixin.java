@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.mixin.client;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.matlib.util.other.IdentifierHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;

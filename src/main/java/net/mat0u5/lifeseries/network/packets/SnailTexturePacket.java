@@ -1,13 +1,13 @@
 package net.mat0u5.lifeseries.network.packets;
 //? if <= 1.20.3 {
-/*import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+/*import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 
 public record SnailTexturePacket(String skinName, byte[] textureData) implements CustomPacketPayload {
 
-    public static final Identifier ID = IdentifierHelper.mod("snail_texture");
+    public static final Identifier ID = LSIdentifierHelper.lifeseries("snail_texture");
 
     @Override
     public void write(FriendlyByteBuf buf) {
@@ -27,14 +27,14 @@ public record SnailTexturePacket(String skinName, byte[] textureData) implements
     }
 }
 *///?} else {
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 public record SnailTexturePacket(String skinName, byte[] textureData) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<SnailTexturePacket> ID =
-            new CustomPacketPayload.Type<>(IdentifierHelper.mod("snail_texture"));
+            new CustomPacketPayload.Type<>(LSIdentifierHelper.lifeseries("snail_texture"));
 
     public static final StreamCodec<FriendlyByteBuf, SnailTexturePacket> CODEC =
             StreamCodec.ofMember(SnailTexturePacket::write, SnailTexturePacket::new);

@@ -5,7 +5,7 @@ import net.mat0u5.lifeseries.entity.snail.server.SnailPathfinding;
 import net.mat0u5.lifeseries.entity.snail.server.SnailServerData;
 import net.mat0u5.lifeseries.entity.snail.server.SnailSounds;
 import net.mat0u5.lifeseries.utils.interfaces.IEntity;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -37,16 +37,15 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSession;
-import net.minecraft.world.entity.*;
 
 //? if <= 1.20
 //import net.minecraft.world.entity.LivingEntity;
 
 public class Snail extends Monster {
-    public static final Identifier DEFAULT_TEXTURE = IdentifierHelper.mod("textures/entity/snail/default.png");
-    public static final Identifier TRIVIA_TEXTURE = IdentifierHelper.mod("textures/entity/snail/trivia.png");
-    public static final Identifier ZOMBIE_TEXTURE = IdentifierHelper.mod("textures/entity/snail/zombie.png");
-    public static final Identifier ID = IdentifierHelper.mod("snail");
+    public static final Identifier DEFAULT_TEXTURE = LSIdentifierHelper.lifeseries("textures/entity/snail/default.png");
+    public static final Identifier TRIVIA_TEXTURE = LSIdentifierHelper.lifeseries("textures/entity/snail/trivia.png");
+    public static final Identifier ZOMBIE_TEXTURE = LSIdentifierHelper.lifeseries("textures/entity/snail/zombie.png");
+    public static final Identifier ID = LSIdentifierHelper.lifeseries("snail");
     public static double GLOBAL_SPEED_MULTIPLIER = 1;
     public static boolean SHOULD_DROWN_PLAYER = true;
     public static boolean ALLOW_POTION_EFFECTS = false;

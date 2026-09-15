@@ -3,11 +3,12 @@ package net.mat0u5.lifeseries.seasons.blacklist;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.other.RegistryUtils;
+import net.mat0u5.matlib.util.other.RegistryUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
+import net.mat0u5.matlib.util.other.IdentifierHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -162,7 +163,7 @@ public class Blacklist {
 
         if (seasonConfig != null) {
             if (!seasonConfig.SPAWNER_RECIPE.get()) {
-                newList.add(IdentifierHelper.mod("spawner_recipe"));
+                newList.add(LSIdentifierHelper.lifeseries("spawner_recipe"));
             }
         }
 

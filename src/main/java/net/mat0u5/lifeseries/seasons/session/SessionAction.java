@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.seasons.session;
 
-import net.mat0u5.lifeseries.utils.other.Time;
+import net.mat0u5.matlib.util.other.Time;
 import static net.mat0u5.lifeseries.LifeSeries.currentSession;
 
 public abstract class SessionAction {

@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.seasons.boogeyman;
 
-import net.mat0u5.lifeseries.utils.other.Time;
+import net.mat0u5.matlib.util.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
 
