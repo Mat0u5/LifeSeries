@@ -766,8 +766,8 @@ public class DoubleLife extends Season {
     }
 
     @Override
-    public void onUpdatedInventory(ServerPlayer player) {
-        super.onUpdatedInventory(player);
+    public void onUpdatedInventory(ServerPlayer player, Inventory inventory) {
+        super.onUpdatedInventory(player, inventory);
         ServerPlayer soulmate = getSoulmate(player);
         if (soulmate == null) return;
         syncPlayerInventory(player, soulmate);

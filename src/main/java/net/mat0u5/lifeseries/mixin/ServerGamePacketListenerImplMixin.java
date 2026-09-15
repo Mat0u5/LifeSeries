@@ -176,15 +176,6 @@ public class ServerGamePacketListenerImplMixin {
         return false;
     }
 
-    @Inject(method = "handlePlayerAction", at = @At("RETURN"))
-    public void onPlayerAction(ServerboundPlayerActionPacket packet, CallbackInfo ci) {
-        ServerGamePacketListenerImpl handler = (ServerGamePacketListenerImpl) (Object) this;
-        if (LifeSeries.isClientOrDisabled()) return;
-        if (packet.getAction() == ServerboundPlayerActionPacket.Action.SWAP_ITEM_WITH_OFFHAND) {
-            currentSeason.onUpdatedInventory(handler.player);
-        }
-    }
-
     //? if <= 1.20 {
     /*@Redirect(method = "onDisconnect", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Z)V"))
     *///?} else {

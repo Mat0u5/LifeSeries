@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.command.manager;
 
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.command.*;
-import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
+import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanCommand;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLifeCommands;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeCommands;

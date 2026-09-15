@@ -166,19 +166,6 @@ public abstract class PlayerMixin implements IPlayerUsername {
     }
 
 
-    //Located in the ServerPlayer class in < 26.1
-    //? if >= 26.1 {
-    @Inject(method = "attack", at = @At("HEAD"))
-    private void onAttackEntity(Entity target, CallbackInfo ci) {
-        if (LifeSeries.modDisabled()) return;
-        Player player = (Player) (Object) this;
-        if (player instanceof ServerPlayer serverPlayer) {
-            currentSeason.onUpdatedInventory(serverPlayer);
-        }
-    }
-    //?}
-
-
 
     @Unique
     private Component ls$cachedDisplayName = null;

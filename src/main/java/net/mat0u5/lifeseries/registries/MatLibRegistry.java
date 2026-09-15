@@ -37,6 +37,7 @@ public class MatLibRegistry {
 		ServerPlayerEvents.ITEM_USE.register(Events::onItemUse);
 		ServerPlayerEvents.CLICK_ENTITY.register(Events::onRightClickEntity);
 		CommonPlayerEvents.ATTACK_ENTITY.register(Events::onAttackEntity);
+		CommonPlayerEvents.UPDATE_INVENTORY.register(Events::onUpdatedInventory);
 	}
 
 	public static void registerCommands() {

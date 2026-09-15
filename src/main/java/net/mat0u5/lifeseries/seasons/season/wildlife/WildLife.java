@@ -37,6 +37,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.warden.Warden;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -457,8 +458,8 @@ public class WildLife extends Season {
     }
 
     @Override
-    public void onUpdatedInventory(ServerPlayer player) {
-        super.onUpdatedInventory(player);
+    public void onUpdatedInventory(ServerPlayer player, Inventory inventory) {
+        super.onUpdatedInventory(player, inventory);
         Hunger.updateInventory(player);
     }
     @Override

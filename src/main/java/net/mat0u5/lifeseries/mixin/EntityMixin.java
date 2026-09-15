@@ -6,7 +6,6 @@ import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.utils.interfaces.IEntity;
-import net.mat0u5.lifeseries.utils.interfaces.IEntityDataSaver;
 import net.mat0u5.lifeseries.utils.interfaces.IMorph;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffects;
@@ -44,7 +43,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(value = Entity.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
-public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
+public abstract class EntityMixin implements IMorph, IEntity {
     //? if >= 26.1 {
     @Accessor("fluidInteraction")
     abstract EntityFluidInteraction ls$entityFluidInteraction();
@@ -53,30 +52,6 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
         return ls$entityFluidInteraction();
     }
     //?}
-    /*
-    private NbtCompound persistentData;
-    @Override
-    public NbtCompound getPersistentData() {
-        if (persistentData == null) {
-            persistentData = new NbtCompound();
-        }
-        return persistentData;
-    }
-
-    @Inject(method = "writeNbt", at = @At("HEAD"))
-    protected void writeNbt(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
-        if (persistentData != null) {
-            nbt.put("lifeseries", persistentData);
-        }
-    }
-
-    @Inject(method = "readNbt", at = @At("HEAD"))
-    protected void readNbt(NbtCompound nbt, CallbackInfo ci) {
-        if (nbt.contains("lifeseries")) {
-            persistentData = nbt.getCompound("lifeseries");
-        }
-    }
-    */
     //? if <= 1.20.5 {
     /*@Shadow
     public abstract BlockPos getBlockPosBelowThatAffectsMyMovement();

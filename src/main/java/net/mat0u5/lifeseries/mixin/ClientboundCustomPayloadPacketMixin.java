@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 //?}
 
+@Deprecated
 @Mixin(ClientboundCustomPayloadPacket.class)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class ClientboundCustomPayloadPacketMixin {

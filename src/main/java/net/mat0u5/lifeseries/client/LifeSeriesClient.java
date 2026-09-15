@@ -11,10 +11,12 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.interfaces.ClientAccessor;
+import net.mat0u5.lifeseries.utils.other.ModBuiltInPacks;
 import net.mat0u5.matlib.MatLib;
-import net.minecraft.client.Minecraft;
+import net.mat0u5.matlib.events.client.ClientPackSourceEvents;import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.packs.PackType;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.*;
@@ -92,6 +94,7 @@ public class LifeSeriesClient implements ClientAccessor {
 
     public static void onInitializeClient() {
         LifeSeries.LOGGER.info("Initializing Life Series Client [{} {} ({})] with MatLib [{}]...", MatLib.platform().loader().name(), MatLib.platform().mcVersion(), LifeSeries.MOD_VERSION, MatLib.MOD_VERSION);
+        ClientPackSourceEvents.LOAD_PACK.register(consumer -> ModBuiltInPacks.loadPacks(consumer, PackType.CLIENT_RESOURCES));
         ClientRegistries.registerModStuff();
         NetworkHandlerClient.initializeSimplePacketReceivers();
 

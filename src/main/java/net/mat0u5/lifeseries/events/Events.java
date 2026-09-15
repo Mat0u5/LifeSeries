@@ -33,6 +33,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -77,7 +78,6 @@ public class Events {
         if (LifeSeries.modDisabled()) return;
         LifeSkinsManager.onPlayerJoin(player);
         currentSeason.onPlayerJoin(player);
-        currentSeason.onUpdatedInventory(player);
         SessionTranscript.playerJoin(player);
         MorphManager.onPlayerJoin(player);
         DatapackIntegration.EVENT_PLAYER_JOIN.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
@@ -263,6 +263,12 @@ public class Events {
             e.printStackTrace();
         }
         return InteractionResult.PASS;
+    }
+
+    public static void onUpdatedInventory(Player player, Inventory inventory) {
+        if (LifeSeries.isClientOrDisabled()) return;
+        if (!(player instanceof ServerPlayer serverPlayer)) return;
+        currentSeason.onUpdatedInventory(serverPlayer, inventory);
     }
 
     /*
