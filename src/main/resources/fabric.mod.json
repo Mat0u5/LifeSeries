@@ -16,12 +16,6 @@
 	"environment": "*",
 	"accessWidener": "aw/${sc_version}.accesswidener",
 	"entrypoints": {
-		"main": [
-			"${group}.platform.fabric.FabricEntrypoint"
-		],
-		"client": [
-			"${group}.client.platform.fabric.FabricClientEntrypoint"
-		],
 		"voicechat": [
 			"net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain"
 		]

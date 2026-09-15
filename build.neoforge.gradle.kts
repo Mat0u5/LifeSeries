@@ -75,6 +75,9 @@ dependencies {
 		compileOnly ("maven.modrinth:simple-voice-chat:neoforge-1.20.4-2.5.22")
 	}
 	implementation("net.mat0u5:matlib-neoforge-${prop("deps.minecraft")}:local-+")
+
+	compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
+	annotationProcessor("com.google.auto.service:auto-service:1.1.1")
 }
 
 tasks.named("createMinecraftArtifacts") {

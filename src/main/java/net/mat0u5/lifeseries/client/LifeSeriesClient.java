@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.client;
 
+import com.google.auto.service.AutoService;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.config.ClientConfig;
 import net.mat0u5.lifeseries.client.network.NetworkHandlerClient;
@@ -13,6 +14,7 @@ import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.interfaces.ClientAccessor;
 import net.mat0u5.lifeseries.utils.other.ModBuiltInPacks;
 import net.mat0u5.matlib.MatLib;
+import net.mat0u5.matlib.api.MatLibClientInitializer;
 import net.mat0u5.matlib.events.client.ClientPackSourceEvents;import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -26,7 +28,8 @@ import java.util.*;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 *///?}
 
-public class LifeSeriesClient implements ClientAccessor {
+@AutoService(MatLibClientInitializer.class)
+public class LifeSeriesClient implements MatLibClientInitializer, ClientAccessor {
 
     public static Seasons clientCurrentSeason = LifeSeries.DEFAULT_SEASON;
     public static SessionStatus clientSessionStatus = SessionStatus.NOT_STARTED;
@@ -92,7 +95,8 @@ public class LifeSeriesClient implements ClientAccessor {
     public static boolean isReplay = false;
     public static HandshakeStatus serverHandshake = HandshakeStatus.WAITING;
 
-    public static void onInitializeClient() {
+    @Override
+    public void onInitializeClient() {
         LifeSeries.LOGGER.info("Initializing Life Series Client [{} {} ({})] with MatLib [{}]...", MatLib.platform().loader().name(), MatLib.platform().mcVersion(), LifeSeries.MOD_VERSION, MatLib.MOD_VERSION);
         ClientPackSourceEvents.LOAD_PACK.register(consumer -> ModBuiltInPacks.loadPacks(consumer, PackType.CLIENT_RESOURCES));
         ClientRegistries.registerModStuff();

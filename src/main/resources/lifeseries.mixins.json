@@ -18,7 +18,6 @@
     "CrafterBlockMixin",
     "CraftingMenuMixin",
     "DamageSourceMixin",
-    "DefaultAttributesAccessor",
     "EnchantmentHelperMixin",
     "EntityBasedExplosionDamageCalculatorMixin",
     "EntityMixin",

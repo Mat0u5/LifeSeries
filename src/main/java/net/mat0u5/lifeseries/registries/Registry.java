@@ -12,8 +12,10 @@ import net.minecraft.server.MinecraftServer;
 import java.util.Optional;
 *///?}
 
-public class MatLibRegistry {
+public class Registry {
 	public static void register() {
+		MobRegistry.registerMobs();
+		ParticleRegistry.registerParticles();
 		registerEvents();
 		registerCommands();
 		//? if <= 1.20.2 {
@@ -41,7 +43,7 @@ public class MatLibRegistry {
 	}
 
 	public static void registerCommands() {
-		ServerCommandEvents.CUSTOM_REGISTER.register(CustomCommand::getAllCommands);
+		ServerRegistryEvents.COMMAND_CUSTOM.register(CustomCommand::getAllCommands);
 	}
 
 	//? if <= 1.20.2 {

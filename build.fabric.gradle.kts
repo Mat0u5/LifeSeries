@@ -78,6 +78,9 @@ dependencies {
 		compileOnly ("maven.modrinth:simple-voice-chat:fabric-2.6.11+26.1-snapshot-1")
 	}
 	implementation("net.mat0u5:matlib-fabric-${prop("deps.minecraft")}:local-+")
+
+	compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
+	annotationProcessor("com.google.auto.service:auto-service:1.1.1")
 }
 
 project.afterEvaluate {

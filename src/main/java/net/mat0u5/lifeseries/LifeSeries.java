@@ -1,12 +1,12 @@
 package net.mat0u5.lifeseries;
 
+import com.google.auto.service.AutoService;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.MainConfig;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
-import net.mat0u5.lifeseries.registries.MatLibRegistry;
+import net.mat0u5.lifeseries.registries.Registry;
 import net.mat0u5.lifeseries.registries.MobRegistry;
-import net.mat0u5.lifeseries.registries.ModRegistries;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -21,8 +21,7 @@ import net.mat0u5.lifeseries.utils.other.ModBuiltInPacks;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.mat0u5.matlib.MatLib;
-import net.mat0u5.matlib.events.EventFactory;
-import net.mat0u5.matlib.events.common.CommonRegistryEvents;
+import net.mat0u5.matlib.api.MatLibInitializer;
 import net.mat0u5.matlib.events.server.ServerLanguageEvents;
 import net.mat0u5.matlib.events.server.ServerPackSourceEvents;
 import net.minecraft.server.MinecraftServer;
@@ -34,7 +33,8 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.UUID;
 
-public class LifeSeries {
+@AutoService(MatLibInitializer.class)
+public class LifeSeries implements MatLibInitializer {
 	public static final String MOD_VERSION = "1.5.9";
 	public static final String MOD_ID = "lifeseries";
 
@@ -56,13 +56,15 @@ public class LifeSeries {
 	public static Blacklist blacklist;
 	public static ConfigManager seasonConfig;
 
-	public static void onInitialize() {
-		LOGGER.info("Initializing Life Series [{} {} ({})] with MatLib [{}]...", MatLib.platform().loader().name(), MatLib.platform().mcVersion(), MOD_VERSION, MatLib.MOD_VERSION);
-
+	@Override
+	public void onRegister() {
 		ServerPackSourceEvents.LOAD_PACK.register(consumer -> ModBuiltInPacks.loadPacks(consumer, PackType.SERVER_DATA));
 		ServerLanguageEvents.LOAD_LANG_FILES.register(() -> List.of("/resourcepacks/lifeseries/assets/lifeseries/lang/en_us.json"));
-		CommonRegistryEvents.PRE_FREEZE.register(ModRegistries::registerModStuff);
-		MatLibRegistry.register();
+		Registry.register();
+	}
+	@Override
+	public void onInitialize() {
+		LOGGER.info("Initializing Life Series [{} {} ({})] with MatLib [{}]...", MatLib.platform().loader().name(), MatLib.platform().mcVersion(), MOD_VERSION, MatLib.MOD_VERSION);
 
 		config = new MainConfig();
 		NetworkHandlerServer.reload();
@@ -75,10 +77,6 @@ public class LifeSeries {
 
 		SeasonChanger.initializeSeason(Seasons.getSeasonFromStringName(seasonStr));
 		Seasons.getSeasons().forEach(seasons -> seasons.getSeasonInstance().createConfig());
-
-		//? fabric || (forge && > 1.21) {
-		MobRegistry.registerAttributes();
-		//?}
 
 		if (!ISOLATED_ENVIRONMENT) {
 			UpdateChecker.checkForMajorUpdates();
