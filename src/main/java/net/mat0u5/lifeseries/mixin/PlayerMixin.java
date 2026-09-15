@@ -48,13 +48,6 @@ import net.minecraft.world.item.enchantment.effects.ReplaceDisk;
 //?}
 //? if > 1.21.9
 import net.minecraft.world.level.gamerules.GameRule;
-//? if <= 1.21.6 {
-/*import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
-import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.EntityType;
-*///?}
 
 @Mixin(value = Player.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
@@ -102,42 +95,6 @@ public abstract class PlayerMixin implements IPlayerUsername {
             }
         }
     }
-    //? if <= 1.20.3 {
-    /*@Inject(method = "getStandingEyeHeight", at = @At("HEAD"), cancellable = true)
-    public void getBaseDimensions(Pose pose, EntityDimensions entityDimensions, CallbackInfoReturnable<Float> cir) {
-        if (LifeSeries.modFullyDisabled()) return;
-        Player player = (Player) (Object) this;
-        MorphComponent morphComponent = MorphManager.getOrCreateComponent(player);
-        if (!morphComponent.isMorphed()) return;
-
-        float scaleRatio = 1 / player.getScale();
-        LivingEntity dummy = morphComponent.getDummy();
-        if (morphComponent.isMorphed() && dummy != null) {
-            cir.setReturnValue(dummy.getEyeHeight(pose) * scaleRatio);
-        }
-    }
-    *///?}
-
-    //? if <= 1.21.6 {
-    /*//? if <= 1.20.3 {
-    /^@Inject(method = "getDimensions", at = @At("HEAD"), cancellable = true)
-    ^///?} else {
-    @Inject(method = "getDefaultDimensions", at = @At("HEAD"), cancellable = true)
-    //?}
-    public void getBaseDimensions(Pose pose, CallbackInfoReturnable<EntityDimensions> cir) {
-        if (LifeSeries.modFullyDisabled()) return;
-        Player player = (Player) (Object) this;
-        MorphComponent morphComponent = MorphManager.getOrCreateComponent(player);
-        if (!morphComponent.isMorphed()) return;
-
-        EntityType<?> morphType = morphComponent.getType();
-        if (morphType != null) {
-            float scaleRatio = 1 / player.getScale();
-            EntityDimensions morphDimensions = morphType.getDimensions();
-            cir.setReturnValue(morphDimensions.scale(scaleRatio, scaleRatio));
-        }
-    }
-    *///?}
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void updateHitbox(CallbackInfo ci) {

@@ -42,7 +42,6 @@
     "OwnableEntityMixin",
     "PlayerAccessor",
     "PlayerDataStorageMixin",
-    "PlayerLikeEntityMixin",
     "PlayerListS2CPacketAccessor",
     "PlayerManagerMixin",
     "PlayerMixin",
