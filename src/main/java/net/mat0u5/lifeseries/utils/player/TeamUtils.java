@@ -11,7 +11,7 @@ import net.minecraft.world.scores.Scoreboard;
 import java.util.Collection;
 import java.util.Optional;
 
-import static net.mat0u5.lifeseries.LifeSeries.server;
+import static net.mat0u5.matlib.MatLib.server;
 
 //? if <= 26.1 {
 /*import net.minecraft.ChatFormatting;

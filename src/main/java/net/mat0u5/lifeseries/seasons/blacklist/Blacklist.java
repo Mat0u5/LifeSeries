@@ -35,7 +35,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
-import static net.mat0u5.lifeseries.LifeSeries.server;
+import static net.mat0u5.matlib.MatLib.server;
 
 //? if <= 1.20.3 {
 /*import net.minecraft.world.item.alchemy.Potion;
@@ -341,7 +341,7 @@ public class Blacklist {
     }
 
     public void reloadBlacklist() {
-        if (LifeSeries.server == null) return;
+        if (server == null) return;
 
         CREATIVE_IGNORE_BLACKLIST = seasonConfig.CREATIVE_IGNORE_BLACKLIST.get();
 
@@ -392,7 +392,7 @@ public class Blacklist {
     }
 
     public void onInventoryUpdated(ServerPlayer player) {
-        if (LifeSeries.server == null) return;
+        if (server == null) return;
         Inventory inventory = player.getInventory();
         if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST) return;
         for (int i = 0; i < inventory.getContainerSize(); i++) {

@@ -32,7 +32,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
-import static net.mat0u5.lifeseries.LifeSeries.server;
+import static net.mat0u5.matlib.MatLib.server;
 
 //? if > 1.21 {
 import com.mojang.authlib.properties.PropertyMap;

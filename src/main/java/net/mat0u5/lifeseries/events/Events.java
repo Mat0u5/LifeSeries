@@ -44,6 +44,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.*;
 import static net.mat0u5.lifeseries.LifeSeries.*;
+import static net.mat0u5.matlib.MatLib.*;
 import static net.mat0u5.lifeseries.utils.player.PlayerUtils.isFakePlayer;
 
 //? if >= 1.21.2 {
@@ -116,19 +117,14 @@ public class Events {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            LifeSeries.server = null;
-            LifeSeries.serverThread = null;
             TaskScheduler.clearTasks();
         }
     }
 
     public static void onServerStarting(MinecraftServer server) {
-        LifeSeries.server = server;
-        LifeSeries.serverThread = Thread.currentThread();
     }
 
     public static void onServerStart(MinecraftServer server) {
-        LifeSeries.server = server;
         DatapackManager.onServerStarted(server);
         if (LifeSeries.modDisabled()) return;
         currentSeason.initialize();

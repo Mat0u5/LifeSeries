@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
+import static net.mat0u5.matlib.MatLib.*;
 
 //? if <= 1.21.5
 //import net.minecraft.nbt.CompoundTag;

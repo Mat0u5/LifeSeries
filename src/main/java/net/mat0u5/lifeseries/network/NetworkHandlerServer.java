@@ -61,6 +61,7 @@ import net.minecraft.world.scores.PlayerTeam;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
+import static net.mat0u5.matlib.MatLib.*;
 
 //? if > 1.20.5 {
 import net.minecraft.network.DisconnectionDetails;
@@ -477,10 +478,10 @@ public class NetworkHandlerServer {
         GameProfile profile = ((ServerLoginPacketListenerImplAccessor) handler).getGameProfile();
         if (understood) {
             preLoginHandshake.add(OtherUtils.profileId(profile));
-            LOGGER.info("Received pre-login packet from " + OtherUtils.profileName(profile));
+            LifeSeries.LOGGER.info("Received pre-login packet from " + OtherUtils.profileName(profile));
         }
         else {
-            LOGGER.info("Did not receive pre-login packet from " + OtherUtils.profileName(profile));
+            LifeSeries.LOGGER.info("Did not receive pre-login packet from " + OtherUtils.profileName(profile));
             if (currentSeason.getSeason().requiresClient() && !PRE_LOGIN_OVERRIDE_KICK) {
                 handler.disconnect(getDisconnectClientText());
             }

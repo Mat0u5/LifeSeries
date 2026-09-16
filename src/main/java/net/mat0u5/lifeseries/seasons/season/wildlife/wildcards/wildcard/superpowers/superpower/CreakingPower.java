@@ -27,7 +27,7 @@ import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.monster.creaking.Creaking;
 import net.minecraft.world.phys.AABB;
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
-import static net.mat0u5.lifeseries.LifeSeries.server;
+import static net.mat0u5.matlib.MatLib.server;
 //?}
 //? if = 1.21.2
 //import net.minecraft.core.particles.TargetColorParticleOption;

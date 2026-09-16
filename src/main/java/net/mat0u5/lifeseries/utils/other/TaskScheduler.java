@@ -3,86 +3,36 @@ package net.mat0u5.lifeseries.utils.other;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.matlib.util.other.Time;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 public class TaskScheduler {
 
-    private static final List<Task> tasks = new ArrayList<>();
-    private static final List<Task> newTasks = new ArrayList<>();
-    private static boolean clearTasks = false;
+    private static final net.mat0u5.matlib.util.other.TaskScheduler sharedTaskScheduler = new net.mat0u5.matlib.util.other.TaskScheduler() {
+        @Override
+        public boolean isDisabled() {
+            return LifeSeries.modDisabled();
+        }
+    };
 
     public static void scheduleTask(int ticks, Runnable goal) {
-        if (LifeSeries.modDisabled()) return;
-        Task task = new Task(ticks, goal);
-        newTasks.add(task);
+        sharedTaskScheduler.scheduleTask(ticks, goal);
     }
 
     public static void scheduleTask(Time time, Runnable goal) {
-        scheduleTask(time.getTicks(), goal);
+        sharedTaskScheduler.scheduleTask(time, goal);
     }
 
     public static void schedulePriorityTask(int ticks, Runnable goal) {
-        Task task = new Task(ticks, goal);
-        task.priority = true;
-        newTasks.add(task);
+        sharedTaskScheduler.schedulePriorityTask(ticks, goal);
     }
 
     public static void schedulePriorityTask(Time time, Runnable goal) {
-        schedulePriorityTask(time.getTicks(), goal);
+        sharedTaskScheduler.schedulePriorityTask(time, goal);
     }
 
     public static void clearTasks() {
-        clearTasks = true;
-        newTasks.clear();
+        sharedTaskScheduler.clearTasks();
     }
 
     public static void onTick(boolean gameFrozen) {
-        try {
-            if (clearTasks) {
-                clearTasks = false;
-                tasks.clear();
-                return;
-            }
-
-            Iterator<Task> iterator = tasks.iterator();
-
-            while (iterator.hasNext()) {
-                Task task = iterator.next();
-                if (!gameFrozen || task.priority) {
-                    task.tickCount--;
-
-                    if (task.tickCount <= 0) {
-                        try {
-                            //Inner try-catch to prevent errors from preventing the task from being removed
-                            if (!LifeSeries.modDisabled() || task.priority) {
-                                task.goal.run();
-                            }
-                        }catch(Exception e) {
-                            LifeSeries.LOGGER.error("Fatal error while running task " + task);
-                            e.printStackTrace();
-                        }
-                        iterator.remove();
-                    }
-                }
-            }
-
-            tasks.addAll(newTasks);
-            newTasks.clear();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    public static class Task {
-        private int tickCount;
-        private final Runnable goal;
-        public boolean priority = false;
-
-        public Task(int tickCount, Runnable goal) {
-            this.tickCount = tickCount;
-            this.goal = goal;
-        }
+        sharedTaskScheduler.onTick(gameFrozen);
     }
 }

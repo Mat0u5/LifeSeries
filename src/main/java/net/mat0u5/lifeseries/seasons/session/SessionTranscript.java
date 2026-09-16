@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
+import static net.mat0u5.matlib.MatLib.*;
 
 public class SessionTranscript {
     public static final List<String> messages = new ArrayList<>();

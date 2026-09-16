@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia;
 
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.snail.server.SnailPathfinding;
@@ -30,6 +31,7 @@ import java.io.IOException;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
+import static net.mat0u5.matlib.MatLib.*;
 
 public class TriviaWildcard extends Wildcard {
     private static Time infiniteSessionFakeTime = Time.hours(2);
@@ -347,7 +349,7 @@ public class TriviaWildcard extends Wildcard {
             }
             return Tuple.of(difficulty, getHardQuestion());
         } catch(Exception e) {
-            LOGGER.error(e.toString());
+            LifeSeries.LOGGER.error(e.toString());
             return Tuple.of(difficulty, TriviaQuestion.getDefault());
         }
     }

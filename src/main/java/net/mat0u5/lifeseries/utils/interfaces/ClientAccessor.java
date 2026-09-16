@@ -11,6 +11,7 @@ import java.util.UUID;
 //? if neoforge
 //import net.neoforged.neoforge.network.handling.IPayloadContext;
 
+@Deprecated
 public interface ClientAccessor {
     boolean isReplay();
     HandshakeStatus serverHandshake();

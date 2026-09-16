@@ -26,7 +26,7 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static net.mat0u5.lifeseries.LifeSeries.server;
+import static net.mat0u5.matlib.MatLib.server;
 
 //? if >= 1.20.3
 import net.minecraft.server.ServerTickRateManager;
@@ -37,31 +37,6 @@ import net.minecraft.world.level.gamerules.GameRule;
 
 public class OtherUtils {
     private static final Random rnd = new Random();
-
-    public static void log(Component message) {
-        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-            ((IPlayer) player).ls$message(message);
-        }
-        LifeSeries.LOGGER.info(message.getString());
-    }
-
-    public static void log(String string) {
-        Component message = Component.nullToEmpty(string);
-        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-            ((IPlayer) player).ls$message(message);
-        }
-        LifeSeries.LOGGER.info(string);
-    }
-
-    public static void logConsole(String string) {
-        LifeSeries.LOGGER.info(string);
-    }
-
-    public static void logIfClient(String string) {
-        if (LifeSeries.hasClient()) {
-            LifeSeries.LOGGER.info(string);
-        }
-    }
 
     private static final Pattern TIME_PATTERN = Pattern.compile("(?:(\\d+)h)?(?:(\\d+)m)?(?:(\\d+)s)?");
     public static Time parseTimeFromArgument(String time) {

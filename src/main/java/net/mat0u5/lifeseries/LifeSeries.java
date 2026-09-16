@@ -43,9 +43,6 @@ public class LifeSeries implements MatLibInitializer {
 	public static final boolean ISOLATED_ENVIRONMENT = false;
 	public static final Seasons DEFAULT_SEASON = Seasons.UNASSIGNED;
 	public static boolean MOD_DISABLED = false;
-	@Nullable
-	public static volatile MinecraftServer server;
-	public static volatile Thread serverThread;
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	private static ConfigManager config;
@@ -161,21 +158,5 @@ public class LifeSeries implements MatLibInitializer {
 
 	public static Session currentSession() {
 		return currentSession;
-	}
-
-	public static boolean isMainThread() {
-		Thread thread = serverThread;
-		return thread != null && Thread.currentThread() == thread;
-	}
-
-	public static void requireMainThread() {
-		if (!isMainThread()) {
-			if (VersionControl.isDevVersion()) {
-				throw new IllegalStateException("[LifeSeries] requireMainThread fail: " + Thread.currentThread().getName());
-			}
-			else {
-				LifeSeries.LOGGER.error("[LifeSeries] requireMainThread fail", new Throwable());
-			}
-		}
 	}
 }

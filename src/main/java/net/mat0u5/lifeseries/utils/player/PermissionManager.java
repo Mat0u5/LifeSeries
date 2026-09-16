@@ -4,7 +4,7 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
 
-import static net.mat0u5.lifeseries.LifeSeries.server;
+import static net.mat0u5.matlib.MatLib.server;
 
 public class PermissionManager {
     public static boolean isAdmin(ServerPlayer player) {

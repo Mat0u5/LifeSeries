@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
+import static net.mat0u5.matlib.MatLib.*;
 
 public class SecretSociety {
     public boolean SOCIETY_ENABLED = false;

@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import static net.mat0u5.lifeseries.LifeSeries.livesManager;
-import static net.mat0u5.lifeseries.LifeSeries.server;
+import static net.mat0u5.matlib.MatLib.server;
 
 //? if <= 1.20.2
 //import net.minecraft.server.level.ServerPlayer;

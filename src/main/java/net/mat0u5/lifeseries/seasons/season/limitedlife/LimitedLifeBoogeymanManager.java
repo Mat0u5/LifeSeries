@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static net.mat0u5.lifeseries.LifeSeries.livesManager;
-import static net.mat0u5.lifeseries.LifeSeries.server;
+import static net.mat0u5.matlib.MatLib.server;
 
 public class LimitedLifeBoogeymanManager extends BoogeymanManager {
 

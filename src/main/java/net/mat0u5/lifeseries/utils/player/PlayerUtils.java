@@ -38,7 +38,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
-import static net.mat0u5.lifeseries.LifeSeries.server;
+import static net.mat0u5.matlib.MatLib.server;
 
 //? if <= 1.21
 //import net.minecraft.world.entity.RelativeMovement;
@@ -131,7 +131,6 @@ public class PlayerUtils {
     }
 
     public static List<ServerPlayer> getAllPlayers() {
-        //LifeSeries.requireMainThread();
         List<ServerPlayer> result = new ArrayList<>();
         if (server == null) return result;
 

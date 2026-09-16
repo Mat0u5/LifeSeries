@@ -25,6 +25,7 @@ import net.minecraft.sounds.SoundEvents;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
+import static net.mat0u5.matlib.MatLib.*;
 
 public class BoogeymanManager {
     public boolean BOOGEYMAN_ENABLED = false;
