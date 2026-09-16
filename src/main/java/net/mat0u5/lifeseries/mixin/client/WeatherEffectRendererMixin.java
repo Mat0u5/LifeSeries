@@ -6,7 +6,7 @@ import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import net.minecraft.resources.Identifier;
@@ -42,7 +42,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 //?}
 @MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public class WeatherEffectRendererMixin {
-    private static Identifier LESS_SNOW_RESOURCE_LOCATION = LSIdentifierHelper.lifeseries("textures/environment/less-snow.png");
+    private static Identifier LESS_SNOW_RESOURCE_LOCATION = IdentifierHelper.lifeseries("textures/environment/less-snow.png");
     //? if >= 26.3 {
     /*private static AbstractTexture LESS_SNOW_RESOURCE;
 

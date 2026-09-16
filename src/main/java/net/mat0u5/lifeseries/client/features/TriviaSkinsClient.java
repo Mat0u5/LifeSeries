@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.client.features;
 
 import com.mojang.blaze3d.platform.NativeImage;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.matlib.util.other.TextUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
@@ -21,7 +21,7 @@ public class TriviaSkinsClient {
             LifeSeries.LOGGER.info(TextUtils.formatString("Received trivia texture '{}'", skinName));
             Minecraft client = Minecraft.getInstance();
 
-            var textureId = LSIdentifierHelper.lifeseries("dynamic/triviaskin/" + skinName);
+            var textureId = IdentifierHelper.lifeseries("dynamic/triviaskin/" + skinName);
 
             NativeImage image = NativeImage.read(new ByteArrayInputStream(textureData));
 

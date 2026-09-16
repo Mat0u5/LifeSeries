@@ -13,7 +13,7 @@ import net.mat0u5.matlib.util.other.ActionText;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.matlib.util.other.TextUtils;
 import net.mat0u5.matlib.util.other.Time;
-import net.mat0u5.lifeseries.utils.player.PlayerReference;
+import net.mat0u5.matlib.util.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;

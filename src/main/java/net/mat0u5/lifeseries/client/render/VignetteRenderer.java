@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.client.render;
 
-import net.mat0u5.matlib.util.other.IdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;

@@ -12,7 +12,7 @@ public interface CrafterBlockMixin {
 *///?} else {
 
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
-import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
+import net.mat0u5.matlib.util.world.ItemStackUtils;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;

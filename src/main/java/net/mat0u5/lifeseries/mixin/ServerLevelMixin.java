@@ -6,7 +6,7 @@ import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLife;
-import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -34,7 +34,7 @@ public class ServerLevelMixin {
             return;
         }
         // This sound doesnt exist client-side, so it won't double
-        PlayerUtils.playSoundWithSourceToPlayers(entity, SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("secretlife_normal_totem")), entity.getSoundSource(), 1, 1);
+        PlayerUtils.playSoundWithSourceToPlayers(entity, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("secretlife_normal_totem")), entity.getSoundSource(), 1, 1);
     }
     //? if <= 1.20 {
     /*@WrapOperation(method = "tickChunk", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextInt(I)I", ordinal = 1))

@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.network.packets;
 //? if <= 1.20.3 {
-/*import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
+/*import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
@@ -10,7 +10,7 @@ import java.util.List;
 
 public record ConfigPayload(String configType, String configId, int index, String name, String description, List<String> args) implements CustomPacketPayload {
 
-    public static final Identifier ID = LSIdentifierHelper.lifeseries("config");
+    public static final Identifier ID = IdentifierHelper.lifeseries("config");
 
     @Override
     public void write(FriendlyByteBuf buf) {
@@ -45,7 +45,7 @@ public record ConfigPayload(String configType, String configId, int index, Strin
     }
 }
 *///?} else {
-import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -55,7 +55,7 @@ import java.util.List;
 
 public record ConfigPayload(String configType, String configId, int index, String name, String description, List<String> args) implements CustomPacketPayload {
 
-    public static final CustomPacketPayload.Type<ConfigPayload> ID = new CustomPacketPayload.Type<>(LSIdentifierHelper.lifeseries("config"));
+    public static final CustomPacketPayload.Type<ConfigPayload> ID = new CustomPacketPayload.Type<>(IdentifierHelper.lifeseries("config"));
     public static final StreamCodec<RegistryFriendlyByteBuf, ConfigPayload> CODEC = StreamCodec.composite(
             ByteBufCodecs.STRING_UTF8, ConfigPayload::configType,
             ByteBufCodecs.STRING_UTF8, ConfigPayload::configId,

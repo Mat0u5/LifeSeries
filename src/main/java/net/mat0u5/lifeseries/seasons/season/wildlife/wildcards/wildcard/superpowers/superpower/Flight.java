@@ -6,7 +6,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.matlib.util.other.Time;
-import net.mat0u5.lifeseries.utils.player.PlayerReference;
+import net.mat0u5.matlib.util.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -16,11 +16,11 @@ import net.minecraft.world.effect.MobEffects;
 
 //? if >= 1.21.2 {
 import net.minecraft.world.item.equipment.Equippable;
-import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
+import net.mat0u5.matlib.util.world.ItemStackUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Unit;
 import java.util.Optional;
-import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -147,7 +147,7 @@ public class Flight extends Superpower {
             helmet.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, false);
             helmet.set(DataComponents.ITEM_NAME, Component.nullToEmpty("Winged Helmet"));
             //? if >= 1.21.2 {
-            helmet.set(DataComponents.ITEM_MODEL, LSIdentifierHelper.lifeseries("winged_helmet"));
+            helmet.set(DataComponents.ITEM_MODEL, IdentifierHelper.lifeseries("winged_helmet"));
             helmet.set(DataComponents.GLIDER, Unit.INSTANCE);
                 //? if <= 1.21.4 {
             /*helmet.set(DataComponents.EQUIPPABLE, new Equippable(EquipmentSlot.HEAD, SoundEvents.ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false));

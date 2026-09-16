@@ -12,6 +12,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 
 import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
 
+@Deprecated
 public class AttributeUtils {
     public static final double DEFAULT_PLAYER_JUMP_HEIGHT = 0.41999998688697815;
     public static final double DEFAULT_PLAYER_SAFE_FALL_HEIGHT = 3.0;

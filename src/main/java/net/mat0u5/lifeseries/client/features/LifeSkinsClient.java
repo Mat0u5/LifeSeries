@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.client.features;
 
 import com.mojang.blaze3d.platform.NativeImage;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.matlib.util.other.TextUtils;
 import net.mat0u5.matlib.util.other.Tuple;
 import net.minecraft.client.Minecraft;
@@ -40,7 +40,7 @@ public class LifeSkinsClient {
         try {
             Minecraft client = Minecraft.getInstance();
 
-            var textureId = LSIdentifierHelper.lifeseries("dynamic/lifeskins/" + skinId.toLowerCase(Locale.ROOT));
+            var textureId = IdentifierHelper.lifeseries("dynamic/lifeskins/" + skinId.toLowerCase(Locale.ROOT));
 
             NativeImage image = NativeImage.read(new ByteArrayInputStream(textureData));
 

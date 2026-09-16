@@ -6,7 +6,7 @@ import net.mat0u5.matlib.util.enums.Direction;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.matlib.util.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
+import net.mat0u5.matlib.util.world.ItemStackUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;

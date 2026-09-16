@@ -16,7 +16,7 @@ import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
-import net.mat0u5.lifeseries.utils.player.PlayerReference;
+import net.mat0u5.matlib.util.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ProfileManager;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
@@ -48,7 +48,7 @@ import static net.mat0u5.matlib.MatLib.*;
 import static net.mat0u5.lifeseries.utils.player.PlayerUtils.isFakePlayer;
 
 //? if >= 1.21.2 {
-import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
+import net.mat0u5.matlib.util.world.ItemStackUtils;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Items;
 //?}

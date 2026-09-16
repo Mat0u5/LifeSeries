@@ -15,13 +15,14 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.*;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
-import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
-import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.mat0u5.matlib.util.world.ItemStackUtils;
+import net.mat0u5.matlib.util.world.LevelUtils;
 import net.mat0u5.matlib.util.other.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -210,7 +211,7 @@ public class WildLifeTriviaHandler extends TriviaHandler {
             bot.setAnalyzingTime(42);
             PlayerUtils.playSoundWithSourceToPlayers(
                     PlayerUtils.getAllPlayers(), bot,
-                    SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("wildlife_trivia_analyzing")),
+                    SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("wildlife_trivia_analyzing")),
                     SoundSource.NEUTRAL, 1f, 1);
             return true;
         }
@@ -226,7 +227,7 @@ public class WildLifeTriviaHandler extends TriviaHandler {
         TaskScheduler.scheduleTask(72, () -> {
             PlayerUtils.playSoundWithSourceToPlayers(
                     PlayerUtils.getAllPlayers(), bot,
-                    SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("wildlife_trivia_correct")),
+                    SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("wildlife_trivia_correct")),
                     SoundSource.NEUTRAL, 1f, 1);
         });
     }
@@ -237,7 +238,7 @@ public class WildLifeTriviaHandler extends TriviaHandler {
         TaskScheduler.scheduleTask(72, () -> {
             PlayerUtils.playSoundWithSourceToPlayers(
                     PlayerUtils.getAllPlayers(), bot,
-                    SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("wildlife_trivia_incorrect")),
+                    SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("wildlife_trivia_incorrect")),
                     SoundSource.NEUTRAL, 1f, 1);
         });
     }

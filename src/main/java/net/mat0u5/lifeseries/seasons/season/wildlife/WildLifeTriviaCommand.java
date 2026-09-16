@@ -15,7 +15,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.matlib.util.other.ActionText;
 import net.mat0u5.matlib.util.other.Tuple;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
+import net.mat0u5.matlib.util.player.PermissionManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;

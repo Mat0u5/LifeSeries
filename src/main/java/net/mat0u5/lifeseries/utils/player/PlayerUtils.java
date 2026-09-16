@@ -12,7 +12,7 @@ import net.mat0u5.lifeseries.seasons.util.WatcherManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.matlib.util.other.TextUtils;
-import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.mat0u5.matlib.util.world.LevelUtils;
 import net.minecraft.Optionull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -53,7 +53,8 @@ import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.network.chat.contents.objects.PlayerSprite;
 //?}
 
-public class PlayerUtils {
+@Deprecated
+public class PlayerUtils extends net.mat0u5.matlib.util.player.PlayerUtils {
     private static HashMap<Component, Integer> broadcastCooldown = new HashMap<>();
 
     public static void sendTitleWithSubtitle(ServerPlayer player, Component title, Component subtitle, int fadeIn, int stay, int fadeOut) {
@@ -145,105 +146,6 @@ public class PlayerUtils {
         List<ServerPlayer> result = getAllPlayers();
         result.removeIf(WatcherManager::isWatcher);
         return result;
-    }
-
-    public static List<ServerPlayer> getAdminPlayers() {
-        List<ServerPlayer> result = getAllPlayers();
-        result.removeIf(player -> !PermissionManager.isAdmin(player));
-        return result;
-    }
-
-    public static ServerPlayer getPlayer(String name) {
-        if (server == null || name == null) return null;
-        return server.getPlayerList().getPlayerByName(name);
-    }
-
-    public static ServerPlayer getPlayer(UUID uuid) {
-        if (server == null || uuid == null) return null;
-        return server.getPlayerList().getPlayer(uuid);
-    }
-
-    public static final int MAX_USERNAME_LENGTH = 16;
-
-    public static boolean isValidUsername(String name) {
-        if (name == null || name.isEmpty()) return false;
-        if (name.length() > MAX_USERNAME_LENGTH) return false;
-        for (int i = 0; i < name.length(); i++) {
-            char chr = name.charAt(i);
-            if (chr >= 'a' && chr <= 'z') continue;
-            if (chr >= 'A' && chr <= 'Z') continue;
-            if (chr >= '0' && chr <= '9') continue;
-            if (chr == '_') continue;
-            return false;
-        }
-        return true;
-    }
-
-    public static UUID getUUIDFromName(String name) {
-        if (name == null || name.isEmpty()) return null;
-        ServerPlayer onlinePlayer = getPlayer(name);
-        if (onlinePlayer != null) return onlinePlayer.getUUID();
-        if (server == null) return null;
-        try {
-            //? if <= 1.21.6 {
-            /*if (server.getProfileCache() != null) {
-                var profile = server.getProfileCache().get(name);
-                if (profile.isPresent()) return profile.get().getId();
-            }
-            *///?} else {
-            if (server.services().nameToIdCache() != null) {
-                var profile = server.services().nameToIdCache().get(name);
-                if (profile.isPresent()) return profile.get().id();
-            }
-            //?}
-        }catch(Exception ignored) {}
-        return null;
-    }
-
-    public static UUID getUUIDFromNameOrUUID(String nameOrUUID) {
-        if (nameOrUUID == null || nameOrUUID.isEmpty()) return null;
-        try {
-            return UUID.fromString(nameOrUUID);
-        }catch(Exception ignored) {}
-        return getUUIDFromName(nameOrUUID);
-    }
-
-    public static String getNameFromUUID(UUID uuid) {
-        if (uuid == null) return null;
-        ServerPlayer onlinePlayer = getPlayer(uuid);
-        if (onlinePlayer != null) return onlinePlayer.getScoreboardName();
-        if (server == null) return null;
-        try {
-            //? if <= 1.21.6 {
-            /*if (server.getProfileCache() != null) {
-                var profile = server.getProfileCache().get(uuid);
-                if (profile.isPresent()) return profile.get().getName();
-            }
-            *///?} else {
-            if (server.services().nameToIdCache() != null) {
-                var profile = server.services().nameToIdCache().get(uuid);
-                if (profile.isPresent()) return profile.get().name();
-            }
-            //?}
-        }catch(Exception ignored) {}
-        return null;
-    }
-
-    public static String getNameFromUUIDOrRaw(UUID uuid) {
-        if (uuid == null) return "";
-        String name = getNameFromUUID(uuid);
-        if (name != null && !name.isEmpty()) return name;
-        return uuid.toString();
-    }
-
-    public static Component getDisplayNameFromUUID(UUID uuid) {
-        if (uuid == null) return Component.empty();
-        ServerPlayer onlinePlayer = getPlayer(uuid);
-        if (onlinePlayer != null) {
-            Component displayName = onlinePlayer.getDisplayName();
-            if (displayName != null) return displayName;
-        }
-        return Component.literal(getNameFromUUIDOrRaw(uuid));
     }
 
     public static void applyResourcepack(UUID uuid) {

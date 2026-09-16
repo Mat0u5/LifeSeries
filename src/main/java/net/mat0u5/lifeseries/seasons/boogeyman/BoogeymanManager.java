@@ -8,12 +8,12 @@ import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.matlib.util.other.TextUtils;
 import net.mat0u5.matlib.util.other.Time;
-import net.mat0u5.lifeseries.utils.player.PlayerListReference;
-import net.mat0u5.lifeseries.utils.player.PlayerReference;
+import net.mat0u5.matlib.util.player.PlayerListReference;
+import net.mat0u5.matlib.util.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
@@ -195,7 +195,7 @@ public class BoogeymanManager {
         if (boogeyman.cured) return;
         boogeyman.cured = true;
         PlayerUtils.sendTitle(player, ModifiableText.BOOGEYMAN_CURE_TITLE.get(), 20, 30, 20);
-        PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("lastlife_boogeyman_cure")));
+        PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("lastlife_boogeyman_cure")));
 
         boolean stealLife = BOOGEYMAN_STEAL_LIFE && livesManager.canChangeLivesNaturally();
 
@@ -273,7 +273,7 @@ public class BoogeymanManager {
         });
         TaskScheduler.scheduleTask(90, () -> {
             var listNew = ref.get();
-            PlayerUtils.playSoundToPlayers(listNew, SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("lastlife_boogeyman_wait")));
+            PlayerUtils.playSoundToPlayers(listNew, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("lastlife_boogeyman_wait")));
             PlayerUtils.sendTitleToPlayers(listNew, ModifiableText.BOOGEYMAN_ROLL.get(),10,50,20);
         });
     }
@@ -381,8 +381,8 @@ public class BoogeymanManager {
     }
 
     public void handleBoogeymanLists(List<ServerPlayer> normalPlayers, List<ServerPlayer> boogeyPlayers) {
-        PlayerUtils.playSoundToPlayers(normalPlayers, SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("lastlife_boogeyman_no")));
-        PlayerUtils.playSoundToPlayers(boogeyPlayers, SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("lastlife_boogeyman_yes")));
+        PlayerUtils.playSoundToPlayers(normalPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("lastlife_boogeyman_no")));
+        PlayerUtils.playSoundToPlayers(boogeyPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("lastlife_boogeyman_yes")));
         PlayerUtils.sendTitleToPlayers(normalPlayers, ModifiableText.BOOGEYMAN_ROLL_NORMAL.get(),10,50,20);
         PlayerUtils.sendTitleToPlayers(boogeyPlayers, ModifiableText.BOOGEYMAN_ROLL_BOOGEY.get(),10,50,20);
         for (ServerPlayer boogey : boogeyPlayers) {
@@ -450,7 +450,7 @@ public class BoogeymanManager {
             }
             else {
                 PlayerUtils.sendTitle(player,ModifiableText.BOOGEYMAN_FAIL_NOTIFY_TITLE.get(), 20, 30, 20);
-                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("lastlife_boogeyman_fail")));
+                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("lastlife_boogeyman_fail")));
                 if (BOOGEYMAN_ANNOUNCE_OUTCOME && sendMessage) {
                     PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_FAIL.get(player));
                 }

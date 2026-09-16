@@ -17,7 +17,7 @@ import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
 import net.mat0u5.matlib.util.other.ActionText;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.matlib.util.other.TextUtils;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
+import net.mat0u5.matlib.util.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.commands.CommandSourceStack;

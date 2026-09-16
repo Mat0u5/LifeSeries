@@ -554,7 +554,6 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 			replace ("getResourceLocation", "getResourceLocation")
 			replace ("getIdentifier", "getIdentifier")
 			replace ("IdentifierHelper", "IdentifierHelper")
-			replace ("LSIdentifierHelper", "LSIdentifierHelper")
 			replace ("net.minecraft.Util", "net.minecraft.util.Util")
 			replace ("net.minecraft.client.renderer.RenderType;", "net.minecraft.client.renderer.rendertype.RenderType;")
 			replace ("net.minecraft.world.entity.animal.SnowGolem", "net.minecraft.world.entity.animal.golem.SnowGolem")
@@ -568,8 +567,6 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 			replace ("net.minecraft.world.entity.projectile.ThrownEnderpearl", "net.minecraft.world.entity.projectile.throwableitemprojectile.ThrownEnderpearl")
 			replace ("net.minecraft.world.entity.npc.WanderingTraderSpawner", "net.minecraft.world.entity.npc.wanderingtrader.WanderingTraderSpawner")
 			replace ("net.minecraft.world.entity.monster.WitherSkeleton", "net.minecraft.world.entity.monster.skeleton.WitherSkeleton")
-			replace ("net.minecraft.world.entity.monster.Zombie", "net.minecraft.world.entity.monster.zombie.Zombie")
-	
 			replace ("net.minecraft.world.entity.animal.horse.TraderLlama", "net.minecraft.world.entity.animal.equine.TraderLlama")
 			replace ("net.minecraft.world.entity.npc.WanderingTrader;", "net.minecraft.world.entity.npc.wanderingtrader.WanderingTrader;")
 	

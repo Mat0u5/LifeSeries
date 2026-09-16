@@ -11,7 +11,7 @@ import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandle
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.TriviaHandler;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -39,9 +39,9 @@ import net.minecraft.tags.TagKey;
 *///?}
 
 public class TriviaBot extends AmbientCreature {
-    public static final Identifier DEFAULT_TEXTURE = LSIdentifierHelper.lifeseries("textures/entity/triviabot/triviabot.png");
-    public static final Identifier SANTABOT_TEXTURE = LSIdentifierHelper.lifeseries("textures/entity/triviabot/santabot.png");
-    public static final Identifier ID = LSIdentifierHelper.lifeseries("triviabot");
+    public static final Identifier DEFAULT_TEXTURE = IdentifierHelper.lifeseries("textures/entity/triviabot/triviabot.png");
+    public static final Identifier SANTABOT_TEXTURE = IdentifierHelper.lifeseries("textures/entity/triviabot/santabot.png");
+    public static final Identifier ID = IdentifierHelper.lifeseries("triviabot");
 
     public static final int STATIONARY_TP_COOLDOWN = 400; // No movement for 20 seconds teleports the bot
     public static final float MOVEMENT_SPEED = 0.45f;

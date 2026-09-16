@@ -5,7 +5,7 @@ import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
-import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.matlib.util.other.Time;
@@ -138,7 +138,7 @@ public class TimeDilation extends Wildcard {
         TaskScheduler.scheduleTask(115, () -> {
             activatedAt = currentSession.getPassedTime().add(Time.seconds(20));
             lastDiv = -1;
-            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("wildlife_time_slow_down")));
+            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("wildlife_time_slow_down")));
             slowlySetWorldSpeed(getMinTickRate(), 18);
             if (!isFinale() && getMinTickRate() <= 4) TaskScheduler.scheduleTask(18, () -> SimplePackets.TIME_DILATION.sendToAllClients(System.currentTimeMillis()));
             TaskScheduler.scheduleTask(19, super::activate);

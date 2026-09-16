@@ -9,7 +9,7 @@ import net.mat0u5.matlib.util.other.ActionText;
 import net.mat0u5.matlib.util.other.Triple;
 import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
 import net.mat0u5.lifeseries.utils.player.NicknameManager;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
+import net.mat0u5.matlib.util.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.ProfileManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;

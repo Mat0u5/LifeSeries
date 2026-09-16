@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.client.features;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.PreBuiltSnailSkins;
-import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.matlib.util.other.TextUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
@@ -26,7 +26,7 @@ public class SnailSkinsClient {
             LifeSeries.LOGGER.info(TextUtils.formatString("Received snail texture '{}'", skinName));
             Minecraft client = Minecraft.getInstance();
 
-            var textureId = LSIdentifierHelper.lifeseries("dynamic/snailskin/" + skinName);
+            var textureId = IdentifierHelper.lifeseries("dynamic/snailskin/" + skinName);
 
             NativeImage image = NativeImage.read(new ByteArrayInputStream(textureData));
 
@@ -73,7 +73,7 @@ public class SnailSkinsClient {
             if (split.length != 2) continue;
             String textureName = split[1];
             if (PreBuiltSnailSkins.prebuiltSkins.contains(textureName)) {
-                Identifier texture = LSIdentifierHelper.lifeseries("textures/entity/snail/builtin/"+textureName.toLowerCase(Locale.ROOT)+".png");
+                Identifier texture = IdentifierHelper.lifeseries("textures/entity/snail/builtin/"+textureName.toLowerCase(Locale.ROOT)+".png");
                 prebuiltAssignments.put(split[0].toLowerCase(Locale.ROOT), texture);
             }
         }

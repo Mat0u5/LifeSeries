@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.network.packets;
 //? if <= 1.20.3 {
-/*import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
+/*import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
@@ -10,7 +10,7 @@ import java.util.List;
 
 public record StringListPayload(String name, List<String> value) implements CustomPacketPayload {
 
-    public static final Identifier ID = LSIdentifierHelper.lifeseries("stringlist");
+    public static final Identifier ID = IdentifierHelper.lifeseries("stringlist");
 
     @Override
     public void write(FriendlyByteBuf buf) {
@@ -37,7 +37,7 @@ public record StringListPayload(String name, List<String> value) implements Cust
     }
 }
 *///?} else {
-import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -47,7 +47,7 @@ import java.util.List;
 
 public record StringListPayload(String name, List<String> value) implements CustomPacketPayload {
 
-    public static final CustomPacketPayload.Type<StringListPayload> ID = new CustomPacketPayload.Type<>(LSIdentifierHelper.lifeseries("stringlist"));
+    public static final CustomPacketPayload.Type<StringListPayload> ID = new CustomPacketPayload.Type<>(IdentifierHelper.lifeseries("stringlist"));
     public static final StreamCodec<RegistryFriendlyByteBuf, StringListPayload> CODEC = StreamCodec.composite(
             ByteBufCodecs.STRING_UTF8, StringListPayload::name,
             ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list()), StringListPayload::value,

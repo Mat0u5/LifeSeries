@@ -5,7 +5,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.seasons.season.Season;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
+import net.mat0u5.matlib.util.player.PermissionManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;

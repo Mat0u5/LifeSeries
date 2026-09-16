@@ -19,6 +19,7 @@ import static net.mat0u5.matlib.MatLib.server;
 import net.minecraft.world.scores.TeamColor;
 //?}
 
+@Deprecated
 public class TeamUtils {
 
     //? if <= 26.1 {

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 //? if >= 1.21.2 {
-import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.mat0u5.matlib.util.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntitySpawnReason;

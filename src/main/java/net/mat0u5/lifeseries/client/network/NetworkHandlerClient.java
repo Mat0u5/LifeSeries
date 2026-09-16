@@ -37,13 +37,13 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDila
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.matlib.util.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
-import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.matlib.util.other.RegistryUtils;
 import net.mat0u5.matlib.util.other.TextUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
-import net.mat0u5.matlib.util.other.IdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;

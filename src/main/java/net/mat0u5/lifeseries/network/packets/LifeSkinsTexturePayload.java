@@ -1,13 +1,13 @@
 package net.mat0u5.lifeseries.network.packets;
 //? if <= 1.20.3 {
-/*import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
+/*import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 
 public record LifeSkinsTexturePayload(String skinName, String teamName, boolean slim, byte[] textureData) implements CustomPacketPayload {
 
-    public static final Identifier ID = LSIdentifierHelper.lifeseries("lifeskins_texture");
+    public static final Identifier ID = IdentifierHelper.lifeseries("lifeskins_texture");
 
     @Override
     public void write(FriendlyByteBuf buf) {
@@ -31,14 +31,14 @@ public record LifeSkinsTexturePayload(String skinName, String teamName, boolean 
     }
 }
 *///?} else {
-import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 public record LifeSkinsTexturePayload(String skinName, String teamName, boolean slim, byte[] textureData) implements CustomPacketPayload {
     public static final Type<LifeSkinsTexturePayload> ID =
-            new Type<>(LSIdentifierHelper.lifeseries("lifeskins_texture"));
+            new Type<>(IdentifierHelper.lifeseries("lifeskins_texture"));
 
     public static final StreamCodec<FriendlyByteBuf, LifeSkinsTexturePayload> CODEC =
             StreamCodec.ofMember(LifeSkinsTexturePayload::write, LifeSkinsTexturePayload::new);

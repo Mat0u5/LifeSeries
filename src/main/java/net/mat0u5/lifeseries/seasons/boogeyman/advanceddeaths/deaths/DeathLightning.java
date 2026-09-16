@@ -4,7 +4,7 @@ import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeath;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeaths;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.mat0u5.matlib.util.world.LevelUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;

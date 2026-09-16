@@ -23,7 +23,6 @@ import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.matlib.util.other.Time;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.mat0u5.matlib.events.EventResult;
@@ -50,6 +49,7 @@ import java.util.List;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSession;
 import net.mat0u5.lifeseries.utils.player.*;
+import net.mat0u5.matlib.util.player.*;
 
 //? if >= 1.21.2 {
 import net.minecraft.server.level.ServerLevel;

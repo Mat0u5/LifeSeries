@@ -13,12 +13,12 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.matlib.util.other.Tuple;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
-import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.mat0u5.matlib.util.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -123,7 +123,7 @@ public class NiceLifeTriviaManager {
 
         preparingForSpawn = true;
         if (longIntro) {
-            SoundEvent sound = SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("nicelife_santabot_introduction_long"));
+            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("nicelife_santabot_introduction_long"));
             PlayerUtils.playSoundToPlayers(triviaPlayers, sound, 1f, 1);
             for (TriviaSpawn triviaSpawnInfo : triviaSpawns) {
                 int botSpawnHeight = 20;
@@ -134,7 +134,7 @@ public class NiceLifeTriviaManager {
             }
         }
         else {
-            SoundEvent sound = SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("nicelife_santabot_introduction_short"));
+            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("nicelife_santabot_introduction_short"));
             PlayerUtils.playSoundToPlayers(triviaPlayers, sound, 1f, 1);
             for (TriviaSpawn triviaSpawnInfo : triviaSpawns) {
                 int botSpawnHeight = rnd.nextInt(15, 30);
@@ -163,7 +163,7 @@ public class NiceLifeTriviaManager {
     }
 
     public static void allWrong() {
-        SoundEvent sound = SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("nicelife_santabot_incorrect_all_wrong"));
+        SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("nicelife_santabot_incorrect_all_wrong"));
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
         PlayerUtils.broadcastMessage(ModifiableText.NICELIFE_TRIVIA_ALL_WRONG_PT1.get());
 

@@ -8,7 +8,7 @@ package net.mat0u5.lifeseries.entity.fakeplayer;
 
 import com.mojang.authlib.GameProfile;
 import net.mat0u5.lifeseries.mixin.SkullBlockEntityAccessor;
-import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.mat0u5.matlib.util.world.LevelUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;

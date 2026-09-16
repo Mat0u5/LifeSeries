@@ -14,6 +14,7 @@ import static net.mat0u5.matlib.MatLib.server;
 //? if <= 1.20.2
 //import net.minecraft.server.level.ServerPlayer;
 
+@Deprecated
 public class ScoreboardUtils {
 
     public static void createObjective(String name) {

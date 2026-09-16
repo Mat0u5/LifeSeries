@@ -6,14 +6,15 @@ import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.*;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.player.PlayerReference;
+import net.mat0u5.matlib.util.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
-import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
+import net.mat0u5.matlib.util.world.ItemStackUtils;
 import net.mat0u5.matlib.util.other.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -196,7 +197,7 @@ public class SecretKeeper {
 		secretKeeperBeingUsed = true;
 
 		Vec3 centerPos = OtherUtils.getCenter(itemSpawnerPos);
-		server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("secretlife_task_succeed")), SoundSource.PLAYERS, 1.0F, 1.0F);
+		server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("secretlife_task_succeed")), SoundSource.PLAYERS, 1.0F, 1.0F);
 		TaskScheduler.scheduleTask(60, () -> {
 			AnimationUtils.createGlyphAnimation(server.overworld(), centerPos, 45);
 		});
@@ -269,7 +270,7 @@ public class SecretKeeper {
 			return;
 		}
 
-		PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("secretlife_task_reroll")));
+		PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("secretlife_task_reroll")));
 		PlayerUtils.playSoundToPlayer(player, SoundEvents.UI_BUTTON_CLICK.value());
 		PlayerUtils.sendTitle(player, ModifiableText.SECRETLIFE_TASK_REROLL_PT1.get(),20,35,0);
 
@@ -329,7 +330,7 @@ public class SecretKeeper {
 
 		Vec3 centerPos = OtherUtils.getCenter(itemSpawnerPos);
 
-		server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("secretlife_task_fail")), SoundSource.PLAYERS, 1.0F, 1.0F);
+		server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("secretlife_task_fail")), SoundSource.PLAYERS, 1.0F, 1.0F);
 		TaskScheduler.scheduleTask(60, () -> {
 			AnimationUtils.createGlyphAnimation(server.overworld(), centerPos, 45);
 		});

@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.mixin;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import io.netty.buffer.Unpooled;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
-import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.login.ClientboundCustomQueryPacket;
 import net.minecraft.server.network.ServerLoginPacketListenerImpl;
@@ -51,7 +51,7 @@ public abstract class ServerLoginPacketListenerImplMixin {
 
             self.connection.send(new ClientboundCustomQueryPacket(
                     NetworkHandlerServer.PRELOGIN_TRANSACTION_ID,
-                    LSIdentifierHelper.lifeseries(NetworkHandlerServer.preLoginPacketID),
+                    IdentifierHelper.lifeseries(NetworkHandlerServer.preLoginPacketID),
                     buf
             ));
 
@@ -105,7 +105,7 @@ public abstract class ServerLoginPacketListenerImplMixin {
 
             ServerLoginPacketListenerImpl self = (ServerLoginPacketListenerImpl)(Object)this;
             FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-            DiscardedQueryPayload payload = new DiscardedQueryPayload(LSIdentifierHelper.lifeseries(NetworkHandlerServer.preLoginPacketID));
+            DiscardedQueryPayload payload = new DiscardedQueryPayload(IdentifierHelper.lifeseries(NetworkHandlerServer.preLoginPacketID));
             payload.write(buf);
             self.connection.send(new ClientboundCustomQueryPacket(
                     NetworkHandlerServer.PRELOGIN_TRANSACTION_ID, payload

@@ -7,7 +7,7 @@ import net.mat0u5.lifeseries.client.render.ClientRenderer;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
-import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.InBedChatScreen;
 import org.spongepowered.asm.mixin.Mixin;
@@ -158,9 +158,9 @@ public class GuiMixin {
         }
 
         //? if <= 1.20 {
-        /*var customHeart = LSIdentifierHelper.lifeseries("textures/gui/sprites/"+color+"_"+heartTypeStr+".png");
+        /*var customHeart = IdentifierHelper.lifeseries("textures/gui/sprites/"+color+"_"+heartTypeStr+".png");
          *///?} else {
-        var customHeart = LSIdentifierHelper.lifeseries(color+"_"+heartTypeStr);
+        var customHeart = IdentifierHelper.lifeseries(color+"_"+heartTypeStr);
         //?}
 
         //? if <= 1.20 {
@@ -197,7 +197,7 @@ public class GuiMixin {
         if (blinking) heartName += "_blinking";
         if (half) heartName += "_half";
 
-        var customHeart = LSIdentifierHelper.lifeseries("secretlife_"+heartName);
+        var customHeart = IdentifierHelper.lifeseries("secretlife_"+heartName);
         //? if <= 1.20 {
         /*instance.blit(customHeart, x, y, u, v, u, v);
         *///? } else if <= 1.21 {

@@ -1,13 +1,13 @@
 package net.mat0u5.lifeseries.network.packets;
 //? if <= 1.20.3 {
-/*import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
+/*import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 
 public record NumberPayload(String name, double number) implements CustomPacketPayload {
 
-    public static final Identifier ID = LSIdentifierHelper.lifeseries("number");
+    public static final Identifier ID = IdentifierHelper.lifeseries("number");
 
     @Override
     public void write(FriendlyByteBuf buf) {
@@ -27,7 +27,7 @@ public record NumberPayload(String name, double number) implements CustomPacketP
     }
 }
 *///?} else {
-import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -35,7 +35,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 public record NumberPayload(String name, double number) implements CustomPacketPayload {
 
-    public static final CustomPacketPayload.Type<NumberPayload> ID = new CustomPacketPayload.Type<>(LSIdentifierHelper.lifeseries("number"));
+    public static final CustomPacketPayload.Type<NumberPayload> ID = new CustomPacketPayload.Type<>(IdentifierHelper.lifeseries("number"));
     public static final StreamCodec<RegistryFriendlyByteBuf, NumberPayload> CODEC = StreamCodec.composite(
             ByteBufCodecs.STRING_UTF8, NumberPayload::name,
             ByteBufCodecs.DOUBLE, NumberPayload::number,

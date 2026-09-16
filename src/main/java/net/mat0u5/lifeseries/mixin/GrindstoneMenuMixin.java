@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.mixin;
 
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
-import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
+import net.mat0u5.matlib.util.world.ItemStackUtils;
 import net.minecraft.world.inventory.GrindstoneMenu;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;

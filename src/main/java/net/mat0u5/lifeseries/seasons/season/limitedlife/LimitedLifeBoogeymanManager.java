@@ -6,7 +6,7 @@ import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.LSIdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
@@ -87,7 +87,7 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
                 Component setTo = livesManager.getFormattedLives(player);
 
                 PlayerUtils.sendTitle(player, ModifiableText.BOOGEYMAN_FAIL_NOTIFY_TITLE.get(), 20, 30, 20);
-                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("lastlife_boogeyman_fail")));
+                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("lastlife_boogeyman_fail")));
                 if (BOOGEYMAN_ANNOUNCE_OUTCOME && sendMessage) {
                     PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_FAIL.get(player, setTo));
                 }

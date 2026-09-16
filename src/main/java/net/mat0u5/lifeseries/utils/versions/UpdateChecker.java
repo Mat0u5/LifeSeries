@@ -8,7 +8,7 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.matlib.util.other.ActionText;
 import net.mat0u5.matlib.util.other.TextUtils;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
+import net.mat0u5.matlib.util.player.PermissionManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 

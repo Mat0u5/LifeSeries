@@ -9,12 +9,13 @@ import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeVotingManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.*;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
-import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
-import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.mat0u5.matlib.util.world.ItemStackUtils;
+import net.mat0u5.matlib.util.world.LevelUtils;
 import net.mat0u5.matlib.util.other.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -364,7 +365,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
             bot.setWaving(78);
         }
         if (newState == BotState.LEAVING) {
-            SoundEvent sound = SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("nicelife_santabot_turn"));
+            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("nicelife_santabot_turn"));
             PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.65f, 1);
             TaskScheduler.scheduleTask(40, () -> {
                 for (ItemEntity item : droppedItems) {
@@ -375,7 +376,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         }
         if (newState == BotState.FLYING_UP) {
             SimplePackets.HIDE_SLEEP_DARKNESS.sendToClient(false, bot.serverData.getBoundPlayer());
-            SoundEvent sound = SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("nicelife_santabot_away"));
+            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("nicelife_santabot_away"));
             PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.65f, 1);
         }
     }
@@ -385,7 +386,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
             bot.setAnalyzingTime(87);
             PlayerUtils.playSoundToPlayer(
                     bot.serverData.getBoundPlayer(),
-                    SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("nicelife_santabot_analyzing")), 1f, 1);
+                    SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("nicelife_santabot_analyzing")), 1f, 1);
             return true;
         }
         return false;
@@ -438,7 +439,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         String screenName = (voteType == NiceLifeVotingManager.VoteType.NICE_LIST) ? ModifiableText.NICELIFE_TRIVIA_VOTE_NICELIST.getString() : ModifiableText.NICELIFE_TRIVIA_VOTE_NAUGHTYLIST.getString();
         NetworkHandlerServer.sendVoteScreenPacket(boundPlayer, screenName, true, false, true, availableForVoting);
         NiceLifeVotingManager.allowedToVote.add(boundPlayer.getUUID());
-        SoundEvent sound = SoundEvent.createVariableRangeEvent(LSIdentifierHelper.lifeseries("nicelife_santabot_vote"));
+        SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("nicelife_santabot_vote"));
         PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.75f, 1);
         return true;
     }
