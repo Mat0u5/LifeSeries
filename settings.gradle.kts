@@ -66,7 +66,11 @@ stonecutter {
 
 		if (env("GRADLE_ONLY_SNAPSHOT") == "true") {
 			// Only the snapshot
-			match("26.3", "fabric")
+			match("26.3", "fabric", "neoforge")
+		}
+		else if (env("GRADLE_ONLY_26_3") == "true") {
+			// 26.3 all platform
+			match("26.3", "fabric", "neoforge")
 		}
 		else if (env("GRADLE_ONLY_26_2") == "true") {
 			// 26.2 all platform
@@ -79,13 +83,10 @@ stonecutter {
 		else if (env("GRADLE_ONLY_IMPORTANT_FABRIC") == "true") {
 			// Main Fabric versions, this is the recommended setting for development
 			match("26.3", "fabric")
-			/*
-			match("26.2", "fabric")
 			match("26.1", "fabric")
 			match("1.21.11", "fabric")
 			match("1.21", "fabric")
 			match("1.20", "fabric")
-			 */
 		}
 		else if (env("GRADLE_ONLY_FABRIC") == "true") {
 			// All Fabric versions
@@ -122,6 +123,7 @@ stonecutter {
 			match("1.20", "forge")
 		}
 		else if (env("GRADLE_ONLY_NEOFORGE") == "true") {
+			match("26.3", "neoforge")
 			match("26.2", "neoforge")
 			match("26.1", "neoforge")
 
@@ -139,7 +141,7 @@ stonecutter {
 		}
 		else {
 			// All versions
-			match("26.3", "fabric")
+			match("26.3", "fabric", "neoforge")
 			match("26.2", "fabric", "forge", "neoforge")
 			match("26.1", "fabric", "forge", "neoforge")
 
@@ -164,7 +166,7 @@ stonecutter {
 			vcsVersion = "26.2-forge"
 		}
 		else if (env("GRADLE_ONLY_NEOFORGE") == "true") {
-			vcsVersion = "26.2-neoforge"
+			vcsVersion = "26.3-neoforge"
 		}
 		else {
 			vcsVersion = "26.3-fabric"
