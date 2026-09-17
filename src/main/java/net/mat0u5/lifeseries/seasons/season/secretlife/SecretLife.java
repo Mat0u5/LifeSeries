@@ -9,10 +9,9 @@ import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.player.AttributeUtils;
+import net.mat0u5.matlib.util.player.AttributeUtils;
 import net.mat0u5.matlib.util.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
@@ -464,7 +463,7 @@ public class SecretLife extends Season {
     }
 
     public void addPlayerHealth(ServerPlayer player, double health, boolean command) {
-        double currentHealth = AttributeUtils.getMaxPlayerHealth(player);
+        double currentHealth = AttributeUtils.MAX_HEALTH.of(player).get();
         setPlayerHealth(player, currentHealth + health, command);
     }
 
@@ -472,7 +471,7 @@ public class SecretLife extends Season {
         if (player == null) return;
         if (health < 0.1) health = 0.1;
         if ((canChangeHealth() || command) || (health > getPlayerHealth(player))) {
-            AttributeUtils.setMaxPlayerHealth(player, health);
+            AttributeUtils.MAX_HEALTH.of(player).set(health);
         }
         if (health > player.getHealth() && player.isAlive()) {
             player.setHealth((float) health);
@@ -480,7 +479,7 @@ public class SecretLife extends Season {
     }
 
     public double getPlayerHealth(ServerPlayer player) {
-        return AttributeUtils.getMaxPlayerHealth(player);
+        return AttributeUtils.MAX_HEALTH.of(player).get();
     }
 
     public double getRoundedHealth(ServerPlayer player) {

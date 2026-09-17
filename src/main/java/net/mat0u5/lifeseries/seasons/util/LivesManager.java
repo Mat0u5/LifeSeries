@@ -389,7 +389,7 @@ public class LivesManager {
         int lives = currentLives + amount;
         if (lives < 0) lives = 0;
         SessionTranscript.addRecordIfMissing(player);
-        ScoreboardUtils.setScore(player, SCOREBOARD_NAME, lives);
+        if (!LIVES_SYSTEM_DISABLED) ScoreboardUtils.setScore(player, SCOREBOARD_NAME, lives);
     }
 
     public void receiveLifeFromOtherPlayer(Component playerName, ServerPlayer target, boolean isRevive) {
@@ -417,7 +417,7 @@ public class LivesManager {
         Integer livesBefore = getPlayerLives(player);
         boolean livesChanged = !Objects.equals(lives, livesBefore);
         SessionTranscript.addRecordIfMissing(player);
-        ScoreboardUtils.setScore(player, SCOREBOARD_NAME, lives);
+        if (!LIVES_SYSTEM_DISABLED) ScoreboardUtils.setScore(player, SCOREBOARD_NAME, lives);
         if (lives <= 0 && !ignoreFinalDeath) {
             playerLostAllLives(player, livesBefore);
         }
@@ -440,6 +440,7 @@ public class LivesManager {
     }
 
     public void setScore(String playerName, int lives) {
+        if (LIVES_SYSTEM_DISABLED) return;
         ScoreboardUtils.setScore(playerName, SCOREBOARD_NAME, lives);
         currentSeason.reloadAllPlayerTeams();
     }

@@ -5,8 +5,8 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.matlib.util.player.AttributeUtils;
 import net.minecraft.server.level.ServerPlayer;
 
 public class SizeShifting extends Wildcard {
@@ -54,7 +54,7 @@ public class SizeShifting extends Wildcard {
 
     //? if > 1.20.3 {
     public static double getPlayerSize(ServerPlayer player) {
-        return AttributeUtils.getPlayerSize(player);
+        return AttributeUtils.SCALE.of(player).get();
     }
 
     public static void addPlayerSize(ServerPlayer player, double amount) {
@@ -75,10 +75,10 @@ public class SizeShifting extends Wildcard {
 
         if (MorphManager.getOrCreateComponent(player).isMorphed()) return;
 
-        AttributeUtils.setScale(player, size);
+        AttributeUtils.SCALE.of(player).set(size);
     }
     public static void setPlayerSizeUnchecked(ServerPlayer player, double size) {
-        AttributeUtils.setScale(player, size);
+        AttributeUtils.SCALE.of(player).set(size);
     }
 
     public static void resetSizesTick(boolean isActive) {

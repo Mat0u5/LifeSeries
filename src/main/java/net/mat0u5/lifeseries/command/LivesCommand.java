@@ -16,7 +16,7 @@ import net.mat0u5.matlib.util.other.TextUtils;
 import net.mat0u5.matlib.util.other.Time;
 import net.mat0u5.matlib.util.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
+import net.mat0u5.matlib.util.player.ScoreboardUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;

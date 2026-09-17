@@ -15,7 +15,7 @@ import net.mat0u5.matlib.util.other.Time;
 import net.mat0u5.matlib.util.player.PlayerListReference;
 import net.mat0u5.matlib.util.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
+import net.mat0u5.matlib.util.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -411,7 +411,7 @@ public class BoogeymanManager {
                     if (BOOGEYMAN_ANNOUNCE_OUTCOME) {
                         PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_FAIL.get(boogeyman.name));
                     }
-                    ScoreboardUtils.setScore(boogeyman.name, LivesManager.SCOREBOARD_NAME, 1);
+                    if (!livesManager.LIVES_SYSTEM_DISABLED) ScoreboardUtils.setScore(boogeyman.name, LivesManager.SCOREBOARD_NAME, 1);
                     continue;
                 }
                 playerFailBoogeyman(player, true);

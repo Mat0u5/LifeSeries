@@ -7,7 +7,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.player.AttributeUtils;
+import net.mat0u5.matlib.util.player.AttributeUtils;
 import net.mat0u5.matlib.util.player.PlayerReference;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -66,7 +66,7 @@ public class Superspeed extends ToggleableSuperpower {
         NetworkHandlerServer.sendVignette(player, -1);
         if (STEP_UP) {
             //? if > 1.20.3 {
-            AttributeUtils.setStepHeight(player, 1);
+            AttributeUtils.STEP_HEIGHT.of(player).set(1);
             //?}
         }
         super.activate();
@@ -86,7 +86,7 @@ public class Superspeed extends ToggleableSuperpower {
         ServerPlayer player = getPlayer();
         if (player == null) return;
         ((IPlayer) player).ls$playNotifySound(SoundEvents.BEACON_DEACTIVATE, SoundSource.MASTER, 1, 1);
-        slowlySetSpeed(player, AttributeUtils.DEFAULT_PLAYER_MOVEMENT_SPEED, 30);
+        slowlySetSpeed(player, AttributeUtils.MOVEMENT_SPEED.of(player).getDefaultValue(), 30);
         if (!WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
             player.removeEffect(MobEffects.HUNGER);
             if (HUNGER_EFFECT_LEVEL > 0) {
@@ -95,19 +95,21 @@ public class Superspeed extends ToggleableSuperpower {
             }
         }
         NetworkHandlerServer.sendVignette(player, 0);
-        AttributeUtils.resetStepHeight(player);
+        //? if > 1.20.3 {
+        AttributeUtils.STEP_HEIGHT.of(player).reset();
+        //?}
         super.deactivate();
     }
 
     public static void slowlySetSpeed(ServerPlayer player, double speed, int ticks) {
         if (server == null) return;
-        double currentSpeed = AttributeUtils.getMovementSpeed(player);
+        double currentSpeed = AttributeUtils.MOVEMENT_SPEED.of(player).get();
         double step = (speed - currentSpeed) / ticks;
         PlayerReference ref = PlayerReference.of(player);
         for (int i = 0; i < ticks; i++) {
             int finalI = i;
-            TaskScheduler.scheduleTask(i, () -> AttributeUtils.setMovementSpeed(ref.get(), currentSpeed + (step * finalI)));
+            TaskScheduler.scheduleTask(i, () -> AttributeUtils.MOVEMENT_SPEED.of(ref.get()).set(currentSpeed + (step * finalI)));
         }
-        TaskScheduler.scheduleTask(ticks+1, () -> AttributeUtils.setMovementSpeed(ref.get(), speed));
+        TaskScheduler.scheduleTask(ticks+1, () -> AttributeUtils.MOVEMENT_SPEED.of(ref.get()).set(speed));
     }
 }

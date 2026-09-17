@@ -160,7 +160,6 @@ public class Events {
             }
             AdvancedDeathsManager.tick();
         }
-        PlayerUtils.onTick();
 
         TaskScheduler.onTick(gameFrozen);
     }

@@ -12,7 +12,7 @@ import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.matlib.util.player.PlayerListReference;
 import net.mat0u5.matlib.util.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.player.TeamUtils;
+import net.mat0u5.matlib.util.player.TeamUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.mat0u5.matlib.util.other.*;
 import net.minecraft.network.chat.Component;
@@ -236,7 +236,7 @@ public class NiceLifeVotingManager {
                     playerNew.addTag("naughty_list");
                     naughtyListMembers.add(uuid);
                     currentSeason.reloadPlayerTeam(playerNew);
-                    PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), PlayerUtils.getPlayerNameWithIcon(playerNew), 15, 80, 20);
+                    PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), PlayerUtils.tryGetPlayerNameWithIcon(playerNew), 15, 80, 20);
                 }
             });
             delay += 55;
@@ -289,7 +289,7 @@ public class NiceLifeVotingManager {
                     playerNew.addTag("nice_list");
                     niceListMembers.add(uuid);
                     currentSeason.reloadPlayerTeam(playerNew);
-                    PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), PlayerUtils.getPlayerNameWithIcon(playerNew), 15, 80, 20);
+                    PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), PlayerUtils.tryGetPlayerNameWithIcon(playerNew), 15, 80, 20);
                 }
             });
             delay += 55;
@@ -503,7 +503,7 @@ public class NiceLifeVotingManager {
                         }
                         currentSeason.reloadPlayerTeam(winnerNew);
                         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.FIREWORK_ROCKET_LAUNCH, 1f, 1);
-                        PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), PlayerUtils.getPlayerNameWithIcon(winnerNew), 15, 80, 20);
+                        PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), PlayerUtils.tryGetPlayerNameWithIcon(winnerNew), 15, 80, 20);
                     }
                 });
             }
@@ -563,7 +563,7 @@ public class NiceLifeVotingManager {
         if (niceListMembers.contains(votedFor.getUUID())) return;
 
         PlayerUtils.playSoundToPlayer(player, SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 1);
-        ((IPlayer) player).ls$message(ModifiableText.NICELIFE_NICELIST_VOTE.get(PlayerUtils.getPlayerNameWithIcon(votedFor)));
+        ((IPlayer) player).ls$message(ModifiableText.NICELIFE_NICELIST_VOTE.get(PlayerUtils.tryGetPlayerNameWithIcon(votedFor)));
         votesByPerson.put(player.getUUID(), votedFor.getUUID());
     }
 

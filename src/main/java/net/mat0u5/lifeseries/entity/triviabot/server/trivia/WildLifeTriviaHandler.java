@@ -18,9 +18,9 @@ import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
+import net.mat0u5.matlib.util.player.AttributeUtils;
 import net.mat0u5.matlib.util.world.ItemStackUtils;
 import net.mat0u5.matlib.util.world.LevelUtils;
 import net.mat0u5.matlib.util.other.*;
@@ -572,16 +572,16 @@ public class WildLifeTriviaHandler extends TriviaHandler {
     public static void curseHearts(ServerPlayer player) {
         cursedHeartPlayers.add(player.getUUID());
         double newHealth = Math.max(player.getMaxHealth()-7, 1);
-        AttributeUtils.setMaxPlayerHealth(player, newHealth);
+        AttributeUtils.MAX_HEALTH.of(player).set(newHealth);
     }
 
     public static final List<UUID> cursedMoonJumpPlayers = new ArrayList<>();
     public static void curseMoonjump(ServerPlayer player) {
         cursedMoonJumpPlayers.add(player.getUUID());
         //? if >= 1.21.5 {
-        AttributeUtils.setJumpStrength(player, 0.85);
+        AttributeUtils.JUMP_STRENGTH.of(player).set(0.85);
         //?} else {
-        /*AttributeUtils.setJumpStrength(player, 0.76);
+        /*AttributeUtils.JUMP_STRENGTH.of(player).set(0.76);
         *///?}
     }
 

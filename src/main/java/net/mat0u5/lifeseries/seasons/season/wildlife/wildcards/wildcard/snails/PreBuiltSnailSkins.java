@@ -5,7 +5,7 @@ import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.matlib.util.resource.ResourceHandler;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
+import net.mat0u5.matlib.util.player.ScoreboardUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.scores.PlayerScoreEntry;
 

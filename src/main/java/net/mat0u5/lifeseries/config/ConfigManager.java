@@ -14,7 +14,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
+import net.mat0u5.matlib.util.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;

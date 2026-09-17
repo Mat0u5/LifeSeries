@@ -7,7 +7,7 @@ import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.matlib.util.other.Time;
 import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
+import net.mat0u5.matlib.util.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -74,7 +74,7 @@ public class LimitedLifeLivesManager extends LivesManager {
             //?}
         }
         SessionTranscript.addRecordIfMissing(player);
-        ScoreboardUtils.setScore(player.getScoreboardName(), LivesManager.SCOREBOARD_NAME, lives);
+        if (!LIVES_SYSTEM_DISABLED) ScoreboardUtils.setScore(player.getScoreboardName(), LivesManager.SCOREBOARD_NAME, lives);
         if (lives <= 0 && !ignoreFinalDeath) {
             playerLostAllLives(player, livesBefore);
         }

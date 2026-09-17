@@ -16,9 +16,9 @@ import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.matlib.util.other.Time;
 import net.mat0u5.matlib.util.other.Tuple;
-import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.mat0u5.matlib.util.player.AttributeUtils;
 import net.mat0u5.matlib.util.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -273,11 +273,11 @@ public class TriviaWildcard extends Wildcard {
         }
         if (WildLifeTriviaHandler.cursedHeartPlayers.contains(player.getUUID())) {
             WildLifeTriviaHandler.cursedHeartPlayers.remove(player.getUUID());
-            AttributeUtils.resetMaxPlayerHealthIfNecessary(player);
+            PlayerUtils.resetMaxPlayerHealthIfNecessary(player);
         }
         if (WildLifeTriviaHandler.cursedMoonJumpPlayers.contains(player.getUUID())) {
             WildLifeTriviaHandler.cursedMoonJumpPlayers.remove(player.getUUID());
-            AttributeUtils.resetPlayerJumpHeight(player);
+            AttributeUtils.JUMP_STRENGTH.of(player).reset();
         }
 
         WildLifeTriviaHandler.cursedSliding.remove(player.getUUID());

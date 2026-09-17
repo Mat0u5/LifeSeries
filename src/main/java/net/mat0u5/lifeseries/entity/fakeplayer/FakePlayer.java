@@ -54,7 +54,7 @@ import java.util.concurrent.CompletableFuture;
 *///?}
 
 @SuppressWarnings("EntityConstructor")
-public class FakePlayer extends ServerPlayer {
+public class FakePlayer extends ServerPlayer implements net.mat0u5.matlib.util.interfaces.FakePlayer {
     //? if <= 1.20 {
     /*private FakePlayer(MinecraftServer server, ServerLevel levelIn, GameProfile profile) {
         super(server, levelIn, profile);

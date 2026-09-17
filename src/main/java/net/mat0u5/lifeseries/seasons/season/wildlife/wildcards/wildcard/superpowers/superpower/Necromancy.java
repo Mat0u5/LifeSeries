@@ -8,8 +8,8 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.matlib.util.other.Time;
-import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.matlib.util.player.AttributeUtils;
 import net.mat0u5.matlib.util.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -111,7 +111,7 @@ public class Necromancy extends Superpower {
         perPlayerRessurections.removeAll(deadAgain);
         queuedRessurectedPlayers.removeAll(deadAgain);
         for (UUID uuid : deadAgain) {
-            AttributeUtils.resetAttributesOnPlayerJoin(PlayerUtils.getPlayer(uuid));
+            PlayerUtils.resetAttributesOnPlayerJoin(PlayerUtils.getPlayer(uuid));
         }
     }
 
@@ -124,7 +124,7 @@ public class Necromancy extends Superpower {
                 ressurectedPlayers.remove(uuid);
                 queuedRessurectedPlayers.remove(uuid);
                 manuallyRessurectedPlayers.remove(uuid);
-                AttributeUtils.resetAttributesOnPlayerJoin(player);
+                PlayerUtils.resetAttributesOnPlayerJoin(player);
             }
         }
     }
@@ -134,7 +134,7 @@ public class Necromancy extends Superpower {
             ServerPlayer player = PlayerUtils.getPlayer(uuid);
             if (player != null && ((IPlayer) player).ls$isAlive()) {
                 manuallyRessurectedPlayers.remove(uuid);
-                AttributeUtils.resetAttributesOnPlayerJoin(player);
+                PlayerUtils.resetAttributesOnPlayerJoin(player);
             }
         }
     }
@@ -166,7 +166,7 @@ public class Necromancy extends Superpower {
         List<UUID> copyPlayers = new ArrayList<>(ressurectedPlayers);
         ressurectedPlayers.clear();
         for (UUID uuid : copyPlayers) {
-            AttributeUtils.resetAttributesOnPlayerJoin(PlayerUtils.getPlayer(uuid));
+            PlayerUtils.resetAttributesOnPlayerJoin(PlayerUtils.getPlayer(uuid));
         }
     }
 
@@ -177,7 +177,7 @@ public class Necromancy extends Superpower {
     public static void onPlayerDeath(ServerPlayer player) {
         if (manuallyRessurectedPlayers.contains(player.getUUID())) {
             manuallyRessurectedPlayers.remove(player.getUUID());
-            AttributeUtils.resetAttributesOnPlayerJoin(player);
+            PlayerUtils.resetAttributesOnPlayerJoin(player);
         }
     }
 
@@ -187,7 +187,7 @@ public class Necromancy extends Superpower {
             clearedPlayers.add(player.getUUID());
             player.getInventory().clearContent();
         }
-        AttributeUtils.setMaxPlayerHealth(player, SuperpowersWildcard.ZOMBIES_HEALTH);
+        AttributeUtils.MAX_HEALTH.of(player).set(SuperpowersWildcard.ZOMBIES_HEALTH);
         player.setHealth(SuperpowersWildcard.ZOMBIES_HEALTH);
         LevelUtils.summonHarmlessLightning(player);
         currentSeason.reloadPlayerTeam(player);

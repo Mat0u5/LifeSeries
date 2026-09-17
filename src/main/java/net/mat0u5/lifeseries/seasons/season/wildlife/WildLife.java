@@ -22,9 +22,8 @@ import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.matlib.util.other.Time;
-import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
+import net.mat0u5.matlib.util.player.ScoreboardUtils;
 import net.mat0u5.matlib.events.EventResult;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -48,7 +47,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSession;
-import net.mat0u5.lifeseries.utils.player.*;
 import net.mat0u5.matlib.util.player.*;
 
 //? if >= 1.21.2 {
@@ -124,7 +122,7 @@ public class WildLife extends Season {
                     if (currentLives == null) currentLives = 0;
                     int lives = currentLives + 1;
                     if (lives <= 0) {
-                        ScoreboardUtils.setScore(killer.getScoreboardName(), LivesManager.SCOREBOARD_NAME, lives);
+                        if (!livesManager.LIVES_SYSTEM_DISABLED) ScoreboardUtils.setScore(killer.getScoreboardName(), LivesManager.SCOREBOARD_NAME, lives);
                     }
                     else {
                         broadcastLifeGain(killer, victim);
@@ -344,10 +342,10 @@ public class WildLife extends Season {
 
         WildLifeTriviaHandler.cursedGigantificationPlayers.remove(player.getUUID());
         WildLifeTriviaHandler.cursedHeartPlayers.remove(player.getUUID());
-        AttributeUtils.resetMaxPlayerHealthIfNecessary(player);
+        PlayerUtils.resetMaxPlayerHealthIfNecessary(player);
 
         WildLifeTriviaHandler.cursedMoonJumpPlayers.remove(player.getUUID());
-        AttributeUtils.resetPlayerJumpHeight(player);
+        AttributeUtils.JUMP_STRENGTH.of(player).reset();
 
         Superpower power = SuperpowersWildcard.getSuperpowerInstance(player);
         if (power != null) {

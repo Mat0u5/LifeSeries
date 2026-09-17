@@ -15,7 +15,7 @@ import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.matlib.util.other.TextUtils;
 import net.mat0u5.matlib.util.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
+import net.mat0u5.matlib.util.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -170,7 +170,7 @@ public class LimitedLife extends Season {
             secondCounter = 20;
             livesManager.getAlivePlayers().forEach(player -> ((IPlayer) player).ls$removeLife());
 
-            if (TICK_OFFLINE_PLAYERS) {
+            if (TICK_OFFLINE_PLAYERS && !livesManager.LIVES_SYSTEM_DISABLED) {
                 //? if <= 1.20.2 {
                 /*Collection<Score> entries = ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME);
                 for (Score entry : entries) {

@@ -77,8 +77,6 @@ import java.util.*;
 import static net.mat0u5.lifeseries.LifeSeries.*;
 import static net.mat0u5.matlib.MatLib.*;
 import static net.mat0u5.lifeseries.seasons.util.WatcherManager.isWatcher;
-import net.minecraft.ChatFormatting;
-import net.minecraft.world.entity.*;
 
 //? if <= 1.20
 //import net.minecraft.world.scores.Scoreboard;
@@ -331,7 +329,7 @@ public abstract class Season {
     }
 
     public void reloadPlayers() {
-        PlayerUtils.getAllPlayers().forEach(AttributeUtils::resetAttributesOnPlayerJoin);
+        PlayerUtils.getAllPlayers().forEach(PlayerUtils::resetAttributesOnPlayerJoin);
     }
 
     public void createTeams() {
@@ -744,10 +742,10 @@ public abstract class Season {
     }
 
     public void onPlayerJoin(ServerPlayer player) {
-        AttributeUtils.resetAttributesOnPlayerJoin(player);
+        PlayerUtils.resetAttributesOnPlayerJoin(player);
         reloadPlayerTeam(player);
         UUID uuid = player.getUUID();
-        TaskScheduler.scheduleTask(2, () -> PlayerUtils.applyResourcepack(uuid));
+        TaskScheduler.scheduleTask(2, () -> PlayerUtils.applyResourcepacks(uuid));
         if (!((IPlayer) player).ls$hasAssignedLives()) {
             assignDefaultLives(player);
         }
