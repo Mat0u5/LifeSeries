@@ -249,7 +249,7 @@ public class Hunger extends Wildcard {
             if (stack.isEmpty()) continue;
 
             //? if < 1.20.5 {
-            /*ItemStack newItem = new ItemStack(stack.getItem(), stack.getCount());
+            /*ItemStack newItem = stack.copy();
             *///?} else {
             stack.set(DataComponents.FOOD, stack.getPrototype().get(DataComponents.FOOD));
             //? if >= 1.21.2 {

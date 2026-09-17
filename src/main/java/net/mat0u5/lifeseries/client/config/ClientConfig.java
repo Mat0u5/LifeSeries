@@ -16,7 +16,7 @@ public class ClientConfig extends ConfigManager {
     }
 
     public static final ConfigFileEntry<MinimalArmorBehavior> MINIMAL_ARMOR = new ConfigFileEntry<>(
-            "minimal_armor", MinimalArmorBehavior.MATCH_SERVER, "",
+            "minimal_armor_resourcepack", MinimalArmorBehavior.MATCH_SERVER, "",
             "Minimal Armor Resourcepack", "Enables the minimal armor resourcepack."
     );
     public static final ConfigFileEntry<Boolean> SESSION_TIMER = new ConfigFileEntry<>(
