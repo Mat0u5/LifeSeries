@@ -31,8 +31,6 @@ import net.minecraft.world.scores.ReadOnlyScoreInfo;
 //import net.minecraft.network.chat.numbers.NumberFormat;
 //? if <= 1.21 {
 /*import com.mojang.blaze3d.vertex.PoseStack;
-import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
-import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.MutableComponent;
@@ -65,27 +63,6 @@ import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 //?}
 @MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public abstract class PlayerEntityRendererMixin {
-
-    //? if <= 1.21 {
-    /*@Inject(method = "render(Lnet/minecraft/client/player/AbstractClientPlayer;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
-            at = @At("HEAD"), cancellable = true)
-    public void replaceRendering(AbstractClientPlayer abstractClientPlayerEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i, CallbackInfo ci){
-        if (LifeSeries.modFullyDisabled()) return;
-        if (LifeSeriesClient.invisiblePlayers.containsKey(abstractClientPlayerEntity.getUUID())) {
-            long time = LifeSeriesClient.invisiblePlayers.get(abstractClientPlayerEntity.getUUID());
-            if (time > System.currentTimeMillis() || time == -1) {
-                ci.cancel();
-                return;
-            }
-        }
-
-        MorphComponent morphComponent = MorphManager.getOrCreateComponent(abstractClientPlayerEntity.getUUID());
-        LivingEntity dummy = morphComponent.getDummy();
-        if(morphComponent.isMorphed() && dummy != null) {
-            ci.cancel();
-        }
-    }
-    *///?}
 
     @Deprecated
     // In EntityRender from 26.1+

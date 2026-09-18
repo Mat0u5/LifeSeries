@@ -15,7 +15,7 @@ import net.mat0u5.lifeseries.utils.interfaces.ClientAccessor;
 import net.mat0u5.lifeseries.utils.other.ModBuiltInPacks;
 import net.mat0u5.matlib.MatLib;
 import net.mat0u5.matlib.api.MatLibClientInitializer;
-import net.mat0u5.matlib.events.client.ClientPackSourceEvents;
+import net.mat0u5.matlib.client.events.ClientPackSourceEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
