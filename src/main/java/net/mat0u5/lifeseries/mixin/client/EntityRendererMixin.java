@@ -47,6 +47,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class EntityRendererMixin<T extends Entity> {
 *///?} else {
 @MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@Deprecated // All getPlayerName stuff and customBelowName
 public class EntityRendererMixin<T extends Entity, S extends EntityRenderState> {
 //?}
 

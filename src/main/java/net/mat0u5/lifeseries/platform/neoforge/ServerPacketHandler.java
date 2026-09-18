@@ -5,6 +5,7 @@ package net.mat0u5.lifeseries.platform.neoforge;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
+@Deprecated
 public class ServerPacketHandler {
     public static <T extends CustomPacketPayload> void handle(T payload, IPayloadContext context) {
         //? if <= 1.20.3 {

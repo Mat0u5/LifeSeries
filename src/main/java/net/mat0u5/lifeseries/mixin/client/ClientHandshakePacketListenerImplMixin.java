@@ -21,6 +21,7 @@ import net.mat0u5.lifeseries.network.packets.CustomQueryPacket;
 
 @Mixin(value = ClientHandshakePacketListenerImpl.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@Deprecated
 public class ClientHandshakePacketListenerImplMixin {
     @Inject(method = "handleCustomQuery", at = @At("HEAD"), cancellable = true)
     private void handleCustomQuery(ClientboundCustomQueryPacket packet, CallbackInfo ci) {

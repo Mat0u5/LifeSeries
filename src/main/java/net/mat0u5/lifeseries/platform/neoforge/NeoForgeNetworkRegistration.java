@@ -27,6 +27,7 @@ import net.minecraft.network.codec.StreamCodec;
 ^///?} else {
 @EventBusSubscriber(modid = LifeSeries.MOD_ID)
 //?}
+@Deprecated
 public class NeoForgeNetworkRegistration {
 //? if <= 1.20.3 {
 /^@SubscribeEvent

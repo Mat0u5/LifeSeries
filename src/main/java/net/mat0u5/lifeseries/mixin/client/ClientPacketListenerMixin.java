@@ -1,11 +1,9 @@
 package net.mat0u5.lifeseries.mixin.client;
 
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
-import net.mat0u5.lifeseries.client.events.ClientEvents;
 import net.mat0u5.lifeseries.client.network.NetworkHandlerClient;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.network.protocol.game.ClientboundLoginPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -42,11 +40,8 @@ public class ClientPacketListenerMixin {
     }
     //?}
 
-    @Inject(method = "handleLogin", at = @At("RETURN"))
-    private void handleServerPlayReady(ClientboundLoginPacket packet, CallbackInfo ci) {
-        ClientEvents.onClientJoin();
-    }
 
+    @Deprecated
 //? if fabric || forge {
     //? if <= 1.20 {
     /*@Inject(method = "handleCustomPayload", at = @At("HEAD"), cancellable = true)

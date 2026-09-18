@@ -12,7 +12,7 @@ import net.minecraft.server.MinecraftServer;
 import java.util.Optional;
 *///?}
 
-public class Registry {
+public class Registries {
 	public static void register() {
 		MobRegistry.registerMobs();
 		ParticleRegistry.registerParticles();

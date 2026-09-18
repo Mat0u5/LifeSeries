@@ -100,7 +100,7 @@ public class LifeSeriesClient implements MatLibClientInitializer, ClientAccessor
     public void onInitializeClient() {
         LifeSeries.LOGGER.info("Initializing Life Series Client [{} {} ({})] with MatLib [{}]...", MatLib.platform().loader().name(), MatLib.platform().mcVersion(), LifeSeries.MOD_VERSION, MatLib.MOD_VERSION);
         ClientPackSourceEvents.LOAD_PACK.register(consumer -> ModBuiltInPacks.loadPacks(consumer, PackType.CLIENT_RESOURCES));
-        ClientRegistries.registerModStuff();
+        ClientRegistries.register();
         NetworkHandlerClient.initializeSimplePacketReceivers();
 
         LifeSeries.setClientAccessor(new LifeSeriesClient());

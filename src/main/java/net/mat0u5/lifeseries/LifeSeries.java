@@ -5,8 +5,7 @@ import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.MainConfig;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
-import net.mat0u5.lifeseries.registries.Registry;
-import net.mat0u5.lifeseries.registries.MobRegistry;
+import net.mat0u5.lifeseries.registries.Registries;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -19,14 +18,11 @@ import net.mat0u5.matlib.util.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.interfaces.ClientAccessor;
 import net.mat0u5.lifeseries.utils.other.ModBuiltInPacks;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
-import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.mat0u5.matlib.MatLib;
 import net.mat0u5.matlib.api.MatLibInitializer;
 import net.mat0u5.matlib.events.server.ServerLanguageEvents;
 import net.mat0u5.matlib.events.server.ServerPackSourceEvents;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.PackType;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +53,7 @@ public class LifeSeries implements MatLibInitializer {
 	public void onRegister() {
 		ServerPackSourceEvents.LOAD_PACK.register(consumer -> ModBuiltInPacks.loadPacks(consumer, PackType.SERVER_DATA));
 		ServerLanguageEvents.LOAD_LANG_FILES.register(() -> List.of("/resourcepacks/lifeseries/assets/lifeseries/lang/en_us.json"));
-		Registry.register();
+		Registries.register();
 	}
 	@Override
 	public void onInitialize() {

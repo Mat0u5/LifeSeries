@@ -225,6 +225,7 @@ public class ClientUtils {
         return null;
     }
 
+    @Deprecated
     public static Component getPlayerName(Component text) {
         if (text == null || LifeSeries.modFullyDisabled()) return text;
         if (Minecraft.getInstance().getConnection() == null) return text;

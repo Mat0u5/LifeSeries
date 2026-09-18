@@ -87,6 +87,7 @@ public abstract class PlayerEntityRendererMixin {
     }
     *///?}
 
+    @Deprecated
     // In EntityRender from 26.1+
     //? if > 1.21.6 && <= 1.21.11 {
     /*@ModifyArg(
