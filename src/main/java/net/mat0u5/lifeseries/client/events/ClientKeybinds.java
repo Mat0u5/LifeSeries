@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import net.mat0u5.lifeseries.client.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
+import net.mat0u5.matlib.client.events.ClientRegistryEvents;
 import net.minecraft.client.KeyMapping;
 
 import java.util.ArrayList;
@@ -33,8 +34,7 @@ public class ClientKeybinds {
         }
     }
 
-    public static void init() {
-        if (superpower != null) return;
+    public static void register() {
 
         //? if <= 26.2 {
         var type = InputConstants.Type.KEYSYM;
@@ -66,19 +66,14 @@ public class ClientKeybinds {
                     KEYBIND_ID
             );
         }
-    }
-    public static KeyMapping[] appendCustomKeybinds(KeyMapping[] vanillaKeys) {
-        init();
-        List<KeyMapping> allKeys = new ArrayList<>(Arrays.asList(vanillaKeys));
-
-        if (!allKeys.contains(superpower)) {
-            allKeys.add(superpower);
-            allKeys.add(openConfig);
-            if (VersionControl.isDevVersion()) {
-                allKeys.add(runCommand);
+        ClientRegistryEvents.KEYBIND.register(list -> {
+            if (!list.contains(superpower)) {
+                list.add(superpower);
+                list.add(openConfig);
+                if (VersionControl.isDevVersion()) {
+                    list.add(runCommand);
+                }
             }
-        }
-
-        return allKeys.toArray(new KeyMapping[0]);
+        });
     }
 }
