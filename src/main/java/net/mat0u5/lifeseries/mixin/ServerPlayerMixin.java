@@ -51,10 +51,10 @@ import java.util.Collection;
 //? if <= 1.21.6
 //import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 //? if >= 26.3 {
-/*import net.minecraft.world.attribute.BedRule;
+import net.minecraft.world.attribute.BedRule;
 import net.minecraft.world.level.block.AbstractBedBlock;
 import net.minecraft.world.level.block.state.BlockState;
-*///?}
+//?}
 
 @Mixin(value = ServerPlayer.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
@@ -283,10 +283,10 @@ public class ServerPlayerMixin implements IPlayer {
 
     @Inject(method = "startSleepInBed", at = @At("HEAD"), cancellable = true)
     //? if <= 26.2 {
-    private void cancelStartSleep(BlockPos blockPos, CallbackInfoReturnable<Either<Player.BedSleepingProblem, Unit>> cir) {
-    //?} else {
-    /*private void cancelStartSleep(AbstractBedBlock bedBlock, BlockState bedBlockState, BedRule rule, BlockPos pos, CallbackInfoReturnable<Either<Player.BedSleepingProblem, Unit>> cir) {
-    *///?}
+    /*private void cancelStartSleep(BlockPos blockPos, CallbackInfoReturnable<Either<Player.BedSleepingProblem, Unit>> cir) {
+    *///?} else {
+    private void cancelStartSleep(AbstractBedBlock bedBlock, BlockState bedBlockState, BedRule rule, BlockPos pos, CallbackInfoReturnable<Either<Player.BedSleepingProblem, Unit>> cir) {
+    //?}
         if (LifeSeries.isLogicalNonDisabled() && LifeSeries.isSeason(Seasons.NICE_LIFE)) {
             if (NiceLifeTriviaManager.triviaInProgress) {
                 cir.setReturnValue(Either.left(Player.BedSleepingProblem.OTHER_PROBLEM));

@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.client.gui.other;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.gui.DefaultScreen;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
+import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.mat0u5.lifeseries.client.utils.TextColors;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
@@ -36,7 +37,7 @@ public class UpdateInfoScreen extends DefaultScreen {
 
         this.addRenderableWidget(
                 Button.builder(Component.literal("Join Discord").withStyle(style -> style.withColor(TextColors.PASTEL_WHITE)),btn -> {
-                            Util.getPlatform().openUri("https://discord.gg/QWJxfb4zQZ");
+                            ClientUtils.openExternalLink("https://discord.gg/QWJxfb4zQZ");
                         })
                         .pos(startX + 5, endY - 25)
                         .size(80, 20)
@@ -44,7 +45,7 @@ public class UpdateInfoScreen extends DefaultScreen {
         );
         this.addRenderableWidget(
                 Button.builder(Component.literal("Full Changelog").withStyle(style -> style.withColor(TextColors.PASTEL_WHITE)), btn -> {
-                            Util.getPlatform().openUri(UpdateChecker.getChangelogLink());
+                            ClientUtils.openExternalLink(UpdateChecker.getChangelogLink());
                         })
                         .pos(endX - 80 - 5, endY - 25)
                         .size(80, 20)
@@ -53,7 +54,7 @@ public class UpdateInfoScreen extends DefaultScreen {
         this.addRenderableWidget(
                 Button.builder(Component.literal("Download on Modrinth"), btn -> {
                             this.onClose();
-                            Util.getPlatform().openUri("https://modrinth.com/mod/life-series"); //Same as having a text with a click event, but that doesnt work in GUIs
+                            ClientUtils.openExternalLink("https://modrinth.com/mod/life-series"); //Same as having a text with a click event, but that doesnt work in GUIs
                         })
                         .pos(centerX - 85, endY - 25)
                         .size(170, 20)

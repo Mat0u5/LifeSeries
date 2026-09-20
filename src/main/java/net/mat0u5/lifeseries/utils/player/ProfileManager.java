@@ -279,10 +279,10 @@ public class ProfileManager {
                         BiomeManager.obfuscateSeed(level.getSeed()),
                         player.gameMode.getGameModeForPlayer(),
                         //? if <= 26.2 {
-                        player.gameMode.getPreviousGameModeForPlayer(),
-                        //?} else {
-                        /*Optional.ofNullable(player.gameMode.getPreviousGameModeForPlayer()),
-                        *///?}
+                        /*player.gameMode.getPreviousGameModeForPlayer(),
+                        *///?} else {
+                        Optional.ofNullable(player.gameMode.getPreviousGameModeForPlayer()),
+                        //?}
                         level.isDebug(),
                         level.isFlat(),
                         player.getLastDeathLocation(),

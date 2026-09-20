@@ -37,10 +37,10 @@ public class ClientKeybinds {
         if (superpower != null) return;
 
         //? if <= 26.2 {
-        var type = InputConstants.Type.KEYSYM;
-        //?} else {
-        /*var type = InputConstants.Type.KEYBOARD;
-        *///?}
+        /*var type = InputConstants.Type.KEYSYM;
+        *///?} else {
+        var type = InputConstants.Type.KEYBOARD;
+        //?}
 
         superpower = new KeyMapping(
                 "key.lifeseries.superpower",

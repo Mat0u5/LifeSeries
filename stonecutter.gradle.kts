@@ -181,17 +181,18 @@ publishMods {
 			changelog = rootProject.file("CHANGELOG.md").readText()
 			webhookUrl = webhook
 
+			val fullChangelogLink = if (changelogLink.isNullOrEmpty()) "" else "\n[Click here to open the **full changelog**]($changelogLink)";
 			if (!isDev) {
 				content = changelog.map { "# [Life Series version `$version` is out!](https://modrinth.com/mod/life-series/versions)\n" +
 						"### Changelog:\n" +
-						"```\n$it```\n\n" +
-						"[Click here to open the **full changelog**]($changelogLink)" }
+						"```\n$it```\n" +
+						"$fullChangelogLink" }
 			}
 			else {
 				content = changelog.map { "# [Life Series version `$version` is out!](https://modrinth.com/mod/life-series-dev/versions)\n" +
 						"### Changelog:\n" +
-						"```\n$it```\n\n" +
-						"[Click here to open the **full changelog**]($changelogLink)" }
+						"```\n$it```\n" +
+						"$fullChangelogLink" }
 			}
 
 			setPlatformsAllFrom()
