@@ -46,8 +46,8 @@ public class WeatherEffectRendererMixin {
     //? if >= 26.3 {
     private static AbstractTexture LESS_SNOW_RESOURCE;
 
-    @Inject(method = "<init>", at = @At("HEAD"))
-    private static void snowTexture(CallbackInfo ci) {
+    @Inject(method = "<init>", at = @At("RETURN"))
+    private void snowTexture(CallbackInfo ci) {
         LESS_SNOW_RESOURCE = Minecraft.getInstance().getTextureManager().getTexture(LESS_SNOW_RESOURCE_LOCATION);
     }
     //?}
