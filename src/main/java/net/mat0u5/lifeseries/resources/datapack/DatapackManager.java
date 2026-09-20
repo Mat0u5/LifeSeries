@@ -48,7 +48,9 @@ public class DatapackManager {
         //? if = 26.2
         //return "26.2";
         //? if = 26.3
-        return "26.3";
+        //return "26.3";
+        //? if = 26.4
+        return "26.4";
     }
 
     public static String getResourceTriviaPackVersion() {
