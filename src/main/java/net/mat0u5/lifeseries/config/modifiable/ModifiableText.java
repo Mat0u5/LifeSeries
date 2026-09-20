@@ -47,7 +47,7 @@ public enum ModifiableText {
     ,SEASON_CHANGED(Formatted.LOOSELY_STYLED,"§aSuccessfully changed the season to {}", List.of("season"))
     ,SEASON_GET("Current season: {}", List.of("season"))
     ,SEASON_KILL_GAINLIFE("{}§7 gained a life for killing {}.", List.of("Killer", "Victim"))
-    ,SEASON_KILL_UNJUSTIFIED("§c [Unjustified Kill?] {}§7 was killed by {}", List.of("Killer", "Victim"))
+    ,SEASON_KILL_UNJUSTIFIED("§c [Unjustified Kill?] {}§7 was killed by {}", List.of("Victim", "Killer"))
     ,SEASON_SELECTION_GUI("§7Opening the season selection GUI...")
 
     ,SESSION_STARTED(Formatted.LOOSELY_STYLED,"§6Session started! §7[{}]\n§f/session timer showDisplay§7 - toggles a session timer on your screen.", List.of("session length"))

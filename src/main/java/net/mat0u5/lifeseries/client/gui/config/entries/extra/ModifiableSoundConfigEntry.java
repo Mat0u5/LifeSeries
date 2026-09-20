@@ -65,7 +65,7 @@ public class ModifiableSoundConfigEntry extends StringConfigEntry {
             clearError();
             SoundInstance instance = SimpleSoundInstance.forUI(SoundEvent.createVariableRangeEvent(soundId), 1);
             //~ if >= 26.3 '.resolve(' -> '.getOrResolve(' {
-            var resolved = instance.resolve(Minecraft.getInstance().getSoundManager());
+            var resolved = instance.getOrResolve(Minecraft.getInstance().getSoundManager());
             //~}
             if (resolved == null) {
                 setWarn("Unknown Sound Event");
