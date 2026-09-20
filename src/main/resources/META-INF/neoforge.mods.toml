@@ -10,6 +10,7 @@ version = "${version}"
 displayURL = "${homepage_url}"
 modUrl = "${homepage_url}"
 logoFile = "icon.png"
+iconFile = "icon.png"
 authors = "${authors}"
 logoBlur = false
 credits = "${contributors}"

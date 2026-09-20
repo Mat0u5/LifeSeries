@@ -44,11 +44,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.scores.TeamColor;
 
 //? if <= 26.2 {
-import net.minecraft.util.Util;
-//?} else {
-/*import com.mojang.blaze3d.Blaze3D;
+/*import net.minecraft.util.Util;
+*///?} else {
+import com.mojang.blaze3d.Blaze3D;
 import java.net.URI;
-*///?}
+//?}
 
 public class ClientUtils {
 
@@ -268,9 +268,9 @@ public class ClientUtils {
     }
     public static void openExternalLink(String str) {
         //? if <= 26.2 {
-        Util.getPlatform().openUri(str);
-        //?} else {
-        /*Blaze3D.openUri(URI.create(str));
-        *///?}
+        /*Util.getPlatform().openUri(str);
+        *///?} else {
+        Blaze3D.openUri(URI.create(str));
+        //?}
     }
 }
