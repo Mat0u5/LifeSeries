@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.client.gui.seasons;
 
 import net.mat0u5.lifeseries.client.gui.DefaultScreen;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
+import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.mat0u5.lifeseries.client.utils.TextColors;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
@@ -31,7 +32,7 @@ public class PastLifeInfoScreen extends DefaultScreen {
         this.addRenderableWidget(
                 Button.builder(Component.literal(buttonText), btn -> {
                             this.onClose();
-                            Util.getPlatform().openUri("https://modrinth.com/mod/past-life");
+                            ClientUtils.openExternalLink("https://modrinth.com/mod/past-life");
                         })
                         .pos(centerX - 90, endY - 25)
                         .size(180, 20)
