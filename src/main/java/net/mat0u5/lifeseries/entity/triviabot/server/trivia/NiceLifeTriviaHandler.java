@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.mat0u5.lifeseries.utils.world.LevelUtils;
@@ -149,6 +150,10 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
                 if (!bot.ranOutOfTime()) {
                     if (boundPlayer != null) {
                         SimplePackets.RESET_TRIVIA.sendToClient(boundPlayer);
+                        DatapackIntegration.EVENT_TRIVIA_FAIL.trigger(List.of(
+                                new DatapackIntegration.Events.MacroEntry("Player", boundPlayer.getScoreboardName()),
+                                new DatapackIntegration.Events.MacroEntry("TriviaBot", bot.getStringUUID())
+                        ));
                     }
                     TaskScheduler.scheduleTask(40, () -> {
                         bot.setSubmittedAnswer(true);
