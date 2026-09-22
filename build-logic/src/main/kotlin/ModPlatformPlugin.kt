@@ -581,5 +581,8 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 		stonecutter.replacements.string(stonecutter.eval(stonecutter.current.version, ">=26.3"), "!renames_26_3") {
 			replace ("com.mojang.blaze3d.pipeline.RenderPipeline", "com.mojang.renderpearl.api.pipeline.RenderPipeline")
 		}
+		stonecutter.replacements.string(stonecutter.eval(stonecutter.current.version, ">=26.4"), "!renames_26_4") {
+			replace ("com.mojang.renderpearl.api.pipeline.RenderPipeline","com.mojang.blaze3d.pipeline.RenderPipeline")
+		}
 	}
 }

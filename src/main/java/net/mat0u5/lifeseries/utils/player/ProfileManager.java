@@ -276,7 +276,9 @@ public class ProfileManager {
                 new CommonPlayerSpawnInfo(
                         level.dimensionTypeRegistration(),
                         level.dimension(),
-                        BiomeManager.obfuscateSeed(level.getSeed()),
+                        //? if <= 26.3 {
+                        /*BiomeManager.obfuscateSeed(level.getSeed()),
+                        *///?}
                         player.gameMode.getGameModeForPlayer(),
                         //? if <= 26.2 {
                         /*player.gameMode.getPreviousGameModeForPlayer(),
