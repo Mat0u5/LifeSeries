@@ -71,6 +71,7 @@ import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
 //?}
 
+@Deprecated
 public class NetworkHandlerClient {
     public static void initializeSimplePacketReceivers() {
         //Long payload

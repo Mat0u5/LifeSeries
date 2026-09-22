@@ -50,6 +50,7 @@ import com.mojang.blaze3d.Blaze3D;
 import java.net.URI;
 //?}
 
+@Deprecated
 public class ClientUtils {
 
     public static boolean shouldPreventGliding() {

@@ -17,6 +17,7 @@ import net.minecraft.util.ARGB;
 //? if >= 1.21.6
 import net.minecraft.client.renderer.RenderPipelines;
 
+@Deprecated
 public class VignetteRenderer {
     private static final Identifier VIGNETTE_TEXTURE = IdentifierHelper.vanilla("textures/misc/vignette.png");
     private static float vignetteDarkness = 0.0F;

@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.client.utils;
 
+@Deprecated
 public class TextColors {
     public static int DEFAULT = rgb(60, 60, 60);
     public static int DEFAULT_LIGHTER = rgb(94, 94, 94);

@@ -60,6 +60,7 @@ import net.minecraft.world.level.block.state.BlockState;
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class ServerPlayerMixin implements IPlayer {
 
+    @Deprecated
     @Inject(method = "openMenu", at = @At("HEAD"))
     private void onInventoryOpen(@Nullable MenuProvider factory, CallbackInfoReturnable<OptionalInt> cir) {
         if (LifeSeries.isClientOrDisabled()) return;
@@ -76,6 +77,7 @@ public class ServerPlayerMixin implements IPlayer {
         });
     }
 
+    @Deprecated //FakePlayer
     //? if <= 1.21.6 {
     /*@Inject(method = "sendSystemMessage(Lnet/minecraft/network/chat/Component;Z)V", at = @At("HEAD"), cancellable = true)
     private void sendMessageToClient(Component message, boolean overlay, CallbackInfo ci) {
@@ -298,7 +300,7 @@ public class ServerPlayerMixin implements IPlayer {
             e.printStackTrace();
         }
     }
-
+    @Deprecated
     @WrapOperation(method = "die", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Z)V"))
     private void modifyDeathMessage(PlayerList instance, Component component, boolean bl, Operation<Void> original) {
         livesManager.deathMessage(ls$get(), component);

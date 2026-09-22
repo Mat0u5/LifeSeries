@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component;
 //? if >= 1.21.9
 import net.minecraft.client.input.*;
 
+@Deprecated
 public abstract class DefaultScreen extends Screen {
 
     protected int BG_WIDTH;

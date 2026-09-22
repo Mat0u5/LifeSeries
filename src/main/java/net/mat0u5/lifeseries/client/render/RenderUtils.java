@@ -10,6 +10,7 @@ import net.minecraft.util.FormattedCharSequence;
 
 import java.util.List;
 
+@Deprecated
 public class RenderUtils {
 
     public static final List<String> lifeSkinsAllowedColors = List.of(

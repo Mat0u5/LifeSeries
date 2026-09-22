@@ -9,6 +9,7 @@ import net.minecraft.resources.Identifier;
 //? if >= 1.21.6
 import net.minecraft.client.renderer.RenderPipelines;
 
+@Deprecated
 public class CustomTextureRenderer {
     private final Identifier texture;
     private final float x;

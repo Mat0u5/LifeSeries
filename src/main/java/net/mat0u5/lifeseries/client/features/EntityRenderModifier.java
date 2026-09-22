@@ -35,16 +35,6 @@ public class EntityRenderModifier {
 			if (entity instanceof IMorph morph && morph.isFromMorph()) {
 				return EventResult.ALLOW;
 			}
-			/* From culling??
-			if (entity instanceof Player player) {
-				MorphComponent morphComponent = MorphManager.getOrCreateComponent(player.getUUID());
-				LivingEntity dummy = morphComponent.getDummy();
-				if(morphComponent.isMorphed() && dummy != null) {
-					cir.setReturnValue(false);
-					return;
-				}
-			}
-			 */
 			return EventResult.PASS;
 		});
 		ClientEntityRenderEvents.ENTITIES_FOR_RENDERING.register(entitiesForRendering -> {

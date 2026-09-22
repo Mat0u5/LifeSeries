@@ -50,6 +50,7 @@ import net.minecraft.world.entity.decoration.Mannequin;
 @Mixin(value = LivingEntity.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class LivingEntityMixin {
+    @Deprecated
     @Inject(method = "heal", at = @At("HEAD"), cancellable = true)
     private void onHealHead(float amount, CallbackInfo info) {
         if (LifeSeries.isClientOrDisabled()) return;
@@ -62,6 +63,7 @@ public abstract class LivingEntityMixin {
         }
     }
 
+    @Deprecated
     @Inject(method = "heal", at = @At("TAIL"))
     private void onHeal(float amount, CallbackInfo info) {
         if (LifeSeries.isClientOrDisabled()) return;
@@ -72,6 +74,7 @@ public abstract class LivingEntityMixin {
         }
     }
 
+    @Deprecated
     //? if <= 1.21 {
     /*@Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     public void hurt(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
@@ -113,6 +116,7 @@ public abstract class LivingEntityMixin {
     }
     *///?}
 
+    @Deprecated
     @ModifyVariable(method = "addEffect(Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/world/entity/Entity;)Z", at = @At("HEAD"), ordinal = 0, argsOnly = true)
     public MobEffectInstance clampStatusEffect(MobEffectInstance value) {
         if (LifeSeries.isClientOrDisabled()) return value;
@@ -127,6 +131,7 @@ public abstract class LivingEntityMixin {
         return value;
     }
 
+    @Deprecated
     @Inject(method = "addEffect(Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/world/entity/Entity;)Z", at = @At("HEAD"), cancellable = true)
     public void addStatusEffect(MobEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir) {
         if (LifeSeries.isClientOrDisabled()) return;
@@ -160,6 +165,7 @@ public abstract class LivingEntityMixin {
     //?}
 
 
+    @Deprecated
     //? if <= 1.21 {
     /*@ModifyArg(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"), index = 0)
     *///?} else if <= 26.1 {
@@ -199,6 +205,7 @@ public abstract class LivingEntityMixin {
 
 
     //? if >= 1.21.9 {
+    @Deprecated
     @Inject(method = "tick", at = @At("HEAD"))
     public void tickMannequin(CallbackInfo ci) {
         LivingEntity entity = (LivingEntity) (Object) this;

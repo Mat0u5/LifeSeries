@@ -9,6 +9,7 @@ import net.minecraft.server.packs.repository.Pack;
 
 import static net.mat0u5.lifeseries.client.LifeSeriesClient.clientConfig;
 
+@Deprecated
 public class ClientResourcePacks {
     private static final String MINIMAL_ARMOR_RESOURCEPACK = "lifeseries:minimal_armor";
     private static final String NICELIFE_ARMOR_RESOURCEPACK = "lifeseries:nicelife";

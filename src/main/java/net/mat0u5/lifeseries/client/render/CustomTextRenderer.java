@@ -8,6 +8,7 @@ import net.minecraft.util.FormattedCharSequence;
 
 import java.util.List;
 
+@Deprecated
 public class CustomTextRenderer {
     private final Component text;
     private FormattedCharSequence orderedText;

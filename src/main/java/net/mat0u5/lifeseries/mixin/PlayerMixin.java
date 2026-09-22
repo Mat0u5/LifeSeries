@@ -60,6 +60,7 @@ import net.minecraft.world.entity.EntityType;
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class PlayerMixin implements IPlayerUsername {
 
+    @Deprecated
     @Inject(method = "actuallyHurt", at = @At("HEAD"), cancellable = true)
     //? if <=1.21 {
     /*private void onApplyDamage(DamageSource source, float amount, CallbackInfo ci) {
@@ -74,6 +75,7 @@ public abstract class PlayerMixin implements IPlayerUsername {
         }
     }
 
+    @Deprecated
     //? if <= 1.21 {
     /*@Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     private void onPreDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
@@ -139,6 +141,7 @@ public abstract class PlayerMixin implements IPlayerUsername {
     }
     *///?}
 
+    @Deprecated
     @Inject(method = "tick", at = @At("HEAD"))
     private void updateHitbox(CallbackInfo ci) {
         if (LifeSeries.modFullyDisabled()) return;

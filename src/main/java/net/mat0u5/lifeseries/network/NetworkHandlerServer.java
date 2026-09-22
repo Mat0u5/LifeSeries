@@ -89,6 +89,7 @@ import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
 //? if neoforge && > 1.20.3
 //import net.neoforged.neoforge.network.registration.NetworkRegistry;
 
+@Deprecated
 public class NetworkHandlerServer {
     public static final int PRELOGIN_TRANSACTION_ID = 10942422;
     public static final String preLoginPacketID = "preloginpacket";
