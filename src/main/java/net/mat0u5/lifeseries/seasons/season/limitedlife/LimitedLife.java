@@ -245,7 +245,7 @@ public class LimitedLife extends Season {
             Integer canGainLife = livesManager.getTeamGainLives(team.getName());
             Integer victimLives = ((IPlayer)victim).ls$getLives();
             int amount = NEW_KILL_NORMAL.getSeconds();
-            if (canGainLife != null && victimLives != null && victimLives > 0) {
+            if (canGainLife != null && victimLives != null) {
                 if (victimLives + amount >= canGainLife) { // +amount because the victim already lost time
                     broadcastLifeGain(killer, victim);
                     ((IPlayer) killer).ls$addLives(amount);

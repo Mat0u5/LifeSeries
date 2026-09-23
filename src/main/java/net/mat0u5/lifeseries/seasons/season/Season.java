@@ -603,7 +603,7 @@ public abstract class Season {
         if (team != null) {
             Integer canGainLife = livesManager.getTeamGainLives(team.getName());
             Integer victimLives = ((IPlayer)victim).ls$getLives();
-            if (canGainLife != null && victimLives != null && victimLives > 0) {
+            if (canGainLife != null && victimLives != null) {
                 if (victimLives + 1 >= canGainLife) { // +1 because the victim already lost a life
                     broadcastLifeGain(killer, victim);
                     ((IPlayer) killer).ls$addLife();

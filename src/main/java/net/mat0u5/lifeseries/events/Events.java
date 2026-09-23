@@ -157,14 +157,15 @@ public class Events {
                 updatePlayerListsNextTick = false;
                 PlayerUtils.updatePlayerLists();
             }
-            if (LifeSeries.currentSession != null) {
-                LifeSeries.currentSession.tick(server);
-            }
             //? if < 1.20.3 {
             /*boolean gameFrozen = false;
             *///?} else {
             boolean gameFrozen = server.tickRateManager().isFrozen();
             //?}
+            TaskScheduler.onTick(gameFrozen);
+            if (LifeSeries.currentSession != null) {
+                LifeSeries.currentSession.tick(server);
+            }
             if (!gameFrozen) {
                 if (LifeSeries.currentSession != null) {
                     currentSeason.tick(server);
@@ -176,7 +177,6 @@ public class Events {
             }
             PlayerUtils.onTick();
 
-            TaskScheduler.onTick(gameFrozen);
         }catch(Exception e) {
             e.printStackTrace();
         }
