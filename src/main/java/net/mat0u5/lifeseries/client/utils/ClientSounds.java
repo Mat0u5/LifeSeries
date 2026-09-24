@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.client.utils;
 
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.mixin.client.AbstractSoundInstanceAccessor;
 import net.mat0u5.lifeseries.mixin.client.SoundEngineAccessor;
 import net.mat0u5.lifeseries.mixin.client.SoundManagerAccessor;
@@ -41,6 +42,7 @@ public class ClientSounds {
     );
 
     public static void onSoundPlay(SoundInstance sound) {
+        if (LifeSeries.modFullyDisabled()) return;
         //? if <= 1.21.9 {
         /*if (!onlyPlayLatestSounds.contains(sound.getLocation().getPath())) return;
         *///?} else {

@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.client.registries;
 
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.entity.angrysnowman.AngrySnowmanRenderer;
 import net.mat0u5.lifeseries.client.entity.snail.SnailModel;
 import net.mat0u5.lifeseries.client.entity.snail.SnailRenderer;
@@ -10,6 +11,7 @@ import net.mat0u5.lifeseries.client.events.ClientKeybinds;
 import net.mat0u5.lifeseries.client.features.EntityRenderModifier;
 import net.mat0u5.lifeseries.client.particle.TriviaSpiritParticle;
 import net.mat0u5.lifeseries.client.render.ClientRenderer;
+import net.mat0u5.lifeseries.client.utils.ClientSounds;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.registries.ParticleRegistry;
 import net.mat0u5.matlib.client.events.*;
@@ -17,6 +19,8 @@ import net.mat0u5.matlib.client.registries.util.LayerDefinitionModel;
 import net.mat0u5.matlib.client.registries.util.ProvidedParticle;
 import net.mat0u5.matlib.client.registries.util.RenderableEntity;
 import net.mat0u5.matlib.events.EventResult;
+import net.mat0u5.matlib.events.common.CommonEntityEvents;
+import net.mat0u5.matlib.events.server.ServerLifecycleEvents;
 
 import java.util.List;
 
@@ -38,6 +42,11 @@ public class ClientRegistries {
 		ClientLifecycleEvents.CLIENT_STOPPING.register(ClientEvents::onClientStopping);
 		ClientPlayerEvents.START_TICK.register(ClientEvents::onClientTickStart);
 		ClientPlayerEvents.END_TICK.register(ClientEvents::onClientTickEnd);
+		ServerLifecycleEvents.SERVER_STARTING.register(ClientEvents::onServerStarting);
+		ServerLifecycleEvents.SERVER_STARTED.register(ClientEvents::onServerStart);
+		ClientScreenEvents.OPEN_SCREEN.register(ClientEvents::onScreenOpen);
+		ClientSoundEvents.PLAY_SOUND.register(ClientSounds::onSoundPlay);
+		CommonEntityEvents.JUMP.register(ClientEvents::onClientJump);
 	}
 	public static void registerRenderers() {
 		ClientRegistryEvents.ENTITY_RENDERER.register(() -> List.of(

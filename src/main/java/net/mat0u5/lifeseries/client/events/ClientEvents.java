@@ -104,14 +104,14 @@ public class ClientEvents {
         if (LifeSeries.modDisabled()) return;
     }
 
-    public static void onScreenOpen(Minecraft client, Screen screen, int scaledWidth, int scaledHeight) {
+    public static void onScreenOpen(Screen screen, int scaledWidth, int scaledHeight) {
         if (LifeSeries.modDisabled()) return;
         if (UpdateChecker.updateAvailable) {
             int disableVersion = LifeSeriesClient.clientConfig.getOrCreateInt("ignore_update", 0);
             if (UpdateChecker.version == disableVersion && !UpdateChecker.TEST_UPDATE_FAKE && !UpdateChecker.TEST_UPDATE_LAST) return;
 
             if (screen instanceof TitleScreen && !hasShownUpdateScreen) {
-                client.execute(() -> {
+                Minecraft.getInstance().execute(() -> {
                     RenderUtils.setScreen(new UpdateInfoScreen(UpdateChecker.versionName, UpdateChecker.versionDescription));
                     hasShownUpdateScreen = true;
                 });
@@ -239,6 +239,7 @@ public class ClientEvents {
     }
 
     public static void onClientJump(Entity entity) {
+        if (LifeSeries.modDisabled()) return;
         if (entity instanceof LocalPlayer) {
             Minecraft client = Minecraft.getInstance();
             LocalPlayer player = client.player;
