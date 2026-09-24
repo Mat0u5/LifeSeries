@@ -84,18 +84,4 @@ public abstract class MinecraftMixin {
         if (worldConfig.acknowledged()) return;
         worldConfig.setProperty("acknowledged", "true");
     }
-
-    //? if <= 26.1 {
-    /*@Inject(at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;info(Ljava/lang/String;)V", shift = At.Shift.AFTER), method = "destroy")
-    *///?} else {
-    @Inject(at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;info(Ljava/lang/String;)V", shift = At.Shift.AFTER), method = "exitWorldAndClose")
-    //?}
-    private void onStopping(CallbackInfo ci) {
-        ClientEvents.onClientStopping((Minecraft) (Object) this);
-    }
-
-    @Inject(at = @At(value = "FIELD", target = "Lnet/minecraft/client/Minecraft;gameThread:Ljava/lang/Thread;", shift = At.Shift.AFTER, ordinal = 0, opcode = Opcodes.PUTFIELD), method = "run")
-    private void onStart(CallbackInfo ci) {
-        ClientEvents.onClientStart((Minecraft) (Object) this);
-    }
 }

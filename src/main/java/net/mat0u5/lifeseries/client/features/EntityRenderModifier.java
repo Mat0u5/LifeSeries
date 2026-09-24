@@ -1,10 +1,12 @@
 package net.mat0u5.lifeseries.client.features;
 
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.utils.interfaces.IMorph;
+import net.mat0u5.matlib.client.events.ClientEntityEvents;
 import net.mat0u5.matlib.client.events.ClientEntityRenderEvents;
 import net.mat0u5.matlib.events.EventResult;
 import net.minecraft.client.Camera;
@@ -17,6 +19,7 @@ import net.minecraft.world.entity.player.Player;
 public class EntityRenderModifier {
 	public static void registerRenderEntityEvents() {
 		ClientEntityRenderEvents.SHOULD_RENDER.register((entity, frustum, camX, camY, camZ) -> {
+			if (LifeSeries.modFullyDisabled()) return EventResult.PASS;
 			if (entity instanceof Player playerEntity) {
 				if (LifeSeriesClient.invisiblePlayers.containsKey(playerEntity.getUUID())) {
 					long time = LifeSeriesClient.invisiblePlayers.get(playerEntity.getUUID());
@@ -38,6 +41,7 @@ public class EntityRenderModifier {
 			return EventResult.PASS;
 		});
 		ClientEntityRenderEvents.ENTITIES_FOR_RENDERING.register(entitiesForRendering -> {
+			if (LifeSeries.modFullyDisabled()) return;
 			for (MorphComponent morphComponent : MorphManager.morphComponents.values()) {
 				if (shouldMorphRender(ClientUtils.getPlayer(morphComponent.playerUUID))) {
 					Entity dummy = morphComponent.getDummy();
@@ -46,7 +50,15 @@ public class EntityRenderModifier {
 					}
 				}
 			}
-
+		});
+		ClientEntityEvents.TICK_ENTITY.register(entity -> {
+			if (LifeSeries.modFullyDisabled()) return;
+			if (entity instanceof Player player) {
+				MorphComponent morphComponent = MorphManager.getComponent(player);
+				if (morphComponent != null) {
+					Morph.clientTick(morphComponent);
+				}
+			}
 		});
 	}
 

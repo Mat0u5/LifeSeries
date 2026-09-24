@@ -126,21 +126,18 @@ public class ClientEvents {
 
     }
 
-    public static void onClientTickStart() {
+    public static void onClientTickStart(LocalPlayer player) {
         if (LifeSeries.modDisabled()) return;
-        Minecraft client = Minecraft.getInstance();
-        LocalPlayer player = client.player;
         if (player != null) {
             sendPackets(player);
         }
     }
 
-    public static void onClientTickEnd() {
+    public static void onClientTickEnd(LocalPlayer player) {
         try {
             ClientTaskScheduler.onClientTick();
             if (LifeSeries.modFullyDisabled()) return;
             Minecraft client = Minecraft.getInstance();
-            LocalPlayer player = client.player;
 
             spawnInvisibilityParticles(client);
 
