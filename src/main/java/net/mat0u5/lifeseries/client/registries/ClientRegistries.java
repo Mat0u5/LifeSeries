@@ -7,10 +7,12 @@ import net.mat0u5.lifeseries.client.events.ClientEvents;
 import net.mat0u5.lifeseries.client.events.ClientKeybinds;
 import net.mat0u5.lifeseries.client.features.EntityRenderModifier;
 import net.mat0u5.lifeseries.client.particle.TriviaSpiritParticle;
+import net.mat0u5.lifeseries.client.render.ClientRenderer;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.registries.ParticleRegistry;
 import net.mat0u5.matlib.client.events.ClientPlayerEvents;
 import net.mat0u5.matlib.client.events.ClientRegistryEvents;
+import net.mat0u5.matlib.client.events.ClientRenderEvents;
 import net.mat0u5.matlib.client.registries.util.ProvidedParticle;
 import net.mat0u5.matlib.client.registries.util.RenderableEntity;
 import net.mat0u5.matlib.events.EventResult;
@@ -30,6 +32,8 @@ public class ClientRegistries {
 		ClientPackSourceEvents.SERVER_PACK_DOWNLOAD.register(url -> url.contains("github.com/Mat0u5/LifeSeries-Resources") ? EventResult.DENY : EventResult.PASS);
 		ClientPlayerEvents.JOIN.register(packet -> ClientEvents.onClientJoin());
 		ClientPlayerEvents.LEAVE.register(ClientEvents::onClientDisconnect);
+		ClientRenderEvents.RENDER_GUI.register((guiGraphics, deltaTracker) -> ClientRenderer.render(guiGraphics));
+		ClientRenderEvents.RENDER_GUI_POST.register((guiGraphics, deltaTracker) -> ClientRenderer.postRender(guiGraphics));
 	}
 	public static void registerRenderers() {
 		ClientRegistryEvents.ENTITY_RENDERER.register(() -> List.of(

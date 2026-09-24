@@ -32,6 +32,7 @@ import net.minecraft.client.renderer.state.level.ParticlesRenderState;
 
 @Mixin(value = ParticleEngine.class)
 @MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@Deprecated
 public abstract class ParticleEngineMixin {
 
     @Accessor("particles")

@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Screen.class)
 @MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@Deprecated
 public class ScreenMixin {
     //? if <= 1.21.9 {
     /*@Inject(method = "init(Lnet/minecraft/client/Minecraft;II)V", at = @At("TAIL"))

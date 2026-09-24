@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = MinecraftServer.class, priority = 2)
 @MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@Deprecated
 public class MinecraftServerMixin {
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/server/MinecraftServer;initServer()Z"), method = "runServer")
     private void beforeSetupServer(CallbackInfo info) {

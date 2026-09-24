@@ -19,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public class LivingEntityMixin {
 
+    @Deprecated
     @Inject(method = "jumpFromGround", at = @At("TAIL"))
     private void onJump(CallbackInfo ci) {
         if (LifeSeries.modDisabled()) return;

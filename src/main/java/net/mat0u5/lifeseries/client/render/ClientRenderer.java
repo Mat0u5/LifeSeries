@@ -14,13 +14,13 @@ import org.joml.Vector3f;
 public class ClientRenderer {
     public static boolean isGameFullyFrozen = false;
 
-    public static void render(GuiGraphicsExtractor context) {
-        TextHud.renderText(context);
-        VignetteRenderer.renderVignette(context);
+    public static void render(GuiGraphicsExtractor graphics) {
+        TextHud.renderText(graphics);
+        VignetteRenderer.renderVignette(graphics);
     }
 
-    public static void postRender(GuiGraphicsExtractor context) {
-        TextHud.renderTextPost(context);
+    public static void postRender(GuiGraphicsExtractor graphics) {
+        TextHud.renderTextPost(graphics);
     }
 
     public static Vec3 modifyColor(Vec3 original, Vec3 targetColor, boolean setMode, Vec3 cache) {

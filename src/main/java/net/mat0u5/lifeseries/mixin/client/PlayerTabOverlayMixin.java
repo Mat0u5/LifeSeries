@@ -30,6 +30,7 @@ import net.minecraft.network.chat.numbers.NumberFormat;
 
 @Mixin(value = PlayerTabOverlay.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@Deprecated
 public class PlayerTabOverlayMixin {
 
     //? if <= 1.20.2 {

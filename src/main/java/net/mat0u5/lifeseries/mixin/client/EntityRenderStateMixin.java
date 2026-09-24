@@ -20,6 +20,7 @@ import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(value = EntityRenderState.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@Deprecated
 public class EntityRenderStateMixin implements IEntityRenderState {
     @Unique
     Entity ls$entity = null;

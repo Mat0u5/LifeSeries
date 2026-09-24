@@ -16,6 +16,7 @@ import java.util.Map;
 
 @Mixin(LayerDefinitions.class)
 @MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@Deprecated
 public class LayerDefinitionsMixin {
     @Inject(method = "createRoots", at = @At("RETURN"), cancellable = true)
     private static void injectLayerDefinitions(CallbackInfoReturnable<Map<ModelLayerLocation, LayerDefinition>> cir) {

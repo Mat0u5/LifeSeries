@@ -105,7 +105,6 @@
     "client.LocalPlayerMixin",
     "client.MinecraftMixin",
     "client.MinecraftServerMixin",
-    "client.OptionsAccessor",
     "client.ParticleAccessor",
     "client.ParticleEngineMixin",
     "client.PlayerEntityRendererMixin",

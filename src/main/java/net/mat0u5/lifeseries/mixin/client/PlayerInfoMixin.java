@@ -18,6 +18,7 @@ import net.minecraft.world.entity.player.PlayerSkin;
 
 @Mixin(value = PlayerInfo.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@Deprecated
 public class PlayerInfoMixin {
 
     //? if <= 1.20 {

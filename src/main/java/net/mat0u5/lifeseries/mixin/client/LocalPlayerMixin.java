@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = LocalPlayer.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@Deprecated
 public abstract class LocalPlayerMixin {
 
     @Inject(method = "tick", at = @At("HEAD"))

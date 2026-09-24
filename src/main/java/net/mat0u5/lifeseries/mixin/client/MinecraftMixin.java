@@ -28,12 +28,8 @@ import java.util.Optional;
 
 @Mixin(value = Minecraft.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@Deprecated
 public abstract class MinecraftMixin {
-
-    @Inject(method = "<init>", at = @At("TAIL"))
-    private void onInit(CallbackInfo ci) {
-        //LifeSeriesClient.onInitializeClient();
-    }
 
     //? if >= 1.20.3 {
     @Inject(method = "getTickTargetMillis", at = @At("HEAD"), cancellable = true)
