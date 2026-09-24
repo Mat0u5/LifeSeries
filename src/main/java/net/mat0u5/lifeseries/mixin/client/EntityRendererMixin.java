@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 //? if >= 1.21.2 {
-import net.mat0u5.lifeseries.client.utils.interfaces.IEntityRenderState;
+import net.mat0u5.matlib.client.util.interfaces.IEntityRenderState;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
@@ -69,16 +69,6 @@ public class EntityRendererMixin<T extends Entity, S extends EntityRenderState> 
     }
      *///?}
 
-
-    //? if >= 1.21.2 {
-    @Inject(method = "extractRenderState", at = @At("HEAD"))
-    public void injectEntity(T entity, S state, float tickProgress, CallbackInfo ci) {
-        if (state instanceof IEntityRenderState accessor) {
-            accessor.ls$update(entity, tickProgress);
-        }
-    }
-    //?}
-
     // In PlayerEntityRendererMixin for <= 1.21.11
 //? if >= 26.1 {
 
@@ -114,7 +104,7 @@ public class EntityRendererMixin<T extends Entity, S extends EntityRenderState> 
         var instance = event.getEntityRenderer();
         Component original = event.getScoreContent();
     *///?}
-        if (instance instanceof IEntityRenderState accessor && accessor.ls$getEntity() instanceof Player player) {
+        if (instance instanceof IEntityRenderState accessor && accessor.ml$getEntity() instanceof Player player) {
             Scoreboard scoreboard = player.level().getScoreboard();
             Objective objective = scoreboard.getDisplayObjective(DisplaySlot.BELOW_NAME);
             if (objective != null) {

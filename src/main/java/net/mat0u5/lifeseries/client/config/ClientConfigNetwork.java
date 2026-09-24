@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.client.config;
 
 import net.mat0u5.lifeseries.client.config.entries.*;
 import net.mat0u5.lifeseries.client.gui.config.entries.ConfigEntry;
-import net.mat0u5.lifeseries.client.utils.ClientResourcePacks;
+import net.mat0u5.lifeseries.client.utils.LifeSeriesResourcePacks;
 import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
@@ -102,7 +102,7 @@ public class ClientConfigNetwork {
 
         // Actions
         if (id.equals(ClientConfig.MINIMAL_ARMOR.key)) {
-            ClientResourcePacks.checkClientPacks();
+            LifeSeriesResourcePacks.checkClientPacks();
         }
     }
 }

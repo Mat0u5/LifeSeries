@@ -1,9 +1,9 @@
 package net.mat0u5.lifeseries.client.gui.seasons;
 
 import net.mat0u5.lifeseries.client.gui.DefaultScreen;
-import net.mat0u5.lifeseries.client.render.RenderUtils;
+import net.mat0u5.matlib.client.render.RenderUtils;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
-import net.mat0u5.lifeseries.client.utils.TextColors;
+import net.mat0u5.matlib.client.util.TextColors;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;

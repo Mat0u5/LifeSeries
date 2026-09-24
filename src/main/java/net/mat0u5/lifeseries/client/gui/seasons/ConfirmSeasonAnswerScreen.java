@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.client.gui.seasons;
 
 import net.mat0u5.lifeseries.client.gui.DefaultScreen;
-import net.mat0u5.lifeseries.client.render.RenderUtils;
+import net.mat0u5.matlib.client.render.RenderUtils;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.matlib.util.other.TextUtils;

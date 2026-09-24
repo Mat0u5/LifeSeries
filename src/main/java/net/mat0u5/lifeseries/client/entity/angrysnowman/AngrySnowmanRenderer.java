@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.client.entity.angrysnowman;
 
-import net.mat0u5.lifeseries.client.utils.interfaces.IEntityRenderState;
+import net.mat0u5.matlib.client.util.interfaces.IEntityRenderState;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.SnowGolemRenderer;
@@ -37,7 +37,7 @@ public class AngrySnowmanRenderer extends SnowGolemRenderer {
             /*uuid  = entity.getUUID();
             *///?} else {
             if (state instanceof IEntityRenderState stateAccessor) {
-                uuid = stateAccessor.ls$getEntity().getUUID();
+                uuid = stateAccessor.ml$getEntity().getUUID();
             }
             //?}
             int variation = 0;

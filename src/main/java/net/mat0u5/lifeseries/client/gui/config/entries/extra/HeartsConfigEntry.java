@@ -4,7 +4,7 @@ import net.mat0u5.lifeseries.client.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.client.gui.config.entries.interfaces.IPopup;
 import net.mat0u5.lifeseries.client.gui.config.entries.interfaces.ITextFieldAddonPopup;
 import net.mat0u5.lifeseries.client.gui.config.entries.main.IntegerConfigEntry;
-import net.mat0u5.lifeseries.client.utils.TextColors;
+import net.mat0u5.matlib.client.util.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.matlib.util.other.TextUtils;
 import net.minecraft.ChatFormatting;

@@ -11,8 +11,8 @@ import net.mat0u5.lifeseries.client.gui.config.entries.TextFieldConfigEntry;
 import net.mat0u5.lifeseries.client.gui.config.entries.extra.TriviaQuestionConfigEntry;
 import net.mat0u5.lifeseries.client.gui.config.entries.main.TextConfigEntry;
 
-import net.mat0u5.lifeseries.client.render.RenderUtils;
-import net.mat0u5.lifeseries.client.utils.TextColors;
+import net.mat0u5.matlib.client.render.RenderUtils;
+import net.mat0u5.matlib.client.util.TextColors;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
@@ -28,7 +28,7 @@ import java.util.Map;
 //? if >= 1.21.9
 import net.minecraft.client.input.*;
 //? if <= 1.20.2
-//import net.mat0u5.lifeseries.client.render.RenderUtils;
+//import net.mat0u5.matlib.client.render.RenderUtils;
 
 public class ConfigScreen extends Screen {
     private static int HEADER_HEIGHT_SMALL = 55;

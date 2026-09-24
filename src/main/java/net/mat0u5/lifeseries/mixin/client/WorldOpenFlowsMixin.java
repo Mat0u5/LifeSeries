@@ -6,7 +6,7 @@ import com.mojang.serialization.Lifecycle;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.gui.WorldWarningScreen;
-import net.mat0u5.lifeseries.client.render.RenderUtils;
+import net.mat0u5.matlib.client.render.RenderUtils;
 import net.mat0u5.lifeseries.config.WorldConfig;
 import net.minecraft.client.gui.screens.worldselection.WorldOpenFlows;
 import net.minecraft.world.level.storage.LevelStorageSource;

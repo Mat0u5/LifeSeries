@@ -35,7 +35,7 @@ public class TextureHelperMixin {
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
-import net.mat0u5.lifeseries.client.render.RenderUtils;
+import net.mat0u5.lifeseries.client.render.ClientRenderer;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.resources.Identifier;
@@ -59,8 +59,8 @@ public class TextureHelperMixin {
         String playerTeamColor = ClientUtils.getPlayerTeamColor();
         String playerTeamName = ClientUtils.getPlayerTeamName();
         if (!LifeSeriesClient.COLORED_HEARTS || playerTeamColor == null || playerTeamName == null ||
-                !RenderUtils.lifeSkinsAllowedColors.contains(playerTeamColor.toLowerCase(Locale.ROOT)) ||
-                !RenderUtils.lifeSkinsAllowedHearts.contains(texturePath) || LifeSeries.modFullyDisabled()) {
+                !ClientRenderer.lifeSkinsAllowedColors.contains(playerTeamColor.toLowerCase(Locale.ROOT)) ||
+                !ClientRenderer.lifeSkinsAllowedHearts.contains(texturePath) || LifeSeries.modFullyDisabled()) {
             return;
         }
         String color = playerTeamColor.toLowerCase(Locale.ROOT);

@@ -7,7 +7,7 @@ import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.NewQuizScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.QuizScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.VotingScreen;
-import net.mat0u5.lifeseries.client.render.RenderUtils;
+import net.mat0u5.matlib.client.render.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import org.spongepowered.asm.mixin.Mixin;
@@ -38,7 +38,7 @@ import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 *///?} else {
-import net.mat0u5.lifeseries.client.utils.interfaces.IEntityRenderState;
+import net.mat0u5.matlib.client.util.interfaces.IEntityRenderState;
 import net.minecraft.world.entity.player.Player;
 //?}
 //? if >= 1.21.2 && <= 1.21.6
@@ -147,7 +147,7 @@ public abstract class PlayerEntityRendererMixin {
     public Component customBelowName(AvatarRenderState instance) {
     //?}
         Component original = instance.scoreText;
-        if (instance instanceof IEntityRenderState accessor && accessor.ls$getEntity() instanceof Player player) {
+        if (instance instanceof IEntityRenderState accessor && accessor.ml$getEntity() instanceof Player player) {
             //? if <= 1.21.6 {
             /^Scoreboard scoreboard = player.getScoreboard();
             ^///?} else {

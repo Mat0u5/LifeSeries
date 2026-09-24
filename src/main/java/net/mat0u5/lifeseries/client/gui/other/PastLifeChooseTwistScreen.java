@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.client.gui.other;
 
 import net.mat0u5.lifeseries.client.gui.DefaultScreen;
-import net.mat0u5.lifeseries.client.render.RenderUtils;
+import net.mat0u5.matlib.client.render.RenderUtils;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;

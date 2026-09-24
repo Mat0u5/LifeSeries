@@ -10,7 +10,7 @@ import net.mat0u5.lifeseries.client.gui.config.entries.extra.*;
 import net.mat0u5.lifeseries.client.gui.config.entries.extra.time.MinutesConfigEntry;
 import net.mat0u5.lifeseries.client.gui.config.entries.extra.time.SecondsConfigEntry;
 import net.mat0u5.lifeseries.client.gui.config.entries.main.*;
-import net.mat0u5.lifeseries.client.render.RenderUtils;
+import net.mat0u5.matlib.client.render.RenderUtils;
 import net.mat0u5.lifeseries.client.utils.interfaces.IEntryGroupHeader;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.minecraft.network.chat.Component;

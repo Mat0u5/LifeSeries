@@ -15,12 +15,11 @@ import net.mat0u5.lifeseries.client.gui.seasons.SeasonInfoScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.NewQuizScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.QuizScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.VotingScreen;
-import net.mat0u5.lifeseries.client.render.RenderUtils;
+import net.mat0u5.matlib.client.render.RenderUtils;
 import net.mat0u5.lifeseries.client.render.TextHud;
-import net.mat0u5.lifeseries.client.render.VignetteRenderer;
-import net.mat0u5.lifeseries.client.utils.ClientResourcePacks;
 import net.mat0u5.lifeseries.client.utils.ClientSounds;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
+import net.mat0u5.lifeseries.client.utils.LifeSeriesResourcePacks;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.mixin.PlayerAccessor;
 import net.mat0u5.lifeseries.mixin.client.GuiAccessor;
@@ -35,6 +34,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Hunger;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDilation;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
+import net.mat0u5.matlib.client.render.VignetteRenderer;
 import net.mat0u5.matlib.util.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
@@ -206,7 +206,7 @@ public class NetworkHandlerClient {
         SimplePackets.CURRENT_SEASON.setClientReceive(payload -> {
             if (LifeSeries.DEBUG) LifeSeries.LOGGER.info("[PACKET_CLIENT] Updated current season to {}", payload.value());
             LifeSeriesClient.clientCurrentSeason = Seasons.getSeasonFromStringName(payload.value());
-            ClientResourcePacks.checkClientPacks();
+            LifeSeriesResourcePacks.checkClientPacks();
             LifeSeriesClient.reloadConfig();
         });
         SimplePackets.SESSION_STATUS.setClientReceive(payload -> {
@@ -250,7 +250,7 @@ public class NetworkHandlerClient {
             boolean newValue = payload.value();
             if (LifeSeriesClient.NICELIFE_SNOWY_NETHER != newValue) {
                 LifeSeriesClient.NICELIFE_SNOWY_NETHER = newValue;
-                ClientResourcePacks.checkClientPacks();
+                LifeSeriesResourcePacks.checkClientPacks();
             }
         });
         SimplePackets.EMPTY_SCREEN.setClientReceive(payload -> {

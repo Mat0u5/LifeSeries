@@ -3,10 +3,11 @@ package net.mat0u5.lifeseries.mixin.client;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
-import net.mat0u5.lifeseries.client.render.RenderUtils;
+import net.mat0u5.lifeseries.client.render.ClientRenderer;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.matlib.client.render.RenderUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.InBedChatScreen;
 import org.spongepowered.asm.mixin.Mixin;
@@ -82,8 +83,8 @@ public class GuiMixin {
         String playerTeamColor = ClientUtils.getPlayerTeamColor();
         String playerTeamName = ClientUtils.getPlayerTeamName();
         if (!LifeSeriesClient.COLORED_HEARTS || playerTeamColor == null || playerTeamName == null ||
-                !RenderUtils.lifeSkinsAllowedColors.contains(playerTeamColor.toLowerCase(Locale.ROOT)) ||
-                !RenderUtils.lifeSkinsAllowedHearts.contains(texturePath) || LifeSeries.modFullyDisabled()) {
+                !ClientRenderer.lifeSkinsAllowedColors.contains(playerTeamColor.toLowerCase(Locale.ROOT)) ||
+                !ClientRenderer.lifeSkinsAllowedHearts.contains(texturePath) || LifeSeries.modFullyDisabled()) {
             if (LifeSeries.isSeason(Seasons.SECRET_LIFE) && texturePath.startsWith("hud/heart/container")) {
                 return;
             }

@@ -3,20 +3,26 @@ package net.mat0u5.lifeseries.client.render;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector4f;
+import java.util.List;
 
-//? if > 1.20.5
-import net.minecraft.client.DeltaTracker;
 //? if >= 1.21.2 {
 import net.minecraft.util.ARGB;
 import org.joml.Vector3f;
 //?}
 
 public class ClientRenderer {
+    public static final List<String> lifeSkinsAllowedColors = List.of(
+            "aqua","black","blue","dark_aqua","dark_blue","dark_gray","dark_green",
+            "dark_purple","dark_red","gold","gray","green","light_purple","white","yellow", "red"
+    );
+    public static final List<String> lifeSkinsAllowedHearts = List.of(
+            "hud/heart/full", "hud/heart/full_blinking", "hud/heart/half", "hud/heart/half_blinking",
+            "hud/heart/hardcore_full", "hud/heart/hardcore_full_blinking", "hud/heart/hardcore_half", "hud/heart/hardcore_half_blinking"
+    );
     public static boolean isGameFullyFrozen = false;
 
     public static void render(GuiGraphicsExtractor graphics) {
         TextHud.renderText(graphics);
-        VignetteRenderer.renderVignette(graphics);
     }
 
     public static void postRender(GuiGraphicsExtractor graphics) {

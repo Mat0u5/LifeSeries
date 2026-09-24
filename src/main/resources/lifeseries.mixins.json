@@ -90,7 +90,6 @@
     "client.EntityBoundSoundInstanceMixin",
     "client.EntityMixin",
     "client.EntityRendererMixin",
-    "client.EntityRenderStateMixin",
     "client.FogRendererMixin",
     "client.GameRendererMixin",
     "client.GuiAccessor",

@@ -2,8 +2,8 @@ package net.mat0u5.lifeseries.client.gui.trivia;
 
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
-import net.mat0u5.lifeseries.client.render.RenderUtils;
-import net.mat0u5.lifeseries.client.utils.TextColors;
+import net.mat0u5.matlib.client.render.RenderUtils;
+import net.mat0u5.matlib.client.util.TextColors;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.matlib.util.other.TextUtils;
