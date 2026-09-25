@@ -11,7 +11,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.matlib.utils.enums.HandshakeStatus;
-import net.mat0u5.lifeseries.utils.interfaces.ClientAccessor;
+import net.mat0u5.lifeseries.utils.interfaces.LifeSeriesClientAccessor;
 import net.mat0u5.lifeseries.utils.other.ModBuiltInPacks;
 import net.mat0u5.matlib.MatLib;
 import net.mat0u5.matlib.api.MatLibClientInitializer;
@@ -30,7 +30,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 *///?}
 
 @AutoService(MatLibClientInitializer.class)
-public class LifeSeriesClient implements MatLibClientInitializer, ClientAccessor {
+public class LifeSeriesClient implements MatLibClientInitializer, LifeSeriesClientAccessor {
 
     public static Seasons clientCurrentSeason = LifeSeries.DEFAULT_SEASON;
     public static SessionStatus clientSessionStatus = SessionStatus.NOT_STARTED;
@@ -109,20 +109,6 @@ public class LifeSeriesClient implements MatLibClientInitializer, ClientAccessor
         reloadConfig();
     }
 
-    public static boolean isClientPlayer(UUID uuid) {
-        Minecraft client = Minecraft.getInstance();
-        if (client == null) return false;
-        if (client.player == null) return false;
-        return client.player.getUUID().equals(uuid);
-    }
-
-    @Override
-    public boolean isRunningIntegratedServer() {
-        Minecraft client = Minecraft.getInstance();
-        if (client == null) return false;
-        return client.hasSingleplayerServer();
-    }
-
     @Override
     public boolean isReplay() {
         return isReplay;
@@ -131,11 +117,6 @@ public class LifeSeriesClient implements MatLibClientInitializer, ClientAccessor
     @Override
     public HandshakeStatus serverHandshake() {
         return serverHandshake;
-    }
-
-    @Override
-    public boolean isMainClientPlayer(UUID uuid) {
-        return isClientPlayer(uuid);
     }
 
     @Override
@@ -149,21 +130,10 @@ public class LifeSeriesClient implements MatLibClientInitializer, ClientAccessor
     }
 
     @Override
-    public void sendPacket(CustomPacketPayload payload) {
-        NetworkHandlerClient.send(payload);
-    }
-
-    @Override
     public boolean isDisabledServerSide() {
         return modDisabledServerSide;
     }
 
-    //? if neoforge {
-    /*@Override
-    public <T extends CustomPacketPayload> void handlePacket(T payload, IPayloadContext context) {
-        NeoForgeClientNetworkRegistration.handleClientPacket(payload, context);
-    }
-    *///?}
 
     public static void reloadConfig() {
         COLORBLIND_SUPPORT = ClientConfig.COLORBLIND_SUPPORT.get(clientConfig);

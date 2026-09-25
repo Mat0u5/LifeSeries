@@ -101,40 +101,26 @@ public class NetworkHandlerServer {
     //? if <= 1.20.3 {
     /*public static final Map<Identifier, Function<FriendlyByteBuf, CustomPacketPayload>> PAYLOAD_READERS = new HashMap<>();
     static {
-        PAYLOAD_READERS.put(NumberPayload.ID, NumberPayload::read);
-        PAYLOAD_READERS.put(StringPayload.ID, StringPayload::read);
-        PAYLOAD_READERS.put(StringListPayload.ID, StringListPayload::read);
         PAYLOAD_READERS.put(HandshakePayload.ID, HandshakePayload::read);
         PAYLOAD_READERS.put(TriviaQuestionPayload.ID, TriviaQuestionPayload::read);
-        PAYLOAD_READERS.put(LongPayload.ID, LongPayload::read);
         PAYLOAD_READERS.put(PlayerDisguisePayload.ID, PlayerDisguisePayload::read);
         PAYLOAD_READERS.put(ConfigPayload.ID, ConfigPayload::read);
         PAYLOAD_READERS.put(SidetitlePacket.ID, SidetitlePacket::read);
         PAYLOAD_READERS.put(SnailTexturePacket.ID, SnailTexturePacket::read);
         PAYLOAD_READERS.put(TriviaTexturePacket.ID, TriviaTexturePacket::read);
         PAYLOAD_READERS.put(VoteScreenPayload.ID, VoteScreenPayload::read);
-        PAYLOAD_READERS.put(EmptyPayload.ID, EmptyPayload::read);
-        PAYLOAD_READERS.put(BooleanPayload.ID, BooleanPayload::read);
-        PAYLOAD_READERS.put(IntPayload.ID, IntPayload::read);
         PAYLOAD_READERS.put(LifeSkinsTexturePayload.ID, LifeSkinsTexturePayload::read);
     }
     *///?} else {
     public static final List<CustomPacketPayload.TypeAndCodec<? super RegistryFriendlyByteBuf, ? extends CustomPacketPayload>> PAYLOADS = List.of(
-            new CustomPacketPayload.TypeAndCodec<>(NumberPayload.ID, NumberPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(StringPayload.ID, StringPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(StringListPayload.ID, StringListPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(HandshakePayload.ID, HandshakePayload.CODEC)
+            new CustomPacketPayload.TypeAndCodec<>(HandshakePayload.ID, HandshakePayload.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(LongPayload.ID, LongPayload.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(ConfigPayload.ID, ConfigPayload.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(SidetitlePacket.ID, SidetitlePacket.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(SnailTexturePacket.ID, SnailTexturePacket.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(TriviaTexturePacket.ID, TriviaTexturePacket.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(VoteScreenPayload.ID, VoteScreenPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(EmptyPayload.ID, EmptyPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(BooleanPayload.ID, BooleanPayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(IntPayload.ID, IntPayload.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(LifeSkinsTexturePayload.ID, LifeSkinsTexturePayload.CODEC)
     );
     //?}

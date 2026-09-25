@@ -15,7 +15,7 @@ import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
 import net.mat0u5.matlib.utils.enums.HandshakeStatus;
-import net.mat0u5.lifeseries.utils.interfaces.ClientAccessor;
+import net.mat0u5.lifeseries.utils.interfaces.LifeSeriesClientAccessor;
 import net.mat0u5.lifeseries.utils.other.ModBuiltInPacks;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.mat0u5.matlib.MatLib;
@@ -42,7 +42,7 @@ public class LifeSeries implements MatLibInitializer {
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	private static ConfigManager config;
-	private static ClientAccessor clientAccessor;
+	private static LifeSeriesClientAccessor clientAccessor;
 	public static Season currentSeason;
 	public static Session currentSession;
 	public static LivesManager livesManager;
@@ -109,11 +109,11 @@ public class LifeSeries implements MatLibInitializer {
 		return clientAccessor != null;
 	}
 
-	public static ClientAccessor getClientAccessor() {
+	public static LifeSeriesClientAccessor getClientAccessor() {
 		return clientAccessor;
 	}
 
-	public static void setClientAccessor(ClientAccessor helper) {
+	public static void setClientAccessor(LifeSeriesClientAccessor helper) {
 		clientAccessor = helper;
 	}
 
@@ -129,8 +129,7 @@ public class LifeSeries implements MatLibInitializer {
 	}
 
 	public static boolean isLogicalSide() {
-		if (clientAccessor == null) return true;
-		return clientAccessor != null && clientAccessor.isRunningIntegratedServer();
+		return MatLib.isLogicalSide();
 	}
 
 	public static boolean isLogicalNonDisabled() {
@@ -138,10 +137,6 @@ public class LifeSeries implements MatLibInitializer {
 	}
 	public static boolean isClientOrDisabled() {
 		return !isLogicalSide() || modDisabled();
-	}
-
-	public static boolean isClientPlayer(UUID uuid) {
-		return clientAccessor != null && clientAccessor.isMainClientPlayer(uuid);
 	}
 
 	public static ConfigManager getMainConfig() {

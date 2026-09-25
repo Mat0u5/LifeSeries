@@ -36,7 +36,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-
+@Deprecated
 public record HandshakePayload(String modVersionStr, int modVersion, String compatibilityStr, int compatibility) implements CustomPacketPayload {
 
     public static final CustomPacketPayload.Type<HandshakePayload> ID = new CustomPacketPayload.Type<>(IdentifierHelper.lifeseries( "handshake"));
