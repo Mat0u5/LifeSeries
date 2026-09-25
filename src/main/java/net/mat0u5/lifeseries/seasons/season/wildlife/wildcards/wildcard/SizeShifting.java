@@ -6,7 +6,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.matlib.util.player.AttributeUtils;
+import net.mat0u5.matlib.utils.player.AttributeUtils;
 import net.minecraft.server.level.ServerPlayer;
 
 public class SizeShifting extends Wildcard {

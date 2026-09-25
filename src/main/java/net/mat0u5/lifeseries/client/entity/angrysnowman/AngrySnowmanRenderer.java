@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.client.entity.angrysnowman;
 
-import net.mat0u5.matlib.client.util.interfaces.IEntityRenderState;
+import net.mat0u5.matlib.client.utils.interfaces.IEntityRenderState;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.SnowGolemRenderer;

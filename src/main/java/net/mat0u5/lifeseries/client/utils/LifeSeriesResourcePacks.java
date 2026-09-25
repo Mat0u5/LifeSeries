@@ -4,7 +4,7 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.config.ClientConfig;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.matlib.client.util.ClientResourcePacks;
+import net.mat0u5.matlib.client.utils.ClientResourcePacks;
 
 import static net.mat0u5.lifeseries.client.LifeSeriesClient.clientConfig;
 

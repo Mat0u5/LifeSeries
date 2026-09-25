@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.matlib.util.resource.ResourceHandler;
+import net.mat0u5.matlib.utils.resource.ResourceHandler;
 
 import java.io.File;
 import java.io.FileWriter;

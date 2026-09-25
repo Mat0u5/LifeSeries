@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 //? if >= 1.21.2 {
-import net.mat0u5.matlib.client.util.interfaces.IEntityRenderState;
+import net.mat0u5.matlib.client.utils.interfaces.IEntityRenderState;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
@@ -26,7 +26,7 @@ import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
-import net.mat0u5.matlib.util.other.Time;
+import net.mat0u5.matlib.utils.other.Time;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.scores.DisplaySlot;
 import net.minecraft.world.scores.Objective;
@@ -44,56 +44,11 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class EntityRendererMixin<T extends Entity> {
 *///?} else {
 @MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
-@Deprecated // All getPlayerName stuff and customBelowName
 public class EntityRendererMixin<T extends Entity, S extends EntityRenderState> {
 //?}
 
-    //? if <= 1.20.3 {
-    /*@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/EntityRenderer;renderNameTag(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V"), index = 1)
-    public Component render(Component text) {
-        return ClientUtils.getPlayerName(text);
-    }
-    *///?} else if <= 1.21 {
-    /*@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/EntityRenderer;renderNameTag(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IF)V"), index = 1)
-    public Component render(Component text) {
-        return ClientUtils.getPlayerName(text);
-    }
-    *///?} else if <= 1.21.6 {
-    /*@ModifyArg(
-            method = "render",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/EntityRenderer;renderNameTag(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V"),
-            index = 1
-    )
-    public Component render(Component text) {
-        return ClientUtils.getPlayerName(text);
-    }
-     *///?}
-
     // In PlayerEntityRendererMixin for <= 1.21.11
 //? if >= 26.1 {
-
-
-    //? if <= 26.1 {
-    /*@ModifyArg(
-            method = "submitNameDisplay(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;I)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitNameTag(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/phys/Vec3;ILnet/minecraft/network/chat/Component;ZIDLnet/minecraft/client/renderer/state/level/CameraRenderState;)V"),
-            index = 3
-    )
-    public Component render(Component text) {
-        return ClientUtils.getPlayerName(text);
-    }
-    *///?} else {
-    @ModifyArg(
-            method = "submitNameDisplay(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;I)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitNameTag(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/phys/Vec3;ILnet/minecraft/network/chat/Component;ZILnet/minecraft/client/renderer/state/level/CameraRenderState;)V"),
-            index = 3
-    )
-    public Component render(Component text) {
-        return ClientUtils.getPlayerName(text);
-    }
-    //?}
-
-
     //? if !forge {
     @Redirect(method = "submitNameDisplay(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;I)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/EntityRenderState;scoreText:Lnet/minecraft/network/chat/Component;"))
     public Component customBelowName(EntityRenderState instance) {

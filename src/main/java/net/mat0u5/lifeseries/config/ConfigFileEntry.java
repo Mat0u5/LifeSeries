@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.config;
 
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.mat0u5.matlib.util.other.TextUtils;
+import net.mat0u5.matlib.utils.other.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;

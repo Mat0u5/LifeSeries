@@ -2,8 +2,8 @@ package net.mat0u5.lifeseries.client.gui.config.entries.extra;
 
 import net.mat0u5.lifeseries.client.gui.config.entries.StringListPopupConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.mat0u5.matlib.util.other.RegistryUtils;
-import net.mat0u5.matlib.util.other.TextUtils;
+import net.mat0u5.matlib.utils.other.RegistryUtils;
+import net.mat0u5.matlib.utils.other.TextUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;

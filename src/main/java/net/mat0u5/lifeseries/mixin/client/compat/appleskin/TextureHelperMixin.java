@@ -56,8 +56,8 @@ public class TextureHelperMixin {
     private static void teamHearts(boolean hardcore, TextureHelper.HeartType type, CallbackInfoReturnable<Identifier> cir) {
         Identifier original = cir.getReturnValue();
         String texturePath = original.getPath();
-        String playerTeamColor = ClientUtils.getPlayerTeamColor();
-        String playerTeamName = ClientUtils.getPlayerTeamName();
+        String playerTeamColor = ClientUtils.getPlayerTeamColorOrPacket();
+        String playerTeamName = ClientUtils.getPlayerTeamNameOrPacket();
         if (!LifeSeriesClient.COLORED_HEARTS || playerTeamColor == null || playerTeamName == null ||
                 !ClientRenderer.lifeSkinsAllowedColors.contains(playerTeamColor.toLowerCase(Locale.ROOT)) ||
                 !ClientRenderer.lifeSkinsAllowedHearts.contains(texturePath) || LifeSeries.modFullyDisabled()) {

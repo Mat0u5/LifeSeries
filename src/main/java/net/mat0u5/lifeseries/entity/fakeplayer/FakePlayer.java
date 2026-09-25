@@ -8,7 +8,7 @@ package net.mat0u5.lifeseries.entity.fakeplayer;
 
 import com.mojang.authlib.GameProfile;
 import net.mat0u5.lifeseries.mixin.SkullBlockEntityAccessor;
-import net.mat0u5.matlib.util.world.LevelUtils;
+import net.mat0u5.matlib.utils.world.LevelUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -54,7 +54,7 @@ import java.util.concurrent.CompletableFuture;
 *///?}
 
 @SuppressWarnings("EntityConstructor")
-public class FakePlayer extends ServerPlayer implements net.mat0u5.matlib.util.interfaces.FakePlayer {
+public class FakePlayer extends ServerPlayer implements net.mat0u5.matlib.utils.interfaces.FakePlayer {
     //? if <= 1.20 {
     /*private FakePlayer(MinecraftServer server, ServerLevel levelIn, GameProfile profile) {
         super(server, levelIn, profile);

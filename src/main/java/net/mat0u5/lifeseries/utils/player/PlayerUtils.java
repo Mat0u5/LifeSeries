@@ -14,7 +14,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.util.WatcherManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.matlib.util.player.AttributeUtils;
+import net.mat0u5.matlib.utils.player.AttributeUtils;
 import net.minecraft.Optionull;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.RemoteChatSession;
@@ -31,7 +31,7 @@ import static net.mat0u5.matlib.MatLib.server;
 //? if >= 1.21.4
 import net.minecraft.world.entity.player.PlayerModelPart;
 
-public class PlayerUtils extends net.mat0u5.matlib.util.player.PlayerUtils {
+public class PlayerUtils extends net.mat0u5.matlib.utils.player.PlayerUtils {
 
     public static void resetAttributesOnPlayerJoin(ServerPlayer player) {
         if (player == null) return;

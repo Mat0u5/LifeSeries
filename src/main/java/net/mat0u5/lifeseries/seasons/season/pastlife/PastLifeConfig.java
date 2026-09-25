@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.pastlife;
 import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.thirdlife.ThirdLifeConfig;
-import net.mat0u5.matlib.util.other.TextUtils;
+import net.mat0u5.matlib.utils.other.TextUtils;
 
 public class PastLifeConfig extends SeasonConfig {
     public PastLifeConfig() {

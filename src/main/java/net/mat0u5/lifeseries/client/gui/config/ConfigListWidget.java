@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.client.gui.config;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.mat0u5.lifeseries.client.gui.config.entries.ConfigEntry;
-import net.mat0u5.matlib.client.util.TextColors;
+import net.mat0u5.matlib.client.utils.TextColors;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.ObjectSelectionList;

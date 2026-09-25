@@ -4,7 +4,7 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.matlib.util.other.Time;
+import net.mat0u5.matlib.utils.other.Time;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 
@@ -19,7 +19,7 @@ import static net.mat0u5.matlib.MatLib.server;
 //? if >= 1.20.3
 import net.minecraft.server.ServerTickRateManager;
 
-public class OtherUtils extends net.mat0u5.matlib.util.other.OtherUtils {
+public class OtherUtils extends net.mat0u5.matlib.utils.other.OtherUtils {
     private static final Random rnd = new Random();
 
     private static final Pattern TIME_PATTERN = Pattern.compile("(?:(\\d+)h)?(?:(\\d+)m)?(?:(\\d+)s)?");

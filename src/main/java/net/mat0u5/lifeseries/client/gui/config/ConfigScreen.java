@@ -12,7 +12,7 @@ import net.mat0u5.lifeseries.client.gui.config.entries.extra.TriviaQuestionConfi
 import net.mat0u5.lifeseries.client.gui.config.entries.main.TextConfigEntry;
 
 import net.mat0u5.matlib.client.render.RenderUtils;
-import net.mat0u5.matlib.client.util.TextColors;
+import net.mat0u5.matlib.client.utils.TextColors;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;

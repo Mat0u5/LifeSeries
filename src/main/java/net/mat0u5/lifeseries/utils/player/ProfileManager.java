@@ -13,7 +13,7 @@ import net.mat0u5.lifeseries.mixin.PlayerAccessor;
 import net.mat0u5.lifeseries.mixin.TrackedEntityAccessor;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.matlib.util.other.Tuple;
+import net.mat0u5.matlib.utils.other.Tuple;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;

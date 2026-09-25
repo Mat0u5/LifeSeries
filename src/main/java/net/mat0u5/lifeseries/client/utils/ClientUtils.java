@@ -2,13 +2,13 @@ package net.mat0u5.lifeseries.client.utils;
 
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
-import net.mat0u5.matlib.util.enums.Direction;
+import net.mat0u5.matlib.events.OptionalEventReturn;
+import net.mat0u5.matlib.utils.enums.Direction;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.matlib.util.other.TextUtils;
+import net.mat0u5.matlib.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.matlib.util.world.ItemStackUtils;
+import net.mat0u5.matlib.utils.world.ItemStackUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
@@ -17,20 +17,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.PlayerTeam;
-import net.minecraft.world.scores.Team;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.entity.Entity;
 
-import java.util.UUID;
-
-//? if > 1.20.5
-import net.minecraft.network.DisconnectionDetails;
 //? if > 1.20 {
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.Holder;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -43,15 +38,7 @@ import net.minecraft.world.entity.LivingEntity;
 //? if >= 26.2
 import net.minecraft.world.scores.TeamColor;
 
-//? if <= 26.2 {
-/*import net.minecraft.util.Util;
-*///?} else {
-import com.mojang.blaze3d.Blaze3D;
-import java.net.URI;
-//?}
-
-@Deprecated
-public class ClientUtils {
+public class ClientUtils extends net.mat0u5.matlib.client.utils.ClientUtils {
 
     public static boolean shouldPreventGliding() {
         if (!LifeSeriesClient.preventGliding) return false;
@@ -70,61 +57,15 @@ public class ClientUtils {
     }
 
     @Nullable
-    public static Player getPlayer(UUID uuid) {
-        Minecraft client = Minecraft.getInstance();
-        if (client == null) return null;
-        if (client.level == null) return null;
-        return client.level.getPlayerByUUID(uuid);
-    }
-
-    @Nullable
-    public static String getPlayerTeamColor() {
+    public static String getPlayerTeamColorOrPacket() {
         if (LifeSeriesClient.teamColor != null && !LifeSeriesClient.teamColor.isEmpty()) return LifeSeriesClient.teamColor;
-
-        Minecraft client = Minecraft.getInstance();
-        if (client.player == null) return null;
-        Team team = client.player.getTeam();
-        //~ if >= 26.2 'team.getColor().getName()' -> 'team.getColor().orElse(TeamColor.WHITE).getSerializedName()' {
-        if (team != null) return team.getColor().orElse(TeamColor.WHITE).getSerializedName();
-        //~}
-        return null;
+        return getPlayerTeamColor();
     }
+
     @Nullable
-    public static String getPlayerTeamName() {
+    public static String getPlayerTeamNameOrPacket() {
         if (LifeSeriesClient.teamName != null && !LifeSeriesClient.teamName.isEmpty()) return LifeSeriesClient.teamName;
-
-        Minecraft client = Minecraft.getInstance();
-        if (client.player == null) return null;
-        Team team = client.player.getTeam();
-        if (team != null) return team.getName();
-        return null;
-    }
-
-    public static void runCommand(String command) {
-        ClientPacketListener handler = Minecraft.getInstance().getConnection();
-        if (handler == null) return;
-
-        if (command.startsWith("/")) {
-            command = command.substring(1);
-        }
-        handler.sendCommand(command);
-    }
-
-    public static void disconnect(Component reason) {
-        Minecraft client = Minecraft.getInstance();
-        if (client.level == null) return;
-        ClientPacketListener handler = client.getConnection();
-        if (handler == null) return;
-        //? if < 1.21.6 {
-        /*client.level.disconnect();
-        *///?} else {
-        client.level.disconnect(reason);
-        //?}
-        //? if <= 1.20.5 {
-        /*handler.onDisconnect(reason);
-        *///?} else {
-        handler.onDisconnect(new DisconnectionDetails(reason));
-        //?}
+        return getPlayerTeamName();
     }
 
     //? if > 1.20.3 {
@@ -233,31 +174,31 @@ public class ClientUtils {
         return null;
     }
 
-    @Deprecated
-    public static Component getPlayerName(Component text) {
-        if (text == null || LifeSeries.modFullyDisabled()) return text;
-        if (Minecraft.getInstance().getConnection() == null) return text;
+    public static OptionalEventReturn<Component> getEntityName(Entity entity, Component text) {
+        if (text == null || LifeSeries.modFullyDisabled() || !(entity instanceof Player player)) return OptionalEventReturn.pass();
+        if (Minecraft.getInstance().getConnection() == null) return OptionalEventReturn.pass();
 
         if (LifeSeriesClient.playerDisguiseNames.containsKey(text.getString())) {
             String name = LifeSeriesClient.playerDisguiseNames.get(text.getString());
             for (PlayerInfo entry : Minecraft.getInstance().getConnection().getOnlinePlayers()) {
                 if (OtherUtils.profileName(entry.getProfile()).equalsIgnoreCase(TextUtils.removeFormattingCodes(name))) {
                     if (entry.getTabListDisplayName() != null) {
-                        return applyColorblindToName(entry.getTabListDisplayName(), entry.getTeam());
+                        return OptionalEventReturn.of(applyColorblindToName(entry.getTabListDisplayName(), entry.getTeam()));
                     }
-                    return applyColorblindToName(Component.literal(name), entry.getTeam());
+                    return OptionalEventReturn.of(applyColorblindToName(Component.literal(name), entry.getTeam()));
                 }
             }
         }
         else {
             for (PlayerInfo entry : Minecraft.getInstance().getConnection().getOnlinePlayers()) {
                 if (OtherUtils.profileName(entry.getProfile()).equalsIgnoreCase(TextUtils.removeFormattingCodes(text.getString()))) {
-                    return applyColorblindToName(text, entry.getTeam());
+                    return OptionalEventReturn.of(applyColorblindToName(text, entry.getTeam()));
                 }
             }
         }
-        return text;
+        return OptionalEventReturn.pass();
     }
+
     public static Component applyColorblindToName(Component original, PlayerTeam team) {
         if (!LifeSeriesClient.COLORBLIND_SUPPORT) return original;
         if (original == null) return original;
@@ -267,12 +208,5 @@ public class ClientUtils {
         //~ if >= 26.2 '.withStyle(team.getColor())' -> '.withColor(team.getColor().orElse(TeamColor.WHITE).textColor())' {
         return TextUtils.format("[{}] ", name).withColor(team.getColor().orElse(TeamColor.WHITE).textColor()).append(original);
         //~}
-    }
-    public static void openExternalLink(String str) {
-        //? if <= 26.2 {
-        /*Util.getPlatform().openUri(str);
-        *///?} else {
-        Blaze3D.openUri(URI.create(str));
-        //?}
     }
 }

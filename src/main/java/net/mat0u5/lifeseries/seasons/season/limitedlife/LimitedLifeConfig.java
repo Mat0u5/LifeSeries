@@ -4,8 +4,8 @@ import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.mat0u5.matlib.util.other.TextUtils;
-import net.mat0u5.matlib.util.other.Time;
+import net.mat0u5.matlib.utils.other.TextUtils;
+import net.mat0u5.matlib.utils.other.Time;
 
 import java.util.ArrayList;
 import java.util.List;

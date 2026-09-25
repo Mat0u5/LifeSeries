@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.utils.interfaces;
 
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
-import net.mat0u5.matlib.util.enums.HandshakeStatus;
+import net.mat0u5.matlib.utils.enums.HandshakeStatus;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 import java.util.List;

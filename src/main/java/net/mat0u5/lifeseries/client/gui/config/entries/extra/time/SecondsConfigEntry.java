@@ -5,7 +5,7 @@ import net.mat0u5.lifeseries.client.gui.config.entries.interfaces.IPopup;
 import net.mat0u5.lifeseries.client.gui.config.entries.interfaces.ITextFieldAddonPopup;
 import net.mat0u5.lifeseries.client.gui.config.entries.main.IntegerConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.mat0u5.matlib.util.other.Time;
+import net.mat0u5.matlib.utils.other.Time;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;

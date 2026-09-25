@@ -3,9 +3,12 @@ package net.mat0u5.lifeseries.client.features;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
-import net.mat0u5.matlib.util.other.TextUtils;
-import net.mat0u5.matlib.util.other.Tuple;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.matlib.events.OptionalEventReturn;
+import net.mat0u5.matlib.utils.other.TextUtils;
+import net.mat0u5.matlib.utils.other.Tuple;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -27,6 +30,20 @@ import net.minecraft.world.entity.player.PlayerSkin;
 //?}
 
 public class LifeSkinsClient {
+
+    //? if <= 1.20 {
+    /*public static OptionalEventReturn<Identifier> onGetSkin(PlayerInfo info, Identifier originalReturn) {
+    *///?} else {
+    public static OptionalEventReturn<PlayerSkin> onGetSkin(PlayerInfo info, PlayerSkin originalReturn) {
+    //?}
+        UUID uuid = OtherUtils.profileId(info.getProfile());
+
+        var lifeSkins = LifeSkinsClient.getTexture(uuid);
+        if (lifeSkins != null) {
+            return OptionalEventReturn.of(lifeSkins);
+        }
+        return OptionalEventReturn.pass();
+    }
 
     //? if <= 1.20 {
     /*private static final Map<String, Identifier> lifeSkinsTextures = new ConcurrentHashMap<>();

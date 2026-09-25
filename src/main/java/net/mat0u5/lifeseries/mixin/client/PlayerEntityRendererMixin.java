@@ -38,7 +38,7 @@ import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 *///?} else {
-import net.mat0u5.matlib.client.util.interfaces.IEntityRenderState;
+import net.mat0u5.matlib.client.utils.interfaces.IEntityRenderState;
 import net.minecraft.world.entity.player.Player;
 //?}
 //? if >= 1.21.2 && <= 1.21.6
@@ -47,7 +47,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 
 //?if <= 1.21.11 {
-/*import net.mat0u5.matlib.util.other.Time;
+/*import net.mat0u5.matlib.utils.other.Time;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -63,19 +63,6 @@ import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 //?}
 @MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public abstract class PlayerEntityRendererMixin {
-
-    @Deprecated
-    // In EntityRender from 26.1+
-    //? if > 1.21.6 && <= 1.21.11 {
-    /*@ModifyArg(
-            method = "submitNameTag(Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitNameTag(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/phys/Vec3;ILnet/minecraft/network/chat/Component;ZIDLnet/minecraft/client/renderer/state/CameraRenderState;)V"),
-            index = 3
-    )
-    public Component render(Component text) {
-        return ClientUtils.getPlayerName(text);
-    }
-    *///?}
 
     //? if <= 1.20.2 {
     /*@Redirect(method = "renderNameTag(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/Component;literal(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;"))

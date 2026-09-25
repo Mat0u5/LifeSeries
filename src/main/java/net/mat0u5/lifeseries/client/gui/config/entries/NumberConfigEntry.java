@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.client.gui.config.entries;
 
-import net.mat0u5.matlib.client.util.TextColors;
+import net.mat0u5.matlib.client.utils.TextColors;
 import net.mat0u5.lifeseries.client.utils.interfaces.IEntryGroupHeader;
-import net.mat0u5.matlib.util.other.TextUtils;
+import net.mat0u5.matlib.utils.other.TextUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfigEntry implements IEntryGroupHeader {

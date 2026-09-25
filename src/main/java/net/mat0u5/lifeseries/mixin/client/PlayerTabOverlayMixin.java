@@ -5,8 +5,8 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
-import net.mat0u5.matlib.util.other.TextUtils;
-import net.mat0u5.matlib.util.other.Time;
+import net.mat0u5.matlib.utils.other.TextUtils;
+import net.mat0u5.matlib.utils.other.Time;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.PlayerTabOverlay;
 import net.minecraft.client.multiplayer.PlayerInfo;
@@ -30,7 +30,6 @@ import net.minecraft.network.chat.numbers.NumberFormat;
 
 @Mixin(value = PlayerTabOverlay.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
-@Deprecated
 public class PlayerTabOverlayMixin {
 
     //? if <= 1.20.2 {

@@ -37,7 +37,7 @@ import java.util.UUID;
 import static net.mat0u5.lifeseries.LifeSeries.currentSession;
 
 //? if > 1.21.4 <= 1.21.11
-//import net.mat0u5.matlib.util.world.LevelUtils;
+//import net.mat0u5.matlib.utils.world.LevelUtils;
 //? if <= 1.21.11
 //import net.minecraft.server.level.TicketType;
 //? if <= 1.21.4

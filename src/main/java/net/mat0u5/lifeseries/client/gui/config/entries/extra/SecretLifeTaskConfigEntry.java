@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.client.gui.config.entries.extra;
 import net.mat0u5.lifeseries.client.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.client.gui.config.entries.ModifiableListEntry;
 import net.mat0u5.matlib.client.render.RenderUtils;
-import net.mat0u5.matlib.client.util.TextColors;
+import net.mat0u5.matlib.client.utils.TextColors;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.minecraft.client.gui.GuiGraphicsExtractor;

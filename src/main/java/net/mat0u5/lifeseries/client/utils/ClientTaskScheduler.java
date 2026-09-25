@@ -4,7 +4,7 @@ import net.mat0u5.lifeseries.LifeSeries;
 
 public class ClientTaskScheduler {
 
-    private static final net.mat0u5.matlib.util.other.TaskScheduler clientTaskScheduler = new net.mat0u5.matlib.util.other.TaskScheduler() {
+    private static final net.mat0u5.matlib.utils.other.TaskScheduler clientTaskScheduler = new net.mat0u5.matlib.utils.other.TaskScheduler() {
         @Override
         public boolean isDisabled() {
             return LifeSeries.modDisabled();

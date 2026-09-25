@@ -1,11 +1,11 @@
 package net.mat0u5.lifeseries.utils.other;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.matlib.util.other.Time;
+import net.mat0u5.matlib.utils.other.Time;
 
 public class TaskScheduler {
 
-    private static final net.mat0u5.matlib.util.other.TaskScheduler sharedTaskScheduler = new net.mat0u5.matlib.util.other.TaskScheduler() {
+    private static final net.mat0u5.matlib.utils.other.TaskScheduler sharedTaskScheduler = new net.mat0u5.matlib.utils.other.TaskScheduler() {
         @Override
         public boolean isDisabled() {
             return LifeSeries.modDisabled();

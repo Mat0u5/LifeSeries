@@ -4,7 +4,7 @@ import net.mat0u5.lifeseries.LifeSeries;
 
 import net.minecraft.resources.Identifier;
 
-public class IdentifierHelper extends net.mat0u5.matlib.util.other.IdentifierHelper {
+public class IdentifierHelper extends net.mat0u5.matlib.utils.other.IdentifierHelper {
     /**
      * Returns an identifier with the {@code lifeseries} namespace.
      */

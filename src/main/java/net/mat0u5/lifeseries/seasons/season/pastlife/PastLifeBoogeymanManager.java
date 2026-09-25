@@ -5,9 +5,9 @@ import net.mat0u5.lifeseries.seasons.boogeyman.Boogeyman;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.matlib.util.other.TextUtils;
-import net.mat0u5.matlib.util.other.Time;
-import net.mat0u5.matlib.util.player.PlayerReference;
+import net.mat0u5.matlib.utils.other.TextUtils;
+import net.mat0u5.matlib.utils.other.Time;
+import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.minecraft.server.level.ServerPlayer;
 
 public class PastLifeBoogeymanManager extends BoogeymanManager {
