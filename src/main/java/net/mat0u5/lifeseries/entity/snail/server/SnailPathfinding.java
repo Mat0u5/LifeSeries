@@ -23,6 +23,7 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.BlockHitResult;
@@ -169,6 +170,11 @@ public class SnailPathfinding {
         if (block.is(Blocks.LAVA)) return false;
         if (block.is(Blocks.WATER)) return false;
         if (block.is(Blocks.POWDER_SNOW)) return false;
+        boolean isWaterlogged = block.hasProperty(BlockStateProperties.WATERLOGGED) && block.getValue(BlockStateProperties.WATERLOGGED);
+        if (isWaterlogged) {
+            return false;
+        }
+
         return true;
     }
 
@@ -200,6 +206,24 @@ public class SnailPathfinding {
                         endPos,
                         ClipContext.Block.COLLIDER,
                         ClipContext.Fluid.NONE,
+                        snail
+                )
+        );
+        if (result.getType() == HitResult.Type.MISS) return null;
+        return result.getBlockPos();
+    }
+
+    @Nullable
+    public BlockPos getGroundBlockOrFluid() {
+        Vec3 startPos = snail.position();
+        Vec3 endPos = new Vec3(startPos.x(), snail.level().getMinY(), startPos.z());
+
+        BlockHitResult result = snail.level().clip(
+                new ClipContext(
+                        startPos,
+                        endPos,
+                        ClipContext.Block.COLLIDER,
+                        ClipContext.Fluid.ANY,
                         snail
                 )
         );

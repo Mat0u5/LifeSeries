@@ -105,6 +105,14 @@ public class DefaultConfigValues {
             "only_lose_durability_in_session", false, "global.session",
             "Only Lose Durability In Session", "Makes players only lose durability on their items and gear while a session is active."
     );
+    public final ConfigFileEntry<Boolean> ONLY_LOSE_HUNGER_IN_SESSION = new ConfigFileEntry<>(
+            "only_lose_hunger_in_session", false, "global.session",
+            "Only Lose Hunger In Session", "Makes players only lose hunger while a session is active."
+    );
+    public final ConfigFileEntry<Boolean> ONLY_ADVANCE_TIME_IN_SESSION = new ConfigFileEntry<>(
+            "only_advance_time_in_session", false, "global.session",
+            "Only Advance Time In Session", "Makes the day time freeze when not in session."
+    );
     public final ConfigFileEntry<Boolean> SESSION_START_COUNTDOWN = new ConfigFileEntry<>(
             "session_start_countdown", false, "global.session",
             "Session Start Countdown", "Shows a countdown when the session is starting."

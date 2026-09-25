@@ -86,6 +86,11 @@ public class Snail extends Monster {
         //? if <= 1.20.3 {
         /*this.setMaxUpStep(1.2F);
         *///?}
+        if (!level.isClientSide()) {
+            this.setSnailFlying(true);
+            this.pathfinding.updateNavigation();
+            this.pathfinding.updateMoveControl();
+        }
     }
 
     @Override

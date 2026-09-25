@@ -122,6 +122,8 @@ public abstract class Season {
     public static boolean cloudColorSetMode = false;
     public boolean TEAMS_SYSTEM_DISABLED = false;
     public static boolean ONLY_LOSE_DURABILITY_IN_SESSION = false;
+    public static boolean ONLY_LOSE_HUNGER_IN_SESSION = false;
+    public static boolean ONLY_ADVANCE_TIME_IN_SESSION = false;
     public static boolean DISABLE_MINIMAL_ARMOR_PACK = false;
 
     public BoogeymanManager boogeymanManager = createBoogeymanManager();
@@ -263,6 +265,8 @@ public abstract class Season {
         LOCATOR_BAR = seasonConfig.LOCATOR_BAR.get();
         TEAMS_SYSTEM_DISABLED = seasonConfig.TEAMS_SYSTEM_DISABLED.get();
         ONLY_LOSE_DURABILITY_IN_SESSION = seasonConfig.ONLY_LOSE_DURABILITY_IN_SESSION.get();
+        ONLY_LOSE_HUNGER_IN_SESSION = seasonConfig.ONLY_LOSE_HUNGER_IN_SESSION.get();
+        ONLY_ADVANCE_TIME_IN_SESSION = seasonConfig.ONLY_ADVANCE_TIME_IN_SESSION.get();
         DISABLE_MINIMAL_ARMOR_PACK = seasonConfig.DISABLE_MINIMAL_ARMOR_PACK.get();
 
         NetworkHandlerServer.reload();
@@ -498,12 +502,18 @@ public abstract class Season {
         if (timer.isMultipleOf(Time.seconds(60))) {
             NetworkHandlerServer.sendUpdatePackets();
         }
+        tickAdvanceTime(server);
     }
     public void tickSessionOn(MinecraftServer server) {}
     public void addSessionActions() {
         boogeymanManager.addSessionActions();
         secretSociety.addSessionActions();
         livesManager.addSessionActions();
+    }
+
+    public void tickAdvanceTime(MinecraftServer server) {
+        boolean advanceTime = currentSession.statusStarted() || !ONLY_ADVANCE_TIME_IN_SESSION;
+        OtherUtils.setBooleanGameRule(server.overworld(), GameRules.ADVANCE_TIME, advanceTime);
     }
 
     public void onPlayerDeath(ServerPlayer player, DamageSource source) {

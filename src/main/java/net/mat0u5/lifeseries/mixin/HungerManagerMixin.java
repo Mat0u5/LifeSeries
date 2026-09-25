@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.mixin;
 
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.utils.interfaces.IHungerManager;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.currentSession;
 
 //? if <= 1.21
 //import net.minecraft.world.entity.player.Player;
@@ -58,16 +60,18 @@ public class HungerManagerMixin implements IHungerManager {
     @Unique
     private float ls$prevSaturationLevel;
 
-    @Inject(method = "tick", at = @At("HEAD"))
+    @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     //? if <= 1.21 {
     /*private void updateHead(Player player, CallbackInfo ci) {
         if (LifeSeries.isClientOrDisabled()) return;
         if (player instanceof ServerPlayer serverPlayer) {
+            if (Season.ONLY_LOSE_HUNGER_IN_SESSION && !currentSession.statusStarted()) ci.cancel();
             this.ls$player = serverPlayer;
         }
     *///?} else {
     private void updateHead(ServerPlayer player, CallbackInfo ci) {
         if (LifeSeries.isClientOrDisabled()) return;
+        if (Season.ONLY_LOSE_HUNGER_IN_SESSION && !currentSession.statusStarted()) ci.cancel();
         this.ls$player = player;
     //?}
         ls$prevFoodLevel = this.foodLevel;

@@ -105,6 +105,8 @@ public abstract class ConfigManager extends DefaultConfigValues {
 
                 , ONLY_CHANGE_LIVES_IN_SESSION
                 ,ONLY_LOSE_DURABILITY_IN_SESSION
+                ,ONLY_LOSE_HUNGER_IN_SESSION
+                ,ONLY_ADVANCE_TIME_IN_SESSION
                 ,SESSION_START_COUNTDOWN
                 //? if >= 1.20.3 {
                 ,TICK_FREEZE_NOT_IN_SESSION

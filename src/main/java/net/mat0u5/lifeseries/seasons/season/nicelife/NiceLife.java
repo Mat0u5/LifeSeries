@@ -57,8 +57,6 @@ public class NiceLife extends Season {
     public static boolean LIGHT_MELTS_SNOW = false;
     public boolean SNOW_WHEN_NOT_IN_SESSION = false;
     public static boolean DISABLE_SNOW = false;
-    public static boolean DISABLE_COLD_WORLD_GENERATION = false;
-    public static boolean ADVANCE_TIME_WHEN_NOT_IN_SESSION = false;
     public static boolean RED_WINTER = true;
     public Time SNOW_LAYER_INCREASE_INTERVAL = Time.seconds(600);
     public Time snowTicks = Time.zero();
@@ -118,7 +116,6 @@ public class NiceLife extends Season {
         LIGHT_MELTS_SNOW = NiceLifeConfig.LIGHT_MELTS_SNOW.get();
         SNOW_WHEN_NOT_IN_SESSION = NiceLifeConfig.SNOW_WHEN_NOT_IN_SESSION.get();
         SNOW_LAYER_INCREASE_INTERVAL = Time.seconds(NiceLifeConfig.SNOW_LAYER_INCREMENT_DELAY.get());
-        ADVANCE_TIME_WHEN_NOT_IN_SESSION = NiceLifeConfig.ADVANCE_TIME_WHEN_NOT_IN_SESSION.get();
         DISABLE_SNOW = NiceLifeConfig.DISABLE_SNOW.get();
         SNOWY_NETHER = NiceLifeConfig.SNOWY_NETHER.get();
         snowLayerTickChance = 280.0 / Math.max(SNOW_LAYER_INCREASE_INTERVAL.getTicks(), 1);
@@ -182,9 +179,6 @@ public class NiceLife extends Season {
         //?}
 
         List<String> nonSleepingPlayers = new ArrayList<>();
-
-        boolean advanceTime = !isMidnight() && (currentSession.statusStarted() || ADVANCE_TIME_WHEN_NOT_IN_SESSION);
-        OtherUtils.setBooleanGameRule(overworld, GameRules.ADVANCE_TIME, advanceTime);
 
         if (!isMidnight()) {
             for(ServerPlayer serverPlayer : PlayerUtils.getAllPlayers()) {
@@ -270,6 +264,12 @@ public class NiceLife extends Season {
             }
             SimplePackets.NICELIFE_TRIVIA_NONSLEEPING.sendToAllClients(nonSleepingPlayers);
         }
+    }
+
+    @Override
+    public void tickAdvanceTime(MinecraftServer server) {
+        boolean advanceTime = !isMidnight() && (currentSession.statusStarted() || !ONLY_ADVANCE_TIME_IN_SESSION);
+        OtherUtils.setBooleanGameRule(server.overworld(), GameRules.ADVANCE_TIME, advanceTime);
     }
 
     public static int forceSleepTicks = 0;

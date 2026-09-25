@@ -71,10 +71,6 @@ public class NiceLifeConfig extends SeasonConfig {
             "disable_snow", false, "season[new]",
             "Disable Snowing", "Controls whether it snows at all."
     );
-    public static final ConfigFileEntry<Boolean> ADVANCE_TIME_WHEN_NOT_IN_SESSION = new ConfigFileEntry<>(
-            "advance_time_not_in_session", false, "season",
-            "Advance Time When Not In Session", "Controls whether the daylight cycle is paused when not in session."
-    );
 
     public static final ConfigFileEntry<Boolean> SNOWY_NETHER = new ConfigFileEntry<>(
             "snowy_nether", true, "season",
@@ -163,7 +159,6 @@ public class NiceLifeConfig extends SeasonConfig {
                 ,SNOW_WHEN_NOT_IN_SESSION
                 ,SNOW_LAYER_INCREMENT_DELAY
                 ,DISABLE_SNOW
-                ,ADVANCE_TIME_WHEN_NOT_IN_SESSION
                 ,SNOWY_NETHER
                 ,RED_WINTER
 
