@@ -7,7 +7,7 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.snail.Snail;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
@@ -95,7 +95,7 @@ public class WildLifeCommands extends CustomCommand {
                     )
                 )
                 .then(literal("choose")
-                    .requires(source -> (NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer()) || (source.getEntity() == null)))
+                    .requires(source -> (LifeSeriesNetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer()) || (source.getEntity() == null)))
                     .executes(context -> chooseWildcard(
                         context.getSource())
                     )
@@ -601,7 +601,7 @@ public class WildLifeCommands extends CustomCommand {
     public int chooseWildcard(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
         if (source.getPlayer() == null) return -1;
-        if (!NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer())) {
+        if (!LifeSeriesNetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer())) {
             sendCommandFailure(source, ModifiableText.WILDLIFE_WILDCARD_GUI_ERROR.get());
             return -1;
         }
@@ -878,7 +878,7 @@ public class WildLifeCommands extends CustomCommand {
         WildcardManager.activeWildcards.remove(wildcard);
 
         sendCommandFeedback(source, ModifiableText.WILDLIFE_WILDCARD_DEACTIVATE.get(wildcardName));
-        NetworkHandlerServer.sendUpdatePackets();
+        LifeSeriesNetworkHandlerServer.sendUpdatePackets();
         return 1;
     }
 
@@ -902,7 +902,7 @@ public class WildLifeCommands extends CustomCommand {
                 }
                 WildcardManager.showRainbowCryptTitle(ModifiableText.WILDLIFE_WILDCARD_ACTIVATE_ALL_TITLE.getString());
             });
-            NetworkHandlerServer.sendUpdatePackets();
+            LifeSeriesNetworkHandlerServer.sendUpdatePackets();
 
             sendCommandFeedback(source, ModifiableText.WILDLIFE_WILDCARD_ACTIVATE_ALL.get());
             return 1;

@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards;
 
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
@@ -110,7 +110,7 @@ public class WildcardManager {
             }
             showCryptTitle(ModifiableText.WILDLIFE_WILDCARD_ACTIVATE_CRYPT_TITLE.get());
         });
-        TaskScheduler.scheduleTask(delay+2, NetworkHandlerServer::sendUpdatePackets);
+        TaskScheduler.scheduleTask(delay+2, LifeSeriesNetworkHandlerServer::sendUpdatePackets);
     }
 
     public static void fadedWildcard() {
@@ -288,7 +288,7 @@ public class WildcardManager {
         activeWildcards.clear();
         DatapackIntegration.initWildcards();
         SuperpowersWildcard.resetAllSuperpowers();
-        NetworkHandlerServer.sendUpdatePackets();
+        LifeSeriesNetworkHandlerServer.sendUpdatePackets();
         chosenWildcard = null;
     }
 

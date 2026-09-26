@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.mixin;
 
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import io.netty.buffer.Unpooled;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.login.ClientboundCustomQueryPacket;
@@ -50,8 +50,8 @@ public abstract class ServerLoginPacketListenerImplMixin {
             FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 
             self.connection.send(new ClientboundCustomQueryPacket(
-                    NetworkHandlerServer.PRELOGIN_TRANSACTION_ID,
-                    IdentifierHelper.lifeseries(NetworkHandlerServer.preLoginPacketID),
+                    LifeSeriesNetworkHandlerServer.PRELOGIN_TRANSACTION_ID,
+                    IdentifierHelper.lifeseries(LifeSeriesNetworkHandlerServer.preLoginPacketID),
                     buf
             ));
 
@@ -65,7 +65,7 @@ public abstract class ServerLoginPacketListenerImplMixin {
 
     @Inject(method = "handleCustomQueryPacket", at = @At("HEAD"), cancellable = true)
     private void onHandleAnswer(ServerboundCustomQueryPacket packet, CallbackInfo ci) {
-        if (packet.getTransactionId() != NetworkHandlerServer.PRELOGIN_TRANSACTION_ID) return;
+        if (packet.getTransactionId() != LifeSeriesNetworkHandlerServer.PRELOGIN_TRANSACTION_ID) return;
 
         boolean understood = packet.getData() != null;
         ls$queryAnswered = true;
@@ -74,7 +74,7 @@ public abstract class ServerLoginPacketListenerImplMixin {
 
         this.server.execute(() -> {
             //? if !forge {
-            NetworkHandlerServer.handlePreLogin(understood, self);
+            LifeSeriesNetworkHandlerServer.handlePreLogin(understood, self);
 
             this.state = ServerLoginPacketListenerImpl.State.READY_TO_ACCEPT;
             this.handleAcceptedLogin();
@@ -82,7 +82,7 @@ public abstract class ServerLoginPacketListenerImplMixin {
 
             /^if (self.connection.getPacketListener() != self) return;
 
-            NetworkHandlerServer.handlePreLogin(understood, self);
+            LifeSeriesNetworkHandlerServer.handlePreLogin(understood, self);
 
             this.state = ServerLoginPacketListenerImpl.State.READY_TO_ACCEPT;
             ^///?}
@@ -105,10 +105,10 @@ public abstract class ServerLoginPacketListenerImplMixin {
 
             ServerLoginPacketListenerImpl self = (ServerLoginPacketListenerImpl)(Object)this;
             FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-            DiscardedQueryPayload payload = new DiscardedQueryPayload(IdentifierHelper.lifeseries(NetworkHandlerServer.preLoginPacketID));
+            DiscardedQueryPayload payload = new DiscardedQueryPayload(IdentifierHelper.lifeseries(LifeSeriesNetworkHandlerServer.preLoginPacketID));
             payload.write(buf);
             self.connection.send(new ClientboundCustomQueryPacket(
-                    NetworkHandlerServer.PRELOGIN_TRANSACTION_ID, payload
+                    LifeSeriesNetworkHandlerServer.PRELOGIN_TRANSACTION_ID, payload
             ));
         }
         ci.cancel();
@@ -116,7 +116,7 @@ public abstract class ServerLoginPacketListenerImplMixin {
 
     @Inject(method = "handleCustomQueryPacket", at = @At("HEAD"), cancellable = true)
     private void onHandleAnswer(ServerboundCustomQueryAnswerPacket packet, CallbackInfo ci) {
-        if (packet.transactionId() != NetworkHandlerServer.PRELOGIN_TRANSACTION_ID) return;
+        if (packet.transactionId() != LifeSeriesNetworkHandlerServer.PRELOGIN_TRANSACTION_ID) return;
 
         boolean understood = false;
 
@@ -130,7 +130,7 @@ public abstract class ServerLoginPacketListenerImplMixin {
         ls$queryAnswered = true;
 
         ServerLoginPacketListenerImpl self = (ServerLoginPacketListenerImpl)(Object)this;
-        NetworkHandlerServer.handlePreLogin(understood, self);
+        LifeSeriesNetworkHandlerServer.handlePreLogin(understood, self);
         finishLogin(ls$pendingProfile);
         ci.cancel();
     }

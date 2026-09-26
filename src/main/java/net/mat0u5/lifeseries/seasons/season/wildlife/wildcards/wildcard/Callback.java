@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard;
 
 import net.mat0u5.lifeseries.config.ModifiableText;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
@@ -89,7 +89,7 @@ public class Callback extends Wildcard {
                 Wildcard wildcardInstance = WildcardManager.activeWildcards.get(Wildcards.TIME_DILATION);
                 wildcardInstance.deactivate();
                 WildcardManager.activeWildcards.remove(Wildcards.TIME_DILATION);
-                NetworkHandlerServer.sendUpdatePackets();
+                LifeSeriesNetworkHandlerServer.sendUpdatePackets();
             }
             preAllWildcardsPhaseReached = true;
             return;
@@ -200,7 +200,7 @@ public class Callback extends Wildcard {
             }
             WildcardManager.showRainbowCryptTitle(ModifiableText.WILDLIFE_WILDCARD_ACTIVATE_ALL_TITLE.getString());
         });
-        TaskScheduler.scheduleTask(92, NetworkHandlerServer::sendUpdatePackets);
+        TaskScheduler.scheduleTask(92, LifeSeriesNetworkHandlerServer::sendUpdatePackets);
 
     }
 
@@ -212,7 +212,7 @@ public class Callback extends Wildcard {
         }
         WildcardManager.activeWildcards.clear();
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BEACON_DEACTIVATE);
-        NetworkHandlerServer.sendUpdatePackets();
+        LifeSeriesNetworkHandlerServer.sendUpdatePackets();
     }
     private Wildcards lastActivatedWildcard;
     public void activateRandomWildcard() {
@@ -233,7 +233,7 @@ public class Callback extends Wildcard {
         wildcardInstance.deactivate();
         WildcardManager.activeWildcards.remove(wildcard);
         WildcardManager.fadedWildcard();
-        NetworkHandlerServer.sendUpdatePackets();
+        LifeSeriesNetworkHandlerServer.sendUpdatePackets();
     }
 
     public Wildcards getRandomInactiveWildcard() {
@@ -264,6 +264,6 @@ public class Callback extends Wildcard {
         if (wildcardInstance == null) return;
         WildcardManager.activeWildcards.put(wildcard, wildcardInstance);
         wildcardInstance.activate();
-        TaskScheduler.scheduleTask(2, NetworkHandlerServer::sendUpdatePackets);
+        TaskScheduler.scheduleTask(2, LifeSeriesNetworkHandlerServer::sendUpdatePackets);
     }
 }

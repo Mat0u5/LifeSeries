@@ -2,13 +2,12 @@ package net.mat0u5.lifeseries.entity.triviabot.server.trivia;
 
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeVotingManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
@@ -437,7 +436,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         if (availableForVoting.isEmpty()) return false;
 
         String screenName = (voteType == NiceLifeVotingManager.VoteType.NICE_LIST) ? ModifiableText.NICELIFE_TRIVIA_VOTE_NICELIST.getString() : ModifiableText.NICELIFE_TRIVIA_VOTE_NAUGHTYLIST.getString();
-        NetworkHandlerServer.sendVoteScreenPacket(boundPlayer, screenName, true, false, true, availableForVoting);
+        LifeSeriesNetworkHandlerServer.sendVoteScreenPacket(boundPlayer, screenName, true, false, true, availableForVoting);
         NiceLifeVotingManager.allowedToVote.add(boundPlayer.getUUID());
         SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("nicelife_santabot_vote"));
         PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.75f, 1);

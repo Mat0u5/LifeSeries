@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.utils.world;
 
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
@@ -41,7 +41,7 @@ public class AnimationUtils {
 
     public static void playSecretLifeTotemAnimation(ServerPlayer player, boolean red) {
         if (player == null) return;
-        if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {
+        if (LifeSeriesNetworkHandlerServer.wasHandshakeSuccessful(player)) {
             SimplePackets.SHOW_TOTEM.sendToClient(red ? "task_red" : "task", player);
             return;
         }

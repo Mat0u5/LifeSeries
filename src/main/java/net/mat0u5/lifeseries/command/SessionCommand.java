@@ -6,7 +6,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.ModifiableText;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
@@ -234,7 +234,7 @@ public class SessionCommand extends CustomCommand {
         final ServerPlayer self = source.getPlayer();
 
         if (self == null) return -1;
-        if (NetworkHandlerServer.wasHandshakeSuccessful(self)) {
+        if (LifeSeriesNetworkHandlerServer.wasHandshakeSuccessful(self)) {
             SimplePackets.TOGGLE_TIMER.sendToClient(self);
         }
 

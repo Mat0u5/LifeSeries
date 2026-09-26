@@ -14,7 +14,7 @@ public interface ServerboundCustomQueryAnswerPacketMixin {
 
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import io.netty.buffer.Unpooled;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.CustomQueryPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.login.ServerboundCustomQueryAnswerPacket;
@@ -36,7 +36,7 @@ public class ServerboundCustomQueryAnswerPacketMixin {
 
     @Inject(method = "readPayload", at = @At("HEAD"), cancellable = true)
     private static void readResponse(int queryId, FriendlyByteBuf buf, CallbackInfoReturnable<CustomQueryAnswerPayload> cir) {
-        if (queryId == NetworkHandlerServer.PRELOGIN_TRANSACTION_ID) {
+        if (queryId == LifeSeriesNetworkHandlerServer.PRELOGIN_TRANSACTION_ID) {
             boolean hasPayload = buf.readBoolean();
 
             if (!hasPayload) {

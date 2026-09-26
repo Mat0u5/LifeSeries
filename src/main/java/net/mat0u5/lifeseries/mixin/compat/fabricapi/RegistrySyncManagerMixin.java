@@ -6,7 +6,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.fabricmc.fabric.impl.registry.sync.RegistrySyncManager;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import net.mat0u5.lifeseries.LifeSeries;
@@ -49,9 +49,9 @@ public class RegistrySyncManagerMixin {
         Map<Identifier, Object2IntMap<Identifier>> originalValue = original.call();
         UUID profileUUID = OtherUtils.profileId(handler.getOwner());
     //?}
-        if (NetworkHandlerServer.REGISTRY_OVERRIDE_BEHAVIOR == NetworkHandlerServer.RegistryOverrideBahaviours.NEVER ||
-                (NetworkHandlerServer.REGISTRY_OVERRIDE_BEHAVIOR == NetworkHandlerServer.RegistryOverrideBahaviours.LOGIN && NetworkHandlerServer.preLoginHandshake.contains(profileUUID)) ||
-                (NetworkHandlerServer.REGISTRY_OVERRIDE_BEHAVIOR == NetworkHandlerServer.RegistryOverrideBahaviours.SEASON && currentSeason.getSeason().requiresClient())) {
+        if (LifeSeriesNetworkHandlerServer.REGISTRY_OVERRIDE_BEHAVIOR == LifeSeriesNetworkHandlerServer.RegistryOverrideBahaviours.NEVER ||
+                (LifeSeriesNetworkHandlerServer.REGISTRY_OVERRIDE_BEHAVIOR == LifeSeriesNetworkHandlerServer.RegistryOverrideBahaviours.LOGIN && LifeSeriesNetworkHandlerServer.preLoginHandshake.contains(profileUUID)) ||
+                (LifeSeriesNetworkHandlerServer.REGISTRY_OVERRIDE_BEHAVIOR == LifeSeriesNetworkHandlerServer.RegistryOverrideBahaviours.SEASON && currentSeason.getSeason().requiresClient())) {
             LifeSeries.LOGGER.info("Sending unmodified registry entries to client");
             return originalValue;
         }

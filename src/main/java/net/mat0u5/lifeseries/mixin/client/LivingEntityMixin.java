@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.events.ClientEvents;
 import net.mat0u5.lifeseries.utils.interfaces.IEntity;
+import net.mat0u5.matlib.MatLib;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -27,7 +28,7 @@ public class LivingEntityMixin {
     private float applyMovementInput(float slipperiness) {
         if ((System.currentTimeMillis() - LifeSeriesClient.CURSE_SLIDING) > 2000 || LifeSeries.modFullyDisabled()) return slipperiness;
         LivingEntity entity = (LivingEntity) (Object) this;
-        if (entity instanceof Player playerr && LifeSeriesClient.isClientPlayer(playerr.getUUID()) && playerr.onGround() && ClientEvents.onGroundFor >= 5) {
+        if (entity instanceof Player playerr && MatLib.isClientPlayer(playerr.getUUID()) && playerr.onGround() && ClientEvents.onGroundFor >= 5) {
             return 1.198f;
         }
         return slipperiness;
@@ -41,7 +42,7 @@ public class LivingEntityMixin {
     private Vec3 applyMovementInput(Vec3 velocity) {
         if ((System.currentTimeMillis() - LifeSeriesClient.CURSE_SLIDING) > 2000 || LifeSeries.modFullyDisabled()) return velocity;
         LivingEntity entity = (LivingEntity) (Object) this;
-        if (entity instanceof Player playerr && entity instanceof IEntity entityAccessor && LifeSeriesClient.isClientPlayer(playerr.getUUID()) && playerr.onGround() && ClientEvents.onGroundFor >= 5) {
+        if (entity instanceof Player playerr && entity instanceof IEntity entityAccessor && MatLib.isClientPlayer(playerr.getUUID()) && playerr.onGround() && ClientEvents.onGroundFor >= 5) {
             BlockPos blockPos = entityAccessor.ls$getBlockPosBelowThatAffectsMyMovement();
             float originalSlipperiness = playerr.level().getBlockState(blockPos).getBlock().getFriction();
             return new Vec3((velocity.x/originalSlipperiness)*0.995f, velocity.y, (velocity.z/originalSlipperiness)*0.995f);

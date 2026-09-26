@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
@@ -67,7 +67,7 @@ public class TripleJump extends ToggleableSuperpower {
         ServerPlayer player = getPlayer();
         if (player == null) return;
         ((IPlayer) player).ls$playNotifySound(SoundEvents.SLIME_JUMP, SoundSource.MASTER, 1, 1);
-        NetworkHandlerServer.sendVignette(player, -1);
+        LifeSeriesNetworkHandlerServer.sendVignette(player, -1);
         SimplePackets.TRIPLE_JUMP.sendToClient(true, player);
         SimplePackets.POWER_TJ_JUMPS.sendToClient(JUMP_COUNT, player);
     }
@@ -79,7 +79,7 @@ public class TripleJump extends ToggleableSuperpower {
         if (player == null) return;
         player.removeEffect(MobEffects.JUMP_BOOST);
         ((IPlayer) player).ls$playNotifySound(SoundEvents.SLIME_SQUISH, SoundSource.MASTER, 1, 1);
-        NetworkHandlerServer.sendVignette(player, 0);
+        LifeSeriesNetworkHandlerServer.sendVignette(player, 0);
         SimplePackets.TRIPLE_JUMP.sendToClient(false, player);
     }
 }

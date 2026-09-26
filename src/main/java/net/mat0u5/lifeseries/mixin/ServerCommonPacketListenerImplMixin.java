@@ -3,15 +3,11 @@ package net.mat0u5.lifeseries.mixin;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
-import io.netty.buffer.Unpooled;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakeClientConnection;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.Connection;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.resources.Identifier;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -24,22 +20,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 //? if >= 1.21.6
 import io.netty.channel.ChannelFutureListener;
 
-//? if <= 1.20.3 {
-/*import net.mat0u5.lifeseries.network.NetworkHandlerServer;
-import net.minecraft.server.network.ServerGamePacketListenerImpl;
-*///?}
 
 //? if <= 1.20 {
-/*import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
-import net.minecraft.server.network.ServerGamePacketListenerImpl;
+/*import net.minecraft.server.network.ServerGamePacketListenerImpl;
 @Mixin(value = ServerGamePacketListenerImpl.class, priority = 1)
 *///?} else {
-import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
 import net.minecraft.server.network.ServerCommonPacketListenerImpl;
 @Mixin(value = ServerCommonPacketListenerImpl.class, priority = 1)
 //?}
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
-@Deprecated
 public class ServerCommonPacketListenerImplMixin {
 
     @Final
@@ -96,23 +85,4 @@ public class ServerCommonPacketListenerImplMixin {
         }
     }
 
-    //? if <= 1.20 {
-    /*@Inject(method = "handleCustomPayload", at = @At("HEAD"), cancellable = true)
-    private void onHandlePayload(ServerboundCustomPayloadPacket packet, CallbackInfo ci) {
-        if ((Object)this instanceof ServerGamePacketListenerImpl gameListener) {
-            Identifier id = packet.getIdentifier();
-            if (NetworkHandlerServer.PAYLOAD_READERS.containsKey(id)) {
-                CustomPacketPayload payload = NetworkHandlerServer.PAYLOAD_READERS.get(id).apply(packet.getData());
-                NetworkHandlerServer.onCustomPayload(payload, gameListener.player);
-            }
-        }
-    }
-    *///?} else if <= 1.20.3 {
-    /*@Inject(method = "handleCustomPayload", at = @At("HEAD"), cancellable = true)
-    private void onHandlePayload(ServerboundCustomPayloadPacket packet, CallbackInfo ci) {
-        if ((Object)this instanceof ServerGamePacketListenerImpl gameListener) {
-            NetworkHandlerServer.onCustomPayload(packet.payload(), gameListener.player);
-        }
-    }
-    *///?}
 }

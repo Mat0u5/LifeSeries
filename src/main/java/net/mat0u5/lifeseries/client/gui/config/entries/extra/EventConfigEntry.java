@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.client.gui.config.entries.extra;
 
 import net.mat0u5.lifeseries.client.gui.config.entries.main.StringConfigEntry;
-import net.mat0u5.lifeseries.client.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.client.network.LifeSeriesNetworkHandlerClient;
 import net.mat0u5.matlib.client.render.RenderUtils;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.mat0u5.matlib.client.utils.TextColors;
@@ -9,7 +9,6 @@ import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Util;
 
 import java.util.List;
 import java.util.Objects;
@@ -137,7 +136,7 @@ public class EventConfigEntry extends StringConfigEntry {
     @Override
     public void onSave() {
         String canceledStr = canceled == null ? "" : String.valueOf(canceled);
-        NetworkHandlerClient.sendConfigUpdate(
+        LifeSeriesNetworkHandlerClient.sendConfigUpdate(
                 getValueType().toString(),
                 getFieldName(),
                 List.of(getValueAsString(), canceledStr)

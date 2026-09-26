@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 //? if <= 1.21.6 {
 /*import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.matlib.utils.other.TextUtils;
 import static net.mat0u5.matlib.MatLib.server;
 *///?}
@@ -176,7 +176,7 @@ public class AstralProjection extends ToggleableSuperpower {
         ServerPlayer player = getPlayer();
         if (player == null) return;
         String name = TextUtils.textToLegacyString(player.getDisplayName());
-        NetworkHandlerServer.sendPlayerDisguise(clone.getUUID().toString(), clone.getName().getString(), player.getUUID().toString(), name);
+        LifeSeriesNetworkHandlerServer.sendPlayerDisguise(clone.getUUID().toString(), clone.getName().getString(), player.getUUID().toString(), name);
         *///?}
     }
 
@@ -194,7 +194,7 @@ public class AstralProjection extends ToggleableSuperpower {
             ^///?} else {
             clone.connection.onDisconnect(new DisconnectionDetails(Component.empty()));
             //?}
-            NetworkHandlerServer.sendPlayerDisguise(clone.getUUID().toString(), clone.getName().getString(), "", "");
+            LifeSeriesNetworkHandlerServer.sendPlayerDisguise(clone.getUUID().toString(), clone.getName().getString(), "", "");
             *///?} else {
             clone.discard();
             //?}

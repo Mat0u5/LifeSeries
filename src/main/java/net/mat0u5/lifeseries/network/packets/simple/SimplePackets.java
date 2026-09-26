@@ -1,9 +1,6 @@
 package net.mat0u5.lifeseries.network.packets.simple;
 
-import net.mat0u5.lifeseries.network.packets.simple.instances.*;
-
-import java.util.HashMap;
-import java.util.Map;
+import net.mat0u5.matlib.network.packets.simple.instances.*;
 
 public class SimplePackets {
 
@@ -54,8 +51,8 @@ public class SimplePackets {
     public static final SimpleBooleanPacket NICELIFE_LIVE_VOTING_ENABLED = new SimpleBooleanPacket("NICELIFE_LIVE_VOTING_ENABLED");
     public static final SimpleBooleanPacket LIMITED_LIFE_ACTIONBAR_TIME = new SimpleBooleanPacket("LIMITED_LIFE_ACTIONBAR_TIME");
 
-    public static final SimpleNumberPacket PLAYER_MIN_MSPT = new SimpleNumberPacket("PLAYER_MIN_MSPT");
-    public static final SimpleNumberPacket SIZESHIFTING_CHANGE = new SimpleNumberPacket("SIZESHIFTING_CHANGE");
+    public static final SimpleDoublePacket PLAYER_MIN_MSPT = new SimpleDoublePacket("PLAYER_MIN_MSPT");
+    public static final SimpleDoublePacket SIZESHIFTING_CHANGE = new SimpleDoublePacket("SIZESHIFTING_CHANGE");
 
     public static final SimpleLongPacket CURSE_SLIDING = new SimpleLongPacket("CURSE_SLIDING");
     public static final SimpleLongPacket SUPERPOWER_COOLDOWN = new SimpleLongPacket("SUPERPOWER_COOLDOWN");

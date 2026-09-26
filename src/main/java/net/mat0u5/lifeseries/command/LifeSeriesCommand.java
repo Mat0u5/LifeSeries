@@ -9,7 +9,7 @@ import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.DefaultConfigValues;
 import net.mat0u5.lifeseries.config.ModifiableText;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.Session;
@@ -120,7 +120,7 @@ public class LifeSeriesCommand extends CustomCommand {
                     .executes(context -> reload(context.getSource()))
                 )
                 .then(literal("chooseSeries")
-                        .requires(source -> PermissionManager.isAdmin(source) && (NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer()) || (source.getEntity() == null)))
+                        .requires(source -> PermissionManager.isAdmin(source) && (LifeSeriesNetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer()) || (source.getEntity() == null)))
                         .executes(context -> chooseSeason(context.getSource()))
                 )
                 .then(literal("setSeries")
@@ -184,7 +184,7 @@ public class LifeSeriesCommand extends CustomCommand {
     public int chooseSeason(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
         if (source.getPlayer() == null) return -1;
-        if (!NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer())) {
+        if (!LifeSeriesNetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer())) {
             sendCommandFailure(source, Component.nullToEmpty("You must have the Life Series mod installed §nclient-side§c to open the season selection GUI."));
             sendCommandFailure(source, Component.nullToEmpty("Use the '/lifeseries setSeries <season>' command instead."));
             return -1;
@@ -244,7 +244,7 @@ public class LifeSeriesCommand extends CustomCommand {
         if (self == null) {
             return -1;
         }
-        if (!NetworkHandlerServer.wasHandshakeSuccessful(self)) {
+        if (!LifeSeriesNetworkHandlerServer.wasHandshakeSuccessful(self)) {
             sendCommandFailure(source, Component.nullToEmpty("You must have the Life Series mod installed §nclient-side§c to open the config GUI."));
             sendCommandFailure(source, Component.nullToEmpty("Either install the mod on the client on modify the config folder."));
             return -1;
@@ -288,13 +288,13 @@ public class LifeSeriesCommand extends CustomCommand {
     public int configChanges(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
 
-        if (NetworkHandlerServer.configChanges.isEmpty()) {
+        if (LifeSeriesNetworkHandlerServer.configChanges.isEmpty()) {
             sendCommandFailure(source, ModifiableText.CONFIG_MODIFY_NONE.get());
             return -1;
         }
 
         MutableComponent changes = ModifiableText.CONFIG_MODIFY_HEADER.get().copy();
-        for (Component component : NetworkHandlerServer.configChanges) {
+        for (Component component : LifeSeriesNetworkHandlerServer.configChanges) {
             changes.append(component);
         }
 
@@ -313,10 +313,10 @@ public class LifeSeriesCommand extends CustomCommand {
 
         sendCommandFeedback(source, ModifiableText.CONFIG_SET.get(key));
 
-        NetworkHandlerServer.updatedConfigThisTickFromCommand = true;
-        NetworkHandlerServer.updatedConfigThisTick = true;
+        LifeSeriesNetworkHandlerServer.updatedConfigThisTickFromCommand = true;
+        LifeSeriesNetworkHandlerServer.updatedConfigThisTick = true;
         if (DefaultConfigValues.RELOAD_NEEDED.contains(key)) {
-            NetworkHandlerServer.configNeedsReload = true;
+            LifeSeriesNetworkHandlerServer.configNeedsReload = true;
         }
         return 1;
     }

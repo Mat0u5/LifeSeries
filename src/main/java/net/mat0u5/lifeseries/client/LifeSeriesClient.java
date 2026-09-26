@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.client;
 import com.google.auto.service.AutoService;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.config.ClientConfig;
-import net.mat0u5.lifeseries.client.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.client.network.LifeSeriesNetworkHandlerClient;
 import net.mat0u5.lifeseries.client.registries.ClientRegistries;
 import net.mat0u5.lifeseries.client.render.TextHud;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -14,11 +14,9 @@ import net.mat0u5.matlib.utils.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.interfaces.LifeSeriesClientAccessor;
 import net.mat0u5.lifeseries.utils.other.ModBuiltInPacks;
 import net.mat0u5.matlib.MatLib;
-import net.mat0u5.matlib.api.MatLibClientInitializer;
+import net.mat0u5.matlib.client.services.MatLibClientInitializer;
 import net.mat0u5.matlib.client.events.ClientPackSourceEvents;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.world.phys.Vec3;
 
@@ -97,11 +95,14 @@ public class LifeSeriesClient implements MatLibClientInitializer, LifeSeriesClie
     public static HandshakeStatus serverHandshake = HandshakeStatus.WAITING;
 
     @Override
-    public void onInitializeClient() {
-        LifeSeries.LOGGER.info("Initializing Life Series Client [{} {} ({})] with MatLib [{}]...", MatLib.platform().loader().name(), MatLib.platform().mcVersion(), LifeSeries.MOD_VERSION, MatLib.MOD_VERSION);
+    public void onRegister() {
         ClientPackSourceEvents.LOAD_PACK.register(consumer -> ModBuiltInPacks.loadPacks(consumer, PackType.CLIENT_RESOURCES));
         ClientRegistries.register();
-        NetworkHandlerClient.initializeSimplePacketReceivers();
+    }
+
+    @Override
+    public void onInitializeClient() {
+        LifeSeries.LOGGER.info("Initializing Life Series Client [{} {} ({})] with MatLib [{}]...", MatLib.platform().loader().name(), MatLib.platform().mcVersion(), LifeSeries.MOD_VERSION, MatLib.MOD_VERSION);
 
         LifeSeries.setClientAccessor(new LifeSeriesClient());
 
@@ -152,7 +153,7 @@ public class LifeSeriesClient implements MatLibClientInitializer, LifeSeriesClie
         LIMITED_LIFE_ACTIONBAR_TIME = ClientConfig.LIMITED_LIFE_ACTIONBAR_TIME.get(clientConfig);
 
         if (serverHandshake == HandshakeStatus.RECEIVED) {
-            NetworkHandlerClient.sendUpdatePackets();
+            LifeSeriesNetworkHandlerClient.sendUpdatePackets();
         }
     }
 

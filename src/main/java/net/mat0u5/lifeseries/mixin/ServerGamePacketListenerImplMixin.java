@@ -4,7 +4,6 @@ import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLife;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
@@ -40,25 +39,15 @@ import java.util.Set;
 *///?} else {
 import net.minecraft.network.protocol.game.ServerboundChatCommandSignedPacket;
 //?}
-//? if >= 1.20.5
-import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
 //? if <= 1.21
 //import net.minecraft.world.entity.RelativeMovement;
 //? if >= 1.21.2 <= 1.21.6 {
 /*import net.minecraft.world.entity.Relative;
 import net.minecraft.world.entity.PositionMoveRotation;
 *///?}
-//? if >= 26.1 {
-import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.EntityHitResult;
-//?}
 
 @Mixin(value = ServerGamePacketListenerImpl.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
-@Deprecated
 public class ServerGamePacketListenerImplMixin {
     @Shadow
     public ServerPlayer player;
@@ -200,11 +189,4 @@ public class ServerGamePacketListenerImplMixin {
         }
     }
 
-    //? if >= 1.20.5 {
-    @Deprecated
-    @Inject(method = "handleCustomPayload", at = @At("HEAD"), cancellable = true)
-    private void onHandlePayload(ServerboundCustomPayloadPacket packet, CallbackInfo ci) {
-        NetworkHandlerServer.onCustomPayload(packet.payload(), this.player);
-    }
-    //?}
 }

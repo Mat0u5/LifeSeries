@@ -109,7 +109,7 @@ public abstract class ItemMixin {
             }
         }
         else {
-            ClientAccessor clientAccessor = LifeSeries.getClientAccessor();
+            LifeSeriesClientAccessor clientAccessor = LifeSeries.getClientAccessor();
             if (clientAccessor != null &&
                     clientAccessor.getCurrentSeason() == Seasons.WILD_LIFE &&
                     clientAccessor.getActiveWildcards().contains(Wildcards.HUNGER)) {

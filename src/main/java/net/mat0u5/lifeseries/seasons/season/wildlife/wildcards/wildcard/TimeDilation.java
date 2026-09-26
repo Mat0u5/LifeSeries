@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard;
 
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
@@ -98,7 +98,7 @@ public class TimeDilation extends Wildcard {
                 if (progress >= 1 && !Callback.allWildcardsPhaseReached) {
                     deactivate();
                     WildcardManager.fadedWildcard();
-                    NetworkHandlerServer.sendUpdatePackets();
+                    LifeSeriesNetworkHandlerServer.sendUpdatePackets();
                     return;
                 }
             }

@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
@@ -52,6 +52,6 @@ public class ShadowPlay extends Superpower {
         }
         player.addEffect(invis);
         playerLevel.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.SHULKER_SHOOT, SoundSource.MASTER, 1, 1);
-        NetworkHandlerServer.sendPlayerInvisible(player.getUUID(), System.currentTimeMillis()+3000);
+        LifeSeriesNetworkHandlerServer.sendPlayerInvisible(player.getUUID(), System.currentTimeMillis()+3000);
     }
 }

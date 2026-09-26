@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries;
 import com.google.auto.service.AutoService;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.MainConfig;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.registries.Registries;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
@@ -19,7 +19,7 @@ import net.mat0u5.lifeseries.utils.interfaces.LifeSeriesClientAccessor;
 import net.mat0u5.lifeseries.utils.other.ModBuiltInPacks;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.mat0u5.matlib.MatLib;
-import net.mat0u5.matlib.api.MatLibInitializer;
+import net.mat0u5.matlib.services.MatLibInitializer;
 import net.mat0u5.matlib.events.server.ServerLanguageEvents;
 import net.mat0u5.matlib.events.server.ServerPackSourceEvents;
 import net.minecraft.server.packs.PackType;
@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.UUID;
 
 @AutoService(MatLibInitializer.class)
 public class LifeSeries implements MatLibInitializer {
@@ -60,7 +59,7 @@ public class LifeSeries implements MatLibInitializer {
 		LOGGER.info("Initializing Life Series [{} {} ({})] with MatLib [{}]...", MatLib.platform().loader().name(), MatLib.platform().mcVersion(), MOD_VERSION, MatLib.MOD_VERSION);
 
 		config = new MainConfig();
-		NetworkHandlerServer.reload();
+		LifeSeriesNetworkHandlerServer.reload();
 		ConfigManager.moveOldMainFileIfExists();
 		SnailSkins.createConfig();
 		TriviaSkins.createConfig();
@@ -74,7 +73,6 @@ public class LifeSeries implements MatLibInitializer {
 		if (!ISOLATED_ENVIRONMENT) {
 			UpdateChecker.checkForMajorUpdates();
 		}
-		NetworkHandlerServer.initializeSimplePacketReceivers();
 	}
 
 	public static boolean modDisabled() {

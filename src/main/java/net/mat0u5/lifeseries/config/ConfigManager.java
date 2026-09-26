@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.config;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
@@ -397,7 +397,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
     }
 
     public void sendConfigEntry(ServerPlayer player, ConfigFileEntry<?> entry, int index) {
-        NetworkHandlerServer.sendConfig(player, getConfigPayload(entry, index));
+        LifeSeriesNetworkHandlerServer.sendConfig(player, getConfigPayload(entry, index));
     }
 
     public ConfigPayload getConfigPayload(ConfigFileEntry<?> entry, int index) {

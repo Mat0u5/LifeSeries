@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
 import net.mat0u5.lifeseries.config.ModifiableText;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
@@ -89,7 +89,7 @@ public class PlayerDisguise extends ToggleableSuperpower {
         if (copiedPlayerName.isEmpty() || copiedPlayerUUID.isEmpty()) return;
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        NetworkHandlerServer.sendPlayerDisguise(player.getUUID().toString(), player.getName().getString(), copiedPlayerUUID, copiedPlayerName);
+        LifeSeriesNetworkHandlerServer.sendPlayerDisguise(player.getUUID().toString(), player.getName().getString(), copiedPlayerUUID, copiedPlayerName);
     }
 
     @Override
@@ -105,7 +105,7 @@ public class PlayerDisguise extends ToggleableSuperpower {
                 playerPos.x(), playerPos.y(), playerPos.z(),
                 2, 0, 0, 0, 0
         );
-        NetworkHandlerServer.sendPlayerDisguise(player.getUUID().toString(), player.getName().getString(), "", "");
+        LifeSeriesNetworkHandlerServer.sendPlayerDisguise(player.getUUID().toString(), player.getName().getString(), "", "");
     }
 
     public void onTakeDamage() {

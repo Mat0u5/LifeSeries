@@ -1,10 +1,9 @@
 package net.mat0u5.lifeseries.utils.player;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
 import net.mat0u5.lifeseries.mixin.PlayerListS2CPacketAccessor;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
@@ -20,7 +19,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.RemoteChatSession;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 
 import java.util.*;
 
@@ -30,6 +28,8 @@ import static net.mat0u5.matlib.MatLib.server;
 
 //? if >= 1.21.4
 import net.minecraft.world.entity.player.PlayerModelPart;
+//? if <= 1.21.6
+import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 
 public class PlayerUtils extends net.mat0u5.matlib.utils.player.PlayerUtils {
 
@@ -72,7 +72,7 @@ public class PlayerUtils extends net.mat0u5.matlib.utils.player.PlayerUtils {
     }
 
     public static void applyResourcepacks(UUID uuid) {
-        if (NetworkHandlerServer.wasHandshakeSuccessful(uuid)) return;
+        if (LifeSeriesNetworkHandlerServer.wasHandshakeSuccessful(uuid)) return;
         applyServerResourcepacks(uuid);
     }
 

@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
@@ -65,7 +65,7 @@ public class Invisibility extends ToggleableSuperpower {
         ServerPlayer player = getPlayer();
         if (player == null) return;
         ((IPlayer) player).ls$getServerLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.CHICKEN_EGG, SoundSource.MASTER, 1, 1);
-        NetworkHandlerServer.sendPlayerInvisible(player.getUUID(), 0);
+        LifeSeriesNetworkHandlerServer.sendPlayerInvisible(player.getUUID(), 0);
         player.removeEffect(MobEffects.INVISIBILITY);
     }
 
@@ -73,7 +73,7 @@ public class Invisibility extends ToggleableSuperpower {
         if (!this.active) return;
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        NetworkHandlerServer.sendPlayerInvisible(player.getUUID(), -1);
+        LifeSeriesNetworkHandlerServer.sendPlayerInvisible(player.getUUID(), -1);
     }
 
     public void onTakeDamage() {

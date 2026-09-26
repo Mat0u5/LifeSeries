@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.pastlife;
 
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.ModifiableText;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
@@ -40,7 +40,7 @@ public class PastLife extends Season {
 
     public void requestSessionAction() {
         for (ServerPlayer player : PlayerUtils.getAdminPlayers()) {
-            if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {
+            if (LifeSeriesNetworkHandlerServer.wasHandshakeSuccessful(player)) {
                 SimplePackets.PAST_LIFE_CHOOSE_TWIST.sendToClient(player);
             }
             else {

@@ -8,7 +8,7 @@ import net.mat0u5.lifeseries.client.gui.other.UpdateInfoScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.NewQuizScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.QuizScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.VotingScreen;
-import net.mat0u5.lifeseries.client.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.client.network.LifeSeriesNetworkHandlerClient;
 import net.mat0u5.matlib.client.render.RenderUtils;
 import net.mat0u5.lifeseries.client.render.TextHud;
 import net.mat0u5.lifeseries.client.utils.ClientSounds;
@@ -93,7 +93,7 @@ public class ClientEvents {
                 LifeSeriesClient.serverHandshake = HandshakeStatus.NOT_RECEIVED;
             }
         });
-        NetworkHandlerClient.sendUpdatePackets();
+        LifeSeriesNetworkHandlerClient.sendUpdatePackets();
         if (LifeSeries.modDisabled()) return;
     }
 
@@ -232,7 +232,7 @@ public class ClientEvents {
                     }
                 }
 
-                NetworkHandlerClient.sendHoldingJumpPacket();
+                LifeSeriesNetworkHandlerClient.sendHoldingJumpPacket();
             }
         }
         //?}

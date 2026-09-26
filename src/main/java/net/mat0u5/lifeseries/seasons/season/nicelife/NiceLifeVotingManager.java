@@ -3,10 +3,9 @@ package net.mat0u5.lifeseries.seasons.season.nicelife;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.matlib.utils.player.PlayerListReference;
@@ -547,7 +546,7 @@ public class NiceLifeVotingManager {
             return false;
         }
 
-        NetworkHandlerServer.sendVoteScreenPacket(player, ModifiableText.NICELIFE_NICELIST_VOTE_TITLE.getString(), false, true, false, availableForVoting);
+        LifeSeriesNetworkHandlerServer.sendVoteScreenPacket(player, ModifiableText.NICELIFE_NICELIST_VOTE_TITLE.getString(), false, true, false, availableForVoting);
         return true;
     }
 

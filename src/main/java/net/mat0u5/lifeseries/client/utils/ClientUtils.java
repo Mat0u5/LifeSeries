@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.client.utils;
 
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
+import net.mat0u5.matlib.MatLib;
 import net.mat0u5.matlib.events.OptionalEventReturn;
 import net.mat0u5.matlib.utils.enums.Direction;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -73,7 +74,7 @@ public class ClientUtils extends net.mat0u5.matlib.client.utils.ClientUtils {
         Entity entity = level.getEntity(packet.getEntityId());
         if (entity == null) return false;
         if (!(entity instanceof LocalPlayer player)) return false;
-        if (!LifeSeriesClient.isClientPlayer(player.getUUID())) return false;
+        if (!MatLib.isClientPlayer(player.getUUID())) return false;
         Holder<Attribute> scaleAttribute = Attributes.SCALE;
         if (instance.getAttribute() != scaleAttribute) return false;
         if (!LifeSeries.isSeason(Seasons.WILD_LIFE)) return false;

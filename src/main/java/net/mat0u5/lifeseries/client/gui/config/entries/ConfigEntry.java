@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.client.gui.config.entries;
 
 import net.mat0u5.lifeseries.client.gui.config.ConfigScreen;
-import net.mat0u5.lifeseries.client.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.client.network.LifeSeriesNetworkHandlerClient;
 import net.mat0u5.matlib.client.render.RenderUtils;
 import net.mat0u5.matlib.client.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
@@ -315,7 +315,7 @@ public abstract class ConfigEntry {
     }
 
     public void onSave() {
-        NetworkHandlerClient.sendConfigUpdate(
+        LifeSeriesNetworkHandlerClient.sendConfigUpdate(
                 getValueType().toString(),
                 getFieldName(),
                 List.of(getValueAsString())

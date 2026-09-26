@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.network;
 
+import com.google.auto.service.AutoService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
@@ -10,7 +11,10 @@ import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.config.StringListManager;
 import net.mat0u5.lifeseries.mixin.ServerLoginPacketListenerImplAccessor;
 import net.mat0u5.lifeseries.network.packets.*;
-import net.mat0u5.lifeseries.network.packets.simple.SimplePacket;
+import net.mat0u5.matlib.events.common.CommonRegistryEvents;
+import net.mat0u5.matlib.events.server.ServerNetworkEvents;
+import net.mat0u5.matlib.network.NetworkHandlerServer;
+import net.mat0u5.matlib.network.packets.simple.SimplePacket;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -43,6 +47,7 @@ import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.matlib.services.RegistrableServer;
 import net.mat0u5.matlib.utils.other.ActionText;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
@@ -80,17 +85,10 @@ import java.util.function.Function;
 *///?} else {
 import net.minecraft.network.RegistryFriendlyByteBuf;
 //?}
-//? if <= 1.20 {
-/*import io.netty.buffer.Unpooled;
-import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
-*///?} else {
-import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
-//?}
-//? if neoforge && > 1.20.3
-//import net.neoforged.neoforge.network.registration.NetworkRegistry;
 
 @Deprecated
-public class NetworkHandlerServer {
+@AutoService(RegistrableServer.class)
+public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
     public static final int PRELOGIN_TRANSACTION_ID = 10942422;
     public static final String preLoginPacketID = "preloginpacket";
     public static final List<UUID> handshakeSuccessful = new ArrayList<>();
@@ -99,17 +97,17 @@ public class NetworkHandlerServer {
     public static boolean PRE_LOGIN_OVERRIDE_KICK = false;
 
     //? if <= 1.20.3 {
-    /*public static final Map<Identifier, Function<FriendlyByteBuf, CustomPacketPayload>> PAYLOAD_READERS = new HashMap<>();
+    /*public static final Map<Identifier, Function<FriendlyByteBuf, CustomPacketPayload>> PAYLOADS = new HashMap<>();
     static {
-        PAYLOAD_READERS.put(HandshakePayload.ID, HandshakePayload::read);
-        PAYLOAD_READERS.put(TriviaQuestionPayload.ID, TriviaQuestionPayload::read);
-        PAYLOAD_READERS.put(PlayerDisguisePayload.ID, PlayerDisguisePayload::read);
-        PAYLOAD_READERS.put(ConfigPayload.ID, ConfigPayload::read);
-        PAYLOAD_READERS.put(SidetitlePacket.ID, SidetitlePacket::read);
-        PAYLOAD_READERS.put(SnailTexturePacket.ID, SnailTexturePacket::read);
-        PAYLOAD_READERS.put(TriviaTexturePacket.ID, TriviaTexturePacket::read);
-        PAYLOAD_READERS.put(VoteScreenPayload.ID, VoteScreenPayload::read);
-        PAYLOAD_READERS.put(LifeSkinsTexturePayload.ID, LifeSkinsTexturePayload::read);
+        PAYLOADS.put(HandshakePayload.ID, HandshakePayload::read);
+        PAYLOADS.put(TriviaQuestionPayload.ID, TriviaQuestionPayload::read);
+        PAYLOADS.put(PlayerDisguisePayload.ID, PlayerDisguisePayload::read);
+        PAYLOADS.put(ConfigPayload.ID, ConfigPayload::read);
+        PAYLOADS.put(SidetitlePacket.ID, SidetitlePacket::read);
+        PAYLOADS.put(SnailTexturePacket.ID, SnailTexturePacket::read);
+        PAYLOADS.put(TriviaTexturePacket.ID, TriviaTexturePacket::read);
+        PAYLOADS.put(VoteScreenPayload.ID, VoteScreenPayload::read);
+        PAYLOADS.put(LifeSkinsTexturePayload.ID, LifeSkinsTexturePayload::read);
     }
     *///?} else {
     public static final List<CustomPacketPayload.TypeAndCodec<? super RegistryFriendlyByteBuf, ? extends CustomPacketPayload>> PAYLOADS = List.of(
@@ -132,6 +130,13 @@ public class NetworkHandlerServer {
         SEASON
     }
 
+    @Override
+    public void onRegister() {
+        CommonRegistryEvents.PACKET_PAYLOADS.register(() -> PAYLOADS);
+        ServerNetworkEvents.RECEIVE_CUSTOM_PACKET.register(LifeSeriesNetworkHandlerServer::onCustomPayload);
+        initializeSimplePacketReceivers();
+    }
+
     public static void reload() {
         String registryOverrideBehaviour = LifeSeries.getMainConfig().getOrCreateProperty("registry_override_behavior", "login");
         if (registryOverrideBehaviour.equalsIgnoreCase("never")) REGISTRY_OVERRIDE_BEHAVIOR = RegistryOverrideBahaviours.NEVER;
@@ -146,8 +151,7 @@ public class NetworkHandlerServer {
         PRE_LOGIN_OVERRIDE_KICK = LifeSeries.getMainConfig().getOrCreateBoolean("pre_login_override_kick", false);
     }
 
-    public static void initializeSimplePacketReceivers() {
-
+    public void initializeSimplePacketReceivers() {
         SimplePackets.TRIVIA_ANSWER.setServerReceive((player, payload) -> {
             if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received trivia answer (from {}): {}", player, payload.number()));
             if (LifeSeries.isSeason(Seasons.NICE_LIFE)) {
@@ -407,60 +411,22 @@ public class NetworkHandlerServer {
             onCustomPayload(customPacketPayload, serverPlayer);
         }
     }
-    public static void onCustomPayload(CustomPacketPayload customPacketPayload, ServerPlayer player) {
-        //? if <= 1.20.3 {
-        /*Identifier id = customPacketPayload.id();
-         *///?} else {
-        Identifier id = customPacketPayload.type().id();
-        //?}
-        if (LifeSeries.DEBUG) LifeSeries.LOGGER.info(TextUtils.formatString("[{} -> PACKET_SERVER] Received {}", player, id.toString()));
 
-        if (server != null) {
-            server.execute(() -> onCustomPayloadSync(customPacketPayload, player, id));
-        }
-    }
-
-    private static void onCustomPayloadSync(CustomPacketPayload customPacketPayload, ServerPlayer player, Identifier id) {
+    public static boolean onCustomPayload(CustomPacketPayload customPacketPayload, ServerPlayer player) {
         if (player.hasDisconnected()) {
-            return;
+            return false;
         }
 
         if (customPacketPayload instanceof HandshakePayload payload) {
             handleHandshakeResponse(player, payload);
         }
-        if (customPacketPayload instanceof ConfigPayload payload) {
+        else if (customPacketPayload instanceof ConfigPayload payload) {
             handleConfigPacket(player, payload);
         }
-
-        //Simple Packets
-        if (customPacketPayload instanceof NumberPayload payload) {
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) packet.receiveServer(player, payload);
+        else {
+            return false;
         }
-        if (customPacketPayload instanceof StringPayload payload) {
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) packet.receiveServer(player, payload);
-        }
-        if (customPacketPayload instanceof StringListPayload payload) {
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) packet.receiveServer(player, payload);
-        }
-        if (customPacketPayload instanceof LongPayload payload) {
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) packet.receiveServer(player, payload);
-        }
-        if (customPacketPayload instanceof BooleanPayload payload) {
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) packet.receiveServer(player, payload);
-        }
-        if (customPacketPayload instanceof EmptyPayload payload) {
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) packet.receiveServer(player, payload);
-        }
-        if (customPacketPayload instanceof IntPayload payload) {
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) packet.receiveServer(player, payload);
-        }
+        return true;
     }
 
     public static void handlePreLogin(boolean understood, ServerLoginPacketListenerImpl handler) {
@@ -624,53 +590,22 @@ public class NetworkHandlerServer {
     /*
         Sending
      */
-    public static void sendPacket(ServerPlayer player, CustomPacketPayload payload) {
-        Objects.requireNonNull(player, "Server player cannot be null");
-        Objects.requireNonNull(payload, "Payload cannot be null");
-
-        //? if <= 1.20.3 {
-        /*Identifier id = payload.id();
-         *///?} else {
-        Identifier id = payload.type().id();
-        //?}
-
-    //? if neoforge {
-        /*//? if <= 1.20.3 {
-        /^if (!wasHandshakeSuccessful(player) && id != HandshakePayload.ID) {
-            return;
-        }
-        ^///?} else {
-        if (!NetworkRegistry.hasChannel(player.connection, id)) {
-            return;
-        }
-        //?}
-    *///?}
-
-        //? if <= 1.20 {
-        /*FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-        payload.write(buf);
-        player.connection.send(new ClientboundCustomPayloadPacket(payload.id(), buf));
-        *///?} else {
-        player.connection.send(new ClientboundCustomPayloadPacket(payload));
-        //?}
-        if (LifeSeries.DEBUG) LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_SERVER -> {}] Sending {}", player, id.toString()));
-    }
     
     public static void sendTriviaPacket(ServerPlayer player, String question, int difficulty, long timestamp, int timeToComplete, List<String> answers, TriviaGuiType guiType) {
         if (guiType != null) SimplePackets.TRIVIA_GUI_TYPE.sendToClient(guiType.name(), player);
         TriviaQuestionPayload triviaQuestionPacket = new TriviaQuestionPayload(question, difficulty, timestamp, timeToComplete, answers);
         if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Sending trivia question packet to {}): {{}, {}, {}, {}, {}}", player, question, difficulty, timestamp, timeToComplete, answers));
 
-        sendPacket(player, triviaQuestionPacket);
+        NetworkHandlerServer.sendPacket(player, triviaQuestionPacket);
     }
 
     public static void sendVoteScreenPacket(ServerPlayer player, String screenName, boolean requiresSleep, boolean closesWithEsc, boolean showTimer, List<String> players) {
         VoteScreenPayload voteScreenPayload = new VoteScreenPayload(screenName, requiresSleep, closesWithEsc, showTimer, players);
-        sendPacket(player, voteScreenPayload);
+        NetworkHandlerServer.sendPacket(player, voteScreenPayload);
     }
 
     public static void sendConfig(ServerPlayer player, ConfigPayload configPacket) {
-        sendPacket(player, configPacket);
+        NetworkHandlerServer.sendPacket(player, configPacket);
     }
 
     public static void sendHandshake(ServerPlayer player) {
@@ -681,7 +616,7 @@ public class NetworkHandlerServer {
         int serverCompatibility = VersionControl.getModVersionInt(serverCompatibilityStr);
 
         HandshakePayload payload = new HandshakePayload(serverVersionStr, serverVersion, serverCompatibilityStr, serverCompatibility);
-        sendPacket(player, payload);
+        NetworkHandlerServer.sendPacket(player, payload);
         handshakeSuccessful.remove(player.getUUID());
         if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Sending handshake to {}: {{}, {}}", player, serverVersionStr, serverVersion));
 
@@ -766,7 +701,7 @@ public class NetworkHandlerServer {
     public static void sendPlayerDisguise(String hiddenUUID, String hiddenName, String shownUUID, String shownName) {
         PlayerDisguisePayload payload = new PlayerDisguisePayload(hiddenUUID, hiddenName, shownUUID, shownName);
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-            sendPacket(player, payload);
+            NetworkHandlerServer.sendPacket(player, payload);
         }
     }
 
@@ -805,6 +740,6 @@ public class NetworkHandlerServer {
     }
 
     public static void sideTitle(ServerPlayer player, Component text) {
-        sendPacket(player, new SidetitlePacket(text));
+        NetworkHandlerServer.sendPacket(player, new SidetitlePacket(text));
     }
 }

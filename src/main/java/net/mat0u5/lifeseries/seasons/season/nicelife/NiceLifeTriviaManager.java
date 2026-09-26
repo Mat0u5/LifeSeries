@@ -6,7 +6,7 @@ import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.angrysnowman.AngrySnowman;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
@@ -73,7 +73,7 @@ public class NiceLifeTriviaManager {
             VoicechatMain.niceLifeTriviaStart(triviaPlayers);
         }
 
-        NetworkHandlerServer.sendUpdatePackets();
+        LifeSeriesNetworkHandlerServer.sendUpdatePackets();
         triviaInProgress = true;
         killAllBots();
         usedQuestions.clear();

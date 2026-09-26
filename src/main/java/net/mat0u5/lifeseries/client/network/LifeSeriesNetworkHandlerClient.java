@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.client.network;
 
+import com.google.auto.service.AutoService;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.compatibilities.VoicechatClient;
@@ -15,6 +16,8 @@ import net.mat0u5.lifeseries.client.gui.seasons.SeasonInfoScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.NewQuizScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.QuizScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.VotingScreen;
+import net.mat0u5.matlib.client.events.ClientNetworkEvents;
+import net.mat0u5.matlib.client.network.NetworkHandlerClient;
 import net.mat0u5.matlib.client.render.RenderUtils;
 import net.mat0u5.lifeseries.client.render.TextHud;
 import net.mat0u5.lifeseries.client.utils.ClientSounds;
@@ -24,7 +27,6 @@ import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.mixin.PlayerAccessor;
 import net.mat0u5.lifeseries.mixin.client.GuiAccessor;
 import net.mat0u5.lifeseries.network.packets.*;
-import net.mat0u5.lifeseries.network.packets.simple.SimplePacket;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.registries.ParticleRegistry;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -35,6 +37,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Hunger;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDilation;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.matlib.client.render.VignetteRenderer;
+import net.mat0u5.matlib.client.services.RegistrableClient;
 import net.mat0u5.matlib.utils.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
@@ -43,14 +46,12 @@ import net.mat0u5.matlib.utils.other.RegistryUtils;
 import net.mat0u5.matlib.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -58,22 +59,19 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
-//? if <= 1.20.3 {
-/*import net.minecraft.network.FriendlyByteBuf;
-*///?}
-//? if <= 1.20 {
-/*import io.netty.buffer.Unpooled;
-import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
-*///?} else {
-import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
-//?}
-
 @Deprecated
-public class NetworkHandlerClient {
-    public static void initializeSimplePacketReceivers() {
+@AutoService(RegistrableClient.class)
+public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
+
+    @Override
+    public void onRegister() {
+        ClientNetworkEvents.RECEIVE_CUSTOM_PACKET.register(LifeSeriesNetworkHandlerClient::onCustomPayload);
+        initializeSimplePacketReceivers();
+    }
+
+    public void initializeSimplePacketReceivers() {
         //Long payload
         SimplePackets.CURSE_SLIDING.setClientReceive(payload -> LifeSeriesClient.CURSE_SLIDING = payload.number());
 
@@ -374,14 +372,6 @@ public class NetworkHandlerClient {
     }
 
     public static boolean onCustomPayload(CustomPacketPayload customPacketPayload) {
-        //? if <= 1.20.3 {
-        /*Identifier id = customPacketPayload.id();
-         *///?} else {
-        Identifier id = customPacketPayload.type().id();
-        //?}
-        if (LifeSeries.DEBUG) LifeSeries.LOGGER.info(TextUtils.formatString("[SERVER -> CLIENT] Received {}", id.toString()));
-
-
         Minecraft client = Minecraft.getInstance();
         if (customPacketPayload instanceof HandshakePayload payload) {
             client.execute(() -> handleHandshake(payload));
@@ -409,36 +399,6 @@ public class NetworkHandlerClient {
         }
         else if (customPacketPayload instanceof LifeSkinsTexturePayload payload) {
             client.execute(() -> LifeSkinsClient.handleTexture(payload.skinName(), payload.teamName(), payload.slim(), payload.textureData()));
-        }
-
-        //Simple Packets
-        else if (customPacketPayload instanceof StringListPayload payload) {
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) client.execute(() -> packet.receiveClient(payload));
-        }
-        else if (customPacketPayload instanceof NumberPayload payload) {
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) client.execute(() -> packet.receiveClient(payload));
-        }
-        else if (customPacketPayload instanceof StringPayload payload) {
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) client.execute(() -> packet.receiveClient(payload));
-        }
-        else if (customPacketPayload instanceof LongPayload payload) {
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) client.execute(() -> packet.receiveClient(payload));
-        }
-        else if (customPacketPayload instanceof BooleanPayload payload) {
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) client.execute(() -> packet.receiveClient(payload));
-        }
-        else if (customPacketPayload instanceof EmptyPayload payload) {
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) client.execute(() -> packet.receiveClient(payload));
-        }
-        else if (customPacketPayload instanceof IntPayload payload) {
-            SimplePacket<?, ?> packet = SimplePackets.registeredPackets.get(payload.name());
-            if (packet != null) client.execute(() -> packet.receiveClient(payload));
         }
         else {
             return false;
@@ -527,7 +487,7 @@ public class NetworkHandlerClient {
             }
         }
 
-        NetworkHandlerClient.sendUpdatePackets();
+        LifeSeriesNetworkHandlerClient.sendUpdatePackets();
         LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_CLIENT] Received handshake (from server): {{}, {}}", payload.modVersionStr(), payload.modVersion()));
         sendHandshake();
     }
@@ -540,31 +500,6 @@ public class NetworkHandlerClient {
     /*
         Sending
      */
-    public static void send(CustomPacketPayload payload) {
-        //? if <= 1.20.3 {
-        /*Identifier id = payload.id();
-         *///?} else {
-        Identifier id = payload.type().id();
-        //?}
-        if (LifeSeries.DEBUG) LifeSeries.LOGGER.info(TextUtils.formatString("[CLIENT -> SERVER] Sending {}", id.toString()));
-
-
-        Objects.requireNonNull(payload, "Payload cannot be null");
-
-        var connection = Minecraft.getInstance().getConnection();
-        if (connection != null) {
-            //? if <= 1.20 {
-            /*FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-            payload.write(buf);
-            connection.send(new ServerboundCustomPayloadPacket(payload.id(), buf));
-            *///?} else {
-            connection.send(new ServerboundCustomPayloadPacket(payload));
-            //?}
-            return;
-        }
-
-        throw new IllegalStateException("Cannot send packets when not in game!");
-    }
 
     public static void sendHandshake() {
         String clientVersionStr = LifeSeries.MOD_VERSION;
@@ -574,13 +509,13 @@ public class NetworkHandlerClient {
         int clientCompatibility = VersionControl.getModVersionInt(clientCompatibilityStr);
 
         HandshakePayload sendPayload = new HandshakePayload(clientVersionStr, clientVersion, clientCompatibilityStr, clientCompatibility);
-        send(sendPayload);
+        NetworkHandlerClient.send(sendPayload);
         if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info("[PACKET_CLIENT] Sent handshake");
     }
 
     public static void sendConfigUpdate(String configType, String id, List<String> args) {
         ConfigPayload configPacket = new ConfigPayload(configType, id, -1, "", "", args);
-        send(configPacket);
+        NetworkHandlerClient.send(configPacket);
     }
 
     public static void sendTriviaAnswer(int answer) {

@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
@@ -14,7 +14,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.ChunkPos;
 
 import java.util.List;
-import net.minecraft.world.entity.*;
 
 public class SuperPunch extends ToggleableSuperpower {
     public static double KNOCKBACK_STRENGTH = 3.0;
@@ -42,7 +41,7 @@ public class SuperPunch extends ToggleableSuperpower {
     public void activate() {
         super.activate();
         ServerPlayer player = getPlayer();
-        if (player != null) NetworkHandlerServer.sendVignette(player, -1);
+        if (player != null) LifeSeriesNetworkHandlerServer.sendVignette(player, -1);
     }
 
     @Override
@@ -50,7 +49,7 @@ public class SuperPunch extends ToggleableSuperpower {
         super.deactivate();
         ServerPlayer player = getPlayer();
         if (player != null) {
-            NetworkHandlerServer.sendVignette(player, 0);
+            LifeSeriesNetworkHandlerServer.sendVignette(player, 0);
             if (player.isPassenger()) {
                 Entity vehicle = player.getVehicle();
                 player.removeVehicle();

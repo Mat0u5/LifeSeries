@@ -11,7 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
 //? if >= 1.21 {
 import java.util.Set;
 import net.minecraft.core.component.DataComponents;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.matlib.utils.world.ItemStackUtils;
 import net.minecraft.sounds.SoundEvents;
@@ -54,7 +54,7 @@ public class WindCharge extends ToggleableSuperpower {
         AttributeUtils.SAFE_FALL_DISTANCE.of(player).set(100000);
         giveMace();
         giveWindCharge();
-        NetworkHandlerServer.sendVignette(player, 300);
+        LifeSeriesNetworkHandlerServer.sendVignette(player, 300);
         //?}
     }
 

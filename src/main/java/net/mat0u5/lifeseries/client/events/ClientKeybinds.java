@@ -1,15 +1,11 @@
 package net.mat0u5.lifeseries.client.events;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import net.mat0u5.lifeseries.client.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.client.network.LifeSeriesNetworkHandlerClient;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.mat0u5.matlib.client.events.ClientRegistryEvents;
 import net.minecraft.client.KeyMapping;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class ClientKeybinds {
     public static KeyMapping superpower;
@@ -24,13 +20,13 @@ public class ClientKeybinds {
 
     public static void tick() {
         while (superpower != null && superpower.consumeClick()) {
-            NetworkHandlerClient.pressSuperpowerKey();
+            LifeSeriesNetworkHandlerClient.pressSuperpowerKey();
         }
         while (runCommand != null && runCommand.consumeClick() && VersionControl.isDevVersion()) {
-            NetworkHandlerClient.pressRunCommandKey();
+            LifeSeriesNetworkHandlerClient.pressRunCommandKey();
         }
         while (openConfig != null && openConfig.consumeClick()) {
-            NetworkHandlerClient.pressOpenConfigKey();
+            LifeSeriesNetworkHandlerClient.pressOpenConfigKey();
         }
     }
 

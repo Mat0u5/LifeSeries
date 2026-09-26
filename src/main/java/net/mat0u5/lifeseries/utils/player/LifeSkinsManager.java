@@ -1,9 +1,10 @@
 package net.mat0u5.lifeseries.utils.player;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.LifeSkinsTexturePayload;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
+import net.mat0u5.matlib.network.NetworkHandlerServer;
 import net.mat0u5.matlib.utils.resource.ResourceHandler;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeLivesManager;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;

@@ -4,7 +4,7 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.mixin.MobEffectInstanceAccessor;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
@@ -25,7 +25,6 @@ import net.minecraft.world.phys.Vec3;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
-import static net.mat0u5.matlib.MatLib.*;
 
 public class Session {
     public Map<UUID, Integer> playerNaturalDeathLog = new HashMap<>();
@@ -512,11 +511,11 @@ public class Session {
                     continue;
                 }
 
-                if (!NetworkHandlerServer.wasHandshakeSuccessful(player)) {
+                if (!LifeSeriesNetworkHandlerServer.wasHandshakeSuccessful(player)) {
                     ((IPlayer) player).ls$message(message, true);
                 }
             }
-            if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {
+            if (LifeSeriesNetworkHandlerServer.wasHandshakeSuccessful(player)) {
                 long timestamp = SessionTimerStates.OFF.getValue();
                 if (statusNotStarted()) timestamp = SessionTimerStates.NOT_STARTED.getValue();
                 else if (statusPaused()) timestamp = SessionTimerStates.PAUSED.getValue();

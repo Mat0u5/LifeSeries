@@ -8,7 +8,7 @@ import net.mat0u5.lifeseries.config.ModifiableTextManager;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.events.Events;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
@@ -264,7 +264,7 @@ public abstract class Season {
         TEAMS_SYSTEM_DISABLED = seasonConfig.TEAMS_SYSTEM_DISABLED.get();
         ONLY_LOSE_DURABILITY_IN_SESSION = seasonConfig.ONLY_LOSE_DURABILITY_IN_SESSION.get();
 
-        NetworkHandlerServer.reload();
+        LifeSeriesNetworkHandlerServer.reload();
         boogeymanManager.onReload();
         secretSociety.onReload();
         createTeams();
@@ -286,19 +286,19 @@ public abstract class Season {
     public static void setSkyColor(Vec3 color, boolean setMode) {
         skyColor = color;
         skyColorSetMode = setMode;
-        NetworkHandlerServer.sendUpdatePackets();
+        LifeSeriesNetworkHandlerServer.sendUpdatePackets();
     }
 
     public static void setFogColor(Vec3 color, boolean setMode) {
         fogColor = color;
         fogColorSetMode = setMode;
-        NetworkHandlerServer.sendUpdatePackets();
+        LifeSeriesNetworkHandlerServer.sendUpdatePackets();
     }
 
     public static void setCloudColor(Vec3 color, boolean setMode) {
         cloudColor = color;
         cloudColorSetMode = setMode;
-        NetworkHandlerServer.sendUpdatePackets();
+        LifeSeriesNetworkHandlerServer.sendUpdatePackets();
     }
 
     public String getAdminCommands() {
@@ -492,10 +492,10 @@ public abstract class Season {
             reloadAllPlayerTeams();
         }
         if (timer.isMultipleOf(Time.seconds(1))) {
-            NetworkHandlerServer.sendSmallUpdatePackets();
+            LifeSeriesNetworkHandlerServer.sendSmallUpdatePackets();
         }
         if (timer.isMultipleOf(Time.seconds(60))) {
-            NetworkHandlerServer.sendUpdatePackets();
+            LifeSeriesNetworkHandlerServer.sendUpdatePackets();
         }
     }
     public void tickSessionOn(MinecraftServer server) {}

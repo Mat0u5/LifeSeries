@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -63,7 +63,7 @@ public class Superspeed extends ToggleableSuperpower {
         }
         ((IPlayer) player).ls$playNotifySound(SoundEvents.BEACON_ACTIVATE, SoundSource.MASTER, 1, 1);
         slowlySetSpeed(player, TARGET_SPEED, 60);
-        NetworkHandlerServer.sendVignette(player, -1);
+        LifeSeriesNetworkHandlerServer.sendVignette(player, -1);
         if (STEP_UP) {
             //? if > 1.20.3 {
             AttributeUtils.STEP_HEIGHT.of(player).set(1);
@@ -94,7 +94,7 @@ public class Superspeed extends ToggleableSuperpower {
                 player.addEffect(hunger);
             }
         }
-        NetworkHandlerServer.sendVignette(player, 0);
+        LifeSeriesNetworkHandlerServer.sendVignette(player, 0);
         //? if > 1.20.3 {
         AttributeUtils.STEP_HEIGHT.of(player).reset();
         //?}

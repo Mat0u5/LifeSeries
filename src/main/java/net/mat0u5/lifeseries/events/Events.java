@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.events;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.resources.datapack.DatapackManager;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -40,11 +40,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.*;
 import static net.mat0u5.lifeseries.LifeSeries.*;
-import static net.mat0u5.matlib.MatLib.*;
 import static net.mat0u5.lifeseries.utils.player.PlayerUtils.isFakePlayer;
 
 //? if >= 1.21.2 {
@@ -104,7 +102,7 @@ public class Events {
 
         currentSeason.onPlayerDisconnect(player);
         SessionTranscript.playerLeave(player);
-        NetworkHandlerServer.preLoginHandshake.remove(player.getUUID());
+        LifeSeriesNetworkHandlerServer.preLoginHandshake.remove(player.getUUID());
         DatapackIntegration.EVENT_PLAYER_LEAVE.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
     }
 
@@ -155,8 +153,8 @@ public class Events {
             if (LifeSeries.currentSession != null) {
                 currentSeason.tick(server);
             }
-            if (NetworkHandlerServer.updatedConfigThisTick) {
-                NetworkHandlerServer.onUpdatedConfig();
+            if (LifeSeriesNetworkHandlerServer.updatedConfigThisTick) {
+                LifeSeriesNetworkHandlerServer.onUpdatedConfig();
             }
             AdvancedDeathsManager.tick();
         }
@@ -274,8 +272,8 @@ public class Events {
     public static final Map<UUID, Float> joiningPlayersYaw = new HashMap<>();
     public static final Map<UUID, Float> joiningPlayersPitch = new HashMap<>();
     public static void playerStartJoining(ServerPlayer player) {
-        NetworkHandlerServer.sendHandshake(player);
-        NetworkHandlerServer.sendUpdatePacket(List.of(player));
+        LifeSeriesNetworkHandlerServer.sendHandshake(player);
+        LifeSeriesNetworkHandlerServer.sendUpdatePacket(List.of(player));
         SnailSkins.sendTexturesTo(player);
         TriviaSkins.sendTexturesTo(player);
         if (!joiningPlayers.contains(player.getUUID())) joiningPlayers.add(player.getUUID());
