@@ -102,7 +102,6 @@
     "client.ParticleAccessor",
     "client.ParticleEngineMixin",
     "client.PlayerEntityRendererMixin",
-    "client.PlayerInfoMixin",
     "client.PlayerMixin",
     "client.PlayerTabOverlayMixin",
     "client.SkyRendererMixin",

@@ -10,12 +10,12 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
-import net.mat0u5.matlib.utils.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.interfaces.LifeSeriesClientAccessor;
 import net.mat0u5.lifeseries.utils.other.ModBuiltInPacks;
 import net.mat0u5.matlib.MatLib;
-import net.mat0u5.matlib.client.services.MatLibClientInitializer;
+import net.mat0u5.matlib.client.services.MultiplatformClientModInitializer;
 import net.mat0u5.matlib.client.events.ClientPackSourceEvents;
+import net.mat0u5.matlib.client.utils.SharedClientInfo;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.world.phys.Vec3;
@@ -27,8 +27,8 @@ import java.util.*;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 *///?}
 
-@AutoService(MatLibClientInitializer.class)
-public class LifeSeriesClient implements MatLibClientInitializer, LifeSeriesClientAccessor {
+@AutoService(MultiplatformClientModInitializer.class)
+public class LifeSeriesClient implements MultiplatformClientModInitializer, LifeSeriesClientAccessor {
 
     public static Seasons clientCurrentSeason = LifeSeries.DEFAULT_SEASON;
     public static SessionStatus clientSessionStatus = SessionStatus.NOT_STARTED;
@@ -92,19 +92,17 @@ public class LifeSeriesClient implements MatLibClientInitializer, LifeSeriesClie
     public static boolean LIMITED_LIFE_ACTIONBAR_TIME = false;
 
     public static boolean isReplay = false;
-    public static HandshakeStatus serverHandshake = HandshakeStatus.WAITING;
 
     @Override
     public void onRegister() {
         ClientPackSourceEvents.LOAD_PACK.register(consumer -> ModBuiltInPacks.loadPacks(consumer, PackType.CLIENT_RESOURCES));
         ClientRegistries.register();
+        LifeSeries.setClientAccessor(new LifeSeriesClient());
     }
 
     @Override
     public void onInitializeClient() {
         LifeSeries.LOGGER.info("Initializing Life Series Client [{} {} ({})] with MatLib [{}]...", MatLib.platform().loader().name(), MatLib.platform().mcVersion(), LifeSeries.MOD_VERSION, MatLib.MOD_VERSION);
-
-        LifeSeries.setClientAccessor(new LifeSeriesClient());
 
         clientConfig = new ClientConfig();
         reloadConfig();
@@ -113,11 +111,6 @@ public class LifeSeriesClient implements MatLibClientInitializer, LifeSeriesClie
     @Override
     public boolean isReplay() {
         return isReplay;
-    }
-
-    @Override
-    public HandshakeStatus serverHandshake() {
-        return serverHandshake;
     }
 
     @Override
@@ -152,7 +145,7 @@ public class LifeSeriesClient implements MatLibClientInitializer, LifeSeriesClie
         NICE_LIFE_LESS_SNOW = ClientConfig.NICE_LIFE_LESS_SNOW.get(clientConfig);
         LIMITED_LIFE_ACTIONBAR_TIME = ClientConfig.LIMITED_LIFE_ACTIONBAR_TIME.get(clientConfig);
 
-        if (serverHandshake == HandshakeStatus.RECEIVED) {
+        if (SharedClientInfo.getHandshakeStatus().hasReceived(LifeSeries.MOD_ID)) {
             LifeSeriesNetworkHandlerClient.sendUpdatePackets();
         }
     }
@@ -179,7 +172,6 @@ public class LifeSeriesClient implements MatLibClientInitializer, LifeSeriesClie
         limitedLifeTimerColor = "";
         limitedLifeTimeLastUpdated = 0;
         limitedLifeLives = 0;
-        serverHandshake = HandshakeStatus.WAITING;
         sideTitle = null;
         TextHud.sideTitleRemainTicks = 0;
 

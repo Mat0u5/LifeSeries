@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.matlib.utils.other.ActionText;
 import net.mat0u5.matlib.utils.other.TextUtils;
+import net.mat0u5.matlib.utils.other.VersionCompatibility;
 import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -59,8 +60,8 @@ public class UpdateChecker {
 
                     String name = json.get("tag_name").getAsString();
 
-                    int currentVersionNumber = VersionControl.getModVersionInt(LifeSeries.MOD_VERSION);
-                    int updateVersionNumber = VersionControl.getModVersionInt(name);
+                    int currentVersionNumber = VersionCompatibility.getModVersionInt(LifeSeries.MOD_VERSION);
+                    int updateVersionNumber = VersionCompatibility.getModVersionInt(name);
 
                     // Compare the current version with the latest version
                     if (currentVersionNumber < updateVersionNumber || TEST_UPDATE_LAST) {
@@ -115,8 +116,8 @@ public class UpdateChecker {
                         if (draft || prerelease) continue;
 
                         try {
-                            int currentVersionNumber = VersionControl.getModVersionInt(LifeSeries.MOD_VERSION);
-                            int updateVersionNumber = VersionControl.getModVersionInt(name);
+                            int currentVersionNumber = VersionCompatibility.getModVersionInt(LifeSeries.MOD_VERSION);
+                            int updateVersionNumber = VersionCompatibility.getModVersionInt(name);
 
                             if (version < updateVersionNumber && currentVersionNumber < updateVersionNumber) {
                                 LifeSeries.LOGGER.info("New minor version found: "+name);
@@ -148,7 +149,7 @@ public class UpdateChecker {
 
     public static String getChangelogLink() {
         if (changelogLink != null) return changelogLink;
-        return "https://mat0u5.github.io/LifeSeries-docs/changelog?v="+VersionControl.strippedVersionName()+"-"+versionName;
+        return "https://mat0u5.github.io/LifeSeries-docs/changelog?v="+VersionCompatibility.strippedVersionName(LifeSeries.MOD_VERSION)+"-"+versionName;
     }
 
     public static String formatDescription(String rawDesctiption) {

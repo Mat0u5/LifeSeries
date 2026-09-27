@@ -18,7 +18,6 @@ import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
-import net.mat0u5.matlib.utils.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -87,12 +86,6 @@ public class ClientEvents {
     }
 
     public static void onClientJoin() {
-        ClientTaskScheduler.schedulePriorityTask(20, () -> {
-            if (LifeSeriesClient.serverHandshake == HandshakeStatus.WAITING) {
-                LifeSeries.LOGGER.info("Disabling the Life Series on the client.");
-                LifeSeriesClient.serverHandshake = HandshakeStatus.NOT_RECEIVED;
-            }
-        });
         LifeSeriesNetworkHandlerClient.sendUpdatePackets();
         if (LifeSeries.modDisabled()) return;
     }

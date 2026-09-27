@@ -5,10 +5,10 @@ import net.mat0u5.lifeseries.client.entity.snail.SnailModel;
 import net.mat0u5.lifeseries.client.entity.snail.SnailRenderer;
 import net.mat0u5.lifeseries.client.entity.triviabot.TriviaBotModel;
 import net.mat0u5.lifeseries.client.entity.triviabot.TriviaBotRenderer;
-import net.mat0u5.lifeseries.client.events.ClientEvents;
-import net.mat0u5.lifeseries.client.events.ClientKeybinds;
+import net.mat0u5.lifeseries.client.events.*;
 import net.mat0u5.lifeseries.client.features.EntityRenderModifier;
 import net.mat0u5.lifeseries.client.features.LifeSkinsClient;
+import net.mat0u5.lifeseries.client.network.LifeSeriesNetworkHandlerClient;
 import net.mat0u5.lifeseries.client.particle.TriviaSpiritParticle;
 import net.mat0u5.lifeseries.client.render.ClientRenderer;
 import net.mat0u5.lifeseries.client.utils.ClientSounds;
@@ -50,6 +50,8 @@ public class ClientRegistries {
 		CommonEntityEvents.JUMP.register(ClientEvents::onClientJump);
 		ClientPlayerEvents.GET_SKIN.register(LifeSkinsClient::onGetSkin);
 		ClientEntityEvents.RENDER_ENTITY_NAMETAG.register(ClientUtils::getEntityName);
+		ClientNetworkEvents.RECEIVE_HANDSHAKE.register(LifeSeriesNetworkHandlerClient::sendUpdatePackets);
+
 	}
 	public static void registerRenderers() {
 		ClientRegistryEvents.ENTITY_RENDERER.register(() -> List.of(

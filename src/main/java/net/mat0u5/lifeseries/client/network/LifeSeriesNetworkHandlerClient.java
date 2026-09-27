@@ -38,12 +38,11 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDila
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.matlib.client.render.VignetteRenderer;
 import net.mat0u5.matlib.client.services.RegistrableClient;
-import net.mat0u5.matlib.utils.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.matlib.client.utils.SharedClientInfo;
 import net.mat0u5.matlib.utils.other.RegistryUtils;
-import net.mat0u5.matlib.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.minecraft.client.Minecraft;
@@ -373,8 +372,8 @@ public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
 
     public static boolean onCustomPayload(CustomPacketPayload customPacketPayload) {
         Minecraft client = Minecraft.getInstance();
-        if (customPacketPayload instanceof HandshakePayload payload) {
-            client.execute(() -> handleHandshake(payload));
+        if (customPacketPayload instanceof OldHandshakePayload payload) {
+            client.execute(() -> handleOldHandshake(payload));
         }
         else if (customPacketPayload instanceof TriviaQuestionPayload payload) {
             client.execute(() -> Trivia.receiveTrivia(payload));
@@ -445,51 +444,13 @@ public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
             }catch(Exception ignored) {}
         }
     }
-    public static void handleHandshake(HandshakePayload payload) {
-        LifeSeriesClient.serverHandshake = HandshakeStatus.RECEIVED;
-
-        String serverVersionStr = payload.modVersionStr();
-        String serverCompatibilityStr = payload.compatibilityStr();
-        String clientVersionStr = LifeSeries.MOD_VERSION;
-        String clientCompatibilityStr = VersionControl.clientCompatibilityMin();
-
-        if (!LifeSeries.ISOLATED_ENVIRONMENT) {
-            int serverVersion = payload.modVersion();
-            int serverCompatibility = payload.compatibility();
-            int clientVersion = VersionControl.getModVersionInt(clientVersionStr);
-            int clientCompatibility = VersionControl.getModVersionInt(clientCompatibilityStr);
-
-            //Check if client version is compatible with the server version
-            if (clientVersion < serverCompatibility) {
-                Component disconnectText = Component.literal("[Life Series Mod] Client-Server version mismatch!\n" +
-                        "Update the client version to at least version "+serverCompatibilityStr);
-                ClientUtils.disconnect(disconnectText);
-                return;
-            }
-
-            //Check if server version is compatible with the client version
-            if (serverVersion < clientCompatibility) {
-                Component disconnectText = Component.literal("[Life Series Mod] Server-Client version mismatch!\n" +
-                        "The client version is too new for the server.\n" +
-                        "Either update the server, or downgrade the client version to " + serverVersionStr);
-                ClientUtils.disconnect(disconnectText);
-                return;
-            }
-        }
-        else {
-            //Isolated enviroment -> mod versions must be IDENTICAL between client and server
-            //Check if client version is the same as the server version
-            if (!clientVersionStr.equalsIgnoreCase(serverVersionStr)) {
-                Component disconnectText = Component.literal("[Life Series Mod] Client-Server version mismatch!\n" +
-                        "You must join with version "+serverCompatibilityStr);
-                ClientUtils.disconnect(disconnectText);
-                return;
-            }
-        }
-
-        LifeSeriesNetworkHandlerClient.sendUpdatePackets();
-        LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_CLIENT] Received handshake (from server): {{}, {}}", payload.modVersionStr(), payload.modVersion()));
-        sendHandshake();
+    public static void handleOldHandshake(OldHandshakePayload payload) {
+        if (SharedClientInfo.getHandshakeStatus().hasReceived(LifeSeries.MOD_ID)) return;
+        if (payload.compatibilityStr().equalsIgnoreCase(OldHandshakePayload.OLD_PACKET_VERSION_BREAKOFF)) return;
+        Component disconnectText = Component.literal("[Life Series Mod] Server-Client version mismatch!\n" +
+                "The client version is too new for the server.\n" +
+                "Either update the server, or downgrade the client version to "+payload.modVersionStr());
+        ClientUtils.disconnect(disconnectText);
     }
 
     public static void handleVoteScreen(VoteScreenPayload payload) {
@@ -500,18 +461,6 @@ public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
     /*
         Sending
      */
-
-    public static void sendHandshake() {
-        String clientVersionStr = LifeSeries.MOD_VERSION;
-        String clientCompatibilityStr = VersionControl.clientCompatibilityMin();
-
-        int clientVersion = VersionControl.getModVersionInt(clientVersionStr);
-        int clientCompatibility = VersionControl.getModVersionInt(clientCompatibilityStr);
-
-        HandshakePayload sendPayload = new HandshakePayload(clientVersionStr, clientVersion, clientCompatibilityStr, clientCompatibility);
-        NetworkHandlerClient.send(sendPayload);
-        if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info("[PACKET_CLIENT] Sent handshake");
-    }
 
     public static void sendConfigUpdate(String configType, String id, List<String> args) {
         ConfigPayload configPacket = new ConfigPayload(configType, id, -1, "", "", args);

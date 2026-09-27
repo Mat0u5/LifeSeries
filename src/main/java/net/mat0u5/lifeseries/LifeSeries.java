@@ -14,12 +14,11 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
-import net.mat0u5.matlib.utils.enums.HandshakeStatus;
 import net.mat0u5.lifeseries.utils.interfaces.LifeSeriesClientAccessor;
 import net.mat0u5.lifeseries.utils.other.ModBuiltInPacks;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.mat0u5.matlib.MatLib;
-import net.mat0u5.matlib.services.MatLibInitializer;
+import net.mat0u5.matlib.services.MultiplatformModInitializer;
 import net.mat0u5.matlib.events.server.ServerLanguageEvents;
 import net.mat0u5.matlib.events.server.ServerPackSourceEvents;
 import net.minecraft.server.packs.PackType;
@@ -28,10 +27,11 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-@AutoService(MatLibInitializer.class)
-public class LifeSeries implements MatLibInitializer {
+@AutoService(MultiplatformModInitializer.class)
+public class LifeSeries implements MultiplatformModInitializer {
 	public static final String MOD_VERSION = "1.5.9";
 	public static final String MOD_ID = "lifeseries";
+	public static final String MOD_FRIENDLY_NAME = "Life Series";
 
 	public static final boolean DEBUG = false;
 	public static final boolean FORCE_DEV = false;
@@ -78,7 +78,7 @@ public class LifeSeries implements MatLibInitializer {
 	public static boolean modDisabled() {
 		if (clientAccessor != null) {
 			if (clientAccessor.isReplay()) return true;
-			if (clientAccessor.serverHandshake() == HandshakeStatus.NOT_RECEIVED) return true;
+			if (!MatLib.getClientAccessor().handshakeWithServer().hasReceived(MOD_ID)) return true;
 			return clientAccessor.isDisabledServerSide();
 		}
 		return MOD_DISABLED;
@@ -86,7 +86,7 @@ public class LifeSeries implements MatLibInitializer {
 
 	public static boolean modFullyDisabled() {
 		if (clientAccessor == null) return false;
-		return clientAccessor.serverHandshake() == HandshakeStatus.NOT_RECEIVED;
+		return !MatLib.getClientAccessor().handshakeWithServer().hasReceived(MOD_ID);
 	}
 
 	public static void setDisabled(boolean disabled) {

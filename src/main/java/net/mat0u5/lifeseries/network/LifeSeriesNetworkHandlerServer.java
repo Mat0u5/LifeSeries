@@ -14,7 +14,6 @@ import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.matlib.events.common.CommonRegistryEvents;
 import net.mat0u5.matlib.events.server.ServerNetworkEvents;
 import net.mat0u5.matlib.network.NetworkHandlerServer;
-import net.mat0u5.matlib.network.packets.simple.SimplePacket;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -54,10 +53,10 @@ import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.matlib.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.*;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
+import net.mat0u5.matlib.utils.other.VersionCompatibility;
 import net.mat0u5.matlib.utils.player.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerLoginPacketListenerImpl;
@@ -91,15 +90,13 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
     public static final int PRELOGIN_TRANSACTION_ID = 10942422;
     public static final String preLoginPacketID = "preloginpacket";
-    public static final List<UUID> handshakeSuccessful = new ArrayList<>();
-    public static final List<UUID> preLoginHandshake = new ArrayList<>();
     public static RegistryOverrideBahaviours REGISTRY_OVERRIDE_BEHAVIOR = RegistryOverrideBahaviours.LOGIN;
     public static boolean PRE_LOGIN_OVERRIDE_KICK = false;
 
     //? if <= 1.20.3 {
     /*public static final Map<Identifier, Function<FriendlyByteBuf, CustomPacketPayload>> PAYLOADS = new HashMap<>();
     static {
-        PAYLOADS.put(HandshakePayload.ID, HandshakePayload::read);
+        PAYLOADS.put(OldHandshakePayload.ID, OldHandshakePayload::read);
         PAYLOADS.put(TriviaQuestionPayload.ID, TriviaQuestionPayload::read);
         PAYLOADS.put(PlayerDisguisePayload.ID, PlayerDisguisePayload::read);
         PAYLOADS.put(ConfigPayload.ID, ConfigPayload::read);
@@ -111,7 +108,7 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
     }
     *///?} else {
     public static final List<CustomPacketPayload.TypeAndCodec<? super RegistryFriendlyByteBuf, ? extends CustomPacketPayload>> PAYLOADS = List.of(
-            new CustomPacketPayload.TypeAndCodec<>(HandshakePayload.ID, HandshakePayload.CODEC)
+            new CustomPacketPayload.TypeAndCodec<>(OldHandshakePayload.ID, OldHandshakePayload.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(ConfigPayload.ID, ConfigPayload.CODEC)
@@ -417,8 +414,8 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
             return false;
         }
 
-        if (customPacketPayload instanceof HandshakePayload payload) {
-            handleHandshakeResponse(player, payload);
+        if (customPacketPayload instanceof OldHandshakePayload payload) {
+            handleOldHandshakeResponse(player, payload);
         }
         else if (customPacketPayload instanceof ConfigPayload payload) {
             handleConfigPacket(player, payload);
@@ -530,61 +527,14 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
         configNeedsReload = false;
     }
 
-    public static void handleHandshakeResponse(ServerPlayer player, HandshakePayload payload) {
-        String clientVersionStr = payload.modVersionStr();
-        String clientCompatibilityStr = payload.compatibilityStr();
-        String serverVersionStr = LifeSeries.MOD_VERSION;
-        String serverCompatibilityStr = VersionControl.serverCompatibilityMin();
-
-        if (!LifeSeries.ISOLATED_ENVIRONMENT) {
-            int clientVersion = payload.modVersion();
-            int clientCompatibility = payload.compatibility();
-            int serverVersion = VersionControl.getModVersionInt(serverVersionStr);
-            int serverCompatibility = VersionControl.getModVersionInt(serverCompatibilityStr);
-
-            //Check if client version is compatible with the server version
-            if (clientVersion < serverCompatibility) {
-                Component disconnectText = Component.literal("[Life Series Mod] Client-Server version mismatch!\n" +
-                        "Update the client version to at least version "+serverCompatibilityStr);
-                //? if <= 1.20.5 {
-                /*player.connection.disconnect(disconnectText);
-                *///?} else {
-                player.connection.disconnect(new DisconnectionDetails(disconnectText));
-                //?}
-                return;
-            }
-
-            //Check if server version is compatible with the client version
-            if (serverVersion < clientCompatibility) {
-                Component disconnectText = Component.literal("[Life Series Mod] Server-Client version mismatch!\n" +
-                        "The client version is too new for the server.\n" +
-                        "Either update the server, or downgrade the client version to " + serverVersionStr);
-                //? if <= 1.20.5 {
-                /*player.connection.disconnect(disconnectText);
-                *///?} else {
-                player.connection.disconnect(new DisconnectionDetails(disconnectText));
-                 //?}
-                return;
-            }
-        }
-        else {
-            //Isolated enviroment -> mod versions must be IDENTICAL between client and server
-            //Check if client version is the same as the server version
-            if (!clientVersionStr.equalsIgnoreCase(serverVersionStr)) {
-                Component disconnectText = Component.literal("[Life Series Mod] Client-Server version mismatch!\n" +
-                        "You must join with version "+serverCompatibilityStr);
-                //? if <= 1.20.5 {
-                /*player.connection.disconnect(disconnectText);
-                *///?} else {
-                player.connection.disconnect(new DisconnectionDetails(disconnectText));
-                 //?}
-                return;
-            }
-        }
-
-        LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received handshake (from {}): {{}, {}}", player, payload.modVersionStr(), payload.modVersion()));
-        handshakeSuccessful.add(player.getUUID());
-        PlayerUtils.resendCommandTree(player);
+    public static void handleOldHandshakeResponse(ServerPlayer player, OldHandshakePayload payload) {
+        Component disconnectText = Component.literal("[Life Series Mod] Client-Server version mismatch!\n" +
+                "Update the client version to at least version "+OldHandshakePayload.OLD_PACKET_VERSION_BREAKOFF);
+        //? if <= 1.20.5 {
+        /*player.connection.disconnect(disconnectText);
+         *///?} else {
+        player.connection.disconnect(new DisconnectionDetails(disconnectText));
+        //?}
     }
 
     /*
@@ -608,17 +558,15 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
         NetworkHandlerServer.sendPacket(player, configPacket);
     }
 
-    public static void sendHandshake(ServerPlayer player) {
+    public static void sendOldHandshake(ServerPlayer player) {
         String serverVersionStr = LifeSeries.MOD_VERSION;
-        String serverCompatibilityStr = VersionControl.serverCompatibilityMin();
+        String serverCompatibilityStr = OldHandshakePayload.OLD_PACKET_VERSION_BREAKOFF;
 
-        int serverVersion = VersionControl.getModVersionInt(serverVersionStr);
-        int serverCompatibility = VersionControl.getModVersionInt(serverCompatibilityStr);
+        int serverVersion = VersionCompatibility.getModVersionInt(serverVersionStr);
+        int serverCompatibility = VersionCompatibility.getModVersionInt(serverCompatibilityStr);
 
-        HandshakePayload payload = new HandshakePayload(serverVersionStr, serverVersion, serverCompatibilityStr, serverCompatibility);
+        OldHandshakePayload payload = new OldHandshakePayload(serverVersionStr, serverVersion, serverCompatibilityStr, serverCompatibility);
         NetworkHandlerServer.sendPacket(player, payload);
-        handshakeSuccessful.remove(player.getUUID());
-        if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Sending handshake to {}: {{}, {}}", player, serverVersionStr, serverVersion));
 
     }
 
@@ -729,17 +677,14 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
                 Component.literal("§9§nThe Life Series mod is available on Modrinth."));
     }
 
+    public static void sideTitle(ServerPlayer player, Component text) {
+        NetworkHandlerServer.sendPacket(player, new SidetitlePacket(text));
+    }
     public static boolean wasHandshakeSuccessful(ServerPlayer player) {
-        if (player == null) return false;
-        return wasHandshakeSuccessful(player.getUUID());
+        return NetworkHandlerServer.wasHandshakeSuccessful(player, LifeSeries.MOD_ID);
     }
 
     public static boolean wasHandshakeSuccessful(UUID uuid) {
-        if (uuid == null) return false;
-        return handshakeSuccessful.contains(uuid) || preLoginHandshake.contains(uuid);
-    }
-
-    public static void sideTitle(ServerPlayer player, Component text) {
-        NetworkHandlerServer.sendPacket(player, new SidetitlePacket(text));
+        return NetworkHandlerServer.wasHandshakeSuccessful(uuid, LifeSeries.MOD_ID);
     }
 }

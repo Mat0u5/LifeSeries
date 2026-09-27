@@ -272,7 +272,7 @@ public class Events {
     public static final Map<UUID, Float> joiningPlayersYaw = new HashMap<>();
     public static final Map<UUID, Float> joiningPlayersPitch = new HashMap<>();
     public static void playerStartJoining(ServerPlayer player) {
-        LifeSeriesNetworkHandlerServer.sendHandshake(player);
+        LifeSeriesNetworkHandlerServer.sendOldHandshake(player);
         LifeSeriesNetworkHandlerServer.sendUpdatePacket(List.of(player));
         SnailSkins.sendTexturesTo(player);
         TriviaSkins.sendTexturesTo(player);

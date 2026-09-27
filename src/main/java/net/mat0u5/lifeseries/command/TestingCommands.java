@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.matlib.utils.other.TextUtils;
+import net.mat0u5.matlib.utils.other.VersionCompatibility;
 import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
@@ -60,13 +61,13 @@ public class TestingCommands extends CustomCommand {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        PlayerUtils.broadcastMessage(Component.literal("1.5.8: "+VersionControl.getModVersionInt("1.5.8")));
-        PlayerUtils.broadcastMessage(Component.literal("1.5.9-pre1: "+VersionControl.getModVersionInt("1.5.9-pre1")));
-        PlayerUtils.broadcastMessage(Component.literal("1.5.9: "+VersionControl.getModVersionInt("1.5.9")));
-        PlayerUtils.broadcastMessage(Component.literal("1.5.10-pre1: "+VersionControl.getModVersionInt("1.5.10-pre1")));
-        PlayerUtils.broadcastMessage(Component.literal("1.5.10: "+VersionControl.getModVersionInt("1.5.10")));
-        PlayerUtils.broadcastMessage(Component.literal("1.6.0-pre1: "+VersionControl.getModVersionInt("1.6.0-pre1")));
-        PlayerUtils.broadcastMessage(Component.literal("1.6.0: "+VersionControl.getModVersionInt("1.6.0")));
+        PlayerUtils.broadcastMessage(Component.literal("1.5.8: "+ VersionCompatibility.getModVersionInt("1.5.8")));
+        PlayerUtils.broadcastMessage(Component.literal("1.5.9-pre1: "+VersionCompatibility.getModVersionInt("1.5.9-pre1")));
+        PlayerUtils.broadcastMessage(Component.literal("1.5.9: "+VersionCompatibility.getModVersionInt("1.5.9")));
+        PlayerUtils.broadcastMessage(Component.literal("1.5.10-pre1: "+VersionCompatibility.getModVersionInt("1.5.10-pre1")));
+        PlayerUtils.broadcastMessage(Component.literal("1.5.10: "+VersionCompatibility.getModVersionInt("1.5.10")));
+        PlayerUtils.broadcastMessage(Component.literal("1.6.0-pre1: "+VersionCompatibility.getModVersionInt("1.6.0-pre1")));
+        PlayerUtils.broadcastMessage(Component.literal("1.6.0: "+VersionCompatibility.getModVersionInt("1.6.0")));
 
         return 1;
     }
