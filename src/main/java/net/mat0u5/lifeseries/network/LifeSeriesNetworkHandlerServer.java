@@ -3,13 +3,11 @@ package net.mat0u5.lifeseries.network;
 import com.google.auto.service.AutoService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mojang.authlib.GameProfile;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.DefaultConfigValues;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.config.StringListManager;
-import net.mat0u5.lifeseries.mixin.ServerLoginPacketListenerImplAccessor;
 import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.matlib.events.common.CommonRegistryEvents;
 import net.mat0u5.matlib.events.server.ServerNetworkEvents;
@@ -59,7 +57,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.network.ServerLoginPacketListenerImpl;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.scores.PlayerTeam;
@@ -88,8 +85,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 @Deprecated
 @AutoService(RegistrableServer.class)
 public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
-    public static final int PRELOGIN_TRANSACTION_ID = 10942422;
-    public static final String preLoginPacketID = "preloginpacket";
     public static RegistryOverrideBahaviours REGISTRY_OVERRIDE_BEHAVIOR = RegistryOverrideBahaviours.LOGIN;
     public static boolean PRE_LOGIN_OVERRIDE_KICK = false;
 
@@ -131,7 +126,13 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
     public void onRegister() {
         CommonRegistryEvents.PACKET_PAYLOADS.register(() -> PAYLOADS);
         ServerNetworkEvents.RECEIVE_CUSTOM_PACKET.register(LifeSeriesNetworkHandlerServer::onCustomPayload);
+        ServerNetworkEvents.PRE_LOGIN_PACKET.register((handler, uuid, username, understood, modIds) -> {
+            if (!wasPreLoginHandshakeSuccessful(uuid) && currentSeason.getSeason().requiresClient() && !PRE_LOGIN_OVERRIDE_KICK) {
+                handler.disconnect(getDisconnectClientText());
+            }
+        });
         initializeSimplePacketReceivers();
+
     }
 
     public static void reload() {
@@ -426,20 +427,6 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
         return true;
     }
 
-    public static void handlePreLogin(boolean understood, ServerLoginPacketListenerImpl handler) {
-        GameProfile profile = ((ServerLoginPacketListenerImplAccessor) handler).getGameProfile();
-        if (understood) {
-            preLoginHandshake.add(OtherUtils.profileId(profile));
-            LifeSeries.LOGGER.info("Received pre-login packet from " + OtherUtils.profileName(profile));
-        }
-        else {
-            LifeSeries.LOGGER.info("Did not receive pre-login packet from " + OtherUtils.profileName(profile));
-            if (currentSeason.getSeason().requiresClient() && !PRE_LOGIN_OVERRIDE_KICK) {
-                handler.disconnect(getDisconnectClientText());
-            }
-        }
-    }
-
     public static boolean updatedConfigThisTick = false;
     public static boolean updatedConfigThisTickFromCommand = false;
     public static boolean configNeedsReload = false;
@@ -680,11 +667,16 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
     public static void sideTitle(ServerPlayer player, Component text) {
         NetworkHandlerServer.sendPacket(player, new SidetitlePacket(text));
     }
+
     public static boolean wasHandshakeSuccessful(ServerPlayer player) {
         return NetworkHandlerServer.wasHandshakeSuccessful(player, LifeSeries.MOD_ID);
     }
 
     public static boolean wasHandshakeSuccessful(UUID uuid) {
         return NetworkHandlerServer.wasHandshakeSuccessful(uuid, LifeSeries.MOD_ID);
+    }
+
+    public static boolean wasPreLoginHandshakeSuccessful(UUID uuid) {
+        return NetworkHandlerServer.wasPreLoginHandshakeSuccessful(uuid, LifeSeries.MOD_ID);
     }
 }

@@ -1,5 +1,4 @@
 classTweaker	v1	named
-accessible field net/minecraft/client/multiplayer/ClientHandshakePacketListenerImpl connection Lnet/minecraft/network/Connection;
-accessible field net/minecraft/server/network/ServerLoginPacketListenerImpl connection Lnet/minecraft/network/Connection;
+
 accessible field net/minecraft/client/resources/sounds/EntityBoundSoundInstance entity Lnet/minecraft/world/entity/Entity;
 mutable field net/minecraft/client/resources/sounds/EntityBoundSoundInstance entity Lnet/minecraft/world/entity/Entity;

@@ -7,6 +7,7 @@ import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.fabricmc.fabric.impl.registry.sync.RegistrySyncManager;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
+import net.mat0u5.matlib.network.NetworkHandlerServer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import net.mat0u5.lifeseries.LifeSeries;
@@ -50,7 +51,7 @@ public class RegistrySyncManagerMixin {
         UUID profileUUID = OtherUtils.profileId(handler.getOwner());
     //?}
         if (LifeSeriesNetworkHandlerServer.REGISTRY_OVERRIDE_BEHAVIOR == LifeSeriesNetworkHandlerServer.RegistryOverrideBahaviours.NEVER ||
-                (LifeSeriesNetworkHandlerServer.REGISTRY_OVERRIDE_BEHAVIOR == LifeSeriesNetworkHandlerServer.RegistryOverrideBahaviours.LOGIN && LifeSeriesNetworkHandlerServer.preLoginHandshake.contains(profileUUID)) ||
+                (LifeSeriesNetworkHandlerServer.REGISTRY_OVERRIDE_BEHAVIOR == LifeSeriesNetworkHandlerServer.RegistryOverrideBahaviours.LOGIN && NetworkHandlerServer.wasPreLoginHandshakeSuccessful(profileUUID, LifeSeries.MOD_ID)) ||
                 (LifeSeriesNetworkHandlerServer.REGISTRY_OVERRIDE_BEHAVIOR == LifeSeriesNetworkHandlerServer.RegistryOverrideBahaviours.SEASON && currentSeason.getSeason().requiresClient())) {
             LifeSeries.LOGGER.info("Sending unmodified registry entries to client");
             return originalValue;

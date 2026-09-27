@@ -2,7 +2,6 @@ package net.mat0u5.lifeseries.utils.versions;
 
 import com.google.auto.service.AutoService;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.matlib.MatLib;
 import net.mat0u5.matlib.services.VersionTrackedMod;
 import net.mat0u5.matlib.utils.other.VersionCompatibility;
 

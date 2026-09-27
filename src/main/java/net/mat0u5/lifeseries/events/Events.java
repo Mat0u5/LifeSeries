@@ -102,7 +102,6 @@ public class Events {
 
         currentSeason.onPlayerDisconnect(player);
         SessionTranscript.playerLeave(player);
-        LifeSeriesNetworkHandlerServer.preLoginHandshake.remove(player.getUUID());
         DatapackIntegration.EVENT_PLAYER_LEAVE.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
     }
 
