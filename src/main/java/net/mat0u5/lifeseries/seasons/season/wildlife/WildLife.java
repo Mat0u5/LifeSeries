@@ -40,8 +40,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -378,8 +376,8 @@ public class WildLife extends Season {
     }
 
     @Override
-    public void onPlayerDamage(ServerPlayer player, DamageSource source, float amount, CallbackInfo ci) {
-        super.onPlayerDamage(player, source, amount, ci);
+    public void onPlayerDamage(ServerPlayer player, DamageSource source, float amount) {
+        super.onPlayerDamage(player, source, amount);
         if (LifeSeries.isClientOrDisabled()) return;
         if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.PLAYER_DISGUISE)) {
             if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof PlayerDisguise power) {
@@ -407,15 +405,14 @@ public class WildLife extends Season {
     }
 
     @Override
-    public void onPrePlayerDamage(ServerPlayer player, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        super.onPrePlayerDamage(player, source, amount, cir);
+    public EventResult onPrePlayerDamage(ServerPlayer player, DamageSource source, float amount) {
+        EventResult original = super.onPrePlayerDamage(player, source, amount);
         if (source.is(DamageTypes.FALL) ||source.is(DamageTypes.STALAGMITE) || source.is(DamageTypes.FLY_INTO_WALL)) {
             if (SuperpowersWildcard.hasActivePower(player, Superpowers.FLIGHT)) {
                 if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof Flight power) {
                     if (power.isLaunchedUp) {
                         if (!source.is(DamageTypes.FLY_INTO_WALL)) power.isLaunchedUp = false;
-                        cir.setReturnValue(false);
-                        return;
+                        return EventResult.DENY;
                     }
                 }
             }
@@ -423,18 +420,17 @@ public class WildLife extends Season {
                 if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof TripleJump power) {
                     if (power.isInAir) {
                         power.isInAir = false;
-                        cir.setReturnValue(false);
-                        return;
+                        return EventResult.DENY;
                     }
                 }
             }
             if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPER_PUNCH) && player.isPassenger()) {
                 if (player.getVehicle() instanceof ServerPlayer) {
-                    cir.setReturnValue(false);
-                    return;
+                    return EventResult.DENY;
                 }
             }
         }
+        return original;
     }
 
     @Override

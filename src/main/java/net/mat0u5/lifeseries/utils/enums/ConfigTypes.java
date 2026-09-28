@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.utils.enums;
 
-@Deprecated
 public enum ConfigTypes {
     NULL(""),
 

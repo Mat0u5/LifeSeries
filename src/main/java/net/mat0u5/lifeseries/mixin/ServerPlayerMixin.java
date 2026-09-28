@@ -13,8 +13,6 @@ import net.mat0u5.lifeseries.seasons.util.WatcherManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.NicknameManager;
-import net.mat0u5.matlib.utils.player.PlayerReference;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -23,7 +21,6 @@ import net.minecraft.server.players.PlayerList;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Unit;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -37,10 +34,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.OptionalInt;
-
 import static net.mat0u5.lifeseries.LifeSeries.*;
-import static net.mat0u5.matlib.MatLib.*;
 
 //? if >= 1.21.11 {
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -60,24 +54,6 @@ import net.minecraft.world.level.block.state.BlockState;
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class ServerPlayerMixin implements IPlayer {
 
-    @Deprecated
-    @Inject(method = "openMenu", at = @At("HEAD"))
-    private void onInventoryOpen(@Nullable MenuProvider factory, CallbackInfoReturnable<OptionalInt> cir) {
-        if (LifeSeries.isClientOrDisabled()) return;
-        ServerPlayer player = ls$get();
-        if (blacklist == null) return;
-
-        PlayerReference ref = PlayerReference.of(player);
-        TaskScheduler.scheduleTask(1, () -> {
-            ServerPlayer playerNew = ref.get();
-            if (playerNew != null) {
-                playerNew.containerMenu.getItems().forEach(itemStack -> blacklist.processItemStack(playerNew, itemStack));
-                PlayerUtils.updatePlayerInventory(playerNew);
-            }
-        });
-    }
-
-    @Deprecated //FakePlayer
     //? if <= 1.21.6 {
     /*@Inject(method = "sendSystemMessage(Lnet/minecraft/network/chat/Component;Z)V", at = @At("HEAD"), cancellable = true)
     private void sendMessageToClient(Component message, boolean overlay, CallbackInfo ci) {
@@ -300,7 +276,7 @@ public class ServerPlayerMixin implements IPlayer {
             e.printStackTrace();
         }
     }
-    @Deprecated
+
     @WrapOperation(method = "die", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Z)V"))
     private void modifyDeathMessage(PlayerList instance, Component component, boolean bl, Operation<Void> original) {
         livesManager.deathMessage(ls$get(), component);

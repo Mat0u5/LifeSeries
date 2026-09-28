@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.secretlife;
 
+import com.google.auto.service.AutoService;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Season;
@@ -11,6 +13,8 @@ import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.matlib.events.server.ServerEntityEvents;
+import net.mat0u5.matlib.services.RegistrableServer;
 import net.mat0u5.matlib.utils.player.AttributeUtils;
 import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -30,7 +34,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.gamerules.GameRules;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.*;
 
@@ -57,7 +60,8 @@ import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.component.TypedEntityData;
 //?}
 
-public class SecretLife extends Season {
+@AutoService(RegistrableServer.class)
+public class SecretLife extends Season implements RegistrableServer {
     public static double MAX_HEALTH = 60.0d;
     public static double MAX_KILL_HEALTH = 1000.0d;
     public static boolean ONLY_LOSE_HEARTS_IN_SESSION = false;
@@ -75,6 +79,20 @@ public class SecretLife extends Season {
             PlayerUtils.broadcastMessage(ModifiableText.SECRETLIFE_TASK_WARNING_30MIN.get());
         }
     };
+
+    @Override
+    public void onRegister() {
+        ServerEntityEvents.PRE_HEAL.register((entity, amount) -> {
+            if (LifeSeries.isClientOrDisabled()) return EventResult.PASS;
+            if (!(currentSeason instanceof SecretLife secretLife)) return EventResult.PASS;
+            if (!secretLife.canChangeHealth()) return EventResult.PASS;
+
+            if (entity instanceof ServerPlayer) {
+                return EventResult.DENY;
+            }
+            return EventResult.PASS;
+        });
+    }
 
     @Override
     public Seasons getSeason() {
@@ -286,8 +304,8 @@ public class SecretLife extends Season {
     }
 
     @Override
-    public void onPlayerDamage(ServerPlayer player, DamageSource source, float amount, CallbackInfo ci) {
-        super.onPlayerDamage(player, source, amount, ci);
+    public void onPlayerDamage(ServerPlayer player, DamageSource source, float amount) {
+        super.onPlayerDamage(player, source, amount);
         if (player.hasEffect(MobEffects.HEALTH_BOOST)) {
             player.removeEffect(MobEffects.HEALTH_BOOST);
         }

@@ -5,13 +5,10 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.entity.angrysnowman.AngrySnowman;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
-import net.mat0u5.lifeseries.events.Events;
-import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.SuperPunch;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.WindCharge;
-import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.matlib.utils.world.ItemStackUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,10 +27,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.mat0u5.lifeseries.LifeSeries.blacklist;
-import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.state.BlockState;
 
 //? if >= 1.21.2
 import net.minecraft.world.entity.monster.creaking.Creaking;
@@ -50,31 +43,7 @@ import net.minecraft.world.entity.decoration.Mannequin;
 @Mixin(value = LivingEntity.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class LivingEntityMixin {
-    @Deprecated
-    @Inject(method = "heal", at = @At("HEAD"), cancellable = true)
-    private void onHealHead(float amount, CallbackInfo info) {
-        if (LifeSeries.isClientOrDisabled()) return;
-        if (!(currentSeason instanceof SecretLife secretLife)) return;
-        if (!secretLife.canChangeHealth()) return;
 
-        LivingEntity entity = (LivingEntity) (Object) this;
-        if (entity instanceof ServerPlayer) {
-            info.cancel();
-        }
-    }
-
-    @Deprecated
-    @Inject(method = "heal", at = @At("TAIL"))
-    private void onHeal(float amount, CallbackInfo info) {
-        if (LifeSeries.isClientOrDisabled()) return;
-        LivingEntity entity = (LivingEntity) (Object) this;
-        if (entity instanceof ServerPlayer player) {
-            if (((IPlayer) player).ls$isWatcher()) return;
-            currentSeason.onPlayerHeal(player, amount);
-        }
-    }
-
-    @Deprecated
     //? if <= 1.21 {
     /*@Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     public void hurt(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
@@ -116,7 +85,6 @@ public abstract class LivingEntityMixin {
     }
     *///?}
 
-    @Deprecated
     @ModifyVariable(method = "addEffect(Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/world/entity/Entity;)Z", at = @At("HEAD"), ordinal = 0, argsOnly = true)
     public MobEffectInstance clampStatusEffect(MobEffectInstance value) {
         if (LifeSeries.isClientOrDisabled()) return value;
@@ -131,7 +99,6 @@ public abstract class LivingEntityMixin {
         return value;
     }
 
-    @Deprecated
     @Inject(method = "addEffect(Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/world/entity/Entity;)Z", at = @At("HEAD"), cancellable = true)
     public void addStatusEffect(MobEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir) {
         if (LifeSeries.isClientOrDisabled()) return;
@@ -165,7 +132,6 @@ public abstract class LivingEntityMixin {
     //?}
 
 
-    @Deprecated
     //? if <= 1.21 {
     /*@ModifyArg(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"), index = 0)
     *///?} else if <= 26.1 {
@@ -205,7 +171,6 @@ public abstract class LivingEntityMixin {
 
 
     //? if >= 1.21.9 {
-    @Deprecated
     @Inject(method = "tick", at = @At("HEAD"))
     public void tickMannequin(CallbackInfo ci) {
         LivingEntity entity = (LivingEntity) (Object) this;

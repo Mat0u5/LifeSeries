@@ -29,6 +29,8 @@ import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.matlib.events.server.ServerEntityEvents;
+import net.mat0u5.matlib.events.server.ServerPlayerEvents;
 import net.mat0u5.matlib.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.*;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
@@ -69,8 +71,6 @@ import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Team;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.*;
 
@@ -129,6 +129,32 @@ public abstract class Season {
     public BoogeymanManager boogeymanManager = createBoogeymanManager();
     public SecretSociety secretSociety = createSecretSociety();
     public LivesManager livesManager = createLivesManager();
+
+    public static void registerEvents() {
+        ServerPlayerEvents.DAMAGE.register((player, source, amount) -> {
+            if (LifeSeries.isClientOrDisabled()) return;
+            if (WatcherManager.isWatcher(player)) return;
+
+            if (player instanceof ServerPlayer serverPlayer) {
+                currentSeason.onPlayerDamage(serverPlayer, source, amount);
+            }
+        });
+        ServerPlayerEvents.PRE_DAMAGE.register((player, source, amount) -> {
+            if (LifeSeries.isClientOrDisabled() || WatcherManager.isWatcher(player)) return EventResult.PASS;
+
+            if (player instanceof ServerPlayer serverPlayer) {
+                return currentSeason.onPrePlayerDamage(serverPlayer, source, amount);
+            }
+            return EventResult.PASS;
+        });
+        ServerEntityEvents.HEAL.register((entity, amount) -> {
+            if (LifeSeries.isClientOrDisabled()) return;
+            if (entity instanceof ServerPlayer player) {
+                if (((IPlayer) player).ls$isWatcher()) return;
+                currentSeason.onPlayerHeal(player, amount);
+            }
+        });
+    }
 
     public abstract Seasons getSeason();
     public abstract ConfigManager createConfig();
@@ -629,17 +655,18 @@ public abstract class Season {
         }
     }
 
-    public void onPlayerDamage(ServerPlayer player, DamageSource source, float amount, CallbackInfo ci) {
+    public void onPlayerDamage(ServerPlayer player, DamageSource source, float amount) {
         DatapackIntegration.EVENT_PLAYER_TAKE_DAMAGE.trigger(List.of(
                 new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()),
                 new DatapackIntegration.Events.MacroEntry("Amount", String.valueOf(amount))
         ));
     }
 
-    public void onPrePlayerDamage(ServerPlayer player, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    public EventResult onPrePlayerDamage(ServerPlayer player, DamageSource source, float amount) {
         if (source.is(DamageTypes.OUTSIDE_BORDER) && Session.WORLDBORDER_OUTSIDE_TELEPORT) {
-            cir.setReturnValue(false);
+            return EventResult.DENY;
         }
+        return EventResult.PASS;
     }
 
     public void onPlayerHeal(ServerPlayer player, float amount) {

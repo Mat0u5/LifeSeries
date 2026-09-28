@@ -78,15 +78,17 @@ public class LifeSeries implements MultiplatformModInitializer {
 	public static boolean modDisabled() {
 		if (clientAccessor != null) {
 			if (clientAccessor.isReplay()) return true;
-			if (!MatLib.getClientAccessor().handshakeWithServer().hasReceived(MOD_ID)) return true;
+			if (MatLib.hasClient()) {
+				if (!MatLib.getClientAccessor().handshakeWithServer().isWaiting() && !MatLib.getClientAccessor().handshakeWithServer().hasReceived(MOD_ID)) return true;
+			}
 			return clientAccessor.isDisabledServerSide();
 		}
 		return MOD_DISABLED;
 	}
 
 	public static boolean modFullyDisabled() {
-		if (clientAccessor == null) return false;
-		return !MatLib.getClientAccessor().handshakeWithServer().hasReceived(MOD_ID);
+		if (!MatLib.hasClient()) return false;
+		return !MatLib.getClientAccessor().handshakeWithServer().isWaiting() && !MatLib.getClientAccessor().handshakeWithServer().hasReceived(MOD_ID);
 	}
 
 	public static void setDisabled(boolean disabled) {

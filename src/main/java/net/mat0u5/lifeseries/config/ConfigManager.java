@@ -306,7 +306,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
             sendConfigEntry(player, teamEntry, index);
             index++;
         }
-        if (LifeSeries.isSeason(Seasons.SECRET_LIFE)) {
+        if (LifeSeries.isSeason(Seasons.SECRET_LIFE) && TaskManager.easyTasks_all != null && TaskManager.hardTasks_all != null && TaskManager.redTasks_all != null) {
             List<String> alreadySelected = SecretLifeUsedTasks.getUsedTasks(TaskManager.usedTasksConfig);
             for (String easyTask : TaskManager.easyTasks_all) {
 
@@ -334,7 +334,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 index++;
             }
         }
-        if (LifeSeries.isSeason(Seasons.WILD_LIFE)) {
+        if (LifeSeries.isSeason(Seasons.WILD_LIFE) && TriviaWildcard.easyTrivia != null && TriviaWildcard.normalTrivia != null && TriviaWildcard.hardTrivia != null) {
             for (TriviaQuestion question : TriviaWildcard.easyTrivia.tryGetTriviaQuestions()) {
                 List<String> info = new ArrayList<>();
                 info.add("easy");
@@ -375,7 +375,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 index++;
             }
         }
-        if (LifeSeries.isSeason(Seasons.NICE_LIFE)) {
+        if (LifeSeries.isSeason(Seasons.NICE_LIFE) && NiceLifeTriviaManager.triviaQuestions != null) {
             for (TriviaQuestion question : NiceLifeTriviaManager.triviaQuestions.tryGetTriviaQuestions()) {
                 List<String> info = new ArrayList<>();
                 info.add("normal");

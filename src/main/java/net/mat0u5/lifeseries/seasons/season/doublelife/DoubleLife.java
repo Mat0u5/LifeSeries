@@ -17,6 +17,7 @@ import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.matlib.events.EventResult;
 import net.mat0u5.matlib.utils.player.PlayerListReference;
 import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -552,23 +553,24 @@ public class DoubleLife extends Season {
     }
 
     @Override
-    public void onPrePlayerDamage(ServerPlayer player, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        super.onPrePlayerDamage(player, source, amount, cir);
-        if (SOULMATES_PVP_ALLOWED) return;
+    public EventResult onPrePlayerDamage(ServerPlayer player, DamageSource source, float amount) {
+        EventResult original = super.onPrePlayerDamage(player, source, amount);
+        if (SOULMATES_PVP_ALLOWED) return original;
 
         ServerPlayer soulmate = getSoulmate(player);
-        if (soulmate == null) return;
+        if (soulmate == null) return original;
 
         if (source.getEntity() instanceof ServerPlayer attacker) {
             if (soulmate == attacker) {
-                cir.setReturnValue(false);
+                return EventResult.DENY;
             }
         }
+        return original;
     }
 
     @Override
-    public void onPlayerDamage(ServerPlayer player, DamageSource source, float amount, CallbackInfo ci) {
-        super.onPlayerDamage(player, source, amount, ci);
+    public void onPlayerDamage(ServerPlayer player, DamageSource source, float amount) {
+        super.onPlayerDamage(player, source, amount);
         if (source.is(DoubleLife.SOULMATE_DAMAGE)) return;
         if (amount == 0) return;
         if (player == null) return;

@@ -1,14 +1,18 @@
 package net.mat0u5.lifeseries.seasons.blacklist;
 
+import com.google.auto.service.AutoService;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.matlib.events.server.ServerPlayerEvents;
+import net.mat0u5.matlib.services.RegistrableServer;
 import net.mat0u5.matlib.utils.other.RegistryUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.mat0u5.matlib.utils.world.ItemStackUtils;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -34,6 +38,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.*;
 
+import static net.mat0u5.lifeseries.LifeSeries.blacklist;
 import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
 import static net.mat0u5.matlib.MatLib.server;
 
@@ -48,7 +53,8 @@ import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 //?}
 
-public class Blacklist {
+@AutoService(RegistrableServer.class)
+public class Blacklist implements RegistrableServer {
     public List<Identifier> loadedListItemIdentifier;
     public List<Identifier> loadedRecipeBlacklist;
     private List<Item> loadedListItem;
@@ -65,6 +71,23 @@ public class Blacklist {
     //?}
 
     public boolean CREATIVE_IGNORE_BLACKLIST = true;
+
+    @Override
+    public void onRegister() {
+        ServerPlayerEvents.OPEN_MENU.register((player, menu) -> {
+            if (LifeSeries.isClientOrDisabled()) return;
+            if (blacklist == null) return;
+
+            PlayerReference ref = PlayerReference.of(player);
+            TaskScheduler.scheduleTask(1, () -> {
+                ServerPlayer playerNew = ref.get();
+                if (playerNew != null) {
+                    playerNew.containerMenu.getItems().forEach(itemStack -> blacklist.processItemStack(playerNew, itemStack));
+                    PlayerUtils.updatePlayerInventory(playerNew);
+                }
+            });
+        });
+    }
 
     public List<String> loadItemBlacklist() {
         if (seasonConfig == null) return new ArrayList<>();

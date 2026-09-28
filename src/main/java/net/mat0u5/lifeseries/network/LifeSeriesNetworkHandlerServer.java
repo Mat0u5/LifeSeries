@@ -82,7 +82,6 @@ import java.util.function.Function;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 //?}
 
-@Deprecated
 @AutoService(RegistrableServer.class)
 public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
     public static RegistryOverrideBahaviours REGISTRY_OVERRIDE_BEHAVIOR = RegistryOverrideBahaviours.LOGIN;
@@ -402,12 +401,6 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
         SimplePackets._______.setServerReceive((player, payload) -> );
 
          */
-    }
-
-    public static void onCustomPayload(CustomPacketPayload customPacketPayload, Player player) {
-        if (player instanceof ServerPlayer serverPlayer) {
-            onCustomPayload(customPacketPayload, serverPlayer);
-        }
     }
 
     public static boolean onCustomPayload(CustomPacketPayload customPacketPayload, ServerPlayer player) {

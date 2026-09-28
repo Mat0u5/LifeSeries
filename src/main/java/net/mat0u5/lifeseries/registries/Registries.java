@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.registries;
 
 import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.events.Events;
+import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.matlib.events.common.*;
 import net.mat0u5.matlib.events.server.*;
 
@@ -21,6 +22,7 @@ public class Registries {
 		//? if <= 1.20.2 {
 		/*registerCustomResourcepack();
 		*///?}
+		Season.registerEvents();
 	}
 
 	public static void registerEvents() {
