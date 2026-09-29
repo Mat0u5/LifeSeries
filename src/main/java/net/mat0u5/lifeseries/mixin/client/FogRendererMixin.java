@@ -54,8 +54,10 @@ public class FogRendererMixin {
     /*private static void stopFog(Camera camera, int i, boolean bl, DeltaTracker deltaTracker, float f, ClientLevel clientLevel, CallbackInfoReturnable<Vector4f> cir) {
     *///?} else if <= 1.21.11 {
     /*private static void stopFog(Camera camera, int i, DeltaTracker deltaTracker, float f, ClientLevel clientLevel, CallbackInfoReturnable<Vector4f> cir) {
+    *///?} else if <= 26.3 {
+    /*private static void stopFog(Camera camera, int renderDistanceInChunks, DeltaTracker deltaTracker, float darkenWorldAmount, ClientLevel level, CallbackInfoReturnable<FogData> cir) {
     *///?} else {
-    private static void stopFog(Camera camera, int renderDistanceInChunks, DeltaTracker deltaTracker, float darkenWorldAmount, ClientLevel level, CallbackInfoReturnable<FogData> cir) {
+    private static void stopFog(Camera camera, int renderDistanceInChunks, DeltaTracker deltaTracker, float darkenWorldAmount, ClientLevel level, boolean shouldCreateBossFog, CallbackInfoReturnable<FogData> cir) {
     //?}
 //?} else {
     /*//? if <= 1.21 {
@@ -71,7 +73,9 @@ public class FogRendererMixin {
     //?}
 *///?}
         ClientLevel nether = Minecraft.getInstance().level;
-        if (LifeSeriesClient.fogColor == null && camera.getFluidInCamera() == FogType.NONE && nether != null && nether.dimension() == Level.NETHER &&
+        //~ if >= 26.4 '.getFluidInCamera' -> '.getFogType()' {
+        if (LifeSeriesClient.fogColor == null && camera.getFogType() == FogType.NONE && nether != null && nether.dimension() == Level.NETHER &&
+        //~}
                 LifeSeriesClient.NICELIFE_SNOWY_NETHER && !LifeSeries.modDisabled() && LifeSeries.isSeason(Seasons.NICE_LIFE)) {
             //? if <= 1.21 {
             /*ci.cancel();

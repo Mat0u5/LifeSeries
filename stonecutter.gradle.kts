@@ -153,6 +153,7 @@ publishMods {
 		val versionPrefix = project.findProperty("mod.version_prefix")?.toString()
 		val versionSuffix = project.findProperty("mod.version_suffix")?.toString()
 		val isDev = project.findProperty("publish.discord.dev")?.toString() == "true"
+		val isSnapshot = project.findProperty("publish.discord.snapshot")?.toString() == "true"
 		val ping = project.findProperty("publish.discord.ping")?.toString() == "true"
 		val version = versionPrefix+versionName+versionSuffix
 		val webhook = if (isDev) env("DISCORD_WEBHOOK_DEV") else env("DISCORD_WEBHOOK")
@@ -182,14 +183,19 @@ publishMods {
 			webhookUrl = webhook
 
 			val fullChangelogLink = if (changelogLink.isNullOrEmpty()) "" else "\n[Click here to open the **full changelog**]($changelogLink)";
-			if (!isDev) {
+			if (!isDev && !isSnapshot) {
 				content = changelog.map { "# [Life Series version `$version` is out!](https://modrinth.com/mod/life-series/versions)\n" +
 						"### Changelog:\n" +
 						"```\n$it```\n" +
 						"$fullChangelogLink" }
 			}
-			else {
+			else if (!isSnapshot) {
 				content = changelog.map { "# [Life Series version `$version` is out!](https://modrinth.com/mod/life-series-dev/versions)\n" +
+						"### Changelog:\n" +
+						"```\n$it```\n" +
+						"$fullChangelogLink" }
+			} else {
+				content = changelog.map { "# [Life Series snapshot version `$version` is out!](https://modrinth.com/mod/life-series-dev/versions)\n" +
 						"### Changelog:\n" +
 						"```\n$it```\n" +
 						"$fullChangelogLink" }

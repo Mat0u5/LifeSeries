@@ -112,10 +112,17 @@ public class EmptySleepScreen extends Screen {
     }
 
     private void updateCommandButtons() {
-        skipNightButton.visible = adminControlsOpen;
+        //? if <= 26.3 {
+        /*skipNightButton.visible = adminControlsOpen;
         wakeUpButton.visible = adminControlsOpen;
         wakeUpEveryoneButton.visible = adminControlsOpen;
         toggleButton.visible = LifeSeriesClient.isAdmin;
+        *///?} else {
+        skipNightButton.setVisible(adminControlsOpen);
+        wakeUpButton.setVisible(adminControlsOpen);
+        wakeUpEveryoneButton.setVisible(adminControlsOpen);
+        toggleButton.setVisible(LifeSeriesClient.isAdmin);
+        //?}
     }
 
     //~ renames_26_1_volatile

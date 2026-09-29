@@ -76,10 +76,14 @@ public class UpdateInfoScreen extends DefaultScreen {
         if (isInCheckboxRegion(mouseX, mouseY)) {
             context.fill(endX - textWidth/2-3-40, startY - 23, endX + textWidth/2+3-40, startY, TextColors.BLACK);
             context.fill(endX - textWidth/2-2-40, startY - 22, endX + textWidth/2+2-40, startY - 1, TextColors.GUI_BACKGROUND);
-            dismissButton.visible = true;
+            //~ if >= 26.4 '.visible = true' -> '.setVisible(true)' {
+            dismissButton.setVisible(true);
+            //~}
         }
         else {
-            dismissButton.visible = false;
+            //~ if >= 26.4 '.visible = false' -> '.setVisible(false)' {
+            dismissButton.setVisible(false);
+            //~}
         }
         super.renderBackground(context, mouseX, mouseY);
     }

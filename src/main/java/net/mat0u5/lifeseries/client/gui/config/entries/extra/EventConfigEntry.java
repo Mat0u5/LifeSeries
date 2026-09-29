@@ -46,7 +46,9 @@ public class EventConfigEntry extends StringConfigEntry {
         //~ renames_26_1_volatile
         canceledButton.extractRenderState(context, mouseX, mouseY, tickDelta);
         boolean isFirst = isFirst();
-        openTutorialButton.visible = isFirst;
+        //~ if >= 26.4 '.visible = isFirst' -> '.setVisible(isFirst)' {
+        openTutorialButton.setVisible(isFirst);
+        //~}
         if (isFirst) {
             openTutorialButton.extractRenderState(context, mouseX, mouseY, tickDelta);
         //~ !renames_26_1_volatile
