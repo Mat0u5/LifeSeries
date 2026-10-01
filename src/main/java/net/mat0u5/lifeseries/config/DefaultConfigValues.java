@@ -106,11 +106,11 @@ public class DefaultConfigValues {
             "Only Lose Durability In Session", "Makes players only lose durability on their items and gear while a session is active."
     );
     public final ConfigFileEntry<Boolean> ONLY_LOSE_HUNGER_IN_SESSION = new ConfigFileEntry<>(
-            "only_lose_hunger_in_session", false, "global.session",
+            "only_lose_hunger_in_session", false, "global.session[new]",
             "Only Lose Hunger In Session", "Makes players only lose hunger while a session is active."
     );
     public final ConfigFileEntry<Boolean> ONLY_ADVANCE_TIME_IN_SESSION = new ConfigFileEntry<>(
-            "only_advance_time_in_session", false, "global.session",
+            "only_advance_time_in_session", false, "global.session[new]",
             "Only Advance Time In Session", "Makes the day time freeze when not in session."
     );
     public final ConfigFileEntry<Boolean> SESSION_START_COUNTDOWN = new ConfigFileEntry<>(
@@ -126,7 +126,7 @@ public class DefaultConfigValues {
             "Fully Disable Teams System", "Fully disables the teams system, if you want to implement a custom one for example :)"
     );
     public final ConfigFileEntry<Boolean> DISABLE_MINIMAL_ARMOR_PACK = new ConfigFileEntry<>(
-            "disable_minimal_armor_pack", false, "global.disable",
+            "disable_minimal_armor_pack", false, "global.disable[new]",
             "Disable Minimal Armor Pack", "Controls whether the minimal armor pack is disabled."
     );
     public final ConfigFileEntry<Boolean> CUSTOM_ENCHANTER_ALGORITHM = new ConfigFileEntry<>(
@@ -315,6 +315,10 @@ public class DefaultConfigValues {
     public final ConfigFileEntry<Boolean> WATCHERS_SEE_BOOGEY_AND_SOCIETY = new ConfigFileEntry<>(
             "watchers_see_boogey_and_society", false, "global.watchers[new]",
             "Show Boogeymen And Society Members", "Controls whether Watchers have permissions for the '/boogeyman list' and '/society members list' commands."
+    );
+    public final ConfigFileEntry<Boolean> WATCHERS_LATEJOIN = new ConfigFileEntry<>(
+            "watchers_latejoin", false, "global.watchers[new]",
+            "Auto-Watcher Late Join Players", "Controls whether players that join the session late (without having joined before), will be added as watchers automatically."
     );
     public final ConfigFileEntry<Boolean> WATCHERS_MUTED = new ConfigFileEntry<>(
             "watchers_muted", false, "global.muted",

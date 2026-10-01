@@ -13,6 +13,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.S
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaSkins;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
+import net.mat0u5.lifeseries.seasons.util.WatcherManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
@@ -79,6 +80,7 @@ public class Events {
         try {
             playerStartJoining(player);
             if (LifeSeries.modDisabled()) return;
+            WatcherManager.onPlayerJoin(player);
             LifeSkinsManager.onPlayerJoin(player);
             currentSeason.onPlayerJoin(player);
             currentSeason.onUpdatedInventory(player);

@@ -335,6 +335,10 @@ public class WildLifeConfig extends SeasonConfig {
             "wildcard_superpowers_teleportation_tp_distance", 100, "season.superpowers.teleportation",
             "Max Teleport Distance", "Controls the max teleport distance.\nVery high numbers may cause performance issues."
     );
+    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_TELEPORTATION_GIVE_PEARLS = new ConfigFileEntry<>(
+            "wildcard_superpowers_teleportation_give_pearls", true, "season.superpowers.teleportation[new]",
+            "Give Ender Pearls", "Controls whether players with this power continually get ender pearls."
+    );
     public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_SHADOW_PLAY_BLIND_RANGE = new ConfigFileEntry<>(
             "wildcard_superpowers_shadow_play_blind_range", 10, "season.superpowers.shadow_play",
             "Blind Range", "Controls the range in which players are blinded."
@@ -615,6 +619,7 @@ public class WildLifeConfig extends SeasonConfig {
                 ,SUPERPOWER_COOLDOWN_TELEPORTATION
                 ,WILDCARD_SUPERPOWERS_TELEPORTATION_SWAP_DISTANCE
                 ,WILDCARD_SUPERPOWERS_TELEPORTATION_TP_DISTANCE
+                ,WILDCARD_SUPERPOWERS_TELEPORTATION_GIVE_PEARLS
 
                 //? if >= 1.20.3 {
                 // Time Control

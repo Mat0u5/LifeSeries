@@ -249,6 +249,7 @@ public abstract class Season {
         SHOW_HEALTH_BELOW_NAME = seasonConfig.SHOW_HEALTH_BELOW_NAME.get();
         WatcherManager.WATCHERS_IN_TAB = seasonConfig.WATCHERS_IN_TAB.get();
         WatcherManager.WATCHERS_SEE_BOOGEY_AND_SOCIETY = seasonConfig.WATCHERS_SEE_BOOGEY_AND_SOCIETY.get();
+        WatcherManager.WATCHERS_LATEJOIN = seasonConfig.WATCHERS_LATEJOIN.get();
         MUTE_WATCHERS = seasonConfig.WATCHERS_MUTED.get();
         MUTED_CHAT = seasonConfig.MUTED_CHAT.get();
         MUTED_CHAT_ADMIN = seasonConfig.MUTED_CHAT_ADMIN.get();

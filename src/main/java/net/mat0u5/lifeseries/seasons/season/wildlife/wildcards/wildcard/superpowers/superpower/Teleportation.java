@@ -21,6 +21,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 
 public class Teleportation extends Superpower {
+    public static boolean GIVE_PEARLS = true;
     public static int MAX_TELEPORT_DISTANCE = 100;
     public static int MAX_SWAP_DISTANCE = 100;
     public static int COOLDOWN_MILLIS = 5000;
@@ -43,7 +44,7 @@ public class Teleportation extends Superpower {
     @Override
     public void tick() {
         timer.tick();
-        if (timer.isMultipleOf(Time.minutes(2))) {
+        if (timer.isMultipleOf(Time.minutes(2)) && GIVE_PEARLS) {
             ServerPlayer player = getPlayer();
             if (player != null) {
                 int pearls = player.getInventory().countItem(Items.ENDER_PEARL);

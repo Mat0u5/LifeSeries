@@ -149,6 +149,7 @@ public enum ModifiableText {
     ,WATCHER_LIST(Formatted.LOOSELY_STYLED,"Current Watchers: §7{}", List.of("Watchers"))
     ,MUTED_WATCHER("Watchers aren't allowed to talk in chat! Admins can change this behavior in the config.")
     ,WATCHER_INFO("§7Watchers are players that are online, but are not affected by most season mechanics. They can only observe.\n§7This is very useful for spectators and for admins.")
+    ,WATCHER_LATEJOIN("{} has been automatically added as a Watcher because of joining late.", List.of("Player"))
 
     ,SOCIETY_INITIATE_REMINDER("§7When you are alone, type \"/initiate\"")
     ,SOCIETY_INITIATED_PT1("§7You have been chosen to be part of the §csecret society§7.")
