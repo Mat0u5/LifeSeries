@@ -19,6 +19,12 @@
             "max_format": 1000,
             "formats": {"min_inclusive": 69, "max_inclusive": 1000},
             "directory": "1.21.9-latest"
+         },
+         {
+            "min_format": 89,
+            "max_format": 1000,
+            "formats": {"min_inclusive": 89, "max_inclusive": 1000},
+            "directory": "26.3-latest"
          }
       ]
    }

@@ -73,7 +73,6 @@ import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
 import static net.mat0u5.lifeseries.seasons.util.WatcherManager.isWatcher;
-import net.minecraft.ChatFormatting;
 import net.minecraft.world.entity.*;
 
 //? if <= 1.20
@@ -91,10 +90,10 @@ public abstract class Season {
     public static final String RESOURCEPACK_MAIN_SHA = "7bb7149103c54c6b37f2238ea9bf00da1a604e52";
     public static final String RESOURCEPACK_SECRETLIFE_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-secretlife-fc0fa2a3efe2aefdba5a3c0deda61039fc43a008/secretlife.zip";
     public static final String RESOURCEPACK_SECRETLIFE_SHA = "1befd668fa775f2b8715b348172e1ba776e57294";
-    public static final String RESOURCEPACK_MINIMAL_ARMOR_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-minimal_armor-27d9e98eb6009401319a5256f7695f1bba902412/minimal_armor.zip";
-    public static final String RESOURCEPACK_MINIMAL_ARMOR_SHA = "e078d9085ea74891ebc4f8ec5686c4da08176a38";
-    public static final String RESOURCEPACK_COMBINED_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-combined-8bd2aff02339acae9820c5f1ae957d7251fb79d0/combined.zip";
-    public static final String RESOURCEPACK_COMBINED_SHA = "405c160002c6b664c908689121edbac4a5616953";
+    public static final String RESOURCEPACK_MINIMAL_ARMOR_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-minimal_armor-4482ed6b3e98f03de1ba85293a3da59ad0000598/minimal_armor.zip";
+    public static final String RESOURCEPACK_MINIMAL_ARMOR_SHA = "b86e10747eddb090a913f76053d960bfa66fc548";
+    public static final String RESOURCEPACK_COMBINED_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-combined-4482ed6b3e98f03de1ba85293a3da59ad0000598/combined.zip";
+    public static final String RESOURCEPACK_COMBINED_SHA = "d3bcbcb22d439882de7a2d8ee0a690b84535de00";
 
     public int GIVELIFE_MAX_LIVES = 99;
     public boolean TAB_LIST_SHOW_DEAD_PLAYERS = true;
