@@ -11,13 +11,13 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.utils.interfaces.LifeSeriesClientAccessor;
-import net.mat0u5.lifeseries.utils.other.ModBuiltInPacks;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.matlib.MatLib;
 import net.mat0u5.matlib.client.services.MultiplatformClientModInitializer;
 import net.mat0u5.matlib.client.events.ClientPackSourceEvents;
 import net.mat0u5.matlib.client.utils.SharedClientInfo;
+import net.mat0u5.matlib.utils.other.ModBuiltInPacks;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.packs.PackType;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.*;
@@ -95,9 +95,14 @@ public class LifeSeriesClient implements MultiplatformClientModInitializer, Life
 
     @Override
     public void onRegister() {
-        ClientPackSourceEvents.LOAD_PACK.register(consumer -> ModBuiltInPacks.loadPacks(consumer, PackType.CLIENT_RESOURCES));
         ClientRegistries.register();
         LifeSeries.setClientAccessor(new LifeSeriesClient());
+        ClientPackSourceEvents.GATHER_PACKS.register(() -> List.of(
+                new ModBuiltInPacks.PackDef(IdentifierHelper.lifeseries("lifeseries"),   Component.literal("Main Life Series Resourcepack"), true)
+                ,new ModBuiltInPacks.PackDef(IdentifierHelper.lifeseries("minimal_armor"), Component.literal("Minimal Armor Resourcepack"),   false)
+                ,new ModBuiltInPacks.PackDef(IdentifierHelper.lifeseries("nicelife"),     Component.literal("Nice Life Resourcepack"),        false)
+        ));
+
     }
 
     @Override

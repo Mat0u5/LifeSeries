@@ -15,13 +15,14 @@ import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
 import net.mat0u5.lifeseries.utils.interfaces.LifeSeriesClientAccessor;
-import net.mat0u5.lifeseries.utils.other.ModBuiltInPacks;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.mat0u5.matlib.MatLib;
 import net.mat0u5.matlib.services.MultiplatformModInitializer;
 import net.mat0u5.matlib.events.server.ServerLanguageEvents;
 import net.mat0u5.matlib.events.server.ServerPackSourceEvents;
-import net.minecraft.server.packs.PackType;
+import net.mat0u5.matlib.utils.other.ModBuiltInPacks;
+import net.minecraft.network.chat.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +51,14 @@ public class LifeSeries implements MultiplatformModInitializer {
 
 	@Override
 	public void onRegister() {
-		ServerPackSourceEvents.LOAD_PACK.register(consumer -> ModBuiltInPacks.loadPacks(consumer, PackType.SERVER_DATA));
+		ServerPackSourceEvents.GATHER_PACKS.register(() -> List.of(
+				new ModBuiltInPacks.PackDef(IdentifierHelper.lifeseries("lifeseries_datapack"), Component.literal("Life Series Datapack"), true)
+				//? if <= 1.20.4 {
+				/*,new ModBuiltInPacks.PackDef(IdentifierHelper.lifeseries("lifeseries_datapack_1.20-1.20.4"), Component.literal("Life Series Datapack"), true)
+				 *///?} else if <= 1.20.5 {
+				/*,new ModBuiltInPacks.PackDef(IdentifierHelper.lifeseries("lifeseries_datapack_1.20.5"), Component.literal("Life Series Datapack"), true)
+				 *///?}
+		));
 		ServerLanguageEvents.LOAD_LANG_FILES.register(() -> List.of("/resourcepacks/lifeseries/assets/lifeseries/lang/en_us.json"));
 		Registries.register();
 	}
