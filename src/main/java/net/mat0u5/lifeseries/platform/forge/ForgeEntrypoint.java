@@ -1,0 +1,12 @@
+package net.mat0u5.lifeseries.platform.forge;
+
+//? if forge {
+/*import net.mat0u5.lifeseries.LifeSeries;
+import net.minecraftforge.fml.common.Mod;
+
+@Mod(LifeSeries.MOD_ID)
+public class ForgeEntrypoint {
+	public ForgeEntrypoint() {
+	}
+}
+*///?}

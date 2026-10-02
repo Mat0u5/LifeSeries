@@ -22,11 +22,6 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.*;
 
-//? if neoforge {
-/*import net.mat0u5.lifeseries.client.platform.neoforge.NeoForgeClientNetworkRegistration;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
-*///?}
-
 @AutoService(MultiplatformClientModInitializer.class)
 public class LifeSeriesClient implements MultiplatformClientModInitializer, LifeSeriesClientAccessor {
 

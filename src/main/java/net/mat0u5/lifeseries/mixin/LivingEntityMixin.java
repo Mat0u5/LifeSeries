@@ -40,6 +40,12 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.world.entity.decoration.Mannequin;
 //?}
 
+//? if forge || neoforge {
+/*import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.state.BlockState;
+*///?}
+
 @Mixin(value = LivingEntity.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class LivingEntityMixin {

@@ -11,10 +11,9 @@ import java.util.UUID;
 
 //? if <= 1.21 {
 /*import net.minecraft.world.entity.animal.golem.SnowGolem;
-*///?}
-//? if >= 1.21.2 {
-//?}
-//? if >= 1.21.4 {
+*///?} else if <= 1.21.3 {
+/*import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+*///?} else {
 import net.minecraft.client.renderer.entity.state.SnowGolemRenderState;
  //?}
 
