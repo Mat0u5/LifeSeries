@@ -23,11 +23,11 @@ import java.util.function.Supplier;
 public abstract class CommandSourceStackMixin {
 
     //? if <= 1.20.2 {
-    /*@Accessor
-    public abstract boolean isSilent();
+    /*@Accessor("silent")
+    public abstract boolean ls$isSilent();
     *///?}
-    @Accessor
-    abstract CommandSource getSource();
+    @Accessor("source")
+    public abstract CommandSource ls$getSource();
 
     @Inject(method = "sendSuccess", at = @At("HEAD"))
     public void sendFeedback(Supplier<Component> feedbackSupplier, boolean broadcastToOps, CallbackInfo ci) {
@@ -37,11 +37,11 @@ public abstract class CommandSourceStackMixin {
         String sourceStr = "null";
         CommandSourceStack source = (CommandSourceStack) (Object) this;
         //? if <= 1.20.2 {
-        /*if (isSilent()) return;
+        /*if (ls$isSilent()) return;
         *///?} else {
         if (source.isSilent()) return;
         //?}
-        if (!source.isPlayer() && !getSource().shouldInformAdmins()) return;
+        if (!source.isPlayer() && !ls$getSource().shouldInformAdmins()) return;
         if (!source.isPlayer()) {
             sourceStr = "console";
         }
