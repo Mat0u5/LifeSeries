@@ -285,21 +285,6 @@ public class OtherUtils {
         return Math.min(max, Math.max(value, min));
     }
 
-    public static int clamp(int value, int min, int max) {
-        if (!(min < max)) {
-            if (Double.isNaN(min)) {
-                throw new IllegalArgumentException("min is NaN");
-            }
-            if (Double.isNaN(max)) {
-                throw new IllegalArgumentException("max is NaN");
-            }
-            if (Double.compare(min, max) > 0) {
-                throw new IllegalArgumentException(min + " > " + max);
-            }
-        }
-        return Math.min(max, Math.max(value, min));
-    }
-
     public static Vec3 getCenter(BlockPos pos) {
         //? if <= 26.1 {
         /*return pos.getCenter();

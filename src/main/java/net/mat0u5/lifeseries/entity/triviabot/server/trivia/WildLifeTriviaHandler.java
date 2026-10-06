@@ -272,7 +272,7 @@ public class WildLifeTriviaHandler extends TriviaHandler {
         if (punishmentWeight == null) punishmentWeight = 1;
         if (difficulty == 1) punishmentWeight++;
         if (difficulty == 3) punishmentWeight--;
-        punishmentWeight = OtherUtils.clamp(punishmentWeight, 1, 4);
+        punishmentWeight = (int) OtherUtils.clamp(punishmentWeight, 1, 4);
 
         WeightedRandomizer randomizer = new WeightedRandomizer();
         int curse = randomizer.getWeightedRandom(minCurseNum, numOfCurses, punishmentWeight, 4, 1.5);

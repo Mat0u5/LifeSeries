@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import net.minecraft.resources.Identifier;
 
@@ -17,12 +18,20 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.client.multiplayer.ClientLevel;
 //?}
 
-//? if >= 26.3 {
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.AbstractTexture;
+//? if = 26.3 {
+/*import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.SimpleTexture;
+*///?}
+//? if >= 26.3 {
+import net.minecraft.client.renderer.state.level.WeatherRenderState;
+import net.minecraft.world.phys.Vec3;
+import org.spongepowered.asm.mixin.gen.Accessor;
+import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+//?}
+//? if >= 26.4 {
+import net.minecraft.client.renderer.texture.TextureHandle;
 //?}
 
 //? if >= 1.21.4 <= 1.21.11 {
@@ -41,16 +50,23 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 @Mixin(value = WeatherEffectRenderer.class)
 //?}
 @MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
-public class WeatherEffectRendererMixin {
-    private static Identifier LESS_SNOW_RESOURCE_LOCATION = IdentifierHelper.mod("textures/environment/less-snow.png");
-    //? if >= 26.3 {
-    private static AbstractTexture LESS_SNOW_RESOURCE;
+public abstract class WeatherEffectRendererMixin {
+    @Unique
+    private static final Identifier LESS_SNOW_RESOURCE_LOCATION = IdentifierHelper.mod("textures/environment/less-snow.png");
+//? if >= 26.3 {
+    //~ if >= 26.4 'AbstractTexture' -> 'TextureHandle' {
+    @Accessor("snowTexture")
+    abstract TextureHandle ls$getSnowTexture();
 
-    @Inject(method = "<init>", at = @At("RETURN"))
-    private void snowTexture(CallbackInfo ci) {
+    @Unique
+    private TextureHandle LESS_SNOW_RESOURCE;
+    //~}
+
+    @Inject(method = "prepare", at = @At("TAIL"))
+    private void prepareSnowTexture(Vec3 cameraPos, WeatherRenderState renderState, CallbackInfo ci) {
         LESS_SNOW_RESOURCE = Minecraft.getInstance().getTextureManager().getTexture(LESS_SNOW_RESOURCE_LOCATION);
     }
-    //?}
+//?}
 
 //? if fabric || forge {
     //? if <= 1.21 {
@@ -75,8 +91,8 @@ public class WeatherEffectRendererMixin {
     /*@ModifyArg(method = "render(Lnet/minecraft/client/renderer/state/level/WeatherRenderState;Lcom/mojang/renderpearl/api/commands/RenderPass;Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/WeatherEffectRenderer;renderWeather(Lcom/mojang/renderpearl/api/commands/RenderPass;Lnet/minecraft/client/renderer/texture/AbstractTexture;II)V"), index = 1)
     public AbstractTexture render(AbstractTexture texture) {
     *///?} else {
-    @ModifyArg(method = "render(Lnet/minecraft/client/renderer/state/level/WeatherRenderState;Lcom/mojang/renderpearl/api/commands/RenderPass;Lcom/mojang/blaze3d/pipeline/RenderPipeline;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/WeatherEffectRenderer;renderWeather(Lcom/mojang/renderpearl/api/commands/RenderPass;Lnet/minecraft/client/renderer/texture/AbstractTexture;II)V"), index = 1)
-    public AbstractTexture render(AbstractTexture texture) {
+    @ModifyArg(method = "render(Lnet/minecraft/client/renderer/state/level/WeatherRenderState;Lcom/mojang/renderpearl/api/commands/RenderPass;Lcom/mojang/blaze3d/pipeline/RenderPipeline;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/WeatherEffectRenderer;renderWeather(Lcom/mojang/renderpearl/api/commands/RenderPass;Lnet/minecraft/client/renderer/texture/TextureHandle;II)V"), index = 1)
+    public TextureHandle render(TextureHandle texture) {
     //?}
 //?} else {
     /*//? if <= 1.21 {
@@ -106,7 +122,7 @@ public class WeatherEffectRendererMixin {
             //? if <= 26.2 {
             /*boolean isSnow = resourceLocation.getPath().contains("snow.png");
             *///?} else {
-            boolean isSnow = (texture instanceof SimpleTexture st) && st.resourceId().getPath().contains("snow.png");
+            boolean isSnow = texture.equals(ls$getSnowTexture());
             //?}
             if (isSnow) {
                 //? if <= 1.21.2 {

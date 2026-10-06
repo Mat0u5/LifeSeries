@@ -6,7 +6,6 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.P
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.Identifier;
 
 import java.io.ByteArrayInputStream;
@@ -16,6 +15,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+//? if <= 26.3 {
+/*import net.minecraft.client.renderer.texture.DynamicTexture;
+*///?} else {
+import net.minecraft.client.renderer.texture.TextureResources;
+//?}
 
 public class SnailSkinsClient {
     private static final Map<String, Identifier> prebuiltAssignments = new ConcurrentHashMap<>();
@@ -37,8 +42,10 @@ public class SnailSkinsClient {
 
             //? if <= 1.21.4 {
             /*DynamicTexture texture = new DynamicTexture(image);
+            *///?} else if <= 26.3 {
+            /*DynamicTexture texture = new DynamicTexture(() -> skinName, image);
             *///?} else {
-            DynamicTexture texture = new DynamicTexture(() -> skinName, image);
+            TextureResources texture = TextureResources.from2dImage(() -> skinName, image);
             //?}
             removeSnailTexture(skinName);
             client.getTextureManager().register(textureId, texture);

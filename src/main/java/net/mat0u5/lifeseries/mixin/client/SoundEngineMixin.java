@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.mixin.client;
 
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.client.sounds.SoundEngine;
 import org.spongepowered.asm.mixin.Mixin;
 
@@ -8,7 +9,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SoundInstance;
-import net.minecraft.util.Mth;
 import net.minecraft.world.TickRateManager;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -40,7 +40,7 @@ public class SoundEngineMixin {
         if (client.level != null) {
             TickRateManager tickManager = client.level.tickRateManager();
             if (tickManager.tickrate() != 20) {
-                cir.setReturnValue(Mth.clamp(sound.getPitch(), 0.5F, 2.0F) * (tickManager.tickrate() / 20.0f));
+                cir.setReturnValue(OtherUtils.clamp(sound.getPitch(), 0.5F, 2.0F) * (tickManager.tickrate() / 20.0f));
             }
         }
     }

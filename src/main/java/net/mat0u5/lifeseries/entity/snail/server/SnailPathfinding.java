@@ -300,9 +300,10 @@ public class SnailPathfinding {
         }
     }
 
+//~ if >= 26.4 'TRAPDOOR' -> 'DROP_DOWN' {
     public void setNavigationFlying() {
         snail.setPathfindingMalus(PathType.BLOCKED, -1);
-        snail.setPathfindingMalus(PathType.TRAPDOOR, -1);
+        snail.setPathfindingMalus(PathType.DROP_DOWN, -1);
         snail.setPathfindingMalus(PathType.WALKABLE_DOOR, -1);
         snail.setPathfindingMalus(PathType.DOOR_OPEN, -1);
         snail.setPathfindingMalus(PathType.UNPASSABLE_RAIL, 0);
@@ -311,11 +312,11 @@ public class SnailPathfinding {
         snail.setPathfindingMalus(PathType.OPEN, 0);
         //? if <= 1.21.11 {
         /*//? if >= 1.20.3
-        snail.setPathfindingMalus(PathType.DANGER_TRAPDOOR, -1);
+        snail.setPathfindingMalus(PathType.DANGER_DROP_DOWN, -1);
         snail.setPathfindingMalus(PathType.DAMAGE_OTHER, 0);
         snail.setPathfindingMalus(PathType.DANGER_OTHER, 0);
         *///?} else {
-        snail.setPathfindingMalus(PathType.ON_TOP_OF_TRAPDOOR, -1);
+        snail.setPathfindingMalus(PathType.ON_TOP_OF_DROP_DOWN, -1);
         snail.setPathfindingMalus(PathType.DAMAGING, 0);
         snail.setPathfindingMalus(PathType.DAMAGING_IN_NEIGHBOR, 0);
         //?}
@@ -325,7 +326,7 @@ public class SnailPathfinding {
 
     public void setNavigationWalking() {
         snail.setPathfindingMalus(PathType.BLOCKED, -1);
-        snail.setPathfindingMalus(PathType.TRAPDOOR, -1);
+        snail.setPathfindingMalus(PathType.DROP_DOWN, -1);
         snail.setPathfindingMalus(PathType.WALKABLE_DOOR, -1);
         snail.setPathfindingMalus(PathType.DOOR_OPEN, -1);
         snail.setPathfindingMalus(PathType.WATER, 8);
@@ -336,11 +337,11 @@ public class SnailPathfinding {
         snail.setPathfindingMalus(PathType.OPEN, 0);
         //? if <= 1.21.11 {
         /*//? if >= 1.20.3
-        snail.setPathfindingMalus(PathType.DANGER_TRAPDOOR, -1);
+        snail.setPathfindingMalus(PathType.DANGER_DROP_DOWN, -1);
         snail.setPathfindingMalus(PathType.DAMAGE_OTHER, 0);
         snail.setPathfindingMalus(PathType.DANGER_OTHER, 0);
         *///?} else {
-        snail.setPathfindingMalus(PathType.ON_TOP_OF_TRAPDOOR, -1);
+        snail.setPathfindingMalus(PathType.ON_TOP_OF_DROP_DOWN, -1);
         snail.setPathfindingMalus(PathType.DAMAGING, 0);
         snail.setPathfindingMalus(PathType.DAMAGING_IN_NEIGHBOR, 0);
         //?}
@@ -351,7 +352,7 @@ public class SnailPathfinding {
 
     public void setNavigationMining() {
         snail.setPathfindingMalus(PathType.BLOCKED, 4.0f);
-        snail.setPathfindingMalus(PathType.TRAPDOOR, 0);
+        snail.setPathfindingMalus(PathType.DROP_DOWN, 0);
         snail.setPathfindingMalus(PathType.WALKABLE_DOOR, 0);
         snail.setPathfindingMalus(PathType.DOOR_OPEN, 0);
         snail.setPathfindingMalus(PathType.UNPASSABLE_RAIL, 0);
@@ -360,17 +361,18 @@ public class SnailPathfinding {
         snail.setPathfindingMalus(PathType.OPEN, 0);
         //? if <= 1.21.11 {
         /*//? if >= 1.20.3
-        snail.setPathfindingMalus(PathType.DANGER_TRAPDOOR, -1);
+        snail.setPathfindingMalus(PathType.DANGER_DROP_DOWN, -1);
         snail.setPathfindingMalus(PathType.DAMAGE_OTHER, 0);
         snail.setPathfindingMalus(PathType.DANGER_OTHER, 0);
         *///?} else {
-        snail.setPathfindingMalus(PathType.ON_TOP_OF_TRAPDOOR, -1);
+        snail.setPathfindingMalus(PathType.ON_TOP_OF_DROP_DOWN, -1);
         snail.setPathfindingMalus(PathType.DAMAGING, 0);
         snail.setPathfindingMalus(PathType.DAMAGING_IN_NEIGHBOR, 0);
         //?}
         snail.setNavigation(miningNavigation);
         updateNavigationTarget();
     }
+//~}
 
     public void updateNavigationTarget() {
         if (snail.serverData.shouldPathfind() && snail.serverData.getPlayerPos() != null) {

@@ -1,10 +1,10 @@
 package net.mat0u5.lifeseries.client.render;
 
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.Mth;
 
 //? if <= 1.21 {
 /*import com.mojang.blaze3d.platform.GlStateManager;
@@ -28,7 +28,7 @@ public class VignetteRenderer {
         Minecraft client = Minecraft.getInstance();
         if (client.player == null) return;
 
-        float darkness = Mth.clamp(vignetteDarkness, 0.0F, 1.0F);
+        float darkness = OtherUtils.clamp(vignetteDarkness, 0.0F, 1.0F);
         if (darkness == 0) return;
 
 
@@ -63,7 +63,7 @@ public class VignetteRenderer {
     }
 
     public static void showVignetteFor(float darkness, long durationMillis) {
-        vignetteDarkness = Mth.clamp(darkness, 0.0F, 1.0F);
+        vignetteDarkness = OtherUtils.clamp(darkness, 0.0F, 1.0F);
         if (durationMillis == -1) {
             vignetteEnd = -1;
         }

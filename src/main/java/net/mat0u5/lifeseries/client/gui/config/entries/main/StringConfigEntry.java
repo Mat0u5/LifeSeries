@@ -78,7 +78,7 @@ public class StringConfigEntry extends TextFieldConfigEntry {
             return;
         }
 
-        int requiredWidth = OtherUtils.clamp(textWidth + PADDING * 2, newMinFieldWidth, maxFieldWidth);
+        int requiredWidth = (int) OtherUtils.clamp(textWidth + PADDING * 2, newMinFieldWidth, maxFieldWidth);
 
         if (isFocused()) {
             targetWidth = requiredWidth;
