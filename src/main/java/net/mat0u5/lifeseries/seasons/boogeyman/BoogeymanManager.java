@@ -86,6 +86,17 @@ public class BoogeymanManager {
         );
     }
 
+    public boolean isActiveBoogeyman(ServerPlayer player) {
+        if (player == null) return false;
+        for (Boogeyman boogeyman : boogeymen) {
+            if (boogeyman.uuid.equals(player.getUUID())) {
+                if (boogeyman.cured || boogeyman.failed || boogeyman.died) continue;
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isBoogeyman(ServerPlayer player) {
         if (player == null) return false;
         for (Boogeyman boogeyman : boogeymen) {
