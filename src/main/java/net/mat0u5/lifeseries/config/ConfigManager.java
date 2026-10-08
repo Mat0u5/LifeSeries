@@ -460,6 +460,8 @@ public abstract class ConfigManager extends DefaultConfigValues {
         renamedProperty("final_death_title_subtitle", "text.final.death.title.subtitle");
         renamedProperty("text.wildlife.superpowes.dead", "text.wildlife.superpowers.dead");
         renamedProperty("only_take_lives_in_session", "only_change_lives_in_session");
+        renamedProperty("colored_hearts_hardcore_last_life", "hardcore_hearts_last_life");
+        renamedProperty("colored_hearts_hardcore_all_lives", "hardcore_hearts_all_lives");
     }
 
     private void renamedProperty(String from, String to) {

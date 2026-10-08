@@ -127,9 +127,25 @@ public class GuiMixin {
         //?}
         String playerTeamColor = ClientUtils.getPlayerTeamColor();
         String playerTeamName = ClientUtils.getPlayerTeamName();
-        if (!LifeSeriesClient.COLORED_HEARTS || playerTeamColor == null || playerTeamName == null ||
-                !RenderUtils.lifeSkinsAllowedColors.contains(playerTeamColor.toLowerCase(Locale.ROOT)) ||
-                !RenderUtils.lifeSkinsAllowedHearts.contains(texturePath) || LifeSeries.modFullyDisabled()) {
+
+        boolean shouldRenderHearts = false;
+
+        boolean isValidState = !LifeSeries.modFullyDisabled()
+                && playerTeamColor != null
+                && playerTeamName != null
+                && RenderUtils.lifeSkinsAllowedColors.contains(playerTeamColor.toLowerCase(Locale.ROOT))
+                && RenderUtils.lifeSkinsAllowedHearts.contains(texturePath);
+
+        if (isValidState) {
+            if (LifeSeriesClient.COLORED_HEARTS || LifeSeriesClient.HARDCORE_HEARTS_ALL_LIVES) {
+                shouldRenderHearts = true;
+            }
+            else if (LifeSeriesClient.HARDCORE_HEARTS_LAST_LIFE && playerTeamName.equals("lives_1")) {
+                shouldRenderHearts = true;
+            }
+        }
+
+        if (!shouldRenderHearts) {
             if (LifeSeries.isSeason(Seasons.SECRET_LIFE) && texturePath.startsWith("hud/heart/container")) {
                 return;
             }
@@ -147,12 +163,12 @@ public class GuiMixin {
             return;
         }
 
-        String color = playerTeamColor.toLowerCase(Locale.ROOT);
+        String color = LifeSeriesClient.COLORED_HEARTS ? playerTeamColor.toLowerCase(Locale.ROOT) : "red";
 
         String heartTypeStr = texturePath.replaceFirst("hud/heart/", "");
 
         if (!heartTypeStr.startsWith("hardcore_")) {
-            if (LifeSeriesClient.COLORED_HEARTS_HARDCORE_ALL_LIVES || (playerTeamName.equals("lives_1") & LifeSeriesClient.COLORED_HEARTS_HARDCORE_LAST_LIFE)) {
+            if (LifeSeriesClient.HARDCORE_HEARTS_ALL_LIVES || (playerTeamName.equals("lives_1") && LifeSeriesClient.HARDCORE_HEARTS_LAST_LIFE)) {
                 heartTypeStr = "hardcore_"+heartTypeStr;
             }
         }

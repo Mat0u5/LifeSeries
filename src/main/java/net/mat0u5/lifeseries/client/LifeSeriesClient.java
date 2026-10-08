@@ -79,8 +79,8 @@ public class LifeSeriesClient implements ClientAccessor {
     public static boolean TAB_LIST_SHOW_EXACT_LIVES = false;
     public static String RUN_COMMAND = "lifeseries config";
     public static boolean COLORED_HEARTS = false;
-    public static boolean COLORED_HEARTS_HARDCORE_LAST_LIFE = true;
-    public static boolean COLORED_HEARTS_HARDCORE_ALL_LIVES = false;
+    public static boolean HARDCORE_HEARTS_LAST_LIFE = true;
+    public static boolean HARDCORE_HEARTS_ALL_LIVES = false;
     public static int TAB_LIST_LIVES_CUTOFF = 4;
     public static boolean FIX_SIZECHANGING_BUGS = false;
     public static float SIZESHIFTING_CHANGE = 0;
@@ -166,8 +166,8 @@ public class LifeSeriesClient implements ClientAccessor {
             RUN_COMMAND = RUN_COMMAND.substring(1);
         }
         COLORED_HEARTS = ClientConfig.COLORED_HEARTS.get(clientConfig);
-        COLORED_HEARTS_HARDCORE_LAST_LIFE = ClientConfig.COLORED_HEARTS_HARDCORE_LAST_LIFE.get(clientConfig);
-        COLORED_HEARTS_HARDCORE_ALL_LIVES = ClientConfig.COLORED_HEARTS_HARDCORE_ALL_LIVES.get(clientConfig);
+        HARDCORE_HEARTS_LAST_LIFE = ClientConfig.HARDCORE_HEARTS_LAST_LIFE.get(clientConfig);
+        HARDCORE_HEARTS_ALL_LIVES = ClientConfig.HARDCORE_HEARTS_ALL_LIVES.get(clientConfig);
 
         TEXT_HUD_SCALE = ClientConfig.TEXT_HUD_SCALE.get(clientConfig);
 

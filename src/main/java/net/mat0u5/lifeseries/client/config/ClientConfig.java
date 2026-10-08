@@ -33,17 +33,20 @@ public class ClientConfig extends ConfigManager {
     );
 
     public static final ConfigFileEntry<Boolean> COLORED_HEARTS = new ConfigFileEntry<>(
-            "colored_hearts", false, "{coloredhearts}",
+            "colored_hearts", false, "",
             "Colored Hearts Based on Lives", "Makes your hearts the same color as how many lives you have."
     );
-    public static final ConfigFileEntry<Boolean> COLORED_HEARTS_HARDCORE_LAST_LIFE = new ConfigFileEntry<>(
-            "colored_hearts_hardcore_last_life", true, "coloredhearts",
-            "Show Last Life as Hardcore", "When you are on your last life, the hearts will appear as though you are in hardcore."
+
+    public static final ConfigFileEntry<Boolean> HARDCORE_HEARTS_LAST_LIFE = new ConfigFileEntry<>(
+            "hardcore_hearts_last_life", false, "",
+            "Show Last Life as Hardcore", "When you are on your last life, your hearts will appear as though you are in hardcore."
     );
-    public static final ConfigFileEntry<Boolean> COLORED_HEARTS_HARDCORE_ALL_LIVES = new ConfigFileEntry<>(
-            "colored_hearts_hardcore_all_lives", false, "coloredhearts",
+
+    public static final ConfigFileEntry<Boolean> HARDCORE_HEARTS_ALL_LIVES = new ConfigFileEntry<>(
+            "hardcore_hearts_all_lives", false, "",
             "Show All Lives as Hardcore", "Hearts will always appear as though you are in hardcore."
     );
+
     public static final ConfigFileEntry<Boolean> NICE_LIFE_LESS_SNOW = new ConfigFileEntry<>(
             "nice_life_less_snow", true, "",
             "Less Obstructive Snow in Nice Life", "Reduces the number of snow particles when it snows."
@@ -70,9 +73,9 @@ public class ClientConfig extends ConfigManager {
                 ,SESSION_TIMER
                 ,COLORBLIND_SUPPORT
 
-                ,COLORED_HEARTS // Group
-                    ,COLORED_HEARTS_HARDCORE_LAST_LIFE
-                    ,COLORED_HEARTS_HARDCORE_ALL_LIVES
+                ,COLORED_HEARTS
+                ,HARDCORE_HEARTS_LAST_LIFE
+                ,HARDCORE_HEARTS_ALL_LIVES
 
                 ,TEXT_HUD_SCALE
         ));
