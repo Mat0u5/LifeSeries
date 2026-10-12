@@ -35,8 +35,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 
-//? if >= 1.21.2
+//? if >= 1.21.2 {
 import net.minecraft.world.entity.monster.creaking.Creaking;
+import java.util.List;
+//?}
+
 //? if = 1.21.2 {
 /*import java.util.function.DoubleSupplier;
 import java.util.function.Predicate;
@@ -135,6 +138,11 @@ public abstract class LivingEntityMixin {
             if (!effect.isAmbient() && !effect.showIcon() && !effect.isVisible()) return;
             if (blacklist.getBannedEffects().contains(effect.getEffect())) {
                 cir.setReturnValue(false);
+                //? if <= 1.21 {
+                /*entity.onEffectRemoved(effect);
+                *///?} else {
+                entity.onEffectsRemoved(List.of(effect));
+                //?}
             }
         }
     }

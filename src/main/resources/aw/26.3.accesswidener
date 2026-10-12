@@ -9,3 +9,4 @@ accessible field net/minecraft/world/entity/LivingEntity swingState Lnet/minecra
 mutable field net/minecraft/world/entity/LivingEntity swingState Lnet/minecraft/world/entity/LivingEntity$SwingState;
 accessible field net/minecraft/client/resources/sounds/EntityBoundSoundInstance entity Lnet/minecraft/world/entity/Entity;
 mutable field net/minecraft/client/resources/sounds/EntityBoundSoundInstance entity Lnet/minecraft/world/entity/Entity;
+accessible method net/minecraft/world/entity/LivingEntity onEffectsRemoved (Ljava/util/Collection;)V

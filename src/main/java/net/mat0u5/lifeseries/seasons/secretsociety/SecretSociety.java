@@ -409,6 +409,7 @@ public class SecretSociety {
         DatapackIntegration.EVENT_SOCIETY_FAIL_REWARD.trigger(new DatapackIntegration.Events.MacroEntry("Player", member.getScoreboardName()));
         if (DatapackIntegration.EVENT_SOCIETY_FAIL_REWARD.isCanceled()) return;
         int punishmentLives = Math.abs(PUNISHMENT_LIVES);
+        if (((IPlayer) member).ls$isDead()) return;
         Integer currentLives = ((IPlayer) member).ls$getLives();
         if (currentLives != null) {
             punishmentLives = Math.min(Math.abs(currentLives-1), punishmentLives);
