@@ -48,8 +48,8 @@ public class DeathAnvil extends AdvancedDeath {
             BlockPos spawnPos = player.blockPosition().offset(anvilAmount, 15, 0);
             ServerLevel level = ((IPlayer) player).ls$getServerLevel();
             FallingBlockEntity entity = FallingBlockEntity.fall(level, spawnPos, Blocks.ANVIL.defaultBlockState());
-            //~ if >= 26.4 'SoundEvents.ANVIL_PLACE' -> 'SoundEvents.ANVIL_PLACE.value()' {
-            PlayerUtils.playSoundWithSourceToPlayers(entity, SoundEvents.ANVIL_PLACE.value(), SoundSource.BLOCKS, 1, 1);
+            //~ if >= 26.4 'SoundEvents.ANVIL_PLACE' -> 'SoundEvents.ANVIL_USE.value()' {
+            PlayerUtils.playSoundWithSourceToPlayers(entity, SoundEvents.ANVIL_USE, SoundSource.BLOCKS, 1, 1);
             //~}
             entity.disableDrop();
             anvilAmount--;
