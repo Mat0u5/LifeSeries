@@ -3,24 +3,7 @@ package net.mat0u5.lifeseries.utils.enums;
 public enum ConfigTypes {
     NULL(""),
 
-    STRING("string"),
-    BOOLEAN("boolean"),
-    INTEGER("integer"),
-    NULLABLE_INTEGER("nullable_integer"),
-    DOUBLE("double"),
-    TEXT("text"),
-
-    HEARTS("hearts"),
-    PERCENTAGE("percentage"),
-    ITEM_LIST("itemlist"),
-    BLOCK_LIST("blocklist"),
-    EFFECT_LIST("effectlist"),
-    ENCHANT_LIST("enchantlist"),
     BOOGEYMAN("boogeyman"),
-    SECONDS("seconds"),
-    MINUTES("minutes"),
-    STRING_LIST("list"),
-    ENUM("enum"),
 
     LIVES_ENTRY("lives"),
     TEAM_ENTRY("teams"),
@@ -46,7 +29,9 @@ public enum ConfigTypes {
     }
 
     public boolean parentString() {
-        return this == STRING || this == ITEM_LIST || this == BLOCK_LIST || this == EFFECT_LIST || this == ENCHANT_LIST || this == STRING_LIST || this == ENUM || this == EVENT_ENTRY || this == MODIFIABLE_TEXT;
+        return this == STRING || this == ITEM_LIST || this == BLOCK_LIST ||
+                this == EFFECT_LIST || this == ENCHANT_LIST || this == STRING_LIST
+                || this == ENUM || this == EVENT_ENTRY || this == MODIFIABLE_TEXT;
     }
     public boolean parentText() {
         return this == TEXT || this == TEAM_ENTRY || this == SECRET_TASK || this == TRIVIA_QUESTION || this == TRIVIA_ANSWER || this == SOULMATE_ENTRY;

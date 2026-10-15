@@ -371,4 +371,11 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
     public boolean hasResetButton() {
         return false;
     }
+
+    @Override
+    public List<ConfigEntry> getInnerEntries() {
+        List<ConfigEntry> innerEntries = this.renderAsGroup.getChildEntries();
+        innerEntries.add(triviaQuestionConfigEntry.renderAsGroup.getMainEntry());
+        return innerEntries;
+    }
 }
