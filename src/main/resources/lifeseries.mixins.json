@@ -70,7 +70,6 @@
   ],
   "client": [
     "client.AbstractClientPlayerMixin",
-    "client.AbstractSelectionListMixin",
     "client.AbstractSoundInstanceAccessor",
     "client.AbstractSoundInstanceMixin",
     "client.BiomeMixin",

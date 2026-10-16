@@ -8,8 +8,6 @@ import net.mat0u5.matlib.utils.other.Time;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -84,28 +82,6 @@ public class OtherUtils extends net.mat0u5.matlib.utils.other.OtherUtils {
     public static void reloadServerNoUpdate() {
         Events.skipNextTickReload = true;
         reloadServer();
-    }
-
-    private static List<Long> reloads = new ArrayList<>();
-    public static void reloadServer() {
-        try {
-            int inInterval = 0;
-            if (reloads.size() >= 3) {
-                int size = reloads.size();
-                if (System.currentTimeMillis() - reloads.get(size-1) < 5000) inInterval++;
-                if (System.currentTimeMillis() - reloads.get(size-2) < 5000) inInterval++;
-                if (System.currentTimeMillis() - reloads.get(size-3) < 5000) inInterval++;
-            }
-
-            if (inInterval >= 3) {
-                LifeSeries.LOGGER.error("Detected and prevented possible reload loop!");
-                return;
-            }
-            reloads.add(System.currentTimeMillis());
-            executeCommand("reload");
-        } catch (Exception e) {
-            LifeSeries.LOGGER.error("Error reloading server", e);
-        }
     }
 
     public static void setFreezeGame(boolean frozen) {
