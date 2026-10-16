@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.entity.triviabot.server.trivia;
 
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
 import net.mat0u5.lifeseries.config.ModifiableText;
@@ -83,9 +84,9 @@ public class WildLifeTriviaHandler extends TriviaHandler {
 
     public static ItemSpawner itemSpawner;
     public int snailTransformation = 0;
-    public static int EASY_TIME = 180;
-    public static int NORMAL_TIME = 240;
-    public static int HARD_TIME = 300;
+    public static final ConfigRef<Integer> EASY_TIME = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_TRIVIA_SECONDS_EASY);
+    public static final ConfigRef<Integer> NORMAL_TIME = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_TRIVIA_SECONDS_NORMAL);
+    public static final ConfigRef<Integer> HARD_TIME = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_TRIVIA_SECONDS_HARD);
 
     public void tick() {
         super.tick();
@@ -177,9 +178,9 @@ public class WildLifeTriviaHandler extends TriviaHandler {
 
     public void setTimeBasedOnDifficulty(int difficulty) {
         timeToComplete = difficulty * 60 + 120;
-        if (difficulty == 1) timeToComplete = EASY_TIME;
-        if (difficulty == 2) timeToComplete = NORMAL_TIME;
-        if (difficulty == 3) timeToComplete = HARD_TIME;
+        if (difficulty == 1) timeToComplete = EASY_TIME.get();
+        if (difficulty == 2) timeToComplete = NORMAL_TIME.get();
+        if (difficulty == 3) timeToComplete = HARD_TIME.get();
     }
 
     public void transformIntoSnail() {
@@ -338,10 +339,7 @@ public class WildLifeTriviaHandler extends TriviaHandler {
 
     public static List<String> loadBlessEffects() {
         if (seasonConfig == null) return new ArrayList<>();
-        String raw = WildLifeConfig.WILDCARD_TRIVIA_EFFECTS.get();
-        raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        if (raw.isEmpty()) return new ArrayList<>();
-        return new ArrayList<>(Arrays.asList(raw.split(",")));
+        return new ArrayList<>(WildLifeConfig.get().WILDCARD_TRIVIA_EFFECTS.get());
     }
 
     //? if <= 1.20.3 {

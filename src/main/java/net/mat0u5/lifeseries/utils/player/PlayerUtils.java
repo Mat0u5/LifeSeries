@@ -56,7 +56,7 @@ public class PlayerUtils extends net.mat0u5.matlib.utils.player.PlayerUtils {
         if (LifeSeries.isSeason(Seasons.SECRET_LIFE)) return;
         double currentMaxHealth = AttributeUtils.MAX_HEALTH.of(player).get();
         if (currentMaxHealth == 13 && WildLifeTriviaHandler.cursedHeartPlayers.contains(player.getUUID())) return;
-        if (currentMaxHealth == SuperpowersWildcard.ZOMBIES_HEALTH && Necromancy.isRessurectedPlayer(player)) return;
+        if (currentMaxHealth == SuperpowersWildcard.ZOMBIES_HEALTH.get() && Necromancy.isRessurectedPlayer(player)) return;
         resetMaxPlayerHealth(player);
     }
 
@@ -149,7 +149,7 @@ public class PlayerUtils extends net.mat0u5.matlib.utils.player.PlayerUtils {
         if (receivingPlayer.isSpectator()) return false;
         if (!player.isSpectator()) return false;
 
-        if (currentSeason.TAB_LIST_SHOW_DEAD_PLAYERS) return false;
+        if (currentSeason.TAB_LIST_SHOW_DEAD_PLAYERS.get()) return false;
         if (((IPlayer) receivingPlayer).ls$isDead()) return false;
         if (((IPlayer) player).ls$isAlive()) return false;
         if (((IPlayer) player).ls$isWatcher()) return false;
@@ -161,7 +161,7 @@ public class PlayerUtils extends net.mat0u5.matlib.utils.player.PlayerUtils {
         if (receivingPlayer.isSpectator()) return false;
         if (!player.isSpectator()) return false;
 
-        if (currentSeason.WATCHERS_IN_TAB) return false;
+        if (currentSeason.WATCHERS_IN_TAB.get()) return false;
         if (((IPlayer) receivingPlayer).ls$isWatcher()) return false;
         if (!((IPlayer) player).ls$isWatcher()) return false;
         return true;

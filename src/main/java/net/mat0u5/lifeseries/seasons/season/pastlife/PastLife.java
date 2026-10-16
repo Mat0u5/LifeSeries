@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.pastlife;
 
-import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
@@ -20,7 +20,7 @@ public class PastLife extends Season {
     }
 
     @Override
-    public ConfigManager createConfig() {
+    public SeasonConfig createConfig() {
         return new PastLifeConfig();
     }
 
@@ -31,7 +31,7 @@ public class PastLife extends Season {
 
     @Override
     public void addSessionActions() {
-        if (boogeymanManager.BOOGEYMAN_ENABLED && secretSociety.SOCIETY_ENABLED) {
+        if (boogeymanManager.BOOGEYMAN_ENABLED.get() && secretSociety.SOCIETY_ENABLED.get()) {
             TaskScheduler.scheduleTask(Time.seconds(1), this::requestSessionAction);
             return;
         }

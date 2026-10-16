@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.client;
 import com.google.auto.service.AutoService;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.config.ClientConfig;
+import net.mat0u5.matlib.client.config.ClientConfigManager;
 import net.mat0u5.lifeseries.client.network.LifeSeriesNetworkHandlerClient;
 import net.mat0u5.lifeseries.client.registries.ClientRegistries;
 import net.mat0u5.lifeseries.client.render.TextHud;
@@ -105,7 +106,7 @@ public class LifeSeriesClient implements MultiplatformClientModInitializer, Life
         LifeSeries.LOGGER.info("Initializing Life Series Client [{} {} ({})] with MatLib [{}]...", MatLib.platform().loader().name(), MatLib.platform().mcVersion(), LifeSeries.MOD_VERSION, MatLib.MOD_VERSION);
 
         clientConfig = new ClientConfig();
-        reloadConfig();
+        ClientConfigManager.registerConfig(clientConfig);
     }
 
     @Override
@@ -130,20 +131,20 @@ public class LifeSeriesClient implements MultiplatformClientModInitializer, Life
 
 
     public static void reloadConfig() {
-        COLORBLIND_SUPPORT = ClientConfig.COLORBLIND_SUPPORT.get(clientConfig);
-        SESSION_TIMER = ClientConfig.SESSION_TIMER.get(clientConfig);
-        RUN_COMMAND = ClientConfig.RUN_COMMAND.get(clientConfig);
+        COLORBLIND_SUPPORT = clientConfig.COLORBLIND_SUPPORT.get();
+        SESSION_TIMER = clientConfig.SESSION_TIMER.get();
+        RUN_COMMAND = clientConfig.RUN_COMMAND.get();
         if (RUN_COMMAND.startsWith("/")) {
             RUN_COMMAND = RUN_COMMAND.substring(1);
         }
-        COLORED_HEARTS = ClientConfig.COLORED_HEARTS.get(clientConfig);
-        COLORED_HEARTS_HARDCORE_LAST_LIFE = ClientConfig.COLORED_HEARTS_HARDCORE_LAST_LIFE.get(clientConfig);
-        COLORED_HEARTS_HARDCORE_ALL_LIVES = ClientConfig.COLORED_HEARTS_HARDCORE_ALL_LIVES.get(clientConfig);
+        COLORED_HEARTS = clientConfig.COLORED_HEARTS.get();
+        COLORED_HEARTS_HARDCORE_LAST_LIFE = clientConfig.COLORED_HEARTS_HARDCORE_LAST_LIFE.get();
+        COLORED_HEARTS_HARDCORE_ALL_LIVES = clientConfig.COLORED_HEARTS_HARDCORE_ALL_LIVES.get();
 
-        TEXT_HUD_SCALE = ClientConfig.TEXT_HUD_SCALE.get(clientConfig);
+        TEXT_HUD_SCALE = clientConfig.TEXT_HUD_SCALE.get();
 
-        NICE_LIFE_LESS_SNOW = ClientConfig.NICE_LIFE_LESS_SNOW.get(clientConfig);
-        LIMITED_LIFE_ACTIONBAR_TIME = ClientConfig.LIMITED_LIFE_ACTIONBAR_TIME.get(clientConfig);
+        NICE_LIFE_LESS_SNOW = clientConfig.NICE_LIFE_LESS_SNOW.get();
+        LIMITED_LIFE_ACTIONBAR_TIME = clientConfig.LIMITED_LIFE_ACTIONBAR_TIME.get();
 
         if (SharedClientInfo.getHandshakeStatus().hasReceived(LifeSeries.MOD_ID)) {
             LifeSeriesNetworkHandlerClient.sendUpdatePackets();

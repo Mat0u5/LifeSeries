@@ -26,7 +26,7 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
 
     @Override
     public void sessionEnd() {
-        if (!BOOGEYMAN_ENABLED) return;
+        if (!BOOGEYMAN_ENABLED.get()) return;
         if (server == null) return;
         for (Boogeyman boogeyman : new ArrayList<>(boogeymen)) {
             if (boogeyman.died) continue;
@@ -36,12 +36,12 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
                 if (player == null) {
                     Integer currentLives = ScoreboardUtils.getScore(boogeyman.name, LivesManager.SCOREBOARD_NAME);
                     if (currentLives == null) continue;
-                    if (currentLives <= LimitedLifeLivesManager.RED_TIME) continue;
+                    if (currentLives <= LimitedLifeLivesManager.RED_TIME.get()) continue;
                     Integer setLives = LimitedLife.getNextLivesColorLives(currentLives);
-                    if (BOOGEYMAN_ANNOUNCE_OUTCOME) {
+                    if (BOOGEYMAN_ANNOUNCE_OUTCOME.get()) {
                         PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_FAIL.get(boogeyman.name, livesManager.getFormattedLives(setLives)));
                     }
-                    if (!livesManager.LIVES_SYSTEM_DISABLED) ScoreboardUtils.setScore(boogeyman.name, LivesManager.SCOREBOARD_NAME, setLives);
+                    if (!livesManager.LIVES_SYSTEM_DISABLED.get()) ScoreboardUtils.setScore(boogeyman.name, LivesManager.SCOREBOARD_NAME, setLives);
                     continue;
                 }
                 playerFailBoogeyman(player, true);
@@ -50,7 +50,7 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
     }
     @Override
     public boolean playerFailBoogeyman(ServerPlayer player, boolean sendMessage) {
-        if (!BOOGEYMAN_ENABLED) return false;
+        if (!BOOGEYMAN_ENABLED.get()) return false;
         Boogeyman boogeyman = getBoogeyman(player);
         if (boogeyman == null) return false;
         if (((IPlayer) player).ls$isDead()) return false;
@@ -70,10 +70,10 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
 
         DatapackIntegration.EVENT_BOOGEYMAN_FAIL_REWARD.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
         if (!DatapackIntegration.EVENT_BOOGEYMAN_FAIL_REWARD.isCanceled()) {
-            if (BOOGEYMAN_ADVANCED_DEATHS) {
+            if (BOOGEYMAN_ADVANCED_DEATHS.get()) {
 
                 PlayerUtils.sendTitle(player, ModifiableText.BOOGEYMAN_FAIL_ADVANCEDDEATH_NOTIFY_TITLE.get(), 20, 30, 20);
-                if (BOOGEYMAN_ANNOUNCE_OUTCOME && sendMessage) {
+                if (BOOGEYMAN_ANNOUNCE_OUTCOME.get() && sendMessage) {
                     PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_FAIL_ADVANCEDDEATH.get(player));
                 }
                 if (canChangeLives) {
@@ -88,7 +88,7 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
 
                 PlayerUtils.sendTitle(player, ModifiableText.BOOGEYMAN_FAIL_NOTIFY_TITLE.get(), 20, 30, 20);
                 PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("lastlife_boogeyman_fail")));
-                if (BOOGEYMAN_ANNOUNCE_OUTCOME && sendMessage) {
+                if (BOOGEYMAN_ANNOUNCE_OUTCOME.get() && sendMessage) {
                     PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_FAIL.get(player, setTo));
                 }
             }

@@ -884,7 +884,7 @@ public class WildLifeCommands extends CustomCommand {
 
     public int activateWildcard(CommandSourceStack source, String wildcardName) {
         if (checkBanned(source)) return -1;
-        int delay = WildcardManager.INSTANTLY_ACTIVATE_WILDCARDS ? 0 : 90;
+        int delay = WildcardManager.INSTANTLY_ACTIVATE_WILDCARDS.get() ? 0 : 90;
         if (wildcardName.equalsIgnoreCase("*")) {
             List<Wildcards> inactiveWildcards = Wildcards.getInactiveWildcards();
             for (Wildcards wildcard : inactiveWildcards) {
@@ -894,7 +894,7 @@ public class WildLifeCommands extends CustomCommand {
                 WildcardManager.activeWildcards.put(wildcard, wildcardInstance);
             }
 
-            if (!WildcardManager.INSTANTLY_ACTIVATE_WILDCARDS) WildcardManager.showDots();
+            if (!WildcardManager.INSTANTLY_ACTIVATE_WILDCARDS.get()) WildcardManager.showDots();
             TaskScheduler.scheduleTask(delay, () -> {
                 for (Wildcard wildcard : WildcardManager.activeWildcards.values()) {
                     if (wildcard.active) continue;
@@ -921,7 +921,7 @@ public class WildLifeCommands extends CustomCommand {
             sendCommandFailure(source, ModifiableText.WILDLIFE_WILDCARD_IMPLEMENT_ERROR.get());
             return -1;
         }
-        if (WildcardManager.INSTANTLY_ACTIVATE_WILDCARDS) {
+        if (WildcardManager.INSTANTLY_ACTIVATE_WILDCARDS.get()) {
             WildcardManager.activeWildcards.put(wildcard, actualWildcard);
         }
         else {

@@ -1,8 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.unassigned;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.config.ConfigFileEntry;
-import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -15,31 +14,25 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class UnassignedSeason extends Season {
     @Override
     public Seasons getSeason() {
         return Seasons.UNASSIGNED;
     }
     @Override
-    public ConfigManager createConfig() {
-        return new ConfigManager(null, null) {
-            @Override
-            public void instantiateProperties() {
-                WORLDBORDER_SIZE.defaultValue = 30_000_000;
+    public SeasonConfig createConfig() {
+        //TODO test
+        return new SeasonConfig(null, null) {
+            {
+                WORLDBORDER_SIZE.defaultValue(30_000_000);
                 //? if >= 1.21.11 {
-                WORLDBORDER_NETHER_SIZE.defaultValue = 30_000_000;
-                WORLDBORDER_END_SIZE.defaultValue = 30_000_000;
+                WORLDBORDER_NETHER_SIZE.defaultValue(30_000_000);
+                WORLDBORDER_END_SIZE.defaultValue(30_000_000);
                 //?}
-                KEEP_INVENTORY.defaultValue = false;
-                SHOW_ADVANCEMENTS.defaultValue = true;
-                LOCATOR_BAR.defaultValue = true;
+                KEEP_INVENTORY.defaultValue(false);
+                SHOW_ADVANCEMENTS.defaultValue(true);
+                LOCATOR_BAR.defaultValue(true);
             }
-
-            @Override
-            protected List<ConfigFileEntry<?>> getDefaultConfigEntries() { return new ArrayList<>(List.of()); }
         };
     }
 

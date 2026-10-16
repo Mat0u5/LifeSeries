@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.blacklist;
 
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import com.google.auto.service.AutoService;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -70,7 +71,7 @@ public class Blacklist implements RegistrableServer {
     private List<Holder<MobEffect>> loadedClampedEffects;
     //?}
 
-    public boolean CREATIVE_IGNORE_BLACKLIST = true;
+    public final ConfigRef<Boolean> CREATIVE_IGNORE_BLACKLIST = ConfigRef.of(() -> LifeSeries.seasonConfig.CREATIVE_IGNORE_BLACKLIST);
 
     @Override
     public void onRegister() {
@@ -91,26 +92,17 @@ public class Blacklist implements RegistrableServer {
 
     public List<String> loadItemBlacklist() {
         if (seasonConfig == null) return new ArrayList<>();
-        String raw = seasonConfig.BLACKLIST_ITEMS.get();
-        raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        if (raw.isEmpty()) return new ArrayList<>();
-        return new ArrayList<>(Arrays.asList(raw.split(",")));
+        return new ArrayList<>(seasonConfig.BLACKLIST_ITEMS.get());
     }
 
     public List<String> loadRecipeBlacklist() {
         if (seasonConfig == null) return new ArrayList<>();
-        String raw = seasonConfig.BLACKLIST_RECIPES.get();
-        raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        if (raw.isEmpty()) return new ArrayList<>();
-        return new ArrayList<>(Arrays.asList(raw.split(",")));
+        return new ArrayList<>(seasonConfig.BLACKLIST_RECIPES.get());
     }
 
     public List<String> loadBlockBlacklist() {
         if (seasonConfig == null) return new ArrayList<>();
-        String raw = seasonConfig.BLACKLIST_BLOCKS.get();
-        raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        if (raw.isEmpty()) return new ArrayList<>();
-        return new ArrayList<>(Arrays.asList(raw.split(",")));
+        return new ArrayList<>(seasonConfig.BLACKLIST_BLOCKS.get());
     }
 
     public Map<Integer, List<String>> loadClampedEnchants() {
@@ -121,41 +113,27 @@ public class Blacklist implements RegistrableServer {
         result.put(4, new ArrayList<>());
         if (seasonConfig == null) return result;
 
-        String raw_level_1 = seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.get().replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        String raw_level_2 = seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_2.get().replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        String raw_level_3 = seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_3.get().replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        String raw_level_4 = seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_4.get().replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-
-        if (!raw_level_1.isEmpty()) result.get(1).addAll(Arrays.asList(raw_level_1.split(",")));
-        if (!raw_level_2.isEmpty()) result.get(2).addAll(Arrays.asList(raw_level_2.split(",")));
-        if (!raw_level_3.isEmpty()) result.get(3).addAll(Arrays.asList(raw_level_3.split(",")));
-        if (!raw_level_4.isEmpty()) result.get(4).addAll(Arrays.asList(raw_level_4.split(",")));
+        result.get(1).addAll(seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.get());
+        result.get(2).addAll(seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_2.get());
+        result.get(3).addAll(seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_3.get());
+        result.get(4).addAll(seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_4.get());
 
         return result;
     }
 
     public List<String> loadBlacklistedEnchants() {
         if (seasonConfig == null) return new ArrayList<>();
-        String raw = seasonConfig.BLACKLIST_BANNED_ENCHANTS.get();
-        raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        if (raw.isEmpty()) return new ArrayList<>();
-        return new ArrayList<>(Arrays.asList(raw.split(",")));
+        return new ArrayList<>(seasonConfig.BLACKLIST_BANNED_ENCHANTS.get());
     }
 
     public List<String> loadBannedPotions() {
         if (seasonConfig == null) return new ArrayList<>();
-        String raw = seasonConfig.BLACKLIST_BANNED_POTION_EFFECTS.get();
-        raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        if (raw.isEmpty()) return new ArrayList<>();
-        return new ArrayList<>(Arrays.asList(raw.split(",")));
+        return new ArrayList<>(seasonConfig.BLACKLIST_BANNED_POTION_EFFECTS.get());
     }
 
     public List<String> loadClampedPotions() {
         if (seasonConfig == null) return new ArrayList<>();
-        String raw = seasonConfig.BLACKLIST_CLAMPED_POTION_EFFECTS.get();
-        raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        if (raw.isEmpty()) return new ArrayList<>();
-        return new ArrayList<>(Arrays.asList(raw.split(",")));
+        return new ArrayList<>(seasonConfig.BLACKLIST_CLAMPED_POTION_EFFECTS.get());
     }
 
     public List<Item> getItemBlacklist() {
@@ -366,7 +344,6 @@ public class Blacklist implements RegistrableServer {
     public void reloadBlacklist() {
         if (server == null) return;
 
-        CREATIVE_IGNORE_BLACKLIST = seasonConfig.CREATIVE_IGNORE_BLACKLIST.get();
 
         loadedListItem = null;
         loadedListBlock = null;
@@ -385,7 +362,7 @@ public class Blacklist implements RegistrableServer {
     }
 
     public InteractionResult onBlockUse(ServerPlayer player, Level level, InteractionHand hand, BlockHitResult hitResult) {
-        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST) return InteractionResult.PASS;
+        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST.get()) return InteractionResult.PASS;
         processItemStack(player, player.getItemInHand(hand));
         BlockPos blockPos = hitResult.getBlockPos();
         BlockState block = level.getBlockState(blockPos);
@@ -398,7 +375,7 @@ public class Blacklist implements RegistrableServer {
     }
 
     public InteractionResult onBlockAttack(ServerPlayer player, Level level, BlockPos pos) {
-        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST) return InteractionResult.PASS;
+        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST.get()) return InteractionResult.PASS;
         if (level.isClientSide()) return InteractionResult.PASS;
         BlockState block = level.getBlockState(pos);
         if (block.isAir()) return InteractionResult.PASS;
@@ -410,14 +387,14 @@ public class Blacklist implements RegistrableServer {
     }
 
     public void onCollision(ServerPlayer player, ItemStack stack, CallbackInfo ci) {
-        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST) return;
+        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST.get()) return;
         processItemStack(player, stack);
     }
 
     public void onInventoryUpdated(ServerPlayer player) {
         if (server == null) return;
         Inventory inventory = player.getInventory();
-        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST) return;
+        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST.get()) return;
         for (int i = 0; i < inventory.getContainerSize(); i++) {
             processItemStack(player, inventory.getItem(i));
         }
@@ -449,7 +426,7 @@ public class Blacklist implements RegistrableServer {
     }
 
     public void processItemStack(ServerPlayer player, ItemStack itemStack) {
-        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST) return;
+        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST.get()) return;
         if (itemStack.isEmpty()) return;
         if (itemStack.getItem() == Items.AIR) return;
         if (isBlacklistedItem(itemStack) && !ItemStackUtils.hasCustomComponentEntry(itemStack, "IgnoreBlacklist")) {

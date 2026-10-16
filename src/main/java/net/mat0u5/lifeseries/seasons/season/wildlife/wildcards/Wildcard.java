@@ -42,6 +42,6 @@ public abstract class Wildcard {
     }
 
     public static boolean isFinale() {
-        return currentSession.isFinale() || (WildcardManager.isActiveWildcard(Wildcards.CALLBACK) && Callback.NERFED_WILDCARDS);
+        return currentSession.isFinale() || (WildcardManager.isActiveWildcard(Wildcards.CALLBACK) && Callback.NERFED_WILDCARDS.get());
     }
 }

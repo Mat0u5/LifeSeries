@@ -31,16 +31,16 @@ public class GameRuleCommandMixin {
         MinecraftServer server = commandContext.getSource().getServer();
         boolean reload = false;
         if (key.equals(GameRules.KEEP_INVENTORY)) {
-            seasonConfig.setProperty(seasonConfig.KEEP_INVENTORY.key, String.valueOf(OtherUtils.getBooleanGameRule(server.overworld(), GameRules.KEEP_INVENTORY)));
+            seasonConfig.setSilently(seasonConfig.KEEP_INVENTORY, OtherUtils.getBooleanGameRule(server.overworld(), GameRules.KEEP_INVENTORY));
             reload = true;
         }
         if (key.equals(GameRules.SHOW_ADVANCEMENT_MESSAGES)) {
-            seasonConfig.setProperty(seasonConfig.SHOW_ADVANCEMENTS.key, String.valueOf(OtherUtils.getBooleanGameRule(server.overworld(), GameRules.SHOW_ADVANCEMENT_MESSAGES)));
+            seasonConfig.setSilently(seasonConfig.SHOW_ADVANCEMENTS, OtherUtils.getBooleanGameRule(server.overworld(), GameRules.SHOW_ADVANCEMENT_MESSAGES));
             reload = true;
         }
         //? if >= 1.21.6 {
         if (key.equals(GameRules.LOCATOR_BAR)) {
-            seasonConfig.setProperty(seasonConfig.LOCATOR_BAR.key, String.valueOf(OtherUtils.getBooleanGameRule(server.overworld(), GameRules.LOCATOR_BAR)));
+            seasonConfig.setSilently(seasonConfig.LOCATOR_BAR, OtherUtils.getBooleanGameRule(server.overworld(), GameRules.LOCATOR_BAR));
             reload = true;
         }
         //?}

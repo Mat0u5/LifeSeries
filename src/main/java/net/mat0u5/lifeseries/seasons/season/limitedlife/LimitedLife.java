@@ -1,6 +1,8 @@
 package net.mat0u5.lifeseries.seasons.season.limitedlife;
 
-import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
+import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
@@ -37,8 +39,8 @@ public class LimitedLife extends Season {
     public static Time NEW_DEATH_BOOGEYMAN = Time.hours(-2);
     public static Time NEW_KILL_NORMAL = Time.minutes(30);
     public static Time NEW_KILL_BOOGEYMAN = Time.hours(1);
-    public static boolean TICK_OFFLINE_PLAYERS = false;
-    public static boolean SHOW_TIME_BELOW_NAME = false;
+    public static final ConfigRef<Boolean> TICK_OFFLINE_PLAYERS = ConfigRef.of(() -> LimitedLifeConfig.get().TICK_OFFLINE_PLAYERS);
+    public static final ConfigRef<Boolean> SHOW_TIME_BELOW_NAME = ConfigRef.of(() -> LimitedLifeConfig.get().SHOW_TIME_BELOW_NAME);
     public static Map<UUID, Boolean> actionbarTime = new ConcurrentHashMap<>();
 
     @Override
@@ -47,7 +49,7 @@ public class LimitedLife extends Season {
     }
 
     @Override
-    public ConfigManager createConfig() {
+    public SeasonConfig createConfig() {
         return new LimitedLifeConfig();
     }
 
@@ -80,7 +82,7 @@ public class LimitedLife extends Season {
                     anyNonAssignedPlayers = true;
                     break;
                 }
-                if (anyNonAssignedPlayers && lllm.ROLL_LIVES && !lllm.assignedLivesFinished && LimitedLifeLivesManager.PAUSE_SESSION_TIME_UNTIL_ROLL) {
+                if (anyNonAssignedPlayers && lllm.ROLL_LIVES.get() && !lllm.assignedLivesFinished && LimitedLifeLivesManager.PAUSE_SESSION_TIME_UNTIL_ROLL.get()) {
                     shouldPassTime = false;
                 }
             }
@@ -169,7 +171,7 @@ public class LimitedLife extends Season {
             secondCounter = 20;
             livesManager.getAlivePlayers().forEach(player -> ((IPlayer) player).ls$removeLife());
 
-            if (TICK_OFFLINE_PLAYERS && !livesManager.LIVES_SYSTEM_DISABLED) {
+            if (TICK_OFFLINE_PLAYERS.get() && !livesManager.LIVES_SYSTEM_DISABLED.get()) {
                 //? if <= 1.20.2 {
                 /*Collection<Score> entries = ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME);
                 for (Score entry : entries) {
@@ -211,7 +213,7 @@ public class LimitedLife extends Season {
         onPlayerDiedNaturally(player, source);
         DatapackIntegration.EVENT_PLAYER_DEATH.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
         if (!DatapackIntegration.EVENT_PLAYER_DEATH.isCanceled() && livesManager.canChangeLivesNaturally(player)) {
-            if (!livesManager.LIVES_LOSE_KILLS_ONLY) {
+            if (!livesManager.LIVES_LOSE_KILLS_ONLY.get()) {
                 ((IPlayer) player).ls$addLives(NEW_DEATH_NORMAL.getSeconds());
             }
         }
@@ -233,7 +235,7 @@ public class LimitedLife extends Season {
             }
             if (!cancelGain) ((IPlayer) killer).ls$addLives(NEW_KILL_BOOGEYMAN.getSeconds());
         }
-        if (livesManager.LIVES_LOSE_KILLS_ONLY) {
+        if (livesManager.LIVES_LOSE_KILLS_ONLY.get()) {
             ((IPlayer) victim).ls$addLives(NEW_DEATH_NORMAL.getSeconds());
         }
     }
@@ -285,33 +287,27 @@ public class LimitedLife extends Season {
 
     @Override
     public void reload() {
-        SHOW_TIME_BELOW_NAME = LimitedLifeConfig.SHOW_TIME_BELOW_NAME.get();
         super.reload();
-        LimitedLifeLivesManager.DEFAULT_TIME = LimitedLifeConfig.TIME_DEFAULT.get();
-        LimitedLifeLivesManager.YELLOW_TIME = LimitedLifeConfig.TIME_YELLOW.get();
-        LimitedLifeLivesManager.RED_TIME = LimitedLifeConfig.TIME_RED.get();
-        NEW_DEATH_NORMAL = Time.seconds(LimitedLifeConfig.TIME_DEATH.get());
-        NEW_DEATH_BOOGEYMAN = Time.seconds(LimitedLifeConfig.TIME_DEATH_BOOGEYMAN.get());
-        NEW_KILL_NORMAL = Time.seconds(LimitedLifeConfig.TIME_KILL.get());
-        NEW_KILL_BOOGEYMAN = Time.seconds(LimitedLifeConfig.TIME_KILL_BOOGEYMAN.get());
-        TICK_OFFLINE_PLAYERS = LimitedLifeConfig.TICK_OFFLINE_PLAYERS.get();
-        LimitedLifeLivesManager.BROADCAST_COLOR_CHANGES = LimitedLifeConfig.BROADCAST_COLOR_CHANGES.get();
+        NEW_DEATH_NORMAL = Time.seconds(LimitedLifeConfig.get().TIME_DEATH.get());
+        NEW_DEATH_BOOGEYMAN = Time.seconds(LimitedLifeConfig.get().TIME_DEATH_BOOGEYMAN.get());
+        NEW_KILL_NORMAL = Time.seconds(LimitedLifeConfig.get().TIME_KILL.get());
+        NEW_KILL_BOOGEYMAN = Time.seconds(LimitedLifeConfig.get().TIME_KILL_BOOGEYMAN.get());
     }
 
     @Override
     public Integer getDefaultLives() {
-        if (livesManager.ROLL_LIVES) {
+        if (livesManager.ROLL_LIVES.get()) {
             return null;
         }
-        return LimitedLifeLivesManager.DEFAULT_TIME;
+        return LimitedLifeLivesManager.DEFAULT_TIME.get();
     }
 
     public static Integer getNextLivesColorLives(Integer currentLives) {
         if (currentLives == null) return null;
 
-        if (currentLives > LimitedLifeLivesManager.DEFAULT_TIME) return LimitedLifeLivesManager.DEFAULT_TIME;
-        else if (currentLives > LimitedLifeLivesManager.YELLOW_TIME) return LimitedLifeLivesManager.YELLOW_TIME;
-        else if (currentLives > LimitedLifeLivesManager.RED_TIME) return LimitedLifeLivesManager.RED_TIME;
+        if (currentLives > LimitedLifeLivesManager.DEFAULT_TIME.get()) return LimitedLifeLivesManager.DEFAULT_TIME.get();
+        else if (currentLives > LimitedLifeLivesManager.YELLOW_TIME.get()) return LimitedLifeLivesManager.YELLOW_TIME.get();
+        else if (currentLives > LimitedLifeLivesManager.RED_TIME.get()) return LimitedLifeLivesManager.RED_TIME.get();
         return 0;
     }
 }

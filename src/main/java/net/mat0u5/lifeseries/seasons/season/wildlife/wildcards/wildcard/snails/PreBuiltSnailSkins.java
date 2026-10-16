@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails;
 
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.matlib.utils.resource.ResourceHandler;
@@ -16,7 +18,7 @@ public class PreBuiltSnailSkins {
 	public static final List<String> prebuiltSkins = List.of("BdoubleO100", "Bigbst4tz2", "Etho", "GeminiTay", "GoodTimeWithScar", "Grian", "impulseSV", "InTheLittleWood", "LDShadowLady", "Mumbo", "PearlescentMoon", "Renthedog", "Skizzleman", "Smajor1995", "Smallishbeans", "SolidarityGaming", "TangoTek", "ZombieCleo");
 	public static final String SCOREBOARD_NAME = "PresetSnailSkins";
 	private static final Random rnd = new Random();
-	public static boolean SNAILS_RANDOM_PRESET_SKIN = true;
+	public static final ConfigRef<Boolean> SNAILS_RANDOM_PRESET_SKIN = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SNAILS_RANDOM_PRESET_SKIN);
 
 	public static void initialize() {
 		ScoreboardUtils.createObjective(SCOREBOARD_NAME);
@@ -52,7 +54,7 @@ public class PreBuiltSnailSkins {
 	}
 
 	public static void onPlayerJoin(ServerPlayer player) {
-		if (SNAILS_RANDOM_PRESET_SKIN && !hasPrebuiltSkinOrReset(player)) {
+		if (SNAILS_RANDOM_PRESET_SKIN.get() && !hasPrebuiltSkinOrReset(player)) {
 			assignNextAvailableSnailPreset(player);
 			TaskScheduler.scheduleTask(1, PreBuiltSnailSkins::sendPrebuiltSkins);
 		}

@@ -1,8 +1,9 @@
 package net.mat0u5.lifeseries;
 
 import com.google.auto.service.AutoService;
-import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.config.LifeSeriesConfigTypes;
 import net.mat0u5.lifeseries.config.MainConfig;
+import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.registries.Registries;
@@ -41,13 +42,13 @@ public class LifeSeries implements MultiplatformModInitializer {
 	public static boolean MOD_DISABLED = false;
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-	private static ConfigManager config;
+	private static MainConfig config;
 	private static LifeSeriesClientAccessor clientAccessor;
 	public static Season currentSeason;
 	public static Session currentSession;
 	public static LivesManager livesManager;
 	public static Blacklist blacklist;
-	public static ConfigManager seasonConfig;
+	public static SeasonConfig seasonConfig;
 
 	@Override
 	public void onRegister() {
@@ -66,9 +67,10 @@ public class LifeSeries implements MultiplatformModInitializer {
 	public void onInitialize() {
 		LOGGER.info("Initializing Life Series [{} {} ({})] with MatLib [{}]...", MatLib.platform().loader().name(), MatLib.platform().mcVersion(), MOD_VERSION, MatLib.MOD_VERSION);
 
+		LifeSeriesConfigTypes.init();
 		config = new MainConfig();
 		LifeSeriesNetworkHandlerServer.reload();
-		ConfigManager.moveOldMainFileIfExists();
+		MainConfig.moveOldMainFileIfExists();
 		SnailSkins.createConfig();
 		TriviaSkins.createConfig();
 
@@ -76,7 +78,7 @@ public class LifeSeries implements MultiplatformModInitializer {
 		String seasonStr = config.getOrCreateProperty("currentSeries", DEFAULT_SEASON.getId());
 
 		SeasonChanger.initializeSeason(Seasons.getSeasonFromStringName(seasonStr));
-		Seasons.getSeasons().forEach(seasons -> seasons.getSeasonInstance().createConfig());
+		Seasons.getSeasons().forEach(seasons -> seasons.getSeasonInstance().createConfig().reload());
 
 		if (!ISOLATED_ENVIRONMENT) {
 			UpdateChecker.checkForMajorUpdates();
@@ -147,7 +149,7 @@ public class LifeSeries implements MultiplatformModInitializer {
 		return !isLogicalSide() || modDisabled();
 	}
 
-	public static ConfigManager getMainConfig() {
+	public static MainConfig getMainConfig() {
 		return config;
 	}
 

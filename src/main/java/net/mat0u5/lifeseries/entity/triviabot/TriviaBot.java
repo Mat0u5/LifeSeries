@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.entity.triviabot;
 
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.entity.triviabot.goal.TriviaBotGlideGoal;
 import net.mat0u5.lifeseries.entity.triviabot.goal.TriviaBotLookAtPlayerGoal;
@@ -46,7 +48,7 @@ public class TriviaBot extends AmbientCreature {
     public static final int STATIONARY_TP_COOLDOWN = 400; // No movement for 20 seconds teleports the bot
     public static final float MOVEMENT_SPEED = 0.45f;
     public static final int MAX_DISTANCE = 100;
-    public static boolean CAN_START_RIDING = true;
+    public static final ConfigRef<Boolean> CAN_START_RIDING = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_TRIVIA_BOTS_CAN_ENTER_BOATS);
 
     public TriviaBotClientData clientData = new TriviaBotClientData(this);
     public TriviaBotServerData serverData = new TriviaBotServerData(this);
@@ -175,7 +177,7 @@ public class TriviaBot extends AmbientCreature {
     @Override
     protected boolean canRide(Entity entity) {
         if (this.noPhysics) return false;
-        return CAN_START_RIDING;
+        return CAN_START_RIDING.get();
     }
 
     @Override

@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -15,7 +17,7 @@ import net.minecraft.world.effect.MobEffects;
 import java.util.List;
 
 public class ShadowPlay extends Superpower {
-    public static int BLIND_RANGE = 10;
+    public static final ConfigRef<Integer> BLIND_RANGE = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_SHADOW_PLAY_BLIND_RANGE);
     public static int BLIND_TIME = 100;
     public static int COOLDOWN_MILLIS = 30000;
     public ShadowPlay(ServerPlayer player) {
@@ -38,7 +40,7 @@ public class ShadowPlay extends Superpower {
         ServerPlayer player = getPlayer();
         if (player == null) return;
         ServerLevel playerLevel = ((IPlayer) player).ls$getServerLevel();
-        List<ServerPlayer> affectedPlayers = playerLevel.getEntitiesOfClass(ServerPlayer.class, player.getBoundingBox().inflate(BLIND_RANGE), playerEntity -> playerEntity.distanceTo(player) <= BLIND_RANGE);
+        List<ServerPlayer> affectedPlayers = playerLevel.getEntitiesOfClass(ServerPlayer.class, player.getBoundingBox().inflate(BLIND_RANGE.get()), playerEntity -> playerEntity.distanceTo(player) <= BLIND_RANGE.get());
         MobEffectInstance blindness = new MobEffectInstance(MobEffects.BLINDNESS, BLIND_TIME, 0);
         MobEffectInstance invis = new MobEffectInstance(MobEffects.INVISIBILITY, 60, 0, false, false, false);
         affectedPlayers.remove(player);

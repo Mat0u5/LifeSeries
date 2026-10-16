@@ -1,8 +1,9 @@
 package net.mat0u5.lifeseries.seasons.season;
 
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.command.manager.CustomCommand;
-import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.config.ModifiableTextManager;
 import net.mat0u5.lifeseries.entity.snail.Snail;
@@ -98,24 +99,24 @@ public abstract class Season {
     public static final String RESOURCEPACK_COMBINED_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-combined-8bd2aff02339acae9820c5f1ae957d7251fb79d0/combined.zip";
     public static final String RESOURCEPACK_COMBINED_SHA = "405c160002c6b664c908689121edbac4a5616953";
 
-    public int GIVELIFE_MAX_LIVES = 99;
-    public boolean TAB_LIST_SHOW_DEAD_PLAYERS = true;
-    public boolean TAB_LIST_SHOW_LIVES = false;
-    public static boolean TAB_LIST_SHOW_EXACT_LIVES = false;
-    public static boolean SHOW_HEALTH_BELOW_NAME = false;
-    public boolean WATCHERS_IN_TAB = true;
-    public boolean MUTE_DEAD_PLAYERS = false;
-    public boolean MUTE_WATCHERS = false;
-    public boolean MUTED_CHAT = true;
-    public boolean MUTED_CHAT_ADMIN = true;
-    public boolean ALLOW_SELF_DEFENSE = true;
-    public static boolean GIVELIFE_CAN_REVIVE = false;
-    public boolean SHOW_LOGIN_COMMAND_INFO = true;
-    public boolean HIDE_UNJUSTIFIED_KILL_MESSAGES = false;
+    public final ConfigRef<Integer> GIVELIFE_MAX_LIVES = ConfigRef.of(() -> LifeSeries.seasonConfig.GIVELIFE_LIVES_MAX);
+    public final ConfigRef<Boolean> TAB_LIST_SHOW_DEAD_PLAYERS = ConfigRef.of(() -> LifeSeries.seasonConfig.TAB_LIST_SHOW_DEAD_PLAYERS);
+    public final ConfigRef<Boolean> TAB_LIST_SHOW_LIVES = ConfigRef.of(() -> LifeSeries.seasonConfig.TAB_LIST_SHOW_LIVES);
+    public static final ConfigRef<Boolean> TAB_LIST_SHOW_EXACT_LIVES = ConfigRef.of(() -> LifeSeries.seasonConfig.TAB_LIST_SHOW_EXACT_LIVES);
+    public static final ConfigRef<Boolean> SHOW_HEALTH_BELOW_NAME = ConfigRef.of(() -> LifeSeries.seasonConfig.SHOW_HEALTH_BELOW_NAME);
+    public final ConfigRef<Boolean> WATCHERS_IN_TAB = ConfigRef.of(() -> LifeSeries.seasonConfig.WATCHERS_IN_TAB);
+    public final ConfigRef<Boolean> MUTE_DEAD_PLAYERS = ConfigRef.of(() -> LifeSeries.seasonConfig.MUTE_DEAD_PLAYERS);
+    public final ConfigRef<Boolean> MUTE_WATCHERS = ConfigRef.of(() -> LifeSeries.seasonConfig.WATCHERS_MUTED);
+    public final ConfigRef<Boolean> MUTED_CHAT = ConfigRef.of(() -> LifeSeries.seasonConfig.MUTED_CHAT);
+    public final ConfigRef<Boolean> MUTED_CHAT_ADMIN = ConfigRef.of(() -> LifeSeries.seasonConfig.MUTED_CHAT_ADMIN);
+    public final ConfigRef<Boolean> ALLOW_SELF_DEFENSE = ConfigRef.of(() -> LifeSeries.seasonConfig.ALLOW_SELF_DEFENSE);
+    public static final ConfigRef<Boolean> GIVELIFE_CAN_REVIVE = ConfigRef.of(() -> LifeSeries.seasonConfig.GIVELIFE_CAN_REVIVE);
+    public final ConfigRef<Boolean> SHOW_LOGIN_COMMAND_INFO = ConfigRef.of(() -> LifeSeries.seasonConfig.SHOW_LOGIN_COMMAND_INFO);
+    public final ConfigRef<Boolean> HIDE_UNJUSTIFIED_KILL_MESSAGES = ConfigRef.of(() -> LifeSeries.seasonConfig.HIDE_UNJUSTIFIED_KILL_MESSAGES);
     public static boolean reloadPlayerTeams = false;
-    private static boolean BROADCAST_LIFE_GAIN = false;
-    public boolean LOCATOR_BAR = false;
-    private double ADDITIONAL_WITHER_SKULL_RATE = 0.05;
+    private static final ConfigRef<Boolean> BROADCAST_LIFE_GAIN = ConfigRef.of(() -> LifeSeries.seasonConfig.BROADCAST_LIFE_GAIN);
+    public final ConfigRef<Boolean> LOCATOR_BAR = ConfigRef.of(() -> LifeSeries.seasonConfig.LOCATOR_BAR);
+    private final ConfigRef<Double> ADDITIONAL_WITHER_SKULL_RATE = ConfigRef.of(() -> LifeSeries.seasonConfig.ADDITIONAL_WITHER_SKULL_RATE);
     public static Random rnd = new Random();
     public static Vec3 skyColor = null;
     public static boolean skyColorSetMode = false;
@@ -123,8 +124,8 @@ public abstract class Season {
     public static boolean fogColorSetMode = false;
     public static Vec3 cloudColor = null;
     public static boolean cloudColorSetMode = false;
-    public boolean TEAMS_SYSTEM_DISABLED = false;
-    public static boolean ONLY_LOSE_DURABILITY_IN_SESSION = false;
+    public final ConfigRef<Boolean> TEAMS_SYSTEM_DISABLED = ConfigRef.of(() -> LifeSeries.seasonConfig.TEAMS_SYSTEM_DISABLED);
+    public static final ConfigRef<Boolean> ONLY_LOSE_DURABILITY_IN_SESSION = ConfigRef.of(() -> LifeSeries.seasonConfig.ONLY_LOSE_DURABILITY_IN_SESSION);
 
     public BoogeymanManager boogeymanManager = createBoogeymanManager();
     public SecretSociety secretSociety = createSecretSociety();
@@ -157,7 +158,7 @@ public abstract class Season {
     }
 
     public abstract Seasons getSeason();
-    public abstract ConfigManager createConfig();
+    public abstract SeasonConfig createConfig();
 
     public Blacklist createBlacklist() {
         return new Blacklist();
@@ -175,7 +176,7 @@ public abstract class Season {
     }
 
     public Integer getDefaultLives() {
-        if (livesManager.ROLL_LIVES) {
+        if (livesManager.ROLL_LIVES.get()) {
             return null;
         }
         return seasonConfig.DEFAULT_LIVES.get();
@@ -216,12 +217,12 @@ public abstract class Season {
             OtherUtils.setBooleanGameRule(overworld, GameRules.NATURAL_HEALTH_REGENERATION, getSeason() != Seasons.SECRET_LIFE);
 
             //? if >= 1.21.6 {
-            boolean locatorBarEnabled = LOCATOR_BAR;
+            boolean locatorBarEnabled = LOCATOR_BAR.get();
             if (!locatorBarEnabled && this instanceof DoubleLife) {
-                locatorBarEnabled = DoubleLife.SOULMATE_LOCATOR_BAR;
+                locatorBarEnabled = DoubleLife.SOULMATE_LOCATOR_BAR.get();
             }
-            if (!locatorBarEnabled && boogeymanManager.BOOGEYMAN_ENABLED) {
-                locatorBarEnabled = boogeymanManager.BOOGEYMAN_LOCATOR_BAR;
+            if (!locatorBarEnabled && boogeymanManager.BOOGEYMAN_ENABLED.get()) {
+                locatorBarEnabled = boogeymanManager.BOOGEYMAN_LOCATOR_BAR.get();
             }
             OtherUtils.setBooleanGameRule(overworld, GameRules.LOCATOR_BAR, locatorBarEnabled);
             //?}
@@ -236,7 +237,7 @@ public abstract class Season {
         //?}
 
         Objective currentListObjective = ScoreboardUtils.getObjectiveInSlot(listSlot);
-        if (TAB_LIST_SHOW_LIVES) {
+        if (TAB_LIST_SHOW_LIVES.get()) {
             ScoreboardUtils.setObjectiveInSlot(listSlot, LivesManager.SCOREBOARD_NAME);
         }
         else if (currentListObjective != null) {
@@ -246,10 +247,10 @@ public abstract class Season {
         }
 
         Objective currentBelowNameObjective = ScoreboardUtils.getObjectiveInSlot(belowNameSlot);
-        if (getSeason() == Seasons.LIMITED_LIFE && LimitedLife.SHOW_TIME_BELOW_NAME) {
+        if (getSeason() == Seasons.LIMITED_LIFE && LimitedLife.SHOW_TIME_BELOW_NAME.get()) {
             ScoreboardUtils.setObjectiveInSlot(belowNameSlot, LivesManager.SCOREBOARD_NAME);
         }
-        else if (SHOW_HEALTH_BELOW_NAME) {
+        else if (SHOW_HEALTH_BELOW_NAME.get()) {
             ScoreboardUtils.setObjectiveInSlot(belowNameSlot, "HP");
         }
         else if (currentBelowNameObjective != null) {
@@ -267,29 +268,6 @@ public abstract class Season {
     }
 
     public void reload() {
-        MUTE_DEAD_PLAYERS = seasonConfig.MUTE_DEAD_PLAYERS.get();
-        GIVELIFE_MAX_LIVES = seasonConfig.GIVELIFE_LIVES_MAX.get();
-        TAB_LIST_SHOW_LIVES = seasonConfig.TAB_LIST_SHOW_LIVES.get();
-        TAB_LIST_SHOW_DEAD_PLAYERS = seasonConfig.TAB_LIST_SHOW_DEAD_PLAYERS.get();
-        TAB_LIST_SHOW_EXACT_LIVES = seasonConfig.TAB_LIST_SHOW_EXACT_LIVES.get();
-        SHOW_HEALTH_BELOW_NAME = seasonConfig.SHOW_HEALTH_BELOW_NAME.get();
-        WATCHERS_IN_TAB = seasonConfig.WATCHERS_IN_TAB.get();
-        MUTE_WATCHERS = seasonConfig.WATCHERS_MUTED.get();
-        MUTED_CHAT = seasonConfig.MUTED_CHAT.get();
-        MUTED_CHAT_ADMIN = seasonConfig.MUTED_CHAT_ADMIN.get();
-        ALLOW_SELF_DEFENSE = seasonConfig.ALLOW_SELF_DEFENSE.get();
-        GIVELIFE_CAN_REVIVE = seasonConfig.GIVELIFE_CAN_REVIVE.get();
-        SHOW_LOGIN_COMMAND_INFO = seasonConfig.SHOW_LOGIN_COMMAND_INFO.get();
-        HIDE_UNJUSTIFIED_KILL_MESSAGES = seasonConfig.HIDE_UNJUSTIFIED_KILL_MESSAGES.get();
-        Session.TICK_FREEZE_NOT_IN_SESSION = seasonConfig.TICK_FREEZE_NOT_IN_SESSION.get();
-        Session.WORLDBORDER_OUTSIDE_TELEPORT = seasonConfig.WORLDBORDER_OUTSIDE_TELEPORT.get();
-        Session.SESSION_START_COUNTDOWN = seasonConfig.SESSION_START_COUNTDOWN.get();
-        BROADCAST_LIFE_GAIN = seasonConfig.BROADCAST_LIFE_GAIN.get();
-        ADDITIONAL_WITHER_SKULL_RATE = seasonConfig.ADDITIONAL_WITHER_SKULL_RATE.get();
-        LOCATOR_BAR = seasonConfig.LOCATOR_BAR.get();
-        TEAMS_SYSTEM_DISABLED = seasonConfig.TEAMS_SYSTEM_DISABLED.get();
-        ONLY_LOSE_DURABILITY_IN_SESSION = seasonConfig.ONLY_LOSE_DURABILITY_IN_SESSION.get();
-
         LifeSeriesNetworkHandlerServer.reload();
         boogeymanManager.onReload();
         secretSociety.onReload();
@@ -396,7 +374,7 @@ public abstract class Season {
     }
 
     private void reloadPlayerTeam(ServerPlayer player, boolean waited) {
-        if (TEAMS_SYSTEM_DISABLED) return;
+        if (TEAMS_SYSTEM_DISABLED.get()) return;
         if (player == null) return;
 
         if (!player.isAlive() && !waited) {
@@ -462,7 +440,7 @@ public abstract class Season {
     }
 
     public boolean isAllowedToAttack(ServerPlayer attacker, ServerPlayer victim) {
-        return isAllowedToAttack(attacker, victim, ALLOW_SELF_DEFENSE);
+        return isAllowedToAttack(attacker, victim, ALLOW_SELF_DEFENSE.get());
     }
 
     public boolean isAllowedToAttack(ServerPlayer attacker, ServerPlayer victim, boolean allowSelfDefense) {
@@ -554,7 +532,7 @@ public abstract class Season {
         }
         DatapackIntegration.EVENT_PLAYER_DEATH.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
         if (!DatapackIntegration.EVENT_PLAYER_DEATH.isCanceled() && livesManager.canChangeLivesNaturally(player) && ((IPlayer) player).ls$hasAssignedLives()) {
-            if (killedByPlayer || !livesManager.LIVES_LOSE_KILLS_ONLY) {
+            if (killedByPlayer || !livesManager.LIVES_LOSE_KILLS_ONLY.get()) {
                 ((IPlayer) player).ls$removeLife();
             }
         }
@@ -618,7 +596,7 @@ public abstract class Season {
         killer.awardKillScore(victim, killer.damageSources().playerAttack(killer));
         //?}
 
-        if (livesManager.LIVES_LOSE_KILLS_ONLY) {
+        if (livesManager.LIVES_LOSE_KILLS_ONLY.get()) {
             ((IPlayer) victim).ls$removeLife();
         }
     }
@@ -650,7 +628,7 @@ public abstract class Season {
 
 
     public void broadcastLifeGain(ServerPlayer player, ServerPlayer victim) {
-        if (BROADCAST_LIFE_GAIN) {
+        if (BROADCAST_LIFE_GAIN.get()) {
             PlayerUtils.broadcastMessage(ModifiableText.SEASON_KILL_GAINLIFE.get(player, victim));
         }
     }
@@ -663,7 +641,7 @@ public abstract class Season {
     }
 
     public EventResult onPrePlayerDamage(ServerPlayer player, DamageSource source, float amount) {
-        if (source.is(DamageTypes.OUTSIDE_BORDER) && Session.WORLDBORDER_OUTSIDE_TELEPORT) {
+        if (source.is(DamageTypes.OUTSIDE_BORDER) && Session.WORLDBORDER_OUTSIDE_TELEPORT.get()) {
             return EventResult.DENY;
         }
         return EventResult.PASS;
@@ -682,8 +660,8 @@ public abstract class Season {
         );
 
         if (!isAllowedToAttack(killer, victim)) {
-            if (!HIDE_UNJUSTIFIED_KILL_MESSAGES) {
-                if (livesManager.SHOW_LIFE_DIFF) {
+            if (!HIDE_UNJUSTIFIED_KILL_MESSAGES.get()) {
+                if (livesManager.SHOW_LIFE_DIFF.get()) {
                     var msg = ModifiableText.SEASON_KILL_UNJUSTIFIED.get(victim, killer);
                     TaskScheduler.schedulePriorityTask(1, () -> PlayerUtils.broadcastMessageToAdmins(msg));
                 }
@@ -711,7 +689,7 @@ public abstract class Season {
     public EventResult modifyEntityDrops(LivingEntity entity, DamageSource damageSource) {
         if (!entity.level().isClientSide() && (damageSource.getEntity() instanceof ServerPlayer)) {
             spawnEggChance(entity);
-            if (entity instanceof WitherSkeleton && rnd.nextDouble() <= ADDITIONAL_WITHER_SKULL_RATE) {
+            if (entity instanceof WitherSkeleton && rnd.nextDouble() <= ADDITIONAL_WITHER_SKULL_RATE.get()) {
                 ItemStack skullItem = Items.WITHER_SKELETON_SKULL.getDefaultInstance();
                 //? if <=1.21 {
                 /*entity.spawnAtLocation(skullItem);
@@ -814,7 +792,7 @@ public abstract class Season {
         onPlayerFinishJoining(player, true);
     }
     public void onPlayerFinishJoining(ServerPlayer player, boolean showMessages) {
-        if (getSeason() != Seasons.UNASSIGNED && SHOW_LOGIN_COMMAND_INFO && !LifeSeries.modDisabled() && showMessages) {
+        if (getSeason() != Seasons.UNASSIGNED && SHOW_LOGIN_COMMAND_INFO.get() && !LifeSeries.modDisabled() && showMessages) {
             if (PermissionManager.isAdmin(player)) {
                 ((IPlayer) player).ls$message(ModifiableText.SEASON_COMMANDS_ADMIN.get(getSeason().getName(), getAdminCommands()));
             }
@@ -858,9 +836,9 @@ public abstract class Season {
         Component prefixedName = Component.literal("§7[MUTED] ").append(sender.getDisplayName());
         var bind = ChatType.bind(net.minecraft.network.chat.ChatType.CHAT, sender.level().registryAccess(), prefixedName);
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-            boolean adminPass = PermissionManager.isAdmin(player) && MUTED_CHAT_ADMIN;
-            boolean deadPass = MUTE_DEAD_PLAYERS && ((IPlayer) player).ls$isDead() && !((IPlayer) player).ls$isWatcher();
-            boolean watcherPass = MUTE_WATCHERS && ((IPlayer) player).ls$isWatcher();
+            boolean adminPass = PermissionManager.isAdmin(player) && MUTED_CHAT_ADMIN.get();
+            boolean deadPass = MUTE_DEAD_PLAYERS.get() && ((IPlayer) player).ls$isDead() && !((IPlayer) player).ls$isWatcher();
+            boolean watcherPass = MUTE_WATCHERS.get() && ((IPlayer) player).ls$isWatcher();
             if (adminPass || deadPass || watcherPass) {
                 player.sendChatMessage(outgoingChatMessage, true, bind);
             }

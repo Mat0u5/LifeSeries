@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.nicelife;
 
+import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
 import net.mat0u5.lifeseries.config.ModifiableText;
@@ -44,19 +46,19 @@ public class NiceLifeTriviaManager {
     private static List<String> usedQuestions = new ArrayList<>();
     public static boolean triviaInProgress = false;
     public static boolean firstTriviaInSession = true;
-    public static NightLength nightLength = NightLength.FIRST_LONG;
+    public static final ConfigRef<NightLength> nightLength = ConfigRef.of(() -> NiceLifeConfig.get().TRIVIA_NIGHT_LENGTH);
     public static TriviaQuestion currentQuestion = TriviaQuestion.getDefault();
     public static Random rnd = new Random();
-    public static int QUESTION_TIME = 68;
-    public static boolean CAN_BREAK_BEDS = true;
-    public static boolean BREAKING_DROPS_RESOURCES = true;
+    public static final ConfigRef<Integer> QUESTION_TIME = ConfigRef.of(() -> NiceLifeConfig.get().TRIVIA_QUESTION_TIME);
+    public static final ConfigRef<Boolean> CAN_BREAK_BEDS = ConfigRef.of(() -> NiceLifeConfig.get().BOT_CAN_BREAK_BEDS);
+    public static final ConfigRef<Boolean> BREAKING_DROPS_RESOURCES = ConfigRef.of(() -> NiceLifeConfig.get().BOT_BREAKING_BLOCKS_DROP_RESOURCES);
     public static List<TriviaSpawn> triviaSpawns = new ArrayList<>();
     public static List<UUID> triviaPlayersUUID = new ArrayList<>();
     public static boolean preparingForSpawn = false;
     public static List<UUID> correctAnswers = new ArrayList<>();
     public static List<UUID> incorrectAnswers = new ArrayList<>();
     public static TriviaQuestion preAssignedTrivia = null;
-    public static boolean SHOW_NONSLEEPING = false;
+    public static final ConfigRef<Boolean> SHOW_NONSLEEPING = ConfigRef.of(() -> NiceLifeConfig.get().TRIVIA_SHOW_NONSLEEPING);
 
     public static void initialize() {
         triviaQuestions = new TriviaQuestionManager("./config/lifeseries/nicelife","trivia.json");
@@ -83,7 +85,7 @@ public class NiceLifeTriviaManager {
         currentQuestion = getQuestion();
         NiceLifeVotingManager.chooseVote();
 
-        boolean longIntro = (nightLength == NightLength.FIRST_LONG && firstTriviaInSession) || nightLength == NightLength.ALL_LONG;
+        boolean longIntro = (nightLength.get() == NightLength.FIRST_LONG && firstTriviaInSession) || nightLength.get() == NightLength.ALL_LONG;
 
         for (ServerPlayer player : triviaPlayers) {
             SimplePackets.HIDE_SLEEP_DARKNESS.sendToClient(true, player);
@@ -238,11 +240,11 @@ public class NiceLifeTriviaManager {
             for (int dirZ = -1; dirZ <= 1; dirZ++) {
                 BlockPos breakBlockPos = pos.offset(dirX, 0, dirZ);
                 //? if <= 26.2 {
-                /*if ((breakBlockPos.getY() <= bedYPos || !CAN_BREAK_BEDS) && level.getBlockState(breakBlockPos).getBlock() instanceof BedBlock) {
+                /*if ((breakBlockPos.getY() <= bedYPos || !CAN_BREAK_BEDS.get()) && level.getBlockState(breakBlockPos).getBlock() instanceof BedBlock) {
                     continue;
                 }
                 *///?} else {
-                if ((breakBlockPos.getY() <= bedYPos || !CAN_BREAK_BEDS) && level.getBlockState(breakBlockPos).getBlock() instanceof AbstractBedBlock) {
+                if ((breakBlockPos.getY() <= bedYPos || !CAN_BREAK_BEDS.get()) && level.getBlockState(breakBlockPos).getBlock() instanceof AbstractBedBlock) {
                     continue;
                 }
                 //?}
@@ -250,7 +252,7 @@ public class NiceLifeTriviaManager {
                     //Unbreakable blocks
                     continue;
                 }
-                level.destroyBlock(breakBlockPos, BREAKING_DROPS_RESOURCES);
+                level.destroyBlock(breakBlockPos, BREAKING_DROPS_RESOURCES.get());
             }
         }
     }

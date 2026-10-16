@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard;
 
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
@@ -25,11 +27,11 @@ public class Callback extends Wildcard {
     private static int activatedAt = -1;
 
     private static Time infiniteSessionFakeTime = Time.hours(2);
-    public static double TURN_OFF = 0.75; // When all wildcards stop
+    public static final ConfigRef<Double> TURN_OFF = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_CALLBACK_TURN_OFF); // When all wildcards stop
     public static final int INITIAL_ACTIVATION_INTERVAL_DEFAULT = 300*20;
     public static int INITIAL_ACTIVATION_INTERVAL = 300*20;
     public static int INITIAL_DEACTIVATION_INTERVAL = 30*20;
-    public static boolean NERFED_WILDCARDS = true;
+    public static final ConfigRef<Boolean> NERFED_WILDCARDS = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_CALLBACK_NERFED_WILDCARDS);
 
     private int nextActivationTick = -1;
     private int nextDeactivationTick = -1;
@@ -38,10 +40,9 @@ public class Callback extends Wildcard {
 
     private static List<Wildcards> blacklistedWildcards = List.of(Wildcards.HUNGER);
 
-    public static void setBlacklist(String blacklist) {
+    public static void setBlacklist(List<String> blacklist) {
         blacklistedWildcards = new ArrayList<>();
-        String[] wildcards = blacklist.replace("[","").replace("]","").split(",");
-        for (String wildcardName : wildcards) {
+        for (String wildcardName : blacklist) {
             Wildcards wildcard = Wildcards.getFromString(wildcardName.trim());
             if (wildcard == null || wildcard == Wildcards.NULL) continue;
             blacklistedWildcards.add(wildcard);
@@ -65,7 +66,7 @@ public class Callback extends Wildcard {
             nextActivationTick = passedTimeTicks + INITIAL_ACTIVATION_INTERVAL; // First activation after 5 minutes
         }
 
-        if (sessionProgress >= TURN_OFF && active) {
+        if (sessionProgress >= TURN_OFF.get() && active) {
             deactivate();
             allWildcardsPhaseReached = true;
             return;
@@ -73,7 +74,7 @@ public class Callback extends Wildcard {
 
         if (allWildcardsPhaseReached) return;
 
-        double approachingEndPhase = TURN_OFF - (6000.0/sessionLengthTicks); // 5 minutes before the end
+        double approachingEndPhase = TURN_OFF.get() - (6000.0/sessionLengthTicks); // 5 minutes before the end
         if (sessionProgress >= approachingEndPhase) {
             activateAllWildcards();
             allWildcardsPhaseReached = true;
@@ -81,7 +82,7 @@ public class Callback extends Wildcard {
         }
 
         if (preAllWildcardsPhaseReached) return;
-        double furtherApproachingEndPhase = TURN_OFF - (6600.0/sessionLengthTicks); // 5.5 minutes before the end - no more actions
+        double furtherApproachingEndPhase = TURN_OFF.get() - (6600.0/sessionLengthTicks); // 5.5 minutes before the end - no more actions
         if (sessionProgress >= furtherApproachingEndPhase) {
             if (WildcardManager.isActiveWildcard(Wildcards.TIME_DILATION)) {
                 // Disable Time Dilation if it's active...
@@ -107,7 +108,7 @@ public class Callback extends Wildcard {
             int activationIntervalTicks = (int)(INITIAL_ACTIVATION_INTERVAL * Math.max(0.5, progressFactor));
             nextActivationTick = passedTimeTicks + activationIntervalTicks;
 
-            double deactivationProgressFactor = 1 + (sessionProgress / TURN_OFF) * 4;
+            double deactivationProgressFactor = 1 + (sessionProgress / TURN_OFF.get()) * 4;
             int deactivationIntervalTicks = (int)(INITIAL_DEACTIVATION_INTERVAL * OtherUtils.clamp(deactivationProgressFactor, 1, 5));
             nextDeactivationTick = passedTimeTicks + deactivationIntervalTicks;
         }
@@ -120,7 +121,7 @@ public class Callback extends Wildcard {
     }
 
     private int getTargetActiveWildcardCount(double sessionProgress, int sessionLengthTicks) {
-        double approachingEndPhase = TURN_OFF - (6000.0/sessionLengthTicks);
+        double approachingEndPhase = TURN_OFF.get() - (6000.0/sessionLengthTicks);
         double newProgress = sessionProgress/approachingEndPhase;
         if (newProgress < 0.25) return 1;
         if (newProgress < 0.5) return 2;

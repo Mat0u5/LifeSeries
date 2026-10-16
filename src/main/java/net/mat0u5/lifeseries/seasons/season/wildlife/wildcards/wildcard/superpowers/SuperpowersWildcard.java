@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers;
 
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
 import net.mat0u5.lifeseries.config.ModifiableText;
@@ -21,16 +23,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import static net.mat0u5.lifeseries.LifeSeries.livesManager;
 
 public class SuperpowersWildcard extends Wildcard {
-    public static boolean WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME = false;
+    public static final ConfigRef<Boolean> WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME);
     public static List<Superpowers> blacklistedPowers = List.of();
     private static final Map<UUID, Superpower> playerSuperpowers = new ConcurrentHashMap<>();
     public static final Map<UUID, Superpowers> preAssignedSuperpowers = new HashMap<>();
-    public static int ZOMBIES_HEALTH = 8;
+    public static final ConfigRef<Integer> ZOMBIES_HEALTH = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_ZOMBIES_HEALTH);
 
-    public static void setBlacklist(String blacklist) {
+    public static void setBlacklist(List<String> blacklist) {
         blacklistedPowers = new ArrayList<>();
-        String[] powers = blacklist.replace("[","").replace("]","").split(",");
-        for (String powerName : powers) {
+        for (String powerName : blacklist) {
             Superpowers power = Superpowers.fromString(powerName.trim());
             if (power == null || power == Superpowers.NULL) continue;
             blacklistedPowers.add(power);
@@ -104,7 +105,7 @@ public class SuperpowersWildcard extends Wildcard {
                 DatapackIntegration.activateSuperpower(player, power);
             }
         }
-        if (!WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME) {
+        if (!WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME.get()) {
             PlayerUtils.playSoundToPlayers(allPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("wildlife_superpowers")), 0.2f, 1);
         }
     }
@@ -168,7 +169,7 @@ public class SuperpowersWildcard extends Wildcard {
             playerSuperpowers.put(player.getUUID(), instance);
             DatapackIntegration.activateSuperpower(player, superpower);
         }
-        if (!WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME) {
+        if (!WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME.get()) {
             PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("wildlife_superpowers")), 0.2f, 1);
         }
         Necromancy.checkRessurectedPlayersReset();

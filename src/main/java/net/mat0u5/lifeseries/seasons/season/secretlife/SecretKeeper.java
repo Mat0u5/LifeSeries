@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.secretlife;
 
+import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
@@ -47,7 +49,7 @@ public class SecretKeeper {
 	public static boolean secretKeeperBeingUsed = false;
 	public static int secretKeeperBeingUsedFor = 0;
 	public static List<UUID> pendingConfirmationTasks = new ArrayList<>();
-	public static boolean UNBREAKABLE_BUTTONS = true;
+	public static final ConfigRef<Boolean> UNBREAKABLE_BUTTONS = ConfigRef.of(() -> SecretLifeConfig.get().UNBREAKABLE_BUTTONS);
 	private static final Map<BlockPos, BlockState> lastKnownButtonStates = new HashMap<>();
 
 	public static void rewardHealth(ServerPlayer player, int addHealth, TaskTypes taskType) {
@@ -59,9 +61,9 @@ public class SecretKeeper {
 		secretKeeperBeingUsed = true;
 		SecretLife season = (SecretLife) currentSeason;
 		double currentHealth = season.getPlayerHealth(player);
-		if (currentHealth > SecretLife.MAX_HEALTH) currentHealth = SecretLife.MAX_HEALTH;
+		if (currentHealth > SecretLife.MAX_HEALTH.get()) currentHealth = SecretLife.MAX_HEALTH.get();
 		int rounded = (int) Math.floor(currentHealth);
-		int remainderToMax = (int) SecretLife.MAX_HEALTH - rounded;
+		int remainderToMax = (int) (double) SecretLife.MAX_HEALTH.get() - rounded;
 
 		if (addHealth <= remainderToMax && remainderToMax != 0) {
 			season.addPlayerHealth(player, addHealth);
@@ -74,7 +76,7 @@ public class SecretKeeper {
 
 	public static void rewardHealthAndItems(ServerPlayer player, int addHealth, TaskTypes taskType, int remainderToMax) {
 		SecretLife season = (SecretLife) currentSeason;
-		if (remainderToMax != 0) season.setPlayerHealth(player, SecretLife.MAX_HEALTH);
+		if (remainderToMax != 0) season.setPlayerHealth(player, SecretLife.MAX_HEALTH.get());
 		int itemsNum = (addHealth - remainderToMax)/2;
 		if (itemsNum == 0) {
 			secretKeeperBeingUsed = false;
@@ -168,7 +170,7 @@ public class SecretKeeper {
 		if (!hasTaskBookCheck(player, !fromCommand)) return;
 		UUID uuid = SubInManager.getOrSub(player);
 		if (!fromCommand) {
-			if (TASKS_NEED_CONFIRMATION) {
+			if (TASKS_NEED_CONFIRMATION.get()) {
 				if (!pendingConfirmationTasks.contains(uuid)) {
 					pendingConfirmationTasks.add(uuid);
 					PlayerUtils.broadcastMessageToAdmins(ModifiableText.SECRETLIFE_TASK_PENDING.get(player));
@@ -180,10 +182,10 @@ public class SecretKeeper {
 			}
 		}
 		pendingConfirmationTasks.remove(uuid);
-		if (BROADCAST_SECRET_KEEPER) {
+		if (BROADCAST_SECRET_KEEPER.get()) {
 			PlayerUtils.broadcastMessage(ModifiableText.SECRETLIFE_TASK_SUCCEED.get(player));
 		}
-		if (PUBLIC_TASKS_ON_SUBMIT) {
+		if (PUBLIC_TASKS_ON_SUBMIT.get()) {
 			PlayerUtils.broadcastMessage(getShowTaskMessage(player));
 		}
 		succeedTask(player, type);
@@ -212,16 +214,16 @@ public class SecretKeeper {
 			ServerPlayer playerNew = ref.get();
 			if (playerNew != null) {
 				if (type == TaskTypes.EASY) {
-					showHeartTitle(playerNew, EASY_SUCCESS);
-					rewardHealth(playerNew, EASY_SUCCESS, type);
+					showHeartTitle(playerNew, EASY_SUCCESS.get());
+					rewardHealth(playerNew, EASY_SUCCESS.get(), type);
 				}
 				if (type == TaskTypes.HARD) {
-					showHeartTitle(playerNew, HARD_SUCCESS);
-					rewardHealth(playerNew, HARD_SUCCESS, type);
+					showHeartTitle(playerNew, HARD_SUCCESS.get());
+					rewardHealth(playerNew, HARD_SUCCESS.get(), type);
 				}
 				if (type == TaskTypes.RED) {
-					showHeartTitle(playerNew, RED_SUCCESS);
-					rewardHealth(playerNew, RED_SUCCESS, type);
+					showHeartTitle(playerNew, RED_SUCCESS.get());
+					rewardHealth(playerNew, RED_SUCCESS.get(), type);
 				}
 			}
 		});
@@ -256,10 +258,10 @@ public class SecretKeeper {
 
 	public static void rerollTask(ServerPlayer player) {
 		removePlayersTaskBook(player);
-		if (BROADCAST_SECRET_KEEPER) {
+		if (BROADCAST_SECRET_KEEPER.get()) {
 			PlayerUtils.broadcastMessage(ModifiableText.SECRETLIFE_TASK_REROLL.get(player));
 		}
-		if (PUBLIC_TASKS_ON_SUBMIT) {
+		if (PUBLIC_TASKS_ON_SUBMIT.get()) {
 			PlayerUtils.broadcastMessage(getShowTaskMessage(player));
 		}
 		SessionTranscript.rerollTask(player);
@@ -311,10 +313,10 @@ public class SecretKeeper {
 		TaskTypes type = getPlayersTaskType(player);
 		if (!hasFinalTaskCheck(player, !fromCommand, type)) return;
 		if (!hasTaskBookCheck(player, !fromCommand)) return;
-		if (BROADCAST_SECRET_KEEPER) {
+		if (BROADCAST_SECRET_KEEPER.get()) {
 			PlayerUtils.broadcastMessage(ModifiableText.SECRETLIFE_TASK_FAIL.get(player));
 		}
-		if (PUBLIC_TASKS_ON_SUBMIT) {
+		if (PUBLIC_TASKS_ON_SUBMIT.get()) {
 			PlayerUtils.broadcastMessage(getShowTaskMessage(player));
 		}
 		failTask(player, type);
@@ -340,16 +342,16 @@ public class SecretKeeper {
 			ServerPlayer playerNew = ref.get();
 			if (playerNew != null) {
 				if (type == TaskTypes.EASY) {
-					showHeartTitle(playerNew, EASY_FAIL);
-					season.removePlayerHealth(playerNew, -EASY_FAIL);
+					showHeartTitle(playerNew, EASY_FAIL.get());
+					season.removePlayerHealth(playerNew, -EASY_FAIL.get());
 				}
 				if (type == TaskTypes.HARD) {
-					showHeartTitle(playerNew, HARD_FAIL);
-					season.removePlayerHealth(playerNew, -HARD_FAIL);
+					showHeartTitle(playerNew, HARD_FAIL.get());
+					season.removePlayerHealth(playerNew, -HARD_FAIL.get());
 				}
 				if (type == TaskTypes.RED) {
-					showHeartTitle(playerNew, RED_FAIL);
-					season.removePlayerHealth(playerNew, -RED_FAIL);
+					showHeartTitle(playerNew, RED_FAIL.get());
+					season.removePlayerHealth(playerNew, -RED_FAIL.get());
 				}
 				if (!((IPlayer) playerNew).ls$isOnLastLife(false)) {
 					secretKeeperBeingUsed = false;
@@ -388,7 +390,7 @@ public class SecretKeeper {
 
 	public static void chooseNewTaskForPlayerIfNecessary(ServerPlayer player) {
 		if (currentSession.statusFinished() || currentSession.isFinale()) return;
-		if (((IPlayer) player).ls$isOnLastLife(false) || CONSTANT_TASKS) {
+		if (((IPlayer) player).ls$isOnLastLife(false) || CONSTANT_TASKS.get()) {
 			PlayerReference ref = PlayerReference.of(player);
 			TaskScheduler.scheduleTask(Time.seconds(6), () -> {
 				ServerPlayer playerNew = ref.get();
@@ -403,15 +405,15 @@ public class SecretKeeper {
 	public static void showHeartTitle(ServerPlayer player, int amount) {
 		if (amount == 0) return;
 		SecretLife season = (SecretLife) currentSeason;
-		if (amount > 0 && season.getPlayerHealth(player) >= SecretLife.MAX_HEALTH) return;
+		if (amount > 0 && season.getPlayerHealth(player) >= SecretLife.MAX_HEALTH.get()) return;
 		int healthBefore = Mth.ceil(season.getPlayerHealth(player));
 		int finalAmount = amount;
 		if (healthBefore + amount <= 0) {
 			finalAmount = -healthBefore+1;
 			if (healthBefore == 1) finalAmount = 0;
 		}
-		if (healthBefore + amount > SecretLife.MAX_HEALTH) {
-			if (amount > 0) finalAmount = (int) (SecretLife.MAX_HEALTH-healthBefore);
+		if (healthBefore + amount > SecretLife.MAX_HEALTH.get()) {
+			if (amount > 0) finalAmount = (int) (SecretLife.MAX_HEALTH.get()-healthBefore);
 			else finalAmount = amount;
 		}
 		double finalHearts = Math.abs(finalAmount) / 2.0;
@@ -458,7 +460,7 @@ public class SecretKeeper {
 	}
 
 	public static boolean isProtectedPos(BlockPos pos) {
-		if (!UNBREAKABLE_BUTTONS) return false;
+		if (!UNBREAKABLE_BUTTONS.get()) return false;
 		if (pos == null) return false;
 		return isButtonOrSupport(successButtonPos, pos) || isButtonOrSupport(rerollButtonPos, pos) || isButtonOrSupport(failButtonPos, pos);
 	}
@@ -481,7 +483,7 @@ public class SecretKeeper {
 	}
 
 	public static void tickUnbreakableButtons() {
-		if (!UNBREAKABLE_BUTTONS) return;
+		if (!UNBREAKABLE_BUTTONS.get()) return;
 		if (server == null) return;
 		ServerLevel level = server.overworld();
 		if (level == null) return;

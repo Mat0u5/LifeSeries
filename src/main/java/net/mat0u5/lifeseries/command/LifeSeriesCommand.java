@@ -6,8 +6,6 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.command.manager.CustomCommand;
-import net.mat0u5.lifeseries.config.ConfigManager;
-import net.mat0u5.lifeseries.config.DefaultConfigValues;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
@@ -16,6 +14,7 @@ import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
 import net.mat0u5.matlib.utils.other.ActionText;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.matlib.config.entry.ConfigurableValue;
 import net.mat0u5.matlib.utils.other.TextUtils;
 import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -219,7 +218,7 @@ public class LifeSeriesCommand extends CustomCommand {
     }
 
     public void setSeasonFinal(CommandSourceStack source, String setTo, String argsStr) {
-        boolean prevTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
+        boolean prevTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION.get();
 
         Seasons currentSeason = LifeSeries.getSeason();
         Seasons season = Seasons.getSeasonFromStringName(setTo);
@@ -231,7 +230,7 @@ public class LifeSeriesCommand extends CustomCommand {
         if (SeasonChanger.changeSeasonTo(season, args)) {
             SeasonChanger.postChangeEvent(currentSeason, season);
             if (args.showChatMessage()) PlayerUtils.broadcastMessage(ModifiableText.SEASON_CHANGED.get(setTo));
-            boolean currentTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
+            boolean currentTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION.get();
             if (prevTickFreeze != currentTickFreeze) {
                 OtherUtils.setFreezeGame(currentTickFreeze);
             }
@@ -246,19 +245,17 @@ public class LifeSeriesCommand extends CustomCommand {
         }
         if (!LifeSeriesNetworkHandlerServer.wasHandshakeSuccessful(self)) {
             sendCommandFailure(source, Component.nullToEmpty("You must have the Life Series mod installed §nclient-side§c to open the config GUI."));
-            sendCommandFailure(source, Component.nullToEmpty("Either install the mod on the client on modify the config folder."));
+            sendCommandFailure(source, Component.nullToEmpty("Either install the mod on the client or modify the config folder."));
             return -1;
         }
 
-        SimplePackets.CLEAR_CONFIG.sendToClient(self);
-        if (PermissionManager.isAdmin(self) && !LifeSeries.isSeason(Seasons.UNASSIGNED)) {
-            LifeSeries.seasonConfig.sendConfigTo(self);
+        if (seasonConfig.hasPermissionsToOpen(self)) {
             sendCommandFeedback(source, ModifiableText.CONFIG_GUI_OPENING.get());
         }
         else {
             sendCommandFeedbackQuiet(source, ModifiableText.CONFIG_GUI_OPENING.get());
         }
-        SimplePackets.OPEN_CONFIG.sendToClient(self);
+        seasonConfig.openGuiFor(self);
         return 1;
     }
 
@@ -308,16 +305,23 @@ public class LifeSeriesCommand extends CustomCommand {
 
         if (value.equalsIgnoreCase("\"\"")) value = "";
 
-        seasonConfig.setProperty(key, value);
-        ConfigManager.onUpdatedUnknown(key, value);
+        ConfigurableValue<?> configurableValue = seasonConfig.getValue(key);
+        if (configurableValue != null) {
+            try {
+                configurableValue.setFromString(value);
+            } catch (Exception e) {
+                sendCommandFailure(source, Component.nullToEmpty("Invalid value '" + value + "' for " + key));
+                return -1;
+            }
+        }
+        else {
+            seasonConfig.setProperty(key, value);
+        }
 
         sendCommandFeedback(source, ModifiableText.CONFIG_SET.get(key));
 
         LifeSeriesNetworkHandlerServer.updatedConfigThisTickFromCommand = true;
         LifeSeriesNetworkHandlerServer.updatedConfigThisTick = true;
-        if (DefaultConfigValues.RELOAD_NEEDED.contains(key)) {
-            LifeSeriesNetworkHandlerServer.configNeedsReload = true;
-        }
         return 1;
     }
 

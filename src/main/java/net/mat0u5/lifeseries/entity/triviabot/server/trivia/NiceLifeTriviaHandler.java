@@ -85,7 +85,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
     }
 
     public void setTimeBasedOnDifficulty(int difficulty) {
-        timeToComplete = NiceLifeTriviaManager.QUESTION_TIME;
+        timeToComplete = NiceLifeTriviaManager.QUESTION_TIME.get();
     }
 
     public void tick() {
@@ -210,7 +210,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
                 if (state.getCollisionShape(level, pos).isEmpty()) {
                     continue;
                 }
-                level.destroyBlock(pos, NiceLifeTriviaManager.BREAKING_DROPS_RESOURCES);
+                level.destroyBlock(pos, NiceLifeTriviaManager.BREAKING_DROPS_RESOURCES.get());
             }
         }
         else {
@@ -288,7 +288,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         sameStateTime.tick();
         bot.setDeltaMovement(0, 0, 0);
         turnToBed(20);
-        if (sameStateTime.getSeconds() >= NiceLifeTriviaManager.QUESTION_TIME + 35) {
+        if (sameStateTime.getSeconds() >= NiceLifeTriviaManager.QUESTION_TIME.get() + 35) {
             changeStateTo(BotState.LEAVING);
         }
     }
@@ -428,7 +428,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
                 }
             }
             else {
-                if (((IPlayer) player).ls$isOnAtLeastLives(2, false) || NiceLifeVotingManager.REDS_ON_NAUGHTY_LIST) {
+                if (((IPlayer) player).ls$isOnAtLeastLives(2, false) || NiceLifeVotingManager.REDS_ON_NAUGHTY_LIST.get()) {
                     availableForVoting.add(player.getScoreboardName());
                 }
             }

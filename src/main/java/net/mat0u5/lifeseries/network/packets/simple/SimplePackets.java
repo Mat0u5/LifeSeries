@@ -75,8 +75,6 @@ public class SimplePackets {
     public static final SimpleEmptyPacket JUMP = new SimpleEmptyPacket("JUMP");
     public static final SimpleEmptyPacket RESET_TRIVIA = new SimpleEmptyPacket("RESET_TRIVIA");
     public static final SimpleEmptyPacket SELECT_WILDCARDS = new SimpleEmptyPacket("SELECT_WILDCARDS");
-    public static final SimpleEmptyPacket CLEAR_CONFIG = new SimpleEmptyPacket("CLEAR_CONFIG");
-    public static final SimpleEmptyPacket OPEN_CONFIG = new SimpleEmptyPacket("OPEN_CONFIG");
     public static final SimpleEmptyPacket TOGGLE_TIMER = new SimpleEmptyPacket("TOGGLE_TIMER");
     public static final SimpleEmptyPacket PAST_LIFE_CHOOSE_TWIST = new SimpleEmptyPacket("PAST_LIFE_CHOOSE_TWIST");
     public static final SimpleEmptyPacket TRIVIA_ALL_WRONG = new SimpleEmptyPacket("TRIVIA_ALL_WRONG");

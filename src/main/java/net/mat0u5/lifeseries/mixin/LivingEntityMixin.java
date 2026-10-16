@@ -68,15 +68,15 @@ public abstract class LivingEntityMixin {
 
         //? if >= 1.21 {
         ItemStack weapon = source.getWeaponItem();
-        if (amount <= WindCharge.MAX_MACE_DAMAGE) return;
+        if (amount <= WindCharge.MAX_MACE_DAMAGE.get()) return;
         if (weapon == null) return;
         if (weapon.isEmpty()) return;
         if (!weapon.is(Items.MACE)) return;
         if (!ItemStackUtils.hasCustomComponentEntry(weapon, "WindChargeSuperpower")) return;
         //? if <= 1.21 {
-        /*cir.setReturnValue(entity.hurt(source, WindCharge.MAX_MACE_DAMAGE));
+        /*cir.setReturnValue(entity.hurt(source, WindCharge.MAX_MACE_DAMAGE.get()));
         *///?} else
-        cir.setReturnValue(entity.hurtServer(level, source, WindCharge.MAX_MACE_DAMAGE));
+        cir.setReturnValue(entity.hurtServer(level, source, WindCharge.MAX_MACE_DAMAGE.get()));
         //?}
     }
 
@@ -158,7 +158,7 @@ public abstract class LivingEntityMixin {
         if (source.getEntity() instanceof ServerPlayer attacker &&
                 source.type() == attacker.damageSources().playerAttack(attacker).type() &&
                 SuperpowersWildcard.hasActivatedPower(attacker, Superpowers.SUPER_PUNCH)) {
-            return SuperPunch.KNOCKBACK_STRENGTH;
+            return SuperPunch.KNOCKBACK_STRENGTH.get();
         }
         return strength;
     }

@@ -54,7 +54,7 @@ public abstract class ChunkStatusTasksMixin {
         }
     //?}
         if (chunkAccess instanceof ProtoChunk) {
-            if (NiceLife.SNOWY_NETHER && level.dimension() == Level.NETHER && LifeSeries.isLogicalNonDisabled() && currentSeason instanceof NiceLife niceLife) {
+            if (NiceLife.SNOWY_NETHER.get() && level.dimension() == Level.NETHER && LifeSeries.isLogicalNonDisabled() && currentSeason instanceof NiceLife niceLife) {
                 int minY = chunkAccess.getMinY();
                 int maxY = chunkAccess.getMaxY();
                 for (int x = 0; x < 16; x++) {

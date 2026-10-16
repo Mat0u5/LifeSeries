@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -16,8 +18,8 @@ import net.minecraft.world.level.ChunkPos;
 import java.util.List;
 
 public class SuperPunch extends ToggleableSuperpower {
-    public static double KNOCKBACK_STRENGTH = 3.0;
-    public static double THORNS_DAMAGE = 1.0;
+    public static final ConfigRef<Double> KNOCKBACK_STRENGTH = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_SUPER_PUNCH_KNOCKBACK_STRENGTH);
+    public static final ConfigRef<Double> THORNS_DAMAGE = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_SUPER_PUNCH_THORNS_DAMAGE);
     public static int COOLDOWN_MILLIS = 1000;
     private Time timer = Time.zero();
     private Entity riding = null;

@@ -62,8 +62,8 @@ public class PastLifeCommands extends CustomCommand {
             return -1;
         }
 
-        boolean bannedSociety = !currentSeason.secretSociety.SOCIETY_ENABLED || currentSeason.secretSociety.societyStarted || currentSeason.secretSociety.societyEnded;
-        boolean bannedBoogeyman = !currentSeason.boogeymanManager.BOOGEYMAN_ENABLED || currentSeason.boogeymanManager.boogeymanChosen;
+        boolean bannedSociety = !currentSeason.secretSociety.SOCIETY_ENABLED.get() || currentSeason.secretSociety.societyStarted || currentSeason.secretSociety.societyEnded;
+        boolean bannedBoogeyman = !currentSeason.boogeymanManager.BOOGEYMAN_ENABLED.get() || currentSeason.boogeymanManager.boogeymanChosen;
         for (SessionAction action : currentSession.getSessionActions()) {
             if (action.sessionMessage.equalsIgnoreCase(ModifiableText.SESSION_ACTION_SOCIETY.getString())) {
                 bannedSociety = true;
@@ -110,7 +110,7 @@ public class PastLifeCommands extends CustomCommand {
             return -1;
         }
 
-        if (!currentSeason.secretSociety.SOCIETY_ENABLED) {
+        if (!currentSeason.secretSociety.SOCIETY_ENABLED.get()) {
             sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_SOCIETY_ERROR_DISABLED.get());
             return -1;
         }
@@ -145,7 +145,7 @@ public class PastLifeCommands extends CustomCommand {
             return -1;
         }
 
-        if (!currentSeason.boogeymanManager.BOOGEYMAN_ENABLED) {
+        if (!currentSeason.boogeymanManager.BOOGEYMAN_ENABLED.get()) {
             sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_BOOGEYMAN_ERROR_DISABLED.get());
             return -1;
         }

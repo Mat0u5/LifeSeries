@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.nicelife;
 
+import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
@@ -33,15 +35,15 @@ import net.minecraft.world.scores.TeamColor;
 public class NiceLifeVotingManager {
     public static Random rnd = new Random();
     public static VoteType voteType = VoteType.NAUGHTY_LIST;
-    public static double NICE_LIST_CHANCE = 0.5;
+    public static final ConfigRef<Double> NICE_LIST_CHANCE = ConfigRef.of(() -> NiceLifeConfig.get().NICE_LIST_CHANCE);
     public static Time VOTING_TIME = Time.seconds(60);
-    public static boolean REDS_ON_NAUGHTY_LIST = false;
+    public static final ConfigRef<Boolean> REDS_ON_NAUGHTY_LIST = ConfigRef.of(() -> NiceLifeConfig.get().ALLOW_REDS_ON_NAUGHTY_LIST);
     public static List<UUID> allowedToVote = new ArrayList<>();
     public static List<UUID> playersVoted = new ArrayList<>();
     public static Map<UUID, Integer> votesByCount = new HashMap<>();
     public static Map<UUID, UUID> votesByPerson = new HashMap<>();
-    public static int NICE_LIST_COUNT = 3;
-    public static int NAUGHTY_LIST_COUNT = 3;
+    public static final ConfigRef<Integer> NICE_LIST_COUNT = ConfigRef.of(() -> NiceLifeConfig.get().NICE_LIST_PLAYERS);
+    public static final ConfigRef<Integer> NAUGHTY_LIST_COUNT = ConfigRef.of(() -> NiceLifeConfig.get().NAUGHTY_LIST_PLAYERS);
     public static List<UUID> niceListMembers = new ArrayList<>();
     public static List<UUID> naughtyListMembers = new ArrayList<>();
     public static String NAUGHTY_LIST_TEAM = "naughty_list";
@@ -49,7 +51,7 @@ public class NiceLifeVotingManager {
     public static String NICE_LIST_TEAM = "nice_list";
     public static String NICE_LIST_TEAM_NAME = "Nice List";
     public static Optional<VoteType> forcedTriviaVote = Optional.empty();
-    public static boolean PUBLIC_VOTING = false;
+    public static final ConfigRef<Boolean> PUBLIC_VOTING = ConfigRef.of(() -> NiceLifeConfig.get().PUBLIC_VOTING);
     private static final Component clickVote =  new ActionText("§f§l/vote").runCommand("Click to open the voting screen", "/vote").get();
 
     public enum VoteType {
@@ -82,9 +84,9 @@ public class NiceLifeVotingManager {
         }
 
         voteType = VoteType.NICE_LIST;
-        if (rnd.nextDouble() > NICE_LIST_CHANCE) {
+        if (rnd.nextDouble() > NICE_LIST_CHANCE.get()) {
             voteType = VoteType.NONE;
-            if (livesManager.anyPlayersAtLeastLives(2) || REDS_ON_NAUGHTY_LIST) {
+            if (livesManager.anyPlayersAtLeastLives(2) || REDS_ON_NAUGHTY_LIST.get()) {
                 voteType = VoteType.NAUGHTY_LIST;
             }
         }
@@ -123,7 +125,7 @@ public class NiceLifeVotingManager {
         ServerPlayer votedFor = PlayerUtils.getPlayer(vote);
         if (votedFor == null) return;
         if (((IPlayer) votedFor).ls$isDead()) return;
-        if (voteType == VoteType.NAUGHTY_LIST && ((IPlayer) votedFor).ls$isOnSpecificLives(1, true) && !REDS_ON_NAUGHTY_LIST) return;
+        if (voteType == VoteType.NAUGHTY_LIST && ((IPlayer) votedFor).ls$isOnSpecificLives(1, true) && !REDS_ON_NAUGHTY_LIST.get()) return;
         if (voteType == VoteType.NICE_LIST && player == votedFor) return;
 
 
@@ -135,7 +137,7 @@ public class NiceLifeVotingManager {
         votesByPerson.put(player.getUUID(), votedFor.getUUID());
 
         List<String> liveVoting = new ArrayList<>();
-        if (PUBLIC_VOTING) {
+        if (PUBLIC_VOTING.get()) {
             for (Map.Entry<UUID, Integer> entry : votesByCount.entrySet()) {
                 ServerPlayer playerVoted = PlayerUtils.getPlayer(entry.getKey());
                 if (playerVoted == null) continue;
@@ -198,13 +200,13 @@ public class NiceLifeVotingManager {
     }
 
     public static void announceNaughtyList() {
-        List<UUID> playersRaw = getMostVotedForPlayers(NAUGHTY_LIST_COUNT);
+        List<UUID> playersRaw = getMostVotedForPlayers(NAUGHTY_LIST_COUNT.get());
         List<UUID> players = new ArrayList<>();
         for (UUID uuid : playersRaw) {
             ServerPlayer player = PlayerUtils.getPlayer(uuid);
             if (player == null) continue;
             if (((IPlayer) player).ls$isDead()) continue;
-            if (((IPlayer) player).ls$isOnLastLife(false) && !REDS_ON_NAUGHTY_LIST) continue;
+            if (((IPlayer) player).ls$isOnLastLife(false) && !REDS_ON_NAUGHTY_LIST.get()) continue;
             players.add(uuid);
         }
         clearNaughtyListMembers();
@@ -228,7 +230,7 @@ public class NiceLifeVotingManager {
             PlayerReference ref = PlayerReference.of(player);
             TaskScheduler.scheduleTask(delay, () -> {
                 ServerPlayer playerNew = ref.get();
-                if (playerNew != null && !((IPlayer) playerNew).ls$isDead() && !(((IPlayer) playerNew).ls$isOnLastLife(false) && !REDS_ON_NAUGHTY_LIST)) {
+                if (playerNew != null && !((IPlayer) playerNew).ls$isDead() && !(((IPlayer) playerNew).ls$isOnLastLife(false) && !REDS_ON_NAUGHTY_LIST.get())) {
                     SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("nicelife_naughtylist"));
                     PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
                     DatapackIntegration.EVENT_NAUGHTY_LIST_ADD.trigger(new DatapackIntegration.Events.MacroEntry("Player", playerNew.getScoreboardName()));
@@ -258,7 +260,7 @@ public class NiceLifeVotingManager {
         });
     }
     public static void announceNiceList() {
-        List<UUID> players = getMostVotedForPlayers(NICE_LIST_COUNT);
+        List<UUID> players = getMostVotedForPlayers(NICE_LIST_COUNT.get());
         clearNiceListMembers();
         if (players.isEmpty()) return;
         int delay = 80;

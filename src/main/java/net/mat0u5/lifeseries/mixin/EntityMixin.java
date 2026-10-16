@@ -86,7 +86,7 @@ public abstract class EntityMixin implements IMorph, IEntity {
     public void getAir(CallbackInfoReturnable<Integer> cir) {
         if (LifeSeries.isClientOrDisabled()) return;
         if (currentSeason instanceof WildLife) {
-            if (!Snail.SHOULD_DROWN_PLAYER) return;
+            if (!Snail.SHOULD_DROWN_PLAYER.get()) return;
             if (Snails.snails.isEmpty()) return;
             Entity entity = (Entity) (Object) this;
             if (entity instanceof Player player && !player.hasEffect(MobEffects.WATER_BREATHING)) {

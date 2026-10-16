@@ -108,7 +108,7 @@ public class ItemStackMixin {
     @Inject(method = "applyDamage", at = @At("HEAD"), cancellable = true)
     private void cancelItemDamage(int newDamage, @Nullable ServerPlayer player, Consumer<Item> onBreak, CallbackInfo ci) {
     //?}
-        if (LifeSeries.isClientOrDisabled() || !Season.ONLY_LOSE_DURABILITY_IN_SESSION) return;
+        if (LifeSeries.isClientOrDisabled() || !Season.ONLY_LOSE_DURABILITY_IN_SESSION.get()) return;
         if (!currentSession.statusStarted()) {
             ci.cancel();
         }

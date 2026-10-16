@@ -119,7 +119,7 @@ public class SnailServerData implements PlayerBoundEntity {
         if (boundEntity != null && shouldPathfind() && snail.getBoundingBox().inflate(0.05).intersects(boundEntity.getBoundingBox())) {
             killBoundEntity(boundEntity);
         }
-        else if (Snail.KILL_ANY_PLAYER) {
+        else if (Snail.KILL_ANY_PLAYER.get()) {
             for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
                 if (player == null || player.isSpectator() || player.isCreative()) continue;
                 if (snail.getBoundingBox().inflate(0.05).intersects(player.getBoundingBox())) {
@@ -129,7 +129,7 @@ public class SnailServerData implements PlayerBoundEntity {
         }
 
         if (boundPlayer != null && boundEntity != null) {
-            if (Snail.SHOULD_DROWN_PLAYER && !snail.isFromTrivia()) {
+            if (Snail.SHOULD_DROWN_PLAYER.get() && !snail.isFromTrivia()) {
                 int currentAir = snail.getAirSupply();
                 if (boundEntity.hasEffect(MobEffects.WATER_BREATHING)) {
                     currentAir = snail.getMaxAirSupply();
@@ -145,7 +145,7 @@ public class SnailServerData implements PlayerBoundEntity {
         handleHighVelocity();
         chunkLoading();
         snail.sounds.playSounds();
-        if (!Snail.ALLOW_POTION_EFFECTS) {
+        if (!Snail.ALLOW_POTION_EFFECTS.get()) {
             snail.removeAllEffects();
         }
     }
@@ -159,7 +159,7 @@ public class SnailServerData implements PlayerBoundEntity {
             despawnPlayerChecks = 0;
         }
 
-        if (player != null && ((IPlayer) player).ls$isOnLastLife(false) && !Snails.WILDCARD_SNAILS_RED_LIVES) {
+        if (player != null && ((IPlayer) player).ls$isOnLastLife(false) && !Snails.WILDCARD_SNAILS_RED_LIVES.get()) {
             despawn();
             return true;
         }

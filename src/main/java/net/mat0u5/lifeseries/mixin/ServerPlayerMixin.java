@@ -280,7 +280,7 @@ public class ServerPlayerMixin implements IPlayer {
     @WrapOperation(method = "die", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Z)V"))
     private void modifyDeathMessage(PlayerList instance, Component component, boolean bl, Operation<Void> original) {
         livesManager.deathMessage(ls$get(), component);
-        if (LifeSeries.isClientOrDisabled() || livesManager == null || !livesManager.SHOW_LIFE_DIFF) {
+        if (LifeSeries.isClientOrDisabled() || livesManager == null || !livesManager.SHOW_LIFE_DIFF.get()) {
             original.call(instance, component, bl);
         }
         else {
@@ -293,7 +293,7 @@ public class ServerPlayerMixin implements IPlayer {
 
     @WrapOperation(method = "die", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemToTeam(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/network/chat/Component;)V"))
     private void modifyDeathMessage2(PlayerList instance, Player player, Component component, Operation<Void> original) {
-        if (LifeSeries.isClientOrDisabled() || livesManager == null || !livesManager.SHOW_LIFE_DIFF) {
+        if (LifeSeries.isClientOrDisabled() || livesManager == null || !livesManager.SHOW_LIFE_DIFF.get()) {
             original.call(instance, player, component);
         }
         else {
@@ -306,7 +306,7 @@ public class ServerPlayerMixin implements IPlayer {
 
     @WrapOperation(method = "die", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemToAllExceptTeam(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/network/chat/Component;)V"))
     private void modifyDeathMessage3(PlayerList instance, Player player, Component component, Operation<Void> original) {
-        if (LifeSeries.isClientOrDisabled() || livesManager == null || !livesManager.SHOW_LIFE_DIFF) {
+        if (LifeSeries.isClientOrDisabled() || livesManager == null || !livesManager.SHOW_LIFE_DIFF.get()) {
             original.call(instance, player, component);
         }
         else {

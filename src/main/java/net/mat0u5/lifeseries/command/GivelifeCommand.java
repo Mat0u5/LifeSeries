@@ -76,7 +76,7 @@ public class GivelifeCommand extends CustomCommand {
             sendCommandFailure(source, ModifiableText.PLAYER_ERROR_WATCHER.get());
             return -1;
         }
-        if (!Season.GIVELIFE_CAN_REVIVE && isRevive) {
+        if (!Season.GIVELIFE_CAN_REVIVE.get() && isRevive) {
             sendCommandFailure(source, ModifiableText.PLAYER_ERROR_DEAD.get());
             return -1;
         }
@@ -96,11 +96,11 @@ public class GivelifeCommand extends CustomCommand {
             return -1;
         }
         Integer targetLives = ((IPlayer) target).ls$getLives();
-        if (targetLives == null || targetLives >= currentSeason.GIVELIFE_MAX_LIVES) {
+        if (targetLives == null || targetLives >= currentSeason.GIVELIFE_MAX_LIVES.get()) {
             sendCommandFailure(source, ModifiableText.GIVELIFE_ERROR_TOO_MANY.get());
             return -1;
         }
-        if (currentSeason instanceof DoubleLife doubleLife && doubleLife.SOULBOUND_LIVES) {
+        if (currentSeason instanceof DoubleLife doubleLife && doubleLife.SOULBOUND_LIVES.get()) {
             ServerPlayer soulmate = doubleLife.getSoulmate(self);
             if (soulmate != null) {
                 if (soulmate.equals(target)) {

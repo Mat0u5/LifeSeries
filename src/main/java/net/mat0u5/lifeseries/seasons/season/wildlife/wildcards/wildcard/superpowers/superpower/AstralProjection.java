@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
@@ -40,7 +42,7 @@ import net.minecraft.world.item.component.ResolvableProfile;
 //?}
 
 public class AstralProjection extends ToggleableSuperpower {
-    public static boolean DAMAGE_CANCELS = true;
+    public static final ConfigRef<Boolean> DAMAGE_CANCELS = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_ASTRAL_PROJECTION_DAMAGE_CANCELS);
     public static int COOLDOWN_MILLIS = 5000;
 
     //? if <= 1.21.6 {
@@ -223,7 +225,7 @@ public class AstralProjection extends ToggleableSuperpower {
             ((IPlayer) player).ls$hurt(level, source, amount);
             //?}
         }
-        if (DAMAGE_CANCELS) {
+        if (DAMAGE_CANCELS.get()) {
             deactivate();
         }
     }

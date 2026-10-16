@@ -399,8 +399,8 @@ public class SnailPathfinding {
             }
             if (speedMultiplier != lastSpeedMultiplier) {
                 lastSpeedMultiplier = speedMultiplier;
-                double movementSpeed = Snail.MOVEMENT_SPEED * speedMultiplier * Snail.GLOBAL_SPEED_MULTIPLIER;
-                double flyingSpeed = Snail.FLYING_SPEED * speedMultiplier * Snail.GLOBAL_SPEED_MULTIPLIER;
+                double movementSpeed = Snail.MOVEMENT_SPEED * speedMultiplier * Snail.GLOBAL_SPEED_MULTIPLIER.get();
+                double flyingSpeed = Snail.FLYING_SPEED * speedMultiplier * Snail.GLOBAL_SPEED_MULTIPLIER.get();
                 if (snail.serverData.isNerfed()) {
                     movementSpeed *= 0.8;
                     flyingSpeed *= 0.8;

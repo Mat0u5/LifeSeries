@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
@@ -26,9 +28,9 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.util.Unit;
 
 public class WindCharge extends ToggleableSuperpower {
-    public static double EXPLOSION_POWER = 3.0;
+    public static final ConfigRef<Double> EXPLOSION_POWER = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_WIND_CHARGE_EXPLOSION_POWER);
     public static int COOLDOWN_MILLIS = 1000;
-    public static int MAX_MACE_DAMAGE = 2;
+    public static final ConfigRef<Integer> MAX_MACE_DAMAGE = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE);
 
     public WindCharge(ServerPlayer player) {
         super(player);

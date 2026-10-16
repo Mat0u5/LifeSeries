@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
@@ -18,12 +20,12 @@ import net.minecraft.world.effect.MobEffects;
 import static net.mat0u5.matlib.MatLib.server;
 
 public class Superspeed extends ToggleableSuperpower {
-    public static double TARGET_SPEED = 0.35;
-    public static int HUNGER_EFFECT_LEVEL = 5;
-    public static int FROST_WALKER_LEVEL = 3;
+    public static final ConfigRef<Double> TARGET_SPEED = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_SUPERSPEED_TARGET_SPEED);
+    public static final ConfigRef<Integer> HUNGER_EFFECT_LEVEL = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_SUPERSPEED_HUNGER_LEVEL);
+    public static final ConfigRef<Integer> FROST_WALKER_LEVEL = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_SUPERSPEED_FROST_WALKER_LEVEL);
     public static int COOLDOWN_MILLIS = 3000;
 
-    public static boolean STEP_UP = false;
+    public static final ConfigRef<Boolean> STEP_UP = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_SUPERSPEED_STEP);
 
     public Superspeed(ServerPlayer player) {
         super(player);
@@ -39,8 +41,8 @@ public class Superspeed extends ToggleableSuperpower {
         if (!active) return;
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        if (HUNGER_EFFECT_LEVEL > 0) {
-            MobEffectInstance hunger = new MobEffectInstance(MobEffects.HUNGER, 219, HUNGER_EFFECT_LEVEL-1, false, false, false);
+        if (HUNGER_EFFECT_LEVEL.get() > 0) {
+            MobEffectInstance hunger = new MobEffectInstance(MobEffects.HUNGER, 219, HUNGER_EFFECT_LEVEL.get()-1, false, false, false);
             player.addEffect(hunger);
         }
         player.getFoodData().setSaturation(0);
@@ -62,9 +64,9 @@ public class Superspeed extends ToggleableSuperpower {
             return;
         }
         ((IPlayer) player).ls$playNotifySound(SoundEvents.BEACON_ACTIVATE, SoundSource.MASTER, 1, 1);
-        slowlySetSpeed(player, TARGET_SPEED, 60);
+        slowlySetSpeed(player, TARGET_SPEED.get(), 60);
         LifeSeriesNetworkHandlerServer.sendVignette(player, -1);
-        if (STEP_UP) {
+        if (STEP_UP.get()) {
             //? if > 1.20.3 {
             AttributeUtils.STEP_HEIGHT.of(player).set(1);
             //?}
@@ -89,8 +91,8 @@ public class Superspeed extends ToggleableSuperpower {
         slowlySetSpeed(player, AttributeUtils.MOVEMENT_SPEED.of(player).getDefaultValue(), 30);
         if (!WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
             player.removeEffect(MobEffects.HUNGER);
-            if (HUNGER_EFFECT_LEVEL > 0) {
-                MobEffectInstance hunger = new MobEffectInstance(MobEffects.HUNGER, 30, HUNGER_EFFECT_LEVEL-1, false, false, false);
+            if (HUNGER_EFFECT_LEVEL.get() > 0) {
+                MobEffectInstance hunger = new MobEffectInstance(MobEffects.HUNGER, 30, HUNGER_EFFECT_LEVEL.get()-1, false, false, false);
                 player.addEffect(hunger);
             }
         }

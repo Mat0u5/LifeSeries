@@ -4,9 +4,6 @@ import com.google.auto.service.AutoService;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.compatibilities.VoicechatClient;
-import net.mat0u5.lifeseries.client.config.ClientConfig;
-import net.mat0u5.lifeseries.client.config.ClientConfigGuiManager;
-import net.mat0u5.lifeseries.client.config.ClientConfigNetwork;
 import net.mat0u5.lifeseries.client.features.*;
 import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.client.gui.other.ChooseWildcardScreen;
@@ -17,7 +14,6 @@ import net.mat0u5.lifeseries.client.gui.trivia.NewQuizScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.QuizScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.VotingScreen;
 import net.mat0u5.matlib.client.events.ClientNetworkEvents;
-import net.mat0u5.matlib.client.network.NetworkHandlerClient;
 import net.mat0u5.matlib.client.render.RenderUtils;
 import net.mat0u5.lifeseries.client.render.TextHud;
 import net.mat0u5.lifeseries.client.utils.ClientSounds;
@@ -329,11 +325,8 @@ public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
                 RenderUtils.setScreen(new ChooseWildcardScreen());
             }
         });
-        SimplePackets.CLEAR_CONFIG.setClientReceive(payload -> ClientConfigNetwork.load());
-        SimplePackets.OPEN_CONFIG.setClientReceive(payload -> ClientConfigGuiManager.openConfig());
         SimplePackets.TOGGLE_TIMER.setClientReceive(payload -> {
-            String key = ClientConfig.SESSION_TIMER.key;
-            LifeSeriesClient.clientConfig.setProperty(key, String.valueOf(!LifeSeriesClient.SESSION_TIMER));
+            LifeSeriesClient.clientConfig.SESSION_TIMER.set(!LifeSeriesClient.SESSION_TIMER);
             LifeSeriesClient.reloadConfig();
         });
         SimplePackets.PAST_LIFE_CHOOSE_TWIST.setClientReceive(payload -> {
@@ -383,9 +376,6 @@ public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
         else if (customPacketPayload instanceof PlayerDisguisePayload payload) {
             client.execute(() -> handlePlayerDisguise(payload));
         }
-        else if (customPacketPayload instanceof ConfigPayload payload) {
-            client.execute(() -> handleConfigPacket(payload));
-        }
         else if (customPacketPayload instanceof SidetitlePacket payload) {
             client.execute(() -> handleSidetitle(payload));
         }
@@ -415,10 +405,6 @@ public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
         //?}
             TextHud.sideTitleRemainTicks = hudAccessor.ls$titleFadeInTicks() + hudAccessor.ls$titleStayTicks() + hudAccessor.ls$titleFadeOutTicks();
         }
-    }
-
-    public static void handleConfigPacket(ConfigPayload payload) {
-        ClientConfigNetwork.handleConfigPacket(payload, false);
     }
 
     public static void handlePlayerDisguise(PlayerDisguisePayload payload) {
@@ -460,11 +446,6 @@ public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
     /*
         Sending
      */
-
-    public static void sendConfigUpdate(String configType, String id, List<String> args) {
-        ConfigPayload configPacket = new ConfigPayload(configType, id, -1, "", "", args);
-        NetworkHandlerClient.send(configPacket);
-    }
 
     public static void sendTriviaAnswer(int answer) {
         if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info("[PACKET_CLIENT] Sending trivia answer: {}", answer);

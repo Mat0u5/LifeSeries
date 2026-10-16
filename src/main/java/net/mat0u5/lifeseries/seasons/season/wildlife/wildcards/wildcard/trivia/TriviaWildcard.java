@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia;
 
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.snail.Snail;
@@ -41,7 +43,7 @@ public class TriviaWildcard extends Wildcard {
     private static boolean globalScheduleInitialized = false;
     public static Map<UUID, TriviaBot> bots = new HashMap<>();
     public static Time activatedAt = Time.nullTime();
-    public static int TRIVIA_BOTS_PER_PLAYER = 5;
+    public static final ConfigRef<Integer> TRIVIA_BOTS_PER_PLAYER = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_TRIVIA_BOTS_PER_PLAYER);
     public static int MIN_BOT_DELAY = 8400;
     public static TriviaQuestionManager easyTrivia;
     public static TriviaQuestionManager normalTrivia;
@@ -415,8 +417,8 @@ public class TriviaWildcard extends Wildcard {
     }
 
     public static int getBotsPerPlayer() {
-        if (isBuffed()) return TRIVIA_BOTS_PER_PLAYER*2;
-        return TRIVIA_BOTS_PER_PLAYER;
+        if (isBuffed()) return TRIVIA_BOTS_PER_PLAYER.get()*2;
+        return TRIVIA_BOTS_PER_PLAYER.get();
     }
 
     public static boolean isBuffed() {

@@ -143,8 +143,8 @@ public class ServerGamePacketListenerImplMixin {
             }
         }
 
-        if (currentSeason.MUTE_WATCHERS && ((IPlayer) player).ls$isWatcher()) {
-            if (message == null || !currentSeason.MUTED_CHAT) {
+        if (currentSeason.MUTE_WATCHERS.get() && ((IPlayer) player).ls$isWatcher()) {
+            if (message == null || !currentSeason.MUTED_CHAT.get()) {
                 ((IPlayer) player).ls$message(ModifiableText.MUTED_WATCHER.get());
             }
             else {
@@ -153,8 +153,8 @@ public class ServerGamePacketListenerImplMixin {
             ci.cancel();
             return true;
         }
-        if (currentSeason.MUTE_DEAD_PLAYERS && ((IPlayer) player).ls$isDead() && !((IPlayer) player).ls$isWatcher()) {
-            if (message == null || !currentSeason.MUTED_CHAT) {
+        if (currentSeason.MUTE_DEAD_PLAYERS.get() && ((IPlayer) player).ls$isDead() && !((IPlayer) player).ls$isWatcher()) {
+            if (message == null || !currentSeason.MUTED_CHAT.get()) {
                 ((IPlayer) player).ls$message(ModifiableText.MUTED_DEADPLAYER.get());
             }
             else {

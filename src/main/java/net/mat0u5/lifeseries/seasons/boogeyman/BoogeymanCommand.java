@@ -21,7 +21,7 @@ public class BoogeymanCommand extends CustomCommand {
 
     @Override
     public boolean isAllowed() {
-        return getBM().BOOGEYMAN_ENABLED;
+        return getBM().BOOGEYMAN_ENABLED.get();
     }
 
     @Override
@@ -171,7 +171,7 @@ public class BoogeymanCommand extends CustomCommand {
             return -1;
         }
 
-        if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME) {
+        if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME.get()) {
             sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_SELFFAIL.get());
         }
         else {
@@ -199,7 +199,7 @@ public class BoogeymanCommand extends CustomCommand {
             bm.playerFailBoogeymanManually(player, true);
         }
 
-        if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME) {
+        if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME.get()) {
             if (targets.size() == 1) {
                 sendCommandFeedback(source, ModifiableText.BOOGEYMAN_FAIL_OTHER_SINGLE.get(targets.iterator().next()));
             }
@@ -254,7 +254,7 @@ public class BoogeymanCommand extends CustomCommand {
             bm.cure(player);
         }
 
-        if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME) {
+        if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME.get()) {
             if (targets.size() == 1) {
                 sendCommandFeedback(source, ModifiableText.BOOGEYMAN_CURE_SINGLE.get(targets.iterator().next()));
             }

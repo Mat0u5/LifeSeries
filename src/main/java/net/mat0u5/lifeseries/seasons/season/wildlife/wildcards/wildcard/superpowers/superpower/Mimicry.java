@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.mixin.MannequinAccessor;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
@@ -21,7 +23,7 @@ import net.minecraft.world.entity.decoration.Mannequin;
 
 public class Mimicry extends Superpower {
     public static int COOLDOWN_MILLIS = 300000;
-    public static boolean DISABLE_OTHER_POWER = false;
+    public static final ConfigRef<Boolean> DISABLE_OTHER_POWER = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_MIMICRY_DISABLE_OTHER_POWER);
 
     private Superpower mimic = null;
 
@@ -86,7 +88,7 @@ public class Mimicry extends Superpower {
         }
         super.activate();
         sendCooldownPacket();
-        if (DISABLE_OTHER_POWER && mimicPowerInstance != null) {
+        if (DISABLE_OTHER_POWER.get() && mimicPowerInstance != null) {
             mimicPowerInstance.stolenUntil = System.currentTimeMillis() + COOLDOWN_MILLIS;
         }
     }

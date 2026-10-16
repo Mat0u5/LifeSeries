@@ -183,12 +183,12 @@ public class Necromancy extends Superpower {
 
     private static void zombieSpawn(ServerPlayer player) {
         player.setGameMode(GameType.SURVIVAL);
-        if (WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_FIRST_SPAWN_CLEAR_ITEMS.get() && !clearedPlayers.contains(player.getUUID())) {
+        if (WildLifeConfig.get().WILDCARD_SUPERPOWERS_ZOMBIES_FIRST_SPAWN_CLEAR_ITEMS.get() && !clearedPlayers.contains(player.getUUID())) {
             clearedPlayers.add(player.getUUID());
             player.getInventory().clearContent();
         }
-        AttributeUtils.MAX_HEALTH.of(player).set(SuperpowersWildcard.ZOMBIES_HEALTH);
-        player.setHealth(SuperpowersWildcard.ZOMBIES_HEALTH);
+        AttributeUtils.MAX_HEALTH.of(player).set(SuperpowersWildcard.ZOMBIES_HEALTH.get());
+        player.setHealth(SuperpowersWildcard.ZOMBIES_HEALTH.get());
         LevelUtils.summonHarmlessLightning(player);
         currentSeason.reloadPlayerTeam(player);
     }

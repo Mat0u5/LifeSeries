@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards;
 
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
@@ -36,8 +38,8 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 public class WildcardManager {
     public static final Map<Wildcards, Wildcard> activeWildcards = new ConcurrentHashMap<>();
     public static final Random rnd = new Random();
-    public static double ACTIVATE_WILDCARD_MINUTE = 2.5;
-    public static boolean INSTANTLY_ACTIVATE_WILDCARDS = false;
+    public static final ConfigRef<Double> ACTIVATE_WILDCARD_MINUTE = ConfigRef.of(() -> WildLifeConfig.get().ACTIVATE_WILDCARD_MINUTE);
+    public static final ConfigRef<Boolean> INSTANTLY_ACTIVATE_WILDCARDS = ConfigRef.of(() -> WildLifeConfig.get().INSTANTLY_ACTIVATE_WILDCARDS);
 
     public static Wildcards chosenWildcard = null;
 
@@ -98,8 +100,8 @@ public class WildcardManager {
     }
 
     public static void activateWildcards() {
-        int delay = INSTANTLY_ACTIVATE_WILDCARDS ? 0 : 90;
-        if (!INSTANTLY_ACTIVATE_WILDCARDS) showDots();
+        int delay = INSTANTLY_ACTIVATE_WILDCARDS.get() ? 0 : 90;
+        if (!INSTANTLY_ACTIVATE_WILDCARDS.get()) showDots();
         TaskScheduler.scheduleTask(delay, () -> {
             if (activeWildcards.isEmpty()) {
                 chooseRandomWildcard();

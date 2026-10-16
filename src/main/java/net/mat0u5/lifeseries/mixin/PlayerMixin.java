@@ -129,9 +129,9 @@ public abstract class PlayerMixin implements IPlayerUsername {
         if (!SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPERSPEED)) return;
 
         //? if <= 1.20.5 {
-        /*FrostWalkerEnchantment.onEntityMoved(entity, entity.level(), entity.blockPosition(), Superspeed.FROST_WALKER_LEVEL);
+        /*FrostWalkerEnchantment.onEntityMoved(entity, entity.level(), entity.blockPosition(), Superspeed.FROST_WALKER_LEVEL.get());
         *///?} else {
-        ls$frostWalker.apply(((IPlayer) player).ls$getServerLevel(), Superspeed.FROST_WALKER_LEVEL, null, player, player.position());
+        ls$frostWalker.apply(((IPlayer) player).ls$getServerLevel(), Superspeed.FROST_WALKER_LEVEL.get(), null, player, player.position());
         //?}
     }
 

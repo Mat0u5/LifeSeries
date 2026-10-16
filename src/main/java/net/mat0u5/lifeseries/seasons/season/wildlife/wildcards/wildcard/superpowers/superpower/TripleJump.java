@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -13,7 +15,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 
 public class TripleJump extends ToggleableSuperpower {
-    public static int JUMP_COUNT = 3;
+    public static final ConfigRef<Integer> JUMP_COUNT = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_TRIPLE_JUMP_JUMPS);
     public static int COOLDOWN_MILLIS = 1000;
     public boolean isInAir = false;
     private Time onGround = Time.zero();
@@ -69,7 +71,7 @@ public class TripleJump extends ToggleableSuperpower {
         ((IPlayer) player).ls$playNotifySound(SoundEvents.SLIME_JUMP, SoundSource.MASTER, 1, 1);
         LifeSeriesNetworkHandlerServer.sendVignette(player, -1);
         SimplePackets.TRIPLE_JUMP.sendToClient(true, player);
-        SimplePackets.POWER_TJ_JUMPS.sendToClient(JUMP_COUNT, player);
+        SimplePackets.POWER_TJ_JUMPS.sendToClient(JUMP_COUNT.get(), player);
     }
 
     @Override

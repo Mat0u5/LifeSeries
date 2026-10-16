@@ -4,8 +4,6 @@ import com.google.auto.service.AutoService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.config.ConfigManager;
-import net.mat0u5.lifeseries.config.DefaultConfigValues;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.config.StringListManager;
 import net.mat0u5.lifeseries.network.packets.*;
@@ -40,14 +38,12 @@ import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
-import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.matlib.services.RegistrableServer;
 import net.mat0u5.matlib.utils.other.ActionText;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.matlib.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.*;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
@@ -93,7 +89,6 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
         PAYLOADS.put(OldHandshakePayload.ID, OldHandshakePayload::read);
         PAYLOADS.put(TriviaQuestionPayload.ID, TriviaQuestionPayload::read);
         PAYLOADS.put(PlayerDisguisePayload.ID, PlayerDisguisePayload::read);
-        PAYLOADS.put(ConfigPayload.ID, ConfigPayload::read);
         PAYLOADS.put(SidetitlePacket.ID, SidetitlePacket::read);
         PAYLOADS.put(SnailTexturePacket.ID, SnailTexturePacket::read);
         PAYLOADS.put(TriviaTexturePacket.ID, TriviaTexturePacket::read);
@@ -105,7 +100,6 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
             new CustomPacketPayload.TypeAndCodec<>(OldHandshakePayload.ID, OldHandshakePayload.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(ConfigPayload.ID, ConfigPayload.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(SidetitlePacket.ID, SidetitlePacket.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(SnailTexturePacket.ID, SnailTexturePacket.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(TriviaTexturePacket.ID, TriviaTexturePacket.CODEC)
@@ -185,11 +179,11 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
                 Seasons currentSeason = LifeSeries.getSeason();
                 Seasons newSeason = Seasons.getSeasonFromStringName(payload.value());
                 if (newSeason == Seasons.UNASSIGNED) return;
-                boolean prevTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
+                boolean prevTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION.get();
                 SeasonChanger.preChangeEvent(currentSeason, newSeason);
                 if (SeasonChanger.changeSeasonTo(newSeason)) {
                     SeasonChanger.postChangeEvent(currentSeason, newSeason);
-                    boolean currentTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
+                    boolean currentTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION.get();
                     PlayerUtils.broadcastMessage(ModifiableText.SEASON_CHANGE.get(payload.value()));
                     if (prevTickFreeze != currentTickFreeze) {
                         OtherUtils.setFreezeGame(currentTickFreeze);
@@ -249,15 +243,15 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
                         Integer num = Integer.parseInt(packetOptionalLimLifeTeam);
                         if (num != null && LifeSeries.isSeason(Seasons.LIMITED_LIFE)) {
                             if (packetTeamName.equalsIgnoreCase("lives_2")) {
-                                seasonConfig.setProperty(LimitedLifeConfig.TIME_RED.key, String.valueOf(num));
+                                LimitedLifeConfig.get().TIME_RED.set(num);
                                 updatedConfigThisTick = true;
                             }
                             else if (packetTeamName.equalsIgnoreCase("lives_3")) {
-                                seasonConfig.setProperty(LimitedLifeConfig.TIME_YELLOW.key, String.valueOf(num));
+                                LimitedLifeConfig.get().TIME_YELLOW.set(num);
                                 updatedConfigThisTick = true;
                             }
                             else if (packetTeamName.equalsIgnoreCase("lives_4")) {
-                                seasonConfig.setProperty(LimitedLifeConfig.TIME_DEFAULT.key, String.valueOf(num));
+                                LimitedLifeConfig.get().TIME_DEFAULT.set(num);
                                 updatedConfigThisTick = true;
                             }
                         }
@@ -411,9 +405,6 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
         if (customPacketPayload instanceof OldHandshakePayload payload) {
             handleOldHandshakeResponse(player, payload);
         }
-        else if (customPacketPayload instanceof ConfigPayload payload) {
-            handleConfigPacket(player, payload);
-        }
         else {
             return false;
         }
@@ -422,68 +413,13 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
 
     public static boolean updatedConfigThisTick = false;
     public static boolean updatedConfigThisTickFromCommand = false;
-    public static boolean configNeedsReload = false;
-    public static void handleConfigPacket(ServerPlayer player, ConfigPayload payload) {
-        if (PermissionManager.isAdmin(player)) {
-            ConfigTypes configType = ConfigTypes.getFromString(payload.configType());
-            String id = payload.configId();
-            List<String> args = payload.args();
-            if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received config update from {}: {{}, {}, {}}", player, configType, id, args));
-
-            String oldValue = seasonConfig.getProperty(id);
-            boolean previousUpdatedConfig = updatedConfigThisTick;
-            if (configType == ConfigTypes.EVENT_ENTRY && args.size() >= 2) {
-                String command = args.get(0).strip();
-                String canceled = args.get(1);
-                seasonConfig.setOrRemoveProperty(id, command);
-                seasonConfig.setOrRemoveProperty(id+"_canceled", canceled);
-                updatedConfigThisTick = true;
-            }
-            else if (configType.parentString() && !args.isEmpty()) {
-                seasonConfig.setProperty(id, args.get(0));
-                updatedConfigThisTick = true;
-            }
-            else if (configType.parentBoolean() && !args.isEmpty()) {
-                boolean boolValue = args.get(0).equalsIgnoreCase("true");
-                seasonConfig.setProperty(id,String.valueOf(boolValue));
-                updatedConfigThisTick = true;
-                TaskScheduler.schedulePriorityTask(1, () -> {
-                    ConfigManager.onUpdatedBoolean(id, boolValue);
-                });
-            }
-            else if (configType.parentDouble() && !args.isEmpty()) {
-                try {
-                    double value = Double.parseDouble(args.get(0));
-                    seasonConfig.setProperty(id, String.valueOf(value));
-                    updatedConfigThisTick = true;
-                }catch(Exception e){}
-            }
-            else if ((configType.parentInteger() && !args.isEmpty()) || (configType.parentNullableInteger() && !args.isEmpty())) {
-                try {
-                    int value = Integer.parseInt(args.get(0));
-                    seasonConfig.setProperty(id, String.valueOf(value));
-                    updatedConfigThisTick = true;
-                    TaskScheduler.schedulePriorityTask(1, () -> {
-                        ConfigManager.onUpdatedInteger(id, value);
-                    });
-                }catch(Exception e){}
-            }
-            else if (configType.parentNullableInteger() && args.isEmpty()) {
-                try {
-                    seasonConfig.removeProperty(id);
-                }catch(Exception e){}
-            }
-            String newValue = seasonConfig.getProperty(id);
-            if (!previousUpdatedConfig && updatedConfigThisTick) {
-                configChanges.clear();
-            }
-            if (!Objects.equals(oldValue, newValue))  {
-                configChanges.add(ModifiableText.CONFIG_MODIFY_KEY.get(id, oldValue, newValue));
-            }
-
-            if (updatedConfigThisTick && DefaultConfigValues.RELOAD_NEEDED.contains(id)) {
-                configNeedsReload = true;
-            }
+    public static void onConfigChanged(String key, String oldValue, String newValue) {
+        if (!updatedConfigThisTick) {
+            configChanges.clear();
+        }
+        updatedConfigThisTick = true;
+        if (!Objects.equals(oldValue, newValue))  {
+            configChanges.add(ModifiableText.CONFIG_MODIFY_KEY.get(key, oldValue, newValue));
         }
     }
 
@@ -492,19 +428,8 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
         if (!updatedConfigThisTickFromCommand) {
             PlayerUtils.broadcastMessageToAdmins(ModifiableText.CONFIG_UPDATED_CHANGES.get(ActionText.hereTextRunCommand("Click to view config changes", "/ls config viewChanges")));
         }
-        try {
-            if (configNeedsReload) {
-                OtherUtils.reloadServer();
-            }
-            else {
-                SeasonChanger.reloadConfig();
-            }
-        }catch(Exception e) {
-            e.printStackTrace();
-        }
         updatedConfigThisTick = false;
         updatedConfigThisTickFromCommand = false;
-        configNeedsReload = false;
     }
 
     public static void handleOldHandshakeResponse(ServerPlayer player, OldHandshakePayload payload) {
@@ -532,10 +457,6 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
     public static void sendVoteScreenPacket(ServerPlayer player, String screenName, boolean requiresSleep, boolean closesWithEsc, boolean showTimer, List<String> players) {
         VoteScreenPayload voteScreenPayload = new VoteScreenPayload(screenName, requiresSleep, closesWithEsc, showTimer, players);
         NetworkHandlerServer.sendPacket(player, voteScreenPayload);
-    }
-
-    public static void sendConfig(ServerPlayer player, ConfigPayload configPacket) {
-        NetworkHandlerServer.sendPacket(player, configPacket);
     }
 
     public static void sendOldHandshake(ServerPlayer player) {
@@ -566,15 +487,15 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
             }
             SimplePackets.ACTIVE_WILDCARDS.sendToClient(activeWildcards, players);
         }
-        SimplePackets.TABLIST_SHOW_EXACT.sendToClient(Season.TAB_LIST_SHOW_EXACT_LIVES, players);
+        SimplePackets.TABLIST_SHOW_EXACT.sendToClient(Season.TAB_LIST_SHOW_EXACT_LIVES.get(), players);
         SimplePackets.TAB_LIST_LIVES_CUTOFF.sendToClient(LivesManager.MAX_TAB_NUMBER, players);
-        SimplePackets.FIX_SIZECHANGING_BUGS.sendToClient(SizeShifting.FIX_SIZECHANGING_BUGS, players);
-        SimplePackets.SIZESHIFTING_CHANGE.sendToClient(SizeShifting.SIZE_CHANGE_STEP * SizeShifting.SIZE_CHANGE_MULTIPLIER, players);
+        SimplePackets.FIX_SIZECHANGING_BUGS.sendToClient(SizeShifting.FIX_SIZECHANGING_BUGS.get(), players);
+        SimplePackets.SIZESHIFTING_CHANGE.sendToClient(SizeShifting.SIZE_CHANGE_STEP * SizeShifting.SIZE_CHANGE_MULTIPLIER.get(), players);
 
-        SimplePackets.ANIMAL_DISGUISE_ARMOR.sendToClient(AnimalDisguise.SHOW_ARMOR, players);
-        SimplePackets.ANIMAL_DISGUISE_HANDS.sendToClient(AnimalDisguise.SHOW_HANDS, players);
+        SimplePackets.ANIMAL_DISGUISE_ARMOR.sendToClient(AnimalDisguise.SHOW_ARMOR.get(), players);
+        SimplePackets.ANIMAL_DISGUISE_HANDS.sendToClient(AnimalDisguise.SHOW_HANDS.get(), players);
         SimplePackets.HUNGER_NON_EDIBLE.sendToClient(Hunger.nonEdibleStr, players);
-        SimplePackets.SNOWY_NETHER.sendToClient(NiceLife.SNOWY_NETHER, players);
+        SimplePackets.SNOWY_NETHER.sendToClient(NiceLife.SNOWY_NETHER.get(), players);
 
         if (Season.skyColor != null) {
             SimplePackets.SKYCOLOR.sendToClient(List.of(String.valueOf(Season.skyColorSetMode), String.valueOf((int)Season.skyColor.x), String.valueOf((int)Season.skyColor.y), String.valueOf((int)Season.skyColor.z)), players);
@@ -615,7 +536,7 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
             Season.updateClientPlayerTeam(player);
         }
 
-        SimplePackets.NICELIFE_LIVE_VOTING_ENABLED.sendToClient(NiceLifeVotingManager.PUBLIC_VOTING, players);
+        SimplePackets.NICELIFE_LIVE_VOTING_ENABLED.sendToClient(NiceLifeVotingManager.PUBLIC_VOTING.get(), players);
     }
 
     public static void sendUpdatePackets() {

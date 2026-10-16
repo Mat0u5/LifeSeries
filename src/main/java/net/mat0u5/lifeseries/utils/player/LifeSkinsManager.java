@@ -208,8 +208,8 @@ public class LifeSkinsManager {
         UUID uuid = player.getUUID();
         String playerName = null;
         if (SubInManager.isSubbingIn(uuid)) {
-            boolean changeSkin = SubInManager.CHANGE_SKIN;
-            boolean changeName = SubInManager.CHANGE_NAME;
+            boolean changeSkin = SubInManager.CHANGE_SKIN.get();
+            boolean changeName = SubInManager.CHANGE_NAME.get();
 
             if (changeSkin && !changeName) {
                 playerName = OtherUtils.profileName(SubInManager.getSubstitutedPlayer(uuid));

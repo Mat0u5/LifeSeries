@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.session;
 
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.events.Events;
@@ -33,9 +34,9 @@ public class Session {
     public static final int NATURAL_DEATH_LOG_MAX = 2400;
     public static final Time DISPLAY_TIMER_INTERVAL = Time.ticks(5);
     public static final Time TAB_LIST_INTERVAL = Time.ticks(20);
-    public static boolean TICK_FREEZE_NOT_IN_SESSION = false;
-    public static boolean WORLDBORDER_OUTSIDE_TELEPORT = true;
-    public static boolean SESSION_START_COUNTDOWN = false;
+    public static final ConfigRef<Boolean> TICK_FREEZE_NOT_IN_SESSION = ConfigRef.of(() -> LifeSeries.seasonConfig.TICK_FREEZE_NOT_IN_SESSION);
+    public static final ConfigRef<Boolean> WORLDBORDER_OUTSIDE_TELEPORT = ConfigRef.of(() -> LifeSeries.seasonConfig.WORLDBORDER_OUTSIDE_TELEPORT);
+    public static final ConfigRef<Boolean> SESSION_START_COUNTDOWN = ConfigRef.of(() -> LifeSeries.seasonConfig.SESSION_START_COUNTDOWN);
 
     private Time timer = Time.zero();
     private Time sessionLength = Time.nullTime();
@@ -78,7 +79,7 @@ public class Session {
         clearSessionActions();
         if (!currentSeason.sessionStart()) return false;
         if (sessionStartInProgress > 0) return false;
-        if (!SESSION_START_COUNTDOWN) {
+        if (!SESSION_START_COUNTDOWN.get()) {
             startSession();
         }
         else {
@@ -440,7 +441,7 @@ public class Session {
 
     private Map<UUID, Vec3> lastNonBorderPositions = new HashMap<>();
     public void checkPlayerPosition(ServerPlayer player) {
-        if (!WORLDBORDER_OUTSIDE_TELEPORT) return;
+        if (!WORLDBORDER_OUTSIDE_TELEPORT.get()) return;
         WorldBorder border = ((IPlayer) player).ls$getServerLevel().getWorldBorder();
         double playerSize = player.getBoundingBox().getXsize()/2;
         double minX = Math.floor(border.getMinX()) + playerSize;
@@ -576,7 +577,7 @@ public class Session {
     }
 
     public void checkTickFreeze() {
-        if (!TICK_FREEZE_NOT_IN_SESSION) return;
+        if (!TICK_FREEZE_NOT_IN_SESSION.get()) return;
         boolean frozen = status != SessionStatus.STARTED && sessionStartInProgress <= 0;
         OtherUtils.setFreezeGame(frozen);
     }
