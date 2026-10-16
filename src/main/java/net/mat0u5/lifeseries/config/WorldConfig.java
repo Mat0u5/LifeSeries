@@ -1,23 +1,16 @@
 package net.mat0u5.lifeseries.config;
 
+import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.matlib.config.SimpleConfig;
 import net.minecraft.world.level.storage.LevelResource;
 import net.minecraft.world.level.storage.LevelStorageSource;
 
-import java.util.List;
-
-public class WorldConfig extends ConfigManager {
+public class WorldConfig extends SimpleConfig {
     public WorldConfig(LevelStorageSource.LevelStorageAccess worldAccess) {
-        super(worldAccess.getLevelPath(LevelResource.ROOT).resolve("lifeseries").toString(), "lifeseries.dat");
-    }
-
-    @Override
-    protected List<ConfigFileEntry<?>> getDefaultConfigEntries() {
-        return List.of();
-    }
-    @Override
-    public void instantiateProperties() {
+        super(LifeSeries.MOD_ID+":world", worldAccess.getLevelPath(LevelResource.ROOT).resolve("lifeseries"), "lifeseries.dat");
         acknowledged();
     }
+
     public boolean acknowledged() {
         return getOrCreateBoolean("acknowledged", false);
     }

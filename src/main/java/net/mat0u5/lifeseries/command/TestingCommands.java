@@ -3,7 +3,9 @@ package net.mat0u5.lifeseries.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.mat0u5.lifeseries.command.manager.CustomCommand;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.matlib.utils.other.TextUtils;
 import net.mat0u5.matlib.utils.other.VersionCompatibility;
 import net.mat0u5.matlib.utils.player.PermissionManager;
@@ -61,13 +63,9 @@ public class TestingCommands extends CustomCommand {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        PlayerUtils.broadcastMessage(Component.literal("1.5.8: "+ VersionCompatibility.getModVersionInt("1.5.8")));
-        PlayerUtils.broadcastMessage(Component.literal("1.5.9-pre1: "+VersionCompatibility.getModVersionInt("1.5.9-pre1")));
-        PlayerUtils.broadcastMessage(Component.literal("1.5.9: "+VersionCompatibility.getModVersionInt("1.5.9")));
-        PlayerUtils.broadcastMessage(Component.literal("1.5.10-pre1: "+VersionCompatibility.getModVersionInt("1.5.10-pre1")));
-        PlayerUtils.broadcastMessage(Component.literal("1.5.10: "+VersionCompatibility.getModVersionInt("1.5.10")));
-        PlayerUtils.broadcastMessage(Component.literal("1.6.0-pre1: "+VersionCompatibility.getModVersionInt("1.6.0-pre1")));
-        PlayerUtils.broadcastMessage(Component.literal("1.6.0: "+VersionCompatibility.getModVersionInt("1.6.0")));
+        TaskScheduler.schedulePriorityTask(1, () -> {
+            TriviaWildcard.spawnBotFor(player);
+        });
 
         return 1;
     }

@@ -1,14 +1,16 @@
 package net.mat0u5.lifeseries.client.gui.config.entries.extra;
 
-import net.mat0u5.lifeseries.client.gui.config.entries.ConfigEntry;
-import net.mat0u5.lifeseries.client.gui.config.entries.interfaces.IPopup;
-import net.mat0u5.lifeseries.client.gui.config.entries.interfaces.ITextFieldAddonPopup;
-import net.mat0u5.lifeseries.client.gui.config.entries.main.StringConfigEntry;
+import net.mat0u5.matlib.client.gui.config.entries.ConfigEntry;
+import net.mat0u5.matlib.client.gui.config.entries.interfaces.IPopup;
+import net.mat0u5.matlib.client.gui.config.entries.interfaces.ITextFieldAddonPopup;
+import net.mat0u5.matlib.client.gui.config.entries.main.StringConfigEntry;
 import net.mat0u5.matlib.client.render.RenderUtils;
 import net.mat0u5.matlib.client.utils.TextColors;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.config.ModifiableTextManager;
-import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.config.LifeSeriesConfigTypes;
+import net.mat0u5.matlib.config.entry.ConfigGuiEntry;
+import net.mat0u5.matlib.config.type.ConfigType;
 import net.mat0u5.matlib.utils.enums.Formatted;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -20,8 +22,8 @@ import java.util.List;
 
 public class ModifiableTextConfigEntry extends StringConfigEntry implements ITextFieldAddonPopup {
     private int firstPartHeight = PREFFERED_HEIGHT;
-    public ModifiableTextConfigEntry(String fieldName, String displayName, String description, String value, String defaultValue) {
-        super(fieldName, displayName, description, value, defaultValue, 300, 14);
+    public ModifiableTextConfigEntry(ConfigGuiEntry guiEntry, String value, String defaultValue) {
+        super(guiEntry, value, defaultValue, 300, 14);
     }
 
     public boolean isFirst() {
@@ -63,8 +65,8 @@ public class ModifiableTextConfigEntry extends StringConfigEntry implements ITex
 
 
     @Override
-    public ConfigTypes getValueType() {
-        return ConfigTypes.MODIFIABLE_TEXT;
+    public ConfigType<?> getValueType() {
+        return LifeSeriesConfigTypes.MODIFIABLE_TEXT;
     }
 
     @Override

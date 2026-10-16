@@ -1,13 +1,16 @@
 package net.mat0u5.lifeseries.client.gui.config.entries.extra;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.client.gui.config.entries.ConfigEntry;
-import net.mat0u5.lifeseries.client.gui.config.entries.ModifiableListEntry;
+import net.mat0u5.lifeseries.client.config.LifeSeriesConfigGuiClient;
+import net.mat0u5.matlib.client.gui.config.entries.ConfigEntry;
+import net.mat0u5.matlib.client.gui.config.entries.ModifiableListEntry;
 import net.mat0u5.matlib.client.render.RenderUtils;
 import net.mat0u5.matlib.client.utils.TextColors;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.config.LifeSeriesConfigTypes;
+import net.mat0u5.matlib.config.entry.ConfigGuiEntry;
+import net.mat0u5.matlib.config.type.ConfigType;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.matlib.utils.other.Time;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -49,18 +52,18 @@ public class TeamConfigEntry extends ModifiableListEntry {
     private int YELLOW_TIME = 0;
     private int DEFAULT_TIME = 0;
 
-    public TeamConfigEntry(String fieldName, List<String> args) {
-        super(fieldName);
+    public TeamConfigEntry(ConfigGuiEntry guiEntry, List<String> args) {
+        super(guiEntry);
         try {
-            RED_TIME = Integer.parseInt(args.get(8));
-            YELLOW_TIME = Integer.parseInt(args.get(9));
-            DEFAULT_TIME = Integer.parseInt(args.get(10));
+            RED_TIME = Integer.parseInt(args.get(5));
+            YELLOW_TIME = Integer.parseInt(args.get(6));
+            DEFAULT_TIME = Integer.parseInt(args.get(7));
         }catch(Exception e) {}
-        this.defaultTeamNum = livesOrTime(args.get(3));
-        this.defaultTeamName = args.get(4);
-        this.defaultTeamColor = args.get(5);
-        this.defaultAllowedKill = livesOrTime(args.get(6));
-        this.defaultGainLifeKill = livesOrTime(args.get(7));
+        this.defaultTeamNum = livesOrTime(args.get(0));
+        this.defaultTeamName = args.get(1);
+        this.defaultTeamColor = args.get(2);
+        this.defaultAllowedKill = livesOrTime(args.get(3));
+        this.defaultGainLifeKill = livesOrTime(args.get(4));
         this.teamNum = defaultTeamNum;
         this.teamName = defaultTeamName;
         this.teamColor = defaultTeamColor;
@@ -396,7 +399,7 @@ public class TeamConfigEntry extends ModifiableListEntry {
         for (int i : getSisterTeamNums()) {
             if (i > max) max = i;
         }
-        TeamConfigEntry newEntry = new TeamConfigEntry("dynamic_teams_"+ UUID.randomUUID(), List.of("", "" ,"", String.valueOf(max+(isLimitedLife()?8*3600:1)), "New Team", "white", "", "", String.valueOf(RED_TIME), String.valueOf(YELLOW_TIME), String.valueOf(DEFAULT_TIME)));
+        TeamConfigEntry newEntry = new TeamConfigEntry(LifeSeriesConfigGuiClient.copyWithKey(inboundGuiEntry, "dynamic_teams_"+ UUID.randomUUID()), List.of(String.valueOf(max+(isLimitedLife()?8*3600:1)), "New Team", "white", "", "", String.valueOf(RED_TIME), String.valueOf(YELLOW_TIME), String.valueOf(DEFAULT_TIME)));
         newEntry.defaultTeamNum = "";
         return newEntry;
     }
@@ -582,7 +585,7 @@ public class TeamConfigEntry extends ModifiableListEntry {
     //?}
 
     @Override
-    public void onSave() {
+    public Optional<ConfigGuiEntry> onSave() {
         List<String> allTeams = new ArrayList<>();
         allTeams.add("lives_"+this.getTeamNumAsString());
         for (ModifiableListEntry entry : getSisterEntries()) {
@@ -595,10 +598,11 @@ public class TeamConfigEntry extends ModifiableListEntry {
         SimplePackets.SET_TEAM.sendToServer(List.of(
                 String.join(";",allTeams), this.getTeamNumAsString(), teamName, teamColor, kill, gainlife, isLimitedLife() ? parseLivesOrTimeNoBoundary(this.teamNum) : ""
         ));
+        return Optional.empty();
     }
 
     @Override
-    public ConfigTypes getValueType() {
-        return ConfigTypes.TEAM_ENTRY;
+    public ConfigType<?> getValueType() {
+        return LifeSeriesConfigTypes.TEAM_ENTRY;
     }
 }

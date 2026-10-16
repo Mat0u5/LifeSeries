@@ -1,12 +1,12 @@
 package net.mat0u5.lifeseries.seasons.season.doublelife;
 
-import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.lifeseries.config.SeasonConfig;
+import net.mat0u5.matlib.config.entry.ConfigHeader;
+import net.mat0u5.matlib.config.entry.ConfigurableValue;
+import net.mat0u5.matlib.config.type.ConfigTypes;
+import net.mat0u5.lifeseries.config.LifeSeriesConfigTypes;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.mat0u5.matlib.utils.other.TextUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DoubleLifeConfig extends SeasonConfig {
@@ -58,118 +58,84 @@ public class DoubleLifeConfig extends SeasonConfig {
             "quick_charge"
     );
 
-    public static final ConfigFileEntry<Boolean> ANNOUNCE_SOULMATES = new ConfigFileEntry<>(
-            "announce_soulmates", false, "season",
-            "Announce Soulmates", "Tells you who your soulmate is instead of it saying 'Your soulmate is ????'"
-    );
+    public final ConfigurableValue<Boolean> ANNOUNCE_SOULMATES = ConfigurableValue.register(this, "announce_soulmates", false)
+            .name("Announce Soulmates")
+            .description("Tells you who your soulmate is instead of it saying 'Your soulmate is ????'")
+            .group("season");
+    public final ConfigHeader GROUP_SOULMATES = ConfigHeader.register(this, "group_soulmates", "Soulmates")
+            .description("Manually edit soulmate pairings. Both players need to have joined this server at least once.")
+            .group("season.soulmates").groupHeader(true);
+    public final ConfigHeader GROUP_SOULBIND = ConfigHeader.register(this, "group_soulbind", "More Soulbind Options")
+            .group("season.soulbind").groupHeader(true);
+    public final ConfigurableValue<Boolean> BREAKUP_LAST_PAIR_STANDING = ConfigurableValue.register(this, "breakup_last_pair_standing", false)
+            .name("Breakup Last Pair Standing")
+            .description("Once only two players are left, they will be broken up as soulmates for a final showdown.")
+            .group("season");
+    public final ConfigurableValue<Boolean> DISABLE_START_TELEPORT = ConfigurableValue.register(this, "disable_start_teleport", false)
+            .name("Disable Start Teleport")
+            .description("Disables the player spreading over the map when the first session starts.")
+            .group("season");
 
-    public static final ConfigFileEntry<Boolean> SOULBOUND_FOOD = new ConfigFileEntry<>(
-            "soulbound_food", false, "season.soulbind",
-            "Soulbound Food", "Makes your food bar shared with your soulmate, just like the health bar."
-    );
-    public static final ConfigFileEntry<Boolean> SOULBOUND_EFFECTS = new ConfigFileEntry<>(
-            "soulbound_effects", false, "season.soulbind",
-            "Soulbound Effects", "Makes your effects be shared with your soulmate."
-    );
-    public static final ConfigFileEntry<Boolean> SOULBOUND_INVENTORIES = new ConfigFileEntry<>(
-            "soulbound_inventories", false, "season.soulbind",
-            "Soulbound Inventories", "Makes your inventory be shared with your soulmate. \nWARNING: There could be some ways of abusing this (duping etc). Use with caution."
-    );
-    public static final ConfigFileEntry<Boolean> BREAKUP_LAST_PAIR_STANDING = new ConfigFileEntry<>(
-            "breakup_last_pair_standing", false, "season",
-            "Breakup Last Pair Standing", "Once only two players are left, they will be broken up as soulmates for a final showdown."
-    );
-    public static final ConfigFileEntry<Boolean> DISABLE_START_TELEPORT = new ConfigFileEntry<>(
-            "disable_start_teleport", false, "season",
-            "Disable Start Teleport", "Disables the player spreading over the map when the first session starts."
-    );
-    public static final ConfigFileEntry<Boolean> SOULMATE_LOCATOR_BAR = new ConfigFileEntry<>(
-            "soulbound_locator_bar", false, "season",
-            "Soulmate Locator Bar", "Makes ONLY your soulmate appear on the locator bar."
-    );
-    public static final ConfigFileEntry<Boolean> SOULBOUND_BOOGEYMAN = new ConfigFileEntry<>(
-            "soulbound_boogeyman", false, "season.soulbind",
-            "Soulbound Boogeymen (If enabled)", "Makes you become the Boogeyman if your soulmate is one - curing one will cure the other as well."
-    );
-    public static final ConfigFileEntry<Boolean> SOULBOUND_SECRET_SOCIETY = new ConfigFileEntry<>(
-            "soulbound_secret_society", false, "season.soulbind[new]",
-            "Soulbound Secret Society (If enabled)", "Makes you become a member of the Secret Society if your soulmate is one."
-    );
-    public static final ConfigFileEntry<Boolean> SOULMATES_PVP_ALLOWED = new ConfigFileEntry<>(
-            "soulmates_pvp_allowed", true, "season",
-            "Soulmates PvP Allowed", "Controls whether soulmates can hit each other."
-    );
-    public static final ConfigFileEntry<Double> SOULMATES_ASSIGN_MINUTE = new ConfigFileEntry<>(
-            "soulmates_assign_time", 1.0, ConfigTypes.MINUTES, "season",
-            "Soulmates Assign Time", "How many minutes after the session starts the soulmates get assigned."
-    );
-    public static final ConfigFileEntry<Boolean> SOULBOUND_LIVES = new ConfigFileEntry<>(
-            "soulbound_lives", true, ConfigTypes.BOOLEAN_REVERSE_HEADER, "{season.soulbind.lives}",
-            "Soulbound Lives", "Controls whether soulmates share their life count."
-    );
-    public static final ConfigFileEntry<Boolean> SOULBOUND_LIVES_ASSIGN_MATCH = new ConfigFileEntry<>(
-            "soulbound_lives_assign_match", false, "season.soulbind.lives",
-            "Only Assign Soulmates With Same Lives", "Makes it so that during assignment, only the players with the same amount of lives can become soulmates."
-    );
+    public final ConfigurableValue<Boolean> SOULBOUND_FOOD = ConfigurableValue.register(this, "soulbound_food", false)
+            .name("Soulbound Food")
+            .description("Makes your food bar shared with your soulmate, just like the health bar.")
+            .group("season.soulbind");
+    public final ConfigurableValue<Boolean> SOULBOUND_EFFECTS = ConfigurableValue.register(this, "soulbound_effects", false)
+            .name("Soulbound Effects")
+            .description("Makes your effects be shared with your soulmate.")
+            .group("season.soulbind");
+    public final ConfigurableValue<Boolean> SOULBOUND_INVENTORIES = ConfigurableValue.register(this, "soulbound_inventories", false)
+            .name("Soulbound Inventories")
+            .description("Makes your inventory be shared with your soulmate. \nWARNING: There could be some ways of abusing this (duping etc). Use with caution.")
+            .group("season.soulbind");
+    public final ConfigurableValue<Boolean> SOULBOUND_BOOGEYMAN = ConfigurableValue.register(this, "soulbound_boogeyman", false)
+            .name("Soulbound Boogeymen (If enabled)")
+            .description("Makes you become the Boogeyman if your soulmate is one - curing one will cure the other as well.")
+            .group("season.soulbind");
+    public final ConfigurableValue<Boolean> SOULBOUND_SECRET_SOCIETY = ConfigurableValue.register(this, "soulbound_secret_society", false)
+            .name("Soulbound Secret Society (If enabled)")
+            .description("Makes you become a member of the Secret Society if your soulmate is one.")
+            .group("season.soulbind")
+            .setNew(true);
+    public final ConfigurableValue<Boolean> SOULBOUND_LIVES = ConfigurableValue.register(this, "soulbound_lives", true, LifeSeriesConfigTypes.BOOLEAN_REVERSE_HEADER)
+            .name("Soulbound Lives")
+            .description("Controls whether soulmates share their life count.")
+            .group("season.soulbind.lives").groupHeader(true);
+    public final ConfigurableValue<Boolean> SOULBOUND_LIVES_ASSIGN_MATCH = ConfigurableValue.register(this, "soulbound_lives_assign_match", false)
+            .name("Only Assign Soulmates With Same Lives")
+            .description("Makes it so that during assignment, only the players with the same amount of lives can become soulmates.")
+            .group("season.soulbind.lives");
+    public final ConfigurableValue<Boolean> SOULMATES_PVP_ALLOWED = ConfigurableValue.register(this, "soulmates_pvp_allowed", true)
+            .name("Soulmates PvP Allowed")
+            .description("Controls whether soulmates can hit each other.")
+            .group("season");
+    public final ConfigurableValue<Double> SOULMATES_ASSIGN_MINUTE = ConfigurableValue.register(this, "soulmates_assign_time", 1.0, ConfigTypes.MINUTES)
+            .name("Soulmates Assign Time")
+            .description("How many minutes after the session starts the soulmates get assigned.")
+            .group("season");
 
-
-
-
-    public static final ConfigFileEntry<Object> GROUP_SOULBIND = new ConfigFileEntry<>(
-            "group_soulbind", null, ConfigTypes.TEXT, "{season.soulbind}",
-            "More Soulbind Options", ""
-    );
-
-    public static final ConfigFileEntry<Object> GROUP_SOULMATES = new ConfigFileEntry<>(
-            "group_soulmates", null, ConfigTypes.TEXT, "{season.soulmates}",
-            "Soulmates", "Manually edit soulmate pairings. Both players need to have joined this server at least once."
-    );
+    public final ConfigurableValue<Boolean> SOULMATE_LOCATOR_BAR = ConfigurableValue.register(this, "soulbound_locator_bar", false)
+            .name("Soulmate Locator Bar")
+            .description("Makes ONLY your soulmate appear on the locator bar.")
+            .group("season");
 
     public DoubleLifeConfig() {
         super(Seasons.DOUBLE_LIFE);
+        removeEntry(NO_SEASON_SPECIFIC);
+        removeEntry(DEATH_TITLE_MATCH_DEATH_MESSAGE);
+        //? if < 1.21.6 {
+        /*removeEntry(SOULMATE_LOCATOR_BAR);
+        *///?}
+
+        CUSTOM_ENCHANTER_ALGORITHM.defaultValue(true);
+        BLACKLIST_ITEMS.defaultValue(BLACKLISTED_ITEMS);
+        BLACKLIST_BLOCKS.defaultValue(BLACKLISTED_BLOCKS);
+        BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.defaultValue(CLAMPED_ENCHANTMENTS);
+        LIVES_RANDOMIZE_MINUTE.defaultValue(1.25);
+        LIVES_RANDOMIZE_MINUTE.description(LIVES_RANDOMIZE_MINUTE.getDescription() + "\n§cThis time should ALWAYS be after soulmates rolling!");
     }
 
-    @Override
-    protected List<ConfigFileEntry<?>> getDefaultConfigEntries() {
-        List<ConfigFileEntry<?>> defaultEntries = super.getDefaultConfigEntries();
-        defaultEntries.remove(DEATH_TITLE_MATCH_DEATH_MESSAGE);
-        return defaultEntries;
-    }
-
-    @Override
-    protected List<ConfigFileEntry<?>> getSeasonSpecificConfigEntries() {
-        List<ConfigFileEntry<?>> result =  new ArrayList<>(List.of(
-                ANNOUNCE_SOULMATES
-                ,GROUP_SOULMATES //Group
-                ,GROUP_SOULBIND //Group
-                ,BREAKUP_LAST_PAIR_STANDING
-                ,DISABLE_START_TELEPORT
-
-
-                ,SOULBOUND_FOOD
-                ,SOULBOUND_EFFECTS
-                ,SOULBOUND_INVENTORIES
-                ,SOULBOUND_BOOGEYMAN
-                ,SOULBOUND_SECRET_SOCIETY
-                ,SOULBOUND_LIVES
-                ,SOULBOUND_LIVES_ASSIGN_MATCH
-                ,SOULMATES_PVP_ALLOWED
-                ,SOULMATES_ASSIGN_MINUTE
-        ));
-        //? if >= 1.21.6 {
-        result.add(SOULMATE_LOCATOR_BAR);
-        //?}
-        return result;
-    }
-
-    @Override
-    public void instantiateProperties() {
-        CUSTOM_ENCHANTER_ALGORITHM.defaultValue = true;
-        BLACKLIST_ITEMS.defaultValue = TextUtils.formatString("[{}]", BLACKLISTED_ITEMS);
-        BLACKLIST_BLOCKS.defaultValue = TextUtils.formatString("[{}]", BLACKLISTED_BLOCKS);
-        BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.defaultValue = TextUtils.formatString("[{}]", CLAMPED_ENCHANTMENTS);
-        LIVES_RANDOMIZE_MINUTE.defaultValue = 1.25;
-        LIVES_RANDOMIZE_MINUTE.description += "\n§cThis time should ALWAYS be after soulmates rolling!";
-        super.instantiateProperties();
+    public static DoubleLifeConfig get() {
+        return getActive(DoubleLifeConfig.class, DoubleLifeConfig::new);
     }
 }

@@ -1,12 +1,15 @@
 package net.mat0u5.lifeseries.client.gui.config.entries.extra;
 
-import net.mat0u5.lifeseries.client.gui.config.entries.ConfigEntry;
-import net.mat0u5.lifeseries.client.gui.config.entries.GroupConfigEntry;
-import net.mat0u5.lifeseries.client.gui.config.entries.ModifiableListEntry;
+import net.mat0u5.lifeseries.client.config.LifeSeriesConfigGuiClient;
+import net.mat0u5.matlib.client.gui.config.entries.ConfigEntry;
+import net.mat0u5.matlib.client.gui.config.entries.GroupConfigEntry;
+import net.mat0u5.matlib.client.gui.config.entries.ModifiableListEntry;
 import net.mat0u5.matlib.client.render.RenderUtils;
 import net.mat0u5.matlib.client.utils.TextColors;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
-import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.config.LifeSeriesConfigTypes;
+import net.mat0u5.matlib.config.entry.ConfigGuiEntry;
+import net.mat0u5.matlib.config.type.ConfigType;
 import net.mat0u5.matlib.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -16,6 +19,7 @@ import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPosition
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -38,12 +42,12 @@ public class SoulmateConfigEntry extends ModifiableListEntry {
 
     public boolean sentToServer;
 
-    public SoulmateConfigEntry(String fieldName, List<String> args) {
-        this(fieldName, args.size() > 3 ? args.get(3) : "", args.size() > 4 ? args.get(4) : "");
+    public SoulmateConfigEntry(ConfigGuiEntry guiEntry, List<String> args) {
+        this(guiEntry, args.size() > 0 ? args.get(0) : "", args.size() > 1 ? args.get(1) : "");
     }
 
-    public SoulmateConfigEntry(String fieldName, String player1, String player2) {
-        super(fieldName);
+    public SoulmateConfigEntry(ConfigGuiEntry guiEntry, String player1, String player2) {
+        super(guiEntry);
         this.defaultPlayer1 = player1;
         this.defaultPlayer2 = player2;
         this.player1 = player1;
@@ -205,7 +209,7 @@ public class SoulmateConfigEntry extends ModifiableListEntry {
 
     @Override
     public ConfigEntry getNewEntry() {
-        return new SoulmateConfigEntry("dynamic_soulmate_" + UUID.randomUUID(), "", "");
+        return new SoulmateConfigEntry(LifeSeriesConfigGuiClient.copyWithKey(inboundGuiEntry, "dynamic_soulmate_" + UUID.randomUUID()), "", "");
     }
 
     @Override
@@ -312,21 +316,22 @@ public class SoulmateConfigEntry extends ModifiableListEntry {
     //?}
 
     @Override
-    public void onSave() {
+    public Optional<ConfigGuiEntry> onSave() {
         List<String> allPairs = new ArrayList<>();
         for (ModifiableListEntry entry : getListEntries()) {
             if (!(entry instanceof SoulmateConfigEntry soulmateEntry)) continue;
-            if (soulmateEntry.sentToServer) return;
+            if (soulmateEntry.sentToServer) return Optional.empty();
             if (soulmateEntry.isEmptyEntry()) continue;
             allPairs.add(soulmateEntry.getPlayer1());
             allPairs.add(soulmateEntry.getPlayer2());
         }
         this.sentToServer = true;
         SimplePackets.SET_SOULMATES.sendToServer(allPairs);
+        return Optional.empty();
     }
 
     @Override
-    public ConfigTypes getValueType() {
-        return ConfigTypes.SOULMATE_ENTRY;
+    public ConfigType<?> getValueType() {
+        return LifeSeriesConfigTypes.SOULMATE_ENTRY;
     }
 }

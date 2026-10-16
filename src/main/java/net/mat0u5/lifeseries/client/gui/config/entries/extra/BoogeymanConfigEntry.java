@@ -1,13 +1,15 @@
 package net.mat0u5.lifeseries.client.gui.config.entries.extra;
 
-import net.mat0u5.lifeseries.client.gui.config.entries.ConfigEntry;
-import net.mat0u5.lifeseries.client.gui.config.entries.main.BooleanConfigEntry;
-import net.mat0u5.lifeseries.client.gui.config.entries.main.DoubleConfigEntry;
-import net.mat0u5.lifeseries.client.gui.config.entries.main.IntegerConfigEntry;
-import net.mat0u5.lifeseries.client.gui.config.entries.main.StringConfigEntry;
+import net.mat0u5.matlib.client.gui.config.entries.ConfigEntry;
+import net.mat0u5.matlib.client.gui.config.entries.main.BooleanConfigEntry;
+import net.mat0u5.matlib.client.gui.config.entries.main.DoubleConfigEntry;
+import net.mat0u5.matlib.client.gui.config.entries.main.IntegerConfigEntry;
+import net.mat0u5.matlib.client.gui.config.entries.main.StringConfigEntry;
 import net.mat0u5.matlib.client.render.RenderUtils;
 import net.mat0u5.matlib.client.utils.TextColors;
-import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.config.LifeSeriesConfigTypes;
+import net.mat0u5.matlib.config.entry.ConfigGuiEntry;
+import net.mat0u5.matlib.config.type.ConfigType;
 import net.mat0u5.matlib.utils.other.TextUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 
@@ -23,8 +25,8 @@ public class BoogeymanConfigEntry extends BooleanConfigEntry {
     private String[] boogeymanIgnore = null;
     private String[] boogeymanForce = null;
 
-    public BoogeymanConfigEntry(String fieldName, String displayName, String description, boolean value, boolean defaultValue) {
-        super(fieldName, displayName, description, value, defaultValue);
+    public BoogeymanConfigEntry(ConfigGuiEntry guiEntry, boolean value, boolean defaultValue) {
+        super(guiEntry, value, defaultValue);
     }
 
     @Override
@@ -141,8 +143,8 @@ public class BoogeymanConfigEntry extends BooleanConfigEntry {
     }
 
     @Override
-    public ConfigTypes getValueType() {
-        return ConfigTypes.BOOGEYMAN;
+    public ConfigType<?> getValueType() {
+        return LifeSeriesConfigTypes.BOOGEYMAN;
     }
 
     public boolean showBoogeymanInfoText() {

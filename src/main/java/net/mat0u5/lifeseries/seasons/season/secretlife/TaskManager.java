@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.secretlife;
 
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.config.StringListConfig;
 import net.mat0u5.lifeseries.config.StringListManager;
@@ -38,17 +39,17 @@ import net.minecraft.world.item.component.WrittenBookContent;
 //import java.util.stream.Stream;
 
 public class TaskManager {
-    public static int EASY_SUCCESS = 20;
-    public static int EASY_FAIL = 0;
-    public static int HARD_SUCCESS = 40;
-    public static int HARD_FAIL = -20;
-    public static int RED_SUCCESS = 10;
-    public static int RED_FAIL = -5;
-    public static double ASSIGN_TASKS_MINUTE = 1;
-    public static boolean BROADCAST_SECRET_KEEPER = false;
-    public static boolean CONSTANT_TASKS = false;
-    public static boolean PUBLIC_TASKS_ON_SUBMIT = false;
-    public static boolean TASKS_NEED_CONFIRMATION = false;
+    public static final ConfigRef<Integer> EASY_SUCCESS = ConfigRef.of(() -> SecretLifeConfig.get().TASK_HEALTH_EASY_PASS);
+    public static final ConfigRef<Integer> EASY_FAIL = ConfigRef.of(() -> SecretLifeConfig.get().TASK_HEALTH_EASY_FAIL);
+    public static final ConfigRef<Integer> HARD_SUCCESS = ConfigRef.of(() -> SecretLifeConfig.get().TASK_HEALTH_HARD_PASS);
+    public static final ConfigRef<Integer> HARD_FAIL = ConfigRef.of(() -> SecretLifeConfig.get().TASK_HEALTH_HARD_FAIL);
+    public static final ConfigRef<Integer> RED_SUCCESS = ConfigRef.of(() -> SecretLifeConfig.get().TASK_HEALTH_RED_PASS);
+    public static final ConfigRef<Integer> RED_FAIL = ConfigRef.of(() -> SecretLifeConfig.get().TASK_HEALTH_RED_FAIL);
+    public static final ConfigRef<Double> ASSIGN_TASKS_MINUTE = ConfigRef.of(() -> SecretLifeConfig.get().ASSIGN_TASKS_MINUTE);
+    public static final ConfigRef<Boolean> BROADCAST_SECRET_KEEPER = ConfigRef.of(() -> SecretLifeConfig.get().BROADCAST_SECRET_KEEPER);
+    public static final ConfigRef<Boolean> CONSTANT_TASKS = ConfigRef.of(() -> SecretLifeConfig.get().CONSTANT_TASKS);
+    public static final ConfigRef<Boolean> PUBLIC_TASKS_ON_SUBMIT = ConfigRef.of(() -> SecretLifeConfig.get().BROADCAST_TASKS_WHEN_SUBMITTED);
+    public static final ConfigRef<Boolean> TASKS_NEED_CONFIRMATION = ConfigRef.of(() -> SecretLifeConfig.get().TASKS_NEED_CONFIRMATION);
 
     // Fraction of the tasks to keep as used when resetting happens.
     public static double RECENT_TASK_PERCENTAGE = 0.5;
@@ -71,7 +72,7 @@ public class TaskManager {
     public static final Random rnd = new Random();
 
     public static void initialize() {
-        usedTasksConfig = new StringListConfig("./config/lifeseries/main", "DO_NOT_MODIFY_secretlife_used_tasks.properties");
+        usedTasksConfig = new StringListConfig("lifeseries/main", "DO_NOT_MODIFY_secretlife_used_tasks.properties");
         locationsConfig = new SecretLifeLocationConfig();
         locationsConfig.loadLocations();
         reloadTasks();
@@ -204,7 +205,7 @@ public class TaskManager {
     public static void assignRandomTaskToPlayer(ServerPlayer player, TaskTypes type) {
         if (player == null) return;
         UUID uuid = SubInManager.getOrSub(player);
-        if (type != TaskTypes.RED || CONSTANT_TASKS) {
+        if (type != TaskTypes.RED || CONSTANT_TASKS.get()) {
             submittedOrFailed.remove(uuid);
         }
 

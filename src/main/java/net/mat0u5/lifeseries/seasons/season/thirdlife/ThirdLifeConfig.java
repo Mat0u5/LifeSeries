@@ -2,7 +2,6 @@ package net.mat0u5.lifeseries.seasons.season.thirdlife;
 
 import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.matlib.utils.other.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,17 +51,17 @@ public class ThirdLifeConfig extends SeasonConfig {
 
     public ThirdLifeConfig() {
         super(Seasons.THIRD_LIFE);
+        setDefaultValues();
     }
 
     public ThirdLifeConfig(String folderPath, String filePath) {
         super(folderPath, filePath);
+        setDefaultValues();
     }
 
-    @Override
-    public void instantiateProperties() {
-        BLACKLIST_ITEMS.defaultValue = TextUtils.formatString("[{}]", BLACKLISTED_ITEMS);
-        BLACKLIST_BLOCKS.defaultValue = TextUtils.formatString("[{}]", BLACKLISTED_BLOCKS);
-        BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.defaultValue = TextUtils.formatString("[{}]", CLAMPED_ENCHANTMENTS);
-        super.instantiateProperties();
+    private void setDefaultValues() {
+        BLACKLIST_ITEMS.defaultValue(BLACKLISTED_ITEMS);
+        BLACKLIST_BLOCKS.defaultValue(BLACKLISTED_BLOCKS);
+        BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.defaultValue(CLAMPED_ENCHANTMENTS);
     }
 }

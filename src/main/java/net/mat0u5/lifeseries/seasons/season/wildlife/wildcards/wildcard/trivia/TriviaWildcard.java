@@ -221,7 +221,8 @@ public class TriviaWildcard extends Wildcard {
     }
     public static void spawnBotFor(ServerPlayer player, BlockPos pos) {
         resetPlayerOnBotSpawn(player);
-        TriviaBot bot = LevelUtils.spawnEntity(MobRegistry.TRIVIA_BOT, ((IPlayer) player).ls$getServerLevel(), pos);
+        ServerLevel level = ((IPlayer) player).ls$getServerLevel();
+        TriviaBot bot = LevelUtils.spawnEntity(MobRegistry.TRIVIA_BOT, level, pos);
         if (bot != null) {
             SessionTranscript.newTriviaBot(player);
             bot.serverData.setBoundPlayer(player);
