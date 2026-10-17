@@ -4,7 +4,6 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.compatibilities.VoicechatClient;
 import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
-import net.mat0u5.lifeseries.client.gui.other.UpdateInfoScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.NewQuizScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.QuizScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.VotingScreen;
@@ -18,10 +17,8 @@ import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
-import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Holder;
@@ -54,7 +51,6 @@ import net.mat0u5.lifeseries.client.compatibilities.ReplayModCompatibility;
 
 public class ClientEvents {
     public static long onGroundFor = 0;
-    private static boolean hasShownUpdateScreen = false;
 
     public static void onServerStarting(MinecraftServer server) {
         checkReplayServer(server);
@@ -99,17 +95,6 @@ public class ClientEvents {
 
     public static void onScreenOpen(Screen screen, int scaledWidth, int scaledHeight) {
         if (LifeSeries.modDisabled()) return;
-        if (UpdateChecker.updateAvailable) {
-            int disableVersion = LifeSeriesClient.clientConfig.getOrCreateInt("ignore_update", 0);
-            if (UpdateChecker.version == disableVersion && !UpdateChecker.TEST_UPDATE_FAKE && !UpdateChecker.TEST_UPDATE_LAST) return;
-
-            if (screen instanceof TitleScreen && !hasShownUpdateScreen) {
-                Minecraft.getInstance().execute(() -> {
-                    RenderUtils.setScreen(new UpdateInfoScreen(UpdateChecker.versionName, UpdateChecker.versionDescription));
-                    hasShownUpdateScreen = true;
-                });
-            }
-        }
     }
 
     public static void onClientStart(Minecraft client) {

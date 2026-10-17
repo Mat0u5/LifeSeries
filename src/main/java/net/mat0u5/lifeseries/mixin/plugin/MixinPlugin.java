@@ -15,13 +15,6 @@ public class MixinPlugin implements IMixinConfigPlugin {
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         boolean isClient = MatLib.platform().isClient();
-        //? if fabric {
-        if (mixinClassName.contains("compat.fabricapi")) {
-            boolean ret = CompatibilityManager.fabricApiLoaded();
-            LifeSeries.LOGGER.info("[Life Series] Compat - Fabric API - " + ret);
-            return ret;
-        }
-        //?}
         if (isClient) {
             if (mixinClassName.contains("client.compat.appleskin")) {
                 boolean ret = CompatibilityManager.appleSkinLoaded();

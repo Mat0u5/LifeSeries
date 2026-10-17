@@ -34,10 +34,6 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.world.entity.Entity;
 //?}
-//? if <= 1.21.6 {
-/*import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
-import java.util.Optional;
-*///?}
 
 @Mixin(value = PlayerList.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
@@ -73,19 +69,6 @@ public abstract class PlayerManagerMixin implements IPlayerManager {
         if (message.decoratedContent().getString().contains("`")) ci.cancel();
     }
 
-    //? if <= 1.21.6 {
-    /*@Inject(method = "load", at = @At(value = "RETURN", shift = At.Shift.BEFORE))
-    //? if <= 1.21.5 {
-    /^public void loadPlayerData(ServerPlayer player, CallbackInfoReturnable<Optional<CompoundTag>> cir) {
-    ^///?} else {
-    public void loadPlayerData(ServerPlayer player, ProblemReporter errorReporter, CallbackInfoReturnable<Optional<ValueInput>> cir) {
-    //?}
-        if (LifeSeries.modFullyDisabled()) return;
-        if (player instanceof FakePlayer fakePlayer) {
-            fakePlayer.fixStartingPosition.run();
-        }
-    }
-    *///?}
 
     @Inject(method = "respawn", at = @At("RETURN"))
     //? if <= 1.20.5 {

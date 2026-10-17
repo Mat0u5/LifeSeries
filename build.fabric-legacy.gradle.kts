@@ -71,7 +71,7 @@ dependencies {
 	else {
 		modCompileOnly("maven.modrinth:appleskin:3.0.6+mc1.21")
 	}
-	modCompileOnly("net.fabricmc.fabric-api:fabric-api:${prop("deps.fabric-api")}")
+	//modCompileOnly("net.fabricmc.fabric-api:fabric-api:${prop("deps.fabric-api")}")
 	//modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:${prop("deps.fabric-api")}")
 
 	if (isValidVersion(prop("deps.carpet"))) modRuntimeOnly("curse.maven:carpet-349239:${prop("deps.carpet")}")

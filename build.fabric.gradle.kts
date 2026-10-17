@@ -63,7 +63,7 @@ dependencies {
 	compileOnly("maven.modrinth:flashback:xs2Obe8Z")
 	compileOnly("maven.modrinth:replaymod:1.21-2.6.23")
 	compileOnly("maven.modrinth:appleskin:3.0.6+mc1.21")
-	compileOnly("net.fabricmc.fabric-api:fabric-api:${prop("deps.fabric-api")}")
+	//compileOnly("net.fabricmc.fabric-api:fabric-api:${prop("deps.fabric-api")}")
 	//runtimeOnly("net.fabricmc.fabric-api:fabric-api:${prop("deps.fabric-api")}")
 
 	if (isValidVersion(prop("deps.carpet"))) runtimeOnly("curse.maven:carpet-349239:${prop("deps.carpet")}")

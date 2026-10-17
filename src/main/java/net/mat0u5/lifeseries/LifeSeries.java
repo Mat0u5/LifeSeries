@@ -17,11 +17,11 @@ import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
 import net.mat0u5.lifeseries.utils.interfaces.LifeSeriesClientAccessor;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
-import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.mat0u5.matlib.MatLib;
 import net.mat0u5.matlib.services.MultiplatformModInitializer;
 import net.mat0u5.matlib.events.server.ServerLanguageEvents;
 import net.mat0u5.matlib.events.server.ServerPackSourceEvents;
+import net.mat0u5.matlib.utils.enums.HandshakeStatus;
 import net.mat0u5.matlib.utils.other.ModBuiltInPacks;
 import net.minecraft.network.chat.Component;
 import org.slf4j.Logger;
@@ -79,17 +79,14 @@ public class LifeSeries implements MultiplatformModInitializer {
 
 		SeasonChanger.initializeSeason(Seasons.getSeasonFromStringName(seasonStr));
 		Seasons.getSeasons().forEach(seasons -> seasons.getSeasonInstance().createConfig().reload());
-
-		if (!ISOLATED_ENVIRONMENT) {
-			UpdateChecker.checkForMajorUpdates();
-		}
 	}
 
 	public static boolean modDisabled() {
 		if (clientAccessor != null) {
 			if (clientAccessor.isReplay()) return true;
 			if (MatLib.hasClient()) {
-				if (!MatLib.getClientAccessor().handshakeWithServer().isWaiting() && !MatLib.getClientAccessor().handshakeWithServer().hasReceived(MOD_ID)) return true;
+				HandshakeStatus handshakeStatus = MatLib.getClientAccessor().handshakeWithServer();
+				if (!handshakeStatus.isWaiting() && !handshakeStatus.hasReceived(MOD_ID)) return true;
 			}
 			return clientAccessor.isDisabledServerSide();
 		}
@@ -98,7 +95,8 @@ public class LifeSeries implements MultiplatformModInitializer {
 
 	public static boolean modFullyDisabled() {
 		if (!MatLib.hasClient()) return false;
-		return !MatLib.getClientAccessor().handshakeWithServer().isWaiting() && !MatLib.getClientAccessor().handshakeWithServer().hasReceived(MOD_ID);
+		HandshakeStatus handshakeStatus = MatLib.getClientAccessor().handshakeWithServer();
+		return !handshakeStatus.isWaiting() && !handshakeStatus.hasReceived(MOD_ID);
 	}
 
 	public static void setDisabled(boolean disabled) {

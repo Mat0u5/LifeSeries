@@ -30,21 +30,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
-import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
-import net.minecraft.server.level.ServerLevel;
-import java.util.Set;
 
 //? if <= 1.20.3 {
 /*import net.minecraft.network.protocol.game.ServerboundChatCommandPacket;
 *///?} else {
 import net.minecraft.network.protocol.game.ServerboundChatCommandSignedPacket;
 //?}
-//? if <= 1.21
-//import net.minecraft.world.entity.RelativeMovement;
-//? if >= 1.21.2 <= 1.21.6 {
-/*import net.minecraft.world.entity.Relative;
-import net.minecraft.world.entity.PositionMoveRotation;
-*///?}
 
 @Mixin(value = ServerGamePacketListenerImpl.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
@@ -71,26 +62,6 @@ public class ServerGamePacketListenerImplMixin {
         }
     }
 
-    //? if <= 1.21.6 {
-    /*//? if <= 1.21 {
-    /^@Inject(method = "teleport(DDDFFLjava/util/Set;)V", at = @At("TAIL"))
-    public void requestTeleport(double x, double y, double z, float yaw, float pitch, Set<RelativeMovement> flags, CallbackInfo ci) {
-    ^///?} else {
-    @Inject(method = "teleport(Lnet/minecraft/world/entity/PositionMoveRotation;Ljava/util/Set;)V", at = @At("TAIL"))
-    public void requestTeleport(PositionMoveRotation pos, Set<Relative> flags, CallbackInfo ci) {
-        //?}
-        if (LifeSeries.modFullyDisabled()) return;
-        ServerGamePacketListenerImpl handler = (ServerGamePacketListenerImpl) (Object) this;
-        ServerPlayer player = handler.getPlayer();
-        if (player instanceof FakePlayer) {
-            ServerLevel level = ((IPlayer) player).ls$getServerLevel();
-            if (level.getPlayerByUUID(player.getUUID()) != null) {
-                handler.resetPosition();
-                level.getChunkSource().move(player);
-            }
-        }
-    }
-    *///?}
 
     @Unique
     private static final List<String> mutedCommands = List.of("msg", "tell", "whisper", "w", "me");

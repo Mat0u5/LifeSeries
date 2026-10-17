@@ -29,7 +29,7 @@ import static net.mat0u5.matlib.MatLib.server;
 //? if >= 1.21.4
 import net.minecraft.world.entity.player.PlayerModelPart;
 //? if <= 1.21.6
-import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
+//import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 
 public class PlayerUtils extends net.mat0u5.matlib.utils.player.PlayerUtils {
 

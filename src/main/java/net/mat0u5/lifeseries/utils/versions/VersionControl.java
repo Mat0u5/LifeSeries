@@ -2,15 +2,61 @@ package net.mat0u5.lifeseries.utils.versions;
 
 import com.google.auto.service.AutoService;
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.matlib.services.VersionTrackedMod;
 import net.mat0u5.matlib.utils.other.VersionCompatibility;
 
+import java.util.UUID;
+
 import static net.mat0u5.lifeseries.LifeSeries.MOD_VERSION;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 @AutoService(VersionTrackedMod.class)
 public class VersionControl implements VersionTrackedMod {
+    private static final VersionControl INSTANCE = new VersionControl();
+
     public static boolean isDevVersion() {
-        return MOD_VERSION.contains("dev") || MOD_VERSION.contains("pre") || LifeSeries.DEBUG || LifeSeries.FORCE_DEV;
+        return INSTANCE.isUnstableVersion();
+    }
+
+    @Override
+    public boolean isUnstableVersion() {
+        return VersionTrackedMod.super.isUnstableVersion() || LifeSeries.DEBUG || LifeSeries.FORCE_DEV;
+    }
+
+    @Override
+    public String githubRepo() {
+        return "Mat0u5/LifeSeries";
+    }
+
+    @Override
+    public String modrinthUrl() {
+        return "https://modrinth.com/mod/life-series";
+    }
+
+    @Override
+    public String discordUrl() {
+        return "https://discord.gg/QWJxfb4zQZ";
+    }
+
+    @Override
+    public String changelogUrl(String fromVersion, String toVersion) {
+        return "https://mat0u5.github.io/LifeSeries-docs/changelog?v="+VersionCompatibility.strippedVersionName(fromVersion)+"-"+toVersion;
+    }
+
+    @Override
+    public boolean checkForUpdates() {
+        return !LifeSeries.ISOLATED_ENVIRONMENT;
+    }
+
+    @Override
+    public boolean shouldStripRegistriesFor(UUID playerUUID) {
+        return switch (LifeSeriesNetworkHandlerServer.REGISTRY_OVERRIDE_BEHAVIOR) {
+            case NEVER -> false;
+            case ALWAYS -> true;
+            case LOGIN -> !LifeSeriesNetworkHandlerServer.wasPreLoginHandshakeSuccessful(playerUUID);
+            case SEASON -> currentSeason == null || !currentSeason.getSeason().requiresClient();
+        };
     }
 
 

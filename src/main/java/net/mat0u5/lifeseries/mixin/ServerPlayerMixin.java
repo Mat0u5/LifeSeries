@@ -42,8 +42,6 @@ import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 //?}
 //? if >= 1.21.2
 import java.util.Collection;
-//? if <= 1.21.6
-//import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 //? if >= 26.3 {
 import net.minecraft.world.attribute.BedRule;
 import net.minecraft.world.level.block.AbstractBedBlock;
@@ -53,35 +51,6 @@ import net.minecraft.world.level.block.state.BlockState;
 @Mixin(value = ServerPlayer.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class ServerPlayerMixin implements IPlayer {
-
-    //? if <= 1.21.6 {
-    /*@Inject(method = "sendSystemMessage(Lnet/minecraft/network/chat/Component;Z)V", at = @At("HEAD"), cancellable = true)
-    private void sendMessageToClient(Component message, boolean overlay, CallbackInfo ci) {
-        if (LifeSeries.modFullyDisabled()) return;
-        ServerPlayer player = ls$get();
-        if (player instanceof FakePlayer) {
-            ci.cancel();
-        }
-    }
-
-    @Inject(method = "acceptsSystemMessages", at = @At("HEAD"), cancellable = true)
-    private void acceptsMessage(boolean overlay, CallbackInfoReturnable<Boolean> cir) {
-        if (LifeSeries.modFullyDisabled()) return;
-        ServerPlayer player = ls$get();
-        if (player instanceof FakePlayer) {
-            cir.setReturnValue(false);
-        }
-    }
-
-    @Inject(method = "acceptsChatMessages", at = @At("HEAD"), cancellable = true)
-    private void acceptsChatMessage(CallbackInfoReturnable<Boolean> cir) {
-        if (LifeSeries.modFullyDisabled()) return;
-        ServerPlayer player = ls$get();
-        if (player instanceof FakePlayer) {
-            cir.setReturnValue(false);
-        }
-    }
-    *///?}
 
     @Inject(method = "onEffectAdded", at = @At("TAIL"))
     private void onStatusEffectApplied(MobEffectInstance effect, Entity source, CallbackInfo ci) {
