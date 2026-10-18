@@ -33,6 +33,10 @@ public class Registries {
 		ServerResourceEvents.RELOAD_STOPPING.register(Events::onReloadEnd);
 		ServerPlayerEvents.CONNECT.register((connection, player) -> Events.onPlayerJoin(player));
 		ServerPlayerEvents.DISCONNECT.register((details, player) -> Events.onPlayerDisconnect(player));
+		ServerPlayerEvents.FINISH_JOINING.register(Events::onPlayerFinishJoining);
+		ServerPlayerEvents.RESPAWN.register(Events::onPlayerRespawn);
+		ServerChatEvents.BROADCAST_SYSTEM.register(Events::onBroadcastSystem);
+		ServerChatEvents.BROADCAST_CHAT.register(Events::onBroadcastChat);
 		ServerTickEvents.END_TICK.register(Events::onServerTickEnd);
 		ServerEntityEvents.DEATH.register(Events::onEntityDeath);
 		ServerEntityEvents.DROP_LOOT.register(Events::onEntityDropItems);

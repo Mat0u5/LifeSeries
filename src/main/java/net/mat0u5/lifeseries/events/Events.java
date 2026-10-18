@@ -19,9 +19,11 @@ import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
 import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ProfileManager;
-import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.mat0u5.matlib.events.EventResult;
+import net.minecraft.network.chat.ChatType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.MinecraftServer;
@@ -39,7 +41,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.*;
 import static net.mat0u5.lifeseries.LifeSeries.*;
@@ -73,7 +74,7 @@ public class Events {
     public static void onPlayerJoin(ServerPlayer player) {
         if (isFakePlayer(player)) return;
 
-        playerStartJoining(player);
+        sendJoinPackets(player);
         if (LifeSeries.modDisabled()) return;
         LifeSkinsManager.onPlayerJoin(player);
         currentSeason.onPlayerJoin(player);
@@ -86,7 +87,6 @@ public class Events {
         if (isFakePlayer(player) || LifeSeries.modDisabled()) return;
 
         try {
-            UpdateChecker.onPlayerJoin(player);
             currentSeason.onPlayerFinishJoining(player);
             PlayerReference ref = PlayerReference.of(player);
             TaskScheduler.scheduleTask(10, () -> PlayerUtils.resendCommandTree(ref.get()));
@@ -108,7 +108,6 @@ public class Events {
     public static void onServerStopping(MinecraftServer server) {
         try {
             //ProfileManager.resetAll();
-            UpdateChecker.shutdownExecutor();
             if (LifeSeries.modDisabled()) return;
             currentSession.sessionEnd();
         } catch (Exception e) {
@@ -134,7 +133,6 @@ public class Events {
     public static void onServerTickEnd(MinecraftServer server) {
         skipNextTickReload = false;
         if (!LifeSeries.isLogicalSide()) return;
-        checkPlayerFinishJoiningTick();
         if (LifeSeries.modDisabled()) return;
         if (updatePlayerListsNextTick) {
             updatePlayerListsNextTick = false;
@@ -263,61 +261,28 @@ public class Events {
         currentSeason.onUpdatedInventory(serverPlayer, inventory);
     }
 
-    /*
-        Non-events
-     */
-    public static final List<UUID> joiningPlayers = new ArrayList<>();
-    public static final Map<UUID, Vec3> joiningPlayersPos = new HashMap<>();
-    public static final Map<UUID, Float> joiningPlayersYaw = new HashMap<>();
-    public static final Map<UUID, Float> joiningPlayersPitch = new HashMap<>();
-    public static void playerStartJoining(ServerPlayer player) {
+    public static void onPlayerRespawn(ServerPlayer newPlayer) {
+        if (LifeSeries.isClientOrDisabled()) return;
+        currentSeason.onPlayerRespawn(newPlayer);
+    }
+
+    public static EventResult onBroadcastSystem(Component message, boolean overlay) {
+        if (LifeSeries.modFullyDisabled()) return EventResult.PASS;
+        if (message.getString().contains("`")) return EventResult.DENY;
+        return EventResult.PASS;
+    }
+
+    public static EventResult onBroadcastChat(PlayerChatMessage message, ServerPlayer sender, ChatType.Bound params) {
+        if (LifeSeries.modFullyDisabled()) return EventResult.PASS;
+        if (message.decoratedContent().getString().contains("`")) return EventResult.DENY;
+        return EventResult.PASS;
+    }
+
+    public static void sendJoinPackets(ServerPlayer player) {
         LifeSeriesNetworkHandlerServer.sendOldHandshake(player);
         LifeSeriesNetworkHandlerServer.sendUpdatePacket(List.of(player));
         SnailSkins.sendTexturesTo(player);
         TriviaSkins.sendTexturesTo(player);
-        if (!joiningPlayers.contains(player.getUUID())) joiningPlayers.add(player.getUUID());
-        joiningPlayersPos.put(player.getUUID(), player.position());
-        joiningPlayersYaw.put(player.getUUID(), player.getYRot());
-        joiningPlayersPitch.put(player.getUUID(), player.getXRot());
-    }
-    public static void checkPlayerFinishJoiningTick() {
-        for (Map.Entry<UUID, Vec3> entry : joiningPlayersPos.entrySet()) {
-            UUID uuid = entry.getKey();
-            ServerPlayer player = PlayerUtils.getPlayer(uuid);
-            if (player == null) continue;
-            if (player.position().equals(entry.getValue())) continue;
-            onPlayerFinishJoining(player);
-            finishedJoining(player.getUUID());
-            return;
-        }
-        //Yaw
-        for (Map.Entry<UUID, Float> entry : joiningPlayersYaw.entrySet()) {
-            UUID uuid = entry.getKey();
-            ServerPlayer player = PlayerUtils.getPlayer(uuid);
-            if (player == null) continue;
-            if (player.getYRot() == entry.getValue()) continue;
-            onPlayerFinishJoining(player);
-            finishedJoining(player.getUUID());
-            return;
-        }
-        //Pitch
-        for (Map.Entry<UUID, Float> entry : joiningPlayersPitch.entrySet()) {
-            UUID uuid = entry.getKey();
-            ServerPlayer player = PlayerUtils.getPlayer(uuid);
-            if (player == null) continue;
-            if (player.getXRot() == entry.getValue()) continue;
-            onPlayerFinishJoining(player);
-            finishedJoining(player.getUUID());
-            return;
-        }
-
-    }
-
-    public static void finishedJoining(UUID uuid) {
-        joiningPlayers.remove(uuid);
-        joiningPlayersPos.remove(uuid);
-        joiningPlayersYaw.remove(uuid);
-        joiningPlayersPitch.remove(uuid);
     }
 
     public static boolean isExcludedPlayer(Entity entity) {

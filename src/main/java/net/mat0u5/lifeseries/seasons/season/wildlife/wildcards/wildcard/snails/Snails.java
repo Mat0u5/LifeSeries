@@ -1,12 +1,12 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails;
 
+import net.mat0u5.matlib.utils.player.PlayerJoinTracker;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
 import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.config.StringListConfig;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.snail.server.SnailPathfinding;
-import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
@@ -101,7 +101,7 @@ public class Snails extends Wildcard {
     public static boolean canHaveSnail(ServerPlayer player) {
         if (player.isCreative()) return false;
         if (!player.isAlive()) return false;
-        if (Events.joiningPlayers.contains(player.getUUID())) return false;
+        if (PlayerJoinTracker.isCurrentlyJoining(player.getUUID())) return false;
         if (player.isSpectator() && !SuperpowersWildcard.hasActivatedPower(player, Superpowers.ASTRAL_PROJECTION)) return false;
         if (preventSnails.contains(player.getUUID())) return false;
         if (((IPlayer) player).ls$isOnLastLife(false) && !WILDCARD_SNAILS_RED_LIVES.get()) return false;

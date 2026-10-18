@@ -1,9 +1,9 @@
 package net.mat0u5.lifeseries.entity.snail.server;
 
+import net.mat0u5.matlib.utils.player.PlayerJoinTracker;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.PlayerBoundEntity;
 import net.mat0u5.lifeseries.entity.snail.Snail;
-import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
@@ -80,7 +80,7 @@ public class SnailServerData implements PlayerBoundEntity {
         if (player.isCreative()) return false;
         if (!player.isAlive()) return false;
         if (getPlayerPos() == null) return false;
-        if (Events.joiningPlayers.contains(player.getUUID())) return false;
+        if (PlayerJoinTracker.isCurrentlyJoining(player.getUUID())) return false;
         if (player.isSpectator() && !SuperpowersWildcard.hasActivatedPower(player, Superpowers.ASTRAL_PROJECTION)) return false;
         return true;
     }
