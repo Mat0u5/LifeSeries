@@ -379,12 +379,6 @@ public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
         else if (customPacketPayload instanceof SidetitlePacket payload) {
             client.execute(() -> handleSidetitle(payload));
         }
-        else if (customPacketPayload instanceof SnailTexturePacket payload) {
-            client.execute(() -> SnailSkinsClient.handleSnailTexture(payload.skinName(), payload.textureData()));
-        }
-        else if (customPacketPayload instanceof TriviaTexturePacket payload) {
-            client.execute(() -> TriviaSkinsClient.handleTriviaTexture(payload.skinName(), payload.textureData()));
-        }
         else if (customPacketPayload instanceof LifeSkinsTexturePayload payload) {
             client.execute(() -> LifeSkinsClient.handleTexture(payload.skinName(), payload.teamName(), payload.slim(), payload.textureData()));
         }

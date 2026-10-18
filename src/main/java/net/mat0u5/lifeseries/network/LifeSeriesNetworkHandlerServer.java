@@ -53,7 +53,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.scores.PlayerTeam;
 
@@ -90,8 +89,6 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
         PAYLOADS.put(TriviaQuestionPayload.ID, TriviaQuestionPayload::read);
         PAYLOADS.put(PlayerDisguisePayload.ID, PlayerDisguisePayload::read);
         PAYLOADS.put(SidetitlePacket.ID, SidetitlePacket::read);
-        PAYLOADS.put(SnailTexturePacket.ID, SnailTexturePacket::read);
-        PAYLOADS.put(TriviaTexturePacket.ID, TriviaTexturePacket::read);
         PAYLOADS.put(VoteScreenPayload.ID, VoteScreenPayload::read);
         PAYLOADS.put(LifeSkinsTexturePayload.ID, LifeSkinsTexturePayload::read);
     }
@@ -101,8 +98,6 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
             , new CustomPacketPayload.TypeAndCodec<>(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(SidetitlePacket.ID, SidetitlePacket.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(SnailTexturePacket.ID, SnailTexturePacket.CODEC)
-            , new CustomPacketPayload.TypeAndCodec<>(TriviaTexturePacket.ID, TriviaTexturePacket.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(VoteScreenPayload.ID, VoteScreenPayload.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(LifeSkinsTexturePayload.ID, LifeSkinsTexturePayload.CODEC)
     );
