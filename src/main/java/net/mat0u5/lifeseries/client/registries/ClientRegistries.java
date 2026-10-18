@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.client.registries;
 
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.entity.angrysnowman.AngrySnowmanRenderer;
 import net.mat0u5.lifeseries.client.entity.snail.SnailModel;
 import net.mat0u5.lifeseries.client.entity.snail.SnailRenderer;
@@ -15,10 +16,12 @@ import net.mat0u5.lifeseries.client.utils.ClientSounds;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.registries.ParticleRegistry;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.matlib.client.events.*;
 import net.mat0u5.matlib.client.registries.util.LayerDefinitionModel;
 import net.mat0u5.matlib.client.registries.util.ProvidedParticle;
 import net.mat0u5.matlib.client.registries.util.RenderableEntity;
+import net.mat0u5.matlib.client.utils.TickRateSoundScaling;
 import net.mat0u5.matlib.events.EventResult;
 import net.mat0u5.matlib.events.common.CommonEntityEvents;
 import net.mat0u5.matlib.events.server.ServerLifecycleEvents;
@@ -51,7 +54,11 @@ public class ClientRegistries {
 		ClientPlayerEvents.GET_SKIN.register(LifeSkinsClient::onGetSkin);
 		ClientEntityEvents.RENDER_ENTITY_NAMETAG.register(ClientUtils::getEntityName);
 		ClientNetworkEvents.RECEIVE_HANDSHAKE.register(LifeSeriesNetworkHandlerClient::sendUpdatePackets);
-
+		//? if >= 1.20.3 {
+		ClientTickRateEvents.MODIFY_TARGET_MSPT.register(ClientRenderer::modifyTargetMspt);
+		//?}
+		TickRateSoundScaling.addEnableCondition(() -> (!LifeSeries.modFullyDisabled() && LifeSeries.isSeason(Seasons.WILD_LIFE)));
+		TickRateSoundScaling.excludeSound("block.beacon.deactivate", "wildlife_time_slow_down", "wildlife_time_speed_up");
 	}
 	public static void registerRenderers() {
 		ClientRegistryEvents.ENTITY_RENDERER.register(() -> List.of(

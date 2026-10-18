@@ -26,9 +26,6 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 *///?}
 
-/**
- * The astral projection clone, bound to the player that created it ({@code shadow}).
- */
 @SuppressWarnings("EntityConstructor")
 public class FakePlayer extends FakeServerPlayer {
     //? if <= 1.20 {

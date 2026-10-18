@@ -1,10 +1,19 @@
 package net.mat0u5.lifeseries.client.render;
 
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector4f;
 import java.util.List;
 
+//? if >= 1.20.3 {
+import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDilation;
+import net.mat0u5.matlib.events.OptionalEventReturn;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.TickRateManager;
+//?}
 //? if >= 1.21.2 {
 import net.minecraft.util.ARGB;
 import org.joml.Vector3f;
@@ -28,6 +37,37 @@ public class ClientRenderer {
     public static void postRender(GuiGraphicsExtractor graphics) {
         TextHud.renderTextPost(graphics);
     }
+
+    //? if >= 1.20.3 {
+    public static OptionalEventReturn<Float> modifyTargetMspt(float millis) {
+        if (LifeSeries.modFullyDisabled() || !LifeSeries.isSeason(Seasons.WILD_LIFE)) return OptionalEventReturn.pass();
+        Minecraft client = Minecraft.getInstance();
+        if (client.level != null) {
+            TickRateManager tickManager = client.level.tickRateManager();
+            if (LifeSeriesClient.TIME_DILATION_TIMESTAMP != 0) {
+                long timeSinceDilationActivate = System.currentTimeMillis() - LifeSeriesClient.TIME_DILATION_TIMESTAMP;
+                if (timeSinceDilationActivate < 14000) {
+                    if (timeSinceDilationActivate < 1000) {
+                        isGameFullyFrozen = false;
+                        return OptionalEventReturn.of(1000/(1-(timeSinceDilationActivate / 4050.0f)));
+                    }
+                    if (timeSinceDilationActivate <= 10000) {
+                        isGameFullyFrozen = true;
+                        return OptionalEventReturn.of(500000f);
+                    }
+                    isGameFullyFrozen = false;
+                    return OptionalEventReturn.of(1000/((timeSinceDilationActivate-10000) / 4050.0f));
+                }
+            }
+            if (tickManager.runsNormally()) {
+                isGameFullyFrozen = false;
+                return OptionalEventReturn.of(Math.max(TimeDilation.MIN_PLAYER_MSPT, tickManager.millisecondsPerTick()));
+            }
+        }
+        isGameFullyFrozen = false;
+        return OptionalEventReturn.of(millis);
+    }
+    //?}
 
     public static Vec3 modifyColor(Vec3 original, Vec3 targetColor, boolean setMode, Vec3 cache) {
         if (targetColor != null) {

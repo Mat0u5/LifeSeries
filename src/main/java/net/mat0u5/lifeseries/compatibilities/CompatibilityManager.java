@@ -4,10 +4,6 @@ import net.mat0u5.matlib.MatLib;
 
 public class CompatibilityManager {
 
-    public static boolean fabricApiLoaded() {
-        return isModLoaded("fabric-api");
-    }
-
     public static boolean voicechatLoaded() {
         return isModLoaded("voicechat");
     }
