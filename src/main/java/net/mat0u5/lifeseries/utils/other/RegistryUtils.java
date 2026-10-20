@@ -53,8 +53,8 @@ public class RegistryUtils {
 				ResourceKey<Item> key = ResourceKey.create(BuiltInRegistries.ITEM.key(), id);
 
 				//? if <= 1.21 {
-				/*Item item = BuiltInRegistries.ITEM.get(key);
-				 *///?} else {
+				//Item item = BuiltInRegistries.ITEM.get(key);
+				 //?} else {
 				Item item = BuiltInRegistries.ITEM.getValue(key);
 				//?}
 
@@ -80,8 +80,8 @@ public class RegistryUtils {
 			ResourceKey<T> key = ResourceKey.create(registry.key(), id);
 
 			//? if <= 1.21 {
-			/*T entry = registry.get(key);
-			*///?} else {
+			//T entry = registry.get(key);
+			//?} else {
 			T entry = registry.getValue(key);
 			//?}
 

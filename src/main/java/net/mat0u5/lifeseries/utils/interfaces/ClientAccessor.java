@@ -22,6 +22,6 @@ public interface ClientAccessor {
     void sendPacket(CustomPacketPayload payload);
 
     //? if neoforge {
-    /*<T extends CustomPacketPayload> void handlePacket(T payload, IPayloadContext context);
-    *///?}
+    //<T extends CustomPacketPayload> void handlePacket(T payload, IPayloadContext context);
+    //?}
 }

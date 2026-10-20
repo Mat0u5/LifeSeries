@@ -32,7 +32,7 @@ public abstract class ServerPlayNetworkHandlerInteractEntityHandlerMixin impleme
     Entity val$target;
 //?} else {
     /^//? if <= 1.20 {
-    /^¹private static java.lang.reflect.Field lifeseries$handlerField;
+    /^private static java.lang.reflect.Field lifeseries$handlerField;
     private static java.lang.reflect.Field lifeseries$entityField;
 
     private ServerGamePacketListenerImpl ls$getHandler() {
@@ -64,7 +64,7 @@ public abstract class ServerPlayNetworkHandlerInteractEntityHandlerMixin impleme
             return (Entity) lifeseries$entityField.get(this);
         } catch (Exception e) { throw new RuntimeException("Failed to find entity field", e); }
     }
-    ¹^///?} else {
+    ^///?} else {
     @Shadow(aliases = {"this$0"})
     @Final
     ServerGamePacketListenerImpl field_28963;

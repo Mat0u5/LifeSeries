@@ -18,8 +18,8 @@ import net.minecraft.client.Camera;
 public class GameRendererMixin {
     @ModifyReturnValue(method = "getFov", at = @At("RETURN"))
     //? if <= 1.21 {
-    /*public double clampFov(double original) {
-    *///?} else {
+    //public double clampFov(double original) {
+    //?} else {
     public float clampFov(float original) {
     //?}
         if (LifeSeries.modFullyDisabled()) return original;

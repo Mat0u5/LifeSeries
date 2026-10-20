@@ -19,8 +19,8 @@ import java.util.List;
 import static net.mat0u5.lifeseries.LifeSeries.*;
 
 //? if <= 26.1 {
-/*import net.minecraft.ChatFormatting;
-*///?} else {
+//import net.minecraft.ChatFormatting;
+//?} else {
 import net.minecraft.world.scores.TeamColor;
 //?}
 

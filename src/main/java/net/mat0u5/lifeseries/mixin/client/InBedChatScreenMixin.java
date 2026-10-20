@@ -17,8 +17,8 @@ public abstract class InBedChatScreenMixin {
     //? if <= 1.21.11 {
     /*@Inject(method = "charTyped", at = @At("HEAD"))
     //? if <= 1.21.6 {
-    /^private void unfocusButton(char c, int i, CallbackInfoReturnable<Boolean> cir) {
-     ^///?} else {
+    //private void unfocusButton(char c, int i, CallbackInfoReturnable<Boolean> cir) {
+     //?} else {
     private void unfocusButton(CharacterEvent input, CallbackInfoReturnable<Boolean> cir) {
         //?}
         InBedChatScreen chatScreen = (InBedChatScreen) (Object) this;

@@ -60,14 +60,14 @@ public class WaypointTransmitterMixin {
                 //? if !forge {
                 cir.setReturnValue(true);
                 //?} else {
-                /*return true;
-                *///?}
+                //return true;
+                //?}
             }
             // Else do vanilla logic
         }
         //? if forge {
-        /*return WaypointTransmitter.doesSourceIgnoreReceiver(sourceEntity, receiver);
-        *///?}
+        //return WaypointTransmitter.doesSourceIgnoreReceiver(sourceEntity, receiver);
+        //?}
     }
 }
 //?}

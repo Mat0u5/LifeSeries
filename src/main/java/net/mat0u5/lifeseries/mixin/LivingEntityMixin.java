@@ -99,8 +99,8 @@ public abstract class LivingEntityMixin {
         if (!weapon.is(Items.MACE)) return;
         if (!ItemStackUtils.hasCustomComponentEntry(weapon, "WindChargeSuperpower")) return;
         //? if <= 1.21 {
-        /*cir.setReturnValue(entity.hurt(source, WindCharge.MAX_MACE_DAMAGE));
-        *///?} else
+        //cir.setReturnValue(entity.hurt(source, WindCharge.MAX_MACE_DAMAGE));
+        //?} else
         cir.setReturnValue(entity.hurtServer(level, source, WindCharge.MAX_MACE_DAMAGE));
         //?}
     }
@@ -169,10 +169,10 @@ public abstract class LivingEntityMixin {
 
 
     //? if <= 1.21 {
-    /*@ModifyArg(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"), index = 0)
-    *///?} else if <= 26.1 {
-    /*@ModifyArg(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"), index = 0)
-    *///?} else {
+    //@ModifyArg(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"), index = 0)
+    //?} else if <= 26.1 {
+    //@ModifyArg(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"), index = 0)
+    //?} else {
     @ModifyArg(method = "dealDefaultKnockback", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDDLnet/minecraft/world/damagesource/DamageSource;F)V"), index = 0)
     //?}
     private double modifyKnockback(double strength) {
@@ -195,8 +195,8 @@ public abstract class LivingEntityMixin {
 
     @Inject(method = "dropAllDeathLoot", at = @At("HEAD"), cancellable = true)
     //? if <= 1.20.5 {
-    /*private void onDrop(DamageSource damageSource, CallbackInfo ci) {
-    *///?} else {
+    //private void onDrop(DamageSource damageSource, CallbackInfo ci) {
+    //?} else {
     private void onDrop(ServerLevel level, DamageSource damageSource, CallbackInfo ci) {
     //?}
         if (LifeSeries.isClientOrDisabled()) return;
@@ -256,8 +256,8 @@ public abstract class LivingEntityMixin {
 
 //? if forge || neoforge {
     /*//? if <= 1.21 {
-    /^@Redirect(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;getFriction(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/Entity;)F"))
-    ^///?} else {
+    //@Redirect(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;getFriction(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/Entity;)F"))
+    //?} else {
     @Redirect(method = "travelInAir", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;getFriction(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/Entity;)F"))
     //?}
     private float noSpecialFriction(BlockState instance, LevelReader levelReader, BlockPos blockPos, Entity thisEntity) {
@@ -269,8 +269,8 @@ public abstract class LivingEntityMixin {
     }
 *///?} else {
     //? if <= 1.21 {
-    /*@Redirect(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;getFriction()F"))
-    *///?} else {
+    //@Redirect(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;getFriction()F"))
+    //?} else {
     @Redirect(method = "travelInAir", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;getFriction()F"))
     //?}
     private float noSpecialFriction(Block instance) {

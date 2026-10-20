@@ -61,8 +61,8 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
     //?}
 
         //? if <= 1.21.2 {
-        /*int maxScroll = getMaxScroll();
-        *///?} else {
+        //int maxScroll = getMaxScroll();
+        //?} else {
         int maxScroll = maxScrollAmount();
         //?}
 
@@ -94,8 +94,8 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
                         mouseY >= currentY && mouseY < currentY + entryHeight;
 
                 //? if <= 1.21.6 {
-                /*entry.render(context, i, currentY, entryLeft, entryWidth, entryHeight, mouseX, mouseY, hovered, delta);
-                *///?} else {
+                //entry.render(context, i, currentY, entryLeft, entryWidth, entryHeight, mouseX, mouseY, hovered, delta);
+                //?} else {
                 entry.setX(entryLeft);
                 entry.setY(currentY);
                 entry.setWidth(entryWidth);
@@ -167,8 +167,8 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
 
     @Override
     //? if <= 1.21.2 {
-    /*public int getMaxScroll() {
-    *///?} else {
+    //public int getMaxScroll() {
+    //?} else {
     public int maxScrollAmount() {
     //?}
         int totalHeight = 0;
@@ -205,8 +205,8 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
 
     @Override
     //? if <= 1.21.6 {
-    /*public boolean mouseClicked(double mouseX, double mouseY, int button) {
-    *///?} else {
+    //public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    //?} else {
     public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         int mouseX = (int) click.x();
         int mouseY = (int) click.y();
@@ -218,8 +218,8 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
         }
 
         //? if <= 1.21.2 {
-        /*int maxScroll = getMaxScroll();
-         *///?} else {
+        //int maxScroll = getMaxScroll();
+         //?} else {
         int maxScroll = maxScrollAmount();
         //?}
 
@@ -243,8 +243,8 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
                 setFocused(entry);
                 entry.getConfigEntry().setFocused(true);
                 //? if <= 1.21.6 {
-                /*return entry.mouseClicked(mouseX, mouseY, button);
-                *///?} else {
+                //return entry.mouseClicked(mouseX, mouseY, button);
+                //?} else {
                 return entry.mouseClicked(click, doubled);
                 //?}
             }
@@ -271,8 +271,8 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
             return true;
         } else if (button == InputConstants.MOUSE_BUTTON_LEFT && this.scrolling) {
             //? if <= 1.21.2 {
-            /^int maxScroll = getMaxScroll();
-            ^///?} else {
+            //int maxScroll = getMaxScroll();
+            //?} else {
             int maxScroll = maxScrollAmount();
             //?}
 
@@ -317,8 +317,8 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
 
     public double getScrolledAmount() {
         //? if <= 1.21.2 {
-        /*return getScrollAmount();
-        *///?} else {
+        //return getScrollAmount();
+        //?} else {
         return scrollAmount();
         //?}
     }

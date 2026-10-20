@@ -21,8 +21,8 @@ import java.util.List;
 import net.minecraft.util.ARGB;
 //?}
 //? if >= 1.21.2 && <= 1.21.5 {
-/*import net.minecraft.client.renderer.rendertype.RenderType;
-*///?}
+//import net.minecraft.client.renderer.rendertype.RenderType;
+//?}
 //? if <= 1.21.5 {
 /*import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.MobEffectTextureManager;
@@ -36,13 +36,13 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.gui.Hud;
 
 //? if <= 1.20.3 {
-/*public class EffectListConfigEntry extends StringListPopupConfigEntry<MobEffect> {
-*///?} else {
+//public class EffectListConfigEntry extends StringListPopupConfigEntry<MobEffect> {
+//?} else {
 public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<MobEffect>> {
 //?}
      //? if <= 1.20 {
-    /*private static final Identifier EFFECT_BACKGROUND_TEXTURE = IdentifierHelper.vanilla("textures/gui/container/inventory.png");
-    *///?} else {
+    //private static final Identifier EFFECT_BACKGROUND_TEXTURE = IdentifierHelper.vanilla("textures/gui/container/inventory.png");
+    //?} else {
     private static final Identifier EFFECT_BACKGROUND_TEXTURE = IdentifierHelper.vanilla("hud/effect_background");
     //?}
 
@@ -59,16 +59,16 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<Mob
         }
 
         //? if <= 1.20.3 {
-        /*List<MobEffect> newList = new ArrayList<>();
-        *///?} else {
+        //List<MobEffect> newList = new ArrayList<>();
+        //?} else {
         List<Holder<MobEffect>> newList = new ArrayList<>();
         //?}
         boolean errors = false;
 
         Registry<MobEffect> effectsRegistry = Minecraft.getInstance().level.registryAccess()
         //? if <=1.21 {
-        /*.registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
-        *///?} else
+        //.registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
+        //?} else
         .lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
 
         for (String potionId : items) {
@@ -78,15 +78,15 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<Mob
             try {
                 var id = IdentifierHelper.parse(potionId);
                 //? if <= 1.21 {
-                /*MobEffect enchantment = effectsRegistry.get(id);
-                *///?} else {
+                //MobEffect enchantment = effectsRegistry.get(id);
+                //?} else {
                 MobEffect enchantment = effectsRegistry.getValue(id);
                 //?}
 
                 if (enchantment != null) {
                     //? if <= 1.20.3 {
-                    /*newList.add(enchantment);
-                    *///?} else {
+                    //newList.add(enchantment);
+                    //?} else {
                     newList.add(effectsRegistry.wrapAsHolder(enchantment));
                     //?}
                 } else {
@@ -107,8 +107,8 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<Mob
 
     @Override
     //? if <= 1.20.3 {
-    /*protected void renderListEntry(GuiGraphicsExtractor context, MobEffect effectType, int x, int y, int mouseX, int mouseY, float tickDelta) {
-    *///?} else {
+    //protected void renderListEntry(GuiGraphicsExtractor context, MobEffect effectType, int x, int y, int mouseX, int mouseY, float tickDelta) {
+    //?} else {
     protected void renderListEntry(GuiGraphicsExtractor context, Holder<MobEffect> effectType, int x, int y, int mouseX, int mouseY, float tickDelta) {
     //?}
         //? if <= 1.21 {
@@ -116,8 +116,8 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<Holder<Mob
         RenderSystem.enableBlend();
 
         //? if <= 1.20 {
-        /^context.blit(EFFECT_BACKGROUND_TEXTURE, x, y, 141, 166, 24, 24);
-        ^///?} else {
+        //context.blit(EFFECT_BACKGROUND_TEXTURE, x, y, 141, 166, 24, 24);
+        //?} else {
         context.blitSprite(EFFECT_BACKGROUND_TEXTURE, x, y, 24, 24);
         //?}
         TextureAtlasSprite sprite = statusEffectSpriteManager.get(effectType);

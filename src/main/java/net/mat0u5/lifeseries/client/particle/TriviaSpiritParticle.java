@@ -19,8 +19,8 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
 //? if <= 1.21 {
-/^import net.minecraft.util.FastColor;
- ^///?} else {
+//import net.minecraft.util.FastColor;
+ //?} else {
 import net.minecraft.util.ARGB;
 //?}
 
@@ -44,22 +44,22 @@ public class TriviaSpiritParticle extends Particle {
 
     @Override
             //? if <= 1.21.2 {
-    /^public void render(VertexConsumer vertexConsumer0, Camera camera, float f) {
-     ^///?} else {
+    //public void render(VertexConsumer vertexConsumer0, Camera camera, float f) {
+     //?} else {
     public void renderCustom(PoseStack poseStack, MultiBufferSource bufferSource, Camera camera, float f) {
         //?}
         float g = ((float)this.age + f) / (float)this.lifetime;
         float h = 0.05f + 0.5f * Mth.sin(g * (float)Math.PI);
         //? if < 1.21 {
-        //?} else if <= 1.21 {
-        /^int i = FastColor.ARGB32.colorFromFloat(h, 1.0f, 1.0f, 1.0f);
-         ^///?} else {
+        /^^///?} else if <= 1.21 {
+        //int i = FastColor.ARGB32.colorFromFloat(h, 1.0f, 1.0f, 1.0f);
+         //?} else {
         int i = ARGB.colorFromFloat(h, 1.0F, 1.0F, 1.0F);
         //?}
 
         //? if <= 1.21.2 {
-        /^PoseStack poseStack = new PoseStack();
-         ^///?} else {
+        //PoseStack poseStack = new PoseStack();
+         //?} else {
         poseStack.pushPose();
         //?}
 
@@ -74,18 +74,18 @@ public class TriviaSpiritParticle extends Particle {
         poseStack.translate(0.0f, 0, 1f);
 
         //? if <= 1.21.2 {
-        /^MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
-         ^///?}
+        //MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
+         //?}
         VertexConsumer vertexConsumer = bufferSource.getBuffer(this.renderType);
         //? if <= 1.20.5 {
-        /^this.model.renderToBuffer(poseStack, vertexConsumer, 0xF000F0, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, h);
-         ^///?} else {
+        //this.model.renderToBuffer(poseStack, vertexConsumer, 0xF000F0, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, h);
+         //?} else {
         this.model.renderToBuffer(poseStack, vertexConsumer, 0xF000F0, OverlayTexture.NO_OVERLAY, i);
         //?}
 
         //? if <= 1.21.2 {
-        /^bufferSource.endBatch();
-         ^///?} else {
+        //bufferSource.endBatch();
+         //?} else {
         poseStack.popPose();
         //?}
     }
@@ -125,8 +125,8 @@ public class TriviaSpiritParticle extends Particle {
     protected final RenderType renderType;
 
     //? if <= 26.1 {
-    /*public static final ParticleRenderType GROUP = new ParticleRenderType("TRIVIA_SPIRITS");
-    *///?} else {
+    //public static final ParticleRenderType GROUP = new ParticleRenderType("TRIVIA_SPIRITS");
+    //?} else {
     public static final ParticleRenderType GROUP = new ParticleRenderType("TRIVIA_SPIRITS", "TS");
     //?}
 
@@ -136,8 +136,8 @@ public class TriviaSpiritParticle extends Particle {
         this.model = new TriviaSpiritParticleModel(particleModel.root());
 
         //? if <= 1.21.9 {
-        /*this.renderType = RenderType.entityTranslucent(TriviaBot.SANTABOT_TEXTURE);
-        *///?} else {
+        //this.renderType = RenderType.entityTranslucent(TriviaBot.SANTABOT_TEXTURE);
+        //?} else {
         this.renderType = RenderTypes.entityTranslucent(TriviaBot.SANTABOT_TEXTURE);
         //?}
         this.gravity = 0.0F;
@@ -152,10 +152,10 @@ public class TriviaSpiritParticle extends Particle {
     public class TriviaSpiritParticleModel extends Model<Unit> {
         public TriviaSpiritParticleModel(ModelPart modelPart) {
             //? if <= 1.21.9 {
-            /*super(modelPart, RenderType::entityCutoutNoCull);
-            *///?} else if <= 1.21.11 {
-            /*super(modelPart, RenderTypes::entityCutoutNoCull);
-            *///?} else {
+            //super(modelPart, RenderType::entityCutoutNoCull);
+            //?} else if <= 1.21.11 {
+            //super(modelPart, RenderTypes::entityCutoutNoCull);
+            //?} else {
             super(modelPart, RenderTypes::entityCutout);
             //?}
         }

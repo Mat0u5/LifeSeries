@@ -42,16 +42,16 @@ import static net.mat0u5.lifeseries.LifeSeries.server;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 *///?}
 //? if <= 1.20.3 {
-/*import net.minecraft.world.item.alchemy.PotionUtils;
- *///?} else {
+//import net.minecraft.world.item.alchemy.PotionUtils;
+ //?} else {
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.component.CustomData;
 //?}
 //? if >= 1.21.9 {
 //? if <= 26.1 {
-/*import net.minecraft.world.entity.EntityType;
-*///?} else {
+//import net.minecraft.world.entity.EntityType;
+//?} else {
 import net.minecraft.world.entity.EntityTypes;
 //?}
 import net.minecraft.world.item.component.TypedEntityData;
@@ -465,8 +465,8 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         if (bot.serverData.getBoundPlayer() == null) return;
         Vec3 pos = bot.position().add(0,1,0);
         //? if <= 1.21 {
-        /*Vec3 towardsArm = Vec3.atLowerCornerOf(spawnInfo.bedDirection().getCounterClockWise().getNormal());
-        *///?} else {
+        //Vec3 towardsArm = Vec3.atLowerCornerOf(spawnInfo.bedDirection().getCounterClockWise().getNormal());
+        //?} else {
         Vec3 towardsArm = spawnInfo.bedDirection().getCounterClockWise().getUnitVec3();
         //?}
         pos = pos.add(towardsArm.scale(0.6));
@@ -544,8 +544,8 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
 
         //Enchanted Books
         //? if <= 1.20.5 {
-        /*itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.FEATHER_FALLING, 3))), 10);
-        *///?} else {
+        //itemSpawner.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.FEATHER_FALLING, 3))), 10);
+        //?} else {
         itemSpawner.addItem(Objects.requireNonNull(ItemStackUtils.createEnchantedBook(Enchantments.FEATHER_FALLING, 3)), 10);
         //?}
 
@@ -613,14 +613,14 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
 
 
         //? if < 1.20.5 {
-        /*camel.setTag(nbtCompCamel);
-        *///?} else {
+        //camel.setTag(nbtCompCamel);
+        //?} else {
         CustomData nbtCamel= CustomData.of(nbtCompCamel);
         //?}
 
         //? if >=1.20.5 && <= 1.21.6 {
-        /*camel.set(DataComponents.ENTITY_DATA, nbtCamel);
-        *///?} else if > 1.21.6 {
+        //camel.set(DataComponents.ENTITY_DATA, nbtCamel);
+        //?} else if > 1.21.6 {
         camel.set(DataComponents.ENTITY_DATA, TypedEntityData.of(EntityTypes.CAMEL, nbtCamel.copyTag()));
         //?}
         itemSpawner.addItem(camel, 10);

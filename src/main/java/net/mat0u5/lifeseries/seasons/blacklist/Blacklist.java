@@ -217,8 +217,8 @@ public class Blacklist {
 
         Registry<Enchantment> enchantmentRegistry = server.registryAccess()
                 //? if <=1.21 {
-                /*.registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));
-                 *///?} else
+                //.registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));
+                 //?} else
                 .lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));
 
         Map<Integer, List<String>> loadedRaw = loadClampedEnchants();
@@ -249,8 +249,8 @@ public class Blacklist {
 
         Registry<Enchantment> enchantmentRegistry = server.registryAccess()
                 //? if <=1.21 {
-                /*.registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));
-                *///?} else
+                //.registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));
+                //?} else
                 .lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));
 
 
@@ -270,23 +270,23 @@ public class Blacklist {
     }
 
     //? if <= 1.20.3 {
-    /*public List<MobEffect> getBannedEffects() {
-    *///?} else {
+    //public List<MobEffect> getBannedEffects() {
+    //?} else {
     public List<Holder<MobEffect>> getBannedEffects() {
         //?}
         if (server == null) return new ArrayList<>();
 
         if (loadedBannedEffects != null) return loadedBannedEffects;
         //? if <= 1.20.3 {
-        /*List<MobEffect> newList = new ArrayList<>();
-        *///?} else {
+        //List<MobEffect> newList = new ArrayList<>();
+        //?} else {
         List<Holder<MobEffect>> newList = new ArrayList<>();
         //?}
 
         Registry<MobEffect> effectsRegistry = server.registryAccess()
                 //? if <=1.21 {
-                /*.registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
-                *///?} else
+                //.registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
+                //?} else
                 .lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
 
         for (String potionId : loadBannedPotions()) {
@@ -294,8 +294,8 @@ public class Blacklist {
                 MobEffect effect = RegistryUtils.resolveRegistryEntry(effectsRegistry, potionId);
                 if (effect != null) {
                     //? if <= 1.20.3 {
-                    /*newList.add(effect);
-                    *///?} else {
+                    //newList.add(effect);
+                    //?} else {
                     newList.add(effectsRegistry.wrapAsHolder(effect));
                     //?}
                 }
@@ -309,23 +309,23 @@ public class Blacklist {
     }
 
     //? if <= 1.20.3 {
-    /*public List<MobEffect> getClampedEffects() {
-     *///?} else {
+    //public List<MobEffect> getClampedEffects() {
+     //?} else {
     public List<Holder<MobEffect>> getClampedEffects() {
         //?}
         if (server == null) return new ArrayList<>();
 
         if (loadedClampedEffects != null) return loadedClampedEffects;
         //? if <= 1.20.3 {
-        /*List<MobEffect> newList = new ArrayList<>();
-         *///?} else {
+        //List<MobEffect> newList = new ArrayList<>();
+         //?} else {
         List<Holder<MobEffect>> newList = new ArrayList<>();
         //?}
 
         Registry<MobEffect> effectsRegistry = server.registryAccess()
         //? if <=1.21 {
-        /*.registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
-        *///?} else
+        //.registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
+        //?} else
         .lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
 
         for (String potionId : loadClampedPotions()) {
@@ -333,8 +333,8 @@ public class Blacklist {
                 MobEffect effect = RegistryUtils.resolveRegistryEntry(effectsRegistry, potionId);
                 if (effect != null) {
                     //? if <= 1.20.3 {
-                    /*newList.add(effect);
-                    *///?} else {
+                    //newList.add(effect);
+                    //?} else {
                     newList.add(effectsRegistry.wrapAsHolder(effect));
                     //?}
                 }
@@ -549,8 +549,8 @@ public class Blacklist {
         for (it.unimi.dsi.fastutil.objects.Object2IntMap.Entry<Holder<Enchantment>> enchant : enchants.entrySet()) {
             if (toRemove.contains(enchant)) continue;
             //? if <= 1.20.5 {
-            /*builder.upgrade(enchant.getKey().value(), enchant.getIntValue());
-            *///?} else {
+            //builder.upgrade(enchant.getKey().value(), enchant.getIntValue());
+            //?} else {
             builder.upgrade(enchant.getKey(), enchant.getIntValue());
             //?}
         }

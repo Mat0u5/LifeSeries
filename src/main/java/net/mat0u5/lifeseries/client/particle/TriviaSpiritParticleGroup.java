@@ -76,8 +76,8 @@ public class TriviaSpiritParticleGroup extends ParticleGroup<TriviaSpiritParticl
             for (TriviaSpiritParticleRenderState state : this.states) {
                 submitNodeCollector.submitModel(
                         //? if <= 26.2 {
-                        /*state.model, Unit.INSTANCE, state.poseStack, state.renderType, 15728880, OverlayTexture.NO_OVERLAY, state.color, null, 0, null
-                        *///?} else {
+                        //state.model, Unit.INSTANCE, state.poseStack, state.renderType, 15728880, OverlayTexture.NO_OVERLAY, state.color, null, 0, null
+                        //?} else {
                         state.model, Unit.INSTANCE, state.poseStack, state.renderType, 15728880, OverlayTexture.NO_OVERLAY, state.color, null, 0
                         //?}
                 );

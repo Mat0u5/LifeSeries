@@ -68,8 +68,8 @@ public class LimitedLifeLivesManager extends LivesManager {
         TeamColor colorBefore = null;
         if (player.getTeam() != null) {
             //? if <= 26.1 {
-            /*colorBefore = player.getTeam().getColor();
-            *///?} else {
+            //colorBefore = player.getTeam().getColor();
+            //?} else {
             colorBefore = player.getTeam().getColor().orElse(null);
             //?}
         }
@@ -85,8 +85,8 @@ public class LimitedLifeLivesManager extends LivesManager {
             }
             if (lives > 0 && colorBefore != null && livesBefore != null && BROADCAST_COLOR_CHANGES) {
                 //? if <= 26.1 {
-                /*Component colorText = Component.literal(colorNow.getName().replaceAll("_", " ").toLowerCase(Locale.ROOT)).withStyle(colorNow);
-                *///?} else {
+                //Component colorText = Component.literal(colorNow.getName().replaceAll("_", " ").toLowerCase(Locale.ROOT)).withStyle(colorNow);
+                //?} else {
                 Component colorText = Component.literal(colorNow.getSerializedName().replaceAll("_", " ").toLowerCase(Locale.ROOT)).withColor(colorNow.textColor());
                 //?}
                 PlayerUtils.broadcastMessage(ModifiableText.LIMITEDLIFE_CHANGE_COLOR.get(player, colorText));

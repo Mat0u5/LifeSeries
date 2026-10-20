@@ -24,8 +24,8 @@ public abstract class CommandsMixin {
     @Inject(at = @At(value = "INVOKE", target = "Lcom/mojang/brigadier/CommandDispatcher;setConsumer(Lcom/mojang/brigadier/ResultConsumer;)V"), method = "<init>")
 //?} else {
     /*//? if <= 1.20.5 {
-    /^@Inject(method = "<init>", at = @At("RETURN"))
-    ^///?} else {
+    //@Inject(method = "<init>", at = @At("RETURN"))
+    //?} else {
     @Inject(at = @At(value = "INVOKE", target = "Lcom/mojang/brigadier/CommandDispatcher;setConsumer(Lcom/mojang/brigadier/ResultConsumer;)V", unsafe = true), method = "<init>")
     //?}
 *///?}

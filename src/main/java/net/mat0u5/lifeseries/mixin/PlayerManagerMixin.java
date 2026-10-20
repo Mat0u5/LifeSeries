@@ -76,8 +76,8 @@ public abstract class PlayerManagerMixin implements IPlayerManager {
     //? if <= 1.21.6 {
     /*@Inject(method = "load", at = @At(value = "RETURN", shift = At.Shift.BEFORE))
     //? if <= 1.21.5 {
-    /^public void loadPlayerData(ServerPlayer player, CallbackInfoReturnable<Optional<CompoundTag>> cir) {
-    ^///?} else {
+    //public void loadPlayerData(ServerPlayer player, CallbackInfoReturnable<Optional<CompoundTag>> cir) {
+    //?} else {
     public void loadPlayerData(ServerPlayer player, ProblemReporter errorReporter, CallbackInfoReturnable<Optional<ValueInput>> cir) {
     //?}
         if (LifeSeries.modFullyDisabled()) return;
@@ -89,13 +89,13 @@ public abstract class PlayerManagerMixin implements IPlayerManager {
 
     @Inject(method = "respawn", at = @At("RETURN"))
     //? if <= 1.20.5 {
-    /*public void respawnPlayer(ServerPlayer serverPlayer, boolean alive, CallbackInfoReturnable<ServerPlayer> cir) {
-    *///?} else {
+    //public void respawnPlayer(ServerPlayer serverPlayer, boolean alive, CallbackInfoReturnable<ServerPlayer> cir) {
+    //?} else {
     public void respawnPlayer(ServerPlayer player, boolean alive, Entity.RemovalReason removalReason, CallbackInfoReturnable<ServerPlayer> cir) {
     //?}
         //? if <= 1.20.5 {
-        /*if (alive) return;
-        *///?} else {
+        //if (alive) return;
+        //?} else {
         if (alive || removalReason != Entity.RemovalReason.KILLED) return;
         //?}
         if (LifeSeries.isClientOrDisabled()) return;
@@ -104,8 +104,8 @@ public abstract class PlayerManagerMixin implements IPlayerManager {
 
     @Redirect(method = "placeNewPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Z)V"))
     //? if <= 1.20 {
-    /*public void skipLoginMessage(PlayerList instance, Component message, boolean overlay, Connection connection, ServerPlayer player) {
-    *///?} else {
+    //public void skipLoginMessage(PlayerList instance, Component message, boolean overlay, Connection connection, ServerPlayer player) {
+    //?} else {
     public void skipLoginMessage(PlayerList instance, Component message, boolean overlay, Connection connection, ServerPlayer player, CommonListenerCookie clientData) {
     //?}
         if (LifeSeries.isClientOrDisabled() || player == null) {

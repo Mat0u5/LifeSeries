@@ -271,8 +271,8 @@ public class MobSwap extends Wildcard {
             if (mobLoot) OtherUtils.setBooleanGameRule(level, GameRules.MOB_DROPS, false);
             for (Entity entity : toKill) {
                 //? if <=1.21 {
-                /*entity.kill();
-                *///?} else {
+                //entity.kill();
+                //?} else {
                 entity.kill((ServerLevel) entity.level());
                 //?}
             }
@@ -299,8 +299,8 @@ public class MobSwap extends Wildcard {
                     Entity newMob = LevelUtils.spawnEntity(randomMob, level, entity.blockPosition());
                     if (newMob != null) {
                         //? if <= 1.21.4 {
-                        /*newMob.moveTo(entity.getX(), entity.getY(), entity.getZ(), entity.getYRot(), entity.getXRot());
-                        *///?} else {
+                        //newMob.moveTo(entity.getX(), entity.getY(), entity.getZ(), entity.getYRot(), entity.getXRot());
+                        //?} else {
                         newMob.snapTo(entity.getX(), entity.getY(), entity.getZ(), entity.getYRot(), entity.getXRot());
                         //?}
                         newMob.addTag("mobswap");
@@ -358,8 +358,8 @@ public class MobSwap extends Wildcard {
                 if (entity instanceof TriviaBot) return;
                 if (entity.hasCustomName()) return;
                 //? if <= 1.21.11 {
-                /*if (!entity.getTags().contains("mobswap")) return;
-                *///?} else {
+                //if (!entity.getTags().contains("mobswap")) return;
+                //?} else {
                 if (!entity.entityTags().contains("mobswap")) return;
                 //?}
                 toKill.add(entity);
@@ -369,8 +369,8 @@ public class MobSwap extends Wildcard {
             if (mobLoot) OtherUtils.setBooleanGameRule(level, GameRules.MOB_DROPS, false);
             for (Entity entity : toKill) {
                 //? if <=1.21 {
-                /*entity.kill();
-                 *///?} else {
+                //entity.kill();
+                 //?} else {
                 entity.kill((ServerLevel) entity.level());
                 //?}
             }
@@ -399,8 +399,8 @@ public class MobSwap extends Wildcard {
             cir.setReturnValue(false);
         }
         //? if <= 1.21.4 {
-        /*cir.setReturnValue(Objects.equals(new ChunkPos(pos), chunk.getPos()) || level.isNaturalSpawningAllowed(pos));
-        *///?} else {
+        //cir.setReturnValue(Objects.equals(new ChunkPos(pos), chunk.getPos()) || level.isNaturalSpawningAllowed(pos));
+        //?} else {
         ChunkPos chunkPos = LevelUtils.chunkPosFromBlockPos(pos);
         cir.setReturnValue(Objects.equals(chunkPos, chunk.getPos()) || level.canSpawnEntitiesInChunk(chunkPos));
         //?}

@@ -72,8 +72,8 @@ public class TimeDilation extends Wildcard {
                     for (ServerPlayer player : serverLevel.players()) {
                         boolean daylightCycle = OtherUtils.getBooleanGameRule(serverLevel, GameRules.ADVANCE_TIME);
                         //? if <= 1.21.11 {
-                        /*player.connection.send(new ClientboundSetTimePacket(serverLevel.getGameTime(), serverLevel.getDayTime(), daylightCycle));
-                        *///?} else {
+                        //player.connection.send(new ClientboundSetTimePacket(serverLevel.getGameTime(), serverLevel.getDayTime(), daylightCycle));
+                        //?} else {
                         player.connection.send(serverLevel.clockManager().createFullSyncPacket());
                         //?}
                     }
@@ -174,8 +174,8 @@ public class TimeDilation extends Wildcard {
         ServerTickRateManager serverTickManager = server.tickRateManager();
         return serverTickManager.tickrate();
         //?} else {
-        /*return 20;
-        *///?}
+        //return 20;
+        //?}
     }
 
     private static void adjustCreeperFuseTimes() {

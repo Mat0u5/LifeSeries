@@ -160,8 +160,8 @@ public class Events {
                 PlayerUtils.updatePlayerLists();
             }
             //? if < 1.20.3 {
-            /*boolean gameFrozen = false;
-            *///?} else {
+            //boolean gameFrozen = false;
+            //?} else {
             boolean gameFrozen = server.tickRateManager().isFrozen();
             //?}
             TaskScheduler.onTick(gameFrozen);

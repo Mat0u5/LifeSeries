@@ -16,8 +16,8 @@ public class ClientKeybinds {
     public static KeyMapping runCommand;
 
     //? if <= 1.21.6 {
-    /*public static final String KEYBIND_ID = "key.category.lifeseries.general";
-     *///?} else {
+    //public static final String KEYBIND_ID = "key.category.lifeseries.general";
+     //?} else {
     public static KeyMapping.Category KEYBIND_ID = KeyMapping.Category.register(IdentifierHelper.mod("general"));
     //?}
 
@@ -37,8 +37,8 @@ public class ClientKeybinds {
         if (superpower != null) return;
 
         //? if <= 26.2 {
-        /*var type = InputConstants.Type.KEYSYM;
-        *///?} else {
+        //var type = InputConstants.Type.KEYSYM;
+        //?} else {
         var type = InputConstants.Type.KEYBOARD;
         //?}
 
@@ -46,8 +46,8 @@ public class ClientKeybinds {
                 "key.lifeseries.superpower",
                 type,
                 //? if <= 1.21.5 {
-                /*InputConstants.KEY_G,
-                 *///?} else {
+                //InputConstants.KEY_G,
+                 //?} else {
                 InputConstants.KEY_R,
                 //?}
                 KEYBIND_ID

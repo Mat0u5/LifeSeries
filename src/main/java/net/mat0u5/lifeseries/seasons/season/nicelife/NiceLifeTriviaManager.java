@@ -34,8 +34,8 @@ import static net.mat0u5.lifeseries.LifeSeries.livesManager;
 import static net.mat0u5.lifeseries.LifeSeries.server;
 
 //? if <= 26.2 {
-/*import net.minecraft.world.level.block.BedBlock;
-*///?} else {
+//import net.minecraft.world.level.block.BedBlock;
+//?} else {
 import net.minecraft.world.level.block.AbstractBedBlock;
 //?}
 

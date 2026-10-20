@@ -281,8 +281,8 @@ public class PlayerUtils {
                 sha1,
                 false,
                 //? if <= 1.20.3 {
-                /*Component.translatable(message)
-                *///?} else {
+                //Component.translatable(message)
+                //?} else {
                 Optional.of(Component.translatable(message))
                 //?}
         );
@@ -375,8 +375,8 @@ public class PlayerUtils {
 
     public static ItemStack getEquipmentSlot(Player player, int slot) {
         //? if <= 1.21.4 {
-        /*return player.getInventory().getArmor(slot);
-        *///?} else {
+        //return player.getInventory().getArmor(slot);
+        //?} else {
         return player.getInventory().getItem(slot + 36);
         //?}
     }
@@ -424,14 +424,14 @@ public class PlayerUtils {
 
     public static ClientboundPlayerInfoUpdatePacket.Entry getPlayerListEntry(ServerPlayer player, boolean listed) {
         //? if <= 1.20 {
-        /*return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.latency, player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
-        *///?} else if <= 1.21 {
-        /*return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), (RemoteChatSession.Data) Optionull.map(player.getChatSession(), RemoteChatSession::asData));
-        *///?} else if <= 1.21.2 {
-        /*return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), player.getTabListOrder(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
-        *///?} else if <= 1.21.6 {
-        /*return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), player.isModelPartShown(PlayerModelPart.HAT), player.getTabListOrder(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
-        *///?} else {
+        //return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.latency, player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
+        //?} else if <= 1.21 {
+        //return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), (RemoteChatSession.Data) Optionull.map(player.getChatSession(), RemoteChatSession::asData));
+        //?} else if <= 1.21.2 {
+        //return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), player.getTabListOrder(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
+        //?} else if <= 1.21.6 {
+        //return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), player.isModelPartShown(PlayerModelPart.HAT), player.getTabListOrder(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
+        //?} else {
         return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode(), player.getTabListDisplayName(), player.isModelPartShown(PlayerModelPart.HAT), player.getTabListOrder(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
         //?}
     }
@@ -577,8 +577,8 @@ public class PlayerUtils {
         ((IPlayer) player).ls$hurt(source, 10);
         if (player.isAlive()) {
             //? if <= 1.21 {
-            /*player.kill();
-            *///?} else {
+            //player.kill();
+            //?} else {
             player.kill(((IPlayer) player).ls$getServerLevel());
             //?}
         }
@@ -593,8 +593,8 @@ public class PlayerUtils {
 
     public static Component getPlayerNameWithIcon(ServerPlayer player) {
         //? if < 1.21.9 {
-        /*return player.getDisplayName();
-        *///?} else {
+        //return player.getDisplayName();
+        //?} else {
         Component image = Component.object(new PlayerSprite(ResolvableProfile.createResolved(player.getGameProfile()), true));
         return TextUtils.format("{} {}", image, player);
         //?}

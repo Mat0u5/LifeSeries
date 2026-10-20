@@ -319,8 +319,8 @@ public class Session {
 
         if (statusPaused()) {
             //? if < 1.20.3 {
-            /*float tickRate = 20;
-             *///?} else {
+            //float tickRate = 20;
+             //?} else {
             float tickRate = server.tickRateManager().tickrate();
             //?}
             if (tickRate == 20) {
@@ -344,8 +344,8 @@ public class Session {
                 SimplePackets.SESSION_STATUS.sendToClient(status.getName(), player);
             }
             //? if <= 1.20.3 {
-            /*for (MobEffect effect : blacklist.getBannedEffects()) {
-             *///?} else {
+            //for (MobEffect effect : blacklist.getBannedEffects()) {
+             //?} else {
             for (Holder<MobEffect> effect : blacklist.getBannedEffects()) {
                 //?}
                 for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
@@ -359,8 +359,8 @@ public class Session {
                 }
             }
             //? if <= 1.20.3 {
-            /*for (MobEffect effect : blacklist.getClampedEffects()) {
-             *///?} else {
+            //for (MobEffect effect : blacklist.getClampedEffects()) {
+             //?} else {
             for (Holder<MobEffect> effect : blacklist.getClampedEffects()) {
                 //?}
                 for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
@@ -408,8 +408,8 @@ public class Session {
 
     public void tickSessionOn(MinecraftServer server) {
         //? if < 1.20.3 {
-        /*float tickRate = 20;
-        *///?} else {
+        //float tickRate = 20;
+        //?} else {
         float tickRate = server.tickRateManager().tickrate();
         //?}
         if (tickRate == 20) {

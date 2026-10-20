@@ -61,8 +61,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 //? if <= 1.20.3 {
-/*import net.minecraft.network.FriendlyByteBuf;
-*///?}
+//import net.minecraft.network.FriendlyByteBuf;
+//?}
 //? if <= 1.20 {
 /*import io.netty.buffer.Unpooled;
 import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
@@ -124,8 +124,8 @@ public class NetworkHandlerClient {
             EntityType<?> morphType = null;
             if (!morphTypeStr.equalsIgnoreCase("null") && !morphUUIDStr.isEmpty()) {
                 //? if <= 1.21 {
-                /*morphType = BuiltInRegistries.ENTITY_TYPE.get(IdentifierHelper.parse(morphTypeStr));
-                 *///?} else {
+                //morphType = BuiltInRegistries.ENTITY_TYPE.get(IdentifierHelper.parse(morphTypeStr));
+                 //?} else {
                 morphType = BuiltInRegistries.ENTITY_TYPE.getValue(IdentifierHelper.parse(morphTypeStr));
                 //?}
             }
@@ -221,8 +221,8 @@ public class NetworkHandlerClient {
                 totemItem = AnimationUtils.getSecretLifeTotemItem(payload.value().equalsIgnoreCase("task_red"));
             }
             //? if <= 26.2 {
-            /*Minecraft.getInstance().gameRenderer.displayItemActivation(totemItem);
-            *///?} else {
+            //Minecraft.getInstance().gameRenderer.displayItemActivation(totemItem);
+            //?} else {
             Minecraft.getInstance().player.displayItemActivation(totemItem);
             //?}
         });
@@ -375,8 +375,8 @@ public class NetworkHandlerClient {
 
     public static boolean onCustomPayload(CustomPacketPayload customPacketPayload) {
         //? if <= 1.20.3 {
-        /*Identifier id = customPacketPayload.id();
-         *///?} else {
+        //Identifier id = customPacketPayload.id();
+         //?} else {
         Identifier id = customPacketPayload.type().id();
         //?}
         if (LifeSeries.DEBUG) LifeSeries.LOGGER.info(TextUtils.formatString("[SERVER -> CLIENT] Received {}", id.toString()));
@@ -451,8 +451,8 @@ public class NetworkHandlerClient {
         LifeSeriesClient.sideTitle = payload.text();
         Minecraft client = Minecraft.getInstance();
         //? if <= 26.2 {
-        /*if (client.gui instanceof GuiAccessor hudAccessor) {
-        *///?} else {
+        //if (client.gui instanceof GuiAccessor hudAccessor) {
+        //?} else {
         if (client.gui.hud instanceof GuiAccessor hudAccessor) {
         //?}
             TextHud.sideTitleRemainTicks = hudAccessor.ls$titleFadeInTicks() + hudAccessor.ls$titleStayTicks() + hudAccessor.ls$titleFadeOutTicks();
@@ -542,8 +542,8 @@ public class NetworkHandlerClient {
      */
     public static void send(CustomPacketPayload payload) {
         //? if <= 1.20.3 {
-        /*Identifier id = payload.id();
-         *///?} else {
+        //Identifier id = payload.id();
+         //?} else {
         Identifier id = payload.type().id();
         //?}
         if (LifeSeries.DEBUG) LifeSeries.LOGGER.info(TextUtils.formatString("[CLIENT -> SERVER] Sending {}", id.toString()));

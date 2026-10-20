@@ -24,8 +24,8 @@ import net.minecraft.world.level.gamerules.GameRule;
 public class GameRuleCommandMixin {
     @Inject(method = "setRule", at = @At("TAIL"))
     //? if <= 1.21.9 {
-    /*private static <T extends GameRules.Value<T>> void onChanged(CommandContext<CommandSourceStack> commandContext, GameRules.Key<T> key, CallbackInfoReturnable<Integer> cir) {
-    *///?} else {
+    //private static <T extends GameRules.Value<T>> void onChanged(CommandContext<CommandSourceStack> commandContext, GameRules.Key<T> key, CallbackInfoReturnable<Integer> cir) {
+    //?} else {
     private static <T> void onChanged(CommandContext<CommandSourceStack> commandContext, GameRule<T> key, CallbackInfoReturnable<Integer> cir) {
     //?}
         MinecraftServer server = commandContext.getSource().getServer();

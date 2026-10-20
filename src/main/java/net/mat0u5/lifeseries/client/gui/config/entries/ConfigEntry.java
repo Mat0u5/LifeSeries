@@ -131,8 +131,8 @@ public abstract class ConfigEntry {
             if (isHovered) {
                 Component errorText = TextUtils.format("§cERROR:\n{}",getErrorMessage());
                 //? if <= 1.21.5 {
-                /*context.renderTooltip(textRenderer, textRenderer.split(errorText, MAX_DESCRIPTION_WIDTH), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY);
-                 *///?} else {
+                //context.renderTooltip(textRenderer, textRenderer.split(errorText, MAX_DESCRIPTION_WIDTH), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY);
+                 //?} else {
                 context.setTooltipForNextFrame(textRenderer, textRenderer.split(errorText, MAX_DESCRIPTION_WIDTH), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY, false);
                 //?}
             }
@@ -153,8 +153,8 @@ public abstract class ConfigEntry {
                 mouseY >= labelY && mouseY <= labelY + textRenderer.lineHeight) {
                 Component descriptionText = getDisplayName().withStyle(ChatFormatting.UNDERLINE).append("§r\n"+description);
                 //? if <= 1.21.5 {
-                /*context.renderTooltip(textRenderer, textRenderer.split(descriptionText, MAX_DESCRIPTION_WIDTH), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY);
-                 *///?} else {
+                //context.renderTooltip(textRenderer, textRenderer.split(descriptionText, MAX_DESCRIPTION_WIDTH), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY);
+                 //?} else {
                 context.setTooltipForNextFrame(textRenderer, textRenderer.split(descriptionText, MAX_DESCRIPTION_WIDTH), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY, false);
                 //?}
             }

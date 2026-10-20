@@ -24,8 +24,8 @@ import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 import static net.mat0u5.lifeseries.LifeSeries.livesManager;
 
 //? if <= 26.1 {
-/*import net.minecraft.ChatFormatting;
- *///?} else {
+//import net.minecraft.ChatFormatting;
+ //?} else {
 import net.minecraft.world.scores.TeamColor;
 //?}
 

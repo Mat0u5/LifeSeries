@@ -14,24 +14,24 @@ import java.util.Optional;
 import static net.mat0u5.lifeseries.LifeSeries.server;
 
 //? if <= 26.1 {
-/*import net.minecraft.ChatFormatting;
- *///?} else {
+//import net.minecraft.ChatFormatting;
+ //?} else {
 import net.minecraft.world.scores.TeamColor;
 //?}
 
 public class TeamUtils {
 
     //? if <= 26.1 {
-    /*public static void createTeam(String teamName, ChatFormatting color) {
-    *///?} else {
+    //public static void createTeam(String teamName, ChatFormatting color) {
+    //?} else {
     public static void createTeam(String teamName, TeamColor color) {
     //?}
         createTeam(teamName, teamName, color);
     }
 
     //? if <= 26.1 {
-    /*public static boolean createTeam(String teamName, String displayName, ChatFormatting color) {
-    *///?} else {
+    //public static boolean createTeam(String teamName, String displayName, ChatFormatting color) {
+    //?} else {
     public static boolean createTeam(String teamName, String displayName, TeamColor color) {
     //?}
         if (server == null) return false;

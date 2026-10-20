@@ -105,8 +105,8 @@ public abstract class DefaultScreen extends Screen {
     //~ renames_26_1_volatile
     @Override
     //? if <= 1.20 {
-    /*public void extractBackground(GuiGraphicsExtractor context) {}
-    *///?} else {
+    //public void extractBackground(GuiGraphicsExtractor context) {}
+    //?} else {
     public void extractBackground(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {}
     //?}
     //~ !renames_26_1_volatile

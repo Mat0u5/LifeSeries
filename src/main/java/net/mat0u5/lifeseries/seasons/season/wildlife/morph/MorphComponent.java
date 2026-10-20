@@ -37,8 +37,8 @@ public class MorphComponent {
             if (serverPlayer != null) {
                 if (morph != null) {
                     //? if <= 1.21 {
-                    /*Entity entity = morph.create(serverPlayer.level());
-                     *///?} else {
+                    //Entity entity = morph.create(serverPlayer.level());
+                     //?} else {
                     Entity entity = morph.create(((IPlayer) serverPlayer).ls$getServerLevel(), EntitySpawnReason.COMMAND);
                     //?}
                     if (entity != null) {

@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import net.minecraft.resources.Identifier;
 
 //? if <= 26.1 {
-/*import net.minecraft.world.level.Level;
-*///?} else {
+//import net.minecraft.world.level.Level;
+//?} else {
 import net.minecraft.client.multiplayer.ClientLevel;
 //?}
 
@@ -26,8 +26,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 //?}
 
 //? if >= 1.21.4 <= 1.21.11 {
-/*import net.minecraft.client.renderer.rendertype.RenderType;
-*///?}
+//import net.minecraft.client.renderer.rendertype.RenderType;
+//?}
 //? if <= 1.21.9
 //import net.minecraft.client.multiplayer.ClientLevel;
 
@@ -101,8 +101,8 @@ public class WeatherEffectRendererMixin {
 *///?}
         if (LifeSeriesClient.NICE_LIFE_LESS_SNOW && !LifeSeries.modDisabled() && LifeSeries.isSeason(Seasons.NICE_LIFE) && !LifeSeriesClient.NICELIFE_DISABLE_SNOW) {
             //? if <= 26.2 {
-            /*boolean isSnow = resourceLocation.getPath().contains("snow.png");
-            *///?} else {
+            //boolean isSnow = resourceLocation.getPath().contains("snow.png");
+            //?} else {
             boolean isSnow = (texture instanceof SimpleTexture st) && st.resourceId().getPath().contains("snow.png");
             //?}
             if (isSnow) {
@@ -110,21 +110,21 @@ public class WeatherEffectRendererMixin {
                 /*original.call(i, LESS_SNOW_RESOURCE_LOCATION);
                 return;
                 *///?} else if <= 1.21.11 {
-                /*return original.call(LESS_SNOW_RESOURCE_LOCATION, bl);
-                *///?} else if <= 26.2 {
-                /*return LESS_SNOW_RESOURCE_LOCATION;
-                *///?} else {
+                //return original.call(LESS_SNOW_RESOURCE_LOCATION, bl);
+                //?} else if <= 26.2 {
+                //return LESS_SNOW_RESOURCE_LOCATION;
+                //?} else {
                 return LESS_SNOW_RESOURCE;
                 //?}
             }
         }
         //? if <= 1.21.2 {
-        /*original.call(i, resourceLocation);
-        *///?} else if <= 1.21.11 {
-        /*return original.call(resourceLocation, bl);
-        *///?} else if <= 26.2 {
-        /*return resourceLocation;
-        *///?} else {
+        //original.call(i, resourceLocation);
+        //?} else if <= 1.21.11 {
+        //return original.call(resourceLocation, bl);
+        //?} else if <= 26.2 {
+        //return resourceLocation;
+        //?} else {
         return texture;
         //?}
     }

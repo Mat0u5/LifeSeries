@@ -80,8 +80,8 @@ public class HungerManagerMixin implements IHungerManager {
 
     @Inject(method = "tick", at = @At("TAIL"))
     //? if <= 1.21 {
-    /*private void updateTail(Player player, CallbackInfo ci) {
-    *///?} else {
+    //private void updateTail(Player player, CallbackInfo ci) {
+    //?} else {
     private void updateTail(ServerPlayer player, CallbackInfo ci) {
     //?}
         if (LifeSeries.isClientOrDisabled()) return;

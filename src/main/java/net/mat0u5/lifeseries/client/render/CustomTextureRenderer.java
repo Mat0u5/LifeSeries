@@ -69,17 +69,17 @@ public class CustomTextureRenderer {
         if (isScaled()) {
             context.pose().pushMatrix();
             //? if <= 1.21.5 {
-            /*context.pose().scale(scaleX, scaleY, 1.0f);
-            *///?} else {
+            //context.pose().scale(scaleX, scaleY, 1.0f);
+            //?} else {
             context.pose().scale(scaleX, scaleY);
             //?}
         }
 
         //? if <= 1.21 {
-        /*context.blit(texture, (int) (x / scaleX), (int) (y / scaleY), outWidth, outHeight, u, v, width, height, textureWidth, textureHeight);
-        *///?} else if <= 1.21.5 {
-        /*context.blit(RenderType::guiTextured, texture, (int) (x / scaleX), (int) (y / scaleY), u, v, outWidth, outHeight, width, height, textureWidth, textureHeight);
-        *///?} else {
+        //context.blit(texture, (int) (x / scaleX), (int) (y / scaleY), outWidth, outHeight, u, v, width, height, textureWidth, textureHeight);
+        //?} else if <= 1.21.5 {
+        //context.blit(RenderType::guiTextured, texture, (int) (x / scaleX), (int) (y / scaleY), u, v, outWidth, outHeight, width, height, textureWidth, textureHeight);
+        //?} else {
         context.blit(RenderPipelines.GUI_TEXTURED, texture, (int) (x / scaleX), (int) (y / scaleY), u, v, outWidth, outHeight, width, height, textureWidth, textureHeight);
         //?}
 

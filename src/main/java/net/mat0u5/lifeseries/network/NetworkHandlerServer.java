@@ -66,8 +66,8 @@ import static net.mat0u5.lifeseries.LifeSeries.*;
 import net.minecraft.network.DisconnectionDetails;
  //?}
 //? if <= 26.1 {
-/*import net.minecraft.ChatFormatting;
- *///?} else {
+//import net.minecraft.ChatFormatting;
+ //?} else {
 import net.minecraft.world.scores.TeamColor;
 //?}
 //? if <= 1.20.3 {
@@ -419,8 +419,8 @@ public class NetworkHandlerServer {
     }
     public static void onCustomPayload(CustomPacketPayload customPacketPayload, ServerPlayer player) {
         //? if <= 1.20.3 {
-        /*Identifier id = customPacketPayload.id();
-         *///?} else {
+        //Identifier id = customPacketPayload.id();
+         //?} else {
         Identifier id = customPacketPayload.type().id();
         //?}
         if (LifeSeries.DEBUG) LifeSeries.LOGGER.info(TextUtils.formatString("[{} -> PACKET_SERVER] Received {}", player, id.toString()));
@@ -591,8 +591,8 @@ public class NetworkHandlerServer {
                 Component disconnectText = Component.literal("[Life Series Mod] Client-Server version mismatch!\n" +
                         "Update the client version to at least version "+serverCompatibilityStr);
                 //? if <= 1.20.5 {
-                /*player.connection.disconnect(disconnectText);
-                *///?} else {
+                //player.connection.disconnect(disconnectText);
+                //?} else {
                 player.connection.disconnect(new DisconnectionDetails(disconnectText));
                 //?}
                 return;
@@ -604,8 +604,8 @@ public class NetworkHandlerServer {
                         "The client version is too new for the server.\n" +
                         "Either update the server, or downgrade the client version to " + serverVersionStr);
                 //? if <= 1.20.5 {
-                /*player.connection.disconnect(disconnectText);
-                *///?} else {
+                //player.connection.disconnect(disconnectText);
+                //?} else {
                 player.connection.disconnect(new DisconnectionDetails(disconnectText));
                  //?}
                 return;
@@ -618,8 +618,8 @@ public class NetworkHandlerServer {
                 Component disconnectText = Component.literal("[Life Series Mod] Client-Server version mismatch!\n" +
                         "You must join with version "+serverCompatibilityStr);
                 //? if <= 1.20.5 {
-                /*player.connection.disconnect(disconnectText);
-                *///?} else {
+                //player.connection.disconnect(disconnectText);
+                //?} else {
                 player.connection.disconnect(new DisconnectionDetails(disconnectText));
                  //?}
                 return;
@@ -639,8 +639,8 @@ public class NetworkHandlerServer {
         Objects.requireNonNull(payload, "Payload cannot be null");
 
         //? if <= 1.20.3 {
-        /*Identifier id = payload.id();
-         *///?} else {
+        //Identifier id = payload.id();
+         //?} else {
         Identifier id = payload.type().id();
         //?}
 
@@ -751,8 +751,8 @@ public class NetworkHandlerServer {
                 List<String> result = new ArrayList<>();
                 for (ResourceKey<Enchantment> enchant : lvl1ClampedEnchants) {
                     //? if <= 1.21.9 {
-                    /*result.add(enchant.location().toString());
-                    *///?} else {
+                    //result.add(enchant.location().toString());
+                    //?} else {
                     result.add(enchant.identifier().toString());
                     //?}
                 }
@@ -795,8 +795,8 @@ public class NetworkHandlerServer {
         if (!currentSeason.getSeason().requiresClient()) return;
         if (wasHandshakeSuccessful(player)) return;
         //? if <= 1.20.5 {
-        /*player.connection.disconnect(getDisconnectClientText());
-        *///?} else {
+        //player.connection.disconnect(getDisconnectClientText());
+        //?} else {
         player.connection.disconnect(new DisconnectionDetails(getDisconnectClientText()));
          //?}
     }

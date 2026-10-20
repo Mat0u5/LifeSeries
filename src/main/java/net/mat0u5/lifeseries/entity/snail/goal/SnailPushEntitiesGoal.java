@@ -45,8 +45,8 @@ public final class SnailPushEntitiesGoal extends Goal {
         pushAway.addAll(level.getEntitiesOfClass(PrimedTnt.class, mob.getBoundingBox().inflate(8.0), entity -> mob.distanceToSqr(entity) < 64.0));
         pushAway.addAll(level.getEntitiesOfClass(MinecartTNT.class, mob.getBoundingBox().inflate(8.0), entity -> mob.distanceToSqr(entity) < 64.0));
         //? if <= 1.21.4 {
-        /*pushAway.addAll(level.getEntitiesOfClass(ThrownPotion.class, mob.getBoundingBox().inflate(8.0), entity -> mob.distanceToSqr(entity) < 64.0));
-        *///?} else {
+        //pushAway.addAll(level.getEntitiesOfClass(ThrownPotion.class, mob.getBoundingBox().inflate(8.0), entity -> mob.distanceToSqr(entity) < 64.0));
+        //?} else {
         pushAway.addAll(level.getEntitiesOfClass(AbstractThrownPotion.class, mob.getBoundingBox().inflate(8.0), entity -> mob.distanceToSqr(entity) < 64.0));
         //?}
 
