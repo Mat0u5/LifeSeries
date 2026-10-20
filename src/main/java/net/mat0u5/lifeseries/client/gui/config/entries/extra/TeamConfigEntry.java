@@ -24,8 +24,8 @@ import java.util.*;
 //? if >= 1.21.9
 import net.minecraft.client.input.*;
 //? if <= 26.1 {
-/*import net.minecraft.ChatFormatting;
-*///?} else {
+//import net.minecraft.ChatFormatting;
+//?} else {
 import net.minecraft.world.scores.TeamColor;
 //?}
 
@@ -127,8 +127,8 @@ public class TeamConfigEntry extends ModifiableListEntry {
         else textFieldLives.setTextColor(TextColors.WHITE);
         var teamColor = getTeamColor();
         //? if <= 26.1 {
-        /*if (teamColor == null || teamColor.getColor() == null) {
-        *///?} else {
+        //if (teamColor == null || teamColor.getColor() == null) {
+        //?} else {
         if (teamColor == null) {
         //?}
             textFieldColor.setTextColor(TextColors.PASTEL_RED);
@@ -137,8 +137,8 @@ public class TeamConfigEntry extends ModifiableListEntry {
         else {
             textFieldColor.setTextColor(TextColors.WHITE);
             //? if <= 26.1 {
-            /*textFieldName.setTextColor(TextColors.toArgb(255, teamColor.getColor()));
-            *///?} else {
+            //textFieldName.setTextColor(TextColors.toArgb(255, teamColor.getColor()));
+            //?} else {
             textFieldName.setTextColor(TextColors.toArgb(255, teamColor.rgb()));
             //?}
         }
@@ -210,8 +210,8 @@ public class TeamConfigEntry extends ModifiableListEntry {
             }
             if (hoverText != null) {
                 //? if <= 1.21.5 {
-                /*context.renderTooltip(textRenderer, textRenderer.split(hoverText, 210), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY);
-                 *///?} else {
+                //context.renderTooltip(textRenderer, textRenderer.split(hoverText, 210), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY);
+                 //?} else {
                 context.setTooltipForNextFrame(textRenderer, textRenderer.split(hoverText, 210), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY, false);
                 //?}
             }

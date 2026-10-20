@@ -196,8 +196,8 @@ public class DoubleLife extends Season {
     public void removeSoulmateTags() {
         for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
             //? if <= 1.21.11 {
-            /*List<String> tagsCopy = new ArrayList<>(player.getTags());
-            *///?} else {
+            //List<String> tagsCopy = new ArrayList<>(player.getTags());
+            //?} else {
             List<String> tagsCopy = new ArrayList<>(player.entityTags());
             //?}
             for (String tag : tagsCopy) {
@@ -619,8 +619,8 @@ public class DoubleLife extends Season {
                 .lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(SOULMATE_DAMAGE));
         soulmate.setLastHurtByMob(player);
         //? if <= 1.21.4 {
-        /*soulmate.setLastHurtByPlayer(player);
-        *///?} else {
+        //soulmate.setLastHurtByPlayer(player);
+        //?} else {
         soulmate.setLastHurtByPlayer(player, 100);
         //?}
         soulmate.hurtServer(((IPlayer) soulmate).ls$getServerLevel(), damageSource, 1000);

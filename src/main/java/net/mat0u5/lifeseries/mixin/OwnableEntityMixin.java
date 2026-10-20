@@ -29,8 +29,8 @@ public interface OwnableEntityMixin {
 	}
 *///?} else {
 	//? if <= 1.21.6 {
-	/*@ModifyArg(method = "getOwner", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/EntityReference;get(Lnet/minecraft/world/entity/EntityReference;Lnet/minecraft/world/level/entity/UUIDLookup;Ljava/lang/Class;)Lnet/minecraft/world/level/entity/UniquelyIdentifyable;"), index = 0)
-	*///?} else {
+	//@ModifyArg(method = "getOwner", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/EntityReference;get(Lnet/minecraft/world/entity/EntityReference;Lnet/minecraft/world/level/entity/UUIDLookup;Ljava/lang/Class;)Lnet/minecraft/world/level/entity/UniquelyIdentifyable;"), index = 0)
+	//?} else {
 	@ModifyArg(method = "getOwner", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/EntityReference;getLivingEntity(Lnet/minecraft/world/entity/EntityReference;Lnet/minecraft/world/level/Level;)Lnet/minecraft/world/entity/LivingEntity;"), index = 0)
 	//?}
 	private @Nullable EntityReference<LivingEntity> subinOwner(@Nullable EntityReference<LivingEntity> original) {
@@ -39,8 +39,8 @@ public interface OwnableEntityMixin {
 		UUID afterSub = SubInManager.subOrSubout(uuid);
 		if (!Objects.equals(uuid, afterSub)) {
 			//? if <= 1.21.6 {
-			/*return new EntityReference<>(afterSub);
-			*///?} else {
+			//return new EntityReference<>(afterSub);
+			//?} else {
 			return EntityReference.of(afterSub);
 			//?}
 		}

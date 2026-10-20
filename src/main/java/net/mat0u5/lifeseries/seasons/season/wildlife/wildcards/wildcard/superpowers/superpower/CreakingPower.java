@@ -22,8 +22,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntitySpawnReason;
 //? if <= 26.1 {
-/*import net.minecraft.world.entity.EntityType;
-*///?} else {
+//import net.minecraft.world.entity.EntityType;
+//?} else {
 import net.minecraft.world.entity.EntityTypes;
 //?}
 import net.minecraft.world.entity.monster.creaking.Creaking;
@@ -80,8 +80,8 @@ public class CreakingPower extends ToggleableSuperpower {
         String newTeamName = "creaking_"+player.getScoreboardName();
         TeamUtils.deleteTeam(newTeamName);
         //? if <= 26.1 {
-        /*TeamUtils.createTeam(newTeamName, playerTeam.getDisplayName().getString(), playerTeam.getColor());
-        *///?} else {
+        //TeamUtils.createTeam(newTeamName, playerTeam.getDisplayName().getString(), playerTeam.getColor());
+        //?} else {
         TeamUtils.createTeam(newTeamName, playerTeam.getDisplayName().getString(), playerTeam.getColor().orElse(TeamColor.WHITE));
         //?}
         createdTeams.add(newTeamName);
@@ -92,8 +92,8 @@ public class CreakingPower extends ToggleableSuperpower {
             Creaking creaking = EntityTypes.CREAKING.spawn(playerLevel, spawnPos, EntitySpawnReason.COMMAND);
             if (creaking != null) {
                 //? if <= 26.2 {
-                /*creaking.setInvulnerable(true);
-                 *///?} else {
+                //creaking.setInvulnerable(true);
+                 //?} else {
                 creaking.setPermanentlyInvulnerable(true);
                 //?}
                 creaking.addTag("creakingFromSuperpower");
@@ -195,8 +195,8 @@ public class CreakingPower extends ToggleableSuperpower {
                 if (!(entity instanceof Creaking)) return;
                 if (allCreatedEntities.contains(entity.getUUID())) return;
                 //? if <= 1.21.11 {
-                /*if (!entity.getTags().contains("creakingFromSuperpower")) return;
-                *///?} else {
+                //if (!entity.getTags().contains("creakingFromSuperpower")) return;
+                //?} else {
                 if (!entity.entityTags().contains("creakingFromSuperpower")) return;
                 //?}
                 toKill.add(entity);

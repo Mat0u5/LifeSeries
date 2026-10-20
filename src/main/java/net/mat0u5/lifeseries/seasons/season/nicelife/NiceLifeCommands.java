@@ -318,8 +318,8 @@ public class NiceLifeCommands extends CustomCommand {
         if (checkBanned(source)) return -1;
         if (currentSeason instanceof NiceLife niceLife) {
             //? if <= 1.21.4 {
-            /*if (!source.getServer().overworld().isNight()) {
-            *///?} else {
+            //if (!source.getServer().overworld().isNight()) {
+            //?} else {
             if (!source.getServer().overworld().isDarkOutside()) {
             //?}
                 sendCommandFailure(source, ModifiableText.NICELIFE_NOT_NIGHT.get());
@@ -334,8 +334,8 @@ public class NiceLifeCommands extends CustomCommand {
         if (checkBanned(source)) return -1;
         if (currentSeason instanceof NiceLife niceLife) {
             //? if <= 1.21.4 {
-            /*if (!source.getServer().overworld().isNight()) {
-             *///?} else {
+            //if (!source.getServer().overworld().isNight()) {
+             //?} else {
             if (!source.getServer().overworld().isDarkOutside()) {
                 //?}
                 sendCommandFailure(source, ModifiableText.NICELIFE_NOT_NIGHT.get());

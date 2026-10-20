@@ -74,8 +74,8 @@ public class PlayerTabOverlayMixin {
     //?}
     private MutableComponent modifyFormattedScore(ReadOnlyScoreInfo readableScoreboardScore, NumberFormat numberFormat) {
         //? if <= 26.1 {
-        /*MutableComponent originalText = ReadOnlyScoreInfo.safeFormatValue(readableScoreboardScore, numberFormat);
-        *///?} else {
+        //MutableComponent originalText = ReadOnlyScoreInfo.safeFormatValue(readableScoreboardScore, numberFormat);
+        //?} else {
         MutableComponent originalText = readableScoreboardScore.formatValue(numberFormat);
         //?}
         Objective objective = ls$getDisplayedObjective();
@@ -104,8 +104,8 @@ public class PlayerTabOverlayMixin {
 
         Scoreboard scoreboard = client.level.getScoreboard();
         //? if <= 1.20 {
-        /*return scoreboard.getDisplayObjective(Scoreboard.DISPLAY_SLOT_LIST);
-        *///?} else {
+        //return scoreboard.getDisplayObjective(Scoreboard.DISPLAY_SLOT_LIST);
+        //?} else {
         return scoreboard.getDisplayObjective(DisplaySlot.LIST);
         //?}
     }

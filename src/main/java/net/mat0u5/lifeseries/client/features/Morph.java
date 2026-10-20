@@ -30,8 +30,8 @@ public class Morph {
 
             if (dummy == null || dummy.getType() != morph) {
                 //? if <= 1.21 {
-                /*Entity entity = morph.create(player.level());
-                *///?} else {
+                //Entity entity = morph.create(player.level());
+                //?} else {
                 Entity entity = morph.create(player.level(), EntitySpawnReason.COMMAND);
                 //?}
                 if (entity != null) {
@@ -68,8 +68,8 @@ public class Morph {
             float prevPlayerSpeed = (player.walkAnimation.speed(-1)+player.walkAnimation.speed())/2;
             dummy.walkAnimation.setSpeed(prevPlayerSpeed);
             //? if <= 1.21 {
-            /*dummy.walkAnimation.update(player.walkAnimation.position() - dummy.walkAnimation.position(), 1);
-            *///?} else {
+            //dummy.walkAnimation.update(player.walkAnimation.position() - dummy.walkAnimation.position(), 1);
+            //?} else {
             dummy.walkAnimation.update(player.walkAnimation.position() - dummy.walkAnimation.position(), 1, 1);
              //?}
             dummy.walkAnimation.setSpeed(player.walkAnimation.speed());

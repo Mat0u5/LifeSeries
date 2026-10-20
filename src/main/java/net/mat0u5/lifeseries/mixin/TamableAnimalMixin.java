@@ -11,8 +11,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.UUID;
 
 //? if <= 1.21.4 {
-/*import org.spongepowered.asm.mixin.injection.ModifyArg;
-*///?} else {
+//import org.spongepowered.asm.mixin.injection.ModifyArg;
+//?} else {
 import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -22,8 +22,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class TamableAnimalMixin {
     //? if <= 1.21 {
-    /*@Inject(method = "isAlliedTo", at = @At("HEAD"), cancellable = true)
-    *///?} else {
+    //@Inject(method = "isAlliedTo", at = @At("HEAD"), cancellable = true)
+    //?} else {
     @Inject(method = "considersEntityAsAlly", at = @At("HEAD"), cancellable = true)
     //?}
     private void petsAlwaysAttackSameTeam(Entity entity, CallbackInfoReturnable<Boolean> cir) {
@@ -45,8 +45,8 @@ public class TamableAnimalMixin {
         UUID subUUID = SubInManager.getSubstitutedPlayerUUID(livingEntity.getUUID());
         if (subUUID != null) {
             //? if <= 1.21.6 {
-            /*((TamableAnimal)(Object) this).setOwnerReference(new EntityReference(subUUID));
-            *///?} else {
+            //((TamableAnimal)(Object) this).setOwnerReference(new EntityReference(subUUID));
+            //?} else {
             ((TamableAnimal)(Object) this).setOwnerReference(EntityReference.of(subUUID));
              //?}
             ci.cancel();

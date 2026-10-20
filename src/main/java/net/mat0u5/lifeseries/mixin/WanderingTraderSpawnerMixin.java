@@ -28,8 +28,8 @@ public class WanderingTraderSpawnerMixin {
     }
     *///?} else {
     //? if <= 1.21.6 {
-    /*public void spawn(ServerLevel level, boolean spawnMonsters, boolean spawnAnimals, CallbackInfo ci) {
-    *///?} else {
+    //public void spawn(ServerLevel level, boolean spawnMonsters, boolean spawnAnimals, CallbackInfo ci) {
+    //?} else {
     public void spawn(ServerLevel level, boolean spawnMonsters, CallbackInfo ci) {
     //?}
         if (LifeSeries.isClientOrDisabled()) return;

@@ -20,8 +20,8 @@ public class TextHud {
     public static void renderText(GuiGraphicsExtractor context) {
         Minecraft client = Minecraft.getInstance();
         //? if <= 26.1 {
-        /*if (client.options.hideGui) return;
-        *///?} else {
+        //if (client.options.hideGui) return;
+        //?} else {
         if (client.gui.hud.isHidden()) return;
         //?}
         int yPos = client.getWindow().getGuiScaledHeight() - (5 + (int) Math.ceil((client.font.lineHeight) * LifeSeriesClient.TEXT_HUD_SCALE));
@@ -41,8 +41,8 @@ public class TextHud {
     public static void renderTextPost(GuiGraphicsExtractor context) {
         Minecraft client = Minecraft.getInstance();
         //? if <= 26.1 {
-        /*if (client.options.hideGui) return;
-         *///?} else {
+        //if (client.options.hideGui) return;
+         //?} else {
         if (client.gui.hud.isHidden()) return;
         //?}
         int yPosTop = (int) Math.ceil((client.font.lineHeight) * LifeSeriesClient.TEXT_HUD_SCALE);

@@ -78,10 +78,10 @@ public class VotingScreen extends Screen {
             for (PlayerInfo playerInfo : connection.getOnlinePlayers()) {
                 String name = OtherUtils.profileName(playerInfo.getProfile());
                 //? if <= 1.20 {
-                /*Identifier skin = playerInfo.getSkinLocation();
-                *///?} else if <= 1.21.6 {
-                /*Identifier skin = playerInfo.getSkin().texture();
-                *///?} else {
+                //Identifier skin = playerInfo.getSkinLocation();
+                //?} else if <= 1.21.6 {
+                //Identifier skin = playerInfo.getSkin().texture();
+                //?} else {
                 var skin = playerInfo.getSkin().body().texturePath();
                 //?}
                 if (!availablePlayers.contains(name)) continue;
@@ -144,8 +144,8 @@ public class VotingScreen extends Screen {
     //~ renames_26_1_volatile
     @Override
     //? if <= 1.20 {
-    /*public void extractBackground(GuiGraphicsExtractor context) {}
-    *///?} else {
+    //public void extractBackground(GuiGraphicsExtractor context) {}
+    //?} else {
     public void extractBackground(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {}
     //?}
 
@@ -243,8 +243,8 @@ public class VotingScreen extends Screen {
 
     @Override
     //? if <= 1.20 {
-    /*public boolean mouseScrolled(double mouseX, double mouseY, double scrollY) {
-    *///?} else {
+    //public boolean mouseScrolled(double mouseX, double mouseY, double scrollY) {
+    //?} else {
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
     //?}
         if (maxScroll > 0) {
@@ -252,8 +252,8 @@ public class VotingScreen extends Screen {
             return true;
         }
         //? if <= 1.20 {
-        /*return super.mouseScrolled(mouseX, mouseY, scrollY);
-        *///?} else {
+        //return super.mouseScrolled(mouseX, mouseY, scrollY);
+        //?} else {
         return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
         //?}
     }
@@ -286,8 +286,8 @@ public class VotingScreen extends Screen {
         }
 
         //? if <= 1.21.6 {
-        /*return super.mouseClicked(mouseX, mouseY, button);
-        *///?} else {
+        //return super.mouseClicked(mouseX, mouseY, button);
+        //?} else {
         return super.mouseClicked(click, doubled);
         //?}
     }

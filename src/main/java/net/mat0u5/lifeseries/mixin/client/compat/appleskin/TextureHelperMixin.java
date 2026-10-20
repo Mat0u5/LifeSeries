@@ -9,8 +9,8 @@ import squeek.appleskin.api.event.HUDOverlayEvent;
 import squeek.appleskin.client.HUDOverlayHandler;
 
 //? if forge {
-/^import org.spongepowered.asm.mixin.injection.Redirect;
-^///?} else {
+//import org.spongepowered.asm.mixin.injection.Redirect;
+//?} else {
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 //?}

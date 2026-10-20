@@ -46,10 +46,10 @@ import net.minecraft.world.flag.FeatureFlagSet;
 public class EnchantmentHelperMixin {
     @Inject(method = "getAvailableEnchantmentResults", at = @At("HEAD"), cancellable = true)
     //? if <= 1.20.3 {
-    /*private static void getPossibleEntries(int level, ItemStack stack, boolean bl, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
-    *///?} else if <= 1.20.5 {
-    /*private static void getPossibleEntries(FeatureFlagSet featureFlagSet, int level, ItemStack stack, boolean bl, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
-    *///?} else {
+    //private static void getPossibleEntries(int level, ItemStack stack, boolean bl, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
+    //?} else if <= 1.20.5 {
+    //private static void getPossibleEntries(FeatureFlagSet featureFlagSet, int level, ItemStack stack, boolean bl, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
+    //?} else {
     private static void getPossibleEntries(int level, ItemStack stack, Stream<Holder<Enchantment>> possibleEnchantments, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
     //?}
         if (LifeSeries.isClientOrDisabled()) return;
@@ -91,8 +91,8 @@ public class EnchantmentHelperMixin {
                 continue;
             }
             //? if <= 1.20 {
-            /^if ((!enchantment.isTreasureOnly() || bl) && enchantment.isDiscoverable() && (enchantment.category.canEnchant(item) || bl2)) {
-            ^///?} else {
+            //if ((!enchantment.isTreasureOnly() || bl) && enchantment.isDiscoverable() && (enchantment.category.canEnchant(item) || bl2)) {
+            //?} else {
             if ((!enchantment.isTreasureOnly() || bl) && enchantment.isDiscoverable() && (enchantment.canEnchant(stack) || bl2)) {
             //?}
                 int maxLevel = enchantment.getMaxLevel();
@@ -124,8 +124,8 @@ public class EnchantmentHelperMixin {
         for(Enchantment enchantment : BuiltInRegistries.ENCHANTMENT) {
             Optional<ResourceKey<Enchantment>> key = BuiltInRegistries.ENCHANTMENT.getResourceKey(enchantment);
             //? if <= 1.20 {
-            /^if ((!enchantment.isTreasureOnly() || bl) && enchantment.isDiscoverable() && (enchantment.category.canEnchant(item) || bl2)) {
-            ^///?} else {
+            //if ((!enchantment.isTreasureOnly() || bl) && enchantment.isDiscoverable() && (enchantment.category.canEnchant(item) || bl2)) {
+            //?} else {
             if ((!enchantment.isTreasureOnly() || bl) && enchantment.isDiscoverable() && (enchantment.canEnchant(stack) || bl2)) {
             //?}
                 int maxLevel = enchantment.getMaxLevel();

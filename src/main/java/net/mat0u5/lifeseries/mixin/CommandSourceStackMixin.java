@@ -37,8 +37,8 @@ public abstract class CommandSourceStackMixin {
         String sourceStr = "null";
         CommandSourceStack source = (CommandSourceStack) (Object) this;
         //? if <= 1.20.2 {
-        /*if (isSilent()) return;
-        *///?} else {
+        //if (isSilent()) return;
+        //?} else {
         if (source.isSilent()) return;
         //?}
         if (!source.isPlayer() && !getSource().shouldInformAdmins()) return;

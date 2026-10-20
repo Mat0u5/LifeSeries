@@ -255,10 +255,10 @@ public class ProfileManager {
         /*player.connection.send(new ClientboundRespawnPacket(
                         new CommonPlayerSpawnInfo(
                                 //? if <= 1.20.3 {
-                                level.dimensionTypeId(),
+                                //level.dimensionTypeId(),
                                 //?} else {
-                                /^level.dimensionTypeRegistration(),
-                                ^///?}
+                                level.dimensionTypeRegistration(),
+                                //?}
                                 level.dimension(),
                                 BiomeManager.obfuscateSeed(level.getSeed()),
                                 player.gameMode.getGameModeForPlayer(),
@@ -279,8 +279,8 @@ public class ProfileManager {
                         BiomeManager.obfuscateSeed(level.getSeed()),
                         player.gameMode.getGameModeForPlayer(),
                         //? if <= 26.2 {
-                        /*player.gameMode.getPreviousGameModeForPlayer(),
-                        *///?} else {
+                        //player.gameMode.getPreviousGameModeForPlayer(),
+                        //?} else {
                         Optional.ofNullable(player.gameMode.getPreviousGameModeForPlayer()),
                         //?}
                         level.isDebug(),
@@ -312,16 +312,16 @@ public class ProfileManager {
 
     private static void restorePlayerState(ServerPlayer player, ServerLevel level, PlayerList playerList) {
         //? if <= 1.21 {
-        /*player.connection.send(new ClientboundPlayerPositionPacket(player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot(), Collections.emptySet(), 0));
-        *///?} else {
+        //player.connection.send(new ClientboundPlayerPositionPacket(player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot(), Collections.emptySet(), 0));
+        //?} else {
         player.connection.send(new ClientboundPlayerPositionPacket(0, PositionMoveRotation.of(player), Collections.emptySet()));
         //?}
 
         //? if <= 1.21 {
-        /*player.connection.send(new ClientboundSetCarriedItemPacket(player.getInventory().selected));
-        *///?} else if <= 1.21.4 {
-        /*player.connection.send(new ClientboundSetCursorItemPacket(player.getInventory().getSelected()));
-        *///?} else {
+        //player.connection.send(new ClientboundSetCarriedItemPacket(player.getInventory().selected));
+        //?} else if <= 1.21.4 {
+        //player.connection.send(new ClientboundSetCursorItemPacket(player.getInventory().getSelected()));
+        //?} else {
         player.connection.send(new ClientboundSetCursorItemPacket(player.getInventory().getSelectedItem()));
         //?}
 
@@ -333,8 +333,8 @@ public class ProfileManager {
 
         for (MobEffectInstance effect : player.getActiveEffects()) {
             //? if <= 1.20.3 {
-            /*player.connection.send(new ClientboundUpdateMobEffectPacket(player.getId(), effect));
-            *///?} else {
+            //player.connection.send(new ClientboundUpdateMobEffectPacket(player.getId(), effect));
+            //?} else {
             player.connection.send(new ClientboundUpdateMobEffectPacket(player.getId(), effect, false));
             //?}
         }

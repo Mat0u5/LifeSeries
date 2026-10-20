@@ -206,8 +206,8 @@ public class SecretKeeper {
 		PlayerReference ref = PlayerReference.of(player);
 		TaskScheduler.scheduleTask(130, () -> {
 			//? if < 1.21 {
-			/*server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.PLAYERS, 1.0F, 1.0F);
-			 *///?} else {
+			//server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.PLAYERS, 1.0F, 1.0F);
+			 //?} else {
 			server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvents.TRIAL_SPAWNER_EJECT_ITEM, SoundSource.PLAYERS, 1.0F, 1.0F);
 			//?}
 			AnimationUtils.spawnFireworkBall(server.overworld(), centerPos, 40, 0.3, new Vector3f(0, 1, 0));

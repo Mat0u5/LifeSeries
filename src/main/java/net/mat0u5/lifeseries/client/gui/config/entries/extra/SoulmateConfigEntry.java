@@ -107,8 +107,8 @@ public class SoulmateConfigEntry extends ModifiableListEntry {
                     "The two players that are paired together.\nBoth players need to have joined this server at least once, they do not need to be online.\nLeave a row completely empty to have no pairing there."
             );
             //? if <= 1.21.5 {
-            /*context.renderTooltip(textRenderer, textRenderer.split(hoverText, 210), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY);
-             *///?} else {
+            //context.renderTooltip(textRenderer, textRenderer.split(hoverText, 210), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY);
+             //?} else {
             context.setTooltipForNextFrame(textRenderer, textRenderer.split(hoverText, 210), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY, false);
             //?}
         }

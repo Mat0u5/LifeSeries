@@ -109,8 +109,8 @@ public class NiceLife extends Season {
         Season.setCloudColor(null, false);
         ServerLevel overworld = server.overworld();
         //? if <= 1.21.11 {
-        /*overworld.setWeatherParameters(96000, 0, false, false);
-        *///?} else {
+        //overworld.setWeatherParameters(96000, 0, false, false);
+        //?} else {
         server.setWeatherParameters(96000, 0, false, false);
          //?}
     }
@@ -164,8 +164,8 @@ public class NiceLife extends Season {
         }
         ServerLevel overworld = server.overworld();
         //? if <= 1.21.11 {
-        /*overworld.setWeatherParameters(0, 1000, true, false);
-        *///?} else {
+        //overworld.setWeatherParameters(0, 1000, true, false);
+        //?} else {
         server.setWeatherParameters(0, 1000, true, false);
         //?}
 
@@ -191,8 +191,8 @@ public class NiceLife extends Season {
 
         if (triviaCannotStartFor.isSmallerThan(Time.zero())) {
             //? if <= 1.21.9 {
-            /*int percentage = overworld.getGameRules().getInt(GameRules.PLAYERS_SLEEPING_PERCENTAGE);
-             *///?} else {
+            //int percentage = overworld.getGameRules().getInt(GameRules.PLAYERS_SLEEPING_PERCENTAGE);
+             //?} else {
             int percentage = overworld.getGameRules().get(GameRules.PLAYERS_SLEEPING_PERCENTAGE);
             //?}
             if (isMidnight() && currentSession.statusStarted() && areEnoughSleeping(percentage, nonSleepingPlayers)) {
@@ -393,8 +393,8 @@ public class NiceLife extends Season {
     public boolean isTimeBetween(int minTime, int maxTime) {
         if (server == null) return false;
         //? if <= 1.21.11 {
-        /*long dayTime = server.overworld().getDayTime() % 24000L;
-        *///?} else {
+        //long dayTime = server.overworld().getDayTime() % 24000L;
+        //?} else {
         long dayTime = server.overworld().getOverworldClockTime() % 24000L;
         //?}
         return dayTime >= minTime && dayTime <= maxTime;
@@ -460,8 +460,8 @@ public class NiceLife extends Season {
         }
 
         //? if <= 1.21 {
-        /*Biome.Precipitation precipitation = biome.getPrecipitationAt(belowPos);
-        *///?} else {
+        //Biome.Precipitation precipitation = biome.getPrecipitationAt(belowPos);
+        //?} else {
         Biome.Precipitation precipitation = biome.getPrecipitationAt(belowPos, level.getSeaLevel());
          //?}
         if (precipitation != Biome.Precipitation.NONE) {
@@ -490,8 +490,8 @@ public class NiceLife extends Season {
     private static final List<Block> snowReplacableBlocks = List.of(
         Blocks.SNOW
         //? if <= 1.20.2 {
-        /*,Blocks.GRASS
-        *///?} else {
+        //,Blocks.GRASS
+        //?} else {
         ,Blocks.SHORT_GRASS
         //?}
         ,Blocks.TALL_GRASS

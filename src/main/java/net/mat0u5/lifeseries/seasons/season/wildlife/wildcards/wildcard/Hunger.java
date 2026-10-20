@@ -66,8 +66,8 @@ public class Hunger extends Wildcard {
     public static final ConfigRef<Double> SOUND_CHANCE = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_HUNGER_SOUND_CHANCE);
 
     //? if <= 1.20.3 {
-    /*private static final List<MobEffect> effects = List.of(
-    *///?} else {
+    //private static final List<MobEffect> effects = List.of(
+    //?} else {
     private static final List<Holder<MobEffect>> effects = List.of(
     //?}
             MobEffects.SPEED
@@ -110,8 +110,8 @@ public class Hunger extends Wildcard {
     );
 
     //? if <= 1.20.3 {
-    /*private static final List<MobEffect> levelLimit = List.of(
-    *///?} else {
+    //private static final List<MobEffect> levelLimit = List.of(
+    //?} else {
     private static final List<Holder<MobEffect>> levelLimit = List.of(
     //?}
             MobEffects.STRENGTH,
@@ -125,8 +125,8 @@ public class Hunger extends Wildcard {
     );
 
     //? if <= 1.20.3 {
-    /*private static final List<MobEffect> durationLimit = List.of(
-    *///?} else {
+    //private static final List<MobEffect> durationLimit = List.of(
+    //?} else {
     private static final List<Holder<MobEffect>> durationLimit = List.of(
     //?}
             MobEffects.INSTANT_HEALTH,
@@ -249,8 +249,8 @@ public class Hunger extends Wildcard {
             if (stack.isEmpty()) continue;
 
             //? if < 1.20.5 {
-            /*ItemStack newItem = new ItemStack(stack.getItem(), stack.getCount());
-            *///?} else {
+            //ItemStack newItem = new ItemStack(stack.getItem(), stack.getCount());
+            //?} else {
             stack.set(DataComponents.FOOD, stack.getPrototype().get(DataComponents.FOOD));
             //? if >= 1.21.2 {
             stack.set(DataComponents.CONSUMABLE, stack.getPrototype().get(DataComponents.CONSUMABLE));
@@ -295,10 +295,10 @@ public class Hunger extends Wildcard {
         if (item == null) return;
         if (bannedFoodItems.contains(item)) return;
         //? if <= 1.20.5 {
-        components.set(DataComponents.FOOD, new FoodProperties(0, 0, false, 1.6f, List.of()));
+        //components.set(DataComponents.FOOD, new FoodProperties(0, 0, false, 1.6f, List.of()));
         //?} else {
-        /^components.set(DataComponents.FOOD, new FoodProperties(0, 0, false, 1.6f, Optional.empty(), List.of()));
-        ^///?}
+        components.set(DataComponents.FOOD, new FoodProperties(0, 0, false, 1.6f, Optional.empty(), List.of()));
+        //?}
     }
     *///?} else if > 1.21 {
     public static void defaultFoodComponents(Item item, PatchedDataComponentMap components) {
@@ -312,8 +312,8 @@ public class Hunger extends Wildcard {
     //?}
 
     //? if < 1.20.5 {
-    /*public static void finishUsing(Item item, boolean isNormallyEdible, LivingEntity entity) {
-    *///?} else {
+    //public static void finishUsing(Item item, boolean isNormallyEdible, LivingEntity entity) {
+    //?} else {
     public static void finishUsing(Item item, DataComponentMap normalComponents, LivingEntity entity) {
     //?}
         if (!(entity instanceof ServerPlayer player)) return;

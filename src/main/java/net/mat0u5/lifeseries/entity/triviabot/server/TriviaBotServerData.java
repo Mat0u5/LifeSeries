@@ -114,8 +114,8 @@ public class TriviaBotServerData implements PlayerBoundEntity {
     public void chunkLoading() {
         if (bot.level() instanceof ServerLevel level) {
             //? if <= 1.21.4 {
-            /*level.getChunkSource().addRegionTicket(TicketType.PORTAL, new ChunkPos(bot.blockPosition()), 2, bot.blockPosition());
-            *///?} else {
+            //level.getChunkSource().addRegionTicket(TicketType.PORTAL, new ChunkPos(bot.blockPosition()), 2, bot.blockPosition());
+            //?} else {
             level.getChunkSource().addTicketWithRadius(TicketType.PORTAL, LevelUtils.chunkPosFromBlockPos(bot.blockPosition()), 2);
             //?}
         }
@@ -127,8 +127,8 @@ public class TriviaBotServerData implements PlayerBoundEntity {
         }
         if (!bot.level().isClientSide()) {
             //? if <= 1.21 {
-            /*bot.kill();
-            *///?} else {
+            //bot.kill();
+            //?} else {
             bot.kill((ServerLevel) bot.level());
              //?}
         }

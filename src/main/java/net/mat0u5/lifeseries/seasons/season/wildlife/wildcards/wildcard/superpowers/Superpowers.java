@@ -93,11 +93,11 @@ public enum Superpowers {
         List<Superpowers> result = new ArrayList<>(List.of(Superpowers.values()));
         result.remove(NULL);
         //? if < 1.20.3 {
-        /*result.remove(TIME_CONTROL);
-        *///?}
+        //result.remove(TIME_CONTROL);
+        //?}
         //? if < 1.21 {
-        /*result.remove(WIND_CHARGE);
-        *///?}
+        //result.remove(WIND_CHARGE);
+        //?}
         //? if < 1.21.2 {
         /*result.remove(CREAKING);
         result.remove(FLIGHT);

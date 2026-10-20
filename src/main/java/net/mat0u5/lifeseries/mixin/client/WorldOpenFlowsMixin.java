@@ -23,8 +23,8 @@ import net.minecraft.client.gui.screens.Screen;
 import java.io.IOException;
 *///?} else {
     //? if <= 1.20.3 {
-    /*import com.mojang.serialization.Dynamic;
-    *///?} else {
+    //import com.mojang.serialization.Dynamic;
+    //?} else {
     import net.minecraft.server.WorldStem;
     import net.minecraft.server.packs.repository.PackRepository;
     //?}
@@ -42,8 +42,8 @@ public abstract class WorldOpenFlowsMixin {
     //? if !forge {
     @WrapOperation(method = "doLoadLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/worldselection/WorldOpenFlows;createWorldAccess(Ljava/lang/String;)Lnet/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess;"))
     //?} else {
-    /^@WrapOperation(method = "doLoadLevel(Lnet/minecraft/client/gui/screens/Screen;Ljava/lang/String;ZZZ)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/worldselection/WorldOpenFlows;createWorldAccess(Ljava/lang/String;)Lnet/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess;"))
-    ^///?}
+    //@WrapOperation(method = "doLoadLevel(Lnet/minecraft/client/gui/screens/Screen;Ljava/lang/String;ZZZ)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/worldselection/WorldOpenFlows;createWorldAccess(Ljava/lang/String;)Lnet/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess;"))
+    //?}
     private LevelStorageSource.LevelStorageAccess verifyWorldOpen(WorldOpenFlows instance, String e, Operation<LevelStorageSource.LevelStorageAccess> originalCall, @Local(argsOnly = true) Screen screen, @Local(argsOnly = true, ordinal = 0) boolean bl,@Local(argsOnly = true, ordinal = 1) boolean bl2) {
         LevelStorageSource.LevelStorageAccess worldAccess = originalCall.call(instance, e);
         if (worldAccess == null) return worldAccess;
@@ -87,8 +87,8 @@ public abstract class WorldOpenFlowsMixin {
                 () -> {
                     worldConfig.setProperty("acknowledged", "true");
                     //? if <= 1.20.3 {
-                    /*ls$openWorldCheckWorldStemCompatibility(worldAccess, dynamic, bl, bl2, onCancel);
-                    *///?} else {
+                    //ls$openWorldCheckWorldStemCompatibility(worldAccess, dynamic, bl, bl2, onCancel);
+                    //?} else {
                     ls$openWorldCheckWorldStemCompatibility(worldAccess, worldStem, packRepository, onCancel);
                     //?}
                 },
@@ -116,14 +116,14 @@ public abstract class WorldOpenFlowsMixin {
         /*//? if !forge {
         @WrapOperation(method = "doLoadLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/storage/WorldData;worldGenSettingsLifecycle()Lcom/mojang/serialization/Lifecycle;"))
         //?} else {
-        /^@WrapOperation(method = "doLoadLevel(Lnet/minecraft/client/gui/screens/Screen;Ljava/lang/String;ZZZ)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/storage/WorldData;worldGenSettingsLifecycle()Lcom/mojang/serialization/Lifecycle;"))
-        ^///?}
+        //@WrapOperation(method = "doLoadLevel(Lnet/minecraft/client/gui/screens/Screen;Ljava/lang/String;ZZZ)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/storage/WorldData;worldGenSettingsLifecycle()Lcom/mojang/serialization/Lifecycle;"))
+        //?}
     *///?} else if <= 1.20.3 {
         /*//? if fabric || forge {
     @WrapOperation(method = "loadLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/storage/WorldData;worldGenSettingsLifecycle()Lcom/mojang/serialization/Lifecycle;"))
         //?} else {
-    /^@WrapOperation(method = "loadLevel(Lnet/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess;Lcom/mojang/serialization/Dynamic;ZZLjava/lang/Runnable;Z)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/storage/WorldData;worldGenSettingsLifecycle()Lcom/mojang/serialization/Lifecycle;"))
-        ^///?}
+    //@WrapOperation(method = "loadLevel(Lnet/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess;Lcom/mojang/serialization/Dynamic;ZZLjava/lang/Runnable;Z)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/storage/WorldData;worldGenSettingsLifecycle()Lcom/mojang/serialization/Lifecycle;"))
+        //?}
     *///?} else {
     @WrapOperation(method = "openWorldCheckWorldStemCompatibility", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/storage/WorldData;worldGenSettingsLifecycle()Lcom/mojang/serialization/Lifecycle;"))
     //?}

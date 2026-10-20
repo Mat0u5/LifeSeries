@@ -220,8 +220,8 @@ public class LivesCommand extends CustomCommand {
         }
 
         //? if <= 1.20.2 {
-        /*Collection<Score> entries = ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME);
-        *///?} else {
+        //Collection<Score> entries = ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME);
+        //?} else {
         Collection<PlayerScoreEntry> entries = ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME);
         //?}
         if (entries.isEmpty()) {

@@ -42,8 +42,8 @@ public class SecretLifeTaskConfigEntry extends ModifiableListEntry {
         textField.setValue(defaultText);
         textField.setResponder(this::onChanged);
         //? if <= 1.20 {
-        /*textField.moveCursorToStart();
-         *///?} else {
+        //textField.moveCursorToStart();
+         //?} else {
         textField.moveCursorToStart(false);
         //?}
     }

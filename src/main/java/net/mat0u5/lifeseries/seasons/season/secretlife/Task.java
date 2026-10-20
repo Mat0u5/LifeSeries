@@ -10,8 +10,8 @@ import java.util.List;
 import static net.mat0u5.lifeseries.LifeSeries.livesManager;
 
 //? if <= 1.20.3 {
-/*import net.minecraft.server.network.FilteredText;
-*///?} else {
+//import net.minecraft.server.network.FilteredText;
+//?} else {
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.network.Filterable;
 //?}

@@ -37,8 +37,8 @@ public class ItemInHandLayerMixin {
     //?}
         if (!LifeSeries.modDisabled() && LifeSeries.isSeason(Seasons.NICE_LIFE) && (RenderUtils.getScreen() instanceof EmptySleepScreen || (RenderUtils.getScreen() instanceof NewQuizScreen quizScreen && !quizScreen.shouldCloseOnEsc()) || (RenderUtils.getScreen() instanceof QuizScreen quizScreenOld && !quizScreenOld.shouldCloseOnEsc()) || RenderUtils.getScreen() instanceof VotingScreen)) {
             //? if <= 1.21.2 {
-            /*return ItemStack.EMPTY;
-            *///?} else {
+            //return ItemStack.EMPTY;
+            //?} else {
             value.clear();
             return value;
             //?}

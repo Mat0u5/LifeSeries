@@ -19,8 +19,8 @@ import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 //?}
 //? if <= 1.21 {
-/*import net.minecraft.world.level.Level;
-*///?} else {
+//import net.minecraft.world.level.Level;
+//?} else {
 import net.minecraft.server.level.ServerLevel;
 //?}
 
@@ -29,8 +29,8 @@ import net.minecraft.server.level.ServerLevel;
 public class CraftingMenuMixin {
     @Inject(method = "slotChangedCraftingGrid", at = @At("HEAD"), cancellable = true)
     //? if <= 1.20.5 {
-    /*private static void blockPreviewIfNoCraftingItemPresent(AbstractContainerMenu abstractContainerMenu, Level level, Player player, CraftingContainer craftingInventory, ResultContainer resultInventory, CallbackInfo ci) {
-    *///?} else if <= 1.21 {
+    //private static void blockPreviewIfNoCraftingItemPresent(AbstractContainerMenu abstractContainerMenu, Level level, Player player, CraftingContainer craftingInventory, ResultContainer resultInventory, CallbackInfo ci) {
+    //?} else if <= 1.21 {
     /*private static void blockPreviewIfNoCraftingItemPresent(AbstractContainerMenu handler, Level level, Player player,
                                                             CraftingContainer craftingInventory, ResultContainer resultInventory, RecipeHolder<CraftingRecipe> recipe, CallbackInfo ci) {
     *///?} else {

@@ -35,8 +35,8 @@ public class WildLifeConfig extends SeasonConfig {
             "fire_aspect",
             "knockback",
             //? if <= 1.20.3 {
-            /*"sweeping",
-            *///?} else {
+            //"sweeping",
+            //?} else {
             "sweeping_edge",
             //?}
 
