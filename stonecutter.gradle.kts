@@ -16,7 +16,7 @@ plugins {
 
 stonecutter active file(".sc_active_version")
 
-val cleanOutput by tasks.registering(Delete::class) {
+val cleanOutput = tasks.register<Delete>("cleanOutput") {
 	val versionName = project.findProperty("mod.version")?.toString()
 	val versionPrefix = project.findProperty("mod.version_prefix")?.toString()
 	val versionSuffix = project.findProperty("mod.version_suffix")?.toString()
@@ -34,7 +34,7 @@ allprojects {
 
 for (version in stonecutter.versions.map { it.version }.distinct()) tasks.register("publish$version") {
 	group = "publishing"
-	dependsOn(stonecutter.tasks.named("publishMods") { metadata.version == version })
+	dependsOn(stonecutter.versions.filter { it.version == version }.map { ":${it.project}:publishMods" })
 }
 
 gradle.projectsEvaluated {
@@ -84,15 +84,14 @@ tasks.register("runActiveClient") {
 	group = "stonecutter"
 	description = "Run client of the active Stonecutter version (always up-to-date)"
 
-	dependsOn(stonecutter.current!!.project + ":processResources")
-	dependsOn(stonecutter.current!!.project + ":classes")
+	dependsOn(stonecutter.active!!.project + ":processResources")
+	dependsOn(stonecutter.active!!.project + ":classes")
 
-	finalizedBy(stonecutter.current!!.project + ":runClient")
+	finalizedBy(stonecutter.active!!.project + ":runClient")
 }
 
 stonecutter parameters {
 	constants.match(node.metadata.project.substringAfterLast('-'), "fabric", "neoforge", "forge")
-	filters.include("**/*.fsh", "**/*.vsh")
 	swaps["mod_version"] = "\"" + property("mod.version") + "\";"
 	swaps["mod_id"] = "\"" + property("mod.id") + "\";"
 	swaps["mod_name"] = "\"" + property("mod.name") + "\";"
