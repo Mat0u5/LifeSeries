@@ -68,9 +68,9 @@ public class LifeSeries implements MultiplatformModInitializer {
 		LOGGER.info("Initializing Life Series [{} {} ({})] with MatLib [{}]...", MatLib.platform().loader().name(), MatLib.platform().mcVersion(), MOD_VERSION, MatLib.MOD_VERSION);
 
 		LifeSeriesConfigTypes.init();
+		MainConfig.moveOldMainFileIfExists();
 		config = new MainConfig();
 		LifeSeriesNetworkHandlerServer.reload();
-		MainConfig.moveOldMainFileIfExists();
 		SnailSkins.createConfig();
 		TriviaSkins.createConfig();
 

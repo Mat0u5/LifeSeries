@@ -176,7 +176,7 @@ public class ClientUtils extends net.mat0u5.matlib.client.utils.ClientUtils {
     }
 
     public static OptionalEventReturn<Component> getEntityName(Entity entity, Component text) {
-        if (text == null || LifeSeries.modFullyDisabled() || !(entity instanceof Player player)) return OptionalEventReturn.pass();
+        if (text == null || LifeSeries.modFullyDisabled()) return OptionalEventReturn.pass();
         if (Minecraft.getInstance().getConnection() == null) return OptionalEventReturn.pass();
 
         if (LifeSeriesClient.playerDisguiseNames.containsKey(text.getString())) {

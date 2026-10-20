@@ -423,6 +423,11 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
         if (!updatedConfigThisTickFromCommand) {
             PlayerUtils.broadcastMessageToAdmins(ModifiableText.CONFIG_UPDATED_CHANGES.get(ActionText.hereTextRunCommand("Click to view config changes", "/ls config viewChanges")));
         }
+        try {
+            SeasonChanger.reloadConfig();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
         updatedConfigThisTick = false;
         updatedConfigThisTickFromCommand = false;
     }
