@@ -57,8 +57,8 @@ public enum ModifiableSound {
 	,SECRETLIFE_TASK(Seasons.SECRET_LIFE, IdentifierHelper.mod("secretlife_task"))
 	,SECRETLIFE_ITEM_SPAWN(Seasons.SECRET_LIFE, SoundEvents.ITEM_PICKUP)
 	//? if < 1.21 {
-	/*,SECRETLIFE_ITEM_SPAWN_START(Seasons.SECRET_LIFE, SoundEvents.ITEM_FRAME_REMOVE_ITEM)
-	*///?} else {
+	//,SECRETLIFE_ITEM_SPAWN_START(Seasons.SECRET_LIFE, SoundEvents.ITEM_FRAME_REMOVE_ITEM)
+	//?} else {
 	,SECRETLIFE_ITEM_SPAWN_START(Seasons.SECRET_LIFE, SoundEvents.TRIAL_SPAWNER_EJECT_ITEM)
 	//?}
 
@@ -86,8 +86,8 @@ public enum ModifiableSound {
 	,WILDLIFE_TIME_SPEED_UP(Seasons.WILD_LIFE, IdentifierHelper.mod("wildlife_time_speed_up"))
 	,WILDLIFE_TRIVIA_CURSE(Seasons.WILD_LIFE, SoundEvents.ELDER_GUARDIAN_CURSE)
 	//? if <= 1.21 {
-	/*,WILDLIFE_SUPERPOWERS_ASTRAL_START(Seasons.WILD_LIFE, SoundEvents.EVOKER_PREPARE_ATTACK)
-	*///?} else {
+	//,WILDLIFE_SUPERPOWERS_ASTRAL_START(Seasons.WILD_LIFE, SoundEvents.EVOKER_PREPARE_ATTACK)
+	//?} else {
 	,WILDLIFE_SUPERPOWERS_ASTRAL_START(Seasons.WILD_LIFE, SoundEvents.TRIAL_SPAWNER_OMINOUS_ACTIVATE)
 	//?}
 	,WILDLIFE_SUPERPOWERS_ASTRAL_END(Seasons.WILD_LIFE, SoundEvents.EVOKER_DEATH)

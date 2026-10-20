@@ -139,8 +139,8 @@ public abstract class LivingEntityMixin {
             if (blacklist.getBannedEffects().contains(effect.getEffect())) {
                 cir.setReturnValue(false);
                 //? if <= 1.21 {
-                /*entity.onEffectRemoved(effect);
-                *///?} else {
+                //entity.onEffectRemoved(effect);
+                //?} else {
                 entity.onEffectsRemoved(List.of(effect));
                 //?}
             }

@@ -142,8 +142,8 @@ public abstract class ConfigEntry {
             if (isHovered) {
                 Component warnText = TextUtils.format("§eWARN:\n{}",getWarnMessage());
                 //? if <= 1.21.5 {
-                /*context.renderTooltip(textRenderer, textRenderer.split(warnText, MAX_DESCRIPTION_WIDTH), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY);
-                 *///?} else {
+                //context.renderTooltip(textRenderer, textRenderer.split(warnText, MAX_DESCRIPTION_WIDTH), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY);
+                 //?} else {
                 context.setTooltipForNextFrame(textRenderer, textRenderer.split(warnText, MAX_DESCRIPTION_WIDTH), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY, false);
                 //?}
             }

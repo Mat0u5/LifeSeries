@@ -32,8 +32,8 @@ import net.mat0u5.lifeseries.mixin.MannequinAccessor;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntitySpawnReason;
 //? if <= 26.1 {
-/*import net.minecraft.world.entity.EntityType;
-*///?} else {
+//import net.minecraft.world.entity.EntityType;
+//?} else {
 import net.minecraft.world.entity.EntityTypes;
 //?}
 import net.minecraft.world.entity.EquipmentSlot;
@@ -151,13 +151,13 @@ public class AstralProjection extends ToggleableSuperpower {
                 clone.setXRot(playerNew.getXRot());
                 clone.setDeltaMovement(velocity);
                 //? if <= 26.2 {
-                /*clone.hurtMarked = true;
-                *///?} else {
+                //clone.hurtMarked = true;
+                //?} else {
                 clone.syncVelocity = true;
                  //?}
                 //? if <= 1.21.9 {
-                /*clone.hasImpulse = true;
-                 *///?} else {
+                //clone.hasImpulse = true;
+                 //?} else {
                 clone.needsSync = true;
                 //?}
                 clone.snapTo(playerNew.position(), playerNew.getYRot(), playerNew.getXRot());
@@ -187,8 +187,8 @@ public class AstralProjection extends ToggleableSuperpower {
             //? if <= 1.21.6 {
 
             /*//? if <= 1.20.5 {
-            /^clone.connection.onDisconnect(Component.empty());
-            ^///?} else {
+            //clone.connection.onDisconnect(Component.empty());
+            //?} else {
             clone.connection.onDisconnect(new DisconnectionDetails(Component.empty()));
             //?}
             NetworkHandlerServer.sendPlayerDisguise(clone.getUUID().toString(), clone.getName().getString(), "", "");
@@ -208,15 +208,15 @@ public class AstralProjection extends ToggleableSuperpower {
 
 
     //? if <= 1.21 {
-    /*public void onDamageClone(DamageSource source, float amount) {
-     *///?} else {
+    //public void onDamageClone(DamageSource source, float amount) {
+     //?} else {
     public void onDamageClone(ServerLevel level, DamageSource source, float amount) {
     //?}
         ServerPlayer player = getPlayer();
         if (player != null) {
             //? if <= 1.21 {
-            /*((IPlayer) player).ls$hurt(source, amount);
-             *///?} else {
+            //((IPlayer) player).ls$hurt(source, amount);
+             //?} else {
             ((IPlayer) player).ls$hurt(level, source, amount);
             //?}
         }

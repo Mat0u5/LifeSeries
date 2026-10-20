@@ -66,8 +66,8 @@ public class ModifiableSoundManager {
 			}
 			ResourceKey<SoundEvent> soundResource = ResourceKey.create(BuiltInRegistries.SOUND_EVENT.key(), identifier);
 			//? if <= 1.21 {
-			/*SoundEvent sound = BuiltInRegistries.SOUND_EVENT.get(soundResource);
-			 *///?} else {
+			//SoundEvent sound = BuiltInRegistries.SOUND_EVENT.get(soundResource);
+			 //?} else {
 			SoundEvent sound = BuiltInRegistries.SOUND_EVENT.getValue(soundResource);
 			//?}
 			if (sound != null) {
