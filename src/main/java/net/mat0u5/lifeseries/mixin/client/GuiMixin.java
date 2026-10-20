@@ -137,7 +137,7 @@ public class GuiMixin {
                 return;
             }
             //? if <= 1.20 {
-            //?} else if <= 1.21 {
+            /**///?} else if <= 1.21 {
             /*instance.blitSprite(identifier, x, y, u, v);
             ls$afterHeartDraw(instance, identifier, x, y, u, v);
             *///?} else if <= 1.21.5 {
@@ -161,8 +161,8 @@ public class GuiMixin {
         }
 
         //? if <= 1.20 {
-        /*var customHeart = IdentifierHelper.mod("textures/gui/sprites/"+color+"_"+heartTypeStr+".png");
-         *///?} else {
+        //var customHeart = IdentifierHelper.mod("textures/gui/sprites/"+color+"_"+heartTypeStr+".png");
+         //?} else {
         var customHeart = IdentifierHelper.mod(color+"_"+heartTypeStr);
         //?}
 
@@ -184,10 +184,10 @@ public class GuiMixin {
 
     @Unique
     //? if <= 1.21 {
-    /*private void ls$afterHeartDraw(GuiGraphicsExtractor instance, Identifier identifier, int x, int y, int u, int v) {
-    *///?} else if <= 1.21.5 {
-    /*private void ls$afterHeartDraw(GuiGraphicsExtractor instance, Function<Identifier, RenderType> renderLayers, Identifier identifier, int x, int y, int u, int v) {
-    *///?} else {
+    //private void ls$afterHeartDraw(GuiGraphicsExtractor instance, Identifier identifier, int x, int y, int u, int v) {
+    //?} else if <= 1.21.5 {
+    //private void ls$afterHeartDraw(GuiGraphicsExtractor instance, Function<Identifier, RenderType> renderLayers, Identifier identifier, int x, int y, int u, int v) {
+    //?} else {
     private void ls$afterHeartDraw(GuiGraphicsExtractor instance, RenderPipeline renderPipeline, Identifier identifier, int x, int y, int u, int v) {
     //?}
         if (!LifeSeries.isSeason(Seasons.SECRET_LIFE) || LifeSeries.modFullyDisabled()) {
@@ -202,12 +202,12 @@ public class GuiMixin {
 
         var customHeart = IdentifierHelper.mod("secretlife_"+heartName);
         //? if <= 1.20 {
-        /*instance.blit(customHeart, x, y, u, v, u, v);
-        *///? } else if <= 1.21 {
-        /*instance.blitSprite(customHeart, x, y, u, v);
-        *///?} else if <= 1.21.5 {
-        /*instance.blitSprite(renderLayers, customHeart, x, y, u, v);
-        *///?} else {
+        //instance.blit(customHeart, x, y, u, v, u, v);
+        //? } else if <= 1.21 {
+        //instance.blitSprite(customHeart, x, y, u, v);
+        //?} else if <= 1.21.5 {
+        //instance.blitSprite(renderLayers, customHeart, x, y, u, v);
+        //?} else {
         instance.blitSprite(renderPipeline, customHeart, x, y, u, v);
         //?}
     }

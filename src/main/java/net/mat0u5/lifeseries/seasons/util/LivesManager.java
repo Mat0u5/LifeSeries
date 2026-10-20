@@ -37,8 +37,8 @@ import static net.mat0u5.lifeseries.LifeSeries.*;
 import static net.mat0u5.lifeseries.seasons.util.WatcherManager.isWatcher;
 
 //? if <= 26.1 {
-/*import net.minecraft.ChatFormatting;
-*///?} else {
+//import net.minecraft.ChatFormatting;
+//?} else {
 import net.minecraft.world.scores.TeamColor;
 //?}
 
@@ -205,8 +205,8 @@ public class LivesManager {
         var team = player.getTeam();
         if (currentSeason.TEAMS_SYSTEM_DISABLED && team != null) {
             //? if <= 26.1 {
-            /*return team.getColor();
-            *///?} else {
+            //return team.getColor();
+            //?} else {
             return team.getColor().orElse(TeamColor.WHITE);
             //?}
         }

@@ -42,8 +42,8 @@ public class ClientSounds {
 
     public static void onSoundPlay(SoundInstance sound) {
         //? if <= 1.21.9 {
-        /*if (!onlyPlayLatestSounds.contains(sound.getLocation().getPath())) return;
-        *///?} else {
+        //if (!onlyPlayLatestSounds.contains(sound.getLocation().getPath())) return;
+        //?} else {
         if (!onlyPlayLatestSounds.contains(sound.getIdentifier().getPath())) return;
         //?}
 
@@ -91,8 +91,8 @@ public class ClientSounds {
         for (Collection<SoundInstance> soundCategory : accessor.getSounds().asMap().values()) {
             for (SoundInstance sound : soundCategory) {
                 //? if <= 1.21.9 {
-                /*String name = sound.getLocation().getPath();
-                *///?} else {
+                //String name = sound.getLocation().getPath();
+                //?} else {
                 String name = sound.getIdentifier().getPath();
                 //?}
                 if (!onlyOneOf.contains(name)) continue;

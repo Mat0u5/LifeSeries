@@ -70,14 +70,14 @@ public class TriviaBot extends AmbientCreature {
         super(entityType, level);
         if (!level.isClientSide()) {
             //? if <= 26.2 {
-            /*this.setInvulnerable(true);
-             *///?} else {
+            //this.setInvulnerable(true);
+             //?} else {
             this.setPermanentlyInvulnerable(true);
             //?}
             setPersistenceRequired();
             //? if <= 1.20.3 {
-            /*this.setMaxUpStep(1.0F);
-             *///?}
+            //this.setMaxUpStep(1.0F);
+             //?}
             if (LifeSeries.isSeason(Seasons.NICE_LIFE)) {
                 triviaHandler = new NiceLifeTriviaHandler(this);
                 setSantaBot(true);
@@ -165,8 +165,8 @@ public class TriviaBot extends AmbientCreature {
 
     @Override
     //? if <= 1.21.11 {
-    /*public boolean updateFluidHeightAndDoFluidPushing(TagKey<Fluid> tag, double speed) {
-    *///?} else {
+    //public boolean updateFluidHeightAndDoFluidPushing(TagKey<Fluid> tag, double speed) {
+    //?} else {
     public boolean updateFluidInteraction() {
     //?}
         return false;

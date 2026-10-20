@@ -25,8 +25,8 @@ public class ScoreboardUtils {
         Scoreboard scoreboard = server.getScoreboard();
         if (scoreboard.getObjective(name) != null) return;
         //? if <= 1.20.2 {
-        /*scoreboard.addObjective(name, criterion, Component.literal(displayName), criterion.getDefaultRenderType());
-        *///?} else {
+        //scoreboard.addObjective(name, criterion, Component.literal(displayName), criterion.getDefaultRenderType());
+        //?} else {
         scoreboard.addObjective(name, criterion, Component.literal(displayName), criterion.getDefaultRenderType(), false, null);
         //?}
     }
@@ -44,8 +44,8 @@ public class ScoreboardUtils {
     }
 
     //? if <= 1.20 {
-    /*public static Objective getObjectiveInSlot(int slot) {
-    *///?} else {
+    //public static Objective getObjectiveInSlot(int slot) {
+    //?} else {
     public static Objective getObjectiveInSlot(DisplaySlot slot) {
     //?}
         if (server == null) return null;
@@ -54,8 +54,8 @@ public class ScoreboardUtils {
     }
 
     //? if <= 1.20 {
-    /*public static void setObjectiveInSlot(int slot, String name) {
-    *///?} else {
+    //public static void setObjectiveInSlot(int slot, String name) {
+    //?} else {
     public static void setObjectiveInSlot(DisplaySlot slot, String name) {
     //?}
         if (server == null) return;
@@ -78,8 +78,8 @@ public class ScoreboardUtils {
     //?}
 
     //? if <= 1.20.2 {
-    /*public static void setScore(String holder, String objectiveName, Integer score) {
-    *///?} else {
+    //public static void setScore(String holder, String objectiveName, Integer score) {
+    //?} else {
     public static void setScore(ScoreHolder holder, String objectiveName, Integer score) {
     //?}
         if (livesManager != null && livesManager.LIVES_SYSTEM_DISABLED && objectiveName.equals(LivesManager.SCOREBOARD_NAME)) {

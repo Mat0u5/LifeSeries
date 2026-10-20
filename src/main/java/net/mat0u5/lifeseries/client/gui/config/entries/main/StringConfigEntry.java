@@ -37,8 +37,8 @@ public class StringConfigEntry extends TextFieldConfigEntry {
         setText(value);
         if (textField.getWidth()-6 < textRenderer.width(value)) {
             //? if <= 1.20 {
-            /*textField.moveCursorToStart();
-            *///?} else {
+            //textField.moveCursorToStart();
+            //?} else {
             textField.moveCursorToStart(false);
             //?}
         }

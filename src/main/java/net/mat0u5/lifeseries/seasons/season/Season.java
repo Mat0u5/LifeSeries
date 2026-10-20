@@ -80,8 +80,8 @@ import net.minecraft.world.entity.*;
 //? if > 1.20
 import net.minecraft.world.scores.DisplaySlot;
 //? if <= 26.1 {
-/*import net.minecraft.ChatFormatting;
- *///?} else {
+//import net.minecraft.ChatFormatting;
+ //?} else {
 import net.minecraft.world.scores.TeamColor;
 //?}
 
@@ -424,8 +424,8 @@ public abstract class Season {
         if (doDrop && keepInventory) {
             for (ItemStack item : PlayerUtils.getPlayerInventory(player)) {
                 //? if <= 1.21 {
-                /*player.spawnAtLocation(item);
-                *///?} else
+                //player.spawnAtLocation(item);
+                //?} else
                 player.spawnAtLocation(((IPlayer) player).ls$getServerLevel(), item);
             }
             player.getInventory().clearContent();
@@ -534,15 +534,15 @@ public abstract class Season {
     public void onPlayerDiedNaturally(ServerPlayer player, DamageSource source) {
         if (source.getEntity() instanceof TamableAnimal tamableAnimal) {
             //? if <= 1.21.4 {
-            /*ServerPlayer owner = PlayerUtils.getPlayer(tamableAnimal.getOwnerUUID());
-            *///?} else {
+            //ServerPlayer owner = PlayerUtils.getPlayer(tamableAnimal.getOwnerUUID());
+            //?} else {
             ServerPlayer owner = null;
             if (tamableAnimal.getOwnerReference() != null) owner = PlayerUtils.getPlayer(tamableAnimal.getOwnerReference().getUUID());
             //?}
             if (owner != null) {
                 //? if <= 1.21.2 {
-                /*owner.awardKillScore(player, 1, source);
-                *///?} else {
+                //owner.awardKillScore(player, 1, source);
+                //?} else {
                 owner.awardKillScore(player, source);
                 //?}
             }
@@ -584,8 +584,8 @@ public abstract class Season {
         }
 
         //? if <= 1.21.2 {
-        /*killer.awardKillScore(victim, 1, killer.damageSources().playerAttack(killer));
-        *///?} else {
+        //killer.awardKillScore(victim, 1, killer.damageSources().playerAttack(killer));
+        //?} else {
         killer.awardKillScore(victim, killer.damageSources().playerAttack(killer));
         //?}
 
@@ -691,8 +691,8 @@ public abstract class Season {
             if (entity instanceof WitherSkeleton && rnd.nextDouble() <= ADDITIONAL_WITHER_SKULL_RATE) {
                 ItemStack skullItem = Items.WITHER_SKELETON_SKULL.getDefaultInstance();
                 //? if <=1.21 {
-                /*entity.spawnAtLocation(skullItem);
-                *///?} else
+                //entity.spawnAtLocation(skullItem);
+                //?} else
                 entity.spawnAtLocation((ServerLevel) entity.level(), skullItem);
                 ci.cancel();
             }
@@ -710,8 +710,8 @@ public abstract class Season {
         if (entity instanceof Snail) return;
         if (entity instanceof TriviaBot) return;
         //? if <= 1.21.11 {
-        /*if (entity.getTags().contains("notNatural") && onlyNatural) return;
-        *///?} else {
+        //if (entity.getTags().contains("notNatural") && onlyNatural) return;
+        //?} else {
         if (entity.entityTags().contains("notNatural") && onlyNatural) return;
         //?}
 
@@ -730,8 +730,8 @@ public abstract class Season {
 
         if (Math.random() <= chance) {
             //? if <=1.21 {
-            /*entity.spawnAtLocation(spawnEggItem);
-            *///?} else
+            //entity.spawnAtLocation(spawnEggItem);
+            //?} else
             entity.spawnAtLocation((ServerLevel) entity.level(), spawnEggItem);
         }
     }

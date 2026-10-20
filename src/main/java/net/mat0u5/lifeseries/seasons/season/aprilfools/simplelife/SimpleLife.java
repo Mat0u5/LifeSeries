@@ -33,8 +33,8 @@ import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.entity.SpawnPlacementType;
 //?}
 //? if <= 26.1 {
-/*import net.minecraft.world.entity.EntityType;
-*///?} else {
+//import net.minecraft.world.entity.EntityType;
+//?} else {
 import net.minecraft.world.entity.EntityTypes;
 //?}
 
@@ -160,8 +160,8 @@ public class SimpleLife extends ThirdLife {
             int l = world.getHeight(Heightmap.Types.WORLD_SURFACE, j, k);
             BlockPos blockPos2 = new BlockPos(j, l, k);
             //? if <= 1.20.3 {
-            /*if (NaturalSpawner.isSpawnPositionOk(SpawnPlacements.Type.ON_GROUND, world, blockPos2, EntityTypes.WANDERING_TRADER)) {
-            *///?} else {
+            //if (NaturalSpawner.isSpawnPositionOk(SpawnPlacements.Type.ON_GROUND, world, blockPos2, EntityTypes.WANDERING_TRADER)) {
+            //?} else {
             if (spawnLocation.isSpawnPositionOk(world, blockPos2, EntityTypes.WANDERING_TRADER)) {
             //?}
                 blockPos = blockPos2;

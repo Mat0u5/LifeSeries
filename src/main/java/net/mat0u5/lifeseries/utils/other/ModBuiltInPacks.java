@@ -62,10 +62,10 @@ public final class ModBuiltInPacks implements RepositorySource {
     private static final List<PackDef> DATA_PACKS = List.of(
             new PackDef("lifeseries_datapack", Component.literal("Life Series Datapack"), true)
             //? if <= 1.20.4 {
-            /*,new PackDef("lifeseries_datapack_1.20-1.20.4", Component.literal("Life Series Datapack"), true)
-            *///?} else if <= 1.20.5 {
-            /*,new PackDef("lifeseries_datapack_1.20.5", Component.literal("Life Series Datapack"), true)
-            *///?}
+            //,new PackDef("lifeseries_datapack_1.20-1.20.4", Component.literal("Life Series Datapack"), true)
+            //?} else if <= 1.20.5 {
+            //,new PackDef("lifeseries_datapack_1.20.5", Component.literal("Life Series Datapack"), true)
+            //?}
     );
 
     public static void loadPacks(Consumer<Pack> consumer, PackType packType) {
@@ -93,8 +93,8 @@ public final class ModBuiltInPacks implements RepositorySource {
                 def.title(),
                 def.required(),
                 //? if <= 1.20 {
-                /^(name) -> new PathPackResources(name, path, true),
-                ^///?} else {
+                //(name) -> new PathPackResources(name, path, true),
+                //?} else {
                 new PathPackResources.PathResourcesSupplier(path, true),
                 //?}
                 packType,

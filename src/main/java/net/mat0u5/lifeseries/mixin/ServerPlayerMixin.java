@@ -230,16 +230,16 @@ public class ServerPlayerMixin implements IPlayer {
     @Unique @Override
     public void ls$hurt(DamageSource source, float amount) {
         //? if <= 1.21 {
-        /*ls$get().hurt(source, amount);
-        *///?} else {
+        //ls$get().hurt(source, amount);
+        //?} else {
         ls$get().hurtServer(ls$getServerLevel(), source, amount);
          //?}
     }
     @Unique @Override
     public void ls$hurt(ServerLevel level, DamageSource source, float amount) {
         //? if <= 1.21 {
-        /*ls$get().hurt(source, amount);
-        *///?} else {
+        //ls$get().hurt(source, amount);
+        //?} else {
         ls$get().hurtServer(level, source, amount);
          //?}
     }
@@ -247,8 +247,8 @@ public class ServerPlayerMixin implements IPlayer {
     @Unique @Override
     public ServerLevel ls$getServerLevel() {
         //? if <= 1.21.5 {
-        /*return ls$get().serverLevel();
-        *///?} else {
+        //return ls$get().serverLevel();
+        //?} else {
         return ls$get().level();
          //?}
     }
@@ -257,8 +257,8 @@ public class ServerPlayerMixin implements IPlayer {
     public void ls$playNotifySound(SoundEvent sound, SoundSource soundSource, float volume, float pitch) {
         ServerPlayer self = ls$get();
         //? if <= 1.21.9 {
-        /*self.playNotifySound(sound, soundSource, volume, pitch);
-        *///?} else {
+        //self.playNotifySound(sound, soundSource, volume, pitch);
+        //?} else {
         self.connection
                 .send(
                         new ClientboundSoundPacket(
@@ -283,8 +283,8 @@ public class ServerPlayerMixin implements IPlayer {
 
     @Inject(method = "startSleepInBed", at = @At("HEAD"), cancellable = true)
     //? if <= 26.2 {
-    /*private void cancelStartSleep(BlockPos blockPos, CallbackInfoReturnable<Either<Player.BedSleepingProblem, Unit>> cir) {
-    *///?} else {
+    //private void cancelStartSleep(BlockPos blockPos, CallbackInfoReturnable<Either<Player.BedSleepingProblem, Unit>> cir) {
+    //?} else {
     private void cancelStartSleep(AbstractBedBlock bedBlock, BlockState bedBlockState, BedRule rule, BlockPos pos, CallbackInfoReturnable<Either<Player.BedSleepingProblem, Unit>> cir) {
     //?}
         if (LifeSeries.isLogicalNonDisabled() && LifeSeries.isSeason(Seasons.NICE_LIFE)) {

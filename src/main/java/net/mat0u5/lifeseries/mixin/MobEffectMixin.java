@@ -49,10 +49,10 @@ public class MobEffectMixin {
     }
     @Inject(method = "applyEffectTick", at = @At("HEAD"), cancellable = true)
     //? if <= 1.20.3 {
-    /*public void applyInstantEffect(LivingEntity entity, int i, CallbackInfo ci) {
-    *///?} else if <= 1.21 {
-    /*public void applyInstantEffect(LivingEntity entity, int amplifier, CallbackInfoReturnable<Boolean> cir) {
-    *///?} else {
+    //public void applyInstantEffect(LivingEntity entity, int i, CallbackInfo ci) {
+    //?} else if <= 1.21 {
+    //public void applyInstantEffect(LivingEntity entity, int amplifier, CallbackInfoReturnable<Boolean> cir) {
+    //?} else {
     public void applyInstantEffect(ServerLevel level, LivingEntity entity, int amplifier, CallbackInfoReturnable<Boolean> cir) {
     //?}
         if (LifeSeries.isClientOrDisabled()) return;
@@ -72,10 +72,10 @@ public class MobEffectMixin {
 
 
     //? if <= 1.21 {
-    /*@ModifyVariable(method = "applyInstantenousEffect", at = @At("HEAD"), index = 4, argsOnly = true)
-    *///?} else if <= 26.1 {
-    /*@ModifyVariable(method = "applyInstantenousEffect", at = @At("HEAD"), index = 5, argsOnly = true)
-    *///?} else {
+    //@ModifyVariable(method = "applyInstantenousEffect", at = @At("HEAD"), index = 4, argsOnly = true)
+    //?} else if <= 26.1 {
+    //@ModifyVariable(method = "applyInstantenousEffect", at = @At("HEAD"), index = 5, argsOnly = true)
+    //?} else {
     @ModifyVariable(method = "applyInstantaneousEffect", at = @At("HEAD"), index = 5, argsOnly = true)
     //?}
     private int clampInstantEffect(int amplifier) {
@@ -83,8 +83,8 @@ public class MobEffectMixin {
     }
 
     //? if <= 1.21 {
-    /*@ModifyVariable(method = "applyEffectTick", at = @At("HEAD"), index = 2, argsOnly = true)
-    *///?} else {
+    //@ModifyVariable(method = "applyEffectTick", at = @At("HEAD"), index = 2, argsOnly = true)
+    //?} else {
     @ModifyVariable(method = "applyEffectTick", at = @At("HEAD"), index = 3, argsOnly = true)
     //?}
     private int clampApplyEffect(int amplifier) {

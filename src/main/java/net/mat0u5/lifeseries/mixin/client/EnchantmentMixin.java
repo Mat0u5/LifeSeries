@@ -23,13 +23,13 @@ public class EnchantmentMixin {
         try {
             Registry<Enchantment> enchantmentRegistry = Minecraft.getInstance().level.registryAccess()
                     //? if <=1.21 {
-                    /*.registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));
-                     *///?} else
+                    //.registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));
+                     //?} else
                     .lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("enchantment")));
             ResourceKey<Enchantment> enchant = enchantmentRegistry.getResourceKey(enchantment).orElseThrow();
             //? if <= 1.21.9 {
-            /*String name = enchant.location().toString();
-            *///?} else {
+            //String name = enchant.location().toString();
+            //?} else {
             String name = enchant.identifier().toString();
             //?}
             if (LifeSeriesClient.lvl1ClampedEnchants.contains(name)) {

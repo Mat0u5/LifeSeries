@@ -10,8 +10,8 @@ import java.util.Random;
 import java.util.UUID;
 
 //? if <= 1.21 {
-/*import net.minecraft.world.entity.animal.golem.SnowGolem;
-*///?}
+//import net.minecraft.world.entity.animal.golem.SnowGolem;
+//?}
 //? if >= 1.21.2 {
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
  //?}
@@ -27,16 +27,16 @@ public class AngrySnowmanRenderer extends SnowGolemRenderer {
     }
     @Override
     //? if <= 1.21 {
-    /*public Identifier getTextureLocation(SnowGolem entity) {
-    *///?} else if <= 1.21.3 {
-    /*public Identifier getTextureLocation(LivingEntityRenderState state) {
-    *///?} else {
+    //public Identifier getTextureLocation(SnowGolem entity) {
+    //?} else if <= 1.21.3 {
+    //public Identifier getTextureLocation(LivingEntityRenderState state) {
+    //?} else {
     public Identifier getTextureLocation(SnowGolemRenderState state) {
     //?}
             UUID uuid = null;
             //? if <= 1.21 {
-            /*uuid  = entity.getUUID();
-            *///?} else {
+            //uuid  = entity.getUUID();
+            //?} else {
             if (state instanceof IEntityRenderState stateAccessor) {
                 uuid = stateAccessor.ls$getEntity().getUUID();
             }

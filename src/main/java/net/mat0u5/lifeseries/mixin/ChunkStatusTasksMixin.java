@@ -65,8 +65,8 @@ public abstract class ChunkStatusTasksMixin {
                             BlockState newState = niceLife.transformBlockState(oldState);
                             if (newState != null) {
                                 //? if <= 1.21.4 {
-                                /*chunkAccess.setBlockState(blockPos, newState, false);
-                                *///?} else {
+                                //chunkAccess.setBlockState(blockPos, newState, false);
+                                //?} else {
                                 chunkAccess.setBlockState(blockPos, newState, 1);
                                 //?}
                             }

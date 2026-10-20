@@ -37,8 +37,8 @@ public class TriviaAnswerConfigEntry extends ModifiableListEntry {
         textField.setValue(answer);
         textField.setResponder(this::onChanged);
         //? if <= 1.20 {
-        /*textField.moveCursorToStart();
-         *///?} else {
+        //textField.moveCursorToStart();
+         //?} else {
         textField.moveCursorToStart(false);
         //?}
 

@@ -60,32 +60,32 @@ public class TextUtils {
 
     public static ClickEvent openURLClickEvent(String url) {
         //? if <= 1.21.4 {
-        /*return new ClickEvent(ClickEvent.Action.OPEN_URL, url);
-        *///?} else {
+        //return new ClickEvent(ClickEvent.Action.OPEN_URL, url);
+        //?} else {
         return new ClickEvent.OpenUrl(URI.create(url));
         //?}
     }
 
     public static ClickEvent runCommandClickEvent(String command) {
         //? if <= 1.21.4 {
-        /*return new ClickEvent(ClickEvent.Action.RUN_COMMAND, command);
-        *///?} else {
+        //return new ClickEvent(ClickEvent.Action.RUN_COMMAND, command);
+        //?} else {
         return new ClickEvent.RunCommand(command);
         //?}
     }
 
     public static ClickEvent copyClipboardClickEvent(String copy) {
         //? if <= 1.21.4 {
-        /*return new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, copy);
-        *///?} else {
+        //return new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, copy);
+        //?} else {
         return new ClickEvent.CopyToClipboard(copy);
         //?}
     }
 
     public static HoverEvent showTextHoverEvent(Component text) {
         //? if <= 1.21.4 {
-        /*return new HoverEvent(HoverEvent.Action.SHOW_TEXT, text);
-        *///?} else {
+        //return new HoverEvent(HoverEvent.Action.SHOW_TEXT, text);
+        //?} else {
         return new HoverEvent.ShowText(text);
         //?}
     }

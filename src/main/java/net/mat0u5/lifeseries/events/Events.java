@@ -161,8 +161,8 @@ public class Events {
                 LifeSeries.currentSession.tick(server);
             }
             //? if < 1.20.3 {
-            /*boolean gameFrozen = false;
-            *///?} else {
+            //boolean gameFrozen = false;
+            //?} else {
             boolean gameFrozen = server.tickRateManager().isFrozen();
             //?}
             if (!gameFrozen) {

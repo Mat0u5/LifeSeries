@@ -23,8 +23,8 @@ public class OptionsMixin {
     @Inject(method = "<init>", at = @At("TAIL"))
     private void lifeseries$initKeysInConstructor(CallbackInfo ci) {
         //? if <= 1.21.6 {
-        /*KeyMappingAccessor.ls$getCategorySortOrder().putIfAbsent(ClientKeybinds.KEYBIND_ID, 20);
-        *///?}
+        //KeyMappingAccessor.ls$getCategorySortOrder().putIfAbsent(ClientKeybinds.KEYBIND_ID, 20);
+        //?}
 
         this.keyMappings = ClientKeybinds.appendCustomKeybinds(this.keyMappings);
     }

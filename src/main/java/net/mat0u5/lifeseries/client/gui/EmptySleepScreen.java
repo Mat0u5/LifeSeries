@@ -86,8 +86,8 @@ public class EmptySleepScreen extends Screen {
         if (!currentCamera.isFirstPerson()) {
             minecraft.options.setCameraType(CameraType.FIRST_PERSON);
             //? if <= 26.1 {
-            /*minecraft.levelRenderer.needsUpdate();
-            *///?}
+            //minecraft.levelRenderer.needsUpdate();
+            //?}
         }
     }
 
@@ -128,8 +128,8 @@ public class EmptySleepScreen extends Screen {
     //~ renames_26_1_volatile
     @Override
     //? if <= 1.20 {
-    /*public void extractBackground(GuiGraphicsExtractor context) {}
-     *///?} else {
+    //public void extractBackground(GuiGraphicsExtractor context) {}
+     //?} else {
     public void extractBackground(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {}
     //?}
 

@@ -107,8 +107,8 @@ public class ConfigScreen extends Screen {
         this.addWidget(this.searchField);
 
         //? if <= 1.20.2 {
-        /*this.listWidget = new ConfigListWidget(this.minecraft, this.width, this.height - listTop - FOOTER_HEIGHT, listTop, this.height - FOOTER_HEIGHT, ConfigEntry.PREFFERED_HEIGHT);
-        *///?} else {
+        //this.listWidget = new ConfigListWidget(this.minecraft, this.width, this.height - listTop - FOOTER_HEIGHT, listTop, this.height - FOOTER_HEIGHT, ConfigEntry.PREFFERED_HEIGHT);
+        //?} else {
         this.listWidget = new ConfigListWidget(this.minecraft, this.width, this.height - listTop - FOOTER_HEIGHT, listTop, ConfigEntry.PREFFERED_HEIGHT);
         //?}
         listWidget.setScreen(this);
@@ -380,8 +380,8 @@ public class ConfigScreen extends Screen {
     public void extractRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
         //? if <= 1.20.2 {
         /*//? if <= 1.20 {
-        /^context.setColor(0.25F, 0.25F, 0.25F, 1.0F);
-        ^///?} else {
+        //context.setColor(0.25F, 0.25F, 0.25F, 1.0F);
+        //?} else {
         context.setColor(0.85F, 0.85F, 0.85F, 1.0F);
         //?}
         RenderUtils.texture(Screen.BACKGROUND_LOCATION, 0, this.height - FOOTER_HEIGHT, this.width, FOOTER_HEIGHT).textureSize(32, 32).extractRenderState(context);
@@ -463,8 +463,8 @@ public class ConfigScreen extends Screen {
             }
         }
         //? if <= 1.21.6 {
-        /*return super.mouseClicked(mouseX, mouseY, button);
-        *///?} else {
+        //return super.mouseClicked(mouseX, mouseY, button);
+        //?} else {
         return super.mouseClicked(click, doubled);
         //?}
     }
@@ -491,8 +491,8 @@ public class ConfigScreen extends Screen {
         }
 
         //? if <= 1.21.6 {
-        /*return super.keyPressed(keyCode, scanCode, modifiers);
-        *///?} else {
+        //return super.keyPressed(keyCode, scanCode, modifiers);
+        //?} else {
         return super.keyPressed(keyInput);
         //?}
     }
