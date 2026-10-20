@@ -21,16 +21,16 @@ import net.minecraft.network.protocol.game.ServerboundResourcePackPacket;
 import java.util.UUID;
 import net.minecraft.client.multiplayer.ClientCommonPacketListenerImpl;
 //? if <= 1.20.2 {
-/*import net.minecraft.network.protocol.common.ClientboundResourcePackPacket;
-*///?} else {
+//import net.minecraft.network.protocol.common.ClientboundResourcePackPacket;
+//?} else {
 import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
 //?}
 import net.minecraft.network.protocol.common.ServerboundResourcePackPacket;
 //?}
 
 //? if <= 1.20 {
-/*@Mixin(ClientPacketListener.class)
-*///?} else {
+//@Mixin(ClientPacketListener.class)
+//?} else {
 @Mixin(ClientCommonPacketListenerImpl.class)
 //?}
 @MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
@@ -56,8 +56,8 @@ public class ClientCommonPacketListenerImplMixin {
     //?}
         if (LifeSeries.modFullyDisabled()) return;
         //? if <= 1.20.2 {
-        /*String url = packet.getUrl();
-        *///?} else {
+        //String url = packet.getUrl();
+        //?} else {
         String url = packet.url();
         UUID uuid = packet.id();
         //?}

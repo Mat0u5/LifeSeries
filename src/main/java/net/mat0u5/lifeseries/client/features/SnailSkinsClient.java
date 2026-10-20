@@ -36,8 +36,8 @@ public class SnailSkinsClient {
             }
 
             //? if <= 1.21.4 {
-            /*DynamicTexture texture = new DynamicTexture(image);
-            *///?} else {
+            //DynamicTexture texture = new DynamicTexture(image);
+            //?} else {
             DynamicTexture texture = new DynamicTexture(() -> skinName, image);
             //?}
             removeSnailTexture(skinName);

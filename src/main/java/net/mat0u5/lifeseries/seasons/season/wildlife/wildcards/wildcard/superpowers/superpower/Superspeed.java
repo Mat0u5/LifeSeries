@@ -55,8 +55,8 @@ public class Superspeed extends ToggleableSuperpower {
         if (player == null) return;
         if (player.getFoodData().getFoodLevel() <= 6) {
             //? if <= 1.21 {
-            /*((IPlayer) player).ls$playNotifySound(SoundEvents.GENERIC_EAT, SoundSource.MASTER, 1, 1);
-            *///?} else {
+            //((IPlayer) player).ls$playNotifySound(SoundEvents.GENERIC_EAT, SoundSource.MASTER, 1, 1);
+            //?} else {
             ((IPlayer) player).ls$playNotifySound(SoundEvents.GENERIC_EAT.value(), SoundSource.MASTER, 1, 1);
             //?}
             return;

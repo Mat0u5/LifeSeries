@@ -13,8 +13,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 //? if <= 1.20 {
-/*import net.minecraft.network.protocol.login.ServerboundCustomQueryPacket;
-*///?} else {
+//import net.minecraft.network.protocol.login.ServerboundCustomQueryPacket;
+//?} else {
 import net.minecraft.network.protocol.login.ServerboundCustomQueryAnswerPacket;
 import net.mat0u5.lifeseries.network.packets.CustomQueryPacket;
 //?}

@@ -60,8 +60,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class EntityRenderDispatcherMixin {
     @Inject(method = "shouldRender", at = @At("HEAD"), cancellable = true)
     //? if <= 26.2 {
-    /*public <E extends Entity> void render(E entity, Frustum frustum, double x, double y, double z, CallbackInfoReturnable<Boolean> cir) {
-    *///?} else {
+    //public <E extends Entity> void render(E entity, Frustum frustum, double x, double y, double z, CallbackInfoReturnable<Boolean> cir) {
+    //?} else {
     public void render(Entity entity, Frustum culler, double camX, double camY, double camZ, float partialTicks, CallbackInfoReturnable<Boolean> cir) {
     //?}
         if (entity instanceof Player playerEntity) {

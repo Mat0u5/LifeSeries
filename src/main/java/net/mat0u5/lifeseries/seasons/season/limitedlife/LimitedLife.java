@@ -112,8 +112,8 @@ public class LimitedLife extends Season {
                         playerLives = -1;
                     }
                     //? if <= 26.1 {
-                    /*String livesColor = livesManager.getColorForLives(player).toString();
-                    *///?} else {
+                    //String livesColor = livesManager.getColorForLives(player).toString();
+                    //?} else {
                     String livesColor = TextUtils.getColorCode(livesManager.getColorForLives(player).textColor());
                     //?}
                     SimplePackets.LIMITED_LIFE_TIMER.sendToClient(List.of(livesColor, String.valueOf(playerLives)), player);

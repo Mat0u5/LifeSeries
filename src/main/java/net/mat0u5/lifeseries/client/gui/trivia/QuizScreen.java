@@ -117,8 +117,8 @@ public class QuizScreen extends DefaultScreen {
             }
         }
         //? if <= 1.21.6 {
-        /*return super.mouseClicked(mouseX, mouseY, button);
-        *///?} else {
+        //return super.mouseClicked(mouseX, mouseY, button);
+        //?} else {
         return super.mouseClicked(click, doubled);
         //?}
     }
@@ -220,8 +220,8 @@ public class QuizScreen extends DefaultScreen {
         }
         if (bot != null) {
             //? if <= 1.20 {
-            /*InventoryScreen.extractEntityInInventoryFollowsMouse(context, x, y+35, size, 0, 0, bot);
-            *///?} else {
+            //InventoryScreen.extractEntityInInventoryFollowsMouse(context, x, y+35, size, 0, 0, bot);
+            //?} else {
             InventoryScreen.extractEntityInInventoryFollowsMouse(context, x-30, y-70, x+30, y+70, size, 0.0625F, centerX, centerY+10, bot);
             //?}
         }

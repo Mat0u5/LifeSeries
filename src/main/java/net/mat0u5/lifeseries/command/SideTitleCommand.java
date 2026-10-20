@@ -41,16 +41,16 @@ public class SideTitleCommand extends Command {
                 .then(argument("targets", EntityArgument.players())
                         .then(literal("side")
                                 //? if <= 1.20.3 {
-                                /*.then(argument("title", ComponentArgument.textComponent())
-                                *///?} else {
+                                //.then(argument("title", ComponentArgument.textComponent())
+                                //?} else {
                                 .then(argument("title", ComponentArgument.textComponent(registryAccess))
                                 //?}
                                         .executes(context -> executeTitle(
                                                 context.getSource(),
                                                 EntityArgument.getPlayers(context, "targets"),
                                                 //? if <= 1.21.4 {
-                                                /*ComponentArgument.getComponent(context, "title")
-                                                *///?} else {
+                                                //ComponentArgument.getComponent(context, "title")
+                                                //?} else {
                                                 ComponentArgument.getRawComponent(context, "title")
                                                 //?}
                                         ))
@@ -63,8 +63,8 @@ public class SideTitleCommand extends Command {
     private int executeTitle(CommandSourceStack source, Collection<ServerPlayer> targets, Component title) throws CommandSyntaxException {
         for(ServerPlayer player : targets) {
             //? if <= 1.21.11 {
-            /*NetworkHandlerServer.sideTitle(player, ComponentUtils.updateForEntity(source, title, player, 0));
-            *///?} else {
+            //NetworkHandlerServer.sideTitle(player, ComponentUtils.updateForEntity(source, title, player, 0));
+            //?} else {
             NetworkHandlerServer.sideTitle(player, ComponentUtils.resolve(ResolutionContext.builder().withSource(source).withEntityOverride(player).build(), title));
             //?}
         }

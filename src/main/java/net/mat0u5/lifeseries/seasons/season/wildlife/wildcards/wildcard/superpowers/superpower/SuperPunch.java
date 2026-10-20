@@ -93,8 +93,8 @@ public class SuperPunch extends ToggleableSuperpower {
         }
 
         //? if <= 1.21.6 {
-        /*boolean rideResult = rider.startRiding(entity, true);
-        *///?} else {
+        //boolean rideResult = rider.startRiding(entity, true);
+        //?} else {
         boolean rideResult = rider.startRiding(entity, true, true);
         //?}
 
@@ -109,8 +109,8 @@ public class SuperPunch extends ToggleableSuperpower {
         ClientboundSetPassengersPacket passengersPacket = new ClientboundSetPassengersPacket(entity);
 
         //? if <= 1.21.11 {
-        /*List<ServerPlayer> players = level.getChunkSource().chunkMap.getPlayers(new ChunkPos(entity.blockPosition()), false);
-        *///?} else {
+        //List<ServerPlayer> players = level.getChunkSource().chunkMap.getPlayers(new ChunkPos(entity.blockPosition()), false);
+        //?} else {
         List<ServerPlayer> players = level.getChunkSource().chunkMap.getPlayers(ChunkPos.containing(entity.blockPosition()), false);
         //?}
         for (ServerPlayer trackingPlayer : players) {

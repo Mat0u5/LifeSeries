@@ -121,8 +121,8 @@ public class LevelUtils {
 
     public static void teleport(Entity entity, ServerLevel level, double destX, double destY, double destZ, float yaw, float pitch) {
         //? if <= 1.21 {
-        /*entity.teleportTo(level, destX, destY, destZ, EnumSet.noneOf(RelativeMovement.class), yaw, pitch);
-        *///?} else {
+        //entity.teleportTo(level, destX, destY, destZ, EnumSet.noneOf(RelativeMovement.class), yaw, pitch);
+        //?} else {
         entity.teleportTo(level, destX, destY, destZ, EnumSet.noneOf(Relative.class), yaw, pitch, false);
          //?}
     }

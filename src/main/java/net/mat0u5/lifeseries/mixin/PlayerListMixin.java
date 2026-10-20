@@ -18,8 +18,8 @@ import net.minecraft.server.network.CommonListenerCookie;
 public class PlayerListMixin {
     @Inject(method = "placeNewPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/protocol/game/ClientboundPlayerAbilitiesPacket;<init>(Lnet/minecraft/world/entity/player/Abilities;)V"))
     //? if <= 1.20 {
-    /*private void handlePlayerConnection(Connection connection, ServerPlayer player, CallbackInfo ci) {
-    *///?} else {
+    //private void handlePlayerConnection(Connection connection, ServerPlayer player, CallbackInfo ci) {
+    //?} else {
     private void handlePlayerConnection(Connection connection, ServerPlayer player, CommonListenerCookie arg, CallbackInfo ci) {
     //?}
         Events.onPlayerJoin(player);

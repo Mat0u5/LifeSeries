@@ -81,8 +81,8 @@ public class CustomTextRenderer {
         if (isScaled()) {
             context.pose().pushMatrix();
             //? if <= 1.21.5 {
-            /*context.pose().scale(scaleX, scaleY, 1.0f);
-            *///?} else {
+            //context.pose().scale(scaleX, scaleY, 1.0f);
+            //?} else {
             context.pose().scale(scaleX, scaleY);
             //?}
         }

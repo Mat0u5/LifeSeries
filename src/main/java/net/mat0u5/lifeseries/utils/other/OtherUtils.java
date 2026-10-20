@@ -172,8 +172,8 @@ public class OtherUtils {
     public static UUID profileId(GameProfile profile) {
         if (profile == null) return null;
         //? if <= 1.21.6 {
-        /*return profile.getId();
-         *///?} else {
+        //return profile.getId();
+         //?} else {
         return profile.id();
         //?}
     }
@@ -181,8 +181,8 @@ public class OtherUtils {
     public static String profileName(GameProfile profile) {
         if (profile == null) return null;
         //? if <= 1.21.6 {
-        /*return profile.getName();
-         *///?} else {
+        //return profile.getName();
+         //?} else {
         return profile.name();
         //?}
     }
@@ -190,8 +190,8 @@ public class OtherUtils {
     public static PropertyMap profileProperties(GameProfile profile) {
         if (profile == null) return null;
         //? if <= 1.21.6 {
-        /*return profile.getProperties();
-         *///?} else {
+        //return profile.getProperties();
+         //?} else {
         return profile.properties();
         //?}
     }
@@ -302,8 +302,8 @@ public class OtherUtils {
 
     public static Vec3 getCenter(BlockPos pos) {
         //? if <= 26.1 {
-        /*return pos.getCenter();
-        *///?} else {
+        //return pos.getCenter();
+        //?} else {
         return Vec3.atCenterOf(pos);
         //?}
     }

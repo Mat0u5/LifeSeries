@@ -28,10 +28,10 @@ import java.util.UUID;
 //? if fabric {
 import net.mat0u5.lifeseries.platform.fabric.FabricPlatform;
 //?} neoforge {
-/*import net.mat0u5.lifeseries.platform.neoforge.NeoforgePlatform;
- *///?} forge {
-/*import net.mat0u5.lifeseries.platform.forge.ForgePlatform;
- *///?}
+//import net.mat0u5.lifeseries.platform.neoforge.NeoforgePlatform;
+ //?} forge {
+//import net.mat0u5.lifeseries.platform.forge.ForgePlatform;
+ //?}
 //? fabric && <= 1.20.5 {
 /*import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.registries.ModRegistries;
@@ -98,10 +98,10 @@ public class LifeSeries {
 		//? if fabric {
 		return new FabricPlatform();
 		//?} neoforge {
-		/*return new NeoforgePlatform();
-		 *///?} forge {
-		/*return new ForgePlatform();
-		 *///?}
+		//return new NeoforgePlatform();
+		 //?} forge {
+		//return new ForgePlatform();
+		 //?}
 	}
 
 	public static boolean modDisabled() {

@@ -8,8 +8,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 //? if <= 1.21.5 {
-/^import net.minecraftforge.eventbus.api.SubscribeEvent;
- ^///?} else {
+//import net.minecraftforge.eventbus.api.SubscribeEvent;
+ //?} else {
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 //?}
 

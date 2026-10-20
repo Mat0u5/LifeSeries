@@ -175,8 +175,8 @@ public class ClientEvents {
         if (!LifeSeriesClient.powerInvisParticles) return;
         if (client.level == null) return;
         //? if <= 1.20.3 {
-        /*if (client.level.random.nextInt(30) != 0) return;
-        *///?} else {
+        //if (client.level.random.nextInt(30) != 0) return;
+        //?} else {
         if (client.level.getRandom().nextInt(15) != 0) return;
         //?}
         for (Player player : client.level.players()) {
@@ -208,8 +208,8 @@ public class ClientEvents {
         //? if > 1.20.3 {
         if (LifeSeries.isSeason(Seasons.WILD_LIFE) && LifeSeriesClient.clientActiveWildcards.contains(Wildcards.SIZE_SHIFTING)) {
             //? if <= 1.21 {
-            /*boolean jumping = player.input.jumping;
-            *///?} else {
+            //boolean jumping = player.input.jumping;
+            //?} else {
             boolean jumping = player.input.keyPresses.jump();
              //?}
             if (jumping) {
@@ -266,8 +266,8 @@ public class ClientEvents {
 
         boolean shouldJump = false;
         //? if <= 1.21 {
-        /*boolean holdingJump = player.input.jumping;
-        *///?} else {
+        //boolean holdingJump = player.input.jumping;
+        //?} else {
         boolean holdingJump = player.input.keyPresses.jump();
         //?}
 
@@ -283,8 +283,8 @@ public class ClientEvents {
         jumpedInAir++;
         player.jumpFromGround();
         //? if < 1.21 {
-        /*player.level().playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.BAT_TAKEOFF, SoundSource.MASTER, 0.25f, 1f, false);
-        *///?} else {
+        //player.level().playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.BAT_TAKEOFF, SoundSource.MASTER, 0.25f, 1f, false);
+        //?} else {
         player.level().playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.WIND_CHARGE_BURST.value(), SoundSource.MASTER, 0.25f, 1f, false);
         //?}
         SimplePackets.TRIPLE_JUMP.sendToServer(true);
@@ -292,8 +292,8 @@ public class ClientEvents {
 
     private static boolean hasTripleJumpEffect(LocalPlayer player) {
         //? if <= 1.20.3 {
-        /*for (Map.Entry<MobEffect, MobEffectInstance> entry : player.getActiveEffectsMap().entrySet()) {
-        *///?} else {
+        //for (Map.Entry<MobEffect, MobEffectInstance> entry : player.getActiveEffectsMap().entrySet()) {
+        //?} else {
         for (Map.Entry<Holder<MobEffect>, MobEffectInstance> entry : player.getActiveEffectsMap().entrySet()) {
         //?}
             if (entry.getKey() != MobEffects.JUMP_BOOST) continue;

@@ -12,8 +12,8 @@ import net.mat0u5.lifeseries.client.render.ClientRenderer;
 ^///?}
 
 //? if <= 1.20.3 {
-/^@net.neoforged.fml.common.Mod.EventBusSubscriber(modid = LifeSeries.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-^///?}
+//@net.neoforged.fml.common.Mod.EventBusSubscriber(modid = LifeSeries.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+//?}
 public class NeoforgeClientEvents {
     //? if <= 1.20.3 {
     /^@SubscribeEvent

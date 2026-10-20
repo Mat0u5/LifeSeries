@@ -21,10 +21,10 @@ import net.minecraft.network.codec.StreamCodec;
 //?}
 
 //? if <= 1.20.3 {
-/^@net.neoforged.fml.common.Mod.EventBusSubscriber(modid = LifeSeries.MOD_ID, bus = net.neoforged.fml.common.Mod.EventBusSubscriber.Bus.MOD)
-^///?} else if <= 1.21.2 {
-/^@EventBusSubscriber(modid = LifeSeries.MOD_ID, bus = net.neoforged.fml.common.EventBusSubscriber.Bus.MOD)
-^///?} else {
+//@net.neoforged.fml.common.Mod.EventBusSubscriber(modid = LifeSeries.MOD_ID, bus = net.neoforged.fml.common.Mod.EventBusSubscriber.Bus.MOD)
+//?} else if <= 1.21.2 {
+//@EventBusSubscriber(modid = LifeSeries.MOD_ID, bus = net.neoforged.fml.common.EventBusSubscriber.Bus.MOD)
+//?} else {
 @EventBusSubscriber(modid = LifeSeries.MOD_ID)
 //?}
 public class NeoForgeNetworkRegistration {

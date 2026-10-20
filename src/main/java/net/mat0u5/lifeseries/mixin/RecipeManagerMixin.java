@@ -76,8 +76,8 @@ public abstract class RecipeManagerMixin {
 
         List<RecipeHolder<?>> filteredRecipes = preparedRecipes.values().stream()
                 //? if <= 1.21.9 {
-                /^.filter(recipe -> !blacklist.loadedListItemIdentifier.contains(recipe.id().location()) && !blacklist.loadedRecipeBlacklist.contains(recipe.id().location()))
-                ^///?} else {
+                //.filter(recipe -> !blacklist.loadedListItemIdentifier.contains(recipe.id().location()) && !blacklist.loadedRecipeBlacklist.contains(recipe.id().location()))
+                //?} else {
                 .filter(recipe -> !blacklist.loadedListItemIdentifier.contains(recipe.id().identifier()) && !blacklist.loadedRecipeBlacklist.contains(recipe.id().identifier()))
                 //?}
                 .toList();

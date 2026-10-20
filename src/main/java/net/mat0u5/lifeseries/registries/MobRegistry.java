@@ -17,8 +17,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 //?}
 //? if <= 26.1 {
-/*import net.minecraft.world.level.block.Blocks;
-*///?} else {
+//import net.minecraft.world.level.block.Blocks;
+//?} else {
 import net.minecraft.tags.BlockTags;
 //?}
 
@@ -44,8 +44,8 @@ public class MobRegistry {
                     .sized(0.5f, 0.6f)
                     .clientTrackingRange(512)
                     //? if <= 1.21 {
-                    /*.build(Snail.ID.toString())
-                    *///?} else {
+                    //.build(Snail.ID.toString())
+                    //?} else {
                     .build(SNAIL_KEY)
                     //?}
     );
@@ -56,8 +56,8 @@ public class MobRegistry {
                     .sized(0.65f, 1.8f)
                     .clientTrackingRange(512)
                     //? if <= 1.21 {
-                    /*.build(TriviaBot.ID.toString())
-                    *///?} else {
+                    //.build(TriviaBot.ID.toString())
+                    //?} else {
                     .build(TRIVIA_KEY)
                      //?}
     );
@@ -66,8 +66,8 @@ public class MobRegistry {
             AngrySnowman.ID,
             EntityType.Builder.of(AngrySnowman::new, MobCategory.MISC)
                     //? if <= 26.1 {
-                    /*.immuneTo(Blocks.POWDER_SNOW)
-                    *///?} else {
+                    //.immuneTo(Blocks.POWDER_SNOW)
+                    //?} else {
                     .immuneTo(BlockTags.POLAR_BEAR_IMMUNE_TO)
                     //?}
 
@@ -78,8 +78,8 @@ public class MobRegistry {
                     //?}
                     .clientTrackingRange(8)
                     //? if <= 1.21 {
-                    /*.build(AngrySnowman.ID.toString())
-                    *///?} else {
+                    //.build(AngrySnowman.ID.toString())
+                    //?} else {
                     .build(SNOWMAN_KEY)
                      //?}
     );

@@ -19,8 +19,8 @@ import java.util.UUID;
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 //? if <= 1.20 {
-/*import net.minecraft.server.level.ServerPlayer;
-*///?} else {
+//import net.minecraft.server.level.ServerPlayer;
+//?} else {
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.server.network.ServerConfigurationPacketListenerImpl;
 //?}

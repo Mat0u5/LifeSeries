@@ -1,6 +1,6 @@
 plugins {
 	alias(libs.plugins.stonecutter)
-	alias(libs.plugins.dotenv)
+	alias(libs.plugins.dotenv).apply(false)
 	alias(libs.plugins.mod.publish.plugin)
 	alias(libs.plugins.fabric.loom).apply(false)
 	alias(libs.plugins.fabric.loom.remap).apply(false)
@@ -15,6 +15,7 @@ plugins {
 }
 
 stonecutter active file(".sc_active_version")
+apply(plugin = "co.uzzu.dotenv.gradle")
 
 val cleanOutput = tasks.register<Delete>("cleanOutput") {
 	val versionName = project.findProperty("mod.version")?.toString()

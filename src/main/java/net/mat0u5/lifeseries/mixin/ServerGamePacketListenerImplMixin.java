@@ -37,8 +37,8 @@ import net.minecraft.server.level.ServerLevel;
 import java.util.Set;
 
 //? if <= 1.20.3 {
-/*import net.minecraft.network.protocol.game.ServerboundChatCommandPacket;
-*///?} else {
+//import net.minecraft.network.protocol.game.ServerboundChatCommandPacket;
+//?} else {
 import net.minecraft.network.protocol.game.ServerboundChatCommandSignedPacket;
 //?}
 //? if >= 1.21
@@ -189,8 +189,8 @@ public class ServerGamePacketListenerImplMixin {
     }
 
     //? if <= 1.20 {
-    /*@Redirect(method = "onDisconnect", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Z)V"))
-    *///?} else {
+    //@Redirect(method = "onDisconnect", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Z)V"))
+    //?} else {
     @Redirect(method = "removePlayerFromWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Z)V"))
     //?}
     public void noLogoffMessage(PlayerList instance, Component message, boolean overlay) {
@@ -232,8 +232,8 @@ public class ServerGamePacketListenerImplMixin {
 
     @Inject(method = "onDisconnect", at = @At("HEAD"))
     //? if <= 1.20.5 {
-    /*private void onDisconnect(Component component, CallbackInfo ci) {
-    *///?} else {
+    //private void onDisconnect(Component component, CallbackInfo ci) {
+    //?} else {
     private void onDisconnect(DisconnectionDetails details, CallbackInfo ci) {
     //?}
         Events.onPlayerDisconnect(this.player);

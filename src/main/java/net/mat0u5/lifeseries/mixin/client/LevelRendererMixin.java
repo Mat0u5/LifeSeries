@@ -33,10 +33,10 @@ public class LevelRendererMixin {
 //? if <= 26.1 {
 
     /*//? if <= 1.21 {
-    /^@Redirect(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;entitiesForRendering()Ljava/lang/Iterable;"))
-     ^///?} else if <= 1.21.6 {
-    /^@Redirect(method = "collectVisibleEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;entitiesForRendering()Ljava/lang/Iterable;"))
-     ^///?} else {
+    //@Redirect(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;entitiesForRendering()Ljava/lang/Iterable;"))
+     //?} else if <= 1.21.6 {
+    //@Redirect(method = "collectVisibleEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;entitiesForRendering()Ljava/lang/Iterable;"))
+     //?} else {
     @Redirect(method = "extractVisibleEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;entitiesForRendering()Ljava/lang/Iterable;"))
             //?}
     private Iterable<Entity> addMorphedEntities(ClientLevel instance) {

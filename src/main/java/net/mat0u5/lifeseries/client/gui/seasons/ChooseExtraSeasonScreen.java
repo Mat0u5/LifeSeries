@@ -99,8 +99,8 @@ public class ChooseExtraSeasonScreen extends DefaultScreen {
             }
         }
         //? if <= 1.21.6 {
-        /*return super.mouseClicked(mouseX, mouseY, button);
-        *///?} else {
+        //return super.mouseClicked(mouseX, mouseY, button);
+        //?} else {
         return super.mouseClicked(click, doubled);
         //?}
     }

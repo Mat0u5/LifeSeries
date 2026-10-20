@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public interface ServerLoginPacketListenerImplAccessor {
     //? if <= 1.20 {
-    /*@Accessor("gameProfile")
-    *///?} else {
+    //@Accessor("gameProfile")
+    //?} else {
     @Accessor("authenticatedProfile")
     //?}
     GameProfile getGameProfile();

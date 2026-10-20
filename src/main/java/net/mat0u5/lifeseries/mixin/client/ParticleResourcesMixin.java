@@ -20,8 +20,8 @@ public class ParticleResourcesMixin {
     @Inject(method = "registerProviders", at = @At("TAIL"))
     private void registerParticles(CallbackInfo ci) {
         //? if <= 1.21.6 {
-        /*ParticleEngine self = (ParticleEngine)(Object)this;
-         *///?} else {
+        //ParticleEngine self = (ParticleEngine)(Object)this;
+         //?} else {
         ParticleResources self = (ParticleResources)(Object)this;
         //?}
         self.register(ParticleRegistry.TRIVIA_SPIRIT, new TriviaSpiritParticle.Provider());

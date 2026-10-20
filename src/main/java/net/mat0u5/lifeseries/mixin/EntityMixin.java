@@ -33,8 +33,8 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.server.level.ServerLevel;
 //? if <= 26.1 {
-/*import net.minecraft.world.entity.EntityType;
-*///?} else {
+//import net.minecraft.world.entity.EntityType;
+//?} else {
 import net.minecraft.world.entity.EntityTypes;
 //?}
 //?}
@@ -172,8 +172,8 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph, IEntity {
     //?}
 
     //? if <= 1.21 {
-    /*@Inject(method = "isAlliedTo(Lnet/minecraft/world/entity/Entity;)Z", at = @At("HEAD"), cancellable = true)
-    *///?} else {
+    //@Inject(method = "isAlliedTo(Lnet/minecraft/world/entity/Entity;)Z", at = @At("HEAD"), cancellable = true)
+    //?} else {
     @Inject(method = "considersEntityAsAlly", at = @At("HEAD"), cancellable = true)
     //?}
     private void nonAllyPets(Entity entity, CallbackInfoReturnable<Boolean> cir) {
