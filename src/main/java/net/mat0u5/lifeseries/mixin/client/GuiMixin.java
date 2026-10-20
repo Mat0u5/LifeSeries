@@ -52,9 +52,12 @@ public class GuiMixin {
     *///?} else if <= 1.21.11 {
     /*@Inject(method = "render", at = @At(value = "HEAD"))
     public void render(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+    *///?} else if <= 26.3 {
+    /*@Inject(method = "extractRenderState", at = @At(value = "HEAD"))
+    public void render(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
     *///?} else {
     @Inject(method = "extractRenderState", at = @At(value = "HEAD"))
-    public void render(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+    public void render(GuiGraphicsExtractor guiGraphics, CallbackInfo ci) {
     //?}
         //? if !(neoforge && <= 1.20.3) && !(forge && <= 1.20) {
         ClientRenderer.render(guiGraphics);
@@ -82,9 +85,12 @@ public class GuiMixin {
     *///?} else if <= 1.21.11 {
     /*@Inject(method = "render", at = @At(value = "TAIL"))
     public void renderPost(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+    *///?} else if <= 26.3 {
+    /*@Inject(method = "extractRenderState", at = @At(value = "TAIL"))
+    public void renderPost(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
     *///?} else {
     @Inject(method = "extractRenderState", at = @At(value = "TAIL"))
-    public void renderPost(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+    public void renderPost(GuiGraphicsExtractor guiGraphics, CallbackInfo ci) {
     //?}
 //?}
         //? if !(neoforge && <= 1.20.3) && !(forge && <= 1.20) {
@@ -235,9 +241,16 @@ public class GuiMixin {
             ci.cancel();
         }
     }
+    *///?} else if <= 26.3 {
+    /*@Inject(method = "extractSleepOverlay", at = @At("HEAD"), cancellable = true)
+    private void stopSleepDarkness(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        if (!LifeSeries.modDisabled() && LifeSeries.isSeason(Seasons.NICE_LIFE) && !(RenderUtils.getScreen() instanceof InBedChatScreen) && LifeSeriesClient.hideSleepDarkness) {
+            ci.cancel();
+        }
+    }
     *///?} else {
     @Inject(method = "extractSleepOverlay", at = @At("HEAD"), cancellable = true)
-    private void stopSleepDarkness(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+    private void stopSleepDarkness(GuiGraphicsExtractor guiGraphics, CallbackInfo ci) {
         if (!LifeSeries.modDisabled() && LifeSeries.isSeason(Seasons.NICE_LIFE) && !(RenderUtils.getScreen() instanceof InBedChatScreen) && LifeSeriesClient.hideSleepDarkness) {
             ci.cancel();
         }

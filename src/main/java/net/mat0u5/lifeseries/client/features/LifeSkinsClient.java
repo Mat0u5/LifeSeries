@@ -26,16 +26,16 @@ import net.minecraft.world.entity.player.PlayerSkin;
 //?}
 
 //? if <= 26.3 {
-/*import net.minecraft.client.renderer.texture.DynamicTexture;
- *///?} else {
+//import net.minecraft.client.renderer.texture.DynamicTexture;
+ //?} else {
 import net.minecraft.client.renderer.texture.TextureResources;
 //?}
 
 public class LifeSkinsClient {
 
     //? if <= 1.20 {
-    /*private static final Map<String, Identifier> lifeSkinsTextures = new ConcurrentHashMap<>();
-    *///?} else {
+    //private static final Map<String, Identifier> lifeSkinsTextures = new ConcurrentHashMap<>();
+    //?} else {
     private static final Map<String, Tuple<Identifier, PlayerSkin>> lifeSkinsTextures = new ConcurrentHashMap<>();
     //?}
     private static final Map<UUID, String> currentPlayerSkinIds = new ConcurrentHashMap<>();
@@ -50,10 +50,10 @@ public class LifeSkinsClient {
             NativeImage image = NativeImage.read(new ByteArrayInputStream(textureData));
 
             //? if <= 1.21.4 {
-            /*DynamicTexture texture = new DynamicTexture(image);
-             *///?} else if <= 26.3 {
-            /*DynamicTexture texture = new DynamicTexture(() -> skinId, image);
-            *///?} else {
+            //DynamicTexture texture = new DynamicTexture(image);
+             //?} else if <= 26.3 {
+            //DynamicTexture texture = new DynamicTexture(() -> skinId, image);
+            //?} else {
             TextureResources texture = TextureResources.from2dImage(() -> skinId, image);
             //?}
             removeTexture(skinId);
@@ -61,8 +61,8 @@ public class LifeSkinsClient {
             LifeSeries.LOGGER.info(TextUtils.formatString("Updated life skins texture '{}'", textureId));
 
             //? if <= 1.20 {
-            /*lifeSkinsTextures.put(skinId, textureId);
-            *///?} else if <= 1.21.6 {
+            //lifeSkinsTextures.put(skinId, textureId);
+            //?} else if <= 1.21.6 {
             /*PlayerSkin.Model modelType = slim ? PlayerSkin.Model.SLIM : PlayerSkin.Model.WIDE;
             PlayerSkin skin = new PlayerSkin(textureId, "", null, null, modelType, false);
             lifeSkinsTextures.put(skinId, new Tuple<>(textureId, skin));
@@ -84,16 +84,16 @@ public class LifeSkinsClient {
 
     @Nullable
     //? if <= 1.20 {
-    /*public static Identifier getTexture(UUID playerUUID) {
-    *///?} else {
+    //public static Identifier getTexture(UUID playerUUID) {
+    //?} else {
     public static PlayerSkin getTexture(UUID playerUUID) {
     //?}
         if (playerUUID == null) return null;
         String playerTeamName = currentPlayerSkinIds.get(playerUUID);
         if (playerTeamName == null) return null;
         //? if <= 1.20 {
-        /*return lifeSkinsTextures.get(playerTeamName);
-        *///?} else {
+        //return lifeSkinsTextures.get(playerTeamName);
+        //?} else {
         Tuple<Identifier, PlayerSkin> lifeSkin = lifeSkinsTextures.get(playerTeamName);
         if (lifeSkin == null) return null;
         return lifeSkin.y;
@@ -110,8 +110,8 @@ public class LifeSkinsClient {
         var textureId = lifeSkinsTextures.remove(skinId);
         if (textureId != null) {
             //? if <= 1.20 {
-            /*Minecraft.getInstance().getTextureManager().release(textureId);
-            *///?} else {
+            //Minecraft.getInstance().getTextureManager().release(textureId);
+            //?} else {
             Minecraft.getInstance().getTextureManager().release(textureId.x);
             //?}
         }

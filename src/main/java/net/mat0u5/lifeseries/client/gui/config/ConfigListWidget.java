@@ -55,11 +55,15 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
     public void renderList(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
     *///?} else {
     @Override
-    //~ renames_26_1_volatile
-    protected void extractListItems(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
-    //~ !renames_26_1_volatile
+    //~ renames_26_1_volatile, renames_26_4_volatile
+    protected void extractListItems(GuiGraphicsExtractor context) {
+    //~ !renames_26_1_volatile, !renames_26_4_volatile
     //?}
-
+        //? if >= 26.4 {
+        int mouseX = context.mouseX();
+        int mouseY = context.mouseY();
+        float tickDelta = context.partialTicks();
+        //?}
         //? if <= 1.21.2 {
         //int maxScroll = getMaxScroll();
         //?} else {
@@ -101,7 +105,11 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
                 entry.setWidth(entryWidth);
                 entry.setHeight(entryHeight);
                 //~ renames_26_1_volatile
-                entry.extractContent(context, mouseX, mouseY, hovered, delta);
+                //? if <= 26.3 {
+                //entry.extractContent(context, mouseX, mouseY, hovered, tickDelta);
+                //?} else {
+                entry.extractContent(context, hovered);
+                //?}
                 //~ !renames_26_1_volatile
                 //?}
 
@@ -399,12 +407,20 @@ public class ConfigListWidget extends ObjectSelectionList<ConfigListWidget.Confi
             return configEntry.charTyped(chr, modifiers);
         }
         *///?} else {
-        @Override
+
+
+        //? if <= 26.3 {
+        /*@Override
         //~ renames_26_1_volatile
         public void extractContent(GuiGraphicsExtractor context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         //~ !renames_26_1_volatile
             configEntry.render(context, this.getX(), this.getY(), this.getWidth(), this.getHeight(), mouseX, mouseY, hovered, tickDelta);
         }
+        *///?} else {
+        public void extractContent(GuiGraphicsExtractor context, boolean hovered) {
+            configEntry.render(context, this.getX(), this.getY(), this.getWidth(), this.getHeight(), context.mouseX(), context.mouseY(), hovered, context.partialTicks());
+        }
+        //?}
 
         @Override
         public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {

@@ -15,7 +15,7 @@ import net.minecraft.util.ARGB;
 //? if >= 1.21.2 && <= 1.21.5
 //import net.minecraft.client.renderer.rendertype.RenderType;
 //? if >= 1.21.6
-import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.pipeline.RenderPipelines;
 
 public class VignetteRenderer {
     private static final Identifier VIGNETTE_TEXTURE = IdentifierHelper.vanilla("textures/misc/vignette.png");

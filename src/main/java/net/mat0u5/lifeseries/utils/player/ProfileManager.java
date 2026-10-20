@@ -277,8 +277,8 @@ public class ProfileManager {
                         level.dimensionTypeRegistration(),
                         level.dimension(),
                         //? if <= 26.3 {
-                        /*BiomeManager.obfuscateSeed(level.getSeed()),
-                        *///?}
+                        //BiomeManager.obfuscateSeed(level.getSeed()),
+                        //?}
                         player.gameMode.getGameModeForPlayer(),
                         //? if <= 26.2 {
                         //player.gameMode.getPreviousGameModeForPlayer(),

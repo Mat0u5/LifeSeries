@@ -67,8 +67,12 @@ public class PlayerTabOverlayMixin {
     /*@Redirect(method = "extractRenderState",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/world/scores/ReadOnlyScoreInfo;safeFormatValue(Lnet/minecraft/world/scores/ReadOnlyScoreInfo;Lnet/minecraft/network/chat/numbers/NumberFormat;)Lnet/minecraft/network/chat/MutableComponent;"))
+    *///?} else if <= 26.3 {
+    /*@Redirect(method = "extractRenderState",
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/world/scores/ReadOnlyScoreInfo;formatValue(Lnet/minecraft/network/chat/numbers/NumberFormat;)Lnet/minecraft/network/chat/MutableComponent;"))
     *///?} else {
-    @Redirect(method = "extractRenderState",
+    @Redirect(method = "extractContents",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/world/scores/ReadOnlyScoreInfo;formatValue(Lnet/minecraft/network/chat/numbers/NumberFormat;)Lnet/minecraft/network/chat/MutableComponent;"))
     //?}

@@ -153,8 +153,10 @@ public class Flight extends Superpower {
             //helmet.set(DataComponents.EQUIPPABLE, new Equippable(EquipmentSlot.HEAD, SoundEvents.ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false));
                 //?} else if <= 1.21.5 {
                 //helmet.set(DataComponents.EQUIPPABLE, new Equippable(EquipmentSlot.HEAD, SoundEvents.ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false, false));
+                //?} else if <= 26.3{
+                //helmet.set(DataComponents.EQUIPPABLE, new Equippable(EquipmentSlot.HEAD, SoundEvents.ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false, false, false, BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.SHEARS_SNIP)));
                 //?} else {
-                helmet.set(DataComponents.EQUIPPABLE, new Equippable(EquipmentSlot.HEAD, SoundEvents.ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false, false, false, BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.SHEARS_SNIP)));
+                helmet.set(DataComponents.EQUIPPABLE, new Equippable(EquipmentSlot.HEAD, Optional.of(SoundEvents.ARMOR_EQUIP_GENERIC), Optional.empty(), Optional.empty(), Optional.empty(), false, false, false, false, false, Optional.of(BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.SHEARS_SNIP.value()))));
                 //?}
             //?}
             ItemStackUtils.setCustomComponentBoolean(helmet, "IgnoreBlacklist", true);

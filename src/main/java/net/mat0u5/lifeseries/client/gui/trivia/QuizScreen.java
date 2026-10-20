@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -24,8 +25,8 @@ import java.util.List;
 import net.minecraft.client.input.*;
 
 //? if <= 26.3 {
-/*import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-*///?} else {
+//import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+//?} else {
 import net.minecraft.client.gui.screens.social.EntityPortraitWidget;
 //?}
 
@@ -122,8 +123,8 @@ public class QuizScreen extends DefaultScreen {
             }
         }
         //? if <= 1.21.6 {
-        /*return super.mouseClicked(mouseX, mouseY, button);
-        *///?} else {
+        //return super.mouseClicked(mouseX, mouseY, button);
+        //?} else {
         return super.mouseClicked(click, doubled);
         //?}
     }
@@ -225,11 +226,11 @@ public class QuizScreen extends DefaultScreen {
         }
         if (bot != null) {
             //? if <= 1.20 {
-            /*InventoryScreen.extractEntityInInventoryFollowsMouse(context, x, y+35, size, 0, 0, bot);
-            *///?} else if <= 26.3 {
-            /*InventoryScreen.extractEntityInInventoryFollowsMouse(context, x-30, y-70, x+30, y+70, size, 0.0625F, centerX, centerY+10, bot);
-            *///?} else {
-            EntityPortraitWidget.extractEntityInInventoryFollowsMouse(context, x-30, y-70, x+30, y+70, size, 0.0625F, centerX, centerY+10, bot);
+            //InventoryScreen.extractEntityInInventoryFollowsMouse(context, x, y+35, size, 0, 0, bot);
+            //?} else if <= 26.3 {
+            //InventoryScreen.extractEntityInInventoryFollowsMouse(context, x-30, y-70, x+30, y+70, size, 0.0625F, centerX, centerY+10, bot);
+            //?} else {
+            EntityPortraitWidget.extractEntityInInventoryFollowsMouse(new GuiGraphicsExtractor(Minecraft.getInstance(), context.guiRenderState, centerX, centerY+10), x-30, y-70, x+30, y+70, size, 0.0625F, bot);
             //?}
         }
     }

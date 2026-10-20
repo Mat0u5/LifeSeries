@@ -11,8 +11,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 
 //? if <= 26.3 {
-/*import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-*///?} else {
+//import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+//?} else {
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.Registry;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;

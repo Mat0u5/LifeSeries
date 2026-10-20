@@ -7,7 +7,7 @@ import net.minecraft.resources.Identifier;
 //? if >= 1.21.2 && <= 1.21.5
 //import net.minecraft.client.renderer.rendertype.RenderType;
 //? if >= 1.21.6
-import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.pipeline.RenderPipelines;
 
 public class CustomTextureRenderer {
     private final Identifier texture;

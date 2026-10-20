@@ -57,16 +57,16 @@ public class TriviaAnswerConfigEntry extends ModifiableListEntry {
 
         setCorrectButton.setX(currentX);
         setCorrectButton.setY(y+2);
-        //~ renames_26_1_volatile
-        setCorrectButton.extractRenderState(context, mouseX, mouseY, tickDelta);
+        //~ renames_26_1_volatile, renames_26_4_volatile
+        setCorrectButton.extractRenderState(context);
         setCorrectButton.active = !isCorrect;
         currentX += setCorrectButton.getWidth() + 5;
 
         textField.setY(y+1);
         textField.setX(currentX);
         textField.setWidth(resetButton.getX()-textField.getX()-10);
-        textField.extractRenderState(context, mouseX, mouseY, tickDelta);
-        //~ !renames_26_1_volatile
+        textField.extractRenderState(context);
+        //~ !renames_26_1_volatile, !renames_26_4_volatile
     }
 
     public void onChanged(String text) {

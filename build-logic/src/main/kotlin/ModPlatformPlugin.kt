@@ -581,5 +581,15 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 		stonecutter.replacements.string(stonecutter.eval(stonecutter.current.version, "=26.3"), "!renames_26_3_exact") {
 			replace ("com.mojang.blaze3d.pipeline.RenderPipeline", "com.mojang.renderpearl.api.pipeline.RenderPipeline")
 		}
+		stonecutter.replacements.string(stonecutter.eval(stonecutter.current.version, ">=26.4"), "!renames_26_4") {
+			replace ("net.minecraft.client.renderer.RenderPipelines", "net.minecraft.client.renderer.pipeline.RenderPipelines")
+		}
+		stonecutter.replacements.string(stonecutter.eval(stonecutter.current.version, ">=26.4"), "renames_26_4_volatile") {
+			replace ("extractRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float tickDelta)", "extractRenderState(GuiGraphicsExtractor context)")
+			replace ("extractBackground(GuiGraphicsExtractor context, int mouseX, int mouseY, float tickDelta)", "extractBackground(GuiGraphicsExtractor context)")
+			replace ("extractListItems(GuiGraphicsExtractor context, int mouseX, int mouseY, float tickDelta)", "extractListItems(GuiGraphicsExtractor context)")
+			replace ("extractContent(GuiGraphicsExtractor context, int mouseX, int mouseY, float tickDelta)", "extractContent(GuiGraphicsExtractor context)")
+			replace ("extractRenderState(context, mouseX, mouseY, tickDelta)", "extractRenderState(context)")
+		}
 	}
 }

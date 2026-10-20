@@ -13,8 +13,10 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface ServerLoginPacketListenerImplAccessor {
     //? if <= 1.20 {
     //@Accessor("gameProfile")
-    //?} else {
-    @Accessor("authenticatedProfile")
+    //?} else if <= 26.3 {
+    /*@Accessor("authenticatedProfile")
+    *///?} else {
+    @Accessor("resolvedUserProfile")
     //?}
     GameProfile getGameProfile();
 

@@ -102,14 +102,14 @@ public abstract class DefaultScreen extends Screen {
         super.init();
     }
 
-    //~ renames_26_1_volatile
+    //~ renames_26_1_volatile, renames_26_4_volatile
     @Override
     //? if <= 1.20 {
     //public void extractBackground(GuiGraphicsExtractor context) {}
     //?} else {
-    public void extractBackground(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {}
+    public void extractBackground(GuiGraphicsExtractor context) {}
     //?}
-    //~ !renames_26_1_volatile
+    //~ !renames_26_1_volatile, !renames_26_4_volatile
 
     public void renderBackground(GuiGraphicsExtractor context, int mouseX, int mouseY) {
         // Thick borders
@@ -168,17 +168,21 @@ public abstract class DefaultScreen extends Screen {
 
     }
 
-    //~ renames_26_1_volatile
+    //~ renames_26_1_volatile, renames_26_4_volatile
     @Override
-    public void extractRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
-    //~ !renames_26_1_volatile
+    public void extractRenderState(GuiGraphicsExtractor context) {
+    //~ !renames_26_1_volatile, !renames_26_4_volatile
+        //? if >= 26.4 {
+        int mouseX = context.mouseX();
+        int mouseY = context.mouseY();
+        //?}
         this.renderBackground(context, mouseX, mouseY);
         this.render(context, mouseX, mouseY);
         if (allowCloseButton()) renderClose(context, mouseX, mouseY);
-    //~ renames_26_1_volatile
-        super.extractRenderState(context, mouseX, mouseY, delta);
+    //~ renames_26_1_volatile, renames_26_4_volatile
+        super.extractRenderState(context);
     }
-    //~ !renames_26_1_volatile
+    //~ !renames_26_1_volatile, !renames_26_4_volatile
 
     public abstract void render(GuiGraphicsExtractor context, int mouseX, int mouseY);
 }

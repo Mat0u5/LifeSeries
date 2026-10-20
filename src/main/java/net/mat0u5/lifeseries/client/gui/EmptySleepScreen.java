@@ -125,29 +125,34 @@ public class EmptySleepScreen extends Screen {
         //?}
     }
 
-    //~ renames_26_1_volatile
+    //~ renames_26_1_volatile, renames_26_4_volatile
     @Override
     //? if <= 1.20 {
     //public void extractBackground(GuiGraphicsExtractor context) {}
      //?} else {
-    public void extractBackground(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {}
+    public void extractBackground(GuiGraphicsExtractor context) {}
     //?}
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
+    public void extractRenderState(GuiGraphicsExtractor context) {
+        //? if >= 26.4 {
+        int mouseX = context.mouseX();
+        int mouseY = context.mouseY();
+        float tickDelta = context.partialTicks();
+        //?}
         if (LifeSeriesClient.isAdmin) {
             boolean shouldShow = adminControlsOpen || isMouseNearButton(mouseX, mouseY);
 
             if (shouldShow) {
-                buttonSlideOffset = Math.min(1f, buttonSlideOffset + SLIDE_SPEED * delta * 0.04f);
+                buttonSlideOffset = Math.min(1f, buttonSlideOffset + SLIDE_SPEED * tickDelta * 0.04f);
             } else {
-                buttonSlideOffset = Math.max(0f, buttonSlideOffset - SLIDE_SPEED * delta * 0.04f);
+                buttonSlideOffset = Math.max(0f, buttonSlideOffset - SLIDE_SPEED * tickDelta * 0.04f);
             }
 
             toggleButton.setX(getToggleButtonX());
         }
 
-        super.extractRenderState(context, mouseX, mouseY, delta);
+        super.extractRenderState(context);
         updateCommandButtons();
 
         if (LifeSeriesClient.isAdmin && buttonSlideOffset < 0.3f && !adminControlsOpen) {
@@ -156,7 +161,7 @@ public class EmptySleepScreen extends Screen {
             context.text(this.font, "<", sliverX, sliverY, TextColors.WHITE);
         }
     }
-    //~ !renames_26_1_volatile
+    //~ !renames_26_1_volatile, !renames_26_4_volatile
 
     @Override
     public boolean isPauseScreen() {

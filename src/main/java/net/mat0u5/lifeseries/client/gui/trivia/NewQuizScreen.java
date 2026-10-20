@@ -112,17 +112,21 @@ public class NewQuizScreen extends Screen {
         }
     }
 
-    //~ renames_26_1_volatile
+    //~ renames_26_1_volatile, renames_26_4_volatile
     @Override
     //? if <= 1.20 {
     //public void extractBackground(GuiGraphicsExtractor context) {}
      //?} else {
-    public void extractBackground(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {}
+    public void extractBackground(GuiGraphicsExtractor context) {}
     //?}
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
-    //~ !renames_26_1_volatile
+    public void extractRenderState(GuiGraphicsExtractor context) {
+    //~ !renames_26_1_volatile, !renames_26_4_volatile
+        //? if >= 26.4 {
+        int mouseX = context.mouseX();
+        int mouseY = context.mouseY();
+        //?}
         int quarter1 = this.width / 4;
         int quarter2 = quarter1*2;
         int quarter3 = quarter1*3;

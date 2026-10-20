@@ -77,10 +77,10 @@ public class SoulmateConfigEntry extends ModifiableListEntry {
         textFieldPlayer1.setTextColor(isValidEntryName(getPlayer1()) ? TextColors.WHITE : TextColors.PASTEL_RED);
         textFieldPlayer2.setTextColor(isValidEntryName(getPlayer2()) ? TextColors.WHITE : TextColors.PASTEL_RED);
 
-        //~ renames_26_1_volatile
-        textFieldPlayer1.extractRenderState(context, mouseX, mouseY, tickDelta);
-        textFieldPlayer2.extractRenderState(context, mouseX, mouseY, tickDelta);
-        //~ !renames_26_1_volatile
+        //~ renames_26_1_volatile, renames_26_4_volatile
+        textFieldPlayer1.extractRenderState(context);
+        textFieldPlayer2.extractRenderState(context);
+        //~ !renames_26_1_volatile, !renames_26_4_volatile
 
         RenderUtils.text(Component.nullToEmpty("§f&"), fieldX + fieldWidth + (FIELD_GAP / 2), y + 6).anchorCenter().render(context, textRenderer);
     }

@@ -141,19 +141,24 @@ public class VotingScreen extends Screen {
         return closesWithEsc;
     }
 
-    //~ renames_26_1_volatile
+    //~ renames_26_1_volatile, renames_26_4_volatile
     @Override
     //? if <= 1.20 {
     //public void extractBackground(GuiGraphicsExtractor context) {}
     //?} else {
-    public void extractBackground(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {}
+    public void extractBackground(GuiGraphicsExtractor context) {}
     //?}
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-        searchBox.extractRenderState(graphics, mouseX, mouseY, partialTick);
-    //~ !renames_26_1_volatile
-        RenderUtils.text(title, width / 2, 10).anchorCenter().colored(TextColors.WHITE).withShadow().render(graphics, font);
+    public void extractRenderState(GuiGraphicsExtractor context) {
+        searchBox.extractRenderState(context);
+        //? if >= 26.4 {
+        int mouseX = context.mouseX();
+        int mouseY = context.mouseY();
+        float tickDelta = context.partialTicks();
+        //?}
+    //~ !renames_26_1_volatile, !renames_26_4_volatile
+        RenderUtils.text(title, width / 2, 10).anchorCenter().colored(TextColors.WHITE).withShadow().render(context, font);
 
         submitButton.active = selectedPlayer != null && !selectedPlayer.isEmpty();
 
@@ -167,14 +172,14 @@ public class VotingScreen extends Screen {
             while (minutesStr.length() < 2) minutesStr = "0" + minutesStr;
             Component timerText = TextUtils.format("{}:{}", minutesStr, secondsStr);
 
-            RenderUtils.text(timerText, listRight, 25).anchorCenter().colored(TextColors.WHITE).withShadow().render(graphics, font);
+            RenderUtils.text(timerText, listRight, 25).anchorCenter().colored(TextColors.WHITE).withShadow().render(context, font);
         }
 
         int listTop = LIST_TOP;
         int listBottom = height - LIST_BOTTOM_OFFSET;
         int listHeight = listBottom - listTop;
 
-        graphics.enableScissor(listLeft, listTop, listRight, listBottom);
+        context.enableScissor(listLeft, listTop, listRight, listBottom);
 
         int posY = listTop - scrollOffset;
         for (int i = 0; i < filteredPlayers.size(); i++) {
@@ -184,21 +189,21 @@ public class VotingScreen extends Screen {
                 boolean hovered = mouseX >= listLeft && mouseX <= listRight && mouseY >= posY && mouseY <= posY + PLAYER_ENTRY_HEIGHT;
                 boolean selected = player.name.equals(selectedPlayer);
 
-                drawPlayerEntry(graphics, player, listLeft, posY, listWidth, hovered, selected);
+                drawPlayerEntry(context, player, listLeft, posY, listWidth, hovered, selected);
             }
 
             posY += PLAYER_ENTRY_HEIGHT + 4;
         }
 
-        graphics.disableScissor();
+        context.disableScissor();
 
         if (maxScroll > 0) {
-            drawScrollbar(graphics, listTop, listBottom);
+            drawScrollbar(context, listTop, listBottom);
         }
 
-        //~ renames_26_1_volatile
-        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
-        //~ !renames_26_1_volatile
+        //~ renames_26_1_volatile, renames_26_4_volatile
+        super.extractRenderState(context);
+        //~ !renames_26_1_volatile, !renames_26_4_volatile
     }
 
     private void drawPlayerEntry(GuiGraphicsExtractor graphics, PlayerEntry player, int x, int y, int width, boolean hovered, boolean selected) {

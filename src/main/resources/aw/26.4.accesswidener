@@ -10,3 +10,4 @@ mutable field net/minecraft/world/entity/LivingEntity swingState Lnet/minecraft/
 accessible field net/minecraft/client/resources/sounds/EntityBoundSoundInstance entity Lnet/minecraft/world/entity/Entity;
 mutable field net/minecraft/client/resources/sounds/EntityBoundSoundInstance entity Lnet/minecraft/world/entity/Entity;
 accessible field net/minecraft/core/registries/BuiltinRegistryBuilder registry Lnet/minecraft/core/WritableRegistry;
+accessible field net/minecraft/client/gui/GuiGraphicsExtractor guiRenderState Lnet/minecraft/client/renderer/state/gui/GuiRenderState;

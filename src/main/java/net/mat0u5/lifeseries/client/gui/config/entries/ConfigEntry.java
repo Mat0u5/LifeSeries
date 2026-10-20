@@ -119,9 +119,9 @@ public abstract class ConfigEntry {
             resetButton.setX(resetButtonX);
             resetButton.setY(y + RESET_BUTTON_OFFSET_Y + additionalResetButtonOffsetY());
             resetButton.active = canReset();
-            //~ renames_26_1_volatile
-            resetButton.extractRenderState(context, mouseX, mouseY, tickDelta);
-            //~ !renames_26_1_volatile
+            //~ renames_26_1_volatile, renames_26_4_volatile
+            resetButton.extractRenderState(context);
+            //~ !renames_26_1_volatile, !renames_26_4_volatile
         }
 
         if (hasError()) {

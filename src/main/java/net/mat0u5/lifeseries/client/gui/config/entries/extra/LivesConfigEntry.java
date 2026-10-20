@@ -31,12 +31,12 @@ public class LivesConfigEntry extends NullableIntegerConfigEntry {
         super.renderEntry(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
         addButton.setX(textField.getX() - 39);
         addButton.setY(y + 2);
-        //~ renames_26_1_volatile
-        addButton.extractRenderState(context, mouseX, mouseY, tickDelta);
+        //~ renames_26_1_volatile, renames_26_4_volatile
+        addButton.extractRenderState(context);
         subtractButton.setX(textField.getX() - 20);
         subtractButton.setY(y + 2);
-        subtractButton.extractRenderState(context, mouseX, mouseY, tickDelta);
-        //~ !renames_26_1_volatile
+        subtractButton.extractRenderState(context);
+        //~ !renames_26_1_volatile, !renames_26_4_volatile
     }
 
     //? if <= 1.21.6 {

@@ -111,13 +111,13 @@ public class TeamConfigEntry extends ModifiableListEntry {
         textFieldAllowedKill.setX(field4X);
         textFieldGainLife.setX(field5X);
 
-        //~ renames_26_1_volatile
-        textFieldLives.extractRenderState(context, mouseX, mouseY, tickDelta);
-        textFieldName.extractRenderState(context, mouseX, mouseY, tickDelta);
-        textFieldColor.extractRenderState(context, mouseX, mouseY, tickDelta);
-        textFieldAllowedKill.extractRenderState(context, mouseX, mouseY, tickDelta);
-        textFieldGainLife.extractRenderState(context, mouseX, mouseY, tickDelta);
-        //~ !renames_26_1_volatile
+        //~ renames_26_1_volatile, renames_26_4_volatile
+        textFieldLives.extractRenderState(context);
+        textFieldName.extractRenderState(context);
+        textFieldColor.extractRenderState(context);
+        textFieldAllowedKill.extractRenderState(context);
+        textFieldGainLife.extractRenderState(context);
+        //~ !renames_26_1_volatile, !renames_26_4_volatile
         textFieldLives.setEditable(!isNonEditableLivesTeam());
 
         if (getTeamNum() == null) textFieldLives.setTextColor(TextColors.PASTEL_RED);

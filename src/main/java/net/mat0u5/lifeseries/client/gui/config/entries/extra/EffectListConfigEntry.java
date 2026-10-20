@@ -28,7 +28,7 @@ import net.minecraft.util.ARGB;
 import net.minecraft.client.resources.MobEffectTextureManager;
 *///?}
 //? if >= 1.21.6 {
-import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.pipeline.RenderPipelines;
 //?}
 //? if >= 1.21.6 <= 26.1
 //import net.minecraft.client.gui.Gui;

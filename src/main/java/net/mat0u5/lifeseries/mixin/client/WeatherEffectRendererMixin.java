@@ -13,8 +13,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import net.minecraft.resources.Identifier;
 
 //? if <= 26.1 {
-/*import net.minecraft.world.level.Level;
-*///?} else {
+//import net.minecraft.world.level.Level;
+//?} else {
 import net.minecraft.client.multiplayer.ClientLevel;
 //?}
 
@@ -35,8 +35,8 @@ import net.minecraft.client.renderer.texture.TextureHandle;
 //?}
 
 //? if >= 1.21.4 <= 1.21.11 {
-/*import net.minecraft.client.renderer.rendertype.RenderType;
-*///?}
+//import net.minecraft.client.renderer.rendertype.RenderType;
+//?}
 //? if <= 1.21.9
 //import net.minecraft.client.multiplayer.ClientLevel;
 
@@ -91,7 +91,7 @@ public abstract class WeatherEffectRendererMixin {
     /*@ModifyArg(method = "render(Lnet/minecraft/client/renderer/state/level/WeatherRenderState;Lcom/mojang/renderpearl/api/commands/RenderPass;Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/WeatherEffectRenderer;renderWeather(Lcom/mojang/renderpearl/api/commands/RenderPass;Lnet/minecraft/client/renderer/texture/AbstractTexture;II)V"), index = 1)
     public AbstractTexture render(AbstractTexture texture) {
     *///?} else {
-    @ModifyArg(method = "render(Lnet/minecraft/client/renderer/state/level/WeatherRenderState;Lcom/mojang/renderpearl/api/commands/RenderPass;Lcom/mojang/blaze3d/pipeline/RenderPipeline;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/WeatherEffectRenderer;renderWeather(Lcom/mojang/renderpearl/api/commands/RenderPass;Lnet/minecraft/client/renderer/texture/TextureHandle;II)V"), index = 1)
+    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/WeatherEffectRenderer;renderWeather(Lcom/mojang/renderpearl/api/commands/RenderPass;Lnet/minecraft/client/renderer/texture/TextureHandle;II)V"), index = 1)
     public TextureHandle render(TextureHandle texture) {
     //?}
 //?} else {
@@ -120,8 +120,8 @@ public abstract class WeatherEffectRendererMixin {
 *///?}
         if (LifeSeriesClient.NICE_LIFE_LESS_SNOW && !LifeSeries.modDisabled() && LifeSeries.isSeason(Seasons.NICE_LIFE)) {
             //? if <= 26.2 {
-            /*boolean isSnow = resourceLocation.getPath().contains("snow.png");
-            *///?} else {
+            //boolean isSnow = resourceLocation.getPath().contains("snow.png");
+            //?} else {
             boolean isSnow = texture.equals(ls$getSnowTexture());
             //?}
             if (isSnow) {
@@ -129,21 +129,21 @@ public abstract class WeatherEffectRendererMixin {
                 /*original.call(i, LESS_SNOW_RESOURCE_LOCATION);
                 return;
                 *///?} else if <= 1.21.11 {
-                /*return original.call(LESS_SNOW_RESOURCE_LOCATION, bl);
-                *///?} else if <= 26.2 {
-                /*return LESS_SNOW_RESOURCE_LOCATION;
-                *///?} else {
+                //return original.call(LESS_SNOW_RESOURCE_LOCATION, bl);
+                //?} else if <= 26.2 {
+                //return LESS_SNOW_RESOURCE_LOCATION;
+                //?} else {
                 return LESS_SNOW_RESOURCE;
                 //?}
             }
         }
         //? if <= 1.21.2 {
-        /*original.call(i, resourceLocation);
-        *///?} else if <= 1.21.11 {
-        /*return original.call(resourceLocation, bl);
-        *///?} else if <= 26.2 {
-        /*return resourceLocation;
-        *///?} else {
+        //original.call(i, resourceLocation);
+        //?} else if <= 1.21.11 {
+        //return original.call(resourceLocation, bl);
+        //?} else if <= 26.2 {
+        //return resourceLocation;
+        //?} else {
         return texture;
         //?}
     }

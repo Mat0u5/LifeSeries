@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 //? if <= 26.3 {
-/*import net.minecraft.client.renderer.texture.DynamicTexture;
-*///?} else {
+//import net.minecraft.client.renderer.texture.DynamicTexture;
+//?} else {
 import net.minecraft.client.renderer.texture.TextureResources;
 //?}
 
@@ -36,10 +36,10 @@ public class TriviaSkinsClient {
             }
 
             //? if <= 1.21.4 {
-            /*DynamicTexture texture = new DynamicTexture(image);
-            *///?} else if <= 26.3 {
-            /*DynamicTexture texture = new DynamicTexture(() -> skinName, image);
-            *///?} else {
+            //DynamicTexture texture = new DynamicTexture(image);
+            //?} else if <= 26.3 {
+            //DynamicTexture texture = new DynamicTexture(() -> skinName, image);
+            //?} else {
             TextureResources texture = TextureResources.from2dImage(() -> skinName, image);
             //?}
             removeTriviaTexture(skinName);

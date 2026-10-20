@@ -304,7 +304,9 @@ public class Hunger extends Wildcard {
         if (item == null) return;
         if (bannedFoodItems.contains(item)) return;
         components.set(DataComponents.CONSUMABLE,
-                new Consumable(Consumable.DEFAULT_CONSUME_SECONDS, ItemUseAnimation.EAT, SoundEvents.GENERIC_EAT, true, List.of())
+                //~ if >= 26.4 'SoundEvents.GENERIC_EAT' -> 'Optional.of(SoundEvents.GENERIC_EAT)' {
+                new Consumable(Consumable.DEFAULT_CONSUME_SECONDS, ItemUseAnimation.EAT, Optional.of(SoundEvents.GENERIC_EAT), true, List.of())
+                //~}
         );
         components.set(DataComponents.FOOD, new FoodProperties(0, 0, false));
     }
