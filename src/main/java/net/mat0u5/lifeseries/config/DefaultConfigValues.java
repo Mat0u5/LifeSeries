@@ -449,10 +449,10 @@ public abstract class DefaultConfigValues extends GuiConfig {
     protected DefaultConfigValues(String configId, String guiTitle, String folderPath, String filePath) {
         super(configId, guiTitle, folderPath, filePath);
         //? if < 1.21.6 {
-        /*removeEntry(LOCATOR_BAR);
-        *///?}
+        //removeEntry(LOCATOR_BAR);
+        //?}
         //? if < 1.20.3 {
-        /*removeEntry(TICK_FREEZE_NOT_IN_SESSION);
-        *///?}
+        //removeEntry(TICK_FREEZE_NOT_IN_SESSION);
+        //?}
     }
 }

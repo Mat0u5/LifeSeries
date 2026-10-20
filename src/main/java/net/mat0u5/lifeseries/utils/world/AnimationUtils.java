@@ -64,10 +64,10 @@ public class AnimationUtils {
         ItemStack totemItem = Items.TOTEM_OF_UNDYING.getDefaultInstance();
         ItemStackUtils.setCustomComponentBoolean(totemItem, "FakeTotem", true);
         //? if <= 1.20.3 {
-        /*ItemStackUtils.setCustomComponentInt(totemItem, "CustomModelData", red ? 2 : 1);
-        *///?} else if <= 1.21 {
-        /*totemItem.set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(red ? 2 : 1));
-        *///?} else {
+        //ItemStackUtils.setCustomComponentInt(totemItem, "CustomModelData", red ? 2 : 1);
+        //?} else if <= 1.21 {
+        //totemItem.set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(red ? 2 : 1));
+        //?} else {
         totemItem.set(DataComponents.ITEM_MODEL, IdentifierHelper.lifeseries(red ? "task_red_totem" : "task_totem"));
         //?}
         return totemItem;
@@ -189,8 +189,8 @@ public class AnimationUtils {
 
                     // Create the particle effect with the generated color and size
                     //? if <= 1.21 {
-                    /*DustParticleOptions particleEffect = new DustParticleOptions(color, 1.0f);
-                    *///?} else
+                    //DustParticleOptions particleEffect = new DustParticleOptions(color, 1.0f);
+                    //?} else
                     DustParticleOptions particleEffect = new DustParticleOptions(new Color(color.x, color.y, color.z).getRGB(), 1.0f);
 
                     // Spawn particle with random offset

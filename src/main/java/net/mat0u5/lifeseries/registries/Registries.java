@@ -20,8 +20,8 @@ public class Registries {
 		registerEvents();
 		registerCommands();
 		//? if <= 1.20.2 {
-		/*registerCustomResourcepack();
-		*///?}
+		//registerCustomResourcepack();
+		//?}
 		Season.registerEvents();
 	}
 

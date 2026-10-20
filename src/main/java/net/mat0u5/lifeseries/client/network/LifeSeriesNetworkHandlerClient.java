@@ -118,8 +118,8 @@ public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
             EntityType<?> morphType = null;
             if (!morphTypeStr.equalsIgnoreCase("null") && !morphUUIDStr.isEmpty()) {
                 //? if <= 1.21 {
-                /*morphType = BuiltInRegistries.ENTITY_TYPE.get(IdentifierHelper.parse(morphTypeStr));
-                 *///?} else {
+                //morphType = BuiltInRegistries.ENTITY_TYPE.get(IdentifierHelper.parse(morphTypeStr));
+                 //?} else {
                 morphType = BuiltInRegistries.ENTITY_TYPE.getValue(IdentifierHelper.parse(morphTypeStr));
                 //?}
             }
@@ -215,8 +215,8 @@ public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
                 totemItem = AnimationUtils.getSecretLifeTotemItem(payload.value().equalsIgnoreCase("task_red"));
             }
             //? if <= 26.2 {
-            /*Minecraft.getInstance().gameRenderer.displayItemActivation(totemItem);
-            *///?} else {
+            //Minecraft.getInstance().gameRenderer.displayItemActivation(totemItem);
+            //?} else {
             Minecraft.getInstance().player.displayItemActivation(totemItem);
             //?}
         });
@@ -393,8 +393,8 @@ public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
         LifeSeriesClient.sideTitle = payload.text();
         Minecraft client = Minecraft.getInstance();
         //? if <= 26.2 {
-        /*if (client.gui instanceof GuiAccessor hudAccessor) {
-        *///?} else {
+        //if (client.gui instanceof GuiAccessor hudAccessor) {
+        //?} else {
         if (client.gui.hud instanceof GuiAccessor hudAccessor) {
         //?}
             TextHud.sideTitleRemainTicks = hudAccessor.ls$titleFadeInTicks() + hudAccessor.ls$titleStayTicks() + hudAccessor.ls$titleFadeOutTicks();

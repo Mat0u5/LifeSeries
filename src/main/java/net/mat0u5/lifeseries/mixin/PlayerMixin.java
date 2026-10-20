@@ -30,8 +30,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 //? if <= 1.20.5 {
-/*import net.minecraft.world.item.enchantment.FrostWalkerEnchantment;
-*///?} else {
+//import net.minecraft.world.item.enchantment.FrostWalkerEnchantment;
+//?} else {
 import net.minecraft.core.Vec3i;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
@@ -87,8 +87,8 @@ public abstract class PlayerMixin implements IPlayerUsername {
 
     //? if <= 1.21.6 {
     /*//? if <= 1.20.3 {
-    /^@Inject(method = "getDimensions", at = @At("HEAD"), cancellable = true)
-    ^///?} else {
+    //@Inject(method = "getDimensions", at = @At("HEAD"), cancellable = true)
+    //?} else {
     @Inject(method = "getDefaultDimensions", at = @At("HEAD"), cancellable = true)
     //?}
     public void getBaseDimensions(Pose pose, CallbackInfoReturnable<EntityDimensions> cir) {
@@ -129,8 +129,8 @@ public abstract class PlayerMixin implements IPlayerUsername {
         if (!SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPERSPEED)) return;
 
         //? if <= 1.20.5 {
-        /*FrostWalkerEnchantment.onEntityMoved(entity, entity.level(), entity.blockPosition(), Superspeed.FROST_WALKER_LEVEL.get());
-        *///?} else {
+        //FrostWalkerEnchantment.onEntityMoved(entity, entity.level(), entity.blockPosition(), Superspeed.FROST_WALKER_LEVEL.get());
+        //?} else {
         ls$frostWalker.apply(((IPlayer) player).ls$getServerLevel(), Superspeed.FROST_WALKER_LEVEL.get(), null, player, player.position());
         //?}
     }

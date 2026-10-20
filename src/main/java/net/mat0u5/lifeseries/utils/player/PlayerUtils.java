@@ -125,14 +125,14 @@ public class PlayerUtils extends net.mat0u5.matlib.utils.player.PlayerUtils {
 
     public static ClientboundPlayerInfoUpdatePacket.Entry getPlayerListEntry(ServerPlayer player, boolean listed) {
         //? if <= 1.20 {
-        /*return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.latency, player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
-        *///?} else if <= 1.21 {
-        /*return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), (RemoteChatSession.Data) Optionull.map(player.getChatSession(), RemoteChatSession::asData));
-        *///?} else if <= 1.21.2 {
-        /*return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), player.getTabListOrder(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
-        *///?} else if <= 1.21.6 {
-        /*return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), player.isModelPartShown(PlayerModelPart.HAT), player.getTabListOrder(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
-        *///?} else {
+        //return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.latency, player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
+        //?} else if <= 1.21 {
+        //return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), (RemoteChatSession.Data) Optionull.map(player.getChatSession(), RemoteChatSession::asData));
+        //?} else if <= 1.21.2 {
+        //return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), player.getTabListOrder(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
+        //?} else if <= 1.21.6 {
+        //return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode.getGameModeForPlayer(), player.getTabListDisplayName(), player.isModelPartShown(PlayerModelPart.HAT), player.getTabListOrder(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
+        //?} else {
         return new ClientboundPlayerInfoUpdatePacket.Entry(player.getUUID(), player.getGameProfile(), listed, player.connection.latency(), player.gameMode(), player.getTabListDisplayName(), player.isModelPartShown(PlayerModelPart.HAT), player.getTabListOrder(), (RemoteChatSession.Data)Optionull.map(player.getChatSession(), RemoteChatSession::asData));
         //?}
     }

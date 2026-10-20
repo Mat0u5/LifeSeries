@@ -216,8 +216,8 @@ public class SeasonConfig extends DefaultConfigValues {
             String validKillStr = validKill != null ? String.valueOf(validKill) : "";
             String gainLifeStr = gainLife != null ? String.valueOf(gainLife) : "";
             //? if <= 26.1 {
-            /*String teamColorName = team.getColor().getName();
-            *///?} else {
+            //String teamColorName = team.getColor().getName();
+            //?} else {
             String teamColorName = team.getColor().orElse(TeamColor.WHITE).getSerializedName();
             //?}
             result.add(new DynamicEntry(

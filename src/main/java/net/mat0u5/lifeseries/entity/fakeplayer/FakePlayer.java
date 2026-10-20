@@ -82,21 +82,21 @@ public class FakePlayer extends FakeServerPlayer {
 
     @Override
     //? if <= 1.21 {
-    /^public boolean hurt(DamageSource source, float amount) {
-    ^///?} else {
+    //public boolean hurt(DamageSource source, float amount) {
+    //?} else {
     public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
     //?}
         AstralProjection projection = getProjection();
         if (projection != null) {
             //? if <= 1.21 {
-            /^projection.onDamageClone(source, amount);
-            ^///?} else {
+            //projection.onDamageClone(source, amount);
+            //?} else {
             projection.onDamageClone(level, source, amount);
             //?}
         }
         //? if <= 1.21 {
-        /^return super.hurt(source, amount);
-        ^///?} else {
+        //return super.hurt(source, amount);
+        //?} else {
         return super.hurtServer(level, source, amount);
         //?}
     }

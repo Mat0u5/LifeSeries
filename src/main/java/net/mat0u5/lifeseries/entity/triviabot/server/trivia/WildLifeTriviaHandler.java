@@ -55,8 +55,8 @@ import static net.mat0u5.lifeseries.LifeSeries.*;
 import static net.mat0u5.matlib.MatLib.*;
 
 //? if <= 1.20.3 {
-/*import net.minecraft.core.particles.DustParticleOptions;
-*///?} else {
+//import net.minecraft.core.particles.DustParticleOptions;
+//?} else {
 import net.minecraft.core.particles.ColorParticleOption;
 //?}
 //? if >= 1.20.5 {
@@ -67,8 +67,8 @@ import net.minecraft.world.entity.EntityReference;
 //? if <= 1.20.3
 //import org.joml.Vector3f;
 //? if <= 26.1 {
-/*import net.minecraft.world.entity.EntityType;
-*///?} else {
+//import net.minecraft.world.entity.EntityType;
+//?} else {
 import net.minecraft.world.entity.EntityTypes;
 //?}
 
@@ -190,8 +190,8 @@ public class WildLifeTriviaHandler extends TriviaHandler {
                 triviaSnail.serverData.setBoundPlayer(bot.serverData.getBoundPlayer());
                 triviaSnail.serverData.setFromTrivia();
                 //? if <= 1.20.3 {
-                /*triviaSnail.playSound(SoundEvents.GENERIC_EXPLODE, 0.5f, 2);
-                *///?} else {
+                //triviaSnail.playSound(SoundEvents.GENERIC_EXPLODE, 0.5f, 2);
+                //?} else {
                 triviaSnail.playSound(SoundEvents.GENERIC_EXPLODE.value(), 0.5f, 2);
                 //?}
                 ServerLevel level = (ServerLevel) triviaSnail.level();
@@ -266,12 +266,12 @@ public class WildLifeTriviaHandler extends TriviaHandler {
         //?}
         int minCurseNum = 0;
         //? if < 1.21 {
-        /*minCurseNum = 1;
-        *///?}
+        //minCurseNum = 1;
+        //?}
         int numOfCurses = 9;
         //? if <= 1.20.3 {
-        /*numOfCurses--;
-        *///?}
+        //numOfCurses--;
+        //?}
         if (CompatibilityManager.voicechatLoaded() && VoicechatMain.isConnectedToSVC(player.getUUID())) numOfCurses = 10;
 
         Integer punishmentWeight = ((IPlayer) player).ls$getLives();
@@ -343,29 +343,29 @@ public class WildLifeTriviaHandler extends TriviaHandler {
     }
 
     //? if <= 1.20.3 {
-    /*private static List<MobEffect> loadedBlessEffects;
-    *///?} else {
+    //private static List<MobEffect> loadedBlessEffects;
+    //?} else {
     private static List<Holder<MobEffect>> loadedBlessEffects;
     //?}
 
     //? if <= 1.20.3 {
-    /*public static List<MobEffect> getBlessEffects() {
-     *///?} else {
+    //public static List<MobEffect> getBlessEffects() {
+     //?} else {
     public static List<Holder<MobEffect>> getBlessEffects() {
         //?}
         if (server == null) return new ArrayList<>();
 
         if (loadedBlessEffects != null) return loadedBlessEffects;
         //? if <= 1.20.3 {
-        /*List<MobEffect> newList = new ArrayList<>();
-         *///?} else {
+        //List<MobEffect> newList = new ArrayList<>();
+         //?} else {
         List<Holder<MobEffect>> newList = new ArrayList<>();
         //?}
 
         Registry<MobEffect> effectsRegistry = server.registryAccess()
                 //? if <=1.21 {
-                /*.registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
-                 *///?} else
+                //.registryOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
+                 //?} else
                 .lookupOrThrow(ResourceKey.createRegistryKey(IdentifierHelper.vanilla("mob_effect")));
 
         for (String potionId : loadBlessEffects()) {
@@ -373,8 +373,8 @@ public class WildLifeTriviaHandler extends TriviaHandler {
                 MobEffect effect = RegistryUtils.resolveRegistryEntry(effectsRegistry, potionId);
                 if (effect != null) {
                     //? if <= 1.20.3 {
-                    /*newList.add(effect);
-                     *///?} else {
+                    //newList.add(effect);
+                     //?} else {
                     newList.add(effectsRegistry.wrapAsHolder(effect));
                     //?}
                 }
@@ -418,8 +418,8 @@ public class WildLifeTriviaHandler extends TriviaHandler {
 
             String romanNumeral = TextUtils.toRomanNumeral(amplifier + 1);
             //? if <= 1.20.3 {
-            /*Component effectName = effect.getDisplayName();
-            *///?} else {
+            //Component effectName = effect.getDisplayName();
+            //?} else {
             Component effectName = Component.translatable(effect.value().getDescriptionId());
             //?}
             ((IPlayer) player).ls$message(ModifiableText.WILDLIFE_TRIVIA_RECEIVE_EFFECT.get(effectName, romanNumeral));
@@ -579,8 +579,8 @@ public class WildLifeTriviaHandler extends TriviaHandler {
         //? if >= 1.21.5 {
         AttributeUtils.JUMP_STRENGTH.of(player).set(0.85);
         //?} else {
-        /*AttributeUtils.JUMP_STRENGTH.of(player).set(0.76);
-        *///?}
+        //AttributeUtils.JUMP_STRENGTH.of(player).set(0.76);
+        //?}
     }
 
     public static void curseBeeswarm(ServerPlayer player, BlockPos pos) {

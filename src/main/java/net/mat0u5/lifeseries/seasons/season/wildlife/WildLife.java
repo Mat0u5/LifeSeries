@@ -248,8 +248,8 @@ public class WildLife extends Season {
         if (damageSource.getDirectEntity() instanceof Player) {
             if (entity instanceof Warden || entity instanceof WitherBoss || entity instanceof EnderDragon) {
                 //? if <= 1.21 {
-                /*entity.spawnAtLocation(Items.TOTEM_OF_UNDYING.getDefaultInstance());
-                 *///?} else {
+                //entity.spawnAtLocation(Items.TOTEM_OF_UNDYING.getDefaultInstance());
+                 //?} else {
                 entity.spawnAtLocation((ServerLevel) entity.level(), Items.TOTEM_OF_UNDYING.getDefaultInstance());
                 //?}
             }
@@ -336,8 +336,8 @@ public class WildLife extends Season {
         Entity sourceEntity = source.getEntity();
         if (sourceEntity != null && SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPER_PUNCH)) {
             //? if <= 1.21 {
-            /*sourceEntity.hurt(player.damageSources().thorns(player), (float) (double) SuperPunch.THORNS_DAMAGE.get());
-             *///?} else {
+            //sourceEntity.hurt(player.damageSources().thorns(player), (float) (double) SuperPunch.THORNS_DAMAGE.get());
+             //?} else {
             sourceEntity.hurtServer(((IPlayer) player).ls$getServerLevel(), player.damageSources().thorns(player), (float) (double) SuperPunch.THORNS_DAMAGE.get());
             //?}
         }

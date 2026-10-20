@@ -55,10 +55,10 @@ public class LifeSeries implements MultiplatformModInitializer {
 		ServerPackSourceEvents.GATHER_PACKS.register(() -> List.of(
 				new ModBuiltInPacks.PackDef(IdentifierHelper.lifeseries("lifeseries_datapack"), Component.literal("Life Series Datapack"), true)
 				//? if <= 1.20.4 {
-				/*,new ModBuiltInPacks.PackDef(IdentifierHelper.lifeseries("lifeseries_datapack_1.20-1.20.4"), Component.literal("Life Series Datapack"), true)
-				 *///?} else if <= 1.20.5 {
-				/*,new ModBuiltInPacks.PackDef(IdentifierHelper.lifeseries("lifeseries_datapack_1.20.5"), Component.literal("Life Series Datapack"), true)
-				 *///?}
+				//,new ModBuiltInPacks.PackDef(IdentifierHelper.lifeseries("lifeseries_datapack_1.20-1.20.4"), Component.literal("Life Series Datapack"), true)
+				 //?} else if <= 1.20.5 {
+				//,new ModBuiltInPacks.PackDef(IdentifierHelper.lifeseries("lifeseries_datapack_1.20.5"), Component.literal("Life Series Datapack"), true)
+				 //?}
 		));
 		ServerLanguageEvents.LOAD_LANG_FILES.register(() -> List.of("/resourcepacks/lifeseries/assets/lifeseries/lang/en_us.json"));
 		Registries.register();

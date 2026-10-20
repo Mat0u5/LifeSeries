@@ -124,8 +124,8 @@ public class DoubleLifeConfig extends SeasonConfig {
         removeEntry(NO_SEASON_SPECIFIC);
         removeEntry(DEATH_TITLE_MATCH_DEATH_MESSAGE);
         //? if < 1.21.6 {
-        /*removeEntry(SOULMATE_LOCATOR_BAR);
-        *///?}
+        //removeEntry(SOULMATE_LOCATOR_BAR);
+        //?}
 
         CUSTOM_ENCHANTER_ALGORITHM.defaultValue(true);
         BLACKLIST_ITEMS.defaultValue(BLACKLISTED_ITEMS);

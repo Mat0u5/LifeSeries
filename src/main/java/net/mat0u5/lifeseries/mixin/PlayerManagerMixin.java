@@ -44,8 +44,8 @@ public abstract class PlayerManagerMixin implements IPlayerManager {
 
     @Redirect(method = "placeNewPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Z)V"))
     //? if <= 1.20 {
-    /*public void skipLoginMessage(PlayerList instance, Component message, boolean overlay, Connection connection, ServerPlayer player) {
-    *///?} else {
+    //public void skipLoginMessage(PlayerList instance, Component message, boolean overlay, Connection connection, ServerPlayer player) {
+    //?} else {
     public void skipLoginMessage(PlayerList instance, Component message, boolean overlay, Connection connection, ServerPlayer player, CommonListenerCookie clientData) {
     //?}
         if (LifeSeries.isClientOrDisabled() || player == null) {

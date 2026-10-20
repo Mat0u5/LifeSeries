@@ -65,8 +65,8 @@ import static net.mat0u5.matlib.MatLib.*;
 import net.minecraft.network.DisconnectionDetails;
  //?}
 //? if <= 26.1 {
-/*import net.minecraft.ChatFormatting;
- *///?} else {
+//import net.minecraft.ChatFormatting;
+ //?} else {
 import net.minecraft.world.scores.TeamColor;
 //?}
 //? if <= 1.20.3 {
@@ -436,8 +436,8 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
         Component disconnectText = Component.literal("[Life Series Mod] Client-Server version mismatch!\n" +
                 "Update the client version to at least version "+OldHandshakePayload.OLD_PACKET_VERSION_BREAKOFF);
         //? if <= 1.20.5 {
-        /*player.connection.disconnect(disconnectText);
-         *///?} else {
+        //player.connection.disconnect(disconnectText);
+         //?} else {
         player.connection.disconnect(new DisconnectionDetails(disconnectText));
         //?}
     }
@@ -523,8 +523,8 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
                 List<String> result = new ArrayList<>();
                 for (ResourceKey<Enchantment> enchant : lvl1ClampedEnchants) {
                     //? if <= 1.21.9 {
-                    /*result.add(enchant.location().toString());
-                    *///?} else {
+                    //result.add(enchant.location().toString());
+                    //?} else {
                     result.add(enchant.identifier().toString());
                     //?}
                 }
@@ -567,8 +567,8 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
         if (!currentSeason.getSeason().requiresClient()) return;
         if (wasHandshakeSuccessful(player)) return;
         //? if <= 1.20.5 {
-        /*player.connection.disconnect(getDisconnectClientText());
-        *///?} else {
+        //player.connection.disconnect(getDisconnectClientText());
+        //?} else {
         player.connection.disconnect(new DisconnectionDetails(getDisconnectClientText()));
          //?}
     }
