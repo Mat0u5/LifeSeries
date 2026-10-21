@@ -12,7 +12,7 @@ public class DoubleLifeSecretSociety extends SecretSociety {
 
 	@Override
 	public int addMember(List<ServerPlayer> memberPlayers, ServerPlayer player) {
-		if (!DoubleLife.SOULBOUND_SECRET_SOCIETY) {
+		if (!DoubleLife.SOULBOUND_SECRET_SOCIETY.get()) {
 			return super.addMember(memberPlayers, player);
 		}
 		memberPlayers.add(player);

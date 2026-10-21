@@ -1,12 +1,14 @@
 package net.mat0u5.lifeseries.seasons.season.nicelife;
 
+import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.angrysnowman.AngrySnowman;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
@@ -15,10 +17,10 @@ import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.other.Tuple;
+import net.mat0u5.matlib.utils.other.Tuple;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
-import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.mat0u5.matlib.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -30,7 +32,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.livesManager;
-import static net.mat0u5.lifeseries.LifeSeries.server;
+import static net.mat0u5.matlib.MatLib.server;
 
 //? if <= 26.2 {
 //import net.minecraft.world.level.block.BedBlock;
@@ -44,19 +46,19 @@ public class NiceLifeTriviaManager {
     private static List<String> usedQuestions = new ArrayList<>();
     public static boolean triviaInProgress = false;
     public static boolean firstTriviaInSession = true;
-    public static NightLength nightLength = NightLength.FIRST_LONG;
+    public static final ConfigRef<NightLength> nightLength = ConfigRef.of(() -> NiceLifeConfig.get().TRIVIA_NIGHT_LENGTH);
     public static TriviaQuestion currentQuestion = TriviaQuestion.getDefault();
     public static Random rnd = new Random();
-    public static int QUESTION_TIME = 68;
-    public static boolean CAN_BREAK_BEDS = true;
-    public static boolean BREAKING_DROPS_RESOURCES = true;
+    public static final ConfigRef<Integer> QUESTION_TIME = ConfigRef.of(() -> NiceLifeConfig.get().TRIVIA_QUESTION_TIME);
+    public static final ConfigRef<Boolean> CAN_BREAK_BEDS = ConfigRef.of(() -> NiceLifeConfig.get().BOT_CAN_BREAK_BEDS);
+    public static final ConfigRef<Boolean> BREAKING_DROPS_RESOURCES = ConfigRef.of(() -> NiceLifeConfig.get().BOT_BREAKING_BLOCKS_DROP_RESOURCES);
     public static List<TriviaSpawn> triviaSpawns = new ArrayList<>();
     public static List<UUID> triviaPlayersUUID = new ArrayList<>();
     public static boolean preparingForSpawn = false;
     public static List<UUID> correctAnswers = new ArrayList<>();
     public static List<UUID> incorrectAnswers = new ArrayList<>();
     public static TriviaQuestion preAssignedTrivia = null;
-    public static boolean SHOW_NONSLEEPING = false;
+    public static final ConfigRef<Boolean> SHOW_NONSLEEPING = ConfigRef.of(() -> NiceLifeConfig.get().TRIVIA_SHOW_NONSLEEPING);
 
     public static void initialize() {
         triviaQuestions = new TriviaQuestionManager("./config/lifeseries/nicelife","trivia.json");
@@ -73,7 +75,7 @@ public class NiceLifeTriviaManager {
             VoicechatMain.niceLifeTriviaStart(triviaPlayers);
         }
 
-        NetworkHandlerServer.sendUpdatePackets();
+        LifeSeriesNetworkHandlerServer.sendUpdatePackets();
         triviaInProgress = true;
         killAllBots();
         usedQuestions.clear();
@@ -83,7 +85,7 @@ public class NiceLifeTriviaManager {
         currentQuestion = getQuestion();
         NiceLifeVotingManager.chooseVote();
 
-        boolean longIntro = (nightLength == NightLength.FIRST_LONG && firstTriviaInSession) || nightLength == NightLength.ALL_LONG;
+        boolean longIntro = (nightLength.get() == NightLength.FIRST_LONG && firstTriviaInSession) || nightLength.get() == NightLength.ALL_LONG;
 
         for (ServerPlayer player : triviaPlayers) {
             SimplePackets.HIDE_SLEEP_DARKNESS.sendToClient(true, player);
@@ -123,7 +125,7 @@ public class NiceLifeTriviaManager {
 
         preparingForSpawn = true;
         if (longIntro) {
-            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_santabot_introduction_long"));
+            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("nicelife_santabot_introduction_long"));
             PlayerUtils.playSoundToPlayers(triviaPlayers, sound, 1f, 1);
             for (TriviaSpawn triviaSpawnInfo : triviaSpawns) {
                 int botSpawnHeight = 20;
@@ -134,7 +136,7 @@ public class NiceLifeTriviaManager {
             }
         }
         else {
-            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_santabot_introduction_short"));
+            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("nicelife_santabot_introduction_short"));
             PlayerUtils.playSoundToPlayers(triviaPlayers, sound, 1f, 1);
             for (TriviaSpawn triviaSpawnInfo : triviaSpawns) {
                 int botSpawnHeight = rnd.nextInt(15, 30);
@@ -163,7 +165,7 @@ public class NiceLifeTriviaManager {
     }
 
     public static void allWrong() {
-        SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_santabot_incorrect_all_wrong"));
+        SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("nicelife_santabot_incorrect_all_wrong"));
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
         PlayerUtils.broadcastMessage(ModifiableText.NICELIFE_TRIVIA_ALL_WRONG_PT1.get());
 
@@ -238,11 +240,11 @@ public class NiceLifeTriviaManager {
             for (int dirZ = -1; dirZ <= 1; dirZ++) {
                 BlockPos breakBlockPos = pos.offset(dirX, 0, dirZ);
                 //? if <= 26.2 {
-                /*if ((breakBlockPos.getY() <= bedYPos || !CAN_BREAK_BEDS) && level.getBlockState(breakBlockPos).getBlock() instanceof BedBlock) {
+                /*if ((breakBlockPos.getY() <= bedYPos || !CAN_BREAK_BEDS.get()) && level.getBlockState(breakBlockPos).getBlock() instanceof BedBlock) {
                     continue;
                 }
                 *///?} else {
-                if ((breakBlockPos.getY() <= bedYPos || !CAN_BREAK_BEDS) && level.getBlockState(breakBlockPos).getBlock() instanceof AbstractBedBlock) {
+                if ((breakBlockPos.getY() <= bedYPos || !CAN_BREAK_BEDS.get()) && level.getBlockState(breakBlockPos).getBlock() instanceof AbstractBedBlock) {
                     continue;
                 }
                 //?}
@@ -250,7 +252,7 @@ public class NiceLifeTriviaManager {
                     //Unbreakable blocks
                     continue;
                 }
-                level.destroyBlock(breakBlockPos, BREAKING_DROPS_RESOURCES);
+                level.destroyBlock(breakBlockPos, BREAKING_DROPS_RESOURCES.get());
             }
         }
     }
@@ -302,7 +304,7 @@ public class NiceLifeTriviaManager {
     }
 
     public static Tuple<Integer, TriviaQuestion> getTriviaQuestion(ServerPlayer player) {
-        return new Tuple<>(1, currentQuestion);
+        return Tuple.of(1, currentQuestion);
     }
 
     public static TriviaQuestion getQuestion() {

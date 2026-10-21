@@ -7,7 +7,7 @@ import net.minecraft.resources.Identifier;
 
 public record LifeSkinsTexturePayload(String skinName, String teamName, boolean slim, byte[] textureData) implements CustomPacketPayload {
 
-    public static final Identifier ID = IdentifierHelper.mod("lifeskins_texture");
+    public static final Identifier ID = IdentifierHelper.lifeseries("lifeskins_texture");
 
     @Override
     public void write(FriendlyByteBuf buf) {
@@ -38,7 +38,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 public record LifeSkinsTexturePayload(String skinName, String teamName, boolean slim, byte[] textureData) implements CustomPacketPayload {
     public static final Type<LifeSkinsTexturePayload> ID =
-            new Type<>(IdentifierHelper.mod("lifeskins_texture"));
+            new Type<>(IdentifierHelper.lifeseries("lifeskins_texture"));
 
     public static final StreamCodec<FriendlyByteBuf, LifeSkinsTexturePayload> CODEC =
             StreamCodec.ofMember(LifeSkinsTexturePayload::write, LifeSkinsTexturePayload::new);

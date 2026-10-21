@@ -2,11 +2,11 @@ package net.mat0u5.lifeseries.seasons.season.pastlife;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
+import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 
@@ -16,7 +16,7 @@ import java.util.Random;
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 import static net.mat0u5.lifeseries.LifeSeries.currentSession;
 
-public class PastLifeCommands extends Command {
+public class PastLifeCommands extends CustomCommand {
     public Random rnd = new Random();
 
     @Override
@@ -62,8 +62,8 @@ public class PastLifeCommands extends Command {
             return -1;
         }
 
-        boolean bannedSociety = !currentSeason.secretSociety.SOCIETY_ENABLED || currentSeason.secretSociety.societyStarted || currentSeason.secretSociety.societyEnded;
-        boolean bannedBoogeyman = !currentSeason.boogeymanManager.BOOGEYMAN_ENABLED || currentSeason.boogeymanManager.boogeymanChosen;
+        boolean bannedSociety = !currentSeason.secretSociety.SOCIETY_ENABLED.get() || currentSeason.secretSociety.societyStarted || currentSeason.secretSociety.societyEnded;
+        boolean bannedBoogeyman = !currentSeason.boogeymanManager.BOOGEYMAN_ENABLED.get() || currentSeason.boogeymanManager.boogeymanChosen;
         for (SessionAction action : currentSession.getSessionActions()) {
             if (action.sessionMessage.equalsIgnoreCase(ModifiableText.SESSION_ACTION_SOCIETY.getString())) {
                 bannedSociety = true;
@@ -110,7 +110,7 @@ public class PastLifeCommands extends Command {
             return -1;
         }
 
-        if (!currentSeason.secretSociety.SOCIETY_ENABLED) {
+        if (!currentSeason.secretSociety.SOCIETY_ENABLED.get()) {
             sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_SOCIETY_ERROR_DISABLED.get());
             return -1;
         }
@@ -145,7 +145,7 @@ public class PastLifeCommands extends Command {
             return -1;
         }
 
-        if (!currentSeason.boogeymanManager.BOOGEYMAN_ENABLED) {
+        if (!currentSeason.boogeymanManager.BOOGEYMAN_ENABLED.get()) {
             sendCommandFailure(source, ModifiableText.PASTLIFE_TWIST_BOOGEYMAN_ERROR_DISABLED.get());
             return -1;
         }

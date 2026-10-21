@@ -1,10 +1,9 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.snail.Snail;
-import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.TriviaHandler;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
 import net.mat0u5.lifeseries.seasons.season.Season;
@@ -21,11 +20,10 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.Time;
-import net.mat0u5.lifeseries.utils.player.AttributeUtils;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
+import net.mat0u5.matlib.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
+import net.mat0u5.matlib.utils.player.ScoreboardUtils;
+import net.mat0u5.matlib.events.EventResult;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -36,18 +34,17 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.warden.Warden;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSession;
-import net.mat0u5.lifeseries.utils.player.*;
+import net.mat0u5.matlib.utils.player.*;
 
 //? if >= 1.21.2 {
 import net.minecraft.server.level.ServerLevel;
@@ -60,7 +57,7 @@ public class WildLife extends Season {
     }
 
     @Override
-    public ConfigManager createConfig() {
+    public SeasonConfig createConfig() {
         Snails.loadConfig();
         return new WildLifeConfig();
     }
@@ -117,12 +114,12 @@ public class WildLife extends Season {
         super.onPlayerKilledByPlayer(victim, killer);
         if (((IPlayer) victim).ls$isOnAtLeastLives(4, false) && wasAllowedToAttack && !wasBoogeyCure) {
             if (Necromancy.isRessurectedPlayer(killer)) {
-                if (WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN.get()) {
+                if (WildLifeConfig.get().WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN.get()) {
                     Integer currentLives = ((IPlayer)killer).ls$getLives();
                     if (currentLives == null) currentLives = 0;
                     int lives = currentLives + 1;
                     if (lives <= 0) {
-                        ScoreboardUtils.setScore(killer.getScoreboardName(), LivesManager.SCOREBOARD_NAME, lives);
+                        if (!livesManager.LIVES_SYSTEM_DISABLED.get()) ScoreboardUtils.setScore(killer.getScoreboardName(), LivesManager.SCOREBOARD_NAME, lives);
                     }
                     else {
                         broadcastLifeGain(killer, victim);
@@ -171,7 +168,7 @@ public class WildLife extends Season {
     public void addSessionActions() {
         super.addSessionActions();
         currentSession.addSessionActionIfTime(
-                new SessionAction.Invisible(Time.minutes(WildcardManager.ACTIVATE_WILDCARD_MINUTE-2), "Wildcard activate 2 minute warning") {
+                new SessionAction.Invisible(Time.minutes(WildcardManager.ACTIVATE_WILDCARD_MINUTE.get()-2), "Wildcard activate 2 minute warning") {
                     @Override
                     public void trigger() {
                         if (WildcardManager.activeWildcards.isEmpty()) {
@@ -181,7 +178,7 @@ public class WildLife extends Season {
                 }
         );
         currentSession.addSessionAction(
-                new SessionAction(Time.minutes(WildcardManager.ACTIVATE_WILDCARD_MINUTE), ModifiableText.SESSION_ACTION_WILDCARD.getString()) {
+                new SessionAction(Time.minutes(WildcardManager.ACTIVATE_WILDCARD_MINUTE.get()), ModifiableText.SESSION_ACTION_WILDCARD.getString()) {
                     @Override
                     public void trigger() {
                         if (WildcardManager.activeWildcards.isEmpty()) {
@@ -201,103 +198,43 @@ public class WildLife extends Season {
     @Override
     public void reload() {
         super.reload();
-        Hunger.SWITCH_DELAY = 20 * WildLifeConfig.WILDCARD_HUNGER_RANDOMIZE_INTERVAL.get();
-        Hunger.HUNGER_EFFECT_LEVEL = WildLifeConfig.WILDCARD_HUNGER_EFFECT_LEVEL.get();
-        Hunger.NUTRITION_CHANCE = WildLifeConfig.WILDCARD_HUNGER_NUTRITION_CHANCE.get();
-        Hunger.SATURATION_CHANCE = WildLifeConfig.WILDCARD_HUNGER_SATURATION_CHANCE.get();
-        Hunger.EFFECT_CHANCE = WildLifeConfig.WILDCARD_HUNGER_EFFECT_CHANCE.get();
-        Hunger.AVG_EFFECT_DURATION = WildLifeConfig.WILDCARD_HUNGER_AVG_EFFECT_DURATION.get();
-        Hunger.SOUND_CHANCE = WildLifeConfig.WILDCARD_HUNGER_SOUND_CHANCE.get();
-        Hunger.newNonEdibleItems(WildLifeConfig.WILDCARD_HUNGER_NON_EDIBLE_ITEMS.get());
+        Hunger.SWITCH_DELAY = 20 * WildLifeConfig.get().WILDCARD_HUNGER_RANDOMIZE_INTERVAL.get();
+        Hunger.newNonEdibleItems(WildLifeConfig.get().WILDCARD_HUNGER_NON_EDIBLE_ITEMS.get());
 
-        SizeShifting.MIN_SIZE = WildLifeConfig.WILDCARD_SIZESHIFTING_MIN_SIZE.get();
-        SizeShifting.MAX_SIZE = WildLifeConfig.WILDCARD_SIZESHIFTING_MAX_SIZE.get();
-        SizeShifting.SIZE_CHANGE_MULTIPLIER = WildLifeConfig.WILDCARD_SIZESHIFTING_SIZE_CHANGE_MULTIPLIER.get();
-        SizeShifting.FIX_SIZECHANGING_BUGS = WildLifeConfig.WILDCARD_SIZESHIFTING_FIX_BUGS.get();
+        Snails.SNAILS_PER_PLAYER = Math.max(1, WildLifeConfig.get().WILDCARD_SNAILS_PER_PLAYER.get());
 
+        TimeDilation.MIN_TICK_RATE = (float) (20.0 * WildLifeConfig.get().WILDCARD_TIMEDILATION_MIN_SPEED.get());
+        TimeDilation.MAX_TICK_RATE = (float) (20.0 * WildLifeConfig.get().WILDCARD_TIMEDILATION_MAX_SPEED.get());
+        TimeDilation.MIN_PLAYER_MSPT = (float) (50.0 / WildLifeConfig.get().WILDCARD_TIMEDILATION_PLAYER_MAX_SPEED.get());
 
-        Snail.GLOBAL_SPEED_MULTIPLIER = WildLifeConfig.WILDCARD_SNAILS_SPEED_MULTIPLIER.get();
-        Snail.SHOULD_DROWN_PLAYER = WildLifeConfig.WILDCARD_SNAILS_DROWN_PLAYERS.get();
-        Snail.ALLOW_POTION_EFFECTS = WildLifeConfig.WILDCARD_SNAILS_EFFECTS.get();
-        Snails.WILDCARD_SNAILS_RED_LIVES = WildLifeConfig.WILDCARD_SNAILS_RED_LIVES.get();
-        Snails.SNAILS_PER_PLAYER = Math.max(1, WildLifeConfig.WILDCARD_SNAILS_PER_PLAYER.get());
+        MobSwap.MAX_DELAY = 20 * WildLifeConfig.get().WILDCARD_MOBSWAP_START_SPAWN_DELAY.get();
+        MobSwap.MIN_DELAY = 20 * WildLifeConfig.get().WILDCARD_MOBSWAP_END_SPAWN_DELAY.get();
 
-        TimeDilation.MIN_TICK_RATE = (float) (20.0 * WildLifeConfig.WILDCARD_TIMEDILATION_MIN_SPEED.get());
-        TimeDilation.MAX_TICK_RATE = (float) (20.0 * WildLifeConfig.WILDCARD_TIMEDILATION_MAX_SPEED.get());
-        TimeDilation.MIN_PLAYER_MSPT = (float) (50.0 / WildLifeConfig.WILDCARD_TIMEDILATION_PLAYER_MAX_SPEED.get());
-        TimeDilation.START_RAIN = WildLifeConfig.WILDCARD_TIMEDILATION_START_RAIN.get();
-
-        MobSwap.MAX_DELAY = 20 * WildLifeConfig.WILDCARD_MOBSWAP_START_SPAWN_DELAY.get();
-        MobSwap.MIN_DELAY = 20 * WildLifeConfig.WILDCARD_MOBSWAP_END_SPAWN_DELAY.get();
-        MobSwap.SPAWN_MOBS = WildLifeConfig.WILDCARD_MOBSWAP_SPAWN_MOBS.get();
-        MobSwap.BOSS_CHANCE_MULTIPLIER = WildLifeConfig.WILDCARD_MOBSWAP_BOSS_CHANCE_MULTIPLIER.get();
-        MobSwap.BOSS_SPAWN_CUTOFF = WildLifeConfig.WILDCARD_MOBSWAP_BOSS_SPAWN_CUTOFF.get();
-
-        TriviaBot.CAN_START_RIDING = WildLifeConfig.WILDCARD_TRIVIA_BOTS_CAN_ENTER_BOATS.get();
-        TriviaWildcard.TRIVIA_BOTS_PER_PLAYER = WildLifeConfig.WILDCARD_TRIVIA_BOTS_PER_PLAYER.get();
-        WildLifeTriviaHandler.EASY_TIME = WildLifeConfig.WILDCARD_TRIVIA_SECONDS_EASY.get();
-        WildLifeTriviaHandler.NORMAL_TIME = WildLifeConfig.WILDCARD_TRIVIA_SECONDS_NORMAL.get();
-        WildLifeTriviaHandler.HARD_TIME = WildLifeConfig.WILDCARD_TRIVIA_SECONDS_HARD.get();
-        WindCharge.MAX_MACE_DAMAGE = WildLifeConfig.WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE.get();
-        Superspeed.STEP_UP = WildLifeConfig.WILDCARD_SUPERPOWERS_SUPERSPEED_STEP.get();
-        WildcardManager.ACTIVATE_WILDCARD_MINUTE = WildLifeConfig.ACTIVATE_WILDCARD_MINUTE.get();
-        WildcardManager.INSTANTLY_ACTIVATE_WILDCARDS = WildLifeConfig.INSTANTLY_ACTIVATE_WILDCARDS.get();
-        SuperpowersWildcard.WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME = WildLifeConfig.WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME.get();
-        SuperpowersWildcard.setBlacklist(WildLifeConfig.WILDCARD_SUPERPOWERS_POWER_BLACKLIST.get());
-        SuperpowersWildcard.ZOMBIES_HEALTH = WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_HEALTH.get();
-        Callback.setBlacklist(WildLifeConfig.WILDCARD_CALLBACK_WILDCARDS_BLACKLIST.get());
-        Callback.TURN_OFF = WildLifeConfig.WILDCARD_CALLBACK_TURN_OFF.get();
-        Callback.NERFED_WILDCARDS = WildLifeConfig.WILDCARD_CALLBACK_NERFED_WILDCARDS.get();
-        Callback.INITIAL_ACTIVATION_INTERVAL = 20 * WildLifeConfig.WILDCARD_CALLBACK_INITIAL_ACTIVATION_INTERVAL.get();
+        SuperpowersWildcard.setBlacklist(WildLifeConfig.get().WILDCARD_SUPERPOWERS_POWER_BLACKLIST.get());
+        Callback.setBlacklist(WildLifeConfig.get().WILDCARD_CALLBACK_WILDCARDS_BLACKLIST.get());
+        Callback.INITIAL_ACTIVATION_INTERVAL = 20 * WildLifeConfig.get().WILDCARD_CALLBACK_INITIAL_ACTIVATION_INTERVAL.get();
         Callback.INITIAL_DEACTIVATION_INTERVAL = 30*20 * (Callback.INITIAL_ACTIVATION_INTERVAL / Callback.INITIAL_ACTIVATION_INTERVAL_DEFAULT);
 
-        AnimalDisguise.SHOW_ARMOR = WildLifeConfig.WILDCARD_SUPERPOWERS_ANIMALDISGUISE_ARMOR.get();
-        AnimalDisguise.SHOW_HANDS = WildLifeConfig.WILDCARD_SUPERPOWERS_ANIMALDISGUISE_HANDS.get();
+        TimeControl.COOLDOWN_MILLIS = 1000 * WildLifeConfig.get().SUPERPOWER_COOLDOWN_TIME_CONTROL.get();
+        CreakingPower.COOLDOWN_MILLIS = 1000 * WildLifeConfig.get().SUPERPOWER_COOLDOWN_CREAKING.get();
+        WindCharge.COOLDOWN_MILLIS = 1000 * WildLifeConfig.get().SUPERPOWER_COOLDOWN_WIND_CHARGE.get();
+        AstralProjection.COOLDOWN_MILLIS = 1000 * WildLifeConfig.get().SUPERPOWER_COOLDOWN_ASTRAL_PROJECTION.get();
+        SuperPunch.COOLDOWN_MILLIS = 1000 * WildLifeConfig.get().SUPERPOWER_COOLDOWN_SUPER_PUNCH.get();
+        Mimicry.COOLDOWN_MILLIS = 1000 * WildLifeConfig.get().SUPERPOWER_COOLDOWN_MIMICRY.get();
+        Teleportation.COOLDOWN_MILLIS = 1000 * WildLifeConfig.get().SUPERPOWER_COOLDOWN_TELEPORTATION.get();
+        Listening.COOLDOWN_MILLIS = 1000 * WildLifeConfig.get().SUPERPOWER_COOLDOWN_LISTENING.get();
+        ShadowPlay.COOLDOWN_MILLIS = 1000 * WildLifeConfig.get().SUPERPOWER_COOLDOWN_SHADOW_PLAY.get();
+        Flight.COOLDOWN_MILLIS = 1000 * WildLifeConfig.get().SUPERPOWER_COOLDOWN_FLIGHT.get();
+        PlayerDisguise.COOLDOWN_MILLIS = 1000 * WildLifeConfig.get().SUPERPOWER_COOLDOWN_PLAYER_DISGUISE.get();
+        AnimalDisguise.COOLDOWN_MILLIS = 1000 * WildLifeConfig.get().SUPERPOWER_COOLDOWN_ANIMAL_DISGUISE.get();
+        TripleJump.COOLDOWN_MILLIS = 1000 * WildLifeConfig.get().SUPERPOWER_COOLDOWN_TRIPLE_JUMP.get();
+        Invisibility.COOLDOWN_MILLIS = 1000 * WildLifeConfig.get().SUPERPOWER_COOLDOWN_INVISIBILITY.get();
+        Superspeed.COOLDOWN_MILLIS = 1000 * WildLifeConfig.get().SUPERPOWER_COOLDOWN_SUPERSPEED.get();
+        Necromancy.COOLDOWN_MILLIS = 1000 * WildLifeConfig.get().SUPERPOWER_COOLDOWN_NECROMANCY.get();
 
-        TimeControl.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_TIME_CONTROL.get();
-        CreakingPower.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_CREAKING.get();
-        WindCharge.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_WIND_CHARGE.get();
-        AstralProjection.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_ASTRAL_PROJECTION.get();
-        SuperPunch.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_SUPER_PUNCH.get();
-        Mimicry.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_MIMICRY.get();
-        Teleportation.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_TELEPORTATION.get();
-        Listening.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_LISTENING.get();
-        ShadowPlay.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_SHADOW_PLAY.get();
-        Flight.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_FLIGHT.get();
-        PlayerDisguise.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_PLAYER_DISGUISE.get();
-        AnimalDisguise.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_ANIMAL_DISGUISE.get();
-        TripleJump.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_TRIPLE_JUMP.get();
-        Invisibility.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_INVISIBILITY.get();
-        Superspeed.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_SUPERSPEED.get();
-        Necromancy.COOLDOWN_MILLIS = 1000 * WildLifeConfig.SUPERPOWER_COOLDOWN_NECROMANCY.get();
-
-        TimeControl.TARGET_TICK_RATE = Math.max(1, WildLifeConfig.WILDCARD_SUPERPOWERS_TIME_DILATION_TICK_RATE.get());
-        TimeControl.SLOW_DURATION =  WildLifeConfig.WILDCARD_SUPERPOWERS_TIME_DILATION_DURATION.get();
-        CreakingPower.CREAKING_AMOUNT =  WildLifeConfig.WILDCARD_SUPERPOWERS_CREAKING_AMOUNT.get();
-        CreakingPower.SHOW_PARTICLES =  WildLifeConfig.WILDCARD_SUPERPOWERS_CREAKING_PARTICLES.get();
-        WindCharge.EXPLOSION_POWER = WildLifeConfig.WILDCARD_SUPERPOWERS_WIND_CHARGE_EXPLOSION_POWER.get();
-        AstralProjection.DAMAGE_CANCELS = WildLifeConfig.WILDCARD_SUPERPOWERS_ASTRAL_PROJECTION_DAMAGE_CANCELS.get();
-        SuperPunch.THORNS_DAMAGE = WildLifeConfig.WILDCARD_SUPERPOWERS_SUPER_PUNCH_THORNS_DAMAGE.get();
-        SuperPunch.KNOCKBACK_STRENGTH = WildLifeConfig.WILDCARD_SUPERPOWERS_SUPER_PUNCH_KNOCKBACK_STRENGTH.get();
-        PlayerDisguise.DAMAGE_CANCELS = WildLifeConfig.WILDCARD_SUPERPOWERS_PLAYER_DISGUISE_DAMAGE_CANCELS.get();
-        AnimalDisguise.DAMAGE_CANCELS = WildLifeConfig.WILDCARD_SUPERPOWERS_ANIMAL_DISGUISE_DAMAGE_CANCELS.get();
-        Teleportation.MAX_SWAP_DISTANCE = WildLifeConfig.WILDCARD_SUPERPOWERS_TELEPORTATION_SWAP_DISTANCE.get();
-        Teleportation.MAX_TELEPORT_DISTANCE = WildLifeConfig.WILDCARD_SUPERPOWERS_TELEPORTATION_TP_DISTANCE.get();
-        ShadowPlay.BLIND_TIME = 20 * WildLifeConfig.WILDCARD_SUPERPOWERS_SHADOW_PLAY_BLIND_TIME.get();
-        ShadowPlay.BLIND_RANGE = WildLifeConfig.WILDCARD_SUPERPOWERS_SHADOW_PLAY_BLIND_RANGE.get();
-        Flight.LAUNGH_JUMP_AMPLIFIER = WildLifeConfig.WILDCARD_SUPERPOWERS_FLIGHT_JUMP_AMPLIFIER.get();
-        Flight.ELYTRA_LAUNCH_NEEDED = WildLifeConfig.WILDCARD_SUPERPOWERS_FLIGHT_ELYTRA_LAUNCH_NEEDED.get();
-        Invisibility.SHOW_PARTICLES = WildLifeConfig.WILDCARD_SUPERPOWERS_INVISIBILITY_SHOW_PARTICLES.get();
-        Invisibility.ATTACK_CANCELS = WildLifeConfig.WILDCARD_SUPERPOWERS_INVISIBILITY_ATTACK_CANCELS.get();
-        Invisibility.DAMAGE_CANCELS = WildLifeConfig.WILDCARD_SUPERPOWERS_INVISIBILITY_DAMAGE_CANCELS.get();
-        Superspeed.FROST_WALKER_LEVEL = WildLifeConfig.WILDCARD_SUPERPOWERS_SUPERSPEED_FROST_WALKER_LEVEL.get();
-        Superspeed.HUNGER_EFFECT_LEVEL = WildLifeConfig.WILDCARD_SUPERPOWERS_SUPERSPEED_HUNGER_LEVEL.get();
-        Superspeed.TARGET_SPEED = WildLifeConfig.WILDCARD_SUPERPOWERS_SUPERSPEED_TARGET_SPEED.get();
-        TripleJump.JUMP_COUNT = WildLifeConfig.WILDCARD_SUPERPOWERS_TRIPLE_JUMP_JUMPS.get();
-        TriviaHandler.guiType = WildLifeConfig.WILDCARD_TRIVIA_GUI_TYPE.get();
-        Mimicry.DISABLE_OTHER_POWER = WildLifeConfig.WILDCARD_SUPERPOWERS_MIMICRY_DISABLE_OTHER_POWER.get();
-        PreBuiltSnailSkins.SNAILS_RANDOM_PRESET_SKIN = WildLifeConfig.WILDCARD_SNAILS_RANDOM_PRESET_SKIN.get();
-        Snail.KILL_ANY_PLAYER = WildLifeConfig.WILDCARD_SNAILS_KILL_ANY_PLAYER.get();
+        TimeControl.TARGET_TICK_RATE = Math.max(1, WildLifeConfig.get().WILDCARD_SUPERPOWERS_TIME_DILATION_TICK_RATE.get());
+        ShadowPlay.BLIND_TIME = 20 * WildLifeConfig.get().WILDCARD_SUPERPOWERS_SHADOW_PLAY_BLIND_TIME.get();
+        TriviaHandler.guiType = WildLifeConfig.get().WILDCARD_TRIVIA_GUI_TYPE.get();
 
         Snails.loadConfig();
         Snails.loadSnailNames();
@@ -306,8 +243,8 @@ public class WildLife extends Season {
     }
 
     @Override
-    public void modifyEntityDrops(LivingEntity entity, DamageSource damageSource, CallbackInfo ci) {
-        super.modifyEntityDrops(entity, damageSource, ci);
+    public EventResult modifyEntityDrops(LivingEntity entity, DamageSource damageSource) {
+        EventResult original = super.modifyEntityDrops(entity, damageSource);
         if (damageSource.getDirectEntity() instanceof Player) {
             if (entity instanceof Warden || entity instanceof WitherBoss || entity instanceof EnderDragon) {
                 //? if <= 1.21 {
@@ -317,12 +254,13 @@ public class WildLife extends Season {
                 //?}
             }
         }
+        return original;
     }
 
     @Override
     public boolean modifyKeepInventory(ServerPlayer player, boolean originalKeepInventory) {
         if (Necromancy.isRessurectedPlayer(player)) {
-            return WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_KEEP_INVENTORY.get();
+            return WildLifeConfig.get().WILDCARD_SUPERPOWERS_ZOMBIES_KEEP_INVENTORY.get();
         }
         return super.modifyKeepInventory(player, originalKeepInventory);
     }
@@ -341,10 +279,10 @@ public class WildLife extends Season {
 
         WildLifeTriviaHandler.cursedGigantificationPlayers.remove(player.getUUID());
         WildLifeTriviaHandler.cursedHeartPlayers.remove(player.getUUID());
-        AttributeUtils.resetMaxPlayerHealthIfNecessary(player);
+        PlayerUtils.resetMaxPlayerHealthIfNecessary(player);
 
         WildLifeTriviaHandler.cursedMoonJumpPlayers.remove(player.getUUID());
-        AttributeUtils.resetPlayerJumpHeight(player);
+        AttributeUtils.JUMP_STRENGTH.of(player).reset();
 
         Superpower power = SuperpowersWildcard.getSuperpowerInstance(player);
         if (power != null) {
@@ -377,8 +315,8 @@ public class WildLife extends Season {
     }
 
     @Override
-    public void onPlayerDamage(ServerPlayer player, DamageSource source, float amount, CallbackInfo ci) {
-        super.onPlayerDamage(player, source, amount, ci);
+    public void onPlayerDamage(ServerPlayer player, DamageSource source, float amount) {
+        super.onPlayerDamage(player, source, amount);
         if (LifeSeries.isClientOrDisabled()) return;
         if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.PLAYER_DISGUISE)) {
             if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof PlayerDisguise power) {
@@ -398,23 +336,22 @@ public class WildLife extends Season {
         Entity sourceEntity = source.getEntity();
         if (sourceEntity != null && SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPER_PUNCH)) {
             //? if <= 1.21 {
-            //sourceEntity.hurt(player.damageSources().thorns(player), (float) SuperPunch.THORNS_DAMAGE);
+            //sourceEntity.hurt(player.damageSources().thorns(player), (float) (double) SuperPunch.THORNS_DAMAGE.get());
              //?} else {
-            sourceEntity.hurtServer(((IPlayer) player).ls$getServerLevel(), player.damageSources().thorns(player), (float) SuperPunch.THORNS_DAMAGE);
+            sourceEntity.hurtServer(((IPlayer) player).ls$getServerLevel(), player.damageSources().thorns(player), (float) (double) SuperPunch.THORNS_DAMAGE.get());
             //?}
         }
     }
 
     @Override
-    public void onPrePlayerDamage(ServerPlayer player, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        super.onPrePlayerDamage(player, source, amount, cir);
+    public EventResult onPrePlayerDamage(ServerPlayer player, DamageSource source, float amount) {
+        EventResult original = super.onPrePlayerDamage(player, source, amount);
         if (source.is(DamageTypes.FALL) ||source.is(DamageTypes.STALAGMITE) || source.is(DamageTypes.FLY_INTO_WALL)) {
             if (SuperpowersWildcard.hasActivePower(player, Superpowers.FLIGHT)) {
                 if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof Flight power) {
                     if (power.isLaunchedUp) {
                         if (!source.is(DamageTypes.FLY_INTO_WALL)) power.isLaunchedUp = false;
-                        cir.setReturnValue(false);
-                        return;
+                        return EventResult.DENY;
                     }
                 }
             }
@@ -422,18 +359,17 @@ public class WildLife extends Season {
                 if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof TripleJump power) {
                     if (power.isInAir) {
                         power.isInAir = false;
-                        cir.setReturnValue(false);
-                        return;
+                        return EventResult.DENY;
                     }
                 }
             }
             if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPER_PUNCH) && player.isPassenger()) {
                 if (player.getVehicle() instanceof ServerPlayer) {
-                    cir.setReturnValue(false);
-                    return;
+                    return EventResult.DENY;
                 }
             }
         }
+        return original;
     }
 
     @Override
@@ -446,7 +382,7 @@ public class WildLife extends Season {
     }
 
     @Override
-    public void onAttackEntity(ServerPlayer player, Level level, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
+    public void onAttackEntity(ServerPlayer player, Level level, Entity entity) {
         if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.INVISIBILITY)) {
             if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof Invisibility power) {
                 power.onAttack();
@@ -455,8 +391,8 @@ public class WildLife extends Season {
     }
 
     @Override
-    public void onUpdatedInventory(ServerPlayer player) {
-        super.onUpdatedInventory(player);
+    public void onUpdatedInventory(ServerPlayer player, Inventory inventory) {
+        super.onUpdatedInventory(player, inventory);
         Hunger.updateInventory(player);
     }
     @Override

@@ -1,20 +1,16 @@
 package net.mat0u5.lifeseries.config;
 
+import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.matlib.config.SimpleConfig;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class StringListConfig extends ConfigManager {
+public class StringListConfig extends SimpleConfig {
 
     public StringListConfig(String folder, String name) {
-        super(folder, name);
+        super(LifeSeries.MOD_ID+":"+name, folder, name);
     }
-
-    @Override
-    protected List<ConfigFileEntry<?>> getDefaultConfigEntries() {
-        return List.of();
-    }
-    @Override
-    protected void instantiateProperties() {}
 
     public void save(List<String> list) {
         resetProperties("-- DO NOT MODIFY --");

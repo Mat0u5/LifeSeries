@@ -1,11 +1,12 @@
 package net.mat0u5.lifeseries.utils.world;
 
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.player.PlayerReference;
+import net.mat0u5.matlib.utils.player.PlayerReference;
+import net.mat0u5.matlib.utils.world.ItemStackUtils;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundEntityEventPacket;
@@ -40,7 +41,7 @@ public class AnimationUtils {
 
     public static void playSecretLifeTotemAnimation(ServerPlayer player, boolean red) {
         if (player == null) return;
-        if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {
+        if (LifeSeriesNetworkHandlerServer.wasHandshakeSuccessful(player)) {
             SimplePackets.SHOW_TOTEM.sendToClient(red ? "task_red" : "task", player);
             return;
         }
@@ -67,7 +68,7 @@ public class AnimationUtils {
         //?} else if <= 1.21 {
         //totemItem.set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(red ? 2 : 1));
         //?} else {
-        totemItem.set(DataComponents.ITEM_MODEL, IdentifierHelper.mod(red ? "task_red_totem" : "task_totem"));
+        totemItem.set(DataComponents.ITEM_MODEL, IdentifierHelper.lifeseries(red ? "task_red_totem" : "task_totem"));
         //?}
         return totemItem;
     }

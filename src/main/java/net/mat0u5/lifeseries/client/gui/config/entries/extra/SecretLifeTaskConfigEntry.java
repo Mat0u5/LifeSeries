@@ -1,16 +1,20 @@
 package net.mat0u5.lifeseries.client.gui.config.entries.extra;
 
-import net.mat0u5.lifeseries.client.gui.config.entries.ConfigEntry;
-import net.mat0u5.lifeseries.client.gui.config.entries.ModifiableListEntry;
-import net.mat0u5.lifeseries.client.render.RenderUtils;
-import net.mat0u5.lifeseries.client.utils.TextColors;
+import net.mat0u5.lifeseries.client.config.LifeSeriesConfigGuiClient;
+import net.mat0u5.matlib.client.gui.config.entries.ConfigEntry;
+import net.mat0u5.matlib.client.gui.config.entries.ModifiableListEntry;
+import net.mat0u5.matlib.client.render.RenderUtils;
+import net.mat0u5.matlib.client.utils.TextColors;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
-import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.config.LifeSeriesConfigTypes;
+import net.mat0u5.matlib.config.entry.ConfigGuiEntry;
+import net.mat0u5.matlib.config.type.ConfigType;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -27,13 +31,13 @@ public class SecretLifeTaskConfigEntry extends ModifiableListEntry {
     private boolean sentToServer = false;
     private boolean isUsedTask;
 
-    public SecretLifeTaskConfigEntry(String fieldName, List<String> info) {
-        super(fieldName);
+    public SecretLifeTaskConfigEntry(ConfigGuiEntry guiEntry, List<String> info) {
+        super(guiEntry);
         textField = new EditBox(textRenderer, 0, 0, 30, 18, Component.empty());
-        this.taskType = info.get(3);
-        this.defaultText = info.get(4);
-        this.text = info.get(4);
-        this.isUsedTask = info.get(5).equalsIgnoreCase("true");
+        this.taskType = info.get(0);
+        this.defaultText = info.get(1);
+        this.text = info.get(1);
+        this.isUsedTask = info.get(2).equalsIgnoreCase("true");
         textField.setMaxLength(maxTextFieldLength);
         textField.setValue(defaultText);
         textField.setResponder(this::onChanged);
@@ -88,7 +92,7 @@ public class SecretLifeTaskConfigEntry extends ModifiableListEntry {
 
     @Override
     public ConfigEntry getNewEntry() {
-        return new SecretLifeTaskConfigEntry("dynamic_task_entry_"+ UUID.randomUUID(), List.of("", "", "", taskType, "New Task", "false"));
+        return new SecretLifeTaskConfigEntry(LifeSeriesConfigGuiClient.copyWithKey(inboundGuiEntry, "dynamic_task_entry_"+ UUID.randomUUID()), List.of(taskType, "New Task", "false"));
     }
 
     @Override
@@ -116,8 +120,8 @@ public class SecretLifeTaskConfigEntry extends ModifiableListEntry {
     }
 
     @Override
-    public ConfigTypes getValueType() {
-        return ConfigTypes.SECRET_TASK;
+    public ConfigType<?> getValueType() {
+        return LifeSeriesConfigTypes.SECRET_TASK;
     }
 
     //? if <= 1.21.6 {
@@ -175,12 +179,12 @@ public class SecretLifeTaskConfigEntry extends ModifiableListEntry {
     //?}
 
     @Override
-    public void onSave() {
+    public Optional<ConfigGuiEntry> onSave() {
         List<String> list = new ArrayList<>();
         list.add(taskType);
         for (ModifiableListEntry entry : getListEntries()) {
             if (entry instanceof SecretLifeTaskConfigEntry taskEntry) {
-                if (taskEntry.sentToServer) return;
+                if (taskEntry.sentToServer) return Optional.empty();
                 String value = taskEntry.text;
                 if (value == null || value.isEmpty()) continue;
                 list.add(value);
@@ -188,5 +192,6 @@ public class SecretLifeTaskConfigEntry extends ModifiableListEntry {
         }
         this.sentToServer = true;
         SimplePackets.CONFIG_SECRET_TASK.sendToServer(list);
+        return Optional.empty();
     }
 }

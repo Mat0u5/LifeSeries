@@ -1,16 +1,17 @@
 package net.mat0u5.lifeseries.utils.player;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.LifeSkinsTexturePayload;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
-import net.mat0u5.lifeseries.resources.ResourceHandler;
+import net.mat0u5.matlib.network.NetworkHandlerServer;
+import net.mat0u5.matlib.utils.resource.ResourceHandler;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeLivesManager;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.mat0u5.lifeseries.utils.other.Triple;
+import net.mat0u5.matlib.utils.other.TextUtils;
+import net.mat0u5.matlib.utils.other.Triple;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.scores.Team;
@@ -91,7 +92,7 @@ public class LifeSkinsManager {
                         intName = skinName.equalsIgnoreCase("null") ? null : Integer.parseInt(skinName);
                         teamName = "lives_"+intName;
                     } catch (Exception ignored) {}
-                    skins.put(teamName, new Triple<>(slim, skinFile, intName));
+                    skins.put(teamName, Triple.of(slim, skinFile, intName));
                 }catch(Exception ignored) {}
             }
             if (skins.isEmpty()) continue;
@@ -207,8 +208,8 @@ public class LifeSkinsManager {
         UUID uuid = player.getUUID();
         String playerName = null;
         if (SubInManager.isSubbingIn(uuid)) {
-            boolean changeSkin = SubInManager.CHANGE_SKIN;
-            boolean changeName = SubInManager.CHANGE_NAME;
+            boolean changeSkin = SubInManager.CHANGE_SKIN.get();
+            boolean changeName = SubInManager.CHANGE_NAME.get();
 
             if (changeSkin && !changeName) {
                 playerName = OtherUtils.profileName(SubInManager.getSubstitutedPlayer(uuid));

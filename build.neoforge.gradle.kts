@@ -16,6 +16,9 @@ platform {
 		required("neoforge") {
 			forgeVersionRange = "[1,)"
 		}
+		required("matlib") {
+			forgeVersionRange = "[${prop("deps.matlib")},)"
+		}
 	}
 }
 
@@ -49,10 +52,15 @@ neoForge {
 }
 
 repositories {
+	mavenLocal()
 	mavenCentral()
 	strictMaven("https://api.modrinth.com/maven", "maven.modrinth") { name = "Modrinth" }
 	strictMaven("https://www.cursemaven.com", "curse.maven") { name = "CurseForge" }
 	maven ( "https://maven.maxhenkel.de/repository/public")
+}
+
+configurations.all {
+	resolutionStrategy.cacheDynamicVersionsFor(0, TimeUnit.SECONDS)
 }
 
 dependencies {
@@ -66,6 +74,16 @@ dependencies {
 	else {
 		compileOnly ("maven.modrinth:simple-voice-chat:neoforge-1.20.4-2.5.22")
 	}
+
+	if (prop("deps.matlib.local").equals("true", ignoreCase = true)) {
+		implementation("net.mat0u5:matlib-neoforge-${prop("deps.minecraft")}:local-+")
+	}
+	else {
+		implementation("maven.modrinth:matlib:neoforge-${prop("deps.matlib")}+${prop("deps.minecraft")}")
+	}
+
+	compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
+	annotationProcessor("com.google.auto.service:auto-service:1.1.1")
 }
 
 tasks.named("createMinecraftArtifacts") {

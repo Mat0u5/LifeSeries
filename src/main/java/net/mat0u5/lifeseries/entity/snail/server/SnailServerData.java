@@ -1,9 +1,9 @@
 package net.mat0u5.lifeseries.entity.snail.server;
 
+import net.mat0u5.matlib.utils.player.PlayerJoinTracker;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.PlayerBoundEntity;
 import net.mat0u5.lifeseries.entity.snail.Snail;
-import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
@@ -37,7 +37,7 @@ import java.util.UUID;
 import static net.mat0u5.lifeseries.LifeSeries.currentSession;
 
 //? if > 1.21.4 <= 1.21.11
-//import net.mat0u5.lifeseries.utils.world.LevelUtils;
+//import net.mat0u5.matlib.utils.world.LevelUtils;
 //? if <= 1.21.11
 //import net.minecraft.server.level.TicketType;
 //? if <= 1.21.4
@@ -45,7 +45,7 @@ import static net.mat0u5.lifeseries.LifeSeries.currentSession;
 
 @SuppressWarnings("resource")
 public class SnailServerData implements PlayerBoundEntity {
-    public static final ResourceKey<DamageType> SNAIL_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE, IdentifierHelper.mod("snail"));
+    public static final ResourceKey<DamageType> SNAIL_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE, IdentifierHelper.lifeseries("snail"));
     public final Snail snail;
 
     public SnailServerData(Snail snail) {
@@ -80,7 +80,7 @@ public class SnailServerData implements PlayerBoundEntity {
         if (player.isCreative()) return false;
         if (!player.isAlive()) return false;
         if (getPlayerPos() == null) return false;
-        if (Events.joiningPlayers.contains(player.getUUID())) return false;
+        if (PlayerJoinTracker.isCurrentlyJoining(player.getUUID())) return false;
         if (player.isSpectator() && !SuperpowersWildcard.hasActivatedPower(player, Superpowers.ASTRAL_PROJECTION)) return false;
         return true;
     }
@@ -119,7 +119,7 @@ public class SnailServerData implements PlayerBoundEntity {
         if (boundEntity != null && shouldPathfind() && snail.getBoundingBox().inflate(0.05).intersects(boundEntity.getBoundingBox())) {
             killBoundEntity(boundEntity);
         }
-        else if (Snail.KILL_ANY_PLAYER) {
+        else if (Snail.KILL_ANY_PLAYER.get()) {
             for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
                 if (player == null || player.isSpectator() || player.isCreative()) continue;
                 if (snail.getBoundingBox().inflate(0.05).intersects(player.getBoundingBox())) {
@@ -129,7 +129,7 @@ public class SnailServerData implements PlayerBoundEntity {
         }
 
         if (boundPlayer != null && boundEntity != null) {
-            if (Snail.SHOULD_DROWN_PLAYER && !snail.isFromTrivia()) {
+            if (Snail.SHOULD_DROWN_PLAYER.get() && !snail.isFromTrivia()) {
                 int currentAir = snail.getAirSupply();
                 if (boundEntity.hasEffect(MobEffects.WATER_BREATHING)) {
                     currentAir = snail.getMaxAirSupply();
@@ -145,7 +145,7 @@ public class SnailServerData implements PlayerBoundEntity {
         handleHighVelocity();
         chunkLoading();
         snail.sounds.playSounds();
-        if (!Snail.ALLOW_POTION_EFFECTS) {
+        if (!Snail.ALLOW_POTION_EFFECTS.get()) {
             snail.removeAllEffects();
         }
     }
@@ -159,7 +159,7 @@ public class SnailServerData implements PlayerBoundEntity {
             despawnPlayerChecks = 0;
         }
 
-        if (player != null && ((IPlayer) player).ls$isOnLastLife(false) && !Snails.WILDCARD_SNAILS_RED_LIVES) {
+        if (player != null && ((IPlayer) player).ls$isOnLastLife(false) && !Snails.WILDCARD_SNAILS_RED_LIVES.get()) {
             despawn();
             return true;
         }

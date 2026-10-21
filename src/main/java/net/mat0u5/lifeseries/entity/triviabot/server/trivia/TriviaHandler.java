@@ -1,11 +1,11 @@
 package net.mat0u5.lifeseries.entity.triviabot.server.trivia;
 
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
-import net.mat0u5.lifeseries.utils.other.Tuple;
+import net.mat0u5.matlib.utils.other.Tuple;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -46,7 +46,7 @@ public abstract class TriviaHandler {
             setTimeBasedOnDifficulty(difficulty);
         }
         sendTimeUpdatePacket();
-        NetworkHandlerServer.sendTriviaPacket(boundPlayer, question.getQuestion(), difficulty, System.currentTimeMillis(), timeToComplete, question.getAnswers(), guiType);
+        LifeSeriesNetworkHandlerServer.sendTriviaPacket(boundPlayer, question.getQuestion(), difficulty, System.currentTimeMillis(), timeToComplete, question.getAnswers(), guiType);
         bot.setInteractedWith(true);
     }
 

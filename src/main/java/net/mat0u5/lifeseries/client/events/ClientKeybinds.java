@@ -1,14 +1,11 @@
 package net.mat0u5.lifeseries.client.events;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import net.mat0u5.lifeseries.client.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.client.network.LifeSeriesNetworkHandlerClient;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
+import net.mat0u5.matlib.client.events.ClientRegistryEvents;
 import net.minecraft.client.KeyMapping;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class ClientKeybinds {
     public static KeyMapping superpower;
@@ -18,23 +15,22 @@ public class ClientKeybinds {
     //? if <= 1.21.6 {
     //public static final String KEYBIND_ID = "key.category.lifeseries.general";
      //?} else {
-    public static KeyMapping.Category KEYBIND_ID = KeyMapping.Category.register(IdentifierHelper.mod("general"));
+    public static KeyMapping.Category KEYBIND_ID = KeyMapping.Category.register(IdentifierHelper.lifeseries("general"));
     //?}
 
     public static void tick() {
         while (superpower != null && superpower.consumeClick()) {
-            NetworkHandlerClient.pressSuperpowerKey();
+            LifeSeriesNetworkHandlerClient.pressSuperpowerKey();
         }
         while (runCommand != null && runCommand.consumeClick() && VersionControl.isDevVersion()) {
-            NetworkHandlerClient.pressRunCommandKey();
+            LifeSeriesNetworkHandlerClient.pressRunCommandKey();
         }
         while (openConfig != null && openConfig.consumeClick()) {
-            NetworkHandlerClient.pressOpenConfigKey();
+            LifeSeriesNetworkHandlerClient.pressOpenConfigKey();
         }
     }
 
-    public static void init() {
-        if (superpower != null) return;
+    public static void register() {
 
         //? if <= 26.2 {
         //var type = InputConstants.Type.KEYSYM;
@@ -66,19 +62,14 @@ public class ClientKeybinds {
                     KEYBIND_ID
             );
         }
-    }
-    public static KeyMapping[] appendCustomKeybinds(KeyMapping[] vanillaKeys) {
-        init();
-        List<KeyMapping> allKeys = new ArrayList<>(Arrays.asList(vanillaKeys));
-
-        if (!allKeys.contains(superpower)) {
-            allKeys.add(superpower);
-            allKeys.add(openConfig);
-            if (VersionControl.isDevVersion()) {
-                allKeys.add(runCommand);
+        ClientRegistryEvents.KEYBIND.register(list -> {
+            if (!list.contains(superpower)) {
+                list.add(superpower);
+                list.add(openConfig);
+                if (VersionControl.isDevVersion()) {
+                    list.add(runCommand);
+                }
             }
-        }
-
-        return allKeys.toArray(new KeyMapping[0]);
+        });
     }
 }

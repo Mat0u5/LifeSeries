@@ -63,7 +63,7 @@ public final class SnailTeleportGoal extends Goal {
         }
 
         double currentSpeed = mob.getDeltaMovement().horizontalDistance();
-        if (currentSpeed < (MIN_SPEED_THRESHOLD*Snail.GLOBAL_SPEED_MULTIPLIER) && mob.getNavigation().getPath() != null) {
+        if (currentSpeed < (MIN_SPEED_THRESHOLD*Snail.GLOBAL_SPEED_MULTIPLIER.get()) && mob.getNavigation().getPath() != null) {
             lowSpeedTicks++;
         } else {
             lowSpeedTicks = 0;

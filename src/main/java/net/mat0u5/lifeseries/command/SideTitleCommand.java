@@ -2,10 +2,10 @@ package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.ModifiableText;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
+import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.ComponentArgument;
@@ -19,7 +19,7 @@ import java.util.Collection;
 //? if >= 26.1
 import net.minecraft.network.chat.ResolutionContext;
 
-public class SideTitleCommand extends Command {
+public class SideTitleCommand extends CustomCommand {
     @Override
     public boolean isAllowed() {
         return true;
@@ -63,9 +63,9 @@ public class SideTitleCommand extends Command {
     private int executeTitle(CommandSourceStack source, Collection<ServerPlayer> targets, Component title) throws CommandSyntaxException {
         for(ServerPlayer player : targets) {
             //? if <= 1.21.11 {
-            //NetworkHandlerServer.sideTitle(player, ComponentUtils.updateForEntity(source, title, player, 0));
+            //LifeSeriesNetworkHandlerServer.sideTitle(player, ComponentUtils.updateForEntity(source, title, player, 0));
             //?} else {
-            NetworkHandlerServer.sideTitle(player, ComponentUtils.resolve(ResolutionContext.builder().withSource(source).withEntityOverride(player).build(), title));
+            LifeSeriesNetworkHandlerServer.sideTitle(player, ComponentUtils.resolve(ResolutionContext.builder().withSource(source).withEntityOverride(player).build(), title));
             //?}
         }
 

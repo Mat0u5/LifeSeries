@@ -1,7 +1,8 @@
 package net.mat0u5.lifeseries.seasons.util;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.config.SeasonConfig;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.resources.datapack.DatapackManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -13,6 +14,7 @@ import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.mat0u5.matlib.config.ConfigManager;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;
@@ -51,16 +53,18 @@ public class SeasonChanger {
 
 		livesManager = currentSeason.livesManager;
 		seasonConfig = currentSeason.createConfig();
+		ConfigManager.unregisterConfig(SeasonConfig.CONFIG_ID);
+		ConfigManager.registerConfig(seasonConfig);
 		blacklist = currentSeason.createBlacklist();
 	}
 
 	public static void reloadConfig() {
 		currentSeason.reloadStart();
-		seasonConfig.loadProperties();
+		seasonConfig.reload();
 		LifeSeries.getMainConfig().loadProperties();
 		blacklist.reloadBlacklist();
 		currentSeason.reload();
-		NetworkHandlerServer.sendUpdatePackets();
+		LifeSeriesNetworkHandlerServer.sendUpdatePackets();
 		PlayerUtils.resendCommandTrees();
 		SnailSkins.sendTextures();
 		TriviaSkins.sendTextures();
@@ -85,7 +89,7 @@ public class SeasonChanger {
 		for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
 			currentSeason.onPlayerJoin(player);
 			currentSeason.onPlayerFinishJoining(player, args.showChatMessage());
-			NetworkHandlerServer.tryKickFailedHandshake(player);
+			LifeSeriesNetworkHandlerServer.tryKickFailedHandshake(player);
 			if (!modDisabled()) {
 				if (args.openGui()) currentSeason.sendSetSeasonPacket(player);
 				if (args.changeSession()) SimplePackets.SESSION_TIMER.sendToClient((long) SessionTimerStates.NOT_STARTED.getValue(), player);

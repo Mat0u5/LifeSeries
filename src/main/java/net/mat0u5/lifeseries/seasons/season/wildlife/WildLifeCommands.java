@@ -4,10 +4,10 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.snail.Snail;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
@@ -25,10 +25,10 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.ActionText;
+import net.mat0u5.matlib.utils.other.ActionText;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
+import net.mat0u5.matlib.utils.other.TextUtils;
+import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -43,7 +43,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-public class WildLifeCommands extends Command {
+public class WildLifeCommands extends CustomCommand {
 
     @Override
     public boolean isAllowed() {
@@ -95,7 +95,7 @@ public class WildLifeCommands extends Command {
                     )
                 )
                 .then(literal("choose")
-                    .requires(source -> (NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer()) || (source.getEntity() == null)))
+                    .requires(source -> (LifeSeriesNetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer()) || (source.getEntity() == null)))
                     .executes(context -> chooseWildcard(
                         context.getSource())
                     )
@@ -601,7 +601,7 @@ public class WildLifeCommands extends Command {
     public int chooseWildcard(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
         if (source.getPlayer() == null) return -1;
-        if (!NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer())) {
+        if (!LifeSeriesNetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer())) {
             sendCommandFailure(source, ModifiableText.WILDLIFE_WILDCARD_GUI_ERROR.get());
             return -1;
         }
@@ -878,13 +878,13 @@ public class WildLifeCommands extends Command {
         WildcardManager.activeWildcards.remove(wildcard);
 
         sendCommandFeedback(source, ModifiableText.WILDLIFE_WILDCARD_DEACTIVATE.get(wildcardName));
-        NetworkHandlerServer.sendUpdatePackets();
+        LifeSeriesNetworkHandlerServer.sendUpdatePackets();
         return 1;
     }
 
     public int activateWildcard(CommandSourceStack source, String wildcardName) {
         if (checkBanned(source)) return -1;
-        int delay = WildcardManager.INSTANTLY_ACTIVATE_WILDCARDS ? 0 : 90;
+        int delay = WildcardManager.INSTANTLY_ACTIVATE_WILDCARDS.get() ? 0 : 90;
         if (wildcardName.equalsIgnoreCase("*")) {
             List<Wildcards> inactiveWildcards = Wildcards.getInactiveWildcards();
             for (Wildcards wildcard : inactiveWildcards) {
@@ -894,7 +894,7 @@ public class WildLifeCommands extends Command {
                 WildcardManager.activeWildcards.put(wildcard, wildcardInstance);
             }
 
-            if (!WildcardManager.INSTANTLY_ACTIVATE_WILDCARDS) WildcardManager.showDots();
+            if (!WildcardManager.INSTANTLY_ACTIVATE_WILDCARDS.get()) WildcardManager.showDots();
             TaskScheduler.scheduleTask(delay, () -> {
                 for (Wildcard wildcard : WildcardManager.activeWildcards.values()) {
                     if (wildcard.active) continue;
@@ -902,7 +902,7 @@ public class WildLifeCommands extends Command {
                 }
                 WildcardManager.showRainbowCryptTitle(ModifiableText.WILDLIFE_WILDCARD_ACTIVATE_ALL_TITLE.getString());
             });
-            NetworkHandlerServer.sendUpdatePackets();
+            LifeSeriesNetworkHandlerServer.sendUpdatePackets();
 
             sendCommandFeedback(source, ModifiableText.WILDLIFE_WILDCARD_ACTIVATE_ALL.get());
             return 1;
@@ -921,7 +921,7 @@ public class WildLifeCommands extends Command {
             sendCommandFailure(source, ModifiableText.WILDLIFE_WILDCARD_IMPLEMENT_ERROR.get());
             return -1;
         }
-        if (WildcardManager.INSTANTLY_ACTIVATE_WILDCARDS) {
+        if (WildcardManager.INSTANTLY_ACTIVATE_WILDCARDS.get()) {
             WildcardManager.activeWildcards.put(wildcard, actualWildcard);
         }
         else {

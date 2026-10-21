@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.seasons.subin;
 
+import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import com.mojang.authlib.GameProfile;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
@@ -16,6 +18,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
+import static net.mat0u5.matlib.MatLib.*;
 
 //? if <= 1.21.5
 //import net.minecraft.nbt.CompoundTag;
@@ -31,8 +34,8 @@ import net.minecraft.nbt.CompoundTag;
 
 public class SubInManager {
     public static List<SubIn> subIns = new ArrayList<>();
-    public static boolean CHANGE_NAME = true;
-    public static boolean CHANGE_SKIN = true;
+    public static final ConfigRef<Boolean> CHANGE_NAME = ConfigRef.of(() -> LifeSeries.seasonConfig.SUBIN_CHANGE_USERNAME);
+    public static final ConfigRef<Boolean> CHANGE_SKIN = ConfigRef.of(() -> LifeSeries.seasonConfig.SUBIN_CHANGE_SKIN);
 
     private static UUID getId(GameProfile profile) {
         return OtherUtils.profileId(profile);
@@ -74,17 +77,15 @@ public class SubInManager {
             ((IPlayer) player).ls$setLives(subInLives);
         }
 
-        if (CHANGE_SKIN  || CHANGE_NAME) {
-            ProfileManager.ProfileChange skinChange = CHANGE_SKIN ? ProfileManager.ProfileChange.set(targetProfileName) : ProfileManager.ProfileChange.original();
-            ProfileManager.ProfileChange nameChange = CHANGE_NAME ? ProfileManager.ProfileChange.set(targetProfileName) : ProfileManager.ProfileChange.original();
+        if (CHANGE_SKIN.get()  || CHANGE_NAME.get()) {
+            ProfileManager.ProfileChange skinChange = CHANGE_SKIN.get() ? ProfileManager.ProfileChange.set(targetProfileName) : ProfileManager.ProfileChange.original();
+            ProfileManager.ProfileChange nameChange = CHANGE_NAME.get() ? ProfileManager.ProfileChange.set(targetProfileName) : ProfileManager.ProfileChange.original();
             ProfileManager.modifyProfile(player, skinChange, nameChange);
         }
         currentSeason.usernameChanged(player);
     }
 
     public static void reload() {
-        CHANGE_SKIN = seasonConfig.SUBIN_CHANGE_SKIN.get();
-        CHANGE_NAME = seasonConfig.SUBIN_CHANGE_USERNAME.get();
         for (SubIn subIn : subIns) {
             ServerPlayer player = PlayerUtils.getPlayer(getId(subIn.substituter()));
             reloadPlayerProfile(player);
@@ -94,15 +95,15 @@ public class SubInManager {
     public static void reloadPlayerProfile(ServerPlayer player) {
         if (player == null) return;
 
-        if ((ProfileManager.hasChangedSkin(player) == CHANGE_SKIN) && (ProfileManager.hasChangedName(player) == CHANGE_NAME)) {
+        if ((ProfileManager.hasChangedSkin(player) == CHANGE_SKIN.get()) && (ProfileManager.hasChangedName(player) == CHANGE_NAME.get())) {
             return;
         }
 
         String targetProfileName = getName(getSubstitutedPlayer(player.getUUID()));
         if (targetProfileName == null) return;
 
-        ProfileManager.ProfileChange skinChange = CHANGE_SKIN ? ProfileManager.ProfileChange.set(targetProfileName) : ProfileManager.ProfileChange.original();
-        ProfileManager.ProfileChange nameChange = CHANGE_NAME ? ProfileManager.ProfileChange.set(targetProfileName) : ProfileManager.ProfileChange.original();
+        ProfileManager.ProfileChange skinChange = CHANGE_SKIN.get() ? ProfileManager.ProfileChange.set(targetProfileName) : ProfileManager.ProfileChange.original();
+        ProfileManager.ProfileChange nameChange = CHANGE_NAME.get() ? ProfileManager.ProfileChange.set(targetProfileName) : ProfileManager.ProfileChange.original();
         ProfileManager.modifyProfile(player, skinChange, nameChange);
     }
 

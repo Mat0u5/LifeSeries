@@ -1,13 +1,11 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
-import net.mat0u5.lifeseries.network.packets.SnailTexturePacket;
-import net.mat0u5.lifeseries.resources.ResourceHandler;
-import net.mat0u5.lifeseries.utils.BufferedImageUtils;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.matlib.utils.resource.SyncedTextureFolder;
+import net.mat0u5.matlib.utils.resource.ResourceHandler;
+import net.mat0u5.matlib.utils.resource.BufferedImageUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.server.level.ServerPlayer;
 
 import javax.imageio.ImageIO;
@@ -19,31 +17,21 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class SnailSkins {
+    public static final Path MAIN_FOLDER = Path.of("./config/lifeseries/wildlife/snailskins");
+    public static final Path BUILTIN_FOLDER = MAIN_FOLDER.resolve("builtin");
+    public static final SyncedTextureFolder TEXTURES = new SyncedTextureFolder(IdentifierHelper.lifeseries("snailskin"), MAIN_FOLDER, 128, 128)
+            .addSyncedFolder(BUILTIN_FOLDER)
+            .excludeFiles("example.png")
+            .addTexturePreProcessor(SnailSkins::upgradeSnailSkinIfNeeded);
 
     public static void sendTexturesTo(ServerPlayer player) {
         sendTexturesTo(List.of(player));
     }
 
     private static void sendTexturesTo(List<ServerPlayer> players) {
-        for (File file : getAllSkinFiles(true)) {
-            try {
-                String name = file.getName().toLowerCase(Locale.ROOT).replaceAll(".png","");
-                byte[] textureData = Files.readAllBytes(file.toPath());
-
-                SnailTexturePacket packet = new SnailTexturePacket(name, textureData);
-                for (ServerPlayer player : players) {
-                    if (VersionControl.isDevVersion()) {
-                        LifeSeries.LOGGER.info(TextUtils.formatString("Sending snail texture '{}' to {}", name, player));
-                    }
-                    NetworkHandlerServer.sendPacket(player, packet);
-                }
-            }catch(Exception e) {
-                e.printStackTrace();
-            }
-        }
+        TEXTURES.sendTo(players);
         PreBuiltSnailSkins.sendPrebuiltSkinsTo(players);
     }
 
@@ -52,51 +40,20 @@ public class SnailSkins {
     }
 
     public static List<File> getAllSkinFiles(boolean containBuiltin) {
-        List<File> result = new ArrayList<>();
-        try {
-            List<File> files = new ArrayList<>();
-
-            File folder = new File("./config/lifeseries/wildlife/snailskins/");
-            File[] filesMain = folder.listFiles();
-            if (filesMain != null) files.addAll(List.of(filesMain));
-
-            if (containBuiltin) {
-                File folderBuiltin = new File("./config/lifeseries/wildlife/snailskins/builtin/");
-                File[] filesBuiltin = folderBuiltin.listFiles();
-                if (filesBuiltin != null) files.addAll(List.of(filesBuiltin));
-            }
-
-            for (File file : files) {
-                if (!file.isFile()) continue;
-                String name = file.getName().toLowerCase(Locale.ROOT);
-                if (name.equalsIgnoreCase("example.png")) continue;
-                if (!name.endsWith(".png")) continue;
-                upgradeSnailSkinIfNeeded(file);
-                result.add(file);
-            }
-        }catch(Exception e) {
-            e.printStackTrace();
-        }
-        return result;
+        if (containBuiltin) return TEXTURES.getFiles();
+        return TEXTURES.getFilesIn(MAIN_FOLDER);
     }
 
     public static List<String> getAllSkins(boolean containBuiltin) {
         List<String> result = new ArrayList<>();
         for (File file : getAllSkinFiles(containBuiltin)) {
-            String name = file.getName().toLowerCase(Locale.ROOT).replaceAll(".png","");
-            result.add(name);
+            result.add(SyncedTextureFolder.getTextureName(file));
         }
         return result;
     }
 
     public static void createConfig() {
-        File folder = new File("./config/lifeseries/wildlife/snailskins");
-        if (!folder.exists()) {
-            if (!folder.mkdirs()) {
-                LifeSeries.LOGGER.error("Failed to create folder {}", folder);
-                return;
-            }
-        }
+        if (!TEXTURES.createFolder()) return;
         copyConfigFiles();
     }
 

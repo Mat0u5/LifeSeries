@@ -15,6 +15,9 @@ platform {
 		required("fabricloader") {
 			versionRange = ">=${libs.fabric.loader.get().version}"
 		}
+		required("matlib") {
+			versionRange = ">=${prop("deps.matlib")}"
+		}
 	}
 }
 
@@ -41,10 +44,15 @@ loom {
 }
 
 repositories {
+	mavenLocal()
 	mavenCentral()
 	strictMaven("https://api.modrinth.com/maven", "maven.modrinth") { name = "Modrinth" }
 	strictMaven("https://www.cursemaven.com", "curse.maven") { name = "CurseForge" }
 	maven ( "https://maven.maxhenkel.de/repository/public")
+}
+
+configurations.all {
+	resolutionStrategy.cacheDynamicVersionsFor(0, TimeUnit.SECONDS)
 }
 
 dependencies {
@@ -63,7 +71,7 @@ dependencies {
 	else {
 		modCompileOnly("maven.modrinth:appleskin:3.0.6+mc1.21")
 	}
-	modCompileOnly("net.fabricmc.fabric-api:fabric-api:${prop("deps.fabric-api")}")
+	//modCompileOnly("net.fabricmc.fabric-api:fabric-api:${prop("deps.fabric-api")}")
 	//modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:${prop("deps.fabric-api")}")
 
 	if (isValidVersion(prop("deps.carpet"))) modRuntimeOnly("curse.maven:carpet-349239:${prop("deps.carpet")}")
@@ -77,6 +85,16 @@ dependencies {
 	else {
 		modCompileOnly ("maven.modrinth:simple-voice-chat:fabric-1.21.1-2.5.35")
 	}
+
+	if (prop("deps.matlib.local").equals("true", ignoreCase = true)) {
+		modImplementation("net.mat0u5:matlib-fabric-${prop("deps.minecraft")}:local-+")
+	}
+	else {
+		modImplementation("maven.modrinth:matlib:fabric-${prop("deps.matlib")}+${prop("deps.minecraft")}")
+	}
+
+	modCompileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
+	annotationProcessor("com.google.auto.service:auto-service:1.1.1")
 }
 
 project.afterEvaluate {

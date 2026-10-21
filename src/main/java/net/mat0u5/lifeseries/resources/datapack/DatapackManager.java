@@ -4,7 +4,7 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.minecraft.server.MinecraftServer;
 
-import static net.mat0u5.lifeseries.LifeSeries.server;
+import static net.mat0u5.matlib.MatLib.server;
 
 public class DatapackManager {
     public static void onServerStarted(MinecraftServer server) {
@@ -13,7 +13,7 @@ public class DatapackManager {
     }
 
     public static void onReloadStart() {
-        DynamicDatapackManager.copyLootTables(server);
+        DynamicDatapackManager.copyLootTables(server());
     }
 
     public static void onReloadEnd() {

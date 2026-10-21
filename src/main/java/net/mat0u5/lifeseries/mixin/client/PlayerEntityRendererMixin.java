@@ -7,7 +7,7 @@ import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.NewQuizScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.QuizScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.VotingScreen;
-import net.mat0u5.lifeseries.client.render.RenderUtils;
+import net.mat0u5.matlib.client.render.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import org.spongepowered.asm.mixin.Mixin;
@@ -31,8 +31,6 @@ import net.minecraft.world.scores.ReadOnlyScoreInfo;
 //import net.minecraft.network.chat.numbers.NumberFormat;
 //? if <= 1.21 {
 /*import com.mojang.blaze3d.vertex.PoseStack;
-import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
-import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.MutableComponent;
@@ -40,7 +38,7 @@ import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 *///?} else {
-import net.mat0u5.lifeseries.client.utils.interfaces.IEntityRenderState;
+import net.mat0u5.matlib.client.utils.interfaces.IEntityRenderState;
 import net.minecraft.world.entity.player.Player;
 //?}
 //? if >= 1.21.2 && <= 1.21.6
@@ -49,7 +47,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 
 //?if <= 1.21.11 {
-/*import net.mat0u5.lifeseries.utils.other.Time;
+/*import net.mat0u5.matlib.utils.other.Time;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -65,39 +63,6 @@ import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 //?}
 @MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public abstract class PlayerEntityRendererMixin {
-
-    //? if <= 1.21 {
-    /*@Inject(method = "render(Lnet/minecraft/client/player/AbstractClientPlayer;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
-            at = @At("HEAD"), cancellable = true)
-    public void replaceRendering(AbstractClientPlayer abstractClientPlayerEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i, CallbackInfo ci){
-        if (LifeSeries.modFullyDisabled()) return;
-        if (LifeSeriesClient.invisiblePlayers.containsKey(abstractClientPlayerEntity.getUUID())) {
-            long time = LifeSeriesClient.invisiblePlayers.get(abstractClientPlayerEntity.getUUID());
-            if (time > System.currentTimeMillis() || time == -1) {
-                ci.cancel();
-                return;
-            }
-        }
-
-        MorphComponent morphComponent = MorphManager.getOrCreateComponent(abstractClientPlayerEntity.getUUID());
-        LivingEntity dummy = morphComponent.getDummy();
-        if(morphComponent.isMorphed() && dummy != null) {
-            ci.cancel();
-        }
-    }
-    *///?}
-
-    // In EntityRender from 26.1+
-    //? if > 1.21.6 && <= 1.21.11 {
-    /*@ModifyArg(
-            method = "submitNameTag(Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitNameTag(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/phys/Vec3;ILnet/minecraft/network/chat/Component;ZIDLnet/minecraft/client/renderer/state/CameraRenderState;)V"),
-            index = 3
-    )
-    public Component render(Component text) {
-        return ClientUtils.getPlayerName(text);
-    }
-    *///?}
 
     //? if <= 1.20.2 {
     /*@Redirect(method = "renderNameTag(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/Component;literal(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;"))
@@ -169,7 +134,7 @@ public abstract class PlayerEntityRendererMixin {
     public Component customBelowName(AvatarRenderState instance) {
     //?}
         Component original = instance.scoreText;
-        if (instance instanceof IEntityRenderState accessor && accessor.ls$getEntity() instanceof Player player) {
+        if (instance instanceof IEntityRenderState accessor && accessor.ml$getEntity() instanceof Player player) {
             //? if <= 1.21.6 {
             //Scoreboard scoreboard = player.getScoreboard();
             //?} else {

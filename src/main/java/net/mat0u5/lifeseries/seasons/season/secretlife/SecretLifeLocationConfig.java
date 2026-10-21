@@ -1,23 +1,14 @@
 package net.mat0u5.lifeseries.seasons.season.secretlife;
 
-import net.mat0u5.lifeseries.config.ConfigFileEntry;
-import net.mat0u5.lifeseries.config.ConfigManager;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.matlib.config.SimpleConfig;
+import net.mat0u5.matlib.utils.other.TextUtils;
 import net.minecraft.core.BlockPos;
 
-import java.util.List;
-
-public class SecretLifeLocationConfig extends ConfigManager {
+public class SecretLifeLocationConfig extends SimpleConfig {
     public SecretLifeLocationConfig() {
-        super("./config/lifeseries/main", "DO_NOT_MODIFY_secretlife_locations.properties");
+        super(LifeSeries.MOD_ID+":secretlife_locations", "lifeseries/main", "DO_NOT_MODIFY_secretlife_locations.properties");
     }
-
-    @Override
-    protected List<ConfigFileEntry<?>> getDefaultConfigEntries() {
-        return List.of();
-    }
-    @Override
-    public void instantiateProperties() {}
 
     public void loadLocations() {
         SecretKeeper.successButtonPos = getLocation("successButtonPos");

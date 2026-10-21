@@ -46,13 +46,13 @@ public class WaypointTransmitterMixin {
         if (LifeSeries.isClientOrDisabled()) return WaypointTransmitter.doesSourceIgnoreReceiver(sourceEntity, receiver);
     *///?}
         if (sourceEntity instanceof ServerPlayer source) {
-            boolean showLocatorBar = currentSeason.LOCATOR_BAR;
-            if (!showLocatorBar && currentSeason instanceof DoubleLife doubleLife && DoubleLife.SOULMATE_LOCATOR_BAR) {
+            boolean showLocatorBar = currentSeason.LOCATOR_BAR.get();
+            if (!showLocatorBar && currentSeason instanceof DoubleLife doubleLife && DoubleLife.SOULMATE_LOCATOR_BAR.get()) {
                 UUID receiverSoulmateUUID = doubleLife.getSoulmateUUID(receiver.getUUID());
                 showLocatorBar = source.getUUID().equals(receiverSoulmateUUID);
             }
 
-            if (!showLocatorBar && currentSeason.boogeymanManager.BOOGEYMAN_ENABLED && currentSeason.boogeymanManager.BOOGEYMAN_LOCATOR_BAR && currentSeason.boogeymanManager.isBoogeyman(receiver)) {
+            if (!showLocatorBar && currentSeason.boogeymanManager.BOOGEYMAN_ENABLED.get() && currentSeason.boogeymanManager.BOOGEYMAN_LOCATOR_BAR.get() && currentSeason.boogeymanManager.isBoogeyman(receiver)) {
                 showLocatorBar = true;
             }
 

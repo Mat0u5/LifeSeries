@@ -23,9 +23,9 @@ import java.util.Random;
 import static net.mat0u5.lifeseries.LifeSeries.livesManager;
 
 public class AngrySnowman extends SnowGolem {
-    public static final SoundEvent HURT_SOUND = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_snowman_hit"));
-    public static final SoundEvent GROWL = SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_snowman_growl"));
-    public static final Identifier ID = IdentifierHelper.mod("angrysnowman");
+    public static final SoundEvent HURT_SOUND = SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("nicelife_snowman_hit"));
+    public static final SoundEvent GROWL = SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("nicelife_snowman_growl"));
+    public static final Identifier ID = IdentifierHelper.lifeseries("angrysnowman");
     public static Random rnd = new Random();
 
     public int calmDuration;

@@ -1,16 +1,18 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard;
 
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.config.ModifiableText;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.other.RegistryUtils;
+import net.mat0u5.matlib.utils.other.RegistryUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.other.Time;
-import net.mat0u5.lifeseries.utils.player.PlayerListReference;
+import net.mat0u5.matlib.utils.other.Time;
+import net.mat0u5.matlib.utils.player.PlayerListReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -33,7 +35,6 @@ import java.util.List;
 import java.util.Random;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSession;
-import java.util.*;
 
 //? if >= 1.20.5 {
 import net.minecraft.core.component.DataComponentMap;
@@ -56,13 +57,13 @@ public class Hunger extends Wildcard {
     private static int lastVersion = -1;
     private static Time timer = Time.zero();
 
-    public static int HUNGER_EFFECT_LEVEL = 3;
+    public static final ConfigRef<Integer> HUNGER_EFFECT_LEVEL = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_HUNGER_EFFECT_LEVEL);
 
-    public static double EFFECT_CHANCE = 0.65;
-    public static int AVG_EFFECT_DURATION = 10;
-    public static double NUTRITION_CHANCE = 0.4;
-    public static double SATURATION_CHANCE = 0.5;
-    public static double SOUND_CHANCE = 0.01;
+    public static final ConfigRef<Double> EFFECT_CHANCE = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_HUNGER_EFFECT_CHANCE);
+    public static final ConfigRef<Integer> AVG_EFFECT_DURATION = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_HUNGER_AVG_EFFECT_DURATION);
+    public static final ConfigRef<Double> NUTRITION_CHANCE = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_HUNGER_NUTRITION_CHANCE);
+    public static final ConfigRef<Double> SATURATION_CHANCE = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_HUNGER_SATURATION_CHANCE);
+    public static final ConfigRef<Double> SOUND_CHANCE = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_HUNGER_SOUND_CHANCE);
 
     //? if <= 1.20.3 {
     //private static final List<MobEffect> effects = List.of(
@@ -196,8 +197,8 @@ public class Hunger extends Wildcard {
         });
     }
 
-    public static void newNonEdibleItems(String raw) {
-        nonEdibleStr = RegistryUtils.parseStringList(raw);
+    public static void newNonEdibleItems(List<String> items) {
+        nonEdibleStr = new ArrayList<>(items);
         nonEdible = new ArrayList<>();
 
         for (String entryId : nonEdibleStr) {
@@ -207,7 +208,7 @@ public class Hunger extends Wildcard {
                 OtherUtils.throwError("[CONFIG] " + e.getMessage());
             }
         }
-        NetworkHandlerServer.sendUpdatePackets();
+        LifeSeriesNetworkHandlerServer.sendUpdatePackets();
         TaskScheduler.scheduleTask(1, OtherUtils::reloadServerNoUpdate);
         TaskScheduler.scheduleTask(5, Hunger::updateInventories);
     }
@@ -234,7 +235,7 @@ public class Hunger extends Wildcard {
         shuffledBefore = true;
         addHunger();
         TaskScheduler.scheduleTask(1, OtherUtils::reloadServerNoUpdate);
-        NetworkHandlerServer.sendUpdatePackets();
+        LifeSeriesNetworkHandlerServer.sendUpdatePackets();
     }
 
     public static void updateInventories() {
@@ -271,8 +272,8 @@ public class Hunger extends Wildcard {
     public static void addHunger(ServerPlayer player) {
         if (player == null) return;
         if (player.isSpectator()) return;
-        if (HUNGER_EFFECT_LEVEL <= 0) return;
-        MobEffectInstance statusEffectInstance = new MobEffectInstance(MobEffects.HUNGER, -1, HUNGER_EFFECT_LEVEL-1, false, false, false);
+        if (HUNGER_EFFECT_LEVEL.get() <= 0) return;
+        MobEffectInstance statusEffectInstance = new MobEffectInstance(MobEffects.HUNGER, -1, HUNGER_EFFECT_LEVEL.get()-1, false, false, false);
         player.addEffect(statusEffectInstance);
     }
 
@@ -336,9 +337,9 @@ public class Hunger extends Wildcard {
             int hash = getHash(item);
             Random random = new Random(hash); // Use hash as seed for consistent results
 
-            if (random.nextDouble() < EFFECT_CHANCE) {
+            if (random.nextDouble() < EFFECT_CHANCE.get()) {
                 int amplifier = random.nextInt(5); // 0 -> 4
-                int duration = (int) Math.ceil(((random.nextInt(20) + 1) * AVG_EFFECT_DURATION) / 10.0);
+                int duration = (int) Math.ceil(((random.nextInt(20) + 1) * AVG_EFFECT_DURATION.get()) / 10.0);
                 //? if <= 1.20.3 {
                 /*MobEffect registryEntryEffect = effects.get(random.nextInt(effects.size()));
                 if (levelLimit.contains(registryEntryEffect) || commonItems.contains(item)) {
@@ -362,10 +363,10 @@ public class Hunger extends Wildcard {
 
             // Random nutrition and saturation
             if (!commonItems.contains(item)) {
-                if (random.nextDouble() < NUTRITION_CHANCE) {
+                if (random.nextDouble() < NUTRITION_CHANCE.get()) {
                     nutrition = random.nextInt(8) + 1; // 1 -> 8
                 }
-                if (random.nextDouble() < SATURATION_CHANCE) {
+                if (random.nextDouble() < SATURATION_CHANCE.get()) {
                     saturation = random.nextInt(4) + 1; // 1 -> 4
                     if (saturation > nutrition) saturation = nutrition;
                 }
@@ -373,7 +374,7 @@ public class Hunger extends Wildcard {
 
             // Random Sound
             if (!commonItems.contains(item)) {
-                if (random.nextDouble() < SOUND_CHANCE) {
+                if (random.nextDouble() < SOUND_CHANCE.get()) {
                     List<SoundEvent> allSounds = new ArrayList<>();
                     for (SoundEvent sound : BuiltInRegistries.SOUND_EVENT.stream().toList()) {
                         //? if <= 1.21 {

@@ -1,11 +1,13 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.config.ModifiableText;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.matlib.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -21,7 +23,7 @@ import net.minecraft.world.entity.decoration.Mannequin;
 //?}
 
 public class PlayerDisguise extends ToggleableSuperpower {
-    public static boolean DAMAGE_CANCELS = true;
+    public static final ConfigRef<Boolean> DAMAGE_CANCELS = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_PLAYER_DISGUISE_DAMAGE_CANCELS);
     public static int COOLDOWN_MILLIS = 10000;
 
     private String copiedPlayerName = "";
@@ -89,7 +91,7 @@ public class PlayerDisguise extends ToggleableSuperpower {
         if (copiedPlayerName.isEmpty() || copiedPlayerUUID.isEmpty()) return;
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        NetworkHandlerServer.sendPlayerDisguise(player.getUUID().toString(), player.getName().getString(), copiedPlayerUUID, copiedPlayerName);
+        LifeSeriesNetworkHandlerServer.sendPlayerDisguise(player.getUUID().toString(), player.getName().getString(), copiedPlayerUUID, copiedPlayerName);
     }
 
     @Override
@@ -105,11 +107,11 @@ public class PlayerDisguise extends ToggleableSuperpower {
                 playerPos.x(), playerPos.y(), playerPos.z(),
                 2, 0, 0, 0, 0
         );
-        NetworkHandlerServer.sendPlayerDisguise(player.getUUID().toString(), player.getName().getString(), "", "");
+        LifeSeriesNetworkHandlerServer.sendPlayerDisguise(player.getUUID().toString(), player.getName().getString(), "", "");
     }
 
     public void onTakeDamage() {
-        if (!DAMAGE_CANCELS) return;
+        if (!DAMAGE_CANCELS.get()) return;
         deactivate();
     }
 }
