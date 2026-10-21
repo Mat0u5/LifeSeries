@@ -13,7 +13,7 @@ import net.mat0u5.lifeseries.mixin.PlayerAccessor;
 import net.mat0u5.lifeseries.mixin.TrackedEntityAccessor;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.other.Tuple;
+import net.mat0u5.matlib.utils.other.Tuple;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
@@ -32,7 +32,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
-import static net.mat0u5.lifeseries.LifeSeries.server;
+import static net.mat0u5.matlib.MatLib.server;
 
 //? if > 1.21 {
 import com.mojang.authlib.properties.PropertyMap;
@@ -173,7 +173,7 @@ public class ProfileManager {
         if (changedName  || changedSkin) {
             ((PlayerAccessor) player).ls$setGameProfile(newProfile);
         }
-        return new Tuple<>(changedSkin, changedName);
+        return Tuple.of(changedSkin, changedName);
     }
 
     private static Property getSkinProperty(GameProfile profile) {

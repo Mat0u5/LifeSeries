@@ -1,11 +1,11 @@
 package net.mat0u5.lifeseries.seasons.season.nicelife;
 
-import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.lifeseries.config.SeasonConfig;
+import net.mat0u5.matlib.config.entry.ConfigHeader;
+import net.mat0u5.matlib.config.entry.ConfigurableValue;
+import net.mat0u5.matlib.config.type.ConfigTypes;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,139 +52,104 @@ public class NiceLifeConfig extends SeasonConfig {
             "quick_charge"
     );
 
-    public static final ConfigFileEntry<Boolean> LIGHT_MELTS_SNOW = new ConfigFileEntry<>(
-            "light_melts_snow", false, "season",
-            "Light Melts Snow", "Controls whether light sources will melt snow."
-    );
+    public final ConfigurableValue<Boolean> LIGHT_MELTS_SNOW = ConfigurableValue.register(this, "light_melts_snow", false)
+            .name("Light Melts Snow")
+            .description("Controls whether light sources will melt snow.")
+            .group("season");
+    public final ConfigurableValue<Boolean> SNOW_WHEN_NOT_IN_SESSION = ConfigurableValue.register(this, "snow_when_not_in_session", false)
+            .name("Snow When Not In Session")
+            .description("Controls it snows when the session is not started.")
+            .group("season");
+    public final ConfigurableValue<Integer> SNOW_LAYER_INCREMENT_DELAY = ConfigurableValue.register(this, "snow_layer_increment_delay", 600, ConfigTypes.SECONDS)
+            .name("Snow Layer Increment Delay")
+            .description("Controls the interval between snow layer increments, in seconds.")
+            .group("season");
+    public final ConfigurableValue<Boolean> ADVANCE_TIME_WHEN_NOT_IN_SESSION = ConfigurableValue.register(this, "advance_time_not_in_session", false)
+            .name("Advance Time When Not In Session")
+            .description("Controls whether the daylight cycle is paused when not in session.")
+            .group("season");
+    public final ConfigurableValue<Boolean> SNOWY_NETHER = ConfigurableValue.register(this, "snowy_nether", true)
+            .name("Snowy Nether")
+            .description("Controls the nether is frozen.")
+            .group("season");
+    public final ConfigurableValue<Boolean> RED_WINTER = ConfigurableValue.register(this, "red_winter", true)
+            .name("Allow Red Winter")
+            .description("Controls whether the Red Winter triggers.")
+            .group("season");
 
-    public static final ConfigFileEntry<Boolean> SNOW_WHEN_NOT_IN_SESSION = new ConfigFileEntry<>(
-            "snow_when_not_in_session", false, "season",
-            "Snow When Not In Session", "Controls it snows when the session is not started."
-    );
+    public final ConfigHeader GROUP_TRIVIA = ConfigHeader.register(this, "group_trivia", "Trivia")
+            .group("season.trivia").groupHeader(true);
+    public final ConfigHeader GROUP_VOTING = ConfigHeader.register(this, "group_voting", "Voting")
+            .group("season.voting").groupHeader(true);
 
-    public static final ConfigFileEntry<Integer> SNOW_LAYER_INCREMENT_DELAY = new ConfigFileEntry<>(
-            "snow_layer_increment_delay", 600, ConfigTypes.SECONDS, "season",
-            "Snow Layer Increment Delay", "Controls the interval between snow layer increments, in seconds."
-    );
-    public static final ConfigFileEntry<Boolean> ADVANCE_TIME_WHEN_NOT_IN_SESSION = new ConfigFileEntry<>(
-            "advance_time_not_in_session", false, "season",
-            "Advance Time When Not In Session", "Controls whether the daylight cycle is paused when not in session."
-    );
-
-    public static final ConfigFileEntry<Boolean> SNOWY_NETHER = new ConfigFileEntry<>(
-            "snowy_nether", true, "season",
-            "Snowy Nether", "Controls the nether is frozen."
-    );
-
-    public static final ConfigFileEntry<Integer> TRIVIA_QUESTION_TIME = new ConfigFileEntry<>(
-            "trivia_question_time", 68, ConfigTypes.SECONDS, "season.trivia",
-            "Trivia Question Time", "Controls how much time people have to answer the trivia, in seconds."
-    );
-    public static final ConfigFileEntry<Boolean> BOT_CAN_BREAK_BEDS = new ConfigFileEntry<>(
-            "bot_can_break_beds", true, "season.trivia",
-            "Bots Can Break Beds", "Controls whether descending santa bots can break the beds of other players in the way."
-    );
-    public static final ConfigFileEntry<Boolean> BOT_BREAKING_BLOCKS_DROP_RESOURCES = new ConfigFileEntry<>(
-            "bot_breaking_blocks_drop_resources", true, "season.trivia",
-            "Bots Breaking Blocks Drop Resources", "Controls whether block broken by descending santa bots drop items."
-    );
-    public static final ConfigFileEntry<Integer> VOTING_TIME = new ConfigFileEntry<>(
-            "voting_time", 60, ConfigTypes.SECONDS, "season.voting",
-            "Voting Time", "Controls how much time people have for voting, in seconds."
-    );
-    public static final ConfigFileEntry<Boolean> ALLOW_REDS_ON_NAUGHTY_LIST = new ConfigFileEntry<>(
-            "allow_reds_on_naughty_list", false, "season.voting",
-            "Naughty List Allow Reds", "Controls red players can be voted for on the naughty list."
-    );
-    public static final ConfigFileEntry<Integer> NAUGHTY_LIST_PLAYERS = new ConfigFileEntry<>(
-            "naughty_list_players", 3, "season.voting",
-            "Naughty List Player Amount", "Controls the maximum number of players that can be on the naughty list."
-    );
-    public static final ConfigFileEntry<Double> NICE_LIST_CHANCE = new ConfigFileEntry<>(
-            "nice_list_chance", 0.5, ConfigTypes.PERCENTAGE, "season.voting",
-            "Nice List Chance", "Percentage of how often the nice list will be chosen for the vote instead of the naughty list."
-    );
-    public static final ConfigFileEntry<Integer> NICE_LIST_PLAYERS = new ConfigFileEntry<>(
-            "nice_list_players", 3, "season.voting",
-            "Nice List Player Amount", "Controls the maximum number of players that can be on the nice list."
-    );
-    public static final ConfigFileEntry<Boolean> RED_WINTER = new ConfigFileEntry<>(
-            "red_winter", true, "season",
-            "Allow Red Winter", "Controls whether the Red Winter triggers."
-    );
-    public static final ConfigFileEntry<TriviaGuiType> TRIVIA_GUI_TYPE = new ConfigFileEntry<>(
-            "gui_type", TriviaGuiType.NICE_LIFE, "season.trivia",
-            "Gui Type", "Controls the trivia gui style."
-    );
-    public static final ConfigFileEntry<NightLength> TRIVIA_NIGHT_LENGTH = new ConfigFileEntry<>(
-            "night_length", NightLength.FIRST_LONG, "season.trivia",
-            "Night Length", "Controls when there are long nights in trivia."
-    );
-    public static final ConfigFileEntry<Boolean> TRIVIA_SHOW_NONSLEEPING = new ConfigFileEntry<>(
-            "trivia_show_nonsleeping", false, "season.trivia",
-            "Display Non-Sleeping Players", "Displays players that are not sleeping yet when you are in bed."
-    );
-    public static final ConfigFileEntry<Boolean> PUBLIC_VOTING = new ConfigFileEntry<>(
-            "public_voting", false, "season.voting",
-            "Public Voting", "Displays how many players have voted for each player in the voting screen."
-    );
-
-
-    public static final ConfigFileEntry<Object> GROUP_TRIVIA = new ConfigFileEntry<>(
-            "group_trivia", null, ConfigTypes.TEXT, "{season.trivia}",
-            "Trivia", ""
-    );
-    public static final ConfigFileEntry<Object> GROUP_VOTING = new ConfigFileEntry<>(
-            "group_voting", null, ConfigTypes.TEXT, "{season.voting}",
-            "Voting", ""
-    );
-    public static final ConfigFileEntry<Object> GROUP_TRIVIA_QUESTIONS = new ConfigFileEntry<>(
-            "group_trivia_questions", null, ConfigTypes.TEXT, "{season.trivia.questions}",
-            "Trivia Questions", ""
-    );
+    public final ConfigurableValue<TriviaGuiType> TRIVIA_GUI_TYPE = ConfigurableValue.register(this, "gui_type", TriviaGuiType.NICE_LIFE)
+            .name("Gui Type")
+            .description("Controls the trivia gui style.")
+            .group("season.trivia");
+    public final ConfigurableValue<NightLength> TRIVIA_NIGHT_LENGTH = ConfigurableValue.register(this, "night_length", NightLength.FIRST_LONG)
+            .name("Night Length")
+            .description("Controls when there are long nights in trivia.")
+            .group("season.trivia");
+    public final ConfigurableValue<Integer> TRIVIA_QUESTION_TIME = ConfigurableValue.register(this, "trivia_question_time", 68, ConfigTypes.SECONDS)
+            .name("Trivia Question Time")
+            .description("Controls how much time people have to answer the trivia, in seconds.")
+            .group("season.trivia");
+    public final ConfigurableValue<Boolean> BOT_CAN_BREAK_BEDS = ConfigurableValue.register(this, "bot_can_break_beds", true)
+            .name("Bots Can Break Beds")
+            .description("Controls whether descending santa bots can break the beds of other players in the way.")
+            .group("season.trivia");
+    public final ConfigurableValue<Boolean> BOT_BREAKING_BLOCKS_DROP_RESOURCES = ConfigurableValue.register(this, "bot_breaking_blocks_drop_resources", true)
+            .name("Bots Breaking Blocks Drop Resources")
+            .description("Controls whether block broken by descending santa bots drop items.")
+            .group("season.trivia");
+    public final ConfigurableValue<Integer> VOTING_TIME = ConfigurableValue.register(this, "voting_time", 60, ConfigTypes.SECONDS)
+            .name("Voting Time")
+            .description("Controls how much time people have for voting, in seconds.")
+            .group("season.voting");
+    public final ConfigurableValue<Boolean> ALLOW_REDS_ON_NAUGHTY_LIST = ConfigurableValue.register(this, "allow_reds_on_naughty_list", false)
+            .name("Naughty List Allow Reds")
+            .description("Controls red players can be voted for on the naughty list.")
+            .group("season.voting");
+    public final ConfigurableValue<Integer> NAUGHTY_LIST_PLAYERS = ConfigurableValue.register(this, "naughty_list_players", 3)
+            .name("Naughty List Player Amount")
+            .description("Controls the maximum number of players that can be on the naughty list.")
+            .group("season.voting");
+    public final ConfigurableValue<Integer> NICE_LIST_PLAYERS = ConfigurableValue.register(this, "nice_list_players", 3)
+            .name("Nice List Player Amount")
+            .description("Controls the maximum number of players that can be on the nice list.")
+            .group("season.voting");
+    public final ConfigurableValue<Double> NICE_LIST_CHANCE = ConfigurableValue.register(this, "nice_list_chance", 0.5, ConfigTypes.PERCENTAGE)
+            .name("Nice List Chance")
+            .description("Percentage of how often the nice list will be chosen for the vote instead of the naughty list.")
+            .group("season.voting");
+    public final ConfigHeader GROUP_TRIVIA_QUESTIONS = ConfigHeader.register(this, "group_trivia_questions", "Trivia Questions")
+            .group("season.trivia.questions").groupHeader(true);
+    public final ConfigurableValue<Boolean> TRIVIA_SHOW_NONSLEEPING = ConfigurableValue.register(this, "trivia_show_nonsleeping", false)
+            .name("Display Non-Sleeping Players")
+            .description("Displays players that are not sleeping yet when you are in bed.")
+            .group("season.trivia");
+    public final ConfigurableValue<Boolean> PUBLIC_VOTING = ConfigurableValue.register(this, "public_voting", false)
+            .name("Public Voting")
+            .description("Displays how many players have voted for each player in the voting screen.")
+            .group("season.voting");
 
     public NiceLifeConfig() {
         super(Seasons.NICE_LIFE);
+        removeEntry(NO_SEASON_SPECIFIC);
+        BLACKLIST_ITEMS.defaultValue(BLACKLISTED_ITEMS);
+        BLACKLIST_BLOCKS.defaultValue(BLACKLISTED_BLOCKS);
+        BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.defaultValue(CLAMPED_ENCHANTMENTS);
     }
 
     public NiceLifeConfig(String folderPath, String filePath) {
         super(folderPath, filePath);
+        removeEntry(NO_SEASON_SPECIFIC);
+        BLACKLIST_ITEMS.defaultValue(BLACKLISTED_ITEMS);
+        BLACKLIST_BLOCKS.defaultValue(BLACKLISTED_BLOCKS);
+        BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.defaultValue(CLAMPED_ENCHANTMENTS);
     }
 
-    @Override
-    protected List<ConfigFileEntry<?>> getSeasonSpecificConfigEntries() {
-        return new ArrayList<>(List.of(
-                LIGHT_MELTS_SNOW
-                ,SNOW_WHEN_NOT_IN_SESSION
-                ,SNOW_LAYER_INCREMENT_DELAY
-                ,ADVANCE_TIME_WHEN_NOT_IN_SESSION
-                ,SNOWY_NETHER
-                ,RED_WINTER
-
-                ,GROUP_TRIVIA
-                ,GROUP_VOTING
-
-                ,TRIVIA_GUI_TYPE
-                ,TRIVIA_NIGHT_LENGTH
-                ,TRIVIA_QUESTION_TIME
-                ,BOT_CAN_BREAK_BEDS
-                ,BOT_BREAKING_BLOCKS_DROP_RESOURCES
-                ,VOTING_TIME
-                ,ALLOW_REDS_ON_NAUGHTY_LIST
-                ,NAUGHTY_LIST_PLAYERS
-                ,NICE_LIST_PLAYERS
-                ,NICE_LIST_CHANCE
-                ,GROUP_TRIVIA_QUESTIONS
-                ,TRIVIA_SHOW_NONSLEEPING
-                ,PUBLIC_VOTING
-        ));
-    }
-
-    @Override
-    public void instantiateProperties() {
-        BLACKLIST_ITEMS.defaultValue = TextUtils.formatString("[{}]", BLACKLISTED_ITEMS);
-        BLACKLIST_BLOCKS.defaultValue = TextUtils.formatString("[{}]", BLACKLISTED_BLOCKS);
-        BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.defaultValue = TextUtils.formatString("[{}]", CLAMPED_ENCHANTMENTS);
-        super.instantiateProperties();
+    public static NiceLifeConfig get() {
+        return getActive(NiceLifeConfig.class, NiceLifeConfig::new);
     }
 }

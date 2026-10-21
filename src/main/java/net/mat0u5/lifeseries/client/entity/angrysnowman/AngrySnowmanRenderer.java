@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.client.entity.angrysnowman;
 
-import net.mat0u5.lifeseries.client.utils.interfaces.IEntityRenderState;
+import net.mat0u5.matlib.client.utils.interfaces.IEntityRenderState;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.SnowGolemRenderer;
@@ -11,11 +11,9 @@ import java.util.UUID;
 
 //? if <= 1.21 {
 //import net.minecraft.world.entity.animal.golem.SnowGolem;
-//?}
-//? if >= 1.21.2 {
-import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
- //?}
-//? if >= 1.21.4 {
+//?} else if <= 1.21.3 {
+//import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+//?} else {
 import net.minecraft.client.renderer.entity.state.SnowGolemRenderState;
  //?}
 
@@ -38,13 +36,13 @@ public class AngrySnowmanRenderer extends SnowGolemRenderer {
             //uuid  = entity.getUUID();
             //?} else {
             if (state instanceof IEntityRenderState stateAccessor) {
-                uuid = stateAccessor.ls$getEntity().getUUID();
+                uuid = stateAccessor.ml$getEntity().getUUID();
             }
             //?}
             int variation = 0;
             if (uuid != null) {
                 variation = new Random(uuid.hashCode()).nextInt(SKIN_VARIATIONS);
             }
-            return IdentifierHelper.mod("textures/entity/angrysnowman/variation_"+variation+".png");
+            return IdentifierHelper.lifeseries("textures/entity/angrysnowman/variation_"+variation+".png");
         }
 }

@@ -1,9 +1,11 @@
 package net.mat0u5.lifeseries.seasons.season.nicelife;
 
+import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
-import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
@@ -14,8 +16,12 @@ import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.*;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.mat0u5.matlib.utils.other.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -45,6 +51,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
+import static net.mat0u5.matlib.MatLib.*;
 
 //? if >= 26.1 {
 import net.minecraft.world.clock.WorldClocks;
@@ -52,11 +59,11 @@ import net.minecraft.world.clock.WorldClocks;
 
 public class NiceLife extends Season {
 
-    public static boolean SNOWY_NETHER = true;
-    public static boolean LIGHT_MELTS_SNOW = false;
-    public boolean SNOW_WHEN_NOT_IN_SESSION = false;
-    public static boolean ADVANCE_TIME_WHEN_NOT_IN_SESSION = false;
-    public static boolean RED_WINTER = true;
+    public static final ConfigRef<Boolean> SNOWY_NETHER = ConfigRef.of(() -> NiceLifeConfig.get().SNOWY_NETHER);
+    public static final ConfigRef<Boolean> LIGHT_MELTS_SNOW = ConfigRef.of(() -> NiceLifeConfig.get().LIGHT_MELTS_SNOW);
+    public final ConfigRef<Boolean> SNOW_WHEN_NOT_IN_SESSION = ConfigRef.of(() -> NiceLifeConfig.get().SNOW_WHEN_NOT_IN_SESSION);
+    public static final ConfigRef<Boolean> ADVANCE_TIME_WHEN_NOT_IN_SESSION = ConfigRef.of(() -> NiceLifeConfig.get().ADVANCE_TIME_WHEN_NOT_IN_SESSION);
+    public static final ConfigRef<Boolean> RED_WINTER = ConfigRef.of(() -> NiceLifeConfig.get().RED_WINTER);
     public Time SNOW_LAYER_INCREASE_INTERVAL = Time.seconds(600);
     public Time snowTicks = Time.zero();
     public double snowLayerTickChance = 1.0 / 43;
@@ -86,7 +93,7 @@ public class NiceLife extends Season {
     }
 
     @Override
-    public ConfigManager createConfig() {
+    public SeasonConfig createConfig() {
         return new NiceLifeConfig();
     }
 
@@ -112,11 +119,7 @@ public class NiceLife extends Season {
     public void reload() {
         super.reload();
         NiceLifeVotingManager.createTeams();
-        LIGHT_MELTS_SNOW = NiceLifeConfig.LIGHT_MELTS_SNOW.get();
-        SNOW_WHEN_NOT_IN_SESSION = NiceLifeConfig.SNOW_WHEN_NOT_IN_SESSION.get();
-        SNOW_LAYER_INCREASE_INTERVAL = Time.seconds(NiceLifeConfig.SNOW_LAYER_INCREMENT_DELAY.get());
-        ADVANCE_TIME_WHEN_NOT_IN_SESSION = NiceLifeConfig.ADVANCE_TIME_WHEN_NOT_IN_SESSION.get();
-        SNOWY_NETHER = NiceLifeConfig.SNOWY_NETHER.get();
+        SNOW_LAYER_INCREASE_INTERVAL = Time.seconds(NiceLifeConfig.get().SNOW_LAYER_INCREMENT_DELAY.get());
         snowLayerTickChance = 280.0 / Math.max(SNOW_LAYER_INCREASE_INTERVAL.getTicks(), 1);
         if (currentMaxSnowLayers == -1) {
             currentMaxSnowLayers = seasonConfig.getOrCreateInt("current_snow_layers", 1);
@@ -124,19 +127,8 @@ public class NiceLife extends Season {
         updateSnowTick();
         NiceLifeTriviaManager.initialize();
 
-        NiceLifeTriviaManager.QUESTION_TIME = NiceLifeConfig.TRIVIA_QUESTION_TIME.get();
-        NiceLifeTriviaManager.CAN_BREAK_BEDS = NiceLifeConfig.BOT_CAN_BREAK_BEDS.get();
-        NiceLifeTriviaManager.BREAKING_DROPS_RESOURCES = NiceLifeConfig.BOT_BREAKING_BLOCKS_DROP_RESOURCES.get();
-        NiceLifeTriviaManager.SHOW_NONSLEEPING = NiceLifeConfig.TRIVIA_SHOW_NONSLEEPING.get();
-        NiceLifeVotingManager.NICE_LIST_CHANCE = NiceLifeConfig.NICE_LIST_CHANCE.get();
-        NiceLifeVotingManager.VOTING_TIME = Time.seconds(NiceLifeConfig.VOTING_TIME.get());
-        NiceLifeVotingManager.REDS_ON_NAUGHTY_LIST = NiceLifeConfig.ALLOW_REDS_ON_NAUGHTY_LIST.get();
-        NiceLifeVotingManager.NAUGHTY_LIST_COUNT = NiceLifeConfig.NAUGHTY_LIST_PLAYERS.get();
-        NiceLifeVotingManager.NICE_LIST_COUNT = NiceLifeConfig.NICE_LIST_PLAYERS.get();
-        NiceLifeVotingManager.PUBLIC_VOTING = NiceLifeConfig.PUBLIC_VOTING.get();
-        RED_WINTER = NiceLifeConfig.RED_WINTER.get();
-        TriviaHandler.guiType = NiceLifeConfig.TRIVIA_GUI_TYPE.get();
-        NiceLifeTriviaManager.nightLength = NiceLifeConfig.TRIVIA_NIGHT_LENGTH.get();
+        NiceLifeVotingManager.VOTING_TIME = Time.seconds(NiceLifeConfig.get().VOTING_TIME.get());
+        TriviaHandler.guiType = NiceLifeConfig.get().TRIVIA_GUI_TYPE.get();
     }
 
     public void updateSnowTick() {
@@ -158,7 +150,7 @@ public class NiceLife extends Season {
         super.tick(server);
         if (forceSleepTicks > 0) forceSleepTicks--;
         timePassed.tick();
-        if (currentSession.statusStarted() || SNOW_WHEN_NOT_IN_SESSION) {
+        if (currentSession.statusStarted() || SNOW_WHEN_NOT_IN_SESSION.get()) {
             snowTicks.tick();
             if (snowTicks.isLargerThan(SNOW_LAYER_INCREASE_INTERVAL)) {
                 snowTicks = Time.zero();
@@ -179,7 +171,7 @@ public class NiceLife extends Season {
 
         List<String> nonSleepingPlayers = new ArrayList<>();
 
-        boolean advanceTime = !isMidnight() && (currentSession.statusStarted() || ADVANCE_TIME_WHEN_NOT_IN_SESSION);
+        boolean advanceTime = !isMidnight() && (currentSession.statusStarted() || ADVANCE_TIME_WHEN_NOT_IN_SESSION.get());
         OtherUtils.setBooleanGameRule(overworld, GameRules.ADVANCE_TIME, advanceTime);
 
         if (!isMidnight()) {
@@ -191,7 +183,7 @@ public class NiceLife extends Season {
             if (!playedMidnightChimes && isTimeBetween(18000-23*20, 20000)) {
                 playedMidnightChimes = true;
                 PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(),
-                        SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_midnight_chimes")),
+                        SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("nicelife_midnight_chimes")),
                         1f, 1);
                 postponeTriviaStart(Time.ticks(779));
             }
@@ -281,7 +273,7 @@ public class NiceLife extends Season {
             if (player.isSleeping()) {
                 sleepingPlayers++;
             }
-            else if (NiceLifeTriviaManager.SHOW_NONSLEEPING) {
+            else if (NiceLifeTriviaManager.SHOW_NONSLEEPING.get()) {
                 nonSleepingPlayers.add(TextUtils.textToLegacyString(player.getDisplayName()));
             }
         }
@@ -313,7 +305,7 @@ public class NiceLife extends Season {
         TaskScheduler.scheduleTask(20, () -> {
             DatapackIntegration.EVENT_RED_WINTER_START.trigger();
             PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(),
-                    SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("nicelife_red_winter")),
+                    SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("nicelife_red_winter")),
                     1f, 1);
         });
         TaskScheduler.scheduleTask(20 + 12, () -> {
@@ -333,7 +325,7 @@ public class NiceLife extends Season {
     }
 
     public boolean shouldRedWinter() {
-        if (!RED_WINTER) return false;
+        if (!RED_WINTER.get()) return false;
         if (currentSession.statusNotStarted()) return false;
         List<ServerPlayer> assignedPlayers = PlayerUtils.getAllFunctioningPlayers();
         assignedPlayers.removeIf(player -> !((IPlayer) player).ls$hasAssignedLives());
@@ -412,7 +404,7 @@ public class NiceLife extends Season {
         if (level.dimension() != Level.OVERWORLD) {
             return;
         }
-        if (currentSession.statusStarted()  || SNOW_WHEN_NOT_IN_SESSION) {
+        if (currentSession.statusStarted()  || SNOW_WHEN_NOT_IN_SESSION.get()) {
             int minX = chunkPos.getMinBlockX();
             int maxX = chunkPos.getMinBlockZ();
 
@@ -479,7 +471,7 @@ public class NiceLife extends Season {
     }
 
     private boolean shouldFreeze(ServerLevel level, BlockPos blockPos) {
-        boolean darkEnough = level.getBrightness(LightLayer.BLOCK, blockPos) < 10 || !LIGHT_MELTS_SNOW;
+        boolean darkEnough = level.getBrightness(LightLayer.BLOCK, blockPos) < 10 || !LIGHT_MELTS_SNOW.get();
         int minY = level.getMinY();
         int maxY = level.getMaxY();
         if (blockPos.getY() >= minY && blockPos.getY() < maxY && darkEnough) {
@@ -545,7 +537,7 @@ public class NiceLife extends Season {
     );
 
     private boolean shouldSnow(ServerLevel level, BlockPos blockPos) {
-        boolean darkEnough = level.getBrightness(LightLayer.BLOCK, blockPos) < 10 || !LIGHT_MELTS_SNOW;
+        boolean darkEnough = level.getBrightness(LightLayer.BLOCK, blockPos) < 10 || !LIGHT_MELTS_SNOW.get();
         int minY = level.getMinY();
         int maxY = level.getMaxY();
         if (blockPos.getY() >= minY && blockPos.getY() < maxY && darkEnough) {

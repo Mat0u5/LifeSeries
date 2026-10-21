@@ -1,0 +1,70 @@
+package net.mat0u5.lifeseries.registries;
+
+import net.mat0u5.lifeseries.command.manager.CustomCommand;
+import net.mat0u5.lifeseries.events.Events;
+import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
+import net.mat0u5.lifeseries.seasons.season.Season;
+import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
+import net.mat0u5.matlib.events.common.*;
+import net.mat0u5.matlib.events.server.*;
+
+//? if <= 1.20.2 {
+/*import net.mat0u5.lifeseries.seasons.season.Season;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
+import java.util.Optional;
+*///?}
+
+public class Registries {
+	public static void register() {
+		MobRegistry.registerMobs();
+		ParticleRegistry.registerParticles();
+		registerEvents();
+		registerCommands();
+		//? if <= 1.20.2 {
+		//registerCustomResourcepack();
+		//?}
+		Season.registerEvents();
+		SecretLife.registerSecretLifeEvents();
+		Blacklist.registerEvents();
+	}
+
+	public static void registerEvents() {
+		ServerLifecycleEvents.SERVER_STARTING.register(Events::onServerStarting);
+		ServerLifecycleEvents.SERVER_STARTED.register(Events::onServerStart);
+		ServerLifecycleEvents.SERVER_STOPPING.register(Events::onServerStopping);
+		ServerResourceEvents.RELOAD_START.register(Events::onReloadStart);
+		ServerResourceEvents.RELOAD_STOPPING.register(Events::onReloadEnd);
+		ServerPlayerEvents.CONNECT.register((connection, player) -> Events.onPlayerJoin(player));
+		ServerPlayerEvents.DISCONNECT.register((details, player) -> Events.onPlayerDisconnect(player));
+		ServerPlayerEvents.FINISH_JOINING.register(Events::onPlayerFinishJoining);
+		ServerPlayerEvents.RESPAWN.register(Events::onPlayerRespawn);
+		ServerChatEvents.BROADCAST_SYSTEM.register(Events::onBroadcastSystem);
+		ServerChatEvents.BROADCAST_CHAT.register(Events::onBroadcastChat);
+		ServerTickEvents.END_TICK.register(Events::onServerTickEnd);
+		ServerEntityEvents.DEATH.register(Events::onEntityDeath);
+		ServerEntityEvents.DROP_LOOT.register(Events::onEntityDropItems);
+		ServerPlayerEvents.ATTACK_BLOCK.register(Events::onBlockAttack);
+		ServerPlayerEvents.CLICK_BLOCK.register(Events::onBlockUse);
+		ServerPlayerEvents.ITEM_USE.register(Events::onItemUse);
+		ServerPlayerEvents.CLICK_ENTITY.register(Events::onRightClickEntity);
+		CommonPlayerEvents.ATTACK_ENTITY.register(Events::onAttackEntity);
+		CommonPlayerEvents.UPDATE_INVENTORY.register(Events::onUpdatedInventory);
+	}
+
+	public static void registerCommands() {
+		ServerRegistryEvents.COMMAND_CUSTOM.register(CustomCommand::getAllCommands);
+	}
+
+	//? if <= 1.20.2 {
+	/*public static void registerCustomResourcepack() {
+		ServerResourceEvents.GET_SERVER_PACK.register(originalPack -> {
+			String url = Season.RESOURCEPACK_COMBINED_URL;
+			String hash = Season.RESOURCEPACK_COMBINED_SHA;
+			boolean isRequired = false;
+			Component prompt = Component.nullToEmpty("Life Series Resourcepack.");
+			return Optional.of(new MinecraftServer.ServerResourcePackInfo(url, hash, isRequired, prompt));
+		});
+	}
+	*///?}
+}

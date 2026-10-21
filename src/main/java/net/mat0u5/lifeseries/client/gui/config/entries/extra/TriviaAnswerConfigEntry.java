@@ -1,15 +1,19 @@
 package net.mat0u5.lifeseries.client.gui.config.entries.extra;
 
-import net.mat0u5.lifeseries.client.gui.config.entries.ConfigEntry;
-import net.mat0u5.lifeseries.client.gui.config.entries.ModifiableListEntry;
-import net.mat0u5.lifeseries.client.render.RenderUtils;
-import net.mat0u5.lifeseries.client.utils.TextColors;
-import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.client.config.LifeSeriesConfigGuiClient;
+import net.mat0u5.matlib.client.gui.config.entries.ConfigEntry;
+import net.mat0u5.matlib.client.gui.config.entries.ModifiableListEntry;
+import net.mat0u5.matlib.client.render.RenderUtils;
+import net.mat0u5.matlib.client.utils.TextColors;
+import net.mat0u5.lifeseries.config.LifeSeriesConfigTypes;
+import net.mat0u5.matlib.config.entry.ConfigGuiEntry;
+import net.mat0u5.matlib.config.type.ConfigType;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 import java.util.Objects;
+import java.util.Optional;
 
 //? if >= 1.21.9
 import net.minecraft.client.input.*;
@@ -25,8 +29,8 @@ public class TriviaAnswerConfigEntry extends ModifiableListEntry {
     boolean isCorrect;
     boolean defaultIsCorrect;
 
-    public TriviaAnswerConfigEntry(String fieldName, String answer, int index, boolean isCorrect) {
-        super(fieldName);
+    public TriviaAnswerConfigEntry(ConfigGuiEntry guiEntry, String answer, int index, boolean isCorrect) {
+        super(guiEntry);
         this.defaultText = answer;
         this.text = answer;
         this.answerIndex = index;
@@ -90,7 +94,7 @@ public class TriviaAnswerConfigEntry extends ModifiableListEntry {
 
     @Override
     public ConfigEntry getNewEntry() {
-        return new TriviaAnswerConfigEntry(this.fieldName.substring(0, this.fieldName.length()-1)+(this.answerIndex+1), "Answer Text", this.answerIndex+1, false);
+        return new TriviaAnswerConfigEntry(LifeSeriesConfigGuiClient.copyWithKey(inboundGuiEntry, this.fieldName.substring(0, this.fieldName.length()-1)+(this.answerIndex+1)), "Answer Text", this.answerIndex+1, false);
     }
 
     @Override
@@ -220,11 +224,12 @@ public class TriviaAnswerConfigEntry extends ModifiableListEntry {
     //?}
 
     @Override
-    public ConfigTypes getValueType() {
-        return ConfigTypes.TRIVIA_ANSWER;
+    public ConfigType<?> getValueType() {
+        return LifeSeriesConfigTypes.TRIVIA_ANSWER;
     }
 
     @Override
-    public void onSave() {
+    public Optional<ConfigGuiEntry> onSave() {
+        return Optional.empty();
     }
 }

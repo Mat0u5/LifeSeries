@@ -1,13 +1,16 @@
 package net.mat0u5.lifeseries.client.gui.config.entries.extra;
 
-import net.mat0u5.lifeseries.client.gui.config.entries.main.NullableIntegerConfigEntry;
+import net.mat0u5.matlib.client.gui.config.entries.main.NullableIntegerConfigEntry;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
-import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.config.LifeSeriesConfigTypes;
+import net.mat0u5.matlib.config.entry.ConfigGuiEntry;
+import net.mat0u5.matlib.config.type.ConfigType;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 //? if >= 1.21.9
 import net.minecraft.client.input.*;
@@ -15,8 +18,8 @@ import net.minecraft.client.input.*;
 public class LivesConfigEntry extends NullableIntegerConfigEntry {
     public Button addButton;
     public Button subtractButton;
-    public LivesConfigEntry(String fieldName, String displayName, String description, Integer value, Integer defaultValue) {
-        super(fieldName, displayName, description, value, defaultValue);
+    public LivesConfigEntry(ConfigGuiEntry guiEntry, Integer value, Integer defaultValue) {
+        super(guiEntry, value, defaultValue);
 
         addButton = Button.builder(Component.nullToEmpty("+"), this::add)
                 .bounds(0, 0, 16, 16)
@@ -70,13 +73,14 @@ public class LivesConfigEntry extends NullableIntegerConfigEntry {
     }
 
     @Override
-    public ConfigTypes getValueType() {
-        return ConfigTypes.LIVES_ENTRY;
+    public ConfigType<?> getValueType() {
+        return LifeSeriesConfigTypes.LIVES_ENTRY;
     }
 
     @Override
-    public void onSave() {
+    public Optional<ConfigGuiEntry> onSave() {
         SimplePackets.SET_LIVES.sendToServer(List.of(fieldName.replaceFirst("dynamic_lives_",""), getValueAsString()));
+        return Optional.empty();
     }
 
     @Override

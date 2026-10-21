@@ -3,9 +3,12 @@ package net.mat0u5.lifeseries.client.features;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.mat0u5.lifeseries.utils.other.Tuple;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.matlib.events.OptionalEventReturn;
+import net.mat0u5.matlib.utils.other.TextUtils;
+import net.mat0u5.matlib.utils.other.Tuple;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,6 +37,20 @@ import net.minecraft.client.renderer.texture.TextureResources;
 public class LifeSkinsClient {
 
     //? if <= 1.20 {
+    //public static OptionalEventReturn<Identifier> onGetSkin(PlayerInfo info, Identifier originalReturn) {
+    //?} else {
+    public static OptionalEventReturn<PlayerSkin> onGetSkin(PlayerInfo info, PlayerSkin originalReturn) {
+    //?}
+        UUID uuid = OtherUtils.profileId(info.getProfile());
+
+        var lifeSkins = LifeSkinsClient.getTexture(uuid);
+        if (lifeSkins != null) {
+            return OptionalEventReturn.of(lifeSkins);
+        }
+        return OptionalEventReturn.pass();
+    }
+
+    //? if <= 1.20 {
     //private static final Map<String, Identifier> lifeSkinsTextures = new ConcurrentHashMap<>();
     //?} else {
     private static final Map<String, Tuple<Identifier, PlayerSkin>> lifeSkinsTextures = new ConcurrentHashMap<>();
@@ -45,7 +62,7 @@ public class LifeSkinsClient {
         try {
             Minecraft client = Minecraft.getInstance();
 
-            var textureId = IdentifierHelper.mod("dynamic/lifeskins/" + skinId.toLowerCase(Locale.ROOT));
+            var textureId = IdentifierHelper.lifeseries("dynamic/lifeskins/" + skinId.toLowerCase(Locale.ROOT));
 
             NativeImage image = NativeImage.read(new ByteArrayInputStream(textureData));
 
@@ -65,12 +82,12 @@ public class LifeSkinsClient {
             //?} else if <= 1.21.6 {
             /*PlayerSkin.Model modelType = slim ? PlayerSkin.Model.SLIM : PlayerSkin.Model.WIDE;
             PlayerSkin skin = new PlayerSkin(textureId, "", null, null, modelType, false);
-            lifeSkinsTextures.put(skinId, new Tuple<>(textureId, skin));
+            lifeSkinsTextures.put(skinId, Tuple.of(textureId, skin));
             *///?} else {
             ClientAsset.DownloadedTexture resourceTexture = new ClientAsset.DownloadedTexture(textureId, "");
             PlayerModelType modelType = slim ? PlayerModelType.SLIM : PlayerModelType.WIDE;
             PlayerSkin skin = new PlayerSkin(resourceTexture, null, null, modelType, false);
-            lifeSkinsTextures.put(skinId, new Tuple<>(textureId, skin));
+            lifeSkinsTextures.put(skinId, Tuple.of(textureId, skin));
             //?}
         } catch (IOException e) {
             LifeSeries.LOGGER.error("Error while processing life skins texture '"+skinId+"'");

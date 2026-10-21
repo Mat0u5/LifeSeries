@@ -74,11 +74,11 @@ public final class SnailPushProjectilesGoal extends Goal {
             //?}
 
             //? if <= 1.21.4 {
-            /*if (projectile instanceof ThrownPotion && Snail.ALLOW_POTION_EFFECTS) {
+            /*if (projectile instanceof ThrownPotion && Snail.ALLOW_POTION_EFFECTS.get()) {
                 continue;
             }
             *///?} else {
-            if (projectile instanceof AbstractThrownPotion && Snail.ALLOW_POTION_EFFECTS) {
+            if (projectile instanceof AbstractThrownPotion && Snail.ALLOW_POTION_EFFECTS.get()) {
                 continue;
             }
             //?}

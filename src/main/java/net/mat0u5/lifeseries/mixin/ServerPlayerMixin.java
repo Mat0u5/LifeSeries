@@ -6,7 +6,6 @@ import com.mojang.datafixers.util.Either;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ModifiableText;
-import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
@@ -14,8 +13,6 @@ import net.mat0u5.lifeseries.seasons.util.WatcherManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.NicknameManager;
-import net.mat0u5.lifeseries.utils.player.PlayerReference;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -24,7 +21,6 @@ import net.minecraft.server.players.PlayerList;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Unit;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -38,8 +34,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.OptionalInt;
-
 import static net.mat0u5.lifeseries.LifeSeries.*;
 
 //? if >= 1.21.11 {
@@ -48,8 +42,6 @@ import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 //?}
 //? if >= 1.21.2
 import java.util.Collection;
-//? if <= 1.21.6
-//import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 //? if >= 26.3 {
 import net.minecraft.world.attribute.BedRule;
 import net.minecraft.world.level.block.AbstractBedBlock;
@@ -59,61 +51,6 @@ import net.minecraft.world.level.block.state.BlockState;
 @Mixin(value = ServerPlayer.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public class ServerPlayerMixin implements IPlayer {
-
-    @Inject(method = "openMenu", at = @At("HEAD"))
-    private void onInventoryOpen(@Nullable MenuProvider factory, CallbackInfoReturnable<OptionalInt> cir) {
-        if (LifeSeries.isClientOrDisabled()) return;
-        ServerPlayer player = ls$get();
-        if (blacklist == null) return;
-
-        PlayerReference ref = PlayerReference.of(player);
-        TaskScheduler.scheduleTask(1, () -> {
-            ServerPlayer playerNew = ref.get();
-            if (playerNew != null) {
-                playerNew.containerMenu.getItems().forEach(itemStack -> blacklist.processItemStack(playerNew, itemStack));
-                PlayerUtils.updatePlayerInventory(playerNew);
-            }
-        });
-    }
-
-    //? if <= 1.21.6 {
-    /*@Inject(method = "sendSystemMessage(Lnet/minecraft/network/chat/Component;Z)V", at = @At("HEAD"), cancellable = true)
-    private void sendMessageToClient(Component message, boolean overlay, CallbackInfo ci) {
-        if (LifeSeries.modFullyDisabled()) return;
-        ServerPlayer player = ls$get();
-        if (player instanceof FakePlayer) {
-            ci.cancel();
-        }
-    }
-
-    @Inject(method = "acceptsSystemMessages", at = @At("HEAD"), cancellable = true)
-    private void acceptsMessage(boolean overlay, CallbackInfoReturnable<Boolean> cir) {
-        if (LifeSeries.modFullyDisabled()) return;
-        ServerPlayer player = ls$get();
-        if (player instanceof FakePlayer) {
-            cir.setReturnValue(false);
-        }
-    }
-
-    @Inject(method = "acceptsChatMessages", at = @At("HEAD"), cancellable = true)
-    private void acceptsChatMessage(CallbackInfoReturnable<Boolean> cir) {
-        if (LifeSeries.modFullyDisabled()) return;
-        ServerPlayer player = ls$get();
-        if (player instanceof FakePlayer) {
-            cir.setReturnValue(false);
-        }
-    }
-    *///?}
-
-    //Located in the Player class in 26.1+
-    //? if <= 1.21.11 {
-    /*@Inject(method = "attack", at = @At("HEAD"))
-    private void onAttackEntity(Entity target, CallbackInfo ci) {
-        if (LifeSeries.isClientOrDisabled()) return;
-        ServerPlayer player = ls$get();
-        currentSeason.onUpdatedInventory(player);
-    }
-    *///?}
 
     @Inject(method = "onEffectAdded", at = @At("TAIL"))
     private void onStatusEffectApplied(MobEffectInstance effect, Entity source, CallbackInfo ci) {
@@ -312,7 +249,7 @@ public class ServerPlayerMixin implements IPlayer {
     @WrapOperation(method = "die", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Z)V"))
     private void modifyDeathMessage(PlayerList instance, Component component, boolean bl, Operation<Void> original) {
         livesManager.deathMessage(ls$get(), component);
-        if (LifeSeries.isClientOrDisabled() || livesManager == null || !livesManager.SHOW_LIFE_DIFF) {
+        if (LifeSeries.isClientOrDisabled() || livesManager == null || !livesManager.SHOW_LIFE_DIFF.get()) {
             original.call(instance, component, bl);
         }
         else {
@@ -325,7 +262,7 @@ public class ServerPlayerMixin implements IPlayer {
 
     @WrapOperation(method = "die", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemToTeam(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/network/chat/Component;)V"))
     private void modifyDeathMessage2(PlayerList instance, Player player, Component component, Operation<Void> original) {
-        if (LifeSeries.isClientOrDisabled() || livesManager == null || !livesManager.SHOW_LIFE_DIFF) {
+        if (LifeSeries.isClientOrDisabled() || livesManager == null || !livesManager.SHOW_LIFE_DIFF.get()) {
             original.call(instance, player, component);
         }
         else {
@@ -338,7 +275,7 @@ public class ServerPlayerMixin implements IPlayer {
 
     @WrapOperation(method = "die", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemToAllExceptTeam(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/network/chat/Component;)V"))
     private void modifyDeathMessage3(PlayerList instance, Player player, Component component, Operation<Void> original) {
-        if (LifeSeries.isClientOrDisabled() || livesManager == null || !livesManager.SHOW_LIFE_DIFF) {
+        if (LifeSeries.isClientOrDisabled() || livesManager == null || !livesManager.SHOW_LIFE_DIFF.get()) {
             original.call(instance, player, component);
         }
         else {
@@ -347,9 +284,5 @@ public class ServerPlayerMixin implements IPlayer {
                 original.call(instance, player, livesManager.modifyBroadcastDeathMessage(component));
             });
         }
-    }
-    @Inject(method = "die", at = @At("TAIL"))
-    private void notifyDeath(DamageSource source, CallbackInfo ci) {
-        Events.onEntityDeath((ServerPlayer) (Object) this, source);
     }
 }

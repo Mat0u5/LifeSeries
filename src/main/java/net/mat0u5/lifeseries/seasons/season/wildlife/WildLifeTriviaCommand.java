@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
 import net.mat0u5.lifeseries.config.ModifiableText;
@@ -13,9 +13,9 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaSkins;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
-import net.mat0u5.lifeseries.utils.other.ActionText;
-import net.mat0u5.lifeseries.utils.other.Tuple;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
+import net.mat0u5.matlib.utils.other.ActionText;
+import net.mat0u5.matlib.utils.other.Tuple;
+import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -24,7 +24,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.*;
 
-public class WildLifeTriviaCommand extends Command {
+public class WildLifeTriviaCommand extends CustomCommand {
 
     @Override
     public boolean isAllowed() {
@@ -349,7 +349,7 @@ public class WildLifeTriviaCommand extends Command {
 
         for (ServerPlayer player : targets) {
             UUID uuid = player.getUUID();
-            TriviaWildcard.preAssignedTrivia.put(uuid, new Tuple<>(difficultyInt, triviaQuestion));
+            TriviaWildcard.preAssignedTrivia.put(uuid, Tuple.of(difficultyInt, triviaQuestion));
         }
 
         if (targets.size() == 1) {

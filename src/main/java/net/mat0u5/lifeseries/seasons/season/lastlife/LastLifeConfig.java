@@ -2,7 +2,6 @@ package net.mat0u5.lifeseries.seasons.season.lastlife;
 
 import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
 
 import java.util.List;
 
@@ -58,17 +57,12 @@ public class LastLifeConfig extends SeasonConfig {
 
     public LastLifeConfig() {
         super(Seasons.LAST_LIFE);
-    }
-
-    @Override
-    public void instantiateProperties() {
-        CUSTOM_ENCHANTER_ALGORITHM.defaultValue = true;
-        BLACKLIST_ITEMS.defaultValue = TextUtils.formatString("[{}]", BLACKLISTED_ITEMS);
-        BLACKLIST_BLOCKS.defaultValue = TextUtils.formatString("[{}]", BLACKLISTED_BLOCKS);
-        BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.defaultValue = TextUtils.formatString("[{}]", CLAMPED_ENCHANTMENTS);
-        GIVELIFE_COMMAND_ENABLED.defaultValue = true;
-        BOOGEYMAN.defaultValue = true;
-        LIVES_RANDOMIZE.defaultValue = true;
-        super.instantiateProperties();
+        CUSTOM_ENCHANTER_ALGORITHM.defaultValue(true);
+        BLACKLIST_ITEMS.defaultValue(BLACKLISTED_ITEMS);
+        BLACKLIST_BLOCKS.defaultValue(BLACKLISTED_BLOCKS);
+        BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.defaultValue(CLAMPED_ENCHANTMENTS);
+        GIVELIFE_COMMAND_ENABLED.defaultValue(true);
+        BOOGEYMAN.defaultValue(true);
+        LIVES_RANDOMIZE.defaultValue(true);
     }
 }

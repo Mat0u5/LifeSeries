@@ -1,12 +1,14 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.Time;
+import net.mat0u5.matlib.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.mat0u5.matlib.utils.world.LevelUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,8 +22,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 
 public class Teleportation extends Superpower {
-    public static int MAX_TELEPORT_DISTANCE = 100;
-    public static int MAX_SWAP_DISTANCE = 100;
+    public static final ConfigRef<Integer> MAX_TELEPORT_DISTANCE = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_TELEPORTATION_TP_DISTANCE);
+    public static final ConfigRef<Integer> MAX_SWAP_DISTANCE = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_TELEPORTATION_SWAP_DISTANCE);
     public static int COOLDOWN_MILLIS = 5000;
     private Time timer = Time.zero();
 
@@ -63,7 +65,7 @@ public class Teleportation extends Superpower {
         ServerLevel playerLevel = ((IPlayer) player).ls$getServerLevel();
         Vec3 playerPos = player.position();
         boolean teleported = false;
-        Entity lookingAt = PlayerUtils.getEntityLookingAt(player, MAX_SWAP_DISTANCE);
+        Entity lookingAt = PlayerUtils.getEntityLookingAt(player, MAX_SWAP_DISTANCE.get());
         if (lookingAt != null)  {
             if (lookingAt instanceof ServerPlayer lookingAtPlayer) {
                 if (!PlayerUtils.isFakePlayer(lookingAtPlayer)) {
@@ -93,7 +95,7 @@ public class Teleportation extends Superpower {
         }
 
         if (!teleported) {
-            Vec3 lookingAtPos = PlayerUtils.getPosLookingAt(player, MAX_TELEPORT_DISTANCE);
+            Vec3 lookingAtPos = PlayerUtils.getPosLookingAt(player, MAX_TELEPORT_DISTANCE.get());
             if (lookingAtPos != null) {
                 playTeleportSound(playerLevel, playerPos);
                 spawnTeleportParticles(playerLevel, playerPos);

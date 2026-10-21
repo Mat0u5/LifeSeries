@@ -1,10 +1,12 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails;
 
+import net.mat0u5.matlib.utils.player.PlayerJoinTracker;
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.config.StringListConfig;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.snail.server.SnailPathfinding;
-import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
@@ -12,7 +14,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.mat0u5.matlib.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,10 +25,10 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSession;
-import static net.mat0u5.lifeseries.LifeSeries.server;
+import static net.mat0u5.matlib.MatLib.server;
 
 public class Snails extends Wildcard {
-    public static boolean WILDCARD_SNAILS_RED_LIVES = true;
+    public static final ConfigRef<Boolean> WILDCARD_SNAILS_RED_LIVES = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SNAILS_RED_LIVES);
     public static int SNAILS_PER_PLAYER = 1;
 
     public static StringListConfig snailNameConfig;
@@ -99,10 +101,10 @@ public class Snails extends Wildcard {
     public static boolean canHaveSnail(ServerPlayer player) {
         if (player.isCreative()) return false;
         if (!player.isAlive()) return false;
-        if (Events.joiningPlayers.contains(player.getUUID())) return false;
+        if (PlayerJoinTracker.isCurrentlyJoining(player.getUUID())) return false;
         if (player.isSpectator() && !SuperpowersWildcard.hasActivatedPower(player, Superpowers.ASTRAL_PROJECTION)) return false;
         if (preventSnails.contains(player.getUUID())) return false;
-        if (((IPlayer) player).ls$isOnLastLife(false) && !WILDCARD_SNAILS_RED_LIVES) return false;
+        if (((IPlayer) player).ls$isOnLastLife(false) && !WILDCARD_SNAILS_RED_LIVES.get()) return false;
         return true;
     }
 
@@ -231,6 +233,6 @@ public class Snails extends Wildcard {
     }
 
     public static void loadConfig() {
-        snailNameConfig = new StringListConfig("./config/lifeseries/main", "DO_NOT_MODIFY_wildlife_snailnames.properties");
+        snailNameConfig = new StringListConfig("lifeseries/main", "DO_NOT_MODIFY_wildlife_snailnames.properties");
     }
 }

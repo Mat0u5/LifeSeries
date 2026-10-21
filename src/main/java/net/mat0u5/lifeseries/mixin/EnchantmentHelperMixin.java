@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.mixin;
 import com.google.common.collect.Lists;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
+import net.mat0u5.matlib.utils.world.ItemStackUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -21,6 +21,7 @@ import java.util.Optional;
 
 import static net.mat0u5.lifeseries.LifeSeries.blacklist;
 import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
+import static net.mat0u5.matlib.MatLib.server;
 
 //? if >= 1.21.2
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -52,7 +53,7 @@ public class EnchantmentHelperMixin {
     private static void getPossibleEntries(int level, ItemStack stack, Stream<Holder<Enchantment>> possibleEnchantments, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
     //?}
         if (LifeSeries.isClientOrDisabled()) return;
-        if (LifeSeries.server == null) return;
+        if (server == null) return;
 
         if (ItemStackUtils.hasCustomComponentEntry(stack, "NoEnchants") || ItemStackUtils.hasCustomComponentEntry(stack, "NoModifications")) {
             cir.setReturnValue(Lists.<EnchantmentInstance>newArrayList());

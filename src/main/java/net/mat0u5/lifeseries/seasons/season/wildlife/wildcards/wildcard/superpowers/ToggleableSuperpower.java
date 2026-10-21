@@ -11,7 +11,7 @@ public abstract class ToggleableSuperpower extends Superpower {
 
     @Override
     public KeyPressResult onKeyPressed() {
-        if (Mimicry.DISABLE_OTHER_POWER && System.currentTimeMillis() < stolenUntil) {
+        if (Mimicry.DISABLE_OTHER_POWER.get() && System.currentTimeMillis() < stolenUntil) {
             return KeyPressResult.STOLEN;
         }
         if (System.currentTimeMillis() < cooldown) {

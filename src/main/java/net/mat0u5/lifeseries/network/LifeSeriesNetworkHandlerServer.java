@@ -1,0 +1,598 @@
+package net.mat0u5.lifeseries.network;
+
+import com.google.auto.service.AutoService;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.config.StringListManager;
+import net.mat0u5.lifeseries.network.packets.*;
+import net.mat0u5.matlib.events.common.CommonRegistryEvents;
+import net.mat0u5.matlib.events.server.ServerNetworkEvents;
+import net.mat0u5.matlib.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
+import net.mat0u5.lifeseries.seasons.season.Season;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
+import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeConfig;
+import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLife;
+import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
+import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeVotingManager;
+import net.mat0u5.lifeseries.seasons.season.secretlife.TaskManager;
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Hunger;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShifting;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDilation;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.AnimalDisguise;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.TripleJump;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
+import net.mat0u5.lifeseries.seasons.session.Session;
+import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.seasons.util.LivesManager;
+import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
+import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.matlib.services.RegistrableServer;
+import net.mat0u5.matlib.utils.other.ActionText;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.matlib.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.player.*;
+import net.mat0u5.lifeseries.utils.versions.VersionControl;
+import net.mat0u5.matlib.utils.other.VersionCompatibility;
+import net.mat0u5.matlib.utils.player.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.scores.PlayerTeam;
+
+import java.util.*;
+
+import static net.mat0u5.lifeseries.LifeSeries.*;
+import static net.mat0u5.matlib.MatLib.*;
+
+//? if > 1.20.5 {
+import net.minecraft.network.DisconnectionDetails;
+ //?}
+//? if <= 26.1 {
+//import net.minecraft.ChatFormatting;
+ //?} else {
+import net.minecraft.world.scores.TeamColor;
+//?}
+//? if <= 1.20.3 {
+/*import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.Identifier;
+import java.util.function.Function;
+*///?} else {
+import net.minecraft.network.RegistryFriendlyByteBuf;
+//?}
+
+@AutoService(RegistrableServer.class)
+public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
+    public static RegistryOverrideBahaviours REGISTRY_OVERRIDE_BEHAVIOR = RegistryOverrideBahaviours.LOGIN;
+    public static boolean PRE_LOGIN_OVERRIDE_KICK = false;
+
+    //? if <= 1.20.3 {
+    /*public static final Map<Identifier, Function<FriendlyByteBuf, CustomPacketPayload>> PAYLOADS = new HashMap<>();
+    static {
+        PAYLOADS.put(OldHandshakePayload.ID, OldHandshakePayload::read);
+        PAYLOADS.put(TriviaQuestionPayload.ID, TriviaQuestionPayload::read);
+        PAYLOADS.put(PlayerDisguisePayload.ID, PlayerDisguisePayload::read);
+        PAYLOADS.put(SidetitlePacket.ID, SidetitlePacket::read);
+        PAYLOADS.put(VoteScreenPayload.ID, VoteScreenPayload::read);
+        PAYLOADS.put(LifeSkinsTexturePayload.ID, LifeSkinsTexturePayload::read);
+    }
+    *///?} else {
+    public static final List<CustomPacketPayload.TypeAndCodec<? super RegistryFriendlyByteBuf, ? extends CustomPacketPayload>> PAYLOADS = List.of(
+            new CustomPacketPayload.TypeAndCodec<>(OldHandshakePayload.ID, OldHandshakePayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(SidetitlePacket.ID, SidetitlePacket.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(VoteScreenPayload.ID, VoteScreenPayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(LifeSkinsTexturePayload.ID, LifeSkinsTexturePayload.CODEC)
+    );
+    //?}
+
+    public enum RegistryOverrideBahaviours {
+        NEVER,
+        ALWAYS,
+        LOGIN,
+        SEASON
+    }
+
+    @Override
+    public void onRegister() {
+        CommonRegistryEvents.PACKET_PAYLOADS.register(() -> PAYLOADS);
+        ServerNetworkEvents.RECEIVE_CUSTOM_PACKET.register(LifeSeriesNetworkHandlerServer::onCustomPayload);
+        ServerNetworkEvents.PRE_LOGIN_PACKET.register((handler, uuid, username, understood, modIds) -> {
+            if (!wasPreLoginHandshakeSuccessful(uuid) && currentSeason.getSeason().requiresClient() && !PRE_LOGIN_OVERRIDE_KICK) {
+                handler.disconnect(getDisconnectClientText());
+            }
+        });
+        initializeSimplePacketReceivers();
+
+    }
+
+    public static void reload() {
+        String registryOverrideBehaviour = LifeSeries.getMainConfig().getOrCreateProperty("registry_override_behavior", "login");
+        if (registryOverrideBehaviour.equalsIgnoreCase("never")) REGISTRY_OVERRIDE_BEHAVIOR = RegistryOverrideBahaviours.NEVER;
+        else if (registryOverrideBehaviour.equalsIgnoreCase("always")) REGISTRY_OVERRIDE_BEHAVIOR = RegistryOverrideBahaviours.ALWAYS;
+        else if (registryOverrideBehaviour.equalsIgnoreCase("login")) REGISTRY_OVERRIDE_BEHAVIOR = RegistryOverrideBahaviours.LOGIN;
+        else if (registryOverrideBehaviour.equalsIgnoreCase("season")) REGISTRY_OVERRIDE_BEHAVIOR = RegistryOverrideBahaviours.SEASON;
+        else {
+            LifeSeries.getMainConfig().setProperty("registry_override_behavior", "login");
+            REGISTRY_OVERRIDE_BEHAVIOR = RegistryOverrideBahaviours.LOGIN;
+        }
+
+        PRE_LOGIN_OVERRIDE_KICK = LifeSeries.getMainConfig().getOrCreateBoolean("pre_login_override_kick", false);
+    }
+
+    public void initializeSimplePacketReceivers() {
+        SimplePackets.TRIVIA_ANSWER.setServerReceive((player, payload) -> {
+            if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received trivia answer (from {}): {}", player, payload.number()));
+            if (LifeSeries.isSeason(Seasons.NICE_LIFE)) {
+                NiceLifeTriviaManager.handleAnswer(player, payload.number());
+            }
+            else {
+                TriviaWildcard.handleAnswer(player, payload.number());
+            }
+        });
+
+        SimplePackets.HOLDING_JUMP.setServerReceive((player, payload) -> {
+            if (LifeSeries.isSeason(Seasons.WILD_LIFE) && WildcardManager.isActiveWildcard(Wildcards.SIZE_SHIFTING)) {
+                SizeShifting.onHoldingJump(player);
+            }
+        });
+        SimplePackets.SUPERPOWER_KEY.setServerReceive((player, payload) -> {
+            if (LifeSeries.isSeason(Seasons.WILD_LIFE)) {
+                SuperpowersWildcard.pressedSuperpowerKey(player);
+            }
+        });
+        SimplePackets.TRANSCRIPT.setServerReceive((player, payload) -> {
+            ((IPlayer) player).ls$message(SessionTranscript.getTranscriptMessage());
+        });
+        SimplePackets.SELECTED_WILDCARD.setServerReceive((player, payload) -> {
+            if (PermissionManager.isAdmin(player)) {
+                Wildcards wildcard = Wildcards.getFromString(payload.value());
+                if (wildcard != null && wildcard != Wildcards.NULL) {
+                    WildcardManager.chosenWildcard(wildcard);
+                }
+            }
+        });
+        SimplePackets.SET_SEASON.setServerReceive((player, payload) -> {
+            if (PermissionManager.isAdmin(player) || LifeSeries.isSeason(Seasons.UNASSIGNED)) {
+                Seasons currentSeason = LifeSeries.getSeason();
+                Seasons newSeason = Seasons.getSeasonFromStringName(payload.value());
+                if (newSeason == Seasons.UNASSIGNED) return;
+                boolean prevTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION.get();
+                SeasonChanger.preChangeEvent(currentSeason, newSeason);
+                if (SeasonChanger.changeSeasonTo(newSeason)) {
+                    SeasonChanger.postChangeEvent(currentSeason, newSeason);
+                    boolean currentTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION.get();
+                    PlayerUtils.broadcastMessage(ModifiableText.SEASON_CHANGE.get(payload.value()));
+                    if (prevTickFreeze != currentTickFreeze) {
+                        OtherUtils.setFreezeGame(currentTickFreeze);
+                    }
+                }
+            }
+        });
+        SimplePackets.LIMITED_LIFE_ACTIONBAR_TIME.setServerReceive((player, payload) -> {
+            LimitedLife.actionbarTime.put(player.getUUID(), payload.value());
+        });
+        SimplePackets.TRIPLE_JUMP.setServerReceive((player, payload) -> {
+            if (LifeSeries.isSeason(Seasons.WILD_LIFE) && SuperpowersWildcard.hasActivatedPower(player, Superpowers.TRIPLE_JUMP)) {
+                Superpower power = SuperpowersWildcard.getSuperpowerInstance(player);
+                if (power instanceof TripleJump tripleJump) {
+                    tripleJump.isInAir = true;
+                }
+            }
+        });
+        SimplePackets.SUBMIT_VOTE.setServerReceive((player, payload) -> {
+            NiceLifeVotingManager.handleVote(player, payload.value());
+        });
+
+        SimplePackets.SET_LIVES.setServerReceive((player, payload) -> {
+            if (PermissionManager.isAdmin(player) && payload.value().size() >= 2) {
+                ServerPlayer settingPlayer = PlayerUtils.getPlayer(payload.value().get(0));
+                if (settingPlayer != null) {
+                    try {
+                        int lives = Integer.parseInt(payload.value().get(1));
+                        ((IPlayer) settingPlayer).ls$setLives(lives);
+                    }catch(Exception e) {
+                        ScoreboardUtils.resetScore(settingPlayer, LivesManager.SCOREBOARD_NAME);
+                    }
+                }
+                else {
+                    try {
+                        int lives = Integer.parseInt(payload.value().get(1));
+                        livesManager.setScore(payload.value().get(0), lives);
+                    }catch(Exception e) {
+                        ScoreboardUtils.resetScore(payload.value().get(0), LivesManager.SCOREBOARD_NAME);
+                    }
+                }
+
+                Season.reloadPlayerTeams = true;
+            }
+        });
+        SimplePackets.SET_TEAM.setServerReceive((player, payload) -> {
+            if (PermissionManager.isAdmin(player) && payload.value().size() >= 7) {
+                List<String> teamNames = Arrays.asList(payload.value().get(0).split(";"));
+                String packetTeamName = "lives_" + payload.value().get(1);
+                String packetTeamDisplayName = payload.value().get(2);
+                String packetTeamColor = payload.value().get(3);
+                String packetAllowedKill = payload.value().get(4);
+                String packetGainLifeKill = payload.value().get(5);
+                String packetOptionalLimLifeTeam = payload.value().get(6);
+                if (!packetOptionalLimLifeTeam.isEmpty()) {
+                    try {
+                        Integer num = Integer.parseInt(packetOptionalLimLifeTeam);
+                        if (num != null && LifeSeries.isSeason(Seasons.LIMITED_LIFE)) {
+                            if (packetTeamName.equalsIgnoreCase("lives_2")) {
+                                LimitedLifeConfig.get().TIME_RED.set(num);
+                                updatedConfigThisTick = true;
+                            }
+                            else if (packetTeamName.equalsIgnoreCase("lives_3")) {
+                                LimitedLifeConfig.get().TIME_YELLOW.set(num);
+                                updatedConfigThisTick = true;
+                            }
+                            else if (packetTeamName.equalsIgnoreCase("lives_4")) {
+                                LimitedLifeConfig.get().TIME_DEFAULT.set(num);
+                                updatedConfigThisTick = true;
+                            }
+                        }
+                    }catch(Exception e) {}
+                }
+
+                //? if <= 26.1 {
+                /*ChatFormatting newTeamColor = ChatFormatting.getByName(packetTeamColor);
+                if (newTeamColor == null) newTeamColor = ChatFormatting.WHITE;
+                *///?} else {
+                TeamColor newTeamColor = TeamColor.byName(packetTeamColor);
+                if (newTeamColor == null) newTeamColor = TeamColor.WHITE;
+                //?}
+
+                Integer allowedKill = null;
+                Integer gainLife = null;
+                try {
+                    allowedKill = Integer.parseInt(packetAllowedKill);
+                } catch(Exception e) {}
+                try {
+                    gainLife = Integer.parseInt(packetGainLifeKill);
+                } catch(Exception e) {}
+
+                boolean teamModified = false;
+                for (PlayerTeam livesTeam : new ArrayList<>(livesManager.getLivesTeams().values())) {
+                    String teamName = livesTeam.getName();
+                    if (!teamNames.contains(teamName)) {
+                        livesManager.updateTeamConfig(teamName, null, null);
+                        TeamUtils.deleteTeam(teamName);
+                        continue;
+                    }
+                    if (!teamName.equals(packetTeamName)) continue;
+
+                    //? if <= 26.1 {
+                    /*livesTeam.setColor(newTeamColor);
+                    livesTeam.setDisplayName(Component.literal(packetTeamDisplayName).withStyle(newTeamColor));
+                    *///?} else {
+                    livesTeam.setColor(Optional.of(newTeamColor));
+                    livesTeam.setDisplayName(Component.literal(packetTeamDisplayName).withColor(newTeamColor.textColor()));
+                    //?}
+                    livesManager.updateTeamConfig(teamName, allowedKill, gainLife);
+                    teamModified = true;
+                }
+                if (!teamModified) {
+                    TeamUtils.createTeam(packetTeamName, packetTeamDisplayName, newTeamColor);
+                    livesManager.updateTeamConfig(packetTeamName, allowedKill, gainLife);
+                }
+                Season.reloadPlayerTeams = true;
+            }
+        });
+        SimplePackets.SET_SOULMATES.setServerReceive((player, payload) -> {
+            if (!PermissionManager.isAdmin(player)) return;
+            if (!LifeSeries.isSeason(Seasons.DOUBLE_LIFE)) return;
+            if (!(currentSeason instanceof DoubleLife doubleLife)) return;
+
+            List<String> values = payload.value();
+            Map<UUID, UUID> newPairs = new LinkedHashMap<>();
+            Set<UUID> alreadyPaired = new HashSet<>();
+            Set<String> unknownPlayers = new LinkedHashSet<>();
+            for (int i = 0; i + 1 < values.size(); i += 2) {
+                String name1 = values.get(i).trim();
+                String name2 = values.get(i + 1).trim();
+                if (name1.isEmpty() && name2.isEmpty()) continue;
+
+                UUID player1UUID = PlayerUtils.getUUIDFromNameOrUUID(name1);
+                UUID player2UUID = PlayerUtils.getUUIDFromNameOrUUID(name2);
+                if (player1UUID == null && !name1.isEmpty()) unknownPlayers.add(name1);
+                if (player2UUID == null && !name2.isEmpty()) unknownPlayers.add(name2);
+                if (player1UUID == null || player2UUID == null) continue;
+                if (player1UUID.equals(player2UUID)) continue;
+                if (alreadyPaired.contains(player1UUID) || alreadyPaired.contains(player2UUID)) continue;
+
+                alreadyPaired.add(player1UUID);
+                alreadyPaired.add(player2UUID);
+                newPairs.put(player1UUID, player2UUID);
+            }
+
+            doubleLife.setAllSoulmatePairs(newPairs);
+
+            if (!unknownPlayers.isEmpty()) {
+                ((IPlayer) player).ls$message(ModifiableText.DOUBLELIFE_SOULMATE_ERROR_UNKNOWN.get(String.join(", ", unknownPlayers)));
+            }
+        });
+        SimplePackets.CONFIG_SECRET_TASK.setServerReceive((player, payload) -> {
+            if (PermissionManager.isAdmin(player)) {
+                String type = payload.value().remove(0);
+                try {
+                    StringListManager manager = new StringListManager("./config/lifeseries/secretlife",type+"-tasks.json");
+                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                    manager.setFileContent(gson.toJson(payload.value()));
+                }catch(Exception ignored) {}
+                TaskManager.reloadTasks();
+            }
+        });
+        SimplePackets.CONFIG_TRIVIA.setServerReceive((player, payload) -> {
+            if (PermissionManager.isAdmin(player)) {
+                String type = payload.value().remove(0);
+                List<TriviaQuestion> triviaQuestions = new ArrayList<>();
+                for (String questionStr : payload.value()) {
+                    try {
+                        if (!questionStr.contains("~~~")) continue;
+                        String[] splitQuestion = questionStr.split("~~~");
+                        if (splitQuestion.length < 3) continue;
+                        String questionText = splitQuestion[0];
+                        int correctAnswerIndex = Integer.parseInt(splitQuestion[1]);
+                        List<String> answers = new ArrayList<>();
+                        for (int i = 2; i < splitQuestion.length; i++) {
+                            answers.add(splitQuestion[i]);
+                        }
+                        triviaQuestions.add(new TriviaQuestion(questionText, answers, correctAnswerIndex-1));
+                    }catch(Exception e) {}
+                }
+                TriviaQuestionManager manager = null;
+                if (LifeSeries.isSeason(Seasons.WILD_LIFE)) {
+                    if (type.equalsIgnoreCase("easy")) {
+                        manager = TriviaWildcard.easyTrivia;
+                    }
+                    else if (type.equalsIgnoreCase("normal")) {
+                        manager = TriviaWildcard.normalTrivia;
+                    }
+                    else {
+                        manager = TriviaWildcard.hardTrivia;
+                    }
+                }
+                else {
+                    manager = NiceLifeTriviaManager.triviaQuestions;
+                }
+                if (manager == null) return;
+                try {
+                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                    manager.setFileContent(gson.toJson(triviaQuestions));
+                }catch(Exception ignored) {}
+            }
+        });
+
+        /*
+
+        SimplePackets._______.setServerReceive((player, payload) -> {
+        });
+
+        SimplePackets._______.setServerReceive((player, payload) -> );
+
+         */
+    }
+
+    public static boolean onCustomPayload(CustomPacketPayload customPacketPayload, ServerPlayer player) {
+        if (player.hasDisconnected()) {
+            return false;
+        }
+
+        if (customPacketPayload instanceof OldHandshakePayload payload) {
+            handleOldHandshakeResponse(player, payload);
+        }
+        else {
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean updatedConfigThisTick = false;
+    public static boolean updatedConfigThisTickFromCommand = false;
+    public static void onConfigChanged(String key, String oldValue, String newValue) {
+        if (!updatedConfigThisTick) {
+            configChanges.clear();
+        }
+        updatedConfigThisTick = true;
+        if (!Objects.equals(oldValue, newValue))  {
+            configChanges.add(ModifiableText.CONFIG_MODIFY_KEY.get(key, oldValue, newValue));
+        }
+    }
+
+    public static List<Component> configChanges = new ArrayList<>();
+    public static void onUpdatedConfig() {
+        if (!updatedConfigThisTickFromCommand) {
+            PlayerUtils.broadcastMessageToAdmins(ModifiableText.CONFIG_UPDATED_CHANGES.get(ActionText.hereTextRunCommand("Click to view config changes", "/ls config viewChanges")));
+        }
+        try {
+            SeasonChanger.reloadConfig();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        updatedConfigThisTick = false;
+        updatedConfigThisTickFromCommand = false;
+    }
+
+    public static void handleOldHandshakeResponse(ServerPlayer player, OldHandshakePayload payload) {
+        Component disconnectText = Component.literal("[Life Series Mod] Client-Server version mismatch!\n" +
+                "Update the client version to at least version "+OldHandshakePayload.OLD_PACKET_VERSION_BREAKOFF);
+        //? if <= 1.20.5 {
+        //player.connection.disconnect(disconnectText);
+         //?} else {
+        player.connection.disconnect(new DisconnectionDetails(disconnectText));
+        //?}
+    }
+
+    /*
+        Sending
+     */
+    
+    public static void sendTriviaPacket(ServerPlayer player, String question, int difficulty, long timestamp, int timeToComplete, List<String> answers, TriviaGuiType guiType) {
+        if (guiType != null) SimplePackets.TRIVIA_GUI_TYPE.sendToClient(guiType.name(), player);
+        TriviaQuestionPayload triviaQuestionPacket = new TriviaQuestionPayload(question, difficulty, timestamp, timeToComplete, answers);
+        if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Sending trivia question packet to {}): {{}, {}, {}, {}, {}}", player, question, difficulty, timestamp, timeToComplete, answers));
+
+        NetworkHandlerServer.sendPacket(player, triviaQuestionPacket);
+    }
+
+    public static void sendVoteScreenPacket(ServerPlayer player, String screenName, boolean requiresSleep, boolean closesWithEsc, boolean showTimer, List<String> players) {
+        VoteScreenPayload voteScreenPayload = new VoteScreenPayload(screenName, requiresSleep, closesWithEsc, showTimer, players);
+        NetworkHandlerServer.sendPacket(player, voteScreenPayload);
+    }
+
+    public static void sendOldHandshake(ServerPlayer player) {
+        String serverVersionStr = LifeSeries.MOD_VERSION;
+        String serverCompatibilityStr = OldHandshakePayload.OLD_PACKET_VERSION_BREAKOFF;
+
+        int serverVersion = VersionCompatibility.getModVersionInt(serverVersionStr);
+        int serverCompatibility = VersionCompatibility.getModVersionInt(serverCompatibilityStr);
+
+        OldHandshakePayload payload = new OldHandshakePayload(serverVersionStr, serverVersion, serverCompatibilityStr, serverCompatibility);
+        NetworkHandlerServer.sendPacket(player, payload);
+
+    }
+
+    public static void sendSmallUpdatePacket(List<ServerPlayer> players) {
+        SimplePackets.CURRENT_SEASON.sendToClient(currentSeason.getSeason().getId(), players);
+        SimplePackets.MOD_DISABLED.sendToClient(LifeSeries.MOD_DISABLED, players);
+    }
+
+    public static void sendUpdatePacket(List<ServerPlayer> players) {
+        sendSmallUpdatePacket(players);
+        if (currentSeason instanceof WildLife) {
+            SimplePackets.PLAYER_MIN_MSPT.sendToClient((double)TimeDilation.MIN_PLAYER_MSPT, players);
+
+            List<String> activeWildcards = new ArrayList<>();
+            for (Wildcards wildcard : WildcardManager.activeWildcards.keySet()) {
+                activeWildcards.add(wildcard.getStringName());
+            }
+            SimplePackets.ACTIVE_WILDCARDS.sendToClient(activeWildcards, players);
+        }
+        SimplePackets.TABLIST_SHOW_EXACT.sendToClient(Season.TAB_LIST_SHOW_EXACT_LIVES.get(), players);
+        SimplePackets.TAB_LIST_LIVES_CUTOFF.sendToClient(LivesManager.MAX_TAB_NUMBER, players);
+        SimplePackets.FIX_SIZECHANGING_BUGS.sendToClient(SizeShifting.FIX_SIZECHANGING_BUGS.get(), players);
+        SimplePackets.SIZESHIFTING_CHANGE.sendToClient(SizeShifting.SIZE_CHANGE_STEP * SizeShifting.SIZE_CHANGE_MULTIPLIER.get(), players);
+
+        SimplePackets.ANIMAL_DISGUISE_ARMOR.sendToClient(AnimalDisguise.SHOW_ARMOR.get(), players);
+        SimplePackets.ANIMAL_DISGUISE_HANDS.sendToClient(AnimalDisguise.SHOW_HANDS.get(), players);
+        SimplePackets.HUNGER_NON_EDIBLE.sendToClient(Hunger.nonEdibleStr, players);
+        SimplePackets.SNOWY_NETHER.sendToClient(NiceLife.SNOWY_NETHER.get(), players);
+
+        if (Season.skyColor != null) {
+            SimplePackets.SKYCOLOR.sendToClient(List.of(String.valueOf(Season.skyColorSetMode), String.valueOf((int)Season.skyColor.x), String.valueOf((int)Season.skyColor.y), String.valueOf((int)Season.skyColor.z)), players);
+        }
+        else {
+            SimplePackets.SKYCOLOR.sendToClient(List.of(String.valueOf(Season.skyColorSetMode)), players);
+        }
+        if (Season.fogColor != null) {
+            SimplePackets.FOGCOLOR.sendToClient(List.of(String.valueOf(Season.fogColorSetMode), String.valueOf((int)Season.fogColor.x), String.valueOf((int)Season.fogColor.y), String.valueOf((int)Season.fogColor.z)), players);
+        }
+        else {
+            SimplePackets.FOGCOLOR.sendToClient(List.of(String.valueOf(Season.fogColorSetMode)), players);
+        }
+        if (Season.cloudColor != null) {
+            SimplePackets.CLOUDCOLOR.sendToClient(List.of(String.valueOf(Season.cloudColorSetMode), String.valueOf((int)Season.cloudColor.x), String.valueOf((int)Season.cloudColor.y), String.valueOf((int)Season.cloudColor.z)), players);
+        }
+        else {
+            SimplePackets.CLOUDCOLOR.sendToClient(List.of(String.valueOf(Season.cloudColorSetMode)), players);
+        }
+
+        LifeSkinsManager.sendTeamNumUpdatesTo(players);
+        if (blacklist != null) {
+            List<ResourceKey<Enchantment>> lvl1ClampedEnchants = blacklist.getClampedEnchants().get(1);
+            if (lvl1ClampedEnchants != null) {
+                List<String> result = new ArrayList<>();
+                for (ResourceKey<Enchantment> enchant : lvl1ClampedEnchants) {
+                    //? if <= 1.21.9 {
+                    //result.add(enchant.location().toString());
+                    //?} else {
+                    result.add(enchant.identifier().toString());
+                    //?}
+                }
+                SimplePackets.LVL1_CLAMPED_ENCHANTS.sendToClient(result, players);
+            }
+        }
+        for (ServerPlayer player : players) {
+            SimplePackets.ADMIN_INFO.sendToClient(PermissionManager.isAdmin(player), player);
+            Season.updateClientPlayerTeam(player);
+        }
+
+        SimplePackets.NICELIFE_LIVE_VOTING_ENABLED.sendToClient(NiceLifeVotingManager.PUBLIC_VOTING.get(), players);
+    }
+
+    public static void sendUpdatePackets() {
+        sendUpdatePacket(PlayerUtils.getAllPlayers());
+    }
+
+    public static void sendSmallUpdatePackets() {
+        sendSmallUpdatePacket(PlayerUtils.getAllPlayers());
+    }
+
+    public static void sendPlayerDisguise(String hiddenUUID, String hiddenName, String shownUUID, String shownName) {
+        PlayerDisguisePayload payload = new PlayerDisguisePayload(hiddenUUID, hiddenName, shownUUID, shownName);
+        for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
+            NetworkHandlerServer.sendPacket(player, payload);
+        }
+    }
+
+    public static void sendPlayerInvisible(UUID uuid, long timestamp) {
+        SimplePackets.PLAYER_INVISIBLE.sendToAllClients(List.of(uuid.toString(), String.valueOf(timestamp)));
+    }
+
+    public static void sendVignette(ServerPlayer player, long durationMillis) {
+        SimplePackets.SHOW_VIGNETTE.sendToClient(durationMillis, player);
+    }
+
+    public static void tryKickFailedHandshake(ServerPlayer player) {
+        if (server == null) return;
+        if (!currentSeason.getSeason().requiresClient()) return;
+        if (wasHandshakeSuccessful(player)) return;
+        //? if <= 1.20.5 {
+        //player.connection.disconnect(getDisconnectClientText());
+        //?} else {
+        player.connection.disconnect(new DisconnectionDetails(getDisconnectClientText()));
+         //?}
+    }
+
+    public static Component getDisconnectClientText() {
+        return Component.literal("You must have the §2Life Series mod\n§l installed on the client§r§r§f to play "+currentSeason.getSeason().getName()+"!\n").append(
+                Component.literal("§9§nThe Life Series mod is available on Modrinth."));
+    }
+
+    public static void sideTitle(ServerPlayer player, Component text) {
+        NetworkHandlerServer.sendPacket(player, new SidetitlePacket(text));
+    }
+
+    public static boolean wasHandshakeSuccessful(ServerPlayer player) {
+        if (player == null) return false;
+        return wasHandshakeSuccessful(player.getUUID());
+    }
+
+    public static boolean wasHandshakeSuccessful(UUID uuid) {
+        if (uuid == null) return false;
+        return NetworkHandlerServer.wasHandshakeSuccessful(uuid, LifeSeries.MOD_ID) || wasPreLoginHandshakeSuccessful(uuid);
+    }
+
+    public static boolean wasPreLoginHandshakeSuccessful(UUID uuid) {
+        return NetworkHandlerServer.wasPreLoginHandshakeSuccessful(uuid, LifeSeries.MOD_ID);
+    }
+}

@@ -7,7 +7,7 @@ import net.minecraft.resources.Identifier;
 
 public record PlayerDisguisePayload(String hiddenUUID, String hiddenName, String shownUUID, String shownName) implements CustomPacketPayload {
 
-    public static final Identifier ID = IdentifierHelper.mod("player_disguise");
+    public static final Identifier ID = IdentifierHelper.lifeseries("player_disguise");
 
     @Override
     public void write(FriendlyByteBuf buf) {
@@ -39,7 +39,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 public record PlayerDisguisePayload(String hiddenUUID, String hiddenName, String shownUUID, String shownName) implements CustomPacketPayload {
 
-    public static final CustomPacketPayload.Type<PlayerDisguisePayload> ID = new CustomPacketPayload.Type<>(IdentifierHelper.mod("player_disguise"));
+    public static final CustomPacketPayload.Type<PlayerDisguisePayload> ID = new CustomPacketPayload.Type<>(IdentifierHelper.lifeseries("player_disguise"));
     public static final StreamCodec<RegistryFriendlyByteBuf, PlayerDisguisePayload> CODEC = StreamCodec.composite(
             ByteBufCodecs.STRING_UTF8, PlayerDisguisePayload::hiddenUUID,
             ByteBufCodecs.STRING_UTF8, PlayerDisguisePayload::hiddenName,

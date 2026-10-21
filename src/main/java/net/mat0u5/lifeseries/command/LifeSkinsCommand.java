@@ -3,13 +3,13 @@ package net.mat0u5.lifeseries.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.ModifiableText;
-import net.mat0u5.lifeseries.utils.other.ActionText;
-import net.mat0u5.lifeseries.utils.other.Triple;
+import net.mat0u5.matlib.utils.other.ActionText;
+import net.mat0u5.matlib.utils.other.Triple;
 import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
 import net.mat0u5.lifeseries.utils.player.NicknameManager;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
+import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.ProfileManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class LifeSkinsCommand extends Command {
+public class LifeSkinsCommand extends CustomCommand {
     @Override
     public boolean isAllowed() {
         return true;

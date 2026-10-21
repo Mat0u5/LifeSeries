@@ -1,10 +1,12 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.player.PlayerReference;
-import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.mat0u5.matlib.utils.player.PlayerReference;
+import net.mat0u5.matlib.utils.world.LevelUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,9 +20,9 @@ import org.jetbrains.annotations.Nullable;
 
 //? if <= 1.21.6 {
 /*import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
-import static net.mat0u5.lifeseries.LifeSeries.server;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
+import net.mat0u5.matlib.utils.other.TextUtils;
+import static net.mat0u5.matlib.MatLib.server;
 *///?}
 //? if > 1.20.5 && <= 1.21.6
 //import net.minecraft.network.DisconnectionDetails;
@@ -40,7 +42,7 @@ import net.minecraft.world.item.component.ResolvableProfile;
 //?}
 
 public class AstralProjection extends ToggleableSuperpower {
-    public static boolean DAMAGE_CANCELS = true;
+    public static final ConfigRef<Boolean> DAMAGE_CANCELS = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_ASTRAL_PROJECTION_DAMAGE_CANCELS);
     public static int COOLDOWN_MILLIS = 5000;
 
     //? if <= 1.21.6 {
@@ -176,7 +178,7 @@ public class AstralProjection extends ToggleableSuperpower {
         ServerPlayer player = getPlayer();
         if (player == null) return;
         String name = TextUtils.textToLegacyString(player.getDisplayName());
-        NetworkHandlerServer.sendPlayerDisguise(clone.getUUID().toString(), clone.getName().getString(), player.getUUID().toString(), name);
+        LifeSeriesNetworkHandlerServer.sendPlayerDisguise(clone.getUUID().toString(), clone.getName().getString(), player.getUUID().toString(), name);
         *///?}
     }
 
@@ -194,7 +196,7 @@ public class AstralProjection extends ToggleableSuperpower {
             //?} else {
             clone.connection.onDisconnect(new DisconnectionDetails(Component.empty()));
             //?}
-            NetworkHandlerServer.sendPlayerDisguise(clone.getUUID().toString(), clone.getName().getString(), "", "");
+            LifeSeriesNetworkHandlerServer.sendPlayerDisguise(clone.getUUID().toString(), clone.getName().getString(), "", "");
             *///?} else {
             clone.discard();
             //?}
@@ -223,7 +225,7 @@ public class AstralProjection extends ToggleableSuperpower {
             ((IPlayer) player).ls$hurt(level, source, amount);
             //?}
         }
-        if (DAMAGE_CANCELS) {
+        if (DAMAGE_CANCELS.get()) {
             deactivate();
         }
     }

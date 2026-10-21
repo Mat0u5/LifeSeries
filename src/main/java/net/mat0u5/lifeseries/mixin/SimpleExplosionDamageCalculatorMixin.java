@@ -42,7 +42,7 @@ public class SimpleExplosionDamageCalculatorMixin {
             if (!LifeSeries.isSeason(Seasons.WILD_LIFE)) return;
             if (player.getAbilities().flying) return;
             if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.WIND_CHARGE)) {
-                cir.setReturnValue((float) WindCharge.EXPLOSION_POWER); // Default is 1.22f
+                cir.setReturnValue((float) (double) WindCharge.EXPLOSION_POWER.get()); // Default is 1.22f
             }
         }
     }

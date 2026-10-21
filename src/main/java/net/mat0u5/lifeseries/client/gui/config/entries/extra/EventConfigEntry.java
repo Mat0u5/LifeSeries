@@ -1,17 +1,18 @@
 package net.mat0u5.lifeseries.client.gui.config.entries.extra;
 
-import net.mat0u5.lifeseries.client.gui.config.entries.main.StringConfigEntry;
-import net.mat0u5.lifeseries.client.network.NetworkHandlerClient;
-import net.mat0u5.lifeseries.client.render.RenderUtils;
+import net.mat0u5.matlib.client.gui.config.entries.main.StringConfigEntry;
+import net.mat0u5.matlib.client.render.RenderUtils;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
-import net.mat0u5.lifeseries.client.utils.TextColors;
-import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.matlib.client.utils.TextColors;
+import net.mat0u5.lifeseries.config.LifeSeriesConfigTypes;
+import net.mat0u5.matlib.config.entry.ConfigGuiEntry;
+import net.mat0u5.matlib.config.type.ConfigType;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Util;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Objects;
 
 //? if >= 1.21.9
@@ -24,8 +25,8 @@ public class EventConfigEntry extends StringConfigEntry {
     public static final String tutorialLink = "https://mat0u5.github.io/LifeSeries-docs/integration/datapacks.html#events";
     final Button openTutorialButton;
 
-    public EventConfigEntry(String fieldName, String displayName, String description, String value, String defaultValue, String canceledStr) {
-        super(fieldName, displayName, description, value, defaultValue);
+    public EventConfigEntry(ConfigGuiEntry guiEntry, String value, String defaultValue, String canceledStr) {
+        super(guiEntry, value, defaultValue);
         Boolean canceledBool = null;
         if (canceledStr.equalsIgnoreCase("true")) canceledBool = true;
         if (canceledStr.equalsIgnoreCase("false")) canceledBool = false;
@@ -132,18 +133,15 @@ public class EventConfigEntry extends StringConfigEntry {
     }
 
     @Override
-    public ConfigTypes getValueType() {
-        return ConfigTypes.EVENT_ENTRY;
+    public ConfigType<?> getValueType() {
+        return LifeSeriesConfigTypes.EVENT_ENTRY;
     }
 
     @Override
-    public void onSave() {
+    public Optional<ConfigGuiEntry> createSavePacket(ConfigGuiEntry inboundGuiEntry) {
         String canceledStr = canceled == null ? "" : String.valueOf(canceled);
-        NetworkHandlerClient.sendConfigUpdate(
-                getValueType().toString(),
-                getFieldName(),
-                List.of(getValueAsString(), canceledStr)
-        );
+        inboundGuiEntry.args = List.of(getValueAsString(), canceledStr);
+        return Optional.of(inboundGuiEntry);
     }
 
 

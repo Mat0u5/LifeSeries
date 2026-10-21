@@ -2,10 +2,10 @@ package net.mat0u5.lifeseries.seasons.secretsociety;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
+import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
@@ -16,15 +16,15 @@ import java.util.List;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
-public class SocietyCommands extends Command {
+public class SocietyCommands extends CustomCommand {
 
-    public SecretSociety get() {
+    public SecretSociety getSociety() {
         return currentSeason.secretSociety;
     }
 
     @Override
     public boolean isAllowed() {
-        return get().SOCIETY_ENABLED;
+        return getSociety().SOCIETY_ENABLED.get();
     }
 
     @Override
@@ -93,7 +93,7 @@ public class SocietyCommands extends Command {
     }
     public int membersRemove(CommandSourceStack source, ServerPlayer target) {
         if (checkBanned(source)) return -1;
-        SecretSociety society = get();
+        SecretSociety society = getSociety();
         if (society == null) return -1;
         if (checkSocietyRunning(source)) return -1;
         if (target == null) return -1;
@@ -109,7 +109,7 @@ public class SocietyCommands extends Command {
 
     public int membersAdd(CommandSourceStack source, ServerPlayer target) {
         if (checkBanned(source)) return -1;
-        SecretSociety society = get();
+        SecretSociety society = getSociety();
         if (society == null) return -1;
         if (checkSocietyRunning(source)) return -1;
         if (target == null) return -1;
@@ -125,7 +125,7 @@ public class SocietyCommands extends Command {
 
     public int membersList(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        SecretSociety society = get();
+        SecretSociety society = getSociety();
         if (society == null) return -1;
         if (checkSocietyRunning(source)) return -1;
 
@@ -145,7 +145,7 @@ public class SocietyCommands extends Command {
     }
 
     public boolean checkSocietyRunning(CommandSourceStack source) {
-        SecretSociety society = get();
+        SecretSociety society = getSociety();
         if (society == null) return false;
         if (society.societyEnded) {
             sendCommandFailure(source, ModifiableText.SOCIETY_ERROR_ENDED.get());
@@ -166,7 +166,7 @@ public class SocietyCommands extends Command {
 
     public int societyBegin(CommandSourceStack source, String word) {
         if (checkBanned(source)) return -1;
-        SecretSociety society = get();
+        SecretSociety society = getSociety();
         if (society == null) return -1;
 
         sendCommandFeedback(source, ModifiableText.SOCIETY_STARTING.get());
@@ -176,7 +176,7 @@ public class SocietyCommands extends Command {
 
     public int societyEnd(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        SecretSociety society = get();
+        SecretSociety society = getSociety();
         if (society == null) return -1;
 
         sendCommandFeedback(source, ModifiableText.SOCIETY_ENDING.get());
@@ -186,7 +186,7 @@ public class SocietyCommands extends Command {
 
     public int societyFail(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        SecretSociety society = get();
+        SecretSociety society = getSociety();
         if (society == null) return -1;
         ServerPlayer self = source.getPlayer();
         if (self == null) return -1;
@@ -212,7 +212,7 @@ public class SocietyCommands extends Command {
 
     public int societyFailConfirm(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        SecretSociety society = get();
+        SecretSociety society = getSociety();
         if (society == null) return -1;
         ServerPlayer self = source.getPlayer();
         if (self == null) return -1;
@@ -225,7 +225,7 @@ public class SocietyCommands extends Command {
 
     public int societySuccess(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        SecretSociety society = get();
+        SecretSociety society = getSociety();
         if (society == null) return -1;
         ServerPlayer self = source.getPlayer();
         if (self == null) return -1;
@@ -251,7 +251,7 @@ public class SocietyCommands extends Command {
 
     public int societySuccessConfirm(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        SecretSociety society = get();
+        SecretSociety society = getSociety();
         if (society == null) return -1;
         ServerPlayer self = source.getPlayer();
         if (self == null) return -1;
@@ -264,7 +264,7 @@ public class SocietyCommands extends Command {
 
     public int initiate(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
-        SecretSociety society = get();
+        SecretSociety society = getSociety();
         if (society == null) return -1;
         ServerPlayer self = source.getPlayer();
         if (self == null) return -1;

@@ -1,9 +1,11 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.player.TeamUtils;
+import net.mat0u5.matlib.utils.player.TeamUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -15,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 //? if >= 1.21.2 {
-import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.mat0u5.matlib.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntitySpawnReason;
@@ -27,7 +29,7 @@ import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.monster.creaking.Creaking;
 import net.minecraft.world.phys.AABB;
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
-import static net.mat0u5.lifeseries.LifeSeries.server;
+import static net.mat0u5.matlib.MatLib.server;
 //?}
 //? if = 1.21.2
 //import net.minecraft.core.particles.TargetColorParticleOption;
@@ -37,8 +39,8 @@ import net.minecraft.core.particles.TrailParticleOption;
 import net.minecraft.world.scores.TeamColor;
 
 public class CreakingPower extends ToggleableSuperpower {
-    public static int CREAKING_AMOUNT = 3;
-    public static boolean SHOW_PARTICLES = true;
+    public static final ConfigRef<Integer> CREAKING_AMOUNT = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_CREAKING_AMOUNT);
+    public static final ConfigRef<Boolean> SHOW_PARTICLES = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_CREAKING_PARTICLES);
     public static int COOLDOWN_MILLIS = 10000;
     public static final List<UUID> allCreatedEntities = new ArrayList<>();
 
@@ -60,7 +62,7 @@ public class CreakingPower extends ToggleableSuperpower {
     public void tick() {
         if (!active) return;
         //? if >= 1.21.2 {
-        if (SHOW_PARTICLES) {
+        if (SHOW_PARTICLES.get()) {
             spawnTrailParticles();
         }
         //?}
@@ -85,7 +87,7 @@ public class CreakingPower extends ToggleableSuperpower {
         createdTeams.add(newTeamName);
 
         //? if >= 1.21.2 {
-        for (int i = 0; i < CREAKING_AMOUNT; i++) {
+        for (int i = 0; i < CREAKING_AMOUNT.get(); i++) {
             BlockPos spawnPos =  LevelUtils.getCloseBlockPos(playerLevel, player.blockPosition(), 6, 3, true);
             Creaking creaking = EntityTypes.CREAKING.spawn(playerLevel, spawnPos, EntitySpawnReason.COMMAND);
             if (creaking != null) {

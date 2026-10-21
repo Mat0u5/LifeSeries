@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.mixin.plugin;
 
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
+import net.mat0u5.matlib.MatLib;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -13,14 +14,7 @@ public class MixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        boolean isClient = LifeSeries.platform().isClient();
-        //? if fabric {
-        if (mixinClassName.contains("compat.fabricapi")) {
-            boolean ret = CompatibilityManager.fabricApiLoaded();
-            LifeSeries.LOGGER.info("[Life Series] Compat - Fabric API - " + ret);
-            return ret;
-        }
-        //?}
+        boolean isClient = MatLib.platform().isClient();
         if (isClient) {
             if (mixinClassName.contains("client.compat.appleskin")) {
                 boolean ret = CompatibilityManager.appleSkinLoaded();

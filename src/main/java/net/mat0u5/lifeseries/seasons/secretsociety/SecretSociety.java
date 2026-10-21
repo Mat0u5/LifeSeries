@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.seasons.secretsociety;
 
+import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
@@ -7,10 +9,10 @@ import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.mat0u5.lifeseries.utils.other.Time;
-import net.mat0u5.lifeseries.utils.player.PlayerListReference;
-import net.mat0u5.lifeseries.utils.player.PlayerReference;
+import net.mat0u5.matlib.utils.other.TextUtils;
+import net.mat0u5.matlib.utils.other.Time;
+import net.mat0u5.matlib.utils.player.PlayerListReference;
+import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.network.chat.Component;
@@ -21,18 +23,19 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
+import static net.mat0u5.matlib.MatLib.*;
 
 public class SecretSociety {
-    public boolean SOCIETY_ENABLED = false;
-    public double START_TIME = 5.0;
-    public int MEMBER_COUNT = 3;
+    public final ConfigRef<Boolean> SOCIETY_ENABLED = ConfigRef.of(() -> LifeSeries.seasonConfig.SECRET_SOCIETY);
+    public final ConfigRef<Double> START_TIME = ConfigRef.of(() -> LifeSeries.seasonConfig.SECRET_SOCIETY_START_TIME);
+    public final ConfigRef<Integer> MEMBER_COUNT = ConfigRef.of(() -> LifeSeries.seasonConfig.SECRET_SOCIETY_MEMBER_AMOUNT);
     public List<String> FORCE_MEMBERS = new ArrayList<>();
     public List<String> IGNORE_MEMBERS = new ArrayList<>();
     public List<String> POSSIBLE_WORDS = new ArrayList<>(List.of("Hammer","Magnet","Throne","Gravity","Puzzle","Spiral","Pivot","Flare"));
-    public int KILL_COUNT = 2;
-    public int PUNISHMENT_LIVES = -2;
-    public boolean SOUND_ONLY_MEMBERS = false;
-    public boolean ADVANCED_DEATHS = false;
+    public final ConfigRef<Integer> KILL_COUNT = ConfigRef.of(() -> LifeSeries.seasonConfig.SECRET_SOCIETY_KILLS_REQUIRED);
+    public final ConfigRef<Integer> PUNISHMENT_LIVES = ConfigRef.of(() -> LifeSeries.seasonConfig.SECRET_SOCIETY_PUNISHMENT_LIVES);
+    public final ConfigRef<Boolean> SOUND_ONLY_MEMBERS = ConfigRef.of(() -> LifeSeries.seasonConfig.SECRET_SOCIETY_SOUND_ONLY_MEMBERS);
+    public final ConfigRef<Boolean> ADVANCED_DEATHS = ConfigRef.of(() -> LifeSeries.seasonConfig.SECRET_SOCIETY_ADVANCED_DEATHS);
 
     public static final Time INITIATE_MESSAGE_DELAYS = Time.seconds(15);
     public List<SocietyMember> members = new ArrayList<>();
@@ -43,17 +46,10 @@ public class SecretSociety {
     public Random rnd = new Random();
 
     public void onReload() {
-        SOCIETY_ENABLED = seasonConfig.SECRET_SOCIETY.get();
-        if (!SOCIETY_ENABLED) {
+        if (!SOCIETY_ENABLED.get()) {
             onDisabledSociety();
         }
 
-        MEMBER_COUNT = seasonConfig.SECRET_SOCIETY_MEMBER_AMOUNT.get();
-        START_TIME = seasonConfig.SECRET_SOCIETY_START_TIME.get();
-        KILL_COUNT = seasonConfig.SECRET_SOCIETY_KILLS_REQUIRED.get();
-        PUNISHMENT_LIVES = seasonConfig.SECRET_SOCIETY_PUNISHMENT_LIVES.get();
-        SOUND_ONLY_MEMBERS = seasonConfig.SECRET_SOCIETY_SOUND_ONLY_MEMBERS.get();
-        ADVANCED_DEATHS = seasonConfig.SECRET_SOCIETY_ADVANCED_DEATHS.get();
 
         FORCE_MEMBERS.clear();
         IGNORE_MEMBERS.clear();
@@ -70,18 +66,18 @@ public class SecretSociety {
     }
 
     public void addSessionActions() {
-        if (!SOCIETY_ENABLED) return;
-        currentSession.addSessionAction(new SessionAction(Time.minutes(START_TIME), ModifiableText.SESSION_ACTION_SOCIETY.getString()) {
+        if (!SOCIETY_ENABLED.get()) return;
+        currentSession.addSessionAction(new SessionAction(Time.minutes(START_TIME.get()), ModifiableText.SESSION_ACTION_SOCIETY.getString()) {
             @Override
             public void trigger() {
-                if (!SOCIETY_ENABLED) return;
+                if (!SOCIETY_ENABLED.get()) return;
                 startSociety(null);
             }
         });
     }
 
     public void startSociety(String word) {
-        if (!SOCIETY_ENABLED) return;
+        if (!SOCIETY_ENABLED.get()) return;
         if (server == null) return;
         if (word == null && !POSSIBLE_WORDS.isEmpty()) {
             word = POSSIBLE_WORDS.get(rnd.nextInt(POSSIBLE_WORDS.size()));
@@ -120,7 +116,7 @@ public class SecretSociety {
     }
 
     public void chooseMembers(List<ServerPlayer> allowedPlayers) {
-        if (!SOCIETY_ENABLED) return;
+        if (!SOCIETY_ENABLED.get()) return;
         Collections.shuffle(allowedPlayers);
         List<ServerPlayer> memberPlayers = getRandomMembers(allowedPlayers);
         List<ServerPlayer> nonMemberPlayers = new ArrayList<>();
@@ -139,10 +135,10 @@ public class SecretSociety {
         PlayerUtils.broadcastMessage(memberPlayers, ModifiableText.SOCIETY_DONT_READ.get());
 
         TaskScheduler.scheduleTask(50, () -> {
-            if (!SOUND_ONLY_MEMBERS) {
-                PlayerUtils.playSoundToPlayers(nonMemberRef.get(), SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("pastlife_society")));
+            if (!SOUND_ONLY_MEMBERS.get()) {
+                PlayerUtils.playSoundToPlayers(nonMemberRef.get(), SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("pastlife_society")));
             }
-            PlayerUtils.playSoundToPlayers(ref.get(), SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("pastlife_society")));
+            PlayerUtils.playSoundToPlayers(ref.get(), SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("pastlife_society")));
             PlayerUtils.sendTitleToPlayers(ref.get(), ModifiableText.SOCIETY_CALLS_PT1.get(), 0, 30, 0);
         });
 
@@ -162,7 +158,7 @@ public class SecretSociety {
 
     public List<ServerPlayer> getRandomMembers(List<ServerPlayer> allowedPlayers) {
         List<ServerPlayer> memberPlayers = new ArrayList<>();
-        int remainingMembers = MEMBER_COUNT;
+        int remainingMembers = MEMBER_COUNT.get();
         for (ServerPlayer player : allowedPlayers) {
             if (IGNORE_MEMBERS.contains(player.getScoreboardName().toLowerCase(Locale.ROOT))) continue;
             if (FORCE_MEMBERS.contains(player.getScoreboardName().toLowerCase(Locale.ROOT))) {
@@ -186,7 +182,7 @@ public class SecretSociety {
     }
 
     public void tick() {
-        if (!SOCIETY_ENABLED) return;
+        if (!SOCIETY_ENABLED.get()) return;
         if (!societyStarted) return;
         if (societyEnded) return;
         timer.tick();
@@ -202,7 +198,7 @@ public class SecretSociety {
     }
 
     public void initiateMember(ServerPlayer player) {
-        if (!SOCIETY_ENABLED) return;
+        if (!SOCIETY_ENABLED.get()) return;
         SocietyMember member = getMember(player);
         if (member == null) return;
         if (member.initiated) return;
@@ -212,7 +208,7 @@ public class SecretSociety {
     }
 
     public void afterInitiate(ServerPlayer player) {
-        PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("pastlife_society")), 1, 1);
+        PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("pastlife_society")), 1, 1);
 
         int currentTime = 20;
         PlayerReference ref = PlayerReference.of(player);
@@ -234,7 +230,7 @@ public class SecretSociety {
             TaskScheduler.scheduleTask(currentTime, () -> {
                 ServerPlayer playerNew = ref.get();
                 if (playerNew != null) {
-                    ((IPlayer) playerNew).ls$message(ModifiableText.SOCIETY_INITIATED_GROUP_PT2.get(KILL_COUNT, TextUtils.pluralize("player", KILL_COUNT)));
+                    ((IPlayer) playerNew).ls$message(ModifiableText.SOCIETY_INITIATED_GROUP_PT2.get(KILL_COUNT.get(), TextUtils.pluralize("player", KILL_COUNT.get())));
                 }
             });
             currentTime += 100;
@@ -256,7 +252,7 @@ public class SecretSociety {
             currentTime += 80;
             TaskScheduler.scheduleTask(currentTime, () -> {
                 ServerPlayer playerNew = ref.get();
-                if (playerNew != null) ((IPlayer) playerNew).ls$message(ModifiableText.SOCIETY_INITIATED_ALONE_PT2.get(KILL_COUNT, TextUtils.pluralize("player", KILL_COUNT)));
+                if (playerNew != null) ((IPlayer) playerNew).ls$message(ModifiableText.SOCIETY_INITIATED_ALONE_PT2.get(KILL_COUNT.get(), TextUtils.pluralize("player", KILL_COUNT.get())));
             });
         }
 
@@ -283,7 +279,7 @@ public class SecretSociety {
     }
 
     public Component getPunishmentText() {
-        return ModifiableText.SOCIETY_INITIATED_PUNISHMENT.get( Math.abs(PUNISHMENT_LIVES), TextUtils.pluralize("life", "lives", PUNISHMENT_LIVES));
+        return ModifiableText.SOCIETY_INITIATED_PUNISHMENT.get( Math.abs(PUNISHMENT_LIVES.get()), TextUtils.pluralize("life", "lives", PUNISHMENT_LIVES.get()));
     }
 
     public void removeMember(ServerPlayer player) {
@@ -292,21 +288,21 @@ public class SecretSociety {
     }
 
     public void addMember(ServerPlayer player) {
-        if (!SOCIETY_ENABLED) return;
+        if (!SOCIETY_ENABLED.get()) return;
         members.add(new SocietyMember(player));
         player.addTag("society_member");
         DatapackIntegration.EVENT_SOCIETY_MEMBER_ADDED.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
     }
 
     public void addMemberManually(ServerPlayer player) {
-        if (!SOCIETY_ENABLED) return;
+        if (!SOCIETY_ENABLED.get()) return;
         ((IPlayer) player).ls$message(ModifiableText.SOCIETY_NOTICE_ADDED.get());
         sendMessageToMembers(ModifiableText.SOCIETY_OTHER_MEMBER_ADDED.get());
         addMember(player);
     }
 
     public void removeMemberManually(ServerPlayer player) {
-        if (!SOCIETY_ENABLED) return;
+        if (!SOCIETY_ENABLED.get()) return;
         ((IPlayer) player).ls$message(ModifiableText.SOCIETY_NOTICE_REMOVED.get());
         removeMember(player);
         sendMessageToMembers(ModifiableText.SOCIETY_OTHER_MEMBER_REMOVED.get());
@@ -341,7 +337,7 @@ public class SecretSociety {
     }
     
     public void sessionEnd() {
-        if (!SOCIETY_ENABLED) return;
+        if (!SOCIETY_ENABLED.get()) return;
         if (societyStarted && !societyEnded) {
             TaskScheduler.scheduleTask(Time.seconds(2), () -> {
                 PlayerUtils.broadcastMessageToAdmins(ModifiableText.SOCIETY_NOT_ENDED.get());
@@ -353,8 +349,8 @@ public class SecretSociety {
         societyStarted = false;
         societyEnded = true;
         SessionTranscript.societyEnded();
-        if (SOUND_ONLY_MEMBERS) {
-            PlayerUtils.playSoundToPlayers(getMembers(), SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("pastlife_society_end_member")));
+        if (SOUND_ONLY_MEMBERS.get()) {
+            PlayerUtils.playSoundToPlayers(getMembers(), SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("pastlife_society_end_member")));
         }
         else {
             List<ServerPlayer> memberPlayers = getMembers();
@@ -365,8 +361,8 @@ public class SecretSociety {
                 nonMemberPlayers.add(player);
             }
 
-            PlayerUtils.playSoundToPlayers(memberPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("pastlife_society_end_member")));
-            PlayerUtils.playSoundToPlayers(nonMemberPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.mod("pastlife_society")));
+            PlayerUtils.playSoundToPlayers(memberPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("pastlife_society_end_member")));
+            PlayerUtils.playSoundToPlayers(nonMemberPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("pastlife_society")));
         }
     }
 
@@ -394,7 +390,7 @@ public class SecretSociety {
         TaskScheduler.scheduleTask(75, () -> {
             PlayerUtils.sendTitleWithSubtitleToPlayers(ref.get(), ModifiableText.SOCIETY_END_FAIL_PT2_TITLE.get(), ModifiableText.SOCIETY_END_FAIL_PT2_SUBTITLE.get(), 20, 30, 20);
         });
-        TaskScheduler.scheduleTask(ADVANCED_DEATHS ? 165 : 95, () -> {
+        TaskScheduler.scheduleTask(ADVANCED_DEATHS.get() ? 165 : 95, () -> {
             for (ServerPlayer member : ref.get()) {
                 punishPlayer(member);
             }
@@ -407,13 +403,13 @@ public class SecretSociety {
     public void punishPlayer(ServerPlayer member) {
         DatapackIntegration.EVENT_SOCIETY_FAIL_REWARD.trigger(new DatapackIntegration.Events.MacroEntry("Player", member.getScoreboardName()));
         if (DatapackIntegration.EVENT_SOCIETY_FAIL_REWARD.isCanceled()) return;
-        int punishmentLives = Math.abs(PUNISHMENT_LIVES);
+        int punishmentLives = Math.abs(PUNISHMENT_LIVES.get());
         Integer currentLives = ((IPlayer) member).ls$getLives();
         if (currentLives != null) {
             punishmentLives = Math.min(Math.abs(currentLives-1), punishmentLives);
         }
 
-        if (ADVANCED_DEATHS && currentLives != null) {
+        if (ADVANCED_DEATHS.get() && currentLives != null) {
             AdvancedDeathsManager.setPlayerLives(member, currentLives-punishmentLives);
         }
         else {

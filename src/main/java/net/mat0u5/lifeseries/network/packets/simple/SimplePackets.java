@@ -1,12 +1,8 @@
 package net.mat0u5.lifeseries.network.packets.simple;
 
-import net.mat0u5.lifeseries.network.packets.simple.instances.*;
-
-import java.util.HashMap;
-import java.util.Map;
+import net.mat0u5.matlib.network.packets.simple.instances.*;
 
 public class SimplePackets {
-    public static final Map<String, SimplePacket<?, ?>> registeredPackets = new HashMap<>();
 
     public static final SimpleStringListPacket LIMITED_LIFE_TIMER = new SimpleStringListPacket("LIMITED_LIFE_TIMER");
     public static final SimpleStringListPacket SEASON_INFO = new SimpleStringListPacket("SEASON_INFO");
@@ -55,8 +51,8 @@ public class SimplePackets {
     public static final SimpleBooleanPacket NICELIFE_LIVE_VOTING_ENABLED = new SimpleBooleanPacket("NICELIFE_LIVE_VOTING_ENABLED");
     public static final SimpleBooleanPacket LIMITED_LIFE_ACTIONBAR_TIME = new SimpleBooleanPacket("LIMITED_LIFE_ACTIONBAR_TIME");
 
-    public static final SimpleNumberPacket PLAYER_MIN_MSPT = new SimpleNumberPacket("PLAYER_MIN_MSPT");
-    public static final SimpleNumberPacket SIZESHIFTING_CHANGE = new SimpleNumberPacket("SIZESHIFTING_CHANGE");
+    public static final SimpleDoublePacket PLAYER_MIN_MSPT = new SimpleDoublePacket("PLAYER_MIN_MSPT");
+    public static final SimpleDoublePacket SIZESHIFTING_CHANGE = new SimpleDoublePacket("SIZESHIFTING_CHANGE");
 
     public static final SimpleLongPacket CURSE_SLIDING = new SimpleLongPacket("CURSE_SLIDING");
     public static final SimpleLongPacket SUPERPOWER_COOLDOWN = new SimpleLongPacket("SUPERPOWER_COOLDOWN");
@@ -79,8 +75,6 @@ public class SimplePackets {
     public static final SimpleEmptyPacket JUMP = new SimpleEmptyPacket("JUMP");
     public static final SimpleEmptyPacket RESET_TRIVIA = new SimpleEmptyPacket("RESET_TRIVIA");
     public static final SimpleEmptyPacket SELECT_WILDCARDS = new SimpleEmptyPacket("SELECT_WILDCARDS");
-    public static final SimpleEmptyPacket CLEAR_CONFIG = new SimpleEmptyPacket("CLEAR_CONFIG");
-    public static final SimpleEmptyPacket OPEN_CONFIG = new SimpleEmptyPacket("OPEN_CONFIG");
     public static final SimpleEmptyPacket TOGGLE_TIMER = new SimpleEmptyPacket("TOGGLE_TIMER");
     public static final SimpleEmptyPacket PAST_LIFE_CHOOSE_TWIST = new SimpleEmptyPacket("PAST_LIFE_CHOOSE_TWIST");
     public static final SimpleEmptyPacket TRIVIA_ALL_WRONG = new SimpleEmptyPacket("TRIVIA_ALL_WRONG");

@@ -64,7 +64,7 @@ public enum Seasons {
     }
 
     public Identifier getLogo() {
-        return IdentifierHelper.mod("textures/gui/" + this.getId() + ".png");
+        return IdentifierHelper.lifeseries("textures/gui/" + this.getId() + ".png");
     }
 
     public boolean requiresClient() {
