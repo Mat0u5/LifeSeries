@@ -2,7 +2,9 @@ package net.mat0u5.lifeseries.registries;
 
 import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.events.Events;
+import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
 import net.mat0u5.lifeseries.seasons.season.Season;
+import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.matlib.events.common.*;
 import net.mat0u5.matlib.events.server.*;
 
@@ -23,6 +25,8 @@ public class Registries {
 		//registerCustomResourcepack();
 		//?}
 		Season.registerEvents();
+		SecretLife.registerSecretLifeEvents();
+		Blacklist.registerEvents();
 	}
 
 	public static void registerEvents() {

@@ -2,7 +2,6 @@ package net.mat0u5.lifeseries.seasons.season.secretlife;
 
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLifeConfig;
 import net.mat0u5.matlib.config.entry.ConfigRef;
-import com.google.auto.service.AutoService;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.config.ModifiableText;
@@ -16,7 +15,6 @@ import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.matlib.events.server.ServerEntityEvents;
-import net.mat0u5.matlib.services.RegistrableServer;
 import net.mat0u5.matlib.utils.player.AttributeUtils;
 import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -62,8 +60,7 @@ import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.component.TypedEntityData;
 //?}
 
-@AutoService(RegistrableServer.class)
-public class SecretLife extends Season implements RegistrableServer {
+public class SecretLife extends Season {
     public static final ConfigRef<Integer> MAX_HEALTH = ConfigRef.of(() -> LifeSeries.seasonConfig.MAX_PLAYER_HEALTH);
     public static final ConfigRef<Integer> MAX_KILL_HEALTH = ConfigRef.of(() -> SecretLifeConfig.get().MAX_PLAYER_KILL_HEALTH);
     public static final ConfigRef<Boolean> ONLY_LOSE_HEARTS_IN_SESSION = ConfigRef.of(() -> SecretLifeConfig.get().ONLY_LOSE_HEARTS_IN_SESSION);
@@ -82,8 +79,7 @@ public class SecretLife extends Season implements RegistrableServer {
         }
     };
 
-    @Override
-    public void onRegister() {
+    public static void registerSecretLifeEvents() {
         ServerEntityEvents.PRE_HEAL.register((entity, amount) -> {
             if (LifeSeries.isClientOrDisabled()) return EventResult.PASS;
             if (!(currentSeason instanceof SecretLife secretLife)) return EventResult.PASS;

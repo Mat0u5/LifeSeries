@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.seasons.blacklist;
 
 import net.mat0u5.matlib.config.entry.ConfigRef;
-import com.google.auto.service.AutoService;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
@@ -9,7 +8,6 @@ import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.matlib.events.server.ServerPlayerEvents;
-import net.mat0u5.matlib.services.RegistrableServer;
 import net.mat0u5.matlib.utils.other.RegistryUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.matlib.utils.player.PlayerReference;
@@ -54,8 +52,7 @@ import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 //?}
 
-@AutoService(RegistrableServer.class)
-public class Blacklist implements RegistrableServer {
+public class Blacklist {
     public List<Identifier> loadedListItemIdentifier;
     public List<Identifier> loadedRecipeBlacklist;
     private List<Item> loadedListItem;
@@ -73,8 +70,7 @@ public class Blacklist implements RegistrableServer {
 
     public final ConfigRef<Boolean> CREATIVE_IGNORE_BLACKLIST = ConfigRef.of(() -> LifeSeries.seasonConfig.CREATIVE_IGNORE_BLACKLIST);
 
-    @Override
-    public void onRegister() {
+    public static void registerEvents() {
         ServerPlayerEvents.OPEN_MENU.register((player, menu) -> {
             if (LifeSeries.isClientOrDisabled()) return;
             if (blacklist == null) return;

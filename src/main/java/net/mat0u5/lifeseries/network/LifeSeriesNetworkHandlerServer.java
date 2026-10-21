@@ -583,11 +583,13 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
     }
 
     public static boolean wasHandshakeSuccessful(ServerPlayer player) {
-        return NetworkHandlerServer.wasHandshakeSuccessful(player, LifeSeries.MOD_ID);
+        if (player == null) return false;
+        return wasHandshakeSuccessful(player.getUUID());
     }
 
     public static boolean wasHandshakeSuccessful(UUID uuid) {
-        return NetworkHandlerServer.wasHandshakeSuccessful(uuid, LifeSeries.MOD_ID);
+        if (uuid == null) return false;
+        return NetworkHandlerServer.wasHandshakeSuccessful(uuid, LifeSeries.MOD_ID) || wasPreLoginHandshakeSuccessful(uuid);
     }
 
     public static boolean wasPreLoginHandshakeSuccessful(UUID uuid) {

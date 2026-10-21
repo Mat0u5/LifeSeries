@@ -15,6 +15,7 @@ import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.mat0u5.matlib.config.entry.ConfigEntry;
 import net.mat0u5.matlib.config.entry.ConfigGuiEntry;
 import net.mat0u5.matlib.config.entry.ConfigurableValue;
 import net.mat0u5.matlib.config.entry.DynamicEntry;
@@ -69,6 +70,7 @@ public class SeasonConfig extends DefaultConfigValues {
 
     protected static <T extends SeasonConfig> T getActive(Class<T> configClass, Supplier<T> fallback) {
         if (configClass.isInstance(seasonConfig)) {
+            fallbackConfigs.remove(configClass);
             return configClass.cast(seasonConfig);
         }
         return configClass.cast(fallbackConfigs.computeIfAbsent(configClass, clazz -> fallback.get()));
@@ -115,8 +117,10 @@ public class SeasonConfig extends DefaultConfigValues {
 
     public List<String> getAvailableConfigKeys() {
         List<String> result = new ArrayList<>();
-        for (ConfigurableValue<?> value : getConfigurableValues()) {
-            result.add(value.getKey());
+        for (ConfigEntry entry : getEntries()) {
+            if (entry instanceof ConfigurableValue<?> value) {
+                result.add(value.getKey());
+            }
         }
         return result;
     }

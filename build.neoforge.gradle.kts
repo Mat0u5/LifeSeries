@@ -74,7 +74,13 @@ dependencies {
 	else {
 		compileOnly ("maven.modrinth:simple-voice-chat:neoforge-1.20.4-2.5.22")
 	}
-	implementation("net.mat0u5:matlib-neoforge-${prop("deps.minecraft")}:local-+")
+
+	if (prop("deps.matlib.local").equals("true", ignoreCase = true)) {
+		implementation("net.mat0u5:matlib-neoforge-${prop("deps.minecraft")}:local-+")
+	}
+	else {
+		implementation("maven.modrinth:matlib:neoforge-${prop("deps.matlib")}+${prop("deps.minecraft")}")
+	}
 
 	compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
 	annotationProcessor("com.google.auto.service:auto-service:1.1.1")

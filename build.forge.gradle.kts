@@ -166,7 +166,13 @@ dependencies {
 	else {
 		compileOnly ("maven.modrinth:simple-voice-chat:forge-1.20.1-2.6.16")
 	}
-	implementation("net.mat0u5:matlib-forge-${prop("deps.minecraft")}:local-+")
+
+	if (prop("deps.matlib.local").equals("true", ignoreCase = true)) {
+		implementation("net.mat0u5:matlib-forge-${prop("deps.minecraft")}:local-+")
+	}
+	else {
+		implementation("maven.modrinth:matlib:forge-${prop("deps.matlib")}+${prop("deps.minecraft")}")
+	}
 
 	compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
 	annotationProcessor("com.google.auto.service:auto-service:1.1.1")
