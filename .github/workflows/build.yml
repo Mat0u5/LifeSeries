@@ -9,6 +9,7 @@ on:
       - master
       - dev
       - snapshot
+      - matlib
 
 jobs:
   notify:

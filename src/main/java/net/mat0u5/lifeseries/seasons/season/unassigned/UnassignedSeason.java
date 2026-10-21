@@ -21,7 +21,6 @@ public class UnassignedSeason extends Season {
     }
     @Override
     public SeasonConfig createConfig() {
-        //TODO test
         return new SeasonConfig(null, null) {
             {
                 WORLDBORDER_SIZE.defaultValue(30_000_000);
