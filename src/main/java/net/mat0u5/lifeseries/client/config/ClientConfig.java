@@ -12,7 +12,7 @@ import net.mat0u5.matlib.config.entry.ConfigurableValue;
 import net.minecraft.server.level.ServerPlayer;
 
 public class ClientConfig extends GuiConfig {
-    public final ConfigurableValue<MinimalArmorBehavior> MINIMAL_ARMOR = ConfigurableValue.register(this, "minimal_armor", MinimalArmorBehavior.MATCH_SERVER)
+    public final ConfigurableValue<MinimalArmorBehavior> MINIMAL_ARMOR = ConfigurableValue.register(this, "minimal_armor_resourcepack", MinimalArmorBehavior.MATCH_SERVER)
             .name("Minimal Armor Resourcepack")
             .description("Enables the minimal armor resourcepack.")
             .onChange((oldValue, newValue) -> LifeSeriesResourcePacks.checkClientPacks());

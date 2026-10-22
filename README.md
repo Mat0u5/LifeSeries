@@ -17,6 +17,8 @@ This mod is a one-to-one recreation of [Grian](https://www.youtube.com/c/Grian)'
 
 It adds everything from the original series, along with an incredible amount of quality of life features, and endless customizability.
 
+**This mod requires the MatLib library, you can download it [here](https://modrinth.com/mod/matlib)**.
+
 -----
 
 ### [Wiki](https://mat0u5.github.io/LifeSeries-docs)
@@ -42,7 +44,9 @@ A big part of this mod that it is very customizable.
 There are over 100 customizable features, including default lives, boogeyman in any season, custom item blacklists, players subbing in, and much more.
 
 ## Requirements
-There are no other mod dependencies (not even Fabric API) - although [Simple Voice Chat](https://modrinth.com/plugin/simple-voice-chat) is recommended.
+The [MatLib](https://modrinth.com/mod/matlib) library is a required dependency.
+
+[Simple Voice Chat](https://modrinth.com/plugin/simple-voice-chat) is recommended for social interactions.
 
 The mod is server-side required and optional client-side.
 

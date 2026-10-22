@@ -1,2 +1,1 @@
-New configs.
-Bug fixes.
+Added the MatLib library mod as a required dependency.

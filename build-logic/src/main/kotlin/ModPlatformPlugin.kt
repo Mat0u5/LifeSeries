@@ -136,6 +136,7 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 				required.maybeCreate("matlib").apply {
 					modid.set("matlib")
 					versionRange.set(">=${prop("deps.matlib")}")
+					slug("matlib")
 				}
 
 				incompatible.maybeCreate("pastlife").apply {
@@ -147,6 +148,7 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 				required.maybeCreate("matlib").apply {
 					modid.set("matlib")
 					forgeVersionRange.set("[${prop("deps.matlib")},)")
+					slug("matlib")
 				}
 			}
 		}
