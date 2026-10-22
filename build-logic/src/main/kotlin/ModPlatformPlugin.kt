@@ -122,6 +122,13 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 				forgeVersionRange.set(mcRange)
 			}
 
+			required.maybeCreate("matlib").apply {
+				modid.set("matlib")
+				versionRange.set(">=${prop("deps.matlib")}")
+				forgeVersionRange.set("[${prop("deps.matlib")},)")
+				slug("matlib")
+			}
+
 			if (isFabric) {
 				required.maybeCreate("java").apply {
 					modid.set("java")
@@ -133,22 +140,9 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 					versionRange.set(">=0.18.0")
 				}
 
-				required.maybeCreate("matlib").apply {
-					modid.set("matlib")
-					versionRange.set(">=${prop("deps.matlib")}")
-					slug("matlib")
-				}
-
 				incompatible.maybeCreate("pastlife").apply {
 					modid.set("pastlife")
 					versionRange.set("*")
-				}
-			}
-			else {
-				required.maybeCreate("matlib").apply {
-					modid.set("matlib")
-					forgeVersionRange.set("[${prop("deps.matlib")},)")
-					slug("matlib")
 				}
 			}
 		}

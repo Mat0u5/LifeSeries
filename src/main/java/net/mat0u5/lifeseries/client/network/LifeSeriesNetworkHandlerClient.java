@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.client.network;
 
 import com.google.auto.service.AutoService;
+import io.netty.buffer.Unpooled;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.compatibilities.VoicechatClient;
@@ -23,6 +24,7 @@ import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.mat0u5.lifeseries.client.utils.LifeSeriesResourcePacks;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.mixin.PlayerAccessor;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.registries.ParticleRegistry;
@@ -43,13 +45,20 @@ import net.mat0u5.matlib.client.render.RenderUtils;
 import net.mat0u5.matlib.client.render.VignetteRenderer;
 import net.mat0u5.matlib.client.services.RegistrableClient;
 import net.mat0u5.matlib.client.utils.SharedClientInfo;
+import net.mat0u5.matlib.events.OptionalEventReturn;
 import net.mat0u5.matlib.utils.other.RegistryUtils;
+import net.mat0u5.matlib.utils.other.VersionTrackedMods;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.Connection;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.network.protocol.login.ClientboundCustomQueryPacket;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -59,12 +68,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+//? if <= 1.20 {
+//import net.minecraft.network.protocol.login.ServerboundCustomQueryPacket;
+//?} else {
+import net.minecraft.network.protocol.login.ServerboundCustomQueryAnswerPacket;
+import net.mat0u5.matlib.network.packets.CustomQueryPacket;
+//?}
+
 @AutoService(RegistrableClient.class)
 public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
 
     @Override
     public void onRegister() {
         ClientNetworkEvents.RECEIVE_CUSTOM_PACKET.register(LifeSeriesNetworkHandlerClient::onCustomPayload);
+        ClientNetworkEvents.RECEIVE_PRELOGIN_PACKET.register(LifeSeriesNetworkHandlerClient::onPreLoginPacket);
         initializeSimplePacketReceivers();
     }
 
@@ -428,6 +445,41 @@ public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
             }catch(Exception ignored) {}
         }
     }
+
+    public static OptionalEventReturn<Packet<?>> onPreLoginPacket(Connection connection, ClientboundCustomQueryPacket packet) {
+        //~ if > 1.20 'packet.getIdentifier()' -> 'packet.payload().id()' {
+        Identifier id = packet.payload().id();
+        //~}
+        if (id.equals(LifeSeriesNetworkHandlerServer.oldPreLoginPacketID)) {
+            //~ if > 1.20 'getTransactionId()' -> 'transactionId()' {
+            boolean isRealOldPacket = packet.transactionId() == LifeSeriesNetworkHandlerServer.OLD_PRELOGIN_TRANSACTION_ID;
+            //~}
+
+            if (isRealOldPacket) {
+                // This is a REAL old pre login packet sent from an old server.
+                Component disconnectText = Component.literal("[Life Series Mod] Server-Client version mismatch!\n" +
+                        "The client version is too new for the server.\n" +
+                        "Either update the server, or downgrade the client version.");
+                connection.disconnect(disconnectText);
+                return OptionalEventReturn.pass();
+            }
+            else {
+                // This is a FAKE old pre login packet sent from a new server -> do not disconnect.
+                FriendlyByteBuf responseBuf = new FriendlyByteBuf(Unpooled.buffer());
+                responseBuf.writeBoolean(true);
+                responseBuf.writeInt(LifeSeriesNetworkHandlerServer.OLD_PRELOGIN_TRANSACTION_ID);
+
+                //? if <= 1.20 {
+                //return OptionalEventReturn.of(new ServerboundCustomQueryPacket(packet.getTransactionId(), responseBuf));
+                //?} else {
+                CustomQueryPacket answerPayload = new CustomQueryPacket(responseBuf);
+                return OptionalEventReturn.of(new ServerboundCustomQueryAnswerPacket(packet.transactionId(), answerPayload));
+                //?}
+            }
+        }
+        return OptionalEventReturn.pass();
+    }
+
     public static void handleOldHandshake(OldHandshakePayload payload) {
         if (SharedClientInfo.getHandshakeStatus().hasReceived(LifeSeries.MOD_ID)) return;
         if (payload.compatibilityStr().equalsIgnoreCase(OldHandshakePayload.OLD_PACKET_VERSION_BREAKOFF)) return;

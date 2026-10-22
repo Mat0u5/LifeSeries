@@ -37,10 +37,12 @@ import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
 import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
+import net.mat0u5.matlib.MatLib;
 import net.mat0u5.matlib.events.common.CommonRegistryEvents;
 import net.mat0u5.matlib.events.server.ServerNetworkEvents;
 import net.mat0u5.matlib.network.NetworkHandlerServer;
@@ -51,10 +53,13 @@ import net.mat0u5.matlib.utils.other.VersionCompatibility;
 import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.mat0u5.matlib.utils.player.ScoreboardUtils;
 import net.mat0u5.matlib.utils.player.TeamUtils;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerLoginPacketListenerImpl;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.scores.PlayerTeam;
 
@@ -83,6 +88,10 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 
 @AutoService(RegistrableServer.class)
 public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
+    public static final int OLD_PRELOGIN_TRANSACTION_ID = 10942422;
+    public static final int OLD_FAKE_PRELOGIN_TRANSACTION_ID = OLD_PRELOGIN_TRANSACTION_ID-1;
+    public static final Identifier oldPreLoginPacketID = IdentifierHelper.lifeseries("preloginpacket");
+
     public static RegistryOverrideBahaviours REGISTRY_OVERRIDE_BEHAVIOR = RegistryOverrideBahaviours.LOGIN;
     public static boolean PRE_LOGIN_OVERRIDE_KICK = false;
 
@@ -118,11 +127,13 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
     public void onRegister() {
         CommonRegistryEvents.PACKET_PAYLOADS.register(() -> PAYLOADS);
         ServerNetworkEvents.RECEIVE_CUSTOM_PACKET.register(LifeSeriesNetworkHandlerServer::onCustomPayload);
-        ServerNetworkEvents.PRE_LOGIN_PACKET.register((handler, uuid, username, understood, modIds) -> {
+        ServerNetworkEvents.PRE_LOGIN_MATLIB_PACKET.register((handler, uuid, username, understood, modIds) -> {
             if (!wasPreLoginHandshakeSuccessful(uuid) && currentSeason.getSeason().requiresClient() && !PRE_LOGIN_OVERRIDE_KICK) {
                 handler.disconnect(getDisconnectClientText());
             }
         });
+        ServerNetworkEvents.SEND_PRELOGIN_PACKETS.register(handler -> Map.of(OLD_FAKE_PRELOGIN_TRANSACTION_ID, oldPreLoginPacketID));
+        ServerNetworkEvents.RECEIVE_PRELOGIN_ANSWER.register(LifeSeriesNetworkHandlerServer::onPreLoginPacket);
         initializeSimplePacketReceivers();
 
     }
@@ -434,6 +445,28 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
         }
         updatedConfigThisTick = false;
         updatedConfigThisTickFromCommand = false;
+    }
+
+    public static boolean onPreLoginPacket(ServerLoginPacketListenerImpl handler, Identifier id, FriendlyByteBuf data) {
+        if (!id.equals(oldPreLoginPacketID)) return false;
+
+        boolean isFromNewClient = false;
+        if (data != null) {
+            try {
+                if (data.isReadable()) {
+                    boolean understood = data.readBoolean();
+                    int additionalInfo = data.readInt();
+                    isFromNewClient = additionalInfo == OLD_PRELOGIN_TRANSACTION_ID;
+                }
+            } catch (Exception ignored) {}
+        }
+
+        if (isFromNewClient) return true;
+
+        Component disconnectText = Component.literal("[Life Series Mod] Client-Server version mismatch!\n" +
+                "Update the client version to at least version "+OldHandshakePayload.OLD_PACKET_VERSION_BREAKOFF);
+        handler.disconnect(disconnectText);
+        return true;
     }
 
     public static void handleOldHandshakeResponse(ServerPlayer player, OldHandshakePayload payload) {
