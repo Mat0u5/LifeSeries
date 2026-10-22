@@ -1,13 +1,13 @@
 package net.mat0u5.lifeseries.entity.snail;
 
-import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
-import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.entity.snail.goal.*;
 import net.mat0u5.lifeseries.entity.snail.server.SnailPathfinding;
 import net.mat0u5.lifeseries.entity.snail.server.SnailServerData;
 import net.mat0u5.lifeseries.entity.snail.server.SnailSounds;
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
 import net.mat0u5.lifeseries.utils.interfaces.IEntity;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;

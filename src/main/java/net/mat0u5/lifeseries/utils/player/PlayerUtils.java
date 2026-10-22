@@ -17,10 +17,12 @@ import net.mat0u5.matlib.utils.player.AttributeUtils;
 import net.minecraft.Optionull;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.RemoteChatSession;
-import net.minecraft.network.protocol.game.*;
+import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
 import net.minecraft.server.level.ServerPlayer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;

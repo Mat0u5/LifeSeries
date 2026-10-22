@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.seasons.blacklist;
 
-import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -8,9 +7,10 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.matlib.events.server.ServerPlayerEvents;
 import net.mat0u5.matlib.utils.other.RegistryUtils;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.mat0u5.matlib.utils.world.ItemStackUtils;
 import net.minecraft.core.BlockPos;

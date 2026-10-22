@@ -4,20 +4,15 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
-import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.matlib.utils.other.TextUtils;
-import net.mat0u5.matlib.utils.other.VersionCompatibility;
-import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
-import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.mat0u5.matlib.utils.other.TextUtils;
+import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-
-import java.util.List;
 
 public class TestingCommands extends CustomCommand {
 

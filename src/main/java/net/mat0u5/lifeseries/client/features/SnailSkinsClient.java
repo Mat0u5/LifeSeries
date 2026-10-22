@@ -2,8 +2,8 @@ package net.mat0u5.lifeseries.client.features;
 
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.PreBuiltSnailSkins;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkins;
-import net.mat0u5.matlib.client.utils.SyncedTexturesClient;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.matlib.client.utils.SyncedTexturesClient;
 import net.minecraft.resources.Identifier;
 
 import java.util.List;

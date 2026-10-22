@@ -13,11 +13,18 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.LifeSeries;
-
-//? if > 1.20
+//? if <= 1.21.11 {
+/*import net.minecraft.network.chat.Component;
+import net.minecraft.world.scores.Objective;
+import net.minecraft.world.scores.Scoreboard;
+import org.spongepowered.asm.mixin.injection.Redirect;
+*///?}
+//? if > 1.20 <= 1.21.11
+//import net.minecraft.world.scores.DisplaySlot;
 //? if <= 1.20.2 {
 //import net.minecraft.world.scores.PlayerScoreEntry;
-//?} else {
+//?} else if <= 1.21.11 {
+//import net.minecraft.world.scores.ReadOnlyScoreInfo;
 //?}
 //? if > 1.20.2 && <= 1.21
 //import net.minecraft.network.chat.numbers.NumberFormat;
@@ -29,12 +36,14 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-*///?} else {
-//?}
+*///?} else if <= 1.21.11 {
+/*import net.mat0u5.matlib.client.utils.interfaces.IEntityRenderState;
+import net.minecraft.world.entity.player.Player;
+*///?}
 //? if >= 1.21.2 && <= 1.21.6
 //import net.minecraft.client.renderer.entity.state.PlayerRenderState;
-//? if >= 1.21.9
-
+//? if >= 1.21.9 <= 1.21.11
+//import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 //?if <= 1.21.11 {
 /*import net.mat0u5.matlib.utils.other.Time;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;

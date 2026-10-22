@@ -1,14 +1,14 @@
 package net.mat0u5.lifeseries.seasons.subin;
 
-import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.matlib.config.entry.ConfigRef;
 import com.mojang.authlib.GameProfile;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayerManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ProfileManager;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.minecraft.network.protocol.game.ClientboundSetExperiencePacket;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -17,8 +17,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static net.mat0u5.lifeseries.LifeSeries.*;
-import static net.mat0u5.matlib.MatLib.*;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.livesManager;
+import static net.mat0u5.matlib.MatLib.server;
 
 //? if <= 1.21.5
 //import net.minecraft.nbt.CompoundTag;

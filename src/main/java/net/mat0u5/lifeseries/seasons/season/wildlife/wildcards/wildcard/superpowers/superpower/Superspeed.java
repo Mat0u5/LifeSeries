@@ -1,20 +1,17 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
-import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
-import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
-import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.matlib.utils.player.AttributeUtils;
 import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 

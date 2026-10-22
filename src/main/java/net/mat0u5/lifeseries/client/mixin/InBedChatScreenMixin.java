@@ -4,7 +4,14 @@ import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.minecraft.client.gui.screens.InBedChatScreen;
 import org.spongepowered.asm.mixin.Mixin;
 
-//? if >= 1.21.9
+//? if <= 1.21.11 {
+/*import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+*///?}
+
+//? if >= 1.21.9 <= 1.21.11
+//import net.minecraft.client.input.*;
 
 
 @Mixin(value = InBedChatScreen.class, priority = 1)

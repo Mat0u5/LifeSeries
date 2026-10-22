@@ -1,11 +1,11 @@
 package net.mat0u5.lifeseries.seasons.season.nicelife;
 
 import net.mat0u5.lifeseries.config.SeasonConfig;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
 import net.mat0u5.matlib.config.entry.ConfigHeader;
 import net.mat0u5.matlib.config.entry.ConfigurableValue;
 import net.mat0u5.matlib.config.type.ConfigTypes;
-import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
 
 import java.util.ArrayList;
 import java.util.List;

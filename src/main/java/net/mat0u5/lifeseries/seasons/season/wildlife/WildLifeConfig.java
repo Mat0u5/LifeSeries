@@ -2,14 +2,14 @@ package net.mat0u5.lifeseries.seasons.season.wildlife;
 
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.config.SeasonConfig;
-import net.mat0u5.matlib.config.entry.ConfigHeader;
-import net.mat0u5.matlib.config.entry.ConfigurableValue;
-import net.mat0u5.matlib.config.type.ConfigTypes;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
 import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
+import net.mat0u5.matlib.config.entry.ConfigHeader;
+import net.mat0u5.matlib.config.entry.ConfigurableValue;
+import net.mat0u5.matlib.config.type.ConfigTypes;
 
 import java.util.List;
 

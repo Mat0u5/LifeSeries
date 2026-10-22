@@ -1,30 +1,28 @@
 package net.mat0u5.lifeseries.seasons.secretsociety;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.matlib.utils.other.TextUtils;
 import net.mat0u5.matlib.utils.other.Time;
 import net.mat0u5.matlib.utils.player.PlayerListReference;
 import net.mat0u5.matlib.utils.player.PlayerReference;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
-import static net.mat0u5.matlib.MatLib.*;
+import static net.mat0u5.matlib.MatLib.server;
 
 public class SecretSociety {
     public final ConfigRef<Boolean> SOCIETY_ENABLED = ConfigRef.of(() -> LifeSeries.seasonConfig.SECRET_SOCIETY);

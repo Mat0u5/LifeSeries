@@ -32,7 +32,6 @@ import static net.mat0u5.lifeseries.LifeSeries.blacklist;
 import net.minecraft.world.entity.monster.creaking.Creaking;
 import java.util.List;
 //?}
-
 //? if = 1.21.2 {
 /*import java.util.function.DoubleSupplier;
 import java.util.function.Predicate;
@@ -42,7 +41,6 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.world.entity.decoration.Mannequin;
 //?}
-
 //? if forge || neoforge {
 /*import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelReader;

@@ -1,10 +1,10 @@
 package net.mat0u5.lifeseries.seasons.season.limitedlife;
 
 import net.mat0u5.lifeseries.config.SeasonConfig;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.matlib.config.entry.ConfigHeader;
 import net.mat0u5.matlib.config.entry.ConfigurableValue;
 import net.mat0u5.matlib.config.type.ConfigTypes;
-import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.matlib.utils.other.Time;
 
 import java.util.List;

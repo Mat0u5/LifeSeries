@@ -5,7 +5,7 @@ import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
-import net.mat0u5.matlib.events.common.*;
+import net.mat0u5.matlib.events.common.CommonPlayerEvents;
 import net.mat0u5.matlib.events.server.*;
 
 //? if <= 1.20.2 {

@@ -1,17 +1,18 @@
 package net.mat0u5.lifeseries.client.gui.config.entries.extra;
 
 import net.mat0u5.lifeseries.client.config.LifeSeriesConfigGuiClient;
+import net.mat0u5.lifeseries.config.LifeSeriesConfigTypes;
 import net.mat0u5.matlib.client.gui.config.entries.ConfigEntry;
 import net.mat0u5.matlib.client.gui.config.entries.ModifiableListEntry;
 import net.mat0u5.matlib.client.render.RenderUtils;
 import net.mat0u5.matlib.client.utils.TextColors;
-import net.mat0u5.lifeseries.config.LifeSeriesConfigTypes;
 import net.mat0u5.matlib.config.entry.ConfigGuiEntry;
 import net.mat0u5.matlib.config.type.ConfigType;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
+
 import java.util.Objects;
 import java.util.Optional;
 
