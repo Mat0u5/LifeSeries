@@ -1,5 +1,8 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
@@ -15,9 +18,9 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 
 public class Invisibility extends ToggleableSuperpower {
-    public static boolean SHOW_PARTICLES = true;
-    public static boolean DAMAGE_CANCELS = true;
-    public static boolean ATTACK_CANCELS = true;
+    public static final ConfigRef<Boolean> SHOW_PARTICLES = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_INVISIBILITY_SHOW_PARTICLES);
+    public static final ConfigRef<Boolean> DAMAGE_CANCELS = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_INVISIBILITY_DAMAGE_CANCELS);
+    public static final ConfigRef<Boolean> ATTACK_CANCELS = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_INVISIBILITY_ATTACK_CANCELS);
     public static int COOLDOWN_MILLIS = 1000;
     public Invisibility(ServerPlayer player) {
         super(player);
@@ -57,7 +60,7 @@ public class Invisibility extends ToggleableSuperpower {
 
         playerLevel.playSound(null, player.getX(), player.getY(), player.getZ(), ModifiableSound.WILDLIFE_SUPERPOWERS_INVISIBILITY_START.get(), SoundSource.MASTER, 1, 1);
         sendInvisibilityPacket();
-        SimplePackets.POWER_INVISIBILITY_PARTICLES.sendToAllClients(SHOW_PARTICLES);
+        SimplePackets.POWER_INVISIBILITY_PARTICLES.sendToAllClients(SHOW_PARTICLES.get());
     }
 
     @Override
@@ -66,7 +69,7 @@ public class Invisibility extends ToggleableSuperpower {
         ServerPlayer player = getPlayer();
         if (player == null) return;
         ((IPlayer) player).ls$getServerLevel().playSound(null, player.getX(), player.getY(), player.getZ(), ModifiableSound.WILDLIFE_SUPERPOWERS_INVISIBILITY_END.get(), SoundSource.MASTER, 1, 1);
-        NetworkHandlerServer.sendPlayerInvisible(player.getUUID(), 0);
+        LifeSeriesNetworkHandlerServer.sendPlayerInvisible(player.getUUID(), 0);
         player.removeEffect(MobEffects.INVISIBILITY);
     }
 
@@ -74,17 +77,17 @@ public class Invisibility extends ToggleableSuperpower {
         if (!this.active) return;
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        NetworkHandlerServer.sendPlayerInvisible(player.getUUID(), -1);
+        LifeSeriesNetworkHandlerServer.sendPlayerInvisible(player.getUUID(), -1);
     }
 
     public void onTakeDamage() {
-        if (DAMAGE_CANCELS) {
+        if (DAMAGE_CANCELS.get()) {
             deactivate();
         }
     }
 
     public void onAttack() {
-        if (ATTACK_CANCELS) {
+        if (ATTACK_CANCELS.get()) {
             deactivate();
         }
     }

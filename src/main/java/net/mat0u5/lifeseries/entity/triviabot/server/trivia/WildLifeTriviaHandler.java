@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.entity.triviabot.server.trivia;
 
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
@@ -16,12 +17,16 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.*;
-import net.mat0u5.lifeseries.utils.player.AttributeUtils;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
-import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
-import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.mat0u5.matlib.utils.player.AttributeUtils;
+import net.mat0u5.matlib.utils.world.ItemStackUtils;
+import net.mat0u5.matlib.utils.world.LevelUtils;
+import net.mat0u5.matlib.utils.other.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -49,6 +54,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
+import static net.mat0u5.matlib.MatLib.*;
 
 //? if <= 1.20.3 {
 //import net.minecraft.core.particles.DustParticleOptions;
@@ -80,9 +86,9 @@ public class WildLifeTriviaHandler extends TriviaHandler {
 
     public static ItemSpawner itemSpawner;
     public int snailTransformation = 0;
-    public static int EASY_TIME = 180;
-    public static int NORMAL_TIME = 240;
-    public static int HARD_TIME = 300;
+    public static final ConfigRef<Integer> EASY_TIME = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_TRIVIA_SECONDS_EASY);
+    public static final ConfigRef<Integer> NORMAL_TIME = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_TRIVIA_SECONDS_NORMAL);
+    public static final ConfigRef<Integer> HARD_TIME = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_TRIVIA_SECONDS_HARD);
 
     public void tick() {
         super.tick();
@@ -178,9 +184,9 @@ public class WildLifeTriviaHandler extends TriviaHandler {
 
     public void setTimeBasedOnDifficulty(int difficulty) {
         timeToComplete = difficulty * 60 + 120;
-        if (difficulty == 1) timeToComplete = EASY_TIME;
-        if (difficulty == 2) timeToComplete = NORMAL_TIME;
-        if (difficulty == 3) timeToComplete = HARD_TIME;
+        if (difficulty == 1) timeToComplete = EASY_TIME.get();
+        if (difficulty == 2) timeToComplete = NORMAL_TIME.get();
+        if (difficulty == 3) timeToComplete = HARD_TIME.get();
     }
 
     public void transformIntoSnail() {
@@ -327,10 +333,7 @@ public class WildLifeTriviaHandler extends TriviaHandler {
 
     public static List<String> loadBlessEffects() {
         if (seasonConfig == null) return new ArrayList<>();
-        String raw = WildLifeConfig.WILDCARD_TRIVIA_EFFECTS.get();
-        raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        if (raw.isEmpty()) return new ArrayList<>();
-        return new ArrayList<>(Arrays.asList(raw.split(",")));
+        return new ArrayList<>(WildLifeConfig.get().WILDCARD_TRIVIA_EFFECTS.get());
     }
 
     //? if <= 1.20.3 {
@@ -561,16 +564,16 @@ public class WildLifeTriviaHandler extends TriviaHandler {
     public static void curseHearts(ServerPlayer player) {
         cursedHeartPlayers.add(player.getUUID());
         double newHealth = Math.max(player.getMaxHealth()-7, 1);
-        AttributeUtils.setMaxPlayerHealth(player, newHealth);
+        AttributeUtils.MAX_HEALTH.of(player).set(newHealth);
     }
 
     public static final List<UUID> cursedMoonJumpPlayers = new ArrayList<>();
     public static void curseMoonjump(ServerPlayer player) {
         cursedMoonJumpPlayers.add(player.getUUID());
         //? if >= 1.21.5 {
-        AttributeUtils.setJumpStrength(player, 0.85);
+        AttributeUtils.JUMP_STRENGTH.of(player).set(0.85);
         //?} else {
-        //AttributeUtils.setJumpStrength(player, 0.76);
+        //AttributeUtils.JUMP_STRENGTH.of(player).set(0.76);
         //?}
     }
 

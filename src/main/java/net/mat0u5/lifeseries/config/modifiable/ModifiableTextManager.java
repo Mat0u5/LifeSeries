@@ -2,9 +2,8 @@ package net.mat0u5.lifeseries.config.modifiable;
 
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.ConfigFileEntry;
-import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.mat0u5.lifeseries.utils.enums.Formatted;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.matlib.utils.enums.Formatted;
+import net.mat0u5.matlib.utils.other.TextUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
@@ -14,8 +13,16 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
+
 public class ModifiableTextManager {
-    private static Map<String, ConfigFileEntry<String>> registeredEntries = new TreeMap<>();
+    public record TextEntry(String key, String defaultValue, String description) {
+        public String configKey() {
+            return "text." + key;
+        }
+    }
+
+    private static Map<String, TextEntry> registeredEntries = new TreeMap<>();
     private static boolean initialized = false;
 
     public static void initialize() {
@@ -34,7 +41,7 @@ public class ModifiableTextManager {
         return str.replace("#","##").replace("§","#").replace("\n", "\\n");
     }
 
-    public static Map<String, ConfigFileEntry<String>> getRegisteredEntries() {
+    public static Map<String, TextEntry> getRegisteredEntries() {
         return registeredEntries;
     }
 
@@ -51,9 +58,11 @@ public class ModifiableTextManager {
         if (args != null) {
             description = "Arguments: §f" + String.join(", ", args);
         }
-        ConfigFileEntry<String> configEntry = new ConfigFileEntry<>("text."+key, value, ConfigTypes.MODIFIABLE_TEXT, "text", key, description);
-        configEntry.get(); // To initialize it
-        registeredEntries.put(key, configEntry);
+        TextEntry entry = new TextEntry(key, value, description);
+        if (seasonConfig != null) {
+            seasonConfig.getOrCreateProperty(entry.configKey(), value); // To initialize it
+        }
+        registeredEntries.put(key, entry);
     }
 
     public static Component get(Formatted formatted, String key, Object... args) {
@@ -146,11 +155,14 @@ public class ModifiableTextManager {
         if (!initialized) {
             initialize();
         }
-        ConfigFileEntry<String> configEntry = registeredEntries.get(key);
-        if (configEntry == null) {
+        TextEntry entry = registeredEntries.get(key);
+        if (entry == null) {
             LifeSeries.LOGGER.warn("Could not find modifiable text " + key);
             return key;
         }
-        return toMinecraftColorFormatting(configEntry.get());
+        if (seasonConfig == null) {
+            return toMinecraftColorFormatting(entry.defaultValue());
+        }
+        return toMinecraftColorFormatting(seasonConfig.getOrCreateProperty(entry.configKey(), entry.defaultValue()));
     }
 }

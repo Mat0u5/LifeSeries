@@ -2,29 +2,32 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.player.AttributeUtils;
-import net.mat0u5.lifeseries.utils.player.PlayerReference;
+import net.mat0u5.matlib.utils.player.AttributeUtils;
+import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 
-import static net.mat0u5.lifeseries.LifeSeries.server;
+import static net.mat0u5.matlib.MatLib.server;
 
 public class Superspeed extends ToggleableSuperpower {
-    public static double TARGET_SPEED = 0.35;
-    public static int HUNGER_EFFECT_LEVEL = 5;
-    public static int FROST_WALKER_LEVEL = 3;
+    public static final ConfigRef<Double> TARGET_SPEED = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_SUPERSPEED_TARGET_SPEED);
+    public static final ConfigRef<Integer> HUNGER_EFFECT_LEVEL = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_SUPERSPEED_HUNGER_LEVEL);
+    public static final ConfigRef<Integer> FROST_WALKER_LEVEL = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_SUPERSPEED_FROST_WALKER_LEVEL);
     public static int COOLDOWN_MILLIS = 3000;
 
-    public static boolean STEP_UP = false;
+    public static final ConfigRef<Boolean> STEP_UP = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_SUPERSPEED_STEP);
 
     public Superspeed(ServerPlayer player) {
         super(player);
@@ -40,8 +43,8 @@ public class Superspeed extends ToggleableSuperpower {
         if (!active) return;
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        if (HUNGER_EFFECT_LEVEL > 0) {
-            MobEffectInstance hunger = new MobEffectInstance(MobEffects.HUNGER, 219, HUNGER_EFFECT_LEVEL-1, false, false, false);
+        if (HUNGER_EFFECT_LEVEL.get() > 0) {
+            MobEffectInstance hunger = new MobEffectInstance(MobEffects.HUNGER, 219, HUNGER_EFFECT_LEVEL.get()-1, false, false, false);
             player.addEffect(hunger);
         }
         player.getFoodData().setSaturation(0);
@@ -59,11 +62,11 @@ public class Superspeed extends ToggleableSuperpower {
             return;
         }
         ModifiableSound.WILDLIFE_SUPERPOWERS_SUPERSPEED_START.play(player);
-        slowlySetSpeed(player, TARGET_SPEED, 60);
-        NetworkHandlerServer.sendVignette(player, -1);
-        if (STEP_UP) {
+        slowlySetSpeed(player, TARGET_SPEED.get(), 60);
+        LifeSeriesNetworkHandlerServer.sendVignette(player, -1);
+        if (STEP_UP.get()) {
             //? if > 1.20.3 {
-            AttributeUtils.setStepHeight(player, 1);
+            AttributeUtils.STEP_HEIGHT.of(player).set(1);
             //?}
         }
         super.activate();
@@ -83,28 +86,30 @@ public class Superspeed extends ToggleableSuperpower {
         ServerPlayer player = getPlayer();
         if (player == null) return;
         ModifiableSound.WILDLIFE_SUPERPOWERS_SUPERSPEED_END.play(player);
-        slowlySetSpeed(player, AttributeUtils.DEFAULT_PLAYER_MOVEMENT_SPEED, 30);
+        slowlySetSpeed(player, AttributeUtils.MOVEMENT_SPEED.of(player).getDefaultValue(), 30);
         if (!WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
             player.removeEffect(MobEffects.HUNGER);
-            if (HUNGER_EFFECT_LEVEL > 0) {
-                MobEffectInstance hunger = new MobEffectInstance(MobEffects.HUNGER, 30, HUNGER_EFFECT_LEVEL-1, false, false, false);
+            if (HUNGER_EFFECT_LEVEL.get() > 0) {
+                MobEffectInstance hunger = new MobEffectInstance(MobEffects.HUNGER, 30, HUNGER_EFFECT_LEVEL.get()-1, false, false, false);
                 player.addEffect(hunger);
             }
         }
-        NetworkHandlerServer.sendVignette(player, 0);
-        AttributeUtils.resetStepHeight(player);
+        LifeSeriesNetworkHandlerServer.sendVignette(player, 0);
+        //? if > 1.20.3 {
+        AttributeUtils.STEP_HEIGHT.of(player).reset();
+        //?}
         super.deactivate();
     }
 
     public static void slowlySetSpeed(ServerPlayer player, double speed, int ticks) {
         if (server == null) return;
-        double currentSpeed = AttributeUtils.getMovementSpeed(player);
+        double currentSpeed = AttributeUtils.MOVEMENT_SPEED.of(player).get();
         double step = (speed - currentSpeed) / ticks;
         PlayerReference ref = PlayerReference.of(player);
         for (int i = 0; i < ticks; i++) {
             int finalI = i;
-            TaskScheduler.scheduleTask(i, () -> AttributeUtils.setMovementSpeed(ref.get(), currentSpeed + (step * finalI)));
+            TaskScheduler.scheduleTask(i, () -> AttributeUtils.MOVEMENT_SPEED.of(ref.get()).set(currentSpeed + (step * finalI)));
         }
-        TaskScheduler.scheduleTask(ticks+1, () -> AttributeUtils.setMovementSpeed(ref.get(), speed));
+        TaskScheduler.scheduleTask(ticks+1, () -> AttributeUtils.MOVEMENT_SPEED.of(ref.get()).set(speed));
     }
 }

@@ -8,9 +8,9 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.mat0u5.lifeseries.utils.other.Time;
-import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
+import net.mat0u5.matlib.utils.other.TextUtils;
+import net.mat0u5.matlib.utils.other.Time;
+import net.mat0u5.matlib.utils.player.ScoreboardUtils;
 import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -171,9 +171,9 @@ public class DatapackIntegration {
     }
 
     public static void limlifeTick() {
-        ScoreboardUtils.setScore("TimeBoundaryDefault", SCOREBOARD_LIMITEDLIFE, LimitedLifeLivesManager.DEFAULT_TIME);
-        ScoreboardUtils.setScore("TimeBoundaryYellow", SCOREBOARD_LIMITEDLIFE, LimitedLifeLivesManager.YELLOW_TIME);
-        ScoreboardUtils.setScore("TimeBoundaryRed", SCOREBOARD_LIMITEDLIFE, LimitedLifeLivesManager.RED_TIME);
+        ScoreboardUtils.setScore("TimeBoundaryDefault", SCOREBOARD_LIMITEDLIFE, LimitedLifeLivesManager.DEFAULT_TIME.get());
+        ScoreboardUtils.setScore("TimeBoundaryYellow", SCOREBOARD_LIMITEDLIFE, LimitedLifeLivesManager.YELLOW_TIME.get());
+        ScoreboardUtils.setScore("TimeBoundaryRed", SCOREBOARD_LIMITEDLIFE, LimitedLifeLivesManager.RED_TIME.get());
         ScoreboardUtils.setScore("TimeKill", SCOREBOARD_LIMITEDLIFE, LimitedLife.NEW_KILL_NORMAL.getSeconds());
         ScoreboardUtils.setScore("TimeDeath", SCOREBOARD_LIMITEDLIFE, LimitedLife.NEW_DEATH_NORMAL.getSeconds());
         ScoreboardUtils.setScore("TimeBoogeymanKill", SCOREBOARD_LIMITEDLIFE, LimitedLife.NEW_KILL_BOOGEYMAN.getSeconds());

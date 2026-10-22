@@ -14,7 +14,7 @@ public class DoubleLifeBoogeymanManager extends BoogeymanManager {
 
     @Override
     public boolean isBoogeymanThatCanBeCured(ServerPlayer player, ServerPlayer victim) {
-        if (currentSeason instanceof DoubleLife doubleLife && DoubleLife.SOULBOUND_BOOGEYMAN) {
+        if (currentSeason instanceof DoubleLife doubleLife && DoubleLife.SOULBOUND_BOOGEYMAN.get()) {
             ServerPlayer soulmate = doubleLife.getSoulmate(player);
             if (soulmate != null) {
                 if (soulmate == victim) {
@@ -28,7 +28,7 @@ public class DoubleLifeBoogeymanManager extends BoogeymanManager {
     @Override
     public void addBoogeymanManually(ServerPlayer player) {
         super.addBoogeymanManually(player);
-        if (currentSeason instanceof DoubleLife doubleLife && DoubleLife.SOULBOUND_BOOGEYMAN) {
+        if (currentSeason instanceof DoubleLife doubleLife && DoubleLife.SOULBOUND_BOOGEYMAN.get()) {
             ServerPlayer soulmate = doubleLife.getSoulmate(player);
             if (soulmate != null) {
                 super.addBoogeymanManually(soulmate);
@@ -39,7 +39,7 @@ public class DoubleLifeBoogeymanManager extends BoogeymanManager {
     @Override
     public void removeBoogeymanManually(ServerPlayer player) {
         super.removeBoogeymanManually(player);
-        if (currentSeason instanceof DoubleLife doubleLife && DoubleLife.SOULBOUND_BOOGEYMAN) {
+        if (currentSeason instanceof DoubleLife doubleLife && DoubleLife.SOULBOUND_BOOGEYMAN.get()) {
             ServerPlayer soulmate = doubleLife.getSoulmate(player);
             if (soulmate != null) {
                 super.removeBoogeymanManually(soulmate);
@@ -50,7 +50,7 @@ public class DoubleLifeBoogeymanManager extends BoogeymanManager {
     @Override
     public void cure(ServerPlayer player) {
         super.cure(player);
-        if (currentSeason instanceof DoubleLife doubleLife && DoubleLife.SOULBOUND_BOOGEYMAN) {
+        if (currentSeason instanceof DoubleLife doubleLife && DoubleLife.SOULBOUND_BOOGEYMAN.get()) {
             ServerPlayer soulmate = doubleLife.getSoulmate(player);
             if (soulmate != null) {
                 super.cure(soulmate);
@@ -61,7 +61,7 @@ public class DoubleLifeBoogeymanManager extends BoogeymanManager {
     @Override
     public void playerFailBoogeymanManually(ServerPlayer player, boolean sendMessage) {
         super.playerFailBoogeymanManually(player, sendMessage);
-        if (currentSeason instanceof DoubleLife doubleLife && DoubleLife.SOULBOUND_BOOGEYMAN) {
+        if (currentSeason instanceof DoubleLife doubleLife && DoubleLife.SOULBOUND_BOOGEYMAN.get()) {
             ServerPlayer soulmate = doubleLife.getSoulmate(player);
             if (soulmate != null) {
                 super.playerFailBoogeymanManually(soulmate, sendMessage);
@@ -71,7 +71,7 @@ public class DoubleLifeBoogeymanManager extends BoogeymanManager {
 
     @Override
     public void chooseNewBoogeyman() {
-        if (!DoubleLife.SOULBOUND_BOOGEYMAN || !skipNextInfiniteCall) {
+        if (!DoubleLife.SOULBOUND_BOOGEYMAN.get() || !skipNextInfiniteCall) {
             super.chooseNewBoogeyman();
             return;
         }
@@ -91,7 +91,7 @@ public class DoubleLifeBoogeymanManager extends BoogeymanManager {
 
     @Override
     public void handleBoogeymanLists(List<ServerPlayer> normalPlayers, List<ServerPlayer> boogeyPlayers) {
-        if (!DoubleLife.SOULBOUND_BOOGEYMAN || !(currentSeason instanceof DoubleLife doubleLife)) {
+        if (!DoubleLife.SOULBOUND_BOOGEYMAN.get() || !(currentSeason instanceof DoubleLife doubleLife)) {
             super.handleBoogeymanLists(normalPlayers, boogeyPlayers);
             return;
         }

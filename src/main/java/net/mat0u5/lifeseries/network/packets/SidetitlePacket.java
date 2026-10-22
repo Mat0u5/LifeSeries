@@ -8,7 +8,7 @@ import net.minecraft.resources.Identifier;
 
 public record SidetitlePacket(Component text) implements CustomPacketPayload {
 
-    public static final Identifier ID = IdentifierHelper.mod("sidetitle");
+    public static final Identifier ID = IdentifierHelper.lifeseries("sidetitle");
 
     @Override
     public void write(FriendlyByteBuf buf) {
@@ -35,7 +35,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 public record SidetitlePacket(Component text) implements CustomPacketPayload {
 
-    public static final CustomPacketPayload.Type<SidetitlePacket> ID = new CustomPacketPayload.Type<>(IdentifierHelper.mod("sidetitle"));
+    public static final CustomPacketPayload.Type<SidetitlePacket> ID = new CustomPacketPayload.Type<>(IdentifierHelper.lifeseries("sidetitle"));
     public static final StreamCodec<RegistryFriendlyByteBuf, SidetitlePacket> CODEC = StreamCodec.composite(ComponentSerialization.TRUSTED_STREAM_CODEC, SidetitlePacket::text, SidetitlePacket::new);
 
     @Override

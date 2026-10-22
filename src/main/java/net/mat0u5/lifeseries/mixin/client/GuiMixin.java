@@ -4,10 +4,10 @@ import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.render.ClientRenderer;
-import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.matlib.client.render.RenderUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.InBedChatScreen;
 import org.spongepowered.asm.mixin.Mixin;
@@ -46,51 +46,6 @@ import net.minecraft.client.gui.Hud;
 //?}
 @MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public class GuiMixin {
-    //? if <= 1.20.5 {
-    /*@Inject(method = "render", at = @At(value = "HEAD"))
-    public void render(GuiGraphicsExtractor guiGraphics, float f, CallbackInfo ci) {
-    *///?} else if <= 1.21.11 {
-    /*@Inject(method = "render", at = @At(value = "HEAD"))
-    public void render(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
-    *///?} else {
-    @Inject(method = "extractRenderState", at = @At(value = "HEAD"))
-    public void render(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
-    //?}
-        //? if !(neoforge && <= 1.20.3) && !(forge && <= 1.20) {
-        ClientRenderer.render(guiGraphics);
-        //?}
-    }
-
-//? if forge {
-    /*//? if <= 1.20.5 {
-    /^@Inject(method = "render", at = @At(value = "TAIL"))
-    public void renderPost(GuiGraphicsExtractor guiGraphics, float f, CallbackInfo ci) {
-    ^///?} else if <= 1.21.6 {
-    /^@Inject(method = "render", at = @At(value = "TAIL"))
-    public void renderPost(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
-    ^///?} else if <= 1.21.11 {
-    /^@Inject(method = "render", at = @At(value = "RETURN"))
-    public void renderPost(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
-    ^///?} else {
-    @Inject(method = "extractRenderState", at = @At(value = "RETURN"))
-    public void renderPost(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
-    //?}
-*///?} else {
-    //? if <= 1.20.5 {
-    /*@Inject(method = "render", at = @At(value = "TAIL"))
-    public void renderPost(GuiGraphicsExtractor guiGraphics, float f, CallbackInfo ci) {
-    *///?} else if <= 1.21.11 {
-    /*@Inject(method = "render", at = @At(value = "TAIL"))
-    public void renderPost(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
-    *///?} else {
-    @Inject(method = "extractRenderState", at = @At(value = "TAIL"))
-    public void renderPost(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
-    //?}
-//?}
-        //? if !(neoforge && <= 1.20.3) && !(forge && <= 1.20) {
-        ClientRenderer.postRender(guiGraphics);
-        //?}
-    }
 
     //? if <= 1.20 {
     /*@Inject(method = "renderHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blit(Lnet/minecraft/resources/Identifier;IIIIII)V"), cancellable = true)
@@ -125,16 +80,16 @@ public class GuiMixin {
         *///?} else {
         String texturePath = identifier.getPath();
         //?}
-        String playerTeamColor = ClientUtils.getPlayerTeamColor();
-        String playerTeamName = ClientUtils.getPlayerTeamName();
+        String playerTeamColor = ClientUtils.getPlayerTeamColorOrPacket();
+        String playerTeamName = ClientUtils.getPlayerTeamColorOrPacket();
 
         boolean shouldRenderHearts = false;
 
         boolean isValidState = !LifeSeries.modFullyDisabled()
                 && playerTeamColor != null
                 && playerTeamName != null
-                && RenderUtils.lifeSkinsAllowedColors.contains(playerTeamColor.toLowerCase(Locale.ROOT))
-                && RenderUtils.lifeSkinsAllowedHearts.contains(texturePath);
+                && ClientRenderer.lifeSkinsAllowedColors.contains(playerTeamColor.toLowerCase(Locale.ROOT))
+                && ClientRenderer.lifeSkinsAllowedHearts.contains(texturePath);
 
         if (isValidState) {
             if (LifeSeriesClient.COLORED_HEARTS || LifeSeriesClient.HARDCORE_HEARTS_ALL_LIVES) {
@@ -174,9 +129,9 @@ public class GuiMixin {
         }
 
         //? if <= 1.20 {
-        //var customHeart = IdentifierHelper.mod("textures/gui/sprites/"+color+"_"+heartTypeStr+".png");
+        //var customHeart = IdentifierHelper.lifeseries("textures/gui/sprites/"+color+"_"+heartTypeStr+".png");
          //?} else {
-        var customHeart = IdentifierHelper.mod(color+"_"+heartTypeStr);
+        var customHeart = IdentifierHelper.lifeseries(color+"_"+heartTypeStr);
         //?}
 
         //? if <= 1.20 {
@@ -213,7 +168,7 @@ public class GuiMixin {
         if (blinking) heartName += "_blinking";
         if (half) heartName += "_half";
 
-        var customHeart = IdentifierHelper.mod("secretlife_"+heartName);
+        var customHeart = IdentifierHelper.lifeseries("secretlife_"+heartName);
         //? if <= 1.20 {
         //instance.blit(customHeart, x, y, u, v, u, v);
         //? } else if <= 1.21 {

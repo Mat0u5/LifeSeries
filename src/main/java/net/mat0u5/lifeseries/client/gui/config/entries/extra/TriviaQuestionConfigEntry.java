@@ -1,20 +1,24 @@
 package net.mat0u5.lifeseries.client.gui.config.entries.extra;
 
-import net.mat0u5.lifeseries.client.gui.config.ConfigScreen;
-import net.mat0u5.lifeseries.client.gui.config.entries.ConfigEntry;
-import net.mat0u5.lifeseries.client.gui.config.entries.EmptyConfigEntry;
-import net.mat0u5.lifeseries.client.gui.config.entries.GroupConfigEntry;
-import net.mat0u5.lifeseries.client.gui.config.entries.ModifiableListEntry;
-import net.mat0u5.lifeseries.client.render.RenderUtils;
-import net.mat0u5.lifeseries.client.utils.TextColors;
-import net.mat0u5.lifeseries.client.utils.interfaces.IEntryGroupHeader;
+import net.mat0u5.lifeseries.client.config.LifeSeriesConfigGuiClient;
+import net.mat0u5.matlib.client.gui.config.ConfigScreen;
+import net.mat0u5.matlib.client.gui.config.entries.ConfigEntry;
+import net.mat0u5.matlib.client.gui.config.entries.EmptyConfigEntry;
+import net.mat0u5.matlib.client.gui.config.entries.GroupConfigEntry;
+import net.mat0u5.matlib.client.gui.config.entries.ModifiableListEntry;
+import net.mat0u5.matlib.client.render.RenderUtils;
+import net.mat0u5.matlib.client.utils.TextColors;
+import net.mat0u5.matlib.client.gui.config.entries.interfaces.IEntryGroupHeader;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
-import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.config.LifeSeriesConfigTypes;
+import net.mat0u5.matlib.config.entry.ConfigGuiEntry;
+import net.mat0u5.matlib.config.type.ConfigType;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -35,8 +39,8 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
         private int maxTextFieldLength = 8192;
         private TriviaQuestionConfigEntry parent;
 
-        public InnerTriviaQuestionConfigEntry(TriviaQuestionConfigEntry parent, String fieldName, String question, String type, List<ConfigEntry> answers) {
-            super(fieldName, "", "");
+        public InnerTriviaQuestionConfigEntry(TriviaQuestionConfigEntry parent, ConfigGuiEntry guiEntry, String question, String type, List<ConfigEntry> answers) {
+            super(guiEntry);
             this.text = question;
             this.defaultText = question;
             this.triviaType = type;
@@ -66,8 +70,8 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
         }
 
         @Override
-        public ConfigTypes getValueType() {
-            return ConfigTypes.TRIVIA_QUESTION;
+        public ConfigType<?> getValueType() {
+            return LifeSeriesConfigTypes.TRIVIA_QUESTION;
         }
 
         @Override
@@ -270,9 +274,9 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
         return this.child.parentGroup.getPreferredHeight();
     }
 
-    public TriviaQuestionConfigEntry(String fieldName, String question, String type, List<ConfigEntry> answers) {
-        super(fieldName);
-        this.child = new InnerTriviaQuestionConfigEntry(this, fieldName+"_inner", question, type, answers);
+    public TriviaQuestionConfigEntry(ConfigGuiEntry guiEntry, String question, String type, List<ConfigEntry> answers) {
+        super(guiEntry);
+        this.child = new InnerTriviaQuestionConfigEntry(this, LifeSeriesConfigGuiClient.copyWithKey(guiEntry, fieldName+"_inner"), question, type, answers);
         renderAsGroup = new GroupConfigEntry<>(this.child, answers, false, true);
         renderAsGroup.setScreen(this.screen);
     }
@@ -288,7 +292,7 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
         for (int i = 1; i <= getAnswerEntries().size(); i++) {
             answers.add("Answer #"+i);
         }
-        TriviaQuestionConfigEntry newEntry = getEntry(child.triviaType, "Placeholder Question", 0, answers);
+        TriviaQuestionConfigEntry newEntry = getEntry(inboundGuiEntry, child.triviaType, "Placeholder Question", 0, answers);
         newEntry.setScreen(this.screen);
         return newEntry;
     }
@@ -310,16 +314,24 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
         return result;
     }
 
-    public static TriviaQuestionConfigEntry getEntry(String triviaType, String question, int correctAnswerIndex, List<String> answers) {
+    public static TriviaQuestionConfigEntry fromGuiEntry(ConfigGuiEntry guiEntry) {
+        List<String> args = new ArrayList<>(guiEntry.args);
+        String triviaType = args.remove(0);
+        String question = args.remove(0);
+        int correctAnswerIndex = Integer.parseInt(args.remove(0));
+        return getEntry(guiEntry, triviaType, question, correctAnswerIndex, args);
+    }
+
+    public static TriviaQuestionConfigEntry getEntry(ConfigGuiEntry base, String triviaType, String question, int correctAnswerIndex, List<String> answers) {
         String id = "dynamic_trivia_entry_"+ UUID.randomUUID();
         List<ConfigEntry> childEntries = new ArrayList<>();
         int answerIndex = 0;
         for (String answerText : answers) {
             answerIndex++;
-            TriviaAnswerConfigEntry answerEntry = new TriviaAnswerConfigEntry(id+"_ans"+answerIndex, answerText, answerIndex, (answerIndex-1) == correctAnswerIndex);
+            TriviaAnswerConfigEntry answerEntry = new TriviaAnswerConfigEntry(LifeSeriesConfigGuiClient.copyWithKey(base, id+"_ans"+answerIndex), answerText, answerIndex, (answerIndex-1) == correctAnswerIndex);
             childEntries.add(answerEntry);
         }
-        return new TriviaQuestionConfigEntry(id, question, triviaType, childEntries);
+        return new TriviaQuestionConfigEntry(LifeSeriesConfigGuiClient.copyWithKey(base, id), question, triviaType, childEntries);
     }
 
     @Override
@@ -328,13 +340,13 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
     }
 
     @Override
-    public ConfigTypes getValueType() {
-        return ConfigTypes.TRIVIA_QUESTION;
+    public ConfigType<?> getValueType() {
+        return LifeSeriesConfigTypes.TRIVIA_QUESTION;
     }
 
     @Override
-    public void onSave() {
-        if (sentToServer) return;
+    public Optional<ConfigGuiEntry> onSave() {
+        if (sentToServer) return Optional.empty();
         List<ModifiableListEntry> allTriviaQuestions = getListEntries();
 
         List<String> list = new ArrayList<>();
@@ -342,7 +354,7 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
 
         for (ModifiableListEntry entry : allTriviaQuestions) {
             if (entry instanceof TriviaQuestionConfigEntry questionConfigEntry) {
-                if (questionConfigEntry.sentToServer) return;
+                if (questionConfigEntry.sentToServer) return Optional.empty();
                 int correctAnswerIndex = 1;
                 List<String> answers = new ArrayList<>();
                 for (TriviaAnswerConfigEntry answerConfigEntry : questionConfigEntry.getAnswerEntries()) {
@@ -360,6 +372,7 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
         }
         sentToServer = true;
         SimplePackets.CONFIG_TRIVIA.sendToServer(list);
+        return Optional.empty();
     }
 
     @Override
@@ -370,5 +383,12 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
     @Override
     public boolean hasResetButton() {
         return false;
+    }
+
+    @Override
+    public List<ConfigEntry> getInnerEntries() {
+        List<ConfigEntry> innerEntries = new ArrayList<>(this.renderAsGroup.getChildEntries());
+        innerEntries.add(this.renderAsGroup.getMainEntry());
+        return innerEntries;
     }
 }

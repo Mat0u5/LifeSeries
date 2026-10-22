@@ -1,6 +1,9 @@
 package net.mat0u5.lifeseries.seasons.season.secretlife;
 
-import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
+import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -9,12 +12,16 @@ import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.*;
-import net.mat0u5.lifeseries.utils.player.AttributeUtils;
-import net.mat0u5.lifeseries.utils.player.PlayerReference;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.matlib.events.server.ServerEntityEvents;
+import net.mat0u5.matlib.utils.player.AttributeUtils;
+import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
-import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
+import net.mat0u5.matlib.utils.world.ItemStackUtils;
+import net.mat0u5.matlib.events.EventResult;
+import net.mat0u5.matlib.utils.other.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
@@ -27,11 +34,11 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.gamerules.GameRules;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
+import static net.mat0u5.matlib.MatLib.*;
 
 //? if <= 1.20.5 {
 /*import net.minecraft.world.item.EnchantedBookItem;
@@ -54,9 +61,9 @@ import net.minecraft.world.item.component.TypedEntityData;
 //?}
 
 public class SecretLife extends Season {
-    public static double MAX_HEALTH = 60.0d;
-    public static double MAX_KILL_HEALTH = 1000.0d;
-    public static boolean ONLY_LOSE_HEARTS_IN_SESSION = false;
+    public static final ConfigRef<Integer> MAX_HEALTH = ConfigRef.of(() -> LifeSeries.seasonConfig.MAX_PLAYER_HEALTH);
+    public static final ConfigRef<Integer> MAX_KILL_HEALTH = ConfigRef.of(() -> SecretLifeConfig.get().MAX_PLAYER_KILL_HEALTH);
+    public static final ConfigRef<Boolean> ONLY_LOSE_HEARTS_IN_SESSION = ConfigRef.of(() -> SecretLifeConfig.get().ONLY_LOSE_HEARTS_IN_SESSION);
 
     public ItemSpawner itemSpawner;
     SessionAction taskWarningAction = new SessionAction.Invisible(Time.minutes(-5).add(Time.seconds(1)), "Task end 5 minute warning") {
@@ -72,13 +79,26 @@ public class SecretLife extends Season {
         }
     };
 
+    public static void registerSecretLifeEvents() {
+        ServerEntityEvents.PRE_HEAL.register((entity, amount) -> {
+            if (LifeSeries.isClientOrDisabled()) return EventResult.PASS;
+            if (!(currentSeason instanceof SecretLife secretLife)) return EventResult.PASS;
+            if (!secretLife.canChangeHealth()) return EventResult.PASS;
+
+            if (entity instanceof ServerPlayer) {
+                return EventResult.DENY;
+            }
+            return EventResult.PASS;
+        });
+    }
+
     @Override
     public Seasons getSeason() {
         return Seasons.SECRET_LIFE;
     }
 
     @Override
-    public ConfigManager createConfig() {
+    public SeasonConfig createConfig() {
         TaskManager.initialize();
         return new SecretLifeConfig();
     }
@@ -99,21 +119,6 @@ public class SecretLife extends Season {
     @Override
     public void reload() {
         super.reload();
-        MAX_HEALTH = seasonConfig.MAX_PLAYER_HEALTH.get();
-        MAX_KILL_HEALTH = SecretLifeConfig.MAX_PLAYER_KILL_HEALTH.get();
-        TaskManager.EASY_SUCCESS = SecretLifeConfig.TASK_HEALTH_EASY_PASS.get();
-        TaskManager.EASY_FAIL = SecretLifeConfig.TASK_HEALTH_EASY_FAIL.get();
-        TaskManager.HARD_SUCCESS = SecretLifeConfig.TASK_HEALTH_HARD_PASS.get();
-        TaskManager.HARD_FAIL = SecretLifeConfig.TASK_HEALTH_HARD_FAIL.get();
-        TaskManager.RED_SUCCESS = SecretLifeConfig.TASK_HEALTH_RED_PASS.get();
-        TaskManager.RED_FAIL = SecretLifeConfig.TASK_HEALTH_RED_FAIL.get();
-        TaskManager.ASSIGN_TASKS_MINUTE = SecretLifeConfig.ASSIGN_TASKS_MINUTE.get();
-        TaskManager.BROADCAST_SECRET_KEEPER = SecretLifeConfig.BROADCAST_SECRET_KEEPER.get();
-        TaskManager.CONSTANT_TASKS = SecretLifeConfig.CONSTANT_TASKS.get();
-        TaskManager.PUBLIC_TASKS_ON_SUBMIT = SecretLifeConfig.BROADCAST_TASKS_WHEN_SUBMITTED.get();
-        ONLY_LOSE_HEARTS_IN_SESSION = SecretLifeConfig.ONLY_LOSE_HEARTS_IN_SESSION.get();
-        TaskManager.TASKS_NEED_CONFIRMATION = SecretLifeConfig.TASKS_NEED_CONFIRMATION.get();
-        SecretKeeper.UNBREAKABLE_BUTTONS = SecretLifeConfig.UNBREAKABLE_BUTTONS.get();
         TaskManager.GUESS_TASKS = SecretLifeConfig.GUESS_TASKS.get();
         TaskManager.GUESS_TASKS_PUBLIC = SecretLifeConfig.GUESS_TASKS_PUBLIC.get();
         TaskManager.GUESS_TASKS_LIFE_GUESSER_MIN = SecretLifeConfig.GUESS_TASKS_LIFE_GUESSER_MIN.get();
@@ -287,8 +292,8 @@ public class SecretLife extends Season {
     }
 
     @Override
-    public void onPlayerDamage(ServerPlayer player, DamageSource source, float amount, CallbackInfo ci) {
-        super.onPlayerDamage(player, source, amount, ci);
+    public void onPlayerDamage(ServerPlayer player, DamageSource source, float amount) {
+        super.onPlayerDamage(player, source, amount);
         if (player.hasEffect(MobEffects.HEALTH_BOOST)) {
             player.removeEffect(MobEffects.HEALTH_BOOST);
         }
@@ -299,7 +304,7 @@ public class SecretLife extends Season {
     @Override
     public void onPlayerDeath(ServerPlayer player, DamageSource source) {
         super.onPlayerDeath(player, source);
-        setPlayerHealth(player, MAX_HEALTH);
+        setPlayerHealth(player, MAX_HEALTH.get());
     }
 
     @Override
@@ -319,8 +324,8 @@ public class SecretLife extends Season {
 
     @Override
     public void assignDefaultLives(ServerPlayer player) {
-        setPlayerHealth(player, MAX_HEALTH);
-        player.setHealth((float) MAX_HEALTH);
+        setPlayerHealth(player, MAX_HEALTH.get());
+        player.setHealth((float) (double) MAX_HEALTH.get());
         super.assignDefaultLives(player);
     }
 
@@ -352,7 +357,7 @@ public class SecretLife extends Season {
     @Override
     public void addSessionActions() {
         super.addSessionActions();
-        currentSession.addSessionAction(new SessionAction(Time.minutes(TaskManager.ASSIGN_TASKS_MINUTE), ModifiableText.SESSION_ACTION_TASKS.getString()) {
+        currentSession.addSessionAction(new SessionAction(Time.minutes(TaskManager.ASSIGN_TASKS_MINUTE.get()), ModifiableText.SESSION_ACTION_TASKS.getString()) {
             @Override
             public void trigger() {
                 TaskManager.chooseTasks(livesManager.getAlivePlayers(), null);
@@ -373,7 +378,7 @@ public class SecretLife extends Season {
             if (((IPlayer) player).ls$isDead()) continue;
             if (TaskManager.submittedOrFailed.contains(uuid)) continue;
             if (TaskManager.infectedPlayers.contains(uuid)) continue;
-            if (TaskManager.CONSTANT_TASKS) continue;
+            if (TaskManager.CONSTANT_TASKS.get()) continue;
             playersWithTaskBooks.add(player.getScoreboardName());
         }
         if (!playersWithTaskBooks.isEmpty()) {
@@ -408,7 +413,7 @@ public class SecretLife extends Season {
         }
         if (!((IPlayer) player).ls$isOnLastLife(false)) return;
         if (((IPlayer) victim).ls$isDead()) return;
-        double amountGained = Math.min(Math.max(MAX_KILL_HEALTH, MAX_HEALTH) - getPlayerHealth(player), 20);
+        double amountGained = Math.min(Math.max(MAX_KILL_HEALTH.get(), MAX_HEALTH.get()) - getPlayerHealth(player), 20);
         if (amountGained > 0) {
             addPlayerHealth(player, amountGained);
             int roundedGained = (int) Math.ceil(amountGained);
@@ -437,16 +442,17 @@ public class SecretLife extends Season {
 
     private Map<UUID, ItemStack> giveBookOnRespawn = new HashMap<>();
     @Override
-    public void modifyEntityDrops(LivingEntity entity, DamageSource damageSource, CallbackInfo ci) {
-        super.modifyEntityDrops(entity, damageSource, ci);
+    public EventResult modifyEntityDrops(LivingEntity entity, DamageSource damageSource) {
+        EventResult original = super.modifyEntityDrops(entity, damageSource);
         if (entity instanceof ServerPlayer player) {
-            boolean dropBook = SecretLifeConfig.PLAYERS_DROP_TASK_ON_DEATH.get();
-            if (dropBook || server == null) return;
+            boolean dropBook = SecretLifeConfig.get().PLAYERS_DROP_TASK_ON_DEATH.get();
+            if (dropBook || server == null) return original;
             boolean keepInventory = OtherUtils.getBooleanGameRule(((IPlayer) player).ls$getServerLevel(), GameRules.KEEP_INVENTORY);
-            if (keepInventory) return;
+            if (keepInventory) return original;
             giveBookOnRespawn.put(player.getUUID(), TaskManager.getPlayersTaskBook(player));
             TaskManager.removePlayersTaskBook(player);
         }
+        return original;
     }
 
     public void removePlayerHealth(ServerPlayer player, double health) {
@@ -464,7 +470,7 @@ public class SecretLife extends Season {
     }
 
     public void addPlayerHealth(ServerPlayer player, double health, boolean command) {
-        double currentHealth = AttributeUtils.getMaxPlayerHealth(player);
+        double currentHealth = AttributeUtils.MAX_HEALTH.of(player).get();
         setPlayerHealth(player, currentHealth + health, command);
     }
 
@@ -472,7 +478,7 @@ public class SecretLife extends Season {
         if (player == null) return;
         if (health < 0.1) health = 0.1;
         if ((canChangeHealth() || command) || (health > getPlayerHealth(player))) {
-            AttributeUtils.setMaxPlayerHealth(player, health);
+            AttributeUtils.MAX_HEALTH.of(player).set(health);
         }
         if (health > player.getHealth() && player.isAlive()) {
             player.setHealth((float) health);
@@ -480,7 +486,7 @@ public class SecretLife extends Season {
     }
 
     public double getPlayerHealth(ServerPlayer player) {
-        return AttributeUtils.getMaxPlayerHealth(player);
+        return AttributeUtils.MAX_HEALTH.of(player).get();
     }
 
     public double getRoundedHealth(ServerPlayer player) {
@@ -500,7 +506,7 @@ public class SecretLife extends Season {
     }
 
     public void resetPlayerHealth(ServerPlayer player) {
-        setPlayerHealth(player, MAX_HEALTH);
+        setPlayerHealth(player, MAX_HEALTH.get());
     }
 
     public void resetAllPlayerHealth() {
@@ -510,7 +516,7 @@ public class SecretLife extends Season {
     }
 
     public boolean canChangeHealth() {
-        if (!ONLY_LOSE_HEARTS_IN_SESSION) return true;
+        if (!ONLY_LOSE_HEARTS_IN_SESSION.get()) return true;
         return currentSession != null && currentSession.statusStarted();
     }
 
@@ -526,7 +532,7 @@ public class SecretLife extends Season {
     public void checkNaturalRegeneration() {
         if (server == null) return;
         boolean naturalRegeneration = false;
-        if (ONLY_LOSE_HEARTS_IN_SESSION) {
+        if (ONLY_LOSE_HEARTS_IN_SESSION.get()) {
             if (!currentSession.statusStarted()) {
                 naturalRegeneration = true;
             }

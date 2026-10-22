@@ -5,19 +5,18 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.command.manager.Command;
-import net.mat0u5.lifeseries.config.ConfigManager;
-import net.mat0u5.lifeseries.config.DefaultConfigValues;
+import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
-import net.mat0u5.lifeseries.utils.other.ActionText;
+import net.mat0u5.matlib.utils.other.ActionText;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
+import net.mat0u5.matlib.config.entry.ConfigurableValue;
+import net.mat0u5.matlib.utils.other.TextUtils;
+import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.commands.CommandSourceStack;
@@ -33,7 +32,7 @@ import java.util.concurrent.CompletableFuture;
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
 
-public class LifeSeriesCommand extends Command {
+public class LifeSeriesCommand extends CustomCommand {
     public static final List<String> ALLOWED_SEASON_NAMES = Seasons.getSeasonIds();
 
     @Override
@@ -120,7 +119,7 @@ public class LifeSeriesCommand extends Command {
                     .executes(context -> reload(context.getSource()))
                 )
                 .then(literal("chooseSeries")
-                        .requires(source -> PermissionManager.isAdmin(source) && (NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer()) || (source.getEntity() == null)))
+                        .requires(source -> PermissionManager.isAdmin(source) && (LifeSeriesNetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer()) || (source.getEntity() == null)))
                         .executes(context -> chooseSeason(context.getSource()))
                 )
                 .then(literal("setSeries")
@@ -184,7 +183,7 @@ public class LifeSeriesCommand extends Command {
     public int chooseSeason(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
         if (source.getPlayer() == null) return -1;
-        if (!NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer())) {
+        if (!LifeSeriesNetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer())) {
             sendCommandFailure(source, Component.nullToEmpty("You must have the Life Series mod installed §nclient-side§c to open the season selection GUI."));
             sendCommandFailure(source, Component.nullToEmpty("Use the '/lifeseries setSeries <season>' command instead."));
             return -1;
@@ -219,7 +218,7 @@ public class LifeSeriesCommand extends Command {
     }
 
     public void setSeasonFinal(CommandSourceStack source, String setTo, String argsStr) {
-        boolean prevTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
+        boolean prevTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION.get();
 
         Seasons currentSeason = LifeSeries.getSeason();
         Seasons season = Seasons.getSeasonFromStringName(setTo);
@@ -231,7 +230,7 @@ public class LifeSeriesCommand extends Command {
         if (SeasonChanger.changeSeasonTo(season, args)) {
             SeasonChanger.postChangeEvent(currentSeason, season);
             if (args.showChatMessage()) PlayerUtils.broadcastMessage(ModifiableText.SEASON_CHANGED.get(setTo));
-            boolean currentTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION;
+            boolean currentTickFreeze = Session.TICK_FREEZE_NOT_IN_SESSION.get();
             if (prevTickFreeze != currentTickFreeze) {
                 OtherUtils.setFreezeGame(currentTickFreeze);
             }
@@ -244,21 +243,19 @@ public class LifeSeriesCommand extends Command {
         if (self == null) {
             return -1;
         }
-        if (!NetworkHandlerServer.wasHandshakeSuccessful(self)) {
+        if (!LifeSeriesNetworkHandlerServer.wasHandshakeSuccessful(self)) {
             sendCommandFailure(source, Component.nullToEmpty("You must have the Life Series mod installed §nclient-side§c to open the config GUI."));
-            sendCommandFailure(source, Component.nullToEmpty("Either install the mod on the client on modify the config folder."));
+            sendCommandFailure(source, Component.nullToEmpty("Either install the mod on the client or modify the config folder."));
             return -1;
         }
 
-        SimplePackets.CLEAR_CONFIG.sendToClient(self);
-        if (PermissionManager.isAdmin(self) && !LifeSeries.isSeason(Seasons.UNASSIGNED)) {
-            LifeSeries.seasonConfig.sendConfigTo(self);
+        if (seasonConfig.hasPermissionsToOpen(self)) {
             sendCommandFeedback(source, ModifiableText.CONFIG_GUI_OPENING.get());
         }
         else {
             sendCommandFeedbackQuiet(source, ModifiableText.CONFIG_GUI_OPENING.get());
         }
-        SimplePackets.OPEN_CONFIG.sendToClient(self);
+        seasonConfig.openGuiFor(self);
         return 1;
     }
 
@@ -288,13 +285,13 @@ public class LifeSeriesCommand extends Command {
     public int configChanges(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
 
-        if (NetworkHandlerServer.configChanges.isEmpty()) {
+        if (LifeSeriesNetworkHandlerServer.configChanges.isEmpty()) {
             sendCommandFailure(source, ModifiableText.CONFIG_MODIFY_NONE.get());
             return -1;
         }
 
         MutableComponent changes = ModifiableText.CONFIG_MODIFY_HEADER.get().copy();
-        for (Component component : NetworkHandlerServer.configChanges) {
+        for (Component component : LifeSeriesNetworkHandlerServer.configChanges) {
             changes.append(component);
         }
 
@@ -308,16 +305,23 @@ public class LifeSeriesCommand extends Command {
 
         if (value.equalsIgnoreCase("\"\"")) value = "";
 
-        seasonConfig.setProperty(key, value);
-        ConfigManager.onUpdatedUnknown(key, value);
+        ConfigurableValue<?> configurableValue = seasonConfig.getValue(key);
+        if (configurableValue != null) {
+            try {
+                configurableValue.setFromString(value);
+            } catch (Exception e) {
+                sendCommandFailure(source, Component.nullToEmpty("Invalid value '" + value + "' for " + key));
+                return -1;
+            }
+        }
+        else {
+            seasonConfig.setProperty(key, value);
+        }
 
         sendCommandFeedback(source, ModifiableText.CONFIG_SET.get(key));
 
-        NetworkHandlerServer.updatedConfigThisTickFromCommand = true;
-        NetworkHandlerServer.updatedConfigThisTick = true;
-        if (DefaultConfigValues.RELOAD_NEEDED.contains(key)) {
-            NetworkHandlerServer.configNeedsReload = true;
-        }
+        LifeSeriesNetworkHandlerServer.updatedConfigThisTickFromCommand = true;
+        LifeSeriesNetworkHandlerServer.updatedConfigThisTick = true;
         return 1;
     }
 

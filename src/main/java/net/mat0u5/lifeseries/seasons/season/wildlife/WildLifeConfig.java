@@ -1,17 +1,16 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife;
 
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
-import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.lifeseries.config.SeasonConfig;
+import net.mat0u5.matlib.config.entry.ConfigHeader;
+import net.mat0u5.matlib.config.entry.ConfigurableValue;
+import net.mat0u5.matlib.config.type.ConfigTypes;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
-import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class WildLifeConfig extends SeasonConfig {
@@ -62,615 +61,502 @@ public class WildLifeConfig extends SeasonConfig {
             "quick_charge"
     );
 
-    public static final ConfigFileEntry<Double> WILDCARD_SIZESHIFTING_MIN_SIZE = new ConfigFileEntry<>(
-            "wildcard_sizeshifting_min_size", 0.25, "season.sizeshifting",
-            "Min Size", "Smallest size you can achieve during Size Shifting."
-    );
-    public static final ConfigFileEntry<Double> WILDCARD_SIZESHIFTING_MAX_SIZE = new ConfigFileEntry<>(
-            "wildcard_sizeshifting_max_size", 3.0, "season.sizeshifting",
-            "Max Size", "Biggest size you can achieve during Size Shifting."
-    );
-    public static final ConfigFileEntry<Double> WILDCARD_SIZESHIFTING_SIZE_CHANGE_MULTIPLIER = new ConfigFileEntry<>(
-            "wildcard_sizeshifting_size_change_multiplier", 1.0, "season.sizeshifting",
-            "Change Multiplier", "The speed with which you change your size during Size Shifting."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SIZESHIFTING_FIX_BUGS = new ConfigFileEntry<>(
-            "wildcard_sizeshifting_fix_bugs", true, "season.sizeshifting",
-            "Fix Bugs", "Fixes the bug where you fall from blocks when shifting and when you get stuck on blocks when jumping."
-    );
+    public final ConfigHeader GROUP_GENERAL = ConfigHeader.register(this, "group_general", "General")
+            .group("season.general").groupHeader(true);
+    public final ConfigHeader GROUP_SIZESHIFTING = ConfigHeader.register(this, "group_sizeshifting", "Size Shifting")
+            .group("season.sizeshifting").groupHeader(true);
+    public final ConfigHeader GROUP_HUNGER = ConfigHeader.register(this, "group_hunger", "Hunger")
+            .group("season.hunger").groupHeader(true);
+    public final ConfigHeader GROUP_SNAILS = ConfigHeader.register(this, "group_snails", "Snails")
+            .group("season.snails").groupHeader(true);
+    public final ConfigHeader GROUP_TIMEDILATION = ConfigHeader.register(this, "group_timedilation", "Time Dilation")
+            .group("season.timedilation").groupHeader(true);
+    public final ConfigHeader GROUP_TRIVIA = ConfigHeader.register(this, "group_trivia", "Trivia")
+            .group("season.trivia").groupHeader(true);
+    public final ConfigHeader GROUP_MOBSWAP = ConfigHeader.register(this, "group_mobswap", "Mob Swap")
+            .group("season.mobswap").groupHeader(true);
+    public final ConfigHeader GROUP_SUPERPOWERS = ConfigHeader.register(this, "group_superpowers", "Superpowers")
+            .group("season.superpowers").groupHeader(true);
+    public final ConfigHeader GROUP_CALLBACK = ConfigHeader.register(this, "group_callback", "Callback")
+            .group("season.callback").groupHeader(true);
 
-    public static final ConfigFileEntry<Integer> WILDCARD_HUNGER_RANDOMIZE_INTERVAL = new ConfigFileEntry<>(
-            "wildcard_hunger_randomize_interval_", 1800, ConfigTypes.SECONDS, "season.hunger",
-            "Randomize Interval", "The duration between food changes, in seconds."
-    );
-    public static final ConfigFileEntry<Integer> WILDCARD_HUNGER_EFFECT_LEVEL = new ConfigFileEntry<>(
-            "wildcard_hunger_effect_level", 3, "season.hunger",
-            "Hunger Effect Level", "Controls the hunger effect level."
-    );
-    public static final ConfigFileEntry<Double> WILDCARD_HUNGER_NUTRITION_CHANCE = new ConfigFileEntry<>(
-            "wildcard_hunger_nutrition_chance", 0.4, ConfigTypes.PERCENTAGE, "season.hunger",
-            "Nutrition Chance", "Chance for food to have nutrition (give hunger bars)."
-    );
-    public static final ConfigFileEntry<Double> WILDCARD_HUNGER_SATURATION_CHANCE = new ConfigFileEntry<>(
-            "wildcard_hunger_saturation_chance", 0.5, ConfigTypes.PERCENTAGE, "season.hunger",
-            "Saturation Chance", "Chance for food to have saturation (needs to have nutrition to have saturation too btw)."
-    );
-    public static final ConfigFileEntry<Double> WILDCARD_HUNGER_EFFECT_CHANCE = new ConfigFileEntry<>(
-            "wildcard_hunger_effect_chance", 0.65, ConfigTypes.PERCENTAGE, "season.hunger",
-            "Effect Chance", "Chance for food to give a random effect."
-    );
-    public static final ConfigFileEntry<Integer> WILDCARD_HUNGER_AVG_EFFECT_DURATION = new ConfigFileEntry<>(
-            "wildcard_hunger_avg_effect_duration", 10, ConfigTypes.SECONDS, "season.hunger",
-            "Average Random Effect Duration", "Average random effect duration, in seconds."
-    );
-    public static final ConfigFileEntry<Double> WILDCARD_HUNGER_SOUND_CHANCE = new ConfigFileEntry<>(
-            "wildcard_hunger_sound_chance", 0.01, ConfigTypes.PERCENTAGE, "season.hunger",
-            "Play Sound Chance", "Chance for food to play a random sound to everyone on the server."
-    );
-    public static final ConfigFileEntry<String> WILDCARD_HUNGER_NON_EDIBLE_ITEMS = new ConfigFileEntry<>(
-            "wildcard_hunger_non_edible_items", "[]", ConfigTypes.ITEM_LIST, "season.hunger",
-            "Non Edible Items", "A list of items that you can't eat."
-    );
+    public final ConfigurableValue<Double> ACTIVATE_WILDCARD_MINUTE = ConfigurableValue.register(this, "activate_wildcard_minute", 2.5, ConfigTypes.MINUTES)
+            .name("Activate Wildcard Time")
+            .description("The number of minutes (in the session) after which the wildcard is activated.")
+            .group("season.general");
+    public final ConfigurableValue<Boolean> INSTANTLY_ACTIVATE_WILDCARDS = ConfigurableValue.register(this, "instantly_activate_wildcards", false)
+            .name("Disable Wildcards Activate Cooldown")
+            .description("Skips the wildcard activate dots cooldown.")
+            .group("season.general");
 
-    public static final ConfigFileEntry<Double> WILDCARD_SNAILS_SPEED_MULTIPLIER = new ConfigFileEntry<>(
-            "wildcard_snails_speed_multiplier", 1.0, "season.snails",
-            "Speed Multiplier", "Snail movement speed multiplier."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SNAILS_DROWN_PLAYERS = new ConfigFileEntry<>(
-            "wildcard_snails_drown_players", true, "season.snails",
-            "Drown Players", "Controls whether snails can drown players when the snails are underwater."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SNAILS_EFFECTS = new ConfigFileEntry<>(
-            "wildcard_snails_effects", false, "season.snails",
-            "Can Have Potion Effects", "Controls whether snails can have potion effects, like invisibility."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SNAILS_RED_LIVES = new ConfigFileEntry<>(
-            "wildcard_snails_red_lives", true, "season.snails",
-            "Can Red Players Have Snails", "Controls whether red players have snails or not."
-    );
-    public static final ConfigFileEntry<Integer> WILDCARD_SNAILS_PER_PLAYER = new ConfigFileEntry<>(
-            "wildcard_snails_per_player", 1, "season.snails",
-            "Number of Snails Per Player", "Controls how many snails each player has.\n§cNOTE: Higher numbers can be very laggy, use high number with caution."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SNAILS_RANDOM_PRESET_SKIN = new ConfigFileEntry<>(
-            "wildcard_snails_random_preset_skin", true, "season.snails",
-            "Assign Random Preset Snail Skin", "Assigns a random snail skin preset to any players without their own snail skin."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SNAILS_KILL_ANY_PLAYER = new ConfigFileEntry<>(
-            "wildcard_snails_kill_any_player", false, "season.snails",
-            "Kill Any Player On Touch", "Makes the snails kill any player they touch, not just their bound player."
-    );
+    public final ConfigurableValue<Double> WILDCARD_SIZESHIFTING_MIN_SIZE = ConfigurableValue.register(this, "wildcard_sizeshifting_min_size", 0.25)
+            .name("Min Size")
+            .description("Smallest size you can achieve during Size Shifting.")
+            .group("season.sizeshifting");
+    public final ConfigurableValue<Double> WILDCARD_SIZESHIFTING_MAX_SIZE = ConfigurableValue.register(this, "wildcard_sizeshifting_max_size", 3.0)
+            .name("Max Size")
+            .description("Biggest size you can achieve during Size Shifting.")
+            .group("season.sizeshifting");
+    public final ConfigurableValue<Double> WILDCARD_SIZESHIFTING_SIZE_CHANGE_MULTIPLIER = ConfigurableValue.register(this, "wildcard_sizeshifting_size_change_multiplier", 1.0)
+            .name("Change Multiplier")
+            .description("The speed with which you change your size during Size Shifting.")
+            .group("season.sizeshifting");
+    public final ConfigurableValue<Boolean> WILDCARD_SIZESHIFTING_FIX_BUGS = ConfigurableValue.register(this, "wildcard_sizeshifting_fix_bugs", true)
+            .name("Fix Bugs")
+            .description("Fixes the bug where you fall from blocks when shifting and when you get stuck on blocks when jumping.")
+            .group("season.sizeshifting");
 
-    public static final ConfigFileEntry<Double> WILDCARD_TIMEDILATION_MIN_SPEED = new ConfigFileEntry<>(
-            "wildcard_timedilation_min_speed", 0.05, "season.timedilation",
-            "Min World Speed Multiplier", "Controls the minimum speed the WORLD can move."
-    );
-    public static final ConfigFileEntry<Double> WILDCARD_TIMEDILATION_MAX_SPEED = new ConfigFileEntry<>(
-            "wildcard_timedilation_max_speed", 5.0, "season.timedilation",
-            "Max World Speed Multiplier", "Controls the maximum speed the WORLD can move."
-    );
-    public static final ConfigFileEntry<Double> WILDCARD_TIMEDILATION_PLAYER_MAX_SPEED = new ConfigFileEntry<>(
-            "wildcard_timedilation_player_max_speed", 2.0, "season.timedilation",
-            "Max Player Speed Multiplier", "Controls the maximum speed the PLAYERS themselves can move (not the world)."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_TIMEDILATION_START_RAIN = new ConfigFileEntry<>(
-            "wildcard_timedilation_start_rain", true, "season.timedilation",
-            "Start Rain", "Controls whether it starts raining when this wildcard starts (helps give an indication of game speed)."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_TRIVIA_BOTS_CAN_ENTER_BOATS = new ConfigFileEntry<>(
-            "wildcard_trivia_bots_can_enter_boats", true, "season.trivia",
-            "Trivia Bots Can Enter Boats", "Controls whether trivia bots can enter boats."
-    );
-    public static final ConfigFileEntry<Integer> WILDCARD_TRIVIA_BOTS_PER_PLAYER = new ConfigFileEntry<>(
-            "wildcard_trivia_bots_per_player", 5, "season.trivia",
-            "Trivia Bots per Player", "The amount of trivia bots that will spawn for each player over the session."
-    );
-    public static final ConfigFileEntry<Integer> WILDCARD_TRIVIA_SECONDS_EASY = new ConfigFileEntry<>(
-            "wildcard_trivia_seconds_easy", 180, ConfigTypes.SECONDS, "season.trivia",
-            "Easy Timer", "Easy question timer length, in seconds."
-    );
-    public static final ConfigFileEntry<Integer> WILDCARD_TRIVIA_SECONDS_NORMAL = new ConfigFileEntry<>(
-            "wildcard_trivia_seconds_normal", 240, ConfigTypes.SECONDS, "season.trivia",
-            "Normal Timer", "Normal question timer length, in seconds."
-    );
-    public static final ConfigFileEntry<Integer> WILDCARD_TRIVIA_SECONDS_HARD = new ConfigFileEntry<>(
-            "wildcard_trivia_seconds_hard", 300, ConfigTypes.SECONDS, "season.trivia",
-            "Hard Timer", "Hard question timer length, in seconds."
-    );
-    public static final ConfigFileEntry<TriviaGuiType> WILDCARD_TRIVIA_GUI_TYPE = new ConfigFileEntry<>(
-            "gui_type", TriviaGuiType.WILD_LIFE, "season.trivia",
-            "Gui Type", "Controls the trivia gui style."
-    );
+    public final ConfigurableValue<Integer> WILDCARD_HUNGER_EFFECT_LEVEL = ConfigurableValue.register(this, "wildcard_hunger_effect_level", 3)
+            .name("Hunger Effect Level")
+            .description("Controls the hunger effect level.")
+            .group("season.hunger");
+    public final ConfigurableValue<Integer> WILDCARD_HUNGER_RANDOMIZE_INTERVAL = ConfigurableValue.register(this, "wildcard_hunger_randomize_interval_", 1800, ConfigTypes.SECONDS)
+            .name("Randomize Interval")
+            .description("The duration between food changes, in seconds.")
+            .group("season.hunger");
+    public final ConfigurableValue<Double> WILDCARD_HUNGER_NUTRITION_CHANCE = ConfigurableValue.register(this, "wildcard_hunger_nutrition_chance", 0.4, ConfigTypes.PERCENTAGE)
+            .name("Nutrition Chance")
+            .description("Chance for food to have nutrition (give hunger bars).")
+            .group("season.hunger");
+    public final ConfigurableValue<Double> WILDCARD_HUNGER_SATURATION_CHANCE = ConfigurableValue.register(this, "wildcard_hunger_saturation_chance", 0.5, ConfigTypes.PERCENTAGE)
+            .name("Saturation Chance")
+            .description("Chance for food to have saturation (needs to have nutrition to have saturation too btw).")
+            .group("season.hunger");
+    public final ConfigurableValue<Double> WILDCARD_HUNGER_EFFECT_CHANCE = ConfigurableValue.register(this, "wildcard_hunger_effect_chance", 0.65, ConfigTypes.PERCENTAGE)
+            .name("Effect Chance")
+            .description("Chance for food to give a random effect.")
+            .group("season.hunger");
+    public final ConfigurableValue<Integer> WILDCARD_HUNGER_AVG_EFFECT_DURATION = ConfigurableValue.register(this, "wildcard_hunger_avg_effect_duration", 10, ConfigTypes.SECONDS)
+            .name("Average Random Effect Duration")
+            .description("Average random effect duration, in seconds.")
+            .group("season.hunger");
+    public final ConfigurableValue<Double> WILDCARD_HUNGER_SOUND_CHANCE = ConfigurableValue.register(this, "wildcard_hunger_sound_chance", 0.01, ConfigTypes.PERCENTAGE)
+            .name("Play Sound Chance")
+            .description("Chance for food to play a random sound to everyone on the server.")
+            .group("season.hunger");
+    public final ConfigurableValue<List<String>> WILDCARD_HUNGER_NON_EDIBLE_ITEMS = ConfigurableValue.register(this, "wildcard_hunger_non_edible_items", List.of(), ConfigTypes.ITEM_LIST)
+            .name("Non Edible Items")
+            .description("A list of items that you can't eat.")
+            .group("season.hunger");
 
+    public final ConfigurableValue<Double> WILDCARD_SNAILS_SPEED_MULTIPLIER = ConfigurableValue.register(this, "wildcard_snails_speed_multiplier", 1.0)
+            .name("Speed Multiplier")
+            .description("Snail movement speed multiplier.")
+            .group("season.snails");
+    public final ConfigurableValue<Boolean> WILDCARD_SNAILS_DROWN_PLAYERS = ConfigurableValue.register(this, "wildcard_snails_drown_players", true)
+            .name("Drown Players")
+            .description("Controls whether snails can drown players when the snails are underwater.")
+            .group("season.snails");
+    public final ConfigurableValue<Boolean> WILDCARD_SNAILS_EFFECTS = ConfigurableValue.register(this, "wildcard_snails_effects", false)
+            .name("Can Have Potion Effects")
+            .description("Controls whether snails can have potion effects, like invisibility.")
+            .group("season.snails");
+    public final ConfigurableValue<Boolean> WILDCARD_SNAILS_RED_LIVES = ConfigurableValue.register(this, "wildcard_snails_red_lives", true)
+            .name("Can Red Players Have Snails")
+            .description("Controls whether red players have snails or not.")
+            .group("season.snails");
+    public final ConfigurableValue<Integer> WILDCARD_SNAILS_PER_PLAYER = ConfigurableValue.register(this, "wildcard_snails_per_player", 1)
+            .name("Number of Snails Per Player")
+            .description("Controls how many snails each player has.\n§cNOTE: Higher numbers can be very laggy, use high number with caution.")
+            .group("season.snails");
+    public final ConfigurableValue<Boolean> WILDCARD_SNAILS_RANDOM_PRESET_SKIN = ConfigurableValue.register(this, "wildcard_snails_random_preset_skin", true)
+            .name("Assign Random Preset Snail Skin")
+            .description("Assigns a random snail skin preset to any players without their own snail skin.")
+            .group("season.snails");
+    public final ConfigurableValue<Boolean> WILDCARD_SNAILS_KILL_ANY_PLAYER = ConfigurableValue.register(this, "wildcard_snails_kill_any_player", false)
+            .name("Kill Any Player On Touch")
+            .description("Makes the snails kill any player they touch, not just their bound player.")
+            .group("season.snails");
 
-    public static final ConfigFileEntry<Integer> WILDCARD_MOBSWAP_START_SPAWN_DELAY = new ConfigFileEntry<>(
-            "wildcard_mobswap_start_spawn_delay_", 360, ConfigTypes.SECONDS, "season.mobswap",
-            "Session Start Spawn Delay", "The delay between mob spawns at the START of the session, in seconds."
-    );
-    public static final ConfigFileEntry<Integer> WILDCARD_MOBSWAP_END_SPAWN_DELAY = new ConfigFileEntry<>(
-            "wildcard_mobswap_end_spawn_delay_", 120, ConfigTypes.SECONDS, "season.mobswap",
-            "Session End Spawn Delay", "The delay between mob spawns at the END of the session, in seconds."
-    );
-    public static final ConfigFileEntry<Integer> WILDCARD_MOBSWAP_SPAWN_MOBS = new ConfigFileEntry<>(
-            "wildcard_mobswap_spawn_mobs", 250, "season.mobswap",
-            "Number of Mobs", "The number of mobs that spawn each cycle."
-    );
-    public static final ConfigFileEntry<Double> WILDCARD_MOBSWAP_BOSS_CHANCE_MULTIPLIER = new ConfigFileEntry<>(
-            "wildcard_mobswap_boss_chance_multiplier", 1.0, "season.mobswap",
-            "Boss Chance Multiplier", "Multiplier for boss chance (wither / warden)."
-    );
-    public static final ConfigFileEntry<Double> WILDCARD_MOBSWAP_BOSS_SPAWN_CUTOFF = new ConfigFileEntry<>(
-            "wildcard_mobswap_boss_spawn_cutoff", 0.7, ConfigTypes.PERCENTAGE, "season.mobswap",
-            "Boss Spawn Session Percentage", "Controls after which point in the session bosses can spawn."
-    );
+    public final ConfigurableValue<Double> WILDCARD_TIMEDILATION_MIN_SPEED = ConfigurableValue.register(this, "wildcard_timedilation_min_speed", 0.05)
+            .name("Min World Speed Multiplier")
+            .description("Controls the minimum speed the WORLD can move.")
+            .group("season.timedilation");
+    public final ConfigurableValue<Double> WILDCARD_TIMEDILATION_MAX_SPEED = ConfigurableValue.register(this, "wildcard_timedilation_max_speed", 5.0)
+            .name("Max World Speed Multiplier")
+            .description("Controls the maximum speed the WORLD can move.")
+            .group("season.timedilation");
+    public final ConfigurableValue<Double> WILDCARD_TIMEDILATION_PLAYER_MAX_SPEED = ConfigurableValue.register(this, "wildcard_timedilation_player_max_speed", 2.0)
+            .name("Max Player Speed Multiplier")
+            .description("Controls the maximum speed the PLAYERS themselves can move (not the world).")
+            .group("season.timedilation");
+    public final ConfigurableValue<Boolean> WILDCARD_TIMEDILATION_START_RAIN = ConfigurableValue.register(this, "wildcard_timedilation_start_rain", true)
+            .name("Start Rain")
+            .description("Controls whether it starts raining when this wildcard starts (helps give an indication of game speed).")
+            .group("season.timedilation");
 
-    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME = new ConfigFileEntry<>(
-            "wildcard_superpowers_disable_intro_theme", false, "season.superpowers",
-            "Disable Intro Theme", "Disables the theme music that plays when this wildcard is activated."
-    );
-    public static final ConfigFileEntry<String> WILDCARD_SUPERPOWERS_POWER_BLACKLIST = new ConfigFileEntry<>(
-            "wildcard_superpowers_power_blacklist", "[]", ConfigTypes.STRING_LIST, "season.superpowers",
-            "Blacklisted Powers", "List of superpowers that cannot be rolled randomly.", Superpowers.getAllStr()
-    );
+    public final ConfigurableValue<TriviaGuiType> WILDCARD_TRIVIA_GUI_TYPE = ConfigurableValue.register(this, "gui_type", TriviaGuiType.WILD_LIFE)
+            .name("Gui Type")
+            .description("Controls the trivia gui style.")
+            .group("season.trivia");
+    public final ConfigurableValue<Boolean> WILDCARD_TRIVIA_BOTS_CAN_ENTER_BOATS = ConfigurableValue.register(this, "wildcard_trivia_bots_can_enter_boats", true)
+            .name("Trivia Bots Can Enter Boats")
+            .description("Controls whether trivia bots can enter boats.")
+            .group("season.trivia");
+    public final ConfigurableValue<Integer> WILDCARD_TRIVIA_BOTS_PER_PLAYER = ConfigurableValue.register(this, "wildcard_trivia_bots_per_player", 5)
+            .name("Trivia Bots per Player")
+            .description("The amount of trivia bots that will spawn for each player over the session.")
+            .group("season.trivia");
+    public final ConfigurableValue<Integer> WILDCARD_TRIVIA_SECONDS_EASY = ConfigurableValue.register(this, "wildcard_trivia_seconds_easy", 180, ConfigTypes.SECONDS)
+            .name("Easy Timer")
+            .description("Easy question timer length, in seconds.")
+            .group("season.trivia");
+    public final ConfigurableValue<Integer> WILDCARD_TRIVIA_SECONDS_NORMAL = ConfigurableValue.register(this, "wildcard_trivia_seconds_normal", 240, ConfigTypes.SECONDS)
+            .name("Normal Timer")
+            .description("Normal question timer length, in seconds.")
+            .group("season.trivia");
+    public final ConfigurableValue<Integer> WILDCARD_TRIVIA_SECONDS_HARD = ConfigurableValue.register(this, "wildcard_trivia_seconds_hard", 300, ConfigTypes.SECONDS)
+            .name("Hard Timer")
+            .description("Hard question timer length, in seconds.")
+            .group("season.trivia");
+    public final ConfigurableValue<List<String>> WILDCARD_TRIVIA_EFFECTS = ConfigurableValue.register(this, "wildcard_trivia_effects", List.of("speed", "haste", "strength", "jump_boost", "resistance", "regeneration", "fire_resistance", "water_breathing", "night_vision", "health_boost", "absorption"), ConfigTypes.EFFECT_LIST)
+            .name("Trivia Reward Effects")
+            .description("List of potion effects you can get from trivia rewards.")
+            .group("season.trivia");
+    public final ConfigHeader GROUP_TRIVIA_QUESTIONS = ConfigHeader.register(this, "group_trivia_questions", "Trivia Questions")
+            .group("season.trivia.questions").groupHeader(true);
+    public final ConfigHeader GROUP_TRIVIA_QUESTIONS_EASY = ConfigHeader.register(this, "group_trivia_questions_easy", "Easy Questions")
+            .group("season.trivia.questions.easy").groupHeader(true);
+    public final ConfigHeader GROUP_TRIVIA_QUESTIONS_NORMAL = ConfigHeader.register(this, "group_trivia_questions_normal", "Normal Questions")
+            .group("season.trivia.questions.normal").groupHeader(true);
+    public final ConfigHeader GROUP_TRIVIA_QUESTIONS_HARD = ConfigHeader.register(this, "group_trivia_questions_hard", "Hard Questions")
+            .group("season.trivia.questions.hard").groupHeader(true);
 
-    public static final ConfigFileEntry<Object> SUPERPOWER_TIME_CONTROL = new ConfigFileEntry<>("superpower_time_control", null, ConfigTypes.TEXT, "{season.superpowers.time_control}", "Time Control", "");
-    public static final ConfigFileEntry<Object> SUPERPOWER_CREAKING = new ConfigFileEntry<>("superpower_creaking", null, ConfigTypes.TEXT, "{season.superpowers.creaking}", "Creaking", "");
-    public static final ConfigFileEntry<Object> SUPERPOWER_WIND_CHARGE = new ConfigFileEntry<>("superpower_wind_charge", null, ConfigTypes.TEXT, "{season.superpowers.wind_charge}", "Wind Charge", "");
-    public static final ConfigFileEntry<Object> SUPERPOWER_ASTRAL_PROJECTION = new ConfigFileEntry<>("superpower_astral_projection", null, ConfigTypes.TEXT, "{season.superpowers.astral_projection}", "Astral Projection", "");
-    public static final ConfigFileEntry<Object> SUPERPOWER_SUPER_PUNCH = new ConfigFileEntry<>("superpower_super_punch", null, ConfigTypes.TEXT, "{season.superpowers.super_punch}", "Super Punch", "");
-    public static final ConfigFileEntry<Object> SUPERPOWER_MIMICRY = new ConfigFileEntry<>("superpower_mimicry", null, ConfigTypes.TEXT, "{season.superpowers.mimicry}", "Mimicry", "");
-    public static final ConfigFileEntry<Object> SUPERPOWER_TELEPORTATION = new ConfigFileEntry<>("superpower_teleportation", null, ConfigTypes.TEXT, "{season.superpowers.teleportation}", "Teleportation", "");
-    public static final ConfigFileEntry<Object> SUPERPOWER_LISTENING = new ConfigFileEntry<>("superpower_listening", null, ConfigTypes.TEXT, "{season.superpowers.listening}", "Listening", "");
-    public static final ConfigFileEntry<Object> SUPERPOWER_SHADOW_PLAY = new ConfigFileEntry<>("superpower_shadow_play", null, ConfigTypes.TEXT, "{season.superpowers.shadow_play}", "Shadow Play", "");
-    public static final ConfigFileEntry<Object> SUPERPOWER_FLIGHT = new ConfigFileEntry<>("superpower_flight", null, ConfigTypes.TEXT, "{season.superpowers.flight}", "Flight", "");
-    public static final ConfigFileEntry<Object> SUPERPOWER_PLAYER_DISGUISE = new ConfigFileEntry<>("superpower_player_disguise", null, ConfigTypes.TEXT, "{season.superpowers.player_disguise}", "Player Disguise", "");
-    public static final ConfigFileEntry<Object> SUPERPOWER_ANIMAL_DISGUISE = new ConfigFileEntry<>("superpower_animal_disguise", null, ConfigTypes.TEXT, "{season.superpowers.animal_disguise}", "Animal Disguise", "");
-    public static final ConfigFileEntry<Object> SUPERPOWER_TRIPLE_JUMP = new ConfigFileEntry<>("superpower_triple_jump", null, ConfigTypes.TEXT, "{season.superpowers.triple_jump}", "Triple Jump", "");
-    public static final ConfigFileEntry<Object> SUPERPOWER_INVISIBILITY = new ConfigFileEntry<>("superpower_invisibility", null, ConfigTypes.TEXT, "{season.superpowers.invisibility}", "Invisibility", "");
-    public static final ConfigFileEntry<Object> SUPERPOWER_SUPERSPEED = new ConfigFileEntry<>("superpower_superspeed", null, ConfigTypes.TEXT, "{season.superpowers.superspeed}", "Superspeed", "");
-    public static final ConfigFileEntry<Object> SUPERPOWER_NECROMANCY = new ConfigFileEntry<>("superpower_necromancy", null, ConfigTypes.TEXT, "{season.superpowers.necromancy}", "Necromancy", "");
+    public final ConfigurableValue<Integer> WILDCARD_MOBSWAP_START_SPAWN_DELAY = ConfigurableValue.register(this, "wildcard_mobswap_start_spawn_delay_", 360, ConfigTypes.SECONDS)
+            .name("Session Start Spawn Delay")
+            .description("The delay between mob spawns at the START of the session, in seconds.")
+            .group("season.mobswap");
+    public final ConfigurableValue<Integer> WILDCARD_MOBSWAP_END_SPAWN_DELAY = ConfigurableValue.register(this, "wildcard_mobswap_end_spawn_delay_", 120, ConfigTypes.SECONDS)
+            .name("Session End Spawn Delay")
+            .description("The delay between mob spawns at the END of the session, in seconds.")
+            .group("season.mobswap");
+    public final ConfigurableValue<Integer> WILDCARD_MOBSWAP_SPAWN_MOBS = ConfigurableValue.register(this, "wildcard_mobswap_spawn_mobs", 250)
+            .name("Number of Mobs")
+            .description("The number of mobs that spawn each cycle.")
+            .group("season.mobswap");
+    public final ConfigurableValue<Double> WILDCARD_MOBSWAP_BOSS_CHANCE_MULTIPLIER = ConfigurableValue.register(this, "wildcard_mobswap_boss_chance_multiplier", 1.0)
+            .name("Boss Chance Multiplier")
+            .description("Multiplier for boss chance (wither / warden).")
+            .group("season.mobswap");
+    public final ConfigurableValue<Double> WILDCARD_MOBSWAP_BOSS_SPAWN_CUTOFF = ConfigurableValue.register(this, "wildcard_mobswap_boss_spawn_cutoff", 0.7, ConfigTypes.PERCENTAGE)
+            .name("Boss Spawn Session Percentage")
+            .description("Controls after which point in the session bosses can spawn.")
+            .group("season.mobswap");
 
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_TIME_CONTROL = new ConfigFileEntry<>("superpower_cooldown_time_control", 300, ConfigTypes.SECONDS, "season.superpowers.time_control", "Time Control Power Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_CREAKING = new ConfigFileEntry<>("superpower_cooldown_creaking", 10, ConfigTypes.SECONDS, "season.superpowers.creaking", "Creaking Power Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_WIND_CHARGE = new ConfigFileEntry<>("superpower_cooldown_wind_charge", 1, ConfigTypes.SECONDS, "season.superpowers.wind_charge", "Wind Charge Power Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_ASTRAL_PROJECTION = new ConfigFileEntry<>("superpower_cooldown_astral_projection", 5, ConfigTypes.SECONDS, "season.superpowers.astral_projection", "Astral Projection Power Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_SUPER_PUNCH = new ConfigFileEntry<>("superpower_cooldown_super_punch", 1, ConfigTypes.SECONDS, "season.superpowers.super_punch", "Super Punch Power Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_MIMICRY = new ConfigFileEntry<>("superpower_cooldown_mimicry", 300, ConfigTypes.SECONDS, "season.superpowers.mimicry", "Mimicry Power Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_TELEPORTATION = new ConfigFileEntry<>("superpower_cooldown_teleportation", 5, ConfigTypes.SECONDS, "season.superpowers.teleportation", "Teleportation Power Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_LISTENING = new ConfigFileEntry<>("superpower_cooldown_listening", 1, ConfigTypes.SECONDS, "season.superpowers.listening", "Listening Power Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_SHADOW_PLAY = new ConfigFileEntry<>("superpower_cooldown_shadow_play", 30, ConfigTypes.SECONDS, "season.superpowers.shadow_play", "Shadow Play Power Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_FLIGHT = new ConfigFileEntry<>("superpower_cooldown_flight", 45, ConfigTypes.SECONDS, "season.superpowers.flight", "Flight Power Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_PLAYER_DISGUISE = new ConfigFileEntry<>("superpower_cooldown_player_disguise", 10, ConfigTypes.SECONDS, "season.superpowers.player_disguise", "Player Disguise Power Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_ANIMAL_DISGUISE = new ConfigFileEntry<>("superpower_cooldown_animal_disguise", 1, ConfigTypes.SECONDS, "season.superpowers.animal_disguise", "Animal Disguise Power Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_TRIPLE_JUMP = new ConfigFileEntry<>("superpower_cooldown_triple_jump", 1, ConfigTypes.SECONDS, "season.superpowers.triple_jump", "Triple Jump Power Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_INVISIBILITY = new ConfigFileEntry<>("superpower_cooldown_invisibility", 1, ConfigTypes.SECONDS, "season.superpowers.invisibility", "Invisibility Power Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_SUPERSPEED = new ConfigFileEntry<>("superpower_cooldown_superspeed", 3, ConfigTypes.SECONDS, "season.superpowers.superspeed", "Superspeed Power Cooldown", "");
-    public static final ConfigFileEntry<Integer> SUPERPOWER_COOLDOWN_NECROMANCY = new ConfigFileEntry<>("superpower_cooldown_necromancy", 300, ConfigTypes.SECONDS, "season.superpowers.necromancy", "Necromancy Power Cooldown", "");
+    public final ConfigurableValue<List<String>> WILDCARD_SUPERPOWERS_POWER_BLACKLIST = ConfigurableValue.register(this, "wildcard_superpowers_power_blacklist", List.of(), ConfigTypes.stringListOf(() -> Superpowers.getAllStr()))
+            .name("Blacklisted Powers")
+            .description("List of superpowers that cannot be rolled randomly.")
+            .group("season.superpowers");
+    public final ConfigurableValue<Boolean> WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME = ConfigurableValue.register(this, "wildcard_superpowers_disable_intro_theme", false)
+            .name("Disable Intro Theme")
+            .description("Disables the theme music that plays when this wildcard is activated.")
+            .group("season.superpowers");
 
-    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_MIMICRY_DISABLE_OTHER_POWER = new ConfigFileEntry<>(
-            "wildcard_superpowers_mimicry_disable_other_power", false, "season.superpowers.mimicry",
-            "Disable Stolen Power", "Disables the power of the person you mimic for the duration of the effect."
-    );
-    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE = new ConfigFileEntry<>(
-            "wildcard_superpowers_windcharge_max_mace_damage", 2, "season.superpowers.wind_charge",
-            "Max Mace Damage", "The max amount of damage you can deal with a mace while using the Wind Charge superpower."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ZOMBIES_FIRST_SPAWN_CLEAR_ITEMS = new ConfigFileEntry<>(
-            "wildcard_superpowers_zombies_first_spawn_clear_items", true, "season.superpowers.necromancy",
-            "Zombies First Spawn Clear Items", "Controls whether zombies get cleared when they first get respawned."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ZOMBIES_KEEP_INVENTORY = new ConfigFileEntry<>(
-            "wildcard_superpowers_zombies_keep_inventory", true, "season.superpowers.necromancy",
-            "Zombies Keep Inventory", "Controls whether zombies keep their items when they die."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN = new ConfigFileEntry<>(
-            "wildcard_superpowers_zombies_revive_by_killing_dark_green", false, "season.superpowers.necromancy",
-            "Zombies Can Revive", "Controls whether zombies can be revived (gain a life) by killing a dark green player."
-    );
-    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_ZOMBIES_HEALTH = new ConfigFileEntry<>(
-            "wildcard_superpowers_zombies_health", 8, "season.superpowers.necromancy",
-            "Zombie Health Amount", "Controls how much health zombies will have."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_SUPERSPEED_STEP = new ConfigFileEntry<>(
-            "wildcard_superpowers_superspeed_step", false, "season.superpowers.superspeed",
-            "Step Up Blocks", "Controls whether players with the superspeed power active can step up blocks without jumping (like when riding a horse)."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ANIMALDISGUISE_ARMOR = new ConfigFileEntry<>(
-            "wildcard_superpowers_animaldisguise_armor", false, "season.superpowers.animal_disguise",
-            "Show Armor", "Controls whether armor is seen on players disguised as mobs."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ANIMALDISGUISE_HANDS = new ConfigFileEntry<>(
-            "wildcard_superpowers_animaldisguise_hands", true, "season.superpowers.animal_disguise",
-            "Show Hand Items", "Controls whether hand items are seen on players disguised as mobs."
-    );
-    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_TIME_DILATION_TICK_RATE = new ConfigFileEntry<>(
-            "wildcard_superpowers_time_dilation_tick_rate", 4, "season.superpowers.time_control",
-            "Target Tick Rate", "Controls the target tick rate."
-    );
-    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_TIME_DILATION_DURATION = new ConfigFileEntry<>(
-            "wildcard_superpowers_time_dilation_duration", 70, "season.superpowers.time_control",
-            "Slow Duration", "Controls the slowdown duration."
-    );
+    // Animal Disguise
+    public final ConfigHeader SUPERPOWER_ANIMAL_DISGUISE = ConfigHeader.register(this, "superpower_animal_disguise", "Animal Disguise")
+            .group("season.superpowers.animal_disguise").groupHeader(true);
+    public final ConfigurableValue<Integer> SUPERPOWER_COOLDOWN_ANIMAL_DISGUISE = ConfigurableValue.register(this, "superpower_cooldown_animal_disguise", 1, ConfigTypes.SECONDS)
+            .name("Animal Disguise Power Cooldown")
+            .group("season.superpowers.animal_disguise");
+    public final ConfigurableValue<Boolean> WILDCARD_SUPERPOWERS_ANIMALDISGUISE_ARMOR = ConfigurableValue.register(this, "wildcard_superpowers_animaldisguise_armor", false)
+            .name("Show Armor")
+            .description("Controls whether armor is seen on players disguised as mobs.")
+            .group("season.superpowers.animal_disguise");
+    public final ConfigurableValue<Boolean> WILDCARD_SUPERPOWERS_ANIMALDISGUISE_HANDS = ConfigurableValue.register(this, "wildcard_superpowers_animaldisguise_hands", true)
+            .name("Show Hand Items")
+            .description("Controls whether hand items are seen on players disguised as mobs.")
+            .group("season.superpowers.animal_disguise");
+    public final ConfigurableValue<Boolean> WILDCARD_SUPERPOWERS_ANIMAL_DISGUISE_DAMAGE_CANCELS = ConfigurableValue.register(this, "wildcard_superpowers_animal_disguise_damage_cancels", true)
+            .name("Damage Cancels Disguise")
+            .description("Controls if your disguise ends when you take damage.")
+            .group("season.superpowers.animal_disguise");
 
-    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_CREAKING_AMOUNT = new ConfigFileEntry<>(
-            "wildcard_superpowers_creaking_amount", 3, "season.superpowers.creaking",
-            "Creaking Amount", "Controls the number of creakings that spawn."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_CREAKING_PARTICLES = new ConfigFileEntry<>(
-            "wildcard_superpowers_creaking_particles", true, "season.superpowers.creaking",
-            "Show Trail Particles", "Controls whether the trail particles towards the creaking show up."
-    );
+    // Astral Projection
+    public final ConfigHeader SUPERPOWER_ASTRAL_PROJECTION = ConfigHeader.register(this, "superpower_astral_projection", "Astral Projection")
+            .group("season.superpowers.astral_projection").groupHeader(true);
+    public final ConfigurableValue<Integer> SUPERPOWER_COOLDOWN_ASTRAL_PROJECTION = ConfigurableValue.register(this, "superpower_cooldown_astral_projection", 5, ConfigTypes.SECONDS)
+            .name("Astral Projection Power Cooldown")
+            .group("season.superpowers.astral_projection");
+    public final ConfigurableValue<Boolean> WILDCARD_SUPERPOWERS_ASTRAL_PROJECTION_DAMAGE_CANCELS = ConfigurableValue.register(this, "wildcard_superpowers_astral_projection_damage_cancels", true)
+            .name("Damage Cancels Projection")
+            .description("Controls if your projection ends when you take damage.")
+            .group("season.superpowers.astral_projection");
 
-    public static final ConfigFileEntry<Double> WILDCARD_SUPERPOWERS_WIND_CHARGE_EXPLOSION_POWER = new ConfigFileEntry<>(
-            "wildcard_superpowers_wind_charge_explosion_power", 3.0, "season.superpowers.wind_charge",
-            "Wind Charge Explosion Power", "Controls the explosion power of wind charges."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ASTRAL_PROJECTION_DAMAGE_CANCELS = new ConfigFileEntry<>(
-            "wildcard_superpowers_astral_projection_damage_cancels", true, "season.superpowers.astral_projection",
-            "Damage Cancels Projection", "Controls if your projection ends when you take damage."
-    );
+    // Creaking
+    public final ConfigHeader SUPERPOWER_CREAKING = ConfigHeader.register(this, "superpower_creaking", "Creaking")
+            .group("season.superpowers.creaking").groupHeader(true);
+    public final ConfigurableValue<Integer> SUPERPOWER_COOLDOWN_CREAKING = ConfigurableValue.register(this, "superpower_cooldown_creaking", 10, ConfigTypes.SECONDS)
+            .name("Creaking Power Cooldown")
+            .group("season.superpowers.creaking");
+    public final ConfigurableValue<Integer> WILDCARD_SUPERPOWERS_CREAKING_AMOUNT = ConfigurableValue.register(this, "wildcard_superpowers_creaking_amount", 3)
+            .name("Creaking Amount")
+            .description("Controls the number of creakings that spawn.")
+            .group("season.superpowers.creaking");
+    public final ConfigurableValue<Boolean> WILDCARD_SUPERPOWERS_CREAKING_PARTICLES = ConfigurableValue.register(this, "wildcard_superpowers_creaking_particles", true)
+            .name("Show Trail Particles")
+            .description("Controls whether the trail particles towards the creaking show up.")
+            .group("season.superpowers.creaking");
 
-    public static final ConfigFileEntry<Double> WILDCARD_SUPERPOWERS_SUPER_PUNCH_THORNS_DAMAGE = new ConfigFileEntry<>(
-            "wildcard_superpowers_super_punch_thorns_damage", 1.0, "season.superpowers.super_punch",
-            "Thorns Damage", "Controls the damage others take when they hit you."
-    );
-    public static final ConfigFileEntry<Double> WILDCARD_SUPERPOWERS_SUPER_PUNCH_KNOCKBACK_STRENGTH = new ConfigFileEntry<>(
-            "wildcard_superpowers_super_punch_knockback_strength", 3.0, "season.superpowers.super_punch",
-            "Knockback Strength", "Controls the knockback strength when you punch someone."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_PLAYER_DISGUISE_DAMAGE_CANCELS = new ConfigFileEntry<>(
-            "wildcard_superpowers_player_disguise_damage_cancels", true, "season.superpowers.player_disguise",
-            "Damage Cancels Disguise", "Controls if your disguise ends when you take damage."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ANIMAL_DISGUISE_DAMAGE_CANCELS = new ConfigFileEntry<>(
-            "wildcard_superpowers_animal_disguise_damage_cancels", true, "season.superpowers.animal_disguise",
-            "Damage Cancels Disguise", "Controls if your disguise ends when you take damage."
-    );
+    // Flight
+    public final ConfigHeader SUPERPOWER_FLIGHT = ConfigHeader.register(this, "superpower_flight", "Flight")
+            .group("season.superpowers.flight").groupHeader(true);
+    public final ConfigurableValue<Integer> SUPERPOWER_COOLDOWN_FLIGHT = ConfigurableValue.register(this, "superpower_cooldown_flight", 45, ConfigTypes.SECONDS)
+            .name("Flight Power Cooldown")
+            .group("season.superpowers.flight");
+    public final ConfigurableValue<Integer> WILDCARD_SUPERPOWERS_FLIGHT_JUMP_AMPLIFIER = ConfigurableValue.register(this, "wildcard_superpowers_flight_jump_amplifier", 54)
+            .name("Jump Boost Amplifier")
+            .description("Controls the jump boost amplifier.")
+            .group("season.superpowers.flight");
+    public final ConfigurableValue<Boolean> WILDCARD_SUPERPOWERS_FLIGHT_ELYTRA_LAUNCH_NEEDED = ConfigurableValue.register(this, "wildcard_superpowers_flight_elytra_launch_needed", true)
+            .name("Needs Launch To Use Elytra")
+            .group("season.superpowers.flight");
 
-    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_TELEPORTATION_SWAP_DISTANCE = new ConfigFileEntry<>(
-            "wildcard_superpowers_teleportation_swap_distance", 100, "season.superpowers.teleportation",
-            "Max Swap Distance", "Controls the max player swap distance.\nVery high numbers may cause performance issues."
-    );
-    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_TELEPORTATION_TP_DISTANCE = new ConfigFileEntry<>(
-            "wildcard_superpowers_teleportation_tp_distance", 100, "season.superpowers.teleportation",
-            "Max Teleport Distance", "Controls the max teleport distance.\nVery high numbers may cause performance issues."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_TELEPORTATION_GIVE_PEARLS = new ConfigFileEntry<>(
-            "wildcard_superpowers_teleportation_give_pearls", true, "season.superpowers.teleportation[new]",
-            "Give Ender Pearls", "Controls whether players with this power continually get ender pearls."
-    );
-    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_SHADOW_PLAY_BLIND_RANGE = new ConfigFileEntry<>(
-            "wildcard_superpowers_shadow_play_blind_range", 10, "season.superpowers.shadow_play",
-            "Blind Range", "Controls the range in which players are blinded."
-    );
-    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_SHADOW_PLAY_BLIND_TIME = new ConfigFileEntry<>(
-            "wildcard_superpowers_shadow_play_blind_time", 5, ConfigTypes.SECONDS, "season.superpowers.shadow_play",
-            "Blind Time", "Controls the time for which players are blinded."
-    );
+    // Invisibility
+    public final ConfigHeader SUPERPOWER_INVISIBILITY = ConfigHeader.register(this, "superpower_invisibility", "Invisibility")
+            .group("season.superpowers.invisibility").groupHeader(true);
+    public final ConfigurableValue<Integer> SUPERPOWER_COOLDOWN_INVISIBILITY = ConfigurableValue.register(this, "superpower_cooldown_invisibility", 1, ConfigTypes.SECONDS)
+            .name("Invisibility Power Cooldown")
+            .group("season.superpowers.invisibility");
+    public final ConfigurableValue<Boolean> WILDCARD_SUPERPOWERS_INVISIBILITY_DAMAGE_CANCELS = ConfigurableValue.register(this, "wildcard_superpowers_invisibility_damage_cancels", true)
+            .name("Taking Damage Cancels Invis")
+            .group("season.superpowers.invisibility");
+    public final ConfigurableValue<Boolean> WILDCARD_SUPERPOWERS_INVISIBILITY_ATTACK_CANCELS = ConfigurableValue.register(this, "wildcard_superpowers_invisibility_attack_cancels", true)
+            .name("Attacking Cancels Invis")
+            .group("season.superpowers.invisibility");
+    public final ConfigurableValue<Boolean> WILDCARD_SUPERPOWERS_INVISIBILITY_SHOW_PARTICLES = ConfigurableValue.register(this, "wildcard_superpowers_invisibility_show_particles", true)
+            .name("Show Transluscent Particles")
+            .group("season.superpowers.invisibility");
 
-    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_FLIGHT_JUMP_AMPLIFIER = new ConfigFileEntry<>(
-            "wildcard_superpowers_flight_jump_amplifier", 54, "season.superpowers.flight",
-            "Jump Boost Amplifier", "Controls the jump boost amplifier."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_FLIGHT_ELYTRA_LAUNCH_NEEDED = new ConfigFileEntry<>(
-            "wildcard_superpowers_flight_elytra_launch_needed", true, "season.superpowers.flight",
-            "Needs Launch To Use Elytra", ""
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_INVISIBILITY_DAMAGE_CANCELS = new ConfigFileEntry<>(
-            "wildcard_superpowers_invisibility_damage_cancels", true, "season.superpowers.invisibility",
-            "Taking Damage Cancels Invis", ""
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_INVISIBILITY_ATTACK_CANCELS = new ConfigFileEntry<>(
-            "wildcard_superpowers_invisibility_attack_cancels", true, "season.superpowers.invisibility",
-            "Attacking Cancels Invis", ""
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_INVISIBILITY_SHOW_PARTICLES = new ConfigFileEntry<>(
-            "wildcard_superpowers_invisibility_show_particles", true, "season.superpowers.invisibility",
-            "Show Transluscent Particles", ""
-    );
+    // Mimicry
+    public final ConfigHeader SUPERPOWER_MIMICRY = ConfigHeader.register(this, "superpower_mimicry", "Mimicry")
+            .group("season.superpowers.mimicry").groupHeader(true);
+    public final ConfigurableValue<Integer> SUPERPOWER_COOLDOWN_MIMICRY = ConfigurableValue.register(this, "superpower_cooldown_mimicry", 300, ConfigTypes.SECONDS)
+            .name("Mimicry Power Cooldown")
+            .group("season.superpowers.mimicry");
+    public final ConfigurableValue<Boolean> WILDCARD_SUPERPOWERS_MIMICRY_DISABLE_OTHER_POWER = ConfigurableValue.register(this, "wildcard_superpowers_mimicry_disable_other_power", false)
+            .name("Disable Stolen Power")
+            .description("Disables the power of the person you mimic for the duration of the effect.")
+            .group("season.superpowers.mimicry");
 
-    public static final ConfigFileEntry<Double> WILDCARD_SUPERPOWERS_SUPERSPEED_TARGET_SPEED = new ConfigFileEntry<>(
-            "wildcard_superpowers_superspeed_target_speed", 0.35, "season.superpowers.superspeed",
-            "Maximum Speed", "Controls the maximum speed."
-    );
-    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_SUPERSPEED_FROST_WALKER_LEVEL = new ConfigFileEntry<>(
-            "wildcard_superpowers_superspeed_frost_walker_level", 3, "season.superpowers.superspeed",
-            "Frost Walker Level", "Controls the frost walker enchant level."
-    );
-    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_SUPERSPEED_HUNGER_LEVEL = new ConfigFileEntry<>(
-            "wildcard_superpowers_superspeed_hunger_level", 5, "season.superpowers.superspeed",
-            "Hunger Level", "Controls the hunger level amplifier."
-    );
-    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_TRIPLE_JUMP_JUMPS = new ConfigFileEntry<>(
-            "wildcard_superpowers_triple_jump_jumps", 3, "season.superpowers.triple_jump",
-            "Max Jump Amount", "Controls the maximum jump amount."
-    );
+    // Necromancy
+    public final ConfigHeader SUPERPOWER_NECROMANCY = ConfigHeader.register(this, "superpower_necromancy", "Necromancy")
+            .group("season.superpowers.necromancy").groupHeader(true);
+    public final ConfigurableValue<Integer> SUPERPOWER_COOLDOWN_NECROMANCY = ConfigurableValue.register(this, "superpower_cooldown_necromancy", 300, ConfigTypes.SECONDS)
+            .name("Necromancy Power Cooldown")
+            .group("season.superpowers.necromancy");
+    public final ConfigurableValue<Boolean> WILDCARD_SUPERPOWERS_ZOMBIES_FIRST_SPAWN_CLEAR_ITEMS = ConfigurableValue.register(this, "wildcard_superpowers_zombies_first_spawn_clear_items", true)
+            .name("Zombies First Spawn Clear Items")
+            .description("Controls whether zombies get cleared when they first get respawned.")
+            .group("season.superpowers.necromancy");
+    public final ConfigurableValue<Boolean> WILDCARD_SUPERPOWERS_ZOMBIES_KEEP_INVENTORY = ConfigurableValue.register(this, "wildcard_superpowers_zombies_keep_inventory", true)
+            .name("Zombies Keep Inventory")
+            .description("Controls whether zombies keep their items when they die.")
+            .group("season.superpowers.necromancy");
+    public final ConfigurableValue<Boolean> WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN = ConfigurableValue.register(this, "wildcard_superpowers_zombies_revive_by_killing_dark_green", false)
+            .name("Zombies Can Revive")
+            .description("Controls whether zombies can be revived (gain a life) by killing a dark green player.")
+            .group("season.superpowers.necromancy");
+    public final ConfigurableValue<Integer> WILDCARD_SUPERPOWERS_ZOMBIES_HEALTH = ConfigurableValue.register(this, "wildcard_superpowers_zombies_health", 8)
+            .name("Zombie Health Amount")
+            .description("Controls how much health zombies will have.")
+            .group("season.superpowers.necromancy");
 
+    // Player Disguise
+    public final ConfigHeader SUPERPOWER_PLAYER_DISGUISE = ConfigHeader.register(this, "superpower_player_disguise", "Player Disguise")
+            .group("season.superpowers.player_disguise").groupHeader(true);
+    public final ConfigurableValue<Integer> SUPERPOWER_COOLDOWN_PLAYER_DISGUISE = ConfigurableValue.register(this, "superpower_cooldown_player_disguise", 10, ConfigTypes.SECONDS)
+            .name("Player Disguise Power Cooldown")
+            .group("season.superpowers.player_disguise");
+    public final ConfigurableValue<Boolean> WILDCARD_SUPERPOWERS_PLAYER_DISGUISE_DAMAGE_CANCELS = ConfigurableValue.register(this, "wildcard_superpowers_player_disguise_damage_cancels", true)
+            .name("Damage Cancels Disguise")
+            .description("Controls if your disguise ends when you take damage.")
+            .group("season.superpowers.player_disguise");
 
-    public static final ConfigFileEntry<String> WILDCARD_CALLBACK_WILDCARDS_BLACKLIST = new ConfigFileEntry<>(
-            "wildcard_callback_wildcards_blacklist", "[hunger]", ConfigTypes.STRING_LIST, "season.callback",
-            "Blacklisted Wildcards", "List of wildcards that cannot be activated in Callback.", Wildcards.getWildcardsStr()
-    );
-    public static final ConfigFileEntry<Double> WILDCARD_CALLBACK_TURN_OFF = new ConfigFileEntry<>(
-            "wildcard_callback_turn_off", 0.75, ConfigTypes.PERCENTAGE, "season.callback",
-            "Turn Off In Session", "Controls when in the session the callback wildcard turns off (percentage)."
-    );
-    public static final ConfigFileEntry<Boolean> WILDCARD_CALLBACK_NERFED_WILDCARDS = new ConfigFileEntry<>(
-            "wildcard_callback_nerfed_wildcards", true, "season.callback",
-            "Nerfed Wildcards", "Controls whether wildcards are nerfed in callback (recommended)."
-    );
-    public static final ConfigFileEntry<Integer> WILDCARD_CALLBACK_INITIAL_ACTIVATION_INTERVAL = new ConfigFileEntry<>(
-            "wildcard_callback_initial_activation_interval", 300, ConfigTypes.SECONDS, "season.callback",
-            "Initial Activation Interval", "Controls in what intervals will the wildcards get activated (it speeds up throughout the session). Changing this mid-session might have unexpected consequences."
-    );
+    // Shadow Play
+    public final ConfigHeader SUPERPOWER_SHADOW_PLAY = ConfigHeader.register(this, "superpower_shadow_play", "Shadow Play")
+            .group("season.superpowers.shadow_play").groupHeader(true);
+    public final ConfigurableValue<Integer> SUPERPOWER_COOLDOWN_SHADOW_PLAY = ConfigurableValue.register(this, "superpower_cooldown_shadow_play", 30, ConfigTypes.SECONDS)
+            .name("Shadow Play Power Cooldown")
+            .group("season.superpowers.shadow_play");
+    public final ConfigurableValue<Integer> WILDCARD_SUPERPOWERS_SHADOW_PLAY_BLIND_RANGE = ConfigurableValue.register(this, "wildcard_superpowers_shadow_play_blind_range", 10)
+            .name("Blind Range")
+            .description("Controls the range in which players are blinded.")
+            .group("season.superpowers.shadow_play");
+    public final ConfigurableValue<Integer> WILDCARD_SUPERPOWERS_SHADOW_PLAY_BLIND_TIME = ConfigurableValue.register(this, "wildcard_superpowers_shadow_play_blind_time", 5, ConfigTypes.SECONDS)
+            .name("Blind Time")
+            .description("Controls the time for which players are blinded.")
+            .group("season.superpowers.shadow_play");
 
-    public static final ConfigFileEntry<String> WILDCARD_TRIVIA_EFFECTS = new ConfigFileEntry<>(
-            "wildcard_trivia_effects", "[speed, haste, strength, jump_boost, resistance, regeneration, fire_resistance, water_breathing, night_vision, health_boost, absorption]", ConfigTypes.EFFECT_LIST, "season.trivia",
-            "Trivia Reward Effects", "List of potion effects you can get from trivia rewards."
-    );
+    // Super Punch
+    public final ConfigHeader SUPERPOWER_SUPER_PUNCH = ConfigHeader.register(this, "superpower_super_punch", "Super Punch")
+            .group("season.superpowers.super_punch").groupHeader(true);
+    public final ConfigurableValue<Integer> SUPERPOWER_COOLDOWN_SUPER_PUNCH = ConfigurableValue.register(this, "superpower_cooldown_super_punch", 1, ConfigTypes.SECONDS)
+            .name("Super Punch Power Cooldown")
+            .group("season.superpowers.super_punch");
+    public final ConfigurableValue<Double> WILDCARD_SUPERPOWERS_SUPER_PUNCH_THORNS_DAMAGE = ConfigurableValue.register(this, "wildcard_superpowers_super_punch_thorns_damage", 1.0)
+            .name("Thorns Damage")
+            .description("Controls the damage others take when they hit you.")
+            .group("season.superpowers.super_punch");
+    public final ConfigurableValue<Double> WILDCARD_SUPERPOWERS_SUPER_PUNCH_KNOCKBACK_STRENGTH = ConfigurableValue.register(this, "wildcard_superpowers_super_punch_knockback_strength", 3.0)
+            .name("Knockback Strength")
+            .description("Controls the knockback strength when you punch someone.")
+            .group("season.superpowers.super_punch");
 
-    //Groups
-    public static final ConfigFileEntry<Object> GROUP_GENERAL = new ConfigFileEntry<>(
-            "group_general", null, ConfigTypes.TEXT, "{season.general}",
-            "General", ""
-    );
-    public static final ConfigFileEntry<Object> GROUP_SIZESHIFTING = new ConfigFileEntry<>(
-            "group_sizeshifting", null, ConfigTypes.TEXT, "{season.sizeshifting}",
-            "Size Shifting", ""
-    );
-    public static final ConfigFileEntry<Object> GROUP_HUNGER = new ConfigFileEntry<>(
-            "group_hunger", null, ConfigTypes.TEXT, "{season.hunger}",
-            "Hunger", ""
-    );
-    public static final ConfigFileEntry<Object> GROUP_SNAILS = new ConfigFileEntry<>(
-            "group_snails", null, ConfigTypes.TEXT, "{season.snails}",
-            "Snails", ""
-    );
-    public static final ConfigFileEntry<Object> GROUP_TIMEDILATION = new ConfigFileEntry<>(
-            "group_timedilation", null, ConfigTypes.TEXT, "{season.timedilation}",
-            "Time Dilation", ""
-    );
-    public static final ConfigFileEntry<Object> GROUP_TRIVIA = new ConfigFileEntry<>(
-            "group_trivia", null, ConfigTypes.TEXT, "{season.trivia}",
-            "Trivia", ""
-    );
-    public static final ConfigFileEntry<Object> GROUP_TRIVIA_QUESTIONS = new ConfigFileEntry<>(
-            "group_trivia_questions", null, ConfigTypes.TEXT, "{season.trivia.questions}",
-            "Trivia Questions", ""
-    );
-    public static final ConfigFileEntry<Object> GROUP_TRIVIA_QUESTIONS_EASY = new ConfigFileEntry<>(
-            "group_trivia_questions_easy", null, ConfigTypes.TEXT, "{season.trivia.questions.easy}",
-            "Easy Questions", ""
-    );
-    public static final ConfigFileEntry<Object> GROUP_TRIVIA_QUESTIONS_NORMAL = new ConfigFileEntry<>(
-            "group_trivia_questions_normal", null, ConfigTypes.TEXT, "{season.trivia.questions.normal}",
-            "Normal Questions", ""
-    );
-    public static final ConfigFileEntry<Object> GROUP_TRIVIA_QUESTIONS_HARD = new ConfigFileEntry<>(
-            "group_trivia_questions_hard", null, ConfigTypes.TEXT, "{season.trivia.questions.hard}",
-            "Hard Questions", ""
-    );
-    public static final ConfigFileEntry<Object> GROUP_MOBSWAP = new ConfigFileEntry<>(
-            "group_mobswap", null, ConfigTypes.TEXT, "{season.mobswap}",
-            "Mob Swap", ""
-    );
-    public static final ConfigFileEntry<Object> GROUP_SUPERPOWERS = new ConfigFileEntry<>(
-            "group_superpowers", null, ConfigTypes.TEXT, "{season.superpowers}",
-            "Superpowers", ""
-    );
-    public static final ConfigFileEntry<Object> GROUP_CALLBACK = new ConfigFileEntry<>(
-            "group_callback", null, ConfigTypes.TEXT, "{season.callback}",
-            "Callback", ""
-    );
+    // Superspeed
+    public final ConfigHeader SUPERPOWER_SUPERSPEED = ConfigHeader.register(this, "superpower_superspeed", "Superspeed")
+            .group("season.superpowers.superspeed").groupHeader(true);
+    public final ConfigurableValue<Integer> SUPERPOWER_COOLDOWN_SUPERSPEED = ConfigurableValue.register(this, "superpower_cooldown_superspeed", 3, ConfigTypes.SECONDS)
+            .name("Superspeed Power Cooldown")
+            .group("season.superpowers.superspeed");
+    public final ConfigurableValue<Boolean> WILDCARD_SUPERPOWERS_SUPERSPEED_STEP = ConfigurableValue.register(this, "wildcard_superpowers_superspeed_step", false)
+            .name("Step Up Blocks")
+            .description("Controls whether players with the superspeed power active can step up blocks without jumping (like when riding a horse).")
+            .group("season.superpowers.superspeed");
+    public final ConfigurableValue<Integer> WILDCARD_SUPERPOWERS_SUPERSPEED_FROST_WALKER_LEVEL = ConfigurableValue.register(this, "wildcard_superpowers_superspeed_frost_walker_level", 3)
+            .name("Frost Walker Level")
+            .description("Controls the frost walker enchant level.")
+            .group("season.superpowers.superspeed");
+    public final ConfigurableValue<Integer> WILDCARD_SUPERPOWERS_SUPERSPEED_HUNGER_LEVEL = ConfigurableValue.register(this, "wildcard_superpowers_superspeed_hunger_level", 5)
+            .name("Hunger Level")
+            .description("Controls the hunger level amplifier.")
+            .group("season.superpowers.superspeed");
+    public final ConfigurableValue<Double> WILDCARD_SUPERPOWERS_SUPERSPEED_TARGET_SPEED = ConfigurableValue.register(this, "wildcard_superpowers_superspeed_target_speed", 0.35)
+            .name("Maximum Speed")
+            .description("Controls the maximum speed.")
+            .group("season.superpowers.superspeed");
 
-    public static final ConfigFileEntry<Double> ACTIVATE_WILDCARD_MINUTE = new ConfigFileEntry<>(
-            "activate_wildcard_minute", 2.5, ConfigTypes.MINUTES, "season.general",
-            "Activate Wildcard Time", "The number of minutes (in the session) after which the wildcard is activated."
-    );
-    public static final ConfigFileEntry<Boolean> INSTANTLY_ACTIVATE_WILDCARDS = new ConfigFileEntry<>(
-            "instantly_activate_wildcards", false, "season.general",
-            "Disable Wildcards Activate Cooldown", "Skips the wildcard activate dots cooldown."
-    );
+    // Teleportation
+    public final ConfigHeader SUPERPOWER_TELEPORTATION = ConfigHeader.register(this, "superpower_teleportation", "Teleportation")
+            .group("season.superpowers.teleportation").groupHeader(true);
+    public final ConfigurableValue<Integer> SUPERPOWER_COOLDOWN_TELEPORTATION = ConfigurableValue.register(this, "superpower_cooldown_teleportation", 5, ConfigTypes.SECONDS)
+            .name("Teleportation Power Cooldown")
+            .group("season.superpowers.teleportation");
+    public final ConfigurableValue<Integer> WILDCARD_SUPERPOWERS_TELEPORTATION_SWAP_DISTANCE = ConfigurableValue.register(this, "wildcard_superpowers_teleportation_swap_distance", 100)
+            .name("Max Swap Distance")
+            .description("Controls the max player swap distance.\nVery high numbers may cause performance issues.")
+            .group("season.superpowers.teleportation");
+    public final ConfigurableValue<Integer> WILDCARD_SUPERPOWERS_TELEPORTATION_TP_DISTANCE = ConfigurableValue.register(this, "wildcard_superpowers_teleportation_tp_distance", 100)
+            .name("Max Teleport Distance")
+            .description("Controls the max teleport distance.\nVery high numbers may cause performance issues.")
+            .group("season.superpowers.teleportation");
+
+    // Time Control
+    public final ConfigHeader SUPERPOWER_TIME_CONTROL = ConfigHeader.register(this, "superpower_time_control", "Time Control")
+            .group("season.superpowers.time_control").groupHeader(true);
+    public final ConfigurableValue<Integer> SUPERPOWER_COOLDOWN_TIME_CONTROL = ConfigurableValue.register(this, "superpower_cooldown_time_control", 300, ConfigTypes.SECONDS)
+            .name("Time Control Power Cooldown")
+            .group("season.superpowers.time_control");
+    public final ConfigurableValue<Integer> WILDCARD_SUPERPOWERS_TIME_DILATION_TICK_RATE = ConfigurableValue.register(this, "wildcard_superpowers_time_dilation_tick_rate", 4)
+            .name("Target Tick Rate")
+            .description("Controls the target tick rate.")
+            .group("season.superpowers.time_control");
+    public final ConfigurableValue<Integer> WILDCARD_SUPERPOWERS_TIME_DILATION_DURATION = ConfigurableValue.register(this, "wildcard_superpowers_time_dilation_duration", 70)
+            .name("Slow Duration")
+            .description("Controls the slowdown duration.")
+            .group("season.superpowers.time_control");
+
+    // Triple Jump
+    public final ConfigHeader SUPERPOWER_TRIPLE_JUMP = ConfigHeader.register(this, "superpower_triple_jump", "Triple Jump")
+            .group("season.superpowers.triple_jump").groupHeader(true);
+    public final ConfigurableValue<Integer> SUPERPOWER_COOLDOWN_TRIPLE_JUMP = ConfigurableValue.register(this, "superpower_cooldown_triple_jump", 1, ConfigTypes.SECONDS)
+            .name("Triple Jump Power Cooldown")
+            .group("season.superpowers.triple_jump");
+    public final ConfigurableValue<Integer> WILDCARD_SUPERPOWERS_TRIPLE_JUMP_JUMPS = ConfigurableValue.register(this, "wildcard_superpowers_triple_jump_jumps", 3)
+            .name("Max Jump Amount")
+            .description("Controls the maximum jump amount.")
+            .group("season.superpowers.triple_jump");
+
+    // Wind Charge
+    public final ConfigHeader SUPERPOWER_WIND_CHARGE = ConfigHeader.register(this, "superpower_wind_charge", "Wind Charge")
+            .group("season.superpowers.wind_charge").groupHeader(true);
+    public final ConfigurableValue<Integer> SUPERPOWER_COOLDOWN_WIND_CHARGE = ConfigurableValue.register(this, "superpower_cooldown_wind_charge", 1, ConfigTypes.SECONDS)
+            .name("Wind Charge Power Cooldown")
+            .group("season.superpowers.wind_charge");
+    public final ConfigurableValue<Integer> WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE = ConfigurableValue.register(this, "wildcard_superpowers_windcharge_max_mace_damage", 2)
+            .name("Max Mace Damage")
+            .description("The max amount of damage you can deal with a mace while using the Wind Charge superpower.")
+            .group("season.superpowers.wind_charge");
+    public final ConfigurableValue<Double> WILDCARD_SUPERPOWERS_WIND_CHARGE_EXPLOSION_POWER = ConfigurableValue.register(this, "wildcard_superpowers_wind_charge_explosion_power", 3.0)
+            .name("Wind Charge Explosion Power")
+            .description("Controls the explosion power of wind charges.")
+            .group("season.superpowers.wind_charge");
+
+    public final ConfigurableValue<List<String>> WILDCARD_CALLBACK_WILDCARDS_BLACKLIST = ConfigurableValue.register(this, "wildcard_callback_wildcards_blacklist", List.of("hunger"), ConfigTypes.stringListOf(() -> Wildcards.getWildcardsStr()))
+            .name("Blacklisted Wildcards")
+            .description("List of wildcards that cannot be activated in Callback.")
+            .group("season.callback");
+    public final ConfigurableValue<Double> WILDCARD_CALLBACK_TURN_OFF = ConfigurableValue.register(this, "wildcard_callback_turn_off", 0.75, ConfigTypes.PERCENTAGE)
+            .name("Turn Off In Session")
+            .description("Controls when in the session the callback wildcard turns off (percentage).")
+            .group("season.callback");
+    public final ConfigurableValue<Boolean> WILDCARD_CALLBACK_NERFED_WILDCARDS = ConfigurableValue.register(this, "wildcard_callback_nerfed_wildcards", true)
+            .name("Nerfed Wildcards")
+            .description("Controls whether wildcards are nerfed in callback (recommended).")
+            .group("season.callback");
+    public final ConfigurableValue<Integer> WILDCARD_CALLBACK_INITIAL_ACTIVATION_INTERVAL = ConfigurableValue.register(this, "wildcard_callback_initial_activation_interval", 300, ConfigTypes.SECONDS)
+            .name("Initial Activation Interval")
+            .description("Controls in what intervals will the wildcards get activated (it speeds up throughout the session). Changing this mid-session might have unexpected consequences.")
+            .group("season.callback");
+
+    public final ConfigHeader SUPERPOWER_LISTENING = ConfigHeader.register(this, "superpower_listening", "Listening")
+            .group("season.superpowers.listening").groupHeader(true);
+    public final ConfigurableValue<Integer> SUPERPOWER_COOLDOWN_LISTENING = ConfigurableValue.register(this, "superpower_cooldown_listening", 1, ConfigTypes.SECONDS)
+            .name("Listening Power Cooldown")
+            .group("season.superpowers.listening");
 
     public WildLifeConfig() {
         super(Seasons.WILD_LIFE);
-    }
-
-    @Override
-    protected List<ConfigFileEntry<?>> getSeasonSpecificConfigEntries() {
-        List<ConfigFileEntry<?>> result = new ArrayList<>(List.of(
-                GROUP_GENERAL //Group
-                ,GROUP_SIZESHIFTING //Group
-                ,GROUP_HUNGER //Group
-                ,GROUP_SNAILS //Group
-                ,GROUP_TIMEDILATION //Group
-                ,GROUP_TRIVIA //Group
-                ,GROUP_MOBSWAP //Group
-                ,GROUP_SUPERPOWERS //Group
-                ,GROUP_CALLBACK //Group
-
-                //Group stuff
-                ,ACTIVATE_WILDCARD_MINUTE
-                ,INSTANTLY_ACTIVATE_WILDCARDS
-
-                ,WILDCARD_SIZESHIFTING_MIN_SIZE
-                ,WILDCARD_SIZESHIFTING_MAX_SIZE
-                ,WILDCARD_SIZESHIFTING_SIZE_CHANGE_MULTIPLIER
-                ,WILDCARD_SIZESHIFTING_FIX_BUGS
-
-                ,WILDCARD_HUNGER_EFFECT_LEVEL
-                ,WILDCARD_HUNGER_RANDOMIZE_INTERVAL
-                ,WILDCARD_HUNGER_NUTRITION_CHANCE
-                ,WILDCARD_HUNGER_SATURATION_CHANCE
-                ,WILDCARD_HUNGER_EFFECT_CHANCE
-                ,WILDCARD_HUNGER_AVG_EFFECT_DURATION
-                ,WILDCARD_HUNGER_SOUND_CHANCE
-                ,WILDCARD_HUNGER_NON_EDIBLE_ITEMS
-
-                ,WILDCARD_SNAILS_SPEED_MULTIPLIER
-                ,WILDCARD_SNAILS_DROWN_PLAYERS
-                ,WILDCARD_SNAILS_EFFECTS
-                ,WILDCARD_SNAILS_RED_LIVES
-                ,WILDCARD_SNAILS_PER_PLAYER
-                ,WILDCARD_SNAILS_RANDOM_PRESET_SKIN
-                ,WILDCARD_SNAILS_KILL_ANY_PLAYER
-
-                ,WILDCARD_TIMEDILATION_MIN_SPEED
-                ,WILDCARD_TIMEDILATION_MAX_SPEED
-                ,WILDCARD_TIMEDILATION_PLAYER_MAX_SPEED
-                ,WILDCARD_TIMEDILATION_START_RAIN
-
-                ,WILDCARD_TRIVIA_GUI_TYPE
-                ,WILDCARD_TRIVIA_BOTS_CAN_ENTER_BOATS
-                ,WILDCARD_TRIVIA_BOTS_PER_PLAYER
-                ,WILDCARD_TRIVIA_SECONDS_EASY
-                ,WILDCARD_TRIVIA_SECONDS_NORMAL
-                ,WILDCARD_TRIVIA_SECONDS_HARD
-                ,WILDCARD_TRIVIA_EFFECTS
-                ,GROUP_TRIVIA_QUESTIONS
-                    ,GROUP_TRIVIA_QUESTIONS_EASY
-                    ,GROUP_TRIVIA_QUESTIONS_NORMAL
-                    ,GROUP_TRIVIA_QUESTIONS_HARD
-
-                ,WILDCARD_MOBSWAP_START_SPAWN_DELAY
-                ,WILDCARD_MOBSWAP_END_SPAWN_DELAY
-                ,WILDCARD_MOBSWAP_SPAWN_MOBS
-                ,WILDCARD_MOBSWAP_BOSS_CHANCE_MULTIPLIER
-                ,WILDCARD_MOBSWAP_BOSS_SPAWN_CUTOFF
-
-                ,WILDCARD_SUPERPOWERS_POWER_BLACKLIST
-                ,WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME
-
-                // Animal Disguise
-                ,SUPERPOWER_ANIMAL_DISGUISE
-                ,SUPERPOWER_COOLDOWN_ANIMAL_DISGUISE
-                ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_ARMOR
-                ,WILDCARD_SUPERPOWERS_ANIMALDISGUISE_HANDS
-                ,WILDCARD_SUPERPOWERS_ANIMAL_DISGUISE_DAMAGE_CANCELS
-
-                // Astral Projection
-                ,SUPERPOWER_ASTRAL_PROJECTION
-                ,SUPERPOWER_COOLDOWN_ASTRAL_PROJECTION
-                ,WILDCARD_SUPERPOWERS_ASTRAL_PROJECTION_DAMAGE_CANCELS
-
-                //? if >= 1.21.2 {
-                // Creaking
-                ,SUPERPOWER_CREAKING
-                ,SUPERPOWER_COOLDOWN_CREAKING
-                ,WILDCARD_SUPERPOWERS_CREAKING_AMOUNT
-                ,WILDCARD_SUPERPOWERS_CREAKING_PARTICLES
-
-                // Flight
-                ,SUPERPOWER_FLIGHT
-                ,SUPERPOWER_COOLDOWN_FLIGHT
-                ,WILDCARD_SUPERPOWERS_FLIGHT_JUMP_AMPLIFIER
-                ,WILDCARD_SUPERPOWERS_FLIGHT_ELYTRA_LAUNCH_NEEDED
-                //?}
-
-                // Invisibility
-                ,SUPERPOWER_INVISIBILITY
-                ,SUPERPOWER_COOLDOWN_INVISIBILITY
-                ,WILDCARD_SUPERPOWERS_INVISIBILITY_DAMAGE_CANCELS
-                ,WILDCARD_SUPERPOWERS_INVISIBILITY_ATTACK_CANCELS
-                ,WILDCARD_SUPERPOWERS_INVISIBILITY_SHOW_PARTICLES
-
-                // Mimicry
-                ,SUPERPOWER_MIMICRY
-                ,SUPERPOWER_COOLDOWN_MIMICRY
-                ,WILDCARD_SUPERPOWERS_MIMICRY_DISABLE_OTHER_POWER
-
-                // Necromancy
-                ,SUPERPOWER_NECROMANCY
-                ,SUPERPOWER_COOLDOWN_NECROMANCY
-                ,WILDCARD_SUPERPOWERS_ZOMBIES_FIRST_SPAWN_CLEAR_ITEMS
-                ,WILDCARD_SUPERPOWERS_ZOMBIES_KEEP_INVENTORY
-                ,WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN
-                ,WILDCARD_SUPERPOWERS_ZOMBIES_HEALTH
-
-                // Player Disguise
-                ,SUPERPOWER_PLAYER_DISGUISE
-                ,SUPERPOWER_COOLDOWN_PLAYER_DISGUISE
-                ,WILDCARD_SUPERPOWERS_PLAYER_DISGUISE_DAMAGE_CANCELS
-
-                // Shadow Play
-                ,SUPERPOWER_SHADOW_PLAY
-                ,SUPERPOWER_COOLDOWN_SHADOW_PLAY
-                ,WILDCARD_SUPERPOWERS_SHADOW_PLAY_BLIND_RANGE
-                ,WILDCARD_SUPERPOWERS_SHADOW_PLAY_BLIND_TIME
-
-                // Super Punch
-                ,SUPERPOWER_SUPER_PUNCH
-                ,SUPERPOWER_COOLDOWN_SUPER_PUNCH
-                ,WILDCARD_SUPERPOWERS_SUPER_PUNCH_THORNS_DAMAGE
-                ,WILDCARD_SUPERPOWERS_SUPER_PUNCH_KNOCKBACK_STRENGTH
-
-                //? if > 1.20.3 {
-                // Superspeed
-                ,SUPERPOWER_SUPERSPEED
-                ,SUPERPOWER_COOLDOWN_SUPERSPEED
-                ,WILDCARD_SUPERPOWERS_SUPERSPEED_STEP
-                ,WILDCARD_SUPERPOWERS_SUPERSPEED_FROST_WALKER_LEVEL
-                ,WILDCARD_SUPERPOWERS_SUPERSPEED_HUNGER_LEVEL
-                ,WILDCARD_SUPERPOWERS_SUPERSPEED_TARGET_SPEED
-                //?}
-
-                // Teleportation
-                ,SUPERPOWER_TELEPORTATION
-                ,SUPERPOWER_COOLDOWN_TELEPORTATION
-                ,WILDCARD_SUPERPOWERS_TELEPORTATION_SWAP_DISTANCE
-                ,WILDCARD_SUPERPOWERS_TELEPORTATION_TP_DISTANCE
-                ,WILDCARD_SUPERPOWERS_TELEPORTATION_GIVE_PEARLS
-
-                //? if >= 1.20.3 {
-                // Time Control
-                ,SUPERPOWER_TIME_CONTROL
-                ,SUPERPOWER_COOLDOWN_TIME_CONTROL
-                ,WILDCARD_SUPERPOWERS_TIME_DILATION_TICK_RATE
-                ,WILDCARD_SUPERPOWERS_TIME_DILATION_DURATION
-                //?}
-
-                // Triple Jump
-                ,SUPERPOWER_TRIPLE_JUMP
-                ,SUPERPOWER_COOLDOWN_TRIPLE_JUMP
-                ,WILDCARD_SUPERPOWERS_TRIPLE_JUMP_JUMPS
-
-                //? if >= 1.21 {
-                // Wind Charge
-                ,SUPERPOWER_WIND_CHARGE
-                ,SUPERPOWER_COOLDOWN_WIND_CHARGE
-                ,WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE
-                ,WILDCARD_SUPERPOWERS_WIND_CHARGE_EXPLOSION_POWER
-                //?}
-
-                ,WILDCARD_CALLBACK_WILDCARDS_BLACKLIST
-                ,WILDCARD_CALLBACK_TURN_OFF
-                ,WILDCARD_CALLBACK_NERFED_WILDCARDS
-                ,WILDCARD_CALLBACK_INITIAL_ACTIVATION_INTERVAL
-        ));
-
-        if (CompatibilityManager.voicechatLoaded()) {
-            result.add(SUPERPOWER_LISTENING);
-            result.add(SUPERPOWER_COOLDOWN_LISTENING);
+        removeEntry(NO_SEASON_SPECIFIC);
+        //? if < 1.21.2 {
+        /*removeEntry(SUPERPOWER_CREAKING);
+        removeEntry(SUPERPOWER_COOLDOWN_CREAKING);
+        removeEntry(WILDCARD_SUPERPOWERS_CREAKING_AMOUNT);
+        removeEntry(WILDCARD_SUPERPOWERS_CREAKING_PARTICLES);
+        removeEntry(SUPERPOWER_FLIGHT);
+        removeEntry(SUPERPOWER_COOLDOWN_FLIGHT);
+        removeEntry(WILDCARD_SUPERPOWERS_FLIGHT_JUMP_AMPLIFIER);
+        removeEntry(WILDCARD_SUPERPOWERS_FLIGHT_ELYTRA_LAUNCH_NEEDED);
+        *///?}
+        //? if <= 1.20.3 {
+        /*removeEntry(SUPERPOWER_SUPERSPEED);
+        removeEntry(SUPERPOWER_COOLDOWN_SUPERSPEED);
+        removeEntry(WILDCARD_SUPERPOWERS_SUPERSPEED_STEP);
+        removeEntry(WILDCARD_SUPERPOWERS_SUPERSPEED_FROST_WALKER_LEVEL);
+        removeEntry(WILDCARD_SUPERPOWERS_SUPERSPEED_HUNGER_LEVEL);
+        removeEntry(WILDCARD_SUPERPOWERS_SUPERSPEED_TARGET_SPEED);
+        *///?}
+        //? if < 1.20.3 {
+        /*removeEntry(SUPERPOWER_TIME_CONTROL);
+        removeEntry(SUPERPOWER_COOLDOWN_TIME_CONTROL);
+        removeEntry(WILDCARD_SUPERPOWERS_TIME_DILATION_TICK_RATE);
+        removeEntry(WILDCARD_SUPERPOWERS_TIME_DILATION_DURATION);
+        *///?}
+        //? if < 1.21 {
+        /*removeEntry(SUPERPOWER_WIND_CHARGE);
+        removeEntry(SUPERPOWER_COOLDOWN_WIND_CHARGE);
+        removeEntry(WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE);
+        removeEntry(WILDCARD_SUPERPOWERS_WIND_CHARGE_EXPLOSION_POWER);
+        *///?}
+        if (!CompatibilityManager.voicechatLoaded()) {
+            removeEntry(SUPERPOWER_LISTENING);
+            removeEntry(SUPERPOWER_COOLDOWN_LISTENING);
         }
 
-        return result;
-    }
-
-    @Override
-    public void instantiateProperties() {
-        CUSTOM_ENCHANTER_ALGORITHM.defaultValue = true;
-        BLACKLIST_ITEMS.defaultValue = TextUtils.formatString("[{}]", BLACKLISTED_ITEMS);
-        BLACKLIST_BLOCKS.defaultValue = TextUtils.formatString("[{}]", BLACKLISTED_BLOCKS);
-        BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.defaultValue = TextUtils.formatString("[{}]", CLAMPED_ENCHANTMENTS);
-        DEFAULT_LIVES.defaultValue = 6;
-        SPAWN_EGG_ALLOW_ON_SPAWNER.defaultValue = true;
-        SPAWNER_RECIPE.defaultValue = true;
-        TAB_LIST_SHOW_LIVES.defaultValue = true;
+        CUSTOM_ENCHANTER_ALGORITHM.defaultValue(true);
+        BLACKLIST_ITEMS.defaultValue(BLACKLISTED_ITEMS);
+        BLACKLIST_BLOCKS.defaultValue(BLACKLISTED_BLOCKS);
+        BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.defaultValue(CLAMPED_ENCHANTMENTS);
+        DEFAULT_LIVES.defaultValue(6);
+        SPAWN_EGG_ALLOW_ON_SPAWNER.defaultValue(true);
+        SPAWNER_RECIPE.defaultValue(true);
+        TAB_LIST_SHOW_LIVES.defaultValue(true);
 
         new TriviaQuestionManager("./config/lifeseries/wildlife","easy-trivia.json");
         new TriviaQuestionManager("./config/lifeseries/wildlife","normal-trivia.json");
         new TriviaQuestionManager("./config/lifeseries/wildlife","hard-trivia.json");
+    }
 
-        super.instantiateProperties();
+    public static WildLifeConfig get() {
+        return getActive(WildLifeConfig.class, WildLifeConfig::new);
     }
 }

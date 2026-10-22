@@ -1,5 +1,8 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia;
 
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.entity.snail.Snail;
@@ -14,12 +17,12 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShifting;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.Time;
-import net.mat0u5.lifeseries.utils.other.Tuple;
-import net.mat0u5.lifeseries.utils.player.AttributeUtils;
+import net.mat0u5.matlib.utils.other.Time;
+import net.mat0u5.matlib.utils.other.Tuple;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
-import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.mat0u5.matlib.utils.player.AttributeUtils;
+import net.mat0u5.matlib.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -31,6 +34,7 @@ import java.io.IOException;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
+import static net.mat0u5.matlib.MatLib.*;
 
 public class TriviaWildcard extends Wildcard {
     private static Time infiniteSessionFakeTime = Time.hours(2);
@@ -40,7 +44,7 @@ public class TriviaWildcard extends Wildcard {
     private static boolean globalScheduleInitialized = false;
     public static Map<UUID, TriviaBot> bots = new HashMap<>();
     public static Time activatedAt = Time.nullTime();
-    public static int TRIVIA_BOTS_PER_PLAYER = 5;
+    public static final ConfigRef<Integer> TRIVIA_BOTS_PER_PLAYER = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_TRIVIA_BOTS_PER_PLAYER);
     public static int MIN_BOT_DELAY = 8400;
     public static TriviaQuestionManager easyTrivia;
     public static TriviaQuestionManager normalTrivia;
@@ -218,7 +222,8 @@ public class TriviaWildcard extends Wildcard {
     }
     public static void spawnBotFor(ServerPlayer player, BlockPos pos) {
         resetPlayerOnBotSpawn(player);
-        TriviaBot bot = LevelUtils.spawnEntity(MobRegistry.TRIVIA_BOT, ((IPlayer) player).ls$getServerLevel(), pos);
+        ServerLevel level = ((IPlayer) player).ls$getServerLevel();
+        TriviaBot bot = LevelUtils.spawnEntity(MobRegistry.TRIVIA_BOT, level, pos);
         if (bot != null) {
             SessionTranscript.newTriviaBot(player);
             bot.serverData.setBoundPlayer(player);
@@ -272,11 +277,11 @@ public class TriviaWildcard extends Wildcard {
         }
         if (WildLifeTriviaHandler.cursedHeartPlayers.contains(player.getUUID())) {
             WildLifeTriviaHandler.cursedHeartPlayers.remove(player.getUUID());
-            AttributeUtils.resetMaxPlayerHealthIfNecessary(player);
+            PlayerUtils.resetMaxPlayerHealthIfNecessary(player);
         }
         if (WildLifeTriviaHandler.cursedMoonJumpPlayers.contains(player.getUUID())) {
             WildLifeTriviaHandler.cursedMoonJumpPlayers.remove(player.getUUID());
-            AttributeUtils.resetPlayerJumpHeight(player);
+            AttributeUtils.JUMP_STRENGTH.of(player).reset();
         }
 
         WildLifeTriviaHandler.cursedSliding.remove(player.getUUID());
@@ -341,15 +346,15 @@ public class TriviaWildcard extends Wildcard {
         int difficulty = 1 + player.getRandom().nextInt(3);
         try {
             if (difficulty == 1) {
-                return new Tuple<>(difficulty, getEasyQuestion());
+                return Tuple.of(difficulty, getEasyQuestion());
             }
             if (difficulty == 2) {
-                return new Tuple<>(difficulty, getNormalQuestion());
+                return Tuple.of(difficulty, getNormalQuestion());
             }
-            return new Tuple<>(difficulty, getHardQuestion());
+            return Tuple.of(difficulty, getHardQuestion());
         } catch(Exception e) {
-            LOGGER.error(e.toString());
-            return new Tuple<>(difficulty, TriviaQuestion.getDefault());
+            LifeSeries.LOGGER.error(e.toString());
+            return Tuple.of(difficulty, TriviaQuestion.getDefault());
         }
     }
 
@@ -414,8 +419,8 @@ public class TriviaWildcard extends Wildcard {
     }
 
     public static int getBotsPerPlayer() {
-        if (isBuffed()) return TRIVIA_BOTS_PER_PLAYER*2;
-        return TRIVIA_BOTS_PER_PLAYER;
+        if (isBuffed()) return TRIVIA_BOTS_PER_PLAYER.get()*2;
+        return TRIVIA_BOTS_PER_PLAYER.get();
     }
 
     public static boolean isBuffed() {

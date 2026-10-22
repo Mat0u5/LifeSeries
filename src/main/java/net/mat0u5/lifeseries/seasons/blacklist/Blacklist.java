@@ -1,14 +1,18 @@
 package net.mat0u5.lifeseries.seasons.blacklist;
 
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.other.RegistryUtils;
+import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.matlib.events.server.ServerPlayerEvents;
+import net.mat0u5.matlib.utils.other.RegistryUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
+import net.mat0u5.matlib.utils.player.PlayerReference;
+import net.mat0u5.matlib.utils.world.ItemStackUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -34,8 +38,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.*;
 
+import static net.mat0u5.lifeseries.LifeSeries.blacklist;
 import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
-import static net.mat0u5.lifeseries.LifeSeries.server;
+import static net.mat0u5.matlib.MatLib.server;
 
 //? if <= 1.20.3 {
 /*import net.minecraft.world.item.alchemy.Potion;
@@ -64,30 +69,37 @@ public class Blacklist {
     private List<Holder<MobEffect>> loadedClampedEffects;
     //?}
 
-    public boolean CREATIVE_IGNORE_BLACKLIST = true;
+    public final ConfigRef<Boolean> CREATIVE_IGNORE_BLACKLIST = ConfigRef.of(() -> LifeSeries.seasonConfig.CREATIVE_IGNORE_BLACKLIST);
+
+    public static void registerEvents() {
+        ServerPlayerEvents.OPEN_MENU.register((player, menu) -> {
+            if (LifeSeries.isClientOrDisabled()) return;
+            if (blacklist == null) return;
+
+            PlayerReference ref = PlayerReference.of(player);
+            TaskScheduler.scheduleTask(1, () -> {
+                ServerPlayer playerNew = ref.get();
+                if (playerNew != null) {
+                    playerNew.containerMenu.getItems().forEach(itemStack -> blacklist.processItemStack(playerNew, itemStack));
+                    PlayerUtils.updatePlayerInventory(playerNew);
+                }
+            });
+        });
+    }
 
     public List<String> loadItemBlacklist() {
         if (seasonConfig == null) return new ArrayList<>();
-        String raw = seasonConfig.BLACKLIST_ITEMS.get();
-        raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        if (raw.isEmpty()) return new ArrayList<>();
-        return new ArrayList<>(Arrays.asList(raw.split(",")));
+        return new ArrayList<>(seasonConfig.BLACKLIST_ITEMS.get());
     }
 
     public List<String> loadRecipeBlacklist() {
         if (seasonConfig == null) return new ArrayList<>();
-        String raw = seasonConfig.BLACKLIST_RECIPES.get();
-        raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        if (raw.isEmpty()) return new ArrayList<>();
-        return new ArrayList<>(Arrays.asList(raw.split(",")));
+        return new ArrayList<>(seasonConfig.BLACKLIST_RECIPES.get());
     }
 
     public List<String> loadBlockBlacklist() {
         if (seasonConfig == null) return new ArrayList<>();
-        String raw = seasonConfig.BLACKLIST_BLOCKS.get();
-        raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        if (raw.isEmpty()) return new ArrayList<>();
-        return new ArrayList<>(Arrays.asList(raw.split(",")));
+        return new ArrayList<>(seasonConfig.BLACKLIST_BLOCKS.get());
     }
 
     public Map<Integer, List<String>> loadClampedEnchants() {
@@ -98,41 +110,27 @@ public class Blacklist {
         result.put(4, new ArrayList<>());
         if (seasonConfig == null) return result;
 
-        String raw_level_1 = seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.get().replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        String raw_level_2 = seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_2.get().replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        String raw_level_3 = seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_3.get().replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        String raw_level_4 = seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_4.get().replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-
-        if (!raw_level_1.isEmpty()) result.get(1).addAll(Arrays.asList(raw_level_1.split(",")));
-        if (!raw_level_2.isEmpty()) result.get(2).addAll(Arrays.asList(raw_level_2.split(",")));
-        if (!raw_level_3.isEmpty()) result.get(3).addAll(Arrays.asList(raw_level_3.split(",")));
-        if (!raw_level_4.isEmpty()) result.get(4).addAll(Arrays.asList(raw_level_4.split(",")));
+        result.get(1).addAll(seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.get());
+        result.get(2).addAll(seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_2.get());
+        result.get(3).addAll(seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_3.get());
+        result.get(4).addAll(seasonConfig.BLACKLIST_CLAMPED_ENCHANTS_LEVEL_4.get());
 
         return result;
     }
 
     public List<String> loadBlacklistedEnchants() {
         if (seasonConfig == null) return new ArrayList<>();
-        String raw = seasonConfig.BLACKLIST_BANNED_ENCHANTS.get();
-        raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        if (raw.isEmpty()) return new ArrayList<>();
-        return new ArrayList<>(Arrays.asList(raw.split(",")));
+        return new ArrayList<>(seasonConfig.BLACKLIST_BANNED_ENCHANTS.get());
     }
 
     public List<String> loadBannedPotions() {
         if (seasonConfig == null) return new ArrayList<>();
-        String raw = seasonConfig.BLACKLIST_BANNED_POTION_EFFECTS.get();
-        raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        if (raw.isEmpty()) return new ArrayList<>();
-        return new ArrayList<>(Arrays.asList(raw.split(",")));
+        return new ArrayList<>(seasonConfig.BLACKLIST_BANNED_POTION_EFFECTS.get());
     }
 
     public List<String> loadClampedPotions() {
         if (seasonConfig == null) return new ArrayList<>();
-        String raw = seasonConfig.BLACKLIST_CLAMPED_POTION_EFFECTS.get();
-        raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        if (raw.isEmpty()) return new ArrayList<>();
-        return new ArrayList<>(Arrays.asList(raw.split(",")));
+        return new ArrayList<>(seasonConfig.BLACKLIST_CLAMPED_POTION_EFFECTS.get());
     }
 
     public List<Item> getItemBlacklist() {
@@ -163,7 +161,7 @@ public class Blacklist {
 
         if (seasonConfig != null) {
             if (!seasonConfig.SPAWNER_RECIPE.get()) {
-                newList.add(IdentifierHelper.mod("spawner_recipe"));
+                newList.add(IdentifierHelper.lifeseries("spawner_recipe"));
             }
         }
         if (!LifeSeries.isSeason(Seasons.LAST_LIFE)) {
@@ -348,9 +346,8 @@ public class Blacklist {
     }
 
     public void reloadBlacklist() {
-        if (LifeSeries.server == null) return;
+        if (server == null) return;
 
-        CREATIVE_IGNORE_BLACKLIST = seasonConfig.CREATIVE_IGNORE_BLACKLIST.get();
 
         loadedListItem = null;
         loadedListBlock = null;
@@ -371,7 +368,7 @@ public class Blacklist {
     }
 
     public InteractionResult onBlockUse(ServerPlayer player, Level level, InteractionHand hand, BlockHitResult hitResult) {
-        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST) return InteractionResult.PASS;
+        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST.get()) return InteractionResult.PASS;
         processItemStack(player, player.getItemInHand(hand));
         BlockPos blockPos = hitResult.getBlockPos();
         BlockState block = level.getBlockState(blockPos);
@@ -384,7 +381,7 @@ public class Blacklist {
     }
 
     public InteractionResult onBlockAttack(ServerPlayer player, Level level, BlockPos pos) {
-        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST) return InteractionResult.PASS;
+        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST.get()) return InteractionResult.PASS;
         if (level.isClientSide()) return InteractionResult.PASS;
         BlockState block = level.getBlockState(pos);
         if (block.isAir()) return InteractionResult.PASS;
@@ -396,14 +393,14 @@ public class Blacklist {
     }
 
     public void onCollision(ServerPlayer player, ItemStack stack, CallbackInfo ci) {
-        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST) return;
+        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST.get()) return;
         processItemStack(player, stack);
     }
 
     public void onInventoryUpdated(ServerPlayer player) {
-        if (LifeSeries.server == null) return;
+        if (server == null) return;
         Inventory inventory = player.getInventory();
-        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST) return;
+        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST.get()) return;
         for (int i = 0; i < inventory.getContainerSize(); i++) {
             processItemStack(player, inventory.getItem(i));
         }
@@ -435,7 +432,7 @@ public class Blacklist {
     }
 
     public void processItemStack(ServerPlayer player, ItemStack itemStack) {
-        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST) return;
+        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST.get()) return;
         if (itemStack.isEmpty()) return;
         if (itemStack.getItem() == Items.AIR) return;
         if (isBlacklistedItem(itemStack) && !ItemStackUtils.hasCustomComponentEntry(itemStack, "IgnoreBlacklist")) {

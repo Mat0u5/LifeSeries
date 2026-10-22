@@ -1,13 +1,15 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.other.Time;
-import net.mat0u5.lifeseries.utils.player.PlayerReference;
+import net.mat0u5.matlib.utils.other.Time;
+import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -17,7 +19,7 @@ import net.minecraft.world.effect.MobEffects;
 
 //? if >= 1.21.2 {
 import net.minecraft.world.item.equipment.Equippable;
-import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
+import net.mat0u5.matlib.utils.world.ItemStackUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Unit;
 import java.util.Optional;
@@ -37,8 +39,8 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.core.registries.BuiltInRegistries;
 
 public class Flight extends Superpower {
-    public static int LAUNGH_JUMP_AMPLIFIER = 54;
-    public static boolean ELYTRA_LAUNCH_NEEDED = true;
+    public static final ConfigRef<Integer> LAUNGH_JUMP_AMPLIFIER = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_FLIGHT_JUMP_AMPLIFIER);
+    public static final ConfigRef<Boolean> ELYTRA_LAUNCH_NEEDED = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_FLIGHT_ELYTRA_LAUNCH_NEEDED);
     public static int COOLDOWN_MILLIS = 45000;
     public boolean isLaunchedUp = false;
     private int onGroundTicks = 0;
@@ -68,13 +70,13 @@ public class Flight extends Superpower {
         }
         if (!isLaunchedUp) {
             onGroundTicks = 0;
-            if (timer.isMultipleOf(Time.ticks(5))) SimplePackets.PREVENT_GLIDING.sendToClient(ELYTRA_LAUNCH_NEEDED, player);
+            if (timer.isMultipleOf(Time.ticks(5))) SimplePackets.PREVENT_GLIDING.sendToClient(ELYTRA_LAUNCH_NEEDED.get(), player);
             return;
         }
 
         if (player.onGround()) {
             onGroundTicks++;
-            if (timer.isMultipleOf(Time.ticks(5))) SimplePackets.PREVENT_GLIDING.sendToClient(ELYTRA_LAUNCH_NEEDED, player);
+            if (timer.isMultipleOf(Time.ticks(5))) SimplePackets.PREVENT_GLIDING.sendToClient(ELYTRA_LAUNCH_NEEDED.get(), player);
         }
 
         else {
@@ -97,7 +99,7 @@ public class Flight extends Superpower {
         ((IPlayer) player).ls$getServerLevel().playSound(null, player.getX(), player.getY(), player.getZ(), ModifiableSound.WILDLIFE_SUPERPOWERS_FLIGHT.get(), SoundSource.MASTER, 1, 1);
         ModifiableSound.WILDLIFE_SUPERPOWERS_FLIGHT.play(player);
 
-        MobEffectInstance effect = new MobEffectInstance(MobEffects.JUMP_BOOST, 20, LAUNGH_JUMP_AMPLIFIER, false, false, false);
+        MobEffectInstance effect = new MobEffectInstance(MobEffects.JUMP_BOOST, 20, LAUNGH_JUMP_AMPLIFIER.get(), false, false, false);
         player.addEffect(effect);
         SimplePackets.JUMP.sendToClient(player);
 
@@ -148,7 +150,7 @@ public class Flight extends Superpower {
             helmet.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, false);
             helmet.set(DataComponents.ITEM_NAME, Component.nullToEmpty("Winged Helmet"));
             //? if >= 1.21.2 {
-            helmet.set(DataComponents.ITEM_MODEL, IdentifierHelper.mod("winged_helmet"));
+            helmet.set(DataComponents.ITEM_MODEL, IdentifierHelper.lifeseries("winged_helmet"));
             helmet.set(DataComponents.GLIDER, Unit.INSTANCE);
                 //? if <= 1.21.4 {
             //helmet.set(DataComponents.EQUIPPABLE, new Equippable(EquipmentSlot.HEAD, SoundEvents.ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false));

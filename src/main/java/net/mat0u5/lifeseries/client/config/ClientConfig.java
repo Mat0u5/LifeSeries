@@ -2,93 +2,69 @@ package net.mat0u5.lifeseries.client.config;
 
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.utils.enums.MinimalArmorBehavior;
-import net.mat0u5.lifeseries.config.ConfigFileEntry;
-import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.utils.LifeSeriesResourcePacks;
+import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
+import net.mat0u5.matlib.config.GuiConfig;
+import net.mat0u5.matlib.config.entry.ConfigurableValue;
+import net.minecraft.server.level.ServerPlayer;
 
-import java.util.ArrayList;
-import java.util.List;
+public class ClientConfig extends GuiConfig {
+    public final ConfigurableValue<MinimalArmorBehavior> MINIMAL_ARMOR = ConfigurableValue.register(this, "minimal_armor", MinimalArmorBehavior.MATCH_SERVER)
+            .name("Minimal Armor Resourcepack")
+            .description("Enables the minimal armor resourcepack.")
+            .onChange((oldValue, newValue) -> LifeSeriesResourcePacks.checkClientPacks());
+    public final ConfigurableValue<Boolean> SESSION_TIMER = ConfigurableValue.register(this, "session_timer", true)
+            .name("Session Timer")
+            .description("Enables the session timer in the bottom right of the screen.");
+    public final ConfigurableValue<Boolean> COLORBLIND_SUPPORT = ConfigurableValue.register(this, "colorblind_support", false)
+            .name("Colorblind Support")
+            .description("Enables a feature that shows the team color name next to a players' usernames.");
 
-public class ClientConfig extends ConfigManager {
+    public final ConfigurableValue<Boolean> COLORED_HEARTS = ConfigurableValue.register(this, "colored_hearts", false)
+            .name("Colored Hearts Based on Lives")
+            .description("Makes your hearts the same color as how many lives you have.")
+            .group("coloredhearts").groupHeader(true);
+    public final ConfigurableValue<Boolean> COLORED_HEARTS_HARDCORE_LAST_LIFE = ConfigurableValue.register(this, "colored_hearts_hardcore_last_life", true)
+            .name("Show Last Life as Hardcore")
+            .description("When you are on your last life, the hearts will appear as though you are in hardcore.")
+            .group("coloredhearts");
+    public final ConfigurableValue<Boolean> COLORED_HEARTS_HARDCORE_ALL_LIVES = ConfigurableValue.register(this, "colored_hearts_hardcore_all_lives", false)
+            .name("Show All Lives as Hardcore")
+            .description("Hearts will always appear as though you are in hardcore.")
+            .group("coloredhearts");
+
+    public final ConfigurableValue<Double> TEXT_HUD_SCALE = ConfigurableValue.register(this, "text_hud_scale", 1.0)
+            .name("Side Text Hud Scale")
+            .description("The scale at which the side texts, like the session timer render at.");
+
+    public final ConfigurableValue<String> RUN_COMMAND = ConfigurableValue.register(this, "run_command", "/lifeseries config")
+            .name("Keybind Command")
+            .description("Pressing the 'Keybind Command' keybind will run this command. Only available in dev versions.")
+            .visibleIf(VersionControl::isDevVersion);
+    public final ConfigurableValue<Boolean> NICE_LIFE_LESS_SNOW = ConfigurableValue.register(this, "nice_life_less_snow", true)
+            .name("Less Obstructive Snow in Nice Life")
+            .description("Reduces the number of snow particles when it snows.")
+            .visibleIf(() -> LifeSeries.isSeason(Seasons.NICE_LIFE));
+    public final ConfigurableValue<Boolean> LIMITED_LIFE_ACTIONBAR_TIME = ConfigurableValue.register(this, "limited_life_actionbar_time", false)
+            .name("Move Time to Actionbar in Limited Life")
+            .description("Shows the remaining time in the actionbar instead of the side title.")
+            .visibleIf(() -> LifeSeries.isSeason(Seasons.LIMITED_LIFE));
+
     public ClientConfig() {
-        super("./config/lifeseries/client", LifeSeries.MOD_ID+"_client.properties");
-    }
-
-    public static final ConfigFileEntry<MinimalArmorBehavior> MINIMAL_ARMOR = new ConfigFileEntry<>(
-            "minimal_armor_resourcepack", MinimalArmorBehavior.MATCH_SERVER, "",
-            "Minimal Armor Resourcepack", "Enables the minimal armor resourcepack."
-    );
-    public static final ConfigFileEntry<Boolean> SESSION_TIMER = new ConfigFileEntry<>(
-            "session_timer", true, "",
-            "Session Timer", "Enables the session timer in the bottom right of the screen."
-    );
-    public static final ConfigFileEntry<Boolean> COLORBLIND_SUPPORT = new ConfigFileEntry<>(
-            "colorblind_support", false, "",
-            "Colorblind Support", "Enables a feature that shows the team color name next to a players' usernames."
-    );
-    public static final ConfigFileEntry<String> RUN_COMMAND = new ConfigFileEntry<>(
-            "run_command", "/lifeseries config", "",
-            "Keybind Command", "Pressing the 'Keybind Command' keybind will run this command. Only available in dev versions."
-    );
-
-    public static final ConfigFileEntry<Boolean> COLORED_HEARTS = new ConfigFileEntry<>(
-            "colored_hearts", false, "",
-            "Colored Hearts Based on Lives", "Makes your hearts the same color as how many lives you have."
-    );
-
-    public static final ConfigFileEntry<Boolean> HARDCORE_HEARTS_LAST_LIFE = new ConfigFileEntry<>(
-            "hardcore_hearts_last_life", false, "",
-            "Show Last Life as Hardcore", "When you are on your last life, your hearts will appear as though you are in hardcore."
-    );
-
-    public static final ConfigFileEntry<Boolean> HARDCORE_HEARTS_ALL_LIVES = new ConfigFileEntry<>(
-            "hardcore_hearts_all_lives", false, "",
-            "Show All Lives as Hardcore", "Hearts will always appear as though you are in hardcore."
-    );
-
-    public static final ConfigFileEntry<Boolean> NICE_LIFE_LESS_SNOW = new ConfigFileEntry<>(
-            "nice_life_less_snow", true, "",
-            "Less Obstructive Snow in Nice Life", "Reduces the number of snow particles when it snows."
-    );
-    public static final ConfigFileEntry<Boolean> LIMITED_LIFE_ACTIONBAR_TIME = new ConfigFileEntry<>(
-            "limited_life_actionbar_time", false, "",
-            "Move Time to Actionbar in Limited Life", "Shows the remaining time in the actionbar instead of the side title."
-    );
-
-    public static final ConfigFileEntry<Double> TEXT_HUD_SCALE = new ConfigFileEntry<>(
-            "text_hud_scale", 1.0, "",
-            "Side Text Hud Scale", "The scale at which the side texts, like the session timer render at."
-    );
-
-    @Override
-    protected List<ConfigFileEntry<?>> getSeasonSpecificConfigEntries() {
-        return new ArrayList<>();
+        super(SeasonConfig.CLIENT_CONFIG_ID, SeasonConfig.GUI_TITLE, "lifeseries/client", LifeSeries.MOD_ID+"_client.properties");
     }
 
     @Override
-    protected List<ConfigFileEntry<?>> getDefaultConfigEntries() {
-        List<ConfigFileEntry<?>> result = new ArrayList<>(List.of(
-                MINIMAL_ARMOR
-                ,SESSION_TIMER
-                ,COLORBLIND_SUPPORT
+    public boolean hasPermissionsToOpen(ServerPlayer player) {
+        return true;
+    }
 
-                ,COLORED_HEARTS
-                ,HARDCORE_HEARTS_LAST_LIFE
-                ,HARDCORE_HEARTS_ALL_LIVES
-
-                ,TEXT_HUD_SCALE
-        ));
-        if (LifeSeries.isSeason(Seasons.NICE_LIFE)) {
-            result.add(NICE_LIFE_LESS_SNOW);
-        }
-        if (LifeSeries.isSeason(Seasons.LIMITED_LIFE)) {
-            result.add(LIMITED_LIFE_ACTIONBAR_TIME);
-        }
-
-        if (VersionControl.isDevVersion()) {
-            result.add(RUN_COMMAND);
-        }
-        return result;
+    @Override
+    public void reload() {
+        super.reload();
+        LifeSeriesClient.reloadConfig();
     }
 }

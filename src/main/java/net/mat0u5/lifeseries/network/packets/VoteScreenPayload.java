@@ -11,7 +11,7 @@ import java.util.List;
 
 public record VoteScreenPayload(String name, boolean requiresSleep, boolean closesWithEsc, boolean showTimer, List<String> players) implements CustomPacketPayload {
 
-    public static final Identifier ID = IdentifierHelper.mod("votescreen");
+    public static final Identifier ID = IdentifierHelper.lifeseries("votescreen");
 
     @Override
     public void write(FriendlyByteBuf buf) {
@@ -54,7 +54,7 @@ import java.util.List;
 
 public record VoteScreenPayload(String name, boolean requiresSleep, boolean closesWithEsc, boolean showTimer, List<String> players) implements CustomPacketPayload {
 
-    public static final CustomPacketPayload.Type<VoteScreenPayload> ID = new CustomPacketPayload.Type<>(IdentifierHelper.mod("votescreen"));
+    public static final CustomPacketPayload.Type<VoteScreenPayload> ID = new CustomPacketPayload.Type<>(IdentifierHelper.lifeseries("votescreen"));
     public static final StreamCodec<RegistryFriendlyByteBuf, VoteScreenPayload> CODEC = StreamCodec.composite(
             ByteBufCodecs.STRING_UTF8, VoteScreenPayload::name,
             ByteBufCodecs.BOOL, VoteScreenPayload::requiresSleep,

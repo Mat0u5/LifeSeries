@@ -1,14 +1,16 @@
 package net.mat0u5.lifeseries.seasons.season.limitedlife;
 
+import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.Time;
+import net.mat0u5.matlib.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
+import net.mat0u5.matlib.utils.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -19,6 +21,7 @@ import net.minecraft.sounds.SoundSource;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
+import static net.mat0u5.matlib.MatLib.*;
 import static net.mat0u5.lifeseries.seasons.util.WatcherManager.isWatcher;
 
 //? if >= 26.2 {
@@ -26,13 +29,13 @@ import net.minecraft.world.scores.TeamColor;
  //?}
 
 public class LimitedLifeLivesManager extends LivesManager {
-    public static int DEFAULT_TIME = 86400;
-    public static int YELLOW_TIME = 57600;
-    public static int RED_TIME = 28800;
-    public static boolean BROADCAST_COLOR_CHANGES = false;
+    public static final ConfigRef<Integer> DEFAULT_TIME = ConfigRef.of(() -> LimitedLifeConfig.get().TIME_DEFAULT);
+    public static final ConfigRef<Integer> YELLOW_TIME = ConfigRef.of(() -> LimitedLifeConfig.get().TIME_YELLOW);
+    public static final ConfigRef<Integer> RED_TIME = ConfigRef.of(() -> LimitedLifeConfig.get().TIME_RED);
+    public static final ConfigRef<Boolean> BROADCAST_COLOR_CHANGES = ConfigRef.of(() -> LimitedLifeConfig.get().BROADCAST_COLOR_CHANGES);
     public static int TIME_RANDOMIZE_INTERVAL = Time.hours(1).getSeconds();
-    public static int CUSTOM_AVERAGE_TIME = Time.hours(24).getSeconds();
-    public static boolean PAUSE_SESSION_TIME_UNTIL_ROLL = false;
+    public static final ConfigRef<Integer> CUSTOM_AVERAGE_TIME = ConfigRef.of(() -> LimitedLifeConfig.get().TIME_RANDOMIZE_AVERAGE);
+    public static final ConfigRef<Boolean> PAUSE_SESSION_TIME_UNTIL_ROLL = ConfigRef.of(() -> LimitedLifeConfig.get().PAUSE_SESSION_TIME_UNTIL_ROLL);
 
     //~ if >= 26.2 'ChatFormatting' -> 'TeamColor' {
     @Override
@@ -74,7 +77,7 @@ public class LimitedLifeLivesManager extends LivesManager {
             //?}
         }
         SessionTranscript.addRecordIfMissing(player);
-        ScoreboardUtils.setScore(player.getScoreboardName(), LivesManager.SCOREBOARD_NAME, lives);
+        if (!LIVES_SYSTEM_DISABLED.get()) ScoreboardUtils.setScore(player.getScoreboardName(), LivesManager.SCOREBOARD_NAME, lives);
         if (lives <= 0 && !ignoreFinalDeath) {
             playerLostAllLives(player, livesBefore);
         }
@@ -83,7 +86,7 @@ public class LimitedLifeLivesManager extends LivesManager {
             if (player.isSpectator() && lives > 0) {
                 PlayerUtils.safelyPutIntoSurvival(player);
             }
-            if (lives > 0 && colorBefore != null && livesBefore != null && BROADCAST_COLOR_CHANGES) {
+            if (lives > 0 && colorBefore != null && livesBefore != null && BROADCAST_COLOR_CHANGES.get()) {
                 //? if <= 26.1 {
                 //Component colorText = Component.literal(colorNow.getName().replaceAll("_", " ").toLowerCase(Locale.ROOT)).withStyle(colorNow);
                 //?} else {
@@ -110,9 +113,9 @@ public class LimitedLifeLivesManager extends LivesManager {
     public static Integer getEquivalentLives(Integer limitedLifeLives) {
         if (limitedLifeLives == null) return null;
         if (limitedLifeLives <= 0) return 0;
-        if (limitedLifeLives <= RED_TIME) return 1;
-        if (limitedLifeLives <= YELLOW_TIME) return 2;
-        if (limitedLifeLives <= DEFAULT_TIME) return 3;
+        if (limitedLifeLives <= RED_TIME.get()) return 1;
+        if (limitedLifeLives <= YELLOW_TIME.get()) return 2;
+        if (limitedLifeLives <= DEFAULT_TIME.get()) return 3;
         return limitedLifeLives;
     }
 
@@ -138,7 +141,7 @@ public class LimitedLifeLivesManager extends LivesManager {
 
     @Override
     public void addToPlayerLives(ServerPlayer player, int amount) {
-        if (Math.abs(amount) >= 2 && !LIVES_SYSTEM_DISABLED) {
+        if (Math.abs(amount) >= 2 && !LIVES_SYSTEM_DISABLED.get()) {
             // Ignore final deaths
             Integer currentLives = ((IPlayer)player).ls$getLives();
             boolean finalDeath = false;
@@ -163,14 +166,12 @@ public class LimitedLifeLivesManager extends LivesManager {
     @Override
     public void reload() {
         super.reload();
-        TIME_RANDOMIZE_INTERVAL = Math.max(1, LimitedLifeConfig.TIME_RANDOMIZE_INTERVAL.get());
-        CUSTOM_AVERAGE_TIME = LimitedLifeConfig.TIME_RANDOMIZE_AVERAGE.get();
-        PAUSE_SESSION_TIME_UNTIL_ROLL = LimitedLifeConfig.PAUSE_SESSION_TIME_UNTIL_ROLL.get();
+        TIME_RANDOMIZE_INTERVAL = Math.max(1, LimitedLifeConfig.get().TIME_RANDOMIZE_INTERVAL.get());
     }
 
     @Override
     public Map<ServerPlayer, Integer> getFinalRandomLives(List<ServerPlayer> players) {
-        if (!CUSTOM_AVERAGE_ENABLED) {
+        if (!CUSTOM_AVERAGE_ENABLED.get()) {
             return super.getFinalRandomLives(players);
         }
 
@@ -178,7 +179,7 @@ public class LimitedLifeLivesManager extends LivesManager {
         int totalSize = players.size();
         int interval = Math.max(1, TIME_RANDOMIZE_INTERVAL);
 
-        double targetTotal = totalSize * CUSTOM_AVERAGE_TIME;
+        double targetTotal = totalSize * CUSTOM_AVERAGE_TIME.get();
         int minTotal = totalSize * ROLL_MIN_LIVES;
         int maxTotal = totalSize * ROLL_MAX_LIVES;
         targetTotal = Math.max(minTotal, Math.min(targetTotal, maxTotal));
@@ -220,6 +221,6 @@ public class LimitedLifeLivesManager extends LivesManager {
     @Override
     public void rollLivesFinished() {
         super.rollLivesFinished();
-        if (PAUSE_SESSION_TIME_UNTIL_ROLL) currentSession.resetPassedTime();
+        if (PAUSE_SESSION_TIME_UNTIL_ROLL.get()) currentSession.resetPassedTime();
     }
 }

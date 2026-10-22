@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
@@ -16,10 +15,6 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.NicknameManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.gamerules.GameRules;
@@ -34,8 +29,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
-//? if >= 1.21.2
-import net.minecraft.server.level.ServerLevel;
 //? if <= 1.20.5 {
 //import net.minecraft.world.item.enchantment.FrostWalkerEnchantment;
 //?} else {
@@ -63,36 +56,6 @@ import net.minecraft.world.entity.EntityType;
 @Mixin(value = Player.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class PlayerMixin implements IPlayerUsername {
-
-    @Inject(method = "actuallyHurt", at = @At("HEAD"), cancellable = true)
-    //? if <=1.21 {
-    //private void onApplyDamage(DamageSource source, float amount, CallbackInfo ci) {
-     //?} else
-    private void onApplyDamage(ServerLevel level, DamageSource source, float amount, CallbackInfo ci) {
-        if (LifeSeries.isClientOrDisabled()) return;
-        Player player = (Player) (Object) this;
-        if (WatcherManager.isWatcher(player)) return;
-
-        if (player instanceof ServerPlayer serverPlayer) {
-            currentSeason.onPlayerDamage(serverPlayer, source, amount, ci);
-        }
-    }
-
-    //? if <= 1.21 {
-    /*@Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
-    private void onPreDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-    *///?} else {
-    @Inject(method = "hurtServer", at = @At("HEAD"), cancellable = true)
-    private void onPreDamage(ServerLevel level, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-    //?}
-        if (LifeSeries.isClientOrDisabled()) return;
-        Player player = (Player) (Object) this;
-        if (WatcherManager.isWatcher(player)) return;
-
-        if (player instanceof ServerPlayer serverPlayer) {
-            currentSeason.onPrePlayerDamage(serverPlayer, source, amount, cir);
-        }
-    }
 
     @Inject(method = "isHurt", at = @At("HEAD"), cancellable = true)
     private void canFoodHeal(CallbackInfoReturnable<Boolean> cir) {
@@ -166,24 +129,11 @@ public abstract class PlayerMixin implements IPlayerUsername {
         if (!SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPERSPEED)) return;
 
         //? if <= 1.20.5 {
-        //FrostWalkerEnchantment.onEntityMoved(entity, entity.level(), entity.blockPosition(), Superspeed.FROST_WALKER_LEVEL);
+        //FrostWalkerEnchantment.onEntityMoved(entity, entity.level(), entity.blockPosition(), Superspeed.FROST_WALKER_LEVEL.get());
         //?} else {
-        ls$frostWalker.apply(((IPlayer) player).ls$getServerLevel(), Superspeed.FROST_WALKER_LEVEL, null, player, player.position());
+        ls$frostWalker.apply(((IPlayer) player).ls$getServerLevel(), Superspeed.FROST_WALKER_LEVEL.get(), null, player, player.position());
         //?}
     }
-
-
-    //Located in the ServerPlayer class in < 26.1
-    //? if >= 26.1 {
-    @Inject(method = "attack", at = @At("HEAD"))
-    private void onAttackEntity(Entity target, CallbackInfo ci) {
-        if (LifeSeries.modDisabled()) return;
-        Player player = (Player) (Object) this;
-        if (player instanceof ServerPlayer serverPlayer) {
-            currentSeason.onUpdatedInventory(serverPlayer);
-        }
-    }
-    //?}
 
 
 
@@ -257,15 +207,4 @@ public abstract class PlayerMixin implements IPlayerUsername {
         return result;
     }
     //?}
-
-    @Inject(method = "attack", at = @At("HEAD"), cancellable = true)
-    public void onPlayerInteractEntity(Entity target, CallbackInfo info) {
-        if ((Object) this instanceof ServerPlayer player) {
-            InteractionResult result = Events.onAttackEntity(player, player.level(), InteractionHand.MAIN_HAND, target, null);
-
-            if (result != InteractionResult.PASS) {
-                info.cancel();
-            }
-        }
-    }
 }

@@ -1,84 +1,78 @@
 package net.mat0u5.lifeseries.utils.versions;
 
+import com.google.auto.service.AutoService;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
+import net.mat0u5.matlib.services.VersionTrackedMod;
+import net.mat0u5.matlib.utils.other.VersionCompatibility;
+
+import java.util.UUID;
 
 import static net.mat0u5.lifeseries.LifeSeries.MOD_VERSION;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
-public class VersionControl {
+@AutoService(VersionTrackedMod.class)
+public class VersionControl implements VersionTrackedMod {
+    private static final VersionControl INSTANCE = new VersionControl();
+
     public static boolean isDevVersion() {
-        return MOD_VERSION.contains("dev") || MOD_VERSION.contains("pre") || LifeSeries.DEBUG || LifeSeries.FORCE_DEV;
+        return INSTANCE.isUnstableVersion();
     }
 
-    public static String strippedVersionName() {
-        return strippedVersionName(MOD_VERSION);
+    @Override
+    public boolean isUnstableVersion() {
+        return VersionTrackedMod.super.isUnstableVersion() || LifeSeries.DEBUG || LifeSeries.FORCE_DEV;
     }
 
-    public static String strippedVersionName(String string) {
-        if (string.contains("-pre")) {
-            string = string.split("-pre")[0];
-        }
-        if (string.contains("-rc")) {
-            string = string.split("-rc")[0];
-        }
-        string = string.replaceAll("[^\\d.]", ""); //Remove all non-digit and non-dot characters.
-        string = string.replaceAll("^\\.+|\\.+$", ""); //Remove all leading or trailing dots.
-        while (string.contains("..")) string = string.replace("..",".");
-
-        return string;
+    @Override
+    public String githubRepo() {
+        return "Mat0u5/LifeSeries";
     }
 
-    public static int getModVersionInt(String string) {
-        try {
+    @Override
+    public String modrinthUrl() {
+        return "https://modrinth.com/mod/life-series";
+    }
 
-            String originalVersion = string;
-            string = strippedVersionName(string);
+    @Override
+    public String discordUrl() {
+        return "https://discord.gg/QWJxfb4zQZ";
+    }
 
-            String[] parts = string.split("\\.");
+    @Override
+    public String changelogUrl(String fromVersion, String toVersion) {
+        return "https://mat0u5.github.io/LifeSeries-docs/changelog?v="+VersionCompatibility.strippedVersionName(fromVersion)+"-"+toVersion;
+    }
 
-            int major = 0;
-            int minor = 0;
-            int patch = 0;
-            int build = 0;
-            try {
-                major = parts.length > 0 ? Integer.parseInt(parts[0]) : 0;
-                minor = parts.length > 1 ? Integer.parseInt(parts[1]) : 0;
-                patch = parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
-                build = parts.length > 3 ? Integer.parseInt(parts[3]) : 0;
-            }catch(Exception e) {
-                LifeSeries.LOGGER.error(TextUtils.formatString("Failed to parse mod version to int: {} (formatted to {})", originalVersion, string));
-            }
+    @Override
+    public boolean checkForUpdates() {
+        return !LifeSeries.ISOLATED_ENVIRONMENT;
+    }
 
-            if (originalVersion.contains("-pre")) {
-                build = -100;
-                try {
-                    build += Integer.parseInt(originalVersion.split("-pre")[1]);
-                }catch(Exception ignored) {}
-            }
+    @Override
+    public boolean shouldStripRegistriesFor(UUID playerUUID) {
+        return switch (LifeSeriesNetworkHandlerServer.REGISTRY_OVERRIDE_BEHAVIOR) {
+            case NEVER -> false;
+            case ALWAYS -> true;
+            case LOGIN -> !LifeSeriesNetworkHandlerServer.wasPreLoginHandshakeSuccessful(playerUUID);
+            case SEASON -> currentSeason == null || !currentSeason.getSeason().requiresClient();
+        };
+    }
 
-            if (originalVersion.contains("-rc")) {
-                build = -10;
-                try {
-                    build += Integer.parseInt(originalVersion.split("-rc")[1]);
-                }catch(Exception ignored) {}
-            }
 
-            /*
-                Supports up to:
-                 213 major versions
-                 99 minor versions
-                 99 patch versions
-                 999 build versions
+    @Override
+    public String modId() {
+        return LifeSeries.MOD_ID;
+    }
 
-                 So 213.99.99.999 is a valid version for example.
+    @Override
+    public String modReadableName() {
+        return LifeSeries.MOD_FRIENDLY_NAME;
+    }
 
-                 Pre-releases act as if 900 build versions are already added, so 100 pre-releases are supported
-                 Release candidates act as if 990 build versions are already added, so 10 rc's are supported
-             */
-
-            return (major * 10_000_000) + (minor * 100_000) + (patch * 1_000) + build;
-        }catch(Exception ignored) {}
-        return 0;
+    @Override
+    public String modVersion() {
+        return LifeSeries.MOD_VERSION;
     }
 
     /*
@@ -165,15 +159,17 @@ public class VersionControl {
         *   1.5.9.2     -   *
      */
 
-    public static String clientCompatibilityMin() {
+    @Override
+    public VersionCompatibility clientCompatibility() {
         // This is the version that the SERVER needs to have for the current client.
-        if (LifeSeries.ISOLATED_ENVIRONMENT) return MOD_VERSION;
-        return "1.5.9.2-dev";
+        if (LifeSeries.ISOLATED_ENVIRONMENT) return VersionCompatibility.equal(MOD_VERSION);
+        return VersionCompatibility.min("1.5.9.2-dev");
     }
 
-    public static String serverCompatibilityMin() {
+    @Override
+    public VersionCompatibility serverCompatibility() {
         // This is the version that the CLIENT needs to have for the current server.
-        if (LifeSeries.ISOLATED_ENVIRONMENT) return MOD_VERSION;
-        return "1.5.9.2-dev";
+        if (LifeSeries.ISOLATED_ENVIRONMENT) return VersionCompatibility.equal(MOD_VERSION);
+        return VersionCompatibility.min("1.5.9.2-dev");
     }
 }

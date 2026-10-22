@@ -5,14 +5,11 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.entity.angrysnowman.AngrySnowman;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
-import net.mat0u5.lifeseries.events.Events;
-import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.SuperPunch;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.WindCharge;
-import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
+import net.mat0u5.matlib.utils.world.ItemStackUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -30,10 +27,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.mat0u5.lifeseries.LifeSeries.blacklist;
-import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.state.BlockState;
 
 //? if >= 1.21.2 {
 import net.minecraft.world.entity.monster.creaking.Creaking;
@@ -50,30 +43,15 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.world.entity.decoration.Mannequin;
 //?}
 
+//? if forge || neoforge {
+/*import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.state.BlockState;
+*///?}
+
 @Mixin(value = LivingEntity.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class LivingEntityMixin {
-    @Inject(method = "heal", at = @At("HEAD"), cancellable = true)
-    private void onHealHead(float amount, CallbackInfo info) {
-        if (LifeSeries.isClientOrDisabled()) return;
-        if (!(currentSeason instanceof SecretLife secretLife)) return;
-        if (!secretLife.canChangeHealth()) return;
-
-        LivingEntity entity = (LivingEntity) (Object) this;
-        if (entity instanceof ServerPlayer) {
-            info.cancel();
-        }
-    }
-
-    @Inject(method = "heal", at = @At("TAIL"))
-    private void onHeal(float amount, CallbackInfo info) {
-        if (LifeSeries.isClientOrDisabled()) return;
-        LivingEntity entity = (LivingEntity) (Object) this;
-        if (entity instanceof ServerPlayer player) {
-            if (((IPlayer) player).ls$isWatcher()) return;
-            currentSeason.onPlayerHeal(player, amount);
-        }
-    }
 
     //? if <= 1.21 {
     /*@Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
@@ -93,15 +71,15 @@ public abstract class LivingEntityMixin {
 
         //? if >= 1.21 {
         ItemStack weapon = source.getWeaponItem();
-        if (amount <= WindCharge.MAX_MACE_DAMAGE) return;
+        if (amount <= WindCharge.MAX_MACE_DAMAGE.get()) return;
         if (weapon == null) return;
         if (weapon.isEmpty()) return;
         if (!weapon.is(Items.MACE)) return;
         if (!ItemStackUtils.hasCustomComponentEntry(weapon, "WindChargeSuperpower")) return;
         //? if <= 1.21 {
-        //cir.setReturnValue(entity.hurt(source, WindCharge.MAX_MACE_DAMAGE));
+        //cir.setReturnValue(entity.hurt(source, WindCharge.MAX_MACE_DAMAGE.get()));
         //?} else
-        cir.setReturnValue(entity.hurtServer(level, source, WindCharge.MAX_MACE_DAMAGE));
+        cir.setReturnValue(entity.hurtServer(level, source, WindCharge.MAX_MACE_DAMAGE.get()));
         //?}
     }
 
@@ -188,19 +166,9 @@ public abstract class LivingEntityMixin {
         if (source.getEntity() instanceof ServerPlayer attacker &&
                 source.type() == attacker.damageSources().playerAttack(attacker).type() &&
                 SuperpowersWildcard.hasActivatedPower(attacker, Superpowers.SUPER_PUNCH)) {
-            return SuperPunch.KNOCKBACK_STRENGTH;
+            return SuperPunch.KNOCKBACK_STRENGTH.get();
         }
         return strength;
-    }
-
-    @Inject(method = "dropAllDeathLoot", at = @At("HEAD"), cancellable = true)
-    //? if <= 1.20.5 {
-    //private void onDrop(DamageSource damageSource, CallbackInfo ci) {
-    //?} else {
-    private void onDrop(ServerLevel level, DamageSource damageSource, CallbackInfo ci) {
-    //?}
-        if (LifeSeries.isClientOrDisabled()) return;
-        Events.onEntityDropItems((LivingEntity) (Object) this, damageSource, ci);
     }
 
     @Inject(method = "checkTotemDeathProtection", at = @At("HEAD"))
@@ -281,9 +249,4 @@ public abstract class LivingEntityMixin {
         return instance.getFriction();
     }
 //?}
-
-    @Inject(method = "die", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;broadcastEntityEvent(Lnet/minecraft/world/entity/Entity;B)V"))
-    private void notifyDeath(DamageSource source, CallbackInfo ci) {
-        Events.onEntityDeath((LivingEntity) (Object) this, source);
-    }
 }

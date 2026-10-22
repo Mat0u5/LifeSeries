@@ -1,12 +1,12 @@
 package net.mat0u5.lifeseries.seasons.boogeyman;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.pastlife.PastLifeBoogeymanManager;
 import net.mat0u5.lifeseries.seasons.util.WatcherManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
+import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -19,11 +19,11 @@ import java.util.List;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
-public class BoogeymanCommand extends Command {
+public class BoogeymanCommand extends CustomCommand {
 
     @Override
     public boolean isAllowed() {
-        return getBM().BOOGEYMAN_ENABLED;
+        return getBM().BOOGEYMAN_ENABLED.get();
     }
 
     @Override
@@ -177,7 +177,7 @@ public class BoogeymanCommand extends Command {
             return -1;
         }
 
-        if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME) {
+        if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME.get()) {
             sendCommandFeedbackQuiet(source, ModifiableText.BOOGEYMAN_SELFFAIL.get());
         }
         else {
@@ -205,7 +205,7 @@ public class BoogeymanCommand extends Command {
             bm.playerFailBoogeymanManually(player, true);
         }
 
-        if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME) {
+        if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME.get()) {
             if (targets.size() == 1) {
                 sendCommandFeedback(source, ModifiableText.BOOGEYMAN_FAIL_OTHER_SINGLE.get(targets.iterator().next()));
             }
@@ -260,7 +260,7 @@ public class BoogeymanCommand extends Command {
             bm.cure(player);
         }
 
-        if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME) {
+        if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME.get()) {
             if (targets.size() == 1) {
                 sendCommandFeedback(source, ModifiableText.BOOGEYMAN_CURE_SINGLE.get(targets.iterator().next()));
             }

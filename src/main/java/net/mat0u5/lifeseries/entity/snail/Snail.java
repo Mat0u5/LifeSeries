@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.entity.snail;
 
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.entity.snail.goal.*;
 import net.mat0u5.lifeseries.entity.snail.server.SnailPathfinding;
 import net.mat0u5.lifeseries.entity.snail.server.SnailServerData;
@@ -37,20 +39,19 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSession;
-import net.minecraft.world.entity.*;
 
 //? if <= 1.20
 //import net.minecraft.world.entity.LivingEntity;
 
 public class Snail extends Monster {
-    public static final Identifier DEFAULT_TEXTURE = IdentifierHelper.mod("textures/entity/snail/default.png");
-    public static final Identifier TRIVIA_TEXTURE = IdentifierHelper.mod("textures/entity/snail/trivia.png");
-    public static final Identifier ZOMBIE_TEXTURE = IdentifierHelper.mod("textures/entity/snail/zombie.png");
-    public static final Identifier ID = IdentifierHelper.mod("snail");
-    public static double GLOBAL_SPEED_MULTIPLIER = 1;
-    public static boolean SHOULD_DROWN_PLAYER = true;
-    public static boolean ALLOW_POTION_EFFECTS = false;
-    public static boolean KILL_ANY_PLAYER = false;
+    public static final Identifier DEFAULT_TEXTURE = IdentifierHelper.lifeseries("textures/entity/snail/default.png");
+    public static final Identifier TRIVIA_TEXTURE = IdentifierHelper.lifeseries("textures/entity/snail/trivia.png");
+    public static final Identifier ZOMBIE_TEXTURE = IdentifierHelper.lifeseries("textures/entity/snail/zombie.png");
+    public static final Identifier ID = IdentifierHelper.lifeseries("snail");
+    public static final ConfigRef<Double> GLOBAL_SPEED_MULTIPLIER = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SNAILS_SPEED_MULTIPLIER);
+    public static final ConfigRef<Boolean> SHOULD_DROWN_PLAYER = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SNAILS_DROWN_PLAYERS);
+    public static final ConfigRef<Boolean> ALLOW_POTION_EFFECTS = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SNAILS_EFFECTS);
+    public static final ConfigRef<Boolean> KILL_ANY_PLAYER = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SNAILS_KILL_ANY_PLAYER);
 
     private static final EntityDataAccessor<Boolean> attacking = SynchedEntityData.defineId(Snail.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> flying = SynchedEntityData.defineId(Snail.class, EntityDataSerializers.BOOLEAN);
@@ -284,7 +285,7 @@ public class Snail extends Monster {
 
     @Override
     public boolean addEffect(MobEffectInstance effect, @Nullable Entity source) {
-        if (ALLOW_POTION_EFFECTS) {
+        if (ALLOW_POTION_EFFECTS.get()) {
             return super.addEffect(effect, source);
         }
         return false;

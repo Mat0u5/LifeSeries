@@ -1,11 +1,11 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.Time;
+import net.mat0u5.matlib.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -55,7 +55,7 @@ public class Listening extends ToggleableSuperpower {
         ServerPlayer player = getPlayer();
         if (player == null) return;
         ModifiableSound.WILDLIFE_SUPERPOWERS_LISTENING_START.play(player);
-        NetworkHandlerServer.sendVignette(player, -1);
+        LifeSeriesNetworkHandlerServer.sendVignette(player, -1);
         listeningPlayers.add(player.getUUID());
         updateLooking();
     }
@@ -65,7 +65,7 @@ public class Listening extends ToggleableSuperpower {
         super.deactivate();
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        NetworkHandlerServer.sendVignette(player, 0);
+        LifeSeriesNetworkHandlerServer.sendVignette(player, 0);
         listeningPlayers.remove(player.getUUID());
         ModifiableSound.WILDLIFE_SUPERPOWERS_LISTENING_END.play(player);
     }

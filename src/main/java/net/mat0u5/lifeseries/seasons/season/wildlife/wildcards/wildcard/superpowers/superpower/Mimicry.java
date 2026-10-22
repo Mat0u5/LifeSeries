@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.mixin.MannequinAccessor;
@@ -9,7 +11,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.other.Time;
+import net.mat0u5.matlib.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -22,7 +24,7 @@ import net.minecraft.world.entity.decoration.Mannequin;
 
 public class Mimicry extends Superpower {
     public static int COOLDOWN_MILLIS = 300000;
-    public static boolean DISABLE_OTHER_POWER = false;
+    public static final ConfigRef<Boolean> DISABLE_OTHER_POWER = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_MIMICRY_DISABLE_OTHER_POWER);
 
     private Superpower mimic = null;
 
@@ -87,7 +89,7 @@ public class Mimicry extends Superpower {
         }
         super.activate();
         sendCooldownPacket();
-        if (DISABLE_OTHER_POWER && mimicPowerInstance != null) {
+        if (DISABLE_OTHER_POWER.get() && mimicPowerInstance != null) {
             mimicPowerInstance.stolenUntil = System.currentTimeMillis() + COOLDOWN_MILLIS;
         }
     }

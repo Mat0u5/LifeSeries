@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.boogeyman;
 
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
@@ -11,12 +12,12 @@ import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.mat0u5.lifeseries.utils.other.Time;
-import net.mat0u5.lifeseries.utils.player.PlayerListReference;
-import net.mat0u5.lifeseries.utils.player.PlayerReference;
+import net.mat0u5.matlib.utils.other.TextUtils;
+import net.mat0u5.matlib.utils.other.Time;
+import net.mat0u5.matlib.utils.player.PlayerListReference;
+import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
+import net.mat0u5.matlib.utils.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,24 +27,25 @@ import net.minecraft.sounds.SoundEvents;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
+import static net.mat0u5.matlib.MatLib.*;
 
 public class BoogeymanManager {
-    public boolean BOOGEYMAN_ENABLED = false;
-    public double BOOGEYMAN_CHANCE_MULTIPLIER = 0.5;
-    public int BOOGEYMAN_AMOUNT_MIN = 1;
-    public int BOOGEYMAN_AMOUNT_MAX = 99;
-    public boolean BOOGEYMAN_ADVANCED_DEATHS = false;
-    public double BOOGEYMAN_CHOOSE_MINUTE = 10;
-    public boolean BOOGEYMAN_ANNOUNCE_OUTCOME = false;
+    public final ConfigRef<Boolean> BOOGEYMAN_ENABLED = ConfigRef.of(() -> LifeSeries.seasonConfig.BOOGEYMAN);
+    public final ConfigRef<Double> BOOGEYMAN_CHANCE_MULTIPLIER = ConfigRef.of(() -> LifeSeries.seasonConfig.BOOGEYMAN_CHANCE_MULTIPLIER);
+    public final ConfigRef<Integer> BOOGEYMAN_AMOUNT_MIN = ConfigRef.of(() -> LifeSeries.seasonConfig.BOOGEYMAN_MIN_AMOUNT);
+    public final ConfigRef<Integer> BOOGEYMAN_AMOUNT_MAX = ConfigRef.of(() -> LifeSeries.seasonConfig.BOOGEYMAN_MAX_AMOUNT);
+    public final ConfigRef<Boolean> BOOGEYMAN_ADVANCED_DEATHS = ConfigRef.of(() -> LifeSeries.seasonConfig.BOOGEYMAN_ADVANCED_DEATHS);
+    public final ConfigRef<Double> BOOGEYMAN_CHOOSE_MINUTE = ConfigRef.of(() -> LifeSeries.seasonConfig.BOOGEYMAN_CHOOSE_MINUTE);
+    public final ConfigRef<Boolean> BOOGEYMAN_ANNOUNCE_OUTCOME = ConfigRef.of(() -> LifeSeries.seasonConfig.BOOGEYMAN_ANNOUNCE_OUTCOME);
     public List<String> BOOGEYMAN_IGNORE = new ArrayList<>();
     public List<String> BOOGEYMAN_FORCE = new ArrayList<>();
-    public boolean BOOGEYMAN_INFINITE = false;
+    public final ConfigRef<Boolean> BOOGEYMAN_INFINITE = ConfigRef.of(() -> LifeSeries.seasonConfig.BOOGEYMAN_INFINITE);
     public Time BOOGEYMAN_INFINITE_LAST_PICK = Time.minutes(30);
     public Time BOOGEYMAN_INFINITE_AUTO_FAIL = Time.hours(100);
-    public boolean BOOGEYMAN_TEAM_NOTICE = false;
-    public int BOOGEYMAN_KILLS_NEEDED = 1;
-    public boolean BOOGEYMAN_STEAL_LIFE = false;
-    public boolean BOOGEYMAN_LOCATOR_BAR = false;
+    public final ConfigRef<Boolean> BOOGEYMAN_TEAM_NOTICE = ConfigRef.of(() -> LifeSeries.seasonConfig.BOOGEYMAN_TEAM_NOTICE);
+    public final ConfigRef<Integer> BOOGEYMAN_KILLS_NEEDED = ConfigRef.of(() -> LifeSeries.seasonConfig.BOOGEYMAN_KILLS_NEEDED);
+    public final ConfigRef<Boolean> BOOGEYMAN_STEAL_LIFE = ConfigRef.of(() -> LifeSeries.seasonConfig.BOOGEYMAN_STEAL_LIFE);
+    public final ConfigRef<Boolean> BOOGEYMAN_LOCATOR_BAR = ConfigRef.of(() -> LifeSeries.seasonConfig.BOOGEYMAN_LOCATOR_BAR);
 
     public List<Boogeyman> boogeymen = new ArrayList<>();
     public List<UUID> rolledPlayers = new ArrayList<>();
@@ -51,12 +53,12 @@ public class BoogeymanManager {
     public boolean boogeymanListChanged = false;
 
     public void addSessionActions() {
-        if (!BOOGEYMAN_ENABLED) return;
+        if (!BOOGEYMAN_ENABLED.get()) return;
         currentSession.addSessionActionIfTime(
-            new SessionAction.Invisible(Time.minutes(BOOGEYMAN_CHOOSE_MINUTE-5), "Boogeyman 5 minute warning") {
+            new SessionAction.Invisible(Time.minutes(BOOGEYMAN_CHOOSE_MINUTE.get()-5), "Boogeyman 5 minute warning") {
                 @Override
                 public void trigger() {
-                    if (!BOOGEYMAN_ENABLED) return;
+                    if (!BOOGEYMAN_ENABLED.get()) return;
                     if (boogeymanChosen) return;
                     PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_NOTICE_5MIN.get());
                     ModifiableSound.BOOGEYMAN_NOTICE_5MIN.broadcast();
@@ -64,10 +66,10 @@ public class BoogeymanManager {
             }
         );
         currentSession.addSessionActionIfTime(
-            new SessionAction.Invisible(Time.minutes(BOOGEYMAN_CHOOSE_MINUTE-1), "Boogeyman 1 minute warning") {
+            new SessionAction.Invisible(Time.minutes(BOOGEYMAN_CHOOSE_MINUTE.get()-1), "Boogeyman 1 minute warning") {
                 @Override
                 public void trigger() {
-                    if (!BOOGEYMAN_ENABLED) return;
+                    if (!BOOGEYMAN_ENABLED.get()) return;
                     if (boogeymanChosen) return;
                     PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_NOTICE_1MIN.get());
                     ModifiableSound.BOOGEYMAN_NOTICE_1MIN.broadcast();
@@ -75,10 +77,10 @@ public class BoogeymanManager {
             }
         );
         currentSession.addSessionAction(
-                new SessionAction(Time.minutes(BOOGEYMAN_CHOOSE_MINUTE), ModifiableText.SESSION_ACTION_BOOGEYMAN.getString()) {
+                new SessionAction(Time.minutes(BOOGEYMAN_CHOOSE_MINUTE.get()), ModifiableText.SESSION_ACTION_BOOGEYMAN.getString()) {
                     @Override
                     public void trigger() {
-                        if (!BOOGEYMAN_ENABLED) return;
+                        if (!BOOGEYMAN_ENABLED.get()) return;
                         if (boogeymanChosen) return;
                         prepareToChooseBoogeymen();
                     }
@@ -130,7 +132,7 @@ public class BoogeymanManager {
     }
 
     public Boogeyman addBoogeyman(ServerPlayer player) {
-        if (!BOOGEYMAN_ENABLED) return null;
+        if (!BOOGEYMAN_ENABLED.get()) return null;
         if (!rolledPlayers.contains(player.getUUID())) {
             rolledPlayers.add(player.getUUID());
         }
@@ -144,14 +146,14 @@ public class BoogeymanManager {
     }
 
     public void addBoogeymanManually(ServerPlayer player) {
-        if (!BOOGEYMAN_ENABLED) return;
+        if (!BOOGEYMAN_ENABLED.get()) return;
         Boogeyman newBoogeyman = addBoogeyman(player);
         ((IPlayer) player).ls$message(ModifiableText.BOOGEYMAN_NOTICE_ADDED.get());
         messageBoogeyman(newBoogeyman, player);
     }
 
     public void removeBoogeymanManually(ServerPlayer player) {
-        if (!BOOGEYMAN_ENABLED) return;
+        if (!BOOGEYMAN_ENABLED.get()) return;
         Boogeyman boogeyman = getBoogeyman(player);
         if (boogeyman == null) return;
         boogeymen.remove(boogeyman);
@@ -182,7 +184,7 @@ public class BoogeymanManager {
     }
 
     public void reset(ServerPlayer player) {
-        if (!BOOGEYMAN_ENABLED) return;
+        if (!BOOGEYMAN_ENABLED.get()) return;
         Boogeyman boogeyman = getBoogeyman(player);
         if (boogeyman == null) return;
         if (boogeyman.failed || boogeyman.cured) {
@@ -197,7 +199,7 @@ public class BoogeymanManager {
     }
 
     public void cure(ServerPlayer player) {
-        if (!BOOGEYMAN_ENABLED) return;
+        if (!BOOGEYMAN_ENABLED.get()) return;
         Boogeyman boogeyman = getBoogeyman(player);
         if (boogeyman == null) return;
         boogeyman.failed = false;
@@ -208,9 +210,9 @@ public class BoogeymanManager {
         PlayerUtils.sendTitle(player, ModifiableText.BOOGEYMAN_CURE_TITLE.get(), 20, 30, 20);
         ModifiableSound.BOOGEYMAN_CURE.play(player);
 
-        boolean stealLife = BOOGEYMAN_STEAL_LIFE && livesManager.canChangeLivesNaturally();
+        boolean stealLife = BOOGEYMAN_STEAL_LIFE.get() && livesManager.canChangeLivesNaturally();
 
-        if (BOOGEYMAN_ANNOUNCE_OUTCOME) {
+        if (BOOGEYMAN_ANNOUNCE_OUTCOME.get()) {
             if (stealLife) {
                 PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_CURE_GAINLIFE.get(player));
             }
@@ -225,7 +227,7 @@ public class BoogeymanManager {
     }
 
     public void onBoogeymanKill(ServerPlayer boogeyPlayer, ServerPlayer victim) {
-        if (!BOOGEYMAN_ENABLED) return;
+        if (!BOOGEYMAN_ENABLED.get()) return;
         Boogeyman boogeyman = getBoogeyman(boogeyPlayer);
         if (boogeyman == null) return;
         if (boogeyman.cured || boogeyman.failed) return;
@@ -243,7 +245,7 @@ public class BoogeymanManager {
     }
 
     public void chooseNewBoogeyman() {
-        if (!BOOGEYMAN_ENABLED) return;
+        if (!BOOGEYMAN_ENABLED.get()) return;
         if (currentSession.statusFinished() || currentSession.statusNotStarted()) return;
         if (currentSession.getRemainingTime().isSmallerThan(BOOGEYMAN_INFINITE_LAST_PICK)) return;
 
@@ -258,7 +260,7 @@ public class BoogeymanManager {
     }
 
     public void prepareToChooseBoogeymen() {
-        if (!BOOGEYMAN_ENABLED) return;
+        if (!BOOGEYMAN_ENABLED.get()) return;
         PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_CHOOSE.get());
         ModifiableSound.BOOGEYMAN_NOTICE_PREPARE.broadcast();
         TaskScheduler.scheduleTask(Time.seconds(5), () -> {
@@ -289,7 +291,7 @@ public class BoogeymanManager {
         });
     }
     public void chooseBoogeymen(List<ServerPlayer> allowedPlayers, BoogeymanRollType rollType) {
-        if (!BOOGEYMAN_ENABLED) return;
+        if (!BOOGEYMAN_ENABLED.get()) return;
         allowedPlayers.removeIf(this::isBoogeyman);
         showRolling(allowedPlayers);
         PlayerListReference ref = PlayerListReference.of(allowedPlayers);
@@ -309,21 +311,21 @@ public class BoogeymanManager {
             }
         }
 
-        int chooseBoogeymen = BOOGEYMAN_AMOUNT_MIN;
+        int chooseBoogeymen = BOOGEYMAN_AMOUNT_MIN.get();
         List<ServerPlayer> nonRedPlayers = livesManager.getNonRedPlayers();
-        while(BOOGEYMAN_CHANCE_MULTIPLIER >= Math.random() && chooseBoogeymen < nonRedPlayers.size()) {
+        while(BOOGEYMAN_CHANCE_MULTIPLIER.get() >= Math.random() && chooseBoogeymen < nonRedPlayers.size()) {
             chooseBoogeymen++;
         }
-        if (chooseBoogeymen > BOOGEYMAN_AMOUNT_MAX) {
-            chooseBoogeymen = BOOGEYMAN_AMOUNT_MAX;
+        if (chooseBoogeymen > BOOGEYMAN_AMOUNT_MAX.get()) {
+            chooseBoogeymen = BOOGEYMAN_AMOUNT_MAX.get();
         }
         return chooseBoogeymen;
     }
 
     public void boogeymenChooseRandom(List<ServerPlayer> allowedPlayers, BoogeymanRollType rollType) {
-        if (!BOOGEYMAN_ENABLED) return;
-        if (BOOGEYMAN_AMOUNT_MAX <= 0) return;
-        if (BOOGEYMAN_AMOUNT_MAX < BOOGEYMAN_AMOUNT_MIN) return;
+        if (!BOOGEYMAN_ENABLED.get()) return;
+        if (BOOGEYMAN_AMOUNT_MAX.get() <= 0) return;
+        if (BOOGEYMAN_AMOUNT_MAX.get() < BOOGEYMAN_AMOUNT_MIN.get()) return;
         allowedPlayers.removeIf(this::isBoogeyman);
         if (allowedPlayers.isEmpty()) return;
 
@@ -411,7 +413,7 @@ public class BoogeymanManager {
     }
 
     public void sessionEnd() {
-        if (!BOOGEYMAN_ENABLED) return;
+        if (!BOOGEYMAN_ENABLED.get()) return;
         if (server == null) return;
         for (Boogeyman boogeyman : new ArrayList<>(boogeymen)) {
             if (boogeyman.died) continue;
@@ -419,10 +421,10 @@ public class BoogeymanManager {
             if (!boogeyman.cured && !boogeyman.failed) {
                 ServerPlayer player = PlayerUtils.getPlayer(boogeyman.uuid);
                 if (player == null) {
-                    if (BOOGEYMAN_ANNOUNCE_OUTCOME) {
+                    if (BOOGEYMAN_ANNOUNCE_OUTCOME.get()) {
                         PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_FAIL.get(boogeyman.name));
                     }
-                    ScoreboardUtils.setScore(boogeyman.name, LivesManager.SCOREBOARD_NAME, 1);
+                    if (!livesManager.LIVES_SYSTEM_DISABLED.get()) ScoreboardUtils.setScore(boogeyman.name, LivesManager.SCOREBOARD_NAME, 1);
                     continue;
                 }
                 playerFailBoogeyman(player, true);
@@ -435,7 +437,7 @@ public class BoogeymanManager {
     }
 
     public boolean playerFailBoogeyman(ServerPlayer player, boolean sendMessage) {
-        if (!BOOGEYMAN_ENABLED) return false;
+        if (!BOOGEYMAN_ENABLED.get()) return false;
         Boogeyman boogeyman = getBoogeyman(player);
         if (boogeyman == null) return false;
 
@@ -450,9 +452,9 @@ public class BoogeymanManager {
 
         DatapackIntegration.EVENT_BOOGEYMAN_FAIL_REWARD.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
         if (!DatapackIntegration.EVENT_BOOGEYMAN_FAIL_REWARD.isCanceled()) {
-            if (BOOGEYMAN_ADVANCED_DEATHS) {
+            if (BOOGEYMAN_ADVANCED_DEATHS.get()) {
                 PlayerUtils.sendTitle(player,ModifiableText.BOOGEYMAN_FAIL_ADVANCEDDEATH_NOTIFY_TITLE.get(), 20, 30, 20);
-                if (BOOGEYMAN_ANNOUNCE_OUTCOME && sendMessage) {
+                if (BOOGEYMAN_ANNOUNCE_OUTCOME.get() && sendMessage) {
                     PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_FAIL_ADVANCEDDEATH.get(player));
                 }
                 if (canChangeLives) {
@@ -462,7 +464,7 @@ public class BoogeymanManager {
             else {
                 PlayerUtils.sendTitle(player,ModifiableText.BOOGEYMAN_FAIL_NOTIFY_TITLE.get(), 20, 30, 20);
                 ModifiableSound.BOOGEYMAN_FAIL.play(player);
-                if (BOOGEYMAN_ANNOUNCE_OUTCOME && sendMessage) {
+                if (BOOGEYMAN_ANNOUNCE_OUTCOME.get() && sendMessage) {
                     PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_FAIL.get(player));
                 }
                 if (canChangeLives) {
@@ -474,18 +476,18 @@ public class BoogeymanManager {
     }
 
     public void playerLostAllLives(ServerPlayer player) {
-        if (!BOOGEYMAN_ENABLED) return;
+        if (!BOOGEYMAN_ENABLED.get()) return;
         Boogeyman boogeyman = getBoogeyman(player);
         if (boogeyman == null) return;
         boogeyman.died = true;
     }
 
     public void onPlayerFinishJoining(ServerPlayer player) {
-        if (!BOOGEYMAN_ENABLED) return;
+        if (!BOOGEYMAN_ENABLED.get()) return;
         if (!boogeymanChosen) return;
         if (rolledPlayers.contains(player.getUUID())) return;
         if (((IPlayer) player).ls$isDead()) return;
-        if (boogeymen.size() >= BOOGEYMAN_AMOUNT_MAX) return;
+        if (boogeymen.size() >= BOOGEYMAN_AMOUNT_MAX.get()) return;
         if (currentSession.statusNotStarted() || currentSession.statusFinished()) return;
         PlayerReference ref = PlayerReference.of(player);
         TaskScheduler.scheduleTask(Time.seconds(2), () -> {
@@ -496,14 +498,9 @@ public class BoogeymanManager {
     }
 
     public void onReload() {
-        BOOGEYMAN_ENABLED = seasonConfig.BOOGEYMAN.get();
-        if (!BOOGEYMAN_ENABLED) {
+        if (!BOOGEYMAN_ENABLED.get()) {
             onDisabledBoogeyman();
         }
-        BOOGEYMAN_CHANCE_MULTIPLIER = seasonConfig.BOOGEYMAN_CHANCE_MULTIPLIER.get();
-        BOOGEYMAN_AMOUNT_MIN = seasonConfig.BOOGEYMAN_MIN_AMOUNT.get();
-        BOOGEYMAN_AMOUNT_MAX = seasonConfig.BOOGEYMAN_MAX_AMOUNT.get();
-        BOOGEYMAN_ADVANCED_DEATHS = seasonConfig.BOOGEYMAN_ADVANCED_DEATHS.get();
         BOOGEYMAN_IGNORE.clear();
         BOOGEYMAN_FORCE.clear();
         for (String name : seasonConfig.BOOGEYMAN_IGNORE.get().replaceAll("\\[","").replaceAll("]","").replaceAll(" ","").trim().split(",")) {
@@ -512,15 +509,8 @@ public class BoogeymanManager {
         for (String name : seasonConfig.BOOGEYMAN_FORCE.get().replaceAll("\\[","").replaceAll("]","").replaceAll(" ","").trim().split(",")) {
             if (!name.isEmpty()) BOOGEYMAN_FORCE.add(name.toLowerCase(Locale.ROOT));
         }
-        BOOGEYMAN_CHOOSE_MINUTE = seasonConfig.BOOGEYMAN_CHOOSE_MINUTE.get();
-        BOOGEYMAN_ANNOUNCE_OUTCOME = seasonConfig.BOOGEYMAN_ANNOUNCE_OUTCOME.get();
-        BOOGEYMAN_INFINITE = seasonConfig.BOOGEYMAN_INFINITE.get();
         BOOGEYMAN_INFINITE_LAST_PICK = Time.seconds(seasonConfig.BOOGEYMAN_INFINITE_LAST_PICK.get());
         BOOGEYMAN_INFINITE_AUTO_FAIL = Time.seconds(seasonConfig.BOOGEYMAN_INFINITE_AUTO_FAIL.get());
-        BOOGEYMAN_TEAM_NOTICE = seasonConfig.BOOGEYMAN_TEAM_NOTICE.get();
-        BOOGEYMAN_KILLS_NEEDED = seasonConfig.BOOGEYMAN_KILLS_NEEDED.get();
-        BOOGEYMAN_STEAL_LIFE = seasonConfig.BOOGEYMAN_STEAL_LIFE.get();
-        BOOGEYMAN_LOCATOR_BAR = seasonConfig.BOOGEYMAN_LOCATOR_BAR.get();
     }
 
     public void onDisabledBoogeyman() {
@@ -530,7 +520,7 @@ public class BoogeymanManager {
     List<UUID> afterFailedMessaged = new ArrayList<>();
     List<UUID> warningAutoFail = new ArrayList<>();
     public void tick() {
-        if (!BOOGEYMAN_ENABLED) return;
+        if (!BOOGEYMAN_ENABLED.get()) return;
         for (Boogeyman boogeyman : boogeymen) {
             boogeyman.tick();
             infiniteBoogeymenTick(boogeyman);
@@ -539,7 +529,7 @@ public class BoogeymanManager {
         }
         if (boogeymanListChanged) {
             boogeymanListChanged = false;
-            if (BOOGEYMAN_TEAM_NOTICE) {
+            if (BOOGEYMAN_TEAM_NOTICE.get()) {
                 sendBoogeymanTeamNotice();
             }
         }
@@ -569,7 +559,7 @@ public class BoogeymanManager {
     }
 
     public void infiniteBoogeymenTick(Boogeyman boogeyman) {
-        if (!BOOGEYMAN_INFINITE) return;
+        if (!BOOGEYMAN_INFINITE.get()) return;
         if (!currentSession.statusStarted()) return;
         if (!boogeyman.failed && !boogeyman.cured && !boogeyman.died) return;
         boogeymen.remove(boogeyman);
@@ -583,7 +573,7 @@ public class BoogeymanManager {
     }
 
     public void autoFailTick(Boogeyman boogeyman) {
-        if (!BOOGEYMAN_INFINITE) return;
+        if (!BOOGEYMAN_INFINITE.get()) return;
         if (!currentSession.statusStarted()) return;
         if (boogeyman.failed) return;
         if (boogeyman.cured) return;
@@ -633,7 +623,7 @@ public class BoogeymanManager {
         if (!afterFailedMessages()) return;
         afterFailedMessaged.add(player.getUUID());
         int delay = 20;
-        if (!BOOGEYMAN_ADVANCED_DEATHS) {
+        if (!BOOGEYMAN_ADVANCED_DEATHS.get()) {
             delay = 140;
         }
         if (LifeSeries.isSeason(Seasons.LIMITED_LIFE)) {
@@ -653,7 +643,7 @@ public class BoogeymanManager {
     }
 
     public boolean afterFailedMessages() {
-        return BOOGEYMAN_ADVANCED_DEATHS;
+        return BOOGEYMAN_ADVANCED_DEATHS.get();
     }
 
     public enum BoogeymanRollType {

@@ -1,9 +1,11 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards;
 
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
@@ -18,7 +20,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.player.PlayerListReference;
+import net.mat0u5.matlib.utils.player.PlayerListReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.network.chat.Component;
@@ -29,6 +31,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
+import static net.mat0u5.matlib.MatLib.*;
 
 //? if >= 1.21.2
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.CreakingPower;
@@ -36,8 +39,8 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 public class WildcardManager {
     public static final Map<Wildcards, Wildcard> activeWildcards = new ConcurrentHashMap<>();
     public static final Random rnd = new Random();
-    public static double ACTIVATE_WILDCARD_MINUTE = 2.5;
-    public static boolean INSTANTLY_ACTIVATE_WILDCARDS = false;
+    public static final ConfigRef<Double> ACTIVATE_WILDCARD_MINUTE = ConfigRef.of(() -> WildLifeConfig.get().ACTIVATE_WILDCARD_MINUTE);
+    public static final ConfigRef<Boolean> INSTANTLY_ACTIVATE_WILDCARDS = ConfigRef.of(() -> WildLifeConfig.get().INSTANTLY_ACTIVATE_WILDCARDS);
 
     public static Wildcards chosenWildcard = null;
 
@@ -98,8 +101,8 @@ public class WildcardManager {
     }
 
     public static void activateWildcards() {
-        int delay = INSTANTLY_ACTIVATE_WILDCARDS ? 0 : 90;
-        if (!INSTANTLY_ACTIVATE_WILDCARDS) showDots();
+        int delay = INSTANTLY_ACTIVATE_WILDCARDS.get() ? 0 : 90;
+        if (!INSTANTLY_ACTIVATE_WILDCARDS.get()) showDots();
         TaskScheduler.scheduleTask(delay, () -> {
             if (activeWildcards.isEmpty()) {
                 chooseRandomWildcard();
@@ -110,7 +113,7 @@ public class WildcardManager {
             }
             showCryptTitle(ModifiableText.WILDLIFE_WILDCARD_ACTIVATE_CRYPT_TITLE.get());
         });
-        TaskScheduler.scheduleTask(delay+2, NetworkHandlerServer::sendUpdatePackets);
+        TaskScheduler.scheduleTask(delay+2, LifeSeriesNetworkHandlerServer::sendUpdatePackets);
     }
 
     public static void fadedWildcard() {
@@ -288,7 +291,7 @@ public class WildcardManager {
         activeWildcards.clear();
         DatapackIntegration.initWildcards();
         SuperpowersWildcard.resetAllSuperpowers();
-        NetworkHandlerServer.sendUpdatePackets();
+        LifeSeriesNetworkHandlerServer.sendUpdatePackets();
         chosenWildcard = null;
     }
 

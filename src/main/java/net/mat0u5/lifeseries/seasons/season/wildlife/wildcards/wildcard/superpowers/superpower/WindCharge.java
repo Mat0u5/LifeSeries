@@ -1,20 +1,22 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.player.PlayerReference;
+import net.mat0u5.matlib.utils.player.AttributeUtils;
+import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
 
 //? if >= 1.21 {
 import java.util.Set;
 import net.minecraft.core.component.DataComponents;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.player.AttributeUtils;
-import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
+import net.mat0u5.matlib.utils.world.ItemStackUtils;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
@@ -27,9 +29,9 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.util.Unit;
 
 public class WindCharge extends ToggleableSuperpower {
-    public static double EXPLOSION_POWER = 3.0;
+    public static final ConfigRef<Double> EXPLOSION_POWER = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_WIND_CHARGE_EXPLOSION_POWER);
     public static int COOLDOWN_MILLIS = 1000;
-    public static int MAX_MACE_DAMAGE = 2;
+    public static final ConfigRef<Integer> MAX_MACE_DAMAGE = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE);
 
     public WindCharge(ServerPlayer player) {
         super(player);
@@ -52,10 +54,10 @@ public class WindCharge extends ToggleableSuperpower {
         ServerPlayer player = getPlayer();
         if (player == null) return;
         ModifiableSound.WILDLIFE_SUPERPOWERS_WINDCHARGE_START.play(player, 0.3f, 1);
-        AttributeUtils.setSafeFallHeight(player, 100000);
+        AttributeUtils.SAFE_FALL_DISTANCE.of(player).set(100000);
         giveMace();
         giveWindCharge();
-        NetworkHandlerServer.sendVignette(player, 300);
+        LifeSeriesNetworkHandlerServer.sendVignette(player, 300);
         //?}
     }
 
@@ -74,7 +76,7 @@ public class WindCharge extends ToggleableSuperpower {
                     PlayerUtils.updatePlayerInventory(playerNew);
                 }
             });
-            AttributeUtils.resetSafeFallHeight(player);
+            AttributeUtils.SAFE_FALL_DISTANCE.of(player).reset();
         }
         //?}
     }

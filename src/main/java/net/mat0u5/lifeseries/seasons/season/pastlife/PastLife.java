@@ -1,15 +1,15 @@
 package net.mat0u5.lifeseries.seasons.season.pastlife;
 
-import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.other.Time;
+import net.mat0u5.matlib.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -20,7 +20,7 @@ public class PastLife extends Season {
     }
 
     @Override
-    public ConfigManager createConfig() {
+    public SeasonConfig createConfig() {
         return new PastLifeConfig();
     }
 
@@ -31,7 +31,7 @@ public class PastLife extends Season {
 
     @Override
     public void addSessionActions() {
-        if (boogeymanManager.BOOGEYMAN_ENABLED && secretSociety.SOCIETY_ENABLED) {
+        if (boogeymanManager.BOOGEYMAN_ENABLED.get() && secretSociety.SOCIETY_ENABLED.get()) {
             TaskScheduler.scheduleTask(Time.seconds(1), this::requestSessionAction);
             return;
         }
@@ -40,7 +40,7 @@ public class PastLife extends Season {
 
     public void requestSessionAction() {
         for (ServerPlayer player : PlayerUtils.getAdminPlayers()) {
-            if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {
+            if (LifeSeriesNetworkHandlerServer.wasHandshakeSuccessful(player)) {
                 SimplePackets.PAST_LIFE_CHOOSE_TWIST.sendToClient(player);
             }
             else {

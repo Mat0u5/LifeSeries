@@ -9,7 +9,7 @@ import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
+import net.mat0u5.matlib.utils.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,13 +21,13 @@ import java.util.List;
 import java.util.Locale;
 
 import static net.mat0u5.lifeseries.LifeSeries.livesManager;
-import static net.mat0u5.lifeseries.LifeSeries.server;
+import static net.mat0u5.matlib.MatLib.server;
 
 public class LimitedLifeBoogeymanManager extends BoogeymanManager {
 
     @Override
     public void sessionEnd() {
-        if (!BOOGEYMAN_ENABLED) return;
+        if (!BOOGEYMAN_ENABLED.get()) return;
         if (server == null) return;
         for (Boogeyman boogeyman : new ArrayList<>(boogeymen)) {
             if (boogeyman.died) continue;
@@ -37,12 +37,12 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
                 if (player == null) {
                     Integer currentLives = ScoreboardUtils.getScore(boogeyman.name, LivesManager.SCOREBOARD_NAME);
                     if (currentLives == null) continue;
-                    if (currentLives <= LimitedLifeLivesManager.RED_TIME) continue;
+                    if (currentLives <= LimitedLifeLivesManager.RED_TIME.get()) continue;
                     Integer setLives = LimitedLife.getNextLivesColorLives(currentLives);
-                    if (BOOGEYMAN_ANNOUNCE_OUTCOME) {
+                    if (BOOGEYMAN_ANNOUNCE_OUTCOME.get()) {
                         PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_FAIL.get(boogeyman.name, livesManager.getFormattedLives(setLives)));
                     }
-                    ScoreboardUtils.setScore(boogeyman.name, LivesManager.SCOREBOARD_NAME, setLives);
+                    if (!livesManager.LIVES_SYSTEM_DISABLED.get()) ScoreboardUtils.setScore(boogeyman.name, LivesManager.SCOREBOARD_NAME, setLives);
                     continue;
                 }
                 playerFailBoogeyman(player, true);
@@ -51,7 +51,7 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
     }
     @Override
     public boolean playerFailBoogeyman(ServerPlayer player, boolean sendMessage) {
-        if (!BOOGEYMAN_ENABLED) return false;
+        if (!BOOGEYMAN_ENABLED.get()) return false;
         Boogeyman boogeyman = getBoogeyman(player);
         if (boogeyman == null) return false;
         if (((IPlayer) player).ls$isDead()) return false;
@@ -71,10 +71,10 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
 
         DatapackIntegration.EVENT_BOOGEYMAN_FAIL_REWARD.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
         if (!DatapackIntegration.EVENT_BOOGEYMAN_FAIL_REWARD.isCanceled()) {
-            if (BOOGEYMAN_ADVANCED_DEATHS) {
+            if (BOOGEYMAN_ADVANCED_DEATHS.get()) {
 
                 PlayerUtils.sendTitle(player, ModifiableText.BOOGEYMAN_FAIL_ADVANCEDDEATH_NOTIFY_TITLE.get(), 20, 30, 20);
-                if (BOOGEYMAN_ANNOUNCE_OUTCOME && sendMessage) {
+                if (BOOGEYMAN_ANNOUNCE_OUTCOME.get() && sendMessage) {
                     PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_FAIL_ADVANCEDDEATH.get(player));
                 }
                 if (canChangeLives) {
@@ -89,7 +89,7 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
 
                 PlayerUtils.sendTitle(player, ModifiableText.BOOGEYMAN_FAIL_NOTIFY_TITLE.get(), 20, 30, 20);
                 ModifiableSound.BOOGEYMAN_FAIL.play(player);
-                if (BOOGEYMAN_ANNOUNCE_OUTCOME && sendMessage) {
+                if (BOOGEYMAN_ANNOUNCE_OUTCOME.get() && sendMessage) {
                     PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_FAIL.get(player, setTo));
                 }
             }

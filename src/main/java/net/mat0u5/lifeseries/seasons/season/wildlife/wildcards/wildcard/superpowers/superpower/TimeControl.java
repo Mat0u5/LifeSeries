@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDilation;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
@@ -12,7 +14,7 @@ import net.minecraft.sounds.SoundEvent;
 
 public class TimeControl extends Superpower {
     public static int TARGET_TICK_RATE = 4;
-    public static int SLOW_DURATION = 70;
+    public static final ConfigRef<Integer> SLOW_DURATION = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_TIME_DILATION_DURATION);
     public static int COOLDOWN_MILLIS = 300000;
     public static int changedSpeedFor = 0;
     public TimeControl(ServerPlayer player) {
@@ -33,10 +35,10 @@ public class TimeControl extends Superpower {
     public void activate() {
         super.activate();
         float previousSpeed = TimeDilation.getWorldSpeed();
-        changedSpeedFor += 20 + SLOW_DURATION;
+        changedSpeedFor += 20 + SLOW_DURATION.get();
         TimeDilation.slowlySetWorldSpeed(TARGET_TICK_RATE, 20);
         ModifiableSound.WILDLIFE_TIME_SLOW_DOWN.broadcast();
-        TaskScheduler.scheduleTask(SLOW_DURATION, () -> {
+        TaskScheduler.scheduleTask(SLOW_DURATION.get(), () -> {
             ModifiableSound.WILDLIFE_TIME_SPEED_UP.broadcast(0.65f, 1);
             TimeDilation.slowlySetWorldSpeed(previousSpeed, 20);
         });

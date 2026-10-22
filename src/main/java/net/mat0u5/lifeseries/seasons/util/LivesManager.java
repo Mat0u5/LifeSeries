@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.util;
 
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
@@ -14,10 +15,16 @@ import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.*;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.*;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
-import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.mat0u5.matlib.utils.world.LevelUtils;
+import net.mat0u5.matlib.utils.other.*;
+import net.mat0u5.matlib.utils.player.*;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -35,6 +42,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
+import static net.mat0u5.matlib.MatLib.*;
 import static net.mat0u5.lifeseries.seasons.util.WatcherManager.isWatcher;
 
 //? if <= 26.1 {
@@ -45,47 +53,34 @@ import net.minecraft.world.scores.TeamColor;
 
 public class LivesManager {
     public static final String SCOREBOARD_NAME = "Lives";
-    public boolean FINAL_DEATH_LIGHTNING = true;
-    public boolean SHOW_DEATH_TITLE = false;
-    public boolean DEATH_TITLE_MATCH_DEATH_MESSAGE = false;
-    public boolean ONLY_CHANGE_LIVES_IN_SESSION = false;
-    public boolean SEE_FRIENDLY_INVISIBLE_PLAYERS = false;
+    public final ConfigRef<Boolean> FINAL_DEATH_LIGHTNING = ConfigRef.of(() -> LifeSeries.seasonConfig.FINAL_DEATH_LIGHTNING);
+    public final ConfigRef<Boolean> SHOW_DEATH_TITLE = ConfigRef.of(() -> LifeSeries.seasonConfig.FINAL_DEATH_TITLE_SHOW);
+    public final ConfigRef<Boolean> DEATH_TITLE_MATCH_DEATH_MESSAGE = ConfigRef.of(() -> LifeSeries.seasonConfig.DEATH_TITLE_MATCH_DEATH_MESSAGE);
+    public final ConfigRef<Boolean> ONLY_CHANGE_LIVES_IN_SESSION = ConfigRef.of(() -> LifeSeries.seasonConfig.ONLY_CHANGE_LIVES_IN_SESSION);
+    public final ConfigRef<Boolean> SEE_FRIENDLY_INVISIBLE_PLAYERS = ConfigRef.of(() -> LifeSeries.seasonConfig.SEE_FRIENDLY_INVISIBLE_PLAYERS);
     public static int MAX_TAB_NUMBER = 4;
-    public boolean LIVES_SYSTEM_DISABLED = false;
-    public boolean ROLL_LIVES = false;
-    public boolean ROLL_LIVES_PSEUDORANDOM = true;
+    public final ConfigRef<Boolean> LIVES_SYSTEM_DISABLED = ConfigRef.of(() -> LifeSeries.seasonConfig.LIVES_SYSTEM_DISABLED);
+    public final ConfigRef<Boolean> ROLL_LIVES = ConfigRef.of(() -> LifeSeries.seasonConfig.LIVES_RANDOMIZE);
+    public final ConfigRef<Boolean> ROLL_LIVES_PSEUDORANDOM = ConfigRef.of(() -> LifeSeries.seasonConfig.LIVES_RANDOMIZE_PSEUDORANDOM);
     public int ROLL_MIN_LIVES = 2;
     public int ROLL_MAX_LIVES = 6;
-    public double LIVES_RANDOMIZE_MINUTE = 1.0;
-    public boolean SHOW_LIFE_DIFF = false;
-    public boolean LIVES_LOSE_KILLS_ONLY = false;
-    public boolean CUSTOM_AVERAGE_ENABLED = false;
-    public double CUSTOM_AVERAGE = 4;
+    public final ConfigRef<Double> LIVES_RANDOMIZE_MINUTE = ConfigRef.of(() -> LifeSeries.seasonConfig.LIVES_RANDOMIZE_MINUTE);
+    public final ConfigRef<Boolean> SHOW_LIFE_DIFF = ConfigRef.of(() -> LifeSeries.seasonConfig.LIVES_LIFE_DIFF_MESSAGE);
+    public final ConfigRef<Boolean> LIVES_LOSE_KILLS_ONLY = ConfigRef.of(() -> LifeSeries.seasonConfig.LIVES_LOSE_KILLS_ONLY);
+    public final ConfigRef<Boolean> CUSTOM_AVERAGE_ENABLED = ConfigRef.of(() -> LifeSeries.seasonConfig.LIVES_RANDOMIZE_CUSTOMAVG);
+    public final ConfigRef<Double> CUSTOM_AVERAGE = ConfigRef.of(() -> LifeSeries.seasonConfig.LIVES_RANDOMIZE_AVERAGE);
 
     public boolean assignedLives = false;
     public boolean assignedLivesFinished = false;
     public Random rnd = new Random();
 
     public void reload() {
-        SHOW_DEATH_TITLE = seasonConfig.FINAL_DEATH_TITLE_SHOW.get();
-        DEATH_TITLE_MATCH_DEATH_MESSAGE = seasonConfig.DEATH_TITLE_MATCH_DEATH_MESSAGE.get();
-        FINAL_DEATH_LIGHTNING = seasonConfig.FINAL_DEATH_LIGHTNING.get();
-        ONLY_CHANGE_LIVES_IN_SESSION = seasonConfig.ONLY_CHANGE_LIVES_IN_SESSION.get();
-        SEE_FRIENDLY_INVISIBLE_PLAYERS = seasonConfig.SEE_FRIENDLY_INVISIBLE_PLAYERS.get();
-        LIVES_SYSTEM_DISABLED = seasonConfig.LIVES_SYSTEM_DISABLED.get();
-        LIVES_RANDOMIZE_MINUTE = seasonConfig.LIVES_RANDOMIZE_MINUTE.get();
         updateTeams();
 
-        ROLL_LIVES = seasonConfig.LIVES_RANDOMIZE.get();
-        ROLL_LIVES_PSEUDORANDOM = seasonConfig.LIVES_RANDOMIZE_PSEUDORANDOM.get();
         int minLivesConfig = seasonConfig.LIVES_RANDOMIZE_MIN.get();
         int maxLivesConfig = seasonConfig.LIVES_RANDOMIZE_MAX.get();
         ROLL_MIN_LIVES = Math.min(minLivesConfig, maxLivesConfig);
         ROLL_MAX_LIVES = Math.max(minLivesConfig, maxLivesConfig);
-        SHOW_LIFE_DIFF = seasonConfig.LIVES_LIFE_DIFF_MESSAGE.get();
-        LIVES_LOSE_KILLS_ONLY = seasonConfig.LIVES_LOSE_KILLS_ONLY.get();
-        CUSTOM_AVERAGE_ENABLED = seasonConfig.LIVES_RANDOMIZE_CUSTOMAVG.get();
-        CUSTOM_AVERAGE = seasonConfig.LIVES_RANDOMIZE_AVERAGE.get();
     }
 
     public Map<Integer, PlayerTeam> getLivesTeams() {
@@ -109,7 +104,7 @@ public class LivesManager {
         MAX_TAB_NUMBER = 4;
         for (Map.Entry<Integer, PlayerTeam> entry : getLivesTeams().entrySet()) {
             MAX_TAB_NUMBER = Math.max(MAX_TAB_NUMBER, entry.getKey());
-            entry.getValue().setSeeFriendlyInvisibles(SEE_FRIENDLY_INVISIBLE_PLAYERS);
+            entry.getValue().setSeeFriendlyInvisibles(SEE_FRIENDLY_INVISIBLE_PLAYERS.get());
         }
         SimplePackets.TAB_LIST_LIVES_CUTOFF.sendToAllClients(MAX_TAB_NUMBER);
     }
@@ -151,7 +146,7 @@ public class LivesManager {
         }
         if (LifeSeries.isSeason(Seasons.LIMITED_LIFE)) {
             if (teamName.equals("lives_2")) {
-                return LimitedLifeLivesManager.YELLOW_TIME;
+                return LimitedLifeLivesManager.YELLOW_TIME.get();
             }
         }
         if (teamName.equals("lives_1")) {
@@ -171,7 +166,7 @@ public class LivesManager {
                 return 1;
             }
             if (teamName.equals("lives_2")) {
-                return LimitedLifeLivesManager.YELLOW_TIME;
+                return LimitedLifeLivesManager.YELLOW_TIME.get();
             }
         }
         return -1;
@@ -202,7 +197,7 @@ public class LivesManager {
     //~ if >= 26.2 'ChatFormatting' -> 'TeamColor' {
     public TeamColor getColorForLives(ServerPlayer player) {
         var team = player.getTeam();
-        if (currentSeason.TEAMS_SYSTEM_DISABLED && team != null) {
+        if (currentSeason.TEAMS_SYSTEM_DISABLED.get() && team != null) {
             //? if <= 26.1 {
             //return team.getColor();
             //?} else {
@@ -253,7 +248,7 @@ public class LivesManager {
     //~}
 
     public String getTeamForPlayer(ServerPlayer player) {
-        if (LIVES_SYSTEM_DISABLED) {
+        if (LIVES_SYSTEM_DISABLED.get()) {
             return null;
         }
         Integer lives = getPlayerLives(player);
@@ -381,7 +376,7 @@ public class LivesManager {
         int lives = currentLives + amount;
         if (lives < 0) lives = 0;
         SessionTranscript.addRecordIfMissing(player);
-        ScoreboardUtils.setScore(player, SCOREBOARD_NAME, lives);
+        if (!LIVES_SYSTEM_DISABLED.get()) ScoreboardUtils.setScore(player, SCOREBOARD_NAME, lives);
     }
 
     public void receiveLifeFromOtherPlayer(Component playerName, ServerPlayer target, boolean isRevive) {
@@ -409,7 +404,7 @@ public class LivesManager {
         Integer livesBefore = getPlayerLives(player);
         boolean livesChanged = !Objects.equals(lives, livesBefore);
         SessionTranscript.addRecordIfMissing(player);
-        ScoreboardUtils.setScore(player, SCOREBOARD_NAME, lives);
+        if (!LIVES_SYSTEM_DISABLED.get()) ScoreboardUtils.setScore(player, SCOREBOARD_NAME, lives);
         if (lives <= 0 && !ignoreFinalDeath) {
             playerLostAllLives(player, livesBefore);
         }
@@ -432,6 +427,7 @@ public class LivesManager {
     }
 
     public void setScore(String playerName, int lives) {
+        if (LIVES_SYSTEM_DISABLED.get()) return;
         ScoreboardUtils.setScore(playerName, SCOREBOARD_NAME, lives);
         currentSeason.reloadAllPlayerTeams();
     }
@@ -491,7 +487,7 @@ public class LivesManager {
         currentSeason.respawnPositions.put(player.getUUID(), info);
         currentSeason.dropItemsOnLastDeath(player);
         if (livesBefore != null) {
-            if (FINAL_DEATH_LIGHTNING) {
+            if (FINAL_DEATH_LIGHTNING.get()) {
                 LevelUtils.summonHarmlessLightning(player);
             }
             if (livesBefore > 0) {
@@ -507,12 +503,12 @@ public class LivesManager {
 
     public void showDeathTitle(ServerPlayer player) {
         if (player == null) return;
-        if (SHOW_DEATH_TITLE) {
+        if (SHOW_DEATH_TITLE.get()) {
             List<ServerPlayer> otherPlayers = PlayerUtils.getAllPlayers();
             otherPlayers.remove(player);
             UUID uuid = player.getUUID();
             boolean showedDeathTitle = false;
-            if (latestDeathMessages.containsKey(uuid) && DEATH_TITLE_MATCH_DEATH_MESSAGE) {
+            if (latestDeathMessages.containsKey(uuid) && DEATH_TITLE_MATCH_DEATH_MESSAGE.get()) {
                 Tuple<Boolean, Component> latestDeathMessage = removeFirstPlayerComponent(latestDeathMessages.get(uuid));
                 if (Objects.equals(latestDeathMessage.x, true)) {
                     PlayerUtils.sendTitleWithSubtitleToPlayers(otherPlayers, ModifiableText.FINAL_DEATH_TITLE.get(player), latestDeathMessage.y, 20, 80, 20);
@@ -526,7 +522,7 @@ public class LivesManager {
         }
         Component deathMessage = ModifiableText.FINAL_DEATH.get(player);
         if (!deathMessage.getString().isEmpty()) {
-            if (SHOW_LIFE_DIFF) {
+            if (SHOW_LIFE_DIFF.get()) {
                 TaskScheduler.schedulePriorityTask(1, () -> {
                     PlayerUtils.broadcastMessage(deathMessage);
                 });
@@ -574,14 +570,14 @@ public class LivesManager {
     }
 
     public boolean canChangeLivesNaturally(ServerPlayer player) {
-        if (ONLY_CHANGE_LIVES_IN_SESSION && currentSession != null && !AdvancedDeathsManager.hasQueuedDeath(player)) {
+        if (ONLY_CHANGE_LIVES_IN_SESSION.get() && currentSession != null && !AdvancedDeathsManager.hasQueuedDeath(player)) {
             return currentSession.statusStarted();
         }
         return true;
     }
 
     public boolean canChangeLivesNaturally() {
-        if (ONLY_CHANGE_LIVES_IN_SESSION && currentSession != null) {
+        if (ONLY_CHANGE_LIVES_IN_SESSION.get() && currentSession != null) {
             return currentSession.statusStarted();
         }
         return true;
@@ -602,8 +598,8 @@ public class LivesManager {
     }
 
     public void addSessionActions() {
-        if (ROLL_LIVES) {
-            currentSession.addSessionAction(new SessionAction(Time.minutes(LIVES_RANDOMIZE_MINUTE), ModifiableText.SESSION_ACTION_ASSIGN_LIVES.getString()) {
+        if (ROLL_LIVES.get()) {
+            currentSession.addSessionAction(new SessionAction(Time.minutes(LIVES_RANDOMIZE_MINUTE.get()), ModifiableText.SESSION_ACTION_ASSIGN_LIVES.getString()) {
                 @Override
                 public void trigger() {
                     assignRandomLivesToUnassignedPlayers();
@@ -613,7 +609,7 @@ public class LivesManager {
     }
 
     public void assignRandomLivesToUnassignedPlayers() {
-        if (!ROLL_LIVES) return;
+        if (!ROLL_LIVES.get()) return;
         assignedLives = true;
         List<ServerPlayer> assignTo = new ArrayList<>();
         for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
@@ -636,8 +632,8 @@ public class LivesManager {
 
         int totalSize = players.size();
 
-        if (CUSTOM_AVERAGE_ENABLED) {
-            int targetTotal = (int) Math.round(totalSize * CUSTOM_AVERAGE);
+        if (CUSTOM_AVERAGE_ENABLED.get()) {
+            int targetTotal = (int) Math.round(totalSize * CUSTOM_AVERAGE.get());
             int minTotal = totalSize * ROLL_MIN_LIVES;
             int maxTotal = totalSize * ROLL_MAX_LIVES;
 
@@ -666,7 +662,7 @@ public class LivesManager {
 
         int chosenNotRandomly = ROLL_MIN_LIVES;
         for (ServerPlayer player : players) {
-            if (ROLL_LIVES_PSEUDORANDOM) {
+            if (ROLL_LIVES_PSEUDORANDOM.get()) {
                 int diff = ROLL_MAX_LIVES-ROLL_MIN_LIVES+2;
                 if (chosenNotRandomly <= ROLL_MAX_LIVES && totalSize > diff) {
                     lives.put(player, chosenNotRandomly);
@@ -771,7 +767,7 @@ public class LivesManager {
     }
 
     public void onPlayerFinishJoining(ServerPlayer player) {
-        if (!ROLL_LIVES) return;
+        if (!ROLL_LIVES.get()) return;
         if (!assignedLives) return;
         if (hasAssignedLives(player)) return;
         if (((IPlayer) player).ls$isWatcher()) return;
@@ -840,9 +836,9 @@ public class LivesManager {
                 }
                 partNum++;
             }
-            return new Tuple<>(removed, result);
+            return Tuple.of(removed, result);
         }catch(Exception ignored) {}
-        return new Tuple<>(false, original);
+        return Tuple.of(false, original);
     }
 
     public Component getDeathMessageAdd(ServerPlayer player) {

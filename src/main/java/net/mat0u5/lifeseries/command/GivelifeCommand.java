@@ -2,18 +2,18 @@ package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.ActionText;
+import net.mat0u5.matlib.utils.other.ActionText;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.mat0u5.lifeseries.utils.other.Time;
-import net.mat0u5.lifeseries.utils.player.PlayerReference;
+import net.mat0u5.matlib.utils.other.TextUtils;
+import net.mat0u5.matlib.utils.other.Time;
+import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -26,8 +26,9 @@ import java.util.Map;
 import java.util.UUID;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
+import static net.mat0u5.matlib.MatLib.*;
 
-public class GivelifeCommand extends Command {
+public class GivelifeCommand extends CustomCommand {
 
     private Map<UUID, Map<UUID, Long>> soulmateGivelifeRequests = new HashMap<>();
 
@@ -75,7 +76,7 @@ public class GivelifeCommand extends Command {
             sendCommandFailure(source, ModifiableText.PLAYER_ERROR_WATCHER.get());
             return -1;
         }
-        if (!Season.GIVELIFE_CAN_REVIVE && isRevive) {
+        if (!Season.GIVELIFE_CAN_REVIVE.get() && isRevive) {
             sendCommandFailure(source, ModifiableText.PLAYER_ERROR_DEAD.get());
             return -1;
         }
@@ -95,11 +96,11 @@ public class GivelifeCommand extends Command {
             return -1;
         }
         Integer targetLives = ((IPlayer) target).ls$getLives();
-        if (targetLives == null || targetLives >= currentSeason.GIVELIFE_MAX_LIVES) {
+        if (targetLives == null || targetLives >= currentSeason.GIVELIFE_MAX_LIVES.get()) {
             sendCommandFailure(source, ModifiableText.GIVELIFE_ERROR_TOO_MANY.get());
             return -1;
         }
-        if (currentSeason instanceof DoubleLife doubleLife && doubleLife.SOULBOUND_LIVES) {
+        if (currentSeason instanceof DoubleLife doubleLife && doubleLife.SOULBOUND_LIVES.get()) {
             ServerPlayer soulmate = doubleLife.getSoulmate(self);
             if (soulmate != null) {
                 if (soulmate.equals(target)) {

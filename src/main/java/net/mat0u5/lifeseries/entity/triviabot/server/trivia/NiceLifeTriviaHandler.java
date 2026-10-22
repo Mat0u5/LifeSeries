@@ -3,18 +3,21 @@ package net.mat0u5.lifeseries.entity.triviabot.server.trivia;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeVotingManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.*;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
-import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
-import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.mat0u5.matlib.utils.world.ItemStackUtils;
+import net.mat0u5.matlib.utils.world.LevelUtils;
+import net.mat0u5.matlib.utils.other.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -35,7 +38,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static net.mat0u5.lifeseries.LifeSeries.livesManager;
-import static net.mat0u5.lifeseries.LifeSeries.server;
+import static net.mat0u5.matlib.MatLib.server;
 
 //? if <= 1.20.5 {
 /*import net.minecraft.world.item.EnchantedBookItem;
@@ -84,7 +87,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
     }
 
     public void setTimeBasedOnDifficulty(int difficulty) {
-        timeToComplete = NiceLifeTriviaManager.QUESTION_TIME;
+        timeToComplete = NiceLifeTriviaManager.QUESTION_TIME.get();
     }
 
     public void tick() {
@@ -213,7 +216,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
                 if (state.getCollisionShape(level, pos).isEmpty()) {
                     continue;
                 }
-                level.destroyBlock(pos, NiceLifeTriviaManager.BREAKING_DROPS_RESOURCES);
+                level.destroyBlock(pos, NiceLifeTriviaManager.BREAKING_DROPS_RESOURCES.get());
             }
         }
         else {
@@ -291,7 +294,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         sameStateTime.tick();
         bot.setDeltaMovement(0, 0, 0);
         turnToBed(20);
-        if (sameStateTime.getSeconds() >= NiceLifeTriviaManager.QUESTION_TIME + 35) {
+        if (sameStateTime.getSeconds() >= NiceLifeTriviaManager.QUESTION_TIME.get() + 35) {
             changeStateTo(BotState.LEAVING);
         }
     }
@@ -427,7 +430,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
                 }
             }
             else {
-                if (((IPlayer) player).ls$isOnAtLeastLives(2, false) || NiceLifeVotingManager.REDS_ON_NAUGHTY_LIST) {
+                if (((IPlayer) player).ls$isOnAtLeastLives(2, false) || NiceLifeVotingManager.REDS_ON_NAUGHTY_LIST.get()) {
                     availableForVoting.add(player.getScoreboardName());
                 }
             }
@@ -435,7 +438,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         if (availableForVoting.isEmpty()) return false;
 
         String screenName = (voteType == NiceLifeVotingManager.VoteType.NICE_LIST) ? ModifiableText.NICELIFE_TRIVIA_VOTE_NICELIST.getString() : ModifiableText.NICELIFE_TRIVIA_VOTE_NAUGHTYLIST.getString();
-        NetworkHandlerServer.sendVoteScreenPacket(boundPlayer, screenName, true, false, true, availableForVoting);
+        LifeSeriesNetworkHandlerServer.sendVoteScreenPacket(boundPlayer, screenName, true, false, true, availableForVoting);
         NiceLifeVotingManager.allowedToVote.add(boundPlayer.getUUID());
         ModifiableSound.NICELIFE_SANTABOT_VOTE.play(bot.serverData.getBoundPlayer(), 0.75f, 1);
         return true;

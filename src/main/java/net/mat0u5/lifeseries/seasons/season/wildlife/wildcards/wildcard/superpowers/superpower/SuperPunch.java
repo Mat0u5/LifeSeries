@@ -1,11 +1,13 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.Time;
+import net.mat0u5.matlib.utils.other.Time;
 import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,11 +16,10 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.ChunkPos;
 
 import java.util.List;
-import net.minecraft.world.entity.*;
 
 public class SuperPunch extends ToggleableSuperpower {
-    public static double KNOCKBACK_STRENGTH = 3.0;
-    public static double THORNS_DAMAGE = 1.0;
+    public static final ConfigRef<Double> KNOCKBACK_STRENGTH = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_SUPER_PUNCH_KNOCKBACK_STRENGTH);
+    public static final ConfigRef<Double> THORNS_DAMAGE = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_SUPER_PUNCH_THORNS_DAMAGE);
     public static int COOLDOWN_MILLIS = 1000;
     private Time timer = Time.zero();
     private Entity riding = null;
@@ -42,7 +43,7 @@ public class SuperPunch extends ToggleableSuperpower {
     public void activate() {
         super.activate();
         ServerPlayer player = getPlayer();
-        if (player != null) NetworkHandlerServer.sendVignette(player, -1);
+        if (player != null) LifeSeriesNetworkHandlerServer.sendVignette(player, -1);
     }
 
     @Override
@@ -50,7 +51,7 @@ public class SuperPunch extends ToggleableSuperpower {
         super.deactivate();
         ServerPlayer player = getPlayer();
         if (player != null) {
-            NetworkHandlerServer.sendVignette(player, 0);
+            LifeSeriesNetworkHandlerServer.sendVignette(player, 0);
             if (player.isPassenger()) {
                 Entity vehicle = player.getVehicle();
                 player.removeVehicle();

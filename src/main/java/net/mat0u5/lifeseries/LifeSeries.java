@@ -1,11 +1,12 @@
 package net.mat0u5.lifeseries;
 
-import net.mat0u5.lifeseries.config.ConfigManager;
+import com.google.auto.service.AutoService;
+import net.mat0u5.lifeseries.config.LifeSeriesConfigTypes;
 import net.mat0u5.lifeseries.config.MainConfig;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.config.SeasonConfig;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
-import net.mat0u5.lifeseries.platform.Platform;
-import net.mat0u5.lifeseries.registries.MobRegistry;
+import net.mat0u5.lifeseries.registries.Registries;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -14,58 +15,62 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
-import net.mat0u5.lifeseries.utils.enums.HandshakeStatus;
-import net.mat0u5.lifeseries.utils.interfaces.ClientAccessor;
-import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
-import net.mat0u5.lifeseries.utils.versions.VersionControl;
-import net.minecraft.server.MinecraftServer;
-import org.jetbrains.annotations.Nullable;
+import net.mat0u5.lifeseries.utils.interfaces.LifeSeriesClientAccessor;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.matlib.MatLib;
+import net.mat0u5.matlib.services.MultiplatformModInitializer;
+import net.mat0u5.matlib.events.server.ServerLanguageEvents;
+import net.mat0u5.matlib.events.server.ServerPackSourceEvents;
+import net.mat0u5.matlib.utils.enums.HandshakeStatus;
+import net.mat0u5.matlib.utils.other.ModBuiltInPacks;
+import net.minecraft.network.chat.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.UUID;
+import java.util.List;
 
-//? if fabric {
-import net.mat0u5.lifeseries.platform.fabric.FabricPlatform;
-//?} neoforge {
-//import net.mat0u5.lifeseries.platform.neoforge.NeoforgePlatform;
- //?} forge {
-//import net.mat0u5.lifeseries.platform.forge.ForgePlatform;
- //?}
-//? fabric && <= 1.20.5 {
-/*import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
-import net.mat0u5.lifeseries.registries.ModRegistries;
-*///?}
-
-public class LifeSeries {
+@AutoService(MultiplatformModInitializer.class)
+public class LifeSeries implements MultiplatformModInitializer {
 	public static final String MOD_VERSION = "1.5.9.24-dev";
 	public static final String MOD_ID = "lifeseries";
-	private static final Platform PLATFORM = createPlatformInstance();
+	public static final String MOD_FRIENDLY_NAME = "Life Series";
 
 	public static final boolean DEBUG = false;
 	public static final boolean FORCE_DEV = false;
 	public static final boolean ISOLATED_ENVIRONMENT = false;
 	public static final Seasons DEFAULT_SEASON = Seasons.UNASSIGNED;
 	public static boolean MOD_DISABLED = false;
-	@Nullable
-	public static volatile MinecraftServer server;
-	public static volatile Thread serverThread;
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-	private static ConfigManager config;
-	private static ClientAccessor clientAccessor;
+	private static MainConfig config;
+	private static LifeSeriesClientAccessor clientAccessor;
 	public static Season currentSeason;
 	public static Session currentSession;
 	public static LivesManager livesManager;
 	public static Blacklist blacklist;
-	public static ConfigManager seasonConfig;
+	public static SeasonConfig seasonConfig;
 
-	public static void onInitialize() {
-		LOGGER.info("Initializing Life Series [{} {} ({})]...", platform().loader().name(), platform().mcVersion(), MOD_VERSION);
+	@Override
+	public void onRegister() {
+		ServerPackSourceEvents.GATHER_PACKS.register(() -> List.of(
+				new ModBuiltInPacks.PackDef(IdentifierHelper.lifeseries("lifeseries_datapack"), Component.literal("Life Series Datapack"), true)
+				//? if <= 1.20.4 {
+				//,new ModBuiltInPacks.PackDef(IdentifierHelper.lifeseries("lifeseries_datapack_1.20-1.20.4"), Component.literal("Life Series Datapack"), true)
+				 //?} else if <= 1.20.5 {
+				//,new ModBuiltInPacks.PackDef(IdentifierHelper.lifeseries("lifeseries_datapack_1.20.5"), Component.literal("Life Series Datapack"), true)
+				 //?}
+		));
+		ServerLanguageEvents.LOAD_LANG_FILES.register(() -> List.of("/resourcepacks/lifeseries/assets/lifeseries/lang/en_us.json"));
+		Registries.register();
+	}
+	@Override
+	public void onInitialize() {
+		LOGGER.info("Initializing Life Series [{} {} ({})] with MatLib [{}]...", MatLib.platform().loader().name(), MatLib.platform().mcVersion(), MOD_VERSION, MatLib.MOD_VERSION);
 
+		LifeSeriesConfigTypes.init();
+		MainConfig.moveOldMainFileIfExists();
 		config = new MainConfig();
-		NetworkHandlerServer.reload();
-		ConfigManager.moveOldMainFileIfExists();
+		LifeSeriesNetworkHandlerServer.reload();
 		SnailSkins.createConfig();
 		TriviaSkins.createConfig();
 
@@ -73,49 +78,25 @@ public class LifeSeries {
 		String seasonStr = config.getOrCreateProperty("currentSeries", DEFAULT_SEASON.getId());
 
 		SeasonChanger.initializeSeason(Seasons.getSeasonFromStringName(seasonStr));
-		Seasons.getSeasons().forEach(seasons -> seasons.getSeasonInstance().createConfig());
-
-		//? fabric || (forge && > 1.21) {
-		MobRegistry.registerAttributes();
-		//?}
-		//? fabric && <= 1.20.5 {
-		/*if (CompatibilityManager.fabricApiLoaded()) {
-			ModRegistries.registerModStuff();
-		}
-		*///?}
-
-		if (!ISOLATED_ENVIRONMENT) {
-			UpdateChecker.checkForMajorUpdates();
-		}
-		NetworkHandlerServer.initializeSimplePacketReceivers();
-	}
-
-	public static Platform platform() {
-		return PLATFORM;
-	}
-
-	private static Platform createPlatformInstance() {
-		//? if fabric {
-		return new FabricPlatform();
-		//?} neoforge {
-		//return new NeoforgePlatform();
-		 //?} forge {
-		//return new ForgePlatform();
-		 //?}
+		Seasons.getSeasons().forEach(seasons -> seasons.getSeasonInstance().createConfig().reload());
 	}
 
 	public static boolean modDisabled() {
 		if (clientAccessor != null) {
 			if (clientAccessor.isReplay()) return true;
-			if (clientAccessor.serverHandshake() == HandshakeStatus.NOT_RECEIVED) return true;
+			if (MatLib.hasClient()) {
+				HandshakeStatus handshakeStatus = MatLib.getClientAccessor().handshakeWithServer();
+				if (!handshakeStatus.isWaiting() && !handshakeStatus.hasReceived(MOD_ID)) return true;
+			}
 			return clientAccessor.isDisabledServerSide();
 		}
 		return MOD_DISABLED;
 	}
 
 	public static boolean modFullyDisabled() {
-		if (clientAccessor == null) return false;
-		return clientAccessor.serverHandshake() == HandshakeStatus.NOT_RECEIVED;
+		if (!MatLib.hasClient()) return false;
+		HandshakeStatus handshakeStatus = MatLib.getClientAccessor().handshakeWithServer();
+		return !handshakeStatus.isWaiting() && !handshakeStatus.hasReceived(MOD_ID);
 	}
 
 	public static void setDisabled(boolean disabled) {
@@ -136,11 +117,11 @@ public class LifeSeries {
 		return clientAccessor != null;
 	}
 
-	public static ClientAccessor getClientAccessor() {
+	public static LifeSeriesClientAccessor getClientAccessor() {
 		return clientAccessor;
 	}
 
-	public static void setClientAccessor(ClientAccessor helper) {
+	public static void setClientAccessor(LifeSeriesClientAccessor helper) {
 		clientAccessor = helper;
 	}
 
@@ -156,8 +137,7 @@ public class LifeSeries {
 	}
 
 	public static boolean isLogicalSide() {
-		if (clientAccessor == null) return true;
-		return clientAccessor != null && clientAccessor.isRunningIntegratedServer();
+		return MatLib.isLogicalSide();
 	}
 
 	public static boolean isLogicalNonDisabled() {
@@ -167,11 +147,7 @@ public class LifeSeries {
 		return !isLogicalSide() || modDisabled();
 	}
 
-	public static boolean isClientPlayer(UUID uuid) {
-		return clientAccessor != null && clientAccessor.isMainClientPlayer(uuid);
-	}
-
-	public static ConfigManager getMainConfig() {
+	public static MainConfig getMainConfig() {
 		return config;
 	}
 
@@ -181,21 +157,5 @@ public class LifeSeries {
 
 	public static Session currentSession() {
 		return currentSession;
-	}
-
-	public static boolean isMainThread() {
-		Thread thread = serverThread;
-		return thread != null && Thread.currentThread() == thread;
-	}
-
-	public static void requireMainThread() {
-		if (!isMainThread()) {
-			if (VersionControl.isDevVersion()) {
-				throw new IllegalStateException("[LifeSeries] requireMainThread fail: " + Thread.currentThread().getName());
-			}
-			else {
-				LifeSeries.LOGGER.error("[LifeSeries] requireMainThread fail", new Throwable());
-			}
-		}
 	}
 }

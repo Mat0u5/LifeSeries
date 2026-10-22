@@ -1,6 +1,8 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -8,7 +10,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.mat0u5.matlib.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -27,11 +29,11 @@ import net.minecraft.world.entity.EntityTypes;
 //?}
 
 public class AnimalDisguise extends ToggleableSuperpower {
-    public static boolean DAMAGE_CANCELS = true;
+    public static final ConfigRef<Boolean> DAMAGE_CANCELS = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_ANIMAL_DISGUISE_DAMAGE_CANCELS);
     public static int COOLDOWN_MILLIS = 1000;
 
-    public static boolean SHOW_ARMOR = false;
-    public static boolean SHOW_HANDS = true;
+    public static final ConfigRef<Boolean> SHOW_ARMOR = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_ANIMALDISGUISE_ARMOR);
+    public static final ConfigRef<Boolean> SHOW_HANDS = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_ANIMALDISGUISE_HANDS);
 
     public AnimalDisguise(ServerPlayer player) {
         super(player);
@@ -95,7 +97,7 @@ public class AnimalDisguise extends ToggleableSuperpower {
     }
 
     public void onTakeDamage() {
-        if (!DAMAGE_CANCELS) return;
+        if (!DAMAGE_CANCELS.get()) return;
         deactivate();
     }
 

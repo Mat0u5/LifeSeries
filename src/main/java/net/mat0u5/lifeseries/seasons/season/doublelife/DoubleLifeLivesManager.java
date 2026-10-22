@@ -33,7 +33,7 @@ public class DoubleLifeLivesManager extends LivesManager {
 
     @Override
     public Map<ServerPlayer, Integer> getFinalRandomLives(List<ServerPlayer> players) {
-        if (!(currentSeason instanceof DoubleLife doubleLife) || !doubleLife.SOULBOUND_LIVES) return super.getFinalRandomLives(players);
+        if (!(currentSeason instanceof DoubleLife doubleLife) || !doubleLife.SOULBOUND_LIVES.get()) return super.getFinalRandomLives(players);
 
         Map<UUID, Integer> livesUUID = new HashMap<>();
         Map<ServerPlayer, Integer> lives = new HashMap<>();
@@ -61,16 +61,16 @@ public class DoubleLifeLivesManager extends LivesManager {
     public void showDeathTitle(ServerPlayer player) {
         if (currentSeason instanceof DoubleLife doubleLife && doubleLife.isSoulmateOnline(player)) {
             ServerPlayer soulmate = doubleLife.getSoulmate(player);
-            if (soulmate != null && doubleLife.SOULBOUND_LIVES) {
+            if (soulmate != null && doubleLife.SOULBOUND_LIVES.get()) {
                 if (!lastShownDeathTitles.contains(player.getUUID())) {
                     lastShownDeathTitles.add(player.getUUID());
                     lastShownDeathTitles.add(soulmate.getUUID());
-                    if (SHOW_DEATH_TITLE) {
+                    if (SHOW_DEATH_TITLE.get()) {
                         PlayerUtils.sendTitleWithSubtitleToPlayers(PlayerUtils.getAllPlayers(), ModifiableText.DOUBLELIFE_FINAL_DEATH_TITLE.get(player, soulmate), ModifiableText.DOUBLELIFE_FINAL_DEATH_TITLE_SUBTITLE.get(), 20, 80, 20);
                     }
                     Component deathMessage = ModifiableText.DOUBLELIFE_FINAL_DEATH.get(player, soulmate);
                     if (!deathMessage.getString().isEmpty()) {
-                        if (SHOW_LIFE_DIFF) {
+                        if (SHOW_LIFE_DIFF.get()) {
                             TaskScheduler.schedulePriorityTask(1, () -> {
                                 PlayerUtils.broadcastMessage(deathMessage);
                             });

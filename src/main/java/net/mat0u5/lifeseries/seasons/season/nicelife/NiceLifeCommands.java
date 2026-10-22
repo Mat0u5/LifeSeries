@@ -3,12 +3,12 @@ package net.mat0u5.lifeseries.seasons.season.nicelife;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.command.manager.Command;
+import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
+import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -20,7 +20,7 @@ import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
-public class NiceLifeCommands extends Command {
+public class NiceLifeCommands extends CustomCommand {
     @Override
     public boolean isAllowed() {
         return LifeSeries.isSeason(Seasons.NICE_LIFE);

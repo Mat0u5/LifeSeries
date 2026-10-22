@@ -1,6 +1,8 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard;
 
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
@@ -9,10 +11,10 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.other.Time;
-import net.mat0u5.lifeseries.utils.player.PlayerListReference;
+import net.mat0u5.matlib.utils.other.Time;
+import net.mat0u5.matlib.utils.player.PlayerListReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.world.LevelUtils;
+import net.mat0u5.matlib.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,7 +32,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSession;
-import static net.mat0u5.lifeseries.LifeSeries.server;
+import static net.mat0u5.matlib.MatLib.server;
 
 
 public class MobSwap extends Wildcard {
@@ -41,11 +43,11 @@ public class MobSwap extends Wildcard {
     public static int mobsLeftDiv = 0;
     public static int swaps = -1;
 
-    public static double BOSS_CHANCE_MULTIPLIER = 1;
-    public static double BOSS_SPAWN_CUTOFF = 0.7;
+    public static final ConfigRef<Double> BOSS_CHANCE_MULTIPLIER = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_MOBSWAP_BOSS_CHANCE_MULTIPLIER);
+    public static final ConfigRef<Double> BOSS_SPAWN_CUTOFF = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_MOBSWAP_BOSS_SPAWN_CUTOFF);
     public static int MIN_DELAY = 2400;
     public static int MAX_DELAY = 7200;
-    public static int SPAWN_MOBS = 250;
+    public static final ConfigRef<Integer> SPAWN_MOBS = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_MOBSWAP_SPAWN_MOBS);
 
     public static int mobcapMonster = -1;
     public static int mobcapAnimal = -1;
@@ -196,20 +198,20 @@ public class MobSwap extends Wildcard {
 
         int spawnMobs;
         if (Wildcard.isFinale()) {
-            spawnMobs = (int) (SPAWN_MOBS / 1.5);
+            spawnMobs = (int) (SPAWN_MOBS.get() / 1.5);
         }
         else {
-            spawnMobs = SPAWN_MOBS;
+            spawnMobs = SPAWN_MOBS.get();
         }
 
         double progress = currentSession.progress(activatedAt);
-        if (progress > BOSS_SPAWN_CUTOFF) {
+        if (progress > BOSS_SPAWN_CUTOFF.get()) {
             if (mobsLeftDiv == 0) {
                 mobsLeftDiv = lastDiv;
             }
             if (spawnMobs != 0) {
                 int totalMobsLeft = mobsLeftDiv * spawnMobs;
-                bossChance = (2.0 / totalMobsLeft) * BOSS_CHANCE_MULTIPLIER;
+                bossChance = (2.0 / totalMobsLeft) * BOSS_CHANCE_MULTIPLIER.get();
             }
         }
 
@@ -329,7 +331,7 @@ public class MobSwap extends Wildcard {
             }
         }
 
-        if (progress > BOSS_SPAWN_CUTOFF) {
+        if (progress > BOSS_SPAWN_CUTOFF.get()) {
             if (Math.random() < bossChance) {
                 double random = Math.random();
                 if (random < 0.33) {
