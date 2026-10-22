@@ -1,0 +1,30 @@
+package net.mat0u5.lifeseries.client.mixin;
+
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
+import net.minecraft.client.gui.screens.InBedChatScreen;
+import org.spongepowered.asm.mixin.Mixin;
+
+//? if >= 1.21.9
+
+
+@Mixin(value = InBedChatScreen.class, priority = 1)
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+public abstract class InBedChatScreenMixin {
+    //26.1+ logic is in ChatScreenMixin
+    //? if <= 1.21.11 {
+    /*@Inject(method = "charTyped", at = @At("HEAD"))
+    //? if <= 1.21.6 {
+    //private void unfocusButton(char c, int i, CallbackInfoReturnable<Boolean> cir) {
+     //?} else {
+    private void unfocusButton(CharacterEvent input, CallbackInfoReturnable<Boolean> cir) {
+        //?}
+        InBedChatScreen chatScreen = (InBedChatScreen) (Object) this;
+        if (chatScreen instanceof InBedChatScreenAccessor accessor) {
+            accessor.ls$leaveBedButton().setFocused(false);
+        }
+        if (chatScreen instanceof ChatScreenAccessor accessor) {
+            chatScreen.setFocused(accessor.ls$input());
+        }
+    }
+    *///?}
+}

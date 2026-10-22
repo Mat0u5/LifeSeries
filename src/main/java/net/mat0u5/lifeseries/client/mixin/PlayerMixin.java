@@ -1,0 +1,27 @@
+package net.mat0u5.lifeseries.client.mixin;
+
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
+import net.minecraft.world.entity.player.Player;
+import org.spongepowered.asm.mixin.Mixin;
+
+//? if >= 1.21.2 {
+import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.client.utils.ClientUtils;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+//?}
+
+@Mixin(value = Player.class, priority = 2)
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+public class PlayerMixin {
+    //? if >= 1.21.2 {
+    @Inject(method = "canGlide", at = @At("HEAD"), cancellable = true)
+    protected void canGlide(CallbackInfoReturnable<Boolean> cir) {
+        if (LifeSeries.modFullyDisabled()) return;
+        if (ClientUtils.shouldPreventGliding()) {
+            cir.setReturnValue(false);
+        }
+    }
+    //?}
+}

@@ -1,0 +1,70 @@
+package net.mat0u5.lifeseries.client.mixin;
+
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
+import net.mat0u5.lifeseries.LifeSeries;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.world.entity.Entity;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+
+//? if >= 1.21.2 {
+import net.mat0u5.matlib.client.utils.interfaces.IEntityRenderState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+//?}
+//? if <= 1.21.6 {
+/*import org.spongepowered.asm.mixin.injection.ModifyArg;
+import net.mat0u5.lifeseries.client.utils.ClientUtils;
+import net.minecraft.network.chat.Component;
+*///?}
+//? if >= 26.1 {
+import net.mat0u5.lifeseries.seasons.util.LivesManager;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.matlib.utils.other.Time;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.scores.DisplaySlot;
+import net.minecraft.world.scores.Objective;
+import net.minecraft.world.scores.ReadOnlyScoreInfo;
+import net.minecraft.world.scores.Scoreboard;
+import org.spongepowered.asm.mixin.injection.Redirect;
+//?}
+//? if forge
+//import net.minecraftforge.client.event.RenderNameTagEvent;
+
+@Mixin(value = EntityRenderer.class, priority = 1)
+//? if <= 1.21 {
+/*@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+public class EntityRendererMixin<T extends Entity> {
+*///?} else {
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+public class EntityRendererMixin<T extends Entity, S extends EntityRenderState> {
+//?}
+
+    // In PlayerEntityRendererMixin for <= 1.21.11
+//? if >= 26.1 {
+    //? if !forge {
+    @Redirect(method = "submitNameDisplay(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;I)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/EntityRenderState;scoreText:Lnet/minecraft/network/chat/Component;"))
+    public Component customBelowName(EntityRenderState instance) {
+        Component original = instance.scoreText;
+    //?} else {
+    /*@Redirect(method = "submitNameDisplay(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/client/event/RenderNameTagEvent;getScoreContent()Lnet/minecraft/network/chat/Component;"))
+    public Component customBelowName(RenderNameTagEvent event) {
+        var instance = event.getEntityRenderer();
+        Component original = event.getScoreContent();
+    *///?}
+        if (instance instanceof IEntityRenderState accessor && accessor.ml$getEntity() instanceof Player player) {
+            Scoreboard scoreboard = player.level().getScoreboard();
+            Objective objective = scoreboard.getDisplayObjective(DisplaySlot.BELOW_NAME);
+            if (objective != null) {
+                ReadOnlyScoreInfo scoreInfo = scoreboard.getPlayerScoreInfo(player, objective);
+                if (scoreInfo != null && objective.getName().equalsIgnoreCase(LivesManager.SCOREBOARD_NAME)) {
+                    if (LifeSeries.isSeason(Seasons.LIMITED_LIFE)) {
+                        return Component.literal(Time.seconds(scoreInfo.value()).formatLong()).setStyle(player.getDisplayName().getStyle());
+                    }
+                }
+            }
+        }
+        return original;
+    }
+//?}
+}
