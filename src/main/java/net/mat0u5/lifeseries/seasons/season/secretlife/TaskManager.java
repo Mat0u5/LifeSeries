@@ -1,18 +1,18 @@
 package net.mat0u5.lifeseries.seasons.season.secretlife;
 
-import net.mat0u5.matlib.config.entry.ConfigRef;
-import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
-import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.config.StringListConfig;
 import net.mat0u5.lifeseries.config.StringListManager;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.matlib.utils.player.PlayerListReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.mat0u5.matlib.config.entry.ConfigRef;
+import net.mat0u5.matlib.utils.player.PlayerListReference;
 import net.mat0u5.matlib.utils.world.ItemStackUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;

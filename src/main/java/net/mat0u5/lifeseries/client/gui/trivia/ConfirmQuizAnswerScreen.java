@@ -2,10 +2,10 @@ package net.mat0u5.lifeseries.client.gui.trivia;
 
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.features.Trivia;
-import net.mat0u5.matlib.client.gui.DefaultScreen;
 import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
-import net.mat0u5.matlib.client.render.RenderUtils;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.matlib.client.gui.DefaultScreen;
+import net.mat0u5.matlib.client.render.RenderUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;

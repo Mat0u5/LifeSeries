@@ -1,9 +1,9 @@
 package net.mat0u5.lifeseries.client.config;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.client.utils.enums.MinimalArmorBehavior;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.utils.LifeSeriesResourcePacks;
+import net.mat0u5.lifeseries.client.utils.enums.MinimalArmorBehavior;
 import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;

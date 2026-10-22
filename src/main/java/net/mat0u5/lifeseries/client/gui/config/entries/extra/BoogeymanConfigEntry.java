@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.client.gui.config.entries.extra;
 
+import net.mat0u5.lifeseries.config.LifeSeriesConfigTypes;
 import net.mat0u5.matlib.client.gui.config.entries.ConfigEntry;
 import net.mat0u5.matlib.client.gui.config.entries.main.BooleanConfigEntry;
 import net.mat0u5.matlib.client.gui.config.entries.main.DoubleConfigEntry;
@@ -7,7 +8,6 @@ import net.mat0u5.matlib.client.gui.config.entries.main.IntegerConfigEntry;
 import net.mat0u5.matlib.client.gui.config.entries.main.StringConfigEntry;
 import net.mat0u5.matlib.client.render.RenderUtils;
 import net.mat0u5.matlib.client.utils.TextColors;
-import net.mat0u5.lifeseries.config.LifeSeriesConfigTypes;
 import net.mat0u5.matlib.config.entry.ConfigGuiEntry;
 import net.mat0u5.matlib.config.type.ConfigType;
 import net.mat0u5.matlib.utils.other.TextUtils;

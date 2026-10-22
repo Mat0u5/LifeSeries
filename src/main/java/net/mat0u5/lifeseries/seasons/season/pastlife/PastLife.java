@@ -9,8 +9,8 @@ import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.matlib.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.matlib.utils.other.Time;
 import net.minecraft.server.level.ServerPlayer;
 
 public class PastLife extends Season {

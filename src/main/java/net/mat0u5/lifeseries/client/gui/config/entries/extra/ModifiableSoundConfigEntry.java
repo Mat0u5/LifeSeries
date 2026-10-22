@@ -12,10 +12,11 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.network.chat.Component;
 
-//? if >= 1.21.9
-import net.minecraft.client.input.*;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
+
+//? if >= 1.21.9
+import net.minecraft.client.input.*;
 
 public class ModifiableSoundConfigEntry extends StringConfigEntry {
     private final Button playSoundButton;

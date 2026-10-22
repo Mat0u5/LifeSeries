@@ -1,7 +1,5 @@
 package net.mat0u5.lifeseries.seasons.season.secretlife;
 
-import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLifeConfig;
-import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
@@ -14,14 +12,17 @@ import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.matlib.events.server.ServerEntityEvents;
-import net.mat0u5.matlib.utils.player.AttributeUtils;
-import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
-import net.mat0u5.matlib.utils.world.ItemStackUtils;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.matlib.events.EventResult;
-import net.mat0u5.matlib.utils.other.*;
+import net.mat0u5.matlib.events.server.ServerEntityEvents;
+import net.mat0u5.matlib.utils.other.ActionText;
+import net.mat0u5.matlib.utils.other.TextUtils;
+import net.mat0u5.matlib.utils.other.Time;
+import net.mat0u5.matlib.utils.player.AttributeUtils;
+import net.mat0u5.matlib.utils.player.PlayerReference;
+import net.mat0u5.matlib.utils.world.ItemStackUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
@@ -37,8 +38,9 @@ import net.minecraft.world.level.gamerules.GameRules;
 
 import java.util.*;
 
-import static net.mat0u5.lifeseries.LifeSeries.*;
-import static net.mat0u5.matlib.MatLib.*;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.currentSession;
+import static net.mat0u5.matlib.MatLib.server;
 
 //? if <= 1.20.5 {
 /*import net.minecraft.world.item.EnchantedBookItem;

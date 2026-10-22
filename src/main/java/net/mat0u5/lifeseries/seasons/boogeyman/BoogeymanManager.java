@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.seasons.boogeyman;
 
-import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
@@ -10,24 +9,22 @@ import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.matlib.utils.other.TextUtils;
 import net.mat0u5.matlib.utils.other.Time;
 import net.mat0u5.matlib.utils.player.PlayerListReference;
 import net.mat0u5.matlib.utils.player.PlayerReference;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.matlib.utils.player.ScoreboardUtils;
-import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 
 import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
-import static net.mat0u5.matlib.MatLib.*;
+import static net.mat0u5.matlib.MatLib.server;
 
 public class BoogeymanManager {
     public final ConfigRef<Boolean> BOOGEYMAN_ENABLED = ConfigRef.of(() -> LifeSeries.seasonConfig.BOOGEYMAN);

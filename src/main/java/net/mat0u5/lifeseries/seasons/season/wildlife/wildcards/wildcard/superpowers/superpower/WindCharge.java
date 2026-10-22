@@ -2,13 +2,12 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
-import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
-import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.matlib.utils.player.AttributeUtils;
 import net.mat0u5.matlib.utils.player.PlayerReference;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
 
 //? if >= 1.21 {
