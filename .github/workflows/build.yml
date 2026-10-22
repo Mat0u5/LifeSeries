@@ -70,8 +70,30 @@ jobs:
           method: POST
           payload: '{ "content": "${{ env.MESSAGE_TITLE }}", "embeds": [{ "title": "[${{ github.repository }}:${{ env.BRANCH_NAME }}] - new commit", "author": {"name": "${{ github.event.head_commit.author.name}}","url": "https://github.com/${{ github.event.head_commit.author.name}}","icon_url": "https://github.com/${{ github.event.head_commit.author.name}}.png"},"description": "`Commit Message:` ```\n${{ env.COMMIT_MESSAGE }}```${{ env.COMMIT_FOOTER }}", "url": "https://github.com/${{ github.repository }}/commit/${{ github.sha }}", "color": 5315202 }] }'
 
+  check_matlib:
+    runs-on: ubuntu-22.04
+    outputs:
+      local: ${{ steps.check.outputs.local }}
+    steps:
+      - name: checkout gradle.properties
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: gradle.properties
+          sparse-checkout-cone-mode: false
+
+      - name: Check if MatLib is a local dependency
+        id: check
+        run: |
+          if grep -qE '^\s*deps\.matlib\.local\s*=\s*true\s*$' gradle.properties; then
+            echo "local=true" >> $GITHUB_OUTPUT
+            echo "::notice::deps.matlib.local=true, skipping build"
+          else
+            echo "local=false" >> $GITHUB_OUTPUT
+          fi
+
   build:
-    if: ${{ !contains(github.event.head_commit.message, '{build_skip}') }}
+    needs: check_matlib
+    if: ${{ needs.check_matlib.outputs.local != 'true' && !contains(github.event.head_commit.message, '{build_skip}') }}
     runs-on: ubuntu-22.04
     steps:
       - name: checkout repository

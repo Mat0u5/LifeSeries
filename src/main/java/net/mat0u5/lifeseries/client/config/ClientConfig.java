@@ -26,15 +26,13 @@ public class ClientConfig extends GuiConfig {
     public final ConfigurableValue<Boolean> COLORED_HEARTS = ConfigurableValue.register(this, "colored_hearts", false)
             .name("Colored Hearts Based on Lives")
             .description("Makes your hearts the same color as how many lives you have.")
-            .group("coloredhearts").groupHeader(true);
-    public final ConfigurableValue<Boolean> COLORED_HEARTS_HARDCORE_LAST_LIFE = ConfigurableValue.register(this, "colored_hearts_hardcore_last_life", true)
+            .group("coloredhearts");
+    public final ConfigurableValue<Boolean> HARDCORE_HEARTS_LAST_LIFE = ConfigurableValue.register(this, "hardcore_hearts_last_life", false)
             .name("Show Last Life as Hardcore")
-            .description("When you are on your last life, the hearts will appear as though you are in hardcore.")
-            .group("coloredhearts");
-    public final ConfigurableValue<Boolean> COLORED_HEARTS_HARDCORE_ALL_LIVES = ConfigurableValue.register(this, "colored_hearts_hardcore_all_lives", false)
+            .description("When you are on your last life, your hearts will appear as though you are in hardcore.");
+    public final ConfigurableValue<Boolean> HARDCORE_HEARTS_ALL_LIVES = ConfigurableValue.register(this, "hardcore_hearts_all_lives", false)
             .name("Show All Lives as Hardcore")
-            .description("Hearts will always appear as though you are in hardcore.")
-            .group("coloredhearts");
+            .description("Hearts will always appear as though you are in hardcore.");
 
     public final ConfigurableValue<Double> TEXT_HUD_SCALE = ConfigurableValue.register(this, "text_hud_scale", 1.0)
             .name("Side Text Hud Scale")

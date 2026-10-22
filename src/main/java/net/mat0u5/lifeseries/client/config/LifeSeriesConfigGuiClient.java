@@ -24,6 +24,7 @@ public class LifeSeriesConfigGuiClient implements RegistrableClient {
         ConfigGuiClient.registerEntryFactory(LifeSeriesConfigTypes.LIVES_ENTRY, e -> new LivesConfigEntry(e, ConfigTypes.NULLABLE_INTEGER.parse(e.value()), ConfigTypes.NULLABLE_INTEGER.parse(e.value())));
         ConfigGuiClient.registerEntryFactory(LifeSeriesConfigTypes.EVENT_ENTRY, e -> new EventConfigEntry(e, e.value(), e.value(), optionOrDefault(e, 0, "")));
         ConfigGuiClient.registerEntryFactory(LifeSeriesConfigTypes.MODIFIABLE_TEXT, e -> new ModifiableTextConfigEntry(e, e.value(), optionOrDefault(e, 0, e.value())));
+        ConfigGuiClient.registerEntryFactory(LifeSeriesConfigTypes.MODIFIABLE_SOUND, e -> new ModifiableSoundConfigEntry(e, e.value(), optionOrDefault(e, 0, e.value())));
         ConfigGuiClient.registerEntryFactory(LifeSeriesConfigTypes.TEAM_ENTRY, e -> new TeamConfigEntry(e, e.args));
         ConfigGuiClient.registerEntryFactory(LifeSeriesConfigTypes.SOULMATE_ENTRY, e -> new SoulmateConfigEntry(e, e.args));
         ConfigGuiClient.registerEntryFactory(LifeSeriesConfigTypes.SECRET_TASK, e -> new SecretLifeTaskConfigEntry(e, e.args));

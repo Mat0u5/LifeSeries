@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.config.modifiable;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.matlib.utils.enums.Formatted;
 import net.mat0u5.matlib.utils.other.TextUtils;
 import net.minecraft.network.chat.Component;

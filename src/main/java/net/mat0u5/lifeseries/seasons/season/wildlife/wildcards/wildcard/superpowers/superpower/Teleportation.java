@@ -23,7 +23,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 
 public class Teleportation extends Superpower {
-    public static boolean GIVE_PEARLS = true;
+    public static final ConfigRef<Boolean> GIVE_PEARLS = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_TELEPORTATION_GIVE_PEARLS);
     public static final ConfigRef<Integer> MAX_TELEPORT_DISTANCE = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_TELEPORTATION_TP_DISTANCE);
     public static final ConfigRef<Integer> MAX_SWAP_DISTANCE = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_TELEPORTATION_SWAP_DISTANCE);
     public static int COOLDOWN_MILLIS = 5000;
@@ -46,7 +46,7 @@ public class Teleportation extends Superpower {
     @Override
     public void tick() {
         timer.tick();
-        if (timer.isMultipleOf(Time.minutes(2)) && GIVE_PEARLS) {
+        if (timer.isMultipleOf(Time.minutes(2)) && GIVE_PEARLS.get()) {
             ServerPlayer player = getPlayer();
             if (player != null) {
                 int pearls = player.getInventory().countItem(Items.ENDER_PEARL);

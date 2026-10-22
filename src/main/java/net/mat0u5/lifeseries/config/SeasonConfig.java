@@ -1,6 +1,8 @@
 package net.mat0u5.lifeseries.config;
 
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSoundManager;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableTextManager;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
@@ -161,6 +163,11 @@ public class SeasonConfig extends DefaultConfigValues {
             setProperty(key, entry.value());
             LifeSeriesNetworkHandlerServer.onConfigChanged(key, oldValue, getProperty(key));
         }
+        else if (typeId.equals(LifeSeriesConfigTypes.MODIFIABLE_SOUND.id()) && !entry.args.isEmpty()) {
+            String oldValue = getProperty(key);
+            setProperty(key, entry.value());
+            LifeSeriesNetworkHandlerServer.onConfigChanged(key, oldValue, getProperty(key));
+        }
     }
 
     /*
@@ -177,6 +184,7 @@ public class SeasonConfig extends DefaultConfigValues {
         addSecretTaskEntries(result);
         addTriviaEntries(result);
         addModifiableTextEntries(result);
+        addModifiableSoundEntries(result);
         return result;
     }
 
@@ -337,6 +345,19 @@ public class SeasonConfig extends DefaultConfigValues {
                     key, entry.key(),
                     entry.description(),
                     "text",
+                    List.of(getOrCreateProperty(key, entry.defaultValue()), entry.defaultValue())
+            ));
+        }
+    }
+
+    private void addModifiableSoundEntries(List<DynamicEntry> result) {
+        for (ModifiableSoundManager.SoundEntry entry : ModifiableSoundManager.getRegisteredEntries().values()) {
+            String key = entry.configKey();
+            result.add(new DynamicEntry(
+                    LifeSeriesConfigTypes.MODIFIABLE_TEXT,
+                    key, entry.key(),
+                    "",
+                    "sound",
                     List.of(getOrCreateProperty(key, entry.defaultValue()), entry.defaultValue())
             ));
         }

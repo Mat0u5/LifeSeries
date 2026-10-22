@@ -1,10 +1,12 @@
 package net.mat0u5.lifeseries.seasons.util;
 
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.matlib.utils.player.ScoreboardUtils;
 import net.mat0u5.matlib.utils.player.TeamUtils;
 import net.minecraft.server.level.ServerPlayer;
@@ -29,12 +31,12 @@ public class WatcherManager {
     public static final String TEAM_NAME = "watcher";
     public static final String TEAM_DISPLAY_NAME = "Watcher";
     private static List<String> watchers = new ArrayList<>();
-    public static boolean WATCHERS_IN_TAB = true;
-    public static boolean WATCHERS_SEE_BOOGEY_AND_SOCIETY = false;
-    public static boolean WATCHERS_LATEJOIN = false;
+    public static ConfigRef<Boolean> WATCHERS_IN_TAB = ConfigRef.of(() -> LifeSeries.seasonConfig.WATCHERS_IN_TAB);
+    public static ConfigRef<Boolean> WATCHERS_SEE_BOOGEY_AND_SOCIETY = ConfigRef.of(() -> LifeSeries.seasonConfig.WATCHERS_SEE_BOOGEY_AND_SOCIETY);
+    public static ConfigRef<Boolean> WATCHERS_LATEJOIN = ConfigRef.of(() -> LifeSeries.seasonConfig.WATCHERS_LATEJOIN);
 
     public static void onPlayerJoin(ServerPlayer player) {
-        if (WATCHERS_LATEJOIN && !isWatcher(player) && (currentSession.statusStarted() || currentSession.statusPaused())) {
+        if (WATCHERS_LATEJOIN.get() && !isWatcher(player) && (currentSession.statusStarted() || currentSession.statusPaused())) {
             if (!((IPlayer) player).ls$hasAssignedLives()) {
                 addWatcher(player);
                 TaskScheduler.schedulePriorityTask(1, () -> {

@@ -1,8 +1,10 @@
 package net.mat0u5.lifeseries.client.gui.config.entries.extra;
 
-import net.mat0u5.lifeseries.client.gui.config.entries.main.StringConfigEntry;
-import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.config.LifeSeriesConfigTypes;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.matlib.client.gui.config.entries.main.StringConfigEntry;
+import net.mat0u5.matlib.config.entry.ConfigGuiEntry;
+import net.mat0u5.matlib.config.type.ConfigType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
@@ -19,8 +21,8 @@ public class ModifiableSoundConfigEntry extends StringConfigEntry {
     private final Button playSoundButton;
     private SoundInstance soundInstance;
 
-    public ModifiableSoundConfigEntry(String fieldName, String displayName, String value, String defaultValue) {
-        super(fieldName, displayName, "", value, defaultValue, 230, 14);
+    public ModifiableSoundConfigEntry(ConfigGuiEntry guiEntry, String value, String defaultValue) {
+        super(guiEntry, value, defaultValue, 230, 14);
         playSoundButton = Button.builder(Component.nullToEmpty("▷"), this::onPlayClicked)
                 .bounds(0, 0, 14, 14)
                 .build();
@@ -106,7 +108,7 @@ public class ModifiableSoundConfigEntry extends StringConfigEntry {
     //?}
 
     @Override
-    public ConfigTypes getValueType() {
-        return ConfigTypes.MODIFIABLE_SOUND;
+    public ConfigType<?> getValueType() {
+        return LifeSeriesConfigTypes.MODIFIABLE_SOUND;
     }
 }

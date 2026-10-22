@@ -497,7 +497,7 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
         SimplePackets.HUNGER_NON_EDIBLE.sendToClient(Hunger.nonEdibleStr, players);
         SimplePackets.SNOWY_NETHER.sendToClient(NiceLife.SNOWY_NETHER.get(), players);
         SimplePackets.NICELIFE_DISABLE_SNOW.sendToClient(NiceLife.DISABLE_SNOW, players);
-        SimplePackets.SERVER_MINIMAL_ARMOR.sendToClient(!Season.DISABLE_MINIMAL_ARMOR_PACK, players);
+        SimplePackets.SERVER_MINIMAL_ARMOR.sendToClient(!Season.DISABLE_MINIMAL_ARMOR_PACK.get(), players);
 
         if (Season.skyColor != null) {
             SimplePackets.SKYCOLOR.sendToClient(List.of(String.valueOf(Season.skyColorSetMode), String.valueOf((int)Season.skyColor.x), String.valueOf((int)Season.skyColor.y), String.valueOf((int)Season.skyColor.z)), players);

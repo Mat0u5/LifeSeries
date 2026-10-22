@@ -82,7 +82,7 @@ public class PlayerUtils extends net.mat0u5.matlib.utils.player.PlayerUtils {
         if (player == null) return;
         //? if > 1.20.2 {
         applySingleResourcepack(player, Season.RESOURCEPACK_MAIN_URL, Season.RESOURCEPACK_MAIN_SHA, "Life Series Resourcepack.");
-        if (!currentSeason.DISABLE_MINIMAL_ARMOR_PACK) {
+        if (!Season.DISABLE_MINIMAL_ARMOR_PACK.get()) {
             applySingleResourcepack(player, Season.RESOURCEPACK_MINIMAL_ARMOR_URL, Season.RESOURCEPACK_MINIMAL_ARMOR_SHA, "Life Series Resourcepack.");
         }
         else {

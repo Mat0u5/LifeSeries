@@ -165,11 +165,11 @@ public class Blacklist {
             }
         }
         if (!LifeSeries.isSeason(Seasons.LAST_LIFE)) {
-            newList.add(IdentifierHelper.mod("moss_block_recipe"));
-            newList.add(IdentifierHelper.mod("spore_blossom_recipe"));
+            newList.add(IdentifierHelper.lifeseries("moss_block_recipe"));
+            newList.add(IdentifierHelper.lifeseries("spore_blossom_recipe"));
         }
         if (!LifeSeries.isSeason(Seasons.LIMITED_LIFE)) {
-            newList.add(IdentifierHelper.mod("magma_cream_recipe"));
+            newList.add(IdentifierHelper.lifeseries("magma_cream_recipe"));
         }
 
         for (String itemId : loadRecipeBlacklist()) {

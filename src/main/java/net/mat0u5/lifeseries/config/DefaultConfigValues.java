@@ -23,6 +23,8 @@ public abstract class DefaultConfigValues extends GuiConfig {
             .group("events").groupHeader(true);
     public final ConfigHeader GROUP_TEXTS = ConfigHeader.register(this, "group_texts", "Modifiable Texts")
             .group("text").groupHeader(true);
+    public final ConfigHeader GROUP_SOUNDS = ConfigHeader.register(this, "group_sounds", "Modifiable Sounds")
+            .group("sound").groupHeader(true).setNew(true);
 
     public final ConfigHeader GROUP_GLOBAL_LIVES = ConfigHeader.register(this, "group_global_lives", "Lives Stuff")
             .group("global.lives").groupHeader(true);
@@ -146,6 +148,16 @@ public abstract class DefaultConfigValues extends GuiConfig {
     public final ConfigurableValue<Boolean> ONLY_LOSE_DURABILITY_IN_SESSION = ConfigurableValue.register(this, "only_lose_durability_in_session", false)
             .name("Only Lose Durability In Session")
             .description("Makes players only lose durability on their items and gear while a session is active.")
+            .group("global.session");
+    public final ConfigurableValue<Boolean> ONLY_LOSE_HUNGER_IN_SESSION = ConfigurableValue.register(this, "only_lose_hunger_in_session", false)
+            .name("Only Lose Hunger In Session")
+            .description("Makes players only lose hunger while a session is active.")
+            .setNew(true)
+            .group("global.session");
+    public final ConfigurableValue<Boolean> ONLY_ADVANCE_TIME_IN_SESSION = ConfigurableValue.register(this, "only_advance_time_in_session", false)
+            .name("Only Advance Time In Session")
+            .description("Makes the day time freeze when not in session.")
+            .setNew(true)
             .group("global.session");
     public final ConfigurableValue<Boolean> SESSION_START_COUNTDOWN = ConfigurableValue.register(this, "session_start_countdown", false)
             .name("Session Start Countdown")
@@ -380,6 +392,16 @@ public abstract class DefaultConfigValues extends GuiConfig {
             .name("Show Watchers In Tab")
             .description("Controls whether Watchers should show up in the tab list.")
             .group("global.watchers");
+    public final ConfigurableValue<Boolean> WATCHERS_SEE_BOOGEY_AND_SOCIETY = ConfigurableValue.register(this, "watchers_see_boogey_and_society", false)
+            .name("Show Boogeymen And Society Members")
+            .description("Controls whether Watchers have permissions for the '/boogeyman list' and '/society members list' commands.")
+            .setNew(true)
+            .group("global.watchers");
+    public final ConfigurableValue<Boolean> WATCHERS_LATEJOIN = ConfigurableValue.register(this, "watchers_latejoin", false)
+            .name("Auto-Watcher Late Join Players")
+            .description("Controls whether players that join the session late (without having joined before), will be added as watchers automatically.")
+            .setNew(true)
+            .group("global.watchers");
     public final ConfigurableValue<Boolean> SUBIN_CHANGE_SKIN = ConfigurableValue.register(this, "subin_change_skin", true)
             .name("Sub-in Change Skin")
             .description("Controls whether the player subbing in will get the skin of the player they are subbing in for.")
@@ -433,6 +455,11 @@ public abstract class DefaultConfigValues extends GuiConfig {
     public final ConfigurableValue<Boolean> TEAMS_SYSTEM_DISABLED = ConfigurableValue.register(this, "teams_system_disabled", false)
             .name("Fully Disable Teams System")
             .description("Fully disables the teams system, if you want to implement a custom one for example :)")
+            .group("global.disable");
+    public final ConfigurableValue<Boolean> DISABLE_MINIMAL_ARMOR_PACK = ConfigurableValue.register(this, "disable_minimal_armor_pack", false)
+            .name("Disable Minimal Armor Pack")
+            .description("Controls whether the minimal armor pack is disabled.")
+            .setNew(true)
             .group("global.disable");
 
     public final ConfigHeader NO_SEASON_SPECIFIC = ConfigHeader.register(this, "no_season_specific", "There are no season specific entries")

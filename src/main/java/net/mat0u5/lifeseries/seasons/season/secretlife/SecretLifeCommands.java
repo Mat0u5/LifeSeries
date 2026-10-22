@@ -12,7 +12,6 @@ import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.matlib.utils.other.ActionText;
-import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
@@ -262,7 +261,7 @@ public class SecretLifeCommands extends CustomCommand {
             return -1;
         }
 
-        if (!TaskManager.GUESS_TASKS) {
+        if (!TaskManager.GUESS_TASKS.get()) {
             sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_ERROR.get());
             return -1;
         }
@@ -284,7 +283,7 @@ public class SecretLifeCommands extends CustomCommand {
                     break;
                 }
                 taskGuess.confirmed = decision;
-                List<ServerPlayer> allPlayers = TaskManager.GUESS_TASKS_PUBLIC ? PlayerUtils.getAllPlayers() : new ArrayList<>(List.of(self, target));
+                List<ServerPlayer> allPlayers = TaskManager.GUESS_TASKS_PUBLIC.get() ? PlayerUtils.getAllPlayers() : new ArrayList<>(List.of(self, target));
 
                 if (decision) {
                     PlayerUtils.broadcastMessage(allPlayers, ModifiableText.SECRETLIFE_TASK_GUESS_DECISION_CORRECT.get(target, self));
@@ -309,7 +308,7 @@ public class SecretLifeCommands extends CustomCommand {
         if (self == null) return -1;
         if (target == null) return -1;
 
-        if (!TaskManager.GUESS_TASKS) {
+        if (!TaskManager.GUESS_TASKS.get()) {
             sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_ERROR.get());
             return -1;
         }
@@ -337,15 +336,15 @@ public class SecretLifeCommands extends CustomCommand {
         Integer targetLives = ((IPlayer) target).ls$getLives();
         if (selfLives == null || targetLives == null) return -1;
 
-        if (selfLives < TaskManager.GUESS_TASKS_LIFE_GUESSER_MIN) {
+        if (selfLives < TaskManager.GUESS_TASKS_LIFE_GUESSER_MIN.get()) {
             sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_ERROR_GUESSER_MIN.get(TaskManager.GUESS_TASKS_LIFE_GUESSER_MIN));
             return -1;
         }
-        if (selfLives > TaskManager.GUESS_TASKS_LIFE_GUESSER_MAX) {
+        if (selfLives > TaskManager.GUESS_TASKS_LIFE_GUESSER_MAX.get()) {
             sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_ERROR_GUESSER_MAX.get(TaskManager.GUESS_TASKS_LIFE_GUESSER_MAX));
             return -1;
         }
-        if (targetLives < TaskManager.GUESS_TASKS_LIFE_GUESSED_MIN) {
+        if (targetLives < TaskManager.GUESS_TASKS_LIFE_GUESSED_MIN.get()) {
             sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_ERROR_GUESSED_MIN.get(TaskManager.GUESS_TASKS_LIFE_GUESSED_MIN));
             return -1;
         }
@@ -373,7 +372,7 @@ public class SecretLifeCommands extends CustomCommand {
 
         taskGuesses.add(new TaskManager.TaskGuess(target.getUUID(), null));
 
-        List<ServerPlayer> allPlayers = TaskManager.GUESS_TASKS_PUBLIC ? PlayerUtils.getAllPlayers() : new ArrayList<>(List.of(self, target));
+        List<ServerPlayer> allPlayers = TaskManager.GUESS_TASKS_PUBLIC.get() ? PlayerUtils.getAllPlayers() : new ArrayList<>(List.of(self, target));
         List<ServerPlayer> otherPlayers = new ArrayList<>(allPlayers);
         otherPlayers.remove(target);
 

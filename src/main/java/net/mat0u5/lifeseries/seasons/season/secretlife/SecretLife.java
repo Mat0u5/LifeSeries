@@ -117,16 +117,6 @@ public class SecretLife extends Season {
     }
 
     @Override
-    public void reload() {
-        super.reload();
-        TaskManager.GUESS_TASKS = SecretLifeConfig.GUESS_TASKS.get();
-        TaskManager.GUESS_TASKS_PUBLIC = SecretLifeConfig.GUESS_TASKS_PUBLIC.get();
-        TaskManager.GUESS_TASKS_LIFE_GUESSER_MIN = SecretLifeConfig.GUESS_TASKS_LIFE_GUESSER_MIN.get();
-        TaskManager.GUESS_TASKS_LIFE_GUESSER_MAX = SecretLifeConfig.GUESS_TASKS_LIFE_GUESSER_MAX.get();
-        TaskManager.GUESS_TASKS_LIFE_GUESSED_MIN = SecretLifeConfig.GUESS_TASKS_LIFE_GUESSED_MIN.get();
-    }
-
-    @Override
     public void onPlayerRespawn(ServerPlayer player) {
         super.onPlayerRespawn(player);
         UUID uuid = SubInManager.getOrSub(player);

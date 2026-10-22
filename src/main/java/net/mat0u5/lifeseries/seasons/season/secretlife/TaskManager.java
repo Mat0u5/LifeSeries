@@ -8,9 +8,7 @@ import net.mat0u5.lifeseries.config.StringListManager;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.other.Tuple;
 import net.mat0u5.matlib.utils.player.PlayerListReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
@@ -18,8 +16,6 @@ import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.mat0u5.matlib.utils.world.ItemStackUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
@@ -52,11 +48,11 @@ public class TaskManager {
     public static final ConfigRef<Boolean> CONSTANT_TASKS = ConfigRef.of(() -> SecretLifeConfig.get().CONSTANT_TASKS);
     public static final ConfigRef<Boolean> PUBLIC_TASKS_ON_SUBMIT = ConfigRef.of(() -> SecretLifeConfig.get().BROADCAST_TASKS_WHEN_SUBMITTED);
     public static final ConfigRef<Boolean> TASKS_NEED_CONFIRMATION = ConfigRef.of(() -> SecretLifeConfig.get().TASKS_NEED_CONFIRMATION);
-    public static boolean GUESS_TASKS = false;
-    public static boolean GUESS_TASKS_PUBLIC = false;
-    public static int GUESS_TASKS_LIFE_GUESSER_MIN = 2;
-    public static int GUESS_TASKS_LIFE_GUESSER_MAX = 2;
-    public static int GUESS_TASKS_LIFE_GUESSED_MIN = 3;
+    public static ConfigRef<Boolean> GUESS_TASKS = ConfigRef.of(() -> SecretLifeConfig.get().GUESS_TASKS);
+    public static ConfigRef<Boolean> GUESS_TASKS_PUBLIC = ConfigRef.of(() -> SecretLifeConfig.get().GUESS_TASKS_PUBLIC);
+    public static ConfigRef<Integer> GUESS_TASKS_LIFE_GUESSER_MIN = ConfigRef.of(() -> SecretLifeConfig.get().GUESS_TASKS_LIFE_GUESSER_MIN);
+    public static ConfigRef<Integer> GUESS_TASKS_LIFE_GUESSER_MAX = ConfigRef.of(() -> SecretLifeConfig.get().GUESS_TASKS_LIFE_GUESSER_MAX);
+    public static ConfigRef<Integer> GUESS_TASKS_LIFE_GUESSED_MIN = ConfigRef.of(() -> SecretLifeConfig.get().GUESS_TASKS_LIFE_GUESSED_MIN);
 
     // Fraction of the tasks to keep as used when resetting happens.
     public static double RECENT_TASK_PERCENTAGE = 0.5;

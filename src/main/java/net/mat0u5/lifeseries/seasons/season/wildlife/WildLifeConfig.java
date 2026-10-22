@@ -439,6 +439,11 @@ public class WildLifeConfig extends SeasonConfig {
             .name("Max Teleport Distance")
             .description("Controls the max teleport distance.\nVery high numbers may cause performance issues.")
             .group("season.superpowers.teleportation");
+    public final ConfigurableValue<Boolean> WILDCARD_SUPERPOWERS_TELEPORTATION_GIVE_PEARLS = ConfigurableValue.register(this, "wildcard_superpowers_teleportation_give_pearls", true)
+            .name("Give Ender Pearls")
+            .description("Controls whether players with this power continually get ender pearls.")
+            .setNew(true)
+            .group("season.superpowers.teleportation");
 
     // Time Control
     public final ConfigHeader SUPERPOWER_TIME_CONTROL = ConfigHeader.register(this, "superpower_time_control", "Time Control")

@@ -63,7 +63,7 @@ public class NiceLife extends Season {
     public static final ConfigRef<Boolean> SNOWY_NETHER = ConfigRef.of(() -> NiceLifeConfig.get().SNOWY_NETHER);
     public static final ConfigRef<Boolean> LIGHT_MELTS_SNOW = ConfigRef.of(() -> NiceLifeConfig.get().LIGHT_MELTS_SNOW);
     public final ConfigRef<Boolean> SNOW_WHEN_NOT_IN_SESSION = ConfigRef.of(() -> NiceLifeConfig.get().SNOW_WHEN_NOT_IN_SESSION);
-    public static final ConfigRef<Boolean> DISABLE_SNOW = ConfigRef.of(() -> NiceLifeConfig.get().DISABLE_SNOW);
+    public static boolean DISABLE_SNOW = false;
     public static final ConfigRef<Boolean> RED_WINTER = ConfigRef.of(() -> NiceLifeConfig.get().RED_WINTER);
     public Time SNOW_LAYER_INCREASE_INTERVAL = Time.seconds(600);
     public Time snowTicks = Time.zero();
@@ -128,6 +128,7 @@ public class NiceLife extends Season {
         updateSnowTick();
         NiceLifeTriviaManager.initialize();
 
+        DISABLE_SNOW = NiceLifeConfig.get().DISABLE_SNOW.get();
         NiceLifeVotingManager.VOTING_TIME = Time.seconds(NiceLifeConfig.get().VOTING_TIME.get());
         TriviaHandler.guiType = NiceLifeConfig.get().TRIVIA_GUI_TYPE.get();
     }

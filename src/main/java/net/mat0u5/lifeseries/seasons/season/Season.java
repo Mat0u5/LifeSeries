@@ -129,7 +129,7 @@ public abstract class Season {
     public static final ConfigRef<Boolean> ONLY_LOSE_DURABILITY_IN_SESSION = ConfigRef.of(() -> LifeSeries.seasonConfig.ONLY_LOSE_DURABILITY_IN_SESSION);
     public static boolean ONLY_LOSE_HUNGER_IN_SESSION = false;
     public static boolean ONLY_ADVANCE_TIME_IN_SESSION = false;
-    public static boolean DISABLE_MINIMAL_ARMOR_PACK = false;
+    public static ConfigRef<Boolean> DISABLE_MINIMAL_ARMOR_PACK = ConfigRef.of(() -> LifeSeries.seasonConfig.DISABLE_MINIMAL_ARMOR_PACK);
 
     public BoogeymanManager boogeymanManager = createBoogeymanManager();
     public SecretSociety secretSociety = createSecretSociety();
@@ -274,12 +274,8 @@ public abstract class Season {
 
     public void reload() {
         LifeSeriesNetworkHandlerServer.reload();
-        WatcherManager.WATCHERS_IN_TAB = seasonConfig.WATCHERS_IN_TAB.get();
-        WatcherManager.WATCHERS_SEE_BOOGEY_AND_SOCIETY = seasonConfig.WATCHERS_SEE_BOOGEY_AND_SOCIETY.get();
-        WatcherManager.WATCHERS_LATEJOIN = seasonConfig.WATCHERS_LATEJOIN.get();
         ONLY_LOSE_HUNGER_IN_SESSION = seasonConfig.ONLY_LOSE_HUNGER_IN_SESSION.get();
         ONLY_ADVANCE_TIME_IN_SESSION = seasonConfig.ONLY_ADVANCE_TIME_IN_SESSION.get();
-        DISABLE_MINIMAL_ARMOR_PACK = seasonConfig.DISABLE_MINIMAL_ARMOR_PACK.get();
         boogeymanManager.onReload();
         secretSociety.onReload();
         createTeams();

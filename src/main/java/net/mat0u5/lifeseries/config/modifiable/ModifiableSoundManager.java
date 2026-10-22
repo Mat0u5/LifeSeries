@@ -1,8 +1,6 @@
 package net.mat0u5.lifeseries.config.modifiable;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.config.ConfigFileEntry;
-import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
@@ -12,8 +10,16 @@ import net.minecraft.sounds.SoundEvents;
 import java.util.Map;
 import java.util.TreeMap;
 
+import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
+
 public class ModifiableSoundManager {
-	private static Map<String, ConfigFileEntry<String>> registeredEntries = new TreeMap<>();
+	public record SoundEntry(String key, String defaultValue) {
+		public String configKey() {
+			return "sound." + key;
+		}
+	}
+
+	private static Map<String, SoundEntry> registeredEntries = new TreeMap<>();
 	private static boolean initialized = false;
 
 	public static void initialize() {
@@ -24,7 +30,7 @@ public class ModifiableSoundManager {
 		LifeSeries.LOGGER.info("Loaded "+registeredEntries.size()+" modifiable sounds");
 	}
 
-	public static Map<String, ConfigFileEntry<String>> getRegisteredEntries() {
+	public static Map<String, SoundEntry> getRegisteredEntries() {
 		return registeredEntries;
 	}
 
@@ -33,9 +39,11 @@ public class ModifiableSoundManager {
 			LifeSeries.LOGGER.error("Tried to register duplicate key for modifiable sound: "+key);
 			return;
 		}
-		ConfigFileEntry<String> configEntry = new ConfigFileEntry<>("sound."+key, defaultSoundId, ConfigTypes.MODIFIABLE_SOUND, "sound", key, "");
-		configEntry.get(); // To initialize it
-		registeredEntries.put(key, configEntry);
+		SoundEntry entry = new SoundEntry(key, defaultSoundId);
+		if (seasonConfig != null) {
+			seasonConfig.getOrCreateProperty(entry.configKey(), defaultSoundId); // To initialize it
+		}
+		registeredEntries.put(key, entry);
 	}
 
 	public static SoundEvent get(ModifiableSound modifiableSound) {
@@ -43,12 +51,12 @@ public class ModifiableSoundManager {
 			initialize();
 		}
 		String key = modifiableSound.name;
-		ConfigFileEntry<String> configEntry = registeredEntries.get(key);
+		SoundEntry configEntry = registeredEntries.get(key);
 		if (configEntry == null) {
 			LifeSeries.LOGGER.warn("Could not find modifiable sound " + key);
 			return SoundEvents.EMPTY;
 		}
-		String configSoundId = configEntry.get().trim();
+		String configSoundId = seasonConfig.getOrCreateProperty(configEntry.configKey(), configEntry.defaultValue());
 		if (!configSoundId.contains(":")) {
 			configSoundId = "minecraft:"+configSoundId;
 		}

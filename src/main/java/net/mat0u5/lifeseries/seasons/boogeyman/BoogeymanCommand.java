@@ -56,7 +56,7 @@ public class BoogeymanCommand extends CustomCommand {
                     .requires(source -> {
                         if (PermissionManager.isAdmin(source)) return true;
                         ServerPlayer self = source.getPlayer();
-						return self != null && WatcherManager.WATCHERS_SEE_BOOGEY_AND_SOCIETY && ((IPlayer) self).ls$isWatcher();
+						return self != null && WatcherManager.WATCHERS_SEE_BOOGEY_AND_SOCIETY.get() && ((IPlayer) self).ls$isWatcher();
 					})
                     .executes(context -> boogeyList(
                         context.getSource()

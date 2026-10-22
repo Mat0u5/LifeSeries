@@ -86,10 +86,11 @@ public class SecretLifeConfig extends SeasonConfig {
             .group("season.health").groupHeader(true);
     public final ConfigHeader GROUP_TASKS = ConfigHeader.register(this, "group_tasks", "Tasks")
             .group("season.tasks").groupHeader(true);
-    public static final ConfigFileEntry<Boolean> GUESS_TASKS = new ConfigFileEntry<>(
-            "guess_tasks", false, "{season.tasks.guess}[new]",
-            "Enable Task Guess Command", "Makes players be able to use /task guess."
-    );
+    public final ConfigurableValue<Boolean> GUESS_TASKS = ConfigurableValue.register(this, "guess_tasks", false)
+            .name("Enable Task Guess Command")
+            .description("Makes players be able to use /task guess.")
+            .setNew(true)
+            .group("season.tasks.guess").groupHeader(true);
     public final ConfigHeader GROUP_TASKS_EASY = ConfigHeader.register(this, "group_tasks_easy", "Easy Tasks")
             .group("season.tasks.easy").groupHeader(true);
     public final ConfigHeader GROUP_TASKS_HARD = ConfigHeader.register(this, "group_tasks_hard", "Hard Tasks")
@@ -125,22 +126,26 @@ public class SecretLifeConfig extends SeasonConfig {
             .name("Task Health Red Fail")
             .description("The health you lose for failing a red task.")
             .group("season.health");
-    public static final ConfigFileEntry<Boolean> GUESS_TASKS_PUBLIC = new ConfigFileEntry<>(
-            "guess_tasks_public", false, "season.tasks.guess[new]",
-            "Public Guessing", "Makes the guess be broadcast publicly."
-    );
-    public static final ConfigFileEntry<Integer> GUESS_TASKS_LIFE_GUESSER_MIN = new ConfigFileEntry<>(
-            "guess_tasks_life_guesser_min", 2, "season.tasks.guess[new]",
-            "Guessing Player Minimum Lives", "Minimum number of lives the player that's guessing needs to have."
-    );
-    public static final ConfigFileEntry<Integer> GUESS_TASKS_LIFE_GUESSER_MAX = new ConfigFileEntry<>(
-            "guess_tasks_life_guesser_max", 2, "season.tasks.guess[new]",
-            "Guessing Player Maximum Lives", "Maximum number of lives the player that's guessing can have."
-    );
-    public static final ConfigFileEntry<Integer> GUESS_TASKS_LIFE_GUESSED_MIN = new ConfigFileEntry<>(
-            "guess_tasks_life_guessed_min", 3, "season.tasks.guess[new]",
-            "Guessed Player Minimum Lives", "Minimum number of lives the player who's task you're guessing needs to have."
-    );
+    public final ConfigurableValue<Boolean> GUESS_TASKS_PUBLIC = ConfigurableValue.register(this, "guess_tasks_public", false)
+            .name("Public Guessing")
+            .description("Makes the guess be broadcast publicly.")
+            .setNew(true)
+            .group("season.tasks.guess");
+    public final ConfigurableValue<Integer> GUESS_TASKS_LIFE_GUESSER_MIN = ConfigurableValue.register(this, "guess_tasks_life_guesser_min", 2)
+            .name("Guessing Player Minimum Lives")
+            .description("Minimum number of lives the player that's guessing needs to have.")
+            .setNew(true)
+            .group("season.tasks.guess");
+    public final ConfigurableValue<Integer> GUESS_TASKS_LIFE_GUESSER_MAX = ConfigurableValue.register(this, "guess_tasks_life_guesser_max", 2)
+            .name("Guessing Player Maximum Lives")
+            .description("Maximum number of lives the player that's guessing can have.")
+            .setNew(true)
+            .group("season.tasks.guess");
+    public final ConfigurableValue<Integer> GUESS_TASKS_LIFE_GUESSED_MIN = ConfigurableValue.register(this, "guess_tasks_life_guessed_min", 3)
+            .name("Guessed Player Minimum Lives")
+            .description("Minimum number of lives the player who's task you're guessing needs to have.")
+            .setNew(true)
+            .group("season.tasks.guess");
 
     public SecretLifeConfig() {
         super(Seasons.SECRET_LIFE);

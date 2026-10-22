@@ -233,7 +233,6 @@ public class WildLife extends Season {
         Necromancy.COOLDOWN_MILLIS = 1000 * WildLifeConfig.get().SUPERPOWER_COOLDOWN_NECROMANCY.get();
 
         TimeControl.TARGET_TICK_RATE = Math.max(1, WildLifeConfig.get().WILDCARD_SUPERPOWERS_TIME_DILATION_TICK_RATE.get());
-        Teleportation.GIVE_PEARLS = WildLifeConfig.WILDCARD_SUPERPOWERS_TELEPORTATION_GIVE_PEARLS.get();
         ShadowPlay.BLIND_TIME = 20 * WildLifeConfig.get().WILDCARD_SUPERPOWERS_SHADOW_PLAY_BLIND_TIME.get();
         TriviaHandler.guiType = WildLifeConfig.get().WILDCARD_TRIVIA_GUI_TYPE.get();
 
