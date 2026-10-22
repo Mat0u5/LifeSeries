@@ -21,7 +21,7 @@ import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.mat0u5.lifeseries.client.utils.LifeSeriesResourcePacks;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.mixin.PlayerAccessor;
-import net.mat0u5.lifeseries.mixin.client.GuiAccessor;
+import net.mat0u5.lifeseries.client.mixin.GuiAccessor;
 import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.registries.ParticleRegistry;

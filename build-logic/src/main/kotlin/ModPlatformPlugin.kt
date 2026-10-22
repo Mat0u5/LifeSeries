@@ -177,7 +177,7 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 			archiveBaseName.set(modId)
 			if (isForge) {
 				manifest.attributes(
-					"MixinConfigs" to "${modId}.mixins.json"
+					"MixinConfigs" to "${modId}.mixins.json,${modId}.mixins.client.json"
 				)
 			}
 		}
@@ -198,7 +198,7 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 			dependsOn(tasks.named("stonecutterGenerate"))
 			dependsOn("kspKotlin")
 
-			filesMatching("*.mixins.json") {
+			filesMatching(listOf("*.mixins.json", "*.mixins.client.json")) {
 				val needsRefmap = isForge && stonecutter.eval(stonecutter.current.version, "<=1.20") // legacyForge
 				if (!needsRefmap) {
 					filter { line: String ->
@@ -363,6 +363,9 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 		extensions.configure<FletchingTableExtension> {
 			mixins.create("main").apply {
 				mixin("default", "${prop("mod.id")}.mixins.json")
+				mixin("client", "${prop("mod.id")}.mixins.client.json") {
+					env("client")
+				}
 			}
 		}
 	}
