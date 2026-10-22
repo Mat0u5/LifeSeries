@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.LevelRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(value = LevelRenderer.class, priority = 1)
-@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public class LevelRendererMixin {
     /**
      * For >= 26.3, located in:

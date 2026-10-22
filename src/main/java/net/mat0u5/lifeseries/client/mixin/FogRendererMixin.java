@@ -42,7 +42,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.minecraft.client.renderer.fog.FogData;
 
 @Mixin(value = FogRenderer.class, priority = 1)
-@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public class FogRendererMixin {
     @Inject(method = "setupFog", at = @At("HEAD"), cancellable = true)
 //? if !forge {

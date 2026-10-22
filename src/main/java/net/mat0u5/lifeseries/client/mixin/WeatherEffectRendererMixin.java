@@ -40,7 +40,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(value = WeatherEffectRenderer.class)
 //?}
-@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public class WeatherEffectRendererMixin {
     private static Identifier LESS_SNOW_RESOURCE_LOCATION = IdentifierHelper.lifeseries("textures/environment/less-snow.png");
     //? if >= 26.3 {

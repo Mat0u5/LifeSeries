@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
 @Mixin(Camera.class)
-@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public class CameraMixin {
     @Shadow
     private Entity entity;

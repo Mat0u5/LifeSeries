@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(value = Enchantment.class, priority = 1)
-@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public class EnchantmentMixin {
     @ModifyReturnValue(method = "getMaxLevel", at = @At("RETURN"))
     private int clampedEnchants(int original) {

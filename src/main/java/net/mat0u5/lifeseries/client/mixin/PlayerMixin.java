@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 //?}
 
 @Mixin(value = Player.class, priority = 2)
-@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public class PlayerMixin {
     //? if >= 1.21.2 {
     @Inject(method = "canGlide", at = @At("HEAD"), cancellable = true)

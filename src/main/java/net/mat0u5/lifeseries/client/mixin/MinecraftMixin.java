@@ -18,7 +18,7 @@ import java.util.Optional;
 //?}
 
 @Mixin(value = Minecraft.class, priority = 1)
-@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public abstract class MinecraftMixin {
 
     @Inject(method = "doWorldLoad", at = @At("HEAD"))

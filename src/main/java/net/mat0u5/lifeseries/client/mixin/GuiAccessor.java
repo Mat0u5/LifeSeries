@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import net.minecraft.client.gui.Hud;
 @Mixin(value = Hud.class, priority = 2)
 //?}
-@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public interface GuiAccessor {
     @Accessor("titleFadeInTime")
     int ls$titleFadeInTicks();

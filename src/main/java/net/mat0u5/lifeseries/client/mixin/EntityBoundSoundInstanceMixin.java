@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = EntityBoundSoundInstance.class, priority = 2)
-@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public abstract class EntityBoundSoundInstanceMixin {
     @Inject(method = "canPlaySound", at = @At("HEAD"), cancellable = true)
     public void canPlay(CallbackInfoReturnable<Boolean> cir) {

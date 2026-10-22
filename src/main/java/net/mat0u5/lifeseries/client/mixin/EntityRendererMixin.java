@@ -33,10 +33,10 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(value = EntityRenderer.class, priority = 1)
 //? if <= 1.21 {
-/*@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+/*@MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public class EntityRendererMixin<T extends Entity> {
 *///?} else {
-@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public class EntityRendererMixin<T extends Entity, S extends EntityRenderState> {
 //?}
 

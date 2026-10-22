@@ -17,7 +17,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
 @Pseudo
 @Mixin(value = HUDOverlayHandler.class, priority = 1, remap = false)
-@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public class TextureHelperMixin {
     //? if forge {
     /^@Redirect(method = "renderFoodOrHealthOverlay", at = @At(value = "INVOKE", target = "Lsqueek/appleskin/api/event/HUDOverlayEvent$HealthRestored;isCanceled()Z"), remap = false)
@@ -50,7 +50,7 @@ import java.util.Locale;
 
 @Pseudo
 @Mixin(value = TextureHelper.class, priority = 1, remap = false)
-@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public class TextureHelperMixin {
     @Inject(method = "getHeartTexture", at = @At("RETURN"), cancellable = true)
     private static void teamHearts(boolean hardcore, TextureHelper.HeartType type, CallbackInfoReturnable<Identifier> cir) {

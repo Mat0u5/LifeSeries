@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.Shadow;
 //?}
 
 @Mixin(value = ClientPacketListener.class, priority = 1)
-@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public class ClientPacketListenerMixin {
     //? if > 1.20.3 {
     @Shadow

@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.minecraft.client.input.*;
 
 @Mixin(value = ChatScreen.class, priority = 1)
-@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public class ChatScreenMixin {
     //1.21.11- logic is in InBedChatScreenMixin
     //? if >= 26.1 {

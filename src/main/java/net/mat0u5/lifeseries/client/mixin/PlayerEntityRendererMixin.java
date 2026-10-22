@@ -50,7 +50,7 @@ import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 
 @Mixin(value = AvatarRenderer.class, priority = 1)
 //?}
-@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public abstract class PlayerEntityRendererMixin {
 
     //? if <= 1.20.2 {

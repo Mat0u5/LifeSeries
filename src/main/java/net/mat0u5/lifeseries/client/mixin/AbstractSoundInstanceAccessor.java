@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(value = AbstractSoundInstance.class, priority = 2)
-@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public interface AbstractSoundInstanceAccessor {
     @Mutable
     @Accessor

@@ -13,7 +13,7 @@ import net.mat0u5.lifeseries.client.LifeSeriesClient;
 *///?}
 
 @Mixin(value = ClientLevel.class, priority = 1)
-@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public class ClientLevelMixin {
     //? if <= 1.21.9 {
 

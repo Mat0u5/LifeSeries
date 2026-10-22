@@ -6,7 +6,7 @@ import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(value = MinecraftServer.class)
-@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public class ParticleEngineMixin {
     //Empty class to avoid mixin errors
 }
@@ -31,7 +31,7 @@ import java.util.Map;
 import net.minecraft.client.renderer.state.level.ParticlesRenderState;
 
 @Mixin(value = ParticleEngine.class)
-@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public abstract class ParticleEngineMixin {
 
     @Accessor("particles")

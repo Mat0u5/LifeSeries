@@ -44,7 +44,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.client.gui.Hud;
 @Mixin(value = Hud.class, priority = 1)
 //?}
-@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public class GuiMixin {
 
     //? if <= 1.20 {

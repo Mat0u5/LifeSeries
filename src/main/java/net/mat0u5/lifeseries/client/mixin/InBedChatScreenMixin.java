@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 
 
 @Mixin(value = InBedChatScreen.class, priority = 1)
-@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
+@MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public abstract class InBedChatScreenMixin {
     //26.1+ logic is in ChatScreenMixin
     //? if <= 1.21.11 {
