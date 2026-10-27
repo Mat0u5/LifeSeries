@@ -49,6 +49,8 @@ import static net.mat0u5.lifeseries.seasons.util.WatcherManager.isWatcher;
 //?} else {
 import net.minecraft.world.scores.TeamColor;
 //?}
+//? if >= 26.4
+import net.minecraft.network.chat.Style;
 
 public class LivesManager {
     public static final String SCOREBOARD_NAME = "Lives";
@@ -794,7 +796,7 @@ public class LivesManager {
     public Component modifyBroadcastDeathMessage(Component original) {
         try {
             MutableComponent result = Component.empty();
-            for (Component part : original.toFlatList()) {
+            for (Component part : toFlatList(original)) {
                 result.append(part);
                 //? if <= 1.21.4 {
                 /*if (part.getStyle().getClickEvent() != null && part.getStyle().getClickEvent().getAction() == ClickEvent.Action.SUGGEST_COMMAND) {
@@ -821,7 +823,7 @@ public class LivesManager {
         try {
             MutableComponent result = Component.empty();
             int partNum = 0;
-            for (Component part : original.toFlatList()) {
+            for (Component part : toFlatList(original)) {
                 if (partNum == 0) {
                     //? if <= 1.21.4 {
                     /*if (part.getStyle().getClickEvent() != null && part.getStyle().getClickEvent().getAction() == ClickEvent.Action.SUGGEST_COMMAND) {
@@ -843,6 +845,21 @@ public class LivesManager {
             return Tuple.of(removed, result);
         }catch(Exception ignored) {}
         return Tuple.of(false, original);
+    }
+
+    private static List<Component> toFlatList(Component component) {
+        //? if <= 26.3 {
+        /*return component.toFlatList();
+         *///?} else {
+        List<Component> result = new ArrayList<>();
+        component.visitWithoutResult((style, contents) -> {
+            if (!contents.isEmpty()) {
+                result.add(Component.literal(contents).withStyle(style));
+            }
+            return Optional.empty();
+        }, Style.EMPTY);
+        return result;
+        //?}
     }
 
     public Component getDeathMessageAdd(ServerPlayer player) {

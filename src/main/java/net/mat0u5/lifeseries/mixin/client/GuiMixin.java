@@ -30,8 +30,10 @@ import net.minecraft.client.player.LocalPlayer;
 /*import net.minecraft.client.renderer.rendertype.RenderType;
 import java.util.function.Function;
 *///?}
-//? if >= 1.21.6
-import com.mojang.blaze3d.pipeline.RenderPipeline;
+//? if >= 1.21.6 <= 26.3
+//import com.mojang.blaze3d.pipeline.RenderPipeline;
+//? if >= 26.4
+import net.minecraft.client.gui.GuiPipeline;
 //? if >= 1.21
 import net.minecraft.client.DeltaTracker;
 
@@ -66,8 +68,8 @@ public class GuiMixin {
     /*@Redirect(method = "extractHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V"))
     private void customHearts(GuiGraphicsExtractor instance, RenderPipeline renderPipeline, Identifier identifier, int x, int y, int u, int v) {
     *///?} else {
-    @Redirect(method = "extractHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V"))
-    private void customHearts(GuiGraphicsExtractor instance, RenderPipeline renderPipeline, Identifier identifier, int x, int y, int u, int v) {
+    @Redirect(method = "extractHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lnet/minecraft/client/gui/GuiPipeline;Lnet/minecraft/resources/Identifier;IIII)V"))
+    private void customHearts(GuiGraphicsExtractor instance, GuiPipeline renderPipeline, Identifier identifier, int x, int y, int u, int v) {
     //?}
 
         //? if <= 1.20 {
@@ -142,8 +144,10 @@ public class GuiMixin {
     //private void ls$afterHeartDraw(GuiGraphicsExtractor instance, Identifier identifier, int x, int y, int u, int v) {
     //?} else if <= 1.21.5 {
     //private void ls$afterHeartDraw(GuiGraphicsExtractor instance, Function<Identifier, RenderType> renderLayers, Identifier identifier, int x, int y, int u, int v) {
+    //?} else if <= 26.3 {
+    //private void ls$afterHeartDraw(GuiGraphicsExtractor instance, RenderPipeline renderPipeline, Identifier identifier, int x, int y, int u, int v) {
     //?} else {
-    private void ls$afterHeartDraw(GuiGraphicsExtractor instance, RenderPipeline renderPipeline, Identifier identifier, int x, int y, int u, int v) {
+    private void ls$afterHeartDraw(GuiGraphicsExtractor instance, GuiPipeline renderPipeline, Identifier identifier, int x, int y, int u, int v) {
     //?}
         if (!LifeSeries.isSeason(Seasons.SECRET_LIFE) || LifeSeries.modFullyDisabled()) {
             return;
