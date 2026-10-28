@@ -1,32 +1,30 @@
 package net.mat0u5.lifeseries.seasons.boogeyman;
 
-import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.matlib.utils.other.TextUtils;
 import net.mat0u5.matlib.utils.other.Time;
 import net.mat0u5.matlib.utils.player.PlayerListReference;
 import net.mat0u5.matlib.utils.player.PlayerReference;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.matlib.utils.player.ScoreboardUtils;
-import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 
 import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
-import static net.mat0u5.matlib.MatLib.*;
+import static net.mat0u5.matlib.MatLib.server;
 
 public class BoogeymanManager {
     public final ConfigRef<Boolean> BOOGEYMAN_ENABLED = ConfigRef.of(() -> LifeSeries.seasonConfig.BOOGEYMAN);
@@ -60,7 +58,7 @@ public class BoogeymanManager {
                     if (!BOOGEYMAN_ENABLED.get()) return;
                     if (boogeymanChosen) return;
                     PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_NOTICE_5MIN.get());
-                    PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.LIGHTNING_BOLT_THUNDER);
+                    ModifiableSound.BOOGEYMAN_NOTICE_5MIN.broadcast();
                 }
             }
         );
@@ -71,7 +69,7 @@ public class BoogeymanManager {
                     if (!BOOGEYMAN_ENABLED.get()) return;
                     if (boogeymanChosen) return;
                     PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_NOTICE_1MIN.get());
-                    PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.LIGHTNING_BOLT_THUNDER);
+                    ModifiableSound.BOOGEYMAN_NOTICE_1MIN.broadcast();
                 }
             }
         );
@@ -85,6 +83,17 @@ public class BoogeymanManager {
                     }
                 }
         );
+    }
+
+    public boolean isActiveBoogeyman(ServerPlayer player) {
+        if (player == null) return false;
+        for (Boogeyman boogeyman : boogeymen) {
+            if (boogeyman.uuid.equals(player.getUUID())) {
+                if (boogeyman.cured || boogeyman.failed || boogeyman.died) continue;
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isBoogeyman(ServerPlayer player) {
@@ -196,7 +205,7 @@ public class BoogeymanManager {
         if (boogeyman.cured) return;
         boogeyman.cured = true;
         PlayerUtils.sendTitle(player, ModifiableText.BOOGEYMAN_CURE_TITLE.get(), 20, 30, 20);
-        PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("lastlife_boogeyman_cure")));
+        ModifiableSound.BOOGEYMAN_CURE.play(player);
 
         boolean stealLife = BOOGEYMAN_STEAL_LIFE.get() && livesManager.canChangeLivesNaturally();
 
@@ -238,7 +247,7 @@ public class BoogeymanManager {
         if (currentSession.getRemainingTime().isSmallerThan(BOOGEYMAN_INFINITE_LAST_PICK)) return;
 
         PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_CHOOSE_NEW.get());
-        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.LIGHTNING_BOLT_THUNDER);
+        ModifiableSound.BOOGEYMAN_NOTICE_CHOOSE.broadcast();
         TaskScheduler.scheduleTask(Time.seconds(14), () -> {
             List<ServerPlayer> allowedPlayers = getAllowedBoogeyPlayers();
             if (allowedPlayers.isEmpty()) return;
@@ -250,7 +259,7 @@ public class BoogeymanManager {
     public void prepareToChooseBoogeymen() {
         if (!BOOGEYMAN_ENABLED.get()) return;
         PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_CHOOSE.get());
-        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.LIGHTNING_BOLT_THUNDER);
+        ModifiableSound.BOOGEYMAN_NOTICE_PREPARE.broadcast();
         TaskScheduler.scheduleTask(Time.seconds(5), () -> {
             resetBoogeymen();
             chooseBoogeymen(livesManager.getAlivePlayers(), BoogeymanRollType.NORMAL);
@@ -258,23 +267,23 @@ public class BoogeymanManager {
     }
 
     public void showRolling(List<ServerPlayer> allowedPlayers) {
-        PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvents.UI_BUTTON_CLICK.value());
+        ModifiableSound.BOOGEYMAN_ROLL_3.play(allowedPlayers);
         PlayerUtils.sendTitleToPlayers(allowedPlayers, ModifiableText.COUNTDOWN_COLOR_3.get(),0,35,0);
 
         PlayerListReference ref = PlayerListReference.of(allowedPlayers);
         TaskScheduler.scheduleTask(30, () -> {
             var listNew = ref.get();
-            PlayerUtils.playSoundToPlayers(listNew, SoundEvents.UI_BUTTON_CLICK.value());
+            ModifiableSound.BOOGEYMAN_ROLL_2.play(listNew);
             PlayerUtils.sendTitleToPlayers(listNew, ModifiableText.COUNTDOWN_COLOR_2.get(),0,35,0);
         });
         TaskScheduler.scheduleTask(60, () -> {
             var listNew = ref.get();
-            PlayerUtils.playSoundToPlayers(listNew, SoundEvents.UI_BUTTON_CLICK.value());
+            ModifiableSound.BOOGEYMAN_ROLL_1.play(listNew);
             PlayerUtils.sendTitleToPlayers(listNew, ModifiableText.COUNTDOWN_COLOR_1.get(),0,35,0);
         });
         TaskScheduler.scheduleTask(90, () -> {
             var listNew = ref.get();
-            PlayerUtils.playSoundToPlayers(listNew, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("lastlife_boogeyman_wait")));
+            ModifiableSound.BOOGEYMAN_ROLL.play(listNew);
             PlayerUtils.sendTitleToPlayers(listNew, ModifiableText.BOOGEYMAN_ROLL.get(),10,50,20);
         });
     }
@@ -382,8 +391,8 @@ public class BoogeymanManager {
     }
 
     public void handleBoogeymanLists(List<ServerPlayer> normalPlayers, List<ServerPlayer> boogeyPlayers) {
-        PlayerUtils.playSoundToPlayers(normalPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("lastlife_boogeyman_no")));
-        PlayerUtils.playSoundToPlayers(boogeyPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("lastlife_boogeyman_yes")));
+        ModifiableSound.BOOGEYMAN_NO.play(normalPlayers);
+        ModifiableSound.BOOGEYMAN_YES.play(boogeyPlayers);
         PlayerUtils.sendTitleToPlayers(normalPlayers, ModifiableText.BOOGEYMAN_ROLL_NORMAL.get(),10,50,20);
         PlayerUtils.sendTitleToPlayers(boogeyPlayers, ModifiableText.BOOGEYMAN_ROLL_BOOGEY.get(),10,50,20);
         for (ServerPlayer boogey : boogeyPlayers) {
@@ -451,7 +460,7 @@ public class BoogeymanManager {
             }
             else {
                 PlayerUtils.sendTitle(player,ModifiableText.BOOGEYMAN_FAIL_NOTIFY_TITLE.get(), 20, 30, 20);
-                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("lastlife_boogeyman_fail")));
+                ModifiableSound.BOOGEYMAN_FAIL.play(player);
                 if (BOOGEYMAN_ANNOUNCE_OUTCOME.get() && sendMessage) {
                     PlayerUtils.broadcastMessage(ModifiableText.BOOGEYMAN_FAIL.get(player));
                 }

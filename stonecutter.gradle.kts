@@ -41,7 +41,7 @@ for (version in stonecutter.versions.map { it.version }.distinct()) tasks.regist
 gradle.projectsEvaluated {
 	val versionOrder = stonecutter.versions.map { it.version }.distinct().reversed()
 
-	listOf("publishModrinth", "publishCurseforge").forEach { taskName ->
+	listOf("publishModrinth", "publishCurseforge", "publishGithub").forEach { taskName ->
 		val allTasks = subprojects.mapNotNull { it.tasks.findByName(taskName) }
 
 		val sorted = allTasks.sortedWith(compareBy(

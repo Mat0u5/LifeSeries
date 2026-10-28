@@ -17,10 +17,12 @@ import net.mat0u5.matlib.utils.player.AttributeUtils;
 import net.minecraft.Optionull;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.RemoteChatSession;
-import net.minecraft.network.protocol.game.*;
+import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
 import net.minecraft.server.level.ServerPlayer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
@@ -82,7 +84,12 @@ public class PlayerUtils extends net.mat0u5.matlib.utils.player.PlayerUtils {
         if (player == null) return;
         //? if > 1.20.2 {
         applySingleResourcepack(player, Season.RESOURCEPACK_MAIN_URL, Season.RESOURCEPACK_MAIN_SHA, "Life Series Resourcepack.");
-        applySingleResourcepack(player, Season.RESOURCEPACK_MINIMAL_ARMOR_URL, Season.RESOURCEPACK_MINIMAL_ARMOR_SHA, "Life Series Resourcepack.");
+        if (!Season.DISABLE_MINIMAL_ARMOR_PACK.get()) {
+            applySingleResourcepack(player, Season.RESOURCEPACK_MINIMAL_ARMOR_URL, Season.RESOURCEPACK_MINIMAL_ARMOR_SHA, "Life Series Resourcepack.");
+        }
+        else {
+            removeSingleResourcepack(player, Season.RESOURCEPACK_MINIMAL_ARMOR_URL);
+        }
         if (currentSeason instanceof SecretLife) {
             applySingleResourcepack(player, Season.RESOURCEPACK_SECRETLIFE_URL, Season.RESOURCEPACK_SECRETLIFE_SHA, "Life Series Resourcepack.");
         }
@@ -161,7 +168,7 @@ public class PlayerUtils extends net.mat0u5.matlib.utils.player.PlayerUtils {
         if (receivingPlayer.isSpectator()) return false;
         if (!player.isSpectator()) return false;
 
-        if (currentSeason.WATCHERS_IN_TAB.get()) return false;
+        if (WatcherManager.WATCHERS_IN_TAB.get()) return false;
         if (((IPlayer) receivingPlayer).ls$isWatcher()) return false;
         if (!((IPlayer) player).ls$isWatcher()) return false;
         return true;

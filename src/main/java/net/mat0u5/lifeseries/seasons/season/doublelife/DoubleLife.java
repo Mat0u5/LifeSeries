@@ -1,10 +1,9 @@
 package net.mat0u5.lifeseries.seasons.season.doublelife;
 
-import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLifeConfig;
-import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.config.SeasonConfig;
-import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.config.StringListConfig;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -15,23 +14,22 @@ import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.utils.interfaces.IHungerManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.matlib.events.EventResult;
-import net.mat0u5.matlib.utils.player.PlayerListReference;
-import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.mat0u5.matlib.config.entry.ConfigRef;
+import net.mat0u5.matlib.events.EventResult;
+import net.mat0u5.matlib.utils.other.TextUtils;
+import net.mat0u5.matlib.utils.other.Time;
+import net.mat0u5.matlib.utils.player.PlayerListReference;
+import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.mat0u5.matlib.utils.world.LevelUtils;
-import net.mat0u5.matlib.utils.other.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -40,7 +38,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.gamerules.GameRules;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.*;
@@ -412,23 +409,23 @@ public class DoubleLife extends Season {
         if (!playersToRoll.isEmpty()) {
             DatapackIntegration.EVENT_SOULMATE_ROLL.trigger();
         }
-        PlayerUtils.playSoundToPlayers(playersToRoll, SoundEvents.UI_BUTTON_CLICK.value());
+        ModifiableSound.DOUBLELIFE_SOULMATE_ROLL_3.play(playersToRoll);
         PlayerUtils.sendTitleToPlayers(playersToRoll, ModifiableText.COUNTDOWN_GREEN_3.get(),5,20,5);
         PlayerListReference ref = PlayerListReference.of(playersToRoll);
         TaskScheduler.scheduleTask(25, () -> {
             var listNew = ref.get();
-            PlayerUtils.playSoundToPlayers(listNew, SoundEvents.UI_BUTTON_CLICK.value());
+            ModifiableSound.DOUBLELIFE_SOULMATE_ROLL_2.play(listNew);
             PlayerUtils.sendTitleToPlayers(listNew, ModifiableText.COUNTDOWN_GREEN_2.get(),5,20,5);
         });
         TaskScheduler.scheduleTask(50, () -> {
             var listNew = ref.get();
-            PlayerUtils.playSoundToPlayers(listNew, SoundEvents.UI_BUTTON_CLICK.value());
+            ModifiableSound.DOUBLELIFE_SOULMATE_ROLL_1.play(listNew);
             PlayerUtils.sendTitleToPlayers(listNew, ModifiableText.COUNTDOWN_GREEN_1.get(),5,20,5);
         });
         TaskScheduler.scheduleTask(75, () -> {
             var listNew = ref.get();
             PlayerUtils.sendTitleToPlayers(listNew, ModifiableText.DOUBLELIFE_SOULMATE_TITLE.get(),10,50,20);
-            PlayerUtils.playSoundToPlayers(listNew, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("doublelife_soulmate_wait")));
+            ModifiableSound.DOUBLELIFE_SOULMATE_WAIT.play(listNew);
         });
         TaskScheduler.scheduleTask(165, () -> {
             chooseRandomSoulmates();
@@ -441,7 +438,7 @@ public class DoubleLife extends Season {
                     }
                 }
                 PlayerUtils.sendTitle(player, text,20,60,20);
-                PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("doublelife_soulmate_chosen")));
+                ModifiableSound.DOUBLELIFE_SOULMATE_CHOSEN.play(player);
             }
         });
     }
@@ -462,7 +459,7 @@ public class DoubleLife extends Season {
         List<ServerPlayer> players = getNonAssignedPlayers();
         if (players.isEmpty()) return;
         if (players.size() == 1) return;
-        PlayerUtils.playSoundToPlayers(players, SoundEvents.ENDERMAN_TELEPORT);
+        ModifiableSound.DOUBLELIFE_DISTRIBUTE.play(players);
 
         for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
             player.removeTag("randomTeleport");

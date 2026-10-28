@@ -1,13 +1,13 @@
 package net.mat0u5.lifeseries.entity.snail;
 
-import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
-import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.entity.snail.goal.*;
 import net.mat0u5.lifeseries.entity.snail.server.SnailPathfinding;
 import net.mat0u5.lifeseries.entity.snail.server.SnailServerData;
 import net.mat0u5.lifeseries.entity.snail.server.SnailSounds;
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
 import net.mat0u5.lifeseries.utils.interfaces.IEntity;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -87,6 +87,11 @@ public class Snail extends Monster {
         //? if <= 1.20.3 {
         //this.setMaxUpStep(1.2F);
         //?}
+        if (!level.isClientSide()) {
+            this.setSnailFlying(true);
+            this.pathfinding.updateNavigation();
+            this.pathfinding.updateMoveControl();
+        }
     }
 
     @Override
@@ -186,6 +191,7 @@ public class Snail extends Monster {
     public boolean updateFluidHeightAndDoFluidPushing(TagKey<Fluid> tag, double speed) {
         boolean returnValue = super.updateFluidHeightAndDoFluidPushing(tag, speed);
         if (FluidTags.LAVA != tag) {
+            isInLavaLocal = false;
             return returnValue;
         }
     *///?} else {
@@ -194,12 +200,14 @@ public class Snail extends Monster {
         TagKey<Fluid> tag = FluidTags.LAVA;
         if (this instanceof IEntity accessor) {
             if (!accessor.ls$getEntityFluidInteraction().isInFluid(tag)) {
+                isInLavaLocal = false;
                 return returnValue;
             }
         }
     //?}
 
         if (this.touchingUnloadedChunk()) {
+            isInLavaLocal = false;
             return returnValue;
         }
         AABB box = this.getBoundingBox().deflate(0.001);

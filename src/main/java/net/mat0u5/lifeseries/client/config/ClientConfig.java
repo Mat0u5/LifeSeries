@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.client.config;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.utils.LifeSeriesResourcePacks;
+import net.mat0u5.lifeseries.client.utils.enums.MinimalArmorBehavior;
 import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
@@ -11,7 +12,7 @@ import net.mat0u5.matlib.config.entry.ConfigurableValue;
 import net.minecraft.server.level.ServerPlayer;
 
 public class ClientConfig extends GuiConfig {
-    public final ConfigurableValue<Boolean> MINIMAL_ARMOR = ConfigurableValue.register(this, "minimal_armor", true)
+    public final ConfigurableValue<MinimalArmorBehavior> MINIMAL_ARMOR = ConfigurableValue.register(this, "minimal_armor_resourcepack", MinimalArmorBehavior.MATCH_SERVER)
             .name("Minimal Armor Resourcepack")
             .description("Enables the minimal armor resourcepack.")
             .onChange((oldValue, newValue) -> LifeSeriesResourcePacks.checkClientPacks());
@@ -25,15 +26,13 @@ public class ClientConfig extends GuiConfig {
     public final ConfigurableValue<Boolean> COLORED_HEARTS = ConfigurableValue.register(this, "colored_hearts", false)
             .name("Colored Hearts Based on Lives")
             .description("Makes your hearts the same color as how many lives you have.")
-            .group("coloredhearts").groupHeader(true);
-    public final ConfigurableValue<Boolean> COLORED_HEARTS_HARDCORE_LAST_LIFE = ConfigurableValue.register(this, "colored_hearts_hardcore_last_life", true)
+            .group("coloredhearts");
+    public final ConfigurableValue<Boolean> HARDCORE_HEARTS_LAST_LIFE = ConfigurableValue.register(this, "hardcore_hearts_last_life", false)
             .name("Show Last Life as Hardcore")
-            .description("When you are on your last life, the hearts will appear as though you are in hardcore.")
-            .group("coloredhearts");
-    public final ConfigurableValue<Boolean> COLORED_HEARTS_HARDCORE_ALL_LIVES = ConfigurableValue.register(this, "colored_hearts_hardcore_all_lives", false)
+            .description("When you are on your last life, your hearts will appear as though you are in hardcore.");
+    public final ConfigurableValue<Boolean> HARDCORE_HEARTS_ALL_LIVES = ConfigurableValue.register(this, "hardcore_hearts_all_lives", false)
             .name("Show All Lives as Hardcore")
-            .description("Hearts will always appear as though you are in hardcore.")
-            .group("coloredhearts");
+            .description("Hearts will always appear as though you are in hardcore.");
 
     public final ConfigurableValue<Double> TEXT_HUD_SCALE = ConfigurableValue.register(this, "text_hud_scale", 1.0)
             .name("Side Text Hud Scale")
@@ -50,7 +49,6 @@ public class ClientConfig extends GuiConfig {
     public final ConfigurableValue<Boolean> LIMITED_LIFE_ACTIONBAR_TIME = ConfigurableValue.register(this, "limited_life_actionbar_time", false)
             .name("Move Time to Actionbar in Limited Life")
             .description("Shows the remaining time in the actionbar instead of the side title.")
-            .setNew(true)
             .visibleIf(() -> LifeSeries.isSeason(Seasons.LIMITED_LIFE));
 
     public ClientConfig() {

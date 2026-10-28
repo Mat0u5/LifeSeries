@@ -1,13 +1,12 @@
 package net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.deaths;
 
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeath;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeaths;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.item.FallingBlockEntity;
@@ -48,9 +47,7 @@ public class DeathAnvil extends AdvancedDeath {
             BlockPos spawnPos = player.blockPosition().offset(anvilAmount, 15, 0);
             ServerLevel level = ((IPlayer) player).ls$getServerLevel();
             FallingBlockEntity entity = FallingBlockEntity.fall(level, spawnPos, Blocks.ANVIL.defaultBlockState());
-            //~ if >= 26.4 'SoundEvents.ANVIL_PLACE' -> 'SoundEvents.ANVIL_USE.value()' {
-            PlayerUtils.playSoundWithSourceToPlayers(entity, SoundEvents.ANVIL_USE, SoundSource.BLOCKS, 1, 1);
-            //~}
+            ModifiableSound.ADVANCEDDEATH_ANVIL.playWithSource(entity, SoundSource.BLOCKS, 1, 1);
             entity.disableDrop();
             anvilAmount--;
         }

@@ -1,11 +1,11 @@
 package net.mat0u5.lifeseries.seasons.season.nicelife;
 
 import net.mat0u5.lifeseries.config.SeasonConfig;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
 import net.mat0u5.matlib.config.entry.ConfigHeader;
 import net.mat0u5.matlib.config.entry.ConfigurableValue;
 import net.mat0u5.matlib.config.type.ConfigTypes;
-import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,13 +64,14 @@ public class NiceLifeConfig extends SeasonConfig {
             .name("Snow Layer Increment Delay")
             .description("Controls the interval between snow layer increments, in seconds.")
             .group("season");
-    public final ConfigurableValue<Boolean> ADVANCE_TIME_WHEN_NOT_IN_SESSION = ConfigurableValue.register(this, "advance_time_not_in_session", false)
-            .name("Advance Time When Not In Session")
-            .description("Controls whether the daylight cycle is paused when not in session.")
+    public final ConfigurableValue<Boolean> DISABLE_SNOW = ConfigurableValue.register(this, "disable_snow", false)
+            .name("Disable Snowing")
+            .description("Controls whether it snows at all.")
+            .setNew(true)
             .group("season");
     public final ConfigurableValue<Boolean> SNOWY_NETHER = ConfigurableValue.register(this, "snowy_nether", true)
             .name("Snowy Nether")
-            .description("Controls the nether is frozen.")
+            .description("Controls whether the nether is frozen.")
             .group("season");
     public final ConfigurableValue<Boolean> RED_WINTER = ConfigurableValue.register(this, "red_winter", true)
             .name("Allow Red Winter")

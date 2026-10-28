@@ -1,16 +1,14 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
-import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
-import net.mat0u5.matlib.config.entry.ConfigRef;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
-import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.matlib.utils.other.Time;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 
@@ -68,7 +66,7 @@ public class TripleJump extends ToggleableSuperpower {
         super.activate();
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        ((IPlayer) player).ls$playNotifySound(SoundEvents.SLIME_JUMP, SoundSource.MASTER, 1, 1);
+        ModifiableSound.WILDLIFE_SUPERPOWERS_TRIPLEJUMP_START.play(player);
         LifeSeriesNetworkHandlerServer.sendVignette(player, -1);
         SimplePackets.TRIPLE_JUMP.sendToClient(true, player);
         SimplePackets.POWER_TJ_JUMPS.sendToClient(JUMP_COUNT.get(), player);
@@ -80,7 +78,7 @@ public class TripleJump extends ToggleableSuperpower {
         ServerPlayer player = getPlayer();
         if (player == null) return;
         player.removeEffect(MobEffects.JUMP_BOOST);
-        ((IPlayer) player).ls$playNotifySound(SoundEvents.SLIME_SQUISH, SoundSource.MASTER, 1, 1);
+        ModifiableSound.WILDLIFE_SUPERPOWERS_TRIPLEJUMP_END.play(player);
         LifeSeriesNetworkHandlerServer.sendVignette(player, 0);
         SimplePackets.TRIPLE_JUMP.sendToClient(false, player);
     }

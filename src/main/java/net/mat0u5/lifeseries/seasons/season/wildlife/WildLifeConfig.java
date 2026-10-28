@@ -2,14 +2,14 @@ package net.mat0u5.lifeseries.seasons.season.wildlife;
 
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.config.SeasonConfig;
-import net.mat0u5.matlib.config.entry.ConfigHeader;
-import net.mat0u5.matlib.config.entry.ConfigurableValue;
-import net.mat0u5.matlib.config.type.ConfigTypes;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
 import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
+import net.mat0u5.matlib.config.entry.ConfigHeader;
+import net.mat0u5.matlib.config.entry.ConfigurableValue;
+import net.mat0u5.matlib.config.type.ConfigTypes;
 
 import java.util.List;
 
@@ -87,8 +87,7 @@ public class WildLifeConfig extends SeasonConfig {
     public final ConfigurableValue<Boolean> INSTANTLY_ACTIVATE_WILDCARDS = ConfigurableValue.register(this, "instantly_activate_wildcards", false)
             .name("Disable Wildcards Activate Cooldown")
             .description("Skips the wildcard activate dots cooldown.")
-            .group("season.general")
-            .setNew(true);
+            .group("season.general");
 
     public final ConfigurableValue<Double> WILDCARD_SIZESHIFTING_MIN_SIZE = ConfigurableValue.register(this, "wildcard_sizeshifting_min_size", 0.25)
             .name("Min Size")
@@ -167,8 +166,7 @@ public class WildLifeConfig extends SeasonConfig {
     public final ConfigurableValue<Boolean> WILDCARD_SNAILS_KILL_ANY_PLAYER = ConfigurableValue.register(this, "wildcard_snails_kill_any_player", false)
             .name("Kill Any Player On Touch")
             .description("Makes the snails kill any player they touch, not just their bound player.")
-            .group("season.snails")
-            .setNew(true);
+            .group("season.snails");
 
     public final ConfigurableValue<Double> WILDCARD_TIMEDILATION_MIN_SPEED = ConfigurableValue.register(this, "wildcard_timedilation_min_speed", 0.05)
             .name("Min World Speed Multiplier")
@@ -214,8 +212,7 @@ public class WildLifeConfig extends SeasonConfig {
     public final ConfigurableValue<List<String>> WILDCARD_TRIVIA_EFFECTS = ConfigurableValue.register(this, "wildcard_trivia_effects", List.of("speed", "haste", "strength", "jump_boost", "resistance", "regeneration", "fire_resistance", "water_breathing", "night_vision", "health_boost", "absorption"), ConfigTypes.EFFECT_LIST)
             .name("Trivia Reward Effects")
             .description("List of potion effects you can get from trivia rewards.")
-            .group("season.trivia")
-            .setNew(true);
+            .group("season.trivia");
     public final ConfigHeader GROUP_TRIVIA_QUESTIONS = ConfigHeader.register(this, "group_trivia_questions", "Trivia Questions")
             .group("season.trivia.questions").groupHeader(true);
     public final ConfigHeader GROUP_TRIVIA_QUESTIONS_EASY = ConfigHeader.register(this, "group_trivia_questions_easy", "Easy Questions")
@@ -339,8 +336,7 @@ public class WildLifeConfig extends SeasonConfig {
     public final ConfigurableValue<Boolean> WILDCARD_SUPERPOWERS_MIMICRY_DISABLE_OTHER_POWER = ConfigurableValue.register(this, "wildcard_superpowers_mimicry_disable_other_power", false)
             .name("Disable Stolen Power")
             .description("Disables the power of the person you mimic for the duration of the effect.")
-            .group("season.superpowers.mimicry")
-            .setNew(true);
+            .group("season.superpowers.mimicry");
 
     // Necromancy
     public final ConfigHeader SUPERPOWER_NECROMANCY = ConfigHeader.register(this, "superpower_necromancy", "Necromancy")
@@ -442,6 +438,11 @@ public class WildLifeConfig extends SeasonConfig {
     public final ConfigurableValue<Integer> WILDCARD_SUPERPOWERS_TELEPORTATION_TP_DISTANCE = ConfigurableValue.register(this, "wildcard_superpowers_teleportation_tp_distance", 100)
             .name("Max Teleport Distance")
             .description("Controls the max teleport distance.\nVery high numbers may cause performance issues.")
+            .group("season.superpowers.teleportation");
+    public final ConfigurableValue<Boolean> WILDCARD_SUPERPOWERS_TELEPORTATION_GIVE_PEARLS = ConfigurableValue.register(this, "wildcard_superpowers_teleportation_give_pearls", true)
+            .name("Give Ender Pearls")
+            .description("Controls whether players with this power continually get ender pearls.")
+            .setNew(true)
             .group("season.superpowers.teleportation");
 
     // Time Control

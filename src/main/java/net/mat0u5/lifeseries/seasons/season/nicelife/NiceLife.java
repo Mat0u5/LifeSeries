@@ -1,12 +1,11 @@
 package net.mat0u5.lifeseries.seasons.season.nicelife;
 
-import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeConfig;
-import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
 import net.mat0u5.lifeseries.config.SeasonConfig;
-import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.TriviaHandler;
@@ -15,18 +14,17 @@ import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.*;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
-import net.mat0u5.matlib.utils.other.*;
+import net.mat0u5.matlib.config.entry.ConfigRef;
+import net.mat0u5.matlib.utils.other.TextUtils;
+import net.mat0u5.matlib.utils.other.Time;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -50,8 +48,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static net.mat0u5.lifeseries.LifeSeries.*;
-import static net.mat0u5.matlib.MatLib.*;
+import static net.mat0u5.lifeseries.LifeSeries.currentSession;
+import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
+import static net.mat0u5.matlib.MatLib.server;
 
 //? if >= 26.1 {
 import net.minecraft.world.clock.WorldClocks;
@@ -62,7 +61,7 @@ public class NiceLife extends Season {
     public static final ConfigRef<Boolean> SNOWY_NETHER = ConfigRef.of(() -> NiceLifeConfig.get().SNOWY_NETHER);
     public static final ConfigRef<Boolean> LIGHT_MELTS_SNOW = ConfigRef.of(() -> NiceLifeConfig.get().LIGHT_MELTS_SNOW);
     public final ConfigRef<Boolean> SNOW_WHEN_NOT_IN_SESSION = ConfigRef.of(() -> NiceLifeConfig.get().SNOW_WHEN_NOT_IN_SESSION);
-    public static final ConfigRef<Boolean> ADVANCE_TIME_WHEN_NOT_IN_SESSION = ConfigRef.of(() -> NiceLifeConfig.get().ADVANCE_TIME_WHEN_NOT_IN_SESSION);
+    public static boolean DISABLE_SNOW = false;
     public static final ConfigRef<Boolean> RED_WINTER = ConfigRef.of(() -> NiceLifeConfig.get().RED_WINTER);
     public Time SNOW_LAYER_INCREASE_INTERVAL = Time.seconds(600);
     public Time snowTicks = Time.zero();
@@ -127,6 +126,7 @@ public class NiceLife extends Season {
         updateSnowTick();
         NiceLifeTriviaManager.initialize();
 
+        DISABLE_SNOW = NiceLifeConfig.get().DISABLE_SNOW.get();
         NiceLifeVotingManager.VOTING_TIME = Time.seconds(NiceLifeConfig.get().VOTING_TIME.get());
         TriviaHandler.guiType = NiceLifeConfig.get().TRIVIA_GUI_TYPE.get();
     }
@@ -164,15 +164,12 @@ public class NiceLife extends Season {
         }
         ServerLevel overworld = server.overworld();
         //? if <= 1.21.11 {
-        //overworld.setWeatherParameters(0, 1000, true, false);
+        //overworld.setWeatherParameters(DISABLE_SNOW?1000:0, DISABLE_SNOW?0:1000, !DISABLE_SNOW, false);
         //?} else {
-        server.setWeatherParameters(0, 1000, true, false);
+        server.setWeatherParameters(DISABLE_SNOW?1000:0, DISABLE_SNOW?0:1000, !DISABLE_SNOW, false);
         //?}
 
         List<String> nonSleepingPlayers = new ArrayList<>();
-
-        boolean advanceTime = !isMidnight() && (currentSession.statusStarted() || ADVANCE_TIME_WHEN_NOT_IN_SESSION.get());
-        OtherUtils.setBooleanGameRule(overworld, GameRules.ADVANCE_TIME, advanceTime);
 
         if (!isMidnight()) {
             for(ServerPlayer serverPlayer : PlayerUtils.getAllPlayers()) {
@@ -182,9 +179,7 @@ public class NiceLife extends Season {
             }
             if (!playedMidnightChimes && isTimeBetween(18000-23*20, 20000)) {
                 playedMidnightChimes = true;
-                PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(),
-                        SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("nicelife_midnight_chimes")),
-                        1f, 1);
+                ModifiableSound.NICELIFE_MIDNIGHT_CHIMES.broadcast();
                 postponeTriviaStart(Time.ticks(779));
             }
         }
@@ -262,6 +257,12 @@ public class NiceLife extends Season {
         }
     }
 
+    @Override
+    public void tickAdvanceTime(MinecraftServer server) {
+        boolean advanceTime = !isMidnight() && (currentSession.statusStarted() || !ONLY_ADVANCE_TIME_IN_SESSION);
+        OtherUtils.setBooleanGameRule(server.overworld(), GameRules.ADVANCE_TIME, advanceTime);
+    }
+
     public static int forceSleepTicks = 0;
     public static boolean areEnoughSleeping(int percentage, List<String> nonSleepingPlayers) {
         List<ServerPlayer> players = LifeSeries.livesManager.getAlivePlayers();
@@ -304,9 +305,7 @@ public class NiceLife extends Season {
     public void triggerRedWinter() {
         TaskScheduler.scheduleTask(20, () -> {
             DatapackIntegration.EVENT_RED_WINTER_START.trigger();
-            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(),
-                    SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("nicelife_red_winter")),
-                    1f, 1);
+            ModifiableSound.NICELIFE_RED_WINTER.broadcast();
         });
         TaskScheduler.scheduleTask(20 + 12, () -> {
             PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), ModifiableText.NICELIFE_REDWINTER_PT1.get(), 15, 65, 15);
@@ -401,10 +400,10 @@ public class NiceLife extends Season {
     }
 
     public void tickChunk(ServerLevel level, ChunkPos chunkPos) {
-        if (level.dimension() != Level.OVERWORLD) {
+        if (level.dimension() != Level.OVERWORLD || DISABLE_SNOW) {
             return;
         }
-        if (currentSession.statusStarted()  || SNOW_WHEN_NOT_IN_SESSION.get()) {
+        if (currentSession.statusStarted() || SNOW_WHEN_NOT_IN_SESSION.get()) {
             int minX = chunkPos.getMinBlockX();
             int maxX = chunkPos.getMinBlockZ();
 

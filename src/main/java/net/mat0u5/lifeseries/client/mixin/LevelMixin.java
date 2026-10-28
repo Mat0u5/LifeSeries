@@ -1,0 +1,22 @@
+package net.mat0u5.lifeseries.client.mixin;
+
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
+import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.minecraft.world.level.Level;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+
+@Mixin(value = Level.class, priority = 1)
+@MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
+public class LevelMixin {
+    @ModifyReturnValue(method = "getRainLevel", at = @At(value = "RETURN"))
+    public float getRainLevel(float original) {
+        if (!LifeSeries.modDisabled() && LifeSeries.isSeason(Seasons.NICE_LIFE) && !LifeSeriesClient.NICELIFE_DISABLE_SNOW) {
+            return 0;
+        }
+        return original;
+    }
+}

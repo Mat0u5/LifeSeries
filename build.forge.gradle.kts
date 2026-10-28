@@ -54,6 +54,7 @@ minecraft {
 			if (hasMixins) {
 				systemProperty("mixin.env.disableRefMap", "true")
 				args("--mixin.config=${prop("mod.id")}.mixins.json")
+				args("--mixin.config=${prop("mod.id")}.mixins.client.json")
 			}
 		}
 		register("client") {
@@ -274,7 +275,7 @@ if (legacyForge) {
 tasks.named<Jar>("jar") {
 	destinationDirectory.set(layout.buildDirectory.dir("intermediates/jar"))
 	manifest {
-		attributes["MixinConfigs"] = "${prop("mod.id")}.mixins.json"
+		attributes["MixinConfigs"] = "${prop("mod.id")}.mixins.json,${prop("mod.id")}.mixins.client.json"
 	}
 	from(layout.buildDirectory.file("sourcesSets/main/${prop("mod.id")}.mixins.refmap.json")) {
 		into("/")

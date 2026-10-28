@@ -1,10 +1,10 @@
 package net.mat0u5.lifeseries.seasons.season.secretlife;
 
 import net.mat0u5.lifeseries.config.SeasonConfig;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.matlib.config.entry.ConfigHeader;
 import net.mat0u5.matlib.config.entry.ConfigurableValue;
 import net.mat0u5.matlib.config.type.ConfigTypes;
-import net.mat0u5.lifeseries.seasons.season.Seasons;
 
 import java.util.List;
 
@@ -80,13 +80,17 @@ public class SecretLifeConfig extends SeasonConfig {
     public final ConfigurableValue<Boolean> UNBREAKABLE_BUTTONS = ConfigurableValue.register(this, "unbreakable_buttons", true)
             .name("Unbreakable Buttons")
             .description("Makes the task buttons and supporting blocks unbreakable.")
-            .group("season")
-            .setNew(true);
+            .group("season");
 
     public final ConfigHeader GROUP_HEALTH = ConfigHeader.register(this, "group_health", "Health Rewards / Punishments")
             .group("season.health").groupHeader(true);
     public final ConfigHeader GROUP_TASKS = ConfigHeader.register(this, "group_tasks", "Tasks")
             .group("season.tasks").groupHeader(true);
+    public final ConfigurableValue<Boolean> GUESS_TASKS = ConfigurableValue.register(this, "guess_tasks", false)
+            .name("Enable Task Guess Command")
+            .description("Makes players be able to use /task guess.")
+            .setNew(true)
+            .group("season.tasks.guess").groupHeader(true);
     public final ConfigHeader GROUP_TASKS_EASY = ConfigHeader.register(this, "group_tasks_easy", "Easy Tasks")
             .group("season.tasks.easy").groupHeader(true);
     public final ConfigHeader GROUP_TASKS_HARD = ConfigHeader.register(this, "group_tasks_hard", "Hard Tasks")
@@ -122,6 +126,26 @@ public class SecretLifeConfig extends SeasonConfig {
             .name("Task Health Red Fail")
             .description("The health you lose for failing a red task.")
             .group("season.health");
+    public final ConfigurableValue<Boolean> GUESS_TASKS_PUBLIC = ConfigurableValue.register(this, "guess_tasks_public", false)
+            .name("Public Guessing")
+            .description("Makes the guess be broadcast publicly.")
+            .setNew(true)
+            .group("season.tasks.guess");
+    public final ConfigurableValue<Integer> GUESS_TASKS_LIFE_GUESSER_MIN = ConfigurableValue.register(this, "guess_tasks_life_guesser_min", 2)
+            .name("Guessing Player Minimum Lives")
+            .description("Minimum number of lives the player that's guessing needs to have.")
+            .setNew(true)
+            .group("season.tasks.guess");
+    public final ConfigurableValue<Integer> GUESS_TASKS_LIFE_GUESSER_MAX = ConfigurableValue.register(this, "guess_tasks_life_guesser_max", 2)
+            .name("Guessing Player Maximum Lives")
+            .description("Maximum number of lives the player that's guessing can have.")
+            .setNew(true)
+            .group("season.tasks.guess");
+    public final ConfigurableValue<Integer> GUESS_TASKS_LIFE_GUESSED_MIN = ConfigurableValue.register(this, "guess_tasks_life_guessed_min", 3)
+            .name("Guessed Player Minimum Lives")
+            .description("Minimum number of lives the player who's task you're guessing needs to have.")
+            .setNew(true)
+            .group("season.tasks.guess");
 
     public SecretLifeConfig() {
         super(Seasons.SECRET_LIFE);

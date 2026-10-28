@@ -1,10 +1,10 @@
 package net.mat0u5.lifeseries.seasons.season.limitedlife;
 
 import net.mat0u5.lifeseries.config.SeasonConfig;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.matlib.config.entry.ConfigHeader;
 import net.mat0u5.matlib.config.entry.ConfigurableValue;
 import net.mat0u5.matlib.config.type.ConfigTypes;
-import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.matlib.utils.other.Time;
 
 import java.util.List;
@@ -108,13 +108,11 @@ public class LimitedLifeConfig extends SeasonConfig {
     public final ConfigurableValue<Integer> TIME_RANDOMIZE_AVERAGE = ConfigurableValue.register(this, "time_randomize_average", Time.hours(24).getSeconds(), ConfigTypes.SECONDS)
             .name("Average Time")
             .description("The average time a player gets after randomization.")
-            .group("global.lives.random.customavg")
-            .setNew(true);
+            .group("global.lives.random.customavg");
     public final ConfigurableValue<Boolean> PAUSE_SESSION_TIME_UNTIL_ROLL = ConfigurableValue.register(this, "pause_session_time_until_roll", false)
             .name("Pause Session Time Until Roll")
             .description("Makes the session time stay at max untill the lives roll happens.")
-            .group("global.lives.random")
-            .setNew(true);
+            .group("global.lives.random");
 
     public LimitedLifeConfig() {
         super(Seasons.LIMITED_LIFE);

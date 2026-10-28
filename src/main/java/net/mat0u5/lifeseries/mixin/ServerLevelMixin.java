@@ -38,23 +38,23 @@ public class ServerLevelMixin {
     }
     //? if <= 1.20 {
     /*@WrapOperation(method = "tickChunk", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextInt(I)I", ordinal = 1))
-    public int customPrecipitation(RandomSource instance, int i, Operation<Integer> original) {
-        if (LifeSeries.isClientOrDisabled() || !LifeSeries.isSeason(Seasons.NICE_LIFE)) {
+    public int originalPrecipitation(RandomSource instance, int i, Operation<Integer> original) {
+        if (LifeSeries.isClientOrDisabled() || !LifeSeries.isSeason(Seasons.NICE_LIFE) || NiceLife.DISABLE_SNOW) {
             return original.call(instance, i);
         }
         return i;
     }
     *///?} else if <= 1.20.2 {
     /*@WrapOperation(method = "tickChunk", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;tickIceAndSnow(ZLnet/minecraft/core/BlockPos;)V"))
-    public void customPrecipitation(ServerLevel level, boolean bl, BlockPos pos, Operation<Void> original) {
-        if (LifeSeries.isClientOrDisabled() || !LifeSeries.isSeason(Seasons.NICE_LIFE)) {
+    public void originalPrecipitation(ServerLevel level, boolean bl, BlockPos pos, Operation<Void> original) {
+        if (LifeSeries.isClientOrDisabled() || !LifeSeries.isSeason(Seasons.NICE_LIFE) || NiceLife.DISABLE_SNOW) {
             original.call(level, bl, pos);
         }
     }
     *///?} else {
     @WrapOperation(method = "tickChunk", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;tickPrecipitation(Lnet/minecraft/core/BlockPos;)V"))
-    public void customPrecipitation(ServerLevel level, BlockPos pos, Operation<Void> original) {
-        if (LifeSeries.isClientOrDisabled() || !LifeSeries.isSeason(Seasons.NICE_LIFE)) {
+    public void originalPrecipitation(ServerLevel level, BlockPos pos, Operation<Void> original) {
+        if (LifeSeries.isClientOrDisabled() || !LifeSeries.isSeason(Seasons.NICE_LIFE) || NiceLife.DISABLE_SNOW) {
             original.call(level, pos);
         }
     }

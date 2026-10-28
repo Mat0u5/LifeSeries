@@ -2,10 +2,10 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails;
 
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
-import net.mat0u5.matlib.utils.resource.SyncedTextureFolder;
-import net.mat0u5.matlib.utils.resource.ResourceHandler;
-import net.mat0u5.matlib.utils.resource.BufferedImageUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.matlib.utils.resource.BufferedImageUtils;
+import net.mat0u5.matlib.utils.resource.ResourceHandler;
+import net.mat0u5.matlib.utils.resource.SyncedTextureFolder;
 import net.minecraft.server.level.ServerPlayer;
 
 import javax.imageio.ImageIO;

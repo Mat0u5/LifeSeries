@@ -18,9 +18,9 @@ import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
 import net.mat0u5.lifeseries.utils.interfaces.LifeSeriesClientAccessor;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.matlib.MatLib;
-import net.mat0u5.matlib.services.MultiplatformModInitializer;
 import net.mat0u5.matlib.events.server.ServerLanguageEvents;
 import net.mat0u5.matlib.events.server.ServerPackSourceEvents;
+import net.mat0u5.matlib.services.MultiplatformModInitializer;
 import net.mat0u5.matlib.utils.enums.HandshakeStatus;
 import net.mat0u5.matlib.utils.other.ModBuiltInPacks;
 import net.minecraft.network.chat.Component;
@@ -31,7 +31,7 @@ import java.util.List;
 
 @AutoService(MultiplatformModInitializer.class)
 public class LifeSeries implements MultiplatformModInitializer {
-	public static final String MOD_VERSION = "1.5.9";
+	public static final String MOD_VERSION = "1.5.10";
 	public static final String MOD_ID = "lifeseries";
 	public static final String MOD_FRIENDLY_NAME = "Life Series";
 

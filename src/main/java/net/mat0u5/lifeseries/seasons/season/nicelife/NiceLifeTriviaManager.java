@@ -1,10 +1,9 @@
 package net.mat0u5.lifeseries.seasons.season.nicelife;
 
-import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeConfig;
-import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
-import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.entity.angrysnowman.AngrySnowman;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandler;
@@ -15,17 +14,16 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.matlib.utils.other.Tuple;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.mat0u5.matlib.config.entry.ConfigRef;
+import net.mat0u5.matlib.utils.other.Tuple;
 import net.mat0u5.matlib.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -125,8 +123,7 @@ public class NiceLifeTriviaManager {
 
         preparingForSpawn = true;
         if (longIntro) {
-            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("nicelife_santabot_introduction_long"));
-            PlayerUtils.playSoundToPlayers(triviaPlayers, sound, 1f, 1);
+            ModifiableSound.NICELIFE_SANTABOT_INTRODUCTION_LONG.play(triviaPlayers);
             for (TriviaSpawn triviaSpawnInfo : triviaSpawns) {
                 int botSpawnHeight = 20;
                 breakBotSpawnBlocks(triviaSpawnInfo, 616-160, botSpawnHeight);
@@ -136,8 +133,7 @@ public class NiceLifeTriviaManager {
             }
         }
         else {
-            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("nicelife_santabot_introduction_short"));
-            PlayerUtils.playSoundToPlayers(triviaPlayers, sound, 1f, 1);
+            ModifiableSound.NICELIFE_SANTABOT_INTRODUCTION_SHORT.play(triviaPlayers);
             for (TriviaSpawn triviaSpawnInfo : triviaSpawns) {
                 int botSpawnHeight = rnd.nextInt(15, 30);
                 breakBotSpawnBlocks(triviaSpawnInfo, 71, botSpawnHeight);
@@ -165,8 +161,7 @@ public class NiceLifeTriviaManager {
     }
 
     public static void allWrong() {
-        SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("nicelife_santabot_incorrect_all_wrong"));
-        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), sound, 1f, 1);
+        ModifiableSound.NICELIFE_SANTABOT_INCORRECT_ALL_WRONG.broadcast();
         PlayerUtils.broadcastMessage(ModifiableText.NICELIFE_TRIVIA_ALL_WRONG_PT1.get());
 
         SimplePackets.TRIVIA_ALL_WRONG.sendToAllClients();

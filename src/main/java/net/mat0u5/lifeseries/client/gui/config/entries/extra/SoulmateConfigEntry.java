@@ -1,28 +1,24 @@
 package net.mat0u5.lifeseries.client.gui.config.entries.extra;
 
 import net.mat0u5.lifeseries.client.config.LifeSeriesConfigGuiClient;
+import net.mat0u5.lifeseries.config.LifeSeriesConfigTypes;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.matlib.client.gui.config.entries.ConfigEntry;
 import net.mat0u5.matlib.client.gui.config.entries.GroupConfigEntry;
 import net.mat0u5.matlib.client.gui.config.entries.ModifiableListEntry;
 import net.mat0u5.matlib.client.render.RenderUtils;
 import net.mat0u5.matlib.client.utils.TextColors;
-import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
-import net.mat0u5.lifeseries.config.LifeSeriesConfigTypes;
 import net.mat0u5.matlib.config.entry.ConfigGuiEntry;
 import net.mat0u5.matlib.config.type.ConfigType;
 import net.mat0u5.matlib.utils.other.TextUtils;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.network.chat.Component;
 
-import java.util.ArrayList;
-import java.util.Optional;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 //? if >= 1.21.9
 import net.minecraft.client.input.*;

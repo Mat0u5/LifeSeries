@@ -1,12 +1,12 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards;
 
-import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
-import net.mat0u5.matlib.config.entry.ConfigRef;
-import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.*;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.PreBuiltSnailSkins;
@@ -19,18 +19,20 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.matlib.utils.player.PlayerListReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.mat0u5.matlib.config.entry.ConfigRef;
+import net.mat0u5.matlib.utils.player.PlayerListReference;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffects;
+
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static net.mat0u5.lifeseries.LifeSeries.*;
-import static net.mat0u5.matlib.MatLib.*;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.currentSession;
+import static net.mat0u5.matlib.MatLib.server;
 
 //? if >= 1.21.2
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.CreakingPower;
@@ -117,29 +119,29 @@ public class WildcardManager {
 
     public static void fadedWildcard() {
         PlayerUtils.broadcastMessage(ModifiableText.WILDLIFE_WILDCARD_FADED.get());
-        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BEACON_DEACTIVATE);
+        ModifiableSound.WILDLIFE_WILDCARD_FADE.broadcast();
     }
 
     public static void showDots() {
         List<ServerPlayer> players = PlayerUtils.getAllPlayers();
-        PlayerUtils.playSoundToPlayers(players, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
+        ModifiableSound.WILDLIFE_WILDCARD_DOTS_1.broadcast(0.4f, 1);
         PlayerUtils.sendTitleToPlayers(players, ModifiableText.WILDLIFE_WILDCARD_DOTS_1.get(),0,40,0);
         PlayerListReference ref = PlayerListReference.of(players);
         TaskScheduler.scheduleTask(30, () -> {
             var listNew = ref.get();
-            PlayerUtils.playSoundToPlayers(listNew, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
+            ModifiableSound.WILDLIFE_WILDCARD_DOTS_2.broadcast(0.4f, 1);
             PlayerUtils.sendTitleToPlayers(listNew, ModifiableText.WILDLIFE_WILDCARD_DOTS_2.get(),0,40,0);
         });
         TaskScheduler.scheduleTask(60, () -> {
             var listNew = ref.get();
-            PlayerUtils.playSoundToPlayers(listNew, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
+            ModifiableSound.WILDLIFE_WILDCARD_DOTS_3.broadcast(0.4f, 1);
             PlayerUtils.sendTitleToPlayers(listNew, ModifiableText.WILDLIFE_WILDCARD_DOTS_3.get(),0,40,0);
         });
     }
 
     public static void showCryptTitle(Component component) {
         if (component.getString().isEmpty()) return;
-        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ZOMBIE_VILLAGER_CURE, 0.2f, 1);
+        ModifiableSound.WILDLIFE_WILDCARD_TITLE.broadcast(0.2f, 1);
         String textRaw = component.getString();
         String textClean = "";
         String text = "";
@@ -199,7 +201,7 @@ public class WildcardManager {
     private static final List<String> allColorCodes = List.of("6","9","a","b","c","d","e");
     public static void showRainbowCryptTitle(String text) {
         if (text.isEmpty()) return;
-        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ZOMBIE_VILLAGER_CURE, 0.2f, 1);
+        ModifiableSound.WILDLIFE_WILDCARD_TITLE.broadcast(0.2f, 1);
         String colorCrypt = "§r§_§l§k";
         String colorNormal = "§r§_§l";
 

@@ -6,17 +6,13 @@ import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.matlib.utils.other.TextUtils;
-import net.mat0u5.matlib.utils.other.VersionCompatibility;
-import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
-import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.mat0u5.matlib.utils.other.TextUtils;
+import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-
-import java.util.List;
 
 public class TestingCommands extends CustomCommand {
 
@@ -75,12 +71,6 @@ public class TestingCommands extends CustomCommand {
         ServerPlayer player = source.getPlayer();
         if (player == null) return -1;
 
-        DatapackIntegration.EVENT_PLAYER_LEAVE.trigger(List.of(
-                new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()),
-                new DatapackIntegration.Events.MacroEntry("PosX", String.valueOf(player.blockPosition().getX())),
-                new DatapackIntegration.Events.MacroEntry("PosY", String.valueOf(player.blockPosition().getY())),
-                new DatapackIntegration.Events.MacroEntry("PosZ", String.valueOf(player.blockPosition().getZ()))
-        ));
 
         return 1;
     }

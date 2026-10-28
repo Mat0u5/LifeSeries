@@ -1,11 +1,11 @@
 package net.mat0u5.lifeseries.seasons.season;
 
-import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.SeasonConfig;
-import net.mat0u5.lifeseries.config.ModifiableText;
-import net.mat0u5.lifeseries.config.ModifiableTextManager;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSoundManager;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableTextManager;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.events.Events;
@@ -29,16 +29,20 @@ import net.mat0u5.lifeseries.seasons.util.WatcherManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.mat0u5.matlib.command.Command;
+import net.mat0u5.matlib.config.entry.ConfigRef;
+import net.mat0u5.matlib.events.EventResult;
 import net.mat0u5.matlib.events.server.ServerEntityEvents;
 import net.mat0u5.matlib.events.server.ServerPlayerEvents;
 import net.mat0u5.matlib.utils.other.Time;
-import net.mat0u5.lifeseries.utils.player.*;
-import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.mat0u5.matlib.utils.player.PermissionManager;
+import net.mat0u5.matlib.utils.player.PlayerReference;
+import net.mat0u5.matlib.utils.player.ScoreboardUtils;
+import net.mat0u5.matlib.utils.player.TeamUtils;
 import net.mat0u5.matlib.utils.world.LevelUtils;
-import net.mat0u5.matlib.command.Command;
-import net.mat0u5.matlib.events.EventResult;
-import net.mat0u5.matlib.utils.player.*;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.OutgoingChatMessage;
@@ -76,8 +80,11 @@ import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
-import static net.mat0u5.matlib.MatLib.*;
 import static net.mat0u5.lifeseries.seasons.util.WatcherManager.isWatcher;
+import static net.mat0u5.matlib.MatLib.server;
+import net.mat0u5.lifeseries.utils.player.*;
+import net.mat0u5.matlib.utils.player.*;
+import net.minecraft.world.entity.*;
 
 //? if <= 1.20
 //import net.minecraft.world.scores.Scoreboard;
@@ -94,17 +101,16 @@ public abstract class Season {
     public static final String RESOURCEPACK_MAIN_SHA = "7bb7149103c54c6b37f2238ea9bf00da1a604e52";
     public static final String RESOURCEPACK_SECRETLIFE_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-secretlife-fc0fa2a3efe2aefdba5a3c0deda61039fc43a008/secretlife.zip";
     public static final String RESOURCEPACK_SECRETLIFE_SHA = "1befd668fa775f2b8715b348172e1ba776e57294";
-    public static final String RESOURCEPACK_MINIMAL_ARMOR_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-minimal_armor-27d9e98eb6009401319a5256f7695f1bba902412/minimal_armor.zip";
-    public static final String RESOURCEPACK_MINIMAL_ARMOR_SHA = "e078d9085ea74891ebc4f8ec5686c4da08176a38";
-    public static final String RESOURCEPACK_COMBINED_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-combined-8bd2aff02339acae9820c5f1ae957d7251fb79d0/combined.zip";
-    public static final String RESOURCEPACK_COMBINED_SHA = "405c160002c6b664c908689121edbac4a5616953";
+    public static final String RESOURCEPACK_MINIMAL_ARMOR_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-minimal_armor-4482ed6b3e98f03de1ba85293a3da59ad0000598/minimal_armor.zip";
+    public static final String RESOURCEPACK_MINIMAL_ARMOR_SHA = "b86e10747eddb090a913f76053d960bfa66fc548";
+    public static final String RESOURCEPACK_COMBINED_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-combined-4482ed6b3e98f03de1ba85293a3da59ad0000598/combined.zip";
+    public static final String RESOURCEPACK_COMBINED_SHA = "d3bcbcb22d439882de7a2d8ee0a690b84535de00";
 
     public final ConfigRef<Integer> GIVELIFE_MAX_LIVES = ConfigRef.of(() -> LifeSeries.seasonConfig.GIVELIFE_LIVES_MAX);
     public final ConfigRef<Boolean> TAB_LIST_SHOW_DEAD_PLAYERS = ConfigRef.of(() -> LifeSeries.seasonConfig.TAB_LIST_SHOW_DEAD_PLAYERS);
     public final ConfigRef<Boolean> TAB_LIST_SHOW_LIVES = ConfigRef.of(() -> LifeSeries.seasonConfig.TAB_LIST_SHOW_LIVES);
     public static final ConfigRef<Boolean> TAB_LIST_SHOW_EXACT_LIVES = ConfigRef.of(() -> LifeSeries.seasonConfig.TAB_LIST_SHOW_EXACT_LIVES);
     public static final ConfigRef<Boolean> SHOW_HEALTH_BELOW_NAME = ConfigRef.of(() -> LifeSeries.seasonConfig.SHOW_HEALTH_BELOW_NAME);
-    public final ConfigRef<Boolean> WATCHERS_IN_TAB = ConfigRef.of(() -> LifeSeries.seasonConfig.WATCHERS_IN_TAB);
     public final ConfigRef<Boolean> MUTE_DEAD_PLAYERS = ConfigRef.of(() -> LifeSeries.seasonConfig.MUTE_DEAD_PLAYERS);
     public final ConfigRef<Boolean> MUTE_WATCHERS = ConfigRef.of(() -> LifeSeries.seasonConfig.WATCHERS_MUTED);
     public final ConfigRef<Boolean> MUTED_CHAT = ConfigRef.of(() -> LifeSeries.seasonConfig.MUTED_CHAT);
@@ -126,6 +132,9 @@ public abstract class Season {
     public static boolean cloudColorSetMode = false;
     public final ConfigRef<Boolean> TEAMS_SYSTEM_DISABLED = ConfigRef.of(() -> LifeSeries.seasonConfig.TEAMS_SYSTEM_DISABLED);
     public static final ConfigRef<Boolean> ONLY_LOSE_DURABILITY_IN_SESSION = ConfigRef.of(() -> LifeSeries.seasonConfig.ONLY_LOSE_DURABILITY_IN_SESSION);
+    public static boolean ONLY_LOSE_HUNGER_IN_SESSION = false;
+    public static boolean ONLY_ADVANCE_TIME_IN_SESSION = false;
+    public static ConfigRef<Boolean> DISABLE_MINIMAL_ARMOR_PACK = ConfigRef.of(() -> LifeSeries.seasonConfig.DISABLE_MINIMAL_ARMOR_PACK);
 
     public BoogeymanManager boogeymanManager = createBoogeymanManager();
     public SecretSociety secretSociety = createSecretSociety();
@@ -184,6 +193,7 @@ public abstract class Season {
 
     public void initialize() {
         ModifiableTextManager.initialize();
+        ModifiableSoundManager.initialize();
         reload();
     }
 
@@ -269,6 +279,8 @@ public abstract class Season {
 
     public void reload() {
         LifeSeriesNetworkHandlerServer.reload();
+        ONLY_LOSE_HUNGER_IN_SESSION = seasonConfig.ONLY_LOSE_HUNGER_IN_SESSION.get();
+        ONLY_ADVANCE_TIME_IN_SESSION = seasonConfig.ONLY_ADVANCE_TIME_IN_SESSION.get();
         boogeymanManager.onReload();
         secretSociety.onReload();
         createTeams();
@@ -501,12 +513,18 @@ public abstract class Season {
         if (timer.isMultipleOf(Time.seconds(60))) {
             LifeSeriesNetworkHandlerServer.sendUpdatePackets();
         }
+        tickAdvanceTime(server);
     }
     public void tickSessionOn(MinecraftServer server) {}
     public void addSessionActions() {
         boogeymanManager.addSessionActions();
         secretSociety.addSessionActions();
         livesManager.addSessionActions();
+    }
+
+    public void tickAdvanceTime(MinecraftServer server) {
+        boolean advanceTime = currentSession.statusStarted() || !ONLY_ADVANCE_TIME_IN_SESSION;
+        OtherUtils.setBooleanGameRule(server.overworld(), GameRules.ADVANCE_TIME, advanceTime);
     }
 
     public void onPlayerDeath(ServerPlayer player, DamageSource source) {
@@ -606,7 +624,7 @@ public abstract class Season {
         if (team != null) {
             Integer canGainLife = livesManager.getTeamGainLives(team.getName());
             Integer victimLives = ((IPlayer)victim).ls$getLives();
-            if (canGainLife != null && victimLives != null && victimLives > 0) {
+            if (canGainLife != null && victimLives != null) {
                 if (victimLives + 1 >= canGainLife) { // +1 because the victim already lost a life
                     broadcastLifeGain(killer, victim);
                     ((IPlayer) killer).ls$addLife();
@@ -744,6 +762,9 @@ public abstract class Season {
         OtherUtils.executeCommand("recipe give @a lifeseries:spawner_recipe");
         OtherUtils.executeCommand("recipe give @a lifeseries:tnt_recipe_variation");
         OtherUtils.executeCommand("recipe give @a lifeseries:bundle_recipe");
+        OtherUtils.executeCommand("recipe give @a lifeseries:moss_block_recipe");
+        OtherUtils.executeCommand("recipe give @a lifeseries:spore_blossom_recipe");
+        OtherUtils.executeCommand("recipe give @a lifeseries:magma_cream_recipe");
     }
 
     public void onPlayerJoin(ServerPlayer player) {

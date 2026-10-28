@@ -3,8 +3,10 @@ package net.mat0u5.lifeseries.seasons.secretsociety;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.command.manager.CustomCommand;
-import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.seasons.util.WatcherManager;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -74,19 +76,25 @@ public class SocietyCommands extends CustomCommand {
                     .executes(context -> societyEnd(context.getSource()))
                 )
                 .then(literal("members")
-                    .requires(PermissionManager::isAdmin)
                         .then(literal("add")
-                            .then(argument("player", EntityArgument.player())
-                                .executes(context -> membersAdd(context.getSource(), EntityArgument.getPlayer(context, "player")))
-                            )
+                                .requires(PermissionManager::isAdmin)
+                                .then(argument("player", EntityArgument.player())
+                                    .executes(context -> membersAdd(context.getSource(), EntityArgument.getPlayer(context, "player")))
+                                )
                         )
                         .then(literal("remove")
-                            .then(argument("player", EntityArgument.player())
-                                .executes(context -> membersRemove(context.getSource(), EntityArgument.getPlayer(context, "player")))
-                            )
+                                .requires(PermissionManager::isAdmin)
+                                .then(argument("player", EntityArgument.player())
+                                    .executes(context -> membersRemove(context.getSource(), EntityArgument.getPlayer(context, "player")))
+                                )
                         )
                         .then(literal("list")
-                            .executes(context -> membersList(context.getSource()))
+                                .requires(source -> {
+                                    if (PermissionManager.isAdmin(source)) return true;
+                                    ServerPlayer self = source.getPlayer();
+                                    return self != null && WatcherManager.WATCHERS_SEE_BOOGEY_AND_SOCIETY.get() && ((IPlayer) self).ls$isWatcher();
+                                })
+                                .executes(context -> membersList(context.getSource()))
                         )
                 )
         );

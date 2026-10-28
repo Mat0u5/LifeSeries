@@ -1,29 +1,28 @@
 package net.mat0u5.lifeseries.seasons.secretsociety;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.matlib.config.entry.ConfigRef;
-import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.matlib.utils.other.TextUtils;
 import net.mat0u5.matlib.utils.other.Time;
 import net.mat0u5.matlib.utils.player.PlayerListReference;
 import net.mat0u5.matlib.utils.player.PlayerReference;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
-import static net.mat0u5.matlib.MatLib.*;
+import static net.mat0u5.matlib.MatLib.server;
 
 public class SecretSociety {
     public final ConfigRef<Boolean> SOCIETY_ENABLED = ConfigRef.of(() -> LifeSeries.seasonConfig.SECRET_SOCIETY);
@@ -136,9 +135,9 @@ public class SecretSociety {
 
         TaskScheduler.scheduleTask(50, () -> {
             if (!SOUND_ONLY_MEMBERS.get()) {
-                PlayerUtils.playSoundToPlayers(nonMemberRef.get(), SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("pastlife_society")));
+                ModifiableSound.PASTLIFE_SOCIETY.play(nonMemberRef.get());
             }
-            PlayerUtils.playSoundToPlayers(ref.get(), SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("pastlife_society")));
+            ModifiableSound.PASTLIFE_SOCIETY.play(ref.get());
             PlayerUtils.sendTitleToPlayers(ref.get(), ModifiableText.SOCIETY_CALLS_PT1.get(), 0, 30, 0);
         });
 
@@ -208,7 +207,7 @@ public class SecretSociety {
     }
 
     public void afterInitiate(ServerPlayer player) {
-        PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("pastlife_society")), 1, 1);
+        ModifiableSound.PASTLIFE_SOCIETY.play(player);
 
         int currentTime = 20;
         PlayerReference ref = PlayerReference.of(player);
@@ -350,7 +349,7 @@ public class SecretSociety {
         societyEnded = true;
         SessionTranscript.societyEnded();
         if (SOUND_ONLY_MEMBERS.get()) {
-            PlayerUtils.playSoundToPlayers(getMembers(), SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("pastlife_society_end_member")));
+            ModifiableSound.PASTLIFE_SOCIETY_END_MEMBER.play(getMembers());
         }
         else {
             List<ServerPlayer> memberPlayers = getMembers();
@@ -361,8 +360,8 @@ public class SecretSociety {
                 nonMemberPlayers.add(player);
             }
 
-            PlayerUtils.playSoundToPlayers(memberPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("pastlife_society_end_member")));
-            PlayerUtils.playSoundToPlayers(nonMemberPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("pastlife_society")));
+            ModifiableSound.PASTLIFE_SOCIETY_END_MEMBER.play(memberPlayers);
+            ModifiableSound.PASTLIFE_SOCIETY.play(nonMemberPlayers);
         }
     }
 
@@ -404,6 +403,7 @@ public class SecretSociety {
         DatapackIntegration.EVENT_SOCIETY_FAIL_REWARD.trigger(new DatapackIntegration.Events.MacroEntry("Player", member.getScoreboardName()));
         if (DatapackIntegration.EVENT_SOCIETY_FAIL_REWARD.isCanceled()) return;
         int punishmentLives = Math.abs(PUNISHMENT_LIVES.get());
+        if (((IPlayer) member).ls$isDead()) return;
         Integer currentLives = ((IPlayer) member).ls$getLives();
         if (currentLives != null) {
             punishmentLives = Math.min(Math.abs(currentLives-1), punishmentLives);

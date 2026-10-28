@@ -1,20 +1,19 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers;
 
-import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
-import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
-import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Mimicry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -106,7 +105,7 @@ public class SuperpowersWildcard extends Wildcard {
             }
         }
         if (!WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME.get()) {
-            PlayerUtils.playSoundToPlayers(allPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("wildlife_superpowers")), 0.2f, 1);
+            ModifiableSound.WILDLIFE_SUPERPOWERS.play(allPlayers, 0.2f, 1);
         }
     }
 
@@ -170,7 +169,7 @@ public class SuperpowersWildcard extends Wildcard {
             DatapackIntegration.activateSuperpower(player, superpower);
         }
         if (!WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME.get()) {
-            PlayerUtils.playSoundToPlayer(player, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("wildlife_superpowers")), 0.2f, 1);
+            ModifiableSound.WILDLIFE_SUPERPOWERS.play(player, 0.2f, 1);
         }
         Necromancy.checkRessurectedPlayersReset();
     }

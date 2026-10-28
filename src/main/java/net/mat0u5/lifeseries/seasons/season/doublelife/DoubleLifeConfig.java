@@ -1,11 +1,11 @@
 package net.mat0u5.lifeseries.seasons.season.doublelife;
 
+import net.mat0u5.lifeseries.config.LifeSeriesConfigTypes;
 import net.mat0u5.lifeseries.config.SeasonConfig;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.matlib.config.entry.ConfigHeader;
 import net.mat0u5.matlib.config.entry.ConfigurableValue;
 import net.mat0u5.matlib.config.type.ConfigTypes;
-import net.mat0u5.lifeseries.config.LifeSeriesConfigTypes;
-import net.mat0u5.lifeseries.seasons.season.Seasons;
 
 import java.util.List;
 
@@ -95,8 +95,7 @@ public class DoubleLifeConfig extends SeasonConfig {
     public final ConfigurableValue<Boolean> SOULBOUND_SECRET_SOCIETY = ConfigurableValue.register(this, "soulbound_secret_society", false)
             .name("Soulbound Secret Society (If enabled)")
             .description("Makes you become a member of the Secret Society if your soulmate is one.")
-            .group("season.soulbind")
-            .setNew(true);
+            .group("season.soulbind");
     public final ConfigurableValue<Boolean> SOULBOUND_LIVES = ConfigurableValue.register(this, "soulbound_lives", true, LifeSeriesConfigTypes.BOOLEAN_REVERSE_HEADER)
             .name("Soulbound Lives")
             .description("Controls whether soulmates share their life count.")

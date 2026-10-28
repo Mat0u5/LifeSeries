@@ -1,20 +1,20 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard;
 
-import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
-import net.mat0u5.matlib.config.entry.ConfigRef;
-import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.matlib.utils.other.Time;
 import net.mat0u5.matlib.utils.player.PlayerListReference;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -167,17 +167,17 @@ public class Callback extends Wildcard {
         PlayerListReference ref = PlayerListReference.of(players);
         TaskScheduler.scheduleTask(80, () -> {
             var listNew = ref.get();
-            PlayerUtils.playSoundToPlayers(listNew, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
+            ModifiableSound.WILDLIFE_WILDCARD_MAKEITWILD_1.broadcast(0.4f, 1);
             PlayerUtils.sendTitleToPlayers(listNew, ModifiableText.WILDLIFE_MAKEITWILD_PT2.get(), 0, 40, 0);
         });
         TaskScheduler.scheduleTask(110, () -> {
             var listNew = ref.get();
-            PlayerUtils.playSoundToPlayers(listNew, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
+            ModifiableSound.WILDLIFE_WILDCARD_MAKEITWILD_2.broadcast(0.4f, 1);
             PlayerUtils.sendTitleToPlayers(listNew, ModifiableText.WILDLIFE_MAKEITWILD_PT3.get(), 0, 40, 0);
         });
         TaskScheduler.scheduleTask(140, () -> {
             var listNew = ref.get();
-            PlayerUtils.playSoundToPlayers(listNew, SoundEvents.ZOMBIE_VILLAGER_CURE, 0.2f, 1);
+            ModifiableSound.WILDLIFE_WILDCARD_MAKEITWILD_3.broadcast(0.2f, 1);
             PlayerUtils.sendTitleToPlayers(listNew, ModifiableText.WILDLIFE_MAKEITWILD_PT4.get(), 0, 90, 20);
 
         });
@@ -212,7 +212,7 @@ public class Callback extends Wildcard {
             PlayerUtils.broadcastMessage(ModifiableText.WILDLIFE_WILDCARD_FADED.get());
         }
         WildcardManager.activeWildcards.clear();
-        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BEACON_DEACTIVATE);
+        ModifiableSound.WILDLIFE_WILDCARD_FADE.broadcast();
         LifeSeriesNetworkHandlerServer.sendUpdatePackets();
     }
     private Wildcards lastActivatedWildcard;

@@ -1,9 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.limitedlife;
 
-import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeConfig;
-import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.config.SeasonConfig;
-import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
@@ -14,11 +12,12 @@ import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.matlib.utils.other.TextUtils;
 import net.mat0u5.matlib.utils.other.Time;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.matlib.utils.player.ScoreboardUtils;
-import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.MinecraftServer;
@@ -247,7 +246,7 @@ public class LimitedLife extends Season {
             Integer canGainLife = livesManager.getTeamGainLives(team.getName());
             Integer victimLives = ((IPlayer)victim).ls$getLives();
             int amount = NEW_KILL_NORMAL.getSeconds();
-            if (canGainLife != null && victimLives != null && victimLives > 0) {
+            if (canGainLife != null && victimLives != null) {
                 if (victimLives + amount >= canGainLife) { // +amount because the victim already lost time
                     broadcastLifeGain(killer, victim);
                     ((IPlayer) killer).ls$addLives(amount);

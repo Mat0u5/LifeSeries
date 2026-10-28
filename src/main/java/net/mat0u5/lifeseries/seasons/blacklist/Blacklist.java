@@ -1,15 +1,16 @@
 package net.mat0u5.lifeseries.seasons.blacklist;
 
-import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.matlib.events.server.ServerPlayerEvents;
 import net.mat0u5.matlib.utils.other.RegistryUtils;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.mat0u5.matlib.utils.world.ItemStackUtils;
 import net.minecraft.core.BlockPos;
@@ -162,6 +163,13 @@ public class Blacklist {
             if (!seasonConfig.SPAWNER_RECIPE.get()) {
                 newList.add(IdentifierHelper.lifeseries("spawner_recipe"));
             }
+        }
+        if (!LifeSeries.isSeason(Seasons.LAST_LIFE)) {
+            newList.add(IdentifierHelper.lifeseries("moss_block_recipe"));
+            newList.add(IdentifierHelper.lifeseries("spore_blossom_recipe"));
+        }
+        if (!LifeSeries.isSeason(Seasons.LIMITED_LIFE)) {
+            newList.add(IdentifierHelper.lifeseries("magma_cream_recipe"));
         }
 
         for (String itemId : loadRecipeBlacklist()) {
@@ -348,6 +356,7 @@ public class Blacklist {
         loadedBannedEffects = null;
         loadedClampedEffects = null;
         loadedRecipeBlacklist = null;
+        loadedListItemIdentifier = null;
         getItemBlacklist();
         getBlockBlacklist();
         getClampedEnchants();
@@ -355,6 +364,7 @@ public class Blacklist {
         getBannedEffects();
         getClampedEffects();
         getRecipeBlacklist();
+        getItemBlacklist();
     }
 
     public InteractionResult onBlockUse(ServerPlayer player, Level level, InteractionHand hand, BlockHitResult hitResult) {

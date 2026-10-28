@@ -3,7 +3,6 @@ package net.mat0u5.lifeseries.client;
 import com.google.auto.service.AutoService;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.config.ClientConfig;
-import net.mat0u5.matlib.client.config.ClientConfigManager;
 import net.mat0u5.lifeseries.client.network.LifeSeriesNetworkHandlerClient;
 import net.mat0u5.lifeseries.client.registries.ClientRegistries;
 import net.mat0u5.lifeseries.client.render.TextHud;
@@ -14,8 +13,9 @@ import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.utils.interfaces.LifeSeriesClientAccessor;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.matlib.MatLib;
-import net.mat0u5.matlib.client.services.MultiplatformClientModInitializer;
+import net.mat0u5.matlib.client.config.ClientConfigManager;
 import net.mat0u5.matlib.client.events.ClientPackSourceEvents;
+import net.mat0u5.matlib.client.services.MultiplatformClientModInitializer;
 import net.mat0u5.matlib.client.utils.SharedClientInfo;
 import net.mat0u5.matlib.utils.other.ModBuiltInPacks;
 import net.minecraft.network.chat.Component;
@@ -34,6 +34,8 @@ public class LifeSeriesClient implements MultiplatformClientModInitializer, Life
     public static long MIMICRY_COOLDOWN_TIMESTAMP = 0;
     public static long CURSE_SLIDING = 0;
     public static boolean NICELIFE_SNOWY_NETHER = true;
+    public static boolean NICELIFE_DISABLE_SNOW = false;
+    public static boolean SERVER_MINIMAL_ARMOR = false;
 
     public static Map<String, String> playerDisguiseNames = new HashMap<>();
     public static Map<UUID, UUID> playerDisguiseUUIDs = new HashMap<>();
@@ -78,8 +80,8 @@ public class LifeSeriesClient implements MultiplatformClientModInitializer, Life
     public static boolean TAB_LIST_SHOW_EXACT_LIVES = false;
     public static String RUN_COMMAND = "lifeseries config";
     public static boolean COLORED_HEARTS = false;
-    public static boolean COLORED_HEARTS_HARDCORE_LAST_LIFE = true;
-    public static boolean COLORED_HEARTS_HARDCORE_ALL_LIVES = false;
+    public static boolean HARDCORE_HEARTS_LAST_LIFE = true;
+    public static boolean HARDCORE_HEARTS_ALL_LIVES = false;
     public static int TAB_LIST_LIVES_CUTOFF = 4;
     public static boolean FIX_SIZECHANGING_BUGS = false;
     public static float SIZESHIFTING_CHANGE = 0;
@@ -138,8 +140,8 @@ public class LifeSeriesClient implements MultiplatformClientModInitializer, Life
             RUN_COMMAND = RUN_COMMAND.substring(1);
         }
         COLORED_HEARTS = clientConfig.COLORED_HEARTS.get();
-        COLORED_HEARTS_HARDCORE_LAST_LIFE = clientConfig.COLORED_HEARTS_HARDCORE_LAST_LIFE.get();
-        COLORED_HEARTS_HARDCORE_ALL_LIVES = clientConfig.COLORED_HEARTS_HARDCORE_ALL_LIVES.get();
+        HARDCORE_HEARTS_LAST_LIFE = clientConfig.HARDCORE_HEARTS_LAST_LIFE.get();
+        HARDCORE_HEARTS_ALL_LIVES = clientConfig.HARDCORE_HEARTS_ALL_LIVES.get();
 
         TEXT_HUD_SCALE = clientConfig.TEXT_HUD_SCALE.get();
 
@@ -159,6 +161,9 @@ public class LifeSeriesClient implements MultiplatformClientModInitializer, Life
         SUPERPOWER_COOLDOWN_TIMESTAMP = 0;
         MIMICRY_COOLDOWN_TIMESTAMP = 0;
         CURSE_SLIDING = 0;
+        NICELIFE_SNOWY_NETHER = true;
+        NICELIFE_DISABLE_SNOW = false;
+        SERVER_MINIMAL_ARMOR = false;
 
 
         playerDisguiseNames = new HashMap<>();
