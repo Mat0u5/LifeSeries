@@ -25,8 +25,7 @@ public class ClientConfig extends GuiConfig {
 
     public final ConfigurableValue<Boolean> COLORED_HEARTS = ConfigurableValue.register(this, "colored_hearts", false)
             .name("Colored Hearts Based on Lives")
-            .description("Makes your hearts the same color as how many lives you have.")
-            .group("coloredhearts");
+            .description("Makes your hearts the same color as how many lives you have.");
     public final ConfigurableValue<Boolean> HARDCORE_HEARTS_LAST_LIFE = ConfigurableValue.register(this, "hardcore_hearts_last_life", false)
             .name("Show Last Life as Hardcore")
             .description("When you are on your last life, your hearts will appear as though you are in hardcore.");

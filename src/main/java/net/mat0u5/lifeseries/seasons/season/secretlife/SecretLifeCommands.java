@@ -337,15 +337,15 @@ public class SecretLifeCommands extends CustomCommand {
         if (selfLives == null || targetLives == null) return -1;
 
         if (selfLives < TaskManager.GUESS_TASKS_LIFE_GUESSER_MIN.get()) {
-            sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_ERROR_GUESSER_MIN.get(TaskManager.GUESS_TASKS_LIFE_GUESSER_MIN));
+            sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_ERROR_GUESSER_MIN.get(TaskManager.GUESS_TASKS_LIFE_GUESSER_MIN.get()));
             return -1;
         }
         if (selfLives > TaskManager.GUESS_TASKS_LIFE_GUESSER_MAX.get()) {
-            sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_ERROR_GUESSER_MAX.get(TaskManager.GUESS_TASKS_LIFE_GUESSER_MAX));
+            sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_ERROR_GUESSER_MAX.get(TaskManager.GUESS_TASKS_LIFE_GUESSER_MAX.get()));
             return -1;
         }
         if (targetLives < TaskManager.GUESS_TASKS_LIFE_GUESSED_MIN.get()) {
-            sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_ERROR_GUESSED_MIN.get(TaskManager.GUESS_TASKS_LIFE_GUESSED_MIN));
+            sendCommandFailure(source, ModifiableText.SECRETLIFE_TASK_GUESS_ERROR_GUESSED_MIN.get(TaskManager.GUESS_TASKS_LIFE_GUESSED_MIN.get()));
             return -1;
         }
         if (!TaskManager.taskGuesses.containsKey(self.getUUID())) {

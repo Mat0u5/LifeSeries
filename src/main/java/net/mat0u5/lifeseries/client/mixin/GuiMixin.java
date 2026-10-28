@@ -86,7 +86,7 @@ public class GuiMixin {
         String texturePath = identifier.getPath();
         //?}
         String playerTeamColor = ClientUtils.getPlayerTeamColorOrPacket();
-        String playerTeamName = ClientUtils.getPlayerTeamColorOrPacket();
+        String playerTeamName = ClientUtils.getPlayerTeamNameOrPacket();
 
         boolean shouldRenderHearts = false;
 

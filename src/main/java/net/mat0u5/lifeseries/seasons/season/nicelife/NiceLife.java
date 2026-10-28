@@ -148,6 +148,7 @@ public class NiceLife extends Season {
     @Override
     public void tick(MinecraftServer server) {
         super.tick(server);
+        checkAdvanceTime();
         if (forceSleepTicks > 0) forceSleepTicks--;
         timePassed.tick();
         if (currentSession.statusStarted() || SNOW_WHEN_NOT_IN_SESSION.get()) {
@@ -258,8 +259,8 @@ public class NiceLife extends Season {
     }
 
     @Override
-    public void tickAdvanceTime(MinecraftServer server) {
-        boolean advanceTime = !isMidnight() && (currentSession.statusStarted() || !ONLY_ADVANCE_TIME_IN_SESSION);
+    public void checkAdvanceTime() {
+        boolean advanceTime = !isMidnight() && (currentSession.statusStarted() || !ONLY_ADVANCE_TIME_IN_SESSION.get());
         OtherUtils.setBooleanGameRule(server.overworld(), GameRules.ADVANCE_TIME, advanceTime);
     }
 
