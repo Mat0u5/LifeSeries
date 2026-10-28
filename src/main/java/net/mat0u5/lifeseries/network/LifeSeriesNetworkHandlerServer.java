@@ -451,17 +451,18 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
         if (!id.equals(oldPreLoginPacketID)) return false;
 
         boolean isFromNewClient = false;
+        boolean understood = false;
         if (data != null) {
             try {
                 if (data.isReadable()) {
-                    boolean understood = data.readBoolean();
+                    understood = data.readBoolean();
                     int additionalInfo = data.readInt();
                     isFromNewClient = additionalInfo == OLD_PRELOGIN_TRANSACTION_ID;
                 }
             } catch (Exception ignored) {}
         }
 
-        if (isFromNewClient) return true;
+        if (!understood || isFromNewClient) return true;
 
         Component disconnectText = Component.literal("[Life Series Mod] Client-Server version mismatch!\n" +
                 "Update the client version to at least version "+OldHandshakePayload.OLD_PACKET_VERSION_BREAKOFF);
