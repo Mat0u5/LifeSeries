@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.entity.snail.server;
 
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.snail.goal.MiningNavigation;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
@@ -10,7 +11,6 @@ import net.mat0u5.matlib.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -22,6 +22,7 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.BlockHitResult;
@@ -168,6 +169,11 @@ public class SnailPathfinding {
         if (block.is(Blocks.LAVA)) return false;
         if (block.is(Blocks.WATER)) return false;
         if (block.is(Blocks.POWDER_SNOW)) return false;
+        boolean isWaterlogged = block.hasProperty(BlockStateProperties.WATERLOGGED) && block.getValue(BlockStateProperties.WATERLOGGED);
+        if (isWaterlogged) {
+            return false;
+        }
+
         return true;
     }
 
@@ -206,6 +212,24 @@ public class SnailPathfinding {
         return result.getBlockPos();
     }
 
+    @Nullable
+    public BlockPos getGroundBlockOrFluid() {
+        Vec3 startPos = snail.position();
+        Vec3 endPos = new Vec3(startPos.x(), snail.level().getMinY(), startPos.z());
+
+        BlockHitResult result = snail.level().clip(
+                new ClipContext(
+                        startPos,
+                        endPos,
+                        ClipContext.Block.COLLIDER,
+                        ClipContext.Fluid.ANY,
+                        snail
+                )
+        );
+        if (result.getType() == HitResult.Type.MISS) return null;
+        return result.getBlockPos();
+    }
+
     public double getDistanceToGroundBlock() {
         BlockPos belowBlock = getGroundBlock();
         if (belowBlock == null) return Double.NEGATIVE_INFINITY;
@@ -222,13 +246,8 @@ public class SnailPathfinding {
                 if (!snail.serverData.shouldPathfind()) return;
                 BlockPos tpTo = getBlockPosNearTarget(boundEntity, minDistanceFromPlayer);
                 if (tpTo == null) return;
-                //? if <= 1.20.2 {
-                /*level.playSound(null, snail.getX(), snail.getY(), snail.getZ(), SoundEvents.ENDERMAN_TELEPORT, snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
-                entityWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.ENDERMAN_TELEPORT, snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
-                *///?} else {
-                level.playSound(null, snail.getX(), snail.getY(), snail.getZ(), SoundEvents.PLAYER_TELEPORT, snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
-                entityWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.PLAYER_TELEPORT, snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
-                //?}
+                level.playSound(null, snail.getX(), snail.getY(), snail.getZ(), ModifiableSound.WILDLIFE_SNAIL_TELEPORT.get(), snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
+                entityWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), ModifiableSound.WILDLIFE_SNAIL_TELEPORT.get(), snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
                 AnimationUtils.spawnTeleportParticles(level, snail.position());
                 AnimationUtils.spawnTeleportParticles(entityWorld, OtherUtils.getCenter(tpTo));
                 snail.serverData.despawn();

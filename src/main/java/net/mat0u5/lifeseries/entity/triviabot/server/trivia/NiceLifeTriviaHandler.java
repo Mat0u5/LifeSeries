@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.entity.triviabot.server.trivia;
 
-import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
@@ -12,10 +13,12 @@ import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
+import net.mat0u5.matlib.utils.other.Time;
+import net.mat0u5.matlib.utils.other.Tuple;
 import net.mat0u5.matlib.utils.world.ItemStackUtils;
 import net.mat0u5.matlib.utils.world.LevelUtils;
-import net.mat0u5.matlib.utils.other.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -151,6 +154,10 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
                 if (!bot.ranOutOfTime()) {
                     if (boundPlayer != null) {
                         SimplePackets.RESET_TRIVIA.sendToClient(boundPlayer);
+                        DatapackIntegration.EVENT_TRIVIA_FAIL.trigger(List.of(
+                                new DatapackIntegration.Events.MacroEntry("Player", boundPlayer.getScoreboardName()),
+                                new DatapackIntegration.Events.MacroEntry("TriviaBot", bot.getStringUUID())
+                        ));
                     }
                     TaskScheduler.scheduleTask(40, () -> {
                         bot.setSubmittedAnswer(true);
@@ -364,8 +371,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
             bot.setWaving(78);
         }
         if (newState == BotState.LEAVING) {
-            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("nicelife_santabot_turn"));
-            PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.65f, 1);
+            ModifiableSound.NICELIFE_SANTABOT_TURN.play(bot.serverData.getBoundPlayer(), 0.65f, 1);
             TaskScheduler.scheduleTask(40, () -> {
                 for (ItemEntity item : droppedItems) {
                     if (item == null) continue;
@@ -375,17 +381,14 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         }
         if (newState == BotState.FLYING_UP) {
             SimplePackets.HIDE_SLEEP_DARKNESS.sendToClient(false, bot.serverData.getBoundPlayer());
-            SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("nicelife_santabot_away"));
-            PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.65f, 1);
+            ModifiableSound.NICELIFE_SANTABOT_AWAY.play(bot.serverData.getBoundPlayer(), 0.65f, 1);
         }
     }
 
     public boolean handleAnswer(int answer) {
         if (super.handleAnswer(answer)) {
             bot.setAnalyzingTime(87);
-            PlayerUtils.playSoundToPlayer(
-                    bot.serverData.getBoundPlayer(),
-                    SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("nicelife_santabot_analyzing")), 1f, 1);
+            ModifiableSound.NICELIFE_SANTABOT_ANALYZING.play(bot.serverData.getBoundPlayer());
             return true;
         }
         return false;
@@ -400,9 +403,9 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         TaskScheduler.scheduleTask(174+107, () -> spawnItemForPlayer(true));
         TaskScheduler.scheduleTask(174+126, () -> spawnItemForPlayer(true));
 
-        SoundEvent sound = OtherUtils.getRandomSound("nicelife_santabot_correct", 1, 6);
+        SoundEvent randomSound = OtherUtils.getRandomSound("nicelife_santabot_correct", 1, 6);
         TaskScheduler.scheduleTask(174, () -> {
-            PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.65f, 1);
+            PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), randomSound, 0.65f, 1);
         });
         TaskScheduler.scheduleTask(174+140, () -> {
             if (startVoting()) {
@@ -438,8 +441,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         String screenName = (voteType == NiceLifeVotingManager.VoteType.NICE_LIST) ? ModifiableText.NICELIFE_TRIVIA_VOTE_NICELIST.getString() : ModifiableText.NICELIFE_TRIVIA_VOTE_NAUGHTYLIST.getString();
         LifeSeriesNetworkHandlerServer.sendVoteScreenPacket(boundPlayer, screenName, true, false, true, availableForVoting);
         NiceLifeVotingManager.allowedToVote.add(boundPlayer.getUUID());
-        SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("nicelife_santabot_vote"));
-        PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.75f, 1);
+        ModifiableSound.NICELIFE_SANTABOT_VOTE.play(bot.serverData.getBoundPlayer(), 0.75f, 1);
         return true;
     }
 
@@ -451,9 +453,9 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         int delay = bot.ranOutOfTime() ? 0 : 174;
         TaskScheduler.scheduleTask(delay+115, () -> spawnItemForPlayer(false));
         TaskScheduler.scheduleTask(delay+135, () -> spawnItemForPlayer(false));
-        SoundEvent sound = OtherUtils.getRandomSound("nicelife_santabot_incorrect", 1, 6);
+        SoundEvent randomSound = OtherUtils.getRandomSound("nicelife_santabot_incorrect", 1, 6);
         TaskScheduler.scheduleTask(delay, () -> {
-            PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), sound, 0.65f, 1);
+            PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), randomSound, 0.65f, 1);
         });
         TaskScheduler.scheduleTask(delay+160, () -> {
             changeStateTo(BotState.LEAVING);

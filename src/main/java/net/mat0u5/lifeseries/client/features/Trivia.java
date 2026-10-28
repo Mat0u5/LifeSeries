@@ -5,12 +5,12 @@ import net.mat0u5.lifeseries.client.gui.trivia.ConfirmQuizAnswerScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.NewQuizScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.QuizScreen;
 import net.mat0u5.lifeseries.client.network.LifeSeriesNetworkHandlerClient;
-import net.mat0u5.matlib.client.render.RenderUtils;
 import net.mat0u5.lifeseries.network.packets.TriviaQuestionPayload;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
-import net.mat0u5.matlib.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
+import net.mat0u5.matlib.client.render.RenderUtils;
+import net.mat0u5.matlib.utils.other.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;

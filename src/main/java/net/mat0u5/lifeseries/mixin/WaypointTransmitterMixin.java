@@ -52,7 +52,7 @@ public class WaypointTransmitterMixin {
                 showLocatorBar = source.getUUID().equals(receiverSoulmateUUID);
             }
 
-            if (!showLocatorBar && currentSeason.boogeymanManager.BOOGEYMAN_ENABLED.get() && currentSeason.boogeymanManager.BOOGEYMAN_LOCATOR_BAR.get() && currentSeason.boogeymanManager.isBoogeyman(receiver)) {
+            if (!showLocatorBar && currentSeason.boogeymanManager.BOOGEYMAN_ENABLED.get() && currentSeason.boogeymanManager.BOOGEYMAN_LOCATOR_BAR.get() && currentSeason.boogeymanManager.isActiveBoogeyman(receiver)) {
                 showLocatorBar = true;
             }
 

@@ -7,7 +7,7 @@ package net.mat0u5.lifeseries.client.particle;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.mat0u5.lifeseries.mixin.client.ParticleAccessor;
+import net.mat0u5.lifeseries.client.mixin.ParticleAccessor;
 import net.minecraft.client.Camera;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.particle.ParticleEngine;

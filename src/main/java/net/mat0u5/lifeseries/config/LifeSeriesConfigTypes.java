@@ -12,6 +12,7 @@ public final class LifeSeriesConfigTypes {
     public static final ConfigType<Integer> LIVES_ENTRY = ConfigTypes.withId("lives", ConfigTypes.NULLABLE_INTEGER);
     public static final ConfigType<String> EVENT_ENTRY = ConfigTypes.withId("event", ConfigTypes.STRING);
     public static final ConfigType<String> MODIFIABLE_TEXT = ConfigTypes.withId("modifiable_text", ConfigTypes.STRING);
+    public static final ConfigType<String> MODIFIABLE_SOUND = ConfigTypes.withId("modifiable_sound", ConfigTypes.STRING);
 
     public static final ConfigType<List<String>> TEAM_ENTRY = ConfigTypes.withId("teams", ConfigTypes.STRING_LIST);
     public static final ConfigType<List<String>> SOULMATE_ENTRY = ConfigTypes.withId("soulmate", ConfigTypes.STRING_LIST);

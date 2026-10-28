@@ -1,13 +1,13 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
-import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
-import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.matlib.utils.player.AttributeUtils;
 import net.mat0u5.matlib.utils.player.PlayerReference;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
 
 //? if >= 1.21 {
@@ -52,7 +52,7 @@ public class WindCharge extends ToggleableSuperpower {
         //? if >= 1.21 {
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        ((IPlayer) player).ls$playNotifySound(SoundEvents.ARROW_SHOOT, SoundSource.MASTER, 0.3f, 1);
+        ModifiableSound.WILDLIFE_SUPERPOWERS_WINDCHARGE_START.play(player, 0.3f, 1);
         AttributeUtils.SAFE_FALL_DISTANCE.of(player).set(100000);
         giveMace();
         giveWindCharge();
@@ -66,7 +66,7 @@ public class WindCharge extends ToggleableSuperpower {
         //? if >= 1.21 {
         ServerPlayer player = getPlayer();
         if (player != null) {
-            ((IPlayer) player).ls$playNotifySound(SoundEvents.WIND_CHARGE_BURST.value(), SoundSource.MASTER, 0.3f, 1);
+            ModifiableSound.WILDLIFE_SUPERPOWERS_WINDCHARGE_END.play(player, 0.3f, 1);
             PlayerReference ref = PlayerReference.of(player);
             TaskScheduler.scheduleTask(1, () -> {
                 ServerPlayer playerNew = ref.get();

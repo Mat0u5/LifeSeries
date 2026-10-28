@@ -4,13 +4,13 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
-import net.mat0u5.lifeseries.resources.datapack.DatapackManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkins;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaSkins;
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
@@ -82,10 +82,10 @@ public class SeasonChanger {
 		currentSeason.boogeymanManager.resetBoogeymen();
 		currentSeason.secretSociety.forceEndSociety();
 		if (args.changeSession()) currentSession.sessionEnd();
+
 		initializeSeason(season, args);
 		currentSeason.initialize();
-		reloadConfig();
-		DatapackManager.onReloadStart();
+		OtherUtils.reloadServer();
 		for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
 			currentSeason.onPlayerJoin(player);
 			currentSeason.onPlayerFinishJoining(player, args.showChatMessage());

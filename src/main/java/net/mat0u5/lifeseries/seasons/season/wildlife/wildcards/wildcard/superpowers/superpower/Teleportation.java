@@ -1,18 +1,18 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
-import net.mat0u5.matlib.config.entry.ConfigRef;
-import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.matlib.utils.other.Time;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.matlib.config.entry.ConfigRef;
+import net.mat0u5.matlib.utils.other.Time;
 import net.mat0u5.matlib.utils.world.LevelUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -22,6 +22,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 
 public class Teleportation extends Superpower {
+    public static final ConfigRef<Boolean> GIVE_PEARLS = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_TELEPORTATION_GIVE_PEARLS);
     public static final ConfigRef<Integer> MAX_TELEPORT_DISTANCE = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_TELEPORTATION_TP_DISTANCE);
     public static final ConfigRef<Integer> MAX_SWAP_DISTANCE = ConfigRef.of(() -> WildLifeConfig.get().WILDCARD_SUPERPOWERS_TELEPORTATION_SWAP_DISTANCE);
     public static int COOLDOWN_MILLIS = 5000;
@@ -44,7 +45,7 @@ public class Teleportation extends Superpower {
     @Override
     public void tick() {
         timer.tick();
-        if (timer.isMultipleOf(Time.minutes(2))) {
+        if (timer.isMultipleOf(Time.minutes(2)) && GIVE_PEARLS.get()) {
             ServerPlayer player = getPlayer();
             if (player != null) {
                 int pearls = player.getInventory().countItem(Items.ENDER_PEARL);
@@ -85,6 +86,8 @@ public class Teleportation extends Superpower {
 
                     playTeleportSound(playerLevel, playerPos);
                     playTeleportSound(lookingAtPlayerLevel, lookingAtPlayerPos);
+                    ModifiableSound.WILDLIFE_SUPERPOWERS_TELEPORTATION.play(player);
+                    ModifiableSound.WILDLIFE_SUPERPOWERS_TELEPORTATION.play(lookingAtPlayer);
 
                     MobEffectInstance resistance = new MobEffectInstance(MobEffects.RESISTANCE, 100, 3);
                     lookingAtPlayer.addEffect(resistance);
@@ -101,6 +104,7 @@ public class Teleportation extends Superpower {
                 spawnTeleportParticles(playerLevel, playerPos);
 
                 PlayerUtils.teleport(player, lookingAtPos);
+                ModifiableSound.WILDLIFE_SUPERPOWERS_TELEPORTATION.play(player);
 
                 playTeleportSound(playerLevel, playerPos);
                 spawnTeleportParticles(playerLevel, playerPos);
@@ -124,10 +128,6 @@ public class Teleportation extends Superpower {
         );
     }
     public void playTeleportSound(ServerLevel level, Vec3 pos) {
-        //? if <= 1.20.2 {
-        //level.playSound(null, pos.x(), pos.y(), pos.z(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.MASTER, 1, 1);
-        //?} else {
-        level.playSound(null, pos.x(), pos.y(), pos.z(), SoundEvents.PLAYER_TELEPORT, SoundSource.MASTER, 1, 1);
-        //?}
+        level.playSound(null, pos.x(), pos.y(), pos.z(), ModifiableSound.WILDLIFE_SUPERPOWERS_TELEPORTATION.get(), SoundSource.MASTER, 1, 1);
     }
 }

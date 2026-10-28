@@ -50,6 +50,8 @@ public class SimplePackets {
     public static final SimpleBooleanPacket POWER_INVISIBILITY_PARTICLES = new SimpleBooleanPacket("POWER_INVISIBILITY_PARTICLES");
     public static final SimpleBooleanPacket NICELIFE_LIVE_VOTING_ENABLED = new SimpleBooleanPacket("NICELIFE_LIVE_VOTING_ENABLED");
     public static final SimpleBooleanPacket LIMITED_LIFE_ACTIONBAR_TIME = new SimpleBooleanPacket("LIMITED_LIFE_ACTIONBAR_TIME");
+    public static final SimpleBooleanPacket NICELIFE_DISABLE_SNOW = new SimpleBooleanPacket("NICELIFE_DISABLE_SNOW");
+    public static final SimpleBooleanPacket SERVER_MINIMAL_ARMOR = new SimpleBooleanPacket("SERVER_MINIMAL_ARMOR");
 
     public static final SimpleDoublePacket PLAYER_MIN_MSPT = new SimpleDoublePacket("PLAYER_MIN_MSPT");
     public static final SimpleDoublePacket SIZESHIFTING_CHANGE = new SimpleDoublePacket("SIZESHIFTING_CHANGE");

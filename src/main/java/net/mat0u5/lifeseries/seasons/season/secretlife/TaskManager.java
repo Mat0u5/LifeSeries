@@ -1,23 +1,21 @@
 package net.mat0u5.lifeseries.seasons.season.secretlife;
 
-import net.mat0u5.matlib.config.entry.ConfigRef;
-import net.mat0u5.lifeseries.config.ModifiableText;
 import net.mat0u5.lifeseries.config.StringListConfig;
 import net.mat0u5.lifeseries.config.StringListManager;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.matlib.utils.player.PlayerListReference;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.mat0u5.matlib.config.entry.ConfigRef;
+import net.mat0u5.matlib.utils.player.PlayerListReference;
 import net.mat0u5.matlib.utils.world.ItemStackUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
@@ -50,6 +48,11 @@ public class TaskManager {
     public static final ConfigRef<Boolean> CONSTANT_TASKS = ConfigRef.of(() -> SecretLifeConfig.get().CONSTANT_TASKS);
     public static final ConfigRef<Boolean> PUBLIC_TASKS_ON_SUBMIT = ConfigRef.of(() -> SecretLifeConfig.get().BROADCAST_TASKS_WHEN_SUBMITTED);
     public static final ConfigRef<Boolean> TASKS_NEED_CONFIRMATION = ConfigRef.of(() -> SecretLifeConfig.get().TASKS_NEED_CONFIRMATION);
+    public static ConfigRef<Boolean> GUESS_TASKS = ConfigRef.of(() -> SecretLifeConfig.get().GUESS_TASKS);
+    public static ConfigRef<Boolean> GUESS_TASKS_PUBLIC = ConfigRef.of(() -> SecretLifeConfig.get().GUESS_TASKS_PUBLIC);
+    public static ConfigRef<Integer> GUESS_TASKS_LIFE_GUESSER_MIN = ConfigRef.of(() -> SecretLifeConfig.get().GUESS_TASKS_LIFE_GUESSER_MIN);
+    public static ConfigRef<Integer> GUESS_TASKS_LIFE_GUESSER_MAX = ConfigRef.of(() -> SecretLifeConfig.get().GUESS_TASKS_LIFE_GUESSER_MAX);
+    public static ConfigRef<Integer> GUESS_TASKS_LIFE_GUESSED_MIN = ConfigRef.of(() -> SecretLifeConfig.get().GUESS_TASKS_LIFE_GUESSED_MIN);
 
     // Fraction of the tasks to keep as used when resetting happens.
     public static double RECENT_TASK_PERCENTAGE = 0.5;
@@ -62,6 +65,16 @@ public class TaskManager {
     public static Map<UUID, String> appendTask = new HashMap<>();
     public static Map<UUID, Task> assignedTasks = new HashMap<>();
     public static Set<UUID> infectedPlayers = new HashSet<>();
+    public static Map<UUID, List<TaskGuess>> taskGuesses = new HashMap<>();
+
+    public static class TaskGuess {
+        final UUID player;
+        Boolean confirmed;
+        public TaskGuess(UUID player, Boolean confirmed) {
+            this.player = player;
+            this.confirmed = confirmed;
+        }
+    }
 
     public static List<String> easyTasks;
     public static List<String> hardTasks;
@@ -259,22 +272,22 @@ public class TaskManager {
 			tasksChosenFor.add(uuid);
         }
         PlayerUtils.sendTitleToPlayers(allowedPlayers, ModifiableText.SECRETLIFE_TASK_TITLE.get(),20,35,0);
-        PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("secretlife_task")));
+        ModifiableSound.SECRETLIFE_TASK.play(allowedPlayers);
 
         PlayerListReference ref = PlayerListReference.of(allowedPlayers);
         TaskScheduler.scheduleTask(50, () -> {
             var newList = ref.get();
-            PlayerUtils.playSoundToPlayers(newList, SoundEvents.UI_BUTTON_CLICK.value());
+            ModifiableSound.SECRETLIFE_TASK_ROLL_3.play(newList);
             PlayerUtils.sendTitleToPlayers(newList, ModifiableText.COUNTDOWN_RED_3.get(),0,35,0);
         });
         TaskScheduler.scheduleTask(80, () -> {
             var newList = ref.get();
-            PlayerUtils.playSoundToPlayers(newList, SoundEvents.UI_BUTTON_CLICK.value());
+            ModifiableSound.SECRETLIFE_TASK_ROLL_2.play(newList);
             PlayerUtils.sendTitleToPlayers(newList, ModifiableText.COUNTDOWN_RED_2.get(),0,35,0);
         });
         TaskScheduler.scheduleTask(115, () -> {
             var newList = ref.get();
-            PlayerUtils.playSoundToPlayers(newList, SoundEvents.UI_BUTTON_CLICK.value());
+            ModifiableSound.SECRETLIFE_TASK_ROLL_1.play(newList);
             PlayerUtils.sendTitleToPlayers(newList, ModifiableText.COUNTDOWN_RED_1.get(),0,35,0);
         });
         TaskTypes finalType = type;

@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.seasons.util;
 
-import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -13,24 +13,24 @@ import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.*;
-import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.player.*;
+import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
+import net.mat0u5.matlib.config.entry.ConfigRef;
+import net.mat0u5.matlib.utils.other.TextUtils;
+import net.mat0u5.matlib.utils.other.Time;
+import net.mat0u5.matlib.utils.other.Tuple;
+import net.mat0u5.matlib.utils.player.PlayerListReference;
+import net.mat0u5.matlib.utils.player.ScoreboardUtils;
+import net.mat0u5.matlib.utils.player.TeamUtils;
 import net.mat0u5.matlib.utils.world.LevelUtils;
-import net.mat0u5.matlib.utils.other.*;
-import net.mat0u5.matlib.utils.player.*;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.PlayerScoreEntry;
@@ -41,7 +41,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
-import static net.mat0u5.matlib.MatLib.*;
 import static net.mat0u5.lifeseries.seasons.util.WatcherManager.isWatcher;
 
 //? if <= 26.1 {
@@ -53,7 +52,6 @@ import net.minecraft.world.scores.TeamColor;
 public class LivesManager {
     public static final String SCOREBOARD_NAME = "Lives";
     public final ConfigRef<Boolean> FINAL_DEATH_LIGHTNING = ConfigRef.of(() -> LifeSeries.seasonConfig.FINAL_DEATH_LIGHTNING);
-    public SoundEvent FINAL_DEATH_SOUND = SoundEvents.LIGHTNING_BOLT_THUNDER;
     public final ConfigRef<Boolean> SHOW_DEATH_TITLE = ConfigRef.of(() -> LifeSeries.seasonConfig.FINAL_DEATH_TITLE_SHOW);
     public final ConfigRef<Boolean> DEATH_TITLE_MATCH_DEATH_MESSAGE = ConfigRef.of(() -> LifeSeries.seasonConfig.DEATH_TITLE_MATCH_DEATH_MESSAGE);
     public final ConfigRef<Boolean> ONLY_CHANGE_LIVES_IN_SESSION = ConfigRef.of(() -> LifeSeries.seasonConfig.ONLY_CHANGE_LIVES_IN_SESSION);
@@ -75,7 +73,6 @@ public class LivesManager {
     public Random rnd = new Random();
 
     public void reload() {
-        FINAL_DEATH_SOUND = SoundEvent.createVariableRangeEvent(IdentifierHelper.parse(seasonConfig.FINAL_DEATH_SOUND.get()));
         updateTeams();
 
         int minLivesConfig = seasonConfig.LIVES_RANDOMIZE_MIN.get();
@@ -382,7 +379,7 @@ public class LivesManager {
 
     public void receiveLifeFromOtherPlayer(Component playerName, ServerPlayer target, boolean isRevive) {
         if (target == null) return;
-        ((IPlayer) target).ls$playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.MASTER, 10, 1);
+        ModifiableSound.LIVES_RECEIVE.play(target, 10, 1);
         if (seasonConfig.GIVELIFE_BROADCAST.get()) {
             PlayerUtils.broadcastMessageExcept(ModifiableText.GIVELIFE_RECEIVE_OTHER.get(target, playerName), target);
         }
@@ -493,11 +490,8 @@ public class LivesManager {
             }
             if (livesBefore > 0) {
                 Necromancy.clearedPlayers.remove(player.getUUID());
-                if (FINAL_DEATH_SOUND != null) {
-                    PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), FINAL_DEATH_SOUND);
-                }
-                PlayerReference ref = PlayerReference.of(player);
-                TaskScheduler.schedulePriorityTask(1, () -> showDeathTitle(ref.get()));
+                ModifiableSound.DEATH_FINAL.broadcast();
+                TaskScheduler.schedulePriorityTask(1, () -> showDeathTitle(player));
                 DatapackIntegration.EVENT_PLAYER_FINAL_DEATH.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
                 SessionTranscript.onPlayerLostAllLives(player);
             }
@@ -696,7 +690,7 @@ public class LivesManager {
                 Component textLives = getFormattedLives(livesNum);
                 PlayerUtils.sendTitle(player, textLives, 0, 25, 0);
             }
-            PlayerUtils.playSoundToPlayers(ref.get(), SoundEvents.UI_BUTTON_CLICK.value());
+            ModifiableSound.LIVES_ROLL.play(ref.get());
         });
 
         delay += 20;
@@ -712,7 +706,7 @@ public class LivesManager {
                 SessionTranscript.assignRandomLives(player, livesNum);
                 setPlayerLives(player, livesNum);
             }
-            PlayerUtils.playSoundToPlayers(lives.keySet(), SoundEvents.END_PORTAL_SPAWN);
+            ModifiableSound.LIVES_ROLL_ASSIGN.play(lives.keySet());
             currentSeason.reloadAllPlayerTeams();
             rollLivesFinished();
         });
@@ -739,7 +733,7 @@ public class LivesManager {
             TaskScheduler.scheduleTask(currentDelay, () -> {
                 var listNew = ref.get();
                 PlayerUtils.sendTitleToPlayers(listNew, getFormattedLives(lives), 0, 25, 0);
-                PlayerUtils.playSoundToPlayers(listNew, SoundEvents.UI_BUTTON_CLICK.value());
+                ModifiableSound.LIVES_ROLL.play(listNew);
             });
         }
 

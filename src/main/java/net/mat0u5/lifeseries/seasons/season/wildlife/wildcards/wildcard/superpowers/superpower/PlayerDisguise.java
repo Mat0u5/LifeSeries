@@ -2,7 +2,8 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
 import net.mat0u5.matlib.config.entry.ConfigRef;
-import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
@@ -62,7 +63,7 @@ public class PlayerDisguise extends ToggleableSuperpower {
                 if (!PlayerUtils.isFakePlayer(lookingAtPlayer)) {
                     copiedPlayerUUID = lookingAtPlayer.getStringUUID();
                     copiedPlayerName = TextUtils.textToLegacyString(lookingAtPlayer.getDisplayName());
-                    ((IPlayer) player).ls$playNotifySound(SoundEvents.RESPAWN_ANCHOR_CHARGE, SoundSource.MASTER, 0.3f, 1);
+                    ModifiableSound.WILDLIFE_SUPERPOWERS_PLAYERDISGUISE_COPY.play(player, 0.3f, 1);
                     PlayerUtils.displayMessageToPlayer(player, ModifiableText.WILDLIFE_POWER_PLAYERDISGUISE.get(lookingAtPlayer), 65);
                     return;
                 }
@@ -75,7 +76,7 @@ public class PlayerDisguise extends ToggleableSuperpower {
         }
 
         ServerLevel playerLevel = ((IPlayer) player).ls$getServerLevel();
-        playerLevel.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PUFFER_FISH_BLOW_UP, SoundSource.MASTER, 1, 1);
+        playerLevel.playSound(null, player.getX(), player.getY(), player.getZ(), ModifiableSound.WILDLIFE_SUPERPOWERS_PLAYERDISGUISE_START.get(), SoundSource.MASTER, 1, 1);
         Vec3 playerPos = player.position();
         playerLevel.sendParticles(
                 ParticleTypes.EXPLOSION,
@@ -100,7 +101,7 @@ public class PlayerDisguise extends ToggleableSuperpower {
         ServerPlayer player = getPlayer();
         if (player == null) return;
         ServerLevel playerLevel = ((IPlayer) player).ls$getServerLevel();
-        playerLevel.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PUFFER_FISH_BLOW_OUT, SoundSource.MASTER, 1, 1);
+        playerLevel.playSound(null, player.getX(), player.getY(), player.getZ(), ModifiableSound.WILDLIFE_SUPERPOWERS_PLAYERDISGUISE_END.get(), SoundSource.MASTER, 1, 1);
         Vec3 playerPos = player.position();
         playerLevel.sendParticles(
                 ParticleTypes.EXPLOSION,

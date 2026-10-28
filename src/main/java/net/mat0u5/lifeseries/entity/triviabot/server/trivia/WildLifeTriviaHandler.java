@@ -1,9 +1,9 @@
 package net.mat0u5.lifeseries.entity.triviabot.server.trivia;
 
-import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
-import net.mat0u5.lifeseries.config.ModifiableText;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.entity.triviabot.server.TriviaBotPathfinding;
@@ -15,16 +15,21 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShif
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.*;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.other.WeightedRandomizer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
+import net.mat0u5.matlib.config.entry.ConfigRef;
+import net.mat0u5.matlib.utils.other.RegistryUtils;
+import net.mat0u5.matlib.utils.other.TextUtils;
+import net.mat0u5.matlib.utils.other.Time;
+import net.mat0u5.matlib.utils.other.Tuple;
 import net.mat0u5.matlib.utils.player.AttributeUtils;
 import net.mat0u5.matlib.utils.world.ItemStackUtils;
 import net.mat0u5.matlib.utils.world.LevelUtils;
-import net.mat0u5.matlib.utils.other.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -33,8 +38,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -49,10 +52,14 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
-import static net.mat0u5.lifeseries.LifeSeries.*;
-import static net.mat0u5.matlib.MatLib.*;
+import static net.mat0u5.lifeseries.LifeSeries.blacklist;
+import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
+import static net.mat0u5.matlib.MatLib.server;
 
 //? if <= 1.20.3 {
 //import net.minecraft.core.particles.DustParticleOptions;
@@ -126,6 +133,10 @@ public class WildLifeTriviaHandler extends TriviaHandler {
                     ServerPlayer boundPlayer = bot.serverData.getBoundPlayer();
                     if (boundPlayer != null) {
                         SimplePackets.RESET_TRIVIA.sendToClient(boundPlayer);
+                        DatapackIntegration.EVENT_TRIVIA_FAIL.trigger(List.of(
+                                new DatapackIntegration.Events.MacroEntry("Player", boundPlayer.getScoreboardName()),
+                                new DatapackIntegration.Events.MacroEntry("TriviaBot", bot.getStringUUID())
+                        ));
                     }
                 }
                 bot.setRanOutOfTime(true);
@@ -189,11 +200,7 @@ public class WildLifeTriviaHandler extends TriviaHandler {
             if (triviaSnail != null) {
                 triviaSnail.serverData.setBoundPlayer(bot.serverData.getBoundPlayer());
                 triviaSnail.serverData.setFromTrivia();
-                //? if <= 1.20.3 {
-                //triviaSnail.playSound(SoundEvents.GENERIC_EXPLODE, 0.5f, 2);
-                //?} else {
-                triviaSnail.playSound(SoundEvents.GENERIC_EXPLODE.value(), 0.5f, 2);
-                //?}
+                triviaSnail.playSound(ModifiableSound.WILDLIFE_TRIVIA_SNAIL_TRANSFORM.get(), 0.5f, 2);
                 ServerLevel level = (ServerLevel) triviaSnail.level();
                 Vec3 pos = bot.position();
                 level.sendParticles(
@@ -210,10 +217,8 @@ public class WildLifeTriviaHandler extends TriviaHandler {
     public boolean handleAnswer(int answer) {
         if (super.handleAnswer(answer)) {
             bot.setAnalyzingTime(42);
-            PlayerUtils.playSoundWithSourceToPlayers(
-                    PlayerUtils.getAllPlayers(), bot,
-                    SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("wildlife_trivia_analyzing")),
-                    SoundSource.NEUTRAL, 1f, 1);
+
+            ModifiableSound.WILDLIFE_TRIVIA_ANALYZING.playWithSource(PlayerUtils.getAllPlayers(), bot, SoundSource.NEUTRAL, 1f, 1);
             return true;
         }
         return false;
@@ -226,10 +231,7 @@ public class WildLifeTriviaHandler extends TriviaHandler {
         TaskScheduler.scheduleTask(198, this::spawnItemForPlayer);
         TaskScheduler.scheduleTask(213, this::blessPlayer);
         TaskScheduler.scheduleTask(72, () -> {
-            PlayerUtils.playSoundWithSourceToPlayers(
-                    PlayerUtils.getAllPlayers(), bot,
-                    SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("wildlife_trivia_correct")),
-                    SoundSource.NEUTRAL, 1f, 1);
+            ModifiableSound.WILDLIFE_TRIVIA_CORRECT.playWithSource(PlayerUtils.getAllPlayers(), bot, SoundSource.NEUTRAL, 1f, 1);
         });
     }
 
@@ -237,17 +239,14 @@ public class WildLifeTriviaHandler extends TriviaHandler {
         super.answeredIncorrect();
         TaskScheduler.scheduleTask(210, this::cursePlayer);
         TaskScheduler.scheduleTask(72, () -> {
-            PlayerUtils.playSoundWithSourceToPlayers(
-                    PlayerUtils.getAllPlayers(), bot,
-                    SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries("wildlife_trivia_incorrect")),
-                    SoundSource.NEUTRAL, 1f, 1);
+            ModifiableSound.WILDLIFE_TRIVIA_INCORRECT.playWithSource(PlayerUtils.getAllPlayers(), bot, SoundSource.NEUTRAL, 1f, 1);
         });
     }
 
     public void cursePlayer() {
         ServerPlayer player = bot.serverData.getBoundPlayer();
         if (player == null) return;
-        ((IPlayer) player).ls$playNotifySound(SoundEvents.ELDER_GUARDIAN_CURSE, SoundSource.MASTER, 0.2f, 1f);
+        ModifiableSound.WILDLIFE_TRIVIA_CURSE.play(player, 0.2f, 1f);
         ServerLevel level = (ServerLevel) bot.level();
         Vec3 pos = bot.position();
 

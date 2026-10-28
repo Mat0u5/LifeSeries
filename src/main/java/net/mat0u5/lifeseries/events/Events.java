@@ -13,6 +13,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.S
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaSkins;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
+import net.mat0u5.lifeseries.seasons.util.WatcherManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
@@ -76,9 +77,10 @@ public class Events {
 
         sendJoinPackets(player);
         if (LifeSeries.modDisabled()) return;
-        LifeSkinsManager.onPlayerJoin(player);
-        currentSeason.onPlayerJoin(player);
-        SessionTranscript.playerJoin(player);
+        WatcherManager.onPlayerJoin(player);
+            LifeSkinsManager.onPlayerJoin(player);
+            currentSeason.onPlayerJoin(player);
+            SessionTranscript.playerJoin(player);
         MorphManager.onPlayerJoin(player);
         DatapackIntegration.EVENT_PLAYER_JOIN.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
     }
@@ -138,14 +140,15 @@ public class Events {
             updatePlayerListsNextTick = false;
             PlayerUtils.updatePlayerLists();
         }
-        if (LifeSeries.currentSession != null) {
-            LifeSeries.currentSession.tick(server);
-        }
         //? if < 1.20.3 {
-        //boolean gameFrozen = false;
-        //?} else {
-        boolean gameFrozen = server.tickRateManager().isFrozen();
-        //?}
+            //boolean gameFrozen = false;
+            //?} else {
+            boolean gameFrozen = server.tickRateManager().isFrozen();
+            //?}
+            TaskScheduler.onTick(gameFrozen);
+            if (LifeSeries.currentSession != null) {
+                LifeSeries.currentSession.tick(server);
+        }
         if (!gameFrozen) {
             if (LifeSeries.currentSession != null) {
                 currentSeason.tick(server);

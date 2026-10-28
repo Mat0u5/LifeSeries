@@ -1,17 +1,16 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
-import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.mat0u5.matlib.utils.world.LevelUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.level.GameType;
@@ -98,11 +97,7 @@ public class AstralProjection extends ToggleableSuperpower {
         ServerPlayer player = getPlayer();
         if (player == null) return;
         if (player.isSpectator()) return;
-        //? if <= 1.21 {
-        //((IPlayer) player).ls$playNotifySound(SoundEvents.EVOKER_PREPARE_ATTACK, SoundSource.MASTER, 0.3f, 1);
-        //?} else {
-        ((IPlayer) player).ls$playNotifySound(SoundEvents.TRIAL_SPAWNER_OMINOUS_ACTIVATE, SoundSource.MASTER, 0.3f, 1);
-        //?}
+        ModifiableSound.WILDLIFE_SUPERPOWERS_ASTRAL_START.play(player, 0.3f, 1);
 
         startedPos = player.position();
         startedLooking[0] = player.getYRot();
@@ -208,7 +203,7 @@ public class AstralProjection extends ToggleableSuperpower {
             LevelUtils.teleport(player, startedLevel, toBackPos, startedLooking[0], startedLooking[1]);
         }
         player.setGameMode(startedGameMode);
-        ((IPlayer) player).ls$playNotifySound(SoundEvents.EVOKER_DEATH, SoundSource.MASTER, 0.3f, 1);
+        ModifiableSound.WILDLIFE_SUPERPOWERS_ASTRAL_END.play(player, 0.3f, 1);
     }
 
 

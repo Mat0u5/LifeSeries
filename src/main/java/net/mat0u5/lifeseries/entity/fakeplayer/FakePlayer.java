@@ -8,7 +8,6 @@ import net.minecraft.server.level.ServerLevel;
 //? if > 1.20 {
 import net.minecraft.server.level.ClientInformation;
 //?}
-
 //? if <= 1.21.6 {
 /*import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
