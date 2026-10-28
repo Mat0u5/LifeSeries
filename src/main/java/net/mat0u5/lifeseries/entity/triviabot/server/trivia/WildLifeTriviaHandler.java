@@ -133,7 +133,7 @@ public class WildLifeTriviaHandler extends TriviaHandler {
                     ServerPlayer boundPlayer = bot.serverData.getBoundPlayer();
                     if (boundPlayer != null) {
                         SimplePackets.RESET_TRIVIA.sendToClient(boundPlayer);
-                        DatapackIntegration.EVENT_TRIVIA_FAIL.trigger(List.of(
+                        DatapackIntegration.EVENT_TRIVIA_FAIL_TIME.trigger(List.of(
                                 new DatapackIntegration.Events.MacroEntry("Player", boundPlayer.getScoreboardName()),
                                 new DatapackIntegration.Events.MacroEntry("TriviaBot", bot.getStringUUID())
                         ));

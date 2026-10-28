@@ -140,14 +140,7 @@ public class NiceLifeConfig extends SeasonConfig {
         BLACKLIST_ITEMS.defaultValue(BLACKLISTED_ITEMS);
         BLACKLIST_BLOCKS.defaultValue(BLACKLISTED_BLOCKS);
         BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.defaultValue(CLAMPED_ENCHANTMENTS);
-    }
-
-    public NiceLifeConfig(String folderPath, String filePath) {
-        super(folderPath, filePath);
-        removeEntry(NO_SEASON_SPECIFIC);
-        BLACKLIST_ITEMS.defaultValue(BLACKLISTED_ITEMS);
-        BLACKLIST_BLOCKS.defaultValue(BLACKLISTED_BLOCKS);
-        BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.defaultValue(CLAMPED_ENCHANTMENTS);
+        ONLY_ADVANCE_TIME_IN_SESSION.defaultValue(true);
     }
 
     public static NiceLifeConfig get() {

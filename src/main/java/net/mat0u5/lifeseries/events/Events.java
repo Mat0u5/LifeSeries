@@ -141,13 +141,13 @@ public class Events {
             PlayerUtils.updatePlayerLists();
         }
         //? if < 1.20.3 {
-            //boolean gameFrozen = false;
-            //?} else {
-            boolean gameFrozen = server.tickRateManager().isFrozen();
-            //?}
-            TaskScheduler.onTick(gameFrozen);
-            if (LifeSeries.currentSession != null) {
-                LifeSeries.currentSession.tick(server);
+        //boolean gameFrozen = false;
+        //?} else {
+        boolean gameFrozen = server.tickRateManager().isFrozen();
+        //?}
+        TaskScheduler.onTick(gameFrozen);
+        if (LifeSeries.currentSession != null) {
+            LifeSeries.currentSession.tick(server);
         }
         if (!gameFrozen) {
             if (LifeSeries.currentSession != null) {
@@ -158,8 +158,6 @@ public class Events {
             }
             AdvancedDeathsManager.tick();
         }
-
-        TaskScheduler.onTick(gameFrozen);
     }
 
     public static void onEntityDeath(LivingEntity entity, DamageSource source) {

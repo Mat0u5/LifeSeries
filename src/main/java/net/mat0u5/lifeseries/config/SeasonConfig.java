@@ -354,7 +354,7 @@ public class SeasonConfig extends DefaultConfigValues {
         for (ModifiableSoundManager.SoundEntry entry : ModifiableSoundManager.getRegisteredEntries().values()) {
             String key = entry.configKey();
             result.add(new DynamicEntry(
-                    LifeSeriesConfigTypes.MODIFIABLE_TEXT,
+                    LifeSeriesConfigTypes.MODIFIABLE_SOUND,
                     key, entry.key(),
                     "",
                     "sound",
