@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.config;
 
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.matlib.config.GuiConfig;
 import net.mat0u5.matlib.config.entry.ConfigHeader;
@@ -158,7 +159,8 @@ public abstract class DefaultConfigValues extends GuiConfig {
             .name("Only Advance Time In Session")
             .description("Makes the day time freeze when not in session.")
             .setNew(true)
-            .group("global.session");
+            .group("global.session")
+            .onChange((oldValue, newValue) -> LifeSeries.currentSeason().checkAdvanceTime());
     public final ConfigurableValue<Boolean> SESSION_START_COUNTDOWN = ConfigurableValue.register(this, "session_start_countdown", false)
             .name("Session Start Countdown")
             .description("Shows a countdown when the session is starting.")
@@ -460,7 +462,8 @@ public abstract class DefaultConfigValues extends GuiConfig {
             .name("Disable Minimal Armor Pack")
             .description("Controls whether the minimal armor pack is disabled.")
             .setNew(true)
-            .group("global.disable");
+            .group("global.disable")
+            .onChange((oldValue, newValue) -> PlayerUtils.applyResourcepacks());
 
     public final ConfigHeader NO_SEASON_SPECIFIC = ConfigHeader.register(this, "no_season_specific", "There are no season specific entries")
             .group("season");

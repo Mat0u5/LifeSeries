@@ -82,9 +82,6 @@ import java.util.*;
 import static net.mat0u5.lifeseries.LifeSeries.*;
 import static net.mat0u5.lifeseries.seasons.util.WatcherManager.isWatcher;
 import static net.mat0u5.matlib.MatLib.server;
-import net.mat0u5.lifeseries.utils.player.*;
-import net.mat0u5.matlib.utils.player.*;
-import net.minecraft.world.entity.*;
 
 //? if <= 1.20
 //import net.minecraft.world.scores.Scoreboard;
@@ -133,7 +130,7 @@ public abstract class Season {
     public final ConfigRef<Boolean> TEAMS_SYSTEM_DISABLED = ConfigRef.of(() -> LifeSeries.seasonConfig.TEAMS_SYSTEM_DISABLED);
     public static final ConfigRef<Boolean> ONLY_LOSE_DURABILITY_IN_SESSION = ConfigRef.of(() -> LifeSeries.seasonConfig.ONLY_LOSE_DURABILITY_IN_SESSION);
     public static boolean ONLY_LOSE_HUNGER_IN_SESSION = false;
-    public static boolean ONLY_ADVANCE_TIME_IN_SESSION = false;
+    public static ConfigRef<Boolean> ONLY_ADVANCE_TIME_IN_SESSION = ConfigRef.of(() -> seasonConfig.ONLY_ADVANCE_TIME_IN_SESSION);
     public static ConfigRef<Boolean> DISABLE_MINIMAL_ARMOR_PACK = ConfigRef.of(() -> LifeSeries.seasonConfig.DISABLE_MINIMAL_ARMOR_PACK);
 
     public BoogeymanManager boogeymanManager = createBoogeymanManager();
@@ -221,6 +218,7 @@ public abstract class Season {
         if (end != null && end.getWorldBorder().getStatus() == BorderStatus.STATIONARY) end.getWorldBorder().setSize(seasonConfig.WORLDBORDER_END_SIZE.get());
         //?}
 
+        checkAdvanceTime();
         if (overworld != null) {
             OtherUtils.setBooleanGameRule(overworld, GameRules.KEEP_INVENTORY, seasonConfig.KEEP_INVENTORY.get());
             OtherUtils.setBooleanGameRule(overworld, GameRules.SHOW_ADVANCEMENT_MESSAGES, seasonConfig.SHOW_ADVANCEMENTS.get());
@@ -280,7 +278,6 @@ public abstract class Season {
     public void reload() {
         LifeSeriesNetworkHandlerServer.reload();
         ONLY_LOSE_HUNGER_IN_SESSION = seasonConfig.ONLY_LOSE_HUNGER_IN_SESSION.get();
-        ONLY_ADVANCE_TIME_IN_SESSION = seasonConfig.ONLY_ADVANCE_TIME_IN_SESSION.get();
         boogeymanManager.onReload();
         secretSociety.onReload();
         createTeams();
@@ -496,6 +493,7 @@ public abstract class Season {
     }
 
     public void sessionChangeStatus(SessionStatus newStatus) {
+        LifeSeries.currentSeason().checkAdvanceTime();
     }
 
     private Time timer = Time.zero();
@@ -513,7 +511,6 @@ public abstract class Season {
         if (timer.isMultipleOf(Time.seconds(60))) {
             LifeSeriesNetworkHandlerServer.sendUpdatePackets();
         }
-        tickAdvanceTime(server);
     }
     public void tickSessionOn(MinecraftServer server) {}
     public void addSessionActions() {
@@ -522,8 +519,8 @@ public abstract class Season {
         livesManager.addSessionActions();
     }
 
-    public void tickAdvanceTime(MinecraftServer server) {
-        boolean advanceTime = currentSession.statusStarted() || !ONLY_ADVANCE_TIME_IN_SESSION;
+    public void checkAdvanceTime() {
+        boolean advanceTime = currentSession.statusStarted() || !ONLY_ADVANCE_TIME_IN_SESSION.get();
         OtherUtils.setBooleanGameRule(server.overworld(), GameRules.ADVANCE_TIME, advanceTime);
     }
 

@@ -378,7 +378,7 @@ public enum ModifiableText {
     ,SECRETLIFE_TASK_GUESS_ERROR_GUESSER_MAX(Seasons.SECRET_LIFE, "Players above {} lives cannot guess tasks", List.of("lives"))
     ,SECRETLIFE_TASK_GUESS_ERROR_GUESSED_DEAD(Seasons.SECRET_LIFE, "You cannot guess tasks of dead players or Watchers")
     ,SECRETLIFE_TASK_GUESS_ERROR_GUESSED_MIN(Seasons.SECRET_LIFE, "You cannot guess tasks of players below {} lives", List.of("lives"))
-    ,SECRETLIFE_TASK_GUESS_ERROR_NO_BOOK(Seasons.SECRET_LIFE, "{} does not have a task book")
+    ,SECRETLIFE_TASK_GUESS_ERROR_NO_BOOK(Seasons.SECRET_LIFE, "{} does not have a task book", List.of("Player"))
     ,SECRETLIFE_TASK_GUESS_ERROR_RED(Seasons.SECRET_LIFE, "You cannot guess red tasks")
     ,SECRETLIFE_TASK_GUESS_HEADER(Seasons.SECRET_LIFE, "\n{} is guessing your task:", List.of("Guesser"))
     ,SECRETLIFE_TASK_GUESS_HEADER_PUBLIC(Seasons.SECRET_LIFE, "\n{} is guessing {}'s task:", List.of("Guesser", "Guessed"))

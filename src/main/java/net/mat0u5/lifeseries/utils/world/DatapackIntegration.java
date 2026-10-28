@@ -295,7 +295,7 @@ public class DatapackIntegration {
         TRIVIA_BOT_OPEN("trivia_bot_open", "Trivia Bot Open", "Triggers when a player opens a trivia bot.\nAvailable macros: $(Player), $(TriviaBot)", false),
         TRIVIA_SUCCEED("trivia_succeed", "Trivia Succeed", "Triggers when a player answers correctly in trivia.\nAvailable macros: $(Player), $(TriviaBot)", false),
         TRIVIA_FAIL("trivia_fail", "Trivia Fail", "Triggers when a player answers incorrectly in trivia.\nAvailable macros: $(Player), $(TriviaBot)", false),
-        TRIVIA_FAIL_TIME("trivia_fail_time", "Trivia Time Fail", "Triggers when a runs out of time for trivia.\nAvailable macros: $(Player), $(TriviaBot)", false),
+        TRIVIA_FAIL_TIME("trivia_fail_time", "Trivia Time Fail", "Triggers when a player runs out of time for trivia.\nAvailable macros: $(Player), $(TriviaBot)", false),
         SUPERPOWER_TRIGGER("superpower_trigger", "Superpower Trigger", "Triggers when a player triggers their superpower.\nAvailable macros: $(Player), $(SuperpowerIndex)", false),
         NICE_LIST_ADD("nice_list_add", "Nice List Add Player", "Triggers when a player is added to the Nice List.\nAvailable macros: $(Player)", false),
         NICE_LIST_END("nice_list_end", "Nice List End", "Triggers when the Nice List ends and the voting results begin.", false),

@@ -73,6 +73,10 @@ public class PlayerUtils extends net.mat0u5.matlib.utils.player.PlayerUtils {
         return result;
     }
 
+    public static void applyResourcepacks() {
+        PlayerUtils.getAllPlayers().forEach(player -> applyResourcepacks(player.getUUID()));
+    }
+
     public static void applyResourcepacks(UUID uuid) {
         if (LifeSeriesNetworkHandlerServer.wasHandshakeSuccessful(uuid)) return;
         applyServerResourcepacks(uuid);
