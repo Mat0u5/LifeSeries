@@ -246,8 +246,8 @@ public class SnailPathfinding {
                 if (!snail.serverData.shouldPathfind()) return;
                 BlockPos tpTo = getBlockPosNearTarget(boundEntity, minDistanceFromPlayer);
                 if (tpTo == null) return;
-                level.playSound(null, snail.getX(), snail.getY(), snail.getZ(), ModifiableSound.WILDLIFE_SNAIL_TELEPORT.get(), snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
-                entityWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), ModifiableSound.WILDLIFE_SNAIL_TELEPORT.get(), snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
+                ModifiableSound.WILDLIFE_SNAIL_TELEPORT.playFromWorld(level, snail.getX(), snail.getY(), snail.getZ(), snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
+                ModifiableSound.WILDLIFE_SNAIL_TELEPORT.playFromWorld(entityWorld, tpTo.getX(), tpTo.getY(), tpTo.getZ(), snail.getSoundSource(), snail.soundVolume(), snail.getVoicePitch());
                 AnimationUtils.spawnTeleportParticles(level, snail.position());
                 AnimationUtils.spawnTeleportParticles(entityWorld, OtherUtils.getCenter(tpTo));
                 snail.serverData.despawn();

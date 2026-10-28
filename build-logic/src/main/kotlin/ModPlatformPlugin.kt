@@ -612,12 +612,23 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 		stonecutter.replacements.string(stonecutter.eval(stonecutter.current.version, ">=26.4"), "!renames_26_4") {
 			replace ("net.minecraft.client.renderer.RenderPipelines", "net.minecraft.client.renderer.pipeline.RenderPipelines")
 		}
-		stonecutter.replacements.string(stonecutter.eval(stonecutter.current.version, ">=26.4"), "renames_26_4_volatile") {
-			replace ("extractRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float tickDelta)", "extractRenderState(GuiGraphicsExtractor context)")
-			replace ("extractBackground(GuiGraphicsExtractor context, int mouseX, int mouseY, float tickDelta)", "extractBackground(GuiGraphicsExtractor context)")
-			replace ("extractListItems(GuiGraphicsExtractor context, int mouseX, int mouseY, float tickDelta)", "extractListItems(GuiGraphicsExtractor context)")
-			replace ("extractContent(GuiGraphicsExtractor context, int mouseX, int mouseY, float tickDelta)", "extractContent(GuiGraphicsExtractor context)")
-			replace ("extractRenderState(context, mouseX, mouseY, tickDelta)", "extractRenderState(context)")
+
+		val is26_4 = stonecutter.eval(stonecutter.current.version, ">=26.4")
+		val isPre26_1 = stonecutter.eval(stonecutter.current.version, "<26.1")
+		val isPre1_20_2 = stonecutter.eval(stonecutter.current.version, "<=1.20")
+		stonecutter.replacements.string(is26_4, "renames_26_4_volatile") {
+			fun replaceSignature(legacy: String, pre26_4: String, modern: String) {
+				if (is26_4) {
+					replace (legacy, modern)
+					replace (pre26_4, modern)
+				}
+				else replace (if (isPre26_1) legacy else pre26_4, modern)
+			}
+			replaceSignature("render(GuiGraphics context, int mouseX, int mouseY, float tickDelta)", "extractRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float tickDelta)", "extractRenderState(GuiGraphicsExtractor context)")
+			replaceSignature(if (isPre1_20_2) "renderBackground(GuiGraphics context)" else "renderBackground(GuiGraphics context, int mouseX, int mouseY, float tickDelta)", "extractBackground(GuiGraphicsExtractor context, int mouseX, int mouseY, float tickDelta)", "extractBackground(GuiGraphicsExtractor context)")
+			replaceSignature("renderListItems(GuiGraphics context, int mouseX, int mouseY, float tickDelta)", "extractListItems(GuiGraphicsExtractor context, int mouseX, int mouseY, float tickDelta)", "extractListItems(GuiGraphicsExtractor context)")
+			replaceSignature("renderContent(GuiGraphics context, int mouseX, int mouseY, float tickDelta)", "extractContent(GuiGraphicsExtractor context, int mouseX, int mouseY, float tickDelta)", "extractContent(GuiGraphicsExtractor context)")
+			replaceSignature("render(context, mouseX, mouseY, tickDelta)", "extractRenderState(context, mouseX, mouseY, tickDelta)", "extractRenderState(context)")
 		}
 	}
 }

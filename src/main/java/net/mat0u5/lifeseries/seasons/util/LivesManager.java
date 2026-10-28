@@ -843,8 +843,8 @@ public class LivesManager {
 
     private static List<Component> toFlatList(Component component) {
         //? if <= 26.3 {
-        /*return component.toFlatList();
-         *///?} else {
+        //return component.toFlatList();
+         //?} else {
         List<Component> result = new ArrayList<>();
         component.visitWithoutResult((style, contents) -> {
             if (!contents.isEmpty()) {

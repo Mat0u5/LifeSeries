@@ -62,7 +62,7 @@ public class Necromancy extends Superpower {
         }
 
         ServerLevel playerLevel = ((IPlayer) player).ls$getServerLevel();
-        playerLevel.playSound(null, player.getX(), player.getY(), player.getZ(), ModifiableSound.WILDLIFE_SUPERPOWERS_NECROMANCY.get(), SoundSource.MASTER, 1, 1);
+        ModifiableSound.WILDLIFE_SUPERPOWERS_NECROMANCY.playFromWorld(playerLevel, player.getX(), player.getY(), player.getZ(), SoundSource.MASTER, 1, 1);
 
         List<ServerPlayer> affectedPlayers = playerLevel.getEntitiesOfClass(ServerPlayer.class, player.getBoundingBox().inflate(10), playerEntity -> playerEntity.distanceTo(player) <= 10);
         MobEffectInstance blindness = new MobEffectInstance(MobEffects.BLINDNESS, 115, 0);

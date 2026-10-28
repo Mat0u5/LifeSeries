@@ -128,6 +128,6 @@ public class Teleportation extends Superpower {
         );
     }
     public void playTeleportSound(ServerLevel level, Vec3 pos) {
-        level.playSound(null, pos.x(), pos.y(), pos.z(), ModifiableSound.WILDLIFE_SUPERPOWERS_TELEPORTATION.get(), SoundSource.MASTER, 1, 1);
+        ModifiableSound.WILDLIFE_SUPERPOWERS_TELEPORTATION.playFromWorld(level, pos.x(), pos.y(), pos.z(), SoundSource.MASTER, 1, 1);
     }
 }

@@ -5,19 +5,25 @@ import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Optional;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 public enum ModifiableSound {
-	ADVANCEDDEATH_ANVIL(SoundEvents.ANVIL_PLACE)
+	//~ if >= 26.4 'SoundEvents.ANVIL_PLACE' -> 'SoundEvents.ANVIL.placeSound().orElseThrow()' {
+	ADVANCEDDEATH_ANVIL(SoundEvents.ANVIL.placeSound().orElseThrow())
+	//~}
 	,ADVANCEDDEATH_WITHER(SoundEvents.WITHER_SHOOT)
 	,DEATH_FINAL(SoundEvents.LIGHTNING_BOLT_THUNDER)
 	,LIVES_ROLL(SoundEvents.UI_BUTTON_CLICK)
@@ -162,14 +168,30 @@ public enum ModifiableSound {
 	final Seasons requiredSeason;
 	final String defaultSoundId;
 	String cachedSoundId;
-	SoundEvent cachedSound;
+	OptionalSoundEvent cachedSound = null;
+
+	public static class OptionalSoundEvent {
+		final Optional<SoundEvent> soundEvent;
+
+		private OptionalSoundEvent(Optional<SoundEvent> soundEvent) {
+			this.soundEvent = soundEvent;
+		}
+
+		public static OptionalSoundEvent empty() {
+			return new OptionalSoundEvent(Optional.empty());
+		}
+
+		public static OptionalSoundEvent of(SoundEvent soundEvent) {
+			return new OptionalSoundEvent(Optional.of(soundEvent));
+		}
+
+		public Optional<SoundEvent> get() {
+			return soundEvent;
+		}
+	}
 
 	ModifiableSound(Identifier sound) {
 		this(null, SoundEvent.createVariableRangeEvent(sound));
-	}
-
-	ModifiableSound(Holder.Reference<SoundEvent> soundRef) {
-		this(null, soundRef.value());
 	}
 
 	ModifiableSound(SoundEvent sound) {
@@ -180,9 +202,14 @@ public enum ModifiableSound {
 		this(season, SoundEvent.createVariableRangeEvent(sound));
 	}
 
-	ModifiableSound(Seasons season, Holder.Reference<SoundEvent> soundRef) {
+//~ if >= 26.4 'Holder.Reference<SoundEvent>' -> 'Holder<SoundEvent>' {
+	ModifiableSound(Holder<SoundEvent> soundRef) {
+		this(null, soundRef.value());
+	}
+	ModifiableSound(Seasons season, Holder<SoundEvent> soundRef) {
 		this(season, soundRef.value());
 	}
+//~}
 
 	ModifiableSound(Seasons season, SoundEvent sound) {
 		this.requiredSeason = season;
@@ -192,43 +219,71 @@ public enum ModifiableSound {
 		//~}
 		this.defaultSoundId = soundId;
 		this.cachedSoundId = soundId;
-		this.cachedSound = sound;
+		this.cachedSound = OptionalSoundEvent.of(sound);
 	}
 
-	public SoundEvent get() {
+	public Optional<SoundEvent> get() {
 		return ModifiableSoundManager.get(this);
 	}
 
 	public void broadcast() {
-		PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), this.get());
+		Optional<SoundEvent> soundEventOptional = this.get();
+		if (soundEventOptional.isEmpty()) return;
+		PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), soundEventOptional.get());
 	}
 
 	public void broadcast(float volume, float pitch) {
-		PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), this.get(), volume, pitch);
+		Optional<SoundEvent> soundEventOptional = this.get();
+		if (soundEventOptional.isEmpty()) return;
+		PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), soundEventOptional.get(), volume, pitch);
 	}
 
 	public void play(ServerPlayer player) {
-		PlayerUtils.playSoundToPlayer(player, this.get());
+		Optional<SoundEvent> soundEventOptional = this.get();
+		if (soundEventOptional.isEmpty()) return;
+		PlayerUtils.playSoundToPlayer(player, soundEventOptional.get());
 	}
 
 	public void play(ServerPlayer player, float volume, float pitch) {
-		PlayerUtils.playSoundToPlayer(player, this.get(), volume, pitch);
+		Optional<SoundEvent> soundEventOptional = this.get();
+		if (soundEventOptional.isEmpty()) return;
+		PlayerUtils.playSoundToPlayer(player, soundEventOptional.get(), volume, pitch);
 	}
 
 	public void play(Collection<ServerPlayer> players) {
-		PlayerUtils.playSoundToPlayers(players, this.get());
+		Optional<SoundEvent> soundEventOptional = this.get();
+		if (soundEventOptional.isEmpty()) return;
+		PlayerUtils.playSoundToPlayers(players, soundEventOptional.get());
 	}
 
 	public void play(Collection<ServerPlayer> players, float volume, float pitch) {
-		PlayerUtils.playSoundToPlayers(players, this.get(), volume, pitch);
+		Optional<SoundEvent> soundEventOptional = this.get();
+		if (soundEventOptional.isEmpty()) return;
+		PlayerUtils.playSoundToPlayers(players, soundEventOptional.get(), volume, pitch);
 	}
 
 	public void playWithSource(Entity source, SoundSource soundCategory, float volume, float pitch) {
-		PlayerUtils.playSoundWithSourceToPlayers(source, this.get(), soundCategory, volume, pitch);
+		Optional<SoundEvent> soundEventOptional = this.get();
+		if (soundEventOptional.isEmpty()) return;
+		PlayerUtils.playSoundWithSourceToPlayers(source, soundEventOptional.get(), soundCategory, volume, pitch);
 	}
 
 	public void playWithSource(Collection<ServerPlayer> players, Entity source, SoundSource soundCategory, float volume, float pitch) {
-		PlayerUtils.playSoundWithSourceToPlayers(players, source, this.get(), soundCategory, volume, pitch);
+		Optional<SoundEvent> soundEventOptional = this.get();
+		if (soundEventOptional.isEmpty()) return;
+		PlayerUtils.playSoundWithSourceToPlayers(players, source, soundEventOptional.get(), soundCategory, volume, pitch);
+	}
+
+	public void playFromWorld(ServerLevel world, final double x, final double y, final double z, final SoundSource source, final float volume, final float pitch) {
+		Optional<SoundEvent> soundEventOptional = this.get();
+		if (soundEventOptional.isEmpty()) return;
+		world.playSound(null, x, y, z, soundEventOptional.get(), source, volume, pitch);
+	}
+
+	public void playFromEntity(Entity entity, final float volume, final float pitch) {
+		Optional<SoundEvent> soundEventOptional = this.get();
+		if (soundEventOptional.isEmpty()) return;
+		entity.playSound(soundEventOptional.get(), volume, pitch);
 	}
 
 	public static void registerAllSounds() {

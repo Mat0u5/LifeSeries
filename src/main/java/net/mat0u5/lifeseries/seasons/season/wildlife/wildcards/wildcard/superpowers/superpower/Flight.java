@@ -96,7 +96,7 @@ public class Flight extends Superpower {
         if (player == null) return;
         giveHelmet();
 
-        ((IPlayer) player).ls$getServerLevel().playSound(null, player.getX(), player.getY(), player.getZ(), ModifiableSound.WILDLIFE_SUPERPOWERS_FLIGHT.get(), SoundSource.MASTER, 1, 1);
+        ModifiableSound.WILDLIFE_SUPERPOWERS_FLIGHT.playFromWorld(((IPlayer) player).ls$getServerLevel(), player.getX(), player.getY(), player.getZ(), SoundSource.MASTER, 1, 1);
         ModifiableSound.WILDLIFE_SUPERPOWERS_FLIGHT.play(player);
 
         MobEffectInstance effect = new MobEffectInstance(MobEffects.JUMP_BOOST, 20, LAUNGH_JUMP_AMPLIFIER.get(), false, false, false);

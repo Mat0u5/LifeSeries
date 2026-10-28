@@ -78,7 +78,7 @@ public class AnimalDisguise extends ToggleableSuperpower {
                 spawnMobs(player, morph);
             }
         }
-        ((IPlayer) player).ls$getServerLevel().playSound(null, player.getX(), player.getY(), player.getZ(), ModifiableSound.WILDLIFE_SUPERPOWERS_ANIMALDISGUISE_START.get(), SoundSource.MASTER, 1, 1);
+        ModifiableSound.WILDLIFE_SUPERPOWERS_ANIMALDISGUISE_START.playFromWorld(((IPlayer) player).ls$getServerLevel(), player.getX(), player.getY(), player.getZ(), SoundSource.MASTER, 1, 1);
 
         EntityType<?> finalMorph = morph;
 
@@ -90,7 +90,7 @@ public class AnimalDisguise extends ToggleableSuperpower {
         super.deactivate();
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        ((IPlayer) player).ls$getServerLevel().playSound(null, player.getX(), player.getY(), player.getZ(), ModifiableSound.WILDLIFE_SUPERPOWERS_ANIMALDISGUISE_END.get(), SoundSource.MASTER, 1, 1);
+        ModifiableSound.WILDLIFE_SUPERPOWERS_ANIMALDISGUISE_END.playFromWorld(((IPlayer) player).ls$getServerLevel(), player.getX(), player.getY(), player.getZ(), SoundSource.MASTER, 1, 1);
 
         MorphManager.resetMorph(player);
     }

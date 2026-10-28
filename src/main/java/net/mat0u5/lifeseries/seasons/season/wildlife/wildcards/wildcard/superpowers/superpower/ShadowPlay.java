@@ -53,7 +53,7 @@ public class ShadowPlay extends Superpower {
             );
         }
         player.addEffect(invis);
-        playerLevel.playSound(null, player.getX(), player.getY(), player.getZ(), ModifiableSound.WILDLIFE_SUPERPOWERS_SHADOWPLAY.get(), SoundSource.MASTER, 1, 1);
+        ModifiableSound.WILDLIFE_SUPERPOWERS_SHADOWPLAY.playFromWorld(playerLevel, player.getX(), player.getY(), player.getZ(), SoundSource.MASTER, 1, 1);
         LifeSeriesNetworkHandlerServer.sendPlayerInvisible(player.getUUID(), System.currentTimeMillis()+3000);
     }
 }

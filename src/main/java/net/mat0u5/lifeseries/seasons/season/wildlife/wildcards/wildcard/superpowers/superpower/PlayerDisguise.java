@@ -76,7 +76,7 @@ public class PlayerDisguise extends ToggleableSuperpower {
         }
 
         ServerLevel playerLevel = ((IPlayer) player).ls$getServerLevel();
-        playerLevel.playSound(null, player.getX(), player.getY(), player.getZ(), ModifiableSound.WILDLIFE_SUPERPOWERS_PLAYERDISGUISE_START.get(), SoundSource.MASTER, 1, 1);
+        ModifiableSound.WILDLIFE_SUPERPOWERS_PLAYERDISGUISE_START.playFromWorld(playerLevel, player.getX(), player.getY(), player.getZ(), SoundSource.MASTER, 1, 1);
         Vec3 playerPos = player.position();
         playerLevel.sendParticles(
                 ParticleTypes.EXPLOSION,
@@ -101,7 +101,7 @@ public class PlayerDisguise extends ToggleableSuperpower {
         ServerPlayer player = getPlayer();
         if (player == null) return;
         ServerLevel playerLevel = ((IPlayer) player).ls$getServerLevel();
-        playerLevel.playSound(null, player.getX(), player.getY(), player.getZ(), ModifiableSound.WILDLIFE_SUPERPOWERS_PLAYERDISGUISE_END.get(), SoundSource.MASTER, 1, 1);
+        ModifiableSound.WILDLIFE_SUPERPOWERS_PLAYERDISGUISE_END.playFromWorld(playerLevel, player.getX(), player.getY(), player.getZ(), SoundSource.MASTER, 1, 1);
         Vec3 playerPos = player.position();
         playerLevel.sendParticles(
                 ParticleTypes.EXPLOSION,

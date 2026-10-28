@@ -6,8 +6,10 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 
 import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
@@ -46,7 +48,7 @@ public class ModifiableSoundManager {
 		registeredEntries.put(key, entry);
 	}
 
-	public static SoundEvent get(ModifiableSound modifiableSound) {
+	public static Optional<SoundEvent> get(ModifiableSound modifiableSound) {
 		if (!initialized) {
 			initialize();
 		}
@@ -54,14 +56,14 @@ public class ModifiableSoundManager {
 		SoundEntry configEntry = registeredEntries.get(key);
 		if (configEntry == null) {
 			LifeSeries.LOGGER.warn("Could not find modifiable sound " + key);
-			return SoundEvents.EMPTY;
+			return Optional.empty();
 		}
 		String configSoundId = seasonConfig.getOrCreateProperty(configEntry.configKey(), configEntry.defaultValue());
 		if (!configSoundId.contains(":")) {
 			configSoundId = "minecraft:"+configSoundId;
 		}
 		if (configSoundId.equalsIgnoreCase(modifiableSound.cachedSoundId) && modifiableSound.cachedSound != null) {
-			return modifiableSound.cachedSound;
+			return modifiableSound.cachedSound.get();
 		}
 
 		modifiableSound.cachedSoundId = configSoundId;
@@ -69,8 +71,8 @@ public class ModifiableSoundManager {
 		try {
 			var identifier = IdentifierHelper.parse(configSoundId);
 			if (identifier.getPath().isEmpty()) {
-				modifiableSound.cachedSound = SoundEvents.EMPTY;
-				return SoundEvents.EMPTY;
+				modifiableSound.cachedSound = ModifiableSound.OptionalSoundEvent.empty();
+				return Optional.empty();
 			}
 			ResourceKey<SoundEvent> soundResource = ResourceKey.create(BuiltInRegistries.SOUND_EVENT.key(), identifier);
 			//? if <= 1.21 {
@@ -79,15 +81,15 @@ public class ModifiableSoundManager {
 			SoundEvent sound = BuiltInRegistries.SOUND_EVENT.getValue(soundResource);
 			//?}
 			if (sound != null) {
-				modifiableSound.cachedSound = sound;
-				return sound;
+				modifiableSound.cachedSound = ModifiableSound.OptionalSoundEvent.of(sound);
+				return modifiableSound.cachedSound.get();
 			}
 			else {
 				sound = SoundEvent.createVariableRangeEvent(identifier);
-				modifiableSound.cachedSound = sound;
-				return sound;
+				modifiableSound.cachedSound = ModifiableSound.OptionalSoundEvent.of(sound);
+				return modifiableSound.cachedSound.get();
 			}
 		}catch(Exception e) {}
-		return SoundEvents.EMPTY;
+		return Optional.empty();
 	}
 }

@@ -74,16 +74,16 @@ public class AngrySnowman extends SnowGolem {
 
     @Nullable
     protected SoundEvent getAmbientSound() {
-        return ModifiableSound.NICELIFE_SNOWMAN_GROWL.get();
+        return ModifiableSound.NICELIFE_SNOWMAN_GROWL.get().orElse(null);
     }
 
     @Nullable
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return ModifiableSound.NICELIFE_SNOWMAN_HIT.get();
+        return ModifiableSound.NICELIFE_SNOWMAN_HIT.get().orElse(null);
     }
 
     @Nullable
     protected SoundEvent getDeathSound() {
-        return ModifiableSound.NICELIFE_SNOWMAN_HIT.get();
+        return ModifiableSound.NICELIFE_SNOWMAN_HIT.get().orElse(null);
     }
 }

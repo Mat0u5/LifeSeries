@@ -200,7 +200,7 @@ public class WildLifeTriviaHandler extends TriviaHandler {
             if (triviaSnail != null) {
                 triviaSnail.serverData.setBoundPlayer(bot.serverData.getBoundPlayer());
                 triviaSnail.serverData.setFromTrivia();
-                triviaSnail.playSound(ModifiableSound.WILDLIFE_TRIVIA_SNAIL_TRANSFORM.get(), 0.5f, 2);
+                ModifiableSound.WILDLIFE_TRIVIA_SNAIL_TRANSFORM.playFromEntity(triviaSnail, 0.5f, 2);
                 ServerLevel level = (ServerLevel) triviaSnail.level();
                 Vec3 pos = bot.position();
                 level.sendParticles(

@@ -56,7 +56,7 @@ public class Invisibility extends ToggleableSuperpower {
                 40, 0.3, 0.5, 0.3, 0
         );
 
-        playerLevel.playSound(null, player.getX(), player.getY(), player.getZ(), ModifiableSound.WILDLIFE_SUPERPOWERS_INVISIBILITY_START.get(), SoundSource.MASTER, 1, 1);
+        ModifiableSound.WILDLIFE_SUPERPOWERS_INVISIBILITY_START.playFromWorld(playerLevel, player.getX(), player.getY(), player.getZ(), SoundSource.MASTER, 1, 1);
         sendInvisibilityPacket();
         SimplePackets.POWER_INVISIBILITY_PARTICLES.sendToAllClients(SHOW_PARTICLES.get());
     }
@@ -66,7 +66,7 @@ public class Invisibility extends ToggleableSuperpower {
         super.deactivate();
         ServerPlayer player = getPlayer();
         if (player == null) return;
-        ((IPlayer) player).ls$getServerLevel().playSound(null, player.getX(), player.getY(), player.getZ(), ModifiableSound.WILDLIFE_SUPERPOWERS_INVISIBILITY_END.get(), SoundSource.MASTER, 1, 1);
+        ModifiableSound.WILDLIFE_SUPERPOWERS_INVISIBILITY_END.playFromWorld(((IPlayer) player).ls$getServerLevel(), player.getX(), player.getY(), player.getZ(), SoundSource.MASTER, 1, 1);
         LifeSeriesNetworkHandlerServer.sendPlayerInvisible(player.getUUID(), 0);
         player.removeEffect(MobEffects.INVISIBILITY);
     }

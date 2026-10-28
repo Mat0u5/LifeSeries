@@ -38,9 +38,9 @@ public class ModifiableSoundConfigEntry extends StringConfigEntry {
     public void renderEntry(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         playSoundButton.setX(textField.getX()+textField.getWidth()+4);
         playSoundButton.setY(textField.getY());
-        //~ renames_26_1_volatile
-        playSoundButton.extractRenderState(context, mouseX, mouseY, tickDelta);
-        //~ !renames_26_1_volatile
+        //~ renames_26_1_volatile, renames_26_4_volatile
+        playSoundButton.extractRenderState(context);
+        //~ !renames_26_1_volatile, !renames_26_4_volatile
         super.renderEntry(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
     }
 
@@ -67,10 +67,16 @@ public class ModifiableSoundConfigEntry extends StringConfigEntry {
             Identifier soundId = IdentifierHelper.parse(getValue());
             clearError();
             SoundInstance instance = SimpleSoundInstance.forUI(SoundEvent.createVariableRangeEvent(soundId), 1);
-            //~ if >= 26.3 '.resolve(' -> '.getOrResolve(' {
+            //? if <= 26.3 {
+            /*//~ if >= 26.3 '.resolve(' -> '.getOrResolve(' {
             var resolved = instance.getOrResolve(Minecraft.getInstance().getSoundManager());
+            boolean isUnknown = resolved == null;
             //~}
-            if (resolved == null) {
+            *///?} else {
+            boolean resolved = instance.resolveAndSelectSound(Minecraft.getInstance().getSoundManager());
+            boolean isUnknown = !resolved;
+            //?}
+            if (isUnknown) {
                 setWarn("Unknown Sound Event");
                 soundInstance = null;
             }

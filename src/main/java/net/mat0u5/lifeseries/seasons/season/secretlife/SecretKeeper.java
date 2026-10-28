@@ -89,7 +89,7 @@ public class SecretKeeper {
 			TaskScheduler.scheduleTask(3*i, () -> {
 				ServerPlayer playerNew = ref.get();
 				if (playerNew != null) {
-					server.overworld().playSound(null, spawnPos.x(), spawnPos.y(), spawnPos.z(), ModifiableSound.SECRETLIFE_ITEM_SPAWN.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+					ModifiableSound.SECRETLIFE_ITEM_SPAWN.playFromWorld(server.overworld(), spawnPos.x(), spawnPos.y(), spawnPos.z(), SoundSource.PLAYERS, 1.0F, 1.0F);
 
 					List<ItemStack> lootTableItems = new ArrayList<>();
 
@@ -199,13 +199,13 @@ public class SecretKeeper {
 		secretKeeperBeingUsed = true;
 
 		Vec3 centerPos = OtherUtils.getCenter(itemSpawnerPos);
-		server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), ModifiableSound.SECRETLIFE_TASK_SUCCEED.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+		ModifiableSound.SECRETLIFE_TASK_SUCCEED.playFromWorld(server.overworld(), centerPos.x(), centerPos.y(), centerPos.z(), SoundSource.PLAYERS, 1.0F, 1.0F);
 		TaskScheduler.scheduleTask(60, () -> {
 			AnimationUtils.createGlyphAnimation(server.overworld(), centerPos, 45);
 		});
 		PlayerReference ref = PlayerReference.of(player);
 		TaskScheduler.scheduleTask(130, () -> {
-			server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), ModifiableSound.SECRETLIFE_ITEM_SPAWN_START.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+			ModifiableSound.SECRETLIFE_ITEM_SPAWN_START.playFromWorld(server.overworld(), centerPos.x(), centerPos.y(), centerPos.z(), SoundSource.PLAYERS, 1.0F, 1.0F);
 			AnimationUtils.spawnFireworkBall(server.overworld(), centerPos, 40, 0.3, new Vector3f(0, 1, 0));
 			ServerPlayer playerNew = ref.get();
 			if (playerNew != null) {
@@ -328,7 +328,7 @@ public class SecretKeeper {
 
 		Vec3 centerPos = OtherUtils.getCenter(itemSpawnerPos);
 
-		server.overworld().playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), ModifiableSound.SECRETLIFE_TASK_FAIL.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+		ModifiableSound.SECRETLIFE_TASK_FAIL.playFromWorld(server.overworld(), centerPos.x(), centerPos.y(), centerPos.z(), SoundSource.PLAYERS, 1.0F, 1.0F);
 		TaskScheduler.scheduleTask(60, () -> {
 			AnimationUtils.createGlyphAnimation(server.overworld(), centerPos, 45);
 		});

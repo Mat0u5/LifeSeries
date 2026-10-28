@@ -45,8 +45,8 @@ public class TriviaBotPathfinding {
         if (bot.level() instanceof ServerLevel level) {
             if (boundEntity.level() instanceof ServerLevel entityWorld) {
                 BlockPos tpTo = getBlockPosNearTarget(boundEntity,5);
-                level.playSound(null, bot.getX(), bot.getY(), bot.getZ(), ModifiableSound.WILDLIFE_TRIVIA_TELEPORT.get(), bot.getSoundSource(), bot.soundVolume(), bot.getVoicePitch());
-                entityWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), ModifiableSound.WILDLIFE_TRIVIA_TELEPORT.get(), bot.getSoundSource(), bot.soundVolume(), bot.getVoicePitch());
+                ModifiableSound.WILDLIFE_TRIVIA_TELEPORT.playFromWorld(level, bot.getX(), bot.getY(), bot.getZ(), bot.getSoundSource(), bot.soundVolume(), bot.getVoicePitch());
+                ModifiableSound.WILDLIFE_TRIVIA_TELEPORT.playFromWorld(entityWorld, tpTo.getX(), tpTo.getY(), tpTo.getZ(), bot.getSoundSource(), bot.soundVolume(), bot.getVoicePitch());
                 AnimationUtils.spawnTeleportParticles(level, bot.position());
                 AnimationUtils.spawnTeleportParticles(level, OtherUtils.getCenter(tpTo));
                 bot.serverData.despawn();
