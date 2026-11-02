@@ -56,15 +56,15 @@ public class DynamicDatapackManager {
         ResourceHandler handler = new ResourceHandler();
 
         File configTrivia = new File(CONFIG_TABLE_TRIVIA);
-        if (!configTrivia.exists()) {
+        if (shouldCopyLootTableToConfig(configTrivia)) {
             handler.copyBundledSingleFile(LOCAL_TABLE_TRIVIA, configTrivia.toPath());
         }
         File configNiceLifeTrivia = new File(CONFIG_TABLE_NICELIFE_TRIVIA);
-        if (!configNiceLifeTrivia.exists()) {
+        if (shouldCopyLootTableToConfig(configNiceLifeTrivia)) {
             handler.copyBundledSingleFile(LOCAL_TABLE_NICELIFE_TRIVIA, configNiceLifeTrivia.toPath());
         }
         File configTask = new File(CONFIG_TABLE_TASK);
-        if (!configTask.exists()) {
+        if (shouldCopyLootTableToConfig(configTask)) {
             handler.copyBundledSingleFile(LOCAL_TABLE_TASK, configTask.toPath());
         }
 
@@ -90,6 +90,19 @@ public class DynamicDatapackManager {
             e.printStackTrace();
             LifeSeries.LOGGER.error("Error copying loot tables: {}", e.getMessage());
         }
+    }
+
+    public static boolean shouldCopyLootTableToConfig(File file) {
+        //? if = 26.3 {
+        if (file.exists() && file.isFile()) {
+            try (var lines = Files.lines(file.toPath())) {
+                boolean isBroken = lines.anyMatch(line -> line.contains("\"functions\""));
+                if (isBroken) return true;
+            } catch (Exception ignored) {}
+        }
+        //?}
+
+        return !file.exists();
     }
 
     public static void disableDatapack() {
