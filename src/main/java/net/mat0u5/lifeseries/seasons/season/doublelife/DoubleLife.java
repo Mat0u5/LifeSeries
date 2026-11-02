@@ -245,6 +245,10 @@ public class DoubleLife extends Season {
         if (SubInManager.isBeingSubstituted(soulmateUUID)) {
             soulmateUUID = SubInManager.getSubstitutingPlayerUUID(soulmateUUID);
         }
+        else if (SubInManager.isSubbingIn(soulmateUUID)) {
+            // Soulmate is online, but playing as someone else
+            return false;
+        }
         return PlayerUtils.getPlayer(soulmateUUID) != null;
     }
 
@@ -396,8 +400,8 @@ public class DoubleLife extends Season {
         List<Map.Entry<String, String>> result = new ArrayList<>();
         for (Map.Entry<UUID, UUID> entry : soulmatesOrdered.entrySet()) {
             result.add(Map.entry(
-                    PlayerUtils.getNameFromUUIDOrRaw(entry.getKey()),
-                    PlayerUtils.getNameFromUUIDOrRaw(entry.getValue())
+                    SubInManager.getNameFromUUID(entry.getKey()),
+                    SubInManager.getNameFromUUID(entry.getValue())
             ));
         }
         result.sort(Comparator.comparing(entry -> entry.getKey().toLowerCase(Locale.ROOT)));

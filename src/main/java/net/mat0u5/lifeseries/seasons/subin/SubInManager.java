@@ -259,6 +259,20 @@ public class SubInManager {
         return uuid;
     }
 
+    public static UUID getUUIDFromNameOrUUID(String name) {
+        for (SubIn subIn : subIns) {
+            if (name.equalsIgnoreCase(getName(subIn.target()))) return getId(subIn.target());
+            if (name.equalsIgnoreCase(getName(subIn.substituter()))) return getId(subIn.substituter());
+        }
+        return PlayerUtils.getUUIDFromNameOrUUID(name);
+    }
+
+    public static String getNameFromUUID(UUID uuid) {
+        GameProfile original = getSubstituterOriginal(uuid);
+        if (original != null) return getName(original);
+        return PlayerUtils.getNameFromUUIDOrRaw(uuid);
+    }
+
     public record SubIn(GameProfile substituter, GameProfile target, Integer startingLives) {
     }
 }

@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.util.WatcherManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.NicknameManager;
 import net.minecraft.core.BlockPos;
@@ -75,6 +76,13 @@ public class ServerPlayerMixin implements IPlayer {
     @Inject(method = "onEffectUpdated", at = @At("TAIL"))
     private void onStatusEffectUpgraded(MobEffectInstance effect, boolean reapplyEffect, Entity source, CallbackInfo ci) {
         ls$onUpdatedEffects(effect, true);
+    }
+
+    @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
+    private void keepProfileUUID(CallbackInfo ci) {
+        // Get the UUID from the profile itself, because sub-ins can store the incorrect id.
+        ServerPlayer player = ls$get();
+        player.setUUID(OtherUtils.profileId(player.getGameProfile()));
     }
 
 

@@ -76,7 +76,10 @@ public class ProfileManager {
     }
 
     public static CompletableFuture<Boolean> modifyProfile(ServerPlayer player, ProfileChange skinChange, ProfileChange usernameChange) {
-        return CompletableFuture.supplyAsync(() -> {
+        CompletableFuture<Property> fetchedSkin = skinChange.type == ProfileChangeType.SET
+                ? CompletableFuture.supplyAsync(() -> fetchSkinFromUsername(skinChange.info))
+                : CompletableFuture.completedFuture(null);
+        return fetchedSkin.thenApplyAsync(skin -> {
             try {
                 if (!originalSkins.containsKey(player.getUUID())) {
                     Property originalSkin = getSkinProperty(player.getGameProfile());
@@ -91,7 +94,7 @@ public class ProfileManager {
                     targetSkin = originalSkins.get(player.getUUID());
                 }
                 if (skinChange.type == ProfileChangeType.SET) {
-                    targetSkin = fetchSkinFromUsername(skinChange.info);
+                    targetSkin = skin;
                 }
 
                 Tuple<Boolean, Boolean> changed = setProfile(player, skinChange, usernameChange, targetSkin);
@@ -113,7 +116,7 @@ public class ProfileManager {
                 e.printStackTrace();
                 return false;
             }
-        });
+        }, server);
     }
 
     private static Tuple<Boolean, Boolean> setProfile(ServerPlayer player, ProfileChange skinChange, ProfileChange usernameChange, Property targetSkin) {

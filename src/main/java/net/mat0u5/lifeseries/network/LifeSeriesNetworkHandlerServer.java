@@ -18,6 +18,7 @@ import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeVotingManager;
 import net.mat0u5.lifeseries.seasons.season.secretlife.TaskManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
+import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Hunger;
@@ -326,8 +327,8 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
                 String name2 = values.get(i + 1).trim();
                 if (name1.isEmpty() && name2.isEmpty()) continue;
 
-                UUID player1UUID = PlayerUtils.getUUIDFromNameOrUUID(name1);
-                UUID player2UUID = PlayerUtils.getUUIDFromNameOrUUID(name2);
+                UUID player1UUID = SubInManager.getUUIDFromNameOrUUID(name1);
+                UUID player2UUID = SubInManager.getUUIDFromNameOrUUID(name2);
                 if (player1UUID == null && !name1.isEmpty()) unknownPlayers.add(name1);
                 if (player2UUID == null && !name2.isEmpty()) unknownPlayers.add(name2);
                 if (player1UUID == null || player2UUID == null) continue;
