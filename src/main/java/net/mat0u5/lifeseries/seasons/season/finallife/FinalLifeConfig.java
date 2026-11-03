@@ -2,6 +2,8 @@ package net.mat0u5.lifeseries.seasons.season.finallife;
 
 import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.matlib.config.entry.ConfigurableValue;
+import net.mat0u5.matlib.config.type.ConfigTypes;
 
 import java.util.List;
 
@@ -55,12 +57,34 @@ public class FinalLifeConfig extends SeasonConfig {
 			"quick_charge"
 	);
 
+
+	public final ConfigurableValue<Boolean> FINAL_LIFE_BOOGEYMAN = ConfigurableValue.register(this, "final_life_boogeyman", true)
+			.name("Final Life Boogeyman")
+			.description("Controls whether the Final Life Boogeyman is activated")
+			.setNew(true)
+			.group("season.boogeyman").groupHeader(true);
+	public final ConfigurableValue<List<String>> FINAL_LIFE_BOOGEYMAN_LIST = ConfigurableValue.register(this, "final_life_boogeyman_list", List.of(), ConfigTypes.STRING_LIST)
+			.name("Boogeyman List")
+			.description("List of active boogeyman UUIDs")
+			.setNew(true)
+			.group("season.boogeyman");
+	public final ConfigurableValue<Boolean> FINAL_LIFE_BOOGEYMAN_HIDE_IN_TAB = ConfigurableValue.register(this, "final_life_boogeyman_hide_in_tab", true)
+			.name("Hide in Tab")
+			.description("Controls whether the secret boogeyman player is shown in the tab list")
+			.setNew(true)
+			.group("season.boogeyman");
+
 	protected FinalLifeConfig() {
 		super(Seasons.FINAL_LIFE);
+		removeEntry(NO_SEASON_SPECIFIC);
 		BLACKLIST_ITEMS.defaultValue(BLACKLISTED_ITEMS);
 		BLACKLIST_BLOCKS.defaultValue(BLACKLISTED_BLOCKS);
 		BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.defaultValue(CLAMPED_ENCHANTMENTS);
 		BLACKLIST_RECIPES.defaultValue(List.of("enchanting_table"));
 		DEFAULT_LIVES.defaultValue(6);
+	}
+
+	public static FinalLifeConfig get() {
+		return getActive(FinalLifeConfig.class, FinalLifeConfig::new);
 	}
 }

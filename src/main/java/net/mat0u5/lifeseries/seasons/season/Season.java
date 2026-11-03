@@ -546,7 +546,7 @@ public abstract class Season {
             onPlayerDiedNaturally(player, source);
         }
         DatapackIntegration.EVENT_PLAYER_DEATH.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
-        if (!DatapackIntegration.EVENT_PLAYER_DEATH.isCanceled() && livesManager.canChangeLivesNaturally(player) && ((IPlayer) player).ls$hasAssignedLives()) {
+        if (!DatapackIntegration.EVENT_PLAYER_DEATH.isCanceled() && livesManager.canChangeLives(player) && ((IPlayer) player).ls$hasAssignedLives()) {
             if (killedByPlayer || !livesManager.LIVES_LOSE_KILLS_ONLY.get()) {
                 ((IPlayer) player).ls$removeLife();
             }
@@ -601,7 +601,7 @@ public abstract class Season {
                 new DatapackIntegration.Events.MacroEntry("Killer", killer.getScoreboardName()),
                 new DatapackIntegration.Events.MacroEntry("Victim", victim.getScoreboardName())
         ));
-        if (!DatapackIntegration.EVENT_CLAIM_KILL.isCanceled() && !isBoogeyCure && livesManager.canChangeLivesNaturally()) {
+        if (!DatapackIntegration.EVENT_CLAIM_KILL.isCanceled() && !isBoogeyCure && livesManager.canChangeLives(killer)) {
             tryClaimKillLifeGain(killer, victim);
         }
 
@@ -617,6 +617,7 @@ public abstract class Season {
     }
 
     public void tryClaimKillLifeGain(ServerPlayer killer, ServerPlayer victim) {
+        if (!livesManager.canChangeLives(killer) || livesManager.isExcludedFromLivesSystem(victim)) return;
         Team team = killer.getTeam();
         if (team != null) {
             Integer canGainLife = livesManager.getTeamGainLives(team.getName());
@@ -631,6 +632,7 @@ public abstract class Season {
     }
 
     public void tryKillLifeGain(ServerPlayer killer, ServerPlayer victim) {
+        if (!livesManager.canChangeLives(killer) || livesManager.isExcludedFromLivesSystem(victim)) return;
         Team team = killer.getTeam();
         if (team != null) {
             Integer canGainLife = livesManager.getTeamGainLives(team.getName());
@@ -696,7 +698,7 @@ public abstract class Season {
         SessionTranscript.onPlayerKilledByPlayer(victim, killer);
 
         DatapackIntegration.EVENT_PLAYER_PVP_KILLED.trigger(eventMacros);
-        if (!DatapackIntegration.EVENT_PLAYER_PVP_KILLED.isCanceled() && !isBoogeyCure && isAllowedToAttack && livesManager.canChangeLivesNaturally()) {
+        if (!DatapackIntegration.EVENT_PLAYER_PVP_KILLED.isCanceled() && !isBoogeyCure && isAllowedToAttack && livesManager.canChangeLives(killer)) {
             tryKillLifeGain(killer, victim);
         }
     }

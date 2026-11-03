@@ -211,7 +211,7 @@ public class LimitedLife extends Season {
         }
         onPlayerDiedNaturally(player, source);
         DatapackIntegration.EVENT_PLAYER_DEATH.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
-        if (!DatapackIntegration.EVENT_PLAYER_DEATH.isCanceled() && livesManager.canChangeLivesNaturally(player)) {
+        if (!DatapackIntegration.EVENT_PLAYER_DEATH.isCanceled() && livesManager.canChangeLives(player)) {
             if (!livesManager.LIVES_LOSE_KILLS_ONLY.get()) {
                 ((IPlayer) player).ls$addLives(NEW_DEATH_NORMAL.getSeconds());
             }
@@ -226,13 +226,15 @@ public class LimitedLife extends Season {
         boolean cancelPunishment = DatapackIntegration.EVENT_PLAYER_DEATH.isCanceled();
         if (cancelGain && cancelPunishment) return;
 
-        if (wasBoogeyCure && livesManager.canChangeLivesNaturally()) {
+        if (wasBoogeyCure) {
             //Victim was killed by boogeyman - remove 2 hours from victim and add 1 hour to boogey
             boolean wasAlive = ((IPlayer) victim).ls$isAlive();
-            if (wasAlive && !cancelPunishment) {
+            if (wasAlive && !cancelPunishment && livesManager.canChangeLives(victim)) {
                 ((IPlayer) victim).ls$addLives(NEW_DEATH_BOOGEYMAN.diff(NEW_DEATH_NORMAL).getSeconds());
             }
-            if (!cancelGain) ((IPlayer) killer).ls$addLives(NEW_KILL_BOOGEYMAN.getSeconds());
+            if (!cancelGain && livesManager.canChangeLives(killer)) {
+                ((IPlayer) killer).ls$addLives(NEW_KILL_BOOGEYMAN.getSeconds());
+            }
         }
         if (livesManager.LIVES_LOSE_KILLS_ONLY.get()) {
             ((IPlayer) victim).ls$addLives(NEW_DEATH_NORMAL.getSeconds());
@@ -273,10 +275,10 @@ public class LimitedLife extends Season {
         super.onPlayerKilledByPlayer(victim, killer);
         if (DatapackIntegration.EVENT_PLAYER_PVP_KILLED.isCanceled()) return;
 
-        if (!wasBoogeyCure && livesManager.canChangeLivesNaturally()) {
+        if (!wasBoogeyCure && livesManager.canChangeLives(victim)) {
             ((IPlayer) victim).ls$addLives(NEW_DEATH_NORMAL.getSeconds());
         }
-        else if (livesManager.canChangeLivesNaturally()) {
+        else if (livesManager.canChangeLives(victim)) {
             //Victim was killed by boogeyman - remove 2 hours from victim and add 1 hour to boogey
             ((IPlayer) victim).ls$addLives(NEW_DEATH_BOOGEYMAN.getSeconds());
             livesManager.addToLivesNoUpdate(killer, NEW_KILL_BOOGEYMAN.getSeconds());

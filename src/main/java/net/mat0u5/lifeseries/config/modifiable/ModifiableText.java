@@ -621,6 +621,22 @@ public enum ModifiableText {
     ,NICELIFE_NICELIST_VOTE_ERROR_AGREEMENT(Seasons.NICE_LIFE, "§cNo agreement reached")
     ,NICELIFE_NICELIST_VOTE_RESULT(Seasons.NICE_LIFE, "§2The winner is...")
 
+    ,FINALLIFE_BOOGEYMAN_COMMAND_DISABLED(Seasons.FINAL_LIFE, "This command is only available when the Final Life Boogeyman has been enabled in the config.")
+    ,FINALLIFE_BOOGEYMAN_COMMAND_ALREADY(Seasons.FINAL_LIFE, "That player is already a Boogeyman")
+    ,FINALLIFE_BOOGEYMAN_COMMAND_NOT(Seasons.FINAL_LIFE, "That player is not a Boogeyman")
+    ,FINALLIFE_BOOGEYMAN_NOTICE_ADDED(Seasons.FINAL_LIFE, "§cYou are now a Boogeyman!")
+    ,FINALLIFE_BOOGEYMAN_NOTICE_REMOVED(Seasons.FINAL_LIFE, "§cYou are no longer a Boogeyman!")
+    ,FINALLIFE_BOOGEYMAN_COMMAND_NONE(Seasons.FINAL_LIFE, "There aren't any boogeymen")
+    ,FINALLIFE_BOOGEYMAN_COMMAND_CLEAR(Seasons.FINAL_LIFE, "Cleared all boogeymen")
+
+    ,FINALLIFE_BOOGEYMAN_LIST(Seasons.FINAL_LIFE, "Current Boogeymen: {}", List.of("list"))
+    ,FINALLIFE_BOOGEYMAN_ADD(Seasons.FINAL_LIFE, "{} is now a Boogeyman", List.of("Player"))
+    ,FINALLIFE_BOOGEYMAN_REMOVE(Seasons.FINAL_LIFE, "{} is no longer a Boogeyman", List.of("Player"))
+
+    ,FINALLIFE_BOOGEYMAN_USERNAME(Seasons.FINAL_LIFE, "The_Boogeyman")
+    ,FINALLIFE_BOOGEYMAN_MESSAGE_JOIN(Seasons.FINAL_LIFE, Formatted.LOOSELY_STYLED, "§e{} joined the game", List.of("username"))
+    ,FINALLIFE_BOOGEYMAN_MESSAGE_LEAVE(Seasons.FINAL_LIFE, Formatted.LOOSELY_STYLED, "§e{} left the game", List.of("username"))
+
 //ModifiableText.NAME.get(
 
     /*

@@ -3,6 +3,8 @@ package net.mat0u5.lifeseries.seasons.boogeyman;
 import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
+import net.mat0u5.lifeseries.seasons.season.finallife.FinalLife;
+import net.mat0u5.lifeseries.seasons.season.finallife.FinalLifeBoogeymanManager;
 import net.mat0u5.lifeseries.seasons.season.pastlife.PastLifeBoogeymanManager;
 import net.mat0u5.lifeseries.seasons.util.WatcherManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
@@ -16,6 +18,7 @@ import net.minecraft.server.level.ServerPlayer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
@@ -23,12 +26,53 @@ public class BoogeymanCommand extends CustomCommand {
 
     @Override
     public boolean isAllowed() {
+        return isAllowedNormal() || isAllowedFinalLife();
+    }
+
+    public boolean isAllowedNormal() {
         return getBM().BOOGEYMAN_ENABLED.get();
+    }
+
+    public boolean isAllowedFinalLife() {
+        return currentSeason instanceof FinalLife finalLife && finalLife.finalLifeBoogeymanManager.isEnabled();
+    }
+
+    public boolean checkBannedNormal(CommandSourceStack source) {
+        if (super.checkBanned(source)) return false;
+        if (isAllowedNormal()) {
+            return false;
+        }
+        else {
+            sendCommandFailure(source, getBannedTextNormal());
+            return true;
+        }
+    }
+
+    public boolean checkBannedFinalLife(CommandSourceStack source) {
+        if (super.checkBanned(source)) return false;
+        if (isAllowedFinalLife()) {
+            return false;
+        }
+        else {
+            sendCommandFailure(source, getBannedTextFinalLife());
+            return true;
+        }
     }
 
     @Override
     public Component getBannedText() {
+        return getBannedTextNormal();
+    }
+
+    public Component getBannedTextNormal() {
+        if (isAllowedFinalLife()) {
+            return Component.nullToEmpty("This command is only available when the boogeyman has been enabled in the Life Series config.\n\nFinal Life has different Boogeyman behavior. Use the '/boogeyman finalLife ...' command instead.");
+        }
         return Component.nullToEmpty("This command is only available when the boogeyman has been enabled in the Life Series config.");
+    }
+
+    public Component getBannedTextFinalLife() {
+        return Component.nullToEmpty("This command is only available in Final Life when the Final Life Boogeyman has been enabled in the config.");
     }
 
     public List<String> getAdminCommands() {
@@ -47,13 +91,14 @@ public class BoogeymanCommand extends CustomCommand {
                         context.getSource()
                 ))
                 .then(literal("clear")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(source -> isAllowedNormal() && PermissionManager.isAdmin(source))
                     .executes(context -> boogeyClear(
                         context.getSource()
                     ))
                 )
                 .then(literal("list")
                     .requires(source -> {
+                        if (!isAllowedNormal()) return false;
                         if (PermissionManager.isAdmin(source)) return true;
                         ServerPlayer self = source.getPlayer();
 						return self != null && WatcherManager.WATCHERS_SEE_BOOGEY_AND_SOCIETY.get() && ((IPlayer) self).ls$isWatcher();
@@ -63,52 +108,72 @@ public class BoogeymanCommand extends CustomCommand {
                     ))
                 )
                 .then(literal("count")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(source -> isAllowedNormal() && PermissionManager.isAdmin(source))
                     .executes(context -> boogeyCount(
                         context.getSource()
                     ))
                 )
                 .then(literal("add")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(source -> isAllowedNormal() && PermissionManager.isAdmin(source))
                     .then(argument("player", EntityArgument.players())
                         .executes(context -> addBoogey(context.getSource(), EntityArgument.getPlayers(context, "player")))
                     )
                 )
                 .then(literal("remove")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(source -> isAllowedNormal() && PermissionManager.isAdmin(source))
                     .then(argument("player", EntityArgument.players())
                         .executes(context -> removeBoogey(context.getSource(), EntityArgument.getPlayers(context, "player")))
                     )
                 )
                 .then(literal("reset")
-                        .requires(PermissionManager::isAdmin)
+                        .requires(source -> isAllowedNormal() && PermissionManager.isAdmin(source))
                         .then(argument("player", EntityArgument.players())
                                 .executes(context -> resetBoogey(context.getSource(), EntityArgument.getPlayers(context, "player")))
                         )
                 )
                 .then(literal("cure")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(source -> isAllowedNormal() && PermissionManager.isAdmin(source))
                     .then(argument("player", EntityArgument.players())
                         .executes(context -> cureBoogey(context.getSource(), EntityArgument.getPlayers(context, "player")))
                     )
                 )
                 .then(literal("fail")
-                        .requires(PermissionManager::isAdmin)
+                        .requires(source -> isAllowedNormal() && PermissionManager.isAdmin(source))
                         .then(argument("player", EntityArgument.players())
                                 .executes(context -> failBoogey(context.getSource(), EntityArgument.getPlayers(context, "player")))
                         )
                 )
                 .then(literal("selfFail")
+                        .requires(source -> isAllowedNormal())
                         .then(literal("confirm")
                                 .executes(context -> selfFailBoogey(context.getSource(), true))
                         )
                         .executes(context -> selfFailBoogey(context.getSource(), false))
                 )
                 .then(literal("randomize")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(source -> isAllowedNormal() && PermissionManager.isAdmin(source))
                     .executes(context -> boogeyChooseRandom(
                         context.getSource()
                     ))
+                )
+                .then(literal("finalLife")
+                        .requires(source -> isAllowedFinalLife() && PermissionManager.isAdmin(source))
+                        .then(literal("add")
+                                .then(argument("player", EntityArgument.player())
+                                        .executes(context -> fl_addBoogey(context.getSource(), EntityArgument.getPlayer(context, "player")))
+                                )
+                        )
+                        .then(literal("remove")
+                                .then(argument("player", EntityArgument.player())
+                                        .executes(context -> fl_removeBoogey(context.getSource(), EntityArgument.getPlayer(context, "player")))
+                                )
+                        )
+                        .then(literal("list")
+                                .executes(context -> fl_listBoogey(context.getSource()))
+                        )
+                        .then(literal("clear")
+                                .executes(context -> fl_clearBoogey(context.getSource()))
+                        )
                 )
         );
     }
@@ -118,7 +183,7 @@ public class BoogeymanCommand extends CustomCommand {
     }
 
     public int boogeyCheck(CommandSourceStack source) {
-        if (checkBanned(source)) return -1;
+        if (checkBannedNormal(source)) return -1;
         ServerPlayer self = source.getPlayer();
         if (self == null) return -1;
         BoogeymanManager bm = getBM();
@@ -150,7 +215,7 @@ public class BoogeymanCommand extends CustomCommand {
     }
 
     public int selfFailBoogey(CommandSourceStack source, boolean confirm) {
-        if (checkBanned(source)) return -1;
+        if (checkBannedNormal(source)) return -1;
         ServerPlayer self = source.getPlayer();
         if (self == null) return -1;
         BoogeymanManager bm = getBM();
@@ -189,7 +254,7 @@ public class BoogeymanCommand extends CustomCommand {
     }
 
     public int failBoogey(CommandSourceStack source, Collection<ServerPlayer> targets) {
-        if (checkBanned(source)) return -1;
+        if (checkBannedNormal(source)) return -1;
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
 
@@ -217,7 +282,7 @@ public class BoogeymanCommand extends CustomCommand {
         return 1;
     }
     public int resetBoogey(CommandSourceStack source, Collection<ServerPlayer> targets) {
-        if (checkBanned(source)) return -1;
+        if (checkBannedNormal(source)) return -1;
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
 
@@ -244,7 +309,7 @@ public class BoogeymanCommand extends CustomCommand {
     }
 
     public int cureBoogey(CommandSourceStack source, Collection<ServerPlayer> targets) {
-        if (checkBanned(source)) return -1;
+        if (checkBannedNormal(source)) return -1;
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
 
@@ -273,7 +338,7 @@ public class BoogeymanCommand extends CustomCommand {
     }
 
     public int addBoogey(CommandSourceStack source, Collection<ServerPlayer> targets) {
-        if (checkBanned(source)) return -1;
+        if (checkBannedNormal(source)) return -1;
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
 
@@ -301,7 +366,7 @@ public class BoogeymanCommand extends CustomCommand {
     }
 
     public int removeBoogey(CommandSourceStack source, Collection<ServerPlayer> targets) {
-        if (checkBanned(source)) return -1;
+        if (checkBannedNormal(source)) return -1;
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
 
@@ -327,7 +392,7 @@ public class BoogeymanCommand extends CustomCommand {
     }
 
     public int boogeyList(CommandSourceStack source) {
-        if (checkBanned(source)) return -1;
+        if (checkBannedNormal(source)) return -1;
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
 
@@ -357,7 +422,7 @@ public class BoogeymanCommand extends CustomCommand {
     }
 
     public int boogeyCount(CommandSourceStack source) {
-        if (checkBanned(source)) return -1;
+        if (checkBannedNormal(source)) return -1;
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
 
@@ -383,7 +448,7 @@ public class BoogeymanCommand extends CustomCommand {
     }
 
     public int boogeyClear(CommandSourceStack source) {
-        if (checkBanned(source)) return -1;
+        if (checkBannedNormal(source)) return -1;
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
 
@@ -393,7 +458,7 @@ public class BoogeymanCommand extends CustomCommand {
     }
 
     public int boogeyChooseRandom(CommandSourceStack source) {
-        if (checkBanned(source)) return -1;
+        if (checkBannedNormal(source)) return -1;
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
 
@@ -402,6 +467,100 @@ public class BoogeymanCommand extends CustomCommand {
         bm.resetBoogeymen();
         bm.prepareToChooseBoogeymen();
 
+        return 1;
+    }
+
+
+    /*
+        Final Life Boogeyman
+     */
+
+    public FinalLifeBoogeymanManager fl_getBM() {
+        if (currentSeason instanceof FinalLife finalLife) {
+            return finalLife.finalLifeBoogeymanManager;
+        }
+        return null;
+    }
+
+    public int fl_addBoogey(CommandSourceStack source, ServerPlayer target) {
+        if (checkBanned(source)) return -1;
+        FinalLifeBoogeymanManager bm = fl_getBM();
+        if (bm == null || target == null) return -1;
+        if (!bm.isEnabled()) {
+            sendCommandFailure(source, ModifiableText.FINALLIFE_BOOGEYMAN_COMMAND_DISABLED.get());
+            return -1;
+        }
+
+        if (bm.isBoogeyman(target)) {
+            sendCommandFailure(source, ModifiableText.FINALLIFE_BOOGEYMAN_COMMAND_ALREADY.get());
+            return -1;
+        }
+
+        bm.addBoogeyman(target);
+        sendCommandFeedbackQuiet(source, ModifiableText.FINALLIFE_BOOGEYMAN_ADD.get(target));
+
+        return 1;
+    }
+
+    public int fl_removeBoogey(CommandSourceStack source, ServerPlayer target) {
+        if (checkBanned(source)) return -1;
+        FinalLifeBoogeymanManager bm = fl_getBM();
+        if (bm == null || target == null) return -1;
+        if (!bm.isEnabled()) {
+            sendCommandFailure(source, ModifiableText.FINALLIFE_BOOGEYMAN_COMMAND_DISABLED.get());
+            return -1;
+        }
+
+        if (!bm.isBoogeyman(target)) {
+            sendCommandFailure(source, ModifiableText.FINALLIFE_BOOGEYMAN_COMMAND_NOT.get());
+            return -1;
+        }
+
+        bm.removeBoogeyman(target);
+        sendCommandFeedbackQuiet(source, ModifiableText.FINALLIFE_BOOGEYMAN_REMOVE.get(target));
+
+        return 1;
+    }
+
+    public int fl_listBoogey(CommandSourceStack source) {
+        if (checkBanned(source)) return -1;
+        FinalLifeBoogeymanManager bm = fl_getBM();
+        if (bm == null) return -1;
+        if (!bm.isEnabled()) {
+            sendCommandFailure(source, ModifiableText.FINALLIFE_BOOGEYMAN_COMMAND_DISABLED.get());
+            return -1;
+        }
+
+        if (!bm.anyBoogeymen()) {
+            sendCommandFailure(source, ModifiableText.FINALLIFE_BOOGEYMAN_COMMAND_NONE.get());
+            return -1;
+        }
+
+        List<Component> boogeymen = new ArrayList<>();
+        for (UUID uuid : bm.getBoogeymen()) {
+            boogeymen.add(PlayerUtils.getDisplayNameFromUUID(uuid));
+        }
+        sendCommandFeedbackQuiet(source, ModifiableText.FINALLIFE_BOOGEYMAN_LIST.get(boogeymen));
+
+        return 1;
+    }
+
+    public int fl_clearBoogey(CommandSourceStack source) {
+        if (checkBanned(source)) return -1;
+        FinalLifeBoogeymanManager bm = fl_getBM();
+        if (bm == null) return -1;
+        if (!bm.isEnabled()) {
+            sendCommandFailure(source, ModifiableText.FINALLIFE_BOOGEYMAN_COMMAND_DISABLED.get());
+            return -1;
+        }
+
+        if (!bm.anyBoogeymen()) {
+            sendCommandFailure(source, ModifiableText.FINALLIFE_BOOGEYMAN_COMMAND_NONE.get());
+            return -1;
+        }
+
+        bm.clearBoogeymen();
+        sendCommandFeedback(source, ModifiableText.FINALLIFE_BOOGEYMAN_COMMAND_CLEAR.get());
         return 1;
     }
 }

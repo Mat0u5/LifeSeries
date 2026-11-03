@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.mixin.PlayerListS2CPacketAccessor;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.finallife.FinalLife;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
@@ -151,8 +152,18 @@ public class PlayerUtils extends net.mat0u5.matlib.utils.player.PlayerUtils {
     public static boolean hidePlayerFrom(ServerPlayer receivingPlayer, ServerPlayer player) {
         if (receivingPlayer == null || player == null) return false;
         if (isFakePlayer(player)) return true;
+        if (hideFinalBoogeyPlayerFrom(receivingPlayer, player)) return true;
         if (hideDeadPlayerFrom(receivingPlayer, player)) return true;
         if (hideWatcherPlayerFrom(receivingPlayer, player)) return true;
+        return false;
+    }
+
+    private static boolean hideFinalBoogeyPlayerFrom(ServerPlayer receivingPlayer, ServerPlayer player) {
+        if (currentSeason instanceof FinalLife finalLife) {
+            if (finalLife.finalLifeBoogeymanManager.BOOGEYMAN_HIDE_IN_TAB.get() && finalLife.finalLifeBoogeymanManager.isBoogeyman(player)) {
+                return true;
+            }
+        }
         return false;
     }
 

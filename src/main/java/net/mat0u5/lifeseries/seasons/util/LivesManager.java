@@ -687,18 +687,16 @@ public class LivesManager {
         return players;
     }
 
-    public boolean canChangeLivesNaturally(ServerPlayer player) {
+    public boolean canChangeLives(ServerPlayer player) {
+        if (isExcludedFromLivesSystem(player)) return false;
         if (ONLY_CHANGE_LIVES_IN_SESSION.get() && currentSession != null && !AdvancedDeathsManager.hasQueuedDeath(player)) {
             return currentSession.statusStarted();
         }
         return true;
     }
 
-    public boolean canChangeLivesNaturally() {
-        if (ONLY_CHANGE_LIVES_IN_SESSION.get() && currentSession != null) {
-            return currentSession.statusStarted();
-        }
-        return true;
+    public boolean isExcludedFromLivesSystem(ServerPlayer player) {
+        return false;
     }
 
     public boolean anyPlayersOnLives(int lives) {

@@ -207,7 +207,7 @@ public class BoogeymanManager {
         PlayerUtils.sendTitle(player, ModifiableText.BOOGEYMAN_CURE_TITLE.get(), 20, 30, 20);
         ModifiableSound.BOOGEYMAN_CURE.play(player);
 
-        boolean stealLife = BOOGEYMAN_STEAL_LIFE.get() && livesManager.canChangeLivesNaturally();
+        boolean stealLife = BOOGEYMAN_STEAL_LIFE.get() && livesManager.canChangeLives(player);
 
         if (BOOGEYMAN_ANNOUNCE_OUTCOME.get()) {
             if (stealLife) {
