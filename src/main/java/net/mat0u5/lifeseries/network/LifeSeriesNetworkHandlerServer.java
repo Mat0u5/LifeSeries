@@ -287,7 +287,7 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
 
                 for (PlayerTeam livesTeam : new ArrayList<>(livesManager.getLivesTeams().values())) {
                     String teamName = livesTeam.getName();
-                    if (!teamNames.contains(teamName)) {
+                    if (!teamNames.contains(teamName) && !livesManager.isDefaultTeam(teamName)) {
                         livesManager.updateTeamConfig(teamName, null, null);
                         livesManager.removeTeam(teamName);
                     }
