@@ -137,7 +137,7 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 
 				required.maybeCreate("fabricloader").apply {
 					modid.set("fabricloader")
-					versionRange.set(">=0.18.0")
+					versionRange.set(">=0.19.5")
 				}
 
 				incompatible.maybeCreate("pastlife").apply {

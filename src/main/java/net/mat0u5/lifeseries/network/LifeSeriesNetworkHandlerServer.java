@@ -53,7 +53,6 @@ import net.mat0u5.matlib.utils.other.TextUtils;
 import net.mat0u5.matlib.utils.other.VersionCompatibility;
 import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.mat0u5.matlib.utils.player.ScoreboardUtils;
-import net.mat0u5.matlib.utils.player.TeamUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -286,30 +285,15 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
                     gainLife = Integer.parseInt(packetGainLifeKill);
                 } catch(Exception e) {}
 
-                boolean teamModified = false;
                 for (PlayerTeam livesTeam : new ArrayList<>(livesManager.getLivesTeams().values())) {
                     String teamName = livesTeam.getName();
                     if (!teamNames.contains(teamName)) {
                         livesManager.updateTeamConfig(teamName, null, null);
-                        TeamUtils.deleteTeam(teamName);
-                        continue;
+                        livesManager.removeTeam(teamName);
                     }
-                    if (!teamName.equals(packetTeamName)) continue;
-
-                    //? if <= 26.1 {
-                    /*livesTeam.setColor(newTeamColor);
-                    livesTeam.setDisplayName(Component.literal(packetTeamDisplayName).withStyle(newTeamColor));
-                    *///?} else {
-                    livesTeam.setColor(Optional.of(newTeamColor));
-                    livesTeam.setDisplayName(Component.literal(packetTeamDisplayName).withColor(newTeamColor.textColor()));
-                    //?}
-                    livesManager.updateTeamConfig(teamName, allowedKill, gainLife);
-                    teamModified = true;
                 }
-                if (!teamModified) {
-                    TeamUtils.createTeam(packetTeamName, packetTeamDisplayName, newTeamColor);
-                    livesManager.updateTeamConfig(packetTeamName, allowedKill, gainLife);
-                }
+                livesManager.setTeam(packetTeamName, packetTeamDisplayName, newTeamColor);
+                livesManager.updateTeamConfig(packetTeamName, allowedKill, gainLife);
                 Season.reloadPlayerTeams = true;
             }
         });
