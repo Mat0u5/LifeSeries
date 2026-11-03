@@ -137,6 +137,14 @@ public class LivesManager {
     }
 
     public int defaultTeamCanKill(String teamName) {
+        if (LifeSeries.isSeason(Seasons.FINAL_LIFE)) {
+            if (teamName.equals("lives_2")) {
+                return 3;
+            }
+            if (teamName.equals("lives_3") || teamName.equals("lives_4")) {
+                return 5;
+            }
+        }
         if (LifeSeries.isSeason(Seasons.WILD_LIFE)) {
             if (teamName.equals("lives_2")) {
                 return 3;
@@ -154,6 +162,9 @@ public class LivesManager {
     }
 
     public int defaultTeamGainLife(String teamName) {
+        if (LifeSeries.isSeason(Seasons.FINAL_LIFE)) {
+            //TODO - unknown
+        }
         if (LifeSeries.isSeason(Seasons.WILD_LIFE)) {
             if (teamName.equals("lives_1") || teamName.equals("lives_2")) {
                 return 4;

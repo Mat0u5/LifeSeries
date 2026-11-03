@@ -10,6 +10,7 @@ on:
       - dev
       - snapshot
       - matlib
+      - finallife
 
 jobs:
   notify:

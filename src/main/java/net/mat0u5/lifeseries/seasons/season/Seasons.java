@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season;
 import net.mat0u5.lifeseries.seasons.season.aprilfools.reallife.RealLife;
 import net.mat0u5.lifeseries.seasons.season.aprilfools.simplelife.SimpleLife;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.seasons.season.finallife.FinalLife;
 import net.mat0u5.lifeseries.seasons.season.lastlife.LastLife;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLife;
@@ -28,6 +29,7 @@ public enum Seasons {
     WILD_LIFE("Wild Life", "wildlife"),
     PAST_LIFE("Past Life", "pastlife"),
     NICE_LIFE("Nice Life", "nicelife"),
+    FINAL_LIFE("Final Life", "finallife"),
 
     REAL_LIFE("Real Life", "reallife"),
     SIMPLE_LIFE("Simple Life", "simplelife");
@@ -57,6 +59,7 @@ public enum Seasons {
         if (this == WILD_LIFE) return new WildLife();
         if (this == PAST_LIFE) return new PastLife();
         if (this == NICE_LIFE) return new NiceLife();
+        if (this == FINAL_LIFE) return new FinalLife();
 
         if (this == REAL_LIFE) return new RealLife();
         if (this == SIMPLE_LIFE) return new SimpleLife();
@@ -70,6 +73,7 @@ public enum Seasons {
     public boolean requiresClient() {
         if (this == WILD_LIFE) return true;
         if (this == NICE_LIFE) return true;
+        if (this == FINAL_LIFE) return true;
         return false;
     }
 
