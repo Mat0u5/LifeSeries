@@ -40,6 +40,12 @@ public class TeamConfigEntry extends ModifiableListEntry {
     public String defaultTeamColor;
     public String defaultAllowedKill;
     public String defaultGainLifeKill;
+    public Boolean defaultTeam = null;
+    public String resetTeamNum;
+    public String resetTeamName;
+    public String resetTeamColor;
+    public String resetAllowedKill;
+    public String resetGainLifeKill;
     private int maxTextFieldLength = 8192;
 
     protected final EditBox textFieldLives;
@@ -59,6 +65,9 @@ public class TeamConfigEntry extends ModifiableListEntry {
             YELLOW_TIME = Integer.parseInt(args.get(6));
             DEFAULT_TIME = Integer.parseInt(args.get(7));
         }catch(Exception e) {}
+        if (args.size() > 8) {
+            this.defaultTeam = Boolean.parseBoolean(args.get(8));
+        }
         this.defaultTeamNum = livesOrTime(args.get(0));
         this.defaultTeamName = args.get(1);
         this.defaultTeamColor = args.get(2);
@@ -69,6 +78,18 @@ public class TeamConfigEntry extends ModifiableListEntry {
         this.teamColor = defaultTeamColor;
         this.allowedKill = defaultAllowedKill;
         this.gainLifeKill = defaultGainLifeKill;
+        this.resetTeamNum = defaultTeamNum;
+        this.resetTeamName = defaultTeamName;
+        this.resetTeamColor = defaultTeamColor;
+        this.resetAllowedKill = defaultAllowedKill;
+        this.resetGainLifeKill = defaultGainLifeKill;
+        if (args.size() > 13 && isDefaultTeam()) {
+            this.resetTeamNum = livesOrTime(args.get(9));
+            this.resetTeamName = args.get(10);
+            this.resetTeamColor = args.get(11);
+            this.resetAllowedKill = livesOrTime(args.get(12));
+            this.resetGainLifeKill = livesOrTime(args.get(13));
+        }
 
         textFieldLives = new EditBox(textRenderer, 0, 0, isLimitedLife()?45:30, 18, Component.empty());
         textFieldName = new EditBox(textRenderer, 0, 0, 80, 18, Component.empty());
@@ -227,6 +248,7 @@ public class TeamConfigEntry extends ModifiableListEntry {
     }
 
     public boolean isDefaultTeam() {
+        if (defaultTeam != null) return defaultTeam;
         String parsed = parseDefaultTeamNum();
         return Objects.equals(parsed, "0") || Objects.equals(parsed, "1") || Objects.equals(parsed, "2") || Objects.equals(parsed, "3") || Objects.equals(parsed, "4");
     }
@@ -399,7 +421,7 @@ public class TeamConfigEntry extends ModifiableListEntry {
         for (int i : getSisterTeamNums()) {
             if (i > max) max = i;
         }
-        TeamConfigEntry newEntry = new TeamConfigEntry(LifeSeriesConfigGuiClient.copyWithKey(inboundGuiEntry, "dynamic_teams_"+ UUID.randomUUID()), List.of(String.valueOf(max+(isLimitedLife()?8*3600:1)), "New Team", "white", "", "", String.valueOf(RED_TIME), String.valueOf(YELLOW_TIME), String.valueOf(DEFAULT_TIME)));
+        TeamConfigEntry newEntry = new TeamConfigEntry(LifeSeriesConfigGuiClient.copyWithKey(inboundGuiEntry, "dynamic_teams_"+ UUID.randomUUID()), List.of(String.valueOf(max+(isLimitedLife()?8*3600:1)), "New Team", "white", "", "", String.valueOf(RED_TIME), String.valueOf(YELLOW_TIME), String.valueOf(DEFAULT_TIME), "false"));
         newEntry.defaultTeamNum = "";
         return newEntry;
     }
@@ -443,7 +465,10 @@ public class TeamConfigEntry extends ModifiableListEntry {
                 }
             }
             else {
-                Integer defaultTeamNum =  defaultTeamNums.get(4);
+                Integer defaultTeamNum = null;
+                if (!defaultTeamNums.isEmpty()) {
+                    defaultTeamNum = defaultTeamNums.get(Collections.max(defaultTeamNums.keySet()));
+                }
                 if (defaultTeamNum != null && currentTeamNum <= defaultTeamNum) {
                     setError("Team boundary must be greater than the default teams.");
                     return;
@@ -456,11 +481,11 @@ public class TeamConfigEntry extends ModifiableListEntry {
 
     @Override
     public void resetToDefault() {
-        textFieldLives.setValue(defaultTeamNum);
-        textFieldName.setValue(defaultTeamName);
-        textFieldColor.setValue(defaultTeamColor);
-        textFieldAllowedKill.setValue(defaultAllowedKill);
-        textFieldGainLife.setValue(defaultGainLifeKill);
+        textFieldLives.setValue(resetTeamNum);
+        textFieldName.setValue(resetTeamName);
+        textFieldColor.setValue(resetTeamColor);
+        textFieldAllowedKill.setValue(resetAllowedKill);
+        textFieldGainLife.setValue(resetGainLifeKill);
     }
 
     @Override
@@ -475,7 +500,12 @@ public class TeamConfigEntry extends ModifiableListEntry {
 
     @Override
     public boolean canReset() {
-        return isModified();
+        if (!Objects.equals(textFieldLives.getValue(), resetTeamNum)) return true;
+        if (!Objects.equals(textFieldName.getValue(), resetTeamName)) return true;
+        if (!Objects.equals(textFieldColor.getValue(), resetTeamColor)) return true;
+        if (!Objects.equals(textFieldAllowedKill.getValue(), resetAllowedKill)) return true;
+        if (!Objects.equals(textFieldGainLife.getValue(), resetGainLifeKill)) return true;
+        return false;
     }
 
     @Override

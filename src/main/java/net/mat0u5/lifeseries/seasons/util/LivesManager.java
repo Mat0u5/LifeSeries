@@ -232,6 +232,7 @@ public class LivesManager {
     }
 
     public void removeTeam(String teamName) {
+        if (isDefaultTeam(teamName)) return;
         List<String> teamNames = getTeamList();
         if (teamNames.remove(teamName)) {
             seasonConfig.setProperty(CONFIG_TEAM_LIST_KEY, String.join(",", teamNames));
@@ -241,21 +242,44 @@ public class LivesManager {
         TeamUtils.deleteTeam(teamName);
     }
 
+    public boolean isDefaultTeam(String teamName) {
+        return getDefaultTeam(teamName) != null;
+    }
+
+    @Nullable
+    public LivesTeam getDefaultTeam(String teamName) {
+        for (LivesTeam team : getDefaultTeams()) {
+            if (team.name().equals(teamName)) return team;
+        }
+        return null;
+    }
+
     private List<String> getTeamList() {
-        if (seasonConfig.getProperty(CONFIG_TEAM_LIST_KEY) == null) {
-            List<String> names = new ArrayList<>();
-            for (LivesTeam team : getDefaultTeams()) {
-                names.add(team.name());
-                seasonConfig.setProperty("team_name-" + team.name(), team.displayName());
-                seasonConfig.setProperty("team_color-" + team.name(), team.color().getSerializedName());
+        String teamList = seasonConfig.getProperty(CONFIG_TEAM_LIST_KEY);
+        List<String> teams = new ArrayList<>();
+        if (teamList != null) {
+            for (String teamName : teamList.split(",")) {
+                String trimmed = teamName.trim();
+                if (!trimmed.isEmpty() && !teams.contains(trimmed)) {
+                    teams.add(trimmed);
+                }
             }
-            seasonConfig.setProperty(CONFIG_TEAM_LIST_KEY, String.join(",", names));
         }
-        List<String> result = new ArrayList<>();
-        for (String teamName : seasonConfig.getProperty(CONFIG_TEAM_LIST_KEY).split(",")) {
-            if (!teamName.isBlank()) result.add(teamName.trim());
+
+        // Restore any missing default teams
+        boolean changed = teamList == null;
+        for (LivesTeam team : getDefaultTeams()) {
+            if (teams.contains(team.name())) continue;
+            teams.add(team.name());
+            changed = true;
+            seasonConfig.setProperty("team_name-" + team.name(), team.displayName());
+            seasonConfig.setProperty("team_color-" + team.name(), team.color().getSerializedName());
         }
-        return result;
+
+        if (changed) {
+            seasonConfig.setProperty(CONFIG_TEAM_LIST_KEY, String.join(",", teams));
+        }
+        return teams;
     }
 
     private void createOrUpdateTeam(String teamName, String displayName, TeamColor color) {

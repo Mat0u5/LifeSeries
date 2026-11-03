@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.config.modifiable.ModifiableTextManager;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeLivesManager;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLifeUsedTasks;
@@ -232,24 +233,50 @@ public class SeasonConfig extends DefaultConfigValues {
             //?} else {
             String teamColorName = team.getColor().orElse(TeamColor.WHITE).getSerializedName();
             //?}
+            List<String> args = new ArrayList<>(List.of(
+                    String.valueOf(teamNum),
+                    team.getDisplayName().getString(),
+                    teamColorName,
+                    validKillStr,
+                    gainLifeStr,
+                    String.valueOf(LimitedLifeLivesManager.RED_TIME.get()),
+                    String.valueOf(LimitedLifeLivesManager.YELLOW_TIME.get()),
+                    String.valueOf(LimitedLifeLivesManager.DEFAULT_TIME.get())
+            ));
+            LivesManager.LivesTeam defaultTeam = livesManager.getDefaultTeam(teamName);
+            args.add(String.valueOf(defaultTeam != null));
+            if (defaultTeam != null) {
+                int defaultCanKill = livesManager.defaultTeamCanKill(teamName);
+                int defaultGainLife = livesManager.defaultTeamGainLife(teamName);
+                args.add(getDefaultTeamBoundary(teamNum));
+                args.add(defaultTeam.displayName());
+                //? if <= 26.1 {
+                //args.add(defaultTeam.color().getName());
+                //?} else {
+                args.add(defaultTeam.color().getSerializedName());
+                //?}
+                args.add(defaultCanKill >= 0 ? String.valueOf(defaultCanKill) : "");
+                args.add(defaultGainLife >= 0 ? String.valueOf(defaultGainLife) : "");
+            }
             result.add(new DynamicEntry(
                     LifeSeriesConfigTypes.TEAM_ENTRY,
                     "dynamic_teams_"+UUID.randomUUID(),
                     "",
                     "",
                     "teams",
-                    List.of(
-                            String.valueOf(teamNum),
-                            team.getDisplayName().getString(),
-                            teamColorName,
-                            validKillStr,
-                            gainLifeStr,
-                            String.valueOf(LimitedLifeLivesManager.RED_TIME.get()),
-                            String.valueOf(LimitedLifeLivesManager.YELLOW_TIME.get()),
-                            String.valueOf(LimitedLifeLivesManager.DEFAULT_TIME.get())
-                    )
+                    args
             ));
         }
+    }
+
+    private String getDefaultTeamBoundary(int teamNum) {
+        if (LifeSeries.isSeason(Seasons.LIMITED_LIFE)) {
+            LimitedLifeConfig config = LimitedLifeConfig.get();
+            if (teamNum == 2) return String.valueOf(config.TIME_RED.getDefaultValue());
+            if (teamNum == 3) return String.valueOf(config.TIME_YELLOW.getDefaultValue());
+            if (teamNum == 4) return String.valueOf(config.TIME_DEFAULT.getDefaultValue());
+        }
+        return String.valueOf(teamNum);
     }
 
     private void addSoulmateEntries(List<DynamicEntry> result) {
