@@ -285,7 +285,8 @@ public class ProfileManager {
                         //?} else {
                         Optional.ofNullable(player.gameMode.getPreviousGameModeForPlayer()),
                         //?}
-                        level.isDebug(),
+                        //? if <= 26.3
+                        //level.isDebug(),
                         level.isFlat(),
                         player.getLastDeathLocation(),
                         player.getPortalCooldown(),

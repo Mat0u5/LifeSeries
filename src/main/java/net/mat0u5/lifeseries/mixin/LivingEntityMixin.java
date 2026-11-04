@@ -47,9 +47,34 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 *///?}
 
+//? if >= 26.4 {
+import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.seasons.util.WatcherManager;
+import net.minecraft.world.entity.player.Player;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
+//?}
+
 @Mixin(value = LivingEntity.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class LivingEntityMixin {
+
+    /**
+     * In {@link PlayerMixin} for <= 26.3
+     */
+    //? if >= 26.4 {
+    @Inject(method = "canHealNaturally", at = @At("HEAD"), cancellable = true)
+    private void canFoodHeal(CallbackInfoReturnable<Boolean> cir) {
+        if (LifeSeries.isClientOrDisabled()) return;
+        if (currentSeason instanceof DoubleLife doubleLife)  {
+            Player player = (Player) (Object) this;
+            if (WatcherManager.isWatcher(player)) return;
+
+            if (player instanceof ServerPlayer serverPlayer) {
+                doubleLife.canFoodHeal(serverPlayer, cir);
+            }
+        }
+    }
+    //?}
 
     //? if <= 1.21 {
     /*@Inject(method = "hurt", at = @At("HEAD"), cancellable = true)

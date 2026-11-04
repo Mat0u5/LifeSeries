@@ -4,11 +4,9 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Superspeed;
-import net.mat0u5.lifeseries.seasons.util.WatcherManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayerUsername;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -25,7 +23,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
@@ -53,11 +50,21 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.EntityType;
 *///?}
 
+//? if <= 26.3 {
+/*import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.seasons.util.WatcherManager;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+*///?}
+
 @Mixin(value = Player.class, priority = 1)
 @MixinEnvironment(type = MixinEnvironment.Env.MAIN)
 public abstract class PlayerMixin implements IPlayerUsername {
 
-    @Inject(method = "isHurt", at = @At("HEAD"), cancellable = true)
+    /**
+     * In {@link LivingEntityMixin} for <= 26.3
+     */
+    //? if <= 26.3 {
+    /*@Inject(method = "isHurt", at = @At("HEAD"), cancellable = true)
     private void canFoodHeal(CallbackInfoReturnable<Boolean> cir) {
         if (LifeSeries.isClientOrDisabled()) return;
         if (currentSeason instanceof DoubleLife doubleLife)  {
@@ -65,10 +72,13 @@ public abstract class PlayerMixin implements IPlayerUsername {
             if (WatcherManager.isWatcher(player)) return;
 
             if (player instanceof ServerPlayer serverPlayer) {
+                serverPlayer.canHealNaturally()
                 doubleLife.canFoodHeal(serverPlayer, cir);
             }
         }
     }
+    *///?}
+    
     //? if <= 1.20.3 {
     /*@Inject(method = "getStandingEyeHeight", at = @At("HEAD"), cancellable = true)
     public void getBaseDimensions(Pose pose, EntityDimensions entityDimensions, CallbackInfoReturnable<Float> cir) {
