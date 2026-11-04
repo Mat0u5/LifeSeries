@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.boogeyman;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.finallife.FinalLife;
@@ -11,6 +12,7 @@ import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -38,7 +40,7 @@ public class BoogeymanCommand extends CustomCommand {
     }
 
     public boolean checkBannedNormal(CommandSourceStack source) {
-        if (super.checkBanned(source)) return false;
+        if (super.checkBanned(source)) return true;
         if (isAllowedNormal()) {
             return false;
         }
@@ -49,7 +51,7 @@ public class BoogeymanCommand extends CustomCommand {
     }
 
     public boolean checkBannedFinalLife(CommandSourceStack source) {
-        if (super.checkBanned(source)) return false;
+        if (super.checkBanned(source)) return true;
         if (isAllowedFinalLife()) {
             return false;
         }
@@ -159,13 +161,15 @@ public class BoogeymanCommand extends CustomCommand {
                 .then(literal("finalLife")
                         .requires(source -> isAllowedFinalLife() && PermissionManager.isAdmin(source))
                         .then(literal("add")
-                                .then(argument("player", EntityArgument.player())
-                                        .executes(context -> fl_addBoogey(context.getSource(), EntityArgument.getPlayer(context, "player")))
+                                .then(argument("player", StringArgumentType.word())
+                                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(fl_getBoogeySuggestions(true), builder))
+                                        .executes(context -> fl_addBoogey(context.getSource(), StringArgumentType.getString(context, "player")))
                                 )
                         )
                         .then(literal("remove")
-                                .then(argument("player", EntityArgument.player())
-                                        .executes(context -> fl_removeBoogey(context.getSource(), EntityArgument.getPlayer(context, "player")))
+                                .then(argument("player", StringArgumentType.word())
+                                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(fl_getBoogeySuggestions(false), builder))
+                                        .executes(context -> fl_removeBoogey(context.getSource(), StringArgumentType.getString(context, "player")))
                                 )
                         )
                         .then(literal("list")
@@ -482,12 +486,24 @@ public class BoogeymanCommand extends CustomCommand {
         return null;
     }
 
-    public int fl_addBoogey(CommandSourceStack source, ServerPlayer target) {
-        if (checkBanned(source)) return -1;
+    public List<String> fl_getBoogeySuggestions(boolean add) {
         FinalLifeBoogeymanManager bm = fl_getBM();
-        if (bm == null || target == null) return -1;
+        if (bm == null) return List.of();
+        return add ? bm.getAddSuggestions() : bm.getRemoveSuggestions();
+    }
+
+    public int fl_addBoogey(CommandSourceStack source, String targetName) {
+        if (checkBannedFinalLife(source)) return -1;
+        FinalLifeBoogeymanManager bm = fl_getBM();
+        if (bm == null) return -1;
         if (!bm.isEnabled()) {
             sendCommandFailure(source, ModifiableText.FINALLIFE_BOOGEYMAN_COMMAND_DISABLED.get());
+            return -1;
+        }
+
+        UUID target = bm.resolvePlayer(targetName);
+        if (target == null) {
+            sendCommandFailure(source, ModifiableText.FINALLIFE_BOOGEYMAN_COMMAND_UNKNOWN.get(targetName));
             return -1;
         }
 
@@ -496,18 +512,25 @@ public class BoogeymanCommand extends CustomCommand {
             return -1;
         }
 
+        String realName = FinalLifeBoogeymanManager.getRealName(target);
         bm.addBoogeyman(target);
-        sendCommandFeedbackQuiet(source, ModifiableText.FINALLIFE_BOOGEYMAN_ADD.get(target));
+        sendCommandFeedbackQuiet(source, ModifiableText.FINALLIFE_BOOGEYMAN_ADD.get(realName));
 
         return 1;
     }
 
-    public int fl_removeBoogey(CommandSourceStack source, ServerPlayer target) {
-        if (checkBanned(source)) return -1;
+    public int fl_removeBoogey(CommandSourceStack source, String targetName) {
+        if (checkBannedFinalLife(source)) return -1;
         FinalLifeBoogeymanManager bm = fl_getBM();
-        if (bm == null || target == null) return -1;
+        if (bm == null) return -1;
         if (!bm.isEnabled()) {
             sendCommandFailure(source, ModifiableText.FINALLIFE_BOOGEYMAN_COMMAND_DISABLED.get());
+            return -1;
+        }
+
+        UUID target = bm.resolvePlayer(targetName);
+        if (target == null) {
+            sendCommandFailure(source, ModifiableText.FINALLIFE_BOOGEYMAN_COMMAND_UNKNOWN.get(targetName));
             return -1;
         }
 
@@ -516,14 +539,15 @@ public class BoogeymanCommand extends CustomCommand {
             return -1;
         }
 
+        String realName = FinalLifeBoogeymanManager.getRealName(target);
         bm.removeBoogeyman(target);
-        sendCommandFeedbackQuiet(source, ModifiableText.FINALLIFE_BOOGEYMAN_REMOVE.get(target));
+        sendCommandFeedbackQuiet(source, ModifiableText.FINALLIFE_BOOGEYMAN_REMOVE.get(realName));
 
         return 1;
     }
 
     public int fl_listBoogey(CommandSourceStack source) {
-        if (checkBanned(source)) return -1;
+        if (checkBannedFinalLife(source)) return -1;
         FinalLifeBoogeymanManager bm = fl_getBM();
         if (bm == null) return -1;
         if (!bm.isEnabled()) {
@@ -538,7 +562,7 @@ public class BoogeymanCommand extends CustomCommand {
 
         List<Component> boogeymen = new ArrayList<>();
         for (UUID uuid : bm.getBoogeymen()) {
-            boogeymen.add(PlayerUtils.getDisplayNameFromUUID(uuid));
+            boogeymen.add(Component.literal(FinalLifeBoogeymanManager.getRealName(uuid)));
         }
         sendCommandFeedbackQuiet(source, ModifiableText.FINALLIFE_BOOGEYMAN_LIST.get(boogeymen));
 
@@ -546,7 +570,7 @@ public class BoogeymanCommand extends CustomCommand {
     }
 
     public int fl_clearBoogey(CommandSourceStack source) {
-        if (checkBanned(source)) return -1;
+        if (checkBannedFinalLife(source)) return -1;
         FinalLifeBoogeymanManager bm = fl_getBM();
         if (bm == null) return -1;
         if (!bm.isEnabled()) {

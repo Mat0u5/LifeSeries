@@ -379,6 +379,10 @@ public class ProfileManager {
         return CompletableFuture.completedFuture(false);
     }
 
+    public static String getOriginalName(UUID uuid) {
+        return originalNames.get(uuid);
+    }
+
     public static boolean hasChangedName(ServerPlayer player) {
         UUID uuid = player.getUUID();
         if (originalNames.containsKey(uuid)) {

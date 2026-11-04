@@ -150,6 +150,7 @@ public class PlayerUtils extends net.mat0u5.matlib.utils.player.PlayerUtils {
     }
 
     public static boolean hidePlayerFrom(ServerPlayer receivingPlayer, ServerPlayer player) {
+        if (receivingPlayer == player) return false;
         if (receivingPlayer == null || player == null) return false;
         if (isFakePlayer(player)) return true;
         if (hideFinalBoogeyPlayerFrom(receivingPlayer, player)) return true;

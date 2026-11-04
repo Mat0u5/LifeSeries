@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.mixin;
 
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
+import net.mat0u5.lifeseries.seasons.season.finallife.FinalLifeBoogeymanManager;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
@@ -30,7 +31,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
-import net.minecraft.network.protocol.game.*;
 
 //? if <= 1.20.3 {
 //import net.minecraft.network.protocol.game.ServerboundChatCommandPacket;
@@ -148,7 +148,7 @@ public class ServerGamePacketListenerImplMixin {
         if (LifeSeries.isClientOrDisabled()) {
             instance.broadcastSystemMessage(message, overlay);
         }
-        else {
+        else if (!FinalLifeBoogeymanManager.overwriteConnectionMessage(handler.player, false)) {
             PlayerUtils.broadcastToVisiblePlayers(handler.player, message);
         }
     }

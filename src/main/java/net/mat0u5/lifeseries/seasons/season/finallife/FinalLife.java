@@ -33,7 +33,7 @@ public class FinalLife extends Season {
 
 	@Override
 	public String getTeamForPlayer(ServerPlayer player) {
-		if (finalLifeBoogeymanManager.isBoogeyman(player)) {
+		if (finalLifeBoogeymanManager.isDisguisedBoogeyman(player)) {
 			return FinalLifeBoogeymanManager.TEAM_NAME;
 		}
 		return super.getTeamForPlayer(player);
@@ -44,6 +44,7 @@ public class FinalLife extends Season {
 		super.createTeams();
 		finalLifeBoogeymanManager.createTeamsIfNecessary();
 	}
+
 	@Override
 	public void createScoreboards() {
 		super.createScoreboards();
@@ -52,8 +53,20 @@ public class FinalLife extends Season {
 
 	@Override
 	public void onPlayerJoin(ServerPlayer player) {
-		finalLifeBoogeymanManager.onPlayerJoin(player);
 		super.onPlayerJoin(player);
+		finalLifeBoogeymanManager.onPlayerJoin(player);
+	}
+
+	@Override
+	public void onPlayerDisconnect(ServerPlayer player) {
+		super.onPlayerDisconnect(player);
+		finalLifeBoogeymanManager.onPlayerDisconnect(player);
+	}
+
+	@Override
+	public void switchOutOfSeason(Seasons changedTo) {
+		super.switchOutOfSeason(changedTo);
+		finalLifeBoogeymanManager.switchOutOfSeason();
 	}
 
 	@Override

@@ -601,7 +601,7 @@ public abstract class Season {
                 new DatapackIntegration.Events.MacroEntry("Killer", killer.getScoreboardName()),
                 new DatapackIntegration.Events.MacroEntry("Victim", victim.getScoreboardName())
         ));
-        if (!DatapackIntegration.EVENT_CLAIM_KILL.isCanceled() && !isBoogeyCure && livesManager.canChangeLives(killer)) {
+        if (!DatapackIntegration.EVENT_CLAIM_KILL.isCanceled() && !isBoogeyCure && canGainLifeFromKill(killer, victim)) {
             tryClaimKillLifeGain(killer, victim);
         }
 
@@ -611,13 +611,16 @@ public abstract class Season {
         killer.awardKillScore(victim, killer.damageSources().playerAttack(killer));
         //?}
 
-        if (livesManager.LIVES_LOSE_KILLS_ONLY.get()) {
+        if (livesManager.LIVES_LOSE_KILLS_ONLY.get() && livesManager.canChangeLives(victim)) {
             ((IPlayer) victim).ls$removeLife();
         }
     }
 
+    public boolean canGainLifeFromKill(ServerPlayer killer, ServerPlayer victim) {
+        return livesManager.canChangeLives(killer) && !livesManager.isExcludedFromLivesSystem(victim);
+    }
+
     public void tryClaimKillLifeGain(ServerPlayer killer, ServerPlayer victim) {
-        if (!livesManager.canChangeLives(killer) || livesManager.isExcludedFromLivesSystem(victim)) return;
         Team team = killer.getTeam();
         if (team != null) {
             Integer canGainLife = livesManager.getTeamGainLives(team.getName());
@@ -632,7 +635,6 @@ public abstract class Season {
     }
 
     public void tryKillLifeGain(ServerPlayer killer, ServerPlayer victim) {
-        if (!livesManager.canChangeLives(killer) || livesManager.isExcludedFromLivesSystem(victim)) return;
         Team team = killer.getTeam();
         if (team != null) {
             Integer canGainLife = livesManager.getTeamGainLives(team.getName());
@@ -698,7 +700,7 @@ public abstract class Season {
         SessionTranscript.onPlayerKilledByPlayer(victim, killer);
 
         DatapackIntegration.EVENT_PLAYER_PVP_KILLED.trigger(eventMacros);
-        if (!DatapackIntegration.EVENT_PLAYER_PVP_KILLED.isCanceled() && !isBoogeyCure && isAllowedToAttack && livesManager.canChangeLives(killer)) {
+        if (!DatapackIntegration.EVENT_PLAYER_PVP_KILLED.isCanceled() && !isBoogeyCure && isAllowedToAttack && canGainLifeFromKill(killer, victim)) {
             tryKillLifeGain(killer, victim);
         }
     }

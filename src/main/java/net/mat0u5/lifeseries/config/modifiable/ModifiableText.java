@@ -624,6 +624,7 @@ public enum ModifiableText {
     ,FINALLIFE_BOOGEYMAN_COMMAND_DISABLED(Seasons.FINAL_LIFE, "This command is only available when the Final Life Boogeyman has been enabled in the config.")
     ,FINALLIFE_BOOGEYMAN_COMMAND_ALREADY(Seasons.FINAL_LIFE, "That player is already a Boogeyman")
     ,FINALLIFE_BOOGEYMAN_COMMAND_NOT(Seasons.FINAL_LIFE, "That player is not a Boogeyman")
+    ,FINALLIFE_BOOGEYMAN_COMMAND_UNKNOWN(Seasons.FINAL_LIFE, "Could not find a player named {}", List.of("Player"))
     ,FINALLIFE_BOOGEYMAN_NOTICE_ADDED(Seasons.FINAL_LIFE, "§cYou are now a Boogeyman!")
     ,FINALLIFE_BOOGEYMAN_NOTICE_REMOVED(Seasons.FINAL_LIFE, "§cYou are no longer a Boogeyman!")
     ,FINALLIFE_BOOGEYMAN_COMMAND_NONE(Seasons.FINAL_LIFE, "There aren't any boogeymen")

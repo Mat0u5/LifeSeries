@@ -42,6 +42,6 @@ public class FinalLifeLivesManager extends LivesManager {
 		if (currentSeason instanceof FinalLife finalLife && finalLife.finalLifeBoogeymanManager.isBoogeyman(player)) {
 			return true;
 		}
-		super.isExcludedFromLivesSystem(player);
+		return super.isExcludedFromLivesSystem(player);
 	}
 }

@@ -232,11 +232,11 @@ public class LimitedLife extends Season {
             if (wasAlive && !cancelPunishment && livesManager.canChangeLives(victim)) {
                 ((IPlayer) victim).ls$addLives(NEW_DEATH_BOOGEYMAN.diff(NEW_DEATH_NORMAL).getSeconds());
             }
-            if (!cancelGain && livesManager.canChangeLives(killer)) {
+            if (!cancelGain && canGainLifeFromKill(killer, victim)) {
                 ((IPlayer) killer).ls$addLives(NEW_KILL_BOOGEYMAN.getSeconds());
             }
         }
-        if (livesManager.LIVES_LOSE_KILLS_ONLY.get()) {
+        if (livesManager.LIVES_LOSE_KILLS_ONLY.get() && livesManager.canChangeLives(victim)) {
             ((IPlayer) victim).ls$addLives(NEW_DEATH_NORMAL.getSeconds());
         }
     }
@@ -275,14 +275,20 @@ public class LimitedLife extends Season {
         super.onPlayerKilledByPlayer(victim, killer);
         if (DatapackIntegration.EVENT_PLAYER_PVP_KILLED.isCanceled()) return;
 
-        if (!wasBoogeyCure && livesManager.canChangeLives(victim)) {
-            ((IPlayer) victim).ls$addLives(NEW_DEATH_NORMAL.getSeconds());
+        if (!wasBoogeyCure) {
+            if (livesManager.canChangeLives(victim)) {
+                ((IPlayer) victim).ls$addLives(NEW_DEATH_NORMAL.getSeconds());
+            }
         }
-        else if (livesManager.canChangeLives(victim)) {
+        else {
             //Victim was killed by boogeyman - remove 2 hours from victim and add 1 hour to boogey
-            ((IPlayer) victim).ls$addLives(NEW_DEATH_BOOGEYMAN.getSeconds());
-            livesManager.addToLivesNoUpdate(killer, NEW_KILL_BOOGEYMAN.getSeconds());
-            currentSeason.reloadPlayerTeam(killer);
+            if (livesManager.canChangeLives(victim)) {
+                ((IPlayer) victim).ls$addLives(NEW_DEATH_BOOGEYMAN.getSeconds());
+            }
+            if (canGainLifeFromKill(killer, victim)) {
+                livesManager.addToLivesNoUpdate(killer, NEW_KILL_BOOGEYMAN.getSeconds());
+                currentSeason.reloadPlayerTeam(killer);
+            }
         }
     }
 
