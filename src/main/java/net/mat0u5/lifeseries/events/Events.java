@@ -182,6 +182,13 @@ public class Events {
         AdvancedDeathsManager.onPlayerDeath(player);
     }
 
+    public static EventResult onPlayerPreDeath(ServerPlayer player, DamageSource source) {
+        if (isExcludedPlayer(player)) return EventResult.PASS;
+
+        if (!LifeSeries.isLogicalSide()) return EventResult.PASS;
+        return currentSeason.onPlayerPreDeath(player, source);
+    }
+
     public static InteractionResult onBlockUse(ServerPlayer player, Level level, ItemStack stack, InteractionHand hand, BlockHitResult hitResult) {
         if (LifeSeries.modDisabled()) return InteractionResult.PASS;
         if (isFakePlayer(player)) return InteractionResult.PASS;

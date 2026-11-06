@@ -156,6 +156,10 @@ public enum ModifiableSound {
 	,NICELIFE_NICELIST_WINNER(Seasons.NICE_LIFE, SoundEvents.FIREWORK_ROCKET_LAUNCH)
 	,NICELIFE_SNOWMAN_HIT(Seasons.NICE_LIFE, IdentifierHelper.lifeseries("nicelife_snowman_hit"))
 	,NICELIFE_SNOWMAN_GROWL(Seasons.NICE_LIFE, IdentifierHelper.lifeseries("nicelife_snowman_growl"))
+
+	,FINALLIFE_BOOGEYMAN_JOIN(Seasons.FINAL_LIFE, SoundEvents.LIGHTNING_BOLT_THUNDER)
+	,FINALLIFE_BOOGEYMAN_LEAVE(Seasons.FINAL_LIFE, SoundEvents.LIGHTNING_BOLT_THUNDER)
+
 	;
 
 	final String name;

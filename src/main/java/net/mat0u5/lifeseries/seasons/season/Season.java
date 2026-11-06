@@ -553,6 +553,10 @@ public abstract class Season {
         }
     }
 
+    public EventResult onPlayerPreDeath(ServerPlayer player, DamageSource source) {
+        return EventResult.PASS;
+    }
+
     public void onPlayerDiedNaturally(ServerPlayer player, DamageSource source) {
         if (source.getEntity() instanceof TamableAnimal tamableAnimal) {
             //? if <= 1.21.4 {

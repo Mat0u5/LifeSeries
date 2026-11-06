@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.finallife;
 
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
@@ -8,6 +9,7 @@ import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ProfileManager;
 import net.mat0u5.matlib.config.entry.ConfigRef;
+import net.mat0u5.matlib.events.EventResult;
 import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.mat0u5.matlib.utils.player.ScoreboardUtils;
 import net.mat0u5.matlib.utils.player.TeamUtils;
@@ -15,6 +17,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.scores.PlayerScoreEntry;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Team;
 
@@ -60,7 +63,7 @@ public class FinalLifeBoogeymanManager {
 
 	public void createTeamsIfNecessary() {
 		//~ if >= 26.2 'ChatFormatting' -> 'TeamColor' {
-		if (TeamUtils.createTeam(TEAM_NAME, "Boogeyman", TeamColor.DARK_RED)) {
+		if (TeamUtils.createTeam(TEAM_NAME, "Boogeyman", TeamColor.DARK_GREEN)) {
 			PlayerTeam team = TeamUtils.getTeam(TEAM_NAME);
 			if (team != null) {
 				team.setNameTagVisibility(Team.Visibility.NEVER);
@@ -73,8 +76,18 @@ public class FinalLifeBoogeymanManager {
 		ScoreboardUtils.createObjective(SCOREBOARD_NAME);
 	}
 
+	public void resetScoreboard() {
+		ScoreboardUtils.removeObjective(SCOREBOARD_NAME);
+		createScoreboardsIfNecessary();
+	}
+
 	public void onPlayerJoin(ServerPlayer player) {
 		PlayerReference ref = PlayerReference.of(player);
+		if (isBoogeyman(player)) {
+			// To hide them before their profile is finished loading
+			player.setGameMode(GameType.SPECTATOR);
+			PlayerUtils.updatePlayerLists(); //TODO it still shows the name for a tick or so.
+		}
 		TaskScheduler.scheduleTask(1, () -> checkBoogeymanStatus(ref.get(), false));
 	}
 
@@ -82,13 +95,62 @@ public class FinalLifeBoogeymanManager {
 		disguised.remove(player.getUUID());
 	}
 
-	public void onPlayerDeath(ServerPlayer player, DamageSource source) {
-		if (!isBoogeyman(player)) return;
+	public EventResult onPlayerPreDeath(ServerPlayer player, DamageSource source) {
+		if (!isBoogeyman(player)) return EventResult.PASS;
 		if (!isDeadBoogeyman(player)) {
-			announceLeaveMessage();
+			announceLeave();
 		}
 		setStoredStatus(player.getUUID(), SCOREBOARD_STATUS_DEAD);
 		player.setGameMode(GameType.SPECTATOR);
+		return EventResult.DENY;
+	}
+
+	public void onSessionStart() {
+		//? if <= 1.20.2 {
+        /*for (Score entry : ScoreboardUtils.getScores(SCOREBOARD_NAME)) {
+            String uuid = entry.getOwner();
+            int score = entry.getScore();
+        *///?} else {
+		for (PlayerScoreEntry entry : ScoreboardUtils.getScores(SCOREBOARD_NAME)) {
+			String uuid = entry.owner();
+			int score = entry.value();
+			//?}
+			if (score == SCOREBOARD_STATUS_DEAD) {
+				ScoreboardUtils.setScore(uuid, SCOREBOARD_NAME, SCOREBOARD_STATUS_ALIVE);
+				try {
+					UUID uuidReal = UUID.fromString(uuid);
+					ServerPlayer player = PlayerUtils.getPlayer(uuidReal);
+					if (player != null && isBoogeyman(player)) {
+						checkBoogeymanGameMode(player);
+						announceJoin();
+					}
+				} catch (Exception ignored) {}
+			}
+		}
+	}
+
+	public void onSessionEnd() {
+		//? if <= 1.20.2 {
+        /*for (Score entry : ScoreboardUtils.getScores(SCOREBOARD_NAME)) {
+            String uuid = entry.getOwner();
+            int score = entry.getScore();
+        *///?} else {
+		for (PlayerScoreEntry entry : ScoreboardUtils.getScores(SCOREBOARD_NAME)) {
+			String uuid = entry.owner();
+			int score = entry.value();
+			//?}
+			if (score == SCOREBOARD_STATUS_ALIVE) {
+				ScoreboardUtils.setScore(uuid, SCOREBOARD_NAME, SCOREBOARD_STATUS_DEAD);
+				try {
+					UUID uuidReal = UUID.fromString(uuid);
+					ServerPlayer player = PlayerUtils.getPlayer(uuidReal);
+					if (player != null && isBoogeyman(player)) {
+						checkBoogeymanGameMode(player);
+						announceLeave();
+					}
+				} catch (Exception ignored) {}
+			}
+		}
 	}
 
 	public void switchOutOfSeason() {
@@ -97,6 +159,7 @@ public class FinalLifeBoogeymanManager {
 			if (player != null) removeDisguise(player);
 		}
 		disguised.clear();
+		resetScoreboard();
 	}
 
 	public static boolean overwriteConnectionMessage(ServerPlayer player, boolean joined) {
@@ -106,10 +169,10 @@ public class FinalLifeBoogeymanManager {
 		if (!bm.isBoogeyman(player)) return false;
 		if (!bm.isDeadBoogeyman(player)) {
 			if (joined) {
-				bm.announceJoinMessage();
+				bm.announceJoin();
 			}
 			else {
-				bm.announceLeaveMessage();
+				bm.announceLeave();
 			}
 		}
 		return true;
@@ -135,10 +198,6 @@ public class FinalLifeBoogeymanManager {
 
 	public boolean isDeadBoogeyman(ServerPlayer player) {
 		return isBoogeyman(player) && isStoredDead(player.getUUID());
-	}
-
-	public boolean isDisguisedBoogeyman(ServerPlayer player) {
-		return isBoogeyman(player) && disguised.contains(player.getUUID()) && ProfileManager.hasChangedName(player);
 	}
 
 	public List<UUID> getBoogeymen() {
@@ -192,9 +251,16 @@ public class FinalLifeBoogeymanManager {
 			clearStoredStatus(uuid);
 			onStoppedBeingBoogeyman(player, wasDead);
 		}
+	}
 
-		if (isDeadBoogeyman(player) && !player.isSpectator()) {
+	private void checkBoogeymanGameMode(ServerPlayer player) {
+		boolean dead = isDeadBoogeyman(player);
+		boolean spectator = player.isSpectator();
+		if (dead && !spectator) {
 			player.setGameMode(GameType.SPECTATOR);
+		}
+		else if (!dead && spectator) {
+			PlayerUtils.safelyPutIntoSurvival(player);
 		}
 	}
 
@@ -203,11 +269,14 @@ public class FinalLifeBoogeymanManager {
 		boolean isDisguised = disguised.contains(player.getUUID());
 		if (shouldBeDisguised && !isDisguised) {
 			applyDisguise(player);
-			if (announce && !isDeadBoogeyman(player)) announceJoinMessage();
+			if (announce && !isDeadBoogeyman(player)) announceJoin();
 		}
 		else if (!shouldBeDisguised && isDisguised) {
 			removeDisguise(player);
-			if (announce && !wasDead) announceLeaveMessage();
+			if (announce && !wasDead) announceLeave();
+		}
+		else {
+			checkBoogeymanGameMode(player);
 		}
 	}
 
@@ -258,6 +327,7 @@ public class FinalLifeBoogeymanManager {
 
 	private void afterProfileChange(ServerPlayer player) {
 		if (player.hasDisconnected()) return;
+		checkBoogeymanGameMode(player);
 		currentSeason.reloadPlayerTeam(player);
 		Events.updatePlayerListsNextTick = true;
 	}
@@ -273,12 +343,14 @@ public class FinalLifeBoogeymanManager {
 		return username;
 	}
 
-	private void announceJoinMessage() {
+	private void announceJoin() {
 		PlayerUtils.broadcastMessage(ModifiableText.FINALLIFE_BOOGEYMAN_MESSAGE_JOIN.get(Component.literal(getBoogeymanUsername())));
+		ModifiableSound.FINALLIFE_BOOGEYMAN_JOIN.broadcast();
 	}
 
-	private void announceLeaveMessage() {
+	private void announceLeave() {
 		PlayerUtils.broadcastMessage(ModifiableText.FINALLIFE_BOOGEYMAN_MESSAGE_LEAVE.get(Component.literal(getBoogeymanUsername())));
+		ModifiableSound.FINALLIFE_BOOGEYMAN_LEAVE.broadcast();
 	}
 
 	public static String getRealName(UUID uuid) {

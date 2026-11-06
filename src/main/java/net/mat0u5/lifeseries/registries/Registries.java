@@ -48,6 +48,7 @@ public class Registries {
 		ServerPlayerEvents.CLICK_BLOCK.register(Events::onBlockUse);
 		ServerPlayerEvents.ITEM_USE.register(Events::onItemUse);
 		ServerPlayerEvents.CLICK_ENTITY.register(Events::onRightClickEntity);
+		ServerPlayerEvents.PRE_DEATH.register(Events::onPlayerPreDeath);
 		CommonPlayerEvents.ATTACK_ENTITY.register(Events::onAttackEntity);
 		CommonPlayerEvents.UPDATE_INVENTORY.register(Events::onUpdatedInventory);
 	}

@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
+import net.mat0u5.matlib.events.EventResult;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 
@@ -33,7 +34,7 @@ public class FinalLife extends Season {
 
 	@Override
 	public String getTeamForPlayer(ServerPlayer player) {
-		if (finalLifeBoogeymanManager.isDisguisedBoogeyman(player)) {
+		if (finalLifeBoogeymanManager.isBoogeyman(player)) {
 			return FinalLifeBoogeymanManager.TEAM_NAME;
 		}
 		return super.getTeamForPlayer(player);
@@ -53,8 +54,20 @@ public class FinalLife extends Season {
 
 	@Override
 	public void onPlayerJoin(ServerPlayer player) {
-		super.onPlayerJoin(player);
 		finalLifeBoogeymanManager.onPlayerJoin(player);
+		super.onPlayerJoin(player);
+	}
+
+	@Override
+	public boolean sessionStart() {
+		finalLifeBoogeymanManager.onSessionStart();
+		super.sessionStart();
+		return true;
+	}
+	@Override
+	public void sessionEnd() {
+		finalLifeBoogeymanManager.onSessionEnd();
+		super.sessionEnd();
 	}
 
 	@Override
@@ -70,8 +83,19 @@ public class FinalLife extends Season {
 	}
 
 	@Override
-	public void onPlayerDeath(ServerPlayer player, DamageSource source) {
-		finalLifeBoogeymanManager.onPlayerDeath(player, source);
-		super.onPlayerDeath(player, source);
+	public EventResult onPlayerPreDeath(ServerPlayer player, DamageSource source) {
+		EventResult res = super.onPlayerPreDeath(player, source);
+		if (res.isPass()) {
+			return finalLifeBoogeymanManager.onPlayerPreDeath(player, source);
+		}
+		return res;
+	}
+
+	@Override
+	public boolean isAllowedToAttack(ServerPlayer attacker, ServerPlayer victim, boolean allowSelfDefense) {
+		if (finalLifeBoogeymanManager.isBoogeyman(attacker)) {
+			return true;
+		}
+		return super.isAllowedToAttack(attacker, victim, allowSelfDefense);
 	}
 }
