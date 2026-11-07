@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.SeasonConfig;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSoundManager;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableTextManager;
@@ -21,6 +22,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.CreakingPower;
 import net.mat0u5.lifeseries.seasons.secretsociety.SecretSociety;
 import net.mat0u5.lifeseries.seasons.session.Session;
+import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
@@ -37,6 +39,7 @@ import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.matlib.events.EventResult;
 import net.mat0u5.matlib.events.server.ServerEntityEvents;
 import net.mat0u5.matlib.events.server.ServerPlayerEvents;
+import net.mat0u5.matlib.utils.other.TextUtils;
 import net.mat0u5.matlib.utils.other.Time;
 import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.mat0u5.matlib.utils.player.PlayerReference;
@@ -69,6 +72,7 @@ import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.border.BorderStatus;
+import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -132,6 +136,7 @@ public abstract class Season {
     public static boolean ONLY_LOSE_HUNGER_IN_SESSION = false;
     public static ConfigRef<Boolean> ONLY_ADVANCE_TIME_IN_SESSION = ConfigRef.of(() -> seasonConfig.ONLY_ADVANCE_TIME_IN_SESSION);
     public static ConfigRef<Boolean> DISABLE_MINIMAL_ARMOR_PACK = ConfigRef.of(() -> LifeSeries.seasonConfig.DISABLE_MINIMAL_ARMOR_PACK);
+    public final ConfigRef<Boolean> ENABLE_START_TELEPORT = ConfigRef.of(() -> LifeSeries.seasonConfig.ENABLE_START_TELEPORT);
 
     public BoogeymanManager boogeymanManager = createBoogeymanManager();
     public SecretSociety secretSociety = createSecretSociety();
@@ -517,6 +522,51 @@ public abstract class Season {
         boogeymanManager.addSessionActions();
         secretSociety.addSessionActions();
         livesManager.addSessionActions();
+        if (ENABLE_START_TELEPORT.get()) {
+            currentSession.addSessionAction(new SessionAction(Time.ticks(5), ModifiableText.SESSION_ACTION_RANDOM_TP.getString()) {
+                @Override
+                public void trigger() {
+                    distributePlayers();
+                }
+            });
+        }
+    }
+
+    public List<ServerPlayer> getPlayersForDistribution() {
+        List<ServerPlayer> players = PlayerUtils.getAllFunctioningPlayers();
+        players.removeIf(player ->
+            //? if <= 1.21.11 {
+            //player.getTags().contains("randomlyTeleported")
+            //?} else {
+            player.entityTags().contains("randomlyTeleported")
+            //?}
+        );
+        return players;
+    }
+
+    public void distributePlayers() {
+        if (!ENABLE_START_TELEPORT.get()) return;
+        if (server == null) return;
+        List<ServerPlayer> players = getPlayersForDistribution();
+        if (players.isEmpty()) return;
+        ModifiableSound.SPREAD_PLAYERS_DISTRIBUTE.play(players);
+
+        for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
+            player.removeTag("tempTeleport");
+        }
+
+        for (ServerPlayer player : players) {
+            player.addTag("tempTeleport");
+            player.addTag("randomlyTeleported");
+            ((IPlayer) player).ls$message(ModifiableText.SPREAD_PLAYERS_TELEPORT.get());
+        }
+        WorldBorder border = server.overworld().getWorldBorder();
+        OtherUtils.executeCommand(TextUtils.formatString("spreadplayers {} {} 0 {} false @a[tag=tempTeleport]", border.getCenterX(), border.getCenterZ(), (border.getSize()/2)));
+        PlayerUtils.broadcastMessageToAdmins(ModifiableText.SPREAD_PLAYERS_TELEPORT_SUCCESS.get());
+
+        for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
+            player.removeTag("tempTeleport");
+        }
     }
 
     public void checkAdvanceTime() {

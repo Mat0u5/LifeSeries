@@ -465,6 +465,11 @@ public abstract class DefaultConfigValues extends GuiConfig {
             .group("global.disable")
             .onChange((oldValue, newValue) -> PlayerUtils.applyResourcepacks());
 
+    public final ConfigurableValue<Boolean> ENABLE_START_TELEPORT = ConfigurableValue.register(this, "enable_start_teleport", false)
+            .name("Enable Start Teleport")
+            .description("Enables the player spreading over the map when the first session starts.")
+            .group("global");
+
     public final ConfigHeader NO_SEASON_SPECIFIC = ConfigHeader.register(this, "no_season_specific", "There are no season specific entries")
             .group("season");
 
