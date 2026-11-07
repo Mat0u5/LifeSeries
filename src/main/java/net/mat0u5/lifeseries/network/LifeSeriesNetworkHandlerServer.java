@@ -501,6 +501,7 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
 
     public static void sendUpdatePacket(List<ServerPlayer> players) {
         sendSmallUpdatePacket(players);
+        seasonConfig.sendAllSyncedConfigs(players);
         if (currentSeason instanceof WildLife) {
             SimplePackets.PLAYER_MIN_MSPT.sendToClient((double)TimeDilation.MIN_PLAYER_MSPT, players);
 
