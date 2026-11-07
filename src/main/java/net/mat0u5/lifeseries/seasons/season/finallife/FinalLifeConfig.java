@@ -1,11 +1,18 @@
 package net.mat0u5.lifeseries.seasons.season.finallife;
 
+import net.mat0u5.lifeseries.config.LifeSeriesConfigTypes;
 import net.mat0u5.lifeseries.config.SeasonConfig;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.matlib.config.entry.ConfigGuiEntry;
 import net.mat0u5.matlib.config.entry.ConfigurableValue;
 import net.mat0u5.matlib.config.type.ConfigTypes;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;
+import java.util.Objects;
+
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 public class FinalLifeConfig extends SeasonConfig {
 	public static final List<String> BLACKLISTED_ITEMS = List.of(
@@ -62,6 +69,7 @@ public class FinalLifeConfig extends SeasonConfig {
 			.name("Final Life Boogeyman")
 			.description("Controls whether the Final Life Boogeyman is activated")
 			.setNew(true)
+			.setRequiresReload(true)
 			.group("season.boogeyman").groupHeader(true);
 	public final ConfigurableValue<List<String>> FINAL_LIFE_BOOGEYMAN_LIST = ConfigurableValue.register(this, "final_life_boogeyman_list", List.of(), ConfigTypes.STRING_LIST)
 			.name("Boogeyman List")
@@ -86,5 +94,19 @@ public class FinalLifeConfig extends SeasonConfig {
 
 	public static FinalLifeConfig get() {
 		return getActive(FinalLifeConfig.class, FinalLifeConfig::new);
+	}
+
+	@Override
+	public void onDynamicEntryUpdate(ServerPlayer player, ConfigGuiEntry entry) {
+		super.onDynamicEntryUpdate(player, entry);
+		String typeId = entry.type.id();
+		String key = entry.key;
+		if (typeId.equals(LifeSeriesConfigTypes.MODIFIABLE_TEXT.id()) && !entry.args.isEmpty()) {
+			if (Objects.equals(key, ModifiableText.FINALLIFE_BOOGEYMAN_USERNAME.getConfigKey())) {
+				if (currentSeason instanceof FinalLife finalLife) {
+					finalLife.finalLifeBoogeymanManager.reloadDisguises();
+				}
+			}
+		}
 	}
 }

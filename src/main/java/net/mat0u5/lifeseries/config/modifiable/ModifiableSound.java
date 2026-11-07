@@ -158,7 +158,6 @@ public enum ModifiableSound {
 	,NICELIFE_SNOWMAN_GROWL(Seasons.NICE_LIFE, IdentifierHelper.lifeseries("nicelife_snowman_growl"))
 
 	,FINALLIFE_BOOGEYMAN_JOIN(Seasons.FINAL_LIFE, SoundEvents.LIGHTNING_BOLT_THUNDER)
-	,FINALLIFE_BOOGEYMAN_LEAVE(Seasons.FINAL_LIFE, SoundEvents.LIGHTNING_BOLT_THUNDER)
 
 	;
 

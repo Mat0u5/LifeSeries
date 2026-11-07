@@ -690,6 +690,10 @@ public enum ModifiableText {
         this.args = args;
     }
 
+    public String getConfigKey() {
+        return "text." + this.name;
+    }
+
     public Component get(Object... args) {
         return ModifiableTextManager.get(this.formatted, this.name, args);
     }

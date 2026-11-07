@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.utils.player;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.network.packets.LifeSkinsTexturePayload;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
+import net.mat0u5.lifeseries.seasons.season.finallife.FinalLife;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeLivesManager;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
@@ -25,6 +26,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.List;
 
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 import static net.mat0u5.lifeseries.LifeSeries.livesManager;
 
 public class LifeSkinsManager {
@@ -78,7 +80,7 @@ public class LifeSkinsManager {
                 try {
                     String skinName = skinFile.getName();
                     if (!skinName.toLowerCase(Locale.ROOT).endsWith(".png")) continue;
-                    upgradeSkinIfNeeded(name, skinFile);
+                    upgradeSkinIfNeeded(name, skinFile, true);
                     int dotIndex = skinName.lastIndexOf('.');
                     if (dotIndex > 0) {
                         skinName = skinName.substring(0, dotIndex);
@@ -97,6 +99,11 @@ public class LifeSkinsManager {
             if (skins.isEmpty()) continue;
             skinsCache.put(name, skins);
         }
+
+        //Boogeyman Skin
+        if (currentSeason instanceof FinalLife finalLife) {
+            finalLife.finalLifeBoogeymanManager.onGatherSkinData();
+        }
     }
 
     public static void createLifeSkinsFolder(File rootFolder) {
@@ -111,6 +118,9 @@ public class LifeSkinsManager {
         handler.copyBundledSingleFile("/files/lifeskins/Steve/1.png", exampleSkins.resolve("1.png"));
         handler.copyBundledSingleFile("/files/lifeskins/Steve/2.png", exampleSkins.resolve("2.png"));
         handler.copyBundledSingleFile("/files/lifeskins/Steve/3.png", exampleSkins.resolve("3.png"));
+        if (currentSeason instanceof FinalLife finalLife) {
+            finalLife.finalLifeBoogeymanManager.copyBoogeymanSkin(handler);
+        }
     }
 
     public static void sendImagePackets() {
@@ -254,7 +264,7 @@ public class LifeSkinsManager {
         return List.of(uuid.toString(), skinId);
     }
 
-    public static void upgradeSkinIfNeeded(String playerName, File skinFile) {
+    public static void upgradeSkinIfNeeded(String playerName, File skinFile, boolean isNested) {
         try {
             BufferedImage src = ImageIO.read(skinFile);
             if (src == null) return;
@@ -282,7 +292,7 @@ public class LifeSkinsManager {
             g.dispose();
 
             // Move the old file to a legacy folder
-            Path parentDir = skinFile.toPath().getParent().getParent();
+            Path parentDir = isNested ? skinFile.toPath().getParent().getParent() : skinFile.toPath().getParent();
             Path legacyDir = parentDir.resolve("_legacy_skins");
             Files.createDirectories(legacyDir);
             Path legacyFile = legacyDir.resolve(playerName+"_"+skinFile.getName());

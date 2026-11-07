@@ -6,13 +6,17 @@ import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ProfileManager;
 import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.matlib.events.EventResult;
+import net.mat0u5.matlib.utils.other.Triple;
 import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.mat0u5.matlib.utils.player.ScoreboardUtils;
 import net.mat0u5.matlib.utils.player.TeamUtils;
+import net.mat0u5.matlib.utils.resource.ResourceHandler;
+import net.mat0u5.matlib.utils.world.LevelUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
@@ -21,6 +25,9 @@ import net.minecraft.world.scores.PlayerScoreEntry;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Team;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,6 +37,8 @@ import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 //import net.minecraft.ChatFormatting;
 //?} else {
 import net.minecraft.world.scores.TeamColor;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 //?}
 
 public class FinalLifeBoogeymanManager {
@@ -98,7 +107,7 @@ public class FinalLifeBoogeymanManager {
 	public EventResult onPlayerPreDeath(ServerPlayer player, DamageSource source) {
 		if (!isBoogeyman(player)) return EventResult.PASS;
 		if (!isDeadBoogeyman(player)) {
-			announceLeave();
+			announceLeave(player);
 		}
 		setStoredStatus(player.getUUID(), SCOREBOARD_STATUS_DEAD);
 		player.setGameMode(GameType.SPECTATOR);
@@ -146,7 +155,7 @@ public class FinalLifeBoogeymanManager {
 					ServerPlayer player = PlayerUtils.getPlayer(uuidReal);
 					if (player != null && isBoogeyman(player)) {
 						checkBoogeymanGameMode(player);
-						announceLeave();
+						announceLeave(player);
 					}
 				} catch (Exception ignored) {}
 			}
@@ -172,7 +181,7 @@ public class FinalLifeBoogeymanManager {
 				bm.announceJoin();
 			}
 			else {
-				bm.announceLeave();
+				bm.announceLeave(player);
 			}
 		}
 		return true;
@@ -229,6 +238,15 @@ public class FinalLifeBoogeymanManager {
 		}
 	}
 
+	public void reloadDisguises() {
+		if (!isEnabled()) return;
+		for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
+			if (isBoogeyman(player) && disguised.contains(player.getUUID())) {
+				applyDisguise(player);
+			}
+		}
+	}
+
 	public void checkBoogeymanStatus(ServerPlayer player, boolean announce) {
 		if (player == null || player.hasDisconnected()) return;
 		boolean wasDead = isStoredDead(player.getUUID());
@@ -273,7 +291,7 @@ public class FinalLifeBoogeymanManager {
 		}
 		else if (!shouldBeDisguised && isDisguised) {
 			removeDisguise(player);
-			if (announce && !wasDead) announceLeave();
+			if (announce && !wasDead) announceLeave(player);
 		}
 		else {
 			checkBoogeymanGameMode(player);
@@ -332,6 +350,7 @@ public class FinalLifeBoogeymanManager {
 		Events.updatePlayerListsNextTick = true;
 	}
 
+	@NotNull
 	public String getBoogeymanUsername() {
 		String username = ModifiableText.FINALLIFE_BOOGEYMAN_USERNAME.getString().replaceAll("[^A-Za-z0-9_]", "");
 		if (username.length() > PlayerUtils.MAX_USERNAME_LENGTH) {
@@ -348,9 +367,9 @@ public class FinalLifeBoogeymanManager {
 		ModifiableSound.FINALLIFE_BOOGEYMAN_JOIN.broadcast();
 	}
 
-	private void announceLeave() {
+	private void announceLeave(ServerPlayer player) {
 		PlayerUtils.broadcastMessage(ModifiableText.FINALLIFE_BOOGEYMAN_MESSAGE_LEAVE.get(Component.literal(getBoogeymanUsername())));
-		ModifiableSound.FINALLIFE_BOOGEYMAN_LEAVE.broadcast();
+		LevelUtils.summonHarmlessLightning(player);
 	}
 
 	public static String getRealName(UUID uuid) {
@@ -393,5 +412,56 @@ public class FinalLifeBoogeymanManager {
 			result.add(getRealName(uuid));
 		}
 		return result;
+	}
+
+	/*
+		Boogeyman Skin
+	 */
+	private static final String FINAL_LIFE_CONFIG = "config/lifeseries/finallife";
+	private static final String FINAL_LIFE_BOOGEY_FILE = "boogeyman.png";
+	private static final String FINAL_LIFE_BOOGEY_FILE_SLIM = "boogeyman_slim.png";
+	public void copyBoogeymanSkin(ResourceHandler handler) {
+		File finalLifeConfig = new File(FINAL_LIFE_CONFIG);
+		try {
+			Files.createDirectories(finalLifeConfig.toPath());
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		File boogeyFileSlim = finalLifeConfig.toPath().resolve(FINAL_LIFE_BOOGEY_FILE_SLIM).toFile();
+		File boogeyFile = finalLifeConfig.toPath().resolve(FINAL_LIFE_BOOGEY_FILE).toFile();
+		if (!boogeyFile.exists() && !boogeyFileSlim.exists()) {
+			handler.copyBundledSingleFile("/files/finallife/boogeyman.png", boogeyFile.toPath());
+		}
+	}
+
+	@Nullable
+	public File getBoogeymanSkin() {
+		File fileSlim = new File(FINAL_LIFE_CONFIG).toPath().resolve(FINAL_LIFE_BOOGEY_FILE_SLIM).toFile();
+		if (fileSlim != null && fileSlim.exists() && fileSlim.isFile()) {
+			return fileSlim;
+		}
+		File file = new File(FINAL_LIFE_CONFIG).toPath().resolve(FINAL_LIFE_BOOGEY_FILE).toFile();
+		if (file != null && file.exists() && file.isFile()) {
+			return file;
+		}
+		return null;
+	}
+
+	public void onGatherSkinData() {
+		if (!isEnabled()) return;
+		String boogeymanUsername = getBoogeymanUsername();
+		File skinFile = getBoogeymanSkin();
+		if (skinFile == null) return;
+		String skinName = skinFile.getName();
+		if (!skinName.toLowerCase(Locale.ROOT).endsWith(".png")) return;
+		LifeSkinsManager.upgradeSkinIfNeeded(boogeymanUsername, skinFile, false);
+		int dotIndex = skinName.lastIndexOf('.');
+		if (dotIndex > 0) {
+			skinName = skinName.substring(0, dotIndex);
+		}
+		Map<String, Triple<Boolean, File, Integer>> skins = new HashMap<>();
+		boolean isSlim = skinName.endsWith("_slim");
+		skins.put(TEAM_NAME, Triple.of(isSlim, skinFile, null));
+		LifeSkinsManager.getCache().put(boogeymanUsername, skins);
 	}
 }
