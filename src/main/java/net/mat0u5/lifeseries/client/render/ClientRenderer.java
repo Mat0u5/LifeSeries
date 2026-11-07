@@ -1,13 +1,20 @@
 package net.mat0u5.lifeseries.client.render;
 
+import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.finallife.FinalLifeBoogeymanManager;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector4f;
 import java.util.List;
 
 //? if >= 1.20.3 {
-import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDilation;
 import net.mat0u5.matlib.events.OptionalEventReturn;
@@ -122,5 +129,19 @@ public class ClientRenderer {
     public static Vector4f modifyColor(Vector4f original, Vec3 targetColor, boolean setMode, Vec3 cache) {
         Vec3 newColor =  modifyColor(new Vec3(original.x, original.y, original.z), targetColor, setMode, cache);
         return new Vector4f((float) newColor.x, (float) newColor.y, (float) newColor.z, original.w);
+    }
+
+    public static boolean shouldHideEquipmentClient(LivingEntity entity, EquipmentSlot slot, ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        if (LifeSeries.modDisabled()) return false;
+        if (!(entity instanceof Player player)) return false;
+        if (LifeSeries.isSeason(Seasons.FINAL_LIFE) && FinalLifeBoogeymanManager.BOOGEYMAN_HIDE_ARMOR.get()) {
+            var team = player.getTeam();
+            boolean isBoogeymanLocalCheck = team != null && FinalLifeBoogeymanManager.TEAM_NAME.equals(team.getName());
+            if (isBoogeymanLocalCheck &&  OtherUtils.isArmorSlot(slot)) {
+                return true;
+            }
+        }
+        return Season.DISABLE_HELMET_RENDERING.get() && slot == EquipmentSlot.HEAD && OtherUtils.isHelmet(stack);
     }
 }

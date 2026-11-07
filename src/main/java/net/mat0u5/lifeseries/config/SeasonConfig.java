@@ -17,6 +17,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.mat0u5.matlib.config.entry.ConfigEntry;
 import net.mat0u5.matlib.config.entry.ConfigGuiEntry;
@@ -63,6 +64,9 @@ public class SeasonConfig extends DefaultConfigValues {
                 if (currentSession != null) currentSession.checkTickFreeze();
                 if (!newValue) OtherUtils.setFreezeGame(false);
             });
+        });
+        DISABLE_HELMET_RENDERING.onChange((oldValue, newValue) -> {
+            if (isActive()) PlayerUtils.resendVisibleEquipment();
         });
         WORLDBORDER_SIZE.onChange((oldValue, newValue) -> setWorldborderSize(Level.OVERWORLD, newValue));
         //? if >= 1.21.9 {

@@ -7,6 +7,8 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.matlib.utils.other.Time;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -16,6 +18,12 @@ import static net.mat0u5.matlib.MatLib.server;
 
 //? if >= 1.20.3
 import net.minecraft.server.ServerTickRateManager;
+
+//? if <= 1.20.3 {
+/*import net.minecraft.world.item.ArmorItem;
+ *///?} else {
+import net.minecraft.tags.ItemTags;
+//?}
 
 public class OtherUtils extends net.mat0u5.matlib.utils.other.OtherUtils {
     private static final Random rnd = new Random();
@@ -112,4 +120,17 @@ public class OtherUtils extends net.mat0u5.matlib.utils.other.OtherUtils {
         //?}
     }
 
+
+    public static boolean isArmorSlot(EquipmentSlot slot) {
+        return slot == EquipmentSlot.HEAD || slot == EquipmentSlot.CHEST || slot == EquipmentSlot.LEGS || slot == EquipmentSlot.FEET;
+    }
+
+    public static boolean isHelmet(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        //? if <= 1.20.3 {
+        /*return stack.getItem() instanceof ArmorItem armorItem && armorItem.getEquipmentSlot() == EquipmentSlot.HEAD;
+         *///?} else {
+        return stack.is(ItemTags.HEAD_ARMOR);
+        //?}
+    }
 }

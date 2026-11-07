@@ -26,11 +26,15 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import com.mojang.datafixers.util.Pair;
+import net.minecraft.world.entity.EquipmentSlot;
+import java.util.List;
+
 import static net.mat0u5.lifeseries.LifeSeries.blacklist;
+import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 //? if >= 1.21.2 {
 import net.minecraft.world.entity.monster.creaking.Creaking;
-import java.util.List;
 //?}
 //? if = 1.21.2 {
 /*import java.util.function.DoubleSupplier;
@@ -247,4 +251,13 @@ public abstract class LivingEntityMixin {
         return instance.getFriction();
     }
 //?}
+
+    //? if <= 26.2 {
+    /*@ModifyArg(method = "handleEquipmentChanges", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/protocol/game/ClientboundSetEquipmentPacket;<init>(ILjava/util/List;)V"), index = 1)
+    *///?} else {
+    @ModifyArg(method = "updatePlayersWithNewEquipment", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/protocol/game/ClientboundSetEquipmentPacket;<init>(ILjava/util/List;)V"), index = 1)
+    //?}
+    private List<Pair<EquipmentSlot, ItemStack>> hideEquipmentChanges(List<Pair<EquipmentSlot, ItemStack>> equipment) {
+        return currentSeason.filterVisibleEquipment((LivingEntity) (Object) this, equipment);
+    }
 }

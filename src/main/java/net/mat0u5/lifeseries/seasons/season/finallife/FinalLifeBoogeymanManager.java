@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
+import net.mat0u5.lifeseries.seasons.util.WatcherManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
@@ -27,18 +28,19 @@ import net.minecraft.world.scores.Team;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.livesManager;
 
 //? if <= 26.1 {
 //import net.minecraft.ChatFormatting;
 //?} else {
 import net.minecraft.world.scores.TeamColor;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 //?}
 
 public class FinalLifeBoogeymanManager {
@@ -50,9 +52,11 @@ public class FinalLifeBoogeymanManager {
 	public final ConfigRef<Boolean> BOOGEYMAN_ENABLED = ConfigRef.of(() -> FinalLifeConfig.get().FINAL_LIFE_BOOGEYMAN);
 	public final ConfigRef<List<String>> BOOGEYMAN_LIST = ConfigRef.of(() -> FinalLifeConfig.get().FINAL_LIFE_BOOGEYMAN_LIST);
 	public final ConfigRef<Boolean> BOOGEYMAN_HIDE_IN_TAB = ConfigRef.of(() -> FinalLifeConfig.get().FINAL_LIFE_BOOGEYMAN_HIDE_IN_TAB);
+	public static final ConfigRef<Boolean> BOOGEYMAN_HIDE_ARMOR = ConfigRef.of(() -> FinalLifeConfig.get().FINAL_LIFE_BOOGEYMAN_HIDE_ARMOR); // Synced value
 
 	private List<UUID> boogeymen = new ArrayList<>();
 	private final Set<UUID> disguised = new HashSet<>();
+	private final Map<UUID, GameType> hiddenGameModes = new HashMap<>();
 
 	public boolean isEnabled() {
 		return BOOGEYMAN_ENABLED.get();
@@ -92,8 +96,9 @@ public class FinalLifeBoogeymanManager {
 
 	public void onPlayerJoin(ServerPlayer player) {
 		PlayerReference ref = PlayerReference.of(player);
-		if (isBoogeyman(player)) {
+		if (isBoogeyman(player) && !player.isSpectator()) {
 			// To hide them before their profile is finished loading
+			hiddenGameModes.put(player.getUUID(), player.gameMode.getGameModeForPlayer());
 			player.setGameMode(GameType.SPECTATOR);
 			PlayerUtils.updatePlayerLists(); //TODO it still shows the name for a tick or so.
 		}
@@ -102,6 +107,7 @@ public class FinalLifeBoogeymanManager {
 
 	public void onPlayerDisconnect(ServerPlayer player) {
 		disguised.remove(player.getUUID());
+		hiddenGameModes.remove(player.getUUID());
 	}
 
 	public EventResult onPlayerPreDeath(ServerPlayer player, DamageSource source) {
@@ -110,6 +116,11 @@ public class FinalLifeBoogeymanManager {
 			announceLeave(player);
 		}
 		setStoredStatus(player.getUUID(), SCOREBOARD_STATUS_DEAD);
+		// The death is cancelled, so the player would otherwise stay at 0 health
+		player.setHealth(player.getMaxHealth());
+		player.clearFire();
+		player.removeAllEffects();
+		hiddenGameModes.remove(player.getUUID());
 		player.setGameMode(GameType.SPECTATOR);
 		return EventResult.DENY;
 	}
@@ -168,6 +179,7 @@ public class FinalLifeBoogeymanManager {
 			if (player != null) removeDisguise(player);
 		}
 		disguised.clear();
+		hiddenGameModes.clear();
 		resetScoreboard();
 	}
 
@@ -240,6 +252,7 @@ public class FinalLifeBoogeymanManager {
 
 	public void reloadDisguises() {
 		if (!isEnabled()) return;
+		LifeSkinsManager.reloadCache();
 		for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
 			if (isBoogeyman(player) && disguised.contains(player.getUUID())) {
 				applyDisguise(player);
@@ -274,10 +287,29 @@ public class FinalLifeBoogeymanManager {
 	private void checkBoogeymanGameMode(ServerPlayer player) {
 		boolean dead = isDeadBoogeyman(player);
 		boolean spectator = player.isSpectator();
+		GameType hiddenGameMode = hiddenGameModes.remove(player.getUUID());
 		if (dead && !spectator) {
 			player.setGameMode(GameType.SPECTATOR);
 		}
 		else if (!dead && spectator) {
+			if (hiddenGameMode != null && hiddenGameMode != GameType.SPECTATOR) {
+				player.setGameMode(hiddenGameMode);
+			}
+			else {
+				PlayerUtils.safelyPutIntoSurvival(player);
+			}
+		}
+	}
+
+	private void restoreNormalGameMode(ServerPlayer player) {
+		GameType hiddenGameMode = hiddenGameModes.remove(player.getUUID());
+		if (!player.isSpectator()) return;
+		if (WatcherManager.isWatcher(player)) return;
+		if (livesManager.hasAssignedLives(player) && !livesManager.isAlive(player)) return;
+		if (hiddenGameMode != null && hiddenGameMode != GameType.SPECTATOR) {
+			player.setGameMode(hiddenGameMode);
+		}
+		else {
 			PlayerUtils.safelyPutIntoSurvival(player);
 		}
 	}
@@ -293,7 +325,7 @@ public class FinalLifeBoogeymanManager {
 			removeDisguise(player);
 			if (announce && !wasDead) announceLeave(player);
 		}
-		else {
+		else if (shouldBeDisguised) {
 			checkBoogeymanGameMode(player);
 		}
 	}
@@ -305,6 +337,7 @@ public class FinalLifeBoogeymanManager {
 
 	private void onStoppedBeingBoogeyman(ServerPlayer player, boolean wasDead) {
 		((IPlayer)player).ls$message(ModifiableText.FINALLIFE_BOOGEYMAN_NOTICE_REMOVED.get());
+		restoreNormalGameMode(player);
 		//TODO
 	}
 
@@ -345,7 +378,12 @@ public class FinalLifeBoogeymanManager {
 
 	private void afterProfileChange(ServerPlayer player) {
 		if (player.hasDisconnected()) return;
-		checkBoogeymanGameMode(player);
+		if (isBoogeyman(player)) {
+			checkBoogeymanGameMode(player);
+		}
+		else {
+			restoreNormalGameMode(player);
+		}
 		currentSeason.reloadPlayerTeam(player);
 		Events.updatePlayerListsNextTick = true;
 	}

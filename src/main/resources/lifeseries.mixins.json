@@ -46,6 +46,7 @@
     "PlayerManagerMixin",
     "PlayerMixin",
     "RecipeManagerMixin",
+    "ServerEntityMixin",
     "ServerGamePacketListenerImplMixin",
     "ServerLevelAccessor",
     "ServerLevelMixin",

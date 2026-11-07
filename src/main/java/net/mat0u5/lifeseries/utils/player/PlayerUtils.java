@@ -18,8 +18,12 @@ import net.mat0u5.matlib.utils.player.AttributeUtils;
 import net.minecraft.Optionull;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.RemoteChatSession;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
+import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,6 +111,22 @@ public class PlayerUtils extends net.mat0u5.matlib.utils.player.PlayerUtils {
     public static void displayMessageToPlayer(ServerPlayer player, Component text, int timeFor) {
         Session.skipTimer.put(player.getUUID(), timeFor/5);
         ((IPlayer) player).ls$message(text, true);
+    }
+
+    public static void resendVisibleEquipment() {
+        if (server == null || !LifeSeries.isLogicalSide()) return;
+        for (ServerPlayer player : getAllPlayers()) {
+            List<Pair<EquipmentSlot, ItemStack>> equipment = new ArrayList<>();
+            for (EquipmentSlot slot : EquipmentSlot.values()) {
+                equipment.add(Pair.of(slot, player.getItemBySlot(slot).copy()));
+            }
+            ClientboundSetEquipmentPacket packet = new ClientboundSetEquipmentPacket(player.getId(), currentSeason.filterVisibleEquipment(player, equipment));
+            //? if <= 1.21.6 {
+            //getPlayerServerLevel(player).getChunkSource().broadcast(player, packet);
+            //?} else {
+            getPlayerServerLevel(player).getChunkSource().sendToTrackingPlayers(player, packet);
+            //?}
+        }
     }
 
     public static void updatePlayerLists() {

@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season;
 
+import com.mojang.datafixers.util.Pair;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.config.SeasonConfig;
@@ -15,6 +16,7 @@ import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.seasons.season.finallife.FinalLife;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
@@ -50,13 +52,11 @@ import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.ElderGuardian;
@@ -120,6 +120,7 @@ public abstract class Season {
     private static final ConfigRef<Boolean> BROADCAST_LIFE_GAIN = ConfigRef.of(() -> LifeSeries.seasonConfig.BROADCAST_LIFE_GAIN);
     public final ConfigRef<Boolean> LOCATOR_BAR = ConfigRef.of(() -> LifeSeries.seasonConfig.LOCATOR_BAR);
     private final ConfigRef<Double> ADDITIONAL_WITHER_SKULL_RATE = ConfigRef.of(() -> LifeSeries.seasonConfig.ADDITIONAL_WITHER_SKULL_RATE);
+    public static final ConfigRef<Boolean> DISABLE_HELMET_RENDERING = ConfigRef.of(() -> LifeSeries.seasonConfig.DISABLE_HELMET_RENDERING); //Synced value
     public static Random rnd = new Random();
     public static Vec3 skyColor = null;
     public static boolean skyColorSetMode = false;
@@ -869,5 +870,23 @@ public abstract class Season {
                 player.sendChatMessage(outgoingChatMessage, true, bind);
             }
         }
+    }
+
+    public List<Pair<EquipmentSlot, ItemStack>> filterVisibleEquipment(Entity entity, List<Pair<EquipmentSlot, ItemStack>> equipment) {
+        if (LifeSeries.isClientOrDisabled()) return equipment;
+        if (!(entity instanceof ServerPlayer player)) return equipment;
+
+        List<Pair<EquipmentSlot, ItemStack>> result = new ArrayList<>(equipment.size());
+        for (Pair<EquipmentSlot, ItemStack> entry : equipment) {
+            EquipmentSlot slot = entry.getFirst();
+            boolean hide = shouldHideEquipment(player, slot, entry.getSecond());
+            result.add(hide ? Pair.of(slot, ItemStack.EMPTY) : entry);
+        }
+        return result;
+    }
+
+    public boolean shouldHideEquipment(ServerPlayer player, EquipmentSlot slot, ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        return DISABLE_HELMET_RENDERING.get() && slot == EquipmentSlot.HEAD && OtherUtils.isHelmet(stack);
     }
 }

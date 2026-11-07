@@ -97,6 +97,7 @@ public class SeasonChanger {
 			}
 		}
 		SessionTranscript.resetStats();
+		PlayerUtils.resendVisibleEquipment();
 		return true;
 	}
 

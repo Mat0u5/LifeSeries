@@ -464,6 +464,12 @@ public abstract class DefaultConfigValues extends GuiConfig {
             .setNew(true)
             .group("global.disable")
             .onChange((oldValue, newValue) -> PlayerUtils.applyResourcepacks());
+    public final ConfigurableValue<Boolean> DISABLE_HELMET_RENDERING = ConfigurableValue.register(this, "disable_helmet_rendering", false)
+            .name("Disable Helmet Rendering")
+            .description("Controls whether helmets of players will render.")
+            .setNew(true)
+            .serverShared()
+            .group("global.disable");
 
     public final ConfigHeader NO_SEASON_SPECIFIC = ConfigHeader.register(this, "no_season_specific", "There are no season specific entries")
             .group("season");

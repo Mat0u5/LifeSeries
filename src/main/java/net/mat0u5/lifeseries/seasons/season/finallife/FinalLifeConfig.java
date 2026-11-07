@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.matlib.config.entry.ConfigGuiEntry;
 import net.mat0u5.matlib.config.entry.ConfigurableValue;
 import net.mat0u5.matlib.config.type.ConfigTypes;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;
@@ -21,7 +22,6 @@ public class FinalLifeConfig extends SeasonConfig {
 			//? if >= 1.21
 			"mace",
 			"end_crystal",
-			"#minecraft:head_armor",
 			//? if >= 1.21.11
 			"#minecraft:spears",
 			"elytra"
@@ -81,6 +81,12 @@ public class FinalLifeConfig extends SeasonConfig {
 			.description("Controls whether the secret boogeyman player is shown in the tab list")
 			.setNew(true)
 			.group("season.boogeyman");
+	public final ConfigurableValue<Boolean> FINAL_LIFE_BOOGEYMAN_HIDE_ARMOR = ConfigurableValue.register(this, "final_life_boogeyman_hide_armor", true)
+			.name("Hide Armor")
+			.description("Controls whether the armor of the boogeyman shows up.")
+			.setNew(true)
+			.serverShared()
+			.group("season.boogeyman");
 
 	protected FinalLifeConfig() {
 		super(Seasons.FINAL_LIFE);
@@ -90,6 +96,10 @@ public class FinalLifeConfig extends SeasonConfig {
 		BLACKLIST_CLAMPED_ENCHANTS_LEVEL_1.defaultValue(CLAMPED_ENCHANTMENTS);
 		BLACKLIST_RECIPES.defaultValue(List.of("enchanting_table"));
 		DEFAULT_LIVES.defaultValue(6);
+		DISABLE_HELMET_RENDERING.defaultValue(true);
+		FINAL_LIFE_BOOGEYMAN_HIDE_ARMOR.onChange((oldValue, newValue) -> {
+			if (isActive()) PlayerUtils.resendVisibleEquipment();
+		});
 	}
 
 	public static FinalLifeConfig get() {
