@@ -23,6 +23,7 @@ public enum ModifiableSound {
 	,LIVES_ROLL(SoundEvents.UI_BUTTON_CLICK)
 	,LIVES_ROLL_ASSIGN(SoundEvents.END_PORTAL_SPAWN)
 	,LIVES_RECEIVE(SoundEvents.AMETHYST_BLOCK_CHIME)
+	,SPREAD_PLAYERS_DISTRIBUTE(SoundEvents.ENDERMAN_TELEPORT)
 
 	,BOOGEYMAN_CURE(IdentifierHelper.lifeseries("lastlife_boogeyman_cure"))
 	,BOOGEYMAN_FAIL(IdentifierHelper.lifeseries("lastlife_boogeyman_fail"))
@@ -43,7 +44,6 @@ public enum ModifiableSound {
 	,DOUBLELIFE_SOULMATE_ROLL_3(Seasons.DOUBLE_LIFE, SoundEvents.UI_BUTTON_CLICK)
 	,DOUBLELIFE_SOULMATE_ROLL_2(Seasons.DOUBLE_LIFE, SoundEvents.UI_BUTTON_CLICK)
 	,DOUBLELIFE_SOULMATE_ROLL_1(Seasons.DOUBLE_LIFE, SoundEvents.UI_BUTTON_CLICK)
-	,DOUBLELIFE_DISTRIBUTE(Seasons.DOUBLE_LIFE, SoundEvents.ENDERMAN_TELEPORT)
 
 	,SECRETLIFE_TASK_SUCCEED(Seasons.SECRET_LIFE, IdentifierHelper.lifeseries("secretlife_task_succeed"))
 	,SECRETLIFE_TASK_FAIL(Seasons.SECRET_LIFE, IdentifierHelper.lifeseries("secretlife_task_fail"))

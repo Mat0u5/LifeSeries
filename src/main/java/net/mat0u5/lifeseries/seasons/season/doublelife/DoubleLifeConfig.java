@@ -71,10 +71,6 @@ public class DoubleLifeConfig extends SeasonConfig {
             .name("Breakup Last Pair Standing")
             .description("Once only two players are left, they will be broken up as soulmates for a final showdown.")
             .group("season");
-    public final ConfigurableValue<Boolean> DISABLE_START_TELEPORT = ConfigurableValue.register(this, "disable_start_teleport", false)
-            .name("Disable Start Teleport")
-            .description("Disables the player spreading over the map when the first session starts.")
-            .group("season");
 
     public final ConfigurableValue<Boolean> SOULBOUND_FOOD = ConfigurableValue.register(this, "soulbound_food", false)
             .name("Soulbound Food")
@@ -126,6 +122,7 @@ public class DoubleLifeConfig extends SeasonConfig {
         //removeEntry(SOULMATE_LOCATOR_BAR);
         //?}
 
+        ENABLE_START_TELEPORT.defaultValue(true);
         CUSTOM_ENCHANTER_ALGORITHM.defaultValue(true);
         BLACKLIST_ITEMS.defaultValue(BLACKLISTED_ITEMS);
         BLACKLIST_BLOCKS.defaultValue(BLACKLISTED_BLOCKS);
