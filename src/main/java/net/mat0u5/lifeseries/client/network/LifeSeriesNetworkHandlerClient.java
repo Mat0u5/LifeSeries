@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.client.network;
 import com.google.auto.service.AutoService;
 import io.netty.buffer.Unpooled;
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.client.utils.ClientSeasonChanger;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.compatibilities.VoicechatClient;
 import net.mat0u5.lifeseries.client.features.LifeSkinsClient;
@@ -218,6 +219,7 @@ public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
         SimplePackets.CURRENT_SEASON.setClientReceive(payload -> {
             if (LifeSeries.DEBUG) LifeSeries.LOGGER.info("[PACKET_CLIENT] Updated current season to {}", payload.value());
             LifeSeriesClient.clientCurrentSeason = Seasons.getSeasonFromStringName(payload.value());
+            ClientSeasonChanger.matchServerSeasonConfig(LifeSeriesClient.clientCurrentSeason);
             LifeSeriesResourcePacks.checkClientPacks();
             LifeSeriesClient.reloadConfig();
         });

@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.client.events;
 
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.client.utils.ClientSeasonChanger;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.compatibilities.VoicechatClient;
 import net.mat0u5.lifeseries.client.gui.EmptySleepScreen;
@@ -90,6 +91,7 @@ public class ClientEvents {
         checkReplayServer(null);
         LifeSeries.LOGGER.info("Client disconnected from server, clearing some client data.");
         LifeSeriesClient.resetClientData();
+        ClientSeasonChanger.restoreLocalSeasonConfig();
         if (LifeSeries.modDisabled()) return;
     }
 

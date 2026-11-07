@@ -85,6 +85,7 @@ public class SeasonChanger {
 
 		initializeSeason(season, args);
 		currentSeason.initialize();
+		LifeSeriesNetworkHandlerServer.sendUpdatePackets();
 		OtherUtils.reloadServer();
 		for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
 			currentSeason.onPlayerJoin(player);
