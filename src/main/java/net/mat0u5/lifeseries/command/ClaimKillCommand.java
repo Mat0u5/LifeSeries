@@ -10,7 +10,6 @@ import net.mat0u5.matlib.utils.other.ActionText;
 import net.mat0u5.matlib.utils.other.TextUtils;
 import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -50,13 +49,13 @@ public class ClaimKillCommand extends CustomCommand {
         dispatcher.register(
             literal("claimkill")
                 .then(argument("player", EntityArgument.player())
-                    .suggests((context, builder) -> SharedSuggestionProvider.suggest(getSuggestions(), builder))
+                    .suggests(suggestList(this::getSuggestions))
                     .executes(context -> claimCredit(
                         context.getSource(), EntityArgument.getPlayer(context, "player")
                     ))
                 )
                 .then(literal("validate")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .then(argument("killer", EntityArgument.player())
                         .then(argument("victim", EntityArgument.player())
                             .executes(context -> claimCreditAccept(

@@ -18,7 +18,6 @@ import net.mat0u5.matlib.utils.other.Time;
 import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.mat0u5.matlib.utils.player.ScoreboardUtils;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -70,26 +69,26 @@ public class LivesCommand extends CustomCommand {
             literal("lives")
             .executes(context -> showLives(context.getSource()))
             .then(literal("reload")
-                .requires(PermissionManager::isAdmin)
+                .requires(requireAdmin())
                 .executes(context -> reloadLives(
                     context.getSource())
                 )
             )
             .then(literal("add")
-                .requires(PermissionManager::isAdmin)
+                .requires(requireAdmin())
                 .then(argument("player", EntityArgument.players())
                     .executes(context -> lifeManager(
                         context.getSource(), EntityArgument.getPlayers(context, "player"), 1, false, false)
                     )
-                    .then(argument("amount", IntegerArgumentType.integer(1))
-                        .requires(source -> isAllowedNormal())
+                    .then(argument("amount", integerArg(1))
+                        .requires(requireIf(this::isAllowedNormal))
                         .executes(context -> lifeManager(
                             context.getSource(), EntityArgument.getPlayers(context, "player"), IntegerArgumentType.getInteger(context, "amount"), false, false)
                         )
                     )
-                    .then(argument("time", StringArgumentType.greedyString())
-                        .requires(source -> isAllowedLimited())
-                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("30m", "1h"), builder))
+                    .then(argument("time", greedyStringArg())
+                        .requires(requireIf(this::isAllowedLimited))
+                        .suggests(suggestList(List.of("30m", "1h")))
                         .executes(context -> lifeManager(
                             context.getSource(), EntityArgument.getPlayers(context, "player"),
                             StringArgumentType.getString(context, "time"), false, false, false)
@@ -98,13 +97,13 @@ public class LivesCommand extends CustomCommand {
                 )
             )
             .then(literal("remove")
-                .requires(PermissionManager::isAdmin)
+                .requires(requireAdmin())
                 .then(argument("player", EntityArgument.players())
                     .executes(context -> lifeManager(
                         context.getSource(), EntityArgument.getPlayers(context, "player"), -1, false, false)
                     )
-                    .then(argument("amount", IntegerArgumentType.integer(1))
-                        .requires(source -> isAllowedNormal())
+                    .then(argument("amount", integerArg(1))
+                        .requires(requireIf(this::isAllowedNormal))
                         .executes(context -> lifeManager(
                             context.getSource(), EntityArgument.getPlayers(context, "player"), -IntegerArgumentType.getInteger(context, "amount"), false, false)
                         )
@@ -114,9 +113,9 @@ public class LivesCommand extends CustomCommand {
                                 )
                         )
                     )
-                    .then(argument("time", StringArgumentType.greedyString())
-                        .requires(source -> isAllowedLimited())
-                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("30m", "1h"), builder))
+                    .then(argument("time", greedyStringArg())
+                        .requires(requireIf(this::isAllowedLimited))
+                        .suggests(suggestList(List.of("30m", "1h")))
                         .executes(context -> lifeManager(
                             context.getSource(), EntityArgument.getPlayers(context, "player"),
                             StringArgumentType.getString(context, "time"), false, true, false)
@@ -131,17 +130,17 @@ public class LivesCommand extends CustomCommand {
                 )
             )
             .then(literal("set")
-                .requires(PermissionManager::isAdmin)
+                .requires(requireAdmin())
                 .then(argument("player", EntityArgument.players())
-                    .then(argument("amount", IntegerArgumentType.integer(0))
-                        .requires(source -> isAllowedNormal())
+                    .then(argument("amount", integerArg(0))
+                        .requires(requireIf(this::isAllowedNormal))
                         .executes(context -> lifeManager(
                             context.getSource(), EntityArgument.getPlayers(context, "player"), IntegerArgumentType.getInteger(context, "amount"), true, false)
                         )
                     )
-                    .then(argument("time", StringArgumentType.greedyString())
-                        .requires(source -> isAllowedLimited())
-                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("8h", "16h", "24h"), builder))
+                    .then(argument("time", greedyStringArg())
+                        .requires(requireIf(this::isAllowedLimited))
+                        .suggests(suggestList(List.of("8h", "16h", "24h")))
                         .executes(context -> lifeManager(
                             context.getSource(), EntityArgument.getPlayers(context, "player"),
                             StringArgumentType.getString(context, "time"), true, false, false)
@@ -150,7 +149,7 @@ public class LivesCommand extends CustomCommand {
                 )
             )
             .then(literal("get")
-                .requires(PermissionManager::isAdmin)
+                .requires(requireAdmin())
                 .then(argument("player", EntityArgument.player())
                     .executes(context -> getLivesFor(
                         context.getSource(), EntityArgument.getPlayer(context, "player"))
@@ -163,7 +162,7 @@ public class LivesCommand extends CustomCommand {
                 )
             )
             .then(literal("reset")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .then(argument("player", EntityArgument.players())
                             .executes(context -> resetLives(
                                     context.getSource(), EntityArgument.getPlayers(context, "player"))
@@ -171,13 +170,13 @@ public class LivesCommand extends CustomCommand {
                     )
             )
             .then(literal("resetAll")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .executes(context -> resetAllLives(
                             context.getSource())
                     )
             )
             .then(literal("rollLives")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .executes(context -> assignRandomLives(
                             context.getSource(), PlayerUtils.getAllPlayers()
                     ))

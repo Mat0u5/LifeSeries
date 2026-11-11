@@ -16,7 +16,6 @@ import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.mat0u5.matlib.utils.other.ActionText;
 import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -53,18 +52,18 @@ public class SecretLifeCommands extends CustomCommand {
             literal("health")
                 .executes(context -> showHealth(context.getSource()))
                 .then(literal("sync")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .executes(context -> syncHealth(
                         context.getSource())
                     )
                 )
                 .then(literal("add")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .then(argument("player", EntityArgument.players())
                         .executes(context -> healthManager(
                             context.getSource(), EntityArgument.getPlayers(context, "player"), 1, false)
                         )
-                        .then(argument("amount", DoubleArgumentType.doubleArg(0))
+                        .then(argument("amount", doubleArg(0))
                             .executes(context -> healthManager(
                                 context.getSource(), EntityArgument.getPlayers(context, "player"), DoubleArgumentType.getDouble(context, "amount"), false)
                             )
@@ -72,12 +71,12 @@ public class SecretLifeCommands extends CustomCommand {
                     )
                 )
                 .then(literal("remove")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .then(argument("player", EntityArgument.players())
                         .executes(context -> healthManager(
                             context.getSource(), EntityArgument.getPlayers(context, "player"), -1, false)
                         )
-                        .then(argument("amount", DoubleArgumentType.doubleArg(0))
+                        .then(argument("amount", doubleArg(0))
                             .executes(context -> healthManager(
                                 context.getSource(), EntityArgument.getPlayers(context, "player"), -DoubleArgumentType.getDouble(context, "amount"), false)
                             )
@@ -85,9 +84,9 @@ public class SecretLifeCommands extends CustomCommand {
                     )
                 )
                 .then(literal("set")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .then(argument("player", EntityArgument.players())
-                        .then(argument("amount", DoubleArgumentType.doubleArg(0))
+                        .then(argument("amount", doubleArg(0))
                             .executes(context -> healthManager(
                                 context.getSource(), EntityArgument.getPlayers(context, "player"), DoubleArgumentType.getDouble(context, "amount"), true)
                             )
@@ -95,7 +94,7 @@ public class SecretLifeCommands extends CustomCommand {
                     )
                 )
                 .then(literal("get")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .then(argument("player", EntityArgument.players())
                         .executes(context -> getHealthFor(
                             context.getSource(), EntityArgument.getPlayers(context, "player"))
@@ -103,7 +102,7 @@ public class SecretLifeCommands extends CustomCommand {
                     )
                 )
                 .then(literal("reset")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .then(argument("player", EntityArgument.players())
                         .executes(context -> resetHealth(
                             context.getSource(), EntityArgument.getPlayers(context, "player"))
@@ -114,7 +113,7 @@ public class SecretLifeCommands extends CustomCommand {
         dispatcher.register(
             literal("task")
                     .then(literal("succeed")
-                            .requires(PermissionManager::isAdmin)
+                            .requires(requireAdmin())
                             .then(argument("player", EntityArgument.players())
                                     .executes(context -> succeedTask(
                                             context.getSource(), EntityArgument.getPlayers(context, "player"))
@@ -122,7 +121,7 @@ public class SecretLifeCommands extends CustomCommand {
                             )
                     )
                     .then(literal("fail")
-                            .requires(PermissionManager::isAdmin)
+                            .requires(requireAdmin())
                             .then(argument("player", EntityArgument.players())
                                     .executes(context -> failTask(
                                             context.getSource(), EntityArgument.getPlayers(context, "player"))
@@ -130,7 +129,7 @@ public class SecretLifeCommands extends CustomCommand {
                             )
                     )
                     .then(literal("reroll")
-                            .requires(PermissionManager::isAdmin)
+                            .requires(requireAdmin())
                             .then(argument("player", EntityArgument.players())
                                     .executes(context -> rerollTask(
                                             context.getSource(), EntityArgument.getPlayers(context, "player"))
@@ -138,7 +137,7 @@ public class SecretLifeCommands extends CustomCommand {
                             )
                     )
                     .then(literal("randomize")
-                            .requires(PermissionManager::isAdmin)
+                            .requires(requireAdmin())
                             .then(argument("player", EntityArgument.players())
                                     .executes(context -> assignTask(
                                             context.getSource(), EntityArgument.getPlayers(context, "player"))
@@ -146,7 +145,7 @@ public class SecretLifeCommands extends CustomCommand {
                             )
                     )
                     .then(literal("clear")
-                            .requires(PermissionManager::isAdmin)
+                            .requires(requireAdmin())
                             .then(argument("player", EntityArgument.players())
                                     .executes(context -> clearTask(
                                             context.getSource(), EntityArgument.getPlayers(context, "player"))
@@ -154,11 +153,11 @@ public class SecretLifeCommands extends CustomCommand {
                             )
                     )
                     .then(literal("set")
-                            .requires(PermissionManager::isAdmin)
+                            .requires(requireAdmin())
                             .then(argument("player", EntityArgument.players())
-                                    .then(argument("type", StringArgumentType.string())
-                                            .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("easy","hard","red"), builder))
-                                            .then(argument("task", StringArgumentType.greedyString())
+                                    .then(argument("type", stringArg())
+                                            .suggests(suggestList(List.of("easy","hard","red")))
+                                            .then(argument("task", greedyStringArg())
                                                     .executes(context -> setTask(
                                                                     context.getSource(),
                                                                     EntityArgument.getPlayers(context, "player"),
@@ -171,9 +170,9 @@ public class SecretLifeCommands extends CustomCommand {
                             )
                     )
                     .then(literal("append")
-                            .requires(PermissionManager::isAdmin)
+                            .requires(requireAdmin())
                             .then(argument("player", EntityArgument.players())
-                                    .then(argument("string", StringArgumentType.greedyString())
+                                    .then(argument("string", greedyStringArg())
                                             .executes(context -> appendTask(
                                                             context.getSource(),
                                                             EntityArgument.getPlayers(context, "player"),
@@ -184,7 +183,7 @@ public class SecretLifeCommands extends CustomCommand {
                             )
                     )
                     .then(literal("get")
-                            .requires(PermissionManager::isAdmin)
+                            .requires(requireAdmin())
                             .then(argument("player", EntityArgument.player())
                                     .executes(context -> getTask(
                                             context.getSource(), EntityArgument.getPlayer(context, "player"))
@@ -192,20 +191,20 @@ public class SecretLifeCommands extends CustomCommand {
                             )
                     )
                     .then(literal("changeLocations")
-                            .requires(PermissionManager::isAdmin)
+                            .requires(requireAdmin())
                             .executes(context -> changeLocations(
                                     context.getSource())
                             )
                     )
                     .then(literal("resetUsed")
-                            .requires(PermissionManager::isAdmin)
+                            .requires(requireAdmin())
                             .executes(context -> resetUsedTasks(
                                     context.getSource())
                             )
                     )
                     .then(literal("guess")
                             .then(argument("player", EntityArgument.player())
-                                    .then(argument("task", StringArgumentType.greedyString())
+                                    .then(argument("task", greedyStringArg())
                                             .executes(context -> guessTask(
                                                             context.getSource(),
                                                             EntityArgument.getPlayer(context, "player"),
@@ -242,7 +241,7 @@ public class SecretLifeCommands extends CustomCommand {
                     )
                 )
                 .then(literal("reset")
-                        .requires(PermissionManager::isAdmin)
+                        .requires(requireAdmin())
                         .then(argument("player", EntityArgument.players())
                             .executes(context -> resetGift(context.getSource(), EntityArgument.getPlayers(context, "player")))
                         )

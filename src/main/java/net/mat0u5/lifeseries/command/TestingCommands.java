@@ -31,7 +31,7 @@ public class TestingCommands extends CustomCommand {
         if (VersionControl.isDevVersion()) {
             dispatcher.register(
                 literal("lsdev")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .then(literal("test")
                         .executes(context -> test(context.getSource()))
                     )
@@ -45,7 +45,7 @@ public class TestingCommands extends CustomCommand {
                             .executes(context -> test3(context.getSource()))
                     )
                     .then(literal("players")
-                        .then(argument("amount", IntegerArgumentType.integer())
+                        .then(argument("amount", integerArg())
                             .executes(context -> spawnPlayers(context.getSource(), IntegerArgumentType.getInteger(context, "amount")))
                         )
                     )

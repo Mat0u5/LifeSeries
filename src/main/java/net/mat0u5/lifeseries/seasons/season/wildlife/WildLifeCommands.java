@@ -31,7 +31,6 @@ import net.mat0u5.matlib.utils.other.ActionText;
 import net.mat0u5.matlib.utils.other.TextUtils;
 import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.network.chat.Component;
@@ -67,7 +66,7 @@ public class WildLifeCommands extends CustomCommand {
     public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
             literal("wildcard")
-                .requires(PermissionManager::isAdmin)
+                .requires(requireAdmin())
                 .then(literal("list")
                     .executes(context -> listWildcards(
                         context.getSource())
@@ -79,23 +78,26 @@ public class WildLifeCommands extends CustomCommand {
                     )
                 )
                 .then(literal("activate")
-                    .then(argument("wildcard", StringArgumentType.greedyString())
-                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(suggestionsActivateWildcard(), builder))
+                    .then(argument("wildcard", greedyStringArg())
+                        .suggests(suggestList(this::suggestionsActivateWildcard))
                         .executes(context -> activateWildcard(
                             context.getSource(), StringArgumentType.getString(context, "wildcard"))
                         )
                     )
                 )
                 .then(literal("deactivate")
-                    .then(argument("wildcard", StringArgumentType.greedyString())
-                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(suggestionsDeactivateWildcard(), builder))
+                    .then(argument("wildcard", greedyStringArg())
+                        .suggests(suggestList(this::suggestionsDeactivateWildcard))
                         .executes(context -> deactivateWildcard(
                             context.getSource(), StringArgumentType.getString(context, "wildcard"))
                         )
                     )
                 )
                 .then(literal("choose")
-                    .requires(source -> (LifeSeriesNetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer()) || (source.getEntity() == null)))
+                    // Checked in the method itself for >= 26.4
+                    //? if <= 26.3 {
+                    //.requires(source -> (LifeSeriesNetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer()) || (source.getEntity() == null)))
+                    //?}
                     .executes(context -> chooseWildcard(
                         context.getSource())
                     )
@@ -127,15 +129,15 @@ public class WildLifeCommands extends CustomCommand {
             literal("snail")
                 .then(literal("names")
                     .then(literal("set")
-                        .requires(PermissionManager::isAdmin)
+                        .requires(requireAdmin())
                         .then(argument("player", EntityArgument.player())
-                            .then(argument("name", StringArgumentType.greedyString())
+                            .then(argument("name", greedyStringArg())
                                 .executes(context -> setSnailName(context.getSource(), EntityArgument.getPlayer(context, "player"), StringArgumentType.getString(context, "name")))
                             )
                         )
                     )
                     .then(literal("reset")
-                        .requires(PermissionManager::isAdmin)
+                        .requires(requireAdmin())
                         .then(argument("player", EntityArgument.players())
                             .executes(context -> resetSnailName(context.getSource(), EntityArgument.getPlayers(context, "player")))
                         )
@@ -146,13 +148,13 @@ public class WildLifeCommands extends CustomCommand {
                         )
                     )
                     .then(literal("request")
-                        .then(argument("name", StringArgumentType.greedyString())
+                        .then(argument("name", greedyStringArg())
                                 .executes(context -> requestSnailName(context.getSource(), StringArgumentType.getString(context, "name")))
                         )
                     )
                 )
                 .then(literal("textures")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .executes(context -> getSnailTexturesInfo(context.getSource()))
                     .then(literal("list")
                             .executes(context -> getSnailTextures(context.getSource(), false))
@@ -173,8 +175,8 @@ public class WildLifeCommands extends CustomCommand {
                             )
                             .then(literal("set")
                                     .then(argument("players", EntityArgument.players())
-                                            .then(argument("skin", StringArgumentType.greedyString())
-                                                    .suggests((context, builder) -> SharedSuggestionProvider.suggest(PreBuiltSnailSkins.prebuiltSkins, builder))
+                                            .then(argument("skin", greedyStringArg())
+                                                    .suggests(suggestList(PreBuiltSnailSkins.prebuiltSkins))
                                                     .executes(context -> snailTexturesPreset(context.getSource(), EntityArgument.getPlayers(context, "players"), StringArgumentType.getString(context, "skin")))
                                             )
                                     )
@@ -192,7 +194,7 @@ public class WildLifeCommands extends CustomCommand {
                     )
                 )
                 .then(literal("control")
-                        .requires(PermissionManager::isAdmin)
+                        .requires(requireAdmin())
                         .then(literal("despawn")
                                 .then(argument("player", EntityArgument.players())
                                         .executes(context -> despawnSnailFor(
@@ -221,11 +223,11 @@ public class WildLifeCommands extends CustomCommand {
         );
         dispatcher.register(
             literal("superpower")
-                .requires(PermissionManager::isAdmin)
+                .requires(requireAdmin())
                 .then(literal("set")
                     .then(argument("player", EntityArgument.players())
-                        .then(argument("superpower", StringArgumentType.string())
-                            .suggests((context, builder) -> SharedSuggestionProvider.suggest(Superpowers.getImplementedStr(), builder))
+                        .then(argument("superpower", stringArg())
+                            .suggests(suggestList(Superpowers.getImplementedStr()))
                             .executes(context -> setSuperpower(context.getSource(), EntityArgument.getPlayers(context, "player"), StringArgumentType.getString(context, "superpower")))
                         )
                     )
@@ -249,7 +251,7 @@ public class WildLifeCommands extends CustomCommand {
                 .then(literal("cooldown")
                         .then(argument("player", EntityArgument.players())
                                 .then(literal("set")
-                                        .then(argument("amount", IntegerArgumentType.integer(0))
+                                        .then(argument("amount", integerArg(0))
                                                 .executes(context -> setSuperpowerCooldown(context.getSource(), EntityArgument.getPlayers(context, "player"), IntegerArgumentType.getInteger(context, "amount")))
                                         )
                                 )
@@ -263,8 +265,8 @@ public class WildLifeCommands extends CustomCommand {
                 )
                 .then(literal("force")
                     .then(argument("player", EntityArgument.players())
-                        .then(argument("superpower", StringArgumentType.string())
-                            .suggests((context, builder) -> SharedSuggestionProvider.suggest(Superpowers.getImplementedStr(), builder))
+                        .then(argument("superpower", stringArg())
+                            .suggests(suggestList(Superpowers.getImplementedStr()))
                             .executes(context -> assignSuperpower(context.getSource(), EntityArgument.getPlayers(context, "player"), StringArgumentType.getString(context, "superpower")))
                         )
                         .then(literal("reset")
@@ -280,21 +282,21 @@ public class WildLifeCommands extends CustomCommand {
         );
         dispatcher.register(
             literal("hunger")
-                .requires(PermissionManager::isAdmin)
+                .requires(requireAdmin())
                 .then(literal("randomizeFood")
                         .executes(context -> randomizeFood(context.getSource()))
                 )
         );
         dispatcher.register(
             literal("mobswap")
-                .requires(PermissionManager::isAdmin)
+                .requires(requireAdmin())
                 .then(literal("swap")
                         .executes(context -> mobSwapTrigger(context.getSource()))
                 )
         );
         dispatcher.register(
                 literal("zombie")
-                        .requires(PermissionManager::isAdmin)
+                        .requires(requireAdmin())
                         .then(argument("player", EntityArgument.players())
                                 .executes(context -> spawnZombies(context.getSource(), EntityArgument.getPlayers(context, "player"), null))
                                 .then(argument("location", Vec3Argument.vec3())

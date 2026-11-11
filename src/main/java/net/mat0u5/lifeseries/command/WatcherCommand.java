@@ -35,7 +35,7 @@ public class WatcherCommand extends CustomCommand {
     public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
             literal("watcher")
-                .requires(PermissionManager::isAdmin)
+                .requires(requireAdmin())
                 .executes(context -> info(context.getSource()))
                 .then(literal("info")
                     .executes(context -> info(context.getSource()))

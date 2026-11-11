@@ -36,7 +36,7 @@ public class DoubleLifeCommands extends CustomCommand {
     public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
             literal("soulmate")
-                .requires(PermissionManager::isAdmin)
+                .requires(requireAdmin())
                 .then(literal("get")
                     .then(argument("player", EntityArgument.player())
                         .executes(context -> getSoulmate(context.getSource(), EntityArgument.getPlayer(context, "player")))

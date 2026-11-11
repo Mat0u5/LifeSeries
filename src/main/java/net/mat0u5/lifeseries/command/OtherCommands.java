@@ -7,7 +7,6 @@ import net.mat0u5.lifeseries.command.manager.CustomCommand;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.phys.Vec3;
 
@@ -35,14 +34,14 @@ public class OtherCommands extends CustomCommand {
     public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
                 literal("envcolor")
-                        .requires(PermissionManager::isAdmin)
-                        .then(argument("type", StringArgumentType.string())
-                                .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("fog", "sky", "cloud"), builder))
-                                .then(argument("modify", StringArgumentType.string())
-                                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("set", "add"), builder))
-                                        .then(argument("red", IntegerArgumentType.integer(-255, 255))
-                                                .then(argument("green", IntegerArgumentType.integer(-255, 255))
-                                                        .then(argument("blue", IntegerArgumentType.integer(-255, 255))
+                        .requires(requireAdmin())
+                        .then(argument("type", stringArg())
+                                .suggests(suggestList(List.of("fog", "sky", "cloud")))
+                                .then(argument("modify", stringArg())
+                                        .suggests(suggestList(List.of("set", "add")))
+                                        .then(argument("red", integerArg(-255, 255))
+                                                .then(argument("green", integerArg(-255, 255))
+                                                        .then(argument("blue", integerArg(-255, 255))
                                                                 .executes(context -> changeEnvColor(
                                                                         context.getSource(),
                                                                         StringArgumentType.getString(context, "type"),

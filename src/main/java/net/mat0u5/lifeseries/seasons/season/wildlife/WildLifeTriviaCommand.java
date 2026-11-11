@@ -17,12 +17,17 @@ import net.mat0u5.matlib.utils.other.ActionText;
 import net.mat0u5.matlib.utils.other.Tuple;
 import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.*;
+//? if <= 26.3 {
+//import net.minecraft.commands.SharedSuggestionProvider;
+//?} else {
+import net.minecraft.commands.suggestions.SuggestionContext;
+import net.minecraft.commands.suggestions.SuggestionProviders;
+//?}
 
 public class WildLifeTriviaCommand extends CustomCommand {
 
@@ -48,15 +53,19 @@ public class WildLifeTriviaCommand extends CustomCommand {
     public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
                 literal("trivia")
-                        .requires(PermissionManager::isAdmin)
+                        .requires(requireAdmin())
                         .then(literal("assign")
-                                .requires(source -> isAllowed())
+                                .requires(requireIf(this::isAllowed))
                                 .then(argument("player", EntityArgument.players())
-                                        .then(argument("difficulty", StringArgumentType.string())
-                                                .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("easy","normal","hard"), builder))
+                                        .then(argument("difficulty", stringArg())
+                                                .suggests(suggestList(List.of("easy","normal","hard")))
 
-                                                .then(argument("question", StringArgumentType.greedyString())
-                                                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(this.getTriviaSuggestionsStr(StringArgumentType.getString(context, "difficulty")), builder))
+                                                .then(argument("question", greedyStringArg())
+                                                        //? if <= 26.3 {
+                                                        //.suggests((context, builder) -> SharedSuggestionProvider.suggest(this.getTriviaSuggestionsStr(StringArgumentType.getString(context, "difficulty")), builder))
+                                                        //?} else {
+                                                        .suggests(SuggestionProviders.serverOnly((server, context, builder) -> SuggestionContext.suggest(this.getTriviaSuggestionsStr(StringArgumentType.getString(context, "difficulty")), builder)))
+                                                        //?}
                                                         .executes(context -> setTrivia(
                                                                         context.getSource(),
                                                                         EntityArgument.getPlayers(context, "player"),
@@ -75,7 +84,7 @@ public class WildLifeTriviaCommand extends CustomCommand {
                                 )
                         )
                         .then(literal("bot")
-                                .requires(source -> isAllowed())
+                                .requires(requireIf(this::isAllowed))
                                 .then(literal("spawn")
                                         .then(argument("player", EntityArgument.players())
                                                 .executes(context -> spawnBotFor(
@@ -86,7 +95,7 @@ public class WildLifeTriviaCommand extends CustomCommand {
                                 )
                         )
                         .then(literal("punishment")
-                                .requires(source -> isAllowed())
+                                .requires(requireIf(this::isAllowed))
                                 .then(literal("clear")
                                         .then(argument("player", EntityArgument.players())
                                                 .executes(context -> clearPunishment(
@@ -97,8 +106,8 @@ public class WildLifeTriviaCommand extends CustomCommand {
                                 )
                                 .then(literal("set")
                                         .then(argument("player", EntityArgument.players())
-                                                .then(argument("punishment", StringArgumentType.string())
-                                                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(
+                                                .then(argument("punishment", stringArg())
+                                                        .suggests(suggestList(
                                                                 List.of(
                                                                         "random"
                                                                         ,"slippery_ground"
@@ -115,7 +124,7 @@ public class WildLifeTriviaCommand extends CustomCommand {
                                                                         //? if > 1.20.3 {
                                                                         ,"gigantification"
                                                                         //?}
-                                                                ), builder))
+                                                                )))
 
                                                         .executes(context -> setPunishment(
                                                                 context.getSource(),
@@ -127,7 +136,7 @@ public class WildLifeTriviaCommand extends CustomCommand {
                                 )
                         )
                         .then(literal("textures")
-                                .requires(PermissionManager::isAdmin)
+                                .requires(requireAdmin())
                                 .executes(context -> getTriviaTexturesInfo(context.getSource()))
                                 .then(literal("list")
                                         .executes(context -> getTriviaTextures(context.getSource()))

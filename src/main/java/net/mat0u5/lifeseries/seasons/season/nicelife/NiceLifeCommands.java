@@ -11,7 +11,6 @@ import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -44,9 +43,9 @@ public class NiceLifeCommands extends CustomCommand {
                 literal("vote")
                         .executes(context -> vote(context.getSource()))
                         .then(literal("forceNext")
-                                .requires(PermissionManager::isAdmin)
-                                .then(argument("type", StringArgumentType.string())
-                                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("none", "nicelist", "naughtylist"), builder))
+                                .requires(requireAdmin())
+                                .then(argument("type", stringArg())
+                                        .suggests(suggestList(List.of("none", "nicelist", "naughtylist")))
                                         .executes(context -> forceNextVote(context.getSource(), StringArgumentType.getString(context, "type")))
                                 )
                         )
@@ -54,7 +53,7 @@ public class NiceLifeCommands extends CustomCommand {
 
         dispatcher.register(
                 literal("nicelife")
-                        .requires(PermissionManager::isAdmin)
+                        .requires(requireAdmin())
                         .then(literal("wakeUp")
                                         .executes(context -> wakeup(context.getSource()))
                                         .then(argument("players", EntityArgument.players())
@@ -70,7 +69,7 @@ public class NiceLifeCommands extends CustomCommand {
         );
         dispatcher.register(
                 literal("nicelist")
-                        .requires(PermissionManager::isAdmin)
+                        .requires(requireAdmin())
                         .then(literal("end")
                                 .executes(context -> niceListEnd(
                                         context.getSource()
@@ -94,7 +93,7 @@ public class NiceLifeCommands extends CustomCommand {
         );
         dispatcher.register(
                 literal("naughtylist")
-                        .requires(PermissionManager::isAdmin)
+                        .requires(requireAdmin())
                         .then(literal("end")
                                 .executes(context -> naughtyListEnd(
                                         context.getSource()

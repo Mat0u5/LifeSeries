@@ -10,7 +10,6 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
 import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
@@ -40,11 +39,11 @@ public class NiceLifeTriviaCommand extends CustomCommand {
     public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
                 literal("trivia")
-                        .requires(PermissionManager::isAdmin)
+                        .requires(requireAdmin())
                         .then(literal("set")
-                                .requires(source -> isAllowed())
-                                .then(argument("question", StringArgumentType.greedyString())
-                                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(this.getTriviaSuggestionsStr(), builder))
+                                .requires(requireIf(this::isAllowed))
+                                .then(argument("question", greedyStringArg())
+                                        .suggests(suggestList(this::getTriviaSuggestionsStr))
                                         .executes(context -> setTrivia(
                                                         context.getSource(),
                                                         StringArgumentType.getString(context, "question")

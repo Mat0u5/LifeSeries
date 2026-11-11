@@ -37,13 +37,13 @@ public class SideTitleCommand extends CustomCommand {
     public void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registryAccess) {
         dispatcher.register(
             literal("title")
-                .requires(PermissionManager::isAdmin)
+                .requires(requireAdmin())
                 .then(argument("targets", EntityArgument.players())
                         .then(literal("side")
-                                //? if <= 1.20.3 {
-                                //.then(argument("title", ComponentArgument.textComponent())
+                                //? if <= 1.20.3 || >= 26.4{
+                                .then(argument("title", ComponentArgument.textComponent())
                                 //?} else {
-                                .then(argument("title", ComponentArgument.textComponent(registryAccess))
+                                //.then(argument("title", ComponentArgument.textComponent(registryAccess))
                                 //?}
                                         .executes(context -> executeTitle(
                                                 context.getSource(),

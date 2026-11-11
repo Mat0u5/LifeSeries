@@ -41,9 +41,9 @@ public class SubInCommands extends CustomCommand {
         dispatcher.register(
             literal("subin")
                     .then(literal("add")
-                        .requires(PermissionManager::isAdmin)
+                        .requires(requireAdmin())
                         .then(argument("player", EntityArgument.player())
-                                .then(argument("subin", StringArgumentType.string())
+                                .then(argument("subin", stringArg())
                                         .executes(context -> addSubIn(
                                                 context.getSource(),
                                                 EntityArgument.getPlayer(context, "player"),
@@ -53,7 +53,7 @@ public class SubInCommands extends CustomCommand {
                         )
                     )
                     .then(literal("remove")
-                            .requires(PermissionManager::isAdmin)
+                            .requires(requireAdmin())
                             .then(argument("player", EntityArgument.player())
                                     .executes(context -> removeSubIn(
                                             context.getSource(),

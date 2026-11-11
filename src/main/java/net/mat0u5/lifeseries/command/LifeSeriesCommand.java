@@ -20,7 +20,6 @@ import net.mat0u5.matlib.utils.other.ActionText;
 import net.mat0u5.matlib.utils.other.TextUtils;
 import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
@@ -31,6 +30,12 @@ import java.util.concurrent.CompletableFuture;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
+
+//? if <= 26.3 {
+//import net.minecraft.commands.SharedSuggestionProvider;
+//?} else {
+import net.minecraft.commands.suggestions.SuggestionContext;
+//?}
 
 public class LifeSeriesCommand extends CustomCommand {
     public static final List<String> ALLOWED_SEASON_NAMES = Seasons.getSeasonIds();
@@ -58,7 +63,7 @@ public class LifeSeriesCommand extends CustomCommand {
           var lifeseriesTree = literal("lifeseries")
                 .executes(context -> defaultCommand(context.getSource()))
                 .then(literal("worlds")
-                        .requires(PermissionManager::isAdmin)
+                        .requires(requireAdmin())
                         .executes(context -> getWorlds(context.getSource()))
                 )
                 .then(literal("credits")
@@ -76,34 +81,34 @@ public class LifeSeriesCommand extends CustomCommand {
                 .then(literal("config")
                         .executes(context -> config(context.getSource()))
                         .then(literal("set")
-                                .requires(PermissionManager::isAdmin)
-                                .then(argument("key", StringArgumentType.string())
-                                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(seasonConfig.getAvailableConfigKeys(), builder))
-                                        .then(argument("value", StringArgumentType.greedyString())
+                                .requires(requireAdmin())
+                                .then(argument("key", stringArg())
+                                        .suggests(suggestList(() -> seasonConfig.getAvailableConfigKeys()))
+                                        .then(argument("value", greedyStringArg())
                                                 .executes(context -> configSet(context.getSource(), StringArgumentType.getString(context, "key"), StringArgumentType.getString(context, "value")))
                                         )
                                 )
                         )
                         .then(literal("setEvent")
-                                .requires(PermissionManager::isAdmin)
-                                .then(argument("key", StringArgumentType.string())
-                                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(DatapackIntegration.getAvailableEvents(), builder))
-                                        .then(argument("canceled", StringArgumentType.string())
-                                                .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("allow","override"), builder))
-                                                .then(argument("command", StringArgumentType.greedyString())
+                                .requires(requireAdmin())
+                                .then(argument("key", stringArg())
+                                        .suggests(suggestList(DatapackIntegration::getAvailableEvents))
+                                        .then(argument("canceled", stringArg())
+                                                .suggests(suggestList(List.of("allow","override")))
+                                                .then(argument("command", greedyStringArg())
                                                         .executes(context -> configSetEvent(context.getSource(), StringArgumentType.getString(context, "key"), StringArgumentType.getString(context, "canceled"), StringArgumentType.getString(context, "command")))
                                                 )
                                         )
                                 )
                         )
                         .then(literal("viewChanges")
-                                .requires(PermissionManager::isAdmin)
+                                .requires(requireAdmin())
                                 .executes(context -> configChanges(context.getSource()))
                         )
                         .then(literal("get")
-                                .requires(PermissionManager::isAdmin)
-                                .then(argument("key", StringArgumentType.string())
-                                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(seasonConfig.getAvailableConfigKeys(), builder))
+                                .requires(requireAdmin())
+                                .then(argument("key", stringArg())
+                                        .suggests(suggestList(() -> seasonConfig.getAvailableConfigKeys()))
                                         .executes(context -> configGet(context.getSource(), StringArgumentType.getString(context, "key")))
                                 )
                         )
@@ -115,17 +120,21 @@ public class LifeSeriesCommand extends CustomCommand {
                         .executes(context -> wiki(context.getSource()))
                 )
                 .then(literal("reload")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .executes(context -> reload(context.getSource()))
                 )
                 .then(literal("chooseSeries")
-                        .requires(source -> PermissionManager.isAdmin(source) && (LifeSeriesNetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer()) || (source.getEntity() == null)))
+                        //? if <= 26.3 {
+                        //.requires(source -> PermissionManager.isAdmin(source) && (LifeSeriesNetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer()) || (source.getEntity() == null)))
+                        //?} else {
+                        .requires(requireAdmin()) // Handshake is checked in chooseSeason
+                        //?}
                         .executes(context -> chooseSeason(context.getSource()))
                 )
                 .then(literal("setSeries")
-                    .requires(PermissionManager::isAdmin)
-                    .then(argument("season", StringArgumentType.string())
-                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(ALLOWED_SEASON_NAMES, builder))
+                    .requires(requireAdmin())
+                    .then(argument("season", stringArg())
+                        .suggests(suggestList(ALLOWED_SEASON_NAMES))
                         .executes(context -> setSeason(
                             context.getSource(), StringArgumentType.getString(context, "season"))
                         )
@@ -133,8 +142,8 @@ public class LifeSeriesCommand extends CustomCommand {
                             .executes(context -> setSeason(
                                 context.getSource(), StringArgumentType.getString(context, "season"), true)
                             )
-                            .then(argument("args", StringArgumentType.greedyString())
-                                    .suggests((context, builder) -> suggestArgs(SeasonChanger.AVAILABLE_SEASON_ARGS, builder))
+                            .then(argument("args", greedyStringArg())
+                                    .suggests(suggestCustom(builder -> suggestArgs(SeasonChanger.AVAILABLE_SEASON_ARGS, builder)))
                                     .executes(context -> setSeason(
                                             context.getSource(), StringArgumentType.getString(context, "season"), true, StringArgumentType.getString(context, "args"))
                                     )
@@ -143,15 +152,15 @@ public class LifeSeriesCommand extends CustomCommand {
                     )
                 )
                 .then(literal("enable")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .executes(context -> enableOrDisable(context.getSource(), false))
                 )
                 .then(literal("disable")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .executes(context -> enableOrDisable(context.getSource(), true))
                 );
-        dispatcher.register(lifeseriesTree);
-        dispatcher.register(literal("ls").redirect(lifeseriesTree.build()));
+        var lifeseriesNode = dispatcher.register(lifeseriesTree);
+        dispatcher.register(literal("ls").redirect(lifeseriesNode));
     }
 
     static CompletableFuture<Suggestions> suggestArgs(final Iterable<String> values, final SuggestionsBuilder builder) {
@@ -166,7 +175,9 @@ public class LifeSeriesCommand extends CustomCommand {
 
         for(String name : values) {
             String lowerName = name.toLowerCase(Locale.ROOT);
-            if (!fullLowerPrefix.contains(lowerName+" ") && SharedSuggestionProvider.matchesSubStr(lowerPrefix, lowerName)) {
+            //~ if >= 26.4 'SharedSuggestionProvider' -> 'SuggestionContext' {
+            if (!fullLowerPrefix.contains(lowerName+" ") && SuggestionContext.matchesSubStr(lowerPrefix, lowerName)) {
+            //~}
                 builder.suggest(suggestPrefix+name);
             }
         }

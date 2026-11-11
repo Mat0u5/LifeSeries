@@ -53,47 +53,46 @@ public class SocietyCommands extends CustomCommand {
                 .then(literal("success")
                     .executes(context -> societySuccess(context.getSource()))
                     .then(literal("confirm")
-                        .requires(PermissionManager::isAdmin)
+                        .requires(requireAdmin())
                         .executes(context -> societySuccessConfirm(context.getSource()))
                     )
                 )
                 .then(literal("fail")
                     .executes(context -> societyFail(context.getSource()))
                     .then(literal("confirm")
-                        .requires(PermissionManager::isAdmin)
+                        .requires(requireAdmin())
                         .executes(context -> societyFailConfirm(context.getSource()))
                     )
                 )
                 .then(literal("begin")
-                    .requires(PermissionManager::isAdmin)
-                    .then(argument("secret_word", StringArgumentType.string())
+                    .requires(requireAdmin())
+                    .then(argument("secret_word", stringArg())
                         .executes(context -> societyBegin(context.getSource(), StringArgumentType.getString(context, "secret_word")))
                     )
                     .executes(context -> societyBegin(context.getSource(), null))
                 )
                 .then(literal("end")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .executes(context -> societyEnd(context.getSource()))
                 )
                 .then(literal("members")
                         .then(literal("add")
-                                .requires(PermissionManager::isAdmin)
+                                .requires(requireAdmin())
                                 .then(argument("player", EntityArgument.player())
                                     .executes(context -> membersAdd(context.getSource(), EntityArgument.getPlayer(context, "player")))
                                 )
                         )
                         .then(literal("remove")
-                                .requires(PermissionManager::isAdmin)
+                                .requires(requireAdmin())
                                 .then(argument("player", EntityArgument.player())
                                     .executes(context -> membersRemove(context.getSource(), EntityArgument.getPlayer(context, "player")))
                                 )
                         )
                         .then(literal("list")
-                                .requires(source -> {
-                                    if (PermissionManager.isAdmin(source)) return true;
-                                    ServerPlayer self = source.getPlayer();
-                                    return self != null && WatcherManager.WATCHERS_SEE_BOOGEY_AND_SOCIETY.get() && ((IPlayer) self).ls$isWatcher();
-                                })
+                                // Checked in the method itself for >= 26.4
+                                //? if <= 26.3 {
+                                //.requires(CustomCommand::isAdminOrWatcher)
+                                //?}
                                 .executes(context -> membersList(context.getSource()))
                         )
                 )
@@ -133,6 +132,7 @@ public class SocietyCommands extends CustomCommand {
 
     public int membersList(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
+        if (checkAdminOrWatcher(source)) return -1;
         SecretSociety society = getSociety();
         if (society == null) return -1;
         if (checkSocietyRunning(source)) return -1;

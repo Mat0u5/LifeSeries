@@ -22,7 +22,7 @@ public class SelfMessageCommand extends CustomCommand {
     public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
             literal("selfmsg")
-                .then(argument("message", StringArgumentType.greedyString())
+                .then(argument("message", greedyStringArg())
                     .executes(context -> execute(
                         context.getSource(),
                         StringArgumentType.getString(context ,"message")

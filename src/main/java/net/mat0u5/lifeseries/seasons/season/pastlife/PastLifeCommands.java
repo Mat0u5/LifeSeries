@@ -41,7 +41,7 @@ public class PastLifeCommands extends CustomCommand {
     public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
             literal("pastlife")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .then(literal("boogeyman")
                         .executes(context -> pickBoogeyman(context.getSource()))
                     )

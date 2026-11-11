@@ -15,7 +15,6 @@ import net.mat0u5.matlib.utils.other.ActionText;
 import net.mat0u5.matlib.utils.other.Time;
 import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -51,7 +50,7 @@ public class SessionCommand extends CustomCommand {
         dispatcher.register(
             literal("session")
                 .then(literal("start")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .executes(context -> startSession(
                         context.getSource()
                     ))
@@ -62,13 +61,13 @@ public class SessionCommand extends CustomCommand {
                     )
                 )
                 .then(literal("stop")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .executes(context -> stopSession(
                         context.getSource()
                     ))
                 )
                 .then(literal("pause")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .executes(context -> pauseSession(
                         context.getSource()
                     ))
@@ -78,10 +77,10 @@ public class SessionCommand extends CustomCommand {
                                     context.getSource()
                             ))
                         )
-                        .then(argument("time", StringArgumentType.string())
-                                .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("1h","1h30m","2h"), builder))
-                                .then(argument("duration", StringArgumentType.greedyString())
-                                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("5m", "10m"), builder))
+                        .then(argument("time", stringArg())
+                                .suggests(suggestList(List.of("1h","1h30m","2h")))
+                                .then(argument("duration", greedyStringArg())
+                                        .suggests(suggestList(List.of("5m", "10m")))
                                         .executes(context -> pauseQueue(
                                                 context.getSource(), StringArgumentType.getString(context, "time"), StringArgumentType.getString(context, "duration")
                                         ))
@@ -91,9 +90,9 @@ public class SessionCommand extends CustomCommand {
                 )
                 .then(literal("timer")
                     .then(literal("set")
-                        .requires(PermissionManager::isAdmin)
-                        .then(argument("time", StringArgumentType.greedyString())
-                            .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("1h","1h30m","2h"), builder))
+                        .requires(requireAdmin())
+                        .then(argument("time", greedyStringArg())
+                            .suggests(suggestList(List.of("1h","1h30m","2h")))
                             .executes(context -> setTime(
                                 context.getSource(), StringArgumentType.getString(context, "time")
                             ))
@@ -103,27 +102,27 @@ public class SessionCommand extends CustomCommand {
                         )
                     )
                     .then(literal("add")
-                        .requires(PermissionManager::isAdmin)
-                        .then(argument("time", StringArgumentType.greedyString())
-                            .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("30m", "1h"), builder))
+                        .requires(requireAdmin())
+                        .then(argument("time", greedyStringArg())
+                            .suggests(suggestList(List.of("30m", "1h")))
                             .executes(context -> addTime(
                                 context.getSource(), StringArgumentType.getString(context, "time")
                             ))
                         )
                     )
                     .then(literal("fastforward")
-                        .requires(PermissionManager::isAdmin)
-                        .then(argument("time", StringArgumentType.greedyString())
-                            .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("5m"), builder))
+                        .requires(requireAdmin())
+                        .then(argument("time", greedyStringArg())
+                            .suggests(suggestList(List.of("5m")))
                             .executes(context -> skipTime(
                                 context.getSource(), StringArgumentType.getString(context, "time")
                             ))
                         )
                     )
                     .then(literal("remove")
-                        .requires(PermissionManager::isAdmin)
-                            .then(argument("time", StringArgumentType.greedyString())
-                                    .suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("5m"), builder))
+                        .requires(requireAdmin())
+                            .then(argument("time", greedyStringArg())
+                                    .suggests(suggestList(List.of("5m")))
                                     .executes(context -> removeTime(
                                             context.getSource(), StringArgumentType.getString(context, "time")
                                     ))
@@ -141,12 +140,12 @@ public class SessionCommand extends CustomCommand {
                     )
                 )
                 .then(literal("actions")
-                        .requires(PermissionManager::isAdmin)
+                        .requires(requireAdmin())
                         .executes(context -> showSessionActions(
                                 context.getSource()
                         ))
                         .then(literal("remove")
-                                .then(argument("id", IntegerArgumentType.integer(0))
+                                .then(argument("id", integerArg(0))
                                         .executes(context -> removeSessionAction(
                                                 context.getSource(), IntegerArgumentType.getInteger(context, "id")
                                         ))

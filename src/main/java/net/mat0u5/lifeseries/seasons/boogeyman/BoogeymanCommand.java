@@ -47,53 +47,52 @@ public class BoogeymanCommand extends CustomCommand {
                         context.getSource()
                 ))
                 .then(literal("clear")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .executes(context -> boogeyClear(
                         context.getSource()
                     ))
                 )
                 .then(literal("list")
-                    .requires(source -> {
-                        if (PermissionManager.isAdmin(source)) return true;
-                        ServerPlayer self = source.getPlayer();
-						return self != null && WatcherManager.WATCHERS_SEE_BOOGEY_AND_SOCIETY.get() && ((IPlayer) self).ls$isWatcher();
-					})
+                    // Checked in the method itself for >= 26.4
+                    //? if <= 26.3 {
+                    //.requires(CustomCommand::isAdminOrWatcher)
+                    //?}
                     .executes(context -> boogeyList(
                         context.getSource()
                     ))
                 )
                 .then(literal("count")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .executes(context -> boogeyCount(
                         context.getSource()
                     ))
                 )
                 .then(literal("add")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .then(argument("player", EntityArgument.players())
                         .executes(context -> addBoogey(context.getSource(), EntityArgument.getPlayers(context, "player")))
                     )
                 )
                 .then(literal("remove")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .then(argument("player", EntityArgument.players())
                         .executes(context -> removeBoogey(context.getSource(), EntityArgument.getPlayers(context, "player")))
                     )
                 )
                 .then(literal("reset")
-                        .requires(PermissionManager::isAdmin)
+                        .requires(requireAdmin())
                         .then(argument("player", EntityArgument.players())
                                 .executes(context -> resetBoogey(context.getSource(), EntityArgument.getPlayers(context, "player")))
                         )
                 )
                 .then(literal("cure")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .then(argument("player", EntityArgument.players())
                         .executes(context -> cureBoogey(context.getSource(), EntityArgument.getPlayers(context, "player")))
                     )
                 )
                 .then(literal("fail")
-                        .requires(PermissionManager::isAdmin)
+                        .requires(requireAdmin())
                         .then(argument("player", EntityArgument.players())
                                 .executes(context -> failBoogey(context.getSource(), EntityArgument.getPlayers(context, "player")))
                         )
@@ -105,7 +104,7 @@ public class BoogeymanCommand extends CustomCommand {
                         .executes(context -> selfFailBoogey(context.getSource(), false))
                 )
                 .then(literal("randomize")
-                    .requires(PermissionManager::isAdmin)
+                    .requires(requireAdmin())
                     .executes(context -> boogeyChooseRandom(
                         context.getSource()
                     ))
@@ -328,6 +327,7 @@ public class BoogeymanCommand extends CustomCommand {
 
     public int boogeyList(CommandSourceStack source) {
         if (checkBanned(source)) return -1;
+        if (checkAdminOrWatcher(source)) return -1;
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
 
