@@ -253,8 +253,8 @@ public abstract class LivingEntityMixin {
 //?}
 
     //? if <= 26.2 {
-    /*@ModifyArg(method = "handleEquipmentChanges", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/protocol/game/ClientboundSetEquipmentPacket;<init>(ILjava/util/List;)V"), index = 1)
-    *///?} else {
+    //@ModifyArg(method = "handleEquipmentChanges", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/protocol/game/ClientboundSetEquipmentPacket;<init>(ILjava/util/List;)V"), index = 1)
+    //?} else {
     @ModifyArg(method = "updatePlayersWithNewEquipment", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/protocol/game/ClientboundSetEquipmentPacket;<init>(ILjava/util/List;)V"), index = 1)
     //?}
     private List<Pair<EquipmentSlot, ItemStack>> hideEquipmentChanges(List<Pair<EquipmentSlot, ItemStack>> equipment) {

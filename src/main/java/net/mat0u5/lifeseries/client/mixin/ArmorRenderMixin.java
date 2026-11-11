@@ -23,8 +23,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.client.renderer.item.ItemModelResolver;
 
 //? if <= 1.21 {
-/*@Mixin(value = HumanoidArmorLayer.class, priority = 1)
-*///?} else {
+//@Mixin(value = HumanoidArmorLayer.class, priority = 1)
+//?} else {
 @Mixin(value = HumanoidMobRenderer.class, priority = 1)
 //?}
 @MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)

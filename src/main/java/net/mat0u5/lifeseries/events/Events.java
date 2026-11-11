@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.resources.datapack.DatapackManager;
 import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.seasons.season.finallife.boogeyman.ThrownBoogeymanWeapon;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretKeeper;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
@@ -110,6 +111,7 @@ public class Events {
     public static void onServerStopping(MinecraftServer server) {
         try {
             //ProfileManager.resetAll();
+            ThrownBoogeymanWeapon.returnAllWeapons();
             if (LifeSeries.modDisabled()) return;
             currentSession.sessionEnd();
         } catch (Exception e) {
@@ -157,6 +159,7 @@ public class Events {
                 LifeSeriesNetworkHandlerServer.onUpdatedConfig();
             }
             AdvancedDeathsManager.tick();
+            ThrownBoogeymanWeapon.onTick(server);
         }
     }
 

@@ -158,6 +158,11 @@ public enum ModifiableSound {
 	,NICELIFE_SNOWMAN_GROWL(Seasons.NICE_LIFE, IdentifierHelper.lifeseries("nicelife_snowman_growl"))
 
 	,FINALLIFE_BOOGEYMAN_JOIN(Seasons.FINAL_LIFE, SoundEvents.LIGHTNING_BOLT_THUNDER)
+	,FINALLIFE_BOOGEYMAN_WEAPON_THROW(Seasons.FINAL_LIFE, IdentifierHelper.vanilla("item.trident.throw"))
+	,FINALLIFE_BOOGEYMAN_WEAPON_HIT(Seasons.FINAL_LIFE, IdentifierHelper.vanilla("entity.player.attack.strong"))
+	,FINALLIFE_BOOGEYMAN_WEAPON_AIR(Seasons.FINAL_LIFE, IdentifierHelper.lifeseries("finallife_fly_woosh"))
+	,FINALLIFE_BOOGEYMAN_WEAPON_CHARGED(Seasons.FINAL_LIFE, IdentifierHelper.vanilla("item.crossbow.loading_end"))
+	,FINALLIFE_DIMENSION_SWAP(Seasons.FINAL_LIFE, IdentifierHelper.lifeseries("finallife_dimension_swap"))
 
 	;
 

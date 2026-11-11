@@ -20,8 +20,8 @@ import static net.mat0u5.matlib.MatLib.server;
 import net.minecraft.server.ServerTickRateManager;
 
 //? if <= 1.20.3 {
-/*import net.minecraft.world.item.ArmorItem;
- *///?} else {
+//import net.minecraft.world.item.ArmorItem;
+ //?} else {
 import net.minecraft.tags.ItemTags;
 //?}
 
@@ -128,8 +128,8 @@ public class OtherUtils extends net.mat0u5.matlib.utils.other.OtherUtils {
     public static boolean isHelmet(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
         //? if <= 1.20.3 {
-        /*return stack.getItem() instanceof ArmorItem armorItem && armorItem.getEquipmentSlot() == EquipmentSlot.HEAD;
-         *///?} else {
+        //return stack.getItem() instanceof ArmorItem armorItem && armorItem.getEquipmentSlot() == EquipmentSlot.HEAD;
+         //?} else {
         return stack.is(ItemTags.HEAD_ARMOR);
         //?}
     }

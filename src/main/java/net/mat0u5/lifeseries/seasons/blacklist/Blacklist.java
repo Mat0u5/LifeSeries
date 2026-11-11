@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.blacklist;
 
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.finallife.boogeyman.BoogeymanWeaponManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
@@ -435,6 +436,9 @@ public class Blacklist {
         if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST.get()) return;
         if (itemStack.isEmpty()) return;
         if (itemStack.getItem() == Items.AIR) return;
+        if (BoogeymanWeaponManager.isBlacklistedFor(player, itemStack)) {
+            BoogeymanWeaponManager.removeBoogeymanWeaponNBT(itemStack);
+        }
         if (isBlacklistedItem(itemStack) && !ItemStackUtils.hasCustomComponentEntry(itemStack, "IgnoreBlacklist")) {
             itemStack.setCount(0);
             player.getInventory().tick();

@@ -1,21 +1,19 @@
 package net.mat0u5.lifeseries.seasons.season.finallife;
 
-import com.mojang.datafixers.util.Pair;
-import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.finallife.boogeyman.BoogeymanWeaponManager;
+import net.mat0u5.lifeseries.seasons.season.finallife.boogeyman.FinalLifeBoogeymanManager;
+import net.mat0u5.lifeseries.seasons.season.finallife.boogeyman.ThrownBoogeymanWeapon;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.matlib.events.EventResult;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
@@ -83,14 +81,23 @@ public class FinalLife extends Season {
 
 	@Override
 	public void onPlayerDisconnect(ServerPlayer player) {
+		ThrownBoogeymanWeapon.returnWeapons(player);
 		super.onPlayerDisconnect(player);
 		finalLifeBoogeymanManager.onPlayerDisconnect(player);
 	}
 
 	@Override
 	public void switchOutOfSeason(Seasons changedTo) {
+		ThrownBoogeymanWeapon.returnAllWeapons();
+		BoogeymanWeaponManager.removeAllBoogeymanWeaponNBTs();
 		super.switchOutOfSeason(changedTo);
 		finalLifeBoogeymanManager.switchOutOfSeason();
+	}
+
+	@Override
+	public void tick(MinecraftServer server) {
+		super.tick(server);
+		BoogeymanWeaponManager.onTick();
 	}
 
 	@Override

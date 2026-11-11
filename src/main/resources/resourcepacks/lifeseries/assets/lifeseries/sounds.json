@@ -599,5 +599,18 @@
         "sounds": [
             "lifeseries:nicelife/santabot_vote"
         ]
+    },
+
+
+
+    "finallife_fly_woosh": {
+        "sounds": [
+            "lifeseries:finallife/fly_woosh"
+        ]
+    },
+    "finallife_dimension_swap": {
+        "sounds": [
+            "lifeseries:finallife/dimension_swap"
+        ]
     }
 }

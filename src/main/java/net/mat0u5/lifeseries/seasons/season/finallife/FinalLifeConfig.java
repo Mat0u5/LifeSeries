@@ -87,6 +87,21 @@ public class FinalLifeConfig extends SeasonConfig {
 			.setNew(true)
 			.serverShared()
 			.group("season.boogeyman");
+	public final ConfigurableValue<Boolean> FINAL_LIFE_BOOGEYMAN_THROWABLE_WEAPONS = ConfigurableValue.register(this, "final_life_boogeyman_throwable_weapons", true)
+			.name("Throwable Weapons")
+			.description("Controls whether the boogeyman can throw their swords and axes.")
+			.setNew(true)
+			.group("season.boogeyman.throwable").groupHeader(true);
+	public final ConfigurableValue<Double> FINAL_LIFE_BOOGEYMAN_THROW_RANGE = ConfigurableValue.register(this, "final_life_boogeyman_throw_range", 20.0)
+			.name("Throw Range")
+			.description("How many blocks a thrown weapon flies before it returns to the boogeyman.")
+			.setNew(true)
+			.group("season.boogeyman.throwable");
+	public final ConfigurableValue<Double> FINAL_LIFE_BOOGEYMAN_THROW_CHARGE_TIME = ConfigurableValue.register(this, "final_life_boogeyman_throw_charge_time", 0.5)
+			.name("Throw Charge Time")
+			.description("How many seconds the boogeyman has to hold right click before releasing throws the weapon. Do note that changing this will desync the pull animation, which is 0.5s long.")
+			.setNew(true)
+			.group("season.boogeyman.throwable");
 
 	protected FinalLifeConfig() {
 		super(Seasons.FINAL_LIFE);
@@ -97,6 +112,7 @@ public class FinalLifeConfig extends SeasonConfig {
 		BLACKLIST_RECIPES.defaultValue(List.of("enchanting_table"));
 		DEFAULT_LIVES.defaultValue(6);
 		DISABLE_HELMET_RENDERING.defaultValue(true);
+		ENABLE_START_TELEPORT.defaultValue(true);
 		FINAL_LIFE_BOOGEYMAN_HIDE_ARMOR.onChange((oldValue, newValue) -> {
 			if (isActive()) PlayerUtils.resendVisibleEquipment();
 		});

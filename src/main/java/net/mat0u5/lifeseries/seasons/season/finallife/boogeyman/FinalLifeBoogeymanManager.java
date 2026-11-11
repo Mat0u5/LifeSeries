@@ -1,9 +1,11 @@
-package net.mat0u5.lifeseries.seasons.season.finallife;
+package net.mat0u5.lifeseries.seasons.season.finallife.boogeyman;
 
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
+import net.mat0u5.lifeseries.seasons.season.finallife.FinalLife;
+import net.mat0u5.lifeseries.seasons.season.finallife.FinalLifeConfig;
 import net.mat0u5.lifeseries.seasons.util.WatcherManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
@@ -217,6 +219,10 @@ public class FinalLifeBoogeymanManager {
 		return player != null && isBoogeyman(player.getUUID());
 	}
 
+	public boolean canHaveBoogeymanWeapons(ServerPlayer player) {
+		return player != null && (isBoogeyman(player) || hasStoredStatus(player.getUUID()));
+	}
+
 	public boolean isDeadBoogeyman(ServerPlayer player) {
 		return isBoogeyman(player) && isStoredDead(player.getUUID());
 	}
@@ -338,6 +344,8 @@ public class FinalLifeBoogeymanManager {
 	private void onStoppedBeingBoogeyman(ServerPlayer player, boolean wasDead) {
 		((IPlayer)player).ls$message(ModifiableText.FINALLIFE_BOOGEYMAN_NOTICE_REMOVED.get());
 		restoreNormalGameMode(player);
+		ThrownBoogeymanWeapon.returnWeapons(player);
+		BoogeymanWeaponManager.removeBoogeymanWeaponNBTs(player);
 		//TODO
 	}
 
