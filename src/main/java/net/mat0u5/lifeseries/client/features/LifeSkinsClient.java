@@ -32,6 +32,7 @@ import net.minecraft.world.entity.player.PlayerSkin;
 //import net.minecraft.client.renderer.texture.DynamicTexture;
  //?} else {
 import net.minecraft.client.renderer.texture.TextureResources;
+import net.minecraft.client.renderer.texture.ExternalTextureProvider;
 //?}
 
 public class LifeSkinsClient {
@@ -74,7 +75,11 @@ public class LifeSkinsClient {
             TextureResources texture = TextureResources.from2dImage(() -> skinId, image);
             //?}
             removeTexture(skinId);
-            client.getTextureManager().register(textureId, texture);
+            //? if <= 26.3 {
+            //client.getTextureManager().register(textureId, texture);
+            //?} else {
+            client.getTextureManager().registerProvider(textureId, new ExternalTextureProvider(texture));
+            //?}
             LifeSeries.LOGGER.info(TextUtils.formatString("Updated life skins texture '{}'", textureId));
 
             //? if <= 1.20 {

@@ -55,7 +55,9 @@ public class ItemSpawner {
             LootParams parameters = new LootParams.Builder(level)
                     .withParameter(LootContextParams.ORIGIN, player.position())
                     .withParameter(LootContextParams.THIS_ENTITY, player)
-                    .create(LootContextParamSets.COMMAND);
+                    //~ if >= 26.4 'COMMAND' -> 'COMMAND_COMPUTE_DEFAULT' {
+                    .create(LootContextParamSets.COMMAND_COMPUTE_DEFAULT);
+                    //~}
             //?}
 
             //? if <= 1.20.3 {

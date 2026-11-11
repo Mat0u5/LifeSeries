@@ -72,7 +72,6 @@ public abstract class PlayerMixin implements IPlayerUsername {
             if (WatcherManager.isWatcher(player)) return;
 
             if (player instanceof ServerPlayer serverPlayer) {
-                serverPlayer.canHealNaturally()
                 doubleLife.canFoodHeal(serverPlayer, cir);
             }
         }
