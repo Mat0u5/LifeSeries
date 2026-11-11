@@ -97,6 +97,7 @@ public class FinalLife extends Season {
 	@Override
 	public void tick(MinecraftServer server) {
 		super.tick(server);
+		finalLifeBoogeymanManager.tick();
 		BoogeymanWeaponManager.onTick();
 	}
 

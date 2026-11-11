@@ -10,6 +10,7 @@ import net.mat0u5.matlib.utils.world.ItemStackUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -194,7 +195,7 @@ public class ThrownBoogeymanWeapon {
 		if (returning) return;
 
 		if (blockHit.getType() != HitResult.Type.MISS) {
-			//display.playSound(SoundEvents.TRIDENT_HIT_GROUND, 1.0F, 1.0F);
+			display.playSound(SoundEvents.TRIDENT_HIT_GROUND, 0.5F, 1.0F);
 			startReturning(-0.2);
 		}
 		else {

@@ -23,6 +23,9 @@ import net.mat0u5.matlib.utils.world.LevelUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.scores.PlayerScoreEntry;
 import net.minecraft.world.scores.PlayerTeam;
@@ -44,6 +47,9 @@ import static net.mat0u5.lifeseries.LifeSeries.livesManager;
 //?} else {
 import net.minecraft.world.scores.TeamColor;
 //?}
+//? if >= 1.20.5 {
+import net.minecraft.core.Holder;
+//?}
 
 public class FinalLifeBoogeymanManager {
 	public static final String SCOREBOARD_NAME = "finallife_boogeyman";
@@ -55,6 +61,13 @@ public class FinalLifeBoogeymanManager {
 	public final ConfigRef<List<String>> BOOGEYMAN_LIST = ConfigRef.of(() -> FinalLifeConfig.get().FINAL_LIFE_BOOGEYMAN_LIST);
 	public final ConfigRef<Boolean> BOOGEYMAN_HIDE_IN_TAB = ConfigRef.of(() -> FinalLifeConfig.get().FINAL_LIFE_BOOGEYMAN_HIDE_IN_TAB);
 	public static final ConfigRef<Boolean> BOOGEYMAN_HIDE_ARMOR = ConfigRef.of(() -> FinalLifeConfig.get().FINAL_LIFE_BOOGEYMAN_HIDE_ARMOR); // Synced value
+	public final ConfigRef<Boolean> FINAL_LIFE_BOOGEYMAN_SPEED = ConfigRef.of(() -> FinalLifeConfig.get().FINAL_LIFE_BOOGEYMAN_SPEED);
+
+	//? if <= 1.20.3 {
+	//private static final MobEffect SPEED_EFFECT = MobEffects.SPEED;
+	//?} else {
+	private static final Holder<MobEffect> SPEED_EFFECT = MobEffects.SPEED;
+	//?}
 
 	private List<UUID> boogeymen = new ArrayList<>();
 	private final Set<UUID> disguised = new HashSet<>();
@@ -183,6 +196,27 @@ public class FinalLifeBoogeymanManager {
 		disguised.clear();
 		hiddenGameModes.clear();
 		resetScoreboard();
+	}
+
+	public void tick() {
+		for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
+			if (isEnabled() && isBoogeyman(player) && !player.isSpectator() && FINAL_LIFE_BOOGEYMAN_SPEED.get()) {
+				boolean giveSpeed = false;
+				MobEffectInstance effect = player.getEffect(SPEED_EFFECT);
+				if (effect == null) {
+					giveSpeed = true;
+				}
+				else {
+					if (effect.endsWithin(20)) giveSpeed = true;
+					if (effect.getAmplifier() > 0) {
+						giveSpeed = false;
+					}
+				}
+				if (giveSpeed) {
+					player.addEffect(new MobEffectInstance(SPEED_EFFECT, 100, 0, false, false, false));
+				}
+			}
+		}
 	}
 
 	public static boolean overwriteConnectionMessage(ServerPlayer player, boolean joined) {

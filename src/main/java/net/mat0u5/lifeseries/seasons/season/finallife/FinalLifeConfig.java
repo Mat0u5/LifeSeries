@@ -92,7 +92,7 @@ public class FinalLifeConfig extends SeasonConfig {
 			.description("Controls whether the boogeyman can throw their swords and axes.")
 			.setNew(true)
 			.group("season.boogeyman.throwable").groupHeader(true);
-	public final ConfigurableValue<Double> FINAL_LIFE_BOOGEYMAN_THROW_RANGE = ConfigurableValue.register(this, "final_life_boogeyman_throw_range", 20.0)
+	public final ConfigurableValue<Double> FINAL_LIFE_BOOGEYMAN_THROW_RANGE = ConfigurableValue.register(this, "final_life_boogeyman_throw_range", 25.0)
 			.name("Throw Range")
 			.description("How many blocks a thrown weapon flies before it returns to the boogeyman.")
 			.setNew(true)
@@ -102,6 +102,11 @@ public class FinalLifeConfig extends SeasonConfig {
 			.description("How many seconds the boogeyman has to hold right click before releasing throws the weapon. Do note that changing this will desync the pull animation, which is 0.5s long.")
 			.setNew(true)
 			.group("season.boogeyman.throwable");
+	public final ConfigurableValue<Boolean> FINAL_LIFE_BOOGEYMAN_SPEED = ConfigurableValue.register(this, "final_life_boogeyman_speed", true)
+			.name("Speed Boost")
+			.description("Controls whether the boogeyman has a permanent speed effect.")
+			.setNew(true)
+			.group("season.boogeyman");
 
 	protected FinalLifeConfig() {
 		super(Seasons.FINAL_LIFE);

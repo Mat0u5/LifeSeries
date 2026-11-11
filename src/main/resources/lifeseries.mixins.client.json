@@ -30,6 +30,7 @@
     "GuiMixin",
     "InBedChatScreenAccessor",
     "InBedChatScreenMixin",
+    "IntegratedServerMixin",
     "ItemInHandLayerMixin",
     "LevelMixin",
     "LevelRendererMixin",
