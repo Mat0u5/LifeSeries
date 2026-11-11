@@ -67,7 +67,6 @@ stonecutter {
 		if (env("GRADLE_ONLY_SNAPSHOT") == "true") {
 			// Only the snapshot
 			match("26.4", "fabric")
-			match("26.3", "fabric")
 		}
 		else if (env("GRADLE_ONLY_26_3") == "true") {
 			// 26.3 all platform
