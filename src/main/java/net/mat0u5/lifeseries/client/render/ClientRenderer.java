@@ -6,6 +6,9 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.finallife.boogeyman.FinalLifeBoogeymanManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -24,6 +27,12 @@ import net.minecraft.world.TickRateManager;
 //? if >= 1.21.2 {
 import net.minecraft.util.ARGB;
 import org.joml.Vector3f;
+//?}
+
+//? if <= 1.21.6 {
+//import net.minecraft.client.renderer.texture.TextureAtlas;
+//?} else {
+import net.minecraft.data.AtlasIds;
 //?}
 
 public class ClientRenderer {
@@ -143,5 +152,17 @@ public class ClientRenderer {
             }
         }
         return Season.DISABLE_HELMET_RENDERING.get() && slot == EquipmentSlot.HEAD && OtherUtils.isHelmet(stack);
+    }
+
+    public static TextureAtlasSprite getParticleSprite(Identifier id) {
+        //? if <= 1.21.6 {
+        //return Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_PARTICLES).apply(id);
+         //?} else {
+        return Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.PARTICLES).getSprite(id);
+        //?}
+    }
+
+    public static boolean isMissing(TextureAtlasSprite sprite) {
+        return sprite == null || sprite.contents().name().equals(MissingTextureAtlasSprite.getLocation());
     }
 }

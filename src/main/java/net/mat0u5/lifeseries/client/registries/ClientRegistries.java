@@ -11,6 +11,9 @@ import net.mat0u5.lifeseries.client.events.ClientKeybinds;
 import net.mat0u5.lifeseries.client.features.EntityRenderModifier;
 import net.mat0u5.lifeseries.client.features.LifeSkinsClient;
 import net.mat0u5.lifeseries.client.network.LifeSeriesNetworkHandlerClient;
+import net.mat0u5.lifeseries.client.particle.InBetweenRingAccentParticle;
+import net.mat0u5.lifeseries.client.particle.InBetweenBackgroundParticle;
+import net.mat0u5.lifeseries.client.particle.InBetweenSquareParticle;
 import net.mat0u5.lifeseries.client.particle.TriviaSpiritParticle;
 import net.mat0u5.lifeseries.client.render.ClientRenderer;
 import net.mat0u5.lifeseries.client.utils.ClientSounds;
@@ -68,7 +71,12 @@ public class ClientRegistries {
 				new RenderableEntity<>(MobRegistry.ANGRY_SNOWMAN, AngrySnowmanRenderer::new)
 		));
 		ClientRegistryEvents.PARTICLE_PROVIDER.register(() -> List.of(
-				new ProvidedParticle<>(ParticleRegistry.TRIVIA_SPIRIT, new TriviaSpiritParticle.Provider())
+				new ProvidedParticle<>(ParticleRegistry.TRIVIA_SPIRIT, new TriviaSpiritParticle.Provider()),
+				new ProvidedParticle<>(ParticleRegistry.IN_BETWEEN_BACKGROUND, new InBetweenBackgroundParticle.Provider("in_between_background")),
+				new ProvidedParticle<>(ParticleRegistry.IN_BETWEEN_BACKGROUND_TRIVIA, new InBetweenBackgroundParticle.Provider("in_between_background_trivia")),
+				new ProvidedParticle<>(ParticleRegistry.IN_BETWEEN_RING_ACCENT, new InBetweenRingAccentParticle.Provider()),
+				new ProvidedParticle<>(ParticleRegistry.IN_BETWEEN_PATH, new InBetweenSquareParticle.Provider(InBetweenSquareParticle.NORMAL_SIZE)),
+				new ProvidedParticle<>(ParticleRegistry.IN_BETWEEN_PATH_SMALL, new InBetweenSquareParticle.Provider(InBetweenSquareParticle.SMALL_SIZE))
 		));
 		ClientRegistryEvents.ENTITY_MODEL_LAYER_DEFINITION.register(() -> List.of(
 				new LayerDefinitionModel(SnailModel.SNAIL, SnailModel.getTexturedModelData()),
