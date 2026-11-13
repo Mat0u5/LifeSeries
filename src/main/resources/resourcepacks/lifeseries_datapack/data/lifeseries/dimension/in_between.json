@@ -1,0 +1,22 @@
+{
+  "type": "lifeseries:in_between",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "lifeseries:in_between",
+      "features": false,
+      "lakes": false,
+      "layers": [
+        {
+          "height": 99,
+          "block": "minecraft:air"
+        },
+        {
+          "height": 1,
+          "block": "minecraft:barrier"
+        }
+      ],
+      "structure_overrides": []
+    }
+  }
+}
