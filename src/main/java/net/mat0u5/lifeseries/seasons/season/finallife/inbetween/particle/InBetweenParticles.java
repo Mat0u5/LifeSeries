@@ -1,7 +1,10 @@
-package net.mat0u5.lifeseries.seasons.season.finallife.inbetween;
+package net.mat0u5.lifeseries.seasons.season.finallife.inbetween.particle;
 
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.registries.ParticleRegistry;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenBuilder;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenInstance;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.core.particles.ParticleOptions;
@@ -32,10 +35,11 @@ public class InBetweenParticles {
 
 	@Nullable
 	private Vec3 getPointNearPath(Vec3 playerPos, double maxDistance) {
-		if (inBetween.pathPoints.size() < 2) return null;
-		double[] distanceMap = new double[inBetween.pathPoints.size()];
-		for (int i = 1; i < inBetween.pathPoints.size(); i++) {
-			distanceMap[i] = distanceMap[i - 1] + inBetween.pathPoints.get(i).distanceTo(inBetween.pathPoints.get(i - 1));
+		InBetweenBuilder builder = inBetween.inBetweenBuilder;
+		if (builder.pathPoints.size() < 2) return null;
+		double[] distanceMap = new double[builder.pathPoints.size()];
+		for (int i = 1; i < builder.pathPoints.size(); i++) {
+			distanceMap[i] = distanceMap[i - 1] + builder.pathPoints.get(i).distanceTo(builder.pathPoints.get(i - 1));
 		}
 		double totalLength = distanceMap[distanceMap.length - 1];
 		if (totalLength <= 0) return null;
@@ -50,7 +54,7 @@ public class InBetweenParticles {
 
 			double segmentLength = distanceMap[segmentNumber] - distanceMap[segmentNumber -1];
 			double segmentProgress = segmentLength <= 0 ? 0 : (randomDistance - distanceMap[segmentNumber -1]) / segmentLength;
-			Vec3 randomPoint = inBetween.pathPoints.get(segmentNumber - 1).lerp(inBetween.pathPoints.get(segmentNumber), segmentProgress);
+			Vec3 randomPoint = builder.pathPoints.get(segmentNumber - 1).lerp(builder.pathPoints.get(segmentNumber), segmentProgress);
 			if (randomPoint.distanceToSqr(playerPos) <= maxDistanceSqr) {
 				return randomPoint;
 			}
@@ -87,8 +91,8 @@ public class InBetweenParticles {
 	private void spawnRingParticles(ServerPlayer player) {
 		ParticleOptions ring = ParticleTypes.END_ROD;
 		ParticleOptions accent = ParticleRegistry.IN_BETWEEN_RING_ACCENT;
-		List<Vec3> centers = inBetween.getChoiceCenters();
-		int ringCount = Math.min(inBetween.choices.size(), centers.size());
+		List<Vec3> centers = inBetween.choiceManager.getChoiceCenters();
+		int ringCount = Math.min(inBetween.choiceManager.choices.size(), centers.size());
 		//Calculate the middle position, to decide which way the choice rings should spin.
 		double middleXPosition = 0;
 		for (int i = 0; i < ringCount; i++) {

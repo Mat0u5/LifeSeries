@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.seasons.boogeyman.advanceddeaths.AdvancedDeathsMana
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.finallife.boogeyman.ThrownBoogeymanWeapon;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenManager;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretKeeper;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
@@ -83,6 +84,7 @@ public class Events {
             currentSeason.onPlayerJoin(player);
             SessionTranscript.playerJoin(player);
         MorphManager.onPlayerJoin(player);
+        InBetweenManager.onPlayerJoin(player);
         DatapackIntegration.EVENT_PLAYER_JOIN.trigger(new DatapackIntegration.Events.MacroEntry("Player", player.getScoreboardName()));
     }
 
@@ -112,6 +114,7 @@ public class Events {
         try {
             //ProfileManager.resetAll();
             ThrownBoogeymanWeapon.returnAllWeapons();
+            InBetweenManager.onServerStopping();
             if (LifeSeries.modDisabled()) return;
             currentSession.sessionEnd();
         } catch (Exception e) {
@@ -197,6 +200,7 @@ public class Events {
         if (isFakePlayer(player)) return InteractionResult.PASS;
 
         if (level instanceof ServerLevel serverLevel && LifeSeries.isLogicalSide()) {
+            if (InBetweenManager.shouldBlockInteractions(player)) return InteractionResult.FAIL;
             if (currentSeason instanceof SecretLife) {
                 SecretKeeper.onBlockUse(player, serverLevel, hitResult);
             }
@@ -210,6 +214,7 @@ public class Events {
         if (isFakePlayer(player) || modDisabled()) return InteractionResult.PASS;
 
         if (level instanceof ServerLevel serverLevel && LifeSeries.isLogicalSide()) {
+            if (InBetweenManager.shouldBlockInteractions(player)) return InteractionResult.FAIL;
             ItemStack itemStack = player.getItemInHand(hand);
             //? if >= 1.21.2 {
             if (itemStack.is(Items.FIREWORK_ROCKET)) {
@@ -232,6 +237,7 @@ public class Events {
 
         if (!LifeSeries.isLogicalSide()) return InteractionResult.PASS;
         if (level.isClientSide()) return InteractionResult.PASS;
+        if (InBetweenManager.shouldBlockInteractions(player)) return InteractionResult.FAIL;
         if (currentSeason instanceof SecretLife && SecretKeeper.preventBlockBreak(player, pos)) {
             return InteractionResult.FAIL;
         }
@@ -244,6 +250,7 @@ public class Events {
 
         try {
             if (!LifeSeries.isLogicalSide()) return InteractionResult.PASS;
+            if (InBetweenManager.shouldBlockInteractions(player)) return InteractionResult.FAIL;
             if (player instanceof ServerPlayer serverPlayer) {
                 currentSeason.onRightClickEntity(serverPlayer, level, hand, entity, hitResult);
             }
@@ -257,6 +264,7 @@ public class Events {
 
         try {
             if (!LifeSeries.isLogicalSide()) return InteractionResult.PASS;
+            if (InBetweenManager.shouldBlockInteractions(player)) return InteractionResult.FAIL;
             if (player instanceof ServerPlayer serverPlayer) {
                 currentSeason.onAttackEntity(serverPlayer, serverPlayer.level(), entity);
             }

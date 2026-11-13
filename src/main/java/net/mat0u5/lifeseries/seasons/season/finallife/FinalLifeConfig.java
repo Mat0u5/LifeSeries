@@ -108,6 +108,17 @@ public class FinalLifeConfig extends SeasonConfig {
 			.setNew(true)
 			.group("season.boogeyman");
 
+	public final ConfigurableValue<Boolean> FINAL_LIFE_IN_BETWEEN = ConfigurableValue.register(this, "final_life_in_between", true)
+			.name("The In-Between")
+			.description("Controls whether players who die are sent to the In-Between before respawning.")
+			.setNew(true)
+			.group("season.inbetween").groupHeader(true);
+	public final ConfigurableValue<Boolean> FINAL_LIFE_IN_BETWEEN_ISOLATE_CHAT = ConfigurableValue.register(this, "final_life_in_between_isolate_chat", true)
+			.name("Isolate Chat")
+			.description("Controls whether the In-Between players have isolated chat.")
+			.setNew(true)
+			.group("season.inbetween");
+
 	protected FinalLifeConfig() {
 		super(Seasons.FINAL_LIFE);
 		removeEntry(NO_SEASON_SPECIFIC);

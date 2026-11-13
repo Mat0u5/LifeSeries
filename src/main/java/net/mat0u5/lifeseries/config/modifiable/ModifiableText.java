@@ -638,6 +638,11 @@ public enum ModifiableText {
     ,FINALLIFE_BOOGEYMAN_MESSAGE_JOIN(Seasons.FINAL_LIFE, Formatted.LOOSELY_STYLED, "§e{} joined the game", List.of("username"))
     ,FINALLIFE_BOOGEYMAN_MESSAGE_LEAVE(Seasons.FINAL_LIFE, Formatted.LOOSELY_STYLED, "§e{} left the game", List.of("username"))
 
+    ,FINALLIFE_INBETWEEN_COMMAND_ENTER(Seasons.FINAL_LIFE, "Sent {} {} to the In-Between", List.of("amount", "player/s"))
+    ,FINALLIFE_INBETWEEN_COMMAND_EXIT(Seasons.FINAL_LIFE, "Returned {} {} from the In-Between", List.of("amount", "player/s"))
+    ,FINALLIFE_INBETWEEN_COMMAND_DEATHS_GET(Seasons.FINAL_LIFE, "{} has {} stored {}", List.of("Player", "amount", "death/s"))
+    ,FINALLIFE_INBETWEEN_COMMAND_DEATHS_SET(Seasons.FINAL_LIFE, "Set {}'s stored deaths to {}", List.of("Player", "amount"))
+
 //ModifiableText.NAME.get(
 
     /*
