@@ -31,7 +31,7 @@ import java.util.List;
 
 @AutoService(MultiplatformModInitializer.class)
 public class LifeSeries implements MultiplatformModInitializer {
-	public static final String MOD_VERSION = "1.5.11-pre1";
+	public static final String MOD_VERSION = "1.5.11";
 	public static final String MOD_ID = "lifeseries";
 	public static final String MOD_FRIENDLY_NAME = "Life Series";
 

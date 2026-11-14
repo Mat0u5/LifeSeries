@@ -168,13 +168,13 @@ public class VersionControl implements VersionTrackedMod {
     public VersionCompatibility clientCompatibility() {
         // This is the version that the SERVER needs to have for the current client.
         if (LifeSeries.ISOLATED_ENVIRONMENT) return VersionCompatibility.equal(MOD_VERSION);
-        return VersionCompatibility.min("1.5.11-pre1");
+        return VersionCompatibility.min("1.5.11");
     }
 
     @Override
     public VersionCompatibility serverCompatibility() {
         // This is the version that the CLIENT needs to have for the current server.
         if (LifeSeries.ISOLATED_ENVIRONMENT) return VersionCompatibility.equal(MOD_VERSION);
-        return VersionCompatibility.min("1.5.11-pre1");
+        return VersionCompatibility.min("1.5.11");
     }
 }

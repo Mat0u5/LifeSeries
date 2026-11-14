@@ -137,6 +137,7 @@ public abstract class Season {
     public static ConfigRef<Boolean> ONLY_ADVANCE_TIME_IN_SESSION = ConfigRef.of(() -> seasonConfig.ONLY_ADVANCE_TIME_IN_SESSION);
     public static ConfigRef<Boolean> DISABLE_MINIMAL_ARMOR_PACK = ConfigRef.of(() -> LifeSeries.seasonConfig.DISABLE_MINIMAL_ARMOR_PACK);
     public final ConfigRef<Boolean> ENABLE_START_TELEPORT = ConfigRef.of(() -> LifeSeries.seasonConfig.ENABLE_START_TELEPORT);
+    public static final String SCOREBOARD_RANDOMLY_TELEPORTED = "RandomlyTeleported";
 
     public BoogeymanManager boogeymanManager = createBoogeymanManager();
     public SecretSociety secretSociety = createSecretSociety();
@@ -206,6 +207,7 @@ public abstract class Season {
     }
     public void switchOutOfSeason(Seasons changedTo) {
         AdvancedDeathsManager.resetQueuedDeaths();
+        ScoreboardUtils.removeObjective(SCOREBOARD_RANDOMLY_TELEPORTED);
     }
 
     public void reloadStart() {
@@ -372,6 +374,7 @@ public abstract class Season {
 
     public void createScoreboards() {
         ScoreboardUtils.createObjective("HP", "§c❤", ObjectiveCriteria.HEALTH);
+        ScoreboardUtils.createObjective(SCOREBOARD_RANDOMLY_TELEPORTED);
         WatcherManager.createScoreboards();
         livesManager.createScoreboards();
         DatapackIntegration.createScoreboards();
@@ -534,14 +537,13 @@ public abstract class Season {
 
     public List<ServerPlayer> getPlayersForDistribution() {
         List<ServerPlayer> players = PlayerUtils.getAllFunctioningPlayers();
-        players.removeIf(player ->
-            //? if <= 1.21.11 {
-            //player.getTags().contains("randomlyTeleported")
-            //?} else {
-            player.entityTags().contains("randomlyTeleported")
-            //?}
-        );
+        players.removeIf(Season::wasRandomlyTeleported);
         return players;
+    }
+
+    public static boolean wasRandomlyTeleported(ServerPlayer player) {
+        Integer score = ScoreboardUtils.getScore(player, SCOREBOARD_RANDOMLY_TELEPORTED);
+        return score != null && score > 0;
     }
 
     public void distributePlayers() {
@@ -557,11 +559,11 @@ public abstract class Season {
 
         for (ServerPlayer player : players) {
             player.addTag("tempTeleport");
-            player.addTag("randomlyTeleported");
+            ScoreboardUtils.setScore(player, SCOREBOARD_RANDOMLY_TELEPORTED, 1);
             ((IPlayer) player).ls$message(ModifiableText.SPREAD_PLAYERS_TELEPORT.get());
         }
         WorldBorder border = server.overworld().getWorldBorder();
-        OtherUtils.executeCommand(TextUtils.formatString("spreadplayers {} {} 0 {} false @a[tag=tempTeleport]", border.getCenterX(), border.getCenterZ(), (border.getSize()/2)));
+        OtherUtils.executeCommand(TextUtils.formatString("spreadplayers {} {} 0 {} false @a[tag=tempTeleport]", border.getCenterX(), border.getCenterZ(), (int)(border.getSize()/2)));
         PlayerUtils.broadcastMessageToAdmins(ModifiableText.SPREAD_PLAYERS_TELEPORT_SUCCESS.get());
 
         for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
