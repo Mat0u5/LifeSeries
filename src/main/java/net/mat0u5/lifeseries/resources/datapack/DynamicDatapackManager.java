@@ -56,15 +56,15 @@ public class DynamicDatapackManager {
         ResourceHandler handler = new ResourceHandler();
 
         File configTrivia = new File(CONFIG_TABLE_TRIVIA);
-        if (!configTrivia.exists()) {
+        if (shouldCopyLootTableToConfig(configTrivia)) {
             handler.copyBundledSingleFile(LOCAL_TABLE_TRIVIA, configTrivia.toPath());
         }
         File configNiceLifeTrivia = new File(CONFIG_TABLE_NICELIFE_TRIVIA);
-        if (!configNiceLifeTrivia.exists()) {
+        if (shouldCopyLootTableToConfig(configNiceLifeTrivia)) {
             handler.copyBundledSingleFile(LOCAL_TABLE_NICELIFE_TRIVIA, configNiceLifeTrivia.toPath());
         }
         File configTask = new File(CONFIG_TABLE_TASK);
-        if (!configTask.exists()) {
+        if (shouldCopyLootTableToConfig(configTask)) {
             handler.copyBundledSingleFile(LOCAL_TABLE_TASK, configTask.toPath());
         }
 
@@ -91,6 +91,36 @@ public class DynamicDatapackManager {
             LifeSeries.LOGGER.error("Error copying loot tables: {}", e.getMessage());
         }
     }
+
+    public static boolean shouldCopyLootTableToConfig(File file) {
+        //? if = 26.3 {
+        if (file.exists() && file.isFile()) {
+            boolean isBroken = false;
+            try (var lines = Files.lines(file.toPath())) {
+                isBroken = lines.anyMatch(line -> line.contains("\"functions\""));
+            } catch (Exception ignored) {}
+            if (isBroken) {
+                backupLootTable(file);
+                return true;
+            }
+        }
+        //?}
+
+        return !file.exists();
+    }
+
+    //? if = 26.3 {
+    private static void backupLootTable(File file) {
+        File backup = new File(file.getPath() + ".bak");
+        for (int i = 2; backup.exists(); i++) {
+            backup = new File(file.getPath() + ".bak" + i);
+        }
+        try {
+            Files.copy(file.toPath(), backup.toPath());
+            LifeSeries.LOGGER.warn("Loot table {} had errors and was replaced with the default. Old file was backed up to {}", file.getPath(), backup.getPath());
+        } catch (Exception ignored) {}
+    }
+    //?}
 
     public static void disableDatapack() {
         OtherUtils.executeCommand("datapack disable \"file/Life Series Dynamic Datapack\"");

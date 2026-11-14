@@ -10,6 +10,7 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
+import net.mat0u5.lifeseries.client.utils.ClientSounds;
 import net.mat0u5.lifeseries.utils.interfaces.LifeSeriesClientAccessor;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.matlib.MatLib;
@@ -164,6 +165,7 @@ public class LifeSeriesClient implements MultiplatformClientModInitializer, Life
         NICELIFE_SNOWY_NETHER = true;
         NICELIFE_DISABLE_SNOW = false;
         SERVER_MINIMAL_ARMOR = false;
+        ClientSounds.resetSoundBehaviors();
 
 
         playerDisguiseNames = new HashMap<>();

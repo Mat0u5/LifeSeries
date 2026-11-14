@@ -23,6 +23,7 @@ public class SimplePackets {
     public static final SimpleStringListPacket PREBUILT_SNAILSKINS = new SimpleStringListPacket("PREBUILT_SNAILSKINS");
     public static final SimpleStringListPacket NICELIFE_TRIVIA_NONSLEEPING = new SimpleStringListPacket("NICELIFE_TRIVIA_NONSLEEPING");
     public static final SimpleStringListPacket NICELIFE_LIVE_VOTING = new SimpleStringListPacket("NICELIFE_LIVE_VOTING");
+    public static final SimpleStringListPacket SOUND_BEHAVIORS = new SimpleStringListPacket("SOUND_BEHAVIORS");
 
     public static final SimpleStringPacket CURRENT_SEASON = new SimpleStringPacket("CURRENT_SEASON");
     public static final SimpleStringPacket SESSION_STATUS = new SimpleStringPacket("SESSION_STATUS");

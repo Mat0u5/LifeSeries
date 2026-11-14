@@ -33,12 +33,12 @@ import net.minecraft.world.level.chunk.ImposterProtoChunk;
 public abstract class ChunkStatusTasksMixin {
     //? if < 1.20.5 {
     /*@Inject(method = "generateBorderTicks", at = @At(value = "RETURN"))
-    private static void snowNether(WorldGenRegion worldGenRegion, ChunkAccess chunkAccess, CallbackInfo ci) {
+    private static void snowGen(WorldGenRegion worldGenRegion, ChunkAccess chunkAccess, CallbackInfo ci) {
         if (LifeSeries.isClientOrDisabled()) return;
         ServerLevel level = worldGenRegion.getLevel();
     *///?} else if <= 1.20.5 {
     /*@ModifyVariable(method = "generateFull", at = @At("HEAD"), index = 5, argsOnly = true)
-    private static ChunkAccess snowNether(ChunkAccess chunkAccess, WorldGenContext context) {
+    private static ChunkAccess snowGen(ChunkAccess chunkAccess, WorldGenContext context) {
         if (LifeSeries.isClientOrDisabled()) return chunkAccess;
         ServerLevel level = context.level();
         if (chunkAccess instanceof ImposterProtoChunk) {
@@ -46,7 +46,7 @@ public abstract class ChunkStatusTasksMixin {
         }
     *///?} else {
     @ModifyVariable(method = "full", at = @At("HEAD"), index = 3, argsOnly = true)
-    private static ChunkAccess snowNether(ChunkAccess chunkAccess, WorldGenContext context) {
+    private static ChunkAccess snowGen(ChunkAccess chunkAccess, WorldGenContext context) {
         if (LifeSeries.isClientOrDisabled()) return chunkAccess;
         ServerLevel level = context.level();
         if (chunkAccess instanceof ImposterProtoChunk) {
@@ -54,21 +54,27 @@ public abstract class ChunkStatusTasksMixin {
         }
     //?}
         if (chunkAccess instanceof ProtoChunk) {
-            if (NiceLife.SNOWY_NETHER.get() && level.dimension() == Level.NETHER && LifeSeries.isLogicalNonDisabled() && currentSeason instanceof NiceLife niceLife) {
-                int minY = chunkAccess.getMinY();
-                int maxY = chunkAccess.getMaxY();
-                for (int x = 0; x < 16; x++) {
-                    for (int z = 0; z < 16; z++) {
-                        for (int y = minY; y < maxY; y++) {
-                            BlockPos blockPos = new BlockPos(x, y, z);
-                            BlockState oldState = chunkAccess.getBlockState(blockPos);
-                            BlockState newState = niceLife.transformBlockState(oldState);
-                            if (newState != null) {
-                                //? if <= 1.21.4 {
-                                //chunkAccess.setBlockState(blockPos, newState, false);
-                                //?} else {
-                                chunkAccess.setBlockState(blockPos, newState, 1);
-                                //?}
+            if (LifeSeries.isLogicalNonDisabled() && currentSeason instanceof NiceLife niceLife) {
+                boolean netherReplace = NiceLife.SNOWY_NETHER.get() && level.dimension() == Level.NETHER;
+                boolean overworldReplace = !NiceLife.DISABLE_SNOW && level.dimension() == Level.OVERWORLD;
+                if (netherReplace || overworldReplace) {
+                    int minY = chunkAccess.getMinY();
+                    int maxY = chunkAccess.getMaxY();
+                    int minX = chunkAccess.getPos().getMinBlockX();
+                    int minZ = chunkAccess.getPos().getMinBlockZ();
+                    for (int x = 0; x < 16; x++) {
+                        for (int z = 0; z < 16; z++) {
+                            for (int y = minY; y < maxY; y++) {
+                                BlockPos blockPos = new BlockPos(minX + x, y, minZ + z);
+                                BlockState oldState = chunkAccess.getBlockState(blockPos);
+                                BlockState newState = netherReplace ? niceLife.transformNetherBlockState(oldState) : niceLife.transformOverworldBlockState(level, chunkAccess, blockPos, oldState);
+                                if (newState != null) {
+                                    //? if <= 1.21.4 {
+                                    //chunkAccess.setBlockState(blockPos, newState, false);
+                                    //?} else {
+                                    chunkAccess.setBlockState(blockPos, newState, 1);
+                                    //?}
+                                }
                             }
                         }
                     }

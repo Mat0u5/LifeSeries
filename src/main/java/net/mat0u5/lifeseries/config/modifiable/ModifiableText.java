@@ -87,8 +87,8 @@ public enum ModifiableText {
     ,SESSION_ACTION_SOCIETY("Begin Secret Society")
     ,SESSION_ACTION_BOOGEYMAN("Choose Boogeymen")
     ,SESSION_ACTION_ASSIGN_LIVES("Assign lives if necessary")
+    ,SESSION_ACTION_RANDOM_TP("Random teleport distribution")
     ,SESSION_ACTION_ASSIGN_SOULMATES(Seasons.DOUBLE_LIFE, "Assign Soulmates if necessary")
-    ,SESSION_ACTION_RANDOM_TP(Seasons.DOUBLE_LIFE, "Random teleport distribution")
     ,SESSION_ACTION_TASKS(Seasons.SECRET_LIFE, "Assign Tasks")
     ,SESSION_ACTION_WILDCARD(Seasons.WILD_LIFE, "Activate Wildcard")
     ,SESSION_ACTION_ENTRY_LONG(Formatted.LOOSELY_STYLED,"§7- {} §f[{}]", List.of("action name", "trigger time"))
@@ -294,9 +294,9 @@ public enum ModifiableText {
     ,BOOGEYMAN_FAIL_ADVANCEDDEATH_FINISH_PT1("§cYour lives are taken...")
     ,BOOGEYMAN_FAIL_ADVANCEDDEATH_FINISH_PT2("§c...Now take theirs.")
 
+    ,SPREAD_PLAYERS_TELEPORT("§6Woosh!")
+    ,SPREAD_PLAYERS_TELEPORT_SUCCESS("Randomly distributed players.")
 
-    ,DOUBLELIFE_TELEPORT(Seasons.DOUBLE_LIFE, "§6Woosh!")
-    ,DOUBLELIFE_TELEPORT_SUCCESS(Seasons.DOUBLE_LIFE, "Randomly distributed players.")
     ,DOUBLELIFE_SOULMATE_TITLE_UNKNOWN(Seasons.DOUBLE_LIFE, "§a????")
     ,DOUBLELIFE_SOULMATE_TITLE_PLAYER(Seasons.DOUBLE_LIFE, "{}", List.of("Player"))
     ,DOUBLELIFE_SOULMATE_PREVENT(Seasons.DOUBLE_LIFE, "{}'s soulmate now cannot be {} when the next randomization happens.", List.of("Player", "Soulmate"))

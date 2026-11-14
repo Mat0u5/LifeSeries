@@ -518,7 +518,7 @@ public class BoogeymanManager {
     List<UUID> warningAutoFail = new ArrayList<>();
     public void tick() {
         if (!BOOGEYMAN_ENABLED.get()) return;
-        for (Boogeyman boogeyman : boogeymen) {
+        for (Boogeyman boogeyman : new ArrayList<>(boogeymen)) {
             boogeyman.tick();
             infiniteBoogeymenTick(boogeyman);
             autoFailTick(boogeyman);

@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.StringListManager;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSoundManager;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
@@ -18,6 +19,7 @@ import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeVotingManager;
 import net.mat0u5.lifeseries.seasons.season.secretlife.TaskManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
+import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Hunger;
@@ -52,7 +54,6 @@ import net.mat0u5.matlib.utils.other.TextUtils;
 import net.mat0u5.matlib.utils.other.VersionCompatibility;
 import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.mat0u5.matlib.utils.player.ScoreboardUtils;
-import net.mat0u5.matlib.utils.player.TeamUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -285,30 +286,15 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
                     gainLife = Integer.parseInt(packetGainLifeKill);
                 } catch(Exception e) {}
 
-                boolean teamModified = false;
                 for (PlayerTeam livesTeam : new ArrayList<>(livesManager.getLivesTeams().values())) {
                     String teamName = livesTeam.getName();
-                    if (!teamNames.contains(teamName)) {
+                    if (!teamNames.contains(teamName) && !livesManager.isDefaultTeam(teamName)) {
                         livesManager.updateTeamConfig(teamName, null, null);
-                        TeamUtils.deleteTeam(teamName);
-                        continue;
+                        livesManager.removeTeam(teamName);
                     }
-                    if (!teamName.equals(packetTeamName)) continue;
-
-                    //? if <= 26.1 {
-                    /*livesTeam.setColor(newTeamColor);
-                    livesTeam.setDisplayName(Component.literal(packetTeamDisplayName).withStyle(newTeamColor));
-                    *///?} else {
-                    livesTeam.setColor(Optional.of(newTeamColor));
-                    livesTeam.setDisplayName(Component.literal(packetTeamDisplayName).withColor(newTeamColor.textColor()));
-                    //?}
-                    livesManager.updateTeamConfig(teamName, allowedKill, gainLife);
-                    teamModified = true;
                 }
-                if (!teamModified) {
-                    TeamUtils.createTeam(packetTeamName, packetTeamDisplayName, newTeamColor);
-                    livesManager.updateTeamConfig(packetTeamName, allowedKill, gainLife);
-                }
+                livesManager.setTeam(packetTeamName, packetTeamDisplayName, newTeamColor);
+                livesManager.updateTeamConfig(packetTeamName, allowedKill, gainLife);
                 Season.reloadPlayerTeams = true;
             }
         });
@@ -326,8 +312,8 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
                 String name2 = values.get(i + 1).trim();
                 if (name1.isEmpty() && name2.isEmpty()) continue;
 
-                UUID player1UUID = PlayerUtils.getUUIDFromNameOrUUID(name1);
-                UUID player2UUID = PlayerUtils.getUUIDFromNameOrUUID(name2);
+                UUID player1UUID = SubInManager.getUUIDFromNameOrUUID(name1);
+                UUID player2UUID = SubInManager.getUUIDFromNameOrUUID(name2);
                 if (player1UUID == null && !name1.isEmpty()) unknownPlayers.add(name1);
                 if (player2UUID == null && !name2.isEmpty()) unknownPlayers.add(name2);
                 if (player1UUID == null || player2UUID == null) continue;
@@ -516,6 +502,7 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
 
     public static void sendUpdatePacket(List<ServerPlayer> players) {
         sendSmallUpdatePacket(players);
+        seasonConfig.sendAllSyncedConfigs(players);
         if (currentSeason instanceof WildLife) {
             SimplePackets.PLAYER_MIN_MSPT.sendToClient((double)TimeDilation.MIN_PLAYER_MSPT, players);
 
@@ -536,6 +523,7 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
         SimplePackets.SNOWY_NETHER.sendToClient(NiceLife.SNOWY_NETHER.get(), players);
         SimplePackets.NICELIFE_DISABLE_SNOW.sendToClient(NiceLife.DISABLE_SNOW, players);
         SimplePackets.SERVER_MINIMAL_ARMOR.sendToClient(!Season.DISABLE_MINIMAL_ARMOR_PACK.get(), players);
+        SimplePackets.SOUND_BEHAVIORS.sendToClient(ModifiableSoundManager.getSoundBehaviorEntries(), players);
 
         if (Season.skyColor != null) {
             SimplePackets.SKYCOLOR.sendToClient(List.of(String.valueOf(Season.skyColorSetMode), String.valueOf((int)Season.skyColor.x), String.valueOf((int)Season.skyColor.y), String.valueOf((int)Season.skyColor.z)), players);
