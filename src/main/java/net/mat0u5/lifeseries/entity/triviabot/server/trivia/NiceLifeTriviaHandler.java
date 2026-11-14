@@ -10,9 +10,7 @@ import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeVotingManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
 import net.mat0u5.matlib.utils.other.Time;
@@ -24,7 +22,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -403,9 +400,8 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         TaskScheduler.scheduleTask(174+107, () -> spawnItemForPlayer(true));
         TaskScheduler.scheduleTask(174+126, () -> spawnItemForPlayer(true));
 
-        SoundEvent randomSound = OtherUtils.getRandomSound("nicelife_santabot_correct", 1, 6);
         TaskScheduler.scheduleTask(174, () -> {
-            PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), randomSound, 0.65f, 1);
+            ModifiableSound.NICELIFE_SANTABOT_CORRECT.play(bot.serverData.getBoundPlayer(), 0.65f, 1);
         });
         TaskScheduler.scheduleTask(174+140, () -> {
             if (startVoting()) {
@@ -453,9 +449,8 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         int delay = bot.ranOutOfTime() ? 0 : 174;
         TaskScheduler.scheduleTask(delay+115, () -> spawnItemForPlayer(false));
         TaskScheduler.scheduleTask(delay+135, () -> spawnItemForPlayer(false));
-        SoundEvent randomSound = OtherUtils.getRandomSound("nicelife_santabot_incorrect", 1, 6);
         TaskScheduler.scheduleTask(delay, () -> {
-            PlayerUtils.playSoundToPlayer(bot.serverData.getBoundPlayer(), randomSound, 0.65f, 1);
+            ModifiableSound.NICELIFE_SANTABOT_INCORRECT.play(bot.serverData.getBoundPlayer(), 0.65f, 1);
         });
         TaskScheduler.scheduleTask(delay+160, () -> {
             changeStateTo(BotState.LEAVING);

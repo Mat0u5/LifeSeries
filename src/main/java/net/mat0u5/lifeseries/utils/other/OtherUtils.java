@@ -6,11 +6,9 @@ import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.matlib.utils.other.Time;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,7 +24,6 @@ import net.minecraft.tags.ItemTags;
 //?}
 
 public class OtherUtils extends net.mat0u5.matlib.utils.other.OtherUtils {
-    private static final Random rnd = new Random();
 
     private static final Pattern TIME_PATTERN = Pattern.compile("(?:(\\d+)h)?(?:(\\d+)m)?(?:(\\d+)s)?");
     public static Time parseTimeFromArgument(String time) {
@@ -77,14 +74,6 @@ public class OtherUtils extends net.mat0u5.matlib.utils.other.OtherUtils {
     public static void throwError(String error) {
         PlayerUtils.broadcastMessageToAdmins(Component.nullToEmpty("§c"+error));
         LifeSeries.LOGGER.error(error);
-    }
-
-    public static SoundEvent getRandomSound(String name, int from, int to) {
-        if (to > from) {
-            int index = rnd.nextInt(from, to + 1);
-            name += index;
-        }
-        return SoundEvent.createVariableRangeEvent(IdentifierHelper.lifeseries(name));
     }
 
     public static void reloadServerNoUpdate() {

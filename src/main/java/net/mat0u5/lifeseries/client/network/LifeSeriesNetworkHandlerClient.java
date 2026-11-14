@@ -366,6 +366,7 @@ public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
             }
         });
         SimplePackets.STOP_TRIVIA_SOUNDS.setClientReceive(payload -> ClientSounds.stopTriviaSounds());
+        SimplePackets.SOUND_BEHAVIORS.setClientReceive(payload -> ClientSounds.setSoundBehaviors(payload.value()));
         SimplePackets.REMOVE_SLEEP_SCREENS.setClientReceive(payload -> {
             Minecraft client = Minecraft.getInstance();
             if (RenderUtils.getScreen() instanceof EmptySleepScreen || (RenderUtils.getScreen() instanceof NewQuizScreen quizScreen && !quizScreen.shouldCloseOnEsc()) || (RenderUtils.getScreen() instanceof QuizScreen quizScreenOld && !quizScreenOld.shouldCloseOnEsc()) || (RenderUtils.getScreen() instanceof VotingScreen votingScreen && votingScreen.requiresSleep)) {

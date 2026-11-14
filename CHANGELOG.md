@@ -1,8 +1,7 @@
-Added the MatLib library mod as a required dependency.
-
-All server-side sounds in the mod are now modifiable via the config.
-You can now disable the minimal armor pack server side.
-Fixed item NBT/components clearing in some versions.
-Improved snail pathfinding.
+Fixed incorrect minimum specified Fabric Loader version (now >=0.19.5)
+Fixed built-in loot tables not working properly on 26.3
+Teams are now season specific instead of global.
+Improved Nice Life snowy world generation.
+Final Life preparations.
 New configs.
 Bug fixes.

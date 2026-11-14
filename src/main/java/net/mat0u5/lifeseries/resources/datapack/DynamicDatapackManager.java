@@ -95,15 +95,32 @@ public class DynamicDatapackManager {
     public static boolean shouldCopyLootTableToConfig(File file) {
         //? if = 26.3 {
         if (file.exists() && file.isFile()) {
+            boolean isBroken = false;
             try (var lines = Files.lines(file.toPath())) {
-                boolean isBroken = lines.anyMatch(line -> line.contains("\"functions\""));
-                if (isBroken) return true;
+                isBroken = lines.anyMatch(line -> line.contains("\"functions\""));
             } catch (Exception ignored) {}
+            if (isBroken) {
+                backupLootTable(file);
+                return true;
+            }
         }
         //?}
 
         return !file.exists();
     }
+
+    //? if = 26.3 {
+    private static void backupLootTable(File file) {
+        File backup = new File(file.getPath() + ".bak");
+        for (int i = 2; backup.exists(); i++) {
+            backup = new File(file.getPath() + ".bak" + i);
+        }
+        try {
+            Files.copy(file.toPath(), backup.toPath());
+            LifeSeries.LOGGER.warn("Loot table {} had errors and was replaced with the default. Old file was backed up to {}", file.getPath(), backup.getPath());
+        } catch (Exception ignored) {}
+    }
+    //?}
 
     public static void disableDatapack() {
         OtherUtils.executeCommand("datapack disable \"file/Life Series Dynamic Datapack\"");

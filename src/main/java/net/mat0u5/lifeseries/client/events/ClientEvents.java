@@ -135,6 +135,7 @@ public class ClientEvents {
             }
             ClientKeybinds.tick();
             ClientSounds.updateSingleSoundVolumes();
+            ClientSounds.checkFollowUpSounds();
             TextHud.tick();
             if (CompatibilityManager.voicechatLoaded()) {
                 VoicechatClient.checkMute();
