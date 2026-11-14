@@ -10,11 +10,12 @@
   "plugin": "net.mat0u5.lifeseries.client.mixin.plugin.ClientMixinPlugin",
   "client": [
     "AbstractClientPlayerMixin",
-    "ArmorRenderMixin",
     "AbstractSoundInstanceAccessor",
     "AbstractSoundInstanceMixin",
+    "ArmorRenderMixin",
     "BiomeMixin",
     "CameraMixin",
+    "ChatComponentMixin",
     "ChatScreenAccessor",
     "ChatScreenMixin",
     "ClientLevelMixin",

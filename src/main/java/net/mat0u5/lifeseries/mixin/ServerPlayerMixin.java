@@ -16,9 +16,7 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.NicknameManager;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.OutgoingChatMessage;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
@@ -28,6 +26,7 @@ import net.minecraft.util.Unit;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.ChatVisiblity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.scores.PlayerTeam;
 import org.jetbrains.annotations.Nullable;
@@ -244,11 +243,32 @@ public class ServerPlayerMixin implements IPlayer {
         }
     }
 
-    @Inject(method = "sendChatMessage", at = @At("HEAD"), cancellable = true)
-    private void inBetweenChatIsolation(OutgoingChatMessage message, boolean filtered, ChatType.Bound bound, CallbackInfo ci) {
+    @Inject(method = "getChatVisibility", at = @At("HEAD"), cancellable = true)
+    private void inBetweenChatIsolation(CallbackInfoReturnable<ChatVisiblity> cir) {
         if (LifeSeries.isClientOrDisabled()) return;
-        if (InBetweenManager.shouldHideChatMessage(ls$get(), message)) {
-            ci.cancel();
+        if (InBetweenManager.shouldIsolateChat(ls$get())) {
+            if (InBetweenManager.isProcessingAllowedCommand(ls$get())) {
+                cir.setReturnValue(ChatVisiblity.SYSTEM);
+            }
+            else {
+                cir.setReturnValue(ChatVisiblity.HIDDEN);
+            }
+        }
+    }
+
+    @Inject(method = "acceptsChatMessages", at = @At("HEAD"), cancellable = true)
+    private void blockChatMessages(CallbackInfoReturnable<Boolean> cir) {
+        if (LifeSeries.isClientOrDisabled()) return;
+        if (InBetweenManager.shouldIsolateChat(ls$get())) {
+            cir.setReturnValue(false);
+        }
+    }
+
+    @Inject(method = "acceptsSystemMessages", at = @At("HEAD"), cancellable = true)
+    private void blockSystemMessages(boolean overlay, CallbackInfoReturnable<Boolean> cir) {
+        if (LifeSeries.isClientOrDisabled()) return;
+        if (InBetweenManager.shouldIsolateChat(ls$get())) {
+            cir.setReturnValue(overlay);
         }
     }
 

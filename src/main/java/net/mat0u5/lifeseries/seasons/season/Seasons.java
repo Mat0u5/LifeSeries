@@ -73,7 +73,7 @@ public enum Seasons {
     public boolean requiresClient() {
         if (this == WILD_LIFE) return true;
         if (this == NICE_LIFE) return true;
-        if (this == FINAL_LIFE) return true;
+        //if (this == FINAL_LIFE) return true; //TODO re-enable
         return false;
     }
 

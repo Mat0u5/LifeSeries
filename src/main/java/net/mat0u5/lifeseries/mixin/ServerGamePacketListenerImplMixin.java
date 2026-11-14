@@ -1,10 +1,13 @@
 package net.mat0u5.lifeseries.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.seasons.season.finallife.boogeyman.FinalLifeBoogeymanManager;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenManager;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLife;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
@@ -31,6 +34,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
+import static net.mat0u5.lifeseries.LifeSeries.isClientOrDisabled;
 
 //? if <= 1.20.3 {
 //import net.minecraft.network.protocol.game.ServerboundChatCommandPacket;
@@ -161,4 +165,48 @@ public class ServerGamePacketListenerImplMixin {
         }
     }
 
+    //? if <= 1.20.3 {
+    /*@Inject(method = "handleChatCommand", at = @At("HEAD"))
+    *///?} else {
+    @Inject(method = {"handleChatCommand", "handleSignedChatCommand"}, at = @At("HEAD"))
+    //?}
+    private void startCommand(CallbackInfo ci) {
+        InBetweenManager.setProcessingCommand(true);
+    }
+
+    //? if <= 1.20.3 {
+    /*@Inject(method = "handleChatCommand", at = @At("RETURN"))
+    *///?} else {
+    @Inject(method = {"handleChatCommand", "handleSignedChatCommand"}, at = @At("RETURN"))
+    //?}
+    private void endCommand(CallbackInfo ci) {
+        InBetweenManager.setProcessingCommand(false);
+    }
+
+    @Inject(method = "handleChat", at = @At("HEAD"))
+    private void startChat(CallbackInfo ci) {
+        InBetweenManager.setProcessingCommand(false);
+    }
+
+    //? if >= 1.21.9 {
+    @Inject(method = "tryHandleChat", at = @At("HEAD"), cancellable = true)
+    private void stopCommand(String message, boolean isCommand, Runnable chatHandler, CallbackInfo ci) {
+        if (isClientOrDisabled() || !isCommand) return;
+        if (InBetweenManager.shouldIsolateChat(player) && !InBetweenManager.canUseCommandsWhileIsolated(player)) {
+            player.connection.send(new ClientboundSystemChatPacket(ModifiableText.FINALLIFE_INBETWEEN_CHAT_ACCESS.get(), false));
+            ci.cancel();
+        }
+    }
+    //?}
+
+    @WrapOperation(method = "tryHandleChat", at = @At(value = "NEW", target = "(Lnet/minecraft/network/chat/Component;Z)Lnet/minecraft/network/protocol/game/ClientboundSystemChatPacket;"))
+    private ClientboundSystemChatPacket changeErrorMessage(Component content, boolean overlay, Operation<ClientboundSystemChatPacket> original) {
+        ServerGamePacketListenerImpl handler = (ServerGamePacketListenerImpl) (Object) this;
+        if (!isClientOrDisabled()) {
+            if (InBetweenManager.shouldIsolateChat(handler.player)) {
+                content = ModifiableText.FINALLIFE_INBETWEEN_CHAT_ACCESS.get();
+            }
+        }
+        return original.call(content, overlay);
+    }
 }

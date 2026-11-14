@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.client.mixin;
 
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.config.WorldConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.WorldStem;
@@ -12,9 +13,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenManager;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
 //? if >= 26.1 {
 import net.minecraft.world.level.gamerules.GameRules;
 import java.util.Optional;
+import net.minecraft.client.multiplayer.chat.ChatAbilities;
+import net.minecraft.client.multiplayer.chat.ChatRestriction;
 //?}
 
 @Mixin(value = Minecraft.class, priority = 1)
@@ -34,4 +40,24 @@ public abstract class MinecraftMixin {
         if (worldConfig.acknowledged()) return;
         worldConfig.setProperty("acknowledged", "true");
     }
+
+    //? if <= 1.21.11 {
+    /*@Inject(method = "getChatStatus", at = @At("HEAD"), cancellable = true)
+    private void inBetweenChatIsolation(CallbackInfoReturnable<Minecraft.ChatStatus> cir) {
+        if (LifeSeries.modDisabled()) return;
+        if (InBetweenManager.shouldIsolateChat(((Minecraft) (Object) this).player) && !LifeSeriesClient.isAdmin) {
+            cir.setReturnValue(Minecraft.ChatStatus.DISABLED_BY_OPTIONS);
+        }
+    }
+    *///?} else {
+    @Inject(method = "computeChatAbilities", at = @At("RETURN"), cancellable = true)
+    private void inBetweenChatIsolation(CallbackInfoReturnable<ChatAbilities> cir) {
+        if (LifeSeries.modDisabled()) return;
+        if (!InBetweenManager.shouldIsolateChat(((Minecraft) (Object) this).player)) return;
+        ChatAbilities.Builder builder = new ChatAbilities.Builder();
+        cir.getReturnValue().restrictions().forEach(builder::addRestriction);
+        builder.addRestriction(LifeSeriesClient.isAdmin ? ChatRestriction.CHAT_DISABLED_BY_OPTIONS : ChatRestriction.CHAT_AND_COMMANDS_DISABLED_BY_OPTIONS);
+        cir.setReturnValue(builder.build());
+    }
+    //?}
 }

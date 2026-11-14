@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.finallife.inbetween;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.registries.ParticleRegistry;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.finallife.FinalLife;
 import net.mat0u5.lifeseries.seasons.season.finallife.FinalLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.choice.InBetweenChoice;
@@ -12,11 +13,11 @@ import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.matlib.events.EventResult;
+import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.mat0u5.matlib.utils.world.LevelUtils;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.OutgoingChatMessage;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -49,7 +50,7 @@ public class InBetweenManager {
 	public static final ResourceKey<Level> DIMENSION = ResourceKey.create(Registries.DIMENSION, IdentifierHelper.lifeseries(DIMENSION_ID));
 
 	public static final ConfigRef<Boolean> ENABLED = ConfigRef.of(() -> FinalLifeConfig.get().FINAL_LIFE_IN_BETWEEN);
-	public static final ConfigRef<Boolean> ISOLATE_CHAT = ConfigRef.of(() -> FinalLifeConfig.get().FINAL_LIFE_IN_BETWEEN_ISOLATE_CHAT);
+	public static final ConfigRef<Boolean> ISOLATE_CHAT = ConfigRef.of(() -> FinalLifeConfig.get().FINAL_LIFE_IN_BETWEEN_ISOLATE_CHAT); // Synced Value
 
 	private static final Map<UUID, InBetweenInstance> instances = new HashMap<>();
 	private static final Set<UUID> preparedRespawns = new HashSet<>();
@@ -69,7 +70,7 @@ public class InBetweenManager {
 	}
 
 	private static boolean isFinalLife() {
-		return currentSeason instanceof FinalLife;
+		return LifeSeries.isSeason(Seasons.FINAL_LIFE);
 	}
 
 	public static boolean shouldEnterAfterDeath(ServerPlayer player) {
@@ -315,16 +316,22 @@ public class InBetweenManager {
 		return ParticleRegistry.IN_BETWEEN_BACKGROUND;
 	}
 
-	public static boolean shouldHideChatMessage(ServerPlayer receiver, OutgoingChatMessage message) {
-		if (!isFinalLife() || !ISOLATE_CHAT.get()) return false;
-		UUID sender = message instanceof OutgoingChatMessage.Player playerMessage ? playerMessage.message().sender() : null;
-		if (receiver.getUUID().equals(sender)) return false;
-		if (isInInBetween(receiver)) return true;
-		if (sender != null) {
-			ServerPlayer senderPlayer = PlayerUtils.getPlayer(sender);
-			return senderPlayer != null && isInInBetween(senderPlayer);
-		}
-		return false;
+	public static boolean shouldIsolateChat(Player receiver) {
+		if (!isFinalLife() || !ISOLATE_CHAT.get() || receiver == null) return false;
+		return isInInBetween(receiver);
+	}
+
+	public static boolean canUseCommandsWhileIsolated(ServerPlayer player) {
+		return PermissionManager.isAdmin(player);
+	}
+
+	private static final ThreadLocal<Boolean> processingCommand = ThreadLocal.withInitial(() -> false);
+	public static void setProcessingCommand(boolean value) {
+		processingCommand.set(value);
+	}
+
+	public static boolean isProcessingAllowedCommand(ServerPlayer player) {
+		return processingCommand.get() && canUseCommandsWhileIsolated(player);
 	}
 
 	public static void onMadeChoice(ServerPlayer player, InBetweenChoice choice) {

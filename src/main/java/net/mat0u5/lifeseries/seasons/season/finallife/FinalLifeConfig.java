@@ -117,6 +117,7 @@ public class FinalLifeConfig extends SeasonConfig {
 			.name("Isolate Chat")
 			.description("Controls whether the In-Between players have isolated chat.")
 			.setNew(true)
+			.serverShared()
 			.group("season.inbetween");
 
 	protected FinalLifeConfig() {
