@@ -25,16 +25,11 @@ public class TriviaBotSounds {
         }
         if (introSoundCooldown > 0) introSoundCooldown--;
 
-        if (introSoundCooldown == 0 && !bot.interactedWith()) {
-            if (!bot.santaBot()) {
-                ModifiableSound.WILDLIFE_TRIVIA_INTRO.playWithSource(PlayerUtils.getAllPlayers(), bot, SoundSource.NEUTRAL, 1, 1);
-                introSoundCooldown = 830;
-            }
-            else {
-                ModifiableSound.NICELIFE_SANTABOT_INTRO.play(bot.serverData.getBoundPlayer(), 0.65f, 1);
-                introSoundCooldown = 624;
-            }
+        if (introSoundCooldown == 0 && !bot.interactedWith() && !bot.santaBot()) {
+            ModifiableSound.WILDLIFE_TRIVIA_INTRO.playWithSource(PlayerUtils.getAllPlayers(), bot, SoundSource.NEUTRAL, 1, 1);
+            introSoundCooldown = 830;
         }
+        // Santa Bot Intro is played by the client , see SoundBehavior.FOLLOWED_BY
 
         if (!playedCountdownEndingSound && bot.interactedWith() && !bot.submittedAnswer() && !bot.ranOutOfTime()
                 && ((!bot.santaBot() && bot.triviaHandler.getRemainingTicks() <= 676) || (bot.santaBot() && bot.triviaHandler.getRemainingTicks() <= 643))) {

@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
-import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.subin.SubInManager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.PlayerDataStorage;
@@ -42,7 +41,7 @@ public class PlayerDataStorageMixin {
 
     @Unique
     private UUID ls$getStringUUIDForPlayer(NameAndId instance) {
-        if (LifeSeries.isLogicalNonDisabled() && SubInManager.isSubbingIn(instance.id())) {
+        if (SubInManager.isSubbingIn(instance.id())) {
             UUID resultUUID = SubInManager.getSubstitutedPlayerUUID(instance.id());
             if (resultUUID != null) {
                 return resultUUID;
@@ -54,7 +53,7 @@ public class PlayerDataStorageMixin {
 
     @Unique
     private String ls$getStringUUIDForPlayer(Player instance) {
-        if (LifeSeries.isLogicalNonDisabled() && SubInManager.isSubbingIn(instance.getUUID())) {
+        if (SubInManager.isSubbingIn(instance.getUUID())) {
             UUID resultUUID = SubInManager.getSubstitutedPlayerUUID(instance.getUUID());
             if (resultUUID != null) {
                 return resultUUID.toString();

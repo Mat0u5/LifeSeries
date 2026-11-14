@@ -22,6 +22,7 @@ import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.matlib.utils.other.TextUtils;
 import net.mat0u5.matlib.utils.other.Time;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -38,6 +39,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.FluidState;
@@ -46,6 +50,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static net.mat0u5.lifeseries.LifeSeries.currentSession;
@@ -487,7 +492,7 @@ public class NiceLife extends Season {
         return false;
     }
 
-    private static final List<Block> snowReplacableBlocks = List.of(
+    private static final Set<Block> snowReplacableBlocks = Set.of(
         Blocks.SNOW
         //? if <= 1.20.2 {
         //,Blocks.GRASS
@@ -536,6 +541,7 @@ public class NiceLife extends Season {
         //?}
     );
 
+    public static final BlockState snowLayer = Blocks.SNOW.defaultBlockState();
     private boolean shouldSnow(ServerLevel level, BlockPos blockPos) {
         boolean darkEnough = level.getBrightness(LightLayer.BLOCK, blockPos) < 10 || !LIGHT_MELTS_SNOW.get();
         int minY = level.getMinY();
@@ -543,18 +549,52 @@ public class NiceLife extends Season {
         if (blockPos.getY() >= minY && blockPos.getY() < maxY && darkEnough) {
             BlockState blockState = level.getBlockState(blockPos);
             boolean canSnowOverride = blockState.isAir() ||snowReplacableBlocks.contains(blockState.getBlock());
-            if (canSnowOverride && Blocks.SNOW.defaultBlockState().canSurvive(level, blockPos)) {
+            if (canSnowOverride && snowLayer.canSurvive(level, blockPos)) {
                 return true;
             }
         }
         return false;
     }
 
+    public BlockState transformOverworldBlockState(ServerLevel level, ChunkAccess chunk, BlockPos blockPos, BlockState blockState) {
+        if (blockState.hasProperty(BlockStateProperties.SNOWY)) {
+            boolean snowAbove = canReplaceWithSnow(level, chunk, blockPos.above(), chunk.getBlockState(blockPos.above()));
+            return snowAbove ? blockState.setValue(BlockStateProperties.SNOWY, true) : null;
+        }
+        if (!canReplaceWithSnow(level, chunk, blockPos, blockState)) {
+            boolean upperHalf = blockState.hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF) && blockState.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.UPPER;
+            boolean lowerHalfReplaced = upperHalf && snowReplacableBlocks.contains(blockState.getBlock()) && chunk.getBlockState(blockPos.below()).is(Blocks.SNOW);
+            return lowerHalfReplaced ? air : null;
+        }
+        return snowLayer;
+    }
+
+    private boolean canReplaceWithSnow(ServerLevel level, ChunkAccess chunk, BlockPos blockPos, BlockState blockState) {
+        if (blockState.is(Blocks.SNOW) || !snowReplacableBlocks.contains(blockState.getBlock())) {
+            return false;
+        }
+        if (LIGHT_MELTS_SNOW.get() && level.getBrightness(LightLayer.BLOCK, blockPos) >= 10) {
+            return false;
+        }
+        BlockPos belowPos = blockPos.below();
+        return canSnowSurviveOn(chunk, chunk.getBlockState(belowPos), belowPos);
+    }
+
+    private boolean canSnowSurviveOn(ChunkAccess chunk, BlockState state, BlockPos pos) {
+        if (state.is(Blocks.ICE) || state.is(Blocks.BARRIER)) { // CANNOT_SUPPORT_SNOW_LAYER tag
+            return false;
+        }
+        if (state.is(Blocks.HONEY_BLOCK) || state.is(Blocks.SOUL_SAND) || state.is(Blocks.MUD)) { // SUPPORT_OVERRIDE_SNOW_LAYER tag
+            return true;
+        }
+        return Block.isFaceFull(state.getCollisionShape(chunk, pos), Direction.UP);
+    }
+
     public static final BlockState blueIce = Blocks.BLUE_ICE.defaultBlockState();
     public static final BlockState snowBlock = Blocks.SNOW_BLOCK.defaultBlockState();
     public static final BlockState air = Blocks.AIR.defaultBlockState();
     public static final BlockState froglight = Blocks.PEARLESCENT_FROGLIGHT.defaultBlockState();
-    public BlockState transformBlockState(BlockState oldState) {
+    public BlockState transformNetherBlockState(BlockState oldState) {
         if (oldState.is(Blocks.NETHERRACK) ||
                 oldState.is(Blocks.BLACKSTONE) ||
                 oldState.is(Blocks.BASALT) ||

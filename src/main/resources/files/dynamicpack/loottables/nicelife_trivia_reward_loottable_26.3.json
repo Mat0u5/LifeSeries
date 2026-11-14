@@ -1,0 +1,297 @@
+{
+  "type": "minecraft:command",
+  "pools": [
+    {
+      "rolls": 1,
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_block",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:golden_carrot",
+          "weight": 10,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": 32
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:wind_charge",
+          "weight": 10,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": 6
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:creeper_spawn_egg",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:pufferfish_bucket",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond",
+          "weight": 20,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": 3
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_block",
+          "weight": 10,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": 2
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:golden_apple",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:sculk_sensor",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:sculk_shrieker",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:tnt",
+          "weight": 20,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": 2
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:obsidian",
+          "weight": 10,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": 20
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:arrow",
+          "weight": 10,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": 32
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:ender_pearl",
+          "weight": 20,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": 2
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:end_crystal",
+          "weight": 10,
+          "modifier": {
+            "type": "minecraft:set_components",
+            "components": {
+              "minecraft:custom_data": {
+                "IgnoreBlacklist": true
+              }
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:mace",
+          "weight": 5,
+          "modifier": {
+            "type": "minecraft:set_components",
+            "components": {
+              "minecraft:custom_data": {
+                "IgnoreBlacklist": true,
+                "NoModifications": true
+              },
+              "minecraft:damage": 499
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "weight": 10,
+          "modifier": {
+            "type": "minecraft:set_potion",
+            "id": "minecraft:invisibility"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "weight": 10,
+          "modifier": {
+            "type": "minecraft:set_potion",
+            "id": "minecraft:slow_falling"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:shulker_box",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:birch_log",
+          "weight": 10,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": 64
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:oak_log",
+          "weight": 10,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": 64
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:mangrove_log",
+          "weight": 10,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": 64
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:enchanted_book",
+          "weight": 10,
+          "modifier": {
+            "type": "minecraft:set_components",
+            "components": {
+              "minecraft:stored_enchantments": {
+                "minecraft:feather_falling": 3
+              }
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:cooked_beef",
+          "weight": 10,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": 16
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:breeze_rod",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:blaze_rod",
+          "weight": 10,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": 8
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:redstone",
+          "weight": 10,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": 32
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:vindicator_spawn_egg",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:piglin_brute_spawn_egg",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:evoker_spawn_egg",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:camel_spawn_egg",
+          "weight": 10,
+          "modifier": {
+            "type": "minecraft:set_components",
+            "components": {
+              "minecraft:entity_data": {
+                "id": "minecraft:camel",
+                "Tame": true,
+                "SaddleItem": {
+                  "id": "minecraft:saddle"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:brewing_stand",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:enchanting_table",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:dried_ghast",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:poisonous_potato",
+          "weight": 1,
+          "modifier": {
+            "type": "minecraft:set_components",
+            "components": {
+              "minecraft:custom_name": "§6§l§nThe Sacred Patat",
+              "minecraft:lore": [
+                "§5§oEating this might help you. Or maybe not..."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

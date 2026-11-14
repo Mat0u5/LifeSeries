@@ -106,8 +106,9 @@ public class SubInCommands extends CustomCommand {
         }
 
         if (SubInManager.isSubbingIn(player.getUUID())) {
+            GameProfile original = SubInManager.getSubstituterOriginal(player.getUUID());
             GameProfile profile = SubInManager.getSubstitutedPlayer(player.getUUID());
-            sendCommandFailure(source, ModifiableText.SUBIN_ERROR_ALREADY_SUBBING.get(player, OtherUtils.profileName(profile)));
+            sendCommandFailure(source, ModifiableText.SUBIN_ERROR_ALREADY_SUBBING.get(OtherUtils.profileName(original), OtherUtils.profileName(profile)));
             return -1;
         }
 
@@ -131,9 +132,10 @@ public class SubInCommands extends CustomCommand {
             return -1;
         }
 
+        GameProfile original = SubInManager.getSubstituterOriginal(player.getUUID());
         GameProfile profile = SubInManager.getSubstitutedPlayer(player.getUUID());
 
-        sendCommandFeedback(source, ModifiableText.SUBIN_STOP.get(player, OtherUtils.profileName(profile)));
+        sendCommandFeedback(source, ModifiableText.SUBIN_STOP.get(OtherUtils.profileName(original), OtherUtils.profileName(profile)));
         SubInManager.removeSubIn(player);
         return 1;
     }

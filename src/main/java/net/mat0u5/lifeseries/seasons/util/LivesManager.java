@@ -177,16 +177,125 @@ public class LivesManager {
         seasonConfig.setProperty("team_gainlives-"+teamName, String.valueOf(gainLife));
     }
 
-    public void createTeams() {
-        //~ if >= 26.2 'ChatFormatting' -> 'TeamColor' {
-        TeamUtils.createTeam("lives_null", "Unassigned", TeamColor.GRAY);
-        TeamUtils.createTeam("lives_0", "Dead", TeamColor.DARK_GRAY);
-        TeamUtils.createTeam("lives_1", "Red", TeamColor.RED);
-        TeamUtils.createTeam("lives_2", "Yellow", TeamColor.YELLOW);
-        TeamUtils.createTeam("lives_3", "Green", TeamColor.GREEN);
-        TeamUtils.createTeam("lives_4", "Dark Green", TeamColor.DARK_GREEN);
-        //~}
+    private static final String CONFIG_TEAM_LIST_KEY = "team_list";
+
+    //~ if >= 26.2 'ChatFormatting' -> 'TeamColor' {
+    public record LivesTeam(String name, String displayName, TeamColor color) {}
+
+    public List<LivesTeam> getDefaultTeams() {
+        return List.of(
+                new LivesTeam("lives_null", "Unassigned", TeamColor.GRAY),
+                new LivesTeam("lives_0", "Dead", TeamColor.DARK_GRAY),
+                new LivesTeam("lives_1", "Red", TeamColor.RED),
+                new LivesTeam("lives_2", "Yellow", TeamColor.YELLOW),
+                new LivesTeam("lives_3", "Green", TeamColor.GREEN),
+                new LivesTeam("lives_4", "Dark Green", TeamColor.DARK_GREEN)
+        );
     }
+
+    public void createTeams() {
+        // Triggers on reload - updates all teams.
+        if (TeamUtils.getAllTeams() == null) return;
+        List<String> teamNames = getTeamList();
+        for (String teamName : teamNames) {
+            String displayName = seasonConfig.getProperty("team_name-" + teamName);
+            TeamColor color = parseColor(seasonConfig.getProperty("team_color-" + teamName));
+            createOrUpdateTeam(teamName, displayName == null ? teamName : displayName, color);
+        }
+        for (PlayerTeam team : new ArrayList<>(TeamUtils.getAllTeams())) {
+            if (team.getName().startsWith("lives_") && !teamNames.contains(team.getName())) {
+                TeamUtils.deleteTeam(team.getName());
+            }
+        }
+    }
+
+    public void setTeam(String teamName, String displayName, TeamColor color) {
+        List<String> teamNames = getTeamList();
+        if (!teamNames.contains(teamName)) {
+            teamNames.add(teamName);
+            seasonConfig.setProperty(CONFIG_TEAM_LIST_KEY, String.join(",", teamNames));
+        }
+        seasonConfig.setProperty("team_name-" + teamName, displayName);
+        seasonConfig.setProperty("team_color-" + teamName, color.getSerializedName());
+        createOrUpdateTeam(teamName, displayName, color);
+    }
+
+    public void removeTeam(String teamName) {
+        if (isDefaultTeam(teamName)) return;
+        List<String> teamNames = getTeamList();
+        if (teamNames.remove(teamName)) {
+            seasonConfig.setProperty(CONFIG_TEAM_LIST_KEY, String.join(",", teamNames));
+        }
+        seasonConfig.removeProperty("team_name-" + teamName);
+        seasonConfig.removeProperty("team_color-" + teamName);
+        TeamUtils.deleteTeam(teamName);
+    }
+
+    public boolean isDefaultTeam(String teamName) {
+        return getDefaultTeam(teamName) != null;
+    }
+
+    @Nullable
+    public LivesTeam getDefaultTeam(String teamName) {
+        for (LivesTeam team : getDefaultTeams()) {
+            if (team.name().equals(teamName)) return team;
+        }
+        return null;
+    }
+
+    private List<String> getTeamList() {
+        String teamList = seasonConfig.getProperty(CONFIG_TEAM_LIST_KEY);
+        List<String> teams = new ArrayList<>();
+        if (teamList != null) {
+            for (String teamName : teamList.split(",")) {
+                String trimmed = teamName.trim();
+                if (!trimmed.isEmpty() && !teams.contains(trimmed)) {
+                    teams.add(trimmed);
+                }
+            }
+        }
+
+        // Restore any missing default teams
+        boolean changed = teamList == null;
+        for (LivesTeam team : getDefaultTeams()) {
+            if (teams.contains(team.name())) continue;
+            teams.add(team.name());
+            changed = true;
+            seasonConfig.setProperty("team_name-" + team.name(), team.displayName());
+            seasonConfig.setProperty("team_color-" + team.name(), team.color().getSerializedName());
+        }
+
+        if (changed) {
+            seasonConfig.setProperty(CONFIG_TEAM_LIST_KEY, String.join(",", teams));
+        }
+        return teams;
+    }
+
+    private void createOrUpdateTeam(String teamName, String displayName, TeamColor color) {
+        if (TeamUtils.createTeam(teamName, displayName, color)) return;
+        PlayerTeam team = TeamUtils.getTeam(teamName);
+        if (team == null) return;
+        //? if <= 26.1 {
+        /*team.setColor(color);
+        team.setDisplayName(Component.literal(displayName).withStyle(color));
+        *///?} else {
+        team.setColor(Optional.of(color));
+        team.setDisplayName(Component.literal(displayName).withColor(color.textColor()));
+        //?}
+    }
+
+    private TeamColor parseColor(@Nullable String name) {
+        TeamColor color = null;
+        if (name != null) {
+            //? if <= 26.1 {
+            //color = TeamColor.getByName(name);
+            //?} else {
+            color = TeamColor.byName(name);
+            //?}
+        }
+        return color == null ? TeamColor.WHITE : color;
+    }
+    //~}
 
     public void createScoreboards() {
         ScoreboardUtils.createObjective(SCOREBOARD_NAME);

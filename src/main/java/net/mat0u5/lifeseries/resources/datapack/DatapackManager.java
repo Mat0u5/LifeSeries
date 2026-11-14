@@ -58,9 +58,11 @@ public class DatapackManager {
         //return "_pre1.21";
         //?} else if <= 1.21.4 {
         //return "";
+        //?} else if <= 26.2 {
+        //return "_1.21.5";
         //?} else {
-        return "_1.21.5";
-         //?}
+        return "_26.3";
+        //?}
     }
 
     public static String getResourceNiceLifeTriviaPackVersion() {
@@ -72,8 +74,10 @@ public class DatapackManager {
         //return "";
         //?} else if <= 1.21.5 {
         //return "_1.21.5";
+        //?} else if <= 26.2 {
+        //return "_1.21.6";
         //?} else {
-        return "_1.21.6";
+        return "_26.3";
         //?}
     }
 
@@ -84,8 +88,10 @@ public class DatapackManager {
         //return "_pre1.21";
         //?} else if <= 1.21.4 {
         //return "";
+        //?} else if <= 26.2 {
+        //return "_1.21.5";
         //?} else {
-        return "_1.21.5";
+        return "_26.3";
         //?}
     }
 }

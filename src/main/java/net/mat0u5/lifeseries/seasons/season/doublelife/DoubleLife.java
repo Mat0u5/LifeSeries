@@ -58,7 +58,6 @@ public class DoubleLife extends Season {
     public static final ConfigRef<Boolean> SOULBOUND_BOOGEYMAN = ConfigRef.of(() -> DoubleLifeConfig.get().SOULBOUND_BOOGEYMAN);
     public static final ConfigRef<Boolean> SOULBOUND_SECRET_SOCIETY = ConfigRef.of(() -> DoubleLifeConfig.get().SOULBOUND_SECRET_SOCIETY);
     public final ConfigRef<Boolean> BREAKUP_LAST_PAIR_STANDING = ConfigRef.of(() -> DoubleLifeConfig.get().BREAKUP_LAST_PAIR_STANDING);
-    public final ConfigRef<Boolean> DISABLE_START_TELEPORT = ConfigRef.of(() -> DoubleLifeConfig.get().DISABLE_START_TELEPORT);
     public static final ConfigRef<Boolean> SOULMATE_LOCATOR_BAR = ConfigRef.of(() -> DoubleLifeConfig.get().SOULMATE_LOCATOR_BAR);
     public final ConfigRef<Boolean> SOULMATES_PVP_ALLOWED = ConfigRef.of(() -> DoubleLifeConfig.get().SOULMATES_PVP_ALLOWED);
     public final ConfigRef<Double> SOULMATES_ASSIGN_MINUTE = ConfigRef.of(() -> DoubleLifeConfig.get().SOULMATES_ASSIGN_MINUTE);
@@ -132,14 +131,6 @@ public class DoubleLife extends Season {
                 rollSoulmates();
             }
         });
-        if (!DISABLE_START_TELEPORT.get()) {
-            currentSession.addSessionAction(new SessionAction(Time.ticks(5), ModifiableText.SESSION_ACTION_RANDOM_TP.getString()) {
-                @Override
-                public void trigger() {
-                    distributePlayers();
-                }
-            });
-        }
     }
 
     @Override
@@ -244,6 +235,10 @@ public class DoubleLife extends Season {
         UUID soulmateUUID = soulmates.get(playerUUID);
         if (SubInManager.isBeingSubstituted(soulmateUUID)) {
             soulmateUUID = SubInManager.getSubstitutingPlayerUUID(soulmateUUID);
+        }
+        else if (SubInManager.isSubbingIn(soulmateUUID)) {
+            // Soulmate is online, but playing as someone else
+            return false;
         }
         return PlayerUtils.getPlayer(soulmateUUID) != null;
     }
@@ -396,8 +391,8 @@ public class DoubleLife extends Season {
         List<Map.Entry<String, String>> result = new ArrayList<>();
         for (Map.Entry<UUID, UUID> entry : soulmatesOrdered.entrySet()) {
             result.add(Map.entry(
-                    PlayerUtils.getNameFromUUIDOrRaw(entry.getKey()),
-                    PlayerUtils.getNameFromUUIDOrRaw(entry.getValue())
+                    SubInManager.getNameFromUUID(entry.getKey()),
+                    SubInManager.getNameFromUUID(entry.getValue())
             ));
         }
         result.sort(Comparator.comparing(entry -> entry.getKey().toLowerCase(Locale.ROOT)));
@@ -453,29 +448,12 @@ public class DoubleLife extends Season {
         return playersToRoll;
     }
 
-    public void distributePlayers() {
-        if (DISABLE_START_TELEPORT.get()) return;
-        if (server == null) return;
-        List<ServerPlayer> players = getNonAssignedPlayers();
-        if (players.isEmpty()) return;
-        if (players.size() == 1) return;
-        ModifiableSound.DOUBLELIFE_DISTRIBUTE.play(players);
-
-        for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
-            player.removeTag("randomTeleport");
-        }
-
-        for (ServerPlayer player : players) {
-            player.addTag("randomTeleport");
-            ((IPlayer) player).ls$message(ModifiableText.DOUBLELIFE_TELEPORT.get());
-        }
-        WorldBorder border = server.overworld().getWorldBorder();
-        OtherUtils.executeCommand(TextUtils.formatString("spreadplayers {} {} 0 {} false @a[tag=randomTeleport]", border.getCenterX(), border.getCenterZ(), (border.getSize()/2)));
-        PlayerUtils.broadcastMessageToAdmins(ModifiableText.DOUBLELIFE_TELEPORT_SUCCESS.get());
-
-        for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
-            player.removeTag("randomTeleport");
-        }
+    @Override
+    public List<ServerPlayer> getPlayersForDistribution() {
+        List<ServerPlayer> players = super.getPlayersForDistribution();
+        List<ServerPlayer> nonAssignedPlayers = getNonAssignedPlayers();
+        players.removeIf(player -> !nonAssignedPlayers.contains(player));
+        return players;
     }
 
     public void chooseRandomSoulmates() {
