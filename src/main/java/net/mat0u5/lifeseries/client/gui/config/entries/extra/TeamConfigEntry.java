@@ -118,11 +118,13 @@ public class TeamConfigEntry extends ModifiableListEntry {
 
     @Override
     protected void renderMainEntry(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-        int field1X = x+40;
-        int field2X = x+80;
-        int field3X = x+170;
-        int field4X = x+260;
-        int field5X = x+320;
+        int resetButtonX = resetButton.getX();
+        int gap = 15;
+        int field5X = resetButtonX - textFieldGainLife.getWidth() - gap;
+        int field4X = field5X - textFieldAllowedKill.getWidth() - gap;
+        int field3X = field4X - textFieldColor.getWidth() - gap;
+        int field2X = field3X - textFieldName.getWidth() - gap;
+        int field1X = field2X - textFieldLives.getWidth() - gap;
         textFieldLives.setY(y+1);
         textFieldName.setY(y+1);
         textFieldColor.setY(y+1);
@@ -181,11 +183,13 @@ public class TeamConfigEntry extends ModifiableListEntry {
 
     @Override
     public void renderFirstEntryExtras(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-        int field1X = x+40;
-        int field2X = x+80;
-        int field3X = x+170;
-        int field4X = x+260;
-        int field5X = x+320;
+        int resetButtonX = resetButton.getX();
+        int gap = 15;
+        int field5X = resetButtonX - textFieldGainLife.getWidth() - gap;
+        int field4X = field5X - textFieldAllowedKill.getWidth() - gap;
+        int field3X = field4X - textFieldColor.getWidth() - gap;
+        int field2X = field3X - textFieldName.getWidth() - gap;
+        int field1X = field2X - textFieldLives.getWidth() - gap;
         int field1CenterX = field1X + 15;
         int field2CenterX = field2X + 30;
         int field3CenterX = field3X + 30;

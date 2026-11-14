@@ -62,7 +62,7 @@ public class TriviaSpiritParticleGroup extends ParticleGroup<TriviaSpiritParticl
             poseStack.mulPose(Axis.XP.rotationDegrees(60.0F - 150.0F * ageScale));
             *///?} else {
             poseStack.rotate(camera.rotation());
-            poseStack.rotate(Axis.XP, 60.0F - 150.0F * ageScale);
+            poseStack.rotateDegrees(Axis.XP, 60.0F - 150.0F * ageScale);
             //?}
             poseStack.scale(1.0f, -1.0f, -1.0f);
             poseStack.translate(0.0f, 0, 1f);
