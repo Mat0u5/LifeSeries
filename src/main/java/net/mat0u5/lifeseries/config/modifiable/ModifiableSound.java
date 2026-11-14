@@ -243,8 +243,10 @@ public enum ModifiableSound {
 
 	public String getCurrentSoundId() {
 		if (!ModifiableSoundManager.isRegistered(this)) return defaultSoundId;
+		Optional<SoundEvent> opt = get();
+		if (opt.isEmpty()) return defaultSoundId;
 		//~ if >= 1.21.2 '.getLocation()' -> '.location()' {
-		return get().location().toString();
+		return opt.get().location().toString();
 		//~}
 	}
 

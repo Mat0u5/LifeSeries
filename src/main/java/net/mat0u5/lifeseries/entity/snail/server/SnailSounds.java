@@ -113,6 +113,7 @@ public class SnailSounds {
             return;
         }
         soundCooldown = 20;
-        snail.playSound(sound.get(), volume, 1);
+        var opt = sound.get();
+		opt.ifPresent(soundEvent -> snail.playSound(soundEvent, volume, 1));
     }
 }
