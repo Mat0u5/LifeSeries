@@ -1,0 +1,31 @@
+{
+  "ultrawarm": false,
+  "natural": false,
+  "coordinate_scale": 1.0,
+  "has_skylight": false,
+  "has_ceiling": false,
+  "ambient_light": 0.5,
+  "fixed_time": 18000,
+  "has_fixed_time": true,
+  "piglin_safe": false,
+  "bed_works": false,
+  "respawn_anchor_works": false,
+  "has_raids": false,
+  "has_ender_dragon_fight": false,
+  "min_y": 0,
+  "height": 256,
+  "logical_height": 256,
+  "infiniburn": "#minecraft:infiniburn_end",
+  "effects": "minecraft:the_nether",
+  "skybox": "none",
+  "monster_spawn_light_level": 0,
+  "monster_spawn_block_light_limit": 0,
+  "attributes": {
+    "minecraft:visual/fog_start_distance": 0.0,
+    "minecraft:visual/fog_end_distance": 100.0,
+    "minecraft:visual/sky_light_factor": 0.0,
+    "minecraft:gameplay/respawn_anchor_works": false,
+    "minecraft:gameplay/can_start_raid": false,
+    "minecraft:visual/ambient_light_color": "#7a7a7a"
+  }
+}

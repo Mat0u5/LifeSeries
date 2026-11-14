@@ -31,6 +31,30 @@
 				"max_format": 1000,
 				"formats": {"min_inclusive": 57, "max_inclusive": 1000},
 				"directory": "data_1.21.2-latest"
+			},
+			{
+				"min_format": 57,
+				"max_format": 93,
+				"formats": {"min_inclusive": 57, "max_inclusive": 93},
+				"directory": "inbetween_1.21.2-1.21.10"
+			},
+			{
+				"min_format": 94,
+				"max_format": 120,
+				"formats": {"min_inclusive": 94, "max_inclusive": 120},
+				"directory": "inbetween_1.21.11-26.2"
+			},
+			{
+				"min_format": 101,
+				"max_format": 1000,
+				"formats": {"min_inclusive": 101, "max_inclusive": 1000},
+				"directory": "inbetween_26.1-latest"
+			},
+			{
+				"min_format": 121,
+				"max_format": 1000,
+				"formats": {"min_inclusive": 121, "max_inclusive": 1000},
+				"directory": "inbetween_26.3-latest"
 			}
 		]
 	}

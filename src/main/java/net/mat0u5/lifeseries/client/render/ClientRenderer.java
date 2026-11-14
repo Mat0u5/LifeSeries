@@ -30,10 +30,12 @@ import org.joml.Vector3f;
 //?}
 
 //? if <= 1.21.6 {
-//import net.minecraft.client.renderer.texture.TextureAtlas;
-//?} else {
+/*import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+*///?} else {
 import net.minecraft.data.AtlasIds;
 //?}
+import org.jetbrains.annotations.Nullable;
 
 public class ClientRenderer {
     public static final List<String> lifeSkinsAllowedColors = List.of(
@@ -154,12 +156,18 @@ public class ClientRenderer {
         return Season.DISABLE_HELMET_RENDERING.get() && slot == EquipmentSlot.HEAD && OtherUtils.isHelmet(stack);
     }
 
+    @Nullable
     public static TextureAtlasSprite getParticleSprite(Identifier id) {
-        //? if <= 1.21.6 {
-        //return Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_PARTICLES).apply(id);
-         //?} else {
-        return Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.PARTICLES).getSprite(id);
-        //?}
+        try {
+            //? if <= 1.21.6 {
+            /*AbstractTexture texture = Minecraft.getInstance().getTextureManager().getTexture(TextureAtlas.LOCATION_PARTICLES);
+            return texture instanceof TextureAtlas atlas ? atlas.getSprite(id) : null;
+            *///?} else {
+            return Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.PARTICLES).getSprite(id);
+            //?}
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public static boolean isMissing(TextureAtlasSprite sprite) {

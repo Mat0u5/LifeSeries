@@ -34,10 +34,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 //? if <= 1.20.5 {
-/*import net.minecraft.core.BlockPos;
-*///?} else if <= 1.21 {
-/*import net.minecraft.world.level.portal.DimensionTransition;
-*///?} else {
+//import net.minecraft.core.BlockPos;
+//?} else if <= 1.21 {
+//import net.minecraft.world.level.portal.DimensionTransition;
+//?} else {
 import net.minecraft.world.level.portal.TeleportTransition;
 //?}
 

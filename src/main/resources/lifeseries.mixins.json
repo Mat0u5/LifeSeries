@@ -41,6 +41,7 @@
     "MobEffectMixin",
     "MobMixin",
     "NaturalSpawnerMixin",
+    "NbtUtilsMixin",
     "OwnableEntityMixin",
     "PlayerAccessor",
     "PlayerDataStorageMixin",
