@@ -2,6 +2,8 @@ package net.mat0u5.lifeseries.client.mixin;
 
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.client.utils.ClientSounds;
+import net.mat0u5.lifeseries.config.modifiable.SoundBehavior;
 import net.minecraft.client.resources.sounds.AbstractSoundInstance;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,21 +14,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = AbstractSoundInstance.class, priority = 1)
 @MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public class AbstractSoundInstanceMixin {
-    //~ if > 1.21.9 '.getLocation()' -> '.getIdentifier()' {
     @Inject(method = "isLooping", at = @At("HEAD"), cancellable = true)
     private void isRepeatable(CallbackInfoReturnable<Boolean> cir) {
         if (LifeSeries.modDisabled()) return;
         AbstractSoundInstance soundInstance = (AbstractSoundInstance) (Object) this;
-        if (soundInstance instanceof EntityBoundSoundInstance entityTrackingSound) {
-            if (entityTrackingSound.getIdentifier().getPath().equalsIgnoreCase("wildlife_trivia_suspense")) {
-                cir.setReturnValue(true);
-            }
-        }
-        if (soundInstance.getIdentifier().getPath().equalsIgnoreCase("nicelife_santabot_suspense") ||
-                soundInstance.getIdentifier().getPath().equalsIgnoreCase("nicelife_santabot_vote")) {
+        String soundId = ClientSounds.getSoundId(soundInstance);
+        if (ClientSounds.hasBehavior(soundId, SoundBehavior.LOOP)) {
             cir.setReturnValue(true);
         }
-
+        else if (soundInstance instanceof EntityBoundSoundInstance && ClientSounds.hasBehavior(soundId, SoundBehavior.LOOP_ENTITY_BOUND)) {
+            cir.setReturnValue(true);
+        }
     }
-    //~}
 }

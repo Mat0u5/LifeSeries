@@ -124,6 +124,15 @@ public enum ModifiableSound {
 	,WILDLIFE_SUPERPOWERS_TELEPORTATION(Seasons.WILD_LIFE, SoundEvents.PLAYER_TELEPORT)
 	//?}
 	,WILDLIFE_TRIVIA_SNAIL_TRANSFORM(Seasons.WILD_LIFE, SoundEvents.GENERIC_EXPLODE)
+	,WILDLIFE_SNAIL_ATTACK(Seasons.WILD_LIFE, IdentifierHelper.lifeseries("wildlife_snail_attack"))
+	,WILDLIFE_SNAIL_BURN(Seasons.WILD_LIFE, IdentifierHelper.lifeseries("wildlife_snail_burn"))
+	,WILDLIFE_SNAIL_DROWN(Seasons.WILD_LIFE, IdentifierHelper.lifeseries("wildlife_snail_drown"))
+	,WILDLIFE_SNAIL_FALL(Seasons.WILD_LIFE, IdentifierHelper.lifeseries("wildlife_snail_fall"))
+	,WILDLIFE_SNAIL_FLY(Seasons.WILD_LIFE, IdentifierHelper.lifeseries("wildlife_snail_fly"))
+	,WILDLIFE_SNAIL_LAVA(Seasons.WILD_LIFE, IdentifierHelper.lifeseries("wildlife_snail_lava"))
+	,WILDLIFE_SNAIL_THROW(Seasons.WILD_LIFE, IdentifierHelper.lifeseries("wildlife_snail_throw"))
+	,WILDLIFE_SNAIL_PROPELLER(Seasons.WILD_LIFE, IdentifierHelper.lifeseries("wildlife_snail_propeller"))
+	,WILDLIFE_SNAIL_WALK(Seasons.WILD_LIFE, IdentifierHelper.lifeseries("wildlife_snail_walk"))
 
 	,PASTLIFE_SOCIETY(Seasons.PAST_LIFE, IdentifierHelper.lifeseries("pastlife_society"))
 	,PASTLIFE_SOCIETY_END_MEMBER(Seasons.PAST_LIFE, IdentifierHelper.lifeseries("pastlife_society_end_member"))
@@ -142,6 +151,8 @@ public enum ModifiableSound {
 	,NICELIFE_RED_WINTER(Seasons.NICE_LIFE, IdentifierHelper.lifeseries("nicelife_red_winter"))
 	,NICELIFE_SANTABOT_INTRODUCTION_LONG(Seasons.NICE_LIFE, IdentifierHelper.lifeseries("nicelife_santabot_introduction_long"))
 	,NICELIFE_SANTABOT_INTRODUCTION_SHORT(Seasons.NICE_LIFE, IdentifierHelper.lifeseries("nicelife_santabot_introduction_short"))
+	,NICELIFE_SANTABOT_CORRECT(Seasons.NICE_LIFE, IdentifierHelper.lifeseries("nicelife_santabot_correct"))
+	,NICELIFE_SANTABOT_INCORRECT(Seasons.NICE_LIFE, IdentifierHelper.lifeseries("nicelife_santabot_incorrect"))
 	,NICELIFE_SANTABOT_INCORRECT_ALL_WRONG(Seasons.NICE_LIFE, IdentifierHelper.lifeseries("nicelife_santabot_incorrect_all_wrong"))
 	,NICELIFE_VOTE_RESULT(Seasons.NICE_LIFE, IdentifierHelper.lifeseries("nicelife_vote_result"))
 	,NICELIFE_NAUGHTYLIST(Seasons.NICE_LIFE, IdentifierHelper.lifeseries("nicelife_naughtylist"))
@@ -197,6 +208,17 @@ public enum ModifiableSound {
 
 	public SoundEvent get() {
 		return ModifiableSoundManager.get(this);
+	}
+
+	public String getDefaultSoundId() {
+		return defaultSoundId;
+	}
+
+	public String getCurrentSoundId() {
+		if (!ModifiableSoundManager.isRegistered(this)) return defaultSoundId;
+		//~ if >= 1.21.2 '.getLocation()' -> '.location()' {
+		return get().location().toString();
+		//~}
 	}
 
 	public void broadcast() {

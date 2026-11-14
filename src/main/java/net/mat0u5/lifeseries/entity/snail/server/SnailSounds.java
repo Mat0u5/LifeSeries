@@ -1,8 +1,7 @@
 package net.mat0u5.lifeseries.entity.snail.server;
 
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.entity.snail.Snail;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.minecraft.sounds.SoundEvent;
 
 import java.util.Random;
 
@@ -67,54 +66,53 @@ public class SnailSounds {
     }
 
     public void playAttackSound() {
-        forcePlayRandomSound("attack", 0.25f, 1, 9);
+        forcePlayRandomSound(ModifiableSound.WILDLIFE_SNAIL_ATTACK, 0.25f);
     }
 
     public void playBurnSound() {
-        playRandomSound("burn", 0.25f, 1, 9);
+        playRandomSound(ModifiableSound.WILDLIFE_SNAIL_BURN, 0.25f);
     }
 
     public void playDrownSound() {
-        playRandomSound("drown", 0.25f, 1, 9);
+        playRandomSound(ModifiableSound.WILDLIFE_SNAIL_DROWN, 0.25f);
     }
 
     public void playFallSound() {
-        playRandomSound("fall", 0.25f, 1, 5);
+        playRandomSound(ModifiableSound.WILDLIFE_SNAIL_FALL, 0.25f);
     }
 
     public void playFlySound() {
-        playRandomSound("fly", 0.25f, 1, 8);
+        playRandomSound(ModifiableSound.WILDLIFE_SNAIL_FLY, 0.25f);
     }
 
     public void playPropellerSound() {
-        forcePlayRandomSound("propeller", 0.2f, 0, 0);
+        forcePlayRandomSound(ModifiableSound.WILDLIFE_SNAIL_PROPELLER, 0.2f);
     }
 
     public void playWalkSound() {
-        forcePlayRandomSound("walk", 0.1f, 0, 0);
+        forcePlayRandomSound(ModifiableSound.WILDLIFE_SNAIL_WALK, 0.1f);
     }
 
     public void playLavaSound() {
-        playRandomSound("lava", 0.25f, 1, 2);
+        playRandomSound(ModifiableSound.WILDLIFE_SNAIL_LAVA, 0.25f);
     }
 
     public void playThrowSound() {
-        playRandomSound("throw", 0.25f, 1, 7);
+        playRandomSound(ModifiableSound.WILDLIFE_SNAIL_THROW, 0.25f);
     }
 
     private int soundCooldown = 0;
-    public void forcePlayRandomSound(String name, float volume, int from, int to) {
+    public void forcePlayRandomSound(ModifiableSound sound, float volume) {
         int cooldownBefore = soundCooldown;
         soundCooldown = 0;
-        playRandomSound(name, volume, from, to);
+        playRandomSound(sound, volume);
         soundCooldown = cooldownBefore;
     }
-    public void playRandomSound(String name, float volume, int from, int to) {
+    public void playRandomSound(ModifiableSound sound, float volume) {
         if (soundCooldown > 0) {
             return;
         }
         soundCooldown = 20;
-        SoundEvent sound = OtherUtils.getRandomSound("wildlife_snail_"+name, from, to);
-        snail.playSound(sound, volume, 1);
+        snail.playSound(sound.get(), volume, 1);
     }
 }
