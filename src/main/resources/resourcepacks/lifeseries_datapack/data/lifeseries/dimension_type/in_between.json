@@ -22,7 +22,7 @@
   "monster_spawn_block_light_limit": 0,
   "attributes": {
     "minecraft:visual/fog_start_distance": 0.0,
-    "minecraft:visual/fog_end_distance": 100.0,
+    "minecraft:visual/fog_end_distance": 75.0,
     "minecraft:visual/sky_light_factor": 0.0,
     "minecraft:gameplay/respawn_anchor_works": false,
     "minecraft:gameplay/can_start_raid": false
