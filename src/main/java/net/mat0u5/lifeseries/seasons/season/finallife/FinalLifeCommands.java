@@ -14,6 +14,7 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -37,11 +38,13 @@ public class FinalLifeCommands extends Command {
 				literal("inbetween")
 						.requires(PermissionManager::isAdmin)
 						.then(literal("enter")
+								.executes(context -> enterInBetween(context.getSource()))
 								.then(argument("player", EntityArgument.players())
 										.executes(context -> enterInBetween(context.getSource(), EntityArgument.getPlayers(context, "player")))
 								)
 						)
 						.then(literal("exit")
+								.executes(context -> exitInBetween(context.getSource()))
 								.then(argument("player", EntityArgument.players())
 										.executes(context -> exitInBetween(context.getSource(), EntityArgument.getPlayers(context, "player")))
 								)
@@ -57,6 +60,20 @@ public class FinalLifeCommands extends Command {
 								)
 						)
 		);
+	}
+
+	public int enterInBetween(CommandSourceStack source) {
+		List<ServerPlayer> players = new ArrayList<>();
+		ServerPlayer self = source.getPlayer();
+		if (self != null) players.add(self);
+		return enterInBetween(source, players);
+	}
+
+	public int exitInBetween(CommandSourceStack source) {
+		List<ServerPlayer> players = new ArrayList<>();
+		ServerPlayer self = source.getPlayer();
+		if (self != null) players.add(self);
+		return exitInBetween(source, players);
 	}
 
 	public int enterInBetween(CommandSourceStack source, Collection<ServerPlayer> targets) {

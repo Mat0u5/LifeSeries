@@ -1,14 +1,13 @@
 package net.mat0u5.lifeseries.seasons.season.finallife.inbetween;
 
 import net.mat0u5.lifeseries.LifeSeries;
-import net.mat0u5.matlib.utils.world.LevelUtils;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.window.InBetweenWindowManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
@@ -37,7 +36,10 @@ import java.util.*;
  * 		{@code spawn} - spawn position, use {@code spawn <yaw>} to face a different direction.
  *		{@code choice 1}, {@code choice 2} ... centers of each choice ring.
  *				{@code choice 1 <x> <y> <z>} - moves the choice ring preciely.
- *		{@code path 1}, {@code path 2}, ... - path waypoints, connected by straight lines
+ *		{@code path 1}, {@code path 2}, ... - path waypoints, connected by straight lines.
+ *		{@code window 1}, {@code window 2}, ... - bottom center of a memory window.
+ *				{@code window 1 <x> <y> <z>} - moves window in space.
+ *				{@code window 1 north/south/east/west} - the way the window is facing.
  *
  *	In case more players are in the dimension at once, they are spaced out by {@link #PLAYER_SLOT_SPACING}.
  */
@@ -202,6 +204,10 @@ public class InBetweenBuilder {
 					//path <number>
 					pathByNumber.put(firstNum == null ? pathByNumber.size() + 1 : firstNum, markerPos);
 				}
+				else if (split[0].equalsIgnoreCase("window")) {
+					// window <number> [x offset] [y offset] [z offset] <north/south/east/west or yaw>
+					parseWindowMarker(split, firstNum, markerPos, info.pos());
+				}
 				else {
 					LifeSeries.LOGGER.warn("[In-Between] Unknown data marker '{}' at {}", getMetadata(info.nbt()), info.pos());
 				}
@@ -216,6 +222,35 @@ public class InBetweenBuilder {
 		for (Vec3 pos : inBetween.choiceManager.choicePositions.values()) minMarkerY = Math.min(minMarkerY, pos.y);
 		for (Vec3 pos : pathPoints) minMarkerY = Math.min(minMarkerY, pos.y);
 		inBetween.choiceManager.spawnChoiceLabels();
+		inBetween.windowManager.createWindows();
+	}
+
+	private void parseWindowMarker(String[] split, @Nullable Integer firstNum, Vec3 markerPos, BlockPos blockPos) {
+		double[] args = new double[4];
+		int valueCount = 0;
+		Float yaw = null;
+		int startPoint = firstNum == null ? 1 : 2;
+		for (int i = startPoint; i < split.length; i++) {
+			Float facing = InBetweenWindowManager.directionToYaw(split[i]);
+			if (facing != null) {
+				yaw = facing;
+				continue;
+			}
+			try {
+				double value = Double.parseDouble(split[i]);
+				if (valueCount < args.length) args[valueCount++] = value;
+			} catch (NumberFormatException e) {
+				LifeSeries.LOGGER.warn("[In-Between] Unknown window marker argument '{}'", split[i]);
+			}
+		}
+		if (valueCount >= 4) yaw = (float) args[3];
+		if (yaw == null) {
+			LifeSeries.LOGGER.warn("[In-Between] Window marker at {} has no direction, add north/south/east/west or a yaw.", blockPos);
+			return;
+		}
+		Vec3 windowPos = markerPos.add(args[0], args[1], args[2]); // Offset
+		Map<Integer, InBetweenWindowManager.WindowMarker> markers = inBetween.windowManager.windowMarkers;
+		markers.put(firstNum == null ? markers.size() + 1 : firstNum, new InBetweenWindowManager.WindowMarker(windowPos, yaw));
 	}
 
 	private static String getMetadata(@Nullable CompoundTag nbt) {

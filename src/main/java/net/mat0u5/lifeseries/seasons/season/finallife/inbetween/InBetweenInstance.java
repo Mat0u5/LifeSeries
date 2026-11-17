@@ -1,7 +1,9 @@
 package net.mat0u5.lifeseries.seasons.season.finallife.inbetween;
 
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.choice.InBetweenChoice;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.choice.InBetweenChoiceManager;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.particle.InBetweenParticles;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.window.InBetweenWindowManager;
 import net.mat0u5.matlib.utils.world.LevelUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,12 +29,14 @@ public class InBetweenInstance {
 	public ServerLevel level;
 	public final InBetweenParticles particleManager;
 	public final InBetweenChoiceManager choiceManager;
+	public final InBetweenWindowManager windowManager;
 	public final InBetweenBuilder inBetweenBuilder;
 
 
-	private InBetweenInstance(int inBetweenSlot, ServerPlayer player, ServerLevel level, int deathNumber, List<Slice> slices) {
+	private InBetweenInstance(int inBetweenSlot, ServerPlayer player, ServerLevel level, int deathNumber, List<InBetweenChoice> choices, List<Slice> slices) {
 		this.particleManager = new InBetweenParticles(this);
-		this.choiceManager = new InBetweenChoiceManager(player, this);
+		this.choiceManager = new InBetweenChoiceManager(this, choices);
+		this.windowManager = new InBetweenWindowManager(player, deathNumber);
 		this.inBetweenBuilder = new InBetweenBuilder(this, slices, inBetweenSlot, level);
 		this.inBetweenSlot = inBetweenSlot;
 		this.playerUUID = player.getUUID();
@@ -41,11 +45,11 @@ public class InBetweenInstance {
 	}
 
 	@Nullable
-	public static InBetweenInstance create(int slot, ServerPlayer player, ServerLevel level, int deathNumber) {
+	public static InBetweenInstance create(int slot, ServerPlayer player, ServerLevel level, int deathNumber, List<InBetweenChoice> choices) {
 		List<Slice> slices = InBetweenBuilder.loadStructureSlices(level, InBetweenBuilder.STRUCTURE_PREFIX);
 		if (slices.isEmpty()) slices = InBetweenBuilder.loadStructureSlices(level, InBetweenBuilder.DEFAULT_STRUCTURE_PREFIX);
 		if (slices.isEmpty()) return null;
-		return new InBetweenInstance(slot, player, level, deathNumber, slices);
+		return new InBetweenInstance(slot, player, level, deathNumber, choices, slices);
 	}
 
 	public void destroy() {

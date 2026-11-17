@@ -34,9 +34,9 @@ public class InBetweenChoiceManager {
 	private final InBetweenInstance inBetween;
 	public final List<InBetweenChoice> choices;
 
-	public InBetweenChoiceManager(ServerPlayer player, InBetweenInstance inBetween) {
+	public InBetweenChoiceManager(InBetweenInstance inBetween, List<InBetweenChoice> choices) {
 		this.inBetween = inBetween;
-		this.choices = createChoices(player);
+		this.choices = choices;
 	}
 
 	public static List<InBetweenChoice> createChoices(ServerPlayer player) {

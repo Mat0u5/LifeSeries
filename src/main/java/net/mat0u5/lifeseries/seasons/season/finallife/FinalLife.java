@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.seasons.season.finallife.boogeyman.BoogeymanWeaponM
 import net.mat0u5.lifeseries.seasons.season.finallife.boogeyman.FinalLifeBoogeymanManager;
 import net.mat0u5.lifeseries.seasons.season.finallife.boogeyman.ThrownBoogeymanWeapon;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenManager;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.window.InBetweenFileSync;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.matlib.events.EventResult;
@@ -17,8 +18,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
-
-import static net.mat0u5.lifeseries.LifeSeries.currentSeason;
 
 public class FinalLife extends Season {
 	public static final String DEATHS_SCOREBOARD = "FinalLifeDeaths";
@@ -43,6 +42,7 @@ public class FinalLife extends Season {
 	public void reload() {
 		super.reload();
 		finalLifeBoogeymanManager.onReload();
+		if (InBetweenManager.ENABLED.get()) InBetweenFileSync.onReload();
 	}
 
 	@Override
@@ -70,6 +70,7 @@ public class FinalLife extends Season {
 	public void onPlayerJoin(ServerPlayer player) {
 		finalLifeBoogeymanManager.onPlayerJoin(player);
 		super.onPlayerJoin(player);
+		if (InBetweenManager.ENABLED.get()) InBetweenFileSync.checkPlayerMemories(player);
 	}
 
 	@Override
@@ -88,6 +89,7 @@ public class FinalLife extends Season {
 	public void onPlayerDisconnect(ServerPlayer player) {
 		ThrownBoogeymanWeapon.returnWeapons(player);
 		InBetweenManager.onPlayerDisconnect(player);
+		InBetweenFileSync.onPlayerDisconnect(player);
 		super.onPlayerDisconnect(player);
 		finalLifeBoogeymanManager.onPlayerDisconnect(player);
 	}
@@ -99,6 +101,7 @@ public class FinalLife extends Season {
 		ThrownBoogeymanWeapon.returnAllWeapons();
 		BoogeymanWeaponManager.removeAllBoogeymanWeaponNBTs();
 		InBetweenManager.exitInBetweenAllPlayers();
+		InBetweenFileSync.switchOutOfSeason();
 		super.switchOutOfSeason(changedTo);
 		finalLifeBoogeymanManager.switchOutOfSeason();
 	}
@@ -109,6 +112,7 @@ public class FinalLife extends Season {
 		finalLifeBoogeymanManager.tick();
 		BoogeymanWeaponManager.onTick();
 		InBetweenManager.tick();
+		InBetweenFileSync.tick();
 	}
 
 	@Override

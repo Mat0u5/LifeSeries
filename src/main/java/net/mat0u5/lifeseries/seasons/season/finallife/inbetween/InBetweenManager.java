@@ -7,6 +7,9 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.finallife.FinalLife;
 import net.mat0u5.lifeseries.seasons.season.finallife.FinalLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.choice.InBetweenChoice;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.choice.InBetweenChoiceManager;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.window.InBetweenFileSync;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.window.InBetweenWindowManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
@@ -54,6 +57,8 @@ public class InBetweenManager {
 
 	private static final Map<UUID, InBetweenInstance> instances = new HashMap<>();
 	private static final Set<UUID> preparedRespawns = new HashSet<>();
+	private static final Map<UUID, SavedChoices> savedChoices = new HashMap<>(); // To prevent disconnect abusing getting new choices
+	private record SavedChoices(int deathNumber, List<InBetweenChoice> choices) {}
 
 	@Nullable
 	public static ServerLevel getLevel() {
@@ -87,10 +92,15 @@ public class InBetweenManager {
 		return player != null && instances.containsKey(player.getUUID());
 	}
 
+	@Nullable
+	public static InBetweenInstance getInstance(ServerPlayer player) {
+		return player == null ? null : instances.get(player.getUUID());
+	}
+
 	public static void onPlayerRespawn(ServerPlayer player) {
 		boolean prepared = preparedRespawns.remove(player.getUUID());
 		if (hasInBetweenInstance(player) && isInInBetween(player)) {
-			if (prepared) onEnteredInBetween(player);
+			if (prepared) onEnteredInBetween(player, instances.get(player.getUUID()));
 			return;
 		}
 		// Fallback, in case the instant respawn failed
@@ -112,6 +122,7 @@ public class InBetweenManager {
 
 	public static void onPlayerDeath(ServerPlayer player) {
 		discardInstance(player);
+		savedChoices.remove(player.getUUID());
 	}
 
 	public static void onPlayerDisconnect(ServerPlayer player) {
@@ -130,6 +141,7 @@ public class InBetweenManager {
 			InBetweenInstance instance = entry.getValue();
 			ServerPlayer player = PlayerUtils.getPlayer(uuid);
 			if (player == null || !isInInBetween(player)) {
+				if (player != null) savedChoices.remove(uuid);
 				discardInstance(uuid);
 				continue;
 			}
@@ -154,6 +166,7 @@ public class InBetweenManager {
 				if (instance != null) instance.destroy();
 			}
 		}
+		savedChoices.clear();
 	}
 
 	@Nullable
@@ -178,13 +191,22 @@ public class InBetweenManager {
 		discardInstance(player); // Remove any old instances
 
 		int deathNumber = getDeaths(player);
-		InBetweenInstance instance = InBetweenInstance.create(getFirstFreeSlot(), player, level, deathNumber);
+		InBetweenInstance instance = InBetweenInstance.create(getFirstFreeSlot(), player, level, deathNumber, getChoices(player, deathNumber));
 		if (instance == null) {
 			LifeSeries.LOGGER.error("[In-Between] Structure files not found.");
 			return null;
 		}
 		instance.inBetweenBuilder.build();
 		return instance;
+	}
+
+	private static List<InBetweenChoice> getChoices(ServerPlayer player, int deathNumber) {
+		// Get saved choices or create new ones
+		SavedChoices saved = savedChoices.get(player.getUUID());
+		if (saved != null && saved.deathNumber() == deathNumber) return saved.choices();
+		List<InBetweenChoice> choices = InBetweenChoiceManager.createChoices(player);
+		savedChoices.put(player.getUUID(), new SavedChoices(deathNumber, choices));
+		return choices;
 	}
 
 	public static boolean enterInBetween(ServerPlayer player) {
@@ -196,19 +218,22 @@ public class InBetweenManager {
 		player.resetFallDistance();
 		player.setDeltaMovement(Vec3.ZERO);
 		LevelUtils.teleport(player, instance.level, instance.getSpawnPos(), instance.getSpawnYaw(), 0);
-		onEnteredInBetween(player);
+		onEnteredInBetween(player, instance);
 		return true;
 	}
 
-	private static void onEnteredInBetween(ServerPlayer player) {
+	private static void onEnteredInBetween(ServerPlayer player, InBetweenInstance instance) {
 		if (player.gameMode.getGameModeForPlayer() == GameType.SURVIVAL) {
 			player.setGameMode(GameType.ADVENTURE);
 		}
+		instance.windowManager.sendWindowsToClient(player);
+		InBetweenFileSync.updatePlayer(player);
 		playDimensionTransition(player);
 	}
 
 	public static void exitInBetween(ServerPlayer player, @Nullable InBetweenChoice choice) {
 		UUID uuid = player.getUUID();
+		savedChoices.remove(uuid);
 		InBetweenInstance instance = instances.remove(uuid);
 		if (choice != null) {
 			choice.onChosen(player);
@@ -218,9 +243,11 @@ public class InBetweenManager {
 			droppedItems.addAll(instance.collectDroppedItems());
 			instance.destroy();
 		}
+		InBetweenWindowManager.sendClientClearWindows(player);
 
 		restoreGameMode(player);
 		teleportToRespawnPoint(player);
+		InBetweenFileSync.updatePlayer(player);
 
 		for (ItemStack stack : droppedItems) {
 			if (!player.getInventory().add(stack) && !stack.isEmpty()) {
@@ -233,6 +260,9 @@ public class InBetweenManager {
 	}
 
 	public static void discardInstance(ServerPlayer player) {
+		if (instances.containsKey(player.getUUID())) {
+			InBetweenWindowManager.sendClientClearWindows(player);
+		}
 		discardInstance(player.getUUID());
 	}
 
