@@ -413,5 +413,10 @@
         "sounds": [
             "lifeseries:finallife/dimension_swap"
         ]
+    },
+    "finallife_window_wind": {
+        "sounds": [
+            "lifeseries:finallife/window_wind"
+        ]
     }
 }
