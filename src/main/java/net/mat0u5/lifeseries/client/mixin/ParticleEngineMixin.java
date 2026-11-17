@@ -1,38 +1,39 @@
 package net.mat0u5.lifeseries.client.mixin;
 
-//? if < 1.21.9 {
-/*import net.minecraft.server.MinecraftServer;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
-import org.spongepowered.asm.mixin.Mixin;
-
-@Mixin(value = MinecraftServer.class)
-@MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
-public class ParticleEngineMixin {
-    //Empty class to avoid mixin errors
-}
-*///?} else {
-
-import dev.kikugie.fletching_table.annotation.MixinEnvironment;
-import net.mat0u5.lifeseries.client.particle.TriviaSpiritParticle;
-import net.mat0u5.lifeseries.client.particle.TriviaSpiritParticleGroup;
-import net.minecraft.client.Camera;
+import net.mat0u5.lifeseries.client.features.inbetween.InBetweenWindowsClient;
 import net.minecraft.client.particle.ParticleEngine;
-import net.minecraft.client.particle.ParticleGroup;
-import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.renderer.culling.Frustum;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+//? if >= 1.21.9 {
+import net.mat0u5.lifeseries.client.particle.InBetweenWindowParticle;
+import net.mat0u5.lifeseries.client.particle.InBetweenWindowParticleGroup;
+import net.mat0u5.lifeseries.client.particle.TriviaSpiritParticle;
+import net.mat0u5.lifeseries.client.particle.TriviaSpiritParticleGroup;
+import net.minecraft.client.Camera;
+import net.minecraft.client.particle.ParticleGroup;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.renderer.culling.Frustum;
+import net.minecraft.client.renderer.state.level.ParticlesRenderState;
+import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.List;
 import java.util.Map;
-import net.minecraft.client.renderer.state.level.ParticlesRenderState;
+//?}
 
 @Mixin(value = ParticleEngine.class)
 @MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public abstract class ParticleEngineMixin {
+
+    //? if >= 1.21.9 {
+    @Inject(method = "clearParticles", at = @At("TAIL"))
+    private void onClearParticles(CallbackInfo ci) {
+        InBetweenWindowsClient.onParticlesCleared();
+    }
 
     @Accessor("particles")
     abstract Map<ParticleRenderType, ParticleGroup<?>> ls$particles();
@@ -43,13 +44,18 @@ public abstract class ParticleEngineMixin {
         if (particleRenderType == TriviaSpiritParticle.GROUP) {
             cir.setReturnValue(new TriviaSpiritParticleGroup(engine));
         }
+        else if (particleRenderType == InBetweenWindowParticle.GROUP) {
+            cir.setReturnValue(new InBetweenWindowParticleGroup(engine));
+        }
     }
     @Inject(method = "extract", at = @At("TAIL"))
     private void extractTriviaSpriteGroup(ParticlesRenderState particlesRenderState, Frustum frustum, Camera camera, float f, CallbackInfo ci) {
-        ParticleGroup<?> particleGroup = ls$particles().get(TriviaSpiritParticle.GROUP);
-        if (particleGroup != null && !particleGroup.isEmpty()) {
-            particlesRenderState.add(particleGroup.extractRenderState(frustum, camera, f));
+        for (ParticleRenderType group : List.of(TriviaSpiritParticle.GROUP, InBetweenWindowParticle.GROUP)) {
+            ParticleGroup<?> particleGroup = ls$particles().get(group);
+            if (particleGroup != null && !particleGroup.isEmpty()) {
+                particlesRenderState.add(particleGroup.extractRenderState(frustum, camera, f));
+            }
         }
     }
+    //?}
 }
-//?}
