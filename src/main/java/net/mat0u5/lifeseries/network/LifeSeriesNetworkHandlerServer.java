@@ -12,6 +12,7 @@ import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.window.InBetweenFileSync;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLife;
@@ -44,7 +45,6 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.LifeSkinsManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
-import net.mat0u5.matlib.MatLib;
 import net.mat0u5.matlib.events.common.CommonRegistryEvents;
 import net.mat0u5.matlib.events.server.ServerNetworkEvents;
 import net.mat0u5.matlib.network.NetworkHandlerServer;
@@ -68,8 +68,6 @@ import java.util.*;
 
 import static net.mat0u5.lifeseries.LifeSeries.*;
 import static net.mat0u5.matlib.MatLib.server;
-import net.mat0u5.lifeseries.utils.player.*;
-import net.mat0u5.matlib.utils.player.*;
 
 //? if > 1.20.5 {
 import net.minecraft.network.DisconnectionDetails;
@@ -105,6 +103,7 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
         PAYLOADS.put(SidetitlePacket.ID, SidetitlePacket::read);
         PAYLOADS.put(VoteScreenPayload.ID, VoteScreenPayload::read);
         PAYLOADS.put(LifeSkinsTexturePayload.ID, LifeSkinsTexturePayload::read);
+        PAYLOADS.put(InBetweenMemoryPayload.ID, InBetweenMemoryPayload::read);
     }
     *///?} else {
     public static final List<CustomPacketPayload.TypeAndCodec<? super RegistryFriendlyByteBuf, ? extends CustomPacketPayload>> PAYLOADS = List.of(
@@ -114,6 +113,7 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
             , new CustomPacketPayload.TypeAndCodec<>(SidetitlePacket.ID, SidetitlePacket.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(VoteScreenPayload.ID, VoteScreenPayload.CODEC)
             , new CustomPacketPayload.TypeAndCodec<>(LifeSkinsTexturePayload.ID, LifeSkinsTexturePayload.CODEC)
+            , new CustomPacketPayload.TypeAndCodec<>(InBetweenMemoryPayload.ID, InBetweenMemoryPayload.CODEC)
     );
     //?}
 
@@ -176,6 +176,11 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
         });
         SimplePackets.TRANSCRIPT.setServerReceive((player, payload) -> {
             ((IPlayer) player).ls$message(SessionTranscript.getTranscriptMessage());
+        });
+        SimplePackets.IN_BETWEEN_MEMORY_FILE_REQUEST.setServerReceive((player, payload) -> {
+            if (LifeSeries.isSeason(Seasons.FINAL_LIFE)) {
+                InBetweenFileSync.onMemoryRequestPacket(player, payload.value());
+            }
         });
         SimplePackets.SELECTED_WILDCARD.setServerReceive((player, payload) -> {
             if (PermissionManager.isAdmin(player)) {

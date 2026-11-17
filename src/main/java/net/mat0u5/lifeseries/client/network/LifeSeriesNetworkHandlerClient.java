@@ -6,6 +6,8 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.utils.ClientSeasonChanger;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.compatibilities.VoicechatClient;
+import net.mat0u5.lifeseries.client.features.inbetween.InBetweenMemoryCache;
+import net.mat0u5.lifeseries.client.features.inbetween.InBetweenWindowsClient;
 import net.mat0u5.lifeseries.client.features.LifeSkinsClient;
 import net.mat0u5.lifeseries.client.features.Morph;
 import net.mat0u5.lifeseries.client.features.SnailSkinsClient;
@@ -48,7 +50,6 @@ import net.mat0u5.matlib.client.services.RegistrableClient;
 import net.mat0u5.matlib.client.utils.SharedClientInfo;
 import net.mat0u5.matlib.events.OptionalEventReturn;
 import net.mat0u5.matlib.utils.other.RegistryUtils;
-import net.mat0u5.matlib.utils.other.VersionTrackedMods;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
@@ -110,6 +111,12 @@ public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
         });
         SimplePackets.PREBUILT_SNAILSKINS.setClientReceive(payload -> {
             SnailSkinsClient.handlePrebuiltAssignPacket(payload.value());
+        });
+        SimplePackets.IN_BETWEEN_WINDOWS.setClientReceive(payload -> {
+            InBetweenWindowsClient.onWindowsPacket(payload.value());
+        });
+        SimplePackets.IN_BETWEEN_MEMORY_FILES.setClientReceive(payload -> {
+            InBetweenMemoryCache.onFilesPacket(payload.value());
         });
         SimplePackets.LVL1_CLAMPED_ENCHANTS.setClientReceive(payload -> {
             LifeSeriesClient.lvl1ClampedEnchants = payload.value();
@@ -406,6 +413,9 @@ public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
         }
         else if (customPacketPayload instanceof LifeSkinsTexturePayload payload) {
             client.execute(() -> LifeSkinsClient.handleTexture(payload.skinName(), payload.teamName(), payload.slim(), payload.textureData()));
+        }
+        else if (customPacketPayload instanceof InBetweenMemoryPayload payload) {
+            client.execute(() -> InBetweenMemoryCache.onFilePartPayload(payload.hash(), payload.totalSize(), payload.offset(), payload.data()));
         }
         else {
             return false;

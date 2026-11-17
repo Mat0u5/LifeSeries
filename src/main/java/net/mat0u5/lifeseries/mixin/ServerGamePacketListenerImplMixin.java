@@ -166,8 +166,8 @@ public class ServerGamePacketListenerImplMixin {
     }
 
     //? if <= 1.20.3 {
-    /*@Inject(method = "handleChatCommand", at = @At("HEAD"))
-    *///?} else {
+    //@Inject(method = "handleChatCommand", at = @At("HEAD"))
+    //?} else {
     @Inject(method = {"handleChatCommand", "handleSignedChatCommand"}, at = @At("HEAD"))
     //?}
     private void startCommand(CallbackInfo ci) {
@@ -175,8 +175,8 @@ public class ServerGamePacketListenerImplMixin {
     }
 
     //? if <= 1.20.3 {
-    /*@Inject(method = "handleChatCommand", at = @At("RETURN"))
-    *///?} else {
+    //@Inject(method = "handleChatCommand", at = @At("RETURN"))
+    //?} else {
     @Inject(method = {"handleChatCommand", "handleSignedChatCommand"}, at = @At("RETURN"))
     //?}
     private void endCommand(CallbackInfo ci) {
