@@ -43,6 +43,7 @@
     "PlayerMixin",
     "PlayerTabOverlayMixin",
     "SkyRendererMixin",
+    "SoundBufferLibraryMixin",
     "SoundEngineAccessor",
     "SoundManagerAccessor",
     "WeatherEffectRendererMixin",
