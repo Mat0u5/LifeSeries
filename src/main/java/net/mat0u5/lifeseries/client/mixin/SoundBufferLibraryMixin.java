@@ -18,8 +18,8 @@ import java.io.ByteArrayInputStream;
 import java.util.concurrent.CompletableFuture;
 
 //? if <= 1.20.3 {
-/*import com.mojang.blaze3d.audio.OggAudioStream;
-*///?} else {
+//import com.mojang.blaze3d.audio.OggAudioStream;
+//?} else {
 import net.minecraft.client.sounds.JOrbisAudioStream;
 //?}
 

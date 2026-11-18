@@ -28,8 +28,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import java.util.function.Supplier;
 //?}
 //? if >= 1.21.11 <= 26.2 {
-/*import com.mojang.blaze3d.textures.FilterMode;
-*///?} else if > 26.2 {
+//import com.mojang.blaze3d.textures.FilterMode;
+//?} else if > 26.2 {
 import com.mojang.renderpearl.api.textures.FilterMode;
 //?}
 

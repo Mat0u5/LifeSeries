@@ -90,8 +90,8 @@ public class InBetweenManager {
 
 	private static boolean isFood(ItemStack stack) {
 		//? if <= 1.20.3 {
-		/*return stack.isEdible();
-		*///?} else {
+		//return stack.isEdible();
+		//?} else {
 		return stack.has(DataComponents.FOOD);
 		//?}
 	}

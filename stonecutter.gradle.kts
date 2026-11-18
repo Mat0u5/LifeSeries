@@ -14,7 +14,7 @@ plugins {
 	alias(libs.plugins.legacyforge.moddev).apply(false)
 }
 
-stonecutter active file(".sc_active_version")
+stonecutter active "26.3-fabric"
 apply(plugin = "co.uzzu.dotenv.gradle")
 
 val cleanOutput = tasks.register<Delete>("cleanOutput") {

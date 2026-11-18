@@ -25,8 +25,8 @@ public class InBetweenMemorySound extends InBetweenWindowSound {
 		super(getLocation(hash), SoundSource.MASTER, false, volume); // No statements before super(), older versions compile with Java 17/21
 		Identifier location = getLocation(hash);
 		//? if <= 1.20.5 {
-		/*this.memorySound = new Sound(location.toString(), ConstantFloat.of(1), ConstantFloat.of(1), 1, Sound.Type.FILE, true, false, ATTENUATION_DISTANCE);
-		*///?} else {
+		//this.memorySound = new Sound(location.toString(), ConstantFloat.of(1), ConstantFloat.of(1), 1, Sound.Type.FILE, true, false, ATTENUATION_DISTANCE);
+		//?} else {
 		this.memorySound = new Sound(location, ConstantFloat.of(1), ConstantFloat.of(1), 1, Sound.Type.FILE, true, false, ATTENUATION_DISTANCE);
 		//?}
 		this.memoryEvents = new WeighedSoundEvents(location, null);

@@ -180,8 +180,8 @@ public enum ModifiableSound {
 	,FINALLIFE_TRIVIA_CORRECT(Seasons.FINAL_LIFE, IdentifierHelper.lifeseries("wildlife_trivia_correct"))
 	,FINALLIFE_TRIVIA_INCORRECT(Seasons.FINAL_LIFE, IdentifierHelper.lifeseries("wildlife_trivia_incorrect"))
 	//? if <= 1.20.2 {
-	/*,FINALLIFE_TRIVIA_TELEPORT(Seasons.FINAL_LIFE, SoundEvents.ENDERMAN_TELEPORT)
-	*///?} else {
+	//,FINALLIFE_TRIVIA_TELEPORT(Seasons.FINAL_LIFE, SoundEvents.ENDERMAN_TELEPORT)
+	//?} else {
 	,FINALLIFE_TRIVIA_TELEPORT(Seasons.FINAL_LIFE, SoundEvents.PLAYER_TELEPORT)
 	//?}
 
