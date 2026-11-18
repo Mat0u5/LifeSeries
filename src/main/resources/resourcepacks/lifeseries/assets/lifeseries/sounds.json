@@ -418,5 +418,14 @@
         "sounds": [
             "lifeseries:finallife/window_wind"
         ]
+    },
+    "finallife_trivia_intro": {
+        "sounds": [
+            {
+                "attenuation_distance": 32,
+                "name": "lifeseries:finallife/triviabot_intro",
+                "stream": true
+            }
+        ]
     }
 }
