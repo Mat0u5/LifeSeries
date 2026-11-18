@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.nicelife;
 
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
+import net.mat0u5.lifeseries.config.StringListConfig;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.entity.angrysnowman.AngrySnowman;
@@ -41,7 +42,7 @@ import net.minecraft.world.level.block.AbstractBedBlock;
 public class NiceLifeTriviaManager {
     public static Map<UUID, TriviaBot> bots = new HashMap<>();
     public static TriviaQuestionManager triviaQuestions;
-    private static List<String> usedQuestions = new ArrayList<>();
+    private static StringListConfig usedQuestions;
     public static boolean triviaInProgress = false;
     public static boolean firstTriviaInSession = true;
     public static final ConfigRef<NightLength> nightLength = ConfigRef.of(() -> NiceLifeConfig.get().TRIVIA_NIGHT_LENGTH);
@@ -60,6 +61,18 @@ public class NiceLifeTriviaManager {
 
     public static void initialize() {
         triviaQuestions = new TriviaQuestionManager("./config/lifeseries/nicelife","trivia.json");
+        getUsedQuestions();
+    }
+
+    private static StringListConfig getUsedQuestions() {
+        if (usedQuestions == null) {
+            usedQuestions = new StringListConfig("lifeseries/main", "DO_NOT_MODIFY_nicelife_used_trivia.properties");
+        }
+        return usedQuestions;
+    }
+
+    public static void resetUsedQuestions() {
+        getUsedQuestions().save(List.of());
     }
 
     public static void startTrivia(List<ServerPlayer> triviaPlayers) {
@@ -76,7 +89,6 @@ public class NiceLifeTriviaManager {
         LifeSeriesNetworkHandlerServer.sendUpdatePackets();
         triviaInProgress = true;
         killAllBots();
-        usedQuestions.clear();
         NiceLifeVotingManager.reset();
         initialize();
         triviaSpawns.clear();
@@ -313,19 +325,7 @@ public class NiceLifeTriviaManager {
             if (triviaQuestions == null) {
                 initialize();
             }
-            List<TriviaQuestion> unusedQuestions = new ArrayList<>();
-            for (TriviaQuestion trivia : triviaQuestions.getTriviaQuestions()) {
-                if (usedQuestions.contains(trivia.getQuestion())) continue;
-                unusedQuestions.add(trivia);
-            }
-            if (unusedQuestions.isEmpty()) {
-                usedQuestions.clear();
-                unusedQuestions = triviaQuestions.getTriviaQuestions();
-            }
-            if (unusedQuestions.isEmpty()) return TriviaQuestion.getDefault();
-            TriviaQuestion result = unusedQuestions.get(rnd.nextInt(unusedQuestions.size()));
-            usedQuestions.add(result.getQuestion());
-            return result;
+            return triviaQuestions.getRandomQuestion(usedQuestions, rnd);
         }catch(Exception ignored) {}
         return TriviaQuestion.getDefault();
     }
